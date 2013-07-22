@@ -1,4 +1,4 @@
-UmbracoSales version 1.0 is licensed under the OSI approved MIT License:
+Merchello version 1.0 is licensed under the OSI approved MIT License:
 
 Copyright (c) 2013 Meritage LLC.
 
