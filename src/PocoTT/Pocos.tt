@@ -1,0 +1,19 @@
+﻿<#@ include file="Poco.Core.ttinclude" #><#
+	// Settings
+    ConnectionStringName = "merchello";			// Uses last connection string in config if not specified
+    Namespace = "Merchello.Core.Model.Rdbms";
+    RepoName = "database";
+    GenerateOperations = false;
+	GeneratePocos = true;
+	//ClassPrefix = "";
+	ClassSuffix = "Dto"; 
+	TrackModifiedColumns = false; 
+    // Read schema
+	var tables = LoadTables();
+
+    
+    // ignore 
+
+
+
+#><#@ include file="Poco.Generator.ttinclude" #>
