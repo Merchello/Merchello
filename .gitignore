@@ -1,1 +1,9 @@
-src/Merchello.Core/obj/
+obj
+_ReSharper.*
+*.csproj.user
+*.resharper.user
+*.resharper
+*.suo
+*.cache
+*.Publish.xml
+~$* 
