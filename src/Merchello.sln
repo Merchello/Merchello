@@ -12,6 +12,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{5269BF
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A6C6EBCD-38C9-4FAD-975A-97FA97578537}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{07393251-2FF9-45FA-AAFA-81720405834F}"
+	ProjectSection(SolutionItems) = preProject
+		..\build\Merchello.build = ..\build\Merchello.build
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,5 +52,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2B8005E2-6E23-44C5-AE78-999E8C55D9E2} = {A6C6EBCD-38C9-4FAD-975A-97FA97578537}
 	EndGlobalSection
 EndGlobal
