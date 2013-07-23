@@ -14,24 +14,50 @@
  *****************************************************
  -->
 
-  <Target Name="Build" DependsOnTargets="CompileProjects">
-
+  <Target Name="Build" DependsOnTargets="ZipBinaries">
     <!-- Copy fresh built umbraco files -->
+
+    <Exec Command="..\src\.nuget\NuGet.exe pack ..\build\nuspec\Merchello.Core.nuspec" />
+    
     <Message Text="Build number is $(DECIMAL_BUILD_NUMBER)" />
   </Target>
-  
-  <Target Name="Clean">
-    <Message Text="Deleting $(BuildFolder)" Importance="high" />
-    <RemoveDir Directories=".\$(BuildFolder)" />
-    <Message Text="Finished deleting $(BuildFolder)" Importance="high" />
+
+
+  <Target Name="ZipBinaries" DependsOnTargets="AllBinaries">
+    <Message Text="Starting to zip to $(BuildZipFileName)" Importance="high" />
+
+    <Exec Command="..\tools\7zip\7za.exe a -r %22$(BuildZipFileNameBin)%22 %22$(AllBinariesBinFolderAbsolutePath)*%22" />
+
+    <Message Text="Finished zipping to build\$(BuildFolder)\$(buildDate)-$(BuildZipFileName)" Importance="high" />
+    
   </Target>
 
-  <Target Name="Init" DependsOnTargets="Clean">
-    <Message Text="Creating $(BuildFolder)" Importance="high" />
-    <MakeDir Directories=".\$(BuildFolder)" />
-    <Message Text="Finished creating $(BuildFolder)" Importance="high" />
+  <Target Name="AllBinaries" DependsOnTargets="CopyXmlDocumentation">
+    <ItemGroup>
+      <AllBinariesFiles Include="$(SolutionBinFolder)*.*" Exclude="$(SolutionBinFolder)*Tests.*;$(SolutionBinFolder)*nunit.*;$(SolutionBinFolder)*Moq.*" />
+    </ItemGroup>
+
+     
+    <Copy SourceFiles="@(AllBinariesFiles)"
+        DestinationFiles="@(AllBinariesFiles->'$(BuildBinariesFolder)\%(RecursiveDir)%(Filename)%(Extension)')"
+        OverwriteReadOnlyFiles="true"
+        SkipUnchangedFiles="false" />
+    <Message Text="CopyXmlDocumentation" />
+    
   </Target>
   
+  <!-- Copy the xml documentation to the bin folder -->
+  <Target Name="CopyXmlDocumentation"  DependsOnTargets="CompileProjects">
+    <ItemGroup>
+      <XmlDocumentationFiles Include="$(SolutionBinFolder)*.xml" />
+    </ItemGroup>
+
+    <Copy SourceFiles="@(XmlDocumentationFiles)"
+        DestinationFiles="@(XmlDocumentationFiles->'$(BuildFolder)bin\%(RecursiveDir)%(Filename)%(Extension)')"
+        OverwriteReadOnlyFiles="true"
+        SkipUnchangedFiles="false" />
+    <Message Text="CopyXmlDocumentation" />
+  </Target>
 
   <Target Name="CompileProjects" DependsOnTargets="SetVersionNumber">
 
@@ -45,8 +71,9 @@
     <Message Text="Finished compiling projects" Importance="high" />
   </Target>
 
+ 
 
-  <Target Name="SetVersionNumber" Condition="'$(BUILD_RELEASE)'!=''" DependsOnTargets="Init">
+  <Target Name="SetVersionNumber" Condition="'$(BUILD_RELEASE)'!=''" DependsOnTargets="MakeBuildDirectory">
     
     <!-- Match & replace 3 and 4 digit version numbers and -beta (if it's there) -->
     <FileUpdate
@@ -59,9 +86,22 @@
       ReplacementText="CurrentComment { get { return &quot;$(BUILD_COMMENT)&quot;"/>
     
   </Target>
-  
-  
-  
+
+  <Target Name="MakeBuildDirectory" DependsOnTargets="Clean">
+    <Message Text="Creating $(BuildFolder) and $(BuildBinariesFolder)" Importance="high" />
+    <MakeDir Directories=".\$(BuildFolder)" />
+    <MakeDir Directories=".\$(BuildBinariesFolder)" />
+    <Message Text="Finished creating $(BuildFolder)" Importance="high" />
+  </Target>
+
+  <Target Name="Clean">
+    <Message Text="Deleting $(BuildFolder)" Importance="high" />
+    <Delete Files="$(BuildZipFileNameBin)" />
+    <Delete Files="$(BuildNuGetFileName)" />
+    <RemoveDir Directories=".\$(BuildFolder)" />
+    <Message Text="Finished deleting $(BuildFolder)" Importance="high" />
+  </Target>
+
 
   <!-- NB: BUILD_NUMBER is passed in by the build server -->
   <PropertyGroup Condition="'$(BUILD_NUMBER)'!=''">
@@ -75,15 +115,20 @@
   </PropertyGroup>
 
   <PropertyGroup>
+
     <BuildConfiguration>Release</BuildConfiguration>
     <BuildFolder>_BuildOutput\</BuildFolder>
-    <BuildZipFileName>Merchello$(DECIMAL_BUILD_NUMBER).zip</BuildZipFileName>
+    <BuildBinariesFolder>$(BuildFolder)\AllBinariesBin\</BuildBinariesFolder>
+    <BuildZipFileName>Merchello.$(DECIMAL_BUILD_NUMBER).zip</BuildZipFileName>
+    <BuildZipFileNameBin>Merchello.AllBinaries.$(DECIMAL_BUILD_NUMBER).zip</BuildZipFileNameBin>
+    <BuildNuGetFileName>Merchello.Core.$(DECIMAL_BUILD_NUMBER).nupkg</BuildNuGetFileName>
     <BuildFolderRelativeToProjects>..\..\build\$(BuildFolder)</BuildFolderRelativeToProjects>
     <BuildFolderAbsolutePath>$(MSBuildProjectDirectory)\$(BuildFolder)</BuildFolderAbsolutePath>
     <SolutionBinFolder>$(BuildFolder)bin\</SolutionBinFolder>
     <ConfigsFolder>$(BuildFolder)Configs\</ConfigsFolder>
     <SolutionBinFolderRelativeToProjects>$(BuildFolderRelativeToProjects)bin\</SolutionBinFolderRelativeToProjects>
     <SolutionBinFolderAbsolutePath>$(BuildFolderAbsolutePath)bin\</SolutionBinFolderAbsolutePath>
+    <AllBinariesBinFolderAbsolutePath>$(MSBuildProjectDirectory)\$(BuildBinariesFolder)</AllBinariesBinFolderAbsolutePath>
   </PropertyGroup>
 
 
