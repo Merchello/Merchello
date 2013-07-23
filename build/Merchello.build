@@ -17,7 +17,7 @@
   <Target Name="Build" DependsOnTargets="ZipBinaries">
     <!-- Copy fresh built umbraco files -->
 
-    <Exec Command="..\src\.nuget\NuGet.exe pack ..\build\nuspec\Merchello.Core.nuspec" />
+      <Exec Command="..\src\.nuget\NuGet.exe pack ..\build\nuspec\Merchello.Core.nuspec" />
     
     <Message Text="Build number is $(DECIMAL_BUILD_NUMBER)" />
   </Target>
@@ -63,8 +63,9 @@
 
     <Message Text="Compiling web project to build\$(BuildFolder)" Importance="high" />
     <!-- For UseWPP_CopyWebApplication=True see http://stackoverflow.com/questions/1983575/copywebapplication-with-web-config-transformations -->
-    <!-- Build the Umbraco.Web.UI project -->
-    <MSBuild Projects="..\src\Merchello.sln" Properties="WarningLevel=0;Configuration=$(BuildConfiguration);PipelineDependsOnBuild=False;OutDir=$(SolutionBinFolderAbsolutePath);" Targets="Clean;Build;" BuildInParallel="False" ToolsVersion="4.0" UnloadProjectsOnCompletion="False">
+    <!-- The following will need to change as we add the Merchello.Web -->
+    <!-- TODO: RSS had to add the Platform Any CPU -->
+    <MSBuild Projects="..\src\Merchello.sln" Properties="WarningLevel=0;Configuration=$(BuildConfiguration);Platform=Any CPU;PipelineDependsOnBuild=False;OutDir=$(SolutionBinFolderAbsolutePath);" Targets="Clean;Build;" BuildInParallel="False" ToolsVersion="4.0" UnloadProjectsOnCompletion="False">
     </MSBuild>
 
     <!-- DONE -->
