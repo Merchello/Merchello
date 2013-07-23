@@ -3,18 +3,83 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Core", "Merchello.Core\Merchello.Core.csproj", "{2A83A229-C24B-4D8D-B806-7C9999EB9461}"
 EndProject
+<<<<<<< HEAD
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+=======
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Core.Tests", "..\test\Merchello.Core.Tests\Merchello.Core.Tests.csproj", "{2B8005E2-6E23-44C5-AE78-999E8C55D9E2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{5269BF00-E042-4225-99CD-84867843409C}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A6C6EBCD-38C9-4FAD-975A-97FA97578537}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{07393251-2FF9-45FA-AAFA-81720405834F}"
+	ProjectSection(SolutionItems) = preProject
+		..\build\build.bat = ..\build\build.bat
+		..\build\Merchello.build = ..\build\Merchello.build
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+>>>>>>> meritage/master
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{2A83A229-C24B-4D8D-B806-7C9999EB9461}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2A83A229-C24B-4D8D-B806-7C9999EB9461}.Debug|Any CPU.Build.0 = Debug|Any CPU
+<<<<<<< HEAD
 		{2A83A229-C24B-4D8D-B806-7C9999EB9461}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A83A229-C24B-4D8D-B806-7C9999EB9461}.Release|Any CPU.Build.0 = Release|Any CPU
+=======
+		{2A83A229-C24B-4D8D-B806-7C9999EB9461}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{2A83A229-C24B-4D8D-B806-7C9999EB9461}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{2A83A229-C24B-4D8D-B806-7C9999EB9461}.Debug|x64.ActiveCfg = Debug|x64
+		{2A83A229-C24B-4D8D-B806-7C9999EB9461}.Debug|x64.Build.0 = Debug|x64
+		{2A83A229-C24B-4D8D-B806-7C9999EB9461}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2A83A229-C24B-4D8D-B806-7C9999EB9461}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A83A229-C24B-4D8D-B806-7C9999EB9461}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A83A229-C24B-4D8D-B806-7C9999EB9461}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{2A83A229-C24B-4D8D-B806-7C9999EB9461}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{2A83A229-C24B-4D8D-B806-7C9999EB9461}.Release|x64.ActiveCfg = Release|x64
+		{2A83A229-C24B-4D8D-B806-7C9999EB9461}.Release|x64.Build.0 = Release|x64
+		{2A83A229-C24B-4D8D-B806-7C9999EB9461}.Release|x86.ActiveCfg = Release|Any CPU
+		{2B8005E2-6E23-44C5-AE78-999E8C55D9E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B8005E2-6E23-44C5-AE78-999E8C55D9E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B8005E2-6E23-44C5-AE78-999E8C55D9E2}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{2B8005E2-6E23-44C5-AE78-999E8C55D9E2}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{2B8005E2-6E23-44C5-AE78-999E8C55D9E2}.Debug|x64.ActiveCfg = Debug|x64
+		{2B8005E2-6E23-44C5-AE78-999E8C55D9E2}.Debug|x64.Build.0 = Debug|x64
+		{2B8005E2-6E23-44C5-AE78-999E8C55D9E2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2B8005E2-6E23-44C5-AE78-999E8C55D9E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B8005E2-6E23-44C5-AE78-999E8C55D9E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B8005E2-6E23-44C5-AE78-999E8C55D9E2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{2B8005E2-6E23-44C5-AE78-999E8C55D9E2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{2B8005E2-6E23-44C5-AE78-999E8C55D9E2}.Release|x64.ActiveCfg = Release|x64
+		{2B8005E2-6E23-44C5-AE78-999E8C55D9E2}.Release|x64.Build.0 = Release|x64
+		{2B8005E2-6E23-44C5-AE78-999E8C55D9E2}.Release|x86.ActiveCfg = Release|Any CPU
+>>>>>>> meritage/master
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
+<<<<<<< HEAD
+=======
+	GlobalSection(NestedProjects) = preSolution
+		{2B8005E2-6E23-44C5-AE78-999E8C55D9E2} = {A6C6EBCD-38C9-4FAD-975A-97FA97578537}
+	EndGlobalSection
+>>>>>>> meritage/master
 EndGlobal

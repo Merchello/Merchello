@@ -4,18 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2A83A229-C24B-4D8D-B806-7C9999EB9461}</ProjectGuid>
+    <ProjectGuid>{2B8005E2-6E23-44C5-AE78-999E8C55D9E2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Merchello.Core</RootNamespace>
-    <AssemblyName>Merchello.Core</AssemblyName>
+    <RootNamespace>Merchello.Core.Tests</RootNamespace>
+    <AssemblyName>Merchello.Core.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-<<<<<<< HEAD
-=======
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\src\</SolutionDir>
     <RestorePackages>true</RestorePackages>
->>>>>>> meritage/master
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -25,10 +22,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-<<<<<<< HEAD
-=======
-    <PlatformTarget>AnyCPU</PlatformTarget>
->>>>>>> meritage/master
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -38,8 +31,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-<<<<<<< HEAD
-=======
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x64\Debug\</OutputPath>
@@ -58,44 +49,39 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
->>>>>>> meritage/master
   <ItemGroup>
+    <Reference Include="Moq">
+      <HintPath>..\..\src\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.6.2.12296, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <HintPath>..\..\src\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.WebRequest" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-<<<<<<< HEAD
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BuildServerSetupTests\BuildSetupTestFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-=======
-    <Reference Include="Umbraco.Core">
-      <HintPath>..\references\Umbraco.Core.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configuration\MerchelloVersion.cs" />
-    <Compile Include="Models\Rdbms\CustomerAddressDto.cs" />
-    <Compile Include="Models\Rdbms\CustomerDto.cs" />
-    <Compile Include="Models\Rdbms\InventoryDto.cs" />
-    <Compile Include="Models\Rdbms\InvoiceDto.cs" />
-    <Compile Include="Models\Rdbms\InvoiceItemDto.cs" />
-    <Compile Include="Models\Rdbms\InvoiceStatusDto.cs" />
-    <Compile Include="Models\Rdbms\PaymentDto.cs" />
-    <Compile Include="Models\Rdbms\PaymentTransactionDto.cs" />
-    <Compile Include="Models\Rdbms\ShipmentDto.cs" />
-    <Compile Include="Models\Rdbms\ShipmentMethodDto.cs" />
-    <Compile Include="Models\Rdbms\WarehouseDto.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Merchello.Core\Merchello.Core.csproj">
+      <Project>{2a83a229-c24b-4d8d-b806-7c9999eb9461}</Project>
+      <Name>Merchello.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
->>>>>>> meritage/master
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
