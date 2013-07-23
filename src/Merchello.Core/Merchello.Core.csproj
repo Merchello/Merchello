@@ -58,8 +58,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Umbraco.Core">
-      <HintPath>..\references\Umbraco.Core.dll</HintPath>
+    <Reference Include="Umbraco.Core, Version=1.0.4927.23554, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\UmbracoCms.Core.6.1.2.2\lib\Umbraco.Core.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

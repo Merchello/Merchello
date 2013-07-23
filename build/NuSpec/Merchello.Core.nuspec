@@ -16,9 +16,9 @@
         <tags>umbraco, merchello</tags>		
     </metadata>
 	<files>
-		<file src="..\_BuildOutput\AllBinariesBin\Merchello.Core.dll" target="lib\Merchello.Core.dll" />
-		<!--file src="..\_BuildOutput\AllBinariesBin\Merchello.Core.xml" target="lib\Merchello.Core.xml" /-->
-		<file src="..\_BuildOutput\AllBinariesBin\Merchello.Core.pdb" target="lib\Merchello.Core.pdb" />
-		<file src="..\_BuildOutput\AllBinariesBin\Umbraco.Core.dll" target="lib\Umbraco.Core.dll" />		
+		<file src="..\Temp\bin\Merchello.Core.dll" target="lib\Merchello.Core.dll" />
+		<!--file src="..\Temp\bin\Merchello.Core.xml" target="lib\Merchello.Core.xml" /-->
+		<file src="..\Temp\bin\Merchello.Core.pdb" target="lib\Merchello.Core.pdb" />
+		<file src="..\Temp\bin\Umbraco.Core.dll" target="lib\Umbraco.Core.dll" />		
 	</files>
 </package>

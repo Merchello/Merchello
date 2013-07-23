@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+    <Import Project="..\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets" />
+
+
+    <Target Name="MakeBuildDirectory" DependsOnTargets="Clean">
+        <Message Text="Creating $(BuildWorkFolder)" Importance="high" />
+        <MakeDir Directories="$(BuildWorkFolder)" />
+        <Message Text="Finished creating $(BuildWorkFolder)" Importance="high" />
+    </Target>
+
+    <Target Name="Clean">
+        <Message Text="Deleting $(BuildWorkFolder)" Importance="high" />
+        <RemoveDir Directories="$(BuildWorkFolder)" />
+        <Message Text="Finished deleting $(BuildWorkFolder)" Importance="high" />
+    </Target>
+
+
+    <!-- 
+    Versioning 
+    -->
+    <Target Name="SetVersionNumber" Condition="'$(BUILD_RELEASE)'!=''" DependsOnTargets="MakeBuildDirectory">
+        <!-- Match & replace 3 and 4 digit version numbers and -beta (if it's there) -->
+        <FileUpdate
+          Files="..\src\Merchello.Core\Configuration\MerchelloVersion.cs"
+          Regex="(\d+)\.(\d+)\.(\d+)(.(\d+))?"
+          ReplacementText="$(BUILD_RELEASE)"/>
+
+        <FileUpdate Files="..\src\Merchello.Core\Configuration\MerchelloVersion.cs"
+          Regex="CurrentComment { get { return &quot;([a-zA-Z]+)?&quot;"
+          ReplacementText="CurrentComment { get { return &quot;$(BUILD_COMMENT)&quot;"/>
+    </Target>
+
+    <Target Name="UpdateAssemblyInfo" DependsOnTargets="Clean">
+        <Version Major="$(VersionMajor)" Minor="$(VersionMinor)" BuildType="Automatic" RevisionType="Automatic" StartDate="05/06/2013">
+            <Output TaskParameter="Build" PropertyName="Build" />
+            <Output TaskParameter="Revision" PropertyName="Revision" />
+        </Version>
+        <AssemblyInfo CodeLanguage="CS"
+			OutputFile="$(ProjectDir)\Properties\VersionInfo.cs"
+			AssemblyVersion="$(VersionMajor).$(VersionMinor).$(VersionPatch)"
+			AssemblyFileVersion="$(VersionMajor).$(VersionMinor).$(Build).$(Revision)"
+			AssemblyInformationalVersion="$(VersionMajor).$(VersionMinor).$(VersionPatch)$(VersionSuffix)"/>
+    </Target>
+
+</Project>

@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-  <PropertyGroup>
-    <MSBuildCommunityTasksPath>..\MSBuildCommunityTasks</MSBuildCommunityTasksPath>
-  </PropertyGroup>
-
-  <Import Project="..\tools\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets" />
+  <Import Project="..\tools\Merchello\Merchello.props" />
+  <Import Project="..\tools\Merchello\Merchello.targets" />
   
 
   <!-- 
@@ -15,13 +12,16 @@
  -->
 
   <Target Name="Build" DependsOnTargets="ZipBinaries">
-    <!-- Copy fresh built umbraco files -->
-
-      <Exec Command="..\src\.nuget\NuGet.exe pack ..\build\nuspec\Merchello.Core.nuspec" />
+    <!-- Copy fresh built umbraco files -->      
     
     <Message Text="Build number is $(DECIMAL_BUILD_NUMBER)" />
   </Target>
 
+    <Target Name="NuGetPackCore">
+
+        <Exec Command="..\src\.nuget\NuGet.exe pack ..\build\nuspec\Merchello.Core.nuspec" />  
+    
+    </Target>
 
   <Target Name="ZipBinaries" DependsOnTargets="AllBinaries">
     <Message Text="Starting to zip to $(BuildZipFileName)" Importance="high" />
@@ -73,64 +73,5 @@
   </Target>
 
  
-
-  <Target Name="SetVersionNumber" Condition="'$(BUILD_RELEASE)'!=''" DependsOnTargets="MakeBuildDirectory">
-    
-    <!-- Match & replace 3 and 4 digit version numbers and -beta (if it's there) -->
-    <FileUpdate
-      Files="..\src\Merchello.Core\Configuration\MerchelloVersion.cs"
-      Regex="(\d+)\.(\d+)\.(\d+)(.(\d+))?"
-      ReplacementText="$(BUILD_RELEASE)"/>
-
-    <FileUpdate Files="..\src\Merchello.Core\Configuration\MerchelloVersion.cs"
-      Regex="CurrentComment { get { return &quot;([a-zA-Z]+)?&quot;"
-      ReplacementText="CurrentComment { get { return &quot;$(BUILD_COMMENT)&quot;"/>
-    
-  </Target>
-
-  <Target Name="MakeBuildDirectory" DependsOnTargets="Clean">
-    <Message Text="Creating $(BuildFolder) and $(BuildBinariesFolder)" Importance="high" />
-    <MakeDir Directories=".\$(BuildFolder)" />
-    <MakeDir Directories=".\$(BuildBinariesFolder)" />
-    <Message Text="Finished creating $(BuildFolder)" Importance="high" />
-  </Target>
-
-  <Target Name="Clean">
-    <Message Text="Deleting $(BuildFolder)" Importance="high" />
-    <Delete Files="$(BuildZipFileNameBin)" />
-    <Delete Files="$(BuildNuGetFileName)" />
-    <RemoveDir Directories=".\$(BuildFolder)" />
-    <Message Text="Finished deleting $(BuildFolder)" Importance="high" />
-  </Target>
-
-
-  <!-- NB: BUILD_NUMBER is passed in by the build server -->
-  <PropertyGroup Condition="'$(BUILD_NUMBER)'!=''">
-    <DECIMAL_BUILD_NUMBER>$(BUILD_NUMBER)</DECIMAL_BUILD_NUMBER>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(BUILD_RELEASE)'!=''">
-    <DECIMAL_BUILD_NUMBER>$(BUILD_RELEASE)</DECIMAL_BUILD_NUMBER>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(BUILD_RELEASE)'!='' AND '$(BUILD_COMMENT)'!=''">
-    <DECIMAL_BUILD_NUMBER>$(BUILD_RELEASE)-$(BUILD_COMMENT)</DECIMAL_BUILD_NUMBER>
-  </PropertyGroup>
-
-  <PropertyGroup>
-
-    <BuildConfiguration>Release</BuildConfiguration>
-    <BuildFolder>_BuildOutput\</BuildFolder>
-    <BuildBinariesFolder>$(BuildFolder)\AllBinariesBin\</BuildBinariesFolder>
-    <BuildZipFileName>Merchello.$(DECIMAL_BUILD_NUMBER).zip</BuildZipFileName>
-    <BuildZipFileNameBin>Merchello.AllBinaries.$(DECIMAL_BUILD_NUMBER).zip</BuildZipFileNameBin>
-    <BuildNuGetFileName>Merchello.Core.$(DECIMAL_BUILD_NUMBER).nupkg</BuildNuGetFileName>
-    <BuildFolderRelativeToProjects>..\..\build\$(BuildFolder)</BuildFolderRelativeToProjects>
-    <BuildFolderAbsolutePath>$(MSBuildProjectDirectory)\$(BuildFolder)</BuildFolderAbsolutePath>
-    <SolutionBinFolder>$(BuildFolder)bin\</SolutionBinFolder>
-    <ConfigsFolder>$(BuildFolder)Configs\</ConfigsFolder>
-    <SolutionBinFolderRelativeToProjects>$(BuildFolderRelativeToProjects)bin\</SolutionBinFolderRelativeToProjects>
-    <SolutionBinFolderAbsolutePath>$(BuildFolderAbsolutePath)bin\</SolutionBinFolderAbsolutePath>
-    <AllBinariesBinFolderAbsolutePath>$(MSBuildProjectDirectory)\$(BuildBinariesFolder)</AllBinariesBinFolderAbsolutePath>
-  </PropertyGroup>
-
 
 </Project>
