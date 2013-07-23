@@ -13,7 +13,9 @@ src/Merchello.Core/obj/
 [Dd]ebug/
 [Rr]elease/
 x64/
-build/
+build/*.zip
+build/*.nupkg
+build/_*
 [Bb]in/
 [Oo]bj/
 
