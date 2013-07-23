@@ -16,6 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A6C6EBCD
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{07393251-2FF9-45FA-AAFA-81720405834F}"
 	ProjectSection(SolutionItems) = preProject
+		..\build\build.bat = ..\build\build.bat
 		..\build\Merchello.build = ..\build\Merchello.build
 	EndProjectSection
 EndProject
