@@ -16,16 +16,16 @@
 		
 		<Message Text="Build number is $(AssemblyInformationVersion)" Importance="high" />
 
-		<!--RemoveDir Directories="$(BuildBinariesFolder);$(BuildPackageFolder)" /-->
+		<RemoveDir Directories="$(BuildBinariesFolder);$(BuildPackageFolder);$(SolutionBinFolderAbsolutePath)" />
 		
 	</Target>
 
 	<!-- MERCHELLO UMBRACO PACKAGE -->
 	<Target Name="Package" DependsOnTargets="Manifest">
     <ItemGroup>
-      <PackageFiles Include="$(BuildPackageFolder)\**\*.*" />
+      <PackageFiles Include="$(BuildPackageFolder)**\*.*" />
     </ItemGroup>
-    <Package ManifestFile="$(BuildPackageFolder)\package.xml"
+    <Package ManifestFile="$(BuildPackageFolder)package.xml"
 			WorkingDirectory="$(BuildPackageFolder)"
 			OutputDirectory="$(PackageDir)"
 			Files="@(PackageFiles)" />
@@ -34,16 +34,18 @@
 
 	<Target Name="Manifest" DependsOnTargets="PreparePackageFiles">
 
-		<!--ItemGroup>
-			<ManifestFiles Include="$(BuildPackageFolder)\**\*" Exclude="$(BuildPackageFolder)\package.xml" />
+		<ItemGroup>
+			<ManifestFiles Include="$(BuildPackageFolder)**\*.*" Exclude="$(BuildPackageFolder)package.xml" />
 		</ItemGroup>
 
-    <ManifestUpdate ManifestFile="$(BuildPackageFolder)\package.xml"
-			WorkingDirectory="$(PackageDir)"
+        
+        <Message Text="$(BuildPackageFolder)package.xml" Importance="high" />
+    <ManifestUpdate ManifestFile="$(BuildPackageFolder)package.xml"
+			WorkingDirectory="$(BuildPackageFolder2)"
 			MinimumRequiredUmbracoVersion="$(UmbracoVersion)"
 			PackageVersion="$(AssemblyInformationVersion)"
 			Readme="$([System.IO.File]::ReadAllText(readme.md))"
-			Files="@(ManifestFiles)" /-->
+			Files="@(ManifestFiles)" />
 
 	</Target>
 
@@ -59,11 +61,11 @@
 
 		</ItemGroup>
 
-		<Copy SourceFiles="@(BinFiles)" DestinationFolder="$(BuildPackageFolder)\bin" />
-		<!--Copy SourceFiles="@(ConfigFiles)" DestinationFolder="$(BuildPackageFolder)\config" />
-		<Copy SourceFiles="@(AppIcon)" DestinationFolder="$(BuildPackageFolder)\umbraco\images\umbraco" />
-		<Copy SourceFiles="@(AppTrayIcon)" DestinationFolder="$(BuildPackageFolder)\umbraco\images\tray" /-->
-		<Copy SourceFiles="@(PluginFiles)" DestinationFolder="$(BuildPackageFolder)\App_Plugins\Merchello\install" />
+		<Copy SourceFiles="@(BinFiles)" DestinationFolder="$(BuildPackageFolder)bin" />
+		<!--Copy SourceFiles="@(ConfigFiles)" DestinationFolder="$(BuildPackageFolder)config" />
+		<Copy SourceFiles="@(AppIcon)" DestinationFolder="$(BuildPackageFolder)umbraco\images\umbraco" />
+		<Copy SourceFiles="@(AppTrayIcon)" DestinationFolder="$(BuildPackageFolder)umbraco\images\tray" /-->
+		<Copy SourceFiles="@(PluginFiles)" DestinationFolder="$(BuildPackageFolder)App_Plugins\Merchello\install" />
 		<Copy SourceFiles="@(PackageFile)" DestinationFolder="$(BuildPackageFolder)" />
 		
 	</Target>

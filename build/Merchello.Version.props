@@ -17,7 +17,7 @@
         <UmbracoVersionMinor>1</UmbracoVersionMinor>
         <UmbracoVersionPatch>2</UmbracoVersionPatch>
         <UmbracoVersionSuffix>2</UmbracoVersionSuffix>
-        <UmbracoVersion>$(UmbracoVersionMajor).$(UmbracoVersionMinor).$(UmbracoVersionPatch).$(UmbracoVersionSuffix)</UmbracoVersion>
+        <UmbracoVersion>$(UmbracoVersionMajor).$(UmbracoVersionMinor).$(UmbracoVersionPatch)</UmbracoVersion>
         
       </PropertyGroup>
 

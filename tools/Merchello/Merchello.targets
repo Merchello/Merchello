@@ -66,32 +66,7 @@
 							 XmlFileName="$(MSBuildProjectDirectory)\nuspec\Merchello.Core.nuspec"
 							 XPath="nu:package/nu:metadata/nu:version"
 							 Value="$(AssemblyInformationVersion)" />
-
-		<!-- Umbraco Package Xml -->
-			<XmlUpdate
-				XmlFileName="$(MSBuildProjectDirectory)\package.xml" 
-				XPath="umbPackage/info/package/version"
-				Value="$(AssemblyInformationVersion)"
-				/>
-
-		<XmlUpdate
-			XmlFileName="$(MSBuildProjectDirectory)\package.xml"
-			XPath="umbPackage/info/package/requirements/major"
-			Value="$(UmbracoVersionMajor)"
-				/>
-
-		<XmlUpdate
-					XmlFileName="$(MSBuildProjectDirectory)\package.xml"
-					XPath="umbPackage/info/package/requirements/minor"
-					Value="$(UmbracoVersionMinor)"
-				/>
-
-		<XmlUpdate
-					XmlFileName="$(MSBuildProjectDirectory)\package.xml"
-					XPath="umbPackage/info/package/requirements/patch"
-					Value="$(UmbracoVersionPatch)"
-				/>
-		
+        
 	</Target>
 
 </Project>

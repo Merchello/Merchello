@@ -2,20 +2,22 @@
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   
     <PropertyGroup>        
-        <MSBuildCommunityTasksPath>..\MSBuildCommunityTasks</MSBuildCommunityTasksPath>        
+        <MSBuildCommunityTasksPath>..\MSBuildCommunityTasks</MSBuildCommunityTasksPath>
+        <MSBuildUmbracoTasksPath>..\MSBuildCommunityTasks</MSBuildUmbracoTasksPath>
     </PropertyGroup>
 
     <PropertyGroup>
        
-        <RootDir>$(MSBuildProjectDirectory)\..</RootDir>
+        <RootDir>$(MSBuildProjectDirectory)\..\</RootDir>
         
         <BuildDir>$(MSBuildProjectDirectory)\Temp\</BuildDir>
-        <BuildBinariesFolder>$(BuildDir)\AllBinariesBin\</BuildBinariesFolder>
-        <BuildPackageFolder>$(BuildDir)\StagePackage\</BuildPackageFolder>
+        <BuildBinariesFolder>$(BuildDir)AllBinariesBin\</BuildBinariesFolder>
+        <BuildPackageFolder>$(BuildDir)StagePackage\</BuildPackageFolder>
+        <BuildPackageFolder2>$(BuildDir)StagePackage</BuildPackageFolder2>
         <PackageDir>$(BuildDir)Artifacts\</PackageDir>
       
-        <MerchelloCoreProjectDir>$(RootDir)\src\Merchello.Core\</MerchelloCoreProjectDir>
-        <MerchelloWebProjectDir>$(RootDir)\src\Merchello.Web\</MerchelloWebProjectDir>
+        <MerchelloCoreProjectDir>$(RootDir)src\Merchello.Core\</MerchelloCoreProjectDir>
+        <MerchelloWebProjectDir>$(RootDir)src\Merchello.Web\</MerchelloWebProjectDir>
                       
                               
         <SolutionBinFolder>$(BuildDir)bin\</SolutionBinFolder>        
