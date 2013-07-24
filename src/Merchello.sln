@@ -18,10 +18,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{07393251
 	ProjectSection(SolutionItems) = preProject
 		..\build\build.bat = ..\build\build.bat
 		..\build\Merchello.build = ..\build\Merchello.build
-		..\build\Merchello.build.old = ..\build\Merchello.build.old
-		..\tools\Merchello\Merchello.proj = ..\tools\Merchello\Merchello.proj
 		..\tools\Merchello\Merchello.props = ..\tools\Merchello\Merchello.props
 		..\tools\Merchello\Merchello.targets = ..\tools\Merchello\Merchello.targets
+		..\build\Merchello.Version.props = ..\build\Merchello.Version.props
+		..\build\package.xml = ..\build\package.xml
+		..\build\readme.md = ..\build\readme.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Web", "Merchello.Web\Merchello.Web.csproj", "{81D9E7DA-5A5A-444A-823F-1D97D7D5FEDF}"
