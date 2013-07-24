@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <!--     
+    The following set the version information for each project in the solution, in addition to the 
+    .nuspec file version(s)    
+    -->
+      <PropertyGroup>
+        
+        <VersionMajor>1</VersionMajor>
+        <VersionMinor>0</VersionMinor>
+        <VersionPatch>0</VersionPatch>
+        <VersionSuffix>0</VersionSuffix>        
+        <BuildConfiguration>Release</BuildConfiguration>
+        <AssemblyInformationVersion>$(VersionMajor).$(VersionMinor).$(VersionPatch).$(VersionSuffix)</AssemblyInformationVersion>
+        
+        <UmbracoVersionMajor>6</UmbracoVersionMajor>
+        <UmbracoVersionMinor>1</UmbracoVersionMinor>
+        <UmbracoVersionPatch>2</UmbracoVersionPatch>
+        <UmbracoVersionSuffix>2</UmbracoVersionSuffix>
+        <UmbracoVersion>$(UmbracoVersionMajor).$(UmbracoVersionMinor).$(UmbracoVersionPatch).$(UmbracoVersionSuffix)</UmbracoVersion>
+        
+      </PropertyGroup>
+
+</Project>

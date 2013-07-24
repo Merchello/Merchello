@@ -1,24 +1,27 @@
-<?xml version="1.0" encoding="utf-16"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
-    <metadata>
-        <id>Merchello.Core</id>
-        <version>1.0.0.0</version>
-        <title>Merchello Core Binaries</title>
-        <authors>Rusty Swayne, Joe Payne, Jason Prothero</authors>
-        <owners>Meritage, LLC.</owners>
-        <licenseUrl>https://github.com/meritage/Merchello/blob/master/License.md</licenseUrl>
-        <projectUrl>http://merchello.com</projectUrl>
-        <!--iconUrl> http://merchello.com/media/*.png</iconUrl-->
-        <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>Contains the core assemblies needed to run the Merchello ecommerce extension package for the Umbraco Cms. This package only contains assemblies and can be used for package development.</description>
-        <summary>Contains the core assemblies needed to extend the Merchello eCommerece package for the Umbraco CMS</summary>
-        <language>en-US</language>
-        <tags>umbraco, merchello</tags>		
-    </metadata>
-	<files>
-		<file src="..\Temp\bin\Merchello.Core.dll" target="lib\Merchello.Core.dll" />
-		<!--file src="..\Temp\bin\Merchello.Core.xml" target="lib\Merchello.Core.xml" /-->
-		<file src="..\Temp\bin\Merchello.Core.pdb" target="lib\Merchello.Core.pdb" />
-		<file src="..\Temp\bin\Umbraco.Core.dll" target="lib\Umbraco.Core.dll" />		
-	</files>
+  <metadata>
+    <id>Merchello.Core</id>
+    <version>1.0.0.0</version>
+    <title>Merchello Core Binaries</title>
+    <authors>Rusty Swayne, Joe Payne, Jason Prothero</authors>
+    <owners>Meritage, LLC.</owners>
+    <licenseUrl>https://github.com/meritage/Merchello/blob/master/License.md</licenseUrl>
+    <projectUrl>http://merchello.com</projectUrl>
+    <!--iconUrl> http://merchello.com/media/*.png</iconUrl-->
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Contains the core assemblies needed to run the Merchello ecommerce extension package for the Umbraco Cms. This package only contains assemblies and can be used for package development.</description>
+    <summary>Contains the core assemblies needed to extend the Merchello eCommerece package for the Umbraco CMS</summary>
+    <language>en-US</language>
+    <tags>umbraco, merchello</tags>
+    <dependencies>
+      <dependency id="UmbracoCms.Core" version="6.1.2.2" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\Temp\bin\Merchello.Core.dll" target="lib\net40\Merchello.Core.dll" />
+    <file src="..\Temp\bin\Merchello.Core.pdb" target="lib\net40\Merchello.Core.pdb" />
+    <file src="..\Temp\bin\Merchello.Web.dll" target="lib\net40\Merchello.Web.dll" />
+    <file src="..\Temp\bin\Merchello.Web.pdb" target="lib\net40\Merchello.Web.pdb" />
+  </files>
 </package>

@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<umbPackage>
+  <info>
+    <package>
+      <name>Merchello</name>
+      <version>1.0.0.0</version>
+      <license url="http://www.opensource.org/licenses/mit-license.php">MIT license</license>
+      <url>http://our.umbraco.org/projects/website-utilities/merchello</url>
+      <requirements>
+        <major>6</major>
+        <minor>1</minor>
+        <patch>2</patch>
+      </requirements>
+    </package>
+    <author>
+      <name>Rusty Swayne</name>
+      <website>http://www.merchello.com/</website>
+    </author>
+    <readme><![CDATA[]]></readme>
+  </info>
+  <DocumentTypes />
+  <Templates />
+  <Stylesheets />
+  <Macros />
+  <DictionaryItems />
+  <Languages />
+  <DataTypes />
+  <Actions>
+    <!--
+		<Action runat="install" undo="true" alias="merchello_AddConfigSection" />
+		<Action runat="install" undo="true" alias="merchello_CreateDatabase" />
+		<Action runat="install" undo="true" alias="merchello_AddLanguageFileKey" language="en" position="end" area="sections" key="merchello" value="Merchello" />
+		<Action runat="install" undo="true" alias="merchello_AddTreeNodeType">
+		 This will probably be different with Bell 
+		</Action>
+		<Action runat="install" undo="true" alias="addDashboardSection" dashboardAlias="merchelloDashboard">
+			<section alias="merchelloDashboard">
+				<areas>
+					<area>Merchello</area>
+				</areas>
+				<tab caption="Overview">
+					
+				</tab>
+				<tab caption="Import">
+					
+				</tab>
+				<tab caption="Export">
+					
+				</tab>
+			</section>
+		</Action>
+    -->
+    <Action runat="install" undo="true" alias="merchello_GrantPermissionForApp" userLogin="$currentUser" appName="Merchello" />
+  </Actions>
+  <control />
+  <files />
+</umbPackage>

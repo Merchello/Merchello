@@ -1,47 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-
-    <PropertyGroup>
-        
-        <MSBuildCommunityTasksPath>..\MSBuildCommunityTasks</MSBuildCommunityTasksPath>
-        
-    </PropertyGroup>
-
-    <!-- NB: BUILD_NUMBER is passed in by the build server -->
-    <PropertyGroup Condition="'$(BUILD_NUMBER)'!=''">
-        <DECIMAL_BUILD_NUMBER>$(BUILD_NUMBER)</DECIMAL_BUILD_NUMBER>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(BUILD_RELEASE)'!=''">
-        <DECIMAL_BUILD_NUMBER>$(BUILD_RELEASE)</DECIMAL_BUILD_NUMBER>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(BUILD_RELEASE)'!='' AND '$(BUILD_COMMENT)'!=''">
-        <DECIMAL_BUILD_NUMBER>$(BUILD_RELEASE)-$(BUILD_COMMENT)</DECIMAL_BUILD_NUMBER>
-    </PropertyGroup>
-
-    <PropertyGroup>
-
-        <BuildConfiguration>Release</BuildConfiguration>
   
-        <BuildFolder>.\</BuildFolder>
-        <BuildWorkFolder>$(BuildFolder)Temp\</BuildWorkFolder>
-        
-        <BuildBinariesFolder>$(BuildWorkFolder)\AllBinariesBin\</BuildBinariesFolder>
-
-
-        <UmbracoPackageZipFileName>Merchello.$(DECIMAL_BUILD_NUMBER).zip</UmbracoPackageZipFileName>
-        <MerchelloNuGetFileName>Merchello.$(DECIMAL_BUILD_NUMBER).nupkg</MerchelloNuGetFileName>
-        <MerchelloCoreNuGetFileName>Merchello.Core.$(DECIMAL_BUILD_NUMBER).nupkg</MerchelloCoreNuGetFileName>
-        
-        <BuildZipFileNameBin>Merchello.AllBinaries.$(DECIMAL_BUILD_NUMBER).zip</BuildZipFileNameBin>
-        <BuildNuGetFileName>Merchello.Core.$(DECIMAL_BUILD_NUMBER).nupkg</BuildNuGetFileName>
-        <BuildFolderRelativeToProjects>..\..\build\$(BuildWorkFolder)</BuildFolderRelativeToProjects>
-        <BuildFolderAbsolutePath>$(MSBuildProjectDirectory)\$(BuildWorkFolder)</BuildFolderAbsolutePath>
-        <SolutionBinFolder>$(BuildWorkFolder)bin\</SolutionBinFolder>
-        
-        <SolutionBinFolderRelativeToProjects>$(BuildFolderRelativeToProjects)bin\</SolutionBinFolderRelativeToProjects>
-        <SolutionBinFolderAbsolutePath>$(BuildFolderAbsolutePath)bin\</SolutionBinFolderAbsolutePath>
-        <AllBinariesBinFolderAbsolutePath>$(MSBuildProjectDirectory)\$(BuildBinariesFolder)</AllBinariesBinFolderAbsolutePath>
+    <PropertyGroup>        
+        <MSBuildCommunityTasksPath>..\MSBuildCommunityTasks</MSBuildCommunityTasksPath>        
     </PropertyGroup>
 
+    <PropertyGroup>
+       
+        <RootDir>$(MSBuildProjectDirectory)\..</RootDir>
+        
+        <BuildDir>$(MSBuildProjectDirectory)\Temp\</BuildDir>
+        <BuildBinariesFolder>$(BuildDir)\AllBinariesBin\</BuildBinariesFolder>
+        <BuildPackageFolder>$(BuildDir)\StagePackage\</BuildPackageFolder>
+        <PackageDir>$(BuildDir)Artifacts\</PackageDir>
+      
+        <MerchelloCoreProjectDir>$(RootDir)\src\Merchello.Core\</MerchelloCoreProjectDir>
+        <MerchelloWebProjectDir>$(RootDir)\src\Merchello.Web\</MerchelloWebProjectDir>
+                      
+                              
+        <SolutionBinFolder>$(BuildDir)bin\</SolutionBinFolder>        
+        <SolutionBinFolderRelativeToProjects>$(BuildFolderRelativeToProjects)bin\</SolutionBinFolderRelativeToProjects>
+        <SolutionBinFolderAbsolutePath>$(BuildDir)bin\</SolutionBinFolderAbsolutePath>
+              
+    </PropertyGroup>
+
+  <PropertyGroup Label="Packages">
+
+    <!-- PACKAGES -->
+    <UmbracoPackageZipFileName>Merchello.$(AssemblyInformationVersion).zip</UmbracoPackageZipFileName>
+    <MerchelloAllBinaries>Merchello.AllBinaries.$(AssemblyInformationVersion).zip</MerchelloAllBinaries>
+    
+  </PropertyGroup>
 
 </Project>
