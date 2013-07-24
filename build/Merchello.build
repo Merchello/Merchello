@@ -109,13 +109,11 @@
 				OverwriteReadOnlyFiles="true"
 				SkipUnchangedFiles="false" />
 		
-		<Message Text="CopyXmlDocumentation" />
-		
 	</Target>
 		
 	
 	<!-- COPY THE XML DOCUMENTATION TO THE BIN FOLDER -->
-	<Target Name="CopyXmlDocumentation"  DependsOnTargets="CompileProjects">
+	<Target Name="CopyXmlDocumentation"  DependsOnTargets="RunTests">
 		<ItemGroup>
 			<XmlDocumentationFiles Include="$(SolutionBinFolder)*.xml" />
 		</ItemGroup>
@@ -127,6 +125,14 @@
 		<Message Text="CopyXmlDocumentation" />
 	</Target>
 
+    <!-- UNIT TESTS -->
+    <Target Name="RunTests" DependsOnTargets="CompileProjects">
+
+        
+        <Exec Command="..\tools\NUnit\nunit-console.exe .\Temp\bin\Merchello.Core.Tests.dll  /xml=.\Temp\Artifacts\MerchelloCore_TestResults.xml" />
+        <Exec Command="..\tools\NUnit\nunit-console.exe .\Temp\bin\Merchello.Web.Tests.dll  /xml=.\Temp\Artifacts\MerchelloWeb_TestResults.xml" />
+        
+    </Target>
 	
 	<!-- COMPILE -->
 	<Target Name="CompileProjects" DependsOnTargets="SetVersionNumber">
