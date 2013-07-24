@@ -50,13 +50,13 @@
 			<AssemblyInfo CodeLanguage="CS"
 				OutputFile="$(MerchelloCoreProjectDir)Properties\AssemblyInfo.cs"
 				AssemblyVersion="$(AssemblyInformationVersion)"
-				AssemblyFileVersion="$(VersionMajor).$(VersionMinor).$(Build).$(Revision)"
+				AssemblyFileVersion="$(AssemblyInformationVersion)"
 				AssemblyInformationalVersion="$(AssemblyInformationVersion)"/>
 			
 			<AssemblyInfo CodeLanguage="CS"
 				OutputFile="$(MerchelloWebProjectDir)Properties\AssemblyInfo.cs"
 				AssemblyVersion="$(AssemblyInformationVersion)"
-				AssemblyFileVersion="$(VersionMajor).$(VersionMinor).$(Build).$(Revision)"
+				AssemblyFileVersion="$(AssemblyInformationVersion)"
 				AssemblyInformationalVersion="$(AssemblyInformationVersion)"/>
 
 		<!-- Update the nuspec file(s) -->
@@ -66,7 +66,7 @@
 							 XmlFileName="$(MSBuildProjectDirectory)\nuspec\Merchello.Core.nuspec"
 							 XPath="nu:package/nu:metadata/nu:version"
 							 Value="$(AssemblyInformationVersion)" />
-        
+				
 	</Target>
 
 </Project>
