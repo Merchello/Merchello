@@ -1,136 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-  <PropertyGroup>
-    <MSBuildCommunityTasksPath>..\MSBuildCommunityTasks</MSBuildCommunityTasksPath>
-  </PropertyGroup>
-
-  <Import Project="..\tools\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets" />
-  
-
-  <!-- 
+	<Import Project="Merchello.Version.props" />
+	<Import Project="..\tools\Merchello\Merchello.props" />
+	<Import Project="..\tools\Merchello\Merchello.targets" />
+	
+	<!-- 
  ****************************************************
  TARGETS 
  *****************************************************
  -->
 
-  <Target Name="Build" DependsOnTargets="ZipBinaries">
-    <!-- Copy fresh built umbraco files -->
+	<!-- BUILD INITIALIZATION -->
+	<Target Name="Build" DependsOnTargets="Package;ZipAllBinaries;NuGetPackCore">
+		
+		<Message Text="Build number is $(AssemblyInformationVersion)" Importance="high" />
 
-      <Exec Command="..\src\.nuget\NuGet.exe pack ..\build\nuspec\Merchello.Core.nuspec" />
-    
-    <Message Text="Build number is $(DECIMAL_BUILD_NUMBER)" />
-  </Target>
+		<RemoveDir Directories="$(BuildBinariesFolder);$(BuildPackageFolder);$(SolutionBinFolderAbsolutePath)" />
+		
+	</Target>
 
-
-  <Target Name="ZipBinaries" DependsOnTargets="AllBinaries">
-    <Message Text="Starting to zip to $(BuildZipFileName)" Importance="high" />
-
-    <Exec Command="..\tools\7zip\7za.exe a -r %22$(BuildZipFileNameBin)%22 %22$(AllBinariesBinFolderAbsolutePath)*%22" />
-
-    <Message Text="Finished zipping to build\$(BuildFolder)\$(buildDate)-$(BuildZipFileName)" Importance="high" />
-    
-  </Target>
-
-  <Target Name="AllBinaries" DependsOnTargets="CopyXmlDocumentation">
+	<!-- MERCHELLO UMBRACO PACKAGE -->
+	<Target Name="Package" DependsOnTargets="Manifest">
     <ItemGroup>
-      <AllBinariesFiles Include="$(SolutionBinFolder)*.*" Exclude="$(SolutionBinFolder)*Tests.*;$(SolutionBinFolder)*nunit.*;$(SolutionBinFolder)*Moq.*" />
+      <PackageFiles Include="$(BuildPackageFolder)**\*.*" />
     </ItemGroup>
+    <Package ManifestFile="$(BuildPackageFolder)package.xml"
+			WorkingDirectory="$(BuildPackageFolder)"
+			OutputDirectory="$(PackageDir)"
+			Files="@(PackageFiles)" />
+		
+	</Target>
 
-     
-    <Copy SourceFiles="@(AllBinariesFiles)"
-        DestinationFiles="@(AllBinariesFiles->'$(BuildBinariesFolder)\%(RecursiveDir)%(Filename)%(Extension)')"
-        OverwriteReadOnlyFiles="true"
-        SkipUnchangedFiles="false" />
-    <Message Text="CopyXmlDocumentation" />
-    
-  </Target>
-  
-  <!-- Copy the xml documentation to the bin folder -->
-  <Target Name="CopyXmlDocumentation"  DependsOnTargets="CompileProjects">
-    <ItemGroup>
-      <XmlDocumentationFiles Include="$(SolutionBinFolder)*.xml" />
-    </ItemGroup>
+	<Target Name="Manifest" DependsOnTargets="PreparePackageFiles">
 
-    <Copy SourceFiles="@(XmlDocumentationFiles)"
-        DestinationFiles="@(XmlDocumentationFiles->'$(BuildFolder)bin\%(RecursiveDir)%(Filename)%(Extension)')"
-        OverwriteReadOnlyFiles="true"
-        SkipUnchangedFiles="false" />
-    <Message Text="CopyXmlDocumentation" />
-  </Target>
+		<ItemGroup>
+			<ManifestFiles Include="$(BuildPackageFolder)**\*.*" Exclude="$(BuildPackageFolder)package.xml" />
+		</ItemGroup>
 
-  <Target Name="CompileProjects" DependsOnTargets="SetVersionNumber">
+        
+        <Message Text="$(BuildPackageFolder)package.xml" Importance="high" />
+    <ManifestUpdate ManifestFile="$(BuildPackageFolder)package.xml"
+			WorkingDirectory="$(BuildPackageFolder2)"
+			MinimumRequiredUmbracoVersion="$(UmbracoVersion)"
+			PackageVersion="$(AssemblyInformationVersion)"
+			Readme="$([System.IO.File]::ReadAllText(readme.md))"
+			Files="@(ManifestFiles)" />
 
-    <Message Text="Compiling web project to build\$(BuildFolder)" Importance="high" />
-    <!-- For UseWPP_CopyWebApplication=True see http://stackoverflow.com/questions/1983575/copywebapplication-with-web-config-transformations -->
-    <!-- The following will need to change as we add the Merchello.Web -->
-    <!-- TODO: RSS had to add the Platform Any CPU -->
-    <MSBuild Projects="..\src\Merchello.sln" Properties="WarningLevel=0;Configuration=$(BuildConfiguration);Platform=Any CPU;PipelineDependsOnBuild=False;OutDir=$(SolutionBinFolderAbsolutePath);" Targets="Clean;Build;" BuildInParallel="False" ToolsVersion="4.0" UnloadProjectsOnCompletion="False">
-    </MSBuild>
+	</Target>
 
-    <!-- DONE -->
-    <Message Text="Finished compiling projects" Importance="high" />
-  </Target>
+	<Target Name="PreparePackageFiles" DependsOnTargets="AllBinaries">
+		
+		<ItemGroup>
+			<BinFiles Include="$(BuildBinariesFolder)*.*"/>
+			<!--ConfigFiles Include="" />
+			<AppIcon Include="" />
+			<AppTrayIcon Include="" /--> 
+			<PluginFiles Include="$(RootDir)\database\merchello-db.sql" />
+			<PackageFile Include="$(MSBuildProjectDirectory)\package.xml" />
+
+		</ItemGroup>
+
+		<Copy SourceFiles="@(BinFiles)" DestinationFolder="$(BuildPackageFolder)bin" />
+		<!--Copy SourceFiles="@(ConfigFiles)" DestinationFolder="$(BuildPackageFolder)config" />
+		<Copy SourceFiles="@(AppIcon)" DestinationFolder="$(BuildPackageFolder)umbraco\images\umbraco" />
+		<Copy SourceFiles="@(AppTrayIcon)" DestinationFolder="$(BuildPackageFolder)umbraco\images\tray" /-->
+		<Copy SourceFiles="@(PluginFiles)" DestinationFolder="$(BuildPackageFolder)App_Plugins\Merchello\install" />
+		<Copy SourceFiles="@(PackageFile)" DestinationFolder="$(BuildPackageFolder)" />
+		
+	</Target>
+	
+	
+
+	<!-- NUGET MERCHELLO.CORE -->
+	<Target Name="NuGetPackCore" DependsOnTargets="AllBinaries">
+
+		<Message Text="Beginning NuGet Pack Merchello.Core.$(AssemblyInformationVersion).nupkg" Importance="high" />
+		
+			<Exec WorkingDirectory="$(PackageDir)" Command="..\..\..\src\.nuget\NuGet.exe pack ..\..\..\build\nuspec\Merchello.Core.nuspec" />
+
+		<Message Text="Finished NuGet Pack Merchello.Core.$(AssemblyInformationVersion).nupkg" Importance="high" />
+		
+	</Target>
+	
+	
+	
+	<!-- ZIP OF ALL BINARIES -->
+	<Target Name="ZipAllBinaries" DependsOnTargets="AllBinaries">
+		
+		<Message Text="Starting to zip to $(BuildZipFileName)" Importance="high" />
+
+		<Exec WorkingDirectory="$(PackageDir)" Command="..\..\..\tools\7zip\7za.exe a -r %22$(MerchelloAllBinaries)%22 %22$(BuildBinariesFolder)*%22" />
+
+		<Message Text="Finished zipping to build\$(BuildZipFileNameBin)" Importance="high" />
+		
+	</Target>
+
+
+	<!-- SEPERATE OUT MERCHELLO BINARIES AND REMOVE TEST DLLS -->
+	<Target Name="AllBinaries" DependsOnTargets="CopyXmlDocumentation">
+		
+		<ItemGroup>
+			<PackageBinariesFiles Include="$(SolutionBinFolder)*Merchello.*" Exclude="$(SolutionBinFolder)*Tests.*;$(SolutionBinFolder)*nunit.*;$(SolutionBinFolder)*Moq.*" />
+		</ItemGroup>
+		
+		<Copy SourceFiles="@(PackageBinariesFiles)"
+				DestinationFiles="@(PackageBinariesFiles->'$(BuildBinariesFolder)\%(RecursiveDir)%(Filename)%(Extension)')"
+				OverwriteReadOnlyFiles="true"
+				SkipUnchangedFiles="false" />
+		
+		<Message Text="CopyXmlDocumentation" />
+		
+	</Target>
+		
+	
+	<!-- COPY THE XML DOCUMENTATION TO THE BIN FOLDER -->
+	<Target Name="CopyXmlDocumentation"  DependsOnTargets="CompileProjects">
+		<ItemGroup>
+			<XmlDocumentationFiles Include="$(SolutionBinFolder)*.xml" />
+		</ItemGroup>
+
+		<Copy SourceFiles="@(XmlDocumentationFiles)"
+				DestinationFiles="@(XmlDocumentationFiles->'$(BuildDir)bin\%(RecursiveDir)%(Filename)%(Extension)')"
+				OverwriteReadOnlyFiles="true"
+				SkipUnchangedFiles="false" />
+		<Message Text="CopyXmlDocumentation" />
+	</Target>
+
+	
+	<!-- COMPILE -->
+	<Target Name="CompileProjects" DependsOnTargets="SetVersionNumber">
+
+		<Message Text="Compiling web project to build\$(BuildDir)" Importance="high" />
+
+		<!-- TODO: RSS had to add the Platform Any CPU -->
+		<MSBuild Projects="..\src\Merchello.sln" Properties="WarningLevel=0;Configuration=$(BuildConfiguration);Platform=Any CPU;PipelineDependsOnBuild=False;OutDir=$(SolutionBinFolderAbsolutePath);" Targets="Clean;Build;" BuildInParallel="False" ToolsVersion="4.0" UnloadProjectsOnCompletion="False">
+		</MSBuild>
+
+		<!-- DONE -->
+		<Message Text="Finished compiling projects" Importance="high" />
+	</Target>
 
  
-
-  <Target Name="SetVersionNumber" Condition="'$(BUILD_RELEASE)'!=''" DependsOnTargets="MakeBuildDirectory">
-    
-    <!-- Match & replace 3 and 4 digit version numbers and -beta (if it's there) -->
-    <FileUpdate
-      Files="..\src\Merchello.Core\Configuration\MerchelloVersion.cs"
-      Regex="(\d+)\.(\d+)\.(\d+)(.(\d+))?"
-      ReplacementText="$(BUILD_RELEASE)"/>
-
-    <FileUpdate Files="..\src\Merchello.Core\Configuration\MerchelloVersion.cs"
-      Regex="CurrentComment { get { return &quot;([a-zA-Z]+)?&quot;"
-      ReplacementText="CurrentComment { get { return &quot;$(BUILD_COMMENT)&quot;"/>
-    
-  </Target>
-
-  <Target Name="MakeBuildDirectory" DependsOnTargets="Clean">
-    <Message Text="Creating $(BuildFolder) and $(BuildBinariesFolder)" Importance="high" />
-    <MakeDir Directories=".\$(BuildFolder)" />
-    <MakeDir Directories=".\$(BuildBinariesFolder)" />
-    <Message Text="Finished creating $(BuildFolder)" Importance="high" />
-  </Target>
-
-  <Target Name="Clean">
-    <Message Text="Deleting $(BuildFolder)" Importance="high" />
-    <Delete Files="$(BuildZipFileNameBin)" />
-    <Delete Files="$(BuildNuGetFileName)" />
-    <RemoveDir Directories=".\$(BuildFolder)" />
-    <Message Text="Finished deleting $(BuildFolder)" Importance="high" />
-  </Target>
-
-
-  <!-- NB: BUILD_NUMBER is passed in by the build server -->
-  <PropertyGroup Condition="'$(BUILD_NUMBER)'!=''">
-    <DECIMAL_BUILD_NUMBER>$(BUILD_NUMBER)</DECIMAL_BUILD_NUMBER>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(BUILD_RELEASE)'!=''">
-    <DECIMAL_BUILD_NUMBER>$(BUILD_RELEASE)</DECIMAL_BUILD_NUMBER>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(BUILD_RELEASE)'!='' AND '$(BUILD_COMMENT)'!=''">
-    <DECIMAL_BUILD_NUMBER>$(BUILD_RELEASE)-$(BUILD_COMMENT)</DECIMAL_BUILD_NUMBER>
-  </PropertyGroup>
-
-  <PropertyGroup>
-
-    <BuildConfiguration>Release</BuildConfiguration>
-    <BuildFolder>_BuildOutput\</BuildFolder>
-    <BuildBinariesFolder>$(BuildFolder)\AllBinariesBin\</BuildBinariesFolder>
-    <BuildZipFileName>Merchello.$(DECIMAL_BUILD_NUMBER).zip</BuildZipFileName>
-    <BuildZipFileNameBin>Merchello.AllBinaries.$(DECIMAL_BUILD_NUMBER).zip</BuildZipFileNameBin>
-    <BuildNuGetFileName>Merchello.Core.$(DECIMAL_BUILD_NUMBER).nupkg</BuildNuGetFileName>
-    <BuildFolderRelativeToProjects>..\..\build\$(BuildFolder)</BuildFolderRelativeToProjects>
-    <BuildFolderAbsolutePath>$(MSBuildProjectDirectory)\$(BuildFolder)</BuildFolderAbsolutePath>
-    <SolutionBinFolder>$(BuildFolder)bin\</SolutionBinFolder>
-    <ConfigsFolder>$(BuildFolder)Configs\</ConfigsFolder>
-    <SolutionBinFolderRelativeToProjects>$(BuildFolderRelativeToProjects)bin\</SolutionBinFolderRelativeToProjects>
-    <SolutionBinFolderAbsolutePath>$(BuildFolderAbsolutePath)bin\</SolutionBinFolderAbsolutePath>
-    <AllBinariesBinFolderAbsolutePath>$(MSBuildProjectDirectory)\$(BuildBinariesFolder)</AllBinariesBinFolderAbsolutePath>
-  </PropertyGroup>
-
 
 </Project>
