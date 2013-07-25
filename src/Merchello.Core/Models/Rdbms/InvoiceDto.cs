@@ -50,8 +50,8 @@ namespace Merchello.Core.Models.Rdbms
         [Column("billToPhone")]
         public string BillToPhone { get; set; }
 
-        [Column("billToCompanyName")]
-        public string BillToCompanyName { get; set; }
+        [Column("billToCompany")]
+        public string BillToCompany { get; set; }
 
         [Column("exported")]
         public bool Exported { get; set; }

@@ -17,6 +17,27 @@ namespace Merchello.Core.Models.Rdbms
         [Column("invoiceId")]
         public int InvoiceId { get; set; }
 
+        [Column("invoiceItemTypeId")]
+        public int InvoiceItemTypeId { get; set; }
+
+        [Column("sku")]
+        public string Sku { get; set; }
+
+        [Column("name")]
+        public string Name { get; set; }
+
+        [Column("baseQuantity")]
+        public int? BaseQuantity { get; set; }
+
+        [Column("unitOfMeasureMultiplier")]
+        public int? UnitOfMeasureMultiplier { get; set; }
+
+        [Column("amount")]
+        public decimal? Amount { get; set; }
+
+        [Column("exported")]
+        public bool Exported { get; set; }
+
         [Column("updateDate")]
         public DateTime UpdateDate { get; set; }
 

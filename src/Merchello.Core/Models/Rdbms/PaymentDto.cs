@@ -14,14 +14,20 @@ namespace Merchello.Core.Models.Rdbms
         [Column("invoiceId")]
         public int InvoiceId { get; set; }
 
-        [Column("memberId")]
-        public int MemberId { get; set; }
+        [Column("customerId")]
+        public int CustomerId { get; set; }
 
-        [Column("userId")]
-        public int? UserId { get; set; }
+        [Column("memberId")]
+        public int? MemberId { get; set; }
 
         [Column("gatewayAlias")]
         public string GatewayAlias { get; set; }
+
+        [Column("paymentMethodName")]
+        public string PaymentMethodName { get; set; }
+
+        [Column("referenceNumber")]
+        public string ReferenceNumber { get; set; }
 
         [Column("amount")]
         public decimal Amount { get; set; }

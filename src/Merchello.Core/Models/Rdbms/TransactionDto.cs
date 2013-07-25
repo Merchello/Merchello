@@ -3,28 +3,28 @@ using Umbraco.Core.Persistence;
 
 namespace Merchello.Core.Models.Rdbms
 {
-    [TableName("merchShipMethod")]
+    [TableName("merchTransaction")]
     [PrimaryKey("id", autoIncrement = false)]
     [ExplicitColumns]
-    public class ShipMethodDto
+    public class TransactionDto
     {
         [Column("id")]
         public int Id { get; set; }
 
-        [Column("name")]
-        public string Name { get; set; }
-
-        [Column("gatewayAlias")]
-        public int GatewayAlias { get; set; }
+        [Column("paymentId")]
+        public int PaymentId { get; set; }
 
         [Column("type")]
-        public string Type { get; set; }
+        public int Type { get; set; }
 
-        [Column("surcharge")]
-        public decimal Surcharge { get; set; }
+        [Column("description")]
+        public string Description { get; set; }
 
-        [Column("serviceCode")]
-        public string ServiceCode { get; set; }
+        [Column("amount")]
+        public decimal Amount { get; set; }
+
+        [Column("exported")]
+        public bool Exported { get; set; }
 
         [Column("updateDate")]
         public DateTime UpdateDate { get; set; }

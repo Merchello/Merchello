@@ -3,10 +3,10 @@ using Umbraco.Core.Persistence;
 
 namespace Merchello.Core.Models.Rdbms
 {
-    [TableName("merchCustomerAddress")]
+    [TableName("merchAddress")]
     [PrimaryKey("id", autoIncrement = false)]
     [ExplicitColumns]
-    public class CustomerAddressDto 
+    public class AddressDto 
     {
         [Column("id")]
         public int Id { get; set; }
