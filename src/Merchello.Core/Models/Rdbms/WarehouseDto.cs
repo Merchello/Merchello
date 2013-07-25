@@ -1,5 +1,6 @@
 ﻿using System;
 using Umbraco.Core.Persistence;
+using Umbraco.Core.Persistence.DatabaseAnnotations;
 
 namespace Merchello.Core.Models.Rdbms
 {
@@ -9,6 +10,7 @@ namespace Merchello.Core.Models.Rdbms
     public class WarehouseDto
     {
         [Column("id")]
+        [PrimaryKeyColumn]
         public int Id { get; set; }
 
         [Column("name")]
@@ -30,10 +32,12 @@ namespace Merchello.Core.Models.Rdbms
         public string PostalCode { get; set; }
 
         [Column("updateDate")]
+        [Constraint(Default = "getdate()")]
         public DateTime UpdateDate { get; set; }
 
         [Column("createDate")]
-        public DateTime CreateDate { get; set; }
+        [Constraint(Default = "getdate()")]
+        public DateTime CreateDate { get; set; }        
 
     }
 }
