@@ -16,7 +16,7 @@
 		
 		<Message Text="Build number is $(AssemblyInformationVersion)" Importance="high" />
 
-		<RemoveDir Directories="$(BuildBinariesFolder);$(BuildPackageFolder);$(SolutionBinFolderAbsolutePath)" />
+		<RemoveDir Directories="$(BuildBinariesFolder);$(BuildPackageFolder);" />
 		
 	</Target>
 
@@ -113,7 +113,7 @@
 		
 	
 	<!-- COPY THE XML DOCUMENTATION TO THE BIN FOLDER -->
-	<Target Name="CopyXmlDocumentation"  DependsOnTargets="RunTests">
+	<Target Name="CopyXmlDocumentation"  DependsOnTargets="CompileProjects">
 		<ItemGroup>
 			<XmlDocumentationFiles Include="$(SolutionBinFolder)*.xml" />
 		</ItemGroup>
