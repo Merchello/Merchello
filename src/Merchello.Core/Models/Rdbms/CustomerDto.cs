@@ -1,5 +1,6 @@
 ﻿using System;
 using Umbraco.Core.Persistence;
+using Umbraco.Core.Persistence.DatabaseAnnotations;
 
 namespace Merchello.Core.Models.Rdbms
 {
@@ -9,9 +10,10 @@ namespace Merchello.Core.Models.Rdbms
     public class CustomerDto
     {
         [Column("id")]
+        [PrimaryKeyColumn]
         public int Id { get; set; }
 
-        [Column("memberId")]
+        [Column("memberId")] 
         public int? MemberId { get; set; }
 
         [Column("firstName")]
@@ -29,5 +31,13 @@ namespace Merchello.Core.Models.Rdbms
         [Column("lastPaymentDate")]
         public DateTime LastPaymentDate { get; set; }
 
+        [Column("updateDate")]
+        [Constraint(Default = "getdate()")]
+        public DateTime UpdateDate { get; set; }
+
+        [Column("createDate")]
+        [Constraint(Default = "getdate()")]
+        public DateTime CreateDate { get; set; }
+        
     }
 }
