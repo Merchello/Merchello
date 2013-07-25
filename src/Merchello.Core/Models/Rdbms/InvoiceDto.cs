@@ -1,5 +1,6 @@
 ﻿using System;
 using Umbraco.Core.Persistence;
+using Umbraco.Core.Persistence.DatabaseAnnotations;
 
 namespace Merchello.Core.Models.Rdbms
 {
@@ -9,18 +10,24 @@ namespace Merchello.Core.Models.Rdbms
     public class InvoiceDto
     {
         [Column("id")]
+        [PrimaryKeyColumn]
         public int Id { get; set; }
 
         [Column("customerId")]
+        [ForeignKey(typeof(CustomerDto), Name = "FK_merchInvoice_merchCustomer",Column = "id")]
+        [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchInvoiceCustomer")]
         public int CustomerId { get; set; }
 
         [Column("invoiceNumber")]
+        [IndexAttribute(IndexTypes.UniqueNonClustered, Name = "IX_merchInvoiceNumber")]
         public string InvoiceNumber { get; set; }
 
         [Column("invoiceDate")]
+        [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchInvoiceDate")]
         public DateTime InvoiceDate { get; set; }
 
         [Column("invoiceStatusId")]
+        [ForeignKey(typeof(InvoiceStatusDto), Name = "FK_merchInvoice_merchInvoiceStatus", Column = "id")]
         public int InvoiceStatusId { get; set; }
 
         [Column("billToName")]
@@ -66,10 +73,15 @@ namespace Merchello.Core.Models.Rdbms
         public decimal Total { get; set; }
 
         [Column("updateDate")]
+        [Constraint(Default = "getdate()")]
         public DateTime UpdateDate { get; set; }
 
-        [Column("createdDate")]
-        public DateTime CreatedDate { get; set; }
+        [Column("createDate")]
+        [Constraint(Default = "getdate()")]
+        public DateTime CreateDate { get; set; }
+
+        [ResultColumn]
+        public CustomerDto CustomerDto { get; set; }
 
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using Umbraco.Core.Persistence;
+using Umbraco.Core.Persistence.DatabaseAnnotations;
 
 namespace Merchello.Core.Models.Rdbms
 {
@@ -9,9 +10,11 @@ namespace Merchello.Core.Models.Rdbms
     public class ShipmentDto
     {
         [Column("id")]
+        [PrimaryKeyColumn]
         public int Id { get; set; }
 
         [Column("invoiceId")]
+        [ForeignKey(typeof(InvoiceDto), Name = "FK_merchShipment_merchInvoice", Column = "id")]
         public int InvoiceId { get; set; }
 
         [Column("address1")]
@@ -33,15 +36,18 @@ namespace Merchello.Core.Models.Rdbms
         public string CountryCode { get; set; }
 
         [Column("shipMethodId")]
+        [ForeignKey(typeof(ShipMethodDto), Name = "FK_merchShipment_merchShipMethod", Column = "id")]
         public int ShipMethodId { get; set; }
 
         [Column("phone")]
         public string Phone { get; set; }
 
         [Column("updateDate")]
+        [Constraint(Default = "getdate()")]
         public DateTime UpdateDate { get; set; }
 
         [Column("createDate")]
+        [Constraint(Default = "getdate()")]
         public DateTime CreateDate { get; set; }
 
     }

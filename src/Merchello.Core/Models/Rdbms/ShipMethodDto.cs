@@ -1,5 +1,6 @@
 ﻿using System;
 using Umbraco.Core.Persistence;
+using Umbraco.Core.Persistence.DatabaseAnnotations;
 
 namespace Merchello.Core.Models.Rdbms
 {
@@ -9,6 +10,7 @@ namespace Merchello.Core.Models.Rdbms
     public class ShipMethodDto
     {
         [Column("id")]
+        [PrimaryKeyColumn]
         public int Id { get; set; }
 
         [Column("name")]
@@ -17,9 +19,8 @@ namespace Merchello.Core.Models.Rdbms
         [Column("gatewayAlias")]
         public int GatewayAlias { get; set; }
 
-        // TODO: RSS - confirm with Joe: This was a char(10) -> should'nt it be an int
-        [Column("shipMethodTypeId")]
-        public string ShipMethodTypeId { get; set; }
+        [Column("shipMethodType")]
+        public int ShipMethodType { get; set; }
 
         [Column("surcharge")]
         public decimal Surcharge { get; set; }
@@ -28,9 +29,11 @@ namespace Merchello.Core.Models.Rdbms
         public string ServiceCode { get; set; }
 
         [Column("updateDate")]
+        [Constraint(Default = "getdate()")]
         public DateTime UpdateDate { get; set; }
 
         [Column("createDate")]
+        [Constraint(Default = "getdate()")]
         public DateTime CreateDate { get; set; }
 
     }

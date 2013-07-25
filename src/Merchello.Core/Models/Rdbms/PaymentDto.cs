@@ -1,5 +1,6 @@
 ﻿using System;
 using Umbraco.Core.Persistence;
+using Umbraco.Core.Persistence.DatabaseAnnotations;
 
 namespace Merchello.Core.Models.Rdbms
 {
@@ -9,12 +10,16 @@ namespace Merchello.Core.Models.Rdbms
     public class PaymentDto
     {
         [Column("id")]
+        [PrimaryKeyColumn]
         public int Id { get; set; }
 
         [Column("invoiceId")]
+        [ForeignKey(typeof(InvoiceDto), Name = "FK_merchPayment_merchInvoice", Column = "id")]
         public int InvoiceId { get; set; }
 
         [Column("customerId")]
+        [ForeignKey(typeof(CustomerDto), Name = "FK_merchPayment_merchCustomer", Column = "id")]
+        [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchPaymentCustomer")]
         public int CustomerId { get; set; }
 
         [Column("memberId")]
@@ -36,10 +41,16 @@ namespace Merchello.Core.Models.Rdbms
         public bool Exported { get; set; }
 
         [Column("updateDate")]
+        [Constraint(Default = "getdate()")]
         public DateTime UpdateDate { get; set; }
 
         [Column("createDate")]
+        [Constraint(Default = "getdate()")]
         public DateTime CreateDate { get; set; }
+
+        [ResultColumn]
+        public CustomerDto CustomerDto { get; set; }
+
 
     }
 }

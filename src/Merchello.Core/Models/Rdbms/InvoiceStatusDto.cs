@@ -1,4 +1,6 @@
-﻿using Umbraco.Core.Persistence;
+﻿using System;
+using Umbraco.Core.Persistence;
+using Umbraco.Core.Persistence.DatabaseAnnotations;
 
 namespace Merchello.Core.Models.Rdbms
 {
@@ -8,6 +10,7 @@ namespace Merchello.Core.Models.Rdbms
     public class InvoiceStatusDto
     {
         [Column("id")]
+        [PrimaryKeyColumn]
         public int Id { get; set; }
 
         [Column("name")]
@@ -29,5 +32,12 @@ namespace Merchello.Core.Models.Rdbms
         [Column("sortOrder")]
         public int SortOrder { get; set; }
 
+        [Column("updateDate")]
+        [Constraint(Default = "getdate()")]
+        public DateTime UpdateDate { get; set; }
+
+        [Column("createDate")]
+        [Constraint(Default = "getdate()")]
+        public DateTime CreateDate { get; set; }
     }
 }
