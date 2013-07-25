@@ -6,7 +6,7 @@ namespace Merchello.Core.Models.Rdbms
     [TableName("merchCustomerAddress")]
     [PrimaryKey("id", autoIncrement = false)]
     [ExplicitColumns]
-    public class CustomerAddressDto
+    public class CustomerAddressDto 
     {
         [Column("id")]
         public int Id { get; set; }
