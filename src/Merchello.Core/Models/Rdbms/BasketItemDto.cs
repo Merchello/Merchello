@@ -4,31 +4,28 @@ using Umbraco.Core.Persistence.DatabaseAnnotations;
 
 namespace Merchello.Core.Models.Rdbms
 {
-    [TableName("merchInvoiceItem")]
+    [TableName("merchBasketItem")]
     [PrimaryKey("id")]
     [ExplicitColumns]
-    public class InvoiceItemDto
+    public class BasketItemDto
     {
         [Column("id")]
         [PrimaryKeyColumn]
         public int Id { get; set; }
 
-        //TODO: RSS IndexAttribute - ref NodeDto
         [Column("parentId")]
-        [ForeignKey(typeof(InvoiceItemDto))]
-        [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchInvoiceItemParent")]
+        [ForeignKey(typeof(BasketItemDto), Name = "FK_merchBasketItem_merchBasketItem", Column = "id")]
+        [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchBasketItemParent")]
         public int ParentId { get; set; }
 
-        [Column("invoiceId")]
-        [ForeignKey(typeof(InvoiceDto), Name = "FK_merchInvoiceItem_merchInvoice", Column = "id")]
-        public int InvoiceId { get; set; }
+        [Column("basketId")]
+        [ForeignKey(typeof(BasketDto), Name = "FK_merchBasketItem_merchBasket", Column = "id")]
+        public int BasketId { get; set; }
 
         [Column("invoiceItemType")]
-        [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchInvoiceItemType")]
         public int InvoiceItemType { get; set; }
 
         [Column("sku")]
-        [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchInvoiceItemSku")]
         public string Sku { get; set; }
 
         [Column("name")]
@@ -38,14 +35,10 @@ namespace Merchello.Core.Models.Rdbms
         public int BaseQuantity { get; set; }
 
         [Column("unitOfMeasureMultiplier")]
-        [Constraint(Default = "1")]
         public int UnitOfMeasureMultiplier { get; set; }
 
         [Column("amount")]
         public decimal Amount { get; set; }
-
-        [Column("exported")]
-        public bool Exported { get; set; }
 
         [Column("updateDate")]
         [Constraint(Default = "getdate()")]
@@ -54,7 +47,5 @@ namespace Merchello.Core.Models.Rdbms
         [Column("createDate")]
         [Constraint(Default = "getdate()")]
         public DateTime CreateDate { get; set; }
-
     }
-
 }
