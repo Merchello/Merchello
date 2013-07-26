@@ -5,7 +5,7 @@ using Umbraco.Core.Persistence.DatabaseAnnotations;
 namespace Merchello.Core.Models.Rdbms
 {
     [TableName("merchWarehouse")]
-    [PrimaryKey("id", autoIncrement = false)]
+    [PrimaryKey("id")]
     [ExplicitColumns]
     public class WarehouseDto
     {
