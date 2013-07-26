@@ -27,6 +27,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Web", "Merchello.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Web.Tests", "..\test\Merchello.Web.Tests\Merchello.Web.Tests.csproj", "{EA042E6E-A1A0-4F03-BE59-A071082ED53D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{463673C8-16DA-466D-9306-011FB5A9105C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Uml", "Uml", "{B7505CAE-220B-4C8E-9079-C9FF2DDC7584}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Uml", "..\docs\Merchello.Uml\Merchello.Uml.csproj", "{5E05FBE1-841A-4F05-9ED1-B8484E1A4B1C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,6 +97,18 @@ Global
 		{EA042E6E-A1A0-4F03-BE59-A071082ED53D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{EA042E6E-A1A0-4F03-BE59-A071082ED53D}.Release|x64.ActiveCfg = Release|Any CPU
 		{EA042E6E-A1A0-4F03-BE59-A071082ED53D}.Release|x86.ActiveCfg = Release|Any CPU
+		{5E05FBE1-841A-4F05-9ED1-B8484E1A4B1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E05FBE1-841A-4F05-9ED1-B8484E1A4B1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E05FBE1-841A-4F05-9ED1-B8484E1A4B1C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{5E05FBE1-841A-4F05-9ED1-B8484E1A4B1C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{5E05FBE1-841A-4F05-9ED1-B8484E1A4B1C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5E05FBE1-841A-4F05-9ED1-B8484E1A4B1C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5E05FBE1-841A-4F05-9ED1-B8484E1A4B1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E05FBE1-841A-4F05-9ED1-B8484E1A4B1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E05FBE1-841A-4F05-9ED1-B8484E1A4B1C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{5E05FBE1-841A-4F05-9ED1-B8484E1A4B1C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{5E05FBE1-841A-4F05-9ED1-B8484E1A4B1C}.Release|x64.ActiveCfg = Release|Any CPU
+		{5E05FBE1-841A-4F05-9ED1-B8484E1A4B1C}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -98,5 +116,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{2B8005E2-6E23-44C5-AE78-999E8C55D9E2} = {A6C6EBCD-38C9-4FAD-975A-97FA97578537}
 		{EA042E6E-A1A0-4F03-BE59-A071082ED53D} = {A6C6EBCD-38C9-4FAD-975A-97FA97578537}
+		{B7505CAE-220B-4C8E-9079-C9FF2DDC7584} = {463673C8-16DA-466D-9306-011FB5A9105C}
+		{5E05FBE1-841A-4F05-9ED1-B8484E1A4B1C} = {B7505CAE-220B-4C8E-9079-C9FF2DDC7584}
 	EndGlobalSection
 EndGlobal

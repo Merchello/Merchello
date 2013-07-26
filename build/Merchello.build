@@ -22,10 +22,10 @@
 
 	<!-- MERCHELLO UMBRACO PACKAGE -->
 	<Target Name="Package" DependsOnTargets="Manifest">
-    <ItemGroup>
-      <PackageFiles Include="$(BuildPackageFolder)**\*.*" />
-    </ItemGroup>
-    <Package ManifestFile="$(BuildPackageFolder)package.xml"
+		<ItemGroup>
+			<PackageFiles Include="$(BuildPackageFolder)**\*.*" />
+		</ItemGroup>
+		<Package ManifestFile="$(BuildPackageFolder)package.xml"
 			WorkingDirectory="$(BuildPackageFolder)"
 			OutputDirectory="$(PackageDir)"
 			Files="@(PackageFiles)" />
@@ -38,9 +38,9 @@
 			<ManifestFiles Include="$(BuildPackageFolder)**\*.*" Exclude="$(BuildPackageFolder)package.xml" />
 		</ItemGroup>
 
-        
-        <Message Text="$(BuildPackageFolder)package.xml" Importance="high" />
-    <ManifestUpdate ManifestFile="$(BuildPackageFolder)package.xml"
+				
+				<Message Text="$(BuildPackageFolder)package.xml" Importance="high" />
+		<ManifestUpdate ManifestFile="$(BuildPackageFolder)package.xml"
 			WorkingDirectory="$(BuildPackageFolder2)"
 			MinimumRequiredUmbracoVersion="$(UmbracoVersion)"
 			PackageVersion="$(AssemblyInformationVersion)"
@@ -125,14 +125,14 @@
 		<Message Text="CopyXmlDocumentation" />
 	</Target>
 
-    <!-- UNIT TESTS -->
-    <Target Name="RunTests" DependsOnTargets="CompileProjects">
+		<!-- UNIT TESTS -->
+		<Target Name="RunTests" DependsOnTargets="CompileProjects">
 
-        
-        <Exec Command="..\tools\NUnit\nunit-console.exe .\Temp\bin\Merchello.Core.Tests.dll  /xml=.\Temp\Artifacts\MerchelloCore_TestResults.xml" />
-        <Exec Command="..\tools\NUnit\nunit-console.exe .\Temp\bin\Merchello.Web.Tests.dll  /xml=.\Temp\Artifacts\MerchelloWeb_TestResults.xml" />
-        
-    </Target>
+				
+				<Exec Command="..\tools\NUnit\nunit-console.exe .\Temp\bin\Merchello.Core.Tests.dll  /xml=.\Temp\Artifacts\MerchelloCore_TestResults.xml" />
+				<Exec Command="..\tools\NUnit\nunit-console.exe .\Temp\bin\Merchello.Web.Tests.dll  /xml=.\Temp\Artifacts\MerchelloWeb_TestResults.xml" />
+				
+		</Target>
 	
 	<!-- COMPILE -->
 	<Target Name="CompileProjects" DependsOnTargets="SetVersionNumber">
