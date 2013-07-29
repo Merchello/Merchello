@@ -53,6 +53,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -73,11 +74,14 @@
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\ExtendedProperty.cs" />
     <Compile Include="Models\IExtendableDataEntity.cs" />
-    <Compile Include="Models\IInvoiceBase.cs" />
+    <Compile Include="Models\IInvoice.cs" />
     <Compile Include="Models\IInvoiceItem.cs" />
+    <Compile Include="Models\IInvoiceItemItemization.cs" />
     <Compile Include="Models\IItemization.cs" />
-    <Compile Include="Models\InvoiceItemBase.cs" />
+    <Compile Include="Models\InvoiceItem.cs" />
+    <Compile Include="Models\InvoiceItemItemization.cs" />
     <Compile Include="Models\InvoiceStatus.cs" />
+    <Compile Include="Models\IShipment.cs" />
     <Compile Include="Models\Rdbms\AddressDto.cs" />
     <Compile Include="Models\Rdbms\AnonymousDto.cs" />
     <Compile Include="Models\Rdbms\BasketItemDto.cs" />
