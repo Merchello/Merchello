@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.Serialization;
 
 namespace Merchello.Core.Models
 {
-    public interface IInvoiceItemItemization
+    /// <summary>
+    /// Defines a Itemization
+    /// </summary>
+    public interface IItemization
     {
-        IEnumerable<IInvoiceItem> InvoiceItems { get; set; }
 
         decimal Total();
     }

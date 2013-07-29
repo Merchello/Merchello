@@ -94,7 +94,7 @@ namespace Merchello.Core.Models
         /// <summary>
         /// The total invoice amount
         /// </summary>
-        decimal Total { get; set; }
+        decimal Amount { get; set; }
 
     }
 
