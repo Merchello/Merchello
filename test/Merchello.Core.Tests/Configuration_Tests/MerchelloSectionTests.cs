@@ -22,7 +22,10 @@ namespace Merchello.Core.Tests.Configuration_Tests
         public void Customer_Address_Residential_Guid_Matches()
         {
             var guid = new Guid("D32D7B40-2FF2-453F-9AC5-51CF1A981E46");
-            Assert.AreEqual(guid, _config.TypeFields.CustomerAddress[CustomerAddress.Residential.ToString()].TypeKey);            
+
+            var residentialType = _config.TypeFields.CustomerAddress[CustomerAddress.Residential.ToString()];
+
+            Assert.AreEqual(guid, residentialType.TypeKey);            
         }
 
         [Test]
@@ -35,13 +38,19 @@ namespace Merchello.Core.Tests.Configuration_Tests
         [Test]
         public void Invoice_Item_Charge_Name_Is_Charge()
         {
-            Assert.AreEqual("Charge or Fee", _invoiceItems["Charge"].Name);
+            const string validText = "Charge or Fee";
+
+            var chargeType = _invoiceItems["Charge"];
+
+            Assert.AreEqual(validText, chargeType.Name);
         }
 
         [Test]
         public void Product_Item_Collection_Is_Empty()
         {
-            Assert.IsEmpty(_config.TypeFields.Product);
+            var productTypeCollection = _config.TypeFields.Product;
+
+            Assert.IsEmpty(productTypeCollection);
         }
 
         [Test]
