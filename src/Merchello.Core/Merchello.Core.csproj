@@ -52,6 +52,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
@@ -66,6 +67,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActivatorHelper.cs" />
+    <Compile Include="Configuration\Outline\TypeFieldDefinitionsElement.cs" />
+    <Compile Include="Configuration\Outline\TypeFieldCollection.cs" />
+    <Compile Include="Configuration\Outline\TypeFieldElement.cs" />
+    <Compile Include="Configuration\Outline\MerchelloSection.cs" />
     <Compile Include="Configuration\MerchelloVersion.cs" />
     <Compile Include="Mandate.cs" />
     <Compile Include="Models\Rdbms\AddressDto.cs" />
