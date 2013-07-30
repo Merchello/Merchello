@@ -68,7 +68,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configuration_Tests\MerchelloSectionConfigurationSection.cs" />
+    <Compile Include="Configuration_Tests\MerchelloSectionTests.cs" />
     <Compile Include="Configuration_Tests\Versioning.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

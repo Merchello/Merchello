@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace Merchello.Core.Tests.Configuration_Tests
 {
     [TestFixture]
-    public class MerchelloSectionConfigurationSection
+    public class MerchelloSectionTests
     {
         private MerchelloSection _config;
         private TypeFieldCollection _invoiceItems;
@@ -42,6 +42,24 @@ namespace Merchello.Core.Tests.Configuration_Tests
         public void Product_Item_Collection_Is_Empty()
         {
             Assert.IsEmpty(_config.TypeFields.Product);
+        }
+
+        [Test]
+        public void EnableLoggion_Is_False()
+        {
+            Assert.IsFalse(_config.EnableLogging);
+        }
+
+        [Test]
+        public void DefaultCountryCode_Is_US()
+        {
+            Assert.AreEqual("US", _config.DefaultCountryCode);
+        }
+
+        [Test]
+        public void ConnectionString_Is_umbracoDbDSN()
+        {
+            Assert.AreEqual("umbracoDbDSN", _config.DefaultConnectionStringName);
         }
 
         private enum CustomerAddress
