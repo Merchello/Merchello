@@ -11,6 +11,9 @@ namespace Merchello.Core.Tests.Configuration_Tests
         private MerchelloSection _config;
         private TypeFieldCollection _invoiceItems;
 
+        /// <summary>
+        /// Setup values for each test
+        /// </summary>
         [SetUp]
         public void Setup()
         {
@@ -18,6 +21,9 @@ namespace Merchello.Core.Tests.Configuration_Tests
             _invoiceItems = _config.TypeFields.InvoiceItem;
         }
 
+        /// <summary>
+        /// Verifies that the Guid associated with the Residential CustomerAddress is correctly retrieved from the configuration
+        /// </summary>
         [Test]
         public void Customer_Address_Residential_Guid_Matches()
         {
@@ -28,13 +34,18 @@ namespace Merchello.Core.Tests.Configuration_Tests
             Assert.AreEqual(guid, residentialType.TypeKey);            
         }
 
+        /// <summary>
+        /// Verifies that the InvoiceItem collection has 5 elements
+        /// </summary>
         [Test]
         public void Invoice_Item_Collection_Contains_5_Elements()
         {
             Assert.AreEqual(5, _invoiceItems.Count);
         }
 
-
+        /// <summary>
+        /// Verifies that descriptive name field is read correctly
+        /// </summary>
         [Test]
         public void Invoice_Item_Charge_Name_Is_Charge()
         {
@@ -45,6 +56,9 @@ namespace Merchello.Core.Tests.Configuration_Tests
             Assert.AreEqual(validText, chargeType.Name);
         }
 
+        /// <summary>
+        /// Verifies an empty collection 
+        /// </summary>
         [Test]
         public void Product_Item_Collection_Is_Empty()
         {
@@ -53,18 +67,27 @@ namespace Merchello.Core.Tests.Configuration_Tests
             Assert.IsEmpty(productTypeCollection);
         }
 
+        /// <summary>
+        /// Verifies the enableLogging attribute is accessible
+        /// </summary>
         [Test]
-        public void EnableLoggion_Is_False()
+        public void EnableLogging_Is_False()
         {
             Assert.IsFalse(_config.EnableLogging);
         }
 
+        /// <summary>
+        /// Verifies the defaultCountryCode attribute is accessible
+        /// </summary>
         [Test]
         public void DefaultCountryCode_Is_US()
         {
             Assert.AreEqual("US", _config.DefaultCountryCode);
         }
 
+        /// <summary>
+        /// Verifies the defaultConnectionString matches Umbraco's connection string name
+        /// </summary>
         [Test]
         public void ConnectionString_Is_umbracoDbDSN()
         {
