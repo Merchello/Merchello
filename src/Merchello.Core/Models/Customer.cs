@@ -12,7 +12,7 @@ namespace Merchello.Core.Models
         private int? _memberId;
         private string _firstName;
         private string _lastName;
-        private readonly decimal _totalInvoiced;
+        private decimal _totalInvoiced;
         private readonly decimal _totalPayments;
         private readonly DateTime? _lastPaymentDate;
 
@@ -86,6 +86,10 @@ namespace Merchello.Core.Models
         public decimal TotalInvoiced
         {
             get { return _totalInvoiced; }
+            internal set
+            {
+                _totalInvoiced = value;
+            }
         }
 
         /// <summary>

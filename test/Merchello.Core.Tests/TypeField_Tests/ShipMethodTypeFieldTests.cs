@@ -6,7 +6,7 @@ using NUnit.Framework;
 
 namespace Merchello.Core.Tests.TypeField_Tests
 {
-    public class ShipMethodTypeTests
+    public class ShipMethodTypeFieldTests
     {
         private ITypeField _mockFlatRate;
         private ITypeField _mockPercentTotal;
@@ -38,7 +38,7 @@ namespace Merchello.Core.Tests.TypeField_Tests
         [Test]
         public void ShipMethodType_flat_rate_matches_configuration()
         {
-            var type = ShipMethodType.FlatRate;
+            var type = ShipMethodTypeField.FlatRate;
 
             Assert.AreEqual(_mockFlatRate.Alias, type.Alias);
             Assert.AreEqual(_mockFlatRate.Name, type.Name);
@@ -52,7 +52,7 @@ namespace Merchello.Core.Tests.TypeField_Tests
         [Test]
         public void ShipMethodType_percent_total_matches_configuration()
         {
-            var type = ShipMethodType.PercentTotal;
+            var type = ShipMethodTypeField.PercentTotal;
 
             Assert.AreEqual(_mockPercentTotal.Alias, type.Alias);
             Assert.AreEqual(_mockPercentTotal.Name, type.Name);
@@ -66,7 +66,7 @@ namespace Merchello.Core.Tests.TypeField_Tests
         [Test]
         public void ShipMethodType_carrier_matches_configuration()
         {
-            var type = ShipMethodType.Carrier;
+            var type = ShipMethodTypeField.Carrier;
 
             Assert.AreEqual(_mockCarrier.Alias, type.Alias);
             Assert.AreEqual(_mockCarrier.Name, type.Name);

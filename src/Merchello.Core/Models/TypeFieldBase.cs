@@ -19,9 +19,15 @@ namespace Merchello.Core.Models
         /// <summary>
         /// Empty type - NullObject Pattern
         /// </summary>
+        /// <remarks>
+        /// TODO: Language specific descriptions
+        /// </remarks>
         private static ITypeField NullTypeField()
         {
+            
             return new TypeField("NotFound", "A TypeField with the configuration specified could not be found", Guid.Empty);
         }
+
+
     }
 }
