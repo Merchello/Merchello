@@ -44,6 +44,15 @@ namespace Merchello.Core.Configuration.Outline
         }
 
         /// <summary>
+        /// Gets the dbTypeFields configuration collection for payment type
+        /// </summary>
+        [ConfigurationProperty("paymentMethod", IsRequired = false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
+        public TypeFieldCollection PaymentMethod
+        {
+            get { return (TypeFieldCollection)this["paymentMethod"]; }
+        }
+
+        /// <summary>
         /// Gets the dbTypeFields configuration collection for IProduct
         /// </summary>
         [ConfigurationProperty("product", IsRequired = false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
@@ -51,6 +60,8 @@ namespace Merchello.Core.Configuration.Outline
         {
             get { return (TypeFieldCollection)this["product"]; }
         }
+
+
 
     }
 }

@@ -72,7 +72,7 @@ namespace Merchello.Core.Models
             get { return _itemization; }
         }
 
-        public InvoiceItemType InvoiceItemType
+        public InvoiceItemTypeField InvoiceItemType
         {
             get
             {

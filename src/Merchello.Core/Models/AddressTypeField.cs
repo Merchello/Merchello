@@ -6,7 +6,7 @@ namespace Merchello.Core.Models
     /// <summary>
     /// Identifies an address as either residential or commercial for shipping estimations 
     /// </summary>
-    public class AddressType : TypeFieldBase
+    public class AddressTypeField : TypeFieldBase
     {
         /// <summary>
         /// Indicates the address is a residential address
@@ -23,6 +23,7 @@ namespace Merchello.Core.Models
         {
             get { return GetTypeField(Addresses["Commercial"]); }
         }
+
 
         private static TypeFieldCollection Addresses
         {

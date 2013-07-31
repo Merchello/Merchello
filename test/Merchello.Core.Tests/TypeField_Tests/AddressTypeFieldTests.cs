@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace Merchello.Core.Tests.TypeField_Tests
 {
     [TestFixture]
-    public class AddressTypeTests
+    public class AddressTypeFieldTests
     {
 
         private ITypeField _residentialMock;
@@ -39,7 +39,7 @@ namespace Merchello.Core.Tests.TypeField_Tests
         [Test]
         public void AddressType_residential_matches_configuration()
         {
-            var type = AddressType.Residential;
+            var type = AddressTypeField.Residential;
 
             Assert.AreEqual(_residentialMock.Alias, type.Alias);
             Assert.AreEqual(_residentialMock.Name, type.Name);
@@ -53,7 +53,7 @@ namespace Merchello.Core.Tests.TypeField_Tests
         [Test]
         public void AddressType_commercial_matches_configuration()
         {
-            var type = AddressType.Commercial;
+            var type = AddressTypeField.Commercial;
 
             Assert.AreEqual(_commercialMock.Alias, type.Alias);
             Assert.AreEqual(_commercialMock.Name, type.Name);
