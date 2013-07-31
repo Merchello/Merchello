@@ -81,7 +81,6 @@
     <Compile Include="LambdaExpressionCacheKey.cs" />
     <Compile Include="Mandate.cs" />
     <Compile Include="Models\Customer.cs" />
-    <Compile Include="Models\ExtendedProperty.cs" />
     <Compile Include="Models\IExtendableDataEntity.cs" />
     <Compile Include="Models\IInvoice.cs" />
     <Compile Include="Models\IInvoiceItem.cs" />
