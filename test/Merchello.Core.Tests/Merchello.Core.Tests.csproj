@@ -71,6 +71,10 @@
     <Compile Include="Configuration_Tests\MerchelloSectionTests.cs" />
     <Compile Include="Configuration_Tests\Versioning.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TypeField_Tests\AddressTypeTests.cs" />
+    <Compile Include="TypeField_Tests\BasketTypeTests.cs" />
+    <Compile Include="TypeField_Tests\InvoiceItemTypeTests.cs" />
+    <Compile Include="TypeField_Tests\ShipMethodTypeTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
