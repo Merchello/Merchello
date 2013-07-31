@@ -32,7 +32,7 @@ namespace Merchello.Core.Models
         /// The type of this invoice item
         /// </summary>
         [IgnoreDataMember]
-        InvoiceItemType InvoiceItemType { get; set; }
+        InvoiceItemTypeField InvoiceItemType { get; set; }
 
         /// <summary>
         /// The Sku of the invoice item

@@ -5,7 +5,7 @@ namespace Merchello.Core.Models
     /// <summary>
     /// The type of a invoice line item
     /// </summary>
-    public class InvoiceItemType : TypeFieldBase
+    public class InvoiceItemTypeField : TypeFieldBase
     {         
         /// <summary>
         /// Catalog product sales

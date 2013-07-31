@@ -10,7 +10,7 @@ using NUnit.Framework;
 
 namespace Merchello.Core.Tests.TypeField_Tests
 {
-    public class InvoiceItemTypeTests
+    public class InvoiceItemTypeFieldTests
     {
         private ITypeField _mockProduct;
         private ITypeField _mockCharge;
@@ -46,7 +46,7 @@ namespace Merchello.Core.Tests.TypeField_Tests
         [Test]
         public void InvoiceItemType_product_matches_configuration()
         {
-            var type = InvoiceItemType.Product;
+            var type = InvoiceItemTypeField.Product;
 
             Assert.AreEqual(_mockProduct.Alias, type.Alias);
             Assert.AreEqual(_mockProduct.Name, type.Name);
@@ -60,7 +60,7 @@ namespace Merchello.Core.Tests.TypeField_Tests
         [Test]
         public void InvoiceItemType_charge_matches_configuration()
         {
-            var type = InvoiceItemType.Charge;
+            var type = InvoiceItemTypeField.Charge;
 
             Assert.AreEqual(_mockCharge.Alias, type.Alias);
             Assert.AreEqual(_mockCharge.Name, type.Name);
@@ -73,7 +73,7 @@ namespace Merchello.Core.Tests.TypeField_Tests
         [Test]
         public void InvoiceItemType_shipping_matches_configuration()
         {
-            var type = InvoiceItemType.Shipping;
+            var type = InvoiceItemTypeField.Shipping;
 
             Assert.AreEqual(_mockShipping.Alias, type.Alias);
             Assert.AreEqual(_mockShipping.Name, type.Name);
@@ -87,7 +87,7 @@ namespace Merchello.Core.Tests.TypeField_Tests
         [Test]
         public void InvoiceItemType_tax_matches_configuration()
         {
-            var type = InvoiceItemType.Tax;
+            var type = InvoiceItemTypeField.Tax;
 
             Assert.AreEqual(_mockTax.Alias, type.Alias);
             Assert.AreEqual(_mockTax.Name, type.Name);
@@ -101,7 +101,7 @@ namespace Merchello.Core.Tests.TypeField_Tests
         [Test]
         public void InvoiceItemType_credit_matches_configuration()
         {
-            var type = InvoiceItemType.Credit;
+            var type = InvoiceItemTypeField.Credit;
 
             Assert.AreEqual(_mockCredit.Alias, type.Alias);
             Assert.AreEqual(_mockCredit.Name, type.Name);

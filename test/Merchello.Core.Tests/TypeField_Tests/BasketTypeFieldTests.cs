@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace Merchello.Core.Tests.TypeField_Tests
 {
     [TestFixture]
-    public class BasketTypeTests
+    public class BasketTypeFieldTests
     {
         private ITypeField _mockBasket;
         private ITypeField _mockWishlist;
@@ -38,7 +38,7 @@ namespace Merchello.Core.Tests.TypeField_Tests
         [Test]
         public void BasketType_basket_matches_configuration()
         {
-            var type = BasketType.Basket;
+            var type = BasketTypeField.Basket;
 
             Assert.AreEqual(_mockBasket.Alias, type.Alias);
             Assert.AreEqual(_mockBasket.Name, type.Name);
@@ -53,7 +53,7 @@ namespace Merchello.Core.Tests.TypeField_Tests
         [Test]
         public void BasketType_wishlist_matches_configuration()
         {
-            var type = BasketType.Wishlist;
+            var type = BasketTypeField.Wishlist;
 
             Assert.AreEqual(_mockWishlist.Alias, type.Alias);
             Assert.AreEqual(_mockWishlist.Name, type.Name);
