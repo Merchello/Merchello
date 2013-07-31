@@ -2,7 +2,7 @@
 
 namespace Merchello.Core.Models
 {
-    public class InvoiceStatus : Entity
+    public class InvoiceStatus : MerchelloEntity
     {
     }
 }
