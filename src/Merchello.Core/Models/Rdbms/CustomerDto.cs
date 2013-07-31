@@ -29,7 +29,7 @@ namespace Merchello.Core.Models.Rdbms
         public decimal TotalPayments { get; set; }
 
         [Column("lastPaymentDate")]
-        public DateTime LastPaymentDate { get; set; }
+        public DateTime? LastPaymentDate { get; set; }
 
         [Column("updateDate")]
         [Constraint(Default = "getdate()")]

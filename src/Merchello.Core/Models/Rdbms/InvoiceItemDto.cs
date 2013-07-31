@@ -27,6 +27,9 @@ namespace Merchello.Core.Models.Rdbms
         [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchInvoiceItemType")]
         public int InvoiceItemType { get; set; }
 
+        [Column("typeKey")]
+        public Guid TypeKey { get; set; }
+
         [Column("sku")]
         [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchInvoiceItemSku")]
         public string Sku { get; set; }

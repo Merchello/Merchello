@@ -17,8 +17,8 @@ namespace Merchello.Core.Models.Rdbms
         [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchBasketIdentitKey")]
         public Guid IdentityKey { get; set; }
 
-        [Column("basketType")]
-        public int BasketType { get; set; }
+        [Column("typeKey")]
+        public Guid TypeKey { get; set; }
 
         [Column("updateDate")]
         [Constraint(Default = "getdate()")]
