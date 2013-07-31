@@ -22,8 +22,8 @@ namespace Merchello.Core.Models.Rdbms
         [ForeignKey(typeof(BasketDto), Name = "FK_merchBasketItem_merchBasket", Column = "id")]
         public int BasketId { get; set; }
 
-        [Column("invoiceItemType")]
-        public int InvoiceItemType { get; set; }
+        [Column("typeKey")] // This is an InvoiceItemType
+        public Guid TypeKey { get; set; }
 
         [Column("sku")]
         public string Sku { get; set; }
