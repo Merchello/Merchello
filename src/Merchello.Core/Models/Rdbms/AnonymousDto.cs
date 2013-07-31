@@ -4,32 +4,18 @@ using Umbraco.Core.Persistence.DatabaseAnnotations;
 
 namespace Merchello.Core.Models.Rdbms
 {
-    [TableName("merchCustomer")]
+    [TableName("merchAnonymous")]
     [PrimaryKey("pk", autoIncrement = false)]
     [ExplicitColumns]
-    public class CustomerDto
+    public class AnonymousDto
     {
         [Column("pk")]
         [PrimaryKeyColumn]
         public Guid Pk { get; set; }
 
-        [Column("memberId")] 
-        public int? MemberId { get; set; }
-
-        [Column("firstName")]
-        public string FirstName { get; set; }
-
-        [Column("lastName")]
-        public string LastName { get; set; }
-
-        [Column("totalInvoiced")]
-        public decimal TotalInvoiced { get; set; }
-
-        [Column("totalPayments")]
-        public decimal TotalPayments { get; set; }
-
-        [Column("lastPaymentDate")]
-        public DateTime LastPaymentDate { get; set; }
+        [Column("lastActivityDate")]
+        [Constraint(Default = "getdate()")]
+        public DateTime LastActivityDate { get; set; }
 
         [Column("updateDate")]
         [Constraint(Default = "getdate()")]
@@ -38,6 +24,6 @@ namespace Merchello.Core.Models.Rdbms
         [Column("createDate")]
         [Constraint(Default = "getdate()")]
         public DateTime CreateDate { get; set; }
-        
+
     }
 }

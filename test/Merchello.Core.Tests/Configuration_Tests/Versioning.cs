@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Merchello.Core.Configuration;
+﻿using Merchello.Core.Configuration;
 using NUnit.Framework;
 
-namespace Merchello.Core.Tests.BuildServerSetupTests
+namespace Merchello.Core.Tests.Configuration_Tests
 {
     [TestFixture]
-    public class BuildSetupTestFixture
+    public class Versioning
     {
         [Test]
         public void CurrentVersion_Equals_AssemblyVersion()

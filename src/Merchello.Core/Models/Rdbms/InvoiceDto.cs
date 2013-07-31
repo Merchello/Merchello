@@ -13,8 +13,8 @@ namespace Merchello.Core.Models.Rdbms
         [PrimaryKeyColumn]
         public int Id { get; set; }
 
-        [Column("customerId")]
-        [ForeignKey(typeof(CustomerDto), Name = "FK_merchInvoice_merchCustomer",Column = "id")]
+        [Column("customerPk")]
+        [ForeignKey(typeof(CustomerDto), Name = "FK_merchInvoice_merchCustomer",Column = "pk")]
         [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchInvoiceCustomer")]
         public int CustomerId { get; set; }
 
@@ -69,8 +69,8 @@ namespace Merchello.Core.Models.Rdbms
         [Column("shipped")]
         public bool Shipped { get; set; }
 
-        [Column("total")]
-        public decimal Total { get; set; }
+        [Column("amount")]
+        public decimal Amount { get; set; }
 
         [Column("updateDate")]
         [Constraint(Default = "getdate()")]

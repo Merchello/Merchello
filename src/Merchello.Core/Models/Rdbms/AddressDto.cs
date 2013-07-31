@@ -5,7 +5,7 @@ using Umbraco.Core.Persistence.DatabaseAnnotations;
 namespace Merchello.Core.Models.Rdbms
 {
     [TableName("merchAddress")]
-    [PrimaryKey("id", autoIncrement = false)]
+    [PrimaryKey("id")]
     [ExplicitColumns]
     public class AddressDto 
     {
@@ -13,9 +13,9 @@ namespace Merchello.Core.Models.Rdbms
         [PrimaryKeyColumn]
         public int Id { get; set; }
 
-        [Column("customerId")]
-        [ForeignKey(typeof(CustomerDto), Name = "FK_merchAddress_merchCustomer", Column = "id")]
-        public int CustomerId { get; set; }
+        [Column("customerPk")]
+        [ForeignKey(typeof(CustomerDto), Name = "FK_merchAddress_merchCustomer", Column = "pk")]
+        public Guid CustomerPk { get; set; }
 
         [Column("label")]
         public string Label { get; set; }
@@ -26,8 +26,8 @@ namespace Merchello.Core.Models.Rdbms
         [Column("company")]
         public string Company { get; set; }
 
-        [Column("addressTypeId")]
-        public int AddressTypeId { get; set; }
+        [Column("addressType")]
+        public int AddressType { get; set; }
 
         [Column("address1")]
         public string Address1 { get; set; }
@@ -43,6 +43,9 @@ namespace Merchello.Core.Models.Rdbms
 
         [Column("postalCode")]
         public string PostalCode { get; set; }
+
+        [Column("countryCode")]
+        public string CountryCode { get; set; }
 
         [Column("phone")]
         public string Phone { get; set; }
