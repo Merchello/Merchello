@@ -7,7 +7,7 @@ using Umbraco.Core.Models.EntityBase;
 namespace Merchello.Core.Models
 {
     [DataContract]
-    public class InvoiceItem : Entity, IInvoiceItem
+    public class InvoiceItem : MerchelloEntity, IInvoiceItem
     {
 
         private int _parentId;
