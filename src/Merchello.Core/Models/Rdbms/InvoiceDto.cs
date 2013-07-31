@@ -69,8 +69,8 @@ namespace Merchello.Core.Models.Rdbms
         [Column("shipped")]
         public bool Shipped { get; set; }
 
-        [Column("total")]
-        public decimal Total { get; set; }
+        [Column("amount")]
+        public decimal Amount { get; set; }
 
         [Column("updateDate")]
         [Constraint(Default = "getdate()")]

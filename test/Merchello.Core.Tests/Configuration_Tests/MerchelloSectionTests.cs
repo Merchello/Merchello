@@ -57,17 +57,6 @@ namespace Merchello.Core.Tests.Configuration_Tests
         }
 
         /// <summary>
-        /// Verifies an empty collection 
-        /// </summary>
-        [Test]
-        public void Product_Item_Collection_Is_Empty()
-        {
-            var productTypeCollection = _config.TypeFields.Product;
-
-            Assert.IsEmpty(productTypeCollection);
-        }
-
-        /// <summary>
         /// Verifies the enableLogging attribute is accessible
         /// </summary>
         [Test]
@@ -98,6 +87,17 @@ namespace Merchello.Core.Tests.Configuration_Tests
         {
             Residential,
             Commercial
+        }
+
+        /// <summary>
+        /// Verifies an empty collection 
+        /// </summary>
+        [Test]
+        public void Product_Item_Collection_Is_Empty()
+        {
+            var productTypeCollection = _config.TypeFields.Product;
+
+            Assert.IsEmpty(productTypeCollection);
         }
 
     }
