@@ -70,6 +70,7 @@
     <Compile Include="Models\AddressType.cs" />
     <Compile Include="Models\BasketType.cs" />
     <Compile Include="Configuration\Outline\TypeFieldDefinitionsElement.cs" />
+    <Compile Include="Models\ICustomer.cs" />
     <Compile Include="Models\ITypeField.cs" />
     <Compile Include="Configuration\Outline\TypeFieldCollection.cs" />
     <Compile Include="Configuration\Outline\TypeFieldElement.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="Models\InvoiceItemItemization.cs" />
     <Compile Include="Models\InvoiceStatus.cs" />
     <Compile Include="Models\IShipment.cs" />
+    <Compile Include="Models\MerchelloEntity.cs" />
     <Compile Include="Models\Rdbms\AddressDto.cs" />
     <Compile Include="Models\Rdbms\AnonymousDto.cs" />
     <Compile Include="Models\Rdbms\BasketItemDto.cs" />
