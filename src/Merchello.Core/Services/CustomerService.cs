@@ -28,9 +28,9 @@ namespace Merchello.Core.Services
 
         public CustomerService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
         {
-            if (provider == null) throw new ArgumentNullException("provider");
-            if (repositoryFactory == null) throw new ArgumentNullException("repositoryFactory");
-
+            Mandate.ParameterNotNull(provider, "provider");
+            Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
+            
             _uowProvider = provider;
             _repositoryFactory = repositoryFactory;
         }
@@ -39,9 +39,11 @@ namespace Merchello.Core.Services
         {
             using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
             {
-                var query = Query<ICustomer>.Builder.Where(x => x.Key == key);
-                var customers = repository.GetByQuery(query);
-                return customers.FirstOrDefault();
+
+                return repository.Get(key);
+                //var query = Query<ICustomer>.Builder.Where(x => x.Key == key);
+                //var customers = repository.GetByQuery(query);
+                //return customers.FirstOrDefault();
             }
         }
     }

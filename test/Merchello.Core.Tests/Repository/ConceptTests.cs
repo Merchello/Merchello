@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Merchello.Core.Configuration.Outline;
 using Merchello.Core.Models.Rdbms;
+using Merchello.Core.Services;
 using NUnit.Framework;
 using Umbraco.Core.Persistence;
 using Umbraco.Core.Persistence.UnitOfWork;
@@ -33,7 +34,7 @@ namespace Merchello.Core.Tests.Repository
         {
             var provider = new PetaPocoUnitOfWorkProvider();
             var uow = provider.GetUnitOfWork();
-           
+            
             
             var dto = new CustomerDto()
                 {
@@ -52,9 +53,12 @@ namespace Merchello.Core.Tests.Repository
 
             var id = new Guid("87737E8D-8E22-4BE2-B738-B9286A2AFB54");
 
+            var service = new CustomerService();
+            var customer = service.GetById(id);
 
+            var firstName = customer.FirstName;
 
-          //_database.Delete(dto);
+            //_database.Delete(dto);
 
 
         }

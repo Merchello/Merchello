@@ -7,9 +7,8 @@ using Merchello.Core.Models;
 using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Persistence.Caching;
 using Merchello.Core.Persistence.Factories;
-using Merchello.Core.Persistence.Querying;
 using Umbraco.Core.Persistence;
-using Umbraco.Core.Persistence.Querying;
+
 using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Core.Persistence.Respositories
@@ -56,20 +55,6 @@ namespace Merchello.Core.Persistence.Respositories
             throw new NotImplementedException();
         }
 
-        protected override IEnumerable<ICustomer> PerformGetByQuery(IQuery<ICustomer> query)
-        {
-            var sqlClause = GetBaseQuery(false);
-            var translator = new SqlTranslator<ICustomer>(sqlClause, query);
-            var sql = translator.Translate();
-
-            var dtos = Database.Fetch<CustomerDto>(sql);
-
-            foreach (var dto in dtos)
-            {
-                yield return Get(dto.Pk);
-            }
-        }
-
         #endregion
 
         #region Overrides of PetaPocoRepositoryBase<ICustomer>
@@ -78,7 +63,7 @@ namespace Merchello.Core.Persistence.Respositories
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-               .From<CustomerDto>();
+               .From("merchCustomer");
 
             return sql;
         }

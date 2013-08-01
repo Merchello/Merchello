@@ -16,7 +16,7 @@ namespace Merchello.Core.Persistence.Respositories
     /// </summary>
     /// <typeparam name="TEntity">Type of <see cref="IAggregateRoot"/> entity for which the repository is used</typeparam>
     /// <typeparam name="TId">Type of the Id used for this entity</typeparam>
-    internal abstract class RepositoryBase<TId, TEntity> : DisposableObject, IRepositoryQueryable<TId, TEntity>, IUnitOfWorkRepository 
+    internal abstract class RepositoryBase<TId, TEntity> : DisposableObject, IRepository<TId, TEntity>, IUnitOfWorkRepository 
 		where TEntity : class, IAggregateRoot
     {
 		private readonly IUnitOfWork _work;
@@ -168,17 +168,6 @@ namespace Merchello.Core.Persistence.Respositories
             return entityCollection;
         }
 
-        protected abstract IEnumerable<TEntity> PerformGetByQuery(IQuery<TEntity> query);
-        /// <summary>
-        /// Gets a list of entities by the passed in query
-        /// </summary>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public IEnumerable<TEntity> GetByQuery(IQuery<TEntity> query)
-        {
-            return PerformGetByQuery(query);
-        }
-
         protected abstract bool PerformExists(TId id);
         /// <summary>
         /// Returns a boolean indicating whether an entity with the passed Id exists
@@ -204,8 +193,7 @@ namespace Merchello.Core.Persistence.Respositories
         public int Count(IQuery<TEntity> query)
         {
             return PerformCount(query);
-        }       
-
+        }    
         #endregion
 
         #region IUnitOfWorkRepository Members
