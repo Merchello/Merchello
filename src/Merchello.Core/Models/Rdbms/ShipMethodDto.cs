@@ -19,8 +19,8 @@ namespace Merchello.Core.Models.Rdbms
         [Column("gatewayAlias")]
         public int GatewayAlias { get; set; }
 
-        [Column("typeKey")]
-        public Guid TypeKey { get; set; }
+        [Column("shipMethodTypeFieldKey")]
+        public Guid ShipMethodTypeFieldKey { get; set; }
 
         [Column("surcharge")]
         public decimal Surcharge { get; set; }

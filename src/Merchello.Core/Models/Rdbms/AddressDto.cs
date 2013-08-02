@@ -27,7 +27,7 @@ namespace Merchello.Core.Models.Rdbms
         public string Company { get; set; }
 
         [Column("addressTypeKey")]
-        public Guid AddressTypeKey { get; set; }
+        public Guid AddressTypeFieldKey { get; set; }
 
         [Column("address1")]
         public string Address1 { get; set; }
