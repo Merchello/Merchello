@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Merchello.Core.Configuration.Outline;
+using Merchello.Core.Models;
 using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Services;
 using NUnit.Framework;
@@ -40,7 +41,7 @@ namespace Merchello.Core.Tests.Repository
                 {
                     Pk = Guid.NewGuid(),
                     MemberId = null,
-                    FirstName = "Joe",
+                    FirstName = "John",
                     LastName = "Schmoe",
                     TotalInvoiced = 0,
                     TotalPayments = 0,
@@ -49,14 +50,29 @@ namespace Merchello.Core.Tests.Repository
                     UpdateDate = DateTime.Now
                 };
 
-           //var poco = _database.Insert(dto);
+            //var poco = _database.Insert(dto);
 
-            var id = new Guid("87737E8D-8E22-4BE2-B738-B9286A2AFB54");
+            //var id = new Guid("87737E8D-8E22-4BE2-B738-B9286A2AFB54");
 
             var service = new CustomerService();
-            var customer = service.GetById(id);
+           // var customers = service.GetAll();
 
-            var firstName = customer.FirstName;
+            //var c1 = service.CreateCustomer("Rusty", "Swayne");
+            //var c2 = service.CreateCustomer("Kara", "Swayne");
+
+            //var customers = new List<ICustomer> {c1, c2 };
+
+            //service.Save(customers);
+
+            var kid = new Guid("B5A0E744-4EBD-44E9-BD90-4C76D29594E1");
+            var kara = service.GetByKey(kid);
+            kara.MemberId = 1;
+            service.Save(kara);
+
+
+            //var firstName = customer.FirstName;
+
+            //int count = customers.Count();
 
             //_database.Delete(dto);
 

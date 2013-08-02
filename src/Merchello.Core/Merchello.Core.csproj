@@ -72,6 +72,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActivatorHelper.cs" />
+    <Compile Include="Events\ConvertEventArgs.cs" />
+    <Compile Include="Events\DeleteEventArgs.cs" />
+    <Compile Include="Events\EventArgsBase.cs" />
+    <Compile Include="Events\EventExtensions.cs" />
+    <Compile Include="Events\NewEventArgs.cs" />
+    <Compile Include="Events\SaveEventArgs.cs" />
+    <Compile Include="Events\TypedEventHandler.cs" />
     <Compile Include="Models\AddressTypeField.cs" />
     <Compile Include="Models\BasketTypeField.cs" />
     <Compile Include="Configuration\Outline\TypeFieldDefinitionsElement.cs" />
@@ -125,8 +132,8 @@
     <Compile Include="Persistence\RepositoryFactory.cs" />
     <Compile Include="Persistence\Respositories\CustomerRepository.cs" />
     <Compile Include="Persistence\Respositories\ICustomerRepository.cs" />
-    <Compile Include="Persistence\Respositories\PetaPocoRepositoryBase.cs" />
-    <Compile Include="Persistence\Respositories\RepositoryBase.cs" />
+    <Compile Include="Persistence\Respositories\SqlPetaPocoRepositoryBase.cs" />
+    <Compile Include="Persistence\Respositories\SqlRepositoryBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\ShipMethodTypeField.cs" />
     <Compile Include="Services\CustomerService.cs" />

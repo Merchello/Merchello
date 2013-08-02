@@ -22,12 +22,29 @@ namespace Merchello.Core.Persistence.Factories
                     UpdateDate = dto.UpdateDate
                 };
 
+
+            //TODO: set to ResetDirtyProperties(false)
+            customer.ResetDirtyProperties();
+
             return customer;
         }
 
         public CustomerDto BuildDto(ICustomer entity)
         {
-            throw new NotImplementedException();
+            var dto = new CustomerDto()
+                {
+                    Pk = entity.Key,
+                    MemberId = entity.MemberId == 0 || entity.MemberId == null ? null : entity.MemberId,
+                    FirstName = entity.FirstName,
+                    LastName = entity.LastName,
+                    TotalInvoiced = entity.TotalInvoiced,
+                    TotalPayments = entity.TotalPayments,
+                    LastPaymentDate = entity.LastPaymentDate,
+                    UpdateDate = entity.UpdateDate,
+                    CreateDate = entity.CreateDate
+                };
+
+            return dto;
         }
     }
 }

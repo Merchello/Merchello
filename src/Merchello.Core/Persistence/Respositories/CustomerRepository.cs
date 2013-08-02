@@ -7,13 +7,14 @@ using Merchello.Core.Models;
 using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Persistence.Caching;
 using Merchello.Core.Persistence.Factories;
+using Umbraco.Core.Models.EntityBase;
 using Umbraco.Core.Persistence;
 
 using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Core.Persistence.Respositories
 {
-    internal class CustomerRepository : PetaPocoRepositoryBase<Guid, ICustomer>, ICustomerRepository
+    internal class CustomerRepository : SqlPetaPocoRepositoryBase<Guid, ICustomer>, ICustomerRepository
     {
         
         public CustomerRepository(IDatabaseUnitOfWork work) 
@@ -44,6 +45,8 @@ namespace Merchello.Core.Persistence.Respositories
 
             var customer = factory.BuildEntity(dto);
 
+            ((MerchelloEntity)customer).MarkHasIdentity();
+
             // TODO : this should be set to .ResetDirtyProperties(false) when exposed
             ((MerchelloEntity)customer).ResetDirtyProperties();
 
@@ -52,7 +55,21 @@ namespace Merchello.Core.Persistence.Respositories
 
         protected override IEnumerable<ICustomer> PerformGetAll(params Guid[] ids)
         {
-            throw new NotImplementedException();
+            if (ids.Any())
+            {
+                foreach (var id in ids)
+                {
+                    yield return Get(id);
+                }
+            }
+            else
+            {
+                var dtos = Database.Fetch<CustomerDto>(GetBaseQuery(false));
+                foreach (var dto in dtos)
+                {
+                    yield return Get(dto.Pk);
+                }
+            }
         }
 
         #endregion
@@ -92,12 +109,27 @@ namespace Merchello.Core.Persistence.Respositories
 
         protected override void PersistNewItem(ICustomer entity)
         {
-            throw new NotImplementedException();
+            ((MerchelloEntity)entity).AddingEntity();
+
+            var factory = new CustomerFactory();
+            var dto = factory.BuildDto(entity);
+            
+            var id = Database.Insert(dto);
+            ((MerchelloEntity)entity).MarkHasIdentity();
+
+            ((ICanBeDirty)entity).ResetDirtyProperties();
         }
 
         protected override void PersistUpdatedItem(ICustomer entity)
         {
-            throw new NotImplementedException();
+            ((MerchelloEntity)entity).UpdatingEntity();
+
+            var factory = new CustomerFactory();
+            var dto = factory.BuildDto(entity);
+
+            Database.Update(dto);
+
+            ((ICanBeDirty)entity).ResetDirtyProperties();
         }
 
         #endregion
