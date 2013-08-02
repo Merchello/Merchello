@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Reflection;
 using System.Runtime.Serialization;
-using Umbraco.Core.Models.EntityBase;
 
 namespace Merchello.Core.Models
 {
@@ -108,6 +107,18 @@ namespace Merchello.Core.Models
         public DateTime? LastPaymentDate
         {
             get { return _lastPaymentDate; }
+        }
+
+        /// <summary>
+        /// Method to call when Entity is being saved
+        /// </summary>
+        /// <remarks>Created date is set and a Unique key is assigned</remarks>
+        internal override void AddingEntity()
+        {
+            base.AddingEntity();
+
+            if (Key == Guid.Empty)
+                Key = Guid.NewGuid();
         }
     }
 }

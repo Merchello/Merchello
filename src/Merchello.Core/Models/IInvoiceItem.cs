@@ -15,7 +15,7 @@ namespace Merchello.Core.Models
         /// <summary>
         /// The Invoice that this invoice item is associated with
         /// </summary>
-        [DataMember]
+        [DataMember]       
         int InvoiceId { get; set; }
 
         /// <summary>
