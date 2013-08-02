@@ -37,6 +37,7 @@ namespace Merchello.Core.Services
             _repositoryFactory = repositoryFactory;
         }
 
+        #region ICustomerService Members
 
         /// <summary>
         /// Creates an <see cref="ICustomer"/> object
@@ -84,7 +85,7 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Saves a collection of <see cref="ICustomer"/> objects.
         /// </summary>
-        /// <param name="customers">Collections of <see cref="ICustomer"/> to save</param>
+        /// <param name="customers">Collection of <see cref="ICustomer"/> to save</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         public void Save(IEnumerable<ICustomer> customers, bool raiseEvents = true)
         {
@@ -103,6 +104,52 @@ namespace Merchello.Core.Services
                 }
 
             }
+        }
+
+        /// <summary>
+        /// Deletes a single <see cref="ICustomer"/> object
+        /// </summary>
+        /// <param name="customer">The <see cref="ICustomer"/> to delete</param>
+        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        public void Delete(ICustomer customer, bool raiseEvents = true)
+        {
+            if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<ICustomer>(customer), this);
+
+            using(new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreateCustomerRepository(uow))
+                {
+                    repository.Delete(customer);
+                    uow.Commit();
+                }
+            }
+            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<ICustomer>(customer), this);
+        }
+
+        /// <summary>
+        /// Deletes a collection <see cref="ICustomer"/> objects
+        /// </summary>
+        /// <param name="customers">Collection of <see cref="ICustomer"/> to delete</param>
+        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        public void Delete(IEnumerable<ICustomer> customers, bool raiseEvents = true)
+        {           
+            if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<ICustomer>(customers), this);
+
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreateCustomerRepository(uow))
+                {
+                    foreach (var customer in customers)
+                    {
+                        repository.Delete(customer);
+                    }
+                    uow.Commit();                    
+                }                
+            }
+
+            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<ICustomer>(customers), this);
         }
 
         /// <summary>
@@ -131,8 +178,9 @@ namespace Merchello.Core.Services
             }
         }
 
+        #endregion
 
-        internal IEnumerable<ICustomer> GetAll()
+        public IEnumerable<ICustomer> GetAll()
         {
             using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
             {

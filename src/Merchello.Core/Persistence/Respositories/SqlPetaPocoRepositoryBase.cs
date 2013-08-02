@@ -56,14 +56,7 @@ namespace Merchello.Core.Persistence.Respositories
             return Database.ExecuteScalar<int>(query);
         }
 
-        protected override void PersistDeletedItem(TEntity entity)
-        {
-            var deletes = GetDeleteClauses();
-            foreach (var delete in deletes)
-            {
-                Database.Execute(delete, new { Id = entity.Id });
-            }
-        }
+
 
     }
 }

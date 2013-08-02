@@ -132,6 +132,15 @@ namespace Merchello.Core.Persistence.Respositories
             ((ICanBeDirty)entity).ResetDirtyProperties();
         }
 
+        protected override void PersistDeletedItem(ICustomer entity)
+        {
+            var deletes = GetDeleteClauses();
+            foreach (var delete in deletes)
+            {
+                Database.Execute(delete, new { Id = entity.Key });
+            }
+        }
+
         #endregion
 
 
