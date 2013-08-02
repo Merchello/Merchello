@@ -30,7 +30,6 @@ namespace Merchello.Core.Tests.Repository
         }
 
 
-        [Test]
         public void Main()
         {
             var provider = new PetaPocoUnitOfWorkProvider();
