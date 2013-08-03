@@ -22,8 +22,6 @@ namespace Merchello.Core.Persistence.Factories
                     UpdateDate = dto.UpdateDate
                 };
 
-
-            //TODO: set to ResetDirtyProperties(false)
             customer.ResetDirtyProperties();
 
             return customer;

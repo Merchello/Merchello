@@ -51,15 +51,15 @@ namespace Merchello.Core.Tests.Repository
             //var id = new Guid("87737E8D-8E22-4BE2-B738-B9286A2AFB54");
 
             var service = new CustomerService();
-            var customers = service.GetAll();
+            //var customers = service.GetAll();
 
-            //var c1 = service.CreateCustomer("Rusty", "Swayne");
-            //var c2 = service.CreateCustomer("Kara", "Swayne");
+            var c1 = service.CreateCustomer("Olivia", "Swayne");
+            var c2 = service.CreateCustomer("Doot", "Swayne");
 
-            //var customers = new List<ICustomer> {c1, c2 };
+            var customers = new List<ICustomer> {c1, c2 };
 
-            //service.Save(customers);
-            service.Delete(customers);
+            service.Save(customers);
+            //service.Delete(customers);
             
 
             //var kid = new Guid("B5A0E744-4EBD-44E9-BD90-4C76D29594E1");

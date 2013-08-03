@@ -1,5 +1,4 @@
 ﻿using Merchello.Core.Configuration.Outline;
-using Merchello.Core.Models;
 
 namespace Merchello.Core.Models
 {

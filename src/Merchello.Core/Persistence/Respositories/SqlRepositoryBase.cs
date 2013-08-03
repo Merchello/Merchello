@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Merchello.Core.Persistence.Caching;
 using Umbraco.Core;
 using Umbraco.Core.Models.EntityBase;
@@ -15,10 +13,9 @@ namespace Merchello.Core.Persistence.Respositories
     /// <summary>
     /// Represent an abstract Repository, which is the base of the Repository implementations
     /// </summary>
-    /// <typeparam name="TEntity">Type of <see cref="IAggregateRoot"/> entity for which the repository is used</typeparam>
     /// <typeparam name="TId">Type of the Id used for this entity</typeparam>
     internal abstract class SqlRepositoryBase<TId, TEntity> : DisposableObject, IRepository<TId, TEntity>, IUnitOfWorkRepository
-        where TEntity : class, IAggregateRoot
+        where TEntity : class, IEntity
     {
         private readonly IUnitOfWork _work;
         private readonly IRepositoryCacheProvider _cache;

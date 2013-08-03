@@ -45,11 +45,6 @@ namespace Merchello.Core.Persistence.Respositories
 
             var customer = factory.BuildEntity(dto);
 
-            ((MerchelloEntity)customer).MarkHasIdentity();
-
-            // TODO : this should be set to .ResetDirtyProperties(false) when exposed
-            ((MerchelloEntity)customer).ResetDirtyProperties();
-
             return customer;
         }
 
@@ -109,27 +104,26 @@ namespace Merchello.Core.Persistence.Respositories
 
         protected override void PersistNewItem(ICustomer entity)
         {
-            ((MerchelloEntity)entity).AddingEntity();
+            ((Customer)entity).AddingEntity();
 
             var factory = new CustomerFactory();
             var dto = factory.BuildDto(entity);
             
-            var id = Database.Insert(dto);
-            ((MerchelloEntity)entity).MarkHasIdentity();
-
-            ((ICanBeDirty)entity).ResetDirtyProperties();
+            Database.Insert(dto);
+            
+            entity.ResetDirtyProperties();
         }
 
         protected override void PersistUpdatedItem(ICustomer entity)
         {
-            ((MerchelloEntity)entity).UpdatingEntity();
+            ((Customer)entity).UpdatingEntity();
 
             var factory = new CustomerFactory();
             var dto = factory.BuildDto(entity);
 
             Database.Update(dto);
 
-            ((ICanBeDirty)entity).ResetDirtyProperties();
+            entity.ResetDirtyProperties();
         }
 
         protected override void PersistDeletedItem(ICustomer entity)

@@ -82,6 +82,13 @@
     <Compile Include="Models\AddressTypeField.cs" />
     <Compile Include="Models\BasketTypeField.cs" />
     <Compile Include="Configuration\Outline\TypeFieldDefinitionsElement.cs" />
+    <Compile Include="Models\EntityBase\Entity.cs" />
+    <Compile Include="Models\EntityBase\IdEntity.cs" />
+    <Compile Include="Models\EntityBase\IIdEntity.cs" />
+    <Compile Include="Models\EntityBase\IKeyEntity.cs" />
+    <Compile Include="Models\EntityBase\ITracksDirty.cs" />
+    <Compile Include="Models\EntityBase\KeyEntity.cs" />
+    <Compile Include="Models\EntityBase\MerchelloEntityBase.cs" />
     <Compile Include="Models\ICustomer.cs" />
     <Compile Include="Models\ITypeField.cs" />
     <Compile Include="Configuration\Outline\TypeFieldCollection.cs" />
@@ -102,7 +109,6 @@
     <Compile Include="Models\InvoiceItemItemization.cs" />
     <Compile Include="Models\InvoiceStatus.cs" />
     <Compile Include="Models\IShipment.cs" />
-    <Compile Include="Models\MerchelloEntity.cs" />
     <Compile Include="Models\PaymentMethodTypeField.cs" />
     <Compile Include="Models\Rdbms\AddressDto.cs" />
     <Compile Include="Models\Rdbms\AnonymousDto.cs" />

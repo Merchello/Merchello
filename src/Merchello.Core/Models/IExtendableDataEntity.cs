@@ -7,7 +7,7 @@ using Umbraco.Core.Models.EntityBase;
 
 namespace Merchello.Core.Models
 {
-    public interface IExtendableDataEntity : IAggregateRoot
+    public interface IExtendableDataEntity
     {
         /// <summary>
         /// List of extended properties assoicated with this item

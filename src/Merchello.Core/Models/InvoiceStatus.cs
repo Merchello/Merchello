@@ -1,8 +1,8 @@
-﻿using Umbraco.Core.Models.EntityBase;
+﻿using Merchello.Core.Models.EntityBase;
 
 namespace Merchello.Core.Models
 {
-    public class InvoiceStatus : MerchelloEntity
+    public class InvoiceStatus : IdEntity
     {
     }
 }

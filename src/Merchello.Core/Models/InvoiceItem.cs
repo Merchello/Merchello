@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using Umbraco.Core.Models.EntityBase;
+using Merchello.Core.Models.EntityBase;
 
 namespace Merchello.Core.Models
 {
     [DataContract]
-    public class InvoiceItem : MerchelloEntity, IInvoiceItem
+    public class InvoiceItem : IdEntity, IInvoiceItem
     {
 
         private int _parentId;

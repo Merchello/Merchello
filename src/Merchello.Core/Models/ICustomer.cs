@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using Merchello.Core.Models.EntityBase;
 using Umbraco.Core.Models.EntityBase;
 
 namespace Merchello.Core.Models
@@ -7,8 +8,9 @@ namespace Merchello.Core.Models
     /// <summary>
     /// Defines a Merchello customer
     /// </summary>
-    public interface ICustomer : IAggregateRoot
+    public interface ICustomer : IKeyEntity
     {
+
         /// <summary>
         /// The Umbraco member Id
         /// </summary>
