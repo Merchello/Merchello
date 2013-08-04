@@ -58,10 +58,11 @@ namespace Merchello.Core.Persistence.Repositories
             }
             else
             {
+                var factory = new CustomerFactory();
                 var dtos = Database.Fetch<CustomerDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
-                {
-                    yield return Get(dto.Pk);
+                {                    
+                    yield return factory.BuildEntity(dto);
                 }
             }
         }
