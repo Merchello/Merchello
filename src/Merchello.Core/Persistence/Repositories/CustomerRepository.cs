@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Persistence.Caching;
 using Merchello.Core.Persistence.Factories;
-using Umbraco.Core.Models.EntityBase;
+using Merchello.Core.Persistence.Querying;
+using Umbraco.Core;
 using Umbraco.Core.Persistence;
-
+using Umbraco.Core.Persistence.Querying;
 using Umbraco.Core.Persistence.UnitOfWork;
 
-namespace Merchello.Core.Persistence.Respositories
+namespace Merchello.Core.Persistence.Repositories
 {
-    internal class CustomerRepository : SqlPetaPocoRepositoryBase<Guid, ICustomer>, ICustomerRepository
+    internal class CustomerRepository : MerchelloPetaPocoRepositoryBase<Guid, ICustomer>, ICustomerRepository
     {
         
         public CustomerRepository(IDatabaseUnitOfWork work) 
@@ -69,7 +68,7 @@ namespace Merchello.Core.Persistence.Respositories
 
         #endregion
 
-        #region Overrides of PetaPocoRepositoryBase<ICustomer>
+        #region Overrides of MerchelloPetaPocoRepositoryBase<ICustomer>
 
         protected override Sql GetBaseQuery(bool isCount)
         {
@@ -135,7 +134,22 @@ namespace Merchello.Core.Persistence.Respositories
             }
         }
 
+
+        protected override IEnumerable<ICustomer> PerformGetByQuery(IQuery<ICustomer> query)
+        {
+            var sqlClause = GetBaseQuery(false);
+            var translator = new SqlTranslator<ICustomer>(sqlClause, query);
+            var sql = translator.Translate();
+
+            var dtos = Database.Fetch<CustomerDto>(sql);
+
+            return dtos.DistinctBy(x => x.Pk).Select(dto => Get(dto.Pk));
+
+        }
+
+
         #endregion
+
 
 
     }

@@ -1,5 +1,5 @@
 ﻿using Merchello.Core.Persistence.Caching;
-using Merchello.Core.Persistence.Respositories;
+using Merchello.Core.Persistence.Repositories;
 using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Core.Persistence
