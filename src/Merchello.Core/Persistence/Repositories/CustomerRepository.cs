@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Persistence.Caching;
 using Merchello.Core.Persistence.Factories;
-using Umbraco.Core.Models.EntityBase;
+using Merchello.Core.Persistence.Querying;
+using Umbraco.Core;
 using Umbraco.Core.Persistence;
-
+using Umbraco.Core.Persistence.Querying;
 using Umbraco.Core.Persistence.UnitOfWork;
 
-namespace Merchello.Core.Persistence.Respositories
+namespace Merchello.Core.Persistence.Repositories
 {
-    internal class CustomerRepository : SqlPetaPocoRepositoryBase<Guid, ICustomer>, ICustomerRepository
+    internal class CustomerRepository : MerchelloPetaPocoRepositoryBase<Guid, ICustomer>, ICustomerRepository
     {
         
         public CustomerRepository(IDatabaseUnitOfWork work) 
@@ -45,11 +44,6 @@ namespace Merchello.Core.Persistence.Respositories
 
             var customer = factory.BuildEntity(dto);
 
-            ((MerchelloEntity)customer).MarkHasIdentity();
-
-            // TODO : this should be set to .ResetDirtyProperties(false) when exposed
-            ((MerchelloEntity)customer).ResetDirtyProperties();
-
             return customer;
         }
 
@@ -64,17 +58,18 @@ namespace Merchello.Core.Persistence.Respositories
             }
             else
             {
+                var factory = new CustomerFactory();
                 var dtos = Database.Fetch<CustomerDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
-                {
-                    yield return Get(dto.Pk);
+                {                    
+                    yield return factory.BuildEntity(dto);
                 }
             }
         }
 
         #endregion
 
-        #region Overrides of PetaPocoRepositoryBase<ICustomer>
+        #region Overrides of MerchelloPetaPocoRepositoryBase<ICustomer>
 
         protected override Sql GetBaseQuery(bool isCount)
         {
@@ -109,30 +104,53 @@ namespace Merchello.Core.Persistence.Respositories
 
         protected override void PersistNewItem(ICustomer entity)
         {
-            ((MerchelloEntity)entity).AddingEntity();
+            ((Customer)entity).AddingEntity();
 
             var factory = new CustomerFactory();
             var dto = factory.BuildDto(entity);
             
-            var id = Database.Insert(dto);
-            ((MerchelloEntity)entity).MarkHasIdentity();
-
-            ((ICanBeDirty)entity).ResetDirtyProperties();
+            Database.Insert(dto);
+            
+            entity.ResetDirtyProperties();
         }
 
         protected override void PersistUpdatedItem(ICustomer entity)
         {
-            ((MerchelloEntity)entity).UpdatingEntity();
+            ((Customer)entity).UpdatingEntity();
 
             var factory = new CustomerFactory();
             var dto = factory.BuildDto(entity);
 
             Database.Update(dto);
 
-            ((ICanBeDirty)entity).ResetDirtyProperties();
+            entity.ResetDirtyProperties();
         }
 
+        protected override void PersistDeletedItem(ICustomer entity)
+        {
+            var deletes = GetDeleteClauses();
+            foreach (var delete in deletes)
+            {
+                Database.Execute(delete, new { Id = entity.Key });
+            }
+        }
+
+
+        protected override IEnumerable<ICustomer> PerformGetByQuery(IQuery<ICustomer> query)
+        {
+            var sqlClause = GetBaseQuery(false);
+            var translator = new SqlTranslator<ICustomer>(sqlClause, query);
+            var sql = translator.Translate();
+
+            var dtos = Database.Fetch<CustomerDto>(sql);
+
+            return dtos.DistinctBy(x => x.Pk).Select(dto => Get(dto.Pk));
+
+        }
+
+
         #endregion
+
 
 
     }

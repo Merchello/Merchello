@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using Umbraco.Core.Models.EntityBase;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
+using Merchello.Core.Models.EntityBase;
+
 
 namespace Merchello.Core.Models
 {
-    public interface IInvoiceItem : IItemization, IAggregateRoot
+    public interface IInvoiceItem : IItemization, IIdEntity
     {
         /// <summary>
         /// The parent Id of the InvoiceItem

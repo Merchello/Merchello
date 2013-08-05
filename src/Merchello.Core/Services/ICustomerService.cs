@@ -37,6 +37,20 @@ namespace Merchello.Core.Services
         void Save(IEnumerable<ICustomer> customers, bool raiseEvents = true);
 
         /// <summary>
+        /// Deletes a single <see cref="ICustomer"/> object
+        /// </summary>
+        /// <param name="customer"><see cref="ICustomer"/> to delete</param>
+        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        void Delete(ICustomer customer, bool raiseEvents = true);
+
+        /// <summary>
+        /// Deletes a collection of <see cref="ICustomer"/> objects
+        /// </summary>
+        /// <param name="customers">Collection of <see cref="ICustomer"/> to delete</param>
+        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        void Delete(IEnumerable<ICustomer> customers, bool raiseEvents = true);
+
+        /// <summary>
         /// Gets an <see cref="ICustomer"/> object by its 'UniqueId'
         /// </summary>
         /// <param name="key">Guid pk of the Customer to retrieve</param>

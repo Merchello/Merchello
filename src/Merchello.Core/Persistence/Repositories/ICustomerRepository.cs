@@ -1,9 +1,8 @@
-﻿
-using System;
+﻿using System;
 using Merchello.Core.Models;
 using Umbraco.Core.Persistence.Repositories;
 
-namespace Merchello.Core.Persistence.Respositories
+namespace Merchello.Core.Persistence.Repositories
 {
     /// <summary>
     /// Marker interface for customer repositories
