@@ -43,7 +43,7 @@ namespace Merchello.Core.Persistence.Caching
         {
             if (HttpContext.Current == null)
             {
-                _memoryCache = new MemoryCache("in-memory");
+                _memoryCache = new MemoryCache("merch-in-memory");
             }
         }
 
@@ -163,7 +163,7 @@ namespace Merchello.Core.Persistence.Caching
                 if (_memoryCache != null)
                 {
                     _memoryCache.DisposeIfDisposable();
-                    _memoryCache = new MemoryCache("in-memory");
+                    _memoryCache = new MemoryCache("merch-in-memory");
                 }
                 else
                 {
@@ -183,7 +183,7 @@ namespace Merchello.Core.Persistence.Caching
         /// We prefix all cache keys with this so that we know which ones this class has created when 
         /// using the HttpRuntime cache so that when we clear it we don't clear other entries we didn't create.
         /// </summary>
-        private const string CacheItemPrefix = "umbrtmche_";
+        private const string CacheItemPrefix = "merchtmche_";
 
         private string GetCompositeId(Type type, Guid id)
         {

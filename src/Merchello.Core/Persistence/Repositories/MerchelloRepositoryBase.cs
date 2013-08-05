@@ -1,33 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Merchello.Core.Persistence.Caching;
 using Umbraco.Core;
 using Umbraco.Core.Models.EntityBase;
-using Umbraco.Core.Persistence;
+using Umbraco.Core.Persistence.Querying;
 using Umbraco.Core.Persistence.Repositories;
 using Umbraco.Core.Persistence.UnitOfWork;
 
-namespace Merchello.Core.Persistence.Respositories
+using Merchello.Core.Models.EntityBase;
+using Merchello.Core.Persistence.Caching;
+
+namespace Merchello.Core.Persistence.Repositories
 {
+
     /// <summary>
     /// Represent an abstract Repository, which is the base of the Repository implementations
     /// </summary>
     /// <typeparam name="TEntity">Type of <see cref="IAggregateRoot"/> entity for which the repository is used</typeparam>
     /// <typeparam name="TId">Type of the Id used for this entity</typeparam>
-    internal abstract class SqlRepositoryBase<TId, TEntity> : DisposableObject, IRepository<TId, TEntity>, IUnitOfWorkRepository
-        where TEntity : class, IAggregateRoot
+    internal abstract class MerchelloRepositoryBase<TId, TEntity> : DisposableObject, IRepositoryQueryable<TId, TEntity>, IUnitOfWorkRepository 
+		where TEntity : class, ISingularRoot
     {
-        private readonly IUnitOfWork _work;
+		private readonly IUnitOfWork _work;
         private readonly IRepositoryCacheProvider _cache;
 
-        protected SqlRepositoryBase(IUnitOfWork work)
-            : this(work, NullCacheProvider.Current)
-        { }
+		protected MerchelloRepositoryBase(IUnitOfWork work)
+            : this(work, RuntimeCacheProvider.Current)
+        {
+        }
 
-        internal SqlRepositoryBase(IUnitOfWork work, IRepositoryCacheProvider cache)
+        internal MerchelloRepositoryBase(IUnitOfWork work, IRepositoryCacheProvider cache)
         {
             _work = work;
             _cache = cache;
@@ -36,7 +38,7 @@ namespace Merchello.Core.Persistence.Respositories
         /// <summary>
         /// Returns the Unit of Work added to the repository
         /// </summary>
-        protected internal IUnitOfWork UnitOfWork
+		protected internal IUnitOfWork UnitOfWork
         {
             get { return _work; }
         }
@@ -48,9 +50,6 @@ namespace Merchello.Core.Persistence.Respositories
         {
             get { return (Guid)_work.Key; }
         }
-
-        protected abstract Sql GetBaseQuery(bool isCount);
-        protected abstract string GetBaseWhereClause();
 
         #region IRepository<TEntity> Members
 
@@ -77,7 +76,7 @@ namespace Merchello.Core.Persistence.Respositories
         /// <param name="entity"></param>
         public void Delete(TEntity entity)
         {
-            if (_work != null)
+            if(_work != null)
             {
                 _work.RegisterRemoved(entity, this);
             }
@@ -91,11 +90,10 @@ namespace Merchello.Core.Persistence.Respositories
         /// <returns></returns>
         public TEntity Get(TId id)
         {
-            Guid key = id is int ? ConvertIdToGuid(id) : ConvertStringIdToGuid(id.ToString());
-            var rEntity = _cache.GetById(typeof(TEntity), key);
-            if (rEntity != null)
+            var fromCache = TryGetFromCache(id);
+            if (fromCache.Success)
             {
-                return (TEntity)rEntity;
+                return fromCache.Result;
             }
 
             var entity = PerformGet(id);
@@ -106,26 +104,25 @@ namespace Merchello.Core.Persistence.Respositories
 
             if (entity != null)
             {
-                //on initial construction we don't want to have dirty properties tracked
-                // http://issues.umbraco.org/issue/U4-1946
-                var asEntity = entity as TracksChangesEntityBase;
+            
+
+                var asEntity = entity as Models.EntityBase.Entity;
                 if (asEntity != null)
                 {
-                    //asEntity.ResetDirtyProperties(false);
                     asEntity.ResetDirtyProperties();
                 }
             }
-
+            
             return entity;
         }
 
         protected Attempt<TEntity> TryGetFromCache(TId id)
         {
-            Guid key = id is int ? ConvertIdToGuid(id) : ConvertStringIdToGuid(id.ToString());
+            Guid key = id is int ? ConvertIdToGuid(id) : new Guid(id.ToString());
             var rEntity = _cache.GetById(typeof(TEntity), key);
             if (rEntity != null)
             {
-                return new Attempt<TEntity>(true, (TEntity)rEntity);
+                return new Attempt<TEntity>(true, (TEntity) rEntity);
             }
             return Attempt<TEntity>.False;
         } 
@@ -147,19 +144,14 @@ namespace Merchello.Core.Persistence.Respositories
             else
             {
                 var allEntities = _cache.GetAllByType(typeof(TEntity));
-
+                
                 if (allEntities.Any())
                 {
-                    // TODO : this is super hacky, not tested ... need to revist
-                    var query = GetBaseQuery(true)
-                        .Where(ids.First() is int ? "id != 0" : "pk != @pk", new { pk = Guid.Empty });
-
-
                     //Get count of all entities of current type (TEntity) to ensure cached result is correct
-                    //var query = Query<TEntity>.Builder.Where(x => x.Id != 0);
+                    var query = Querying.Query<TEntity>.Builder.Where(x => x.Id != 0);
                     int totalCount = PerformCount(query);
 
-                    if (allEntities.Count() == totalCount)
+                    if(allEntities.Count() == totalCount)
                         return allEntities.Select(x => (TEntity)x);
                 }
             }
@@ -177,6 +169,17 @@ namespace Merchello.Core.Persistence.Respositories
             return entityCollection;
         }
 
+        protected abstract IEnumerable<TEntity> PerformGetByQuery(IQuery<TEntity> query);
+        /// <summary>
+        /// Gets a list of entities by the passed in query
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public IEnumerable<TEntity> GetByQuery(IQuery<TEntity> query)
+        {
+            return PerformGetByQuery(query);
+        }
+
         protected abstract bool PerformExists(TId id);
         /// <summary>
         /// Returns a boolean indicating whether an entity with the passed Id exists
@@ -190,24 +193,23 @@ namespace Merchello.Core.Persistence.Respositories
             {
                 return true;
             }
-            return PerformExists(id);
+            return PerformExists(id);            
         }
 
-        protected abstract int PerformCount(Sql query);
+        protected abstract int PerformCount(IQuery<TEntity> query);
         /// <summary>
         /// Returns an integer with the count of entities found with the passed in query
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        public int Count(Sql query)
+        public int Count(IQuery<TEntity> query)
         {
-            if(query.ToString().ToUpperInvariant().Contains("COUNT")) throw new ArgumentException("Invalid SQL passed to count");
             return PerformCount(query);
-        }
+        }       
 
         #endregion
 
-        #region IUnitOfWorkRespository Members
+        #region IUnitOfWorkRepository Members
 
         /// <summary>
         /// Unit of work method that tells the repository to persist the new entity
@@ -241,7 +243,6 @@ namespace Merchello.Core.Persistence.Respositories
 
         #endregion
 
-
         #region Abstract IUnitOfWorkRepository Methods
 
         protected abstract void PersistNewItem(TEntity item);
@@ -262,7 +263,7 @@ namespace Merchello.Core.Persistence.Respositories
         protected virtual Guid ConvertIdToGuid(TId id)
         {
             int i = 0;
-            if (int.TryParse(id.ToString(), out i))
+            if(int.TryParse(id.ToString(), out i))
             {
                 return i.ToGuid();
             }
@@ -274,16 +275,15 @@ namespace Merchello.Core.Persistence.Respositories
             return id.EncodeAsGuid();
         }
 
-        /// <summary>
-        /// Dispose disposable properties
-        /// </summary>
-        /// <remarks>
-        /// Ensure the unit of work is disposed
-        /// </remarks>
-        protected override void DisposeResources()
-        {
-            UnitOfWork.DisposeIfDisposable();
-        }
-
+		/// <summary>
+		/// Dispose disposable properties
+		/// </summary>
+		/// <remarks>
+		/// Ensure the unit of work is disposed
+		/// </remarks>
+		protected override void DisposeResources()
+		{
+			UnitOfWork.DisposeIfDisposable();
+		}
     }
 }

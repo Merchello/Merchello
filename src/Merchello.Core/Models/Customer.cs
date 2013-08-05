@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Reflection;
 using System.Runtime.Serialization;
+using Merchello.Core.Models.EntityBase;
 
 namespace Merchello.Core.Models
 {
     [Serializable]
     [DataContract(IsReference = true)]
-    public class Customer : MerchelloEntity, ICustomer
+    public class Customer : KeyEntity, ICustomer
     {
         private int? _memberId;
         private string _firstName;
@@ -35,7 +36,7 @@ namespace Merchello.Core.Models
         {
             get { return _memberId; }
             set
-            {
+            {                
                 SetPropertyValueAndDetectChanges(o => 
                     {
                         _memberId = value;
@@ -110,7 +111,7 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
-        /// Method to call when Entity is being saved
+        /// Method to call when EntityEntity is being saved
         /// </summary>
         /// <remarks>Created date is set and a Unique key is assigned</remarks>
         internal override void AddingEntity()
@@ -120,5 +121,7 @@ namespace Merchello.Core.Models
             if (Key == Guid.Empty)
                 Key = Guid.NewGuid();
         }
+
+        
     }
 }
