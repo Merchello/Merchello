@@ -19,7 +19,7 @@ namespace Merchello.Core.Persistence.Repositories
     /// <typeparam name="TEntity">Type of <see cref="IAggregateRoot"/> entity for which the repository is used</typeparam>
     /// <typeparam name="TId">Type of the Id used for this entity</typeparam>
     internal abstract class MerchelloRepositoryBase<TId, TEntity> : DisposableObject, IRepositoryQueryable<TId, TEntity>, IUnitOfWorkRepository 
-		where TEntity : class, IAggregateRoot
+		where TEntity : class, ISingularRoot
     {
 		private readonly IUnitOfWork _work;
         private readonly IRepositoryCacheProvider _cache;

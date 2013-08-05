@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Merchello.Core.Models.EntityBase;
 using Umbraco.Core.Models.EntityBase;
 using Umbraco.Core.Persistence;
 using Merchello.Core.Persistence.Caching;
@@ -16,7 +17,7 @@ namespace Merchello.Core.Persistence.Repositories
     /// <typeparam name="TId"></typeparam>
     /// <typeparam name="TEntity"></typeparam>
     internal abstract class MerchelloPetaPocoRepositoryBase<TId, TEntity> : MerchelloRepositoryBase<TId, TEntity>
-        where TEntity : class, IAggregateRoot
+        where TEntity : class, ISingularRoot
     {
 		protected MerchelloPetaPocoRepositoryBase(IDatabaseUnitOfWork work)
 			: base(work)

@@ -5,7 +5,7 @@ using Umbraco.Core.Models.EntityBase;
 
 namespace Merchello.Core.Models.EntityBase
 {
-    public abstract class Entity : MerchelloEntityBase, IAggregateRoot
+    public abstract class Entity : MerchelloEntityBase, ISingularRoot
     {
         private int _id;
         private Guid _key;

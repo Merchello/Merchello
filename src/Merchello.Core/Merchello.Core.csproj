@@ -79,6 +79,7 @@
     <Compile Include="Events\NewEventArgs.cs" />
     <Compile Include="Events\SaveEventArgs.cs" />
     <Compile Include="Events\TypedEventHandler.cs" />
+    <Compile Include="Models\EntityBase\ISingularRoot.cs" />
     <Compile Include="ObjectResolution\Resolution.cs" />
     <Compile Include="Persistence\Mappers\CustomerMapper.cs" />
     <Compile Include="Persistence\Mappers\DtoMapModel.cs" />

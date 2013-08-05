@@ -7,7 +7,7 @@ namespace Merchello.Core.Models.EntityBase
     /// <summary>
     /// Marker interface for IKeyEntity
     /// </summary>
-    public interface IKeyEntity : ITracksDirty, IAggregateRoot
+    public interface IKeyEntity : ITracksDirty, ISingularRoot
     {
 
     }
