@@ -4,7 +4,7 @@ using Merchello.Core.Configuration.Outline;
 
 namespace Merchello.Core.Models
 {
-    public abstract class TypeFieldBase
+    public abstract class TypeFieldProxyBase
     {
 
         protected static TypeFieldDefinitionsElement Fields { get { return ((MerchelloSection)ConfigurationManager.GetSection("merchello")).TypeFields; } }
@@ -16,12 +16,14 @@ namespace Merchello.Core.Models
                        : new TypeField(element);
         }
 
+       public static ITypeField Custom(string alias)
+       {
+           return NullTypeField();
+       }
+
         /// <summary>
         /// Empty type - NullObject Pattern
         /// </summary>
-        /// <remarks>
-        /// TODO: Language specific descriptions
-        /// </remarks>
         private static ITypeField NullTypeField()
         {
             
