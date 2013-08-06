@@ -3,7 +3,7 @@ using System.Configuration;
 using Merchello.Core.Configuration.Outline;
 using NUnit.Framework;
 
-namespace Merchello.Core.Tests.Configuration_Tests
+namespace Merchello.Tests.UnitTests.Configuration
 {
     [TestFixture]
     [Category("Configuration")]

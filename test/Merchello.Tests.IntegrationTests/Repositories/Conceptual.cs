@@ -7,10 +7,10 @@ using NUnit.Framework;
 using Umbraco.Core.Persistence;
 using Umbraco.Core.Persistence.UnitOfWork;
 
-namespace Merchello.Core.Tests.Repository_Tests
+namespace Merchello.Tests.IntegrationTests.Repositories
 {
     [TestFixture]
-    public class ConceptTests
+    public class Conceptual
     {
         private string _connectionStringName;
         private Database _database;
@@ -24,7 +24,7 @@ namespace Merchello.Core.Tests.Repository_Tests
             _database = new UmbracoDatabase(_connectionStringName);
         }
 
-        //[Test]
+        [Test]
         public void Main()
         {
             var provider = new PetaPocoUnitOfWorkProvider();
