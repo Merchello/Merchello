@@ -6,7 +6,7 @@ namespace Merchello.Core.Models
     /// <summary>
     /// Used in basket and invoice (product) items to identify if a specific shipping method is required.
     /// </summary>
-    public class ShipMethodTypeField :TypeFieldBase
+    public class ShipMethodTypeField :TypeFieldProxyBase
     {
         /// <summary>
         /// Flat rate shipping
@@ -30,6 +30,16 @@ namespace Merchello.Core.Models
         public static ITypeField Carrier
         {
             get { return GetTypeField(ShipMethods["Carrier"]); }
+        }
+
+        /// <summary>
+        /// Returns a custom shipment methods or a NullTypeField
+        /// </summary>
+        /// <param name="alias">The alias of the custom shipment method</param>
+        /// <returns>An object of <see cref="ITypeField"/></returns>
+        public new static ITypeField Custom(string alias)
+        {
+            return GetTypeField(ShipMethods[alias]);
         }
 
         private static TypeFieldCollection ShipMethods

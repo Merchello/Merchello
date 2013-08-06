@@ -5,7 +5,7 @@ namespace Merchello.Core.Models
     /// <summary>
     /// The type of a invoice line item
     /// </summary>
-    public class InvoiceItemTypeField : TypeFieldBase
+    public class InvoiceItemTypeField : TypeFieldProxyBase
     {         
         /// <summary>
         /// Catalog product sales
@@ -47,8 +47,18 @@ namespace Merchello.Core.Models
             get { return GetTypeField(Items["Credit"]);  }
         }
 
+        /// <summary>
+        /// Returns a custom invoice item types or a NullTypeField
+        /// </summary>
+        /// <param name="alias">The alias of the custom invoice item type</param>
+        /// <returns>An object of <see cref="ITypeField"/></returns>
+        public new static ITypeField Custom(string alias)
+        {
+            return GetTypeField(Items[alias]);
+        }
 
-        public static TypeFieldCollection Items
+
+        private static TypeFieldCollection Items
         {
             get { return Fields.InvoiceItem; }
         }

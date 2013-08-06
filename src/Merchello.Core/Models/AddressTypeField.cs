@@ -23,6 +23,15 @@ namespace Merchello.Core.Models
             get { return GetTypeField(Addresses["Commercial"]); }
         }
 
+        /// <summary>
+        /// Returns a custom address or NullTypeField
+        /// </summary>
+        /// <param name="alias">The alias of the custom address</param>
+        /// <returns>An object of <see cref="ITypeField"/></returns>
+        public new static ITypeField Custom(string alias)
+        {
+            return GetTypeField(Addresses[alias]);
+        }
 
         private static TypeFieldCollection Addresses
         {

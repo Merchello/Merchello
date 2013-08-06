@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using Merchello.Core.Configuration.Outline;
-using Merchello.Core.Models;
 using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Services;
 using NUnit.Framework;
 using Umbraco.Core.Persistence;
 using Umbraco.Core.Persistence.UnitOfWork;
 
-namespace Merchello.Core.Tests.Repository
+namespace Merchello.Core.Tests.Repository_Tests
 {
     [TestFixture]
     public class ConceptTests
@@ -26,7 +24,7 @@ namespace Merchello.Core.Tests.Repository
             _database = new UmbracoDatabase(_connectionStringName);
         }
 
-        [Test]
+        //[Test]
         public void Main()
         {
             var provider = new PetaPocoUnitOfWorkProvider();
