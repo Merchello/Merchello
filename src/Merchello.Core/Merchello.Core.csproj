@@ -135,7 +135,7 @@
     <Compile Include="Models\Rdbms\ShipMethodDto.cs" />
     <Compile Include="Models\Rdbms\WarehouseDto.cs" />
     <Compile Include="Models\TypeField.cs" />
-    <Compile Include="Models\TypeFieldBase.cs" />
+    <Compile Include="Models\TypeFieldProxyBase.cs" />
     <Compile Include="ObjectResolution\LazyManyObjectsResolverbase.cs" />
     <Compile Include="Persistence\Caching\IRepositoryCacheProvider.cs" />
     <Compile Include="Persistence\Caching\NullCacheProvider.cs" />

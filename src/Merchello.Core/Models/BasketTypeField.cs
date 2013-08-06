@@ -5,7 +5,7 @@ namespace Merchello.Core.Models
     /// <summary>
     /// Indicates whether a shopping cart basket is either a "basket" or a "wishlist" representation
     /// </summary>
-    public class BasketTypeField : TypeFieldBase
+    public class BasketTypeField : TypeFieldProxyBase
     {
         /// <summary>
         /// Default ecommerce basket

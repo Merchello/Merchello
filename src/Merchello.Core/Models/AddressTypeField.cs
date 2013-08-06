@@ -5,7 +5,7 @@ namespace Merchello.Core.Models
     /// <summary>
     /// Identifies an address as either residential or commercial for shipping estimations 
     /// </summary>
-    public class AddressTypeField : TypeFieldBase
+    public class AddressTypeField : TypeFieldProxyBase
     {
         /// <summary>
         /// Indicates the address is a residential address
