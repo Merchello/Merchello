@@ -2,9 +2,10 @@
 using System.Configuration;
 using Merchello.Core.Configuration.Outline;
 using Merchello.Core.Models;
+using Merchello.Tests.Base.TypeFields;
 using NUnit.Framework;
 
-namespace Merchello.Core.Tests.TypeField_Tests
+namespace Merchello.Tests.UnitTests.TypeFields
 {
     [TestFixture]
     [Category("TypeField")]
@@ -16,8 +17,8 @@ namespace Merchello.Core.Tests.TypeField_Tests
         [SetUp]
         public void Setup()
         {
-            _mockBasket = new TypeField("Basket", "Standard Basket", new Guid("C53E3100-2DFD-408A-872E-4380383FAD35"));
-            _mockWishlist = new TypeField("Wishlist", "Wishlist", new Guid("B3EBB9E0-C7CE-4BA6-B379-BEDA3465D6D5"));
+            _mockBasket = TypeFieldMock.BasketBasket;
+            _mockWishlist = TypeFieldMock.BasketWishlist;
         }
 
 

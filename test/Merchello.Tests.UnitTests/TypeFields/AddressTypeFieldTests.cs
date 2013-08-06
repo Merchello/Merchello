@@ -2,9 +2,10 @@
 using System.Configuration;
 using Merchello.Core.Configuration.Outline;
 using Merchello.Core.Models;
+using Merchello.Tests.Base.TypeFields;
 using NUnit.Framework;
 
-namespace Merchello.Core.Tests.TypeField_Tests
+namespace Merchello.Tests.UnitTests.TypeFields
 {
     [TestFixture]
     [Category("TypeField")]
@@ -18,8 +19,8 @@ namespace Merchello.Core.Tests.TypeField_Tests
         [SetUp]
         public void Setup()
         {
-            _residentialMock = new TypeField("Residential", "Residential", new Guid("D32D7B40-2FF2-453F-9AC5-51CF1A981E46"));
-            _commercialMock = new TypeField("Commercial", "Commercial", new Guid("5C2A8638-EA32-49AD-8167-EDDFB45A7360"));
+            _residentialMock = TypeFieldMock.AddressTypeResidential;
+            _commercialMock = TypeFieldMock.AddressTypeCommercial;
             _customMock = new TypeField("Custom", "Custom", new Guid("A9C5D25C-C825-49F7-B532-14202B8EE61C"));
         }
 
@@ -27,7 +28,7 @@ namespace Merchello.Core.Tests.TypeField_Tests
         /// Verifies customer address as two configuration options
         /// </summary>
         //[Test]
-        public void AddressType_should_have_2_options()
+        public void AddressTypeField_should_have_2_options()
         {
             var fields =
                 ((MerchelloSection) ConfigurationManager.GetSection("merchello")).TypeFields.CustomerAddress;

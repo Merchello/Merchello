@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Merchello.Core.Configuration.Outline;
 using Merchello.Core.Models;
+using Merchello.Tests.Base.TypeFields;
 using NUnit.Framework;
 
-namespace Merchello.Core.Tests.TypeField_Tests
+namespace Merchello.Tests.UnitTests.TypeFields
 {
     [TestFixture]
     [Category("TypeField")]
@@ -22,9 +19,9 @@ namespace Merchello.Core.Tests.TypeField_Tests
         [SetUp]
         public void Setup()
         {
-            _cashMock = new TypeField("Cash", "Cash", new Guid("9C9A7E61-D79C-4ECC-B0E0-B2A502F252C5"));
-            _creditCardMock = new TypeField("CreditCard", "Credit Card", new Guid("CB1354FE-B30C-449E-BD5C-CD50BCBD804A"));
-            _purchaseOrderMock = new TypeField("PurchaseOrder", "Purchase Order", new Guid("2B588AE0-7B76-430F-9341-270A8C943E7E"));
+            _cashMock = TypeFieldMock.PaymentMethodCash;
+            _creditCardMock = TypeFieldMock.PaymentMethodCreditCard;
+            _purchaseOrderMock = TypeFieldMock.PaymentMethodPurchaseOrder;
         }
 
         /// <summary>
