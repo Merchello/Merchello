@@ -193,7 +193,7 @@
     <Compile Include="Configuration_Tests\MerchelloSectionTests.cs" />
     <Compile Include="Configuration_Tests\Versioning.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repository\ConceptTests.cs" />
+    <Compile Include="Repository_Tests\ConceptTests.cs" />
     <Compile Include="TypeField_Tests\AddressTypeFieldTests.cs" />
     <Compile Include="TypeField_Tests\BasketTypeFieldTests.cs" />
     <Compile Include="TypeField_Tests\InvoiceItemTypeFieldTests.cs" />

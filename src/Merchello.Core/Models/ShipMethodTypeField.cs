@@ -6,7 +6,7 @@ namespace Merchello.Core.Models
     /// <summary>
     /// Used in basket and invoice (product) items to identify if a specific shipping method is required.
     /// </summary>
-    public class ShipMethodTypeField :TypeFieldBase
+    public class ShipMethodTypeField :TypeFieldProxyBase
     {
         /// <summary>
         /// Flat rate shipping

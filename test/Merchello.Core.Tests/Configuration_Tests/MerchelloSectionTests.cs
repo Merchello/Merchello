@@ -6,6 +6,7 @@ using NUnit.Framework;
 namespace Merchello.Core.Tests.Configuration_Tests
 {
     [TestFixture]
+    [Category("Configuration")]
     public class MerchelloSectionTests
     {
         private MerchelloSection _config;

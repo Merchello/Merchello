@@ -10,6 +10,8 @@ using NUnit.Framework;
 
 namespace Merchello.Core.Tests.TypeField_Tests
 {
+    [TestFixture]
+    [Category("TypeField")]
     public class PaymentMethodTypeFieldTests
     {
 

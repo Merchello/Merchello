@@ -28,6 +28,16 @@ namespace Merchello.Core.Models
             get { return GetTypeField(PaymentMethods["PurchaseOrder"]); }
         }
 
+        /// <summary>
+        /// Returns a custom payment methods or a NullTypeField
+        /// </summary>
+        /// <param name="alias">The alias of the custom payment method</param>
+        /// <returns>An object of <see cref="ITypeField"/></returns>
+        public new static ITypeField Custom(string alias)
+        {
+            return GetTypeField(PaymentMethods[alias]);
+        }
+
         private static TypeFieldCollection PaymentMethods
         {
             get { return Fields.PaymentMethod; }

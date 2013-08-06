@@ -7,6 +7,7 @@ using NUnit.Framework;
 namespace Merchello.Core.Tests.TypeField_Tests
 {
     [TestFixture]
+    [Category("TypeField")]
     public class BasketTypeFieldTests
     {
         private ITypeField _mockBasket;
