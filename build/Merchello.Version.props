@@ -8,15 +8,15 @@
         
         <VersionMajor>0</VersionMajor>
         <VersionMinor>9</VersionMinor>
-        <VersionPatch>0</VersionPatch>
+        <VersionPatch>1</VersionPatch>
         <VersionSuffix>0</VersionSuffix>        
         <BuildConfiguration>Release</BuildConfiguration>
         <AssemblyInformationVersion>$(VersionMajor).$(VersionMinor).$(VersionPatch).$(VersionSuffix)</AssemblyInformationVersion>
         
         <UmbracoVersionMajor>6</UmbracoVersionMajor>
         <UmbracoVersionMinor>1</UmbracoVersionMinor>
-        <UmbracoVersionPatch>2</UmbracoVersionPatch>
-        <UmbracoVersionSuffix>2</UmbracoVersionSuffix>
+        <UmbracoVersionPatch>3</UmbracoVersionPatch>
+        <UmbracoVersionSuffix>0</UmbracoVersionSuffix>
         <UmbracoVersion>$(UmbracoVersionMajor).$(UmbracoVersionMinor).$(UmbracoVersionPatch)</UmbracoVersion>
         
       </PropertyGroup>
