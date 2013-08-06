@@ -2,7 +2,7 @@
 
 namespace Merchello.Core.Models
 {
-    public class PaymentMethodTypeField : TypeFieldBase
+    public class PaymentMethodTypeField : TypeFieldProxyBase
     {
         /// <summary>
         /// Indicates the payment method is cash
