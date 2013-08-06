@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Merchello.Core.Configuration.Outline;
 using Merchello.Core.Models;
+using Merchello.Tests.Base.TypeFields;
 using NUnit.Framework;
 
-namespace Merchello.Core.Tests.TypeField_Tests
+namespace Merchello.Tests.UnitTests.TypeFields
 {
 
     [TestFixture]
@@ -24,11 +21,11 @@ namespace Merchello.Core.Tests.TypeField_Tests
         [SetUp]
         public void Setup()
         {
-            _mockProduct = new TypeField("Product", "Product", new Guid("576CB1FB-5C0D-45F5-8CCD-94F63D174902"));
-            _mockCharge = new TypeField("Charge", "Charge or Fee", new Guid("5574BB84-1C96-4F7E-91FB-CFD7C11162A0"));
-            _mockShipping = new TypeField("Shipping", "Shipping", new Guid("7E69FFD2-394C-44BF-9442-B86F67AEC110"));
-            _mockTax = new TypeField("Tax", "Tax", new Guid("3F4830C8-FB7C-4393-831D-3953525541B3"));
-            _mockCredit = new TypeField("Credit", "Credit", new Guid("18DEF584-E92A-42F5-9F6F-A49034DAB34F"));
+            _mockProduct = TypeFieldMock.InvoiceItemProduct;
+            _mockCharge = TypeFieldMock.InvoiceItemCharge;
+            _mockShipping = TypeFieldMock.InvoiceItemShipping;
+            _mockTax = TypeFieldMock.InvoiceItemTax;
+            _mockCredit = TypeFieldMock.InvoiceItemCredit;
         }
 
         /// <summary>

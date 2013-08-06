@@ -2,9 +2,10 @@
 using System.Configuration;
 using Merchello.Core.Configuration.Outline;
 using Merchello.Core.Models;
+using Merchello.Tests.Base.TypeFields;
 using NUnit.Framework;
 
-namespace Merchello.Core.Tests.TypeField_Tests
+namespace Merchello.Tests.UnitTests.TypeFields
 {
     [TestFixture]
     [Category("TypeField")]
@@ -17,9 +18,9 @@ namespace Merchello.Core.Tests.TypeField_Tests
         [SetUp]
         public void Setup()
         {
-            _mockFlatRate = new TypeField("FlatRate", "Flat Rate", new Guid("1D0B73CF-AE9D-4501-83F5-FA0B2FEE1236"));
-            _mockPercentTotal = new TypeField("PercentTotal", "Percent of Total", new Guid("B056DA45-3FB0-49AE-8349-6FCEB1465DF6"));
-            _mockCarrier = new TypeField("Carrier", "Carrier", new Guid("4311536A-9554-43D4-8422-DEAAD214B469"));
+            _mockFlatRate = TypeFieldMock.ShipMethodFlatRate;
+            _mockPercentTotal = TypeFieldMock.ShipMethodPercentTotal;
+            _mockCarrier = TypeFieldMock.ShipMethodCarrier;
         }
 
         /// <summary>
