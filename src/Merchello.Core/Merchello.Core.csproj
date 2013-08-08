@@ -79,6 +79,8 @@
     <Compile Include="Events\NewEventArgs.cs" />
     <Compile Include="Events\SaveEventArgs.cs" />
     <Compile Include="Events\TypedEventHandler.cs" />
+    <Compile Include="Models\Rdbms\TypeFieldDto.cs" />
+    <Compile Include="Persistence\Migrations\Initial\BaseDataCreation.cs" />
     <Compile Include="Models\EntityBase\ISingularRoot.cs" />
     <Compile Include="ObjectResolution\Resolution.cs" />
     <Compile Include="Persistence\Mappers\CustomerMapper.cs" />
@@ -143,6 +145,7 @@
     <Compile Include="Persistence\Factories\CustomerFactory.cs" />
     <Compile Include="Persistence\Factories\IEntityFactory.cs" />
     <Compile Include="Persistence\Mappers\BaseMapper.cs" />
+    <Compile Include="Persistence\Migrations\Initial\DatabaseSchemaCreation.cs" />
     <Compile Include="Persistence\Querying\ModelToSqlExpressionHelper.cs" />
     <Compile Include="Persistence\Querying\Query.cs" />
     <Compile Include="Persistence\Querying\QueryHelper.cs" />
