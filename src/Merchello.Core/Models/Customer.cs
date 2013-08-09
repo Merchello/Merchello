@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Reflection;
 using System.Runtime.Serialization;
-using Umbraco.Core.Models.EntityBase;
+using Merchello.Core.Models.EntityBase;
 
 namespace Merchello.Core.Models
 {
     [Serializable]
     [DataContract(IsReference = true)]
-    public class Customer : MerchelloEntity, ICustomer
+    public class Customer : KeyEntity, ICustomer
     {
         private int? _memberId;
         private string _firstName;
         private string _lastName;
-        private readonly decimal _totalInvoiced;
+        private decimal _totalInvoiced;
         private readonly decimal _totalPayments;
         private readonly DateTime? _lastPaymentDate;
 
@@ -36,7 +36,7 @@ namespace Merchello.Core.Models
         {
             get { return _memberId; }
             set
-            {
+            {                
                 SetPropertyValueAndDetectChanges(o => 
                     {
                         _memberId = value;
@@ -86,6 +86,10 @@ namespace Merchello.Core.Models
         public decimal TotalInvoiced
         {
             get { return _totalInvoiced; }
+            internal set
+            {
+                _totalInvoiced = value;
+            }
         }
 
         /// <summary>
@@ -105,5 +109,19 @@ namespace Merchello.Core.Models
         {
             get { return _lastPaymentDate; }
         }
+
+        /// <summary>
+        /// Method to call when EntityEntity is being saved
+        /// </summary>
+        /// <remarks>Created date is set and a Unique key is assigned</remarks>
+        internal override void AddingEntity()
+        {
+            base.AddingEntity();
+
+            if (Key == Guid.Empty)
+                Key = Guid.NewGuid();
+        }
+
+        
     }
 }

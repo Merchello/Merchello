@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>xmlrpcnet</id>
+    <version>2.5.0</version>
+    <title>XML-RPC.NET</title>
+    <authors>Charles Cook</authors>
+    <owners>Charles Cook</owners>
+    <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
+    <projectUrl>http://www.xml-rpc.net/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A client and server XML-RPC library for .Net.</description>
+    <summary>A client and server XML-RPC library for .Net.</summary>
+    <copyright>© 2011 Charles Cook</copyright>
+    <tags>xml-rpc xml rpc .net20 .net35 .net40</tags>
+  </metadata>
+</package>

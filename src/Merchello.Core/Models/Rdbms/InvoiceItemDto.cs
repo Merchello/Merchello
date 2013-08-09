@@ -22,13 +22,10 @@ namespace Merchello.Core.Models.Rdbms
         [Column("invoiceId")]
         [ForeignKey(typeof(InvoiceDto), Name = "FK_merchInvoiceItem_merchInvoice", Column = "id")]
         public int InvoiceId { get; set; }
+        
 
-        [Column("invoiceItemType")]
-        [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchInvoiceItemType")]
-        public int InvoiceItemType { get; set; }
-
-        [Column("typeKey")]
-        public Guid TypeKey { get; set; }
+        [Column("invoiceItemTypeFieldKey")]
+        public Guid InvoiceItemTypeFieldKey { get; set; }
 
         [Column("sku")]
         [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchInvoiceItemSku")]

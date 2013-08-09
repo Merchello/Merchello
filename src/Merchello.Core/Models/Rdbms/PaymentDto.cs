@@ -28,6 +28,9 @@ namespace Merchello.Core.Models.Rdbms
         [Column("gatewayAlias")]
         public string GatewayAlias { get; set; }
 
+        [Column("paymentTypeFieldKey")]
+        public Guid PaymentTypeFieldKey { get; set; }
+
         [Column("paymentMethodName")]
         public string PaymentMethodName { get; set; }
 

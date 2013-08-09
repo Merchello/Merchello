@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using Umbraco.Core.Models.EntityBase;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
+using Merchello.Core.Models.EntityBase;
+
 
 namespace Merchello.Core.Models
 {
-    public interface IInvoiceItem : IItemization, IAggregateRoot
+    public interface IInvoiceItem : IItemization, IIdEntity
     {
         /// <summary>
         /// The parent Id of the InvoiceItem
@@ -15,7 +15,7 @@ namespace Merchello.Core.Models
         /// <summary>
         /// The Invoice that this invoice item is associated with
         /// </summary>
-        [DataMember]
+        [DataMember]       
         int InvoiceId { get; set; }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace Merchello.Core.Models
         /// The type of this invoice item
         /// </summary>
         [IgnoreDataMember]
-        InvoiceItemType InvoiceItemType { get; set; }
+        InvoiceItemTypeField InvoiceItemType { get; set; }
 
         /// <summary>
         /// The Sku of the invoice item

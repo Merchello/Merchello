@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.Serialization;
-using Umbraco.Core.Models.EntityBase;
+using Merchello.Core.Models.EntityBase;
+
 
 namespace Merchello.Core.Models
 {
-    public interface IInvoice : IAggregateRoot
+    public interface IInvoice : IIdEntity
     {
         /// <summary>
         /// The invoice number
