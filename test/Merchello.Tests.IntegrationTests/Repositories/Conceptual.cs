@@ -3,6 +3,7 @@ using System.Configuration;
 using Merchello.Core.Configuration.Outline;
 using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Services;
+using Merchello.Tests.Base.Database;
 using NUnit.Framework;
 using Umbraco.Core.Persistence;
 using Umbraco.Core.Persistence.UnitOfWork;
@@ -10,10 +11,19 @@ using Umbraco.Core.Persistence.UnitOfWork;
 namespace Merchello.Tests.IntegrationTests.Repositories
 {
     [TestFixture]
-    public class Conceptual
+    public class Conceptual : BaseDatabaseTest        
     {
         private string _connectionStringName;
-        private Database _database;
+
+       
+
+     
+
+        public Conceptual ()
+            : base(new UmbracoDatabase(((MerchelloSection)ConfigurationManager.GetSection("merchello")).DefaultConnectionStringName, "System.Data.SqlClient"))
+        {
+            
+        }
 
         [SetUp]
         public void Setup()
@@ -21,7 +31,7 @@ namespace Merchello.Tests.IntegrationTests.Repositories
             var config = (MerchelloSection) ConfigurationManager.GetSection("merchello");
             _connectionStringName = config.DefaultConnectionStringName;
 
-            _database = new UmbracoDatabase(_connectionStringName);
+            
         }
 
         [Test]
@@ -29,8 +39,8 @@ namespace Merchello.Tests.IntegrationTests.Repositories
         {
             var provider = new PetaPocoUnitOfWorkProvider();
             var uow = provider.GetUnitOfWork();
-            
-            
+
+
             var dto = new CustomerDto()
                 {
                     Pk = Guid.NewGuid(),
@@ -48,8 +58,8 @@ namespace Merchello.Tests.IntegrationTests.Repositories
 
             //var id = new Guid("87737E8D-8E22-4BE2-B738-B9286A2AFB54");
 
-            var service = new CustomerService();
-            var customers = service.GetAll();
+            //var service = new CustomerService();
+            //var customers = service.GetAll();
 
             //var c1 = service.CreateCustomer("Olivia", "Swayne");
             //var c2 = service.CreateCustomer("Doot", "Swayne");
@@ -59,7 +69,7 @@ namespace Merchello.Tests.IntegrationTests.Repositories
 
             //var customers = new List<ICustomer> {c1, c2 };
 
-            service.Save(customers);
+            //service.Save(customers);
             //service.Delete(customers);
             
 
@@ -77,6 +87,8 @@ namespace Merchello.Tests.IntegrationTests.Repositories
 
 
         }
+
+
 
     }
 }

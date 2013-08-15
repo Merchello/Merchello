@@ -5,8 +5,8 @@ namespace Merchello.Core
     /// <summary>
     /// Helper methods for Activation
     /// </summary>
-    internal class ActivatorHelper
-    {
+	internal static class ActivatorHelper
+	{
         /// <summary>
         /// Creates an instance of a type using that type's default constructor.
         /// </summary>

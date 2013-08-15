@@ -11,7 +11,7 @@ namespace Merchello.Core.Models.Rdbms
     [TableName("merchDBTypeField")]
     [PrimaryKey("pk", autoIncrement = false)]
     [ExplicitColumns]
-    public class TypeFieldDto
+    internal class TypeFieldDto
     {
         [Column("pk")]
         [PrimaryKeyColumn]

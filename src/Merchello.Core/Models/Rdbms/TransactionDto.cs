@@ -7,7 +7,7 @@ namespace Merchello.Core.Models.Rdbms
     [TableName("merchTransaction")]
     [PrimaryKey("id")]
     [ExplicitColumns]
-    public class TransactionDto
+    internal class TransactionDto
     {
         [Column("id")]
         [PrimaryKeyColumn]

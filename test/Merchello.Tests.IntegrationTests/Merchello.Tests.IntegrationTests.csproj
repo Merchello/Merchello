@@ -59,7 +59,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="bin\Debug\unit-test-log4net.config" />
     <None Include="packages.config" />
+    <None Include="unit-test-log4net.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Merchello.Core\Merchello.Core.csproj">

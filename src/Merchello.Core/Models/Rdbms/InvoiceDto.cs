@@ -7,7 +7,7 @@ namespace Merchello.Core.Models.Rdbms
     [TableName("merchInvoice")]
     [PrimaryKey("id")]
     [ExplicitColumns]
-    public class InvoiceDto
+    internal class InvoiceDto
     {
         [Column("id")]
         [PrimaryKeyColumn]
