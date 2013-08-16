@@ -72,6 +72,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActivatorHelper.cs" />
+    <Compile Include="ConstantsTypeFields.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants.cs" />
     <Compile Include="Events\ConvertEventArgs.cs" />
     <Compile Include="Events\DatabaseCreationEventArgs.cs" />
     <Compile Include="Events\DeleteEventArgs.cs" />
@@ -80,6 +84,7 @@
     <Compile Include="Events\NewEventArgs.cs" />
     <Compile Include="Events\SaveEventArgs.cs" />
     <Compile Include="Events\TypedEventHandler.cs" />
+    <Compile Include="Models\ProductTypeField.cs" />
     <Compile Include="Models\Rdbms\TypeFieldDto.cs" />
     <Compile Include="Persistence\DatabaseModelDefinitions\DefinitionFactory.cs" />
     <Compile Include="Persistence\Migrations\Initial\BaseDataCreation.cs" />

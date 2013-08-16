@@ -18,7 +18,7 @@ namespace Merchello.Core.Configuration.Outline
         /// <summary>
         /// Gets the dbTypeFields configuration collection for baskets
         /// </summary>
-        [ConfigurationProperty("basket", IsRequired = true), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
+        [ConfigurationProperty("basket", IsRequired = false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
         public TypeFieldCollection Basket
         {
             get { return (TypeFieldCollection)this["basket"]; }

@@ -12,7 +12,7 @@ namespace Merchello.Core.Models
         /// </summary>
         public static ITypeField Basket
         {
-            get { return GetTypeField(Baskets["Basket"]); }
+            get { return Constants.BasketType.Basket; }
         }
 
         /// <summary>
@@ -20,7 +20,7 @@ namespace Merchello.Core.Models
         /// </summary>
         public static ITypeField Wishlist
         {
-            get { return GetTypeField(Baskets["Wishlist"]);  }
+            get { return Constants.BasketType.Wishlist; }
         }
 
         /// <summary>
