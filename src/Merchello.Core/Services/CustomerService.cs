@@ -89,21 +89,24 @@ namespace Merchello.Core.Services
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         public void Save(IEnumerable<ICustomer> customers, bool raiseEvents = true)
         {
-            if(raiseEvents) Saved.RaiseEvent(new SaveEventArgs<ICustomer>(customers), this);
+            var customerArray = customers as ICustomer[] ?? customers.ToArray();
+
+            if (raiseEvents) Saving.RaiseEvent(new SaveEventArgs<ICustomer>(customerArray), this);
 
             using (new WriteLock(Locker))
             {
                 var uow = _uowProvider.GetUnitOfWork();
                 using (var repository = _repositoryFactory.CreateCustomerRepository(uow))
                 {
-                    foreach (var customer in customers)
+                    foreach (var customer in customerArray)
                     {
                         repository.AddOrUpdate(customer);
                     }
                     uow.Commit();
-                }
-
+                }               
             }
+
+            if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<ICustomer>(customerArray), this);
         }
 
         /// <summary>
@@ -133,15 +136,17 @@ namespace Merchello.Core.Services
         /// <param name="customers">Collection of <see cref="ICustomer"/> to delete</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         public void Delete(IEnumerable<ICustomer> customers, bool raiseEvents = true)
-        {           
-            if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<ICustomer>(customers), this);
+        {
+            var customerArray = customers as ICustomer[] ?? customers.ToArray();
+
+            if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<ICustomer>(customerArray), this);
 
             using (new WriteLock(Locker))
             {
                 var uow = _uowProvider.GetUnitOfWork();
                 using (var repository = _repositoryFactory.CreateCustomerRepository(uow))
                 {
-                    foreach (var customer in customers)
+                    foreach (var customer in customerArray)
                     {
                         repository.Delete(customer);
                     }
@@ -149,7 +154,7 @@ namespace Merchello.Core.Services
                 }                
             }
 
-            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<ICustomer>(customers), this);
+            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<ICustomer>(customerArray), this);
         }
 
         /// <summary>

@@ -7,7 +7,7 @@ namespace Merchello.Core.Models.Rdbms
     [TableName("merchBasket")]
     [PrimaryKey("id", autoIncrement = false)]
     [ExplicitColumns]
-    public class BasketDto
+    internal class BasketDto
     {
         [Column("id")]
         [PrimaryKeyColumn]
