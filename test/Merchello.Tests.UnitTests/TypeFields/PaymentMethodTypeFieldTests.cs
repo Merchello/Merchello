@@ -24,19 +24,6 @@ namespace Merchello.Tests.UnitTests.TypeFields
             _purchaseOrderMock = TypeFieldMock.PaymentMethodPurchaseOrder;
         }
 
-        /// <summary>
-        /// Verifies payment method type as 3 configuration options
-        /// </summary>
-        [Test]
-        public void PaymentMethodType_should_have_3_options()
-        {
-            var fields =
-                ((MerchelloSection)ConfigurationManager.GetSection("merchello")).TypeFields.PaymentMethod;
-
-            Assert.AreEqual(3, fields.Count);
-        }
-
-
 
         /// <summary>
         /// Asserts the PaymentMethodTypeField class returns the expected cash configuration

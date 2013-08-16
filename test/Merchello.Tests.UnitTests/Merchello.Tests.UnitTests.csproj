@@ -55,6 +55,7 @@
     <Compile Include="TypeFields\BasketTypeFieldTests.cs" />
     <Compile Include="TypeFields\InvoiceItemTypeFieldTests.cs" />
     <Compile Include="TypeFields\PaymentMethodTypeFieldTests.cs" />
+    <Compile Include="TypeFields\ProductTypeFieldTests.cs" />
     <Compile Include="TypeFields\ShipMethodTypeFieldTests.cs" />
   </ItemGroup>
   <ItemGroup>

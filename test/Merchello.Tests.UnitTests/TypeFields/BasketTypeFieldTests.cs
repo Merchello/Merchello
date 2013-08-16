@@ -23,18 +23,6 @@ namespace Merchello.Tests.UnitTests.TypeFields
 
 
         /// <summary>
-        /// Verifies baskets should have two configuration options
-        /// </summary>
-        [Test]
-        public void BasketType_should_have_2_options()
-        {
-            var fields =
-                ((MerchelloSection)ConfigurationManager.GetSection("merchello")).TypeFields.Basket;
-
-            Assert.AreEqual(2, fields.Count);
-        }
-
-        /// <summary>
         /// Asserts the BasketType class returns the expected basket configuration
         /// </summary>
         [Test]

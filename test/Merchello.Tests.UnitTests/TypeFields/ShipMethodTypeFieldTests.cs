@@ -24,18 +24,6 @@ namespace Merchello.Tests.UnitTests.TypeFields
         }
 
         /// <summary>
-        /// Verifies shipment method should have 3 configuration options
-        /// </summary>
-        [Test]
-        public void ShipMethodType_should_have_3_options()
-        {
-            var fields =
-                ((MerchelloSection)ConfigurationManager.GetSection("merchello")).TypeFields.ShipMethod;
-
-            Assert.AreEqual(3, fields.Count);
-        }
-
-        /// <summary>
         /// Asserts the ShipMethodType class returns the expected flat rate configuration
         /// </summary>
         [Test]

@@ -12,7 +12,7 @@ namespace Merchello.Core.Models
         /// </summary>
         public static ITypeField Product
         {
-            get { return GetTypeField(Items["Product"]); }
+            get { return Constants.InvoiceItemType.Product; }
         }
 
         /// <summary>
@@ -20,7 +20,7 @@ namespace Merchello.Core.Models
         /// </summary>
         public static ITypeField Charge
         {
-            get { return GetTypeField(Items["Charge"]); }
+            get { return Constants.InvoiceItemType.Charge; }
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace Merchello.Core.Models
         /// </summary>
         public static ITypeField Shipping
         {
-            get { return GetTypeField(Items["Shipping"]); }
+            get { return Constants.InvoiceItemType.Shipping; }
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace Merchello.Core.Models
         /// </summary>
         public static ITypeField Tax
         {
-            get { return GetTypeField(Items["Tax"]);  }
+            get { return Constants.InvoiceItemType.Tax; }
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace Merchello.Core.Models
         /// </summary>
         public static ITypeField Credit
         {
-            get { return GetTypeField(Items["Credit"]);  }
+            get { return Constants.InvoiceItemType.Credit; }
         }
 
         /// <summary>
