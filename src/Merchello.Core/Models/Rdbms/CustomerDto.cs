@@ -7,10 +7,10 @@ namespace Merchello.Core.Models.Rdbms
     [TableName("merchCustomer")]
     [PrimaryKey("pk", autoIncrement = false)]
     [ExplicitColumns]
-    public class CustomerDto
+    internal class CustomerDto
     {
         [Column("pk")]
-        [PrimaryKeyColumn]
+        [PrimaryKeyColumn(AutoIncrement = false)]
         public Guid Pk { get; set; }
 
         [Column("memberId")] 

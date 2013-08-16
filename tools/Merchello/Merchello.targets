@@ -51,7 +51,7 @@
 				OutputFile="$(MerchelloCoreProjectDir)Properties\AssemblyInfo.cs"
 				AssemblyVersion="$(AssemblyInformationVersion)"
 				AssemblyFileVersion="$(AssemblyInformationVersion)"
-				AssemblyInformationalVersion="$(AssemblyInformationVersion)"/>
+				AssemblyInformationalVersion="$(AssemblyInformationVersion)" />
 			
 			<AssemblyInfo CodeLanguage="CS"
 				OutputFile="$(MerchelloWebProjectDir)Properties\AssemblyInfo.cs"

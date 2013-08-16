@@ -7,7 +7,7 @@ namespace Merchello.Core.Models.Rdbms
     [TableName("merchInvoice")]
     [PrimaryKey("id")]
     [ExplicitColumns]
-    public class InvoiceDto
+    internal class InvoiceDto
     {
         [Column("id")]
         [PrimaryKeyColumn]
@@ -16,7 +16,7 @@ namespace Merchello.Core.Models.Rdbms
         [Column("customerPk")]
         [ForeignKey(typeof(CustomerDto), Name = "FK_merchInvoice_merchCustomer",Column = "pk")]
         [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchInvoiceCustomer")]
-        public int CustomerId { get; set; }
+        public Guid CustomerPk { get; set; }
 
         [Column("invoiceNumber")]
         [IndexAttribute(IndexTypes.UniqueNonClustered, Name = "IX_merchInvoiceNumber")]

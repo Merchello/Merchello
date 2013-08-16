@@ -8,7 +8,7 @@ using Merchello.Core.Persistence.Mappers;
 
 namespace Merchello.Core.Persistence.Querying
 {
-    internal class ModelToSqlExpressionHelper<T>
+    internal class ModelToSqlExpressionHelper<T> : BaseExpressionHelper
     {
         private string sep = " ";
         private BaseMapper _mapper;
@@ -81,7 +81,7 @@ namespace Merchello.Core.Persistence.Querying
         {
             if (lambda.Body.NodeType == ExpressionType.MemberAccess && sep == " ")
             {
-                var m = lambda.Body as MemberExpression;
+                MemberExpression m = lambda.Body as MemberExpression;
 
                 if (m.Expression != null)
                 {
@@ -99,10 +99,10 @@ namespace Merchello.Core.Persistence.Querying
             var operand = BindOperant(b.NodeType);   //sep= " " ??
             if (operand == "AND" || operand == "OR")
             {
-                var m = b.Left as MemberExpression;
+                MemberExpression m = b.Left as MemberExpression;
                 if (m != null && m.Expression != null)
                 {
-                    var r = VisitMemberAccess(m);
+                    string r = VisitMemberAccess(m);
                     left = string.Format("{0}={1}", r, GetQuotedTrueValue());
                 }
                 else
@@ -246,7 +246,7 @@ namespace Merchello.Core.Persistence.Querying
                 case "ToLower":
                     return string.Format("lower({0})", r);
                 case "StartsWith":
-                    return string.Format("upper({0}) like '{1}%'", r, RemoveQuote(args[0].ToString().ToUpper()));
+                    return string.Format("upper({0}) like '{1}%'", r, EscapeAtArgument(RemoveQuote(args[0].ToString().ToUpper())));
                 case "EndsWith":
                     return string.Format("upper({0}) like '%{1}'", r, RemoveQuote(args[0].ToString()).ToUpper());
                 case "Contains":
@@ -435,41 +435,7 @@ namespace Merchello.Core.Persistence.Querying
 
         public virtual string GetQuotedValue(object value, Type fieldType)
         {
-            return QueryHelper.GetQuotedValue(value, fieldType, EscapeParam, ShouldQuoteValue);
-        }
-
-        public virtual string EscapeParam(object paramValue)
-        {
-            return paramValue.ToString().Replace("'", "''");
-        }
-
-        public virtual bool ShouldQuoteValue(Type fieldType)
-        {
-            return true;
-        }
-
-        protected string RemoveQuote(string exp)
-        {
-
-            if (exp.StartsWith("'") && exp.EndsWith("'"))
-            {
-                exp = exp.Remove(0, 1);
-                exp = exp.Remove(exp.Length - 1, 1);
-            }
-            return exp;
-        }
-
-        protected string RemoveQuoteFromAlias(string exp)
-        {
-
-            if ((exp.StartsWith("\"") || exp.StartsWith("`") || exp.StartsWith("'"))
-                &&
-                (exp.EndsWith("\"") || exp.EndsWith("`") || exp.EndsWith("'")))
-            {
-                exp = exp.Remove(0, 1);
-                exp = exp.Remove(exp.Length - 1, 1);
-            }
-            return exp;
+            return GetQuotedValue(value, fieldType, EscapeParam, ShouldQuoteValue);
         }
 
         private string GetTrueExpression()
