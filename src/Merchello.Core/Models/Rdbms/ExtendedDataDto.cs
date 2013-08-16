@@ -7,7 +7,7 @@ namespace Merchello.Core.Models.Rdbms
     [TableName("merchExtendedData")]
     [PrimaryKey("foreignKeyId", autoIncrement = false)]
     [ExplicitColumns]
-    public class ExtendedDataDto
+    internal class ExtendedDataDto
     {
         [Column("foreignKeyId")]
         [PrimaryKeyColumn(AutoIncrement = false, Name = "PK_merchExtendedData", OnColumns = "foreignKeyId, tableName, propertyName")]

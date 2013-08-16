@@ -7,10 +7,10 @@ namespace Merchello.Core.Models.Rdbms
     [TableName("merchAnonymous")]
     [PrimaryKey("pk", autoIncrement = false)]
     [ExplicitColumns]
-    public class AnonymousDto
+    internal class AnonymousDto
     {
         [Column("pk")]
-        [PrimaryKeyColumn]
+        [PrimaryKeyColumn(AutoIncrement = false)]
         public Guid Pk { get; set; }
 
         [Column("lastActivityDate")]
