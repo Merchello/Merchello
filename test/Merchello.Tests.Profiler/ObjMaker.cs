@@ -19,18 +19,21 @@ namespace Merchello.Tests.Profiler
             ConstructorInfo[] cInfo = T.GetConstructors();
 
             // get parameters from the first constructor
-            Type[] newParams;
-
             ParameterInfo[] cParams = cInfo[0].GetParameters();
             foreach (ParameterInfo cParam in cParams)
             {
                 switch (cParam.ParameterType.ToString())
                 {
                     case "System.Decimal":
+                        // make random Decimal value
                         break;
+
                     case "System.DateTime":
+                        // make random DateTime value
                         break;
+
                     case "System.String":
+                        // make random string value
                         break;
 
 
