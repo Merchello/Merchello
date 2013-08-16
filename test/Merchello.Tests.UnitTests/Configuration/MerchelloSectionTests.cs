@@ -22,40 +22,6 @@ namespace Merchello.Tests.UnitTests.Configuration
             _invoiceItems = _config.TypeFields.InvoiceItem;
         }
 
-        /// <summary>
-        /// Verifies that the Guid associated with the Residential CustomerAddress is correctly retrieved from the configuration
-        /// </summary>
-        [Test]
-        public void Customer_Address_Residential_Guid_Matches()
-        {
-            var guid = new Guid("D32D7B40-2FF2-453F-9AC5-51CF1A981E46");
-
-            var residentialType = _config.TypeFields.CustomerAddress[CustomerAddress.Residential.ToString()];
-
-            Assert.AreEqual(guid, residentialType.TypeKey);            
-        }
-
-        /// <summary>
-        /// Verifies that the InvoiceItem collection has 5 elements
-        /// </summary>
-        [Test]
-        public void Invoice_Item_Collection_Contains_5_Elements()
-        {
-            Assert.AreEqual(5, _invoiceItems.Count);
-        }
-
-        /// <summary>
-        /// Verifies that descriptive name field is read correctly
-        /// </summary>
-        [Test]
-        public void Invoice_Item_Charge_Name_Is_Charge()
-        {
-            const string validText = "Charge or Fee";
-
-            var chargeType = _invoiceItems["Charge"];
-
-            Assert.AreEqual(validText, chargeType.Name);
-        }
 
         /// <summary>
         /// Verifies the enableLogging attribute is accessible
