@@ -30,22 +30,22 @@ namespace Merchello.Core.Persistence.Migrations.Initial
 
         private static readonly Dictionary<int, Type> OrderedTables = new Dictionary<int, Type>
             {
-                {0, typeof(AddressDto)},
+                {0, typeof(TypeFieldDto)},
                 {1, typeof(AnonymousDto)},
-                {2, typeof(BasketDto)},
-                {3, typeof(BasketItemDto)},
-                {4, typeof(CustomerDto)},
-                {5, typeof(TypeFieldDto)},
-                {6, typeof(InventoryDto)},
-                {7, typeof(InvoiceDto)},
-                {8, typeof(InvoiceItemDto)},
-                {9, typeof(InvoiceStatusDto)},
-                {10, typeof(PaymentDto)},
-                {11, typeof(ShipmentDto)},
-                {12, typeof(ShipMethodDto)},
-                {13, typeof(ShipMethod2WarehouseDto)},
-                {14, typeof(TransactionDto)},
-                {15, typeof(WarehouseDto)}
+                {2, typeof(CustomerDto)},
+                {3, typeof(AddressDto)},             
+                {4, typeof(BasketDto)},
+                {5, typeof(BasketItemDto)},
+                {6, typeof(WarehouseDto)},
+                {7, typeof(InventoryDto)},
+                {8, typeof(ShipMethodDto)},
+                {9, typeof(ShipMethod2WarehouseDto)},
+                {10, typeof(InvoiceStatusDto)},
+                {11, typeof(InvoiceDto)},
+                {12, typeof(InvoiceItemDto)},
+                {13, typeof(ShipmentDto)},                
+                {14, typeof(PaymentDto)},
+                {15, typeof(TransactionDto)}            
 
             };
 
