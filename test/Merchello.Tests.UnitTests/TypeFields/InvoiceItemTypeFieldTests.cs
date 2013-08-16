@@ -29,18 +29,6 @@ namespace Merchello.Tests.UnitTests.TypeFields
         }
 
         /// <summary>
-        /// Verifies invoice item types should have 5 configuration options
-        /// </summary>
-        [Test]
-        public void InvoiceItemType_should_have_5_options()
-        {
-            var fields =
-                ((MerchelloSection)ConfigurationManager.GetSection("merchello")).TypeFields.InvoiceItem;
-
-            Assert.AreEqual(5, fields.Count);
-        }
-
-        /// <summary>
         /// Asserts the InvoiceItemTpe class returns the expected product configuration
         /// </summary>
         [Test]

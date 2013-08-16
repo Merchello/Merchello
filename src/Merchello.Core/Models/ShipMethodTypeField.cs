@@ -13,7 +13,7 @@ namespace Merchello.Core.Models
         /// </summary>
         public static ITypeField FlatRate
         {
-            get { return GetTypeField(ShipMethods["FlatRate"]); }
+            get { return Constants.ShipMethodType.FlatRate; }
         }
 
         /// <summary>
@@ -21,7 +21,7 @@ namespace Merchello.Core.Models
         /// </summary>
         public static ITypeField PercentTotal
         {
-            get { return GetTypeField(ShipMethods["PercentTotal"]); }
+            get { return Constants.ShipMethodType.PercentTotal; }
         }
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace Merchello.Core.Models
         /// </summary>
         public static ITypeField Carrier
         {
-            get { return GetTypeField(ShipMethods["Carrier"]); }
+            get { return Constants.ShipMethodType.Carrier; }
         }
 
         /// <summary>

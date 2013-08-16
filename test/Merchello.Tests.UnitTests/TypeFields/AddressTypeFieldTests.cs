@@ -24,18 +24,6 @@ namespace Merchello.Tests.UnitTests.TypeFields
             _customMock = new TypeField("Custom", "Custom", new Guid("A9C5D25C-C825-49F7-B532-14202B8EE61C"));
         }
 
-        /// <summary>
-        /// Verifies customer address as two configuration options
-        /// </summary>
-        //[Test]
-        public void AddressTypeField_should_have_2_options()
-        {
-            var fields =
-                ((MerchelloSection) ConfigurationManager.GetSection("merchello")).TypeFields.CustomerAddress;
-
-            Assert.AreEqual(2, fields.Count);
-        }
-
 
         /// <summary>
         /// Asserts the AddressType class returns the expected residential configuration
