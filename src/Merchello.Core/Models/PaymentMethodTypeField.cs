@@ -9,7 +9,7 @@ namespace Merchello.Core.Models
         /// </summary>
         public static ITypeField Cash
         {
-            get { return GetTypeField(PaymentMethods["Cash"]); }
+            get { return Constants.PaymentMethodType.Cash; }
         }
 
         /// <summary>
@@ -17,7 +17,7 @@ namespace Merchello.Core.Models
         /// </summary>
         public static ITypeField CreditCard
         {
-            get { return GetTypeField(PaymentMethods["CreditCard"]); }
+            get { return Constants.PaymentMethodType.CreditCard; }
         }
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace Merchello.Core.Models
         /// </summary>
         public static ITypeField PurchaseOrder
         {
-            get { return GetTypeField(PaymentMethods["PurchaseOrder"]); }
+            get { return Constants.PaymentMethodType.PurchaseOrder; }
         }
 
         /// <summary>

@@ -10,6 +10,11 @@ namespace Merchello.Tests.Base.TypeFields
     public class TypeFieldMock
     {
 
+        public static ITypeField NullTypeField
+        {
+            get { return new TypeField("NotFound", "A TypeField with the configuration specified could not be found", Guid.Empty); }
+        }
+
         #region Customer AddressType TypeFields
 
         public static ITypeField AddressTypeResidential
