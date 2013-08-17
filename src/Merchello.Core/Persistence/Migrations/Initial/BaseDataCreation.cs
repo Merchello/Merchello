@@ -1,6 +1,7 @@
 ﻿using System;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Rdbms;
+using Merchello.Core.Models.TypeFields;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Persistence;
 

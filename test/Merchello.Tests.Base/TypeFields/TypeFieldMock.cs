@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Merchello.Core.Models;
+using Merchello.Core.Models.TypeFields;
 
 namespace Merchello.Tests.Base.TypeFields
 {

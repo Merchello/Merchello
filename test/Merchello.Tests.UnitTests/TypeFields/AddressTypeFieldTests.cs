@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Configuration;
-using Merchello.Core.Configuration.Outline;
 using Merchello.Core.Models;
+using Merchello.Core.Models.TypeFields;
 using Merchello.Tests.Base.TypeFields;
 using NUnit.Framework;
 

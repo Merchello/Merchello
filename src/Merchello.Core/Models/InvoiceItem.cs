@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using Merchello.Core.Models.EntityBase;
+using Merchello.Core.Models.TypeFields;
 
 namespace Merchello.Core.Models
 {
