@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Runtime.Serialization;
-using System.Security.Cryptography.X509Certificates;
+using Umbraco.Core;
 using Umbraco.Core.Models.EntityBase;
 
 namespace Merchello.Core.Models.EntityBase
@@ -20,7 +20,7 @@ namespace Merchello.Core.Models.EntityBase
         /// </summary>
         [IgnoreDataMember]
         public override Guid Key {
-            get { return Guid.Empty; }
+            get { return Id.ToGuid(); }
             set { }
         }
 
