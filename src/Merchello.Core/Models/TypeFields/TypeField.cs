@@ -1,7 +1,7 @@
 ﻿using System;
 using Merchello.Core.Configuration.Outline;
 
-namespace Merchello.Core.Models
+namespace Merchello.Core.Models.TypeFields
 {
     /// <summary>
     /// Wrapper for the TypeFieldElement configuration class.

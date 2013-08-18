@@ -46,7 +46,7 @@ namespace Merchello.Core.Services
         /// <param name="lastName">Last name of the customer</param>
         /// <param name="memberId">The Umbraco memberId of the customer</param>
         /// <returns></returns>
-        public ICustomer CreateCustomer(string firstName, string lastName, int? memberId = 0)
+        public ICustomer CreateCustomer(string firstName, string lastName, int? memberId = null)
         {
             var customer = new Customer(0, 0, null)
                 {
