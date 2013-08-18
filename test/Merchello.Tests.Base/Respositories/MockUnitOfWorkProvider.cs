@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Merchello.Tests.Base.Respositories.UnitOfWork;
+﻿using Merchello.Tests.Base.Respositories.UnitOfWork;
 using Umbraco.Core.Persistence.UnitOfWork;
 
-namespace Merchello.Tests.UnitTests.Repository
+namespace Merchello.Tests.Base.Respositories
 {
     public class MockUnitOfWorkProvider : IDatabaseUnitOfWorkProvider
     {
