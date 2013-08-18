@@ -56,7 +56,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Migration\DatabaseSchema.cs" />
-    <Compile Include="Repositories\CustomersRepository.cs" />
+    <Compile Include="Services\CustomerServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

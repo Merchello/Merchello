@@ -118,7 +118,7 @@ namespace Merchello.Core.Persistence.Repositories
 
         protected Attempt<TEntity> TryGetFromCache(TId id)
         {
-            Guid key = id is Guid ? ConvertIdToGuid(id) : new Guid(id.ToString());
+            Guid key = id is Guid ? new Guid(id.ToString()) : ConvertIdToGuid(id);
             var rEntity = _cache.GetById(typeof(TEntity), key);
             if (rEntity != null)
             {
