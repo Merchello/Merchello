@@ -56,8 +56,10 @@
   <ItemGroup>
     <Compile Include="Data\CustomerData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Respositories\MockUnitOfWorkProvider.cs" />
     <Compile Include="Respositories\UnitOfWork\MockDatabaseUnitOfWork.cs" />
     <Compile Include="Respositories\UnitOfWork\TransactionType.cs" />
+    <Compile Include="Services\ServiceTestsBase.cs" />
     <Compile Include="TypeFields\TypeFieldMock.cs" />
     <Compile Include="SqlSyntax\BaseUsingSqlCeSyntax.cs" />
   </ItemGroup>
