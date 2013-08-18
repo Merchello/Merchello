@@ -1,5 +1,6 @@
 ﻿using System;
 using Merchello.Core.Models;
+using Merchello.Core.Models.TypeFields;
 
 namespace Merchello.Core
 {

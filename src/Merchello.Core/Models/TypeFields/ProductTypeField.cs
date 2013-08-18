@@ -1,6 +1,6 @@
 ﻿using Merchello.Core.Configuration.Outline;
 
-namespace Merchello.Core.Models
+namespace Merchello.Core.Models.TypeFields
 {
     /// <summary>
     /// Product Types
