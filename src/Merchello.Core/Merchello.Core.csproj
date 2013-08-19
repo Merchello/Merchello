@@ -72,10 +72,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActivatorHelper.cs" />
-    <Compile Include="ConstantsTypeFields.cs">
-      <DependentUpon>Constants.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Constants.cs" />
     <Compile Include="Events\ConvertEventArgs.cs" />
     <Compile Include="Events\DatabaseCreationEventArgs.cs" />
     <Compile Include="Events\DeleteEventArgs.cs" />
@@ -84,8 +80,10 @@
     <Compile Include="Events\NewEventArgs.cs" />
     <Compile Include="Events\SaveEventArgs.cs" />
     <Compile Include="Events\TypedEventHandler.cs" />
+    <Compile Include="Models\TypeFields\MerchelloType.cs" />
     <Compile Include="Models\TypeFields\ProductTypeField.cs" />
     <Compile Include="Models\Rdbms\TypeFieldDto.cs" />
+    <Compile Include="Models\TypeFields\TypeFieldProvider.cs" />
     <Compile Include="Persistence\DatabaseModelDefinitions\DefinitionFactory.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -106,7 +104,7 @@
     <Compile Include="Models\EntityBase\KeyEntity.cs" />
     <Compile Include="Models\EntityBase\MerchelloEntityBase.cs" />
     <Compile Include="Models\ICustomer.cs" />
-    <Compile Include="Models\ITypeField.cs" />
+    <Compile Include="Models\TypeFields\ITypeField.cs" />
     <Compile Include="Configuration\Outline\TypeFieldCollection.cs" />
     <Compile Include="Configuration\Outline\TypeFieldElement.cs" />
     <Compile Include="Configuration\Outline\MerchelloSection.cs" />
