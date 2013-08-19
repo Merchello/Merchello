@@ -11,9 +11,11 @@ namespace Merchello.Core.Models.Rdbms
     {
         [Column("pk")]
         [PrimaryKeyColumn(AutoIncrement = false)]
+        [Constraint(Default = "newid()")]
         public Guid Pk { get; set; }
 
-        [Column("memberId")] 
+        [Column("memberId")]
+        [NullSetting(NullSetting = NullSettings.Null)]
         public int? MemberId { get; set; }
 
         [Column("firstName")]
@@ -29,6 +31,7 @@ namespace Merchello.Core.Models.Rdbms
         public decimal TotalPayments { get; set; }
 
         [Column("lastPaymentDate")]
+        [NullSetting(NullSetting = NullSettings.Null)]
         public DateTime? LastPaymentDate { get; set; }
 
         [Column("updateDate")]

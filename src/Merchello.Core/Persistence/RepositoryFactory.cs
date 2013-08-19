@@ -12,7 +12,7 @@ namespace Merchello.Core.Persistence
 
         public virtual ICustomerRepository CreateCustomerRepository(IDatabaseUnitOfWork uow)
         {
-            return new CustomerRepository(uow, NullCacheProvider.Current);
+            return new CustomerRepository(uow, RuntimeCacheProvider.Current);
         }
 
     }

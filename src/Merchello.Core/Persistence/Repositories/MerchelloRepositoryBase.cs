@@ -118,7 +118,7 @@ namespace Merchello.Core.Persistence.Repositories
 
         protected Attempt<TEntity> TryGetFromCache(TId id)
         {
-            Guid key = id is int ? ConvertIdToGuid(id) : new Guid(id.ToString());
+            Guid key = id is Guid ? new Guid(id.ToString()) : ConvertIdToGuid(id);
             var rEntity = _cache.GetById(typeof(TEntity), key);
             if (rEntity != null)
             {
@@ -147,8 +147,9 @@ namespace Merchello.Core.Persistence.Repositories
                 
                 if (allEntities.Any())
                 {
-                    //Get count of all entities of current type (TEntity) to ensure cached result is correct
-                    var query = Querying.Query<TEntity>.Builder.Where(x => x.Id != 0);
+                    // TODO: RSS this is a modification to the original repository base where x.Id != 0
+                    // TODO: watch for errors surfacing as a result of the change with Id entities 
+                    var query = Querying.Query<TEntity>.Builder.Where(x => x.Key != Guid.Empty);
                     int totalCount = PerformCount(query);
 
                     if(allEntities.Count() == totalCount)

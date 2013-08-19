@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using Merchello.Core.Models.EntityBase;
+using Merchello.Core.Models.TypeFields;
 
 namespace Merchello.Core.Models
 {
@@ -8,7 +9,7 @@ namespace Merchello.Core.Models
     public class InvoiceItem : IdEntity, IInvoiceItem
     {
 
-        private int _parentId;
+        private int? _parentId;
         private int _invoiceId;
         private int _shipmentId;
         private readonly IInvoiceItemItemization _itemization;
@@ -29,7 +30,7 @@ namespace Merchello.Core.Models
         #region Implementation of IInvoiceItem
         
 
-        public int ParentId
+        public int? ParentId
         {
             get
             {

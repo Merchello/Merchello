@@ -2,7 +2,7 @@
 using System.Configuration;
 using Merchello.Core.Configuration.Outline;
 
-namespace Merchello.Core.Models
+namespace Merchello.Core.Models.TypeFields
 {
     public abstract class TypeFieldProxyBase
     {
@@ -25,8 +25,7 @@ namespace Merchello.Core.Models
         /// Empty type - NullObject Pattern
         /// </summary>
         private static ITypeField NullTypeField()
-        {
-            
+        {    
             return new TypeField("NotFound", "A TypeField with the configuration specified could not be found", Guid.Empty);
         }
 
