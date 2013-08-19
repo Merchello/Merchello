@@ -61,7 +61,7 @@
     <Compile Include="Respositories\UnitOfWork\TransactionType.cs" />
     <Compile Include="Services\ServiceTestsBase.cs" />
     <Compile Include="TypeFields\TypeFieldMock.cs" />
-    <Compile Include="SqlSyntax\BaseUsingSqlCeSyntax.cs" />
+    <Compile Include="SqlSyntax\BaseUsingSqlServerSyntax.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Merchello.Core\Merchello.Core.csproj">

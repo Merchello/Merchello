@@ -15,7 +15,9 @@ namespace Merchello.Core.Persistence.Querying
 
         public ModelToSqlExpressionHelper()
         {
-            _mapper = MappingResolver.Current.ResolveMapperByType(typeof(T));
+            _mapper = MerchelloMappers.ResolveByType(typeof (T)).Result;
+
+            //MappingResolver.Current.ResolveMapperByType(typeof(T));
         }
 
         protected internal virtual string Visit(Expression exp)
