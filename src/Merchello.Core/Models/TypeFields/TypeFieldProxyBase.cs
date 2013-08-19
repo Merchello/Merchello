@@ -16,6 +16,7 @@ namespace Merchello.Core.Models.TypeFields
                        : new TypeField(element);
         }
 
+       
        public static ITypeField Custom(string alias)
        {
            return NullTypeField();
