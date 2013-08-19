@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Merchello.Core.Models;
 using Merchello.Core.Models.TypeFields;
 
@@ -9,6 +10,15 @@ namespace Merchello.Core
     /// </summary>
     public partial class Constants
     {
+
+        //internal static Dictionary<string, ITypeField> TypeFields = new Dictionary<string, ITypeField>()
+        //    {
+        //        { "AddressType.Residential", new TypeField("Residential", "Residential", new Guid("D32D7B40-2FF2-453F-9AC5-51CF1A981E46")) },
+        //        { "AddressType.Commercial", new TypeField("Commercial", "Commercial", new Guid("5C2A8638-EA32-49AD-8167-EDDFB45A7360")) },   
+        //        { "Basket.Basket", new TypeField("Basket", "Standard Basket", new Guid("C53E3100-2DFD-408A-872E-4380383FAD35")) },
+        //        { "Basket.Wishlist", new TypeField("Wishlist", "Wishlist", new Guid("B3EBB9E0-C7CE-4BA6-B379-BEDA3465D6D5")) }
+
+        //    };
 
         internal struct AddressType
         {          
