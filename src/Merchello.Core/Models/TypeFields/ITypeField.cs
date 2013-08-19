@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Merchello.Core.Models
+namespace Merchello.Core.Models.TypeFields
 {
     public interface ITypeField
     {

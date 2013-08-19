@@ -12,7 +12,7 @@ namespace Merchello.Core.Models.TypeFields
         /// </summary>
         public static ITypeField Residential
         {
-            get { return Constants.AddressType.Residential; }
+            get { return TypeFieldProvider.GetTypeField(MerchelloType.AddressResidential); }
         }
 
         /// <summary>
@@ -20,7 +20,7 @@ namespace Merchello.Core.Models.TypeFields
         /// </summary>
         public static ITypeField Commercial
         {
-            get { return Constants.AddressType.Commercial; }
+            get { return TypeFieldProvider.GetTypeField(MerchelloType.AddressCommercial); }
         }
 
         /// <summary>
