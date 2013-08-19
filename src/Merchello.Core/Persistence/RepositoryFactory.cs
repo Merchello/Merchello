@@ -1,4 +1,5 @@
-﻿using Merchello.Core.Persistence.Caching;
+﻿using System;
+using Merchello.Core.Persistence.Caching;
 using Merchello.Core.Persistence.Repositories;
 using Umbraco.Core.Persistence.UnitOfWork;
 
@@ -15,5 +16,9 @@ namespace Merchello.Core.Persistence
             return new CustomerRepository(uow, RuntimeCacheProvider.Current);
         }
 
+        public virtual IAddressRepository CreateAddressRepository(IDatabaseUnitOfWork uow)
+        {
+            return new AddressRepository(uow, RuntimeCacheProvider.Current);
+        }
     }
 }
