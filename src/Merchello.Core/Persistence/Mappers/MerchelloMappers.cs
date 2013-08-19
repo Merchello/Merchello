@@ -1,21 +1,21 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Merchello.Core.Models;
 using Umbraco.Core;
 using Umbraco.Core.Logging;
 
 namespace Merchello.Core.Persistence.Mappers
 {
+    /// <summary>
+    /// Provides a mapping by type between domain objects and their respective mapper classes.
+    /// </summary>
+    /// <remarks>
+    /// This class basically short circuits the methodology Umbraco uses in it's MapperResolver implementation
+    /// and allows us to reduce the number of internal classes that we need to copy into the Merchello core.
+    /// </remarks>
     internal class MerchelloMappers
     {
-        /// <summary>
-        /// Caches the type -> mapper so that we don't have to type check each time we want one or lookup the attribute
-        /// </summary>
-        
         private static readonly Dictionary<Type, Type> Mappers = new Dictionary<Type, Type>()
             {
                 { typeof(ICustomer), typeof(CustomerMapper) }
