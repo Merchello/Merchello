@@ -11,7 +11,7 @@ namespace Merchello.Tests.UnitTests.Services
         [Test]
         public void Create_Triggers_Event_Assert_And_Customer_Is_Passed()
         {
-            var customer = Service.CreateCustomer("Jo", "Jo");
+            var customer = CustomerService.CreateCustomer("Jo", "Jo");
 
             Assert.IsTrue(AfterTriggered);
         }
@@ -21,7 +21,7 @@ namespace Merchello.Tests.UnitTests.Services
         {
             var customer = CustomerData.CustomerForInserting();
 
-            Service.Save(customer);
+            CustomerService.Save(customer);
 
             Assert.IsTrue(BeforeTriggered);
             Assert.AreEqual(customer.FirstName, BeforeCustomer.FirstName);
@@ -35,7 +35,7 @@ namespace Merchello.Tests.UnitTests.Services
         {
             var customer = CustomerData.CustomerForInserting();
 
-            Service.Save(customer);
+            CustomerService.Save(customer);
 
             Assert.IsTrue(CommitCalled);
 
@@ -46,7 +46,7 @@ namespace Merchello.Tests.UnitTests.Services
         {
             var customer = CustomerData.CustomerForUpdating();
 
-            Service.Delete(customer);
+            CustomerService.Delete(customer);
 
 
             Assert.IsTrue(BeforeTriggered);
@@ -61,7 +61,7 @@ namespace Merchello.Tests.UnitTests.Services
         {
             var customer = CustomerData.CustomerForUpdating();
 
-            Service.Delete(customer);
+            CustomerService.Delete(customer);
    
             Assert.IsTrue(CommitCalled);
         }

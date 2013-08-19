@@ -56,6 +56,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Migration\DatabaseSchema.cs" />
+    <Compile Include="Services\AddressServiceTests.cs" />
     <Compile Include="Services\CustomerServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>
