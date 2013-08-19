@@ -13,8 +13,8 @@ namespace Merchello.Core.Persistence.Mappers
     /// Represents a <see cref="Customer"/> to DTO mapper used to translate the properties of the public api 
     /// implementation to that of the database's DTO as sql: [tableName].[columnName].
     /// </summary>
-    [MapperFor(typeof(Customer))]
-    [MapperFor(typeof(ICustomer))]
+    //[MapperFor(typeof(Customer))]
+    //[MapperFor(typeof(ICustomer))]
     internal sealed class CustomerMapper : BaseMapper
     {
         private static readonly ConcurrentDictionary<string, DtoMapModel> PropertyInfoCacheInstance = new ConcurrentDictionary<string, DtoMapModel>();

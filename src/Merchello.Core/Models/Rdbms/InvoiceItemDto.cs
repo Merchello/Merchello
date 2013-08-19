@@ -13,11 +13,11 @@ namespace Merchello.Core.Models.Rdbms
         [PrimaryKeyColumn]
         public int Id { get; set; }
 
-        //TODO: RSS IndexAttribute - ref NodeDto
         [Column("parentId")]
         [ForeignKey(typeof(InvoiceItemDto))]
+        [NullSetting(NullSetting = NullSettings.Null)]
         [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchInvoiceItemParent")]
-        public int ParentId { get; set; }
+        public int? ParentId { get; set; }
 
         [Column("invoiceId")]
         [ForeignKey(typeof(InvoiceDto), Name = "FK_merchInvoiceItem_merchInvoice", Column = "id")]

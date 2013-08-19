@@ -10,19 +10,13 @@ namespace Merchello.Tests.Base.SqlSyntax
 {
 
     [TestFixture]
-    public abstract class BaseUsingSqlCeSyntax
+    public abstract class BaseUsingSqlServerSyntax
     {
         [SetUp]
         public virtual void Initialize()
         {
-            SqlSyntaxContext.SqlSyntaxProvider = new SqlCeSyntaxProvider();
+            SqlSyntaxContext.SqlSyntaxProvider = new SqlServerSyntaxProvider();
            
-            MappingResolver.Current = new MappingResolver(
-                () => new List<Type>()
-                {
-                    typeof(Customer)
-                });
-
             Resolution.Freeze();
             SetUp();
         }
