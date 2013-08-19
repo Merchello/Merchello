@@ -9,7 +9,7 @@ namespace Merchello.Tests.UnitTests.Querying
 {
     [TestFixture]
     [Category("SqlSyntax")]
-    public class CustomerSqlClausesTest : BaseUsingSqlCeSyntax
+    public class CustomerSqlClausesTest : BaseUsingSqlServerSyntax
     {
         [Test]
         public void Can_Verify_Base_Clause()

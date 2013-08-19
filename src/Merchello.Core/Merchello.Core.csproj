@@ -86,15 +86,15 @@
     <Compile Include="Events\TypedEventHandler.cs" />
     <Compile Include="Models\TypeFields\ProductTypeField.cs" />
     <Compile Include="Models\Rdbms\TypeFieldDto.cs" />
-    <Compile Include="Persistence\DatabaseModelDefinitions\DefinitionFactory.cs" />
+    <Compile Include="Persistence\DatabaseModelDefinitions\DefinitionFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Persistence\Mappers\MerchelloMappers.cs" />
     <Compile Include="Persistence\Migrations\Initial\BaseDataCreation.cs" />
     <Compile Include="Models\EntityBase\ISingularRoot.cs" />
     <Compile Include="ObjectResolution\Resolution.cs" />
     <Compile Include="Persistence\Mappers\CustomerMapper.cs" />
     <Compile Include="Persistence\Mappers\DtoMapModel.cs" />
-    <Compile Include="Persistence\Mappers\MapperAttribute.cs" />
-    <Compile Include="Persistence\Mappers\MapperForAttribute.cs" />
-    <Compile Include="Persistence\Mappers\MappingResolver.cs" />
     <Compile Include="Models\TypeFields\AddressTypeField.cs" />
     <Compile Include="Models\TypeFields\BasketTypeField.cs" />
     <Compile Include="Configuration\Outline\TypeFieldDefinitionsElement.cs" />
@@ -145,7 +145,6 @@
     <Compile Include="Models\Rdbms\WarehouseDto.cs" />
     <Compile Include="Models\TypeFields\TypeField.cs" />
     <Compile Include="Models\TypeFields\TypeFieldProxyBase.cs" />
-    <Compile Include="ObjectResolution\LazyManyObjectsResolverbase.cs" />
     <Compile Include="Persistence\Caching\IRepositoryCacheProvider.cs" />
     <Compile Include="Persistence\Caching\NullCacheProvider.cs" />
     <Compile Include="Persistence\Caching\RuntimeCacheProvider.cs" />
@@ -171,6 +170,7 @@
     <Compile Include="Services\CustomerService.cs" />
     <Compile Include="Services\ICustomerService.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

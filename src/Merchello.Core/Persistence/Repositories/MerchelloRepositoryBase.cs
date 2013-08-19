@@ -148,7 +148,7 @@ namespace Merchello.Core.Persistence.Repositories
                 if (allEntities.Any())
                 {
                     //Get count of all entities of current type (TEntity) to ensure cached result is correct
-                    var query = Querying.Query<TEntity>.Builder.Where(x => x.Id != 0);
+                    var query = Querying.Query<TEntity>.Builder.Where(x => x.Key != Guid.Empty);
                     int totalCount = PerformCount(query);
 
                     if(allEntities.Count() == totalCount)
