@@ -72,10 +72,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActivatorHelper.cs" />
-    <Compile Include="ConstantsTypeFields.cs">
-      <DependentUpon>Constants.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Constants.cs" />
     <Compile Include="Events\ConvertEventArgs.cs" />
     <Compile Include="Events\DatabaseCreationEventArgs.cs" />
     <Compile Include="Events\DeleteEventArgs.cs" />
