@@ -21,7 +21,7 @@ namespace Merchello.Tests.IntegrationTests.Services
 
             var service = new AddressService();
 
-            var address = service.GetByKey(0);
+            var address = service.GetById(0);
 
             var addresses = service.GetAll();
 

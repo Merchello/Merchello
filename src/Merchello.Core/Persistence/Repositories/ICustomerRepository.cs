@@ -5,7 +5,7 @@ using Umbraco.Core.Persistence.Repositories;
 namespace Merchello.Core.Persistence.Repositories
 {
     /// <summary>
-    /// Marker interface for customer repositories
+    /// Marker Interface for the customer repository
     /// </summary>
     public interface ICustomerRepository : IRepository<Guid, ICustomer>
     {

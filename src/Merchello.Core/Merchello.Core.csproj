@@ -90,6 +90,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Persistence\Factories\AddressFactory.cs" />
+    <Compile Include="Persistence\Repositories\ICustomerRepository.cs" />
     <Compile Include="Persistence\Mappers\AddressMapper.cs" />
     <Compile Include="Persistence\Mappers\MerchelloMappers.cs" />
     <Compile Include="Persistence\Migrations\Initial\BaseDataCreation.cs" />
@@ -165,7 +166,6 @@
     <Compile Include="Persistence\Repositories\IAddressRepository.cs" />
     <Compile Include="Persistence\RepositoryFactory.cs" />
     <Compile Include="Persistence\Repositories\CustomerRepository.cs" />
-    <Compile Include="Persistence\Repositories\ICustomerRepository.cs" />
     <Compile Include="Persistence\Repositories\MerchelloPetaPocoRepositoryBase.cs" />
     <Compile Include="Persistence\Repositories\MerchelloRepositoryBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -6,12 +6,12 @@ using Merchello.Core.Models.TypeFields;
 
 namespace Merchello.Core.Models
 {
+
     [Serializable]
     [DataContract(IsReference = true)]
     public class Address : IdEntity, IAddress
     {
-        private int _id;
-        private Guid _customerPk;
+        private readonly Guid _customerPk;
         private string _label;
         private string _fullName;
         private string _company;
@@ -24,107 +24,232 @@ namespace Merchello.Core.Models
         private string _countryCode;
         private string _phone;
 
-        public Address(int id, Guid customerPk, string label)
+        ///TODO: We need to talk about the contstructor.  An empty address does not make a lot of sense.
+        public Address(Guid customerPk)
         {
-            _id = id;
             _customerPk = customerPk;
-            _label = label;
         }
-
-        private static readonly PropertyInfo IdSelector = ExpressionHelper.GetPropertyInfo<Address, int>(x => x.Id);
-        private static readonly PropertyInfo CustomerPkSelector = ExpressionHelper.GetPropertyInfo<Address, Guid>(x => x.CustomerPk);
+        
         private static readonly PropertyInfo LabelSelector = ExpressionHelper.GetPropertyInfo<Address, string>(x => x.Label);
+        private static readonly PropertyInfo FullNameSelector = ExpressionHelper.GetPropertyInfo<Address, string>(x => x.FullName);
+        private static readonly PropertyInfo CompanySelector = ExpressionHelper.GetPropertyInfo<Address, string>(x => x.Company);
+        private static readonly PropertyInfo AddressTypeFieldSelector = ExpressionHelper.GetPropertyInfo<Address, Guid>(x => x.AddressTypeFieldKey);
+        private static readonly PropertyInfo Address1Selector = ExpressionHelper.GetPropertyInfo<Address, string>(x => x.Address1);
+        private static readonly PropertyInfo Address2Selector = ExpressionHelper.GetPropertyInfo<Address, string>(x => x.Address2);
+        private static readonly PropertyInfo LocalitySelector = ExpressionHelper.GetPropertyInfo<Address, string>(x => x.Locality);
+        private static readonly PropertyInfo RegionSelector = ExpressionHelper.GetPropertyInfo<Address, string>(x => x.Region);
+        private static readonly PropertyInfo PostalCodeSelector = ExpressionHelper.GetPropertyInfo<Address, string>(x => x.PostalCode);
+        private static readonly PropertyInfo CountryCodeSelector = ExpressionHelper.GetPropertyInfo<Address, string>(x => x.CountryCode);
+        private static readonly PropertyInfo PhoneSelector = ExpressionHelper.GetPropertyInfo<Address, string>(x => x.Phone);
 
-
+        /// <summary>
+        /// The customer key (pk) associated with the address
+        /// </summary>
+        [DataMember]
         public Guid CustomerPk
         {
             get { return _customerPk; }
-            set { _customerPk = value; }
         }
 
+        /// <summary>
+        /// The descriptive label for the address
+        /// </summary>
+        [DataMember]
         public string Label
         {
             get { return _label; }
-            set { _label = value; }
+            set 
+            { 
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _label = value;
+                    return _label;
+                }, _label, LabelSelector); 
+            }
         }
 
+        /// <summary>
+        /// The full name for the address
+        /// </summary>
+        /// <remarks>
+        /// TODO: do we need this????
+        /// </remarks>
+        [DataMember]
         public string FullName
         {
             get { return _fullName; }
-            set { _fullName = value; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                { 
+                    _fullName = value ;
+                    return _label;
+                }, _fullName, FullNameSelector);
+            }
         }
 
+        /// <summary>
+        /// The company name associated with a company
+        /// </summary>
+        [DataMember]
         public string Company
         {
             get { return _company; }
-            set { _company = value; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _company = value;
+                    return _company;
+                }, _company, CompanySelector);
+            }
         }
 
+        /// <summary>
+        /// The address type indicator
+        /// </summary>
+        [DataMember]
         public Guid AddressTypeFieldKey
         {
             get { return _addressTypeFieldKey; }
-            set { _addressTypeFieldKey = value; }
+            set 
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _addressTypeFieldKey = value;
+                    return _addressTypeFieldKey;
+                }, _addressTypeFieldKey, AddressTypeFieldSelector);
+            }
         }
 
+        /// <summary>
+        /// The first address line
+        /// </summary>
+        [DataMember]
         public string Address1
         {
             get { return _address1; }
-            set { _address1 = value; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _address1 = value;
+                    return _address1;
+                }, _address1, Address1Selector);
+            }
         }
 
+        /// <summary>
+        /// The second address line 
+        /// </summary>
+        [DataMember]
         public string Address2
         {
             get { return _address2; }
-            set { _address2 = value; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _address2 = value;
+                    return _address2;
+                }, _address2, Address2Selector);
+            }
         }
 
+        /// <summary>
+        /// The locality or city of the address
+        /// </summary>
+        [DataMember]
         public string Locality
         {
             get { return _locality; }
-            set { _locality = value; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _locality = value;
+                    return _locality;
+                }, _locality, LocalitySelector);
+            }
         }
 
+        /// <summary>
+        /// The region, state or province of the address
+        /// </summary>
+        [DataMember]
         public string Region
         {
             get { return _region; }
-            set { _region = value; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _region = value;
+                    return _region;
+                }, _region, RegionSelector);
+            }
         }
 
+        /// <summary>
+        /// The postal code of the address
+        /// </summary>
+        [DataMember]
         public string PostalCode
         {
             get { return _postalCode; }
-            set { _postalCode = value; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _postalCode = value;
+                    return _postalCode;
+                }, _postalCode, PostalCodeSelector);
+            }
         }
 
+        /// <summary>
+        /// The country code of the address
+        /// </summary>
+        [DataMember]
         public string CountryCode
         {
             get { return _countryCode; }
-            set { _countryCode = value; }
+            set
+            {
+                {
+                    SetPropertyValueAndDetectChanges(o =>
+                    {
+                        _countryCode = value;
+                        return _countryCode;
+                    }, _countryCode, CountryCodeSelector);
+                }
+            }
         }
 
+        /// <summary>
+        /// The phone number associated with the address
+        /// </summary>
+        /// <remarks>
+        /// This is sometimes required by shipping providers
+        /// </remarks>
+        [DataMember]
         public string Phone
         {
             get { return _phone; }
-            set { _phone = value; }
+            set
+            {
+                {
+                    SetPropertyValueAndDetectChanges(o =>
+                    {
+                        _phone = value;
+                        return _phone;
+                    }, _phone, PhoneSelector);
+                }
+            }
         }
 
-        #region Strongly-typed properties
-
-        #endregion
-
-
-        /// <summary>
-        /// Method to call when EntityEntity is being saved
-        /// </summary>
-        /// <remarks>Created date is set and a Unique key is assigned</remarks>
-        internal override void AddingEntity()
-        {
-            base.AddingEntity();
-
-            if (Key == Guid.Empty)
-                Key = Guid.NewGuid();
-        }
 
 
     }
+
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using Merchello.Core.Models;
+using Merchello.Core.Models.TypeFields;
 using Merchello.Tests.Base.Data;
 using Merchello.Tests.Base.Services;
 using NUnit.Framework;
@@ -13,7 +14,7 @@ namespace Merchello.Tests.UnitTests.Services
         [Test]
         public void Create_Triggers_Event_Assert_And_Address_Is_Passed()
         {
-            var address = AddressService.CreateAddress(0, new Guid(), "Home");
+            var address = AddressService.CreateAddress(new Guid(), "Billing", AddressTypeField.Residential, "111 somewhere", string.Empty, "Somewhere", "Outthere", "11111", "US");
 
             Assert.IsTrue(AfterTriggered);
         }

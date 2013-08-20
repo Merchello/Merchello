@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Merchello.Core.Models;
+using Merchello.Core.Models.TypeFields;
 
 namespace Merchello.Tests.Base.Data
 {
@@ -12,22 +13,29 @@ namespace Merchello.Tests.Base.Data
 
         public static IAddress AddressForInserting()
         {
-            var address = new Address(0, new Guid(), string.Empty)
-            {
-                Id = 0, 
-                CustomerPk = new Guid(), 
-                Label = "Billing"
-            };
+            // this won't work for integration tests because of the database constraint.
+
+            var address = new Address(Guid.NewGuid())
+                {
+                    Label = "Home",
+                    Address1 = "111 Somewhere",
+                    AddressTypeFieldKey = AddressTypeField.Residential.TypeKey,
+                    Company = "Demo Co.",
+                    Locality = "Seattle",
+                    Region = "WA",
+                    PostalCode = "99701",
+                    CountryCode = "US"
+                };
 
             address.ResetDirtyProperties();
 
             return address;
+            
         }
 
         public static IAddress AddressForUpdating()
         {
             var address = AddressData.AddressForInserting();
-            address.Id = 0;
             address.ResetDirtyProperties();
             return address;
 
@@ -37,24 +45,38 @@ namespace Merchello.Tests.Base.Data
         {
             return new List<IAddress>()
                 {
-                    new Address(0, new Guid(), null)
-                        {
-                            Id = 0, 
-                            CustomerPk = new Guid(), 
-                            Label = "Billing"
-                        },
-                    new Address(0, new Guid(), null)
-                        {
-                            Id = 0, 
-                            CustomerPk = new Guid(), 
-                            Label = "Shipping"
-                        },
-                     new Address(0, new Guid(), null)
-                        {
-                            Id = 0, 
-                            CustomerPk = new Guid(), 
-                            Label = "Summer Cabin"
-                        }
+                   new Address(Guid.NewGuid())
+                    {
+                        Label = "Home",
+                        Address1 = "111 Somewhere",
+                        AddressTypeFieldKey = AddressTypeField.Residential.TypeKey,
+                        Company = "Demo Co.",
+                        Locality = "Seattle",
+                        Region = "WA",
+                        PostalCode = "99701",
+                        CountryCode = "US"
+                    },
+                    new Address(Guid.NewGuid())
+                    {
+                        Label = "Viva",
+                        Address1 = "666 Drifters Highway",
+                        AddressTypeFieldKey = AddressTypeField.Commercial.TypeKey,
+                        Company = "Vegas.",
+                        Locality = "Las Vegas",
+                        Region = "NV",
+                        PostalCode = "00122",
+                        CountryCode = "US"
+                    },
+                    new Address(Guid.NewGuid())
+                    {
+                        Label = "Condo",
+                        Address1 = "12 Hampton Ct.",
+                        AddressTypeFieldKey = AddressTypeField.Residential.TypeKey,
+                        Locality = "District of Columbia",
+                        Region = "DC",
+                        PostalCode = "11111",
+                        CountryCode = "US"
+                    }
 
                 };
 
