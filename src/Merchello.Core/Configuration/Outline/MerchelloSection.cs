@@ -37,6 +37,16 @@ namespace Merchello.Core.Configuration.Outline
             set { this["enableLogging"] = value; }
         }
 
+        /// <summary>
+        /// Gets/Sets the Merchello Version
+        /// </summary>
+        [ConfigurationProperty("version", IsRequired = true)]
+        public string Version
+        {
+           get { return (string) this["version"];  }
+           set { this["version"] = value;  }
+        }
+
         [ConfigurationProperty("typeFieldDefinitions", IsRequired = true)]
         public TypeFieldDefinitionsElement TypeFields
         {
