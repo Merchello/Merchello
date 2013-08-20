@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Merchello.Core.Models;
+using Merchello.Core.Models.TypeFields;
 using Merchello.Core.Persistence;
 using Merchello.Core.Events;
 using Umbraco.Core;
@@ -42,18 +43,19 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Creates an <see cref="IAddress"/> object
         /// </summary>
-        /// <param name="id">id value of the Address</param>
-        /// <param name="customerPk">Guid value for the customer object to which the Address belongs</param>
-        /// <param name="label">Descriptive name for the Address</param>
-        /// <returns></returns>
-        public IAddress CreateAddress(int id, Guid customerPk, string label)
+        public IAddress CreateAddress(Guid customerPk, string label, ITypeField addressType, string address1, string address2, string locality, string region, string postalCode, string countryCode)
         {
-            var address = new Address(0, new Guid(), null)
-            {
-                Id = id, 
-                CustomerPk = customerPk, 
-                Label = label
-            };
+            var address = new Address(customerPk)
+                {
+                    Label = label,
+                    AddressTypeFieldKey = addressType.TypeKey,
+                    Address1 = address1,
+                    Address2 = address2,
+                    Locality = locality,
+                    Region = region,
+                    PostalCode = postalCode,
+                    CountryCode = countryCode
+                };
 
             Created.RaiseEvent(new NewEventArgs<IAddress>(address), this);
 
@@ -162,11 +164,11 @@ namespace Merchello.Core.Services
         /// </summary>
         /// <param name="id">int Id for the Address</param>
         /// <returns><see cref="IAddress"/></returns>
-        public IAddress GetByKey(int id)
+        public IAddress GetById(int id)
         {
             using (var repository = _repositoryFactory.CreateAddressRepository(_uowProvider.GetUnitOfWork()))
             {
-                return repository.Get(id.ToGuid());
+                return repository.Get(id);
             }
         }
 
@@ -175,11 +177,11 @@ namespace Merchello.Core.Services
         /// </summary>
         /// <param name="keys">List of unique keys</param>
         /// <returns></returns>
-        public IEnumerable<IAddress> GetByKeys(IEnumerable<Guid> keys)
+        public IEnumerable<IAddress> GetByIds(IEnumerable<int> ids)
         {
             using (var repository = _repositoryFactory.CreateAddressRepository(_uowProvider.GetUnitOfWork()))
             {
-                return repository.GetAll(keys.ToArray());
+                return repository.GetAll(ids.ToArray());
             }
         }
 
@@ -238,5 +240,7 @@ namespace Merchello.Core.Services
 
         #endregion
 
+
+     
     }
 }

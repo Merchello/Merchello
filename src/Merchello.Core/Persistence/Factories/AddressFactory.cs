@@ -9,11 +9,20 @@ namespace Merchello.Core.Persistence.Factories
 
         public IAddress BuildEntity(AddressDto dto)
         {
-            var address = new Address(dto.Id, dto.CustomerPk, dto.Label)
+            var address = new Address(dto.CustomerPk)
             {
                 Id = dto.Id, 
-                CustomerPk = dto.CustomerPk, 
                 Label = dto.Label,
+                FullName = dto.FullName,
+                Company =  dto.Company,
+                AddressTypeFieldKey = dto.AddressTypeFieldKey,
+                Address1 = dto.Address1,
+                Address2 = dto.Address2,
+                Locality = dto.Locality,
+                Region = dto.Region,
+                PostalCode = dto.PostalCode,
+                CountryCode = dto.CountryCode,
+                Phone = dto.Phone,
                 CreateDate = dto.CreateDate,
                 UpdateDate = dto.UpdateDate
             };

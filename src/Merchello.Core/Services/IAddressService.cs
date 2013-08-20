@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Merchello.Core.Models;
+using Merchello.Core.Models.TypeFields;
 using Umbraco.Core.Services;
 
 namespace Merchello.Core.Services
@@ -13,14 +14,11 @@ namespace Merchello.Core.Services
     /// </summary>
     public interface IAddressService : IService
     {
+
         /// <summary>
         /// Creates a Address
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="customerPk"></param>
-        /// <param name="label"></param>
-        /// <returns><see cref="IAddress"/></returns>
-        IAddress CreateAddress(int id, Guid customerPk, string label);
+        IAddress CreateAddress(Guid customerPk, string label, ITypeField addressType, string address1, string address2, string locality, string region, string postalCode, string countryCode);
 
         /// <summary>
         /// Saves a single <see cref="IAddress"/> object
@@ -55,14 +53,14 @@ namespace Merchello.Core.Services
         /// </summary>
         /// <param name="id">int Id of the Address to retrieve</param>
         /// <returns><see cref="IAddress"/></returns>
-        IAddress GetByKey(int id);
+        IAddress GetById(int id);
 
         /// <summary>
         /// Gets list of <see cref="IAddress"/> objects given a list of Unique keys
         /// </summary>
-        /// <param name="keys">List of Guid pk for Addresss to retrieve</param>
+        /// <param name="ids">List of int Id for Addresss to retrieve</param>
         /// <returns>List of <see cref="IAddress"/></returns>
-        IEnumerable<IAddress> GetByKeys(IEnumerable<Guid> keys);
+        IEnumerable<IAddress> GetByIds(IEnumerable<int> ids);
 
     }
 }
