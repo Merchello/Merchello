@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Text;
 using Merchello.Core.Configuration;
-using Merchello.Core.Persistence.SqlSyntax;
 using Umbraco.Core.Persistence.Migrations.Initial;
 using Umbraco.Core.Persistence.SqlSyntax;
 
@@ -82,7 +81,7 @@ namespace Merchello.Core.Persistence.Migrations.Initial
                 sb.AppendLine(" ");
             }
 
-            if (PluginSqlSyntaxContext.SqlSyntaxProvider is MySqlSyntaxProvider)
+            if (SqlSyntaxContext.SqlSyntaxProvider is MySqlSyntaxProvider)
             {
                 sb.AppendLine("Please note that the constraints could not be validated because the current dataprovider is MySql.");
             }

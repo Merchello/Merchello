@@ -24,18 +24,20 @@ namespace Merchello.Tests.IntegrationTests.Migration
         }
 
         [Test]
-        public void Can_Create_Default_Database_Schema()
-        {
-            var creation = new DatabaseSchemaCreation(_database);
-            creation.InitializeDatabaseSchema();
-        }
-
-        [Test]
         public void Can_Drop_All_Database_Tables()
         {
             var deletions = new DatabaseSchemaCreation(_database);
             deletions.UninstallDatabaseSchema();
         }
+
+        [Test]
+        public void Successfully_Create_Default_Database_Schema()
+        {
+            var creation = new DatabaseSchemaCreation(_database);
+            creation.InitializeDatabaseSchema();
+        }
+
+
 
     }
 }
