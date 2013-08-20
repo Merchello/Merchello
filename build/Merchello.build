@@ -55,9 +55,10 @@
 			<BinFiles Include="$(BuildBinariesFolder)*.*"/>
 			<!--ConfigFiles Include="" />
 			<AppIcon Include="" />
-			<AppTrayIcon Include="" /--> 
-			<PluginFiles Include="$(RootDir)\database\merchello-db.sql" />
-			<PackageFile Include="$(MSBuildProjectDirectory)\package.xml" />
+			<AppTrayIcon Include="" /-->
+      <AppPluginFiles Include="$(RootDir)\src\Merchello.Web.UI\App_Plugins\Merchello\Package.manifest" />
+      <PluginFiles Include="$(RootDir)\database\merchello-db.sql" />
+      <PackageFile Include="$(MSBuildProjectDirectory)\package.xml" />
 
 		</ItemGroup>
 
@@ -65,8 +66,9 @@
 		<!--Copy SourceFiles="@(ConfigFiles)" DestinationFolder="$(BuildPackageFolder)config" />
 		<Copy SourceFiles="@(AppIcon)" DestinationFolder="$(BuildPackageFolder)umbraco\images\umbraco" />
 		<Copy SourceFiles="@(AppTrayIcon)" DestinationFolder="$(BuildPackageFolder)umbraco\images\tray" /-->
-		<Copy SourceFiles="@(PluginFiles)" DestinationFolder="$(BuildPackageFolder)App_Plugins\Merchello\install" />
-		<Copy SourceFiles="@(PackageFile)" DestinationFolder="$(BuildPackageFolder)" />
+    <Copy SourceFiles="@(AppPluginFiles)" DestinationFolder="$(BuildPackageFolder)App_Plugins\Merchello" />
+    <Copy SourceFiles="@(PluginFiles)" DestinationFolder="$(BuildPackageFolder)App_Plugins\Merchello\install" />
+    <Copy SourceFiles="@(PackageFile)" DestinationFolder="$(BuildPackageFolder)" />
 		
 	</Target>
 	

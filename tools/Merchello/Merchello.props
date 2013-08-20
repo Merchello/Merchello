@@ -21,8 +21,9 @@
       
         <MerchelloCoreProjectDir>$(RootDir)src\Merchello.Core\</MerchelloCoreProjectDir>
         <MerchelloWebProjectDir>$(RootDir)src\Merchello.Web\</MerchelloWebProjectDir>
-                      
-                              
+        <MerchelloWebUiProjectDir>$(RootDir)src\Merchello.Web.UI\</MerchelloWebUiProjectDir>
+
+
         <SolutionBinFolder>$(BuildDir)bin\</SolutionBinFolder>        
         <SolutionBinFolderRelativeToProjects>$(BuildFolderRelativeToProjects)bin\</SolutionBinFolderRelativeToProjects>
         <SolutionBinFolderAbsolutePath>$(BuildDir)bin\</SolutionBinFolderAbsolutePath>
