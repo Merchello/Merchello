@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Linq.Expressions;
 using System.Reflection;
+using Merchello.Core.Persistence.SqlSyntax;
 using Umbraco.Core;
 using Umbraco.Core.Persistence;
 using Umbraco.Core.Persistence.SqlSyntax;
@@ -46,8 +47,8 @@ namespace Merchello.Core.Persistence.Mappers
             string columnName = columnAttribute.Name;
 
             string columnMap = string.Format("{0}.{1}",
-                                             SqlSyntaxContext.SqlSyntaxProvider.GetQuotedTableName(tableName),
-                                             SqlSyntaxContext.SqlSyntaxProvider.GetQuotedColumnName(columnName));
+                                             PluginSqlSyntaxContext.SqlSyntaxProvider.GetQuotedTableName(tableName),
+                                             PluginSqlSyntaxContext.SqlSyntaxProvider.GetQuotedColumnName(columnName));
             return columnMap;
         }
     }

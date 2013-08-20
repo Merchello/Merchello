@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using Merchello.Core.Models;
-using Merchello.Core.ObjectResolution;
-using Merchello.Core.Persistence.Mappers;
+﻿using Merchello.Core.ObjectResolution;
+using Merchello.Core.Persistence.SqlSyntax;
 using NUnit.Framework;
 using Umbraco.Core.Persistence.SqlSyntax;
 
@@ -15,7 +12,7 @@ namespace Merchello.Tests.Base.SqlSyntax
         [SetUp]
         public virtual void Initialize()
         {
-            SqlSyntaxContext.SqlSyntaxProvider = new SqlServerSyntaxProvider();
+            PluginSqlSyntaxContext.SqlSyntaxProvider = new SqlServerSyntaxProvider();
            
             Resolution.Freeze();
             SetUp();
@@ -27,7 +24,7 @@ namespace Merchello.Tests.Base.SqlSyntax
         [TearDown]
         public virtual void TearDown()
         {
-            SqlSyntaxContext.SqlSyntaxProvider = null;
+            PluginSqlSyntaxContext.SqlSyntaxProvider = null;
   
         }
     }

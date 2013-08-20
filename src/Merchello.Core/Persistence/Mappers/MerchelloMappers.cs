@@ -14,7 +14,7 @@ namespace Merchello.Core.Persistence.Mappers
     /// This class basically short circuits the methodology Umbraco uses in it's MapperResolver implementation
     /// and allows us to reduce the number of internal classes that we need to copy into the Merchello core.
     /// </remarks>
-    internal class MerchelloMappers
+    internal static class MerchelloMappers
     {
         private static readonly Dictionary<Type, Type> Mappers = new Dictionary<Type, Type>()
             {
