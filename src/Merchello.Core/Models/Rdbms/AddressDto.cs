@@ -21,18 +21,22 @@ namespace Merchello.Core.Models.Rdbms
         public string Label { get; set; }
 
         [Column("fullName")]
+        [NullSetting(NullSetting = NullSettings.Null)]
         public string FullName { get; set; }
 
         [Column("company")]
+        [NullSetting(NullSetting = NullSettings.Null)]
         public string Company { get; set; }
 
         [Column("addressTypeKey")]
         public Guid AddressTypeFieldKey { get; set; }
 
         [Column("address1")]
+        [NullSetting(NullSetting = NullSettings.Null)]
         public string Address1 { get; set; }
 
         [Column("address2")]
+        [NullSetting(NullSetting = NullSettings.Null)]
         public string Address2 { get; set; }
 
         [Column("locality")]
@@ -45,9 +49,11 @@ namespace Merchello.Core.Models.Rdbms
         public string PostalCode { get; set; }
 
         [Column("countryCode")]
+        [NullSetting(NullSetting = NullSettings.Null)]
         public string CountryCode { get; set; }
 
         [Column("phone")]
+        [NullSetting(NullSetting = NullSettings.Null)]
         public string Phone { get; set; }
 
         [Column("updateDate")]

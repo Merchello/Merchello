@@ -19,6 +19,8 @@
         PaymentMethodPurchaseOrder,
         ShipMethodFlatRate,
         ShipMethodPercentTotal,
-        ShipMethodCarrier
+        ShipMethodCarrier,
+        Custom,
+        NotFound
     }
 }

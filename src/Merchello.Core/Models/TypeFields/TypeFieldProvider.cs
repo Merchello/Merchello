@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Caching;
 
 namespace Merchello.Core.Models.TypeFields
 {
@@ -19,12 +20,25 @@ namespace Merchello.Core.Models.TypeFields
             ITypeField typeField;
             return CachedTypeFields.TryGetValue(key, out typeField) ?
                 typeField : 
-                new TypeField("NotFound", "A TypeField with the configuration specified could not be found", Guid.Empty);            
+                new TypeField("NotFound", "A TypeField with the configuration specified could not be found", Guid.Empty);           
         }
+
+        internal static MerchelloType GetMerchelloType(Guid key)
+        {
+            return CachedTypeFields.Keys.FirstOrDefault(x => CachedTypeFields[x].TypeKey == key);
+        }
+
+       
 
 
         private static void BuildCache()
-        {
+        {            
+
+            // Key Group
+            // Value -> Dictionary<string, ITypeField>
+
+            // Dictionary[TypeFieldGroup.Address][MerchelloType.AddressResidential].Value
+
             // AddressTypes
             AddUpdateCache(MerchelloType.AddressResidential, new TypeField("Residential", "Residential", new Guid("D32D7B40-2FF2-453F-9AC5-51CF1A981E46")));
             AddUpdateCache(MerchelloType.AddressCommercial, new TypeField("Commercial", "Commercial", new Guid("5C2A8638-EA32-49AD-8167-EDDFB45A7360")));
@@ -49,6 +63,7 @@ namespace Merchello.Core.Models.TypeFields
             AddUpdateCache(MerchelloType.ShipMethodFlatRate, new TypeField("FlatRate", "Flat Rate", new Guid("1D0B73CF-AE9D-4501-83F5-FA0B2FEE1236")));
             AddUpdateCache(MerchelloType.ShipMethodPercentTotal, new TypeField("PercentTotal", "Percent of Total", new Guid("B056DA45-3FB0-49AE-8349-6FCEB1465DF6")));
             AddUpdateCache(MerchelloType.ShipMethodCarrier, new TypeField("Carrier", "Carrier", new Guid("4311536A-9554-43D4-8422-DEAAD214B469")));
+
         }
 
 
@@ -58,4 +73,6 @@ namespace Merchello.Core.Models.TypeFields
         }
         
     }
+
+
 }

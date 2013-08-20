@@ -12,15 +12,15 @@ namespace Merchello.Core.Models.TypeFields
         protected static ITypeField GetTypeField(TypeFieldElement element)
         {
             return element == null
-                       ? NullTypeField()
+                       ? TypeFieldMapperBase.NotFound
                        : new TypeField(element);
         }
 
-       
-       public static ITypeField Custom(string alias)
-       {
-           return NullTypeField();
-       }
+
+        public static ITypeField Custom(string alias)
+        {
+            return NullTypeField();
+        }
 
         /// <summary>
         /// Empty type - NullObject Pattern

@@ -36,9 +36,10 @@ namespace Merchello.Core.Persistence.Migrations.Initial
 
         private void CreateDbTypeFieldData()
         {
-            // AddressTypeField
-            _database.Insert("merchDBTypeField", "pk", new TypeFieldDto() { Pk = AddressTypeField.Residential.TypeKey, Alias = AddressTypeField.Residential.Alias, Name = AddressTypeField.Residential.Name });
-            _database.Insert("merchDBTypeField", "pk", new TypeFieldDto() { Pk = AddressTypeField.Commercial.TypeKey, Alias = AddressTypeField.Commercial.Alias, Name = AddressTypeField.Commercial.Name });
+            // address
+            var address = new AddressTypeField();
+            _database.Insert("merchDBTypeField", "pk", new TypeFieldDto() { Pk = address.Residential.TypeKey, Alias = address.Residential.Alias, Name = address.Residential.Name });
+            _database.Insert("merchDBTypeField", "pk", new TypeFieldDto() { Pk = address.Commercial.TypeKey, Alias = address.Commercial.Alias, Name = address.Commercial.Name });
 
             // BasketTypeField
             _database.Insert("merchDBTypeField", "pk", new TypeFieldDto() { Pk = BasketTypeField.Basket.TypeKey, Alias = BasketTypeField.Basket.Alias, Name = BasketTypeField.Basket.Name });

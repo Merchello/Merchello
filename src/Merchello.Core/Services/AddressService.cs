@@ -43,7 +43,9 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Creates an <see cref="IAddress"/> object
         /// </summary>
-        public IAddress CreateAddress(Guid customerPk, string label, ITypeField addressType, string address1, string address2, string locality, string region, string postalCode, string countryCode)
+        public IAddress CreateAddress(Guid customerPk, string label, ITypeField addressType, 
+            string address1, string address2, 
+            string locality, string region, string postalCode, string countryCode)
         {
             var address = new Address(customerPk)
                 {

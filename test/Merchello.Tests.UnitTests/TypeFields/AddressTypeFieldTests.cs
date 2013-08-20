@@ -30,7 +30,7 @@ namespace Merchello.Tests.UnitTests.TypeFields
         [Test]
         public void AddressType_residential_matches_configuration()
         {
-            var type = AddressTypeField.Residential;
+            var type = new AddressTypeField().Residential;
 
             Assert.AreEqual(_residentialMock.Alias, type.Alias);
             Assert.AreEqual(_residentialMock.Name, type.Name);
@@ -44,7 +44,7 @@ namespace Merchello.Tests.UnitTests.TypeFields
         [Test]
         public void AddressType_commercial_matches_configuration()
         {
-            var type = AddressTypeField.Commercial;
+            var type = new AddressTypeField().Commercial;
 
             Assert.AreEqual(_commercialMock.Alias, type.Alias);
             Assert.AreEqual(_commercialMock.Name, type.Name);
@@ -57,7 +57,7 @@ namespace Merchello.Tests.UnitTests.TypeFields
         [Test]
         public void AddressType_custom_matches_configuration()
         {
-            var type = AddressTypeField.Custom("Custom");
+            var type = new AddressTypeField().Custom("Custom");
 
             Assert.AreEqual(_customMock.Alias, type.Alias);
             Assert.AreEqual(_customMock.Name, type.Name);

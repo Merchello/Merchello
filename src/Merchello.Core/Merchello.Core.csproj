@@ -88,9 +88,12 @@
     <Compile Include="MerchelloPluginContext.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\IAddress.cs" />
+    <Compile Include="TypeFieldMapperEnumerations.cs" />
     <Compile Include="Models\TypeFields\MerchelloType.cs" />
     <Compile Include="Models\TypeFields\ProductTypeField.cs" />
     <Compile Include="Models\Rdbms\TypeFieldDto.cs" />
+    <Compile Include="Models\TypeFields\TypeFieldMapper.cs" />
+    <Compile Include="Models\TypeFields\TypeFieldMapperBase.cs" />
     <Compile Include="Models\TypeFields\TypeFieldProvider.cs" />
     <Compile Include="Persistence\DatabaseModelDefinitions\DefinitionFactory.cs">
       <SubType>Code</SubType>
