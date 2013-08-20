@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Merchello.Core.Models;
+using Merchello.Core.Models.EntityBase;
 using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Persistence.Caching;
 using Merchello.Core.Persistence.Factories;
@@ -13,7 +14,7 @@ using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Core.Persistence.Repositories
 {
-    internal class AddressRepository : MerchelloPetaPocoRepositoryBase<Guid, IAddress>, IAddressRepository
+    internal class AddressRepository : MerchelloPetaPocoRepositoryBase<int, IAddress>, IAddressRepository
     {
 
         public AddressRepository(IDatabaseUnitOfWork work)
@@ -30,7 +31,7 @@ namespace Merchello.Core.Persistence.Repositories
         #region Overrides of RepositoryBase<IAddress>
 
 
-        protected override IAddress PerformGet(Guid id)
+        protected override IAddress PerformGet(int id)
         {
             var sql = GetBaseQuery(false)
                 .Where(GetBaseWhereClause(), new { Id = id });
@@ -47,7 +48,7 @@ namespace Merchello.Core.Persistence.Repositories
             return address;
         }
 
-        protected override IEnumerable<IAddress> PerformGetAll(params Guid[] ids)
+        protected override IEnumerable<IAddress> PerformGetAll(params int[] ids)
         {
             if (ids.Any())
             {
@@ -97,7 +98,7 @@ namespace Merchello.Core.Persistence.Repositories
 
         protected override void PersistNewItem(IAddress entity)
         {
-            ((Address)entity).AddingEntity();
+            ((IdEntity)entity).AddingEntity();
 
             var factory = new AddressFactory();
             var dto = factory.BuildDto(entity);
@@ -109,7 +110,7 @@ namespace Merchello.Core.Persistence.Repositories
 
         protected override void PersistUpdatedItem(IAddress entity)
         {
-            ((Address)entity).UpdatingEntity();
+            ((IdEntity)entity).UpdatingEntity();
 
             var factory = new AddressFactory();
             var dto = factory.BuildDto(entity);
@@ -124,7 +125,7 @@ namespace Merchello.Core.Persistence.Repositories
             var deletes = GetDeleteClauses();
             foreach (var delete in deletes)
             {
-                Database.Execute(delete, new { Id = entity.Key });
+                Database.Execute(delete, new { Id = entity.Id });
             }
         }
 
@@ -137,7 +138,7 @@ namespace Merchello.Core.Persistence.Repositories
 
             var dtos = Database.Fetch<AddressDto>(sql);
 
-            return dtos.DistinctBy(x => x.Id).Select(dto => Get(dto.Id.ToGuid()));
+            return dtos.DistinctBy(x => x.Id).Select(dto => Get(dto.Id));
 
         }
 

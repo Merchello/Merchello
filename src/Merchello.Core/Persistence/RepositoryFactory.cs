@@ -18,7 +18,7 @@ namespace Merchello.Core.Persistence
 
         public virtual IAddressRepository CreateAddressRepository(IDatabaseUnitOfWork uow)
         {
-            return new AddressRepository(uow, RuntimeCacheProvider.Current);
+            return new AddressRepository(uow, NullCacheProvider.Current);
         }
     }
 }
