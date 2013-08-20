@@ -8,6 +8,12 @@ namespace Merchello.Tests.IntegrationTests.Services
     public class AddressServiceTests : BaseUsingSqlServerSyntax
     {
 
+        //[Test]
+        //public void Can_Create_New_Address()
+        //{
+            
+        //}
+
         [Test]
         public void CacheDebug()
         {

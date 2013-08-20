@@ -1,41 +1,58 @@
-﻿using Merchello.Core.Configuration.Outline;
+﻿using System;
+using Merchello.Core.Configuration.Outline;
 
 namespace Merchello.Core.Models.TypeFields
 {
     /// <summary>
     /// Indicates whether a shopping cart basket is either a "basket" or a "wishlist" representation
     /// </summary>
-    public class BasketTypeField : TypeFieldProxyBase
+    internal class BasketTypeField : TypeFieldMapper<BasketType>, IBasketTypeField
     {
-        /// <summary>
-        /// Default ecommerce basket
-        /// </summary>
-        public static ITypeField Basket
+        internal BasketTypeField()
         {
-            get { return TypeFieldProvider.GetTypeField(MerchelloType.BasketBasket); }
+            if (CachedTypeFields.IsEmpty) BuildCache();
         }
 
-        /// <summary>
-        /// Wishlist
-        /// </summary>
-        public static ITypeField Wishlist
+#region Overrides TypeFieldMapper<BasketType>
+
+        internal override sealed void BuildCache()
         {
-            get { return TypeFieldProvider.GetTypeField(MerchelloType.BasketWishlist); }
+            AddUpdateCache(BasketType.Basket, new TypeField("Basket", "Standard Basket", new Guid("C53E3100-2DFD-408A-872E-4380383FAD35")));
+            AddUpdateCache(BasketType.Wishlist, new TypeField("Wishlist", "Wishlist", new Guid("B3EBB9E0-C7CE-4BA6-B379-BEDA3465D6D5")));
         }
 
         /// <summary>
         /// Returns a custom basket or a NullTypeField
         /// </summary>
         /// <param name="alias">The alias of the custom basket</param>
-        /// <returns>An object of <see cref="ITypeField"/></returns>
-        public new static ITypeField Custom(string alias)
+        protected override ITypeField GetCustom(string alias)
         {
             return GetTypeField(Baskets[alias]);
         }
+
+#endregion
+
+        /// <summary>
+        /// Default ecommerce basket
+        /// </summary>
+        public ITypeField Basket
+        {
+            get { return GetTypeField(BasketType.Basket); }
+        }
+
+        /// <summary>
+        /// Wishlist
+        /// </summary>
+        public ITypeField Wishlist
+        {
+            get { return GetTypeField(BasketType.Wishlist); }
+        }
+
 
         private static TypeFieldCollection Baskets
         {
             get { return Fields.Basket; }
         }
+
     }
 }

@@ -71,17 +71,17 @@ namespace Merchello.Core.Models
             get { return _itemization; }
         }
 
-        public InvoiceItemTypeField InvoiceItemType
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        //public InvoiceItemTypeField InvoiceItemType
+        //{
+        //    get
+        //    {
+        //        throw new NotImplementedException();
+        //    }
+        //    set
+        //    {
+        //        throw new NotImplementedException();
+        //    }
+        //}
 
         public string Sku
         {

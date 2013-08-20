@@ -32,7 +32,7 @@ namespace Merchello.Tests.UnitTests.TypeFields
         [Test]
         public void InvoiceItemType_product_matches_configuration()
         {
-            var type = InvoiceItemTypeField.Product;
+            var type = TypeFieldProvider.InvoiceItem().Product;
 
             Assert.AreEqual(_mockProduct.Alias, type.Alias);
             Assert.AreEqual(_mockProduct.Name, type.Name);
@@ -46,7 +46,7 @@ namespace Merchello.Tests.UnitTests.TypeFields
         [Test]
         public void InvoiceItemType_charge_matches_configuration()
         {
-            var type = InvoiceItemTypeField.Charge;
+            var type = TypeFieldProvider.InvoiceItem().Charge;
 
             Assert.AreEqual(_mockCharge.Alias, type.Alias);
             Assert.AreEqual(_mockCharge.Name, type.Name);
@@ -59,7 +59,7 @@ namespace Merchello.Tests.UnitTests.TypeFields
         [Test]
         public void InvoiceItemType_shipping_matches_configuration()
         {
-            var type = InvoiceItemTypeField.Shipping;
+            var type = TypeFieldProvider.InvoiceItem().Shipping;
 
             Assert.AreEqual(_mockShipping.Alias, type.Alias);
             Assert.AreEqual(_mockShipping.Name, type.Name);
@@ -73,7 +73,7 @@ namespace Merchello.Tests.UnitTests.TypeFields
         [Test]
         public void InvoiceItemType_tax_matches_configuration()
         {
-            var type = InvoiceItemTypeField.Tax;
+            var type = TypeFieldProvider.InvoiceItem().Tax;
 
             Assert.AreEqual(_mockTax.Alias, type.Alias);
             Assert.AreEqual(_mockTax.Name, type.Name);
@@ -87,7 +87,7 @@ namespace Merchello.Tests.UnitTests.TypeFields
         [Test]
         public void InvoiceItemType_credit_matches_configuration()
         {
-            var type = InvoiceItemTypeField.Credit;
+            var type = TypeFieldProvider.InvoiceItem().Credit;
 
             Assert.AreEqual(_mockCredit.Alias, type.Alias);
             Assert.AreEqual(_mockCredit.Name, type.Name);

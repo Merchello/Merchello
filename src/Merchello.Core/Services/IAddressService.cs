@@ -18,7 +18,7 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Creates a Address
         /// </summary>
-        IAddress CreateAddress(Guid customerPk, string label, ITypeField addressType, string address1, string address2, string locality, string region, string postalCode, string countryCode);
+        IAddress CreateAddress(ICustomer customer, string label, AddressType addressType, string address1,  string locality, string region, string postalCode, string countryCode = "");
 
         /// <summary>
         /// Saves a single <see cref="IAddress"/> object

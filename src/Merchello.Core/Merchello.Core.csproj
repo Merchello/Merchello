@@ -88,10 +88,20 @@
     <Compile Include="MerchelloPluginContext.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\IAddress.cs" />
-    <Compile Include="Models\TypeFields\MerchelloType.cs" />
+    <Compile Include="Models\TypeFields\IAddressTypeField.cs" />
+    <Compile Include="Models\TypeFields\IBasketTypeField.cs" />
+    <Compile Include="Models\TypeFields\ICustomTypeField.cs" />
+    <Compile Include="Models\TypeFields\IInvoiceItemTypeField.cs" />
+    <Compile Include="Models\TypeFields\IPaymentMethodTypeField.cs" />
+    <Compile Include="Models\TypeFields\IProductTypeField.cs" />
+    <Compile Include="Models\TypeFields\IShipmentMethodTypeField.cs" />
+    <Compile Include="Models\TypeFields\ITypeFieldMapper.cs" />
+    <Compile Include="Models\TypeFields\TypeFieldProvider.cs" />
+    <Compile Include="TypeFieldMapperEnumerations.cs" />
     <Compile Include="Models\TypeFields\ProductTypeField.cs" />
     <Compile Include="Models\Rdbms\TypeFieldDto.cs" />
-    <Compile Include="Models\TypeFields\TypeFieldProvider.cs" />
+    <Compile Include="Models\TypeFields\TypeFieldMapper.cs" />
+    <Compile Include="Models\TypeFields\TypeFieldMapperBase.cs" />
     <Compile Include="Persistence\DatabaseModelDefinitions\DefinitionFactory.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -154,7 +164,6 @@
     <Compile Include="Models\Rdbms\ShipMethodDto.cs" />
     <Compile Include="Models\Rdbms\WarehouseDto.cs" />
     <Compile Include="Models\TypeFields\TypeField.cs" />
-    <Compile Include="Models\TypeFields\TypeFieldProxyBase.cs" />
     <Compile Include="Persistence\Caching\IRepositoryCacheProvider.cs" />
     <Compile Include="Persistence\Caching\NullCacheProvider.cs" />
     <Compile Include="Persistence\Caching\RuntimeCacheProvider.cs" />

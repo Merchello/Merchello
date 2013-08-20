@@ -5,22 +5,34 @@ namespace Merchello.Core.Models.TypeFields
     /// <summary>
     /// Product Types
     /// </summary>
-    public class ProductTypeField: TypeFieldProxyBase
+    internal  sealed class ProductTypeField: TypeFieldMapper<ProductType>, IProductTypeField
     {
+        internal ProductTypeField()
+        {
+            //if(CachedTypeFields.IsEmpty) BuildCache();
+        }
+
+        internal override void BuildCache()
+        {
+        }
+
         /// <summary>
         /// Returns a product type or NullTypeField
         /// </summary>
         /// <param name="alias">The alias of the product type</param>
         /// <returns>An object of <see cref="ITypeField"/></returns>
-        public new static ITypeField Custom(string alias)
+        protected override ITypeField GetCustom(string alias)
         {
             return GetTypeField(Products[alias]);
         }
+
+
 
         private static TypeFieldCollection Products
         {
             get { return Fields.Product; }
         }
+
     }
 
 }

@@ -26,7 +26,7 @@ namespace Merchello.Core.Models
 
         ///TODO: We need to talk about the contstructor.  An empty address does not make a lot of sense.
         public Address(Guid customerPk)
-        {
+        {            
             _customerPk = customerPk;
         }
         
@@ -71,9 +71,6 @@ namespace Merchello.Core.Models
         /// <summary>
         /// The full name for the address
         /// </summary>
-        /// <remarks>
-        /// TODO: do we need this????
-        /// </remarks>
         [DataMember]
         public string FullName
         {
@@ -244,6 +241,28 @@ namespace Merchello.Core.Models
                         _phone = value;
                         return _phone;
                     }, _phone, PhoneSelector);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets/sets the AddressType
+        /// </summary>
+        /// <remarks>
+        /// This property only allows internally defined AddressTypes to be set.  eg. no Custom types.  These will have
+        /// to be set through the AddressTypeFieldKey property directly.
+        /// </remarks>
+        [DataMember]
+        public AddressType AddressType
+        {
+            get { return TypeFieldProvider.Address().GetTypeField(_addressTypeFieldKey); }
+            set
+            {
+                var reference = TypeFieldProvider.Address().GetTypeField(value);
+                if (!ReferenceEquals(TypeFieldMapperBase.NotFound, reference))
+                { 
+                    // call through the property to flag the dirty property
+                    AddressTypeFieldKey = reference.TypeKey;
                 }
             }
         }

@@ -82,16 +82,5 @@ namespace Merchello.Core.Models
         [DataMember]
         string Phone { get; set; }
 
-        /// <summary>
-        /// The date the address was last modified
-        /// </summary>
-        [DataMember]
-        DateTime UpdateDate { get; set; }
-
-        /// <summary>
-        /// The date the address was created
-        /// </summary>
-        [DataMember]
-        DateTime CreateDate { get; set; }
     }
 }
