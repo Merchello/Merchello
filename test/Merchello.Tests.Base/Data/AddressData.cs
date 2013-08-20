@@ -19,7 +19,7 @@ namespace Merchello.Tests.Base.Data
                 {
                     Label = "Home",
                     Address1 = "111 Somewhere",
-                    AddressTypeFieldKey = AddressTypeField.Residential.TypeKey,
+                    AddressTypeFieldKey = new AddressTypeField().Residential.TypeKey,
                     Company = "Demo Co.",
                     Locality = "Seattle",
                     Region = "WA",
@@ -50,7 +50,7 @@ namespace Merchello.Tests.Base.Data
                     {
                         Label = "Home",
                         Address1 = "111 Somewhere",
-                        AddressTypeFieldKey = AddressTypeField.Residential.TypeKey,
+                        AddressTypeFieldKey = new AddressTypeField().Residential.TypeKey,
                         Company = "Demo Co.",
                         Locality = "Seattle",
                         Region = "WA",
@@ -61,7 +61,7 @@ namespace Merchello.Tests.Base.Data
                     {
                         Label = "Viva",
                         Address1 = "666 Drifters Highway",
-                        AddressTypeFieldKey = AddressTypeField.Commercial.TypeKey,
+                        AddressTypeFieldKey = new AddressTypeField().Commercial.TypeKey,
                         Company = "Vegas.",
                         Locality = "Las Vegas",
                         Region = "NV",
@@ -72,7 +72,7 @@ namespace Merchello.Tests.Base.Data
                     {
                         Label = "Condo",
                         Address1 = "12 Hampton Ct.",
-                        AddressTypeFieldKey = AddressTypeField.Residential.TypeKey,
+                        AddressTypeFieldKey = new AddressTypeField().Residential.TypeKey,
                         Locality = "District of Columbia",
                         Region = "DC",
                         PostalCode = "11111",
