@@ -54,6 +54,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\AddressData.cs" />
     <Compile Include="Data\CustomerData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Respositories\MockUnitOfWorkProvider.cs" />
