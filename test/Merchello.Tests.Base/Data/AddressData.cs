@@ -35,7 +35,8 @@ namespace Merchello.Tests.Base.Data
 
         public static IAddress AddressForUpdating()
         {
-            var address = AddressData.AddressForInserting();
+            var address = AddressForInserting();
+            address.Id = 111;
             address.ResetDirtyProperties();
             return address;
 

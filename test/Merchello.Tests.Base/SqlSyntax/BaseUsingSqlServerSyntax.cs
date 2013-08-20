@@ -28,7 +28,7 @@ namespace Merchello.Tests.Base.SqlSyntax
         public virtual void TearDown()
         {
             SqlSyntaxContext.SqlSyntaxProvider = null;
-  
+            Resolution.Reset();
         }
     }
     
