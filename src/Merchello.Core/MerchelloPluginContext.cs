@@ -14,12 +14,10 @@ namespace Merchello.Core
     public class MerchelloPluginContext : IDisposable
     {
 
-        internal MerchelloPluginContext(DatabaseContext dbContext, ServiceContext serviceContext, CacheHelper cache)
+        internal MerchelloPluginContext(ServiceContext serviceContext, CacheHelper cache)
         {
-            Mandate.ParameterNotNull(dbContext, "dbContext");
             Mandate.ParameterNotNull(serviceContext, "serviceContext");
 
-            _databaseContext = dbContext;
             _services = serviceContext;
             PluginCache = cache;
 
@@ -39,9 +37,6 @@ namespace Merchello.Core
         /// </remarks>
         public CacheHelper PluginCache { get; private set; }
 
-
-
-        private DatabaseContext _databaseContext;
         private ServiceContext _services;
 
         /// <summary>
