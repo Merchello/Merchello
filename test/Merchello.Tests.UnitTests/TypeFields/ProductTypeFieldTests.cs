@@ -11,7 +11,7 @@ namespace Merchello.Tests.UnitTests.TypeFields
         [Test]
         public void Empty_custom_configurations_returns_null_type()
         {
-            var type = ProductTypeField.Custom("empty");
+            var type = new ProductTypeField().Custom("empty");
 
             Assert.AreEqual(TypeFieldMock.NullTypeField.Alias, type.Alias);
             Assert.AreEqual(TypeFieldMock.NullTypeField.TypeKey, type.TypeKey);

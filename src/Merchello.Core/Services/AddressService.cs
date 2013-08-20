@@ -40,10 +40,32 @@ namespace Merchello.Core.Services
 
         #region IAddressService Members
 
+
         /// <summary>
         /// Creates an <see cref="IAddress"/> object
         /// </summary>
-        public IAddress CreateAddress(Guid customerPk, string label, ITypeField addressType, string address1, string address2, string locality, string region, string postalCode, string countryCode)
+        public IAddress CreateAddress(ICustomer customer, string label, AddressType addressType, 
+                                        string address1,string locality, string region, string postalCode, string countryCode = "")
+        {
+            return CreateAddress(
+                                customer.Key, 
+                                label, 
+                                TypeFieldProvider.Address().GetTypeField(addressType), 
+                                address1,
+                                string.Empty, 
+                                locality, 
+                                region, 
+                                postalCode, 
+                                countryCode
+                                );
+        }
+
+
+        /// <summary>
+        /// Creates an <see cref="IAddress"/> object
+        /// </summary>
+        internal IAddress CreateAddress(Guid customerPk, string label, ITypeField addressType, string address1, string address2, string locality, string region, 
+                                        string postalCode, string countryCode)
         {
             var address = new Address(customerPk)
                 {
