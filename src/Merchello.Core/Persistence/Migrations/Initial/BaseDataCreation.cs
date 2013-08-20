@@ -37,30 +37,30 @@ namespace Merchello.Core.Persistence.Migrations.Initial
         private void CreateDbTypeFieldData()
         {
             // address
-            var address = new AddressTypeField();
-            _database.Insert("merchDBTypeField", "pk", new TypeFieldDto() { Pk = address.Residential.TypeKey, Alias = address.Residential.Alias, Name = address.Residential.Name });
-            _database.Insert("merchDBTypeField", "pk", new TypeFieldDto() { Pk = address.Commercial.TypeKey, Alias = address.Commercial.Alias, Name = address.Commercial.Name });
+            //var address = new AddressTypeField();
+            //_database.Insert("merchDBTypeField", "pk", new TypeFieldDto() { Pk = address.Residential.TypeKey, Alias = address.Residential.Alias, Name = address.Residential.Name });
+            //_database.Insert("merchDBTypeField", "pk", new TypeFieldDto() { Pk = address.Commercial.TypeKey, Alias = address.Commercial.Alias, Name = address.Commercial.Name });
 
-            // BasketTypeField
-            _database.Insert("merchDBTypeField", "pk", new TypeFieldDto() { Pk = BasketTypeField.Basket.TypeKey, Alias = BasketTypeField.Basket.Alias, Name = BasketTypeField.Basket.Name });
-            _database.Insert("merchDBTypeField", "pk", new TypeFieldDto() { Pk = BasketTypeField.Wishlist.TypeKey, Alias = BasketTypeField.Wishlist.Alias, Name = BasketTypeField.Wishlist.Name });
+            //// BasketTypeField
+            //_database.Insert("merchDBTypeField", "pk", new TypeFieldDto() { Pk = BasketTypeField.Basket.TypeKey, Alias = BasketTypeField.Basket.Alias, Name = BasketTypeField.Basket.Name });
+            //_database.Insert("merchDBTypeField", "pk", new TypeFieldDto() { Pk = BasketTypeField.Wishlist.TypeKey, Alias = BasketTypeField.Wishlist.Alias, Name = BasketTypeField.Wishlist.Name });
 
-            // InvoiceItemType
-            _database.Insert("merchDBTypeField", "pk", new TypeFieldDto() { Pk = InvoiceItemTypeField.Product.TypeKey, Alias = InvoiceItemTypeField.Product.Alias, Name = InvoiceItemTypeField.Product.Name });
-            _database.Insert("merchDBTypeField", "pk", new TypeFieldDto() { Pk = InvoiceItemTypeField.Charge.TypeKey, Alias = InvoiceItemTypeField.Charge.Alias, Name = InvoiceItemTypeField.Charge.Name });
-            _database.Insert("merchDBTypeField", "pk", new TypeFieldDto() { Pk = InvoiceItemTypeField.Credit.TypeKey, Alias = InvoiceItemTypeField.Credit.Alias, Name = InvoiceItemTypeField.Credit.Name });
-            _database.Insert("merchDBTypeField", "pk", new TypeFieldDto() { Pk = InvoiceItemTypeField.Shipping.TypeKey, Alias = InvoiceItemTypeField.Shipping.Alias, Name = InvoiceItemTypeField.Shipping.Name });
-            _database.Insert("merchDBTypeField", "pk", new TypeFieldDto() { Pk = InvoiceItemTypeField.Tax.TypeKey, Alias = InvoiceItemTypeField.Tax.Alias, Name = InvoiceItemTypeField.Tax.Name });
+            //// InvoiceItemType
+            //_database.Insert("merchDBTypeField", "pk", new TypeFieldDto() { Pk = InvoiceItemTypeField.Product.TypeKey, Alias = InvoiceItemTypeField.Product.Alias, Name = InvoiceItemTypeField.Product.Name });
+            //_database.Insert("merchDBTypeField", "pk", new TypeFieldDto() { Pk = InvoiceItemTypeField.Charge.TypeKey, Alias = InvoiceItemTypeField.Charge.Alias, Name = InvoiceItemTypeField.Charge.Name });
+            //_database.Insert("merchDBTypeField", "pk", new TypeFieldDto() { Pk = InvoiceItemTypeField.Credit.TypeKey, Alias = InvoiceItemTypeField.Credit.Alias, Name = InvoiceItemTypeField.Credit.Name });
+            //_database.Insert("merchDBTypeField", "pk", new TypeFieldDto() { Pk = InvoiceItemTypeField.Shipping.TypeKey, Alias = InvoiceItemTypeField.Shipping.Alias, Name = InvoiceItemTypeField.Shipping.Name });
+            //_database.Insert("merchDBTypeField", "pk", new TypeFieldDto() { Pk = InvoiceItemTypeField.Tax.TypeKey, Alias = InvoiceItemTypeField.Tax.Alias, Name = InvoiceItemTypeField.Tax.Name });
 
-            // PaymentMethodType
-            _database.Insert("merchDBTypeField", "pk", new TypeFieldDto() { Pk = PaymentMethodTypeField.Cash.TypeKey, Alias = PaymentMethodTypeField.Cash.Alias, Name = PaymentMethodTypeField.Cash.Name });
-            _database.Insert("merchDBTypeField", "pk", new TypeFieldDto() { Pk = PaymentMethodTypeField.CreditCard.TypeKey, Alias = PaymentMethodTypeField.CreditCard.Alias, Name = PaymentMethodTypeField.CreditCard.Name });
-            _database.Insert("merchDBTypeField", "pk", new TypeFieldDto() { Pk = PaymentMethodTypeField.PurchaseOrder.TypeKey, Alias = PaymentMethodTypeField.PurchaseOrder.Alias, Name = PaymentMethodTypeField.PurchaseOrder.Name });
+            //// PaymentMethodType
+            //_database.Insert("merchDBTypeField", "pk", new TypeFieldDto() { Pk = PaymentMethodTypeField.Cash.TypeKey, Alias = PaymentMethodTypeField.Cash.Alias, Name = PaymentMethodTypeField.Cash.Name });
+            //_database.Insert("merchDBTypeField", "pk", new TypeFieldDto() { Pk = PaymentMethodTypeField.CreditCard.TypeKey, Alias = PaymentMethodTypeField.CreditCard.Alias, Name = PaymentMethodTypeField.CreditCard.Name });
+            //_database.Insert("merchDBTypeField", "pk", new TypeFieldDto() { Pk = PaymentMethodTypeField.PurchaseOrder.TypeKey, Alias = PaymentMethodTypeField.PurchaseOrder.Alias, Name = PaymentMethodTypeField.PurchaseOrder.Name });
 
-            // ShipmentMethodType
-            _database.Insert("merchDBTypeField", "pk", new TypeFieldDto() { Pk = ShipMethodTypeField.FlatRate.TypeKey, Alias = ShipMethodTypeField.FlatRate.Alias, Name = ShipMethodTypeField.FlatRate.Name });
-            _database.Insert("merchDBTypeField", "pk", new TypeFieldDto() { Pk = ShipMethodTypeField.Carrier.TypeKey, Alias = ShipMethodTypeField.Carrier.Alias, Name = ShipMethodTypeField.Carrier.Name });
-            _database.Insert("merchDBTypeField", "pk", new TypeFieldDto() { Pk = ShipMethodTypeField.PercentTotal.TypeKey, Alias = ShipMethodTypeField.PercentTotal.Alias, Name = ShipMethodTypeField.PercentTotal.Name });
+            //// ShipmentMethodType
+            //_database.Insert("merchDBTypeField", "pk", new TypeFieldDto() { Pk = ShipMethodTypeField.FlatRate.TypeKey, Alias = ShipMethodTypeField.FlatRate.Alias, Name = ShipMethodTypeField.FlatRate.Name });
+            //_database.Insert("merchDBTypeField", "pk", new TypeFieldDto() { Pk = ShipMethodTypeField.Carrier.TypeKey, Alias = ShipMethodTypeField.Carrier.Alias, Name = ShipMethodTypeField.Carrier.Name });
+            //_database.Insert("merchDBTypeField", "pk", new TypeFieldDto() { Pk = ShipMethodTypeField.PercentTotal.TypeKey, Alias = ShipMethodTypeField.PercentTotal.Alias, Name = ShipMethodTypeField.PercentTotal.Name });
         }
     }
 }

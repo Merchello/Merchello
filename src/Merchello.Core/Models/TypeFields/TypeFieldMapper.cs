@@ -6,8 +6,9 @@ using Merchello.Core.Configuration.Outline;
 
 namespace Merchello.Core.Models.TypeFields
 {
-    internal abstract class TypeFieldMapper<T> : TypeFieldMapperBase
+    internal abstract class TypeFieldMapper<T> : TypeFieldMapperBase, ITypeFieldMapper<T>
     {
+
         protected static readonly ConcurrentDictionary<T,ITypeField> CachedTypeFields = new ConcurrentDictionary<T, ITypeField>();
  
         /// <summary>
@@ -18,7 +19,7 @@ namespace Merchello.Core.Models.TypeFields
         /// <summary>
         /// Returns the respective enum value for a given <see cref="TypeField"/> TypeKey
         /// </summary>
-        public static T GetTypeField(Guid key)
+        public T GetTypeField(Guid key)
         {
             return CachedTypeFields.Keys.FirstOrDefault(x => CachedTypeFields[x].TypeKey == key);
         }
@@ -26,7 +27,7 @@ namespace Merchello.Core.Models.TypeFields
         /// <summary>
         /// Returns a typefield for a given key
         /// </summary>
-        public static ITypeField GetTypeField(T key)
+        public ITypeField GetTypeField(T key)
         {
             ITypeField typeField;
             return CachedTypeFields.TryGetValue(key, out typeField) ?

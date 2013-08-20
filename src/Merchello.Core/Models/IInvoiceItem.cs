@@ -29,11 +29,11 @@ namespace Merchello.Core.Models
         IInvoiceItemItemization Itemization { get; }
 
         //TODO: RSS create a property shim to get/set InvoiceItemType via enumeration name
-        /// <summary>
-        /// The type of this invoice item
-        /// </summary>
-        [IgnoreDataMember]
-        InvoiceItemTypeField InvoiceItemType { get; set; }
+        ///// <summary>
+        ///// The type of this invoice item
+        ///// </summary>
+        //[IgnoreDataMember]
+        //InvoiceItemTypeField InvoiceItemType { get; set; }
 
         /// <summary>
         /// The Sku of the invoice item

@@ -245,16 +245,24 @@ namespace Merchello.Core.Models
             }
         }
 
-        [IgnoreDataMember]
+        /// <summary>
+        /// Gets/sets the AddressType
+        /// </summary>
+        /// <remarks>
+        /// This property only allows internally defined AddressTypes to be set.  eg. no Custom types.  These will have
+        /// to be set through the AddressTypeFieldKey property directly.
+        /// </remarks>
+        [DataMember]
         public AddressType AddressType
         {
-            get { return AddressTypeField.GetTypeField(_addressTypeFieldKey); }
+            get { return TypeFieldProvider.Address().GetTypeField(_addressTypeFieldKey); }
             set
             {
-                var reference = AddressTypeField.GetTypeField(value);
-                if (object.ReferenceEquals(TypeFieldMapperBase.NotFound, reference))
+                var reference = TypeFieldProvider.Address().GetTypeField(value);
+                if (!ReferenceEquals(TypeFieldMapperBase.NotFound, reference))
                 { 
-                    _addressTypeFieldKey = reference.TypeKey;
+                    // call through the property to flag the dirty property
+                    AddressTypeFieldKey = reference.TypeKey;
                 }
             }
         }

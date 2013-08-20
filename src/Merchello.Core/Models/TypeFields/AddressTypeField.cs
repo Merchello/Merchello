@@ -7,7 +7,7 @@ namespace Merchello.Core.Models.TypeFields
     /// <summary>
     /// Identifies an address as either residential or commercial for shipping estimations 
     /// </summary>
-    internal sealed class AddressTypeField : TypeFieldMapper<AddressType>
+    internal sealed class AddressTypeField : TypeFieldMapper<AddressType>, IAddressTypeField
     {
         internal AddressTypeField()
         {
@@ -55,8 +55,6 @@ namespace Merchello.Core.Models.TypeFields
         {
             get { return Fields.CustomerAddress; }
         }
-
-
         
     }
 }
