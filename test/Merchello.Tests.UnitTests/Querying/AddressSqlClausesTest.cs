@@ -14,12 +14,12 @@ namespace Merchello.Tests.UnitTests.Querying
         [Test]
         public void Can_Verify_Base_Clause()
         {
-            var id = 0;
+            var id = 111;
 
             var expected = new Sql();
             expected.Select("*")
                 .From("[merchAddress]")
-                .Where("[merchAddress].[id] = '" + id.ToString() + "'");
+                .Where("[merchAddress].[id] = 111");
 
             var sql = new Sql();
             sql.Select("*")
