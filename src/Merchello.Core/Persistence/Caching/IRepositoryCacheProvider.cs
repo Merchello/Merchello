@@ -10,7 +10,7 @@ namespace Merchello.Core.Persistence.Caching
     internal interface IRepositoryCacheProvider
     {
         /// <summary>
-        /// Gets an EntityEntity from the cache by Type and Id
+        /// Gets an Entity from the cache by Type and Id
         /// </summary>
         /// <param name="type"></param>
         /// <param name="id"></param>
@@ -18,7 +18,7 @@ namespace Merchello.Core.Persistence.Caching
         IEntity GetById(Type type, Guid id);
 
         /// <summary>
-        /// Gets an EntityEntity from the cache by Type and Ids
+        /// Gets an Entity from the cache by Type and Ids
         /// </summary>
         /// <param name="type"></param>
         /// <param name="ids"></param>
@@ -33,14 +33,14 @@ namespace Merchello.Core.Persistence.Caching
         IEnumerable<IEntity> GetAllByType(Type type);
 
         /// <summary>
-        /// Saves the EntityEntity
+        /// Saves the Entity
         /// </summary>
         /// <param name="type"></param>
         /// <param name="entity"></param>
         void Save(Type type, IEntity entity);
 
         /// <summary>
-        /// Deletes the EntityEntity from the cache
+        /// Deletes the Entity from the cache
         /// </summary>
         /// <param name="type"></param>
         /// <param name="entity"></param>
