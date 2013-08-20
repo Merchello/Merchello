@@ -4,7 +4,6 @@ using System.Linq;
 using Merchello.Core.Events;
 using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Persistence.DatabaseModelDefinitions;
-using Merchello.Core.Persistence.SqlSyntax;
 using Umbraco.Core;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Persistence;
@@ -114,7 +113,7 @@ namespace Merchello.Core.Persistence.Migrations.Initial
             }
 
             //Check tables in configured database against tables in schema
-            var tablesInDatabase = PluginSqlSyntaxContext.SqlSyntaxProvider.GetTablesInSchema(_database).ToList();
+            var tablesInDatabase = SqlSyntaxContext.SqlSyntaxProvider.GetTablesInSchema(_database).ToList();
             var tablesInSchema = result.TableDefinitions.Select(x => x.Name).ToList();
             //Add valid and invalid table differences to the result object
             var validTableDifferences = tablesInDatabase.Intersect(tablesInSchema);
@@ -131,7 +130,7 @@ namespace Merchello.Core.Persistence.Migrations.Initial
             }
 
             //Check columns in configured database against columns in schema
-            var columnsInDatabase = PluginSqlSyntaxContext.SqlSyntaxProvider.GetColumnsInSchema(_database);
+            var columnsInDatabase = SqlSyntaxContext.SqlSyntaxProvider.GetColumnsInSchema(_database);
             var columnsPerTableInDatabase = columnsInDatabase.Select(x => string.Concat(x.TableName, ",", x.ColumnName)).ToList();
             var columnsPerTableInSchema = result.TableDefinitions.SelectMany(x => x.Columns.Select(y => string.Concat(y.TableName, ",", y.Name))).ToList();
             //Add valid and invalid column differences to the result object
@@ -148,11 +147,11 @@ namespace Merchello.Core.Persistence.Migrations.Initial
 
             //MySql doesn't conform to the "normal" naming of constraints, so there is currently no point in doing these checks.
             //NOTE: At a later point we do other checks for MySql, but ideally it should be necessary to do special checks for different providers.
-            if (PluginSqlSyntaxContext.SqlSyntaxProvider is MySqlSyntaxProvider)
+            if (SqlSyntaxContext.SqlSyntaxProvider is MySqlSyntaxProvider)
                 return result;
 
             //Check constraints in configured database against constraints in schema
-            var constraintsInDatabase = PluginSqlSyntaxContext.SqlSyntaxProvider.GetConstraintsPerColumn(_database).DistinctBy(x => x.Item3).ToList();
+            var constraintsInDatabase = SqlSyntaxContext.SqlSyntaxProvider.GetConstraintsPerColumn(_database).DistinctBy(x => x.Item3).ToList();
             var foreignKeysInDatabase = constraintsInDatabase.Where(x => x.Item3.StartsWith("FK_")).Select(x => x.Item3).ToList();
             var primaryKeysInDatabase = constraintsInDatabase.Where(x => x.Item3.StartsWith("PK_")).Select(x => x.Item3).ToList();
             var indexesInDatabase = constraintsInDatabase.Where(x => x.Item3.StartsWith("IX_")).Select(x => x.Item3).ToList();

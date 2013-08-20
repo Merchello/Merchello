@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Configuration;
 using Merchello.Core.Configuration;
-using Merchello.Core.Persistence.SqlSyntax;
 using Merchello.Core.Persistence.Migrations.Initial;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Persistence;
@@ -136,7 +135,7 @@ namespace Merchello.Core
 
             try
             {
-                PluginSqlSyntaxContext.SqlSyntaxProvider = providerName.Equals("System.Data.SqlClient")
+                SqlSyntaxContext.SqlSyntaxProvider = providerName.Equals("System.Data.SqlClient")
                     ? new SqlServerSyntaxProvider()
                     : new SqlCeSyntaxProvider() as ISqlSyntaxProvider;
 
@@ -194,7 +193,7 @@ namespace Merchello.Core
                 var message = string.Empty;
 
                 var database = new UmbracoDatabase(_connectionString, ProviderName);
-                var supportsCaseInsensitiveQueries = PluginSqlSyntaxContext.SqlSyntaxProvider.SupportsCaseInsensitiveQueries(database);
+                var supportsCaseInsensitiveQueries = SqlSyntaxContext.SqlSyntaxProvider.SupportsCaseInsensitiveQueries(database);
 
                 // TODO: At the moment we will only support SqlServer and SqlCE
                 //if (supportsCaseInsensitiveQueries == false)
