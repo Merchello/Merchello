@@ -62,7 +62,6 @@
   <ItemGroup>
     <Folder Include="App_Plugins\Merchello\Common\Css\" />
     <Folder Include="App_Plugins\Merchello\Common\Js\" />
-    <Folder Include="App_Plugins\Merchello\Config\" />
     <Folder Include="App_Plugins\Merchello\Controllers\" />
     <Folder Include="App_Plugins\Merchello\PropertyEditors\Css\" />
     <Folder Include="App_Plugins\Merchello\PropertyEditors\Js\" />
@@ -73,6 +72,18 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Plugins\Merchello\Package.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Plugins\Merchello\Config\Merchello.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Web.transform" />
+    <None Include="Web.Debug.transform">
+      <DependentUpon>Web.transform</DependentUpon>
+    </None>
+    <None Include="Web.Release.transform">
+      <DependentUpon>Web.transform</DependentUpon>
+    </None>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
