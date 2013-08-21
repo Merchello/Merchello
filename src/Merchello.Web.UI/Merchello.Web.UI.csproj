@@ -62,6 +62,7 @@
   <ItemGroup>
     <Folder Include="App_Plugins\Merchello\Common\Css\" />
     <Folder Include="App_Plugins\Merchello\Common\Js\" />
+    <Folder Include="App_Plugins\Merchello\Config\" />
     <Folder Include="App_Plugins\Merchello\Controllers\" />
     <Folder Include="App_Plugins\Merchello\PropertyEditors\Css\" />
     <Folder Include="App_Plugins\Merchello\PropertyEditors\Js\" />
