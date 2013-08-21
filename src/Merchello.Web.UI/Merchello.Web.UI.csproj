@@ -73,6 +73,18 @@
   <ItemGroup>
     <Content Include="App_Plugins\Merchello\Package.manifest" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Plugins\Merchello\Config\Merchello.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Web.transform" />
+    <None Include="Web.Debug.transform">
+      <DependentUpon>Web.transform</DependentUpon>
+    </None>
+    <None Include="Web.Release.transform">
+      <DependentUpon>Web.transform</DependentUpon>
+    </None>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

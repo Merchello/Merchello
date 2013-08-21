@@ -15,7 +15,7 @@ namespace Merchello.Core
         private DisposableTimer _timer;
         private bool _isInitialized = false;
         private readonly MerchelloPluginBase _merchelloMerchello;
-        private MerchelloPluginContext MerchelloPluginContext { get; set; }
+        private MerchelloAppContext MerchelloAppContext { get; set; }
         protected CacheHelper MerchelloCache { get; set; }
 
 
@@ -36,7 +36,6 @@ namespace Merchello.Core
             // create the database and service contexts for the MerchelloAppContext
             
             Database.Mapper = new PetaPocoMapper();
-            //var dbContext = new PluginDatabaseContext(dbFactory);
 
             var connString = ConfigurationManager.ConnectionStrings[PluginConfiguration.Section.DefaultConnectionStringName].ConnectionString;
             var providerName = ConfigurationManager.ConnectionStrings[PluginConfiguration.Section.DefaultConnectionStringName].ProviderName;
@@ -56,14 +55,14 @@ namespace Merchello.Core
             MerchelloCache = cacheHelper;
         }
 
-        public IBootManager Complete(Action<MerchelloPluginContext> afterComplete)
+        public IBootManager Complete(Action<MerchelloAppContext> afterComplete)
         {
             throw new NotImplementedException();
         }
 
 
 
-        public IBootManager Startup(Action<MerchelloPluginContext> afterStartup)
+        public IBootManager Startup(Action<MerchelloAppContext> afterStartup)
         {
             throw new NotImplementedException();
         }

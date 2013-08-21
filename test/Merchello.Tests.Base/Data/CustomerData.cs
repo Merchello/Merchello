@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Merchello.Core.Models;
+using Merchello.Core.Models.Rdbms;
 
 namespace Merchello.Tests.Base.Data
 {
@@ -23,6 +24,24 @@ namespace Merchello.Tests.Base.Data
             customer.ResetDirtyProperties();
 
             return customer;
+        }
+
+        internal static CustomerDto CustomerDtoForInserting(ICustomer c)
+        {            
+            var dto = new CustomerDto()
+            {
+                Pk = c.Key,
+                FirstName = c.FirstName,
+                LastName = c.LastName,
+                MemberId = c.MemberId,
+                LastPaymentDate = c.LastPaymentDate,
+                TotalInvoiced = c.TotalInvoiced,
+                TotalPayments = c.TotalPayments,
+                CreateDate = c.CreateDate,
+                UpdateDate = c.UpdateDate
+            };
+
+            return dto;
         }
 
         public static ICustomer CustomerForUpdating()
