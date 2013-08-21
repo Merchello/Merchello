@@ -63,6 +63,7 @@
     <Compile Include="Services\ServiceTestsBase.cs" />
     <Compile Include="TypeFields\TypeFieldMock.cs" />
     <Compile Include="SqlSyntax\BaseUsingSqlServerSyntax.cs" />
+    <Compile Include="Umbraco\ApplicationContext\FakeUmbracoApplication.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Merchello.Core\Merchello.Core.csproj">

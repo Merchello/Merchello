@@ -19,13 +19,13 @@ namespace Merchello.Core
         /// </summary>
         /// <param name="afterStartup"></param>
         /// <returns></returns>
-        IBootManager Startup(Action<MerchelloPluginContext> afterStartup);
+        IBootManager Startup(Action<MerchelloAppContext> afterStartup);
 
         /// <summary>
         /// Fires after startup and calls the callback once customizations are locked
         /// </summary>
         /// <param name="afterComplete"></param>
         /// <returns></returns>
-        IBootManager Complete(Action<MerchelloPluginContext> afterComplete);
+        IBootManager Complete(Action<MerchelloAppContext> afterComplete);
     }
 }

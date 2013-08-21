@@ -85,7 +85,7 @@
     <Compile Include="IBootManager.cs" />
     <Compile Include="IPluginApplication.cs" />
     <Compile Include="MerchelloPluginBase.cs" />
-    <Compile Include="MerchelloPluginContext.cs" />
+    <Compile Include="MerchelloAppContext.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\IAddress.cs" />
     <Compile Include="Models\TypeFields\IAddressTypeField.cs" />

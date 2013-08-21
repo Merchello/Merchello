@@ -11,12 +11,13 @@ using Umbraco.Core.Logging;
 
 namespace Merchello.Core
 {
-    public class MerchelloPluginContext : IDisposable
+    public class MerchelloAppContext : IDisposable
     {
 
-        internal MerchelloPluginContext(ServiceContext serviceContext, CacheHelper cache)
+        internal MerchelloAppContext(ServiceContext serviceContext, CacheHelper cache)
         {
             Mandate.ParameterNotNull(serviceContext, "serviceContext");
+            Mandate.ParameterNotNull(cache, "cache");
 
             _services = serviceContext;
             PluginCache = cache;
@@ -27,7 +28,7 @@ namespace Merchello.Core
         /// <summary>
         /// Singleton accessor
         /// </summary>
-        public static MerchelloPluginContext Current { get; internal set; }
+        public static MerchelloAppContext Current { get; internal set; }
 
         /// <summary>
         /// Returns the application wide cache accessor
