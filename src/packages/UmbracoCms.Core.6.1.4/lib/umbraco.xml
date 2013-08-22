@@ -764,6 +764,12 @@
             Gets or sets a value indicating whether internal redirect preserves the template.
             </summary>
         </member>
+        <member name="M:Umbraco.Web.WebApi.UmbracoApiController.TryGetHttpContext">
+            <summary>
+            Tries to retreive the current HttpContext if one exists.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="P:Umbraco.Web.WebApi.UmbracoApiController.ApplicationContext">
             <summary>
             Returns the current ApplicationContext
@@ -797,16 +803,6 @@
         <member name="P:Umbraco.Web.WebApi.UmbracoApiController.Security">
             <summary>
             Returns the WebSecurity instance
-            </summary>
-        </member>
-        <member name="F:Umbraco.Web.WebApi.UmbracoAuthorizedApiController._uid">
-            <summary>
-            The current user ID
-            </summary>
-        </member>
-        <member name="F:Umbraco.Web.WebApi.UmbracoAuthorizedApiController._timeout">
-            <summary>
-            The page timeout in seconds.
             </summary>
         </member>
         <member name="P:Umbraco.Web.WebApi.UmbracoAuthorizedApiController.UmbracoUser">
@@ -1080,6 +1076,12 @@
             then the authorization is successful
             </summary>
         </member>
+        <member name="M:Umbraco.Web.Install.UmbracoInstallAuthorizeAttribute.#ctor(Umbraco.Web.UmbracoContext)">
+            <summary>
+            THIS SHOULD BE ONLY USED FOR UNIT TESTS
+            </summary>
+            <param name="umbracoContext"></param>
+        </member>
         <member name="M:Umbraco.Web.Install.UmbracoInstallAuthorizeAttribute.AuthorizeCore(System.Web.HttpContextBase)">
             <summary>
             Ensures that the user must be logged in or that the application is not configured just yet.
@@ -1133,6 +1135,12 @@
             <remarks>
             Currently this is required by mvc macro engines
             </remarks>
+        </member>
+        <member name="M:Umbraco.Web.Mvc.UmbracoViewPage`1.WriteLiteral(System.Object)">
+            <summary>
+            This will detect the end /body tag and insert the preview badge if in preview mode
+            </summary>
+            <param name="value"></param>
         </member>
         <member name="P:Umbraco.Web.Mvc.UmbracoViewPage`1.UmbracoContext">
             <summary>
@@ -2034,6 +2042,12 @@
             Attribute for attributing controller actions to restrict them
             to just authenticated members, and optionally of a particular type and/or group
             </summary>
+        </member>
+        <member name="M:Umbraco.Web.Mvc.MemberAuthorizeAttribute.#ctor(Umbraco.Web.UmbracoContext)">
+            <summary>
+            THIS SHOULD BE ONLY USED FOR UNIT TESTS
+            </summary>
+            <param name="umbracoContext"></param>
         </member>
         <member name="M:Umbraco.Web.Mvc.MemberAuthorizeAttribute.HandleUnauthorizedRequest(System.Web.Mvc.AuthorizationContext)">
             <summary>
@@ -3275,6 +3289,12 @@
             to just authenticated members, and optionally of a particular type and/or group
             </summary>
         </member>
+        <member name="M:Umbraco.Web.WebApi.MemberAuthorizeAttribute.#ctor(Umbraco.Web.UmbracoContext)">
+            <summary>
+            THIS SHOULD BE ONLY USED FOR UNIT TESTS
+            </summary>
+            <param name="umbracoContext"></param>
+        </member>
         <member name="P:Umbraco.Web.WebApi.MemberAuthorizeAttribute.AllowAll">
             <summary>
             Flag for whether to allow all site visitors or just authenticated members
@@ -3307,6 +3327,12 @@
             <summary>	
             Ensures authorization is successful for a back office user
             </summary>
+        </member>
+        <member name="M:Umbraco.Web.Mvc.UmbracoAuthorizeAttribute.#ctor(Umbraco.Web.UmbracoContext)">
+            <summary>
+            THIS SHOULD BE ONLY USED FOR UNIT TESTS
+            </summary>
+            <param name="umbracoContext"></param>
         </member>
         <member name="M:Umbraco.Web.Mvc.UmbracoAuthorizeAttribute.AuthorizeCore(System.Web.HttpContextBase)">
             <summary>
@@ -3372,16 +3398,6 @@
         <member name="P:Umbraco.Web.Mvc.UmbracoController.Security">
             <summary>
             Returns the WebSecurity instance
-            </summary>
-        </member>
-        <member name="F:Umbraco.Web.Mvc.UmbracoAuthorizedController._uid">
-            <summary>
-            The current user ID
-            </summary>
-        </member>
-        <member name="F:Umbraco.Web.Mvc.UmbracoAuthorizedController._timeout">
-            <summary>
-            The page timeout in seconds.
             </summary>
         </member>
         <member name="P:Umbraco.Web.Mvc.UmbracoAuthorizedController.UmbracoUser">
@@ -6521,6 +6537,18 @@
             Summary description for moveOrCopy.
             </summary>
         </member>
+        <member name="M:umbraco.dialogs.moveOrCopy.CheckPermissions(Umbraco.Core.Models.IContentBase,umbraco.interfaces.IAction)">
+            <summary>
+            Checks if the current user has permissions to execute this action against this node
+            </summary>
+            <param name="node"></param>
+            <param name="currentAction"></param>
+            <returns></returns>
+            <remarks>
+            This used to do a recursive check for all descendent nodes but this is not required and is a massive CPU hog.
+            See: http://issues.umbraco.org/issue/U4-2632, https://groups.google.com/forum/?fromgroups=#!topic/umbraco-dev/L1D4LwVSP2Y
+            </remarks>
+        </member>
         <member name="F:umbraco.dialogs.moveOrCopy.JsInclude1">
             <summary>
             JsInclude1 control.
@@ -6977,6 +7005,7 @@
             Maps active directory account to umbraco user account
             </summary>
             <param name="loginName">Name of the login.</param>
+            <param name="email">Email address of the user</param>
         </member>
         <member name="F:umbraco.cms.presentation.login.ClientLoader">
             <summary>
@@ -9709,12 +9738,6 @@
             The View that front-end templates inherit from
             </summary>
         </member>
-        <member name="M:Umbraco.Web.Mvc.UmbracoTemplatePage.WriteLiteral(System.Object)">
-            <summary>
-            This will detect the end /body tag and insert the preview badge if in preview mode
-            </summary>
-            <param name="value"></param>
-        </member>
         <member name="P:Umbraco.Web.Mvc.UmbracoTemplatePage.CurrentPage">
             <summary>
             Returns the a DynamicPublishedContent object
@@ -9776,6 +9799,12 @@
             <summary>
             Ensures authorization is successful for a back office user
             </summary>
+        </member>
+        <member name="M:Umbraco.Web.WebApi.UmbracoAuthorizeAttribute.#ctor(Umbraco.Web.UmbracoContext)">
+            <summary>
+            THIS SHOULD BE ONLY USED FOR UNIT TESTS
+            </summary>
+            <param name="umbracoContext"></param>
         </member>
         <member name="T:Umbraco.Web.WebBootManager">
             <summary>
@@ -23888,12 +23917,6 @@
             Setups the form.
             </summary>
         </member>
-        <member name="M:umbraco.cms.presentation.user.EditUser.InitializeComponent">
-            <summary>
-            Required method for Designer support - do not modify
-            the contents of this method with the code editor.
-            </summary>
-        </member>
         <member name="M:umbraco.cms.presentation.user.EditUser.saveUser_Click(System.Object,System.Web.UI.ImageClickEventArgs)">
             <summary>
             Handles the Click event of the saveUser control.
@@ -25701,15 +25724,12 @@
             </summary>
             <param name="httpContext"></param>
         </member>
-        <member name="M:Umbraco.Web.UmbracoModule.PersistXmlCache(System.Web.HttpContextBase)">
+        <member name="M:Umbraco.Web.UmbracoModule.AuthenticateRequest(System.Object,System.EventArgs)">
             <summary>
-            Checks if the xml cache file needs to be updated/persisted
+            Checks if the request is authenticated, if it is it sets the thread culture to the currently logged in user
             </summary>
-            <param name="httpContext"></param>
-            <remarks>
-            TODO: This needs an overhaul, see the error report created here:
-              https://docs.google.com/document/d/1neGE3q3grB4lVJfgID1keWY2v9JYqf-pw75sxUUJiyo/edit		
-            </remarks>
+            <param name="sender"></param>
+            <param name="e"></param>
         </member>
         <member name="M:Umbraco.Web.UmbracoModule.EnsureUmbracoRoutablePage(Umbraco.Web.UmbracoContext,System.Web.HttpContextBase)">
             <summary>
@@ -25734,18 +25754,28 @@
             <param name="context"></param>
             <param name="pcr"> </param>
         </member>
-        <member name="M:Umbraco.Web.UmbracoModule.Init(System.Web.HttpApplication)">
+        <member name="M:Umbraco.Web.UmbracoModule.PersistXmlCache(System.Web.HttpContextBase)">
             <summary>
-            Initialize the module,  this will trigger for each new application 
-            and there may be more than 1 application per application domain
+            Checks if the xml cache file needs to be updated/persisted
             </summary>
-            <param name="app"></param>
+            <param name="httpContext"></param>
+            <remarks>
+            TODO: This needs an overhaul, see the error report created here:
+              https://docs.google.com/document/d/1neGE3q3grB4lVJfgID1keWY2v9JYqf-pw75sxUUJiyo/edit		
+            </remarks>
         </member>
         <member name="M:Umbraco.Web.UmbracoModule.DisposeHttpContextItems(System.Web.HttpContext)">
             <summary>
             Any object that is in the HttpContext.Items collection that is IDisposable will get disposed on the end of the request
             </summary>
             <param name="http"></param>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoModule.Init(System.Web.HttpApplication)">
+            <summary>
+            Initialize the module,  this will trigger for each new application 
+            and there may be more than 1 application per application domain
+            </summary>
+            <param name="app"></param>
         </member>
         <member name="M:Umbraco.Web.UriUtility.ToFullUrl(System.String,System.Web.HttpContextBase)">
             <summary>

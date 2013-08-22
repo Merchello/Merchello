@@ -657,6 +657,14 @@
             <param name="InitValue">The init value.</param>
             <param name="InitPropertyId">The init property id.</param>
         </member>
+        <member name="M:umbraco.cms.businesslogic.datatype.DefaultData.umbraco#interfaces#IDataValueSetter#SetValue(System.Object,System.String)">
+            <summary>
+            This is here for performance reasons since in some cases we will have already resolved the value from the db
+            and want to just give this object the value so it doesn't go re-look it up from the database.
+            </summary>
+            <param name="val"></param>
+            <param name="strDbType"></param>
+        </member>
         <member name="M:umbraco.cms.businesslogic.datatype.DefaultData.LoadValueFromDatabase">
             <summary>
             Loads the data value from the database.
@@ -2204,6 +2212,13 @@
             </summary>
         </member>
         <member name="M:umbraco.cms.businesslogic.ContentType.Tab.GetCaptionById(System.Int32)">
+            <summary>
+            Gets the tab caption by id.
+            </summary>
+            <param name="id">The id.</param>
+            <returns></returns>
+        </member>
+        <member name="M:umbraco.cms.businesslogic.ContentType.Tab.GetRawCaptionById(System.Int32)">
             <summary>
             Gets the tab caption by id.
             </summary>

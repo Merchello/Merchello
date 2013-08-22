@@ -1237,6 +1237,11 @@
             has been added to the web.config.
             </remarks>
         </member>
+        <member name="M:Umbraco.Core.DatabaseContext.DetermineSqlServerVersion">
+            <summary>
+            Set the lazy resolution of determining the SQL server version if that is the db type we're using
+            </summary>
+        </member>
         <member name="P:Umbraco.Core.DatabaseContext.Database">
             <summary>
             Gets the <see cref="P:Umbraco.Core.DatabaseContext.Database"/> object for doing CRUD operations
@@ -1818,6 +1823,38 @@
             Returns all entities that were published during the operation
             </summary>
         </member>
+        <member name="P:Umbraco.Core.Events.RecycleBinEventArgs.NodeObjectType">
+            <summary>
+            Gets the Id of the node object type of the items 
+            being deleted from the Recycle Bin.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Events.RecycleBinEventArgs.Ids">
+            <summary>
+            Gets the list of Ids for each of the items being deleted from the Recycle Bin.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Events.RecycleBinEventArgs.Files">
+            <summary>
+            Gets the list of Files that should be deleted as part
+            of emptying the Recycle Bin.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Events.RecycleBinEventArgs.RecycleBinEmptiedSuccessfully">
+            <summary>
+            Boolean indicating whether the Recycle Bin was emptied successfully
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Events.RecycleBinEventArgs.IsContentRecycleBin">
+            <summary>
+            Boolean indicating whether this event was fired for the Content's Recycle Bin.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Events.RecycleBinEventArgs.IsMediaRecycleBin">
+            <summary>
+            Boolean indicating whether this event was fired for the Media's Recycle Bin.
+            </summary>
+        </member>
         <member name="P:Umbraco.Core.Events.MoveEventArgs`1.Entity">
             <summary>
             The entity being moved
@@ -2347,6 +2384,13 @@
             </summary>
             <returns>True if content is valid otherwise false</returns>
         </member>
+        <member name="M:Umbraco.Core.Models.ContentBase.ResetDirtyProperties(System.Boolean)">
+            <summary>
+            We will override this method to ensure that when we reset the dirty properties that we 
+            also reset the dirty changes made to the content's Properties (user defined)
+            </summary>
+            <param name="rememberPreviouslyChangedProperties"></param>
+        </member>
         <member name="P:Umbraco.Core.Models.ContentBase.ParentId">
             <summary>
             Gets or sets the Id of the Parent entity
@@ -2413,6 +2457,61 @@
             <summary>
             Returns a collection of the result of the last validation process, this collection contains all invalid properties.
             </summary>
+        </member>
+        <member name="M:Umbraco.Core.Models.ContentExtensions.ShouldCreateNewVersion(Umbraco.Core.Models.IContent)">
+            <summary>
+            Determines if a new version should be created
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+            <remarks>
+            A new version needs to be created when:
+            * The publish status is changed
+            * The language is changed
+            * The item is already published and is being published again and any property value is changed (to enable a rollback)
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Core.Models.ContentExtensions.ShouldCreateNewVersion(Umbraco.Core.Models.IContent,Umbraco.Core.Models.PublishedState)">
+            <summary>
+            Determines if a new version should be created
+            </summary>
+            <param name="entity"></param>
+            <param name="publishedState"></param>
+            <returns></returns>
+            <remarks>
+            A new version needs to be created when:
+            * The publish status is changed
+            * The language is changed
+            * The item is already published and is being published again and any property value is changed (to enable a rollback)
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Core.Models.ContentExtensions.ShouldClearPublishedFlagForPreviousVersions(Umbraco.Core.Models.IContent)">
+            <summary>
+            Determines if the published db flag should be set to true for the current entity version and all other db
+            versions should have their flag set to false.
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+            <remarks>
+            This is determined by:
+            * If a new version is being created and the entity is published
+            * If the published state has changed and the entity is published OR the entity has been un-published.
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Core.Models.ContentExtensions.ShouldClearPublishedFlagForPreviousVersions(Umbraco.Core.Models.IContent,Umbraco.Core.Models.PublishedState,System.Boolean)">
+            <summary>
+            Determines if the published db flag should be set to true for the current entity version and all other db
+            versions should have their flag set to false.
+            </summary>
+            <param name="entity"></param>
+            <param name="publishedState"></param>
+            <param name="isCreatingNewVersion"></param>
+            <returns></returns>
+            <remarks>
+            This is determined by:
+            * If a new version is being created and the entity is published
+            * If the published state has changed and the entity is published OR the entity has been un-published.
+            </remarks>
         </member>
         <member name="M:Umbraco.Core.Models.ContentExtensions.Ancestors(Umbraco.Core.Models.IContent)">
             <summary>
@@ -2949,6 +3048,11 @@
             This is currently (specifically) used in order to know that we need to refresh the content cache which 
             needs to occur when a property has been removed from a content type
             </remarks>
+        </member>
+        <member name="P:Umbraco.Core.Models.ContentTypeBase.PropertyTypeCollection">
+            <summary>
+            PropertyTypes that are not part of a PropertyGroup
+            </summary>
         </member>
         <member name="T:Umbraco.Core.Models.ContentTypeCompositionBase">
             <summary>
@@ -3917,12 +4021,13 @@
             <param name="property"><see cref="T:Umbraco.Core.Models.Property"/> to generate xml for</param>
             <returns>Xml of the property and its value</returns>
         </member>
-        <member name="M:Umbraco.Core.Models.PropertyTypeExtensions.DataType(Umbraco.Core.Models.PropertyType,System.Int32)">
+        <member name="M:Umbraco.Core.Models.PropertyTypeExtensions.DataType(Umbraco.Core.Models.PropertyType,System.Int32,Umbraco.Core.Services.IDataTypeService)">
             <summary>
             Resolves the IDataType for a PropertyType.
             </summary>
             <param name="propertyType">PropertyType that references a DataType</param>
             <param name="propertyId">Id of the Property which references this DataType through its PropertyType</param>
+            <param name="dataTypeService"></param>
             <returns><see cref="T:umbraco.interfaces.IDataType"/></returns>
             <remarks>
             This extension method is left internal because we don't want to take
@@ -4277,6 +4382,27 @@
             </summary>
             <param name="umbracoObjectType">UmbracoObjectTypes value</param>
             <returns>a string of the FriendlyName</returns>
+        </member>
+        <member name="T:Umbraco.Core.NetworkHelper">
+            <summary>
+            Currently just used to get the machine name in med trust and to format a machine name for use with file names
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.NetworkHelper.FileSafeMachineName">
+            <summary>
+            Returns the machine name that is safe to use in file paths.
+            </summary>
+            <remarks>
+            see: https://github.com/Shandem/ClientDependency/issues/4
+            </remarks>
+        </member>
+        <member name="P:Umbraco.Core.NetworkHelper.MachineName">
+            <summary>
+            Returns the current machine name
+            </summary>
+            <remarks>
+            Tries to resolve the machine name, if it cannot it uses the config section.
+            </remarks>
         </member>
         <member name="T:Umbraco.Core.ObjectResolution.ApplicationEventsResolver">
             <summary>
@@ -6200,9 +6326,31 @@
             <param name="connection">The connection object that is required as per extension method declaration.</param>
             <param name="retryPolicy">The retry policy defining whether to retry a request if the connection fails to be opened.</param>
         </member>
+        <member name="M:Umbraco.Core.Persistence.PetaPocoExtensions.GenerateBulkInsertCommand``1(Umbraco.Core.Persistence.Database,System.Collections.Generic.IEnumerable{``0},System.Data.IDbConnection,System.String[]@)">
+            <summary>
+            Creates a bulk insert command
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="db"></param>
+            <param name="collection"></param>
+            <param name="connection"></param>        
+            <param name="sql"></param>
+            <returns>Sql commands with populated command parameters required to execute the sql statement</returns>
+            <remarks>
+            The limits for number of parameters are 2100 (in sql server, I think there's many more allowed in mysql). So 
+            we need to detect that many params and split somehow. 
+            For some reason the 2100 limit is not actually allowed even though the exception from sql server mentions 2100 as a max, perhaps it is 2099 
+            that is max. I've reduced it to 2000 anyways.
+            </remarks>
+        </member>
         <member name="T:Umbraco.Core.Persistence.PetaPocoSqlExtensions">
             <summary>
             Extension methods adding strong types to PetaPoco's Sql Builder
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Persistence.Querying.BaseExpressionHelper">
+            <summary>
+            Logic that is shared with the expression helpers
             </summary>
         </member>
         <member name="T:Umbraco.Core.Persistence.Querying.Query`1">
@@ -6503,7 +6651,7 @@
         </member>
         <member name="M:Umbraco.Core.Persistence.Repositories.IContentRepository.GetByPublishedVersion(Umbraco.Core.Persistence.Querying.IQuery{Umbraco.Core.Models.IContent})">
             <summary>
-            Gets all published Content byh the specified query
+            Gets all published Content by the specified query
             </summary>
             <param name="query">Query to execute against published versions</param>
             <returns>An enumerable list of <see cref="T:Umbraco.Core.Models.IContent"/></returns>
@@ -6627,6 +6775,51 @@
             Represents a repository for doing CRUD operations for <see cref="T:Umbraco.Core.Models.IMediaType"/>
             </summary>
         </member>
+        <member name="T:Umbraco.Core.Persistence.Repositories.RecycleBinRepository">
+            <summary>
+            Represents a repository specific to the Recycle Bins
+            available for Content and Media.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.Repositories.RecycleBinRepository.GetFilesInRecycleBin(System.Guid)">
+            <summary>
+            Gets a list of files, which are referenced on items in the Recycle Bin.
+            The list is generated by the convention that a file is referenced by 
+            the Upload data type or a property type with the alias 'umbracoFile'.
+            </summary>
+            <param name="nodeObjectType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.Repositories.RecycleBinRepository.GetIdsOfItemsInRecycleBin(System.Guid)">
+            <summary>
+            Gets a list of Ids for each of the items in the Recycle Bin.
+            </summary>
+            <param name="nodeObjectType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.Repositories.RecycleBinRepository.EmptyRecycleBin(System.Guid)">
+            <summary>
+            Empties the Recycle Bin by running single bulk-Delete queries
+            against the Content- or Media's Recycle Bin.
+            </summary>
+            <param name="nodeObjectType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.Repositories.RecycleBinRepository.DeleteFiles(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Deletes all files passed in.
+            </summary>
+            <param name="files"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.Repositories.RecycleBinRepository.DisposeResources">
+            <summary>
+            Dispose disposable properties
+            </summary>
+            <remarks>
+            Ensure the unit of work is disposed
+            </remarks>
+        </member>
         <member name="T:Umbraco.Core.Persistence.Repositories.RelationRepository">
             <summary>
             Represents a repository for doing CRUD operations for <see cref="T:Umbraco.Core.Models.Relation"/>
@@ -6741,9 +6934,19 @@
             Static class that provides simple access to the Sql Server SqlSyntax Provider
             </summary>
         </member>
+        <member name="T:Umbraco.Core.Persistence.SqlSyntax.SqlServerVersionName">
+            <summary>
+            Represents the version name of SQL server (i.e. the year 2008, 2005, etc...)
+            </summary>
+        </member>
         <member name="T:Umbraco.Core.Persistence.SqlSyntax.SqlServerSyntaxProvider">
             <summary>
             Represents an SqlSyntaxProvider for Sql Server
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Persistence.SqlSyntax.SqlServerSyntaxProvider.VersionName">
+            <summary>
+            Gets/sets the version of the current SQL server instance
             </summary>
         </member>
         <member name="T:Umbraco.Core.Persistence.SqlSyntax.SqlSyntaxProviderAttribute">
@@ -7588,6 +7791,18 @@
             </summary>
             <returns>True if entity is dirty, otherwise False</returns>
         </member>
+        <member name="M:Umbraco.Core.Models.Content.IsEntityDirty">
+            <summary>
+            Returns true if only the entity properties are direty
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Models.Content.IsAnyUserPropertyDirty">
+            <summary>
+            Returns true if any of the properties are dirty
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Umbraco.Core.Models.Content.ResetDirtyProperties">
             <summary>
             Resets dirty properties by clearing the dictionary used to track changes.
@@ -7628,7 +7843,10 @@
             <summary>
             Boolean indicating whether this Content is Published or not
             </summary>
-            <remarks>Setting Published to true/false should be private or internal</remarks>
+            <remarks>
+            Setting Published to true/false should be private or internal and should ONLY be used for wiring up the value
+            from the db or modifying it based on changing the published state.
+            </remarks>
         </member>
         <member name="P:Umbraco.Core.Models.Content.Language">
             <summary>
@@ -7757,6 +7975,12 @@
             Please note that resetting the dirty properties could potentially
             obstruct the saving of a new or updated entity.
             </remarks>
+        </member>
+        <member name="M:Umbraco.Core.Models.ContentType.Clone(System.String)">
+            <summary>
+            Creates a clone of the current entity
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:Umbraco.Core.Models.ContentType.AddingEntity">
             <summary>
@@ -10087,6 +10311,78 @@
             The content item contains invalid data (has not passed validation requirements)
             </summary>
         </member>
+        <member name="T:Umbraco.Core.Security.AuthenticationExtensions">
+            <summary>
+            Extensions to create and renew and remove authentication tickets for the Umbraco back office
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Security.AuthenticationExtensions.UmbracoLogout(System.Web.HttpContextBase)">
+            <summary>
+            This clears the authentication cookie
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Security.AuthenticationExtensions.CreateUmbracoAuthTicket(System.Web.HttpContextBase,Umbraco.Core.Security.UserData)">
+            <summary>
+            Creates the umbraco authentication ticket
+            </summary>
+            <param name="http"></param>
+            <param name="userdata"></param>
+        </member>
+        <member name="M:Umbraco.Core.Security.AuthenticationExtensions.GetUmbracoAuthTicket(System.Web.HttpContextBase)">
+            <summary>
+            Gets the umbraco auth ticket
+            </summary>
+            <param name="http"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Security.AuthenticationExtensions.Logout(System.Web.HttpContextBase,System.String)">
+            <summary>
+            This clears the authentication cookie
+            </summary>
+            <param name="http"></param>
+            <param name="cookieName"></param>
+        </member>
+        <member name="M:Umbraco.Core.Security.AuthenticationExtensions.GetAuthTicket(System.Web.HttpContextBase,System.String)">
+            <summary>
+            In v6 this is a custom cookie, in v7 this is a real formsauth cookie.
+            </summary>
+            <param name="http"></param>
+            <param name="cookieName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Security.AuthenticationExtensions.CreateAuthTicket(System.Web.HttpContextBase,Umbraco.Core.Security.UserData,System.Int32,System.String,System.String,System.String)">
+            <summary>
+            Creates a custom umbraco auth cookie with the data specified
+            </summary>
+            <param name="http">The HTTP.</param>
+            <param name="userData">The user data.</param>
+            <param name="minutesPersisted">The minutes persisted.</param>
+            <param name="cookiePath">The cookie path.</param>
+            <param name="cookieName">Name of the cookie.</param>
+            <param name="cookieDomain">The cookie domain.</param>
+        </member>
+        <member name="T:Umbraco.Core.Security.UmbracoBackOfficeIdentity">
+            <summary>
+            A custom user identity for the Umbraco backoffice
+            </summary>
+            <remarks>
+            All values are lazy loaded for performance reasons as the constructor is called for every single request
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Core.Security.UmbracoBackOfficeIdentity.EnsureDeserialized">
+            <summary>
+            This will ensure we only deserialize once
+            </summary>
+            <remarks>
+            For performance reasons, we'll also check if there's an http context available,
+            if so, we'll chuck our instance in there so that we only deserialize once per request.
+            </remarks>
+        </member>
+        <member name="T:Umbraco.Core.Security.UserData">
+            <summary>
+            Data structure used to store information in the authentication cookie
+            </summary>
+        </member>
         <member name="M:Umbraco.Core.Serialization.AbstractSerializationService.FromStream(System.IO.Stream,System.Type,System.String)">
             <summary>
               Finds an <see cref="T:Umbraco.Core.Serialization.IFormatter"/> with a matching <paramref name="intent"/> , and deserializes the <see cref="T:System.IO.Stream"/> <paramref name="input"/> to an object graph.
@@ -10664,6 +10960,12 @@
             </summary>
             <returns>An Enumerable list of <see cref="T:Umbraco.Core.Models.IContent"/> objects</returns>
         </member>
+        <member name="M:Umbraco.Core.Services.ContentService.GetAllPublished">
+            <summary>
+            Gets all published content items
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Umbraco.Core.Services.ContentService.GetContentForExpiration">
             <summary>
             Gets a collection of <see cref="T:Umbraco.Core.Models.IContent"/> objects, which has an expiration date less than or equal to today.
@@ -11044,7 +11346,7 @@
             Occurs after Create
             </summary>
             <remarks>
-            Please note that the Content object has been created, but not saved
+            Please note that the Content object has been created, but might not have been saved
             so it does not have an identity yet (meaning no Id has been set).
             </remarks>
         </member>
@@ -11096,6 +11398,16 @@
         <member name="E:Umbraco.Core.Services.ContentService.SentToPublish">
             <summary>
             Occurs after Send to Publish
+            </summary>
+        </member>
+        <member name="E:Umbraco.Core.Services.ContentService.EmptyingRecycleBin">
+            <summary>
+            Occurs before the Recycle Bin is emptied
+            </summary>
+        </member>
+        <member name="E:Umbraco.Core.Services.ContentService.EmptiedRecycleBin">
+            <summary>
+            Occurs after the Recycle Bin has been Emptied
             </summary>
         </member>
         <member name="T:Umbraco.Core.Services.ContentTypeService">
@@ -12996,6 +13308,16 @@
         <member name="E:Umbraco.Core.Services.MediaService.Moved">
             <summary>
             Occurs after Move
+            </summary>
+        </member>
+        <member name="E:Umbraco.Core.Services.MediaService.EmptyingRecycleBin">
+            <summary>
+            Occurs before the Recycle Bin is emptied
+            </summary>
+        </member>
+        <member name="E:Umbraco.Core.Services.MediaService.EmptiedRecycleBin">
+            <summary>
+            Occurs after the Recycle Bin has been Emptied
             </summary>
         </member>
         <member name="T:Umbraco.Core.Services.MemberService">
@@ -16328,6 +16650,20 @@
             <summary>
             Provides extension methods to <see cref="T:System.Uri"/>.
             </summary>
+        </member>
+        <member name="M:Umbraco.Core.UriExtensions.IsBackOfficeRequest(System.Uri)">
+            <summary>
+            Checks if the current uri is a back office request
+            </summary>
+            <param name="url"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.UriExtensions.IsInstallerRequest(System.Uri)">
+            <summary>
+            Checks if the current uri is an install request
+            </summary>
+            <param name="url"></param>
+            <returns></returns>
         </member>
         <member name="M:Umbraco.Core.UriExtensions.IsClientSideRequest(System.Uri)">
             <summary>
