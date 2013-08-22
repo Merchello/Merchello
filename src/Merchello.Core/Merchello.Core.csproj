@@ -171,11 +171,8 @@
     <Compile Include="Persistence\Mappers\BaseMapper.cs" />
     <Compile Include="Persistence\Migrations\Initial\DatabaseSchemaCreation.cs" />
     <Compile Include="Models\Rdbms\ShipMethod2WarehouseDto.cs" />
-    <Compile Include="Persistence\Migrations\Initial\DatabaseShemaResult.cs" />
     <Compile Include="Persistence\Querying\BaseExpressionHelper.cs" />
     <Compile Include="Persistence\Querying\ModelToSqlExpressionHelper.cs" />
-    <Compile Include="Persistence\Querying\Query.cs" />
-    <Compile Include="Persistence\Querying\QueryHelper.cs" />
     <Compile Include="Persistence\Querying\SqlTranslator.cs" />
     <Compile Include="Persistence\Repositories\AddressRepository.cs" />
     <Compile Include="Persistence\Repositories\IAddressRepository.cs" />
@@ -192,9 +189,7 @@
     <Compile Include="Services\ICustomerService.cs" />
     <Compile Include="Services\ServiceContext.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Persistence\SqlSyntax\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
