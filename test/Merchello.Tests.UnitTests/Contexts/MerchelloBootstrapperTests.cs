@@ -25,18 +25,15 @@ namespace Merchello.Tests.UnitTests.Contexts
             MerchelloContext.Current = null;
             Resolution.Reset();
 
-            BootManagerBase.MerchelloInit += delegate(object sender, EventArgs args)
-            {
+            BootManagerBase.MerchelloInit += delegate {
                 _initEventCalled = true;
             };
 
-            BootManagerBase.MerchelloStarting += delegate(object sender, EventArgs args)
-            {
+            BootManagerBase.MerchelloStarting += delegate {
                 _startingEventCalled = true;
             };
 
-            BootManagerBase.MerchelloStarted += delegate(object sender, EventArgs args)
-            {
+            BootManagerBase.MerchelloStarted += delegate {
                 _completedEventCalled = true;
             };
         }
