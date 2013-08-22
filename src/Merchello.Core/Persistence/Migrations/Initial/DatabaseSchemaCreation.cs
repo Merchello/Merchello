@@ -9,7 +9,7 @@ using Umbraco.Core.Logging;
 using Umbraco.Core.Persistence;
 using Umbraco.Core.Persistence.SqlSyntax;
 
-using DatabaseSchemaResult = Merchello.Core.Persistence.Migrations.Initial.DatabaseShemaResult;
+
 
 namespace Merchello.Core.Persistence.Migrations.Initial
 {
