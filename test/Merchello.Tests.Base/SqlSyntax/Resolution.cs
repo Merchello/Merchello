@@ -2,7 +2,7 @@
 using System.Threading;
 using Umbraco.Core;
 
-namespace Merchello.Core.ObjectResolution
+namespace Merchello.Tests.Base.SqlSyntax
 {
 	/// <summary>
 	/// Represents the status of objects resolution.

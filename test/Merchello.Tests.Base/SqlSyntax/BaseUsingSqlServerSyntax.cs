@@ -1,5 +1,4 @@
-﻿using Merchello.Core.ObjectResolution;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Umbraco.Core.Persistence.SqlSyntax;
 
 namespace Merchello.Tests.Base.SqlSyntax
