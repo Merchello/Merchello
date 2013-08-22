@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Merchello.Core
 {
-    internal interface IBootManager
+    public interface IBootManager
     {
         /// <summary>
         /// Fires first in the Merchello application startup process before any customizations can occur
@@ -19,13 +19,13 @@ namespace Merchello.Core
         /// </summary>
         /// <param name="afterStartup"></param>
         /// <returns></returns>
-        IBootManager Startup(Action<MerchelloAppContext> afterStartup);
+        IBootManager Startup(Action<MerchelloContext> afterStartup);
 
         /// <summary>
         /// Fires after startup and calls the callback once customizations are locked
         /// </summary>
         /// <param name="afterComplete"></param>
         /// <returns></returns>
-        IBootManager Complete(Action<MerchelloAppContext> afterComplete);
+        IBootManager Complete(Action<MerchelloContext> afterComplete);
     }
 }

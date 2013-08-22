@@ -71,6 +71,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActivatorHelper.cs" />
+    <Compile Include="BootManagerBase.cs" />
+    <Compile Include="MerchelloBootstrapper.cs" />
     <Compile Include="Cache\ICacheProvider.cs" />
     <Compile Include="Cache\IRuntimeCacheProvider.cs" />
     <Compile Include="Cache\NullCacheProvider.cs" />
@@ -85,9 +87,7 @@
     <Compile Include="Events\SaveEventArgs.cs" />
     <Compile Include="Events\TypedEventHandler.cs" />
     <Compile Include="IBootManager.cs" />
-    <Compile Include="IPluginApplication.cs" />
-    <Compile Include="MerchelloPluginBase.cs" />
-    <Compile Include="MerchelloAppContext.cs" />
+    <Compile Include="MerchelloContext.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\IAddress.cs" />
     <Compile Include="Models\TypeFields\IAddressTypeField.cs" />
@@ -99,6 +99,9 @@
     <Compile Include="Models\TypeFields\IShipmentMethodTypeField.cs" />
     <Compile Include="Models\TypeFields\ITypeFieldMapper.cs" />
     <Compile Include="Models\TypeFields\TypeFieldProvider.cs" />
+    <Compile Include="Cache\ObjectCacheRuntimeCacheProvider.cs" />
+    <Compile Include="Cache\StaticCacheProvider.cs" />
+    <Compile Include="ObjectResolution\Resolution.cs" />
     <Compile Include="TypeFieldMapperEnumerations.cs" />
     <Compile Include="Models\TypeFields\ProductTypeField.cs" />
     <Compile Include="Models\Rdbms\TypeFieldDto.cs" />

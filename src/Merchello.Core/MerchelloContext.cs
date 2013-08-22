@@ -11,24 +11,32 @@ using Umbraco.Core.Logging;
 
 namespace Merchello.Core
 {
-    public class MerchelloAppContext : IDisposable
+    public class MerchelloContext : IDisposable
     {
 
-        internal MerchelloAppContext(ServiceContext serviceContext, CacheHelper cache)
+        internal MerchelloContext(ServiceContext serviceContext, CacheHelper cache)
         {
             Mandate.ParameterNotNull(serviceContext, "serviceContext");
-            Mandate.ParameterNotNull(cache, "cache");
+            //Mandate.ParameterNotNull(cache, "cache");
 
             _services = serviceContext;
             PluginCache = cache;
 
         }
 
+        /// <summary>
+        /// Creates a basic plugin context
+        /// </summary>
+        /// <param name="cache"></param>
+        internal MerchelloContext(CacheHelper cache)
+        {
+            PluginCache = cache;
+        }
 
         /// <summary>
         /// Singleton accessor
         /// </summary>
-        public static MerchelloAppContext Current { get; internal set; }
+        public static MerchelloContext Current { get; internal set; }
 
         /// <summary>
         /// Returns the application wide cache accessor
@@ -36,9 +44,36 @@ namespace Merchello.Core
         /// <remarks>
         /// Any caching that is done in the package (Merchello wide) should be done through this property
         /// </remarks>
-        public CacheHelper PluginCache { get; private set; }
+        internal CacheHelper PluginCache { get; private set; }
 
+        
+
+        // IsReady is set to true by the boot manager once it has successfully booted
+        // note - the original umbraco module checks on content.Instance in umbraco.dll
+        //   now, the boot task that setup the content store ensures that it is ready
+        bool _isReady = false;
+        readonly System.Threading.ManualResetEventSlim _isReadyEvent = new System.Threading.ManualResetEventSlim(false);
         private ServiceContext _services;
+
+        public bool IsReady
+        {
+            get
+            {
+                return _isReady;
+            }
+            internal set
+            {
+                AssertIsNotReady();
+                _isReady = value;
+                _isReadyEvent.Set();
+            }
+        }
+
+        public bool WaitForReady(int timeout)
+        {
+            return _isReadyEvent.WaitHandle.WaitOne(timeout);
+        }
+
 
         /// <summary>
         /// Compares the binary version to that listed in the Merchello configuration to determine if the 
@@ -83,6 +118,30 @@ namespace Merchello.Core
                 }
             }
         }
+
+        private void AssertIsNotReady()
+        {
+            if (IsReady)
+                throw new Exception("MerchelloPluginContext has already been initialized.");
+        }
+
+        /// <summary>
+        /// Gets the current ServiceContext
+        /// </summary>
+        /// <remarks>
+        /// Internal set is generally only used for unit tests
+        /// </remarks>
+        public ServiceContext Services
+        {
+            get
+            {
+                if (_services == null)
+                    throw new InvalidOperationException("The ServiceContext has not been set on the MerchelloPluginContext");
+                return _services;
+            }
+            internal set { _services = value; }
+        }
+
 
         private volatile bool _disposed;
         private readonly ReaderWriterLockSlim _disposalLocker = new ReaderWriterLockSlim();
