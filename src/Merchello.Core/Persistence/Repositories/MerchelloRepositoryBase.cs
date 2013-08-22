@@ -149,7 +149,7 @@ namespace Merchello.Core.Persistence.Repositories
 				{
 					// TODO: RSS this is a modification to the original repository base where x.Id != 0
 					// TODO: watch for errors surfacing as a result of the change with Id entities 
-					var query = Querying.Query<TEntity>.Builder.Where(x => x.Key != Guid.Empty);
+					var query = Query<TEntity>.Builder.Where(x => x.Key != Guid.Empty);
 					int totalCount = PerformCount(query);
 
 					if(allEntities.Count() == totalCount)
