@@ -112,7 +112,6 @@
     <Compile Include="Persistence\Mappers\MerchelloMappers.cs" />
     <Compile Include="Persistence\Migrations\Initial\BaseDataCreation.cs" />
     <Compile Include="Models\EntityBase\ISingularRoot.cs" />
-    <Compile Include="ObjectResolution\Resolution.cs" />
     <Compile Include="Persistence\Mappers\CustomerMapper.cs" />
     <Compile Include="Persistence\Mappers\DtoMapModel.cs" />
     <Compile Include="Models\TypeFields\AddressTypeField.cs" />
