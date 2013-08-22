@@ -1,69 +1,144 @@
 ﻿using System;
 using System.Configuration;
 using System.Web;
+using System.Web.Configuration;
+using Merchello.Core.Cache;
 using Merchello.Core.Configuration;
+using Merchello.Core.ObjectResolution;
 using Merchello.Core.Services;
 using Umbraco.Core;
 using Umbraco.Core.Persistence;
 using Umbraco.Core.Persistence.Mappers;
 using Umbraco.Core.Persistence.UnitOfWork;
 
+
 namespace Merchello.Core
 {
-    internal class CoreBootManager : IBootManager
+    /// <summary>
+    /// A bootstrapper for the Merchello Plugin which initializes all objects to be used in the Merchello Core
+    /// </summary>
+    /// <remarks>
+    /// We needed our own bootstrapper to resolve third party Plugins such as Payment, Taxation, and Shipping Providers and provision the MerchelloPluginContext.ServiceContext
+    /// This does not provide any startup functionality relating to web objects
+    /// </remarks>
+    internal class CoreBootManager : BootManagerBase, IBootManager
     {
         private DisposableTimer _timer;
         private bool _isInitialized = false;
-        private readonly MerchelloPluginBase _merchelloAppPlugin;
-        private MerchelloAppContext MerchelloAppContext { get; set; }
+        private bool _isStarted = false;
+        private bool _isComplete = false;
+        
+        private MerchelloContext MerchelloContext { get; set; }       
         protected CacheHelper MerchelloCache { get; set; }
 
 
-        public CoreBootManager(MerchelloPluginBase merchelloAppPlugin)
+        public CoreBootManager()
         {
-            Mandate.ParameterNotNull(merchelloAppPlugin, "merchelloPlugin");
-
-            _merchelloAppPlugin = merchelloAppPlugin;
+            
         }
 
-        public virtual IBootManager Initialize()
+       
+
+        public override IBootManager Initialize()
         {
             if (_isInitialized)
-                throw new InvalidOperationException("The boot manager has already been initialized");
+                throw new InvalidOperationException("The Merchello core boot manager has already been initialized");
 
-            _timer = DisposableTimer.DebugDuration<CoreBootManager>("Merchello package starting", "Merchello package startup complete");
+            OnMerchelloInit();
 
-            // create the database and service contexts for the MerchelloAppContext
+            _timer = DisposableTimer.DebugDuration<CoreBootManager>("Merchello plugin starting", "Merchello plugin startup complete");
+
+            CreateApplicationCache();
+
+            // create the service context for the MerchelloAppContext   
+            var connString = ConfigurationManager.ConnectionStrings[PluginConfiguration.Section.DefaultConnectionStringName].ConnectionString;
+            var providerName = ConfigurationManager.ConnectionStrings[PluginConfiguration.Section.DefaultConnectionStringName].ProviderName;                
+            var serviceContext = new ServiceContext(new PetaPocoUnitOfWorkProvider(connString, providerName));
             
 
-            var connString = ConfigurationManager.ConnectionStrings[PluginConfiguration.Section.DefaultConnectionStringName].ConnectionString;
-            var providerName = ConfigurationManager.ConnectionStrings[PluginConfiguration.Section.DefaultConnectionStringName].ProviderName;
+            CreateMerchelloContext(serviceContext);
 
-            var serviceContext = new ServiceContext(new PetaPocoUnitOfWorkProvider(connString, providerName));
+            // TODO: this is where we need to resolve shipping, tax, and payment providers
 
-            return null;
+
+            _isInitialized = true;
+
+            return this;
         }
+
+        /// <summary>
+        /// Creates the MerchelloPluginContext (singleton)
+        /// </summary>
+        /// <param name="serviceContext"></param>
+        protected void CreateMerchelloContext(ServiceContext serviceContext)
+        {           
+            MerchelloContext = MerchelloContext.Current = new MerchelloContext(serviceContext, MerchelloCache);
+        }
+
 
         /// <summary>
         /// Creates and assigns the ApplicationCache based on a new instance of System.Web.Caching.Cache
         /// </summary>
+        /// <remarks>
+        /// TODO : CacheHelper parameter will need to be configured
+        /// </remarks>
         protected virtual void CreateApplicationCache()
         {
-            var cacheHelper = new CacheHelper(HttpContext.Current.Cache);
+            //var cacheHelper = new CacheHelper(
+            //        new ObjectCacheRuntimeCacheProvider(),
+            //    );
 
-            MerchelloCache = cacheHelper;
+            MerchelloCache = null;
         }
 
-        public IBootManager Complete(Action<MerchelloAppContext> afterComplete)
+
+        /// <summary>
+        /// Fires after initialization and calls the callback to allow for customizations to occur
+        /// </summary>
+        /// <param name="afterStartup"></param>
+        /// <returns></returns>
+        public override IBootManager Startup(Action<MerchelloContext> afterStartup)
         {
-            throw new NotImplementedException();
+            if (_isStarted)
+                throw new InvalidOperationException("The boot manager has already been initialized");
+
+            if (afterStartup != null)
+                afterStartup(MerchelloContext.Current);
+
+            _isStarted = true;
+
+            return this;
         }
 
-
-
-        public IBootManager Startup(Action<MerchelloAppContext> afterStartup)
+        /// <summary>
+        /// Fires after startup and calls the callback once customizations are locked
+        /// </summary>
+        public override IBootManager Complete(Action<MerchelloContext> afterComplete)
         {
-            throw new NotImplementedException();
+            if(_isComplete)
+                throw new InvalidOperationException("The boot manager has already been completed");
+
+            FreezeResolution();
+
+            if (afterComplete != null)
+            {
+                afterComplete(MerchelloContext.Current);
+                
+            }
+
+            _isComplete = true;
+
+            MerchelloContext.IsReady = true;
+
+            return this;
         }
+
+
+        protected virtual void FreezeResolution()
+        {
+            Resolution.Freeze();
+        }
+
+
     }
 }
