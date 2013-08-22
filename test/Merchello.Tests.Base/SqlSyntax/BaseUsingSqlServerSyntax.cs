@@ -7,10 +7,11 @@ namespace Merchello.Tests.Base.SqlSyntax
     [TestFixture]
     public abstract class BaseUsingSqlServerSyntax
     {
+
         [SetUp]
         public virtual void Initialize()
         {
-            SqlSyntaxContext.SqlSyntaxProvider = new SqlServerSyntaxProvider();
+            SqlSyntaxContext.SqlSyntaxProvider = new SqlCeSyntaxProvider();
            
             Resolution.Freeze();
             SetUp();
