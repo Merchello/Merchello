@@ -14,6 +14,6 @@ namespace Merchello.Core.Models
         /// The lastActivityDate for the Anonymous
         /// </summary>
         [DataMember]
-        DateTime LastActivityDate { get; set; }
+        DateTime LastActivityDate { get; }
     }
 }

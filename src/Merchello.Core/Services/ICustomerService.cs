@@ -18,9 +18,10 @@ namespace Merchello.Core.Services
         /// </summary>
         /// <param name="firstName">The first name of the customer</param>
         /// <param name="lastName">The last name of the customer</param>
+        /// <param name="email">the email address of the customer</param>
         /// <param name="memberId">The Umbraco member Id of the customer</param>
         /// <returns><see cref="ICustomer"/></returns>
-        ICustomer CreateCustomer(string firstName, string lastName, int? memberId = null);
+        ICustomer CreateCustomer(string firstName, string lastName, string email, int? memberId = null);        
 
         /// <summary>
         /// Saves a single <see cref="ICustomer"/> object

@@ -24,6 +24,9 @@ namespace Merchello.Core.Models.Rdbms
         [Column("lastName")]
         public string LastName { get; set; }
 
+        [Column("email")]
+        public string Email { get; set; }
+
         [Column("totalInvoiced")]
         public decimal TotalInvoiced { get; set; }
 

@@ -11,6 +11,7 @@ using NUnit.Framework;
 namespace Merchello.Tests.UnitTests.Mappers
 {
     [TestFixture]
+    [Category("Mappers")]
     public class MerchelloMapperTests
     {
         
@@ -34,6 +35,18 @@ namespace Merchello.Tests.UnitTests.Mappers
 
             Assert.IsTrue(resolved.Success);
             Assert.AreSame(expected, resolved.Result.GetType());
+        }
+
+        [Test]
+        public void Mapper_Resolves_IAnonymousCustomer_To_AnonymousCustomerMapper()
+        {
+            var expected = typeof (AnonymousCustomerMapper);
+
+            var resolved = MerchelloMappers.ResolveByType(typeof (IAnonymousCustomer));
+
+            Assert.IsTrue(resolved.Success);
+            Assert.AreSame(expected, resolved.Result.GetType());
+
         }
     }
 }

@@ -12,6 +12,7 @@ namespace Merchello.Core.Models
         private int? _memberId;
         private string _firstName;
         private string _lastName;
+        private string _email;
         private decimal _totalInvoiced;
         private readonly decimal _totalPayments;
         private readonly DateTime? _lastPaymentDate;
@@ -26,7 +27,7 @@ namespace Merchello.Core.Models
         private static readonly PropertyInfo MemberIdSelector = ExpressionHelper.GetPropertyInfo<Customer, int?>(x => x.MemberId);
         private static readonly PropertyInfo FirstNameSelector = ExpressionHelper.GetPropertyInfo<Customer, string>(x => x.FirstName);
         private static readonly PropertyInfo LastNameSelector = ExpressionHelper.GetPropertyInfo<Customer, string>(x => x.LastName);
-
+        private static readonly PropertyInfo EmailSelector = ExpressionHelper.GetPropertyInfo<Customer, string>(x => x.Email);
 
         /// <summary>
         /// Gets or sets the memberId
@@ -76,6 +77,23 @@ namespace Merchello.Core.Models
                         _lastName = value;
                         return _lastName;
                     }, _lastName, LastNameSelector);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the email address of the customer
+        /// </summary>
+        [DataMember]
+        public string Email
+        {
+            get { return _email; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o => 
+                    {
+                        _email = value;
+                        return _email;
+                    }, _email, EmailSelector);                    
             }
         }
 
