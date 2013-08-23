@@ -1,6 +1,4 @@
-﻿using System;
-using Merchello.Core;
-using umbraco.BusinessLogic;
+﻿using Merchello.Core;
 using Umbraco.Core;
 
 namespace Merchello.Web
@@ -14,13 +12,10 @@ namespace Merchello.Web
         {
             base.ApplicationStarted(umbracoApplication, applicationContext);
             
-            UmbracoApplicationBase.ApplicationStarted += delegate(object sender, EventArgs args)
-            {
-                var wbm = new WebBootManager();
-                    wbm.Initialize()
-                    .Startup(merchContext => wbm.OnMerchelloStarted(this, new EventArgs()))
-                    .Complete(merchContext => wbm.OnMerchelloStarted(this, new EventArgs()));
-    
+
+            UmbracoApplicationBase.ApplicationStarted += delegate {
+
+               MerchelloBootstrapper.Init(new WebBootManager());
 
             };
             

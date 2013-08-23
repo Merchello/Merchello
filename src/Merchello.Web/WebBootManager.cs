@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Merchello.Core;
+﻿using Merchello.Core;
 
 namespace Merchello.Web
 {
@@ -16,9 +11,7 @@ namespace Merchello.Web
         /// A bootstrapper for the Merchello plugin which initializes all objects including the Web portion of the plugin
         /// </summary>
         public WebBootManager()
-        {
-            
-        }
+        { }
 
         /// <summary>
         /// Constructor for unit tests, ensures some resolvers are not initialized

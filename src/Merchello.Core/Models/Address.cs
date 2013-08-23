@@ -11,7 +11,7 @@ namespace Merchello.Core.Models
     [DataContract(IsReference = true)]
     public class Address : IdEntity, IAddress
     {
-        private readonly Guid _customerPk;
+        private readonly Guid _customerKey;
         private string _label;
         private string _fullName;
         private string _company;
@@ -25,9 +25,9 @@ namespace Merchello.Core.Models
         private string _phone;
 
         ///TODO: We need to talk about the contstructor.  An empty address does not make a lot of sense.
-        public Address(Guid customerPk)
+        public Address(Guid customerKey)
         {            
-            _customerPk = customerPk;
+            _customerKey = customerKey;
         }
         
         private static readonly PropertyInfo LabelSelector = ExpressionHelper.GetPropertyInfo<Address, string>(x => x.Label);
@@ -46,9 +46,9 @@ namespace Merchello.Core.Models
         /// The customer key (pk) associated with the address
         /// </summary>
         [DataMember]
-        public Guid CustomerPk
+        public Guid CustomerKey
         {
-            get { return _customerPk; }
+            get { return _customerKey; }
         }
 
         /// <summary>
