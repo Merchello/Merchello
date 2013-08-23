@@ -11,14 +11,8 @@ namespace Merchello.Web
         protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
             base.ApplicationStarted(umbracoApplication, applicationContext);
-            
 
-            UmbracoApplicationBase.ApplicationStarted += delegate {
-
-               MerchelloBootstrapper.Init(new WebBootManager());
-
-            };
-            
+            //MerchelloBootstrapper.Init(new WebBootManager());
         }
     }
 }
