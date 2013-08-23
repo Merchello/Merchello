@@ -31,9 +31,14 @@ namespace Merchello.Tests.Base.Db
             Database = uowProvider.GetUnitOfWork().Database;
 
             SqlSyntaxContext.SqlSyntaxProvider = new SqlCeSyntaxProvider();
+
+            Setup();
         }
 
-
+        public virtual void Setup()
+        {
+            
+        }
 
         [TearDown]
         public virtual void TearDown()
