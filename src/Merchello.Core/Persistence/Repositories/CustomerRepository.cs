@@ -35,6 +35,7 @@ namespace Merchello.Core.Persistence.Repositories
             var sql = GetBaseQuery(false)
                 .Where(GetBaseWhereClause(), new {Id = id});
 
+
             var dto = Database.Fetch<CustomerDto>(sql).FirstOrDefault();
 
             if (dto == null)
@@ -82,7 +83,7 @@ namespace Merchello.Core.Persistence.Repositories
 
         protected override string GetBaseWhereClause()
         {
-            return "merchCustomer.key = @Id";
+            return "merchCustomer.pk = @Id";
         }
 
         protected override IEnumerable<string> GetDeleteClauses()
@@ -98,7 +99,7 @@ namespace Merchello.Core.Persistence.Repositories
                     "DELETE FROM merchPayment WHERE invoiceId = " + invoiceIdByKey,
                     "DELETE FROM merchInvoice WHERE customerKey = @Id",
                     "DELETE FROM merchAddress WHERE customerKey = @Id",
-                    "DELETE FROM merchCustomer WHERE key = @Id"
+                    "DELETE FROM merchCustomer WHERE pk = @Id"
                 };
 
             return list;

@@ -1,12 +1,6 @@
-﻿using System;
-using System.Configuration;
-using Merchello.Core.Configuration.Outline;
-using Merchello.Core.Persistence.Migrations.Initial;
+﻿using Merchello.Core.Persistence.Migrations.Initial;
 using Merchello.Tests.Base.Db;
-using Merchello.Tests.Base.SqlSyntax;
 using NUnit.Framework;
-using Umbraco.Core.Persistence;
-using Umbraco.Core.Persistence.SqlSyntax;
 
 namespace Merchello.Tests.IntegrationTests.Migration
 {

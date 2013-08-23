@@ -36,7 +36,7 @@ namespace Merchello.Core.Configuration.Outline
         /// Gets/sets the guid associated with the referenced type field.  
         /// </summary>
         /// <remarks>
-        /// This corresponds to the 'pk' database column in the merchDbTypefield table
+        /// This corresponds to the 'key' database column in the merchDbTypefield table
         /// </remarks>
         [ConfigurationProperty("typeKey", IsRequired = true)]
         public Guid TypeKey

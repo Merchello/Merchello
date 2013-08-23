@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Merchello.Core.Models.EntityBase;
-using Umbraco.Core.Models.EntityBase;
-using Umbraco.Core.Persistence;
 using Merchello.Core.Persistence.Caching;
 using Merchello.Core.Persistence.Querying;
+using Umbraco.Core.Persistence;
 using Umbraco.Core.Persistence.Querying;
-using Umbraco.Core.Persistence.Repositories;
 using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Core.Persistence.Repositories

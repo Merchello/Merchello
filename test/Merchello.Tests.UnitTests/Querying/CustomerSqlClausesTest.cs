@@ -19,7 +19,7 @@ namespace Merchello.Tests.UnitTests.Querying
             var expected = new Sql();
             expected.Select("*")
                 .From("[merchCustomer]")
-                .Where("[merchCustomer].[key] = '" + key.ToString() + "'");
+                .Where("[merchCustomer].[pk] = '" + key.ToString() + "'");
 
             var sql = new Sql();
             sql.Select("*")

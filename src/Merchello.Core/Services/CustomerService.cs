@@ -158,9 +158,9 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
-        /// Gets a customer by its unique id - pk
+        /// Gets a customer by its unique id - key
         /// </summary>
-        /// <param name="key">Guid pk for the customer</param>
+        /// <param name="key">Guid key for the customer</param>
         /// <returns><see cref="ICustomer"/></returns>
         public ICustomer GetByKey(Guid key)
         {

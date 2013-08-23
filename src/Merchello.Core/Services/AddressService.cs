@@ -64,10 +64,10 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Creates an <see cref="IAddress"/> object
         /// </summary>
-        internal IAddress CreateAddress(Guid customerPk, string label, ITypeField addressType, string address1, string address2, string locality, string region, 
+        internal IAddress CreateAddress(Guid customerKey, string label, ITypeField addressType, string address1, string address2, string locality, string region, 
                                         string postalCode, string countryCode)
         {
-            var address = new Address(customerPk)
+            var address = new Address(customerKey)
                 {
                     Label = label,
                     AddressTypeFieldKey = addressType.TypeKey,
@@ -182,7 +182,7 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
-        /// Gets a Address by its unique id - pk
+        /// Gets a Address by its unique id 
         /// </summary>
         /// <param name="id">int Id for the Address</param>
         /// <returns><see cref="IAddress"/></returns>
@@ -197,7 +197,7 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Gets a list of Address give a list of unique keys
         /// </summary>
-        /// <param name="keys">List of unique keys</param>
+        /// <param name="ids">List of unique keys</param>
         /// <returns></returns>
         public IEnumerable<IAddress> GetByIds(IEnumerable<int> ids)
         {
