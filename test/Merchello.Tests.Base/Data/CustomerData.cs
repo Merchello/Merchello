@@ -17,6 +17,7 @@ namespace Merchello.Tests.Base.Data
                 {
                     FirstName = "Joe",
                     LastName = "Schmoe",
+                    Email = "joe@schmoe.com",
                     MemberId = null,
                     TotalInvoiced = 0
                 };
@@ -33,6 +34,7 @@ namespace Merchello.Tests.Base.Data
                 Key = c.Key,
                 FirstName = c.FirstName,
                 LastName = c.LastName,
+                Email = c.Email,
                 MemberId = c.MemberId,
                 LastPaymentDate = c.LastPaymentDate,
                 TotalInvoiced = c.TotalInvoiced,
@@ -61,6 +63,7 @@ namespace Merchello.Tests.Base.Data
                         {
                             FirstName = "Joe",
                             LastName = "Schmoe",
+                            Email = "jo@schmoe.com",
                             MemberId = null,
                             TotalInvoiced = 0
                         },
@@ -68,6 +71,7 @@ namespace Merchello.Tests.Base.Data
                         {
                             FirstName = "John",
                             LastName = "Doe",
+                            Email = "john@doe.com",
                             MemberId = null,
                             TotalInvoiced = 0
                         },
@@ -75,6 +79,7 @@ namespace Merchello.Tests.Base.Data
                         {
                             FirstName = "Jane",
                             LastName = "Doe",
+                            Email = "jane@doe.com",
                             MemberId = null,
                             TotalInvoiced = 0
                         }

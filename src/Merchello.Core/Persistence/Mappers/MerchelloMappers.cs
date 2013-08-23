@@ -19,6 +19,7 @@ namespace Merchello.Core.Persistence.Mappers
         private static readonly Dictionary<Type, Type> Mappers = new Dictionary<Type, Type>()
             {
                 { typeof(ICustomer), typeof(CustomerMapper) },
+                { typeof(IAnonymousCustomer), typeof(AnonymousCustomerMapper) },
                 { typeof(IAddress), typeof(AddressMapper) }
             };
 
@@ -48,4 +49,6 @@ namespace Merchello.Core.Persistence.Mappers
         }
 
     }
+
+
 }

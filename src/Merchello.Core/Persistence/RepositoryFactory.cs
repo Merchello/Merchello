@@ -11,14 +11,31 @@ namespace Merchello.Core.Persistence
     public class RepositoryFactory
     {
 
+        /// <summary>
+        /// Returns <see cref="ICustomerRepository"/>
+        /// </summary>        
         public virtual ICustomerRepository CreateCustomerRepository(IDatabaseUnitOfWork uow)
         {
             return new CustomerRepository(uow, RuntimeCacheProvider.Current);
         }
 
-        public virtual IAddressRepository CreateAddressRepository(IDatabaseUnitOfWork uow)
+        /// <summary>
+        /// Returns <see cref="IAnonymousCustomerRepository"/>
+        /// </summary>        
+        internal virtual IAnonymousCustomerRepository CreateAnonymousCustomerRepository(IDatabaseUnitOfWork uow)
+        {
+            return new AnonymousCustomerRepository(uow, NullCacheProvider.Current);
+        }
+
+        /// <summary>
+        /// Returns <see cref="IAddressRepository"/>
+        /// </summary>        
+        internal virtual IAddressRepository CreateAddressRepository(IDatabaseUnitOfWork uow)
         {
             return new AddressRepository(uow, NullCacheProvider.Current);
         }
+
+
+        
     }
 }

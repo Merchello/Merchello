@@ -13,10 +13,9 @@ namespace Merchello.Core.Persistence.Mappers
     /// Represents a <see cref="Address"/> to DTO mapper used to translate the properties of the public api 
     /// implementation to that of the database's DTO as sql: [tableName].[columnName].
     /// </summary>
-    internal sealed class AddressMapper : BaseMapper
+    internal sealed class AddressMapper : MerchelloBaseMapper
     {
-        private static readonly ConcurrentDictionary<string, DtoMapModel> PropertyInfoCacheInstance = new ConcurrentDictionary<string, DtoMapModel>();
-
+        
         //NOTE: its an internal class but the ctor must be public since we're using Activator.CreateInstance to create it
         // otherwise that would fail because there is no public constructor.
         public AddressMapper()
@@ -24,12 +23,8 @@ namespace Merchello.Core.Persistence.Mappers
             BuildMap();
         }
 
-        #region Overrides of BaseMapper
+        #region Overrides of MerchelloBaseMapper
 
-        internal override ConcurrentDictionary<string, DtoMapModel> PropertyInfoCache
-        {
-            get { return PropertyInfoCacheInstance; }
-        }
 
         internal override void BuildMap()
         {

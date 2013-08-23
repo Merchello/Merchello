@@ -30,6 +30,12 @@ namespace Merchello.Core.Models
         string LastName { get; set; }
 
         /// <summary>
+        /// The email address of the customer
+        /// </summary>
+        [DataMember]
+        string Email { get; set; }
+
+        /// <summary>
         /// The total amount this customer has been invoiced
         /// </summary>
         [DataMember]

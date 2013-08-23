@@ -89,8 +89,9 @@
     <Compile Include="IBootManager.cs" />
     <Compile Include="MerchelloContext.cs" />
     <Compile Include="Models\Address.cs" />
+    <Compile Include="Models\AnonymousCustomer.cs" />
     <Compile Include="Models\IAddress.cs" />
-    <Compile Include="Models\IAnonymous.cs" />
+    <Compile Include="Models\IAnonymousCustomer.cs" />
     <Compile Include="Models\TypeFields\IAddressTypeField.cs" />
     <Compile Include="Models\TypeFields\IBasketTypeField.cs" />
     <Compile Include="Models\TypeFields\ICustomTypeField.cs" />
@@ -103,7 +104,14 @@
     <Compile Include="Cache\ObjectCacheRuntimeCacheProvider.cs" />
     <Compile Include="Cache\StaticCacheProvider.cs" />
     <Compile Include="ObjectResolution\Resolution.cs" />
+    <Compile Include="Persistence\Factories\AnonymousCustomerFactory.cs" />
+    <Compile Include="Persistence\Mappers\AnonymousCustomerMapper.cs" />
+    <Compile Include="Persistence\Mappers\MerchelloBaseMapper.cs" />
     <Compile Include="Persistence\Querying\Query.cs" />
+    <Compile Include="Persistence\Repositories\AnonymousCustomerRepository.cs" />
+    <Compile Include="Persistence\Repositories\IAnonymousCustomerRepository.cs" />
+    <Compile Include="Services\AnonymousCustomerService.cs" />
+    <Compile Include="Services\IAnonymousCustomerService.cs" />
     <Compile Include="TypeFieldMapperEnumerations.cs" />
     <Compile Include="Models\TypeFields\ProductTypeField.cs" />
     <Compile Include="Models\Rdbms\TypeFieldDto.cs" />

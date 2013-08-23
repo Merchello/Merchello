@@ -15,6 +15,7 @@ namespace Merchello.Core.Services
     public class ServiceContext
     {
         private Lazy<CustomerService> _customerService;
+        private Lazy<AnonymousCustomerService> _anonymousCustomerService; 
         
         /// <summary>
         /// Constructor
@@ -35,6 +36,10 @@ namespace Merchello.Core.Services
         {
             if(_customerService == null)
                 _customerService = new Lazy<CustomerService>(() => new CustomerService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+
+            if (_anonymousCustomerService == null)
+                _anonymousCustomerService = new Lazy<AnonymousCustomerService>(() => new AnonymousCustomerService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _customerService.Value));
+
         }
 
 
