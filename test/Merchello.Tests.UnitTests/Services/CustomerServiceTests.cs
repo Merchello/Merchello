@@ -11,7 +11,7 @@ namespace Merchello.Tests.UnitTests.Services
         [Test]
         public void Create_Triggers_Event_Assert_And_Customer_Is_Passed()
         {
-            var customer = CustomerService.CreateCustomer("Jo", "Jo");
+            var customer = CustomerService.CreateCustomer("Jo", "Jo", "jo@test.com");
 
             Assert.IsTrue(AfterTriggered);
         }

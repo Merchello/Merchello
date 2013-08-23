@@ -13,6 +13,7 @@ namespace Merchello.Core.Persistence.Factories
                     MemberId = dto.MemberId,
                     FirstName = dto.FirstName,
                     LastName = dto.LastName,
+                    Email = dto.Email,
                     CreateDate = dto.CreateDate,
                     UpdateDate = dto.UpdateDate
                 };
@@ -30,6 +31,7 @@ namespace Merchello.Core.Persistence.Factories
                     MemberId = entity.MemberId == 0 || entity.MemberId == null ? null : entity.MemberId,
                     FirstName = entity.FirstName,
                     LastName = entity.LastName,
+                    Email = entity.Email,
                     TotalInvoiced = entity.TotalInvoiced,
                     TotalPayments = entity.TotalPayments,
                     LastPaymentDate = entity.LastPaymentDate,
@@ -39,5 +41,6 @@ namespace Merchello.Core.Persistence.Factories
 
             return dto;
         }
+        
     }
 }

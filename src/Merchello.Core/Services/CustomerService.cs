@@ -44,14 +44,16 @@ namespace Merchello.Core.Services
         /// </summary>
         /// <param name="firstName">First name of the customer</param>
         /// <param name="lastName">Last name of the customer</param>
+        /// <param name="email">Email address of the customer</param>
         /// <param name="memberId">The Umbraco memberId of the customer</param>
         /// <returns></returns>
-        public ICustomer CreateCustomer(string firstName, string lastName, int? memberId = null)
+        public ICustomer CreateCustomer(string firstName, string lastName, string email, int? memberId = null)
         {
             var customer = new Customer(0, 0, null)
                 {
                     FirstName = firstName,
                     LastName = lastName,
+                    Email = email,
                     MemberId = memberId
                 };
 
@@ -59,6 +61,8 @@ namespace Merchello.Core.Services
 
             return customer;
         }
+
+
 
         /// <summary>
         /// Saves a single <see cref="ICustomer"/> object
@@ -217,24 +221,11 @@ namespace Merchello.Core.Services
         public static event TypedEventHandler<ICustomerService, SaveEventArgs<ICustomer>> Saved;
 
         /// <summary>
-        /// Occurs before Create
-        /// </summary>
-        public static event TypedEventHandler<ICustomerService, NewEventArgs<ICustomer>> Creating;
-
-        /// <summary>
         /// Occurs after Create
         /// </summary>
         public static event TypedEventHandler<ICustomerService, NewEventArgs<ICustomer>> Created;
 
-        /// <summary>
-        /// Occurs before Converting anonymous users to customer
-        /// </summary>
-        public static event TypedEventHandler<ICustomerService, ConvertEventArgs<ICustomer>> Converting;
 
-        /// <summary>
-        /// Occurs after Converting anonymous users to customer
-        /// </summary>
-        public static event TypedEventHandler<ICustomerService, ConvertEventArgs<ICustomer>> Converted;
 
         #endregion
 
