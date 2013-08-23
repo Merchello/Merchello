@@ -35,6 +35,7 @@ namespace Merchello.Core.Persistence.Repositories
             var sql = GetBaseQuery(false)
                 .Where(GetBaseWhereClause(), new {Id = id});
 
+
             var dto = Database.Fetch<CustomerDto>(sql).FirstOrDefault();
 
             if (dto == null)
@@ -87,17 +88,17 @@ namespace Merchello.Core.Persistence.Repositories
 
         protected override IEnumerable<string> GetDeleteClauses()
         {
-            const string invoiceIdByPk = "(SELECT id FROM merchInvoice WHERE customerPk = @Id)";
+            const string invoiceIdByKey = "(SELECT id FROM merchInvoice WHERE customerKey = @Id)";
 
             var list = new List<string>
                 {
                     "DELETE FROM merchBasketItem WHERE basketId IN (SELECT id FROM merchBasket WHERE identityKey = @Id)",
                     "DELETE FROM merchBasket WHERE identityKey = @Id",
-                    "DELETE FROM merchInvoiceItem WHERE invoiceId = " + invoiceIdByPk,
-                    "DELETE FROM merchShipment WHERE invoiceId = " + invoiceIdByPk,
-                    "DELETE FROM merchPayment WHERE invoiceId = " + invoiceIdByPk,
-                    "DELETE FROM merchInvoice WHERE customerPk = @Id",
-                    "DELETE FROM merchAddress WHERE customerPk = @Id",
+                    "DELETE FROM merchInvoiceItem WHERE invoiceId = " + invoiceIdByKey,
+                    "DELETE FROM merchShipment WHERE invoiceId = " + invoiceIdByKey,
+                    "DELETE FROM merchPayment WHERE invoiceId = " + invoiceIdByKey,
+                    "DELETE FROM merchInvoice WHERE customerKey = @Id",
+                    "DELETE FROM merchAddress WHERE customerKey = @Id",
                     "DELETE FROM merchCustomer WHERE pk = @Id"
                 };
 
