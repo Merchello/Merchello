@@ -43,7 +43,7 @@ namespace Merchello.Core.Models
         private static readonly PropertyInfo PhoneSelector = ExpressionHelper.GetPropertyInfo<Address, string>(x => x.Phone);
 
         /// <summary>
-        /// The customer key (pk) associated with the address
+        /// The customer key (key) associated with the address
         /// </summary>
         [DataMember]
         public Guid CustomerKey

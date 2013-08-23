@@ -53,7 +53,7 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Gets an <see cref="ICustomer"/> object by its 'UniqueId'
         /// </summary>
-        /// <param name="key">Guid pk of the Customer to retrieve</param>
+        /// <param name="key">Guid key of the Customer to retrieve</param>
         /// <returns><see cref="ICustomer"/></returns>
         ICustomer GetByKey(Guid key);
 

@@ -90,7 +90,7 @@ namespace Merchello.Core.Persistence.Repositories
         {
             var list = new List<string>
                 {
-                    "DELETE FROM merchAddress WHERE AddressPk = @Id",
+                    "DELETE FROM merchAddress WHERE Id = @Id",
                 };
 
             return list;
