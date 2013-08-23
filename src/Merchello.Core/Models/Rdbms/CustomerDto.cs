@@ -9,10 +9,10 @@ namespace Merchello.Core.Models.Rdbms
     [ExplicitColumns]
     internal class CustomerDto
     {
-        [Column("pk")]
+        [Column("key")]
         [PrimaryKeyColumn(AutoIncrement = false)]
         [Constraint(Default = "newid()")]
-        public Guid Pk { get; set; }
+        public Guid Key { get; set; }
 
         [Column("memberId")]
         [NullSetting(NullSetting = NullSettings.Null)]

@@ -35,7 +35,7 @@ namespace Merchello.Core.Persistence.Mappers
         {
             if (!PropertyInfoCache.IsEmpty) return;
 
-            CacheMap<Customer, CustomerDto>(src => src.Key, dto => dto.Pk);
+            CacheMap<Customer, CustomerDto>(src => src.Key, dto => dto.Key);
             CacheMap<Customer, CustomerDto>(src => src.FirstName, dto => dto.FirstName);
             CacheMap<Customer, CustomerDto>(src => src.LastName, dto => dto.LastName);
             CacheMap<Customer, CustomerDto>(src => src.MemberId, dto => dto.MemberId);

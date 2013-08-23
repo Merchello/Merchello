@@ -5,14 +5,14 @@ using Umbraco.Core.Persistence.DatabaseAnnotations;
 namespace Merchello.Core.Models.Rdbms
 {
     [TableName("merchAnonymous")]
-    [PrimaryKey("pk", autoIncrement = false)]
+    [PrimaryKey("key", autoIncrement = false)]
     [ExplicitColumns]
     internal class AnonymousDto
     {
-        [Column("pk")]
+        [Column("key")]
         [PrimaryKeyColumn(AutoIncrement = false)]
         [Constraint(Default = "newid()")]
-        public Guid Pk { get; set; }
+        public Guid Key { get; set; }
 
         [Column("lastActivityDate")]
         [Constraint(Default = "getdate()")]

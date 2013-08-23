@@ -13,9 +13,9 @@ namespace Merchello.Core.Models.Rdbms
     [ExplicitColumns]
     internal class TypeFieldDto
     {
-        [Column("pk")]
+        [Column("key")]
         [PrimaryKeyColumn(AutoIncrement = false)]
-        public Guid Pk { get; set; }
+        public Guid Key { get; set; }
 
         [Column("name")]
         public string Name { get; set; }

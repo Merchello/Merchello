@@ -32,13 +32,6 @@ namespace Merchello.Core
         protected CacheHelper MerchelloCache { get; set; }
 
 
-        public CoreBootManager()
-        {
-            
-        }
-
-       
-
         public override IBootManager Initialize()
         {
             if (_isInitialized)

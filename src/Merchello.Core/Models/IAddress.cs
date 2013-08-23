@@ -14,7 +14,7 @@ namespace Merchello.Core.Models
         /// The Customer primary key Guid
         /// </summary>
         [DataMember]
-        Guid CustomerPk { get; }
+        Guid CustomerKey { get; }
 
         /// <summary>
         /// The descriptive label for the address

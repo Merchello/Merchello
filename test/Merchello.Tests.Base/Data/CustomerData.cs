@@ -30,7 +30,7 @@ namespace Merchello.Tests.Base.Data
         {            
             var dto = new CustomerDto()
             {
-                Pk = c.Key,
+                Key = c.Key,
                 FirstName = c.FirstName,
                 LastName = c.LastName,
                 MemberId = c.MemberId,
