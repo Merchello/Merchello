@@ -14,9 +14,15 @@ namespace Merchello.Core.Configuration
     {
         private static string _rootDir = "";
 
+        /// <summary>
+        /// Name of the application.
+        /// </summary>
+        public static string ApplicationName = "Merchello";
+        public static string ConfigurationName = ApplicationName.ToLower();
+
         public static MerchelloSection Section
         {
-            get { return (MerchelloSection) ConfigurationManager.GetSection("merchello"); }
+            get { return (MerchelloSection)ConfigurationManager.GetSection(ConfigurationName); }
         }
 
         /// <summary>

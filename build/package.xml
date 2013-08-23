@@ -25,7 +25,9 @@
   <DictionaryItems />
   <Languages />
   <DataTypes />
-  <Actions />
+  <Actions>
+    <Action runat="install" undo="true" alias="Merchello_AddConfigSection" />
+  </Actions>
   <control />
   <files />
 </umbPackage>
