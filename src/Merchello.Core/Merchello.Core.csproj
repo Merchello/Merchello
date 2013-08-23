@@ -103,6 +103,7 @@
     <Compile Include="Cache\ObjectCacheRuntimeCacheProvider.cs" />
     <Compile Include="Cache\StaticCacheProvider.cs" />
     <Compile Include="ObjectResolution\Resolution.cs" />
+    <Compile Include="Persistence\Querying\Query.cs" />
     <Compile Include="TypeFieldMapperEnumerations.cs" />
     <Compile Include="Models\TypeFields\ProductTypeField.cs" />
     <Compile Include="Models\Rdbms\TypeFieldDto.cs" />

@@ -94,9 +94,9 @@ namespace Merchello.Core.Persistence.Repositories
                 {
                     "DELETE FROM merchBasketItem WHERE basketId IN (SELECT id FROM merchBasket WHERE identityKey = @Id)",
                     "DELETE FROM merchBasket WHERE identityKey = @Id",
-                    "DELETE FROM merchInvoiceItem WHERE invoiceId = " + invoiceIdByKey,
-                    "DELETE FROM merchShipment WHERE invoiceId = " + invoiceIdByKey,
-                    "DELETE FROM merchPayment WHERE invoiceId = " + invoiceIdByKey,
+                    "DELETE FROM merchInvoiceItem WHERE invoiceId IN " + invoiceIdByKey,
+                    "DELETE FROM merchShipment WHERE invoiceId IN " + invoiceIdByKey,
+                    "DELETE FROM merchPayment WHERE invoiceId IN " + invoiceIdByKey,
                     "DELETE FROM merchInvoice WHERE customerKey = @Id",
                     "DELETE FROM merchAddress WHERE customerKey = @Id",
                     "DELETE FROM merchCustomer WHERE pk = @Id"
