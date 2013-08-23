@@ -90,6 +90,7 @@
     <Compile Include="MerchelloContext.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\IAddress.cs" />
+    <Compile Include="Models\IAnonymous.cs" />
     <Compile Include="Models\TypeFields\IAddressTypeField.cs" />
     <Compile Include="Models\TypeFields\IBasketTypeField.cs" />
     <Compile Include="Models\TypeFields\ICustomTypeField.cs" />

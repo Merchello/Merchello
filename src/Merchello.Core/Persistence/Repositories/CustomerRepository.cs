@@ -146,7 +146,7 @@ namespace Merchello.Core.Persistence.Repositories
 
             var dtos = Database.Fetch<CustomerDto>(sql);
 
-            return dtos.DistinctBy(x => x.Pk).Select(dto => Get(dto.Pk));
+            return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
 
         }
 

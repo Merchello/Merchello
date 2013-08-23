@@ -14,17 +14,17 @@ namespace Merchello.Tests.UnitTests.Querying
         [Test]
         public void Can_Verify_Base_Clause()
         {
-            var pk = Guid.Empty;
+            var key = Guid.Empty;
 
             var expected = new Sql();
             expected.Select("*")
                 .From("[merchCustomer]")
-                .Where("[merchCustomer].[pk] = '" + pk.ToString() + "'");
+                .Where("[merchCustomer].[key] = '" + key.ToString() + "'");
 
             var sql = new Sql();
             sql.Select("*")
                 .From<CustomerDto>()
-                .Where<CustomerDto>(x => x.Pk == pk);
+                .Where<CustomerDto>(x => x.Key == key);
 
             Assert.That(sql.SQL, Is.EqualTo(expected.SQL));
         }
