@@ -70,6 +70,25 @@ namespace Merchello.Core.Persistence.Repositories
 
         #endregion
 
+        #region Overrides of ICustomerRepository
+
+
+        //TODO: RSS this needs to be tested
+        /// <summary>
+        /// Returns a customer based on an Umbraco Member Id
+        /// </summary>
+        public ICustomer GetByMemberId(int? memberId)
+        {
+            if (memberId == null) return null;
+
+            var q = new Querying.Query<ICustomer>()
+                .Where(c => c.MemberId == memberId);
+
+            return PerformGetByQuery(q).FirstOrDefault();
+        }
+
+        #endregion
+
         #region Overrides of MerchelloPetaPocoRepositoryBase<ICustomer>
 
         protected override Sql GetBaseQuery(bool isCount)
@@ -153,6 +172,7 @@ namespace Merchello.Core.Persistence.Repositories
 
 
         #endregion
+
 
 
 

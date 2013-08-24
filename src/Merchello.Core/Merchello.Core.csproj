@@ -71,6 +71,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActivatorHelper.cs" />
+    <Compile Include="CustomerConversion\BaseAnonymousConversionStrategy.cs" />
+    <Compile Include="CustomerConversion\AnonymousToNewCustomerStrategy.cs" />
+    <Compile Include="CustomerConversion\IAnonymousCustomerConversionStrategy.cs" />
     <Compile Include="BootManagerBase.cs" />
     <Compile Include="MerchelloBootstrapper.cs" />
     <Compile Include="Cache\ICacheProvider.cs" />

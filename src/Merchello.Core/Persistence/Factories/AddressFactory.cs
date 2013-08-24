@@ -9,10 +9,9 @@ namespace Merchello.Core.Persistence.Factories
 
         public IAddress BuildEntity(AddressDto dto)
         {
-            var address = new Address(dto.CustomerKey)
+            var address = new Address(dto.CustomerKey, dto.Label)
             {
                 Id = dto.Id, 
-                Label = dto.Label,
                 FullName = dto.FullName,
                 Company =  dto.Company,
                 AddressTypeFieldKey = dto.AddressTypeFieldKey,

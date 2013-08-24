@@ -24,10 +24,20 @@ namespace Merchello.Core.Models
         private string _countryCode;
         private string _phone;
 
+        internal Address(Guid customerPk, string label)
+        {
+            _customerKey = customerPk;
+            _label = label;
+        }
+
         ///TODO: We need to talk about the contstructor.  An empty address does not make a lot of sense.
-        public Address(Guid customerKey)
+        public Address(ICustomer customer, string label)
         {            
-            _customerKey = customerKey;
+            Mandate.ParameterNotNull(customer, "customer");
+            Mandate.ParameterNotNull(label, "label");
+            _customerKey = customer.Key;
+            _label = label;
+
         }
         
         private static readonly PropertyInfo LabelSelector = ExpressionHelper.GetPropertyInfo<Address, string>(x => x.Label);
