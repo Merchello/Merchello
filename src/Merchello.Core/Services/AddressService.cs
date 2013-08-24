@@ -67,9 +67,11 @@ namespace Merchello.Core.Services
         internal IAddress CreateAddress(Guid customerKey, string label, ITypeField addressType, string address1, string address2, string locality, string region, 
                                         string postalCode, string countryCode)
         {
-            var address = new Address(customerKey)
+            if(customerKey == null) throw new ArgumentNullException("customerKey");
+            Mandate.ParameterNotNull(label, "label");
+
+            var address = new Address(customerKey, label)
                 {
-                    Label = label,
                     AddressTypeFieldKey = addressType.TypeKey,
                     Address1 = address1,
                     Address2 = address2,
