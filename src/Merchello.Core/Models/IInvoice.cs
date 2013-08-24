@@ -25,11 +25,11 @@ namespace Merchello.Core.Models
         [IgnoreDataMember]
         Customer Customer { get; set; }
 
-        /// <summary>
-        /// The status of the invoice
-        /// </summary>
-        [DataMember]
-        InvoiceStatus InvoiceStatus { get; set; }
+        ///// <summary>
+        ///// The status of the invoice
+        ///// </summary>
+        //[DataMember]
+        //IInvoiceStatus InvoiceStatus { get; set; }
 
         /// <summary>
         /// The full name to use for billing.  Generally copied from customer address.
