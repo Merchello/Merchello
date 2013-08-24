@@ -7,7 +7,7 @@ namespace Merchello.Core.Models
     /// <summary>
     /// Defines a Merchello Anonymous customer
     /// </summary>
-    public interface IAnonymousCustomer : IKeyEntity
+    public interface IAnonymousCustomer : IConsumer
     {
 
         /// <summary>
