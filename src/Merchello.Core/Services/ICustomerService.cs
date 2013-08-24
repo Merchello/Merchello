@@ -59,11 +59,19 @@ namespace Merchello.Core.Services
         ICustomer GetByKey(Guid key);
 
         /// <summary>
+        /// Gets an <see cref="ICustomer"/> object by its Umbraco MemberId
+        /// </summary>
+        /// <param name="memberId">The Umbraco MemberId of the customer to return</param>
+        /// <returns><see cref="ICustomer"/> object or null if not found</returns>
+        ICustomer GetByMemberId(int? memberId);
+
+        /// <summary>
         /// Gets list of <see cref="ICustomer"/> objects given a list of Unique keys
         /// </summary>
         /// <param name="keys">List of Guid pk for customers to retrieve</param>
         /// <returns>List of <see cref="ICustomer"/></returns>
         IEnumerable<ICustomer> GetByKeys(IEnumerable<Guid> keys);
+
      
     }
 }
