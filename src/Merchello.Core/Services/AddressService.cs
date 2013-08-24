@@ -242,10 +242,6 @@ namespace Merchello.Core.Services
         /// </summary>
         public static event TypedEventHandler<IAddressService, SaveEventArgs<IAddress>> Saved;
 
-        /// <summary>
-        /// Occurs before Create
-        /// </summary>
-        public static event TypedEventHandler<IAddressService, NewEventArgs<IAddress>> Creating;
 
         /// <summary>
         /// Occurs after Create
