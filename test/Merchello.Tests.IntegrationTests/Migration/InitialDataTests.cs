@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Persistence.Migrations.Initial;
 using Merchello.Tests.Base.Db;
@@ -26,6 +22,7 @@ namespace Merchello.Tests.IntegrationTests.Migration
 
             var count = dtos.Count();
 
+            Assert.AreEqual(15, count);
         }
     }
 }
