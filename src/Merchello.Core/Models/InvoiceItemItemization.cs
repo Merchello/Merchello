@@ -7,7 +7,7 @@ namespace Merchello.Core.Models
     public class InvoiceItemItemization : IInvoiceItemItemization, INotifyCollectionChanged
     {
 
-        private IList<IInvoiceItem> _items; 
+        private readonly IList<IInvoiceItem> _items; 
 
         public InvoiceItemItemization(IList<IInvoiceItem> items)
         {

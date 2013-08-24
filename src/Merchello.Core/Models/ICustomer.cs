@@ -8,7 +8,7 @@ namespace Merchello.Core.Models
     /// <summary>
     /// Defines a Merchello customer
     /// </summary>
-    public interface ICustomer : IKeyEntity
+    public interface ICustomer : IConsumer
     {
 
         /// <summary>
