@@ -7,7 +7,7 @@ namespace Merchello.Core.Models
     /// Marker interface for a consumer
     /// </summary>
     /// <remarks>
-    /// Enables either an ICustomer or IAnonymousCustomer to be a parameter to the the IBasket  
+    /// Enables either an ICustomer or IAnonymousCustomer to be a parameter to the IBasket  
     /// </remarks>
     public interface IConsumer : IKeyEntity
     {
