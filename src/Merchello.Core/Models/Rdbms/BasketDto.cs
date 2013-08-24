@@ -13,9 +13,9 @@ namespace Merchello.Core.Models.Rdbms
         [PrimaryKeyColumn]
         public int Id { get; set; }
 
-        [Column("identityKey")]
-        [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchBasketIdentitKey")]
-        public Guid IdentityKey { get; set; }
+        [Column("consumerKey")]
+        [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchBasketConsumerKey")]
+        public Guid ConsumerKey { get; set; }
 
         [Column("basketTypeFieldKey")]
         public Guid BasketTypeFieldKey { get; set; }

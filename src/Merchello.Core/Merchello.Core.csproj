@@ -71,9 +71,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActivatorHelper.cs" />
-    <Compile Include="CustomerConversion\BaseAnonymousConversionStrategy.cs" />
-    <Compile Include="CustomerConversion\AnonymousToNewCustomerStrategy.cs" />
-    <Compile Include="CustomerConversion\IAnonymousCustomerConversionStrategy.cs" />
+    <Compile Include="ConversionStrategies\BaseAnonymousCustomerConversionStrategy.cs" />
+    <Compile Include="ConversionStrategies\AnonymousCustomerToNewCustomerStrategy.cs" />
+    <Compile Include="ConversionStrategies\IAnonymousBasketConversionStrategy.cs" />
+    <Compile Include="ConversionStrategies\IAnonymousCustomerConversionStrategy.cs" />
     <Compile Include="BootManagerBase.cs" />
     <Compile Include="MerchelloBootstrapper.cs" />
     <Compile Include="Cache\ICacheProvider.cs" />
@@ -95,6 +96,8 @@
     <Compile Include="Models\AnonymousCustomer.cs" />
     <Compile Include="Models\IAddress.cs" />
     <Compile Include="Models\IAnonymousCustomer.cs" />
+    <Compile Include="Models\IBasket.cs" />
+    <Compile Include="Models\IBasketItem.cs" />
     <Compile Include="Models\IConsumer.cs" />
     <Compile Include="Models\TypeFields\IAddressTypeField.cs" />
     <Compile Include="Models\TypeFields\IBasketTypeField.cs" />
@@ -116,6 +119,7 @@
     <Compile Include="Persistence\Repositories\IAnonymousCustomerRepository.cs" />
     <Compile Include="Services\AnonymousCustomerService.cs" />
     <Compile Include="Services\IAnonymousCustomerService.cs" />
+    <Compile Include="Services\IBasketService.cs" />
     <Compile Include="TypeFieldMapperEnumerations.cs" />
     <Compile Include="Models\TypeFields\ProductTypeField.cs" />
     <Compile Include="Models\Rdbms\TypeFieldDto.cs" />

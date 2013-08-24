@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Merchello.Core.CustomerConversion;
+using Merchello.Core.ConversionStrategies;
 using Merchello.Core.Events;
 using Merchello.Core.Models;
 using Merchello.Core.Persistence;
@@ -37,8 +37,6 @@ namespace Merchello.Core.Services
             _repositoryFactory = repositoryFactory;
             _customerService = customerService;
         }
-
-
 
 
         #region Overrides IAnonymousCustomerService
@@ -164,25 +162,34 @@ namespace Merchello.Core.Services
         /// <returns><see cref="ICustomer"/></returns>
         public ICustomer ConvertToCustomer(IAnonymousCustomer anonymous, string firstName, string lastName, string email)
         {
-            var strategy = new AnonymousToNewCustomerStrategy(anonymous, firstName, lastName, email, _customerService);
-            return ConvertToCustomer(anonymous, firstName, lastName, email, strategy);
+            // assert there is not already a customer with this key
+            var customer = _customerService.GetByKey(anonymous.Key);
+            if (customer == null)
+            {
+                var strategy = new AnonymousCustomerToNewCustomerStrategy(anonymous, firstName, lastName, email, _customerService);
+                return ConvertToCustomer(anonymous, strategy);
+            }
+            //if (customer.MemberId != null)
+            //{
+            //    var strategy = new AnonymousCustomerToExistingCustomerStrategy(anonymous, (int)customer.MemberId, _customerService);
+            //    return ConvertToCustomer(anonymous, strategy);
+            //}
+            throw new InvalidOperationException("Cannot convert anonymous user.");
         }
+
 
         /// <summary>
         /// Converts an anonymous customer into a customer
         /// </summary>
         /// <param name="anonymous">The <see cref="IAnonymousCustomer"/> object to a <see cref="ICustomer"/> obect</param>
-        /// <param name="firstName">The first name of the customer</param>
-        /// <param name="lastName">The last name of the customer</param>
-        /// <param name="email">The email address of the customer</param>
+        
         /// <param name="strategy">The strategy to use when converting the anonymous customer to a customer</param>
         /// <returns><see cref="ICustomer"/></returns>
-        internal ICustomer ConvertToCustomer(IAnonymousCustomer anonymous, string firstName, string lastName, string email, IAnonymousCustomerConversionStrategy strategy)
+        internal ICustomer ConvertToCustomer(IAnonymousCustomer anonymous, IAnonymousCustomerConversionStrategy strategy)
         {
             Mandate.ParameterNotNull(strategy, "strategy");
 
-            // assert there is not already a customer with this key
-            var customer = _customerService.GetByKey(anonymous.Key) ?? strategy.ConvertToCustomer();
+            var customer = strategy.ConvertToCustomer();
             Delete(anonymous);
             return customer;
         }
@@ -218,7 +225,6 @@ namespace Merchello.Core.Services
 
 
         #endregion
-
 
     }
 }
