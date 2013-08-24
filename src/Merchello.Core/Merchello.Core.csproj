@@ -92,6 +92,7 @@
     <Compile Include="Models\AnonymousCustomer.cs" />
     <Compile Include="Models\IAddress.cs" />
     <Compile Include="Models\IAnonymousCustomer.cs" />
+    <Compile Include="Models\IConsumer.cs" />
     <Compile Include="Models\TypeFields\IAddressTypeField.cs" />
     <Compile Include="Models\TypeFields\IBasketTypeField.cs" />
     <Compile Include="Models\TypeFields\ICustomTypeField.cs" />
@@ -150,14 +151,12 @@
     <Compile Include="LambdaExpressionCacheKey.cs" />
     <Compile Include="Mandate.cs" />
     <Compile Include="Models\Customer.cs" />
-    <Compile Include="Models\IExtendableDataEntity.cs" />
     <Compile Include="Models\IInvoice.cs" />
     <Compile Include="Models\IInvoiceItem.cs" />
     <Compile Include="Models\IInvoiceItemItemization.cs" />
     <Compile Include="Models\IItemization.cs" />
     <Compile Include="Models\InvoiceItem.cs" />
     <Compile Include="Models\InvoiceItemItemization.cs" />
-    <Compile Include="Models\InvoiceStatus.cs" />
     <Compile Include="Models\IShipment.cs" />
     <Compile Include="Models\TypeFields\PaymentMethodTypeField.cs" />
     <Compile Include="Models\Rdbms\AddressDto.cs" />
