@@ -15,9 +15,8 @@ namespace Merchello.Tests.Base.Data
         {
             // this won't work for integration tests because of the database constraint.
 
-            var address = new Address(Guid.NewGuid())
+            var address = new Address(Guid.NewGuid(), "Home")
                 {
-                    Label = "Home",
                     Address1 = "111 Somewhere",
                     AddressTypeFieldKey = new AddressTypeField().Residential.TypeKey,
                     Company = "Demo Co.",
@@ -46,9 +45,8 @@ namespace Merchello.Tests.Base.Data
         {
             return new List<IAddress>()
                 {
-                   new Address(Guid.NewGuid())
+                   new Address(Guid.NewGuid(), "Home")
                     {
-                        Label = "Home",
                         Address1 = "111 Somewhere",
                         AddressTypeFieldKey = new AddressTypeField().Residential.TypeKey,
                         Company = "Demo Co.",
@@ -57,9 +55,8 @@ namespace Merchello.Tests.Base.Data
                         PostalCode = "99701",
                         CountryCode = "US"
                     },
-                    new Address(Guid.NewGuid())
+                    new Address(Guid.NewGuid(), "Viva")
                     {
-                        Label = "Viva",
                         Address1 = "666 Drifters Highway",
                         AddressTypeFieldKey = new AddressTypeField().Commercial.TypeKey,
                         Company = "Vegas.",
@@ -68,9 +65,8 @@ namespace Merchello.Tests.Base.Data
                         PostalCode = "00122",
                         CountryCode = "US"
                     },
-                    new Address(Guid.NewGuid())
+                    new Address(Guid.NewGuid(), "Condo")
                     {
-                        Label = "Condo",
                         Address1 = "12 Hampton Ct.",
                         AddressTypeFieldKey = new AddressTypeField().Residential.TypeKey,
                         Locality = "District of Columbia",

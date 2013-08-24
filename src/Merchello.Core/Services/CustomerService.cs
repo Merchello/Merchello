@@ -187,6 +187,19 @@ namespace Merchello.Core.Services
             }
         }
 
+        /// <summary>
+        /// Gets an <see cref="ICustomer"/> object by its Umbraco MemberId
+        /// </summary>
+        /// <param name="memberId">The Umbraco MemberId of the customer to return</param>
+        /// <returns><see cref="ICustomer"/> object or null if not found</returns>
+        public ICustomer GetByMemberId(int? memberId)
+        {
+            using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetByMemberId(memberId);
+            }
+        }
+
         #endregion
 
         public IEnumerable<ICustomer> GetAll()

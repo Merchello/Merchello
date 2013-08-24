@@ -46,9 +46,7 @@ namespace Merchello.Core.Persistence.Repositories
         {
             var list = new List<string>
                 {
-                    "DELETE FROM merchBasketItem WHERE basketId IN (SELECT id FROM merchBasket WHERE identityKey = @Id)",
-                    "DELETE FROM merchBasket WHERE identityKey = @Id",
-                    "DELETE FROM merchAnonymous WHERE pk = @Id",
+                    "DELETE FROM merchAnonymous WHERE pk = @Id"
                 };
 
             return list;

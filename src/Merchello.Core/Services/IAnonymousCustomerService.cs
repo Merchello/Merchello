@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Merchello.Core.CustomerConversion;
 using Merchello.Core.Models;
 using Umbraco.Core.Services;
 
@@ -59,8 +60,15 @@ namespace Merchello.Core.Services
         /// <returns>List of <see cref="Guid"/> keys</returns>
         IEnumerable<IAnonymousCustomer> GetByKeys(IEnumerable<Guid> keys);
 
-
-        ICustomer ConvertToCustomer(IAnonymousCustomer anonymous, string firstName, string lastName, string email, int? memberId = null, bool raiseEvents = true);
+        /// <summary>
+        /// Converts an anonymous customer into a customer
+        /// </summary>
+        /// <param name="anonymous">The <see cref="IAnonymousCustomer"/> object to a <see cref="ICustomer"/> obect</param>
+        /// <param name="firstName">The first name of the customer</param>
+        /// <param name="lastName">The last name of the customer</param>
+        /// <param name="email">The email address of the customer</param>
+        /// <returns><see cref="ICustomer"/></returns>
+        ICustomer ConvertToCustomer(IAnonymousCustomer anonymous, string firstName, string lastName, string email);
 
     }
 }
