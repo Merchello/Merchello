@@ -1,1 +1,15 @@
-﻿
+﻿{     
+    propertyEditors: [      
+        { 
+            id: "2EFE5776-7981-47A1-B037-04508E427111",
+            name: "Merchello SKU Selector",
+            editor: {
+                view: "~/App_Plugins/Merchello/PropertyEditors/Views/merchelloskuselector.html"
+            }
+        }
+    ]
+    ,
+    javascript: [
+        '~/App_Plugins/Merchello/PropertyEditors/Js/merchelloskuselector.controller.js'
+    ]
+}
