@@ -8,7 +8,7 @@ using Umbraco.Core.Persistence.DatabaseAnnotations;
 
 namespace Merchello.Core.Models.Rdbms
 {
-    [TableName("merchContent2Product")]
+    [TableName("merchProduct")]
     [PrimaryKey("id")]
     [ExplicitColumns]
     internal class ProductDto

@@ -12,7 +12,7 @@ namespace Merchello.Core.Models.Rdbms
         [Column("productVariantPk")]
         [PrimaryKeyColumn(AutoIncrement = false, Name = "PK_merchProductVariant2OptionChoice", OnColumns = "productVariantPk, optionChoiceId")]
         [ForeignKey(typeof(ProductVariantDto), Name = "FK_merchProductVariant2OptionChoice_merchProductVariant", Column = "pk")]
-        public Guid Key { get; set; }
+        public Guid ProductVariantKey { get; set; }
 
         [Column("optionChoiceId")]
         [ForeignKey(typeof(OptionChoiceDto), Name = "FK_merchProductVariant2OptionChoice_merchOptionChoice", Column = "id")]
