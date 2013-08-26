@@ -94,6 +94,7 @@
     <Compile Include="MerchelloContext.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\AnonymousCustomer.cs" />
+    <Compile Include="Models\Basket.cs" />
     <Compile Include="Models\IAddress.cs" />
     <Compile Include="Models\IAnonymousCustomer.cs" />
     <Compile Include="Models\IBasket.cs" />
@@ -119,12 +120,17 @@
     <Compile Include="Cache\StaticCacheProvider.cs" />
     <Compile Include="ObjectResolution\Resolution.cs" />
     <Compile Include="Persistence\Factories\AnonymousCustomerFactory.cs" />
+    <Compile Include="Persistence\Factories\BasketFactory.cs" />
     <Compile Include="Persistence\Mappers\AnonymousCustomerMapper.cs" />
+    <Compile Include="Persistence\Mappers\BasketMapper.cs" />
     <Compile Include="Persistence\Mappers\MerchelloBaseMapper.cs" />
     <Compile Include="Persistence\Querying\Query.cs" />
     <Compile Include="Persistence\Repositories\AnonymousCustomerRepository.cs" />
+    <Compile Include="Persistence\Repositories\BasketRepository.cs" />
     <Compile Include="Persistence\Repositories\IAnonymousCustomerRepository.cs" />
+    <Compile Include="Persistence\Repositories\IBasketRepository.cs" />
     <Compile Include="Services\AnonymousCustomerService.cs" />
+    <Compile Include="Services\BasketService.cs" />
     <Compile Include="Services\IAnonymousCustomerService.cs" />
     <Compile Include="Services\IBasketService.cs" />
     <Compile Include="TypeFieldMapperEnumerations.cs" />

@@ -11,6 +11,20 @@ namespace Merchello.Tests.Base.Data
     public class CustomerData
     {
 
+        public static IAnonymousCustomer AnonymousCustomerMock()
+        {
+            var key = new Guid("E2D98FAE-EAF3-47B6-9A3F-5E74202043BC");
+            var lmd = DateTime.Parse("8/26/2013");
+            var anonymous = new AnonymousCustomer(lmd)
+            {
+                Key = key,
+                CreateDate = lmd,
+                UpdateDate = lmd
+            };
+
+            return anonymous;
+        }
+
         public static ICustomer CustomerForInserting()
         {
             var customer = new Customer(0, 0, null)

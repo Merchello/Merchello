@@ -20,7 +20,8 @@ namespace Merchello.Core.Persistence.Mappers
             {
                 { typeof(ICustomer), typeof(CustomerMapper) },
                 { typeof(IAnonymousCustomer), typeof(AnonymousCustomerMapper) },
-                { typeof(IAddress), typeof(AddressMapper) }
+                { typeof(IAddress), typeof(AddressMapper) },
+                { typeof(IBasket), typeof(BasketMapper)}
             };
 
 

@@ -14,6 +14,11 @@ namespace Merchello.Core.Services
     public interface IBasketService : IService
     {
         /// <summary>
+        /// Creates a Basket
+        /// </summary>
+        IBasket CreateBasket(IConsumer consumer, BasketType basketType);
+
+        /// <summary>
         /// Saves a single <see cref="IAddress"/> object
         /// </summary>
         /// <param name="basket">The <see cref="IBasket"/> to save</param>
@@ -56,6 +61,13 @@ namespace Merchello.Core.Services
         /// <returns><see cref="IBasket"/></returns>
         IBasket GetByConsumer(IConsumer consumer, BasketType basketType);
 
+        /// <summary>
+        /// Gets a collection of <see cref="IBasket"/> objects by teh <see cref="IConsumer"/>
+        /// </summary>
+        /// <param name="consumer"></param>
+        /// <returns></returns>
+        IEnumerable<IBasket> GetByConsumer(IConsumer consumer); 
+            
         /// <summary>
         /// Gets list of <see cref="IBasket"/> objects given a list of Ids
         /// </summary>

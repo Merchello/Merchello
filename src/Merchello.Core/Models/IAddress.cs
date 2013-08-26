@@ -82,5 +82,11 @@ namespace Merchello.Core.Models
         [DataMember]
         string Phone { get; set; }
 
+        /// <summary>
+        /// The <see cref="AddressType"/> of the address
+        /// </summary>
+        [DataMember]
+        AddressType AddressType { get; set; }
+
     }
 }
