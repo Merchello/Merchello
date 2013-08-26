@@ -80,7 +80,9 @@
     <Compile Include="Services\CustomerServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
     <None Include="unit-test-log4net.config" />
   </ItemGroup>

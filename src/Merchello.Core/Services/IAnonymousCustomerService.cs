@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Merchello.Core.CustomerConversion;
 using Merchello.Core.Models;
 using Umbraco.Core.Services;
 
@@ -28,14 +27,12 @@ namespace Merchello.Core.Services
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         void Save(IAnonymousCustomer anonymous, bool raiseEvents = true);
 
-
         /// <summary>
         /// Deletes a single <see cref="IAnonymousCustomer"/> object
         /// </summary>
         /// <param name="anonymous"><see cref="IAnonymousCustomer"/> to delete</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         void Delete(IAnonymousCustomer anonymous, bool raiseEvents = true);
-
 
         /// <summary>
         /// Deletes a collection of <see cref="IAnonymousCustomer"/> objects
@@ -44,14 +41,12 @@ namespace Merchello.Core.Services
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         void Delete(IEnumerable<IAnonymousCustomer> anonymousList, bool raiseEvents = true);
 
-
         /// <summary>
         /// Gets an <see cref="IAnonymousCustomer"/> object by its 'UniqueId' (key)
         /// </summary>
         /// <param name="key">Guid pk of the AnonymousCustomer to retrieve</param>
         /// <returns><see cref="IAnonymousCustomer"/></returns>
         IAnonymousCustomer GetByKey(Guid key);
-
 
         /// <summary>
         /// Gets list of <see cref="IAnonymousCustomer"/> objects given a list of Unique keys

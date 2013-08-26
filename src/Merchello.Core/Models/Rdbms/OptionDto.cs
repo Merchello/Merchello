@@ -1,24 +1,28 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Umbraco.Core.Persistence;
 using Umbraco.Core.Persistence.DatabaseAnnotations;
 
 namespace Merchello.Core.Models.Rdbms
 {
-    [TableName("merchBasket")]
-    [PrimaryKey("id", autoIncrement = false)]
+    [TableName("merchOption")]
+    [PrimaryKey("id")]
     [ExplicitColumns]
-    internal class BasketDto
+    internal class OptionDto
     {
         [Column("id")]
         [PrimaryKeyColumn]
         public int Id { get; set; }
 
-        [Column("consumerKey")]
-        [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchBasketConsumerKey")]
-        public Guid ConsumerKey { get; set; }
+        [Column("name")]
+        public string Name { get; set; }
 
-        [Column("basketTypeFieldKey")]
-        public Guid BasketTypeFieldKey { get; set; }
+        [Column("required")]
+        [Constraint(Default = "0")]
+        public bool Required { get; set; }
 
         [Column("updateDate")]
         [Constraint(Default = "getdate()")]

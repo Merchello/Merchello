@@ -111,8 +111,8 @@ namespace Merchello.Core.Persistence.Repositories
 
             var list = new List<string>
                 {
-                    "DELETE FROM merchBasketItem WHERE basketId IN (SELECT id FROM merchBasket WHERE identityKey = @Id)",
-                    "DELETE FROM merchBasket WHERE identityKey = @Id",
+                    "DELETE FROM merchBasketItem WHERE basketId IN (SELECT id FROM merchBasket WHERE consumerKey = @Id)",
+                    "DELETE FROM merchBasket WHERE consumerKey = @Id",
                     "DELETE FROM merchInvoiceItem WHERE invoiceId IN " + invoiceIdByKey,
                     "DELETE FROM merchShipment WHERE invoiceId IN " + invoiceIdByKey,
                     "DELETE FROM merchPayment WHERE invoiceId IN " + invoiceIdByKey,
