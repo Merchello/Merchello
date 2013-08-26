@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Linq;
-using Merchello.Core.Models;
-using Merchello.Core.Persistence.Querying;
-using Merchello.Core.Persistence.Repositories;
 using Merchello.Core.Services;
 using Merchello.Tests.Base.Data;
 using Merchello.Tests.Base.SqlSyntax;
 using NUnit.Framework;
-using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Tests.IntegrationTests.Services
 {
@@ -46,28 +42,14 @@ namespace Merchello.Tests.IntegrationTests.Services
 
             _customerService.Save(customers);
 
-            var recordCount = _customerService.GetAll().Count();
-
-            Assert.IsTrue(3 <= recordCount);
-        }
-
-        [Test]
-        public void Can_Delete_A_Customer()
-        {
-            var all = _customerService.GetAll();
-            var count = all.Count();
-
-            Console.WriteLine("Current count is : " + count.ToString());
-
-            if (count > 0)
+            foreach (var c in customers)
             {
-                _customerService.Delete(all.ToArray().First());
-                var newCount = _customerService.GetAll().Count();
-                Assert.AreEqual(count -1, newCount);
-
+                Assert.IsTrue(c.HasIdentity);    
             }
+
             
         }
+
 
         [Test]
         public void Can_Delete_Every_Customers()

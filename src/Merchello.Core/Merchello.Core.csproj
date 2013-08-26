@@ -95,6 +95,7 @@
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\AnonymousCustomer.cs" />
     <Compile Include="Models\Basket.cs" />
+    <Compile Include="Models\BasketItem.cs" />
     <Compile Include="Models\IAddress.cs" />
     <Compile Include="Models\IAnonymousCustomer.cs" />
     <Compile Include="Models\IBasket.cs" />
