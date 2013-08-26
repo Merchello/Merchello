@@ -99,6 +99,13 @@
     <Compile Include="Models\IBasket.cs" />
     <Compile Include="Models\IBasketItem.cs" />
     <Compile Include="Models\IConsumer.cs" />
+    <Compile Include="Models\Rdbms\Content2ProductDto.cs" />
+    <Compile Include="Models\Rdbms\OptionChoiceDto.cs" />
+    <Compile Include="Models\Rdbms\OptionDto.cs" />
+    <Compile Include="Models\Rdbms\Product2OptionDto.cs" />
+    <Compile Include="Models\Rdbms\ProductDto.cs" />
+    <Compile Include="Models\Rdbms\ProductVariant2OptionChoiceDto.cs" />
+    <Compile Include="Models\Rdbms\ProductVariantDto.cs" />
     <Compile Include="Models\TypeFields\IAddressTypeField.cs" />
     <Compile Include="Models\TypeFields\IBasketTypeField.cs" />
     <Compile Include="Models\TypeFields\ICustomTypeField.cs" />
