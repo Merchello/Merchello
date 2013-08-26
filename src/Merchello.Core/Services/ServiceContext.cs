@@ -15,7 +15,8 @@ namespace Merchello.Core.Services
     public class ServiceContext
     {
         private Lazy<CustomerService> _customerService;
-        private Lazy<AnonymousCustomerService> _anonymousCustomerService; 
+        private Lazy<AnonymousCustomerService> _anonymousCustomerService;
+        private Lazy<BasketService> _basketService; 
         
         /// <summary>
         /// Constructor
@@ -40,6 +41,9 @@ namespace Merchello.Core.Services
             if (_anonymousCustomerService == null)
                 _anonymousCustomerService = new Lazy<AnonymousCustomerService>(() => new AnonymousCustomerService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _customerService.Value));
 
+            if(_basketService == null)
+                _basketService = new Lazy<BasketService>(() => new BasketService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+
         }
 
 
@@ -49,6 +53,14 @@ namespace Merchello.Core.Services
         public ICustomerService CustomerService
         {
             get { return _customerService.Value;  }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="BasketService"/>
+        /// </summary>
+        public IBasketService BasketService
+        {
+            get { return _basketService.Value;  }
         }
     }
 }

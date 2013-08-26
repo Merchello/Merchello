@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Merchello.Core;
 using Merchello.Core.Events;
 using Merchello.Core.Models;
 using Merchello.Core.Persistence;
@@ -13,44 +14,46 @@ namespace Merchello.Tests.UnitTests.Services
 {
     [TestFixture]
     [Category("Services")]
-    public class CustomerServiceTests : ServiceTestsBase<ICustomer>
+    public class BasketServiceTests : ServiceTestsBase<IBasket>
     {
 
-        private CustomerService _customerService;
-
+        private BasketService _basketService;
+        private IAnonymousCustomer _anonymous;
 
         protected override void Initialize()
         {
-            _customerService = new CustomerService(new MockUnitOfWorkProvider(), new RepositoryFactory());
+            _basketService = new BasketService(new MockUnitOfWorkProvider(), new RepositoryFactory());
             Before = null;
             After = null;
 
-            CustomerService.Saving += delegate(ICustomerService sender, SaveEventArgs<ICustomer> args)
+            _anonymous = CustomerData.AnonymousCustomerMock();
+
+            BasketService.Saving += delegate(IBasketService sender, SaveEventArgs<IBasket> args)
             {
                 BeforeTriggered = true;
                 Before = args.SavedEntities.FirstOrDefault();
             };
 
-            CustomerService.Saved += delegate(ICustomerService sender, SaveEventArgs<ICustomer> args)
+            BasketService.Saved += delegate(IBasketService sender, SaveEventArgs<IBasket> args)
             {
                 AfterTriggered = true;
                 After = args.SavedEntities.FirstOrDefault();
             };
 
 
-            CustomerService.Created += delegate(ICustomerService sender, NewEventArgs<ICustomer> args)
+            BasketService.Created += delegate(IBasketService sender, NewEventArgs<IBasket> args)
             {
                 AfterTriggered = true;
                 After = args.Entity;
             };
 
-            CustomerService.Deleting += delegate(ICustomerService sender, DeleteEventArgs<ICustomer> args)
+            BasketService.Deleting += delegate(IBasketService sender, DeleteEventArgs<IBasket> args)
             {
                 BeforeTriggered = true;
                 Before = args.DeletedEntities.FirstOrDefault();
             };
 
-            CustomerService.Deleted += delegate(ICustomerService sender, DeleteEventArgs<ICustomer> args)
+            BasketService.Deleted += delegate(IBasketService sender, DeleteEventArgs<IBasket> args)
             {
                 AfterTriggered = true;
                 After = args.DeletedEntities.FirstOrDefault();
@@ -65,62 +68,53 @@ namespace Merchello.Tests.UnitTests.Services
 
         }
 
-
         [Test]
-        public void Create_Triggers_Event_Assert_And_Customer_Is_Passed()
+        public void Save_Triggers_Events_And_Basket_Is_Passed()
         {
-            var customer = _customerService.CreateCustomer("Jo", "Jo", "jo@test.com");
+            var basket = BasketData.AnonymousBasket(BasketType.Basket);
 
-            Assert.IsTrue(AfterTriggered);
-        }
-
-        [Test]
-        public void Save_Triggers_Events_And_Customer_Is_Passed()
-        {
-            var customer = CustomerData.CustomerForInserting();
-
-            _customerService.Save(customer);
+            _basketService.Save(basket);
 
             Assert.IsTrue(BeforeTriggered);
-            Assert.AreEqual(customer.FirstName, Before.FirstName);
+            Assert.AreEqual(basket.ConsumerKey, Before.ConsumerKey);
 
             Assert.IsTrue(AfterTriggered);
-            Assert.AreEqual(customer.LastName, After.LastName);    
+            Assert.AreEqual(basket.BasketType, After.BasketType);
         }
 
         [Test]
         public void Save_Is_Committed()
         {
-            var customer = CustomerData.CustomerForInserting();
 
-            _customerService.Save(customer);
+            var basket = BasketData.AnonymousBasket(BasketType.Basket);
+            _basketService.Save(basket);
+
 
             Assert.IsTrue(CommitCalled);
 
         }
 
         [Test]
-        public void Delete_Triggers_Events_And_Customer_Is_Passed()
+        public void Delete_Triggers_Events_And_Basket_Is_Passed()
         {
-            var customer = CustomerData.CustomerForUpdating();
+            var basket = BasketData.AnonymousBasket(BasketType.Basket);
 
-            _customerService.Delete(customer);
-
-
+            _basketService.Delete(basket);
+            
             Assert.IsTrue(BeforeTriggered);
-            Assert.AreEqual(customer.FirstName, Before.FirstName);
+            Assert.AreEqual(basket.ConsumerKey, Before.ConsumerKey);
 
             Assert.IsTrue(AfterTriggered);
-            Assert.AreEqual(customer.LastName, After.LastName);    
+            Assert.AreEqual(basket.BasketTypeFieldKey, After.BasketTypeFieldKey);
         }
 
         [Test]
         public void Delete_Is_Committed()
         {
-            var customer = CustomerData.CustomerForUpdating();
+            var basket = BasketData.AnonymousBasket(BasketType.Basket);
 
-            _customerService.Delete(customer);
-   
+            _basketService.Delete(basket);
+
             Assert.IsTrue(CommitCalled);
         }
 

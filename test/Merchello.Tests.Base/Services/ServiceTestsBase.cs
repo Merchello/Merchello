@@ -10,22 +10,22 @@ using Merchello.Core.Services;
 using Merchello.Tests.Base.Respositories;
 using Merchello.Tests.Base.Respositories.UnitOfWork;
 using NUnit.Framework;
+using Umbraco.Core.Persistence.SqlSyntax;
+using Umbraco.Core.Services;
 
 namespace Merchello.Tests.Base.Services
 {
-    public class ServiceTestsBase
+    public abstract class ServiceTestsBase<T>
     {
-        protected CustomerService CustomerService;
-        protected ICustomer BeforeCustomer;
-        protected ICustomer AfterCustomer;
-
-        protected AddressService AddressService;
-        protected IAddress BeforeAddress;
-        protected IAddress AfterAddress;
-
+        protected T Before;
+        protected T After;
         protected bool BeforeTriggered;
         protected bool AfterTriggered;
         protected bool CommitCalled;
+
+
+
+        protected abstract void Initialize();
 
         [SetUp]
         public void Setup()
@@ -36,96 +36,17 @@ namespace Merchello.Tests.Base.Services
             AfterTriggered = false;
             CommitCalled = false;
 
-            // Customer setup
-            CustomerSetup();
-
-            // Address setup
-            AddressSetup();
+            SqlSyntaxContext.SqlSyntaxProvider = new SqlCeSyntaxProvider();
 
             // General tests
             MockDatabaseUnitOfWork.Committed += delegate(object sender)
             {
                 CommitCalled = true;
             };
+
+            Initialize();
         }
 
-        private void CustomerSetup()
-        {
-            CustomerService = new CustomerService(new MockUnitOfWorkProvider(), new RepositoryFactory());
-            BeforeCustomer = null;
-            AfterCustomer = null;
-
-            CustomerService.Saving += delegate(ICustomerService sender, SaveEventArgs<ICustomer> args)
-            {
-                BeforeTriggered = true;
-                BeforeCustomer = args.SavedEntities.FirstOrDefault();
-            };
-
-            CustomerService.Saved += delegate(ICustomerService sender, SaveEventArgs<ICustomer> args)
-            {
-                AfterTriggered = true;
-                AfterCustomer = args.SavedEntities.FirstOrDefault();
-            };
-
-
-            CustomerService.Created += delegate(ICustomerService sender, NewEventArgs<ICustomer> args)
-            {
-                AfterTriggered = true;
-                AfterCustomer = args.Entity;
-            };
-
-            CustomerService.Deleting += delegate(ICustomerService sender, DeleteEventArgs<ICustomer> args)
-            {
-                BeforeTriggered = true;
-                BeforeCustomer = args.DeletedEntities.FirstOrDefault();
-            };
-
-            CustomerService.Deleted += delegate(ICustomerService sender, DeleteEventArgs<ICustomer> args)
-            {
-                AfterTriggered = true;
-                AfterCustomer = args.DeletedEntities.FirstOrDefault();
-            };
-
-
-        }
-
-        private void AddressSetup()
-        {
-            AddressService = new AddressService(new MockUnitOfWorkProvider(), new RepositoryFactory());
-            BeforeAddress = null;
-            AfterAddress = null;
-
-            AddressService.Saving += delegate(IAddressService sender, SaveEventArgs<IAddress> args)
-            {
-                BeforeTriggered = true;
-                BeforeAddress = args.SavedEntities.FirstOrDefault();
-            };
-
-            AddressService.Saved += delegate(IAddressService sender, SaveEventArgs<IAddress> args)
-            {
-                AfterTriggered = true;
-                AfterAddress = args.SavedEntities.FirstOrDefault();
-            };
-
-
-            AddressService.Created += delegate(IAddressService sender, NewEventArgs<IAddress> args)
-            {
-                AfterTriggered = true;
-                AfterAddress = args.Entity;
-            };
-
-            AddressService.Deleting += delegate(IAddressService sender, DeleteEventArgs<IAddress> args)
-            {
-                BeforeTriggered = true;
-                BeforeAddress = args.DeletedEntities.FirstOrDefault();
-            };
-
-            AddressService.Deleted += delegate(IAddressService sender, DeleteEventArgs<IAddress> args)
-            {
-                AfterTriggered = true;
-                AfterAddress = args.DeletedEntities.FirstOrDefault();
-            };
-
-        }
+       
     }
 }
