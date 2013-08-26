@@ -15,8 +15,7 @@ namespace Merchello.Tests.IntegrationTests.Services
     public class CustomerServiceTests : BaseUsingSqlServerSyntax
     {
         private CustomerService _customerService;
-        private int _expectedAddOne = 1;
-        private int _expectedAddThree = 3;
+
 
         [SetUp]
         public override void Initialize()
@@ -25,10 +24,6 @@ namespace Merchello.Tests.IntegrationTests.Services
 
             _customerService = new CustomerService();
 
-            var all = _customerService.GetAll().ToArray();
-
-            _expectedAddOne = all.Count() + 1;
-            _expectedAddThree = all.Count() + 3;
 
         }
         
@@ -39,10 +34,8 @@ namespace Merchello.Tests.IntegrationTests.Services
             var customer = CustomerData.CustomerForInserting();
 
             _customerService.Save(customer);
-
-            var recordCount = _customerService.GetAll().Count();
-
-            Assert.AreEqual(_expectedAddOne, recordCount);
+          
+            Assert.IsTrue(customer.HasIdentity);
 
         }
 
@@ -55,7 +48,7 @@ namespace Merchello.Tests.IntegrationTests.Services
 
             var recordCount = _customerService.GetAll().Count();
 
-            Assert.AreEqual(_expectedAddThree, recordCount);
+            Assert.IsTrue(3 <= recordCount);
         }
 
         [Test]
