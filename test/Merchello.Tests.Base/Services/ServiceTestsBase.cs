@@ -10,6 +10,7 @@ using Merchello.Core.Services;
 using Merchello.Tests.Base.Respositories;
 using Merchello.Tests.Base.Respositories.UnitOfWork;
 using NUnit.Framework;
+using Umbraco.Core.Persistence.SqlSyntax;
 using Umbraco.Core.Services;
 
 namespace Merchello.Tests.Base.Services
@@ -35,6 +36,7 @@ namespace Merchello.Tests.Base.Services
             AfterTriggered = false;
             CommitCalled = false;
 
+            SqlSyntaxContext.SqlSyntaxProvider = new SqlCeSyntaxProvider();
 
             // General tests
             MockDatabaseUnitOfWork.Committed += delegate(object sender)

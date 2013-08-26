@@ -122,6 +122,7 @@
     <Compile Include="Persistence\Factories\AnonymousCustomerFactory.cs" />
     <Compile Include="Persistence\Factories\BasketFactory.cs" />
     <Compile Include="Persistence\Mappers\AnonymousCustomerMapper.cs" />
+    <Compile Include="Persistence\Mappers\BasketMapper.cs" />
     <Compile Include="Persistence\Mappers\MerchelloBaseMapper.cs" />
     <Compile Include="Persistence\Querying\Query.cs" />
     <Compile Include="Persistence\Repositories\AnonymousCustomerRepository.cs" />

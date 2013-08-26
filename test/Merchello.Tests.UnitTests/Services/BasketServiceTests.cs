@@ -68,33 +68,6 @@ namespace Merchello.Tests.UnitTests.Services
 
         }
 
-
-        ///this test can't be run against the MockDatabaseUnitOfWork because it accesses the Database property
-        //[Test]
-        //public void Can_Create_A_Basket()
-        //{
-            
-
-        //    var basket = _basketService.CreateBasket(_anonymous, BasketType.Basket);
-
-        //    Assert.IsTrue(basket.BasketType == BasketType.Basket);
-        //    Assert.IsTrue(basket.ConsumerKey == _anonymous.Key);
-
-        //    Assert.IsTrue(AfterTriggered);
-        //}
-
-        ///this test can't be run against the MockDatabaseUnitOfWork because it accesses the Database property
-        //[Test]
-        //public void Can_Create_A_Wishlist()
-        //{
-        //    var basket = _basketService.CreateBasket(_anonymous, BasketType.Wishlist);
-
-        //    Assert.IsTrue(basket.BasketType == BasketType.Wishlist);
-        //    Assert.IsTrue(basket.ConsumerKey == _anonymous.Key);
-
-        //    Assert.IsTrue(AfterTriggered);
-        //}
-
         [Test]
         public void Save_Triggers_Events_And_Basket_Is_Passed()
         {
