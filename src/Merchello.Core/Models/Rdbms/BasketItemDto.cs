@@ -16,7 +16,8 @@ namespace Merchello.Core.Models.Rdbms
         [Column("parentId")]
         [ForeignKey(typeof(BasketItemDto), Name = "FK_merchBasketItem_merchBasketItem", Column = "id")]
         [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchBasketItemParent")]
-        public int ParentId { get; set; }
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public int? ParentId { get; set; }
 
         [Column("basketId")]
         [ForeignKey(typeof(BasketDto), Name = "FK_merchBasketItem_merchBasket", Column = "id")]
