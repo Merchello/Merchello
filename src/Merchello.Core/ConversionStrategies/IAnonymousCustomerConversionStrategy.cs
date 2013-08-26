@@ -1,6 +1,6 @@
 ﻿using Merchello.Core.Models;
 
-namespace Merchello.Core.CustomerConversion
+namespace Merchello.Core.ConversionStrategies
 {
     /// <summary>
     /// Defines the anonymous customer conversion strategy

@@ -1,20 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Merchello.Core.Events;
+﻿using Merchello.Core.Events;
 using Merchello.Core.Models;
-using Merchello.Core.Persistence;
 using Merchello.Core.Services;
-using Umbraco.Core.Persistence.UnitOfWork;
 
-namespace Merchello.Core.CustomerConversion
+namespace Merchello.Core.ConversionStrategies
 {
     /// <summary>
     /// Strategy to convert an anonymous customer into a new customer
     /// </summary>
-    public class AnonymousToNewCustomerStrategy : BaseAnonymousConversionStrategy
+    public class AnonymousCustomerToNewCustomerStrategy : BaseAnonymousCustomerConversionStrategy, IAnonymousCustomerConversionStrategy
     {
 
         private readonly IAnonymousCustomer _anonymous;
@@ -23,14 +16,7 @@ namespace Merchello.Core.CustomerConversion
         private readonly string _email;
         
         
-        /// <summary>
-        /// 
-        /// </summary>
-        internal AnonymousToNewCustomerStrategy(IAnonymousCustomer anonymous, string firstName, string lastName, string email)
-            : this(anonymous,firstName,lastName,email, new CustomerService(new PetaPocoUnitOfWorkProvider(), new RepositoryFactory()))
-        {}
-
-        public AnonymousToNewCustomerStrategy(IAnonymousCustomer anonymous, string firstName, string lastName, string email, ICustomerService customerService)
+        public AnonymousCustomerToNewCustomerStrategy(IAnonymousCustomer anonymous, string firstName, string lastName, string email, ICustomerService customerService)
             : base(customerService)
         {
             _anonymous = anonymous;
@@ -40,7 +26,7 @@ namespace Merchello.Core.CustomerConversion
           
         }
 
-        public override ICustomer ConvertToCustomer()
+        public ICustomer ConvertToCustomer()
         {
 
             Converting.RaiseEvent(new ConvertEventArgs<IAnonymousCustomer>(_anonymous), this);
@@ -60,12 +46,12 @@ namespace Merchello.Core.CustomerConversion
         /// <summary>
         /// Occurs before Converting anonymous users to customer
         /// </summary>
-        public static event TypedEventHandler<AnonymousToNewCustomerStrategy, ConvertEventArgs<IAnonymousCustomer>> Converting;
+        public static event TypedEventHandler<AnonymousCustomerToNewCustomerStrategy, ConvertEventArgs<IAnonymousCustomer>> Converting;
 
         /// <summary>
         /// Occurs after Converting anonymous users to customer
         /// </summary>
-        public static event TypedEventHandler<AnonymousToNewCustomerStrategy, ConvertEventArgs<ICustomer>> Converted;
+        public static event TypedEventHandler<AnonymousCustomerToNewCustomerStrategy, ConvertEventArgs<ICustomer>> Converted;
 
         #endregion
     }

@@ -1,4 +1,5 @@
-﻿using Umbraco.Core.Persistence;
+﻿using System;
+using Umbraco.Core.Persistence;
 using Umbraco.Core.Persistence.DatabaseAnnotations;
 
 namespace Merchello.Core.Models.Rdbms
@@ -17,5 +18,14 @@ namespace Merchello.Core.Models.Rdbms
         [Column("warehouseId")]
         [ForeignKey(typeof(WarehouseDto), Name = "FK_merchShipMethod2Warehouse_merchWarehouse", Column = "id")]
         public int WarehouseId { get; set; }
+
+
+        [Column("updateDate")]
+        [Constraint(Default = "getdate()")]
+        public DateTime UpdateDate { get; set; }
+
+        [Column("createDate")]
+        [Constraint(Default = "getdate()")]
+        public DateTime CreateDate { get; set; }
     }
 }
