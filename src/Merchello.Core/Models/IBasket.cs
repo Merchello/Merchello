@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using Merchello.Core.Models.EntityBase;
+using Merchello.Core.Models.TypeFields;
 
 namespace Merchello.Core.Models
 {
@@ -12,18 +14,20 @@ namespace Merchello.Core.Models
         /// <summary>
         /// The <see cref="IConsumer"/> key
         /// </summary>
+        [DataMember]
         Guid ConsumerKey { get; set; }
 
-        IEnumerable<IBasketItem> BasketItems { get; set; }
+        /// <summary>
+        /// The basket <see cref="ITypeField"/> guid typeKey
+        /// </summary>
+        [DataMember]
+        Guid BasketTypeFieldKey { get; set; }
+
 
         /// <summary>
-        /// Returns true or false indicating whether or not the basket is empty 
+        /// The <see cref="BasketType"/> of the basket
         /// </summary>
-        bool IsEmpty();
-
-        /// <summary>
-        /// Returns the count of <see cref="IBasketItem"/>
-        /// </summary>
-        int BasketItemCount();
+        [DataMember]
+        BasketType BasketType { get; set; }
     }
 }

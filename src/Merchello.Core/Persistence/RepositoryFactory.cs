@@ -10,7 +10,6 @@ namespace Merchello.Core.Persistence
     /// </summary>
     public class RepositoryFactory
     {
-
         /// <summary>
         /// Returns <see cref="ICustomerRepository"/>
         /// </summary>        
@@ -24,7 +23,7 @@ namespace Merchello.Core.Persistence
         /// </summary>        
         internal virtual IAnonymousCustomerRepository CreateAnonymousCustomerRepository(IDatabaseUnitOfWork uow)
         {
-            return new AnonymousCustomerRepository(uow, NullCacheProvider.Current);
+            return new AnonymousCustomerRepository(uow, RuntimeCacheProvider.Current);
         }
 
         /// <summary>
@@ -36,6 +35,10 @@ namespace Merchello.Core.Persistence
         }
 
 
+        internal virtual IBasketRepository CreateBasketRepository(IDatabaseUnitOfWork uow)
+        {
+            return new BasketRepository(uow, RuntimeCacheProvider.Current);
+        }
         
     }
 }
