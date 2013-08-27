@@ -34,10 +34,11 @@ namespace Merchello.Tests.IntegrationTests.Services
         public void Can_Delete_All_Consumers_Baskets()
         {
             var baskets = _basketService.GetByConsumer(_anonymous);
-            Console.Write(baskets.Count().ToString());
-
-            _basketService.Delete(baskets);
-
+            if (baskets.Any())
+            {
+                Console.Write(baskets.Count().ToString());
+                _basketService.Delete(baskets);
+            }
             var count = _basketService.GetByConsumer(_anonymous).Count();
 
             Assert.IsTrue(0 == count);

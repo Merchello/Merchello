@@ -129,8 +129,8 @@
     <Compile Include="Persistence\Factories\InvoiceFactory.cs" />
     <Compile Include="Persistence\Factories\InvoiceStatusFactory.cs" />
     <Compile Include="Persistence\Mappers\AnonymousCustomerMapper.cs" />
-    <Compile Include="Persistence\Mappers\BasketMapper.cs" />
     <Compile Include="Persistence\Mappers\BasketItemMapper.cs" />
+    <Compile Include="Persistence\Mappers\BasketMapper.cs" />
     <Compile Include="Persistence\Mappers\InvoiceStatusMapper.cs" />
     <Compile Include="Persistence\Mappers\MerchelloBaseMapper.cs" />
     <Compile Include="Persistence\Querying\Query.cs" />
