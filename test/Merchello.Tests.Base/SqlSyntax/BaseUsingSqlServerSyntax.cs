@@ -11,7 +11,7 @@ namespace Merchello.Tests.Base.SqlSyntax
         [SetUp]
         public virtual void Initialize()
         {
-            SqlSyntaxContext.SqlSyntaxProvider = new SqlCeSyntaxProvider();
+            SqlSyntaxContext.SqlSyntaxProvider = new SqlServerSyntaxProvider(); // new SqlCeSyntaxProvider();
            
             Resolution.Freeze();
             SetUp();

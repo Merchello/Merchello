@@ -3,18 +3,16 @@ using Merchello.Core.Models.Rdbms;
 
 namespace Merchello.Core.Persistence.Factories
 {
-    internal partial class InvoiceFactory : IEntityFactory<IInvoice, InvoiceDto>
+    internal class InvoiceFactory : IEntityFactory<IInvoice, InvoiceDto>
     {
         public IInvoice BuildEntity(InvoiceDto dto)
         {
 
-            var invoice = new Invoice()
+            var invoice = new Invoice(GetCustomer(dto.CustomerDto), GetInvoiceStatus(dto.InvoiceStatusDto), dto.Amount)
             {
                 Id = dto.Id,
-                Customer = GetCustomer(dto.CustomerDto),
                 InvoiceNumber = dto.InvoiceNumber,
                 InvoiceDate = dto.InvoiceDate,
-                InvoiceStatus = GetInvoiceStatus(dto.InvoiceStatusDto),
                 BillToName = dto.BillToName,
                 BillToAddress1 = dto.BillToAddress1,
                 BillToAddress2 = dto.BillToAddress2,
@@ -28,7 +26,6 @@ namespace Merchello.Core.Persistence.Factories
                 Exported = dto.Exported,
                 Paid = dto.Paid,
                 Shipped = dto.Shipped,
-                Amount = dto.Amount,
                 UpdateDate = dto.UpdateDate,
                 CreateDate = dto.CreateDate
             };
@@ -68,13 +65,13 @@ namespace Merchello.Core.Persistence.Factories
             return dto;
         }
 
-        private ICustomer GetCustomer(CustomerDto dto)
+        private static ICustomer GetCustomer(CustomerDto dto)
         {
             var factory = new CustomerFactory();
             return factory.BuildEntity(dto);
         }
 
-        private IInvoiceStatus GetInvoiceStatus(InvoiceStatusDto dto)
+        private static IInvoiceStatus GetInvoiceStatus(InvoiceStatusDto dto)
         {
             var factory = new InvoiceStatusFactory();
             return factory.BuildEntity(dto);

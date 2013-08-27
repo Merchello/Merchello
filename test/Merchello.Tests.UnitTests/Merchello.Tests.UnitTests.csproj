@@ -212,6 +212,7 @@
     <Compile Include="Services\AddressServiceTests.cs" />
     <Compile Include="Services\BasketServiceTests.cs" />
     <Compile Include="Services\BasketItemServiceTests.cs" />
+    <Compile Include="Services\InvoiceServiceTests.cs" />
     <Compile Include="Services\CustomerServiceTests.cs" />
     <Compile Include="TypeFields\AddressTypeFieldTests.cs" />
     <Compile Include="TypeFields\BasketTypeFieldTests.cs" />

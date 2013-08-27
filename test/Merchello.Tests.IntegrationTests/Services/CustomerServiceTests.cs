@@ -44,10 +44,8 @@ namespace Merchello.Tests.IntegrationTests.Services
 
             _customerService.Save(customers);
 
-            foreach (var c in customers)
-            {
-                Assert.IsTrue(c.HasIdentity);    
-            }
+            Assert.IsTrue(customers.First().HasIdentity);
+            Assert.IsTrue(customers.Last().HasIdentity);
 
             
         }
