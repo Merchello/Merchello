@@ -7,11 +7,10 @@ namespace Merchello.Core.Persistence.Factories
     {
         public IBasket BuildEntity(BasketDto dto)
         {
-            var basket = new Basket()
+            var basket = new Basket(dto.BasketTypeFieldKey)
             {
                 Id = dto.Id,
                 ConsumerKey = dto.ConsumerKey,
-                BasketTypeFieldKey = dto.BasketTypeFieldKey,
                 UpdateDate = dto.UpdateDate,
                 CreateDate = dto.CreateDate
             };

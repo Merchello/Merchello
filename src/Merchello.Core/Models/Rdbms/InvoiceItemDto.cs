@@ -23,7 +23,6 @@ namespace Merchello.Core.Models.Rdbms
         [ForeignKey(typeof(InvoiceDto), Name = "FK_merchInvoiceItem_merchInvoice", Column = "id")]
         public int InvoiceId { get; set; }
         
-
         [Column("invoiceItemTypeFieldKey")]
         public Guid InvoiceItemTypeFieldKey { get; set; }
 
@@ -55,6 +54,8 @@ namespace Merchello.Core.Models.Rdbms
         [Constraint(Default = "getdate()")]
         public DateTime CreateDate { get; set; }
 
+        [ResultColumn]
+        public InvoiceDto InvoiceDto { get; set; }
     }
 
 }

@@ -9,10 +9,10 @@ namespace Merchello.Core.Models
 
     [Serializable]
     [DataContract(IsReference = true)]
-    public partial class InvoiceItem : IdEntity, IInvoiceItem
+    public class InvoiceItem : IdEntity, IInvoiceItem
     {
-        private readonly int _parentId;
-        private readonly IInvoice _invoice;
+        private readonly int? _parentId;
+        private readonly int _invoiceId;
         private Guid _invoiceItemTypeFieldKey;
         private string _sku;
         private string _name;
@@ -21,10 +21,19 @@ namespace Merchello.Core.Models
         private decimal _amount;
         private bool _exported;
 
-        public InvoiceItem (IInvoice invoice, int parentId)  
+        public InvoiceItem (IInvoice invoice, InvoiceItemType invoiceItemType, int? parentId)  
         {
-            _invoice = _invoice;
+            _invoiceId = invoice.Id;
             _parentId = parentId;
+            _invoiceItemTypeFieldKey = TypeFieldProvider.InvoiceItem().GetTypeField(invoiceItemType).TypeKey;
+        }
+
+        internal InvoiceItem(int invoiceId, Guid invoiceItemTypeFieldKey, int? parentId)
+        {
+            _invoiceId = invoiceId;
+            _invoiceItemTypeFieldKey = invoiceItemTypeFieldKey;
+            _parentId = parentId;
+
         }
         
         private static readonly PropertyInfo InvoiceItemTypeFieldKeySelector = ExpressionHelper.GetPropertyInfo<InvoiceItem, Guid>(x => x.InvoiceItemTypeFieldKey);  
@@ -35,31 +44,31 @@ namespace Merchello.Core.Models
         private static readonly PropertyInfo AmountSelector = ExpressionHelper.GetPropertyInfo<InvoiceItem, decimal>(x => x.Amount);  
         private static readonly PropertyInfo ExportedSelector = ExpressionHelper.GetPropertyInfo<InvoiceItem, bool>(x => x.Exported);  
         
-    /// <summary>
-    /// The parentId associated with the InvoiceItem
-    /// </summary>
-    [DataMember]
-    public int? ParentId
-    {
-        get { return _parentId; }
-    }
+        /// <summary>
+        /// The parentId associated with the InvoiceItem
+        /// </summary>
+        [DataMember]
+        public int? ParentId
+        {
+            get { return _parentId; }
+        }
     
-    /// <summary>
-    /// The invoiceId associated with the InvoiceItem
-    /// </summary>
-    [DataMember]
-    public int InvoiceId
-    {
-        get { return _invoice.Id; }
-    }
+        /// <summary>
+        /// The invoiceId associated with the InvoiceItem
+        /// </summary>
+        [DataMember]
+        public int InvoiceId
+        {
+            get { return _invoiceId; }
+        }
     
-    /// <summary>
-    /// The invoiceItemTypeFieldKey associated with the InvoiceItem
-    /// </summary>
-    [DataMember]
-    public Guid InvoiceItemTypeFieldKey
-    {
-        get { return _invoiceItemTypeFieldKey; }
+        /// <summary>
+        /// The invoiceItemTypeFieldKey associated with the InvoiceItem
+        /// </summary>
+        [DataMember]
+        public Guid InvoiceItemTypeFieldKey
+        {
+            get { return _invoiceItemTypeFieldKey; }
             set 
             { 
                 SetPropertyValueAndDetectChanges(o =>
@@ -68,111 +77,124 @@ namespace Merchello.Core.Models
                     return _invoiceItemTypeFieldKey;
                 }, _invoiceItemTypeFieldKey, InvoiceItemTypeFieldKeySelector); 
             }
-    }
+        }
     
-    /// <summary>
-    /// The sku associated with the InvoiceItem
-    /// </summary>
-    [DataMember]
-    public string Sku
-    {
-        get { return _sku; }
-            set 
-            { 
-                SetPropertyValueAndDetectChanges(o =>
+        /// <summary>
+        /// The sku associated with the InvoiceItem
+        /// </summary>
+        [DataMember]
+        public string Sku
+        {
+            get { return _sku; }
+                set 
+                { 
+                    SetPropertyValueAndDetectChanges(o =>
+                    {
+                        _sku = value;
+                        return _sku;
+                    }, _sku, SkuSelector); 
+                }
+        }
+    
+        /// <summary>
+        /// The name associated with the InvoiceItem
+        /// </summary>
+        [DataMember]
+        public string Name
+        {
+            get { return _name; }
+                set 
+                { 
+                    SetPropertyValueAndDetectChanges(o =>
+                    {
+                        _name = value;
+                        return _name;
+                    }, _name, NameSelector); 
+                }
+        }
+    
+        /// <summary>
+        /// The baseQuantity associated with the InvoiceItem
+        /// </summary>
+        [DataMember]
+        public int BaseQuantity
+        {
+            get { return _baseQuantity; }
+                set 
+                { 
+                    SetPropertyValueAndDetectChanges(o =>
+                    {
+                        _baseQuantity = value;
+                        return _baseQuantity;
+                    }, _baseQuantity, BaseQuantitySelector); 
+                }
+        }
+    
+        /// <summary>
+        /// The unitOfMeasureMultiplier associated with the InvoiceItem
+        /// </summary>
+        [DataMember]
+        public int UnitOfMeasureMultiplier
+        {
+            get { return _unitOfMeasureMultiplier; }
+                set 
+                { 
+                    SetPropertyValueAndDetectChanges(o =>
+                    {
+                        _unitOfMeasureMultiplier = value;
+                        return _unitOfMeasureMultiplier;
+                    }, _unitOfMeasureMultiplier, UnitOfMeasureMultiplierSelector); 
+                }
+        }
+    
+        /// <summary>
+        /// The amount associated with the InvoiceItem
+        /// </summary>
+        [DataMember]
+        public decimal Amount
+        {
+            get { return _amount; }
+                set 
+                { 
+                    SetPropertyValueAndDetectChanges(o =>
+                    {
+                        _amount = value;
+                        return _amount;
+                    }, _amount, AmountSelector); 
+                }
+        }
+    
+        /// <summary>
+        /// The exported associated with the InvoiceItem
+        /// </summary>
+        [DataMember]
+        public bool Exported
+        {
+            get { return _exported; }
+                set 
+                { 
+                    SetPropertyValueAndDetectChanges(o =>
+                    {
+                        _exported = value;
+                        return _exported;
+                    }, _exported, ExportedSelector); 
+                }
+        }
+
+        [DataMember]
+        public InvoiceItemType InvoiceItemType
+        {
+            get { return TypeFieldProvider.InvoiceItem().GetTypeField(_invoiceItemTypeFieldKey); }
+            set
+            {
+                var reference = TypeFieldProvider.InvoiceItem().GetTypeField(value);
+                if (!ReferenceEquals(TypeFieldMapperBase.NotFound, reference))
                 {
-                    _sku = value;
-                    return _sku;
-                }, _sku, SkuSelector); 
+                    // call through the property to flag the dirty property
+                    InvoiceItemTypeFieldKey = reference.TypeKey;
+                }
             }
-    }
-    
-    /// <summary>
-    /// The name associated with the InvoiceItem
-    /// </summary>
-    [DataMember]
-    public string Name
-    {
-        get { return _name; }
-            set 
-            { 
-                SetPropertyValueAndDetectChanges(o =>
-                {
-                    _name = value;
-                    return _name;
-                }, _name, NameSelector); 
-            }
-    }
-    
-    /// <summary>
-    /// The baseQuantity associated with the InvoiceItem
-    /// </summary>
-    [DataMember]
-    public int BaseQuantity
-    {
-        get { return _baseQuantity; }
-            set 
-            { 
-                SetPropertyValueAndDetectChanges(o =>
-                {
-                    _baseQuantity = value;
-                    return _baseQuantity;
-                }, _baseQuantity, BaseQuantitySelector); 
-            }
-    }
-    
-    /// <summary>
-    /// The unitOfMeasureMultiplier associated with the InvoiceItem
-    /// </summary>
-    [DataMember]
-    public int UnitOfMeasureMultiplier
-    {
-        get { return _unitOfMeasureMultiplier; }
-            set 
-            { 
-                SetPropertyValueAndDetectChanges(o =>
-                {
-                    _unitOfMeasureMultiplier = value;
-                    return _unitOfMeasureMultiplier;
-                }, _unitOfMeasureMultiplier, UnitOfMeasureMultiplierSelector); 
-            }
-    }
-    
-    /// <summary>
-    /// The amount associated with the InvoiceItem
-    /// </summary>
-    [DataMember]
-    public decimal Amount
-    {
-        get { return _amount; }
-            set 
-            { 
-                SetPropertyValueAndDetectChanges(o =>
-                {
-                    _amount = value;
-                    return _amount;
-                }, _amount, AmountSelector); 
-            }
-    }
-    
-    /// <summary>
-    /// The exported associated with the InvoiceItem
-    /// </summary>
-    [DataMember]
-    public bool Exported
-    {
-        get { return _exported; }
-            set 
-            { 
-                SetPropertyValueAndDetectChanges(o =>
-                {
-                    _exported = value;
-                    return _exported;
-                }, _exported, ExportedSelector); 
-            }
-    }
-    
-        
+        }
         
     }
 
