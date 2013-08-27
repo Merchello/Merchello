@@ -11,7 +11,7 @@ namespace Merchello.Core.Persistence
     public class RepositoryFactory
     {
         /// <summary>
-        /// Returns <see cref="ICustomerRepository"/>
+        /// Returns an instance of the <see cref="ICustomerRepository"/>
         /// </summary>        
         public virtual ICustomerRepository CreateCustomerRepository(IDatabaseUnitOfWork uow)
         {
@@ -19,7 +19,7 @@ namespace Merchello.Core.Persistence
         }
 
         /// <summary>
-        /// Returns <see cref="IAnonymousCustomerRepository"/>
+        /// Returns an instance of the <see cref="IAnonymousCustomerRepository"/>
         /// </summary>        
         internal virtual IAnonymousCustomerRepository CreateAnonymousCustomerRepository(IDatabaseUnitOfWork uow)
         {
@@ -27,17 +27,31 @@ namespace Merchello.Core.Persistence
         }
 
         /// <summary>
-        /// Returns <see cref="IAddressRepository"/>
+        /// Returns an instance of the <see cref="IAddressRepository"/>
         /// </summary>        
         internal virtual IAddressRepository CreateAddressRepository(IDatabaseUnitOfWork uow)
         {
             return new AddressRepository(uow, NullCacheProvider.Current);
         }
 
-
+        /// <summary>
+        /// Returns an instance of the <see cref="IBasketRepository"/>
+        /// </summary>
+        /// <param name="uow"></param>
+        /// <returns></returns>
         internal virtual IBasketRepository CreateBasketRepository(IDatabaseUnitOfWork uow)
         {
             return new BasketRepository(uow, RuntimeCacheProvider.Current);
+        }
+
+        /// <summary>
+        /// Returns an instance of the <see cref="IBasketItemRepository"/>
+        /// </summary>
+        /// <param name="uow"></param>
+        /// <returns></returns>
+        internal virtual IBasketItemRepository CreateBasketItemRepository(IDatabaseUnitOfWork uow)
+        {
+            return new BasketItemRepository(uow, RuntimeCacheProvider.Current);
         }
         
     }
