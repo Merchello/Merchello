@@ -16,9 +16,8 @@ namespace Merchello.Core.Models.Rdbms
         [Column("name")]
         public string Name { get; set; }
 
-        // TODO: RSS should either name or publicName be "alias"
-        [Column("publicName")]
-        public string PublicName { get; set; }
+        [Column("alias")]
+        public string Alias { get; set; }
 
         [Column("reportable")]
         public bool Reportable { get; set; }

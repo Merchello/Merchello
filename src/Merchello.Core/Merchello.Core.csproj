@@ -101,6 +101,7 @@
     <Compile Include="Models\IBasket.cs" />
     <Compile Include="Models\IBasketItem.cs" />
     <Compile Include="Models\IConsumer.cs" />
+    <Compile Include="Models\IInvoiceStatus.cs" />
     <Compile Include="Models\Rdbms\Content2ProductDto.cs" />
     <Compile Include="Models\Rdbms\OptionChoiceDto.cs" />
     <Compile Include="Models\Rdbms\OptionDto.cs" />
@@ -125,6 +126,7 @@
     <Compile Include="Persistence\Factories\BasketItemFactory.cs" />
     <Compile Include="Persistence\Mappers\AnonymousCustomerMapper.cs" />
     <Compile Include="Persistence\Mappers\BasketMapper.cs" />
+    <Compile Include="Persistence\Mappers\BasketItemMapper.cs" />
     <Compile Include="Persistence\Mappers\MerchelloBaseMapper.cs" />
     <Compile Include="Persistence\Querying\Query.cs" />
     <Compile Include="Persistence\Repositories\AnonymousCustomerRepository.cs" />
