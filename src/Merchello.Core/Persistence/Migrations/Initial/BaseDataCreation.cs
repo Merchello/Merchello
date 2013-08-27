@@ -28,10 +28,10 @@ namespace Merchello.Core.Persistence.Migrations.Initial
         {
             LogHelper.Info<BaseDataCreation>(string.Format("Creating data in table {0}", tableName));
 
-            if (tableName.Equals("merchDBTypeField"))
-            {
-                CreateDbTypeFieldData();
-            }
+            if (tableName.Equals("merchDBTypeField")) CreateDbTypeFieldData();
+
+            if(tableName.Equals("merchInvoiceStatus")) CreateInvoiceStatusData();
+            
         }
 
         private void CreateDbTypeFieldData()
@@ -65,6 +65,15 @@ namespace Merchello.Core.Persistence.Migrations.Initial
             _database.Insert("merchDBTypeField", "Key", new TypeFieldDto() { Key = stf.FlatRate.TypeKey, Alias = stf.FlatRate.Alias, Name = stf.FlatRate.Name });
             _database.Insert("merchDBTypeField", "Key", new TypeFieldDto() { Key = stf.Carrier.TypeKey, Alias = stf.Carrier.Alias, Name = stf.Carrier.Name });
             _database.Insert("merchDBTypeField", "Key", new TypeFieldDto() { Key = stf.PercentTotal.TypeKey, Alias = stf.PercentTotal.Alias, Name = stf.PercentTotal.Name });
+        }
+
+        private void CreateInvoiceStatusData()
+        {
+            _database.Insert("merchInvoiceStatus", "id", new InvoiceStatusDto() { Alias = "unpaid", Name = "Unpaid", Active = true, Reportable = true, SortOrder = 1, CreateDate = DateTime.Now, UpdateDate = DateTime.Now});
+            _database.Insert("merchInvoiceStatus", "id", new InvoiceStatusDto() { Alias = "unshipped", Name = "Unshipped", Active = true, Reportable = true, SortOrder = 2, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchInvoiceStatus", "id", new InvoiceStatusDto() { Alias = "completed", Name = "Completed", Active = true, Reportable = true, SortOrder = 3, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchInvoiceStatus", "id", new InvoiceStatusDto() { Alias = "cancelled", Name = "Cancelled", Active = true, Reportable = true, SortOrder = 4, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchInvoiceStatus", "id", new InvoiceStatusDto() { Alias = "fraud", Name = "Fraud", Active = true, Reportable = true, SortOrder = 5, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
         }
     }
 }
