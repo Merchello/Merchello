@@ -102,6 +102,7 @@
     <Compile Include="Models\IBasketItem.cs" />
     <Compile Include="Models\IConsumer.cs" />
     <Compile Include="Models\IInvoiceStatus.cs" />
+    <Compile Include="Models\Invoice.cs" />
     <Compile Include="Models\InvoiceStatus.cs" />
     <Compile Include="Models\Rdbms\Content2ProductDto.cs" />
     <Compile Include="Models\Rdbms\OptionChoiceDto.cs" />
@@ -125,6 +126,7 @@
     <Compile Include="Persistence\Factories\AnonymousCustomerFactory.cs" />
     <Compile Include="Persistence\Factories\BasketFactory.cs" />
     <Compile Include="Persistence\Factories\BasketItemFactory.cs" />
+    <Compile Include="Persistence\Factories\InvoiceFactory.cs" />
     <Compile Include="Persistence\Factories\InvoiceStatusFactory.cs" />
     <Compile Include="Persistence\Mappers\AnonymousCustomerMapper.cs" />
     <Compile Include="Persistence\Mappers\BasketMapper.cs" />
@@ -138,7 +140,9 @@
     <Compile Include="Persistence\Repositories\IAnonymousCustomerRepository.cs" />
     <Compile Include="Persistence\Repositories\IBasketItemRepository.cs" />
     <Compile Include="Persistence\Repositories\IBasketRepository.cs" />
+    <Compile Include="Persistence\Repositories\IInvoiceRepository.cs" />
     <Compile Include="Persistence\Repositories\IInvoiceStatusRepository.cs" />
+    <Compile Include="Persistence\Repositories\InvoiceRepository.cs" />
     <Compile Include="Persistence\Repositories\InvoiceStatusRepository.cs" />
     <Compile Include="Services\AnonymousCustomerService.cs" />
     <Compile Include="Services\BasketItemService.cs" />

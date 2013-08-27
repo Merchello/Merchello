@@ -16,7 +16,7 @@ namespace Merchello.Core.Models.Rdbms
         [Column("customerKey")]
         [ForeignKey(typeof(CustomerDto), Name = "FK_merchInvoice_merchCustomer",Column = "pk")]
         [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchInvoiceCustomer")]
-        public Guid CustomerPk { get; set; }
+        public Guid CustomerKey { get; set; }
 
         [Column("invoiceNumber")]
         [IndexAttribute(IndexTypes.UniqueNonClustered, Name = "IX_merchInvoiceNumber")]
@@ -79,6 +79,9 @@ namespace Merchello.Core.Models.Rdbms
         [Column("createDate")]
         [Constraint(Default = "getdate()")]
         public DateTime CreateDate { get; set; }
+
+        [ResultColumn]
+        public InvoiceStatusDto InvoiceStatusDto { get; set; }
 
         [ResultColumn]
         public CustomerDto CustomerDto { get; set; }
