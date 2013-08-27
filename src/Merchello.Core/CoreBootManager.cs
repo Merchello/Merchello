@@ -44,8 +44,8 @@ namespace Merchello.Core
             CreateApplicationCache();
 
             // create the service context for the MerchelloAppContext   
-            var connString = ConfigurationManager.ConnectionStrings[PluginConfiguration.Section.DefaultConnectionStringName].ConnectionString;
-            var providerName = ConfigurationManager.ConnectionStrings[PluginConfiguration.Section.DefaultConnectionStringName].ProviderName;                
+            var connString = ConfigurationManager.ConnectionStrings[MerchelloConfiguration.Section.DefaultConnectionStringName].ConnectionString;
+            var providerName = ConfigurationManager.ConnectionStrings[MerchelloConfiguration.Section.DefaultConnectionStringName].ProviderName;                
             var serviceContext = new ServiceContext(new PetaPocoUnitOfWorkProvider(connString, providerName));
             
 

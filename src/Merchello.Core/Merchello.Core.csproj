@@ -82,7 +82,7 @@
     <Compile Include="MerchelloBootstrapper.cs" />
     <Compile Include="Cache\IRuntimeCacheProvider.cs" />
     <Compile Include="Cache\NullCacheProvider.cs" />
-    <Compile Include="Configuration\PluginConfiguration.cs" />
+    <Compile Include="Configuration\MerchelloConfiguration.cs" />
     <Compile Include="CoreBootManager.cs" />
     <Compile Include="Events\ConvertEventArgs.cs" />
     <Compile Include="Events\DatabaseCreationEventArgs.cs" />

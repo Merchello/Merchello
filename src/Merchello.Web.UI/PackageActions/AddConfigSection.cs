@@ -31,7 +31,7 @@ namespace Merchello.Web.UI.PackageActions
         /// <returns>The Alias of the package action.</returns>
         public string Alias()
         {
-            return string.Concat(PluginConfiguration.ApplicationName, "_AddConfigSection");
+            return string.Concat(MerchelloConfiguration.ApplicationName, "_AddConfigSection");
         }
 
         /// <summary>
@@ -45,11 +45,11 @@ namespace Merchello.Web.UI.PackageActions
             try
             {
                 var webConfig = WebConfigurationManager.OpenWebConfiguration("~/");
-                if (webConfig.Sections[PluginConfiguration.ConfigurationName] == null)
+                if (webConfig.Sections[MerchelloConfiguration.ConfigurationName] == null)
                 {
-                    webConfig.Sections.Add(PluginConfiguration.ConfigurationName, new MerchelloSection());
+                    webConfig.Sections.Add(MerchelloConfiguration.ConfigurationName, new MerchelloSection());
 
-                    var configPath = string.Concat("App_Plugins", Path.DirectorySeparatorChar, PluginConfiguration.ApplicationName, Path.DirectorySeparatorChar, "Config", Path.DirectorySeparatorChar, PluginConfiguration.ConfigurationName, ".config");
+                    var configPath = string.Concat("App_Plugins", Path.DirectorySeparatorChar, MerchelloConfiguration.ApplicationName, Path.DirectorySeparatorChar, "Config", Path.DirectorySeparatorChar, MerchelloConfiguration.ConfigurationName, ".config");
                     var xmlPath = IOHelper.MapPath(string.Concat("~/", configPath));
                     string xml;
 
@@ -58,7 +58,7 @@ namespace Merchello.Web.UI.PackageActions
                         xml = reader.ReadToEnd();
                     }
 
-                    webConfig.Sections[PluginConfiguration.ConfigurationName].SectionInformation.ConfigSource = configPath;
+                    webConfig.Sections[MerchelloConfiguration.ConfigurationName].SectionInformation.ConfigSource = configPath;
 
                     webConfig.Save(ConfigurationSaveMode.Modified);
                 }
@@ -95,9 +95,9 @@ namespace Merchello.Web.UI.PackageActions
             try
             {
                 var webConfig = WebConfigurationManager.OpenWebConfiguration("~/");
-                if (webConfig.Sections[PluginConfiguration.ConfigurationName] != null)
+                if (webConfig.Sections[MerchelloConfiguration.ConfigurationName] != null)
                 {
-                    webConfig.Sections.Remove(PluginConfiguration.ConfigurationName);
+                    webConfig.Sections.Remove(MerchelloConfiguration.ConfigurationName);
 
                     webConfig.Save(ConfigurationSaveMode.Modified);
                 }

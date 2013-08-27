@@ -60,7 +60,7 @@ namespace Merchello.Core.Persistence.Repositories
             else
             {
                 var factory = new InvoiceFactory();
-                var dtos = Database.Fetch<InvoiceDto>(GetBaseQuery(false));
+                var dtos = Database.Fetch<InvoiceDto, CustomerDto, InvoiceStatusDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
                     yield return factory.BuildEntity(dto);
