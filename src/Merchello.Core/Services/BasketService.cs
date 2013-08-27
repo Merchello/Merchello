@@ -53,10 +53,9 @@ namespace Merchello.Core.Services
             var basket = GetByConsumer(consumer, basketType);
             if (basket != null) return basket;
             
-            basket = new Basket()
+            basket = new Basket(basketType)
             {
                 ConsumerKey = consumer.Key,
-                BasketType = basketType
             };
 
             Created.RaiseEvent(new NewEventArgs<IBasket>(basket), this);

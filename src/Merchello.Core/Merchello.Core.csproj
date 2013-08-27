@@ -131,6 +131,7 @@
     <Compile Include="Persistence\Factories\BasketFactory.cs" />
     <Compile Include="Persistence\Factories\BasketItemFactory.cs" />
     <Compile Include="Persistence\Factories\InvoiceFactory.cs" />
+    <Compile Include="Persistence\Factories\InvoiceItemFactory.cs" />
     <Compile Include="Persistence\Factories\InvoiceStatusFactory.cs" />
     <Compile Include="Persistence\Mappers\AnonymousCustomerMapper.cs" />
     <Compile Include="Persistence\Mappers\BasketItemMapper.cs" />
@@ -145,8 +146,10 @@
     <Compile Include="Persistence\Repositories\Interfaces\IAnonymousCustomerRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IBasketItemRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IBasketRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IInvoiceItemRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IInvoiceRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IInvoiceStatusRepository.cs" />
+    <Compile Include="Persistence\Repositories\InvoiceItemRepository.cs" />
     <Compile Include="Persistence\Repositories\InvoiceRepository.cs" />
     <Compile Include="Persistence\Repositories\InvoiceStatusRepository.cs" />
     <Compile Include="Services\AnonymousCustomerService.cs" />
