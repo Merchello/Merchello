@@ -19,17 +19,20 @@ namespace Merchello.Core.Models
         [DataMember]
         DateTime InvoiceDate { get; set; }
 
-        /// <summary>
-        /// The customer to associated with the invoice
-        /// </summary>
-        [IgnoreDataMember]
-        Customer Customer { get; set; }
-
         ///// <summary>
-        ///// The status of the invoice
+        ///// The customer to associated with the invoice
         ///// </summary>
         //[DataMember]
-        //IInvoiceStatus InvoiceStatus { get; set; }
+        //Guid CustomerKey { get;  }
+
+        [DataMember]
+        ICustomer Customer { get; }
+
+        /// <summary>
+        /// The status of the invoice
+        /// </summary>
+        [DataMember]
+        IInvoiceStatus InvoiceStatus { get; }
 
         /// <summary>
         /// The full name to use for billing.  Generally copied from customer address.
@@ -115,11 +118,11 @@ namespace Merchello.Core.Models
         [DataMember]
         decimal Amount { get; set; }
 
-        /// <summary>
-        /// The line items associated with this invoice
-        /// </summary>
-        [DataMember]
-        IInvoiceItemItemization InvoiceItems { get;  }
+        ///// <summary>
+        ///// The line items associated with this invoice
+        ///// </summary>
+        //[DataMember]
+        //IInvoiceItemItemization InvoiceItems { get;  }
 
     }
 

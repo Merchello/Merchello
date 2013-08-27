@@ -206,6 +206,7 @@
     <Compile Include="Querying\AddressSqlClausesTest.cs" />
     <Compile Include="Querying\BasketSqlClausesTest.cs" />
     <Compile Include="Querying\CustomerSqlClausesTest.cs" />
+    <Compile Include="Querying\InvoiceRelatedSqlClausesTest.cs" />
     <Compile Include="Repository\AddressRepositoryTests.cs" />
     <Compile Include="Repository\CustomerRepositoryTests.cs" />
     <Compile Include="Services\AddressServiceTests.cs" />
