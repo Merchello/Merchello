@@ -110,7 +110,7 @@ namespace Merchello.Core
             {
                 try
                 {
-                    return PluginConfiguration.Section.Version;
+                    return MerchelloConfiguration.Section.Version;
                 }
                 catch
                 {

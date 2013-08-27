@@ -28,6 +28,20 @@ namespace Merchello.Core.Persistence.Mappers
             };
 
 
+        private static readonly IEnumerable<Type> KeyedTypes = new List<Type>()
+            {
+                { typeof(ICustomer) },
+                { typeof(IAnonymousCustomer)}
+            };
+
+        /// <summary>
+        /// Returns True/false indicating whether or not the type was registered as a KeyBasedType
+        /// </summary>
+        internal static bool IsKeyBasedType(Type type)
+        {
+            return KeyedTypes.Contains(type);
+        }
+
         internal static Attempt<BaseMapper> ResolveByType(Type entityType)
         {
             var mapper = Mappers.FirstOrDefault(x => x.Key == entityType).Value;
