@@ -54,5 +54,15 @@ namespace Merchello.Core.Persistence
             return new BasketItemRepository(uow, RuntimeCacheProvider.Current);
         }
         
+        /// <summary>
+        /// Returns an instance of the <see cref="IInvoiceStatusRepository"/>
+        /// </summary>
+        /// <param name="uow"></param>
+        /// <returns></returns>
+        internal virtual IInvoiceStatusRepository CreateInvoiceStatusRepository(IDatabaseUnitOfWork uow)
+        {
+            return new InvoiceStatusRepository(uow, NullCacheProvider.Current);
+        }
+
     }
 }

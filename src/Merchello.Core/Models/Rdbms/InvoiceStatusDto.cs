@@ -25,9 +25,6 @@ namespace Merchello.Core.Models.Rdbms
         [Column("active")]
         public bool Active { get; set; }
 
-        [Column("actionTriggerId")]
-        public int ActionTriggerId { get; set; }
-
         [Column("sortOrder")]
         public int SortOrder { get; set; }
 
