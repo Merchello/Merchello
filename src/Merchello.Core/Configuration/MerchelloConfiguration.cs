@@ -10,7 +10,7 @@ namespace Merchello.Core.Configuration
     /// <summary>
     /// Provides quick access to the Merchello configuration section.
     /// </summary>
-    public sealed class PluginConfiguration
+    public sealed class MerchelloConfiguration
     {
         private static string _rootDir = "";
 
@@ -24,6 +24,7 @@ namespace Merchello.Core.Configuration
         {
             get { return (MerchelloSection)ConfigurationManager.GetSection(ConfigurationName); }
         }
+        
 
         /// <summary>
         /// Returns the path to the root of the application, by getting the path to where the assembly where this

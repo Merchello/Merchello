@@ -44,13 +44,15 @@ namespace Merchello.Tests.IntegrationTests.Services
 
             _invoiceService = new InvoiceService();
 
-            
-
+     
         }
 
         [Test]
         public void Can_Create_And_Save_An_Invoice()
         {
+            var all = ((InvoiceService)_invoiceService).GetAll().ToArray();
+            _invoiceService.Delete(all);
+
             var unpaid = _statuses.FirstOrDefault(x => x.Alias == "unpaid");
 
             var invoice = _invoiceService.CreateInvoice(_customer, unpaid, "test111", "name", "address1",
@@ -65,6 +67,9 @@ namespace Merchello.Tests.IntegrationTests.Services
         [Test]
         public void Can_Get_An_Invoice_By_Id()
         {
+            var all = ((InvoiceService)_invoiceService).GetAll().ToArray();
+            _invoiceService.Delete(all);
+
             var unpaid = _statuses.FirstOrDefault(x => x.Alias == "unpaid");
 
             var random = new Random(15000);
@@ -79,6 +84,31 @@ namespace Merchello.Tests.IntegrationTests.Services
             var retrieved = _invoiceService.GetById(id);
 
             Assert.NotNull(retrieved);
+        }
+
+        [Test]
+        public void Can_Delete_An_Invoice()
+        {
+            var all = ((InvoiceService)_invoiceService).GetAll().ToArray();
+            _invoiceService.Delete(all);
+
+            var unpaid = _statuses.FirstOrDefault(x => x.Alias == "unpaid");
+
+            var random = new Random(120);
+
+            var invoice = _invoiceService.CreateInvoice(_customer, unpaid, "test" + random.Next().ToString(), "name", "address1",
+              "address2", "city", "state", "98225", "US", "test@test.com", string.Empty, string.Empty);
+
+            _invoiceService.Save(invoice);
+
+            var id = invoice.Id;
+
+            _invoiceService.Delete(invoice);
+
+
+            var retrieved = _invoiceService.GetById(id);
+
+            Assert.IsNull(retrieved);
         }
     }
 }

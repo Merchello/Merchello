@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using Merchello.Core.Persistence.Mappers;
 using Umbraco.Core;
 using Umbraco.Core.Models.EntityBase;
 using Umbraco.Core.Persistence.Querying;
@@ -146,10 +148,11 @@ namespace Merchello.Core.Persistence.Repositories
 				var allEntities = _cache.GetAllByType(typeof(TEntity));
 				
 				if (allEntities.Any())
-				{
-					// TODO: RSS this is a modification to the original repository base where x.Id != 0
-					// TODO: watch for errors surfacing as a result of the change with Id entities 
-					var query = Querying.Query<TEntity>.Builder.Where(x => x.Key != Guid.Empty);
+				{                    
+					//
+                    var query = MerchelloMappers.IsKeyBasedType(typeof(TEntity))
+				        ? Querying.Query<TEntity>.Builder.Where(x => x.Key != Guid.Empty)
+				        : Querying.Query<TEntity>.Builder.Where(x => x.Id != 0);
 					int totalCount = PerformCount(query);
 
 					if(allEntities.Count() == totalCount)
