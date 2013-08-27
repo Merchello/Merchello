@@ -17,31 +17,25 @@ namespace Merchello.Core.Models
         string Name { get; set; }
 
         /// <summary>
-        /// The publicName for the InvoiceStatus
+        /// The alias of the invoice status
         /// </summary>
         [DataMember]
         string Alias { get; set; }
 
         /// <summary>
-        /// The reportable for the InvoiceStatus
+        /// True/false indicating whether or not to report on this invoice status
         /// </summary>
         [DataMember]
         bool Reportable { get; set; }
 
         /// <summary>
-        /// The active for the InvoiceStatus
+        /// True/false indicating whether or not this invoice status is active
         /// </summary>
         [DataMember]
         bool Active { get; set; }
 
         /// <summary>
-        /// The actionTriggerId for the InvoiceStatus
-        /// </summary>
-        [DataMember]
-        int ActionTriggerId { get; set; }
-
-        /// <summary>
-        /// The sortOrder for the InvoiceStatus
+        /// The sort order of the invoice status
         /// </summary>
         [DataMember]
         int SortOrder { get; set; }

@@ -17,12 +17,13 @@ namespace Merchello.Core.Persistence.Mappers
     internal static class MerchelloMappers
     {
         private static readonly Dictionary<Type, Type> Mappers = new Dictionary<Type, Type>()
-            {
-                { typeof(ICustomer), typeof(CustomerMapper) },
-                { typeof(IAnonymousCustomer), typeof(AnonymousCustomerMapper) },
+            {                
                 { typeof(IAddress), typeof(AddressMapper) },
+                { typeof(IAnonymousCustomer), typeof(AnonymousCustomerMapper) },
                 { typeof(IBasket), typeof(BasketMapper)},
-                { typeof(IBasketItem), typeof(BasketItemMapper) }
+                { typeof(IBasketItem), typeof(BasketItemMapper) },
+                { typeof(ICustomer), typeof(CustomerMapper) },
+                { typeof(InvoiceStatus), typeof(InvoiceStatusMapper) } 
             };
 
 

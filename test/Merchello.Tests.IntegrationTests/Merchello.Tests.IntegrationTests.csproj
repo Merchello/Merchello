@@ -78,6 +78,7 @@
     <Compile Include="Migration\DatabaseSchema.cs" />
     <Compile Include="Services\AddressServiceTests.cs" />
     <Compile Include="Services\BasketServiceTests.cs" />
+    <Compile Include="Services\InvoiceStatusServiceTests.cs" />
     <Compile Include="Services\CustomerServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>
