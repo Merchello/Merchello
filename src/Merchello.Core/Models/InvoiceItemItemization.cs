@@ -79,7 +79,7 @@ namespace Merchello.Core.Models
           
         public decimal Total()
         {
-            return _items.Sum(x => x.Total());
+            return 0; //_items.Sum(x => x.Total());
         }
         #endregion
 
