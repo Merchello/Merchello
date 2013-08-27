@@ -14,7 +14,7 @@ using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Core.Persistence.Repositories
 {
-    internal partial class InvoiceItemRepository : MerchelloPetaPocoRepositoryBase<int, IInvoiceItem>, IInvoiceItemRepository
+    internal class InvoiceItemRepository : MerchelloPetaPocoRepositoryBase<int, IInvoiceItem>, IInvoiceItemRepository
     {
 
         public InvoiceItemRepository(IDatabaseUnitOfWork work)
