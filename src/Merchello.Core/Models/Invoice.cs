@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Runtime.Serialization;
+using System.Web.Configuration;
 using Merchello.Core.Models.EntityBase;
 using Merchello.Core.Models.TypeFields;
 
@@ -13,8 +14,10 @@ namespace Merchello.Core.Models
     {
         private string _invoiceNumber;
         private DateTime _invoiceDate;
-        //private Guid _customerKey;
-        //private int _invoiceStatusId;
+        private ICustomer _customer;
+        private Guid _customerKey;
+        private IInvoiceStatus _invoiceStatus;
+        private int _invoiceStatusId;
         private string _billToName;
         private string _billToAddress1;
         private string _billToAddress2;
@@ -28,16 +31,19 @@ namespace Merchello.Core.Models
         private bool _exported;
         private bool _paid;
         private bool _shipped;
-        private decimal _amount;
+        private readonly decimal _amount;
 
-        public Invoice ()
+        public Invoice (ICustomer customer, IInvoiceStatus invoiceStatus, decimal amount)
         {
+            _customer = customer;
+            _invoiceStatus = invoiceStatus;
+            _amount = amount;
         }
         
         private static readonly PropertyInfo InvoiceNumberSelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.InvoiceNumber);  
         private static readonly PropertyInfo InvoiceDateSelector = ExpressionHelper.GetPropertyInfo<Invoice, DateTime>(x => x.InvoiceDate);
-        //private static readonly PropertyInfo CustomerKeySelector = ExpressionHelper.GetPropertyInfo<Invoice, Guid>(x => x.CustomerKey);
-        //private static readonly PropertyInfo InvoiceStatusIdSelector = ExpressionHelper.GetPropertyInfo<Invoice, int>(x => x.InvoiceStatusId);
+        private static readonly PropertyInfo CustomerKeySelector = ExpressionHelper.GetPropertyInfo<Invoice, Guid>(x => x.CustomerKey);
+        private static readonly PropertyInfo InvoiceStatusIdSelector = ExpressionHelper.GetPropertyInfo<Invoice, int>(x => x.InvoiceStatusId);
         private static readonly PropertyInfo BillToNameSelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.BillToName);  
         private static readonly PropertyInfo BillToAddress1Selector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.BillToAddress1);  
         private static readonly PropertyInfo BillToAddress2Selector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.BillToAddress2);  
@@ -50,29 +56,42 @@ namespace Merchello.Core.Models
         private static readonly PropertyInfo BillToCompanySelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.BillToCompany);  
         private static readonly PropertyInfo ExportedSelector = ExpressionHelper.GetPropertyInfo<Invoice, bool>(x => x.Exported);  
         private static readonly PropertyInfo PaidSelector = ExpressionHelper.GetPropertyInfo<Invoice, bool>(x => x.Paid);  
-        private static readonly PropertyInfo ShippedSelector = ExpressionHelper.GetPropertyInfo<Invoice, bool>(x => x.Shipped);  
-        private static readonly PropertyInfo AmountSelector = ExpressionHelper.GetPropertyInfo<Invoice, decimal>(x => x.Amount);
+        private static readonly PropertyInfo ShippedSelector = ExpressionHelper.GetPropertyInfo<Invoice, bool>(x => x.Shipped);
 
 
 
-        ///// <summary>
-        ///// The customer key associated with the Invoice
-        ///// </summary>
-        //[DataMember]
-        //public Guid CustomerKey
-        //{
-        //    get { return _customerKey;  }
-        //    set
-        //    {
-        //        SetPropertyValueAndDetectChanges(o =>
-        //            {   _customerKey = value;
-        //                return _customerKey;
-        //            }, _customerKey, CustomerKeySelector);
 
-        //    }
-        //}
+        /// <summary>
+        /// The customer key associated with the Invoice
+        /// </summary>
+        [IgnoreDataMember]
+        public Guid CustomerKey
+        {
+            get { return _customerKey; }
+            internal set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                    {
+                        _customerKey = value;
+                        return _customerKey;
+                    }, _customerKey, CustomerKeySelector);
 
-        public ICustomer Customer { get; internal set; }
+            }
+        }
+
+        /// <summary>
+        /// The customer associated with the Customer
+        /// </summary>
+        [DataMember]
+        public ICustomer Customer
+        {
+            get { return _customer;}
+            internal set
+            {
+                _customer = value;
+                CustomerKey = _customer.Key;
+            }
+        }
 
         /// <summary>
         /// The invoice number associated with the Invoice
@@ -108,28 +127,36 @@ namespace Merchello.Core.Models
             }
         }
 
-        ///// <summary>
-        ///// The invoiceStatusId associated with the Invoice
-        ///// </summary>
-        //[DataMember]
-        //public int InvoiceStatusId
-        //{
-        //    get { return _invoiceStatusId; }
-        //    internal set
-        //    {
-        //        SetPropertyValueAndDetectChanges(o =>
-        //        {
-        //            _invoiceStatusId = value;
-        //            return _invoiceStatusId;
-        //        }, _invoiceStatusId, InvoiceStatusIdSelector); 
-        //    }
-        //}
+        /// <summary>
+        /// The invoiceStatusId associated with the Invoice
+        /// </summary>
+        [DataMember]
+        public int InvoiceStatusId
+        {
+            get { return _invoiceStatusId; }
+            internal set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _invoiceStatusId = value;
+                    return _invoiceStatusId;
+                }, _invoiceStatusId, InvoiceStatusIdSelector);
+            }
+        }
 
         /// <summary>
         /// The invoice status associated with the Invoice
         /// </summary>
         [DataMember]
-        public IInvoiceStatus InvoiceStatus { get; internal set; }
+        public IInvoiceStatus InvoiceStatus 
+        {
+            get { return _invoiceStatus; }
+            set
+            {
+                _invoiceStatus = value;
+                InvoiceStatusId = _invoiceStatus.Id;
+            } 
+        }
 
         /// <summary>
         /// The billToName associated with the Invoice
@@ -360,14 +387,6 @@ namespace Merchello.Core.Models
         public decimal Amount
         {
             get { return _amount; }
-            set 
-            { 
-                SetPropertyValueAndDetectChanges(o =>
-                {
-                    _amount = value;
-                    return _amount;
-                }, _amount, AmountSelector); 
-            }
         }
 
     }

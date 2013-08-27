@@ -71,13 +71,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActivatorHelper.cs" />
+    <Compile Include="Cache\ICacheProvider.cs" />
+    <Compile Include="CloneHelper.cs" />
     <Compile Include="ConversionStrategies\BaseAnonymousCustomerConversionStrategy.cs" />
     <Compile Include="ConversionStrategies\AnonymousCustomerToNewCustomerStrategy.cs" />
     <Compile Include="ConversionStrategies\IAnonymousBasketConversionStrategy.cs" />
     <Compile Include="ConversionStrategies\IAnonymousCustomerConversionStrategy.cs" />
     <Compile Include="BootManagerBase.cs" />
+    <Compile Include="Events\StatusChangedEventArgs.cs" />
     <Compile Include="MerchelloBootstrapper.cs" />
-    <Compile Include="Cache\ICacheProvider.cs" />
     <Compile Include="Cache\IRuntimeCacheProvider.cs" />
     <Compile Include="Cache\NullCacheProvider.cs" />
     <Compile Include="Configuration\PluginConfiguration.cs" />
@@ -131,26 +133,29 @@
     <Compile Include="Persistence\Mappers\AnonymousCustomerMapper.cs" />
     <Compile Include="Persistence\Mappers\BasketItemMapper.cs" />
     <Compile Include="Persistence\Mappers\BasketMapper.cs" />
+    <Compile Include="Persistence\Mappers\InvoiceMapper.cs" />
     <Compile Include="Persistence\Mappers\InvoiceStatusMapper.cs" />
     <Compile Include="Persistence\Mappers\MerchelloBaseMapper.cs" />
     <Compile Include="Persistence\Querying\Query.cs" />
     <Compile Include="Persistence\Repositories\AnonymousCustomerRepository.cs" />
     <Compile Include="Persistence\Repositories\BasketItemRepository.cs" />
     <Compile Include="Persistence\Repositories\BasketRepository.cs" />
-    <Compile Include="Persistence\Repositories\IAnonymousCustomerRepository.cs" />
-    <Compile Include="Persistence\Repositories\IBasketItemRepository.cs" />
-    <Compile Include="Persistence\Repositories\IBasketRepository.cs" />
-    <Compile Include="Persistence\Repositories\IInvoiceRepository.cs" />
-    <Compile Include="Persistence\Repositories\IInvoiceStatusRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IAnonymousCustomerRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IBasketItemRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IBasketRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IInvoiceRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IInvoiceStatusRepository.cs" />
     <Compile Include="Persistence\Repositories\InvoiceRepository.cs" />
     <Compile Include="Persistence\Repositories\InvoiceStatusRepository.cs" />
     <Compile Include="Services\AnonymousCustomerService.cs" />
     <Compile Include="Services\BasketItemService.cs" />
     <Compile Include="Services\BasketService.cs" />
-    <Compile Include="Services\IAnonymousCustomerService.cs" />
-    <Compile Include="Services\IBasketItemService.cs" />
-    <Compile Include="Services\IBasketService.cs" />
-    <Compile Include="Services\IInvoiceStatusService.cs" />
+    <Compile Include="Services\Interfaces\IAnonymousCustomerService.cs" />
+    <Compile Include="Services\Interfaces\IBasketItemService.cs" />
+    <Compile Include="Services\Interfaces\IBasketService.cs" />
+    <Compile Include="Services\Interfaces\IInvoiceService.cs" />
+    <Compile Include="Services\Interfaces\IInvoiceStatusService.cs" />
+    <Compile Include="Services\InvoiceService.cs" />
     <Compile Include="Services\InvoiceStatusService.cs" />
     <Compile Include="TypeFieldMapperEnumerations.cs" />
     <Compile Include="Models\TypeFields\ProductTypeField.cs" />
@@ -162,7 +167,7 @@
     </Compile>
     <Compile Include="Persistence\Factories\AddressFactory.cs" />
     <Compile Include="Persistence\Migrations\Initial\PluginDatabaseSchemaResult.cs" />
-    <Compile Include="Persistence\Repositories\ICustomerRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\ICustomerRepository.cs" />
     <Compile Include="Persistence\Mappers\AddressMapper.cs" />
     <Compile Include="Persistence\Mappers\MerchelloMappers.cs" />
     <Compile Include="Persistence\Migrations\Initial\BaseDataCreation.cs" />
@@ -228,7 +233,7 @@
     <Compile Include="Persistence\Querying\ModelToSqlExpressionHelper.cs" />
     <Compile Include="Persistence\Querying\SqlTranslator.cs" />
     <Compile Include="Persistence\Repositories\AddressRepository.cs" />
-    <Compile Include="Persistence\Repositories\IAddressRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IAddressRepository.cs" />
     <Compile Include="Persistence\RepositoryFactory.cs" />
     <Compile Include="Persistence\Repositories\CustomerRepository.cs" />
     <Compile Include="Persistence\Repositories\MerchelloPetaPocoRepositoryBase.cs" />
@@ -237,9 +242,9 @@
     <Compile Include="Models\TypeFields\ShipMethodTypeField.cs" />
     <Compile Include="Properties\AssemblyVisibility.cs" />
     <Compile Include="Services\AddressService.cs" />
-    <Compile Include="Services\IAddressService.cs" />
+    <Compile Include="Services\Interfaces\IAddressService.cs" />
     <Compile Include="Services\CustomerService.cs" />
-    <Compile Include="Services\ICustomerService.cs" />
+    <Compile Include="Services\Interfaces\ICustomerService.cs" />
     <Compile Include="Services\ServiceContext.cs" />
   </ItemGroup>
   <ItemGroup />

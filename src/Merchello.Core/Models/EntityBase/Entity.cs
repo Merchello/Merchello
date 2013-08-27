@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Configuration;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Umbraco.Core.Models.EntityBase;
 
 namespace Merchello.Core.Models.EntityBase
 {
+    [Serializable]
+    [DataContract(IsReference = true)]
     public abstract class Entity : MerchelloEntityBase, ISingularRoot
     {
         private int _id;
