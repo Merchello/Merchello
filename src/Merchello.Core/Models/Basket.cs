@@ -11,6 +11,17 @@ namespace Merchello.Core.Models
     [DataContract(IsReference = true)]
     public class Basket : IdEntity, IBasket
     {
+
+        public Basket(BasketType basketType)
+        {
+            _basketTypeFieldKey = TypeFieldProvider.Basket().GetTypeField(basketType).TypeKey;
+        }
+
+        internal Basket(Guid basketTypeFieldKey)
+        {
+            _basketTypeFieldKey = basketTypeFieldKey;
+        }
+
         private Guid _consumerKey;
         private Guid _basketTypeFieldKey;
 

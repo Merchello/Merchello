@@ -15,11 +15,10 @@ namespace Merchello.Tests.Base.Data
             var anonymous = CustomerData.AnonymousCustomerMock();
            
 
-            var basket =  new Basket()
+            var basket =  new Basket(basketType)
             {
                 Id = 1,
                 ConsumerKey = anonymous.Key,
-                BasketType = basketType,
                 CreateDate = DateTime.Now,
                 UpdateDate = DateTime.Now
             };
@@ -33,10 +32,9 @@ namespace Merchello.Tests.Base.Data
         public static IBasket AnonymousBasketForInserting(BasketType basketType)
         {
             var anonymous = CustomerData.AnonymousCustomerMock();
-            return new Basket()
+            return new Basket(basketType)
             {
-                ConsumerKey = anonymous.Key,
-                BasketType = basketType
+                ConsumerKey = anonymous.Key
             };
         }
 
