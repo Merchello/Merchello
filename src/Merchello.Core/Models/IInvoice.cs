@@ -32,7 +32,7 @@ namespace Merchello.Core.Models
         /// The status of the invoice
         /// </summary>
         [DataMember]
-        IInvoiceStatus InvoiceStatus { get; }
+        IInvoiceStatus InvoiceStatus { get; set; }
 
         /// <summary>
         /// The full name to use for billing.  Generally copied from customer address.
@@ -116,7 +116,7 @@ namespace Merchello.Core.Models
         /// The total invoice amount
         /// </summary>
         [DataMember]
-        decimal Amount { get; set; }
+        decimal Amount { get; }
 
         ///// <summary>
         ///// The line items associated with this invoice

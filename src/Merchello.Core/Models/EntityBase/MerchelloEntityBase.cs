@@ -6,12 +6,13 @@ using System.Reflection;
 
 namespace Merchello.Core.Models.EntityBase
 {
+    [Serializable]
     public abstract class MerchelloEntityBase : ITracksDirty
     {
 
         /// <summary>
         /// Tracks the properties that have changed
-        /// </summary>
+        /// </summary>        
         private readonly IDictionary<string, bool> _propertyChangedInfo = new Dictionary<string, bool>();
 
         

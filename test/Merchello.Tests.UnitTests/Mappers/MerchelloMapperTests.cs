@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Merchello.Core.Models;
-using Merchello.Core.Models.Rdbms;
+﻿using Merchello.Core.Models;
 using Merchello.Core.Persistence.Mappers;
 using NUnit.Framework;
 
@@ -47,6 +41,29 @@ namespace Merchello.Tests.UnitTests.Mappers
             Assert.IsTrue(resolved.Success);
             Assert.AreSame(expected, resolved.Result.GetType());
 
+        }
+
+        [Test]
+        public void Mapper_Resolves_IInvoiceStatus_To_InvoiceStatusMapper()
+        {
+            var expected = typeof (InvoiceStatusMapper);
+
+            var resolved = MerchelloMappers.ResolveByType(typeof (IInvoiceStatus));
+
+            Assert.IsTrue(resolved.Success);
+            Assert.AreSame(expected, resolved.Result.GetType());
+        }
+
+
+        [Test]
+        public void Mapper_Resolves_IInvoice_To_InvoiceMapper()
+        {
+            var expected = typeof(InvoiceMapper);
+
+            var resolved = MerchelloMappers.ResolveByType(typeof(IInvoice));
+
+            Assert.IsTrue(resolved.Success);
+            Assert.AreSame(expected, resolved.Result.GetType());
         }
     }
 }

@@ -22,7 +22,5 @@ namespace Merchello.Tests.IntegrationTests.Migration
             creation.InitializeDatabaseSchema();
         }
 
-
-
     }
 }
