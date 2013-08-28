@@ -5,9 +5,9 @@ using Umbraco.Core.Persistence.Repositories;
 namespace Merchello.Core.Persistence.Repositories
 {
     /// <summary>
-    /// Marker interface for the invoice repository
+    /// Marker interface for the payment repository
     /// </summary>
-    public interface IInvoiceRepository : IRepository<int, IInvoice>
+    public interface IPaymentRepository : IRepository<int, IPayment>
     {
     }
 }

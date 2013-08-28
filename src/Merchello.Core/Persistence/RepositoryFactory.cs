@@ -13,7 +13,7 @@ namespace Merchello.Core.Persistence
         /// <summary>
         /// Returns an instance of the <see cref="ICustomerRepository"/>
         /// </summary>        
-        public virtual ICustomerRepository CreateCustomerRepository(IDatabaseUnitOfWork uow)
+        internal virtual ICustomerRepository CreateCustomerRepository(IDatabaseUnitOfWork uow)
         {
             return new CustomerRepository(uow, RuntimeCacheProvider.Current);
         }
@@ -79,10 +79,19 @@ namespace Merchello.Core.Persistence
         /// </summary>
         /// <param name="uow"></param>
         /// <returns></returns>
-        internal virtual InvoiceItemRepository CreateInvoiceItemRepository(IDatabaseUnitOfWork uow)
+        internal virtual IInvoiceItemRepository CreateInvoiceItemRepository(IDatabaseUnitOfWork uow)
         {
             return new InvoiceItemRepository(uow, RuntimeCacheProvider.Current);
         }
 
+        /// <summary>
+        /// Returns an instance of the <see cref="IPaymentRepository"/>
+        /// </summary>
+        /// <param name="uow"></param>
+        /// <returns></returns>
+        internal virtual IPaymentRepository CreatePaymentRepository(IDatabaseUnitOfWork uow)
+        {
+            return new PaymentRepository(uow, NullCacheProvider.Current);
+        }
     }
 }
