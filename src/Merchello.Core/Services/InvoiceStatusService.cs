@@ -12,7 +12,7 @@ namespace Merchello.Core.Services
     /// <summary>
     /// Represents the InvoiceStatus Service 
     /// </summary>
-    public partial class InvoiceStatusService : IInvoiceStatusService
+    internal class InvoiceStatusService : IInvoiceStatusService
     {
         private readonly IDatabaseUnitOfWorkProvider _uowProvider;
         private readonly RepositoryFactory _repositoryFactory;

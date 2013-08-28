@@ -11,6 +11,9 @@ using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Core.Services
 {
+    /// <summary>
+    /// Represents the anonymous customer service
+    /// </summary>
     internal class AnonymousCustomerService : IAnonymousCustomerService
     {
 

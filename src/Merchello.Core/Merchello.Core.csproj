@@ -155,11 +155,15 @@
     <Compile Include="Services\AnonymousCustomerService.cs" />
     <Compile Include="Services\BasketItemService.cs" />
     <Compile Include="Services\BasketService.cs" />
+    <Compile Include="Services\ConsumerService.cs" />
     <Compile Include="Services\Interfaces\IAnonymousCustomerService.cs" />
     <Compile Include="Services\Interfaces\IBasketItemService.cs" />
     <Compile Include="Services\Interfaces\IBasketService.cs" />
+    <Compile Include="Services\Interfaces\IConsumerService.cs" />
+    <Compile Include="Services\Interfaces\IInvoiceItemService.cs" />
     <Compile Include="Services\Interfaces\IInvoiceService.cs" />
     <Compile Include="Services\Interfaces\IInvoiceStatusService.cs" />
+    <Compile Include="Services\InvoiceItemService.cs" />
     <Compile Include="Services\InvoiceService.cs" />
     <Compile Include="Services\InvoiceStatusService.cs" />
     <Compile Include="TypeFieldMapperEnumerations.cs" />

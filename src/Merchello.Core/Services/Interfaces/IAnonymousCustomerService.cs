@@ -11,7 +11,7 @@ namespace Merchello.Core.Services
     /// <summary>
     /// Defines the anonymous customer service
     /// </summary>
-    interface IAnonymousCustomerService : IService
+    public interface IAnonymousCustomerService : IService
     {
 
         /// <summary>
