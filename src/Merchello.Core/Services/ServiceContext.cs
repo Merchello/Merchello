@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Merchello.Core.Persistence;
 using Umbraco.Core.Persistence.UnitOfWork;
 
@@ -16,7 +12,10 @@ namespace Merchello.Core.Services
     {
         private Lazy<CustomerService> _customerService;
         private Lazy<AnonymousCustomerService> _anonymousCustomerService;
-        private Lazy<BasketService> _basketService; 
+        private Lazy<BasketService> _basketService;
+        private Lazy<InvoiceService> _invoiceService;
+        private Lazy<InvoiceItemService> _invoiceItemService;
+        private Lazy<InvoiceStatusService> _invoiceStatusService; 
         
         /// <summary>
         /// Constructor
@@ -44,6 +43,14 @@ namespace Merchello.Core.Services
             if(_basketService == null)
                 _basketService = new Lazy<BasketService>(() => new BasketService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
+            if(_invoiceItemService == null)
+                _invoiceItemService = new Lazy<InvoiceItemService>(() => new InvoiceItemService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+
+            if(_invoiceStatusService == null)
+                _invoiceStatusService = new Lazy<InvoiceStatusService>(() => new InvoiceStatusService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+
+            if(_invoiceService == null)
+                _invoiceService = new Lazy<InvoiceService>(() => new InvoiceService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _invoiceItemService.Value, _invoiceStatusService.Value));
         }
 
 
@@ -61,6 +68,14 @@ namespace Merchello.Core.Services
         public IBasketService BasketService
         {
             get { return _basketService.Value;  }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IInvoiceService"/>
+        /// </summary>
+        public IInvoiceService InvoiceService
+        {
+            get { return _invoiceService.Value; }
         }
     }
 }
