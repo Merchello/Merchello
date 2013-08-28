@@ -36,10 +36,14 @@ namespace Merchello.Core.Models
             _customer = customer;
             _customerKey = customer.Key;
             _invoice = invoice;
-            _invoiceId = invoice.Id;
+            if(invoice != null) _invoiceId = invoice.Id;
             _amount = amount;
             _paymentTypeFieldKey = paymentTypeFieldKey;
         }
+
+        internal Payment(ICustomer customer, int invoiceId, Guid paymentTypeFieldKey, decimal amount)
+        {}
+        
 
         private static readonly PropertyInfo InvoiceIdSelector = ExpressionHelper.GetPropertyInfo<Payment, int>(x => x.InvoiceId);
         private static readonly PropertyInfo CustomerKeySelector = ExpressionHelper.GetPropertyInfo<Payment, Guid>(x => x.CustomerKey);
