@@ -21,19 +21,23 @@ namespace Merchello.Core.Models
         private decimal _amount;
         private bool _exported;
 
+        public InvoiceItem(IInvoice invoice, InvoiceItemType invoiceItemType)
+            : this(invoice, invoiceItemType, null)
+        {}
+
         public InvoiceItem (IInvoice invoice, InvoiceItemType invoiceItemType, int? parentId)  
-        {
-            _invoiceId = invoice.Id;
-            _parentId = parentId;
-            _invoiceItemTypeFieldKey = TypeFieldProvider.InvoiceItem().GetTypeField(invoiceItemType).TypeKey;
-        }
+            : this(invoice, TypeFieldProvider.InvoiceItem().GetTypeField(invoiceItemType).TypeKey, parentId)
+        {}
+
+        public InvoiceItem(IInvoice invoice, Guid invoiceItemTypeFieldKey, int? parentId)
+            : this(invoice.Id, invoiceItemTypeFieldKey, parentId)
+        {}
 
         internal InvoiceItem(int invoiceId, Guid invoiceItemTypeFieldKey, int? parentId)
         {
             _invoiceId = invoiceId;
             _invoiceItemTypeFieldKey = invoiceItemTypeFieldKey;
             _parentId = parentId;
-
         }
         
         private static readonly PropertyInfo InvoiceItemTypeFieldKeySelector = ExpressionHelper.GetPropertyInfo<InvoiceItem, Guid>(x => x.InvoiceItemTypeFieldKey);  
