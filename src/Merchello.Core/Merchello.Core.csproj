@@ -135,9 +135,12 @@
     <Compile Include="Persistence\Factories\InvoiceFactory.cs" />
     <Compile Include="Persistence\Factories\InvoiceItemFactory.cs" />
     <Compile Include="Persistence\Factories\InvoiceStatusFactory.cs" />
+    <Compile Include="Persistence\Factories\PaymentFactory.cs" />
     <Compile Include="Persistence\Mappers\AnonymousCustomerMapper.cs" />
     <Compile Include="Persistence\Mappers\BasketItemMapper.cs" />
     <Compile Include="Persistence\Mappers\BasketMapper.cs" />
+    <Compile Include="Persistence\Mappers\PaymentMapper.cs" />
+    <Compile Include="Persistence\Mappers\InvoiceItemMapper.cs" />
     <Compile Include="Persistence\Mappers\InvoiceMapper.cs" />
     <Compile Include="Persistence\Mappers\InvoiceStatusMapper.cs" />
     <Compile Include="Persistence\Mappers\MerchelloBaseMapper.cs" />
@@ -151,9 +154,11 @@
     <Compile Include="Persistence\Repositories\Interfaces\IInvoiceItemRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IInvoiceRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IInvoiceStatusRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IPaymentRepository.cs" />
     <Compile Include="Persistence\Repositories\InvoiceItemRepository.cs" />
     <Compile Include="Persistence\Repositories\InvoiceRepository.cs" />
     <Compile Include="Persistence\Repositories\InvoiceStatusRepository.cs" />
+    <Compile Include="Persistence\Repositories\PaymentRepository.cs" />
     <Compile Include="Services\AnonymousCustomerService.cs" />
     <Compile Include="Services\BasketItemService.cs" />
     <Compile Include="Services\BasketService.cs" />

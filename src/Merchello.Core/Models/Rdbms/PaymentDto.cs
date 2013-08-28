@@ -54,6 +54,7 @@ namespace Merchello.Core.Models.Rdbms
         [ResultColumn]
         public CustomerDto CustomerDto { get; set; }
 
-
+        [ResultColumn]
+        public InvoiceDto InvoiceDto { get; set; }
     }
 }
