@@ -14,7 +14,7 @@ namespace Merchello.Core
     public class MerchelloContext : IDisposable
     {
 
-        internal MerchelloContext(ServiceContext serviceContext, CacheHelper cache)
+        internal MerchelloContext(IServiceContext serviceContext, CacheHelper cache)
         {
             Mandate.ParameterNotNull(serviceContext, "serviceContext");
             //Mandate.ParameterNotNull(cache, "cache");
@@ -53,7 +53,7 @@ namespace Merchello.Core
         //   now, the boot task that setup the content store ensures that it is ready
         bool _isReady = false;
         readonly System.Threading.ManualResetEventSlim _isReadyEvent = new System.Threading.ManualResetEventSlim(false);
-        private ServiceContext _services;
+        private IServiceContext _services;
 
         public bool IsReady
         {
@@ -131,7 +131,7 @@ namespace Merchello.Core
         /// <remarks>
         /// Internal set is generally only used for unit tests
         /// </remarks>
-        public ServiceContext Services
+        public IServiceContext Services
         {
             get
             {

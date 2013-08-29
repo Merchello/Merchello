@@ -63,7 +63,7 @@ namespace Merchello.Tests.UnitTests.Contexts
         [Test]
         public void Web_BootManager_Can_Create_MerchelloContext()
         {
-            MerchelloBootstrapper.Init(new WebBootManager());
+            MerchelloBootstrapper.Init(new WebBootManager(true));
 
             var context = MerchelloContext.Current;
             Assert.NotNull(context);

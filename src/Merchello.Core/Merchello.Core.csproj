@@ -165,6 +165,7 @@
     <Compile Include="Services\Interfaces\IInvoiceItemService.cs" />
     <Compile Include="Services\Interfaces\IInvoiceService.cs" />
     <Compile Include="Services\Interfaces\IInvoiceStatusService.cs" />
+    <Compile Include="Services\Interfaces\IServiceContext.cs" />
     <Compile Include="Services\InvoiceItemService.cs" />
     <Compile Include="Services\InvoiceService.cs" />
     <Compile Include="Services\InvoiceStatusService.cs" />
