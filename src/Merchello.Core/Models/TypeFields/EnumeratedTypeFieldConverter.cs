@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Merchello.Core.Models.TypeFields
 {
-    public class TypeFieldProvider
+    public class EnumeratedTypeFieldConverter
     {
         /// <summary>
         /// Creates an instance of an <see cref="IAddressTypeField"/> object

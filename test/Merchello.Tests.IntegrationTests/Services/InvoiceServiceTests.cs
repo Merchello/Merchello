@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Merchello.Core.Models;
 using Merchello.Core.Persistence.Migrations.Initial;
 using Merchello.Core.Services;

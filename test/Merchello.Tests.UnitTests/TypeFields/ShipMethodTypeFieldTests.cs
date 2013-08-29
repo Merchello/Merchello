@@ -27,7 +27,7 @@ namespace Merchello.Tests.UnitTests.TypeFields
         [Test]
         public void ShipMethodType_flat_rate_matches_configuration()
         {
-            var type = TypeFieldProvider.ShipmentMethod().FlatRate;
+            var type = EnumeratedTypeFieldConverter.ShipmentMethod().FlatRate;
 
             Assert.AreEqual(_mockFlatRate.Alias, type.Alias);
             Assert.AreEqual(_mockFlatRate.Name, type.Name);
@@ -41,7 +41,7 @@ namespace Merchello.Tests.UnitTests.TypeFields
         [Test]
         public void ShipMethodType_percent_total_matches_configuration()
         {
-            var type = TypeFieldProvider.ShipmentMethod().PercentTotal;
+            var type = EnumeratedTypeFieldConverter.ShipmentMethod().PercentTotal;
 
             Assert.AreEqual(_mockPercentTotal.Alias, type.Alias);
             Assert.AreEqual(_mockPercentTotal.Name, type.Name);
@@ -55,7 +55,7 @@ namespace Merchello.Tests.UnitTests.TypeFields
         [Test]
         public void ShipMethodType_carrier_matches_configuration()
         {
-            var type = TypeFieldProvider.ShipmentMethod().Carrier;
+            var type = EnumeratedTypeFieldConverter.ShipmentMethod().Carrier;
 
             Assert.AreEqual(_mockCarrier.Alias, type.Alias);
             Assert.AreEqual(_mockCarrier.Name, type.Name);

@@ -45,7 +45,7 @@ namespace Merchello.Core.Services
         /// </summary>
         public IBasketItem CreateBasketItem(IBasket basket, string sku, string name, int baseQuantity, int unitOfMeasureMultiplier, decimal amount)
         {
-            var invoiceItemType = TypeFieldProvider.InvoiceItem().GetTypeField(InvoiceItemType.Product);
+            var invoiceItemType = EnumeratedTypeFieldConverter.InvoiceItem().GetTypeField(InvoiceItemType.Product);
             return CreateBasketItem(basket, invoiceItemType.TypeKey, sku, name, baseQuantity, unitOfMeasureMultiplier, amount);
         }
 
