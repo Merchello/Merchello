@@ -45,7 +45,7 @@ namespace Merchello.Core.Services
         /// </summary>
         public IInvoiceItem CreateInvoiceItem(IInvoice invoice, InvoiceItemType invoiceItemType, string sku, string name, int baseQuantity, int unitOfMeasure, decimal amount, int? parentId = null)
         {
-            var invoiceItemTypeFieldKey = TypeFieldProvider.InvoiceItem().GetTypeField(invoiceItemType).TypeKey;
+            var invoiceItemTypeFieldKey = EnumeratedTypeFieldConverter.InvoiceItem().GetTypeField(invoiceItemType).TypeKey;
             return CreateInvoiceItem(invoice, invoiceItemTypeFieldKey, sku, name, baseQuantity, unitOfMeasure, amount, false, parentId);
         }
 

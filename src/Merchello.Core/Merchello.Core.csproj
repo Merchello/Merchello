@@ -125,7 +125,7 @@
     <Compile Include="Models\TypeFields\IProductTypeField.cs" />
     <Compile Include="Models\TypeFields\IShipmentMethodTypeField.cs" />
     <Compile Include="Models\TypeFields\ITypeFieldMapper.cs" />
-    <Compile Include="Models\TypeFields\TypeFieldProvider.cs" />
+    <Compile Include="Models\TypeFields\EnumeratedTypeFieldConverter.cs" />
     <Compile Include="Cache\ObjectCacheRuntimeCacheProvider.cs" />
     <Compile Include="Cache\StaticCacheProvider.cs" />
     <Compile Include="ObjectResolution\Resolution.cs" />
@@ -170,10 +170,12 @@
     <Compile Include="Services\Interfaces\IInvoiceItemService.cs" />
     <Compile Include="Services\Interfaces\IInvoiceService.cs" />
     <Compile Include="Services\Interfaces\IInvoiceStatusService.cs" />
+    <Compile Include="Services\Interfaces\IPaymentService.cs" />
     <Compile Include="Services\Interfaces\IServiceContext.cs" />
     <Compile Include="Services\InvoiceItemService.cs" />
     <Compile Include="Services\InvoiceService.cs" />
     <Compile Include="Services\InvoiceStatusService.cs" />
+    <Compile Include="Services\PaymentService.cs" />
     <Compile Include="TypeFieldMapperEnumerations.cs" />
     <Compile Include="Models\TypeFields\ProductTypeField.cs" />
     <Compile Include="Models\Rdbms\TypeFieldDto.cs" />

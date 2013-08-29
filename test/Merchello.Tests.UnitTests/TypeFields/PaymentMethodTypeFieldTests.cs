@@ -29,7 +29,7 @@ namespace Merchello.Tests.UnitTests.TypeFields
         [Test]
         public void PaymentMethodType_cash_matches_configuration()
         {
-            var type = TypeFieldProvider.PaymentMethod().Cash;
+            var type = EnumeratedTypeFieldConverter.PaymentMethod().Cash;
 
             Assert.AreEqual(_cashMock.Alias, type.Alias);
             Assert.AreEqual(_cashMock.Name, type.Name);
@@ -43,7 +43,7 @@ namespace Merchello.Tests.UnitTests.TypeFields
         [Test]
         public void PaymentMethodType_credit_card_matches_configuration()
         {
-            var type = TypeFieldProvider.PaymentMethod().CreditCard;
+            var type = EnumeratedTypeFieldConverter.PaymentMethod().CreditCard;
 
             Assert.AreEqual(_creditCardMock.Alias, type.Alias);
             Assert.AreEqual(_creditCardMock.Name, type.Name);
@@ -57,7 +57,7 @@ namespace Merchello.Tests.UnitTests.TypeFields
         [Test]
         public void PaymentMethodType_purchase_order_matches_configuration()
         {
-            var type = TypeFieldProvider.PaymentMethod().PurchaseOrder;
+            var type = EnumeratedTypeFieldConverter.PaymentMethod().PurchaseOrder;
 
             Assert.AreEqual(_purchaseOrderMock.Alias, type.Alias);
             Assert.AreEqual(_purchaseOrderMock.Name, type.Name);

@@ -24,5 +24,11 @@ namespace Merchello.Core.Services
         /// Gets the <see cref="IInvoiceService"/>
         /// </summary>
         IInvoiceService InvoiceService { get; }
+
+        /// <summary>
+        /// Gets the <see cref="IPaymentService"/>
+        /// </summary>
+        IPaymentService PaymentService { get; }
     }
+    
 }

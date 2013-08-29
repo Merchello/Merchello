@@ -17,10 +17,7 @@ namespace Merchello.Core.Models.Rdbms
         [ForeignKey(typeof(CustomerDto), Name = "FK_merchPayment_merchCustomer", Column = "pk")]
         [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchPaymentCustomer")]
         public Guid CustomerKey { get; set; }
-
-        [Column("memberId")]
-        public int? MemberId { get; set; }
-
+        
         [Column("gatewayAlias")]
         public string GatewayAlias { get; set; }
 
@@ -50,7 +47,5 @@ namespace Merchello.Core.Models.Rdbms
         [ResultColumn]
         public CustomerDto CustomerDto { get; set; }
 
-        [ResultColumn]
-        public InvoiceDto InvoiceDto { get; set; }
     }
 }

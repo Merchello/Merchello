@@ -82,6 +82,7 @@
     <Compile Include="Services\InvoiceServiceTests.cs" />
     <Compile Include="Services\InvoiceStatusServiceTests.cs" />
     <Compile Include="Services\CustomerServiceTests.cs" />
+    <Compile Include="Services\PaymentServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

@@ -14,7 +14,7 @@ namespace Merchello.Core.Models
 
         public Basket(BasketType basketType)
         {
-            _basketTypeFieldKey = TypeFieldProvider.Basket().GetTypeField(basketType).TypeKey;
+            _basketTypeFieldKey = EnumeratedTypeFieldConverter.Basket().GetTypeField(basketType).TypeKey;
         }
 
         internal Basket(Guid basketTypeFieldKey)
@@ -72,10 +72,10 @@ namespace Merchello.Core.Models
         [DataMember]
         public BasketType BasketType
         {
-            get { return TypeFieldProvider.Basket().GetTypeField(_basketTypeFieldKey); }
+            get { return EnumeratedTypeFieldConverter.Basket().GetTypeField(_basketTypeFieldKey); }
             set
             {
-                var reference = TypeFieldProvider.Basket().GetTypeField(value);
+                var reference = EnumeratedTypeFieldConverter.Basket().GetTypeField(value);
                 if (!ReferenceEquals(TypeFieldMapperBase.NotFound, reference))
                 {
                     // call through the property to flag the dirty property

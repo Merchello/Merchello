@@ -50,7 +50,7 @@ namespace Merchello.Core.Services
             return CreateAddress(
                                 customer.Key, 
                                 label, 
-                                TypeFieldProvider.Address().GetTypeField(addressType), 
+                                EnumeratedTypeFieldConverter.Address().GetTypeField(addressType), 
                                 address1,
                                 string.Empty, 
                                 locality, 
