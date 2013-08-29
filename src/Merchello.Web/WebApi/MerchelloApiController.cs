@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Merchello.Core;
 using Merchello.Core.Services;
+using Umbraco.Web;
+using Umbraco.Web.WebApi;
 
 namespace Merchello.Web.WebApi
 {
-    public abstract class MerchelloApiController : ApiController
+    public abstract class MerchelloApiController : UmbracoApiController
     {
         protected MerchelloApiController()
             : this(MerchelloContext.Current)
@@ -17,13 +19,19 @@ namespace Merchello.Web.WebApi
 
         }
 
-        protected MerchelloApiController(MerchelloContext merchelloContext)
+        protected MerchelloApiController(MerchelloContext merchelloContext) : this(merchelloContext, UmbracoContext.Current)
         {
             if (merchelloContext == null) throw new ArgumentNullException("merchelloContext");
             MerchelloContext = merchelloContext;
             InstanceId = Guid.NewGuid();
         }
 
+        protected MerchelloApiController(MerchelloContext merchelloContext, UmbracoContext umbracoContext) : base(umbracoContext)
+        {
+            if (merchelloContext == null) throw new ArgumentNullException("merchelloContext");
+            MerchelloContext = merchelloContext;
+            InstanceId = Guid.NewGuid();
+        }
 
         /// <summary>
         /// Returns the current MerchelloContext

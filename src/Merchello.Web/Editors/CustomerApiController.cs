@@ -8,16 +8,17 @@ using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Merchello.Web.WebApi;
+using Umbraco.Web;
 
 namespace Merchello.Web.Editors
 {
-    [PluginController("MerchelloApi")]
-    public class CustomerController : MerchelloApiController
+    [PluginController("Merchello")]
+    public class CustomerApiController : MerchelloApiController
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public CustomerController()
+        public CustomerApiController()
             : this(MerchelloContext.Current)
         {            
         }
@@ -26,10 +27,21 @@ namespace Merchello.Web.Editors
         /// Constructor
         /// </summary>
         /// <param name="merchelloContext"></param>
-        public CustomerController(MerchelloContext merchelloContext)
+        public CustomerApiController(MerchelloContext merchelloContext)
             : base(merchelloContext)
         {
         }
+
+        /// <summary>
+        /// This is a helper contructor for unit testing
+        /// </summary>
+        internal CustomerApiController(MerchelloContext merchelloContext, UmbracoContext umbracoContext)
+            : base(merchelloContext, umbracoContext)
+        {
+        }
+
+
+
 
 
         /// <summary>

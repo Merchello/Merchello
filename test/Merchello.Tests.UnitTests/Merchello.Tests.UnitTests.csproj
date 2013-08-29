@@ -125,6 +125,8 @@
       <HintPath>..\..\src\packages\Microsoft.AspNet.WebApi.Client.4.0.30506.0\lib\net40\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\..\src\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.Helpers.dll</HintPath>
@@ -184,6 +186,10 @@
     <Reference Include="umbraco.providers">
       <HintPath>..\..\src\packages\UmbracoCms.Core.6.1.4\lib\umbraco.providers.dll</HintPath>
     </Reference>
+    <Reference Include="Umbraco.Tests, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\dependencies\Umbraco.Tests.dll</HintPath>
+    </Reference>
     <Reference Include="Umbraco.Web.UI">
       <HintPath>..\..\src\packages\UmbracoCms.Core.6.1.4\lib\Umbraco.Web.UI.dll</HintPath>
     </Reference>
@@ -221,6 +227,7 @@
     <Compile Include="TypeFields\ProductTypeFieldTests.cs" />
     <Compile Include="TypeFields\ShipMethodTypeFieldTests.cs" />
     <Compile Include="WebControllers\CustomerControllerTests.cs" />
+    <Compile Include="WebControllers\InvoiceControllerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
