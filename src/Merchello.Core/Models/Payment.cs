@@ -11,9 +11,7 @@ namespace Merchello.Core.Models
     [DataContract(IsReference = true)]
     public partial class Payment : IdEntity, IPayment
     {
-        ///
-        private IInvoice _invoice;
-        private int _invoiceId; // TODO : invoice is included here because of the selector and can probably be refactored a bit to remove
+        
         private ICustomer _customer;
         private Guid _customerKey;
         private int? _memberId;
@@ -24,28 +22,22 @@ namespace Merchello.Core.Models
         private decimal _amount;
         private bool _exported;
 
-        public Payment(ICustomer customer, IInvoice invoice, PaymentMethodType paymentMethodType, decimal amount)
-            : this(customer, invoice, TypeFieldProvider.PaymentMethod().GetTypeField(paymentMethodType).TypeKey, amount)
+        public Payment(ICustomer customer, PaymentMethodType paymentMethodType, decimal amount)
+            : this(customer, TypeFieldProvider.PaymentMethod().GetTypeField(paymentMethodType).TypeKey, amount)
         { }
 
-        internal Payment (ICustomer customer, IInvoice invoice, Guid paymentTypeFieldKey, decimal amount)  
+        internal Payment (ICustomer customer, Guid paymentTypeFieldKey, decimal amount)  
         {
             // customer can make a payment without an invoice (credit) so invoice can be null
             Mandate.ParameterNotNull(customer, "customer");
            
             _customer = customer;
-            _customerKey = customer.Key;
-            _invoice = invoice;
-            if(invoice != null) _invoiceId = invoice.Id;
+            _customerKey = customer.Key;            
             _amount = amount;
             _paymentTypeFieldKey = paymentTypeFieldKey;
         }
-
-        internal Payment(ICustomer customer, int invoiceId, Guid paymentTypeFieldKey, decimal amount)
-        {}
         
 
-        private static readonly PropertyInfo InvoiceIdSelector = ExpressionHelper.GetPropertyInfo<Payment, int>(x => x.InvoiceId);
         private static readonly PropertyInfo CustomerKeySelector = ExpressionHelper.GetPropertyInfo<Payment, Guid>(x => x.CustomerKey);
         private static readonly PropertyInfo MemberIdSelector = ExpressionHelper.GetPropertyInfo<Payment, int?>(x => x.MemberId);  
         private static readonly PropertyInfo GatewayAliasSelector = ExpressionHelper.GetPropertyInfo<Payment, string>(x => x.GatewayAlias);  
@@ -55,35 +47,6 @@ namespace Merchello.Core.Models
         private static readonly PropertyInfo AmountSelector = ExpressionHelper.GetPropertyInfo<Payment, decimal>(x => x.Amount);  
         private static readonly PropertyInfo ExportedSelector = ExpressionHelper.GetPropertyInfo<Payment, bool>(x => x.Exported);  
         
-        /// <summary>
-        /// The invoiceId associated with the Payment
-        /// </summary>
-        [IgnoreDataMember]
-        public int InvoiceId
-        {
-            get { return _invoice.Id; }
-            internal set
-            {
-                SetPropertyValueAndDetectChanges(o =>
-                {
-                    _invoiceId = value;
-                    return _invoiceId;
-                }, _invoiceId, InvoiceIdSelector);
-            }
-        }
-
-        /// <summary>
-        /// The invoice associated with the payment
-        /// </summary>
-        [DataMember]
-        public IInvoice Invoice
-        {
-            get { return _invoice; }
-            set 
-            {
-                _invoice = value;
-            }
-        }
     
         /// <summary>
         /// The customerKey associated with the Payment

@@ -7,7 +7,7 @@ namespace Merchello.Core.Persistence.Factories
     {
         public IPayment BuildEntity(PaymentDto dto)
         {
-            var payment = new Payment(GetCustomer(dto.CustomerDto), GetInvoice(dto.InvoiceDto), dto.PaymentTypeFieldKey, dto.Amount)
+            var payment = new Payment(GetCustomer(dto.CustomerDto), dto.PaymentTypeFieldKey, dto.Amount)
             {
                 Id = dto.Id,
                 MemberId = dto.MemberId,
@@ -28,8 +28,7 @@ namespace Merchello.Core.Persistence.Factories
         {
             var dto = new PaymentDto()
             {
-                Id = entity.Id,
-                InvoiceId = entity.InvoiceId,
+                Id = entity.Id,                
                 CustomerKey = entity.CustomerKey,
                 MemberId = entity.MemberId,
                 GatewayAlias = entity.GatewayAlias,
@@ -51,10 +50,5 @@ namespace Merchello.Core.Persistence.Factories
             return factory.BuildEntity(dto);
         }
 
-        private static IInvoice GetInvoice(InvoiceDto dto)
-        {
-            var factory = new InvoiceFactory();
-            return factory.BuildEntity(dto);
-        }
     }
 }

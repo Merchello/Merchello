@@ -9,14 +9,8 @@ namespace Merchello.Core.Models
     /// </summary>
     public interface IPayment : IIdEntity
     {
-            
-            /// <summary>
-            /// The invoiceId for the Payment
-            /// </summary>
-            [DataMember]
-            int InvoiceId { get; }
-            
-            
+                        
+                       
             /// <summary>
             /// The customerKey for the Payment
             /// </summary>

@@ -22,17 +22,14 @@ namespace Merchello.Tests.UnitTests.Querying
             var expected = new Sql();
             expected.Select("*")
                 .From("[merchPayment]")
-                .InnerJoin("[merchCustomer]").On("[merchPayment].[customerKey] = [merchCustomer].[pk]")
-                .LeftJoin("[merchInvoice]").On("[merchPayment].[invoiceId] = [merchInvoice].[id]")
+                .InnerJoin("[merchCustomer]").On("[merchPayment].[customerKey] = [merchCustomer].[pk]")                
                 .Where("[merchPayment].[id] = " + id.ToString());
 
             var sql = new Sql();
             sql.Select("*")
                 .From<PaymentDto>()
                 .InnerJoin<CustomerDto>()
-                .On<PaymentDto, CustomerDto>(left => left.CustomerKey, right => right.Key)
-                .LeftJoin<InvoiceDto>()
-                .On<PaymentDto, InvoiceDto>(left => left.InvoiceId, right => right.Id)
+                .On<PaymentDto, CustomerDto>(left => left.CustomerKey, right => right.Key)                                
                 .Where<PaymentDto>(x => x.Id == id);
 
 
