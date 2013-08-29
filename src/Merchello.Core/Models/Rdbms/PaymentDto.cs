@@ -11,11 +11,7 @@ namespace Merchello.Core.Models.Rdbms
     {
         [Column("id")]
         [PrimaryKeyColumn]
-        public int Id { get; set; }
-
-        [Column("invoiceId")]
-        [ForeignKey(typeof(InvoiceDto), Name = "FK_merchPayment_merchInvoice", Column = "id")]
-        public int InvoiceId { get; set; }
+        public int Id { get; set; }        
 
         [Column("customerKey")]
         [ForeignKey(typeof(CustomerDto), Name = "FK_merchPayment_merchCustomer", Column = "pk")]
