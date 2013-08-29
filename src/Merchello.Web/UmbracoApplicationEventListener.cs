@@ -1,4 +1,5 @@
 ﻿using Merchello.Core;
+using System.IO;
 using Umbraco.Core;
 
 namespace Merchello.Web
@@ -12,7 +13,11 @@ namespace Merchello.Web
         {
             base.ApplicationStarted(umbracoApplication, applicationContext);
 
-            //MerchelloBootstrapper.Init(new WebBootManager());
+            string merchelloConfigFileLocation = @"~\App_Plugins\Merchello\Config\merchello.config";
+            if (File.Exists(merchelloConfigFileLocation))
+            {
+                MerchelloBootstrapper.Init(new WebBootManager());
+            }
         }
     }
 }

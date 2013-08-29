@@ -8,7 +8,7 @@ namespace Merchello.Core.Services
     /// The Merchello ServiceContext, which provides access to the following services:
     /// <see cref="ICustomerService"/>
     /// </summary>
-    public class ServiceContext
+    public class ServiceContext : IServiceContext
     {
         private Lazy<CustomerService> _customerService;
         private Lazy<AnonymousCustomerService> _anonymousCustomerService;
@@ -25,6 +25,7 @@ namespace Merchello.Core.Services
         {
             BuildServiceContext(dbUnitOfWorkProvider, new Lazy<RepositoryFactory>(() => new RepositoryFactory()));
         }
+
 
         /// <summary>
         /// Builds the various services
@@ -54,6 +55,9 @@ namespace Merchello.Core.Services
         }
 
 
+        #region ICustomerService Members
+
+
         /// <summary>
         /// Gets the <see cref="ICustomerService"/>
         /// </summary>
@@ -77,5 +81,7 @@ namespace Merchello.Core.Services
         {
             get { return _invoiceService.Value; }
         }
+
+        #endregion
     }
 }
