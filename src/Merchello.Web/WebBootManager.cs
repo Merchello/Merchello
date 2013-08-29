@@ -21,17 +21,18 @@ namespace Merchello.Web
             _isForTesting = isForTesting;
         }
 
-        ///// <summary>
-        ///// Initialize objects before anything during the boot cycle happens
-        ///// </summary>
-        ///// <returns></returns>
-        //public override IBootManager Initialize()
-        //{
-        //    base.Initialize();
+        /// <summary>
+        /// Initialize objects before anything during the boot cycle happens
+        /// </summary>
+        /// <returns></returns>
+        public override IBootManager Initialize()
+        {
+            base.Initialize();
 
 
-        //    return this;
-        //}
+
+            return this;
+        }
 
 
     }

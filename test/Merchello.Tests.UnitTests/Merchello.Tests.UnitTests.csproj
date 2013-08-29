@@ -220,6 +220,7 @@
     <Compile Include="TypeFields\PaymentMethodTypeFieldTests.cs" />
     <Compile Include="TypeFields\ProductTypeFieldTests.cs" />
     <Compile Include="TypeFields\ShipMethodTypeFieldTests.cs" />
+    <Compile Include="WebControllers\CustomerControllerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
