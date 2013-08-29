@@ -35,7 +35,7 @@ namespace Merchello.Core.Persistence.Repositories
             var sql = GetBaseQuery(false)
                 .Where(GetBaseWhereClause(), new { Id = id });
 
-            var dto = Database.Fetch<PaymentDto, CustomerDto, InvoiceDto>(sql).FirstOrDefault();
+            var dto = Database.Fetch<PaymentDto, CustomerDto>(sql).FirstOrDefault();
 
             if (dto == null)
                 return null;
@@ -59,7 +59,7 @@ namespace Merchello.Core.Persistence.Repositories
             else
             {
                 var factory = new PaymentFactory();
-                var dtos = Database.Fetch<PaymentDto, CustomerDto, InvoiceDto>(GetBaseQuery(false));
+                var dtos = Database.Fetch<PaymentDto, CustomerDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
                     yield return factory.BuildEntity(dto);
@@ -75,11 +75,9 @@ namespace Merchello.Core.Persistence.Repositories
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-                .From("merchPayment")
-                .InnerJoin("merchCustomer")
-                .On<PaymentDto, CustomerDto>(left => left.CustomerKey, right => right.Key)
-                .LeftJoin("merchInvoice")
-                .On<PaymentDto, InvoiceDto>(left => left.InvoiceId, right => right.Id);
+               .From("merchPayment")
+               .InnerJoin("merchCustomer")
+               .On<PaymentDto, CustomerDto>(left => left.CustomerKey, right => right.Key);              
 
             return sql;
         }
@@ -140,7 +138,7 @@ namespace Merchello.Core.Persistence.Repositories
             var translator = new SqlTranslator<IPayment>(sqlClause, query);
             var sql = translator.Translate();
 
-            var dtos = Database.Fetch<PaymentDto, CustomerDto, InvoiceDto>(sql);
+            var dtos = Database.Fetch<PaymentDto, CustomerDto>(sql);
 
             return dtos.DistinctBy(x => x.Id).Select(dto => Get(dto.Id));
 

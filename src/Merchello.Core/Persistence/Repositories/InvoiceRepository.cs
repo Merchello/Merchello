@@ -93,9 +93,8 @@ namespace Merchello.Core.Persistence.Repositories
         protected override IEnumerable<string> GetDeleteClauses()
         {
             var list = new List<string>
-                {
-                    "DELETE FROM merchTransaction WHERE paymentId IN (SELECT id FROM merchPayment WHERE invoiceId = @Id)",
-                    "DELETE FROM merchPayment WHERE invoiceId = @Id",
+                {                    
+                    "DELETE FROM merchTransaction WHERE invoiceId = @Id",
                     "DELETE FROM merchShipment WHERE invoiceId = @Id",
                     "DELETE FROM merchInvoiceItem WHERE invoiceId = @Id",
                     "DELETE FROM merchInvoice WHERE id = @Id"
