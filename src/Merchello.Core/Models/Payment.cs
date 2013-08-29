@@ -14,7 +14,6 @@ namespace Merchello.Core.Models
         
         private ICustomer _customer;
         private Guid _customerKey;
-        private int? _memberId;
         private string _gatewayAlias;
         private Guid _paymentTypeFieldKey;
         private string _paymentMethodName;
@@ -23,7 +22,7 @@ namespace Merchello.Core.Models
         private bool _exported;
 
         public Payment(ICustomer customer, PaymentMethodType paymentMethodType, decimal amount)
-            : this(customer, TypeFieldProvider.PaymentMethod().GetTypeField(paymentMethodType).TypeKey, amount)
+            : this(customer, EnumeratedTypeFieldConverter.PaymentMethod().GetTypeField(paymentMethodType).TypeKey, amount)
         { }
 
         internal Payment (ICustomer customer, Guid paymentTypeFieldKey, decimal amount)  
@@ -38,8 +37,7 @@ namespace Merchello.Core.Models
         }
         
 
-        private static readonly PropertyInfo CustomerKeySelector = ExpressionHelper.GetPropertyInfo<Payment, Guid>(x => x.CustomerKey);
-        private static readonly PropertyInfo MemberIdSelector = ExpressionHelper.GetPropertyInfo<Payment, int?>(x => x.MemberId);  
+        private static readonly PropertyInfo CustomerKeySelector = ExpressionHelper.GetPropertyInfo<Payment, Guid>(x => x.CustomerKey); 
         private static readonly PropertyInfo GatewayAliasSelector = ExpressionHelper.GetPropertyInfo<Payment, string>(x => x.GatewayAlias);  
         private static readonly PropertyInfo PaymentTypeFieldKeySelector = ExpressionHelper.GetPropertyInfo<Payment, Guid>(x => x.PaymentTypeFieldKey);  
         private static readonly PropertyInfo PaymentMethodNameSelector = ExpressionHelper.GetPropertyInfo<Payment, string>(x => x.PaymentMethodName);  
@@ -80,23 +78,6 @@ namespace Merchello.Core.Models
             }
         }
 
-        /// <summary>
-        /// The memberId associated with the Payment
-        /// </summary>
-        [DataMember]
-        public int? MemberId
-        {
-            get { return _memberId; }
-            set 
-            { 
-                SetPropertyValueAndDetectChanges(o =>
-                {
-                    _memberId = value;
-                    return _memberId;
-                }, _memberId, MemberIdSelector); 
-            }
-        }
-    
         /// <summary>
         /// The gatewayAlias associated with the Payment
         /// </summary>
@@ -202,10 +183,10 @@ namespace Merchello.Core.Models
         [DataMember]
         public PaymentMethodType PaymentMethodType
         {
-            get { return TypeFieldProvider.PaymentMethod().GetTypeField(_paymentTypeFieldKey); }
+            get { return EnumeratedTypeFieldConverter.PaymentMethod().GetTypeField(_paymentTypeFieldKey); }
             set
             {
-                var reference = TypeFieldProvider.PaymentMethod().GetTypeField(value);
+                var reference = EnumeratedTypeFieldConverter.PaymentMethod().GetTypeField(value);
                 if (!ReferenceEquals(TypeFieldMapperBase.NotFound, reference))
                 {
                     // call through the property to flag the dirty property

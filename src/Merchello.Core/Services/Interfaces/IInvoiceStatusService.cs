@@ -62,5 +62,11 @@ namespace Merchello.Core.Services
         /// <returns>List of <see cref="IInvoiceStatus"/></returns>
         IEnumerable<IInvoiceStatus> GetByIds(IEnumerable<int> ids);
 
+
+        /// <summary>
+        /// Returns a list of all <see cref="IInvoiceStatus"/> objects
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<IInvoiceStatus> GetAll();
     }
 }

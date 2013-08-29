@@ -15,8 +15,9 @@ namespace Merchello.Core.Services
         private Lazy<BasketService> _basketService;
         private Lazy<InvoiceService> _invoiceService;
         private Lazy<InvoiceItemService> _invoiceItemService;
-        private Lazy<InvoiceStatusService> _invoiceStatusService; 
-        
+        private Lazy<InvoiceStatusService> _invoiceStatusService;
+        private Lazy<PaymentService> _paymentService; 
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -52,6 +53,9 @@ namespace Merchello.Core.Services
 
             if(_invoiceService == null)
                 _invoiceService = new Lazy<InvoiceService>(() => new InvoiceService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _invoiceItemService.Value, _invoiceStatusService.Value));
+
+            if(_paymentService == null)
+                _paymentService = new Lazy<PaymentService>(() => new PaymentService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
         }
 
 
@@ -80,6 +84,14 @@ namespace Merchello.Core.Services
         public IInvoiceService InvoiceService
         {
             get { return _invoiceService.Value; }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IPaymentService"/>
+        /// </summary>
+        public IPaymentService PaymentService
+        {
+            get { return _paymentService.Value;  }
         }
 
         #endregion
