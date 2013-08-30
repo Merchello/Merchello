@@ -148,6 +148,7 @@
     <Compile Include="Persistence\Mappers\InvoiceMapper.cs" />
     <Compile Include="Persistence\Mappers\InvoiceStatusMapper.cs" />
     <Compile Include="Persistence\Mappers\MerchelloBaseMapper.cs" />
+    <Compile Include="Persistence\Mappers\TransactionMapper.cs" />
     <Compile Include="Persistence\Querying\Query.cs" />
     <Compile Include="Persistence\Repositories\AnonymousCustomerRepository.cs" />
     <Compile Include="Persistence\Repositories\BasketItemRepository.cs" />
