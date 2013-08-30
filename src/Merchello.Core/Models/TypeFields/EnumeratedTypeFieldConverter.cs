@@ -51,5 +51,14 @@ namespace Merchello.Core.Models.TypeFields
             return new ShipMethodTypeField();
         }
 
+        /// <summary>
+        /// Creates an instance of an <see cref="ITransactionTypeField"/>
+        /// </summary>
+        /// <returns></returns>
+        internal static ITransactionTypeField Transaction()
+        {
+            return new TransactionTypeField();
+        }
+
     }
 }

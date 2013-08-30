@@ -21,6 +21,9 @@ namespace Merchello.Core.Models.Rdbms
         [Column("sku")]
         public string Sku { get; set; }
 
+        [Column("available")]
+        public bool Available { get; set; }
+
         [Column("trackInventory")]
         [Constraint(Default = "1")]
         public bool TrackInventory { get; set; }

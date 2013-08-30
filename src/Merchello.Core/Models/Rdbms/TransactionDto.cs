@@ -21,8 +21,8 @@ namespace Merchello.Core.Models.Rdbms
         [ForeignKey(typeof(InvoiceDto), Name = "FK_merchTransaction_merchInvoice", Column = "id")]
         public int InvoiceId { get; set; }
 
-        [Column("type")]
-        public int Type { get; set; }
+        [Column("transactionTypeFieldKey")]
+        public Guid TransactionTypeFieldKey { get; set; }
 
         [Column("description")]
         public string Description { get; set; }

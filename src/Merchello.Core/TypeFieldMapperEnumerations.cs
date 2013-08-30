@@ -32,6 +32,13 @@
         Custom
     }
 
+    public enum TransactionType
+    {
+        Credit,
+        Debit,
+        Custom
+    }
+
     public enum ProductType
     {
         Custom
