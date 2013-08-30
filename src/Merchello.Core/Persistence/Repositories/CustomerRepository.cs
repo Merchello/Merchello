@@ -87,6 +87,20 @@ namespace Merchello.Core.Persistence.Repositories
             return PerformGetByQuery(q).FirstOrDefault();
         }
 
+
+        /// <summary>
+        /// Returns 
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="itemsPerPage"></param>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        internal IPage<ICustomer> GetCustomerByPage(long page, long itemsPerPage)
+        {
+            var query = new Querying.Query<ICustomer>();
+            return PerformGetPageByQuery(page, itemsPerPage, query);
+        }
+
         #endregion
 
         #region Overrides of MerchelloPetaPocoRepositoryBase<ICustomer>
@@ -170,6 +184,24 @@ namespace Merchello.Core.Persistence.Repositories
 
         }
 
+
+        protected IPage<ICustomer> PerformGetPageByQuery(long page, long itemsPerPage, IQuery<ICustomer> query)
+        {
+            var sqlClause = GetBaseQuery(false);
+            var translator = new SqlTranslator<ICustomer>(sqlClause, query);
+            var sql = translator.Translate();
+
+            var p = Database.Page<CustomerDto>(page, itemsPerPage, sql);
+
+            return new Models.Page<ICustomer>()
+            {
+                CurrentPage = p.CurrentPage,
+                ItemsPerPage = p.ItemsPerPage,
+                TotalItems = p.TotalItems,
+                TotalPages = p.TotalPages,
+                Items = p.Items.DistinctBy(x => x.Key).Select(dto => Get(dto.Key))
+            };
+        }
 
         #endregion
 
