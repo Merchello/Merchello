@@ -105,11 +105,13 @@
     <Compile Include="Models\IConsumer.cs" />
     <Compile Include="Models\IInvoiceItem.cs" />
     <Compile Include="Models\IInvoiceStatus.cs" />
+    <Compile Include="Models\IPage.cs" />
     <Compile Include="Models\Invoice.cs" />
     <Compile Include="Models\InvoiceItem.cs" />
     <Compile Include="Models\InvoiceStatus.cs" />
     <Compile Include="Models\IPayment.cs" />
     <Compile Include="Models\ITransaction.cs" />
+    <Compile Include="Models\Page.cs" />
     <Compile Include="Models\Payment.cs" />
     <Compile Include="Models\Rdbms\Content2ProductDto.cs" />
     <Compile Include="Models\Rdbms\OptionChoiceDto.cs" />
