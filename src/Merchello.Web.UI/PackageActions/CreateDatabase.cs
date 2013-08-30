@@ -1,19 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.IO;
-using System.Linq;
-using System.Web;
-using System.Web.Configuration;
 using umbraco.cms.businesslogic.packager.standardPackageActions;
 using umbraco.interfaces;
-using Umbraco.Core.IO;
 using Umbraco.Core.Logging;
-using Umbraco.Core.Persistence;
-using Umbraco.Core.Persistence.UnitOfWork;
-using Merchello.Core;
 using Merchello.Core.Configuration;
-using Merchello.Core.Configuration.Outline;
 using Merchello.Core.Persistence.Migrations.Initial;
 
 namespace Merchello.Web.UI.PackageActions
