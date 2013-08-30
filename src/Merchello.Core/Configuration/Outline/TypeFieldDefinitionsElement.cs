@@ -61,6 +61,14 @@ namespace Merchello.Core.Configuration.Outline
             get { return (TypeFieldCollection)this["product"]; }
         }
 
+        /// <summary>
+        /// Gets the dbTypeFields configuration collection for IProduct
+        /// </summary>
+        [ConfigurationProperty("transaction", IsRequired = false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
+        public TypeFieldCollection Transaction
+        {
+            get { return (TypeFieldCollection)this["transaction"]; }
+        }
 
 
     }
