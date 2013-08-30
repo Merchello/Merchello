@@ -19,12 +19,12 @@ namespace Merchello.Tests.UnitTests.WebControllers
     [TestFixture]
     public class CustomerControllerTests : BaseUmbracoApplicationTest
     {
-        UmbracoContext tempUmbracoContext;
+        //UmbracoContext tempUmbracoContext;
 
         [SetUp]
         public void Setup()
         {
-            var httpContext = new Mock<HttpContextBase>();
+            //var httpContext = new Mock<HttpContextBase>();
 
             //tempUmbracoContext = UmbracoContext.EnsureContext(httpContext.Object, ApplicationContext.Current);
         }
@@ -52,9 +52,9 @@ namespace Merchello.Tests.UnitTests.WebControllers
             var MockServiceContext = new Mock<IServiceContext>();
             MockServiceContext.SetupGet(sc => sc.CustomerService).Returns(MockCustomerService.Object);
 
-            //MerchelloContext merchelloContext = new MerchelloContext(MockServiceContext.Object, null);
+            MerchelloContext merchelloContext = new MerchelloContext(MockServiceContext.Object, null);
 
-            //CustomerApiController ctrl = new CustomerApiController(merchelloContext, tempUmbracoContext);
+            //CustomerApiController ctrl = new CustomerApiController(merchelloContext, UmbracoContext.Current);
 
             //// Act
             //var result = ctrl.GetCustomer(customerKey);
