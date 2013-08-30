@@ -52,10 +52,10 @@ namespace Merchello.Web.Editors
         /// <summary>
         /// Returns all Customers
         /// </summary>
-        /// <param name="contentId"></param>
-        public ICustomer GetCustomer(Guid key)
+        /// <param name="key"></param>
+        public Customer GetCustomer(Guid key)
         {
-            ICustomer customer = MerchelloContext.Services.CustomerService.GetByKey(key);
+            var customer = MerchelloContext.Services.CustomerService.GetByKey(key) as Customer;
             if (customer == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);
