@@ -5,6 +5,7 @@ using System.Threading;
 using Merchello.Core.Models;
 using Merchello.Core.Persistence;
 using Merchello.Core.Events;
+using Merchello.Core.Persistence.Repositories;
 using Umbraco.Core;
 using Umbraco.Core.Persistence.UnitOfWork;
 
@@ -202,7 +203,15 @@ namespace Merchello.Core.Services
 
         #endregion
 
-        public IEnumerable<ICustomer> GetAll()
+        public IPage<ICustomer> GetCustomerByPage(long page, long itemsPerPage)
+        {
+            using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return ((CustomerRepository) repository).GetCustomerByPage(page, itemsPerPage);
+            }
+        }
+
+        internal IEnumerable<ICustomer> GetAll()
         {
             using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
             {

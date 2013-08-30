@@ -40,7 +40,7 @@ namespace Merchello.Core.Persistence.Factories
                 };
 
             return dto;
-        }
+        }       
         
     }
 }
