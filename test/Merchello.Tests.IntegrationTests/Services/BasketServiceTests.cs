@@ -2,13 +2,10 @@
 using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Models;
-using Merchello.Core.Persistence.Querying;
-using Merchello.Core.Persistence.Repositories;
 using Merchello.Core.Services;
 using Merchello.Tests.Base.Data;
 using Merchello.Tests.Base.SqlSyntax;
 using NUnit.Framework;
-using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Tests.IntegrationTests.Services
 {

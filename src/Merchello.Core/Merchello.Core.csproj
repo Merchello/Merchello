@@ -109,6 +109,7 @@
     <Compile Include="Models\InvoiceItem.cs" />
     <Compile Include="Models\InvoiceStatus.cs" />
     <Compile Include="Models\IPayment.cs" />
+    <Compile Include="Models\ITransaction.cs" />
     <Compile Include="Models\Payment.cs" />
     <Compile Include="Models\Rdbms\Content2ProductDto.cs" />
     <Compile Include="Models\Rdbms\OptionChoiceDto.cs" />
@@ -117,6 +118,9 @@
     <Compile Include="Models\Rdbms\ProductDto.cs" />
     <Compile Include="Models\Rdbms\ProductVariant2OptionChoiceDto.cs" />
     <Compile Include="Models\Rdbms\ProductVariantDto.cs" />
+    <Compile Include="Models\Transaction.cs" />
+    <Compile Include="Models\TypeFields\ITransactionTypeField.cs" />
+    <Compile Include="Models\TypeFields\TransactionTypeField.cs" />
     <Compile Include="Models\TypeFields\IAddressTypeField.cs" />
     <Compile Include="Models\TypeFields\IBasketTypeField.cs" />
     <Compile Include="Models\TypeFields\ICustomTypeField.cs" />
