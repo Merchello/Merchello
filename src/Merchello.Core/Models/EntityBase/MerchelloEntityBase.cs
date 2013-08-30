@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization;
 
 namespace Merchello.Core.Models.EntityBase
 {
     [Serializable]
+    [DataContract(IsReference = true)]
     public abstract class MerchelloEntityBase : ITracksDirty
     {
 
