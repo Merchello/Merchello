@@ -27,6 +27,7 @@
   <DataTypes />
   <Actions>
     <Action runat="install" undo="true" alias="Merchello_AddConfigSection" />
+    <Action runat="install" undo="true" alias="Merchello_CreateDatabase" />
   </Actions>
   <control />
   <files />
