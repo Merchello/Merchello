@@ -10,7 +10,6 @@
         ])
         .then(function () {
             //this function will execute when all dependencies have loaded
-            alert("editor dependencies loaded");
         });
 
         //load the seperat css for the editor to avoid it blocking our js loading
