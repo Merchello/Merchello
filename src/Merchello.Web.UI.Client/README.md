@@ -12,7 +12,7 @@ We need node to run tests and automated less compiling and other automated tasks
 
 
 ###Install dependencies
-Next we need to install all the required packages. This is done with the package tool, included with node.js, open /Umbraco.Belle.Client in cmd.exe or osx terminal and run the command:
+Next we need to install all the required packages. This is done with the package tool, included with node.js, go to the /src/Merchello.Web.Ui.Client directory in cmd.exe or osx terminal and run the command:
 
 	npm install
 
@@ -25,7 +25,7 @@ this will fetch all needed packages to your local machine.
 You can pick one of these options:
 
 * serve this repository with your webserver
-* install node.js and run `scripts/web-server.js`
+* install node.js and run `node scripts/web-server.js` from the /src/Merchello.Web.Ui.Client directory in cmd.exe or osx terminal
 
 Then navigate your browser to `http://localhost:<port>/app/index.html` to see the app running in
 your browser.
@@ -37,11 +37,12 @@ We recommend using [jasmine](http://pivotal.github.com/jasmine/) and
 [Karma](http://karma-runner.github.io) for your unit tests/specs, but you are free
 to use whatever works for you.
 
-Requires [node.js](http://nodejs.org/), Karma (`sudo npm install -g karma`) and a local
+Requires [node.js](http://nodejs.org/), Karma (`sudo npm install -g karma` for Mac or `npm install -g karma` for Windows) and a local
 or remote browser.
 
-* start `scripts/test.sh` (on windows: `scripts\test.bat`)
+* start `scripts/test.sh` (on windows: `scripts\test`)  from the /src/Merchello.Web.Ui.Client directory in cmd.exe or osx terminal
   * a browser will start and connect to the Karma server (Chrome is default browser, others can be captured by loading the same url as the one in Chrome or by changing the `config/karma.conf.js` file)
+  * Browse to the '/app' directory
 * to run or re-run tests just change any of your source or test javascript files
 
 
@@ -61,7 +62,7 @@ info.
 * to run do one of:
   * open `http://localhost:port/test/e2e/runner.html` in your browser
   * run the tests from console with [Karma](http://karma-runner.github.io) via
-    `scripts/e2e-test.sh` or `script/e2e-test.bat`
+    `scripts/e2e-test.sh` or `script/e2e-test`
 
 
 ## Directory Layout
