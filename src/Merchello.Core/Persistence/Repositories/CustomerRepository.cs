@@ -109,7 +109,7 @@ namespace Merchello.Core.Persistence.Repositories
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-               .From("merchCustomer");
+               .From<CustomerDto>();
 
             return sql;
         }

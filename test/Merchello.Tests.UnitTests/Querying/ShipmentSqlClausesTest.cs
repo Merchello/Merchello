@@ -23,15 +23,32 @@ namespace Merchello.Tests.UnitTests.Querying
             var expected = new Sql();
             expected.Select("*")
                 .From("[merchShipment]")
-                .InnerJoin("[merchShipMethod]").On("[merchShipment].[shipMethodId] = [merchShipMethod].[id]")
                 .Where("[merchShipment].[id] = " + id.ToString());
 
             var sql = new Sql();
             sql.Select("*")
                 .From<ShipmentDto>()
-                .InnerJoin<ShipMethodDto>()
-                .On<ShipmentDto, ShipMethodDto>(left => left.ShipMethodId, right => right.Id)
                 .Where<ShipmentDto>(x => x.Id == id);
+
+            Assert.That(sql.SQL, Is.EqualTo(expected.SQL));
+        }
+
+        [Test]
+        public void Can_Verify_ShipMethod_Base_Sql_Clause()
+        {
+            var id = 10;
+
+            var expected = new Sql();
+            expected.Select("*")
+                .From("[merchShipMethod]")
+                .Where("[merchShipMethod].[id] = " + id.ToString());
+
+            var sql = new Sql();
+            sql.Select("*")
+                .From<ShipMethodDto>()
+                .Where<ShipMethodDto>(x => x.Id == id);
+
+            Assert.That(sql.SQL, Is.EqualTo(expected.SQL));
         }
     }
 }

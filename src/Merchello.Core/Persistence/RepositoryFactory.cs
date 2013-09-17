@@ -103,5 +103,37 @@ namespace Merchello.Core.Persistence
         {
             return new TransactionRepository(uow, NullCacheProvider.Current);
         }
+
+
+        /// <summary>
+        /// Returns an instance of the <see cref="IShipmentRepository"/>
+        /// </summary>
+        /// <param name="uow"></param>
+        /// <returns></returns>
+        internal virtual IShipmentRepository CreateShipmentRepository(IDatabaseUnitOfWork uow)
+        {
+            return new ShipmentRepository(uow, NullCacheProvider.Current);
+        }
+
+        /// <summary>
+        /// Returns an instance of the <see cref="IShipMethodRepository"/>
+        /// </summary>
+        /// <param name="uow"></param>
+        /// <returns></returns>
+        internal virtual IShipMethodRepository CreateShipMethodRepository(IDatabaseUnitOfWork uow)
+        {
+            return new ShipMethodRepository(uow, RuntimeCacheProvider.Current);
+        }
+
+        /// <summary>
+        /// Returns an instance of the <see cref="IProductRepository"/>
+        /// </summary>
+        /// <param name="uow"></param>
+        /// <returns></returns>
+        internal virtual IProductRepository CreateProductRepository(IDatabaseUnitOfWork uow)
+        {
+            return new ProductRepository(uow, RuntimeCacheProvider.Current);
+        }
+
     }
 }

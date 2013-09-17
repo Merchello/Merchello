@@ -10,6 +10,7 @@ using NUnit.Framework;
 namespace Merchello.Tests.IntegrationTests.Services
 {
     [TestFixture]
+    [Category("Service Integration")]
     public class BasketServiceTests : BaseUsingSqlServerSyntax
     {
         private IAnonymousCustomer _anonymous;

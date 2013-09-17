@@ -11,7 +11,6 @@ namespace Merchello.Core.Services
     public interface IServiceContext
     {
 
-        IAddressService AddressService { get; }
 
         /// <summary>
         /// Gets the <see cref="ICustomerService"/>
@@ -32,6 +31,12 @@ namespace Merchello.Core.Services
         /// Gets the <see cref="IPaymentService"/>
         /// </summary>
         IPaymentService PaymentService { get; }
+
+
+        /// <summary>
+        /// Gets the <see cref="IProductService"/>
+        /// </summary>
+        IProductService ProductService { get; }
     }
     
 }

@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Data\BasketData.cs" />
     <Compile Include="Data\InvoiceData.cs" />
+    <Compile Include="Data\ProductData.cs" />
     <Compile Include="Db\DbIntegrationTestBase.cs" />
     <Compile Include="Data\AddressData.cs" />
     <Compile Include="Data\CustomerData.cs" />

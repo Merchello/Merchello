@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Runtime.Serialization;
 using Merchello.Core.Models.EntityBase;
+using Merchello.Core.Models.TypeFields;
 
 namespace Merchello.Core.Models
 {
@@ -105,6 +106,24 @@ namespace Merchello.Core.Models
                         return _serviceCode;
                     }, _serviceCode, ServiceCodeSelector); 
                 }
+        }
+
+        /// <summary>
+        /// The ship method type 
+        /// </summary>
+        [DataMember]
+        public ShipMethodType ShipMethodType
+        {
+            get { return EnumeratedTypeFieldConverter.ShipmentMethod().GetTypeField(_shipMethodTypeFieldKey); }
+            set
+            {
+                var reference = EnumeratedTypeFieldConverter.ShipmentMethod().GetTypeField(value);
+                if (!ReferenceEquals(TypeFieldMapperBase.NotFound, reference))
+                {
+                    // call through the property to flag the dirty property
+                    ShipMethodTypeFieldKey = reference.TypeKey;
+                }
+            }
         }
                     
     }
