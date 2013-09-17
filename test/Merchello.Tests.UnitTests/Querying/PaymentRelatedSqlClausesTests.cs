@@ -52,6 +52,7 @@ namespace Merchello.Tests.UnitTests.Querying
                 .From<TransactionDto>()               
                 .Where<PaymentDto>(x => x.Id == id);
 
+            Assert.That(sql.SQL, Is.EqualTo(expected.SQL));
         }
 
     }

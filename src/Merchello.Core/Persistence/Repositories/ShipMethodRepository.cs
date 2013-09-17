@@ -14,41 +14,41 @@ using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Core.Persistence.Repositories
 {
-    internal class ShipmentRepository : MerchelloPetaPocoRepositoryBase<int, IShipment>, IShipmentRepository
+    internal class ShipMethodRepository : MerchelloPetaPocoRepositoryBase<int, IShipMethod>, IShipMethodRepository
     {
 
-        public ShipmentRepository(IDatabaseUnitOfWork work)
+        public ShipMethodRepository(IDatabaseUnitOfWork work)
             : base(work)
         {
 
         }
 
-        public ShipmentRepository(IDatabaseUnitOfWork work, IRepositoryCacheProvider cache)
+        public ShipMethodRepository(IDatabaseUnitOfWork work, IRepositoryCacheProvider cache)
             : base(work, cache)
         {
         }
 
-        #region Overrides of RepositoryBase<IShipment>
+        #region Overrides of RepositoryBase<IShipMethod>
 
 
-        protected override IShipment PerformGet(int id)
+        protected override IShipMethod PerformGet(int id)
         {
             var sql = GetBaseQuery(false)
                 .Where(GetBaseWhereClause(), new { Id = id });
 
-            var dto = Database.Fetch<ShipmentDto>(sql).FirstOrDefault();
+            var dto = Database.Fetch<ShipMethodDto>(sql).FirstOrDefault();
 
             if (dto == null)
                 return null;
 
-            var factory = new ShipmentFactory();
+            var factory = new ShipMethodFactory();
 
-            var shipment = factory.BuildEntity(dto);
+            var shipMethod = factory.BuildEntity(dto);
 
-            return shipment;
+            return shipMethod;
         }
 
-        protected override IEnumerable<IShipment> PerformGetAll(params int[] ids)
+        protected override IEnumerable<IShipMethod> PerformGetAll(params int[] ids)
         {
             if (ids.Any())
             {
@@ -59,8 +59,8 @@ namespace Merchello.Core.Persistence.Repositories
             }
             else
             {
-                var factory = new ShipmentFactory();
-                var dtos = Database.Fetch<ShipmentDto>(GetBaseQuery(false));
+                var factory = new ShipMethodFactory();
+                var dtos = Database.Fetch<ShipMethodDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
                     yield return factory.BuildEntity(dto);
@@ -70,37 +70,39 @@ namespace Merchello.Core.Persistence.Repositories
 
         #endregion
 
-        #region Overrides of MerchelloPetaPocoRepositoryBase<IShipment>
+        #region Overrides of MerchelloPetaPocoRepositoryBase<IShipMethod>
 
         protected override Sql GetBaseQuery(bool isCount)
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-                .From<ShipmentDto>();
+               .From<ShipMethodDto>();
 
             return sql;
         }
 
         protected override string GetBaseWhereClause()
         {
-            return "merchShipment.id = @Id";
+            return "merchShipMethod.id = @Id";
         }
 
         protected override IEnumerable<string> GetDeleteClauses()
         {
             var list = new List<string>
                 {
-                    "DELETE FROM merchShipment WHERE id = @Id",
+                    "DELETE FROM merchShipMethod2Warehouse WHERE shipMethodId = @Id",
+                    "UPDATE merchShipment SET shipMethodId = null WHERE shipMethodId = @Id",
+                    "DELETE FROM merchShipMethod WHERE id = @Id",
                 };
 
             return list;
         }
 
-        protected override void PersistNewItem(IShipment entity)
+        protected override void PersistNewItem(IShipMethod entity)
         {
             ((IdEntity)entity).AddingEntity();
 
-            var factory = new ShipmentFactory();
+            var factory = new ShipMethodFactory();
             var dto = factory.BuildDto(entity);
 
             Database.Insert(dto);
@@ -108,11 +110,11 @@ namespace Merchello.Core.Persistence.Repositories
             entity.ResetDirtyProperties();
         }
 
-        protected override void PersistUpdatedItem(IShipment entity)
+        protected override void PersistUpdatedItem(IShipMethod entity)
         {
             ((IdEntity)entity).UpdatingEntity();
 
-            var factory = new ShipmentFactory();
+            var factory = new ShipMethodFactory();
             var dto = factory.BuildDto(entity);
 
             Database.Update(dto);
@@ -120,7 +122,7 @@ namespace Merchello.Core.Persistence.Repositories
             entity.ResetDirtyProperties();
         }
 
-        protected override void PersistDeletedItem(IShipment entity)
+        protected override void PersistDeletedItem(IShipMethod entity)
         {
             var deletes = GetDeleteClauses();
             foreach (var delete in deletes)
@@ -130,13 +132,13 @@ namespace Merchello.Core.Persistence.Repositories
         }
 
 
-        protected override IEnumerable<IShipment> PerformGetByQuery(IQuery<IShipment> query)
+        protected override IEnumerable<IShipMethod> PerformGetByQuery(IQuery<IShipMethod> query)
         {
             var sqlClause = GetBaseQuery(false);
-            var translator = new SqlTranslator<IShipment>(sqlClause, query);
+            var translator = new SqlTranslator<IShipMethod>(sqlClause, query);
             var sql = translator.Translate();
 
-            var dtos = Database.Fetch<ShipmentDto, ShipMethodDto>(sql);
+            var dtos = Database.Fetch<ShipMethodDto>(sql);
 
             return dtos.DistinctBy(x => x.Id).Select(dto => Get(dto.Id));
 

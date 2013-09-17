@@ -153,6 +153,7 @@
     <Compile Include="Persistence\Mappers\AnonymousCustomerMapper.cs" />
     <Compile Include="Persistence\Mappers\BasketItemMapper.cs" />
     <Compile Include="Persistence\Mappers\BasketMapper.cs" />
+    <Compile Include="Persistence\Mappers\ShipMethodMapper.cs" />
     <Compile Include="Persistence\Mappers\PaymentMapper.cs" />
     <Compile Include="Persistence\Mappers\InvoiceItemMapper.cs" />
     <Compile Include="Persistence\Mappers\InvoiceMapper.cs" />
@@ -179,6 +180,7 @@
     <Compile Include="Persistence\Repositories\InvoiceStatusRepository.cs" />
     <Compile Include="Persistence\Repositories\PaymentRepository.cs" />
     <Compile Include="Persistence\Repositories\ShipmentRepository.cs" />
+    <Compile Include="Persistence\Repositories\ShipMethodRepository.cs" />
     <Compile Include="Persistence\Repositories\TransactionRepository.cs" />
     <Compile Include="Services\AnonymousCustomerService.cs" />
     <Compile Include="Services\BasketItemService.cs" />
@@ -196,11 +198,14 @@
     <Compile Include="Services\Interfaces\IProductService.cs" />
     <Compile Include="Services\Interfaces\IServiceContext.cs" />
     <Compile Include="Services\Interfaces\IShipmentService.cs" />
+    <Compile Include="Services\Interfaces\IShipMethodService.cs" />
     <Compile Include="Services\Interfaces\ITransactionService.cs" />
     <Compile Include="Services\InvoiceItemService.cs" />
     <Compile Include="Services\InvoiceService.cs" />
     <Compile Include="Services\InvoiceStatusService.cs" />
     <Compile Include="Services\PaymentService.cs" />
+    <Compile Include="Services\ShipmentService.cs" />
+    <Compile Include="Services\ShipMethodService.cs" />
     <Compile Include="Services\TransactionService.cs" />
     <Compile Include="TypeFieldMapperEnumerations.cs" />
     <Compile Include="Models\TypeFields\ProductTypeField.cs" />
