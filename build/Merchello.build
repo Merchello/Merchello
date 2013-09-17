@@ -94,7 +94,7 @@
 
 
 	<!-- SEPERATE OUT MERCHELLO BINARIES AND REMOVE TEST DLLS -->
-	<Target Name="AllBinaries" DependsOnTargets="CopyXmlDocumentation">
+	<Target Name="AllBinaries" DependsOnTargets="CopyXmlDocumentation;CopyTestFiles">
 		
 		<ItemGroup>
 			<PackageBinariesFiles Include="$(SolutionBinFolder)*Merchello.*" Exclude="$(SolutionBinFolder)*Tests.*;$(SolutionBinFolder)*nunit.*;$(SolutionBinFolder)*Moq.*" />
@@ -106,7 +106,23 @@
 				SkipUnchangedFiles="false" />
 		
 	</Target>
-		
+
+  <!-- COPY THE TEST DEPENDENCIES -->
+  <Target Name="CopyTestFiles" DependsOnTargets="CompileProjects">
+
+
+    <ItemGroup>
+      <UmbracoTestFiles Include="$(MerchelloTestDir)\Umbraco.*\**\*.*" />
+    </ItemGroup>
+
+    <Message Text="Copying Test Files\$(UmbracoTestFiles)" Importance="high" />
+
+    <Copy SourceFiles="@(UmbracoTestFiles)"
+				DestinationFiles="@(UmbracoTestFiles->'$(RootDir)\%(RecursiveDir)%(Filename)%(Extension)')"
+				OverwriteReadOnlyFiles="true"
+				SkipUnchangedFiles="false" />
+
+  </Target>
 	
 	<!-- COPY THE XML DOCUMENTATION TO THE BIN FOLDER -->
 	<Target Name="CopyXmlDocumentation"  DependsOnTargets="CompileProjects">
