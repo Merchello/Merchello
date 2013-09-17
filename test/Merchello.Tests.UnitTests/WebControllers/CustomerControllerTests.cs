@@ -17,16 +17,19 @@ using Umbraco.Tests.TestHelpers;
 namespace Merchello.Tests.UnitTests.WebControllers
 {
     [TestFixture]
-    public class CustomerControllerTests : BaseUmbracoApplicationTest
+    public class CustomerControllerTests : BaseRoutingTest
     {
-        //UmbracoContext tempUmbracoContext;
+        UmbracoContext tempUmbracoContext;
+
+        protected override DatabaseBehavior DatabaseTestBehavior
+        {
+            get { return DatabaseBehavior.NoDatabasePerFixture; }
+        }
 
         [SetUp]
         public void Setup()
         {
-            //var httpContext = new Mock<HttpContextBase>();
-
-            //tempUmbracoContext = UmbracoContext.EnsureContext(httpContext.Object, ApplicationContext.Current);
+            tempUmbracoContext = GetRoutingContext("/test", 1234).UmbracoContext;
         }
 
         /// <summary>
@@ -54,13 +57,14 @@ namespace Merchello.Tests.UnitTests.WebControllers
 
             MerchelloContext merchelloContext = new MerchelloContext(MockServiceContext.Object, null);
 
-            //CustomerApiController ctrl = new CustomerApiController(merchelloContext, UmbracoContext.Current);
+            CustomerApiController ctrl = new CustomerApiController(merchelloContext, tempUmbracoContext);
 
             //// Act
-            //var result = ctrl.GetCustomer(customerKey);
+            var result = ctrl.GetCustomer(customerKey);
 
             //// Assert
-            //Assert.AreEqual(result, customer);
+            Assert.AreEqual(result, customer);
         }
+
     }
 }

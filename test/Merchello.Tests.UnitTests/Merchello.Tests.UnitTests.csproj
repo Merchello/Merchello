@@ -106,6 +106,9 @@
     <Reference Include="Our.Umbraco.uGoLive.Checks">
       <HintPath>..\..\src\packages\UmbracoCms.Core.6.1.4\lib\Our.Umbraco.uGoLive.Checks.dll</HintPath>
     </Reference>
+    <Reference Include="Rhino.Mocks">
+      <HintPath>..\..\src\packages\RhinoMocks.3.6.1\lib\net\Rhino.Mocks.dll</HintPath>
+    </Reference>
     <Reference Include="SQLCE4Umbraco">
       <HintPath>..\..\src\packages\UmbracoCms.Core.6.1.4\lib\SQLCE4Umbraco.dll</HintPath>
     </Reference>
