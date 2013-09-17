@@ -14,7 +14,6 @@ namespace Merchello.Core.Services
     /// </summary>
     public interface IShipmentService : IService
     {
-
         /// <summary>
         /// Creates a Shipment
         /// </summary>

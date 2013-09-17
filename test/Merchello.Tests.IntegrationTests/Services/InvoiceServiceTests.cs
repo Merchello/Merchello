@@ -12,6 +12,7 @@ using Umbraco.Core.Persistence.UnitOfWork;
 namespace Merchello.Tests.IntegrationTests.Services
 {
     [TestFixture]
+    [Category("Service Integration")]
     public class InvoiceServiceTests : BaseUsingSqlServerSyntax
     {
 

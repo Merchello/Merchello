@@ -39,7 +39,7 @@
         Custom
     }
 
-    public enum ProductType
+    internal enum ProductType
     {
         Custom
     }

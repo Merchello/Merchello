@@ -128,18 +128,6 @@ namespace Merchello.Core.Models
             get { return _lastPaymentDate; }
         }
 
-        /// <summary>
-        /// Method to call when EntityEntity is being saved
-        /// </summary>
-        /// <remarks>Created date is set and a Unique key is assigned</remarks>
-        internal override void AddingEntity()
-        {
-            base.AddingEntity();
-
-            if (Key == Guid.Empty)
-                Key = Guid.NewGuid();
-        }
-
         
     }
 }

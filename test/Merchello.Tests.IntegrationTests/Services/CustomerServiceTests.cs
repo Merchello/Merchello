@@ -8,6 +8,7 @@ using NUnit.Framework;
 namespace Merchello.Tests.IntegrationTests.Services
 {
     [TestFixture]
+    [Category("Service Integration")]
     public class CustomerServiceTests : BaseUsingSqlServerSyntax
     {
         private CustomerService _customerService;

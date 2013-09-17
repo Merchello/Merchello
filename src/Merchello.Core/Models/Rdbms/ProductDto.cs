@@ -28,36 +28,28 @@ namespace Merchello.Core.Models.Rdbms
 
         [Column("costOfGoods")]
         [NullSetting(NullSetting = NullSettings.Null)]
-        public decimal CostOfGoods { get; set; }
+        public decimal? CostOfGoods { get; set; }
 
         [Column("salePrice")]
         [NullSetting(NullSetting = NullSettings.Null)]
-        public decimal SalePrice { get; set; }
+        public decimal? SalePrice { get; set; }
 
         [Column("weight")]
         [NullSetting(NullSetting = NullSettings.Null)]
-        public decimal Weight { get; set; }
+        public decimal? Weight { get; set; }
 
         [Column("length")]
         [NullSetting(NullSetting = NullSettings.Null)]
-        public decimal Length { get; set; }
+        public decimal? Length { get; set; }
 
         [Column("width")]
         [NullSetting(NullSetting = NullSettings.Null)]
-        public decimal Width { get; set; }
+        public decimal? Width { get; set; }
 
         [Column("height")]
         [NullSetting(NullSetting = NullSettings.Null)]
-        public decimal Height { get; set; }
-
-        [Column("brief")]
-        [NullSetting(NullSetting = NullSettings.Null)]
-        public string Brief { get; set; }
-
-        [Column("description")]
-        [NullSetting(NullSetting = NullSettings.Null)]
-        public string Description { get; set; }
-
+        public decimal? Height { get; set; }
+       
         [Column("taxable")]
         [Constraint(Default = "1")]
         public bool Taxable { get; set; }
