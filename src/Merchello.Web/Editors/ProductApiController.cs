@@ -46,19 +46,18 @@ namespace Merchello.Web.Editors
         }
 
         /// <summary>
-        /// Returns all Product by Key
+        /// Returns all Product by key
         /// </summary>
         /// <param name="key"></param>
         public Product GetProduct(Guid key)
         {
-            //var customer = MerchelloContext.Services. as Product;
-            //if (customer == null)
-            //{
-            //    throw new HttpResponseException(HttpStatusCode.NotFound);
-            //}
+            var product = MerchelloContext.Services.ProductService.GetByKey(key) as Product;
+            if (product == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
 
-            //return customer;
-            return null;
+            return product;
         }
     }
 }

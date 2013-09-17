@@ -94,7 +94,7 @@
 
 
 	<!-- SEPERATE OUT MERCHELLO BINARIES AND REMOVE TEST DLLS -->
-	<Target Name="AllBinaries" DependsOnTargets="CopyXmlDocumentation;CopyTestFiles">
+	<Target Name="AllBinaries" DependsOnTargets="CopyXmlDocumentation">
 		
 		<ItemGroup>
 			<PackageBinariesFiles Include="$(SolutionBinFolder)*Merchello.*" Exclude="$(SolutionBinFolder)*Tests.*;$(SolutionBinFolder)*nunit.*;$(SolutionBinFolder)*Moq.*" />
