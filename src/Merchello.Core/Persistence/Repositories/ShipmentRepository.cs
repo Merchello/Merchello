@@ -36,7 +36,7 @@ namespace Merchello.Core.Persistence.Repositories
             var sql = GetBaseQuery(false)
                 .Where(GetBaseWhereClause(), new { Id = id });
 
-            var dto = Database.Fetch<ShipmentDto>(sql).FirstOrDefault();
+            var dto = Database.Fetch<ShipmentDto, ShipMethodDto>(sql).FirstOrDefault();
 
             if (dto == null)
                 return null;
@@ -60,7 +60,7 @@ namespace Merchello.Core.Persistence.Repositories
             else
             {
                 var factory = new ShipmentFactory();
-                var dtos = Database.Fetch<ShipmentDto>(GetBaseQuery(false));
+                var dtos = Database.Fetch<ShipmentDto, ShipMethodDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
                     yield return factory.BuildEntity(dto);
@@ -76,7 +76,9 @@ namespace Merchello.Core.Persistence.Repositories
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-               .From<ShipmentDto>();
+                .From<ShipmentDto>()
+                .InnerJoin<ShipMethodDto>()
+                .On<ShipmentDto, ShipMethodDto>(left => left.ShipMethodId, right => right.Id);
 
             return sql;
         }
@@ -136,7 +138,7 @@ namespace Merchello.Core.Persistence.Repositories
             var translator = new SqlTranslator<IShipment>(sqlClause, query);
             var sql = translator.Translate();
 
-            var dtos = Database.Fetch<ShipmentDto>(sql);
+            var dtos = Database.Fetch<ShipmentDto, ShipMethodDto>(sql);
 
             return dtos.DistinctBy(x => x.Id).Select(dto => Get(dto.Id));
 
