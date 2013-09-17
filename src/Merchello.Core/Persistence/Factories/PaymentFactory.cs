@@ -7,7 +7,8 @@ namespace Merchello.Core.Persistence.Factories
     {
         public IPayment BuildEntity(PaymentDto dto)
         {
-            var payment = new Payment(GetCustomer(dto.CustomerDto), dto.PaymentTypeFieldKey, dto.Amount)
+            var payment = new Payment(
+               new CustomerFactory().BuildEntity(dto.CustomerDto), dto.PaymentTypeFieldKey, dto.Amount)
             {
                 Id = dto.Id,
                 GatewayAlias = dto.GatewayAlias,
@@ -40,12 +41,6 @@ namespace Merchello.Core.Persistence.Factories
             };
 
             return dto;
-        }
-
-        private static ICustomer GetCustomer(CustomerDto dto)
-        {
-            var factory = new CustomerFactory();
-            return factory.BuildEntity(dto);
         }
 
     }

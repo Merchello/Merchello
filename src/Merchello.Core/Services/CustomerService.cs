@@ -14,7 +14,7 @@ namespace Merchello.Core.Services
     /// <summary>
     /// Represents the Customer Service, 
     /// </summary>
-    internal class CustomerService : ICustomerService
+    public class CustomerService : ICustomerService
     {
         private readonly IDatabaseUnitOfWorkProvider _uowProvider;
         private readonly RepositoryFactory _repositoryFactory;
@@ -65,7 +65,7 @@ namespace Merchello.Core.Services
 
 
 
-        /// <summary>
+        /// <summary>yg
         /// Saves a single <see cref="ICustomer"/> object
         /// </summary>
         /// <param name="customer">The <see cref="ICustomer"/> to save</param>
