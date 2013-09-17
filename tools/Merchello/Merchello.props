@@ -23,6 +23,7 @@
         <MerchelloWebProjectDir>$(RootDir)src\Merchello.Web\</MerchelloWebProjectDir>
         <MerchelloWebUiProjectDir>$(RootDir)src\Merchello.Web.UI\</MerchelloWebUiProjectDir>
 
+        <MerchelloTestDir>$(MSBuildProjectDirectory)\..\test\</MerchelloTestDir>
 
         <SolutionBinFolder>$(BuildDir)bin\</SolutionBinFolder>        
         <SolutionBinFolderRelativeToProjects>$(BuildFolderRelativeToProjects)bin\</SolutionBinFolderRelativeToProjects>

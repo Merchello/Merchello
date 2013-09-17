@@ -232,6 +232,7 @@
     <Compile Include="TypeFields\ShipMethodTypeFieldTests.cs" />
     <Compile Include="WebControllers\CustomerControllerTests.cs" />
     <Compile Include="WebControllers\InvoiceControllerTests.cs" />
+    <Compile Include="WebControllers\ProductControllerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

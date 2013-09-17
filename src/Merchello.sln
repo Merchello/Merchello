@@ -16,6 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{07393251
 	ProjectSection(SolutionItems) = preProject
 		..\build\build.bat = ..\build\build.bat
 		..\build\Merchello.build = ..\build\Merchello.build
+		..\tools\Merchello\Merchello.props = ..\tools\Merchello\Merchello.props
 		..\tools\Merchello\Merchello.targets = ..\tools\Merchello\Merchello.targets
 		..\build\Merchello.Version.props = ..\build\Merchello.Version.props
 		..\build\package.xml = ..\build\package.xml
@@ -138,16 +139,6 @@ Global
 		{DC644111-E837-43C1-B84C-1E1B27A6DAF7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{DC644111-E837-43C1-B84C-1E1B27A6DAF7}.Release|x64.ActiveCfg = Release|Any CPU
 		{DC644111-E837-43C1-B84C-1E1B27A6DAF7}.Release|x86.ActiveCfg = Release|Any CPU
-		{09C86AA3-3D84-4412-BD23-9240026265F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{09C86AA3-3D84-4412-BD23-9240026265F0}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{09C86AA3-3D84-4412-BD23-9240026265F0}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{09C86AA3-3D84-4412-BD23-9240026265F0}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{09C86AA3-3D84-4412-BD23-9240026265F0}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{09C86AA3-3D84-4412-BD23-9240026265F0}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{09C86AA3-3D84-4412-BD23-9240026265F0}.Release|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{09C86AA3-3D84-4412-BD23-9240026265F0}.Release|Mixed Platforms.Build.0 = Debug|Any CPU
-		{09C86AA3-3D84-4412-BD23-9240026265F0}.Release|x64.ActiveCfg = Debug|Any CPU
-		{09C86AA3-3D84-4412-BD23-9240026265F0}.Release|x86.ActiveCfg = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
