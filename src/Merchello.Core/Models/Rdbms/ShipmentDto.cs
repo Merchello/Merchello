@@ -50,5 +50,8 @@ namespace Merchello.Core.Models.Rdbms
         [Constraint(Default = "getdate()")]
         public DateTime CreateDate { get; set; }
 
+        [ResultColumn]
+        public ShipMethodDto ShipMethodDto { get; set; }
+
     }
 }

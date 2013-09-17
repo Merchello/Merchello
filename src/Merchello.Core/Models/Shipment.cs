@@ -17,20 +17,19 @@ namespace Merchello.Core.Models
         private string _region;
         private string _postalCode;
         private string _countryCode;
-        private int _shipMethodId;
+        private IShipMethod _shipMethod;
         private string _phone;
 
-        public Shipment (IInvoice invoice, IShipMethod shipMethod)  
-            : this(invoice.Id, shipMethod.Id)
+        public Shipment (IShipMethod shipMethod, IInvoice invoice)
+            : this(shipMethod, invoice.Id)
         { }
 
-        internal Shipment(int invoiceId, int shipmethodId)
+        internal Shipment(IShipMethod shipmethod, int invoiceId)
         {
             _invoiceId = invoiceId;
-            _shipMethodId = shipmethodId;
+            _shipMethod = shipmethod;
         }
         
-        private static readonly PropertyInfo ShipMethodSelector = ExpressionHelper.GetPropertyInfo<Shipment, int>(x => x.ShipMethodId);
         private static readonly PropertyInfo Address1Selector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.Address1);  
         private static readonly PropertyInfo Address2Selector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.Address2);  
         private static readonly PropertyInfo LocalitySelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.Locality);  
@@ -156,15 +155,7 @@ namespace Merchello.Core.Models
         [DataMember]
         public int ShipMethodId
         {
-            get { return _shipMethodId; }
-            set
-            {
-                SetPropertyValueAndDetectChanges(o =>
-                {
-                    _shipMethodId = value;
-                    return _shipMethodId;
-                }, _shipMethodId, ShipMethodSelector);
-            }
+            get { return _shipMethod.Id; }
         }
     
         /// <summary>
