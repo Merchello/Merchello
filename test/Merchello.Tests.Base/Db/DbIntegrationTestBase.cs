@@ -30,8 +30,7 @@ namespace Merchello.Tests.Base.Db
 
             Database = uowProvider.GetUnitOfWork().Database;
 
-            SqlSyntaxContext.SqlSyntaxProvider = new SqlServerSyntaxProvider();
-            //new SqlCeSyntaxProvider(); //
+            SqlSyntaxContext.SqlSyntaxProvider = new SqlCeSyntaxProvider(); //new SqlServerSyntaxProvider();
 
             Setup();
         }

@@ -7,9 +7,11 @@ namespace Merchello.Core.Persistence.Factories
     {
         public ITransaction BuildEntity(TransactionDto dto)
         {
+
+
             var transaction = new Transaction(
-                new PaymentFactory().BuildEntity(dto.PaymentDto), 
-                new InvoiceFactory().BuildEntity(dto.InvoiceDto), 
+                dto.PaymentId, 
+                dto.InvoiceId, 
                 dto.TransactionTypeFieldKey)
             {
                 Id = dto.Id,

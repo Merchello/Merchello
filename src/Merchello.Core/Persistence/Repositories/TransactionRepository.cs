@@ -14,7 +14,7 @@ using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Core.Persistence.Repositories
 {
-    internal partial class TransactionRepository : MerchelloPetaPocoRepositoryBase<int, ITransaction>, ITransactionRepository
+    internal class TransactionRepository : MerchelloPetaPocoRepositoryBase<int, ITransaction>, ITransactionRepository
     {
 
         public TransactionRepository(IDatabaseUnitOfWork work)
@@ -36,7 +36,7 @@ namespace Merchello.Core.Persistence.Repositories
             var sql = GetBaseQuery(false)
                 .Where(GetBaseWhereClause(), new { Id = id });
 
-            var dto = Database.Fetch<TransactionDto, PaymentDto, InvoiceDto, CustomerDto, InvoiceStatusDto>(sql).FirstOrDefault();
+            var dto = Database.Fetch<TransactionDto>(sql).FirstOrDefault();
 
             if (dto == null)
                 return null;
@@ -60,7 +60,7 @@ namespace Merchello.Core.Persistence.Repositories
             else
             {
                 var factory = new TransactionFactory();
-                var dtos = Database.Fetch<TransactionDto, PaymentDto, InvoiceDto, CustomerDto, InvoiceStatusDto>(GetBaseQuery(false));
+                var dtos = Database.Fetch<TransactionDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
                     yield return factory.BuildEntity(dto);
@@ -76,15 +76,7 @@ namespace Merchello.Core.Persistence.Repositories
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-                .From<TransactionDto>()
-                .InnerJoin<PaymentDto>()
-                .On<TransactionDto, PaymentDto>(left => left.PaymentId, right => right.Id)
-                .InnerJoin<InvoiceDto>()
-                .On<TransactionDto, InvoiceDto>(left => left.InvoiceId, right => right.Id)
-                .InnerJoin<CustomerDto>()
-                .On<InvoiceDto, CustomerDto>(left => left.CustomerKey, right => right.Key)
-                .InnerJoin<InvoiceStatusDto>()
-                .On<InvoiceDto, InvoiceStatusDto>(left => left.InvoiceStatusId, right => right.Id);
+                .From<TransactionDto>();               
 
             return sql;
         }
@@ -98,7 +90,7 @@ namespace Merchello.Core.Persistence.Repositories
         {
             var list = new List<string>
                 {
-                    "DELETE FROM merchTransaction WHERE TransactionPk = @Id",
+                    "DELETE FROM merchTransaction WHERE id = @Id",
                 };
 
             return list;
@@ -144,7 +136,7 @@ namespace Merchello.Core.Persistence.Repositories
             var translator = new SqlTranslator<ITransaction>(sqlClause, query);
             var sql = translator.Translate();
 
-            var dtos = Database.Fetch<TransactionDto, PaymentDto, InvoiceDto, CustomerDto, InvoiceStatusDto>(sql);
+            var dtos = Database.Fetch<TransactionDto>(sql);
 
             return dtos.DistinctBy(x => x.Id).Select(dto => Get(dto.Id));
 

@@ -9,10 +9,10 @@ namespace Merchello.Core.Models
 
     [Serializable]
     [DataContract(IsReference = true)]
-    public partial class Transaction : IdEntity, ITransaction
+    public class Transaction : IdEntity, ITransaction
     {
-        private readonly IInvoice _invoice;
-        private readonly IPayment _payment;
+        private readonly int _invoiceId;
+        private readonly int _paymentId;
         private Guid _transactionTypeFieldKey;
         private string _description;
         private decimal _amount;
@@ -24,9 +24,13 @@ namespace Merchello.Core.Models
         { }
 
         internal Transaction (IPayment payment, IInvoice invoice, Guid transactionTypeFieldKey)
+            : this(payment.Id, invoice.Id, transactionTypeFieldKey)
+        { }
+
+        internal Transaction(int paymentId, int invoiceId, Guid transactionTypeFieldKey)
         {
-            _payment = payment;
-            _invoice = invoice;
+            _paymentId = paymentId;
+            _invoiceId = invoiceId;
             _transactionTypeFieldKey = transactionTypeFieldKey;
         }
         
@@ -41,7 +45,7 @@ namespace Merchello.Core.Models
         [DataMember]
         public int PaymentId
         {
-            get { return _payment.Id; }
+            get { return _paymentId; }
         }
 
         /// <summary>
@@ -50,7 +54,7 @@ namespace Merchello.Core.Models
         [DataMember]
         public int InvoiceId
         {
-            get { return _invoice.Id; }
+            get { return _invoiceId; }
         }
     
         /// <summary>

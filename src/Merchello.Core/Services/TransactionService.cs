@@ -14,7 +14,7 @@ namespace Merchello.Core.Services
     /// <summary>
     /// Represents the Transaction Service 
     /// </summary>
-    public partial class TransactionService : ITransactionService
+    public class TransactionService : ITransactionService
     {
         private readonly IDatabaseUnitOfWorkProvider _uowProvider;
         private readonly RepositoryFactory _repositoryFactory;
