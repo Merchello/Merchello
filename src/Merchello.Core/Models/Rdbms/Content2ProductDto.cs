@@ -10,13 +10,13 @@ namespace Merchello.Core.Models.Rdbms
     internal class Content2ProductDto
     {
         [Column("contentId")]
-        [PrimaryKeyColumn(AutoIncrement = false, Name = "PK_merchContent2Product", OnColumns = "contentId, productId")]
+        [PrimaryKeyColumn(AutoIncrement = false, Name = "PK_merchContent2Product", OnColumns = "contentId, productKey")]
         public int ContentId { get; set; }
 
 
-        [Column("productId")]
-        [ForeignKey(typeof(ProductDto), Name = "FK_merchContent2Product_merchProduct", Column = "id")]
-        public int ProductId { get; set; }
+        [Column("productKey")]
+        [ForeignKey(typeof(ProductDto), Name = "FK_merchContent2Product_merchProduct", Column = "pk")]
+        public Guid ProductKey { get; set; }
 
 
         [Column("updateDate")]
@@ -26,5 +26,8 @@ namespace Merchello.Core.Models.Rdbms
         [Column("createDate")]
         [Constraint(Default = "getdate()")]
         public DateTime CreateDate { get; set; }
+
+        [ResultColumn]
+        public ProductDto ProductDto { get; set; }
     }
 }

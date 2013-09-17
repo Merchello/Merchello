@@ -130,6 +130,7 @@ namespace Merchello.Core.Persistence.Repositories
                     "DELETE FROM merchInvoiceItem WHERE invoiceId IN " + invoiceIdByKey,
                     "DELETE FROM merchShipment WHERE invoiceId IN " + invoiceIdByKey,
                     "DELETE FROM merchTransaction WHERE invoiceId IN " + invoiceIdByKey,
+                    "DELETE FROM merchPayment WHERE customerKey = @Id",
                     "DELETE FROM merchInvoice WHERE customerKey = @Id",
                     "DELETE FROM merchAddress WHERE customerKey = @Id",
                     "DELETE FROM merchCustomer WHERE pk = @Id"

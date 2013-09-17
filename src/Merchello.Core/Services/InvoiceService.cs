@@ -49,6 +49,22 @@ namespace Merchello.Core.Services
 
         #region IInvoiceService Members
 
+        /// <summary>
+        /// Creates an <see cref="IInvoice"/> object
+        /// </summary>
+        public IInvoice CreateInvoice(ICustomer customer, IAddress address, IInvoiceStatus invoiceStatus, string invoiceNumber)
+        {
+            var invoice = new Invoice(customer, address, invoiceStatus, 0)
+            {
+                Exported = false,
+                Paid = false,
+                Shipped = false
+            };
+
+            Created.RaiseEvent(new NewEventArgs<IInvoice>(invoice), this);
+            return invoice;
+        }
+
 
         /// <summary>
         /// Creates an <see cref="IInvoice"/> object
