@@ -65,7 +65,7 @@ namespace Merchello.Core.Services
 
 
 
-        /// <summary>
+        /// <summary>yg
         /// Saves a single <see cref="ICustomer"/> object
         /// </summary>
         /// <param name="customer">The <see cref="ICustomer"/> to save</param>
