@@ -26,14 +26,18 @@ namespace Merchello.Core.Persistence.Mappers
                 { typeof(IInvoice), typeof(InvoiceMapper) },
                 { typeof(IInvoiceItem), typeof(InvoiceItemMapper) },
                 { typeof(IInvoiceStatus), typeof(InvoiceStatusMapper) },
-                { typeof(IPayment), typeof(PaymentMapper) }
+                { typeof(IPayment), typeof(PaymentMapper) },
+                { typeof(ITransaction), typeof(TransactionMapper) }
             };
 
-
+        /// <summary>
+        /// Returns a list of entities that use guids as their primary keys
+        /// </summary>
         private static readonly IEnumerable<Type> KeyedTypes = new List<Type>()
             {
                 { typeof(ICustomer) },
-                { typeof(IAnonymousCustomer)}
+                { typeof(IAnonymousCustomer)},
+                { typeof(IProduct) }
             };
 
         /// <summary>

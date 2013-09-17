@@ -39,6 +39,19 @@ namespace Merchello.Core.Models
             _invoiceStatus = invoiceStatus;
             _amount = amount;
         }
+
+        public Invoice(ICustomer customer, IAddress address, IInvoiceStatus invoiceStatus, decimal amount)
+            : this(customer, invoiceStatus, amount)
+        {
+            _billToAddress1 = address.Address1;
+            _billToAddress2 = address.Address2;
+            _billToLocality = address.Locality;
+            _billToRegion = address.Region;
+            _billToPostalCode = address.PostalCode;
+            _billToCountryCode = address.CountryCode;
+            _billToPhone = address.Phone;
+            _billToCompany = address.Company;
+        }
         
         private static readonly PropertyInfo InvoiceNumberSelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.InvoiceNumber);  
         private static readonly PropertyInfo InvoiceDateSelector = ExpressionHelper.GetPropertyInfo<Invoice, DateTime>(x => x.InvoiceDate);

@@ -1,4 +1,5 @@
 ﻿using System;
+using Umbraco.Core.Media;
 using Umbraco.Core.Persistence;
 using Umbraco.Core.Persistence.DatabaseAnnotations;
 
@@ -41,5 +42,10 @@ namespace Merchello.Core.Models.Rdbms
         [Constraint(Default = "getdate()")]
         public DateTime CreateDate { get; set; }
 
+        [ResultColumn]
+        public PaymentDto PaymentDto { get; set; }
+
+        [ResultColumn]
+        public InvoiceDto InvoiceDto { get; set; }
     }
 }

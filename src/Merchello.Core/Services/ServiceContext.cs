@@ -10,6 +10,7 @@ namespace Merchello.Core.Services
     /// </summary>
     public class ServiceContext : IServiceContext
     {
+        private Lazy<AddressService> _addressService;
         private Lazy<CustomerService> _customerService;
         private Lazy<AnonymousCustomerService> _anonymousCustomerService;
         private Lazy<BasketService> _basketService;
@@ -36,6 +37,10 @@ namespace Merchello.Core.Services
         private void BuildServiceContext(IDatabaseUnitOfWorkProvider dbDatabaseUnitOfWorkProvider,
             Lazy<RepositoryFactory> repositoryFactory)
         {
+
+            if(_addressService == null)
+                _addressService = new Lazy<AddressService>(() => new AddressService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+
             if(_customerService == null)
                 _customerService = new Lazy<CustomerService>(() => new CustomerService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
@@ -61,6 +66,9 @@ namespace Merchello.Core.Services
 
         #region ICustomerService Members
 
+        public IAddressService AddressService {
+            get { return _addressService.Value; }
+        }
 
         /// <summary>
         /// Gets the <see cref="ICustomerService"/>

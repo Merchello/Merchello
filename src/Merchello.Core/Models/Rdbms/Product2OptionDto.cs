@@ -6,14 +6,14 @@ namespace Merchello.Core.Models.Rdbms
 {
     
     [TableName("merchProduct2Option")]
-    [PrimaryKey("productId", autoIncrement = false)]
+    [PrimaryKey("productKey", autoIncrement = false)]
     [ExplicitColumns]
     internal class Product2OptionDto
     {
-        [Column("productId")]
-        [PrimaryKeyColumn(AutoIncrement = false, Name = "PK_merchProduct2Option", OnColumns = "productId, optionId")]
-        [ForeignKey(typeof(ProductDto), Name = "FK_merchProduct2Option_merchProduct", Column = "id")]
-        public int ProductId { get; set; }
+        [Column("productKey")]
+        [PrimaryKeyColumn(AutoIncrement = false, Name = "PK_merchProduct2Option", OnColumns = "productKey, optionId")]
+        [ForeignKey(typeof(ProductDto), Name = "FK_merchProduct2Option_merchProduct", Column = "pk")]
+        public Guid ProductKey { get; set; }
 
         [Column("optionId")]
         [ForeignKey(typeof(OptionDto), Name = "FK_merchProduct2Option_merchOption", Column = "id")]
@@ -29,5 +29,8 @@ namespace Merchello.Core.Models.Rdbms
         [Column("createDate")]
         [Constraint(Default = "getdate()")]
         public DateTime CreateDate { get; set; }
+
+        [ResultColumn]
+        public OptionDto OptionDto { get; set; }
     }
 }

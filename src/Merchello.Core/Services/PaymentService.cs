@@ -14,7 +14,7 @@ namespace Merchello.Core.Services
     /// <summary>
     /// Represents the Payment Service 
     /// </summary>
-    public partial class PaymentService : IPaymentService
+    public class PaymentService : IPaymentService
     {
         private readonly IDatabaseUnitOfWorkProvider _uowProvider;
         private readonly RepositoryFactory _repositoryFactory;

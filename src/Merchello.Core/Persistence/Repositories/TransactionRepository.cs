@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Merchello.Core.Models;
 using Merchello.Core.Models.EntityBase;
@@ -13,41 +14,41 @@ using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Core.Persistence.Repositories
 {
-    internal class PaymentRepository : MerchelloPetaPocoRepositoryBase<int, IPayment>, IPaymentRepository
+    internal partial class TransactionRepository : MerchelloPetaPocoRepositoryBase<int, ITransaction>, ITransactionRepository
     {
 
-        public PaymentRepository(IDatabaseUnitOfWork work)
+        public TransactionRepository(IDatabaseUnitOfWork work)
             : base(work)
         {
 
         }
 
-        public PaymentRepository(IDatabaseUnitOfWork work, IRepositoryCacheProvider cache)
+        public TransactionRepository(IDatabaseUnitOfWork work, IRepositoryCacheProvider cache)
             : base(work, cache)
         {
         }
 
-        #region Overrides of RepositoryBase<IPayment>
+        #region Overrides of RepositoryBase<ITransaction>
 
 
-        protected override IPayment PerformGet(int id)
+        protected override ITransaction PerformGet(int id)
         {
             var sql = GetBaseQuery(false)
                 .Where(GetBaseWhereClause(), new { Id = id });
 
-            var dto = Database.Fetch<PaymentDto, CustomerDto>(sql).FirstOrDefault();
+            var dto = Database.Fetch<TransactionDto, PaymentDto, InvoiceDto, CustomerDto, InvoiceStatusDto>(sql).FirstOrDefault();
 
             if (dto == null)
                 return null;
 
-            var factory = new PaymentFactory();
+            var factory = new TransactionFactory();
 
-            var payment = factory.BuildEntity(dto);
+            var transaction = factory.BuildEntity(dto);
 
-            return payment;
+            return transaction;
         }
 
-        protected override IEnumerable<IPayment> PerformGetAll(params int[] ids)
+        protected override IEnumerable<ITransaction> PerformGetAll(params int[] ids)
         {
             if (ids.Any())
             {
@@ -58,8 +59,8 @@ namespace Merchello.Core.Persistence.Repositories
             }
             else
             {
-                var factory = new PaymentFactory();
-                var dtos = Database.Fetch<PaymentDto, CustomerDto>(GetBaseQuery(false));
+                var factory = new TransactionFactory();
+                var dtos = Database.Fetch<TransactionDto, PaymentDto, InvoiceDto, CustomerDto, InvoiceStatusDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
                     yield return factory.BuildEntity(dto);
@@ -69,40 +70,45 @@ namespace Merchello.Core.Persistence.Repositories
 
         #endregion
 
-        #region Overrides of MerchelloPetaPocoRepositoryBase<IPayment>
+        #region Overrides of MerchelloPetaPocoRepositoryBase<ITransaction>
 
         protected override Sql GetBaseQuery(bool isCount)
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-               .From<PaymentDto>()
-               .InnerJoin<CustomerDto>()
-               .On<PaymentDto, CustomerDto>(left => left.CustomerKey, right => right.Key);              
+                .From<TransactionDto>()
+                .InnerJoin<PaymentDto>()
+                .On<TransactionDto, PaymentDto>(left => left.PaymentId, right => right.Id)
+                .InnerJoin<InvoiceDto>()
+                .On<TransactionDto, InvoiceDto>(left => left.InvoiceId, right => right.Id)
+                .InnerJoin<CustomerDto>()
+                .On<InvoiceDto, CustomerDto>(left => left.CustomerKey, right => right.Key)
+                .InnerJoin<InvoiceStatusDto>()
+                .On<InvoiceDto, InvoiceStatusDto>(left => left.InvoiceStatusId, right => right.Id);
 
             return sql;
         }
 
         protected override string GetBaseWhereClause()
         {
-            return "merchPayment.id = @Id";
+            return "merchTransaction.id = @Id";
         }
 
         protected override IEnumerable<string> GetDeleteClauses()
         {
             var list = new List<string>
                 {
-                    "DELETE FROM merchTransaction WHERE paymentId = @Id",
-                    "DELETE FROM merchPayment WHERE id = @Id"
+                    "DELETE FROM merchTransaction WHERE TransactionPk = @Id",
                 };
 
             return list;
         }
 
-        protected override void PersistNewItem(IPayment entity)
+        protected override void PersistNewItem(ITransaction entity)
         {
             ((IdEntity)entity).AddingEntity();
 
-            var factory = new PaymentFactory();
+            var factory = new TransactionFactory();
             var dto = factory.BuildDto(entity);
 
             Database.Insert(dto);
@@ -110,11 +116,11 @@ namespace Merchello.Core.Persistence.Repositories
             entity.ResetDirtyProperties();
         }
 
-        protected override void PersistUpdatedItem(IPayment entity)
+        protected override void PersistUpdatedItem(ITransaction entity)
         {
             ((IdEntity)entity).UpdatingEntity();
 
-            var factory = new PaymentFactory();
+            var factory = new TransactionFactory();
             var dto = factory.BuildDto(entity);
 
             Database.Update(dto);
@@ -122,7 +128,7 @@ namespace Merchello.Core.Persistence.Repositories
             entity.ResetDirtyProperties();
         }
 
-        protected override void PersistDeletedItem(IPayment entity)
+        protected override void PersistDeletedItem(ITransaction entity)
         {
             var deletes = GetDeleteClauses();
             foreach (var delete in deletes)
@@ -132,13 +138,13 @@ namespace Merchello.Core.Persistence.Repositories
         }
 
 
-        protected override IEnumerable<IPayment> PerformGetByQuery(IQuery<IPayment> query)
+        protected override IEnumerable<ITransaction> PerformGetByQuery(IQuery<ITransaction> query)
         {
             var sqlClause = GetBaseQuery(false);
-            var translator = new SqlTranslator<IPayment>(sqlClause, query);
+            var translator = new SqlTranslator<ITransaction>(sqlClause, query);
             var sql = translator.Translate();
 
-            var dtos = Database.Fetch<PaymentDto, CustomerDto>(sql);
+            var dtos = Database.Fetch<TransactionDto, PaymentDto, InvoiceDto, CustomerDto, InvoiceStatusDto>(sql);
 
             return dtos.DistinctBy(x => x.Id).Select(dto => Get(dto.Id));
 

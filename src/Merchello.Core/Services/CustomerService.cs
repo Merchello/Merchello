@@ -14,7 +14,7 @@ namespace Merchello.Core.Services
     /// <summary>
     /// Represents the Customer Service, 
     /// </summary>
-    internal class CustomerService : ICustomerService
+    public class CustomerService : ICustomerService
     {
         private readonly IDatabaseUnitOfWorkProvider _uowProvider;
         private readonly RepositoryFactory _repositoryFactory;

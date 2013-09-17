@@ -23,7 +23,7 @@ namespace Merchello.Core.Models.Rdbms
         public Guid ShipMethodTypeFieldKey { get; set; }
 
         [Column("surcharge")]
-        public decimal Surcharge { get; set; }
+        public decimal Surcharge { get; set; }        
 
         [Column("serviceCode")]
         public string ServiceCode { get; set; }

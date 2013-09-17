@@ -8,7 +8,9 @@ namespace Merchello.Core.Persistence.Factories
         public IInvoice BuildEntity(InvoiceDto dto)
         {
 
-            var invoice = new Invoice(GetCustomer(dto.CustomerDto), GetInvoiceStatus(dto.InvoiceStatusDto), dto.Amount)
+            var invoice = new Invoice(
+                new CustomerFactory().BuildEntity(dto.CustomerDto),
+                new InvoiceStatusFactory().BuildEntity(dto.InvoiceStatusDto), dto.Amount)
             {
                 Id = dto.Id,
                 InvoiceNumber = dto.InvoiceNumber,
@@ -64,17 +66,6 @@ namespace Merchello.Core.Persistence.Factories
 
             return dto;
         }
-
-        private static ICustomer GetCustomer(CustomerDto dto)
-        {
-            var factory = new CustomerFactory();
-            return factory.BuildEntity(dto);
-        }
-
-        private static IInvoiceStatus GetInvoiceStatus(InvoiceStatusDto dto)
-        {
-            var factory = new InvoiceStatusFactory();
-            return factory.BuildEntity(dto);
-        }
+      
     }
 }

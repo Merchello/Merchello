@@ -9,13 +9,13 @@ using Umbraco.Core.Persistence.DatabaseAnnotations;
 namespace Merchello.Core.Models.Rdbms
 {
     [TableName("merchProduct")]
-    [PrimaryKey("id")]
+    [PrimaryKey("pk", autoIncrement = false)]
     [ExplicitColumns]
     internal class ProductDto
     {
-        [Column("id")]
-        [PrimaryKeyColumn]
-        public int Id { get; set; }
+        [Column("pk")]
+        [PrimaryKeyColumn(AutoIncrement = false)]
+        public Guid Key { get; set; }
 
         [Column("sku")]
         public string Sku { get; set; }
@@ -33,6 +33,22 @@ namespace Merchello.Core.Models.Rdbms
         [Column("salePrice")]
         [NullSetting(NullSetting = NullSettings.Null)]
         public decimal SalePrice { get; set; }
+
+        [Column("weight")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public decimal Weight { get; set; }
+
+        [Column("length")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public decimal Length { get; set; }
+
+        [Column("width")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public decimal Width { get; set; }
+
+        [Column("height")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public decimal Height { get; set; }
 
         [Column("brief")]
         [NullSetting(NullSetting = NullSettings.Null)]
