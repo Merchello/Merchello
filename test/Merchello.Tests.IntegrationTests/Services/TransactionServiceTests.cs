@@ -92,13 +92,13 @@ namespace Merchello.Tests.IntegrationTests.Services
 
         }
 
-        [Test]
-        public void Can_Retrieve_A_List_Of_All_Transactions()
-        {
-            var transactions = ((TransactionService)_transactionService).GetAll();
+        //[Test]
+        //public void Can_Retrieve_A_List_Of_All_Transactions()
+        //{
+        //    var transactions = ((TransactionService)_transactionService).GetAll();
 
-            Assert.IsTrue(transactions.Any());
-        }
+        //    Assert.IsTrue(transactions.Any());
+        //}
 
         [Test]
         public void Can_Delete_A_List_Of_Transactions()

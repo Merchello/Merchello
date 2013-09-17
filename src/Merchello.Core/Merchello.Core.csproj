@@ -124,6 +124,7 @@
     <Compile Include="Models\Rdbms\ProductVariant2OptionChoiceDto.cs" />
     <Compile Include="Models\Rdbms\ProductVariantDto.cs" />
     <Compile Include="Models\Shipment.cs" />
+    <Compile Include="Models\ShipMethod.cs" />
     <Compile Include="Models\Transaction.cs" />
     <Compile Include="Models\TypeFields\ITransactionTypeField.cs" />
     <Compile Include="Models\TypeFields\TransactionTypeField.cs" />
@@ -147,6 +148,7 @@
     <Compile Include="Persistence\Factories\InvoiceStatusFactory.cs" />
     <Compile Include="Persistence\Factories\PaymentFactory.cs" />
     <Compile Include="Persistence\Factories\ShipmentFactory.cs" />
+    <Compile Include="Persistence\Factories\ShipMethodFactory.cs" />
     <Compile Include="Persistence\Factories\TransactionFactory.cs" />
     <Compile Include="Persistence\Mappers\AnonymousCustomerMapper.cs" />
     <Compile Include="Persistence\Mappers\BasketItemMapper.cs" />
@@ -156,6 +158,7 @@
     <Compile Include="Persistence\Mappers\InvoiceMapper.cs" />
     <Compile Include="Persistence\Mappers\InvoiceStatusMapper.cs" />
     <Compile Include="Persistence\Mappers\MerchelloBaseMapper.cs" />
+    <Compile Include="Persistence\Mappers\ShipmentMapper.cs" />
     <Compile Include="Persistence\Mappers\TransactionMapper.cs" />
     <Compile Include="Persistence\Querying\Query.cs" />
     <Compile Include="Persistence\Repositories\AnonymousCustomerRepository.cs" />
@@ -169,6 +172,7 @@
     <Compile Include="Persistence\Repositories\Interfaces\IInvoiceStatusRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IPaymentRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IShipmentRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IShipMethodRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\ITransactionRepository.cs" />
     <Compile Include="Persistence\Repositories\InvoiceItemRepository.cs" />
     <Compile Include="Persistence\Repositories\InvoiceRepository.cs" />
@@ -189,7 +193,9 @@
     <Compile Include="Services\Interfaces\IInvoiceStatusService.cs" />
     <Compile Include="Services\Interfaces\IPaymentService.cs" />
     <Compile Include="Models\IProduct.cs" />
+    <Compile Include="Services\Interfaces\IProductService.cs" />
     <Compile Include="Services\Interfaces\IServiceContext.cs" />
+    <Compile Include="Services\Interfaces\IShipmentService.cs" />
     <Compile Include="Services\Interfaces\ITransactionService.cs" />
     <Compile Include="Services\InvoiceItemService.cs" />
     <Compile Include="Services\InvoiceService.cs" />
