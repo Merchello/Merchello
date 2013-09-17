@@ -39,36 +39,25 @@ namespace Merchello.Tests.UnitTests.WebControllers
         public void GetProductByKeyReturnsCorrectItemFromRepository()
         {
             //// Arrange
-            //Guid productKey = new Guid();
+            Guid productKey = new Guid();
 
-            //Product product = new Product();
-            //product.Key = productKey;
-            //product.Sku = "TESTSKU";
-            //product.Name = "Product One";
-            //product.Price = 12.00M;
-            //product.CostOfGoods = 4.00M;
-            //product.SalePrice = 11.00M;
-            //product.Brief = "Tihs is the Product One brief";
-            //product.Taxable = false;
-            //product.Shippable = true;
-            //product.Download = false;
-            //product.Template = false;
+            Product product = CreateFakeProduct(productKey, 20.0M);
 
-            //var MockProductService = new Mock<IProductService>();
-            //MockProductService.Setup(cs => cs.GetByKey(productKey)).Returns(product);
+            var MockProductService = new Mock<IProductService>();
+            MockProductService.Setup(cs => cs.GetByKey(productKey)).Returns(product);
 
-            //var MockServiceContext = new Mock<IServiceContext>();
-            //MockServiceContext.SetupGet(sc => sc.CustomerService).Returns(MockProductService.Object);
+            var MockServiceContext = new Mock<IServiceContext>();
+            MockServiceContext.SetupGet(sc => sc.ProductService).Returns(MockProductService.Object);
 
-            //MerchelloContext merchelloContext = new MerchelloContext(MockServiceContext.Object, null);
+            MerchelloContext merchelloContext = new MerchelloContext(MockServiceContext.Object, null);
 
-            //ProductApiController ctrl = new ProductApiController(merchelloContext, tempUmbracoContext);
+            ProductApiController ctrl = new ProductApiController(merchelloContext, tempUmbracoContext);
 
-            ////// Act
-            //var result = ctrl.GetProduct(productKey);
+            //// Act
+            var result = ctrl.GetProduct(productKey);
 
-            ////// Assert
-            //Assert.AreEqual(result, product);
+            //// Assert
+            Assert.AreEqual(result, product);
         }
 
         #region ProductSetup
@@ -76,13 +65,19 @@ namespace Merchello.Tests.UnitTests.WebControllers
         /// <summary>
         /// Create a fake product with fake data for testing
         /// </summary>
-        /// <param name="key"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        private Product CreateFakeProduct(Guid key)
+        private Product CreateFakeProduct(Guid key, Decimal price)
         {
-            return new Product { Key = key, Name = String.Format("Product {0}", key), Brief = String.Format("Brief for product {0}", key),
-                                 Price = 20.0M, CostOfGoods = 5.0M, SalePrice = 18.0M,
-                                 Taxable = false, Shippable = true, Download = false, Template = true };
+            return new Product
+            {
+                Key = key,
+                Name = String.Format("Product {0}", key),
+                Weight = 5.0M, Width = 15.0M, Length = 22.0M,
+                Price = price,
+                CostOfGoods = 5.0M,
+                SalePrice = 18.0M,
+                Taxable = false, Shippable = true, Download = false, Template = true };
         }
 		 
 	    #endregion
