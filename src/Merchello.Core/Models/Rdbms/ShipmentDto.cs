@@ -37,7 +37,8 @@ namespace Merchello.Core.Models.Rdbms
 
         [Column("shipMethodId")]
         [ForeignKey(typeof(ShipMethodDto), Name = "FK_merchShipment_merchShipMethod", Column = "id")]
-        public int ShipMethodId { get; set; }
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public int? ShipMethodId { get; set; }
 
         [Column("phone")]
         public string Phone { get; set; }
@@ -49,9 +50,6 @@ namespace Merchello.Core.Models.Rdbms
         [Column("createDate")]
         [Constraint(Default = "getdate()")]
         public DateTime CreateDate { get; set; }
-
-        [ResultColumn]
-        public ShipMethodDto ShipMethodDto { get; set; }
 
     }
 }

@@ -17,19 +17,17 @@ namespace Merchello.Core.Models
         private string _region;
         private string _postalCode;
         private string _countryCode;
-        private IShipMethod _shipMethod;
+        private int? _shipMethodId;
         private string _phone;
 
-        public Shipment (IShipMethod shipMethod, IInvoice invoice)
-            : this(shipMethod, invoice.Id)
-        { }
-
-        internal Shipment(IShipMethod shipmethod, int invoiceId)
+        
+        public Shipment(int invoiceId)
         {
             _invoiceId = invoiceId;
-            _shipMethod = shipmethod;
         }
-        
+
+
+        private static readonly PropertyInfo ShipMethodIdSelector = ExpressionHelper.GetPropertyInfo<Shipment, int?>(x => x.ShipMethodId);
         private static readonly PropertyInfo Address1Selector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.Address1);  
         private static readonly PropertyInfo Address2Selector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.Address2);  
         private static readonly PropertyInfo LocalitySelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.Locality);  
@@ -153,11 +151,19 @@ namespace Merchello.Core.Models
         /// The shipMethodId associated with the Shipment
         /// </summary>
         [DataMember]
-        public int ShipMethodId
+        public int? ShipMethodId
         {
-            get { return _shipMethod.Id; }
+            get { return _shipMethodId; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _shipMethodId = value;
+                    return _shipMethodId;
+                }, _shipMethodId, ShipMethodIdSelector);
+            }
         }
-    
+
         /// <summary>
         /// The phone at the shipping address associated with the Shipment
         /// </summary>

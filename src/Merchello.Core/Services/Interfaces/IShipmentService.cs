@@ -14,16 +14,20 @@ namespace Merchello.Core.Services
     /// </summary>
     public interface IShipmentService : IService
     {
+        /// <summary>
+        /// Creates a Shipment
+        /// </summary>
+        IShipment CreateShipment(IShipMethod shipMethod, IInvoice invoice, string address1, string address2, string locality, string region, string postalCode, string countryCode, string phone);
 
         /// <summary>
         /// Creates a Shipment
         /// </summary>
-        IShipment CreateShipment(IShipMethod shipMethod, string address1, string address2, string locality, string region, string postalCode, string countryCode, string phone);
+        IShipment CreateShipment(IInvoice invoice, string address1, string address2, string locality, string region, string postalCode, string countryCode, string phone);
 
         /// <summary>
         /// Creates a Shipment
         /// </summary>
-        IShipment CreateShipment(IShipMethod shipMethod, IAddress address);
+        IShipment CreateShipment(IShipMethod shipMethod, IInvoice invoice, IAddress address);
 
         /// <summary>
         /// Saves a single <see cref="IShipment"/> object

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
+using Merchello.Core.Models;
 using Merchello.Core.Persistence;
 using Umbraco.Core.Persistence.UnitOfWork;
 
@@ -17,7 +19,8 @@ namespace Merchello.Core.Services
         private Lazy<InvoiceService> _invoiceService;
         private Lazy<InvoiceItemService> _invoiceItemService;
         private Lazy<InvoiceStatusService> _invoiceStatusService;
-        private Lazy<PaymentService> _paymentService; 
+        private Lazy<PaymentService> _paymentService;
+        private Lazy<ProductService> _productService;
 
         /// <summary>
         /// Constructor
@@ -61,15 +64,15 @@ namespace Merchello.Core.Services
 
             if(_paymentService == null)
                 _paymentService = new Lazy<PaymentService>(() => new PaymentService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+
+            if(_productService == null)
+                _productService = new Lazy<ProductService>(() => new ProductService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
         }
 
 
         #region ICustomerService Members
 
-        public IAddressService AddressService {
-            get { return _addressService.Value; }
-        }
-
+       
         /// <summary>
         /// Gets the <see cref="ICustomerService"/>
         /// </summary>
@@ -101,6 +104,14 @@ namespace Merchello.Core.Services
         {
             get { return _paymentService.Value;  }
         }
+
+        /// <summary>
+        /// Gets the <see cref="IProductService"/>
+        /// </summary>
+        public IProductService ProductService
+        {
+            get { return _productService.Value;  }
+        }       
 
         #endregion
     }

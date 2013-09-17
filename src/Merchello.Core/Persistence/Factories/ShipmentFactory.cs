@@ -7,9 +7,7 @@ namespace Merchello.Core.Persistence.Factories
     {
         public IShipment BuildEntity(ShipmentDto dto)
         {
-            var shipment = new Shipment(
-                new ShipMethodFactory().BuildEntity(dto.ShipMethodDto), 
-                dto.InvoiceId)
+            var shipment = new Shipment(dto.InvoiceId)
             {
                 Id = dto.Id,
                 Address1 = dto.Address1,
@@ -19,6 +17,7 @@ namespace Merchello.Core.Persistence.Factories
                 PostalCode = dto.PostalCode,
                 CountryCode = dto.CountryCode,
                 Phone = dto.Phone,
+                ShipMethodId = dto.ShipMethodId,
                 UpdateDate = dto.UpdateDate,
                 CreateDate = dto.CreateDate
             };

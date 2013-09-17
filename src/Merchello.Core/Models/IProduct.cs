@@ -8,75 +8,89 @@ namespace Merchello.Core.Models
     /// Defines a Merchello Product object interface
     /// </summary>
     public interface IProduct : IKeyEntity
-    {            
+    {
+            
+            
             /// <summary>
-            /// The sku for the product
+            /// The sku for the Product
             /// </summary>
             [DataMember]
             string Sku { get; set;}
             
             /// <summary>
-            /// The name of the product
+            /// The name for the Product
             /// </summary>
             [DataMember]
             string Name { get; set;}
             
             /// <summary>
-            /// The base price of the product
+            /// The price for the Product
             /// </summary>
             [DataMember]
             decimal Price { get; set;}
             
             /// <summary>
-            /// The cost of goods sold for the product
+            /// The costOfGoods for the Product
             /// </summary>
             [DataMember]
-            decimal CostOfGoods { get; set;}
+            decimal? CostOfGoods { get; set;}
             
             /// <summary>
-            /// The base "on sale" price for the product
+            /// The salePrice for the Product
             /// </summary>
             [DataMember]
-            decimal SalePrice { get; set;}
+            decimal? SalePrice { get; set;}
             
             /// <summary>
-            /// The brief description of the product
+            /// The weight for the Product
             /// </summary>
             [DataMember]
-            string Brief { get; set;}
+            decimal? Weight { get; set;}
             
             /// <summary>
-            /// The description of the product
+            /// The length for the Product
             /// </summary>
             [DataMember]
-            string Description { get; set;}
+            decimal? Length { get; set;}
             
             /// <summary>
-            /// Indicates whether or not to tax this product
+            /// The width for the Product
+            /// </summary>
+            [DataMember]
+            decimal? Width { get; set;}
+            
+            /// <summary>
+            /// The height for the Product
+            /// </summary>
+            [DataMember]
+            decimal? Height { get; set;}
+                                   
+            /// <summary>
+            /// The taxable for the Product
             /// </summary>
             [DataMember]
             bool Taxable { get; set;}
             
             /// <summary>
-            /// Indicates whether or not this product is shippable
+            /// The shippable for the Product
             /// </summary>
             [DataMember]
             bool Shippable { get; set;}
             
             /// <summary>
-            /// Indicates whether or not this product is avaialable via download
+            /// The download for the Product
             /// </summary>
             [DataMember]
             bool Download { get; set;}
             
             /// <summary>
-            /// The download url for the product
+            /// The downloadUrl for the Product
             /// </summary>
             [DataMember]
             string DownloadUrl { get; set;}
             
             /// <summary>
-            /// Indicates whether or not this product is a template to be used when generating other products
+            /// The template for the Product
             /// </summary>
             [DataMember]
             bool Template { get; set;}

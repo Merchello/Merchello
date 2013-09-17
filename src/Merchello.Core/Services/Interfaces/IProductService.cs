@@ -19,11 +19,7 @@ namespace Merchello.Core.Services
         /// Creates a Product
         /// </summary>
         IProduct CreateProduct(string sku, string name, decimal price);
-
-        /// <summary>
-        /// Creates a Product
-        /// </summary>
-        IProduct CreateProduct(string sku, string name, decimal price, decimal costOfGoods, decimal salePrice, decimal weight, decimal length, decimal width, decimal height, string brief, string description, bool taxable, bool shippable, bool download, string downloadUrl, bool template);
+      
 
         /// <summary>
         /// Saves a single <see cref="IProduct"/> object
@@ -56,16 +52,16 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Gets an <see cref="IProduct"/> object by its 'UniqueId'
         /// </summary>
-        /// <param name="id">int Id of the Product to retrieve</param>
+        /// <param name="key">Guid key of the Product to retrieve</param>
         /// <returns><see cref="IProduct"/></returns>
-        IProduct GetById(int id);
+        IProduct GetByKey(Guid key);
 
         /// <summary>
         /// Gets list of <see cref="IProduct"/> objects given a list of Unique keys
         /// </summary>
-        /// <param name="ids">List of int Id for Product objects to retrieve</param>
+        /// <param name="keys">List of Guid keys for Product objects to retrieve</param>
         /// <returns>List of <see cref="IProduct"/></returns>
-        IEnumerable<IProduct> GetByIds(IEnumerable<int> ids);
+        IEnumerable<IProduct> GetByKeys(IEnumerable<Guid> keys);
 
     }
 }

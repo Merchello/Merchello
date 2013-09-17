@@ -56,7 +56,7 @@ namespace Merchello.Core.Models
             /// The shipMethodId for the Shipment
             /// </summary>
             [DataMember]
-            int ShipMethodId { get; }
+            int? ShipMethodId { get; set; }
             
             /// <summary>
             /// The phone number at the shipping address for the Shipment
