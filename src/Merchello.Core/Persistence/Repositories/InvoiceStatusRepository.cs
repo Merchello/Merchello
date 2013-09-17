@@ -76,7 +76,7 @@ namespace Merchello.Core.Persistence.Repositories
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-               .From("merchInvoiceStatus");
+               .From<InvoiceStatusDto>();
 
             return sql;
         }

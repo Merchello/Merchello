@@ -14,7 +14,7 @@ namespace Merchello.Core.Services
     /// <summary>
     /// Represents the BasketItem Service 
     /// </summary>
-    public partial class BasketItemService : IBasketItemService
+    public class BasketItemService : IBasketItemService
     {
         private readonly IDatabaseUnitOfWorkProvider _uowProvider;
         private readonly RepositoryFactory _repositoryFactory;

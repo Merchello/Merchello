@@ -16,9 +16,14 @@ namespace Merchello.Core.Services
     {
 
         /// <summary>
-        /// Creates a Invoice
+        /// Creates an Invoice
         /// </summary>
         IInvoice CreateInvoice(ICustomer customer, IInvoiceStatus invoiceStatus, string invoiceNumber, string billToName, string billToAddress1, string billToAddress2, string billToLocality, string billToRegion, string billToPostalCode, string billToCountryCode, string billToEmail, string billToPhone, string billToCompany);
+
+        /// <summary>
+        /// Creates an Invoice
+        /// </summary>        
+        IInvoice CreateInvoice(ICustomer customer, IAddress address, IInvoiceStatus invoiceStatus, string invoiceNumber);
 
         /// <summary>
         /// Saves a single <see cref="IInvoice"/> object

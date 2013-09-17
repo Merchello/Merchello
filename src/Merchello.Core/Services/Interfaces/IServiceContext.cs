@@ -10,6 +10,9 @@ namespace Merchello.Core.Services
     /// </summary>
     public interface IServiceContext
     {
+
+        IAddressService AddressService { get; }
+
         /// <summary>
         /// Gets the <see cref="ICustomerService"/>
         /// </summary>

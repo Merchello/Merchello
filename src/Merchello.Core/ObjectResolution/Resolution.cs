@@ -16,7 +16,7 @@ namespace Merchello.Core.ObjectResolution
 	/// </remarks>
 	internal static class Resolution
 	{
-		private static readonly ReaderWriterLockSlim Lock = new ReaderWriterLockSlim();
+		private static readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim();
 	    private volatile static bool _isFrozen;
 
 	    /// <summary>
@@ -49,7 +49,7 @@ namespace Merchello.Core.ObjectResolution
 		{
 			get
 			{
-				IDisposable l = new WriteLock(Lock);
+				IDisposable l = new WriteLock(_lock);
                 if (_isFrozen)
 				{
 					l.Dispose();
