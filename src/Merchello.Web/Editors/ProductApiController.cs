@@ -18,21 +18,21 @@ using Umbraco.Web;
 namespace Merchello.Web.Editors
 {
     [PluginController("Merchello")]
-    public class CustomerApiController : MerchelloApiController
+    public class ProductApiController : MerchelloApiController
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public CustomerApiController()
+        public ProductApiController()
             : this(MerchelloContext.Current)
-        {            
+        {
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="merchelloContext"></param>
-        public CustomerApiController(MerchelloContext merchelloContext)
+        public ProductApiController(MerchelloContext merchelloContext)
             : base(merchelloContext)
         {
         }
@@ -40,24 +40,25 @@ namespace Merchello.Web.Editors
         /// <summary>
         /// This is a helper contructor for unit testing
         /// </summary>
-        internal CustomerApiController(MerchelloContext merchelloContext, UmbracoContext umbracoContext)
+        internal ProductApiController(MerchelloContext merchelloContext, UmbracoContext umbracoContext)
             : base(merchelloContext, umbracoContext)
         {
         }
 
         /// <summary>
-        /// Returns customer by the key
+        /// Returns all Product by Key
         /// </summary>
         /// <param name="key"></param>
-        public Customer GetCustomer(Guid key)
+        public Product GetProduct(Guid key)
         {
-            var customer = MerchelloContext.Services.CustomerService.GetByKey(key) as Customer;
-            if (customer == null)
-            {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
-            }
+            //var customer = MerchelloContext.Services. as Product;
+            //if (customer == null)
+            //{
+            //    throw new HttpResponseException(HttpStatusCode.NotFound);
+            //}
 
-            return customer;
+            //return customer;
+            return null;
         }
     }
 }
