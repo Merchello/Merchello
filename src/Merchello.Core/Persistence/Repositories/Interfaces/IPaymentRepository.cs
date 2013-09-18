@@ -7,7 +7,7 @@ namespace Merchello.Core.Persistence.Repositories
     /// <summary>
     /// Marker interface for the payment repository
     /// </summary>
-    public interface IPaymentRepository : IRepository<int, IPayment>
+    public interface IPaymentRepository : IRepositoryQueryable<int, IPayment>
     {
     }
 }

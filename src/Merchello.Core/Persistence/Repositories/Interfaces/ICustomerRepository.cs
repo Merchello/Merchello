@@ -8,7 +8,7 @@ namespace Merchello.Core.Persistence.Repositories
     /// <summary>
     /// Marker Interface for the customer repository
     /// </summary>
-    public interface ICustomerRepository : IRepository<Guid, ICustomer>
+    public interface ICustomerRepository : IRepositoryQueryable<Guid, ICustomer>
     {
         /// <summary>
         /// Returns a <see cref="ICustomer"/> given an Umbraco Member Id or null if not found.
