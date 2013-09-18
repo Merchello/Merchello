@@ -81,5 +81,23 @@ namespace Merchello.Tests.IntegrationTests.Services
 
         }
 
+        [Test]
+        public void Can_Get_A_List_Of_Payments_By_Customer()
+        {
+            var payments = new List<IPayment>()
+                {
+                   { _paymentService.CreatePayment(_customer, "CustomerGateway", PaymentMethodType.Cash, "Cash", "Complete", 12.00m) },
+                   { _paymentService.CreatePayment(_customer, "CustomerGateway", PaymentMethodType.CreditCard, "CC", "Complete", 156.00m) },
+                   { _paymentService.CreatePayment(_customer, "CustomerGateway", PaymentMethodType.Cash, "Cash", "Complete", 1.00m) }
+                };
+
+            _paymentService.Save(payments);
+
+            var customerPayments = _paymentService.GetPaymentsByCustomer(_customer.Key);
+
+            Assert.IsTrue(customerPayments.Any());
+
+        }
+
     }
 }

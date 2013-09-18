@@ -58,11 +58,14 @@ namespace Merchello.Tests.IntegrationTests.Services
             var shipmentService = new ShipmentService();
             var shipments = shipmentService.GetAll();
 
+
             var shipment = shipments.FirstOrDefault(x => x.ShipMethodId != null);
-            var id = shipment.Id;
-            Console.WriteLine(string.Format("shipment: {0} - ship method: {1}", shipment.Id, shipment.ShipMethodId));
+           
             if (shipment != null && shipment.ShipMethodId != null)
             {
+                var id = shipment.Id;
+                Console.WriteLine(string.Format("shipment: {0} - ship method: {1}", shipment.Id, shipment.ShipMethodId));
+
                 var shipmethod = _shipMethodService.GetById(shipment.ShipMethodId.Value);
                 _shipMethodService.Delete(shipmethod);
 

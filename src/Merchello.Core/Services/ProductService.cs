@@ -122,7 +122,7 @@ namespace Merchello.Core.Services
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         public void Delete(IProduct product, bool raiseEvents = true)
         {
-            if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<IProduct>( product), this);
+            if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<IProduct>(product), this);
 
             using (new WriteLock(Locker))
             {
@@ -133,7 +133,7 @@ namespace Merchello.Core.Services
                     uow.Commit();
                 }
             }
-            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<IProduct>( product), this);
+            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<IProduct>(product), this);
         }
 
         /// <summary>
@@ -222,10 +222,6 @@ namespace Merchello.Core.Services
         /// </summary>
         public static event TypedEventHandler<IProductService, SaveEventArgs<IProduct>> Saved;
 
-        /// <summary>
-        /// Occurs before Create
-        /// </summary>
-        public static event TypedEventHandler<IProductService, NewEventArgs<IProduct>> Creating;
 
         /// <summary>
         /// Occurs after Create

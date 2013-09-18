@@ -226,10 +226,6 @@ namespace Merchello.Core.Services
         /// </summary>
         public static event TypedEventHandler<IInvoiceItemService, SaveEventArgs<IInvoiceItem>> Saved;
 
-        /// <summary>
-        /// Occurs before Create
-        /// </summary>
-        public static event TypedEventHandler<IInvoiceItemService, NewEventArgs<IInvoiceItem>> Creating;
 
         /// <summary>
         /// Occurs after Create

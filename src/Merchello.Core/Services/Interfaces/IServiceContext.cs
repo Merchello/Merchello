@@ -37,6 +37,11 @@ namespace Merchello.Core.Services
         /// Gets the <see cref="IProductService"/>
         /// </summary>
         IProductService ProductService { get; }
+
+        /// <summary>
+        /// Gets the <see cref="IAddressService"/>
+        /// </summary>
+        IAddressService AddressService { get; }
     }
     
 }

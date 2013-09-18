@@ -7,7 +7,7 @@ namespace Merchello.Core.Persistence.Repositories
     /// <summary>
     /// Marker interface for the anonymous customer repository
     /// </summary>
-    public interface IAnonymousCustomerRepository :  IRepository<Guid, IAnonymousCustomer>
+    public interface IAnonymousCustomerRepository :  IRepositoryQueryable<Guid, IAnonymousCustomer>
     {
 
     }

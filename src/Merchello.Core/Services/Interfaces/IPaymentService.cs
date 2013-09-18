@@ -56,6 +56,14 @@ namespace Merchello.Core.Services
         IPayment GetById(int id);
 
         /// <summary>
+        /// Gets a collection of <see cref="IPayment"/> object given a customers key
+        /// </summary>
+        /// <param name="customerKey">The unique <see cref="Guid"/> of the customer record</param>
+        /// <returns>A collection of <see cref="IPayment"/> objects</returns>
+        IEnumerable<IPayment> GetPaymentsByCustomer(Guid customerKey);
+        
+            
+        /// <summary>
         /// Gets list of <see cref="IPayment"/> objects given a list of Unique keys
         /// </summary>
         /// <param name="ids">List of int Id for Payment objects to retrieve</param>
