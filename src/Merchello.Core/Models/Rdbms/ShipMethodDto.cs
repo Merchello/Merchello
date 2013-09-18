@@ -16,16 +16,18 @@ namespace Merchello.Core.Models.Rdbms
         [Column("name")]
         public string Name { get; set; }
 
-        [Column("gatewayAlias")]
-        public int GatewayAlias { get; set; }
+        [Column("providerKey")]
+        public Guid ProviderKey { get; set; }
 
         [Column("shipMethodTypeFieldKey")]
         public Guid ShipMethodTypeFieldKey { get; set; }
 
         [Column("surcharge")]
+        [Constraint(Default = "0")]
         public decimal Surcharge { get; set; }        
 
         [Column("serviceCode")]
+        [NullSetting(NullSetting = NullSettings.Null)]
         public string ServiceCode { get; set; }
 
         [Column("updateDate")]

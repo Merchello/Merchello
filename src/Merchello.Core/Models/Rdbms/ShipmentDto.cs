@@ -21,6 +21,7 @@ namespace Merchello.Core.Models.Rdbms
         public string Address1 { get; set; }
 
         [Column("address2")]
+        [NullSetting(NullSetting = NullSettings.Null)]
         public string Address2 { get; set; }
 
         [Column("locality")]
@@ -41,6 +42,7 @@ namespace Merchello.Core.Models.Rdbms
         public int? ShipMethodId { get; set; }
 
         [Column("phone")]
+        [NullSetting(NullSetting = NullSettings.Null)]
         public string Phone { get; set; }
 
         [Column("updateDate")]

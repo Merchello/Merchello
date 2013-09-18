@@ -91,6 +91,37 @@ namespace Merchello.Tests.IntegrationTests.Services
             Assert.NotNull(deletedProduct);
             Assert.AreEqual(key, deletedProduct.Key);
         }
+
+        [Test]
+        public void Can_Update_A_Product()
+        {
+            IProduct updatedProduct = null;
+            ProductService.Saved += delegate(IProductService sender, SaveEventArgs<IProduct> args)
+                {
+                    updatedProduct = args.SavedEntities.FirstOrDefault();
+                };
+
+            var product = ProductData.MockProductForInserting(ProductData.MockSku());
+
+            _productService.Save(product);
+
+            Assert.IsTrue(product.HasIdentity);
+
+            updatedProduct = null;
+
+            var key = product.Key;
+
+            product.Name = "Updated Product";
+
+            product.CostOfGoods = 9.00m;
+            _productService.Save(product);
+
+            Assert.NotNull(updatedProduct);
+            Assert.AreEqual(updatedProduct.Name, product.Name);
+            Assert.AreEqual("Updated Product", product.Name);
+            Assert.AreEqual(9.00m, product.CostOfGoods);
+
+        }
         
     }
 }
