@@ -11,7 +11,7 @@ namespace Merchello.Core.Persistence.Factories
             {
                 Id = dto.Id,
                 Name = dto.Name,
-                GatewayAlias = dto.GatewayAlias,
+                ProviderKey = dto.ProviderKey,
                 ShipMethodTypeFieldKey = dto.ShipMethodTypeFieldKey,
                 Surcharge = dto.Surcharge,
                 ServiceCode = dto.ServiceCode,
@@ -30,7 +30,7 @@ namespace Merchello.Core.Persistence.Factories
             {
                 Id = entity.Id,
                 Name = entity.Name,
-                GatewayAlias = entity.GatewayAlias,
+                ProviderKey = entity.ProviderKey,
                 ShipMethodTypeFieldKey = entity.ShipMethodTypeFieldKey,
                 Surcharge = entity.Surcharge,
                 ServiceCode = entity.ServiceCode,

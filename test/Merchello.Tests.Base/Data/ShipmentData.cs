@@ -23,5 +23,17 @@ namespace Merchello.Tests.Base.Data
                     ShipMethodId = shipMethodId
                 };
         }
+
+        public static IShipMethod MockShipMethodForInserting()
+        {
+            return new ShipMethod()
+                {
+                    Name = "Mock Ship Method",
+                    ProviderKey = Guid.NewGuid(),
+                    ShipMethodTypeFieldKey = TypeFields.TypeFieldMock.ShipMethodCarrier.TypeKey,
+                    Surcharge = 0m,
+                    ServiceCode = "Mock"
+                };
+        }
     }
 }

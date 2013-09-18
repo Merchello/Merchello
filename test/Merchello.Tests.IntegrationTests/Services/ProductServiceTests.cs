@@ -121,7 +121,6 @@ namespace Merchello.Tests.IntegrationTests.Services
             Assert.AreEqual("Updated Product", product.Name);
             Assert.AreEqual(9.00m, product.CostOfGoods);
 
-
         }
         
     }

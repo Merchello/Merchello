@@ -18,7 +18,12 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Creates a ShipMethod
         /// </summary>
-        IShipMethod CreateShipMethod(string name, int gatewayAlias, Guid shipMethodTypeFieldKey, decimal surcharge, string serviceCode);
+        IShipMethod CreateShipMethod(string name, Guid providerKey, ShipMethodType shipMethodType);
+
+        /// <summary>
+        /// Creates a ShipMethod
+        /// </summary>
+        IShipMethod CreateShipMethod(string name, Guid providerKey, Guid shipMethodTypeFieldKey);
 
         /// <summary>
         /// Saves a single <see cref="IShipMethod"/> object

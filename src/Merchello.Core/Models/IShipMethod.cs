@@ -17,10 +17,10 @@ namespace Merchello.Core.Models
             string Name { get; set;}
             
             /// <summary>
-            /// The gatewayAlias for the ShipMethod
+            /// The key associated with the gateway provider for the Ship Method
             /// </summary>
             [DataMember]
-            int GatewayAlias { get; set;}
+            Guid ProviderKey { get; set;}
             
             /// <summary>
             /// The shipMethodTypeFieldKey for the ShipMethod

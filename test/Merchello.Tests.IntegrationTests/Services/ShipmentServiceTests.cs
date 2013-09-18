@@ -22,7 +22,7 @@ namespace Merchello.Tests.IntegrationTests.Services
         private IInvoice _invoice;
         private ICustomer _customer;
         private IEnumerable<IInvoiceStatus> _statuses;
-        
+        private IShipMethod _shipMethod;
 
         [SetUp]
         public void Setup()
@@ -54,6 +54,9 @@ namespace Merchello.Tests.IntegrationTests.Services
 
             invoiceService.Save(_invoice);
 
+            var shipMethodService = new ShipMethodService();
+            _shipMethod = ShipmentData.MockShipMethodForInserting();
+            shipMethodService.Save(_shipMethod);
 
         }
 
@@ -78,7 +81,7 @@ namespace Merchello.Tests.IntegrationTests.Services
                     savedShipment = args.SavedEntities.FirstOrDefault();
                 };
 
-            var shipment = _shipmentService.CreateShipment(null, _invoice, AddressData.MindflyAddressForInserting());
+            var shipment = _shipmentService.CreateShipment(_shipMethod, _invoice, AddressData.MindflyAddressForInserting());
 
             _shipmentService.Save(shipment);
 
@@ -123,7 +126,7 @@ namespace Merchello.Tests.IntegrationTests.Services
                     updatedShipment = args.SavedEntities.FirstOrDefault();
                 };
 
-            var shipment = _shipmentService.CreateShipment(null, _invoice, AddressData.MindflyAddressForInserting());
+            var shipment = _shipmentService.CreateShipment(_shipMethod, _invoice, AddressData.MindflyAddressForInserting());
 
             _shipmentService.Save(shipment);
             updatedShipment = null;
