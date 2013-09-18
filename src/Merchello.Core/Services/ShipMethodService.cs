@@ -40,19 +40,26 @@ namespace Merchello.Core.Services
 
         #region IShipMethodService Members
 
+        /// <summary>
+        /// Creates an <see cref="IShipMethod"/> object
+        /// </summary
+        public IShipMethod CreateShipMethod(string name, Guid providerKey, ShipMethodType shipMethodType)
+        {
+            var typeField = EnumeratedTypeFieldConverter.ShipmentMethod().GetTypeField(shipMethodType);
+            return CreateShipMethod(name, providerKey, typeField.TypeKey);
+        }
 
         /// <summary>
         /// Creates an <see cref="IShipMethod"/> object
         /// </summary>
-        public IShipMethod CreateShipMethod(string name, int gatewayAlias, Guid shipMethodTypeFieldKey, decimal surcharge, string serviceCode)
+        public IShipMethod CreateShipMethod(string name, Guid providerKey, Guid shipMethodTypeFieldKey)
         {
             var shipMethod = new ShipMethod()
                 {
                     Name = name, 
-                    GatewayAlias = gatewayAlias, 
+                    ProviderKey = providerKey, 
                     ShipMethodTypeFieldKey = shipMethodTypeFieldKey, 
-                    Surcharge = surcharge, 
-                    ServiceCode = serviceCode
+                    Surcharge = 0
                 };
                 
             Created.RaiseEvent(new NewEventArgs<IShipMethod>(shipMethod), this);

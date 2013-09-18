@@ -32,6 +32,24 @@ namespace Merchello.Tests.Base.Data
             
         }
 
+        public static IAddress MindflyAddressForInserting()
+        {
+            var address = new Address(Guid.NewGuid(), "Mindfly")
+                {
+                    Address1 = "114 W. Magnolia St.",
+                    Address2 = "Suite 504",
+                    Locality = "Bellingham",
+                    Region = "WA",
+                    CountryCode = "US",
+                    PostalCode = "98225",
+                    Phone = "555-555-5555"
+                };
+
+            address.ResetDirtyProperties();
+
+            return address;
+        }
+
         public static IAddress AddressForUpdating()
         {
             var address = AddressForInserting();
