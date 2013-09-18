@@ -258,7 +258,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Factory\" />
-    <Folder Include="Strategy\Shipping\" />
+    <Folder Include="Strategy\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
