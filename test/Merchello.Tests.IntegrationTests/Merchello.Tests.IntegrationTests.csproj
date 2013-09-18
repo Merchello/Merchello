@@ -84,6 +84,7 @@
     <Compile Include="Services\CustomerServiceTests.cs" />
     <Compile Include="Services\PaymentServiceTests.cs" />
     <Compile Include="Services\ProductServiceTests.cs" />
+    <Compile Include="Services\ShipmentServiceTests.cs" />
     <Compile Include="Services\TransactionServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>
