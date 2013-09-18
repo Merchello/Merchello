@@ -13,6 +13,8 @@ using Merchello.Web.Editors;
 using Umbraco.Core;
 using Umbraco.Web;
 using Umbraco.Tests.TestHelpers;
+using System.Web.Http;
+using System.Net.Http;
 
 namespace Merchello.Tests.UnitTests.WebControllers
 {
@@ -40,7 +42,6 @@ namespace Merchello.Tests.UnitTests.WebControllers
         {
             //// Arrange
             Guid productKey = new Guid();
-
             Product product = CreateFakeProduct(productKey, 20.0M);
 
             var MockProductService = new Mock<IProductService>();
@@ -54,11 +55,193 @@ namespace Merchello.Tests.UnitTests.WebControllers
             ProductApiController ctrl = new ProductApiController(merchelloContext, tempUmbracoContext);
 
             //// Act
-            var result = ctrl.GetProduct(productKey);
+            var result = ctrl.Get(productKey);
 
             //// Assert
             Assert.AreEqual(result, product);
         }
+
+        /// <summary>
+        /// Test to verify that the API throws an exception when param is not found
+        /// </summary>
+        [Test]
+        public void GetProductThrowsWhenRepositoryReturnsNull()
+        {
+            //// Arrange
+            Guid productKey = new Guid();
+
+            var MockProductService = new Mock<IProductService>();
+            MockProductService.Setup(cs => cs.GetByKey(productKey)).Returns((Product)null);
+
+            var MockServiceContext = new Mock<IServiceContext>();
+            MockServiceContext.SetupGet(sc => sc.ProductService).Returns(MockProductService.Object);
+
+            MerchelloContext merchelloContext = new MerchelloContext(MockServiceContext.Object, null);
+
+            ProductApiController ctrl = new ProductApiController(merchelloContext, tempUmbracoContext);
+
+            //// Act & Assert
+            var ex = Assert.Throws<HttpResponseException>(() => ctrl.Get(Guid.Empty));
+        }
+
+
+        /// <summary>
+        /// Test to verify that the API gets the correct Products from the passed in Keys
+        /// </summary>
+        [Test]
+        public void GetProductByKeysReturnsCorrectItemsFromRepository()
+        {
+            //// Arrange
+            Guid productKey = new Guid();
+            Product product = CreateFakeProduct(productKey, 20.0M);
+
+            Guid productKey2 = new Guid();
+            Product product2 = CreateFakeProduct(productKey2, 30.0M);
+
+            Guid productKey3 = new Guid();
+            Product product3 = CreateFakeProduct(productKey3, 40.0M);
+
+            List<Product> productsList = new List<Product>();
+            productsList.Add(product);
+            productsList.Add(product3);
+
+            var productKeys = new[] { productKey, productKey3 };
+
+            var MockProductService = new Mock<IProductService>();
+            MockProductService.Setup(cs => cs.GetByKeys(productKeys)).Returns(productsList);
+
+            var MockServiceContext = new Mock<IServiceContext>();
+            MockServiceContext.SetupGet(sc => sc.ProductService).Returns(MockProductService.Object);
+
+            MerchelloContext merchelloContext = new MerchelloContext(MockServiceContext.Object, null);
+
+            ProductApiController ctrl = new ProductApiController(merchelloContext, tempUmbracoContext);
+
+            //// Act
+            var result = ctrl.Get(productKeys);
+
+            //// Assert
+            Assert.AreEqual(result, productsList);
+        }
+        
+        /// <summary>
+        /// Test to verify that the repository is updated on a PUT
+        /// </summary>
+        [Test]
+        public void PutProductUpdatesRepository()
+        {
+            //// Arrange
+            bool wasCalled = false;
+            Guid productKey = new Guid();
+            Product product = CreateFakeProduct(productKey, 20.0M);
+
+            var MockProductService = new Mock<IProductService>();
+            MockProductService.Setup(cs => cs.Save(product, It.IsAny<bool>())).Callback(() => wasCalled = true);
+
+            var MockServiceContext = new Mock<IServiceContext>();
+            MockServiceContext.SetupGet(sc => sc.ProductService).Returns(MockProductService.Object);
+
+            MerchelloContext merchelloContext = new MerchelloContext(MockServiceContext.Object, null);
+
+            ProductApiController ctrl = new ProductApiController(merchelloContext, tempUmbracoContext);
+
+            //// Act
+            HttpResponseMessage response = ctrl.Put(productKey, product);
+
+            //// Assert
+            Assert.AreEqual(response.StatusCode, System.Net.HttpStatusCode.OK);
+
+            Assert.True(wasCalled);
+        }
+
+        /// <summary>
+        /// Test to verify that the proper error response is returned on an error
+        /// </summary>
+        [Test]
+        public void PutProductReturns500WhenRepositoryUpdateReturnsError()
+        {
+            //// Arrange
+            Guid productKey = new Guid();
+            Product product = CreateFakeProduct(productKey, 20.0M);
+
+            var MockProductService = new Mock<IProductService>();
+            MockProductService.Setup(cs => cs.Save(product, It.IsAny<bool>())).Throws<InvalidOperationException>();
+
+            var MockServiceContext = new Mock<IServiceContext>();
+            MockServiceContext.SetupGet(sc => sc.ProductService).Returns(MockProductService.Object);
+
+            MerchelloContext merchelloContext = new MerchelloContext(MockServiceContext.Object, null);
+
+            ProductApiController ctrl = new ProductApiController(merchelloContext, tempUmbracoContext);
+
+            //// Act
+            HttpResponseMessage response = ctrl.Put(productKey, product);
+
+            //// Assert
+            Assert.AreEqual(response.StatusCode, System.Net.HttpStatusCode.InternalServerError);
+        }
+
+        /// <summary>
+        /// Test to verify that the delete is called
+        /// </summary>
+        [Test]
+        public void DeleteProductCallsRepositoryRemove()
+        {
+            //// Arrange
+            Guid removedKey = Guid.Empty;
+
+            Guid productKey = new Guid();
+            Product product = CreateFakeProduct(productKey, 20.0M);
+
+            var MockProductService = new Mock<IProductService>();
+            MockProductService.Setup(cs => cs.Delete(product, It.IsAny<bool>())).Callback<IProduct, bool>((p, b) => removedKey = p.Key);
+
+            var MockServiceContext = new Mock<IServiceContext>();
+            MockServiceContext.SetupGet(sc => sc.ProductService).Returns(MockProductService.Object);
+
+            MerchelloContext merchelloContext = new MerchelloContext(MockServiceContext.Object, null);
+
+            ProductApiController ctrl = new ProductApiController(merchelloContext, tempUmbracoContext);
+
+            //// Act
+            HttpResponseMessage response = ctrl.Delete(productKey);
+
+            //// Assert
+            Assert.AreEqual(System.Net.HttpStatusCode.NoContent, response.StatusCode);
+
+            Assert.AreEqual(productKey, removedKey);
+        }
+
+        /// <summary>
+        /// Test to verify that the product is created
+        /// </summary>
+        [Test]
+        public void NewProductReturnsCorrectProduct()
+        {
+            //// Arrange
+            bool wasCalled = false;
+            Guid productKey = new Guid();
+            Product product = CreateFakeProduct(productKey, 20.0M);
+
+            var MockProductService = new Mock<IProductService>();
+            MockProductService.Setup(cs => cs.CreateProduct(product.Sku, product.Name, product.Price)).Returns(product).Callback(() => wasCalled = true);
+
+            var MockServiceContext = new Mock<IServiceContext>();
+            MockServiceContext.SetupGet(sc => sc.ProductService).Returns(MockProductService.Object);
+
+            MerchelloContext merchelloContext = new MerchelloContext(MockServiceContext.Object, null);
+
+            ProductApiController ctrl = new ProductApiController(merchelloContext, tempUmbracoContext);
+
+            //// Act
+            Product result = ctrl.NewProduct(product.Sku, product.Name, product.Price);
+
+            //// Assert
+            Assert.AreEqual(product, result);
+            Assert.True(wasCalled);
+        }
+
+
 
         #region ProductSetup
 
