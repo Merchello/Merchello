@@ -65,6 +65,22 @@ namespace Merchello.Core.Services
         IShipment GetById(int id);
 
         /// <summary>
+        /// Gets a list of <see cref="IShipment"/> object given a ship method id
+        /// </summary>
+        /// <param name="shipMethodId">The id of the shipMethod</param>
+        /// <returns>A collection of <see cref="IShipment"/></returns>
+        IEnumerable<IShipment> GetShipmentsForShipMethod(int shipMethodId);
+
+
+        /// <summary>
+        /// Gets a list of <see cref="IShipment"/> object given a invoice id
+        /// </summary>
+        /// <param name="invoiceId">The id of the invoice</param>
+        /// <returns>A collection of <see cref="IShipment"/></returns>
+        IEnumerable<IShipment> GetShipmentsForInvoice(int invoiceId);
+            
+            
+        /// <summary>
         /// Gets list of <see cref="IShipment"/> objects given a list of Unique keys
         /// </summary>
         /// <param name="ids">List of int Id for Shipment objects to retrieve</param>

@@ -9,7 +9,7 @@ namespace Merchello.Core.Persistence.Repositories
     /// <summary>
     /// Marker interface for the basket repository
     /// </summary>
-    public interface IBasketRepository : IRepository<int, IBasket>
+    public interface IBasketRepository : IRepositoryQueryable<int, IBasket>
     {
         /// <summary>
         /// Returns the consumer's basket of a given type

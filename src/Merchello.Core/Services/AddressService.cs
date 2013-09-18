@@ -248,15 +248,6 @@ namespace Merchello.Core.Services
         /// </summary>
         public static event TypedEventHandler<IAddressService, NewEventArgs<IAddress>> Created;
 
-        /// <summary>
-        /// Occurs before Converting anonymous users to Address
-        /// </summary>
-        public static event TypedEventHandler<IAddressService, ConvertEventArgs<IAddress>> Converting;
-
-        /// <summary>
-        /// Occurs after Converting anonymous users to Address
-        /// </summary>
-        public static event TypedEventHandler<IAddressService, ConvertEventArgs<IAddress>> Converted;
 
         #endregion
 

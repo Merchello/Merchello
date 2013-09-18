@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using Merchello.Core.Events;
@@ -139,6 +140,55 @@ namespace Merchello.Tests.IntegrationTests.Services
             Assert.AreEqual(shipment.Address1, updatedShipment.Address1);
             Assert.IsTrue(string.IsNullOrEmpty(shipment.Address2));
         }
+
+        [Test]
+        public void Can_Get_A_List_Of_ShipMethod_Shipments()
+        {
+            var nullShipMethodShipments = new List<IShipment>()
+            {
+                new Shipment(_invoice.Id),
+                new Shipment(_invoice.Id),
+                new Shipment(_invoice.Id),
+                new Shipment(_invoice.Id)
+            };
+
+            _shipmentService.Save(nullShipMethodShipments);
+
+            var shipment = _shipmentService.CreateShipment(_shipMethod, _invoice, AddressData.MindflyAddressForInserting());
+            _shipmentService.Save(shipment);
+
+            var shipments = _shipmentService.GetShipmentsForShipMethod(_shipMethod.Id);
+
+            Assert.IsTrue(shipments.Any());
+
+            var ids = shipments.Select(x => x.ShipMethodId).Distinct();
+
+            Assert.IsTrue(ids.Count() == 1);
+            Assert.IsTrue(ids.First() == _shipMethod.Id);
+        }
+
+        [Test]
+        public void Can_Get_A_List_Of_Invoice_Shipments()
+        {
+            var nullShipMethodShipments = new List<IShipment>()
+            {
+                new Shipment(_invoice.Id),
+                new Shipment(_invoice.Id),
+                new Shipment(_invoice.Id),
+                new Shipment(_invoice.Id)
+            };
+
+            _shipmentService.Save(nullShipMethodShipments);
+
+            var shipments = _shipmentService.GetShipmentsForInvoice(_invoice.Id);
+
+            Assert.IsTrue(shipments.Any());
+
+            var ids = shipments.Select(x => x.Id).Distinct();
+
+            Assert.IsTrue(ids.Count() == 4);
+        }
+
 
     }
 }

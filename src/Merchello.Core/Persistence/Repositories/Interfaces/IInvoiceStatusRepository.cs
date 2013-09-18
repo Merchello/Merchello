@@ -7,7 +7,7 @@ namespace Merchello.Core.Persistence.Repositories
     /// <summary>
     /// Marker interface for the invoice status repository
     /// </summary>
-    public interface IInvoiceStatusRepository : IRepository<int, IInvoiceStatus>
+    public interface IInvoiceStatusRepository : IRepositoryQueryable<int, IInvoiceStatus>
     {
     }
 }
