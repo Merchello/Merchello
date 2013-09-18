@@ -51,6 +51,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper">
+      <HintPath>..\packages\AutoMapper.2.2.1\lib\net40\AutoMapper.dll</HintPath>
+    </Reference>
     <Reference Include="MiniProfiler">
       <HintPath>..\packages\MiniProfiler.2.1.0\lib\net40\MiniProfiler.dll</HintPath>
     </Reference>
@@ -114,6 +117,7 @@
     <Compile Include="Models\IShipment.cs" />
     <Compile Include="Models\IShipMethod.cs" />
     <Compile Include="Models\ITransaction.cs" />
+    <Compile Include="Models\IWarehouse.cs" />
     <Compile Include="Models\Page.cs" />
     <Compile Include="Models\Payment.cs" />
     <Compile Include="Models\Product.cs" />
@@ -140,6 +144,7 @@
     <Compile Include="Models\TypeFields\EnumeratedTypeFieldConverter.cs" />
     <Compile Include="Cache\ObjectCacheRuntimeCacheProvider.cs" />
     <Compile Include="Cache\StaticCacheProvider.cs" />
+    <Compile Include="Models\Warehouse.cs" />
     <Compile Include="ObjectResolution\Resolution.cs" />
     <Compile Include="Persistence\Factories\AnonymousCustomerFactory.cs" />
     <Compile Include="Persistence\Factories\BasketFactory.cs" />
@@ -152,6 +157,7 @@
     <Compile Include="Persistence\Factories\ShipmentFactory.cs" />
     <Compile Include="Persistence\Factories\ShipMethodFactory.cs" />
     <Compile Include="Persistence\Factories\TransactionFactory.cs" />
+    <Compile Include="Persistence\Factories\WarehouseFactory.cs" />
     <Compile Include="Persistence\Mappers\AnonymousCustomerMapper.cs" />
     <Compile Include="Persistence\Mappers\BasketItemMapper.cs" />
     <Compile Include="Persistence\Mappers\BasketMapper.cs" />
@@ -179,6 +185,7 @@
     <Compile Include="Persistence\Repositories\Interfaces\IShipmentRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IShipMethodRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\ITransactionRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IWarehouseRepository.cs" />
     <Compile Include="Persistence\Repositories\InvoiceItemRepository.cs" />
     <Compile Include="Persistence\Repositories\InvoiceRepository.cs" />
     <Compile Include="Persistence\Repositories\InvoiceStatusRepository.cs" />
@@ -187,6 +194,7 @@
     <Compile Include="Persistence\Repositories\ShipmentRepository.cs" />
     <Compile Include="Persistence\Repositories\ShipMethodRepository.cs" />
     <Compile Include="Persistence\Repositories\TransactionRepository.cs" />
+    <Compile Include="Persistence\Repositories\WarehouseRepository.cs" />
     <Compile Include="Services\AnonymousCustomerService.cs" />
     <Compile Include="Services\BasketItemService.cs" />
     <Compile Include="Services\BasketService.cs" />
@@ -204,6 +212,7 @@
     <Compile Include="Services\Interfaces\IShipmentService.cs" />
     <Compile Include="Services\Interfaces\IShipMethodService.cs" />
     <Compile Include="Services\Interfaces\ITransactionService.cs" />
+    <Compile Include="Services\Interfaces\IWarehouseService.cs" />
     <Compile Include="Services\InvoiceItemService.cs" />
     <Compile Include="Services\InvoiceService.cs" />
     <Compile Include="Services\InvoiceStatusService.cs" />
@@ -299,7 +308,9 @@
     <Compile Include="Services\Interfaces\ICustomerService.cs" />
     <Compile Include="Services\ServiceContext.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

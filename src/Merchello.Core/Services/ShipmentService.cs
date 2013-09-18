@@ -6,6 +6,7 @@ using Merchello.Core.Models;
 using Merchello.Core.Models.TypeFields;
 using Merchello.Core.Persistence;
 using Merchello.Core.Events;
+using Merchello.Core.Persistence.Querying;
 using Umbraco.Core;
 using Umbraco.Core.Persistence.UnitOfWork;
 
@@ -187,6 +188,35 @@ namespace Merchello.Core.Services
             }
         }
 
+
+        /// <summary>
+        /// Gets a list of all shipments for a given ship method
+        /// </summary>
+        /// <param name="shipMethodId">The id of the ship method</param>
+        /// <returns>A collection of <see cref="IShipment"/></returns>
+        public IEnumerable<IShipment> GetShipmentsForShipMethod(int shipMethodId)
+        {
+            using (var repository = _repositoryFactory.CreateShipmentRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Query<IShipment>.Builder.Where(x => x.ShipMethodId == shipMethodId);
+                return repository.GetByQuery(query);                
+            }
+        }
+
+        /// <summary>
+        /// Gets a list fo all shipments for a given invoice
+        /// </summary>
+        /// <param name="invoiceId"></param>
+        /// <returns></returns>
+        public IEnumerable<IShipment> GetShipmentsForInvoice(int invoiceId)
+        {
+            using (var repository = _repositoryFactory.CreateShipmentRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Query<IShipment>.Builder.Where(x => x.InvoiceId == invoiceId);                
+                return repository.GetByQuery(query);                
+            }
+        }
+
         /// <summary>
         /// Gets a list of Shipment give a list of unique keys
         /// </summary>
@@ -233,10 +263,6 @@ namespace Merchello.Core.Services
         /// </summary>
         public static event TypedEventHandler<IShipmentService, SaveEventArgs<IShipment>> Saved;
 
-        /// <summary>
-        /// Occurs before Create
-        /// </summary>
-        public static event TypedEventHandler<IShipmentService, NewEventArgs<IShipment>> Creating;
 
         /// <summary>
         /// Occurs after Create

@@ -28,6 +28,7 @@ namespace Merchello.Core.Persistence.Mappers
                 { typeof(IInvoiceStatus), typeof(InvoiceStatusMapper) },
                 { typeof(IPayment), typeof(PaymentMapper) },
                 { typeof(ITransaction), typeof(TransactionMapper) },
+                { typeof(IShipment), typeof(ShipmentMapper) },
                 { typeof(IShipMethod), typeof(ShipMethodMapper) }
             };
 

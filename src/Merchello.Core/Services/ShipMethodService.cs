@@ -224,11 +224,6 @@ namespace Merchello.Core.Services
         public static event TypedEventHandler<IShipMethodService, SaveEventArgs<IShipMethod>> Saved;
 
         /// <summary>
-        /// Occurs before Create
-        /// </summary>
-        public static event TypedEventHandler<IShipMethodService, NewEventArgs<IShipMethod>> Creating;
-
-        /// <summary>
         /// Occurs after Create
         /// </summary>
         public static event TypedEventHandler<IShipMethodService, NewEventArgs<IShipMethod>> Created;

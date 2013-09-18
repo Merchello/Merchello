@@ -111,7 +111,15 @@ namespace Merchello.Core.Services
         public IProductService ProductService
         {
             get { return _productService.Value;  }
-        }       
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IAddressService"/>
+        /// </summary>
+        public IAddressService AddressService
+        {
+            get { return _addressService.Value;  }
+        }
 
         #endregion
     }

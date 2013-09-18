@@ -112,7 +112,7 @@ namespace Merchello.Core.Persistence
         /// <returns></returns>
         internal virtual IShipmentRepository CreateShipmentRepository(IDatabaseUnitOfWork uow)
         {
-            return new ShipmentRepository(uow, NullCacheProvider.Current);
+            return new ShipmentRepository(uow, RuntimeCacheProvider.Current);
         }
 
         /// <summary>

@@ -6,6 +6,7 @@ using Merchello.Core.Models;
 using Merchello.Core.Models.TypeFields;
 using Merchello.Core.Persistence;
 using Merchello.Core.Events;
+using Merchello.Core.Persistence.Querying;
 using Umbraco.Core;
 using Umbraco.Core.Persistence.UnitOfWork;
 
@@ -186,6 +187,20 @@ namespace Merchello.Core.Services
             using (var repository = _repositoryFactory.CreatePaymentRepository(_uowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll(ids.ToArray());
+            }
+        }
+
+        /// <summary>
+        /// Gets a list of <see cref="IPayment"/> for a customer
+        /// </summary>
+        /// <param name="customerKey">The key of for the customer</param>
+        /// <returns>A collection of <see cref="IPayment"/></returns>
+        public IEnumerable<IPayment> GetPaymentsByCustomer(Guid customerKey)
+        {
+            using (var repository = _repositoryFactory.CreatePaymentRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Query<IPayment>.Builder.Where(x => x.CustomerKey == customerKey);
+                return repository.GetByQuery(query);
             }
         }
 

@@ -8,23 +8,23 @@ using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Core.Persistence.Repositories
 {
-    /// <summary>
-    /// Represent an abstract Repository for PetaPoco based repositories
-    /// </summary>
-    /// <typeparam name="TId"></typeparam>
-    /// <typeparam name="TEntity"></typeparam>
-    internal abstract class MerchelloPetaPocoRepositoryBase<TId, TEntity> : MerchelloRepositoryBase<TId, TEntity>
-        where TEntity : class, ISingularRoot
-    {
+	/// <summary>
+	/// Represent an abstract Repository for PetaPoco based repositories
+	/// </summary>
+	/// <typeparam name="TId"></typeparam>
+	/// <typeparam name="TEntity"></typeparam>
+	internal abstract class MerchelloPetaPocoRepositoryBase<TId, TEntity> : MerchelloRepositoryBase<TId, TEntity>
+		where TEntity : class, ISingularRoot
+	{
 		protected MerchelloPetaPocoRepositoryBase(IDatabaseUnitOfWork work)
 			: base(work)
-        {
-        }
+		{
+		}
 
-        protected MerchelloPetaPocoRepositoryBase(IDatabaseUnitOfWork work, IRepositoryCacheProvider cache)
+		protected MerchelloPetaPocoRepositoryBase(IDatabaseUnitOfWork work, IRepositoryCacheProvider cache)
 			: base(work, cache)
-        {
-        }
+		{
+		}
 
 		/// <summary>
 		/// Returns the database Unit of Work added to the repository
@@ -35,44 +35,44 @@ namespace Merchello.Core.Persistence.Repositories
 		}
 
 		protected UmbracoDatabase Database
-        {
-            get { return UnitOfWork.Database; }			
-        }
+		{
+			get { return UnitOfWork.Database; }			
+		}
 
-        #region Abstract Methods
-        
-        protected abstract Sql GetBaseQuery(bool isCount);
-        protected abstract string GetBaseWhereClause();
-        protected abstract IEnumerable<string> GetDeleteClauses();
-        protected abstract override void PersistNewItem(TEntity entity);
-        protected abstract override void PersistUpdatedItem(TEntity entity);
+		#region Abstract Methods
+		
+		protected abstract Sql GetBaseQuery(bool isCount);
+		protected abstract string GetBaseWhereClause();
+		protected abstract IEnumerable<string> GetDeleteClauses();
+		protected abstract override void PersistNewItem(TEntity entity);
+		protected abstract override void PersistUpdatedItem(TEntity entity);
 
-        #endregion
+		#endregion
 
-        protected override bool PerformExists(TId id)
-        {
-            var sql = GetBaseQuery(true);
-            sql.Where(GetBaseWhereClause(), new { Id = id});
-            var count = Database.ExecuteScalar<int>(sql);
-            return count == 1;
-        }
+		protected override bool PerformExists(TId id)
+		{
+			var sql = GetBaseQuery(true);
+			sql.Where(GetBaseWhereClause(), new { Id = id});
+			var count = Database.ExecuteScalar<int>(sql);
+			return count == 1;
+		}
 
-        protected override int PerformCount(IQuery<TEntity> query)
-        {
-            var sqlClause = GetBaseQuery(true);
-            var translator = new SqlTranslator<TEntity>(sqlClause, query);
-            var sql = translator.Translate();
+		protected override int PerformCount(IQuery<TEntity> query)
+		{
+			var sqlClause = GetBaseQuery(true);
+			var translator = new SqlTranslator<TEntity>(sqlClause, query);
+			var sql = translator.Translate();
 
-            return Database.ExecuteScalar<int>(sql);
-        }
+			return Database.ExecuteScalar<int>(sql);
+		}
 
-        protected override void PersistDeletedItem(TEntity entity)
-        {
-            var deletes = GetDeleteClauses();
-            foreach (var delete in deletes)
-            {
-                Database.Execute(delete, new {Id = entity.Id});
-            }
-        }
-    }
+		protected override void PersistDeletedItem(TEntity entity)
+		{
+			var deletes = GetDeleteClauses();
+			foreach (var delete in deletes)
+			{
+				Database.Execute(delete, new {Id = entity.Id});
+			}
+		}
+	}
 }

@@ -136,7 +136,7 @@ namespace Merchello.Core.Persistence.Repositories
             var translator = new SqlTranslator<IShipment>(sqlClause, query);
             var sql = translator.Translate();
 
-            var dtos = Database.Fetch<ShipmentDto, ShipMethodDto>(sql);
+            var dtos = Database.Fetch<ShipmentDto>(sql);
 
             return dtos.DistinctBy(x => x.Id).Select(dto => Get(dto.Id));
 
