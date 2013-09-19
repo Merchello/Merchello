@@ -47,15 +47,12 @@ namespace Merchello.Tests.UnitTests.WebControllers
             var MockProductService = new Mock<IProductService>();
             MockProductService.Setup(cs => cs.GetByKey(productKey)).Returns(product);
 
-            var MockServiceContext = new Mock<IServiceContext>();
-            MockServiceContext.SetupGet(sc => sc.ProductService).Returns(MockProductService.Object);
-
-            MerchelloContext merchelloContext = new MerchelloContext(MockServiceContext.Object, null);
+            MerchelloContext merchelloContext = GetMerchelloContext(MockProductService.Object);
 
             ProductApiController ctrl = new ProductApiController(merchelloContext, tempUmbracoContext);
 
             //// Act
-            var result = ctrl.Get(productKey);
+            var result = ctrl.GetProduct(productKey);
 
             //// Assert
             Assert.AreEqual(result, product);
@@ -73,17 +70,13 @@ namespace Merchello.Tests.UnitTests.WebControllers
             var MockProductService = new Mock<IProductService>();
             MockProductService.Setup(cs => cs.GetByKey(productKey)).Returns((Product)null);
 
-            var MockServiceContext = new Mock<IServiceContext>();
-            MockServiceContext.SetupGet(sc => sc.ProductService).Returns(MockProductService.Object);
-
-            MerchelloContext merchelloContext = new MerchelloContext(MockServiceContext.Object, null);
+            MerchelloContext merchelloContext = GetMerchelloContext(MockProductService.Object);
 
             ProductApiController ctrl = new ProductApiController(merchelloContext, tempUmbracoContext);
 
             //// Act & Assert
-            var ex = Assert.Throws<HttpResponseException>(() => ctrl.Get(Guid.Empty));
+            var ex = Assert.Throws<HttpResponseException>(() => ctrl.GetProduct(Guid.Empty));
         }
-
 
         /// <summary>
         /// Test to verify that the API gets the correct Products from the passed in Keys
@@ -110,15 +103,12 @@ namespace Merchello.Tests.UnitTests.WebControllers
             var MockProductService = new Mock<IProductService>();
             MockProductService.Setup(cs => cs.GetByKeys(productKeys)).Returns(productsList);
 
-            var MockServiceContext = new Mock<IServiceContext>();
-            MockServiceContext.SetupGet(sc => sc.ProductService).Returns(MockProductService.Object);
-
-            MerchelloContext merchelloContext = new MerchelloContext(MockServiceContext.Object, null);
+            MerchelloContext merchelloContext = GetMerchelloContext(MockProductService.Object);
 
             ProductApiController ctrl = new ProductApiController(merchelloContext, tempUmbracoContext);
 
             //// Act
-            var result = ctrl.Get(productKeys);
+            var result = ctrl.GetProducts(productKeys);
 
             //// Assert
             Assert.AreEqual(result, productsList);
@@ -138,15 +128,12 @@ namespace Merchello.Tests.UnitTests.WebControllers
             var MockProductService = new Mock<IProductService>();
             MockProductService.Setup(cs => cs.Save(product, It.IsAny<bool>())).Callback(() => wasCalled = true);
 
-            var MockServiceContext = new Mock<IServiceContext>();
-            MockServiceContext.SetupGet(sc => sc.ProductService).Returns(MockProductService.Object);
-
-            MerchelloContext merchelloContext = new MerchelloContext(MockServiceContext.Object, null);
+            MerchelloContext merchelloContext = GetMerchelloContext(MockProductService.Object);
 
             ProductApiController ctrl = new ProductApiController(merchelloContext, tempUmbracoContext);
 
             //// Act
-            HttpResponseMessage response = ctrl.Put(productKey, product);
+            HttpResponseMessage response = ctrl.SaveProduct(product);
 
             //// Assert
             Assert.AreEqual(response.StatusCode, System.Net.HttpStatusCode.OK);
@@ -167,15 +154,12 @@ namespace Merchello.Tests.UnitTests.WebControllers
             var MockProductService = new Mock<IProductService>();
             MockProductService.Setup(cs => cs.Save(product, It.IsAny<bool>())).Throws<InvalidOperationException>();
 
-            var MockServiceContext = new Mock<IServiceContext>();
-            MockServiceContext.SetupGet(sc => sc.ProductService).Returns(MockProductService.Object);
-
-            MerchelloContext merchelloContext = new MerchelloContext(MockServiceContext.Object, null);
+            MerchelloContext merchelloContext = GetMerchelloContext(MockProductService.Object);
 
             ProductApiController ctrl = new ProductApiController(merchelloContext, tempUmbracoContext);
 
             //// Act
-            HttpResponseMessage response = ctrl.Put(productKey, product);
+            HttpResponseMessage response = ctrl.SaveProduct(product);
 
             //// Assert
             Assert.AreEqual(response.StatusCode, System.Net.HttpStatusCode.InternalServerError);
@@ -196,10 +180,7 @@ namespace Merchello.Tests.UnitTests.WebControllers
             var MockProductService = new Mock<IProductService>();
             MockProductService.Setup(cs => cs.Delete(product, It.IsAny<bool>())).Callback<IProduct, bool>((p, b) => removedKey = p.Key);
 
-            var MockServiceContext = new Mock<IServiceContext>();
-            MockServiceContext.SetupGet(sc => sc.ProductService).Returns(MockProductService.Object);
-
-            MerchelloContext merchelloContext = new MerchelloContext(MockServiceContext.Object, null);
+            MerchelloContext merchelloContext = GetMerchelloContext(MockProductService.Object);
 
             ProductApiController ctrl = new ProductApiController(merchelloContext, tempUmbracoContext);
 
@@ -226,10 +207,7 @@ namespace Merchello.Tests.UnitTests.WebControllers
             var MockProductService = new Mock<IProductService>();
             MockProductService.Setup(cs => cs.CreateProduct(product.Sku, product.Name, product.Price)).Returns(product).Callback(() => wasCalled = true);
 
-            var MockServiceContext = new Mock<IServiceContext>();
-            MockServiceContext.SetupGet(sc => sc.ProductService).Returns(MockProductService.Object);
-
-            MerchelloContext merchelloContext = new MerchelloContext(MockServiceContext.Object, null);
+            MerchelloContext merchelloContext = GetMerchelloContext(MockProductService.Object);
 
             ProductApiController ctrl = new ProductApiController(merchelloContext, tempUmbracoContext);
 
@@ -241,7 +219,22 @@ namespace Merchello.Tests.UnitTests.WebControllers
             Assert.True(wasCalled);
         }
 
+        #region ServicesSetup
 
+        /// <summary>
+        /// Setup the Mocks and get a MerchelloContext
+        /// </summary>
+        /// <param name="mockProductService"></param>
+        /// <returns>MerchelloContext</returns>
+        private MerchelloContext GetMerchelloContext(IProductService mockProductService)
+        {
+            var MockServiceContext = new Mock<IServiceContext>();
+            MockServiceContext.SetupGet(sc => sc.ProductService).Returns(mockProductService);
+
+            return new MerchelloContext(MockServiceContext.Object, null);
+        }
+
+        #endregion
 
         #region ProductSetup
 
