@@ -8,16 +8,15 @@ namespace Merchello.Tests.IntegrationTests.Services
 {
     [TestFixture]
     [Category("Service Integration")]
-    public class InvoiceStatusServiceTests : BaseUsingSqlServerSyntax
+    public class InvoiceStatusServiceTests : ServiceIntegrationTestBase
     {
 
         private IInvoiceStatusService _invoiceStatusService;
         private IInvoiceStatus _createdStatus;
 
         [SetUp]
-        public override void Initialize()
+        public void Initialize()
         {
-            base.Initialize();
 
             _invoiceStatusService = new InvoiceStatusService();
             _createdStatus = null;

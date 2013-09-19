@@ -1,20 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
-using Merchello.Tests.Base.Data;
-using Merchello.Tests.Base.SqlSyntax;
+using Merchello.Tests.Base.DataMakers;
 using NUnit.Framework;
 
 namespace Merchello.Tests.IntegrationTests.Services
 {
     [TestFixture]
     [Category("Service Integration")]
-    public class TransactionServiceTests : BaseUsingSqlServerSyntax
+    public class TransactionServiceTests : ServiceIntegrationTestBase
     {
         private ITransactionService _transactionService;
         private IPayment _payment;
@@ -22,20 +19,20 @@ namespace Merchello.Tests.IntegrationTests.Services
         private ICustomer _customer;
 
         [SetUp]
-        public override void Initialize()
+        public void Initialize()
         {
-            base.Initialize();
+            
 
             _transactionService = new TransactionService();
 
-            _customer = CustomerData.CustomerForInserting();
+            _customer = MockCustomerDataMaker.CustomerForInserting();
             var customerService = new CustomerService();
             customerService.Save(_customer);
 
             var invoiceService = new InvoiceService();
                        
 
-            _invoice = invoiceService.CreateInvoice(_customer, InvoiceData.InvoiceStatusUnpaidMock(), Guid.NewGuid().ToString().Substring(0, 5), "Joe",
+            _invoice = invoiceService.CreateInvoice(_customer, MockInvoiceDataMaker.InvoiceStatusUnpaidMock(), Guid.NewGuid().ToString().Substring(0, 5), "Joe",
                 "somewhere", string.Empty, "somewhere", "us", "98225", "us", "temp@temp.com", "5555555555",
                 "company name");
             invoiceService.Save(_invoice);

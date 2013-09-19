@@ -38,7 +38,7 @@ namespace Merchello.Core.Persistence.Factories
                 Id = entity.Id,
                 CustomerKey = entity.CustomerKey,
                 Label = entity.Label,
-                FullName = entity.Label,
+                FullName = entity.FullName,
                 Company = entity.Company,
                 AddressTypeFieldKey = entity.AddressTypeFieldKey,
                 Address1 = entity.Address1,

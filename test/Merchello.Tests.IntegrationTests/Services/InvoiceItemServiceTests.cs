@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Core.Persistence.Migrations.Initial;
 using Merchello.Core.Services;
-using Merchello.Tests.Base.Data;
-using Merchello.Tests.Base.SqlSyntax;
+using Merchello.Tests.Base.DataMakers;
 using NUnit.Framework;
 using Umbraco.Core.Persistence.UnitOfWork;
 
@@ -16,7 +12,7 @@ namespace Merchello.Tests.IntegrationTests.Services
 {
     [TestFixture]
     [Category("Service Integration")]
-    public class InvoiceItemServiceTests : BaseUsingSqlServerSyntax
+    public class InvoiceItemServiceTests : ServiceIntegrationTestBase
     {
         private IInvoiceService _invoiceService;
         private ICustomer _customer;
@@ -25,10 +21,8 @@ namespace Merchello.Tests.IntegrationTests.Services
         private IInvoice _invoice;
 
         [SetUp]
-        public override void Initialize()
+        public void Initialize()
         {
-            base.Initialize();
-
             var invoiceStatusService = new InvoiceStatusService();
             _statuses = invoiceStatusService.GetAll();
             if (!_statuses.Any())
@@ -39,7 +33,7 @@ namespace Merchello.Tests.IntegrationTests.Services
                 _statuses = invoiceStatusService.GetAll();
             }
 
-            _customer = CustomerData.CustomerForInserting();
+            _customer = MockCustomerDataMaker.CustomerForInserting();
             var customerService = new CustomerService();
 
             customerService.Save(_customer);

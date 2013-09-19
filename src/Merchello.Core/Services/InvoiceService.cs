@@ -56,6 +56,8 @@ namespace Merchello.Core.Services
         {
             var invoice = new Invoice(customer, address, invoiceStatus, 0)
             {
+                InvoiceNumber =  invoiceNumber,
+                InvoiceDate = DateTime.Now,
                 Exported = false,
                 Paid = false,
                 Shipped = false

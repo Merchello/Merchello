@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Merchello.Core.Models;
-using Merchello.Core.Models.Rdbms;
+﻿using Merchello.Core.Models.Rdbms;
 using Merchello.Tests.Base.SqlSyntax;
 using NUnit.Framework;
 using Umbraco.Core.Persistence;
@@ -12,12 +6,15 @@ using Umbraco.Core.Persistence;
 namespace Merchello.Tests.UnitTests.Querying
 {
     [TestFixture]
-    public class InvoiceRelatedSqlClausesTest  : BaseUsingSqlServerSyntax
+    public class InvoiceSqlClausesTest  : BaseUsingSqlServerSyntax
     {
-
+        /// <summary>
+        /// Test to verify that the typed <see cref="InvoiceDto"/> query matches generic "select * ..." query 
+        /// </summary>
         [Test]
         public void Can_Verify_Invoice_Base_Sql_Clause()
         {
+            //// Arrange
             var id = 10;
 
             var expected = new Sql();
@@ -27,6 +24,7 @@ namespace Merchello.Tests.UnitTests.Querying
                 .InnerJoin("[merchInvoiceStatus]").On("[merchInvoiceStatus].[id] = [merchInvoice].[invoiceStatusId]")
                 .Where("[merchInvoice].[id] = " + id.ToString());
 
+            //// Act
             var sql = new Sql();
             sql.Select("*")
                 .From<InvoiceDto>()
@@ -36,29 +34,9 @@ namespace Merchello.Tests.UnitTests.Querying
                 .On<InvoiceStatusDto, InvoiceDto>(left => left.Id, right => right.InvoiceStatusId)
                 .Where<InvoiceDto>(x => x.Id == id);
 
-
+            //// Assert
             Assert.That(sql.SQL, Is.EqualTo(expected.SQL));
         }
-
-
-        [Test]
-        public void Can_Verify_InvoiceStatus_Base_Sql_Clause()
-        {
-            var id = 1;
-
-            var expected = new Sql();
-            expected.Select("*")
-                .From("[merchInvoiceStatus]")
-                .Where("[merchInvoiceStatus].[id] = " + id.ToString());
-
-            var sql = new Sql();
-            sql.Select("*")
-                .From<InvoiceStatusDto>()
-                .Where<InvoiceStatusDto>(x => x.Id == id);
-
-            Assert.That(sql.SQL, Is.EqualTo(expected.SQL));
-        }
-
         
     }
 }

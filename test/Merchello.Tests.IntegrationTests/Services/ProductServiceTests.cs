@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Merchello.Core.Events;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
-using Merchello.Tests.Base.Data;
-using Merchello.Tests.Base.SqlSyntax;
+using Merchello.Tests.Base.DataMakers;
 using NUnit.Framework;
 
 namespace Merchello.Tests.IntegrationTests.Services
 {
     [TestFixture]
     [Category("Service Integration")]
-    public class ProductServiceTests  : BaseUsingSqlServerSyntax
+    public class ProductServiceTests : ServiceIntegrationTestBase
     {
         private IProductService _productService;
 
@@ -27,19 +23,19 @@ namespace Merchello.Tests.IntegrationTests.Services
         [Test]
         public void Can_Create_A_Product()
         {
-            var sku = ProductData.MockSku();
-            
-            var expected = ProductData.MockProductForInserting(sku);
+            var sku = MockProductDataMaker.MockSku();
+
+            var expected = MockProductDataMaker.MockProductForInserting(sku, "fake product", 15.00m);
 
             var product = _productService.CreateProduct(sku, "fake product", 15.00m);
 
-          Assert.AreEqual(expected.Key, product.Key);
+            Assert.AreEqual(expected.Name, product.Name);
         }
 
         [Test]
         public void Can_Save_A_Product()
         {
-            var product = ProductData.MockProductForInserting(ProductData.MockSku());
+            var product = MockProductDataMaker.MockProductForInserting();
 
             _productService.Save(product);
 
@@ -58,10 +54,10 @@ namespace Merchello.Tests.IntegrationTests.Services
 
             var products = new List<IProduct>()
             {
-                ProductData.MockProductForInserting(ProductData.MockSku()),
-                ProductData.MockProductForInserting(ProductData.MockSku()),
-                ProductData.MockProductForInserting(ProductData.MockSku()),
-                ProductData.MockProductForInserting(ProductData.MockSku())
+                MockProductDataMaker.MockProductForInserting(),
+                MockProductDataMaker.MockProductForInserting(),
+                MockProductDataMaker.MockProductForInserting(),
+                MockProductDataMaker.MockProductForInserting()
             };
 
             _productService.Save(products);
@@ -79,7 +75,7 @@ namespace Merchello.Tests.IntegrationTests.Services
                 deletedProduct = args.DeletedEntities.FirstOrDefault();
             };
 
-            var product = ProductData.MockProductForInserting(ProductData.MockSku());
+            var product = MockProductDataMaker.MockProductForInserting();
             _productService.Save(product);
 
             Assert.IsTrue(product.HasIdentity);
@@ -101,7 +97,7 @@ namespace Merchello.Tests.IntegrationTests.Services
                     updatedProduct = args.SavedEntities.FirstOrDefault();
                 };
 
-            var product = ProductData.MockProductForInserting(ProductData.MockSku());
+            var product = MockProductDataMaker.MockProductForInserting();
 
             _productService.Save(product);
 

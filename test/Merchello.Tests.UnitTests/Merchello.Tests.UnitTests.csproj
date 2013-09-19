@@ -212,12 +212,16 @@
     <Compile Include="Contexts\MerchelloBootstrapperTests.cs" />
     <Compile Include="Mappers\MerchelloMapperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Querying\AddressSqlClausesTests.cs" />
     <Compile Include="Querying\BasketSqlClausesTest.cs" />
-    <Compile Include="Querying\CustomerRelatedSqlClausesTest.cs" />
-    <Compile Include="Querying\InvoiceRelatedSqlClausesTest.cs" />
-    <Compile Include="Querying\PaymentRelatedSqlClausesTests.cs" />
+    <Compile Include="Querying\CustomerSqlClausesTest.cs" />
+    <Compile Include="Querying\InvoiceSqlClausesTest.cs" />
+    <Compile Include="Querying\InvoiceStatusSqlClausesTests.cs" />
+    <Compile Include="Querying\PaymentSqlClausesTests.cs" />
     <Compile Include="Querying\ProductRelatedSqlClausesTests.cs" />
     <Compile Include="Querying\ShipmentSqlClausesTest.cs" />
+    <Compile Include="Querying\ShipMethodSqlClausesTests.cs" />
+    <Compile Include="Querying\TransactionSqlClauseTests.cs" />
     <Compile Include="Repository\AddressRepositoryTests.cs" />
     <Compile Include="Repository\CustomerRepositoryTests.cs" />
     <Compile Include="Services\AddressServiceTests.cs" />
@@ -257,7 +261,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Factory\" />
     <Folder Include="Strategy\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

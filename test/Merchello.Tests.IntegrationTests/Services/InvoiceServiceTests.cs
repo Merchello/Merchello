@@ -4,8 +4,7 @@ using System.Linq;
 using Merchello.Core.Models;
 using Merchello.Core.Persistence.Migrations.Initial;
 using Merchello.Core.Services;
-using Merchello.Tests.Base.Data;
-using Merchello.Tests.Base.SqlSyntax;
+using Merchello.Tests.Base.DataMakers;
 using NUnit.Framework;
 using Umbraco.Core.Persistence.UnitOfWork;
 
@@ -13,7 +12,7 @@ namespace Merchello.Tests.IntegrationTests.Services
 {
     [TestFixture]
     [Category("Service Integration")]
-    public class InvoiceServiceTests : BaseUsingSqlServerSyntax
+    public class InvoiceServiceTests : ServiceIntegrationTestBase
     {
 
         private IInvoiceService _invoiceService;
@@ -22,10 +21,9 @@ namespace Merchello.Tests.IntegrationTests.Services
             
             
         [SetUp]
-        public override void Initialize()
+        public void Initialize()
         {
-            base.Initialize();
-
+            
             var invoiceStatusService = new InvoiceStatusService();
                 _statuses = invoiceStatusService.GetAll();
             if (!_statuses.Any())
@@ -36,21 +34,19 @@ namespace Merchello.Tests.IntegrationTests.Services
                 _statuses = invoiceStatusService.GetAll();
             }
 
-            _customer = CustomerData.CustomerForInserting();
+            _customer = MockCustomerDataMaker.CustomerForInserting();
             var customerService = new CustomerService();
 
             customerService.Save(_customer);
 
             _invoiceService = new InvoiceService();
 
-     
         }
 
         [Test]
         public void Can_Create_And_Save_An_Invoice()
         {
-            var all = ((InvoiceService)_invoiceService).GetAll().ToArray();
-            _invoiceService.Delete(all);
+            PreTestDataWorker.DeleteAllInvoices();
 
             var unpaid = _statuses.FirstOrDefault(x => x.Alias == "unpaid");
 
@@ -66,8 +62,7 @@ namespace Merchello.Tests.IntegrationTests.Services
         [Test]
         public void Can_Get_An_Invoice_By_Id()
         {
-            var all = ((InvoiceService)_invoiceService).GetAll().ToArray();
-            _invoiceService.Delete(all);
+            PreTestDataWorker.DeleteAllInvoices();
 
             var unpaid = _statuses.FirstOrDefault(x => x.Alias == "unpaid");
 

@@ -1,33 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
-using Merchello.Tests.Base.Data;
-using Merchello.Tests.Base.SqlSyntax;
+using Merchello.Tests.Base.DataMakers;
 using NUnit.Framework;
 
 namespace Merchello.Tests.IntegrationTests.Services
 {
     [TestFixture]
     [Category("Service Integration")]
-    public class PaymentServiceTests : BaseUsingSqlServerSyntax
+    public class PaymentServiceTests : ServiceIntegrationTestBase
     {
 
         private IPaymentService _paymentService;
         private ICustomer _customer;
 
         [SetUp]
-        public override void Initialize()
+        public void Initialize()
         {
-            base.Initialize();
-
             _paymentService = new PaymentService();
             
-            _customer = CustomerData.CustomerForInserting();
+            _customer = MockCustomerDataMaker.CustomerForInserting();
             var customerService = new CustomerService();
 
             customerService.Save(_customer);
