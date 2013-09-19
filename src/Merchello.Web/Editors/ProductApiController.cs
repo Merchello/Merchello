@@ -52,35 +52,62 @@ namespace Merchello.Web.Editors
         /// <summary>
         /// Returns Product by id (key)
         /// 
-        /// GET /umbraco/Merchello/ProductApi?key={guid}
+        /// GET /umbraco/Merchello/ProductApi/GetProduct?key={guid}
         /// </summary>
         /// <param name="key"></param>
-        public Product Get(Guid key)
+        public Product GetProduct(Guid key)
         {
-            var product = _productService.GetByKey(key) as Product;
-            if (product == null)
+            if (key != null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
-            }
+                var product = _productService.GetByKey(key) as Product;
+                if (product == null)
+                {
+                    throw new HttpResponseException(HttpStatusCode.NotFound);
+                }
 
-            return product;
+                return product;
+            }
+            else
+            {
+                var resp = new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    Content = new StringContent(string.Format("Parameter key is null")),
+                    ReasonPhrase = "Invalid Parameter"
+                };
+                throw new HttpResponseException(resp);
+            }
         }
 
         /// <summary>
         /// Returns Product by keys separated by a comma
         /// 
-        /// GET /umbraco/Merchello/ProductApi?keys={guid},{guid}
+        /// GET /umbraco/Merchello/ProductApi/GetProducts?keys={guid}&keys={guid}
         /// </summary>
         /// <param name="keys"></param>
-        public List<Product> Get(IEnumerable<Guid> keys)
+        public IEnumerable<Product> GetProducts([FromUri]IEnumerable<Guid> keys)
         {
-            var products = _productService.GetByKeys(keys) as List<Product>;
-            if (products == null)
+            if (keys != null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
-            }
+                var products = _productService.GetByKeys(keys);
+                if (products == null)
+                {
+                    throw new HttpResponseException(HttpStatusCode.NotFound);
+                }
 
-            return products;
+                foreach(IProduct product in products)
+                {
+                    yield return product as Product;
+                }
+            }
+            else
+            {
+                var resp = new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    Content = new StringContent(string.Format("Parameter keys is null")),
+                    ReasonPhrase = "Invalid Parameter"
+                };
+                throw new HttpResponseException(resp);
+            }
         }
 
         /// <summary>
@@ -109,22 +136,25 @@ namespace Merchello.Web.Editors
         /// <summary>
         /// Updates an existing product
         ///
-        /// PUT /umbraco/Merchello/ProductApi/{guid}
+        /// PUT /umbraco/Merchello/ProductApi/SaveProduct
         /// </summary>
         /// <param name="key"></param>
         /// <param name="item"></param>
-        public HttpResponseMessage Put(Guid key, Product item)
+        [AcceptVerbs("PUT")]
+        public HttpResponseMessage SaveProduct([FromBody]Product item)
         {
             HttpResponseMessage response = new HttpResponseMessage(System.Net.HttpStatusCode.OK);
-            item.Key = key;
             try
             {
                 _productService.Save(item);
             }
             catch (Exception ex)
             {
-                response = new HttpResponseMessage(System.Net.HttpStatusCode.InternalServerError);
-                var errorMessage = String.Format("{0}", ex.Message);
+                response = new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent(String.Format("{0}", ex.Message)),
+                    ReasonPhrase = "Internal Error"
+                };
             }
 
             return response;
@@ -146,8 +176,11 @@ namespace Merchello.Web.Editors
             }
             catch (Exception ex)
             {
-                response = new HttpResponseMessage(System.Net.HttpStatusCode.InternalServerError);
-                var errorMessage = String.Format("{0}", ex.Message);
+                response = new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent(String.Format("{0}", ex.Message)),
+                    ReasonPhrase = "Internal Error"
+                };
             }
 
             return response;
