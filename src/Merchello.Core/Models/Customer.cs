@@ -46,6 +46,12 @@ namespace Merchello.Core.Models
             }
         }
 
+        [IgnoreDataMember]
+        public string FullName
+        {
+            get { return string.Format("{0} {1}", _firstName, _lastName).Trim(); }
+        }
+
         /// <summary>
         /// Gets or sets the first name
         /// </summary>

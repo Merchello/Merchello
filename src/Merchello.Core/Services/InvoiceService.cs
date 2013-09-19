@@ -5,6 +5,7 @@ using System.Threading;
 using Merchello.Core.Models;
 using Merchello.Core.Persistence;
 using Merchello.Core.Events;
+using Merchello.Core.Persistence.Querying;
 using Umbraco.Core;
 using Umbraco.Core.Persistence.UnitOfWork;
 
@@ -236,6 +237,34 @@ namespace Merchello.Core.Services
             using (var repository = _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll(ids.ToArray());
+            }
+        }
+
+        /// <summary>
+        /// Gets a list of <see cref="IInvoice"/> objects give a customer key
+        /// </summary>
+        /// <param name="key">Unique customer key (Guid)</param>
+        /// <returns>A collection of <see cref="IInvoice"/></returns>
+        public IEnumerable<IInvoice> GetInvoicesForCustomer(Guid key)
+        {
+            using (var repository = _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Query<IInvoice>.Builder.Where(x => x.CustomerKey == key);
+                return repository.GetByQuery(query);
+            }
+        }
+
+        /// <summary>
+        /// Gets a list of <see cref="IInvoice"/> objects given an invoice status id
+        /// </summary>
+        /// <param name="invoiceStatusId">The id of the <see cref="IInvoiceStatus"/></param>
+        /// <returns>A collection of <see cref="IInvoiceStatus"/></returns>
+        public IEnumerable<IInvoice> GetInvoicesByInvoiceStatus(int invoiceStatusId)
+        {
+            using (var repository = _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Query<IInvoice>.Builder.Where(x => x.InvoiceStatusId == invoiceStatusId);
+                return repository.GetByQuery(query);
             }
         }
 

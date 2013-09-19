@@ -13,36 +13,39 @@ namespace Merchello.Tests.IntegrationTests.Services
     public class BasketServiceTests : ServiceIntegrationTestBase
     {
         private IAnonymousCustomer _anonymous;
-        private BasketService _basketService;   
+        private IBasketService _basketService;   
 
         [SetUp]
         public void Initialize()
         {
-            _basketService = new BasketService();
-
-            _anonymous = MockCustomerDataMaker.AnonymousCustomerMock();
-
+            _basketService = PreTestDataWorker.BasketService;
+            _anonymous = PreTestDataWorker.MakeExistingAnonymousCustomer();
         }
 
 
         [Test]
         public void Can_Delete_All_Consumers_Baskets()
         {
+            //// Arrange
+            const int expected = 0;
+
             var baskets = _basketService.GetByConsumer(_anonymous);
-            if (baskets.Any())
+            var enumerable = baskets as IBasket[] ?? baskets.ToArray();
+
+            if (enumerable.Any())
             {
-                Console.Write(baskets.Count().ToString());
-                _basketService.Delete(baskets);
+                Console.Write(enumerable.Count().ToString());
+                _basketService.Delete(enumerable);
             }
             var count = _basketService.GetByConsumer(_anonymous).Count();
 
-            Assert.IsTrue(0 == count);
+            Assert.IsTrue(expected == count);
         }
 
         [Test]
         public void Can_Save_A_Basket()
         {
-            var basket = MockBasketDataMaker.AnonymousBasketForInserting(BasketType.Basket);
+            var basket = MockBasketDataMaker.AnonymousBasketForInserting(_anonymous, BasketType.Basket);
 
             _basketService.Save(basket);
 
@@ -55,7 +58,7 @@ namespace Merchello.Tests.IntegrationTests.Services
         [Test]
         public void Creating_A_Second_Basket_Results_In_The_First_Being_Returned()
         {
-            var basket = MockBasketDataMaker.AnonymousBasketForInserting(BasketType.Wishlist);
+            var basket = MockBasketDataMaker.AnonymousBasketForInserting(_anonymous, BasketType.Wishlist);
             _basketService.Save(basket);
 
             var id = basket.Id;

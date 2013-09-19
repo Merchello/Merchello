@@ -44,9 +44,9 @@ namespace Merchello.Tests.UnitTests.Services
 
             _customer = MockCustomerDataMaker.CustomerForUpdating();
 
-            _invoiceStatus = MockInvoiceDataMaker.InvoiceStatusUnpaidMock();
+            _invoiceStatus = MockInvoiceStatusDataMaker.InvoiceStatusUnpaidMock();
 
-            _anonymous = MockCustomerDataMaker.AnonymousCustomerMock();
+            _anonymous = MockAnonymousCustomerDataMaker.AnonymousCustomerForUpdating();
 
             InvoiceService.Saving += delegate(IInvoiceService sender, SaveEventArgs<IInvoice> args)
             {
@@ -168,7 +168,7 @@ namespace Merchello.Tests.UnitTests.Services
             _invoice.ResetDirtyProperties();
             CommitCalled = false;
 
-            _invoice.InvoiceStatus = MockInvoiceDataMaker.InvoiceStatusCompletedMock();
+            _invoice.InvoiceStatus = MockInvoiceStatusDataMaker.InvoiceStatusCompletedMock();
 
             _invoiceService.Save(_invoice);
 
@@ -203,9 +203,9 @@ namespace Merchello.Tests.UnitTests.Services
                 {MakeFakeInvoice(5)}
             };
 
-            invoices[1].InvoiceStatus = MockInvoiceDataMaker.InvoiceStatusCompletedMock();
-            invoices[2].InvoiceStatus = MockInvoiceDataMaker.InvoiceStatusCompletedMock();
-            invoices[4].InvoiceStatus = MockInvoiceDataMaker.InvoiceStatusCompletedMock();
+            invoices[1].InvoiceStatus = MockInvoiceStatusDataMaker.InvoiceStatusCompletedMock();
+            invoices[2].InvoiceStatus = MockInvoiceStatusDataMaker.InvoiceStatusCompletedMock();
+            invoices[4].InvoiceStatus = MockInvoiceStatusDataMaker.InvoiceStatusCompletedMock();
 
             _invoiceService.Save(invoices);
 

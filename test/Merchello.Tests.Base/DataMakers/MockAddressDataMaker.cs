@@ -7,6 +7,9 @@ using Merchello.Core.Models.TypeFields;
 
 namespace Merchello.Tests.Base.DataMakers
 {
+    /// <summary>
+    /// Helper class to assist in putting together address data for testing
+    /// </summary>
     public class MockAddressDataMaker : MockDataMakerBase
     {
         
@@ -107,6 +110,11 @@ namespace Merchello.Tests.Base.DataMakers
         }
 
 
+        public static IEnumerable<IAddress> AddressCollectionForInserting(ICustomer customer, string label, int count)
+        {
+            for (var i = 0; i < count; i++) yield return RandomAddress(customer, label);
+        }
+
         public static IEnumerable<AddressMock> AddressMocks()
         {
             return new List<AddressMock>()
@@ -184,9 +192,11 @@ namespace Merchello.Tests.Base.DataMakers
                         Region = this.Region,
                         PostalCode = this.PostalCode,
                         CountryCode = this.CountryCode,
-                        AddressTypeFieldKey = EnumeratedTypeFieldConverter.Address().GetTypeField(AddressType.Residential).TypeKey
+                        AddressTypeFieldKey = EnumTypeFieldConverter.Address().GetTypeField(AddressType.Residential).TypeKey
                     };
             }
         }
+
+
     }
 }

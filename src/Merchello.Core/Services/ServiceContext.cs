@@ -86,7 +86,7 @@ namespace Merchello.Core.Services
         }
 
 
-        #region ICustomerService Members
+        #region IServiceContext Members
 
         /// <summary>
         /// Gets the <see cref="IAddressService"/>
@@ -95,7 +95,15 @@ namespace Merchello.Core.Services
         {
             get { return _addressService.Value; }
         }
-       
+
+        /// <summary>
+        /// Gets the <see cref="IAnonymousCustomerService"/>
+        /// </summary>
+        public IAnonymousCustomerService AnonymousCustomerService
+        {
+            get { return _anonymousCustomerService.Value; }
+        }
+
         /// <summary>
         /// Gets the <see cref="ICustomerService"/>
         /// </summary>

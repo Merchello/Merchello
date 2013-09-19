@@ -14,7 +14,6 @@ namespace Merchello.Tests.IntegrationTests.Services
     [Category("Service Integration")]
     public class InvoiceItemServiceTests : ServiceIntegrationTestBase
     {
-        private IInvoiceService _invoiceService;
         private ICustomer _customer;
         private IEnumerable<IInvoiceStatus> _statuses;
         private IInvoiceItemService _invoiceItemService;
@@ -23,71 +22,109 @@ namespace Merchello.Tests.IntegrationTests.Services
         [SetUp]
         public void Initialize()
         {
-            var invoiceStatusService = new InvoiceStatusService();
-            _statuses = invoiceStatusService.GetAll();
-            if (!_statuses.Any())
-            {
-                // populate the table
-                var creation = new BaseDataCreation(new PetaPocoUnitOfWorkProvider().GetUnitOfWork().Database);
-                creation.InitializeBaseData("merchInvoiceStatus");
-                _statuses = invoiceStatusService.GetAll();
-            }
-
-            _customer = MockCustomerDataMaker.CustomerForInserting();
-            var customerService = new CustomerService();
-
-            customerService.Save(_customer);
-
-            _invoiceService = new InvoiceService();
-
-            var all = ((InvoiceService)_invoiceService).GetAll().ToArray();
-            _invoiceService.Delete(all);
-
+            _statuses = PreTestDataWorker.DefaultInvoiceStatuses();
+            _customer = PreTestDataWorker.MakeExistingCustomer();
+            
             var unpaid = _statuses.FirstOrDefault(x => x.Alias == "unpaid");
+            var address = PreTestDataWorker.MakeExistingAddress(_customer, "Billing");
 
-            _invoice = _invoiceService.CreateInvoice(_customer, unpaid, "test111", "name", "address1",
-              "address2", "city", "state", "98225", "US", "test@test.com", string.Empty, string.Empty);
-
-            _invoiceService.Save(_invoice);
-
-
-            _invoiceItemService = new InvoiceItemService();
+            PreTestDataWorker.DeleteAllInvoices();
+            _invoice = PreTestDataWorker.MakeExistingInvoice(_customer, unpaid, address);
+           
+            _invoiceItemService = PreTestDataWorker.InvoiceItemService;
         }
 
+        /// <summary>
+        /// Test to verify an invoice can be created and saved
+        /// </summary>
         [Test]
         public void Can_Create_And_Save_An_InvoiceItem()
         {
+            //// Arrange
+            var id = 0;
+
+            //// Act
             var invoiceItem = _invoiceItemService.CreateInvoiceItem(_invoice, InvoiceItemType.Product, "temp", "test", 1, 1, 100m);
             _invoiceItemService.Save(invoiceItem);
 
-            Assert.IsTrue(invoiceItem.Id > 0);
+            //// Assert
+            Assert.IsTrue(id != invoiceItem.Id);
+            Assert.IsTrue(invoiceItem.HasIdentity);
         }
 
+
+        /// <summary>
+        /// Test to verify that an invoice item can be retrieved from the database
+        /// </summary>
         [Test]
         public void Can_Retrieve_An_Invoice_Item()
         {
-            var invoiceItem = _invoiceItemService.CreateInvoiceItem(_invoice, InvoiceItemType.Product, "temp", "test", 1, 1, 100m);
-            _invoiceItemService.Save(invoiceItem);
+            //// Arrange
+            var expected = PreTestDataWorker.MakeExistingInvoiceItem(_invoice, InvoiceItemType.Product);
+            var id = expected.Id;
 
-            var id = invoiceItem.Id;
+            //// Act
             var retrieved = _invoiceItemService.GetById(id);
 
+            //// Assert
             Assert.NotNull(retrieved);
+            Assert.AreEqual(expected, retrieved);
         }
 
+        /// <summary>
+        /// Test to verify that a collection of invoice items can be saved
+        /// </summary>
+        [Test]
+        public void Can_Save_A_Collection_Of_InvoiceItems()
+        {
+            //// Arrange
+            PreTestDataWorker.DeleteAllInvoiceItems();
+            var invoiceItems = MockInvoiceItemDataMaker.InvoiceItemCollectionForInserting(_invoice, InvoiceItemType.Product, 10);
+            var expected = 10;
+
+            //// Act
+            _invoiceItemService.Save(invoiceItems);
+
+            //// Assert
+            var all = ((InvoiceItemService) _invoiceItemService).GetAll();
+            Assert.IsTrue(all.Any());
+            Assert.AreEqual(10, all.Count());
+        }
+
+        /// <summary>
+        /// Test to verify that an invoice item can be deleted
+        /// </summary>
         [Test]
         public void Can_Delete_An_Invoice_Item()
         {
-            var invoiceItem = _invoiceItemService.CreateInvoiceItem(_invoice, InvoiceItemType.Product, "temp", "test", 1, 1, 100m);
-            _invoiceItemService.Save(invoiceItem);
-
+            //// Arrange
+            var invoiceItem = PreTestDataWorker.MakeExistingInvoiceItem(_invoice, InvoiceItemType.Product);
             var id = invoiceItem.Id;
-            _invoiceItemService.Delete(invoiceItem);
-            var retrieved = _invoiceItemService.GetById(id);
 
+            //// Act
+            _invoiceItemService.Delete(invoiceItem);
+
+            //// Assert
+            var retrieved = _invoiceItemService.GetById(id);
             Assert.IsNull(retrieved);
         }
 
+        /// <summary>
+        /// Test to verify that invoice items can be retrieved for a given invoice
+        /// </summary>
+        [Test]
+        public void Can_Retrieve_A_Collection_Of_InvoiceItems_By_Invoice() 
+        {
+            //// Arrange
+            var expected = 12;
+            var invoiceItems = PreTestDataWorker.MakeExistingInvoiceItemCollection(_invoice, InvoiceItemType.Product, expected);
 
+            //// Act
+            var items = _invoiceItemService.GetInvoiceItemsForInvoice(_invoice.Id);
+
+            //// Assert
+            Assert.IsTrue(items.Any());
+            Assert.AreEqual(expected, items.Count());
+        }
     }
 }

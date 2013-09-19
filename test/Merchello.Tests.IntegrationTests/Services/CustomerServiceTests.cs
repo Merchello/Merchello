@@ -9,52 +9,46 @@ namespace Merchello.Tests.IntegrationTests.Services
     [Category("Service Integration")]
     public class CustomerServiceTests : ServiceIntegrationTestBase
     {
-        private CustomerService _customerService;
-
+        private ICustomerService _customerService;
 
         [SetUp]
         public void Initialize()
-        {
-            
-
-            _customerService = new CustomerService();
-
-            var all = _customerService.GetAll();
-            _customerService.Delete(all);
-
+        {            
+            _customerService = PreTestDataWorker.CustomerService;
+            PreTestDataWorker.DeleteAllCustomers();
         }
         
-        //[Test]
-        public void Demo()
-        {
-            //var helper = new DbPreTestDataWorker();
-            //var customers = helper.CollectionExistingCustomers(1500);
-            //helper.DeleteAllCustomers();
-        }
-
+        /// <summary>
+        /// Test to verify if a customer can be saved to the database
+        /// </summary>
         [Test]
         public void Can_Add_A_Customer()
         {
+            //// Arrange
             var customer = MockCustomerDataMaker.CustomerForInserting();
 
+            //// Act
             _customerService.Save(customer);
           
+            //// Assert
             Assert.IsTrue(customer.HasIdentity);
-
         }
 
-        //[Test]
-        // TODO RSS Troubleshoot this.  I think it is just the setup routine.
+        /// <summary>
+        /// Test to verify that a collection of customers can be saved to the database
+        /// </summary>
+        [Test]
         public void Can_Add_A_List_Of_Three_Customers()
         {
+            //// Arrange
             var customers = MockCustomerDataMaker.CustomerListForInserting();
 
+            //// Act
             _customerService.Save(customers);
 
+            //// Assert
             Assert.IsTrue(customers.First().HasIdentity);
-            Assert.IsTrue(customers.Last().HasIdentity);
-
-            
+            Assert.IsTrue(customers.Last().HasIdentity);            
         }
 
     }

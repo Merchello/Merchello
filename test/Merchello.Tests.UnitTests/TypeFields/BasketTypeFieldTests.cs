@@ -26,7 +26,7 @@ namespace Merchello.Tests.UnitTests.TypeFields
         [Test]
         public void BasketType_basket_matches_configuration()
         {
-            var type = EnumeratedTypeFieldConverter.Basket().Basket;
+            var type = EnumTypeFieldConverter.Basket().Basket;
 
             Assert.AreEqual(_mockBasket.Alias, type.Alias);
             Assert.AreEqual(_mockBasket.Name, type.Name);
@@ -41,7 +41,7 @@ namespace Merchello.Tests.UnitTests.TypeFields
         [Test]
         public void BasketType_wishlist_matches_configuration()
         {
-            var type = EnumeratedTypeFieldConverter.Basket().Wishlist;
+            var type = EnumTypeFieldConverter.Basket().Wishlist;
 
             Assert.AreEqual(_mockWishlist.Alias, type.Alias);
             Assert.AreEqual(_mockWishlist.Name, type.Name);

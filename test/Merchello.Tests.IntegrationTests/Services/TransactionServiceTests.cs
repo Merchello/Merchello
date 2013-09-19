@@ -32,7 +32,7 @@ namespace Merchello.Tests.IntegrationTests.Services
             var invoiceService = new InvoiceService();
                        
 
-            _invoice = invoiceService.CreateInvoice(_customer, MockInvoiceDataMaker.InvoiceStatusUnpaidMock(), Guid.NewGuid().ToString().Substring(0, 5), "Joe",
+            _invoice = invoiceService.CreateInvoice(_customer, MockInvoiceStatusDataMaker.InvoiceStatusUnpaidMock(), Guid.NewGuid().ToString().Substring(0, 5), "Joe",
                 "somewhere", string.Empty, "somewhere", "us", "98225", "us", "temp@temp.com", "5555555555",
                 "company name");
             invoiceService.Save(_invoice);
