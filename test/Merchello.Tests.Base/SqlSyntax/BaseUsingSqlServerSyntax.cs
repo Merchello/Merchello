@@ -3,17 +3,14 @@ using Umbraco.Core.Persistence.SqlSyntax;
 
 namespace Merchello.Tests.Base.SqlSyntax
 {
-
     [TestFixture]
     public abstract class BaseUsingSqlServerSyntax
     {
 
         [SetUp]
         public virtual void Initialize()
-        {
-            SqlSyntaxContext.SqlSyntaxProvider = new SqlServerSyntaxProvider(); // new SqlCeSyntaxProvider();
-           
-            Resolution.Freeze();
+        {            
+            SqlSyntaxProviderTestHelper.EstablishSqlSyntax();
             SetUp();
         }
 
