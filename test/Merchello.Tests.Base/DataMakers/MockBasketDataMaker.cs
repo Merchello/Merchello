@@ -5,13 +5,13 @@ using Merchello.Core.Models;
 
 namespace Merchello.Tests.Base.DataMakers
 {
+    /// <summary>
+    /// Helper class to assist in putting together basket data for testing
+    /// </summary>
     public class MockBasketDataMaker : MockDataMakerBase
     {
-        public static IBasket AnonymousBasket(BasketType basketType)
+        public static IBasket AnonymousBasket(IAnonymousCustomer anonymous, BasketType basketType)
         {
-            var anonymous = MockCustomerDataMaker.AnonymousCustomerMock();
-           
-
             var basket =  new Basket(basketType)
             {
                 Id = 1,
@@ -26,9 +26,8 @@ namespace Merchello.Tests.Base.DataMakers
 
         }
 
-        public static IBasket AnonymousBasketForInserting(BasketType basketType)
+        public static IBasket AnonymousBasketForInserting(IAnonymousCustomer anonymous, BasketType basketType)
         {
-            var anonymous = MockCustomerDataMaker.AnonymousCustomerMock();
             return new Basket(basketType)
             {
                 ConsumerKey = anonymous.Key

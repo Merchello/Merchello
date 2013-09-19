@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Merchello.Core;
 using Merchello.Core.Models;
+using Merchello.Core.Models.TypeFields;
 using Merchello.Core.Persistence.Migrations.Initial;
 using Merchello.Core.Services;
 using Merchello.Tests.Base.DataMakers;
 using Merchello.Tests.Base.SqlSyntax;
+using Moq;
+using Umbraco.Core.Persistence;
 using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Tests.IntegrationTests.TestHelpers
@@ -18,15 +22,23 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
     {
         
         private readonly ServiceContext _serviceContext;
+        public UmbracoDatabase Database { get; private set; }
 
         public DbPreTestDataWorker()
+            : this(new ServiceContext(new PetaPocoUnitOfWorkProvider()))
+        { }
+
+        public DbPreTestDataWorker(ServiceContext serviceContext)
         {
             // sets up the Umbraco SqlSyntaxProvider Singleton
             SqlSyntaxProviderTestHelper.EstablishSqlSyntax();
 
-            _serviceContext = new ServiceContext(new PetaPocoUnitOfWorkProvider());
-        }
+            var uowProvider = new PetaPocoUnitOfWorkProvider();
 
+            Database = uowProvider.GetUnitOfWork().Database;
+
+            _serviceContext = serviceContext;
+        }
 
         #region IAddress
 
@@ -50,6 +62,16 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         }
 
         /// <summary>
+        /// Inserts a collection of address records into the database and returns a collection of <see cref="IAddress"/> objects representation
+        /// </summary>        
+        public IEnumerable<IAddress> MakeExistingAddressCollection(ICustomer customer, string label, int count)
+        {
+            var addresses = MockAddressDataMaker.AddressCollectionForInserting(customer, label, count);
+            AddressService.Save(addresses);
+            return addresses;
+        }
+
+        /// <summary>
         /// Deletes all of the addresses in the database
         /// </summary>
         public void DeleteAllAddresses()
@@ -64,6 +86,48 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         public IAddressService AddressService
         {
             get { return _serviceContext.AddressService; }
+        }
+
+        #endregion
+
+        #region IAnonymousCustomer
+
+
+        public IAnonymousCustomer MakeExistingAnonymousCustomer()
+        {
+            var anonymous = MockAnonymousCustomerDataMaker.AnonymousCustomerForInserting();
+            AnonymousCustomerService.Save(anonymous);
+            return anonymous;
+        }
+
+
+        public IAnonymousCustomerService AnonymousCustomerService
+        {
+            get { return _serviceContext.AnonymousCustomerService; }
+        }
+
+        #endregion
+
+        #region IBasket
+
+        /// <summary>
+        /// The basket service
+        /// </summary>
+        public IBasketService BasketService
+        {
+            get { return _serviceContext.BasketService; }
+        }
+
+        #endregion
+
+        #region IBasketItem
+
+        /// <summary>
+        /// The basket item service
+        /// </summary>
+        public IBasketItemService BasketItemService
+        {
+            get { return _serviceContext.BasketItemService; }
         }
 
         #endregion
@@ -137,13 +201,46 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
         /// <summary>
         /// Makes an invoice record in the database and returns an instance of IInvoice representing that record
+        /// 
         /// </summary>
-        public IInvoice MakeExistingInvoice(ICustomer customer, IInvoiceStatus invoiceStatus, IAddress address)
+        /// <param name="address"></param>
+        /// <param name="maxItemCount">If itemCount is greater than 0, invoice items will be added to the invoice</param>
+        /// <param name="customer"></param>
+        /// <param name="invoiceStatus"></param>
+        public IInvoice MakeExistingInvoice(ICustomer customer, IInvoiceStatus invoiceStatus, IAddress address, int maxItemCount = 0)
         {
-            var invoice = InvoiceService.CreateInvoice(customer, address, invoiceStatus, Guid.NewGuid().ToString().Substring(0, 8));
+            var invoice = MockInvoiceDataMaker.InvoiceForInserting(customer, invoiceStatus, address);
             InvoiceService.Save(invoice);
+
+            if(maxItemCount > 0) MakeExistingInvoiceItemCollection(invoice, InvoiceItemType.Product, MockDataMakerBase.NoWhammyStop.Next(maxItemCount));
+
             return invoice;
         }
+
+        /// <summary>
+        /// Makes a list of invoices (without items) in the database and returns a collection of IInvoice representing these records
+        /// </summary>
+        public IEnumerable<IInvoice> MakeExistingInvoiceCollection(ICustomer customer, IInvoiceStatus invoiceStatus, IAddress address, int count)
+        {
+            var invoices = MockInvoiceDataMaker.InvoiceCollectionForInserting(customer, invoiceStatus, address, count);
+            InvoiceService.Save(invoices);
+            return invoices;
+        }
+
+        /// <summary>
+        /// Makes a list of invoices (with items) in the database and returns a collection of IInvoice representing these records
+        /// </summary>
+        /// <param name="customer"><see cref="ICustomer"/></param>
+        /// <param name="invoiceStatus"><see cref="IInvoiceStatus"/></param>
+        /// <param name="address"><see cref="IAddress"/></param>
+        /// <param name="count">the number of invoices to generate</param>
+        /// <param name="maxItemCount">The maximum number of invoice items for each invoice</param>
+        /// <returns></returns>
+        public IEnumerable<IInvoice> MakeExistingInvoiceCollection(ICustomer customer, IInvoiceStatus invoiceStatus, IAddress address, int count, int maxItemCount)
+        {
+            for(var i = 0; i < count; i++) yield return MakeExistingInvoice(customer, invoiceStatus, address, maxItemCount);
+        }
+
 
         /// <summary>
         /// Deletes all invoices
@@ -167,6 +264,35 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         #region IInvoiceItem
 
         /// <summary>
+        /// Makes an invoice item record in the database and returns an instance of the IInvoiceItem representing that record
+        /// </summary>        
+        public IInvoiceItem MakeExistingInvoiceItem(IInvoice invoice, InvoiceItemType invoiceItemType)
+        {
+            var invoiceItem = MockInvoiceItemDataMaker.InvoiceItemForInserting(invoice, invoiceItemType);
+            InvoiceItemService.Save(invoiceItem);
+            return invoiceItem;
+        }
+
+        /// <summary>
+        /// Makes collection of invoice items associated with an invoice
+        /// </summary>        
+        public IEnumerable<IInvoiceItem> MakeExistingInvoiceItemCollection(IInvoice invoice, InvoiceItemType invoiceItemType, int count)
+        {            
+            var invoiceItems = MockInvoiceItemDataMaker.InvoiceItemCollectionForInserting(invoice, invoiceItemType, count);
+            InvoiceItemService.Save(invoiceItems);
+            return invoiceItems;
+        }
+
+        /// <summary>
+        /// Deletes all invoice items
+        /// </summary>
+        public void DeleteAllInvoiceItems()
+        {
+            var all = ((InvoiceItemService) InvoiceItemService).GetAll();
+            InvoiceItemService.Delete(all);
+        }
+
+        /// <summary>
         /// The invoice item service
         /// </summary>
         public IInvoiceItemService InvoiceItemService
@@ -176,32 +302,49 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
         #endregion
 
-
-        #region IBasket
+        #region IProduct
 
         /// <summary>
-        /// The basket service
+        /// Saves a product record to the database and returns and instance of <see cref="IProduct"/> represents that record
         /// </summary>
-        public IBasketService BasketService
+        /// <returns><see cref="IProduct"/></returns>
+        public IProduct MakeExistingProduct()
         {
-            get { return _serviceContext.BasketService; }
+            var product = MockProductDataMaker.MockProductForInserting();
+            ProductService.Save(product);
+            return product;
+        }
+
+        /// <summary>
+        /// Saves a collection of products to the database and return a collection of <see cref="IProduct"/> representing that collection
+        /// </summary>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        public IEnumerable<IProduct> MakeExistingProductCollection(int count)
+        {
+            var products = MockProductDataMaker.MockProductCollectionForInserting(count);
+            ProductService.Save(products);
+            return products;
+        }
+
+        /// <summary>
+        /// Deletes all products
+        /// </summary>
+        public void DeleteAllProducts()
+        {
+            var all = ((ProductService) ProductService).GetAll();
+            ProductService.Delete(all);
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IProductService"/>
+        /// </summary>
+        public IProductService ProductService
+        {
+            get { return _serviceContext.ProductService; }
         }
 
         #endregion
-
-
-        #region IBasketItem
-
-        /// <summary>
-        /// The basket item service
-        /// </summary>
-        public IBasketItemService BasketItemService
-        {
-            get { return _serviceContext.BasketItemService; }
-        }
-
-        #endregion
-
 
         #region IShipment
 
@@ -212,8 +355,6 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         }
 
         #endregion
-
-
 
         #region IShipMethod
 

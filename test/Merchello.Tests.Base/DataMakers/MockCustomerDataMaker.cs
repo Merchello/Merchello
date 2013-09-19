@@ -6,22 +6,13 @@ using Merchello.Core.Models.Rdbms;
 
 namespace Merchello.Tests.Base.DataMakers
 {
+    /// <summary>
+    /// Helper class to assist in putting together customer data for testing
+    /// </summary>
     public class MockCustomerDataMaker : MockDataMakerBase
     {
 
-        public static IAnonymousCustomer AnonymousCustomerMock()
-        {
-            var key = new Guid("E2D98FAE-EAF3-47B6-9A3F-5E74202043BC");
-            var lmd = DateTime.Parse("8/26/2013");
-            var anonymous = new AnonymousCustomer(lmd)
-                {
-                    Key = key,
-                    CreateDate = lmd,
-                    UpdateDate = lmd
-                };
-
-            return anonymous;
-        }
+       
 
         public static ICustomer CustomerForInserting()
         {
@@ -36,7 +27,7 @@ namespace Merchello.Tests.Base.DataMakers
                     TotalInvoiced = 0
                 };
 
-            customer.ResetDirtyProperties();
+            //customer.ResetDirtyProperties();
 
             return customer;
         }
@@ -62,7 +53,7 @@ namespace Merchello.Tests.Base.DataMakers
 
         public static ICustomer CustomerForUpdating()
         {
-            var customer = MockCustomerDataMaker.CustomerForInserting();
+            var customer = CustomerForInserting();
             customer.Key = Guid.NewGuid();
             customer.ResetDirtyProperties();
             return customer;
@@ -77,8 +68,6 @@ namespace Merchello.Tests.Base.DataMakers
                     CustomerForInserting(),
                     CustomerForInserting()                    
                 };
-
-
         }
 
 
@@ -96,7 +85,6 @@ namespace Merchello.Tests.Base.DataMakers
             return SelectRandomString(names);
         }
 
-
         private static string LastNames()
         {
             var names = new[]
@@ -111,7 +99,7 @@ namespace Merchello.Tests.Base.DataMakers
             return SelectRandomString(names);
         }
 
-        public static string Email(string first, string last)
+        private static string Email(string first, string last)
         {
             var name = string.Empty;
             const string email = "{0}@{1}";
@@ -144,9 +132,7 @@ namespace Merchello.Tests.Base.DataMakers
 
             return string.Format(email, name, SelectRandomString(domains));
 
-        }
-
-        
+        }        
 
     }
 }
