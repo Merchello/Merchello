@@ -1,5 +1,5 @@
 ﻿using Merchello.Core.Services;
-using Merchello.Tests.Base.SqlSyntax;
+using Merchello.Tests.Base.DataMakers;
 using NUnit.Framework;
 
 namespace Merchello.Tests.IntegrationTests.Services
@@ -8,26 +8,33 @@ namespace Merchello.Tests.IntegrationTests.Services
     [Category("Service Integration")]
     public class AddressServiceTests : ServiceIntegrationTestBase
     {
+        private IAddressService _addressService;
 
-        //[Test]
-        //public void Can_Create_New_Address()
-        //{
-            
-        //}
-
-        [Test]
-        public void CacheDebug()
+        [SetUp]
+        public void Setup()
         {
-
-            var service = new AddressService();
-
-            var address = service.GetById(0);
-
-            var addresses = service.GetAll();
-
-
+            _addressService = PreTestDataWorker.AddressService;
         }
 
+        /// <summary>
+        /// Verifies that an address can be saved
+        /// </summary>
+        [Test]
+        public void Can_Save_An_Address()
+        {
+            //// Arrange
+            var customer = PreTestDataWorker.MakeExistingCustomer();
+            var address = MockAddressDataMaker.RandomAddress(customer, "Studio");
+            var hasIdentity = address.HasIdentity;
+
+            Assert.IsFalse(hasIdentity);
+
+            //// Act
+            _addressService.Save(address);
+
+            //// Assert
+            Assert.IsTrue(address.HasIdentity);
+        }
 
     }
 }

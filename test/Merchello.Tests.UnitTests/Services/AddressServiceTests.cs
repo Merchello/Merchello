@@ -5,7 +5,7 @@ using Merchello.Core.Models;
 using Merchello.Core.Models.TypeFields;
 using Merchello.Core.Persistence;
 using Merchello.Core.Services;
-using Merchello.Tests.Base.Data;
+using Merchello.Tests.Base.DataMakers;
 using Merchello.Tests.Base.Respositories;
 using Merchello.Tests.Base.Respositories.UnitOfWork;
 using Merchello.Tests.Base.Services;
@@ -78,7 +78,7 @@ namespace Merchello.Tests.UnitTests.Services
         [Test]
         public void Save_Triggers_Events_And_Address_Is_Passed()
         {
-            var address = AddressData.AddressForInserting();
+            var address = MockAddressDataMaker.AddressForInserting();
 
             _addressService.Save(address);
 
@@ -92,7 +92,7 @@ namespace Merchello.Tests.UnitTests.Services
         [Test]
         public void Save_Is_Committed()
         {
-            var address = AddressData.AddressForInserting();
+            var address = MockAddressDataMaker.AddressForInserting();
 
             _addressService.Save(address);
 
@@ -103,7 +103,7 @@ namespace Merchello.Tests.UnitTests.Services
         [Test]
         public void Delete_Triggers_Events_And_Address_Is_Passed()
         {
-            var address = AddressData.AddressForUpdating();
+            var address = MockAddressDataMaker.AddressForUpdating();
 
             _addressService.Delete(address);
 
@@ -118,7 +118,7 @@ namespace Merchello.Tests.UnitTests.Services
         [Test]
         public void Delete_Is_Committed()
         {
-            var address = AddressData.AddressForUpdating();
+            var address = MockAddressDataMaker.AddressForUpdating();
 
             _addressService.Delete(address);
 

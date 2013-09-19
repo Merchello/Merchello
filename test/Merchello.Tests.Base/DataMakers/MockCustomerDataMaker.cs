@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.UI.WebControls;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Rdbms;
-using Umbraco.Core;
 
-namespace Merchello.Tests.Base.Data
+namespace Merchello.Tests.Base.DataMakers
 {
-    public class CustomerData
+    public class MockCustomerDataMaker : MockDataMakerBase
     {
 
         public static IAnonymousCustomer AnonymousCustomerMock()
@@ -66,7 +62,7 @@ namespace Merchello.Tests.Base.Data
 
         public static ICustomer CustomerForUpdating()
         {
-            var customer = CustomerData.CustomerForInserting();
+            var customer = MockCustomerDataMaker.CustomerForInserting();
             customer.Key = Guid.NewGuid();
             customer.ResetDirtyProperties();
             return customer;
@@ -121,7 +117,7 @@ namespace Merchello.Tests.Base.Data
             const string email = "{0}@{1}";
 
          
-            var select = Random.Next(3);
+            var select = NoWhammyStop.Next(3);
 
 
             var domains = new[]
@@ -150,13 +146,7 @@ namespace Merchello.Tests.Base.Data
 
         }
 
-        private static string SelectRandomString(string[] values)
-        {
-            
-            var index = Random.Next(values.Count());
-            return values.ToArray()[index];
-        }
+        
 
-        private static readonly Random Random = new Random();
     }
 }

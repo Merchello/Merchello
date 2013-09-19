@@ -6,7 +6,7 @@ using Merchello.Core.Events;
 using Merchello.Core.Models;
 using Merchello.Core.Persistence;
 using Merchello.Core.Services;
-using Merchello.Tests.Base.Data;
+using Merchello.Tests.Base.DataMakers;
 using Merchello.Tests.Base.Respositories;
 using Merchello.Tests.Base.Respositories.UnitOfWork;
 using Merchello.Tests.Base.Services;
@@ -42,11 +42,11 @@ namespace Merchello.Tests.UnitTests.Services
             _statusBefore = false;
             _statusAfter = false;
 
-            _customer = CustomerData.CustomerForUpdating();
+            _customer = MockCustomerDataMaker.CustomerForUpdating();
 
-            _invoiceStatus = InvoiceData.InvoiceStatusUnpaidMock();
+            _invoiceStatus = MockInvoiceDataMaker.InvoiceStatusUnpaidMock();
 
-            _anonymous = CustomerData.AnonymousCustomerMock();
+            _anonymous = MockCustomerDataMaker.AnonymousCustomerMock();
 
             InvoiceService.Saving += delegate(IInvoiceService sender, SaveEventArgs<IInvoice> args)
             {
@@ -168,7 +168,7 @@ namespace Merchello.Tests.UnitTests.Services
             _invoice.ResetDirtyProperties();
             CommitCalled = false;
 
-            _invoice.InvoiceStatus = InvoiceData.InvoiceStatusCompletedMock();
+            _invoice.InvoiceStatus = MockInvoiceDataMaker.InvoiceStatusCompletedMock();
 
             _invoiceService.Save(_invoice);
 
@@ -203,9 +203,9 @@ namespace Merchello.Tests.UnitTests.Services
                 {MakeFakeInvoice(5)}
             };
 
-            invoices[1].InvoiceStatus = InvoiceData.InvoiceStatusCompletedMock();
-            invoices[2].InvoiceStatus = InvoiceData.InvoiceStatusCompletedMock();
-            invoices[4].InvoiceStatus = InvoiceData.InvoiceStatusCompletedMock();
+            invoices[1].InvoiceStatus = MockInvoiceDataMaker.InvoiceStatusCompletedMock();
+            invoices[2].InvoiceStatus = MockInvoiceDataMaker.InvoiceStatusCompletedMock();
+            invoices[4].InvoiceStatus = MockInvoiceDataMaker.InvoiceStatusCompletedMock();
 
             _invoiceService.Save(invoices);
 

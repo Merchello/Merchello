@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 using Merchello.Core.Events;
 using Merchello.Core.Models;
-using Merchello.Core.Persistence.Migrations.Initial;
 using Merchello.Core.Services;
-using Merchello.Tests.Base.Data;
-using Merchello.Tests.Base.SqlSyntax;
+using Merchello.Tests.Base.DataMakers;
 using NUnit.Framework;
-using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Tests.IntegrationTests.Services
 {
@@ -28,35 +21,22 @@ namespace Merchello.Tests.IntegrationTests.Services
         [SetUp]
         public void Setup()
         {
-            _shipmentService = new ShipmentService();
-
-            var invoiceStatusService = new InvoiceStatusService();
-            _statuses = invoiceStatusService.GetAll();
-            if (!_statuses.Any())
-            {
-                // populate the table
-                var creation = new BaseDataCreation(new PetaPocoUnitOfWorkProvider().GetUnitOfWork().Database);
-                creation.InitializeBaseData("merchInvoiceStatus");
-                _statuses = invoiceStatusService.GetAll();
-            }
-
-            var customerService = new CustomerService();
-            _customer = CustomerData.CustomerForInserting();
-            customerService.Save(_customer);
-
-            var invoiceService = new InvoiceService();
-            var all = invoiceService.GetAll().ToArray();
-            invoiceService.Delete(all);
-
+            _shipmentService = PreTestDataWorker.ShipmentService;
+            
+            _statuses = PreTestDataWorker.DefaultInvoiceStatuses();
+            
+            _customer = PreTestDataWorker.MakeExistingCustomer();
+            
             var unpaid = _statuses.FirstOrDefault(x => x.Alias == "unpaid");
+            
+            var address = PreTestDataWorker.MakeExistingAddress(_customer, "home");
+            
+            _invoice = PreTestDataWorker.MakeExistingInvoice(_customer, unpaid, address);
 
-            _invoice = invoiceService.CreateInvoice(_customer, unpaid, "test111", "name", "address1",
-              "address2", "city", "state", "98225", "US", "test@test.com", string.Empty, string.Empty);
 
-            invoiceService.Save(_invoice);
 
             var shipMethodService = new ShipMethodService();
-            _shipMethod = ShipmentData.MockShipMethodForInserting();
+            _shipMethod = MockShipmentDataMaker.MockShipMethodForInserting();
             shipMethodService.Save(_shipMethod);
 
         }
@@ -64,9 +44,9 @@ namespace Merchello.Tests.IntegrationTests.Services
         [Test]
         public void Can_Create_A_Shipment()
         {
-            var expected = ShipmentData.MockShipmentForInserting(_invoice.Id, null);
+            var expected = MockShipmentDataMaker.MockShipmentForInserting(_invoice.Id, null);
 
-            var shipment = _shipmentService.CreateShipment(null, _invoice, AddressData.MindflyAddressForInserting());
+            var shipment = _shipmentService.CreateShipment(null, _invoice, MockAddressDataMaker.MindflyAddressForInserting());
 
             Assert.AreEqual(expected.Address1, shipment.Address1);
         }
@@ -82,7 +62,7 @@ namespace Merchello.Tests.IntegrationTests.Services
                     savedShipment = args.SavedEntities.FirstOrDefault();
                 };
 
-            var shipment = _shipmentService.CreateShipment(_shipMethod, _invoice, AddressData.MindflyAddressForInserting());
+            var shipment = _shipmentService.CreateShipment(_shipMethod, _invoice, MockAddressDataMaker.MindflyAddressForInserting());
 
             _shipmentService.Save(shipment);
 
@@ -104,7 +84,7 @@ namespace Merchello.Tests.IntegrationTests.Services
                     deletedShipment = args.DeletedEntities.FirstOrDefault();
                 };
 
-            var shipment = _shipmentService.CreateShipment(null, _invoice, AddressData.MindflyAddressForInserting());
+            var shipment = _shipmentService.CreateShipment(null, _invoice, MockAddressDataMaker.MindflyAddressForInserting());
 
             _shipmentService.Save(shipment);
             Assert.IsTrue(shipment.HasIdentity);
@@ -127,7 +107,7 @@ namespace Merchello.Tests.IntegrationTests.Services
                     updatedShipment = args.SavedEntities.FirstOrDefault();
                 };
 
-            var shipment = _shipmentService.CreateShipment(_shipMethod, _invoice, AddressData.MindflyAddressForInserting());
+            var shipment = _shipmentService.CreateShipment(_shipMethod, _invoice, MockAddressDataMaker.MindflyAddressForInserting());
 
             _shipmentService.Save(shipment);
             updatedShipment = null;
@@ -154,7 +134,7 @@ namespace Merchello.Tests.IntegrationTests.Services
 
             _shipmentService.Save(nullShipMethodShipments);
 
-            var shipment = _shipmentService.CreateShipment(_shipMethod, _invoice, AddressData.MindflyAddressForInserting());
+            var shipment = _shipmentService.CreateShipment(_shipMethod, _invoice, MockAddressDataMaker.MindflyAddressForInserting());
             _shipmentService.Save(shipment);
 
             var shipments = _shipmentService.GetShipmentsForShipMethod(_shipMethod.Id);

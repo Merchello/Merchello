@@ -1,9 +1,6 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Merchello.Core.Services;
-using Merchello.Tests.Base.Data;
-using Merchello.Tests.Base.SqlSyntax;
-using Merchello.Tests.IntegrationTests.TestHelpers;
+using Merchello.Tests.Base.DataMakers;
 using NUnit.Framework;
 
 namespace Merchello.Tests.IntegrationTests.Services
@@ -27,7 +24,7 @@ namespace Merchello.Tests.IntegrationTests.Services
 
         }
         
-        [Test]
+        //[Test]
         public void Demo()
         {
             //var helper = new DbPreTestDataWorker();
@@ -38,7 +35,7 @@ namespace Merchello.Tests.IntegrationTests.Services
         [Test]
         public void Can_Add_A_Customer()
         {
-            var customer = CustomerData.CustomerForInserting();
+            var customer = MockCustomerDataMaker.CustomerForInserting();
 
             _customerService.Save(customer);
           
@@ -50,7 +47,7 @@ namespace Merchello.Tests.IntegrationTests.Services
         // TODO RSS Troubleshoot this.  I think it is just the setup routine.
         public void Can_Add_A_List_Of_Three_Customers()
         {
-            var customers = CustomerData.CustomerListForInserting();
+            var customers = MockCustomerDataMaker.CustomerListForInserting();
 
             _customerService.Save(customers);
 

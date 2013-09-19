@@ -1,21 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Merchello.Core;
 using Merchello.Core.Events;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
-using Merchello.Tests.Base.Data;
-using Merchello.Tests.Base.SqlSyntax;
+using Merchello.Tests.Base.DataMakers;
 using NUnit.Framework;
 
 namespace Merchello.Tests.IntegrationTests.Services
 {
     [TestFixture]
     [Category("Service Integration")]
-    public class ShipMethodServiceTests : BaseUsingSqlServerSyntax
+    public class ShipMethodServiceTests : ServiceIntegrationTestBase
     {
         private IShipMethodService _shipMethodService;
 
@@ -44,7 +39,7 @@ namespace Merchello.Tests.IntegrationTests.Services
         [Test]
         public void Can_Save_A_ShipMethod()
         {
-            var shipmethod = ShipmentData.MockShipMethodForInserting();
+            var shipmethod = MockShipmentDataMaker.MockShipMethodForInserting();
             Assert.IsFalse(shipmethod.HasIdentity);
             _shipMethodService.Save(shipmethod);
 
@@ -57,11 +52,11 @@ namespace Merchello.Tests.IntegrationTests.Services
         {
 
             //// Arrange
-            var shipmethod = ShipmentData.MockShipMethodForInserting();
+            var shipmethod = MockShipmentDataMaker.MockShipMethodForInserting();
             _shipMethodService.Save(shipmethod);
 
             var shipmentService = new ShipmentService();
-           // var shipment = ShipmentData.MockShipmentForInserting();
+           // var shipment = MockShipmentDataMaker.MockShipmentForInserting();
 
             //var shipment = shipments.FirstOrDefault(x => x.ShipMethodId != null);
 
