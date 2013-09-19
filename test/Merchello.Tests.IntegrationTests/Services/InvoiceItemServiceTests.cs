@@ -16,7 +16,7 @@ namespace Merchello.Tests.IntegrationTests.Services
 {
     [TestFixture]
     [Category("Service Integration")]
-    public class InvoiceItemServiceTests : BaseUsingSqlServerSyntax
+    public class InvoiceItemServiceTests : ServiceIntegrationTestBase
     {
         private IInvoiceService _invoiceService;
         private ICustomer _customer;
@@ -25,10 +25,8 @@ namespace Merchello.Tests.IntegrationTests.Services
         private IInvoice _invoice;
 
         [SetUp]
-        public override void Initialize()
+        public void Initialize()
         {
-            base.Initialize();
-
             var invoiceStatusService = new InvoiceStatusService();
             _statuses = invoiceStatusService.GetAll();
             if (!_statuses.Any())

@@ -17,7 +17,7 @@ namespace Merchello.Tests.IntegrationTests.Services
 {
     [TestFixture]
     [Category("Service Integration")]
-    public class ShipmentServiceTests : BaseUsingSqlServerSyntax
+    public class ShipmentServiceTests : ServiceIntegrationTestBase
     {
         private IShipmentService _shipmentService;
         private IInvoice _invoice;

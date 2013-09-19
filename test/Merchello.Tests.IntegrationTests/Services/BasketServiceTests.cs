@@ -11,16 +11,14 @@ namespace Merchello.Tests.IntegrationTests.Services
 {
     [TestFixture]
     [Category("Service Integration")]
-    public class BasketServiceTests : BaseUsingSqlServerSyntax
+    public class BasketServiceTests : ServiceIntegrationTestBase
     {
         private IAnonymousCustomer _anonymous;
         private BasketService _basketService;   
 
         [SetUp]
-        public override void Initialize()
+        public void Initialize()
         {
-            base.Initialize();
-
             _basketService = new BasketService();
 
             _anonymous = CustomerData.AnonymousCustomerMock();
@@ -73,12 +71,5 @@ namespace Merchello.Tests.IntegrationTests.Services
 
 
        
-        [TearDown]
-        public override void TearDown()
-        {
-            base.TearDown();
-
-            _basketService = null;
-        }
     }
 }

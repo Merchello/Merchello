@@ -14,7 +14,7 @@ namespace Merchello.Tests.IntegrationTests.Services
 {
     [TestFixture]
     [Category("Service Integration")]
-    public class TransactionServiceTests : BaseUsingSqlServerSyntax
+    public class TransactionServiceTests : ServiceIntegrationTestBase
     {
         private ITransactionService _transactionService;
         private IPayment _payment;
@@ -22,9 +22,9 @@ namespace Merchello.Tests.IntegrationTests.Services
         private ICustomer _customer;
 
         [SetUp]
-        public override void Initialize()
+        public void Initialize()
         {
-            base.Initialize();
+            
 
             _transactionService = new TransactionService();
 

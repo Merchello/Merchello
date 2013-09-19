@@ -14,17 +14,15 @@ namespace Merchello.Tests.IntegrationTests.Services
 {
     [TestFixture]
     [Category("Service Integration")]
-    public class PaymentServiceTests : BaseUsingSqlServerSyntax
+    public class PaymentServiceTests : ServiceIntegrationTestBase
     {
 
         private IPaymentService _paymentService;
         private ICustomer _customer;
 
         [SetUp]
-        public override void Initialize()
+        public void Initialize()
         {
-            base.Initialize();
-
             _paymentService = new PaymentService();
             
             _customer = CustomerData.CustomerForInserting();

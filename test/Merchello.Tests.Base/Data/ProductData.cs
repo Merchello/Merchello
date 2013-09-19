@@ -31,7 +31,7 @@ namespace Merchello.Tests.Base.Data
 
         public static string MockSku()
         {
-            return Guid.NewGuid().ToString().Substring(0, 10);
+            return Guid.NewGuid().ToString().Substring(0, 8);
         }
     }
 }

@@ -6,7 +6,7 @@ namespace Merchello.Tests.IntegrationTests.Services
 {
     [TestFixture]
     [Category("Service Integration")]
-    public class AddressServiceTests : BaseUsingSqlServerSyntax
+    public class AddressServiceTests : ServiceIntegrationTestBase
     {
 
         //[Test]

@@ -3,21 +3,22 @@ using System.Linq;
 using Merchello.Core.Services;
 using Merchello.Tests.Base.Data;
 using Merchello.Tests.Base.SqlSyntax;
+using Merchello.Tests.IntegrationTests.TestHelpers;
 using NUnit.Framework;
 
 namespace Merchello.Tests.IntegrationTests.Services
 {
     [TestFixture]
     [Category("Service Integration")]
-    public class CustomerServiceTests : BaseUsingSqlServerSyntax
+    public class CustomerServiceTests : ServiceIntegrationTestBase
     {
         private CustomerService _customerService;
 
 
         [SetUp]
-        public override void Initialize()
+        public void Initialize()
         {
-            base.Initialize();
+            
 
             _customerService = new CustomerService();
 
@@ -26,6 +27,13 @@ namespace Merchello.Tests.IntegrationTests.Services
 
         }
         
+        [Test]
+        public void Demo()
+        {
+            //var helper = new DbPreTestDataWorker();
+            //var customers = helper.CollectionExistingCustomers(1500);
+            //helper.DeleteAllCustomers();
+        }
 
         [Test]
         public void Can_Add_A_Customer()
@@ -52,13 +60,5 @@ namespace Merchello.Tests.IntegrationTests.Services
             
         }
 
-
-        [TearDown]
-        public override void TearDown()
-        {
-            base.TearDown();
-
-            _customerService = null;
-        }
     }
 }

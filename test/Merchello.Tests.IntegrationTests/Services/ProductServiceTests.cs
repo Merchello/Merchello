@@ -14,7 +14,7 @@ namespace Merchello.Tests.IntegrationTests.Services
 {
     [TestFixture]
     [Category("Service Integration")]
-    public class ProductServiceTests  : BaseUsingSqlServerSyntax
+    public class ProductServiceTests : ServiceIntegrationTestBase
     {
         private IProductService _productService;
 
@@ -33,7 +33,7 @@ namespace Merchello.Tests.IntegrationTests.Services
 
             var product = _productService.CreateProduct(sku, "fake product", 15.00m);
 
-          Assert.AreEqual(expected.Key, product.Key);
+            Assert.AreEqual(expected.Key, product.Key);
         }
 
         [Test]
