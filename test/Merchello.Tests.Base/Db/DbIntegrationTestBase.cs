@@ -17,20 +17,12 @@ namespace Merchello.Tests.Base.Db
         [SetUp]
         public void Initialize()
         {
-            //var config = (MerchelloSection)ConfigurationManager.GetSection("merchello");
-            //var connectionString = ConfigurationManager.ConnectionStrings[config.DefaultConnectionStringName].ConnectionString;
-            //var provider = ConfigurationManager.ConnectionStrings[config.DefaultConnectionStringName].ProviderName;
-            //connectionString = connectionString.Replace("Data Source=|DataDirectory|",
-            //    System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase)).Replace("\\bin\\Debug", string.Empty).Replace("\\bin\\Release", string.Empty);
-
-            //connectionString = "Data Source=" + new Uri(connectionString).LocalPath;
 
             var uowProvider = new PetaPocoUnitOfWorkProvider();
 
-
             Database = uowProvider.GetUnitOfWork().Database;
 
-            SqlSyntaxContext.SqlSyntaxProvider = new SqlCeSyntaxProvider(); //new SqlServerSyntaxProvider();
+            SqlSyntaxContext.SqlSyntaxProvider = SqlSyntaxProviderTestHelper.SqlSyntaxProvider();
 
             Setup();
         }

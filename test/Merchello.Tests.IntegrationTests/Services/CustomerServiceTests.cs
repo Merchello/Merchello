@@ -53,21 +53,6 @@ namespace Merchello.Tests.IntegrationTests.Services
         }
 
 
-        //[Test]
-        //public void Can_Delete_Every_Customers()
-        //{
-        //    var all = _customerService.GetAll();
-
-        //    Console.WriteLine("Current count is : " + all.Count().ToString());
-
-            
-        //    _customerService.Delete(all);
-
-        //    var count = _customerService.GetAll().Count();
-
-        //    Assert.AreEqual(0, count);
-        //}
-
         [TearDown]
         public override void TearDown()
         {
