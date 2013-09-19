@@ -52,7 +52,7 @@ namespace Merchello.Tests.UnitTests.WebControllers
             ProductApiController ctrl = new ProductApiController(merchelloContext, tempUmbracoContext);
 
             //// Act
-            var result = ctrl.Get(productKey);
+            var result = ctrl.GetProduct(productKey);
 
             //// Assert
             Assert.AreEqual(result, product);
@@ -75,9 +75,8 @@ namespace Merchello.Tests.UnitTests.WebControllers
             ProductApiController ctrl = new ProductApiController(merchelloContext, tempUmbracoContext);
 
             //// Act & Assert
-            var ex = Assert.Throws<HttpResponseException>(() => ctrl.Get(Guid.Empty));
+            var ex = Assert.Throws<HttpResponseException>(() => ctrl.GetProduct(Guid.Empty));
         }
-
 
         /// <summary>
         /// Test to verify that the API gets the correct Products from the passed in Keys
@@ -109,7 +108,7 @@ namespace Merchello.Tests.UnitTests.WebControllers
             ProductApiController ctrl = new ProductApiController(merchelloContext, tempUmbracoContext);
 
             //// Act
-            var result = ctrl.Get(productKeys);
+            var result = ctrl.GetProducts(productKeys);
 
             //// Assert
             Assert.AreEqual(result, productsList);
@@ -134,7 +133,7 @@ namespace Merchello.Tests.UnitTests.WebControllers
             ProductApiController ctrl = new ProductApiController(merchelloContext, tempUmbracoContext);
 
             //// Act
-            HttpResponseMessage response = ctrl.Put(productKey, product);
+            HttpResponseMessage response = ctrl.SaveProduct(product);
 
             //// Assert
             Assert.AreEqual(response.StatusCode, System.Net.HttpStatusCode.OK);
@@ -160,7 +159,7 @@ namespace Merchello.Tests.UnitTests.WebControllers
             ProductApiController ctrl = new ProductApiController(merchelloContext, tempUmbracoContext);
 
             //// Act
-            HttpResponseMessage response = ctrl.Put(productKey, product);
+            HttpResponseMessage response = ctrl.SaveProduct(product);
 
             //// Assert
             Assert.AreEqual(response.StatusCode, System.Net.HttpStatusCode.InternalServerError);
