@@ -16,11 +16,15 @@ namespace Merchello.Core.Services
         private Lazy<CustomerService> _customerService;
         private Lazy<AnonymousCustomerService> _anonymousCustomerService;
         private Lazy<BasketService> _basketService;
+        private Lazy<BasketItemService> _basketItemService; 
         private Lazy<InvoiceService> _invoiceService;
         private Lazy<InvoiceItemService> _invoiceItemService;
         private Lazy<InvoiceStatusService> _invoiceStatusService;
         private Lazy<PaymentService> _paymentService;
         private Lazy<ProductService> _productService;
+        private Lazy<ShipmentService> _shipmentService;
+        private Lazy<ShipMethodService> _shipMethodService;
+        private Lazy<TransactionService> _transactionService; 
 
         /// <summary>
         /// Constructor
@@ -53,6 +57,9 @@ namespace Merchello.Core.Services
             if(_basketService == null)
                 _basketService = new Lazy<BasketService>(() => new BasketService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
+            if(_basketItemService == null)
+                _basketItemService = new Lazy<BasketItemService>(() => new BasketItemService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+
             if(_invoiceItemService == null)
                 _invoiceItemService = new Lazy<InvoiceItemService>(() => new InvoiceItemService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
@@ -67,11 +74,27 @@ namespace Merchello.Core.Services
 
             if(_productService == null)
                 _productService = new Lazy<ProductService>(() => new ProductService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+
+            if(_shipmentService == null)
+                _shipmentService = new Lazy<ShipmentService>(() => new ShipmentService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+
+            if (_shipMethodService == null)
+                _shipMethodService = new Lazy<ShipMethodService>(() => new ShipMethodService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+
+            if(_transactionService == null)
+                _transactionService = new Lazy<TransactionService>(() => new TransactionService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
         }
 
 
         #region ICustomerService Members
 
+        /// <summary>
+        /// Gets the <see cref="IAddressService"/>
+        /// </summary>
+        public IAddressService AddressService
+        {
+            get { return _addressService.Value; }
+        }
        
         /// <summary>
         /// Gets the <see cref="ICustomerService"/>
@@ -82,11 +105,19 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
-        /// Gets the <see cref="BasketService"/>
+        /// Gets the <see cref="IBasketService"/>
         /// </summary>
         public IBasketService BasketService
         {
             get { return _basketService.Value;  }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IBasketItemService"/>
+        /// </summary>
+        internal IBasketItemService BasketItemService
+        {
+            get { return _basketItemService.Value; }
         }
 
         /// <summary>
@@ -95,6 +126,22 @@ namespace Merchello.Core.Services
         public IInvoiceService InvoiceService
         {
             get { return _invoiceService.Value; }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IInvoiceItemService"/>
+        /// </summary>
+        internal IInvoiceItemService InvoiceItemService
+        {
+            get { return _invoiceItemService.Value; }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IInvoiceStatusService"/>
+        /// </summary>
+        internal IInvoiceStatusService InvoiceStatusService
+        {
+            get { return _invoiceStatusService.Value; }
         }
 
         /// <summary>
@@ -113,14 +160,20 @@ namespace Merchello.Core.Services
             get { return _productService.Value;  }
         }
 
-        /// <summary>
-        /// Gets the <see cref="IAddressService"/>
-        /// </summary>
-        public IAddressService AddressService
+        public IShipmentService ShipmentService
         {
-            get { return _addressService.Value;  }
+            get { return _shipmentService.Value; }
         }
 
+        internal IShipMethodService ShipMethodService
+        {
+            get { return _shipMethodService.Value; }
+        }
+
+        internal  ITransactionService TransactionService
+        {
+            get { return _transactionService.Value; }
+        }
         #endregion
     }
 }

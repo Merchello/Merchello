@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Merchello.Core.Models.EntityBase;
-using Merchello.Core.Persistence.Repositories;
-using Merchello.Tests.Base.Data;
+﻿using Merchello.Core.Persistence.Repositories;
+using Merchello.Tests.Base.DataMakers;
 using Merchello.Tests.Base.Respositories.UnitOfWork;
 using NUnit.Framework;
-using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Tests.UnitTests.Repository
 {
@@ -29,7 +22,7 @@ namespace Merchello.Tests.UnitTests.Repository
         [Test]
         public void Save_Calls_Insert()
         {
-            var address = AddressData.AddressForInserting();
+            var address = MockAddressDataMaker.AddressForInserting();
 
             _repository.AddOrUpdate(address);
 
@@ -39,7 +32,7 @@ namespace Merchello.Tests.UnitTests.Repository
         [Test]
         public void Save_Calls_Update()
         {
-            var address = AddressData.AddressForUpdating();
+            var address = MockAddressDataMaker.AddressForUpdating();
             _repository.AddOrUpdate(address);
 
             Assert.IsTrue(_uow.UpdateCalled);
@@ -49,7 +42,7 @@ namespace Merchello.Tests.UnitTests.Repository
         [Test]
         public void Delete_Calls_Delete()
         {
-            var address = AddressData.AddressForUpdating();
+            var address = MockAddressDataMaker.AddressForUpdating();
 
             _repository.Delete(address);
 

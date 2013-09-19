@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Merchello.Core;
 using Merchello.Core.Models;
 
-namespace Merchello.Tests.Base.Data
+
+namespace Merchello.Tests.Base.DataMakers
 {
-    public class BasketData
+    public class MockBasketDataMaker : MockDataMakerBase
     {
         public static IBasket AnonymousBasket(BasketType basketType)
         {
-            var anonymous = CustomerData.AnonymousCustomerMock();
+            var anonymous = MockCustomerDataMaker.AnonymousCustomerMock();
            
 
             var basket =  new Basket(basketType)
@@ -31,7 +28,7 @@ namespace Merchello.Tests.Base.Data
 
         public static IBasket AnonymousBasketForInserting(BasketType basketType)
         {
-            var anonymous = CustomerData.AnonymousCustomerMock();
+            var anonymous = MockCustomerDataMaker.AnonymousCustomerMock();
             return new Basket(basketType)
             {
                 ConsumerKey = anonymous.Key

@@ -4,7 +4,7 @@ using Merchello.Core.Events;
 using Merchello.Core.Models;
 using Merchello.Core.Persistence;
 using Merchello.Core.Services;
-using Merchello.Tests.Base.Data;
+using Merchello.Tests.Base.DataMakers;
 using Merchello.Tests.Base.Respositories;
 using Merchello.Tests.Base.Respositories.UnitOfWork;
 using Merchello.Tests.Base.Services;
@@ -26,7 +26,7 @@ namespace Merchello.Tests.UnitTests.Services
             Before = null;
             After = null;
 
-            _anonymous = CustomerData.AnonymousCustomerMock();
+            _anonymous = MockCustomerDataMaker.AnonymousCustomerMock();
 
             BasketService.Saving += delegate(IBasketService sender, SaveEventArgs<IBasket> args)
             {
@@ -71,7 +71,7 @@ namespace Merchello.Tests.UnitTests.Services
         [Test]
         public void Save_Triggers_Events_And_Basket_Is_Passed()
         {
-            var basket = BasketData.AnonymousBasket(BasketType.Basket);
+            var basket = MockBasketDataMaker.AnonymousBasket(BasketType.Basket);
 
             _basketService.Save(basket);
 
@@ -86,7 +86,7 @@ namespace Merchello.Tests.UnitTests.Services
         public void Save_Is_Committed()
         {
 
-            var basket = BasketData.AnonymousBasket(BasketType.Basket);
+            var basket = MockBasketDataMaker.AnonymousBasket(BasketType.Basket);
             _basketService.Save(basket);
 
 
@@ -97,7 +97,7 @@ namespace Merchello.Tests.UnitTests.Services
         [Test]
         public void Delete_Triggers_Events_And_Basket_Is_Passed()
         {
-            var basket = BasketData.AnonymousBasket(BasketType.Basket);
+            var basket = MockBasketDataMaker.AnonymousBasket(BasketType.Basket);
 
             _basketService.Delete(basket);
             
@@ -111,7 +111,7 @@ namespace Merchello.Tests.UnitTests.Services
         [Test]
         public void Delete_Is_Committed()
         {
-            var basket = BasketData.AnonymousBasket(BasketType.Basket);
+            var basket = MockBasketDataMaker.AnonymousBasket(BasketType.Basket);
 
             _basketService.Delete(basket);
 

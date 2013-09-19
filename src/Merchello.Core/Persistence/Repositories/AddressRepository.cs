@@ -104,7 +104,7 @@ namespace Merchello.Core.Persistence.Repositories
             var dto = factory.BuildDto(entity);
 
             Database.Insert(dto);
-
+            entity.Id = dto.Id;
             entity.ResetDirtyProperties();
         }
 

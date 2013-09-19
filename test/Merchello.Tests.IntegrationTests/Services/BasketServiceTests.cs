@@ -3,27 +3,24 @@ using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
-using Merchello.Tests.Base.Data;
-using Merchello.Tests.Base.SqlSyntax;
+using Merchello.Tests.Base.DataMakers;
 using NUnit.Framework;
 
 namespace Merchello.Tests.IntegrationTests.Services
 {
     [TestFixture]
     [Category("Service Integration")]
-    public class BasketServiceTests : BaseUsingSqlServerSyntax
+    public class BasketServiceTests : ServiceIntegrationTestBase
     {
         private IAnonymousCustomer _anonymous;
         private BasketService _basketService;   
 
         [SetUp]
-        public override void Initialize()
+        public void Initialize()
         {
-            base.Initialize();
-
             _basketService = new BasketService();
 
-            _anonymous = CustomerData.AnonymousCustomerMock();
+            _anonymous = MockCustomerDataMaker.AnonymousCustomerMock();
 
         }
 
@@ -45,7 +42,7 @@ namespace Merchello.Tests.IntegrationTests.Services
         [Test]
         public void Can_Save_A_Basket()
         {
-            var basket = BasketData.AnonymousBasketForInserting(BasketType.Basket);
+            var basket = MockBasketDataMaker.AnonymousBasketForInserting(BasketType.Basket);
 
             _basketService.Save(basket);
 
@@ -58,7 +55,7 @@ namespace Merchello.Tests.IntegrationTests.Services
         [Test]
         public void Creating_A_Second_Basket_Results_In_The_First_Being_Returned()
         {
-            var basket = BasketData.AnonymousBasketForInserting(BasketType.Wishlist);
+            var basket = MockBasketDataMaker.AnonymousBasketForInserting(BasketType.Wishlist);
             _basketService.Save(basket);
 
             var id = basket.Id;
@@ -73,12 +70,5 @@ namespace Merchello.Tests.IntegrationTests.Services
 
 
        
-        [TearDown]
-        public override void TearDown()
-        {
-            base.TearDown();
-
-            _basketService = null;
-        }
     }
 }

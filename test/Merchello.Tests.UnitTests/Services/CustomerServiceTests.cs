@@ -3,7 +3,7 @@ using Merchello.Core.Events;
 using Merchello.Core.Models;
 using Merchello.Core.Persistence;
 using Merchello.Core.Services;
-using Merchello.Tests.Base.Data;
+using Merchello.Tests.Base.DataMakers;
 using Merchello.Tests.Base.Respositories;
 using Merchello.Tests.Base.Respositories.UnitOfWork;
 using Merchello.Tests.Base.Services;
@@ -77,7 +77,7 @@ namespace Merchello.Tests.UnitTests.Services
         [Test]
         public void Save_Triggers_Events_And_Customer_Is_Passed()
         {
-            var customer = CustomerData.CustomerForInserting();
+            var customer = MockCustomerDataMaker.CustomerForInserting();
 
             _customerService.Save(customer);
 
@@ -91,7 +91,7 @@ namespace Merchello.Tests.UnitTests.Services
         [Test]
         public void Save_Is_Committed()
         {
-            var customer = CustomerData.CustomerForInserting();
+            var customer = MockCustomerDataMaker.CustomerForInserting();
 
             _customerService.Save(customer);
 
@@ -102,7 +102,7 @@ namespace Merchello.Tests.UnitTests.Services
         [Test]
         public void Delete_Triggers_Events_And_Customer_Is_Passed()
         {
-            var customer = CustomerData.CustomerForUpdating();
+            var customer = MockCustomerDataMaker.CustomerForUpdating();
 
             _customerService.Delete(customer);
 
@@ -117,7 +117,7 @@ namespace Merchello.Tests.UnitTests.Services
         [Test]
         public void Delete_Is_Committed()
         {
-            var customer = CustomerData.CustomerForUpdating();
+            var customer = MockCustomerDataMaker.CustomerForUpdating();
 
             _customerService.Delete(customer);
    

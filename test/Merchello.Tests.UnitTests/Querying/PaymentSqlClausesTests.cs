@@ -12,12 +12,15 @@ using Umbraco.Core.Persistence;
 namespace Merchello.Tests.UnitTests.Querying
 {
     [TestFixture]
-    public class PaymentRelatedSqlClausesTests : BaseUsingSqlServerSyntax
+    public class PaymentSqlClausesTests : BaseUsingSqlServerSyntax
     {
-
+        /// <summary>
+        /// Test to verify that the typed <see cref="PaymentDto"/> query matches generic "select * ..." query 
+        /// </summary>
         [Test]
         public void Can_Verify_Payment_Base_Sql_Clause()
         {
+            //// Arrange
             var id = 10;
 
             var expected = new Sql();
@@ -26,6 +29,7 @@ namespace Merchello.Tests.UnitTests.Querying
                 .InnerJoin("[merchCustomer]").On("[merchPayment].[customerKey] = [merchCustomer].[pk]")                
                 .Where("[merchPayment].[id] = " + id.ToString());
 
+            //// Act
             var sql = new Sql();
             sql.Select("*")
                 .From<PaymentDto>()
@@ -33,25 +37,7 @@ namespace Merchello.Tests.UnitTests.Querying
                 .On<PaymentDto, CustomerDto>(left => left.CustomerKey, right => right.Key)                                
                 .Where<PaymentDto>(x => x.Id == id);
 
-
-            Assert.That(sql.SQL, Is.EqualTo(expected.SQL));
-        }
-
-        [Test]
-        public void Can_Verify_Transaction_Base_Sql_Clause()
-        {
-            var id = 10;
-
-            var expected = new Sql();
-            expected.Select("*")
-                .From("[merchTransaction]")                
-                .Where("[merchPayment].[id] = " + id.ToString());
-
-            var sql = new Sql();
-            sql.Select("*")
-                .From<TransactionDto>()               
-                .Where<PaymentDto>(x => x.Id == id);
-
+            //// Assert
             Assert.That(sql.SQL, Is.EqualTo(expected.SQL));
         }
 

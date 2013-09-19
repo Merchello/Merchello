@@ -84,10 +84,11 @@
     <Compile Include="Services\CustomerServiceTests.cs" />
     <Compile Include="Services\PaymentServiceTests.cs" />
     <Compile Include="Services\ProductServiceTests.cs" />
+    <Compile Include="Services\ServiceIntegrationTestBase.cs" />
     <Compile Include="Services\ShipmentServiceTests.cs" />
     <Compile Include="Services\ShipMethodServiceTests.cs" />
     <Compile Include="Services\TransactionServiceTests.cs" />
-    <Compile Include="TestHelpers\EnsureDatabaseData.cs" />
+    <Compile Include="TestHelpers\DbPreTestDataWorker.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
