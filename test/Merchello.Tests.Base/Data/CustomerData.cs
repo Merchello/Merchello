@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.UI.WebControls;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Rdbms;
+using Umbraco.Core;
 
 namespace Merchello.Tests.Base.Data
 {
@@ -29,7 +31,7 @@ namespace Merchello.Tests.Base.Data
         {
             var customer = new Customer(0, 0, null)
                 {
-                    FirstName = "Joe",
+                    FirstName = RandomFirstName(),
                     LastName = "Schmoe",
                     Email = "joe@schmoe.com",
                     MemberId = null,
@@ -75,7 +77,7 @@ namespace Merchello.Tests.Base.Data
                 {
                     new Customer(0, 0, null)
                         {
-                            FirstName = "Joe",
+                            FirstName = RandomFirstName(),
                             LastName = "Schmoe",
                             Email = "jo@schmoe.com",
                             MemberId = null,
@@ -83,7 +85,7 @@ namespace Merchello.Tests.Base.Data
                         },
                     new Customer(0, 0, null)
                         {
-                            FirstName = "John",
+                            FirstName = RandomFirstName(),
                             LastName = "Doe",
                             Email = "john@doe.com",
                             MemberId = null,
@@ -91,7 +93,7 @@ namespace Merchello.Tests.Base.Data
                         },
                      new Customer(0, 0, null)
                         {
-                            FirstName = "Jane",
+                            FirstName = RandomFirstName(),
                             LastName = "Doe",
                             Email = "jane@doe.com",
                             MemberId = null,
@@ -103,5 +105,17 @@ namespace Merchello.Tests.Base.Data
 
         }
 
-    }
+
+        private static string RandomFirstName()
+        {
+            var names = new List<string> {"Jaqueline", "Steve", "Fred", "Stella", "Conner", "Tommy", "Tony", "Shubert","Abigail", "Lucy", "Olivia", "Lucas", "Gavin", "Stella"};
+            return SelectRandom(names);
+        }
+
+        private static string SelectRandom(IEnumerable<string> names)
+        {
+            var random = new Random();
+            var index = random.Next(names.Count());
+            return names.ToArray()[index];
+        }
 }
