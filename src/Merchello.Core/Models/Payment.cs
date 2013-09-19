@@ -22,7 +22,7 @@ namespace Merchello.Core.Models
         private bool _exported;
 
         public Payment(ICustomer customer, PaymentMethodType paymentMethodType, decimal amount)
-            : this(customer, EnumeratedTypeFieldConverter.PaymentMethod().GetTypeField(paymentMethodType).TypeKey, amount)
+            : this(customer, EnumTypeFieldConverter.PaymentMethod().GetTypeField(paymentMethodType).TypeKey, amount)
         { }
 
         internal Payment (ICustomer customer, Guid paymentTypeFieldKey, decimal amount)  
@@ -183,10 +183,10 @@ namespace Merchello.Core.Models
         [DataMember]
         public PaymentMethodType PaymentMethodType
         {
-            get { return EnumeratedTypeFieldConverter.PaymentMethod().GetTypeField(_paymentTypeFieldKey); }
+            get { return EnumTypeFieldConverter.PaymentMethod().GetTypeField(_paymentTypeFieldKey); }
             set
             {
-                var reference = EnumeratedTypeFieldConverter.PaymentMethod().GetTypeField(value);
+                var reference = EnumTypeFieldConverter.PaymentMethod().GetTypeField(value);
                 if (!ReferenceEquals(TypeFieldMapperBase.NotFound, reference))
                 {
                     // call through the property to flag the dirty property

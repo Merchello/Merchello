@@ -6,6 +6,7 @@ using Merchello.Core.Models;
 using Merchello.Core.Models.TypeFields;
 using Merchello.Core.Persistence;
 using Merchello.Core.Events;
+using Merchello.Core.Persistence.Querying;
 using Umbraco.Core;
 using Umbraco.Core.Persistence.UnitOfWork;
 
@@ -50,7 +51,7 @@ namespace Merchello.Core.Services
             return CreateAddress(
                                 customer.Key, 
                                 label, 
-                                EnumeratedTypeFieldConverter.Address().GetTypeField(addressType), 
+                                EnumTypeFieldConverter.Address().GetTypeField(addressType), 
                                 address1,
                                 string.Empty, 
                                 locality, 
@@ -206,6 +207,20 @@ namespace Merchello.Core.Services
             using (var repository = _repositoryFactory.CreateAddressRepository(_uowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll(ids.ToArray());
+            }
+        }
+
+        /// <summary>
+        /// Gets a list of <see cref="IAddress"/> objects given a customer key
+        /// </summary>
+        /// <param name="customerKey">The key (Guid) of the customer</param>
+        /// <returns>A collection of <see cref="IAddress"/> objects</returns>
+        public IEnumerable<IAddress> GetAddressesForCustomer(Guid customerKey)
+        {
+            using (var repository = _repositoryFactory.CreateAddressRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Query<IAddress>.Builder.Where(x => x.CustomerKey == customerKey);
+                return repository.GetByQuery(query);
             }
         }
 

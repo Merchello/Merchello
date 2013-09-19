@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Merchello.Core.Models;
+using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Models.TypeFields;
 using Merchello.Core.Persistence;
 using Merchello.Core.Events;
+using Merchello.Core.Persistence.Querying;
 using Umbraco.Core;
 using Umbraco.Core.Persistence.UnitOfWork;
 
@@ -45,7 +47,7 @@ namespace Merchello.Core.Services
         /// </summary>
         public IInvoiceItem CreateInvoiceItem(IInvoice invoice, InvoiceItemType invoiceItemType, string sku, string name, int baseQuantity, int unitOfMeasure, decimal amount, int? parentId = null)
         {
-            var invoiceItemTypeFieldKey = EnumeratedTypeFieldConverter.InvoiceItem().GetTypeField(invoiceItemType).TypeKey;
+            var invoiceItemTypeFieldKey = EnumTypeFieldConverter.InvoiceItem().GetTypeField(invoiceItemType).TypeKey;
             return CreateInvoiceItem(invoice, invoiceItemTypeFieldKey, sku, name, baseQuantity, unitOfMeasure, amount, false, parentId);
         }
 
@@ -190,6 +192,20 @@ namespace Merchello.Core.Services
             using (var repository = _repositoryFactory.CreateInvoiceItemRepository(_uowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll(ids.ToArray());
+            }
+        }
+
+        /// <summary>
+        /// Gets a list of <see cref="IInvoiceItem"/> 
+        /// </summary>
+        /// <param name="invoiceId"></param>
+        /// <returns></returns>
+        public IEnumerable<IInvoiceItem> GetInvoiceItemsForInvoice(int invoiceId)
+        {
+            using (var repository = _repositoryFactory.CreateInvoiceItemRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Query<IInvoiceItem>.Builder.Where(x => x.InvoiceId == invoiceId);
+                return repository.GetByQuery(query);
             }
         }
 

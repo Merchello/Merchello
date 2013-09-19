@@ -45,7 +45,7 @@ namespace Merchello.Core.Services
         /// </summary
         public IShipMethod CreateShipMethod(string name, Guid providerKey, ShipMethodType shipMethodType)
         {
-            var typeField = EnumeratedTypeFieldConverter.ShipmentMethod().GetTypeField(shipMethodType);
+            var typeField = EnumTypeFieldConverter.ShipmentMethod().GetTypeField(shipMethodType);
             return CreateShipMethod(name, providerKey, typeField.TypeKey);
         }
 

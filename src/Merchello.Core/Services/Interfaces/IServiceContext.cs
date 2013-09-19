@@ -17,6 +17,11 @@ namespace Merchello.Core.Services
         IAddressService AddressService { get; }
 
         /// <summary>
+        /// Gets the <see cref="IAnonymousCustomerService"/>
+        /// </summary>
+        IAnonymousCustomerService AnonymousCustomerService { get; }
+
+        /// <summary>
         /// Gets the <see cref="ICustomerService"/>
         /// </summary>
         ICustomerService CustomerService { get; }

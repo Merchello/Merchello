@@ -44,7 +44,7 @@ namespace Merchello.Core.Persistence.Repositories
         /// </remarks>
         public IBasket GetByConsumer(IConsumer consumer, BasketType basketType)
         {
-            return GetByConsumer(consumer, EnumeratedTypeFieldConverter.Basket().GetTypeField(basketType).TypeKey);
+            return GetByConsumer(consumer, EnumTypeFieldConverter.Basket().GetTypeField(basketType).TypeKey);
         }
 
 
