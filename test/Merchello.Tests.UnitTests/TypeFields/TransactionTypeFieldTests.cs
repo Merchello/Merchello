@@ -26,7 +26,7 @@ namespace Merchello.Tests.UnitTests.TypeFields
         [Test]
         public void TransactionType_debit_matches_configuration()
         {
-            var type = EnumeratedTypeFieldConverter.Transaction().Debit;
+            var type = EnumTypeFieldConverter.Transaction().Debit;
 
             Assert.AreEqual(_mockTransactionDebit.Alias, type.Alias);
             Assert.AreEqual(_mockTransactionDebit.Name, type.Name);
@@ -41,7 +41,7 @@ namespace Merchello.Tests.UnitTests.TypeFields
         [Test]
         public void BasketType_wishlist_matches_configuration()
         {
-            var type = EnumeratedTypeFieldConverter.Transaction().Credit;
+            var type = EnumTypeFieldConverter.Transaction().Credit;
 
             Assert.AreEqual(_mockTransactionCredit.Alias, type.Alias);
             Assert.AreEqual(_mockTransactionCredit.Name, type.Name);

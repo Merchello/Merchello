@@ -47,7 +47,7 @@ namespace Merchello.Core.Services
         /// </summary>
         public IPayment CreatePayment(ICustomer customer, string gatewayAlias, PaymentMethodType paymentMethodType, string paymentMethodName, string referenceNumber, decimal amount)
         {
-            var typeFieldKey = EnumeratedTypeFieldConverter.PaymentMethod().GetTypeField(paymentMethodType).TypeKey;
+            var typeFieldKey = EnumTypeFieldConverter.PaymentMethod().GetTypeField(paymentMethodType).TypeKey;
             return CreatePayment(customer, gatewayAlias, typeFieldKey, paymentMethodName, referenceNumber, amount);
         }
 

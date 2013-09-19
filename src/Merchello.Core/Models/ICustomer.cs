@@ -18,6 +18,12 @@ namespace Merchello.Core.Models
         int? MemberId { get; set; }
 
         /// <summary>
+        /// Returns the full name of the customer
+        /// </summary>
+        [IgnoreDataMember]
+        string FullName { get; }
+
+        /// <summary>
         /// The first name of the customer
         /// </summary>
         [DataMember]

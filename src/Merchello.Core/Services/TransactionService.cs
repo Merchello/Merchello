@@ -46,7 +46,7 @@ namespace Merchello.Core.Services
         /// </summary>
         public ITransaction CreateTransaction(IPayment payment, IInvoice invoice, TransactionType transactionType, decimal amount)
         {
-            var typeField = EnumeratedTypeFieldConverter.Transaction().GetTypeField(transactionType);
+            var typeField = EnumTypeFieldConverter.Transaction().GetTypeField(transactionType);
             return CreateTransaction(payment, invoice, typeField.TypeKey, amount);
         }
 

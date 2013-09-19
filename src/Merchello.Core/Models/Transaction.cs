@@ -20,7 +20,7 @@ namespace Merchello.Core.Models
 
 
         public Transaction(IPayment payment, IInvoice invoice, TransactionType transactionType)
-            : this(payment, invoice, EnumeratedTypeFieldConverter.Transaction().GetTypeField(transactionType).TypeKey)
+            : this(payment, invoice, EnumTypeFieldConverter.Transaction().GetTypeField(transactionType).TypeKey)
         { }
 
         internal Transaction (IPayment payment, IInvoice invoice, Guid transactionTypeFieldKey)
@@ -131,10 +131,10 @@ namespace Merchello.Core.Models
         [DataMember]
         public TransactionType TransactionType
         {
-            get { return EnumeratedTypeFieldConverter.Transaction().GetTypeField(_transactionTypeFieldKey); }
+            get { return EnumTypeFieldConverter.Transaction().GetTypeField(_transactionTypeFieldKey); }
             set
             {
-                var reference = EnumeratedTypeFieldConverter.Transaction().GetTypeField(value);
+                var reference = EnumTypeFieldConverter.Transaction().GetTypeField(value);
                 if (!ReferenceEquals(TypeFieldMapperBase.NotFound, reference))
                 {
                     // call through the property to flag the dirty property

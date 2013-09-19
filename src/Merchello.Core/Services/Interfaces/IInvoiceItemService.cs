@@ -57,5 +57,11 @@ namespace Merchello.Core.Services
         /// <returns>List of <see cref="IInvoiceItem"/></returns>
         IEnumerable<IInvoiceItem> GetByIds(IEnumerable<int> ids);
 
+        /// <summary>
+        /// Gets a list of <see cref="IInvoiceItem"/> objects for a given invoice id
+        /// </summary>
+        /// <param name="invoiceId">The id of the invoice</param>
+        /// <returns>A collection of <see cref="IInvoiceItem"/></returns>
+        IEnumerable<IInvoiceItem> GetInvoiceItemsForInvoice(int invoiceId);
     }
 }

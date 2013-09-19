@@ -6,8 +6,27 @@ using System.Threading.Tasks;
 
 namespace Merchello.Core.Models.TypeFields
 {
-    public class EnumeratedTypeFieldConverter
+    //public class EnumTypeFieldConverter<T, TResult>
+    //{
+    //    public static TResult GetTypeField(T enumeratedType)
+    //    {
+    //        object o = null;
+    //        if (typeof (T) == typeof (AddressType)) o = new AddressTypeField();
+    //        if (typeof (T) == typeof (BasketType)) o = new BasketTypeField();
+    //        if (typeof (T) == typeof (InvoiceItemType)) o = new InvoiceItemTypeField();
+    //        if (typeof (T) == typeof (PaymentMethodType)) o = new PaymentMethodTypeField();
+    //        if (typeof (T) == typeof (ShipMethodType)) o = new ShipMethodTypeField();
+    //        if (typeof (T) == typeof (TransactionType)) o = new TransactionTypeField();
+    //        if(o == null) throw new NotSupportedException();
+
+    //        return (TResult) o;
+    //    }
+    //}
+
+
+    public class EnumTypeFieldConverter
     {
+
         /// <summary>
         /// Creates an instance of an <see cref="IAddressTypeField"/> object
         /// </summary>

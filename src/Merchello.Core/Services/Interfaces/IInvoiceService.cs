@@ -67,5 +67,18 @@ namespace Merchello.Core.Services
         /// <returns>List of <see cref="IInvoice"/></returns>
         IEnumerable<IInvoice> GetByIds(IEnumerable<int> ids);
 
+        /// <summary>
+        /// Gets a list of <see cref="IInvoice"/> objects given a customer key
+        /// </summary>
+        /// <param name="key">Unique customer key (Guid)</param>
+        /// <returns>A collection of <see cref="IInvoice"/></returns>
+        IEnumerable<IInvoice> GetInvoicesForCustomer(Guid key);
+
+        /// <summary>
+        /// Gets a list of <see cref="IInvoice"/> objects given an invoice status id
+        /// </summary>
+        /// <param name="invoiceStatusId">The id of the <see cref="IInvoiceStatus"/></param>
+        /// <returns>A collection of <see cref="IInvoiceStatus"/></returns>
+        IEnumerable<IInvoice> GetInvoicesByInvoiceStatus(int invoiceStatusId);
     }
 }

@@ -19,14 +19,20 @@ namespace Merchello.Core.Models
         [DataMember]
         DateTime InvoiceDate { get; set; }
 
-        ///// <summary>
-        ///// The customer to associated with the invoice
-        ///// </summary>
-        //[DataMember]
-        //Guid CustomerKey { get;  }
+        /// <summary>
+        /// The customer key to associated with the invoice
+        /// </summary>
+        [IgnoreDataMember]
+        Guid CustomerKey { get; }
 
         [DataMember]
         ICustomer Customer { get; }
+
+        /// <summary>
+        /// The id for the invoice status associated with this invoice
+        /// </summary>
+        [DataMember]
+        int InvoiceStatusId { get; }
 
         /// <summary>
         /// The status of the invoice

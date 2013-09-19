@@ -56,16 +56,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataMakers\MockAnonymousCustomerDataMaker.cs" />
     <Compile Include="DataMakers\MockBasketDataMaker.cs" />
+    <Compile Include="DataMakers\MockBasketItemDataMaker.cs" />
     <Compile Include="DataMakers\MockInvoiceDataMaker.cs" />
+    <Compile Include="DataMakers\MockInvoiceItemDataMaker.cs" />
+    <Compile Include="DataMakers\MockInvoiceStatusDataMaker.cs" />
     <Compile Include="DataMakers\MockDataMakerBase.cs" />
+    <Compile Include="DataMakers\MockPaymentDataMaker.cs" />
     <Compile Include="DataMakers\MockProductDataMaker.cs" />
     <Compile Include="DataMakers\MockShipmentDataMaker.cs" />
     <Compile Include="DataMakers\MockAddressDataMaker.cs" />
     <Compile Include="DataMakers\MockCustomerDataMaker.cs" />
-    <Compile Include="Db\DbIntegrationTestBase.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="DataMakers\MockShipMethodDataMaker.cs" />
+    <Compile Include="DataMakers\MockTransactionDataMaker.cs" />
+    <Compile Include="DataMakers\MockWarehouseDataMaker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Respositories\MockUnitOfWorkProvider.cs" />
     <Compile Include="Respositories\UnitOfWork\MockDatabaseUnitOfWork.cs" />

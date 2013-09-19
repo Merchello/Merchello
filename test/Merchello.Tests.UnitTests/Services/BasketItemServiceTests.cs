@@ -27,7 +27,7 @@ namespace Merchello.Tests.UnitTests.Services
             Before = null;
             After = null;
 
-            _anonymous = MockCustomerDataMaker.AnonymousCustomerMock();
+            _anonymous = MockAnonymousCustomerDataMaker.AnonymousCustomerForUpdating();
 
             BasketItemService.Saving += delegate(IBasketItemService sender, SaveEventArgs<IBasketItem> args)
             {
@@ -72,7 +72,7 @@ namespace Merchello.Tests.UnitTests.Services
         [Test]
         public void Save_Triggers_Events_And_BasketItem_Is_Passed()
         {
-            var basket = MockBasketDataMaker.AnonymousBasket(BasketType.Basket);
+            var basket = MockBasketDataMaker.AnonymousBasket(_anonymous, BasketType.Basket);
             _basketService.Save(basket);
 
             var basketItem = _basketItemService.CreateBasketItem(basket, "sku", "demo", 1, 1, 10.00m);
@@ -88,7 +88,7 @@ namespace Merchello.Tests.UnitTests.Services
         [Test]
         public void Save_Is_Committed()
         {
-            var basket = MockBasketDataMaker.AnonymousBasket(BasketType.Basket);
+            var basket = MockBasketDataMaker.AnonymousBasket(_anonymous, BasketType.Basket);
             _basketService.Save(basket);
 
             CommitCalled = false;
@@ -117,7 +117,7 @@ namespace Merchello.Tests.UnitTests.Services
         [Test]
         public void Delete_Is_Committed()
         {
-            var basket = MockBasketDataMaker.AnonymousBasket(BasketType.Basket);
+            var basket = MockBasketDataMaker.AnonymousBasket(_anonymous, BasketType.Basket);
 
             _basketService.Delete(basket);
 
