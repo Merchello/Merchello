@@ -141,7 +141,7 @@ namespace Merchello.Web.Editors
         /// <param name="key"></param>
         /// <param name="item"></param>
         [AcceptVerbs("PUT")]
-        public HttpResponseMessage SaveProduct([FromBody]Product item)
+        public HttpResponseMessage PutProduct(Product item)
         {
             HttpResponseMessage response = new HttpResponseMessage(System.Net.HttpStatusCode.OK);
             try

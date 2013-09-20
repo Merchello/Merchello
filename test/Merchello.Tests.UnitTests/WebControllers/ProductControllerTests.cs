@@ -133,7 +133,7 @@ namespace Merchello.Tests.UnitTests.WebControllers
             ProductApiController ctrl = new ProductApiController(merchelloContext, tempUmbracoContext);
 
             //// Act
-            HttpResponseMessage response = ctrl.SaveProduct(product);
+            HttpResponseMessage response = ctrl.PutProduct(product);
 
             //// Assert
             Assert.AreEqual(response.StatusCode, System.Net.HttpStatusCode.OK);
@@ -159,7 +159,7 @@ namespace Merchello.Tests.UnitTests.WebControllers
             ProductApiController ctrl = new ProductApiController(merchelloContext, tempUmbracoContext);
 
             //// Act
-            HttpResponseMessage response = ctrl.SaveProduct(product);
+            HttpResponseMessage response = ctrl.PutProduct(product);
 
             //// Assert
             Assert.AreEqual(response.StatusCode, System.Net.HttpStatusCode.InternalServerError);
