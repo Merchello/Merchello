@@ -236,7 +236,6 @@
     <Compile Include="PackageActions\CreateDatabase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Trees\MerchelloApplication.cs" />
-    <Compile Include="Trees\MerchelloLegacyTree.cs" />
     <Compile Include="Trees\MerchelloTreeController.cs" />
   </ItemGroup>
   <ItemGroup>
