@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using Merchello.Core.Persistence.Caching;
 using Merchello.Core.Persistence.Repositories;
 using Umbraco.Core.Persistence.UnitOfWork;
@@ -133,6 +134,16 @@ namespace Merchello.Core.Persistence
         internal virtual IProductRepository CreateProductRepository(IDatabaseUnitOfWork uow)
         {
             return new ProductRepository(uow, RuntimeCacheProvider.Current);
+        }
+
+        /// <summary>
+        /// Returns an instance of the <see cref="IWarehouseRepository"/>
+        /// </summary>
+        /// <param name="uow"></param>
+        /// <returns></returns>
+        internal virtual IWarehouseRepository CreateWarehouseRepository(IDatabaseUnitOfWork uow)
+        {
+            return new WarehouseRepository(uow, RuntimeCacheProvider.Current);
         }
 
     }

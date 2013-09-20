@@ -74,6 +74,11 @@ namespace Merchello.Core.Services
         ///// </summary>
         //ITransactionService TransactionService { get; }
 
+        /// <summary>
+        /// Gets the <see cref="IWarehouseService"/>
+        /// </summary>
+        IWarehouseService WarehouseService { get; }
+
     }
     
 }

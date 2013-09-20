@@ -18,7 +18,7 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Creates a Warehouse
         /// </summary>
-        IWarehouse CreateWarehouse(string name, string address1, string address2, string locality, string region, string postalCode);
+        IWarehouse CreateWarehouse(string name);
 
         /// <summary>
         /// Saves a single <see cref="IWarehouse"/> object
@@ -62,8 +62,12 @@ namespace Merchello.Core.Services
         /// <returns>List of <see cref="IWarehouse"/></returns>
         IEnumerable<IWarehouse> GetByIds(IEnumerable<int> ids);
 
-
-        IEnumerable<IWarehouse> GetByShipMethod(IShipMethod shipMethod);
+        /// <summary>
+        /// Gets a list of warehouses associated with a ship method
+        /// </summary>
+        /// <param name="shipMethodId">The id of the <see cref="IShipMethod"/></param>
+        /// <returns>A collection of <see cref="IWarehouse"/></returns>
+        IEnumerable<IWarehouse> GetWarehousesForShipMethod(int shipMethodId);
 
     }
 }

@@ -45,14 +45,16 @@ namespace Merchello.Core.Services
         /// Creates an <see cref="ITransaction"/> object
         /// </summary>
         public ITransaction CreateTransaction(IPayment payment, IInvoice invoice, TransactionType transactionType, decimal amount)
-        {
+        {           
             var typeField = EnumTypeFieldConverter.Transaction().GetTypeField(transactionType);
             return CreateTransaction(payment, invoice, typeField.TypeKey, amount);
         }
 
         public ITransaction CreateTransaction(IPayment payment, IInvoice invoice, Guid transactionTypeFieldKey, decimal amount)
         {
-           
+            Mandate.ParameterNotNull(payment, "payment");
+            Mandate.ParameterNotNull(invoice, "invoice");
+
             var transaction = new Transaction(payment, invoice, transactionTypeFieldKey)
                 {                     
                     TransactionTypeFieldKey = transactionTypeFieldKey,
