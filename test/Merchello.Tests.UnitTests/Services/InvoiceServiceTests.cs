@@ -42,11 +42,11 @@ namespace Merchello.Tests.UnitTests.Services
             _statusBefore = false;
             _statusAfter = false;
 
-            _customer = MockCustomerDataMaker.CustomerForUpdating();
+            _customer = MockCustomerDataMaker.CustomerForInserting().MockSavedWithKey(Guid.NewGuid());
 
             _invoiceStatus = MockInvoiceStatusDataMaker.InvoiceStatusUnpaidMock();
 
-            _anonymous = MockAnonymousCustomerDataMaker.AnonymousCustomerForUpdating();
+            _anonymous = MockAnonymousCustomerDataMaker.AnonymousCustomerForInserting().MockSavedWithKey(Guid.NewGuid());
 
             InvoiceService.Saving += delegate(IInvoiceService sender, SaveEventArgs<IInvoice> args)
             {

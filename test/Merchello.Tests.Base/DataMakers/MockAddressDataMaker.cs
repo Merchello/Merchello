@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Models;
+using Merchello.Core.Models.EntityBase;
 using Merchello.Core.Models.TypeFields;
 
 namespace Merchello.Tests.Base.DataMakers
@@ -52,14 +53,6 @@ namespace Merchello.Tests.Base.DataMakers
             return address;
         }
 
-        public static IAddress AddressForUpdating()
-        {
-            var address = AddressForInserting();
-            address.Id = 111;
-            address.ResetDirtyProperties();
-            return address;
-
-        }
 
         public static IEnumerable<IAddress> AddressListForInserting()
         {

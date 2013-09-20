@@ -22,30 +22,41 @@ namespace Merchello.Tests.UnitTests.Repository
         [Test]
         public void Save_Calls_Insert()
         {
+            //// Arrange
             var address = MockAddressDataMaker.AddressForInserting();
 
+            //// Act
             _repository.AddOrUpdate(address);
 
+            //// Assert
             Assert.IsTrue(_uow.InsertCalled);
         }
 
         [Test]
         public void Save_Calls_Update()
         {
-            var address = MockAddressDataMaker.AddressForUpdating();
+            //// Arrange
+            var id = 111;
+            var address = MockAddressDataMaker.AddressForInserting().MockSavedWithId(id);
+
+            //// Act
             _repository.AddOrUpdate(address);
 
+            //// Assert
             Assert.IsTrue(_uow.UpdateCalled);
-
         }
 
         [Test]
         public void Delete_Calls_Delete()
         {
-            var address = MockAddressDataMaker.AddressForUpdating();
+            //// Arrange
+            var id = 111;
+            var address = MockAddressDataMaker.AddressForInserting().MockSavedWithId(id);
 
+            //// Act
             _repository.Delete(address);
 
+            //// Assert
             Assert.IsTrue(_uow.DeleteCalled);
         }
 

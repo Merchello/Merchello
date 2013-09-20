@@ -1,4 +1,5 @@
-﻿using Merchello.Core.Persistence.Repositories;
+﻿using System;
+using Merchello.Core.Persistence.Repositories;
 using Merchello.Tests.Base.DataMakers;
 using Merchello.Tests.Base.Respositories.UnitOfWork;
 using NUnit.Framework;
@@ -22,30 +23,41 @@ namespace Merchello.Tests.UnitTests.Repository
         [Test]
         public void Save_Calls_Insert()
         {
+            //// Arrange
             var customer = MockCustomerDataMaker.CustomerForInserting();
 
+            //// Act
             _repository.AddOrUpdate(customer);
 
+            //// Assert
             Assert.IsTrue(_uow.InsertCalled);
         }
 
         [Test]
         public void Save_Calls_Update()
         {
-            var customer = MockCustomerDataMaker.CustomerForUpdating();
+            //// Arrange
+            var key = Guid.NewGuid();
+            var customer = MockCustomerDataMaker.CustomerForInserting().MockSavedWithKey(key);
+
+            //// Act
             _repository.AddOrUpdate(customer);
 
+            //// Assert
             Assert.IsTrue(_uow.UpdateCalled);
-
         }
 
         [Test]
         public void Delete_Calls_Delete()
         {
-            var customer = MockCustomerDataMaker.CustomerForUpdating();
+            //// Arrange
+            var key = Guid.NewGuid();
+            var customer = MockCustomerDataMaker.CustomerForInserting().MockSavedWithKey(key);
 
+            //// Act
             _repository.Delete(customer);
 
+            //// Assert
             Assert.IsTrue(_uow.DeleteCalled);
         }
 

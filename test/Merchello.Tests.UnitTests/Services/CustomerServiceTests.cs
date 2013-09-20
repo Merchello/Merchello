@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Merchello.Core.Events;
 using Merchello.Core.Models;
 using Merchello.Core.Persistence;
@@ -102,25 +103,34 @@ namespace Merchello.Tests.UnitTests.Services
         [Test]
         public void Delete_Triggers_Events_And_Customer_Is_Passed()
         {
-            var customer = MockCustomerDataMaker.CustomerForUpdating();
+            //// Arrange
+            var key = Guid.NewGuid();
+            var customer =  MockCustomerDataMaker
+                            .CustomerForInserting()
+                            .MockSavedWithKey(key);
 
+            //// Act
             _customerService.Delete(customer);
 
 
             Assert.IsTrue(BeforeTriggered);
-            Assert.AreEqual(customer.FirstName, Before.FirstName);
+            Assert.AreEqual(customer, Before);
 
             Assert.IsTrue(AfterTriggered);
-            Assert.AreEqual(customer.LastName, After.LastName);    
+            Assert.AreEqual(customer, After);    
         }
 
         [Test]
         public void Delete_Is_Committed()
         {
-            var customer = MockCustomerDataMaker.CustomerForUpdating();
+            //// Arrange
+            var key = Guid.NewGuid();
+            var customer = MockCustomerDataMaker.CustomerForInserting().MockSavedWithKey(key);
 
+            //// Act
             _customerService.Delete(customer);
    
+            //// Assert
             Assert.IsTrue(CommitCalled);
         }
 

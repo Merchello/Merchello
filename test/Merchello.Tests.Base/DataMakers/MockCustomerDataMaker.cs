@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Merchello.Core.Models;
+using Merchello.Core.Models.EntityBase;
 using Merchello.Core.Models.Rdbms;
 
 namespace Merchello.Tests.Base.DataMakers
@@ -10,9 +11,7 @@ namespace Merchello.Tests.Base.DataMakers
     /// Helper class to assist in putting together customer data for testing
     /// </summary>
     public class MockCustomerDataMaker : MockDataMakerBase
-    {
-
-       
+    {       
 
         public static ICustomer CustomerForInserting()
         {
@@ -31,6 +30,8 @@ namespace Merchello.Tests.Base.DataMakers
 
             return customer;
         }
+
+
 
         internal static CustomerDto CustomerDtoForInserting(ICustomer c)
         {
@@ -51,14 +52,7 @@ namespace Merchello.Tests.Base.DataMakers
             return dto;
         }
 
-        public static ICustomer CustomerForUpdating()
-        {
-            var customer = CustomerForInserting();
-            customer.Key = Guid.NewGuid();
-            customer.ResetDirtyProperties();
-            return customer;
 
-        }
 
         public static IEnumerable<ICustomer> CustomerListForInserting(int count)
         {

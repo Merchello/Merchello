@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Merchello.Core.Models;
+using Merchello.Core.Models.EntityBase;
 
 namespace Merchello.Tests.Base.DataMakers
 {
@@ -18,14 +19,6 @@ namespace Merchello.Tests.Base.DataMakers
             return anonymous;
         }
 
-        public static IAnonymousCustomer AnonymousCustomerForUpdating()
-        {
-            var anonymous = AnonymousCustomerForInserting();
-            anonymous.Key = Guid.NewGuid();
-            anonymous.CreateDate = DateTime.Now;
-            anonymous.UpdateDate = DateTime.Now;
-            anonymous.ResetDirtyProperties();
-            return anonymous;
-        }
+
     }
 }
