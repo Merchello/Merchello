@@ -30,6 +30,7 @@ namespace Merchello.Tests.Base.DataMakers
                                 
             };
         }
+        
 
         public static IEnumerable<IInvoice> InvoiceCollectionForInserting(ICustomer customer, IInvoiceStatus invoiceStatus, IAddress address, int count)
         {

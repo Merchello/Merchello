@@ -56,6 +56,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataMakers\DataMakerMockSavedExtensions.cs" />
     <Compile Include="DataMakers\MockAnonymousCustomerDataMaker.cs" />
     <Compile Include="DataMakers\MockBasketDataMaker.cs" />
     <Compile Include="DataMakers\MockBasketItemDataMaker.cs" />
@@ -75,7 +76,6 @@
     <Compile Include="Respositories\MockUnitOfWorkProvider.cs" />
     <Compile Include="Respositories\UnitOfWork\MockDatabaseUnitOfWork.cs" />
     <Compile Include="Respositories\UnitOfWork\TransactionType.cs" />
-    <Compile Include="Services\ServiceEventTestBase.cs" />
     <Compile Include="Services\ServiceTestsBase.cs" />
     <Compile Include="SqlSyntax\DbSyntax.cs" />
     <Compile Include="SqlSyntax\Resolution.cs" />

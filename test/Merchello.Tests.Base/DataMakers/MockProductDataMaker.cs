@@ -17,6 +17,19 @@ namespace Merchello.Tests.Base.DataMakers
         }
 
         /// <summary>
+        /// Represents a product as if it was returned from the database
+        /// </summary>
+        /// <param name="key">The key you want to use as the key for the product</param>
+        /// <returns><see cref="IProduct"/></returns>
+        public static IProduct MockProductComplete(Guid key)
+        {
+            var product = MockProductForInserting();
+            product.Key = key;
+            product.ResetDirtyProperties();
+            return product;
+        }
+
+        /// <summary>
         /// Makes a list of products for inserting
         /// </summary>
         /// <param name="count">The number of products to create</param>
@@ -46,11 +59,7 @@ namespace Merchello.Tests.Base.DataMakers
             };
         }
 
-        private static decimal PriceCheck()
-        {
-            var cost = NoWhammyStop.Next(100);
-            return Convert.ToDecimal(cost);
-        }
+      
 
         
     }
