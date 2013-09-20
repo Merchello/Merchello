@@ -29,7 +29,6 @@ namespace Merchello.Core
         private bool _isComplete = false;
         
         private MerchelloContext MerchelloContext { get; set; }       
-        protected CacheHelper MerchelloCache { get; set; }
 
 
         public override IBootManager Initialize()
@@ -41,8 +40,7 @@ namespace Merchello.Core
 
             _timer = DisposableTimer.DebugDuration<CoreBootManager>("Merchello plugin starting", "Merchello plugin startup complete");
 
-            CreatePackageCache();
-
+ 
             // create the service context for the MerchelloAppContext   
             var connString = ConfigurationManager.ConnectionStrings[MerchelloConfiguration.Current.Section.DefaultConnectionStringName].ConnectionString;
             var providerName = ConfigurationManager.ConnectionStrings[MerchelloConfiguration.Current.Section.DefaultConnectionStringName].ProviderName;                
@@ -60,6 +58,18 @@ namespace Merchello.Core
         }
 
         /// <summary>
+        /// Quick access to the CacheHelper
+        /// 
+        /// Merchello Cache is the ApplicationContext.Current.ApplicationCache
+        /// </summary>
+        /// <remarks>
+        /// Since we load fire our boot manager after Umbraco fires its "started" even, Merchello gets the benefit
+        /// of allowing Umbraco to manage the various caching providers via the Umbraco CoreBootManager or WebBootManager
+        /// depending on the context.
+        /// </remarks>
+        public CacheHelper Cache { get { return ApplicationContext.Current.ApplicationCache; } }
+
+        /// <summary>
         /// Creates the MerchelloPluginContext (singleton)
         /// </summary>
         /// <param name="serviceContext"></param>
@@ -67,23 +77,6 @@ namespace Merchello.Core
         {           
             MerchelloContext = MerchelloContext.Current = new MerchelloContext(serviceContext, MerchelloCache);
         }
-
-
-        /// <summary>
-        /// Creates and assigns the ApplicationCache based on a new instance of System.Web.Caching.Cache
-        /// </summary>        
-        protected virtual void CreatePackageCache()
-        {
-            var cacheHelper = new CacheHelper(
-                    new ObjectCacheRuntimeCacheProvider(),
-                    new StaticCacheProvider(),
-                    //we have no request based cache when not running in web-based context
-                    new NullCacheProvider()
-                );
-
-            MerchelloCache = cacheHelper;
-        }
-
 
         /// <summary>
         /// Fires after initialization and calls the callback to allow for customizations to occur

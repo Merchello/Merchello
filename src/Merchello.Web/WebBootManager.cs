@@ -23,14 +23,6 @@ namespace Merchello.Web
             _isForTesting = isForTesting;
         }
 
-        /// <summary>
-        /// Creates the application cache based on the HttpRuntime cache
-        /// </summary>
-        protected override void CreatePackageCache()
-        {
-            //create a web-based cache helper
-            MerchelloCache = new CacheHelper();
-        }
 
         /// <summary>
         /// Initialize objects before anything during the boot cycle happens
