@@ -29,7 +29,6 @@ namespace Merchello.Core
         private bool _isComplete = false;
         
         private MerchelloContext MerchelloContext { get; set; }       
-        protected CacheHelper MerchelloCache { get; set; }
 
 
         public override IBootManager Initialize()
@@ -41,49 +40,37 @@ namespace Merchello.Core
 
             _timer = DisposableTimer.DebugDuration<CoreBootManager>("Merchello plugin starting", "Merchello plugin startup complete");
 
-            CreateApplicationCache();
-
+ 
             // create the service context for the MerchelloAppContext   
-            var connString = ConfigurationManager.ConnectionStrings[MerchelloConfiguration.Section.DefaultConnectionStringName].ConnectionString;
-            var providerName = ConfigurationManager.ConnectionStrings[MerchelloConfiguration.Section.DefaultConnectionStringName].ProviderName;                
+            var connString = ConfigurationManager.ConnectionStrings[MerchelloConfiguration.Current.Section.DefaultConnectionStringName].ConnectionString;
+            var providerName = ConfigurationManager.ConnectionStrings[MerchelloConfiguration.Current.Section.DefaultConnectionStringName].ProviderName;                
             var serviceContext = new ServiceContext(new PetaPocoUnitOfWorkProvider(connString, providerName));
             
 
             CreateMerchelloContext(serviceContext);
 
             // TODO: this is where we need to resolve shipping, tax, and payment providers
-
+            // TODO: Then wire in the Resolution
 
             _isInitialized = true;
 
             return this;
         }
 
+                
         /// <summary>
         /// Creates the MerchelloPluginContext (singleton)
         /// </summary>
         /// <param name="serviceContext"></param>
-        protected void CreateMerchelloContext(ServiceContext serviceContext)
-        {           
-            MerchelloContext = MerchelloContext.Current = new MerchelloContext(serviceContext, MerchelloCache);
-        }
-
-
-        /// <summary>
-        /// Creates and assigns the ApplicationCache based on a new instance of System.Web.Caching.Cache
-        /// </summary>
         /// <remarks>
-        /// TODO : CacheHelper parameter will need to be configured
+        /// Since we load fire our boot manager after Umbraco fires its "started" even, Merchello gets the benefit
+        /// of allowing Umbraco to manage the various caching providers via the Umbraco CoreBootManager or WebBootManager
+        /// depending on the context.
         /// </remarks>
-        protected virtual void CreateApplicationCache()
+        protected void CreateMerchelloContext(ServiceContext serviceContext)
         {
-            //var cacheHelper = new CacheHelper(
-            //        new ObjectCacheRuntimeCacheProvider(),
-            //    );
-
-            MerchelloCache = null;
+            MerchelloContext = MerchelloContext.Current = new MerchelloContext(serviceContext);
         }
-
 
         /// <summary>
         /// Fires after initialization and calls the callback to allow for customizations to occur
@@ -125,7 +112,6 @@ namespace Merchello.Core
 
             return this;
         }
-
 
         protected virtual void FreezeResolution()
         {

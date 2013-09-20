@@ -1,4 +1,6 @@
-﻿using Merchello.Core;
+﻿using Umbraco.Core;
+using CoreBootManager = Merchello.Core.CoreBootManager;
+using IBootManager = Merchello.Core.IBootManager;
 
 namespace Merchello.Web
 {
@@ -21,6 +23,7 @@ namespace Merchello.Web
             _isForTesting = isForTesting;
         }
 
+
         /// <summary>
         /// Initialize objects before anything during the boot cycle happens
         /// </summary>
@@ -28,8 +31,6 @@ namespace Merchello.Web
         public override IBootManager Initialize()
         {
             base.Initialize();
-
-
 
             return this;
         }

@@ -134,6 +134,13 @@ namespace Merchello.Core.Models
             get { return _lastPaymentDate; }
         }
 
+        /// <summary>
+        /// Indicates that this is a known consumer
+        /// </summary>
+        [IgnoreDataMember]
+        public bool IsAnonymous {
+            get { return false; }
+        }
         
     }
 }

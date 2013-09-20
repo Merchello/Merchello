@@ -11,6 +11,8 @@ namespace Merchello.Core.Persistence
     /// </summary>
     public class RepositoryFactory
     {
+        private readonly bool _disableAllCache;
+
         /// <summary>
         /// Returns an instance of the <see cref="ICustomerRepository"/>
         /// </summary>        

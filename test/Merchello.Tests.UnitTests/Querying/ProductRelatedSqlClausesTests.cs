@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Merchello.Core.Models;
 using Merchello.Core.Models.Rdbms;
 using Merchello.Tests.Base.SqlSyntax;
 using NUnit.Framework;
@@ -12,7 +13,7 @@ namespace Merchello.Tests.UnitTests.Querying
 {
     [TestFixture]
     [Category("SqlSyntax")]
-    public class ProductRelatedSqlClausesTests  : BaseUsingSqlServerSyntax
+    public class ProductRelatedSqlClausesTests  : BaseUsingSqlServerSyntax<IProduct>
     {
 
         [Test]

@@ -13,7 +13,7 @@ namespace Merchello.Tests.UnitTests.Querying
 {
     [TestFixture]
     [Category("SqlSyntax")]
-    public class ShipMethodSqlClausesTest : BaseUsingSqlServerSyntax
+    public class ShipMethodSqlClausesTest : BaseUsingSqlServerSyntax<IShipMethod>
     {
         /// <summary>
         /// Test to verify that the typed <see cref="ShipmentDto"/> query matches generic "select * ..." query 
