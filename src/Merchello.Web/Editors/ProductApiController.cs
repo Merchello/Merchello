@@ -91,7 +91,7 @@ namespace Merchello.Web.Editors
                 var products = _productService.GetByKeys(keys);
                 if (products == null)
                 {
-                    throw new HttpResponseException(HttpStatusCode.NotFound);
+                    //throw new HttpResponseException(HttpStatusCode.NotFound);
                 }
 
                 foreach(IProduct product in products)
@@ -143,12 +143,21 @@ namespace Merchello.Web.Editors
         [AcceptVerbs("PUT")]
         public HttpResponseMessage PutProduct(Product item)
         {
-            HttpResponseMessage response = new HttpResponseMessage(System.Net.HttpStatusCode.OK);
+            // I think we should consider having a specific objects in .Web to pass back and forth
+            // via the Api like this so that we can take advantage of the Model.IsValid.  Umbraco does this with
+            // their various models in : Umbraco.Web.Models.ContentEditing
+
+            // Mapping between the models will be pretty straight forward with the AutoMapper stuff (http://automapper.org/)
+
+
+            var response = Request.CreateResponse(HttpStatusCode.OK);
+                        
+                //new HttpResponseMessage(System.Net.HttpStatusCode.OK);
             try
-            {
+            { 
                 _productService.Save(item);
             }
-            catch (Exception ex)
+            catch (Exception ex) // I think this is not required as the server will create the error response message anyway
             {
                 response = new HttpResponseMessage(HttpStatusCode.InternalServerError)
                 {
@@ -168,22 +177,31 @@ namespace Merchello.Web.Editors
         /// <param name="key"></param>
         public HttpResponseMessage Delete(Guid key)
         {
-            HttpResponseMessage response = new HttpResponseMessage(System.Net.HttpStatusCode.NoContent);
-            try
+            ///HttpResponseMessage response = new HttpResponseMessage(System.Net.HttpStatusCode.NoContent);
+
+            var productToDelete = _productService.GetByKey(key);
+            if (productToDelete == null)
             {
-                var productToDelete = _productService.GetByKey(key);
-                _productService.Delete(productToDelete);
-            }
-            catch (Exception ex)
-            {
-                response = new HttpResponseMessage(HttpStatusCode.InternalServerError)
-                {
-                    Content = new StringContent(String.Format("{0}", ex.Message)),
-                    ReasonPhrase = "Internal Error"
-                };
+                return Request.CreateResponse(HttpStatusCode.NotFound);
             }
 
-            return response;
+            _productService.Delete(productToDelete);
+            
+            return Request.CreateResponse(HttpStatusCode.OK);
+
+        //try
+        //{
+        //}
+        //    catch (Exception ex)
+        //    {
+        //        response = new HttpResponseMessage(HttpStatusCode.InternalServerError)
+        //        {
+        //            Content = new StringContent(String.Format("{0}", ex.Message)),
+        //            ReasonPhrase = "Internal Error"
+        //        };
+        //    }
+
+            //return response;
         }
     }
 }

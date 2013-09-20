@@ -12,7 +12,7 @@ using Umbraco.Web.WebApi;
 
 namespace Merchello.Web.WebApi
 {
-    public abstract class MerchelloApiController : UmbracoApiController
+    public abstract class MerchelloApiController : UmbracoApiController //  : UmbracoAuthorizedJsonController we will eventually want to inherit this
     {
         protected MerchelloApiController()
             : this(MerchelloContext.Current)
@@ -43,6 +43,7 @@ namespace Merchello.Web.WebApi
             base.Initialize(controllerContext);
 
             // remove the XmlFormatter 
+            // TODO : this becomes redundant when we inherit from UmbracoAuthorizedJsonController
             controllerContext.Configuration.Formatters.Remove(controllerContext.Configuration.Formatters.XmlFormatter);
             
             // camel casing
