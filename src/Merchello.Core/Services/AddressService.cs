@@ -215,7 +215,7 @@ namespace Merchello.Core.Services
         /// </summary>
         /// <param name="customerKey">The key (Guid) of the customer</param>
         /// <returns>A collection of <see cref="IAddress"/> objects</returns>
-        public IEnumerable<IAddress> GetAddressesForCustomer(Guid customerKey)
+        public IEnumerable<IAddress> GetAddressesByCustomer(Guid customerKey)
         {
             using (var repository = _repositoryFactory.CreateAddressRepository(_uowProvider.GetUnitOfWork()))
             {

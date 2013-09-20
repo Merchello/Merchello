@@ -9,24 +9,30 @@ namespace Merchello.Core
 {
     public class MerchelloContext : IDisposable
     {
+        internal MerchelloContext(IServiceContext serviceContext)
+            : this(serviceContext, ApplicationContext.Current.ApplicationCache)
+        {}
 
         internal MerchelloContext(IServiceContext serviceContext, CacheHelper cache)
         {
             Mandate.ParameterNotNull(serviceContext, "serviceContext");
-            //Mandate.ParameterNotNull(cache, "cache");
+            Mandate.ParameterNotNull(cache, "cache");
 
             _services = serviceContext;
-            PluginCache = cache;
+            Cache = cache;
 
         }
 
         /// <summary>
-        /// Creates a basic plugin context
+        /// Creates a basic basic context
         /// </summary>
         /// <param name="cache"></param>
+        /// <remarks>
+        /// Used for testing
+        /// </remarks>
         internal MerchelloContext(CacheHelper cache)
         {
-            PluginCache = cache;
+            Cache = cache;
         }
 
         /// <summary>
@@ -38,9 +44,9 @@ namespace Merchello.Core
         /// Returns the application wide cache accessor
         /// </summary>
         /// <remarks>
-        /// Any caching that is done in the package (Merchello wide) should be done through this property
+        /// This is generally a short cut to the ApplicationContext.Current.ApplicationCache
         /// </remarks>
-        internal CacheHelper PluginCache { get; private set; }
+        internal CacheHelper Cache { get; private set; }
 
         
 
@@ -48,7 +54,7 @@ namespace Merchello.Core
         // note - the original umbraco module checks on content.Instance in umbraco.dll
         //   now, the boot task that setup the content store ensures that it is ready
         bool _isReady = false;
-        readonly System.Threading.ManualResetEventSlim _isReadyEvent = new System.Threading.ManualResetEventSlim(false);
+        readonly ManualResetEventSlim _isReadyEvent = new System.Threading.ManualResetEventSlim(false);
         private IServiceContext _services;
 
         public bool IsReady
@@ -106,7 +112,7 @@ namespace Merchello.Core
             {
                 try
                 {
-                    return MerchelloConfiguration.Section.Version;
+                    return MerchelloConfiguration.Current.Section.Version;
                 }
                 catch
                 {
@@ -150,17 +156,7 @@ namespace Merchello.Core
             if (_disposed) return;
 
             using (new WriteLock(_disposalLocker))
-            { 
-
-                // clear the cache
-                if (PluginCache != null)
-                {
-                    PluginCache.ClearAllCache();
-                }
-
-                // reset the instance objects
-                this.PluginCache = null;
-
+            {                
                 _disposed = true;
             }
         }

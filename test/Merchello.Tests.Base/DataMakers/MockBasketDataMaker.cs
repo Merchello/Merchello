@@ -26,11 +26,11 @@ namespace Merchello.Tests.Base.DataMakers
 
         }
 
-        public static IBasket AnonymousBasketForInserting(IAnonymousCustomer anonymous, BasketType basketType)
+        public static IBasket ConsumerBasketForInserting(IConsumer consumer, BasketType basketType)
         {
             return new Basket(basketType)
             {
-                ConsumerKey = anonymous.Key
+                ConsumerKey = consumer.Key
             };
         }
 

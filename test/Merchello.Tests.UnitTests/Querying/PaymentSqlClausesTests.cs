@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc.Html;
+using Merchello.Core.Models;
 using Merchello.Core.Models.Rdbms;
 using Merchello.Tests.Base.SqlSyntax;
 using NUnit.Framework;
@@ -12,7 +13,8 @@ using Umbraco.Core.Persistence;
 namespace Merchello.Tests.UnitTests.Querying
 {
     [TestFixture]
-    public class PaymentSqlClausesTests : BaseUsingSqlServerSyntax
+    [Category("SqlSyntax")]
+    public class PaymentSqlClausesTests : BaseUsingSqlServerSyntax<IPayment>
     {
         /// <summary>
         /// Test to verify that the typed <see cref="PaymentDto"/> query matches generic "select * ..." query 

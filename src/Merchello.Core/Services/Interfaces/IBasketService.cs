@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Merchello.Core.Models;
+using Merchello.Core.Models.TypeFields;
 using Umbraco.Core.Services;
 
 namespace Merchello.Core.Services
@@ -53,20 +54,32 @@ namespace Merchello.Core.Services
         /// <returns><see cref="IBasket"/></returns>
         IBasket GetById(int id);
 
-        /// <summary>
-        /// Gets an <see cref="IBasket"/> object by the <see cref="IConsumer"/>
-        /// </summary>
-        /// <param name="consumer">The <see cref="IConsumer"/> object</param>
-        /// <param name="basketType"></param>
-        /// <returns><see cref="IBasket"/></returns>
-        IBasket GetByConsumer(IConsumer consumer, BasketType basketType);
 
         /// <summary>
         /// Gets a collection of <see cref="IBasket"/> objects by teh <see cref="IConsumer"/>
         /// </summary>
         /// <param name="consumer"></param>
         /// <returns></returns>
-        IEnumerable<IBasket> GetByConsumer(IConsumer consumer); 
+        IEnumerable<IBasket> GetBasketsByConsumer(IConsumer consumer);
+
+        /// <summary>
+        /// Returns the consumer's basket of a given type
+        /// </summary>
+        /// <param name="consumer"><see cref="IConsumer"/></param>
+        /// <param name="basketTypeKey"><see cref="ITypeField"/>.TypeKey</param>
+        /// <returns><see cref="IBasket"/></returns>
+        /// <remarks>
+        /// Public use of this method is intended to access BasketType.Custom records
+        /// </remarks>
+        IBasket GetBasketByConsumer(IConsumer consumer, Guid basketTypeKey);
+
+        /// <summary>
+        /// Gets an <see cref="IBasket"/> object by the <see cref="IConsumer"/>
+        /// </summary>
+        /// <param name="consumer">The <see cref="IConsumer"/> object</param>
+        /// <param name="basketType"></param>
+        /// <returns><see cref="IBasket"/></returns>
+        IBasket GetBasketByConsumer(IConsumer consumer, BasketType basketType);
             
         /// <summary>
         /// Gets list of <see cref="IBasket"/> objects given a list of Ids
@@ -75,26 +88,5 @@ namespace Merchello.Core.Services
         /// <returns>List of <see cref="IBasket"/></returns>
         IEnumerable<IBasket> GetByIds(IEnumerable<int> ids);
 
-        /// <summary>
-        /// Returns a collection of <see cref="IBasketItem"/>
-        /// </summary>
-        IEnumerable<IBasketItem> GetBasketItems(int basketId);
-
-        /// <summary>
-        /// Adds a <see cref="IBasketItem"/> to the basket
-        /// </summary>
-        /// <param name="basketItem"><see cref="IBasketItem"/></param>
-        void AddBasketItem(IBasketItem basketItem);
-
-        /// <summary>
-        /// Removes a <see cref="IBasketItem"/> from the basket
-        /// </summary>
-        /// <param name="basketItem"><see cref="IBasketItem"/></param>
-        void RemoveBasketItem(IBasketItem basketItem);
-
-        /// <summary>
-        /// Removes all <see cref="IBasketItem"/> from the <see cref="IBasket"/>
-        /// </summary>
-        void Empty(IBasket basket);
     }
 }

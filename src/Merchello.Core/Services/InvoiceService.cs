@@ -245,7 +245,7 @@ namespace Merchello.Core.Services
         /// </summary>
         /// <param name="key">Unique customer key (Guid)</param>
         /// <returns>A collection of <see cref="IInvoice"/></returns>
-        public IEnumerable<IInvoice> GetInvoicesForCustomer(Guid key)
+        public IEnumerable<IInvoice> GetInvoicesByCustomer(Guid key)
         {
             using (var repository = _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))
             {
