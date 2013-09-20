@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Merchello.Tests.Base.DataMakers
@@ -48,6 +49,61 @@ namespace Merchello.Tests.Base.DataMakers
 
             var index = NoWhammyStop.Next(values.Count());
             return values.ToArray()[index];
+        }
+
+
+        internal static IEnumerable<AddressMock> AddressMocks()
+        {
+            return new List<AddressMock>()
+                {
+                    new AddressMock()
+                        {
+                            Name = "Walt Disney World Resort",
+                            Locality = "Lake Buena Vista",
+                            Region = "FL",
+                            PostalCode = "32830",
+                            CountryCode = "US"
+                        },
+                    new AddressMock()
+                        {
+                            Name = "Rockefeller Center",
+                            Address1 = "45 Rockefeller Plz",
+                            Locality = "New York",
+                            Region = "NY",
+                            PostalCode = "10111"
+                        },
+                    new AddressMock()
+                        {
+                            Name = "Eiffel Tower",
+                            Address1 = "Champs-de-Mars",
+                            Locality = "Paris",
+                            PostalCode = "75007",
+                            CountryCode = "FR"
+                        },
+                    new AddressMock()
+                        {
+                            Name = "Buckingham Palace",
+                            Address1 = "SW1A 1AA",
+                            Locality = "London",
+                            CountryCode = "UK"
+                        },
+                    new AddressMock()
+                        {
+                            Name = "Space Needle",
+                            Address1 = "400 Broad St",
+                            Locality = "Seattle",
+                            Region = "WA",
+                            PostalCode = "98102"
+                        },
+                    new AddressMock()
+                        {
+                            Name = "Sydney Opera House",
+                            Address1 = "Bennelong Point",
+                            Locality = "Sydney",
+                            PostalCode = "NSW 2000",
+                            CountryCode = "AU"
+                        }
+                };
         }
     }
 }

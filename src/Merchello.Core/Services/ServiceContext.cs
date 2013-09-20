@@ -24,7 +24,8 @@ namespace Merchello.Core.Services
         private Lazy<ProductService> _productService;
         private Lazy<ShipmentService> _shipmentService;
         private Lazy<ShipMethodService> _shipMethodService;
-        private Lazy<TransactionService> _transactionService; 
+        private Lazy<TransactionService> _transactionService;
+        private Lazy<WarehouseService> _warehouseService; 
 
         /// <summary>
         /// Constructor
@@ -83,6 +84,9 @@ namespace Merchello.Core.Services
 
             if(_transactionService == null)
                 _transactionService = new Lazy<TransactionService>(() => new TransactionService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+
+            if(_warehouseService == null)
+                _warehouseService = new Lazy<WarehouseService>(() => new WarehouseService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
         }
 
 
@@ -182,6 +186,13 @@ namespace Merchello.Core.Services
         {
             get { return _transactionService.Value; }
         }
+
+        public IWarehouseService WarehouseService
+        {
+            get { return _warehouseService.Value; }
+
+        }
+
         #endregion
     }
 }

@@ -358,11 +358,29 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
         #region IShipMethod
 
+        /// <summary>
+        /// Gets the <see cref="IShipMethodService"/>
+        /// </summary>
         public IShipMethodService ShipMethodService
         {
             get { return _serviceContext.ShipMethodService; }
         }
 
+        
+
+        #endregion
+
+
+        #region IWarehouse
+
+        /// <summary>
+        /// Gets <see cref="IWarehouseService"/>
+        /// </summary>
+        public IWarehouseService WarehouseService
+        {
+            get { return _serviceContext.WarehouseService; } 
+
+        }
         #endregion
 
     }
