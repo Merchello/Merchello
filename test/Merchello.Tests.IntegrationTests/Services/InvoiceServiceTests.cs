@@ -97,7 +97,7 @@ namespace Merchello.Tests.IntegrationTests.Services
             var expected = PreTestDataWorker.MakeExistingInvoiceCollection(_customer, _unpaid, address, count);
 
             //// Act
-            var retrieved = _invoiceService.GetInvoicesForCustomer(_customer.Key);
+            var retrieved = _invoiceService.GetInvoicesByCustomer(_customer.Key);
 
             //// Assert
             Assert.IsTrue(retrieved.Any());

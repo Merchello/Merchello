@@ -49,5 +49,15 @@ namespace Merchello.Core.Models
             base.UpdatingEntity();
             _lastActivityDate = DateTime.Now;
         }
+
+        /// <summary>
+        /// Indicates that this is an anonymous consumer
+        /// </summary>
+        [IgnoreDataMember]
+        public bool IsAnonymous
+        {
+            get { return true; }
+        }
+        
     }
 }

@@ -67,7 +67,7 @@ namespace Merchello.Core.Services
         /// </summary>
         /// <param name="customerKey">The key (Guid) of the customer</param>
         /// <returns>A collection of <see cref="IAddress"/> objects</returns>
-        IEnumerable<IAddress> GetAddressesForCustomer(Guid customerKey);
+        IEnumerable<IAddress> GetAddressesByCustomer(Guid customerKey);
 
     }
 }

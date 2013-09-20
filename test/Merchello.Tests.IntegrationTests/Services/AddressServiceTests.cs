@@ -70,7 +70,7 @@ namespace Merchello.Tests.IntegrationTests.Services
             var generated = PreTestDataWorker.MakeExistingAddressCollection(_customer, "Home", expected);
 
             //// Act
-            var retrieved = _addressService.GetAddressesForCustomer(_customer.Key);
+            var retrieved = _addressService.GetAddressesByCustomer(_customer.Key);
 
             //// Assert
             Assert.IsTrue(retrieved.Any());

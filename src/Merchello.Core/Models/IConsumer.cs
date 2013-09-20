@@ -11,5 +11,6 @@ namespace Merchello.Core.Models
     /// </remarks>
     public interface IConsumer : IKeyEntity
     {
+        bool IsAnonymous { get; }
     }
 }

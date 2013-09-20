@@ -272,6 +272,7 @@
     <Compile Include="Querying\ShipmentSqlClausesTest.cs" />
     <Compile Include="Querying\ShipMethodSqlClausesTests.cs" />
     <Compile Include="Querying\TransactionSqlClauseTests.cs" />
+    <Compile Include="Querying\WarehouseSqlClauseTests.cs" />
     <Compile Include="Repository\AddressRepositoryTests.cs" />
     <Compile Include="Repository\CustomerRepositoryTests.cs" />
     <Compile Include="Services\AddressServiceTests.cs" />

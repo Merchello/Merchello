@@ -6,6 +6,7 @@ using Merchello.Core.Models;
 using Merchello.Core.Models.TypeFields;
 using Merchello.Core.Persistence;
 using Merchello.Core.Events;
+using Merchello.Core.Persistence.Querying;
 using Umbraco.Core;
 using Umbraco.Core.Persistence.UnitOfWork;
 
@@ -50,7 +51,7 @@ namespace Merchello.Core.Services
         {
 
             // determine if the consumer already has a basket of this type, if so return it.
-            var basket = GetByConsumer(consumer, basketType);
+            var basket = GetBasketByConsumer(consumer, basketType);
             if (basket != null) return basket;
             
             basket = new Basket(basketType)
@@ -63,40 +64,8 @@ namespace Merchello.Core.Services
             return basket;
         }
 
-        /// <summary>
-        /// Returns the consumer's basket of a given type
-        /// </summary>
-        public IBasket GetByConsumer(IConsumer consumer, BasketType basketType)
-        {
-            using (var repository = _repositoryFactory.CreateBasketRepository(_uowProvider.GetUnitOfWork()))
-            {
-                return repository.GetByConsumer(consumer, basketType);
-            }
-        }
 
-        /// <summary>
-        /// Returns the consumer's basket of a given type
-        /// </summary>
-        internal IBasket GetByConsumer(IConsumer consumer, Guid basketTypeFieldKey)
-        {
-            using (var repository = _repositoryFactory.CreateBasketRepository(_uowProvider.GetUnitOfWork()))
-            {
-                return repository.GetByConsumer(consumer, basketTypeFieldKey);
-            }
-        }
-
-        /// <summary>
-        /// Gets a collection of <see cref="IBasket"/> objects by teh <see cref="IConsumer"/>
-        /// </summary>
-        /// <param name="consumer"></param>
-        /// <returns></returns>
-        public IEnumerable<IBasket> GetByConsumer(IConsumer consumer)
-        {
-            using (var repository = _repositoryFactory.CreateBasketRepository(_uowProvider.GetUnitOfWork()))
-            {
-                return repository.GetByConsumer(consumer);
-            }    
-        }
+      
 
         /// <summary>
         /// Saves a single <see cref="IBasket"/> object
@@ -221,33 +190,49 @@ namespace Merchello.Core.Services
             }
         }
 
+
+        /// <summary>
+        /// Returns the consumer's basket of a given type
+        /// </summary>
+        public IBasket GetBasketByConsumer(IConsumer consumer, BasketType basketType)
+        {
+            var typeKey = EnumTypeFieldConverter.Basket().GetTypeField(basketType).TypeKey;
+            return GetBasketByConsumer(consumer, typeKey);
+        }
+
+        /// <summary>
+        /// Returns the consumer's basket of a given type
+        /// </summary>
+        public IBasket GetBasketByConsumer(IConsumer consumer, Guid basketTypeFieldKey)
+        {
+            using (var repository = _repositoryFactory.CreateBasketRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Query<IBasket>.Builder.Where(x => x.ConsumerKey == consumer.Key && x.BasketTypeFieldKey == basketTypeFieldKey);
+                return repository.GetByQuery(query).FirstOrDefault();
+            }
+        }
+
+        /// <summary>
+        /// Gets a collection of <see cref="IBasket"/> objects by teh <see cref="IConsumer"/>
+        /// </summary>
+        /// <param name="consumer"></param>
+        /// <returns></returns>
+        public IEnumerable<IBasket> GetBasketsByConsumer(IConsumer consumer)
+        {
+            using (var repository = _repositoryFactory.CreateBasketRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Query<IBasket>.Builder.Where(x => x.ConsumerKey == consumer.Key);
+                return repository.GetByQuery(query);
+            }
+        }
+
         public IEnumerable<IBasket> GetAll()
         {
             using (var repository = _repositoryFactory.CreateBasketRepository(_uowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll();
             }
-        }
-
-        public IEnumerable<IBasketItem> GetBasketItems(int basketId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void AddBasketItem(IBasketItem basketItem)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void RemoveBasketItem(IBasketItem basketItem)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Empty(IBasket basket)
-        {
-            throw new NotImplementedException();
-        }
+        }      
 
         #endregion
 

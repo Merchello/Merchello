@@ -1,4 +1,6 @@
-﻿using Merchello.Core.Models.Rdbms;
+﻿using Merchello.Core.Models;
+using Merchello.Core.Models.Rdbms;
+using Merchello.Core.Services;
 using Merchello.Tests.Base.SqlSyntax;
 using Umbraco.Core.Persistence;
 using NUnit.Framework;
@@ -8,7 +10,7 @@ namespace Merchello.Tests.UnitTests.Querying
     
     [TestFixture]
     [Category("SqlSyntax")]
-    public class InvoiceStatusSqlClausesTests : BaseUsingSqlServerSyntax
+    public class InvoiceStatusSqlClausesTests : BaseUsingSqlServerSyntax<IInvoiceStatus>
     {
         /// <summary>
         /// Test to verify that the typed <see cref="InvoiceStatusDto"/> query matches generic "select * ..." query 
