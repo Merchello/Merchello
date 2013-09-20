@@ -47,29 +47,189 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper">
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="businesslogic">
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\businesslogic.dll</HintPath>
+    </Reference>
+    <Reference Include="ClientDependency.Core">
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\ClientDependency.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="ClientDependency.Core.Mvc">
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\ClientDependency.Core.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="cms">
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\cms.dll</HintPath>
+    </Reference>
+    <Reference Include="controls">
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\controls.dll</HintPath>
+    </Reference>
+    <Reference Include="CookComputing.XmlRpcV2">
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\CookComputing.XmlRpcV2.dll</HintPath>
+    </Reference>
+    <Reference Include="Examine">
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\Examine.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlAgilityPack">
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="interfaces">
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Lucene.Net">
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\Lucene.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationBlocks.Data">
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\Microsoft.ApplicationBlocks.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Helpers">
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\Microsoft.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Mvc.FixedDisplayModes">
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\Microsoft.Web.Mvc.FixedDisplayModes.dll</HintPath>
+    </Reference>
     <Reference Include="MiniProfiler">
-      <HintPath>..\..\src\packages\MiniProfiler.2.1.0\lib\net40\MiniProfiler.dll</HintPath>
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\MiniProfiler.dll</HintPath>
     </Reference>
     <Reference Include="Moq">
       <HintPath>..\..\src\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
     </Reference>
+    <Reference Include="MySql.Data, Version=6.6.5.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NuGet.Core, Version=1.0.11220.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\NuGet.Core.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\src\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Our.Umbraco.uGoLive">
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\Our.Umbraco.uGoLive.dll</HintPath>
+    </Reference>
+    <Reference Include="Our.Umbraco.uGoLive.47x">
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\Our.Umbraco.uGoLive.47x.dll</HintPath>
+    </Reference>
+    <Reference Include="Our.Umbraco.uGoLive.Checks">
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\Our.Umbraco.uGoLive.Checks.dll</HintPath>
     </Reference>
     <Reference Include="Rhino.Mocks">
       <HintPath>..\..\src\packages\RhinoMocks.3.6.1\lib\net\Rhino.Mocks.dll</HintPath>
     </Reference>
+    <Reference Include="SQLCE4Umbraco">
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\SQLCE4Umbraco.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" />
+    <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\System.Data.SqlServerCe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SqlServerCe.Entity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\System.Data.SqlServerCe.Entity.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+      <Private>True</Private>
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\System.Net.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+      <Private>True</Private>
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\System.Net.Http.WebRequest.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Administration, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\System.Web.WebPages.Administration.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="TidyNet">
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\TidyNet.dll</HintPath>
+    </Reference>
+    <Reference Include="umbraco">
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\umbraco.dll</HintPath>
+    </Reference>
     <Reference Include="Umbraco.Core">
-      <HintPath>..\..\src\packages\UmbracoCms.Core.6.1.4\lib\Umbraco.Core.dll</HintPath>
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\Umbraco.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="umbraco.DataLayer">
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\umbraco.DataLayer.dll</HintPath>
+    </Reference>
+    <Reference Include="umbraco.editorControls">
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\umbraco.editorControls.dll</HintPath>
+    </Reference>
+    <Reference Include="umbraco.MacroEngines">
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\umbraco.MacroEngines.dll</HintPath>
+    </Reference>
+    <Reference Include="umbraco.macroRenderings">
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\umbraco.macroRenderings.dll</HintPath>
+    </Reference>
+    <Reference Include="umbraco.providers">
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\umbraco.providers.dll</HintPath>
+    </Reference>
+    <Reference Include="Umbraco.Web.UI">
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\Umbraco.Web.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="umbraco.XmlSerializers">
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\umbraco.XmlSerializers.dll</HintPath>
+    </Reference>
+    <Reference Include="UmbracoExamine">
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\UmbracoExamine.dll</HintPath>
+    </Reference>
+    <Reference Include="UrlRewritingNet.UrlRewriter">
+      <HintPath>..\..\src\packages\UmbracoCms.Core.Nightly.7.0.0.78\lib\UrlRewritingNet.UrlRewriter.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
