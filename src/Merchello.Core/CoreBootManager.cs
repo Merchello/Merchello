@@ -41,7 +41,7 @@ namespace Merchello.Core
 
             _timer = DisposableTimer.DebugDuration<CoreBootManager>("Merchello plugin starting", "Merchello plugin startup complete");
 
-            CreateApplicationCache();
+            CreatePackageCache();
 
             // create the service context for the MerchelloAppContext   
             var connString = ConfigurationManager.ConnectionStrings[MerchelloConfiguration.Current.Section.DefaultConnectionStringName].ConnectionString;
@@ -52,7 +52,7 @@ namespace Merchello.Core
             CreateMerchelloContext(serviceContext);
 
             // TODO: this is where we need to resolve shipping, tax, and payment providers
-
+            // TODO: Then wire in the Resolution
 
             _isInitialized = true;
 
@@ -71,17 +71,17 @@ namespace Merchello.Core
 
         /// <summary>
         /// Creates and assigns the ApplicationCache based on a new instance of System.Web.Caching.Cache
-        /// </summary>
-        /// <remarks>
-        /// TODO : CacheHelper parameter will need to be configured
-        /// </remarks>
-        protected virtual void CreateApplicationCache()
+        /// </summary>        
+        protected virtual void CreatePackageCache()
         {
-            //var cacheHelper = new CacheHelper(
-            //        new ObjectCacheRuntimeCacheProvider(),
-            //    );
+            var cacheHelper = new CacheHelper(
+                    new ObjectCacheRuntimeCacheProvider(),
+                    new StaticCacheProvider(),
+                    //we have no request based cache when not running in web-based context
+                    new NullCacheProvider()
+                );
 
-            MerchelloCache = null;
+            MerchelloCache = cacheHelper;
         }
 
 
@@ -125,7 +125,6 @@ namespace Merchello.Core
 
             return this;
         }
-
 
         protected virtual void FreezeResolution()
         {

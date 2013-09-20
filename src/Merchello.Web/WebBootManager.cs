@@ -1,4 +1,6 @@
-﻿using Merchello.Core;
+﻿using Umbraco.Core;
+using CoreBootManager = Merchello.Core.CoreBootManager;
+using IBootManager = Merchello.Core.IBootManager;
 
 namespace Merchello.Web
 {
@@ -22,14 +24,21 @@ namespace Merchello.Web
         }
 
         /// <summary>
+        /// Creates the application cache based on the HttpRuntime cache
+        /// </summary>
+        protected override void CreatePackageCache()
+        {
+            //create a web-based cache helper
+            MerchelloCache = new CacheHelper();
+        }
+
+        /// <summary>
         /// Initialize objects before anything during the boot cycle happens
         /// </summary>
         /// <returns></returns>
         public override IBootManager Initialize()
         {
             base.Initialize();
-
-
 
             return this;
         }
