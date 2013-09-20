@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Merchello.Core;
 using Merchello.Core.Services;
+using Newtonsoft.Json.Serialization;
 using Umbraco.Web;
 using Umbraco.Web.WebApi;
 
@@ -31,6 +32,22 @@ namespace Merchello.Web.WebApi
             if (merchelloContext == null) throw new ArgumentNullException("merchelloContext");
             MerchelloContext = merchelloContext;
             InstanceId = Guid.NewGuid();
+        }
+
+        /// <summary>
+        /// Removes the xml formatter and configure the camel casing
+        /// </summary>
+        /// <param name="controllerContext"></param>
+        protected override void Initialize(global::System.Web.Http.Controllers.HttpControllerContext controllerContext)
+        {
+            base.Initialize(controllerContext);
+
+            // remove the XmlFormatter 
+            controllerContext.Configuration.Formatters.Remove(controllerContext.Configuration.Formatters.XmlFormatter);
+            
+            // camel casing
+            controllerContext.Configuration.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            
         }
 
         /// <summary>

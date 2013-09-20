@@ -60,14 +60,9 @@ namespace Merchello.Tests.Base.DataMakers
 
         }
 
-        public static IEnumerable<ICustomer> CustomerListForInserting()
+        public static IEnumerable<ICustomer> CustomerListForInserting(int count)
         {
-            return new List<ICustomer>()
-                {
-                    CustomerForInserting(),
-                    CustomerForInserting(),
-                    CustomerForInserting()                    
-                };
+            for (var i = 0; i < count; i++) yield return CustomerForInserting();
         }
 
 
