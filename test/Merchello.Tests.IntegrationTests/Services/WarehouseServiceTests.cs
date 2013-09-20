@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Merchello.Core.Models;
 using Merchello.Core.Services;
 using NUnit.Framework;
 
@@ -26,7 +27,14 @@ namespace Merchello.Tests.IntegrationTests.Services
         [Test]
         public void Can_Create_A_Warehouse()
         {
-            
+            //// Arrange
+            IWarehouse warehouse;
+
+            //// Act
+            warehouse = _warehouseService.CreateWarehouse("Expected");
+
+            //// Assert
+            Assert.NotNull(warehouse);
         }
     }
 }
