@@ -12,7 +12,20 @@ namespace Merchello.Core.Configuration
     /// </summary>
     public sealed class MerchelloConfiguration
     {
-        private static string _rootDir = "";
+        #region SingleTon
+
+        private static readonly Lazy<MerchelloConfiguration> Lazy = new Lazy<MerchelloConfiguration>(() => new MerchelloConfiguration());
+
+        public static MerchelloConfiguration Current
+        {
+            get { return Lazy.Value; }
+        }
+
+        #endregion
+
+
+
+        private string _rootDir = "";
 
         /// <summary>
         /// Name of the application.
@@ -20,7 +33,7 @@ namespace Merchello.Core.Configuration
         public static string ApplicationName = "Merchello";
         public static string ConfigurationName = ApplicationName.ToLower();
 
-        public static MerchelloSection Section
+        public MerchelloSection Section
         {
             get { return (MerchelloSection)ConfigurationManager.GetSection(ConfigurationName); }
         }
@@ -32,7 +45,7 @@ namespace Merchello.Core.Configuration
         /// even if the assembly is in a /bin/debug or /bin/release folder
         /// </summary>
         /// <returns></returns>
-        internal static string GetRootDirectorySafe()
+        internal string GetRootDirectorySafe()
         {
             if (string.IsNullOrEmpty(_rootDir) == false)
             {
@@ -58,7 +71,7 @@ namespace Merchello.Core.Configuration
         /// Gets the full path to root.
         /// </summary>
         /// <value>The fullpath to root.</value>
-        public static string FullpathToRoot
+        public string FullpathToRoot
         {
             get { return GetRootDirectorySafe(); }
         }

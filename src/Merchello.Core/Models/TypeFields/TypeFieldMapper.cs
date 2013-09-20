@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Configuration;
 using System.Linq;
+using Merchello.Core.Configuration;
 using Merchello.Core.Configuration.Outline;
 
 namespace Merchello.Core.Models.TypeFields
@@ -49,7 +50,7 @@ namespace Merchello.Core.Models.TypeFields
         /// <summary>
         /// A collection of custom typefields from the configuration file
         /// </summary>
-        protected static TypeFieldDefinitionsElement Fields { get { return ((MerchelloSection)ConfigurationManager.GetSection("merchello")).TypeFields; } }
+        protected static TypeFieldDefinitionsElement Fields { get { return MerchelloConfiguration.Current.Section.TypeFields; } }
 
         /// <summary>
         /// Creates a <see cref="TypeField"/> from a configuration file element
