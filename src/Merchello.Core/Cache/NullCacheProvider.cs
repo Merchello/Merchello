@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Caching;
+using Umbraco.Core.Cache;
 
 
 namespace Merchello.Core.Cache
@@ -17,6 +18,14 @@ namespace Merchello.Core.Cache
         }
 
         public virtual void ClearCacheObjectTypes(string typeName)
+        {
+        }
+
+        public virtual void ClearCacheObjectTypes<T>()
+        {
+        }
+
+        public virtual void ClearCacheObjectTypes<T>(Func<string, T, bool> predicate)
         {
         }
 
