@@ -51,18 +51,19 @@ namespace Merchello.Tests.UnitTests.TypeFields
             Assert.AreEqual(_commercialMock.TypeKey, type.TypeKey);
         }
 
-        /// <summary>
-        /// Asserts the AddressType class returns the expected custom configuration
-        /// </summary>
-        [Test]
-        public void AddressType_custom_matches_configuration()
-        {
-            var type = EnumTypeFieldConverter.Address().Custom("Custom");
+        // TODO Version 1.0 will not expose custom types
+        ///// <summary>
+        ///// Asserts the AddressType class returns the expected custom configuration
+        ///// </summary>
+        //[Test]
+        //public void AddressType_custom_matches_configuration()
+        //{
+        //    var type = EnumTypeFieldConverter.Address().Custom("Custom");
 
-            Assert.AreEqual(_customMock.Alias, type.Alias);
-            Assert.AreEqual(_customMock.Name, type.Name);
-            Assert.AreEqual(_customMock.TypeKey, type.TypeKey);
-        }
+        //    Assert.AreEqual(_customMock.Alias, type.Alias);
+        //    Assert.AreEqual(_customMock.Name, type.Name);
+        //    Assert.AreEqual(_customMock.TypeKey, type.TypeKey);
+        //}
 
 
 

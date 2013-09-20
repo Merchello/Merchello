@@ -14,8 +14,7 @@ namespace Merchello.Tests.IntegrationTests.Services
         [SetUp]
         public void Initialize()
         {            
-            _customerService = PreTestDataWorker.CustomerService;
-            PreTestDataWorker.DeleteAllCustomers();
+            _customerService = PreTestDataWorker.CustomerService;            
         }
         
         /// <summary>
@@ -38,17 +37,20 @@ namespace Merchello.Tests.IntegrationTests.Services
         /// Test to verify that a collection of customers can be saved to the database
         /// </summary>
         [Test]
-        public void Can_Add_A_List_Of_Three_Customers()
+        public void Can_Save_A_Collection_Customers()
         {
             //// Arrange
-            var customers = MockCustomerDataMaker.CustomerListForInserting();
+            PreTestDataWorker.DeleteAllCustomers();
+            var count = 10;
+            var customers = MockCustomerDataMaker.CustomerListForInserting(count);
 
             //// Act
             _customerService.Save(customers);
 
             //// Assert
-            Assert.IsTrue(customers.First().HasIdentity);
-            Assert.IsTrue(customers.Last().HasIdentity);            
+            var retrieved = ((CustomerService) _customerService).GetAll();
+            Assert.IsTrue(retrieved.Any());
+            Assert.AreEqual(count, retrieved.Count());
         }
 
     }
