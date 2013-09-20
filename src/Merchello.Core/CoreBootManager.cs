@@ -57,25 +57,19 @@ namespace Merchello.Core
             return this;
         }
 
+                
         /// <summary>
-        /// Quick access to the CacheHelper
-        /// 
-        /// Merchello Cache is the ApplicationContext.Current.ApplicationCache
+        /// Creates the MerchelloPluginContext (singleton)
         /// </summary>
+        /// <param name="serviceContext"></param>
         /// <remarks>
         /// Since we load fire our boot manager after Umbraco fires its "started" even, Merchello gets the benefit
         /// of allowing Umbraco to manage the various caching providers via the Umbraco CoreBootManager or WebBootManager
         /// depending on the context.
         /// </remarks>
-        public CacheHelper Cache { get { return ApplicationContext.Current.ApplicationCache; } }
-
-        /// <summary>
-        /// Creates the MerchelloPluginContext (singleton)
-        /// </summary>
-        /// <param name="serviceContext"></param>
         protected void CreateMerchelloContext(ServiceContext serviceContext)
-        {           
-            MerchelloContext = MerchelloContext.Current = new MerchelloContext(serviceContext, MerchelloCache);
+        {
+            MerchelloContext = MerchelloContext.Current = new MerchelloContext(serviceContext);
         }
 
         /// <summary>
