@@ -221,6 +221,7 @@
     <Compile Include="Services\ShipmentService.cs" />
     <Compile Include="Services\ShipMethodService.cs" />
     <Compile Include="Services\TransactionService.cs" />
+    <Compile Include="Services\WarehouseService.cs" />
     <Compile Include="TypeFieldMapperEnumerations.cs" />
     <Compile Include="Models\TypeFields\ProductTypeField.cs" />
     <Compile Include="Models\Rdbms\TypeFieldDto.cs" />

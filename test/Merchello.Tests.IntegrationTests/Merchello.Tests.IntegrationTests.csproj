@@ -88,6 +88,7 @@
     <Compile Include="Services\ShipmentServiceTests.cs" />
     <Compile Include="Services\ShipMethodServiceTests.cs" />
     <Compile Include="Services\TransactionServiceTests.cs" />
+    <Compile Include="Services\WarehouseServiceTests.cs" />
     <Compile Include="TestHelpers\DbPreTestDataWorker.cs" />
   </ItemGroup>
   <ItemGroup>
