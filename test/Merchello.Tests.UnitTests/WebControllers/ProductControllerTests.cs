@@ -15,6 +15,7 @@ using Umbraco.Web;
 using Umbraco.Tests.TestHelpers;
 using System.Web.Http;
 using System.Net.Http;
+using System.Web.Http.Hosting;
 
 namespace Merchello.Tests.UnitTests.WebControllers
 {
@@ -131,6 +132,8 @@ namespace Merchello.Tests.UnitTests.WebControllers
             MerchelloContext merchelloContext = GetMerchelloContext(MockProductService.Object);
 
             ProductApiController ctrl = new ProductApiController(merchelloContext, tempUmbracoContext);
+            ctrl.Request = new HttpRequestMessage();
+            ctrl.Request.Properties.Add(HttpPropertyKeys.HttpConfigurationKey, new HttpConfiguration());
 
             //// Act
             HttpResponseMessage response = ctrl.PutProduct(product);
@@ -157,12 +160,14 @@ namespace Merchello.Tests.UnitTests.WebControllers
             MerchelloContext merchelloContext = GetMerchelloContext(MockProductService.Object);
 
             ProductApiController ctrl = new ProductApiController(merchelloContext, tempUmbracoContext);
+            ctrl.Request = new HttpRequestMessage();
+            ctrl.Request.Properties.Add(HttpPropertyKeys.HttpConfigurationKey, new HttpConfiguration());
 
             //// Act
             HttpResponseMessage response = ctrl.PutProduct(product);
 
             //// Assert
-            Assert.AreEqual(response.StatusCode, System.Net.HttpStatusCode.InternalServerError);
+            Assert.AreEqual(response.StatusCode, System.Net.HttpStatusCode.NotFound);
         }
 
         /// <summary>
@@ -179,16 +184,19 @@ namespace Merchello.Tests.UnitTests.WebControllers
 
             var MockProductService = new Mock<IProductService>();
             MockProductService.Setup(cs => cs.Delete(product, It.IsAny<bool>())).Callback<IProduct, bool>((p, b) => removedKey = p.Key);
+            MockProductService.Setup(cs => cs.GetByKey(productKey)).Returns(product);
 
             MerchelloContext merchelloContext = GetMerchelloContext(MockProductService.Object);
 
             ProductApiController ctrl = new ProductApiController(merchelloContext, tempUmbracoContext);
+            ctrl.Request = new HttpRequestMessage();
+            ctrl.Request.Properties.Add(HttpPropertyKeys.HttpConfigurationKey, new HttpConfiguration());
 
             //// Act
             HttpResponseMessage response = ctrl.Delete(productKey);
 
             //// Assert
-            Assert.AreEqual(System.Net.HttpStatusCode.NoContent, response.StatusCode);
+            Assert.AreEqual(System.Net.HttpStatusCode.OK, response.StatusCode);
 
             Assert.AreEqual(productKey, removedKey);
         }
