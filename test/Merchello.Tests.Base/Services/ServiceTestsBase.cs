@@ -1,17 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Merchello.Core.Events;
-using Merchello.Core.Models;
-using Merchello.Core.Persistence;
-using Merchello.Core.Services;
-using Merchello.Tests.Base.Respositories;
-using Merchello.Tests.Base.Respositories.UnitOfWork;
+﻿using Merchello.Tests.Base.Respositories.UnitOfWork;
+using Merchello.Tests.Base.SqlSyntax;
 using NUnit.Framework;
-using Umbraco.Core.Persistence.SqlSyntax;
-using Umbraco.Core.Services;
 
 namespace Merchello.Tests.Base.Services
 {
@@ -36,7 +25,7 @@ namespace Merchello.Tests.Base.Services
             AfterTriggered = false;
             CommitCalled = false;
 
-            SqlSyntaxContext.SqlSyntaxProvider = new SqlCeSyntaxProvider();
+            SqlSyntaxProviderTestHelper.EstablishSqlSyntax();
 
             // General tests
             MockDatabaseUnitOfWork.Committed += delegate(object sender)

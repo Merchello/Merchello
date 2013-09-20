@@ -103,7 +103,9 @@ namespace Merchello.Tests.UnitTests.Services
         [Test]
         public void Delete_Triggers_Events_And_Address_Is_Passed()
         {
-            var address = MockAddressDataMaker.AddressForUpdating();
+            //// Arrange
+            var id = 111;
+            var address = MockAddressDataMaker.AddressForInserting().MockSavedWithId(id);
 
             _addressService.Delete(address);
 
@@ -118,7 +120,9 @@ namespace Merchello.Tests.UnitTests.Services
         [Test]
         public void Delete_Is_Committed()
         {
-            var address = MockAddressDataMaker.AddressForUpdating();
+            //// Arrange
+            var id = 111;
+            var address = MockAddressDataMaker.AddressForInserting().MockSavedWithId(id);
 
             _addressService.Delete(address);
 

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Events;
 using Merchello.Core.Models;
@@ -26,7 +27,9 @@ namespace Merchello.Tests.UnitTests.Services
             Before = null;
             After = null;
 
-            _anonymous = MockAnonymousCustomerDataMaker.AnonymousCustomerForUpdating();
+            _anonymous = MockAnonymousCustomerDataMaker
+                         .AnonymousCustomerForInserting()
+                         .MockSavedWithKey(Guid.NewGuid());
 
             BasketService.Saving += delegate(IBasketService sender, SaveEventArgs<IBasket> args)
             {

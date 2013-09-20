@@ -37,6 +37,12 @@ namespace Merchello.Tests.Base.DataMakers
             return descriptions[index];
         }
 
+        protected static decimal PriceCheck()
+        {
+            var cost = NoWhammyStop.Next(100);
+            return Convert.ToDecimal(cost);
+        }
+
         protected static string SelectRandomString(string[] values)
         {
 
