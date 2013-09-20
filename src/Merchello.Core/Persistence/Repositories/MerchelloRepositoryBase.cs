@@ -148,8 +148,8 @@ namespace Merchello.Core.Persistence.Repositories
 				var allEntities = _cache.GetAllByType(typeof(TEntity));
 				
 				if (allEntities.Any())
-				{                    
-					//
+				{
+                    // TODO  Refactor: this is the where the intermittent customer query error happens
                     var query = MerchelloMappers.IsKeyBasedType(typeof(TEntity))
 				        ? Querying.Query<TEntity>.Builder.Where(x => x.Key != Guid.Empty)
 				        : Querying.Query<TEntity>.Builder.Where(x => x.Id != 0);
