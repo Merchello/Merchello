@@ -152,18 +152,13 @@ namespace Merchello.Web.Editors
 
             var response = Request.CreateResponse(HttpStatusCode.OK);
                         
-                //new HttpResponseMessage(System.Net.HttpStatusCode.OK);
             try
             { 
                 _productService.Save(item);
             }
             catch (Exception ex) // I think this is not required as the server will create the error response message anyway
             {
-                response = new HttpResponseMessage(HttpStatusCode.InternalServerError)
-                {
-                    Content = new StringContent(String.Format("{0}", ex.Message)),
-                    ReasonPhrase = "Internal Error"
-                };
+                response = Request.CreateResponse(HttpStatusCode.NotFound, String.Format("{0}", ex.Message));
             }
 
             return response;
@@ -177,8 +172,6 @@ namespace Merchello.Web.Editors
         /// <param name="key"></param>
         public HttpResponseMessage Delete(Guid key)
         {
-            ///HttpResponseMessage response = new HttpResponseMessage(System.Net.HttpStatusCode.NoContent);
-
             var productToDelete = _productService.GetByKey(key);
             if (productToDelete == null)
             {
@@ -186,22 +179,8 @@ namespace Merchello.Web.Editors
             }
 
             _productService.Delete(productToDelete);
-            
+
             return Request.CreateResponse(HttpStatusCode.OK);
-
-        //try
-        //{
-        //}
-        //    catch (Exception ex)
-        //    {
-        //        response = new HttpResponseMessage(HttpStatusCode.InternalServerError)
-        //        {
-        //            Content = new StringContent(String.Format("{0}", ex.Message)),
-        //            ReasonPhrase = "Internal Error"
-        //        };
-        //    }
-
-            //return response;
         }
     }
 }
