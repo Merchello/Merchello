@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Configuration;
-using System.Web;
-using System.Web.Configuration;
 using Merchello.Core.Cache;
 using Merchello.Core.Configuration;
 using Merchello.Core.ObjectResolution;
 using Merchello.Core.Services;
 using Umbraco.Core;
-using Umbraco.Core.Persistence;
-using Umbraco.Core.Persistence.Mappers;
 using Umbraco.Core.Persistence.UnitOfWork;
 
 
@@ -30,7 +26,7 @@ namespace Merchello.Core
         
         private MerchelloContext MerchelloContext { get; set; }       
 
-
+        
         public override IBootManager Initialize()
         {
             if (_isInitialized)
@@ -69,7 +65,16 @@ namespace Merchello.Core
         /// </remarks>
         protected void CreateMerchelloContext(ServiceContext serviceContext)
         {
-            MerchelloContext = MerchelloContext.Current = new MerchelloContext(serviceContext);
+           
+            // TODO: Mock the ApplicationContext.  ApplicationContext should never be null but we need this for unit testing at this point  
+            var cache = ApplicationContext.Current == null
+                            ? new CacheHelper(
+                                    new ObjectCacheRuntimeCacheProvider(),
+                                    new StaticCacheProvider(),
+                                    new NullCacheProvider())
+                            : ApplicationContext.Current.ApplicationCache;
+
+            MerchelloContext = MerchelloContext.Current = new MerchelloContext(serviceContext, cache);
         }
 
         /// <summary>
