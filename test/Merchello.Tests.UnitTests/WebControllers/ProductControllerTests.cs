@@ -16,6 +16,7 @@ using Umbraco.Tests.TestHelpers;
 using System.Web.Http;
 using System.Net.Http;
 using System.Web.Http.Hosting;
+using Merchello.Tests.Base.DataMakers;
 
 namespace Merchello.Tests.UnitTests.WebControllers
 {
@@ -43,7 +44,7 @@ namespace Merchello.Tests.UnitTests.WebControllers
         {
             //// Arrange
             Guid productKey = new Guid();
-            Product product = CreateFakeProduct(productKey, 20.0M);
+            Product product = MockProductDataMaker.MockProductComplete(productKey) as Product;
 
             var MockProductService = new Mock<IProductService>();
             MockProductService.Setup(cs => cs.GetByKey(productKey)).Returns(product);
