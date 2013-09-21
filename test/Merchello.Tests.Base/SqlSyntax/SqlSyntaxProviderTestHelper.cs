@@ -4,10 +4,10 @@ namespace Merchello.Tests.Base.SqlSyntax
 {
     internal class SqlSyntaxProviderTestHelper
     {
-        public static void EstablishSqlSyntax()
+        public static void EstablishSqlSyntax(DbSyntax syntax = DbSyntax.SqlCe)
         {
             if (Resolution.IsFrozen) return;
-            SqlSyntaxContext.SqlSyntaxProvider = SqlSyntaxProvider();
+            SqlSyntaxContext.SqlSyntaxProvider = SqlSyntaxProvider(syntax);
             Resolution.Freeze();
         }
 

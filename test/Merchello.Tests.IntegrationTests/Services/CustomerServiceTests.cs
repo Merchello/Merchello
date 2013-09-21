@@ -52,6 +52,5 @@ namespace Merchello.Tests.IntegrationTests.Services
             Assert.IsTrue(retrieved.Any());
             Assert.AreEqual(count, retrieved.Count());
         }
-
     }
 }
