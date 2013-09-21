@@ -1,6 +1,7 @@
 ﻿using System;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Rdbms;
+using Merchello.Core.Persistence.Querying;
 using Merchello.Tests.Base.SqlSyntax;
 using Umbraco.Core.Persistence;
 using NUnit.Framework;
@@ -57,6 +58,33 @@ namespace Merchello.Tests.UnitTests.Querying
 
             //// Assert
             Assert.That(sql.SQL, Is.EqualTo(expected.SQL));
+        }
+
+        /// <summary>
+        /// Test to verify the sql count customer syntax
+        /// </summary>
+        [Test]
+        public void Can_Verify_A_Customer_Count_Query()
+        {
+            //// Arrange
+            var key = Guid.Empty;
+
+            var expected = new Sql();
+            expected.Select("COUNT(*)")
+                    .From("[merchCustomer]")
+                    .Where("[merchCustomer].[pk] <> '" + key.ToString() + "'");
+
+            //// Act
+            var sql = new Sql();
+            sql.Select("COUNT(*)")
+               .From<CustomerDto>();
+
+            var query = Query<ICustomer>.Builder.Where(x => x.Key != Guid.Empty);
+            var translated = TranslateQuery(sql, query);
+
+            //// Assert
+            Assert.AreEqual(expected.SQL, translated.SQL);
+
         }
 
     }

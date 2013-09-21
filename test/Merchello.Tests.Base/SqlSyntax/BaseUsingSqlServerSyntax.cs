@@ -16,7 +16,7 @@ namespace Merchello.Tests.Base.SqlSyntax
 
         [SetUp]
         public virtual void Initialize()
-        {            
+        {
             SqlSyntaxProviderTestHelper.EstablishSqlSyntax();
             SetUp();
         }

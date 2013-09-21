@@ -79,7 +79,7 @@ namespace Merchello.Tests.IntegrationTests.Services
         {
             //// Arrange
             PreTestDataWorker.DeleteAllProducts();
-            var expected = 10000;
+            var expected = 3;
             var generated = MockProductDataMaker.MockProductCollectionForInserting(expected);
 
             //// Act
