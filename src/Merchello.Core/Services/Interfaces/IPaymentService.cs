@@ -18,7 +18,7 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Creates a Payment
         /// </summary>
-        IPayment CreatePayment(ICustomer customer, string gatewayAlias, PaymentMethodType paymentMethodType, string paymentMethodName, string referenceNumber, decimal amount);
+        IPayment CreatePayment(ICustomer customer, Guid providerKey, PaymentMethodType paymentMethodType, string paymentMethodName, string referenceNumber, decimal amount);
 
         /// <summary>
         /// Saves a single <see cref="IPayment"/> object

@@ -146,6 +146,10 @@
     <Compile Include="Cache\StaticCacheProvider.cs" />
     <Compile Include="Models\Warehouse.cs" />
     <Compile Include="ObjectResolution\Resolution.cs" />
+    <Compile Include="OrderFulfillment\IOrderFulfillment.cs" />
+    <Compile Include="Models\IFulfillmentProvider.cs" />
+    <Compile Include="OrderFulfillment\Strategies\Payment\PaymentInFullStrategy.cs" />
+    <Compile Include="OrderFulfillment\Strategies\Payment\PaymentNotAppliedStrategy.cs" />
     <Compile Include="Persistence\Factories\AnonymousCustomerFactory.cs" />
     <Compile Include="Persistence\Factories\BasketFactory.cs" />
     <Compile Include="Persistence\Factories\BasketItemFactory.cs" />
@@ -222,6 +226,12 @@
     <Compile Include="Services\ShipMethodService.cs" />
     <Compile Include="Services\TransactionService.cs" />
     <Compile Include="Services\WarehouseService.cs" />
+    <Compile Include="OrderFulfillment\Strategies\IFulfillmentStrategy.cs" />
+    <Compile Include="OrderFulfillment\Strategies\Payment\IPaymentFulfillmnetStrategy.cs" />
+    <Compile Include="OrderFulfillment\Strategies\IPromotionFulfillmentStrategy.cs" />
+    <Compile Include="OrderFulfillment\Strategies\IShippingFulfillmentStrategy.cs" />
+    <Compile Include="OrderFulfillment\Strategies\ITaxationFulfillmentStrategy.cs" />
+    <Compile Include="OrderFulfillment\Strategies\Payment\PaymentFulfillmentStrategyBase.cs" />
     <Compile Include="TypeFieldMapperEnumerations.cs" />
     <Compile Include="Models\TypeFields\ProductTypeField.cs" />
     <Compile Include="Models\Rdbms\TypeFieldDto.cs" />
@@ -311,6 +321,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="OrderFulfillment\Providers\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
