@@ -33,7 +33,7 @@ namespace Merchello.Tests.IntegrationTests.Services
         [Test]
         public void Can_Create_And_Save_An_Payments()
         {
-            var payment = _paymentService.CreatePayment(_customer, "DemoGateway", PaymentMethodType.Cash, "Cash", "Complete", 12.00m);
+            var payment = _paymentService.CreatePayment(_customer, Guid.NewGuid(), PaymentMethodType.Cash, "Cash", "Complete", 12.00m);
 
             _paymentService.Save(payment);
 
@@ -44,11 +44,13 @@ namespace Merchello.Tests.IntegrationTests.Services
         [Test]
         public void Can_Create_And_Save_A_List_Of_Payments()
         {
+            var providerKey = Guid.NewGuid();
+
             var payments = new List<IPayment>()
                 {
-                   { _paymentService.CreatePayment(_customer, "DemoGateway", PaymentMethodType.Cash, "Cash", "Complete", 12.00m) },
-                   { _paymentService.CreatePayment(_customer, "DemoGateway", PaymentMethodType.CreditCard, "CC", "Complete", 156.00m) },
-                   { _paymentService.CreatePayment(_customer, "DemoGateway", PaymentMethodType.Cash, "Cash", "Complete", 1.00m) }
+                   { _paymentService.CreatePayment(_customer, providerKey, PaymentMethodType.Cash, "Cash", "Complete", 12.00m) },
+                   { _paymentService.CreatePayment(_customer, providerKey, PaymentMethodType.CreditCard, "CC", "Complete", 156.00m) },
+                   { _paymentService.CreatePayment(_customer, providerKey, PaymentMethodType.Cash, "Cash", "Complete", 1.00m) }
                 };
 
             _paymentService.Save(payments);
@@ -79,11 +81,12 @@ namespace Merchello.Tests.IntegrationTests.Services
         [Test]
         public void Can_Get_A_List_Of_Payments_By_Customer()
         {
+            var providerKey = Guid.NewGuid();
             var payments = new List<IPayment>()
                 {
-                   { _paymentService.CreatePayment(_customer, "CustomerGateway", PaymentMethodType.Cash, "Cash", "Complete", 12.00m) },
-                   { _paymentService.CreatePayment(_customer, "CustomerGateway", PaymentMethodType.CreditCard, "CC", "Complete", 156.00m) },
-                   { _paymentService.CreatePayment(_customer, "CustomerGateway", PaymentMethodType.Cash, "Cash", "Complete", 1.00m) }
+                   { _paymentService.CreatePayment(_customer, providerKey, PaymentMethodType.Cash, "Cash", "Complete", 12.00m) },
+                   { _paymentService.CreatePayment(_customer, providerKey, PaymentMethodType.CreditCard, "CC", "Complete", 156.00m) },
+                   { _paymentService.CreatePayment(_customer, providerKey, PaymentMethodType.Cash, "Cash", "Complete", 1.00m) }
                 };
 
             _paymentService.Save(payments);

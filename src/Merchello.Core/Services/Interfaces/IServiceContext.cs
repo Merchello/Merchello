@@ -79,6 +79,7 @@ namespace Merchello.Core.Services
         /// </summary>
         IWarehouseService WarehouseService { get; }
 
+        
     }
     
 }

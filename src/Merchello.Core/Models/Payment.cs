@@ -14,7 +14,7 @@ namespace Merchello.Core.Models
         
         private ICustomer _customer;
         private Guid _customerKey;
-        private string _gatewayAlias;
+        private Guid _providerKey;
         private Guid _paymentTypeFieldKey;
         private string _paymentMethodName;
         private string _referenceNumber;
@@ -38,7 +38,7 @@ namespace Merchello.Core.Models
         
 
         private static readonly PropertyInfo CustomerKeySelector = ExpressionHelper.GetPropertyInfo<Payment, Guid>(x => x.CustomerKey); 
-        private static readonly PropertyInfo GatewayAliasSelector = ExpressionHelper.GetPropertyInfo<Payment, string>(x => x.GatewayAlias);  
+        private static readonly PropertyInfo ProviderKeySelector = ExpressionHelper.GetPropertyInfo<Payment, Guid>(x => x.ProviderKey);  
         private static readonly PropertyInfo PaymentTypeFieldKeySelector = ExpressionHelper.GetPropertyInfo<Payment, Guid>(x => x.PaymentTypeFieldKey);  
         private static readonly PropertyInfo PaymentMethodNameSelector = ExpressionHelper.GetPropertyInfo<Payment, string>(x => x.PaymentMethodName);  
         private static readonly PropertyInfo ReferenceNumberSelector = ExpressionHelper.GetPropertyInfo<Payment, string>(x => x.ReferenceNumber);  
@@ -79,19 +79,19 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
-        /// The gatewayAlias associated with the Payment
+        /// The provider key associated with the fulfillment provider for this payment
         /// </summary>
         [DataMember]
-        public string GatewayAlias
+        public Guid ProviderKey
         {
-            get { return _gatewayAlias; }
+            get { return _providerKey; }
                 set 
                 { 
                     SetPropertyValueAndDetectChanges(o =>
                     {
-                        _gatewayAlias = value;
-                        return _gatewayAlias;
-                    }, _gatewayAlias, GatewayAliasSelector); 
+                        _providerKey = value;
+                        return _providerKey;
+                    }, _providerKey, ProviderKeySelector); 
                 }
         }
     
