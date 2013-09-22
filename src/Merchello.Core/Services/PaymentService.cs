@@ -89,7 +89,7 @@ namespace Merchello.Core.Services
             paymentFulfillmentStrategy.Process();
         }
 
-        internal void SaveNotApplied(IPayment payment, bool raiseEvents = true)
+        public void SaveNotApplied(IPayment payment, bool raiseEvents = true)
         {
             if (raiseEvents) Saving.RaiseEvent(new SaveEventArgs<IPayment>(payment), this);
 
