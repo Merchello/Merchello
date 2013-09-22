@@ -11,7 +11,7 @@ namespace Merchello.Core.Persistence.Factories
                new CustomerFactory().BuildEntity(dto.CustomerDto), dto.PaymentTypeFieldKey, dto.Amount)
             {
                 Id = dto.Id,
-                GatewayAlias = dto.GatewayAlias,
+                ProviderKey = dto.ProviderKey,
                 PaymentMethodName = dto.PaymentMethodName,
                 ReferenceNumber = dto.ReferenceNumber,
                 Exported = dto.Exported,
@@ -30,7 +30,7 @@ namespace Merchello.Core.Persistence.Factories
             {
                 Id = entity.Id,                
                 CustomerKey = entity.CustomerKey,
-                GatewayAlias = entity.GatewayAlias,
+                ProviderKey = entity.ProviderKey,
                 PaymentTypeFieldKey = entity.PaymentTypeFieldKey,
                 PaymentMethodName = entity.PaymentMethodName,
                 ReferenceNumber = entity.ReferenceNumber,

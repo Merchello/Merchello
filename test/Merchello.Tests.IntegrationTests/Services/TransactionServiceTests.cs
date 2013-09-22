@@ -38,7 +38,7 @@ namespace Merchello.Tests.IntegrationTests.Services
             invoiceService.Save(_invoice);
 
             var paymentService = new PaymentService();
-            _payment = paymentService.CreatePayment(_customer, "DemoGateway", PaymentMethodType.Cash, "Cash", "Complete", 12.00m);
+            _payment = paymentService.CreatePayment(_customer, Guid.NewGuid(), PaymentMethodType.Cash, "Cash", "Complete", 12.00m);
             paymentService.Save(_payment);
 
             

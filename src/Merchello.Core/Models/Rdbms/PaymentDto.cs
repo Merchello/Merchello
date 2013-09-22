@@ -18,8 +18,8 @@ namespace Merchello.Core.Models.Rdbms
         [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchPaymentCustomer")]
         public Guid CustomerKey { get; set; }
         
-        [Column("gatewayAlias")]
-        public string GatewayAlias { get; set; }
+        [Column("providerKey")]
+        public Guid ProviderKey { get; set; }
 
         [Column("paymentTypeFieldKey")]
         public Guid PaymentTypeFieldKey { get; set; }

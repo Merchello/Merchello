@@ -18,10 +18,10 @@ namespace Merchello.Core.Models
             Guid CustomerKey { get; }
             
             /// <summary>
-            /// The alias for the payment gateway
+            /// The provider key for the payment provider
             /// </summary>
             [DataMember]
-            string GatewayAlias { get; set;}
+            Guid ProviderKey { get; set;}
             
             /// <summary>
             /// The paymentTypeFieldKey for the payment
