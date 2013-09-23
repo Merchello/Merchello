@@ -20,24 +20,30 @@ namespace Merchello.Core.Services
     {
         private readonly IDatabaseUnitOfWorkProvider _uowProvider;
         private readonly RepositoryFactory _repositoryFactory;
+        private readonly IInvoiceService _invoiceService;
+        private readonly ITransactionService _transactionService;
 
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
         public PaymentService()
-            : this(new RepositoryFactory())
+            : this(new RepositoryFactory(), new InvoiceService(), new TransactionService())
         { }
 
-        public PaymentService(RepositoryFactory repositoryFactory)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory)
+        public PaymentService(RepositoryFactory repositoryFactory, IInvoiceService invoiceService, ITransactionService transactionService)
+            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, invoiceService, transactionService)
         { }
 
-        public PaymentService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
+        public PaymentService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, IInvoiceService invoiceService, ITransactionService transactionService)
         {
             Mandate.ParameterNotNull(provider, "provider");
             Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
+            Mandate.ParameterNotNull(invoiceService, "invoiceService");
+            Mandate.ParameterNotNull(transactionService, "transactionService");
 
             _uowProvider = provider;
             _repositoryFactory = repositoryFactory;
+            _invoiceService = invoiceService;
+            _transactionService = transactionService;
         }
 
         #region IPaymentService Members
@@ -76,15 +82,25 @@ namespace Merchello.Core.Services
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events.</param>
         public void Save(IPayment payment, bool raiseEvents = true)
         {
-            SaveByPaymnetFulfillmentStrategy(new PaymentNotAppliedStrategy(payment, raiseEvents));
+            SaveWithStrategy(new PaymentNotAppliedStrategy(this,_invoiceService, _transactionService, payment, raiseEvents));
         }
 
         public void SaveAndApplyInFull(IPayment payment, IInvoice invoice, string description = "", bool raiseEvents = true)
         {
-            SaveByPaymnetFulfillmentStrategy(new PaymentInFullStrategy(payment, invoice, description, raiseEvents));
+            SaveWithStrategy(new PayInFullStrategy(
+                this,
+                _invoiceService,
+                _transactionService,
+                payment, 
+                invoice, 
+                description, 
+                raiseEvents));
         }
 
-        public void SaveByPaymnetFulfillmentStrategy(PaymentFulfillmentStrategyBase paymentFulfillmentStrategy)
+
+        // public void SaveWithPartial(IPayment payment, IDictionary<IInvoice, decimal> apply)
+
+        public void SaveWithStrategy(PaymentFulfillmentStrategyBase paymentFulfillmentStrategy)
         {
             paymentFulfillmentStrategy.Process();
         }

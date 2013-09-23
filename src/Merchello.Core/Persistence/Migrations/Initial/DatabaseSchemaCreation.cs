@@ -48,7 +48,13 @@ namespace Merchello.Core.Persistence.Migrations.Initial
                 {20, typeof(ProductVariantDto)},
                 {21, typeof(InventoryDto)},
                 {22, typeof(Content2ProductDto)},
-                {23, typeof(ProductVariant2OptionChoiceDto)}
+                {23, typeof(ProductVariant2OptionChoiceDto)},
+                {24, typeof(ShipZoneDto) },
+                {25, typeof(CountryDto) },
+                {26, typeof(RegionDto) },
+                {27, typeof(ShipZone2Region)},
+                {28, typeof(ShipZone2Country)},
+                {29, typeof(ShipMethod2ShipZone)}
             };
 
         #endregion
