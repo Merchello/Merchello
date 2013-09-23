@@ -70,8 +70,11 @@ namespace Merchello.Core.Services
             if(_invoiceService == null)
                 _invoiceService = new Lazy<InvoiceService>(() => new InvoiceService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _invoiceItemService.Value, _invoiceStatusService.Value));
 
+            if (_transactionService == null)
+                _transactionService = new Lazy<TransactionService>(() => new TransactionService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+
             if(_paymentService == null)
-                _paymentService = new Lazy<PaymentService>(() => new PaymentService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+                _paymentService = new Lazy<PaymentService>(() => new PaymentService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _invoiceService.Value, _transactionService.Value));
 
             if(_productService == null)
                 _productService = new Lazy<ProductService>(() => new ProductService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
@@ -81,9 +84,6 @@ namespace Merchello.Core.Services
 
             if (_shipMethodService == null)
                 _shipMethodService = new Lazy<ShipMethodService>(() => new ShipMethodService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
-
-            if(_transactionService == null)
-                _transactionService = new Lazy<TransactionService>(() => new TransactionService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
             if(_warehouseService == null)
                 _warehouseService = new Lazy<WarehouseService>(() => new WarehouseService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));

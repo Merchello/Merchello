@@ -68,7 +68,7 @@ namespace Merchello.Tests.IntegrationTests.Services
 
             //// Assert
             Assert.NotNull(retrieved);
-            Assert.AreEqual(expected, retrieved);
+            Assert.AreEqual(expected.Id, retrieved.Id);
         }
 
         /// <summary>

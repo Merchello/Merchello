@@ -1,4 +1,5 @@
-﻿using Merchello.Core.Services;
+﻿using System.Net.Configuration;
+using Merchello.Core.Services;
 
 namespace Merchello.Core.OrderFulfillment.Strategies.Payment
 {
@@ -13,25 +14,21 @@ namespace Merchello.Core.OrderFulfillment.Strategies.Payment
         private readonly TransactionType _transactionType;
         private readonly bool _raiseEvents;
 
-        protected PaymentFulfillmentStrategyBase(TransactionType transactionType, bool raiseEvents = true)
-            : this(transactionType, MerchelloContext.Current.Services.PaymentService, raiseEvents)
-        { }
-
-        internal PaymentFulfillmentStrategyBase(TransactionType transactionType, IPaymentService paymentService, bool raiseEvents = true)
-            : this(transactionType, paymentService, ((ServiceContext) MerchelloContext.Current.Services).TransactionService, MerchelloContext.Current.Services.InvoiceService, raiseEvents)
+        protected PaymentFulfillmentStrategyBase(
+            IPaymentService paymentService,
+            IInvoiceService invoiceService,
+            ITransactionService transactionService,
+            TransactionType transactionType,
+            bool raiseEvents = true)
         {
-        }
-
-        internal PaymentFulfillmentStrategyBase(TransactionType transactionType, IPaymentService paymentService, ITransactionService transactionService, IInvoiceService invoiceService, bool raiseEvents = true)
-        {            
             Mandate.ParameterNotNull(paymentService, "paymentService");
-            Mandate.ParameterNotNull(transactionService, "transactionService");
-            Mandate.ParameterNotNull(invoiceService, "invoiceService");
+            //Mandate.ParameterNotNull(invoiceService, "invoiceService");
+            //Mandate.ParameterNotNull(transactionService, "transactionService");
 
             _paymentService = paymentService;
             _transactionService = transactionService;
-            _transactionType = transactionType;
             _invoiceService = invoiceService;
+            _transactionType = transactionType;            
             _raiseEvents = raiseEvents;
         }
 
@@ -74,6 +71,10 @@ namespace Merchello.Core.OrderFulfillment.Strategies.Payment
         {
             get { return _raiseEvents; }
         }
+
+        //public abstract void PaymentInFull();
+        //public abstract void PaymentPartial();
+        //public abstract void PaymentNotApplied();
 
         public abstract void Process();
     }

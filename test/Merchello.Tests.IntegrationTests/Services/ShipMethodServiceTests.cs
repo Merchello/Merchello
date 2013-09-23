@@ -47,34 +47,34 @@ namespace Merchello.Tests.IntegrationTests.Services
 
         }
 
-        [Test]
-        public void Can_Delete_A_ShipMethod_With_AssociatedShipments()
-        {
+        //[Test]
+        //public void Can_Delete_A_ShipMethod_With_AssociatedShipments()
+        //{
 
-            //// Arrange
-            var shipmethod = MockShipmentDataMaker.MockShipMethodForInserting();
-            _shipMethodService.Save(shipmethod);
+        //    //// Arrange
+        //    var shipmethod = MockShipmentDataMaker.MockShipMethodForInserting();
+        //    _shipMethodService.Save(shipmethod);
 
-            var shipmentService = new ShipmentService();
-           // var shipment = MockShipmentDataMaker.MockShipmentForInserting();
+        //    var shipmentService = new ShipmentService();
+        //   // var shipment = MockShipmentDataMaker.MockShipmentForInserting();
 
-            //var shipment = shipments.FirstOrDefault(x => x.ShipMethodId != null);
+        //    //var shipment = shipments.FirstOrDefault(x => x.ShipMethodId != null);
 
-            //if (shipment != null && shipment.ShipMethodId != null)
-            //{
-            //    var id = shipment.Id;
-            //    Console.WriteLine(string.Format("shipment: {0} - ship method: {1}", shipment.Id, shipment.ShipMethodId));
+        //    //if (shipment != null && shipment.ShipMethodId != null)
+        //    //{
+        //    //    var id = shipment.Id;
+        //    //    Console.WriteLine(string.Format("shipment: {0} - ship method: {1}", shipment.Id, shipment.ShipMethodId));
 
-            //    var shipmethod = _shipMethodService.GetById(shipment.ShipMethodId.Value);
-            //    _shipMethodService.Delete(shipmethod);
+        //    //    var shipmethod = _shipMethodService.GetById(shipment.ShipMethodId.Value);
+        //    //    _shipMethodService.Delete(shipmethod);
 
-            //    shipment = shipmentService.GetById(id);
-            //    Assert.IsNull(shipment.ShipMethodId);
-            //}
-            //else
-            //{
-            //    Assert.Pass();
-            //}
-        }
+        //    //    shipment = shipmentService.GetById(id);
+        //    //    Assert.IsNull(shipment.ShipMethodId);
+        //    //}
+        //    //else
+        //    //{
+        //    //    Assert.Pass();
+        //    //}
+        //}
     }
 }

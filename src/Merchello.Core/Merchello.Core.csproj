@@ -122,12 +122,18 @@
     <Compile Include="Models\Payment.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\Rdbms\Content2ProductDto.cs" />
+    <Compile Include="Models\Rdbms\CountryDto.cs" />
     <Compile Include="Models\Rdbms\OptionChoiceDto.cs" />
     <Compile Include="Models\Rdbms\OptionDto.cs" />
     <Compile Include="Models\Rdbms\Product2OptionDto.cs" />
     <Compile Include="Models\Rdbms\ProductDto.cs" />
     <Compile Include="Models\Rdbms\ProductVariant2OptionChoiceDto.cs" />
     <Compile Include="Models\Rdbms\ProductVariantDto.cs" />
+    <Compile Include="Models\Rdbms\RegionDto.cs" />
+    <Compile Include="Models\Rdbms\ShipMethod2ShipZone.cs" />
+    <Compile Include="Models\Rdbms\ShipZone2Region.cs" />
+    <Compile Include="Models\Rdbms\ShipZoneDto.cs" />
+    <Compile Include="Models\Rdbms\ShipZone2Country.cs" />
     <Compile Include="Models\Shipment.cs" />
     <Compile Include="Models\ShipMethod.cs" />
     <Compile Include="Models\Transaction.cs" />
@@ -148,7 +154,7 @@
     <Compile Include="ObjectResolution\Resolution.cs" />
     <Compile Include="OrderFulfillment\IOrderFulfillment.cs" />
     <Compile Include="Models\IFulfillmentProvider.cs" />
-    <Compile Include="OrderFulfillment\Strategies\Payment\PaymentInFullStrategy.cs" />
+    <Compile Include="OrderFulfillment\Strategies\Payment\PayInFullStrategy.cs" />
     <Compile Include="OrderFulfillment\Strategies\Payment\PaymentNotAppliedStrategy.cs" />
     <Compile Include="Persistence\Factories\AnonymousCustomerFactory.cs" />
     <Compile Include="Persistence\Factories\BasketFactory.cs" />

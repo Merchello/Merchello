@@ -28,11 +28,27 @@ namespace Merchello.Core.Services
         void Save(IPayment payment, bool raiseEvents = true);
 
         /// <summary>
+        /// Saves a single <see cref="IPayment"/> object
+        /// </summary>
+        /// <param name="payment">The <see cref="IPayment"/> to save</param>
+        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        void SaveNotApplied(IPayment payment, bool raiseEvents = true);
+
+        // SaveAndApply(payment, invoice) 
+        // always take as much of the payment as it can to apply to an invoice
+        // check amount due on invoice
+        // compare amount due to payment amount
+        // apply
+
+        // SaveAndApply(with strategy)
+
+        /// <summary>
         /// Saves a collection of <see cref="IPayment"/> objects
         /// </summary>
         /// <param name="paymentList">Collection of <see cref="IPayment"/> to save</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         void Save(IEnumerable<IPayment> paymentList, bool raiseEvents = true);
+      
 
         /// <summary>
         /// Deletes a single <see cref="IPayment"/> object

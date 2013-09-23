@@ -20,12 +20,8 @@ namespace Merchello.Tests.IntegrationTests.Services
         [SetUp]
         public void Initialize()
         {
-            _paymentService = new PaymentService();
-            
-            _customer = MockCustomerDataMaker.CustomerForInserting();
-            var customerService = new CustomerService();
-
-            customerService.Save(_customer);
+            _paymentService = PreTestDataWorker.PaymentService;
+            _customer = PreTestDataWorker.MakeExistingCustomer();
 
         }
 
