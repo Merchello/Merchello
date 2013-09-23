@@ -13,7 +13,7 @@ using Umbraco.Web.Trees.Menu;
 
 namespace Merchello.Web.UI.Trees
 {
-    [Tree("merchello", "merchelloTree", "Merchello Tree")]
+    [Tree("merchello", "merchello", "Merchello Tree")]
     public class MerchelloTreeController : TreeApiController
     {
         protected override TreeNodeCollection GetTreeNodes(string id, FormDataCollection queryStrings)
