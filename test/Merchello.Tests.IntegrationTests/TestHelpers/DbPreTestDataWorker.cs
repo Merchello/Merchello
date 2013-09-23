@@ -28,6 +28,8 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
             : this(new ServiceContext(new PetaPocoUnitOfWorkProvider()))
         { }
 
+        internal DbSyntax SqlSyntax { get; set; }
+
         public DbPreTestDataWorker(ServiceContext serviceContext)
         {
             // sets up the Umbraco SqlSyntaxProvider Singleton
@@ -356,6 +358,20 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
         #endregion
 
+        #region IPayment
+
+
+
+        /// <summary>
+        /// Returns the Payment Service
+        /// </summary>
+        public IPaymentService PaymentService
+        {
+            get { return _serviceContext.PaymentService; }
+        }
+
+        #endregion
+
         #region IShipment
 
 
@@ -380,6 +396,18 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
         #endregion
 
+        #region ITransaction
+
+
+        /// <summary>
+        /// Gets the transaction service
+        /// </summary>
+        public ITransactionService TransactionService
+        {
+            get { return _serviceContext.TransactionService; }
+        }
+
+        #endregion
 
         #region IWarehouse
 

@@ -1,4 +1,5 @@
 ﻿using Merchello.Core.Persistence.Migrations.Initial;
+using Merchello.Tests.Base.SqlSyntax;
 using Merchello.Tests.IntegrationTests.TestHelpers;
 using NUnit.Framework;
 using Umbraco.Core.Persistence;
@@ -13,7 +14,7 @@ namespace Merchello.Tests.IntegrationTests.Migration
         [SetUp]
         public void Init()
         {
-            var worker = new DbPreTestDataWorker();
+            var worker = new DbPreTestDataWorker {SqlSyntax = DbSyntax.SqlCe};
             _database = worker.Database;
         }
 
@@ -29,6 +30,11 @@ namespace Merchello.Tests.IntegrationTests.Migration
         {
             var creation = new DatabaseSchemaCreation(_database);
             creation.InitializeDatabaseSchema();
+        }
+
+        public void Teardown()
+        {
+            
         }
 
     }

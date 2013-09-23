@@ -14,18 +14,29 @@ namespace Merchello.Core.OrderFulfillment.Strategies.Payment
     public class PaymentNotAppliedStrategy : PaymentFulfillmentStrategyBase
     {
         private readonly IPayment _payment;
-        private bool _raiseEvents;
+        private readonly bool _raiseEvents;
 
         public PaymentNotAppliedStrategy(IPayment payment, bool raiseEvents = true)
-            : base(TransactionType.Credit)
+            : this(new PaymentService(), new InvoiceService(), new TransactionService(),payment, raiseEvents)
+        { }
+
+        public PaymentNotAppliedStrategy(
+            IPaymentService paymentService, 
+            IInvoiceService invoiceService,
+            ITransactionService transactionService, 
+            IPayment payment, 
+            bool raiseEvents = true)
+            : base(paymentService, invoiceService, transactionService, TransactionType.Credit, raiseEvents)
         {
+            Mandate.ParameterNotNull(payment, "payment");
+
             _payment = payment;
             _raiseEvents = raiseEvents;
         }
 
         public override void Process()
         {
-            ((PaymentService)PaymentService).SaveNotApplied(_payment, _raiseEvents);
+            PaymentService.SaveNotApplied(_payment, _raiseEvents);
         }
     }
 }
