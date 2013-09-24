@@ -11,6 +11,7 @@
     ,
     javascript: [
         '~/App_Plugins/Merchello/PropertyEditors/Js/merchelloskuselector.controller.js',
+        '~/App_Plugins/Merchello/Controllers/product.create.controller.js',
         '~/App_Plugins/Merchello/Controllers/product.edit.controller.js'
     ]
 }

@@ -235,6 +235,7 @@
     <Compile Include="PackageActions\AddConfigSection.cs" />
     <Compile Include="PackageActions\CreateDatabase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Trees\MerchelloActionNewProduct.cs" />
     <Compile Include="Trees\MerchelloApplication.cs" />
     <Compile Include="Trees\MerchelloTreeController.cs" />
   </ItemGroup>
@@ -247,11 +248,13 @@
     <Folder Include="App_Plugins\Merchello\Views\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Plugins\Merchello\Controllers\product.create.controller.js" />
     <Content Include="App_Plugins\Merchello\Controllers\product.edit.controller.js" />
     <Content Include="App_Plugins\Merchello\lib\select2\ui-select2.js" />
     <Content Include="App_Plugins\Merchello\Package.manifest" />
     <Content Include="App_Plugins\Merchello\PropertyEditors\Js\merchelloskuselector.controller.js" />
     <Content Include="App_Plugins\Merchello\PropertyEditors\Views\merchelloskuselector.html" />
+    <Content Include="Umbraco\Views\merchello\CreateProduct.html" />
     <Content Include="Umbraco\Views\merchello\edit.html" />
     <Content Include="Umbraco\images\tray\Merchello-Icon.gif" />
   </ItemGroup>
