@@ -40,28 +40,46 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Saves a single <see cref="IPayment"/> object and applies the payment to an <see cref="IInvoice"/> by creating a <see cref="ITransaction"/> 
         /// </summary>
-        /// <param name="payment"><see cref="IPayment"/></param>
-        /// <param name="invoice"><see cref="IInvoice"/></param>        
+        /// <param name="payment">The <see cref="IPayment"/></param>
+        /// <param name="invoice">The <see cref="IInvoice"/> to be paid</param>    
         /// <param name="transactionDescription">An optional description for the transaction</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        void SaveAndApply(IPayment payment, IInvoice invoice, string transactionDescription = "", bool raiseEvents = true);
+        void SaveAndApplyPayment(IPayment payment, IInvoice invoice, string transactionDescription = "", bool raiseEvents = true);
 
         /// <summary>
         /// Saves a single <see cref="IPayment"/> object and applies the payment to an <see cref="IInvoice"/> by creating a <see cref="ITransaction"/> 
         /// </summary>
-        /// <param name="payment"><see cref="IPayment"/></param>
-        /// <param name="invoice"><see cref="IInvoice"/></param>
+        /// <param name="payment">The <see cref="IPayment"/></param>
+        /// <param name="invoice">The <see cref="IInvoice"/> to be paid</param>
         /// <param name="amountToApply">The amount of the payment to apply.  
         /// This in conjuction with other transaction amounts associated with the payment cannot 
         /// exceed the the total payment amount.
         /// </param>
         /// <param name="transactionDescription">An optional description for the transaction</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        void SaveAndApply(IPayment payment, IInvoice invoice, decimal amountToApply, string transactionDescription = "",  bool raiseEvents = true);
+        void SaveAndApplyPayment(IPayment payment, IInvoice invoice, decimal amountToApply, string transactionDescription = "",  bool raiseEvents = true);
 
+        /// <summary>
+        /// Saves a single <see cref="IPayment"/> object and applies the payment to an <see cref="IInvoice"/> by creating a <see cref="ITransaction"/> 
+        /// </summary>
+        /// <param name="paymentApplicationStrategy">The <see cref="PaymentApplicationStrategyBase"/> to use in applying the payment</param>
+        /// <param name="payment">The <see cref="IPayment"/></param>
+        /// <param name="invoice">The <see cref="IInvoice"/> to be paid</param>
+        /// <param name="amountToApply">The amount of the payment to apply.  
+        /// This in conjuction with other transaction amounts associated with the payment cannot 
+        /// exceed the the total payment amount.
+        /// </param>
+        /// <param name="transactionDescription">An optional description for the transaction</param>
+        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        void SaveAndApplyPayment(PaymentApplicationStrategyBase paymentApplicationStrategy, IPayment payment, IInvoice invoice, decimal amountToApply, string transactionDescription = "", bool raiseEvents = true);
 
-        void SaveAndApply(ApplyPaymentStrategyBase applyPaymentStrategy, IPayment payment, IInvoice invoice, decimal amountToApply, string transactionDescription = "", bool raiseEvents = true);
-
+        /// <summary>
+        /// Voids the <see cref="IPayment"/> and all assoicated transactions
+        /// </summary>
+        /// <param name="payment">The <see cref="IPayment"/> to be voided</param>
+        /// <param name="transactionDescription">An optional description to be applied to each of the <see cref="ITransaction"/></param>
+        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        void SaveAndVoidPayment(IPayment payment, string transactionDescription = "", bool raiseEvents = true);
 
         /// <summary>
         /// Saves a collection of <see cref="IPayment"/> objects

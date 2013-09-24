@@ -29,7 +29,7 @@ namespace Merchello.Core.Services
         private Lazy<TransactionService> _transactionService;
         private Lazy<WarehouseService> _warehouseService;
 
-        private Lazy<ApplyPaymentStrategyBase> _applyPaymentStrategy;
+        private Lazy<PaymentApplicationStrategyBase> _applyPaymentStrategy;
         
         /// <summary>
         /// Constructor
@@ -86,7 +86,7 @@ namespace Merchello.Core.Services
                 var constructorArgs = new[] { typeof(InvoiceService), typeof(TransactionService) };
                 var constructorArgValues = new object[] { _invoiceService.Value, _transactionService.Value };
                 
-                _applyPaymentStrategy = new Lazy<ApplyPaymentStrategyBase>(() => ActivatorHelper.CreateInstance<ApplyPaymentStrategyBase>(Type.GetType(paymentStrategyTypeName), constructorArgs, constructorArgValues));
+                _applyPaymentStrategy = new Lazy<PaymentApplicationStrategyBase>(() => ActivatorHelper.CreateInstance<PaymentApplicationStrategyBase>(Type.GetType(paymentStrategyTypeName), constructorArgs, constructorArgValues));
             }
 
             if(_paymentService == null)

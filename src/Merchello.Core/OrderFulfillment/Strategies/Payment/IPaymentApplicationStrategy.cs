@@ -5,7 +5,7 @@ namespace Merchello.Core.OrderFulfillment.Strategies.Payment
     /// <summary>
     /// Defines the apply payment strategy
     /// </summary>
-    public interface IApplyPaymentStrategy
+    public interface IPaymentApplicationStrategy
     {
        /// <summary>
        /// Performs the actual work of the apply payment transaction
@@ -18,12 +18,16 @@ namespace Merchello.Core.OrderFulfillment.Strategies.Payment
        /// <param name="transactionType">The <see cref="TransactionType"/> of the resulting transaction created</param>
        /// <param name="transactionDescription">An optional description for the transaction</param>
        /// <param name="raiseEvents">True/False indicating whether or not any service providers required to make the transaction should raise events</param>
-        void ProcessTransaction(
+        void ApplyPayment(
             IPayment payment, 
             IInvoice invoice, 
             decimal amount,
             TransactionType transactionType = TransactionType.Credit, 
             string transactionDescription = "",
             bool raiseEvents = true);
+
+
+        void VoidPayment(IPayment payment, string transactionDescription = "** Void **", bool raiseEvents = true);
+
     }
 }

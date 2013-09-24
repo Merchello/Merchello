@@ -7,7 +7,7 @@ using Merchello.Core.Services;
 
 namespace Merchello.Core.OrderFulfillment.Strategies.Payment
 {
-    public interface IApplyPaymentStrategyBase : IApplyPaymentStrategy
+    public interface IPaymentApplicationStrategyBase : IPaymentApplicationStrategy
     {
         /// <summary>
         /// The transaction service
