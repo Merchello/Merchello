@@ -47,12 +47,24 @@ namespace Merchello.Core.Configuration.Outline
            set { this["version"] = value;  }
         }
 
+
+        /// <summary>
+        /// Gets the settings collection
+        /// </summary>
+        [ConfigurationProperty("settings", IsRequired = true), ConfigurationCollection(typeof(SettingsCollection), AddItemName = "setting")]
+        public SettingsCollection Settings
+        {
+            get { return (SettingsCollection) this["settings"]; }
+        }
+
+        /// <summary>
+        /// Gets the type field definitions element
+        /// </summary>
         [ConfigurationProperty("typeFieldDefinitions", IsRequired = true)]
         public TypeFieldDefinitionsElement TypeFields
         {
             get { return (TypeFieldDefinitionsElement) this["typeFieldDefinitions"];  }
         }
-
 
     }
 }

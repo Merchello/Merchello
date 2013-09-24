@@ -9,7 +9,7 @@ namespace Merchello.Tests.UnitTests.Mappers
     public class MerchelloMapperTests
     {
         /// <summary>
-        /// Test to verify <see cref="MerchelloMappers"/> correctly maps ICustomer to CustomerMapper
+        /// Test to verify <see cref="MerchelloMapper"/> correctly maps ICustomer to CustomerMapper
         /// </summary>
         [Test]
         public void Mapper_Resolves_ICustomer_To_CustomerMapper()
@@ -18,7 +18,7 @@ namespace Merchello.Tests.UnitTests.Mappers
             var expected = typeof (CustomerMapper);
 
             //// Act
-            var resolved = MerchelloMappers.ResolveByType(typeof (ICustomer));
+            var resolved = MerchelloMapper.Current.ResolveByType(typeof (ICustomer));
 
             //// Assert
             Assert.IsTrue(resolved.Success);
@@ -26,7 +26,7 @@ namespace Merchello.Tests.UnitTests.Mappers
         }
 
         /// <summary>
-        /// Test to verify <see cref="MerchelloMappers"/> correctly maps IAddress to AddressMapper
+        /// Test to verify <see cref="MerchelloMapper"/> correctly maps IAddress to AddressMapper
         /// </summary>
         [Test]
         public void Mapper_Resolves_IAddress_To_AddressMapper()
@@ -35,7 +35,7 @@ namespace Merchello.Tests.UnitTests.Mappers
             var expected = typeof (AddressMapper);
 
             //// Act
-            var resolved = MerchelloMappers.ResolveByType(typeof (IAddress));
+            var resolved = MerchelloMapper.Current.ResolveByType(typeof(IAddress));
 
             //// Assert
             Assert.IsTrue(resolved.Success);
@@ -43,7 +43,7 @@ namespace Merchello.Tests.UnitTests.Mappers
         }
 
         /// <summary>
-        /// Test to verify <see cref="MerchelloMappers"/> correctly maps IAnonymousCustomer to AnonymousCustomerMapper
+        /// Test to verify <see cref="MerchelloMapper"/> correctly maps IAnonymousCustomer to AnonymousCustomerMapper
         /// </summary>
         [Test]
         public void Mapper_Resolves_IAnonymousCustomer_To_AnonymousCustomerMapper()
@@ -52,7 +52,7 @@ namespace Merchello.Tests.UnitTests.Mappers
             var expected = typeof (AnonymousCustomerMapper);
 
             //// Act
-            var resolved = MerchelloMappers.ResolveByType(typeof (IAnonymousCustomer));
+            var resolved = MerchelloMapper.Current.ResolveByType(typeof(IAnonymousCustomer));
 
             //// Assert
             Assert.IsTrue(resolved.Success);
@@ -60,7 +60,7 @@ namespace Merchello.Tests.UnitTests.Mappers
         }
 
         /// <summary>
-        /// Test to verify <see cref="MerchelloMappers"/> correctly maps IInvoiceStatus to InvoiceStatusMapper
+        /// Test to verify <see cref="MerchelloMapper"/> correctly maps IInvoiceStatus to InvoiceStatusMapper
         /// </summary>
         [Test]
         public void Mapper_Resolves_IInvoiceStatus_To_InvoiceStatusMapper()
@@ -69,7 +69,7 @@ namespace Merchello.Tests.UnitTests.Mappers
             var expected = typeof (InvoiceStatusMapper);
 
             //// Act
-            var resolved = MerchelloMappers.ResolveByType(typeof (IInvoiceStatus));
+            var resolved = MerchelloMapper.Current.ResolveByType(typeof(IInvoiceStatus));
 
             //// Assert
             Assert.IsTrue(resolved.Success);
@@ -77,7 +77,7 @@ namespace Merchello.Tests.UnitTests.Mappers
         }
 
         /// <summary>
-        /// Test to verify <see cref="MerchelloMappers"/> correctly maps IInvoice to InvoiceMapper
+        /// Test to verify <see cref="MerchelloMapper"/> correctly maps IInvoice to InvoiceMapper
         /// </summary>
         [Test]
         public void Mapper_Resolves_IInvoice_To_InvoiceMapper()
@@ -86,7 +86,7 @@ namespace Merchello.Tests.UnitTests.Mappers
             var expected = typeof(InvoiceMapper);
 
             //// Act
-            var resolved = MerchelloMappers.ResolveByType(typeof(IInvoice));
+            var resolved = MerchelloMapper.Current.ResolveByType(typeof(IInvoice));
 
             //// Assert
             Assert.IsTrue(resolved.Success);
@@ -94,7 +94,7 @@ namespace Merchello.Tests.UnitTests.Mappers
         }
 
         /// <summary>
-        /// Test to verify <see cref="MerchelloMappers"/> correctly maps IBasket to BasketMapper
+        /// Test to verify <see cref="MerchelloMapper"/> correctly maps IBasket to BasketMapper
         /// </summary>
         [Test]
         public void Mapper_Resolves_IBasket_To_BasketMapper()
@@ -104,7 +104,7 @@ namespace Merchello.Tests.UnitTests.Mappers
             var expected = typeof(BasketMapper);
 
             //// Act
-            var resolved = MerchelloMappers.ResolveByType(typeof(IBasket));
+            var resolved = MerchelloMapper.Current.ResolveByType(typeof(IBasket));
 
             //// Assert
             Assert.IsTrue(resolved.Success);
@@ -112,7 +112,7 @@ namespace Merchello.Tests.UnitTests.Mappers
         }
 
         /// <summary>
-        /// Test to verify <see cref="MerchelloMappers"/> correctly maps IBasketItem to BasketItemMapper
+        /// Test to verify <see cref="MerchelloMapper"/> correctly maps IBasketItem to BasketItemMapper
         /// </summary>
         [Test]
         public void Mapper_Resolves_IBasketItem_To_BasketItemMapper()
@@ -122,7 +122,7 @@ namespace Merchello.Tests.UnitTests.Mappers
             var expected = typeof(BasketItemMapper);
 
             //// Act
-            var resolved = MerchelloMappers.ResolveByType(typeof(IBasketItem));
+            var resolved = MerchelloMapper.Current.ResolveByType(typeof(IBasketItem));
 
             //// Assert
             Assert.IsTrue(resolved.Success);
@@ -130,7 +130,7 @@ namespace Merchello.Tests.UnitTests.Mappers
         }
 
         /// <summary>
-        /// Test to verify <see cref="MerchelloMappers"/> correctly maps IInvoiceItem to InvoiceItemMapper
+        /// Test to verify <see cref="MerchelloMapper"/> correctly maps IInvoiceItem to InvoiceItemMapper
         /// </summary>
         [Test]
         public void Mapper_Resolves_IInvoiceItem_To_InvoiceItemMapper()
@@ -140,7 +140,7 @@ namespace Merchello.Tests.UnitTests.Mappers
             var expected = typeof(InvoiceItemMapper);
 
             //// Act
-            var resolved = MerchelloMappers.ResolveByType(typeof(IInvoiceItem));
+            var resolved = MerchelloMapper.Current.ResolveByType(typeof(IInvoiceItem));
 
             //// Assert
             Assert.IsTrue(resolved.Success);
@@ -148,7 +148,7 @@ namespace Merchello.Tests.UnitTests.Mappers
         }
 
         /// <summary>
-        /// Test to verify <see cref="MerchelloMappers"/> correctly maps IPayment to PaymentMapper
+        /// Test to verify <see cref="MerchelloMapper"/> correctly maps IPayment to PaymentMapper
         /// </summary>
         [Test]
         public void Mapper_Resolves_IPayment_To_PaymentMapper()
@@ -158,7 +158,7 @@ namespace Merchello.Tests.UnitTests.Mappers
             var expected = typeof(PaymentMapper);
 
             //// Act
-            var resolved = MerchelloMappers.ResolveByType(typeof(IPayment));
+            var resolved = MerchelloMapper.Current.ResolveByType(typeof(IPayment));
 
             //// Assert
             Assert.IsTrue(resolved.Success);
@@ -166,7 +166,7 @@ namespace Merchello.Tests.UnitTests.Mappers
         }
 
         /// <summary>
-        /// Test to verify <see cref="MerchelloMappers"/> correctly maps IProduct to ProductMapper
+        /// Test to verify <see cref="MerchelloMapper"/> correctly maps IProduct to ProductMapper
         /// </summary>
         [Test]
         public void Mapper_Resolves_IProduct_To_ProductMapper()
@@ -176,7 +176,7 @@ namespace Merchello.Tests.UnitTests.Mappers
             var expected = typeof(ProductMapper);
 
             //// Act
-            var resolved = MerchelloMappers.ResolveByType(typeof(IProduct));
+            var resolved = MerchelloMapper.Current.ResolveByType(typeof(IProduct));
 
             //// Assert
             Assert.IsTrue(resolved.Success);
@@ -184,7 +184,7 @@ namespace Merchello.Tests.UnitTests.Mappers
         }
 
         /// <summary>
-        /// Test to verify <see cref="MerchelloMappers"/> correctly maps IShipment to ShipmentMapper
+        /// Test to verify <see cref="MerchelloMapper"/> correctly maps IShipment to ShipmentMapper
         /// </summary>
         [Test]
         public void Mapper_Resolves_IShipment_To_ShipmentMapper()
@@ -194,7 +194,7 @@ namespace Merchello.Tests.UnitTests.Mappers
             var expected = typeof(ShipmentMapper);
 
             //// Act
-            var resolved = MerchelloMappers.ResolveByType(typeof(IShipment));
+            var resolved = MerchelloMapper.Current.ResolveByType(typeof(IShipment));
 
             //// Assert
             Assert.IsTrue(resolved.Success);
@@ -202,7 +202,7 @@ namespace Merchello.Tests.UnitTests.Mappers
         }
 
         /// <summary>
-        /// Test to verify <see cref="MerchelloMappers"/> correctly maps IShipMethod to ShipMethodMapper
+        /// Test to verify <see cref="MerchelloMapper"/> correctly maps IShipMethod to ShipMethodMapper
         /// </summary>
         [Test]
         public void Mapper_Resolves_IShipMethod_To_ShipMethodMapper()
@@ -212,7 +212,7 @@ namespace Merchello.Tests.UnitTests.Mappers
             var expected = typeof(ShipMethodMapper);
 
             //// Act
-            var resolved = MerchelloMappers.ResolveByType(typeof(IShipMethod));
+            var resolved = MerchelloMapper.Current.ResolveByType(typeof(IShipMethod));
 
             //// Assert
             Assert.IsTrue(resolved.Success);
@@ -220,7 +220,7 @@ namespace Merchello.Tests.UnitTests.Mappers
         }
 
         /// <summary>
-        /// Test to verify <see cref="MerchelloMappers"/> correctly maps ITransaction to TransactionMapper
+        /// Test to verify <see cref="MerchelloMapper"/> correctly maps ITransaction to TransactionMapper
         /// </summary>
         [Test]
         public void Mapper_Resolves_ITransaction_To_TransactionMapper()
@@ -230,7 +230,7 @@ namespace Merchello.Tests.UnitTests.Mappers
             var expected = typeof(TransactionMapper);
 
             //// Act
-            var resolved = MerchelloMappers.ResolveByType(typeof(ITransaction));
+            var resolved = MerchelloMapper.Current.ResolveByType(typeof(ITransaction));
 
             //// Assert
             Assert.IsTrue(resolved.Success);

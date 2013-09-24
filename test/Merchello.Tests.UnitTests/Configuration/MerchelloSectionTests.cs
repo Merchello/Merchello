@@ -67,6 +67,21 @@ namespace Merchello.Tests.UnitTests.Configuration
             Assert.IsEmpty(productTypeCollection);
         }
 
+        /// <summary>
+        /// Test to verify that the DefaultApplyPaymentStrategy can be retrieved
+        /// </summary>
+        [Test]
+        public void Can_Retrieve_DefaultApplyPaymentStrategy_Setting()
+        {
+            //// Arrage
+            const string expected = "Merchello.Core.OrderFulfillment.Strategies.Payment.SaveAndApplyStrategy, Merchello.Core";
+
+            //// Act
+            var actual = _config.Settings["DefaultApplyPaymentStrategy"].Value;
+
+            //// Assert
+            Assert.AreEqual(expected, actual);
+        }
     }
 
 

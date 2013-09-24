@@ -5,7 +5,7 @@ namespace Merchello.Core.OrderFulfillment.Strategies
     /// <summary>
     /// Defines a tax fulfillment strategy
     /// </summary>
-    public interface ITaxationFulfillmentStrategy : IFulfillmentStrategy
+    public interface ITaxationFulfillmentStrategy
     {
     }
 }

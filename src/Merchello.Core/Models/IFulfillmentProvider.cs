@@ -6,7 +6,7 @@ namespace Merchello.Core.Models
     /// <summary>
     /// Defines an order fulfillment provider
     /// </summary>
-    public interface IFulfillmentProvider : IOrderFulfillment
+    public interface IFulfillmentProvider
     {
         /// <summary>
         /// The unique 

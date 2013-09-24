@@ -38,6 +38,13 @@ namespace Merchello.Core.Configuration
             get { return (MerchelloSection)ConfigurationManager.GetSection(ConfigurationName); }
         }
         
+        /// <summary>
+        /// The configuration setting for DefaultApplyPaymentStrategy
+        /// </summary>
+        public string DefaultApplyPaymentStrategy
+        {
+            get { return Section.Settings["DefaultApplyPaymentStrategy"].Value; }
+        }
 
         /// <summary>
         /// Returns the path to the root of the application, by getting the path to where the assembly where this
