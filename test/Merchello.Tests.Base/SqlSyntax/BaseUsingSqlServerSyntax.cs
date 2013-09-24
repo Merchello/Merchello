@@ -24,12 +24,12 @@ namespace Merchello.Tests.Base.SqlSyntax
         public virtual void SetUp()
         { }
 
-        [TearDown]
-        public virtual void TearDown()
-        {
-            SqlSyntaxContext.SqlSyntaxProvider = null;
-            Resolution.Reset();
-        }
+        //[TearDown]
+        //public virtual void TearDown()
+        //{
+        //    SqlSyntaxContext.SqlSyntaxProvider = null;
+        //    Resolution.Reset();
+        //}
 
         protected Sql TranslateQuery(Sql sqlClause, IQuery<T> query)
         {

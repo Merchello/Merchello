@@ -11,16 +11,16 @@ namespace Merchello.Core.OrderFulfillment.Strategies.Payment
     /// <summary>
     /// Defines a payment without a transaction
     /// </summary>
-    public class PaymentNotAppliedStrategy : PaymentFulfillmentStrategyBase
+    public class ApplyPaymentNotAppliedStrategy : ApplyPaymentStrategyBase
     {
         private readonly IPayment _payment;
         private readonly bool _raiseEvents;
 
-        public PaymentNotAppliedStrategy(IPayment payment, bool raiseEvents = true)
+        public ApplyPaymentNotAppliedStrategy(IPayment payment, bool raiseEvents = true)
             : this(new PaymentService(), new InvoiceService(), new TransactionService(),payment, raiseEvents)
         { }
 
-        public PaymentNotAppliedStrategy(
+        public ApplyPaymentNotAppliedStrategy(
             IPaymentService paymentService, 
             IInvoiceService invoiceService,
             ITransactionService transactionService, 

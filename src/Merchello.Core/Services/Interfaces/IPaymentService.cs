@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Merchello.Core.Models;
 using Merchello.Core.Models.TypeFields;
+using Merchello.Core.OrderFulfillment.Strategies.Payment;
 using Umbraco.Core.Services;
 
 namespace Merchello.Core.Services
@@ -27,12 +28,6 @@ namespace Merchello.Core.Services
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         void Save(IPayment payment, bool raiseEvents = true);
 
-        /// <summary>
-        /// Saves a single <see cref="IPayment"/> object
-        /// </summary>
-        /// <param name="payment">The <see cref="IPayment"/> to save</param>
-        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        void SaveNotApplied(IPayment payment, bool raiseEvents = true);
 
         // SaveAndApply(payment, invoice) 
         // always take as much of the payment as it can to apply to an invoice
@@ -41,6 +36,32 @@ namespace Merchello.Core.Services
         // apply
 
         // SaveAndApply(with strategy)
+
+        /// <summary>
+        /// Saves a single <see cref="IPayment"/> object and applies the payment to an <see cref="IInvoice"/> by creating a <see cref="ITransaction"/> 
+        /// </summary>
+        /// <param name="payment"><see cref="IPayment"/></param>
+        /// <param name="invoice"><see cref="IInvoice"/></param>        
+        /// <param name="transactionDescription">An optional description for the transaction</param>
+        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        void SaveAndApply(IPayment payment, IInvoice invoice, string transactionDescription = "", bool raiseEvents = true);
+
+        /// <summary>
+        /// Saves a single <see cref="IPayment"/> object and applies the payment to an <see cref="IInvoice"/> by creating a <see cref="ITransaction"/> 
+        /// </summary>
+        /// <param name="payment"><see cref="IPayment"/></param>
+        /// <param name="invoice"><see cref="IInvoice"/></param>
+        /// <param name="amountToApply">The amount of the payment to apply.  
+        /// This in conjuction with other transaction amounts associated with the payment cannot 
+        /// exceed the the total payment amount.
+        /// </param>
+        /// <param name="transactionDescription">An optional description for the transaction</param>
+        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        void SaveAndApply(IPayment payment, IInvoice invoice, decimal amountToApply, string transactionDescription = "",  bool raiseEvents = true);
+
+
+        void SaveAndApply(ApplyPaymentStrategyBase applyPaymentStrategy, IPayment payment, IInvoice invoice, decimal amountToApply, string transactionDescription = "", bool raiseEvents = true);
+
 
         /// <summary>
         /// Saves a collection of <see cref="IPayment"/> objects

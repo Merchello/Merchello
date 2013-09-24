@@ -21,6 +21,8 @@ namespace Merchello.Core.Persistence.Querying
 
         }
 
+        // TODO : figure out if this is an error when call simultaniously using different types.
+        // Unit tests error if called all at the same time
         public static IQuery<T> Builder
         {
             get

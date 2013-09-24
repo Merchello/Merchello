@@ -11,11 +11,11 @@ namespace Merchello.Core.Persistence.Querying
     internal class ModelToSqlExpressionHelper<T> : BaseExpressionHelper
     {
         private string sep = " ";
-        private BaseMapper _mapper;
+        private readonly BaseMapper _mapper;
 
         public ModelToSqlExpressionHelper()
         {
-            _mapper = MerchelloMappers.ResolveByType(typeof (T)).Result;
+            _mapper = MerchelloMapper.Current.ResolveByType(typeof (T)).Result;
 
             //MappingResolver.Current.ResolveMapperByType(typeof(T));
         }
