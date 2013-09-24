@@ -21,6 +21,7 @@ This package includes only the framework assembly. You will need to install the 
 Unlike earlier versions, this package includes only the framework assembly. You will need to install the NUnit.Runners package unless you are using a third-party runner.
 
 The nunit.mocks assembly is now provided by the NUnit.Mocks package. The pnunit.framework assembly is provided by the pNUnit package.</releaseNotes>
+    <copyright />
     <language>en-US</language>
     <tags>test testing tdd framework fluent assert theory plugin addin</tags>
   </metadata>
