@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
+using Merchello.Core.Configuration;
 using Merchello.Core.Models;
+using Merchello.Core.OrderFulfillment.Strategies.Payment;
 using Merchello.Core.Persistence;
 using Umbraco.Core.Persistence.UnitOfWork;
 
@@ -25,8 +27,10 @@ namespace Merchello.Core.Services
         private Lazy<ShipmentService> _shipmentService;
         private Lazy<ShipMethodService> _shipMethodService;
         private Lazy<TransactionService> _transactionService;
-        private Lazy<WarehouseService> _warehouseService; 
+        private Lazy<WarehouseService> _warehouseService;
 
+        private Lazy<ApplyPaymentStrategyBase> _applyPaymentStrategy;
+        
         /// <summary>
         /// Constructor
         /// </summary>
@@ -45,7 +49,7 @@ namespace Merchello.Core.Services
         private void BuildServiceContext(IDatabaseUnitOfWorkProvider dbDatabaseUnitOfWorkProvider,
             Lazy<RepositoryFactory> repositoryFactory)
         {
-
+            
             if(_addressService == null)
                 _addressService = new Lazy<AddressService>(() => new AddressService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
@@ -73,8 +77,20 @@ namespace Merchello.Core.Services
             if (_transactionService == null)
                 _transactionService = new Lazy<TransactionService>(() => new TransactionService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
+            if (_applyPaymentStrategy == null)
+            {
+                // instantiate type configured in Merchello configuration section
+                var paymentStrategyTypeName = MerchelloConfiguration.Current.DefaultApplyPaymentStrategy;
+
+                // we have to find the ApplyPaymentStrategyBase with a specific constructor
+                var constructorArgs = new[] { typeof(InvoiceService), typeof(TransactionService) };
+                var constructorArgValues = new object[] { _invoiceService.Value, _transactionService.Value };
+                
+                _applyPaymentStrategy = new Lazy<ApplyPaymentStrategyBase>(() => ActivatorHelper.CreateInstance<ApplyPaymentStrategyBase>(Type.GetType(paymentStrategyTypeName), constructorArgs, constructorArgValues));
+            }
+
             if(_paymentService == null)
-                _paymentService = new Lazy<PaymentService>(() => new PaymentService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _invoiceService.Value, _transactionService.Value));
+                _paymentService = new Lazy<PaymentService>(() => new PaymentService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _applyPaymentStrategy.Value));
 
             if(_productService == null)
                 _productService = new Lazy<ProductService>(() => new ProductService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));

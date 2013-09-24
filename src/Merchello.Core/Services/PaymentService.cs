@@ -20,30 +20,28 @@ namespace Merchello.Core.Services
     {
         private readonly IDatabaseUnitOfWorkProvider _uowProvider;
         private readonly RepositoryFactory _repositoryFactory;
-        private readonly IInvoiceService _invoiceService;
-        private readonly ITransactionService _transactionService;
+        private readonly ApplyPaymentStrategyBase _defaultApplyPaymentStrategy;
+
 
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
         public PaymentService()
-            : this(new RepositoryFactory(), new InvoiceService(), new TransactionService())
+            : this(new RepositoryFactory(), new SaveAndApplyStrategy())
         { }
 
-        public PaymentService(RepositoryFactory repositoryFactory, IInvoiceService invoiceService, ITransactionService transactionService)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, invoiceService, transactionService)
+        public PaymentService(RepositoryFactory repositoryFactory, ApplyPaymentStrategyBase defaultApplyPaymentStrategy)
+            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, defaultApplyPaymentStrategy)
         { }
 
-        public PaymentService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, IInvoiceService invoiceService, ITransactionService transactionService)
+        public PaymentService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ApplyPaymentStrategyBase defaultApplyPaymentStrategy)
         {
             Mandate.ParameterNotNull(provider, "provider");
             Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
-            Mandate.ParameterNotNull(invoiceService, "invoiceService");
-            Mandate.ParameterNotNull(transactionService, "transactionService");
+            Mandate.ParameterNotNull(defaultApplyPaymentStrategy, "defaultApplyPaymentStrategy");
 
             _uowProvider = provider;
             _repositoryFactory = repositoryFactory;
-            _invoiceService = invoiceService;
-            _transactionService = transactionService;
+            _defaultApplyPaymentStrategy = defaultApplyPaymentStrategy;
         }
 
         #region IPaymentService Members
@@ -82,31 +80,6 @@ namespace Merchello.Core.Services
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events.</param>
         public void Save(IPayment payment, bool raiseEvents = true)
         {
-            SaveWithStrategy(new PaymentNotAppliedStrategy(this,_invoiceService, _transactionService, payment, raiseEvents));
-        }
-
-        public void SaveAndApplyInFull(IPayment payment, IInvoice invoice, string description = "", bool raiseEvents = true)
-        {
-            SaveWithStrategy(new PayInFullStrategy(
-                this,
-                _invoiceService,
-                _transactionService,
-                payment, 
-                invoice, 
-                description, 
-                raiseEvents));
-        }
-
-
-        // public void SaveWithPartial(IPayment payment, IDictionary<IInvoice, decimal> apply)
-
-        public void SaveWithStrategy(PaymentFulfillmentStrategyBase paymentFulfillmentStrategy)
-        {
-            paymentFulfillmentStrategy.Process();
-        }
-
-        public void SaveNotApplied(IPayment payment, bool raiseEvents = true)
-        {
             if (raiseEvents) Saving.RaiseEvent(new SaveEventArgs<IPayment>(payment), this);
 
             using (new WriteLock(Locker))
@@ -119,10 +92,44 @@ namespace Merchello.Core.Services
                 }
 
                 if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IPayment>(payment), this);
-            }
+            }            
         }
 
-        
+        /// <summary>
+        /// Saves a single <see cref="IPayment"/> object and applies the payment to an <see cref="IInvoice"/> by creating a <see cref="ITransaction"/> 
+        /// </summary>
+        /// <param name="payment"><see cref="IPayment"/></param>
+        /// <param name="invoice"><see cref="IInvoice"/></param>        
+        /// <param name="transactionDescription">An optional description for the transaction</param>
+        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        public void SaveAndApply(IPayment payment, IInvoice invoice, string transactionDescription = "", bool raiseEvents = true)
+        {
+            SaveAndApply(payment, invoice, payment.Amount, transactionDescription, raiseEvents);
+        }
+
+        public void SaveAndApply(IPayment payment, IInvoice invoice, decimal amountToApply, string transactionDescription = "", bool raiseEvents = true)
+        {
+            SaveAndApply(_defaultApplyPaymentStrategy, payment, invoice, amountToApply, transactionDescription, raiseEvents);
+        }
+
+        /// <summary>
+        /// Processes the <see cref="IApplyPaymentStrategy"/>
+        /// </summary>
+        /// <param name="applyPaymentStrategy"><see cref="ApplyPaymentStrategyBase"/></param>
+        /// <param name="payment"></param>
+        /// <param name="invoice"></param>
+        /// <param name="amountToApply"></param>
+        /// <param name="transactionDescription"></param>
+        /// <param name="raiseEvents"></param>
+        public void SaveAndApply(ApplyPaymentStrategyBase applyPaymentStrategy, IPayment payment, IInvoice invoice, decimal amountToApply, string transactionDescription = "", bool raiseEvents = true)
+        {
+            // save the payment
+            Save(payment);
+
+            // TODO : TransactionType 
+            applyPaymentStrategy.ProcessTransaction(payment, invoice, amountToApply, TransactionType.Credit, transactionDescription, raiseEvents);
+        }
+
 
         /// <summary>
         /// Saves a collection of <see cref="IPayment"/> objects.

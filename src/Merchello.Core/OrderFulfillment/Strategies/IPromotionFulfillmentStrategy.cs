@@ -5,7 +5,7 @@ namespace Merchello.Core.OrderFulfillment.Strategies
     /// <summary>
     /// Marker interface for the promotional fulfillment strategy
     /// </summary>
-    internal interface IPromotionFulfillmentStrategy : IFulfillmentStrategy
+    internal interface IPromotionFulfillmentStrategy
     {
     }
 }

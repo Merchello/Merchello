@@ -5,7 +5,7 @@ namespace Merchello.Core.OrderFulfillment.Strategies
     /// <summary>
     /// Defines a shipping fulfillment strategy
     /// </summary>
-    public interface IShippingFulfillmentStrategy : IFulfillmentStrategy
+    public interface IShippingFulfillmentStrategy
     {
     }
 }

@@ -258,6 +258,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Activator\ActivatorHelperTests.cs" />
     <Compile Include="Configuration\MerchelloSectionTests.cs" />
     <Compile Include="Configuration\Versioning.cs" />
     <Compile Include="Contexts\MerchelloBootstrapperTests.cs" />
@@ -312,9 +313,7 @@
       <Name>Merchello.Tests.Base</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Strategy\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
