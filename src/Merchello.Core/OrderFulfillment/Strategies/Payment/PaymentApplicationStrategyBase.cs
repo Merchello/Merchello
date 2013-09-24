@@ -6,7 +6,7 @@ namespace Merchello.Core.OrderFulfillment.Strategies.Payment
     /// <summary>
     /// Defines a payment fulfillment strategy
     /// </summary>
-    public abstract class ApplyPaymentStrategyBase : IApplyPaymentStrategyBase
+    public abstract class PaymentApplicationStrategyBase : IPaymentApplicationStrategyBase
     {
         private readonly ITransactionService _transactionService;
         private readonly IInvoiceService _invoiceService;
@@ -14,7 +14,7 @@ namespace Merchello.Core.OrderFulfillment.Strategies.Payment
 
         // TODO : Figure out a way to require that sub classes are forced to implement
         // a constructor with this signature as it is used in the ServiceContext
-        protected ApplyPaymentStrategyBase(
+        protected PaymentApplicationStrategyBase(
             IInvoiceService invoiceService,
             ITransactionService transactionService)
         {
@@ -59,13 +59,17 @@ namespace Merchello.Core.OrderFulfillment.Strategies.Payment
         /// <param name="transactionType">The <see cref="TransactionType"/> of the resulting transaction created</param>
         /// <param name="transactionDescription">An optional description for the transaction</param>
         /// <param name="raiseEvents">True/False indicating whether or not any service providers required to make the transaction should raise events</param>
-        public abstract void ProcessTransaction(
+        public abstract void ApplyPayment(
             IPayment payment,
             IInvoice invoice,
             decimal amount,
             TransactionType transactionType = TransactionType.Credit,
             string transactionDescription = "",
             bool raiseEvents = true);
+
+
+        public abstract void VoidPayment(IPayment payment, string transactionDescription = "", bool raiseEvents = true);
+
 
         #endregion
 

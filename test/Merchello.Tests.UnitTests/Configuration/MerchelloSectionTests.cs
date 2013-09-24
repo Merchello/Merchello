@@ -74,7 +74,7 @@ namespace Merchello.Tests.UnitTests.Configuration
         public void Can_Retrieve_DefaultApplyPaymentStrategy_Setting()
         {
             //// Arrage
-            const string expected = "Merchello.Core.OrderFulfillment.Strategies.Payment.SaveAndApplyStrategy, Merchello.Core";
+            const string expected = "Merchello.Core.OrderFulfillment.Strategies.Payment.PaymentApplicationStrategy, Merchello.Core";
 
             //// Act
             var actual = _config.Settings["DefaultApplyPaymentStrategy"].Value;

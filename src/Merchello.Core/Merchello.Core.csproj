@@ -155,8 +155,8 @@
     <Compile Include="Models\Warehouse.cs" />
     <Compile Include="ObjectResolution\Resolution.cs" />
     <Compile Include="Models\IFulfillmentProvider.cs" />
-    <Compile Include="OrderFulfillment\Strategies\Payment\IApplyPaymentStrategyBase.cs" />
-    <Compile Include="OrderFulfillment\Strategies\Payment\SaveAndApplyStrategy.cs" />
+    <Compile Include="OrderFulfillment\Strategies\Payment\IPaymentApplicationStrategyBase.cs" />
+    <Compile Include="OrderFulfillment\Strategies\Payment\PaymentApplicationStrategy.cs" />
     <Compile Include="Persistence\Factories\AnonymousCustomerFactory.cs" />
     <Compile Include="Persistence\Factories\BasketFactory.cs" />
     <Compile Include="Persistence\Factories\BasketItemFactory.cs" />
@@ -233,11 +233,11 @@
     <Compile Include="Services\ShipMethodService.cs" />
     <Compile Include="Services\TransactionService.cs" />
     <Compile Include="Services\WarehouseService.cs" />
-    <Compile Include="OrderFulfillment\Strategies\Payment\IApplyPaymentStrategy.cs" />
+    <Compile Include="OrderFulfillment\Strategies\Payment\IPaymentApplicationStrategy.cs" />
     <Compile Include="OrderFulfillment\Strategies\IPromotionFulfillmentStrategy.cs" />
     <Compile Include="OrderFulfillment\Strategies\IShippingFulfillmentStrategy.cs" />
     <Compile Include="OrderFulfillment\Strategies\ITaxationFulfillmentStrategy.cs" />
-    <Compile Include="OrderFulfillment\Strategies\Payment\ApplyPaymentStrategyBase.cs" />
+    <Compile Include="OrderFulfillment\Strategies\Payment\PaymentApplicationStrategyBase.cs" />
     <Compile Include="TypeFieldMapperEnumerations.cs" />
     <Compile Include="Models\TypeFields\ProductTypeField.cs" />
     <Compile Include="Models\Rdbms\TypeFieldDto.cs" />
