@@ -43,7 +43,7 @@ namespace Merchello.Tests.UnitTests.WebControllers
         public void GetProductByKeyReturnsCorrectItemFromRepository()
         {
             //// Arrange
-            Guid productKey = new Guid();
+			Guid productKey = Guid.NewGuid();
             Product product = MockProductDataMaker.MockProductComplete(productKey) as Product;
 
             var MockProductService = new Mock<IProductService>();
@@ -67,7 +67,7 @@ namespace Merchello.Tests.UnitTests.WebControllers
         public void GetProductThrowsWhenRepositoryReturnsNull()
         {
             //// Arrange
-            Guid productKey = new Guid();
+			Guid productKey = Guid.NewGuid();
 
             var MockProductService = new Mock<IProductService>();
             MockProductService.Setup(cs => cs.GetByKey(productKey)).Returns((Product)null);
@@ -87,13 +87,13 @@ namespace Merchello.Tests.UnitTests.WebControllers
         public void GetProductByKeysReturnsCorrectItemsFromRepository()
         {
             //// Arrange
-            Guid productKey = new Guid();
+			Guid productKey = Guid.NewGuid();
             Product product = CreateFakeProduct(productKey, 20.0M);
 
-            Guid productKey2 = new Guid();
+			Guid productKey2 = Guid.NewGuid();
             Product product2 = CreateFakeProduct(productKey2, 30.0M);
 
-            Guid productKey3 = new Guid();
+			Guid productKey3 = Guid.NewGuid();
             Product product3 = CreateFakeProduct(productKey3, 40.0M);
 
             List<Product> productsList = new List<Product>();
@@ -124,7 +124,7 @@ namespace Merchello.Tests.UnitTests.WebControllers
         {
             //// Arrange
             bool wasCalled = false;
-            Guid productKey = new Guid();
+			Guid productKey = Guid.NewGuid();
             Product product = CreateFakeProduct(productKey, 20.0M);
 
             var MockProductService = new Mock<IProductService>();
@@ -152,7 +152,7 @@ namespace Merchello.Tests.UnitTests.WebControllers
         public void PutProductReturns500WhenRepositoryUpdateReturnsError()
         {
             //// Arrange
-            Guid productKey = new Guid();
+			Guid productKey = Guid.NewGuid();
             Product product = CreateFakeProduct(productKey, 20.0M);
 
             var MockProductService = new Mock<IProductService>();
@@ -210,7 +210,7 @@ namespace Merchello.Tests.UnitTests.WebControllers
         {
             //// Arrange
             bool wasCalled = false;
-            Guid productKey = new Guid();
+			Guid productKey = Guid.NewGuid();
             Product product = CreateFakeProduct(productKey, 20.0M);
 
             var MockProductService = new Mock<IProductService>();
@@ -240,7 +240,7 @@ namespace Merchello.Tests.UnitTests.WebControllers
             var MockServiceContext = new Mock<IServiceContext>();
             MockServiceContext.SetupGet(sc => sc.ProductService).Returns(mockProductService);
 
-            return new MerchelloContext(MockServiceContext.Object, null);
+            return new MerchelloContext(MockServiceContext.Object);
         }
 
         #endregion
