@@ -65,9 +65,17 @@ namespace Merchello.Web.UI.Trees
                 menu.AddMenuItem<RefreshNode, ActionRefresh>(true);
                 return menu;
             }
+            else if (id == "catalog")
+            {
+                //create product
+                menu.AddMenuItem<MerchelloActionNewProduct>();
+            }
+            else
+            {
+                //only have refres for each node
+                menu.AddMenuItem<RefreshNode, ActionRefresh>(true);
+            }
 
-            //only have delete for each node
-            menu.AddMenuItem<ActionDelete>();
             return menu;
         }
 

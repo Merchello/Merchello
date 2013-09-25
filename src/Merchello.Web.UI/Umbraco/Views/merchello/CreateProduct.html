@@ -1,0 +1,43 @@
+﻿<div class="umb-dialog umb-pane" data-ng-controller="Merchello.Editors.Product.CreateController">
+	<div class="umb-dialog-body" auto-scale="90">
+	<h5>Create a new Product</h5>
+
+	<ul class="umb-actions umb-actions-child">
+
+        <li>
+
+            <div class="form-group">
+                <label for="productname">Product Name</label>
+                <input id="productname" data-ng-model="productname" placeholder="Product Name" />
+            </div>
+            <div class="form-group">
+                <label for="sku">SKU</label>
+                <input id="sku" data-ng-model="sku" placeholder="SKU" />
+            </div>
+            <div class="form-group">
+                <label for="price">Price</label>
+                <input id="price" data-ng-model="price" placeholder="Price" />
+            </div>
+
+            <a href="#merchello/merchello/edit/{{currentNode.id}}?create=true" class="btn" data-ng-click="nav.hideNavigation()">
+                <i class="large icon-check"></i>
+
+		        <span class="menu-label">
+		        	Create Product
+		            <small>
+		                and add Product information
+		            </small>
+		        </span>
+            </a>
+
+
+        </li>
+
+	</ul>
+			
+	</div>
+	
+	<div class="btn-toolbar umb-btn-toolbar">
+		<button class="btn" data-ng-click="nav.hideDialog()">Do something else</button>
+	</div>
+</div>

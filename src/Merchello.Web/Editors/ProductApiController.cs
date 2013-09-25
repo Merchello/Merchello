@@ -136,12 +136,12 @@ namespace Merchello.Web.Editors
         /// <summary>
         /// Updates an existing product
         ///
-        /// PUT /umbraco/Merchello/ProductApi/SaveProduct
+        /// PUT /umbraco/Merchello/ProductApi/PutProduct
         /// </summary>
         /// <param name="key"></param>
         /// <param name="item"></param>
         [AcceptVerbs("PUT")]
-        public HttpResponseMessage PutProduct(Product item)
+        public HttpResponseMessage PutProduct(Product product)
         {
             // I think we should consider having a specific objects in .Web to pass back and forth
             // via the Api like this so that we can take advantage of the Model.IsValid.  Umbraco does this with
@@ -153,8 +153,8 @@ namespace Merchello.Web.Editors
             var response = Request.CreateResponse(HttpStatusCode.OK);
                         
             try
-            { 
-                _productService.Save(item);
+            {
+				_productService.Save(product);
             }
             catch (Exception ex) // I think this is not required as the server will create the error response message anyway
             {
