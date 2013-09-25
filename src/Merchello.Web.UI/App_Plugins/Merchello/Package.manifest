@@ -10,6 +10,9 @@
     ]
     ,
     javascript: [
+        '~/App_Plugins/Merchello/Common/Js/_module.js',
+        '~/App_Plugins/Merchello/Common/Js/merchello.product.service.js',
+        '~/App_Plugins/Merchello/PropertyEditors/Js/merchelloskuselector.controller.js',
         '~/App_Plugins/Merchello/PropertyEditors/Js/merchelloskuselector.controller.js',
         '~/App_Plugins/Merchello/Controllers/product.create.controller.js',
         '~/App_Plugins/Merchello/Controllers/product.edit.controller.js'

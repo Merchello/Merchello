@@ -16,6 +16,8 @@
         assetsService.loadCss("/App_Plugins/Merchello/lib/select2.css");
     };
 
+    skuSelector.$inject = ['ui.select2'];
+
     angular.module("umbraco").controller('Merchello.PropertyEditors.MerchelloSkuSelector', skuSelector);
 
 })();
