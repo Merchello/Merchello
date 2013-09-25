@@ -42,23 +42,14 @@ namespace Merchello.Tests.UnitTests.WebControllers
         public void GetCustomerByKeyReturnsCorrectItemFromRepository()
         {
             // Arrange
-            Guid customerKey = new Guid();
+            Guid customerKey = Guid.NewGuid();
 
-            var customer = new Customer(100.00m, 100.00m, DateTime.Now);
-            customer.FirstName = "John";
-            customer.LastName = "Jones";
-            customer.Email = "john.jones@gmail.com";
-            customer.MemberId = 1004;
-            customer.Key = customerKey;
-            customer.Id = 1001;
+			Customer customer = CreateFakeCustomer(customerKey);
 
             var MockCustomerService = new Mock<ICustomerService>();
             MockCustomerService.Setup(cs => cs.GetByKey(customerKey)).Returns(customer);
 
-            var MockServiceContext = new Mock<IServiceContext>();
-            MockServiceContext.SetupGet(sc => sc.CustomerService).Returns(MockCustomerService.Object);
-
-            MerchelloContext merchelloContext = new MerchelloContext(MockServiceContext.Object, null);
+			MerchelloContext merchelloContext = GetMerchelloContext(MockCustomerService.Object);
 
             CustomerApiController ctrl = new CustomerApiController(merchelloContext, tempUmbracoContext);
 
@@ -76,12 +67,15 @@ namespace Merchello.Tests.UnitTests.WebControllers
 		public void GetCustomerThrowsWhenRepositoryReturnsNull()
 		{
 			// Arrange
-			Guid customerKey = new Guid();
+			Guid customerKey = Guid.NewGuid();
 
 			var MockCustomerService = new Mock<ICustomerService>();
 			MockCustomerService.Setup(cs => cs.GetByKey(customerKey)).Returns((Customer)null);
 
-			MerchelloContext merchelloContext = GetMerchelloContext(MockCustomerService.Object);
+			var MockServiceContext = new Mock<IServiceContext>();
+			MockServiceContext.SetupGet(sc => sc.CustomerService).Returns(MockCustomerService.Object);
+
+			MerchelloContext merchelloContext = new MerchelloContext(MockServiceContext.Object);
 
 			CustomerApiController ctrl = new CustomerApiController(merchelloContext, tempUmbracoContext);
 
@@ -96,17 +90,11 @@ namespace Merchello.Tests.UnitTests.WebControllers
 		{
 			//// Arrange
 			bool wasCalled = false;
-			Guid customerKey = new Guid();
+			Guid customerKey = Guid.NewGuid();
 
-			Customer customer = new Customer(100.00m, 100.00m, DateTime.Now);
-			customer.FirstName = "John";
-			customer.LastName = "Jones";
-			customer.Email = "john.jones@gmail.com";
-			customer.MemberId = 1004;
-			customer.Key = customerKey;
-			customer.Id = 1001;
+			Customer customer = CreateFakeCustomer(customerKey);
 
-			var MockCustomerService = new Mock<ICustomerService>();
+			var MockCustomerService = new Mock<ICustomerService>();														   
 			MockCustomerService.Setup(cs => cs.Save(customer, It.IsAny<bool>())).Callback(() => wasCalled = true);
 
 			MerchelloContext merchelloContext = GetMerchelloContext(MockCustomerService.Object);
@@ -131,7 +119,8 @@ namespace Merchello.Tests.UnitTests.WebControllers
 		public void PutCustomerReturns500WhenRepositoryUpdateReturnsError()
 		{
 			//// Arrange
-			Guid customerKey = new Guid();
+			Guid customerKey = Guid.NewGuid();
+
 			Customer customer = CreateFakeCustomer(customerKey);
 
 			var MockCustomerService = new Mock<ICustomerService>();
@@ -185,11 +174,11 @@ namespace Merchello.Tests.UnitTests.WebControllers
 		/// Test to verify that the customer is created
 		/// </summary>
 		[Test]
-		public void NewCustomerReturnsCorrectProduct()
+		public void NewCustomerReturnsCorrectCustomer()
 		{
 			//// Arrange
 			bool wasCalled = false;
-			Guid customerKey = new Guid();
+			Guid customerKey = Guid.NewGuid();
 			Customer customer = CreateFakeCustomer(customerKey);
 
 			var MockCustomerService = new Mock<ICustomerService>();
@@ -219,7 +208,7 @@ namespace Merchello.Tests.UnitTests.WebControllers
 			var MockServiceContext = new Mock<IServiceContext>();
 			MockServiceContext.SetupGet(sc => sc.CustomerService).Returns(mockCustomerService);
 
-			return new MerchelloContext(MockServiceContext.Object, null);
+			return new MerchelloContext(MockServiceContext.Object);
 		}
 
 		#endregion
