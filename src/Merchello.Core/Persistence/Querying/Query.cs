@@ -11,24 +11,18 @@ namespace Merchello.Core.Persistence.Querying
     /// <typeparam name="T"></typeparam>
     public class Query<T> : IQuery<T>
     {
-        //private readonly ExpressionHelper<T> _expresionist = new ExpressionHelper<T>();
         private readonly ModelToSqlExpressionHelper<T> _expresionist = new ModelToSqlExpressionHelper<T>();
         private readonly List<string> _wheres = new List<string>();
 
         public Query()
             : base()
-        {
-
-        }
+        { }
 
         // TODO : figure out if this is an error when call simultaniously using different types.
         // Unit tests error if called all at the same time
         public static IQuery<T> Builder
         {
-            get
-            {
-                return new Query<T>();
-            }
+            get { return new Query<T>(); }
         }
 
         public virtual IQuery<T> Where(Expression<Func<T, bool>> predicate)

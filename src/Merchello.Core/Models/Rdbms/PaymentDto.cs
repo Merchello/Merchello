@@ -33,7 +33,16 @@ namespace Merchello.Core.Models.Rdbms
         [Column("amount")]
         public decimal Amount { get; set; }
 
+        [Column("authorized")]
+        [Constraint(Default = "1")]
+        public bool Authorized { get; set; }
+
+        [Column("collected")]
+        [Constraint(Default = "1")]
+        public bool Collected { get; set; }
+
         [Column("exported")]
+        [Constraint(Default = "0")]
         public bool Exported { get; set; }
 
         [Column("updateDate")]

@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Merchello.Core.Models;
 using Merchello.Core.Services;
 
-namespace Merchello.Core.OrderFulfillment.Strategies.Payment
+namespace Merchello.Core.Strategies.Payment
 {
     public interface IPaymentApplicationStrategyBase : IPaymentApplicationStrategy
     {
+        /// <summary>
+        /// The customer service
+        /// </summary>
+        ICustomerService CustomerService { get; }
+
         /// <summary>
         /// The transaction service
         /// </summary>

@@ -2,8 +2,8 @@
 using System.ComponentModel;
 using Merchello.Core.Configuration;
 using Merchello.Core.Models;
-using Merchello.Core.OrderFulfillment.Strategies.Payment;
 using Merchello.Core.Persistence;
+using Merchello.Core.Strategies.Payment;
 using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Core.Services
@@ -83,8 +83,8 @@ namespace Merchello.Core.Services
                 var paymentStrategyTypeName = MerchelloConfiguration.Current.DefaultApplyPaymentStrategy;
 
                 // we have to find the ApplyPaymentStrategyBase with a specific constructor
-                var constructorArgs = new[] { typeof(InvoiceService), typeof(TransactionService) };
-                var constructorArgValues = new object[] { _invoiceService.Value, _transactionService.Value };
+                var constructorArgs = new[] { typeof(CustomerService), typeof(InvoiceService), typeof(TransactionService) };
+                var constructorArgValues = new object[] { _customerService.Value, _invoiceService.Value, _transactionService.Value };
                 
                 _applyPaymentStrategy = new Lazy<PaymentApplicationStrategyBase>(() => ActivatorHelper.CreateInstance<PaymentApplicationStrategyBase>(Type.GetType(paymentStrategyTypeName), constructorArgs, constructorArgValues));
             }
@@ -111,7 +111,7 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Gets the <see cref="IAddressService"/>
         /// </summary>
-        public IAddressService AddressService
+        internal IAddressService AddressService
         {
             get { return _addressService.Value; }
         }
@@ -119,7 +119,7 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Gets the <see cref="IAnonymousCustomerService"/>
         /// </summary>
-        public IAnonymousCustomerService AnonymousCustomerService
+        internal IAnonymousCustomerService AnonymousCustomerService
         {
             get { return _anonymousCustomerService.Value; }
         }
@@ -208,6 +208,8 @@ namespace Merchello.Core.Services
             get { return _warehouseService.Value; }
 
         }
+
+        
 
         #endregion
     }

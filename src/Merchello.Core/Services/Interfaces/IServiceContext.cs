@@ -11,15 +11,15 @@ namespace Merchello.Core.Services
     public interface IServiceContext
     {
 
-        /// <summary>
-        /// Gets the <see cref="IAddressService"/>
-        /// </summary>
-        IAddressService AddressService { get; }
+        ///// <summary>
+        ///// Gets the <see cref="IAddressService"/>
+        ///// </summary>
+        //IAddressService AddressService { get; }
 
-        /// <summary>
-        /// Gets the <see cref="IAnonymousCustomerService"/>
-        /// </summary>
-        IAnonymousCustomerService AnonymousCustomerService { get; }
+        ///// <summary>
+        ///// Gets the <see cref="IAnonymousCustomerService"/>
+        ///// </summary>
+        //IAnonymousCustomerService AnonymousCustomerService { get; }
 
         /// <summary>
         /// Gets the <see cref="ICustomerService"/>
@@ -79,7 +79,10 @@ namespace Merchello.Core.Services
         /// </summary>
         IWarehouseService WarehouseService { get; }
 
-        
+        ///// <summary>
+        ///// Gets the <see cref="IRegisteredGatewayProviderService"/>
+        ///// </summary>
+        //IRegisteredGatewayProviderService RegisteredGatewayProviderService { get; }
     }
     
 }

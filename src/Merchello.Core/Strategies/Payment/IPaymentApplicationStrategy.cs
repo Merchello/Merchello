@@ -1,6 +1,6 @@
 ﻿using Merchello.Core.Models;
 
-namespace Merchello.Core.OrderFulfillment.Strategies.Payment
+namespace Merchello.Core.Strategies.Payment
 {
     /// <summary>
     /// Defines the apply payment strategy

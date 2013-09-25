@@ -74,7 +74,7 @@ namespace Merchello.Core
                                     new NullCacheProvider())
                             : ApplicationContext.Current.ApplicationCache;
 
-            MerchelloContext = MerchelloContext.Current = new MerchelloContext(serviceContext, cache);
+            MerchelloContext = MerchelloContext.Current = new MerchelloContext(serviceContext, null, cache);
         }
 
         /// <summary>
