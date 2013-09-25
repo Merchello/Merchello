@@ -13,7 +13,7 @@ namespace Merchello.Core.Strategies.Payment
         /// <summary>
         /// The transaction service
         /// </summary>
-        ITransactionService TransactionService { get; }
+        IAppliedPaymentService AppliedPaymentService { get; }
 
         /// <summary>
         /// The invoice service

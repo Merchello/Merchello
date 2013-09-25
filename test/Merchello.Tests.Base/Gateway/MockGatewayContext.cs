@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Merchello.Core;
 using Merchello.Core.Gateway;
 using Merchello.Core.Models;
@@ -89,7 +90,7 @@ namespace Merchello.Tests.Base.Gateway
 
     public interface IPaymentGatewayProviderRegistry
     {
-        ReceivePaymentStrategyBase GetInstance(Guid key);
+        CustomerPaymentProviderBase GetInstance(Guid key);
     }
 
 
@@ -98,18 +99,13 @@ namespace Merchello.Tests.Base.Gateway
 
 
     // this is a registered gateway provider
-    public class CashPayment : ReceiveCashPaymentStrategyBase
+    public class CashPayment : CustomerCashPaymentProviderBase
     {
         public CashPayment(IRegisteredGatewayProvider registration, ICustomer customer, decimal amount) 
             : base(registration, customer, amount)
         { }
 
 
-        public override IPaymentGatewayResponse ReceivePayment()
-        {
-            return null;
-            //return new PaymentGatewayResponse();
-        }
     }
 
     public interface IPaymentGatewayProvider
@@ -133,7 +129,7 @@ namespace Merchello.Tests.Base.Gateway
         public bool Captured { get; set; }
     }
 
-    public interface IPaymentGatewayResponse
+    public interface IGatewayTransaction
     {
 
         PaymentGatewayResponseType ResponseType { get; }
@@ -162,8 +158,16 @@ namespace Merchello.Tests.Base.Gateway
         /// True/false indicating whether or not the payment has been captured
         /// </summary>
         bool Captured { get; set; }
+
+        IDictionary<string, string> TransactionMeta { get; set; }
     }
 
+    public enum TransactionStatus
+    {
+        Failed,
+        Successful,
+        Pending
+    }
 
     public enum PaymentGatewayResponseType
     {
@@ -178,28 +182,28 @@ namespace Merchello.Tests.Base.Gateway
 #region ReceivePaymentBase
 
 
-    public abstract class ReceiveCashPaymentStrategyBase : ReceivePaymentStrategyBase
+    public abstract class CustomerCashPaymentProviderBase : CustomerPaymentProviderBase
     {
-        protected ReceiveCashPaymentStrategyBase(IRegisteredGatewayProvider registration, ICustomer customer, decimal amount) 
+        protected CustomerCashPaymentProviderBase(IRegisteredGatewayProvider registration, ICustomer customer, decimal amount) 
             : base(registration, customer, PaymentMethodType.Cash, amount)
         {
         }
     }
 
 
-    public abstract class ReceivePaymentStrategyBase : IReceivePaymentStrategy
+    public abstract class CustomerPaymentProviderBase : ICustomerPaymentProvider
     {
         private readonly IRegisteredGatewayProvider _registration;
         private readonly Guid _paymentTypeFieldKey;
         private readonly ICustomer _customer;
         private readonly decimal _amount;
 
-        protected ReceivePaymentStrategyBase(IRegisteredGatewayProvider registration, ICustomer customer, PaymentMethodType paymentMethodType, decimal amount)
+        protected CustomerPaymentProviderBase(IRegisteredGatewayProvider registration, ICustomer customer, PaymentMethodType paymentMethodType, decimal amount)
             : this(registration, customer, EnumTypeFieldConverter.PaymentMethod().GetTypeField(paymentMethodType).TypeKey, amount)
         { }
 
 
-        internal ReceivePaymentStrategyBase(IRegisteredGatewayProvider registration, ICustomer customer, Guid paymentTypeFieldKey, decimal amount)
+        internal CustomerPaymentProviderBase(IRegisteredGatewayProvider registration, ICustomer customer, Guid paymentTypeFieldKey, decimal amount)
         {
             Mandate.ParameterNotNull(registration, "registration");
             Mandate.ParameterNotNull(customer, "customer");
@@ -210,11 +214,6 @@ namespace Merchello.Tests.Base.Gateway
             _amount = amount;
         }
 
-        /// <summary>
-        /// Abstract method to invoke the CreatePaymentStrategy
-        /// </summary>
-        /// <returns></returns>
-        public abstract IPaymentGatewayResponse ReceivePayment();
 
         /// <summary>
         /// The provider key
@@ -250,13 +249,23 @@ namespace Merchello.Tests.Base.Gateway
 
     }
 
-    public interface IReceivePaymentStrategy
+    public interface ICustomerPaymentProvider
     {
-        IPaymentGatewayResponse ReceivePayment();
-        //IPaymentGatewayResponse RefundPayment();
+        string Name { get; }
+
+        IGatewayTransaction DoAuthorize();
+
+        IGatewayTransaction DoCapture();
+
+        IGatewayTransaction DoRefund();
+
+        IGatewayTransaction DoVoid();
+
     }
 
-#endregion
+
+
+    #endregion
 }
 
 

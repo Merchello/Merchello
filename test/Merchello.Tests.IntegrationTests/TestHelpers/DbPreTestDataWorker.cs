@@ -396,15 +396,15 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
         #endregion
 
-        #region ITransaction
+        #region IAppliedPayment
 
 
         /// <summary>
         /// Gets the transaction service
         /// </summary>
-        public ITransactionService TransactionService
+        public IAppliedPaymentService AppliedPaymentService
         {
-            get { return _serviceContext.TransactionService; }
+            get { return _serviceContext.AppliedPaymentService; }
         }
 
         #endregion

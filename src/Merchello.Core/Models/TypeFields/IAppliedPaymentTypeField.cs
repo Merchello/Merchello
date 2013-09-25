@@ -3,7 +3,7 @@
     /// <summary>
     /// Defines a TransactionTypeField
     /// </summary>
-    public interface ITransactionTypeField : ITypeFieldMapper<TransactionType>
+    public interface IAppliedPaymentTypeField : ITypeFieldMapper<AppliedPaymentType>
     {
      
         /// <summary>
@@ -16,5 +16,11 @@
         /// </summary>
         ITypeField Debit { get; }
    
+        /// <summary>
+        /// The Void Type
+        /// </summary>
+        ITypeField Void { get; }
     }
+
+
 }

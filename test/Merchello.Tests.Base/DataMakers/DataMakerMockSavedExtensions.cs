@@ -83,7 +83,7 @@ namespace Merchello.Tests.Base.DataMakers
             return entity;
         }
 
-        public static ITransaction MockSavedWithId(this ITransaction entity, int id)
+        public static IAppliedPayment MockSavedWithId(this IAppliedPayment entity, int id)
         {
             entity.Id = id;
             ((IdEntity)entity).AddingEntity();

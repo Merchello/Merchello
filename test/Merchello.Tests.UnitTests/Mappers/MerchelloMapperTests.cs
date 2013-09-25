@@ -228,10 +228,10 @@ namespace Merchello.Tests.UnitTests.Mappers
         {
 
             //// Arrage
-            var expected = typeof(TransactionMapper);
+            var expected = typeof(AppliedPaymentMapper);
 
             //// Act
-            var resolved = MerchelloMapper.Current.ResolveByType(typeof(ITransaction));
+            var resolved = MerchelloMapper.Current.ResolveByType(typeof(IAppliedPayment));
 
             //// Assert
             Assert.IsTrue(resolved.Success);
