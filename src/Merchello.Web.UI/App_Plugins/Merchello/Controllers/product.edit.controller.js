@@ -6,7 +6,7 @@
  * @description
  * The controller for the product editor
  */
-function ProductEditController($scope, $routeParams, $location, dataTypeResource, notificationsService, angularHelper, serverValidationManager, contentEditingHelper) {
+function ProductEditController($scope, $routeParams, $location, notificationsService, angularHelper, serverValidationManager, merchelloProductService) {
 
     $scope.productName = "Lego Star Wars: Ewok Village";
 
@@ -21,6 +21,8 @@ function ProductEditController($scope, $routeParams, $location, dataTypeResource
         //    });
     }
     else {
+
+
         //we are editing so get the content item from the server
         //dataTypeResource.getById($routeParams.id)
         //    .then(function (data) {

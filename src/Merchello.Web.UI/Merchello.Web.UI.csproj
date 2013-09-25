@@ -241,13 +241,14 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Plugins\Merchello\Common\Css\" />
-    <Folder Include="App_Plugins\Merchello\Common\Js\" />
     <Folder Include="App_Plugins\Merchello\PropertyEditors\Css\" />
     <Folder Include="App_Plugins\Merchello\System\" />
     <Folder Include="App_Plugins\Merchello\Trees\" />
     <Folder Include="App_Plugins\Merchello\Views\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Plugins\Merchello\Common\Js\merchello.product.service.js" />
+    <Content Include="App_Plugins\Merchello\Common\Js\_module.js" />
     <Content Include="App_Plugins\Merchello\Controllers\product.create.controller.js" />
     <Content Include="App_Plugins\Merchello\Controllers\product.edit.controller.js" />
     <Content Include="App_Plugins\Merchello\lib\select2\ui-select2.js" />
