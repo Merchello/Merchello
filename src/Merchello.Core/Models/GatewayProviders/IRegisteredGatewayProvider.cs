@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using Merchello.Core.Gateway;
 using Merchello.Core.Models.EntityBase;
 
 namespace Merchello.Core.Models.GatewayProviders
@@ -42,5 +43,6 @@ namespace Merchello.Core.Models.GatewayProviders
         /// </summary>
         [DataMember]
         GatewayProviderType GatewayProviderType { get; set; }
+
     }
 }
