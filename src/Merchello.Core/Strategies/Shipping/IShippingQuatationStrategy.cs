@@ -3,7 +3,7 @@
     /// <summary>
     /// Defines a shipping quotation strategy
     /// </summary>
-    public interface IShippingQuatationStrategy
+    public interface IShippingQuatationStrategy : IStrategy
     {
     }
 }

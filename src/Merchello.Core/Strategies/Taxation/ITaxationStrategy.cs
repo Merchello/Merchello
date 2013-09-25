@@ -3,7 +3,7 @@
     /// <summary>
     /// Defines a taxation strategy
     /// </summary>
-    public interface ITaxationStrategy
+    public interface ITaxationStrategy : IStrategy
     {
     }
 }

@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Merchello.Core.Models.EntityBase;
+﻿using System.Collections.Generic;
+using Merchello.Core.Gateway;
 
 namespace Merchello.Core.Models.GatewayProviders
 {

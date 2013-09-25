@@ -72,6 +72,7 @@
     <Compile Include="DataMakers\MockShipMethodDataMaker.cs" />
     <Compile Include="DataMakers\MockTransactionDataMaker.cs" />
     <Compile Include="DataMakers\MockWarehouseDataMaker.cs" />
+    <Compile Include="Gateway\MockGatewayContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Respositories\MockUnitOfWorkProvider.cs" />
     <Compile Include="Respositories\UnitOfWork\MockDatabaseUnitOfWork.cs" />
