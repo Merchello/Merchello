@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using Merchello.Core.Configuration;
-using Merchello.Core.Providers.Gateway;
+using Merchello.Core.Gateway;
 using Merchello.Core.Services;
 using Umbraco.Core;
 using Umbraco.Core.Logging;
@@ -10,11 +10,11 @@ namespace Merchello.Core
 {
     public class MerchelloContext : IDisposable
     {
-        internal MerchelloContext(IServiceContext serviceContext, IGatewayProviderRegister gatewayProviderRegister)
-            : this(serviceContext, gatewayProviderRegister, ApplicationContext.Current.ApplicationCache)
+        internal MerchelloContext(IServiceContext serviceContext, IGatewayContext gatewayContext)
+            : this(serviceContext, gatewayContext, ApplicationContext.Current.ApplicationCache)
         {}
 
-        internal MerchelloContext(IServiceContext serviceContext, IGatewayProviderRegister gatewayProviderRegister, CacheHelper cache)
+        internal MerchelloContext(IServiceContext serviceContext, IGatewayContext gatewayContext, CacheHelper cache)
         {
             Mandate.ParameterNotNull(serviceContext, "serviceContext");
             Mandate.ParameterNotNull(cache, "cache");
@@ -58,7 +58,7 @@ namespace Merchello.Core
         bool _isReady = false;
         readonly ManualResetEventSlim _isReadyEvent = new System.Threading.ManualResetEventSlim(false);
         private IServiceContext _services;
-        private IGatewayProviderRegister _gatewayProviderRegister;
+        private IGatewayContext _gatewayContext;
 
         public bool IsReady
         {
@@ -150,15 +150,15 @@ namespace Merchello.Core
         /// <summary>
         /// Gets the current GatewayProviderRegistry
         /// </summary>
-        public IGatewayProviderRegister GatewayProviderRegister
+        public IGatewayContext GatewayContext
         {
             get
             {
-                if(_gatewayProviderRegister == null)
+                if(_gatewayContext == null)
                     throw new InvalidOperationException("GatewayProvider have not been set on the MerchelloContext");
-                return _gatewayProviderRegister;
+                return _gatewayContext;
             }
-            internal set { _gatewayProviderRegister = value; }
+            internal set { _gatewayContext = value; }
         }
 
         private volatile bool _disposed;

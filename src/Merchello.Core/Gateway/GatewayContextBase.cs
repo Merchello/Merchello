@@ -1,24 +1,23 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using Merchello.Core.Models;
 using Merchello.Core.Models.GatewayProviders;
 using Merchello.Core.Services;
 
-namespace Merchello.Core.Providers.Gateway
+namespace Merchello.Core.Gateway
 {
-    internal abstract class GatewayProviderRegisterBase : IGatewayProviderRegister
+    internal abstract class GatewayContextBase : IGatewayContext
     {        
         private static readonly ConcurrentDictionary<Guid, IRegisteredGatewayProviderBase> GatewayProviderCache = new ConcurrentDictionary<Guid, IRegisteredGatewayProviderBase>();
         private IRegisteredGatewayProviderService _registeredGatewayProviderService;
 
-        protected GatewayProviderRegisterBase(IRegisteredGatewayProviderService registeredGatewayProviderService)
+        protected GatewayContextBase(IRegisteredGatewayProviderService registeredGatewayProviderService)
         {
             Mandate.ParameterNotNull(registeredGatewayProviderService, "gatewayProviderService");
 
             _registeredGatewayProviderService = registeredGatewayProviderService;
         }
 
-        public IRegisteredGatewayProviderBase GetByKey(Guid key)
+        public IRegisteredGatewayProvider GetByKey(Guid key)
         {
             throw new NotImplementedException();
         }

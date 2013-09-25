@@ -5,7 +5,7 @@ namespace Merchello.Core.Strategies.Payment
     /// <summary>
     /// Defines the apply payment strategy
     /// </summary>
-    public interface IPaymentApplicationStrategy
+    public interface IPaymentApplicationStrategy : IStrategy
     {
        /// <summary>
        /// Performs the actual work of the apply payment transaction
