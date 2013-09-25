@@ -11,6 +11,6 @@ namespace Merchello.Core.Gateway
     /// </summary>
     public interface IGatewayProvider
     {
-        
+        Guid ProviderKey { get; }
     }
 }

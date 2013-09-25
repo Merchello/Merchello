@@ -23,7 +23,7 @@ namespace Merchello.Core.Models
         private bool _collected;
         private bool _exported;
 
-        public Payment(ICustomer customer, PaymentMethodType paymentMethodType, decimal amount)
+        internal Payment(ICustomer customer, PaymentMethodType paymentMethodType, decimal amount)
             : this(customer, EnumTypeFieldConverter.PaymentMethod().GetTypeField(paymentMethodType).TypeKey, amount)
         { }
 

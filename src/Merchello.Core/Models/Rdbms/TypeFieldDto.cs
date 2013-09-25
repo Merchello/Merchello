@@ -4,7 +4,7 @@ using Umbraco.Core.Persistence.DatabaseAnnotations;
 
 namespace Merchello.Core.Models.Rdbms
 {
-    [TableName("merchDBTypeField")]
+    [TableName("merchTypeField")]
     [PrimaryKey("pk", autoIncrement = false)]
     [ExplicitColumns]
     internal class TypeFieldDto

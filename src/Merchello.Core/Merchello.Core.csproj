@@ -87,7 +87,6 @@
     <Compile Include="Events\StatusChangedEventArgs.cs" />
     <Compile Include="Gateway\GatewayEnumerations.cs" />
     <Compile Include="Gateway\IGatewayProvider.cs" />
-    <Compile Include="Gateway\PaymentGatewayProviderBase.cs" />
     <Compile Include="MerchelloBootstrapper.cs" />
     <Compile Include="Cache\NullCacheProvider.cs" />
     <Compile Include="Configuration\MerchelloConfiguration.cs" />
@@ -106,7 +105,6 @@
     <Compile Include="Models\AnonymousCustomer.cs" />
     <Compile Include="Models\Basket.cs" />
     <Compile Include="Models\BasketItem.cs" />
-    <Compile Include="Gateway\IPaymentGatewayProvider.cs" />
     <Compile Include="Models\GatewayProviders\IRegisteredGatewayProvider.cs" />
     <Compile Include="Models\GatewayProviders\RegisteredGatewayProvider.cs" />
     <Compile Include="Models\IAddress.cs" />
