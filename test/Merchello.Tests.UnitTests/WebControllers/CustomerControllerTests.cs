@@ -57,7 +57,7 @@ namespace Merchello.Tests.UnitTests.WebControllers
             var result = ctrl.GetCustomer(customerKey);
 
             //// Assert
-            Assert.AreEqual(result, customer);
+			Assert.AreEqual(customer, result);
         }
 
 		/// <summary>
@@ -107,7 +107,7 @@ namespace Merchello.Tests.UnitTests.WebControllers
 			HttpResponseMessage response = ctrl.PutCustomer(customer);
 
 			//// Assert
-			Assert.AreEqual(response.StatusCode, System.Net.HttpStatusCode.OK);
+			Assert.AreEqual(System.Net.HttpStatusCode.OK, response.StatusCode);
 
 			Assert.True(wasCalled);
 		}
@@ -136,7 +136,7 @@ namespace Merchello.Tests.UnitTests.WebControllers
 			HttpResponseMessage response = ctrl.PutCustomer(customer);
 
 			//// Assert
-			Assert.AreEqual(response.StatusCode, System.Net.HttpStatusCode.NotFound);
+			Assert.AreEqual(System.Net.HttpStatusCode.NotFound, response.StatusCode);
 		}
 
 		/// <summary>

@@ -57,7 +57,7 @@ namespace Merchello.Tests.UnitTests.WebControllers
             var result = ctrl.GetProduct(productKey);
 
             //// Assert
-            Assert.AreEqual(result, product);
+			Assert.AreEqual(product, result);
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace Merchello.Tests.UnitTests.WebControllers
             var result = ctrl.GetProducts(productKeys);
 
             //// Assert
-            Assert.AreEqual(result, productsList);
+			Assert.AreEqual(productsList, result);
         }
         
         /// <summary>
@@ -140,7 +140,7 @@ namespace Merchello.Tests.UnitTests.WebControllers
             HttpResponseMessage response = ctrl.PutProduct(product);
 
             //// Assert
-            Assert.AreEqual(response.StatusCode, System.Net.HttpStatusCode.OK);
+			Assert.AreEqual(System.Net.HttpStatusCode.OK, response.StatusCode);
 
             Assert.True(wasCalled);
         }
@@ -168,7 +168,7 @@ namespace Merchello.Tests.UnitTests.WebControllers
             HttpResponseMessage response = ctrl.PutProduct(product);
 
             //// Assert
-            Assert.AreEqual(response.StatusCode, System.Net.HttpStatusCode.NotFound);
+			Assert.AreEqual(System.Net.HttpStatusCode.NotFound, response.StatusCode);
         }
 
         /// <summary>
