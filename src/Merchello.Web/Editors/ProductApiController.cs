@@ -124,6 +124,7 @@ namespace Merchello.Web.Editors
             try
             {
                 newProduct = _productService.CreateProduct(sku, name, price) as Product;
+                _productService.Save(newProduct);
             }
             catch (Exception ex)
             {
