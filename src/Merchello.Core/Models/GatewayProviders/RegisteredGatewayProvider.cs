@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Web;
+using Merchello.Core.Gateway;
 using Merchello.Core.Models.TypeFields;
 
 namespace Merchello.Core.Models.GatewayProviders

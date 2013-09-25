@@ -85,6 +85,9 @@
     <Compile Include="ConversionStrategies\IAnonymousCustomerConversionStrategy.cs" />
     <Compile Include="BootManagerBase.cs" />
     <Compile Include="Events\StatusChangedEventArgs.cs" />
+    <Compile Include="Gateway\GatewayEnumerations.cs" />
+    <Compile Include="Gateway\IGatewayProvider.cs" />
+    <Compile Include="Gateway\PaymentGatewayProviderBase.cs" />
     <Compile Include="MerchelloBootstrapper.cs" />
     <Compile Include="Cache\NullCacheProvider.cs" />
     <Compile Include="Configuration\MerchelloConfiguration.cs" />
@@ -103,7 +106,7 @@
     <Compile Include="Models\AnonymousCustomer.cs" />
     <Compile Include="Models\Basket.cs" />
     <Compile Include="Models\BasketItem.cs" />
-    <Compile Include="Models\GatewayProviders\IGatewayProvider.cs" />
+    <Compile Include="Gateway\IPaymentGatewayProvider.cs" />
     <Compile Include="Models\GatewayProviders\IRegisteredGatewayProvider.cs" />
     <Compile Include="Models\GatewayProviders\RegisteredGatewayProvider.cs" />
     <Compile Include="Models\IAddress.cs" />
@@ -111,6 +114,7 @@
     <Compile Include="Models\IBasket.cs" />
     <Compile Include="Models\IBasketItem.cs" />
     <Compile Include="Models\IConsumer.cs" />
+    <Compile Include="Gateway\IGatewayResponse.cs" />
     <Compile Include="Models\IInvoiceItem.cs" />
     <Compile Include="Models\IInvoiceStatus.cs" />
     <Compile Include="Models\IPage.cs" />
@@ -164,11 +168,13 @@
     <Compile Include="Models\GatewayProviders\IRegisteredGatewayProviderBase.cs" />
     <Compile Include="Persistence\Factories\RegisteredGatewayProviderFactory.cs" />
     <Compile Include="Persistence\Mappers\GatewayProviderMapper.cs" />
-    <Compile Include="Providers\Gateway\GatewayProviderRegister.cs" />
-    <Compile Include="Providers\Gateway\GatewayProviderRegisterBase.cs" />
-    <Compile Include="Providers\Gateway\IGatewayProviderRegister.cs" />
+    <Compile Include="Gateway\GatewayContext.cs" />
+    <Compile Include="Gateway\GatewayContextBase.cs" />
+    <Compile Include="Gateway\IGatewayContext.cs" />
     <Compile Include="Services\RegisteredGatewayProviderService.cs" />
     <Compile Include="Services\Interfaces\IRegisteredGatewayProviderService.cs" />
+    <Compile Include="Strategies\IGatewayProviderStrategy.cs" />
+    <Compile Include="Strategies\IStrategy.cs" />
     <Compile Include="Strategies\Payment\IPaymentApplicationStrategyBase.cs" />
     <Compile Include="Strategies\Payment\PaymentApplicationStrategy.cs" />
     <Compile Include="Persistence\Factories\AnonymousCustomerFactory.cs" />

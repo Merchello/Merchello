@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.Serialization;
+using Merchello.Core.Gateway;
 using Merchello.Core.Models.EntityBase;
 using Merchello.Core.Models.TypeFields;
 

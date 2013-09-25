@@ -262,6 +262,7 @@
     <Compile Include="Configuration\MerchelloSectionTests.cs" />
     <Compile Include="Configuration\Versioning.cs" />
     <Compile Include="Contexts\MerchelloBootstrapperTests.cs" />
+    <Compile Include="Gateway\GatewayProviderPrototyping.cs" />
     <Compile Include="Mappers\MerchelloMapperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Querying\AddressSqlClausesTests.cs" />
