@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using Merchello.Core.Configuration;
+using Merchello.Core.Providers.Gateway;
 using Merchello.Core.Services;
 using Umbraco.Core;
 using Umbraco.Core.Logging;
@@ -9,15 +10,16 @@ namespace Merchello.Core
 {
     public class MerchelloContext : IDisposable
     {
-        internal MerchelloContext(IServiceContext serviceContext)
-            : this(serviceContext, ApplicationContext.Current.ApplicationCache)
+        internal MerchelloContext(IServiceContext serviceContext, IGatewayProviderRegister gatewayProviderRegister)
+            : this(serviceContext, gatewayProviderRegister, ApplicationContext.Current.ApplicationCache)
         {}
 
-        internal MerchelloContext(IServiceContext serviceContext, CacheHelper cache)
+        internal MerchelloContext(IServiceContext serviceContext, IGatewayProviderRegister gatewayProviderRegister, CacheHelper cache)
         {
             Mandate.ParameterNotNull(serviceContext, "serviceContext");
             Mandate.ParameterNotNull(cache, "cache");
 
+            
             _services = serviceContext;
             Cache = cache;
 
@@ -56,6 +58,7 @@ namespace Merchello.Core
         bool _isReady = false;
         readonly ManualResetEventSlim _isReadyEvent = new System.Threading.ManualResetEventSlim(false);
         private IServiceContext _services;
+        private IGatewayProviderRegister _gatewayProviderRegister;
 
         public bool IsReady
         {
@@ -138,12 +141,25 @@ namespace Merchello.Core
             get
             {
                 if (_services == null)
-                    throw new InvalidOperationException("The ServiceContext has not been set on the MerchelloPluginContext");
+                    throw new InvalidOperationException("The ServiceContext has not been set on the MerchelloContext");
                 return _services;
             }
             internal set { _services = value; }
         }
 
+        /// <summary>
+        /// Gets the current GatewayProviderRegistry
+        /// </summary>
+        public IGatewayProviderRegister GatewayProviderRegister
+        {
+            get
+            {
+                if(_gatewayProviderRegister == null)
+                    throw new InvalidOperationException("GatewayProvider have not been set on the MerchelloContext");
+                return _gatewayProviderRegister;
+            }
+            internal set { _gatewayProviderRegister = value; }
+        }
 
         private volatile bool _disposed;
         private readonly ReaderWriterLockSlim _disposalLocker = new ReaderWriterLockSlim();

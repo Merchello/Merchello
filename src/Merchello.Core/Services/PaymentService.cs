@@ -4,10 +4,10 @@ using System.Linq;
 using System.Threading;
 using Merchello.Core.Models;
 using Merchello.Core.Models.TypeFields;
-using Merchello.Core.OrderFulfillment.Strategies.Payment;
 using Merchello.Core.Persistence;
 using Merchello.Core.Events;
 using Merchello.Core.Persistence.Querying;
+using Merchello.Core.Strategies.Payment;
 using Umbraco.Core;
 using Umbraco.Core.Persistence.UnitOfWork;
 

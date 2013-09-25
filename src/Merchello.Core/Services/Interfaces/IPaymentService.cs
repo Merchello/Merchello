@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Merchello.Core.Models;
 using Merchello.Core.Models.TypeFields;
-using Merchello.Core.OrderFulfillment.Strategies.Payment;
+using Merchello.Core.Strategies.Payment;
 using Umbraco.Core.Services;
 
 namespace Merchello.Core.Services

@@ -271,6 +271,7 @@
     <Compile Include="Querying\InvoiceStatusSqlClausesTests.cs" />
     <Compile Include="Querying\PaymentSqlClausesTests.cs" />
     <Compile Include="Querying\ProductRelatedSqlClausesTests.cs" />
+    <Compile Include="Querying\RegisteredGatewayProviderSqlClausesTests.cs" />
     <Compile Include="Querying\ShipmentSqlClausesTest.cs" />
     <Compile Include="Querying\ShipMethodSqlClausesTests.cs" />
     <Compile Include="Querying\TransactionSqlClauseTests.cs" />
@@ -284,6 +285,7 @@
     <Compile Include="Services\CustomerServiceTests.cs" />
     <Compile Include="TypeFields\AddressTypeFieldTests.cs" />
     <Compile Include="TypeFields\BasketTypeFieldTests.cs" />
+    <Compile Include="TypeFields\GatewayProviderTypeFieldTests.cs" />
     <Compile Include="TypeFields\TransactionTypeFieldTests.cs" />
     <Compile Include="TypeFields\InvoiceItemTypeFieldTests.cs" />
     <Compile Include="TypeFields\PaymentMethodTypeFieldTests.cs" />

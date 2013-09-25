@@ -51,4 +51,12 @@
         Carrier,
         Custom
     }
+
+    public enum GatewayProviderType
+    {
+        Shipping,
+        Payment,
+        Taxation,
+        Custom
+    }
 }

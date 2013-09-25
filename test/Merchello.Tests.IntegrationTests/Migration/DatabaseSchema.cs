@@ -32,10 +32,5 @@ namespace Merchello.Tests.IntegrationTests.Migration
             creation.InitializeDatabaseSchema();
         }
 
-        public void Teardown()
-        {
-            
-        }
-
     }
 }

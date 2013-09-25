@@ -1,13 +1,14 @@
 ﻿using Merchello.Core.Models;
 using Merchello.Core.Services;
 
-namespace Merchello.Core.OrderFulfillment.Strategies.Payment
+namespace Merchello.Core.Strategies.Payment
 {
     /// <summary>
     /// Defines a payment fulfillment strategy
     /// </summary>
     public abstract class PaymentApplicationStrategyBase : IPaymentApplicationStrategyBase
     {
+        private readonly ICustomerService _customerService;
         private readonly ITransactionService _transactionService;
         private readonly IInvoiceService _invoiceService;
 
@@ -15,17 +16,27 @@ namespace Merchello.Core.OrderFulfillment.Strategies.Payment
         // TODO : Figure out a way to require that sub classes are forced to implement
         // a constructor with this signature as it is used in the ServiceContext
         protected PaymentApplicationStrategyBase(
+            ICustomerService customerService,
             IInvoiceService invoiceService,
             ITransactionService transactionService)
         {
+            Mandate.ParameterNotNull(customerService, "customerService");
             Mandate.ParameterNotNull(invoiceService, "invoiceService");
             Mandate.ParameterNotNull(transactionService, "transactionService");
 
+            _customerService = customerService;
             _transactionService = transactionService;
             _invoiceService = invoiceService;
         }
 
         #region Overrides IApplyPaymentStrategyBase
+
+        /// <summary>
+        /// The customer service
+        /// </summary>
+        public ICustomerService CustomerService {
+            get { return _customerService; }
+        }
 
         /// <summary>
         /// The transaction service

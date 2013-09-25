@@ -1,4 +1,5 @@
 ﻿using Merchello.Core.Models;
+using Merchello.Core.Models.GatewayProviders;
 using Merchello.Core.Persistence.Mappers;
 using NUnit.Framework;
 
@@ -237,7 +238,22 @@ namespace Merchello.Tests.UnitTests.Mappers
             Assert.AreSame(expected, resolved.Result.GetType());
         }
 
+        /// <summary>
+        /// Test to verify <see cref="MerchelloMapper "/> correctly maps IRegisteredGatewayProvider to RegisteredGatewayProviderMapper
+        /// </summary>
+        [Test]
+        public void Mapper_Resolves_IRegisteredGatewayProvider_To_RegisteredGatewayProviderMapper()
+        {
+            //// Arrage
+            var expected = typeof(RegisteredGatewayProviderMapper);
 
+            //// Act
+            var resolved = MerchelloMapper.Current.ResolveByType(typeof(IRegisteredGatewayProvider));
+
+            //// Assert
+            Assert.IsTrue(resolved.Success);
+            Assert.AreSame(expected, resolved.Result.GetType());
+        }
 
     }
 }

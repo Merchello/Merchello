@@ -1,17 +1,17 @@
 ﻿using Merchello.Core.Models;
 using Merchello.Core.Services;
 
-namespace Merchello.Core.OrderFulfillment.Strategies.Payment
+namespace Merchello.Core.Strategies.Payment
 {
     public class PaymentApplicationStrategy : PaymentApplicationStrategyBase
     {
         public PaymentApplicationStrategy()
-            : this(new InvoiceService(), new TransactionService())
+            : this(new CustomerService(), new InvoiceService(), new TransactionService()) // IEnumerable<IPaymentProviderGateways>
         { }
 
         // This is the constructor referenced in the ServiceContext
-        public PaymentApplicationStrategy(IInvoiceService invoiceService, ITransactionService transactionService)
-            : base(invoiceService, transactionService)
+        public PaymentApplicationStrategy(ICustomerService customerService, IInvoiceService invoiceService, ITransactionService transactionService)
+            : base(customerService, invoiceService, transactionService)
         { }
 
         /// <summary>
