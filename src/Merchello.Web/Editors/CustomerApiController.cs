@@ -37,6 +37,8 @@ namespace Merchello.Web.Editors
         public CustomerApiController(MerchelloContext merchelloContext)
             : base(merchelloContext)
         {
+
+			_customerService = MerchelloContext.Services.CustomerService;
         }
 
         /// <summary>
@@ -45,6 +47,8 @@ namespace Merchello.Web.Editors
         internal CustomerApiController(MerchelloContext merchelloContext, UmbracoContext umbracoContext)
             : base(merchelloContext, umbracoContext)
         {
+
+			_customerService = MerchelloContext.Services.CustomerService;
         }
 
         /// <summary>
