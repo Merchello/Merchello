@@ -10,11 +10,11 @@ namespace Merchello.Core
 {
     public class MerchelloContext : IDisposable
     {
-        internal MerchelloContext(IServiceContext serviceContext, IGatewayContext gatewayContext)
-            : this(serviceContext, gatewayContext, ApplicationContext.Current.ApplicationCache)
+        internal MerchelloContext(IServiceContext serviceContext)
+            : this(serviceContext, ApplicationContext.Current.ApplicationCache)
         {}
 
-        internal MerchelloContext(IServiceContext serviceContext, IGatewayContext gatewayContext, CacheHelper cache)
+        internal MerchelloContext(IServiceContext serviceContext, CacheHelper cache)
         {
             Mandate.ParameterNotNull(serviceContext, "serviceContext");
             Mandate.ParameterNotNull(cache, "cache");

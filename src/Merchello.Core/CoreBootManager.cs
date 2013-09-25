@@ -67,6 +67,7 @@ namespace Merchello.Core
         {
            
             // TODO: Mock the ApplicationContext.  ApplicationContext should never be null but we need this for unit testing at this point  
+            
             var cache = ApplicationContext.Current == null
                             ? new CacheHelper(
                                     new ObjectCacheRuntimeCacheProvider(),
@@ -74,7 +75,7 @@ namespace Merchello.Core
                                     new NullCacheProvider())
                             : ApplicationContext.Current.ApplicationCache;
 
-            MerchelloContext = MerchelloContext.Current = new MerchelloContext(serviceContext, null, cache);
+            MerchelloContext = MerchelloContext.Current = new MerchelloContext(serviceContext, cache);
         }
 
         /// <summary>
