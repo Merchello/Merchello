@@ -9,7 +9,7 @@ namespace Merchello.Core.Models
 
     [Serializable]
     [DataContract(IsReference = true)]
-    public partial class Payment : IdEntity, IPayment
+    public class Payment : IdEntity, IPayment
     {
         
         private ICustomer _customer;
@@ -19,6 +19,8 @@ namespace Merchello.Core.Models
         private string _paymentMethodName;
         private string _referenceNumber;
         private decimal _amount;
+        private bool _authorized;
+        private bool _collected;
         private bool _exported;
 
         public Payment(ICustomer customer, PaymentMethodType paymentMethodType, decimal amount)
@@ -34,17 +36,17 @@ namespace Merchello.Core.Models
             _customerKey = customer.Key;            
             _amount = amount;
             _paymentTypeFieldKey = paymentTypeFieldKey;
-        }
-        
+        }        
 
         private static readonly PropertyInfo CustomerKeySelector = ExpressionHelper.GetPropertyInfo<Payment, Guid>(x => x.CustomerKey); 
         private static readonly PropertyInfo ProviderKeySelector = ExpressionHelper.GetPropertyInfo<Payment, Guid>(x => x.ProviderKey);  
         private static readonly PropertyInfo PaymentTypeFieldKeySelector = ExpressionHelper.GetPropertyInfo<Payment, Guid>(x => x.PaymentTypeFieldKey);  
         private static readonly PropertyInfo PaymentMethodNameSelector = ExpressionHelper.GetPropertyInfo<Payment, string>(x => x.PaymentMethodName);  
         private static readonly PropertyInfo ReferenceNumberSelector = ExpressionHelper.GetPropertyInfo<Payment, string>(x => x.ReferenceNumber);  
-        private static readonly PropertyInfo AmountSelector = ExpressionHelper.GetPropertyInfo<Payment, decimal>(x => x.Amount);  
-        private static readonly PropertyInfo ExportedSelector = ExpressionHelper.GetPropertyInfo<Payment, bool>(x => x.Exported);  
-        
+        private static readonly PropertyInfo AmountSelector = ExpressionHelper.GetPropertyInfo<Payment, decimal>(x => x.Amount);
+        private static readonly PropertyInfo AuthorizedSelector = ExpressionHelper.GetPropertyInfo<Payment, bool>(x => x.Authorized);
+        private static readonly PropertyInfo CollectedSelector = ExpressionHelper.GetPropertyInfo<Payment, bool>(x => x.Collected);
+        private static readonly PropertyInfo ExportedSelector = ExpressionHelper.GetPropertyInfo<Payment, bool>(x => x.Exported);        
     
         /// <summary>
         /// The customerKey associated with the Payment
@@ -85,14 +87,14 @@ namespace Merchello.Core.Models
         public Guid ProviderKey
         {
             get { return _providerKey; }
-                set 
-                { 
-                    SetPropertyValueAndDetectChanges(o =>
-                    {
-                        _providerKey = value;
-                        return _providerKey;
-                    }, _providerKey, ProviderKeySelector); 
-                }
+            set 
+            { 
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _providerKey = value;
+                    return _providerKey;
+                }, _providerKey, ProviderKeySelector); 
+            }
         }
     
         /// <summary>
@@ -102,14 +104,14 @@ namespace Merchello.Core.Models
         public Guid PaymentTypeFieldKey
         {
             get { return _paymentTypeFieldKey; }
-                set 
-                { 
-                    SetPropertyValueAndDetectChanges(o =>
-                    {
-                        _paymentTypeFieldKey = value;
-                        return _paymentTypeFieldKey;
-                    }, _paymentTypeFieldKey, PaymentTypeFieldKeySelector); 
-                }
+            set 
+            { 
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _paymentTypeFieldKey = value;
+                    return _paymentTypeFieldKey;
+                }, _paymentTypeFieldKey, PaymentTypeFieldKeySelector); 
+            }
         }
     
         /// <summary>
@@ -119,14 +121,14 @@ namespace Merchello.Core.Models
         public string PaymentMethodName
         {
             get { return _paymentMethodName; }
-                set 
-                { 
-                    SetPropertyValueAndDetectChanges(o =>
-                    {
-                        _paymentMethodName = value;
-                        return _paymentMethodName;
-                    }, _paymentMethodName, PaymentMethodNameSelector); 
-                }
+            set 
+            { 
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _paymentMethodName = value;
+                    return _paymentMethodName;
+                }, _paymentMethodName, PaymentMethodNameSelector); 
+            }
         }
     
         /// <summary>
@@ -136,14 +138,14 @@ namespace Merchello.Core.Models
         public string ReferenceNumber
         {
             get { return _referenceNumber; }
-                set 
-                { 
-                    SetPropertyValueAndDetectChanges(o =>
-                    {
-                        _referenceNumber = value;
-                        return _referenceNumber;
-                    }, _referenceNumber, ReferenceNumberSelector); 
-                }
+            set 
+            { 
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _referenceNumber = value;
+                    return _referenceNumber;
+                }, _referenceNumber, ReferenceNumberSelector); 
+            }
         }
     
         /// <summary>
@@ -153,16 +155,50 @@ namespace Merchello.Core.Models
         public decimal Amount
         {
             get { return _amount; }
-                set 
-                { 
-                    SetPropertyValueAndDetectChanges(o =>
-                    {
-                        _amount = value;
-                        return _amount;
-                    }, _amount, AmountSelector); 
-                }
+            set 
+            { 
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _amount = value;
+                    return _amount;
+                }, _amount, AmountSelector); 
+            }
         }
-    
+
+        /// <summary>
+        /// True/False indicating whether or not this payment has been authorized with the payment gateway provider
+        /// </summary>
+        [DataMember]
+        public bool Authorized
+        {
+            get { return _authorized; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _authorized = value;
+                    return _authorized;
+                }, _authorized, AuthorizedSelector);
+            }
+        }
+
+        /// <summary>
+        /// True/False indicating whether or not this payment has been collected by the merchant
+        /// </summary>
+        [DataMember]
+        public bool Collected
+        {
+            get { return _collected; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _collected = value;
+                    return _collected;
+                }, _collected, CollectedSelector);
+            }
+        }
+
         /// <summary>
         /// The exported associated with the Payment
         /// </summary>
@@ -170,14 +206,14 @@ namespace Merchello.Core.Models
         public bool Exported
         {
             get { return _exported; }
-                set 
-                { 
-                    SetPropertyValueAndDetectChanges(o =>
-                    {
-                        _exported = value;
-                        return _exported;
-                    }, _exported, ExportedSelector); 
-                }
+            set 
+            { 
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _exported = value;
+                    return _exported;
+                }, _exported, ExportedSelector); 
+            }
         }
     
         [DataMember]

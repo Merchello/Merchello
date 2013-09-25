@@ -103,6 +103,9 @@
     <Compile Include="Models\AnonymousCustomer.cs" />
     <Compile Include="Models\Basket.cs" />
     <Compile Include="Models\BasketItem.cs" />
+    <Compile Include="Models\GatewayProviders\IGatewayProvider.cs" />
+    <Compile Include="Models\GatewayProviders\IRegisteredGatewayProvider.cs" />
+    <Compile Include="Models\GatewayProviders\RegisteredGatewayProvider.cs" />
     <Compile Include="Models\IAddress.cs" />
     <Compile Include="Models\IAnonymousCustomer.cs" />
     <Compile Include="Models\IBasket.cs" />
@@ -125,6 +128,7 @@
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\Rdbms\Content2ProductDto.cs" />
     <Compile Include="Models\Rdbms\CountryDto.cs" />
+    <Compile Include="Models\Rdbms\RegisteredGatewayProviderDto.cs" />
     <Compile Include="Models\Rdbms\OptionChoiceDto.cs" />
     <Compile Include="Models\Rdbms\OptionDto.cs" />
     <Compile Include="Models\Rdbms\Product2OptionDto.cs" />
@@ -136,10 +140,13 @@
     <Compile Include="Models\Rdbms\ShipZone2Region.cs" />
     <Compile Include="Models\Rdbms\ShipZoneDto.cs" />
     <Compile Include="Models\Rdbms\ShipZone2Country.cs" />
+    <Compile Include="Models\GatewayProviders\RegisteredGatewayProviderBase.cs" />
     <Compile Include="Models\Shipment.cs" />
     <Compile Include="Models\ShipMethod.cs" />
     <Compile Include="Models\Transaction.cs" />
+    <Compile Include="Models\TypeFields\IGatewayProviderTypeField.cs" />
     <Compile Include="Models\TypeFields\ITransactionTypeField.cs" />
+    <Compile Include="Models\TypeFields\GatewayProviderTypeField.cs" />
     <Compile Include="Models\TypeFields\TransactionTypeField.cs" />
     <Compile Include="Models\TypeFields\IAddressTypeField.cs" />
     <Compile Include="Models\TypeFields\IBasketTypeField.cs" />
@@ -154,9 +161,16 @@
     <Compile Include="Cache\StaticCacheProvider.cs" />
     <Compile Include="Models\Warehouse.cs" />
     <Compile Include="ObjectResolution\Resolution.cs" />
-    <Compile Include="Models\IFulfillmentProvider.cs" />
-    <Compile Include="OrderFulfillment\Strategies\Payment\IPaymentApplicationStrategyBase.cs" />
-    <Compile Include="OrderFulfillment\Strategies\Payment\PaymentApplicationStrategy.cs" />
+    <Compile Include="Models\GatewayProviders\IRegisteredGatewayProviderBase.cs" />
+    <Compile Include="Persistence\Factories\RegisteredGatewayProviderFactory.cs" />
+    <Compile Include="Persistence\Mappers\GatewayProviderMapper.cs" />
+    <Compile Include="Providers\Gateway\GatewayProviderRegister.cs" />
+    <Compile Include="Providers\Gateway\GatewayProviderRegisterBase.cs" />
+    <Compile Include="Providers\Gateway\IGatewayProviderRegister.cs" />
+    <Compile Include="Services\RegisteredGatewayProviderService.cs" />
+    <Compile Include="Services\Interfaces\IRegisteredGatewayProviderService.cs" />
+    <Compile Include="Strategies\Payment\IPaymentApplicationStrategyBase.cs" />
+    <Compile Include="Strategies\Payment\PaymentApplicationStrategy.cs" />
     <Compile Include="Persistence\Factories\AnonymousCustomerFactory.cs" />
     <Compile Include="Persistence\Factories\BasketFactory.cs" />
     <Compile Include="Persistence\Factories\BasketItemFactory.cs" />
@@ -233,11 +247,10 @@
     <Compile Include="Services\ShipMethodService.cs" />
     <Compile Include="Services\TransactionService.cs" />
     <Compile Include="Services\WarehouseService.cs" />
-    <Compile Include="OrderFulfillment\Strategies\Payment\IPaymentApplicationStrategy.cs" />
-    <Compile Include="OrderFulfillment\Strategies\IPromotionFulfillmentStrategy.cs" />
-    <Compile Include="OrderFulfillment\Strategies\IShippingFulfillmentStrategy.cs" />
-    <Compile Include="OrderFulfillment\Strategies\ITaxationFulfillmentStrategy.cs" />
-    <Compile Include="OrderFulfillment\Strategies\Payment\PaymentApplicationStrategyBase.cs" />
+    <Compile Include="Strategies\Payment\IPaymentApplicationStrategy.cs" />
+    <Compile Include="Strategies\Shipping\IShippingQuatationStrategy.cs" />
+    <Compile Include="Strategies\Taxation\ITaxationStrategy.cs" />
+    <Compile Include="Strategies\Payment\PaymentApplicationStrategyBase.cs" />
     <Compile Include="TypeFieldMapperEnumerations.cs" />
     <Compile Include="Models\TypeFields\ProductTypeField.cs" />
     <Compile Include="Models\Rdbms\TypeFieldDto.cs" />
@@ -285,7 +298,6 @@
     <Compile Include="Models\Rdbms\AnonymousDto.cs" />
     <Compile Include="Models\Rdbms\BasketItemDto.cs" />
     <Compile Include="Models\Rdbms\CustomerDto.cs" />
-    <Compile Include="Models\Rdbms\ExtendedDataDto.cs" />
     <Compile Include="Models\Rdbms\InventoryDto.cs" />
     <Compile Include="Models\Rdbms\InvoiceDto.cs" />
     <Compile Include="Models\Rdbms\InvoiceItemDto.cs" />
@@ -328,9 +340,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="OrderFulfillment\Providers\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -131,5 +131,25 @@ namespace Merchello.Tests.Base.TypeFields
 
         #endregion
 
+
+        #region GatewayProvider
+
+        public static ITypeField GatewayProviderShipping
+        {
+            get { return new TypeField("Shipping", "Shipping", new Guid("646D3EA7-3B31-45C1-9488-7C0449A564A6")); }
+        }
+
+        public static ITypeField GatewayProviderPayment
+        {
+            get { return new TypeField("Payment", "Payment", new Guid("A0B4F835-D92E-4D17-8181-6C342C41606E")); }
+        }
+
+        public static ITypeField GatewayProviderTaxation
+        {
+            get { return new TypeField("Taxation", "Taxation", new Guid("360B47F9-A4FB-4B96-81B4-A4A497D2B44A")); }
+        }
+
+        #endregion
+
     }
 }

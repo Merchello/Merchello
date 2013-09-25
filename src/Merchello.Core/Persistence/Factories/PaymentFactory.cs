@@ -14,6 +14,8 @@ namespace Merchello.Core.Persistence.Factories
                 ProviderKey = dto.ProviderKey,
                 PaymentMethodName = dto.PaymentMethodName,
                 ReferenceNumber = dto.ReferenceNumber,
+                Authorized = dto.Authorized,
+                Collected = dto.Collected,
                 Exported = dto.Exported,
                 UpdateDate = dto.UpdateDate,
                 CreateDate = dto.CreateDate
@@ -35,6 +37,8 @@ namespace Merchello.Core.Persistence.Factories
                 PaymentMethodName = entity.PaymentMethodName,
                 ReferenceNumber = entity.ReferenceNumber,
                 Amount = entity.Amount,
+                Authorized = entity.Authorized,
+                Collected = entity.Collected,
                 Exported = entity.Exported,
                 UpdateDate = entity.UpdateDate,
                 CreateDate = entity.CreateDate                

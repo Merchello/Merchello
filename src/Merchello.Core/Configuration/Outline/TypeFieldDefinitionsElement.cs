@@ -1,4 +1,6 @@
 ﻿using System.Configuration;
+using Merchello.Core.Models;
+using Merchello.Core.Models.GatewayProviders;
 
 
 namespace Merchello.Core.Configuration.Outline
@@ -7,7 +9,7 @@ namespace Merchello.Core.Configuration.Outline
     {
 
         /// <summary>
-        /// Gets the dbTypeFields configuration collection for customer address
+        /// Gets the dbTypeFields configuration collection for <see cref="IAddress"/>
         /// </summary>
         [ConfigurationProperty("customerAddress", IsRequired = false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
         public TypeFieldCollection CustomerAddress
@@ -16,7 +18,7 @@ namespace Merchello.Core.Configuration.Outline
         }
 
         /// <summary>
-        /// Gets the dbTypeFields configuration collection for baskets
+        /// Gets the dbTypeFields configuration collection for <see cref="IBasket"/>
         /// </summary>
         [ConfigurationProperty("basket", IsRequired = false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
         public TypeFieldCollection Basket
@@ -26,7 +28,7 @@ namespace Merchello.Core.Configuration.Outline
 
 
         /// <summary>
-        /// Gets the dbTypeFields configuration collection for shipping methods
+        /// Gets the dbTypeFields configuration collection for <see cref="IShipMethod"/>
         /// </summary>
         [ConfigurationProperty("shipMethod", IsRequired = false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
         public TypeFieldCollection ShipMethod
@@ -35,7 +37,7 @@ namespace Merchello.Core.Configuration.Outline
         }
 
         /// <summary>
-        /// Gets the dbTypeFields configuration collection for invoice items
+        /// Gets the dbTypeFields configuration collection for <see cref="IInvoiceItem"/>
         /// </summary>
         [ConfigurationProperty("invoiceItem", IsRequired = false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
         public TypeFieldCollection InvoiceItem
@@ -44,7 +46,7 @@ namespace Merchello.Core.Configuration.Outline
         }
 
         /// <summary>
-        /// Gets the dbTypeFields configuration collection for payment type
+        /// Gets the dbTypeFields configuration collection for <see cref="IPayment"/>
         /// </summary>
         [ConfigurationProperty("paymentMethod", IsRequired = false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
         public TypeFieldCollection PaymentMethod
@@ -53,7 +55,7 @@ namespace Merchello.Core.Configuration.Outline
         }
 
         /// <summary>
-        /// Gets the dbTypeFields configuration collection for IProduct
+        /// Gets the dbTypeFields configuration collection for <see cref="IProduct"/>
         /// </summary>
         [ConfigurationProperty("product", IsRequired = false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
         public TypeFieldCollection Product
@@ -62,7 +64,7 @@ namespace Merchello.Core.Configuration.Outline
         }
 
         /// <summary>
-        /// Gets the dbTypeFields configuration collection for IProduct
+        /// Gets the dbTypeFields configuration collection for <see cref="ITransaction"/>
         /// </summary>
         [ConfigurationProperty("transaction", IsRequired = false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
         public TypeFieldCollection Transaction
@@ -70,6 +72,14 @@ namespace Merchello.Core.Configuration.Outline
             get { return (TypeFieldCollection)this["transaction"]; }
         }
 
+        /// <summary>
+        /// Gets the dbTypeFields configuration collection for <see cref="IRegisteredGatewayProviderBase"/>
+        /// </summary>
+        [ConfigurationProperty("gatewayProvider", IsRequired = false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
+        public TypeFieldCollection GatewayProvider
+        {
+            get { return (TypeFieldCollection)this["gatewayProvider"]; }
+        }
 
     }
 }
