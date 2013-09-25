@@ -64,12 +64,12 @@ namespace Merchello.Core.Configuration.Outline
         }
 
         /// <summary>
-        /// Gets the dbTypeFields configuration collection for <see cref="ITransaction"/>
+        /// Gets the dbTypeFields configuration collection for <see cref="IAppliedPayment"/>
         /// </summary>
-        [ConfigurationProperty("transaction", IsRequired = false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
-        public TypeFieldCollection Transaction
+        [ConfigurationProperty("appliedPayment", IsRequired = false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
+        public TypeFieldCollection AppliedPayment
         {
-            get { return (TypeFieldCollection)this["transaction"]; }
+            get { return (TypeFieldCollection)this["appliedPayment"]; }
         }
 
         /// <summary>

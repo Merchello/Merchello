@@ -54,12 +54,12 @@ namespace Merchello.Core.Models.TypeFields
         }
 
         /// <summary>
-        /// Creates an instance of an <see cref="ITransactionTypeField"/>
+        /// Creates an instance of an <see cref="IAppliedPaymentTypeField"/>
         /// </summary>
         /// <returns></returns>
-        internal static ITransactionTypeField Transaction()
+        internal static IAppliedPaymentTypeField AppliedPayment()
         {
-            return new TransactionTypeField();
+            return new AppliedPaymentTypeField();
         }
 
         /// <summary>

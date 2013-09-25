@@ -14,7 +14,7 @@ namespace Merchello.Tests.UnitTests.Querying
 {
     [TestFixture]
     [Category("SqlSyntax")]
-    public class TransactiontSqlClausesTests : BaseUsingSqlServerSyntax<ITransaction>
+    public class TransactiontSqlClausesTests : BaseUsingSqlServerSyntax<IAppliedPayment>
     {
         /// <summary>
         /// Test to verify that the typed <see cref="TransactionDto"/> query matches generic "select * ..." query 

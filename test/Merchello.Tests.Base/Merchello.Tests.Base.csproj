@@ -214,7 +214,6 @@
     <Compile Include="DataMakers\MockShipMethodDataMaker.cs" />
     <Compile Include="DataMakers\MockTransactionDataMaker.cs" />
     <Compile Include="DataMakers\MockWarehouseDataMaker.cs" />
-    <Compile Include="Gateway\MockGatewayContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Respositories\MockUnitOfWorkProvider.cs" />
     <Compile Include="Respositories\UnitOfWork\MockDatabaseUnitOfWork.cs" />
@@ -239,6 +238,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Gateway\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

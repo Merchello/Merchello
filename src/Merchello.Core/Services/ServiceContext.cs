@@ -26,7 +26,7 @@ namespace Merchello.Core.Services
         private Lazy<ProductService> _productService;
         private Lazy<ShipmentService> _shipmentService;
         private Lazy<ShipMethodService> _shipMethodService;
-        private Lazy<TransactionService> _transactionService;
+        private Lazy<AppliedPaymentService> _appliedPaymentService;
         private Lazy<WarehouseService> _warehouseService;
 
         private Lazy<PaymentApplicationStrategyBase> _applyPaymentStrategy;
@@ -74,8 +74,8 @@ namespace Merchello.Core.Services
             if(_invoiceService == null)
                 _invoiceService = new Lazy<InvoiceService>(() => new InvoiceService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _invoiceItemService.Value, _invoiceStatusService.Value));
 
-            if (_transactionService == null)
-                _transactionService = new Lazy<TransactionService>(() => new TransactionService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+            if (_appliedPaymentService == null)
+                _appliedPaymentService = new Lazy<AppliedPaymentService>(() => new AppliedPaymentService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
             if (_applyPaymentStrategy == null)
             {
@@ -83,8 +83,8 @@ namespace Merchello.Core.Services
                 var paymentStrategyTypeName = MerchelloConfiguration.Current.DefaultApplyPaymentStrategy;
 
                 // we have to find the ApplyPaymentStrategyBase with a specific constructor
-                var constructorArgs = new[] { typeof(CustomerService), typeof(InvoiceService), typeof(TransactionService) };
-                var constructorArgValues = new object[] { _customerService.Value, _invoiceService.Value, _transactionService.Value };
+                var constructorArgs = new[] { typeof(CustomerService), typeof(InvoiceService), typeof(AppliedPaymentService) };
+                var constructorArgValues = new object[] { _customerService.Value, _invoiceService.Value, _appliedPaymentService.Value };
                 
                 _applyPaymentStrategy = new Lazy<PaymentApplicationStrategyBase>(() => ActivatorHelper.CreateInstance<PaymentApplicationStrategyBase>(Type.GetType(paymentStrategyTypeName), constructorArgs, constructorArgValues));
             }
@@ -198,9 +198,9 @@ namespace Merchello.Core.Services
             get { return _shipMethodService.Value; }
         }
 
-        internal  ITransactionService TransactionService
+        internal  IAppliedPaymentService AppliedPaymentService
         {
-            get { return _transactionService.Value; }
+            get { return _appliedPaymentService.Value; }
         }
 
         public IWarehouseService WarehouseService

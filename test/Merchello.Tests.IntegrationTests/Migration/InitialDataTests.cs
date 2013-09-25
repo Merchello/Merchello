@@ -25,18 +25,18 @@ namespace Merchello.Tests.IntegrationTests.Migration
         /// Test to verify Merchello 
         /// </summary>
         [Test]
-        public void Can_Populate_typeFieldData_Into_merchDBTypeField()
+        public void Can_Populate_typeFieldData_Into_merchTypeField()
         {
             //// Arrange
-            var expected = 15; 
+            var expected = 21; 
             
             //// Act
-            _creation.InitializeBaseData("merchDBTypeField");
+            _creation.InitializeBaseData("merchTypeField");
 
             //// Assert
-            var dtos = _database.Query<TypeFieldDto>("SELECT * FROM merchDBTypeField");
+            var dtos = _database.Query<TypeFieldDto>("SELECT * FROM merchTypeField");
             var count = dtos.Count();
-            Assert.AreEqual(15, count);
+            Assert.AreEqual(expected, count);
         }
 
         [Test]

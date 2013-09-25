@@ -32,12 +32,17 @@
         Custom
     }
 
-    public enum TransactionType
+   
+
+    public enum AppliedPaymentType
     {
         Credit,
         Debit,
+        Void,
         Custom
     }
+
+
 
     internal enum ProductType
     {

@@ -1,18 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration.Provider;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Merchello.Core;
-using Merchello.Core.Gateway;
-using Merchello.Core.Models;
-using Merchello.Core.Models.GatewayProviders;
-using Merchello.Core.Models.TypeFields;
-using Merchello.Core.Services;
-using Merchello.Tests.Base.DataMakers;
-using Merchello.Tests.Base.Gateway;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace Merchello.Tests.UnitTests.Gateway
 {
