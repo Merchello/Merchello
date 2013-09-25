@@ -3,16 +3,16 @@ using Merchello.Core.Models.Rdbms;
 
 namespace Merchello.Core.Persistence.Factories
 {
-    internal class TransactionFactory : IEntityFactory<ITransaction, TransactionDto>
+    internal class AppliedPaymentFactory : IEntityFactory<IAppliedPayment, AppliedPaymentDto>
     {
-        public ITransaction BuildEntity(TransactionDto dto)
+        public IAppliedPayment BuildEntity(AppliedPaymentDto dto)
         {
 
 
-            var transaction = new Transaction(
+            var transaction = new AppliedPayment(
                 dto.PaymentId, 
                 dto.InvoiceId, 
-                dto.TransactionTypeFieldKey)
+                dto.AppliedPaymentTypeFieldKey)
             {
                 Id = dto.Id,
                 Description = dto.Description,
@@ -27,14 +27,14 @@ namespace Merchello.Core.Persistence.Factories
             return transaction;
         }
 
-        public TransactionDto BuildDto(ITransaction entity)
+        public AppliedPaymentDto BuildDto(IAppliedPayment entity)
         {
-            var dto = new TransactionDto()
+            var dto = new AppliedPaymentDto()
             {
                 Id = entity.Id,
                 PaymentId = entity.PaymentId,
                 InvoiceId = entity.InvoiceId,
-                TransactionTypeFieldKey = entity.TransactionTypeFieldKey,
+                AppliedPaymentTypeFieldKey = entity.AppliedPaymentTypeFieldKey,
                 Description = entity.Description,
                 Amount = entity.Amount,
                 Exported = entity.Exported,

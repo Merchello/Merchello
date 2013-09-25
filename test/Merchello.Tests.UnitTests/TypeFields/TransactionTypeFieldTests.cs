@@ -7,7 +7,7 @@ namespace Merchello.Tests.UnitTests.TypeFields
 {
     [TestFixture]
     [Category("TypeField")]
-    public class TransactionTypeFieldTests
+    public class AppliedPaymentTypeFieldTests
     {
         private ITypeField _mockTransactionCredit;
         private ITypeField _mockTransactionDebit;
@@ -15,8 +15,8 @@ namespace Merchello.Tests.UnitTests.TypeFields
         [SetUp]
         public void Setup()
         {
-            _mockTransactionCredit = TypeFieldMock.TransactionCredit;
-            _mockTransactionDebit = TypeFieldMock.TransactionDebit;
+            _mockTransactionCredit = TypeFieldMock.AppliedPaymentCredit;
+            _mockTransactionDebit = TypeFieldMock.AppliedPaymentDebit;
         }
 
 
@@ -24,9 +24,9 @@ namespace Merchello.Tests.UnitTests.TypeFields
         /// Asserts the TransactionType Debit returns the expected transaction configuration
         /// </summary>
         [Test]
-        public void TransactionType_debit_matches_configuration()
+        public void AppliedPaymentType_debit_matches_configuration()
         {
-            var type = EnumTypeFieldConverter.Transaction().Debit;
+            var type = EnumTypeFieldConverter.AppliedPayment().Debit;
 
             Assert.AreEqual(_mockTransactionDebit.Alias, type.Alias);
             Assert.AreEqual(_mockTransactionDebit.Name, type.Name);
@@ -39,9 +39,9 @@ namespace Merchello.Tests.UnitTests.TypeFields
         /// Asserts the TransactionType Credit returns the expected wishlist configuration
         /// </summary>
         [Test]
-        public void BasketType_wishlist_matches_configuration()
+        public void AppliedPayment_Credit_matches_configuration()
         {
-            var type = EnumTypeFieldConverter.Transaction().Credit;
+            var type = EnumTypeFieldConverter.AppliedPayment().Credit;
 
             Assert.AreEqual(_mockTransactionCredit.Alias, type.Alias);
             Assert.AreEqual(_mockTransactionCredit.Name, type.Name);

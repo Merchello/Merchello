@@ -47,15 +47,15 @@ namespace Merchello.Tests.Base.TypeFields
 
 
 
-        #region TransactionType TypeFields
+        #region AppliedPaymentType TypeFields
 
 
-        public static ITypeField TransactionCredit
+        public static ITypeField AppliedPaymentCredit
         {
             get { return new TypeField("Credit", "Credit", new Guid("020F6FF8-1F66-4D90-9FF4-C32A7A5AB32B")); }
         }
 
-        public static ITypeField TransactionDebit
+        public static ITypeField AppliedPaymentDebit
         {
             get { return new TypeField("Debit", "Debit", new Guid("916929F0-96FB-430A-886D-F7A83E9A4B9A")); }
         }

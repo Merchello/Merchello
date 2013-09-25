@@ -98,13 +98,13 @@ namespace Merchello.Core.Persistence
         }
 
         /// <summary>
-        /// Returns an instance of the <see cref="ITransactionRepository"/>
+        /// Returns an instance of the <see cref="IAppliedPaymentRepository"/>
         /// </summary>
         /// <param name="uow"></param>
         /// <returns></returns>
-        internal virtual ITransactionRepository CreateTransactionRepository(IDatabaseUnitOfWork uow)
+        internal virtual IAppliedPaymentRepository CreateAppliedPaymentRepository(IDatabaseUnitOfWork uow)
         {
-            return new TransactionRepository(uow, NullCacheProvider.Current);
+            return new AppliedPaymentRepository(uow, NullCacheProvider.Current);
         }
 
 

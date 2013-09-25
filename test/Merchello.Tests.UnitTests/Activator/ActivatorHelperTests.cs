@@ -17,9 +17,9 @@ namespace Merchello.Tests.UnitTests.Activator
         public void Can_Instantiate_PaymentApplicationStrategy()
         {
             //// Arrange
-            var args = new Type[] { typeof(CustomerService), typeof (InvoiceService), typeof (TransactionService)};
-            var argValues = new object[] { new CustomerService(), new InvoiceService(), new TransactionService() };
-            var expected = new PaymentApplicationStrategy(new CustomerService(), new  InvoiceService(), new TransactionService());
+            var args = new Type[] { typeof(CustomerService), typeof (InvoiceService), typeof (AppliedPaymentService)};
+            var argValues = new object[] { new CustomerService(), new InvoiceService(), new AppliedPaymentService() };
+            var expected = new PaymentApplicationStrategy(new CustomerService(), new InvoiceService(), new AppliedPaymentService());
             
             //// Act
             var actual = ActivatorHelper.CreateInstance<PaymentApplicationStrategy>(typeof(PaymentApplicationStrategy), args, argValues);

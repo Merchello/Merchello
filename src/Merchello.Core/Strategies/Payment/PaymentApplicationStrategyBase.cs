@@ -9,23 +9,22 @@ namespace Merchello.Core.Strategies.Payment
     public abstract class PaymentApplicationStrategyBase : IPaymentApplicationStrategyBase
     {
         private readonly ICustomerService _customerService;
-        private readonly ITransactionService _transactionService;
+        private readonly IAppliedPaymentService _appliedPaymentService;
         private readonly IInvoiceService _invoiceService;
 
 
-        // TODO : Figure out a way to require that sub classes are forced to implement
         // a constructor with this signature as it is used in the ServiceContext
         protected PaymentApplicationStrategyBase(
             ICustomerService customerService,
             IInvoiceService invoiceService,
-            ITransactionService transactionService)
+            IAppliedPaymentService appliedPaymentService)
         {
             Mandate.ParameterNotNull(customerService, "customerService");
             Mandate.ParameterNotNull(invoiceService, "invoiceService");
-            Mandate.ParameterNotNull(transactionService, "transactionService");
+            Mandate.ParameterNotNull(appliedPaymentService, "appliedPaymentService");
 
             _customerService = customerService;
-            _transactionService = transactionService;
+            _appliedPaymentService = appliedPaymentService;
             _invoiceService = invoiceService;
         }
 
@@ -41,9 +40,9 @@ namespace Merchello.Core.Strategies.Payment
         /// <summary>
         /// The transaction service
         /// </summary>
-        public ITransactionService TransactionService
+        public IAppliedPaymentService AppliedPaymentService
         {
-            get { return _transactionService; }
+            get { return _appliedPaymentService; }
         }
 
         /// <summary>
@@ -67,14 +66,14 @@ namespace Merchello.Core.Strategies.Payment
         /// <param name="amount">The amount of the <see cref="IPayment"/> to be applied to the <see cref="IInvoice"/>.  This could
         /// be a partial payment
         /// </param>
-        /// <param name="transactionType">The <see cref="TransactionType"/> of the resulting transaction created</param>
+        /// <param name="appliedPaymentType">The <see cref="AppliedPaymentType"/> of the resulting transaction created</param>
         /// <param name="transactionDescription">An optional description for the transaction</param>
         /// <param name="raiseEvents">True/False indicating whether or not any service providers required to make the transaction should raise events</param>
         public abstract void ApplyPayment(
             IPayment payment,
             IInvoice invoice,
             decimal amount,
-            TransactionType transactionType = TransactionType.Credit,
+            AppliedPaymentType appliedPaymentType = AppliedPaymentType.Credit,
             string transactionDescription = "",
             bool raiseEvents = true);
 

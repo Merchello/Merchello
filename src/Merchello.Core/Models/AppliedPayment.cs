@@ -9,35 +9,35 @@ namespace Merchello.Core.Models
 
     [Serializable]
     [DataContract(IsReference = true)]
-    public class Transaction : IdEntity, ITransaction
+    public class AppliedPayment : IdEntity, IAppliedPayment
     {
         private readonly int _invoiceId;
         private readonly int _paymentId;
-        private Guid _transactionTypeFieldKey;
+        private Guid _appliedPaymentTypeFieldKey;
         private string _description;
         private decimal _amount;
         private bool _exported;
 
 
-        public Transaction(IPayment payment, IInvoice invoice, TransactionType transactionType)
-            : this(payment, invoice, EnumTypeFieldConverter.Transaction().GetTypeField(transactionType).TypeKey)
+        public AppliedPayment(IPayment payment, IInvoice invoice, AppliedPaymentType appliedPaymentType)
+            : this(payment, invoice, EnumTypeFieldConverter.AppliedPayment().GetTypeField(appliedPaymentType).TypeKey)
         { }
 
-        internal Transaction (IPayment payment, IInvoice invoice, Guid transactionTypeFieldKey)
-            : this(payment.Id, invoice.Id, transactionTypeFieldKey)
+        internal AppliedPayment (IPayment payment, IInvoice invoice, Guid appliedPaymentTypeFieldKey)
+            : this(payment.Id, invoice.Id, appliedPaymentTypeFieldKey)
         { }
 
-        internal Transaction(int paymentId, int invoiceId, Guid transactionTypeFieldKey)
+        internal AppliedPayment(int paymentId, int invoiceId, Guid appliedPaymentTypeFieldKey)
         {
             _paymentId = paymentId;
             _invoiceId = invoiceId;
-            _transactionTypeFieldKey = transactionTypeFieldKey;
+            _appliedPaymentTypeFieldKey = appliedPaymentTypeFieldKey;
         }
         
-        private static readonly PropertyInfo TransactionTypeFieldSelector = ExpressionHelper.GetPropertyInfo<Transaction, Guid>(x => x.TransactionTypeFieldKey);  
-        private static readonly PropertyInfo DescriptionSelector = ExpressionHelper.GetPropertyInfo<Transaction, string>(x => x.Description);  
-        private static readonly PropertyInfo AmountSelector = ExpressionHelper.GetPropertyInfo<Transaction, decimal>(x => x.Amount);  
-        private static readonly PropertyInfo ExportedSelector = ExpressionHelper.GetPropertyInfo<Transaction, bool>(x => x.Exported);  
+        private static readonly PropertyInfo AppliedPaymentTypeFieldSelector = ExpressionHelper.GetPropertyInfo<AppliedPayment, Guid>(x => x.AppliedPaymentTypeFieldKey);  
+        private static readonly PropertyInfo DescriptionSelector = ExpressionHelper.GetPropertyInfo<AppliedPayment, string>(x => x.Description);  
+        private static readonly PropertyInfo AmountSelector = ExpressionHelper.GetPropertyInfo<AppliedPayment, decimal>(x => x.Amount);  
+        private static readonly PropertyInfo ExportedSelector = ExpressionHelper.GetPropertyInfo<AppliedPayment, bool>(x => x.Exported);  
         
         /// <summary>
         /// The payment Id associated with the Transaction
@@ -61,16 +61,16 @@ namespace Merchello.Core.Models
         /// The type associated with the Transaction
         /// </summary>
         [DataMember]
-        public Guid TransactionTypeFieldKey
+        public Guid AppliedPaymentTypeFieldKey
         {
-            get { return _transactionTypeFieldKey; }
+            get { return _appliedPaymentTypeFieldKey; }
             internal set 
             { 
                 SetPropertyValueAndDetectChanges(o =>
                 {
-                    _transactionTypeFieldKey = value;
-                    return _transactionTypeFieldKey;
-                }, _transactionTypeFieldKey, TransactionTypeFieldSelector); 
+                    _appliedPaymentTypeFieldKey = value;
+                    return _appliedPaymentTypeFieldKey;
+                }, _appliedPaymentTypeFieldKey, AppliedPaymentTypeFieldSelector); 
             }
         }
     
@@ -129,16 +129,16 @@ namespace Merchello.Core.Models
         /// The transaction type associated with this transaction
         /// </summary>
         [DataMember]
-        public TransactionType TransactionType
+        public AppliedPaymentType TransactionType
         {
-            get { return EnumTypeFieldConverter.Transaction().GetTypeField(_transactionTypeFieldKey); }
+            get { return EnumTypeFieldConverter.AppliedPayment().GetTypeField(_appliedPaymentTypeFieldKey); }
             set
             {
-                var reference = EnumTypeFieldConverter.Transaction().GetTypeField(value);
+                var reference = EnumTypeFieldConverter.AppliedPayment().GetTypeField(value);
                 if (!ReferenceEquals(TypeFieldMapperBase.NotFound, reference))
                 {
                     // call through the property to flag the dirty property
-                    TransactionTypeFieldKey = reference.TypeKey;
+                    AppliedPaymentTypeFieldKey = reference.TypeKey;
                 }
             }
         }
