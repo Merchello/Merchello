@@ -61,7 +61,6 @@ namespace Merchello.Web.UI.Trees
             if (id == Constants.System.Root.ToInvariantString())
             {
                 // root actions              
-                menu.AddMenuItem<CreateChildEntity, ActionNew>();
                 menu.AddMenuItem<RefreshNode, ActionRefresh>(true);
                 return menu;
             }
