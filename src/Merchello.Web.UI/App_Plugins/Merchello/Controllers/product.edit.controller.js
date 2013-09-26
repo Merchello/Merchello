@@ -8,42 +8,47 @@
  */
 function ProductEditController($scope, $routeParams, $location, notificationsService, angularHelper, serverValidationManager, merchelloProductService) {
 
-    $scope.productName = "Lego Star Wars: Ewok Village";
-
     if ($routeParams.create) {
-        //we are creating so get an empty content item
-        //dataTypeResource.getScaffold($routeParams.id, $routeParams.doctype)
-         //   .then(function (data) {
-                $scope.loaded = true;
-                $scope.preValuesLoaded = true;
-                $scope.content = {};
-                $(".content-column-body").css('background-image', 'none');
-        //    });
+        $scope.loaded = true;
+        $scope.preValuesLoaded = true;
+        $scope.product = {};
+        $(".content-column-body").css('background-image', 'none');
     }
     else {
 
+        //we are editing so get the product from the server
+        var promise = merchelloProductService.getByKey($routeParams.id);
 
-        //we are editing so get the content item from the server
-        //dataTypeResource.getById($routeParams.id)
-        //    .then(function (data) {
-                $scope.loaded = true;
-                $scope.preValuesLoaded = true;
-                $scope.content = {};
-                $(".content-column-body").css('background-image', 'none');
-        //        createPreValueProps($scope.content.preValues);
+        promise.then(function (product) {
 
-                //in one particular special case, after we've created a new item we redirect back to the edit
-                // route but there might be server validation errors in the collection which we need to display
-                // after the redirect, so we will bind all subscriptions which will show the server validation errors
-                // if there are any and then clear them so the collection no longer persists them.
-         //       serverValidationManager.executeAndClearAllSubscriptions();
-          //  });
+            $scope.product = product;
+            $scope.loaded = true;
+            $scope.preValuesLoaded = true;
+            $(".content-column-body").css('background-image', 'none');
+
+        }, function (reason) {
+
+            alert('Failed: ' + reason.message);
+
+        });
     }
 
     $scope.save = function () {
-        $scope.$broadcast("saving", { scope: $scope });
 
+        $scope.$broadcast("Saving", { scope: $scope });
 
+        //we are editing so get the product from the server
+        var promise = merchelloProductService.save($scope.product);
+
+        promise.then(function (product) {
+
+            $scope.$broadcast("Product Saved", { scope: $scope });
+
+        }, function (reason) {
+
+            alert('Failed: ' + reason.message);
+
+        });
     };
 }
 
