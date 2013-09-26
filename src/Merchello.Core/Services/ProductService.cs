@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using log4net.Core;
 using Merchello.Core.Models;
 using Merchello.Core.Persistence;
 using Merchello.Core.Events;
@@ -135,6 +136,7 @@ namespace Merchello.Core.Services
             }
             if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<IProduct>(product), this);
         }
+
 
         /// <summary>
         /// Deletes a collection <see cref="IProduct"/> objects

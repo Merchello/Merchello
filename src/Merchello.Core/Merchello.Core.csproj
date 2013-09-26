@@ -85,6 +85,7 @@
     <Compile Include="ConversionStrategies\IAnonymousBasketConversionStrategy.cs" />
     <Compile Include="ConversionStrategies\IAnonymousCustomerConversionStrategy.cs" />
     <Compile Include="BootManagerBase.cs" />
+    <Compile Include="ModelExtensions.cs" />
     <Compile Include="Events\StatusChangedEventArgs.cs" />
     <Compile Include="Gateway\GatewayEnumerations.cs" />
     <Compile Include="Gateway\IGatewayProvider.cs" />
@@ -116,7 +117,6 @@
     <Compile Include="Gateway\IGatewayResponse.cs" />
     <Compile Include="Models\IInvoiceItem.cs" />
     <Compile Include="Models\IInvoiceStatus.cs" />
-    <Compile Include="Models\IPage.cs" />
     <Compile Include="Models\Invoice.cs" />
     <Compile Include="Models\InvoiceItem.cs" />
     <Compile Include="Models\InvoiceStatus.cs" />
@@ -126,7 +126,6 @@
     <Compile Include="Models\IShipMethod.cs" />
     <Compile Include="Models\IAppliedPayment.cs" />
     <Compile Include="Models\IWarehouse.cs" />
-    <Compile Include="Models\Page.cs" />
     <Compile Include="Models\Payment.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\Rdbms\Content2ProductDto.cs" />
@@ -166,6 +165,7 @@
     <Compile Include="Models\Warehouse.cs" />
     <Compile Include="ObjectResolution\Resolution.cs" />
     <Compile Include="Models\GatewayProviders\IRegisteredGatewayProviderBase.cs" />
+    <Compile Include="Persistence\Caching\InMemoryCacheProvider.cs" />
     <Compile Include="Persistence\Factories\RegisteredGatewayProviderFactory.cs" />
     <Compile Include="Persistence\Mappers\GatewayProviderMapper.cs" />
     <Compile Include="Gateway\GatewayContext.cs" />
@@ -298,7 +298,6 @@
     <Compile Include="Models\IInvoice.cs" />
     <Compile Include="Models\IInvoiceItemItemization.cs" />
     <Compile Include="Models\IItemization.cs" />
-    <Compile Include="Models\InvoiceItemItemization.cs" />
     <Compile Include="Models\TypeFields\PaymentMethodTypeField.cs" />
     <Compile Include="Models\Rdbms\AddressDto.cs" />
     <Compile Include="Models\Rdbms\AnonymousDto.cs" />

@@ -9,7 +9,7 @@ namespace Merchello.Core.Models
 
     [Serializable]
     [DataContract(IsReference = true)]
-    public class Basket : IdEntity, IBasket
+    internal class Basket : IdEntity, IBasket
     {
 
         public Basket(BasketType basketType)

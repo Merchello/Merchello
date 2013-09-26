@@ -9,7 +9,7 @@ namespace Merchello.Core.Models
 
     [Serializable]
     [DataContract(IsReference = true)]
-    public partial class Warehouse : IdEntity, IWarehouse
+    internal class Warehouse : IdEntity, IWarehouse
     {
         private string _name;
         private string _address1;
