@@ -1,6 +1,6 @@
 ﻿/**
     * @ngdoc service
-    * @name merchello.resources.merchelloProductService
+    * @name umbraco.resources.merchelloProductService
     * @description Loads in data for data types
     **/
 function merchelloProductService($q, $http, umbDataFormatter, umbRequestHelper) {
@@ -21,8 +21,11 @@ function merchelloProductService($q, $http, umbDataFormatter, umbRequestHelper) 
         getByKey: function (key) {
 
             return umbRequestHelper.resourcePromise(
-               $http.get('/umbraco/Merchello/ProductApi/GetProduct',
-                         [{ key: key }]),
+               $http({
+                   url: '/umbraco/Merchello/ProductApi/GetProduct',
+                   method: "GET",
+                   params: { key: key }
+               }),
                'Failed to retreive data for product key ' + key);
         },
 
@@ -30,8 +33,10 @@ function merchelloProductService($q, $http, umbDataFormatter, umbRequestHelper) 
         save: function (product) {
 
             return umbRequestHelper.resourcePromise(
-                 $http.put('/umbraco/Merchello/ProductApi/PutProduct',
-                            [{ product: product }]),
+                $http.put(
+                    '/umbraco/Merchello/ProductApi/PutProduct',
+                    product
+                ),
                 'Failed to save data for product key ' + product.key);
         }
     };
