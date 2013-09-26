@@ -12,7 +12,7 @@ namespace Merchello.Core
         
         public static void Save(ICustomer customer)
         {
-            if (customer.IsDirty())
+            if (customer.IsDirty() && customer.HasIdentity)
             {               
                 MerchelloContext.Current.Services.CustomerService.Save(customer);
             }
@@ -25,6 +25,7 @@ namespace Merchello.Core
         /// <returns></returns>
         public static IEnumerable<IInvoice> Invoices(this ICustomer customer)
         {
+            if(!customer.HasIdentity) return new List<IInvoice>();
             return MerchelloContext.Current.Services.InvoiceService.GetInvoicesByCustomer(customer.Key);
         }
 
