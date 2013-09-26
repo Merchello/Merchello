@@ -4,7 +4,7 @@ using Umbraco.Core.Persistence.DatabaseAnnotations;
 
 namespace Merchello.Core.Models.Rdbms
 {
-    [TableName("merchProductVariant2OptionChoiceDto")]
+    [TableName("merchProductVariant2OptionChoice")]
     [PrimaryKey("productVariantPk", autoIncrement = false)]
     [ExplicitColumns]
     internal class ProductVariant2OptionChoiceDto

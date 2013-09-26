@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using Umbraco.Core.Services;
 
 namespace Merchello.Tests.UnitTests.Gateway
 {
@@ -8,9 +9,11 @@ namespace Merchello.Tests.UnitTests.Gateway
         [Test]
         public void Main()
         {
+            var content = new ContentService().GetById(1);
+            content.SetValue();
             ////// Arrange
             //var expected = new MockPaymentGatewayProvider(); 
-             
+
             ////// Act
             //var instance = MockGatewayContext.CreateInstance<MockPaymentGatewayProvider>();
 

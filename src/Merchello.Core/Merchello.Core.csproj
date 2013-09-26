@@ -85,6 +85,7 @@
     <Compile Include="ConversionStrategies\IAnonymousBasketConversionStrategy.cs" />
     <Compile Include="ConversionStrategies\IAnonymousCustomerConversionStrategy.cs" />
     <Compile Include="BootManagerBase.cs" />
+    <Compile Include="ModelExtensions.cs" />
     <Compile Include="Events\StatusChangedEventArgs.cs" />
     <Compile Include="Gateway\GatewayEnumerations.cs" />
     <Compile Include="Gateway\IGatewayProvider.cs" />

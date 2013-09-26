@@ -87,20 +87,6 @@ namespace Merchello.Core.Persistence.Repositories
             return PerformGetByQuery(q).FirstOrDefault();
         }
 
-
-        /// <summary>
-        /// Returns 
-        /// </summary>
-        /// <param name="page"></param>
-        /// <param name="itemsPerPage"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        internal IPage<ICustomer> GetCustomerByPage(long page, long itemsPerPage)
-        {
-            var query = new Querying.Query<ICustomer>();
-            return PerformGetPageByQuery(page, itemsPerPage, query);
-        }
-
         #endregion
 
         #region Overrides of MerchelloPetaPocoRepositoryBase<ICustomer>
