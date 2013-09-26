@@ -167,6 +167,7 @@
     <Compile Include="Models\Warehouse.cs" />
     <Compile Include="ObjectResolution\Resolution.cs" />
     <Compile Include="Models\GatewayProviders\IRegisteredGatewayProviderBase.cs" />
+    <Compile Include="Persistence\Caching\InMemoryCacheProvider.cs" />
     <Compile Include="Persistence\Factories\RegisteredGatewayProviderFactory.cs" />
     <Compile Include="Persistence\Mappers\GatewayProviderMapper.cs" />
     <Compile Include="Gateway\GatewayContext.cs" />

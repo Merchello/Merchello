@@ -19,6 +19,7 @@ namespace Merchello.Tests.Base.SqlSyntax
         {
             SqlSyntaxProviderTestHelper.EstablishSqlSyntax();
             SetUp();
+            //Resolution.Freeze();            
         }
 
         public virtual void SetUp()

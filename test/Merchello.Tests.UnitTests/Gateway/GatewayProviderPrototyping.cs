@@ -9,8 +9,7 @@ namespace Merchello.Tests.UnitTests.Gateway
         [Test]
         public void Main()
         {
-            var content = new ContentService().GetById(1);
-            content.SetValue();
+           
             ////// Arrange
             //var expected = new MockPaymentGatewayProvider(); 
 

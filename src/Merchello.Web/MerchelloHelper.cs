@@ -35,28 +35,7 @@ namespace Merchello.Web
 
         #endregion
 
-        #region ProductVariant
-
-        public IProductVariant ProductVariant(string key)
-        {
-            
-        }
-
-        public IProductVariant ProductVariant(Guid key)
-        {
-            return new ProductVariant();
-        }
-
-
-
-        #endregion
+    
     }
 
-    public class ProductVariant : IProductVariant
-    {
-    }
-
-    public interface IProductVariant
-    {
-    }
 }
