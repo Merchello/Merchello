@@ -8,8 +8,8 @@
 
             <div class="span4">
                  <umb-content-name 
-                    ng-model="content.name" 
-                    placeholder="Enter a title">
+                    ng-model="product.name" 
+                    placeholder="Enter a product name">
                 </umb-content-name>
             </div>
 
@@ -31,17 +31,43 @@
             <div class="tab-content form-horizontal">
                 <div class="umb-pane">
                     
-                    <umb-property property="properties.selectedEditorId">
-                        <div>TEST</div>
+                    <!-- Property classes from Umbraco styles -->
+                    <div class="umb-property">
+                        <div class="control-group umb-control-group" >
                         
-                    </umb-property>
+                            <div class="umb-el-wrap">
+                                <label class="control-label">
+                                    Inventory & Variants
+                                    <small>Configure the options for this product</small>
+                                </label>
 
-                    <umb-property 
-                        property="property"
-                        ng-repeat="property in tab.properties">
-                        
-                        <umb-editor model="property"></umb-editor>
-                    </umb-property>
+                                <div class="controls controls-row">
+
+                                    <div>
+                                        <label for="price">Price</label>
+                                        <input id="price" name="price" data-ng-model="product.price" />
+
+                                        <label for="compareatprice">Compare at Price</label>
+                                        <input id="compareatprice" name="compareatprice" data-ng-model="product.salePrice" />
+                                    </div>
+
+                                    <div>
+                                        <label for="sku">Base Sku <small>Must have a unique SKU</small></label>
+                                        <input id="Text2" name="sku" data-ng-model="product.sku" />
+
+                                        <label for="barcode">Barcode <small>e.g. UPC, ISBN</small></label>
+                                        <input id="barcode" name="barcode" data-ng-model="product.barcode" />
+                                    </div>
+
+                                    <div>
+                                        <label><input name="chargetaxes" type="checkbox" data-ng-model="product.taxable"> Charge Taxes</label>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
                     
                 </div>
             </div>

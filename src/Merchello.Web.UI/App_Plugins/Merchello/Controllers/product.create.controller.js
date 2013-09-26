@@ -17,8 +17,8 @@ function ProductCreateController($scope, $routeParams, $location, merchelloProdu
         var promise = merchelloProductService.create($scope.productname, $scope.sku, $scope.price);
 
         promise.then(function (product) {
-            alert('Product Key Created: ' + product.key);
             $location.path('merchello/merchello/edit/' + product.key);
+            $scope.nav.hideNavigation();
         }, function (reason) {
             alert('Failed: ' + reason.message);
         });
