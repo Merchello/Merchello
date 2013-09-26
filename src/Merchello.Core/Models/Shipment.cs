@@ -8,7 +8,7 @@ namespace Merchello.Core.Models
 
     [Serializable]
     [DataContract(IsReference = true)]
-    public class Shipment : IdEntity, IShipment
+    internal class Shipment : IdEntity, IShipment
     {
         private readonly int _invoiceId;
         private string _address1;

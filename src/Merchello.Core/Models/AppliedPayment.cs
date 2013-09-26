@@ -9,7 +9,7 @@ namespace Merchello.Core.Models
 
     [Serializable]
     [DataContract(IsReference = true)]
-    public class AppliedPayment : IdEntity, IAppliedPayment
+    internal class AppliedPayment : IdEntity, IAppliedPayment
     {
         private readonly int _invoiceId;
         private readonly int _paymentId;

@@ -278,9 +278,6 @@ namespace Merchello.Core.Models
                     return _template;
                 }, _template, TemplateSelector); 
             }
-        }
-        
-            
+        }                    
     }
-
 }

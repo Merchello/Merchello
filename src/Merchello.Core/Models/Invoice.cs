@@ -10,7 +10,7 @@ namespace Merchello.Core.Models
 
     [Serializable]
     [DataContract(IsReference = true)]
-    public partial class Invoice : IdEntity, IInvoice
+    public class Invoice : IdEntity, IInvoice
     {
         private string _invoiceNumber;
         private DateTime _invoiceDate;
