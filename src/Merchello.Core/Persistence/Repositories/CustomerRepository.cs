@@ -87,20 +87,6 @@ namespace Merchello.Core.Persistence.Repositories
             return PerformGetByQuery(q).FirstOrDefault();
         }
 
-
-        /// <summary>
-        /// Returns 
-        /// </summary>
-        /// <param name="page"></param>
-        /// <param name="itemsPerPage"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        internal IPage<ICustomer> GetCustomerByPage(long page, long itemsPerPage)
-        {
-            var query = new Querying.Query<ICustomer>();
-            return PerformGetPageByQuery(page, itemsPerPage, query);
-        }
-
         #endregion
 
         #region Overrides of MerchelloPetaPocoRepositoryBase<ICustomer>
@@ -129,7 +115,7 @@ namespace Merchello.Core.Persistence.Repositories
                     "DELETE FROM merchBasket WHERE consumerKey = @Id",
                     "DELETE FROM merchInvoiceItem WHERE invoiceId IN " + invoiceIdByKey,
                     "DELETE FROM merchShipment WHERE invoiceId IN " + invoiceIdByKey,
-                    "DELETE FROM merchTransaction WHERE invoiceId IN " + invoiceIdByKey,
+                    "DELETE FROM merchAppliedPayment WHERE invoiceId IN " + invoiceIdByKey,
                     "DELETE FROM merchPayment WHERE customerKey = @Id",
                     "DELETE FROM merchInvoice WHERE customerKey = @Id",
                     "DELETE FROM merchAddress WHERE customerKey = @Id",
@@ -183,25 +169,6 @@ namespace Merchello.Core.Persistence.Repositories
 
             return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
 
-        }
-
-
-        protected IPage<ICustomer> PerformGetPageByQuery(long page, long itemsPerPage, IQuery<ICustomer> query)
-        {
-            var sqlClause = GetBaseQuery(false);
-            var translator = new SqlTranslator<ICustomer>(sqlClause, query);
-            var sql = translator.Translate();
-
-            var p = Database.Page<CustomerDto>(page, itemsPerPage, sql);
-
-            return new Models.Page<ICustomer>()
-            {
-                CurrentPage = p.CurrentPage,
-                ItemsPerPage = p.ItemsPerPage,
-                TotalItems = p.TotalItems,
-                TotalPages = p.TotalPages,
-                Items = p.Items.DistinctBy(x => x.Key).Select(dto => Get(dto.Key))
-            };
         }
 
         #endregion

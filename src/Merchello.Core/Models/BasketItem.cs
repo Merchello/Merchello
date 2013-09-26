@@ -9,7 +9,7 @@ namespace Merchello.Core.Models
 
     [Serializable]
     [DataContract(IsReference = true)]
-    public partial class BasketItem : IdEntity, IBasketItem
+    internal class BasketItem : IdEntity, IBasketItem
     {
         private readonly int _basketId;
         private int? _parentId;        

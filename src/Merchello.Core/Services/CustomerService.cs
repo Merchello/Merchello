@@ -203,13 +203,6 @@ namespace Merchello.Core.Services
 
         #endregion
 
-        public IPage<ICustomer> GetCustomerByPage(long page, long itemsPerPage)
-        {
-            using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
-            {
-                return ((CustomerRepository) repository).GetCustomerByPage(page, itemsPerPage);
-            }
-        }
 
         internal IEnumerable<ICustomer> GetAll()
         {
