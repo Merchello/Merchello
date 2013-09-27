@@ -15,7 +15,7 @@ function merchelloProductService($q, $http, umbDataFormatter, umbRequestHelper) 
                    method: "POST",
                    params: { sku: sku, name: productname, price: price }
                }),
-               'Failed to retreive create product sku ' + sku);
+               'Failed to create product sku ' + sku);
         },
 
         getByKey: function (key) {
@@ -38,6 +38,16 @@ function merchelloProductService($q, $http, umbDataFormatter, umbRequestHelper) 
                     product
                 ),
                 'Failed to save data for product key ' + product.key);
+        },
+
+        getAllProducts: function () {
+
+            return umbRequestHelper.resourcePromise(
+                $http.get(
+                    '/umbraco/Merchello/ProductApi/GetProducts'
+                ),
+                'Failed to get all products');
+
         }
     };
 }

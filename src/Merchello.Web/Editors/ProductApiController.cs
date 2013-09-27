@@ -79,6 +79,27 @@ namespace Merchello.Web.Editors
         }
 
         /// <summary>
+        /// Returns All Products
+        /// 
+        /// GET /umbraco/Merchello/ProductApi/GetProducts
+        /// </summary>
+        /// <param name="keys"></param>
+        public IEnumerable<Product> GetProducts()
+        {
+            ProductService tempProductService = _productService as ProductService;
+            var products = tempProductService.GetAll();
+            if (products == null)
+            {
+                // ?
+            }
+
+            foreach (IProduct product in products)
+            {
+                yield return product as Product;
+            }
+        }
+
+        /// <summary>
         /// Returns Product by keys separated by a comma
         /// 
         /// GET /umbraco/Merchello/ProductApi/GetProducts?keys={guid}&keys={guid}
