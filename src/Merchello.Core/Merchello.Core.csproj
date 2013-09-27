@@ -130,6 +130,9 @@
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\Rdbms\Content2ProductDto.cs" />
     <Compile Include="Models\Rdbms\AppliedPaymentDto.cs" />
+    <Compile Include="Models\Rdbms\OrderItemDto.cs" />
+    <Compile Include="Models\Rdbms\OrderStatusDto.cs" />
+    <Compile Include="Models\Rdbms\OrderDto.cs" />
     <Compile Include="Models\Rdbms\CountryDto.cs" />
     <Compile Include="Models\Rdbms\RegisteredGatewayProviderDto.cs" />
     <Compile Include="Models\Rdbms\OptionChoiceDto.cs" />
@@ -300,7 +303,7 @@
     <Compile Include="Models\IItemization.cs" />
     <Compile Include="Models\TypeFields\PaymentMethodTypeField.cs" />
     <Compile Include="Models\Rdbms\AddressDto.cs" />
-    <Compile Include="Models\Rdbms\AnonymousDto.cs" />
+    <Compile Include="Models\Rdbms\AnonymousCustomerDto.cs" />
     <Compile Include="Models\Rdbms\BasketItemDto.cs" />
     <Compile Include="Models\Rdbms\CustomerDto.cs" />
     <Compile Include="Models\Rdbms\InventoryDto.cs" />

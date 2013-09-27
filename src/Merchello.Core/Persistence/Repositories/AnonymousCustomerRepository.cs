@@ -81,7 +81,7 @@ namespace Merchello.Core.Persistence.Repositories
             var sql = GetBaseQuery(false)
                .Where(GetBaseWhereClause(), new { Id = id });
 
-            var dto = Database.Fetch<AnonymousDto>(sql).FirstOrDefault();
+            var dto = Database.Fetch<AnonymousCustomerDto>(sql).FirstOrDefault();
 
             if (dto == null)
                 return null;
@@ -105,7 +105,7 @@ namespace Merchello.Core.Persistence.Repositories
             else
             {
                 var factory = new AnonymousCustomerFactory();
-                var dtos = Database.Fetch<AnonymousDto>(GetBaseQuery(false));
+                var dtos = Database.Fetch<AnonymousCustomerDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
                     yield return factory.BuildEntity(dto);
@@ -119,7 +119,7 @@ namespace Merchello.Core.Persistence.Repositories
             var translator = new SqlTranslator<IAnonymousCustomer>(sqlClause, query);
             var sql = translator.Translate();
 
-            var dtos = Database.Fetch<AnonymousDto>(sql);
+            var dtos = Database.Fetch<AnonymousCustomerDto>(sql);
 
             return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
         }

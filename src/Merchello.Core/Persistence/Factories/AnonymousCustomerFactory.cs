@@ -8,9 +8,9 @@ using Merchello.Core.Models.Rdbms;
 
 namespace Merchello.Core.Persistence.Factories
 {
-    internal class AnonymousCustomerFactory : IEntityFactory<IAnonymousCustomer, AnonymousDto>
+    internal class AnonymousCustomerFactory : IEntityFactory<IAnonymousCustomer, AnonymousCustomerDto>
     {
-        public IAnonymousCustomer BuildEntity(AnonymousDto dto)
+        public IAnonymousCustomer BuildEntity(AnonymousCustomerDto dto)
         {
             return new AnonymousCustomer(dto.LastActivityDate)
             {
@@ -20,9 +20,9 @@ namespace Merchello.Core.Persistence.Factories
             };
         }
 
-        public AnonymousDto BuildDto(IAnonymousCustomer entity)
+        public AnonymousCustomerDto BuildDto(IAnonymousCustomer entity)
         {
-            return new AnonymousDto()
+            return new AnonymousCustomerDto()
             {
                 Key = entity.Key,
                 LastActivityDate = entity.LastActivityDate,

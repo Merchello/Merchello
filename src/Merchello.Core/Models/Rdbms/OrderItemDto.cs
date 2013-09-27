@@ -4,29 +4,30 @@ using Umbraco.Core.Persistence.DatabaseAnnotations;
 
 namespace Merchello.Core.Models.Rdbms
 {
-    [TableName("merchBasketItem")]
+    [TableName("merchOrderItem")]
     [PrimaryKey("id")]
     [ExplicitColumns]
-    internal class BasketItemDto
+    internal class OrderItemDto
     {
         [Column("id")]
         [PrimaryKeyColumn]
         public int Id { get; set; }
 
         [Column("parentId")]
-        [ForeignKey(typeof(BasketItemDto), Name = "FK_merchBasketItem_merchBasketItem", Column = "id")]
-        [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchBasketItemParent")]
+        [ForeignKey(typeof(OrderItemDto))]
         [NullSetting(NullSetting = NullSettings.Null)]
+        [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchOrderItemParent")]
         public int? ParentId { get; set; }
 
-        [Column("basketId")]
-        [ForeignKey(typeof(BasketDto), Name = "FK_merchBasketItem_merchBasket", Column = "id")]
-        public int BasketId { get; set; }
-
-        [Column("lineItemTfKey")] 
+        [Column("orderId")]
+        [ForeignKey(typeof(OrderDto), Name = "FK_merchOrderItem_merchOrder", Column = "id")]
+        public int OrderId { get; set; }
+        
+        [Column("lineItemTfKey")]
         public Guid LineItemTfKey { get; set; }
 
         [Column("sku")]
+        [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchOrderItemSku")]
         public string Sku { get; set; }
 
         [Column("name")]
@@ -36,10 +37,14 @@ namespace Merchello.Core.Models.Rdbms
         public int BaseQuantity { get; set; }
 
         [Column("unitOfMeasureMultiplier")]
+        [Constraint(Default = "1")]
         public int UnitOfMeasureMultiplier { get; set; }
 
         [Column("amount")]
         public decimal Amount { get; set; }
+
+        [Column("exported")]
+        public bool Exported { get; set; }
 
         [Column("extendedData")]
         public string ExtendedData { get; set; }
@@ -51,5 +56,9 @@ namespace Merchello.Core.Models.Rdbms
         [Column("createDate")]
         [Constraint(Default = "getdate()")]
         public DateTime CreateDate { get; set; }
+
+        [ResultColumn]
+        public OrderDto OrderDto { get; set; }
     }
+
 }

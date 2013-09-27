@@ -37,7 +37,7 @@ namespace Merchello.Tests.UnitTests.Querying
         }
 
         /// <summary>
-        /// Test to verify that the typed <see cref="AnonymousDto"/> query matches generic "select * ..." query 
+        /// Test to verify that the typed <see cref="AnonymousCustomerDto"/> query matches generic "select * ..." query 
         /// </summary>
         [Test]
         public void Can_Verify_AnonymousCustomer_Base_Clause()
@@ -53,8 +53,8 @@ namespace Merchello.Tests.UnitTests.Querying
             //// Act
             var sql = new Sql();
             sql.Select("*")
-                .From<AnonymousDto>()
-                .Where<AnonymousDto>(x => x.Key == key);
+                .From<AnonymousCustomerDto>()
+                .Where<AnonymousCustomerDto>(x => x.Key == key);
 
             //// Assert
             Assert.That(sql.SQL, Is.EqualTo(expected.SQL));

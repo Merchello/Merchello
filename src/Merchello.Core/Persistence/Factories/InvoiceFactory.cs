@@ -1,4 +1,5 @@
-﻿using Merchello.Core.Models;
+﻿using System;
+using Merchello.Core.Models;
 using Merchello.Core.Models.Rdbms;
 
 namespace Merchello.Core.Persistence.Factories
@@ -13,6 +14,7 @@ namespace Merchello.Core.Persistence.Factories
                 new InvoiceStatusFactory().BuildEntity(dto.InvoiceStatusDto), dto.Amount)
             {
                 Id = dto.Id,
+                OrderId = dto.OrderId,
                 InvoiceNumber = dto.InvoiceNumber,
                 InvoiceDate = dto.InvoiceDate,
                 BillToName = dto.BillToName,
@@ -27,7 +29,6 @@ namespace Merchello.Core.Persistence.Factories
                 BillToCompany = dto.BillToCompany,
                 Exported = dto.Exported,
                 Paid = dto.Paid,
-                Shipped = dto.Shipped,
                 UpdateDate = dto.UpdateDate,
                 CreateDate = dto.CreateDate
             };
@@ -42,6 +43,7 @@ namespace Merchello.Core.Persistence.Factories
             var dto = new InvoiceDto()
             {
                 Id = entity.Id,
+                OrderId = entity.OrderId,
                 CustomerKey = entity.Customer.Key,
                 InvoiceNumber = entity.InvoiceNumber,
                 InvoiceDate = entity.InvoiceDate,
@@ -58,7 +60,6 @@ namespace Merchello.Core.Persistence.Factories
                 BillToCompany = entity.BillToCompany,
                 Exported = entity.Exported,
                 Paid = entity.Paid,
-                Shipped = entity.Shipped,
                 Amount = entity.Amount,
                 UpdateDate = entity.UpdateDate,
                 CreateDate = entity.CreateDate

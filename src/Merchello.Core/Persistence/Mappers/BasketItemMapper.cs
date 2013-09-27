@@ -19,7 +19,7 @@ namespace Merchello.Core.Persistence.Mappers
             CacheMap<BasketItem, BasketItemDto>(src => src.Id, dto => dto.Id);            
             CacheMap<BasketItem, BasketItemDto>(src => src.BasketId, dto => dto.BasketId);
             CacheMap<BasketItem, BasketItemDto>(src => src.ParentId, dto => dto.ParentId);
-            CacheMap<BasketItem, BasketItemDto>(src => src.InvoiceItemTypeFieldKey, dto => dto.InvoiceItemTypeFieldKey);
+            CacheMap<BasketItem, BasketItemDto>(src => src.InvoiceItemTypeFieldKey, dto => dto.LineItemTfKey);
             CacheMap<BasketItem, BasketItemDto>(src => src.Sku, dto => dto.Sku);
             CacheMap<BasketItem, BasketItemDto>(src => src.Name, dto => dto.Name);
             CacheMap<BasketItem, BasketItemDto>(src => src.BaseQuantity, dto => dto.BaseQuantity);

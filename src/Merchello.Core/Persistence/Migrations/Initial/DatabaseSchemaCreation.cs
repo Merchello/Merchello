@@ -27,7 +27,7 @@ namespace Merchello.Core.Persistence.Migrations.Initial
         private static readonly Dictionary<int, Type> OrderedTables = new Dictionary<int, Type>
         {
                 {0, typeof(TypeFieldDto)},
-                {1, typeof(AnonymousDto)},
+                {1, typeof(AnonymousCustomerDto)},
                 {2, typeof(CustomerDto)},
                 {3, typeof(AddressDto)},             
                 {4, typeof(BasketDto)},

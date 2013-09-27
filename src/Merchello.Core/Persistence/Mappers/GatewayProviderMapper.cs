@@ -21,8 +21,8 @@ namespace Merchello.Core.Persistence.Mappers
             CacheMap<RegisteredGatewayProvider, RegisteredGatewayProviderDto>(src => src.GatewayProviderTypeFieldKey, dto => dto.GatewayProviderTypeFieldKey);
             CacheMap<RegisteredGatewayProvider, RegisteredGatewayProviderDto>(src => src.Name, dto => dto.Name);
             CacheMap<RegisteredGatewayProvider, RegisteredGatewayProviderDto>(src => src.TypeFullName, dto => dto.TypeFullName);
-            CacheMap<RegisteredGatewayProvider, RegisteredGatewayProviderDto>(src => src.ConfigurationData, dto => dto.ConfigurationData);
-            CacheMap<RegisteredGatewayProvider, RegisteredGatewayProviderDto>(src => src.EncryptConfigurationData, dto => dto.EncryptConfigurationData);
+            CacheMap<RegisteredGatewayProvider, RegisteredGatewayProviderDto>(src => src.ConfigurationData, dto => dto.ExtendedData);
+            CacheMap<RegisteredGatewayProvider, RegisteredGatewayProviderDto>(src => src.EncryptConfigurationData, dto => dto.EncryptExtendedData);
             CacheMap<RegisteredGatewayProvider, RegisteredGatewayProviderDto>(src => src.CreateDate, dto => dto.CreateDate);
             CacheMap<RegisteredGatewayProvider, RegisteredGatewayProviderDto>(src => src.UpdateDate, dto => dto.UpdateDate);
         }

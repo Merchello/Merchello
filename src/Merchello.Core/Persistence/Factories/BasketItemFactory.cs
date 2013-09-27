@@ -11,7 +11,7 @@ namespace Merchello.Core.Persistence.Factories
             {
                 Id = dto.Id,
                 ParentId = dto.ParentId,
-                InvoiceItemTypeFieldKey = dto.InvoiceItemTypeFieldKey,
+                InvoiceItemTypeFieldKey = dto.LineItemTfKey,
                 Sku = dto.Sku,
                 Name = dto.Name,
                 BaseQuantity = dto.BaseQuantity,
@@ -33,7 +33,7 @@ namespace Merchello.Core.Persistence.Factories
                 Id = entity.Id,
                 ParentId = entity.ParentId,
                 BasketId = entity.BasketId,
-                InvoiceItemTypeFieldKey = entity.InvoiceItemTypeFieldKey,
+                LineItemTfKey = entity.InvoiceItemTypeFieldKey,
                 Sku = entity.Sku,
                 Name = entity.Name,
                 BaseQuantity = entity.BaseQuantity,

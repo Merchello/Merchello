@@ -4,10 +4,10 @@ using Umbraco.Core.Persistence.DatabaseAnnotations;
 
 namespace Merchello.Core.Models.Rdbms
 {
-    [TableName("merchAnonymous")]
+    [TableName("merchAnonymousCustomer")]
     [PrimaryKey("pk", autoIncrement = false)]
     [ExplicitColumns]
-    internal class AnonymousDto
+    internal class AnonymousCustomerDto
     {
         [Column("pk")]
         [PrimaryKeyColumn(AutoIncrement = false)]

@@ -4,20 +4,29 @@ using Umbraco.Core.Persistence.DatabaseAnnotations;
 
 namespace Merchello.Core.Models.Rdbms
 {
-    [TableName("merchTypeField")]
-    [PrimaryKey("pk", autoIncrement = false)]
+    [TableName("merchOrderStatus")]
+    [PrimaryKey("id")]
     [ExplicitColumns]
-    internal class TypeFieldDto
+    internal class OrderStatusDto
     {
-        [Column("pk")]
-        [PrimaryKeyColumn(AutoIncrement = false)]
-        public Guid Key { get; set; }
+        [Column("id")]
+        [PrimaryKeyColumn]
+        public int Id { get; set; }
 
         [Column("name")]
         public string Name { get; set; }
 
         [Column("alias")]
         public string Alias { get; set; }
+
+        [Column("reportable")]
+        public bool Reportable { get; set; }
+
+        [Column("active")]
+        public bool Active { get; set; }
+
+        [Column("sortOrder")]
+        public int SortOrder { get; set; }
 
         [Column("updateDate")]
         [Constraint(Default = "getdate()")]

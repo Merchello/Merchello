@@ -57,7 +57,7 @@ namespace Merchello.Core.Services
 
             var transaction = new AppliedPayment(payment, invoice, appliedPaymentTypeFieldKey)
                 {                     
-                    AppliedPaymentTypeFieldKey = appliedPaymentTypeFieldKey,
+                    AppliedPaymentTfKey = appliedPaymentTypeFieldKey,
                     Description = string.Empty, 
                     Amount = amount, 
                     Exported = false

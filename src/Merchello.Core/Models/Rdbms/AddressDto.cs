@@ -28,8 +28,8 @@ namespace Merchello.Core.Models.Rdbms
         [NullSetting(NullSetting = NullSettings.Null)]
         public string Company { get; set; }
 
-        [Column("addressTypeKey")]
-        public Guid AddressTypeFieldKey { get; set; }
+        [Column("addressTfKey")]
+        public Guid AddressTfKey { get; set; }
 
         [Column("address1")]
         [NullSetting(NullSetting = NullSettings.Null)]

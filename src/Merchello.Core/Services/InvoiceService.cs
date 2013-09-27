@@ -60,8 +60,7 @@ namespace Merchello.Core.Services
                 InvoiceNumber =  invoiceNumber,
                 InvoiceDate = DateTime.Now,
                 Exported = false,
-                Paid = false,
-                Shipped = false
+                Paid = false
             };
 
             Created.RaiseEvent(new NewEventArgs<IInvoice>(invoice), this);
@@ -89,8 +88,7 @@ namespace Merchello.Core.Services
                     BillToPhone = billToPhone, 
                     BillToCompany = billToCompany, 
                     Exported = false, 
-                    Paid = false, 
-                    Shipped = false
+                    Paid = false
                 };
                 
             Created.RaiseEvent(new NewEventArgs<IInvoice>(invoice), this);
