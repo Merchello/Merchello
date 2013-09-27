@@ -232,6 +232,7 @@
     <Content Include="App_Plugins\Merchello\Common\Js\_module.js" />
     <Content Include="App_Plugins\Merchello\Controllers\product.create.controller.js" />
     <Content Include="App_Plugins\Merchello\Controllers\product.edit.controller.js" />
+    <Content Include="App_Plugins\Merchello\Controllers\product.list.controller.js" />
     <Content Include="App_Plugins\Merchello\lib\select2\ui-select2.js" />
     <Content Include="App_Plugins\Merchello\Package.manifest" />
     <Content Include="App_Plugins\Merchello\PropertyEditors\Js\merchelloskuselector.controller.js" />
@@ -244,6 +245,7 @@
     <Content Include="App_Plugins\Merchello\Config\merchello.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Umbraco\Views\merchello\ListProducts.html" />
     <Content Include="web.config" />
     <Content Include="packages.config" />
     <None Include="web.Debug.config">
