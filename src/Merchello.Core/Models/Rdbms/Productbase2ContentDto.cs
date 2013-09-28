@@ -4,20 +4,18 @@ using Umbraco.Core.Persistence.DatabaseAnnotations;
 
 namespace Merchello.Core.Models.Rdbms
 {
-    [TableName("merchContent2Product")]
+    [TableName("merchProductBase2Content")]
     [PrimaryKey("contentId", autoIncrement = false)]
     [ExplicitColumns]
-    internal class Content2ProductDto
+    internal class ProductBase2ContentDto
     {
+        [Column("productBaseKey")]
+        [ForeignKey(typeof(ProductBaseDto), Name = "FK_merchProductBase2Content_merchProductBase", Column = "pk")]
+        public Guid ProductBaseKey { get; set; }
+
         [Column("contentId")]
-        [PrimaryKeyColumn(AutoIncrement = false, Name = "PK_merchContent2Product", OnColumns = "contentId, productKey")]
+        [PrimaryKeyColumn(AutoIncrement = false, Name = "PK_merchProductBase2Content", OnColumns = "contentId, productBaseKey")]
         public int ContentId { get; set; }
-
-
-        [Column("productKey")]
-        [ForeignKey(typeof(ProductDto), Name = "FK_merchContent2Product_merchProduct", Column = "pk")]
-        public Guid ProductKey { get; set; }
-
 
         [Column("updateDate")]
         [Constraint(Default = "getdate()")]
@@ -28,6 +26,6 @@ namespace Merchello.Core.Models.Rdbms
         public DateTime CreateDate { get; set; }
 
         [ResultColumn]
-        public ProductDto ProductDto { get; set; }
+        public ProductBaseDto ProductBaseDto { get; set; }
     }
 }

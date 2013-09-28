@@ -8,14 +8,18 @@ using Umbraco.Core.Persistence.DatabaseAnnotations;
 
 namespace Merchello.Core.Models.Rdbms
 {
-    [TableName("merchProduct")]
+    [TableName("merchProductActual")]
     [PrimaryKey("pk", autoIncrement = false)]
     [ExplicitColumns]
-    internal class ProductDto
+    internal class ProductActualDto
     {
         [Column("pk")]
         [PrimaryKeyColumn(AutoIncrement = false)]
         public Guid Key { get; set; }
+
+        [Column("productBaseKey")]
+        [ForeignKey(typeof(ProductBaseDto), Name = "FK_merchProductActual_merchProductBase", Column = "pk")]
+        public Guid ProductBaseKey { get; set; }
 
         [Column("sku")]
         public string Sku { get; set; }
@@ -49,7 +53,17 @@ namespace Merchello.Core.Models.Rdbms
         [Column("height")]
         [NullSetting(NullSetting = NullSettings.Null)]
         public decimal? Height { get; set; }
-       
+
+        [Column("barcode")]
+        public string Barcode { get; set; }
+
+        [Column("available")]
+        public bool Available { get; set; }
+
+        [Column("trackInventory")]
+        [Constraint(Default = "1")]
+        public bool TrackInventory { get; set; }
+
         [Column("taxable")]
         [Constraint(Default = "1")]
         public bool Taxable { get; set; }

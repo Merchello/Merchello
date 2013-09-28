@@ -55,7 +55,7 @@ namespace Merchello.Core.Configuration.Outline
         }
 
         /// <summary>
-        /// Gets the dbTypeFields configuration collection for <see cref="IProduct"/>
+        /// Gets the dbTypeFields configuration collection for <see cref="IProductActual"/>
         /// </summary>
         [ConfigurationProperty("product", IsRequired = false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
         public TypeFieldCollection Product

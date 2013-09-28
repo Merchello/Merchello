@@ -38,7 +38,7 @@ namespace Merchello.Core.Persistence.Mappers
             CacheMapper(typeof(IInvoiceItem), typeof(InvoiceItemMapper));
             CacheMapper(typeof(IInvoiceStatus), typeof(InvoiceStatusMapper));
             CacheMapper(typeof(IPayment), typeof(PaymentMapper));
-            CacheMapper(typeof(IProduct), typeof(ProductMapper));
+            CacheMapper(typeof(IProductActual), typeof(ProductActualMapper));
             CacheMapper(typeof(IAppliedPayment), typeof(AppliedPaymentMapper));
             CacheMapper(typeof(IShipment), typeof(ShipmentMapper));
             CacheMapper(typeof(IShipMethod), typeof (ShipMethodMapper));
@@ -64,7 +64,7 @@ namespace Merchello.Core.Persistence.Mappers
             {
                 { typeof(ICustomer) },
                 { typeof(IAnonymousCustomer)},
-                { typeof(IProduct) }
+                { typeof(IProductActual) }
             };
 
         /// <summary>

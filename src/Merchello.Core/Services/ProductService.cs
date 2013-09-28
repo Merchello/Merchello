@@ -43,9 +43,9 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Creates a Product
         /// </summary>
-        public IProduct CreateProduct(string sku, string name, decimal price)
+        public IProductActual CreateProduct(string sku, string name, decimal price)
         {
-            var product = new Product()
+            var product = new ProductActual()
             {
                 Sku = sku,
                 Name = name,
@@ -62,43 +62,43 @@ namespace Merchello.Core.Services
                 Template = false
             };
 
-            Created.RaiseEvent(new NewEventArgs<IProduct>(product), this);
+            Created.RaiseEvent(new NewEventArgs<IProductActual>(product), this);
 
             return product;
         }
 
         /// <summary>
-        /// Saves a single <see cref="IProduct"/> object
+        /// Saves a single <see cref="IProductActual"/> object
         /// </summary>
-        /// <param name="product">The <see cref="IProduct"/> to save</param>
+        /// <param name="productActual">The <see cref="IProductActual"/> to save</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events.</param>
-        public void Save(IProduct product, bool raiseEvents = true)
+        public void Save(IProductActual productActual, bool raiseEvents = true)
         {
-            if (raiseEvents) Saving.RaiseEvent(new SaveEventArgs<IProduct>(product), this);
+            if (raiseEvents) Saving.RaiseEvent(new SaveEventArgs<IProductActual>(productActual), this);
 
             using (new WriteLock(Locker))
             {
                 var uow = _uowProvider.GetUnitOfWork();
                 using (var repository = _repositoryFactory.CreateProductRepository(uow))
                 {
-                    repository.AddOrUpdate(product);
+                    repository.AddOrUpdate(productActual);
                     uow.Commit();
                 }
 
-                if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IProduct>(product), this);
+                if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IProductActual>(productActual), this);
             }
         }
 
         /// <summary>
-        /// Saves a collection of <see cref="IProduct"/> objects.
+        /// Saves a collection of <see cref="IProductActual"/> objects.
         /// </summary>
-        /// <param name="productList">Collection of <see cref="Product"/> to save</param>
+        /// <param name="productList">Collection of <see cref="ProductActual"/> to save</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        public void Save(IEnumerable<IProduct> productList, bool raiseEvents = true)
+        public void Save(IEnumerable<IProductActual> productList, bool raiseEvents = true)
         {
-            var productArray = productList as IProduct[] ?? productList.ToArray();
+            var productArray = productList as IProductActual[] ?? productList.ToArray();
 
-            if (raiseEvents) Saving.RaiseEvent(new SaveEventArgs<IProduct>(productArray), this);
+            if (raiseEvents) Saving.RaiseEvent(new SaveEventArgs<IProductActual>(productArray), this);
 
             using (new WriteLock(Locker))
             {
@@ -113,41 +113,41 @@ namespace Merchello.Core.Services
                 }
             }
 
-            if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IProduct>(productArray), this);
+            if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IProductActual>(productArray), this);
         }
 
         /// <summary>
-        /// Deletes a single <see cref="IProduct"/> object
+        /// Deletes a single <see cref="IProductActual"/> object
         /// </summary>
-        /// <param name="product">The <see cref="IProduct"/> to delete</param>
+        /// <param name="productActual">The <see cref="IProductActual"/> to delete</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        public void Delete(IProduct product, bool raiseEvents = true)
+        public void Delete(IProductActual productActual, bool raiseEvents = true)
         {
-            if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<IProduct>(product), this);
+            if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<IProductActual>(productActual), this);
 
             using (new WriteLock(Locker))
             {
                 var uow = _uowProvider.GetUnitOfWork();
                 using (var repository = _repositoryFactory.CreateProductRepository(uow))
                 {
-                    repository.Delete(product);
+                    repository.Delete(productActual);
                     uow.Commit();
                 }
             }
-            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<IProduct>(product), this);
+            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<IProductActual>(productActual), this);
         }
 
 
         /// <summary>
-        /// Deletes a collection <see cref="IProduct"/> objects
+        /// Deletes a collection <see cref="IProductActual"/> objects
         /// </summary>
-        /// <param name="productList">Collection of <see cref="IProduct"/> to delete</param>
+        /// <param name="productList">Collection of <see cref="IProductActual"/> to delete</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        public void Delete(IEnumerable<IProduct> productList, bool raiseEvents = true)
+        public void Delete(IEnumerable<IProductActual> productList, bool raiseEvents = true)
         {
-            var productArray = productList as IProduct[] ?? productList.ToArray();
+            var productArray = productList as IProductActual[] ?? productList.ToArray();
 
-            if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<IProduct>(productArray), this);
+            if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<IProductActual>(productArray), this);
 
             using (new WriteLock(Locker))
             {
@@ -162,15 +162,15 @@ namespace Merchello.Core.Services
                 }
             }
 
-            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<IProduct>(productArray), this);
+            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<IProductActual>(productArray), this);
         }
 
         /// <summary>
         /// Gets a Product by its unique id - pk
         /// </summary>
         /// <param name="key">Guid key for the Product</param>
-        /// <returns><see cref="IProduct"/></returns>
-        public IProduct GetByKey(Guid key)
+        /// <returns><see cref="IProductActual"/></returns>
+        public IProductActual GetByKey(Guid key)
         {
             using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
             {
@@ -183,7 +183,7 @@ namespace Merchello.Core.Services
         /// </summary>
         /// <param name="keys">List of unique keys</param>
         /// <returns></returns>
-        public IEnumerable<IProduct> GetByKeys(IEnumerable<Guid> keys)
+        public IEnumerable<IProductActual> GetByKeys(IEnumerable<Guid> keys)
         {
             using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
             {
@@ -193,7 +193,7 @@ namespace Merchello.Core.Services
 
         #endregion
 
-        internal IEnumerable<IProduct> GetAll()
+        internal IEnumerable<IProductActual> GetAll()
         {
             using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
             {
@@ -207,28 +207,28 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Occurs before Delete
         /// </summary>		
-        public static event TypedEventHandler<IProductService, DeleteEventArgs<IProduct>> Deleting;
+        public static event TypedEventHandler<IProductService, DeleteEventArgs<IProductActual>> Deleting;
 
         /// <summary>
         /// Occurs after Delete
         /// </summary>
-        public static event TypedEventHandler<IProductService, DeleteEventArgs<IProduct>> Deleted;
+        public static event TypedEventHandler<IProductService, DeleteEventArgs<IProductActual>> Deleted;
 
         /// <summary>
         /// Occurs before Save
         /// </summary>
-        public static event TypedEventHandler<IProductService, SaveEventArgs<IProduct>> Saving;
+        public static event TypedEventHandler<IProductService, SaveEventArgs<IProductActual>> Saving;
 
         /// <summary>
         /// Occurs after Save
         /// </summary>
-        public static event TypedEventHandler<IProductService, SaveEventArgs<IProduct>> Saved;
+        public static event TypedEventHandler<IProductService, SaveEventArgs<IProductActual>> Saved;
 
 
         /// <summary>
         /// Occurs after Create
         /// </summary>
-        public static event TypedEventHandler<IProductService, NewEventArgs<IProduct>> Created;
+        public static event TypedEventHandler<IProductService, NewEventArgs<IProductActual>> Created;
 
         #endregion
 

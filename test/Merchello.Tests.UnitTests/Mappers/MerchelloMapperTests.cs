@@ -174,10 +174,10 @@ namespace Merchello.Tests.UnitTests.Mappers
         {
 
             //// Arrage
-            var expected = typeof(ProductMapper);
+            var expected = typeof(ProductActualMapper);
 
             //// Act
-            var resolved = MerchelloMapper.Current.ResolveByType(typeof(IProduct));
+            var resolved = MerchelloMapper.Current.ResolveByType(typeof(IProductActual));
 
             //// Assert
             Assert.IsTrue(resolved.Success);

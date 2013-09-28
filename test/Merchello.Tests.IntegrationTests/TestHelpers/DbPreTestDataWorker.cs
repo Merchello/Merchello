@@ -317,10 +317,10 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         #region IProduct
 
         /// <summary>
-        /// Saves a product record to the database and returns and instance of <see cref="IProduct"/> represents that record
+        /// Saves a product record to the database and returns and instance of <see cref="IProductActual"/> represents that record
         /// </summary>
-        /// <returns><see cref="IProduct"/></returns>
-        public IProduct MakeExistingProduct()
+        /// <returns><see cref="IProductActual"/></returns>
+        public IProductActual MakeExistingProduct()
         {
             var product = MockProductDataMaker.MockProductForInserting();
             ProductService.Save(product);
@@ -328,11 +328,11 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         }
 
         /// <summary>
-        /// Saves a collection of products to the database and return a collection of <see cref="IProduct"/> representing that collection
+        /// Saves a collection of products to the database and return a collection of <see cref="IProductActual"/> representing that collection
         /// </summary>
         /// <param name="count"></param>
         /// <returns></returns>
-        public IEnumerable<IProduct> MakeExistingProductCollection(int count)
+        public IEnumerable<IProductActual> MakeExistingProductCollection(int count)
         {
             var products = MockProductDataMaker.MockProductCollectionForInserting(count);
             ProductService.Save(products);

@@ -9,7 +9,7 @@ namespace Merchello.Web.Models
             
         }
 
-        public ProductDisplay(IProduct product)
+        public ProductDisplay(IProductActual productActual)
         {
             
         }
