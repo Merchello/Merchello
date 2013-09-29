@@ -85,8 +85,16 @@
     <Compile Include="ConversionStrategies\IAnonymousBasketConversionStrategy.cs" />
     <Compile Include="ConversionStrategies\IAnonymousCustomerConversionStrategy.cs" />
     <Compile Include="BootManagerBase.cs" />
+    <Compile Include="Events\DatabaseCreationEventArgs.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\NewEventArgs.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\StatusChangedEventArgs.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ModelExtensions.cs" />
-    <Compile Include="Events\StatusChangedEventArgs.cs" />
     <Compile Include="Gateway\GatewayEnumerations.cs" />
     <Compile Include="Gateway\IGatewayProvider.cs" />
     <Compile Include="MerchelloBootstrapper.cs" />
@@ -94,29 +102,23 @@
     <Compile Include="Configuration\MerchelloConfiguration.cs" />
     <Compile Include="CoreBootManager.cs" />
     <Compile Include="Events\ConvertEventArgs.cs" />
-    <Compile Include="Events\DatabaseCreationEventArgs.cs" />
-    <Compile Include="Events\DeleteEventArgs.cs" />
-    <Compile Include="Events\EventArgsBase.cs" />
-    <Compile Include="Events\EventExtensions.cs" />
-    <Compile Include="Events\NewEventArgs.cs" />
-    <Compile Include="Events\SaveEventArgs.cs" />
-    <Compile Include="Events\TypedEventHandler.cs" />
     <Compile Include="IBootManager.cs" />
     <Compile Include="MerchelloContext.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\AnonymousCustomer.cs" />
-    <Compile Include="Models\Basket.cs" />
-    <Compile Include="Models\BasketItem.cs" />
+    <Compile Include="Models\CustomerRegistry.cs" />
+    <Compile Include="Models\PurchaseLineItemContainer.cs" />
     <Compile Include="Models\GatewayProviders\IRegisteredGatewayProvider.cs" />
     <Compile Include="Models\GatewayProviders\RegisteredGatewayProvider.cs" />
     <Compile Include="Models\IAddress.cs" />
     <Compile Include="Models\IAnonymousCustomer.cs" />
-    <Compile Include="Models\IBasket.cs" />
-    <Compile Include="Models\IBasketItem.cs" />
+    <Compile Include="Models\ICustomerRegistry.cs" />
+    <Compile Include="Models\IPurchaseLineItem.cs" />
     <Compile Include="Models\IConsumer.cs" />
     <Compile Include="Gateway\IGatewayResponse.cs" />
     <Compile Include="Models\IInvoiceItem.cs" />
     <Compile Include="Models\IInvoiceStatus.cs" />
+    <Compile Include="Models\ILineItem.cs" />
     <Compile Include="Models\Invoice.cs" />
     <Compile Include="Models\InvoiceItem.cs" />
     <Compile Include="Models\InvoiceStatus.cs" />
@@ -126,6 +128,8 @@
     <Compile Include="Models\IShipMethod.cs" />
     <Compile Include="Models\IAppliedPayment.cs" />
     <Compile Include="Models\IWarehouse.cs" />
+    <Compile Include="Models\LineItemContainerBase.cs" />
+    <Compile Include="Models\LineItemCollection.cs" />
     <Compile Include="Models\Payment.cs" />
     <Compile Include="Models\ProductActual.cs" />
     <Compile Include="Models\Rdbms\Productbase2ContentDto.cs" />
@@ -155,7 +159,7 @@
     <Compile Include="Models\TypeFields\GatewayProviderTypeField.cs" />
     <Compile Include="Models\TypeFields\AppliedPaymentTypeField.cs" />
     <Compile Include="Models\TypeFields\IAddressTypeField.cs" />
-    <Compile Include="Models\TypeFields\IBasketTypeField.cs" />
+    <Compile Include="Models\TypeFields\ICustomerRegistryTypeField.cs" />
     <Compile Include="Models\TypeFields\ICustomTypeField.cs" />
     <Compile Include="Models\TypeFields\IInvoiceItemTypeField.cs" />
     <Compile Include="Models\TypeFields\IPaymentMethodTypeField.cs" />
@@ -181,8 +185,8 @@
     <Compile Include="Strategies\Payment\IPaymentApplicationStrategyBase.cs" />
     <Compile Include="Strategies\Payment\PaymentApplicationStrategy.cs" />
     <Compile Include="Persistence\Factories\AnonymousCustomerFactory.cs" />
-    <Compile Include="Persistence\Factories\BasketFactory.cs" />
-    <Compile Include="Persistence\Factories\BasketItemFactory.cs" />
+    <Compile Include="Persistence\Factories\CustomerRegistryFactory.cs" />
+    <Compile Include="Persistence\Factories\CustomerRegistryItemFactory.cs" />
     <Compile Include="Persistence\Factories\InvoiceFactory.cs" />
     <Compile Include="Persistence\Factories\InvoiceItemFactory.cs" />
     <Compile Include="Persistence\Factories\InvoiceStatusFactory.cs" />
@@ -206,11 +210,11 @@
     <Compile Include="Persistence\Mappers\AppliedPaymentMapper.cs" />
     <Compile Include="Persistence\Querying\Query.cs" />
     <Compile Include="Persistence\Repositories\AnonymousCustomerRepository.cs" />
-    <Compile Include="Persistence\Repositories\BasketItemRepository.cs" />
-    <Compile Include="Persistence\Repositories\BasketRepository.cs" />
+    <Compile Include="Persistence\Repositories\CustomerRegistryItemRepository.cs" />
+    <Compile Include="Persistence\Repositories\CustomerRegistryRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IAnonymousCustomerRepository.cs" />
-    <Compile Include="Persistence\Repositories\Interfaces\IBasketItemRepository.cs" />
-    <Compile Include="Persistence\Repositories\Interfaces\IBasketRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\ICustomerRegistryItemRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\ICustomerRegistryRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IInvoiceItemRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IInvoiceRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IInvoiceStatusRepository.cs" />
@@ -231,11 +235,11 @@
     <Compile Include="Persistence\Repositories\WarehouseRepository.cs" />
     <Compile Include="Services\AnonymousCustomerService.cs" />
     <Compile Include="Services\BasketItemService.cs" />
-    <Compile Include="Services\BasketService.cs" />
+    <Compile Include="Services\CustomerRegistryService.cs" />
     <Compile Include="Services\ConsumerService.cs" />
     <Compile Include="Services\Interfaces\IAnonymousCustomerService.cs" />
     <Compile Include="Services\Interfaces\IBasketItemService.cs" />
-    <Compile Include="Services\Interfaces\IBasketService.cs" />
+    <Compile Include="Services\Interfaces\ICustomerRegistryService.cs" />
     <Compile Include="Services\Interfaces\IConsumerService.cs" />
     <Compile Include="Services\Interfaces\IInvoiceItemService.cs" />
     <Compile Include="Services\Interfaces\IInvoiceService.cs" />
@@ -278,7 +282,7 @@
     <Compile Include="Persistence\Mappers\CustomerMapper.cs" />
     <Compile Include="Persistence\Mappers\DtoMapModel.cs" />
     <Compile Include="Models\TypeFields\AddressTypeField.cs" />
-    <Compile Include="Models\TypeFields\BasketTypeField.cs" />
+    <Compile Include="Models\TypeFields\CustomerRegistryTypeField.cs" />
     <Compile Include="Configuration\Outline\TypeFieldDefinitionsElement.cs" />
     <Compile Include="Models\EntityBase\Entity.cs" />
     <Compile Include="Models\EntityBase\IdEntity.cs" />
@@ -299,18 +303,16 @@
     <Compile Include="Mandate.cs" />
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\IInvoice.cs" />
-    <Compile Include="Models\IInvoiceItemItemization.cs" />
-    <Compile Include="Models\IItemization.cs" />
     <Compile Include="Models\TypeFields\PaymentMethodTypeField.cs" />
     <Compile Include="Models\Rdbms\AddressDto.cs" />
     <Compile Include="Models\Rdbms\AnonymousCustomerDto.cs" />
-    <Compile Include="Models\Rdbms\BasketItemDto.cs" />
+    <Compile Include="Models\Rdbms\CustomerRegistryItemDto.cs" />
     <Compile Include="Models\Rdbms\CustomerDto.cs" />
     <Compile Include="Models\Rdbms\InventoryDto.cs" />
     <Compile Include="Models\Rdbms\InvoiceDto.cs" />
     <Compile Include="Models\Rdbms\InvoiceItemDto.cs" />
     <Compile Include="Models\Rdbms\InvoiceStatusDto.cs" />
-    <Compile Include="Models\Rdbms\BasketDto.cs" />
+    <Compile Include="Models\Rdbms\CustomerRegistryDto.cs" />
     <Compile Include="Models\Rdbms\PaymentDto.cs" />
     <Compile Include="Models\Rdbms\TransactionDto.cs">
       <SubType>Code</SubType>

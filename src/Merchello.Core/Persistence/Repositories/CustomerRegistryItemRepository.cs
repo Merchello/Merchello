@@ -4,7 +4,6 @@ using System.Linq;
 using Merchello.Core.Models;
 using Merchello.Core.Models.EntityBase;
 using Merchello.Core.Models.Rdbms;
-using Merchello.Core.Models.TypeFields;
 using Merchello.Core.Persistence.Caching;
 using Merchello.Core.Persistence.Factories;
 using Merchello.Core.Persistence.Querying;
@@ -15,43 +14,41 @@ using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Core.Persistence.Repositories
 {
-    internal class BasketRepository : MerchelloPetaPocoRepositoryBase<int, IBasket>, IBasketRepository
+    internal partial class CustomerRegistryItemRepository : MerchelloPetaPocoRepositoryBase<int, IPurchaseLineItem>, ICustomerRegistryItemRepository
     {
 
-        public BasketRepository(IDatabaseUnitOfWork work)
+        public CustomerRegistryItemRepository(IDatabaseUnitOfWork work)
             : base(work)
         {
 
         }
 
-        public BasketRepository(IDatabaseUnitOfWork work, IRepositoryCacheProvider cache)
+        public CustomerRegistryItemRepository(IDatabaseUnitOfWork work, IRepositoryCacheProvider cache)
             : base(work, cache)
         {
         }
 
+        #region Overrides of RepositoryBase<IBasketItem>
 
 
-        #region Overrides of RepositoryBase<IBasket>
-
-
-        protected override IBasket PerformGet(int id)
+        protected override IPurchaseLineItem PerformGet(int id)
         {
             var sql = GetBaseQuery(false)
                 .Where(GetBaseWhereClause(), new { Id = id });
 
-            var dto = Database.Fetch<BasketDto>(sql).FirstOrDefault();
+            var dto = Database.Fetch<CustomerRegistryItemDto>(sql).FirstOrDefault();
 
             if (dto == null)
                 return null;
 
-            var factory = new BasketFactory();
+            var factory = new CustomerRegistryItemFactory();
 
-            var basket = factory.BuildEntity(dto);
+            var basketItem = factory.BuildEntity(dto);
 
-            return basket;
+            return basketItem;
         }
 
-        protected override IEnumerable<IBasket> PerformGetAll(params int[] ids)
+        protected override IEnumerable<IPurchaseLineItem> PerformGetAll(params int[] ids)
         {
             if (ids.Any())
             {
@@ -62,8 +59,8 @@ namespace Merchello.Core.Persistence.Repositories
             }
             else
             {
-                var factory = new BasketFactory();
-                var dtos = Database.Fetch<BasketDto>(GetBaseQuery(false));
+                var factory = new CustomerRegistryItemFactory();
+                var dtos = Database.Fetch<CustomerRegistryItemDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
                     yield return factory.BuildEntity(dto);
@@ -73,38 +70,37 @@ namespace Merchello.Core.Persistence.Repositories
 
         #endregion
 
-        #region Overrides of MerchelloPetaPocoRepositoryBase<IBasket>
+        #region Overrides of MerchelloPetaPocoRepositoryBase<IBasketItem>
 
         protected override Sql GetBaseQuery(bool isCount)
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-               .From("merchBasket");
+               .From("merchBasketItem");
 
             return sql;
         }
 
         protected override string GetBaseWhereClause()
         {
-            return "merchBasket.id = @Id";
+            return "merchBasketItem.id = @Id";
         }
 
         protected override IEnumerable<string> GetDeleteClauses()
         {
             var list = new List<string>
                 {
-                    "DELETE FROM merchBasketItem WHERE basketId = @Id",
-                    "DELETE FROM merchBasket WHERE id = @Id"
+                    "DELETE FROM merchBasketItem WHERE BasketItemPk = @Id",
                 };
 
             return list;
         }
 
-        protected override void PersistNewItem(IBasket entity)
+        protected override void PersistNewItem(IPurchaseLineItem entity)
         {
             ((IdEntity)entity).AddingEntity();
 
-            var factory = new BasketFactory();
+            var factory = new CustomerRegistryItemFactory();
             var dto = factory.BuildDto(entity);
 
             Database.Insert(dto);
@@ -112,19 +108,19 @@ namespace Merchello.Core.Persistence.Repositories
             entity.ResetDirtyProperties();
         }
 
-        protected override void PersistUpdatedItem(IBasket entity)
+        protected override void PersistUpdatedItem(IPurchaseLineItem entity)
         {
             ((IdEntity)entity).UpdatingEntity();
 
-            var factory = new BasketFactory();
+            var factory = new CustomerRegistryItemFactory();
             var dto = factory.BuildDto(entity);
 
             Database.Update(dto);
-
+            
             entity.ResetDirtyProperties();
         }
 
-        protected override void PersistDeletedItem(IBasket entity)
+        protected override void PersistDeletedItem(IPurchaseLineItem entity)
         {
             var deletes = GetDeleteClauses();
             foreach (var delete in deletes)
@@ -134,21 +130,22 @@ namespace Merchello.Core.Persistence.Repositories
         }
 
 
-        protected override IEnumerable<IBasket> PerformGetByQuery(IQuery<IBasket> query)
+        protected override IEnumerable<IPurchaseLineItem> PerformGetByQuery(IQuery<IPurchaseLineItem> query)
         {
             var sqlClause = GetBaseQuery(false);
-            var translator = new SqlTranslator<IBasket>(sqlClause, query);
+            var translator = new SqlTranslator<IPurchaseLineItem>(sqlClause, query);
             var sql = translator.Translate();
 
-            var dtos = Database.Fetch<BasketDto>(sql);
+            var dtos = Database.Fetch<CustomerRegistryItemDto>(sql);
 
             return dtos.DistinctBy(x => x.Id).Select(dto => Get(dto.Id));
 
         }
 
-        
 
         #endregion
+
+
 
     }
 }

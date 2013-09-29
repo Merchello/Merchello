@@ -6,9 +6,9 @@ using Merchello.Core.Models;
 using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Models.TypeFields;
 using Merchello.Core.Persistence;
-using Merchello.Core.Events;
 using Merchello.Core.Persistence.Querying;
 using Umbraco.Core;
+using Umbraco.Core.Events;
 using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Core.Services
@@ -67,7 +67,7 @@ namespace Merchello.Core.Services
                     Exported = exported
                 };
                 
-            Created.RaiseEvent(new NewEventArgs<IInvoiceItem>(invoiceItem), this);
+            Created.RaiseEvent(new Events.NewEventArgs<IInvoiceItem>(invoiceItem), this);
 
             return invoiceItem;
         }
@@ -246,7 +246,7 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Occurs after Create
         /// </summary>
-        public static event TypedEventHandler<IInvoiceItemService, NewEventArgs<IInvoiceItem>> Created;
+        public static event TypedEventHandler<IInvoiceItemService, Events.NewEventArgs<IInvoiceItem>> Created;
 
         #endregion
 

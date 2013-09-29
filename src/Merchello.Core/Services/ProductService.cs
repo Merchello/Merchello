@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Umbraco.Core.Events;
 using log4net.Core;
 using Merchello.Core.Models;
 using Merchello.Core.Persistence;
-using Merchello.Core.Events;
 using Umbraco.Core;
 using Umbraco.Core.Persistence.UnitOfWork;
 
@@ -62,7 +62,7 @@ namespace Merchello.Core.Services
                 Template = false
             };
 
-            Created.RaiseEvent(new NewEventArgs<IProductActual>(product), this);
+            Created.RaiseEvent(new Events.NewEventArgs<IProductActual>(product), this);
 
             return product;
         }
@@ -228,7 +228,7 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Occurs after Create
         /// </summary>
-        public static event TypedEventHandler<IProductService, NewEventArgs<IProductActual>> Created;
+        public static event TypedEventHandler<IProductService, Events.NewEventArgs<IProductActual>> Created;
 
         #endregion
 

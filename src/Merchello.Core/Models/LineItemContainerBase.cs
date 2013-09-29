@@ -2,39 +2,40 @@
 using System.Reflection;
 using System.Runtime.Serialization;
 using Merchello.Core.Models.EntityBase;
-using Merchello.Core.Models.TypeFields;
 
 namespace Merchello.Core.Models
 {
-
+    /// <summary>
+    /// Defines a line item
+    /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    internal class BasketItem : IdEntity, IBasketItem
+    public abstract class LineItemContainerBase : IdEntity, ILineItem
     {
-        private readonly int _basketId;
+        private readonly int _containerId;
         private int? _parentId;        
-        private Guid _invoiceItemTypeFieldKey;
+        private Guid _lineItemTfKey;
         private string _sku;
         private string _name;
         private int _baseQuantity;
-        private int _unitOfMeasureMultiplier;
         private decimal _amount;
+        private LineItemCollection _lineItems;
 
-        public BasketItem (int basketId)  
+        protected LineItemContainerBase (int containerId, LineItemCollection lineItems)  
         {
-            _basketId = basketId;
+            _containerId = containerId;
+            _lineItems = lineItems;
         }
-        
-        private static readonly PropertyInfo ParentIdSelector = ExpressionHelper.GetPropertyInfo<BasketItem, int?>(x => x.ParentId);
-        private static readonly PropertyInfo InvoiceItemTypeFieldKeySelector = ExpressionHelper.GetPropertyInfo<BasketItem, Guid>(x => x.InvoiceItemTypeFieldKey);  
-        private static readonly PropertyInfo SkuSelector = ExpressionHelper.GetPropertyInfo<BasketItem, string>(x => x.Sku);  
-        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<BasketItem, string>(x => x.Name);  
-        private static readonly PropertyInfo BaseQuantitySelector = ExpressionHelper.GetPropertyInfo<BasketItem, int>(x => x.BaseQuantity);  
-        private static readonly PropertyInfo UnitOfMeasureMultiplierSelector = ExpressionHelper.GetPropertyInfo<BasketItem, int>(x => x.UnitOfMeasureMultiplier);  
-        private static readonly PropertyInfo AmountSelector = ExpressionHelper.GetPropertyInfo<BasketItem, decimal>(x => x.Amount);  
-        
+
+        private static readonly PropertyInfo ParentIdSelector = ExpressionHelper.GetPropertyInfo<LineItemContainerBase, int?>(x => x.ParentId);
+        private static readonly PropertyInfo LineItemTfKeySelector = ExpressionHelper.GetPropertyInfo<LineItemContainerBase, Guid>(x => x.LineItemTfKey);
+        private static readonly PropertyInfo SkuSelector = ExpressionHelper.GetPropertyInfo<LineItemContainerBase, string>(x => x.Sku);
+        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<LineItemContainerBase, string>(x => x.Name);
+        private static readonly PropertyInfo BaseQuantitySelector = ExpressionHelper.GetPropertyInfo<LineItemContainerBase, int>(x => x.BaseQuantity);
+        private static readonly PropertyInfo AmountSelector = ExpressionHelper.GetPropertyInfo<LineItemContainerBase, decimal>(x => x.Amount);
+
         /// <summary>
-        /// The parentId associated with the BasketItem
+        /// The parentId associated with the customer registry item
         /// </summary>
         [DataMember]
         public int? ParentId
@@ -51,33 +52,33 @@ namespace Merchello.Core.Models
         }
     
         /// <summary>
-        /// The basketId associated with the BasketItem
+        /// The customer registry id associated with the Customer Registry
         /// </summary>
         [DataMember]
-        public int BasketId
+        public int ContainerId
         {
-            get { return _basketId; }
+            get { return _containerId; }
         }
     
         /// <summary>
-        /// The invoiceItemTypeFieldKey associated with the BasketItem
+        /// The line item type field Key
         /// </summary>
         [DataMember]
-        public Guid InvoiceItemTypeFieldKey
+        public Guid LineItemTfKey
         {
-            get { return _invoiceItemTypeFieldKey; }
+            get { return _lineItemTfKey; }
             set 
             { 
                 SetPropertyValueAndDetectChanges(o =>
                 {
-                    _invoiceItemTypeFieldKey = value;
-                    return _invoiceItemTypeFieldKey;
-                }, _invoiceItemTypeFieldKey, InvoiceItemTypeFieldKeySelector); 
+                    _lineItemTfKey = value;
+                    return _lineItemTfKey;
+                }, _lineItemTfKey, LineItemTfKeySelector); 
             }
         }
     
         /// <summary>
-        /// The sku associated with the BasketItem
+        /// The sku associated with the line item in the customer registry
         /// </summary>
         [DataMember]
         public string Sku
@@ -94,7 +95,7 @@ namespace Merchello.Core.Models
         }
     
         /// <summary>
-        /// The name associated with the BasketItem
+        /// The name or title of the item
         /// </summary>
         [DataMember]
         public string Name
@@ -111,7 +112,7 @@ namespace Merchello.Core.Models
         }
     
         /// <summary>
-        /// The baseQuantity associated with the BasketItem
+        /// The quantity of items to be ordered
         /// </summary>
         [DataMember]
         public int BaseQuantity
@@ -128,24 +129,7 @@ namespace Merchello.Core.Models
         }
     
         /// <summary>
-        /// The unitOfMeasureMultiplier associated with the BasketItem
-        /// </summary>
-        [DataMember]
-        public int UnitOfMeasureMultiplier
-        {
-            get { return _unitOfMeasureMultiplier; }
-                set 
-                { 
-                    SetPropertyValueAndDetectChanges(o =>
-                    {
-                        _unitOfMeasureMultiplier = value;
-                        return _unitOfMeasureMultiplier;
-                    }, _unitOfMeasureMultiplier, UnitOfMeasureMultiplierSelector); 
-                }
-        }
-    
-        /// <summary>
-        /// The amount associated with the BasketItem
+        /// The amount (cost) of the line item
         /// </summary>
         [DataMember]
         public decimal Amount
@@ -159,8 +143,6 @@ namespace Merchello.Core.Models
                         return _amount;
                     }, _amount, AmountSelector); 
                 }
-        }           
-        
+        } 
     }
-
 }

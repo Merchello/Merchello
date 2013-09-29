@@ -3,7 +3,7 @@
     /// <summary>
     /// Defines a BasketTypeField
     /// </summary>
-    public interface IBasketTypeField : ITypeFieldMapper<BasketType>
+    public interface ICustomerRegistryTypeField : ITypeFieldMapper<CustomerRegistryType>
     {
      
         /// <summary>

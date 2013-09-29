@@ -5,9 +5,9 @@ using System.Threading;
 using Merchello.Core.Models;
 using Merchello.Core.Models.TypeFields;
 using Merchello.Core.Persistence;
-using Merchello.Core.Events;
 using Merchello.Core.Persistence.Querying;
 using Umbraco.Core;
+using Umbraco.Core.Events;
 using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Core.Services
@@ -82,7 +82,7 @@ namespace Merchello.Core.Services
                     CountryCode = countryCode
                 };
 
-            Created.RaiseEvent(new NewEventArgs<IAddress>(address), this);
+            Created.RaiseEvent(new Events.NewEventArgs<IAddress>(address), this);
 
             return address;
         }
@@ -261,7 +261,7 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Occurs after Create
         /// </summary>
-        public static event TypedEventHandler<IAddressService, NewEventArgs<IAddress>> Created;
+        public static event TypedEventHandler<IAddressService, Events.NewEventArgs<IAddress>> Created;
 
 
         #endregion

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Merchello.Core.Events;
 using Merchello.Core.Models;
 using Merchello.Core.Models.TypeFields;
 using Merchello.Core.Persistence;
@@ -10,6 +9,7 @@ using Merchello.Tests.Base.Respositories;
 using Merchello.Tests.Base.Respositories.UnitOfWork;
 using Merchello.Tests.Base.Services;
 using NUnit.Framework;
+using Umbraco.Core.Events;
 
 namespace Merchello.Tests.UnitTests.Services
 {
@@ -38,7 +38,7 @@ namespace Merchello.Tests.UnitTests.Services
             };
 
 
-            AddressService.Created += delegate(IAddressService sender, NewEventArgs<IAddress> args)
+            AddressService.Created += delegate(IAddressService sender, Core.Events.NewEventArgs<IAddress> args)
             {
                 AfterTriggered = true;
                 After = args.Entity;

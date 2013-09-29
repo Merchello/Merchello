@@ -42,7 +42,7 @@ namespace Merchello.Core.Persistence.Migrations.Initial
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = address.Commercial.TypeKey, Alias = address.Commercial.Alias, Name = address.Commercial.Name });
 
             // BasketTypeField
-            var basket = new BasketTypeField();
+            var basket = new CustomerRegistryTypeField();
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = basket.Basket.TypeKey, Alias = basket.Basket.Alias, Name = basket.Basket.Name });
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = basket.Wishlist.TypeKey, Alias = basket.Wishlist.Alias, Name = basket.Wishlist.Name });
 

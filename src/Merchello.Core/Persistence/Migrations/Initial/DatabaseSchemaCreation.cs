@@ -30,8 +30,8 @@ namespace Merchello.Core.Persistence.Migrations.Initial
                 {1, typeof(AnonymousCustomerDto)},
                 {2, typeof(CustomerDto)},
                 {3, typeof(AddressDto)},             
-                {4, typeof(BasketDto)},
-                {5, typeof(BasketItemDto)},
+                {4, typeof(CustomerRegistryDto)},
+                {5, typeof(CustomerRegistryItemDto)},
                 {6, typeof(WarehouseDto)},
                 {8, typeof(ShipMethodDto)},
                 {9, typeof(ShipMethod2WarehouseDto)},
@@ -274,6 +274,5 @@ namespace Merchello.Core.Persistence.Migrations.Initial
 
         #endregion
     }
-
 
 }

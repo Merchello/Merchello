@@ -229,7 +229,6 @@
   <ItemGroup>
     <Compile Include="Editors\CustomerApiController.cs" />
     <Compile Include="Editors\InvoiceApiController.cs" />
-    <Compile Include="Editors\ProductApiController.cs" />
     <Compile Include="MerchelloHelper.cs" />
     <Compile Include="MerchelloPackage.cs" />
     <Compile Include="Models\IProductDisplay.cs" />

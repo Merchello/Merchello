@@ -11,6 +11,7 @@ using Merchello.Tests.Base.Respositories;
 using Merchello.Tests.Base.Respositories.UnitOfWork;
 using Merchello.Tests.Base.Services;
 using NUnit.Framework;
+using Umbraco.Core.Events;
 
 namespace Merchello.Tests.UnitTests.Services
 {
@@ -61,7 +62,7 @@ namespace Merchello.Tests.UnitTests.Services
             };
 
 
-            InvoiceService.Created += delegate(IInvoiceService sender, NewEventArgs<IInvoice> args)
+            InvoiceService.Created += delegate(IInvoiceService sender, Core.Events.NewEventArgs<IInvoice> args)
             {
                 AfterTriggered = true;
                 After = args.Entity;

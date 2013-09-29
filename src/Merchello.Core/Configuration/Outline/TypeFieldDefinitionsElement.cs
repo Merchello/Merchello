@@ -18,7 +18,7 @@ namespace Merchello.Core.Configuration.Outline
         }
 
         /// <summary>
-        /// Gets the dbTypeFields configuration collection for <see cref="IBasket"/>
+        /// Gets the dbTypeFields configuration collection for <see cref="ICustomerRegistry"/>
         /// </summary>
         [ConfigurationProperty("basket", IsRequired = false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
         public TypeFieldCollection Basket

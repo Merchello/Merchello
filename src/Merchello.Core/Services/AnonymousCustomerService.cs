@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Merchello.Core.ConversionStrategies;
-using Merchello.Core.Events;
 using Merchello.Core.Models;
 using Merchello.Core.Persistence;
 using Umbraco.Core;
+using Umbraco.Core.Events;
 using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Core.Services
@@ -52,7 +52,7 @@ namespace Merchello.Core.Services
         {
             var anonymous = new AnonymousCustomer(DateTime.Now);
 
-            Created.RaiseEvent(new NewEventArgs<IAnonymousCustomer>(anonymous), this);
+            Created.RaiseEvent(new Events.NewEventArgs<IAnonymousCustomer>(anonymous), this);
 
             return anonymous;
         }
@@ -224,7 +224,7 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Occurs after Create
         /// </summary>
-        public static event TypedEventHandler<IAnonymousCustomerService, NewEventArgs<IAnonymousCustomer>> Created;
+        public static event TypedEventHandler<IAnonymousCustomerService, Events.NewEventArgs<IAnonymousCustomer>> Created;
 
 
         #endregion

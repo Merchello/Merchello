@@ -3,30 +3,29 @@ using Merchello.Core.Models.Rdbms;
 
 namespace Merchello.Core.Persistence.Factories
 {
-    internal class BasketFactory : IEntityFactory<IBasket, BasketDto>
+    internal class CustomerRegistryFactory : IEntityFactory<ICustomerRegistry, CustomerRegistryDto>
     {
-        public IBasket BuildEntity(BasketDto dto)
+        public ICustomerRegistry BuildEntity(CustomerRegistryDto dto)
         {
-            var basket = new Basket(dto.BasketTypeFieldKey)
+            var customerRegistry = new CustomerRegistry(dto.ConsumerKey, dto.RegistryTfKey)
             {
                 Id = dto.Id,
-                ConsumerKey = dto.ConsumerKey,
                 UpdateDate = dto.UpdateDate,
                 CreateDate = dto.CreateDate
             };
 
-            basket.ResetDirtyProperties();
+            customerRegistry.ResetDirtyProperties();
 
-            return basket;
+            return customerRegistry;
         }
 
-        public BasketDto BuildDto(IBasket entity)
+        public CustomerRegistryDto BuildDto(ICustomerRegistry entity)
         {
-            var dto = new BasketDto()
+            var dto = new CustomerRegistryDto()
             {
                 Id = entity.Id,
                 ConsumerKey = entity.ConsumerKey,
-                BasketTypeFieldKey = entity.BasketTypeFieldKey,
+                RegistryTfKey = entity.CustomerRegistryTfKey,
                 UpdateDate = entity.UpdateDate,
                 CreateDate = entity.CreateDate
             };

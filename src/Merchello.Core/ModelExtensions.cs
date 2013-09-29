@@ -39,7 +39,7 @@ namespace Merchello.Core
             productActual.ConvertToBasketItem().AddItem();
         }
 
-        public static void AddItem(this IBasketItem basketItem)
+        public static void AddItem(this IPurchaseLineItem purchaseLineItem)
         {
             //MerchelloContext.Current.Services.BasketService.
         }
@@ -47,9 +47,9 @@ namespace Merchello.Core
 
         #endregion
 
-        public static IBasketItem ConvertToBasketItem(this IProductActual productActual)
+        public static IPurchaseLineItem ConvertToBasketItem(this IProductActual productActual)
         {
-            return new BasketItem(1);
+            return new PurchaseLineItemContainer(1);
         }
 
 

@@ -5,8 +5,8 @@ using System.Threading;
 using Merchello.Core.Models;
 using Merchello.Core.Models.TypeFields;
 using Merchello.Core.Persistence;
-using Merchello.Core.Events;
 using Umbraco.Core;
+using Umbraco.Core.Events;
 using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Core.Services
@@ -41,22 +41,22 @@ namespace Merchello.Core.Services
         #region IBasketItemService Members
 
         /// <summary>
-        /// Creates an <see cref="IBasketItem"/> object
+        /// Creates an <see cref="IPurchaseLineItem"/> object
         /// </summary>
-        public IBasketItem CreateBasketItem(IBasket basket, string sku, string name, int baseQuantity, int unitOfMeasureMultiplier, decimal amount)
+        public IPurchaseLineItem CreateBasketItem(ICustomerRegistry customerRegistry, string sku, string name, int baseQuantity, int unitOfMeasureMultiplier, decimal amount)
         {
             var invoiceItemType = EnumTypeFieldConverter.InvoiceItem().GetTypeField(InvoiceItemType.Product);
-            return CreateBasketItem(basket, invoiceItemType.TypeKey, sku, name, baseQuantity, unitOfMeasureMultiplier, amount);
+            return CreateBasketItem(customerRegistry, invoiceItemType.TypeKey, sku, name, baseQuantity, unitOfMeasureMultiplier, amount);
         }
 
         /// <summary>
-        /// Creates an <see cref="IBasketItem"/> object
+        /// Creates an <see cref="IPurchaseLineItem"/> object
         /// </summary>
-        internal IBasketItem CreateBasketItem(IBasket basket, Guid invoiceItemTypeFieldKey, string sku, string name, int baseQuantity, int unitOfMeasureMultiplier, decimal amount)
+        internal IPurchaseLineItem CreateBasketItem(ICustomerRegistry customerRegistry, Guid invoiceItemTypeFieldKey, string sku, string name, int baseQuantity, int unitOfMeasureMultiplier, decimal amount)
         {
-            var basketItem = new BasketItem(basket.Id)
+            var basketItem = new PurchaseLineItemContainer(customerRegistry.Id)
                 {
-                    InvoiceItemTypeFieldKey = invoiceItemTypeFieldKey, 
+                    LineItemTfKey = invoiceItemTypeFieldKey, 
                     Sku = sku, 
                     Name = name, 
                     BaseQuantity = baseQuantity, 
@@ -64,43 +64,43 @@ namespace Merchello.Core.Services
                     Amount = amount
                 };
                 
-            Created.RaiseEvent(new NewEventArgs<IBasketItem>(basketItem), this);
+            Created.RaiseEvent(new Events.NewEventArgs<IPurchaseLineItem>(basketItem), this);
 
             return basketItem;
         }
 
         /// <summary>
-        /// Saves a single <see cref="IBasketItem"/> object
+        /// Saves a single <see cref="IPurchaseLineItem"/> object
         /// </summary>
-        /// <param name="basketItem">The <see cref="IBasketItem"/> to save</param>
+        /// <param name="purchaseLineItem">The <see cref="IPurchaseLineItem"/> to save</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events.</param>
-        public void Save(IBasketItem basketItem, bool raiseEvents = true)
+        public void Save(IPurchaseLineItem purchaseLineItem, bool raiseEvents = true)
         {
-            if (raiseEvents) Saving.RaiseEvent(new SaveEventArgs<IBasketItem>(basketItem), this);
+            if (raiseEvents) Saving.RaiseEvent(new SaveEventArgs<IPurchaseLineItem>(purchaseLineItem), this);
 
             using (new WriteLock(Locker))
             {
                 var uow = _uowProvider.GetUnitOfWork();
                 using (var repository = _repositoryFactory.CreateBasketItemRepository(uow))
                 {
-                    repository.AddOrUpdate(basketItem);
+                    repository.AddOrUpdate(purchaseLineItem);
                     uow.Commit();
                 }
 
-                if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IBasketItem>(basketItem), this);
+                if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IPurchaseLineItem>(purchaseLineItem), this);
             }
         }
 
         /// <summary>
-        /// Saves a collection of <see cref="IBasketItem"/> objects.
+        /// Saves a collection of <see cref="IPurchaseLineItem"/> objects.
         /// </summary>
-        /// <param name="basketItemList">Collection of <see cref="BasketItem"/> to save</param>
+        /// <param name="basketItemList">Collection of <see cref="PurchaseLineItemContainer"/> to save</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        public void Save(IEnumerable<IBasketItem> basketItemList, bool raiseEvents = true)
+        public void Save(IEnumerable<IPurchaseLineItem> basketItemList, bool raiseEvents = true)
         {
-            var basketItemArray = basketItemList as IBasketItem[] ?? basketItemList.ToArray();
+            var basketItemArray = basketItemList as IPurchaseLineItem[] ?? basketItemList.ToArray();
 
-            if (raiseEvents) Saving.RaiseEvent(new SaveEventArgs<IBasketItem>(basketItemArray), this);
+            if (raiseEvents) Saving.RaiseEvent(new SaveEventArgs<IPurchaseLineItem>(basketItemArray), this);
 
             using (new WriteLock(Locker))
             {
@@ -115,40 +115,40 @@ namespace Merchello.Core.Services
                 }
             }
 
-            if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IBasketItem>(basketItemArray), this);
+            if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IPurchaseLineItem>(basketItemArray), this);
         }
 
         /// <summary>
-        /// Deletes a single <see cref="IBasketItem"/> object
+        /// Deletes a single <see cref="IPurchaseLineItem"/> object
         /// </summary>
-        /// <param name="basketItem">The <see cref="IBasketItem"/> to delete</param>
+        /// <param name="purchaseLineItem">The <see cref="IPurchaseLineItem"/> to delete</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        public void Delete(IBasketItem basketItem, bool raiseEvents = true)
+        public void Delete(IPurchaseLineItem purchaseLineItem, bool raiseEvents = true)
         {
-            if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<IBasketItem>( basketItem), this);
+            if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<IPurchaseLineItem>( purchaseLineItem), this);
 
             using (new WriteLock(Locker))
             {
                 var uow = _uowProvider.GetUnitOfWork();
                 using (var repository = _repositoryFactory.CreateBasketItemRepository(uow))
                 {
-                    repository.Delete( basketItem);
+                    repository.Delete( purchaseLineItem);
                     uow.Commit();
                 }
             }
-            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<IBasketItem>( basketItem), this);
+            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<IPurchaseLineItem>( purchaseLineItem), this);
         }
 
         /// <summary>
-        /// Deletes a collection <see cref="IBasketItem"/> objects
+        /// Deletes a collection <see cref="IPurchaseLineItem"/> objects
         /// </summary>
-        /// <param name="basketItemList">Collection of <see cref="IBasketItem"/> to delete</param>
+        /// <param name="basketItemList">Collection of <see cref="IPurchaseLineItem"/> to delete</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        public void Delete(IEnumerable<IBasketItem> basketItemList, bool raiseEvents = true)
+        public void Delete(IEnumerable<IPurchaseLineItem> basketItemList, bool raiseEvents = true)
         {
-            var basketItemArray = basketItemList as IBasketItem[] ?? basketItemList.ToArray();
+            var basketItemArray = basketItemList as IPurchaseLineItem[] ?? basketItemList.ToArray();
 
-            if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<IBasketItem>(basketItemArray), this);
+            if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<IPurchaseLineItem>(basketItemArray), this);
 
             using (new WriteLock(Locker))
             {
@@ -163,15 +163,15 @@ namespace Merchello.Core.Services
                 }
             }
 
-            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<IBasketItem>(basketItemArray), this);
+            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<IPurchaseLineItem>(basketItemArray), this);
         }
 
         /// <summary>
         /// Gets a BasketItem by its unique id - pk
         /// </summary>
         /// <param name="id">int Id for the BasketItem</param>
-        /// <returns><see cref="IBasketItem"/></returns>
-        public IBasketItem GetById(int id)
+        /// <returns><see cref="IPurchaseLineItem"/></returns>
+        public IPurchaseLineItem GetById(int id)
         {
             using (var repository = _repositoryFactory.CreateBasketItemRepository(_uowProvider.GetUnitOfWork()))
             {
@@ -184,7 +184,7 @@ namespace Merchello.Core.Services
         /// </summary>
         /// <param name="ids">List of unique keys</param>
         /// <returns></returns>
-        public IEnumerable<IBasketItem> GetByIds(IEnumerable<int> ids)
+        public IEnumerable<IPurchaseLineItem> GetByIds(IEnumerable<int> ids)
         {
             using (var repository = _repositoryFactory.CreateBasketItemRepository(_uowProvider.GetUnitOfWork()))
             {
@@ -194,7 +194,7 @@ namespace Merchello.Core.Services
 
         #endregion
 
-        public IEnumerable<IBasketItem> GetAll()
+        public IEnumerable<IPurchaseLineItem> GetAll()
         {
             using (var repository = _repositoryFactory.CreateBasketItemRepository(_uowProvider.GetUnitOfWork()))
             {
@@ -208,27 +208,27 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Occurs before Delete
         /// </summary>		
-        public static event TypedEventHandler<IBasketItemService, DeleteEventArgs<IBasketItem>> Deleting;
+        public static event TypedEventHandler<IBasketItemService, DeleteEventArgs<IPurchaseLineItem>> Deleting;
 
         /// <summary>
         /// Occurs after Delete
         /// </summary>
-        public static event TypedEventHandler<IBasketItemService, DeleteEventArgs<IBasketItem>> Deleted;
+        public static event TypedEventHandler<IBasketItemService, DeleteEventArgs<IPurchaseLineItem>> Deleted;
 
         /// <summary>
         /// Occurs before Save
         /// </summary>
-        public static event TypedEventHandler<IBasketItemService, SaveEventArgs<IBasketItem>> Saving;
+        public static event TypedEventHandler<IBasketItemService, SaveEventArgs<IPurchaseLineItem>> Saving;
 
         /// <summary>
         /// Occurs after Save
         /// </summary>
-        public static event TypedEventHandler<IBasketItemService, SaveEventArgs<IBasketItem>> Saved;
+        public static event TypedEventHandler<IBasketItemService, SaveEventArgs<IPurchaseLineItem>> Saved;
 
         /// <summary>
         /// Occurs after Create
         /// </summary>
-        public static event TypedEventHandler<IBasketItemService, NewEventArgs<IBasketItem>> Created;
+        public static event TypedEventHandler<IBasketItemService, Events.NewEventArgs<IPurchaseLineItem>> Created;
 
         #endregion
 

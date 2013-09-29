@@ -8,29 +8,30 @@ using Merchello.Core.Persistence;
 using Merchello.Core.Events;
 using Merchello.Core.Persistence.Querying;
 using Umbraco.Core;
+using Umbraco.Core.Events;
 using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Core.Services
 {
     /// <summary>
-    /// Represents the Basket Service 
+    /// Represents the Customer Registry Service 
     /// </summary>
-    public class BasketService : IBasketService
+    public class CustomerRegistryService : ICustomerRegistryService
     {
         private readonly IDatabaseUnitOfWorkProvider _uowProvider;
         private readonly RepositoryFactory _repositoryFactory;
 
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
-        public BasketService()
+        public CustomerRegistryService()
             : this(new RepositoryFactory())
         { }
 
-        public BasketService(RepositoryFactory repositoryFactory)
+        public CustomerRegistryService(RepositoryFactory repositoryFactory)
             : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory)
         { }
 
-        public BasketService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
+        public CustomerRegistryService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
         {
             Mandate.ParameterNotNull(provider, "provider");
             Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
@@ -41,64 +42,66 @@ namespace Merchello.Core.Services
 
         #region IBasketService Members
 
-
-
-
         /// <summary>
         /// Creates a basket for a consumer with a given type
         /// </summary>
-        public IBasket CreateBasket(IConsumer consumer, BasketType basketType)
+        public ICustomerRegistry CreateCustomerRegistry(IConsumer consumer, CustomerRegistryType customerRegistryType)
         {
 
-            // determine if the consumer already has a basket of this type, if so return it.
-            var basket = GetBasketByConsumer(consumer, basketType);
-            if (basket != null) return basket;
-            
-            basket = new Basket(basketType)
+            // determine if the consumer already has a registry of this type, if so return it.
+            var registry = GetBasketByConsumer(consumer, customerRegistryType);
+            if (registry != null) return registry;
+
+            registry = new CustomerRegistry(consumer.Key, customerRegistryType);
+            if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<ICustomerRegistry>(registry), this))
             {
-                ConsumerKey = consumer.Key,
-            };
+                //registry.WasCancelled = true;
+                return registry;
+            }
 
-            Created.RaiseEvent(new NewEventArgs<IBasket>(basket), this);
+            registry.ConsumerKey = consumer.Key;
+            
 
-            return basket;
+            Created.RaiseEvent(new Events.NewEventArgs<ICustomerRegistry>(registry), this);
+
+            return registry;
         }
 
 
       
 
         /// <summary>
-        /// Saves a single <see cref="IBasket"/> object
+        /// Saves a single <see cref="ICustomerRegistry"/> object
         /// </summary>
-        /// <param name="basket">The <see cref="IBasket"/> to save</param>
+        /// <param name="customerRegistry">The <see cref="ICustomerRegistry"/> to save</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events.</param>
-        public void Save(IBasket basket, bool raiseEvents = true)
+        public void Save(ICustomerRegistry customerRegistry, bool raiseEvents = true)
         {
-            if (raiseEvents) Saving.RaiseEvent(new SaveEventArgs<IBasket>(basket), this);
+            if (raiseEvents) Saving.RaiseEvent(new SaveEventArgs<ICustomerRegistry>(customerRegistry), this);
 
             using (new WriteLock(Locker))
             {
                 var uow = _uowProvider.GetUnitOfWork();
                 using (var repository = _repositoryFactory.CreateBasketRepository(uow))
                 {
-                    repository.AddOrUpdate(basket);
+                    repository.AddOrUpdate(customerRegistry);
                     uow.Commit();
                 }
 
-                if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IBasket>(basket), this);
+                if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<ICustomerRegistry>(customerRegistry), this);
             }
         }
 
         /// <summary>
-        /// Saves a collection of <see cref="IBasket"/> objects.
+        /// Saves a collection of <see cref="ICustomerRegistry"/> objects.
         /// </summary>
-        /// <param name="basketList">Collection of <see cref="Basket"/> to save</param>
+        /// <param name="customerRegistries">Collection of <see cref="CustomerRegistry"/> to save</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        public void Save(IEnumerable<IBasket> basketList, bool raiseEvents = true)
+        public void Save(IEnumerable<ICustomerRegistry> customerRegistries, bool raiseEvents = true)
         {
-            var basketArray = basketList as IBasket[] ?? basketList.ToArray();
+            var basketArray = customerRegistries as ICustomerRegistry[] ?? customerRegistries.ToArray();
 
-            if (raiseEvents) Saving.RaiseEvent(new SaveEventArgs<IBasket>(basketArray), this);
+            if (raiseEvents) Saving.RaiseEvent(new SaveEventArgs<ICustomerRegistry>(basketArray), this);
 
             using (new WriteLock(Locker))
             {
@@ -113,40 +116,40 @@ namespace Merchello.Core.Services
                 }
             }
 
-            if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IBasket>(basketArray), this);
+            if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<ICustomerRegistry>(basketArray), this);
         }
 
         /// <summary>
-        /// Deletes a single <see cref="IBasket"/> object
+        /// Deletes a single <see cref="ICustomerRegistry"/> object
         /// </summary>
-        /// <param name="basket">The <see cref="IBasket"/> to delete</param>
+        /// <param name="customerRegistry">The <see cref="ICustomerRegistry"/> to delete</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        public void Delete(IBasket basket, bool raiseEvents = true)
+        public void Delete(ICustomerRegistry customerRegistry, bool raiseEvents = true)
         {
-            if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<IBasket>(basket), this);
+            if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<ICustomerRegistry>(customerRegistry), this);
 
             using (new WriteLock(Locker))
             {
                 var uow = _uowProvider.GetUnitOfWork();
                 using (var repository = _repositoryFactory.CreateBasketRepository(uow))
                 {
-                    repository.Delete(basket);
+                    repository.Delete(customerRegistry);
                     uow.Commit();
                 }
             }
-            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<IBasket>(basket), this);
+            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<ICustomerRegistry>(customerRegistry), this);
         }
 
         /// <summary>
-        /// Deletes a collection <see cref="IBasket"/> objects
+        /// Deletes a collection <see cref="ICustomerRegistry"/> objects
         /// </summary>
-        /// <param name="basketList">Collection of <see cref="IBasket"/> to delete</param>
+        /// <param name="customerRegistries">Collection of <see cref="ICustomerRegistry"/> to delete</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        public void Delete(IEnumerable<IBasket> basketList, bool raiseEvents = true)
+        public void Delete(IEnumerable<ICustomerRegistry> customerRegistries, bool raiseEvents = true)
         {
-            var basketArray = basketList as IBasket[] ?? basketList.ToArray();
+            var basketArray = customerRegistries as ICustomerRegistry[] ?? customerRegistries.ToArray();
 
-            if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<IBasket>(basketArray), this);
+            if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<ICustomerRegistry>(basketArray), this);
 
             using (new WriteLock(Locker))
             {
@@ -161,15 +164,15 @@ namespace Merchello.Core.Services
                 }
             }
 
-            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<IBasket>(basketArray), this);
+            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<ICustomerRegistry>(basketArray), this);
         }
 
         /// <summary>
         /// Gets a Basket by its unique id - pk
         /// </summary>
         /// <param name="id">int Id for the Basket</param>
-        /// <returns><see cref="IBasket"/></returns>
-        public IBasket GetById(int id)
+        /// <returns><see cref="ICustomerRegistry"/></returns>
+        public ICustomerRegistry GetById(int id)
         {
             using (var repository = _repositoryFactory.CreateBasketRepository(_uowProvider.GetUnitOfWork()))
             {
@@ -182,7 +185,7 @@ namespace Merchello.Core.Services
         /// </summary>
         /// <param name="ids">List of unique keys</param>
         /// <returns></returns>
-        public IEnumerable<IBasket> GetByIds(IEnumerable<int> ids)
+        public IEnumerable<ICustomerRegistry> GetByIds(IEnumerable<int> ids)
         {
             using (var repository = _repositoryFactory.CreateBasketRepository(_uowProvider.GetUnitOfWork()))
             {
@@ -194,39 +197,39 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Returns the consumer's basket of a given type
         /// </summary>
-        public IBasket GetBasketByConsumer(IConsumer consumer, BasketType basketType)
+        public ICustomerRegistry GetBasketByConsumer(IConsumer consumer, CustomerRegistryType customerRegistryType)
         {
-            var typeKey = EnumTypeFieldConverter.Basket().GetTypeField(basketType).TypeKey;
+            var typeKey = EnumTypeFieldConverter.CustomerRegistry().GetTypeField(customerRegistryType).TypeKey;
             return GetBasketByConsumer(consumer, typeKey);
         }
 
         /// <summary>
         /// Returns the consumer's basket of a given type
         /// </summary>
-        public IBasket GetBasketByConsumer(IConsumer consumer, Guid basketTypeFieldKey)
+        public ICustomerRegistry GetBasketByConsumer(IConsumer consumer, Guid customerRegistryBasketTfKey)
         {
             using (var repository = _repositoryFactory.CreateBasketRepository(_uowProvider.GetUnitOfWork()))
             {
-                var query = Query<IBasket>.Builder.Where(x => x.ConsumerKey == consumer.Key && x.BasketTypeFieldKey == basketTypeFieldKey);
+                var query = Query<ICustomerRegistry>.Builder.Where(x => x.ConsumerKey == consumer.Key && x.CustomerRegistryTfKey == customerRegistryBasketTfKey);
                 return repository.GetByQuery(query).FirstOrDefault();
             }
         }
 
         /// <summary>
-        /// Gets a collection of <see cref="IBasket"/> objects by teh <see cref="IConsumer"/>
+        /// Gets a collection of <see cref="ICustomerRegistry"/> objects by teh <see cref="IConsumer"/>
         /// </summary>
         /// <param name="consumer"></param>
         /// <returns></returns>
-        public IEnumerable<IBasket> GetBasketsByConsumer(IConsumer consumer)
+        public IEnumerable<ICustomerRegistry> GetBasketsByConsumer(IConsumer consumer)
         {
             using (var repository = _repositoryFactory.CreateBasketRepository(_uowProvider.GetUnitOfWork()))
             {
-                var query = Query<IBasket>.Builder.Where(x => x.ConsumerKey == consumer.Key);
+                var query = Query<ICustomerRegistry>.Builder.Where(x => x.ConsumerKey == consumer.Key);
                 return repository.GetByQuery(query);
             }
         }
 
-        public IEnumerable<IBasket> GetAll()
+        public IEnumerable<ICustomerRegistry> GetAll()
         {
             using (var repository = _repositoryFactory.CreateBasketRepository(_uowProvider.GetUnitOfWork()))
             {
@@ -242,33 +245,35 @@ namespace Merchello.Core.Services
         #region Event Handlers
 
 
+        /// <summary>
+        /// Occurs before Create
+        /// </summary>
+        public static event TypedEventHandler<ICustomerRegistryService, Events.NewEventArgs<ICustomerRegistry>> Creating; 
 
         /// <summary>
         /// Occurs after Create
         /// </summary>
-        public static event TypedEventHandler<IBasketService, NewEventArgs<IBasket>> Created;
-
-
+        public static event TypedEventHandler<ICustomerRegistryService, Events.NewEventArgs<ICustomerRegistry>> Created;
 
         /// <summary>
         /// Occurs before Save
         /// </summary>
-        public static event TypedEventHandler<IBasketService, SaveEventArgs<IBasket>> Saving;
+        public static event TypedEventHandler<ICustomerRegistryService, SaveEventArgs<ICustomerRegistry>> Saving;
 
         /// <summary>
         /// Occurs after Save
         /// </summary>
-        public static event TypedEventHandler<IBasketService, SaveEventArgs<IBasket>> Saved;
+        public static event TypedEventHandler<ICustomerRegistryService, SaveEventArgs<ICustomerRegistry>> Saved;
 
         /// <summary>
         /// Occurs before Delete
         /// </summary>		
-        public static event TypedEventHandler<IBasketService, DeleteEventArgs<IBasket>> Deleting;
+        public static event TypedEventHandler<ICustomerRegistryService, DeleteEventArgs<ICustomerRegistry>> Deleting;
 
         /// <summary>
         /// Occurs after Delete
         /// </summary>
-        public static event TypedEventHandler<IBasketService, DeleteEventArgs<IBasket>> Deleted;
+        public static event TypedEventHandler<ICustomerRegistryService, DeleteEventArgs<ICustomerRegistry>> Deleted;
 
 
 

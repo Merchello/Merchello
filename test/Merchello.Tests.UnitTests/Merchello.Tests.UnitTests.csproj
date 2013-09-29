@@ -263,7 +263,7 @@
     <Compile Include="Repository\AddressRepositoryTests.cs" />
     <Compile Include="Repository\CustomerRepositoryTests.cs" />
     <Compile Include="Services\AddressServiceTests.cs" />
-    <Compile Include="Services\BasketServiceTests.cs" />
+    <Compile Include="Services\CustomerRegistryServiceTests.cs" />
     <Compile Include="Services\BasketItemServiceTests.cs" />
     <Compile Include="Services\InvoiceServiceTests.cs" />
     <Compile Include="Services\CustomerServiceTests.cs" />
@@ -277,7 +277,6 @@
     <Compile Include="TypeFields\ShipMethodTypeFieldTests.cs" />
     <Compile Include="WebControllers\CustomerControllerTests.cs" />
     <Compile Include="WebControllers\InvoiceControllerTests.cs" />
-    <Compile Include="WebControllers\ProductControllerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

@@ -3,8 +3,8 @@ using System.Linq;
 using System.Threading;
 using Merchello.Core.Models;
 using Merchello.Core.Persistence;
-using Merchello.Core.Events;
 using Umbraco.Core;
+using Umbraco.Core.Events;
 using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Core.Services
@@ -53,7 +53,7 @@ namespace Merchello.Core.Services
                     SortOrder = sortOrder
                 };
                 
-            Created.RaiseEvent(new NewEventArgs<IInvoiceStatus>(invoiceStatus), this);
+            Created.RaiseEvent(new Events.NewEventArgs<IInvoiceStatus>(invoiceStatus), this);
 
             return invoiceStatus;
         }
@@ -194,6 +194,12 @@ namespace Merchello.Core.Services
 
         #region Event Handlers
 
+       
+        /// <summary>
+        /// Occurs after Create
+        /// </summary>
+        public static event TypedEventHandler<IInvoiceStatusService, Events.NewEventArgs<IInvoiceStatus>> Created;
+
         /// <summary>
         /// Occurs before Save
         /// </summary>
@@ -204,11 +210,7 @@ namespace Merchello.Core.Services
         /// </summary>
         public static event TypedEventHandler<IInvoiceStatusService, SaveEventArgs<IInvoiceStatus>> Saved;
 
-        /// <summary>
-        /// Occurs after Create
-        /// </summary>
-        public static event TypedEventHandler<IInvoiceStatusService, NewEventArgs<IInvoiceStatus>> Created;
-
+        
         /// <summary>
         /// Occurs before Delete
         /// </summary>		

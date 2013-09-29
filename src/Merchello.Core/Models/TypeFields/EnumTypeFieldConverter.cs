@@ -19,11 +19,11 @@ namespace Merchello.Core.Models.TypeFields
         }
 
         /// <summary>
-        /// Creates an instance of an <see cref="IBasketTypeField"/> object
+        /// Creates an instance of an <see cref="ICustomerRegistryTypeField"/> object
         /// </summary>
-        internal static IBasketTypeField Basket()
+        internal static ICustomerRegistryTypeField CustomerRegistry()
         {
-            return new BasketTypeField();            
+            return new CustomerRegistryTypeField();            
         }
 
         /// <summary>

@@ -5,8 +5,8 @@ using System.Threading;
 using Merchello.Core.Models;
 using Merchello.Core.Models.TypeFields;
 using Merchello.Core.Persistence;
-using Merchello.Core.Events;
 using Umbraco.Core;
+using Umbraco.Core.Events;
 using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Core.Services
@@ -63,7 +63,7 @@ namespace Merchello.Core.Services
                     Exported = false
                 };
                 
-            Created.RaiseEvent(new NewEventArgs<IAppliedPayment>(transaction), this);
+            Created.RaiseEvent(new Events.NewEventArgs<IAppliedPayment>(transaction), this);
 
             return transaction;
         }
@@ -227,7 +227,7 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Occurs after Create
         /// </summary>
-        public static event TypedEventHandler<IAppliedPaymentService, NewEventArgs<IAppliedPayment>> Created;
+        public static event TypedEventHandler<IAppliedPaymentService, Events.NewEventArgs<IAppliedPayment>> Created;
 
         #endregion
 

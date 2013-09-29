@@ -5,6 +5,7 @@ using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Merchello.Tests.Base.DataMakers;
 using NUnit.Framework;
+using Umbraco.Core.Events;
 
 namespace Merchello.Tests.IntegrationTests.Services
 {

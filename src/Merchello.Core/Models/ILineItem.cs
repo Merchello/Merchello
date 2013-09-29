@@ -1,36 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 using Merchello.Core.Models.EntityBase;
 using Merchello.Core.Models.TypeFields;
 
 namespace Merchello.Core.Models
 {
-    /// <summary>
-    /// Defines a BasketItem
-    /// </summary>
-    public interface IBasketItem : IIdEntity
+    public interface ILineItem : IIdEntity
     {
         /// <summary>
-        /// The parentId of the basket item
+        /// The id of the list item parent
         /// </summary>
         [DataMember]
         int? ParentId { get; set; }
 
         /// <summary>
-        /// The basketId of the basket item
+        /// The ContainerId of the container collection
         /// </summary>
         [DataMember]
-        int BasketId { get; }
+        int ContainerId { get; }
 
         /// <summary>
-        /// The invoiceItemTypeFieldKey (<see cref="ITypeField"/>.TypeKey) for the basket item
+        /// The line item type field key (<see cref="ITypeField"/>.TypeKey) for the registry item
         /// </summary>
         [DataMember]
-        Guid InvoiceItemTypeFieldKey { get; set; }
+        Guid LineItemTfKey { get; set; }
 
         /// <summary>
         /// The sku for the basket item
@@ -51,15 +44,9 @@ namespace Merchello.Core.Models
         int BaseQuantity { get; set; }
 
         /// <summary>
-        /// The unitOfMeasureMultiplier for the basket item
-        /// </summary>
-        [DataMember]
-        int UnitOfMeasureMultiplier { get; set; }
-
-        /// <summary>
         /// The amount for the basket item
         /// </summary>
         [DataMember]
-        decimal Amount { get; set; }
+        decimal Amount { get; set; } 
     }
 }

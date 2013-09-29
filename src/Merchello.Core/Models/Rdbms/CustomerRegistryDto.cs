@@ -4,21 +4,21 @@ using Umbraco.Core.Persistence.DatabaseAnnotations;
 
 namespace Merchello.Core.Models.Rdbms
 {
-    [TableName("merchBasket")]
+    [TableName("merchCustomerRegistry")]
     [PrimaryKey("id")]
     [ExplicitColumns]
-    internal class BasketDto
+    internal class CustomerRegistryDto
     {
         [Column("id")]
         [PrimaryKeyColumn]
         public int Id { get; set; }
 
         [Column("consumerKey")]
-        [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchBasketConsumerKey")]
+        [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchCustomerRegistryConsumerKey")]
         public Guid ConsumerKey { get; set; }
 
-        [Column("basketTypeFieldKey")]
-        public Guid BasketTypeFieldKey { get; set; }
+        [Column("registryTfKey")]
+        public Guid RegistryTfKey { get; set; }
 
         [Column("updateDate")]
         [Constraint(Default = "getdate()")]

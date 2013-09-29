@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Merchello.Core.Events;
 using Merchello.Core.Models;
 using Merchello.Core.Persistence;
-using Merchello.Core.Events;
 using Merchello.Core.Persistence.Querying;
 using Umbraco.Core;
+using Umbraco.Core.Events;
 using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Core.Services
@@ -63,7 +64,7 @@ namespace Merchello.Core.Services
                 Paid = false
             };
 
-            Created.RaiseEvent(new NewEventArgs<IInvoice>(invoice), this);
+            Created.RaiseEvent(new Events.NewEventArgs<IInvoice>(invoice), this);
             return invoice;
         }
 
@@ -91,7 +92,7 @@ namespace Merchello.Core.Services
                     Paid = false
                 };
                 
-            Created.RaiseEvent(new NewEventArgs<IInvoice>(invoice), this);
+            Created.RaiseEvent(new Events.NewEventArgs<IInvoice>(invoice), this);
 
             return invoice;
         }
@@ -283,7 +284,7 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Occurs after Create
         /// </summary>
-        public static event TypedEventHandler<IInvoiceService, NewEventArgs<IInvoice>> Created;
+        public static event TypedEventHandler<IInvoiceService, Events.NewEventArgs<IInvoice>> Created;
 
         /// <summary>
         /// Occurs before Save

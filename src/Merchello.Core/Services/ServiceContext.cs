@@ -17,7 +17,7 @@ namespace Merchello.Core.Services
         private Lazy<AddressService> _addressService;
         private Lazy<CustomerService> _customerService;
         private Lazy<AnonymousCustomerService> _anonymousCustomerService;
-        private Lazy<BasketService> _basketService;
+        private Lazy<CustomerRegistryService> _basketService;
         private Lazy<BasketItemService> _basketItemService; 
         private Lazy<InvoiceService> _invoiceService;
         private Lazy<InvoiceItemService> _invoiceItemService;
@@ -60,7 +60,7 @@ namespace Merchello.Core.Services
                 _anonymousCustomerService = new Lazy<AnonymousCustomerService>(() => new AnonymousCustomerService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _customerService.Value));
 
             if(_basketService == null)
-                _basketService = new Lazy<BasketService>(() => new BasketService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+                _basketService = new Lazy<CustomerRegistryService>(() => new CustomerRegistryService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
             if(_basketItemService == null)
                 _basketItemService = new Lazy<BasketItemService>(() => new BasketItemService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
@@ -133,9 +133,9 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
-        /// Gets the <see cref="IBasketService"/>
+        /// Gets the <see cref="ICustomerRegistryService"/>
         /// </summary>
-        public IBasketService BasketService
+        public ICustomerRegistryService CustomerRegistryService
         {
             get { return _basketService.Value;  }
         }

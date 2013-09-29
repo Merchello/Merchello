@@ -19,7 +19,7 @@ namespace Merchello.Tests.Base.DataMakers
             return entity;            
         }
 
-        public static IBasket MockSavedWithId(this IBasket entity, int id)
+        public static ICustomerRegistry MockSavedWithId(this ICustomerRegistry entity, int id)
         {
             entity.Id = id;
             ((IdEntity)entity).AddingEntity();
@@ -27,7 +27,7 @@ namespace Merchello.Tests.Base.DataMakers
             return entity;
         }
 
-        public static IBasketItem MockSavedWithId(this IBasketItem entity, int id)
+        public static IPurchaseLineItem MockSavedWithId(this IPurchaseLineItem entity, int id)
         {
             entity.Id = id;
             ((IdEntity)entity).AddingEntity();

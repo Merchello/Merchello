@@ -6,9 +6,9 @@ namespace Merchello.Core.Models.TypeFields
     /// <summary>
     /// Indicates whether a shopping cart basket is either a "basket" or a "wishlist" representation
     /// </summary>
-    internal class BasketTypeField : TypeFieldMapper<BasketType>, IBasketTypeField
+    internal class CustomerRegistryTypeField : TypeFieldMapper<CustomerRegistryType>, ICustomerRegistryTypeField
     {
-        internal BasketTypeField()
+        internal CustomerRegistryTypeField()
         {
             if (CachedTypeFields.IsEmpty) BuildCache();
         }
@@ -17,8 +17,8 @@ namespace Merchello.Core.Models.TypeFields
 
         internal override sealed void BuildCache()
         {
-            AddUpdateCache(BasketType.Basket, new TypeField("Basket", "Standard Basket", new Guid("C53E3100-2DFD-408A-872E-4380383FAD35")));
-            AddUpdateCache(BasketType.Wishlist, new TypeField("Wishlist", "Wishlist", new Guid("B3EBB9E0-C7CE-4BA6-B379-BEDA3465D6D5")));
+            AddUpdateCache(CustomerRegistryType.Basket, new TypeField("Basket", "Standard Basket", new Guid("C53E3100-2DFD-408A-872E-4380383FAD35")));
+            AddUpdateCache(CustomerRegistryType.Wishlist, new TypeField("Wishlist", "Wishlist", new Guid("B3EBB9E0-C7CE-4BA6-B379-BEDA3465D6D5")));
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace Merchello.Core.Models.TypeFields
         /// </summary>
         public ITypeField Basket
         {
-            get { return GetTypeField(BasketType.Basket); }
+            get { return GetTypeField(CustomerRegistryType.Basket); }
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace Merchello.Core.Models.TypeFields
         /// </summary>
         public ITypeField Wishlist
         {
-            get { return GetTypeField(BasketType.Wishlist); }
+            get { return GetTypeField(CustomerRegistryType.Wishlist); }
         }
 
 

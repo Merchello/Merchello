@@ -7,9 +7,9 @@ using Umbraco.Core.Persistence.Repositories;
 namespace Merchello.Core.Persistence.Repositories
 {
     /// <summary>
-    /// Marker interface for the basket repository
+    /// Marker interface for the customer registry repository
     /// </summary>
-    public interface IBasketRepository : IRepositoryQueryable<int, IBasket>
+    public interface ICustomerRegistryRepository : IRepositoryQueryable<int, ICustomerRegistry>
     {
 
     }
