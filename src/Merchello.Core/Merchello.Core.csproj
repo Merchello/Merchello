@@ -107,6 +107,7 @@
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\AnonymousCustomer.cs" />
     <Compile Include="Models\CustomerItemRegister.cs" />
+    <Compile Include="Models\IProductBase.cs" />
     <Compile Include="Models\OrderLineItem.cs" />
     <Compile Include="Models\GatewayProviders\IRegisteredGatewayProvider.cs" />
     <Compile Include="Models\GatewayProviders\RegisteredGatewayProvider.cs" />
