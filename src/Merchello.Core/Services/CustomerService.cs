@@ -215,6 +215,13 @@ namespace Merchello.Core.Services
 
         #region Event Handlers
 
+
+        /// <summary>
+        /// Occurs after Create
+        /// </summary>
+        public static event TypedEventHandler<ICustomerService, Events.NewEventArgs<ICustomer>> Created;
+
+
         /// <summary>
         /// Occurs before Delete
         /// </summary>		
@@ -234,12 +241,6 @@ namespace Merchello.Core.Services
         /// Occurs after Save
         /// </summary>
         public static event TypedEventHandler<ICustomerService, SaveEventArgs<ICustomer>> Saved;
-
-        /// <summary>
-        /// Occurs after Create
-        /// </summary>
-        public static event TypedEventHandler<ICustomerService, Events.NewEventArgs<ICustomer>> Created;
-
 
 
         #endregion

@@ -3,15 +3,14 @@ using Merchello.Core.Models.Rdbms;
 
 namespace Merchello.Core.Persistence.Factories
 {
-    internal class CustomerRegistryItemFactory : IEntityFactory<IPurchaseLineItem, CustomerRegistryItemDto>
+    internal class CustomerItemRegisterItemFactory : IEntityFactory<IOrderLineItem, CustomerItemRegisterItemDto>
     {
-        public IPurchaseLineItem BuildEntity(CustomerRegistryItemDto dto)
+        public IOrderLineItem BuildEntity(CustomerItemRegisterItemDto dto)
         {
-            var purchaseLineItem = new PurchaseLineItemContainer(dto.CustomerRegistryId)
+            var lineItem = new OrderLineItem(dto.CustomerItemRegisterId, dto.LineItemTfKey)
             {
                 Id = dto.Id,
                 ParentId = dto.ParentId,
-                LineItemTfKey = dto.LineItemTfKey,
                 Sku = dto.Sku,
                 Name = dto.Name,
                 BaseQuantity = dto.BaseQuantity,
@@ -21,18 +20,18 @@ namespace Merchello.Core.Persistence.Factories
                 CreateDate = dto.CreateDate
             };
 
-            purchaseLineItem.ResetDirtyProperties();
+            lineItem.ResetDirtyProperties();
 
-            return purchaseLineItem;
+            return lineItem;
         }
 
-        public CustomerRegistryItemDto BuildDto(IPurchaseLineItem entity)
+        public CustomerItemRegisterItemDto BuildDto(IOrderLineItem entity)
         {
-            var dto = new CustomerRegistryItemDto()
+            var dto = new CustomerItemRegisterItemDto()
             {
                 Id = entity.Id,
                 ParentId = entity.ParentId,
-                CustomerRegistryId = entity.ContainerId,
+                CustomerItemRegisterId = entity.ContainerId,
                 LineItemTfKey = entity.LineItemTfKey,
                 Sku = entity.Sku,
                 Name = entity.Name,

@@ -49,27 +49,16 @@ namespace Merchello.Core.Persistence
         }
 
         /// <summary>
-        /// Returns an instance of the <see cref="ICustomerRegistryRepository"/>
+        /// Returns an instance of the <see cref="ICustomerItemRegisterRepository"/>
         /// </summary>
         /// <param name="uow"></param>
         /// <returns></returns>
-        internal virtual ICustomerRegistryRepository CreateBasketRepository(IDatabaseUnitOfWork uow)
+        internal virtual ICustomerItemRegisterRepository CreateCustomerItemRegisterRepository(IDatabaseUnitOfWork uow)
         {
-            return new CustomerRegistryRepository(uow,
+            return new CustomerItemRegisterRepository(uow,
                 _disableAllCache ? (IRepositoryCacheProvider)NullCacheProvider.Current : RuntimeCacheProvider.Current);
         }
 
-        /// <summary>
-        /// Returns an instance of the <see cref="ICustomerRegistryItemRepository"/>
-        /// </summary>
-        /// <param name="uow"></param>
-        /// <returns></returns>
-        internal virtual ICustomerRegistryItemRepository CreateBasketItemRepository(IDatabaseUnitOfWork uow)
-        {
-            return new CustomerRegistryItemRepository(uow,
-                _disableAllCache ? (IRepositoryCacheProvider)NullCacheProvider.Current : RuntimeCacheProvider.Current);
-        }
-        
         /// <summary>
         /// Returns an instance of the <see cref="IInvoiceStatusRepository"/>
         /// </summary>

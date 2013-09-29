@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Merchello.Core.Models;
 using Merchello.Core.Models.EntityBase;
@@ -14,41 +13,43 @@ using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Core.Persistence.Repositories
 {
-    internal partial class CustomerRegistryItemRepository : MerchelloPetaPocoRepositoryBase<int, IPurchaseLineItem>, ICustomerRegistryItemRepository
+    internal class CustomerItemRegisterRepository : MerchelloPetaPocoRepositoryBase<int, ICustomerItemRegister>, ICustomerItemRegisterRepository
     {
 
-        public CustomerRegistryItemRepository(IDatabaseUnitOfWork work)
+        public CustomerItemRegisterRepository(IDatabaseUnitOfWork work)
             : base(work)
         {
 
         }
 
-        public CustomerRegistryItemRepository(IDatabaseUnitOfWork work, IRepositoryCacheProvider cache)
+        public CustomerItemRegisterRepository(IDatabaseUnitOfWork work, IRepositoryCacheProvider cache)
             : base(work, cache)
         {
         }
 
-        #region Overrides of RepositoryBase<IBasketItem>
 
 
-        protected override IPurchaseLineItem PerformGet(int id)
+        #region Overrides of RepositoryBase<ICustomerRegistry>
+
+
+        protected override ICustomerItemRegister PerformGet(int id)
         {
             var sql = GetBaseQuery(false)
                 .Where(GetBaseWhereClause(), new { Id = id });
 
-            var dto = Database.Fetch<CustomerRegistryItemDto>(sql).FirstOrDefault();
+            var dto = Database.Fetch<CustomerItemRegisterDto>(sql).FirstOrDefault();
 
             if (dto == null)
                 return null;
 
-            var factory = new CustomerRegistryItemFactory();
+            var factory = new CustomerItemRegistryFactory();
 
-            var basketItem = factory.BuildEntity(dto);
+            var basket = factory.BuildEntity(dto);
 
-            return basketItem;
+            return basket;
         }
 
-        protected override IEnumerable<IPurchaseLineItem> PerformGetAll(params int[] ids)
+        protected override IEnumerable<ICustomerItemRegister> PerformGetAll(params int[] ids)
         {
             if (ids.Any())
             {
@@ -59,8 +60,8 @@ namespace Merchello.Core.Persistence.Repositories
             }
             else
             {
-                var factory = new CustomerRegistryItemFactory();
-                var dtos = Database.Fetch<CustomerRegistryItemDto>(GetBaseQuery(false));
+                var factory = new CustomerItemRegistryFactory();
+                var dtos = Database.Fetch<CustomerItemRegisterDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
                     yield return factory.BuildEntity(dto);
@@ -70,37 +71,44 @@ namespace Merchello.Core.Persistence.Repositories
 
         #endregion
 
-        #region Overrides of MerchelloPetaPocoRepositoryBase<IBasketItem>
+        private ICustomerItemRegister CreateCustomerRegistryFromDto(CustomerItemRegisterDto dto)
+        {
+            var factory = new CustomerItemRegistryFactory();
+            return null;
+        }
+
+        #region Overrides of MerchelloPetaPocoRepositoryBase<ICustomerRegistry>
 
         protected override Sql GetBaseQuery(bool isCount)
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-               .From("merchBasketItem");
+               .From("merchCustomerRegistry");
 
             return sql;
         }
 
         protected override string GetBaseWhereClause()
         {
-            return "merchBasketItem.id = @Id";
+            return "merchCustomerRegistry.id = @Id";
         }
 
         protected override IEnumerable<string> GetDeleteClauses()
         {
             var list = new List<string>
                 {
-                    "DELETE FROM merchBasketItem WHERE BasketItemPk = @Id",
+                    "DELETE FROM merchCustomerRegistryItem WHERE basketId = @Id",
+                    "DELETE FROM merchCustomerRegistry WHERE id = @Id"
                 };
 
             return list;
         }
 
-        protected override void PersistNewItem(IPurchaseLineItem entity)
+        protected override void PersistNewItem(ICustomerItemRegister entity)
         {
             ((IdEntity)entity).AddingEntity();
 
-            var factory = new CustomerRegistryItemFactory();
+            var factory = new CustomerItemRegistryFactory();
             var dto = factory.BuildDto(entity);
 
             Database.Insert(dto);
@@ -108,19 +116,19 @@ namespace Merchello.Core.Persistence.Repositories
             entity.ResetDirtyProperties();
         }
 
-        protected override void PersistUpdatedItem(IPurchaseLineItem entity)
+        protected override void PersistUpdatedItem(ICustomerItemRegister entity)
         {
             ((IdEntity)entity).UpdatingEntity();
 
-            var factory = new CustomerRegistryItemFactory();
+            var factory = new CustomerItemRegistryFactory();
             var dto = factory.BuildDto(entity);
 
             Database.Update(dto);
-            
+
             entity.ResetDirtyProperties();
         }
 
-        protected override void PersistDeletedItem(IPurchaseLineItem entity)
+        protected override void PersistDeletedItem(ICustomerItemRegister entity)
         {
             var deletes = GetDeleteClauses();
             foreach (var delete in deletes)
@@ -130,22 +138,21 @@ namespace Merchello.Core.Persistence.Repositories
         }
 
 
-        protected override IEnumerable<IPurchaseLineItem> PerformGetByQuery(IQuery<IPurchaseLineItem> query)
+        protected override IEnumerable<ICustomerItemRegister> PerformGetByQuery(IQuery<ICustomerItemRegister> query)
         {
             var sqlClause = GetBaseQuery(false);
-            var translator = new SqlTranslator<IPurchaseLineItem>(sqlClause, query);
+            var translator = new SqlTranslator<ICustomerItemRegister>(sqlClause, query);
             var sql = translator.Translate();
 
-            var dtos = Database.Fetch<CustomerRegistryItemDto>(sql);
+            var dtos = Database.Fetch<CustomerItemRegisterDto>(sql);
 
             return dtos.DistinctBy(x => x.Id).Select(dto => Get(dto.Id));
 
         }
 
+        
 
         #endregion
-
-
 
     }
 }

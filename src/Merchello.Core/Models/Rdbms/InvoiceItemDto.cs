@@ -47,6 +47,7 @@ namespace Merchello.Core.Models.Rdbms
         public bool Exported { get; set; }
 
         [Column("extendedData")]
+        [NullSetting(NullSetting = NullSettings.Null)]
         public string ExtendedData { get; set; }
 
         [Column("updateDate")]

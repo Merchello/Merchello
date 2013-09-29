@@ -4,24 +4,24 @@ using Umbraco.Core.Persistence.DatabaseAnnotations;
 
 namespace Merchello.Core.Models.Rdbms
 {
-    [TableName("merchCustomerRegistryItem")]
+    [TableName("merchCustomerItemRegisterItem")]
     [PrimaryKey("id")]
     [ExplicitColumns]
-    internal class CustomerRegistryItemDto
+    internal class CustomerItemRegisterItemDto
     {
         [Column("id")]
         [PrimaryKeyColumn]
         public int Id { get; set; }
 
         [Column("parentId")]
-        [ForeignKey(typeof(CustomerRegistryItemDto), Name = "FK_merchCustomerRegistryItem_merchCustomerRegistryItemItem", Column = "id")]
-        [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchCustomerRegistryItemParent")]
+        [ForeignKey(typeof(CustomerItemRegisterItemDto), Name = "FK_merchCustomerItemRegisterItem_merchCustomerItemRegisterItem", Column = "id")]
+        [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchCustomerItemRegisterItemParent")]
         [NullSetting(NullSetting = NullSettings.Null)]
         public int? ParentId { get; set; }
 
-        [Column("customerRegistryId")]
-        [ForeignKey(typeof(CustomerRegistryDto), Name = "FK_merchCustomerRegistryItem_merchCustomerRegistry", Column = "id")]
-        public int CustomerRegistryId { get; set; }
+        [Column("customerItemRegisterId")]
+        [ForeignKey(typeof(CustomerItemRegisterDto), Name = "FK_merchCustomerItemRegistryItem_merchCustomerItemRegistry", Column = "id")]
+        public int CustomerItemRegisterId { get; set; }
 
         [Column("lineItemTfKey")] 
         public Guid LineItemTfKey { get; set; }
@@ -42,6 +42,7 @@ namespace Merchello.Core.Models.Rdbms
         public decimal Amount { get; set; }
 
         [Column("extendedData")]
+        [NullSetting(NullSetting = NullSettings.Null)]
         public string ExtendedData { get; set; }
 
         [Column("updateDate")]

@@ -10,46 +10,46 @@ using Umbraco.Core;
 namespace Merchello.Core.Models
 {
     /// <summary>
-    /// Represents a Collection of <see cref="LineItemContainerBase"/> objects
+    /// Represents a Collection of <see cref="LineItemBase"/> objects
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    public class LineItemCollection : KeyedCollection<string, LineItemContainerBase>, INotifyCollectionChanged
+    public class LineItemCollection : KeyedCollection<string, LineItemBase>, INotifyCollectionChanged
     {
         private readonly ReaderWriterLockSlim _addLocker = new ReaderWriterLockSlim();
         internal Action OnAdd;
-        internal Func<LineItemContainerBase, bool> ValidateAdd { get; set; }
+        internal Func<LineItemBase, bool> ValidateAdd { get; set; }
 
         internal LineItemCollection()
         {}
 
-        internal LineItemCollection(Func<LineItemContainerBase, bool> validationCallback)
+        internal LineItemCollection(Func<LineItemBase, bool> validationCallback)
         {
             ValidateAdd = validationCallback;
         }
 
-        public LineItemCollection(IEnumerable<LineItemContainerBase> lineItems)
+        public LineItemCollection(IEnumerable<LineItemBase> lineItems)
         {
             Reset(lineItems);
         }
 
         /// <summary>
-        /// Resets the collection to only contain the <see cref="LineItemContainerBase"/> instances referenced in the <paramref name="lineItems"/> parameter, whilst maintaining
+        /// Resets the collection to only contain the <see cref="LineItemBase"/> instances referenced in the <paramref name="lineItems"/> parameter, whilst maintaining
         /// any validation delegates such as <see cref="ValidateAdd"/>
         /// </summary>
         /// <param name="lineItems"></param>
         /// <remarks></remarks>
-        private void Reset(IEnumerable<LineItemContainerBase> lineItems)
+        private void Reset(IEnumerable<LineItemBase> lineItems)
         {
             Clear();
             lineItems.ForEach(Add);
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
-        protected override void SetItem(int index, LineItemContainerBase itemContainer)
+        protected override void SetItem(int index, LineItemBase item)
         {
-            base.SetItem(index, itemContainer);
-            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, itemContainer, index));
+            base.SetItem(index, item);
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, index));
         }
 
         protected override void RemoveItem(int index)
@@ -65,24 +65,23 @@ namespace Merchello.Core.Models
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
-        internal new void Add(LineItemContainerBase itemContainer)
+        internal new void Add(LineItemBase item)
         {
             using (new WriteLock(_addLocker))
             {
-                var key = GetKeyForItem(itemContainer);
+                var key = GetKeyForItem(item);
                 if (key != null)
                 {
                     var exists = this.Contains(key);
                     if (exists)
                         return;
                 }
-                base.Add(itemContainer);
+                base.Add(item);
                 OnAdd.IfNotNull(x => x.Invoke());
 
-                OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, itemContainer));
+                OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));
             }
         }
-
 
         public int IndexOfSku(string sku)
         {
@@ -96,9 +95,9 @@ namespace Merchello.Core.Models
             return -1;
         }
 
-        protected override string GetKeyForItem(LineItemContainerBase itemContainer)
+        protected override string GetKeyForItem(LineItemBase item)
         {
-            return itemContainer.Sku;
+            return item.Sku;
         }
 
 
@@ -113,10 +112,10 @@ namespace Merchello.Core.Models
         //    }
         //}
 
-        protected override void InsertItem(int index, LineItemContainerBase itemContainer)
+        protected override void InsertItem(int index, LineItemBase item)
         {
-            base.InsertItem(index, itemContainer);
-            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, itemContainer));
+            base.InsertItem(index, item);
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));
         }
 
         /// <summary>

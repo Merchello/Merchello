@@ -13,62 +13,71 @@ namespace Merchello.Core.Models.TypeFields
         /// <summary>
         /// Creates an instance of an <see cref="IAddressTypeField"/> object
         /// </summary>
-        internal static IAddressTypeField Address()
+        internal static IAddressTypeField Address
         {
-            return new AddressTypeField();
+            get { return new AddressTypeField(); } 
         }
 
         /// <summary>
         /// Creates an instance of an <see cref="ICustomerRegistryTypeField"/> object
         /// </summary>
-        internal static ICustomerRegistryTypeField CustomerRegistry()
+        internal static ICustomerRegistryTypeField CustomerItemRegistry
         {
-            return new CustomerRegistryTypeField();            
+            get { return new CustomerRegistryTypeField(); }            
+        }
+
+        /// <summary>
+        /// Creates an instance of an <see cref="ILineItemTypeField"/> object
+        /// </summary>
+        /// <returns></returns>
+        internal static ILineItemTypeField LineItemType
+        {
+            get { return new LineItemTypeField(); }
         }
 
         /// <summary>
         /// Creates an instance of an <see cref="IInvoiceItemTypeField"/> object
         /// </summary>
         /// <returns></returns>
-        internal static IInvoiceItemTypeField InvoiceItem()
+        internal static IInvoiceItemTypeField InvoiceItem
         {
-            return new InvoiceItemTypeField();
+            get { return new InvoiceItemTypeField(); }
         }
 
         /// <summary>
         /// Creates an instance of an <see cref="IPaymentMethodTypeField"/> object
         /// </summary>
         /// <returns></returns>
-        internal static IPaymentMethodTypeField PaymentMethod()
+        internal static IPaymentMethodTypeField PaymentMethod
         {
-            return new PaymentMethodTypeField();
+            get { return new PaymentMethodTypeField(); }
         }
 
         /// <summary>
         /// Creates an instance of an <see cref="IShipmentMethodTypeField"/> object
         /// </summary>
         /// <returns></returns>
-        internal static IShipmentMethodTypeField ShipmentMethod()
+        internal static IShipmentMethodTypeField ShipmentMethod
         {
-            return new ShipMethodTypeField();
+            get { return new ShipMethodTypeField(); }
         }
 
         /// <summary>
         /// Creates an instance of an <see cref="IAppliedPaymentTypeField"/>
         /// </summary>
         /// <returns></returns>
-        internal static IAppliedPaymentTypeField AppliedPayment()
+        internal static IAppliedPaymentTypeField AppliedPayment
         {
-            return new AppliedPaymentTypeField();
+           get { return new AppliedPaymentTypeField(); }
         }
 
         /// <summary>
         /// Creates an instance of an <see cref="IGatewayProviderTypeField"/>
         /// </summary>
         /// <returns></returns>
-        internal static IGatewayProviderTypeField GatewayProvider()
+        internal static IGatewayProviderTypeField GatewayProvider
         {
-            return new GatewayProviderTypeField();            
+            get { return new GatewayProviderTypeField(); }
         }
     }
 }

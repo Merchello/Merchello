@@ -105,7 +105,7 @@ namespace Merchello.Tests.UnitTests.Mappers
             var expected = typeof(BasketMapper);
 
             //// Act
-            var resolved = MerchelloMapper.Current.ResolveByType(typeof(ICustomerRegistry));
+            var resolved = MerchelloMapper.Current.ResolveByType(typeof(ICustomerItemRegister));
 
             //// Assert
             Assert.IsTrue(resolved.Success);
@@ -123,7 +123,7 @@ namespace Merchello.Tests.UnitTests.Mappers
             var expected = typeof(BasketItemMapper);
 
             //// Act
-            var resolved = MerchelloMapper.Current.ResolveByType(typeof(IPurchaseLineItem));
+            var resolved = MerchelloMapper.Current.ResolveByType(typeof(IOrderLineItem));
 
             //// Assert
             Assert.IsTrue(resolved.Success);

@@ -9,7 +9,7 @@ namespace Merchello.Core.Models
     /// <summary>
     /// Defines a customer registry
     /// </summary>
-    public interface ICustomerRegistry : IIdEntity
+    public interface ICustomerItemRegister : IIdEntity
     {
         /// <summary>
         /// The <see cref="IConsumer"/> key
@@ -21,19 +21,19 @@ namespace Merchello.Core.Models
         /// The registry type field <see cref="ITypeField"/> guid typeKey
         /// </summary>
         [DataMember]
-        Guid CustomerRegistryTfKey { get; set; }
+        Guid CustomerRegisterTfKey { get; set; }
 
         /// <summary>
-        /// The <see cref="CustomerRegistryType"/> of the customer registry
+        /// The <see cref="CustomerItemRegisterType"/> of the customer registry
         /// </summary>
         [DataMember]
-        CustomerRegistryType CustomerRegistryType { get; set; }
+        CustomerItemRegisterType CustomerItemRegisterType { get; set; }
 
         /// <summary>
-        /// The <see cref="IPurchaseLineItem"/>s in the customer registry
+        /// The <see cref="IOrderLineItem"/>s in the customer registry
         /// </summary>
         [DataMember]
-        IEnumerable<IPurchaseLineItem> Items { get; }
+        LineItemCollection Items { get; }
 
 
     }

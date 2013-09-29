@@ -246,6 +246,7 @@
     <Compile Include="Configuration\Versioning.cs" />
     <Compile Include="Contexts\MerchelloBootstrapperTests.cs" />
     <Compile Include="Gateway\GatewayProviderPrototyping.cs" />
+    <Compile Include="LineItem\LineItemCollectionTest.cs" />
     <Compile Include="Mappers\MerchelloMapperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Querying\AddressSqlClausesTests.cs" />
@@ -262,9 +263,7 @@
     <Compile Include="Querying\WarehouseSqlClauseTests.cs" />
     <Compile Include="Repository\AddressRepositoryTests.cs" />
     <Compile Include="Repository\CustomerRepositoryTests.cs" />
-    <Compile Include="Services\AddressServiceTests.cs" />
     <Compile Include="Services\CustomerRegistryServiceTests.cs" />
-    <Compile Include="Services\BasketItemServiceTests.cs" />
     <Compile Include="Services\InvoiceServiceTests.cs" />
     <Compile Include="Services\CustomerServiceTests.cs" />
     <Compile Include="TypeFields\AddressTypeFieldTests.cs" />

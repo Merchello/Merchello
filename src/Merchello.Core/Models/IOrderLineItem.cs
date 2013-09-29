@@ -8,7 +8,7 @@ namespace Merchello.Core.Models
     /// <summary>
     /// Defines a purchase item
     /// </summary>
-    public interface IPurchaseLineItem : ILineItem
+    public interface IOrderLineItem : ILineItem
     {
         /// <summary>
         /// The unitOfMeasureMultiplier for the basket item

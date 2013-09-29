@@ -27,12 +27,10 @@ namespace Merchello.Core.Services
         ICustomerService CustomerService { get; }
 
         /// <summary>
-        /// Gets the <see cref="CustomerRegistryService"/>
+        /// Gets the <see cref="CustomerItemRegisterService"/>
         /// </summary>
-        ICustomerRegistryService CustomerRegistryService { get; }
+        ICustomerItemRegisterService CustomerItemRegisterService { get; }
 
-
-        ///IBasketItemService BasketItemService { get; }
 
         /// <summary>
         /// Gets the <see cref="IInvoiceService"/>

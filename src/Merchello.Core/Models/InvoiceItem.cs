@@ -26,7 +26,7 @@ namespace Merchello.Core.Models
         {}
 
         public InvoiceItem (IInvoice invoice, InvoiceItemType invoiceItemType, int? parentId)  
-            : this(invoice, EnumTypeFieldConverter.InvoiceItem().GetTypeField(invoiceItemType).TypeKey, parentId)
+            : this(invoice, EnumTypeFieldConverter.InvoiceItem.GetTypeField(invoiceItemType).TypeKey, parentId)
         {}
 
         public InvoiceItem(IInvoice invoice, Guid invoiceItemTypeFieldKey, int? parentId)
@@ -188,10 +188,10 @@ namespace Merchello.Core.Models
         [DataMember]
         public InvoiceItemType InvoiceItemType
         {
-            get { return EnumTypeFieldConverter.InvoiceItem().GetTypeField(_invoiceItemTypeFieldKey); }
+            get { return EnumTypeFieldConverter.InvoiceItem.GetTypeField(_invoiceItemTypeFieldKey); }
             set
             {
-                var reference = EnumTypeFieldConverter.InvoiceItem().GetTypeField(value);
+                var reference = EnumTypeFieldConverter.InvoiceItem.GetTypeField(value);
                 if (!ReferenceEquals(TypeFieldMapperBase.NotFound, reference))
                 {
                     // call through the property to flag the dirty property

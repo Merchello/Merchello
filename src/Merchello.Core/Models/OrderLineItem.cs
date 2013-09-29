@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Runtime.Serialization;
-using Merchello.Core.Models.EntityBase;
+using Merchello.Core.Models.TypeFields;
 
 namespace Merchello.Core.Models
 {
@@ -11,15 +11,23 @@ namespace Merchello.Core.Models
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    internal class PurchaseLineItemContainer : LineItemContainerBase, IPurchaseLineItem
+    internal class OrderLineItem : LineItemBase, IOrderLineItem
     {
         private int _unitOfMeasureMultiplier;
 
-        public PurchaseLineItemContainer(int containerId, LineItemCollection lineItems)
-            : base(containerId, lineItems)
+        //public OrderLineItem(int containerId, LineItemType lineItemType)
+        //    : this(containerId, EnumTypeFieldConverter)
+        //{ }
+
+        internal OrderLineItem(int containerId, Guid lineItemTfKey)
+            : this(containerId, lineItemTfKey, new LineItemCollection())
         { }
 
-        private static readonly PropertyInfo UnitOfMeasureMultiplierSelector = ExpressionHelper.GetPropertyInfo<PurchaseLineItemContainer, int>(x => x.UnitOfMeasureMultiplier);
+        internal OrderLineItem(int containerId, Guid lineItemTfKey, LineItemCollection itemization)
+            : base(containerId, lineItemTfKey, itemization)
+        { }
+
+        private static readonly PropertyInfo UnitOfMeasureMultiplierSelector = ExpressionHelper.GetPropertyInfo<OrderLineItem, int>(x => x.UnitOfMeasureMultiplier);
 
         /// <summary>
         /// The unit of measure associated with the item

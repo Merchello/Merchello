@@ -4,7 +4,7 @@ using Merchello.Core.Models.Rdbms;
 namespace Merchello.Core.Persistence.Mappers
 {
     /// <summary>
-    /// Represents a <see cref="CustomerRegistry"/> to DTO mapper used to translate the properties of the public api 
+    /// Represents a <see cref="CustomerItemRegister"/> to DTO mapper used to translate the properties of the public api 
     /// implementation to that of the database's DTO as sql: [tableName].[columnName].
     /// </summary>
     internal sealed class InvoiceItemMapper : MerchelloBaseMapper

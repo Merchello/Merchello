@@ -59,7 +59,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         public IAddress MakeExistingAddress(ICustomer customer, string label)
         {
             var address = MockAddressDataMaker.RandomAddress(customer, label);
-            AddressService.Save(address);
+            //AddressService.Save(address);
             return address;
         }
 
@@ -69,7 +69,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         public IEnumerable<IAddress> MakeExistingAddressCollection(ICustomer customer, string label, int count)
         {
             var addresses = MockAddressDataMaker.AddressCollectionForInserting(customer, label, count);
-            AddressService.Save(addresses);
+            //AddressService.Save(addresses);
             return addresses;
         }
 
@@ -78,17 +78,17 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         /// </summary>
         public void DeleteAllAddresses()
         {
-            var all = ((AddressService) AddressService).GetAll();
-            AddressService.Delete(all);
+            //var all = ((AddressService) AddressService).GetAll();
+            //AddressService.Delete(all);
         }
 
-        /// <summary>
-        /// The address service
-        /// </summary>
-        public IAddressService AddressService
-        {
-            get { return _serviceContext.AddressService; }
-        }
+        ///// <summary>
+        ///// The address service
+        ///// </summary>
+        //public IAddressService AddressService
+        //{
+        //    get { return _serviceContext.AddressService; }
+        //}
 
         #endregion
 
@@ -113,33 +113,21 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         #region IBasket
 
         /// <summary>
-        ///  Inserts an address record in the merchBasket table and returns an <see cref="ICustomerRegistry"/> object representation
+        ///  Inserts an address record in the merchBasket table and returns an <see cref="ICustomerItemRegister"/> object representation
         /// </summary>
-        public ICustomerRegistry MakeExistingBasket(IConsumer consumer, CustomerRegistryType customerRegistryType)
+        public ICustomerItemRegister MakeExistingBasket(IConsumer consumer, CustomerItemRegisterType customerItemRegisterType)
         {
-            var basket = MockBasketDataMaker.ConsumerBasketForInserting(consumer, customerRegistryType);
-            CustomerRegistryService.Save(basket);
+            var basket = MockBasketDataMaker.ConsumerBasketForInserting(consumer, customerItemRegisterType);
+            CustomerItemRegisterService.Save(basket);
             return basket;
         }
 
         /// <summary>
         /// The basket service
         /// </summary>
-        public ICustomerRegistryService CustomerRegistryService
+        public ICustomerItemRegisterService CustomerItemRegisterService
         {
-            get { return _serviceContext.CustomerRegistryService; }
-        }
-
-        #endregion
-
-        #region IBasketItem
-
-        /// <summary>
-        /// The basket item service
-        /// </summary>
-        public IBasketItemService BasketItemService
-        {
-            get { return _serviceContext.BasketItemService; }
+            get { return _serviceContext.CustomerItemRegisterService; }
         }
 
         #endregion

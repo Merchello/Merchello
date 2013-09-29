@@ -10,7 +10,7 @@ namespace Merchello.Core.Models
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    public abstract class LineItemContainerBase : IdEntity, ILineItem
+    public abstract class LineItemBase : IdEntity, ILineItem
     {
         private readonly int _containerId;
         private int? _parentId;        
@@ -19,20 +19,28 @@ namespace Merchello.Core.Models
         private string _name;
         private int _baseQuantity;
         private decimal _amount;
-        private LineItemCollection _lineItems;
+        private LineItemCollection _itemization;
 
-        protected LineItemContainerBase (int containerId, LineItemCollection lineItems)  
+        protected LineItemBase (int containerId, Guid lineItemTfKey)
+            : this(containerId, lineItemTfKey, new LineItemCollection())
+        { }
+
+        protected LineItemBase (int containerId, Guid lineItemTfKey, LineItemCollection itemization)  
         {
+            Mandate.ParameterCondition(containerId != 0, "containerId");
+            Mandate.ParameterCondition(lineItemTfKey != Guid.Empty, "lineItemTfKey");
+            Mandate.ParameterNotNull(itemization, "itemization");
+
             _containerId = containerId;
-            _lineItems = lineItems;
+            _itemization = itemization;
         }
 
-        private static readonly PropertyInfo ParentIdSelector = ExpressionHelper.GetPropertyInfo<LineItemContainerBase, int?>(x => x.ParentId);
-        private static readonly PropertyInfo LineItemTfKeySelector = ExpressionHelper.GetPropertyInfo<LineItemContainerBase, Guid>(x => x.LineItemTfKey);
-        private static readonly PropertyInfo SkuSelector = ExpressionHelper.GetPropertyInfo<LineItemContainerBase, string>(x => x.Sku);
-        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<LineItemContainerBase, string>(x => x.Name);
-        private static readonly PropertyInfo BaseQuantitySelector = ExpressionHelper.GetPropertyInfo<LineItemContainerBase, int>(x => x.BaseQuantity);
-        private static readonly PropertyInfo AmountSelector = ExpressionHelper.GetPropertyInfo<LineItemContainerBase, decimal>(x => x.Amount);
+        private static readonly PropertyInfo ParentIdSelector = ExpressionHelper.GetPropertyInfo<LineItemBase, int?>(x => x.ParentId);
+        private static readonly PropertyInfo LineItemTfKeySelector = ExpressionHelper.GetPropertyInfo<LineItemBase, Guid>(x => x.LineItemTfKey);
+        private static readonly PropertyInfo SkuSelector = ExpressionHelper.GetPropertyInfo<LineItemBase, string>(x => x.Sku);
+        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<LineItemBase, string>(x => x.Name);
+        private static readonly PropertyInfo BaseQuantitySelector = ExpressionHelper.GetPropertyInfo<LineItemBase, int>(x => x.BaseQuantity);
+        private static readonly PropertyInfo AmountSelector = ExpressionHelper.GetPropertyInfo<LineItemBase, decimal>(x => x.Amount);
 
         /// <summary>
         /// The parentId associated with the customer registry item

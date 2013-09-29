@@ -46,7 +46,7 @@ namespace Merchello.Core.Services
         /// </summary>
         public IAppliedPayment CreateAppliedPayment(IPayment payment, IInvoice invoice, AppliedPaymentType appliedPaymentType, decimal amount)
         {           
-            var typeField = EnumTypeFieldConverter.AppliedPayment().GetTypeField(appliedPaymentType);
+            var typeField = EnumTypeFieldConverter.AppliedPayment.GetTypeField(appliedPaymentType);
             return CreateAppliedPayment(payment, invoice, typeField.TypeKey, amount);
         }
 

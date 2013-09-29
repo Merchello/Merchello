@@ -25,7 +25,7 @@ namespace Merchello.Tests.Base.DataMakers
                 Region = this.Region,
                 PostalCode = this.PostalCode,
                 CountryCode = this.CountryCode,
-                AddressTypeFieldKey = EnumTypeFieldConverter.Address().GetTypeField(AddressType.Residential).TypeKey
+                AddressTypeFieldKey = EnumTypeFieldConverter.Address.GetTypeField(AddressType.Residential).TypeKey
             };
         }
 

@@ -15,7 +15,7 @@ namespace Merchello.Core.ConversionStrategies
         /// <summary>
         /// Converts an anonymous customer's basket to a customer basket
         /// </summary>
-        /// <returns><see cref="ICustomerRegistry"/></returns>
-        ICustomerRegistry ConvertBasket();
+        /// <returns><see cref="ICustomerItemRegister"/></returns>
+        ICustomerItemRegister ConvertBasket();
     }
 }

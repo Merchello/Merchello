@@ -55,6 +55,7 @@ namespace Merchello.Core.Models.Rdbms
         public decimal? Height { get; set; }
 
         [Column("barcode")]
+        [NullSetting(NullSetting = NullSettings.Null)]
         public string Barcode { get; set; }
 
         [Column("available")]

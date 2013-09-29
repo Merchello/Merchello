@@ -13,12 +13,10 @@ namespace Merchello.Core.Services
     /// <see cref="ICustomerService"/>
     /// </summary>
     public class ServiceContext : IServiceContext
-    {
-        private Lazy<AddressService> _addressService;
+    {        
         private Lazy<CustomerService> _customerService;
         private Lazy<AnonymousCustomerService> _anonymousCustomerService;
-        private Lazy<CustomerRegistryService> _basketService;
-        private Lazy<BasketItemService> _basketItemService; 
+        private Lazy<CustomerItemRegisterService> _basketService;    
         private Lazy<InvoiceService> _invoiceService;
         private Lazy<InvoiceItemService> _invoiceItemService;
         private Lazy<InvoiceStatusService> _invoiceStatusService;
@@ -50,9 +48,6 @@ namespace Merchello.Core.Services
             Lazy<RepositoryFactory> repositoryFactory)
         {
             
-            if(_addressService == null)
-                _addressService = new Lazy<AddressService>(() => new AddressService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
-
             if(_customerService == null)
                 _customerService = new Lazy<CustomerService>(() => new CustomerService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
@@ -60,10 +55,7 @@ namespace Merchello.Core.Services
                 _anonymousCustomerService = new Lazy<AnonymousCustomerService>(() => new AnonymousCustomerService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _customerService.Value));
 
             if(_basketService == null)
-                _basketService = new Lazy<CustomerRegistryService>(() => new CustomerRegistryService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
-
-            if(_basketItemService == null)
-                _basketItemService = new Lazy<BasketItemService>(() => new BasketItemService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+                _basketService = new Lazy<CustomerItemRegisterService>(() => new CustomerItemRegisterService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
             if(_invoiceItemService == null)
                 _invoiceItemService = new Lazy<InvoiceItemService>(() => new InvoiceItemService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
@@ -109,14 +101,6 @@ namespace Merchello.Core.Services
         #region IServiceContext Members
 
         /// <summary>
-        /// Gets the <see cref="IAddressService"/>
-        /// </summary>
-        internal IAddressService AddressService
-        {
-            get { return _addressService.Value; }
-        }
-
-        /// <summary>
         /// Gets the <see cref="IAnonymousCustomerService"/>
         /// </summary>
         internal IAnonymousCustomerService AnonymousCustomerService
@@ -133,19 +117,11 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
-        /// Gets the <see cref="ICustomerRegistryService"/>
+        /// Gets the <see cref="ICustomerItemRegisterService"/>
         /// </summary>
-        public ICustomerRegistryService CustomerRegistryService
+        public ICustomerItemRegisterService CustomerItemRegisterService
         {
             get { return _basketService.Value;  }
-        }
-
-        /// <summary>
-        /// Gets the <see cref="IBasketItemService"/>
-        /// </summary>
-        internal IBasketItemService BasketItemService
-        {
-            get { return _basketItemService.Value; }
         }
 
         /// <summary>

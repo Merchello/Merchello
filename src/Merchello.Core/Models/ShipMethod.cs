@@ -114,10 +114,10 @@ namespace Merchello.Core.Models
         [DataMember]
         public ShipMethodType ShipMethodType
         {
-            get { return EnumTypeFieldConverter.ShipmentMethod().GetTypeField(_shipMethodTypeFieldKey); }
+            get { return EnumTypeFieldConverter.ShipmentMethod.GetTypeField(_shipMethodTypeFieldKey); }
             set
             {
-                var reference = EnumTypeFieldConverter.ShipmentMethod().GetTypeField(value);
+                var reference = EnumTypeFieldConverter.ShipmentMethod.GetTypeField(value);
                 if (!ReferenceEquals(TypeFieldMapperBase.NotFound, reference))
                 {
                     // call through the property to flag the dirty property

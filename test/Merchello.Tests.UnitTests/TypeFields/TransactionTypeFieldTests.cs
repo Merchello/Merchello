@@ -26,7 +26,7 @@ namespace Merchello.Tests.UnitTests.TypeFields
         [Test]
         public void AppliedPaymentType_debit_matches_configuration()
         {
-            var type = EnumTypeFieldConverter.AppliedPayment().Debit;
+            var type = EnumTypeFieldConverter.AppliedPayment.Debit;
 
             Assert.AreEqual(_mockTransactionDebit.Alias, type.Alias);
             Assert.AreEqual(_mockTransactionDebit.Name, type.Name);
@@ -41,7 +41,7 @@ namespace Merchello.Tests.UnitTests.TypeFields
         [Test]
         public void AppliedPayment_Credit_matches_configuration()
         {
-            var type = EnumTypeFieldConverter.AppliedPayment().Credit;
+            var type = EnumTypeFieldConverter.AppliedPayment.Credit;
 
             Assert.AreEqual(_mockTransactionCredit.Alias, type.Alias);
             Assert.AreEqual(_mockTransactionCredit.Name, type.Name);
