@@ -20,14 +20,14 @@ namespace Merchello.Core.Services
         private Lazy<InvoiceService> _invoiceService;
         private Lazy<InvoiceItemService> _invoiceItemService;
         private Lazy<InvoiceStatusService> _invoiceStatusService;
-        private Lazy<PaymentService> _paymentService;
+        //private Lazy<PaymentService> _paymentService;
         private Lazy<ProductService> _productService;
         private Lazy<ShipmentService> _shipmentService;
         private Lazy<ShipMethodService> _shipMethodService;
-        private Lazy<AppliedPaymentService> _appliedPaymentService;
+        
         private Lazy<WarehouseService> _warehouseService;
 
-        private Lazy<PaymentApplicationStrategyBase> _applyPaymentStrategy;
+        //private Lazy<PaymentApplicationStrategyBase> _applyPaymentStrategy;
         
         /// <summary>
         /// Constructor
@@ -66,23 +66,23 @@ namespace Merchello.Core.Services
             if(_invoiceService == null)
                 _invoiceService = new Lazy<InvoiceService>(() => new InvoiceService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _invoiceItemService.Value, _invoiceStatusService.Value));
 
-            if (_appliedPaymentService == null)
-                _appliedPaymentService = new Lazy<AppliedPaymentService>(() => new AppliedPaymentService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+            //if (_appliedPaymentService == null)
+            //    _appliedPaymentService = new Lazy<AppliedPaymentService>(() => new AppliedPaymentService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
-            if (_applyPaymentStrategy == null)
-            {
-                // instantiate type configured in Merchello configuration section
-                var paymentStrategyTypeName = MerchelloConfiguration.Current.DefaultApplyPaymentStrategy;
+            //if (_applyPaymentStrategy == null)
+            //{
+            //    // instantiate type configured in Merchello configuration section
+            //    var paymentStrategyTypeName = MerchelloConfiguration.Current.DefaultApplyPaymentStrategy;
 
-                // we have to find the ApplyPaymentStrategyBase with a specific constructor
-                var constructorArgs = new[] { typeof(CustomerService), typeof(InvoiceService), typeof(AppliedPaymentService) };
-                var constructorArgValues = new object[] { _customerService.Value, _invoiceService.Value, _appliedPaymentService.Value };
+            //    // we have to find the ApplyPaymentStrategyBase with a specific constructor
+            //    var constructorArgs = new[] { typeof(CustomerService), typeof(InvoiceService), typeof(AppliedPaymentService) };
+            //    var constructorArgValues = new object[] { _customerService.Value, _invoiceService.Value, _appliedPaymentService.Value };
                 
-                _applyPaymentStrategy = new Lazy<PaymentApplicationStrategyBase>(() => ActivatorHelper.CreateInstance<PaymentApplicationStrategyBase>(Type.GetType(paymentStrategyTypeName), constructorArgs, constructorArgValues));
-            }
+            //    _applyPaymentStrategy = new Lazy<PaymentApplicationStrategyBase>(() => ActivatorHelper.CreateInstance<PaymentApplicationStrategyBase>(Type.GetType(paymentStrategyTypeName), constructorArgs, constructorArgValues));
+            //}
 
-            if(_paymentService == null)
-                _paymentService = new Lazy<PaymentService>(() => new PaymentService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _applyPaymentStrategy.Value));
+            //if(_paymentService == null)
+            //    _paymentService = new Lazy<PaymentService>(() => new PaymentService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _applyPaymentStrategy.Value));
 
             if(_productService == null)
                 _productService = new Lazy<ProductService>(() => new ProductService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
@@ -148,13 +148,13 @@ namespace Merchello.Core.Services
             get { return _invoiceStatusService.Value; }
         }
 
-        /// <summary>
-        /// Gets the <see cref="IPaymentService"/>
-        /// </summary>
-        public IPaymentService PaymentService
-        {
-            get { return _paymentService.Value;  }
-        }
+        ///// <summary>
+        ///// Gets the <see cref="IPaymentService"/>
+        ///// </summary>
+        //public IPaymentService PaymentService
+        //{
+        //    get { return _paymentService.Value;  }
+        //}
 
         /// <summary>
         /// Gets the <see cref="IProductService"/>
@@ -172,11 +172,6 @@ namespace Merchello.Core.Services
         internal IShipMethodService ShipMethodService
         {
             get { return _shipMethodService.Value; }
-        }
-
-        internal  IAppliedPaymentService AppliedPaymentService
-        {
-            get { return _appliedPaymentService.Value; }
         }
 
         public IWarehouseService WarehouseService

@@ -258,7 +258,6 @@
     <Compile Include="Services\InvoiceServiceTests.cs" />
     <Compile Include="Services\InvoiceStatusServiceTests.cs" />
     <Compile Include="Services\CustomerServiceTests.cs" />
-    <Compile Include="Services\PaymentServiceTests.cs" />
     <Compile Include="Services\ProductServiceTests.cs" />
     <Compile Include="Services\ServiceIntegrationTestBase.cs" />
     <Compile Include="Services\ShipmentServiceTests.cs" />

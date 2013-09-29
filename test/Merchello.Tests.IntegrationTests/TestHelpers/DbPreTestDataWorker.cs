@@ -350,13 +350,13 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
 
 
-        /// <summary>
-        /// Returns the Payment Service
-        /// </summary>
-        public IPaymentService PaymentService
-        {
-            get { return _serviceContext.PaymentService; }
-        }
+        ///// <summary>
+        ///// Returns the Payment Service
+        ///// </summary>
+        //public IPaymentService PaymentService
+        //{
+        //    get { return _serviceContext.PaymentService; }
+        //}
 
         #endregion
 
@@ -387,13 +387,6 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         #region IAppliedPayment
 
 
-        /// <summary>
-        /// Gets the transaction service
-        /// </summary>
-        public IAppliedPaymentService AppliedPaymentService
-        {
-            get { return _serviceContext.AppliedPaymentService; }
-        }
 
         #endregion
 

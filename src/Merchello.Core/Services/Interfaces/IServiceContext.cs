@@ -11,16 +11,6 @@ namespace Merchello.Core.Services
     public interface IServiceContext
     {
 
-        ///// <summary>
-        ///// Gets the <see cref="IAddressService"/>
-        ///// </summary>
-        //IAddressService AddressService { get; }
-
-        ///// <summary>
-        ///// Gets the <see cref="IAnonymousCustomerService"/>
-        ///// </summary>
-        //IAnonymousCustomerService AnonymousCustomerService { get; }
-
         /// <summary>
         /// Gets the <see cref="ICustomerService"/>
         /// </summary>
@@ -37,20 +27,11 @@ namespace Merchello.Core.Services
         /// </summary>
         IInvoiceService InvoiceService { get; }
 
-        ///// <summary>
-        ///// Gets the <see cref="IInvoiceItemService"/>
-        ///// </summary>
-        //IInvoiceItemService InvoiceItemService { get;  }
 
         ///// <summary>
-        ///// Gets the <see cref="IInvoiceStatusService"/>
+        ///// Gets the <see cref="IPaymentService"/>
         ///// </summary>
-        //IInvoiceStatusService InvoiceStatusService { get; }
-
-        /// <summary>
-        /// Gets the <see cref="IPaymentService"/>
-        /// </summary>
-        IPaymentService PaymentService { get; }
+        //IPaymentService PaymentService { get; }
 
         /// <summary>
         /// Gets the <see cref="IProductService"/>
@@ -62,16 +43,7 @@ namespace Merchello.Core.Services
         /// </summary>
         IShipmentService ShipmentService { get; }
 
-        ///// <summary>
-        ///// Gets the <see cref="IShipMethodService"/>
-        ///// </summary>
-        //IShipMethodService ShipMethodService { get; }
-
-        ///// <summary>
-        ///// Gets the <see cref="ITransactionService"/>
-        ///// </summary>
-        //ITransactionService TransactionService { get; }
-
+        
         /// <summary>
         /// Gets the <see cref="IWarehouseService"/>
         /// </summary>
