@@ -34,9 +34,9 @@ namespace Merchello.Web.UI.Trees
             }
             else
             {
-                collection.Add(CreateTreeNode("catalog", queryStrings, "Catalog", "icon-autofill", false));
-                collection.Add(CreateTreeNode("invoice", queryStrings, "Invoice", "icon-autofill", false));
-                collection.Add(CreateTreeNode("customers", queryStrings, "Customers", "icon-autofill", false));
+                collection.Add(CreateTreeNode("catalog", queryStrings, "Catalog", "icon-autofill", false, "merchello/merchello/ListProducts/"));
+                collection.Add(CreateTreeNode("invoice", queryStrings, "Invoice", "icon-autofill", false, "ListProducts.html"));
+                collection.Add(CreateTreeNode("customers", queryStrings, "Customers", "icon-autofill", false, "ListProducts"));
                 collection.Add(CreateTreeNode("reports", queryStrings, "Reports", "icon-autofill", false));
                 collection.Add(CreateTreeNode("settings", queryStrings, "Settings", "icon-autofill", true));
             }
