@@ -5,9 +5,9 @@ using System.Threading;
 using Merchello.Core.Models;
 using Merchello.Core.Models.TypeFields;
 using Merchello.Core.Persistence;
-using Merchello.Core.Events;
 using Merchello.Core.Persistence.Querying;
 using Umbraco.Core;
+using Umbraco.Core.Events;
 using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Core.Services
@@ -73,7 +73,7 @@ namespace Merchello.Core.Services
                     Phone = phone
                 };
                 
-            Created.RaiseEvent(new NewEventArgs<IShipment>(shipment), this);
+            Created.RaiseEvent(new Events.NewEventArgs<IShipment>(shipment), this);
 
             return shipment;
         }
@@ -267,7 +267,7 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Occurs after Create
         /// </summary>
-        public static event TypedEventHandler<IShipmentService, NewEventArgs<IShipment>> Created;
+        public static event TypedEventHandler<IShipmentService, Events.NewEventArgs<IShipment>> Created;
 
         #endregion
 

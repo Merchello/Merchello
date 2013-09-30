@@ -14,7 +14,7 @@ using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Core.Persistence.Repositories
 {
-    internal class ProductRepository : MerchelloPetaPocoRepositoryBase<Guid, IProduct>, IProductRepository
+    internal class ProductRepository : MerchelloPetaPocoRepositoryBase<Guid, IProductActual>, IProductRepository
     {
 
         public ProductRepository(IDatabaseUnitOfWork work)
@@ -31,12 +31,12 @@ namespace Merchello.Core.Persistence.Repositories
         #region Overrides of RepositoryBase<IProduct>
 
 
-        protected override IProduct PerformGet(Guid id)
+        protected override IProductActual PerformGet(Guid id)
         {
             var sql = GetBaseQuery(false)
                 .Where(GetBaseWhereClause(), new { Id = id });
 
-            var dto = Database.Fetch<ProductDto>(sql).FirstOrDefault();
+            var dto = Database.Fetch<ProductActualDto>(sql).FirstOrDefault();
 
             if (dto == null)
                 return null;
@@ -48,7 +48,7 @@ namespace Merchello.Core.Persistence.Repositories
             return product;
         }
 
-        protected override IEnumerable<IProduct> PerformGetAll(params Guid[] ids)
+        protected override IEnumerable<IProductActual> PerformGetAll(params Guid[] ids)
         {
             if (ids.Any())
             {
@@ -60,7 +60,7 @@ namespace Merchello.Core.Persistence.Repositories
             else
             {
                 var factory = new ProductFactory();
-                var dtos = Database.Fetch<ProductDto>(GetBaseQuery(false));
+                var dtos = Database.Fetch<ProductActualDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
                     yield return factory.BuildEntity(dto);
@@ -76,7 +76,7 @@ namespace Merchello.Core.Persistence.Repositories
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-               .From<ProductDto>();
+               .From<ProductActualDto>();
 
             return sql;
         }
@@ -90,13 +90,13 @@ namespace Merchello.Core.Persistence.Repositories
         {
             var list = new List<string>
                 {
-                    "DELETE FROM merchProduct WHERE pk = @Id",
+                    "DELETE FROM merchProductActual WHERE pk = @Id",
                 };
 
             return list;
         }
 
-        protected override void PersistNewItem(IProduct entity)
+        protected override void PersistNewItem(IProductActual entity)
         {
             ((KeyEntity)entity).AddingEntity();
 
@@ -108,7 +108,7 @@ namespace Merchello.Core.Persistence.Repositories
             entity.ResetDirtyProperties();
         }
 
-        protected override void PersistUpdatedItem(IProduct entity)
+        protected override void PersistUpdatedItem(IProductActual entity)
         {
             ((KeyEntity)entity).UpdatingEntity();
 
@@ -120,7 +120,7 @@ namespace Merchello.Core.Persistence.Repositories
             entity.ResetDirtyProperties();
         }
 
-        protected override void PersistDeletedItem(IProduct entity)
+        protected override void PersistDeletedItem(IProductActual entity)
         {
             var deletes = GetDeleteClauses();
             foreach (var delete in deletes)
@@ -130,13 +130,13 @@ namespace Merchello.Core.Persistence.Repositories
         }
 
 
-        protected override IEnumerable<IProduct> PerformGetByQuery(IQuery<IProduct> query)
+        protected override IEnumerable<IProductActual> PerformGetByQuery(IQuery<IProductActual> query)
         {
             var sqlClause = GetBaseQuery(false);
-            var translator = new SqlTranslator<IProduct>(sqlClause, query);
+            var translator = new SqlTranslator<IProductActual>(sqlClause, query);
             var sql = translator.Translate();
 
-            var dtos = Database.Fetch<ProductDto>(sql);
+            var dtos = Database.Fetch<ProductActualDto>(sql);
 
             return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
 

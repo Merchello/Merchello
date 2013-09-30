@@ -2,11 +2,9 @@
 using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Models;
-using Merchello.Core.Persistence.Migrations.Initial;
 using Merchello.Core.Services;
 using Merchello.Tests.Base.DataMakers;
 using NUnit.Framework;
-using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Tests.IntegrationTests.Services
 {

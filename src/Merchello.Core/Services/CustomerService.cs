@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading;
 using Merchello.Core.Models;
 using Merchello.Core.Persistence;
-using Merchello.Core.Events;
 using Merchello.Core.Persistence.Repositories;
 using Umbraco.Core;
+using Umbraco.Core.Events;
 using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Core.Services
@@ -58,7 +58,7 @@ namespace Merchello.Core.Services
                     MemberId = memberId
                 };
 
-            Created.RaiseEvent(new NewEventArgs<ICustomer>(customer), this);
+            Created.RaiseEvent(new Events.NewEventArgs<ICustomer>(customer), this);
 
             return customer;
         }
@@ -215,6 +215,13 @@ namespace Merchello.Core.Services
 
         #region Event Handlers
 
+
+        /// <summary>
+        /// Occurs after Create
+        /// </summary>
+        public static event TypedEventHandler<ICustomerService, Events.NewEventArgs<ICustomer>> Created;
+
+
         /// <summary>
         /// Occurs before Delete
         /// </summary>		
@@ -234,12 +241,6 @@ namespace Merchello.Core.Services
         /// Occurs after Save
         /// </summary>
         public static event TypedEventHandler<ICustomerService, SaveEventArgs<ICustomer>> Saved;
-
-        /// <summary>
-        /// Occurs after Create
-        /// </summary>
-        public static event TypedEventHandler<ICustomerService, NewEventArgs<ICustomer>> Created;
-
 
 
         #endregion

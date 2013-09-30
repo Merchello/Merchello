@@ -13,11 +13,13 @@ namespace Merchello.Core.Models.EntityBase
         private int _id;
         private Guid _key;
         private bool _hasIdentity;
+        private bool _wasCancelled;
         private DateTime _createDate;
         private DateTime _updateDate;
 
         private static readonly PropertyInfo IdSelector = ExpressionHelper.GetPropertyInfo<Entity, int>(x => x.Id);
         private static readonly PropertyInfo KeySelector = ExpressionHelper.GetPropertyInfo<Entity, Guid>(x => x.Key);
+        private static readonly PropertyInfo WasCancelledSelector = ExpressionHelper.GetPropertyInfo<Entity, bool>(x => x.WasCancelled);
         private static readonly PropertyInfo CreateDateSelector = ExpressionHelper.GetPropertyInfo<Entity, DateTime>(x => x.CreateDate);
         private static readonly PropertyInfo UpdateDateSelector = ExpressionHelper.GetPropertyInfo<Entity, DateTime>(x => x.UpdateDate);
         private static readonly PropertyInfo HasIdentitySelector = ExpressionHelper.GetPropertyInfo<Entity, bool>(x => x.HasIdentity);
@@ -136,6 +138,24 @@ namespace Merchello.Core.Models.EntityBase
         {
             CreateDate = DateTime.Now;
             UpdateDate = DateTime.Now;
+        }
+
+        /// <summary>
+        /// Gets or sets the WasCancelled flag, which is used to track
+        /// whether some action against an entity was cancelled through some event.
+        /// </summary>
+        [IgnoreDataMember]
+        internal bool WasCancelled
+        {
+            get { return _wasCancelled; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _wasCancelled = value;
+                    return _wasCancelled;
+                }, _wasCancelled, WasCancelledSelector);
+            }
         }
 
         /// <summary>

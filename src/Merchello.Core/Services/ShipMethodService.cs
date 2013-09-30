@@ -5,8 +5,8 @@ using System.Threading;
 using Merchello.Core.Models;
 using Merchello.Core.Models.TypeFields;
 using Merchello.Core.Persistence;
-using Merchello.Core.Events;
 using Umbraco.Core;
+using Umbraco.Core.Events;
 using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Core.Services
@@ -45,7 +45,7 @@ namespace Merchello.Core.Services
         /// </summary
         public IShipMethod CreateShipMethod(string name, Guid providerKey, ShipMethodType shipMethodType)
         {
-            var typeField = EnumTypeFieldConverter.ShipmentMethod().GetTypeField(shipMethodType);
+            var typeField = EnumTypeFieldConverter.ShipmentMethod.GetTypeField(shipMethodType);
             return CreateShipMethod(name, providerKey, typeField.TypeKey);
         }
 
@@ -62,7 +62,7 @@ namespace Merchello.Core.Services
                     Surcharge = 0
                 };
                 
-            Created.RaiseEvent(new NewEventArgs<IShipMethod>(shipMethod), this);
+            Created.RaiseEvent(new Events.NewEventArgs<IShipMethod>(shipMethod), this);
 
             return shipMethod;
         }
@@ -226,7 +226,7 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Occurs after Create
         /// </summary>
-        public static event TypedEventHandler<IShipMethodService, NewEventArgs<IShipMethod>> Created;
+        public static event TypedEventHandler<IShipMethodService, Events.NewEventArgs<IShipMethod>> Created;
 
         #endregion
 

@@ -5,10 +5,10 @@ using System.Threading;
 using Merchello.Core.Models;
 using Merchello.Core.Models.TypeFields;
 using Merchello.Core.Persistence;
-using Merchello.Core.Events;
 using Merchello.Core.Persistence.Querying;
 using Merchello.Core.Strategies.Payment;
 using Umbraco.Core;
+using Umbraco.Core.Events;
 using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Core.Services
@@ -52,7 +52,7 @@ namespace Merchello.Core.Services
         /// </summary>
         public IPayment CreatePayment(ICustomer customer, Guid providerKey, PaymentMethodType paymentMethodType, string paymentMethodName, string referenceNumber, decimal amount)
         {
-            var typeFieldKey = EnumTypeFieldConverter.PaymentMethod().GetTypeField(paymentMethodType).TypeKey;
+            var typeFieldKey = EnumTypeFieldConverter.PaymentMethod.GetTypeField(paymentMethodType).TypeKey;
             return CreatePayment(customer, providerKey, typeFieldKey, paymentMethodName, referenceNumber, amount);
         }
 
@@ -67,7 +67,7 @@ namespace Merchello.Core.Services
                     Exported = false
                 };
                 
-            Created.RaiseEvent(new NewEventArgs<IPayment>(payment), this);
+            Created.RaiseEvent(new Events.NewEventArgs<IPayment>(payment), this);
 
             return payment;
         }
@@ -286,7 +286,7 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Occurs after Create
         /// </summary>
-        public static event TypedEventHandler<IPaymentService, NewEventArgs<IPayment>> Created;
+        public static event TypedEventHandler<IPaymentService, Events.NewEventArgs<IPayment>> Created;
 
 
         /// <summary>

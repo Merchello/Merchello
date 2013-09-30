@@ -3,11 +3,11 @@ using Merchello.Core.Models.Rdbms;
 
 namespace Merchello.Core.Persistence.Factories
 {
-    internal partial class ProductFactory : IEntityFactory<IProduct, ProductDto>
+    internal partial class ProductFactory : IEntityFactory<IProductActual, ProductActualDto>
     {
-        public IProduct BuildEntity(ProductDto dto)
+        public IProductActual BuildEntity(ProductActualDto dto)
         {
-            var product = new Product()
+            var product = new ProductActual()
             {
                 Key = dto.Key,
                 Sku = dto.Sku,
@@ -18,7 +18,10 @@ namespace Merchello.Core.Persistence.Factories
                 Weight = dto.Weight,
                 Length = dto.Length,
                 Width = dto.Width,
-                Height = dto.Height,                
+                Height = dto.Height,
+                Barcode = dto.Barcode,
+                Available = dto.Available,
+                TrackInventory = dto.TrackInventory,
                 Taxable = dto.Taxable,
                 Shippable = dto.Shippable,
                 Download = dto.Download,
@@ -33,9 +36,9 @@ namespace Merchello.Core.Persistence.Factories
             return product;
         }
 
-        public ProductDto BuildDto(IProduct entity)
+        public ProductActualDto BuildDto(IProductActual entity)
         {
-            var dto = new ProductDto()
+            var dto = new ProductActualDto()
             {
                 Key = entity.Key,
                 Sku = entity.Sku,
@@ -46,7 +49,10 @@ namespace Merchello.Core.Persistence.Factories
                 Weight = entity.Weight,
                 Length = entity.Length,
                 Width = entity.Width,
-                Height = entity.Height,                
+                Height = entity.Height,
+                Barcode = entity.Barcode,
+                Available = entity.Available,
+                TrackInventory = entity.TrackInventory,
                 Taxable = entity.Taxable,
                 Shippable = entity.Shippable,
                 Download = entity.Download,

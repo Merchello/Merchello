@@ -1,6 +1,7 @@
 ﻿using Merchello.Core.Events;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
+using Umbraco.Core.Events;
 
 namespace Merchello.Core.ConversionStrategies
 {

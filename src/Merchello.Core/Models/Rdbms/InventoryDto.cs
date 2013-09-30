@@ -10,18 +10,17 @@ namespace Merchello.Core.Models.Rdbms
     internal class InventoryDto
     {
         [Column("warehouseId")]
-        [PrimaryKeyColumn(AutoIncrement = false, Name = "PK_merchInventory", OnColumns = "warehouseId, productVariantKey")]
+        [PrimaryKeyColumn(AutoIncrement = false, Name = "PK_merchInventory", OnColumns = "warehouseId, productActualKey")]
         [ForeignKey(typeof(WarehouseDto), Name = "FK_merchInventory_merchWarehouse", Column = "id")]
         public int WarehouseId { get; set; }
 
-        [Column("productVariantKey")]
-        [ForeignKey(typeof(ProductVariantDto), Name="FK_merchInventory_merchProductVariant", Column = "pk")]
-        public Guid ProductVariantKey { get; set; }
+        [Column("productActualKey")]
+        [ForeignKey(typeof(ProductActualDto), Name = "FK_merchInventory_merchProductActual", Column = "pk")]
+        public Guid ProductActualKey { get; set; }
 
         [Column("count")]
         public int Count { get; set; }
 
-        // TODO : This may be a good global setting?
         [Column("lowCount")] 
         public int LowCount { get; set; }
 

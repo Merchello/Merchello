@@ -59,7 +59,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         public IAddress MakeExistingAddress(ICustomer customer, string label)
         {
             var address = MockAddressDataMaker.RandomAddress(customer, label);
-            AddressService.Save(address);
+            //AddressService.Save(address);
             return address;
         }
 
@@ -69,7 +69,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         public IEnumerable<IAddress> MakeExistingAddressCollection(ICustomer customer, string label, int count)
         {
             var addresses = MockAddressDataMaker.AddressCollectionForInserting(customer, label, count);
-            AddressService.Save(addresses);
+            //AddressService.Save(addresses);
             return addresses;
         }
 
@@ -78,17 +78,17 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         /// </summary>
         public void DeleteAllAddresses()
         {
-            var all = ((AddressService) AddressService).GetAll();
-            AddressService.Delete(all);
+            //var all = ((AddressService) AddressService).GetAll();
+            //AddressService.Delete(all);
         }
 
-        /// <summary>
-        /// The address service
-        /// </summary>
-        public IAddressService AddressService
-        {
-            get { return _serviceContext.AddressService; }
-        }
+        ///// <summary>
+        ///// The address service
+        ///// </summary>
+        //public IAddressService AddressService
+        //{
+        //    get { return _serviceContext.AddressService; }
+        //}
 
         #endregion
 
@@ -113,33 +113,21 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         #region IBasket
 
         /// <summary>
-        ///  Inserts an address record in the merchBasket table and returns an <see cref="IBasket"/> object representation
+        ///  Inserts an address record in the merchBasket table and returns an <see cref="ICustomerItemRegister"/> object representation
         /// </summary>
-        public IBasket MakeExistingBasket(IConsumer consumer, BasketType basketType)
+        public ICustomerItemRegister MakeExistingBasket(IConsumer consumer, CustomerItemRegisterType customerItemRegisterType)
         {
-            var basket = MockBasketDataMaker.ConsumerBasketForInserting(consumer, basketType);
-            BasketService.Save(basket);
+            var basket = MockBasketDataMaker.ConsumerBasketForInserting(consumer, customerItemRegisterType);
+            CustomerItemRegisterService.Save(basket);
             return basket;
         }
 
         /// <summary>
         /// The basket service
         /// </summary>
-        public IBasketService BasketService
+        public ICustomerItemRegisterService CustomerItemRegisterService
         {
-            get { return _serviceContext.BasketService; }
-        }
-
-        #endregion
-
-        #region IBasketItem
-
-        /// <summary>
-        /// The basket item service
-        /// </summary>
-        public IBasketItemService BasketItemService
-        {
-            get { return _serviceContext.BasketItemService; }
+            get { return _serviceContext.CustomerItemRegisterService; }
         }
 
         #endregion
@@ -317,10 +305,10 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         #region IProduct
 
         /// <summary>
-        /// Saves a product record to the database and returns and instance of <see cref="IProduct"/> represents that record
+        /// Saves a product record to the database and returns and instance of <see cref="IProductActual"/> represents that record
         /// </summary>
-        /// <returns><see cref="IProduct"/></returns>
-        public IProduct MakeExistingProduct()
+        /// <returns><see cref="IProductActual"/></returns>
+        public IProductActual MakeExistingProduct()
         {
             var product = MockProductDataMaker.MockProductForInserting();
             ProductService.Save(product);
@@ -328,11 +316,11 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         }
 
         /// <summary>
-        /// Saves a collection of products to the database and return a collection of <see cref="IProduct"/> representing that collection
+        /// Saves a collection of products to the database and return a collection of <see cref="IProductActual"/> representing that collection
         /// </summary>
         /// <param name="count"></param>
         /// <returns></returns>
-        public IEnumerable<IProduct> MakeExistingProductCollection(int count)
+        public IEnumerable<IProductActual> MakeExistingProductCollection(int count)
         {
             var products = MockProductDataMaker.MockProductCollectionForInserting(count);
             ProductService.Save(products);
@@ -362,13 +350,13 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
 
 
-        /// <summary>
-        /// Returns the Payment Service
-        /// </summary>
-        public IPaymentService PaymentService
-        {
-            get { return _serviceContext.PaymentService; }
-        }
+        ///// <summary>
+        ///// Returns the Payment Service
+        ///// </summary>
+        //public IPaymentService PaymentService
+        //{
+        //    get { return _serviceContext.PaymentService; }
+        //}
 
         #endregion
 
@@ -399,13 +387,6 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         #region IAppliedPayment
 
 
-        /// <summary>
-        /// Gets the transaction service
-        /// </summary>
-        public IAppliedPaymentService AppliedPaymentService
-        {
-            get { return _serviceContext.AppliedPaymentService; }
-        }
 
         #endregion
 
