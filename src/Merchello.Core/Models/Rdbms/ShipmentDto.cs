@@ -13,9 +13,9 @@ namespace Merchello.Core.Models.Rdbms
         [PrimaryKeyColumn]
         public int Id { get; set; }
 
-        [Column("invoiceId")]
-        [ForeignKey(typeof(InvoiceDto), Name = "FK_merchShipment_merchInvoice", Column = "id")]
-        public int InvoiceId { get; set; }
+        [Column("orderId")]
+        [ForeignKey(typeof(OrderDto), Name = "FK_merchShipment_merchOrder", Column = "id")]
+        public int OrderId { get; set; }
 
         [Column("address1")]
         [NullSetting(NullSetting = NullSettings.Null)]
