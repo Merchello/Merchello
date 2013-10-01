@@ -1,0 +1,39 @@
+﻿<form novalidate name="contentForm" 
+      ng-controller="Merchello.Editors.Product.EditController" 
+      ng-show="loaded" 
+      ng-submit="save()">
+    <umb-panel val-show-validation>
+
+        <umb-header>
+
+            <div class="span4">
+                <umb-content-name 
+                    ng-model="content.name" 
+                    placeholder="Enter a title">
+                </umb-content-name>
+            </div>
+
+            <div class="span8">
+                <div class="btn-toolbar pull-right umb-btn-toolbar">
+                    
+                    <div class="btn-group">
+                        
+                        <button type="submit" class="btn btn-success">Save</button>
+
+                    </div>
+                </div>
+            </div>
+        </umb-header>
+        
+        <div class="umb-panel-body umb-scrollable row-fluid">
+            <div class="tab-content form-horizontal">
+                <div class="umb-pane">
+                    
+                    <p>TESTING MERCHELLO</p>
+                    
+                </div>
+            </div>
+        </div>
+
+    </umb-panel>
+</form>
