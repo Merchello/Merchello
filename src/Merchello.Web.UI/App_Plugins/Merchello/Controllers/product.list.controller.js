@@ -16,11 +16,11 @@ function ProductListController($scope, $routeParams, $location, notificationsSer
     $scope.$watch('filtertext', function (newfilter, oldfilter) {
         $scope.watchCount = $scope.watchCount + 1;
 
-        var newFilteredProducts = jQuery.grep($scope.products, function (p, i) {
-            return p.name.test($scope.filtertext);
-        });
+        //var newFilteredProducts = jQuery.grep($scope.products, function (p, i) {
+        //    return p.name.test($scope.filtertext);
+        //});
 
-        $scope.filteredproducts = newFilteredProducts;
+        //$scope.filteredproducts = newFilteredProducts;
     }, true);
 
     $scope.loadProducts = function () {

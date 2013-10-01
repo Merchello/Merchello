@@ -44,7 +44,7 @@ function merchelloProductService($q, $http, umbDataFormatter, umbRequestHelper) 
 
             return umbRequestHelper.resourcePromise(
                 $http.get(
-                    '/umbraco/Merchello/ProductApi/GetProducts'
+                    '/umbraco/Merchello/ProductApi/GetAllProducts'
                 ),
                 'Failed to get all products');
 
