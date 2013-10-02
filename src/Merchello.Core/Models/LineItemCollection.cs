@@ -73,8 +73,9 @@ namespace Merchello.Core.Models
                 if (key != null)
                 {
                     var exists = this.Contains(key);
-                    if (exists)
-                        return;
+                    if (!exists) return;
+                    this[key].Quantity += item.Quantity;
+                    return;
                 }
                 base.Add(item);
                 OnAdd.IfNotNull(x => x.Invoke());

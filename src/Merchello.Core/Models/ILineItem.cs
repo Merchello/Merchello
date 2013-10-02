@@ -8,8 +8,12 @@ namespace Merchello.Core.Models
     public interface ILineItem : IIdEntity
     {
         /// <summary>
-        /// The id of the list item parent
+        /// The id of the line item parent
         /// </summary>
+        /// <remarks>
+        /// Children of this line item would represent an itemization of the line item itself.
+        /// Example would be sales of kits or a break down of sales tax.
+        /// </remarks>
         [DataMember]
         int? ParentId { get; set; }
 
@@ -26,25 +30,25 @@ namespace Merchello.Core.Models
         Guid LineItemTfKey { get; set; }
 
         /// <summary>
-        /// The sku for the basket item
+        /// The sku for the line item
         /// </summary>
         [DataMember]
         string Sku { get; set; }
 
         /// <summary>
-        /// The name for the basket item
+        /// The name for the line item
         /// </summary>
         [DataMember]
         string Name { get; set; }
 
         /// <summary>
-        /// The baseQuantity for the basket item
+        /// The Quantity for the line item
         /// </summary>
         [DataMember]
-        int BaseQuantity { get; set; }
+        int Quantity { get; set; }
 
         /// <summary>
-        /// The amount for the basket item
+        /// The amount for the line item
         /// </summary>
         [DataMember]
         decimal Amount { get; set; } 

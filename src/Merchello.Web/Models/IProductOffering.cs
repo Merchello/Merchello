@@ -3,7 +3,7 @@
     /// <summary>
     /// Defines a product composition
     /// </summary>
-    public interface IProductComposition
+    public interface IProductOffering
     {
          
     }

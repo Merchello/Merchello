@@ -83,7 +83,7 @@ namespace Merchello.Core.Persistence.Repositories
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-               .From("merchCustomerRegistry");
+               .From("merchCustomerItemRegister");
 
             return sql;
         }
@@ -97,8 +97,8 @@ namespace Merchello.Core.Persistence.Repositories
         {
             var list = new List<string>
                 {
-                    "DELETE FROM merchCustomerRegistryItem WHERE basketId = @Id",
-                    "DELETE FROM merchCustomerRegistry WHERE id = @Id"
+                    "DELETE FROM merchCustomerItemRegisterItem WHERE basketId = @Id",
+                    "DELETE FROM merchCustomerItemRegister WHERE id = @Id"
                 };
 
             return list;
