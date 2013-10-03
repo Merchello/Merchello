@@ -78,13 +78,11 @@ namespace Merchello.Tests.UnitTests.Querying
             //// Act
             var sql = new Sql();
             sql.Select("*")
-                .From<CustomerItemRegisterDto>();
-
-            var query = Query<ICustomerItemRegister>.Builder.Where(x => x.ConsumerKey == key);
-            var translated = TranslateQuery(sql, query);
+                .From<CustomerItemRegisterDto>()
+                .Where<CustomerItemRegisterDto>(x => x.ConsumerKey == key);
 
             //// Assert
-            Assert.AreEqual(expected.SQL, translated.SQL);
+            Assert.AreEqual(expected.SQL, sql.SQL);
         }
 
         /// <summary>
@@ -105,13 +103,11 @@ namespace Merchello.Tests.UnitTests.Querying
             //// Act
             var sql = new Sql();
             sql.Select("*")
-               .From<CustomerItemRegisterDto>();
-
-            var query = Query<ICustomerItemRegister>.Builder.Where(x => x.ConsumerKey == key && x.CustomerRegisterTfKey == basketTypeKey);
-            var translated = TranslateQuery(sql, query);
+                .From<CustomerItemRegisterDto>()
+                .Where<CustomerItemRegisterDto>(x => x.ConsumerKey == key && x.RegisterTfKey == basketTypeKey);
 
             //// Assert
-            Assert.AreEqual(expected.SQL, translated.SQL);
+            Assert.AreEqual(expected.SQL, sql.SQL);
         }
     }
 }

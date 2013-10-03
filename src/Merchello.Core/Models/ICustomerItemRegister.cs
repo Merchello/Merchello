@@ -21,7 +21,7 @@ namespace Merchello.Core.Models
         /// The registry type field <see cref="ITypeField"/> guid typeKey
         /// </summary>
         [DataMember]
-        Guid CustomerRegisterTfKey { get; set; }
+        Guid RegisterTfKey { get; set; }
 
         /// <summary>
         /// The <see cref="CustomerItemRegisterType"/> of the customer registry

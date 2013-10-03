@@ -55,12 +55,12 @@ namespace Merchello.Core.Persistence.Migrations.Initial
                 {24, typeof(InventoryDto)},
                 {25, typeof(ProductBase2ContentDto)},
                 {26, typeof(ProductActual2OptionChoiceDto)},
-                {27, typeof(ShipZoneDto)},
+               /* {27, typeof(ShipZoneDto)},
                 {28, typeof(CountryDto)},
                 {29, typeof(RegionDto)},
                 {30, typeof(ShipZone2Region)},
                 {31, typeof(ShipZone2Country)},
-                {32, typeof(ShipMethod2ShipZone)},
+                {32, typeof(ShipMethod2ShipZone)},*/
                 {33, typeof(RegisteredGatewayProviderDto)},
                 {34, typeof(AppliedPaymentDto)}
             };

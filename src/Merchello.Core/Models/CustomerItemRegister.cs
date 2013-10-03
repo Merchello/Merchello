@@ -14,34 +14,34 @@ namespace Merchello.Core.Models
     internal class CustomerItemRegister : IdEntity, ICustomerItemRegister
     {
         private Guid _consumerKey;
-        private Guid _customerRegisterTfKey;
+        private Guid _registerTfKey;
         private readonly LineItemCollection _items;
  
         public CustomerItemRegister(Guid consumerKey, CustomerItemRegisterType customerItemRegisterType)
             : this(consumerKey, EnumTypeFieldConverter.CustomerItemRegistry.GetTypeField(customerItemRegisterType).TypeKey, new LineItemCollection())
         { }
 
-        internal CustomerItemRegister(Guid consumerKey, Guid customerRegisterTfKey)
-            : this(consumerKey, customerRegisterTfKey, new LineItemCollection())
+        internal CustomerItemRegister(Guid consumerKey, Guid registerTfKey)
+            : this(consumerKey, registerTfKey, new LineItemCollection())
         { }
 
         public CustomerItemRegister(Guid consumerKey, CustomerItemRegisterType customerItemRegisterType, LineItemCollection items)
             : this(consumerKey, EnumTypeFieldConverter.CustomerItemRegistry.GetTypeField(customerItemRegisterType).TypeKey, items)
         { }
 
-        internal CustomerItemRegister(Guid consumerKey, Guid customerRegisterTfKey, LineItemCollection items)
+        internal CustomerItemRegister(Guid consumerKey, Guid registerTfKey, LineItemCollection items)
         {
             Mandate.ParameterCondition(consumerKey != Guid.Empty, "consumerKey");
-            Mandate.ParameterCondition(customerRegisterTfKey != Guid.Empty, "customerRegisterTfKey");
+            Mandate.ParameterCondition(registerTfKey != Guid.Empty, "customerRegisterTfKey");
             Mandate.ParameterNotNull(items, "items");
 
             _consumerKey = consumerKey;
-            _customerRegisterTfKey = customerRegisterTfKey;
+            _registerTfKey = registerTfKey;
             _items = items;
         }
         
         private static readonly PropertyInfo CustomerRegistrySelector = ExpressionHelper.GetPropertyInfo<CustomerItemRegister, Guid>(x => x.ConsumerKey);
-        private static readonly PropertyInfo CustomerRegistryTfKeySelector = ExpressionHelper.GetPropertyInfo<CustomerItemRegister, Guid>(x => x.CustomerRegisterTfKey);
+        private static readonly PropertyInfo RegistryTfKeySelector = ExpressionHelper.GetPropertyInfo<CustomerItemRegister, Guid>(x => x.RegisterTfKey);
         
         /// <summary>
         /// The <see cref="IConsumer"/> key
@@ -64,16 +64,16 @@ namespace Merchello.Core.Models
         /// The registry type field <see cref="ITypeField"/> guid typeKey
         /// </summary>
         [DataMember]
-        public Guid CustomerRegisterTfKey
+        public Guid RegisterTfKey
         {
-            get { return _customerRegisterTfKey; }
+            get { return _registerTfKey; }
             set
             {
                 SetPropertyValueAndDetectChanges(o =>
                 {
-                    _customerRegisterTfKey = value;
-                    return _customerRegisterTfKey;
-                }, _customerRegisterTfKey, CustomerRegistryTfKeySelector);
+                    _registerTfKey = value;
+                    return _registerTfKey;
+                }, _registerTfKey, RegistryTfKeySelector);
             }
         }
 
@@ -83,14 +83,14 @@ namespace Merchello.Core.Models
         [DataMember]
         public CustomerItemRegisterType CustomerItemRegisterType
         {
-            get { return EnumTypeFieldConverter.CustomerItemRegistry.GetTypeField(_customerRegisterTfKey); }
+            get { return EnumTypeFieldConverter.CustomerItemRegistry.GetTypeField(_registerTfKey); }
             set
             {
                 var reference = EnumTypeFieldConverter.CustomerItemRegistry.GetTypeField(value);
                 if (!ReferenceEquals(TypeFieldMapperBase.NotFound, reference))
                 {
                     // call through the property to flag the dirty property
-                    _customerRegisterTfKey = reference.TypeKey;
+                    _registerTfKey = reference.TypeKey;
                 }
             }
         }

@@ -17,7 +17,7 @@ namespace Merchello.Core.Models
         private Guid _lineItemTfKey;
         private string _sku;
         private string _name;
-        private int _baseQuantity;
+        private int _quantity;
         private decimal _amount;
         private LineItemCollection _itemization;
 
@@ -39,7 +39,7 @@ namespace Merchello.Core.Models
         private static readonly PropertyInfo LineItemTfKeySelector = ExpressionHelper.GetPropertyInfo<LineItemBase, Guid>(x => x.LineItemTfKey);
         private static readonly PropertyInfo SkuSelector = ExpressionHelper.GetPropertyInfo<LineItemBase, string>(x => x.Sku);
         private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<LineItemBase, string>(x => x.Name);
-        private static readonly PropertyInfo BaseQuantitySelector = ExpressionHelper.GetPropertyInfo<LineItemBase, int>(x => x.BaseQuantity);
+        private static readonly PropertyInfo BaseQuantitySelector = ExpressionHelper.GetPropertyInfo<LineItemBase, int>(x => x.Quantity);
         private static readonly PropertyInfo AmountSelector = ExpressionHelper.GetPropertyInfo<LineItemBase, decimal>(x => x.Amount);
 
         /// <summary>
@@ -123,16 +123,16 @@ namespace Merchello.Core.Models
         /// The quantity of items to be ordered
         /// </summary>
         [DataMember]
-        public int BaseQuantity
+        public int Quantity
         {
-            get { return _baseQuantity; }
+            get { return _quantity; }
                 set 
                 { 
                     SetPropertyValueAndDetectChanges(o =>
                     {
-                        _baseQuantity = value;
-                        return _baseQuantity;
-                    }, _baseQuantity, BaseQuantitySelector); 
+                        _quantity = value;
+                        return _quantity;
+                    }, _quantity, BaseQuantitySelector); 
                 }
         }
     

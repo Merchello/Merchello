@@ -221,7 +221,7 @@ namespace Merchello.Core.Services
         {
             using (var repository = _repositoryFactory.CreateCustomerItemRegisterRepository(_uowProvider.GetUnitOfWork()))
             {
-                var query = Query<ICustomerItemRegister>.Builder.Where(x => x.ConsumerKey == consumer.Key && x.CustomerRegisterTfKey == registerTfKey);
+                var query = Query<ICustomerItemRegister>.Builder.Where(x => x.ConsumerKey == consumer.Key && x.RegisterTfKey == registerTfKey);
                 return repository.GetByQuery(query).FirstOrDefault();
             }
         }

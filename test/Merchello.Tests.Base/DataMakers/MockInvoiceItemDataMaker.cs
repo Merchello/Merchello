@@ -21,7 +21,7 @@ namespace Merchello.Tests.Base.DataMakers
                     {
                         Amount = GetAmount(),
                         Name = ProductItemName(),
-                        BaseQuantity = Quanity(),
+                        Quantity = Quanity(),
                         UnitOfMeasureMultiplier = 1,
                         Sku = MockSku(),
                         Exported = false

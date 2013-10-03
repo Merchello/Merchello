@@ -25,7 +25,7 @@ namespace Merchello.Core.Persistence.Factories
             {
                 Id = entity.Id,
                 ConsumerKey = entity.ConsumerKey,
-                RegisterTfKey = entity.CustomerRegisterTfKey,
+                RegisterTfKey = entity.RegisterTfKey,
                 UpdateDate = entity.UpdateDate,
                 CreateDate = entity.CreateDate
             };

@@ -108,7 +108,7 @@ namespace Merchello.Tests.UnitTests.Services
             Assert.AreEqual(basket.ConsumerKey, Before.ConsumerKey);
 
             Assert.IsTrue(AfterTriggered);
-            Assert.AreEqual(basket.CustomerRegisterTfKey, After.CustomerRegisterTfKey);
+            Assert.AreEqual(basket.RegisterTfKey, After.RegisterTfKey);
         }
 
         [Test]

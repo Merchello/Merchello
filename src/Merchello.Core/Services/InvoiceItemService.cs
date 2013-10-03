@@ -58,10 +58,10 @@ namespace Merchello.Core.Services
         {
             var invoiceItem = new InvoiceItem(invoice.Id, invoiceItemTypeFieldKey, parentId)
                 {
-                    InvoiceItemTypeFieldKey = invoiceItemTypeFieldKey, 
+                    InvoiceItemTfKey = invoiceItemTypeFieldKey, 
                     Sku = sku, 
                     Name = name, 
-                    BaseQuantity = baseQuantity, 
+                    Quantity = baseQuantity, 
                     UnitOfMeasureMultiplier = unitOfMeasureMultiplier, 
                     Amount = amount, 
                     Exported = exported
