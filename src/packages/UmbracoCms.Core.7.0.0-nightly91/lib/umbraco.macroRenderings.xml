@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>umbraco.macroRenderings</name>
+    </assembly>
+    <members>
+        <member name="T:umbraco.macroRenderings.autoForms">
+            <summary>
+            Summary description for autoForms.
+            </summary>
+        </member>
+        <member name="T:umbraco.macroRenderings.contentTypeSingle">
+            <summary>
+            Summary description for contentType.
+            </summary>
+        </member>
+        <member name="T:umbraco.macroRenderings.contentTypeMultiple">
+            <summary>
+            Summary description for contentTypeMultiple.
+            </summary>
+        </member>
+        <member name="T:umbraco.macroRenderings.numeric">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:umbraco.macroRenderings.propertyTypePicker">
+            <summary>
+            Summary description for propertyTypePicker.
+            </summary>
+        </member>
+        <member name="T:umbraco.macroRenderings.propertyTypePickerMultiple">
+            <summary>
+            Summary description for propertyTypePickerMultiple.
+            </summary>
+        </member>
+        <member name="T:umbraco.macroRenderings.tabPicker">
+            <summary>
+            Summary description for tabPicker.
+            </summary>
+        </member>
+        <member name="T:umbraco.macroRenderings.tabPickerMultiple">
+            <summary>
+            Summary description for tabPickerMultiple.
+            </summary>
+        </member>
+        <member name="T:umbraco.macroRenderings.text">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:umbraco.macroRenderings.textMultiple">
+            <summary>
+            Summary description for textMultiple.
+            </summary>
+        </member>
+        <member name="T:umbraco.macroRenderings.yesNo">
+            <summary>
+            Generates a radiolist of yes and no for boolean fields
+            </summary>
+        </member>
+    </members>
+</doc>
