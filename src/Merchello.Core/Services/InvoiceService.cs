@@ -98,7 +98,7 @@ namespace Merchello.Core.Services
             if (raiseEvents)
             {
                 Saving.RaiseEvent(new SaveEventArgs<IInvoice>(invoice), this);
-                if (invoice.IsPropertyDirty("InvoiceStatusId")) StatusChanging.RaiseEvent(new StatusChangedEventArgs<IInvoice>(invoice), this);
+                if (invoice.IsPropertyDirty("InvoiceStatusId")) StatusChanging.RaiseEvent(new StatusChangeEventArgs<IInvoice>(invoice), this);
             }
            
             using (new WriteLock(Locker))
@@ -113,7 +113,7 @@ namespace Merchello.Core.Services
                 if (raiseEvents)
                 {
                     Saved.RaiseEvent(new SaveEventArgs<IInvoice>(invoice), this);
-                    if (invoice.IsPropertyDirty("InvoiceStatusId")) StatusChanged.RaiseEvent(new StatusChangedEventArgs<IInvoice>(invoice), this);
+                    if (invoice.IsPropertyDirty("InvoiceStatusId")) StatusChanged.RaiseEvent(new StatusChangeEventArgs<IInvoice>(invoice), this);
                 }
             }
         }
@@ -133,7 +133,7 @@ namespace Merchello.Core.Services
             if (raiseEvents)
             {
                 Saving.RaiseEvent(new SaveEventArgs<IInvoice>(invoiceArray), this);
-                if (statusChangedArray.Any()) StatusChanging.RaiseEvent(new StatusChangedEventArgs<IInvoice>(statusChangedArray), this);
+                if (statusChangedArray.Any()) StatusChanging.RaiseEvent(new StatusChangeEventArgs<IInvoice>(statusChangedArray), this);
             }
 
             using (new WriteLock(Locker))
@@ -152,7 +152,7 @@ namespace Merchello.Core.Services
             if (raiseEvents)
             {
                 Saved.RaiseEvent(new SaveEventArgs<IInvoice>(invoiceArray), this);
-                if (statusChangedArray.Any()) StatusChanged.RaiseEvent(new StatusChangedEventArgs<IInvoice>(statusChangedArray), this);
+                if (statusChangedArray.Any()) StatusChanged.RaiseEvent(new StatusChangeEventArgs<IInvoice>(statusChangedArray), this);
             }
         }
 
@@ -290,12 +290,12 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Occurs before the status has been changed
         /// </summary>
-        public static event TypedEventHandler<IInvoiceService, StatusChangedEventArgs<IInvoice>> StatusChanging;
+        public static event TypedEventHandler<IInvoiceService, StatusChangeEventArgs<IInvoice>> StatusChanging;
 
         /// <summary>
         /// Occurs after the status has been changed
         /// </summary>
-        public static event TypedEventHandler<IInvoiceService, StatusChangedEventArgs<IInvoice>> StatusChanged;
+        public static event TypedEventHandler<IInvoiceService, StatusChangeEventArgs<IInvoice>> StatusChanged;
 
         /// <summary>
         /// Occurs before Delete

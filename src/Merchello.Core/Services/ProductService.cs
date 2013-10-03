@@ -205,14 +205,14 @@ namespace Merchello.Core.Services
         #region Event Handlers
 
         /// <summary>
-        /// Occurs before Delete
-        /// </summary>		
-        public static event TypedEventHandler<IProductService, DeleteEventArgs<IProductActual>> Deleting;
+        /// Occurs after Create
+        /// </summary>
+        public static event TypedEventHandler<IProductService, Events.NewEventArgs<IProductActual>> Creating;
 
         /// <summary>
-        /// Occurs after Delete
+        /// Occurs after Create
         /// </summary>
-        public static event TypedEventHandler<IProductService, DeleteEventArgs<IProductActual>> Deleted;
+        public static event TypedEventHandler<IProductService, Events.NewEventArgs<IProductActual>> Created;
 
         /// <summary>
         /// Occurs before Save
@@ -224,15 +224,17 @@ namespace Merchello.Core.Services
         /// </summary>
         public static event TypedEventHandler<IProductService, SaveEventArgs<IProductActual>> Saved;
 
+        /// <summary>
+        /// Occurs before Delete
+        /// </summary>		
+        public static event TypedEventHandler<IProductService, DeleteEventArgs<IProductActual>> Deleting;
 
         /// <summary>
-        /// Occurs after Create
+        /// Occurs after Delete
         /// </summary>
-        public static event TypedEventHandler<IProductService, Events.NewEventArgs<IProductActual>> Created;
+        public static event TypedEventHandler<IProductService, DeleteEventArgs<IProductActual>> Deleted;
 
         #endregion
-
-
      
     }
 }

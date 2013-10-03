@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Merchello.Core.Events;
 using Merchello.Core.Models;
 using Merchello.Core.Persistence;
 using Merchello.Core.Persistence.Repositories;
@@ -217,10 +218,35 @@ namespace Merchello.Core.Services
 
 
         /// <summary>
+        /// Occurs before Create
+        /// </summary>
+        public static event TypedEventHandler<ICustomerService, Events.NewEventArgs<ICustomer>> Creating;
+
+        /// <summary>
         /// Occurs after Create
         /// </summary>
         public static event TypedEventHandler<ICustomerService, Events.NewEventArgs<ICustomer>> Created;
 
+
+        /// <summary>
+        /// Occurs before convert
+        /// </summary>
+        public static event TypedEventHandler<ICustomerService, ConvertEventArgs<ICustomer>> Converting;
+
+        /// <summary>
+        /// Occurs after convert
+        /// </summary>
+        public static event TypedEventHandler<ICustomerService, ConvertEventArgs<ICustomer>> Converted;
+
+        /// <summary>
+        /// Occurs before Save
+        /// </summary>
+        public static event TypedEventHandler<ICustomerService, SaveEventArgs<ICustomer>> Saving;
+
+        /// <summary>
+        /// Occurs after Save
+        /// </summary>
+        public static event TypedEventHandler<ICustomerService, SaveEventArgs<ICustomer>> Saved;
 
         /// <summary>
         /// Occurs before Delete
@@ -232,15 +258,6 @@ namespace Merchello.Core.Services
         /// </summary>
         public static event TypedEventHandler<ICustomerService, DeleteEventArgs<ICustomer>> Deleted;
 
-        /// <summary>
-        /// Occurs before Save
-        /// </summary>
-        public static event TypedEventHandler<ICustomerService, SaveEventArgs<ICustomer>> Saving;
-
-        /// <summary>
-        /// Occurs after Save
-        /// </summary>
-        public static event TypedEventHandler<ICustomerService, SaveEventArgs<ICustomer>> Saved;
 
 
         #endregion

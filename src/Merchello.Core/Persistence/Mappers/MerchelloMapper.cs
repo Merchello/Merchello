@@ -63,7 +63,7 @@ namespace Merchello.Core.Persistence.Mappers
         private static readonly IEnumerable<Type> KeyedTypes = new List<Type>()
             {
                 { typeof(ICustomer) },
-                { typeof(IAnonymousCustomer)},
+                { typeof(IAnonymousCustomer) },
                 { typeof(IProductActual) }
             };
 
@@ -83,19 +83,19 @@ namespace Merchello.Core.Persistence.Mappers
 
             if (mapper == null)
             {
-                return Attempt<BaseMapper>.False;
+                return Attempt<BaseMapper>.Fail();
             }
             try
             {
                 var instance = Activator.CreateInstance(mapper) as BaseMapper;
                 return instance != null
-                    ? new Attempt<BaseMapper>(true, instance)
-                    : Attempt<BaseMapper>.False;
+                    ? Attempt<BaseMapper>.Succeed(instance) //(true, instance)
+                    : Attempt<BaseMapper>.Fail();
             }
             catch (Exception ex)
             {
                 LogHelper.Error(typeof(MerchelloMapper), "Could not instantiate mapper of type " + mapper, ex);
-                return new Attempt<BaseMapper>(ex);
+                return Attempt<BaseMapper>.Fail(ex);
             }
 
 

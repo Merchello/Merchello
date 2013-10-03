@@ -4,13 +4,13 @@ using Umbraco.Core.Events;
 
 namespace Merchello.Core.Events
 {
-    public class StatusChangedEventArgs<T> : CancellableObjectEventArgs<IEnumerable<T>>
+    public class StatusChangeEventArgs<T> : CancellableObjectEventArgs<IEnumerable<T>>
     {
         /// <summary>
         /// Constructor for accepting multiple entities that are used in the saving operation
         /// </summary>
         /// <param name="eventObject"></param>
-        public StatusChangedEventArgs(IEnumerable<T> eventObject)
+        public StatusChangeEventArgs(IEnumerable<T> eventObject)
             : base(eventObject)
         { }
 
@@ -19,21 +19,21 @@ namespace Merchello.Core.Events
         /// </summary>
         /// <param name="eventObject"></param>
         /// <param name="canCancel"></param>
-        public StatusChangedEventArgs(IEnumerable<T> eventObject, bool canCancel)
+        public StatusChangeEventArgs(IEnumerable<T> eventObject, bool canCancel)
             : base(eventObject, canCancel)
         { }
 
         /// <summary>
         /// Constructor accepting a single entity reference
         /// </summary
-        public StatusChangedEventArgs(T eventObject)
+        public StatusChangeEventArgs(T eventObject)
             : base(new List<T> {eventObject})
         { }
 
         /// <summary>
         /// Constructor accepting a single entity reference
         /// </summary>
-        public StatusChangedEventArgs(T eventObject, bool canCancel)
+        public StatusChangeEventArgs(T eventObject, bool canCancel)
             : base(new List<T> { eventObject }, canCancel)
         { }
 
