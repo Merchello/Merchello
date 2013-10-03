@@ -180,17 +180,6 @@
             </summary>
             <value><c>true</c> if preview mode is switched on; otherwise, <c>false</c>.</value>
         </member>
-        <member name="T:umbraco.interfaces.ILiveEditingDataEditor">
-            <summary>
-            Data type editor controls can choose to implement this interface
-            to customize their Live Editing behavior.
-            </summary>
-        </member>
-        <member name="P:umbraco.interfaces.ILiveEditingDataEditor.LiveEditingControl">
-            <summary>
-            Gets the control used for Live Editing.
-            </summary>
-        </member>
         <member name="T:umbraco.interfaces.IMacroGuiRendering">
             <summary>
             Summary description for IMacroGuiRendering.
