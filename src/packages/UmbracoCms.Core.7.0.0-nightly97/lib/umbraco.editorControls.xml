@@ -591,9 +591,6 @@
             <summary>
             Summary description for DataTypeFolderbrowser.
             </summary>
-            <summary>
-            Summary description for DataTypeUploadField.
-            </summary>
         </member>
         <member name="T:umbraco.editorControls.folderBrowser">
             <summary>
@@ -2142,7 +2139,7 @@
             Extension methods for embedded resources
             </summary>
         </member>
-        <member name="M:umbraco.editorControls.ResourceExtensions.RegisterEmbeddedClientResource(System.Web.UI.Control,System.String,umbraco.cms.businesslogic.datatype.ClientDependencyType)">
+        <member name="M:umbraco.editorControls.ResourceExtensions.RegisterEmbeddedClientResource(System.Web.UI.Control,System.String,ClientDependency.Core.ClientDependencyType)">
             <summary>
             Registers the embedded client resource.
             </summary>
@@ -2150,7 +2147,7 @@
             <param name="resourceName">Name of the resource.</param>
             <param name="type">The type.</param>
         </member>
-        <member name="M:umbraco.editorControls.ResourceExtensions.RegisterEmbeddedClientResource(System.Web.UI.Control,System.Type,System.String,umbraco.cms.businesslogic.datatype.ClientDependencyType)">
+        <member name="M:umbraco.editorControls.ResourceExtensions.RegisterEmbeddedClientResource(System.Web.UI.Control,System.Type,System.String,ClientDependency.Core.ClientDependencyType)">
             <summary>
             Registers the embedded client resource.
             </summary>
@@ -2159,7 +2156,7 @@
             <param name="resourceName">Name of the resource.</param>
             <param name="type">The type.</param>
         </member>
-        <member name="M:umbraco.editorControls.ResourceExtensions.RegisterEmbeddedClientResource(System.Web.UI.Page,System.Type,System.String,umbraco.cms.businesslogic.datatype.ClientDependencyType)">
+        <member name="M:umbraco.editorControls.ResourceExtensions.RegisterEmbeddedClientResource(System.Web.UI.Page,System.Type,System.String,ClientDependency.Core.ClientDependencyType)">
             <summary>
             Registers the embedded client resource.
             </summary>

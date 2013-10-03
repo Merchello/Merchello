@@ -394,18 +394,6 @@
             When this applicatio is refactored, this constuctor should be made private.
             </summary>
         </member>
-        <member name="T:umbraco.BusinessLogic.Actions.ActionSave">
-            <summary>
-            This action is invoked upon saving of a document, media, member
-            </summary>
-        </member>
-        <member name="M:umbraco.BusinessLogic.Actions.ActionSave.#ctor">
-            <summary>
-            A public constructor exists ONLY for backwards compatibility in regards to 3rd party add-ons.
-            All Umbraco assemblies should use the singleton instantiation (this.Instance)
-            When this applicatio is refactored, this constuctor should be made private.
-            </summary>
-        </member>
         <member name="T:umbraco.BusinessLogic.Actions.ActionSendToTranslate">
             <summary>
             This action is invoked when a send to translate request occurs
@@ -600,78 +588,6 @@
             The save event handler
             </summary>
             <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
-        </member>
-        <member name="T:umbraco.cms.businesslogic.datatype.ClientDependencyAttribute">
-            <summary>
-            This attribute is used for data types that uses client assets like Javascript and CSS for liveediting.
-            The Live Editing feature in umbraco will look for this attribute and preload all dependencies to the page
-            to ensure that all client events and assets gets loaded
-            </summary>
-        </member>
-        <member name="M:umbraco.cms.businesslogic.datatype.ClientDependencyAttribute.#ctor(System.Int32,umbraco.cms.businesslogic.datatype.ClientDependencyType,System.String)">
-            <summary>
-            Initializes a new instance of the <see cref="T:umbraco.cms.businesslogic.datatype.ClientDependencyAttribute"/> class.
-            </summary>
-            <param name="priority">The priority.</param>
-            <param name="dependencyType">Type of the dependency.</param>
-            <param name="filePath">The file path to the dependency.</param>
-        </member>
-        <member name="M:umbraco.cms.businesslogic.datatype.ClientDependencyAttribute.#ctor(System.Int32,umbraco.cms.businesslogic.datatype.ClientDependencyType,System.String,System.String)">
-            <summary>
-            Initializes a new instance of the <see cref="T:umbraco.cms.businesslogic.datatype.ClientDependencyAttribute"/> class.
-            </summary>
-            <param name="priority">The priority.</param>
-            <param name="dependencyType">Type of the dependency.</param>
-            <param name="filePath">The file path to the dependency.</param>
-            <param name="invokeJavascriptMethodOnLoad">The name of the Javascript method to invoke when the dependency is loaded.</param>
-        </member>
-        <member name="M:umbraco.cms.businesslogic.datatype.ClientDependencyAttribute.#ctor(System.Int32,umbraco.cms.businesslogic.datatype.ClientDependencyType,System.String,System.Boolean)">
-            <summary>
-            Initializes a new instance of the <see cref="T:umbraco.cms.businesslogic.datatype.ClientDependencyAttribute"/> class.
-            </summary>
-            <param name="priority">The priority.</param>
-            <param name="dependencyType">Type of the dependency.</param>
-            <param name="filePath">The file path to the dependency.</param>
-            <param name="appendUmbracoPath">if set to <c>true</c> the current umbraco path will be prefixed to the filePath.</param>
-        </member>
-        <member name="M:umbraco.cms.businesslogic.datatype.ClientDependencyAttribute.#ctor(System.Int32,umbraco.cms.businesslogic.datatype.ClientDependencyType,System.String,System.Boolean,System.String)">
-            <summary>
-            Initializes a new instance of the <see cref="T:umbraco.cms.businesslogic.datatype.ClientDependencyAttribute"/> class.
-            </summary>
-            <param name="priority">The priority.</param>
-            <param name="dependencyType">Type of the dependency.</param>
-            <param name="filePath">The file path to the dependency.</param>
-            <param name="appendUmbracoPath">if set to <c>true</c> the current umbraco path will be prefixed to the filePath.</param>
-            <param name="invokeJavascriptMethodOnLoad">The name of the Javascript method to invoke when the dependency is loaded.</param>
-        </member>
-        <member name="P:umbraco.cms.businesslogic.datatype.ClientDependencyAttribute.Priority">
-            <summary>
-            Gets or sets the priority.
-            </summary>
-            <value>The priority.</value>
-        </member>
-        <member name="P:umbraco.cms.businesslogic.datatype.ClientDependencyAttribute.FilePath">
-            <summary>
-            Gets or sets the file path.
-            </summary>
-            <value>The file path.</value>
-        </member>
-        <member name="P:umbraco.cms.businesslogic.datatype.ClientDependencyAttribute.DependencyType">
-            <summary>
-            Gets or sets the type of the dependency.
-            </summary>
-            <value>The type of the dependency.</value>
-        </member>
-        <member name="P:umbraco.cms.businesslogic.datatype.ClientDependencyAttribute.InvokeJavascriptMethodOnLoad">
-            <summary>
-            Gets or sets the name of an optional javascript method that should be called on load.
-            </summary>
-            <value>The name of the method.</value>
-        </member>
-        <member name="T:umbraco.cms.businesslogic.datatype.ClientDependencyType">
-            <summary>
-            The type of client file
-            </summary>
         </member>
         <member name="T:umbraco.cms.businesslogic.datatype.DefaultData">
             <summary>
