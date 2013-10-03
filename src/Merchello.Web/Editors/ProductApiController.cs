@@ -84,7 +84,7 @@ namespace Merchello.Web.Editors
         /// GET /umbraco/Merchello/ProductApi/GetProducts
         /// </summary>
         /// <param name="keys"></param>
-        public IEnumerable<Product> GetProducts()
+        public IEnumerable<Product> GetAllProducts()
         {
             ProductService tempProductService = _productService as ProductService;
             var products = tempProductService.GetAll();

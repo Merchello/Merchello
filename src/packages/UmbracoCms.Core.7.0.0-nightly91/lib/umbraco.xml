@@ -1116,6 +1116,11 @@
             An action filter that wires up the persisted entity of the DataTypeSave model and validates the whole request
             </summary>
         </member>
+        <member name="T:Umbraco.Web.Editors.LogController">
+            <summary>
+            The API controller used for getting log history
+            </summary>
+        </member>
         <member name="T:Umbraco.Web.Editors.MacroController">
             <summary>
             API controller to deal with Macro data
@@ -1131,14 +1136,7 @@
             inserting into templates/views/etc... it doesn't expose any sensitive data.
             </remarks>
         </member>
-        <member name="M:Umbraco.Web.Editors.MacroController.GetMacroResultAsHtmlForEditor(System.String,System.Int32)">
-            <summary>
-            Gets a rendered macro as html for rendering in the rich text editor
-            </summary>
-            <param name="macroAlias"></param>
-            <param name="pageId"></param>
-            <returns></returns>
-        </member>
+        <!-- Badly formed XML comment ignored for member "M:Umbraco.Web.Editors.MacroController.GetMacroResultAsHtmlForEditor(System.String,System.Int32,System.Collections.Generic.IDictionary{System.String,System.Object})" -->
         <member name="T:Umbraco.Web.Models.ContentEditing.MacroParameter">
             <summary>
             Represents a macro parameter with an editor
@@ -1239,6 +1237,96 @@
             Data Type
             </summary>
         </member>
+        <member name="T:Umbraco.Web.Models.ContentEditing.AuditLogType">
+            <summary>
+            Defines audit trail log types
+            </summary>
+        </member>
+        <member name="F:Umbraco.Web.Models.ContentEditing.AuditLogType.New">
+            <summary>
+            Used when new nodes are added
+            </summary>
+        </member>
+        <member name="F:Umbraco.Web.Models.ContentEditing.AuditLogType.Save">
+            <summary>
+            Used when nodes are saved
+            </summary>
+        </member>
+        <member name="F:Umbraco.Web.Models.ContentEditing.AuditLogType.Open">
+            <summary>
+            Used when nodes are opened
+            </summary>
+        </member>
+        <member name="F:Umbraco.Web.Models.ContentEditing.AuditLogType.Delete">
+            <summary>
+            Used when nodes are deleted
+            </summary>
+        </member>
+        <member name="F:Umbraco.Web.Models.ContentEditing.AuditLogType.Publish">
+            <summary>
+            Used when nodes are published
+            </summary>
+        </member>
+        <member name="F:Umbraco.Web.Models.ContentEditing.AuditLogType.SendToPublish">
+            <summary>
+            Used when nodes are send to publishing
+            </summary>
+        </member>
+        <member name="F:Umbraco.Web.Models.ContentEditing.AuditLogType.UnPublish">
+            <summary>
+            Used when nodes are unpublished
+            </summary>
+        </member>
+        <member name="F:Umbraco.Web.Models.ContentEditing.AuditLogType.Move">
+            <summary>
+            Used when nodes are moved
+            </summary>
+        </member>
+        <member name="F:Umbraco.Web.Models.ContentEditing.AuditLogType.Copy">
+            <summary>
+            Used when nodes are copied
+            </summary>
+        </member>
+        <member name="F:Umbraco.Web.Models.ContentEditing.AuditLogType.AssignDomain">
+            <summary>
+            Used when nodes are assígned a domain
+            </summary>
+        </member>
+        <member name="F:Umbraco.Web.Models.ContentEditing.AuditLogType.PublicAccess">
+            <summary>
+            Used when public access are changed for a node
+            </summary>
+        </member>
+        <member name="F:Umbraco.Web.Models.ContentEditing.AuditLogType.Sort">
+            <summary>
+            Used when nodes are sorted
+            </summary>
+        </member>
+        <member name="F:Umbraco.Web.Models.ContentEditing.AuditLogType.Notify">
+            <summary>
+            Used when a notification are send to a user
+            </summary>
+        </member>
+        <member name="F:Umbraco.Web.Models.ContentEditing.AuditLogType.RollBack">
+            <summary>
+            Used when a node's content is rolled back to a previous version
+            </summary>
+        </member>
+        <member name="F:Umbraco.Web.Models.ContentEditing.AuditLogType.PackagerInstall">
+            <summary>
+            Used when a package is installed
+            </summary>
+        </member>
+        <member name="F:Umbraco.Web.Models.ContentEditing.AuditLogType.PackagerUninstall">
+            <summary>
+            Used when a package is uninstalled
+            </summary>
+        </member>
+        <member name="F:Umbraco.Web.Models.ContentEditing.AuditLogType.SendToTranslate">
+            <summary>
+            Used when a node is send to translation
+            </summary>
+        </member>
         <member name="T:Umbraco.Web.Models.Mapping.MacroModelMapper">
             <summary>
             Declares model mappings for macros.
@@ -1297,6 +1385,15 @@
             <remarks>
             Some objects such as macros are not based on CMSNode
             </remarks>
+        </member>
+        <member name="M:Umbraco.Web.Editors.EntityController.GetResultForAll(Umbraco.Web.Models.ContentEditing.UmbracoEntityTypes,System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Gets the result for the entity list based on the type
+            </summary>
+            <param name="entityType"></param>
+            <param name="postFilter">A string where filter that will filter the results dynamically with linq - optional</param>
+            <param name="postFilterParams">the parameters to fill in the string where filter - optional</param>
+            <returns></returns>
         </member>
         <member name="T:Umbraco.Web.Editors.MediaPostValidateAttribute">
             <summary>
@@ -1729,18 +1826,18 @@
             contain the errors.
             </remarks>
         </member>
-        <member name="T:Umbraco.Web.Trees.TreeApiController">
+        <member name="T:Umbraco.Web.Trees.TreeController">
             <summary>
             The base controller for all tree requests
             </summary>
         </member>
-        <member name="M:Umbraco.Web.Trees.TreeApiController.Initialize(System.Web.Http.Controllers.HttpControllerContext)">
+        <member name="M:Umbraco.Web.Trees.TreeController.Initialize(System.Web.Http.Controllers.HttpControllerContext)">
             <summary>
             Remove the xml formatter... only support JSON!
             </summary>
             <param name="controllerContext"></param>
         </member>
-        <member name="M:Umbraco.Web.Trees.TreeApiController.GetTreeNodes(System.String,System.Net.Http.Formatting.FormDataCollection)">
+        <member name="M:Umbraco.Web.Trees.TreeController.GetTreeNodes(System.String,System.Net.Http.Formatting.FormDataCollection)">
             <summary>
             The method called to render the contents of the tree structure
             </summary>
@@ -1753,7 +1850,7 @@
             to the back end to be used in the query for model data.
             </remarks>
         </member>
-        <member name="M:Umbraco.Web.Trees.TreeApiController.GetMenuForNode(System.String,System.Net.Http.Formatting.FormDataCollection)">
+        <member name="M:Umbraco.Web.Trees.TreeController.GetMenuForNode(System.String,System.Net.Http.Formatting.FormDataCollection)">
             <summary>
             Returns the menu structure for the node
             </summary>
@@ -1761,14 +1858,14 @@
             <param name="queryStrings"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.Trees.TreeApiController.GetRootNode(System.Net.Http.Formatting.FormDataCollection)">
+        <member name="M:Umbraco.Web.Trees.TreeController.GetRootNode(System.Net.Http.Formatting.FormDataCollection)">
             <summary>
             Returns the root node for the tree
             </summary>
             <param name="queryStrings"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.Trees.TreeApiController.GetNodes(System.String,System.Net.Http.Formatting.FormDataCollection)">
+        <member name="M:Umbraco.Web.Trees.TreeController.GetNodes(System.String,System.Net.Http.Formatting.FormDataCollection)">
             <summary>
             The action called to render the contents of the tree structure
             </summary>
@@ -1782,7 +1879,7 @@
             to the back end to be used in the query for model data.
             </remarks>
         </member>
-        <member name="M:Umbraco.Web.Trees.TreeApiController.GetMenu(System.String,System.Net.Http.Formatting.FormDataCollection)">
+        <member name="M:Umbraco.Web.Trees.TreeController.GetMenu(System.String,System.Net.Http.Formatting.FormDataCollection)">
             <summary>
             The action called to render the menu for a tree node
             </summary>
@@ -1790,13 +1887,13 @@
             <param name="queryStrings"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.Trees.TreeApiController.CreateRootNode(System.Net.Http.Formatting.FormDataCollection)">
+        <member name="M:Umbraco.Web.Trees.TreeController.CreateRootNode(System.Net.Http.Formatting.FormDataCollection)">
             <summary>
             Helper method to create a root model for a tree
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.Trees.TreeApiController.AddQueryStringsToAdditionalData(Umbraco.Web.Trees.TreeNode,System.Net.Http.Formatting.FormDataCollection)">
+        <member name="M:Umbraco.Web.Trees.TreeController.AddQueryStringsToAdditionalData(Umbraco.Web.Trees.TreeNode,System.Net.Http.Formatting.FormDataCollection)">
             <summary>
             The AdditionalData of a node is always populated with the query string data, this method performs this
             operation and ensures that special values are not inserted or that duplicate keys are not added.
@@ -1804,7 +1901,7 @@
             <param name="node"></param>
             <param name="queryStrings"></param>
         </member>
-        <member name="M:Umbraco.Web.Trees.TreeApiController.CreateTreeNode(System.String,System.Net.Http.Formatting.FormDataCollection,System.String)">
+        <member name="M:Umbraco.Web.Trees.TreeController.CreateTreeNode(System.String,System.Net.Http.Formatting.FormDataCollection,System.String)">
             <summary>
             Helper method to create tree nodes
             </summary>
@@ -1813,7 +1910,7 @@
             <param name="title"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.Trees.TreeApiController.CreateTreeNode(System.String,System.Net.Http.Formatting.FormDataCollection,System.String,System.String)">
+        <member name="M:Umbraco.Web.Trees.TreeController.CreateTreeNode(System.String,System.Net.Http.Formatting.FormDataCollection,System.String,System.String)">
             <summary>
             Helper method to create tree nodes
             </summary>
@@ -1823,7 +1920,7 @@
             <param name="icon"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.Trees.TreeApiController.CreateTreeNode(System.String,System.Net.Http.Formatting.FormDataCollection,System.String,System.String,System.String)">
+        <member name="M:Umbraco.Web.Trees.TreeController.CreateTreeNode(System.String,System.Net.Http.Formatting.FormDataCollection,System.String,System.String,System.String)">
             <summary>
             Helper method to create tree nodes
             </summary>
@@ -1834,7 +1931,7 @@
             <param name="icon"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.Trees.TreeApiController.CreateTreeNode(System.String,System.Net.Http.Formatting.FormDataCollection,System.String,System.String,System.Boolean)">
+        <member name="M:Umbraco.Web.Trees.TreeController.CreateTreeNode(System.String,System.Net.Http.Formatting.FormDataCollection,System.String,System.String,System.Boolean)">
             <summary>
             Helper method to create tree nodes and automatically generate the json url
             </summary>
@@ -1845,7 +1942,7 @@
             <param name="hasChildren"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.Trees.TreeApiController.CreateTreeNode(System.String,System.Net.Http.Formatting.FormDataCollection,System.String,System.String,System.Boolean,System.String)">
+        <member name="M:Umbraco.Web.Trees.TreeController.CreateTreeNode(System.String,System.Net.Http.Formatting.FormDataCollection,System.String,System.String,System.Boolean,System.String)">
             <summary>
             Helper method to create tree nodes and automatically generate the json url
             </summary>
@@ -1857,19 +1954,19 @@
             <param name="icon"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.Trees.TreeApiController.IsDialog(System.Net.Http.Formatting.FormDataCollection)">
+        <member name="M:Umbraco.Web.Trees.TreeController.IsDialog(System.Net.Http.Formatting.FormDataCollection)">
             <summary>
             If the request is for a dialog mode tree
             </summary>
             <param name="queryStrings"></param>
             <returns></returns>
         </member>
-        <member name="P:Umbraco.Web.Trees.TreeApiController.RootNodeDisplayName">
+        <member name="P:Umbraco.Web.Trees.TreeController.RootNodeDisplayName">
             <summary>
             The name to display on the root node
             </summary>
         </member>
-        <member name="P:Umbraco.Web.Trees.TreeApiController.TreeAlias">
+        <member name="P:Umbraco.Web.Trees.TreeController.TreeAlias">
             <summary>
             Gets the current tree alias from the attribute assigned to it.
             </summary>
@@ -2503,11 +2600,11 @@
             <param name="queryStrings"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.Trees.ContentTreeControllerBase.GetUserAllowedMenuItems(System.Collections.Generic.IEnumerable{Umbraco.Web.Trees.Menu.MenuItem},System.Collections.Generic.IEnumerable{Umbraco.Web.Trees.Menu.MenuItem})">
+        <member name="M:Umbraco.Web.Trees.ContentTreeControllerBase.FilterUserAllowedMenuItems(Umbraco.Web.Trees.Menu.MenuItemCollection,System.Collections.Generic.IEnumerable{Umbraco.Web.Trees.Menu.MenuItem})">
             <summary>
             Based on the allowed actions, this will filter the ones that the current user is allowed
             </summary>
-            <param name="allMenuItems"></param>
+            <param name="menuWithAllItems"></param>
             <param name="userAllowedMenuItems"></param>
             <returns></returns>
         </member>
@@ -2679,6 +2776,12 @@
             Adds a menu item
             </summary>
         </member>
+        <member name="M:Umbraco.Web.Trees.Menu.MenuItemCollection.RemoveMenuItem(Umbraco.Web.Trees.Menu.MenuItem)">
+            <summary>
+            Removes a menu item
+            </summary>
+            <param name="item"></param>
+        </member>
         <member name="M:Umbraco.Web.Trees.Menu.MenuItemCollection.AddMenuItem(Umbraco.Web.Trees.Menu.MenuItem)">
             <summary>
             Adds a menu item
@@ -2714,6 +2817,16 @@
             </summary>
             <param name="actionType"></param>
             <param name="menuItem"></param>
+        </member>
+        <member name="P:Umbraco.Web.Trees.Menu.MenuItemCollection.DefaultMenuAlias">
+            <summary>
+            Sets the default menu item alias to be shown when the menu is launched - this is optional and if not set then the menu will just be shown normally.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Trees.Menu.MenuItemCollection.MenuItems">
+            <summary>
+            The list of menu items
+            </summary>
         </member>
         <member name="F:Umbraco.Web.Trees.Menu.MenuItemExtensions.DialogTitleKey">
             <summary>
@@ -3297,6 +3410,13 @@
             <summary>
             Custom Membership Provider for Umbraco Users (User authentication for Umbraco Backend CMS)  
             </summary>
+        </member>
+        <member name="M:Umbraco.Web.Trees.ContentTreeController.GetAllNodeMenuItems(Umbraco.Core.Models.EntityBase.IUmbracoEntity)">
+            <summary>
+            Returns a collection of all menu items that can be on a content node
+            </summary>
+            <param name="item"></param>
+            <returns></returns>
         </member>
         <member name="T:Umbraco.Web.UI.JavaScript.JsInitialization">
             <summary>
@@ -5912,7 +6032,7 @@
             Returns the root media objects
             </summary>
         </member>
-        <member name="M:Umbraco.Web.Editors.MediaController.GetChildren(System.Int32)">
+        <member name="M:Umbraco.Web.Editors.MediaController.GetChildren(System.Int32,System.Int32,System.Int32,System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.String)">
             <summary>
             Returns the child media objects
             </summary>
@@ -5922,11 +6042,7 @@
             Moves an item to the recycle bin, if it is already there then it will permanently delete it
             </summary>
             <param name="id"></param>
-            <returns></returns>
-            <remarks>
-            The CanAccessContentAuthorize attribute will deny access to this method if the current user
-            does not have Delete access to this node.
-            </remarks>
+            <returns></returns> 
         </member>
         <member name="M:Umbraco.Web.Editors.MediaController.PostSave(Umbraco.Web.Models.ContentEditing.ContentItemSave{Umbraco.Core.Models.IMedia})">
             <summary>
@@ -5948,6 +6064,8 @@
             <returns></returns>
             <remarks>
             We cannot validate this request with attributes (nicely) due to the nature of the multi-part for data.
+            
+            TOOD: Validate this request properly!
             </remarks>
         </member>
         <member name="M:Umbraco.Web.Editors.MediaController.CheckPermissions(System.Collections.Generic.IDictionary{System.String,System.Object},Umbraco.Core.Models.Membership.IUser,Umbraco.Core.Services.IMediaService,System.Int32,Umbraco.Core.Models.IMedia)">
@@ -8864,15 +8982,6 @@
         <member name="F:umbraco.presentation.channels.wlwmanifest.xhtml">
             <summary>
             xhtml control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.LiveEditingEnabler.form1">
-            <summary>
-            form1 control.
             </summary>
             <remarks>
             Auto-generated field.
@@ -14403,11 +14512,6 @@
             Determines whether the current user is in a preview mode and browsing the site (ie. not in the admin UI)
             </summary>
         </member>
-        <member name="P:umbraco.presentation.UmbracoContext.LiveEditingContext">
-            <summary>
-            Gets the current Live Editing Context.
-            </summary>
-        </member>
         <member name="P:umbraco.presentation.UmbracoContext.Response">
             <summary>
             Gets the response for the current context
@@ -15724,204 +15828,6 @@
              </summary>
             
         </member>
-        <member name="F:umbraco.presentation.umbraco.dashboard.ChangePassword.JsInclude2">
-            <summary>
-            JsInclude2 control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.dashboard.ChangePassword.changeForm">
-            <summary>
-            changeForm control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.dashboard.ChangePassword.errorPane">
-            <summary>
-            errorPane control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.dashboard.ChangePassword.errorMessage">
-            <summary>
-            errorMessage control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.dashboard.ChangePassword.Label1">
-            <summary>
-            Label1 control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.dashboard.ChangePassword.Label2">
-            <summary>
-            Label2 control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.dashboard.ChangePassword.currentpassword">
-            <summary>
-            currentpassword control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.dashboard.ChangePassword.RequiredFieldValidator1">
-            <summary>
-            RequiredFieldValidator1 control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.dashboard.ChangePassword.passwordLabel">
-            <summary>
-            passwordLabel control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.dashboard.ChangePassword.password">
-            <summary>
-            password control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.dashboard.ChangePassword.passwordvalidator">
-            <summary>
-            passwordvalidator control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.dashboard.ChangePassword.confirmpasswordlabel">
-            <summary>
-            confirmpasswordlabel control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.dashboard.ChangePassword.confirmpassword">
-            <summary>
-            confirmpassword control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.dashboard.ChangePassword.confirmpasswordvalidator">
-            <summary>
-            confirmpasswordvalidator control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.dashboard.ChangePassword.CompareValidator1">
-            <summary>
-            CompareValidator1 control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.dashboard.ChangePassword.changePassword">
-            <summary>
-            changePassword control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.dashboard.ChangePassword.passwordChanged">
-            <summary>
-            passwordChanged control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.dashboard.DesktopMediaUploader.Panel1">
-            <summary>
-            Panel1 control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.dashboard.DesktopMediaUploader.Panel2">
-            <summary>
-            Panel2 control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.dashboard.Settings.Applyskin.skinpicker">
-            <summary>
-            skinpicker control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.dashboard.Settings.Applyskin.bt_apply">
-            <summary>
-            bt_apply control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.dashboard.Settings.Applyskin.bt_rollback">
-            <summary>
-            bt_rollback control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
         <member name="T:umbraco.cms.presentation.developer.RelationTypes.EditRelationType">
             <summary>
             Edit an existing RelationType
@@ -16631,487 +16537,6 @@
             Auto-generated field.
             To modify move field declaration from designer file to code-behind file.
             </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.dialogs.TemplateSkinning.p_apply">
-            <summary>
-            p_apply control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.dialogs.TemplateSkinning.PropertyPanel1">
-            <summary>
-            PropertyPanel1 control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.dialogs.TemplateSkinning.dd_skins">
-            <summary>
-            dd_skins control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.dialogs.TemplateSkinning.bt_repo">
-            <summary>
-            bt_repo control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.dialogs.TemplateSkinning.PropertyPanel2">
-            <summary>
-            PropertyPanel2 control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.dialogs.TemplateSkinning.Button1">
-            <summary>
-            Button1 control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.dialogs.TemplateSkinning.ph_rollback">
-            <summary>
-            ph_rollback control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.dialogs.TemplateSkinning.lb_rollback">
-            <summary>
-            lb_rollback control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.dialogs.TemplateSkinning.p_download">
-            <summary>
-            p_download control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.dialogs.TemplateSkinning.rep_starterKitDesigns">
-            <summary>
-            rep_starterKitDesigns control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.CanvasClientDependencyProvider.RenderJsDependencies(System.Collections.Generic.IEnumerable{ClientDependency.Core.IClientDependencyFile},System.Web.HttpContextBase,System.Collections.Generic.IDictionary{System.String,System.String})">
-            <summary>
-            override to never render out the dependency handler address (no compression, combination, etc...)
-            </summary>
-            <param name="jsDependencies"></param>
-            <param name="http"></param>
-            <param name="htmlAttributes"></param>
-            <returns></returns>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.CanvasClientDependencyProvider.RenderCssDependencies(System.Collections.Generic.IEnumerable{ClientDependency.Core.IClientDependencyFile},System.Web.HttpContextBase,System.Collections.Generic.IDictionary{System.String,System.String})">
-            <summary>
-            override to never render out the dependency handler address (no compression, combination, etc...)
-            </summary>
-            <param name="cssDependencies"></param>
-            <param name="http"></param>
-            <param name="htmlAttributes"></param>
-            <returns></returns>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.LiveEditing.Modules.SkinModule.ImageUploader.ClientLoader">
-            <summary>
-            ClientLoader control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.LiveEditing.Modules.SkinModule.ImageUploader.CssInclude1">
-            <summary>
-            CssInclude1 control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.LiveEditing.Modules.SkinModule.ImageUploader.CssInclude2">
-            <summary>
-            CssInclude2 control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.LiveEditing.Modules.SkinModule.ImageUploader.JsInclude1">
-            <summary>
-            JsInclude1 control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.LiveEditing.Modules.SkinModule.ImageUploader.JsInclude2">
-            <summary>
-            JsInclude2 control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.LiveEditing.Modules.SkinModule.ImageUploader.JsInclude3">
-            <summary>
-            JsInclude3 control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.LiveEditing.Modules.SkinModule.ImageUploader.form1">
-            <summary>
-            form1 control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.LiveEditing.Modules.SkinModule.ImageUploader.Image">
-            <summary>
-            Image control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.LiveEditing.Modules.SkinModule.ImageUploader.FileName">
-            <summary>
-            FileName control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.LiveEditing.Modules.SkinModule.ImageUploader.X">
-            <summary>
-            X control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.LiveEditing.Modules.SkinModule.ImageUploader.Y">
-            <summary>
-            Y control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.LiveEditing.Modules.SkinModule.ImageUploader.Scale">
-            <summary>
-            Scale control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.LiveEditing.Modules.SkinModule.ImageUploader.fb_feedback1">
-            <summary>
-            fb_feedback1 control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.LiveEditing.Modules.SkinModule.ImageUploader.pnl_upload">
-            <summary>
-            pnl_upload control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.LiveEditing.Modules.SkinModule.ImageUploader.FileUpload1">
-            <summary>
-            FileUpload1 control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.LiveEditing.Modules.SkinModule.ImageUploader.bt_upload">
-            <summary>
-            bt_upload control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.LiveEditing.Modules.SkinModule.ImageUploader.pnl_crop">
-            <summary>
-            pnl_crop control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.LiveEditing.Modules.SkinModule.ImageUploader.Image1">
-            <summary>
-            Image1 control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.LiveEditing.Modules.SkinModule.ImageUploader.bt_crop">
-            <summary>
-            bt_crop control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.LiveEditing.Modules.SkinModule.ModuleInjector.ClientLoader">
-            <summary>
-            ClientLoader control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.LiveEditing.Modules.SkinModule.ModuleInjector.JsInclude1">
-            <summary>
-            JsInclude1 control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.LiveEditing.Modules.SkinModule.ModuleInjector.CssInclude1">
-            <summary>
-            CssInclude1 control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.LiveEditing.Modules.SkinModule.ModuleInjector.CssInclude2">
-            <summary>
-            CssInclude2 control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.LiveEditing.Modules.SkinModule.ModuleInjector.CssInclude3">
-            <summary>
-            CssInclude3 control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.LiveEditing.Modules.SkinModule.ModuleInjector.form1">
-            <summary>
-            form1 control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.LiveEditing.Modules.SkinModule.ModuleInjector.macroProperties">
-            <summary>
-            macroProperties control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.LiveEditing.Modules.SkinModule.ModuleSelector.rep_modules">
-            <summary>
-            rep_modules control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.umbraco.LiveEditing.Modules.SkinModule.ModuleSelector.noConnectionToRepo">
-            <summary>
-            noConnectionToRepo control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.LiveEditing.Modules.SkinModule.SkinCustomizer.pnl_connectionerror">
-            <summary>
-            pnl_connectionerror control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.LiveEditing.Modules.SkinModule.SkinCustomizer.ltCustomizeSkinStyle">
-            <summary>
-            ltCustomizeSkinStyle control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.LiveEditing.Modules.SkinModule.SkinCustomizer.ph_dependencies">
-            <summary>
-            ph_dependencies control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.LiveEditing.Modules.SkinModule.SkinCustomizer.btnOk">
-            <summary>
-            btnOk control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.LiveEditing.Modules.SkinModule.SkinCustomizer.pChangeSkin">
-            <summary>
-            pChangeSkin control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.LiveEditing.Modules.SkinModule.SkinCustomizer.ltChangeSkinStyle">
-            <summary>
-            ltChangeSkinStyle control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.LiveEditing.Modules.SkinModule.SkinCustomizer.rep_starterKitDesigns">
-            <summary>
-            rep_starterKitDesigns control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.LiveEditing.Modules.SkinModule.SkinCustomizer.localSkinsContainer">
-            <summary>
-            localSkinsContainer control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.LiveEditing.Modules.SkinModule.SkinCustomizer.rep_starterKitDesignsLocal">
-            <summary>
-            rep_starterKitDesignsLocal control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.LiveEditing.Modules.SkinModule.SkinCustomizer.pCustomizeSkin">
-            <summary>
-            pCustomizeSkin control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="T:umbraco.presentation.LiveEditing.Modules.BaseModule">
-            <summary>
-            Base class that Live Editing modules can choose to extend, providing some common features.
-            Note that inheriting this control is not a requirement for modules.
-            </summary>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Modules.BaseModule.#ctor(umbraco.presentation.LiveEditing.Controls.LiveEditingManager)">
-            <summary>
-            Initializes a new instance of the <see cref="T:umbraco.presentation.LiveEditing.Modules.BaseModule"/> class.
-            </summary>
-            <param name="manager">The Live Editing manager.</param>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Modules.BaseModule.Manager_MessageReceived(System.Object,umbraco.presentation.LiveEditing.Controls.MesssageReceivedArgs)">
-            <summary>
-            Handles the <c>MessageReceived</c> event of the Live Editing manager.
-            </summary>
-            <param name="sender">The sender.</param>
-            <param name="e">The e.</param>
-        </member>
-        <member name="P:umbraco.presentation.LiveEditing.Modules.BaseModule.Manager">
-            <summary>
-            Gets the current Live Editing manager.
-            </summary>
-            <value>The current Live Editing manager.</value>
-        </member>
-        <member name="P:umbraco.presentation.LiveEditing.Modules.BaseModule.LiveEditingContext">
-            <summary>
-            Gets the current Live Editing context.
-            </summary>
-            <value>The current Live Editing context.</value>
         </member>
         <member name="F:umbraco.presentation.umbraco.members.MemberSearch.searchQuery">
             <summary>
@@ -21029,1024 +20454,6 @@
             the contents of this method with the code editor.
             </summary>
         </member>
-        <member name="T:umbraco.presentation.LiveEditing.Controls.Communicator">
-            <summary>
-            Control that can receive messages from the client.
-            </summary>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Controls.Communicator.OnInit(System.EventArgs)">
-            <summary>
-            Raises the <see cref="E:System.Web.UI.Control.Init"/> event.
-            </summary>
-            <param name="e">An <see cref="T:System.EventArgs"/> object that contains the event data.</param>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Controls.Communicator.CreateChildControls">
-            <summary>
-            Called by the ASP.NET page framework to notify server controls 
-            that use composition-based implementation to create any child controls
-            they contain in preparation for posting back or rendering.
-            </summary>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Controls.Communicator.SubmitButton_Click(System.Object,System.EventArgs)">
-            <summary>
-            Handles the Click event of the m_SubmitButton control.
-            </summary>
-            <param name="sender">The source of the event.</param>
-            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Controls.Communicator.Render(System.Web.UI.HtmlTextWriter)">
-            <summary>
-            Sends server control content to a provided <see cref="T:System.Web.UI.HtmlTextWriter"/> object,
-            which writes the content to be rendered on the client.
-            </summary>
-            <param name="writer">
-                The <see cref="T:System.Web.UI.HtmlTextWriter"/>
-                object that receives the server control content.
-            </param>
-        </member>
-        <member name="E:umbraco.presentation.LiveEditing.Controls.Communicator.MessageReceived">
-            <summary>
-            Occurs when the communicator receives a message from the client.
-            </summary>
-        </member>
-        <member name="T:umbraco.presentation.LiveEditing.Controls.MesssageReceivedArgs">
-            <summary>
-            Arguments for the <see cref="!:MessageReceived"/> event.
-            </summary>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Controls.MesssageReceivedArgs.#ctor(System.String,System.String)">
-            <summary>
-            Initializes a new instance of the <see cref="T:umbraco.presentation.LiveEditing.Controls.MesssageReceivedArgs"/> class.
-            </summary>
-            <param name="type">The type.</param>
-            <param name="message">The message text.</param>
-        </member>
-        <member name="P:umbraco.presentation.LiveEditing.Controls.MesssageReceivedArgs.Type">
-            <summary>
-            Gets or sets the type of the message.
-            </summary>
-            <value>The type.</value>
-        </member>
-        <member name="P:umbraco.presentation.LiveEditing.Controls.MesssageReceivedArgs.Message">
-            <summary>
-            Gets or sets the message text.
-            </summary>
-            <value>The message.</value>
-        </member>
-        <member name="T:umbraco.presentation.LiveEditing.Modules.Separator">
-            <summary>
-            Module separator item.
-            </summary>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Modules.Separator.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:umbraco.presentation.LiveEditing.Modules.Separator"/> class.
-            </summary>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Modules.CreateModule.CreateModule.Manager_MessageReceived(System.Object,umbraco.presentation.LiveEditing.Controls.MesssageReceivedArgs)">
-            <summary>
-            Handles the <c>MessageReceived</c> event of the manager.
-            </summary>
-            <param name="sender">The sender.</param>
-            <param name="e">The e.</param>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Modules.DeleteModule.DeleteModule.Manager_MessageReceived(System.Object,umbraco.presentation.LiveEditing.Controls.MesssageReceivedArgs)">
-            <summary>
-            Handles the <c>MessageReceived</c> event of the manager.
-            </summary>
-            <param name="sender">The sender.</param>
-            <param name="e">The e.</param>
-        </member>
-        <member name="T:umbraco.presentation.LiveEditing.Modules.ItemEditing.ItemEditor">
-            <summary>
-            Control that wraps the editor control to edit a field in Live Editing mode.
-            </summary>
-        </member>
-        <member name="F:umbraco.presentation.LiveEditing.Modules.ItemEditing.ItemEditor.EditorWrapperTag">
-            <summary>Name of the wrapper tag.</summary>
-        </member>
-        <member name="F:umbraco.presentation.LiveEditing.Modules.ItemEditing.ItemEditor.m_Manager">
-            <summary>The current Live Editing manager.</summary>
-        </member>
-        <member name="F:umbraco.presentation.LiveEditing.Modules.ItemEditing.ItemEditor.m_Container">
-            <summary>Control that will contain the editor control.</summary>
-        </member>
-        <member name="F:umbraco.presentation.LiveEditing.Modules.ItemEditing.ItemEditor.m_DataType">
-            <summary>Data type of the field.</summary>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Modules.ItemEditing.ItemEditor.#ctor(umbraco.presentation.LiveEditing.Controls.LiveEditingManager)">
-            <summary>
-            Initializes a new instance of the <see cref="T:umbraco.presentation.LiveEditing.Modules.ItemEditing.ItemEditor"/> class.
-            </summary>
-            <param name="manager">The manager.</param>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Modules.ItemEditing.ItemEditor.StartEditing(System.Int32)">
-            <summary>
-            Starts editing the item with the specified ID.
-            </summary>
-            <param name="itemId">The item ID.</param>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Modules.ItemEditing.ItemEditor.StopEditing">
-            <summary>
-            Stops editing the current item.
-            </summary>
-            <remarks>Currently triggered by the client.</remarks>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Modules.ItemEditing.ItemEditor.OnInit(System.EventArgs)">
-            <summary>
-            Raises the <see cref="E:Init"/> event.
-            </summary>
-            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Modules.ItemEditing.ItemEditor.OnLoad(System.EventArgs)">
-            <summary>
-            Raises the <see cref="E:Load"/> event.
-            </summary>
-            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Modules.ItemEditing.ItemEditor.CreateChildControls">
-            <summary>
-            Called by the ASP.NET page framework to notify server controls
-            that use composition-based implementation to create any child controls
-            they contain in preparation for posting back or rendering.
-            </summary>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Modules.ItemEditing.ItemEditor.CreateFieldDataEditor(umbraco.presentation.templateControls.Item)">
-            <summary>
-            Gets the editor control for the specified item.
-            </summary>
-            <param name="item">The item.</param>
-            <returns>The editor control.</returns>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Modules.ItemEditing.ItemEditor.GetDataType(umbraco.presentation.templateControls.Item)">
-            <summary>
-            Gets the datatype for the specified item.
-            </summary>
-            <param name="item">The item.</param>
-            <returns>The datatype.</returns>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Modules.ItemEditing.ItemEditor.FindItem(System.Int32)">
-            <summary>
-            Finds the item width the specified ID.
-            </summary>
-            <param name="id">The item ID.</param>
-            <returns></returns>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Modules.ItemEditing.ItemEditor.Submit_Click(System.Object,System.EventArgs)">
-            <summary>
-            Handles the Click event of the Submit button.
-            </summary>
-            <param name="sender">The source of the event.</param>
-            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Modules.ItemEditing.ItemEditor.Manager_MessageReceived(System.Object,umbraco.presentation.LiveEditing.Controls.MesssageReceivedArgs)">
-            <summary>
-            Handles the <c>MessageReceived</c> event of the manager.
-            </summary>
-            <param name="sender">The sender.</param>
-            <param name="e">The e.</param>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Modules.ItemEditing.ItemEditor.Updates_UpdateAdded(System.Object,umbraco.presentation.LiveEditing.Updates.UpdateAddedEventArgs)">
-            <summary>
-            Occurs when a new update is added to the Live Editing update collection.
-            </summary>
-            <param name="sender">The source of the event.</param>
-            <param name="e">The <see cref="T:umbraco.presentation.LiveEditing.Updates.UpdateAddedEventArgs"/> instance containing the event data.</param>
-        </member>
-        <member name="P:umbraco.presentation.LiveEditing.Modules.ItemEditing.ItemEditor.ItemId">
-            <summary>
-            Gets or sets the ID of the item that is to be edited.
-            </summary>
-            <value>The item ID, or 0 if no item is to be edited.</value>
-        </member>
-        <member name="P:umbraco.presentation.LiveEditing.Modules.ItemEditing.ItemEditor.LiveEditingContext">
-            <summary>
-            Gets the current Live Editing context.
-            </summary>
-            <value>The Live Editing context.</value>
-        </member>
-        <member name="T:umbraco.presentation.LiveEditing.Modules.ItemEditing.ItemEditor.EditorWrapper">
-            <summary>
-            Custom tag that wraps the editor control.
-            This class needs to implement <see cref="T:System.Web.UI.INamingContainer"/> to enable correct ViewState handling
-            of the wrapped editor.
-            </summary>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Modules.ItemEditing.ItemEditor.EditorWrapper.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:umbraco.presentation.LiveEditing.Modules.ItemEditing.ItemEditor.EditorWrapper"/> class.
-            </summary>
-        </member>
-        <member name="T:umbraco.presentation.LiveEditing.Controls.LiveEditingManager">
-            <summary>
-            Control that manages Live Editing on a certain page.
-            Provides public properties, events and methods for Live Editing controls.
-            Add this control to a (master) page to enable Live Editing.
-            </summary>
-        </member>
-        <member name="F:umbraco.presentation.LiveEditing.Controls.LiveEditingManager.m_Context">
-            <summary>The associated Live Editing context.</summary>
-        </member>
-        <member name="F:umbraco.presentation.LiveEditing.Controls.LiveEditingManager.m_Toolbar">
-            <summary>Toolbar instance.</summary>
-        </member>
-        <member name="F:umbraco.presentation.LiveEditing.Controls.LiveEditingManager.m_Communicator">
-            <summary>Communicator instance.</summary>
-        </member>
-        <member name="F:umbraco.presentation.LiveEditing.Controls.LiveEditingManager.m_Output">
-            <summary>Placeholder to which dynamic output can be added.</summary>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Controls.LiveEditingManager.#ctor(umbraco.presentation.LiveEditing.ILiveEditingContext)">
-            <summary>
-            Initializes a new instance of the <see cref="T:umbraco.presentation.LiveEditing.Controls.LiveEditingManager"/> class.
-            </summary>
-            <param name="context">The context.</param>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Controls.LiveEditingManager.OnInit(System.EventArgs)">
-            <summary>
-            Raises the <see cref="E:System.Web.UI.Control.Init"/> event.
-            </summary>
-            <param name="e">An <see cref="T:System.EventArgs"/> object that contains the event data.</param>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Controls.LiveEditingManager.CreateChildControls">
-            <summary>
-            Called by the ASP.NET page framework to notify server controls
-            that use composition-based implementation to create any child controls
-            they contain in preparation for posting back or rendering.
-            </summary>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Controls.LiveEditingManager.AddClientOutput(System.Web.UI.Control)">
-            <summary>
-            Adds a control to the client output.
-            </summary>
-            <param name="output">The control to add.</param>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Controls.LiveEditingManager.DisplayUserMessage(System.String,System.String,System.String)">
-            <summary>
-            Shows a balloon message on the client side.
-            </summary>
-            <param name="title">Unescaped title text.</param>
-            <param name="message">Unescaped message text.</param>
-            <param name="icon">The icon.</param>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Controls.LiveEditingManager.EscapeJavascriptString(System.String)">
-            <summary>
-            Escapes a Javascript string for use inside a single quoted Javascript literal.
-            </summary>
-            <param name="input">The input.</param>
-            <returns>The escaped Javascript string.</returns>
-            <remarks>Escaping only concerns slashes, returns and single quotes. This might not be complete.</remarks>
-        </member>
-        <member name="P:umbraco.presentation.LiveEditing.Controls.LiveEditingManager.LiveEditingContext">
-            <summary>
-            Gets the associated Live Editing context.
-            </summary>
-            <value>The Live Editing context.</value>
-        </member>
-        <member name="E:umbraco.presentation.LiveEditing.Controls.LiveEditingManager.MessageReceived">
-            <summary>
-            Occurs when a message is received from the client.
-            </summary>
-        </member>
-        <member name="T:umbraco.presentation.LiveEditing.DefaultLiveEditingContext">
-            <summary>
-            Class that encapsulates all Live Editing information for an Umbraco context.
-            </summary>
-        </member>
-        <member name="T:umbraco.presentation.LiveEditing.ILiveEditingContext">
-            <summary>
-            Interfaces that encapsulates all Live Editing information of a specific Umbraco context.
-            </summary>
-        </member>
-        <member name="P:umbraco.presentation.LiveEditing.ILiveEditingContext.Enabled">
-            <summary>
-            Gets or sets whether Live Editing is enabled.
-            </summary>
-            <value><c>true</c> if Live Editing enabled; otherwise, <c>false</c>.</value>
-        </member>
-        <member name="P:umbraco.presentation.LiveEditing.ILiveEditingContext.InSkinningMode">
-            <summary>
-            Gets or set whether Canvas is in Skinning mode
-            </summary>
-        </member>
-        <member name="P:umbraco.presentation.LiveEditing.ILiveEditingContext.Menu">
-            <summary>
-            Gets the Live Editing menu.
-            </summary>
-            <value>The Live Editing menu, or <c>null</c> if Live Editing is disabled.</value>
-        </member>
-        <member name="P:umbraco.presentation.LiveEditing.ILiveEditingContext.Updates">
-            <summary>
-            Gets the field updates made during this context.
-            </summary>
-            <value>The updates.</value>
-        </member>
-        <member name="F:umbraco.presentation.LiveEditing.DefaultLiveEditingContext.m_Menu">
-            <summary>The current Live Editing menu.</summary>
-        </member>
-        <member name="F:umbraco.presentation.LiveEditing.DefaultLiveEditingContext.m_fieldUpdateSaver">
-            <summary>Current object that maintains the update list accross different requests.</summary>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.DefaultLiveEditingContext.#ctor">
-            <summary>
-            Creates a default Live Editing context.
-            </summary>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.DefaultLiveEditingContext.Initialize">
-            <summary>
-            Initializes this instance.
-            </summary>
-        </member>
-        <!-- Badly formed XML comment ignored for member "P:umbraco.presentation.LiveEditing.DefaultLiveEditingContext.Enabled" -->
-        <member name="P:umbraco.presentation.LiveEditing.DefaultLiveEditingContext.Menu">
-            <summary>
-            Gets the Live Editing menu, or <c>null</c> if Live Editing is disabled.
-            </summary>
-            <value>
-            The Live Editing menu, or <c>null</c> if Live Editing is disabled.
-            </value>
-        </member>
-        <member name="P:umbraco.presentation.LiveEditing.DefaultLiveEditingContext.Updates">
-            <summary>
-            Gets the field updates made during this context.
-            </summary>
-            <value>The updates.</value>
-        </member>
-        <member name="T:umbraco.presentation.LiveEditing.DefaultLiveEditingContext.UpdateListSaver">
-            <summary>
-            Dummy control used to save the Updates list into a hidden field.
-            It cannot be stored inside the HTTP Context, because this context changes on every request
-            and we need to have access to this information on every page postback.
-            </summary>
-        </member>
-        <member name="F:umbraco.presentation.LiveEditing.DefaultLiveEditingContext.UpdateListSaver.UpdatesFieldName">
-            <summary>The fieldname used to save the updates in.</summary>
-        </member>
-        <member name="F:umbraco.presentation.LiveEditing.DefaultLiveEditingContext.UpdateListSaver.m_Updates">
-            <summary>Internal list of updates.</summary>
-        </member>
-        <member name="F:umbraco.presentation.LiveEditing.DefaultLiveEditingContext.UpdateListSaver.serializer">
-            <summary>Updates serializer.</summary>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.DefaultLiveEditingContext.UpdateListSaver.Render(System.Web.UI.HtmlTextWriter)">
-            <summary>
-            Saves the updates into a hidden field.
-            </summary>
-            <param name="writer">Ignored.</param>
-        </member>
-        <member name="P:umbraco.presentation.LiveEditing.DefaultLiveEditingContext.UpdateListSaver.Updates">
-            <summary>
-            Gets or sets the updates.
-            </summary>
-            <value>The updates.</value>
-        </member>
-        <member name="T:umbraco.presentation.LiveEditing.Modules.ItemEditing.PageElementEditor">
-            <summary>
-            Control that lets the user edit page properties in Live Edit mode.
-            </summary>
-            <remarks>Keep this class internal, or it will cause problems since it's not a "real" data editor.</remarks>
-        </member>
-        <member name="F:umbraco.presentation.LiveEditing.Modules.ItemEditing.PageElementEditor.m_Item">
-            <summary>The item to edit.</summary>
-        </member>
-        <member name="F:umbraco.presentation.LiveEditing.Modules.ItemEditing.PageElementEditor.m_FieldContents">
-            <summary>Textbox that edits the item.</summary>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Modules.ItemEditing.PageElementEditor.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:umbraco.presentation.LiveEditing.Modules.ItemEditing.PageElementEditor"/> class.
-            </summary>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Modules.ItemEditing.PageElementEditor.#ctor(umbraco.presentation.templateControls.Item)">
-            <summary>
-            Initializes a new instance of the <see cref="T:umbraco.presentation.LiveEditing.Modules.ItemEditing.PageElementEditor"/> class.
-            </summary>
-            <param name="item">The item.</param>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Modules.ItemEditing.PageElementEditor.CreateChildControls">
-            <summary>
-            Called by the ASP.NET page framework to notify server controls
-            that use composition-based implementation to create any child controls
-            they contain in preparation for posting back or rendering.
-            </summary>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Modules.ItemEditing.PageElementEditor.ToXMl(System.Xml.XmlDocument)">
-            <summary>
-            Converts the data to XML.
-            </summary>
-            <param name="data">The data.</param>
-            <returns>The data as XML.</returns>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Modules.ItemEditing.PageElementEditor.MakeNew(System.Int32)">
-            <summary>
-            Creates a new value
-            </summary>
-            <param name="PropertyId">The property id.</param>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Modules.ItemEditing.PageElementEditor.Delete">
-            <summary>
-            Deletes this instance.
-            </summary>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Modules.ItemEditing.PageElementEditor.Save">
-            <summary>
-            Saves this instance.
-            </summary>
-        </member>
-        <member name="P:umbraco.presentation.LiveEditing.Modules.ItemEditing.PageElementEditor.PropertyId">
-            <summary>
-            Gets or sets the property id.
-            </summary>
-            <value>The property id.</value>
-        </member>
-        <member name="P:umbraco.presentation.LiveEditing.Modules.ItemEditing.PageElementEditor.Value">
-            <summary>
-            Gets or sets the value.
-            </summary>
-            <value>The value.</value>
-        </member>
-        <member name="P:umbraco.presentation.LiveEditing.Modules.ItemEditing.PageElementEditor.PreviewMode">
-            <summary>
-            Gets or sets a value indicating whether preview mode is switched on.
-            In preview mode, the <see cref="P:umbraco.presentation.LiveEditing.Modules.ItemEditing.PageElementEditor.Value"/> setter saves to a temporary location
-            instead of persistent storage, which the getter also reads from on subsequent access.
-            Switching off preview mode restores the persistent value.
-            </summary>
-            <value>
-            	<c>true</c> if preview mode is switched on; otherwise, <c>false</c>.
-            </value>
-        </member>
-        <member name="P:umbraco.presentation.LiveEditing.Modules.ItemEditing.PageElementEditor.Id">
-            <summary>
-            Gets the id.
-            </summary>
-            <value>The id.</value>
-        </member>
-        <member name="P:umbraco.presentation.LiveEditing.Modules.ItemEditing.PageElementEditor.DataTypeName">
-            <summary>
-            Gets the name of the data type.
-            </summary>
-            <value>The name of the data type.</value>
-        </member>
-        <member name="P:umbraco.presentation.LiveEditing.Modules.ItemEditing.PageElementEditor.DataEditor">
-            <summary>
-            Gets the data editor.
-            </summary>
-            <value>The data editor.</value>
-        </member>
-        <member name="P:umbraco.presentation.LiveEditing.Modules.ItemEditing.PageElementEditor.PrevalueEditor">
-            <summary>
-            Gets the prevalue editor.
-            </summary>
-            <value>The prevalue editor.</value>
-        </member>
-        <member name="P:umbraco.presentation.LiveEditing.Modules.ItemEditing.PageElementEditor.Data">
-            <summary>
-            Gets the data.
-            </summary>
-            <value>The data.</value>
-        </member>
-        <member name="P:umbraco.presentation.LiveEditing.Modules.ItemEditing.PageElementEditor.DataTypeDefinitionId">
-            <summary>
-            Gets or sets the data type definition id.
-            </summary>
-            <value>The data type definition id.</value>
-        </member>
-        <member name="P:umbraco.presentation.LiveEditing.Modules.ItemEditing.PageElementEditor.ShowLabel">
-            <summary>
-            Gets a value indicating whether a label is shown
-            </summary>
-            <value><c>true</c> if [show label]; otherwise, <c>false</c>.</value>
-        </member>
-        <member name="P:umbraco.presentation.LiveEditing.Modules.ItemEditing.PageElementEditor.TreatAsRichTextEditor">
-            <summary>
-            Gets a value indicating whether the editor should be treated as a rich text editor.
-            </summary>
-            <value>
-            	<c>true</c> if [treat as rich text editor]; otherwise, <c>false</c>.
-            </value>
-        </member>
-        <member name="P:umbraco.presentation.LiveEditing.Modules.ItemEditing.PageElementEditor.Editor">
-            <summary>
-            Gets the editor control
-            </summary>
-            <value>The editor.</value>
-        </member>
-        <member name="P:umbraco.presentation.LiveEditing.Modules.ItemEditing.PageElementEditor.LiveEditingControl">
-            <summary>
-            Gets the control used for Live Editing.
-            </summary>
-            <value></value>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Modules.UnpublishModule.UnpublishModule.#ctor(umbraco.presentation.LiveEditing.Controls.LiveEditingManager)">
-            <summary>
-            Initializes a new instance of the <see cref="T:umbraco.presentation.LiveEditing.Modules.UnpublishModule.UnpublishModule"/> class.
-            </summary>
-            <param name="manager">The Live Editing manager.</param>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Modules.UnpublishModule.UnpublishModule.OnInit(System.EventArgs)">
-            <summary>
-            Raises the <see cref="E:System.Web.UI.Control.Init"/> event.
-            </summary>
-            <param name="e">An <see cref="T:System.EventArgs"/> object that contains the event data.</param>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Modules.UnpublishModule.UnpublishModule.CreateChildControls">
-            <summary>
-            Called by the ASP.NET page framework to notify server controls that use composition-based implementation to create any child controls they contain in preparation for posting back or rendering.
-            </summary>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Modules.UnpublishModule.UnpublishModule.Manager_MessageReceived(System.Object,umbraco.presentation.LiveEditing.Controls.MesssageReceivedArgs)">
-            <summary>
-            Handles the <c>MessageReceived</c> event of the Live Editing manager.
-            </summary>
-            <param name="sender">The sender.</param>
-            <param name="e">The e.</param>
-        </member>
-        <member name="T:umbraco.presentation.LiveEditing.Updates.DefaultUpdateList">
-            <summary>
-            Default implementation of <see cref="T:umbraco.presentation.LiveEditing.Updates.IUpdateList"/>.
-            </summary>
-        </member>
-        <member name="T:umbraco.presentation.LiveEditing.Updates.IUpdateList">
-            <summary>
-            Interface for a list of Live Editing updates.
-            </summary>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Updates.IUpdateList.Add(umbraco.presentation.LiveEditing.Updates.IUpdate)">
-            <summary>
-            Adds the specified item to the list.
-            </summary>
-            <param name="update">The item.</param>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Updates.IUpdateList.SaveAll">
-            <summary>
-            Saves all updates.
-            </summary>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Updates.IUpdateList.PublishAll">
-            <summary>
-            Publishes all updates.
-            </summary>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Updates.IUpdateList.GetAll``1">
-            <summary>
-            Gets all updates of the specified type.
-            </summary>
-            <typeparam name="T">Type of updates to find.</typeparam>
-            <returns>All matching updates.</returns>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Updates.IUpdateList.GetAll``1(System.Predicate{``0})">
-            <summary>
-            Gets all updates of the specified type satisfying the matcher.
-            </summary>
-            <typeparam name="T">Type of updates to find.</typeparam>
-            <param name="matcher">The matcher.</param>
-            <returns>All matching updates.</returns>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Updates.IUpdateList.GetLatest``1(System.Predicate{``0})">
-            <summary>
-            Gets the latest update of the specified type satisfying the matcher.
-            </summary>
-            <typeparam name="T">Type of the update.</typeparam>
-            <param name="matcher">The matcher.</param>
-            <returns>The latest matching update if found, otherwise <c>null</c>.</returns>
-        </member>
-        <member name="E:umbraco.presentation.LiveEditing.Updates.IUpdateList.UpdateAdded">
-            <summary>Occurs when an update is added to the list.</summary>
-        </member>
-        <member name="F:umbraco.presentation.LiveEditing.Updates.DefaultUpdateList.m_Updates">
-            <summary>The internal list of updates.</summary>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Updates.DefaultUpdateList.Add(umbraco.presentation.LiveEditing.Updates.IUpdate)">
-            <summary>
-            Adds the specified item to the list.
-            </summary>
-            <param name="update">The item.</param>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Updates.DefaultUpdateList.SaveAll">
-            <summary>
-            Saves all updates.
-            </summary>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Updates.DefaultUpdateList.PublishAll">
-            <summary>
-            Publishes all updates.
-            </summary>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Updates.DefaultUpdateList.GetAll``1">
-            <summary>
-            Gets all updates of the specified type.
-            </summary>
-            <typeparam name="T">Type of updates to find.</typeparam>
-            <returns>All matching updates.</returns>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Updates.DefaultUpdateList.GetAll``1(System.Predicate{``0})">
-            <summary>
-            Gets all updates satisfying the matcher.
-            </summary>
-            <typeparam name="T">Type of updates to find.</typeparam>
-            <param name="matcher">The matcher.</param>
-            <returns>All matching updates.</returns>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Updates.DefaultUpdateList.GetLatest``1(System.Predicate{``0})">
-            <summary>
-            Gets the latest update satisfying the matcher.
-            </summary>
-            <typeparam name="T">Type of the update.</typeparam>
-            <param name="matcher">The matcher.</param>
-            <returns>
-            The latest matching update if found, otherwise <c>null</c>.
-            </returns>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Updates.DefaultUpdateList.GetEnumerator">
-            <summary>
-            Returns an enumerator that iterates through the collection.
-            </summary>
-            <returns>
-            A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.
-            </returns>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Updates.DefaultUpdateList.System#Collections#IEnumerable#GetEnumerator">
-            <summary>
-            Returns an enumerator that iterates through the collection.
-            </summary>
-            <returns>
-            An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.
-            </returns>
-        </member>
-        <member name="E:umbraco.presentation.LiveEditing.Updates.DefaultUpdateList.UpdateAdded">
-            <summary>
-            Occurs when an update is added to the list.
-            </summary>
-        </member>
-        <member name="T:umbraco.presentation.LiveEditing.Modules.ItemEditing.ItemUpdate">
-            <summary>
-            Class that holds information about an update to a certain field of a certain node.
-            </summary>
-        </member>
-        <member name="T:umbraco.presentation.LiveEditing.Updates.IUpdate">
-            <summary>
-            Interface for a class that holds information about a Live Editing update.
-            </summary>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Updates.IUpdate.Save">
-            <summary>
-            Saves the update.
-            </summary>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Updates.IUpdate.Publish">
-            <summary>
-            Publishes the update.
-            </summary>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Modules.ItemEditing.ItemUpdate.#ctor(System.Nullable{System.Int32},System.String,System.Object)">
-            <summary>
-            Initializes a new instance of the <see cref="!:FieldUpdate"/> class.
-            </summary>
-            <param name="nodeId">The node id.</param>
-            <param name="field">The field.</param>
-            <param name="data">The data.</param>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Modules.ItemEditing.ItemUpdate.Save">
-            <summary>
-            Saveses this instance.
-            </summary>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Modules.ItemEditing.ItemUpdate.Publish">
-            <summary>
-            Publishes the update.
-            </summary>
-        </member>
-        <member name="P:umbraco.presentation.LiveEditing.Modules.ItemEditing.ItemUpdate.NodeId">
-            <summary>
-            Gets or sets the node id.
-            </summary>
-            <value>The node id.</value>
-        </member>
-        <member name="P:umbraco.presentation.LiveEditing.Modules.ItemEditing.ItemUpdate.Field">
-            <summary>
-            Gets or sets the field name.
-            </summary>
-            <value>The field name.</value>
-        </member>
-        <member name="P:umbraco.presentation.LiveEditing.Modules.ItemEditing.ItemUpdate.Data">
-            <summary>
-            Gets or sets the field data.
-            </summary>
-            <value>The field data.</value>
-        </member>
-        <member name="T:umbraco.presentation.LiveEditing.Modules.ItemEditing.LiveEditingItemRenderer">
-            <summary>
-            ItemRenderer that surrounds regular output with a marker tag to enable Live Editing.
-            </summary>
-        </member>
-        <member name="M:umbraco.presentation.templateControls.ItemRenderer.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:umbraco.presentation.templateControls.ItemRenderer"/> class.
-            </summary>
-        </member>
-        <member name="M:umbraco.presentation.templateControls.ItemRenderer.Render(umbraco.presentation.templateControls.Item,System.Web.UI.HtmlTextWriter)">
-            <summary>
-            Renders the specified item.
-            </summary>
-            <param name="item">The item.</param>
-            <param name="writer">The writer.</param>
-        </member>
-        <member name="M:umbraco.presentation.templateControls.ItemRenderer.GetFieldContents(umbraco.presentation.templateControls.Item)">
-            <summary>
-            Renders the field contents.
-            Checks via the NodeId attribute whether to fetch data from another page than the current one.
-            </summary>
-            <returns>A string of field contents (macros not parsed)</returns>
-        </member>
-        <member name="M:umbraco.presentation.templateControls.ItemRenderer.Init(umbraco.presentation.templateControls.Item)">
-            <summary>
-            Inits the specified item. To be called from the OnInit method of Item.
-            </summary>
-            <param name="item">The item.</param>
-        </member>
-        <member name="M:umbraco.presentation.templateControls.ItemRenderer.Load(umbraco.presentation.templateControls.Item)">
-            <summary>
-            Loads the specified item. To be called from the OnLoad method of Item.
-            </summary>
-            <param name="item">The item.</param>
-        </member>
-        <member name="M:umbraco.presentation.templateControls.ItemRenderer.ParseMacros(umbraco.presentation.templateControls.Item)">
-            <summary>
-            Parses the macros inside the text, by creating child elements for each item.
-            </summary>
-            <param name="item">The item.</param>
-        </member>
-        <member name="M:umbraco.presentation.templateControls.ItemRenderer.XsltTransform(System.String,System.String,System.Boolean)">
-            <summary>
-            Transforms the content using the XSLT attribute, if provided.
-            </summary>
-            <param name="xpath">The xpath expression.</param>
-            <param name="itemData">The item's rendered content.</param>
-            <param name="disableEscaping">if set to <c>true</c>, escaping is disabled.</param>
-            <returns>The transformed content if the XSLT attribute is present, otherwise the original content.</returns>
-        </member>
-        <member name="M:umbraco.presentation.templateControls.ItemRenderer.GetEmptyText(umbraco.presentation.templateControls.Item)">
-            <summary>
-            Gets the text to display if the field contents are empty.
-            </summary>
-            <param name="item">The item.</param>
-            <returns>The text to display.</returns>
-        </member>
-        <member name="M:umbraco.presentation.templateControls.ItemRenderer.GetContentFromDatabase(umbraco.AttributeCollectionAdapter,System.Int32,System.String)">
-            <summary>
-            Gets the field content from database instead of the published XML via the APIs.
-            </summary>
-            <param name="itemAttributes"></param>
-            <param name="nodeIdInt">The node id.</param>
-            <param name="currentField">The field that should be fetched.</param>
-            <returns>The contents of the <paramref name="currentField"/> from the <paramref name="nodeIdInt"/> content object</returns>
-        </member>
-        <member name="M:umbraco.presentation.templateControls.ItemRenderer.GetContentFromCache(System.Int32,System.String)">
-            <summary>
-            Gets the content from cache.
-            </summary>
-            <param name="nodeIdInt">The node id.</param>
-            <param name="field">The field.</param>
-            <returns>The cached contents of the <paramref name="field"/> from the <paramref name="nodeIdInt"/> content object</returns>
-        </member>
-        <member name="F:umbraco.presentation.LiveEditing.Modules.ItemEditing.LiveEditingItemRenderer.LiveEditingMarkerTag">
-            <summary>Name of the marker tag.</summary>
-        </member>
-        <member name="F:umbraco.presentation.LiveEditing.Modules.ItemEditing.LiveEditingItemRenderer.LiveEditingMarkerIdAttribute">
-            <summary>Name of the marker tag's ID attribute.</summary>
-        </member>
-        <member name="F:umbraco.presentation.LiveEditing.Modules.ItemEditing.LiveEditingItemRenderer.LiveEditingFieldNameAttribute">
-            <summary>Name of the marker tag's field name attribute.</summary>
-        </member>
-        <member name="F:umbraco.presentation.LiveEditing.Modules.ItemEditing.LiveEditingItemRenderer.LiveEditingNodeIdAttribute">
-            <summary>Name of the marker tag's node ID attribute.</summary>
-        </member>
-        <member name="F:umbraco.presentation.LiveEditing.Modules.ItemEditing.LiveEditingItemRenderer.TooltipTextFormat">
-            <summary>Format string of the tooltip.</summary>
-        </member>
-        <member name="F:umbraco.presentation.LiveEditing.Modules.ItemEditing.LiveEditingItemRenderer.DefaultEmptyTextFormat">
-            <summary>Default text to display if the item's contents are empty.</summary>
-        </member>
-        <member name="F:umbraco.presentation.LiveEditing.Modules.ItemEditing.LiveEditingItemRenderer.Instance">
-            <summary>Returns the instance of <see cref="T:umbraco.presentation.LiveEditing.Modules.ItemEditing.LiveEditingItemRenderer"/>.</summary>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Modules.ItemEditing.LiveEditingItemRenderer.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:umbraco.presentation.LiveEditing.Modules.ItemEditing.LiveEditingItemRenderer"/> class.
-            </summary>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Modules.ItemEditing.LiveEditingItemRenderer.Init(umbraco.presentation.templateControls.Item)">
-            <summary>
-            Inits the specified item. To be called from the OnInit method of Item.
-            </summary>
-            <param name="item">The item.</param>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Modules.ItemEditing.LiveEditingItemRenderer.ForceParseMacros(umbraco.presentation.templateControls.Item)">
-            <summary>
-            Forces macros to be parsed.
-            This can be useful if controls, that are created as a result of the parsing,
-            need to be available.
-            </summary>
-            <remarks>This can cause problems however, when called too early. (see comments inside Init)</remarks>
-            <param name="item">The item.</param>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Modules.ItemEditing.LiveEditingItemRenderer.Render(umbraco.presentation.templateControls.Item,System.Web.UI.HtmlTextWriter)">
-            <summary>
-            Sends server control content to a provided <see cref="T:System.Web.UI.HtmlTextWriter"/> object,
-            which writes the content to be rendered on the client.
-            </summary>
-            <param name="writer">
-                The <see cref="T:System.Web.UI.HtmlTextWriter"/>
-                object that receives the server control content.
-            </param>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Modules.ItemEditing.LiveEditingItemRenderer.GetFieldContents(umbraco.presentation.templateControls.Item)">
-            <summary>
-            Renders the field contents.
-            Checks via the NodeId attribute whether to fetch data from another page than the current one.
-            </summary>
-            <returns>
-            A string of field contents (macros not parsed)
-            </returns>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Modules.ItemEditing.LiveEditingItemRenderer.GetEmptyText(umbraco.presentation.templateControls.Item)">
-            <summary>
-            Gets the text to display if the field contents are empty.
-            </summary>
-            <param name="item">The item.</param>
-            <returns>The text to display.</returns>
-        </member>
-        <member name="T:umbraco.presentation.LiveEditing.Menu.DefaultLiveEditingMenu">
-            <summary>
-            A default implementation of <see cref="T:umbraco.presentation.LiveEditing.Menu.ILiveEditingMenu"/>.
-            </summary>
-        </member>
-        <member name="T:umbraco.presentation.LiveEditing.Menu.ILiveEditingMenu">
-            <summary>
-            Interface for a Live Editing menu, which supports the adding of custom menu items.
-            </summary>
-        </member>
-        <member name="T:umbraco.presentation.LiveEditing.Controls.LiveEditingToolbar">
-            <summary>
-            The default toolbar used for Live Editing.
-            </summary>
-        </member>
-        <member name="F:umbraco.presentation.LiveEditing.Controls.LiveEditingToolbar.ToolbarId">
-            <summary>Client ID of the toolbar.</summary>
-        </member>
-        <member name="F:umbraco.presentation.LiveEditing.Controls.LiveEditingToolbar.ToolbarTitle">
-            <summary>Title of the toolbar.</summary>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Controls.LiveEditingToolbar.#ctor(umbraco.presentation.LiveEditing.Controls.LiveEditingManager)">
-            <summary>
-            Creates a new default toolbar for the specified manager.
-            </summary>
-            <param name="manager">The manager.</param>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Controls.LiveEditingToolbar.AddModules">
-            <summary>
-            Adds the modules to the toolbar.
-            </summary>
-            <remarks>Modules should be loaded from a configuration file in the future.</remarks>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Controls.LiveEditingToolbar.RefreshPage">
-            <summary>
-            Refreshes the current page using a client redirect.
-            </summary>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Controls.LiveEditingToolbar.OnInit(System.EventArgs)">
-            <summary>
-            Raises the <see cref="E:System.Web.UI.Control.Init"/> event.
-            </summary>
-            <param name="e">An <see cref="T:System.EventArgs"/> object that contains the event data.</param>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Controls.LiveEditingToolbar.CreateChildControls">
-            <summary>
-            Called by the ASP.NET page framework to notify server controls that use composition-based implementation
-            to create any child controls they contain in preparation for posting back or rendering.
-            </summary>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Controls.LiveEditingToolbar.Render(System.Web.UI.HtmlTextWriter)">
-            <summary>
-            Sends server control content to a provided <see cref="T:System.Web.UI.HtmlTextWriter"/> object,
-            which writes the content to be rendered on the client.
-            </summary>
-            <param name="writer">
-                The <see cref="T:System.Web.UI.HtmlTextWriter"/> object
-                that receives the server control content.
-            </param>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Controls.LiveEditingToolbar.SaveButton_Click(System.Object,System.Web.UI.ImageClickEventArgs)">
-            <summary>
-            Handles the Click event of the SaveButton control.
-            </summary>
-            <param name="sender">The source of the event.</param>
-            <param name="e">The <see cref="T:System.Web.UI.ImageClickEventArgs"/> instance containing the event data.</param>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Controls.LiveEditingToolbar.SaveAndPublishButton_Click(System.Object,System.Web.UI.ImageClickEventArgs)">
-            <summary>
-            Handles the Click event of the SaveAndPublishButton control.
-            </summary>
-            <param name="sender">The source of the event.</param>
-            <param name="e">The <see cref="T:System.Web.UI.ImageClickEventArgs"/> instance containing the event data.</param>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Controls.LiveEditingToolbar.CloseButton_Click(System.Object,System.EventArgs)">
-            <summary>
-            Handles the Click event of the CloseButton control.
-            </summary>
-            <param name="sender">The source of the event.</param>
-            <param name="e">The <see cref="T:System.Web.UI.ImageClickEventArgs"/> instance containing the event data.</param>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Controls.LiveEditingToolbar.Manager_MessageReceived(System.Object,umbraco.presentation.LiveEditing.Controls.MesssageReceivedArgs)">
-            <summary>
-            Handles the MessageReceived event of the Manager control.
-            </summary>
-            <param name="sender">The sender.</param>
-            <param name="e">The e.</param>
-        </member>
-        <member name="T:umbraco.presentation.LiveEditing.Modules.MacroEditing.MacroModule">
-            <summary>
-            
-            THIS MODULE HASN'T YET EVER BEEN INCLUDED IN UMBRACO.
-            
-            SINCE AJAXCONTROLTOOLKIT IS REMOVED, THIS CLASS WILL NEED TO BE REFACTORED LIKE THE 
-            OTHER MODULES.
-            
-            WHATEVER FUNCTIONALITY THAT WAS INTENDED FOR THIS MODULE WILL NEED TO BE FIGURED OUT
-            BASED ON THE COMMENTED CODE ALREADY WRITTEN.
-            
-            </summary>
-        </member>
-        <member name="T:umbraco.presentation.LiveEditing.Updates.UpdateAddedEventArgs">
-            <summary>
-            Event arguments for the <see cref="!:UpdateAdded"/> event.
-            </summary>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Updates.UpdateAddedEventArgs.#ctor(umbraco.presentation.LiveEditing.Updates.IUpdate)">
-            <summary>
-            Initializes a new instance of the <see cref="T:umbraco.presentation.LiveEditing.Updates.UpdateAddedEventArgs"/> class.
-            </summary>
-            <param name="update">The update.</param>
-        </member>
-        <member name="P:umbraco.presentation.LiveEditing.Updates.UpdateAddedEventArgs.Update">
-            <summary>
-            Gets the added update.
-            </summary>
-            <value>The update.</value>
-        </member>
-        <member name="T:umbraco.presentation.LiveEditing.Modules.MacroEditing.TemplateUpdate">
-            <summary>
-            Class that holds information about an update to a certain template.
-            </summary>
-            <remarks>Not implemented yet.</remarks>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Modules.MacroEditing.TemplateUpdate.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:umbraco.presentation.LiveEditing.Modules.MacroEditing.TemplateUpdate"/> class.
-            </summary>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Modules.MacroEditing.TemplateUpdate.Save">
-            <summary>
-            Saves the update.
-            </summary>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Modules.MacroEditing.TemplateUpdate.Publish">
-            <summary>
-            Publishes the update.
-            </summary>
-        </member>
-        <member name="T:umbraco.presentation.LiveEditing.Utility">
-            <summary>
-            Utility that simplifies some commmon tasks for Live Editing.
-            </summary>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Utility.FindControl``1(System.Predicate{``0},System.Web.UI.Control)">
-            <summary>
-            Finds a control satisfying a matcher recursively.
-            </summary>
-            <typeparam name="T">Type of the control to find.</typeparam>
-            <param name="matcher">The matcher.</param>
-            <param name="root">Control where the search should start at.</param>
-            <returns>The control if found; otherwise <c>null</c>.</returns>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Utility.FindControls``1(System.Web.UI.Control)">
-            <summary>
-            Finds all controls of the given type.
-            </summary>
-            <typeparam name="T">Type of the control to find.</typeparam>
-            <param name="root">Control where the search should start at.</param>
-            <returns>All satisfying controls.</returns>
-        </member>
-        <member name="M:umbraco.presentation.LiveEditing.Utility.FindControls``1(System.Predicate{``0},System.Web.UI.Control)">
-            <summary>
-            Finds all controls satisfying a matcher recursively.
-            </summary>
-            <typeparam name="T">Type of the control to find.</typeparam>
-            <param name="matcher">The matcher.</param>
-            <param name="root">Control where the search should start at.</param>
-            <returns>All satisfying controls.</returns>
-        </member>
         <member name="T:umbraco.cms.presentation.members.EditMember">
             <summary>
             Summary description for EditMember.
@@ -24514,16 +22921,6 @@
             A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
             </returns>
         </member>
-        <member name="M:umbraco.presentation.templateControls.Item.FieldSupportsLiveEditing">
-            <summary>
-            Gets a value indicating whether Live Editing is useLiveEditing on this field.
-            Certain functionalities of the item field makes it hard to 
-            support Live Editing, like dictionary items and recursive values.
-            </summary>
-            <value>
-            	<c>true</c> if Live Editing is useLiveEditing; otherwise, <c>false</c>.
-            </value>
-        </member>
         <member name="M:umbraco.presentation.templateControls.Item.FieldIsDictionaryItem">
             <summary>
             Determines whether the field is a dictionary item.
@@ -24592,33 +22989,87 @@
                 of the XSLT <c>value-of</c> element.
             </remarks>
         </member>
-        <member name="P:umbraco.presentation.templateControls.Item.LiveEditingDisabled">
-            <summary>
-            Gets or sets a value indicating whether Live Editing is disabled for this field.
-            </summary>
-            <value><c>true</c> if you manually wish to disable Live Editing for this field; otherwise, <c>false</c> (default is false).</value>
-        </member>
         <member name="P:umbraco.presentation.templateControls.Item.ItemId">
             <summary>
             Gets the item's unique ID on the page.
             </summary>
             <value>The item id.</value>
         </member>
-        <member name="P:umbraco.presentation.templateControls.Item.CanUseLiveEditing">
-            <summary>
-            Gets a value indicating whether this control can be used in Live Editing mode.
-            Checks whether live editing has not been disabled,
-            the control is inside a form tag,
-            the field is editable
-            and the user has sufficient permissions.
-            </summary>
-            <value><c>true</c> if live editing is useLiveEditing; otherwise, <c>false</c>.</value>
-        </member>
         <member name="P:umbraco.presentation.templateControls.Item.PageElements">
             <summary>
             Gets the Umbraco page elements.
             </summary>
             <value>The Umbraco page elements.</value>
+        </member>
+        <member name="M:umbraco.presentation.templateControls.ItemRenderer.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:umbraco.presentation.templateControls.ItemRenderer"/> class.
+            </summary>
+        </member>
+        <member name="M:umbraco.presentation.templateControls.ItemRenderer.Render(umbraco.presentation.templateControls.Item,System.Web.UI.HtmlTextWriter)">
+            <summary>
+            Renders the specified item.
+            </summary>
+            <param name="item">The item.</param>
+            <param name="writer">The writer.</param>
+        </member>
+        <member name="M:umbraco.presentation.templateControls.ItemRenderer.GetFieldContents(umbraco.presentation.templateControls.Item)">
+            <summary>
+            Renders the field contents.
+            Checks via the NodeId attribute whether to fetch data from another page than the current one.
+            </summary>
+            <returns>A string of field contents (macros not parsed)</returns>
+        </member>
+        <member name="M:umbraco.presentation.templateControls.ItemRenderer.Init(umbraco.presentation.templateControls.Item)">
+            <summary>
+            Inits the specified item. To be called from the OnInit method of Item.
+            </summary>
+            <param name="item">The item.</param>
+        </member>
+        <member name="M:umbraco.presentation.templateControls.ItemRenderer.Load(umbraco.presentation.templateControls.Item)">
+            <summary>
+            Loads the specified item. To be called from the OnLoad method of Item.
+            </summary>
+            <param name="item">The item.</param>
+        </member>
+        <member name="M:umbraco.presentation.templateControls.ItemRenderer.ParseMacros(umbraco.presentation.templateControls.Item)">
+            <summary>
+            Parses the macros inside the text, by creating child elements for each item.
+            </summary>
+            <param name="item">The item.</param>
+        </member>
+        <member name="M:umbraco.presentation.templateControls.ItemRenderer.XsltTransform(System.String,System.String,System.Boolean)">
+            <summary>
+            Transforms the content using the XSLT attribute, if provided.
+            </summary>
+            <param name="xpath">The xpath expression.</param>
+            <param name="itemData">The item's rendered content.</param>
+            <param name="disableEscaping">if set to <c>true</c>, escaping is disabled.</param>
+            <returns>The transformed content if the XSLT attribute is present, otherwise the original content.</returns>
+        </member>
+        <member name="M:umbraco.presentation.templateControls.ItemRenderer.GetEmptyText(umbraco.presentation.templateControls.Item)">
+            <summary>
+            Gets the text to display if the field contents are empty.
+            </summary>
+            <param name="item">The item.</param>
+            <returns>The text to display.</returns>
+        </member>
+        <member name="M:umbraco.presentation.templateControls.ItemRenderer.GetContentFromDatabase(umbraco.AttributeCollectionAdapter,System.Int32,System.String)">
+            <summary>
+            Gets the field content from database instead of the published XML via the APIs.
+            </summary>
+            <param name="itemAttributes"></param>
+            <param name="nodeIdInt">The node id.</param>
+            <param name="currentField">The field that should be fetched.</param>
+            <returns>The contents of the <paramref name="currentField"/> from the <paramref name="nodeIdInt"/> content object</returns>
+        </member>
+        <member name="M:umbraco.presentation.templateControls.ItemRenderer.GetContentFromCache(System.Int32,System.String)">
+            <summary>
+            Gets the content from cache.
+            </summary>
+            <param name="nodeIdInt">The node id.</param>
+            <param name="field">The field.</param>
+            <returns>The cached contents of the <paramref name="field"/> from the <paramref name="nodeIdInt"/> content object</returns>
         </member>
         <member name="M:umbraco.presentation.templateControls.Macro.OnInit(System.EventArgs)">
             <summary>
@@ -26670,22 +25121,6 @@
             </summary>
             <param name="language">The language.</param>
             <param name="word">The word.</param>
-            <returns></returns>
-        </member>
-        <member name="M:umbraco.presentation.umbraco_client.tinymce3.plugins.spellchecker.GoogleSpellChecker.CheckWords(System.String,System.String[])">
-            <summary>
-            Checks all the words submitted against Google for spelling
-            </summary>
-            <param name="language">The language code.</param>
-            <param name="words">The words to be checked.</param>
-            <returns></returns>
-        </member>
-        <member name="M:umbraco.presentation.umbraco_client.tinymce3.plugins.spellchecker.GoogleSpellChecker.GetSuggestions(System.String,System.String)">
-            <summary>
-            Gets the suggested spelling for a misspelt word
-            </summary>
-            <param name="language">The language the word is.</param>
-            <param name="word">The word that is misspelt.</param>
             <returns></returns>
         </member>
         <member name="T:umbraco.presentation.umbraco_client.tinymce3.plugins.spellchecker.SpellCheckerInput">
