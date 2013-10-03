@@ -257,10 +257,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Migration\DatabaseSchema.cs" />
     <Compile Include="Services\CustomerItemRegisterServiceTests.cs" />
-    <Compile Include="Services\InvoiceStatusServiceTests.cs" />
     <Compile Include="Services\ProductServiceTests.cs" />
     <Compile Include="Services\ServiceIntegrationTestBase.cs" />
-    <Compile Include="Services\ShipMethodServiceTests.cs" />
     <Compile Include="Services\WarehouseServiceTests.cs" />
     <Compile Include="TestHelpers\DbPreTestDataWorker.cs" />
   </ItemGroup>

@@ -3,7 +3,7 @@ using Merchello.Core.Models.Rdbms;
 
 namespace Merchello.Core.Persistence.Factories
 {
-    internal partial class InvoiceItemFactory : IEntityFactory<IInvoiceItem, InvoiceItemDto>
+    internal class InvoiceItemFactory : IEntityFactory<IInvoiceItem, InvoiceItemDto>
     {
         public IInvoiceItem BuildEntity(InvoiceItemDto dto)
         {
@@ -13,7 +13,6 @@ namespace Merchello.Core.Persistence.Factories
                 Sku = dto.Sku,
                 Name = dto.Name,
                 Quantity = dto.Quantity,
-                UnitOfMeasureMultiplier = dto.UnitOfMeasureMultiplier,
                 Amount = dto.Amount,
                 Exported = dto.Exported,
                 UpdateDate = dto.UpdateDate,
@@ -36,7 +35,6 @@ namespace Merchello.Core.Persistence.Factories
                 Sku = entity.Sku,
                 Name = entity.Name,
                 Quantity = entity.Quantity,
-                UnitOfMeasureMultiplier = entity.UnitOfMeasureMultiplier,
                 Amount = entity.Amount,
                 Exported = entity.Exported,
                 UpdateDate = entity.UpdateDate,

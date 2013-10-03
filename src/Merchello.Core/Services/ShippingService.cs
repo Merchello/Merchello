@@ -15,22 +15,22 @@ namespace Merchello.Core.Services
     /// <summary>
     /// Represents the Shipment Service 
     /// </summary>
-    public class ShipmentService : IShipmentService
+    public class ShippingService : IShippingService
     {
         private readonly IDatabaseUnitOfWorkProvider _uowProvider;
         private readonly RepositoryFactory _repositoryFactory;
 
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
-        public ShipmentService()
+        public ShippingService()
             : this(new RepositoryFactory())
         { }
 
-        public ShipmentService(RepositoryFactory repositoryFactory)
+        public ShippingService(RepositoryFactory repositoryFactory)
             : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory)
         { }
 
-        public ShipmentService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
+        public ShippingService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
         {
             Mandate.ParameterNotNull(provider, "provider");
             Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
@@ -246,28 +246,28 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Occurs before Delete
         /// </summary>		
-        public static event TypedEventHandler<IShipmentService, DeleteEventArgs<IShipment>> Deleting;
+        public static event TypedEventHandler<IShippingService, DeleteEventArgs<IShipment>> Deleting;
 
         /// <summary>
         /// Occurs after Delete
         /// </summary>
-        public static event TypedEventHandler<IShipmentService, DeleteEventArgs<IShipment>> Deleted;
+        public static event TypedEventHandler<IShippingService, DeleteEventArgs<IShipment>> Deleted;
 
         /// <summary>
         /// Occurs before Save
         /// </summary>
-        public static event TypedEventHandler<IShipmentService, SaveEventArgs<IShipment>> Saving;
+        public static event TypedEventHandler<IShippingService, SaveEventArgs<IShipment>> Saving;
 
         /// <summary>
         /// Occurs after Save
         /// </summary>
-        public static event TypedEventHandler<IShipmentService, SaveEventArgs<IShipment>> Saved;
+        public static event TypedEventHandler<IShippingService, SaveEventArgs<IShipment>> Saved;
 
 
         /// <summary>
         /// Occurs after Create
         /// </summary>
-        public static event TypedEventHandler<IShipmentService, Events.NewEventArgs<IShipment>> Created;
+        public static event TypedEventHandler<IShippingService, Events.NewEventArgs<IShipment>> Created;
 
         #endregion
 

@@ -39,9 +39,9 @@ namespace Merchello.Core.Services
         IProductService ProductService { get; }
 
         /// <summary>
-        /// Gets the <see cref="IShipmentService"/>
+        /// Gets the <see cref="IShippingService"/>
         /// </summary>
-        IShipmentService ShipmentService { get; }
+        IShippingService ShippingService { get; }
 
         
         /// <summary>

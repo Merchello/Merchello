@@ -3,9 +3,9 @@ using Merchello.Core.Models.Rdbms;
 
 namespace Merchello.Core.Persistence.Factories
 {
-    internal class CustomerItemRegisterItemFactory : IEntityFactory<IOrderLineItem, CustomerItemRegisterItemDto>
+    internal class CustomerItemRegisterItemFactory : IEntityFactory<ILineItem, CustomerItemRegisterItemDto>
     {
-        public IOrderLineItem BuildEntity(CustomerItemRegisterItemDto dto)
+        public ILineItem BuildEntity(CustomerItemRegisterItemDto dto)
         {
             var lineItem = new OrderLineItem(dto.CustomerItemRegisterId, dto.LineItemTfKey)
             {
@@ -13,8 +13,7 @@ namespace Merchello.Core.Persistence.Factories
                 ParentId = dto.ParentId,
                 Sku = dto.Sku,
                 Name = dto.Name,
-                Quantity = dto.BaseQuantity,
-                UnitOfMeasureMultiplier = dto.UnitOfMeasureMultiplier,
+                Quantity = dto.Quantity,
                 Amount = dto.Amount,
                 UpdateDate = dto.UpdateDate,
                 CreateDate = dto.CreateDate
@@ -25,7 +24,7 @@ namespace Merchello.Core.Persistence.Factories
             return lineItem;
         }
 
-        public CustomerItemRegisterItemDto BuildDto(IOrderLineItem entity)
+        public CustomerItemRegisterItemDto BuildDto(ILineItem entity)
         {
             var dto = new CustomerItemRegisterItemDto()
             {
@@ -35,8 +34,7 @@ namespace Merchello.Core.Persistence.Factories
                 LineItemTfKey = entity.LineItemTfKey,
                 Sku = entity.Sku,
                 Name = entity.Name,
-                BaseQuantity = entity.Quantity,
-                UnitOfMeasureMultiplier = entity.UnitOfMeasureMultiplier,
+                Quantity = entity.Quantity,
                 Amount = entity.Amount,
                 UpdateDate = entity.UpdateDate,
                 CreateDate = entity.CreateDate

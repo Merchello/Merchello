@@ -15,15 +15,11 @@ namespace Merchello.Core.Services
     public class ServiceContext : IServiceContext
     {        
         private Lazy<CustomerService> _customerService;
-        private Lazy<AnonymousCustomerService> _anonymousCustomerService;
         private Lazy<CustomerItemRegisterService> _basketService;    
         private Lazy<InvoiceService> _invoiceService;
-        private Lazy<InvoiceItemService> _invoiceItemService;
-        private Lazy<InvoiceStatusService> _invoiceStatusService;
         //private Lazy<PaymentService> _paymentService;
         private Lazy<ProductService> _productService;
-        private Lazy<ShipmentService> _shipmentService;
-        private Lazy<ShipMethodService> _shipMethodService;
+        private Lazy<ShippingService> _shipmentService;
         
         private Lazy<WarehouseService> _warehouseService;
 
@@ -51,20 +47,12 @@ namespace Merchello.Core.Services
             if(_customerService == null)
                 _customerService = new Lazy<CustomerService>(() => new CustomerService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
-            if (_anonymousCustomerService == null)
-                _anonymousCustomerService = new Lazy<AnonymousCustomerService>(() => new AnonymousCustomerService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _customerService.Value));
-
             if(_basketService == null)
                 _basketService = new Lazy<CustomerItemRegisterService>(() => new CustomerItemRegisterService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
-            if(_invoiceItemService == null)
-                _invoiceItemService = new Lazy<InvoiceItemService>(() => new InvoiceItemService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
-
-            if(_invoiceStatusService == null)
-                _invoiceStatusService = new Lazy<InvoiceStatusService>(() => new InvoiceStatusService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
             if(_invoiceService == null)
-                _invoiceService = new Lazy<InvoiceService>(() => new InvoiceService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _invoiceItemService.Value, _invoiceStatusService.Value));
+                _invoiceService = new Lazy<InvoiceService>(() => new InvoiceService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
             //if (_appliedPaymentService == null)
             //    _appliedPaymentService = new Lazy<AppliedPaymentService>(() => new AppliedPaymentService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
@@ -88,10 +76,8 @@ namespace Merchello.Core.Services
                 _productService = new Lazy<ProductService>(() => new ProductService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
             if(_shipmentService == null)
-                _shipmentService = new Lazy<ShipmentService>(() => new ShipmentService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+                _shipmentService = new Lazy<ShippingService>(() => new ShippingService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
-            if (_shipMethodService == null)
-                _shipMethodService = new Lazy<ShipMethodService>(() => new ShipMethodService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
             if(_warehouseService == null)
                 _warehouseService = new Lazy<WarehouseService>(() => new WarehouseService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
@@ -100,14 +86,7 @@ namespace Merchello.Core.Services
 
         #region IServiceContext Members
 
-        /// <summary>
-        /// Gets the <see cref="IAnonymousCustomerService"/>
-        /// </summary>
-        internal IAnonymousCustomerService AnonymousCustomerService
-        {
-            get { return _anonymousCustomerService.Value; }
-        }
-
+    
         /// <summary>
         /// Gets the <see cref="ICustomerService"/>
         /// </summary>
@@ -131,22 +110,7 @@ namespace Merchello.Core.Services
         {
             get { return _invoiceService.Value; }
         }
-
-        /// <summary>
-        /// Gets the <see cref="IInvoiceItemService"/>
-        /// </summary>
-        internal IInvoiceItemService InvoiceItemService
-        {
-            get { return _invoiceItemService.Value; }
-        }
-
-        /// <summary>
-        /// Gets the <see cref="IInvoiceStatusService"/>
-        /// </summary>
-        internal IInvoiceStatusService InvoiceStatusService
-        {
-            get { return _invoiceStatusService.Value; }
-        }
+    
 
         ///// <summary>
         ///// Gets the <see cref="IPaymentService"/>
@@ -164,15 +128,10 @@ namespace Merchello.Core.Services
             get { return _productService.Value;  }
         }
 
-        public IShipmentService ShipmentService
+        public IShippingService ShippingService
         {
             get { return _shipmentService.Value; }
-        }
-
-        internal IShipMethodService ShipMethodService
-        {
-            get { return _shipMethodService.Value; }
-        }
+        }        
 
         public IWarehouseService WarehouseService
         {

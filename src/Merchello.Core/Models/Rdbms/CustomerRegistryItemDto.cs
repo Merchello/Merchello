@@ -32,11 +32,8 @@ namespace Merchello.Core.Models.Rdbms
         [Column("name")]
         public string Name { get; set; }
 
-        [Column("baseQuantity")]
-        public int BaseQuantity { get; set; }
-
-        [Column("unitOfMeasureMultiplier")]
-        public int UnitOfMeasureMultiplier { get; set; }
+        [Column("quantity")]
+        public int Quantity { get; set; }        
 
         [Column("amount")]
         public decimal Amount { get; set; }

@@ -34,11 +34,7 @@ namespace Merchello.Core.Models.Rdbms
         public string Name { get; set; }
 
         [Column("quantity")]
-        public int Quantity { get; set; }
-
-        [Column("unitOfMeasureMultiplier")]
-        [Constraint(Default = "1")]
-        public int UnitOfMeasureMultiplier { get; set; }
+        public int Quantity { get; set; }        
 
         [Column("amount")]
         public decimal Amount { get; set; }

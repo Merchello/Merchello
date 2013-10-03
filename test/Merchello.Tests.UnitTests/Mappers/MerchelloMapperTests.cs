@@ -120,7 +120,7 @@ namespace Merchello.Tests.UnitTests.Mappers
         {
 
             //// Arrage
-            var expected = typeof(BasketItemMapper);
+            var expected = typeof(CustomerItemRegisterItemMapper);
 
             //// Act
             var resolved = MerchelloMapper.Current.ResolveByType(typeof(IOrderLineItem));

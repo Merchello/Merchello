@@ -46,12 +46,7 @@ namespace Merchello.Core.Models
             /// </summary>
             [DataMember]
             int Quantity { get; set;}
-            
-            /// <summary>
-            /// The unit of measure  of the invoice item
-            /// </summary>
-            [DataMember]
-            int UnitOfMeasureMultiplier { get; set;}
+                        
             
             /// <summary>
             /// The amount  of the invoice item

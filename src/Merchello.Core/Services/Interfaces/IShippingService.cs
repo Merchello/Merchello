@@ -12,7 +12,7 @@ namespace Merchello.Core.Services
     /// <summary>
     /// Defines the AddressService, which provides access to operations involving <see cref="IShipment"/>
     /// </summary>
-    public interface IShipmentService : IService
+    public interface IShippingService : IService
     {
         /// <summary>
         /// Creates a Shipment

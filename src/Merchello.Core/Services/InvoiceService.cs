@@ -19,8 +19,6 @@ namespace Merchello.Core.Services
     {
         private readonly IDatabaseUnitOfWorkProvider _uowProvider;
         private readonly RepositoryFactory _repositoryFactory;
-        private readonly IInvoiceItemService _invoiceItemService;
-        private readonly IInvoiceStatusService _invoiceStatusService;
 
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
@@ -29,24 +27,17 @@ namespace Merchello.Core.Services
         { }
 
         public InvoiceService(RepositoryFactory repositoryFactory)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, new InvoiceItemService(new PetaPocoUnitOfWorkProvider(), repositoryFactory), new InvoiceStatusService(new PetaPocoUnitOfWorkProvider(),repositoryFactory))
+            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory)
         { }
+
 
         public InvoiceService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
-            : this(provider, repositoryFactory, new InvoiceItemService(provider, repositoryFactory), new InvoiceStatusService(provider, repositoryFactory))
-        { }
-
-        public InvoiceService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, IInvoiceItemService invoiceItemService, IInvoiceStatusService invoiceStatusService)
         {
             Mandate.ParameterNotNull(provider, "provider");
             Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
-            Mandate.ParameterNotNull(invoiceStatusService, "invoiceStatusService");
-            Mandate.ParameterNotNull(invoiceItemService, "invoiceItemService");
 
             _uowProvider = provider;
             _repositoryFactory = repositoryFactory;
-            _invoiceItemService = invoiceItemService;
-            _invoiceStatusService = invoiceStatusService;
         }
 
         #region IInvoiceService Members

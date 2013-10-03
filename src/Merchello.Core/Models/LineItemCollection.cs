@@ -101,18 +101,6 @@ namespace Merchello.Core.Models
             return item.Sku;
         }
 
-
-        ///// <summary>
-        ///// Gets the element with the specified ProductActualKey (Guid).
-        ///// </summary>
-        //internal LineItemBase this[Guid productActualKey]
-        //{
-        //    get
-        //    {
-        //        return this.FirstOrDefault(x => x.ProductActualKey == productActualKey);
-        //    }
-        //}
-
         protected override void InsertItem(int index, LineItemBase item)
         {
             base.InsertItem(index, item);

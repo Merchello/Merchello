@@ -47,7 +47,7 @@ namespace Merchello.Tests.IntegrationTests.Services
         public void Can_Save_A_Basket()
         {
             var basket = MockBasketDataMaker.ConsumerBasketForInserting(_anonymous, CustomerItemRegisterType.Basket);
-
+            
             _customerItemRegisterService.Save(basket);
 
             Console.Write(basket.Id.ToString());
@@ -60,6 +60,7 @@ namespace Merchello.Tests.IntegrationTests.Services
         public void Creating_A_Second_Basket_Results_In_The_First_Being_Returned()
         {
             var basket = MockBasketDataMaker.ConsumerBasketForInserting(_anonymous, CustomerItemRegisterType.Wishlist);
+            
             _customerItemRegisterService.Save(basket);
 
             var id = basket.Id;

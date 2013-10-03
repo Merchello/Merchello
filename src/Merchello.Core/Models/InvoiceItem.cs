@@ -17,7 +17,6 @@ namespace Merchello.Core.Models
         private string _sku;
         private string _name;
         private int _quantity;
-        private int _unitOfMeasureMultiplier;
         private decimal _amount;
         private bool _exported;
 
@@ -44,7 +43,6 @@ namespace Merchello.Core.Models
         private static readonly PropertyInfo SkuSelector = ExpressionHelper.GetPropertyInfo<InvoiceItem, string>(x => x.Sku);  
         private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<InvoiceItem, string>(x => x.Name);  
         private static readonly PropertyInfo QuantitySelector = ExpressionHelper.GetPropertyInfo<InvoiceItem, int>(x => x.Quantity);  
-        private static readonly PropertyInfo UnitOfMeasureMultiplierSelector = ExpressionHelper.GetPropertyInfo<InvoiceItem, int>(x => x.UnitOfMeasureMultiplier);  
         private static readonly PropertyInfo AmountSelector = ExpressionHelper.GetPropertyInfo<InvoiceItem, decimal>(x => x.Amount);  
         private static readonly PropertyInfo ExportedSelector = ExpressionHelper.GetPropertyInfo<InvoiceItem, bool>(x => x.Exported);  
         
@@ -131,23 +129,6 @@ namespace Merchello.Core.Models
                         _quantity = value;
                         return _quantity;
                     }, _quantity, QuantitySelector); 
-                }
-        }
-    
-        /// <summary>
-        /// The unitOfMeasureMultiplier associated with the InvoiceItem
-        /// </summary>
-        [DataMember]
-        public int UnitOfMeasureMultiplier
-        {
-            get { return _unitOfMeasureMultiplier; }
-                set 
-                { 
-                    SetPropertyValueAndDetectChanges(o =>
-                    {
-                        _unitOfMeasureMultiplier = value;
-                        return _unitOfMeasureMultiplier;
-                    }, _unitOfMeasureMultiplier, UnitOfMeasureMultiplierSelector); 
                 }
         }
     

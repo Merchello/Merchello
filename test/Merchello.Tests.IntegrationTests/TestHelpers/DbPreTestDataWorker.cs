@@ -98,15 +98,12 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         public IAnonymousCustomer MakeExistingAnonymousCustomer()
         {
             var anonymous = MockAnonymousCustomerDataMaker.AnonymousCustomerForInserting();
-            AnonymousCustomerService.Save(anonymous);
+            //AnonymousCustomerService.Save(anonymous);
+            anonymous.Key = Guid.NewGuid();
+            anonymous.ResetDirtyProperties();
             return anonymous;
         }
 
-
-        public IAnonymousCustomerService AnonymousCustomerService
-        {
-            get { return _serviceContext.AnonymousCustomerService; }
-        }
 
         #endregion
 
@@ -177,25 +174,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
         #endregion
 
-        #region IInvoiceStatus
-
-        public IEnumerable<IInvoiceStatus> DefaultInvoiceStatuses()
-        {            
-            var statuses = InvoiceStatusService.GetAll();
-            if (!statuses.Any())
-            {
-                // populate the table
-                var creation = new BaseDataCreation(new PetaPocoUnitOfWorkProvider().GetUnitOfWork().Database);
-                creation.InitializeBaseData("merchInvoiceStatus");               
-            }
-            return InvoiceStatusService.GetAll();
-        }
-
-        public IInvoiceStatusService InvoiceStatusService
-        {
-            get { return _serviceContext.InvoiceStatusService; }
-        }
-        #endregion
+       
 
         #region IInvoice
 
@@ -212,7 +191,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
             var invoice = MockInvoiceDataMaker.InvoiceForInserting(customer, invoiceStatus, address);
             InvoiceService.Save(invoice);
 
-            if(maxItemCount > 0) MakeExistingInvoiceItemCollection(invoice, InvoiceItemType.Product, MockDataMakerBase.NoWhammyStop.Next(maxItemCount));
+            //if(maxItemCount > 0) MakeExistingInvoiceItemCollection(invoice, InvoiceItemType.Product, MockDataMakerBase.NoWhammyStop.Next(maxItemCount));
 
             return invoice;
         }
@@ -261,46 +240,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
         #endregion
 
-        #region IInvoiceItem
-
-        /// <summary>
-        /// Makes an invoice item record in the database and returns an instance of the IInvoiceItem representing that record
-        /// </summary>        
-        public IInvoiceItem MakeExistingInvoiceItem(IInvoice invoice, InvoiceItemType invoiceItemType)
-        {
-            var invoiceItem = MockInvoiceItemDataMaker.InvoiceItemForInserting(invoice, invoiceItemType);
-            InvoiceItemService.Save(invoiceItem);
-            return invoiceItem;
-        }
-
-        /// <summary>
-        /// Makes collection of invoice items associated with an invoice
-        /// </summary>        
-        public IEnumerable<IInvoiceItem> MakeExistingInvoiceItemCollection(IInvoice invoice, InvoiceItemType invoiceItemType, int count)
-        {            
-            var invoiceItems = MockInvoiceItemDataMaker.InvoiceItemCollectionForInserting(invoice, invoiceItemType, count);
-            InvoiceItemService.Save(invoiceItems);
-            return invoiceItems;
-        }
-
-        /// <summary>
-        /// Deletes all invoice items
-        /// </summary>
-        public void DeleteAllInvoiceItems()
-        {
-            var all = ((InvoiceItemService) InvoiceItemService).GetAll();
-            InvoiceItemService.Delete(all);
-        }
-
-        /// <summary>
-        /// The invoice item service
-        /// </summary>
-        public IInvoiceItemService InvoiceItemService
-        {
-            get { return _serviceContext.InvoiceItemService; }
-        }
-
-        #endregion
+        
 
         #region IProduct
 
@@ -363,26 +303,13 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         #region IShipment
 
 
-        public IShipmentService ShipmentService
+        public IShippingService ShippingService
         {
-            get { return _serviceContext.ShipmentService; }
+            get { return _serviceContext.ShippingService; }
         }
 
         #endregion
 
-        #region IShipMethod
-
-        /// <summary>
-        /// Gets the <see cref="IShipMethodService"/>
-        /// </summary>
-        public IShipMethodService ShipMethodService
-        {
-            get { return _serviceContext.ShipMethodService; }
-        }
-
-        
-
-        #endregion
 
         #region IAppliedPayment
 

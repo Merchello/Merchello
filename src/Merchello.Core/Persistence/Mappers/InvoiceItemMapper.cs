@@ -23,7 +23,6 @@ namespace Merchello.Core.Persistence.Mappers
             CacheMap<InvoiceItem, InvoiceItemDto>(src => src.Sku, dto => dto.Sku);
             CacheMap<InvoiceItem, InvoiceItemDto>(src => src.Name, dto => dto.Name);
             CacheMap<InvoiceItem, InvoiceItemDto>(src => src.Quantity, dto => dto.Quantity);
-            CacheMap<InvoiceItem, InvoiceItemDto>(src => src.UnitOfMeasureMultiplier, dto => dto.UnitOfMeasureMultiplier);
             CacheMap<InvoiceItem, InvoiceItemDto>(src => src.Amount, dto => dto.Amount);
             CacheMap<InvoiceItem, InvoiceItemDto>(src => src.Exported, dto => dto.Exported);
             CacheMap<InvoiceItem, InvoiceItemDto>(src => src.CreateDate, dto => dto.CreateDate);
