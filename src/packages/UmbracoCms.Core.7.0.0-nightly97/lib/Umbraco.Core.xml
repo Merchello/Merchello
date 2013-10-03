@@ -761,6 +761,11 @@
             A CacheProvider that wraps the logic of the HttpRuntime.Cache
             </summary>
         </member>
+        <member name="M:Umbraco.Core.Cache.HttpRuntimeCacheProvider.ClearCacheObjectTypes``1(System.Func{System.String,``0,System.Boolean})">
+            <summary>
+            Clears all objects in the System.Web.Cache with the System.Type specified that satisfy the predicate
+            </summary>
+        </member>
         <member name="M:Umbraco.Core.Cache.HttpRuntimeCacheProvider.GetCacheItem(System.String,System.Func{System.Object})">
             <summary>
             Gets (and adds if necessary) an item from the cache with all of the default parameters
@@ -1083,45 +1088,31 @@
             Gets or sets a value indicating whether base rest extensions are enabled.
             </summary>
         </member>
-        <member name="T:Umbraco.Core.Configuration.UmbracoConfiguration">
+        <member name="T:Umbraco.Core.Configuration.UmbracoConfig">
             <summary>
             The gateway to all umbraco configuration
             </summary>
         </member>
-        <member name="M:Umbraco.Core.Configuration.UmbracoConfiguration.Set``1(``0)">
-            <summary>
-            Used for unit tests to explicitly associate an IUmbracoConfigurationSection to an implementation
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="implementation"></param>
-        </member>
-        <member name="M:Umbraco.Core.Configuration.UmbracoConfiguration.Reset">
-            <summary>
-            Used for unit tests to reset the resolved sections
-            </summary>
-        </member>
-        <member name="M:Umbraco.Core.Configuration.UmbracoConfiguration.For``1(System.Configuration.Configuration)">
-            <summary>
-            Gets the specified UmbracoConfigurationSection.
-            </summary>
-            <typeparam name="T">The type of the UmbracoConfigurationSectiont.</typeparam>
-            <returns>The UmbracoConfigurationSection of the specified type.</returns>
-        </member>
-        <member name="M:Umbraco.Core.Configuration.UmbracoConfiguration.#ctor">
+        <member name="M:Umbraco.Core.Configuration.UmbracoConfig.#ctor">
             <summary>
             Default constructor 
             </summary>
         </member>
-        <member name="M:Umbraco.Core.Configuration.UmbracoConfiguration.#ctor(Umbraco.Core.Configuration.UmbracoSettings.IUmbracoSettingsSection,Umbraco.Core.Configuration.BaseRest.IBaseRestSection)">
+        <member name="M:Umbraco.Core.Configuration.UmbracoConfig.#ctor(Umbraco.Core.Configuration.UmbracoSettings.IUmbracoSettingsSection,Umbraco.Core.Configuration.BaseRest.IBaseRestSection)">
             <summary>
             Constructor - can be used for testing
             </summary>
             <param name="umbracoSettings"></param>
             <param name="baseRestSettings"></param>
         </member>
-        <member name="P:Umbraco.Core.Configuration.UmbracoConfiguration.UmbracoSettings">
+        <member name="M:Umbraco.Core.Configuration.UmbracoConfig.UmbracoSettings">
             <summary>
             Gets the IUmbracoSettings
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Configuration.UmbracoConfig.BaseRestExtensions">
+            <summary>
+            Gets the IBaseRestSection
             </summary>
         </member>
         <member name="T:Umbraco.Core.Configuration.InnerTextConfigurationElement`1">
@@ -1399,6 +1390,11 @@
         <member name="F:Umbraco.Core.Constants.Trees.Content">
             <summary>
             alias for the content tree.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Constants.Trees.Members">
+            <summary>
+            alias for the media tree.
             </summary>
         </member>
         <member name="F:Umbraco.Core.Constants.Trees.Media">
@@ -2901,6 +2897,11 @@
             The entity being sent to publish
             </summary>
         </member>
+        <member name="T:Umbraco.Core.IDisposeOnRequestEnd">
+            <summary>
+            Any class implementing this interface that is added to the httpcontext.items keys or values will be disposed of at the end of the request.
+            </summary>
+        </member>
         <member name="M:Umbraco.Core.IO.UmbracoMediaFile.Initialize">
             <summary>
             Initialized values that don't require opening the file.
@@ -3498,6 +3499,11 @@
         <member name="T:Umbraco.Core.Manifest.PropertyEditorConverter">
             <summary>
             Used to convert a property editor manifest to a property editor object
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.ImageHelper">
+            <summary>
+            A helper class used for imaging
             </summary>
         </member>
         <member name="T:Umbraco.Core.Media.MediaSubfolderCounter">
@@ -7634,7 +7640,7 @@
             Gets a value indicating whether throttling conditions were not determined with certainty.
             </summary>
         </member>
-        <member name="T:Umbraco.Core.Persistence.Migrations.Upgrades.TargetVersionSeven.AddEditorAliasToCmsMacroProperty">
+        <member name="T:Umbraco.Core.Persistence.Migrations.Upgrades.TargetVersionSeven.AlterCmsMacroPropertyTable">
             <summary>
             We are removing the cmsMacroPropertyType which the cmsMacroProperty references and the cmsMacroProperty.macroPropertyType column
             needs to be changed to editorAlias, we'll do this by removing the constraint,changing the macroPropertyType to the new 
@@ -7879,6 +7885,27 @@
             Returns the database Unit of Work added to the repository
             </summary>
         </member>
+        <member name="T:Umbraco.Core.PropertyEditors.BackwardsCompatibleData">
+            <summary>
+            This is used purelty to attempt to maintain some backwards compatibility with new property editors that don't have a 
+            legacy property editor predecessor when developers are using the legacy APIs
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.PropertyEditors.BackwardsCompatibleDataType">
+            <summary>
+            This is used purelty to attempt to maintain some backwards compatibility with new property editors that don't have a 
+            legacy property editor predecessor when developers are using the legacy APIs
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.PropertyEditors.BackwardsCompatibleDataType.Create(System.String,System.Guid,System.Int32)">
+            <summary>
+            Creates a runtime instance
+            </summary>
+            <param name="propEdAlias"></param>
+            <param name="legacyId"></param>
+            <param name="dataTypeDefId"></param>
+            <returns></returns>
+        </member>
         <member name="T:Umbraco.Core.PropertyEditors.LegacyParameterEditorAliasConverter">
             <summary>
             Used to map the legacy parameter editor aliases to the new ones, this is really just used during 
@@ -7948,12 +7975,12 @@
             <param name="throwIfNotFound">if set to true will throw an exception if the map isn't found</param>
             <returns>Returns the alias if found otherwise null if not found</returns>
         </member>
-        <member name="M:Umbraco.Core.PropertyEditors.LegacyPropertyEditorIdToAliasConverter.GetLegacyIdFromAlias(System.String,System.Boolean)">
+        <member name="M:Umbraco.Core.PropertyEditors.LegacyPropertyEditorIdToAliasConverter.GetLegacyIdFromAlias(System.String,Umbraco.Core.PropertyEditors.LegacyPropertyEditorIdToAliasConverter.NotFoundLegacyIdResponseBehavior)">
             <summary>
             Gets a legacy Id based on the alias
             </summary>
             <param name="alias"></param>
-            <param name="throwIfNotFound">if set to true will throw an exception if the map isn't found</param>
+            <param name="notFoundBehavior"></param>
             <returns>Returns the legacy GUID of a property editor if found, otherwise returns null</returns>
         </member>
         <member name="M:Umbraco.Core.PropertyEditors.LegacyPropertyEditorIdToAliasConverter.CreateMappingsForCoreEditors">
@@ -10311,7 +10338,7 @@
             
                 {div class='umb-macro-holder'}
                     <!-- <?UMBRACO_MACRO macroAlias=\"myMacro\" /> -->
-                    This could be some macro content
+                    {ins}Macro alias: {strong}My Macro{/strong}{/ins}
                 {/div}
             
             </remarks>
@@ -13431,6 +13458,7 @@
         <member name="M:Umbraco.Core.Services.ContentService.DeleteVersions(System.Int32,System.DateTime,System.Int32)">
             <summary>
             Permanently deletes versions from an <see cref="T:Umbraco.Core.Models.IContent"/> object prior to a specific date.
+            This method will never delete the latest version of a content item.
             </summary>
             <param name="id">Id of the <see cref="T:Umbraco.Core.Models.IContent"/> object to delete versions from</param>
             <param name="versionDate">Latest version date</param>
@@ -13439,6 +13467,7 @@
         <member name="M:Umbraco.Core.Services.ContentService.DeleteVersion(System.Int32,System.Guid,System.Boolean,System.Int32)">
             <summary>
             Permanently deletes specific version(s) from an <see cref="T:Umbraco.Core.Models.IContent"/> object.
+            This method will never delete the latest version of a content item.
             </summary>
             <param name="id">Id of the <see cref="T:Umbraco.Core.Models.IContent"/> object to delete a version from</param>
             <param name="versionId">Id of the version to delete</param>
@@ -13823,6 +13852,20 @@
             <remarks>Deleting a <see cref="T:Umbraco.Core.Models.IContentType"/> will delete all the <see cref="T:Umbraco.Core.Models.IContent"/> objects based on this <see cref="T:Umbraco.Core.Models.IContentType"/></remarks>
             <param name="userId">Optional Id of the User deleting the ContentTypes</param>
         </member>
+        <member name="M:Umbraco.Core.Services.IContentTypeService.GetMemberType(System.Int32)">
+            <summary>
+            Gets an <see cref="T:Umbraco.Core.Models.IMemberType"/> object by its Id
+            </summary>
+            <param name="id">Id of the <see cref="T:Umbraco.Core.Models.IMediaType"/> to retrieve</param>
+            <returns><see cref="T:Umbraco.Core.Models.IMediaType"/></returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.IContentTypeService.GetMemberType(System.String)">
+            <summary>
+            Gets an <see cref="T:Umbraco.Core.Models.IMemberType"/> object by its Alias
+            </summary>
+            <param name="alias">Alias of the <see cref="T:Umbraco.Core.Models.IMediaType"/> to retrieve</param>
+            <returns><see cref="T:Umbraco.Core.Models.IMediaType"/></returns>
+        </member>
         <member name="M:Umbraco.Core.Services.IContentTypeService.GetMediaType(System.Int32)">
             <summary>
             Gets an <see cref="T:Umbraco.Core.Models.IMediaType"/> object by its Id
@@ -13980,6 +14023,20 @@
             <remarks>
             Deleting a <see cref="T:Umbraco.Core.Models.IContentType"/> will delete all the <see cref="T:Umbraco.Core.Models.IContent"/> objects based on this <see cref="T:Umbraco.Core.Models.IContentType"/>
             </remarks>
+        </member>
+        <member name="M:Umbraco.Core.Services.ContentTypeService.GetMemberType(System.Int32)">
+            <summary>
+            Gets an <see cref="T:Umbraco.Core.Models.IMemberType"/> object by its Id
+            </summary>
+            <param name="id">Id of the <see cref="T:Umbraco.Core.Models.IMemberType"/> to retrieve</param>
+            <returns><see cref="T:Umbraco.Core.Models.IMemberType"/></returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.ContentTypeService.GetMemberType(System.String)">
+            <summary>
+            Gets an <see cref="T:Umbraco.Core.Models.IMemberType"/> object by its Alias
+            </summary>
+            <param name="alias">Alias of the <see cref="T:Umbraco.Core.Models.IMemberType"/> to retrieve</param>
+            <returns><see cref="T:Umbraco.Core.Models.IMemberType"/></returns>
         </member>
         <member name="M:Umbraco.Core.Services.ContentTypeService.GetMediaType(System.Int32)">
             <summary>
@@ -15681,6 +15738,7 @@
         <member name="M:Umbraco.Core.Services.MediaService.DeleteVersions(System.Int32,System.DateTime,System.Int32)">
             <summary>
             Permanently deletes versions from an <see cref="T:Umbraco.Core.Models.IMedia"/> object prior to a specific date.
+            This method will never delete the latest version of a content item.
             </summary>
             <param name="id">Id of the <see cref="T:Umbraco.Core.Models.IMedia"/> object to delete versions from</param>
             <param name="versionDate">Latest version date</param>
@@ -15689,6 +15747,7 @@
         <member name="M:Umbraco.Core.Services.MediaService.DeleteVersion(System.Int32,System.Guid,System.Boolean,System.Int32)">
             <summary>
             Permanently deletes specific version(s) from an <see cref="T:Umbraco.Core.Models.IMedia"/> object.
+            This method will never delete the latest version of a content item.
             </summary>
             <param name="id">Id of the <see cref="T:Umbraco.Core.Models.IMedia"/> object to delete a version from</param>
             <param name="versionId">Id of the version to delete</param>
@@ -17975,6 +18034,13 @@
             than doing a manual type check in c#
             </summary>
         </member>
+        <member name="M:Umbraco.Core.TypeHelper.IsOverride(System.Reflection.MethodInfo)">
+            <summary>
+            Checks if the method is actually overriding a base method
+            </summary>
+            <param name="m"></param>
+            <returns></returns>
+        </member>
         <member name="M:Umbraco.Core.TypeHelper.GetReferencedAssemblies(System.Type,System.Collections.Generic.IEnumerable{System.Reflection.Assembly})">
             <summary>
             Find all assembly references that are referencing the assignTypeFrom Type's assembly found in the assemblyList
@@ -18378,12 +18444,6 @@
         <member name="M:Umbraco.Core.PluginManager.ResolveApplicationStartupHandlers">
             <summary>
             Returns all available IApplicationStartupHandler objects
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Umbraco.Core.PluginManager.ResolveUmbracoConfigurationSections">
-            <summary>
-            Returns all classes of type IUmbracoConfigurationSection
             </summary>
             <returns></returns>
         </member>

@@ -1596,11 +1596,6 @@
             Keep user alive as long as they have their browser open? Default is true
             </summary>
         </member>
-        <member name="P:umbraco.UmbracoSettings.EnableCanvasEditing">
-            <summary>
-            Enables the experimental canvas (live) editing on the frontend of the website
-            </summary>
-        </member>
         <member name="P:umbraco.UmbracoSettings.HideDisabledUsersInBackoffice">
             <summary>
             Show disabled users in the tree in the Users section in the backoffice
@@ -2211,14 +2206,6 @@
             Gets or sets a value indicating whether this <see cref="T:umbraco.BusinessLogic.User"/> is disabled.
             </summary>
             <value><c>true</c> if disabled; otherwise, <c>false</c>.</value>
-        </member>
-        <member name="P:umbraco.BusinessLogic.User.DefaultToLiveEditing">
-            <summary>
-            Gets or sets a value indicating whether a user should be redirected to liveediting by default.
-            </summary>
-            <value>
-            	<c>true</c> if defaults to live editing; otherwise, <c>false</c>.
-            </value>
         </member>
         <member name="P:umbraco.BusinessLogic.User.StartNodeId">
             <summary>
