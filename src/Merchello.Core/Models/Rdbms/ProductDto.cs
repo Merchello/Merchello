@@ -4,30 +4,18 @@ using Umbraco.Core.Persistence.DatabaseAnnotations;
 
 namespace Merchello.Core.Models.Rdbms
 {
-    [TableName("merchProductBase")]
+    [TableName("merchProduct")]
     [PrimaryKey("pk", autoIncrement = false)]
     [ExplicitColumns]
-    internal class ProductBaseDto
+    internal class ProductDto
     {
         [Column("pk")]
         [PrimaryKeyColumn(AutoIncrement = false)]
         [Constraint(Default = "newid()")]
         public Guid Key { get; set; }
 
-        [Column("name")]
-        public string Name { get; set; }
-
-        [Column("baseSku")]
-        public string BaseSku { get; set; }
-
-        [Column("price")]
-        public decimal Price { get; set; }
-
-        [Column("canHaveOptions")]
-        public bool CanHaveOptions { get; set; }
-
-        [Column("outOfStockPurchase")]
-        public bool OutOfStockPurchase { get; set; }
+        [Column("definesOptions")]
+        public bool DefinesOptions { get; set; }
 
         [Column("updateDate")]
         [Constraint(Default = "getdate()")]

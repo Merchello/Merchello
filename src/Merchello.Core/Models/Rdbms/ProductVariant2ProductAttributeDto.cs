@@ -4,15 +4,15 @@ using Umbraco.Core.Persistence.DatabaseAnnotations;
 
 namespace Merchello.Core.Models.Rdbms
 {
-    [TableName("merchProductActual2ProductAttribute")]
-    [PrimaryKey("productActualKey", autoIncrement = false)]
+    [TableName("merchProductVariant2ProductAttribute")]
+    [PrimaryKey("productVariantKey", autoIncrement = false)]
     [ExplicitColumns]
-    internal class ProductActual2ProductAttributeDto
+    internal class ProductVariant2ProductAttributeDto
     {
-        [Column("productActualKey")]
-        [PrimaryKeyColumn(AutoIncrement = false, Name = "PK_merchProductActual2ProductAttribute", OnColumns = "productActualKey, optionId")]
-        [ForeignKey(typeof(ProductActualDto), Name = "FK_merchProductActual2ProductAttribute_merchProductActual", Column = "pk")]
-        public Guid ProductActualKey { get; set; }
+        [Column("productVariantKey")]
+        [PrimaryKeyColumn(AutoIncrement = false, Name = "PK_merchProductVariant2ProductAttribute", OnColumns = "productVariantKey, optionId")]
+        [ForeignKey(typeof(ProductVariantDto), Name = "FK_merchProductVariant2ProductAttribute_merchOption", Column = "pk")]
+        public Guid ProductVariantKey { get; set; }
 
         [Column("optionId")]
         [ForeignKey(typeof(OptionDto), Name = "FK_merchProductActual2OProductAttribute_merchOption", Column = "id")]

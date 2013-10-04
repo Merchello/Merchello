@@ -3,9 +3,9 @@ using Merchello.Core.Models.Rdbms;
 
 namespace Merchello.Core.Persistence.Factories
 {
-    internal partial class ProductFactory : IEntityFactory<IProductActual, ProductActualDto>
+    internal partial class ProductFactory : IEntityFactory<IProductActual, ProductVariantDto>
     {
-        public IProductActual BuildEntity(ProductActualDto dto)
+        public IProductActual BuildEntity(ProductVariantDto dto)
         {
             var product = new ProductActual()
             {
@@ -36,9 +36,9 @@ namespace Merchello.Core.Persistence.Factories
             return product;
         }
 
-        public ProductActualDto BuildDto(IProductActual entity)
+        public ProductVariantDto BuildDto(IProductActual entity)
         {
-            var dto = new ProductActualDto()
+            var dto = new ProductVariantDto()
             {
                 Key = entity.Key,
                 Sku = entity.Sku,

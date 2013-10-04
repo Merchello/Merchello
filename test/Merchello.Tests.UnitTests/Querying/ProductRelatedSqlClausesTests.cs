@@ -28,8 +28,8 @@ namespace Merchello.Tests.UnitTests.Querying
 
             var sql = new Sql();
             sql.Select("*")
-                .From<ProductActualDto>()
-                .Where<ProductActualDto>(x => x.Key == key);
+                .From<ProductVariantDto>()
+                .Where<ProductVariantDto>(x => x.Key == key);
 
             Assert.That(sql.SQL, Is.EqualTo(expected.SQL));
         }
