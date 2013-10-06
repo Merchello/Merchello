@@ -21,8 +21,8 @@ namespace Merchello.Core.Models.Rdbms
         [Column("providerKey")]
         public Guid ProviderKey { get; set; }
 
-        [Column("paymentTypeFieldKey")]
-        public Guid PaymentTypeFieldKey { get; set; }
+        [Column("paymentTfKey")]
+        public Guid PaymentTfKey { get; set; }
 
         [Column("paymentMethodName")]
         public string PaymentMethodName { get; set; }

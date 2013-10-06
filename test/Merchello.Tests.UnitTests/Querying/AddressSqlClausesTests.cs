@@ -56,14 +56,12 @@ namespace Merchello.Tests.UnitTests.Querying
             //// Act
             var sql = new Sql();
             sql.Select("*")
-                .From<AddressDto>();
+                .From<AddressDto>()
+                .Where<AddressDto>(x => x.CustomerKey == key);
 
-            var query = Query<IAddress>.Builder.Where(x => x.CustomerKey == key);
-
-            var translated = TranslateQuery(sql, query);
-
+            
             //// Assert
-            Assert.AreEqual(expected.SQL, translated.SQL);
+            Assert.AreEqual(expected.SQL, sql.SQL);
         }
     }
 }

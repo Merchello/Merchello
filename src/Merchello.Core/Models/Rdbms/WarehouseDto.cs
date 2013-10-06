@@ -31,6 +31,18 @@ namespace Merchello.Core.Models.Rdbms
         [Column("postalCode")]
         public string PostalCode { get; set; }
 
+        [Column("countryCode")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public string CountryCode { get; set; }
+
+        [Column("phone")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public string Phone { get; set; }
+
+        [Column("email")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public string Email { get; set; }
+
         [Column("updateDate")]
         [Constraint(Default = "getdate()")]
         public DateTime UpdateDate { get; set; }

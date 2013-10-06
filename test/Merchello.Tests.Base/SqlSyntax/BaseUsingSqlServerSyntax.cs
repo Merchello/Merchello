@@ -32,12 +32,12 @@ namespace Merchello.Tests.Base.SqlSyntax
         //    Resolution.Reset();
         //}
 
-        protected Sql TranslateQuery(Sql sqlClause, IQuery<T> query)
-        {
-            var translator = new SqlTranslator<T>(sqlClause, query);
-            var sql = translator.Translate();
-            return sql;
-        }
+        //protected static Sql TranslateQuery(Sql sqlClause, IQuery<T> query)
+        //{
+        //    var translator = new SqlTranslator<T>(sqlClause, query);
+        //    var sql = translator.Translate();
+        //    return sql;
+        //}
     }
     
 }

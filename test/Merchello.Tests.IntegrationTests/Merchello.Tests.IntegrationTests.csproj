@@ -256,17 +256,10 @@
     <Compile Include="Migration\InitialDataTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Migration\DatabaseSchema.cs" />
-    <Compile Include="Services\AddressServiceTests.cs" />
-    <Compile Include="Services\BasketServiceTests.cs" />
-    <Compile Include="Services\InvoiceItemServiceTests.cs" />
-    <Compile Include="Services\InvoiceServiceTests.cs" />
-    <Compile Include="Services\InvoiceStatusServiceTests.cs" />
-    <Compile Include="Services\CustomerServiceTests.cs" />
-    <Compile Include="Services\PaymentServiceTests.cs" />
-    <Compile Include="Services\ProductServiceTests.cs" />
+    <Compile Include="Services\CustomerItemRegisterServiceTests.cs" />
+    <Compile Include="Services\Product\ProductOptionTests.cs" />
+    <Compile Include="Services\Product\ProductTests.cs" />
     <Compile Include="Services\ServiceIntegrationTestBase.cs" />
-    <Compile Include="Services\ShipmentServiceTests.cs" />
-    <Compile Include="Services\ShipMethodServiceTests.cs" />
     <Compile Include="Services\WarehouseServiceTests.cs" />
     <Compile Include="TestHelpers\DbPreTestDataWorker.cs" />
   </ItemGroup>

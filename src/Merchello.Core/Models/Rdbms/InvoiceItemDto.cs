@@ -23,8 +23,8 @@ namespace Merchello.Core.Models.Rdbms
         [ForeignKey(typeof(InvoiceDto), Name = "FK_merchInvoiceItem_merchInvoice", Column = "id")]
         public int InvoiceId { get; set; }
         
-        [Column("invoiceItemTypeFieldKey")]
-        public Guid InvoiceItemTypeFieldKey { get; set; }
+        [Column("lineItemTfKey")]
+        public Guid LineItemTfKey { get; set; }
 
         [Column("sku")]
         [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchInvoiceItemSku")]
@@ -33,18 +33,18 @@ namespace Merchello.Core.Models.Rdbms
         [Column("name")]
         public string Name { get; set; }
 
-        [Column("baseQuantity")]
-        public int BaseQuantity { get; set; }
-
-        [Column("unitOfMeasureMultiplier")]
-        [Constraint(Default = "1")]
-        public int UnitOfMeasureMultiplier { get; set; }
+        [Column("quantity")]
+        public int Quantity { get; set; }        
 
         [Column("amount")]
         public decimal Amount { get; set; }
 
         [Column("exported")]
         public bool Exported { get; set; }
+
+        [Column("extendedData")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public string ExtendedData { get; set; }
 
         [Column("updateDate")]
         [Constraint(Default = "getdate()")]

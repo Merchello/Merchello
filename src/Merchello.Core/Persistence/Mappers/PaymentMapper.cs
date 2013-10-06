@@ -19,7 +19,7 @@ namespace Merchello.Core.Persistence.Mappers
             CacheMap<Payment, PaymentDto>(src => src.Id, dto => dto.Id);                        
             CacheMap<Payment, PaymentDto>(src => src.CustomerKey, dto => dto.CustomerKey);
             CacheMap<Payment, PaymentDto>(src => src.ProviderKey, dto => dto.ProviderKey);
-            CacheMap<Payment, PaymentDto>(src => src.PaymentTypeFieldKey, dto => dto.PaymentTypeFieldKey);                        
+            CacheMap<Payment, PaymentDto>(src => src.PaymentTypeFieldKey, dto => dto.PaymentTfKey);                        
             CacheMap<Payment, PaymentDto>(src => src.PaymentMethodName, dto => dto.PaymentMethodName);
             CacheMap<Payment, PaymentDto>(src => src.ReferenceNumber, dto => dto.ReferenceNumber);
             CacheMap<Payment, PaymentDto>(src => src.Amount, dto => dto.Amount);

@@ -13,23 +13,17 @@ namespace Merchello.Core.Services
     /// <see cref="ICustomerService"/>
     /// </summary>
     public class ServiceContext : IServiceContext
-    {
-        private Lazy<AddressService> _addressService;
+    {        
         private Lazy<CustomerService> _customerService;
-        private Lazy<AnonymousCustomerService> _anonymousCustomerService;
-        private Lazy<BasketService> _basketService;
-        private Lazy<BasketItemService> _basketItemService; 
+        private Lazy<CustomerItemRegisterService> _basketService;    
         private Lazy<InvoiceService> _invoiceService;
-        private Lazy<InvoiceItemService> _invoiceItemService;
-        private Lazy<InvoiceStatusService> _invoiceStatusService;
-        private Lazy<PaymentService> _paymentService;
+        //private Lazy<PaymentService> _paymentService;
         private Lazy<ProductService> _productService;
-        private Lazy<ShipmentService> _shipmentService;
-        private Lazy<ShipMethodService> _shipMethodService;
-        private Lazy<AppliedPaymentService> _appliedPaymentService;
+        private Lazy<ShippingService> _shipmentService;
+        
         private Lazy<WarehouseService> _warehouseService;
 
-        private Lazy<PaymentApplicationStrategyBase> _applyPaymentStrategy;
+        //private Lazy<PaymentApplicationStrategyBase> _applyPaymentStrategy;
         
         /// <summary>
         /// Constructor
@@ -50,56 +44,40 @@ namespace Merchello.Core.Services
             Lazy<RepositoryFactory> repositoryFactory)
         {
             
-            if(_addressService == null)
-                _addressService = new Lazy<AddressService>(() => new AddressService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
-
             if(_customerService == null)
                 _customerService = new Lazy<CustomerService>(() => new CustomerService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
-            if (_anonymousCustomerService == null)
-                _anonymousCustomerService = new Lazy<AnonymousCustomerService>(() => new AnonymousCustomerService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _customerService.Value));
-
             if(_basketService == null)
-                _basketService = new Lazy<BasketService>(() => new BasketService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+                _basketService = new Lazy<CustomerItemRegisterService>(() => new CustomerItemRegisterService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
-            if(_basketItemService == null)
-                _basketItemService = new Lazy<BasketItemService>(() => new BasketItemService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
-
-            if(_invoiceItemService == null)
-                _invoiceItemService = new Lazy<InvoiceItemService>(() => new InvoiceItemService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
-
-            if(_invoiceStatusService == null)
-                _invoiceStatusService = new Lazy<InvoiceStatusService>(() => new InvoiceStatusService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
             if(_invoiceService == null)
-                _invoiceService = new Lazy<InvoiceService>(() => new InvoiceService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _invoiceItemService.Value, _invoiceStatusService.Value));
+                _invoiceService = new Lazy<InvoiceService>(() => new InvoiceService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
-            if (_appliedPaymentService == null)
-                _appliedPaymentService = new Lazy<AppliedPaymentService>(() => new AppliedPaymentService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+            //if (_appliedPaymentService == null)
+            //    _appliedPaymentService = new Lazy<AppliedPaymentService>(() => new AppliedPaymentService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
-            if (_applyPaymentStrategy == null)
-            {
-                // instantiate type configured in Merchello configuration section
-                var paymentStrategyTypeName = MerchelloConfiguration.Current.DefaultApplyPaymentStrategy;
+            //if (_applyPaymentStrategy == null)
+            //{
+            //    // instantiate type configured in Merchello configuration section
+            //    var paymentStrategyTypeName = MerchelloConfiguration.Current.DefaultApplyPaymentStrategy;
 
-                // we have to find the ApplyPaymentStrategyBase with a specific constructor
-                var constructorArgs = new[] { typeof(CustomerService), typeof(InvoiceService), typeof(AppliedPaymentService) };
-                var constructorArgValues = new object[] { _customerService.Value, _invoiceService.Value, _appliedPaymentService.Value };
+            //    // we have to find the ApplyPaymentStrategyBase with a specific constructor
+            //    var constructorArgs = new[] { typeof(CustomerService), typeof(InvoiceService), typeof(AppliedPaymentService) };
+            //    var constructorArgValues = new object[] { _customerService.Value, _invoiceService.Value, _appliedPaymentService.Value };
                 
-                _applyPaymentStrategy = new Lazy<PaymentApplicationStrategyBase>(() => ActivatorHelper.CreateInstance<PaymentApplicationStrategyBase>(Type.GetType(paymentStrategyTypeName), constructorArgs, constructorArgValues));
-            }
+            //    _applyPaymentStrategy = new Lazy<PaymentApplicationStrategyBase>(() => ActivatorHelper.CreateInstance<PaymentApplicationStrategyBase>(Type.GetType(paymentStrategyTypeName), constructorArgs, constructorArgValues));
+            //}
 
-            if(_paymentService == null)
-                _paymentService = new Lazy<PaymentService>(() => new PaymentService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _applyPaymentStrategy.Value));
+            //if(_paymentService == null)
+            //    _paymentService = new Lazy<PaymentService>(() => new PaymentService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _applyPaymentStrategy.Value));
 
             if(_productService == null)
                 _productService = new Lazy<ProductService>(() => new ProductService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
             if(_shipmentService == null)
-                _shipmentService = new Lazy<ShipmentService>(() => new ShipmentService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+                _shipmentService = new Lazy<ShippingService>(() => new ShippingService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
-            if (_shipMethodService == null)
-                _shipMethodService = new Lazy<ShipMethodService>(() => new ShipMethodService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
             if(_warehouseService == null)
                 _warehouseService = new Lazy<WarehouseService>(() => new WarehouseService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
@@ -108,22 +86,7 @@ namespace Merchello.Core.Services
 
         #region IServiceContext Members
 
-        /// <summary>
-        /// Gets the <see cref="IAddressService"/>
-        /// </summary>
-        internal IAddressService AddressService
-        {
-            get { return _addressService.Value; }
-        }
-
-        /// <summary>
-        /// Gets the <see cref="IAnonymousCustomerService"/>
-        /// </summary>
-        internal IAnonymousCustomerService AnonymousCustomerService
-        {
-            get { return _anonymousCustomerService.Value; }
-        }
-
+    
         /// <summary>
         /// Gets the <see cref="ICustomerService"/>
         /// </summary>
@@ -133,19 +96,11 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
-        /// Gets the <see cref="IBasketService"/>
+        /// Gets the <see cref="ICustomerItemRegisterService"/>
         /// </summary>
-        public IBasketService BasketService
+        public ICustomerItemRegisterService CustomerItemRegisterService
         {
             get { return _basketService.Value;  }
-        }
-
-        /// <summary>
-        /// Gets the <see cref="IBasketItemService"/>
-        /// </summary>
-        internal IBasketItemService BasketItemService
-        {
-            get { return _basketItemService.Value; }
         }
 
         /// <summary>
@@ -155,30 +110,15 @@ namespace Merchello.Core.Services
         {
             get { return _invoiceService.Value; }
         }
+    
 
-        /// <summary>
-        /// Gets the <see cref="IInvoiceItemService"/>
-        /// </summary>
-        internal IInvoiceItemService InvoiceItemService
-        {
-            get { return _invoiceItemService.Value; }
-        }
-
-        /// <summary>
-        /// Gets the <see cref="IInvoiceStatusService"/>
-        /// </summary>
-        internal IInvoiceStatusService InvoiceStatusService
-        {
-            get { return _invoiceStatusService.Value; }
-        }
-
-        /// <summary>
-        /// Gets the <see cref="IPaymentService"/>
-        /// </summary>
-        public IPaymentService PaymentService
-        {
-            get { return _paymentService.Value;  }
-        }
+        ///// <summary>
+        ///// Gets the <see cref="IPaymentService"/>
+        ///// </summary>
+        //public IPaymentService PaymentService
+        //{
+        //    get { return _paymentService.Value;  }
+        //}
 
         /// <summary>
         /// Gets the <see cref="IProductService"/>
@@ -188,20 +128,10 @@ namespace Merchello.Core.Services
             get { return _productService.Value;  }
         }
 
-        public IShipmentService ShipmentService
+        public IShippingService ShippingService
         {
             get { return _shipmentService.Value; }
-        }
-
-        internal IShipMethodService ShipMethodService
-        {
-            get { return _shipMethodService.Value; }
-        }
-
-        internal  IAppliedPaymentService AppliedPaymentService
-        {
-            get { return _appliedPaymentService.Value; }
-        }
+        }        
 
         public IWarehouseService WarehouseService
         {

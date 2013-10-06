@@ -265,10 +265,10 @@ namespace Merchello.Core.Models
         [DataMember]
         public AddressType AddressType
         {
-            get { return EnumTypeFieldConverter.Address().GetTypeField(_addressTypeFieldKey); }
+            get { return EnumTypeFieldConverter.Address.GetTypeField(_addressTypeFieldKey); }
             set
             {
-                var reference = EnumTypeFieldConverter.Address().GetTypeField(value);
+                var reference = EnumTypeFieldConverter.Address.GetTypeField(value);
                 if (!ReferenceEquals(TypeFieldMapperBase.NotFound, reference))
                 { 
                     // call through the property to flag the dirty property

@@ -13,9 +13,9 @@ namespace Merchello.Core.Models.Rdbms
         [PrimaryKeyColumn]
         public int Id { get; set; }
 
-        [Column("invoiceId")]
-        [ForeignKey(typeof(InvoiceDto), Name = "FK_merchShipment_merchInvoice", Column = "id")]
-        public int InvoiceId { get; set; }
+        [Column("orderId")]
+        [ForeignKey(typeof(OrderDto), Name = "FK_merchShipment_merchOrder", Column = "id")]
+        public int OrderId { get; set; }
 
         [Column("address1")]
         [NullSetting(NullSetting = NullSettings.Null)]
@@ -37,18 +37,26 @@ namespace Merchello.Core.Models.Rdbms
         [NullSetting(NullSetting = NullSettings.Null)]
         public string PostalCode { get; set; }
 
+        [Column("email")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public string Email { get; set; }
+
+        [Column("company")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public string Company { get; set; }
+
         [Column("countryCode")]
         [NullSetting(NullSetting = NullSettings.Null)]
         public string CountryCode { get; set; }
+
+        [Column("phone")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public string Phone { get; set; }
 
         [Column("shipMethodId")]
         [ForeignKey(typeof(ShipMethodDto), Name = "FK_merchShipment_merchShipMethod", Column = "id")]
         [NullSetting(NullSetting = NullSettings.Null)]
         public int? ShipMethodId { get; set; }
-
-        [Column("phone")]
-        [NullSetting(NullSetting = NullSettings.Null)]
-        public string Phone { get; set; }
 
         [Column("updateDate")]
         [Constraint(Default = "getdate()")]

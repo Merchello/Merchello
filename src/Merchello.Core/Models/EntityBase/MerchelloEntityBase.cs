@@ -61,7 +61,7 @@ namespace Merchello.Core.Models.EntityBase
         /// <summary>
         /// Resets dirty properties by clearing the dictionary used to track changes.
         /// </summary>
-        public void ResetDirtyProperties()
+        public virtual void ResetDirtyProperties()
         {
             _propertyChangedInfo.Clear();
         }

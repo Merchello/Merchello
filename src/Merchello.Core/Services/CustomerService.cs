@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Merchello.Core.Events;
 using Merchello.Core.Models;
 using Merchello.Core.Persistence;
-using Merchello.Core.Events;
 using Merchello.Core.Persistence.Repositories;
 using Umbraco.Core;
+using Umbraco.Core.Events;
 using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Core.Services
@@ -58,7 +59,7 @@ namespace Merchello.Core.Services
                     MemberId = memberId
                 };
 
-            Created.RaiseEvent(new NewEventArgs<ICustomer>(customer), this);
+            Created.RaiseEvent(new Events.NewEventArgs<ICustomer>(customer), this);
 
             return customer;
         }
@@ -215,15 +216,27 @@ namespace Merchello.Core.Services
 
         #region Event Handlers
 
-        /// <summary>
-        /// Occurs before Delete
-        /// </summary>		
-        public static event TypedEventHandler<ICustomerService, DeleteEventArgs<ICustomer>> Deleting;
 
         /// <summary>
-        /// Occurs after Delete
+        /// Occurs before Create
         /// </summary>
-        public static event TypedEventHandler<ICustomerService, DeleteEventArgs<ICustomer>> Deleted;
+        public static event TypedEventHandler<ICustomerService, Events.NewEventArgs<ICustomer>> Creating;
+
+        /// <summary>
+        /// Occurs after Create
+        /// </summary>
+        public static event TypedEventHandler<ICustomerService, Events.NewEventArgs<ICustomer>> Created;
+
+
+        /// <summary>
+        /// Occurs before convert
+        /// </summary>
+        public static event TypedEventHandler<ICustomerService, ConvertEventArgs<ICustomer>> Converting;
+
+        /// <summary>
+        /// Occurs after convert
+        /// </summary>
+        public static event TypedEventHandler<ICustomerService, ConvertEventArgs<ICustomer>> Converted;
 
         /// <summary>
         /// Occurs before Save
@@ -236,9 +249,14 @@ namespace Merchello.Core.Services
         public static event TypedEventHandler<ICustomerService, SaveEventArgs<ICustomer>> Saved;
 
         /// <summary>
-        /// Occurs after Create
+        /// Occurs before Delete
+        /// </summary>		
+        public static event TypedEventHandler<ICustomerService, DeleteEventArgs<ICustomer>> Deleting;
+
+        /// <summary>
+        /// Occurs after Delete
         /// </summary>
-        public static event TypedEventHandler<ICustomerService, NewEventArgs<ICustomer>> Created;
+        public static event TypedEventHandler<ICustomerService, DeleteEventArgs<ICustomer>> Deleted;
 
 
 

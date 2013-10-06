@@ -19,8 +19,8 @@ namespace Merchello.Core.Models.Rdbms
         [Column("providerKey")]
         public Guid ProviderKey { get; set; }
 
-        [Column("shipMethodTypeFieldKey")]
-        public Guid ShipMethodTypeFieldKey { get; set; }
+        [Column("shipMethodTfKey")]
+        public Guid ShipMethodTfKey { get; set; }
 
         [Column("surcharge")]
         [Constraint(Default = "0")]

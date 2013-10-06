@@ -17,7 +17,7 @@ namespace Merchello.Core.Persistence.Mappers
     /// This class basically short circuits the methodology Umbraco uses in it's MapperResolver implementation
     /// and allows us to reduce the number of internal classes that we need to copy into the Merchello core.
     /// </remarks>
-    internal class MerchelloMapper
+    public class MerchelloMapper
     {
         private static readonly ConcurrentDictionary<Type, Type> MapperCache = new ConcurrentDictionary<Type, Type>();
         private static readonly Lazy<MerchelloMapper> Mapper = new Lazy<MerchelloMapper>(() => new MerchelloMapper());
@@ -31,14 +31,16 @@ namespace Merchello.Core.Persistence.Mappers
         {
             CacheMapper(typeof(IAddress), typeof(AddressMapper));
             CacheMapper(typeof(IAnonymousCustomer), typeof(AnonymousCustomerMapper));
-            CacheMapper(typeof(IBasket), typeof(BasketMapper));
-            CacheMapper(typeof(IBasketItem), typeof(BasketItemMapper));
+            CacheMapper(typeof(ICustomerItemRegister), typeof(BasketMapper));
+            CacheMapper(typeof(IOrderLineItem), typeof(CustomerItemRegisterItemMapper));
             CacheMapper(typeof(ICustomer), typeof(CustomerMapper));
             CacheMapper(typeof(IInvoice), typeof(InvoiceMapper));
             CacheMapper(typeof(IInvoiceItem), typeof(InvoiceItemMapper));
             CacheMapper(typeof(IInvoiceStatus), typeof(InvoiceStatusMapper));
             CacheMapper(typeof(IPayment), typeof(PaymentMapper));
             CacheMapper(typeof(IProduct), typeof(ProductMapper));
+            CacheMapper(typeof(IProductVariant), typeof(ProductVariantMapper));
+            CacheMapper(typeof(IProductOption), typeof(ProductOptionMapper));
             CacheMapper(typeof(IAppliedPayment), typeof(AppliedPaymentMapper));
             CacheMapper(typeof(IShipment), typeof(ShipmentMapper));
             CacheMapper(typeof(IShipMethod), typeof (ShipMethodMapper));
@@ -63,8 +65,9 @@ namespace Merchello.Core.Persistence.Mappers
         private static readonly IEnumerable<Type> KeyedTypes = new List<Type>()
             {
                 { typeof(ICustomer) },
-                { typeof(IAnonymousCustomer)},
-                { typeof(IProduct) }
+                { typeof(IAnonymousCustomer) },
+                { typeof(IProduct) },
+                { typeof(IProductVariant) }
             };
 
         /// <summary>
@@ -83,19 +86,19 @@ namespace Merchello.Core.Persistence.Mappers
 
             if (mapper == null)
             {
-                return Attempt<BaseMapper>.False;
+                return Attempt<BaseMapper>.Fail();
             }
             try
             {
                 var instance = Activator.CreateInstance(mapper) as BaseMapper;
                 return instance != null
-                    ? new Attempt<BaseMapper>(true, instance)
-                    : Attempt<BaseMapper>.False;
+                    ? Attempt<BaseMapper>.Succeed(instance) //(true, instance)
+                    : Attempt<BaseMapper>.Fail();
             }
             catch (Exception ex)
             {
                 LogHelper.Error(typeof(MerchelloMapper), "Could not instantiate mapper of type " + mapper, ex);
-                return new Attempt<BaseMapper>(ex);
+                return Attempt<BaseMapper>.Fail(ex);
             }
 
 

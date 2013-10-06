@@ -8,6 +8,12 @@ namespace Merchello.Core.Models
     public interface IInvoice : IIdEntity
     {
         /// <summary>
+        /// Optional id of the order assoicated with the invoice
+        /// </summary>
+        [DataMember]
+        int? OrderId { get; set; }
+
+        /// <summary>
         /// The invoice number
         /// </summary>
         [DataMember]
@@ -113,22 +119,10 @@ namespace Merchello.Core.Models
         bool Paid { get; set; }
 
         /// <summary>
-        /// Indicates whether or not all shipments have been completed for items in this invoice
-        /// </summary>
-        [DataMember]
-        bool Shipped { get; set; }
-
-        /// <summary>
         /// The total invoice amount
         /// </summary>
         [DataMember]
         decimal Amount { get; }
-
-        ///// <summary>
-        ///// The line items associated with this invoice
-        ///// </summary>
-        //[DataMember]
-        //IInvoiceItemItemization InvoiceItems { get;  }
 
     }
 

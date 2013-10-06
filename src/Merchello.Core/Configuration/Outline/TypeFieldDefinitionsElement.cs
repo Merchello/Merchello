@@ -18,7 +18,7 @@ namespace Merchello.Core.Configuration.Outline
         }
 
         /// <summary>
-        /// Gets the dbTypeFields configuration collection for <see cref="IBasket"/>
+        /// Gets the dbTypeFields configuration collection for <see cref="ICustomerItemRegister"/>
         /// </summary>
         [ConfigurationProperty("basket", IsRequired = false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
         public TypeFieldCollection Basket
@@ -55,7 +55,7 @@ namespace Merchello.Core.Configuration.Outline
         }
 
         /// <summary>
-        /// Gets the dbTypeFields configuration collection for <see cref="IProduct"/>
+        /// Gets the dbTypeFields configuration collection for <see cref="IProductVariant"/>
         /// </summary>
         [ConfigurationProperty("product", IsRequired = false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
         public TypeFieldCollection Product
@@ -81,5 +81,13 @@ namespace Merchello.Core.Configuration.Outline
             get { return (TypeFieldCollection)this["gatewayProvider"]; }
         }
 
+        /// <summary>
+        /// Gets the dbTypeFields configuration collection for <see cref="ILineItem"/>
+        /// </summary>
+        [ConfigurationProperty("lineItem", IsRequired = false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
+        public TypeFieldCollection LineItem
+        {
+            get { return (TypeFieldCollection) this["lineItem"]; }
+        }
     }
 }

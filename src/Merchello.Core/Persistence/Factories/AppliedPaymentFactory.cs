@@ -12,7 +12,7 @@ namespace Merchello.Core.Persistence.Factories
             var transaction = new AppliedPayment(
                 dto.PaymentId, 
                 dto.InvoiceId, 
-                dto.AppliedPaymentTypeFieldKey)
+                dto.AppliedPaymentTfKey)
             {
                 Id = dto.Id,
                 Description = dto.Description,
@@ -34,7 +34,7 @@ namespace Merchello.Core.Persistence.Factories
                 Id = entity.Id,
                 PaymentId = entity.PaymentId,
                 InvoiceId = entity.InvoiceId,
-                AppliedPaymentTypeFieldKey = entity.AppliedPaymentTypeFieldKey,
+                AppliedPaymentTfKey = entity.AppliedPaymentTfKey,
                 Description = entity.Description,
                 Amount = entity.Amount,
                 Exported = entity.Exported,

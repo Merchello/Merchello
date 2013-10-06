@@ -44,10 +44,10 @@ namespace Merchello.Tests.UnitTests.WebControllers
         {
             //// Arrange
 			Guid productKey = Guid.NewGuid();
-            Product product = MockProductDataMaker.MockProductComplete(productKey) as Product;
+            ProductActual productActual = MockProductDataMaker.MockProductComplete(productKey) as ProductActual;
 
             var MockProductService = new Mock<IProductService>();
-            MockProductService.Setup(cs => cs.GetByKey(productKey)).Returns(product);
+            MockProductService.Setup(cs => cs.GetByKey(productKey)).Returns(productActual);
 
             MerchelloContext merchelloContext = GetMerchelloContext(MockProductService.Object);
 
@@ -57,7 +57,7 @@ namespace Merchello.Tests.UnitTests.WebControllers
             var result = ctrl.GetProduct(productKey);
 
             //// Assert
-			Assert.AreEqual(product, result);
+			Assert.AreEqual(productActual, result);
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace Merchello.Tests.UnitTests.WebControllers
 			Guid productKey = Guid.NewGuid();
 
             var MockProductService = new Mock<IProductService>();
-            MockProductService.Setup(cs => cs.GetByKey(productKey)).Returns((Product)null);
+            MockProductService.Setup(cs => cs.GetByKey(productKey)).Returns((ProductActual)null);
 
             MerchelloContext merchelloContext = GetMerchelloContext(MockProductService.Object);
 
@@ -88,16 +88,16 @@ namespace Merchello.Tests.UnitTests.WebControllers
         {
             //// Arrange
 			Guid productKey = Guid.NewGuid();
-            Product product = CreateFakeProduct(productKey, 20.0M);
+            ProductActual productActual = CreateFakeProduct(productKey, 20.0M);
 
 			Guid productKey2 = Guid.NewGuid();
-            Product product2 = CreateFakeProduct(productKey2, 30.0M);
+            ProductActual product2 = CreateFakeProduct(productKey2, 30.0M);
 
 			Guid productKey3 = Guid.NewGuid();
-            Product product3 = CreateFakeProduct(productKey3, 40.0M);
+            ProductActual product3 = CreateFakeProduct(productKey3, 40.0M);
 
-            List<Product> productsList = new List<Product>();
-            productsList.Add(product);
+            List<ProductActual> productsList = new List<ProductActual>();
+            productsList.Add(productActual);
             productsList.Add(product3);
 
             var productKeys = new[] { productKey, productKey3 };
@@ -125,10 +125,10 @@ namespace Merchello.Tests.UnitTests.WebControllers
             //// Arrange
             bool wasCalled = false;
 			Guid productKey = Guid.NewGuid();
-            Product product = CreateFakeProduct(productKey, 20.0M);
+            ProductActual productActual = CreateFakeProduct(productKey, 20.0M);
 
             var MockProductService = new Mock<IProductService>();
-            MockProductService.Setup(cs => cs.Save(product, It.IsAny<bool>())).Callback(() => wasCalled = true);
+            MockProductService.Setup(cs => cs.Save(productActual, It.IsAny<bool>())).Callback(() => wasCalled = true);
 
             MerchelloContext merchelloContext = GetMerchelloContext(MockProductService.Object);
 
@@ -137,7 +137,7 @@ namespace Merchello.Tests.UnitTests.WebControllers
             ctrl.Request.Properties.Add(HttpPropertyKeys.HttpConfigurationKey, new HttpConfiguration());
 
             //// Act
-            HttpResponseMessage response = ctrl.PutProduct(product);
+            HttpResponseMessage response = ctrl.PutProduct(productActual);
 
             //// Assert
 			Assert.AreEqual(System.Net.HttpStatusCode.OK, response.StatusCode);
@@ -153,10 +153,10 @@ namespace Merchello.Tests.UnitTests.WebControllers
         {
             //// Arrange
 			Guid productKey = Guid.NewGuid();
-            Product product = CreateFakeProduct(productKey, 20.0M);
+            ProductActual productActual = CreateFakeProduct(productKey, 20.0M);
 
             var MockProductService = new Mock<IProductService>();
-            MockProductService.Setup(cs => cs.Save(product, It.IsAny<bool>())).Throws<InvalidOperationException>();
+            MockProductService.Setup(cs => cs.Save(productActual, It.IsAny<bool>())).Throws<InvalidOperationException>();
 
             MerchelloContext merchelloContext = GetMerchelloContext(MockProductService.Object);
 
@@ -165,7 +165,7 @@ namespace Merchello.Tests.UnitTests.WebControllers
             ctrl.Request.Properties.Add(HttpPropertyKeys.HttpConfigurationKey, new HttpConfiguration());
 
             //// Act
-            HttpResponseMessage response = ctrl.PutProduct(product);
+            HttpResponseMessage response = ctrl.PutProduct(productActual);
 
             //// Assert
 			Assert.AreEqual(System.Net.HttpStatusCode.NotFound, response.StatusCode);
@@ -181,11 +181,11 @@ namespace Merchello.Tests.UnitTests.WebControllers
             Guid removedKey = Guid.Empty;
 
             Guid productKey = new Guid();
-            Product product = CreateFakeProduct(productKey, 20.0M);
+            ProductActual productActual = CreateFakeProduct(productKey, 20.0M);
 
             var MockProductService = new Mock<IProductService>();
-            MockProductService.Setup(cs => cs.Delete(product, It.IsAny<bool>())).Callback<IProduct, bool>((p, b) => removedKey = p.Key);
-            MockProductService.Setup(cs => cs.GetByKey(productKey)).Returns(product);
+            MockProductService.Setup(cs => cs.Delete(productActual, It.IsAny<bool>())).Callback<IProductActual, bool>((p, b) => removedKey = p.Key);
+            MockProductService.Setup(cs => cs.GetByKey(productKey)).Returns(productActual);
 
             MerchelloContext merchelloContext = GetMerchelloContext(MockProductService.Object);
 
@@ -211,20 +211,20 @@ namespace Merchello.Tests.UnitTests.WebControllers
             //// Arrange
             bool wasCalled = false;
 			Guid productKey = Guid.NewGuid();
-            Product product = CreateFakeProduct(productKey, 20.0M);
+            ProductActual productActual = CreateFakeProduct(productKey, 20.0M);
 
             var MockProductService = new Mock<IProductService>();
-            MockProductService.Setup(cs => cs.CreateProduct(product.Sku, product.Name, product.Price)).Returns(product).Callback(() => wasCalled = true);
+            MockProductService.Setup(cs => cs.CreateProduct(productActual.Sku, productActual.Name, productActual.Price)).Returns(productActual).Callback(() => wasCalled = true);
 
             MerchelloContext merchelloContext = GetMerchelloContext(MockProductService.Object);
 
             ProductApiController ctrl = new ProductApiController(merchelloContext, tempUmbracoContext);
 
             //// Act
-            Product result = ctrl.NewProduct(product.Sku, product.Name, product.Price);
+            ProductActual result = ctrl.NewProduct(productActual.Sku, productActual.Name, productActual.Price);
 
             //// Assert
-            Assert.AreEqual(product, result);
+            Assert.AreEqual(productActual, result);
             Assert.True(wasCalled);
         }
 
@@ -252,9 +252,9 @@ namespace Merchello.Tests.UnitTests.WebControllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        private Product CreateFakeProduct(Guid key, Decimal price)
+        private ProductActual CreateFakeProduct(Guid key, Decimal price)
         {
-            return new Product
+            return new ProductActual
             {
                 Key = key,
                 Name = String.Format("Product {0}", key),

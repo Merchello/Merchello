@@ -4,8 +4,8 @@ using System.Linq;
 using System.Threading;
 using Merchello.Core.Models;
 using Merchello.Core.Persistence;
-using Merchello.Core.Events;
 using Umbraco.Core;
+using Umbraco.Core.Events;
 using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Core.Services
@@ -52,7 +52,7 @@ namespace Merchello.Core.Services
                     Name = name
                 };
                 
-            Created.RaiseEvent(new NewEventArgs<IWarehouse>(warehouse), this);
+            Created.RaiseEvent(new Events.NewEventArgs<IWarehouse>(warehouse), this);
 
             return warehouse;
         }
@@ -226,12 +226,12 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Occurs before Create
         /// </summary>
-        public static event TypedEventHandler<IWarehouseService, NewEventArgs<IWarehouse>> Creating;
+        public static event TypedEventHandler<IWarehouseService, Events.NewEventArgs<IWarehouse>> Creating;
 
         /// <summary>
         /// Occurs after Create
         /// </summary>
-        public static event TypedEventHandler<IWarehouseService, NewEventArgs<IWarehouse>> Created;
+        public static event TypedEventHandler<IWarehouseService, Events.NewEventArgs<IWarehouse>> Created;
 
         #endregion
 

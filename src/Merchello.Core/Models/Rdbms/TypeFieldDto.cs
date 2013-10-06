@@ -18,5 +18,13 @@ namespace Merchello.Core.Models.Rdbms
 
         [Column("alias")]
         public string Alias { get; set; }
+
+        [Column("updateDate")]
+        [Constraint(Default = "getdate()")]
+        public DateTime UpdateDate { get; set; }
+
+        [Column("createDate")]
+        [Constraint(Default = "getdate()")]
+        public DateTime CreateDate { get; set; }
     }
 }

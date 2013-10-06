@@ -10,25 +10,24 @@ namespace Merchello.Tests.Base.DataMakers
     /// </summary>
     public class MockBasketDataMaker : MockDataMakerBase
     {
-        public static IBasket AnonymousBasket(IAnonymousCustomer anonymous, BasketType basketType)
+        public static ICustomerItemRegister AnonymousBasket(IAnonymousCustomer anonymous, CustomerItemRegisterType customerItemRegisterType)
         {
-            var basket =  new Basket(basketType)
+            var customerRegistry =  new CustomerItemRegister(anonymous.Key, customerItemRegisterType)
             {
                 Id = 1,
-                ConsumerKey = anonymous.Key,
                 CreateDate = DateTime.Now,
                 UpdateDate = DateTime.Now
             };
 
-           basket.ResetDirtyProperties();
+           customerRegistry.ResetDirtyProperties();
 
-            return basket;
+            return customerRegistry;
 
         }
 
-        public static IBasket ConsumerBasketForInserting(IConsumer consumer, BasketType basketType)
+        public static ICustomerItemRegister ConsumerBasketForInserting(IConsumer consumer, CustomerItemRegisterType customerItemRegisterType)
         {
-            return new Basket(basketType)
+            return new CustomerItemRegister(consumer.Key, customerItemRegisterType)
             {
                 ConsumerKey = consumer.Key
             };

@@ -18,7 +18,6 @@ namespace Merchello.Tests.Base.DataMakers
                 InvoiceDate = DateTime.Now,
                 Exported = false,
                 Paid = false,
-                Shipped = false,
                 BillToName = customer.FullName,
                 BillToAddress1 = address.Address1,
                 BillToAddress2 = address.Address2,

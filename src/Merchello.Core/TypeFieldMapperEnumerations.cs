@@ -7,11 +7,17 @@
         Custom
     }
 
-    public enum BasketType
+    public enum CustomerItemRegisterType
     {
         Basket,
         Wishlist,
         Custom
+    }
+
+    public enum LineItemType
+    {
+        Product,
+        Customer
     }
 
     public enum InvoiceItemType

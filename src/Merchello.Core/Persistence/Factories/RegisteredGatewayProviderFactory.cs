@@ -13,8 +13,8 @@ namespace Merchello.Core.Persistence.Factories
                 GatewayProviderTypeFieldKey = dto.GatewayProviderTypeFieldKey,
                 Name = dto.Name,
                 TypeFullName = dto.TypeFullName,
-                ConfigurationData = dto.ConfigurationData,
-                EncryptConfigurationData = dto.EncryptConfigurationData,
+                ConfigurationData = dto.ExtendedData,
+                EncryptConfigurationData = dto.EncryptExtendedData,
                 UpdateDate = dto.UpdateDate,
                 CreateDate = dto.CreateDate
             };
@@ -32,8 +32,8 @@ namespace Merchello.Core.Persistence.Factories
                 GatewayProviderTypeFieldKey = entity.GatewayProviderTypeFieldKey,
                 Name = entity.Name,
                 TypeFullName = entity.TypeFullName,
-                ConfigurationData = entity.ConfigurationData,
-                EncryptConfigurationData = entity.EncryptConfigurationData,
+                ExtendedData = entity.ConfigurationData,
+                EncryptExtendedData = entity.EncryptConfigurationData,
                 UpdateDate = entity.UpdateDate,
                 CreateDate = entity.CreateDate
             };
