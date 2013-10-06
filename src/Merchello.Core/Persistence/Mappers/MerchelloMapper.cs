@@ -17,7 +17,7 @@ namespace Merchello.Core.Persistence.Mappers
     /// This class basically short circuits the methodology Umbraco uses in it's MapperResolver implementation
     /// and allows us to reduce the number of internal classes that we need to copy into the Merchello core.
     /// </remarks>
-    internal class MerchelloMapper
+    public class MerchelloMapper
     {
         private static readonly ConcurrentDictionary<Type, Type> MapperCache = new ConcurrentDictionary<Type, Type>();
         private static readonly Lazy<MerchelloMapper> Mapper = new Lazy<MerchelloMapper>(() => new MerchelloMapper());
@@ -38,7 +38,8 @@ namespace Merchello.Core.Persistence.Mappers
             CacheMapper(typeof(IInvoiceItem), typeof(InvoiceItemMapper));
             CacheMapper(typeof(IInvoiceStatus), typeof(InvoiceStatusMapper));
             CacheMapper(typeof(IPayment), typeof(PaymentMapper));
-            CacheMapper(typeof(IProductActual), typeof(ProductActualMapper));
+            CacheMapper(typeof(IProduct), typeof(ProductMapper));
+            CacheMapper(typeof(IProductVariant), typeof(ProductVariantMapper));
             CacheMapper(typeof(IAppliedPayment), typeof(AppliedPaymentMapper));
             CacheMapper(typeof(IShipment), typeof(ShipmentMapper));
             CacheMapper(typeof(IShipMethod), typeof (ShipMethodMapper));
@@ -64,7 +65,8 @@ namespace Merchello.Core.Persistence.Mappers
             {
                 { typeof(ICustomer) },
                 { typeof(IAnonymousCustomer) },
-                { typeof(IProductActual) }
+                { typeof(IProduct) },
+                { typeof(IProductVariant) }
             };
 
         /// <summary>

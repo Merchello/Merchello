@@ -19,7 +19,7 @@ namespace Merchello.Core.Models.Rdbms
 
         [Column("productKey")]
         [ForeignKey(typeof(ProductDto), Name = "FK_merchProductVariant_merchProduct", Column = "pk")]
-        public Guid ProductBaseKey { get; set; }
+        public Guid ProductKey { get; set; }
 
         [Column("sku")]
         public string Sku { get; set; }
@@ -83,9 +83,9 @@ namespace Merchello.Core.Models.Rdbms
         [Constraint(Default = "0")]
         public bool Download { get; set; }
 
-        [Column("downloadUrl")]
+        [Column("downloadMediaId")]
         [NullSetting(NullSetting = NullSettings.Null)]
-        public string DownloadUrl { get; set; }
+        public int? DownloadMediaId { get; set; }
 
         [Column("template")]
         [Constraint(Default = "0")]

@@ -18,7 +18,7 @@ namespace Merchello.Core.Models.Rdbms
         public int Id { get; set; }
 
         [Column("optionId")]
-        [ForeignKey(typeof(OptionDto), Name = "FK_merchProductAttribute_merchOption", Column = "id")]
+        [ForeignKey(typeof(ProductOptionDto), Name = "FK_merchProductAttribute_merchOption", Column = "id")]
         public int OptionId { get; set; }
 
         [Column("name")]

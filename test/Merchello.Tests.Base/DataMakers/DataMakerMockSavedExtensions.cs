@@ -120,7 +120,7 @@ namespace Merchello.Tests.Base.DataMakers
             return entity;
         }
 
-        public static IProductActual MockSavedWithKey(this IProductActual entity, Guid key)
+        public static IProductVariant MockSavedWithKey(this IProductVariant entity, Guid key)
         {
             ((KeyEntity)entity).UpdatingEntity();
             entity.Key = key;

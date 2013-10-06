@@ -13,7 +13,7 @@ namespace Merchello.Tests.UnitTests.Querying
 {
     [TestFixture]
     [Category("SqlSyntax")]
-    public class ProductRelatedSqlClausesTests  : BaseUsingSqlServerSyntax<IProductActual>
+    public class ProductSqlClausesTests  : BaseUsingSqlServerSyntax<IProductVariant>
     {
 
         [Test]
@@ -23,13 +23,19 @@ namespace Merchello.Tests.UnitTests.Querying
 
             var expected = new Sql();
             expected.Select("*")
-                .From("[merchProductActual]")
-                .Where("[merchProductActual].[pk] = '" + key.ToString() + "'");
+                .From("[merchProduct]")
+                .InnerJoin("[merchProductVariant]")
+                .On("[merchProduct].[pk] = [merchProductVariant].[productKey]")
+                .Where("[merchProductVariant].[template]=1")
+                .Where("[merchProduct].[pk] = '" + key.ToString() + "'");
 
             var sql = new Sql();
             sql.Select("*")
-                .From<ProductVariantDto>()
-                .Where<ProductVariantDto>(x => x.Key == key);
+               .From<ProductDto>()
+               .InnerJoin<ProductVariantDto>()
+               .On<ProductDto, ProductVariantDto>(left => left.Key, right => right.ProductKey)
+               .Where<ProductVariantDto>(x => x.Template)
+               .Where<ProductDto>(x => x.Key == key);
 
             Assert.That(sql.SQL, Is.EqualTo(expected.SQL));
         }

@@ -14,9 +14,6 @@ namespace Merchello.Core.Models.Rdbms
         [Constraint(Default = "newid()")]
         public Guid Key { get; set; }
 
-        [Column("definesOptions")]
-        public bool DefinesOptions { get; set; }
-
         [Column("updateDate")]
         [Constraint(Default = "getdate()")]
         public DateTime UpdateDate { get; set; }
@@ -24,6 +21,9 @@ namespace Merchello.Core.Models.Rdbms
         [Column("createDate")]
         [Constraint(Default = "getdate()")]
         public DateTime CreateDate { get; set; }
+
+        [ResultColumn]
+        public ProductVariantDto ProductVariantDto { get; set; }
 
     }
 }

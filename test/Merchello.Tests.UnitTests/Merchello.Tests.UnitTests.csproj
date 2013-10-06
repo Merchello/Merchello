@@ -258,7 +258,7 @@
     <Compile Include="Querying\InvoiceSqlClausesTest.cs" />
     <Compile Include="Querying\InvoiceStatusSqlClausesTests.cs" />
     <Compile Include="Querying\PaymentSqlClausesTests.cs" />
-    <Compile Include="Querying\ProductRelatedSqlClausesTests.cs" />
+    <Compile Include="Querying\ProductSqlClausesTests.cs" />
     <Compile Include="Querying\RegisteredGatewayProviderSqlClausesTests.cs" />
     <Compile Include="Querying\ShipmentSqlClausesTest.cs" />
     <Compile Include="Querying\ShipMethodSqlClausesTests.cs" />

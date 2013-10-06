@@ -5,10 +5,10 @@ using Umbraco.Core.Persistence.DatabaseAnnotations;
 namespace Merchello.Core.Models.Rdbms
 {
     
-    [TableName("merchProduct2Option")]
+    [TableName("merchProduct2ProductOption")]
     [PrimaryKey("productKey", autoIncrement = false)]
     [ExplicitColumns]
-    internal class Product2OptionDto
+    internal class Product2ProductOptionDto
     {
         [Column("productKey")]
         [PrimaryKeyColumn(AutoIncrement = false, Name = "PK_merchProduct2Option", OnColumns = "productKey, optionId")]
@@ -16,7 +16,7 @@ namespace Merchello.Core.Models.Rdbms
         public Guid ProductKey { get; set; }
 
         [Column("optionId")]
-        [ForeignKey(typeof(OptionDto), Name = "FK_merchProduct2Option_merchOption", Column = "id")]
+        [ForeignKey(typeof(ProductOptionDto), Name = "FK_merchProduct2Option_merchOption", Column = "id")]
         public int OptionId { get; set; }
 
         [Column("sortOrder")]
@@ -31,6 +31,6 @@ namespace Merchello.Core.Models.Rdbms
         public DateTime CreateDate { get; set; }
 
         [ResultColumn]
-        public OptionDto OptionDto { get; set; }
+        public ProductOptionDto ProductOptionDto { get; set; }
     }
 }

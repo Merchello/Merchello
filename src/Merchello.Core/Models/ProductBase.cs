@@ -1,20 +1,20 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.Serialization;
 using Merchello.Core.Models.EntityBase;
-using Merchello.Core.Models.TypeFields;
+using Merchello.Tests.Base.Prototyping.Models;
 
 namespace Merchello.Core.Models
 {
-
-    [Serializable]
-    [DataContract(IsReference = true)]
-    public class ProductActual : KeyEntity, IProductActual
+    /// <summary>
+    /// Represents an abstract class for base Product properties and methods
+    /// </summary>
+    public abstract class ProductBase : KeyEntity, IProductBase
     {
         private string _sku;
         private string _name;
         private decimal _price;
         private decimal? _costOfGoods;
+        private bool _onSale;
         private decimal? _salePrice;
         private decimal? _weight;
         private decimal? _length;
@@ -23,31 +23,53 @@ namespace Merchello.Core.Models
         private string _barcode;
         private bool _available;
         private bool _trackInventory;
+        private bool _outOfStockPurchase;
         private bool _taxable;
         private bool _shippable;
         private bool _download;
-        private string _downloadUrl;
-        private bool _template;
+        private int? _downloadMediaId;
 
-        private static readonly PropertyInfo SkuSelector = ExpressionHelper.GetPropertyInfo<ProductActual, string>(x => x.Sku);  
-        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<ProductActual, string>(x => x.Name);  
-        private static readonly PropertyInfo PriceSelector = ExpressionHelper.GetPropertyInfo<ProductActual, decimal>(x => x.Price);  
-        private static readonly PropertyInfo CostOfGoodsSelector = ExpressionHelper.GetPropertyInfo<ProductActual, decimal?>(x => x.CostOfGoods);  
-        private static readonly PropertyInfo SalePriceSelector = ExpressionHelper.GetPropertyInfo<ProductActual, decimal?>(x => x.SalePrice);  
-        private static readonly PropertyInfo WeightSelector = ExpressionHelper.GetPropertyInfo<ProductActual, decimal?>(x => x.Weight);  
-        private static readonly PropertyInfo LengthSelector = ExpressionHelper.GetPropertyInfo<ProductActual, decimal?>(x => x.Length);  
-        private static readonly PropertyInfo WidthSelector = ExpressionHelper.GetPropertyInfo<ProductActual, decimal?>(x => x.Width);  
-        private static readonly PropertyInfo HeightSelector = ExpressionHelper.GetPropertyInfo<ProductActual, decimal?>(x => x.Height);
-        private static readonly PropertyInfo BarcodeSelector = ExpressionHelper.GetPropertyInfo<ProductActual, string>(x => x.Barcode);
-        private static readonly PropertyInfo AvailableSelector = ExpressionHelper.GetPropertyInfo<ProductActual, bool>(x => x.Available);
-        private static readonly PropertyInfo TrackInventorySelector = ExpressionHelper.GetPropertyInfo<ProductActual, bool>(x => x.TrackInventory);  
-        private static readonly PropertyInfo TaxableSelector = ExpressionHelper.GetPropertyInfo<ProductActual, bool>(x => x.Taxable);  
-        private static readonly PropertyInfo ShippableSelector = ExpressionHelper.GetPropertyInfo<ProductActual, bool>(x => x.Shippable);  
-        private static readonly PropertyInfo DownloadSelector = ExpressionHelper.GetPropertyInfo<ProductActual, bool>(x => x.Download);  
-        private static readonly PropertyInfo DownloadUrlSelector = ExpressionHelper.GetPropertyInfo<ProductActual, string>(x => x.DownloadUrl);  
-        private static readonly PropertyInfo TemplateSelector = ExpressionHelper.GetPropertyInfo<ProductActual, bool>(x => x.Template);  
-  
-    
+        private readonly InventoryCollection _inventory;
+
+        protected ProductBase(string name, string sku, decimal price)
+            : this(name, sku, price, new InventoryCollection())
+        { }
+        
+        internal ProductBase(string name, string sku, decimal price, InventoryCollection inventory)
+        {
+            Mandate.ParameterNotNullOrEmpty(name, "name");
+            Mandate.ParameterNotNullOrEmpty(sku, "sku");
+            Mandate.ParameterNotNull(inventory, "inventory");
+            _name = name;
+            _sku = sku;
+            _price = price;
+            _inventory = inventory;
+            
+        }
+
+        private static readonly PropertyInfo SkuSelector = ExpressionHelper.GetPropertyInfo<ProductBase, string>(x => x.Sku);
+        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<ProductBase, string>(x => x.Name);
+        private static readonly PropertyInfo PriceSelector = ExpressionHelper.GetPropertyInfo<ProductBase, decimal>(x => x.Price);
+        private static readonly PropertyInfo CostOfGoodsSelector = ExpressionHelper.GetPropertyInfo<ProductBase, decimal?>(x => x.CostOfGoods);
+        private static readonly PropertyInfo SalePriceSelector = ExpressionHelper.GetPropertyInfo<ProductBase, decimal?>(x => x.SalePrice);
+        private static readonly PropertyInfo OnSaleSelector = ExpressionHelper.GetPropertyInfo<ProductBase, bool>(x => x.OnSale);
+        private static readonly PropertyInfo WeightSelector = ExpressionHelper.GetPropertyInfo<ProductBase, decimal?>(x => x.Weight);
+        private static readonly PropertyInfo LengthSelector = ExpressionHelper.GetPropertyInfo<ProductBase, decimal?>(x => x.Length);
+        private static readonly PropertyInfo WidthSelector = ExpressionHelper.GetPropertyInfo<ProductBase, decimal?>(x => x.Width);
+        private static readonly PropertyInfo HeightSelector = ExpressionHelper.GetPropertyInfo<ProductBase, decimal?>(x => x.Height);
+        private static readonly PropertyInfo BarcodeSelector = ExpressionHelper.GetPropertyInfo<ProductBase, string>(x => x.Barcode);
+        private static readonly PropertyInfo AvailableSelector = ExpressionHelper.GetPropertyInfo<ProductBase, bool>(x => x.Available);
+        private static readonly PropertyInfo TrackInventorySelector = ExpressionHelper.GetPropertyInfo<ProductBase, bool>(x => x.TrackInventory);
+        private static readonly PropertyInfo OutOfStockPurchaseSelector = ExpressionHelper.GetPropertyInfo<ProductBase, bool>(x => x.OutOfStockPurchase);
+        private static readonly PropertyInfo TaxableSelector = ExpressionHelper.GetPropertyInfo<ProductBase, bool>(x => x.Taxable);
+        private static readonly PropertyInfo ShippableSelector = ExpressionHelper.GetPropertyInfo<ProductBase, bool>(x => x.Shippable);
+        private static readonly PropertyInfo DownloadSelector = ExpressionHelper.GetPropertyInfo<ProductBase, bool>(x => x.Download);
+        private static readonly PropertyInfo DownloadMediaIdSelector = ExpressionHelper.GetPropertyInfo<ProductBase, int?>(x => x.DownloadMediaId);
+        
+
+
+
+
         /// <summary>
         /// The sku associated with the Product
         /// </summary>
@@ -55,16 +77,16 @@ namespace Merchello.Core.Models
         public string Sku
         {
             get { return _sku; }
-            set 
-            { 
+            set
+            {
                 SetPropertyValueAndDetectChanges(o =>
                 {
                     _sku = value;
                     return _sku;
-                }, _sku, SkuSelector); 
+                }, _sku, SkuSelector);
             }
         }
-    
+
         /// <summary>
         /// The name associated with the Product
         /// </summary>
@@ -72,16 +94,16 @@ namespace Merchello.Core.Models
         public string Name
         {
             get { return _name; }
-            set 
-            { 
+            set
+            {
                 SetPropertyValueAndDetectChanges(o =>
                 {
                     _name = value;
                     return _name;
-                }, _name, NameSelector); 
+                }, _name, NameSelector);
             }
         }
-    
+
         /// <summary>
         /// The price associated with the Product
         /// </summary>
@@ -89,16 +111,16 @@ namespace Merchello.Core.Models
         public decimal Price
         {
             get { return _price; }
-            set 
-            { 
+            set
+            {
                 SetPropertyValueAndDetectChanges(o =>
                 {
                     _price = value;
                     return _price;
-                }, _price, PriceSelector); 
+                }, _price, PriceSelector);
             }
         }
-    
+
         /// <summary>
         /// The costOfGoods associated with the Product
         /// </summary>
@@ -106,16 +128,16 @@ namespace Merchello.Core.Models
         public decimal? CostOfGoods
         {
             get { return _costOfGoods; }
-            set 
-            { 
+            set
+            {
                 SetPropertyValueAndDetectChanges(o =>
                 {
                     _costOfGoods = value;
                     return _costOfGoods;
-                }, _costOfGoods, CostOfGoodsSelector); 
+                }, _costOfGoods, CostOfGoodsSelector);
             }
         }
-    
+
         /// <summary>
         /// The salePrice associated with the Product
         /// </summary>
@@ -123,16 +145,33 @@ namespace Merchello.Core.Models
         public decimal? SalePrice
         {
             get { return _salePrice; }
-            set 
-            { 
+            set
+            {
                 SetPropertyValueAndDetectChanges(o =>
                 {
                     _salePrice = value;
                     return _salePrice;
-                }, _salePrice, SalePriceSelector); 
+                }, _salePrice, SalePriceSelector);
             }
         }
-    
+
+        /// <summary>
+        /// True/false indicating whether or not this product is onsale
+        /// </summary>
+        [DataMember]
+        public bool OnSale
+        {
+            get { return _onSale; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _onSale = value;
+                    return _onSale;
+                }, _onSale, OnSaleSelector);
+            }
+        }
+
         /// <summary>
         /// The weight associated with the Product
         /// </summary>
@@ -140,16 +179,16 @@ namespace Merchello.Core.Models
         public decimal? Weight
         {
             get { return _weight; }
-            set 
-            { 
+            set
+            {
                 SetPropertyValueAndDetectChanges(o =>
                 {
                     _weight = value;
                     return _weight;
-                }, _weight, WeightSelector); 
+                }, _weight, WeightSelector);
             }
         }
-    
+
         /// <summary>
         /// The length associated with the Product
         /// </summary>
@@ -157,16 +196,16 @@ namespace Merchello.Core.Models
         public decimal? Length
         {
             get { return _length; }
-            set 
-            { 
+            set
+            {
                 SetPropertyValueAndDetectChanges(o =>
                 {
                     _length = value;
                     return _length;
-                }, _length, LengthSelector); 
+                }, _length, LengthSelector);
             }
         }
-    
+
         /// <summary>
         /// The width associated with the Product
         /// </summary>
@@ -174,16 +213,16 @@ namespace Merchello.Core.Models
         public decimal? Width
         {
             get { return _width; }
-            set 
-            { 
+            set
+            {
                 SetPropertyValueAndDetectChanges(o =>
                 {
                     _width = value;
                     return _width;
-                }, _width, WidthSelector); 
+                }, _width, WidthSelector);
             }
         }
-    
+
         /// <summary>
         /// The height associated with the Product
         /// </summary>
@@ -191,13 +230,13 @@ namespace Merchello.Core.Models
         public decimal? Height
         {
             get { return _height; }
-            set 
-            { 
+            set
+            {
                 SetPropertyValueAndDetectChanges(o =>
                 {
                     _height = value;
                     return _height;
-                }, _height, HeightSelector); 
+                }, _height, HeightSelector);
             }
         }
 
@@ -215,14 +254,14 @@ namespace Merchello.Core.Models
                     _barcode = value;
                     return _barcode;
                 }, _barcode, BarcodeSelector);
-            } 
+            }
         }
 
         /// <summary>
         /// True/false indicating whether or not this product is available
         /// </summary>
         [DataMember]
-        public bool Available 
+        public bool Available
         {
             get { return _available; }
             set
@@ -232,9 +271,9 @@ namespace Merchello.Core.Models
                     _available = value;
                     return _available;
                 }, _available, AvailableSelector);
-            } 
+            }
         }
-        
+
         /// <summary>
         /// True/false indicating whether or not to track inventory on this product
         /// </summary>
@@ -253,22 +292,40 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
+        /// True/false indicating wether or not this product can be purchased when inventory levels are 
+        /// 0 or below.
+        /// </summary>
+        [DataMember]
+        public bool OutOfStockPurchase
+        {
+            get { return _outOfStockPurchase; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _outOfStockPurchase = value;
+                    return _outOfStockPurchase;
+                }, _outOfStockPurchase, OutOfStockPurchaseSelector);
+            }
+        }
+
+        /// <summary>
         /// The taxable associated with the Product
         /// </summary>
         [DataMember]
         public bool Taxable
         {
             get { return _taxable; }
-            set 
-            { 
+            set
+            {
                 SetPropertyValueAndDetectChanges(o =>
                 {
                     _taxable = value;
                     return _taxable;
-                }, _taxable, TaxableSelector); 
+                }, _taxable, TaxableSelector);
             }
         }
-    
+
         /// <summary>
         /// The shippable associated with the Product
         /// </summary>
@@ -276,16 +333,16 @@ namespace Merchello.Core.Models
         public bool Shippable
         {
             get { return _shippable; }
-            set 
-            { 
+            set
+            {
                 SetPropertyValueAndDetectChanges(o =>
                 {
                     _shippable = value;
                     return _shippable;
-                }, _shippable, ShippableSelector); 
+                }, _shippable, ShippableSelector);
             }
         }
-    
+
         /// <summary>
         /// The download associated with the Product
         /// </summary>
@@ -293,48 +350,42 @@ namespace Merchello.Core.Models
         public bool Download
         {
             get { return _download; }
-            set 
-            { 
+            set
+            {
                 SetPropertyValueAndDetectChanges(o =>
                 {
                     _download = value;
                     return _download;
-                }, _download, DownloadSelector); 
+                }, _download, DownloadSelector);
             }
         }
-    
+
         /// <summary>
         /// The downloadUrl associated with the Product
         /// </summary>
         [DataMember]
-        public string DownloadUrl
+        public int? DownloadMediaId
         {
-            get { return _downloadUrl; }
-            set 
-            { 
+            get { return _downloadMediaId; }
+            set
+            {
                 SetPropertyValueAndDetectChanges(o =>
                 {
-                    _downloadUrl = value;
-                    return _downloadUrl;
-                }, _downloadUrl, DownloadUrlSelector); 
+                    _downloadMediaId = value;
+                    return _downloadMediaId;
+                }, _downloadMediaId, DownloadMediaIdSelector);
             }
         }
-    
+
+
+ 
         /// <summary>
-        /// The template associated with the Product
+        /// Product variant inventory accross all warehouses
         /// </summary>
         [DataMember]
-        public bool Template
+        public InventoryCollection Inventory 
         {
-            get { return _template; }
-            set 
-            { 
-                SetPropertyValueAndDetectChanges(o =>
-                {
-                    _template = value;
-                    return _template;
-                }, _template, TemplateSelector); 
-            }
-        }                    
+            get { return _inventory; }
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Merchello.Tests.Base.Prototyping.Models;
+using Merchello.Core.Models;
+
 
 namespace Merchello.Tests.Base.Services
 {

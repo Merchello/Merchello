@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Models;
@@ -32,8 +33,9 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
         public DbPreTestDataWorker(ServiceContext serviceContext)
         {
+            var syntax = (DbSyntax)Enum.Parse(typeof (DbSyntax), ConfigurationManager.AppSettings["syntax"]);
             // sets up the Umbraco SqlSyntaxProvider Singleton
-            SqlSyntaxProviderTestHelper.EstablishSqlSyntax();
+            SqlSyntaxProviderTestHelper.EstablishSqlSyntax(syntax);
 
             var uowProvider = new PetaPocoUnitOfWorkProvider();
 
@@ -245,10 +247,10 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         #region IProduct
 
         /// <summary>
-        /// Saves a product record to the database and returns and instance of <see cref="IProductActual"/> represents that record
+        /// Saves a product record to the database and returns and instance of <see cref="IProduct"/> represents that record
         /// </summary>
-        /// <returns><see cref="IProductActual"/></returns>
-        public IProductActual MakeExistingProduct()
+        /// <returns><see cref="IProduct"/></returns>
+        public IProduct MakeExistingProduct()
         {
             var product = MockProductDataMaker.MockProductForInserting();
             ProductService.Save(product);
@@ -256,15 +258,18 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         }
 
         /// <summary>
-        /// Saves a collection of products to the database and return a collection of <see cref="IProductActual"/> representing that collection
+        /// Saves a collection of products to the database and return a collection of <see cref="IProduct"/> representing that collection
         /// </summary>
         /// <param name="count"></param>
         /// <returns></returns>
-        public IEnumerable<IProductActual> MakeExistingProductCollection(int count)
+        public IEnumerable<IProduct> MakeExistingProductCollection(int count)
         {
             var products = MockProductDataMaker.MockProductCollectionForInserting(count);
-            ProductService.Save(products);
-            return products;
+            foreach (var p in products)
+            {
+                ProductService.Save(p);
+                yield return p;
+            }
         }
 
         /// <summary>
