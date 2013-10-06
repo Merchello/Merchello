@@ -11,6 +11,7 @@ namespace Merchello.Core.Persistence.Factories
             var option = new ProductOption(dto.Name, dto.Required)
                 {
                     Id = dto.Id,
+                    SortOrder = dto.Product2ProductOptionDto.SortOrder,
                     UpdateDate = dto.UpdateDate,
                     CreateDate = dto.CreateDate
                 };

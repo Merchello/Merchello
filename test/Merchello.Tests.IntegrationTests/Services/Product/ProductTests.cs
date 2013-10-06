@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Merchello.Tests.Base.DataMakers;
@@ -17,6 +18,7 @@ namespace Merchello.Tests.IntegrationTests.Services.Product
         [SetUp]
         public void Setup()
         {
+            PreTestDataWorker.DeleteAllProducts();
             _productService = PreTestDataWorker.ProductService;
         }
 
@@ -72,13 +74,74 @@ namespace Merchello.Tests.IntegrationTests.Services.Product
         }
 
         /// <summary>
+        /// Test to verify a product can be retrieved with 3 options
+        /// </summary>
+        [Test]
+        public void Can_Retrieve_A_Product_With_3_Options()
+        {
+            //// Arrange
+            var expected = PreTestDataWorker.MakeExistingProduct();
+            var key = expected.Key;
+            expected.ProductOptions.Add(new ProductOption("Color"));
+            expected.ProductOptions.Add(new ProductOption("Size"));
+            expected.ProductOptions.Add(new ProductOption("Material"));
+            _productService.Save(expected);
+
+
+            //// Act
+            var retrieved = _productService.GetByKey(key);
+
+            //// Assert
+            Assert.NotNull(retrieved);
+            Assert.IsTrue(3 == retrieved.ProductOptions.Count);
+            Assert.IsFalse(retrieved.IsDirty());
+        }
+
+        /// <summary>
+        /// Test to verify a product can be retrieved with 3 options each with choices
+        /// </summary>
+        [Test]
+        public void Can_Retrieve_A_Product_With_3_Options_With_Choices()
+        {
+            //// Arrange
+            var expected = PreTestDataWorker.MakeExistingProduct();
+            var key = expected.Key;
+            expected.ProductOptions.Add(new ProductOption("Color"));
+
+            expected.ProductOptions["Color"].Choices.Add(new ProductAttribute("Black", "Black"));
+            expected.ProductOptions["Color"].Choices.Add(new ProductAttribute("Red", "Red"));
+            expected.ProductOptions["Color"].Choices.Add(new ProductAttribute("Grey", "Grey"));
+
+            expected.ProductOptions.Add(new ProductOption("Size"));
+            expected.ProductOptions["Size"].Choices.Add(new ProductAttribute("Small", "Sm"));
+            expected.ProductOptions["Size"].Choices.Add(new ProductAttribute("Medium", "M"));
+            expected.ProductOptions["Size"].Choices.Add(new ProductAttribute("Large", "Lg"));
+            expected.ProductOptions["Size"].Choices.Add(new ProductAttribute("X-Large", "XL"));
+
+            expected.ProductOptions.Add(new ProductOption("Material"));
+            expected.ProductOptions["Material"].Choices.Add(new ProductAttribute("Cotton", "Cotton"));
+            expected.ProductOptions["Material"].Choices.Add(new ProductAttribute("Wool", "Wool"));
+
+            _productService.Save(expected);
+
+
+            //// Act
+            var retrieved = _productService.GetByKey(key);
+
+            //// Assert
+            Assert.NotNull(retrieved);
+            Assert.IsTrue(3 == retrieved.ProductOptions.Count);
+            Assert.IsTrue(3 == retrieved.ProductOptions["Color"].Choices.Count);
+            Assert.IsFalse(retrieved.IsDirty());
+        }
+
+        /// <summary>
         /// Verifies that a multiple products can be saved
         /// </summary>
         [Test]
         public void Can_Save_Multiple_Products()
         {
             //// Arrange
-            PreTestDataWorker.DeleteAllProducts();
             var expected = 3;
             var generated = MockProductDataMaker.MockProductCollectionForInserting(expected);
 
@@ -138,7 +201,6 @@ namespace Merchello.Tests.IntegrationTests.Services.Product
         public void Can_Update_Multiple_Products()
         {
             //// Arrange
-            PreTestDataWorker.DeleteAllProducts();
             var count = 4;
             var generated = PreTestDataWorker.MakeExistingProductCollection(count);
             var keys = new List<Guid>();

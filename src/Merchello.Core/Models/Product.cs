@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -12,21 +13,27 @@ namespace Merchello.Core.Models
     {
         
         private readonly IProductVariant _variantTemplate;
-        private readonly ProductOptionCollection _productOptionCollection;
+        private ProductOptionCollection _productOptions;
 
         public Product(IProductVariant variantTemplate)
             : this(variantTemplate, new ProductOptionCollection())
         {}
 
-        public Product(IProductVariant variantTemplate, ProductOptionCollection productOptionCollection)
+        public Product(IProductVariant variantTemplate, ProductOptionCollection productOptions)
         {
             Mandate.ParameterNotNull(variantTemplate, "groupTemplate");
-            Mandate.ParameterNotNull(productOptionCollection, "optionCollection");
+            Mandate.ParameterNotNull(productOptions, "optionCollection");
 
             _variantTemplate = variantTemplate;
-            _productOptionCollection = productOptionCollection;
+            _productOptions = productOptions;
         }
 
+        private static readonly PropertyInfo ProductOptionsChangedSelector = ExpressionHelper.GetPropertyInfo<Product, ProductOptionCollection>(x => x.ProductOptions);
+
+        protected void ProductOptionsChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            OnPropertyChanged(ProductOptionsChangedSelector);
+        }
 
         /// <summary>
         /// True/false indicating whether or not this group defines options
@@ -34,7 +41,7 @@ namespace Merchello.Core.Models
         [DataMember]
         public bool DefinesOptions
         {
-            get { return _productOptionCollection.Any(); }
+            get { return _productOptions.Any(); }
             
         }
 
@@ -44,7 +51,11 @@ namespace Merchello.Core.Models
         [DataMember]
         public ProductOptionCollection ProductOptions 
         {
-            get { return _productOptionCollection; }
+            get { return _productOptions; }
+            set { 
+                _productOptions = value;
+                _productOptions.CollectionChanged += ProductOptionsChanged;
+            }
         }
 
 

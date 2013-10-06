@@ -24,6 +24,9 @@ namespace Merchello.Core.Models.Rdbms
         [Column("name")]
         public string Name { get; set; }
 
+        [Column("sku")]
+        public string Sku { get; set; }
+
         [Column("sortOrder")]
         public int SortOrder { get; set; }
 

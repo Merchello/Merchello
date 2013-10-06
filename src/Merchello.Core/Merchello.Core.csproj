@@ -116,6 +116,7 @@
     <Compile Include="Models\IProductAttribute.cs" />
     <Compile Include="Models\IProductBase.cs" />
     <Compile Include="Models\IProductVariant.cs" />
+    <Compile Include="Models\ProductAttribute.cs" />
     <Compile Include="Models\ProductOption.cs" />
     <Compile Include="Models\ProductOptionCollection.cs" />
     <Compile Include="Models\OrderLineItem.cs" />
@@ -186,6 +187,7 @@
     <Compile Include="ObjectResolution\Resolution.cs" />
     <Compile Include="Models\GatewayProviders\IRegisteredGatewayProviderBase.cs" />
     <Compile Include="Persistence\Caching\InMemoryCacheProvider.cs" />
+    <Compile Include="Persistence\Factories\ProductAttributeFactory.cs" />
     <Compile Include="Persistence\Factories\ProductOptionFactory.cs" />
     <Compile Include="Persistence\Factories\RegisteredGatewayProviderFactory.cs" />
     <Compile Include="Persistence\Mappers\GatewayProviderMapper.cs" />
@@ -193,6 +195,7 @@
     <Compile Include="Gateway\GatewayContextBase.cs" />
     <Compile Include="Gateway\IGatewayContext.cs" />
     <Compile Include="Persistence\Mappers\ProductMapper.cs" />
+    <Compile Include="Persistence\Mappers\ProductOptionMapper.cs" />
     <Compile Include="Services\RegisteredGatewayProviderService.cs" />
     <Compile Include="Services\Interfaces\IRegisteredGatewayProviderService.cs" />
     <Compile Include="Strategies\IGatewayProviderStrategy.cs" />

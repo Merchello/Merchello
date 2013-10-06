@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Merchello.Core.Models.EntityBase;
@@ -14,6 +15,7 @@ namespace Merchello.Core.Models
     {
         private string _name;
         private bool _required;
+        private int _sortOrder;
         private ProductAttributeCollection _choices;
 
         public ProductOption(string name)
@@ -33,8 +35,17 @@ namespace Merchello.Core.Models
 
         private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<ProductOption, string>(x => x.Name);
         private static readonly PropertyInfo RequiredSelector = ExpressionHelper.GetPropertyInfo<ProductOption, bool>(x => x.Required);
-        private static readonly PropertyInfo ChoicesSelector = ExpressionHelper.GetPropertyInfo<ProductOption, ProductAttributeCollection>(x => x.Choices);
+        private static readonly PropertyInfo SortOrderSelector = ExpressionHelper.GetPropertyInfo<ProductOption, int>(x => x.SortOrder);
+        private static readonly PropertyInfo ChoicesChangedSelector = ExpressionHelper.GetPropertyInfo<ProductOption, ProductAttributeCollection>(x => x.Choices);
 
+        protected void ProductAttributeChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            OnPropertyChanged(ChoicesChangedSelector);
+        }
+
+        /// <summary>
+        /// The name of the option
+        /// </summary>
         [DataMember]
         public string Name {
             get { return _name; }
@@ -47,6 +58,14 @@ namespace Merchello.Core.Models
                 }, _name, NameSelector);
             }
         }
+
+        /// <summary>
+        /// True/false indicating whether or not it is required to select an option in order to purchase the associated product.
+        /// </summary>
+        /// <remarks>
+        /// If true - a product item to product attribute relation is created defines the composition of a product item
+        /// </remarks>
+        [DataMember]
         public bool Required
         {
             get { return _required; }
@@ -59,15 +78,34 @@ namespace Merchello.Core.Models
                 }, _required, RequiredSelector);
             }
         }
-        public ProductAttributeCollection Choices {
-            get { return _choices; }
+
+        /// <summary>
+        /// The order in which to list product option with respect to its product association
+        /// </summary>
+        [DataMember]
+        public int SortOrder
+        {
+            get { return _sortOrder; }
             set
             {
                 SetPropertyValueAndDetectChanges(o =>
                 {
-                    _choices = value;
-                    return _choices;
-                }, _choices, ChoicesSelector);
+                    _sortOrder = value;
+                    return _sortOrder;
+                }, _sortOrder, SortOrderSelector);
+            }
+        }
+
+
+        /// <summary>
+        /// The choices (product attributes) associated with this option
+        /// </summary>
+        [DataMember]
+        public ProductAttributeCollection Choices {
+            get { return _choices; }
+            set { 
+                _choices = value;
+                _choices.CollectionChanged += ProductAttributeChanged;
             }
         }
     }

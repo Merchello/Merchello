@@ -21,6 +21,12 @@ namespace Merchello.Core.Models
         bool Required { get; set; }
 
         /// <summary>
+        /// The order in which to list product option with respect to its product association
+        /// </summary>
+        [DataMember]
+        int SortOrder { get; set; }
+
+        /// <summary>
         /// The choices (product attributes) associated with this option
         /// </summary>
         [DataMember]

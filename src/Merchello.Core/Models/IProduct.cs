@@ -14,6 +14,6 @@ namespace Merchello.Core.Models
          /// <summary>
          /// The product's collection of options (Attribute selection)
          /// </summary>
-         ProductOptionCollection ProductOptions { get; }
+         ProductOptionCollection ProductOptions { get; set; }
     }
 }

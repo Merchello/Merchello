@@ -24,6 +24,34 @@ namespace Merchello.Core.Models
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
+
+
+        protected override void SetItem(int index, IProductOption item)
+        {
+            base.SetItem(index, item);
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, index));
+        }
+
+        protected override void RemoveItem(int index)
+        {
+            var removed = this[index];
+            base.RemoveItem(index);
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, removed));
+        }
+
+        protected override void InsertItem(int index, IProductOption item)
+        {
+            base.InsertItem(index, item);
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));
+        }
+
+        protected override void ClearItems()
+        {
+            base.ClearItems();
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+        }
+
+
         internal new void Add(IProductOption item)
         {
             using (new WriteLock(_addLocker))
@@ -31,16 +59,28 @@ namespace Merchello.Core.Models
                 var key = GetKeyForItem(item);
                 if (!string.IsNullOrEmpty(key))
                 {
-                    var exists = this.Contains(item.Name);
+                    var exists = Contains(item.Name);
                     if (exists)
                     {
+                        this[key].SortOrder = item.SortOrder;
                         return;
                     }
                 }
+
+                // set the sort order to the next highest
+                item.SortOrder = this.Any() ? this.Max(x => x.SortOrder) + 1 : 1;
                 base.Add(item);
                 
                 OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));
             }
+        }
+
+        public void RemoveItem(string name)
+        {
+            var key = IndexOfKey(name);
+            //Only removes an item if the key was found
+            if (key != -1)
+                RemoveItem(key);
         }
 
         protected virtual void OnCollectionChanged(NotifyCollectionChangedEventArgs args)
