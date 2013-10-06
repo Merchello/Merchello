@@ -124,10 +124,10 @@ namespace Merchello.Core.Models.GatewayProviders
         [DataMember]
         public GatewayProviderType GatewayProviderType
         {
-            get { return EnumTypeFieldConverter.GatewayProvider().GetTypeField(_gatewayProviderTypeFieldKey); }
+            get { return EnumTypeFieldConverter.GatewayProvider.GetTypeField(_gatewayProviderTypeFieldKey); }
             set
             {
-                var reference = EnumTypeFieldConverter.GatewayProvider().GetTypeField(value);
+                var reference = EnumTypeFieldConverter.GatewayProvider.GetTypeField(value);
                 if (!ReferenceEquals(TypeFieldMapperBase.NotFound, reference))
                 {
                     // call through the property to flag the dirty property

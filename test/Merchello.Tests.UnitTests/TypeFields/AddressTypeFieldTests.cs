@@ -30,7 +30,7 @@ namespace Merchello.Tests.UnitTests.TypeFields
         [Test]
         public void AddressType_residential_matches_configuration()
         {
-            var type = EnumTypeFieldConverter.Address().Residential;
+            var type = EnumTypeFieldConverter.Address.Residential;
 
             Assert.AreEqual(_residentialMock.Alias, type.Alias);
             Assert.AreEqual(_residentialMock.Name, type.Name);
@@ -44,7 +44,7 @@ namespace Merchello.Tests.UnitTests.TypeFields
         [Test]
         public void AddressType_commercial_matches_configuration()
         {
-            var type = EnumTypeFieldConverter.Address().Commercial;
+            var type = EnumTypeFieldConverter.Address.Commercial;
 
             Assert.AreEqual(_commercialMock.Alias, type.Alias);
             Assert.AreEqual(_commercialMock.Name, type.Name);

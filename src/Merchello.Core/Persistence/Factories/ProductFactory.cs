@@ -3,27 +3,14 @@ using Merchello.Core.Models.Rdbms;
 
 namespace Merchello.Core.Persistence.Factories
 {
-    internal partial class ProductFactory : IEntityFactory<IProduct, ProductDto>
+    internal class ProductFactory : IEntityFactory<IProduct, ProductDto>
     {
         public IProduct BuildEntity(ProductDto dto)
         {
-            var product = new Product()
+            var variant = BuildProductVariant(dto.ProductVariantDto);
+            var product = new Product(variant)
             {
                 Key = dto.Key,
-                Sku = dto.Sku,
-                Name = dto.Name,
-                Price = dto.Price,
-                CostOfGoods = dto.CostOfGoods,
-                SalePrice = dto.SalePrice,
-                Weight = dto.Weight,
-                Length = dto.Length,
-                Width = dto.Width,
-                Height = dto.Height,                
-                Taxable = dto.Taxable,
-                Shippable = dto.Shippable,
-                Download = dto.Download,
-                DownloadUrl = dto.DownloadUrl,
-                Template = dto.Template,
                 UpdateDate = dto.UpdateDate,
                 CreateDate = dto.CreateDate
             };
@@ -38,25 +25,73 @@ namespace Merchello.Core.Persistence.Factories
             var dto = new ProductDto()
             {
                 Key = entity.Key,
-                Sku = entity.Sku,
-                Name = entity.Name,
-                Price = entity.Price,
-                CostOfGoods = entity.CostOfGoods,
-                SalePrice = entity.SalePrice,
-                Weight = entity.Weight,
-                Length = entity.Length,
-                Width = entity.Width,
-                Height = entity.Height,                
-                Taxable = entity.Taxable,
-                Shippable = entity.Shippable,
-                Download = entity.Download,
-                DownloadUrl = entity.DownloadUrl,
-                Template = entity.Template,
                 UpdateDate = entity.UpdateDate,
-                CreateDate = entity.CreateDate                
+                CreateDate = entity.CreateDate,
+                ProductVariantDto = BuildProductVariantDto(((Product)entity).ProductVariantTemplate)
             };
 
             return dto;
+        }
+
+
+        private IProductVariant BuildProductVariant(ProductVariantDto dto)
+        {
+            var entity = new ProductVariant(dto.Name, dto.Sku, dto.Price)
+            {
+                Key = dto.Key,
+                ProductKey = dto.ProductKey,
+                CostOfGoods = dto.CostOfGoods,
+                SalePrice = dto.SalePrice,
+                OnSale = dto.OnSale,
+                Weight = dto.Weight,
+                Length = dto.Length,
+                Height = dto.Height,
+                Width = dto.Width,
+                Barcode = dto.Barcode,
+                Available = dto.Available,
+                TrackInventory = dto.TrackInventory,
+                OutOfStockPurchase = dto.OutOfStockPurchase,
+                Taxable = dto.Taxable,
+                Shippable = dto.Shippable,
+                Download = dto.Download,
+                DownloadMediaId = dto.DownloadMediaId,
+                Template = dto.Template,
+                UpdateDate = dto.UpdateDate,
+                CreateDate = dto.CreateDate
+            };
+
+            entity.ResetDirtyProperties();
+            return entity;
+        }
+
+        private ProductVariantDto BuildProductVariantDto(IProductVariant entity)
+        {
+            return new ProductVariantDto()
+            {
+                Key = entity.Key,
+                ProductKey = entity.ProductKey,
+                Name = entity.Name,
+                Sku = entity.Sku,
+                Price = entity.Price,
+                CostOfGoods = entity.CostOfGoods,
+                SalePrice = entity.SalePrice,
+                OnSale = entity.OnSale,
+                Weight = entity.Weight,
+                Length = entity.Length,
+                Height = entity.Height,
+                Width = entity.Width,
+                Barcode = entity.Barcode,
+                Available = entity.Available,
+                TrackInventory = entity.TrackInventory,
+                OutOfStockPurchase = entity.OutOfStockPurchase,
+                Taxable = entity.Taxable,
+                Shippable = entity.Shippable,
+                Download = entity.Download,
+                DownloadMediaId = entity.DownloadMediaId,
+                Template = ((ProductVariant)entity).Template,
+                UpdateDate = entity.UpdateDate,
+                CreateDate = entity.CreateDate
+            };
         }
     }
 }

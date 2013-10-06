@@ -19,7 +19,7 @@ namespace Merchello.Tests.UnitTests.TypeFields
             var expected = TypeFieldMock.GatewayProviderShipping;
 
             //// Act
-            var actual = EnumTypeFieldConverter.GatewayProvider().GetTypeField(GatewayProviderType.Shipping);
+            var actual = EnumTypeFieldConverter.GatewayProvider.GetTypeField(GatewayProviderType.Shipping);
 
             //// Assert
             Assert.AreEqual(expected.TypeKey, actual.TypeKey);
@@ -35,7 +35,7 @@ namespace Merchello.Tests.UnitTests.TypeFields
             var expected = TypeFieldMock.GatewayProviderPayment;
 
             //// Act
-            var actual = EnumTypeFieldConverter.GatewayProvider().GetTypeField(GatewayProviderType.Payment);
+            var actual = EnumTypeFieldConverter.GatewayProvider.GetTypeField(GatewayProviderType.Payment);
 
             //// Assert
             Assert.AreEqual(expected.TypeKey, actual.TypeKey);
@@ -53,7 +53,7 @@ namespace Merchello.Tests.UnitTests.TypeFields
             var expected = TypeFieldMock.GatewayProviderTaxation;
 
             //// Act
-            var actual = EnumTypeFieldConverter.GatewayProvider().GetTypeField(GatewayProviderType.Taxation);
+            var actual = EnumTypeFieldConverter.GatewayProvider.GetTypeField(GatewayProviderType.Taxation);
 
             //// Assert
             Assert.AreEqual(expected.TypeKey, actual.TypeKey);

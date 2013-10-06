@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Merchello.Core.Events;
 using Merchello.Core.Models;
 using Merchello.Core.Persistence;
-using Merchello.Core.Events;
 using Merchello.Core.Persistence.Querying;
 using Umbraco.Core;
+using Umbraco.Core.Events;
 using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Core.Services
@@ -18,8 +19,6 @@ namespace Merchello.Core.Services
     {
         private readonly IDatabaseUnitOfWorkProvider _uowProvider;
         private readonly RepositoryFactory _repositoryFactory;
-        private readonly IInvoiceItemService _invoiceItemService;
-        private readonly IInvoiceStatusService _invoiceStatusService;
 
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
@@ -28,24 +27,17 @@ namespace Merchello.Core.Services
         { }
 
         public InvoiceService(RepositoryFactory repositoryFactory)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, new InvoiceItemService(new PetaPocoUnitOfWorkProvider(), repositoryFactory), new InvoiceStatusService(new PetaPocoUnitOfWorkProvider(),repositoryFactory))
+            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory)
         { }
+
 
         public InvoiceService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
-            : this(provider, repositoryFactory, new InvoiceItemService(provider, repositoryFactory), new InvoiceStatusService(provider, repositoryFactory))
-        { }
-
-        public InvoiceService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, IInvoiceItemService invoiceItemService, IInvoiceStatusService invoiceStatusService)
         {
             Mandate.ParameterNotNull(provider, "provider");
             Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
-            Mandate.ParameterNotNull(invoiceStatusService, "invoiceStatusService");
-            Mandate.ParameterNotNull(invoiceItemService, "invoiceItemService");
 
             _uowProvider = provider;
             _repositoryFactory = repositoryFactory;
-            _invoiceItemService = invoiceItemService;
-            _invoiceStatusService = invoiceStatusService;
         }
 
         #region IInvoiceService Members
@@ -60,11 +52,10 @@ namespace Merchello.Core.Services
                 InvoiceNumber =  invoiceNumber,
                 InvoiceDate = DateTime.Now,
                 Exported = false,
-                Paid = false,
-                Shipped = false
+                Paid = false
             };
 
-            Created.RaiseEvent(new NewEventArgs<IInvoice>(invoice), this);
+            Created.RaiseEvent(new Events.NewEventArgs<IInvoice>(invoice), this);
             return invoice;
         }
 
@@ -89,11 +80,10 @@ namespace Merchello.Core.Services
                     BillToPhone = billToPhone, 
                     BillToCompany = billToCompany, 
                     Exported = false, 
-                    Paid = false, 
-                    Shipped = false
+                    Paid = false
                 };
                 
-            Created.RaiseEvent(new NewEventArgs<IInvoice>(invoice), this);
+            Created.RaiseEvent(new Events.NewEventArgs<IInvoice>(invoice), this);
 
             return invoice;
         }
@@ -108,7 +98,7 @@ namespace Merchello.Core.Services
             if (raiseEvents)
             {
                 Saving.RaiseEvent(new SaveEventArgs<IInvoice>(invoice), this);
-                if (invoice.IsPropertyDirty("InvoiceStatusId")) StatusChanging.RaiseEvent(new StatusChangedEventArgs<IInvoice>(invoice), this);
+                if (invoice.IsPropertyDirty("InvoiceStatusId")) StatusChanging.RaiseEvent(new StatusChangeEventArgs<IInvoice>(invoice), this);
             }
            
             using (new WriteLock(Locker))
@@ -123,7 +113,7 @@ namespace Merchello.Core.Services
                 if (raiseEvents)
                 {
                     Saved.RaiseEvent(new SaveEventArgs<IInvoice>(invoice), this);
-                    if (invoice.IsPropertyDirty("InvoiceStatusId")) StatusChanged.RaiseEvent(new StatusChangedEventArgs<IInvoice>(invoice), this);
+                    if (invoice.IsPropertyDirty("InvoiceStatusId")) StatusChanged.RaiseEvent(new StatusChangeEventArgs<IInvoice>(invoice), this);
                 }
             }
         }
@@ -143,7 +133,7 @@ namespace Merchello.Core.Services
             if (raiseEvents)
             {
                 Saving.RaiseEvent(new SaveEventArgs<IInvoice>(invoiceArray), this);
-                if (statusChangedArray.Any()) StatusChanging.RaiseEvent(new StatusChangedEventArgs<IInvoice>(statusChangedArray), this);
+                if (statusChangedArray.Any()) StatusChanging.RaiseEvent(new StatusChangeEventArgs<IInvoice>(statusChangedArray), this);
             }
 
             using (new WriteLock(Locker))
@@ -162,7 +152,7 @@ namespace Merchello.Core.Services
             if (raiseEvents)
             {
                 Saved.RaiseEvent(new SaveEventArgs<IInvoice>(invoiceArray), this);
-                if (statusChangedArray.Any()) StatusChanged.RaiseEvent(new StatusChangedEventArgs<IInvoice>(statusChangedArray), this);
+                if (statusChangedArray.Any()) StatusChanged.RaiseEvent(new StatusChangeEventArgs<IInvoice>(statusChangedArray), this);
             }
         }
 
@@ -285,7 +275,7 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Occurs after Create
         /// </summary>
-        public static event TypedEventHandler<IInvoiceService, NewEventArgs<IInvoice>> Created;
+        public static event TypedEventHandler<IInvoiceService, Events.NewEventArgs<IInvoice>> Created;
 
         /// <summary>
         /// Occurs before Save
@@ -300,12 +290,12 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Occurs before the status has been changed
         /// </summary>
-        public static event TypedEventHandler<IInvoiceService, StatusChangedEventArgs<IInvoice>> StatusChanging;
+        public static event TypedEventHandler<IInvoiceService, StatusChangeEventArgs<IInvoice>> StatusChanging;
 
         /// <summary>
         /// Occurs after the status has been changed
         /// </summary>
-        public static event TypedEventHandler<IInvoiceService, StatusChangedEventArgs<IInvoice>> StatusChanged;
+        public static event TypedEventHandler<IInvoiceService, StatusChangeEventArgs<IInvoice>> StatusChanged;
 
         /// <summary>
         /// Occurs before Delete

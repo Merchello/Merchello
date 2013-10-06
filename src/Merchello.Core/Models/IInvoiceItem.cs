@@ -24,10 +24,10 @@ namespace Merchello.Core.Models
             int InvoiceId { get; }
 
             /// <summary>
-            /// The invoiceItemTypeFieldKey (<see cref="ITypeField"/>.TypeKey) for the basket item
+            /// The invoiceItemTfKey (<see cref="ITypeField"/>.TypeKey) for the invoice item
             /// </summary>
             [DataMember]
-            Guid InvoiceItemTypeFieldKey { get; set;}
+            Guid InvoiceItemTfKey { get; set;}
             
             /// <summary>
             /// The sku  of the invoice item
@@ -45,13 +45,8 @@ namespace Merchello.Core.Models
             /// The base quantity  of the invoice item
             /// </summary>
             [DataMember]
-            int BaseQuantity { get; set;}
-            
-            /// <summary>
-            /// The unit of measure  of the invoice item
-            /// </summary>
-            [DataMember]
-            int UnitOfMeasureMultiplier { get; set;}
+            int Quantity { get; set;}
+                        
             
             /// <summary>
             /// The amount  of the invoice item

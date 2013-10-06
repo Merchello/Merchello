@@ -19,7 +19,7 @@ namespace Merchello.Core.Persistence.Mappers
         internal override void BuildMap()
         {
             CacheMap<Shipment, ShipmentDto>(src => src.Id, dto => dto.Id);
-            CacheMap<Shipment, ShipmentDto>(src => src.InvoiceId, dto => dto.InvoiceId);
+            CacheMap<Shipment, ShipmentDto>(src => src.InvoiceId, dto => dto.OrderId);
             CacheMap<Shipment, ShipmentDto>(src => src.Address1, dto => dto.Address1);
             CacheMap<Shipment, ShipmentDto>(src => src.Address2, dto => dto.Address2);
             CacheMap<Shipment, ShipmentDto>(src => src.Locality, dto => dto.Locality);

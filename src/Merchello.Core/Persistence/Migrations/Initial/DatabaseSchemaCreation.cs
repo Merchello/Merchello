@@ -27,36 +27,42 @@ namespace Merchello.Core.Persistence.Migrations.Initial
         private static readonly Dictionary<int, Type> OrderedTables = new Dictionary<int, Type>
         {
                 {0, typeof(TypeFieldDto)},
-                {1, typeof(AnonymousDto)},
+                {1, typeof(AnonymousCustomerDto)},
                 {2, typeof(CustomerDto)},
                 {3, typeof(AddressDto)},             
-                {4, typeof(BasketDto)},
-                {5, typeof(BasketItemDto)},
+                {4, typeof(CustomerItemRegisterDto)},
+                {5, typeof(CustomerItemRegisterItemDto)},
                 {6, typeof(WarehouseDto)},
                 {8, typeof(ShipMethodDto)},
                 {9, typeof(ShipMethod2WarehouseDto)},
-                {10, typeof(InvoiceStatusDto)},
-                {11, typeof(InvoiceDto)},
-                {12, typeof(InvoiceItemDto)},
-                {13, typeof(ShipmentDto)},                
-                {14, typeof(PaymentDto)},                
-                {15, typeof(TransactionDto)},
-                {16, typeof(ProductDto)},
-                {17, typeof(OptionDto)},
-                {18, typeof(OptionChoiceDto)},
-                {19, typeof(Product2OptionDto)},
+                
+                {10, typeof(OrderStatusDto)},
+                {11, typeof(OrderDto)},
+                {12, typeof(OrderItemDto)},
+
+                {13, typeof(InvoiceStatusDto)},
+                {14, typeof(InvoiceDto)},
+                {15, typeof(InvoiceItemDto)},
+                
+                {16, typeof(ShipmentDto)},                
+                {17, typeof(PaymentDto)},                
+                {18, typeof(TransactionDto)},
+                {19, typeof(ProductDto)},
                 {20, typeof(ProductVariantDto)},
-                {21, typeof(InventoryDto)},
-                {22, typeof(Content2ProductDto)},
-                {23, typeof(ProductVariant2OptionChoiceDto)},
-                {24, typeof(ShipZoneDto)},
-                {25, typeof(CountryDto)},
-                {26, typeof(RegionDto)},
-                {27, typeof(ShipZone2Region)},
-                {28, typeof(ShipZone2Country)},
-                {29, typeof(ShipMethod2ShipZone)},
-                {30, typeof(RegisteredGatewayProviderDto)},
-                {31, typeof(AppliedPaymentDto)}
+                {21, typeof(ProductOptionDto)},
+                {22, typeof(ProductAttributeDto)},
+                {23, typeof(Product2ProductOptionDto)},
+                {24, typeof(InventoryDto)},
+                //{25, typeof(ProductBase2ContentDto)},
+                {26, typeof(ProductVariant2ProductAttributeDto)},
+               /* {27, typeof(ShipZoneDto)},
+                {28, typeof(CountryDto)},
+                {29, typeof(RegionDto)},
+                {30, typeof(ShipZone2Region)},
+                {31, typeof(ShipZone2Country)},
+                {32, typeof(ShipMethod2ShipZone)},*/
+                {33, typeof(RegisteredGatewayProviderDto)},
+                {34, typeof(AppliedPaymentDto)}
             };
 
         #endregion
@@ -268,6 +274,5 @@ namespace Merchello.Core.Persistence.Migrations.Initial
 
         #endregion
     }
-
 
 }

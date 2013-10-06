@@ -15,13 +15,12 @@ namespace Merchello.Core.Models.Rdbms
         public int WarehouseId { get; set; }
 
         [Column("productVariantKey")]
-        [ForeignKey(typeof(ProductVariantDto), Name="FK_merchInventory_merchProductVariant", Column = "pk")]
+        [ForeignKey(typeof(ProductVariantDto), Name = "FK_merchInventory_merchProductVariant", Column = "pk")]
         public Guid ProductVariantKey { get; set; }
 
         [Column("count")]
         public int Count { get; set; }
 
-        // TODO : This may be a good global setting?
         [Column("lowCount")] 
         public int LowCount { get; set; }
 

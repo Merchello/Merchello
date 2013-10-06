@@ -23,14 +23,14 @@ namespace Merchello.Core.Models.Rdbms
         [Length(255)]
         public string TypeFullName { get; set; }
 
-        [Column("configurationData")]
+        [Column("extendedData")]
         [NullSetting(NullSetting = NullSettings.Null)]
         [SpecialDbType(SpecialDbTypes.NTEXT)]
-        public string ConfigurationData { get; set; }
+        public string ExtendedData { get; set; }
 
-        [Column("encryptConfigurationData")]
+        [Column("encryptExtendedData")]
         [Constraint(Default = "0")]
-        public bool EncryptConfigurationData { get; set; }
+        public bool EncryptExtendedData { get; set; }
 
         [Column("updateDate")]
         [Constraint(Default = "getdate()")]

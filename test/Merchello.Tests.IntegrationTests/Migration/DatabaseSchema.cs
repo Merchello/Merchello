@@ -14,7 +14,7 @@ namespace Merchello.Tests.IntegrationTests.Migration
         [SetUp]
         public void Init()
         {
-            var worker = new DbPreTestDataWorker {SqlSyntax = DbSyntax.SqlCe };
+            var worker = new DbPreTestDataWorker {SqlSyntax = DbSyntax.SqlServer };
             _database = worker.Database;
         }
 

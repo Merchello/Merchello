@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Runtime.Serialization;
-using Merchello.Core.Models.EntityBase;
-using Umbraco.Core.Models.EntityBase;
 
 namespace Merchello.Core.Models
 {
@@ -10,13 +8,7 @@ namespace Merchello.Core.Models
     /// </summary>
     public interface ICustomer : IConsumer
     {
-
-        /// <summary>
-        /// The Umbraco member Id
-        /// </summary>
-        [DataMember]
-        int? MemberId { get; set; }
-
+       
         /// <summary>
         /// Returns the full name of the customer
         /// </summary>
@@ -40,6 +32,12 @@ namespace Merchello.Core.Models
         /// </summary>
         [DataMember]
         string Email { get; set; }
+
+        /// <summary>
+        /// The Umbraco member Id
+        /// </summary>
+        [DataMember]
+        int? MemberId { get; set; }
 
         /// <summary>
         /// The total amount this customer has been invoiced

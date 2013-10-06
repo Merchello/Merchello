@@ -55,11 +55,11 @@ namespace Merchello.Web.Editors
         /// GET /umbraco/Merchello/ProductApi/GetProduct?key={guid}
         /// </summary>
         /// <param name="key"></param>
-        public Product GetProduct(Guid key)
+        public ProductActual GetProduct(Guid key)
         {
             if (key != null)
             {
-                var product = _productService.GetByKey(key) as Product;
+                var product = _productService.GetByKey(key) as ProductActual;
                 if (product == null)
                 {
                     throw new HttpResponseException(HttpStatusCode.NotFound);
@@ -105,7 +105,7 @@ namespace Merchello.Web.Editors
         /// GET /umbraco/Merchello/ProductApi/GetProducts?keys={guid}&keys={guid}
         /// </summary>
         /// <param name="keys"></param>
-        public IEnumerable<Product> GetProducts([FromUri]IEnumerable<Guid> keys)
+        public IEnumerable<ProductActual> GetProducts([FromUri]IEnumerable<Guid> keys)
         {
             if (keys != null)
             {
@@ -115,9 +115,9 @@ namespace Merchello.Web.Editors
                     //throw new HttpResponseException(HttpStatusCode.NotFound);
                 }
 
-                foreach(IProduct product in products)
+                foreach(IProductActual product in products)
                 {
-                    yield return product as Product;
+                    yield return product as ProductActual;
                 }
             }
             else
@@ -138,21 +138,21 @@ namespace Merchello.Web.Editors
         /// </summary>
         /// <param name="item"></param>
         [AcceptVerbs("GET","POST")]
-        public Product NewProduct(string sku, string name, decimal price)
+        public ProductActual NewProduct(string sku, string name, decimal price)
         {
-            Product newProduct = null;
+            ProductActual newProductActual = null;
 
             try
             {
-                newProduct = _productService.CreateProduct(sku, name, price) as Product;
-                _productService.Save(newProduct);
+                newProductActual = _productService.CreateProduct(sku, name, price) as ProductActual;
+                _productService.Save(newProductActual);
             }
             catch (Exception ex)
             {
                 throw new HttpResponseException(HttpStatusCode.InternalServerError);
             }
 
-            return newProduct;
+            return newProductActual;
         }
 
         /// <summary>
@@ -163,7 +163,7 @@ namespace Merchello.Web.Editors
         /// <param name="key"></param>
         /// <param name="item"></param>
         [AcceptVerbs("PUT")]
-        public HttpResponseMessage PutProduct(Product product)
+        public HttpResponseMessage PutProduct(ProductActual productActual)
         {
             // I think we should consider having a specific objects in .Web to pass back and forth
             // via the Api like this so that we can take advantage of the Model.IsValid.  Umbraco does this with
@@ -176,7 +176,7 @@ namespace Merchello.Web.Editors
                         
             try
             {
-				_productService.Save(product);
+				_productService.Save(productActual);
             }
             catch (Exception ex) // I think this is not required as the server will create the error response message anyway
             {

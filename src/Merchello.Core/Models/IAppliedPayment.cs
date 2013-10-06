@@ -26,7 +26,7 @@ namespace Merchello.Core.Models
         /// The type field for the Applied Payment
         /// </summary>
         [DataMember]
-        Guid AppliedPaymentTypeFieldKey { get; }
+        Guid AppliedPaymentTfKey { get; }
             
         /// <summary>
         /// The description for the Transaction

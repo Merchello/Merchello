@@ -13,14 +13,14 @@ namespace Merchello.Tests.Base.DataMakers
 
         public static IProduct MockProductForInserting()
         {
-            return MockProductForInserting(MockSku(), ProductItemName(), PriceCheck());
+            return MockProductForInserting(ProductItemName(), MockSku(), PriceCheck());
         }
 
         /// <summary>
         /// Represents a product as if it was returned from the database
         /// </summary>
         /// <param name="key">The key you want to use as the key for the product</param>
-        /// <returns><see cref="IProduct"/></returns>
+        /// <returns><see cref="IProductVariant"/></returns>
         public static IProduct MockProductComplete(Guid key)
         {
             var product = MockProductForInserting();
@@ -33,34 +33,15 @@ namespace Merchello.Tests.Base.DataMakers
         /// Makes a list of products for inserting
         /// </summary>
         /// <param name="count">The number of products to create</param>
-        /// <returns>A collection of <see cref="IProduct"/></returns>
+        /// <returns>A collection of <see cref="IProductVariant"/></returns>
         public static IEnumerable<IProduct> MockProductCollectionForInserting(int count)
         {
-            for (var i = 0; i < count; i++) yield return MockProductForInserting(Guid.NewGuid().ToString().Replace("-", string.Empty), ProductItemName(), PriceCheck());
+            for (var i = 0; i < count; i++) yield return MockProductForInserting(ProductItemName(), Guid.NewGuid().ToString().Replace("-", string.Empty), PriceCheck());
         }
 
-        public static IProduct MockProductForInserting(string sku, string name, decimal price)
+        public static IProduct MockProductForInserting(string name, string sku, decimal price)
         {
-            return new Product()
-            {
-                Sku = sku,
-                Name = name,
-                Price = price,
-                CostOfGoods = null,
-                SalePrice = null,
-                Weight = null,
-                Length = null,
-                Width = null,
-                Height = null,
-                Taxable = true,
-                Shippable = false,
-                Download = false,
-                Template = false
-            };
+            return new Product(new ProductVariant(name, sku, price));
         }
-
-      
-
-        
     }
 }

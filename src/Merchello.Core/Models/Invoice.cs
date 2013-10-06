@@ -12,6 +12,7 @@ namespace Merchello.Core.Models
     [DataContract(IsReference = true)]
     public class Invoice : IdEntity, IInvoice
     {
+        private int? _orderId;
         private string _invoiceNumber;
         private DateTime _invoiceDate;
         private ICustomer _customer;
@@ -30,7 +31,6 @@ namespace Merchello.Core.Models
         private string _billToCompany;
         private bool _exported;
         private bool _paid;
-        private bool _shipped;
         private readonly decimal _amount;
 
         public Invoice (ICustomer customer, IInvoiceStatus invoiceStatus, decimal amount)
@@ -42,7 +42,7 @@ namespace Merchello.Core.Models
 
         public Invoice(ICustomer customer, IAddress address, IInvoiceStatus invoiceStatus, decimal amount)
             : this(customer, invoiceStatus, amount)
-        {
+        {            
             _billToAddress1 = address.Address1;
             _billToAddress2 = address.Address2;
             _billToLocality = address.Locality;
@@ -52,7 +52,8 @@ namespace Merchello.Core.Models
             _billToPhone = address.Phone;
             _billToCompany = address.Company;
         }
-        
+
+        private static readonly PropertyInfo OrderIdSelector = ExpressionHelper.GetPropertyInfo<Invoice, int?>(x => x.OrderId);
         private static readonly PropertyInfo InvoiceNumberSelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.InvoiceNumber);  
         private static readonly PropertyInfo InvoiceDateSelector = ExpressionHelper.GetPropertyInfo<Invoice, DateTime>(x => x.InvoiceDate);
         private static readonly PropertyInfo CustomerKeySelector = ExpressionHelper.GetPropertyInfo<Invoice, Guid>(x => x.CustomerKey);
@@ -69,10 +70,25 @@ namespace Merchello.Core.Models
         private static readonly PropertyInfo BillToCompanySelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.BillToCompany);  
         private static readonly PropertyInfo ExportedSelector = ExpressionHelper.GetPropertyInfo<Invoice, bool>(x => x.Exported);  
         private static readonly PropertyInfo PaidSelector = ExpressionHelper.GetPropertyInfo<Invoice, bool>(x => x.Paid);  
-        private static readonly PropertyInfo ShippedSelector = ExpressionHelper.GetPropertyInfo<Invoice, bool>(x => x.Shipped);
 
 
 
+        /// <summary>
+        /// The OrderId associated with the Invoice
+        /// </summary>
+        [DataMember]
+        public int? OrderId
+        {
+            get { return _orderId; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _orderId = value;
+                    return _orderId;
+                }, _orderId, OrderIdSelector);
+            }
+        }
 
         /// <summary>
         /// The customer key associated with the Invoice
@@ -372,24 +388,6 @@ namespace Merchello.Core.Models
                     _paid = value;
                     return _paid;
                 }, _paid, PaidSelector); 
-            }
-        }
-    
-        /// <summary>
-        /// True/false indicating whether or not that ALL items invoices have been shipped and there will be no
-        /// additional shipments
-        /// </summary>
-        [DataMember]
-        public bool Shipped
-        {
-            get { return _shipped; }
-            set 
-            { 
-                SetPropertyValueAndDetectChanges(o =>
-                {
-                    _shipped = value;
-                    return _shipped;
-                }, _shipped, ShippedSelector); 
             }
         }
     

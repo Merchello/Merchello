@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Merchello.Core.Events;
 using Merchello.Core.Models;
 using Merchello.Core.Persistence;
 using Merchello.Core.Services;
@@ -9,6 +8,7 @@ using Merchello.Tests.Base.Respositories;
 using Merchello.Tests.Base.Respositories.UnitOfWork;
 using Merchello.Tests.Base.Services;
 using NUnit.Framework;
+using Umbraco.Core.Events;
 
 namespace Merchello.Tests.UnitTests.Services
 {
@@ -39,7 +39,7 @@ namespace Merchello.Tests.UnitTests.Services
             };
 
 
-            CustomerService.Created += delegate(ICustomerService sender, NewEventArgs<ICustomer> args)
+            CustomerService.Created += delegate(ICustomerService sender, Core.Events.NewEventArgs<ICustomer> args)
             {
                 AfterTriggered = true;
                 After = args.Entity;

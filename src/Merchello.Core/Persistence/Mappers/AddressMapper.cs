@@ -35,7 +35,7 @@ namespace Merchello.Core.Persistence.Mappers
             CacheMap<Address, AddressDto>(src => src.Label, dto => dto.Label);
             CacheMap<Address, AddressDto>(src => src.FullName, dto => dto.FullName);
             CacheMap<Address, AddressDto>(src => src.Company, dto => dto.Company);
-            CacheMap<Address, AddressDto>(src => src.AddressTypeFieldKey, dto => dto.AddressTypeFieldKey);
+            CacheMap<Address, AddressDto>(src => src.AddressTypeFieldKey, dto => dto.AddressTfKey);
             CacheMap<Address, AddressDto>(src => src.Address1, dto => dto.Address1);
             CacheMap<Address, AddressDto>(src => src.Address2, dto => dto.Address2);
             CacheMap<Address, AddressDto>(src => src.Locality, dto => dto.Locality);

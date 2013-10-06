@@ -249,6 +249,7 @@
     <Compile Include="Configuration\Versioning.cs" />
     <Compile Include="Contexts\MerchelloBootstrapperTests.cs" />
     <Compile Include="Gateway\GatewayProviderPrototyping.cs" />
+    <Compile Include="LineItem\LineItemCollectionTest.cs" />
     <Compile Include="Mappers\MerchelloMapperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Querying\AddressSqlClausesTests.cs" />
@@ -257,7 +258,7 @@
     <Compile Include="Querying\InvoiceSqlClausesTest.cs" />
     <Compile Include="Querying\InvoiceStatusSqlClausesTests.cs" />
     <Compile Include="Querying\PaymentSqlClausesTests.cs" />
-    <Compile Include="Querying\ProductRelatedSqlClausesTests.cs" />
+    <Compile Include="Querying\ProductSqlClausesTests.cs" />
     <Compile Include="Querying\RegisteredGatewayProviderSqlClausesTests.cs" />
     <Compile Include="Querying\ShipmentSqlClausesTest.cs" />
     <Compile Include="Querying\ShipMethodSqlClausesTests.cs" />
@@ -265,11 +266,10 @@
     <Compile Include="Querying\WarehouseSqlClauseTests.cs" />
     <Compile Include="Repository\AddressRepositoryTests.cs" />
     <Compile Include="Repository\CustomerRepositoryTests.cs" />
-    <Compile Include="Services\AddressServiceTests.cs" />
-    <Compile Include="Services\BasketServiceTests.cs" />
-    <Compile Include="Services\BasketItemServiceTests.cs" />
+    <Compile Include="Services\CustomerRegistryServiceTests.cs" />
     <Compile Include="Services\InvoiceServiceTests.cs" />
     <Compile Include="Services\CustomerServiceTests.cs" />
+    <Compile Include="Services\ProductServiceTests.cs" />
     <Compile Include="TypeFields\AddressTypeFieldTests.cs" />
     <Compile Include="TypeFields\BasketTypeFieldTests.cs" />
     <Compile Include="TypeFields\GatewayProviderTypeFieldTests.cs" />
@@ -280,7 +280,6 @@
     <Compile Include="TypeFields\ShipMethodTypeFieldTests.cs" />
     <Compile Include="WebControllers\CustomerControllerTests.cs" />
     <Compile Include="WebControllers\InvoiceControllerTests.cs" />
-    <Compile Include="WebControllers\ProductControllerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

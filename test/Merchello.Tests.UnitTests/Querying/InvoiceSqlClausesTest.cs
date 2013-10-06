@@ -62,13 +62,12 @@ namespace Merchello.Tests.UnitTests.Querying
             //// Act
             var sql = new Sql();
             sql.Select("*")
-                .From<InvoiceDto>();
+                .From<InvoiceDto>()
+                .Where<InvoiceDto>(x => x.CustomerKey == key);
 
-            var query = Query<IInvoice>.Builder.Where(x => x.CustomerKey == key);
-            var translatedSql = TranslateQuery(sql, query);
 
             //// Assert
-            Assert.AreEqual(expected.SQL, translatedSql.SQL);
+            Assert.AreEqual(expected.SQL, sql.SQL);
         }
 
         /// <summary>
@@ -78,7 +77,7 @@ namespace Merchello.Tests.UnitTests.Querying
         public void Can_Verify_Sql_For_Invoices_By_InvoiceStatus_Query()
         {
             //// Arrange
-            int invoiceStatusId = 1;
+            const int invoiceStatusId = 1;
 
             var expected = new Sql();
             expected.Select("*")
@@ -88,13 +87,14 @@ namespace Merchello.Tests.UnitTests.Querying
             //// Act
             var sql = new Sql();
             sql.Select("*")
-                .From<InvoiceDto>();
+                .From<InvoiceDto>()
+                .Where<InvoiceDto>(x => x.InvoiceStatusId == invoiceStatusId);
 
-            var query = Query<IInvoice>.Builder.Where(x => x.InvoiceStatusId == invoiceStatusId);
-            var translated = TranslateQuery(sql, query);
+            //var query = Query<IInvoice>.Builder.Where(x => x.InvoiceStatusId == invoiceStatusId);
+            //var translated = TranslateQuery(sql, query);
 
             //// Assert
-            Assert.AreEqual(expected.SQL, translated.SQL);
+            Assert.AreEqual(expected.SQL, sql.SQL);
         }
 
     }

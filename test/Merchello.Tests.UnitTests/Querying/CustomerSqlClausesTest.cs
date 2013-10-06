@@ -37,7 +37,7 @@ namespace Merchello.Tests.UnitTests.Querying
         }
 
         /// <summary>
-        /// Test to verify that the typed <see cref="AnonymousDto"/> query matches generic "select * ..." query 
+        /// Test to verify that the typed <see cref="AnonymousCustomerDto"/> query matches generic "select * ..." query 
         /// </summary>
         [Test]
         public void Can_Verify_AnonymousCustomer_Base_Clause()
@@ -47,14 +47,14 @@ namespace Merchello.Tests.UnitTests.Querying
 
             var expected = new Sql();
             expected.Select("*")
-                .From("[merchAnonymous]")
-                .Where("[merchAnonymous].[pk] = '" + key.ToString() + "'");
+                .From("[merchAnonymousCustomer]")
+                .Where("[merchAnonymousCustomer].[pk] = '" + key.ToString() + "'");
 
             //// Act
             var sql = new Sql();
             sql.Select("*")
-                .From<AnonymousDto>()
-                .Where<AnonymousDto>(x => x.Key == key);
+                .From<AnonymousCustomerDto>()
+                .Where<AnonymousCustomerDto>(x => x.Key == key);
 
             //// Assert
             Assert.That(sql.SQL, Is.EqualTo(expected.SQL));
@@ -77,13 +77,14 @@ namespace Merchello.Tests.UnitTests.Querying
             //// Act
             var sql = new Sql();
             sql.Select("COUNT(*)")
-               .From<CustomerDto>();
+                .From<CustomerDto>()
+                .Where<CustomerDto>(x => x.Key != Guid.Empty);
 
-            var query = Query<ICustomer>.Builder.Where(x => x.Key != Guid.Empty);
-            var translated = TranslateQuery(sql, query);
+            //var query = Query<ICustomer>.Builder.Where(x => x.Key != Guid.Empty);
+            //var translated = TranslateQuery(sql, query);
 
             //// Assert
-            Assert.AreEqual(expected.SQL, translated.SQL);
+            Assert.AreEqual(expected.SQL, sql.SQL);
 
         }
 

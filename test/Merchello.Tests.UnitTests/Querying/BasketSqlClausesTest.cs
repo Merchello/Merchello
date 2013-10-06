@@ -1,11 +1,9 @@
 ﻿using System;
-using Lucene.Net.Search;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Persistence.Querying;
 using Merchello.Tests.Base.SqlSyntax;
 using Merchello.Tests.Base.TypeFields;
-using Rhino.Mocks;
 using Umbraco.Core.Persistence;
 using NUnit.Framework;
 
@@ -13,10 +11,10 @@ namespace Merchello.Tests.UnitTests.Querying
 {
     [TestFixture]
     [Category("SqlSyntax")]
-    public class BasketRelatedSqlClausesTest : BaseUsingSqlServerSyntax<IBasket>
+    public class CustomerItemRegisterSqlClausesTest : BaseUsingSqlServerSyntax<ICustomerItemRegister>
     {
         /// <summary>
-        /// Test to verify that the typed <see cref="BasketDto"/> query matches generic "select * ..." query 
+        /// Test to verify that the typed <see cref="CustomerItemRegisterDto"/> query matches generic "select * ..." query 
         /// </summary>
         [Test]
         public void Can_Verify_Base_Basket_Clause()
@@ -26,21 +24,21 @@ namespace Merchello.Tests.UnitTests.Querying
 
             var expected = new Sql();
             expected.Select("*")
-                .From("[merchBasket]")
-                .Where("[merchBasket].[id] = " + id.ToString());
+                .From("[merchCustomerItemRegister]")
+                .Where("[merchCustomerItemRegister].[id] = " + id.ToString());
 
             //// Act
             var sql = new Sql();
             sql.Select("*")
-                .From<BasketDto>()
-                .Where<BasketDto>(x => x.Id == id);
+                .From<CustomerItemRegisterDto>()
+                .Where<CustomerItemRegisterDto>(x => x.Id == id);
 
             //// Assert
             Assert.That(sql.SQL, Is.EqualTo(expected.SQL));
         }
 
         /// <summary>
-        /// Test to verify that the typed <see cref="BasketItemDto"/> query matches generic "select * ..." query  
+        /// Test to verify that the typed <see cref="CustomerItemRegisterItemDto"/> query matches generic "select * ..." query  
         /// </summary>
         [Test]
         public void Can_Verify_Base_BasketItem_Clause()
@@ -50,21 +48,21 @@ namespace Merchello.Tests.UnitTests.Querying
 
             var expected = new Sql();
             expected.Select("*")
-                .From("[merchBasketItem]")
-                .Where("[merchBasketItem].[id] = " + id.ToString());
+                .From("[merchCustomerItemRegisterItem]")
+                .Where("[merchCustomerItemRegisterItem].[id] = " + id.ToString());
 
             //// Act
             var sql = new Sql();
             sql.Select("*")
-                .From<BasketItemDto>()
-                .Where<BasketItemDto>(x => x.Id == id);
+                .From<CustomerItemRegisterItemDto>()
+                .Where<CustomerItemRegisterItemDto>(x => x.Id == id);
 
             //// Assert
             Assert.That(sql.SQL, Is.EqualTo(expected.SQL));
         }
 
         /// <summary>
-        /// Test to verify the typed <see cref="IBasket"/> sql by consumer key queries
+        /// Test to verify the typed <see cref="ICustomerItemRegister"/> sql by consumer key queries
         /// </summary>
         [Test]
         public void Can_Verify_Basket_By_Consumer_Query()
@@ -74,23 +72,21 @@ namespace Merchello.Tests.UnitTests.Querying
 
             var expected = new Sql();
             expected.Select("*")
-                .From("[merchBasket]")
-                .Where("[merchBasket].[consumerKey] = '" + key.ToString() + "'");
+                .From("[merchCustomerItemRegister]")
+                .Where("[merchCustomerItemRegister].[consumerKey] = '" + key.ToString() + "'");
 
             //// Act
             var sql = new Sql();
             sql.Select("*")
-                .From<BasketDto>();
-
-            var query = Query<IBasket>.Builder.Where(x => x.ConsumerKey == key);
-            var translated = TranslateQuery(sql, query);
+                .From<CustomerItemRegisterDto>()
+                .Where<CustomerItemRegisterDto>(x => x.ConsumerKey == key);
 
             //// Assert
-            Assert.AreEqual(expected.SQL, translated.SQL);
+            Assert.AreEqual(expected.SQL, sql.SQL);
         }
 
         /// <summary>
-        /// Test to verify type <see cref="IBasket"/> sql by consumer and basket type field key
+        /// Test to verify type <see cref="ICustomerItemRegister"/> sql by consumer and basket type field key
         /// </summary>
         [Test]
         public void Can_Verify_Basket_By_Consumer_And_BasketType_Query()
@@ -101,19 +97,17 @@ namespace Merchello.Tests.UnitTests.Querying
 
             var expected = new Sql();
             expected.Select("*")
-               .From("[merchBasket]")
-               .Where("[merchBasket].[consumerKey] = '" + key.ToString() + "' AND [merchBasket].[basketTypeFieldKey] = '" + basketTypeKey.ToString() + "'");
+               .From("[merchCustomerItemRegister]")
+               .Where("[merchCustomerItemRegister].[consumerKey] = '" + key.ToString() + "' AND [merchCustomerItemRegister].[registerTfKey] = '" + basketTypeKey.ToString() + "'");
 
             //// Act
             var sql = new Sql();
             sql.Select("*")
-               .From<BasketDto>();
-
-            var query = Query<IBasket>.Builder.Where(x => x.ConsumerKey == key && x.BasketTypeFieldKey == basketTypeKey);
-            var translated = TranslateQuery(sql, query);
+                .From<CustomerItemRegisterDto>()
+                .Where<CustomerItemRegisterDto>(x => x.ConsumerKey == key && x.RegisterTfKey == basketTypeKey);
 
             //// Assert
-            Assert.AreEqual(expected.SQL, translated.SQL);
+            Assert.AreEqual(expected.SQL, sql.SQL);
         }
     }
 }

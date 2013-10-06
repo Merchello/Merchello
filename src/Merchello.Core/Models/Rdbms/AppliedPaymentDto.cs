@@ -22,8 +22,8 @@ namespace Merchello.Core.Models.Rdbms
         [ForeignKey(typeof(InvoiceDto), Name = "FK_merchAppliedPayment_merchInvoice", Column = "id")]
         public int InvoiceId { get; set; }
 
-        [Column("appliedPaymentTypeFieldKey")]
-        public Guid AppliedPaymentTypeFieldKey { get; set; }
+        [Column("appliedPaymentTfKey")]
+        public Guid AppliedPaymentTfKey { get; set; }
 
         [Column("description")]
         public string Description { get; set; }
@@ -42,12 +42,5 @@ namespace Merchello.Core.Models.Rdbms
         [Constraint(Default = "getdate()")]
         public DateTime CreateDate { get; set; }
 
-        /*
-        [ResultColumn]
-        public PaymentDto PaymentDto { get; set; }
-
-        [ResultColumn]
-        public InvoiceDto InvoiceDto { get; set; }
-         * */
     }
 }
