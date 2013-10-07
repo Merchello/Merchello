@@ -196,6 +196,8 @@
     <Compile Include="Gateway\IGatewayContext.cs" />
     <Compile Include="Persistence\Mappers\ProductMapper.cs" />
     <Compile Include="Persistence\Mappers\ProductOptionMapper.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IProductVariantRepository.cs" />
+    <Compile Include="Persistence\Repositories\ProductVariantRepository.cs" />
     <Compile Include="Services\RegisteredGatewayProviderService.cs" />
     <Compile Include="Services\Interfaces\IRegisteredGatewayProviderService.cs" />
     <Compile Include="Strategies\IGatewayProviderStrategy.cs" />

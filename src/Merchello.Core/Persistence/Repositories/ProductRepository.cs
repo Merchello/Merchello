@@ -201,7 +201,6 @@ namespace Merchello.Core.Persistence.Repositories
 
         private void DeleteProductOption(IProductOption option)
         {
-            // TODO : this will leave the sort order out of sync
             var executeClauses = new[]
                 {
                     "DELETE FROM merchProductVariant2ProductAttribute WHERE optionId = @Id",
@@ -321,16 +320,36 @@ namespace Merchello.Core.Persistence.Repositories
         private void DeleteProductAttribute(IProductAttribute productAttribute)
         {
             // TODO : if no records remain in merchProductVariant2ProductAttribute we need to decide what happens to the variant
-            var executeClauses = new[]
-                {
-                    "DELETE FROM merchProductVariant2ProductAttribute WHERE productAttributeId = @Id",
-                    "DELETE FROM merchProductAttribute WHERE Id = @Id"
-                };
+            var sql = new Sql();
+            sql.Select("*")
+               .From<ProductVariant2ProductAttributeDto>()
+               .Where<ProductVariant2ProductAttributeDto>(x => x.ProductAttributeId == productAttribute.Id);
+
+            var dtos = Database.Fetch<ProductVariant2ProductAttributeDto>(sql);
+            var executeClauses = new List<string>();
+
+            // determine if there is a variant that had only this attribute
+            if (dtos.Any() && !dtos.Exists(x => x.ProductAttributeId != productAttribute.Id))
+            {
+                var productVariantKey = dtos.Select(x => x.ProductVariantKey).First();
+                //executeClauses.AddRange(
+                //    new []
+                //        {
+                //            "DELETE "
+                //        }
+                //    );
+            }
+
+            executeClauses.AddRange(
+                new [] {"DELETE FROM merchProductVariant2ProductAttribute WHERE productAttributeId = @Id",
+                    "DELETE FROM merchProductAttribute WHERE Id = @Id" });
 
             foreach (var clause in executeClauses)
             {
                 Database.Execute(clause, new { Id = productAttribute.Id });
             }
+
+            
         }
 
         private void SaveProductAttributes(IProductOption productOption)
