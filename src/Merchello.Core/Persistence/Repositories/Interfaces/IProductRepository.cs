@@ -16,11 +16,5 @@ namespace Merchello.Core.Persistence.Repositories
         /// <returns></returns>
         bool SkuExists(string sku);
 
-        ///// <summary>
-        ///// Saves a product option associated with a product
-        ///// </summary>
-        ///// <param name="product">The <see cref="IProduct"/> with the option to be saved</param>
-        ///// <param name="productOption">The <see cref="IProductOption"/> to be saved</param>
-        //void SaveProductOption(IProduct product, IProductOption productOption);
     }
 }

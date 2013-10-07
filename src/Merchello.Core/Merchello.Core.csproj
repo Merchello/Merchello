@@ -116,6 +116,7 @@
     <Compile Include="Models\IProductAttribute.cs" />
     <Compile Include="Models\IProductBase.cs" />
     <Compile Include="Models\IProductVariant.cs" />
+    <Compile Include="Models\NotifiyCollectionBase.cs" />
     <Compile Include="Models\ProductAttribute.cs" />
     <Compile Include="Models\ProductOption.cs" />
     <Compile Include="Models\ProductOptionCollection.cs" />
@@ -189,6 +190,7 @@
     <Compile Include="Persistence\Caching\InMemoryCacheProvider.cs" />
     <Compile Include="Persistence\Factories\ProductAttributeFactory.cs" />
     <Compile Include="Persistence\Factories\ProductOptionFactory.cs" />
+    <Compile Include="Persistence\Factories\ProductVariantFactory.cs" />
     <Compile Include="Persistence\Factories\RegisteredGatewayProviderFactory.cs" />
     <Compile Include="Persistence\Mappers\GatewayProviderMapper.cs" />
     <Compile Include="Gateway\GatewayContext.cs" />
@@ -198,6 +200,7 @@
     <Compile Include="Persistence\Mappers\ProductOptionMapper.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IProductVariantRepository.cs" />
     <Compile Include="Persistence\Repositories\ProductVariantRepository.cs" />
+    <Compile Include="Services\Interfaces\IProductVariantService.cs" />
     <Compile Include="Services\RegisteredGatewayProviderService.cs" />
     <Compile Include="Services\Interfaces\IRegisteredGatewayProviderService.cs" />
     <Compile Include="Strategies\IGatewayProviderStrategy.cs" />

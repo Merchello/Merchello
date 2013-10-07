@@ -17,13 +17,10 @@ namespace Merchello.Core.Services
         private Lazy<CustomerService> _customerService;
         private Lazy<CustomerItemRegisterService> _basketService;    
         private Lazy<InvoiceService> _invoiceService;
-        //private Lazy<PaymentService> _paymentService;
         private Lazy<ProductService> _productService;
-        private Lazy<ShippingService> _shipmentService;
-        
+        private Lazy<ShippingService> _shipmentService;        
         private Lazy<WarehouseService> _warehouseService;
 
-        //private Lazy<PaymentApplicationStrategyBase> _applyPaymentStrategy;
         
         /// <summary>
         /// Constructor
@@ -111,15 +108,6 @@ namespace Merchello.Core.Services
             get { return _invoiceService.Value; }
         }
     
-
-        ///// <summary>
-        ///// Gets the <see cref="IPaymentService"/>
-        ///// </summary>
-        //public IPaymentService PaymentService
-        //{
-        //    get { return _paymentService.Value;  }
-        //}
-
         /// <summary>
         /// Gets the <see cref="IProductService"/>
         /// </summary>
@@ -138,9 +126,7 @@ namespace Merchello.Core.Services
             get { return _warehouseService.Value; }
 
         }
-
-        
-
+     
         #endregion
     }
 }

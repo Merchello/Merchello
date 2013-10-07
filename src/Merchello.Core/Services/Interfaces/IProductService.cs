@@ -11,7 +11,7 @@ using Umbraco.Core.Services;
 namespace Merchello.Core.Services
 {
     /// <summary>
-    /// Defines the AddressService, which provides access to operations involving <see cref="IProductVariant"/>
+    /// Defines the ProductService, which provides access to operations involving <see cref="IProduct"/>
     /// </summary>
     public interface IProductService : IService
     {
@@ -62,7 +62,7 @@ namespace Merchello.Core.Services
         /// Gets an <see cref="IProduct"/> object by its 'UniqueId'
         /// </summary>
         /// <param name="key">Guid key of the Product to retrieve</param>
-        /// <returns><see cref="IProductVariant"/></returns>
+        /// <returns><see cref="IProduct"/></returns>
         IProduct GetByKey(Guid key);
 
         /// <summary>
@@ -71,23 +71,7 @@ namespace Merchello.Core.Services
         /// <param name="keys">List of Guid keys for Product objects to retrieve</param>
         /// <returns>List of <see cref="IProduct"/></returns>
         IEnumerable<IProduct> GetByKeys(IEnumerable<Guid> keys);
-
-        ///// <summary>
-        ///// Creates and saves a <see cref="IProductOption"/> object associated with a product
-        ///// </summary>
-        ///// <param name="product">The <see cref="IProduct"/> to which to add the <see cref="IProductOption"/></param>
-        ///// <param name="name">The name of the option</param>
-        ///// <param name="required">True/false indicating whether or not this option is required in which case will become part of a ProductVariant definition</param>
-        ///// <returns></returns>
-        //void SaveProductOption(IProduct product, string name, bool required = true);
-
-        ///// <summary>
-        ///// Saves a <see cref="IProductOption"/> associated with a <see cref="IProduct"/>
-        ///// </summary>
-        ///// <param name="product"></param>
-        ///// <param name="productOption"></param>
-        //void SaveProductOption(IProduct product, IProductOption productOption);
-
+       
         /// <summary>
         /// True/false indicating whether or not a sku is already exists in the database
         /// </summary>

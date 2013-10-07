@@ -137,7 +137,7 @@ namespace Merchello.Tests.IntegrationTests.Services.Product
             var product = PreTestDataWorker.MakeExistingProduct();
             product.ProductOptions.Add(new ProductOption("Color"));
             product.ProductOptions["Color"].Choices.Add(new ProductAttribute("Black", "Black"));
-            product.ProductOptions["Color"].Choices.Add(new ProductAttribute("Black", "Blue"));
+            product.ProductOptions["Color"].Choices.Add(new ProductAttribute("Blue", "Blue"));
             var removeChoice = new ProductAttribute("Grey", "Grey");
             product.ProductOptions["Color"].Choices.Add(removeChoice);
             product.ProductOptions["Color"].Choices.Add(new ProductAttribute("Green", "Green"));

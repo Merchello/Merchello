@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Merchello.Tests.Base.Prototyping.Models;
 using Umbraco.Core.Events;
-using log4net.Core;
 using Merchello.Core.Models;
 using Merchello.Core.Persistence;
 using Umbraco.Core;
@@ -19,7 +17,8 @@ namespace Merchello.Core.Services
     {
         private readonly IDatabaseUnitOfWorkProvider _uowProvider;
         private readonly RepositoryFactory _repositoryFactory;
-
+        //private readonly IEnumerable<>
+ 
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
 
         public ProductService()
@@ -229,35 +228,6 @@ namespace Merchello.Core.Services
                 return repository.GetAll(keys.ToArray());
             }
         }
-
-        ///// <summary>
-        ///// Creates and saves <see cref="IProductOption"/>
-        ///// </summary>
-        ///// <param name="product"></param>
-        ///// <param name="name"></param>
-        ///// <param name="required"></param>
-        ///// <returns></returns>
-        //public void SaveProductOption(IProduct product, string name, bool required = true)
-        //{
-        //    var option = new ProductOption(name, required);
-
-        //    using (new WriteLock(Locker))
-        //    {
-        //        var uow = _uowProvider.GetUnitOfWork();
-        //        using (var repository = _repositoryFactory.CreateProductRepository(uow))
-        //        {
-        //            repository.SaveProductOption(product, option);
-        //            uow.Commit();
-        //        }
-        //    }
-
-        //}
-
-
-        //public void SaveProductOption(IProduct product, IProductOption productOption)
-        //{
-            
-        //}
 
         /// <summary>
         /// True/false indicating whether or not a sku is already exists in the database

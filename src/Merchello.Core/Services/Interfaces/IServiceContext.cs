@@ -17,42 +17,29 @@ namespace Merchello.Core.Services
         ICustomerService CustomerService { get; }
 
         /// <summary>
+        /// Gets the <see cref="IProductService"/>
+        /// </summary>
+        IProductService ProductService { get; }
+        
+        /// <summary>
         /// Gets the <see cref="CustomerItemRegisterService"/>
         /// </summary>
         ICustomerItemRegisterService CustomerItemRegisterService { get; }
-
 
         /// <summary>
         /// Gets the <see cref="IInvoiceService"/>
         /// </summary>
         IInvoiceService InvoiceService { get; }
 
-
-        ///// <summary>
-        ///// Gets the <see cref="IPaymentService"/>
-        ///// </summary>
-        //IPaymentService PaymentService { get; }
-
-        /// <summary>
-        /// Gets the <see cref="IProductService"/>
-        /// </summary>
-        IProductService ProductService { get; }
-
         /// <summary>
         /// Gets the <see cref="IShippingService"/>
         /// </summary>
         IShippingService ShippingService { get; }
-
         
         /// <summary>
         /// Gets the <see cref="IWarehouseService"/>
         /// </summary>
         IWarehouseService WarehouseService { get; }
-
-        ///// <summary>
-        ///// Gets the <see cref="IRegisteredGatewayProviderService"/>
-        ///// </summary>
-        //IRegisteredGatewayProviderService RegisteredGatewayProviderService { get; }
     }
     
 }

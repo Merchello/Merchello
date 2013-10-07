@@ -124,7 +124,6 @@ namespace Merchello.Tests.IntegrationTests.Services.Product
 
             _productService.Save(expected);
 
-
             //// Act
             var retrieved = _productService.GetByKey(key);
 
