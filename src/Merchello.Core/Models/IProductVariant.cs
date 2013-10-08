@@ -1,5 +1,4 @@
 ﻿using System;
-using Merchello.Tests.Base.Prototyping.Models;
 
 namespace Merchello.Core.Models
 {

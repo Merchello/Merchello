@@ -26,7 +26,7 @@ namespace Merchello.Tests.UnitTests.Querying
                 .From("[merchProduct]")
                 .InnerJoin("[merchProductVariant]")
                 .On("[merchProduct].[pk] = [merchProductVariant].[productKey]")
-                .Where("[merchProductVariant].[template]=1")
+                .Where("[merchProductVariant].[master]=1")
                 .Where("[merchProduct].[pk] = '" + key.ToString() + "'");
 
             var sql = new Sql();
@@ -34,7 +34,7 @@ namespace Merchello.Tests.UnitTests.Querying
                .From<ProductDto>()
                .InnerJoin<ProductVariantDto>()
                .On<ProductDto, ProductVariantDto>(left => left.Key, right => right.ProductKey)
-               .Where<ProductVariantDto>(x => x.Template)
+               .Where<ProductVariantDto>(x => x.Master)
                .Where<ProductDto>(x => x.Key == key);
 
             Assert.That(sql.SQL, Is.EqualTo(expected.SQL));

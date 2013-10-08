@@ -185,6 +185,24 @@ namespace Merchello.Tests.UnitTests.Mappers
         }
 
         /// <summary>
+        /// Test to verify <see cref="MerchelloMapper"/> correctly maps IProductVariant to ProductVariantMapper
+        /// </summary>
+        [Test]
+        public void Mapper_Resolves_IProductVariant_To_ProductVariantMapper()
+        {
+
+            //// Arrage
+            var expected = typeof(ProductVariantMapper);
+
+            //// Act
+            var resolved = MerchelloMapper.Current.ResolveByType(typeof(IProductVariant));
+
+            //// Assert
+            Assert.IsTrue(resolved.Success);
+            Assert.AreSame(expected, resolved.Result.GetType());
+        }
+
+        /// <summary>
         /// Test to verify <see cref="MerchelloMapper"/> correctly maps IShipment to ShipmentMapper
         /// </summary>
         [Test]

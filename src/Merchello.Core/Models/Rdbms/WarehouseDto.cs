@@ -17,18 +17,23 @@ namespace Merchello.Core.Models.Rdbms
         public string Name { get; set; }
 
         [Column("address1")]
+        [NullSetting(NullSetting = NullSettings.Null)]
         public string Address1 { get; set; }
 
         [Column("address2")]
+        [NullSetting(NullSetting = NullSettings.Null)]
         public string Address2 { get; set; }
 
         [Column("locality")]
+        [NullSetting(NullSetting = NullSettings.Null)]
         public string Locality { get; set; }
 
         [Column("region")]
+        [NullSetting(NullSetting = NullSettings.Null)]
         public string Region { get; set; }
 
         [Column("postalCode")]
+        [NullSetting(NullSetting = NullSettings.Null)]
         public string PostalCode { get; set; }
 
         [Column("countryCode")]

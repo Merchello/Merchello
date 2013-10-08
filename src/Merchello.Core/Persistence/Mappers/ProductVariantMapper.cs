@@ -17,11 +17,13 @@ namespace Merchello.Core.Persistence.Mappers
         internal override void BuildMap()
         {
             CacheMap<ProductVariant, ProductVariantDto>(src => src.Key, dto => dto.Key);
+            CacheMap<ProductVariant, ProductVariantDto>(src => src.ProductKey, dto => dto.ProductKey);
             CacheMap<ProductVariant, ProductVariantDto>(src => src.Sku, dto => dto.Sku);
             CacheMap<ProductVariant, ProductVariantDto>(src => src.Name, dto => dto.Name);
             CacheMap<ProductVariant, ProductVariantDto>(src => src.Price, dto => dto.Price);
             CacheMap<ProductVariant, ProductVariantDto>(src => src.CostOfGoods, dto => dto.CostOfGoods);
             CacheMap<ProductVariant, ProductVariantDto>(src => src.SalePrice, dto => dto.SalePrice);
+            CacheMap<ProductVariant, ProductVariantDto>(src => src.OnSale, dto => dto.OnSale);
             CacheMap<ProductVariant, ProductVariantDto>(src => src.Weight, dto => dto.Weight);
             CacheMap<ProductVariant, ProductVariantDto>(src => src.Length, dto => dto.Length);
             CacheMap<ProductVariant, ProductVariantDto>(src => src.Height, dto => dto.Height);
@@ -34,7 +36,7 @@ namespace Merchello.Core.Persistence.Mappers
             CacheMap<ProductVariant, ProductVariantDto>(src => src.Shippable, dto => dto.Shippable);
             CacheMap<ProductVariant, ProductVariantDto>(src => src.Download, dto => dto.Download);
             CacheMap<ProductVariant, ProductVariantDto>(src => src.DownloadMediaId, dto => dto.DownloadMediaId);
-            CacheMap<ProductVariant, ProductVariantDto>(src => src.Template, dto => dto.Template);
+            CacheMap<ProductVariant, ProductVariantDto>(src => src.Master, dto => dto.Master);
             CacheMap<ProductVariant, ProductVariantDto>(src => src.CreateDate, dto => dto.CreateDate);
             CacheMap<ProductVariant, ProductVariantDto>(src => src.UpdateDate, dto => dto.UpdateDate);
         }

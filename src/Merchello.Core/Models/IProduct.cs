@@ -15,5 +15,14 @@ namespace Merchello.Core.Models
          /// The product's collection of options (Attribute selection)
          /// </summary>
          ProductOptionCollection ProductOptions { get; set; }
+
+        /// <summary>
+        /// Returns a collection of ProductOption given as list of attributes (choices)
+        /// </summary>
+        /// <param name="attributes">A collection of <see cref="IProductAttribute"/></param>
+        /// <remarks>
+        /// This is mainly used for suggesting sku defaults for ProductVariantes
+        /// </remarks>
+        IEnumerable<IProductOption> ProductOptionsForAttributes(IEnumerable<IProductAttribute> attributes);
     }
 }

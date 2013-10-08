@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Merchello.Tests.Base.Prototyping.Models;
@@ -14,7 +15,7 @@ namespace Merchello.Core.Models
     {
         private Guid _productKey;
         private ProductAttributeCollection _attibutes;
-        private bool _template;
+        private bool _master;
 
         internal ProductVariant(string name, string sku, decimal price)
             : this(Guid.Empty, new ProductAttributeCollection(), new InventoryCollection(), false, name, sku, price)
@@ -28,19 +29,24 @@ namespace Merchello.Core.Models
             : this(productKey, attributes, inventory, false, name, sku, price)
         { }
 
-        internal ProductVariant(Guid productKey, ProductAttributeCollection attributes, InventoryCollection inventory, bool template, string name, string sku, decimal price)
+        internal ProductVariant(Guid productKey, ProductAttributeCollection attributes, InventoryCollection inventory, bool master, string name, string sku, decimal price)
             : base(name, sku, price)
         {
             Mandate.ParameterNotNull(attributes, "attributes");
             Mandate.ParameterNotNull(inventory, "inventory");
             _productKey = productKey;
             _attibutes = attributes;
-            _template = template;
+            _master = master;
         }
 
-        private static readonly PropertyInfo ProductKeySelector = ExpressionHelper.GetPropertyInfo<ProductVariant, Guid>(x => x.ProductKey);
-        private static readonly PropertyInfo AttributesSelector = ExpressionHelper.GetPropertyInfo<ProductVariant, ProductAttributeCollection>(x => x.Attributes);
-        private static readonly PropertyInfo TemplateSelector = ExpressionHelper.GetPropertyInfo<ProductVariant, bool>(x => x.Template);
+        private static readonly PropertyInfo ProductKeySelector = ExpressionHelper.GetPropertyInfo<ProductVariant, Guid>(x => x.ProductKey);        
+        private static readonly PropertyInfo MasterSelector = ExpressionHelper.GetPropertyInfo<ProductVariant, bool>(x => x.Master);
+        private static readonly PropertyInfo AttributesChangedSelector = ExpressionHelper.GetPropertyInfo<ProductVariant, ProductAttributeCollection>(x => x.Attributes);
+
+        private void ProductAttributesChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            OnPropertyChanged(AttributesChangedSelector);
+        }
 
         /// <summary>
         /// The key for the defining product
@@ -71,28 +77,25 @@ namespace Merchello.Core.Models
             get { return _attibutes; }
             internal set
             {
-                SetPropertyValueAndDetectChanges(o =>
-                {
-                    _attibutes = value;
-                    return _attibutes;
-                }, _attibutes, AttributesSelector);
+                _attibutes = value;
+                _attibutes.CollectionChanged += ProductAttributesChanged;
             }
         }
 
         /// <summary>
-        /// The template associated with the Product
+        /// True/false indicating whether or not this variant is the "master" variant for the product.  All products (even products without options) have a master variant.
         /// </summary>
         [IgnoreDataMember]
-        internal bool Template
+        internal bool Master
         {
-            get { return _template; }
+            get { return _master; }
             set
             {
                 SetPropertyValueAndDetectChanges(o =>
                 {
-                    _template = value;
-                    return _template;
-                }, _template, TemplateSelector);
+                    _master = value;
+                    return _master;
+                }, _master, MasterSelector);
             }
         }  
     }

@@ -10,7 +10,7 @@ using NUnit.Framework;
 namespace Merchello.Tests.IntegrationTests.Services.Product
 {
     [TestFixture]
-    [Category("ProductService Integration")]
+    [Category("Service Integration")]
     public class ProductTests : ServiceIntegrationTestBase
     {
         private IProductService _productService;
@@ -123,7 +123,6 @@ namespace Merchello.Tests.IntegrationTests.Services.Product
             expected.ProductOptions["Material"].Choices.Add(new ProductAttribute("Wool", "Wool"));
 
             _productService.Save(expected);
-
 
             //// Act
             var retrieved = _productService.GetByKey(key);

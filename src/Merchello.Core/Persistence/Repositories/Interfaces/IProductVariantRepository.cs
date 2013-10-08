@@ -5,9 +5,9 @@ using Umbraco.Core.Persistence.Repositories;
 namespace Merchello.Core.Persistence.Repositories
 {
     /// <summary>
-    /// Marker interface for the address repository
+    /// Defines the product variant repository
     /// </summary>
-    public interface IProductRepository : IRepositoryQueryable<Guid, IProduct>
+    public interface IProductVariantRepository : IRepositoryQueryable<Guid, IProductVariant>
     {
         /// <summary>
         /// True/false indicating whether or not a sku is already exists in the database
@@ -15,6 +15,5 @@ namespace Merchello.Core.Persistence.Repositories
         /// <param name="sku">The sku to be tested</param>
         /// <returns></returns>
         bool SkuExists(string sku);
-
     }
 }

@@ -46,6 +46,11 @@ namespace Merchello.Core.Configuration
             get { return Section.Settings["DefaultApplyPaymentStrategy"].Value; }
         }
 
+        public string DefaultSkuSeparator
+        {
+            get { return Section.Settings["DefaultSkuSeparator"].Value; }
+        }
+
         /// <summary>
         /// Returns the path to the root of the application, by getting the path to where the assembly where this
         /// method is included is present, then traversing until it's past the /bin directory. Ie. this makes it work

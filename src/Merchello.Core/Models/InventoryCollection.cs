@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
+using Merchello.Core.Models;
 
 namespace Merchello.Tests.Base.Prototyping.Models
 {
