@@ -26,7 +26,7 @@ namespace Merchello.Core.Persistence.Factories
                 Shippable = dto.Shippable,
                 Download = dto.Download,
                 DownloadMediaId = dto.DownloadMediaId,
-                Template = dto.Template,
+                Master = dto.Master,
                 UpdateDate = dto.UpdateDate,
                 CreateDate = dto.CreateDate
             };
@@ -59,7 +59,7 @@ namespace Merchello.Core.Persistence.Factories
                 Shippable = entity.Shippable,
                 Download = entity.Download,
                 DownloadMediaId = entity.DownloadMediaId,
-                Template = ((ProductVariant)entity).Template,
+                Master = ((ProductVariant)entity).Master,
                 UpdateDate = entity.UpdateDate,
                 CreateDate = entity.CreateDate
             };

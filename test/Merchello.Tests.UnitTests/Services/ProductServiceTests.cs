@@ -16,7 +16,7 @@ namespace Merchello.Tests.UnitTests.Services
 
             Assert.NotNull(product);
             Assert.IsFalse(product.HasIdentity);
-            Assert.IsFalse(((Product)product).ProductVariantTemplate.HasIdentity);
+            Assert.IsFalse(((Product)product).ProductVariantMaster.HasIdentity);
         }
     }
 }

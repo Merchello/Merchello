@@ -17,25 +17,30 @@ namespace Merchello.Core.Services
     {
         private readonly IDatabaseUnitOfWorkProvider _uowProvider;
         private readonly RepositoryFactory _repositoryFactory;
-        //private readonly IEnumerable<>
- 
+        private readonly IProductVariantService _productVariantService;
+
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
 
         public ProductService()
-            : this(new RepositoryFactory())
+            : this(new RepositoryFactory(), new ProductVariantService())
         { }
 
-        public ProductService(RepositoryFactory repositoryFactory)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory)
+        public ProductService(RepositoryFactory repositoryFactory, IProductVariantService productVariantService)
+            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, productVariantService)
         { }
 
-        public ProductService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
+        public ProductService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, IProductVariantService productVariantService)
         {
             Mandate.ParameterNotNull(provider, "provider");
             Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
+            Mandate.ParameterNotNull(productVariantService, "productVariantService");
 
             _uowProvider = provider;
             _repositoryFactory = repositoryFactory;
+
+            // included the ProductVariantService so that events will trigger if variants
+            // need to be deleted due to a product save removing attributes
+            _productVariantService = productVariantService;
         }
 
         #region IProductService Members
@@ -118,6 +123,9 @@ namespace Merchello.Core.Services
             }
 
             if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IProduct>(product), this);
+
+            // verify that all variants of this product still have attributes - or delete them
+            _productVariantService.EnsureProductVariantsHaveAttributes(product);
         }
 
         /// <summary>
@@ -145,6 +153,9 @@ namespace Merchello.Core.Services
             }
 
             if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IProduct>(productArray), this);
+
+            // verify that all variants of these products still have attributes - or delete them
+            _productVariantService.EnsureProductVariantsHaveAttributes(productArray);
         }
 
         /// <summary>
@@ -236,10 +247,7 @@ namespace Merchello.Core.Services
         /// <returns></returns>
         public bool SkuExists(string sku)
         {
-            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
-            {
-                return repository.SkuExists(sku);
-            }
+            return _productVariantService.SkuExists(sku);
         }
 
         #endregion

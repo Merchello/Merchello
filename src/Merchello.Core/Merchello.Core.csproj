@@ -201,6 +201,7 @@
     <Compile Include="Persistence\Repositories\Interfaces\IProductVariantRepository.cs" />
     <Compile Include="Persistence\Repositories\ProductVariantRepository.cs" />
     <Compile Include="Services\Interfaces\IProductVariantService.cs" />
+    <Compile Include="Services\ProductVariantService.cs" />
     <Compile Include="Services\RegisteredGatewayProviderService.cs" />
     <Compile Include="Services\Interfaces\IRegisteredGatewayProviderService.cs" />
     <Compile Include="Strategies\IGatewayProviderStrategy.cs" />
@@ -341,6 +342,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -83,7 +83,7 @@ namespace Merchello.Core.Persistence.Repositories
                 .From<ProductDto>()
                 .InnerJoin<ProductVariantDto>()
                 .On<ProductDto, ProductVariantDto>(left => left.Key, right => right.ProductKey)
-                .Where<ProductVariantDto>(x => x.Template == false);
+                .Where<ProductVariantDto>(x => x.Master == false);
 
             return sql;
         }
@@ -97,9 +97,9 @@ namespace Merchello.Core.Persistence.Repositories
         {
             var list = new List<string>
             {
-                "DELETE merchInventory WHERE productVariantKey = @Id",
-                "DELETE merchProductVariant2ProductAttribute WHERE productVariantKey = @Id",
-                "DELETE merchProductVariant WHERE pk = @Id"
+                "DELETE FROM merchInventory WHERE productVariantKey = @Id",
+                "DELETE FROM merchProductVariant2ProductAttribute WHERE productVariantKey = @Id",
+                "DELETE FROM merchProductVariant WHERE pk = @Id"
             };
 
             return list;
@@ -110,6 +110,8 @@ namespace Merchello.Core.Persistence.Repositories
         {
             if (!MandateProductVariantRules(entity)) return;
 
+            Mandate.ParameterCondition(!SkuExists(entity.Sku), "The sku must be unique");
+
             ((Entity)entity).AddingEntity();
 
             var factory = new ProductVariantFactory();
@@ -119,12 +121,27 @@ namespace Merchello.Core.Persistence.Repositories
             Database.Insert(dto);
             entity.Key = dto.Key;
 
+            // insert associations for every attribute
+            foreach (var association in entity.Attributes.Select(att => new ProductVariant2ProductAttributeDto()
+            {
+                ProductVariantKey = entity.Key,
+                OptionId = att.OptionId,
+                ProductAttributeId = att.Id,
+                UpdateDate = DateTime.Now,
+                CreateDate = DateTime.Now
+            }))
+            {
+                Database.Insert(association);
+            }
+
             entity.ResetDirtyProperties();
         }
 
         protected override void PersistUpdatedItem(IProductVariant entity)
         {
             if (!MandateProductVariantRules(entity)) return;
+
+            Mandate.ParameterCondition(!SkuExists(entity.Sku, entity.Key), "Entity cannot be updated.  The sku already exists.");
 
             ((Entity)entity).UpdatingEntity();
 
@@ -146,8 +163,8 @@ namespace Merchello.Core.Persistence.Repositories
             // TODO these checks can probably be moved somewhere else but are here at the moment to enforce the rules as the API develops
             Mandate.ParameterCondition(entity.ProductKey != Guid.Empty, "productKey must be set");
 
-            if (!((ProductVariant)entity).Template)
-                Mandate.ParameterCondition(entity.Attributes.Any(), "Product variant must have attributes");
+            if (!((ProductVariant)entity).Master)
+                Mandate.ParameterCondition(entity.Attributes.Any(), "Product variant must have attributes");            
 
             return true;
         }
@@ -166,6 +183,22 @@ namespace Merchello.Core.Persistence.Repositories
 
             return Database.Fetch<ProductVariantDto>(sql).Any();
 
+        }
+
+        /// <summary>
+        /// True/false indicating whether or not a sku exists on a record other than the record with the id passed
+        /// </summary>
+        /// <param name="sku">The sku to be tested</param>
+        /// <param name="productVariantKey">The key of the <see cref="IProductVariant"/> to be excluded</param>
+        /// <returns></returns>
+        private bool SkuExists(string sku, Guid productVariantKey)
+        {
+            var sql = new Sql();
+            sql.Select("*")
+                .From<ProductVariantDto>()
+                .Where<ProductVariantDto>(x => x.Sku == sku && x.Key != productVariantKey);
+
+            return Database.Fetch<ProductAttributeDto>(sql).Any();
         }
 
     }

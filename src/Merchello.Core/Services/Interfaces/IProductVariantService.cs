@@ -6,8 +6,12 @@ using Umbraco.Core.Services;
 
 namespace Merchello.Core.Services
 {
+    /// <summary>
+    /// Defines a ProductVariantService
+    /// </summary>
     public interface IProductVariantService : IService
     {
+
         /// <summary>
         /// Creates a <see cref="IProductVariant"/> of the <see cref="IProduct"/> passed defined by the collection of <see cref="IProductAttribute"/>
         /// </summary>
@@ -16,6 +20,18 @@ namespace Merchello.Core.Services
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         /// <returns>Either a new <see cref="IProductVariant"/> or, if one already exists with associated attributes, the existing <see cref="IProductVariant"/></returns>
         IProductVariant CreateVariantWithKey(IProduct product, ProductAttributeCollection attributes, bool raiseEvents = true);
+
+        /// <summary>
+        /// Creates a <see cref="IProductVariant"/> of the <see cref="IProduct"/> passed defined by the collection of <see cref="IProductAttribute"/>
+        /// </summary>
+        /// <param name="product"><see cref="IProduct"/></param>
+        /// <param name="name">The name of the product variant</param>
+        /// <param name="sku">The unique sku of the product variant</param>
+        /// <param name="price">The price of the product variant</param>
+        /// <param name="attributes"><see cref="IProductVariant"/></param>
+        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        /// <returns>Either a new <see cref="IProductVariant"/> or, if one already exists with associated attributes, the existing <see cref="IProductVariant"/></returns>
+        IProductVariant CreateVariantWithKey(IProduct product, string name, string sku, decimal price, ProductAttributeCollection attributes, bool raiseEvents = true);
 
         /// <summary>
         /// Saves a single instance of a <see cref="IProductVariant"/>
@@ -30,6 +46,18 @@ namespace Merchello.Core.Services
         /// <param name="productVariantList">The collection of <see cref="IProductVariant"/> to be saved</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         void Save(IEnumerable<IProductVariant> productVariantList, bool raiseEvents = true);
+
+        /// <summary>
+        /// Ensures that all <see cref="IProductVariant"/> except the "master" variant for the <see cref="IProduct"/> have attributes
+        /// </summary>
+        /// <param name="product"><see cref="IProduct"/> to varify</param>
+        void EnsureProductVariantsHaveAttributes(IProduct product);
+
+        /// <summary>
+        /// Ensures that every <see cref="IProductVariant"/> for every <see cref="IProduct"/> (except it's master variant) in the collection has related <see cref="IProductAttribute"/>
+        /// </summary>
+        /// <param name="productList">The collection of <see cref="IProduct"/> to ensure</param>
+        void EnsureProductVariantsHaveAttributes(IEnumerable<IProduct> productList);
 
         /// <summary>
         /// Deletes a single <see cref="IProductVariant"/>
@@ -65,6 +93,14 @@ namespace Merchello.Core.Services
         /// <param name="productKey">Guid product key of the <see cref="IProductVariant"/> collection to retrieve</param>
         /// <returns>A collection of <see cref="IProductVariant"/></returns>
         IEnumerable<IProductVariant> GetByProductKey(Guid productKey);
+
+
+        /// <summary>
+        /// True/false indicating whether or not a sku is already exists in the database
+        /// </summary>
+        /// <param name="sku">The sku to be tested</param>
+        /// <returns></returns>
+        bool SkuExists(string sku);
 
     }
 }

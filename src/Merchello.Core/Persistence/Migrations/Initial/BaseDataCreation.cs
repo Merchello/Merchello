@@ -31,6 +31,8 @@ namespace Merchello.Core.Persistence.Migrations.Initial
             if (tableName.Equals("merchTypeField")) CreateDbTypeFieldData();
 
             if(tableName.Equals("merchInvoiceStatus")) CreateInvoiceStatusData();
+
+            if(tableName.Equals("merchWarehouse")) CreateWarehouseData();
             
         }
 
@@ -86,6 +88,12 @@ namespace Merchello.Core.Persistence.Migrations.Initial
             _database.Insert("merchInvoiceStatus", "id", new InvoiceStatusDto() { Alias = "completed", Name = "Completed", Active = true, Reportable = true, SortOrder = 3, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
             _database.Insert("merchInvoiceStatus", "id", new InvoiceStatusDto() { Alias = "cancelled", Name = "Cancelled", Active = true, Reportable = true, SortOrder = 4, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
             _database.Insert("merchInvoiceStatus", "id", new InvoiceStatusDto() { Alias = "fraud", Name = "Fraud", Active = true, Reportable = true, SortOrder = 5, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+        }
+
+
+        private void CreateWarehouseData()
+        {
+            _database.Insert("merchWarehouse", "id", new WarehouseDto() { Name = "Default Warehouse", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
         }
     }
 }

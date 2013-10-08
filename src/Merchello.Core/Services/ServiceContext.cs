@@ -18,6 +18,7 @@ namespace Merchello.Core.Services
         private Lazy<CustomerItemRegisterService> _basketService;    
         private Lazy<InvoiceService> _invoiceService;
         private Lazy<ProductService> _productService;
+        private Lazy<ProductVariantService> _productVariantService;
         private Lazy<ShippingService> _shipmentService;        
         private Lazy<WarehouseService> _warehouseService;
 
@@ -69,8 +70,11 @@ namespace Merchello.Core.Services
             //if(_paymentService == null)
             //    _paymentService = new Lazy<PaymentService>(() => new PaymentService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _applyPaymentStrategy.Value));
 
+            if(_productVariantService == null)
+                _productVariantService = new Lazy<ProductVariantService>(() => new ProductVariantService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+
             if(_productService == null)
-                _productService = new Lazy<ProductService>(() => new ProductService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+                _productService = new Lazy<ProductService>(() => new ProductService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _productVariantService.Value));
 
             if(_shipmentService == null)
                 _shipmentService = new Lazy<ShippingService>(() => new ShippingService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
@@ -114,6 +118,14 @@ namespace Merchello.Core.Services
         public IProductService ProductService
         {
             get { return _productService.Value;  }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IProductVariantService"/>
+        /// </summary>
+        public IProductVariantService ProductVariantService
+        {
+            get { return _productVariantService.Value; }
         }
 
         public IShippingService ShippingService

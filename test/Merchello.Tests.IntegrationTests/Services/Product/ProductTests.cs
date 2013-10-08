@@ -10,7 +10,7 @@ using NUnit.Framework;
 namespace Merchello.Tests.IntegrationTests.Services.Product
 {
     [TestFixture]
-    [Category("ProductService Integration")]
+    [Category("Service Integration")]
     public class ProductTests : ServiceIntegrationTestBase
     {
         private IProductService _productService;

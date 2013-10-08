@@ -87,7 +87,7 @@ namespace Merchello.Core.Persistence.Repositories
                .From<ProductDto>()
                .InnerJoin<ProductVariantDto>()
                .On<ProductDto, ProductVariantDto>(left => left.Key, right => right.ProductKey)
-               .Where<ProductVariantDto>(x => x.Template);
+               .Where<ProductVariantDto>(x => x.Master);
             
             return sql;
         }
@@ -128,11 +128,11 @@ namespace Merchello.Core.Persistence.Repositories
             Database.Insert(dto);
             entity.Key = dto.Key;
             
-            // setup and save the template (singular) variant
+            // setup and save the master (singular) variant
             dto.ProductVariantDto.ProductKey = dto.Key;
             Database.Insert(dto.ProductVariantDto);
 
-            ((Product) entity).ProductVariantTemplate.ProductKey = dto.ProductVariantDto.ProductKey;
+            ((Product) entity).ProductVariantMaster.ProductKey = dto.ProductVariantDto.ProductKey;
             
             // save the product options
             SaveProductOptions(entity);
@@ -299,7 +299,7 @@ namespace Merchello.Core.Persistence.Repositories
             }
 
             // now save the product attributes
-            SaveProductAttributes(productOption);
+            SaveProductAttributes(productOption);            
         }
 
         private ProductAttributeCollection GetProductAttributeCollection(int optionId)
@@ -324,37 +324,24 @@ namespace Merchello.Core.Persistence.Repositories
 
         private void DeleteProductAttribute(IProductAttribute productAttribute)
         {
-            // TODO : if no records remain in merchProductVariant2ProductAttribute we need to decide what happens to the variant
+            // TODO : this is sort of hacky but we want ProductVariant events to trigger on a ProductVariant Delete
+            // and we need to delete all variants that had the attribute that is to be deleted so the current solution
+            // is to delete all associations from the merchProductVariant2ProductAttribute table so that the follow up
+            // EnsureProductVariantsHaveAttributes called in the ProductVariantService cleans up the orphaned variants and fires off
+            // the events
             var sql = new Sql();
             sql.Select("*")
                .From<ProductVariant2ProductAttributeDto>()
                .Where<ProductVariant2ProductAttributeDto>(x => x.ProductAttributeId == productAttribute.Id);
 
             var dtos = Database.Fetch<ProductVariant2ProductAttributeDto>(sql);
-            var executeClauses = new List<string>();
-
-            // determine if there is a variant that had only this attribute
-            if (dtos.Any() && !dtos.Exists(x => x.ProductAttributeId != productAttribute.Id))
+            foreach (var dto in dtos)
             {
-                var productVariantKey = dtos.Select(x => x.ProductVariantKey).First();
-                //executeClauses.AddRange(
-                //    new []
-                //        {
-                //            "DELETE "
-                //        }
-                //    );
+                Database.Delete(dto);
             }
-
-            executeClauses.AddRange(
-                new [] {"DELETE FROM merchProductVariant2ProductAttribute WHERE productAttributeId = @Id",
-                    "DELETE FROM merchProductAttribute WHERE Id = @Id" });
-
-            foreach (var clause in executeClauses)
-            {
-                Database.Execute(clause, new { Id = productAttribute.Id });
-            }
-
             
+            Database.Execute("DELETE FROM merchProductAttribute WHERE Id = @Id", new { Id = productAttribute.Id });
+                      
         }
 
         private void SaveProductAttributes(IProductOption productOption)

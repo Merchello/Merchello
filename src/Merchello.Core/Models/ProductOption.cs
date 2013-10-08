@@ -38,7 +38,7 @@ namespace Merchello.Core.Models
         private static readonly PropertyInfo SortOrderSelector = ExpressionHelper.GetPropertyInfo<ProductOption, int>(x => x.SortOrder);
         private static readonly PropertyInfo ChoicesChangedSelector = ExpressionHelper.GetPropertyInfo<ProductOption, ProductAttributeCollection>(x => x.Choices);
 
-        protected void ProductAttributeChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void ProductAttributeChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             OnPropertyChanged(ChoicesChangedSelector);
         }

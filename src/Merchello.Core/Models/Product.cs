@@ -12,19 +12,19 @@ namespace Merchello.Core.Models
     internal class Product : KeyEntity, IProduct
     {
         
-        private readonly IProductVariant _variantTemplate;
+        private readonly IProductVariant _variantMaster;
         private ProductOptionCollection _productOptions;
 
-        public Product(IProductVariant variantTemplate)
-            : this(variantTemplate, new ProductOptionCollection())
+        public Product(IProductVariant variantMaster)
+            : this(variantMaster, new ProductOptionCollection())
         {}
 
-        public Product(IProductVariant variantTemplate, ProductOptionCollection productOptions)
+        public Product(IProductVariant variantMaster, ProductOptionCollection productOptions)
         {
-            Mandate.ParameterNotNull(variantTemplate, "groupTemplate");
+            Mandate.ParameterNotNull(variantMaster, "variantMaster");
             Mandate.ParameterNotNull(productOptions, "optionCollection");
 
-            _variantTemplate = variantTemplate;
+            _variantMaster = variantMaster;
             _productOptions = productOptions;
         }
 
@@ -34,6 +34,9 @@ namespace Merchello.Core.Models
         {
             OnPropertyChanged(ProductOptionsChangedSelector);
         }
+
+        #region Overrides IProduct
+        
 
         /// <summary>
         /// True/false indicating whether or not this group defines options
@@ -59,11 +62,28 @@ namespace Merchello.Core.Models
         }
 
 
-        #region Variant Template
-
-        internal IProductVariant ProductVariantTemplate
+        public IEnumerable<IProductOption> ProductOptionsForAttributes(IEnumerable<IProductAttribute> attributes)
         {
-            get { return _variantTemplate; }
+            var options = new List<IProductOption>();
+            foreach (var att in attributes)
+            {
+                options.AddRange(_productOptions.Where(option => OptionContainsAttribute(option, att)));
+            }
+            return options;
+        }
+
+        public static bool OptionContainsAttribute(IProductOption option, IProductAttribute attribute)
+        {
+            return option.Choices.Any(choice => choice.Id == attribute.Id);
+        }
+
+        #endregion
+
+        #region Overrides IProductBase
+
+        internal IProductVariant ProductVariantMaster
+        {
+            get { return _variantMaster; }
         }
 
         /// <summary>
@@ -72,7 +92,7 @@ namespace Merchello.Core.Models
         [DataMember]
         public Guid ProductVariantKey
         {
-            get { return _variantTemplate.Key; }
+            get { return _variantMaster.Key; }
         }
 
         /// <summary>
@@ -81,8 +101,8 @@ namespace Merchello.Core.Models
         [DataMember]
         public string Name
         {
-            get { return _variantTemplate.Name; }
-            set { _variantTemplate.Name = value; }
+            get { return _variantMaster.Name; }
+            set { _variantMaster.Name = value; }
         }
 
         /// <summary>
@@ -91,8 +111,8 @@ namespace Merchello.Core.Models
         [DataMember]
         public string Sku
         {
-            get { return _variantTemplate.Sku; }
-            set { _variantTemplate.Sku = value; }
+            get { return _variantMaster.Sku; }
+            set { _variantMaster.Sku = value; }
         }
 
         /// <summary>
@@ -101,8 +121,8 @@ namespace Merchello.Core.Models
         [DataMember]
         public decimal Price
         {
-            get { return _variantTemplate.Price; }
-            set { _variantTemplate.Price = value; }
+            get { return _variantMaster.Price; }
+            set { _variantMaster.Price = value; }
         }
 
         /// <summary>
@@ -111,8 +131,8 @@ namespace Merchello.Core.Models
         [DataMember]
         public decimal? CostOfGoods
         {
-            get { return _variantTemplate.CostOfGoods; }
-            set { _variantTemplate.CostOfGoods = value; }
+            get { return _variantMaster.CostOfGoods; }
+            set { _variantMaster.CostOfGoods = value; }
         }
 
         /// <summary>
@@ -121,8 +141,8 @@ namespace Merchello.Core.Models
         [DataMember]
         public decimal? SalePrice
         {
-            get { return _variantTemplate.SalePrice; }
-            set { _variantTemplate.SalePrice = value; }
+            get { return _variantMaster.SalePrice; }
+            set { _variantMaster.SalePrice = value; }
         }
 
         /// <summary>
@@ -131,8 +151,8 @@ namespace Merchello.Core.Models
         [DataMember]
         public bool OnSale
         {
-            get { return _variantTemplate.OnSale; }
-            set { _variantTemplate.OnSale = value; }
+            get { return _variantMaster.OnSale; }
+            set { _variantMaster.OnSale = value; }
         }
 
         /// <summary>
@@ -141,8 +161,8 @@ namespace Merchello.Core.Models
         [DataMember]
         public decimal? Weight
         {
-            get { return _variantTemplate.Weight; }
-            set { _variantTemplate.Weight = value; }
+            get { return _variantMaster.Weight; }
+            set { _variantMaster.Weight = value; }
         }
 
         /// <summary>
@@ -151,8 +171,8 @@ namespace Merchello.Core.Models
         [DataMember]
         public decimal? Length
         {
-            get { return _variantTemplate.Length; }
-            set { _variantTemplate.Length = value; }
+            get { return _variantMaster.Length; }
+            set { _variantMaster.Length = value; }
         }
 
         /// <summary>
@@ -161,8 +181,8 @@ namespace Merchello.Core.Models
         [DataMember]
         public decimal? Width
         {
-            get { return _variantTemplate.Width; }
-            set { _variantTemplate.Width = value; }
+            get { return _variantMaster.Width; }
+            set { _variantMaster.Width = value; }
         }
 
         /// <summary>
@@ -171,8 +191,8 @@ namespace Merchello.Core.Models
         [DataMember]
         public decimal? Height
         {
-            get { return _variantTemplate.Height; }
-            set { _variantTemplate.Height = value; }
+            get { return _variantMaster.Height; }
+            set { _variantMaster.Height = value; }
         }
 
         /// <summary>
@@ -181,8 +201,8 @@ namespace Merchello.Core.Models
         [DataMember]
         public string Barcode
         {
-            get { return _variantTemplate.Barcode; }
-            set { _variantTemplate.Barcode = value; }
+            get { return _variantMaster.Barcode; }
+            set { _variantMaster.Barcode = value; }
         }
 
         /// <summary>
@@ -191,8 +211,8 @@ namespace Merchello.Core.Models
         [DataMember]
         public bool Available
         {
-            get { return _variantTemplate.Available; }
-            set { _variantTemplate.Available = value; }
+            get { return _variantMaster.Available; }
+            set { _variantMaster.Available = value; }
         }
 
         /// <summary>
@@ -201,8 +221,8 @@ namespace Merchello.Core.Models
         [DataMember]
         public bool TrackInventory
         {
-            get { return _variantTemplate.TrackInventory; }
-            set { _variantTemplate.TrackInventory = value; }
+            get { return _variantMaster.TrackInventory; }
+            set { _variantMaster.TrackInventory = value; }
         }
 
         /// <summary>
@@ -211,8 +231,8 @@ namespace Merchello.Core.Models
         [DataMember]
         public bool OutOfStockPurchase
         {
-            get { return _variantTemplate.OutOfStockPurchase; }
-            set { _variantTemplate.OutOfStockPurchase = value; }
+            get { return _variantMaster.OutOfStockPurchase; }
+            set { _variantMaster.OutOfStockPurchase = value; }
         }
 
         /// <summary>
@@ -221,8 +241,8 @@ namespace Merchello.Core.Models
         [DataMember]
         public bool Taxable
         {
-            get { return _variantTemplate.Taxable; }
-            set { _variantTemplate.Taxable = value; }
+            get { return _variantMaster.Taxable; }
+            set { _variantMaster.Taxable = value; }
         }
 
         /// <summary>
@@ -231,8 +251,8 @@ namespace Merchello.Core.Models
         [DataMember]
         public bool Shippable
         {
-            get { return _variantTemplate.Shippable; }
-            set { _variantTemplate.Shippable = value; }
+            get { return _variantMaster.Shippable; }
+            set { _variantMaster.Shippable = value; }
         }
 
         /// <summary>
@@ -241,8 +261,8 @@ namespace Merchello.Core.Models
         [DataMember]
         public bool Download
         {
-            get { return _variantTemplate.Download; }
-            set { _variantTemplate.Download = value; }
+            get { return _variantMaster.Download; }
+            set { _variantMaster.Download = value; }
         }
 
         /// <summary>
@@ -251,8 +271,8 @@ namespace Merchello.Core.Models
         [DataMember]
         public int? DownloadMediaId
         {
-            get { return _variantTemplate.DownloadMediaId; }
-            set { _variantTemplate.DownloadMediaId = value; }
+            get { return _variantMaster.DownloadMediaId; }
+            set { _variantMaster.DownloadMediaId = value; }
         }
 
         /// <summary>
@@ -261,7 +281,7 @@ namespace Merchello.Core.Models
         [DataMember]
         public InventoryCollection Inventory
         {
-            get { return _variantTemplate.Inventory; }
+            get { return _variantMaster.Inventory; }
         }
 
         #endregion
@@ -269,20 +289,20 @@ namespace Merchello.Core.Models
         public override void ResetDirtyProperties()
         {
             base.ResetDirtyProperties();
-            _variantTemplate.ResetDirtyProperties();
+            _variantMaster.ResetDirtyProperties();
         }
 
         internal override void AddingEntity()
         {
             base.AddingEntity();
-            ((ProductVariant) _variantTemplate).Template = true;
-            ((ProductVariant) _variantTemplate).AddingEntity();
+            ((ProductVariant) _variantMaster).Master = true;
+            ((ProductVariant) _variantMaster).AddingEntity();
         }
 
         internal override void UpdatingEntity()
         {
             base.UpdatingEntity();
-            ((ProductVariant)_variantTemplate).UpdatingEntity();
+            ((ProductVariant)_variantMaster).UpdatingEntity();
         }
 
 
