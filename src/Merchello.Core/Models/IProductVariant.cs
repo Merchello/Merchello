@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Merchello.Core.Models
 {
@@ -19,7 +20,7 @@ namespace Merchello.Core.Models
         /// Designated options that make up this product
         /// e.g. for product T-Shirt -> attributes could be  Small, Black
         /// </remarks>
-        ProductAttributeCollection Attributes { get; }
+        IEnumerable<IProductAttribute> Attributes { get; }
 
         
     }

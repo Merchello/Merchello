@@ -16,7 +16,7 @@ namespace Merchello.Core.Persistence.Repositories
 {
     internal class ProductRepository : MerchelloPetaPocoRepositoryBase<Guid, IProduct>, IProductRepository
     {
-        private IProductVariantRepository _productVariantRepository;
+        private readonly IProductVariantRepository _productVariantRepository;
 
         public ProductRepository(IDatabaseUnitOfWork work, IProductVariantRepository productVariantRepository)
             : base(work)
@@ -50,6 +50,9 @@ namespace Merchello.Core.Persistence.Repositories
 
             // Build the list of options
             product.ProductOptions = GetProductOptionCollection(product.Key);
+
+            // Build the list of product variants
+            product.ProductVariants = GetProductVariantCollection(product.Key);
 
             product.ResetDirtyProperties();
 
@@ -100,8 +103,8 @@ namespace Merchello.Core.Persistence.Repositories
         protected override IEnumerable<string> GetDeleteClauses()
         {
             var list = new List<string>
-                {
-                    "DELETE FROM merchProductVariant2ProductAttribute WHERE productVariantKey IN (SELECT pk FROM merchProductVariant WHERE productKey = @Id)",
+                {                    
+                    "DELETE FROM merchProductVariant2ProductAttribute WHERE productVariantKey IN (SELECT pk FROM merchProductVariant WHERE productKey = @Id)",                    
                     @"DELETE FROM merchProductAttribute WHERE optionId IN 
                         (SELECT optionId FROM merchProductOption WHERE id IN 
                         (SELECT optionId FROM merchProduct2ProductOption WHERE productKey = @Id))",
@@ -204,11 +207,24 @@ namespace Merchello.Core.Persistence.Repositories
             return productOptions;
         }
 
+        private ProductVariantCollection GetProductVariantCollection(Guid productKey)
+        {
+            var collection = new ProductVariantCollection();
+            var query = Querying.Query<IProductVariant>.Builder.Where(x => x.ProductKey == productKey);
+            var variants = _productVariantRepository.GetByQuery(query);
+            foreach (var variant in variants)
+            {
+                if(variant != null) // todo why is this need?
+                collection.Add(variant);
+            }
+            return collection;
+        }
+
         private void DeleteProductOption(IProductOption option)
         {
             var executeClauses = new[]
                 {
-                    "DELETE FROM merchProductVariant2ProductAttribute WHERE optionId = @Id",
+                    "DELETE FROM merchProductVariant2ProductAttribute WHERE productVariantKey IN (SELECT productVariantKey FROM merchProductVariant2ProductAttribute WHERE optionId = @Id)",
                     "DELETE FROM merchProduct2ProductOption WHERE optionId = @Id",
                     "DELETE FROM merchProductAttribute WHERE optionId = @Id",
                     "DELETE FROM merchProductOption WHERE id = @Id"
@@ -329,17 +345,9 @@ namespace Merchello.Core.Persistence.Repositories
             // is to delete all associations from the merchProductVariant2ProductAttribute table so that the follow up
             // EnsureProductVariantsHaveAttributes called in the ProductVariantService cleans up the orphaned variants and fires off
             // the events
-            var sql = new Sql();
-            sql.Select("*")
-               .From<ProductVariant2ProductAttributeDto>()
-               .Where<ProductVariant2ProductAttributeDto>(x => x.ProductAttributeId == productAttribute.Id);
-
-            var dtos = Database.Fetch<ProductVariant2ProductAttributeDto>(sql);
-            foreach (var dto in dtos)
-            {
-                Database.Delete(dto);
-            }
-            
+           
+            Database.Execute("DELETE FROM merchProductVariant2ProductAttribute WHERE productVariantKey IN (SELECT productVariantKey FROM merchProductVariant2ProductAttribute WHERE productAttributeId = @Id)", 
+                new { Id = productAttribute.Id});
             Database.Execute("DELETE FROM merchProductAttribute WHERE Id = @Id", new { Id = productAttribute.Id });
                       
         }

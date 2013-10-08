@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -41,7 +42,7 @@ namespace Merchello.Core.Models
 
         private static readonly PropertyInfo ProductKeySelector = ExpressionHelper.GetPropertyInfo<ProductVariant, Guid>(x => x.ProductKey);        
         private static readonly PropertyInfo MasterSelector = ExpressionHelper.GetPropertyInfo<ProductVariant, bool>(x => x.Master);
-        private static readonly PropertyInfo AttributesChangedSelector = ExpressionHelper.GetPropertyInfo<ProductVariant, ProductAttributeCollection>(x => x.Attributes);
+        private static readonly PropertyInfo AttributesChangedSelector = ExpressionHelper.GetPropertyInfo<ProductVariant, ProductAttributeCollection>(x => x.ProductAttributes);
 
         private void ProductAttributesChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
@@ -72,10 +73,17 @@ namespace Merchello.Core.Models
         /// The collection of attributes that makes this variant different from other variants of the same product
         /// </summary>
         [DataMember]
-        public ProductAttributeCollection Attributes 
+        public IEnumerable<IProductAttribute> Attributes 
         {
             get { return _attibutes; }
-            internal set
+            
+        }
+
+        [IgnoreDataMember]
+        internal ProductAttributeCollection ProductAttributes
+        {
+            get { return _attibutes; }
+            set
             {
                 _attibutes = value;
                 _attibutes.CollectionChanged += ProductAttributesChanged;

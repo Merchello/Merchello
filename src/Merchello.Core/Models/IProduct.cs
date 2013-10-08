@@ -11,10 +11,18 @@ namespace Merchello.Core.Models
         /// </summary>
          bool DefinesOptions { get; }
 
-         /// <summary>
-         /// The product's collection of options (Attribute selection)
-         /// </summary>
-         ProductOptionCollection ProductOptions { get; set; }
+        /// <summary>
+        /// The product's collection of options (Attribute selection)
+        /// </summary>
+        ProductOptionCollection ProductOptions { get; set; }
+
+        /// <summary>
+        /// The product's collection of <see cref="IProductVariant"/>
+        /// </summary>
+        /// <remarks>
+        /// A product variant is the culmination of a product with product option choices selected
+        /// </remarks>
+        ProductVariantCollection ProductVariants { get; set; }
 
         /// <summary>
         /// Returns a collection of ProductOption given as list of attributes (choices)
