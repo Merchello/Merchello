@@ -291,6 +291,19 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
         #endregion
 
+        #region IProductVariant
+
+
+        /// <summary>
+        /// Gets the <see cref="IProductVariantService"/>
+        /// </summary>
+        public IProductVariantService ProductVariantService
+        {
+            get { return _serviceContext.ProductVariantService; }
+        }
+
+        #endregion
+
         #region IPayment
 
 

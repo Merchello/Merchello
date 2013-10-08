@@ -8,7 +8,7 @@ using Umbraco.Core.Persistence;
 namespace Merchello.Tests.IntegrationTests.Migration
 {
     [TestFixture]
-    public class InitialDataTests 
+    public class InitialDataTests
     {
         private BaseDataCreation _creation;
         private UmbracoDatabase _database;
@@ -20,7 +20,7 @@ namespace Merchello.Tests.IntegrationTests.Migration
             _database = worker.Database;
             _creation = new BaseDataCreation(_database);
         }
-        
+
         /// <summary>
         /// Test to verify Merchello 
         /// </summary>
@@ -28,8 +28,8 @@ namespace Merchello.Tests.IntegrationTests.Migration
         public void Can_Populate_typeFieldData_Into_merchTypeField()
         {
             //// Arrange
-            var expected = 21; 
-            
+            var expected = 21;
+
             //// Act
             _creation.InitializeBaseData("merchTypeField");
 
@@ -43,7 +43,7 @@ namespace Merchello.Tests.IntegrationTests.Migration
         public void Can_Populate_InvoiceStatusData_Into_merchInvoiceStatus()
         {
             //// Arrange
-            
+
 
             //// Act
             _creation.InitializeBaseData("merchInvoiceStatus");
@@ -56,6 +56,20 @@ namespace Merchello.Tests.IntegrationTests.Migration
             Assert.IsTrue(dtos.Last().Name == "Fraud");
             Assert.IsTrue(dtos.Last().SortOrder == 5);
         }
-     
-    }
+
+        [Test]
+        public void Can_Populate_DefaultWarehouse_Into_merchWarehouse()
+        {
+            //// Arrange
+            var expected = 1;
+
+            //// Act
+            _creation.InitializeBaseData("merchWarehouse");
+            var dtos = _database.Query<WarehouseDto>("SELECT * FROM merchWarehouse");
+
+            //// Assert
+            Assert.IsTrue(dtos.Any());
+        }
+
+}
 }

@@ -122,6 +122,8 @@ namespace Merchello.Core.Persistence.Repositories
 
         protected override void PersistDeletedItem(IWarehouse entity)
         {
+            Mandate.ParameterCondition(entity.Id != 1, "Cannot delete the default warehouse (id = 1)");
+
             var deletes = GetDeleteClauses();
             foreach (var delete in deletes)
             {

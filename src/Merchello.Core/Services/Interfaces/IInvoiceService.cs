@@ -10,7 +10,7 @@ using Umbraco.Core.Services;
 namespace Merchello.Core.Services
 {
     /// <summary>
-    /// Defines the AddressService, which provides access to operations involving <see cref="IInvoice"/>
+    /// Defines the InvoiceService, which provides access to operations involving <see cref="IInvoice"/>
     /// </summary>
     public interface IInvoiceService : IService
     {

@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Reflection;
 using System.Runtime.Serialization;
 using Merchello.Core.Models.EntityBase;
 
-namespace Merchello.Tests.Base.Prototyping.Models
+namespace Merchello.Core.Models
 {
     /// <summary>
     /// Defines product inventory for a warehouse
     /// </summary>
-    public interface IInventory
+    public interface IInventory : IIdEntity
     {
         /// <summary>
         /// The warehouse Id
@@ -33,17 +32,6 @@ namespace Merchello.Tests.Base.Prototyping.Models
         /// </summary>
         [DataMember]
         int LowCount { get; set; }
-
-        /// <summary>
-        /// The date the inventory record was last updated
-        /// </summary>
-        [DataMember]
-        DateTime UpdateDate { get; set; }
-
-        /// <summary>
-        /// The date the inventory record was created
-        /// </summary>
-        [DataMember]
-        DateTime CreateDate { get; set; }
+      
     }
 }

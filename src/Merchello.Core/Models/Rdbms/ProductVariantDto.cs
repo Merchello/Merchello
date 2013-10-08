@@ -87,9 +87,9 @@ namespace Merchello.Core.Models.Rdbms
         [NullSetting(NullSetting = NullSettings.Null)]
         public int? DownloadMediaId { get; set; }
 
-        [Column("template")]
+        [Column("master")]
         [Constraint(Default = "0")]
-        public bool Template { get; set; }
+        public bool Master { get; set; }
 
         [Column("updateDate")]
         [Constraint(Default = "getdate()")]

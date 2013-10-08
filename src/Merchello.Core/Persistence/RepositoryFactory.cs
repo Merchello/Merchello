@@ -94,7 +94,19 @@ namespace Merchello.Core.Persistence
         internal virtual IProductRepository CreateProductRepository(IDatabaseUnitOfWork uow)
         {
             return new ProductRepository(uow,
-                _disableAllCache ? (IRepositoryCacheProvider)NullCacheProvider.Current : RuntimeCacheProvider.Current);
+                _disableAllCache ? (IRepositoryCacheProvider)NullCacheProvider.Current : RuntimeCacheProvider.Current, 
+                CreateProductVariantRepository(uow));
+        }
+
+        /// <summary>
+        /// Returns an instance of the <see cref="IProductVariantRepository"/>
+        /// </summary>
+        /// <param name="uow"></param>
+        /// <returns></returns>
+        internal virtual IProductVariantRepository CreateProductVariantRepository(IDatabaseUnitOfWork uow)
+        {
+            return new ProductVariantRepository(uow,
+               _disableAllCache ? (IRepositoryCacheProvider)NullCacheProvider.Current : RuntimeCacheProvider.Current);
         }
 
         /// <summary>
