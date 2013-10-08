@@ -81,6 +81,9 @@ namespace Merchello.Core.Services
         {
             Mandate.ParameterNotNull(product, "product");
             Mandate.ParameterNotNull(attributes, "attributes");
+            Mandate.ParameterCondition(attributes.Count == product.ProductOptions.Count(x => x.Required), "An attribute must be assigned for every required option");            
+            // verify there is not already a variant with these attributes
+            Mandate.ParameterCondition(false == ProductVariantWithAttributesExists(product, attributes), "A ProductVariant already exists for the ProductAttributeCollection");
 
             var productVariant = new ProductVariant(product.Key, attributes, name, sku, price)
             {
@@ -119,6 +122,8 @@ namespace Merchello.Core.Services
 
             if(raiseEvents)
             Created.RaiseEvent(new Events.NewEventArgs<IProductVariant>(productVariant), this);
+
+            product.ProductVariants.Add(productVariant);
 
             return productVariant;
         }
@@ -187,11 +192,13 @@ namespace Merchello.Core.Services
         public void EnsureProductVariantsHaveAttributes(IProduct product)
         {
             var variants = GetByProductKey(product.Key);
-
-            foreach (var variant in variants.Where(variant => !variant.Attributes.Any()))
+            var productVariants = variants as IProductVariant[] ?? variants.ToArray();
+            if (!productVariants.Any()) return;
+            foreach (var variant in productVariants.Where(variant => !variant.Attributes.Any()))
             {
                 Delete(variant);
-            }
+                product.ProductVariants.Remove(variant.Sku);
+            }            
         }
 
         /// <summary>
@@ -295,8 +302,22 @@ namespace Merchello.Core.Services
         {
             using (var repository = _repositoryFactory.CreateProductVariantRepository(_uowProvider.GetUnitOfWork()))
             {
-                var query = Query<IProductVariant>.Builder.Where(x => x.ProductKey == productKey);
-                return repository.GetByQuery(query);
+                return repository.GetByProductKey(productKey);
+            }
+        }
+
+        /// <summary>
+        /// Compares the <see cref="ProductAttributeCollection"/> with other <see cref="IProductVariant"/>s of the <see cref="IProduct"/> pass
+        /// to determine if the a variant already exists with the attributes passed
+        /// </summary>
+        /// <param name="product">The <see cref="IProduct"/> to reference</param>
+        /// <param name="attributes"><see cref="ProductAttributeCollection"/> to compare</param>
+        /// <returns>True/false indicating whether or not a <see cref="IProductVariant"/> already exists with the <see cref="ProductAttributeCollection"/> passed</returns>
+        public bool ProductVariantWithAttributesExists(IProduct product, ProductAttributeCollection attributes)
+        {
+            using (var repository = _repositoryFactory.CreateProductVariantRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.ProductVariantWithAttributesExists(product, attributes);
             }
         }
 

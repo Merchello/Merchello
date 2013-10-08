@@ -12,13 +12,13 @@ using Umbraco.Core.Models.EntityBase;
 namespace Merchello.Core.Persistence.Caching
 {
     /// <summary>
-    /// The Runtime Cache provider looks up objects in the Runtime cache for fast retrieval
+    /// The Runtime Cache provider looks up objects in the Runtime cache for fast retrival
     /// </summary>
     /// <remarks>
     /// 
     /// If a web session is detected then the HttpRuntime.Cache will be used for the runtime cache, otherwise a custom
     /// MemoryCache instance will be used. It is important to use the HttpRuntime.Cache when a web session is detected so 
-    /// that the memory management of cache in IIS can be handled appropriately.
+    /// that the memory management of cache in IIS can be handled appopriately.
     /// 
     /// When a web sessions is detected we will pre-fix all HttpRuntime.Cache entries so that when we clear it we are only 
     /// clearing items that have been inserted by this provider.

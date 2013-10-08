@@ -146,6 +146,7 @@
     <Compile Include="Models\ProductAttributeCollection.cs" />
     <Compile Include="Models\ProductBase.cs" />
     <Compile Include="Models\ProductVariant.cs" />
+    <Compile Include="Models\ProductVariantCollection.cs" />
     <Compile Include="Models\Rdbms\AppliedPaymentDto.cs" />
     <Compile Include="Models\Rdbms\OrderItemDto.cs" />
     <Compile Include="Models\Rdbms\OrderStatusDto.cs" />

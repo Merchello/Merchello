@@ -11,15 +11,15 @@ namespace Merchello.Core.Models.Rdbms
     {
         [Column("productVariantKey")]
         [PrimaryKeyColumn(AutoIncrement = false, Name = "PK_merchProductVariant2ProductAttribute", OnColumns = "productVariantKey, optionId")]
-        [ForeignKey(typeof(ProductVariantDto), Name = "FK_merchProductVariant2ProductAttribute_merchOption", Column = "pk")]
+        [ForeignKey(typeof(ProductVariantDto), Name = "FK_merchProductVariant2ProductAttribute_merchProductVariant", Column = "pk")]
         public Guid ProductVariantKey { get; set; }
 
         [Column("optionId")]
-        [ForeignKey(typeof(ProductOptionDto), Name = "FK_merchProductActual2OProductAttribute_merchOption", Column = "id")]
+        [ForeignKey(typeof(ProductOptionDto), Name = "FK_merchProductVariant2ProductAttribute_merchProductOption", Column = "id")]
         public int OptionId { get; set; }
 
         [Column("productAttributeId")]
-        [ForeignKey(typeof(ProductAttributeDto), Name = "FK_merchProductActual2ProductAttribute_merchProductAttribute", Column = "id")]
+        [ForeignKey(typeof(ProductAttributeDto), Name = "FK_merchProductVariant2ProductAttribute_merchProductAttribute", Column = "id")]
         public int ProductAttributeId { get; set; }
 
         [Column("updateDate")]
@@ -30,5 +30,7 @@ namespace Merchello.Core.Models.Rdbms
         [Constraint(Default = "getdate()")]
         public DateTime CreateDate { get; set; }
 
+        [ResultColumn]
+        public ProductAttributeDto ProductAttributeDto { get; set; }
     }
 }

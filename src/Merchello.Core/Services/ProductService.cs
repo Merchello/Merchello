@@ -72,7 +72,6 @@ namespace Merchello.Core.Services
         /// <returns></returns>
         public IProduct CreateProductWithKey(string name, string sku, decimal price)
         {
-
             var templateVariant = new ProductVariant(name, sku, price);
             var product = new Product(templateVariant);
             if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<IProduct>(product), this))
@@ -126,6 +125,9 @@ namespace Merchello.Core.Services
 
             // verify that all variants of this product still have attributes - or delete them
             _productVariantService.EnsureProductVariantsHaveAttributes(product);
+
+            // save any remaining variants changes in the variants collection
+            _productVariantService.Save(product.ProductVariants);
         }
 
         /// <summary>
@@ -156,6 +158,12 @@ namespace Merchello.Core.Services
 
             // verify that all variants of these products still have attributes - or delete them
             _productVariantService.EnsureProductVariantsHaveAttributes(productArray);
+
+            // save any remaining variants changes in the variants collections
+            //foreach (var collection in productArray.Select(x => x.ProductVariants))
+            //{
+            //    _productVariantService.Save(collection);
+            //}
         }
 
         /// <summary>

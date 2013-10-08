@@ -13,7 +13,7 @@ namespace Merchello.Tests.UnitTests.Querying
 {
     [TestFixture]
     [Category("SqlSyntax")]
-    public class ProductSqlClausesTests  : BaseUsingSqlServerSyntax<IProductVariant>
+    public class ProductVariantSqlClausesTests  : BaseUsingSqlServerSyntax<IProductVariant>
     {
 
         [Test]
@@ -39,6 +39,5 @@ namespace Merchello.Tests.UnitTests.Querying
 
             Assert.That(sql.SQL, Is.EqualTo(expected.SQL));
         }
-
     }
 }
