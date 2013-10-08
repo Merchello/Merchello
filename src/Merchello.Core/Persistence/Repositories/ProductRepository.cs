@@ -315,7 +315,7 @@ namespace Merchello.Core.Persistence.Repositories
             }
 
             // now save the product attributes
-            SaveProductAttributes(productOption);            
+            SaveProductAttributes(product, productOption);            
         }
 
         private ProductAttributeCollection GetProductAttributeCollection(int optionId)
@@ -352,7 +352,7 @@ namespace Merchello.Core.Persistence.Repositories
                       
         }
 
-        private void SaveProductAttributes(IProductOption productOption)
+        private void SaveProductAttributes(IProduct product, IProductOption productOption)
         {
             if (!productOption.Choices.Any()) return;
 
