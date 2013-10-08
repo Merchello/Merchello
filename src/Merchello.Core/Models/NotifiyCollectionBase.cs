@@ -4,6 +4,11 @@ using System.Collections.Specialized;
 
 namespace Merchello.Core.Models
 {
+    /// <summary>
+    /// Defines an abstract class for key collections with notification events
+    /// </summary>
+    /// <typeparam name="TKey"></typeparam>
+    /// <typeparam name="TItem"></typeparam>
     public abstract class NotifiyCollectionBase<TKey, TItem> : KeyedCollection<TKey, TItem>, INotifyCollectionChanged
     {
         protected abstract override TKey GetKeyForItem(TItem item);

@@ -251,6 +251,7 @@
     <Compile Include="Gateway\GatewayProviderPrototyping.cs" />
     <Compile Include="LineItem\LineItemCollectionTest.cs" />
     <Compile Include="Mappers\MerchelloMapperTests.cs" />
+    <Compile Include="Models\ProductVariantTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Querying\AddressSqlClausesTests.cs" />
     <Compile Include="Querying\BasketSqlClausesTest.cs" />
@@ -258,7 +259,7 @@
     <Compile Include="Querying\InvoiceSqlClausesTest.cs" />
     <Compile Include="Querying\InvoiceStatusSqlClausesTests.cs" />
     <Compile Include="Querying\PaymentSqlClausesTests.cs" />
-    <Compile Include="Querying\ProductSqlClausesTests.cs" />
+    <Compile Include="Querying\ProductVariantSqlClausesTests.cs" />
     <Compile Include="Querying\RegisteredGatewayProviderSqlClausesTests.cs" />
     <Compile Include="Querying\ShipmentSqlClausesTest.cs" />
     <Compile Include="Querying\ShipMethodSqlClausesTests.cs" />

@@ -3,7 +3,7 @@ SELECT	*
 FROM	[dbo].[merchProduct]			T1
 JOIN	[dbo].[merchProductVariant]		T2
 ON		T1.pk = T2.productKey
-WHERE	T2.template = 1
+WHERE	T2.[master] = 1
 
 -- product options
 SELECT	*
@@ -17,3 +17,9 @@ SELECT	*
 FROM	merchProductAttribute			T1
 JOIN	merchProductOption				T2
 ON		T1.optionId = T2.id
+
+SELECT	*
+FROM	merchProductVariant
+
+SELECT *
+FROM	merchProductVariant2ProductAttribute

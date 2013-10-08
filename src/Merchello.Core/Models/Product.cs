@@ -14,25 +14,34 @@ namespace Merchello.Core.Models
         
         private readonly IProductVariant _variantMaster;
         private ProductOptionCollection _productOptions;
+        private ProductVariantCollection _productVariants;
 
         public Product(IProductVariant variantMaster)
-            : this(variantMaster, new ProductOptionCollection())
+            : this(variantMaster, new ProductOptionCollection(), new ProductVariantCollection())
         {}
 
-        public Product(IProductVariant variantMaster, ProductOptionCollection productOptions)
+        public Product(IProductVariant variantMaster, ProductOptionCollection productOptions, ProductVariantCollection productVariants)
         {
             Mandate.ParameterNotNull(variantMaster, "variantMaster");
             Mandate.ParameterNotNull(productOptions, "optionCollection");
+            Mandate.ParameterNotNull(productVariants, "productVariants");
 
             _variantMaster = variantMaster;
             _productOptions = productOptions;
+            _productVariants = productVariants;
         }
 
         private static readonly PropertyInfo ProductOptionsChangedSelector = ExpressionHelper.GetPropertyInfo<Product, ProductOptionCollection>(x => x.ProductOptions);
+        private static readonly PropertyInfo ProductVariantsChangedSelector = ExpressionHelper.GetPropertyInfo<Product, ProductVariantCollection>(x => x.ProductVariants);
 
-        protected void ProductOptionsChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void ProductOptionsChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             OnPropertyChanged(ProductOptionsChangedSelector);
+        }
+
+        private void ProductVariantsChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            OnPropertyChanged(ProductVariantsChangedSelector);
         }
 
         #region Overrides IProduct
@@ -61,6 +70,19 @@ namespace Merchello.Core.Models
             }
         }
 
+        /// <summary>
+        /// Product variants available for this product
+        /// </summary>
+        [DataMember]
+        public ProductVariantCollection ProductVariants
+        {
+            get { return _productVariants; }
+            set
+            {
+                _productVariants = value;
+                _productVariants.CollectionChanged += ProductVariantsChanged;
+            }
+        }
 
         public IEnumerable<IProductOption> ProductOptionsForAttributes(IEnumerable<IProductAttribute> attributes)
         {

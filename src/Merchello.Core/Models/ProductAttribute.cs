@@ -18,18 +18,23 @@ namespace Merchello.Core.Models
         private int _sortOrder;
 
         public ProductAttribute(string name, string sku)
-            : this(0, name, sku)
-        {}
-
-        public ProductAttribute(int optionId, string name, string sku)
         {
             Mandate.ParameterNotNullOrEmpty(name, "name");
             Mandate.ParameterNotNullOrEmpty(sku, "sku");
 
-            _optionId = optionId;
             _name = name;
             _sku = sku;
         }
+
+        //public ProductAttribute(int optionId, string name, string sku)
+        //{
+        //    Mandate.ParameterNotNullOrEmpty(name, "name");
+        //    Mandate.ParameterNotNullOrEmpty(sku, "sku");
+
+        //    _optionId = optionId;
+        //    _name = name;
+        //    _sku = sku;
+        //}
 
         private static readonly PropertyInfo OptionIdSelector = ExpressionHelper.GetPropertyInfo<ProductAttribute, int>(x => x.OptionId);
         private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<ProductAttribute, string>(x => x.Name);

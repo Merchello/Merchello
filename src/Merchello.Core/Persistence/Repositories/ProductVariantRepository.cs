@@ -37,9 +37,11 @@ namespace Merchello.Core.Persistence.Repositories
                 return null;
 
             var factory = new ProductVariantFactory();
-
             var variant = factory.BuildEntity(dto.ProductVariantDto);
 
+            // set the attributes collection
+            ((ProductVariant)variant).ProductAttributes = GetProductAttributeCollection(variant.ProductKey);
+            
             variant.ResetDirtyProperties();
 
             return variant;
@@ -72,7 +74,7 @@ namespace Merchello.Core.Persistence.Repositories
 
             var dtos = Database.Fetch<ProductDto, ProductVariantDto>(sql);
 
-            return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
+            return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.ProductVariantDto.Key));
 
         }
 
@@ -105,7 +107,6 @@ namespace Merchello.Core.Persistence.Repositories
             return list;
         }
       
-
         protected override void PersistNewItem(IProductVariant entity)
         {
             if (!MandateProductVariantRules(entity)) return;
@@ -154,11 +155,18 @@ namespace Merchello.Core.Persistence.Repositories
             entity.ResetDirtyProperties();
         }
 
+        protected override void PersistDeletedItem(IProductVariant entity)
+        {
+            var deletes = GetDeleteClauses();
+            foreach (var delete in deletes)
+            {
+                Database.Execute(delete, new { Id = entity.Key });
+            }
+        }
+
         #endregion
 
-
-
-        private bool MandateProductVariantRules(IProductVariant entity)
+        private static bool MandateProductVariantRules(IProductVariant entity)
         {
             // TODO these checks can probably be moved somewhere else but are here at the moment to enforce the rules as the API develops
             Mandate.ParameterCondition(entity.ProductKey != Guid.Empty, "productKey must be set");
@@ -167,6 +175,50 @@ namespace Merchello.Core.Persistence.Repositories
                 Mandate.ParameterCondition(entity.Attributes.Any(), "Product variant must have attributes");            
 
             return true;
+        }
+
+        private ProductAttributeCollection GetProductAttributeCollection(Guid productVariantKey)
+        {
+            var sql = new Sql();
+            sql.Select("*")
+                .From<ProductVariant2ProductAttributeDto>()
+                .InnerJoin<ProductAttributeDto>()
+                .On<ProductVariant2ProductAttributeDto, ProductAttributeDto>(left => left.ProductAttributeId, right => right.Id)
+                .Where<ProductVariant2ProductAttributeDto>(x => x.ProductVariantKey == productVariantKey);
+
+            var dtos = Database.Fetch<ProductVariant2ProductAttributeDto, ProductAttributeDto>(sql);
+
+            var factory = new ProductAttributeFactory();
+            var collection = new ProductAttributeCollection();
+            foreach (var dto in dtos)
+            {
+                collection.Add(factory.BuildEntity(dto.ProductAttributeDto));
+            }
+            return collection;
+        }
+
+        /// <summary>
+        /// Compares the <see cref="ProductAttributeCollection"/> with other <see cref="IProductVariant"/>s of the <see cref="IProduct"/> pass
+        /// to determine if the a variant already exists with the attributes passed
+        /// </summary>
+        /// <param name="product">The <see cref="IProduct"/> to reference</param>
+        /// <param name="attributes"><see cref="ProductAttributeCollection"/> to compare</param>
+        /// <returns>True/false indicating whether or not a <see cref="IProductVariant"/> already exists with the <see cref="ProductAttributeCollection"/> passed</returns>
+        public bool ProductVariantWithAttributesExists(IProduct product, ProductAttributeCollection attributes)
+        {
+            var variants = GetByProductKey(product.Key);
+            return variants.Any(x => x.Attributes.Equals(attributes));
+        }
+
+        /// <summary>
+        /// Gets a collection of <see cref="IProductVariant"/> object for a given Product Key
+        /// </summary>
+        /// <param name="productKey">Guid product key of the <see cref="IProductVariant"/> collection to retrieve</param>
+        /// <returns>A collection of <see cref="IProductVariant"/></returns>
+        public IEnumerable<IProductVariant> GetByProductKey(Guid productKey)
+        {
+            var query = Querying.Query<IProductVariant>.Builder.Where(x => x.ProductKey == productKey && ((ProductVariant)x).Master == false);            
+            return GetByQuery(query);
         }
 
         /// <summary>
