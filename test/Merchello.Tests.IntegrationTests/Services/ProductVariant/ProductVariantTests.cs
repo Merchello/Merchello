@@ -209,7 +209,7 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
             _productService.Save(_product);
 
             //// Assert
-            Assert.IsTrue(_product.ProductVariants.Any());
+            Assert.IsFalse(_product.ProductVariants.Any());
         }
     }
 }

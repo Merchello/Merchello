@@ -127,6 +127,7 @@ namespace Merchello.Core.Services
             _productVariantService.EnsureProductVariantsHaveAttributes(product);
 
             // save any remaining variants changes in the variants collection
+            if(product.ProductVariants.Any())
             _productVariantService.Save(product.ProductVariants);
         }
 
@@ -160,10 +161,10 @@ namespace Merchello.Core.Services
             _productVariantService.EnsureProductVariantsHaveAttributes(productArray);
 
             // save any remaining variants changes in the variants collections
-            //foreach (var collection in productArray.Select(x => x.ProductVariants))
-            //{
-            //    _productVariantService.Save(collection);
-            //}
+            foreach (var collection in productArray.Select(x => x.ProductVariants).Where(collection => collection.Any()))
+            {
+                _productVariantService.Save(collection);
+            }
         }
 
         /// <summary>
