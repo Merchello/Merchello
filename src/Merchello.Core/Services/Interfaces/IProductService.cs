@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Merchello.Core.Models;
 using Merchello.Core.Models.TypeFields;
-using Merchello.Tests.Base.Prototyping.Models;
 using Umbraco.Core.Services;
 
 namespace Merchello.Core.Services

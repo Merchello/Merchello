@@ -1,20 +1,74 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.Linq;
 using System.Runtime.Serialization;
-using Merchello.Core.Models;
+using System.Threading;
+using Umbraco.Core;
 
-namespace Merchello.Tests.Base.Prototyping.Models
+namespace Merchello.Core.Models
 {
     /// <summary>
     /// Defines a product variant inventory collection
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    public class InventoryCollection : KeyedCollection<string, IInventory>
+    public class InventoryCollection : NotifiyCollectionBase<string, IInventory>
     {
+        private readonly ReaderWriterLockSlim _addLocker = new ReaderWriterLockSlim();
+
         protected override string GetKeyForItem(IInventory item)
+        {
+            return MakeKeyForItem(item);
+        }
+
+
+        internal new void Add(IInventory item)
+        {
+            using (new WriteLock(_addLocker))
+            {
+                var key = GetKeyForItem(item);
+                if (!string.IsNullOrEmpty(key))
+                {
+                    var exists = Contains(MakeKeyForItem(item));
+                    if (exists)
+                    {
+                        return;
+                    }
+                }
+
+                // set the sort order to the next highest
+                base.Add(item);
+
+                OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));
+            }
+        }
+
+        public new bool Contains(string key)
+        {
+            return this.Any(x => MakeKeyForItem(x) == key);
+        }
+
+        public bool Contains(int warehouseId)
+        {
+            return this.Any(x => x.WarehouseId == warehouseId);
+        }
+
+        public override int IndexOfKey(string key)
+        {
+            for (var i = 0; i < Count; i++)
+            {
+                if (GetKeyForItem(this[i]) == key)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        public static string MakeKeyForItem(IInventory item)
         {
             return string.Format("{0}-{1}", item.ProductVariantKey, item.WarehouseId);
         }
+        
     }
 }

@@ -1,7 +1,8 @@
-﻿using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Reflection;
 using System.Runtime.Serialization;
 using Merchello.Core.Models.EntityBase;
-using Merchello.Tests.Base.Prototyping.Models;
 
 namespace Merchello.Core.Models
 {
@@ -29,7 +30,7 @@ namespace Merchello.Core.Models
         private bool _download;
         private int? _downloadMediaId;
 
-        private readonly InventoryCollection _inventory;
+        private InventoryCollection _inventory;
 
         protected ProductBase(string name, string sku, decimal price)
             : this(name, sku, price, new InventoryCollection())
@@ -65,10 +66,32 @@ namespace Merchello.Core.Models
         private static readonly PropertyInfo ShippableSelector = ExpressionHelper.GetPropertyInfo<ProductBase, bool>(x => x.Shippable);
         private static readonly PropertyInfo DownloadSelector = ExpressionHelper.GetPropertyInfo<ProductBase, bool>(x => x.Download);
         private static readonly PropertyInfo DownloadMediaIdSelector = ExpressionHelper.GetPropertyInfo<ProductBase, int?>(x => x.DownloadMediaId);
-        
+        private static readonly PropertyInfo InventoryChangedSelector = ExpressionHelper.GetPropertyInfo<ProductBase, InventoryCollection>(x => x.WarehouseInventory);
+
+        private void InventoryChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            OnPropertyChanged(InventoryChangedSelector);
+        }
 
 
+        /// <summary>
+        /// Product variant inventory accross all warehouses
+        /// </summary>
+        [DataMember]
+        public IEnumerable<IInventory> Inventory
+        {
+            get { return _inventory; }
+        }
 
+        [IgnoreDataMember]
+        internal InventoryCollection WarehouseInventory
+        {
+            get { return _inventory; }
+            set { 
+                _inventory = value;
+                _inventory.CollectionChanged += InventoryChanged;
+            }
+        }
 
         /// <summary>
         /// The sku associated with the Product
@@ -379,13 +402,5 @@ namespace Merchello.Core.Models
 
 
  
-        /// <summary>
-        /// Product variant inventory accross all warehouses
-        /// </summary>
-        [DataMember]
-        public InventoryCollection Inventory 
-        {
-            get { return _inventory; }
-        }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Merchello.Core.Models;
-using Merchello.Tests.Base.Prototyping.Models;
 using Merchello.Tests.Base.Services;
 using NUnit.Framework;
 

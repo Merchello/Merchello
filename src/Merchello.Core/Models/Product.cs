@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Merchello.Core.Models.EntityBase;
-using Merchello.Tests.Base.Prototyping.Models;
 
 namespace Merchello.Core.Models
 {
@@ -301,7 +300,7 @@ namespace Merchello.Core.Models
         /// Exposes the product variant template's inventory collection
         /// </summary>
         [DataMember]
-        public InventoryCollection Inventory
+        public IEnumerable<IInventory> Inventory
         {
             get { return _variantMaster.Inventory; }
         }

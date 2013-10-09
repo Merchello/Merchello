@@ -1,6 +1,5 @@
 ﻿using System;
 using Merchello.Core.Models;
-using Merchello.Tests.Base.Prototyping.Models;
 using NUnit.Framework;
 
 namespace Merchello.Tests.UnitTests.Models
