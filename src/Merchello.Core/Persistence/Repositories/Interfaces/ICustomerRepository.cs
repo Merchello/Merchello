@@ -10,15 +10,11 @@ namespace Merchello.Core.Persistence.Repositories
     /// </summary>
     public interface ICustomerRepository : IRepositoryQueryable<Guid, ICustomer>
     {
+        
         /// <summary>
         /// Returns a <see cref="ICustomer"/> given an Umbraco Member Id or null if not found.
         /// </summary>
         ICustomer GetByMemberId(int? memberId);
-
-        ///// <summary>
-        ///// Returns a <see cref="IPage"/> collection of customers
-        ///// </summary>
-        ///// <returns></returns>
-        //IPage<ICustomer> GetCustomersByPage();
+        
     }
 }

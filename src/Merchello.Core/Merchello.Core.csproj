@@ -201,6 +201,8 @@
     <Compile Include="Persistence\Mappers\ProductMapper.cs" />
     <Compile Include="Persistence\Mappers\ProductOptionMapper.cs" />
     <Compile Include="Persistence\Mappers\WarehouseMapper.cs" />
+    <Compile Include="Persistence\Repositories\AnonymousCustomerRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IAnonymousCustomerRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IProductVariantRepository.cs" />
     <Compile Include="Persistence\Repositories\ProductVariantRepository.cs" />
     <Compile Include="Services\Interfaces\IProductVariantService.cs" />
@@ -235,8 +237,8 @@
     <Compile Include="Persistence\Mappers\ShipmentMapper.cs" />
     <Compile Include="Persistence\Mappers\AppliedPaymentMapper.cs" />
     <Compile Include="Persistence\Querying\Query.cs" />
-    <Compile Include="Persistence\Repositories\CustomerItemRegisterRepository.cs" />
-    <Compile Include="Persistence\Repositories\Interfaces\ICustomerItemRegisterRepository.cs" />
+    <Compile Include="Persistence\Repositories\CustomerItemCacheRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\ICustomerItemCacheRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IInvoiceRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IPaymentRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IProductRepository.cs" />
@@ -247,8 +249,8 @@
     <Compile Include="Persistence\Repositories\ProductRepository.cs" />
     <Compile Include="Persistence\Repositories\ShipmentRepository.cs" />
     <Compile Include="Persistence\Repositories\WarehouseRepository.cs" />
-    <Compile Include="Services\CustomerItemRegisterService.cs" />
-    <Compile Include="Services\Interfaces\ICustomerItemRegisterService.cs" />
+    <Compile Include="Services\CustomerItemCacheService.cs" />
+    <Compile Include="Services\Interfaces\ICustomerItemCacheService.cs" />
     <Compile Include="Services\Interfaces\IInvoiceService.cs" />
     <Compile Include="Services\Interfaces\IProductService.cs" />
     <Compile Include="Services\Interfaces\IServiceContext.cs" />

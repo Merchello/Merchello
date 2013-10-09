@@ -117,16 +117,16 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         public ICustomerItemCache MakeExistingBasket(IConsumer consumer, CustomerItemCacheType customerItemCacheType)
         {
             var basket = MockBasketDataMaker.ConsumerBasketForInserting(consumer, customerItemCacheType);
-            CustomerItemRegisterService.Save(basket);
+            CustomerItemCacheService.Save(basket);
             return basket;
         }
 
         /// <summary>
         /// The basket service
         /// </summary>
-        public ICustomerItemRegisterService CustomerItemRegisterService
+        public ICustomerItemCacheService CustomerItemCacheService
         {
-            get { return _serviceContext.CustomerItemRegisterService; }
+            get { return _serviceContext.CustomerItemCacheService; }
         }
 
         #endregion

@@ -13,16 +13,16 @@ using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Core.Persistence.Repositories
 {
-    internal class CustomerItemRegisterRepository : MerchelloPetaPocoRepositoryBase<int, ICustomerItemCache>, ICustomerItemRegisterRepository
+    internal class CustomerItemCacheRepository : MerchelloPetaPocoRepositoryBase<int, ICustomerItemCache>, ICustomerItemCacheRepository
     {
 
-        public CustomerItemRegisterRepository(IDatabaseUnitOfWork work)
+        public CustomerItemCacheRepository(IDatabaseUnitOfWork work)
             : base(work)
         {
 
         }
 
-        public CustomerItemRegisterRepository(IDatabaseUnitOfWork work, IRepositoryCacheProvider cache)
+        public CustomerItemCacheRepository(IDatabaseUnitOfWork work, IRepositoryCacheProvider cache)
             : base(work, cache)
         {
         }

@@ -280,6 +280,7 @@
     <Compile Include="TypeFields\PaymentMethodTypeFieldTests.cs" />
     <Compile Include="TypeFields\ProductTypeFieldTests.cs" />
     <Compile Include="TypeFields\ShipMethodTypeFieldTests.cs" />
+    <Compile Include="Utilities\EncryptionHelperTests.cs" />
     <Compile Include="WebControllers\CustomerControllerTests.cs" />
     <Compile Include="WebControllers\InvoiceControllerTests.cs" />
   </ItemGroup>

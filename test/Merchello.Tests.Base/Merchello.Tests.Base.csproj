@@ -238,6 +238,7 @@
     <Compile Include="DataMakers\DataMakerMockSavedExtensions.cs" />
     <Compile Include="DataMakers\MockAnonymousCustomerDataMaker.cs" />
     <Compile Include="DataMakers\MockBasketDataMaker.cs" />
+    <Compile Include="DataMakers\MockHttpContext.cs" />
     <Compile Include="DataMakers\MockInvoiceDataMaker.cs" />
     <Compile Include="DataMakers\MockInvoiceItemDataMaker.cs" />
     <Compile Include="DataMakers\MockInvoiceStatusDataMaker.cs" />

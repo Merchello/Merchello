@@ -15,7 +15,7 @@ namespace Merchello.Core.Services
     public class ServiceContext : IServiceContext
     {        
         private Lazy<CustomerService> _customerService;
-        private Lazy<CustomerItemRegisterService> _basketService;    
+        private Lazy<CustomerItemCacheService> _basketService;    
         private Lazy<InvoiceService> _invoiceService;
         private Lazy<ProductService> _productService;
         private Lazy<ProductVariantService> _productVariantService;
@@ -46,7 +46,7 @@ namespace Merchello.Core.Services
                 _customerService = new Lazy<CustomerService>(() => new CustomerService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
             if(_basketService == null)
-                _basketService = new Lazy<CustomerItemRegisterService>(() => new CustomerItemRegisterService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+                _basketService = new Lazy<CustomerItemCacheService>(() => new CustomerItemCacheService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
 
             if(_invoiceService == null)
@@ -97,9 +97,9 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
-        /// Gets the <see cref="ICustomerItemRegisterService"/>
+        /// Gets the <see cref="ICustomerItemCacheService"/>
         /// </summary>
-        public ICustomerItemRegisterService CustomerItemRegisterService
+        public ICustomerItemCacheService CustomerItemCacheService
         {
             get { return _basketService.Value;  }
         }

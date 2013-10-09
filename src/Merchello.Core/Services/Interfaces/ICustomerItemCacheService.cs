@@ -9,7 +9,7 @@ namespace Merchello.Core.Services
     /// <summary>
     /// Defines the CustomerRegistryService, which provides access to operations involving <see cref="ICustomerItemCache"/>
     /// </summary>
-    public interface ICustomerItemRegisterService : IService
+    public interface ICustomerItemCacheService : IService
     {
         /// <summary>
         /// Creates a Basket

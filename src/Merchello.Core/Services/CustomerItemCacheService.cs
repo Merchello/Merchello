@@ -17,22 +17,22 @@ namespace Merchello.Core.Services
     /// <summary>
     /// Represents the Customer Registry Service 
     /// </summary>
-    public class CustomerItemRegisterService : ICustomerItemRegisterService
+    public class CustomerItemCacheService : ICustomerItemCacheService
     {
         private readonly IDatabaseUnitOfWorkProvider _uowProvider;
         private readonly RepositoryFactory _repositoryFactory;
 
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
-        public CustomerItemRegisterService()
+        public CustomerItemCacheService()
             : this(new RepositoryFactory())
         { }
 
-        public CustomerItemRegisterService(RepositoryFactory repositoryFactory)
+        public CustomerItemCacheService(RepositoryFactory repositoryFactory)
             : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory)
         { }
 
-        public CustomerItemRegisterService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
+        public CustomerItemCacheService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
         {
             Mandate.ParameterNotNull(provider, "provider");
             Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
@@ -259,32 +259,32 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Occurs before Create
         /// </summary>
-        public static event TypedEventHandler<ICustomerItemRegisterService, Events.NewEventArgs<ICustomerItemCache>> Creating; 
+        public static event TypedEventHandler<ICustomerItemCacheService, Events.NewEventArgs<ICustomerItemCache>> Creating; 
 
         /// <summary>
         /// Occurs after Create
         /// </summary>
-        public static event TypedEventHandler<ICustomerItemRegisterService, Events.NewEventArgs<ICustomerItemCache>> Created;
+        public static event TypedEventHandler<ICustomerItemCacheService, Events.NewEventArgs<ICustomerItemCache>> Created;
 
         /// <summary>
         /// Occurs before Save
         /// </summary>
-        public static event TypedEventHandler<ICustomerItemRegisterService, SaveEventArgs<ICustomerItemCache>> Saving;
+        public static event TypedEventHandler<ICustomerItemCacheService, SaveEventArgs<ICustomerItemCache>> Saving;
 
         /// <summary>
         /// Occurs after Save
         /// </summary>
-        public static event TypedEventHandler<ICustomerItemRegisterService, SaveEventArgs<ICustomerItemCache>> Saved;
+        public static event TypedEventHandler<ICustomerItemCacheService, SaveEventArgs<ICustomerItemCache>> Saved;
 
         /// <summary>
         /// Occurs before Delete
         /// </summary>		
-        public static event TypedEventHandler<ICustomerItemRegisterService, DeleteEventArgs<ICustomerItemCache>> Deleting;
+        public static event TypedEventHandler<ICustomerItemCacheService, DeleteEventArgs<ICustomerItemCache>> Deleting;
 
         /// <summary>
         /// Occurs after Delete
         /// </summary>
-        public static event TypedEventHandler<ICustomerItemRegisterService, DeleteEventArgs<ICustomerItemCache>> Deleted;
+        public static event TypedEventHandler<ICustomerItemCacheService, DeleteEventArgs<ICustomerItemCache>> Deleted;
 
 
 

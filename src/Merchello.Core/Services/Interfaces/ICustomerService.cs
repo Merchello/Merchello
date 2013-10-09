@@ -13,6 +13,13 @@ namespace Merchello.Core.Services
     /// </summary>
     public interface ICustomerService : IService
     {
+
+        /// <summary>
+        /// Crates an <see cref="IAnonymousCustomer"/> and saves it to the database
+        /// </summary>
+        /// <returns><see cref="IAnonymousCustomer"/></returns>
+        IAnonymousCustomer CreateAnonymousCustomerWithKey();
+
         /// <summary>
         /// Creates a customer
         /// </summary>

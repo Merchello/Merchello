@@ -42,6 +42,25 @@ namespace Merchello.Core.Services
         #region ICustomerService Members
 
         /// <summary>
+        /// Crates an <see cref="IAnonymousCustomer"/> and saves it to the database
+        /// </summary>
+        /// <returns><see cref="IAnonymousCustomer"/></returns>
+        public IAnonymousCustomer CreateAnonymousCustomerWithKey()
+        {
+            var anonymous = new AnonymousCustomer(DateTime.Now);
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreateAnonymousCustomerRepository(uow))
+                {
+                    repository.AddOrUpdate(anonymous);
+                    uow.Commit();
+                }
+            }
+            return anonymous;
+        }
+
+        /// <summary>
         /// Creates an <see cref="ICustomer"/> object
         /// </summary>
         /// <param name="firstName">First name of the customer</param>
