@@ -2,7 +2,7 @@
 using Umbraco.Core;
 using Umbraco.Web.Trees;
 using umbraco.BusinessLogic.Actions;
-using Umbraco.Web.Trees.Menu;
+using Umbraco.Web.Models.Trees;
 
 namespace Merchello.Web.UI.Trees
 {
@@ -47,6 +47,8 @@ namespace Merchello.Web.UI.Trees
             return collection;
         }
 
+        // TODO : Umbraco Refactored the TreeNodeController and it's underlying collections.  This
+        // TODO : broke with the introduction of the Umbraco Nightly Build 111
         protected override MenuItemCollection GetMenuForNode(string id, FormDataCollection queryStrings)
         {
             var menu = new MenuItemCollection();
@@ -54,18 +56,18 @@ namespace Merchello.Web.UI.Trees
             if (id == Constants.System.Root.ToInvariantString())
             {
                 // root actions              
-                menu.AddMenuItem<RefreshNode, ActionRefresh>(true);
+                //menu.AddMenuItem<RefreshNode, ActionRefresh>(true);
                 return menu;
             }
             else if (id == "catalog")
             {
                 //create product
-                menu.AddMenuItem<MerchelloActionNewProduct>();
+                //menu.AddMenuItem<MerchelloActionNewProduct>();
             }
             else
             {
                 //only have refres for each node
-                menu.AddMenuItem<RefreshNode, ActionRefresh>(true);
+                //menu.AddMenuItem<RefreshNode, ActionRefresh>(true);
             }
 
             return menu;

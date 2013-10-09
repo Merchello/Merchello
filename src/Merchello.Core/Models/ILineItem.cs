@@ -7,15 +7,6 @@ namespace Merchello.Core.Models
 {
     public interface ILineItem : IIdEntity
     {
-        /// <summary>
-        /// The id of the line item parent
-        /// </summary>
-        /// <remarks>
-        /// Children of this line item would represent an itemization of the line item itself.
-        /// Example would be sales of kits or a break down of sales tax.
-        /// </remarks>
-        [DataMember]
-        int? ParentId { get; set; }
 
         /// <summary>
         /// The ContainerId of the container collection

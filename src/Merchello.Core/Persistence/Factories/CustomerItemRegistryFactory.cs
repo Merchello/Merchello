@@ -3,11 +3,11 @@ using Merchello.Core.Models.Rdbms;
 
 namespace Merchello.Core.Persistence.Factories
 {
-    internal class CustomerItemRegistryFactory : IEntityFactory<ICustomerItemRegister, CustomerItemRegisterDto>
+    internal class CustomerItemRegistryFactory : IEntityFactory<ICustomerItemCache, CustomerItemCacheDto>
     {
-        public ICustomerItemRegister BuildEntity(CustomerItemRegisterDto dto)
+        public ICustomerItemCache BuildEntity(CustomerItemCacheDto dto)
         {
-            var customerRegistry = new CustomerItemRegister(dto.ConsumerKey, dto.RegisterTfKey)
+            var customerRegistry = new CustomerItemCache(dto.ConsumerKey, dto.ItemCacheTfKey)
             {
                 Id = dto.Id,
                 UpdateDate = dto.UpdateDate,
@@ -19,13 +19,13 @@ namespace Merchello.Core.Persistence.Factories
             return customerRegistry;
         }
 
-        public CustomerItemRegisterDto BuildDto(ICustomerItemRegister entity)
+        public CustomerItemCacheDto BuildDto(ICustomerItemCache entity)
         {
-            var dto = new CustomerItemRegisterDto()
+            var dto = new CustomerItemCacheDto()
             {
                 Id = entity.Id,
                 ConsumerKey = entity.ConsumerKey,
-                RegisterTfKey = entity.RegisterTfKey,
+                ItemCacheTfKey = entity.ItemCacheTfKey,
                 UpdateDate = entity.UpdateDate,
                 CreateDate = entity.CreateDate
             };

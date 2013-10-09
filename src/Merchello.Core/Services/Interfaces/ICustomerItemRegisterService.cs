@@ -7,82 +7,82 @@ using Umbraco.Core.Services;
 namespace Merchello.Core.Services
 {
     /// <summary>
-    /// Defines the CustomerRegistryService, which provides access to operations involving <see cref="ICustomerItemRegister"/>
+    /// Defines the CustomerRegistryService, which provides access to operations involving <see cref="ICustomerItemCache"/>
     /// </summary>
     public interface ICustomerItemRegisterService : IService
     {
         /// <summary>
         /// Creates a Basket
         /// </summary>
-        ICustomerItemRegister CreateCustomerItemRegister(IConsumer consumer, CustomerItemRegisterType customerItemRegisterType);
+        ICustomerItemCache CreateCustomerItemRegister(IConsumer consumer, CustomerItemCacheType customerItemCacheType);
 
         /// <summary>
-        /// Saves a single <see cref="ICustomerItemRegister"/> object
+        /// Saves a single <see cref="ICustomerItemCache"/> object
         /// </summary>
-        /// <param name="customerItemRegister">The <see cref="ICustomerItemRegister"/> to save</param>
+        /// <param name="customerItemCache">The <see cref="ICustomerItemCache"/> to save</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        void Save(ICustomerItemRegister customerItemRegister, bool raiseEvents = true);
+        void Save(ICustomerItemCache customerItemCache, bool raiseEvents = true);
 
         /// <summary>
-        /// Saves a collection of <see cref="ICustomerItemRegister"/> objects
+        /// Saves a collection of <see cref="ICustomerItemCache"/> objects
         /// </summary>
         /// <param name="customerRegistries"></param>
         /// <param name="raiseEvents"></param>
-        void Save(IEnumerable<ICustomerItemRegister> customerRegistries, bool raiseEvents = true);
+        void Save(IEnumerable<ICustomerItemCache> customerRegistries, bool raiseEvents = true);
 
         /// <summary>
-        /// Deletes a single <see cref="ICustomerItemRegister"/> object
+        /// Deletes a single <see cref="ICustomerItemCache"/> object
         /// </summary>
-        /// <param name="customerItemRegister"><see cref="ICustomerItemRegister"/> to delete</param>
+        /// <param name="customerItemCache"><see cref="ICustomerItemCache"/> to delete</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        void Delete(ICustomerItemRegister customerItemRegister, bool raiseEvents = true);
+        void Delete(ICustomerItemCache customerItemCache, bool raiseEvents = true);
 
         /// <summary>
         /// Deletes a collection of <see cref="IAddress"/> objects
         /// </summary>
-        /// <param name="customerRegistries">Collection of <see cref="ICustomerItemRegister"/> to delete</param>
+        /// <param name="customerRegistries">Collection of <see cref="ICustomerItemCache"/> to delete</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        void Delete(IEnumerable<ICustomerItemRegister> customerRegistries, bool raiseEvents = true);
+        void Delete(IEnumerable<ICustomerItemCache> customerRegistries, bool raiseEvents = true);
 
         /// <summary>
-        /// Gets an <see cref="ICustomerItemRegister"/> object by its Id
+        /// Gets an <see cref="ICustomerItemCache"/> object by its Id
         /// </summary>
         /// <param name="id">int Id of the Address to retrieve</param>
-        /// <returns><see cref="ICustomerItemRegister"/></returns>
-        ICustomerItemRegister GetById(int id);
+        /// <returns><see cref="ICustomerItemCache"/></returns>
+        ICustomerItemCache GetById(int id);
 
         /// <summary>
-        /// Gets a collection of <see cref="ICustomerItemRegister"/> objects by the <see cref="IConsumer"/>
+        /// Gets a collection of <see cref="ICustomerItemCache"/> objects by the <see cref="IConsumer"/>
         /// </summary>
         /// <param name="consumer"></param>
         /// <returns></returns>
-        IEnumerable<ICustomerItemRegister> GetRegisterByConsumer(IConsumer consumer);
+        IEnumerable<ICustomerItemCache> GetRegisterByConsumer(IConsumer consumer);
 
         /// <summary>
         /// Returns the consumer's registry of a given type
         /// </summary>
         /// <param name="consumer"><see cref="IConsumer"/></param>
         /// <param name="registerTfKey"><see cref="ITypeField"/>.TypeKey</param>
-        /// <returns><see cref="ICustomerItemRegister"/></returns>
+        /// <returns><see cref="ICustomerItemCache"/></returns>
         /// <remarks>
         /// Public use of this method is intended to access CustomerRegistryType.Custom records
         /// </remarks>
-        ICustomerItemRegister GetRegisterByConsumer(IConsumer consumer, Guid registerTfKey);
+        ICustomerItemCache GetRegisterByConsumer(IConsumer consumer, Guid registerTfKey);
 
         /// <summary>
-        /// Gets an <see cref="ICustomerItemRegister"/> object by the <see cref="IConsumer"/>
+        /// Gets an <see cref="ICustomerItemCache"/> object by the <see cref="IConsumer"/>
         /// </summary>
         /// <param name="consumer">The <see cref="IConsumer"/> object</param>
-        /// <param name="customerItemRegisterType"></param>
-        /// <returns><see cref="ICustomerItemRegister"/></returns>
-        ICustomerItemRegister GetRegisterByConsumer(IConsumer consumer, CustomerItemRegisterType customerItemRegisterType);
+        /// <param name="customerItemCacheType"></param>
+        /// <returns><see cref="ICustomerItemCache"/></returns>
+        ICustomerItemCache GetRegisterByConsumer(IConsumer consumer, CustomerItemCacheType customerItemCacheType);
             
         /// <summary>
-        /// Gets list of <see cref="ICustomerItemRegister"/> objects given a list of Ids
+        /// Gets list of <see cref="ICustomerItemCache"/> objects given a list of Ids
         /// </summary>
         /// <param name="ids">List of int Id for customer registries to retrieve</param>
-        /// <returns>List of <see cref="ICustomerItemRegister"/></returns>
-        IEnumerable<ICustomerItemRegister> GetByIds(IEnumerable<int> ids);
+        /// <returns>List of <see cref="ICustomerItemCache"/></returns>
+        IEnumerable<ICustomerItemCache> GetByIds(IEnumerable<int> ids);
 
     }
 }

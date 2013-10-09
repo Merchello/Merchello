@@ -46,15 +46,15 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Creates a basket for a consumer with a given type
         /// </summary>
-        public ICustomerItemRegister CreateCustomerItemRegister(IConsumer consumer, CustomerItemRegisterType customerItemRegisterType)
+        public ICustomerItemCache CreateCustomerItemRegister(IConsumer consumer, CustomerItemCacheType customerItemCacheType)
         {
 
             // determine if the consumer already has a registry of this type, if so return it.
-            var registry = GetRegisterByConsumer(consumer, customerItemRegisterType);
+            var registry = GetRegisterByConsumer(consumer, customerItemCacheType);
             if (registry != null) return registry;
 
-            registry = new CustomerItemRegister(consumer.Key, customerItemRegisterType);
-            if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<ICustomerItemRegister>(registry), this))
+            registry = new CustomerItemCache(consumer.Key, customerItemCacheType);
+            if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<ICustomerItemCache>(registry), this))
             {
                 //registry.WasCancelled = true;
                 return registry;
@@ -63,43 +63,43 @@ namespace Merchello.Core.Services
             registry.ConsumerKey = consumer.Key;
             
 
-            Created.RaiseEvent(new Events.NewEventArgs<ICustomerItemRegister>(registry), this);
+            Created.RaiseEvent(new Events.NewEventArgs<ICustomerItemCache>(registry), this);
 
             return registry;
         }
 
         /// <summary>
-        /// Saves a single <see cref="ICustomerItemRegister"/> object
+        /// Saves a single <see cref="ICustomerItemCache"/> object
         /// </summary>
-        /// <param name="customerItemRegister">The <see cref="ICustomerItemRegister"/> to save</param>
+        /// <param name="customerItemCache">The <see cref="ICustomerItemCache"/> to save</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events.</param>
-        public void Save(ICustomerItemRegister customerItemRegister, bool raiseEvents = true)
+        public void Save(ICustomerItemCache customerItemCache, bool raiseEvents = true)
         {
-            if (raiseEvents) Saving.RaiseEvent(new SaveEventArgs<ICustomerItemRegister>(customerItemRegister), this);
+            if (raiseEvents) Saving.RaiseEvent(new SaveEventArgs<ICustomerItemCache>(customerItemCache), this);
 
             using (new WriteLock(Locker))
             {
                 var uow = _uowProvider.GetUnitOfWork();
                 using (var repository = _repositoryFactory.CreateCustomerItemRegisterRepository(uow))
                 {
-                    repository.AddOrUpdate(customerItemRegister);
+                    repository.AddOrUpdate(customerItemCache);
                     uow.Commit();
                 }
 
-                if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<ICustomerItemRegister>(customerItemRegister), this);
+                if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<ICustomerItemCache>(customerItemCache), this);
             }
         }
 
         /// <summary>
-        /// Saves a collection of <see cref="ICustomerItemRegister"/> objects.
+        /// Saves a collection of <see cref="ICustomerItemCache"/> objects.
         /// </summary>
-        /// <param name="customerRegistries">Collection of <see cref="CustomerItemRegister"/> to save</param>
+        /// <param name="customerRegistries">Collection of <see cref="CustomerItemCache"/> to save</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        public void Save(IEnumerable<ICustomerItemRegister> customerRegistries, bool raiseEvents = true)
+        public void Save(IEnumerable<ICustomerItemCache> customerRegistries, bool raiseEvents = true)
         {
-            var basketArray = customerRegistries as ICustomerItemRegister[] ?? customerRegistries.ToArray();
+            var basketArray = customerRegistries as ICustomerItemCache[] ?? customerRegistries.ToArray();
 
-            if (raiseEvents) Saving.RaiseEvent(new SaveEventArgs<ICustomerItemRegister>(basketArray), this);
+            if (raiseEvents) Saving.RaiseEvent(new SaveEventArgs<ICustomerItemCache>(basketArray), this);
 
             using (new WriteLock(Locker))
             {
@@ -114,40 +114,40 @@ namespace Merchello.Core.Services
                 }
             }
 
-            if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<ICustomerItemRegister>(basketArray), this);
+            if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<ICustomerItemCache>(basketArray), this);
         }
 
         /// <summary>
-        /// Deletes a single <see cref="ICustomerItemRegister"/> object
+        /// Deletes a single <see cref="ICustomerItemCache"/> object
         /// </summary>
-        /// <param name="customerItemRegister">The <see cref="ICustomerItemRegister"/> to delete</param>
+        /// <param name="customerItemCache">The <see cref="ICustomerItemCache"/> to delete</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        public void Delete(ICustomerItemRegister customerItemRegister, bool raiseEvents = true)
+        public void Delete(ICustomerItemCache customerItemCache, bool raiseEvents = true)
         {
-            if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<ICustomerItemRegister>(customerItemRegister), this);
+            if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<ICustomerItemCache>(customerItemCache), this);
 
             using (new WriteLock(Locker))
             {
                 var uow = _uowProvider.GetUnitOfWork();
                 using (var repository = _repositoryFactory.CreateCustomerItemRegisterRepository(uow))
                 {
-                    repository.Delete(customerItemRegister);
+                    repository.Delete(customerItemCache);
                     uow.Commit();
                 }
             }
-            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<ICustomerItemRegister>(customerItemRegister), this);
+            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<ICustomerItemCache>(customerItemCache), this);
         }
 
         /// <summary>
-        /// Deletes a collection <see cref="ICustomerItemRegister"/> objects
+        /// Deletes a collection <see cref="ICustomerItemCache"/> objects
         /// </summary>
-        /// <param name="customerRegistries">Collection of <see cref="ICustomerItemRegister"/> to delete</param>
+        /// <param name="customerRegistries">Collection of <see cref="ICustomerItemCache"/> to delete</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        public void Delete(IEnumerable<ICustomerItemRegister> customerRegistries, bool raiseEvents = true)
+        public void Delete(IEnumerable<ICustomerItemCache> customerRegistries, bool raiseEvents = true)
         {
-            var basketArray = customerRegistries as ICustomerItemRegister[] ?? customerRegistries.ToArray();
+            var basketArray = customerRegistries as ICustomerItemCache[] ?? customerRegistries.ToArray();
 
-            if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<ICustomerItemRegister>(basketArray), this);
+            if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<ICustomerItemCache>(basketArray), this);
 
             using (new WriteLock(Locker))
             {
@@ -162,15 +162,15 @@ namespace Merchello.Core.Services
                 }
             }
 
-            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<ICustomerItemRegister>(basketArray), this);
+            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<ICustomerItemCache>(basketArray), this);
         }
 
         /// <summary>
         /// Gets a Basket by its unique id - pk
         /// </summary>
         /// <param name="id">int Id for the Basket</param>
-        /// <returns><see cref="ICustomerItemRegister"/></returns>
-        public ICustomerItemRegister GetById(int id)
+        /// <returns><see cref="ICustomerItemCache"/></returns>
+        public ICustomerItemCache GetById(int id)
         {
             using (var repository = _repositoryFactory.CreateCustomerItemRegisterRepository(_uowProvider.GetUnitOfWork()))
             {
@@ -183,7 +183,7 @@ namespace Merchello.Core.Services
         /// </summary>
         /// <param name="ids">List of unique keys</param>
         /// <returns></returns>
-        public IEnumerable<ICustomerItemRegister> GetByIds(IEnumerable<int> ids)
+        public IEnumerable<ICustomerItemCache> GetByIds(IEnumerable<int> ids)
         {
             using (var repository = _repositoryFactory.CreateCustomerItemRegisterRepository(_uowProvider.GetUnitOfWork()))
             {
@@ -194,9 +194,9 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Returns the consumer's basket of a given type
         /// </summary>
-        public ICustomerItemRegister GetRegisterByConsumer(IConsumer consumer, CustomerItemRegisterType customerItemRegisterType)
+        public ICustomerItemCache GetRegisterByConsumer(IConsumer consumer, CustomerItemCacheType customerItemCacheType)
         {
-            var typeKey = EnumTypeFieldConverter.CustomerItemRegistry.GetTypeField(customerItemRegisterType).TypeKey;
+            var typeKey = EnumTypeFieldConverter.CustomerItemItemCache.GetTypeField(customerItemCacheType).TypeKey;
             return GetRegisterByConsumer(consumer, typeKey);
         }
 
@@ -205,11 +205,11 @@ namespace Merchello.Core.Services
         /// </summary>
         /// <param name="consumer"></param>
         /// <returns></returns>
-        public IEnumerable<ICustomerItemRegister> GetRegisterByConsumer(IConsumer consumer)
+        public IEnumerable<ICustomerItemCache> GetRegisterByConsumer(IConsumer consumer)
         {
             using (var repository = _repositoryFactory.CreateCustomerItemRegisterRepository(_uowProvider.GetUnitOfWork()))
             {
-                var query = Query<ICustomerItemRegister>.Builder.Where(x => x.ConsumerKey == consumer.Key);
+                var query = Query<ICustomerItemCache>.Builder.Where(x => x.ConsumerKey == consumer.Key);
                 return repository.GetByQuery(query);
             }
         }
@@ -217,30 +217,30 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Returns the consumer's basket of a given type
         /// </summary>
-        public ICustomerItemRegister GetRegisterByConsumer(IConsumer consumer, Guid registerTfKey)
+        public ICustomerItemCache GetRegisterByConsumer(IConsumer consumer, Guid registerTfKey)
         {
             using (var repository = _repositoryFactory.CreateCustomerItemRegisterRepository(_uowProvider.GetUnitOfWork()))
             {
-                var query = Query<ICustomerItemRegister>.Builder.Where(x => x.ConsumerKey == consumer.Key && x.RegisterTfKey == registerTfKey);
+                var query = Query<ICustomerItemCache>.Builder.Where(x => x.ConsumerKey == consumer.Key && x.ItemCacheTfKey == registerTfKey);
                 return repository.GetByQuery(query).FirstOrDefault();
             }
         }
 
         /// <summary>
-        /// Gets a collection of <see cref="ICustomerItemRegister"/> objects by teh <see cref="IConsumer"/>
+        /// Gets a collection of <see cref="ICustomerItemCache"/> objects by teh <see cref="IConsumer"/>
         /// </summary>
         /// <param name="consumer"></param>
         /// <returns></returns>
-        public IEnumerable<ICustomerItemRegister> GeByConsumer(IConsumer consumer)
+        public IEnumerable<ICustomerItemCache> GeByConsumer(IConsumer consumer)
         {
             using (var repository = _repositoryFactory.CreateCustomerItemRegisterRepository(_uowProvider.GetUnitOfWork()))
             {
-                var query = Query<ICustomerItemRegister>.Builder.Where(x => x.ConsumerKey == consumer.Key);
+                var query = Query<ICustomerItemCache>.Builder.Where(x => x.ConsumerKey == consumer.Key);
                 return repository.GetByQuery(query);
             }
         }
 
-        public IEnumerable<ICustomerItemRegister> GetAll()
+        public IEnumerable<ICustomerItemCache> GetAll()
         {
             using (var repository = _repositoryFactory.CreateCustomerItemRegisterRepository(_uowProvider.GetUnitOfWork()))
             {
@@ -259,32 +259,32 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Occurs before Create
         /// </summary>
-        public static event TypedEventHandler<ICustomerItemRegisterService, Events.NewEventArgs<ICustomerItemRegister>> Creating; 
+        public static event TypedEventHandler<ICustomerItemRegisterService, Events.NewEventArgs<ICustomerItemCache>> Creating; 
 
         /// <summary>
         /// Occurs after Create
         /// </summary>
-        public static event TypedEventHandler<ICustomerItemRegisterService, Events.NewEventArgs<ICustomerItemRegister>> Created;
+        public static event TypedEventHandler<ICustomerItemRegisterService, Events.NewEventArgs<ICustomerItemCache>> Created;
 
         /// <summary>
         /// Occurs before Save
         /// </summary>
-        public static event TypedEventHandler<ICustomerItemRegisterService, SaveEventArgs<ICustomerItemRegister>> Saving;
+        public static event TypedEventHandler<ICustomerItemRegisterService, SaveEventArgs<ICustomerItemCache>> Saving;
 
         /// <summary>
         /// Occurs after Save
         /// </summary>
-        public static event TypedEventHandler<ICustomerItemRegisterService, SaveEventArgs<ICustomerItemRegister>> Saved;
+        public static event TypedEventHandler<ICustomerItemRegisterService, SaveEventArgs<ICustomerItemCache>> Saved;
 
         /// <summary>
         /// Occurs before Delete
         /// </summary>		
-        public static event TypedEventHandler<ICustomerItemRegisterService, DeleteEventArgs<ICustomerItemRegister>> Deleting;
+        public static event TypedEventHandler<ICustomerItemRegisterService, DeleteEventArgs<ICustomerItemCache>> Deleting;
 
         /// <summary>
         /// Occurs after Delete
         /// </summary>
-        public static event TypedEventHandler<ICustomerItemRegisterService, DeleteEventArgs<ICustomerItemRegister>> Deleted;
+        public static event TypedEventHandler<ICustomerItemRegisterService, DeleteEventArgs<ICustomerItemCache>> Deleted;
 
 
 

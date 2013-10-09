@@ -18,12 +18,12 @@ namespace Merchello.Core.Configuration.Outline
         }
 
         /// <summary>
-        /// Gets the dbTypeFields configuration collection for <see cref="ICustomerItemRegister"/>
+        /// Gets the dbTypeFields configuration collection for <see cref="ICustomerItemCache"/>
         /// </summary>
-        [ConfigurationProperty("basket", IsRequired = false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
-        public TypeFieldCollection Basket
+        [ConfigurationProperty("customerItemCache", IsRequired = false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
+        public TypeFieldCollection CustomerItemCache
         {
-            get { return (TypeFieldCollection)this["basket"]; }
+            get { return (TypeFieldCollection)this["customerItemCache"]; }
         }
 
 

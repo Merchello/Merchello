@@ -4,7 +4,7 @@ using Merchello.Core.Models.Rdbms;
 namespace Merchello.Core.Persistence.Mappers
 {
     /// <summary>
-    /// Represents a <see cref="CustomerItemRegister"/> to DTO mapper used to translate the properties of the public api 
+    /// Represents a <see cref="CustomerItemCache"/> to DTO mapper used to translate the properties of the public api 
     /// implementation to that of the database's DTO as sql: [tableName].[columnName].
     /// </summary>
     internal sealed class InvoiceItemMapper : MerchelloBaseMapper
@@ -18,7 +18,6 @@ namespace Merchello.Core.Persistence.Mappers
         {
             CacheMap<InvoiceItem, InvoiceItemDto>(src => src.Id, dto => dto.Id);            
             CacheMap<InvoiceItem, InvoiceItemDto>(src => src.InvoiceId, dto => dto.InvoiceId);
-            CacheMap<InvoiceItem, InvoiceItemDto>(src => src.ParentId, dto => dto.ParentId);
             CacheMap<InvoiceItem, InvoiceItemDto>(src => src.InvoiceItemTfKey, dto => dto.LineItemTfKey);
             CacheMap<InvoiceItem, InvoiceItemDto>(src => src.Sku, dto => dto.Sku);
             CacheMap<InvoiceItem, InvoiceItemDto>(src => src.Name, dto => dto.Name);

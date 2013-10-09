@@ -11,13 +11,7 @@ namespace Merchello.Core.Models.Rdbms
     {
         [Column("id")]
         [PrimaryKeyColumn]
-        public int Id { get; set; }
-
-        [Column("parentId")]
-        [ForeignKey(typeof(InvoiceItemDto))]
-        [NullSetting(NullSetting = NullSettings.Null)]
-        [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchInvoiceItemParent")]
-        public int? ParentId { get; set; }
+        public int Id { get; set; }        
 
         [Column("invoiceId")]
         [ForeignKey(typeof(InvoiceDto), Name = "FK_merchInvoiceItem_merchInvoice", Column = "id")]

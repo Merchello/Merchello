@@ -31,7 +31,7 @@ namespace Merchello.Tests.IntegrationTests.Services
             const int expected = 0;
 
             var baskets = _customerItemRegisterService.GetRegisterByConsumer(_anonymous);
-            var enumerable = baskets as ICustomerItemRegister[] ?? baskets.ToArray();
+            var enumerable = baskets as ICustomerItemCache[] ?? baskets.ToArray();
 
             if (enumerable.Any())
             {
@@ -46,7 +46,7 @@ namespace Merchello.Tests.IntegrationTests.Services
         [Test]
         public void Can_Save_A_Basket()
         {
-            var basket = MockBasketDataMaker.ConsumerBasketForInserting(_anonymous, CustomerItemRegisterType.Basket);
+            var basket = MockBasketDataMaker.ConsumerBasketForInserting(_anonymous, CustomerItemCacheType.Basket);
             
             _customerItemRegisterService.Save(basket);
 
@@ -59,14 +59,14 @@ namespace Merchello.Tests.IntegrationTests.Services
         [Test]
         public void Creating_A_Second_Basket_Results_In_The_First_Being_Returned()
         {
-            var basket = MockBasketDataMaker.ConsumerBasketForInserting(_anonymous, CustomerItemRegisterType.Wishlist);
+            var basket = MockBasketDataMaker.ConsumerBasketForInserting(_anonymous, CustomerItemCacheType.Wishlist);
             
             _customerItemRegisterService.Save(basket);
 
             var id = basket.Id;
             Assert.IsTrue(id > 0);
 
-            var basket2 = _customerItemRegisterService.CreateCustomerItemRegister(_anonymous, CustomerItemRegisterType.Wishlist);
+            var basket2 = _customerItemRegisterService.CreateCustomerItemRegister(_anonymous, CustomerItemCacheType.Wishlist);
 
             Assert.IsTrue(id == basket2.Id);
 
@@ -81,10 +81,10 @@ namespace Merchello.Tests.IntegrationTests.Services
             //// Arrange
             var count = 2;
             var customer = PreTestDataWorker.MakeExistingCustomer();
-            var baskets = new List<ICustomerItemRegister>()
+            var baskets = new List<ICustomerItemCache>()
             {
-                PreTestDataWorker.MakeExistingBasket(customer, CustomerItemRegisterType.Basket),
-                PreTestDataWorker.MakeExistingBasket(customer, CustomerItemRegisterType.Wishlist)
+                PreTestDataWorker.MakeExistingBasket(customer, CustomerItemCacheType.Basket),
+                PreTestDataWorker.MakeExistingBasket(customer, CustomerItemCacheType.Wishlist)
             };
 
             //// Act
@@ -101,11 +101,11 @@ namespace Merchello.Tests.IntegrationTests.Services
             //// Arrange
             var count = 1;
             var customer = PreTestDataWorker.MakeExistingCustomer();
-            var expectedBasketType = CustomerItemRegisterType.Basket;
-            var baskets = new List<ICustomerItemRegister>()
+            var expectedBasketType = CustomerItemCacheType.Basket;
+            var baskets = new List<ICustomerItemCache>()
             {
-                PreTestDataWorker.MakeExistingBasket(customer, CustomerItemRegisterType.Basket),
-                PreTestDataWorker.MakeExistingBasket(customer, CustomerItemRegisterType.Wishlist)
+                PreTestDataWorker.MakeExistingBasket(customer, CustomerItemCacheType.Basket),
+                PreTestDataWorker.MakeExistingBasket(customer, CustomerItemCacheType.Wishlist)
             };
 
             //// Act
@@ -113,7 +113,7 @@ namespace Merchello.Tests.IntegrationTests.Services
 
             //// Assert
             Assert.NotNull(retreived);
-            Assert.AreEqual(expectedBasketType, retreived.CustomerItemRegisterType);
+            Assert.AreEqual(expectedBasketType, retreived.CustomerItemCacheType);
         }
 
        

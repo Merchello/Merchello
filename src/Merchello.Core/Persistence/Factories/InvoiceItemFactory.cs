@@ -7,7 +7,7 @@ namespace Merchello.Core.Persistence.Factories
     {
         public IInvoiceItem BuildEntity(InvoiceItemDto dto)
         {
-            var invoiceItem = new InvoiceItem(dto.InvoiceId, dto.LineItemTfKey, dto.ParentId)
+            var invoiceItem = new InvoiceItem(dto.InvoiceId, dto.LineItemTfKey)
             {
                 Id = dto.Id,                
                 Sku = dto.Sku,
@@ -29,7 +29,6 @@ namespace Merchello.Core.Persistence.Factories
             var dto = new InvoiceItemDto()
             {
                 Id = entity.Id,
-                ParentId = entity.ParentId,
                 InvoiceId = entity.InvoiceId,
                 LineItemTfKey = entity.InvoiceItemTfKey,
                 Sku = entity.Sku,
