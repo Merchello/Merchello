@@ -9,7 +9,7 @@ namespace Merchello.Core.Models
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    internal class Inventory : IdEntity, IInventory
+    internal class Inventory : IInventory
     {
         private readonly int _warehouseId;
         private readonly Guid _productVariantKey;
@@ -48,6 +48,11 @@ namespace Merchello.Core.Models
         /// </summary>
         [DataMember]
         public int LowCount { get; set; }
-    
+
+        [DataMember]
+        public DateTime UpdateDate { get; set; }
+
+        [DataMember]
+        public DateTime CreateDate { get; set; }
     }
 }

@@ -41,7 +41,10 @@ namespace Merchello.Core.Persistence.Repositories
 
             // set the attributes collection
             ((ProductVariant)variant).ProductAttributes = GetProductAttributeCollection(variant.ProductKey);
-            
+
+            // set the inventory collection
+            ((ProductVariant) variant).WarehouseInventory = GetProductInventory(variant.Key);
+
             variant.ResetDirtyProperties();
 
             return variant;
@@ -196,6 +199,31 @@ namespace Merchello.Core.Persistence.Repositories
             }
             return collection;
         }
+
+        #region Inventory
+
+        internal InventoryCollection GetProductInventory(Guid productVariantKey)
+        {
+            var sql = new Sql();
+            sql.Select("*")
+               .From<InventoryDto>()
+               .InnerJoin<WarehouseDto>()
+               .On<InventoryDto, WarehouseDto>(left => left.WarehouseId, right => right.Id)
+               .Where<InventoryDto>(x => x.ProductVariantKey == productVariantKey);
+
+            var dtos = Database.Fetch<InventoryDto, WarehouseDto>(sql);
+
+            var collection = new InventoryCollection();
+            var factory = new InventoryFactory();
+
+            foreach (var dto in dtos)
+            {
+                collection.Add(factory.BuildEntity(dto));
+            }
+            return collection;
+        }
+
+        #endregion
 
         /// <summary>
         /// Compares the <see cref="ProductAttributeCollection"/> with other <see cref="IProductVariant"/>s of the <see cref="IProduct"/> pass
