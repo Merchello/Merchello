@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Reflection;
 using System.Runtime.Serialization;
-using Merchello.Tests.Base.Prototyping.Models;
 
 namespace Merchello.Core.Models
 {
@@ -31,7 +30,7 @@ namespace Merchello.Core.Models
         { }
 
         internal ProductVariant(Guid productKey, ProductAttributeCollection attributes, InventoryCollection inventory, bool master, string name, string sku, decimal price)
-            : base(name, sku, price)
+            : base(name, sku, price, inventory)
         {
             Mandate.ParameterNotNull(attributes, "attributes");
             Mandate.ParameterNotNull(inventory, "inventory");
