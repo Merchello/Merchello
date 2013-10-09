@@ -1,6 +1,6 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 using Merchello.Core.Models.EntityBase;
-using Merchello.Tests.Base.Prototyping.Models;
 
 namespace Merchello.Core.Models
 {
@@ -120,7 +120,8 @@ namespace Merchello.Core.Models
         /// <summary>
         /// The product inventory
         /// </summary>
-        InventoryCollection Inventory { get; }
+        IEnumerable<IInventory> Inventory { get; }
+
     }
 
 }

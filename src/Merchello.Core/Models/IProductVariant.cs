@@ -12,7 +12,7 @@ namespace Merchello.Core.Models
         /// The key for the defining product
         /// </summary>
         Guid ProductKey { get; set; }
-
+            
         /// <summary>
         /// The product's attributes
         /// </summary>
