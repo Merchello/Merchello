@@ -7,7 +7,7 @@ namespace Merchello.Core.Models
     /// <summary>
     /// Defines product inventory for a warehouse
     /// </summary>
-    public interface IInventory : IIdEntity
+    public interface IInventory
     {
         /// <summary>
         /// The warehouse Id
@@ -26,12 +26,16 @@ namespace Merchello.Core.Models
         /// </summary>
         [DataMember]
         int Count { get; set;  }
-
         /// <summary>
         /// The number at which inventory for the product is considered to be low
         /// </summary>
         [DataMember]
         int LowCount { get; set; }
-      
+
+        [DataMember]
+        DateTime UpdateDate { get; set; }
+
+        [DataMember]
+        DateTime CreateDate { get; set; }
     }
 }
