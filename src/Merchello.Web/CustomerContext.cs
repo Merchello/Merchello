@@ -1,7 +1,9 @@
 ﻿using System;
 using Merchello.Core;
 using Merchello.Core.Models;
+using Merchello.Core.Services;
 using Merchello.Web.Cache;
+using Umbraco.Core.Models.EntityBase;
 using umbraco.cms.businesslogic.member;
 using Umbraco.Core;
 using Umbraco.Web;
@@ -11,13 +13,18 @@ namespace Merchello.Web
     public class CustomerContext
     {
         private const string ConsumerCookieKey = "merchello";
-        private readonly MerchelloContext _merchelloContext;
+        private readonly ICustomerService _customerService;
         private readonly UmbracoContext _umbracoContext;
         private readonly CacheHelper _cache;
-        private CustomerBase _customer;
+
+        #region Constructors
 
         public CustomerContext()
-            : this(MerchelloContext.Current, UmbracoContext.Current)
+            : this(UmbracoContext.Current)
+        {}
+
+        public CustomerContext(UmbracoContext umbracoContext)
+            : this(MerchelloContext.Current, umbracoContext)
         {}
 
         public CustomerContext(MerchelloContext merchelloContext, UmbracoContext umbracoContext)
@@ -26,14 +33,25 @@ namespace Merchello.Web
             Mandate.ParameterNotNull(umbracoContext, "umbracoContext");
 
             _umbracoContext = umbracoContext;
-            _merchelloContext = merchelloContext;
+            _customerService = merchelloContext.Services.CustomerService;
             _cache = merchelloContext.Cache;
 
             Initialize();
         }
 
         private void Initialize()
-        {            
+        {
+            // see if the key is already in the request cache
+            var cachedKey = _cache.RequestCache.GetCacheItem(ConsumerCookieKey);
+            if (cachedKey != null)
+            {
+                var key = (Guid) cachedKey;
+                var customer = _cache.RuntimeCache.GetCacheItem(CachingBacker.ConsumerCacheKey(key));
+                if (customer != null) return;
+                TryGetCustomer(key);
+                return;
+            }
+
             // retrieve the merchello consumer cookie
             var cookie = _umbracoContext.HttpContext.Request.Cookies[ConsumerCookieKey];         
    
@@ -42,72 +60,78 @@ namespace Merchello.Web
                 Guid key;
                 if (!Guid.TryParse(EncryptionHelper.Decrypt(cookie.Value), out key))
                 { 
-                    var customer = _cache.RuntimeCache.GetCacheItem(CachingBacker.ConsumerCacheKey(key));
-
-                    if (customer != null)
-                    {
-                        _customer = (CustomerBase) customer;
-                    }
-                    else { BuildConsumer(key); } // consumer not cached
+                    TryGetCustomer(key);
                 }
-                else { GetConsumer(); } // consumer key parsing failed ... start over
+                else { CreateAnonymousCustomer(); } // consumer key parsing failed ... start over
             }
-            else { GetConsumer(); } // a cookie was not found
+            else { CreateAnonymousCustomer(); } // a cookie was not found
         }
 
-        private Guid GetConsumerKey()
+        #endregion
+
+        /// <summary>
+        /// Returns the current customer
+        /// </summary>
+        public ICustomerBase CurrentCustomer { get; private set; }
+
+        /// <summary>
+        /// Attempts to either retrieve an anonymous customer or an existing customer
+        /// </summary>
+        /// <param name="key">The key of the customer to retrieve</param>
+        private void TryGetCustomer(Guid key)
         {
-            // see if the key is already in the request cache
-            var cachedKey = _cache.RequestCache.GetCacheItem(ConsumerCookieKey);
-            if (cachedKey != null) return (Guid)cachedKey;
- 
-            // retrieve the merchello consumer cookie
-            var cookie = _umbracoContext.HttpContext.Request.Cookies[ConsumerCookieKey];
-           
-            if (cookie != null)
+            ICustomerBase customer = (CustomerBase)_cache.RuntimeCache.GetCacheItem(CachingBacker.ConsumerCacheKey(key));
+            
+            // check the cache for a previously retrieved customer
+            if (customer != null)
             {
-                Guid key;
-                if (!Guid.TryParse(EncryptionHelper.Decrypt(cookie.Value), out key))
-                {
-                    _cache.RequestCache.GetCacheItem(ConsumerCookieKey, () => key);
-                    return key;
-                }
+                CurrentCustomer = customer;
+                return;
             }
 
-            // first hit to site? 
+            // If the member has been authenticated there is no need to create an anonymous record.
+            // Either return an existing customer or create a new one for the member.
             if (_umbracoContext.Security.IsMemberAuthorized())
             {
                 var member = Member.GetCurrentMember();
-                // future will look for returning customers
-                var customer = _merchelloContext.Services.CustomerService.GetByMemberId(member.Id);
-                if (customer != null)
-                {
-                    _cache.RequestCache.GetCacheItem(ConsumerCookieKey, () => customer.Key);
-                    _cache.RuntimeCache.GetCacheItem(CachingBacker.ConsumerCacheKey(customer.Key), () => customer, TimeSpan.FromMinutes(5), true);
-                    return customer.Key;
-                }
+
+                customer = _customerService.GetByMemberId(member.Id) ??
+                               _customerService.CreateCustomerWithKey(member.Id);
+
+                CacheCustomer(customer);
+                CurrentCustomer = customer;
+                
+                return;                
             }
-            else
+           
+            // try to get the customer
+            customer = _customerService.GetAnyByKey(key);
+           
+            if (customer != null)
             {
-                // create a new anonymous customer
-
+                CurrentCustomer = customer;
+                CacheCustomer(customer);
             }
-
-            return Guid.Empty;
+            else // create a new anonymous customer
+            {
+                CreateAnonymousCustomer();
+            }
         }
 
-        
-
-        private void GetConsumer()
+        /// <summary>
+        /// Creates an anonymous customer
+        /// </summary>
+        private void CreateAnonymousCustomer()
         {
-            throw new NotImplementedException();
+            var customer = _customerService.CreateAnonymousCustomerWithKey();
+            CurrentCustomer = customer;
+            CacheCustomer(customer);
         }
 
-        private void BuildConsumer(Guid key)
+        private void CacheCustomer(IEntity customer)
         {
-            throw new NotImplementedException();
+            _cache.RequestCache.GetCacheItem(ConsumerCookieKey, () => customer.Key);
+            _cache.RuntimeCache.GetCacheItem(CachingBacker.ConsumerCacheKey(customer.Key), () => customer, TimeSpan.FromMinutes(5), true);
         }
-
-
     }
 }

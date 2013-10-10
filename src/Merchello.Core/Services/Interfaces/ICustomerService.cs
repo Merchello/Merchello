@@ -21,14 +21,32 @@ namespace Merchello.Core.Services
         IAnonymousCustomer CreateAnonymousCustomerWithKey();
 
         /// <summary>
-        /// Creates a customer
+        /// Creates a customer without saving to the database
         /// </summary>
         /// <param name="firstName">The first name of the customer</param>
         /// <param name="lastName">The last name of the customer</param>
         /// <param name="email">the email address of the customer</param>
         /// <param name="memberId">The Umbraco member Id of the customer</param>
         /// <returns><see cref="ICustomer"/></returns>
-        ICustomer CreateCustomer(string firstName, string lastName, string email, int? memberId = null);        
+        ICustomer CreateCustomer(string firstName, string lastName, string email, int? memberId = null);
+
+        /// <summary>
+        /// Creates a customer and saves the record to the database
+        /// </summary>
+        /// <param name="firstName">The first name of the customer</param>
+        /// <param name="lastName">The last name of the customer</param>
+        /// <param name="email">the email address of the customer</param>
+        /// <param name="memberId">The Umbraco member Id of the customer</param>
+        /// <returns><see cref="ICustomer"/></returns>
+        ICustomer CreateCustomerWithKey(string firstName, string lastName, string email, int? memberId = null);
+
+        /// <summary>
+        /// Creates a customer with the Umbraco member id passed
+        /// </summary>
+        /// <param name="memberId">The Umbraco member id (int)</param>
+        /// <returns><see cref="ICustomer"/></returns>
+        ICustomer CreateCustomerWithKey(int memberId);
+
 
         /// <summary>
         /// Saves a single <see cref="ICustomer"/> object
@@ -64,6 +82,13 @@ namespace Merchello.Core.Services
         /// <param name="key">Guid key of the Customer to retrieve</param>
         /// <returns><see cref="ICustomer"/></returns>
         ICustomer GetByKey(Guid key);
+
+        /// <summary>
+        /// Gets an <see cref="ICustomer"/> or <see cref="IAnonymousCustomer"/> object by its 'UniqueId'
+        /// </summary>
+        /// <param name="key">Guid key of either object to retrieve</param>
+        /// <returns><see cref="ICustomerBase"/></returns>
+        ICustomerBase GetAnyByKey(Guid key);
 
         /// <summary>
         /// Gets an <see cref="ICustomer"/> object by its Umbraco MemberId

@@ -5,7 +5,6 @@ using System.Threading;
 using Merchello.Core.Events;
 using Merchello.Core.Models;
 using Merchello.Core.Persistence;
-using Merchello.Core.Persistence.Repositories;
 using Umbraco.Core;
 using Umbraco.Core.Events;
 using Umbraco.Core.Persistence.UnitOfWork;
@@ -61,15 +60,16 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
-        /// Creates an <see cref="ICustomer"/> object
+        /// Creates a customer without saving to the database
         /// </summary>
-        /// <param name="firstName">First name of the customer</param>
-        /// <param name="lastName">Last name of the customer</param>
-        /// <param name="email">Email address of the customer</param>
-        /// <param name="memberId">The Umbraco memberId of the customer</param>
-        /// <returns></returns>
+        /// <param name="firstName">The first name of the customer</param>
+        /// <param name="lastName">The last name of the customer</param>
+        /// <param name="email">the email address of the customer</param>
+        /// <param name="memberId">The Umbraco member Id of the customer</param>
+        /// <returns><see cref="ICustomer"/></returns>
         public ICustomer CreateCustomer(string firstName, string lastName, string email, int? memberId = null)
         {
+
             var customer = new Customer(0, 0, null)
                 {
                     FirstName = firstName,
@@ -83,7 +83,54 @@ namespace Merchello.Core.Services
             return customer;
         }
 
+        /// <summary>
+        /// Creates a customer and saves the record to the database
+        /// </summary>
+        /// <param name="firstName">The first name of the customer</param>
+        /// <param name="lastName">The last name of the customer</param>
+        /// <param name="email">the email address of the customer</param>
+        /// <param name="memberId">The Umbraco member Id of the customer</param>
+        /// <returns><see cref="ICustomer"/></returns>
+        public ICustomer CreateCustomerWithKey(string firstName, string lastName, string email, int? memberId = null)
+        {
+            var customer = new Customer(0, 0, null)
+            {
+                FirstName = firstName,
+                LastName = lastName,
+                Email = email,
+                MemberId = memberId
+            };
 
+            if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<ICustomer>(customer), this))
+            {
+                customer.WasCancelled = true;
+                return customer;
+            }
+
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreateCustomerRepository(uow))
+                {
+                    repository.AddOrUpdate(customer);
+                    uow.Commit();
+                }
+            }
+
+            Created.RaiseEvent(new Events.NewEventArgs<ICustomer>(customer), this);
+
+            return customer;
+        }
+
+        /// <summary>
+        /// Creates a customer with the Umbraco member id passed
+        /// </summary>
+        /// <param name="memberId">The Umbraco member id (int)</param>
+        /// <returns><see cref="ICustomer"/></returns>
+        public ICustomer CreateCustomerWithKey(int memberId)
+        {
+            return CreateCustomerWithKey(string.Empty, string.Empty, string.Empty, memberId);
+        }
 
         /// <summary>yg
         /// Saves a single <see cref="ICustomer"/> object
@@ -101,10 +148,10 @@ namespace Merchello.Core.Services
                 {
                     repository.AddOrUpdate(customer);
                     uow.Commit();
-                }
-
-                if(raiseEvents) Saved.RaiseEvent(new SaveEventArgs<ICustomer>(customer), this);
+                }                
             }
+
+            if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<ICustomer>(customer), this);
         }
 
         /// <summary>
@@ -189,6 +236,30 @@ namespace Merchello.Core.Services
         /// <returns><see cref="ICustomer"/></returns>
         public ICustomer GetByKey(Guid key)
         {
+            using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.Get(key);
+            }
+        }
+        
+        /// <summary>
+        /// Gets an <see cref="ICustomer"/> or <see cref="IAnonymousCustomer"/> object by its 'UniqueId'
+        /// </summary>
+        /// <param name="key">Guid key of either object to retrieve</param>
+        /// <returns><see cref="ICustomerBase"/></returns>
+        public ICustomerBase GetAnyByKey(Guid key)
+        {
+            ICustomerBase customer;
+
+            // try retrieving an anonymous customer first as in most situations this will be what is being queried
+            using (var repository = _repositoryFactory.CreateAnonymousCustomerRepository(_uowProvider.GetUnitOfWork()))
+            {
+                customer = repository.Get(key);
+            }
+
+            if (customer != null) return customer;
+
+            // try retrieving an existing customer
             using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
             {
                 return repository.Get(key);
