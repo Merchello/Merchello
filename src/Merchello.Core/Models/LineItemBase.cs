@@ -12,8 +12,7 @@ namespace Merchello.Core.Models
     [DataContract(IsReference = true)]
     public abstract class LineItemBase : IdEntity, ILineItem
     {
-        private readonly int _containerId;
-        private int? _parentId;        
+        private readonly int _containerId;     
         private Guid _lineItemTfKey;
         private string _sku;
         private string _name;
@@ -35,29 +34,12 @@ namespace Merchello.Core.Models
             _itemization = itemization;
         }
 
-        private static readonly PropertyInfo ParentIdSelector = ExpressionHelper.GetPropertyInfo<LineItemBase, int?>(x => x.ParentId);
         private static readonly PropertyInfo LineItemTfKeySelector = ExpressionHelper.GetPropertyInfo<LineItemBase, Guid>(x => x.LineItemTfKey);
         private static readonly PropertyInfo SkuSelector = ExpressionHelper.GetPropertyInfo<LineItemBase, string>(x => x.Sku);
         private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<LineItemBase, string>(x => x.Name);
         private static readonly PropertyInfo BaseQuantitySelector = ExpressionHelper.GetPropertyInfo<LineItemBase, int>(x => x.Quantity);
         private static readonly PropertyInfo AmountSelector = ExpressionHelper.GetPropertyInfo<LineItemBase, decimal>(x => x.Amount);
 
-        /// <summary>
-        /// The parentId associated with the customer registry item
-        /// </summary>
-        [DataMember]
-        public int? ParentId
-        {
-            get { return _parentId; }
-            set
-            {
-                SetPropertyValueAndDetectChanges(o =>
-                {
-                    _parentId = value;
-                    return _parentId;
-                }, _parentId, ParentIdSelector);
-            }
-        }
     
         /// <summary>
         /// The customer registry id associated with the Customer Registry

@@ -37,6 +37,10 @@ namespace Merchello.Core.Models.Rdbms
         [NullSetting(NullSetting = NullSettings.Null)]
         public DateTime? LastPaymentDate { get; set; }
 
+        [Column("lastActivityDate")]
+        [Constraint(Default = "getdate()")]
+        public DateTime LastActivityDate { get; set; }
+
         [Column("updateDate")]
         [Constraint(Default = "getdate()")]
         public DateTime UpdateDate { get; set; }

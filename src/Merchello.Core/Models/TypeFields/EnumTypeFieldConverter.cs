@@ -19,11 +19,11 @@ namespace Merchello.Core.Models.TypeFields
         }
 
         /// <summary>
-        /// Creates an instance of an <see cref="ICustomerRegistryTypeField"/> object
+        /// Creates an instance of an <see cref="ICustomerItemCacheTypeField"/> object
         /// </summary>
-        internal static ICustomerRegistryTypeField CustomerItemRegistry
+        internal static ICustomerItemCacheTypeField CustomerItemItemCache
         {
-            get { return new CustomerRegistryTypeField(); }            
+            get { return new CustomerItemCacheTypeField(); }            
         }
 
         /// <summary>

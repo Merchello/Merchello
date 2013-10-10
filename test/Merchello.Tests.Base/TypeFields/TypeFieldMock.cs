@@ -31,14 +31,14 @@ namespace Merchello.Tests.Base.TypeFields
         #endregion
 
 
-        #region BasketType TypeFields
+        #region ItemCacheType TypeFields
 
-        public static ITypeField BasketBasket
+        public static ITypeField ItemCacheBasket
         {
             get { return new TypeField("Basket", "Standard Basket", new Guid("C53E3100-2DFD-408A-872E-4380383FAD35")); }
         }
 
-        public static ITypeField BasketWishlist
+        public static ITypeField ItemCacheWishlist
         {
             get { return new TypeField("Wishlist", "Wishlist", new Guid("B3EBB9E0-C7CE-4BA6-B379-BEDA3465D6D5")); }
         }

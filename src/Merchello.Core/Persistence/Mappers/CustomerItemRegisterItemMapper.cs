@@ -4,7 +4,7 @@ using Merchello.Core.Models.Rdbms;
 namespace Merchello.Core.Persistence.Mappers
 {
     /// <summary>
-    /// Represents a <see cref="CustomerItemRegister"/> to DTO mapper used to translate the properties of the public api 
+    /// Represents a <see cref="CustomerItemCache"/> to DTO mapper used to translate the properties of the public api 
     /// implementation to that of the database's DTO as sql: [tableName].[columnName].
     /// </summary>
     internal sealed class CustomerItemRegisterItemMapper : MerchelloBaseMapper
@@ -16,16 +16,15 @@ namespace Merchello.Core.Persistence.Mappers
 
         internal override void BuildMap()
         {
-            CacheMap<OrderLineItem, CustomerItemRegisterItemDto>(src => src.Id, dto => dto.Id);            
-            CacheMap<OrderLineItem, CustomerItemRegisterItemDto>(src => src.ContainerId, dto => dto.CustomerItemRegisterId);
-            CacheMap<OrderLineItem, CustomerItemRegisterItemDto>(src => src.ParentId, dto => dto.ParentId);
-            CacheMap<OrderLineItem, CustomerItemRegisterItemDto>(src => src.LineItemTfKey, dto => dto.LineItemTfKey);
-            CacheMap<OrderLineItem, CustomerItemRegisterItemDto>(src => src.Sku, dto => dto.Sku);
-            CacheMap<OrderLineItem, CustomerItemRegisterItemDto>(src => src.Name, dto => dto.Name);
-            CacheMap<OrderLineItem, CustomerItemRegisterItemDto>(src => src.Quantity, dto => dto.Quantity);
-            CacheMap<OrderLineItem, CustomerItemRegisterItemDto>(src => src.Amount, dto => dto.Amount);
-            CacheMap<OrderLineItem, CustomerItemRegisterItemDto>(src => src.CreateDate, dto => dto.CreateDate);
-            CacheMap<OrderLineItem, CustomerItemRegisterItemDto>(src => src.UpdateDate, dto => dto.UpdateDate);
+            CacheMap<OrderLineItem, CustomerItemCacheItemDto>(src => src.Id, dto => dto.Id);            
+            CacheMap<OrderLineItem, CustomerItemCacheItemDto>(src => src.ContainerId, dto => dto.ItemCacheId);
+            CacheMap<OrderLineItem, CustomerItemCacheItemDto>(src => src.LineItemTfKey, dto => dto.LineItemTfKey);
+            CacheMap<OrderLineItem, CustomerItemCacheItemDto>(src => src.Sku, dto => dto.Sku);
+            CacheMap<OrderLineItem, CustomerItemCacheItemDto>(src => src.Name, dto => dto.Name);
+            CacheMap<OrderLineItem, CustomerItemCacheItemDto>(src => src.Quantity, dto => dto.Quantity);
+            CacheMap<OrderLineItem, CustomerItemCacheItemDto>(src => src.Amount, dto => dto.Amount);
+            CacheMap<OrderLineItem, CustomerItemCacheItemDto>(src => src.CreateDate, dto => dto.CreateDate);
+            CacheMap<OrderLineItem, CustomerItemCacheItemDto>(src => src.UpdateDate, dto => dto.UpdateDate);
         }
     }
 }

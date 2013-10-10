@@ -10,13 +10,7 @@ namespace Merchello.Core.Models
     /// </summary>
     public interface IInvoiceItem : IIdEntity
     {
-            
-            /// <summary>
-            /// The parentId of the invoice item
-            /// </summary>
-            [DataMember]
-            int? ParentId { get; }
-            
+                        
             /// <summary>
             /// The invoiceId of the invoice item
             /// </summary>

@@ -2,6 +2,7 @@
 using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Rdbms;
+using Umbraco.Web;
 
 namespace Merchello.Web
 {
@@ -10,32 +11,24 @@ namespace Merchello.Web
     /// </summary> 
     public class MerchelloHelper
     {
-        
+        //private MerchelloContext _merchelloContext;
+        private UmbracoContext _umbracoContext;
+
+        public MerchelloHelper(UmbracoContext umbracoContext)
+        {
+
+            //_merchelloContext = merchelloContext;
+            _umbracoContext = umbracoContext;
+        }
+
         #region Customer
 
-        /// <summary>
-        /// Gets a <see cref="ICustomer"/>
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public ICustomer Customer(string key)
-        {
-            return Customer(new Guid(key));
-        }
 
-        /// <summary>
-        /// Gets a <see cref="ICustomer"/>
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public ICustomer Customer(Guid key)
-        {
-            return MerchelloContext.Current.Services.CustomerService.GetByKey(key);
-        }
+
 
         #endregion
 
-    
+
     }
 
 }

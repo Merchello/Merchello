@@ -17,7 +17,7 @@ namespace Merchello.Tests.Base.DataMakers
         public static IInvoiceItem InvoiceItemForInserting(IInvoice invoice, InvoiceItemType invoiceItemType)
         {
             var typeKey = EnumTypeFieldConverter.InvoiceItem.GetTypeField(invoiceItemType).TypeKey;
-            return new InvoiceItem(invoice, typeKey, null)
+            return new InvoiceItem(invoice, typeKey)
                     {
                         Amount = GetAmount(),
                         Name = ProductItemName(),

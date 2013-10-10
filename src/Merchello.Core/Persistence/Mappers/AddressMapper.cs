@@ -30,21 +30,21 @@ namespace Merchello.Core.Persistence.Mappers
         {
             if (!PropertyInfoCache.IsEmpty) return;
 
-            CacheMap<Address, AddressDto>(src => src.Id, dto => dto.Id);
-            CacheMap<Address, AddressDto>(src => src.CustomerKey, dto => dto.CustomerKey);
-            CacheMap<Address, AddressDto>(src => src.Label, dto => dto.Label);
-            CacheMap<Address, AddressDto>(src => src.FullName, dto => dto.FullName);
-            CacheMap<Address, AddressDto>(src => src.Company, dto => dto.Company);
-            CacheMap<Address, AddressDto>(src => src.AddressTypeFieldKey, dto => dto.AddressTfKey);
-            CacheMap<Address, AddressDto>(src => src.Address1, dto => dto.Address1);
-            CacheMap<Address, AddressDto>(src => src.Address2, dto => dto.Address2);
-            CacheMap<Address, AddressDto>(src => src.Locality, dto => dto.Locality);
-            CacheMap<Address, AddressDto>(src => src.Region, dto => dto.Region);
-            CacheMap<Address, AddressDto>(src => src.PostalCode, dto => dto.PostalCode);
-            CacheMap<Address, AddressDto>(src => src.CountryCode, dto => dto.CountryCode);
-            CacheMap<Address, AddressDto>(src => src.Phone, dto => dto.Phone);
-            CacheMap<Address, AddressDto>(src => src.CreateDate, dto => dto.CreateDate);
-            CacheMap<Address, AddressDto>(src => src.UpdateDate, dto => dto.UpdateDate);
+            CacheMap<Address, CustomerAddressDto>(src => src.Id, dto => dto.Id);
+            CacheMap<Address, CustomerAddressDto>(src => src.CustomerKey, dto => dto.CustomerKey);
+            CacheMap<Address, CustomerAddressDto>(src => src.Label, dto => dto.Label);
+            CacheMap<Address, CustomerAddressDto>(src => src.FullName, dto => dto.FullName);
+            CacheMap<Address, CustomerAddressDto>(src => src.Company, dto => dto.Company);
+            CacheMap<Address, CustomerAddressDto>(src => src.AddressTypeFieldKey, dto => dto.AddressTfKey);
+            CacheMap<Address, CustomerAddressDto>(src => src.Address1, dto => dto.Address1);
+            CacheMap<Address, CustomerAddressDto>(src => src.Address2, dto => dto.Address2);
+            CacheMap<Address, CustomerAddressDto>(src => src.Locality, dto => dto.Locality);
+            CacheMap<Address, CustomerAddressDto>(src => src.Region, dto => dto.Region);
+            CacheMap<Address, CustomerAddressDto>(src => src.PostalCode, dto => dto.PostalCode);
+            CacheMap<Address, CustomerAddressDto>(src => src.CountryCode, dto => dto.CountryCode);
+            CacheMap<Address, CustomerAddressDto>(src => src.Phone, dto => dto.Phone);
+            CacheMap<Address, CustomerAddressDto>(src => src.CreateDate, dto => dto.CreateDate);
+            CacheMap<Address, CustomerAddressDto>(src => src.UpdateDate, dto => dto.UpdateDate);
         }
         #endregion
 

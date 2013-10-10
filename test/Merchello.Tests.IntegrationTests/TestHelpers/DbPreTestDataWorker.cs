@@ -112,21 +112,21 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         #region IBasket
 
         /// <summary>
-        ///  Inserts an address record in the merchBasket table and returns an <see cref="ICustomerItemRegister"/> object representation
+        ///  Inserts an address record in the merchBasket table and returns an <see cref="ICustomerItemCache"/> object representation
         /// </summary>
-        public ICustomerItemRegister MakeExistingBasket(IConsumer consumer, CustomerItemRegisterType customerItemRegisterType)
+        public ICustomerItemCache MakeExistingBasket(ICustomerBase customer, CustomerItemCacheType customerItemCacheType)
         {
-            var basket = MockBasketDataMaker.ConsumerBasketForInserting(consumer, customerItemRegisterType);
-            CustomerItemRegisterService.Save(basket);
+            var basket = MockBasketDataMaker.ConsumerBasketForInserting(customer, customerItemCacheType);
+            CustomerItemCacheService.Save(basket);
             return basket;
         }
 
         /// <summary>
         /// The basket service
         /// </summary>
-        public ICustomerItemRegisterService CustomerItemRegisterService
+        public ICustomerItemCacheService CustomerItemCacheService
         {
-            get { return _serviceContext.CustomerItemRegisterService; }
+            get { return _serviceContext.CustomerItemCacheService; }
         }
 
         #endregion

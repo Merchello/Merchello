@@ -12,9 +12,10 @@ namespace Merchello.Core.Persistence.Factories
     {
         public IAnonymousCustomer BuildEntity(AnonymousCustomerDto dto)
         {
-            return new AnonymousCustomer(dto.LastActivityDate)
+            return new AnonymousCustomer()
             {
                 Key = dto.Key,
+                LastActivityDate = dto.LastActivityDate,
                 UpdateDate = dto.UpdateDate,
                 CreateDate = dto.CreateDate                
             };

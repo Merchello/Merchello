@@ -14,6 +14,10 @@ namespace Merchello.Core.Models.Rdbms
         [Constraint(Default = "newid()")]
         public Guid Key { get; set; }
 
+        [Column("memberId")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public int? MemberId { get; set; }
+
         [Column("lastActivityDate")]
         [Constraint(Default = "getdate()")]
         public DateTime LastActivityDate { get; set; }

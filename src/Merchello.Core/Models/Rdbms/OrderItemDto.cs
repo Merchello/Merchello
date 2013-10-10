@@ -13,12 +13,6 @@ namespace Merchello.Core.Models.Rdbms
         [PrimaryKeyColumn]
         public int Id { get; set; }
 
-        [Column("parentId")]
-        [ForeignKey(typeof(OrderItemDto))]
-        [NullSetting(NullSetting = NullSettings.Null)]
-        [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchOrderItemParent")]
-        public int? ParentId { get; set; }
-
         [Column("orderId")]
         [ForeignKey(typeof(OrderDto), Name = "FK_merchOrderItem_merchOrder", Column = "id")]
         public int OrderId { get; set; }

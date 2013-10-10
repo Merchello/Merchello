@@ -11,7 +11,6 @@ namespace Merchello.Core.Models
     [DataContract(IsReference = true)]
     internal class InvoiceItem : IdEntity, IInvoiceItem
     {
-        private readonly int? _parentId;
         private readonly int _invoiceId;
         private Guid _invoiceItemTfKey;
         private string _sku;
@@ -20,23 +19,19 @@ namespace Merchello.Core.Models
         private decimal _amount;
         private bool _exported;
 
-        public InvoiceItem(IInvoice invoice, InvoiceItemType invoiceItemType)
-            : this(invoice, invoiceItemType, null)
+
+        public InvoiceItem (IInvoice invoice, InvoiceItemType invoiceItemType)  
+            : this(invoice, EnumTypeFieldConverter.InvoiceItem.GetTypeField(invoiceItemType).TypeKey)
         {}
 
-        public InvoiceItem (IInvoice invoice, InvoiceItemType invoiceItemType, int? parentId)  
-            : this(invoice, EnumTypeFieldConverter.InvoiceItem.GetTypeField(invoiceItemType).TypeKey, parentId)
+        public InvoiceItem(IInvoice invoice, Guid invoiceItemTfKey)
+            : this(invoice.Id, invoiceItemTfKey)
         {}
 
-        public InvoiceItem(IInvoice invoice, Guid invoiceItemTfKey, int? parentId)
-            : this(invoice.Id, invoiceItemTfKey, parentId)
-        {}
-
-        internal InvoiceItem(int invoiceId, Guid invoiceItemTfKey, int? parentId)
+        internal InvoiceItem(int invoiceId, Guid invoiceItemTfKey)
         {
             _invoiceId = invoiceId;
             _invoiceItemTfKey = invoiceItemTfKey;
-            _parentId = parentId;
         }
         
         private static readonly PropertyInfo InvoiceItemTypeFieldKeySelector = ExpressionHelper.GetPropertyInfo<InvoiceItem, Guid>(x => x.InvoiceItemTfKey);  
@@ -46,15 +41,6 @@ namespace Merchello.Core.Models
         private static readonly PropertyInfo AmountSelector = ExpressionHelper.GetPropertyInfo<InvoiceItem, decimal>(x => x.Amount);  
         private static readonly PropertyInfo ExportedSelector = ExpressionHelper.GetPropertyInfo<InvoiceItem, bool>(x => x.Exported);  
         
-        /// <summary>
-        /// The parentId associated with the InvoiceItem
-        /// </summary>
-        [DataMember]
-        public int? ParentId
-        {
-            get { return _parentId; }
-        }
-    
         /// <summary>
         /// The invoiceId associated with the InvoiceItem
         /// </summary>

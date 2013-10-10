@@ -1,19 +1,10 @@
-﻿using System;
-using System.Runtime.Serialization;
-using Merchello.Core.Models.EntityBase;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
     /// <summary>
-    /// Defines a Merchello Anonymous customer
+    /// Marker interface for anonymous customers
     /// </summary>
-    public interface IAnonymousCustomer : IConsumer
+    public interface IAnonymousCustomer : ICustomerBase
     {
-
-        /// <summary>
-        /// The lastActivityDate for the Anonymous
-        /// </summary>
-        [DataMember]
-        DateTime LastActivityDate { get; }
+         
     }
 }

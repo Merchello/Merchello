@@ -55,10 +55,7 @@
       <HintPath>..\packages\AutoMapper.2.2.1\lib\net40\AutoMapper.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
-      <HintPath>..\packages\UmbracoCms.Core.7.0.0-nightly97\lib\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="MiniProfiler">
-      <HintPath>..\packages\MiniProfiler.2.1.0\lib\net40\MiniProfiler.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.0.0-nightly111\lib\log4net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -72,7 +69,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Umbraco.Core">
-      <HintPath>..\packages\UmbracoCms.Core.7.0.0-nightly97\lib\Umbraco.Core.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.0.0-nightly111\lib\Umbraco.Core.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -106,7 +103,11 @@
     <Compile Include="MerchelloContext.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\AnonymousCustomer.cs" />
-    <Compile Include="Models\CustomerItemRegister.cs" />
+    <Compile Include="Models\CustomerBase.cs" />
+    <Compile Include="Models\CustomerItemCache.cs" />
+    <Compile Include="Models\ExtendedDataCollection.cs" />
+    <Compile Include="Models\IAnonymousCustomer.cs" />
+    <Compile Include="Models\ICustomerBase.cs" />
     <Compile Include="Models\IInventory.cs" />
     <Compile Include="Models\Inventory.cs" />
     <Compile Include="Models\InventoryCollection.cs" />
@@ -125,9 +126,7 @@
     <Compile Include="Models\GatewayProviders\IRegisteredGatewayProvider.cs" />
     <Compile Include="Models\GatewayProviders\RegisteredGatewayProvider.cs" />
     <Compile Include="Models\IAddress.cs" />
-    <Compile Include="Models\IAnonymousCustomer.cs" />
-    <Compile Include="Models\ICustomerItemRegister.cs" />
-    <Compile Include="Models\IConsumer.cs" />
+    <Compile Include="Models\ICustomerItemCache.cs" />
     <Compile Include="Gateway\IGatewayResponse.cs" />
     <Compile Include="Models\IInvoiceItem.cs" />
     <Compile Include="Models\IInvoiceStatus.cs" />
@@ -174,7 +173,7 @@
     <Compile Include="Models\TypeFields\GatewayProviderTypeField.cs" />
     <Compile Include="Models\TypeFields\AppliedPaymentTypeField.cs" />
     <Compile Include="Models\TypeFields\IAddressTypeField.cs" />
-    <Compile Include="Models\TypeFields\ICustomerRegistryTypeField.cs" />
+    <Compile Include="Models\TypeFields\ICustomerItemCacheTypeField.cs" />
     <Compile Include="Models\TypeFields\ICustomTypeField.cs" />
     <Compile Include="Models\TypeFields\IInvoiceItemTypeField.cs" />
     <Compile Include="Models\TypeFields\ILineItemTypeField.cs" />
@@ -190,6 +189,7 @@
     <Compile Include="ObjectResolution\Resolution.cs" />
     <Compile Include="Models\GatewayProviders\IRegisteredGatewayProviderBase.cs" />
     <Compile Include="Persistence\Caching\InMemoryCacheProvider.cs" />
+    <Compile Include="Persistence\Factories\ExtendedDataFactory.cs" />
     <Compile Include="Persistence\Factories\InventoryFactory.cs" />
     <Compile Include="Persistence\Factories\ProductAttributeFactory.cs" />
     <Compile Include="Persistence\Factories\ProductOptionFactory.cs" />
@@ -202,6 +202,8 @@
     <Compile Include="Persistence\Mappers\ProductMapper.cs" />
     <Compile Include="Persistence\Mappers\ProductOptionMapper.cs" />
     <Compile Include="Persistence\Mappers\WarehouseMapper.cs" />
+    <Compile Include="Persistence\Repositories\AnonymousCustomerRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IAnonymousCustomerRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IProductVariantRepository.cs" />
     <Compile Include="Persistence\Repositories\ProductVariantRepository.cs" />
     <Compile Include="Services\Interfaces\IProductVariantService.cs" />
@@ -225,7 +227,7 @@
     <Compile Include="Persistence\Factories\WarehouseFactory.cs" />
     <Compile Include="Persistence\Mappers\AnonymousCustomerMapper.cs" />
     <Compile Include="Persistence\Mappers\CustomerItemRegisterItemMapper.cs" />
-    <Compile Include="Persistence\Mappers\BasketMapper.cs" />
+    <Compile Include="Persistence\Mappers\CustomerItemCacheMapper.cs" />
     <Compile Include="Persistence\Mappers\ProductVariantMapper.cs" />
     <Compile Include="Persistence\Mappers\ShipMethodMapper.cs" />
     <Compile Include="Persistence\Mappers\PaymentMapper.cs" />
@@ -236,8 +238,8 @@
     <Compile Include="Persistence\Mappers\ShipmentMapper.cs" />
     <Compile Include="Persistence\Mappers\AppliedPaymentMapper.cs" />
     <Compile Include="Persistence\Querying\Query.cs" />
-    <Compile Include="Persistence\Repositories\CustomerItemRegisterRepository.cs" />
-    <Compile Include="Persistence\Repositories\Interfaces\ICustomerItemRegisterRepository.cs" />
+    <Compile Include="Persistence\Repositories\CustomerItemCacheRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\ICustomerItemCacheRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IInvoiceRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IPaymentRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IProductRepository.cs" />
@@ -248,8 +250,8 @@
     <Compile Include="Persistence\Repositories\ProductRepository.cs" />
     <Compile Include="Persistence\Repositories\ShipmentRepository.cs" />
     <Compile Include="Persistence\Repositories\WarehouseRepository.cs" />
-    <Compile Include="Services\CustomerItemRegisterService.cs" />
-    <Compile Include="Services\Interfaces\ICustomerItemRegisterService.cs" />
+    <Compile Include="Services\CustomerItemCacheService.cs" />
+    <Compile Include="Services\Interfaces\ICustomerItemCacheService.cs" />
     <Compile Include="Services\Interfaces\IInvoiceService.cs" />
     <Compile Include="Services\Interfaces\IProductService.cs" />
     <Compile Include="Services\Interfaces\IServiceContext.cs" />
@@ -280,7 +282,7 @@
     <Compile Include="Persistence\Mappers\CustomerMapper.cs" />
     <Compile Include="Persistence\Mappers\DtoMapModel.cs" />
     <Compile Include="Models\TypeFields\AddressTypeField.cs" />
-    <Compile Include="Models\TypeFields\CustomerRegistryTypeField.cs" />
+    <Compile Include="Models\TypeFields\CustomerItemCacheTypeField.cs" />
     <Compile Include="Configuration\Outline\TypeFieldDefinitionsElement.cs" />
     <Compile Include="Models\EntityBase\Entity.cs" />
     <Compile Include="Models\EntityBase\IdEntity.cs" />
@@ -302,15 +304,15 @@
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\IInvoice.cs" />
     <Compile Include="Models\TypeFields\PaymentMethodTypeField.cs" />
-    <Compile Include="Models\Rdbms\AddressDto.cs" />
+    <Compile Include="Models\Rdbms\CustomerAddressDto.cs" />
     <Compile Include="Models\Rdbms\AnonymousCustomerDto.cs" />
-    <Compile Include="Models\Rdbms\CustomerRegistryItemDto.cs" />
+    <Compile Include="Models\Rdbms\CustomerItemCacheItemDto.cs" />
     <Compile Include="Models\Rdbms\CustomerDto.cs" />
     <Compile Include="Models\Rdbms\InventoryDto.cs" />
     <Compile Include="Models\Rdbms\InvoiceDto.cs" />
     <Compile Include="Models\Rdbms\InvoiceItemDto.cs" />
     <Compile Include="Models\Rdbms\InvoiceStatusDto.cs" />
-    <Compile Include="Models\Rdbms\CustomerRegistryDto.cs" />
+    <Compile Include="Models\Rdbms\CustomerItemCacheDto.cs" />
     <Compile Include="Models\Rdbms\PaymentDto.cs" />
     <Compile Include="Models\Rdbms\TransactionDto.cs">
       <SubType>Code</SubType>
