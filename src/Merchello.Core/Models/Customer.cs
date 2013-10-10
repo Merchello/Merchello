@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Reflection;
 using System.Runtime.Serialization;
-using Merchello.Core.Models.EntityBase;
 
 namespace Merchello.Core.Models
 {
     [Serializable]
     [DataContract(IsReference = true)]
-    public class Customer : KeyEntity, ICustomer
+    public class Customer : CustomerBase, ICustomer
     {
         private int? _memberId;
         private string _firstName;
@@ -18,6 +17,7 @@ namespace Merchello.Core.Models
         private readonly DateTime? _lastPaymentDate;
 
         public Customer(decimal totalInvoice, decimal totalPayments, DateTime? lastPaymentDate)
+            :base(false)
         {
             _totalInvoiced = totalInvoice;
             _totalPayments = totalPayments;
@@ -132,14 +132,6 @@ namespace Merchello.Core.Models
         public DateTime? LastPaymentDate
         {
             get { return _lastPaymentDate; }
-        }
-
-        /// <summary>
-        /// Indicates that this is a known consumer
-        /// </summary>
-        [IgnoreDataMember]
-        public bool IsAnonymous {
-            get { return false; }
         }
         
     }

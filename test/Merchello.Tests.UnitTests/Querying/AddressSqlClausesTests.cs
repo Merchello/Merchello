@@ -16,7 +16,7 @@ namespace Merchello.Tests.UnitTests.Querying
     public class AddressSqlClausesTests  : BaseUsingSqlServerSyntax<IAddress>
     {
         /// <summary>
-        /// Test to verify that the typed <see cref="AddressDto"/> query matches generic "select * ..." query 
+        /// Test to verify that the typed <see cref="CustomerAddressDto"/> query matches generic "select * ..." query 
         /// </summary>
         [Test]
         public void Can_Verify_Address_Base_Clause()
@@ -32,8 +32,8 @@ namespace Merchello.Tests.UnitTests.Querying
             //// Act
             var sql = new Sql();
             sql.Select("*")
-                .From<AddressDto>()
-                .Where<AddressDto>(x => x.Id == id);
+                .From<CustomerAddressDto>()
+                .Where<CustomerAddressDto>(x => x.Id == id);
 
             //// Assert
             Assert.That(sql.SQL, Is.EqualTo(expected.SQL));
@@ -56,8 +56,8 @@ namespace Merchello.Tests.UnitTests.Querying
             //// Act
             var sql = new Sql();
             sql.Select("*")
-                .From<AddressDto>()
-                .Where<AddressDto>(x => x.CustomerKey == key);
+                .From<CustomerAddressDto>()
+                .Where<CustomerAddressDto>(x => x.CustomerKey == key);
 
             
             //// Assert

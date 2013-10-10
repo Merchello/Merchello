@@ -11,100 +11,101 @@ namespace Merchello.Tests.UnitTests.Querying
 {
     [TestFixture]
     [Category("SqlSyntax")]
-    public class CustomerItemRegisterSqlClausesTest : BaseUsingSqlServerSyntax<ICustomerItemRegister>
+    public class CustomerItemCacheSqlClausesTest : BaseUsingSqlServerSyntax<ICustomerItemCache>
     {
         /// <summary>
-        /// Test to verify that the typed <see cref="CustomerItemRegisterDto"/> query matches generic "select * ..." query 
+        /// Test to verify that the typed <see cref="CustomerItemCacheDto"/> query matches generic "select * ..." query 
         /// </summary>
         [Test]
-        public void Can_Verify_Base_Basket_Clause()
+        public void Can_Verify_Base_ItemCache_Clause()
         {
             //// Arrange
             var id = 12;
 
             var expected = new Sql();
             expected.Select("*")
-                .From("[merchCustomerItemRegister]")
-                .Where("[merchCustomerItemRegister].[id] = " + id.ToString());
+                .From("[merchCustomerItemCache]")
+                .Where("[merchCustomerItemCache].[id] = " + id.ToString());
+                //.Where("[merchCustomerItemCache].[itemCacheTfKey] = '" +  + "'")
 
             //// Act
             var sql = new Sql();
             sql.Select("*")
-                .From<CustomerItemRegisterDto>()
-                .Where<CustomerItemRegisterDto>(x => x.Id == id);
+                .From<CustomerItemCacheDto>()
+                .Where<CustomerItemCacheDto>(x => x.Id == id);
 
             //// Assert
             Assert.That(sql.SQL, Is.EqualTo(expected.SQL));
         }
 
         /// <summary>
-        /// Test to verify that the typed <see cref="CustomerItemRegisterItemDto"/> query matches generic "select * ..." query  
+        /// Test to verify that the typed <see cref="CustomerItemCacheItemDto"/> query matches generic "select * ..." query  
         /// </summary>
         [Test]
-        public void Can_Verify_Base_BasketItem_Clause()
+        public void Can_Verify_Base_ItemCacheItem_Clause()
         {
             //// Arrange
             var id = 125;
 
             var expected = new Sql();
             expected.Select("*")
-                .From("[merchCustomerItemRegisterItem]")
-                .Where("[merchCustomerItemRegisterItem].[id] = " + id.ToString());
+                .From("[merchCustomerItemCacheItem]")
+                .Where("[merchCustomerItemCacheItem].[id] = " + id.ToString());
 
             //// Act
             var sql = new Sql();
             sql.Select("*")
-                .From<CustomerItemRegisterItemDto>()
-                .Where<CustomerItemRegisterItemDto>(x => x.Id == id);
+                .From<CustomerItemCacheItemDto>()
+                .Where<CustomerItemCacheItemDto>(x => x.Id == id);
 
             //// Assert
             Assert.That(sql.SQL, Is.EqualTo(expected.SQL));
         }
 
         /// <summary>
-        /// Test to verify the typed <see cref="ICustomerItemRegister"/> sql by consumer key queries
+        /// Test to verify the typed <see cref="ICustomerItemCache"/> sql by consumer key queries
         /// </summary>
         [Test]
-        public void Can_Verify_Basket_By_Consumer_Query()
+        public void Can_Verify_ItemCache_By_Consumer_Query()
         {
             //// Arrange
             var key = new Guid("E7ADD433-DF59-42AC-B195-BAF0E4F4392A");
 
             var expected = new Sql();
             expected.Select("*")
-                .From("[merchCustomerItemRegister]")
-                .Where("[merchCustomerItemRegister].[consumerKey] = '" + key.ToString() + "'");
+                .From("[merchCustomerItemCache]")
+                .Where("[merchCustomerItemCache].[consumerKey] = '" + key.ToString() + "'");
 
             //// Act
             var sql = new Sql();
             sql.Select("*")
-                .From<CustomerItemRegisterDto>()
-                .Where<CustomerItemRegisterDto>(x => x.ConsumerKey == key);
+                .From<CustomerItemCacheDto>()
+                .Where<CustomerItemCacheDto>(x => x.ConsumerKey == key);
 
             //// Assert
             Assert.AreEqual(expected.SQL, sql.SQL);
         }
 
         /// <summary>
-        /// Test to verify type <see cref="ICustomerItemRegister"/> sql by consumer and basket type field key
+        /// Test to verify type <see cref="ICustomerItemCache"/> sql by consumer and basket type field key
         /// </summary>
         [Test]
-        public void Can_Verify_Basket_By_Consumer_And_BasketType_Query()
+        public void Can_Verify_ItemCache_By_Consumer_And_BasketType_Query()
         {
             //// Arrange
-            var basketTypeKey = TypeFieldMock.BasketBasket.TypeKey;
+            var basketTypeKey = TypeFieldMock.ItemCacheBasket.TypeKey;
             var key = new Guid("E7ADD433-DF59-42AC-B195-BAF0E4F4392A");
 
             var expected = new Sql();
             expected.Select("*")
-               .From("[merchCustomerItemRegister]")
-               .Where("[merchCustomerItemRegister].[consumerKey] = '" + key.ToString() + "' AND [merchCustomerItemRegister].[registerTfKey] = '" + basketTypeKey.ToString() + "'");
+               .From("[merchCustomerItemCache]")
+               .Where("[merchCustomerItemCache].[consumerKey] = '" + key.ToString() + "' AND [merchCustomerItemCache].[itemCacheTfKey] = '" + basketTypeKey.ToString() + "'");
 
             //// Act
             var sql = new Sql();
             sql.Select("*")
-                .From<CustomerItemRegisterDto>()
-                .Where<CustomerItemRegisterDto>(x => x.ConsumerKey == key && x.RegisterTfKey == basketTypeKey);
+                .From<CustomerItemCacheDto>()
+                .Where<CustomerItemCacheDto>(x => x.ConsumerKey == key && x.ItemCacheTfKey == basketTypeKey);
 
             //// Assert
             Assert.AreEqual(expected.SQL, sql.SQL);

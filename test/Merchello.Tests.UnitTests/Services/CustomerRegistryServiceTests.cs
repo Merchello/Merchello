@@ -15,15 +15,15 @@ namespace Merchello.Tests.UnitTests.Services
 {
     [TestFixture]
     [Category("Services")]
-    public class CustomerRegistryServiceTests : ServiceTestsBase<ICustomerItemRegister>
+    public class CustomerRegistryServiceTests : ServiceTestsBase<ICustomerItemCache>
     {
 
-        private CustomerItemRegisterService _customerItemRegisterService;
+        private CustomerItemCacheService _customerItemCacheService;
         private IAnonymousCustomer _anonymous;
 
         protected override void Initialize()
         {
-            _customerItemRegisterService = new CustomerItemRegisterService(new MockUnitOfWorkProvider(), new RepositoryFactory());
+            _customerItemCacheService = new CustomerItemCacheService(new MockUnitOfWorkProvider(), new RepositoryFactory());
             Before = null;
             After = null;
 
@@ -31,32 +31,32 @@ namespace Merchello.Tests.UnitTests.Services
                          .AnonymousCustomerForInserting()
                          .MockSavedWithKey(Guid.NewGuid());
 
-            CustomerItemRegisterService.Saving += delegate(ICustomerItemRegisterService sender, SaveEventArgs<ICustomerItemRegister> args)
+            CustomerItemCacheService.Saving += delegate(ICustomerItemCacheService sender, SaveEventArgs<ICustomerItemCache> args)
             {
                 BeforeTriggered = true;
                 Before = args.SavedEntities.FirstOrDefault();
             };
 
-            CustomerItemRegisterService.Saved += delegate(ICustomerItemRegisterService sender, SaveEventArgs<ICustomerItemRegister> args)
+            CustomerItemCacheService.Saved += delegate(ICustomerItemCacheService sender, SaveEventArgs<ICustomerItemCache> args)
             {
                 AfterTriggered = true;
                 After = args.SavedEntities.FirstOrDefault();
             };
 
 
-            CustomerItemRegisterService.Created += delegate(ICustomerItemRegisterService sender, Core.Events.NewEventArgs<ICustomerItemRegister> args)
+            CustomerItemCacheService.Created += delegate(ICustomerItemCacheService sender, Core.Events.NewEventArgs<ICustomerItemCache> args)
             {
                 AfterTriggered = true;
                 After = args.Entity;
             };
 
-            CustomerItemRegisterService.Deleting += delegate(ICustomerItemRegisterService sender, DeleteEventArgs<ICustomerItemRegister> args)
+            CustomerItemCacheService.Deleting += delegate(ICustomerItemCacheService sender, DeleteEventArgs<ICustomerItemCache> args)
             {
                 BeforeTriggered = true;
                 Before = args.DeletedEntities.FirstOrDefault();
             };
 
-            CustomerItemRegisterService.Deleted += delegate(ICustomerItemRegisterService sender, DeleteEventArgs<ICustomerItemRegister> args)
+            CustomerItemCacheService.Deleted += delegate(ICustomerItemCacheService sender, DeleteEventArgs<ICustomerItemCache> args)
             {
                 AfterTriggered = true;
                 After = args.DeletedEntities.FirstOrDefault();
@@ -74,23 +74,23 @@ namespace Merchello.Tests.UnitTests.Services
         [Test]
         public void Save_Triggers_Events_And_Basket_Is_Passed()
         {
-            var basket = MockBasketDataMaker.AnonymousBasket(_anonymous, CustomerItemRegisterType.Basket);
+            var basket = MockBasketDataMaker.AnonymousBasket(_anonymous, CustomerItemCacheType.Basket);
 
-            _customerItemRegisterService.Save(basket);
+            _customerItemCacheService.Save(basket);
 
             Assert.IsTrue(BeforeTriggered);
             Assert.AreEqual(basket.ConsumerKey, Before.ConsumerKey);
 
             Assert.IsTrue(AfterTriggered);
-            Assert.AreEqual(basket.CustomerItemRegisterType, After.CustomerItemRegisterType);
+            Assert.AreEqual(basket.CustomerItemCacheType, After.CustomerItemCacheType);
         }
 
         [Test]
         public void Save_Is_Committed()
         {
 
-            var basket = MockBasketDataMaker.AnonymousBasket(_anonymous, CustomerItemRegisterType.Basket);
-            _customerItemRegisterService.Save(basket);
+            var basket = MockBasketDataMaker.AnonymousBasket(_anonymous, CustomerItemCacheType.Basket);
+            _customerItemCacheService.Save(basket);
 
 
             Assert.IsTrue(CommitCalled);
@@ -100,23 +100,23 @@ namespace Merchello.Tests.UnitTests.Services
         [Test]
         public void Delete_Triggers_Events_And_Basket_Is_Passed()
         {
-            var basket = MockBasketDataMaker.AnonymousBasket(_anonymous, CustomerItemRegisterType.Basket);
+            var basket = MockBasketDataMaker.AnonymousBasket(_anonymous, CustomerItemCacheType.Basket);
 
-            _customerItemRegisterService.Delete(basket);
+            _customerItemCacheService.Delete(basket);
             
             Assert.IsTrue(BeforeTriggered);
             Assert.AreEqual(basket.ConsumerKey, Before.ConsumerKey);
 
             Assert.IsTrue(AfterTriggered);
-            Assert.AreEqual(basket.RegisterTfKey, After.RegisterTfKey);
+            Assert.AreEqual(basket.ItemCacheTfKey, After.ItemCacheTfKey);
         }
 
         [Test]
         public void Delete_Is_Committed()
         {
-            var basket = MockBasketDataMaker.AnonymousBasket(_anonymous, CustomerItemRegisterType.Basket);
+            var basket = MockBasketDataMaker.AnonymousBasket(_anonymous, CustomerItemCacheType.Basket);
 
-            _customerItemRegisterService.Delete(basket);
+            _customerItemCacheService.Delete(basket);
 
             Assert.IsTrue(CommitCalled);
         }

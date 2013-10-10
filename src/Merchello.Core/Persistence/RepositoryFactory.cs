@@ -31,6 +31,16 @@ namespace Merchello.Core.Persistence
                 _disableAllCache ? (IRepositoryCacheProvider)NullCacheProvider.Current : RuntimeCacheProvider.Current);
         }
 
+        /// <summary>
+        /// Returns an instance of the <see cref="IAnonymousCustomerRepository"/>
+        /// </summary>
+        /// <param name="uow"></param>
+        /// <returns></returns>
+        internal virtual IAnonymousCustomerRepository CreateAnonymousCustomerRepository(IDatabaseUnitOfWork uow)
+        {
+            return new AnonymousCustomerRepository(uow,
+                _disableAllCache ? (IRepositoryCacheProvider)NullCacheProvider.Current : RuntimeCacheProvider.Current);
+        }
 
         /// <summary>
         /// Returns an instance of the <see cref="IAddressRepository"/>
@@ -41,13 +51,13 @@ namespace Merchello.Core.Persistence
         }
 
         /// <summary>
-        /// Returns an instance of the <see cref="ICustomerItemRegisterRepository"/>
+        /// Returns an instance of the <see cref="ICustomerItemCacheRepository"/>
         /// </summary>
         /// <param name="uow"></param>
         /// <returns></returns>
-        internal virtual ICustomerItemRegisterRepository CreateCustomerItemRegisterRepository(IDatabaseUnitOfWork uow)
+        internal virtual ICustomerItemCacheRepository CreateCustomerItemRegisterRepository(IDatabaseUnitOfWork uow)
         {
-            return new CustomerItemRegisterRepository(uow,
+            return new CustomerItemCacheRepository(uow,
                 _disableAllCache ? (IRepositoryCacheProvider)NullCacheProvider.Current : RuntimeCacheProvider.Current);
         }
 

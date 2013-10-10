@@ -102,10 +102,10 @@ namespace Merchello.Tests.UnitTests.Mappers
         {
 
             //// Arrage
-            var expected = typeof(BasketMapper);
+            var expected = typeof(CustomerItemCacheMapper);
 
             //// Act
-            var resolved = MerchelloMapper.Current.ResolveByType(typeof(ICustomerItemRegister));
+            var resolved = MerchelloMapper.Current.ResolveByType(typeof(ICustomerItemCache));
 
             //// Assert
             Assert.IsTrue(resolved.Success);

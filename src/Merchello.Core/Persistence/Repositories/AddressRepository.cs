@@ -36,7 +36,7 @@ namespace Merchello.Core.Persistence.Repositories
             var sql = GetBaseQuery(false)
                 .Where(GetBaseWhereClause(), new { Id = id });
 
-            var dto = Database.Fetch<AddressDto>(sql).FirstOrDefault();
+            var dto = Database.Fetch<CustomerAddressDto>(sql).FirstOrDefault();
 
             if (dto == null)
                 return null;
@@ -60,7 +60,7 @@ namespace Merchello.Core.Persistence.Repositories
             else
             {
                 var factory = new AddressFactory();
-                var dtos = Database.Fetch<AddressDto>(GetBaseQuery(false));
+                var dtos = Database.Fetch<CustomerAddressDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
                     yield return factory.BuildEntity(dto);
@@ -136,7 +136,7 @@ namespace Merchello.Core.Persistence.Repositories
             var translator = new SqlTranslator<IAddress>(sqlClause, query);
             var sql = translator.Translate();
 
-            var dtos = Database.Fetch<AddressDto>(sql);
+            var dtos = Database.Fetch<CustomerAddressDto>(sql);
 
             return dtos.DistinctBy(x => x.Id).Select(dto => Get(dto.Id));
 

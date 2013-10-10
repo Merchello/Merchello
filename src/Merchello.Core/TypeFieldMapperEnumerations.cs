@@ -7,7 +7,7 @@
         Custom
     }
 
-    public enum CustomerItemRegisterType
+    public enum CustomerItemCacheType
     {
         Basket,
         Wishlist,
