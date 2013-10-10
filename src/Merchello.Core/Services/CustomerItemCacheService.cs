@@ -46,21 +46,21 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Creates a basket for a consumer with a given type
         /// </summary>
-        public ICustomerItemCache CreateCustomerItemRegister(IConsumer consumer, CustomerItemCacheType customerItemCacheType)
+        public ICustomerItemCache CreateCustomerItemRegister(ICustomerBase customer, CustomerItemCacheType customerItemCacheType)
         {
 
             // determine if the consumer already has a registry of this type, if so return it.
-            var registry = GetRegisterByConsumer(consumer, customerItemCacheType);
+            var registry = GetRegisterByCustomer(customer, customerItemCacheType);
             if (registry != null) return registry;
 
-            registry = new CustomerItemCache(consumer.Key, customerItemCacheType);
+            registry = new CustomerItemCache(customer.Key, customerItemCacheType);
             if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<ICustomerItemCache>(registry), this))
             {
                 //registry.WasCancelled = true;
                 return registry;
             }
 
-            registry.ConsumerKey = consumer.Key;
+            registry.ConsumerKey = customer.Key;
             
 
             Created.RaiseEvent(new Events.NewEventArgs<ICustomerItemCache>(registry), this);
@@ -194,22 +194,22 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Returns the consumer's basket of a given type
         /// </summary>
-        public ICustomerItemCache GetRegisterByConsumer(IConsumer consumer, CustomerItemCacheType customerItemCacheType)
+        public ICustomerItemCache GetRegisterByCustomer(ICustomerBase customer, CustomerItemCacheType customerItemCacheType)
         {
             var typeKey = EnumTypeFieldConverter.CustomerItemItemCache.GetTypeField(customerItemCacheType).TypeKey;
-            return GetRegisterByConsumer(consumer, typeKey);
+            return GetRegisterByCustomer(customer, typeKey);
         }
 
         /// <summary>
         /// Returns a collection of item registers for the consumer
         /// </summary>
-        /// <param name="consumer"></param>
+        /// <param name="customer"></param>
         /// <returns></returns>
-        public IEnumerable<ICustomerItemCache> GetRegisterByConsumer(IConsumer consumer)
+        public IEnumerable<ICustomerItemCache> GetRegisterByCustomer(ICustomerBase customer)
         {
             using (var repository = _repositoryFactory.CreateCustomerItemRegisterRepository(_uowProvider.GetUnitOfWork()))
             {
-                var query = Query<ICustomerItemCache>.Builder.Where(x => x.ConsumerKey == consumer.Key);
+                var query = Query<ICustomerItemCache>.Builder.Where(x => x.ConsumerKey == customer.Key);
                 return repository.GetByQuery(query);
             }
         }
@@ -217,25 +217,25 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Returns the consumer's basket of a given type
         /// </summary>
-        public ICustomerItemCache GetRegisterByConsumer(IConsumer consumer, Guid registerTfKey)
+        public ICustomerItemCache GetRegisterByCustomer(ICustomerBase customer, Guid registerTfKey)
         {
             using (var repository = _repositoryFactory.CreateCustomerItemRegisterRepository(_uowProvider.GetUnitOfWork()))
             {
-                var query = Query<ICustomerItemCache>.Builder.Where(x => x.ConsumerKey == consumer.Key && x.ItemCacheTfKey == registerTfKey);
+                var query = Query<ICustomerItemCache>.Builder.Where(x => x.ConsumerKey == customer.Key && x.ItemCacheTfKey == registerTfKey);
                 return repository.GetByQuery(query).FirstOrDefault();
             }
         }
 
         /// <summary>
-        /// Gets a collection of <see cref="ICustomerItemCache"/> objects by teh <see cref="IConsumer"/>
+        /// Gets a collection of <see cref="ICustomerItemCache"/> objects by teh <see cref="ICustomerBase"/>
         /// </summary>
-        /// <param name="consumer"></param>
+        /// <param name="customer"></param>
         /// <returns></returns>
-        public IEnumerable<ICustomerItemCache> GeByConsumer(IConsumer consumer)
+        public IEnumerable<ICustomerItemCache> GeByConsumer(ICustomerBase customer)
         {
             using (var repository = _repositoryFactory.CreateCustomerItemRegisterRepository(_uowProvider.GetUnitOfWork()))
             {
-                var query = Query<ICustomerItemCache>.Builder.Where(x => x.ConsumerKey == consumer.Key);
+                var query = Query<ICustomerItemCache>.Builder.Where(x => x.ConsumerKey == customer.Key);
                 return repository.GetByQuery(query);
             }
         }

@@ -25,11 +25,11 @@ namespace Merchello.Tests.Base.DataMakers
 
         }
 
-        public static ICustomerItemCache ConsumerBasketForInserting(IConsumer consumer, CustomerItemCacheType customerItemCacheType)
+        public static ICustomerItemCache ConsumerBasketForInserting(ICustomerBase customer, CustomerItemCacheType customerItemCacheType)
         {
-            return new CustomerItemCache(consumer.Key, customerItemCacheType)
+            return new CustomerItemCache(customer.Key, customerItemCacheType)
             {
-                ConsumerKey = consumer.Key
+                ConsumerKey = customer.Key
             };
         }
 

@@ -14,12 +14,11 @@ namespace Merchello.Web
         private readonly MerchelloContext _merchelloContext;
         private readonly UmbracoContext _umbracoContext;
         private readonly CacheHelper _cache;
-        private IConsumer _consumer;
+        private CustomerBase _customer;
 
         public CustomerContext()
             : this(MerchelloContext.Current, UmbracoContext.Current)
         {}
-
 
         public CustomerContext(MerchelloContext merchelloContext, UmbracoContext umbracoContext)
         {
@@ -30,10 +29,10 @@ namespace Merchello.Web
             _merchelloContext = merchelloContext;
             _cache = merchelloContext.Cache;
 
-            InitCustomer();
+            Initialize();
         }
 
-        private void InitCustomer()
+        private void Initialize()
         {            
             // retrieve the merchello consumer cookie
             var cookie = _umbracoContext.HttpContext.Request.Cookies[ConsumerCookieKey];         
@@ -43,11 +42,11 @@ namespace Merchello.Web
                 Guid key;
                 if (!Guid.TryParse(EncryptionHelper.Decrypt(cookie.Value), out key))
                 { 
-                    var consumer = _cache.RuntimeCache.GetCacheItem(CachingBacker.ConsumerCacheKey(key));
+                    var customer = _cache.RuntimeCache.GetCacheItem(CachingBacker.ConsumerCacheKey(key));
 
-                    if (consumer != null)
+                    if (customer != null)
                     {
-                        _consumer = (IConsumer) consumer;
+                        _customer = (CustomerBase) customer;
                     }
                     else { BuildConsumer(key); } // consumer not cached
                 }

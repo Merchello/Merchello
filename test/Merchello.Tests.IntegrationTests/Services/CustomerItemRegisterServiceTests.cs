@@ -30,7 +30,7 @@ namespace Merchello.Tests.IntegrationTests.Services
             //// Arrange
             const int expected = 0;
 
-            var baskets = _customerItemCacheService.GetRegisterByConsumer(_anonymous);
+            var baskets = _customerItemCacheService.GetRegisterByCustomer(_anonymous);
             var enumerable = baskets as ICustomerItemCache[] ?? baskets.ToArray();
 
             if (enumerable.Any())
@@ -38,7 +38,7 @@ namespace Merchello.Tests.IntegrationTests.Services
                 Console.Write(enumerable.Count().ToString());
                 _customerItemCacheService.Delete(enumerable);
             }
-            var count = _customerItemCacheService.GetRegisterByConsumer(_anonymous).Count();
+            var count = _customerItemCacheService.GetRegisterByCustomer(_anonymous).Count();
 
             Assert.IsTrue(expected == count);
         }
@@ -88,7 +88,7 @@ namespace Merchello.Tests.IntegrationTests.Services
             };
 
             //// Act
-            var retreived = _customerItemCacheService.GetRegisterByConsumer(customer);
+            var retreived = _customerItemCacheService.GetRegisterByCustomer(customer);
 
             //// Assert
             Assert.NotNull(retreived);
@@ -109,7 +109,7 @@ namespace Merchello.Tests.IntegrationTests.Services
             };
 
             //// Act
-            var retreived = _customerItemCacheService.GetRegisterByConsumer(customer, expectedBasketType);
+            var retreived = _customerItemCacheService.GetRegisterByCustomer(customer, expectedBasketType);
 
             //// Assert
             Assert.NotNull(retreived);

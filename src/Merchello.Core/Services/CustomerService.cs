@@ -47,7 +47,7 @@ namespace Merchello.Core.Services
         /// <returns><see cref="IAnonymousCustomer"/></returns>
         public IAnonymousCustomer CreateAnonymousCustomerWithKey()
         {
-            var anonymous = new AnonymousCustomer(DateTime.Now);
+            var anonymous = new AnonymousCustomer();
             using (new WriteLock(Locker))
             {
                 var uow = _uowProvider.GetUnitOfWork();

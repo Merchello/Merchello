@@ -14,7 +14,7 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Creates a Basket
         /// </summary>
-        ICustomerItemCache CreateCustomerItemRegister(IConsumer consumer, CustomerItemCacheType customerItemCacheType);
+        ICustomerItemCache CreateCustomerItemRegister(ICustomerBase customer, CustomerItemCacheType customerItemCacheType);
 
         /// <summary>
         /// Saves a single <see cref="ICustomerItemCache"/> object
@@ -52,30 +52,30 @@ namespace Merchello.Core.Services
         ICustomerItemCache GetById(int id);
 
         /// <summary>
-        /// Gets a collection of <see cref="ICustomerItemCache"/> objects by the <see cref="IConsumer"/>
+        /// Gets a collection of <see cref="ICustomerItemCache"/> objects by the <see cref="ICustomerBase"/>
         /// </summary>
-        /// <param name="consumer"></param>
+        /// <param name="customer"></param>
         /// <returns></returns>
-        IEnumerable<ICustomerItemCache> GetRegisterByConsumer(IConsumer consumer);
+        IEnumerable<ICustomerItemCache> GetRegisterByCustomer(ICustomerBase customer);
 
         /// <summary>
         /// Returns the consumer's registry of a given type
         /// </summary>
-        /// <param name="consumer"><see cref="IConsumer"/></param>
+        /// <param name="customer"><see cref="ICustomerBase"/></param>
         /// <param name="registerTfKey"><see cref="ITypeField"/>.TypeKey</param>
         /// <returns><see cref="ICustomerItemCache"/></returns>
         /// <remarks>
         /// Public use of this method is intended to access CustomerRegistryType.Custom records
         /// </remarks>
-        ICustomerItemCache GetRegisterByConsumer(IConsumer consumer, Guid registerTfKey);
+        ICustomerItemCache GetRegisterByCustomer(ICustomerBase customer, Guid registerTfKey);
 
         /// <summary>
-        /// Gets an <see cref="ICustomerItemCache"/> object by the <see cref="IConsumer"/>
+        /// Gets an <see cref="ICustomerItemCache"/> object by the <see cref="ICustomerBase"/>
         /// </summary>
-        /// <param name="consumer">The <see cref="IConsumer"/> object</param>
+        /// <param name="customer">The <see cref="ICustomerBase"/> object</param>
         /// <param name="customerItemCacheType"></param>
         /// <returns><see cref="ICustomerItemCache"/></returns>
-        ICustomerItemCache GetRegisterByConsumer(IConsumer consumer, CustomerItemCacheType customerItemCacheType);
+        ICustomerItemCache GetRegisterByCustomer(ICustomerBase customer, CustomerItemCacheType customerItemCacheType);
             
         /// <summary>
         /// Gets list of <see cref="ICustomerItemCache"/> objects given a list of Ids

@@ -15,7 +15,7 @@ namespace Merchello.Tests.Base.DataMakers
     {
         public static IAnonymousCustomer AnonymousCustomerForInserting()
         {   
-            var anonymous = new AnonymousCustomer(DateTime.Now);
+            var anonymous = new AnonymousCustomer();
             return anonymous;
         }
 

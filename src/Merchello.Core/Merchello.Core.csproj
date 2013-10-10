@@ -103,8 +103,11 @@
     <Compile Include="MerchelloContext.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\AnonymousCustomer.cs" />
+    <Compile Include="Models\CustomerBase.cs" />
     <Compile Include="Models\CustomerItemCache.cs" />
     <Compile Include="Models\ExtendedDataCollection.cs" />
+    <Compile Include="Models\IAnonymousCustomer.cs" />
+    <Compile Include="Models\ICustomerBase.cs" />
     <Compile Include="Models\IInventory.cs" />
     <Compile Include="Models\Inventory.cs" />
     <Compile Include="Models\InventoryCollection.cs" />
@@ -123,9 +126,7 @@
     <Compile Include="Models\GatewayProviders\IRegisteredGatewayProvider.cs" />
     <Compile Include="Models\GatewayProviders\RegisteredGatewayProvider.cs" />
     <Compile Include="Models\IAddress.cs" />
-    <Compile Include="Models\IAnonymousCustomer.cs" />
     <Compile Include="Models\ICustomerItemCache.cs" />
-    <Compile Include="Models\IConsumer.cs" />
     <Compile Include="Gateway\IGatewayResponse.cs" />
     <Compile Include="Models\IInvoiceItem.cs" />
     <Compile Include="Models\IInvoiceStatus.cs" />
