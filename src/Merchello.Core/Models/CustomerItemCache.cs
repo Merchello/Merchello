@@ -15,7 +15,7 @@ namespace Merchello.Core.Models
     {
         private Guid _customerKey;
         private Guid _itemCacheTfKey;
-        private readonly LineItemCollection _items;
+        private LineItemCollection _items;
  
         public CustomerItemCache(Guid customerKey, ItemCacheType itemCacheType)
             : this(customerKey, EnumTypeFieldConverter.CustomerItemItemCache.GetTypeField(itemCacheType).TypeKey, new LineItemCollection())
@@ -100,7 +100,14 @@ namespace Merchello.Core.Models
         /// </summary>
         [DataMember]
         public LineItemCollection Items {
-            get { return _items; }
+            get
+            {
+                return _items;                 
+            }
+            internal set
+            {
+                _items = value;
+            }
         }
     }
 }

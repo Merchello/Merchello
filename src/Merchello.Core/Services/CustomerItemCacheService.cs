@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Merchello.Core.Models;
-using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Models.TypeFields;
 using Merchello.Core.Persistence;
-using Merchello.Core.Events;
 using Merchello.Core.Persistence.Querying;
 using Umbraco.Core;
 using Umbraco.Core.Events;
@@ -46,26 +44,35 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Creates a basket for a consumer with a given type
         /// </summary>
-        public ICustomerItemCache CreateCustomerItemRegister(ICustomerBase customer, ItemCacheType itemCacheType)
+        public ICustomerItemCache GetCustomerItemCacheWithKey(ICustomerBase customer, ItemCacheType itemCacheType)
         {
 
-            // determine if the consumer already has a registry of this type, if so return it.
-            var registry = GetRegisterByCustomer(customer, itemCacheType);
-            if (registry != null) return registry;
+            // determine if the consumer already has a item cache of this type, if so return it.
+            var itemCache = GetCustomerItemCacheByCustomer(customer, itemCacheType);
+            if (itemCache != null) return itemCache;
 
-            registry = new CustomerItemCache(customer.Key, itemCacheType);
-            if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<ICustomerItemCache>(registry), this))
+            itemCache = new CustomerItemCache(customer.Key, itemCacheType);
+            if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<ICustomerItemCache>(itemCache), this))
             {
                 //registry.WasCancelled = true;
-                return registry;
+                return itemCache;
             }
 
-            registry.CustomerKey = customer.Key;
-            
+            itemCache.CustomerKey = customer.Key;
 
-            Created.RaiseEvent(new Events.NewEventArgs<ICustomerItemCache>(registry), this);
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreateCustomerItemRegisterRepository(uow))
+                {
+                    repository.AddOrUpdate(itemCache);
+                    uow.Commit();
+                }
+            }
 
-            return registry;
+            Created.RaiseEvent(new Events.NewEventArgs<ICustomerItemCache>(itemCache), this);
+
+            return itemCache;
         }
 
         /// <summary>
@@ -93,11 +100,11 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Saves a collection of <see cref="ICustomerItemCache"/> objects.
         /// </summary>
-        /// <param name="customerRegistries">Collection of <see cref="CustomerItemCache"/> to save</param>
+        /// <param name="customerItemCaches">Collection of <see cref="CustomerItemCache"/> to save</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        public void Save(IEnumerable<ICustomerItemCache> customerRegistries, bool raiseEvents = true)
+        public void Save(IEnumerable<ICustomerItemCache> customerItemCaches, bool raiseEvents = true)
         {
-            var basketArray = customerRegistries as ICustomerItemCache[] ?? customerRegistries.ToArray();
+            var basketArray = customerItemCaches as ICustomerItemCache[] ?? customerItemCaches.ToArray();
 
             if (raiseEvents) Saving.RaiseEvent(new SaveEventArgs<ICustomerItemCache>(basketArray), this);
 
@@ -141,11 +148,11 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Deletes a collection <see cref="ICustomerItemCache"/> objects
         /// </summary>
-        /// <param name="customerRegistries">Collection of <see cref="ICustomerItemCache"/> to delete</param>
+        /// <param name="customerItemCaches">Collection of <see cref="ICustomerItemCache"/> to delete</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        public void Delete(IEnumerable<ICustomerItemCache> customerRegistries, bool raiseEvents = true)
+        public void Delete(IEnumerable<ICustomerItemCache> customerItemCaches, bool raiseEvents = true)
         {
-            var basketArray = customerRegistries as ICustomerItemCache[] ?? customerRegistries.ToArray();
+            var basketArray = customerItemCaches as ICustomerItemCache[] ?? customerItemCaches.ToArray();
 
             if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<ICustomerItemCache>(basketArray), this);
 
@@ -192,20 +199,20 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
-        /// Returns the consumer's basket of a given type
+        /// Returns the customer item cache of a given type.  This method will not create an item cache if the cache does not exist.
         /// </summary>
-        public ICustomerItemCache GetRegisterByCustomer(ICustomerBase customer, ItemCacheType itemCacheType)
+        public ICustomerItemCache GetCustomerItemCacheByCustomer(ICustomerBase customer, ItemCacheType itemCacheType)
         {
             var typeKey = EnumTypeFieldConverter.CustomerItemItemCache.GetTypeField(itemCacheType).TypeKey;
-            return GetRegisterByCustomer(customer, typeKey);
+            return GetCustomerItemCacheByCustomer(customer, typeKey);
         }
 
         /// <summary>
-        /// Returns a collection of item registers for the consumer
+        /// Returns a collection of item caches for the consumer
         /// </summary>
         /// <param name="customer"></param>
         /// <returns></returns>
-        public IEnumerable<ICustomerItemCache> GetRegisterByCustomer(ICustomerBase customer)
+        public IEnumerable<ICustomerItemCache> GetCustomerItemCacheByCustomer(ICustomerBase customer)
         {
             using (var repository = _repositoryFactory.CreateCustomerItemRegisterRepository(_uowProvider.GetUnitOfWork()))
             {
@@ -215,30 +222,18 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
-        /// Returns the consumer's basket of a given type
+        /// Returns the customer item cache of a given type. This method will not create an item cache if the cache does not exist.
         /// </summary>
-        public ICustomerItemCache GetRegisterByCustomer(ICustomerBase customer, Guid registerTfKey)
+        public ICustomerItemCache GetCustomerItemCacheByCustomer(ICustomerBase customer, Guid itemCacheTfKey)
         {
             using (var repository = _repositoryFactory.CreateCustomerItemRegisterRepository(_uowProvider.GetUnitOfWork()))
             {
-                var query = Query<ICustomerItemCache>.Builder.Where(x => x.CustomerKey == customer.Key && x.ItemCacheTfKey == registerTfKey);
+                var query = Query<ICustomerItemCache>.Builder.Where(x => x.CustomerKey == customer.Key && x.ItemCacheTfKey == itemCacheTfKey);
                 return repository.GetByQuery(query).FirstOrDefault();
             }
         }
 
-        /// <summary>
-        /// Gets a collection of <see cref="ICustomerItemCache"/> objects by teh <see cref="ICustomerBase"/>
-        /// </summary>
-        /// <param name="customer"></param>
-        /// <returns></returns>
-        public IEnumerable<ICustomerItemCache> GeByConsumer(ICustomerBase customer)
-        {
-            using (var repository = _repositoryFactory.CreateCustomerItemRegisterRepository(_uowProvider.GetUnitOfWork()))
-            {
-                var query = Query<ICustomerItemCache>.Builder.Where(x => x.CustomerKey == customer.Key);
-                return repository.GetByQuery(query);
-            }
-        }
+       
 
         public IEnumerable<ICustomerItemCache> GetAll()
         {

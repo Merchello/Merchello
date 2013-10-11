@@ -8,7 +8,7 @@
         /// <summary>
         /// The product type
         /// </summary>
-        ITypeField Product { get; }
+        ITypeField Item { get; }
 
         /// <summary>
         /// The charge type

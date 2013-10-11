@@ -3,17 +3,14 @@ using Merchello.Core.Models.Rdbms;
 
 namespace Merchello.Core.Persistence.Factories
 {
-    internal class CustomerItemRegisterItemFactory : IEntityFactory<ILineItem, CustomerItemCacheItemDto>
+    internal class CustomerItemCacheItemFactory : IEntityFactory<ILineItem, CustomerItemCacheItemDto>
     {
         public ILineItem BuildEntity(CustomerItemCacheItemDto dto)
         {
-            var lineItem = new OrderLineItem(dto.ItemCacheId, dto.LineItemTfKey)
+            var lineItem = new OrderLineItem(dto.ItemCacheId, dto.LineItemTfKey, dto.Name, dto.Sku, dto.Quantity, dto.Amount)
             {
                 Id = dto.Id,
-                Sku = dto.Sku,
-                Name = dto.Name,
-                Quantity = dto.Quantity,
-                Amount = dto.Amount,
+                ExtendedData = string.IsNullOrEmpty(dto.ExtendedData) ? new ExtendedDataCollection() : new ExtendedDataCollection(dto.ExtendedData),
                 UpdateDate = dto.UpdateDate,
                 CreateDate = dto.CreateDate
             };
@@ -34,6 +31,7 @@ namespace Merchello.Core.Persistence.Factories
                 Name = entity.Name,
                 Quantity = entity.Quantity,
                 Amount = entity.Amount,
+                ExtendedData = entity.ExtendedData.Serialize(),
                 UpdateDate = entity.UpdateDate,
                 CreateDate = entity.CreateDate
             };

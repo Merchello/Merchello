@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Net.Configuration;
 using System.Runtime.Serialization;
 using System.Threading;
 using Umbraco.Core;
@@ -8,17 +9,17 @@ using Umbraco.Core;
 namespace Merchello.Core.Models
 {
     /// <summary>
-    /// Represents a Collection of <see cref="LineItemBase"/> objects
+    /// Represents a Collection of <see cref="ILineItem"/> objects
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    public class LineItemCollection : NotifiyCollectionBase<string, LineItemBase>
+    public class LineItemCollection : NotifiyCollectionBase<string, ILineItem>
     {
         private readonly ReaderWriterLockSlim _addLocker = new ReaderWriterLockSlim();
         internal Action OnAdd;
-        internal Func<LineItemBase, bool> ValidateAdd { get; set; }
+        internal Func<ILineItem, bool> ValidateAdd { get; set; }
 
-        internal new void Add(LineItemBase item)
+        internal new void Add(ILineItem item)
         {
             using (new WriteLock(_addLocker))
             {
@@ -26,9 +27,11 @@ namespace Merchello.Core.Models
                 if (key != null)
                 {
                     var exists = this.Contains(key);
-                    if (!exists) return;
-                    this[key].Quantity += item.Quantity;
-                    return;
+                    if (exists) 
+                    { 
+                        this[key].Quantity += item.Quantity;
+                        return;
+                    }
                 }
                 base.Add(item);
 
@@ -38,7 +41,7 @@ namespace Merchello.Core.Models
             }
         }
 
-        protected override string GetKeyForItem(LineItemBase item)
+        protected override string GetKeyForItem(ILineItem item)
         {
             return item.Sku;
         }
@@ -64,6 +67,16 @@ namespace Merchello.Core.Models
         public new bool Contains(string sku)
         {
             return this.Any(x => x.Sku == sku);
+        }
+
+
+        /// <summary>
+        /// True/false indicating whether or not the current collection is empty
+        /// </summary>
+        /// <returns></returns>
+        public bool IsEmpty
+        {
+            get { return Count == 0; }
         }
 
         /// <summary>

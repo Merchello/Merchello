@@ -74,13 +74,13 @@ namespace Merchello.Tests.UnitTests.Querying
             var expected = new Sql();
             expected.Select("*")
                 .From("[merchCustomerItemCache]")
-                .Where("[merchCustomerItemCache].[consumerKey] = '" + key.ToString() + "'");
+                .Where("[merchCustomerItemCache].[customerKey] = '" + key.ToString() + "'");
 
             //// Act
             var sql = new Sql();
             sql.Select("*")
                 .From<CustomerItemCacheDto>()
-                .Where<CustomerItemCacheDto>(x => x.ConsumerKey == key);
+                .Where<CustomerItemCacheDto>(x => x.CustomerKey == key);
 
             //// Assert
             Assert.AreEqual(expected.SQL, sql.SQL);
@@ -99,13 +99,13 @@ namespace Merchello.Tests.UnitTests.Querying
             var expected = new Sql();
             expected.Select("*")
                .From("[merchCustomerItemCache]")
-               .Where("[merchCustomerItemCache].[consumerKey] = '" + key.ToString() + "' AND [merchCustomerItemCache].[itemCacheTfKey] = '" + basketTypeKey.ToString() + "'");
+               .Where("[merchCustomerItemCache].[customerKey] = '" + key.ToString() + "' AND [merchCustomerItemCache].[itemCacheTfKey] = '" + basketTypeKey.ToString() + "'");
 
             //// Act
             var sql = new Sql();
             sql.Select("*")
                 .From<CustomerItemCacheDto>()
-                .Where<CustomerItemCacheDto>(x => x.ConsumerKey == key && x.ItemCacheTfKey == basketTypeKey);
+                .Where<CustomerItemCacheDto>(x => x.CustomerKey == key && x.ItemCacheTfKey == basketTypeKey);
 
             //// Assert
             Assert.AreEqual(expected.SQL, sql.SQL);

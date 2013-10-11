@@ -65,9 +65,9 @@ namespace Merchello.Tests.Base.TypeFields
 
         #region InvoiceItemType TypeFields
 
-        public static ITypeField InvoiceItemProduct
+        public static ITypeField InvoiceItemItem
         {
-            get { return new TypeField("Product", "Product", new Guid("576CB1FB-5C0D-45F5-8CCD-94F63D174902")); }
+            get { return new TypeField("Item", "Item", new Guid("576CB1FB-5C0D-45F5-8CCD-94F63D174902")); }
         }
 
         public static ITypeField InvoiceItemCharge
