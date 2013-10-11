@@ -22,14 +22,16 @@ namespace Merchello.Web.WebApi
 
         protected MerchelloApiController(MerchelloContext merchelloContext) : this(merchelloContext, UmbracoContext.Current)
         {
-            if (merchelloContext == null) throw new ArgumentNullException("merchelloContext");
+            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
+            
             MerchelloContext = merchelloContext;
             InstanceId = Guid.NewGuid();
         }
 
         protected MerchelloApiController(MerchelloContext merchelloContext, UmbracoContext umbracoContext) : base(umbracoContext)
         {
-            if (merchelloContext == null) throw new ArgumentNullException("merchelloContext");
+            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
+
             MerchelloContext = merchelloContext;
             InstanceId = Guid.NewGuid();
         }
