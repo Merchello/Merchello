@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -14,56 +12,11 @@ namespace Merchello.Core.Models
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    public class LineItemCollection : KeyedCollection<string, LineItemBase>, INotifyCollectionChanged
+    public class LineItemCollection : NotifiyCollectionBase<string, LineItemBase>
     {
         private readonly ReaderWriterLockSlim _addLocker = new ReaderWriterLockSlim();
         internal Action OnAdd;
         internal Func<LineItemBase, bool> ValidateAdd { get; set; }
-
-        internal LineItemCollection()
-        {}
-
-        internal LineItemCollection(Func<LineItemBase, bool> validationCallback)
-        {
-            ValidateAdd = validationCallback;
-        }
-
-        public LineItemCollection(IEnumerable<LineItemBase> lineItems)
-        {
-            Reset(lineItems);
-        }
-
-        /// <summary>
-        /// Resets the collection to only contain the <see cref="LineItemBase"/> instances referenced in the <paramref name="lineItems"/> parameter, whilst maintaining
-        /// any validation delegates such as <see cref="ValidateAdd"/>
-        /// </summary>
-        /// <param name="lineItems"></param>
-        /// <remarks></remarks>
-        private void Reset(IEnumerable<LineItemBase> lineItems)
-        {
-            Clear();
-            lineItems.ForEach(Add);
-            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-        }
-
-        protected override void SetItem(int index, LineItemBase item)
-        {
-            base.SetItem(index, item);
-            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, index));
-        }
-
-        protected override void RemoveItem(int index)
-        {
-            var removed = this[index];
-            base.RemoveItem(index);
-            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, removed));
-        }
-
-        protected override void ClearItems()
-        {
-            base.ClearItems();
-            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-        }
 
         internal new void Add(LineItemBase item)
         {
@@ -78,13 +31,19 @@ namespace Merchello.Core.Models
                     return;
                 }
                 base.Add(item);
+
                 OnAdd.IfNotNull(x => x.Invoke());
 
                 OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));
             }
         }
 
-        public int IndexOfSku(string sku)
+        protected override string GetKeyForItem(LineItemBase item)
+        {
+            return item.Sku;
+        }
+
+        public override int IndexOfKey(string sku)
         {
             for (var i = 0; i < Count; i++)
             {
@@ -94,17 +53,6 @@ namespace Merchello.Core.Models
                 }
             }
             return -1;
-        }
-
-        protected override string GetKeyForItem(LineItemBase item)
-        {
-            return item.Sku;
-        }
-
-        protected override void InsertItem(int index, LineItemBase item)
-        {
-            base.InsertItem(index, item);
-            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));
         }
 
         /// <summary>
@@ -118,16 +66,16 @@ namespace Merchello.Core.Models
             return this.Any(x => x.Sku == sku);
         }
 
-
-        public event NotifyCollectionChangedEventHandler CollectionChanged;
-
-        protected virtual void OnCollectionChanged(NotifyCollectionChangedEventArgs args)
+        /// <summary>
+        /// Allows visitor to visit each item in the collection
+        /// </summary>
+        /// <param name="visitor"><see cref="ILineItemVisitor"/></param>
+        public virtual void Accept(ILineItemVisitor visitor)
         {
-            if (CollectionChanged != null)
+            foreach (var item in this)
             {
-                CollectionChanged(this, args);
+                visitor.Visit(item);
             }
         }
     }
-
 }

@@ -14,7 +14,7 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Creates a Basket
         /// </summary>
-        ICustomerItemCache CreateCustomerItemRegister(ICustomerBase customer, CustomerItemCacheType customerItemCacheType);
+        ICustomerItemCache CreateCustomerItemRegister(ICustomerBase customer, ItemCacheType itemCacheType);
 
         /// <summary>
         /// Saves a single <see cref="ICustomerItemCache"/> object
@@ -73,9 +73,9 @@ namespace Merchello.Core.Services
         /// Gets an <see cref="ICustomerItemCache"/> object by the <see cref="ICustomerBase"/>
         /// </summary>
         /// <param name="customer">The <see cref="ICustomerBase"/> object</param>
-        /// <param name="customerItemCacheType"></param>
+        /// <param name="itemCacheType"></param>
         /// <returns><see cref="ICustomerItemCache"/></returns>
-        ICustomerItemCache GetRegisterByCustomer(ICustomerBase customer, CustomerItemCacheType customerItemCacheType);
+        ICustomerItemCache GetRegisterByCustomer(ICustomerBase customer, ItemCacheType itemCacheType);
             
         /// <summary>
         /// Gets list of <see cref="ICustomerItemCache"/> objects given a list of Ids

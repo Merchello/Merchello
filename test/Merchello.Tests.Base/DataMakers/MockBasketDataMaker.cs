@@ -10,9 +10,9 @@ namespace Merchello.Tests.Base.DataMakers
     /// </summary>
     public class MockBasketDataMaker : MockDataMakerBase
     {
-        public static ICustomerItemCache AnonymousBasket(IAnonymousCustomer anonymous, CustomerItemCacheType customerItemCacheType)
+        public static ICustomerItemCache AnonymousBasket(IAnonymousCustomer anonymous, ItemCacheType itemCacheType)
         {
-            var customerRegistry =  new CustomerItemCache(anonymous.Key, customerItemCacheType)
+            var customerRegistry =  new CustomerItemCache(anonymous.Key, itemCacheType)
             {
                 Id = 1,
                 CreateDate = DateTime.Now,
@@ -25,11 +25,11 @@ namespace Merchello.Tests.Base.DataMakers
 
         }
 
-        public static ICustomerItemCache ConsumerBasketForInserting(ICustomerBase customer, CustomerItemCacheType customerItemCacheType)
+        public static ICustomerItemCache ConsumerBasketForInserting(ICustomerBase customer, ItemCacheType itemCacheType)
         {
-            return new CustomerItemCache(customer.Key, customerItemCacheType)
+            return new CustomerItemCache(customer.Key, itemCacheType)
             {
-                ConsumerKey = customer.Key
+                CustomerKey = customer.Key
             };
         }
 

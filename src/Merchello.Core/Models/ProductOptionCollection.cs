@@ -21,8 +21,6 @@ namespace Merchello.Core.Models
             return item.Name;
         }
 
-      
-
         internal new void Add(IProductOption item)
         {
             using (new WriteLock(_addLocker))

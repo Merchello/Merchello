@@ -24,7 +24,7 @@ namespace Merchello.Core.Persistence.Factories
             var dto = new CustomerItemCacheDto()
             {
                 Id = entity.Id,
-                ConsumerKey = entity.ConsumerKey,
+                ConsumerKey = entity.CustomerKey,
                 ItemCacheTfKey = entity.ItemCacheTfKey,
                 UpdateDate = entity.UpdateDate,
                 CreateDate = entity.CreateDate
