@@ -13,17 +13,10 @@ namespace Merchello.Core.Models
     [DataContract(IsReference = true)]
     internal class OrderLineItem : LineItemBase, IOrderLineItem
     {
-
-
-        internal OrderLineItem(int containerId, Guid lineItemTfKey)
-            : this(containerId, lineItemTfKey, new LineItemCollection())
+        public OrderLineItem(int containerId, Guid lineItemTfKey)
+            : base(containerId, lineItemTfKey)
         { }
 
-        internal OrderLineItem(int containerId, Guid lineItemTfKey, LineItemCollection itemization)
-            : base(containerId, lineItemTfKey, itemization)
-        { }
-
-       
     }
 
 }

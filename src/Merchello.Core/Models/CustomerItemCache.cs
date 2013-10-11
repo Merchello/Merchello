@@ -11,52 +11,52 @@ namespace Merchello.Core.Models
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    internal class CustomerItemCache : IdEntity, ICustomerItemCache
+    public class CustomerItemCache : IdEntity, ICustomerItemCache
     {
-        private Guid _consumerKey;
+        private Guid _customerKey;
         private Guid _itemCacheTfKey;
         private readonly LineItemCollection _items;
  
-        public CustomerItemCache(Guid consumerKey, CustomerItemCacheType customerItemCacheType)
-            : this(consumerKey, EnumTypeFieldConverter.CustomerItemItemCache.GetTypeField(customerItemCacheType).TypeKey, new LineItemCollection())
+        public CustomerItemCache(Guid customerKey, ItemCacheType itemCacheType)
+            : this(customerKey, EnumTypeFieldConverter.CustomerItemItemCache.GetTypeField(itemCacheType).TypeKey, new LineItemCollection())
         { }
 
-        internal CustomerItemCache(Guid consumerKey, Guid itemCacheTfKey)
-            : this(consumerKey, itemCacheTfKey, new LineItemCollection())
+        internal CustomerItemCache(Guid customerKey, Guid itemCacheTfKey)
+            : this(customerKey, itemCacheTfKey, new LineItemCollection())
         { }
 
-        public CustomerItemCache(Guid consumerKey, CustomerItemCacheType customerItemCacheType, LineItemCollection items)
-            : this(consumerKey, EnumTypeFieldConverter.CustomerItemItemCache.GetTypeField(customerItemCacheType).TypeKey, items)
+        public CustomerItemCache(Guid customerKey, ItemCacheType itemCacheType, LineItemCollection items)
+            : this(customerKey, EnumTypeFieldConverter.CustomerItemItemCache.GetTypeField(itemCacheType).TypeKey, items)
         { }
 
-        internal CustomerItemCache(Guid consumerKey, Guid itemCacheTfKey, LineItemCollection items)
+        internal CustomerItemCache(Guid customerKey, Guid itemCacheTfKey, LineItemCollection items)
         {
-            Mandate.ParameterCondition(consumerKey != Guid.Empty, "consumerKey");
-            Mandate.ParameterCondition(itemCacheTfKey != Guid.Empty, "customerRegisterTfKey");
+            Mandate.ParameterCondition(customerKey != Guid.Empty, "consumerKey");
+            Mandate.ParameterCondition(itemCacheTfKey != Guid.Empty, "itemCacheTfKey");
             Mandate.ParameterNotNull(items, "items");
 
-            _consumerKey = consumerKey;
+            _customerKey = customerKey;
             _itemCacheTfKey = itemCacheTfKey;
             _items = items;
         }
         
-        private static readonly PropertyInfo CustomerRegistrySelector = ExpressionHelper.GetPropertyInfo<CustomerItemCache, Guid>(x => x.ConsumerKey);
-        private static readonly PropertyInfo RegistryTfKeySelector = ExpressionHelper.GetPropertyInfo<CustomerItemCache, Guid>(x => x.ItemCacheTfKey);
+        private static readonly PropertyInfo CustomerRegistrySelector = ExpressionHelper.GetPropertyInfo<CustomerItemCache, Guid>(x => x.CustomerKey);
+        private static readonly PropertyInfo ItemCacheTfKeySelector = ExpressionHelper.GetPropertyInfo<CustomerItemCache, Guid>(x => x.ItemCacheTfKey);
         
         /// <summary>
-        /// The <see cref="IConsumer"/> key
+        /// The <see cref="ICustomer"/> key
         /// </summary>
         [DataMember]
-        public Guid ConsumerKey
+        public Guid CustomerKey
         {
-            get { return _consumerKey; }
+            get { return _customerKey; }
             set
             {
                 SetPropertyValueAndDetectChanges(o =>
                 {
-                    _consumerKey = value;
-                    return _consumerKey;
-                }, _consumerKey, CustomerRegistrySelector);
+                    _customerKey = value;
+                    return _customerKey;
+                }, _customerKey, CustomerRegistrySelector);
             }
         }
 
@@ -73,15 +73,15 @@ namespace Merchello.Core.Models
                 {
                     _itemCacheTfKey = value;
                     return _itemCacheTfKey;
-                }, _itemCacheTfKey, RegistryTfKeySelector);
+                }, _itemCacheTfKey, ItemCacheTfKeySelector);
             }
         }
 
         /// <summary>
-        /// The <see cref="CustomerItemCacheType"/> of the customer registry
+        /// The <see cref="ItemCacheType"/> of the customer registry
         /// </summary>
         [DataMember]
-        public CustomerItemCacheType CustomerItemCacheType
+        public ItemCacheType ItemCacheType
         {
             get { return EnumTypeFieldConverter.CustomerItemItemCache.GetTypeField(_itemCacheTfKey); }
             set

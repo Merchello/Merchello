@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Merchello.Core.Models.EntityBase;
@@ -6,7 +7,7 @@ using Merchello.Core.Models.EntityBase;
 namespace Merchello.Core.Models
 {
     /// <summary>
-    /// Defines a line item
+    /// Represents a line item
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
@@ -18,20 +19,15 @@ namespace Merchello.Core.Models
         private string _name;
         private int _quantity;
         private decimal _amount;
-        private LineItemCollection _itemization;
+        private ExtendedDataCollection _extendedData;
 
-        protected LineItemBase (int containerId, Guid lineItemTfKey)
-            : this(containerId, lineItemTfKey, new LineItemCollection())
-        { }
-
-        protected LineItemBase (int containerId, Guid lineItemTfKey, LineItemCollection itemization)  
+        protected LineItemBase (int containerId, Guid lineItemTfKey)  
         {
             Mandate.ParameterCondition(containerId != 0, "containerId");
             Mandate.ParameterCondition(lineItemTfKey != Guid.Empty, "lineItemTfKey");
-            Mandate.ParameterNotNull(itemization, "itemization");
-
+            
             _containerId = containerId;
-            _itemization = itemization;
+            _lineItemTfKey = lineItemTfKey;
         }
 
         private static readonly PropertyInfo LineItemTfKeySelector = ExpressionHelper.GetPropertyInfo<LineItemBase, Guid>(x => x.LineItemTfKey);
@@ -39,8 +35,14 @@ namespace Merchello.Core.Models
         private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<LineItemBase, string>(x => x.Name);
         private static readonly PropertyInfo BaseQuantitySelector = ExpressionHelper.GetPropertyInfo<LineItemBase, int>(x => x.Quantity);
         private static readonly PropertyInfo AmountSelector = ExpressionHelper.GetPropertyInfo<LineItemBase, decimal>(x => x.Amount);
+        private static readonly PropertyInfo ExtendedDataChangedSelector = ExpressionHelper.GetPropertyInfo<LineItemBase, ExtendedDataCollection>(x => x.ExtendedData);
 
-    
+        private void ExtendedDataChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            OnPropertyChanged(ExtendedDataChangedSelector);
+        }
+
+
         /// <summary>
         /// The customer registry id associated with the Customer Registry
         /// </summary>
@@ -133,6 +135,28 @@ namespace Merchello.Core.Models
                         return _amount;
                     }, _amount, AmountSelector); 
                 }
-        } 
+        }
+
+        /// <summary>
+        /// A collection for storing custom/extended line item data
+        /// </summary>
+        [DataMember]
+        public ExtendedDataCollection ExtendedData
+        {
+            get { return _extendedData; }
+            internal set { 
+                _extendedData = value;
+                _extendedData.CollectionChanged += ExtendedDataChanged;
+            }
+        }
+
+        /// <summary>
+        /// Accept for visitor operations
+        /// </summary>
+        /// <param name="vistor"><see cref="ILineItemVisitor"/></param>
+        public virtual void Accept(ILineItemVisitor vistor)
+        {
+            vistor.Visit(this);
+        }
     }
 }

@@ -114,9 +114,9 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         /// <summary>
         ///  Inserts an address record in the merchBasket table and returns an <see cref="ICustomerItemCache"/> object representation
         /// </summary>
-        public ICustomerItemCache MakeExistingBasket(ICustomerBase customer, CustomerItemCacheType customerItemCacheType)
+        public ICustomerItemCache MakeExistingBasket(ICustomerBase customer, ItemCacheType itemCacheType)
         {
-            var basket = MockBasketDataMaker.ConsumerBasketForInserting(customer, customerItemCacheType);
+            var basket = MockBasketDataMaker.ConsumerBasketForInserting(customer, itemCacheType);
             CustomerItemCacheService.Save(basket);
             return basket;
         }

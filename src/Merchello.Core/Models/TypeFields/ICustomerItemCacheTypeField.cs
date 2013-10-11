@@ -3,7 +3,7 @@
     /// <summary>
     /// Defines a BasketTypeField
     /// </summary>
-    public interface ICustomerItemCacheTypeField : ITypeFieldMapper<CustomerItemCacheType>
+    public interface ICustomerItemCacheTypeField : ITypeFieldMapper<ItemCacheType>
     {
      
         /// <summary>

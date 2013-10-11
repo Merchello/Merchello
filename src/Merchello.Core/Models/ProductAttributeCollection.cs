@@ -50,6 +50,19 @@ namespace Merchello.Core.Models
             return Count == compare.Count && compare.All(item => Contains(item.Id));
         }
 
+        public override int IndexOfKey(string key)
+        {
+            for (var i = 0; i < Count; i++)
+            {
+                if (this[i].Sku == key)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+
         public new bool Contains(string sku)
         {
             return this.Any(x => x.Sku  == sku);
@@ -60,16 +73,7 @@ namespace Merchello.Core.Models
             return this.Any(x => x.Id == id);
         }
 
-        public override int IndexOfKey(string key)
-        {
-            for (var i = 0; i < Count; i++)
-            {
-                if (this[i].Name == key)
-                {
-                    return i;
-                }
-            }
-            return -1;
-        }
+        
+
     }
 }
