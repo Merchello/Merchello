@@ -28,7 +28,6 @@ namespace Merchello.Core.Persistence.Repositories
         }
 
 
-
         #region Overrides of RepositoryBase<ICustomerRegistry>
 
 
@@ -42,11 +41,15 @@ namespace Merchello.Core.Persistence.Repositories
             if (dto == null)
                 return null;
 
-            var factory = new CustomerItemRegistryFactory();
+            var factory = new CustomerItemCacheFactory();
 
-            var basket = factory.BuildEntity(dto);
+            var itemCache = factory.BuildEntity(dto);
 
-            return basket;
+            ((CustomerItemCache)itemCache).Items = GetLineItemCollection(itemCache.Id);
+
+            itemCache.ResetDirtyProperties();
+
+            return itemCache;
         }
 
         protected override IEnumerable<ICustomerItemCache> PerformGetAll(params int[] ids)
@@ -59,22 +62,34 @@ namespace Merchello.Core.Persistence.Repositories
                 }
             }
             else
-            {
-                var factory = new CustomerItemRegistryFactory();
+            {                
                 var dtos = Database.Fetch<CustomerItemCacheDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
-                    yield return factory.BuildEntity(dto);
+                    yield return Get(dto.Id);
                 }
             }
         }
 
         #endregion
 
-        private ICustomerItemCache CreateCustomerRegistryFromDto(CustomerItemCacheDto dto)
+        private LineItemCollection GetLineItemCollection(int itemCacheId)
         {
-            var factory = new CustomerItemRegistryFactory();
-            return null;
+            var sql = new Sql();
+            sql.Select("*")
+                .From<CustomerItemCacheItemDto>()
+                .Where<CustomerItemCacheItemDto>(x => x.ItemCacheId == itemCacheId);
+
+            var dtos = Database.Fetch<CustomerItemCacheItemDto>(sql);
+
+            var factory = new CustomerItemCacheLineItemFactory();
+            var collection = new LineItemCollection();
+            foreach (var dto in dtos)
+            {
+                collection.Add(factory.BuildEntity(dto));
+            }
+
+            return collection;
         }
 
         #region Overrides of MerchelloPetaPocoRepositoryBase<ICustomerRegistry>
@@ -83,22 +98,22 @@ namespace Merchello.Core.Persistence.Repositories
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-               .From("merchCustomerItemRegister");
+               .From("merchCustomerItemCache");
 
             return sql;
         }
 
         protected override string GetBaseWhereClause()
         {
-            return "merchCustomerRegistry.id = @Id";
+            return "merchCustomerItemCache.id = @Id";
         }
 
         protected override IEnumerable<string> GetDeleteClauses()
         {
             var list = new List<string>
                 {
-                    "DELETE FROM merchCustomerItemRegisterItem WHERE basketId = @Id",
-                    "DELETE FROM merchCustomerItemRegister WHERE id = @Id"
+                    "DELETE FROM merchCustomerItemCacheItem WHERE itemCacheId = @Id",
+                    "DELETE FROM merchCustomerItemCache WHERE id = @Id"
                 };
 
             return list;
@@ -108,7 +123,7 @@ namespace Merchello.Core.Persistence.Repositories
         {
             ((IdEntity)entity).AddingEntity();
 
-            var factory = new CustomerItemRegistryFactory();
+            var factory = new CustomerItemCacheFactory();
             var dto = factory.BuildDto(entity);
 
             Database.Insert(dto);
@@ -120,7 +135,7 @@ namespace Merchello.Core.Persistence.Repositories
         {
             ((IdEntity)entity).UpdatingEntity();
 
-            var factory = new CustomerItemRegistryFactory();
+            var factory = new CustomerItemCacheFactory();
             var dto = factory.BuildDto(entity);
 
             Database.Update(dto);
@@ -137,7 +152,6 @@ namespace Merchello.Core.Persistence.Repositories
             }
         }
 
-
         protected override IEnumerable<ICustomerItemCache> PerformGetByQuery(IQuery<ICustomerItemCache> query)
         {
             var sqlClause = GetBaseQuery(false);
@@ -147,10 +161,7 @@ namespace Merchello.Core.Persistence.Repositories
             var dtos = Database.Fetch<CustomerItemCacheDto>(sql);
 
             return dtos.DistinctBy(x => x.Id).Select(dto => Get(dto.Id));
-
-        }
-
-        
+        }        
 
         #endregion
 

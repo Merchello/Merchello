@@ -12,9 +12,9 @@ namespace Merchello.Core.Services
     public interface ICustomerItemCacheService : IService
     {
         /// <summary>
-        /// Creates a Basket
+        /// Creates an item cache (or retrieves an existing one) based on type and saves it to the database
         /// </summary>
-        ICustomerItemCache CreateCustomerItemRegister(ICustomerBase customer, ItemCacheType itemCacheType);
+        ICustomerItemCache GetCustomerItemCacheWithKey(ICustomerBase customer, ItemCacheType itemCacheType);
 
         /// <summary>
         /// Saves a single <see cref="ICustomerItemCache"/> object
@@ -26,9 +26,9 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Saves a collection of <see cref="ICustomerItemCache"/> objects
         /// </summary>
-        /// <param name="customerRegistries"></param>
+        /// <param name="customerItemCaches"></param>
         /// <param name="raiseEvents"></param>
-        void Save(IEnumerable<ICustomerItemCache> customerRegistries, bool raiseEvents = true);
+        void Save(IEnumerable<ICustomerItemCache> customerItemCaches, bool raiseEvents = true);
 
         /// <summary>
         /// Deletes a single <see cref="ICustomerItemCache"/> object
@@ -38,11 +38,11 @@ namespace Merchello.Core.Services
         void Delete(ICustomerItemCache customerItemCache, bool raiseEvents = true);
 
         /// <summary>
-        /// Deletes a collection of <see cref="IAddress"/> objects
+        /// Deletes a collection of <see cref="ICustomerItemCache"/> objects
         /// </summary>
-        /// <param name="customerRegistries">Collection of <see cref="ICustomerItemCache"/> to delete</param>
+        /// <param name="customerItemCaches">Collection of <see cref="ICustomerItemCache"/> to delete</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        void Delete(IEnumerable<ICustomerItemCache> customerRegistries, bool raiseEvents = true);
+        void Delete(IEnumerable<ICustomerItemCache> customerItemCaches, bool raiseEvents = true);
 
         /// <summary>
         /// Gets an <see cref="ICustomerItemCache"/> object by its Id
@@ -56,18 +56,18 @@ namespace Merchello.Core.Services
         /// </summary>
         /// <param name="customer"></param>
         /// <returns></returns>
-        IEnumerable<ICustomerItemCache> GetRegisterByCustomer(ICustomerBase customer);
+        IEnumerable<ICustomerItemCache> GetCustomerItemCacheByCustomer(ICustomerBase customer);
 
         /// <summary>
         /// Returns the consumer's registry of a given type
         /// </summary>
         /// <param name="customer"><see cref="ICustomerBase"/></param>
-        /// <param name="registerTfKey"><see cref="ITypeField"/>.TypeKey</param>
+        /// <param name="itemCacheTfKey"><see cref="ITypeField"/>.TypeKey</param>
         /// <returns><see cref="ICustomerItemCache"/></returns>
         /// <remarks>
-        /// Public use of this method is intended to access CustomerRegistryType.Custom records
+        /// Public use of this method is intended to access ItemCacheType.Custom records
         /// </remarks>
-        ICustomerItemCache GetRegisterByCustomer(ICustomerBase customer, Guid registerTfKey);
+        ICustomerItemCache GetCustomerItemCacheByCustomer(ICustomerBase customer, Guid itemCacheTfKey);
 
         /// <summary>
         /// Gets an <see cref="ICustomerItemCache"/> object by the <see cref="ICustomerBase"/>
@@ -75,7 +75,7 @@ namespace Merchello.Core.Services
         /// <param name="customer">The <see cref="ICustomerBase"/> object</param>
         /// <param name="itemCacheType"></param>
         /// <returns><see cref="ICustomerItemCache"/></returns>
-        ICustomerItemCache GetRegisterByCustomer(ICustomerBase customer, ItemCacheType itemCacheType);
+        ICustomerItemCache GetCustomerItemCacheByCustomer(ICustomerBase customer, ItemCacheType itemCacheType);
             
         /// <summary>
         /// Gets list of <see cref="ICustomerItemCache"/> objects given a list of Ids

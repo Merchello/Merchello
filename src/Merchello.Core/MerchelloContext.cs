@@ -8,7 +8,7 @@ using Umbraco.Core.Logging;
 
 namespace Merchello.Core
 {
-    public class MerchelloContext : IDisposable
+    public class MerchelloContext : IMerchelloContext
     {
         internal MerchelloContext(IServiceContext serviceContext)
             : this(serviceContext, ApplicationContext.Current.ApplicationCache)
@@ -48,7 +48,7 @@ namespace Merchello.Core
         /// <remarks>
         /// This is generally a short cut to the ApplicationContext.Current.ApplicationCache
         /// </remarks>
-        internal CacheHelper Cache { get; private set; }
+        public CacheHelper Cache { get; private set; }
 
         
 
@@ -150,7 +150,7 @@ namespace Merchello.Core
         /// <summary>
         /// Gets the current GatewayProviderRegistry
         /// </summary>
-        public IGatewayContext GatewayContext
+        public IGatewayContext Gateways
         {
             get
             {

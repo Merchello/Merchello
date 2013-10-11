@@ -18,7 +18,7 @@ namespace Merchello.Core.Models.TypeFields
 
         internal override sealed void BuildCache()
         {
-            AddUpdateCache(InvoiceItemType.Product, new TypeField("Product", "Product", new Guid("576CB1FB-5C0D-45F5-8CCD-94F63D174902")));
+            AddUpdateCache(InvoiceItemType.Item, new TypeField("Item", "Item", new Guid("576CB1FB-5C0D-45F5-8CCD-94F63D174902")));
             AddUpdateCache(InvoiceItemType.Charge, new TypeField("Charge", "Charge or Fee", new Guid("5574BB84-1C96-4F7E-91FB-CFD7C11162A0")));
             AddUpdateCache(InvoiceItemType.Shipping, new TypeField("Shipping", "Shipping", new Guid("7E69FFD2-394C-44BF-9442-B86F67AEC110")));
             AddUpdateCache(InvoiceItemType.Tax, new TypeField("Tax", "Tax", new Guid("3F4830C8-FB7C-4393-831D-3953525541B3")));
@@ -39,9 +39,9 @@ namespace Merchello.Core.Models.TypeFields
         /// <summary>
         /// Catalog product sales
         /// </summary>
-        public ITypeField Product
+        public ITypeField Item
         {
-            get { return GetTypeField(InvoiceItemType.Product); }
+            get { return GetTypeField(InvoiceItemType.Item); }
         }
 
         /// <summary>

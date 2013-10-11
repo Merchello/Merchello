@@ -1,5 +1,7 @@
 ﻿using System;
+using Merchello.Core;
 using Merchello.Core.Models;
+using Merchello.Core.Models.TypeFields;
 using Merchello.Web.Models;
 
 namespace Merchello.Web.Cache
@@ -20,10 +22,11 @@ namespace Merchello.Web.Cache
         /// Returns a cache key intend for runtime caching of a <see cref="IBasket"/>
         /// </summary>
         /// <param name="customerKey"></param>
+        /// <param name="itemCacheTfKey">The type field key for the cache</param>
         /// <returns></returns>
-        public static string BasketCacheKey(Guid customerKey)
+        public static string CustomerItemCacheKey(Guid customerKey, Guid itemCacheTfKey)
         {
-            return string.Format("merchello.basket.{0}", customerKey);
+            return string.Format("merchello.itemcache.{0}.{1}", itemCacheTfKey, customerKey);
         }
     }
 }

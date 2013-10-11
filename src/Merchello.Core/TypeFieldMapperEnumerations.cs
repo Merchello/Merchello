@@ -22,7 +22,7 @@
 
     public enum InvoiceItemType
     {
-        Product,
+        Item,
         Charge,
         Shipping,
         Tax,

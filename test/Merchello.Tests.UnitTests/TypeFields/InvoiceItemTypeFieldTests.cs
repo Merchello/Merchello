@@ -19,7 +19,7 @@ namespace Merchello.Tests.UnitTests.TypeFields
         [SetUp]
         public void Setup()
         {
-            _mockProduct = TypeFieldMock.InvoiceItemProduct;
+            _mockProduct = TypeFieldMock.InvoiceItemItem;
             _mockCharge = TypeFieldMock.InvoiceItemCharge;
             _mockShipping = TypeFieldMock.InvoiceItemShipping;
             _mockTax = TypeFieldMock.InvoiceItemTax;
@@ -32,7 +32,7 @@ namespace Merchello.Tests.UnitTests.TypeFields
         [Test]
         public void InvoiceItemType_product_matches_configuration()
         {
-            var type = EnumTypeFieldConverter.InvoiceItem.Product;
+            var type = EnumTypeFieldConverter.InvoiceItem.Item;
 
             Assert.AreEqual(_mockProduct.Alias, type.Alias);
             Assert.AreEqual(_mockProduct.Name, type.Name);

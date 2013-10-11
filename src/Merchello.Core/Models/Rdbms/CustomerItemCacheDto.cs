@@ -13,9 +13,9 @@ namespace Merchello.Core.Models.Rdbms
         [PrimaryKeyColumn]
         public int Id { get; set; }
 
-        [Column("consumerKey")]
+        [Column("customerKey")]
         [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchCustomerItemCacheConsumerKey")]
-        public Guid ConsumerKey { get; set; }
+        public Guid CustomerKey { get; set; }
 
         [Column("itemCacheTfKey")]
         public Guid ItemCacheTfKey { get; set; }

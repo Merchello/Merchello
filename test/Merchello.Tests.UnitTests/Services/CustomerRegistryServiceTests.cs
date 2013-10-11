@@ -74,7 +74,7 @@ namespace Merchello.Tests.UnitTests.Services
         [Test]
         public void Save_Triggers_Events_And_Basket_Is_Passed()
         {
-            var basket = MockBasketDataMaker.AnonymousBasket(_anonymous, ItemCacheType.Basket);
+            var basket = MockCustomerItemCacheDataMaker.AnonymousBasket(_anonymous, ItemCacheType.Basket);
 
             _customerItemCacheService.Save(basket);
 
@@ -89,7 +89,7 @@ namespace Merchello.Tests.UnitTests.Services
         public void Save_Is_Committed()
         {
 
-            var basket = MockBasketDataMaker.AnonymousBasket(_anonymous, ItemCacheType.Basket);
+            var basket = MockCustomerItemCacheDataMaker.AnonymousBasket(_anonymous, ItemCacheType.Basket);
             _customerItemCacheService.Save(basket);
 
 
@@ -100,7 +100,7 @@ namespace Merchello.Tests.UnitTests.Services
         [Test]
         public void Delete_Triggers_Events_And_Basket_Is_Passed()
         {
-            var basket = MockBasketDataMaker.AnonymousBasket(_anonymous, ItemCacheType.Basket);
+            var basket = MockCustomerItemCacheDataMaker.AnonymousBasket(_anonymous, ItemCacheType.Basket);
 
             _customerItemCacheService.Delete(basket);
             
@@ -114,7 +114,7 @@ namespace Merchello.Tests.UnitTests.Services
         [Test]
         public void Delete_Is_Committed()
         {
-            var basket = MockBasketDataMaker.AnonymousBasket(_anonymous, ItemCacheType.Basket);
+            var basket = MockCustomerItemCacheDataMaker.AnonymousBasket(_anonymous, ItemCacheType.Basket);
 
             _customerItemCacheService.Delete(basket);
 
