@@ -91,6 +91,7 @@
     <Compile Include="Events\StatusChangeEventArgs.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IMerchelloContext.cs" />
     <Compile Include="ModelExtensions.cs" />
     <Compile Include="Gateway\GatewayEnumerations.cs" />
     <Compile Include="Gateway\IGatewayProvider.cs" />
@@ -192,6 +193,7 @@
     <Compile Include="Persistence\Caching\InMemoryCacheProvider.cs" />
     <Compile Include="Persistence\Factories\ExtendedDataFactory.cs" />
     <Compile Include="Persistence\Factories\InventoryFactory.cs" />
+    <Compile Include="Persistence\Factories\OrderItemFactory.cs" />
     <Compile Include="Persistence\Factories\ProductAttributeFactory.cs" />
     <Compile Include="Persistence\Factories\ProductOptionFactory.cs" />
     <Compile Include="Persistence\Factories\ProductVariantFactory.cs" />
@@ -215,8 +217,8 @@
     <Compile Include="Strategies\IStrategy.cs" />
     <Compile Include="Strategies\Payment\IPaymentApplicationStrategyBase.cs" />
     <Compile Include="Persistence\Factories\AnonymousCustomerFactory.cs" />
-    <Compile Include="Persistence\Factories\CustomerItemRegistryFactory.cs" />
-    <Compile Include="Persistence\Factories\CustomerItemRegisterItemFactory.cs" />
+    <Compile Include="Persistence\Factories\CustomerItemCacheFactory.cs" />
+    <Compile Include="Persistence\Factories\CustomerItemCacheItemFactory.cs" />
     <Compile Include="Persistence\Factories\InvoiceFactory.cs" />
     <Compile Include="Persistence\Factories\InvoiceItemFactory.cs" />
     <Compile Include="Persistence\Factories\InvoiceStatusFactory.cs" />

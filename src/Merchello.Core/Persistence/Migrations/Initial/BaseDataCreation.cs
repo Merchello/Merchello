@@ -50,7 +50,7 @@ namespace Merchello.Core.Persistence.Migrations.Initial
 
             // InvoiceItemType
             var itf = new InvoiceItemTypeField();
-            _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = itf.Product.TypeKey, Alias = itf.Product.Alias, Name = itf.Product.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
+            _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = itf.Item.TypeKey, Alias = itf.Item.Alias, Name = itf.Item.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = itf.Charge.TypeKey, Alias = itf.Charge.Alias, Name = itf.Charge.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = itf.Credit.TypeKey, Alias = itf.Credit.Alias, Name = itf.Credit.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = itf.Shipping.TypeKey, Alias = itf.Shipping.Alias, Name = itf.Shipping.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });

@@ -6,26 +6,26 @@ using Merchello.Core.Models;
 namespace Merchello.Tests.Base.DataMakers
 {
     /// <summary>
-    /// Helper class to assist in putting together basket data for testing
+    /// Helper class to assist in putting together customer item cache data for testing
     /// </summary>
-    public class MockBasketDataMaker : MockDataMakerBase
+    public class MockCustomerItemCacheDataMaker : MockDataMakerBase
     {
         public static ICustomerItemCache AnonymousBasket(IAnonymousCustomer anonymous, ItemCacheType itemCacheType)
         {
-            var customerRegistry =  new CustomerItemCache(anonymous.Key, itemCacheType)
+            var itemCache =  new CustomerItemCache(anonymous.Key, itemCacheType)
             {
                 Id = 1,
                 CreateDate = DateTime.Now,
                 UpdateDate = DateTime.Now
             };
 
-           customerRegistry.ResetDirtyProperties();
+           itemCache.ResetDirtyProperties();
 
-            return customerRegistry;
+            return itemCache;
 
         }
 
-        public static ICustomerItemCache ConsumerBasketForInserting(ICustomerBase customer, ItemCacheType itemCacheType)
+        public static ICustomerItemCache ConsumerItemCacheForInserting(ICustomerBase customer, ItemCacheType itemCacheType)
         {
             return new CustomerItemCache(customer.Key, itemCacheType)
             {
