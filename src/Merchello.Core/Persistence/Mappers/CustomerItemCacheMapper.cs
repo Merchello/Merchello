@@ -18,7 +18,7 @@ namespace Merchello.Core.Persistence.Mappers
         {
             CacheMap<CustomerItemCache, CustomerItemCacheDto>(src => src.Id, dto => dto.Id);
             CacheMap<CustomerItemCache, CustomerItemCacheDto>(src => src.ItemCacheTfKey, dto => dto.ItemCacheTfKey);
-            CacheMap<CustomerItemCache, CustomerItemCacheDto>(src => src.ConsumerKey, dto => dto.ConsumerKey);
+            CacheMap<CustomerItemCache, CustomerItemCacheDto>(src => src.CustomerKey, dto => dto.ConsumerKey);
             CacheMap<CustomerItemCache, CustomerItemCacheDto>(src => src.CreateDate, dto => dto.CreateDate);
             CacheMap<CustomerItemCache, CustomerItemCacheDto>(src => src.UpdateDate, dto => dto.UpdateDate);
         }

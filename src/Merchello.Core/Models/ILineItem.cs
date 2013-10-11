@@ -7,7 +7,6 @@ namespace Merchello.Core.Models
 {
     public interface ILineItem : IIdEntity
     {
-
         /// <summary>
         /// The ContainerId of the container collection
         /// </summary>
@@ -42,6 +41,18 @@ namespace Merchello.Core.Models
         /// The amount for the line item
         /// </summary>
         [DataMember]
-        decimal Amount { get; set; } 
+        decimal Amount { get; set; }
+
+        /// <summary>
+        /// A collection to store custom/extended data for the line item
+        /// </summary>
+        [DataMember]
+        ExtendedDataCollection ExtendedData { get; }
+
+        /// <summary>
+        /// Accept for visitor operations
+        /// </summary>
+        /// <param name="vistor"><see cref="ILineItemVisitor"/></param>
+        void Accept(ILineItemVisitor vistor);
     }
 }

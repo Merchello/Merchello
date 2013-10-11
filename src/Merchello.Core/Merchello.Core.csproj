@@ -109,6 +109,7 @@
     <Compile Include="Models\IAnonymousCustomer.cs" />
     <Compile Include="Models\ICustomerBase.cs" />
     <Compile Include="Models\IInventory.cs" />
+    <Compile Include="Models\ILineItemVisitor.cs" />
     <Compile Include="Models\Inventory.cs" />
     <Compile Include="Models\InventoryCollection.cs" />
     <Compile Include="Models\InventoryMapper.cs" />

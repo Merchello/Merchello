@@ -46,21 +46,21 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Creates a basket for a consumer with a given type
         /// </summary>
-        public ICustomerItemCache CreateCustomerItemRegister(ICustomerBase customer, CustomerItemCacheType customerItemCacheType)
+        public ICustomerItemCache CreateCustomerItemRegister(ICustomerBase customer, ItemCacheType itemCacheType)
         {
 
             // determine if the consumer already has a registry of this type, if so return it.
-            var registry = GetRegisterByCustomer(customer, customerItemCacheType);
+            var registry = GetRegisterByCustomer(customer, itemCacheType);
             if (registry != null) return registry;
 
-            registry = new CustomerItemCache(customer.Key, customerItemCacheType);
+            registry = new CustomerItemCache(customer.Key, itemCacheType);
             if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<ICustomerItemCache>(registry), this))
             {
                 //registry.WasCancelled = true;
                 return registry;
             }
 
-            registry.ConsumerKey = customer.Key;
+            registry.CustomerKey = customer.Key;
             
 
             Created.RaiseEvent(new Events.NewEventArgs<ICustomerItemCache>(registry), this);
@@ -194,9 +194,9 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Returns the consumer's basket of a given type
         /// </summary>
-        public ICustomerItemCache GetRegisterByCustomer(ICustomerBase customer, CustomerItemCacheType customerItemCacheType)
+        public ICustomerItemCache GetRegisterByCustomer(ICustomerBase customer, ItemCacheType itemCacheType)
         {
-            var typeKey = EnumTypeFieldConverter.CustomerItemItemCache.GetTypeField(customerItemCacheType).TypeKey;
+            var typeKey = EnumTypeFieldConverter.CustomerItemItemCache.GetTypeField(itemCacheType).TypeKey;
             return GetRegisterByCustomer(customer, typeKey);
         }
 
@@ -209,7 +209,7 @@ namespace Merchello.Core.Services
         {
             using (var repository = _repositoryFactory.CreateCustomerItemRegisterRepository(_uowProvider.GetUnitOfWork()))
             {
-                var query = Query<ICustomerItemCache>.Builder.Where(x => x.ConsumerKey == customer.Key);
+                var query = Query<ICustomerItemCache>.Builder.Where(x => x.CustomerKey == customer.Key);
                 return repository.GetByQuery(query);
             }
         }
@@ -221,7 +221,7 @@ namespace Merchello.Core.Services
         {
             using (var repository = _repositoryFactory.CreateCustomerItemRegisterRepository(_uowProvider.GetUnitOfWork()))
             {
-                var query = Query<ICustomerItemCache>.Builder.Where(x => x.ConsumerKey == customer.Key && x.ItemCacheTfKey == registerTfKey);
+                var query = Query<ICustomerItemCache>.Builder.Where(x => x.CustomerKey == customer.Key && x.ItemCacheTfKey == registerTfKey);
                 return repository.GetByQuery(query).FirstOrDefault();
             }
         }
@@ -235,7 +235,7 @@ namespace Merchello.Core.Services
         {
             using (var repository = _repositoryFactory.CreateCustomerItemRegisterRepository(_uowProvider.GetUnitOfWork()))
             {
-                var query = Query<ICustomerItemCache>.Builder.Where(x => x.ConsumerKey == customer.Key);
+                var query = Query<ICustomerItemCache>.Builder.Where(x => x.CustomerKey == customer.Key);
                 return repository.GetByQuery(query);
             }
         }

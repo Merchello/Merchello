@@ -74,22 +74,22 @@ namespace Merchello.Tests.UnitTests.Services
         [Test]
         public void Save_Triggers_Events_And_Basket_Is_Passed()
         {
-            var basket = MockBasketDataMaker.AnonymousBasket(_anonymous, CustomerItemCacheType.Basket);
+            var basket = MockBasketDataMaker.AnonymousBasket(_anonymous, ItemCacheType.Basket);
 
             _customerItemCacheService.Save(basket);
 
             Assert.IsTrue(BeforeTriggered);
-            Assert.AreEqual(basket.ConsumerKey, Before.ConsumerKey);
+            Assert.AreEqual(basket.CustomerKey, Before.CustomerKey);
 
             Assert.IsTrue(AfterTriggered);
-            Assert.AreEqual(basket.CustomerItemCacheType, After.CustomerItemCacheType);
+            Assert.AreEqual(basket.ItemCacheType, After.ItemCacheType);
         }
 
         [Test]
         public void Save_Is_Committed()
         {
 
-            var basket = MockBasketDataMaker.AnonymousBasket(_anonymous, CustomerItemCacheType.Basket);
+            var basket = MockBasketDataMaker.AnonymousBasket(_anonymous, ItemCacheType.Basket);
             _customerItemCacheService.Save(basket);
 
 
@@ -100,12 +100,12 @@ namespace Merchello.Tests.UnitTests.Services
         [Test]
         public void Delete_Triggers_Events_And_Basket_Is_Passed()
         {
-            var basket = MockBasketDataMaker.AnonymousBasket(_anonymous, CustomerItemCacheType.Basket);
+            var basket = MockBasketDataMaker.AnonymousBasket(_anonymous, ItemCacheType.Basket);
 
             _customerItemCacheService.Delete(basket);
             
             Assert.IsTrue(BeforeTriggered);
-            Assert.AreEqual(basket.ConsumerKey, Before.ConsumerKey);
+            Assert.AreEqual(basket.CustomerKey, Before.CustomerKey);
 
             Assert.IsTrue(AfterTriggered);
             Assert.AreEqual(basket.ItemCacheTfKey, After.ItemCacheTfKey);
@@ -114,7 +114,7 @@ namespace Merchello.Tests.UnitTests.Services
         [Test]
         public void Delete_Is_Committed()
         {
-            var basket = MockBasketDataMaker.AnonymousBasket(_anonymous, CustomerItemCacheType.Basket);
+            var basket = MockBasketDataMaker.AnonymousBasket(_anonymous, ItemCacheType.Basket);
 
             _customerItemCacheService.Delete(basket);
 

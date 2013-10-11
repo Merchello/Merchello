@@ -12,10 +12,10 @@ namespace Merchello.Core.Models
     public interface ICustomerItemCache : IIdEntity
     {
         /// <summary>
-        /// The <see cref="IConsumer"/> key
+        /// The <see cref="ICustomerBase"/> key
         /// </summary>
         [DataMember]
-        Guid ConsumerKey { get; set; }
+        Guid CustomerKey { get; set; }
 
         /// <summary>
         /// The registry type field <see cref="ITypeField"/> guid typeKey
@@ -24,17 +24,15 @@ namespace Merchello.Core.Models
         Guid ItemCacheTfKey { get; set; }
 
         /// <summary>
-        /// The <see cref="CustomerItemCacheType"/> of the customer registry
+        /// The <see cref="ItemCacheType"/> of the customer registry
         /// </summary>
         [DataMember]
-        CustomerItemCacheType CustomerItemCacheType { get; set; }
+        ItemCacheType ItemCacheType { get; set; }
 
         /// <summary>
         /// The <see cref="IOrderLineItem"/>s in the customer registry
         /// </summary>
         [DataMember]
         LineItemCollection Items { get; }
-
-
     }
 }
