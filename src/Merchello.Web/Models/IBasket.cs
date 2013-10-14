@@ -6,7 +6,6 @@ namespace Merchello.Web.Models
     public interface IBasket
     {
         // Adds an item to the basket
-        void AddItem(Guid productVariantKey);
         void AddItem(IProductVariant productVariant);
         void AddItem(string name, string sku, decimal price);
         void AddItem(string name, string sku, decimal price, ExtendedDataCollection extendedData);
@@ -15,13 +14,11 @@ namespace Merchello.Web.Models
         // Updates the quantity of an item in the basket
         void UpdateQuantity(int id, int quantity);
         void UpdateQuantity(string sku, int quantity);
-        void UpdateQuantity(Guid productVariantKey, int quantity);
         void UpdateQuantity(IProductVariant productVariant, int quantity);
       
         /// Removes an item from the basket      
         void RemoveItem(int id);     
         void RemoveItem(string sku);        
-        void RemoveItem(Guid productVariantKey);        
         void RemoveItem(IProductVariant productVariant);
 
         /// <summary>

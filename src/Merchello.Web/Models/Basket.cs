@@ -11,37 +11,38 @@ namespace Merchello.Web.Models
 {
     public class Basket : IBasket
     {
-        private ICustomerItemCache _customerItemCache;
-        private readonly IServiceContext _serviceContext;
-        private readonly ICacheProvider _runtimeCache;
+        private readonly ICustomerItemCache _customerItemCache;
         private readonly ICustomerBase _customer;
-        private readonly string _cacheKey;
 
-        public Basket(ICustomerBase customer)
-            : this(MerchelloContext.Current, customer)
-        {}
-
-        public Basket(IMerchelloContext merchelloContext, ICustomerBase customer)
+        internal Basket(ICustomerItemCache customerItemCache)
         {
-            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
-            Mandate.ParameterNotNull(customer, "customer");
+            Mandate.ParameterNotNull(customerItemCache, "customerItemCache");
 
-            _serviceContext = merchelloContext.Services;
-            _runtimeCache = merchelloContext.Cache.RuntimeCache;
-            _customer = customer;
-            _cacheKey = CachingBacker.CustomerItemCacheKey(customer.Key, EnumTypeFieldConverter.CustomerItemItemCache.Basket.TypeKey);
+            _customerItemCache = customerItemCache;
+        }
+
+        public static IBasket GetBasket(ICustomerBase customer)
+        {
+            return GetBasket(MerchelloContext.Current, customer);
+        }
+
+        public static IBasket GetBasket(IMerchelloContext merchelloContext, ICustomerBase customer)
+        {
+            var cacheKey = MakeCacheKey(customer);
+            
+            var basket = (IBasket)merchelloContext.Cache.RuntimeCache.GetCacheItem(cacheKey);
+            if (basket != null) return basket;
+
+            var customerItemCache = merchelloContext.Services.CustomerItemCacheService.GetCustomerItemCacheWithId(customer, ItemCacheType.Basket);
+            basket = new Basket(customerItemCache);
+            merchelloContext.Cache.RuntimeCache.GetCacheItem(cacheKey, () => basket);
+            
+            return basket;         
         }
 
         #region Overrides IBasket
 
-        /// <summary>
-        /// Adds a line item to the basket
-        /// </summary>
-        public void AddItem(Guid productVariantKey)
-        {
-            var variant = _serviceContext.ProductVariantService.GetByKey(productVariantKey);
-            AddItem(variant);
-        }
+
 
         /// <summary>
         /// Adds a line item to the basket
@@ -97,15 +98,6 @@ namespace Merchello.Web.Models
         /// <summary>
         /// Updates a basket item's quantity
         /// </summary>
-        public void UpdateQuantity(Guid productVariantKey, int quantity)
-        {
-            var variant = _serviceContext.ProductVariantService.GetByKey(productVariantKey);
-            if (variant != null) UpdateQuantity(variant, quantity);
-        }
-
-        /// <summary>
-        /// Updates a basket item's quantity
-        /// </summary>
         public void UpdateQuantity(IProductVariant productVariant, int quantity)
         {
             UpdateQuantity(productVariant.Sku, quantity);
@@ -143,14 +135,6 @@ namespace Merchello.Web.Models
             if(item != null) RemoveItem(item.Sku);
         }        
 
-        /// <summary>
-        /// Removes a basket line item
-        /// </summary>
-        public void RemoveItem(Guid productVariantKey)
-        {
-            var variant = _serviceContext.ProductVariantService.GetByKey(productVariantKey);
-            if(variant != null) RemoveItem(variant.Sku);
-        }
 
         /// <summary>
         /// Removes a basket line item
@@ -182,8 +166,12 @@ namespace Merchello.Web.Models
         /// </summary>
         public void Refresh()
         {
-            _runtimeCache.ClearCacheItem(_cacheKey);
-            GetCustomerItemCache();
+           Refresh(MerchelloContext.Current, _customer);
+        }
+
+        public static void Refresh(IMerchelloContext merchelloContext, ICustomerBase customer)
+        {
+            
         }
 
         /// <summary>
@@ -191,7 +179,7 @@ namespace Merchello.Web.Models
         /// </summary>
         public void Save()
         {
-            _serviceContext.CustomerItemCacheService.Save(_customerItemCache);
+            //_serviceContext.CustomerItemCacheService.Save(_customerItemCache);
             Refresh();
         }
 
@@ -211,16 +199,9 @@ namespace Merchello.Web.Models
 
         #endregion
 
-
-        private void GetCustomerItemCache()
+        private static string MakeCacheKey(ICustomerBase customer)
         {
-            var itemCache = (ICustomerItemCache)_runtimeCache.GetCacheItem(_cacheKey);
-            if (itemCache == null)
-            {
-                itemCache = _serviceContext.CustomerItemCacheService.GetCustomerItemCacheWithId(_customer, ItemCacheType.Basket);
-                _runtimeCache.GetCacheItem(_cacheKey, () => itemCache);
-            }
-            _customerItemCache = itemCache;
+            return CachingBacker.CustomerBasketCacheKey(customer.Key, EnumTypeFieldConverter.CustomerItemItemCache.Basket.TypeKey);
         }
 
         

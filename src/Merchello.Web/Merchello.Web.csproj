@@ -231,6 +231,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cache\CachingBacker.cs" />
+    <Compile Include="CustomerExtensions.cs" />
     <Compile Include="Editors\CustomerApiController.cs" />
     <Compile Include="Editors\InvoiceApiController.cs" />
     <Compile Include="EncryptionHelper.cs" />

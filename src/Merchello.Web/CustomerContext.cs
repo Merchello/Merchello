@@ -3,6 +3,7 @@ using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Merchello.Web.Cache;
+using Merchello.Web.Models;
 using Umbraco.Core.Models.EntityBase;
 using umbraco.cms.businesslogic.member;
 using Umbraco.Core;
@@ -65,6 +66,8 @@ namespace Merchello.Web
                 else { CreateAnonymousCustomer(); } // consumer key parsing failed ... start over
             }
             else { CreateAnonymousCustomer(); } // a cookie was not found
+
+
         }
 
         #endregion
