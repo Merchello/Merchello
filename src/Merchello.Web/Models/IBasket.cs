@@ -7,12 +7,10 @@ namespace Merchello.Web.Models
     {
         // Adds an item to the basket
         void AddItem(Guid productVariantKey);
-        void AddItem(Guid productVariantKey, ExtendedDataCollection extendedData);
         void AddItem(IProductVariant productVariant);
-        void AddItem(IProductVariant productVariant, ExtendedDataCollection extendedData);
         void AddItem(string name, string sku, decimal price);
         void AddItem(string name, string sku, decimal price, ExtendedDataCollection extendedData);
-        void AddItem(ILineItem lineItem);
+        void AddItem(ICustomerItemCacheLineItem lineItem);
 
         // Updates the quantity of an item in the basket
         void UpdateQuantity(int id, int quantity);
@@ -35,6 +33,17 @@ namespace Merchello.Web.Models
         /// Refreshes cache with database values
         /// </summary>
         void Refresh();
+
+        /// <summary>
+        /// Saves the basket
+        /// </summary>
+        void Save();
+
+        /// <summary>
+        /// Accepts visitor class to visit basket items
+        /// </summary>
+        /// <param name="vistor"><see cref="ILineItemVisitor"/></param>
+        void Accept(ILineItemVisitor vistor);
 
         /// <summary>
         /// The basket line items

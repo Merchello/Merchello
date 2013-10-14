@@ -1,44 +1,38 @@
 ﻿using System;
-using System.Globalization;
-using System.Reflection;
 using System.Runtime.Serialization;
-using Merchello.Core.Models.TypeFields;
 
 namespace Merchello.Core.Models
 {
 
     /// <summary>
-    /// Defines a order list item
+    /// Represents an order line item
     /// </summary>
+    /// <remarks>
+    /// Needed for typed query mapper
+    /// </remarks>
     [Serializable]
     [DataContract(IsReference = true)]
-    internal sealed class OrderLineItem : LineItemBase, IOrderLineItem
+    public class OrderLineItem : LineItemBase, IOrderLineItem
     {
-
-        public OrderLineItem(int containerId, string name, string sku, decimal amount)
-            : this(containerId, name, sku, 1, amount)
+        public OrderLineItem(int containerId, string name, string sku, decimal amount) 
+            : base(containerId, name, sku, amount)
         { }
 
         public OrderLineItem(int containerId, string name, string sku, int quantity, decimal amount)
-            : this(containerId, LineItemType.Product, name, sku, quantity, amount)
+            : base(containerId, name, sku, quantity, amount)
         { }
 
-        public OrderLineItem(int containerId, LineItemType lineItemType, string name, string sku, int quantity, decimal amount)
-            : this(containerId, EnumTypeFieldConverter.LineItemType.GetTypeField(lineItemType).TypeKey, name, sku, quantity, amount)
+        public OrderLineItem(int containerId, LineItemType lineItemType, string name, string sku, int quantity, decimal amount) 
+            : base(containerId, lineItemType, name, sku, quantity, amount)
         { }
 
-        internal OrderLineItem(int containerId, Guid lineItemTfKey, string name, string sku, int quantity, decimal amount)
-            : base(containerId, lineItemTfKey)
-        {
-            Name = name;
-            Sku = sku;
-            Quantity = quantity;
-            Amount = amount;
-            LineItemTfKey = lineItemTfKey;
+        public OrderLineItem(int containerId, LineItemType lineItemType, string name, string sku, int quantity, decimal amount, ExtendedDataCollection extendedData) 
+            : base(containerId, lineItemType, name, sku, quantity, amount, extendedData)
+        { }
 
-            ResetDirtyProperties();
-        }
-
+        public OrderLineItem(int containerId, Guid lineItemTfKey, string name, string sku, int quantity, decimal amount, ExtendedDataCollection extendedData) 
+            : base(containerId, lineItemTfKey, name, sku, quantity, amount, extendedData)
+        { }
     }
 
 }

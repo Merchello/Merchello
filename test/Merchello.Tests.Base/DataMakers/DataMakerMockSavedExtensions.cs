@@ -11,7 +11,7 @@ namespace Merchello.Tests.Base.DataMakers
         #region IdEntity
         
 
-        public static IAddress MockSavedWithId(this IAddress entity, int id)
+        public static ICustomerAddress MockSavedWithId(this ICustomerAddress entity, int id)
         {
             entity.Id = id;
             ((IdEntity) entity).AddingEntity();
@@ -43,7 +43,7 @@ namespace Merchello.Tests.Base.DataMakers
             return entity;
         }
 
-        public static IInvoiceItem MockSavedWithId(this IInvoiceItem entity, int id)
+        public static IInvoiceLineItem MockSavedWithId(this IInvoiceLineItem entity, int id)
         {
             entity.Id = id;
             ((IdEntity)entity).AddingEntity();

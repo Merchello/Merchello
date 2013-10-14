@@ -96,7 +96,7 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
-        /// The <see cref="IOrderLineItem"/>s in the customer registry
+        /// The <see cref="ILineItem"/>s in the customer registry
         /// </summary>
         [DataMember]
         public LineItemCollection Items {

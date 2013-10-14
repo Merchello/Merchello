@@ -3,11 +3,11 @@ using Merchello.Core.Models.Rdbms;
 
 namespace Merchello.Core.Persistence.Factories
 {
-    internal class InvoiceItemFactory : IEntityFactory<IInvoiceItem, InvoiceItemDto>
+    internal class InvoiceItemFactory : ILineItemFactory<InvoiceItemDto>
     {
-        public IInvoiceItem BuildEntity(InvoiceItemDto dto)
+        public ILineItem BuildEntity(InvoiceItemDto dto)
         {
-            var invoiceItem = new InvoiceItem(dto.InvoiceId, dto.LineItemTfKey)
+            var invoiceItem = new LineItem(dto.ContainerId, dto.LineItemTfKey, dto.Name, )
             {
                 Id = dto.Id,                
                 Sku = dto.Sku,
@@ -24,24 +24,33 @@ namespace Merchello.Core.Persistence.Factories
             return invoiceItem;
         }
 
-        public InvoiceItemDto BuildDto(IInvoiceItem entity)
+        public InvoiceItemDto BuildDto(ILineItem entity)
         {
             var dto = new InvoiceItemDto()
             {
                 Id = entity.Id,
-                InvoiceId = entity.InvoiceId,
-                LineItemTfKey = entity.InvoiceItemTfKey,
+                ContainerId = entity.ContainerId,
+                LineItemTfKey = entity.LineItemTfKey,
                 Sku = entity.Sku,
                 Name = entity.Name,
                 Quantity = entity.Quantity,
                 Amount = entity.Amount,
                 Exported = entity.Exported,
                 UpdateDate = entity.UpdateDate,
-                CreateDate = entity.CreateDate                
+                CreateDate = entity.CreateDate
             };
 
             return dto;
         }
 
+        public InvoiceItemDto BuildDto(IInvoiceItem entity)
+        {
+           
+        }
+
+        ILineItem IEntityFactory<ILineItem, InvoiceItemDto>.BuildEntity(InvoiceItemDto dto)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

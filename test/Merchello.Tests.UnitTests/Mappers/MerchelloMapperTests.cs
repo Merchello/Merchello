@@ -36,7 +36,7 @@ namespace Merchello.Tests.UnitTests.Mappers
             var expected = typeof (AddressMapper);
 
             //// Act
-            var resolved = MerchelloMapper.Current.ResolveByType(typeof(IAddress));
+            var resolved = MerchelloMapper.Current.ResolveByType(typeof(ICustomerAddress));
 
             //// Assert
             Assert.IsTrue(resolved.Success);
@@ -134,14 +134,14 @@ namespace Merchello.Tests.UnitTests.Mappers
         /// Test to verify <see cref="MerchelloMapper"/> correctly maps IInvoiceItem to InvoiceItemMapper
         /// </summary>
         [Test]
-        public void Mapper_Resolves_IInvoiceItem_To_InvoiceItemMapper()
+        public void Mapper_Resolves_IInvoiceLineItem_To_InvoiceItemMapper()
         {
 
             //// Arrage
-            var expected = typeof(InvoiceItemMapper);
+            var expected = typeof(InvoiceLineItemMapper);
 
             //// Act
-            var resolved = MerchelloMapper.Current.ResolveByType(typeof(IInvoiceItem));
+            var resolved = MerchelloMapper.Current.ResolveByType(typeof(IInvoiceLineItem));
 
             //// Assert
             Assert.IsTrue(resolved.Success);

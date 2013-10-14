@@ -44,10 +44,10 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Creates a Shipment
         /// </summary>
-        public IShipment CreateShipment(IShipMethod shipMethod, IInvoice invoice, IAddress address)
+        public IShipment CreateShipment(IShipMethod shipMethod, IInvoice invoice, ICustomerAddress customerAddress)
         {
-            return CreateShipment(shipMethod, invoice, address.Address1, address.Address2, address.Locality,
-                address.Region, address.PostalCode, address.CountryCode, address.Phone);
+            return CreateShipment(shipMethod, invoice, customerAddress.Address1, customerAddress.Address2, customerAddress.Locality,
+                customerAddress.Region, customerAddress.PostalCode, customerAddress.CountryCode, customerAddress.Phone);
         }
 
         public IShipment CreateShipment(IInvoice invoice, string address1, string address2, string locality,

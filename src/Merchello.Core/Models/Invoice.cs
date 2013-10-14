@@ -40,17 +40,17 @@ namespace Merchello.Core.Models
             _amount = amount;
         }
 
-        public Invoice(ICustomer customer, IAddress address, IInvoiceStatus invoiceStatus, decimal amount)
+        public Invoice(ICustomer customer, ICustomerAddress customerAddress, IInvoiceStatus invoiceStatus, decimal amount)
             : this(customer, invoiceStatus, amount)
         {            
-            _billToAddress1 = address.Address1;
-            _billToAddress2 = address.Address2;
-            _billToLocality = address.Locality;
-            _billToRegion = address.Region;
-            _billToPostalCode = address.PostalCode;
-            _billToCountryCode = address.CountryCode;
-            _billToPhone = address.Phone;
-            _billToCompany = address.Company;
+            _billToAddress1 = customerAddress.Address1;
+            _billToAddress2 = customerAddress.Address2;
+            _billToLocality = customerAddress.Locality;
+            _billToRegion = customerAddress.Region;
+            _billToPostalCode = customerAddress.PostalCode;
+            _billToCountryCode = customerAddress.CountryCode;
+            _billToPhone = customerAddress.Phone;
+            _billToCompany = customerAddress.Company;
         }
 
         private static readonly PropertyInfo OrderIdSelector = ExpressionHelper.GetPropertyInfo<Invoice, int?>(x => x.OrderId);

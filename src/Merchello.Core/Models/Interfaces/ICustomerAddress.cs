@@ -7,7 +7,7 @@ namespace Merchello.Core.Models
     /// <summary>
     /// Defines a Merchello customer
     /// </summary>
-    public interface IAddress : IIdEntity
+    public interface ICustomerAddress : IIdEntity
     {
 
         /// <summary>

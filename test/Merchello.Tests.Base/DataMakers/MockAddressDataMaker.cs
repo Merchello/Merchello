@@ -13,11 +13,11 @@ namespace Merchello.Tests.Base.DataMakers
     public class MockAddressDataMaker : MockDataMakerBase
     {
         
-        public static IAddress AddressForInserting()
+        public static ICustomerAddress AddressForInserting()
         {
             // this won't work for integration tests because of the database constraint.
 
-            var address = new Address(Guid.NewGuid(), "Home")
+            var address = new CustomerAddress(Guid.NewGuid(), "Home")
                 {
                     Address1 = "111 Somewhere",
                     AddressTypeFieldKey = new AddressTypeField().Residential.TypeKey,
@@ -34,9 +34,9 @@ namespace Merchello.Tests.Base.DataMakers
 
         }
 
-        public static IAddress MindflyAddressForInserting()
+        public static ICustomerAddress MindflyAddressForInserting()
         {
-            var address = new Address(Guid.NewGuid(), "Mindfly")
+            var address = new CustomerAddress(Guid.NewGuid(), "Mindfly")
                 {
                     Address1 = "114 W. Magnolia St.",
                     Address2 = "Suite 504",
@@ -53,7 +53,7 @@ namespace Merchello.Tests.Base.DataMakers
         }
 
 
-        public static IAddress RandomAddress(ICustomer customer, string label)
+        public static ICustomerAddress RandomAddress(ICustomer customer, string label)
         {
             var addresses = AddressMocks().ToArray();
             var index = NoWhammyStop.Next(addresses.Count());
@@ -61,7 +61,7 @@ namespace Merchello.Tests.Base.DataMakers
         }
 
 
-        public static IEnumerable<IAddress> AddressCollectionForInserting(ICustomer customer, string label, int count)
+        public static IEnumerable<ICustomerAddress> AddressCollectionForInserting(ICustomer customer, string label, int count)
         {
             for (var i = 0; i < count; i++) yield return RandomAddress(customer, label);
         }

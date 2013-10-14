@@ -33,7 +33,7 @@ namespace Merchello.Tests.IntegrationTests.Services.Customer
             const ItemCacheType itemCacheType = ItemCacheType.Basket;
 
             //// Act
-            var itemCache = _customerItemCacheService.GetCustomerItemCacheWithKey(_anonymous, itemCacheType);
+            var itemCache = _customerItemCacheService.GetCustomerItemCacheWithId(_anonymous, itemCacheType);
 
             //// Assert
             Assert.NotNull(itemCache);
@@ -50,11 +50,11 @@ namespace Merchello.Tests.IntegrationTests.Services.Customer
         {
             //// Arrange
             const ItemCacheType itemCacheType = ItemCacheType.Basket;
-            var existing = _customerItemCacheService.GetCustomerItemCacheWithKey(_anonymous, itemCacheType);
+            var existing = _customerItemCacheService.GetCustomerItemCacheWithId(_anonymous, itemCacheType);
             Assert.NotNull(existing);
 
             //// Act
-            var secondAttempt = _customerItemCacheService.GetCustomerItemCacheWithKey(_anonymous, itemCacheType);
+            var secondAttempt = _customerItemCacheService.GetCustomerItemCacheWithId(_anonymous, itemCacheType);
 
             //// Assert
             Assert.NotNull(secondAttempt);
@@ -70,8 +70,8 @@ namespace Merchello.Tests.IntegrationTests.Services.Customer
             //// Arrange
             
             //// Act
-            var basket = _customerItemCacheService.GetCustomerItemCacheWithKey(_anonymous, ItemCacheType.Basket);
-            var wishlist = _customerItemCacheService.GetCustomerItemCacheWithKey(_anonymous, ItemCacheType.Wishlist);
+            var basket = _customerItemCacheService.GetCustomerItemCacheWithId(_anonymous, ItemCacheType.Basket);
+            var wishlist = _customerItemCacheService.GetCustomerItemCacheWithId(_anonymous, ItemCacheType.Wishlist);
 
             //// Assert
             Assert.NotNull(basket);
@@ -86,16 +86,83 @@ namespace Merchello.Tests.IntegrationTests.Services.Customer
         public void Can_Add_An_Item_To_An_ItemCache()
         {
             //// Arrange
-            var basket = _customerItemCacheService.GetCustomerItemCacheWithKey(_anonymous, ItemCacheType.Basket);
+            var basket = _customerItemCacheService.GetCustomerItemCacheWithId(_anonymous, ItemCacheType.Basket);
 
             //// Act
-            var lineItem = new OrderLineItem(basket.Id, "Kosher Salt", "KS", 1, 2.5M);            
+            var lineItem = new CustomerItemCacheLineItem(basket.Id, "Kosher Salt", "KS", 1, 2.5M);            
             basket.Items.Add(lineItem);
 
 
             //// Assert
             Assert.IsTrue(basket.Items.Any());
             
+        }
+
+        /// <summary>
+        /// Test verifies that than item can be added to an item cache and persisted
+        /// </summary>
+        [Test]
+        public void Can_Add_And_Save_An_Item_To_ItemCache()
+        {
+            //// Arrange
+            var basket = _customerItemCacheService.GetCustomerItemCacheWithId(_anonymous, ItemCacheType.Basket);
+            var lineItem = new CustomerItemCacheLineItem(basket.Id, "Kosher Salt", "KS", 1, 2.5M);
+            basket.Items.Add(lineItem);
+            
+            //// Act
+            _customerItemCacheService.Save(basket);            
+
+            //// Assert            
+            Assert.IsFalse(basket.IsDirty());
+            Assert.IsTrue(basket.HasIdentity);
+            Assert.IsFalse(basket.Items.IsEmpty);
+        }
+
+        /// <summary>
+        /// Test confirms that two baskets can be managed independently
+        /// </summary>
+        [Test]
+        public void Can_Manage_Two_Baskets_Independently()
+        {
+            //// Arrange
+            var customer1 = PreTestDataWorker.MakeExistingAnonymousCustomer();
+            var customer2 = PreTestDataWorker.MakeExistingAnonymousCustomer();
+            var basket1 = _customerItemCacheService.GetCustomerItemCacheWithId(customer1, ItemCacheType.Basket);
+            var basket2 = _customerItemCacheService.GetCustomerItemCacheWithId(customer2, ItemCacheType.Basket);
+
+            //// Act            
+            basket1.Items.Add(new CustomerItemCacheLineItem(basket1.Id, "Kosher Salt", "KS", 1, 2.5M));
+            _customerItemCacheService.Save(basket1);
+            
+            basket2.Items.Add(new CustomerItemCacheLineItem(basket2.Id, "Kosher Salt", "KS", 1, 2.5M));
+            basket2.Items.Add(new CustomerItemCacheLineItem(basket2.Id, "Pickle dust", "PD", 20, 25.50M));
+            _customerItemCacheService.Save(basket2);
+
+            //// Assert
+            Assert.IsTrue(basket1.HasIdentity);
+            Assert.IsTrue(basket2.HasIdentity);
+            Assert.AreNotEqual(basket1.Id, basket2.Id);
+            Assert.AreEqual(1, basket1.Items.Count);
+            Assert.AreEqual(2, basket2.Items.Count);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [Test]
+        public void Can_Update_An_Item_In_An_ItemCache()
+        {
+            //// Arrange
+            var basket1 = _customerItemCacheService.GetCustomerItemCacheWithId(_anonymous, ItemCacheType.Basket);
+            basket1.Items.Add(new CustomerItemCacheLineItem(basket1.Id, "Kosher Salt", "KS", 1, 2.5M));
+            _customerItemCacheService.Save(basket1);
+
+            //// Act
+            basket1.Items["KS"].Amount = 35M;
+            _customerItemCacheService.Save(basket1);
+
+            //// Assert
+            Assert.IsFalse(basket1.IsDirty());
         }
     }
 }
