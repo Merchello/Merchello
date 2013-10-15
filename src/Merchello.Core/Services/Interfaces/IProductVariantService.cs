@@ -19,7 +19,7 @@ namespace Merchello.Core.Services
         /// <param name="attributes"><see cref="IProductVariant"/></param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         /// <returns>Either a new <see cref="IProductVariant"/> or, if one already exists with associated attributes, the existing <see cref="IProductVariant"/></returns>
-        IProductVariant CreateVariantWithKey(IProduct product, ProductAttributeCollection attributes, bool raiseEvents = true);
+        IProductVariant CreateProductVariantWithKey(IProduct product, ProductAttributeCollection attributes, bool raiseEvents = true);
 
         /// <summary>
         /// Creates a <see cref="IProductVariant"/> of the <see cref="IProduct"/> passed defined by the collection of <see cref="IProductAttribute"/>
@@ -31,7 +31,7 @@ namespace Merchello.Core.Services
         /// <param name="attributes"><see cref="IProductVariant"/></param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         /// <returns>Either a new <see cref="IProductVariant"/> or, if one already exists with associated attributes, the existing <see cref="IProductVariant"/></returns>
-        IProductVariant CreateVariantWithKey(IProduct product, string name, string sku, decimal price, ProductAttributeCollection attributes, bool raiseEvents = true);
+        IProductVariant CreateProductVariantWithKey(IProduct product, string name, string sku, decimal price, ProductAttributeCollection attributes, bool raiseEvents = true);
 
         /// <summary>
         /// Saves a single instance of a <see cref="IProductVariant"/>
@@ -88,11 +88,23 @@ namespace Merchello.Core.Services
         IEnumerable<IProductVariant> GetByKeys(IEnumerable<Guid> keys);
 
         /// <summary>
-        /// Gets a collection of <see cref="IProductVariant"/> object for a given Product Key
+        /// Gets a collection of <see cref="IProductVariant"/> objects for a given Product Key
         /// </summary>
         /// <param name="productKey">Guid product key of the <see cref="IProductVariant"/> collection to retrieve</param>
         /// <returns>A collection of <see cref="IProductVariant"/></returns>
         IEnumerable<IProductVariant> GetByProductKey(Guid productKey);
+
+        /// <summary>
+        /// Gets a collection of <see cref="IProductVariant"/> objects associated with a given warehouse 
+        /// </summary>
+        /// <param name="warehouseId">The 'unique' id of the warehouse</param>
+        /// <returns>A collection of <see cref="IProductVariant"/></returns>
+        IEnumerable<IProductVariant> GetByWarehouseId(int warehouseId);
+
+        /// <summary>
+        /// Returns <see cref="IProductVariant"/> given the product and the collection of attribute ids that defines the<see cref="IProductVariant"/>
+        /// </summary>
+        IProductVariant GetProductVariantWithAttributes(IProduct product, int[] attributeIds);
 
         /// <summary>
         /// Compares the <see cref="ProductAttributeCollection"/> with other <see cref="IProductVariant"/>s of the <see cref="IProduct"/> pass

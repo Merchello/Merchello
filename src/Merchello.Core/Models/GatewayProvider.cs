@@ -2,51 +2,49 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.Serialization;
-using System.Web;
-using Merchello.Core.Gateway;
 using Merchello.Core.Models.TypeFields;
 
-namespace Merchello.Core.Models.GatewayProviders
+namespace Merchello.Core.Models
 {
-    internal class RegisteredGatewayProvider : RegisteredGatewayProviderBase, IRegisteredGatewayProvider
+    internal class GatewayProvider : GatewayProviderBase, IGatewayProvider
     {
-        private Guid _gatewayProviderTypeFieldKey;
+        private Guid _gatewayProviderTfKey;
         private string _name;
         private string _typeFullName;
         private string _configurationData;
         private bool _encryptConfigurationData;
-        private IGatewayProvider _gatewayProvider;
+        private Gateway.IGatewayProvider _gatewayProvider;
 
 
-        public RegisteredGatewayProvider()
+        public GatewayProvider()
             : this(null)
         { }
 
-        public RegisteredGatewayProvider(IGatewayProvider gatewayProvider)
+        public GatewayProvider(Gateway.IGatewayProvider gatewayProvider)
         {
             _gatewayProvider = gatewayProvider;
         }
 
-        private static readonly PropertyInfo GatewayTypeFieldKeySelector = ExpressionHelper.GetPropertyInfo<RegisteredGatewayProvider, Guid>(x => x.GatewayProviderTypeFieldKey);
-        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<RegisteredGatewayProvider, string>(x => x.Name);
-        private static readonly PropertyInfo TypeFullNameSelector = ExpressionHelper.GetPropertyInfo<RegisteredGatewayProvider, string>(x => x.TypeFullName);
-        private static readonly PropertyInfo ConfigurationDataSelector = ExpressionHelper.GetPropertyInfo<RegisteredGatewayProvider, string>(x => x.ConfigurationData);
-        private static readonly PropertyInfo EncryptConfigurationDatSelector = ExpressionHelper.GetPropertyInfo<RegisteredGatewayProvider, bool>(x => x.EncryptConfigurationData);
+        private static readonly PropertyInfo GatewayTypeFieldKeySelector = ExpressionHelper.GetPropertyInfo<GatewayProvider, Guid>(x => x.GatewayProviderTfKey);
+        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<GatewayProvider, string>(x => x.Name);
+        private static readonly PropertyInfo TypeFullNameSelector = ExpressionHelper.GetPropertyInfo<GatewayProvider, string>(x => x.TypeFullName);
+        private static readonly PropertyInfo ConfigurationDataSelector = ExpressionHelper.GetPropertyInfo<GatewayProvider, string>(x => x.ConfigurationData);
+        private static readonly PropertyInfo EncryptConfigurationDatSelector = ExpressionHelper.GetPropertyInfo<GatewayProvider, bool>(x => x.EncryptConfigurationData);
 
         /// <summary>
         /// The GatewayProviderTypeFieldKey
         /// </summary>
         [DataMember]
-        public Guid GatewayProviderTypeFieldKey
+        public Guid GatewayProviderTfKey
         {
-            get { return _gatewayProviderTypeFieldKey; }
+            get { return _gatewayProviderTfKey; }
             set 
             { 
                 SetPropertyValueAndDetectChanges(o =>
                 {
-                    _gatewayProviderTypeFieldKey = value;
-                    return _gatewayProviderTypeFieldKey;
-                }, _gatewayProviderTypeFieldKey, GatewayTypeFieldKeySelector); 
+                    _gatewayProviderTfKey = value;
+                    return _gatewayProviderTfKey;
+                }, _gatewayProviderTfKey, GatewayTypeFieldKeySelector); 
             }
         }
 
@@ -124,14 +122,14 @@ namespace Merchello.Core.Models.GatewayProviders
         [DataMember]
         public GatewayProviderType GatewayProviderType
         {
-            get { return EnumTypeFieldConverter.GatewayProvider.GetTypeField(_gatewayProviderTypeFieldKey); }
+            get { return EnumTypeFieldConverter.GatewayProvider.GetTypeField(_gatewayProviderTfKey); }
             set
             {
                 var reference = EnumTypeFieldConverter.GatewayProvider.GetTypeField(value);
                 if (!ReferenceEquals(TypeFieldMapperBase.NotFound, reference))
                 {
                     // call through the property to flag the dirty property
-                    GatewayProviderTypeFieldKey = reference.TypeKey;
+                    GatewayProviderTfKey = reference.TypeKey;
                 }
             }
         }
@@ -142,7 +140,7 @@ namespace Merchello.Core.Models.GatewayProviders
         /// <typeparam name="T"></typeparam>
         /// <param name="settings"></param>
         /// <returns></returns>
-        public override IGatewayProvider CreateInstance<T>(IDictionary<string, string> settings)
+        public override Gateway.IGatewayProvider CreateInstance<T>(IDictionary<string, string> settings)
         {
             if (_gatewayProvider != null) return _gatewayProvider as T;
             return null;

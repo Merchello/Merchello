@@ -255,13 +255,13 @@
     <Compile Include="Models\ProductVariantTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Querying\AddressSqlClausesTests.cs" />
-    <Compile Include="Querying\BasketSqlClausesTest.cs" />
+    <Compile Include="Querying\ItemCacheSqlClausesTest.cs" />
     <Compile Include="Querying\CustomerSqlClausesTest.cs" />
     <Compile Include="Querying\InvoiceSqlClausesTest.cs" />
     <Compile Include="Querying\InvoiceStatusSqlClausesTests.cs" />
     <Compile Include="Querying\PaymentSqlClausesTests.cs" />
     <Compile Include="Querying\ProductVariantSqlClausesTests.cs" />
-    <Compile Include="Querying\RegisteredGatewayProviderSqlClausesTests.cs" />
+    <Compile Include="Querying\GatewayProviderSqlClausesTests.cs" />
     <Compile Include="Querying\ShipmentSqlClausesTest.cs" />
     <Compile Include="Querying\ShipMethodSqlClausesTests.cs" />
     <Compile Include="Querying\TransactionSqlClauseTests.cs" />

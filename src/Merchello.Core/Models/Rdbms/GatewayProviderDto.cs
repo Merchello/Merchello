@@ -4,17 +4,17 @@ using Umbraco.Core.Persistence.DatabaseAnnotations;
 
 namespace Merchello.Core.Models.Rdbms
 {
-    [TableName("merchRegisteredGatewayProvider")]
+    [TableName("merchGatewayProvider")]
     [PrimaryKey("pk", autoIncrement = false)]
     [ExplicitColumns]
-    public class RegisteredGatewayProviderDto
+    public class GatewayProviderDto
     {
         [Column("pk")]
         [PrimaryKeyColumn(AutoIncrement = false)]
         public Guid Key { get; set; }
 
-        [Column("gatewayProviderTypeFieldKey")]
-        public Guid GatewayProviderTypeFieldKey { get; set; }
+        [Column("gatewayProviderTfKey")]
+        public Guid GatewayProviderTfKey { get; set; }
 
         [Column("name")]
         public string Name { get; set; }

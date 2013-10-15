@@ -50,7 +50,7 @@ namespace Merchello.Core.Persistence.Repositories
 
             // TODO - inventory
             ((ProductVariant) ((Product) product).ProductVariantMaster).WarehouseInventory =
-                ((ProductVariantRepository) _productVariantRepository).GetProductInventory(
+                ((ProductVariantRepository) _productVariantRepository).GetWarehouseInventory(
                     ((Product) product).ProductVariantKey);
 
             // Build the list of options
@@ -114,7 +114,7 @@ namespace Merchello.Core.Persistence.Repositories
                         (SELECT optionId FROM merchProductOption WHERE id IN 
                         (SELECT optionId FROM merchProduct2ProductOption WHERE productKey = @Id))",
                     "DELETE FROM merchProduct2ProductOption WHERE productKey = @Id",
-                    "DELETE FROM merchInventory WHERE productVariantKey IN (SELECT pk FROM merchProductVariant WHERE productKey = @Id)",
+                    "DELETE FROM merchWarehouseInventory WHERE productVariantKey IN (SELECT pk FROM merchProductVariant WHERE productKey = @Id)",
                     "DELETE FROM merchProductVariant WHERE productKey = @Id",
                     "DELETE FROM merchProduct WHERE pk = @Id",
                     "DELETE FROM merchProductOption WHERE id NOT IN (SELECT optionId FROM merchProduct2ProductOption)"

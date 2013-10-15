@@ -68,7 +68,7 @@ namespace Merchello.Core.Models
             return this.Any(x => x.Sku  == sku);
         }
 
-        private bool Contains(int id)
+        public bool Contains(int id)
         {
             return this.Any(x => x.Id == id);
         }

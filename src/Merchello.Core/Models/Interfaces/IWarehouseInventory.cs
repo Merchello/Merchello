@@ -7,7 +7,7 @@ namespace Merchello.Core.Models
     /// <summary>
     /// Defines product inventory for a warehouse
     /// </summary>
-    public interface IInventory
+    public interface IWarehouseInventory
     {
         /// <summary>
         /// The warehouse Id

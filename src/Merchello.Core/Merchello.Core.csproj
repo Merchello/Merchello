@@ -91,7 +91,9 @@
     <Compile Include="Events\StatusChangeEventArgs.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ExtendedDataExtensions.cs" />
     <Compile Include="IMerchelloContext.cs" />
+    <Compile Include="LineItemContainerExtensions.cs" />
     <Compile Include="ModelExtensions.cs" />
     <Compile Include="Gateway\GatewayEnumerations.cs" />
     <Compile Include="Gateway\IGatewayProvider.cs" />
@@ -102,6 +104,7 @@
     <Compile Include="Events\ConvertEventArgs.cs" />
     <Compile Include="IBootManager.cs" />
     <Compile Include="MerchelloContext.cs" />
+    <Compile Include="Models\Interfaces\ILineItemContainer.cs" />
     <Compile Include="Models\ItemCacheLineItem.cs" />
     <Compile Include="Models\CustomerAddress.cs" />
     <Compile Include="Models\AnonymousCustomer.cs" />
@@ -111,12 +114,12 @@
     <Compile Include="Models\Interfaces\IAnonymousCustomer.cs" />
     <Compile Include="Models\Interfaces\ICustomerBase.cs" />
     <Compile Include="Models\Interfaces\IItemCacheLineItem.cs" />
-    <Compile Include="Models\Interfaces\IInventory.cs" />
+    <Compile Include="Models\Interfaces\IWarehouseInventory.cs" />
     <Compile Include="Models\Interfaces\IInvoiceLineItem.cs" />
     <Compile Include="Models\Interfaces\ILineItemVisitor.cs" />
-    <Compile Include="Models\Inventory.cs" />
-    <Compile Include="Models\InventoryCollection.cs" />
-    <Compile Include="Models\InventoryMapper.cs" />
+    <Compile Include="Models\WarehouseInventory.cs" />
+    <Compile Include="Models\WarehouseInventoryCollection.cs" />
+    <Compile Include="Persistence\Mappers\WarehouseInventoryMapper.cs" />
     <Compile Include="Models\InvoiceLineItem.cs" />
     <Compile Include="Models\Interfaces\IOrderLineItem.cs" />
     <Compile Include="Models\Interfaces\IProductOption.cs" />
@@ -129,8 +132,8 @@
     <Compile Include="Models\ProductOption.cs" />
     <Compile Include="Models\ProductOptionCollection.cs" />
     <Compile Include="Models\OrderLineItem.cs" />
-    <Compile Include="Models\GatewayProviders\IRegisteredGatewayProvider.cs" />
-    <Compile Include="Models\GatewayProviders\RegisteredGatewayProvider.cs" />
+    <Compile Include="Models\Interfaces\IGatewayProvider.cs" />
+    <Compile Include="Models\GatewayProvider.cs" />
     <Compile Include="Models\Interfaces\ICustomerAddress.cs" />
     <Compile Include="Models\Interfaces\IItemCache.cs" />
     <Compile Include="Gateway\IGatewayResponse.cs" />
@@ -157,7 +160,7 @@
     <Compile Include="Models\Rdbms\OrderStatusDto.cs" />
     <Compile Include="Models\Rdbms\OrderDto.cs" />
     <Compile Include="Models\Rdbms\CountryDto.cs" />
-    <Compile Include="Models\Rdbms\RegisteredGatewayProviderDto.cs" />
+    <Compile Include="Models\Rdbms\GatewayProviderDto.cs" />
     <Compile Include="Models\Rdbms\ProductAttributeDto.cs" />
     <Compile Include="Models\Rdbms\ProductOptionDto.cs" />
     <Compile Include="Models\Rdbms\Product2ProductOptionDto.cs" />
@@ -169,7 +172,7 @@
     <Compile Include="Models\Rdbms\ShipZone2Region.cs" />
     <Compile Include="Models\Rdbms\ShipZoneDto.cs" />
     <Compile Include="Models\Rdbms\ShipZone2Country.cs" />
-    <Compile Include="Models\GatewayProviders\RegisteredGatewayProviderBase.cs" />
+    <Compile Include="Models\GatewayProviderBase.cs" />
     <Compile Include="Models\Shipment.cs" />
     <Compile Include="Models\ShipMethod.cs" />
     <Compile Include="Models\AppliedPayment.cs" />
@@ -192,14 +195,14 @@
     <Compile Include="Models\TypeFields\LineItemTypeField.cs" />
     <Compile Include="Models\Warehouse.cs" />
     <Compile Include="ObjectResolution\Resolution.cs" />
-    <Compile Include="Models\GatewayProviders\IRegisteredGatewayProviderBase.cs" />
+    <Compile Include="Models\Interfaces\IGatewayProviderBase.cs" />
     <Compile Include="Persistence\Caching\InMemoryCacheProvider.cs" />
     <Compile Include="Persistence\Factories\ExtendedDataFactory.cs" />
     <Compile Include="Persistence\Factories\InventoryFactory.cs" />
     <Compile Include="Persistence\Factories\ProductAttributeFactory.cs" />
     <Compile Include="Persistence\Factories\ProductOptionFactory.cs" />
     <Compile Include="Persistence\Factories\ProductVariantFactory.cs" />
-    <Compile Include="Persistence\Factories\RegisteredGatewayProviderFactory.cs" />
+    <Compile Include="Persistence\Factories\GatewayProviderFactory.cs" />
     <Compile Include="Persistence\Mappers\CustomerItemCacheLineItemMapper.cs" />
     <Compile Include="Persistence\Mappers\GatewayProviderMapper.cs" />
     <Compile Include="Gateway\GatewayContext.cs" />
@@ -217,8 +220,8 @@
     <Compile Include="Persistence\Repositories\ProductVariantRepository.cs" />
     <Compile Include="Services\Interfaces\IProductVariantService.cs" />
     <Compile Include="Services\ProductVariantService.cs" />
-    <Compile Include="Services\RegisteredGatewayProviderService.cs" />
-    <Compile Include="Services\Interfaces\IRegisteredGatewayProviderService.cs" />
+    <Compile Include="Services\GatewayProviderService.cs" />
+    <Compile Include="Services\Interfaces\IGatewayProviderService.cs" />
     <Compile Include="Strategies\IGatewayProviderStrategy.cs" />
     <Compile Include="Strategies\IStrategy.cs" />
     <Compile Include="Strategies\Payment\IPaymentApplicationStrategyBase.cs" />
@@ -316,7 +319,7 @@
     <Compile Include="Models\Rdbms\AnonymousCustomerDto.cs" />
     <Compile Include="Models\Rdbms\ItemCacheItemDto.cs" />
     <Compile Include="Models\Rdbms\CustomerDto.cs" />
-    <Compile Include="Models\Rdbms\InventoryDto.cs" />
+    <Compile Include="Models\Rdbms\WarehouseInventoryDto.cs" />
     <Compile Include="Models\Rdbms\InvoiceDto.cs" />
     <Compile Include="Models\Rdbms\InvoiceItemDto.cs" />
     <Compile Include="Models\Rdbms\InvoiceStatusDto.cs" />

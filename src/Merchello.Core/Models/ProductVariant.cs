@@ -18,22 +18,22 @@ namespace Merchello.Core.Models
         private bool _master;
 
         internal ProductVariant(string name, string sku, decimal price)
-            : this(Guid.Empty, new ProductAttributeCollection(), new InventoryCollection(), false, name, sku, price)
+            : this(Guid.Empty, new ProductAttributeCollection(), new WarehouseInventoryCollection(), false, name, sku, price)
         { }
 
         internal ProductVariant(Guid productKey, ProductAttributeCollection attributes, string name, string sku, decimal price)
-            : this(productKey, attributes, new InventoryCollection(), false, name, sku, price)
+            : this(productKey, attributes, new WarehouseInventoryCollection(), false, name, sku, price)
         {}
 
-        internal ProductVariant(Guid productKey, ProductAttributeCollection attributes, InventoryCollection inventory, string name, string sku, decimal price)
-            : this(productKey, attributes, inventory, false, name, sku, price)
+        internal ProductVariant(Guid productKey, ProductAttributeCollection attributes, WarehouseInventoryCollection warehouseInventory, string name, string sku, decimal price)
+            : this(productKey, attributes, warehouseInventory, false, name, sku, price)
         { }
 
-        internal ProductVariant(Guid productKey, ProductAttributeCollection attributes, InventoryCollection inventory, bool master, string name, string sku, decimal price)
-            : base(name, sku, price, inventory)
+        internal ProductVariant(Guid productKey, ProductAttributeCollection attributes, WarehouseInventoryCollection warehouseInventory, bool master, string name, string sku, decimal price)
+            : base(name, sku, price, warehouseInventory)
         {
             Mandate.ParameterNotNull(attributes, "attributes");
-            Mandate.ParameterNotNull(inventory, "inventory");
+            Mandate.ParameterNotNull(warehouseInventory, "warehouseInventory");
             _productKey = productKey;
             _attibutes = attributes;
             _master = master;
@@ -104,6 +104,16 @@ namespace Merchello.Core.Models
                     return _master;
                 }, _master, MasterSelector);
             }
-        }  
+        }
+
+        /// <summary>
+        /// Associates a product variant with a warehouse
+        /// </summary>
+        /// <param name="warehouseId">The 'unique' id of the <see cref="IWarehouse"/></param>
+        public void AddToWarehouse(int warehouseId)
+        {
+            WarehouseInventory.Add(new WarehouseInventory(warehouseId, Key));
+        }
+
     }
 }

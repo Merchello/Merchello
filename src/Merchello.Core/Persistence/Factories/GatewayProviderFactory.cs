@@ -1,16 +1,16 @@
-﻿using Merchello.Core.Models.GatewayProviders;
+﻿using Merchello.Core.Models;
 using Merchello.Core.Models.Rdbms;
 
 namespace Merchello.Core.Persistence.Factories
 {
-    public class RegisteredGatewayProviderFactory
+    public class GatewayProviderFactory
     {
-        public IRegisteredGatewayProvider BuildEntity(RegisteredGatewayProviderDto dto)
+        public IGatewayProvider BuildEntity(GatewayProviderDto dto)
         {
-            var provider = new RegisteredGatewayProvider()
+            var provider = new GatewayProvider()
             {
                 Key = dto.Key,
-                GatewayProviderTypeFieldKey = dto.GatewayProviderTypeFieldKey,
+                GatewayProviderTfKey = dto.GatewayProviderTfKey,
                 Name = dto.Name,
                 TypeFullName = dto.TypeFullName,
                 ConfigurationData = dto.ExtendedData,
@@ -24,12 +24,12 @@ namespace Merchello.Core.Persistence.Factories
             return provider;
         }
 
-        public RegisteredGatewayProviderDto BuildDto(IRegisteredGatewayProvider entity)
+        public GatewayProviderDto BuildDto(IGatewayProvider entity)
         {
-            var dto = new RegisteredGatewayProviderDto()
+            var dto = new GatewayProviderDto()
             {                
                 Key = entity.Key,
-                GatewayProviderTypeFieldKey = entity.GatewayProviderTypeFieldKey,
+                GatewayProviderTfKey = entity.GatewayProviderTfKey,
                 Name = entity.Name,
                 TypeFullName = entity.TypeFullName,
                 ExtendedData = entity.ConfigurationData,

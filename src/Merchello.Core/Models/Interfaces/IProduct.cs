@@ -31,5 +31,11 @@ namespace Merchello.Core.Models
         /// This is mainly used for suggesting sku defaults for ProductVariantes
         /// </remarks>
         IEnumerable<IProductOption> ProductOptionsForAttributes(IEnumerable<IProductAttribute> attributes);
+
+        /// <summary>
+        /// Associates a product with a warehouse
+        /// </summary>
+        /// <param name="warehouseId">The 'unique' id of the <see cref="IWarehouse"/></param>
+        void AddToWarehouse(int warehouseId);
     }
 }
