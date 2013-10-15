@@ -93,7 +93,7 @@ namespace Merchello.Core.Persistence.Migrations.Initial
 
         private void CreateWarehouseData()
         {
-            _database.Insert("merchWarehouse", "id", new WarehouseDto() { Name = "Default Warehouse", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchWarehouse", "id", new WarehouseDto() { Name = "Default Warehouse", CountryCode = "", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
         }
     }
 }
