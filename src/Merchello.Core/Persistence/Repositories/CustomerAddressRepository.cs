@@ -14,16 +14,16 @@ using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Core.Persistence.Repositories
 {
-    internal class AddressRepository : MerchelloPetaPocoRepositoryBase<int, IAddress>, IAddressRepository
+    internal class CustomerAddressRepository : MerchelloPetaPocoRepositoryBase<int, ICustomerAddress>, ICustomerAddressRepository
     {
 
-        public AddressRepository(IDatabaseUnitOfWork work)
+        public CustomerAddressRepository(IDatabaseUnitOfWork work)
             : base(work)
         {
 
         }
 
-        public AddressRepository(IDatabaseUnitOfWork work, IRepositoryCacheProvider cache)
+        public CustomerAddressRepository(IDatabaseUnitOfWork work, IRepositoryCacheProvider cache)
             : base(work, cache)
         {
         }
@@ -31,7 +31,7 @@ namespace Merchello.Core.Persistence.Repositories
         #region Overrides of RepositoryBase<IAddress>
 
 
-        protected override IAddress PerformGet(int id)
+        protected override ICustomerAddress PerformGet(int id)
         {
             var sql = GetBaseQuery(false)
                 .Where(GetBaseWhereClause(), new { Id = id });
@@ -48,7 +48,7 @@ namespace Merchello.Core.Persistence.Repositories
             return address;
         }
 
-        protected override IEnumerable<IAddress> PerformGetAll(params int[] ids)
+        protected override IEnumerable<ICustomerAddress> PerformGetAll(params int[] ids)
         {
             if (ids.Any())
             {
@@ -96,7 +96,7 @@ namespace Merchello.Core.Persistence.Repositories
             return list;
         }
 
-        protected override void PersistNewItem(IAddress entity)
+        protected override void PersistNewItem(ICustomerAddress entity)
         {
             ((IdEntity)entity).AddingEntity();
 
@@ -108,7 +108,7 @@ namespace Merchello.Core.Persistence.Repositories
             entity.ResetDirtyProperties();
         }
 
-        protected override void PersistUpdatedItem(IAddress entity)
+        protected override void PersistUpdatedItem(ICustomerAddress entity)
         {
             ((IdEntity)entity).UpdatingEntity();
 
@@ -120,7 +120,7 @@ namespace Merchello.Core.Persistence.Repositories
             entity.ResetDirtyProperties();
         }
 
-        protected override void PersistDeletedItem(IAddress entity)
+        protected override void PersistDeletedItem(ICustomerAddress entity)
         {
             var deletes = GetDeleteClauses();
             foreach (var delete in deletes)
@@ -130,10 +130,10 @@ namespace Merchello.Core.Persistence.Repositories
         }
 
 
-        protected override IEnumerable<IAddress> PerformGetByQuery(IQuery<IAddress> query)
+        protected override IEnumerable<ICustomerAddress> PerformGetByQuery(IQuery<ICustomerAddress> query)
         {
             var sqlClause = GetBaseQuery(false);
-            var translator = new SqlTranslator<IAddress>(sqlClause, query);
+            var translator = new SqlTranslator<ICustomerAddress>(sqlClause, query);
             var sql = translator.Translate();
 
             var dtos = Database.Fetch<CustomerAddressDto>(sql);

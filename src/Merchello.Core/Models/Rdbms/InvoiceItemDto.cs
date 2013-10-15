@@ -7,7 +7,7 @@ namespace Merchello.Core.Models.Rdbms
     [TableName("merchInvoiceItem")]
     [PrimaryKey("id")]
     [ExplicitColumns]
-    internal class InvoiceItemDto
+    internal class InvoiceItemDto : ILineItemDto
     {
         [Column("id")]
         [PrimaryKeyColumn]
@@ -15,7 +15,7 @@ namespace Merchello.Core.Models.Rdbms
 
         [Column("invoiceId")]
         [ForeignKey(typeof(InvoiceDto), Name = "FK_merchInvoiceItem_merchInvoice", Column = "id")]
-        public int InvoiceId { get; set; }
+        public int ContainerId { get; set; }
         
         [Column("lineItemTfKey")]
         public Guid LineItemTfKey { get; set; }

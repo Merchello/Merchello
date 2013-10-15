@@ -10,13 +10,13 @@ namespace Merchello.Tests.UnitTests.Repository
     public class AddressRepositoryTests
     {
         private MockDatabaseUnitOfWork _uow;
-        private AddressRepository _repository;
+        private CustomerAddressRepository _repository;
 
         [SetUp]
         public void Setup()
         {
             _uow = new MockDatabaseUnitOfWork();
-            _repository = new AddressRepository(_uow);
+            _repository = new CustomerAddressRepository(_uow);
         }
 
         [Test]

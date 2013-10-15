@@ -45,9 +45,9 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Creates an <see cref="IInvoice"/> object
         /// </summary>
-        public IInvoice CreateInvoice(ICustomer customer, IAddress address, IInvoiceStatus invoiceStatus, string invoiceNumber)
+        public IInvoice CreateInvoice(ICustomer customer, ICustomerAddress customerAddress, IInvoiceStatus invoiceStatus, string invoiceNumber)
         {
-            var invoice = new Invoice(customer, address, invoiceStatus, 0)
+            var invoice = new Invoice(customer, customerAddress, invoiceStatus, 0)
             {
                 InvoiceNumber =  invoiceNumber,
                 InvoiceDate = DateTime.Now,

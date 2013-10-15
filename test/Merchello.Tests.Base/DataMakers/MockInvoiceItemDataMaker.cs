@@ -14,22 +14,15 @@ namespace Merchello.Tests.Base.DataMakers
     public class MockInvoiceItemDataMaker : MockDataMakerBase
     {
 
-        public static IInvoiceItem InvoiceItemForInserting(IInvoice invoice, InvoiceItemType invoiceItemType)
+        public static IInvoiceLineItem InvoiceLineItemForInserting(IInvoice invoice, InvoiceItemType invoiceItemType)
         {
             var typeKey = EnumTypeFieldConverter.InvoiceItem.GetTypeField(invoiceItemType).TypeKey;
-            return new InvoiceItem(invoice, typeKey)
-                    {
-                        Amount = GetAmount(),
-                        Name = ProductItemName(),
-                        Quantity = Quanity(),
-                        Sku = MockSku(),
-                        Exported = false
-                    };
+            return new InvoiceLineItem(invoice.Id, typeKey, ProductItemName(), MockSku(), Quanity(), PriceCheck(), new ExtendedDataCollection());
         }
 
-        public static IEnumerable<IInvoiceItem> InvoiceItemCollectionForInserting(IInvoice invoice, InvoiceItemType invoiceItemType, int count)
+        public static IEnumerable<IInvoiceLineItem> InvoiceLineItemCollectionForInserting(IInvoice invoice, InvoiceItemType invoiceItemType, int count)
         {
-            for (var i = 0; i < count; i++) yield return InvoiceItemForInserting(invoice, invoiceItemType);
+            for (var i = 0; i < count; i++) yield return InvoiceLineItemForInserting(invoice, invoiceItemType);
         }
 
         private static int Quanity()

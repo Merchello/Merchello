@@ -47,18 +47,18 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         #region IAddress
 
         /// <summary>
-        /// Inserts an address record in the merchAddress table and returns an <see cref="IAddress"/> object representation
+        /// Inserts an address record in the merchAddress table and returns an <see cref="ICustomerAddress"/> object representation
         /// </summary>
         /// <returns></returns>
-        public IAddress MakeExistingAddress()
+        public ICustomerAddress MakeExistingAddress()
         {
             return MakeExistingAddress(MakeExistingCustomer(), "Home");
         }
 
         /// <summary>
-        /// Inserts an address record in the merchAddress table and returns an <see cref="IAddress"/> object representation
+        /// Inserts an address record in the merchAddress table and returns an <see cref="ICustomerAddress"/> object representation
         /// </summary>
-        public IAddress MakeExistingAddress(ICustomer customer, string label)
+        public ICustomerAddress MakeExistingAddress(ICustomer customer, string label)
         {
             var address = MockAddressDataMaker.RandomAddress(customer, label);
             //AddressService.Save(address);
@@ -66,9 +66,9 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         }
 
         /// <summary>
-        /// Inserts a collection of address records into the database and returns a collection of <see cref="IAddress"/> objects representation
+        /// Inserts a collection of address records into the database and returns a collection of <see cref="ICustomerAddress"/> objects representation
         /// </summary>        
-        public IEnumerable<IAddress> MakeExistingAddressCollection(ICustomer customer, string label, int count)
+        public IEnumerable<ICustomerAddress> MakeExistingAddressCollection(ICustomer customer, string label, int count)
         {
             var addresses = MockAddressDataMaker.AddressCollectionForInserting(customer, label, count);
             //AddressService.Save(addresses);
@@ -190,13 +190,13 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         /// Makes an invoice record in the database and returns an instance of IInvoice representing that record
         /// 
         /// </summary>
-        /// <param name="address"></param>
+        /// <param name="customerAddress"></param>
         /// <param name="maxItemCount">If itemCount is greater than 0, invoice items will be added to the invoice</param>
         /// <param name="customer"></param>
         /// <param name="invoiceStatus"></param>
-        public IInvoice MakeExistingInvoice(ICustomer customer, IInvoiceStatus invoiceStatus, IAddress address, int maxItemCount = 0)
+        public IInvoice MakeExistingInvoice(ICustomer customer, IInvoiceStatus invoiceStatus, ICustomerAddress customerAddress, int maxItemCount = 0)
         {
-            var invoice = MockInvoiceDataMaker.InvoiceForInserting(customer, invoiceStatus, address);
+            var invoice = MockInvoiceDataMaker.InvoiceForInserting(customer, invoiceStatus, customerAddress);
             InvoiceService.Save(invoice);
 
             //if(maxItemCount > 0) MakeExistingInvoiceItemCollection(invoice, InvoiceItemType.Product, MockDataMakerBase.NoWhammyStop.Next(maxItemCount));
@@ -207,9 +207,9 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         /// <summary>
         /// Makes a list of invoices (without items) in the database and returns a collection of IInvoice representing these records
         /// </summary>
-        public IEnumerable<IInvoice> MakeExistingInvoiceCollection(ICustomer customer, IInvoiceStatus invoiceStatus, IAddress address, int count)
+        public IEnumerable<IInvoice> MakeExistingInvoiceCollection(ICustomer customer, IInvoiceStatus invoiceStatus, ICustomerAddress customerAddress, int count)
         {
-            var invoices = MockInvoiceDataMaker.InvoiceCollectionForInserting(customer, invoiceStatus, address, count);
+            var invoices = MockInvoiceDataMaker.InvoiceCollectionForInserting(customer, invoiceStatus, customerAddress, count);
             InvoiceService.Save(invoices);
             return invoices;
         }
@@ -219,13 +219,13 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         /// </summary>
         /// <param name="customer"><see cref="ICustomer"/></param>
         /// <param name="invoiceStatus"><see cref="IInvoiceStatus"/></param>
-        /// <param name="address"><see cref="IAddress"/></param>
+        /// <param name="customerAddress"><see cref="ICustomerAddress"/></param>
         /// <param name="count">the number of invoices to generate</param>
         /// <param name="maxItemCount">The maximum number of invoice items for each invoice</param>
         /// <returns></returns>
-        public IEnumerable<IInvoice> MakeExistingInvoiceCollection(ICustomer customer, IInvoiceStatus invoiceStatus, IAddress address, int count, int maxItemCount)
+        public IEnumerable<IInvoice> MakeExistingInvoiceCollection(ICustomer customer, IInvoiceStatus invoiceStatus, ICustomerAddress customerAddress, int count, int maxItemCount)
         {
-            for(var i = 0; i < count; i++) yield return MakeExistingInvoice(customer, invoiceStatus, address, maxItemCount);
+            for(var i = 0; i < count; i++) yield return MakeExistingInvoice(customer, invoiceStatus, customerAddress, maxItemCount);
         }
 
 

@@ -13,7 +13,7 @@ namespace Merchello.Tests.UnitTests.Querying
     
     [TestFixture]
     [Category("SqlSyntax")]
-    public class AddressSqlClausesTests  : BaseUsingSqlServerSyntax<IAddress>
+    public class AddressSqlClausesTests  : BaseUsingSqlServerSyntax<ICustomerAddress>
     {
         /// <summary>
         /// Test to verify that the typed <see cref="CustomerAddressDto"/> query matches generic "select * ..." query 
@@ -40,7 +40,7 @@ namespace Merchello.Tests.UnitTests.Querying
         }
 
         /// <summary>
-        /// Test to verify that the typed <see cref="IAddress"/> query for addresses by customer
+        /// Test to verify that the typed <see cref="ICustomerAddress"/> query for addresses by customer
         /// </summary>
         [Test]
         public void Can_Verify_Sql_For_Address_By_Customer_Query()

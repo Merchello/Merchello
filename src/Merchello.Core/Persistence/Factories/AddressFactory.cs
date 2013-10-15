@@ -4,12 +4,12 @@ using Merchello.Core.Models.Rdbms;
 
 namespace Merchello.Core.Persistence.Factories
 {
-    internal class AddressFactory : IEntityFactory<IAddress, CustomerAddressDto>
+    internal class AddressFactory : IEntityFactory<ICustomerAddress, CustomerAddressDto>
     {
 
-        public IAddress BuildEntity(CustomerAddressDto dto)
+        public ICustomerAddress BuildEntity(CustomerAddressDto dto)
         {
-            var address = new Address(dto.CustomerKey, dto.Label)
+            var address = new CustomerAddress(dto.CustomerKey, dto.Label)
             {
                 Id = dto.Id, 
                 FullName = dto.FullName,
@@ -31,7 +31,7 @@ namespace Merchello.Core.Persistence.Factories
             return address;
         }
 
-        public CustomerAddressDto BuildDto(IAddress entity)
+        public CustomerAddressDto BuildDto(ICustomerAddress entity)
         {
             var dto = new CustomerAddressDto()
             {
