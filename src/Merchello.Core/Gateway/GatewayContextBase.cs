@@ -1,30 +1,31 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using Merchello.Core.Models.GatewayProviders;
+
+using Merchello.Core.Models;
 using Merchello.Core.Services;
 
 namespace Merchello.Core.Gateway
 {
     internal abstract class GatewayContextBase : IGatewayContext
     {        
-        private static readonly ConcurrentDictionary<Guid, IRegisteredGatewayProviderBase> GatewayProviderCache = new ConcurrentDictionary<Guid, IRegisteredGatewayProviderBase>();
-        private IRegisteredGatewayProviderService _registeredGatewayProviderService;
+        private static readonly ConcurrentDictionary<Guid, IGatewayProviderBase> GatewayProviderCache = new ConcurrentDictionary<Guid, IGatewayProviderBase>();
+        private IGatewayProviderService _gatewayProviderService;
 
-        protected GatewayContextBase(IRegisteredGatewayProviderService registeredGatewayProviderService)
+        protected GatewayContextBase(IGatewayProviderService gatewayProviderService)
         {
-            Mandate.ParameterNotNull(registeredGatewayProviderService, "gatewayProviderService");
+            Mandate.ParameterNotNull(gatewayProviderService, "gatewayProviderService");
 
-            _registeredGatewayProviderService = registeredGatewayProviderService;
+            _gatewayProviderService = gatewayProviderService;
         }
 
-        public IRegisteredGatewayProvider GetByKey(Guid key)
+        public IGatewayProvider GetByKey(Guid key)
         {
             throw new NotImplementedException();
         }
 
-        protected void AddToCache(Guid providerKey, IRegisteredGatewayProviderBase registeredGatewayProviderBase)
+        protected void AddToCache(Guid providerKey, IGatewayProviderBase gatewayProviderBase)
         {
-            GatewayProviderCache.AddOrUpdate(providerKey, registeredGatewayProviderBase, (x, y) => registeredGatewayProviderBase);
+            GatewayProviderCache.AddOrUpdate(providerKey, gatewayProviderBase, (x, y) => gatewayProviderBase);
         }
         
         public  void Refresh()

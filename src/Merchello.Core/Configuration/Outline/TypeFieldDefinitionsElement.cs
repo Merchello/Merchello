@@ -1,6 +1,5 @@
 ﻿using System.Configuration;
 using Merchello.Core.Models;
-using Merchello.Core.Models.GatewayProviders;
 
 
 namespace Merchello.Core.Configuration.Outline
@@ -37,7 +36,7 @@ namespace Merchello.Core.Configuration.Outline
         }
 
         /// <summary>
-        /// Gets the dbTypeFields configuration collection for <see cref="IInvoiceItem"/>
+        /// Gets the dbTypeFields configuration collection for <see cref="IInvoiceLineItem"/>
         /// </summary>
         [ConfigurationProperty("invoiceItem", IsRequired = false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
         public TypeFieldCollection InvoiceItem
@@ -73,7 +72,7 @@ namespace Merchello.Core.Configuration.Outline
         }
 
         /// <summary>
-        /// Gets the dbTypeFields configuration collection for <see cref="IRegisteredGatewayProviderBase"/>
+        /// Gets the dbTypeFields configuration collection for <see cref="IGatewayProviderBase"/>
         /// </summary>
         [ConfigurationProperty("gatewayProvider", IsRequired = false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
         public TypeFieldCollection GatewayProvider

@@ -47,7 +47,7 @@ namespace Merchello.Core.Services
         /// <param name="attributes"><see cref="IProductVariant"/></param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         /// <returns>Either a new <see cref="IProductVariant"/> or, if one already exists with associated attributes, the existing <see cref="IProductVariant"/></returns>
-        public IProductVariant CreateVariantWithKey(IProduct product, ProductAttributeCollection attributes, bool raiseEvents = true)
+        public IProductVariant CreateProductVariantWithKey(IProduct product, ProductAttributeCollection attributes, bool raiseEvents = true)
         {
             var skuSeparator = MerchelloConfiguration.Current.DefaultSkuSeparator;
 
@@ -64,7 +64,7 @@ namespace Merchello.Core.Services
                 sku += skuSeparator + att.Sku;
             }
 
-            return CreateVariantWithKey(product, name.Trim(), sku, product.Price, attributes, raiseEvents);
+            return CreateProductVariantWithKey(product, name.Trim(), sku, product.Price, attributes, raiseEvents);
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace Merchello.Core.Services
         /// <param name="attributes"><see cref="IProductVariant"/></param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         /// <returns>Either a new <see cref="IProductVariant"/> or, if one already exists with associated attributes, the existing <see cref="IProductVariant"/></returns>
-        public IProductVariant CreateVariantWithKey(IProduct product, string name, string sku, decimal price, ProductAttributeCollection attributes, bool raiseEvents = true)
+        public IProductVariant CreateProductVariantWithKey(IProduct product, string name, string sku, decimal price, ProductAttributeCollection attributes, bool raiseEvents = true)
         {
             Mandate.ParameterNotNull(product, "product");
             Mandate.ParameterNotNull(attributes, "attributes");
@@ -303,6 +303,30 @@ namespace Merchello.Core.Services
             using (var repository = _repositoryFactory.CreateProductVariantRepository(_uowProvider.GetUnitOfWork()))
             {
                 return repository.GetByProductKey(productKey);
+            }
+        }
+
+        /// <summary>
+        /// Gets a collection of <see cref="IProductVariant"/> objects associated with a given warehouse 
+        /// </summary>
+        /// <param name="warehouseId">The 'unique' id of the warehouse</param>
+        /// <returns>A collection of <see cref="IProductVariant"/></returns>
+        public IEnumerable<IProductVariant> GetByWarehouseId(int warehouseId)
+        {
+            using (var repository = _repositoryFactory.CreateProductVariantRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetByWarehouseId(warehouseId);
+            }
+        }
+
+        /// <summary>
+        /// Returns <see cref="IProductVariant"/> given the product and the collection of attribute ids that defines the<see cref="IProductVariant"/>
+        /// </summary>
+        public IProductVariant GetProductVariantWithAttributes(IProduct product, int[] attributeIds)
+        {
+            using (var repository = _repositoryFactory.CreateProductVariantRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetProductVariantWithAttributes(product, attributeIds);
             }
         }
 

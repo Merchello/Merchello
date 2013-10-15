@@ -9,12 +9,12 @@ namespace Merchello.Core.Models
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    internal class Inventory : IInventory
+    internal class WarehouseInventory : IWarehouseInventory
     {
         private readonly int _warehouseId;
         private readonly Guid _productVariantKey;
 
-        public Inventory(int warehouseId, Guid productVariantKey)
+        public WarehouseInventory(int warehouseId, Guid productVariantKey)
         {            
             _warehouseId = warehouseId;
             _productVariantKey = productVariantKey;

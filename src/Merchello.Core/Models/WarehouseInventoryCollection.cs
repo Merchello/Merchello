@@ -12,17 +12,17 @@ namespace Merchello.Core.Models
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    public class InventoryCollection : NotifiyCollectionBase<string, IInventory>
+    public class WarehouseInventoryCollection : NotifiyCollectionBase<string, IWarehouseInventory>
     {
         private readonly ReaderWriterLockSlim _addLocker = new ReaderWriterLockSlim();
 
-        protected override string GetKeyForItem(IInventory item)
+        protected override string GetKeyForItem(IWarehouseInventory item)
         {
             return MakeKeyForItem(item);
         }
 
 
-        internal new void Add(IInventory item)
+        internal new void Add(IWarehouseInventory item)
         {
             using (new WriteLock(_addLocker))
             {
@@ -65,7 +65,7 @@ namespace Merchello.Core.Models
             return -1;
         }
 
-        public static string MakeKeyForItem(IInventory item)
+        public static string MakeKeyForItem(IWarehouseInventory item)
         {
             return string.Format("{0}-{1}", item.ProductVariantKey, item.WarehouseId);
         }

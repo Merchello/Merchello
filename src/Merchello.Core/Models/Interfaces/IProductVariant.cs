@@ -22,6 +22,11 @@ namespace Merchello.Core.Models
         /// </remarks>
         IEnumerable<IProductAttribute> Attributes { get; }
 
-        
+        /// <summary>
+        /// Associates a product variant with a warehouse
+        /// </summary>
+        /// <param name="warehouseId">The 'unique' id of the <see cref="IWarehouse"/></param>
+        void AddToWarehouse(int warehouseId);
+
     }
 }

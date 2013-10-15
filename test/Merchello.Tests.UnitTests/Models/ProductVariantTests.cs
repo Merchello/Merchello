@@ -21,7 +21,7 @@ namespace Merchello.Tests.UnitTests.Models
                     new ProductAttribute("Att3", "Sku3") { Id = 3 }
                 };
 
-            _productVariant = new ProductVariant(Guid.NewGuid(), _attributes, new InventoryCollection(), false, "Product1", "P1", 11M);
+            _productVariant = new ProductVariant(Guid.NewGuid(), _attributes, new WarehouseInventoryCollection(), false, "Product1", "P1", 11M);
         }
 
         /// <summary>

@@ -11,7 +11,7 @@ namespace Merchello.Tests.UnitTests.Querying
 {
     [TestFixture]
     [Category("SqlSyntax")]
-    public class CustomerItemCacheSqlClausesTest : BaseUsingSqlServerSyntax<IItemCache>
+    public class ItemCacheSqlClausesTest : BaseUsingSqlServerSyntax<IItemCache>
     {
         /// <summary>
         /// Test to verify that the typed <see cref="ItemCacheDto"/> query matches generic "select * ..." query 
@@ -24,8 +24,8 @@ namespace Merchello.Tests.UnitTests.Querying
 
             var expected = new Sql();
             expected.Select("*")
-                .From("[merchCustomerItemCache]")
-                .Where("[merchCustomerItemCache].[id] = " + id.ToString());
+                .From("[merchItemCache]")
+                .Where("[merchItemCache].[id] = " + id.ToString());
                 //.Where("[merchCustomerItemCache].[itemCacheTfKey] = '" +  + "'")
 
             //// Act
@@ -49,8 +49,8 @@ namespace Merchello.Tests.UnitTests.Querying
 
             var expected = new Sql();
             expected.Select("*")
-                .From("[merchCustomerItemCacheItem]")
-                .Where("[merchCustomerItemCacheItem].[id] = " + id.ToString());
+                .From("[merchItemCacheItem]")
+                .Where("[merchItemCacheItem].[id] = " + id.ToString());
 
             //// Act
             var sql = new Sql();
@@ -66,15 +66,15 @@ namespace Merchello.Tests.UnitTests.Querying
         /// Test to verify the typed <see cref="IItemCache"/> sql by consumer key queries
         /// </summary>
         [Test]
-        public void Can_Verify_ItemCache_By_Consumer_Query()
+        public void Can_Verify_ItemCache_By_Entity_Query()
         {
             //// Arrange
             var key = new Guid("E7ADD433-DF59-42AC-B195-BAF0E4F4392A");
 
             var expected = new Sql();
             expected.Select("*")
-                .From("[merchCustomerItemCache]")
-                .Where("[merchCustomerItemCache].[customerKey] = '" + key.ToString() + "'");
+                .From("[merchItemCache]")
+                .Where("[merchItemCache].[entityKey] = '" + key.ToString() + "'");
 
             //// Act
             var sql = new Sql();
@@ -90,7 +90,7 @@ namespace Merchello.Tests.UnitTests.Querying
         /// Test to verify type <see cref="IItemCache"/> sql by consumer and basket type field key
         /// </summary>
         [Test]
-        public void Can_Verify_ItemCache_By_Consumer_And_BasketType_Query()
+        public void Can_Verify_ItemCache_By_Entity_And_BasketType_Query()
         {
             //// Arrange
             var basketTypeKey = TypeFieldMock.ItemCacheBasket.TypeKey;
@@ -98,8 +98,8 @@ namespace Merchello.Tests.UnitTests.Querying
 
             var expected = new Sql();
             expected.Select("*")
-               .From("[merchCustomerItemCache]")
-               .Where("[merchCustomerItemCache].[customerKey] = '" + key.ToString() + "' AND [merchCustomerItemCache].[itemCacheTfKey] = '" + basketTypeKey.ToString() + "'");
+               .From("[merchItemCache]")
+               .Where("[merchItemCache].[entityKey] = '" + key.ToString() + "' AND [merchItemCache].[itemCacheTfKey] = '" + basketTypeKey.ToString() + "'");
 
             //// Act
             var sql = new Sql();

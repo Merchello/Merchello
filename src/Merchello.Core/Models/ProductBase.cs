@@ -30,21 +30,21 @@ namespace Merchello.Core.Models
         private bool _download;
         private int? _downloadMediaId;
 
-        private InventoryCollection _inventory;
+        private WarehouseInventoryCollection _warehouseInventory;
 
         protected ProductBase(string name, string sku, decimal price)
-            : this(name, sku, price, new InventoryCollection())
+            : this(name, sku, price, new WarehouseInventoryCollection())
         { }
         
-        internal ProductBase(string name, string sku, decimal price, InventoryCollection inventory)
+        internal ProductBase(string name, string sku, decimal price, WarehouseInventoryCollection warehouseInventory)
         {
             Mandate.ParameterNotNullOrEmpty(name, "name");
             Mandate.ParameterNotNullOrEmpty(sku, "sku");
-            Mandate.ParameterNotNull(inventory, "inventory");
+            Mandate.ParameterNotNull(warehouseInventory, "warehouseInventory");
             _name = name;
             _sku = sku;
             _price = price;
-            _inventory = inventory;
+            _warehouseInventory = warehouseInventory;
             
         }
 
@@ -66,11 +66,11 @@ namespace Merchello.Core.Models
         private static readonly PropertyInfo ShippableSelector = ExpressionHelper.GetPropertyInfo<ProductBase, bool>(x => x.Shippable);
         private static readonly PropertyInfo DownloadSelector = ExpressionHelper.GetPropertyInfo<ProductBase, bool>(x => x.Download);
         private static readonly PropertyInfo DownloadMediaIdSelector = ExpressionHelper.GetPropertyInfo<ProductBase, int?>(x => x.DownloadMediaId);
-        private static readonly PropertyInfo InventoryChangedSelector = ExpressionHelper.GetPropertyInfo<ProductBase, InventoryCollection>(x => x.WarehouseInventory);
+        private static readonly PropertyInfo WarehouseInventoryChangedSelector = ExpressionHelper.GetPropertyInfo<ProductBase, WarehouseInventoryCollection>(x => x.WarehouseInventory);
 
-        private void InventoryChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void WarehouseInventoryChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            OnPropertyChanged(InventoryChangedSelector);
+            OnPropertyChanged(WarehouseInventoryChangedSelector);
         }
 
 
@@ -78,18 +78,18 @@ namespace Merchello.Core.Models
         /// Product variant inventory accross all warehouses
         /// </summary>
         [DataMember]
-        public IEnumerable<IInventory> Inventory
+        public IEnumerable<IWarehouseInventory> Inventory
         {
-            get { return _inventory; }
+            get { return _warehouseInventory; }
         }
 
         [IgnoreDataMember]
-        internal InventoryCollection WarehouseInventory
+        internal WarehouseInventoryCollection WarehouseInventory
         {
-            get { return _inventory; }
+            get { return _warehouseInventory; }
             set { 
-                _inventory = value;
-                _inventory.CollectionChanged += InventoryChanged;
+                _warehouseInventory = value;
+                _warehouseInventory.CollectionChanged += WarehouseInventoryChanged;
             }
         }
 
