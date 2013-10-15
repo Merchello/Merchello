@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Formatting;
+using umbraco;
 using Umbraco.Core;
 using Umbraco.Web.Trees;
 using umbraco.BusinessLogic.Actions;
@@ -56,18 +57,19 @@ namespace Merchello.Web.UI.Trees
             if (id == Constants.System.Root.ToInvariantString())
             {
                 // root actions              
-                //menu.AddMenuItem<RefreshNode, ActionRefresh>(true);
+                menu.Items.Add<RefreshNode, ActionRefresh>(ui.Text("actions", ActionRefresh.Instance.Alias), true);
                 return menu;
             }
             else if (id == "catalog")
             {
                 //create product
+                menu.Items.Add<MerchelloActionNewProduct>(ui.Text("actions", MerchelloActionNewProduct.Instance.Alias));
                 //menu.AddMenuItem<MerchelloActionNewProduct>();
             }
             else
             {
                 //only have refres for each node
-                //menu.AddMenuItem<RefreshNode, ActionRefresh>(true);
+                menu.Items.Add<RefreshNode, ActionRefresh>(ui.Text("actions", ActionRefresh.Instance.Alias), true);
             }
 
             return menu;
