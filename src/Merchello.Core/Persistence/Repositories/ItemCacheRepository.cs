@@ -13,17 +13,17 @@ using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Core.Persistence.Repositories
 {
-    internal class CustomerItemCacheRepository : MerchelloPetaPocoRepositoryBase<int, ICustomerItemCache>, ICustomerItemCacheRepository
+    internal class ItemCacheRepository : MerchelloPetaPocoRepositoryBase<int, IItemCache>, IItemCacheRepository
     {
-        private ILineItemRepository _lineItemRepository;
+        private readonly ILineItemRepository _lineItemRepository;
 
-        public CustomerItemCacheRepository(IDatabaseUnitOfWork work, ILineItemRepository lineItemRepository)
+        public ItemCacheRepository(IDatabaseUnitOfWork work, ILineItemRepository lineItemRepository)
             : base(work)
         {
             _lineItemRepository = lineItemRepository;
         }
 
-        public CustomerItemCacheRepository(IDatabaseUnitOfWork work, IRepositoryCacheProvider cache, ILineItemRepository lineItemRepository)
+        public ItemCacheRepository(IDatabaseUnitOfWork work, IRepositoryCacheProvider cache, ILineItemRepository lineItemRepository)
             : base(work, cache)
         {
             _lineItemRepository = lineItemRepository;
@@ -33,28 +33,28 @@ namespace Merchello.Core.Persistence.Repositories
         #region Overrides of RepositoryBase<ICustomerItemCache>
 
 
-        protected override ICustomerItemCache PerformGet(int id)
+        protected override IItemCache PerformGet(int id)
         {
             var sql = GetBaseQuery(false)
                 .Where(GetBaseWhereClause(), new { Id = id });
 
-            var dto = Database.Fetch<CustomerItemCacheDto>(sql).FirstOrDefault();
+            var dto = Database.Fetch<ItemCacheDto>(sql).FirstOrDefault();
 
             if (dto == null)
                 return null;
 
-            var factory = new CustomerItemCacheFactory();
+            var factory = new ItemCacheFactory();
 
             var itemCache = factory.BuildEntity(dto);
 
-            ((CustomerItemCache)itemCache).Items = GetLineItemCollection(itemCache.Id);
+            ((ItemCache)itemCache).Items = GetLineItemCollection(itemCache.Id);
 
             itemCache.ResetDirtyProperties();
 
             return itemCache;
         }
 
-        protected override IEnumerable<ICustomerItemCache> PerformGetAll(params int[] ids)
+        protected override IEnumerable<IItemCache> PerformGetAll(params int[] ids)
         {
             if (ids.Any())
             {
@@ -65,7 +65,7 @@ namespace Merchello.Core.Persistence.Repositories
             }
             else
             {                
-                var dtos = Database.Fetch<CustomerItemCacheDto>(GetBaseQuery(false));
+                var dtos = Database.Fetch<ItemCacheDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
                     yield return Get(dto.Id);
@@ -79,10 +79,10 @@ namespace Merchello.Core.Persistence.Repositories
         {
             var sql = new Sql();
             sql.Select("*")
-                .From<CustomerItemCacheItemDto>()
-                .Where<CustomerItemCacheItemDto>(x => x.ContainerId == itemCacheId);
+                .From<ItemCacheItemDto>()
+                .Where<ItemCacheItemDto>(x => x.ContainerId == itemCacheId);
 
-            var dtos = Database.Fetch<CustomerItemCacheItemDto>(sql);
+            var dtos = Database.Fetch<ItemCacheItemDto>(sql);
 
             var factory = new LineItemFactory();
             var collection = new LineItemCollection();
@@ -100,32 +100,32 @@ namespace Merchello.Core.Persistence.Repositories
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-               .From<CustomerItemCacheDto>();
+               .From<ItemCacheDto>();
 
             return sql;
         }
 
         protected override string GetBaseWhereClause()
         {
-            return "merchCustomerItemCache.id = @Id";
+            return "merchItemCache.id = @Id";
         }
 
         protected override IEnumerable<string> GetDeleteClauses()
         {
             var list = new List<string>
                 {
-                    "DELETE FROM merchCustomerItemCacheItem WHERE itemCacheId = @Id",
-                    "DELETE FROM merchCustomerItemCache WHERE id = @Id"
+                    "DELETE FROM merchItemCacheItem WHERE itemCacheId = @Id",
+                    "DELETE FROM merchItemCache WHERE id = @Id"
                 };
 
             return list;
         }
 
-        protected override void PersistNewItem(ICustomerItemCache entity)
+        protected override void PersistNewItem(IItemCache entity)
         {
             ((IdEntity)entity).AddingEntity();
 
-            var factory = new CustomerItemCacheFactory();
+            var factory = new ItemCacheFactory();
             var dto = factory.BuildDto(entity);
             Database.Insert(dto);
             entity.Id = dto.Id;
@@ -135,11 +135,11 @@ namespace Merchello.Core.Persistence.Repositories
             entity.ResetDirtyProperties();
         }
 
-        protected override void PersistUpdatedItem(ICustomerItemCache entity)
+        protected override void PersistUpdatedItem(IItemCache entity)
         {
             ((IdEntity)entity).UpdatingEntity();
 
-            var factory = new CustomerItemCacheFactory();
+            var factory = new ItemCacheFactory();
             var dto = factory.BuildDto(entity);
             Database.Update(dto);
 
@@ -148,7 +148,7 @@ namespace Merchello.Core.Persistence.Repositories
             entity.ResetDirtyProperties();
         }
 
-        protected override void PersistDeletedItem(ICustomerItemCache entity)
+        protected override void PersistDeletedItem(IItemCache entity)
         {
             var deletes = GetDeleteClauses();
             foreach (var delete in deletes)
@@ -157,13 +157,13 @@ namespace Merchello.Core.Persistence.Repositories
             }
         }
 
-        protected override IEnumerable<ICustomerItemCache> PerformGetByQuery(IQuery<ICustomerItemCache> query)
+        protected override IEnumerable<IItemCache> PerformGetByQuery(IQuery<IItemCache> query)
         {
             var sqlClause = GetBaseQuery(false);
-            var translator = new SqlTranslator<ICustomerItemCache>(sqlClause, query);
+            var translator = new SqlTranslator<IItemCache>(sqlClause, query);
             var sql = translator.Translate();
 
-            var dtos = Database.Fetch<CustomerItemCacheDto>(sql);
+            var dtos = Database.Fetch<ItemCacheDto>(sql);
 
             return dtos.DistinctBy(x => x.Id).Select(dto => Get(dto.Id));
         }        

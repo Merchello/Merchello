@@ -3,6 +3,6 @@
     /// <summary>
     /// Marker interface for ICustomerItemCacheLineItem
     /// </summary>
-    public interface ICustomerItemCacheLineItem : ILineItem
+    public interface IItemCacheLineItem : ILineItem
     { }
 }

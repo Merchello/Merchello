@@ -13,13 +13,13 @@ namespace Merchello.Tests.IntegrationTests.Services.Customer
     public class CustomerItemCacheServiceTests : ServiceIntegrationTestBase
     {
         private IAnonymousCustomer _anonymous;
-        private ICustomerItemCacheService _customerItemCacheService;   
+        private IItemCacheService _itemCacheService;   
 
         [SetUp]
         public void Initialize()
         {
             PreTestDataWorker.DeleteAllCustomerItemCaches();
-            _customerItemCacheService = PreTestDataWorker.CustomerItemCacheService;
+            _itemCacheService = PreTestDataWorker.ItemCacheService;
             _anonymous = PreTestDataWorker.MakeExistingAnonymousCustomer();
         }
 
@@ -33,7 +33,7 @@ namespace Merchello.Tests.IntegrationTests.Services.Customer
             const ItemCacheType itemCacheType = ItemCacheType.Basket;
 
             //// Act
-            var itemCache = _customerItemCacheService.GetCustomerItemCacheWithId(_anonymous, itemCacheType);
+            var itemCache = _itemCacheService.GetItemCacheWithId(_anonymous, itemCacheType);
 
             //// Assert
             Assert.NotNull(itemCache);
@@ -50,11 +50,11 @@ namespace Merchello.Tests.IntegrationTests.Services.Customer
         {
             //// Arrange
             const ItemCacheType itemCacheType = ItemCacheType.Basket;
-            var existing = _customerItemCacheService.GetCustomerItemCacheWithId(_anonymous, itemCacheType);
+            var existing = _itemCacheService.GetItemCacheWithId(_anonymous, itemCacheType);
             Assert.NotNull(existing);
 
             //// Act
-            var secondAttempt = _customerItemCacheService.GetCustomerItemCacheWithId(_anonymous, itemCacheType);
+            var secondAttempt = _itemCacheService.GetItemCacheWithId(_anonymous, itemCacheType);
 
             //// Assert
             Assert.NotNull(secondAttempt);
@@ -70,8 +70,8 @@ namespace Merchello.Tests.IntegrationTests.Services.Customer
             //// Arrange
             
             //// Act
-            var basket = _customerItemCacheService.GetCustomerItemCacheWithId(_anonymous, ItemCacheType.Basket);
-            var wishlist = _customerItemCacheService.GetCustomerItemCacheWithId(_anonymous, ItemCacheType.Wishlist);
+            var basket = _itemCacheService.GetItemCacheWithId(_anonymous, ItemCacheType.Basket);
+            var wishlist = _itemCacheService.GetItemCacheWithId(_anonymous, ItemCacheType.Wishlist);
 
             //// Assert
             Assert.NotNull(basket);
@@ -86,10 +86,10 @@ namespace Merchello.Tests.IntegrationTests.Services.Customer
         public void Can_Add_An_Item_To_An_ItemCache()
         {
             //// Arrange
-            var basket = _customerItemCacheService.GetCustomerItemCacheWithId(_anonymous, ItemCacheType.Basket);
+            var basket = _itemCacheService.GetItemCacheWithId(_anonymous, ItemCacheType.Basket);
 
             //// Act
-            var lineItem = new CustomerItemCacheLineItem(basket.Id, "Kosher Salt", "KS", 1, 2.5M);            
+            var lineItem = new ItemCacheLineItem(basket.Id, "Kosher Salt", "KS", 1, 2.5M);            
             basket.Items.Add(lineItem);
 
 
@@ -105,12 +105,12 @@ namespace Merchello.Tests.IntegrationTests.Services.Customer
         public void Can_Add_And_Save_An_Item_To_ItemCache()
         {
             //// Arrange
-            var basket = _customerItemCacheService.GetCustomerItemCacheWithId(_anonymous, ItemCacheType.Basket);
-            var lineItem = new CustomerItemCacheLineItem(basket.Id, "Kosher Salt", "KS", 1, 2.5M);
+            var basket = _itemCacheService.GetItemCacheWithId(_anonymous, ItemCacheType.Basket);
+            var lineItem = new ItemCacheLineItem(basket.Id, "Kosher Salt", "KS", 1, 2.5M);
             basket.Items.Add(lineItem);
             
             //// Act
-            _customerItemCacheService.Save(basket);            
+            _itemCacheService.Save(basket);            
 
             //// Assert            
             Assert.IsFalse(basket.IsDirty());
@@ -127,16 +127,16 @@ namespace Merchello.Tests.IntegrationTests.Services.Customer
             //// Arrange
             var customer1 = PreTestDataWorker.MakeExistingAnonymousCustomer();
             var customer2 = PreTestDataWorker.MakeExistingAnonymousCustomer();
-            var basket1 = _customerItemCacheService.GetCustomerItemCacheWithId(customer1, ItemCacheType.Basket);
-            var basket2 = _customerItemCacheService.GetCustomerItemCacheWithId(customer2, ItemCacheType.Basket);
+            var basket1 = _itemCacheService.GetItemCacheWithId(customer1, ItemCacheType.Basket);
+            var basket2 = _itemCacheService.GetItemCacheWithId(customer2, ItemCacheType.Basket);
 
             //// Act            
-            basket1.Items.Add(new CustomerItemCacheLineItem(basket1.Id, "Kosher Salt", "KS", 1, 2.5M));
-            _customerItemCacheService.Save(basket1);
+            basket1.Items.Add(new ItemCacheLineItem(basket1.Id, "Kosher Salt", "KS", 1, 2.5M));
+            _itemCacheService.Save(basket1);
             
-            basket2.Items.Add(new CustomerItemCacheLineItem(basket2.Id, "Kosher Salt", "KS", 1, 2.5M));
-            basket2.Items.Add(new CustomerItemCacheLineItem(basket2.Id, "Pickle dust", "PD", 20, 25.50M));
-            _customerItemCacheService.Save(basket2);
+            basket2.Items.Add(new ItemCacheLineItem(basket2.Id, "Kosher Salt", "KS", 1, 2.5M));
+            basket2.Items.Add(new ItemCacheLineItem(basket2.Id, "Pickle dust", "PD", 20, 25.50M));
+            _itemCacheService.Save(basket2);
 
             //// Assert
             Assert.IsTrue(basket1.HasIdentity);
@@ -153,13 +153,13 @@ namespace Merchello.Tests.IntegrationTests.Services.Customer
         public void Can_Update_An_Item_In_An_ItemCache()
         {
             //// Arrange
-            var basket1 = _customerItemCacheService.GetCustomerItemCacheWithId(_anonymous, ItemCacheType.Basket);
-            basket1.Items.Add(new CustomerItemCacheLineItem(basket1.Id, "Kosher Salt", "KS", 1, 2.5M));
-            _customerItemCacheService.Save(basket1);
+            var basket1 = _itemCacheService.GetItemCacheWithId(_anonymous, ItemCacheType.Basket);
+            basket1.Items.Add(new ItemCacheLineItem(basket1.Id, "Kosher Salt", "KS", 1, 2.5M));
+            _itemCacheService.Save(basket1);
 
             //// Act
             basket1.Items["KS"].Amount = 35M;
-            _customerItemCacheService.Save(basket1);
+            _itemCacheService.Save(basket1);
 
             //// Assert
             Assert.IsFalse(basket1.IsDirty());

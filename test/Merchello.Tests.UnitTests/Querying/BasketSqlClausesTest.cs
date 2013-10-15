@@ -11,10 +11,10 @@ namespace Merchello.Tests.UnitTests.Querying
 {
     [TestFixture]
     [Category("SqlSyntax")]
-    public class CustomerItemCacheSqlClausesTest : BaseUsingSqlServerSyntax<ICustomerItemCache>
+    public class CustomerItemCacheSqlClausesTest : BaseUsingSqlServerSyntax<IItemCache>
     {
         /// <summary>
-        /// Test to verify that the typed <see cref="CustomerItemCacheDto"/> query matches generic "select * ..." query 
+        /// Test to verify that the typed <see cref="ItemCacheDto"/> query matches generic "select * ..." query 
         /// </summary>
         [Test]
         public void Can_Verify_Base_ItemCache_Clause()
@@ -31,15 +31,15 @@ namespace Merchello.Tests.UnitTests.Querying
             //// Act
             var sql = new Sql();
             sql.Select("*")
-                .From<CustomerItemCacheDto>()
-                .Where<CustomerItemCacheDto>(x => x.Id == id);
+                .From<ItemCacheDto>()
+                .Where<ItemCacheDto>(x => x.Id == id);
 
             //// Assert
             Assert.That(sql.SQL, Is.EqualTo(expected.SQL));
         }
 
         /// <summary>
-        /// Test to verify that the typed <see cref="CustomerItemCacheItemDto"/> query matches generic "select * ..." query  
+        /// Test to verify that the typed <see cref="ItemCacheItemDto"/> query matches generic "select * ..." query  
         /// </summary>
         [Test]
         public void Can_Verify_Base_ItemCacheItem_Clause()
@@ -55,15 +55,15 @@ namespace Merchello.Tests.UnitTests.Querying
             //// Act
             var sql = new Sql();
             sql.Select("*")
-                .From<CustomerItemCacheItemDto>()
-                .Where<CustomerItemCacheItemDto>(x => x.Id == id);
+                .From<ItemCacheItemDto>()
+                .Where<ItemCacheItemDto>(x => x.Id == id);
 
             //// Assert
             Assert.That(sql.SQL, Is.EqualTo(expected.SQL));
         }
 
         /// <summary>
-        /// Test to verify the typed <see cref="ICustomerItemCache"/> sql by consumer key queries
+        /// Test to verify the typed <see cref="IItemCache"/> sql by consumer key queries
         /// </summary>
         [Test]
         public void Can_Verify_ItemCache_By_Consumer_Query()
@@ -79,15 +79,15 @@ namespace Merchello.Tests.UnitTests.Querying
             //// Act
             var sql = new Sql();
             sql.Select("*")
-                .From<CustomerItemCacheDto>()
-                .Where<CustomerItemCacheDto>(x => x.CustomerKey == key);
+                .From<ItemCacheDto>()
+                .Where<ItemCacheDto>(x => x.EntityKey == key);
 
             //// Assert
             Assert.AreEqual(expected.SQL, sql.SQL);
         }
 
         /// <summary>
-        /// Test to verify type <see cref="ICustomerItemCache"/> sql by consumer and basket type field key
+        /// Test to verify type <see cref="IItemCache"/> sql by consumer and basket type field key
         /// </summary>
         [Test]
         public void Can_Verify_ItemCache_By_Consumer_And_BasketType_Query()
@@ -104,8 +104,8 @@ namespace Merchello.Tests.UnitTests.Querying
             //// Act
             var sql = new Sql();
             sql.Select("*")
-                .From<CustomerItemCacheDto>()
-                .Where<CustomerItemCacheDto>(x => x.CustomerKey == key && x.ItemCacheTfKey == basketTypeKey);
+                .From<ItemCacheDto>()
+                .Where<ItemCacheDto>(x => x.EntityKey == key && x.ItemCacheTfKey == basketTypeKey);
 
             //// Assert
             Assert.AreEqual(expected.SQL, sql.SQL);
