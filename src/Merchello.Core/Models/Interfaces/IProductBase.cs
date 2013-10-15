@@ -120,7 +120,7 @@ namespace Merchello.Core.Models
         /// <summary>
         /// The product inventory
         /// </summary>
-        IEnumerable<IWarehouseInventory> Inventory { get; }
+        IEnumerable<IWarehouseInventory> Warehouses { get; }
 
     }
 

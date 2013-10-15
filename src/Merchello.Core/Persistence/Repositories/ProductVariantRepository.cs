@@ -138,6 +138,8 @@ namespace Merchello.Core.Persistence.Repositories
                 Database.Insert(association);
             }
 
+            SynchronizeWarehouseAssociations(entity);
+
             entity.ResetDirtyProperties();
         }
 
@@ -154,6 +156,8 @@ namespace Merchello.Core.Persistence.Repositories
 
             // update the variant
             Database.Update(dto);
+
+            SynchronizeWarehouseAssociations(entity);
 
             entity.ResetDirtyProperties();
         }
@@ -201,6 +205,44 @@ namespace Merchello.Core.Persistence.Repositories
         }
 
         #region WarehouseInventory
+
+        internal void SynchronizeWarehouseAssociations(IProductVariant productVariant)
+        {
+            var existing = GetWarehouseInventory(productVariant.Key);
+
+            foreach (var inv in existing.Where(inv => !((ProductVariant) productVariant).WarehouseInventory.Contains(inv.WarehouseId)))
+            {
+                DeleteWarehouseInventory(productVariant.Key, inv.WarehouseId);
+            }
+
+            foreach (var inv in productVariant.Warehouses.Where((inv => !existing.Contains(inv.WarehouseId))))
+            {
+                AddWarehouseInventory(inv);
+            }
+        }
+
+        private void AddWarehouseInventory(IWarehouseInventory inv)
+        {
+            var dto = new WarehouseInventoryDto()
+            {
+                WarehouseId = inv.WarehouseId,
+                ProductVariantKey = inv.ProductVariantKey,
+                Count = inv.Count,
+                LowCount = inv.LowCount,
+                CreateDate = DateTime.Now,
+                UpdateDate = DateTime.Now
+            };
+
+            Database.Insert(dto);
+        }
+
+        private void DeleteWarehouseInventory(Guid productVariantKey, int warehouseId)
+        {
+            const string sql = "DELETE FROM mercheWarehouseInventory WHERE productVariantKey = @Key AND warehouseId = @wId";
+            Database.Execute(sql, new {@Key = productVariantKey, @wId = warehouseId});
+        }
+
+
 
         internal WarehouseInventoryCollection GetWarehouseInventory(Guid productVariantKey)
         {

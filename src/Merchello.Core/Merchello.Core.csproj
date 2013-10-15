@@ -355,6 +355,7 @@
     <Compile Include="Services\CustomerService.cs" />
     <Compile Include="Services\Interfaces\ICustomerService.cs" />
     <Compile Include="Services\ServiceContext.cs" />
+    <Compile Include="WarehouseInventoryExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
