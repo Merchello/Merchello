@@ -78,7 +78,7 @@ namespace Merchello.Core.Models
         /// Product variant inventory accross all warehouses
         /// </summary>
         [DataMember]
-        public IEnumerable<IWarehouseInventory> Inventory
+        public IEnumerable<IWarehouseInventory> Warehouses
         {
             get { return _warehouseInventory; }
         }

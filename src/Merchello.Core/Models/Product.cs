@@ -8,6 +8,11 @@ using Merchello.Core.Models.EntityBase;
 
 namespace Merchello.Core.Models
 {
+    /// <summary>
+    /// Defines a product variant
+    /// </summary>
+    [Serializable]
+    [DataContract(IsReference = true)]
     internal class Product : KeyEntity, IProduct
     {
         
@@ -317,9 +322,9 @@ namespace Merchello.Core.Models
         /// Exposes the product variant template's inventory collection
         /// </summary>
         [DataMember]
-        public IEnumerable<IWarehouseInventory> Inventory
+        public IEnumerable<IWarehouseInventory> Warehouses
         {
-            get { return _variantMaster.Inventory; }
+            get { return _variantMaster.Warehouses; }
         }
 
         #endregion
