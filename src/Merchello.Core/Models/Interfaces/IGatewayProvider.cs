@@ -3,16 +3,16 @@ using System.Runtime.Serialization;
 using Merchello.Core.Gateway;
 using Merchello.Core.Models.EntityBase;
 
-namespace Merchello.Core.Models.GatewayProviders
+namespace Merchello.Core.Models
 {
-    public interface IRegisteredGatewayProvider : IKeyEntity
+    public interface IGatewayProvider : IKeyEntity
     {
 
         /// <summary>
         /// The GatewayProviderTypeFieldKey
         /// </summary>
         [DataMember]
-        Guid GatewayProviderTypeFieldKey { get; set; }
+        Guid GatewayProviderTfKey { get; set; }
 
         /// <summary>
         /// The name of the gateway provider

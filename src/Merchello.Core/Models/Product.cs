@@ -83,6 +83,13 @@ namespace Merchello.Core.Models
             }
         }
 
+        /// <summary>
+        /// Returns a collection of ProductOption given as list of attributes (choices)
+        /// </summary>
+        /// <param name="attributes">A collection of <see cref="IProductAttribute"/></param>
+        /// <remarks>
+        /// This is mainly used for suggesting sku defaults for ProductVariantes
+        /// </remarks>
         public IEnumerable<IProductOption> ProductOptionsForAttributes(IEnumerable<IProductAttribute> attributes)
         {
             var options = new List<IProductOption>();
@@ -93,9 +100,19 @@ namespace Merchello.Core.Models
             return options;
         }
 
+
         public static bool OptionContainsAttribute(IProductOption option, IProductAttribute attribute)
         {
             return option.Choices.Any(choice => choice.Id == attribute.Id);
+        }
+
+        /// <summary>
+        /// Associates a product with a warehouse
+        /// </summary>
+        /// <param name="warehouseId">The 'unique' id of the <see cref="IWarehouse"/></param>
+        public void AddToWarehouse(int warehouseId)
+        {
+            _variantMaster.AddToWarehouse(warehouseId);
         }
 
         #endregion
@@ -300,7 +317,7 @@ namespace Merchello.Core.Models
         /// Exposes the product variant template's inventory collection
         /// </summary>
         [DataMember]
-        public IEnumerable<IInventory> Inventory
+        public IEnumerable<IWarehouseInventory> Inventory
         {
             get { return _variantMaster.Inventory; }
         }

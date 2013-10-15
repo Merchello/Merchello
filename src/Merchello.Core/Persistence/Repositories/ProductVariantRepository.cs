@@ -40,10 +40,10 @@ namespace Merchello.Core.Persistence.Repositories
             var variant = factory.BuildEntity(dto.ProductVariantDto);
 
             // set the attributes collection
-            ((ProductVariant)variant).ProductAttributes = GetProductAttributeCollection(variant.ProductKey);
+            ((ProductVariant)variant).ProductAttributes = GetProductAttributeCollection(variant.Key);
 
             // set the inventory collection
-            ((ProductVariant) variant).WarehouseInventory = GetProductInventory(variant.Key);
+            ((ProductVariant) variant).WarehouseInventory = GetWarehouseInventory(variant.Key);
 
             variant.ResetDirtyProperties();
 
@@ -77,7 +77,7 @@ namespace Merchello.Core.Persistence.Repositories
 
             var dtos = Database.Fetch<ProductDto, ProductVariantDto>(sql);
 
-            return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.ProductVariantDto.Key));
+            return dtos.DistinctBy(x => x.ProductVariantDto.Key).Select(dto => Get(dto.ProductVariantDto.Key));
 
         }
 
@@ -102,7 +102,7 @@ namespace Merchello.Core.Persistence.Repositories
         {
             var list = new List<string>
             {
-                "DELETE FROM merchInventory WHERE productVariantKey = @Id",
+                "DELETE FROM merchWarehouseInventory WHERE productVariantKey = @Id",
                 "DELETE FROM merchProductVariant2ProductAttribute WHERE productVariantKey = @Id",
                 "DELETE FROM merchProductVariant WHERE pk = @Id"
             };
@@ -200,20 +200,20 @@ namespace Merchello.Core.Persistence.Repositories
             return collection;
         }
 
-        #region Inventory
+        #region WarehouseInventory
 
-        internal InventoryCollection GetProductInventory(Guid productVariantKey)
+        internal WarehouseInventoryCollection GetWarehouseInventory(Guid productVariantKey)
         {
             var sql = new Sql();
             sql.Select("*")
-               .From<InventoryDto>()
+               .From<WarehouseInventoryDto>()
                .InnerJoin<WarehouseDto>()
-               .On<InventoryDto, WarehouseDto>(left => left.WarehouseId, right => right.Id)
-               .Where<InventoryDto>(x => x.ProductVariantKey == productVariantKey);
+               .On<WarehouseInventoryDto, WarehouseDto>(left => left.WarehouseId, right => right.Id)
+               .Where<WarehouseInventoryDto>(x => x.ProductVariantKey == productVariantKey);
 
-            var dtos = Database.Fetch<InventoryDto, WarehouseDto>(sql);
+            var dtos = Database.Fetch<WarehouseInventoryDto, WarehouseDto>(sql);
 
-            var collection = new InventoryCollection();
+            var collection = new WarehouseInventoryCollection();
             var factory = new InventoryFactory();
 
             foreach (var dto in dtos)
@@ -223,7 +223,36 @@ namespace Merchello.Core.Persistence.Repositories
             return collection;
         }
 
+        /// <summary>
+        /// Gets a collection of <see cref="IProductVariant"/> objects associated with a given warehouse 
+        /// </summary>
+        /// <param name="warehouseId">The 'unique' id of the warehouse</param>
+        /// <returns>A collection of <see cref="IProductVariant"/></returns>
+        public IEnumerable<IProductVariant> GetByWarehouseId(int warehouseId)
+        {
+            var sql = new Sql();
+            sql.Select("*")
+                .From<WarehouseInventoryDto>()
+                .Where<WarehouseInventoryDto>(x => x.WarehouseId == warehouseId);
+
+            var dtos = Database.Fetch<WarehouseInventoryDto>(sql);
+
+            return dtos.Select(dto => Get(dto.ProductVariantKey));
+
+        }
+
+        /// <summary>
+        /// Returns <see cref="IProductVariant"/> given the product and the collection of attribute ids that defines the<see cref="IProductVariant"/>
+        /// </summary>
+        public IProductVariant GetProductVariantWithAttributes(IProduct product, int[] attributeIds)
+        {
+            var variants = GetByProductKey(product.Key);
+            return variants.FirstOrDefault(x => x.Attributes.Count() == attributeIds.Count() && attributeIds.All(id => x.Attributes.FirstOrDefault(att => att.Id == id) != null));
+        }
+
         #endregion
+
+
 
         /// <summary>
         /// Compares the <see cref="ProductAttributeCollection"/> with other <see cref="IProductVariant"/>s of the <see cref="IProduct"/> pass

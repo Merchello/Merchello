@@ -26,7 +26,7 @@ namespace Merchello.Core.Models
                 var key = GetKeyForItem(item);
                 if (key != null)
                 {
-                    var exists = this.Contains(key);
+                    var exists = Contains(key);
                     if (exists) 
                     { 
                         this[key].Quantity += item.Quantity;

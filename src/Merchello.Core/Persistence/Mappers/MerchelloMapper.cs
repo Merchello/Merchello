@@ -3,8 +3,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Merchello.Core.Models;
-using Merchello.Core.Models.GatewayProviders;
-using Merchello.Core.Models.TypeFields;
 using Umbraco.Core;
 using Umbraco.Core.Logging;
 
@@ -45,7 +43,7 @@ namespace Merchello.Core.Persistence.Mappers
             CacheMapper(typeof(IAppliedPayment), typeof(AppliedPaymentMapper));
             CacheMapper(typeof(IShipment), typeof(ShipmentMapper));
             CacheMapper(typeof(IShipMethod), typeof (ShipMethodMapper));
-            CacheMapper(typeof(IRegisteredGatewayProvider), typeof(RegisteredGatewayProviderMapper));
+            CacheMapper(typeof(IGatewayProvider), typeof(RegisteredGatewayProviderMapper));
         }
 
 

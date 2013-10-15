@@ -131,7 +131,7 @@ namespace Merchello.Core.Persistence
         internal virtual IProductVariantRepository CreateProductVariantRepository(IDatabaseUnitOfWork uow)
         {
             return new ProductVariantRepository(uow,
-               _disableAllCache ? (IRepositoryCacheProvider)NullCacheProvider.Current : RuntimeCacheProvider.Current);
+               _disableAllCache ? (IRepositoryCacheProvider)NullCacheProvider.Current : NullCacheProvider.Current);
         }
 
         /// <summary>

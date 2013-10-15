@@ -9,7 +9,7 @@ namespace Merchello.Core.Models
     /// <summary>
     /// Defines a customer item cache
     /// </summary>
-    public interface IItemCache : IIdEntity
+    public interface IItemCache : ILineItemContainer
     {
         /// <summary>
         /// The key of the entity associated with the item cache
@@ -29,10 +29,5 @@ namespace Merchello.Core.Models
         [DataMember]
         ItemCacheType ItemCacheType { get; set; }
 
-        /// <summary>
-        /// The <see cref="IOrderLineItem"/>s in the customer registry
-        /// </summary>
-        [DataMember]
-        LineItemCollection Items { get; }
     }
 }

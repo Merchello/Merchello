@@ -53,19 +53,7 @@ namespace Merchello.Web.Models
         public void AddItem(IProductVariant productVariant)
         {
             var extendedData = new ExtendedDataCollection();
-            extendedData.SetValue("MerchProductKey", productVariant.ProductKey.ToString());
-            extendedData.SetValue("MerchProductVariantKey", productVariant.Key.ToString());
-            extendedData.SetValue("MerchCostOfGoods", productVariant.CostOfGoods.ToString());
-            extendedData.SetValue("MerchWeight", productVariant.Weight.ToString());
-            extendedData.SetValue("MerchWidth", productVariant.Width.ToString());
-            extendedData.SetValue("MerchHeight", productVariant.Height.ToString());
-            extendedData.SetValue("MerchBarcode", productVariant.Barcode);
-            extendedData.SetValue("MerchTrackInventory", productVariant.TrackInventory.ToString());
-            extendedData.SetValue("MerchOutOfStockPurchase", productVariant.OutOfStockPurchase.ToString());
-            extendedData.SetValue("MerchTaxable", productVariant.Taxable.ToString());
-            extendedData.SetValue("MerchShippable", productVariant.Shippable.ToString());
-            extendedData.SetValue("MerchDownload", productVariant.Download.ToString());
-            extendedData.SetValue("MerchDownloadMediaId", productVariant.DownloadMediaId.ToString());
+            extendedData.AddProductVariantValues(productVariant);
             
             AddItem(productVariant.Name, productVariant.Sku, 
                 productVariant.OnSale ? 
@@ -86,17 +74,9 @@ namespace Merchello.Web.Models
         /// </summary>
         public void AddItem(string name, string sku, decimal price, ExtendedDataCollection extendedData)
         {
-            AddItem(new ItemCacheLineItem(_itemCache.Id, LineItemType.Product, name, sku, 1, price, extendedData));
+            _itemCache.AddItem(LineItemType.Product, name, sku, 1, price, extendedData);
         }
 
-        /// <summary>
-        /// Adds a line item to the basket
-        /// </summary>
-        public void AddItem(IItemCacheLineItem lineItem)
-        {
-            Mandate.ParameterNotNull(lineItem, "lineItem");
-            _itemCache.Items.Add(lineItem);
-        }
 
         /// <summary>
         /// Updates a basket item's quantity

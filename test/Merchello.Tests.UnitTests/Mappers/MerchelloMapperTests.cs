@@ -1,5 +1,4 @@
 ﻿using Merchello.Core.Models;
-using Merchello.Core.Models.GatewayProviders;
 using Merchello.Core.Persistence.Mappers;
 using NUnit.Framework;
 
@@ -266,7 +265,7 @@ namespace Merchello.Tests.UnitTests.Mappers
             var expected = typeof(RegisteredGatewayProviderMapper);
 
             //// Act
-            var resolved = MerchelloMapper.Current.ResolveByType(typeof(IRegisteredGatewayProvider));
+            var resolved = MerchelloMapper.Current.ResolveByType(typeof(IGatewayProvider));
 
             //// Assert
             Assert.IsTrue(resolved.Success);
