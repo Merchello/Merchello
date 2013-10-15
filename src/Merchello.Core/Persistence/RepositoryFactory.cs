@@ -52,15 +52,15 @@ namespace Merchello.Core.Persistence
         }
 
         /// <summary>
-        /// Returns an instance of the <see cref="ICustomerItemCacheRepository"/>
+        /// Returns an instance of the <see cref="IItemCacheRepository"/>
         /// </summary>
         /// <param name="uow"></param>
         /// <returns></returns>
-        internal virtual ICustomerItemCacheRepository CreateCustomerItemCacheRepository(IDatabaseUnitOfWork uow)
+        internal virtual IItemCacheRepository CreateCustomerItemCacheRepository(IDatabaseUnitOfWork uow)
         {
-            return new CustomerItemCacheRepository(uow,
+            return new ItemCacheRepository(uow,
                 _disableAllCache ? (IRepositoryCacheProvider)NullCacheProvider.Current : NullCacheProvider.Current,
-                CreateLineItemRepository<CustomerItemCacheItemDto>(uow));
+                CreateLineItemRepository<ItemCacheItemDto>(uow));
         }
 
 

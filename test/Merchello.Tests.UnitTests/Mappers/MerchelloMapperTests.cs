@@ -105,7 +105,7 @@ namespace Merchello.Tests.UnitTests.Mappers
             var expected = typeof(CustomerItemCacheMapper);
 
             //// Act
-            var resolved = MerchelloMapper.Current.ResolveByType(typeof(ICustomerItemCache));
+            var resolved = MerchelloMapper.Current.ResolveByType(typeof(IItemCache));
 
             //// Assert
             Assert.IsTrue(resolved.Success);
@@ -123,7 +123,7 @@ namespace Merchello.Tests.UnitTests.Mappers
             var expected = typeof(CustomerItemCacheItemMapper);
 
             //// Act
-            var resolved = MerchelloMapper.Current.ResolveByType(typeof(ICustomerItemCacheLineItem));
+            var resolved = MerchelloMapper.Current.ResolveByType(typeof(IItemCacheLineItem));
 
             //// Assert
             Assert.IsTrue(resolved.Success);

@@ -11,52 +11,52 @@ namespace Merchello.Core.Models
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    public class CustomerItemCache : IdEntity, ICustomerItemCache
+    public class ItemCache : IdEntity, IItemCache
     {
-        private Guid _customerKey;
+        private Guid _entityKey;
         private Guid _itemCacheTfKey;
         private LineItemCollection _items;
  
-        public CustomerItemCache(Guid customerKey, ItemCacheType itemCacheType)
-            : this(customerKey, EnumTypeFieldConverter.CustomerItemItemCache.GetTypeField(itemCacheType).TypeKey, new LineItemCollection())
+        public ItemCache(Guid entityKey, ItemCacheType itemCacheType)
+            : this(entityKey, EnumTypeFieldConverter.CustomerItemItemCache.GetTypeField(itemCacheType).TypeKey, new LineItemCollection())
         { }
 
-        internal CustomerItemCache(Guid customerKey, Guid itemCacheTfKey)
-            : this(customerKey, itemCacheTfKey, new LineItemCollection())
+        internal ItemCache(Guid entityKey, Guid itemCacheTfKey)
+            : this(entityKey, itemCacheTfKey, new LineItemCollection())
         { }
 
-        public CustomerItemCache(Guid customerKey, ItemCacheType itemCacheType, LineItemCollection items)
-            : this(customerKey, EnumTypeFieldConverter.CustomerItemItemCache.GetTypeField(itemCacheType).TypeKey, items)
+        public ItemCache(Guid entityKey, ItemCacheType itemCacheType, LineItemCollection items)
+            : this(entityKey, EnumTypeFieldConverter.CustomerItemItemCache.GetTypeField(itemCacheType).TypeKey, items)
         { }
 
-        internal CustomerItemCache(Guid customerKey, Guid itemCacheTfKey, LineItemCollection items)
+        internal ItemCache(Guid entityKey, Guid itemCacheTfKey, LineItemCollection items)
         {
-            Mandate.ParameterCondition(customerKey != Guid.Empty, "consumerKey");
+            Mandate.ParameterCondition(entityKey != Guid.Empty, "entityKey");
             Mandate.ParameterCondition(itemCacheTfKey != Guid.Empty, "itemCacheTfKey");
             Mandate.ParameterNotNull(items, "items");
 
-            _customerKey = customerKey;
+            _entityKey = entityKey;
             _itemCacheTfKey = itemCacheTfKey;
             _items = items;
         }
         
-        private static readonly PropertyInfo CustomerRegistrySelector = ExpressionHelper.GetPropertyInfo<CustomerItemCache, Guid>(x => x.CustomerKey);
-        private static readonly PropertyInfo ItemCacheTfKeySelector = ExpressionHelper.GetPropertyInfo<CustomerItemCache, Guid>(x => x.ItemCacheTfKey);
+        private static readonly PropertyInfo EntityKeySelector = ExpressionHelper.GetPropertyInfo<ItemCache, Guid>(x => x.EntityKey);
+        private static readonly PropertyInfo ItemCacheTfKeySelector = ExpressionHelper.GetPropertyInfo<ItemCache, Guid>(x => x.ItemCacheTfKey);
         
         /// <summary>
-        /// The <see cref="ICustomer"/> key
+        /// The key of the entity associated with the item cache
         /// </summary>
         [DataMember]
-        public Guid CustomerKey
+        public Guid EntityKey
         {
-            get { return _customerKey; }
+            get { return _entityKey; }
             set
             {
                 SetPropertyValueAndDetectChanges(o =>
                 {
-                    _customerKey = value;
-                    return _customerKey;
-                }, _customerKey, CustomerRegistrySelector);
+                    _entityKey = value;
+                    return _entityKey;
+                }, _entityKey, EntityKeySelector);
             }
         }
 
@@ -78,7 +78,7 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
-        /// The <see cref="ItemCacheType"/> of the customer registry
+        /// The <see cref="ItemCacheType"/> of the item cache
         /// </summary>
         [DataMember]
         public ItemCacheType ItemCacheType

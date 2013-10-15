@@ -92,7 +92,7 @@ namespace Merchello.Core.Persistence.Repositories
                 return PerformGetByQuery(converted);
             }
 
-            var final = new Querying.Query<ICustomerItemCacheLineItem>();
+            var final = new Querying.Query<IItemCacheLineItem>();
             foreach (var item in q.WhereClauses())
             {
                 final.WhereClauses().Add(item);
@@ -124,16 +124,16 @@ namespace Merchello.Core.Persistence.Repositories
             return dtos.DistinctBy(x => x.Id).Select(dto => (IOrderLineItem)Get(dto.Id));
         }
 
-        protected IEnumerable<ICustomerItemCacheLineItem> PerformGetByQuery(IQuery<ICustomerItemCacheLineItem> query)
+        protected IEnumerable<IItemCacheLineItem> PerformGetByQuery(IQuery<IItemCacheLineItem> query)
         {
             var sqlClause = GetBaseQuery(false);
 
-            var translator = new SqlTranslator<ICustomerItemCacheLineItem>(sqlClause, query);
+            var translator = new SqlTranslator<IItemCacheLineItem>(sqlClause, query);
             var sql = translator.Translate();
 
             var dtos = Database.Fetch<InvoiceItemDto>(sql);
 
-            return dtos.DistinctBy(x => x.Id).Select(dto => (ICustomerItemCacheLineItem)Get(dto.Id));
+            return dtos.DistinctBy(x => x.Id).Select(dto => (IItemCacheLineItem)Get(dto.Id));
         }
         
         protected override Sql GetBaseQuery(bool isCount)
@@ -152,7 +152,7 @@ namespace Merchello.Core.Persistence.Repositories
 
             if (typeof(TDto) == typeof(InvoiceItemDto)) return factory.BuildEntity((InvoiceItemDto)dto);
             if (typeof(TDto) == typeof(OrderItemDto)) return factory.BuildEntity((OrderItemDto)dto);
-            return factory.BuildEntity((CustomerItemCacheItemDto)dto);
+            return factory.BuildEntity((ItemCacheItemDto)dto);
         }
 
         private ILineItemDto GetDto(ILineItem entity)
@@ -161,14 +161,14 @@ namespace Merchello.Core.Persistence.Repositories
 
             if (typeof(TDto) == typeof(InvoiceItemDto)) return factory.BuildDto((IInvoiceLineItem)entity);
             if (typeof(TDto) == typeof(OrderItemDto)) return factory.BuildDto((IOrderLineItem)entity);
-            return factory.BuildDto((ICustomerItemCacheLineItem)entity);
+            return factory.BuildDto((IItemCacheLineItem)entity);
         }
 
         private static string GetMerchTableName()
         {
             return typeof (TDto) == typeof (InvoiceItemDto) ? "merchInvoiceItem"
                 : typeof (TDto) == typeof (OrderItemDto) ? "merchOrderItem" 
-                : "merchCustomerItemCache";
+                : "merchItemCacheItem";
         }
 
         protected override string GetBaseWhereClause()

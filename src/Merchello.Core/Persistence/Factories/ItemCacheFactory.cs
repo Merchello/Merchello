@@ -3,12 +3,12 @@ using Merchello.Core.Models.Rdbms;
 
 namespace Merchello.Core.Persistence.Factories
 {
-    internal class CustomerItemCacheFactory : IEntityFactory<ICustomerItemCache, CustomerItemCacheDto>
+    internal class ItemCacheFactory : IEntityFactory<IItemCache, ItemCacheDto>
     {
 
-        public ICustomerItemCache BuildEntity(CustomerItemCacheDto dto)
+        public IItemCache BuildEntity(ItemCacheDto dto)
         {
-            var itemCache = new CustomerItemCache(dto.CustomerKey, dto.ItemCacheTfKey)
+            var itemCache = new ItemCache(dto.EntityKey, dto.ItemCacheTfKey)
             {
                 Id = dto.Id,
                 UpdateDate = dto.UpdateDate,
@@ -20,12 +20,12 @@ namespace Merchello.Core.Persistence.Factories
             return itemCache;
         }
 
-        public CustomerItemCacheDto BuildDto(ICustomerItemCache entity)
+        public ItemCacheDto BuildDto(IItemCache entity)
         {
-            var dto = new CustomerItemCacheDto()
+            var dto = new ItemCacheDto()
             {
                 Id = entity.Id,
-                CustomerKey = entity.CustomerKey,
+                EntityKey = entity.EntityKey,
                 ItemCacheTfKey = entity.ItemCacheTfKey,
                 UpdateDate = entity.UpdateDate,
                 CreateDate = entity.CreateDate

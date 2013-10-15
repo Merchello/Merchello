@@ -9,13 +9,13 @@ namespace Merchello.Core.Models
     /// <summary>
     /// Defines a customer item cache
     /// </summary>
-    public interface ICustomerItemCache : IIdEntity
+    public interface IItemCache : IIdEntity
     {
         /// <summary>
-        /// The <see cref="ICustomerBase"/> key
+        /// The key of the entity associated with the item cache
         /// </summary>
         [DataMember]
-        Guid CustomerKey { get; set; }
+        Guid EntityKey { get; set; }
 
         /// <summary>
         /// The registry type field <see cref="ITypeField"/> guid typeKey

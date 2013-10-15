@@ -19,7 +19,7 @@ namespace Merchello.Tests.Base.DataMakers
             return entity;            
         }
 
-        public static ICustomerItemCache MockSavedWithId(this ICustomerItemCache entity, int id)
+        public static IItemCache MockSavedWithId(this IItemCache entity, int id)
         {
             entity.Id = id;
             ((IdEntity)entity).AddingEntity();

@@ -15,22 +15,22 @@ namespace Merchello.Core.Services
     /// <summary>
     /// Represents the Customer Registry Service 
     /// </summary>
-    public class CustomerItemCacheService : ICustomerItemCacheService
+    public class ItemCacheService : IItemCacheService
     {
         private readonly IDatabaseUnitOfWorkProvider _uowProvider;
         private readonly RepositoryFactory _repositoryFactory;
 
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
-        public CustomerItemCacheService()
+        public ItemCacheService()
             : this(new RepositoryFactory())
         { }
 
-        public CustomerItemCacheService(RepositoryFactory repositoryFactory)
+        public ItemCacheService(RepositoryFactory repositoryFactory)
             : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory)
         { }
 
-        public CustomerItemCacheService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
+        public ItemCacheService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
         {
             Mandate.ParameterNotNull(provider, "provider");
             Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
@@ -44,21 +44,21 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Creates a basket for a consumer with a given type
         /// </summary>
-        public ICustomerItemCache GetCustomerItemCacheWithId(ICustomerBase customer, ItemCacheType itemCacheType)
+        public IItemCache GetItemCacheWithId(ICustomerBase customer, ItemCacheType itemCacheType)
         {
 
             // determine if the consumer already has a item cache of this type, if so return it.
-            var itemCache = GetCustomerItemCacheByCustomer(customer, itemCacheType);
+            var itemCache = GetItemCacheByCustomer(customer, itemCacheType);
             if (itemCache != null) return itemCache;
 
-            itemCache = new CustomerItemCache(customer.Key, itemCacheType);
-            if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<ICustomerItemCache>(itemCache), this))
+            itemCache = new ItemCache(customer.Key, itemCacheType);
+            if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<IItemCache>(itemCache), this))
             {
                 //registry.WasCancelled = true;
                 return itemCache;
             }
 
-            itemCache.CustomerKey = customer.Key;
+            itemCache.EntityKey = customer.Key;
 
             using (new WriteLock(Locker))
             {
@@ -70,43 +70,43 @@ namespace Merchello.Core.Services
                 }
             }
 
-            Created.RaiseEvent(new Events.NewEventArgs<ICustomerItemCache>(itemCache), this);
+            Created.RaiseEvent(new Events.NewEventArgs<IItemCache>(itemCache), this);
 
             return itemCache;
         }
 
         /// <summary>
-        /// Saves a single <see cref="ICustomerItemCache"/> object
+        /// Saves a single <see cref="IItemCache"/> object
         /// </summary>
-        /// <param name="customerItemCache">The <see cref="ICustomerItemCache"/> to save</param>
+        /// <param name="itemCache">The <see cref="IItemCache"/> to save</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events.</param>
-        public void Save(ICustomerItemCache customerItemCache, bool raiseEvents = true)
+        public void Save(IItemCache itemCache, bool raiseEvents = true)
         {
-            if (raiseEvents) Saving.RaiseEvent(new SaveEventArgs<ICustomerItemCache>(customerItemCache), this);
+            if (raiseEvents) Saving.RaiseEvent(new SaveEventArgs<IItemCache>(itemCache), this);
 
             using (new WriteLock(Locker))
             {
                 var uow = _uowProvider.GetUnitOfWork();
                 using (var repository = _repositoryFactory.CreateCustomerItemCacheRepository(uow))
                 {
-                    repository.AddOrUpdate(customerItemCache);
+                    repository.AddOrUpdate(itemCache);
                     uow.Commit();
                 }
 
-                if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<ICustomerItemCache>(customerItemCache), this);
+                if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IItemCache>(itemCache), this);
             }
         }
 
         /// <summary>
-        /// Saves a collection of <see cref="ICustomerItemCache"/> objects.
+        /// Saves a collection of <see cref="IItemCache"/> objects.
         /// </summary>
-        /// <param name="customerItemCaches">Collection of <see cref="CustomerItemCache"/> to save</param>
+        /// <param name="itemCaches">Collection of <see cref="ItemCache"/> to save</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        public void Save(IEnumerable<ICustomerItemCache> customerItemCaches, bool raiseEvents = true)
+        public void Save(IEnumerable<IItemCache> itemCaches, bool raiseEvents = true)
         {
-            var basketArray = customerItemCaches as ICustomerItemCache[] ?? customerItemCaches.ToArray();
+            var basketArray = itemCaches as IItemCache[] ?? itemCaches.ToArray();
 
-            if (raiseEvents) Saving.RaiseEvent(new SaveEventArgs<ICustomerItemCache>(basketArray), this);
+            if (raiseEvents) Saving.RaiseEvent(new SaveEventArgs<IItemCache>(basketArray), this);
 
             using (new WriteLock(Locker))
             {
@@ -121,47 +121,47 @@ namespace Merchello.Core.Services
                 }
             }
 
-            if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<ICustomerItemCache>(basketArray), this);
+            if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IItemCache>(basketArray), this);
         }
 
         /// <summary>
-        /// Deletes a single <see cref="ICustomerItemCache"/> object
+        /// Deletes a single <see cref="IItemCache"/> object
         /// </summary>
-        /// <param name="customerItemCache">The <see cref="ICustomerItemCache"/> to delete</param>
+        /// <param name="itemCache">The <see cref="IItemCache"/> to delete</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        public void Delete(ICustomerItemCache customerItemCache, bool raiseEvents = true)
+        public void Delete(IItemCache itemCache, bool raiseEvents = true)
         {
-            if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<ICustomerItemCache>(customerItemCache), this);
+            if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<IItemCache>(itemCache), this);
 
             using (new WriteLock(Locker))
             {
                 var uow = _uowProvider.GetUnitOfWork();
                 using (var repository = _repositoryFactory.CreateCustomerItemCacheRepository(uow))
                 {
-                    repository.Delete(customerItemCache);
+                    repository.Delete(itemCache);
                     uow.Commit();
                 }
             }
-            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<ICustomerItemCache>(customerItemCache), this);
+            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<IItemCache>(itemCache), this);
         }
 
         /// <summary>
-        /// Deletes a collection <see cref="ICustomerItemCache"/> objects
+        /// Deletes a collection <see cref="IItemCache"/> objects
         /// </summary>
-        /// <param name="customerItemCaches">Collection of <see cref="ICustomerItemCache"/> to delete</param>
+        /// <param name="itemCaches">Collection of <see cref="IItemCache"/> to delete</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        public void Delete(IEnumerable<ICustomerItemCache> customerItemCaches, bool raiseEvents = true)
+        public void Delete(IEnumerable<IItemCache> itemCaches, bool raiseEvents = true)
         {
-            var basketArray = customerItemCaches as ICustomerItemCache[] ?? customerItemCaches.ToArray();
+            var caches = itemCaches as IItemCache[] ?? itemCaches.ToArray();
 
-            if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<ICustomerItemCache>(basketArray), this);
+            if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<IItemCache>(caches), this);
 
             using (new WriteLock(Locker))
             {
                 var uow = _uowProvider.GetUnitOfWork();
                 using (var repository = _repositoryFactory.CreateCustomerItemCacheRepository(uow))
                 {
-                    foreach (var basket in basketArray)
+                    foreach (var basket in caches)
                     {
                         repository.Delete(basket);
                     }
@@ -169,15 +169,15 @@ namespace Merchello.Core.Services
                 }
             }
 
-            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<ICustomerItemCache>(basketArray), this);
+            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<IItemCache>(caches), this);
         }
 
         /// <summary>
         /// Gets a Basket by its unique id - pk
         /// </summary>
         /// <param name="id">int Id for the Basket</param>
-        /// <returns><see cref="ICustomerItemCache"/></returns>
-        public ICustomerItemCache GetById(int id)
+        /// <returns><see cref="IItemCache"/></returns>
+        public IItemCache GetById(int id)
         {
             using (var repository = _repositoryFactory.CreateCustomerItemCacheRepository(_uowProvider.GetUnitOfWork()))
             {
@@ -190,7 +190,7 @@ namespace Merchello.Core.Services
         /// </summary>
         /// <param name="ids">List of unique keys</param>
         /// <returns></returns>
-        public IEnumerable<ICustomerItemCache> GetByIds(IEnumerable<int> ids)
+        public IEnumerable<IItemCache> GetByIds(IEnumerable<int> ids)
         {
             using (var repository = _repositoryFactory.CreateCustomerItemCacheRepository(_uowProvider.GetUnitOfWork()))
             {
@@ -201,10 +201,10 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Returns the customer item cache of a given type.  This method will not create an item cache if the cache does not exist.
         /// </summary>
-        public ICustomerItemCache GetCustomerItemCacheByCustomer(ICustomerBase customer, ItemCacheType itemCacheType)
+        public IItemCache GetItemCacheByCustomer(ICustomerBase customer, ItemCacheType itemCacheType)
         {
             var typeKey = EnumTypeFieldConverter.CustomerItemItemCache.GetTypeField(itemCacheType).TypeKey;
-            return GetCustomerItemCacheByCustomer(customer, typeKey);
+            return GetItemCacheByCustomer(customer, typeKey);
         }
 
         /// <summary>
@@ -212,11 +212,11 @@ namespace Merchello.Core.Services
         /// </summary>
         /// <param name="customer"></param>
         /// <returns></returns>
-        public IEnumerable<ICustomerItemCache> GetCustomerItemCacheByCustomer(ICustomerBase customer)
+        public IEnumerable<IItemCache> GetItemCacheByCustomer(ICustomerBase customer)
         {
             using (var repository = _repositoryFactory.CreateCustomerItemCacheRepository(_uowProvider.GetUnitOfWork()))
             {
-                var query = Query<ICustomerItemCache>.Builder.Where(x => x.CustomerKey == customer.Key);
+                var query = Query<IItemCache>.Builder.Where(x => x.EntityKey == customer.Key);
                 return repository.GetByQuery(query);
             }
         }
@@ -224,18 +224,18 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Returns the customer item cache of a given type. This method will not create an item cache if the cache does not exist.
         /// </summary>
-        public ICustomerItemCache GetCustomerItemCacheByCustomer(ICustomerBase customer, Guid itemCacheTfKey)
+        public IItemCache GetItemCacheByCustomer(ICustomerBase customer, Guid itemCacheTfKey)
         {
             using (var repository = _repositoryFactory.CreateCustomerItemCacheRepository(_uowProvider.GetUnitOfWork()))
             {
-                var query = Query<ICustomerItemCache>.Builder.Where(x => x.CustomerKey == customer.Key && x.ItemCacheTfKey == itemCacheTfKey);
+                var query = Query<IItemCache>.Builder.Where(x => x.EntityKey == customer.Key && x.ItemCacheTfKey == itemCacheTfKey);
                 return repository.GetByQuery(query).FirstOrDefault();
             }
         }
 
        
 
-        public IEnumerable<ICustomerItemCache> GetAll()
+        public IEnumerable<IItemCache> GetAll()
         {
             using (var repository = _repositoryFactory.CreateCustomerItemCacheRepository(_uowProvider.GetUnitOfWork()))
             {
@@ -254,32 +254,32 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Occurs before Create
         /// </summary>
-        public static event TypedEventHandler<ICustomerItemCacheService, Events.NewEventArgs<ICustomerItemCache>> Creating; 
+        public static event TypedEventHandler<IItemCacheService, Events.NewEventArgs<IItemCache>> Creating; 
 
         /// <summary>
         /// Occurs after Create
         /// </summary>
-        public static event TypedEventHandler<ICustomerItemCacheService, Events.NewEventArgs<ICustomerItemCache>> Created;
+        public static event TypedEventHandler<IItemCacheService, Events.NewEventArgs<IItemCache>> Created;
 
         /// <summary>
         /// Occurs before Save
         /// </summary>
-        public static event TypedEventHandler<ICustomerItemCacheService, SaveEventArgs<ICustomerItemCache>> Saving;
+        public static event TypedEventHandler<IItemCacheService, SaveEventArgs<IItemCache>> Saving;
 
         /// <summary>
         /// Occurs after Save
         /// </summary>
-        public static event TypedEventHandler<ICustomerItemCacheService, SaveEventArgs<ICustomerItemCache>> Saved;
+        public static event TypedEventHandler<IItemCacheService, SaveEventArgs<IItemCache>> Saved;
 
         /// <summary>
         /// Occurs before Delete
         /// </summary>		
-        public static event TypedEventHandler<ICustomerItemCacheService, DeleteEventArgs<ICustomerItemCache>> Deleting;
+        public static event TypedEventHandler<IItemCacheService, DeleteEventArgs<IItemCache>> Deleting;
 
         /// <summary>
         /// Occurs after Delete
         /// </summary>
-        public static event TypedEventHandler<ICustomerItemCacheService, DeleteEventArgs<ICustomerItemCache>> Deleted;
+        public static event TypedEventHandler<IItemCacheService, DeleteEventArgs<IItemCache>> Deleted;
 
 
 
