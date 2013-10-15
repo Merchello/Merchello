@@ -14,10 +14,12 @@ namespace Merchello.Web.Models
         private readonly ICustomerItemCache _customerItemCache;
         private readonly ICustomerBase _customer;
 
-        internal Basket(ICustomerItemCache customerItemCache)
+        internal Basket(ICustomerItemCache customerItemCache, ICustomerBase customer)
         {
             Mandate.ParameterNotNull(customerItemCache, "customerItemCache");
+            Mandate.ParameterNotNull(customer, "customer");
 
+            _customer = customer;
             _customerItemCache = customerItemCache;
         }
 
@@ -28,21 +30,22 @@ namespace Merchello.Web.Models
 
         public static IBasket GetBasket(IMerchelloContext merchelloContext, ICustomerBase customer)
         {
+            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
+            Mandate.ParameterNotNull(customer, "customer");
+
             var cacheKey = MakeCacheKey(customer);
             
             var basket = (IBasket)merchelloContext.Cache.RuntimeCache.GetCacheItem(cacheKey);
             if (basket != null) return basket;
 
             var customerItemCache = merchelloContext.Services.CustomerItemCacheService.GetCustomerItemCacheWithId(customer, ItemCacheType.Basket);
-            basket = new Basket(customerItemCache);
+            basket = new Basket(customerItemCache, customer);
             merchelloContext.Cache.RuntimeCache.GetCacheItem(cacheKey, () => basket);
             
             return basket;         
         }
 
         #region Overrides IBasket
-
-
 
         /// <summary>
         /// Adds a line item to the basket
@@ -135,7 +138,6 @@ namespace Merchello.Web.Models
             if(item != null) RemoveItem(item.Sku);
         }        
 
-
         /// <summary>
         /// Removes a basket line item
         /// </summary>
@@ -166,12 +168,17 @@ namespace Merchello.Web.Models
         /// </summary>
         public void Refresh()
         {
-           Refresh(MerchelloContext.Current, _customer);
+           Refresh(MerchelloContext.Current, this);
         }
 
-        public static void Refresh(IMerchelloContext merchelloContext, ICustomerBase customer)
+        public static void Refresh(IMerchelloContext merchelloContext, IBasket basket)
         {
-            
+            var cacheKey = MakeCacheKey(basket.Customer);
+            merchelloContext.Cache.RuntimeCache.ClearCacheItem(cacheKey);
+
+            var customerItemCache = merchelloContext.Services.CustomerItemCacheService.GetCustomerItemCacheWithId(basket.Customer, ItemCacheType.Basket);
+            basket = new Basket(customerItemCache, basket.Customer);
+            merchelloContext.Cache.RuntimeCache.GetCacheItem(cacheKey, () => basket);
         }
 
         /// <summary>
@@ -179,8 +186,13 @@ namespace Merchello.Web.Models
         /// </summary>
         public void Save()
         {
-            //_serviceContext.CustomerItemCacheService.Save(_customerItemCache);
-            Refresh();
+            Save(MerchelloContext.Current, this);
+        }
+
+        public static void Save(IMerchelloContext merchelloContext, IBasket basket)
+        {
+            merchelloContext.Services.CustomerItemCacheService.Save(((Basket)basket).CustomerItemCache);
+            Refresh(merchelloContext, basket);
         }
 
         /// <summary>
@@ -190,6 +202,18 @@ namespace Merchello.Web.Models
         public void Accept(ILineItemVisitor vistor)
         {
             _customerItemCache.Items.Accept(vistor);
+        }
+
+        internal ICustomerItemCache CustomerItemCache
+        {
+            get { return _customerItemCache; }
+        }
+
+        /// <summary>
+        /// The customer associated with the basket
+        /// </summary>
+        public ICustomerBase Customer {
+            get { return _customer; }
         }
 
         public LineItemCollection Items

@@ -234,7 +234,7 @@
     <Compile Include="Persistence\Factories\AppliedPaymentFactory.cs" />
     <Compile Include="Persistence\Factories\WarehouseFactory.cs" />
     <Compile Include="Persistence\Mappers\AnonymousCustomerMapper.cs" />
-    <Compile Include="Persistence\Mappers\CustomerItemRegisterItemMapper.cs" />
+    <Compile Include="Persistence\Mappers\CustomerItemCacheItemMapper.cs" />
     <Compile Include="Persistence\Mappers\CustomerItemCacheMapper.cs" />
     <Compile Include="Persistence\Mappers\ProductVariantMapper.cs" />
     <Compile Include="Persistence\Mappers\ShipMethodMapper.cs" />

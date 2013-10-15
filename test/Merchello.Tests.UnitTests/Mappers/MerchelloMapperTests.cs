@@ -116,14 +116,14 @@ namespace Merchello.Tests.UnitTests.Mappers
         /// Test to verify <see cref="MerchelloMapper"/> correctly maps IBasketItem to BasketItemMapper
         /// </summary>
         [Test]
-        public void Mapper_Resolves_IBasketItem_To_BasketItemMapper()
+        public void Mapper_Resolves_ICustomerItemCache_To_ICustomerItemCachetMapper()
         {
 
             //// Arrage
-            var expected = typeof(CustomerItemRegisterItemMapper);
+            var expected = typeof(CustomerItemCacheItemMapper);
 
             //// Act
-            var resolved = MerchelloMapper.Current.ResolveByType(typeof(IOrderLineItem));
+            var resolved = MerchelloMapper.Current.ResolveByType(typeof(ICustomerItemCacheLineItem));
 
             //// Assert
             Assert.IsTrue(resolved.Success);

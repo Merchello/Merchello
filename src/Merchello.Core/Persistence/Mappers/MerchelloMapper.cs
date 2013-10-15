@@ -32,7 +32,7 @@ namespace Merchello.Core.Persistence.Mappers
             CacheMapper(typeof(ICustomerAddress), typeof(AddressMapper));
             CacheMapper(typeof(IAnonymousCustomer), typeof(AnonymousCustomerMapper));
             CacheMapper(typeof(ICustomerItemCache), typeof(CustomerItemCacheMapper));            
-            CacheMapper(typeof(ICustomerItemCacheLineItem), typeof(CustomerItemRegisterItemMapper));
+            CacheMapper(typeof(ICustomerItemCacheLineItem), typeof(CustomerItemCacheItemMapper));
             CacheMapper(typeof(ICustomer), typeof(CustomerMapper));
             CacheMapper(typeof(IInvoice), typeof(InvoiceMapper));
             CacheMapper(typeof(IInvoiceLineItem), typeof(InvoiceLineItemMapper));

@@ -43,6 +43,11 @@ namespace Merchello.Web.Models
         void Accept(ILineItemVisitor vistor);
 
         /// <summary>
+        /// The customer assoicated with the basket
+        /// </summary>
+        ICustomerBase Customer { get; }
+
+        /// <summary>
         /// The basket line items
         /// </summary>
         LineItemCollection Items { get; }
