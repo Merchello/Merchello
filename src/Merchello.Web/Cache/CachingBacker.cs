@@ -24,7 +24,7 @@ namespace Merchello.Web.Cache
         /// <param name="customerKey"></param>
         /// <param name="itemCacheTfKey">The type field key for the cache</param>
         /// <returns></returns>
-        public static string CustomerItemCacheKey(Guid customerKey, Guid itemCacheTfKey)
+        public static string CustomerBasketCacheKey(Guid customerKey, Guid itemCacheTfKey)
         {
             return string.Format("merchello.itemcache.{0}.{1}", itemCacheTfKey, customerKey);
         }

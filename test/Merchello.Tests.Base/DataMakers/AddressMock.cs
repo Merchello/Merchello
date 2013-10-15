@@ -14,9 +14,9 @@ namespace Merchello.Tests.Base.DataMakers
         public string PostalCode { get; set; }
         public string CountryCode { get; set; }
 
-        public IAddress MakeAddress(ICustomer customer, string label)
+        public ICustomerAddress MakeAddress(ICustomer customer, string label)
         {
-            return new Address(customer.Key, label)
+            return new CustomerAddress(customer.Key, label)
             {
                 FullName = string.Format("{0} {1}", customer.FirstName, customer.LastName).Trim(),
                 Address1 = this.Address1,

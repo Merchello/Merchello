@@ -307,7 +307,7 @@ namespace Merchello.Tests.UnitTests.WebControllers
 				customer.Email = "john.jones@gmail.com";
 				customer.MemberId = 1004;
 			
-			var address = new Address(customer, "Address")
+			var address = new CustomerAddress(customer, "Address")
 			{
 				Address1 = "123 Test St.",
 				Address2 = "Apt 1",
@@ -376,7 +376,7 @@ namespace Merchello.Tests.UnitTests.WebControllers
 				Key = key,
 				Id = 1001
 			};
-			var address = new Address(customer, "Address")
+			var address = new CustomerAddress(customer, "Address")
 			{
 				Address1 = "123 Test St.",
 				Address2 = "Apt 1",

@@ -160,13 +160,13 @@ namespace Merchello.Web.Editors
 		/// <param name="memberId">Optional: MemberId</param>
 		/// <returns>New Customer</returns>		
 		[AcceptVerbs("GET", "POST")]
-		public Invoice NewInvoice(Customer customer, Address address, InvoiceStatus invoiceStatus, string invoiceNumber)
+		public Invoice NewInvoice(Customer customer, CustomerAddress customerAddress, InvoiceStatus invoiceStatus, string invoiceNumber)
 		{
 			Invoice newInvoice = null;
 
 			try
 			{
-				newInvoice = _invoiceService.CreateInvoice(customer, address, invoiceStatus, invoiceNumber) as Invoice;
+				newInvoice = _invoiceService.CreateInvoice(customer, customerAddress, invoiceStatus, invoiceNumber) as Invoice;
 			}
 			catch
 			{

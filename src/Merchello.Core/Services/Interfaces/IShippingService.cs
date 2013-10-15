@@ -27,7 +27,7 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Creates a Shipment
         /// </summary>
-        IShipment CreateShipment(IShipMethod shipMethod, IInvoice invoice, IAddress address);
+        IShipment CreateShipment(IShipMethod shipMethod, IInvoice invoice, ICustomerAddress customerAddress);
 
         /// <summary>
         /// Saves a single <see cref="IShipment"/> object

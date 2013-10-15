@@ -7,7 +7,7 @@ namespace Merchello.Core.Models.Rdbms
     [TableName("merchCustomerItemCacheItem")]
     [PrimaryKey("id")]
     [ExplicitColumns]
-    internal class CustomerItemCacheItemDto
+    internal class CustomerItemCacheItemDto : ILineItemDto
     {
         [Column("id")]
         [PrimaryKeyColumn]
@@ -15,7 +15,7 @@ namespace Merchello.Core.Models.Rdbms
         
         [Column("itemCacheId")]
         [ForeignKey(typeof(CustomerItemCacheDto), Name = "FK_merchCustomerItemCacheItem_merchCustomerItemCache", Column = "id")]
-        public int ItemCacheId { get; set; }
+        public int ContainerId { get; set; }
 
         [Column("lineItemTfKey")] 
         public Guid LineItemTfKey { get; set; }
@@ -35,6 +35,9 @@ namespace Merchello.Core.Models.Rdbms
         [Column("extendedData")]
         [NullSetting(NullSetting = NullSettings.Null)]
         public string ExtendedData { get; set; }
+
+        [Column("exported")]
+        public bool Exported { get; set; }
 
         [Column("updateDate")]
         [Constraint(Default = "getdate()")]

@@ -9,7 +9,7 @@ namespace Merchello.Core.Models
 
     [Serializable]
     [DataContract(IsReference = true)]
-    public class Address : IdEntity, IAddress
+    public class CustomerAddress : IdEntity, ICustomerAddress
     {
         private readonly Guid _customerKey;
         private string _label;
@@ -24,14 +24,14 @@ namespace Merchello.Core.Models
         private string _countryCode;
         private string _phone;
 
-        internal Address(Guid customerPk, string label)
+        internal CustomerAddress(Guid customerPk, string label)
         {
             _customerKey = customerPk;
             _label = label;
         }
 
         ///TODO: We need to talk about the contstructor.  An empty address does not make a lot of sense.
-        public Address(ICustomer customer, string label)
+        public CustomerAddress(ICustomer customer, string label)
         {            
             Mandate.ParameterNotNull(customer, "customer");
             Mandate.ParameterNotNull(label, "label");
@@ -40,17 +40,17 @@ namespace Merchello.Core.Models
 
         }
         
-        private static readonly PropertyInfo LabelSelector = ExpressionHelper.GetPropertyInfo<Address, string>(x => x.Label);
-        private static readonly PropertyInfo FullNameSelector = ExpressionHelper.GetPropertyInfo<Address, string>(x => x.FullName);
-        private static readonly PropertyInfo CompanySelector = ExpressionHelper.GetPropertyInfo<Address, string>(x => x.Company);
-        private static readonly PropertyInfo AddressTypeFieldSelector = ExpressionHelper.GetPropertyInfo<Address, Guid>(x => x.AddressTypeFieldKey);
-        private static readonly PropertyInfo Address1Selector = ExpressionHelper.GetPropertyInfo<Address, string>(x => x.Address1);
-        private static readonly PropertyInfo Address2Selector = ExpressionHelper.GetPropertyInfo<Address, string>(x => x.Address2);
-        private static readonly PropertyInfo LocalitySelector = ExpressionHelper.GetPropertyInfo<Address, string>(x => x.Locality);
-        private static readonly PropertyInfo RegionSelector = ExpressionHelper.GetPropertyInfo<Address, string>(x => x.Region);
-        private static readonly PropertyInfo PostalCodeSelector = ExpressionHelper.GetPropertyInfo<Address, string>(x => x.PostalCode);
-        private static readonly PropertyInfo CountryCodeSelector = ExpressionHelper.GetPropertyInfo<Address, string>(x => x.CountryCode);
-        private static readonly PropertyInfo PhoneSelector = ExpressionHelper.GetPropertyInfo<Address, string>(x => x.Phone);
+        private static readonly PropertyInfo LabelSelector = ExpressionHelper.GetPropertyInfo<CustomerAddress, string>(x => x.Label);
+        private static readonly PropertyInfo FullNameSelector = ExpressionHelper.GetPropertyInfo<CustomerAddress, string>(x => x.FullName);
+        private static readonly PropertyInfo CompanySelector = ExpressionHelper.GetPropertyInfo<CustomerAddress, string>(x => x.Company);
+        private static readonly PropertyInfo AddressTypeFieldSelector = ExpressionHelper.GetPropertyInfo<CustomerAddress, Guid>(x => x.AddressTypeFieldKey);
+        private static readonly PropertyInfo Address1Selector = ExpressionHelper.GetPropertyInfo<CustomerAddress, string>(x => x.Address1);
+        private static readonly PropertyInfo Address2Selector = ExpressionHelper.GetPropertyInfo<CustomerAddress, string>(x => x.Address2);
+        private static readonly PropertyInfo LocalitySelector = ExpressionHelper.GetPropertyInfo<CustomerAddress, string>(x => x.Locality);
+        private static readonly PropertyInfo RegionSelector = ExpressionHelper.GetPropertyInfo<CustomerAddress, string>(x => x.Region);
+        private static readonly PropertyInfo PostalCodeSelector = ExpressionHelper.GetPropertyInfo<CustomerAddress, string>(x => x.PostalCode);
+        private static readonly PropertyInfo CountryCodeSelector = ExpressionHelper.GetPropertyInfo<CustomerAddress, string>(x => x.CountryCode);
+        private static readonly PropertyInfo PhoneSelector = ExpressionHelper.GetPropertyInfo<CustomerAddress, string>(x => x.Phone);
 
         /// <summary>
         /// The customer key (key) associated with the address

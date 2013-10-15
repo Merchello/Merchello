@@ -9,7 +9,7 @@ namespace Merchello.Core.Configuration.Outline
     {
 
         /// <summary>
-        /// Gets the dbTypeFields configuration collection for <see cref="IAddress"/>
+        /// Gets the dbTypeFields configuration collection for <see cref="ICustomerAddress"/>
         /// </summary>
         [ConfigurationProperty("customerAddress", IsRequired = false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
         public TypeFieldCollection CustomerAddress

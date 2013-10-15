@@ -15,20 +15,22 @@ namespace Merchello.Core.Persistence.Repositories
 {
     internal class CustomerItemCacheRepository : MerchelloPetaPocoRepositoryBase<int, ICustomerItemCache>, ICustomerItemCacheRepository
     {
+        private ILineItemRepository _lineItemRepository;
 
-        public CustomerItemCacheRepository(IDatabaseUnitOfWork work)
+        public CustomerItemCacheRepository(IDatabaseUnitOfWork work, ILineItemRepository lineItemRepository)
             : base(work)
         {
-
+            _lineItemRepository = lineItemRepository;
         }
 
-        public CustomerItemCacheRepository(IDatabaseUnitOfWork work, IRepositoryCacheProvider cache)
+        public CustomerItemCacheRepository(IDatabaseUnitOfWork work, IRepositoryCacheProvider cache, ILineItemRepository lineItemRepository)
             : base(work, cache)
         {
+            _lineItemRepository = lineItemRepository;
         }
 
 
-        #region Overrides of RepositoryBase<ICustomerRegistry>
+        #region Overrides of RepositoryBase<ICustomerItemCache>
 
 
         protected override ICustomerItemCache PerformGet(int id)
@@ -78,11 +80,11 @@ namespace Merchello.Core.Persistence.Repositories
             var sql = new Sql();
             sql.Select("*")
                 .From<CustomerItemCacheItemDto>()
-                .Where<CustomerItemCacheItemDto>(x => x.ItemCacheId == itemCacheId);
+                .Where<CustomerItemCacheItemDto>(x => x.ContainerId == itemCacheId);
 
             var dtos = Database.Fetch<CustomerItemCacheItemDto>(sql);
 
-            var factory = new CustomerItemCacheLineItemFactory();
+            var factory = new LineItemFactory();
             var collection = new LineItemCollection();
             foreach (var dto in dtos)
             {
@@ -98,7 +100,7 @@ namespace Merchello.Core.Persistence.Repositories
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-               .From("merchCustomerItemCache");
+               .From<CustomerItemCacheDto>();
 
             return sql;
         }
@@ -125,9 +127,11 @@ namespace Merchello.Core.Persistence.Repositories
 
             var factory = new CustomerItemCacheFactory();
             var dto = factory.BuildDto(entity);
-
             Database.Insert(dto);
             entity.Id = dto.Id;
+
+            _lineItemRepository.SaveLineItem(entity.Items);
+
             entity.ResetDirtyProperties();
         }
 
@@ -137,8 +141,9 @@ namespace Merchello.Core.Persistence.Repositories
 
             var factory = new CustomerItemCacheFactory();
             var dto = factory.BuildDto(entity);
-
             Database.Update(dto);
+
+            _lineItemRepository.SaveLineItem(entity.Items);
 
             entity.ResetDirtyProperties();
         }

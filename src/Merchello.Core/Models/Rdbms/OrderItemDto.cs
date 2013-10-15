@@ -7,7 +7,7 @@ namespace Merchello.Core.Models.Rdbms
     [TableName("merchOrderItem")]
     [PrimaryKey("id")]
     [ExplicitColumns]
-    internal class OrderItemDto
+    internal class OrderItemDto : ILineItemDto
     {
         [Column("id")]
         [PrimaryKeyColumn]
@@ -15,7 +15,7 @@ namespace Merchello.Core.Models.Rdbms
 
         [Column("orderId")]
         [ForeignKey(typeof(OrderDto), Name = "FK_merchOrderItem_merchOrder", Column = "id")]
-        public int OrderId { get; set; }
+        public int ContainerId { get; set; }
         
         [Column("lineItemTfKey")]
         public Guid LineItemTfKey { get; set; }

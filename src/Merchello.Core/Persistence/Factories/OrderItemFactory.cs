@@ -3,12 +3,12 @@ using Merchello.Core.Models.Rdbms;
 
 namespace Merchello.Core.Persistence.Factories
 {
-    internal class CustomerItemCacheLineItemFactory : IEntityFactory<IOrderLineItem, CustomerItemCacheItemDto>
+    internal class OrderItemFactory : ILineItemFactory<OrderItemDto>
     {
-        public IOrderLineItem BuildEntity(CustomerItemCacheItemDto dto)
+        public ILineItem BuildEntity(OrderItemDto dto)
         {
-            var orderLineItem = new OrderLineItem(dto.ItemCacheId, dto.LineItemTfKey, dto.Name, dto.Sku, dto.Quantity, dto.Amount)
-            {   
+            var orderLineItem = new LineItem(dto.ContainerId, dto.LineItemTfKey, dto.Name, dto.Sku, dto.Quantity, dto.Amount)
+            {
                 Id = dto.Id,
                 ExtendedData = string.IsNullOrEmpty(dto.ExtendedData) ? new ExtendedDataCollection() : new ExtendedDataCollection(dto.ExtendedData),
                 UpdateDate = dto.UpdateDate,
@@ -20,12 +20,12 @@ namespace Merchello.Core.Persistence.Factories
             return orderLineItem;
         }
 
-        public CustomerItemCacheItemDto BuildDto(IOrderLineItem entity)
+        public OrderItemDto BuildDto(ILineItem entity)
         {
-            return new CustomerItemCacheItemDto()
+            return new OrderItemDto()
             {
                 Id = entity.Id,
-                ItemCacheId = entity.ContainerId,
+                ContainerId = entity.ContainerId,
                 LineItemTfKey = entity.LineItemTfKey,
                 Sku = entity.Sku,
                 Name = entity.Name,
@@ -35,7 +35,8 @@ namespace Merchello.Core.Persistence.Factories
                 UpdateDate = entity.UpdateDate,
                 CreateDate = entity.CreateDate
             };
-
         }
+
+
     }
 }

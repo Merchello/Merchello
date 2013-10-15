@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Persistence.Caching;
 using Merchello.Core.Persistence.Repositories;
 using Umbraco.Core.Persistence.UnitOfWork;
@@ -43,11 +44,11 @@ namespace Merchello.Core.Persistence
         }
 
         /// <summary>
-        /// Returns an instance of the <see cref="IAddressRepository"/>
+        /// Returns an instance of the <see cref="ICustomerAddressRepository"/>
         /// </summary>        
-        internal virtual IAddressRepository CreateAddressRepository(IDatabaseUnitOfWork uow)
+        internal virtual ICustomerAddressRepository CreateCustomerAddressRepository(IDatabaseUnitOfWork uow)
         {
-            return new AddressRepository(uow, NullCacheProvider.Current);
+            return new CustomerAddressRepository(uow, NullCacheProvider.Current);
         }
 
         /// <summary>
@@ -55,10 +56,11 @@ namespace Merchello.Core.Persistence
         /// </summary>
         /// <param name="uow"></param>
         /// <returns></returns>
-        internal virtual ICustomerItemCacheRepository CreateCustomerItemRegisterRepository(IDatabaseUnitOfWork uow)
+        internal virtual ICustomerItemCacheRepository CreateCustomerItemCacheRepository(IDatabaseUnitOfWork uow)
         {
             return new CustomerItemCacheRepository(uow,
-                _disableAllCache ? (IRepositoryCacheProvider)NullCacheProvider.Current : RuntimeCacheProvider.Current);
+                _disableAllCache ? (IRepositoryCacheProvider)NullCacheProvider.Current : NullCacheProvider.Current,
+                CreateLineItemRepository<CustomerItemCacheItemDto>(uow));
         }
 
 
@@ -71,6 +73,19 @@ namespace Merchello.Core.Persistence
         {
             return new InvoiceRepository(uow,
                 _disableAllCache ? (IRepositoryCacheProvider)NullCacheProvider.Current : RuntimeCacheProvider.Current);
+        }
+
+        /// <summary>
+        /// Returns an instance of the <see cref="ILineItemRepository"/>
+        /// </summary>
+        /// <typeparam name="TDto"></typeparam>
+        /// <param name="uow"></param>
+        /// <returns></returns>
+        internal virtual ILineItemRepository CreateLineItemRepository<TDto>(IDatabaseUnitOfWork uow)
+            where TDto : ILineItemDto
+        {
+            return new LineItemRepository<TDto>(uow,
+                _disableAllCache ? (IRepositoryCacheProvider)NullCacheProvider.Current : NullCacheProvider.Current);
         }
 
         /// <summary>

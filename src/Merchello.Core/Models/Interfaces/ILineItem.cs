@@ -44,6 +44,12 @@ namespace Merchello.Core.Models
         decimal Amount { get; set; }
 
         /// <summary>
+        /// True/false indicating whether or not this line item has been exported to an external system
+        /// </summary>
+        [DataMember]
+        bool Exported { get; set; }
+
+        /// <summary>
         /// A collection to store custom/extended data for the line item
         /// </summary>
         [DataMember]
