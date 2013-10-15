@@ -4,17 +4,17 @@ using Umbraco.Core.Persistence.DatabaseAnnotations;
 
 namespace Merchello.Core.Models.Rdbms
 {
-    [TableName("merchCustomerItemCacheItem")]
+    [TableName("merchItemCacheItem")]
     [PrimaryKey("id")]
     [ExplicitColumns]
-    internal class CustomerItemCacheItemDto : ILineItemDto
+    internal class ItemCacheItemDto : ILineItemDto
     {
         [Column("id")]
         [PrimaryKeyColumn]
         public int Id { get; set; }
         
         [Column("itemCacheId")]
-        [ForeignKey(typeof(CustomerItemCacheDto), Name = "FK_merchCustomerItemCacheItem_merchCustomerItemCache", Column = "id")]
+        [ForeignKey(typeof(ItemCacheDto), Name = "FK_merchItemCacheItem_merchItemCache", Column = "id")]
         public int ContainerId { get; set; }
 
         [Column("lineItemTfKey")] 

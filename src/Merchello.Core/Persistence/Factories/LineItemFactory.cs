@@ -5,9 +5,9 @@ namespace Merchello.Core.Persistence.Factories
 {
     internal class LineItemFactory 
     {       
-        public CustomerItemCacheItemDto BuildDto(ICustomerItemCacheLineItem entity)
+        public ItemCacheItemDto BuildDto(IItemCacheLineItem entity)
         {
-            var dto = new CustomerItemCacheItemDto()
+            var dto = new ItemCacheItemDto()
             {
                 Id = entity.Id,
                 ContainerId = entity.ContainerId,
@@ -65,9 +65,9 @@ namespace Merchello.Core.Persistence.Factories
             return dto;
         }
 
-        public CustomerItemCacheLineItem BuildEntity(CustomerItemCacheItemDto dto)
+        public ItemCacheLineItem BuildEntity(ItemCacheItemDto dto)
         {
-             var lineItem = new CustomerItemCacheLineItem(dto.ContainerId, dto.LineItemTfKey, dto.Name, dto.Sku, dto.Quantity, dto.Amount,
+             var lineItem = new ItemCacheLineItem(dto.ContainerId, dto.LineItemTfKey, dto.Name, dto.Sku, dto.Quantity, dto.Amount,
                  string.IsNullOrEmpty(dto.ExtendedData) ? new ExtendedDataCollection() : new ExtendedDataCollection(dto.ExtendedData))
             {
                 Id = dto.Id,

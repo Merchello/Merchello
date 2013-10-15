@@ -27,9 +27,9 @@ namespace Merchello.Core.Services
         IProductVariantService ProductVariantService { get; }
 
         /// <summary>
-        /// Gets the <see cref="CustomerItemCacheService"/>
+        /// Gets the <see cref="ItemCacheService"/>
         /// </summary>
-        ICustomerItemCacheService CustomerItemCacheService { get; }
+        IItemCacheService ItemCacheService { get; }
 
         /// <summary>
         /// Gets the <see cref="IInvoiceService"/>

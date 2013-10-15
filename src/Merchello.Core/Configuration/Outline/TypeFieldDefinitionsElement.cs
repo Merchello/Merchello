@@ -18,7 +18,7 @@ namespace Merchello.Core.Configuration.Outline
         }
 
         /// <summary>
-        /// Gets the dbTypeFields configuration collection for <see cref="ICustomerItemCache"/>
+        /// Gets the dbTypeFields configuration collection for <see cref="IItemCache"/>
         /// </summary>
         [ConfigurationProperty("customerItemCache", IsRequired = false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
         public TypeFieldCollection CustomerItemCache
