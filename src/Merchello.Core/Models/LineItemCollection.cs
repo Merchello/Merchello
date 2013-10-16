@@ -19,6 +19,14 @@ namespace Merchello.Core.Models
         internal Action OnAdd;
         internal Func<ILineItem, bool> ValidateAdd { get; set; }
 
+        public LineItemCollection()
+        {}
+
+        public LineItemCollection(Func<ILineItem, bool> validationCallback)
+        {
+            ValidateAdd = validationCallback;
+        }
+
         internal new void Add(ILineItem item)
         {
             using (new WriteLock(_addLocker))
@@ -33,6 +41,8 @@ namespace Merchello.Core.Models
                         return;
                     }
                 }
+                if(ValidateAdd != null) if(!ValidateAdd(item)) return;
+                
                 base.Add(item);
 
                 OnAdd.IfNotNull(x => x.Invoke());

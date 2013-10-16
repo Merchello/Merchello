@@ -51,6 +51,10 @@ namespace Merchello.Tests.Base.DataMakers
             return values.ToArray()[index];
         }
 
+        protected static int Quanity()
+        {
+            return NoWhammyStop.Next(25);
+        }
 
         internal static IEnumerable<AddressMock> AddressMocks()
         {
