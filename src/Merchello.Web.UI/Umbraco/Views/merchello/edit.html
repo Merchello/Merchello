@@ -1,4 +1,6 @@
-﻿<form novalidate name="productForm" 
+﻿<link href="/App_Plugins/Merchello/Common/Css/merchello.css" rel="stylesheet">
+
+<form novalidate name="productForm" 
       ng-controller="Merchello.Editors.Product.EditController" 
       ng-show="loaded" 
       ng-submit="save()">
@@ -27,39 +29,47 @@
 
         </umb-header>
         
-        <div class="umb-panel-body umb-scrollable row-fluid">
+        <div class="merchello-panel-body row-fluid">
             <div class="tab-content form-horizontal">
-                <div class="umb-pane">
+                <div class="merchello-pane">
                     
                     <!-- Property classes from Umbraco styles -->
-                    <div class="umb-property">
-                        <div class="control-group umb-control-group" >
+                    <div class="">
+                        <div class="" >
                         
-                            <div class="umb-el-wrap">
-                                <label class="control-label">
+                            <div class="">
+                                <label class="merchello-control-label">
                                     Inventory & Variants
                                     <small>Configure the options for this product</small>
                                 </label>
 
-                                <div class="controls controls-row">
+                                <div class="merchello-controls">
 
-                                    <div>
-                                        <label for="price">Price</label>
-                                        <input id="price" name="price" data-ng-model="product.price" />
+                                    <div class="row">
+                                        <div class="form-group col-xs-6 span6">
+                                            <label for="price">Price</label>
+                                            <input id="price" name="price" class="form-control" data-ng-model="product.price" />
+                                        </div>
 
-                                        <label for="compareatprice">Compare at Price</label>
-                                        <input id="compareatprice" name="compareatprice" data-ng-model="product.salePrice" />
+                                        <div class="form-group col-xs-6 span6">
+                                            <label for="compareatprice">Compare at Price</label>
+                                            <input id="compareatprice" name="compareatprice" class="form-control" data-ng-model="product.salePrice" />
+                                        </div>
                                     </div>
 
-                                    <div>
-                                        <label for="sku">Base Sku <small>Must have a unique SKU</small></label>
-                                        <input id="Text2" name="sku" data-ng-model="product.sku" />
+                                    <div class="row">
+                                        <div class="form-group col-xs-6 span6">
+                                            <label for="sku">Base Sku <small>Must have a unique SKU</small></label>
+                                            <input id="Text2" name="sku" class="form-control" data-ng-model="product.sku" />
+                                        </div>
 
-                                        <label for="barcode">Barcode <small>e.g. UPC, ISBN</small></label>
-                                        <input id="barcode" name="barcode" data-ng-model="product.barcode" />
+                                        <div class="form-group col-xs-6 span6">
+                                            <label for="barcode">Barcode <small>e.g. UPC, ISBN</small></label>
+                                            <input id="barcode" name="barcode" class="form-control" data-ng-model="product.barcode" />
+                                        </div>
                                     </div>
 
-                                    <div>
+                                    <div class="row">
                                         <label><input name="chargetaxes" type="checkbox" data-ng-model="product.taxable"> Charge Taxes</label>
                                     </div>
 
