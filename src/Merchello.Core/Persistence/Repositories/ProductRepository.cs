@@ -49,7 +49,7 @@ namespace Merchello.Core.Persistence.Repositories
             var product = factory.BuildEntity(dto);
 
             // TODO - inventory
-            ((ProductVariant) ((Product) product).ProductVariantMaster).WarehouseInventory =
+            ((ProductVariant) ((Product) product).DefaultVariant).WarehouseInventory =
                 ((ProductVariantRepository) _productVariantRepository).GetWarehouseInventory(
                     ((Product) product).ProductVariantKey);
 
@@ -140,13 +140,13 @@ namespace Merchello.Core.Persistence.Repositories
             dto.ProductVariantDto.ProductKey = dto.Key;
             Database.Insert(dto.ProductVariantDto);
 
-            ((Product) entity).ProductVariantMaster.ProductKey = dto.ProductVariantDto.ProductKey;
+            ((Product) entity).DefaultVariant.ProductKey = dto.ProductVariantDto.ProductKey;
             
             // save the product options
             SaveProductOptions(entity);
 
             // synchronize the inventory
-            ((ProductVariantRepository)_productVariantRepository).SaveWarehouseInventory(((Product)entity).ProductVariantMaster);
+            ((ProductVariantRepository)_productVariantRepository).SaveWarehouseInventory(((Product)entity).DefaultVariant);
 
             entity.ResetDirtyProperties();
         }
@@ -164,7 +164,7 @@ namespace Merchello.Core.Persistence.Repositories
             SaveProductOptions(entity);
 
             // synchronize the inventory
-            ((ProductVariantRepository) _productVariantRepository).SaveWarehouseInventory(((Product)entity).ProductVariantMaster);
+            ((ProductVariantRepository) _productVariantRepository).SaveWarehouseInventory(((Product)entity).DefaultVariant);
 
             entity.ResetDirtyProperties();
         }

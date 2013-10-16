@@ -32,6 +32,8 @@ namespace Merchello.Core.Models
         /// </remarks>
         IEnumerable<IProductOption> ProductOptionsForAttributes(IEnumerable<IProductAttribute> attributes);
 
+        IProductVariant DefaultVariant { get; }
+
         /// <summary>
         /// Associates a product with a warehouse
         /// </summary>
