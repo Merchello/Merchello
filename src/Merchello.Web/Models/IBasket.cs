@@ -1,4 +1,5 @@
 ﻿using System.Net.Configuration;
+using ICSharpCode.SharpZipLib.Core;
 using Merchello.Core.Models;
 
 namespace Merchello.Web.Models
@@ -7,9 +8,9 @@ namespace Merchello.Web.Models
     {
         // Adds an item to the basket
         void AddItem(IProduct product);
-        void AddItem(IProduct product, int quantity);
+        void AddItem(IProduct product, string name, int quantity);
         void AddItem(IProductVariant productVariant);
-        void AddItem(IProductVariant productVariant, int quantity);
+        void AddItem(IProductVariant productVariant, string name, int quantity);
         void AddItem(string name, string sku, decimal price);
         void AddItem(string name, string sku, int quantity, decimal price);
         void AddItem(string name, string sku, int quantity, decimal price, ExtendedDataCollection extendedData);
