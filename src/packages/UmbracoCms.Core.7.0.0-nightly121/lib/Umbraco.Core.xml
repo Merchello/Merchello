@@ -1971,6 +1971,11 @@
             Alias for the XPath DropDownList datatype.
             </summary>
         </member>
+        <member name="F:Umbraco.Core.Constants.PropertyEditors.EmailAddressAlias">
+            <summary>
+            Alias for the email address property editor
+            </summary>
+        </member>
         <member name="T:Umbraco.Core.Constants.ObjectTypes">
             <summary>
             Defines the identifiers for Umbraco object types as constants for easy centralized access/management.
@@ -3159,6 +3164,13 @@
             </summary>
             <param name="value">The type to look for.</param>
             <returns>A value indicating whether the type is already in the collection of types.</returns>
+        </member>
+        <member name="M:Umbraco.Core.ObjectResolution.ManyObjectsResolverBase`2.GetTypes">
+            <summary>
+            Gets the types in the collection of types.
+            </summary>
+            <returns>The types in the collection of types.</returns>
+            <remarks>Returns an enumeration, the list cannot be modified.</remarks>
         </member>
         <member name="M:Umbraco.Core.ObjectResolution.ManyObjectsResolverBase`2.ContainsType``1">
             <summary>
@@ -4923,6 +4935,538 @@
             Gets or sets the Alias of the ContentType
             </summary>
         </member>
+        <member name="T:Umbraco.Core.Models.PublishedContent.IPublishedContentExtended">
+            <summary>
+            Provides methods to handle extended content.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Models.IPublishedContent">
+            <summary>
+            Represents a cached content.
+            </summary>
+            <remarks>
+            <para>SD: A replacement for INode which needs to occur since INode doesn't contain the document type alias
+            and INode is poorly formatted with mutable properties (i.e. Lists instead of IEnumerable).</para>
+            <para>Stephan: initially, that was for cached published content only. Now, we're using it also for
+            cached preview (so, maybe unpublished) content. A better name would therefore be ICachedContent, as
+            has been suggested. However, can't change now. Maybe in v7?</para>
+            </remarks>	
+        </member>
+        <member name="M:Umbraco.Core.Models.IPublishedContent.GetIndex">
+            <summary>
+            Gets the index of the published content within its current owning content set.
+            </summary>
+            <returns>The index of the published content within its current owning content set.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Models.IPublishedContent.GetProperty(System.String)">
+            <summary>
+            Gets a property identified by its alias.
+            </summary>
+            <param name="alias">The property alias.</param>
+            <returns>The property identified by the alias.</returns>
+            <remarks>
+            <para>If the content type has no property with that alias, including inherited properties, returns <c>null</c>,</para>
+            <para>otherwise return a property -- that may have no value (ie <c>HasValue</c> is <c>false</c>).</para>
+            <para>The alias is case-insensitive.</para>
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Core.Models.IPublishedContent.GetProperty(System.String,System.Boolean)">
+            <summary>
+            Gets a property identified by its alias.
+            </summary>
+            <param name="alias">The property alias.</param>
+            <param name="recurse">A value indicating whether to navigate the tree upwards until a property with a value is found.</param>
+            <returns>The property identified by the alias.</returns>
+            <remarks>
+            <para>Navigate the tree upwards and look for a property with that alias and with a value (ie <c>HasValue</c> is <c>true</c>).
+            If found, return the property. If no property with that alias is found, having a value or not, return <c>null</c>. Otherwise
+            return the first property that was found with the alias but had no value (ie <c>HasValue</c> is <c>false</c>).</para>
+            <para>The alias is case-insensitive.</para>
+            </remarks>
+        </member>
+        <member name="P:Umbraco.Core.Models.IPublishedContent.ContentSet">
+            <summary>
+            Gets the content set to which the content belongs.
+            </summary>
+            <remarks>The default set consists in the siblings of the content (including the content 
+            itself) ordered by <c>sortOrder</c>.</remarks>
+        </member>
+        <member name="P:Umbraco.Core.Models.IPublishedContent.ContentType">
+            <summary>
+            Gets the content type.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Models.IPublishedContent.ItemType">
+            <summary>
+            Gets a value indicating whether the content is a content (aka a document) or a media.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Models.IPublishedContent.IsDraft">
+            <summary>
+            Gets a value indicating whether the content is draft.
+            </summary>
+            <remarks>A content is draft when it is the unpublished version of a content, which may
+            have a published version, or not.</remarks>
+        </member>
+        <member name="P:Umbraco.Core.Models.IPublishedContent.Parent">
+            <summary>
+            Gets the parent of the content.
+            </summary>
+            <remarks>The parent of root content is <c>null</c>.</remarks>
+        </member>
+        <member name="P:Umbraco.Core.Models.IPublishedContent.Children">
+            <summary>
+            Gets the children of the content.
+            </summary>
+            <remarks>Children are sorted by their sortOrder.</remarks>
+        </member>
+        <member name="P:Umbraco.Core.Models.IPublishedContent.Properties">
+            <summary>
+            Gets the properties of the content.
+            </summary>
+            <remarks>
+            <para>Contains one <c>IPublishedProperty</c> for each property defined for the content type, including
+            inherited properties. Some properties may have no value.</para>
+            <para>The properties collection of an IPublishedContent instance should be read-only ie it is illegal
+            to add properties to the collection.</para>
+            </remarks>
+        </member>
+        <member name="P:Umbraco.Core.Models.IPublishedContent.Item(System.String)">
+            <summary>
+            Gets the value of a property identified by its alias.
+            </summary>
+            <param name="alias">The property alias.</param>
+            <returns>The value of the property identified by the alias.</returns>
+            <remarks>
+            <para>If <c>GetProperty(alias)</c> is <c>null</c> then returns <c>null</c> else return <c>GetProperty(alias).Value</c>.</para>
+            <para>So if the property has no value, returns the default value for that property type.</para>
+            <para>This one is defined here really because we cannot define index extension methods, but all it should do is:
+            <code>var p = GetProperty(alias); return p == null ? null : p.Value;</code> and nothing else.</para>
+            <para>The recursive syntax (eg "_title") is _not_ supported here.</para>
+            <para>The alias is case-insensitive.</para>
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Core.Models.PublishedContent.IPublishedContentExtended.AddProperty(Umbraco.Core.Models.IPublishedProperty)">
+            <summary>
+            Adds a property to the extended content.
+            </summary>
+            <param name="property">The property to add.</param>
+        </member>
+        <member name="M:Umbraco.Core.Models.PublishedContent.IPublishedContentExtended.SetContentSet(System.Collections.Generic.IEnumerable{Umbraco.Core.Models.IPublishedContent})">
+            <summary>
+            Sets the content set of the extended content.
+            </summary>
+            <param name="contentSet"></param>
+        </member>
+        <member name="M:Umbraco.Core.Models.PublishedContent.IPublishedContentExtended.ClearContentSet">
+            <summary>
+            Resets the content set of the extended content.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Models.PublishedContent.IPublishedContentExtended.SetIndex(System.Int32)">
+            <summary>
+            Sets the index of the extended content.
+            </summary>
+            <param name="value">The index value.</param>
+        </member>
+        <member name="M:Umbraco.Core.Models.PublishedContent.IPublishedContentExtended.ClearIndex">
+            <summary>
+            Resets the index of the extended content.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Models.PublishedContent.IPublishedContentExtended.HasAddedProperties">
+            <summary>
+            Gets a value indicating whether properties were added to the extended content.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Models.PublishedContent.PublishedPropertyBase">
+            <summary>
+            Provides a base class for <c>IPublishedProperty</c> implementations which converts and caches
+            the value source to the actual value to use when rendering content.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Models.IPublishedProperty">
+            <summary>
+            Represents a property of an <c>IPublishedContent</c>.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Models.IPublishedProperty.PropertyTypeAlias">
+            <summary>
+            Gets the alias of the property.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Models.IPublishedProperty.HasValue">
+            <summary>
+            Gets a value indicating whether the property has a value.
+            </summary>
+            <remarks>
+            <para>This is somewhat implementation-dependent -- depending on whatever IPublishedCache considers
+            a missing value.</para>
+            <para>The XmlPublishedCache raw values are strings, and it will consider missing, null or empty (and
+            that includes whitespace-only) strings as "no value".</para>
+            <para>Other caches that get their raw value from the database would consider that a property has "no
+            value" if it is missing, null, or an empty string (including whitespace-only).</para>
+            </remarks>
+        </member>
+        <member name="P:Umbraco.Core.Models.IPublishedProperty.DataValue">
+            <summary>
+            Gets the data value of the property.
+            </summary>
+            <remarks>
+            <para>The data value is whatever was passed to the property when it was instanciated, and it is
+            somewhat implementation-dependent -- depending on how the IPublishedCache is implemented.</para>
+            <para>The XmlPublishedCache raw values are strings exclusively since they come from the Xml cache.</para>
+            <para>For other caches that get their raw value from the database, it would be either a string,
+            an integer (Int32), or a date and time (DateTime).</para>
+            <para>If you're using that value, you're probably wrong, unless you're doing some internal
+            Umbraco stuff.</para>
+            </remarks>
+        </member>
+        <member name="P:Umbraco.Core.Models.IPublishedProperty.Value">
+            <summary>
+            Gets the object value of the property.
+            </summary>
+            <remarks>
+            <para>The value is what you want to use when rendering content in an MVC view ie in C#.</para>
+            <para>It can be null, or any type of CLR object.</para>
+            <para>It has been fully prepared and processed by the appropriate converter.</para>
+            </remarks>
+        </member>
+        <member name="P:Umbraco.Core.Models.IPublishedProperty.XPathValue">
+            <summary>
+            Gets the XPath value of the property.
+            </summary>
+            <remarks>
+            <para>The XPath value is what you want to use when navigating content via XPath eg in the XSLT engine.</para>
+            <para>It must be either null, or a string, or an XPathNavigator.</para>
+            <para>It has been fully prepared and processed by the appropriate converter.</para>
+            </remarks>
+        </member>
+        <member name="T:Umbraco.Core.Models.PublishedContent.PublishedContentModelFactoryImpl">
+            <summary>
+            Implements a strongly typed content model factory
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Models.PublishedContent.IPublishedContentModelFactory">
+            <summary>
+            Provides the model creation service.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Models.PublishedContent.IPublishedContentModelFactory.CreateModel(Umbraco.Core.Models.IPublishedContent)">
+            <summary>
+            Creates a strongly-typed model representing a published content.
+            </summary>
+            <param name="content">The original published content.</param>
+            <returns>The strongly-typed model representing the published content, or the published content
+            itself it the factory has no model for that content type.</returns>
+        </member>
+        <member name="T:Umbraco.Core.Models.PublishedContent.PublishedContentModel">
+            <summary>
+            Represents a strongly-typed published content.
+            </summary>
+            <remarks>Every strongly-typed published content class should inherit from <c>PublishedContentModel</c>
+            (or inherit from a class that inherits from... etc.) so they are picked by the factory.</remarks>
+        </member>
+        <member name="T:Umbraco.Core.Models.PublishedContent.PublishedContentWrapped">
+            <summary>
+            Provides an abstract base class for <c>IPublishedContent</c> implementations that
+            wrap and extend another <c>IPublishedContent</c>.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Models.PublishedContent.PublishedContentWrapped.#ctor(Umbraco.Core.Models.IPublishedContent)">
+            <summary>
+            Initialize a new instance of the <see cref="T:Umbraco.Core.Models.PublishedContent.PublishedContentWrapped"/> class
+            with an <c>IPublishedContent</c> instance to wrap and extend.
+            </summary>
+            <param name="content">The content to wrap and extend.</param>
+        </member>
+        <member name="M:Umbraco.Core.Models.PublishedContent.PublishedContentWrapped.Unwrap">
+            <summary>
+            Gets the wrapped content.
+            </summary>
+            <returns>The wrapped content, that was passed as an argument to the constructor.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Models.PublishedContent.PublishedContentModel.#ctor(Umbraco.Core.Models.IPublishedContent)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Umbraco.Core.Models.PublishedContent.PublishedContentModel"/> class with
+            an original <see cref="T:Umbraco.Core.Models.IPublishedContent"/> instance.
+            </summary>
+            <param name="content">The original content.</param>
+        </member>
+        <member name="T:Umbraco.Core.Models.PublishedContent.PublishedContentModelFactoryResolver">
+            <summary>
+            Resolves the IPublishedContentModelFactory object.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Models.PublishedContent.PublishedContentModelFactoryResolver.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Umbraco.Core.Models.PublishedContent.PublishedContentModelFactoryResolver"/>.
+            </summary>
+            <remarks>The resolver is created by the <c>WebBootManager</c> and thus the constructor remains internal.</remarks>
+        </member>
+        <member name="M:Umbraco.Core.Models.PublishedContent.PublishedContentModelFactoryResolver.#ctor(Umbraco.Core.Models.PublishedContent.IPublishedContentModelFactory)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Umbraco.Core.Models.PublishedContent.PublishedContentModelFactoryResolver"/> with a factory.
+            </summary>
+            <param name="factory">The factory.</param>
+            <remarks>The resolver is created by the <c>WebBootManager</c> and thus the constructor remains internal.</remarks>
+        </member>
+        <member name="M:Umbraco.Core.Models.PublishedContent.PublishedContentModelFactoryResolver.SetFactory(Umbraco.Core.Models.PublishedContent.IPublishedContentModelFactory)">
+            <summary>
+            Sets the factory.
+            </summary>
+            <param name="factory">The factory.</param>
+            <remarks>For developers, at application startup.</remarks>
+        </member>
+        <member name="P:Umbraco.Core.Models.PublishedContent.PublishedContentModelFactoryResolver.Factory">
+            <summary>
+            Gets the factory.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.PropertyEditors.IValueEditor">
+            <summary>
+            An interface that is shared between parameter and property value editors to access their views
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.PropertyEditors.PropertyCacheValue">
+            <summary>
+            Specifies the different types of property cacheable values.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.PropertyEditors.PropertyCacheValue.All">
+            <summary>
+            All of them.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.PropertyEditors.PropertyCacheValue.Source">
+            <summary>
+            The source value ie the internal value that can be used to create both the
+            object value and the xpath value.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.PropertyEditors.PropertyCacheValue.Object">
+            <summary>
+            The object value ie the strongly typed value of the property as seen when accessing content via C#.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.PropertyEditors.PropertyCacheValue.XPath">
+            <summary>
+            The XPath value ie the value of the property as seen when accessing content via XPath.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.PropertyEditors.PropertyValueCacheAttribute">
+            <summary>
+            Indicates the cache level for a property cacheable value.
+            </summary>
+            <remarks>Use this attribute to mark property values converters.</remarks>
+        </member>
+        <member name="M:Umbraco.Core.PropertyEditors.PropertyValueCacheAttribute.#ctor(Umbraco.Core.PropertyEditors.PropertyCacheValue,Umbraco.Core.PropertyEditors.PropertyCacheLevel)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Umbraco.Core.PropertyEditors.PropertyValueCacheAttribute"/> class with a cacheable value and a cache level.
+            </summary>
+            <param name="value">The cacheable value.</param>
+            <param name="level">The cache level.</param>
+        </member>
+        <member name="P:Umbraco.Core.PropertyEditors.PropertyValueCacheAttribute.Value">
+            <summary>
+            Gets or sets the cacheable value.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.PropertyEditors.PropertyValueCacheAttribute.Level">
+            <summary>
+            Gets or sets the cache level;
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.PropertyEditors.PropertyValueTypeAttribute">
+            <summary>
+            Indicates the CLR type of property object values returned by a converter.
+            </summary>
+            <remarks>Use this attribute to mark property values converters.</remarks>
+        </member>
+        <member name="M:Umbraco.Core.PropertyEditors.PropertyValueTypeAttribute.#ctor(System.Type)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Umbraco.Core.PropertyEditors.PropertyValueTypeAttribute"/> class with a type.
+            </summary>
+            <param name="type">The type.</param>
+        </member>
+        <member name="P:Umbraco.Core.PropertyEditors.PropertyValueTypeAttribute.Type">
+            <summary>
+            Gets or sets the type.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.PropertyEditors.PropertyCacheLevel">
+            <summary>
+            Specifies the acceptable level of cache for a property value.
+            </summary>
+            <remarks>By default, <c>Request</c> is assumed.</remarks>
+        </member>
+        <member name="F:Umbraco.Core.PropertyEditors.PropertyCacheLevel.Content">
+            <summary>
+            Indicates that the property value can be cached at the content level, ie it can be
+            cached until the content itself is modified.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.PropertyEditors.PropertyCacheLevel.ContentCache">
+            <summary>
+            Indicates that the property value can be cached at the content cache level, ie it can
+            be cached until any content in the cache is modified.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.PropertyEditors.PropertyCacheLevel.Request">
+            <summary>
+            Indicates that the property value can be cached at the request level, ie it can be
+            cached for the duration of the current request.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.PropertyEditors.PropertyCacheLevel.None">
+            <summary>
+            Indicates that the property value cannot be cached and has to be converted any time
+            it is requested.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.PropertyEditors.PropertyValueConverterBase">
+            <summary>
+            Provides a default overridable implementation for <see cref="T:Umbraco.Core.PropertyEditors.IPropertyValueConverter"/> that does nothing.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.PropertyEditors.IPropertyValueConverter">
+            <summary>
+            Provides published content properties conversion service.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.PropertyEditors.IPropertyValueConverter.IsConverter(Umbraco.Core.Models.PublishedContent.PublishedPropertyType)">
+            <summary>
+            Gets a value indicating whether the converter supports a property type.
+            </summary>
+            <param name="propertyType">The property type.</param>
+            <returns>A value indicating whether the converter supports a property type.</returns>
+        </member>
+        <member name="M:Umbraco.Core.PropertyEditors.IPropertyValueConverter.ConvertDataToSource(Umbraco.Core.Models.PublishedContent.PublishedPropertyType,System.Object,System.Boolean)">
+            <summary>
+            Converts a property Data value to a Source value.
+            </summary>
+            <param name="propertyType">The property type.</param>
+            <param name="source">The data value.</param>
+            <param name="preview">A value indicating whether conversion should take place in preview mode.</param>
+            <returns>The result of the conversion.</returns>
+            <remarks>
+            <para>The converter should know how to convert a <c>null</c> raw value, meaning that no
+            value has been assigned to the property. The source value can be <c>null</c>.</para>
+            <para>With the XML cache, raw values come from the XML cache and therefore are strings.</para>
+            <para>With objects caches, raw values would come from the database and therefore be either
+            ints, DateTimes, or strings.</para>
+            <para>The converter should be prepared to handle both situations.</para>
+            <para>When raw values are strings, the converter must handle empty strings, whitespace
+            strings, and xml-whitespace strings appropriately, ie it should know whether to preserve
+            whitespaces.</para>
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Core.PropertyEditors.IPropertyValueConverter.ConvertSourceToObject(Umbraco.Core.Models.PublishedContent.PublishedPropertyType,System.Object,System.Boolean)">
+            <summary>
+            Converts a property Source value to an Object value.
+            </summary>
+            <param name="propertyType">The property type.</param>
+            <param name="source">The source value.</param>
+            <param name="preview">A value indicating whether conversion should take place in preview mode.</param>
+            <returns>The result of the conversion.</returns>
+            <remarks>The converter should know how to convert a <c>null</c> source value, or any source value
+            indicating that no value has been assigned to the property. It is up to the converter to determine
+            what to return in that case: either <c>null</c>, or the default value...</remarks>
+        </member>
+        <member name="M:Umbraco.Core.PropertyEditors.IPropertyValueConverter.ConvertSourceToXPath(Umbraco.Core.Models.PublishedContent.PublishedPropertyType,System.Object,System.Boolean)">
+            <summary>
+            Converts a property Source value to an XPath value.
+            </summary>
+            <param name="propertyType">The property type.</param>
+            <param name="source">The source value.</param>
+            <param name="preview">A value indicating whether conversion should take place in preview mode.</param>
+            <returns>The result of the conversion.</returns>
+            <remarks>
+            <para>The converter should know how to convert a <c>null</c> source value, or any source value
+            indicating that no value has been assigned to the property. It is up to the converter to determine
+            what to return in that case: either <c>null</c>, or the default value...</para>
+            <para>If successful, the result should be either <c>null</c>, a string, or an <c>XPathNavigator</c>
+            instance. Whether an xml-whitespace string should be returned as <c>null</c> or litterally, is
+            up to the converter.</para>
+            <para>The converter may want to return an XML fragment that represent a part of the content tree,
+            but should pay attention not to create infinite loops that would kill XPath and XSLT.</para>
+            </remarks>
+        </member>
+        <member name="T:Umbraco.Core.PropertyEditors.SupportTagsAttribute">
+            <summary>
+            An interface that indicates that a property editor supports tags and will store it's published tags into the tag db table
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.PropertyEditors.SupportTagsAttribute.ValueType">
+            <summary>
+            Defines how the tag values will be extracted, default is FromDelimitedValue
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.PropertyEditors.SupportTagsAttribute.Delimiter">
+            <summary>
+            Defines a custom delimiter, the default is a comma
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.PropertyEditors.SupportTagsAttribute.ReplaceTags">
+            <summary>
+            Determines whether or not to replace the tags with the new value or append them (true to replace, false to append), default is true
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.PropertyEditors.SupportTagsAttribute.TagGroup">
+            <summary>
+            The tag group to use when tagging, the default is 'default'
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.PropertyEditors.TagValueType">
+            <summary>
+            Determines how the value for tags is extracted from the property
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.PropertyEditors.TagValueType.FromDelimitedValue">
+            <summary>
+            The list of tags will be extracted from the string value by a delimiter
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.PropertyEditors.TagValueType.CustomTagList">
+            <summary>
+            The list of tags will be supplied by the property editor's ConvertEditorToDb method result which will need to return an IEnumerable{string} value
+            </summary>        
+            <remarks>
+            if the ConvertEditorToDb doesn't return an IEnumerable{string} then an exception will be thrown.
+            </remarks>
+        </member>
+        <member name="T:Umbraco.Core.PropertyEditors.ValueConverters.TinyMceValueConverter">
+            <summary>
+            Value converter for the RTE so that it always returns IHtmlString so that Html.Raw doesn't have to be used.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Models.PublishedContent.PublishedContentOrderedSet`1">
+            <summary>
+            Represents an ordered set of <see cref="T:Umbraco.Core.Models.IPublishedContent"/>.
+            </summary>
+            <typeparam name="T">The type of content.</typeparam>
+        </member>
+        <member name="T:Umbraco.Core.Models.PublishedContent.PublishedContentSet`1">
+            <summary>
+            Represents a set of <see cref="T:Umbraco.Core.Models.IPublishedContent"/>.
+            </summary>
+            <typeparam name="T">The type of content.</typeparam>
+            <remarks>
+            <para>A <c>ContentSet{T}</c> is created from an <c>IEnumerable{T}</c> using the <c>ToContentSet</c>
+            extension method.</para>
+            <para>The content set source is enumerated only once. Same as what you get
+            when you call ToList on an IEnumerable. Only, ToList enumerates its source when
+            created, whereas a content set enumerates its source only when the content set itself
+            is enumerated.</para>
+            </remarks>
+        </member>
+        <member name="P:Umbraco.Core.Models.PublishedContent.PublishedContentSet`1.Count">
+            <summary>
+            Gets the number of items in the set.
+            </summary>
+            <returns>The number of items in the set.</returns>
+            <remarks>Will cause the set to be enumerated if it hasn't been already.</remarks>
+        </member>
         <member name="M:Umbraco.Core.Models.Css.CssParser.#ctor(System.String)">
             <summary>
             Ctor.
@@ -5619,6 +6163,36 @@
             Gets or sets a list of Macro Properties
             </summary>
         </member>
+        <member name="T:Umbraco.Core.Models.PublishedContent.PublishedContentModelAttribute">
+            <summary>
+            Indicates that the class is a published content model for a specified content type.
+            </summary>
+            <remarks>By default, the name of the class is assumed to be the content type alias. The
+            <c>PublishedContentModelAttribute</c> can be used to indicate a different alias.</remarks>
+        </member>
+        <member name="M:Umbraco.Core.Models.PublishedContent.PublishedContentModelAttribute.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Umbraco.Core.Models.PublishedContent.PublishedContentModelAttribute"/> class with a content type alias.
+            </summary>
+            <param name="contentTypeAlias">The content type alias.</param>
+        </member>
+        <member name="P:Umbraco.Core.Models.PublishedContent.PublishedContentModelAttribute.ContentTypeAlias">
+            <summary>
+            Gets or sets the content type alias.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Models.PublishedContent.PublishedContentModelFactory">
+            <summary>
+            Provides strongly typed published content models services.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Models.PublishedContent.PublishedContentModelFactory.CreateModel(Umbraco.Core.Models.IPublishedContent)">
+            <summary>
+            Creates a strongly typed published content model for an internal published content.
+            </summary>
+            <param name="content">The internal published content.</param>
+            <returns>The strongly typed published content model.</returns>
+        </member>
         <member name="T:Umbraco.Core.Models.MacroProperty">
             <summary>
             Represents a Macro Property
@@ -5719,6 +6293,40 @@
         <member name="T:Umbraco.Core.Models.MacroTypes">
             <summary>
             Enum for the various types of Macros
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Models.PublishedContent.PublishedContentType">
+            <summary>
+            Represents an <see cref="T:Umbraco.Core.Models.IPublishedContent"/> type.
+            </summary>
+            <remarks>Instances of the <see cref="T:Umbraco.Core.Models.PublishedContent.PublishedContentType"/> class are immutable, ie
+            if the content type changes, then a new class needs to be created.</remarks>
+        </member>
+        <member name="T:Umbraco.Core.Models.PublishedContent.PublishedPropertyType">
+            <summary>
+            Represents an <see cref="T:Umbraco.Core.Models.IPublishedProperty"/> type.
+            </summary>
+            <remarks>Instances of the <see cref="T:Umbraco.Core.Models.PublishedContent.PublishedPropertyType"/> class are immutable, ie
+            if the property type changes, then a new class needs to be created.</remarks>
+        </member>
+        <member name="P:Umbraco.Core.Models.PublishedContent.PublishedPropertyType.ContentType">
+            <summary>
+            Gets or sets the published content type containing the property type.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Models.PublishedContent.PublishedPropertyType.PropertyTypeAlias">
+            <summary>
+            Gets or sets the alias uniquely identifying the property type.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Models.PublishedContent.PublishedPropertyType.DataTypeId">
+            <summary>
+            Gets or sets the identifier uniquely identifying the data type supporting the property type.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Models.PublishedContent.PublishedPropertyType.PropertyEditorAlias">
+            <summary>
+            Gets or sets the alias uniquely identifying the property editor for the property type.
             </summary>
         </member>
         <member name="T:Umbraco.Core.Models.Mapping.IMapperConfiguration">
@@ -5894,6 +6502,13 @@
             Represents a Member object
             </summary>
         </member>
+        <member name="M:Umbraco.Core.Models.Member.#ctor(System.String,Umbraco.Core.Models.IMemberType)">
+            <summary>
+            Constructor for creating a Member object
+            </summary>
+            <param name="name">Name of the content</param>
+            <param name="contentType">ContentType for the current Content object</param>
+        </member>
         <member name="M:Umbraco.Core.Models.Member.SetProviderUserKeyType(System.Type)">
             <summary>
             Sets the type of the provider user key.
@@ -6064,6 +6679,20 @@
             <param name="userType">Type of the user.</param>
             <param name="user"></param>
         </member>
+        <member name="T:Umbraco.Core.Models.PagedResult`1">
+            <summary>
+            Represents a paged result for a model collection
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:Umbraco.Core.Models.PagedResult`1.SkipSize">
+            <summary>
+            Calculates the skip size based on the paged parameters specified
+            </summary>
+            <remarks>
+            Returns 0 if the page number or page size is zero
+            </remarks>
+        </member>
         <member name="T:Umbraco.Core.Models.PreValue">
             <summary>
             Represents a stored pre-value field value
@@ -6173,11 +6802,6 @@
         <member name="P:Umbraco.Core.Models.PropertyTags.Tags">
             <summary>
             The actual tags to associate - tag/group
-            </summary>
-        </member>
-        <member name="T:Umbraco.Core.Models.PublishedPropertyDefinition">
-            <summary>
-            The definition of a published property
             </summary>
         </member>
         <member name="T:Umbraco.Core.Sync.IServerAddress">
@@ -6504,7 +7128,17 @@
         </member>
         <member name="T:Umbraco.Core.Models.PublishedItemType">
             <summary>
-            The type of published item
+            The type of published content, ie whether it is a content or a media.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Models.PublishedItemType.Content">
+            <summary>
+            A content, ie what was formerly known as a document.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Models.PublishedItemType.Media">
+            <summary>
+            A media.
             </summary>
         </member>
         <member name="P:Umbraco.Core.Models.Rdbms.ServerRegistrationDto.ComputerName">
@@ -7777,16 +8411,16 @@
             Gets a value indicating whether throttling conditions were not determined with certainty.
             </summary>
         </member>
+        <member name="T:Umbraco.Core.Persistence.Migrations.IMigration">
+            <summary>
+            Marker interface for database migrations
+            </summary>
+        </member>
         <member name="T:Umbraco.Core.Persistence.Migrations.Upgrades.TargetVersionSeven.AlterCmsMacroPropertyTable">
             <summary>
             We are removing the cmsMacroPropertyType which the cmsMacroProperty references and the cmsMacroProperty.macroPropertyType column
             needs to be changed to editorAlias, we'll do this by removing the constraint,changing the macroPropertyType to the new 
             editorAlias column (and maintaing data so we can reference it)
-            </summary>
-        </member>
-        <member name="T:Umbraco.Core.Persistence.Migrations.IMigration">
-            <summary>
-            Marker interface for database migrations
             </summary>
         </member>
         <member name="T:Umbraco.Core.Persistence.Migrations.Upgrades.TargetVersionSeven.AddIndexToCmsMacroPropertyTable">
@@ -8124,6 +8758,58 @@
             <param name="propEdAlias"></param>
             <param name="legacyId"></param>
             <param name="dataTypeDefId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Umbraco.Core.PropertyEditors.EmailValidator">
+            <summary>
+            A validator that validates an email address
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.PropertyEditors.ManifestValueValidator">
+            <summary>
+            A validator used to validate a value based on a validator name defined in a package manifest
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.PropertyEditors.ManifestValueValidator.Validate(System.Object,System.String,Umbraco.Core.Models.PreValueCollection,Umbraco.Core.PropertyEditors.PropertyEditor)">
+            <summary>
+            Performs the validation against the value
+            </summary>
+            <param name="value">
+            Depending on what is being validated, this value can be a json structure (JObject, JArray, etc...) representing an editor's model, it could be a single
+            string representing an editor's model.
+            </param>
+            <param name="config">
+            An object that is used to configure the validator. An example could be a regex 
+            expression if the validator was a regex validator. This is defined in the manifest along with
+            the definition of the validator.
+            </param>
+            <param name="preValues">The current pre-values stored for the data type</param>
+            <param name="editor">The property editor instance that is being validated</param>
+            <returns>
+            Returns a list of validation results. If a result does not have a field name applied to it then then we assume that 
+            the validation message applies to the entire property type being validated. If there is a field name applied to a 
+            validation result we will try to match that field name up with a field name on the item itself.
+            </returns>
+        </member>
+        <member name="T:Umbraco.Core.PropertyEditors.IPropertyValidator">
+            <summary>
+            An interface defining a validator
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.PropertyEditors.IPropertyValidator.Validate(System.Object,Umbraco.Core.Models.PreValueCollection,Umbraco.Core.PropertyEditors.PropertyEditor)">
+            <summary>
+            Validates the object with the resolved ValueValidator found for this type
+            </summary>
+            <param name="value">
+            Depending on what is being validated, this value can be a json structure (JObject, JArray, etc...) representing an editor's model, it could be a single
+            string representing an editor's model, this class structure is also used to validate pre-values and in that case this value
+            could be a json structure or a single value representing a pre-value field.
+            </param>
+            <param name="preValues">
+            When validating a property editor value (not a pre-value), this is the current pre-values stored for the data type.
+            When validating a pre-value field this will be null.
+            </param>
+            <param name="editor">The property editor instance that we are validating for</param>
             <returns></returns>
         </member>
         <member name="P:Umbraco.Core.PropertyEditors.IParameterEditor.Alias">
@@ -8858,6 +9544,14 @@
             </summary>
             <param name="connection">The connection object that is required as per extension method declaration.</param>
             <param name="retryPolicy">The retry policy defining whether to retry a request if the connection fails to be opened.</param>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.PetaPocoExtensions.EscapeAtSymbols(Umbraco.Core.Persistence.Database,System.String)">
+            <summary>
+            This will escape single @ symbols for peta poco values so it doesn't think it's a parameter
+            </summary>
+            <param name="db"></param>
+            <param name="value"></param>
+            <returns></returns>
         </member>
         <member name="M:Umbraco.Core.Persistence.PetaPocoExtensions.GenerateBulkInsertCommand``1(Umbraco.Core.Persistence.Database,System.Collections.Generic.IEnumerable{``0},System.Data.IDbConnection,System.String[]@)">
             <summary>
@@ -9813,55 +10507,10 @@
             <param name="sender">The application object</param>
             <returns></returns>
         </member>
-        <member name="T:Umbraco.Core.PropertyEditors.PropertyValueConverter">
-            <summary>
-            Used to convert property values from various sources to various destination formats for use with caching
-            </summary>
-        </member>
-        <member name="P:Umbraco.Core.PropertyEditors.PropertyValueConverter.AssociatedPropertyEditorAlias">
-            <summary>
-            Returns the alias of the PropertyEditor that this converter is for
-            </summary>
-        </member>
-        <member name="M:Umbraco.Core.PropertyEditors.DateTimePickerPropertyValueConverter.ConvertSourceToObject(System.Object,Umbraco.Core.Models.PublishedPropertyDefinition,System.Boolean)">
-            <summary>
-            return a DateTime object even if the value is a string
-            </summary>
-            <param name="valueToConvert"></param>
-            <param name="propertyDefinition"></param>
-            <param name="isPreviewing"></param>
-            <returns></returns>
-        </member>
         <member name="T:Umbraco.Core.PropertyEditors.DelimitedManifestValueValidator">
             <summary>
             A validator that validates a delimited set of values against a common regex
             </summary>
-        </member>
-        <member name="T:Umbraco.Core.PropertyEditors.ManifestValueValidator">
-            <summary>
-            A validator used to validate a value based on a validator name defined in a package manifest
-            </summary>
-        </member>
-        <member name="M:Umbraco.Core.PropertyEditors.ManifestValueValidator.Validate(System.Object,System.String,Umbraco.Core.Models.PreValueCollection,Umbraco.Core.PropertyEditors.PropertyEditor)">
-            <summary>
-            Performs the validation against the value
-            </summary>
-            <param name="value">
-            Depending on what is being validated, this value can be a json structure (JObject, JArray, etc...) representing an editor's model, it could be a single
-            string representing an editor's model.
-            </param>
-            <param name="config">
-            An object that is used to configure the validator. An example could be a regex 
-            expression if the validator was a regex validator. This is defined in the manifest along with
-            the definition of the validator.
-            </param>
-            <param name="preValues">The current pre-values stored for the data type</param>
-            <param name="editor">The property editor instance that is being validated</param>
-            <returns>
-            Returns a list of validation results. If a result does not have a field name applied to it then then we assume that 
-            the validation message applies to the entire property type being validated. If there is a field name applied to a 
-            validation result we will try to match that field name up with a field name on the item itself.
-            </returns>
         </member>
         <member name="M:Umbraco.Core.PropertyEditors.DelimitedManifestValueValidator.Validate(System.Object,System.String,Umbraco.Core.Models.PreValueCollection,Umbraco.Core.PropertyEditors.PropertyEditor)">
             <summary>
@@ -9877,27 +10526,6 @@
             <summary>
             A validator that validates that the value is a valid integer
             </summary>
-        </member>
-        <member name="T:Umbraco.Core.PropertyEditors.IPropertyValidator">
-            <summary>
-            An interface defining a validator
-            </summary>
-        </member>
-        <member name="M:Umbraco.Core.PropertyEditors.IPropertyValidator.Validate(System.Object,Umbraco.Core.Models.PreValueCollection,Umbraco.Core.PropertyEditors.PropertyEditor)">
-            <summary>
-            Validates the object with the resolved ValueValidator found for this type
-            </summary>
-            <param name="value">
-            Depending on what is being validated, this value can be a json structure (JObject, JArray, etc...) representing an editor's model, it could be a single
-            string representing an editor's model, this class structure is also used to validate pre-values and in that case this value
-            could be a json structure or a single value representing a pre-value field.
-            </param>
-            <param name="preValues">
-            When validating a property editor value (not a pre-value), this is the current pre-values stored for the data type.
-            When validating a pre-value field this will be null.
-            </param>
-            <param name="editor">The property editor instance that we are validating for</param>
-            <returns></returns>
         </member>
         <member name="T:Umbraco.Core.PropertyEditors.ManifestPropertyValidator">
             <summary>
@@ -9993,11 +10621,6 @@
         <member name="P:Umbraco.Core.PropertyEditors.ParameterEditorResolver.ParameterEditors">
             <summary>
             Returns the parameter editors
-            </summary>
-        </member>
-        <member name="T:Umbraco.Core.PropertyEditors.IValueEditor">
-            <summary>
-            An interface that is shared between parameter and property value editors to access their views
             </summary>
         </member>
         <member name="T:Umbraco.Core.PropertyEditors.ParameterValueEditor">
@@ -10249,7 +10872,28 @@
         </member>
         <member name="T:Umbraco.Core.PropertyEditors.PropertyValueConvertersResolver">
             <summary>
-            Manages the list of PropertyValueConverter's
+            Resolves the IPropertyValueConverter objects.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.PropertyEditors.PropertyValueConvertersResolver.#ctor(System.Collections.Generic.IEnumerable{System.Type})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Umbraco.Core.PropertyEditors.PropertyValueConvertersResolver"/> class with 
+            an initial list of converter types.
+            </summary>
+            <param name="converters">The list of converter types</param>
+            <remarks>The resolver is created by the <c>WebBootManager</c> and thus the constructor remains internal.</remarks>
+        </member>
+        <member name="M:Umbraco.Core.PropertyEditors.PropertyValueConvertersResolver.#ctor(System.Type[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:Umbraco.Core.PropertyEditors.PropertyValueConvertersResolver"/> class with 
+            an initial list of converter types.
+            </summary>
+            <param name="converters">The list of converter types</param>
+            <remarks>The resolver is created by the <c>WebBootManager</c> and thus the constructor remains internal.</remarks>
+        </member>
+        <member name="P:Umbraco.Core.PropertyEditors.PropertyValueConvertersResolver.Converters">
+            <summary>
+            Gets the converters.
             </summary>
         </member>
         <member name="T:Umbraco.Core.PropertyEditors.RegexValidator">
@@ -10297,11 +10941,6 @@
         <member name="P:Umbraco.Core.PropertyEditors.ValidatorsResolver.Validators">
             <summary>
             Returns the validators
-            </summary>
-        </member>
-        <member name="T:Umbraco.Core.PropertyEditors.ISupportTags">
-            <summary>
-            An interface that indicates that a property editor supports tags and will store it's published tags into the tag db table
             </summary>
         </member>
         <member name="T:Umbraco.Core.PropertyEditors.PropertyValueEditor">
@@ -10433,19 +11072,6 @@
             <summary>
             Set this to true if the property editor is for display purposes only
             </summary>
-        </member>
-        <member name="T:Umbraco.Core.PublishedContentExtensions">
-            <summary>
-            Extension methods for IPublishedContent
-            </summary>
-        </member>
-        <member name="M:Umbraco.Core.PublishedContentExtensions.GetRecursiveValue(Umbraco.Core.Models.IPublishedContent,System.String)">
-            <summary>
-            Returns the recursive value of a field by iterating up the parent chain but starting at the publishedContent passed in
-            </summary>
-            <param name="publishedContent"></param>
-            <param name="fieldname"></param>
-            <returns></returns>
         </member>
         <member name="T:Umbraco.Core.Dictionary.ICultureDictionary">
             <summary>
@@ -11459,82 +12085,25 @@
             Gets or sets the weight of the object type.
             </summary>
         </member>
-        <member name="M:Umbraco.Core.PropertyEditors.DatePickerPropertyValueConverter.ConvertSourceToObject(System.Object,Umbraco.Core.Models.PublishedPropertyDefinition,System.Boolean)">
-            <summary>
-            return a DateTime object even if the value is a string
-            </summary>
-            <param name="valueToConvert"></param>
-            <param name="propertyDefinition"></param>
-            <param name="isPreviewing"></param>
-            <returns></returns>
-        </member>
+        <!-- Badly formed XML comment ignored for member "T:Umbraco.Core.PropertyEditors.IPropertyEditorValueConverter" -->
         <member name="M:Umbraco.Core.PropertyEditors.IPropertyEditorValueConverter.IsConverterFor(System.Guid,System.String,System.String)">
             <summary>
-            Returns true if this converter can perform the value conversion for the specified property editor id
+            Returns a value indicating whether this provider applies to the specified property.
             </summary>
-            <param name="propertyEditorId"></param>
-            <param name="docTypeAlias"> </param>
-            <param name="propertyTypeAlias"> </param>
-            <returns></returns>
+            <param name="datatypeGuid">A Guid identifying the property datatype.</param>
+            <param name="contentTypeAlias">The content type alias.</param>
+            <param name="propertyTypeAlias">The property alias.</param>
+            <returns>True if this provider applies to the specified property.</returns>
         </member>
         <member name="M:Umbraco.Core.PropertyEditors.IPropertyEditorValueConverter.ConvertPropertyValue(System.Object)">
             <summary>
-            Attempts to convert the value specified into a useable value on the front-end
+            Attempts to convert a source value specified into a property model.
             </summary>
-            <param name="value"></param>
-            <returns></returns>
-            <remarks>
-            This is used to convert the value stored in the repository into a usable value on the front-end.
-            For example, if a 0 or 1 is stored for a boolean, we'd want to convert this to a real boolean.
-            
-            Also note that the value might not come in as a 0 or 1 but as a "0" or "1"
-            </remarks>
-        </member>
-        <member name="P:Umbraco.Core.Dynamics.PropertyResult.ValueAsString">
-            <summary>
-            Returns the value as a string output, this is used in the final rendering process of a property
-            </summary>
-        </member>
-        <member name="P:Umbraco.Core.Dynamics.PropertyResult.DocumentId">
-            <summary>
-            The Id of the document for which this property belongs to
-            </summary>
-        </member>
-        <member name="P:Umbraco.Core.Dynamics.PropertyResult.DocumentTypeAlias">
-            <summary>
-            The alias of the document type alias for which this property belongs to
-            </summary>
-        </member>
-        <member name="T:Umbraco.Core.Models.IPublishedContent">
-            <summary>
-            Defines a published item in Umbraco
-            </summary>
-            <remarks>
-            A replacement for INode which needs to occur since INode doesn't contain the document type alias
-            and INode is poorly formatted with mutable properties (i.e. Lists instead of IEnumerable)
-            </remarks>	
-        </member>
-        <member name="M:Umbraco.Core.Models.IPublishedContent.GetProperty(System.String)">
-            <summary>
-            Returns a property on the object based on an alias
-            </summary>
-            <param name="alias"></param>
-            <returns></returns>
-            <remarks>
-            Although we do have a a property to return Properties of the object, in some cases a custom implementation may not know
-            about all properties until specifically asked for one by alias. 
-            
-            This method is mostly used in places such as DynamicPublishedContent when trying to resolve a property based on an alias. 
-            In some cases Pulish Stores, a property value may exist in multiple places and we need to fallback to different cached locations
-            therefore sometimes the 'Properties' collection may not be sufficient.
-            </remarks>
-        </member>
-        <member name="P:Umbraco.Core.Models.IPublishedContent.Item(System.String)">
-            <summary>
-            Returns the property value for the property alias specified
-            </summary>
-            <param name="propertyAlias"></param>
-            <returns></returns>
+            <param name="sourceValue">The source value.</param>
+            <returns>An <c>Attempt</c> representing the result of the conversion.</returns>
+            <remarks>The source value is dependent on the content cache. With the Xml content cache it
+            is always a string, but with other caches it may be an object (numeric, time...) matching
+            what is in the database. Be prepared.</remarks>
         </member>
         <member name="T:Umbraco.Core.ActionsResolver">
             <summary>
@@ -12501,22 +13070,29 @@
         </member>
         <member name="T:Umbraco.Core.PropertyEditors.PropertyEditorValueConvertersResolver">
             <summary>
-            Manages the list of legacy IPropertyEditorValueConverter's
+            Manages the list of IPropertyEditorValueConverter's
             </summary>
         </member>
-        <member name="T:Umbraco.Core.PropertyEditors.TinyMcePropertyValueConverter">
+        <member name="M:Umbraco.Core.PropertyEditors.PropertyEditorValueConvertersResolver.#ctor(System.Collections.Generic.IEnumerable{System.Type})">
             <summary>
-            Value converter for the RTE so that it always returns IHtmlString so that Html.Raw doesn't have to be used.
+            Initializes a new instance of the <see cref="T:Umbraco.Core.PropertyEditors.PropertyEditorValueConvertersResolver"/> class with 
+            an initial list of converter types.
             </summary>
+            <param name="converters">The list of converter types</param>
+            <remarks>The resolver is created by the <c>WebBootManager</c> and thus the constructor remains internal.</remarks>
         </member>
-        <member name="M:Umbraco.Core.PropertyEditors.YesNoPropertyValueConverter.ConvertSourceToObject(System.Object,Umbraco.Core.Models.PublishedPropertyDefinition,System.Boolean)">
+        <member name="M:Umbraco.Core.PropertyEditors.PropertyEditorValueConvertersResolver.#ctor(System.Type[])">
             <summary>
-            Convert from string boolean or 0 or 1 to real boolean
+            Initializes a new instance of the <see cref="T:Umbraco.Core.PropertyEditors.PropertyEditorValueConvertersResolver"/> class with 
+            an initial list of converter types.
             </summary>
-            <param name="valueToConvert"></param>
-            <param name="propertyDefinition"></param>
-            <param name="isPreviewing"></param>
-            <returns></returns>
+            <param name="converters">The list of converter types</param>
+            <remarks>The resolver is created by the <c>WebBootManager</c> and thus the constructor remains internal.</remarks>
+        </member>
+        <member name="P:Umbraco.Core.PropertyEditors.PropertyEditorValueConvertersResolver.Converters">
+            <summary>
+            Gets the converteres.
+            </summary>
         </member>
         <member name="T:Umbraco.Core.ObjectResolution.ObjectLifetimeScope">
             <summary>
@@ -12585,45 +13161,6 @@
             <para>Should be used in a <c>using(Resolution.DirtyBackdoorToConfiguration) { ... }</c> mode.</para>
             <para>Because we just lift the frozen state, and we don't actually re-freeze, the <c>Frozen</c> event does not trigger.</para>
             </remarks>
-        </member>
-        <member name="T:Umbraco.Core.PublishedContentHelper">
-            <summary>
-            Utility class for dealing with data types and value conversions
-            </summary>
-            <remarks>
-            TODO: The logic for the GetDataType + cache should probably be moved to a service, no ? 
-            
-            We inherit from ApplicationEventHandler so we can bind to the ContentTypeService events to ensure that our local cache
-            object gets cleared when content types change.
-            </remarks>
-        </member>
-        <member name="M:Umbraco.Core.PublishedContentHelper.ClearPropertyTypeCache">
-            <summary>
-            Used to invalidate the cache from the ICacherefresher
-            </summary>
-        </member>
-        <member name="F:Umbraco.Core.PublishedContentHelper.GetDataTypeCallback">
-            <summary>
-            This callback is used only for unit tests which enables us to return any data we want and not rely on having the data in a database
-            </summary>
-        </member>
-        <member name="M:Umbraco.Core.PublishedContentHelper.GetPropertyEditor(Umbraco.Core.ApplicationContext,System.String,System.String,Umbraco.Core.Models.PublishedItemType)">
-            <summary>
-            Return the GUID Id for the data type assigned to the document type with the property alias
-            </summary>
-            <param name="applicationContext"></param>
-            <param name="docTypeAlias"></param>
-            <param name="propertyAlias"></param>
-            <param name="itemType"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Umbraco.Core.PublishedContentHelper.ConvertPropertyValue(System.Object,Umbraco.Core.Models.PublishedPropertyDefinition)">
-            <summary>
-            Converts the currentValue to a correctly typed value based on known registered converters, then based on known standards.
-            </summary>
-            <param name="currentValue"></param>
-            <param name="propertyDefinition"></param>
-            <returns></returns>
         </member>
         <member name="T:Umbraco.Core.Publishing.BasePublishingStrategy">
             <summary>
@@ -12960,12 +13497,11 @@
             This clears the forms authentication cookie
             </summary>
         </member>
-        <member name="M:Umbraco.Core.Security.AuthenticationExtensions.RenewUmbracoAuthTicket(System.Web.HttpContextBase,System.Int32)">
+        <member name="M:Umbraco.Core.Security.AuthenticationExtensions.RenewUmbracoAuthTicket(System.Web.HttpContextBase)">
             <summary>
             Renews the Umbraco authentication ticket
             </summary>
             <param name="http"></param>
-            <param name="timeoutInMinutes"></param>
             <returns></returns>
         </member>
         <member name="M:Umbraco.Core.Security.AuthenticationExtensions.CreateUmbracoAuthTicket(System.Web.HttpContextBase,Umbraco.Core.Security.UserData)">
@@ -12974,6 +13510,20 @@
             </summary>
             <param name="http"></param>
             <param name="userdata"></param>
+        </member>
+        <member name="M:Umbraco.Core.Security.AuthenticationExtensions.GetRemainingAuthSeconds(System.Web.HttpContextBase)">
+            <summary>
+            returns the number of seconds the user has until their auth session times out
+            </summary>
+            <param name="http"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Security.AuthenticationExtensions.GetRemainingAuthSeconds(System.Web.Security.FormsAuthenticationTicket)">
+            <summary>
+            returns the number of seconds the user has until their auth session times out
+            </summary>
+            <param name="ticket"></param>
+            <returns></returns>
         </member>
         <member name="M:Umbraco.Core.Security.AuthenticationExtensions.GetUmbracoAuthTicket(System.Web.HttpContextBase)">
             <summary>
@@ -12989,8 +13539,8 @@
             <param name="http"></param>
             <param name="cookieName"></param>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:Umbraco.Core.Security.AuthenticationExtensions.RenewAuthTicket(System.Web.HttpContextBase,System.String,System.String,System.Int32)" -->
-        <member name="M:Umbraco.Core.Security.AuthenticationExtensions.CreateAuthTicket(System.Web.HttpContextBase,System.String,System.String,System.Int32,System.Int32,System.String,System.String,System.String)">
+        <!-- Badly formed XML comment ignored for member "M:Umbraco.Core.Security.AuthenticationExtensions.RenewAuthTicket(System.Web.HttpContextBase,System.String,System.String)" -->
+        <member name="M:Umbraco.Core.Security.AuthenticationExtensions.CreateAuthTicketAndCookie(System.Web.HttpContextBase,System.String,System.String,System.Int32,System.Int32,System.String,System.String,System.String)">
             <summary>
             Creates a custom FormsAuthentication ticket with the data specified
             </summary>
@@ -13334,6 +13884,14 @@
             <param name="userId">Optional Id of the User issueing the publishing</param>
             <returns>True if publishing succeeded, otherwise False</returns>
         </member>
+        <member name="M:Umbraco.Core.Services.IContentService.PublishWithStatus(Umbraco.Core.Models.IContent,System.Int32)">
+            <summary>
+            Publishes a single <see cref="T:Umbraco.Core.Models.IContent"/> object
+            </summary>
+            <param name="content">The <see cref="T:Umbraco.Core.Models.IContent"/> to publish</param>
+            <param name="userId">Optional Id of the User issueing the publishing</param>
+            <returns>The published status attempt</returns>
+        </member>
         <member name="M:Umbraco.Core.Services.IContentService.PublishWithChildren(Umbraco.Core.Models.IContent,System.Int32)">
             <summary>
             Publishes a <see cref="T:Umbraco.Core.Models.IContent"/> object and all its children
@@ -13341,6 +13899,15 @@
             <param name="content">The <see cref="T:Umbraco.Core.Models.IContent"/> to publish along with its children</param>
             <param name="userId">Optional Id of the User issueing the publishing</param>
             <returns>True if publishing succeeded, otherwise False</returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.IContentService.PublishWithChildrenWithStatus(Umbraco.Core.Models.IContent,System.Int32,System.Boolean)">
+            <summary>
+            Publishes a <see cref="T:Umbraco.Core.Models.IContent"/> object and all its children
+            </summary>
+            <param name="content">The <see cref="T:Umbraco.Core.Models.IContent"/> to publish along with its children</param>
+            <param name="userId">Optional Id of the User issueing the publishing</param>
+            <param name="includeUnpublished"></param>
+            <returns>The list of statuses for all published items</returns>
         </member>
         <member name="M:Umbraco.Core.Services.IContentService.UnPublish(Umbraco.Core.Models.IContent,System.Int32)">
             <summary>
@@ -13351,6 +13918,15 @@
             <returns>True if unpublishing succeeded, otherwise False</returns>
         </member>
         <member name="M:Umbraco.Core.Services.IContentService.SaveAndPublish(Umbraco.Core.Models.IContent,System.Int32,System.Boolean)">
+            <summary>
+            Saves and Publishes a single <see cref="T:Umbraco.Core.Models.IContent"/> object
+            </summary>
+            <param name="content">The <see cref="T:Umbraco.Core.Models.IContent"/> to save and publish</param>
+            <param name="userId">Optional Id of the User issueing the publishing</param>
+            <param name="raiseEvents">Optional boolean indicating whether or not to raise save events.</param>
+            <returns>True if publishing succeeded, otherwise False</returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.IContentService.SaveAndPublishWithStatus(Umbraco.Core.Models.IContent,System.Int32,System.Boolean)">
             <summary>
             Saves and Publishes a single <see cref="T:Umbraco.Core.Models.IContent"/> object
             </summary>
@@ -13687,12 +14263,29 @@
             <param name="userId">Optional Id of the User issueing the publishing</param>
             <returns>True if publishing succeeded, otherwise False</returns>
         </member>
+        <member name="M:Umbraco.Core.Services.ContentService.PublishWithStatus(Umbraco.Core.Models.IContent,System.Int32)">
+            <summary>
+            Publishes a single <see cref="T:Umbraco.Core.Models.IContent"/> object
+            </summary>
+            <param name="content">The <see cref="T:Umbraco.Core.Models.IContent"/> to publish</param>
+            <param name="userId">Optional Id of the User issueing the publishing</param>
+            <returns>True if publishing succeeded, otherwise False</returns>
+        </member>
         <member name="M:Umbraco.Core.Services.ContentService.PublishWithChildren(Umbraco.Core.Models.IContent,System.Int32)">
             <summary>
             Publishes a <see cref="T:Umbraco.Core.Models.IContent"/> object and all its children
             </summary>
             <param name="content">The <see cref="T:Umbraco.Core.Models.IContent"/> to publish along with its children</param>
             <param name="userId">Optional Id of the User issueing the publishing</param>
+            <returns>True if publishing succeeded, otherwise False</returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.ContentService.PublishWithChildrenWithStatus(Umbraco.Core.Models.IContent,System.Int32,System.Boolean)">
+            <summary>
+            Publishes a <see cref="T:Umbraco.Core.Models.IContent"/> object and all its children
+            </summary>
+            <param name="content">The <see cref="T:Umbraco.Core.Models.IContent"/> to publish along with its children</param>
+            <param name="userId">Optional Id of the User issueing the publishing</param>
+            <param name="includeUnpublished">set to true if you want to also publish children that are currently unpublished</param>
             <returns>True if publishing succeeded, otherwise False</returns>
         </member>
         <member name="M:Umbraco.Core.Services.ContentService.UnPublish(Umbraco.Core.Models.IContent,System.Int32)">
@@ -13704,6 +14297,15 @@
             <returns>True if unpublishing succeeded, otherwise False</returns>
         </member>
         <member name="M:Umbraco.Core.Services.ContentService.SaveAndPublish(Umbraco.Core.Models.IContent,System.Int32,System.Boolean)">
+            <summary>
+            Saves and Publishes a single <see cref="T:Umbraco.Core.Models.IContent"/> object
+            </summary>
+            <param name="content">The <see cref="T:Umbraco.Core.Models.IContent"/> to save and publish</param>
+            <param name="userId">Optional Id of the User issueing the publishing</param>
+            <param name="raiseEvents">Optional boolean indicating whether or not to raise save events.</param>
+            <returns>True if publishing succeeded, otherwise False</returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.ContentService.SaveAndPublishWithStatus(Umbraco.Core.Models.IContent,System.Int32,System.Boolean)">
             <summary>
             Saves and Publishes a single <see cref="T:Umbraco.Core.Models.IContent"/> object
             </summary>
@@ -13842,32 +14444,6 @@
             <param name="userId"></param>
             <param name="raiseEvents"></param>
             <returns>True if sorting succeeded, otherwise False</returns>
-        </member>
-        <member name="M:Umbraco.Core.Services.ContentService.PublishInternal(Umbraco.Core.Models.IContent,System.Int32)">
-            <summary>
-            Internal method that Publishes a single <see cref="T:Umbraco.Core.Models.IContent"/> object for legacy purposes.
-            </summary>
-            <param name="content">The <see cref="T:Umbraco.Core.Models.IContent"/> to publish</param>
-            <param name="userId">Optional Id of the User issueing the publishing</param>
-            <returns>True if publishing succeeded, otherwise False</returns>
-        </member>
-        <member name="M:Umbraco.Core.Services.ContentService.PublishWithChildrenInternal(Umbraco.Core.Models.IContent,System.Int32,System.Boolean)">
-            <summary>
-            Internal method that Publishes a <see cref="T:Umbraco.Core.Models.IContent"/> object and all its children for legacy purposes.
-            </summary>
-            <param name="content">The <see cref="T:Umbraco.Core.Models.IContent"/> to publish along with its children</param>
-            <param name="userId">Optional Id of the User issueing the publishing</param>
-            <param name="includeUnpublished">If set to true, this will also publish descendants that are completely unpublished, normally this will only publish children that have previously been published</param>
-            <returns>True if publishing succeeded, otherwise False</returns>
-        </member>
-        <member name="M:Umbraco.Core.Services.ContentService.SaveAndPublishInternal(Umbraco.Core.Models.IContent,System.Int32,System.Boolean)">
-            <summary>
-            Saves and Publishes a single <see cref="T:Umbraco.Core.Models.IContent"/> object
-            </summary>
-            <param name="content">The <see cref="T:Umbraco.Core.Models.IContent"/> to save and publish</param>
-            <param name="userId">Optional Id of the User issueing the publishing</param>
-            <param name="raiseEvents">Optional boolean indicating whether or not to raise save events.</param>
-            <returns>True if publishing succeeded, otherwise False</returns>
         </member>
         <member name="M:Umbraco.Core.Services.ContentService.GetPublishedDescendants(Umbraco.Core.Models.IContent)">
             <summary>
@@ -14148,20 +14724,6 @@
             <remarks>Deleting a <see cref="T:Umbraco.Core.Models.IContentType"/> will delete all the <see cref="T:Umbraco.Core.Models.IContent"/> objects based on this <see cref="T:Umbraco.Core.Models.IContentType"/></remarks>
             <param name="userId">Optional Id of the User deleting the ContentTypes</param>
         </member>
-        <member name="M:Umbraco.Core.Services.IContentTypeService.GetMemberType(System.Int32)">
-            <summary>
-            Gets an <see cref="T:Umbraco.Core.Models.IMemberType"/> object by its Id
-            </summary>
-            <param name="id">Id of the <see cref="T:Umbraco.Core.Models.IMediaType"/> to retrieve</param>
-            <returns><see cref="T:Umbraco.Core.Models.IMediaType"/></returns>
-        </member>
-        <member name="M:Umbraco.Core.Services.IContentTypeService.GetMemberType(System.String)">
-            <summary>
-            Gets an <see cref="T:Umbraco.Core.Models.IMemberType"/> object by its Alias
-            </summary>
-            <param name="alias">Alias of the <see cref="T:Umbraco.Core.Models.IMediaType"/> to retrieve</param>
-            <returns><see cref="T:Umbraco.Core.Models.IMediaType"/></returns>
-        </member>
         <member name="M:Umbraco.Core.Services.IContentTypeService.GetMediaType(System.Int32)">
             <summary>
             Gets an <see cref="T:Umbraco.Core.Models.IMediaType"/> object by its Id
@@ -14319,20 +14881,6 @@
             <remarks>
             Deleting a <see cref="T:Umbraco.Core.Models.IContentType"/> will delete all the <see cref="T:Umbraco.Core.Models.IContent"/> objects based on this <see cref="T:Umbraco.Core.Models.IContentType"/>
             </remarks>
-        </member>
-        <member name="M:Umbraco.Core.Services.ContentTypeService.GetMemberType(System.Int32)">
-            <summary>
-            Gets an <see cref="T:Umbraco.Core.Models.IMemberType"/> object by its Id
-            </summary>
-            <param name="id">Id of the <see cref="T:Umbraco.Core.Models.IMemberType"/> to retrieve</param>
-            <returns><see cref="T:Umbraco.Core.Models.IMemberType"/></returns>
-        </member>
-        <member name="M:Umbraco.Core.Services.ContentTypeService.GetMemberType(System.String)">
-            <summary>
-            Gets an <see cref="T:Umbraco.Core.Models.IMemberType"/> object by its Alias
-            </summary>
-            <param name="alias">Alias of the <see cref="T:Umbraco.Core.Models.IMemberType"/> to retrieve</param>
-            <returns><see cref="T:Umbraco.Core.Models.IMemberType"/></returns>
         </member>
         <member name="M:Umbraco.Core.Services.ContentTypeService.GetMediaType(System.Int32)">
             <summary>
@@ -15748,6 +16296,20 @@
             <param name="ids">Optional list of ids</param>
             <returns>An Enumerable list of <see cref="T:Umbraco.Core.Models.IContentType"/> objects</returns>
         </member>
+        <member name="M:Umbraco.Core.Services.IMemberTypeService.GetMemberType(System.Int32)">
+            <summary>
+            Gets an <see cref="T:Umbraco.Core.Models.IMemberType"/> object by its Id
+            </summary>
+            <param name="id">Id of the <see cref="T:Umbraco.Core.Models.IMediaType"/> to retrieve</param>
+            <returns><see cref="T:Umbraco.Core.Models.IMediaType"/></returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.IMemberTypeService.GetMemberType(System.String)">
+            <summary>
+            Gets an <see cref="T:Umbraco.Core.Models.IMemberType"/> object by its Alias
+            </summary>
+            <param name="alias">Alias of the <see cref="T:Umbraco.Core.Models.IMediaType"/> to retrieve</param>
+            <returns><see cref="T:Umbraco.Core.Models.IMediaType"/></returns>
+        </member>
         <member name="M:Umbraco.Core.Services.ISectionService.Initialize(System.Collections.Generic.IEnumerable{Umbraco.Core.Models.Section})">
             <summary>
             Ensures all available sections exist in the storage medium
@@ -16445,6 +17007,13 @@
             <param name="ids"></param>
             <returns></returns>
         </member>
+        <member name="M:Umbraco.Core.Services.MemberService.FindMembersByEmail(System.String)">
+            <summary>
+            Does a search for members that contain the specified string in their email address
+            </summary>
+            <param name="emailStringToMatch"></param>
+            <returns></returns>
+        </member>
         <member name="M:Umbraco.Core.Services.MemberService.GetMembersByPropertyValue(System.String,System.String)">
             <summary>
             Gets a list of Members with a certain string property value
@@ -16523,6 +17092,20 @@
             Saves an updated Member
             </summary>
             <param name="member"></param>
+        </member>
+        <member name="M:Umbraco.Core.Services.MemberTypeService.GetMemberType(System.Int32)">
+            <summary>
+            Gets an <see cref="T:Umbraco.Core.Models.IMemberType"/> object by its Id
+            </summary>
+            <param name="id">Id of the <see cref="T:Umbraco.Core.Models.IMemberType"/> to retrieve</param>
+            <returns><see cref="T:Umbraco.Core.Models.IMemberType"/></returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.MemberTypeService.GetMemberType(System.String)">
+            <summary>
+            Gets an <see cref="T:Umbraco.Core.Models.IMemberType"/> object by its Alias
+            </summary>
+            <param name="alias">Alias of the <see cref="T:Umbraco.Core.Models.IMemberType"/> to retrieve</param>
+            <returns><see cref="T:Umbraco.Core.Models.IMemberType"/></returns>
         </member>
         <member name="M:Umbraco.Core.Services.RelationService.GetById(System.Int32)">
             <summary>
@@ -18848,10 +19431,23 @@
             <remarks></remarks>
         </member>
         <member name="M:Umbraco.Core.EnumerableExtensions.FindIndex``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})">
-            <summary>Finds the index of the first item matching an expression in an enumerable.</summary>
+            <summary>
+            Finds the index of the first item matching an expression in an enumerable.
+            </summary>
+            <typeparam name="T">The type of the enumerated objects.</typeparam>
             <param name="items">The enumerable to search.</param>
             <param name="predicate">The expression to test the items against.</param>
-            <returns>The index of the first matching item, or -1 if no items match.</returns>
+            <returns>The index of the first matching item, or -1.</returns>
+        </member>
+        <member name="M:Umbraco.Core.EnumerableExtensions.FindIndex``1(System.Collections.Generic.IEnumerable{``0},System.Int32,System.Func{``0,System.Boolean})">
+            <summary>
+            Finds the index of the first item matching an expression in an enumerable.
+            </summary>
+            <typeparam name="T">The type of the enumerated objects.</typeparam>
+            <param name="items">The enumerable to search.</param>
+            <param name="startIndex">The index to start at.</param>
+            <param name="predicate">The expression to test the items against.</param>
+            <returns>The index of the first matching item, or -1.</returns>
         </member>
         <member name="M:Umbraco.Core.EnumerableExtensions.IndexOf``1(System.Collections.Generic.IEnumerable{``0},``0)">
             <summary>Finds the index of the first occurence of an item in an enumerable.</summary>
@@ -20177,6 +20773,454 @@
             </summary>
             <param name="tag"></param>
             <returns></returns>
+        </member>
+        <member name="T:Umbraco.Core.Xml.XPath.MacroNavigator">
+            <summary>
+            Provides a cursor model for navigating {macro /} as if it were XML.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Xml.XPath.MacroNavigator.#ctor(System.Collections.Generic.IEnumerable{Umbraco.Core.Xml.XPath.MacroNavigator.MacroParameter})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Umbraco.Core.Xml.XPath.MacroNavigator"/> class with macro parameters.
+            </summary>
+            <param name="parameters">The macro parameters.</param>
+        </member>
+        <member name="M:Umbraco.Core.Xml.XPath.MacroNavigator.#ctor(Umbraco.Core.Xml.XPath.MacroNavigator.MacroRoot,System.Xml.XmlNameTable,Umbraco.Core.Xml.XPath.MacroNavigator.State)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Umbraco.Core.Xml.XPath.MacroNavigator"/> class with a macro node,
+            a name table and a state.
+            </summary>
+            <param name="macro">The macro node.</param>
+            <param name="nameTable">The name table.</param>
+            <param name="state">The state.</param>
+            <remarks>Privately used for cloning a navigator.</remarks>
+        </member>
+        <member name="M:Umbraco.Core.Xml.XPath.MacroNavigator.Clone">
+            <summary>
+            Creates a new XPathNavigator positioned at the same node as this XPathNavigator.
+            </summary>
+            <returns>A new XPathNavigator positioned at the same node as this XPathNavigator.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Xml.XPath.MacroNavigator.IsSamePosition(System.Xml.XPath.XPathNavigator)">
+            <summary>
+            Determines whether the current XPathNavigator is at the same position as the specified XPathNavigator.
+            </summary>
+            <param name="nav">The XPathNavigator to compare to this XPathNavigator.</param>
+            <returns>true if the two XPathNavigator objects have the same position; otherwise, false.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Xml.XPath.MacroNavigator.MoveTo(System.Xml.XPath.XPathNavigator)">
+            <summary>
+            Moves the XPathNavigator to the same position as the specified XPathNavigator.
+            </summary>
+            <param name="nav">The XPathNavigator positioned on the node that you want to move to. </param>
+            <returns>Returns true if the XPathNavigator is successful moving to the same position as the specified XPathNavigator;
+            otherwise, false. If false, the position of the XPathNavigator is unchanged.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Xml.XPath.MacroNavigator.MoveToFirstAttribute">
+            <summary>
+            Moves the XPathNavigator to the first attribute of the current node.
+            </summary>
+            <returns>Returns true if the XPathNavigator is successful moving to the first attribute of the current node;
+            otherwise, false. If false, the position of the XPathNavigator is unchanged.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Xml.XPath.MacroNavigator.MoveToFirstChild">
+            <summary>
+            Moves the XPathNavigator to the first child node of the current node.
+            </summary>
+            <returns>Returns true if the XPathNavigator is successful moving to the first child node of the current node;
+            otherwise, false. If false, the position of the XPathNavigator is unchanged.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Xml.XPath.MacroNavigator.MoveToFirstNamespace(System.Xml.XPath.XPathNamespaceScope)">
+            <summary>
+            Moves the XPathNavigator to the first namespace node that matches the XPathNamespaceScope specified.
+            </summary>
+            <param name="namespaceScope">An XPathNamespaceScope value describing the namespace scope. </param>
+            <returns>Returns true if the XPathNavigator is successful moving to the first namespace node;
+            otherwise, false. If false, the position of the XPathNavigator is unchanged.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Xml.XPath.MacroNavigator.MoveToNextNamespace(System.Xml.XPath.XPathNamespaceScope)">
+            <summary>
+            Moves the XPathNavigator to the next namespace node matching the XPathNamespaceScope specified.
+            </summary>
+            <param name="namespaceScope">An XPathNamespaceScope value describing the namespace scope. </param>
+            <returns>Returns true if the XPathNavigator is successful moving to the next namespace node;
+            otherwise, false. If false, the position of the XPathNavigator is unchanged.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Xml.XPath.MacroNavigator.MoveToId(System.String)">
+            <summary>
+            Moves to the node that has an attribute of type ID whose value matches the specified String.
+            </summary>
+            <param name="id">A String representing the ID value of the node to which you want to move.</param>
+            <returns>true if the XPathNavigator is successful moving; otherwise, false.
+            If false, the position of the navigator is unchanged.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Xml.XPath.MacroNavigator.MoveToNext">
+            <summary>
+            Moves the XPathNavigator to the next sibling node of the current node.
+            </summary>
+            <returns>true if the XPathNavigator is successful moving to the next sibling node;
+            otherwise, false if there are no more siblings or if the XPathNavigator is currently
+            positioned on an attribute node. If false, the position of the XPathNavigator is unchanged.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Xml.XPath.MacroNavigator.MoveToPrevious">
+            <summary>
+            Moves the XPathNavigator to the previous sibling node of the current node.
+            </summary>
+            <returns>Returns true if the XPathNavigator is successful moving to the previous sibling node;
+            otherwise, false if there is no previous sibling node or if the XPathNavigator is currently
+            positioned on an attribute node. If false, the position of the XPathNavigator is unchanged.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Xml.XPath.MacroNavigator.MoveToNextAttribute">
+            <summary>
+            Moves the XPathNavigator to the next attribute.
+            </summary>
+            <returns>Returns true if the XPathNavigator is successful moving to the next attribute;
+            false if there are no more attributes. If false, the position of the XPathNavigator is unchanged.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Xml.XPath.MacroNavigator.MoveToParent">
+            <summary>
+            Moves the XPathNavigator to the parent node of the current node.
+            </summary>
+            <returns>Returns true if the XPathNavigator is successful moving to the parent node of the current node;
+            otherwise, false. If false, the position of the XPathNavigator is unchanged.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Xml.XPath.MacroNavigator.MoveToRoot">
+            <summary>
+            Moves the XPathNavigator to the root node that the current node belongs to.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Xml.XPath.MacroNavigator.IsEmptyElement">
+            <summary>
+            Gets a value indicating whether the current node is an empty element without an end element tag.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Xml.XPath.MacroNavigator.Name">
+            <summary>
+            Gets the qualified name of the current node.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Xml.XPath.MacroNavigator.LocalName">
+            <summary>
+            Gets the Name of the current node without any namespace prefix.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Xml.XPath.MacroNavigator.BaseURI">
+            <summary>
+            Gets the base URI for the current node.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Xml.XPath.MacroNavigator.NameTable">
+            <summary>
+            Gets the XmlNameTable of the XPathNavigator.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Xml.XPath.MacroNavigator.NamespaceURI">
+            <summary>
+            Gets the namespace URI of the current node.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Xml.XPath.MacroNavigator.NodeType">
+            <summary>
+            Gets the XPathNodeType of the current node.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Xml.XPath.MacroNavigator.Prefix">
+            <summary>
+            Gets the namespace prefix associated with the current node.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Xml.XPath.MacroNavigator.Value">
+            <summary>
+            Gets the string value of the item.
+            </summary>
+            <remarks>Does not fully behave as per the specs, as we report empty value on root and macro elements, and we start
+            reporting values only on parameter elements. This is because, otherwise, we would might dump the whole database
+            and it probably does not make sense at Umbraco level.</remarks>
+        </member>
+        <member name="T:Umbraco.Core.Xml.XPath.INavigableContentType">
+            <summary>
+            Represents the type of a content that can be navigated via XPath.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Xml.XPath.INavigableContentType.Name">
+            <summary>
+            Gets the name of the content type.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Xml.XPath.INavigableContentType.FieldTypes">
+            <summary>
+            Gets the field types of the content type.
+            </summary>
+            <remarks>This includes the attributes and the properties.</remarks>
+        </member>
+        <member name="T:Umbraco.Core.Xml.XPath.NavigableNavigator">
+            <summary>
+            Provides a cursor model for navigating Umbraco data as if it were XML.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Xml.XPath.NavigableNavigator.#ctor(Umbraco.Core.Xml.XPath.INavigableSource)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Umbraco.Core.Xml.XPath.NavigableNavigator"/> class with a content source.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Xml.XPath.NavigableNavigator.#ctor(Umbraco.Core.Xml.XPath.INavigableSource,Umbraco.Core.Xml.XPath.INavigableContent)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Umbraco.Core.Xml.XPath.NavigableNavigator"/> class with a content source,
+            and an optional root content.
+            </summary>
+            <param name="source">The content source.</param>
+            <param name="content">The root content.</param>
+            <remarks>When no root content is supplied then the root of the source is used.</remarks>
+        </member>
+        <member name="M:Umbraco.Core.Xml.XPath.NavigableNavigator.#ctor(Umbraco.Core.Xml.XPath.INavigableSource,System.Xml.XmlNameTable,Umbraco.Core.Xml.XPath.NavigableNavigator.State)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Umbraco.Core.Xml.XPath.NavigableNavigator"/> class with a content source, a name table and a state.
+            </summary>
+            <param name="source">The content source.</param>
+            <param name="nameTable">The name table.</param>
+            <param name="state">The state.</param>
+            <remarks>Privately used for cloning a navigator.</remarks>
+        </member>
+        <member name="M:Umbraco.Core.Xml.XPath.NavigableNavigator.Clone">
+            <summary>
+            Creates a new XPathNavigator positioned at the same node as this XPathNavigator.
+            </summary>
+            <returns>A new XPathNavigator positioned at the same node as this XPathNavigator.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Xml.XPath.NavigableNavigator.CloneWithNewRoot(System.String)">
+            <summary>
+            Creates a new XPathNavigator using the same source but positioned at a new root.
+            </summary>
+            <returns>A new XPathNavigator using the same source and positioned at a new root.</returns>
+            <remarks>The new root can be above this navigator's root.</remarks>
+        </member>
+        <member name="M:Umbraco.Core.Xml.XPath.NavigableNavigator.IsSamePosition(System.Xml.XPath.XPathNavigator)">
+            <summary>
+            Determines whether the current XPathNavigator is at the same position as the specified XPathNavigator.
+            </summary>
+            <param name="nav">The XPathNavigator to compare to this XPathNavigator.</param>
+            <returns>true if the two XPathNavigator objects have the same position; otherwise, false.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Xml.XPath.NavigableNavigator.MoveTo(System.Xml.XPath.XPathNavigator)">
+            <summary>
+            Moves the XPathNavigator to the same position as the specified XPathNavigator.
+            </summary>
+            <param name="nav">The XPathNavigator positioned on the node that you want to move to. </param>
+            <returns>Returns true if the XPathNavigator is successful moving to the same position as the specified XPathNavigator;
+            otherwise, false. If false, the position of the XPathNavigator is unchanged.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Xml.XPath.NavigableNavigator.MoveToFirstAttribute">
+            <summary>
+            Moves the XPathNavigator to the first attribute of the current node.
+            </summary>
+            <returns>Returns true if the XPathNavigator is successful moving to the first attribute of the current node;
+            otherwise, false. If false, the position of the XPathNavigator is unchanged.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Xml.XPath.NavigableNavigator.MoveToFirstChild">
+            <summary>
+            Moves the XPathNavigator to the first child node of the current node.
+            </summary>
+            <returns>Returns true if the XPathNavigator is successful moving to the first child node of the current node;
+            otherwise, false. If false, the position of the XPathNavigator is unchanged.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Xml.XPath.NavigableNavigator.MoveToFirstNamespace(System.Xml.XPath.XPathNamespaceScope)">
+            <summary>
+            Moves the XPathNavigator to the first namespace node that matches the XPathNamespaceScope specified.
+            </summary>
+            <param name="namespaceScope">An XPathNamespaceScope value describing the namespace scope. </param>
+            <returns>Returns true if the XPathNavigator is successful moving to the first namespace node;
+            otherwise, false. If false, the position of the XPathNavigator is unchanged.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Xml.XPath.NavigableNavigator.MoveToNextNamespace(System.Xml.XPath.XPathNamespaceScope)">
+            <summary>
+            Moves the XPathNavigator to the next namespace node matching the XPathNamespaceScope specified.
+            </summary>
+            <param name="namespaceScope">An XPathNamespaceScope value describing the namespace scope. </param>
+            <returns>Returns true if the XPathNavigator is successful moving to the next namespace node;
+            otherwise, false. If false, the position of the XPathNavigator is unchanged.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Xml.XPath.NavigableNavigator.MoveToId(System.String)">
+            <summary>
+            Moves to the node that has an attribute of type ID whose value matches the specified String.
+            </summary>
+            <param name="id">A String representing the ID value of the node to which you want to move.</param>
+            <returns>true if the XPathNavigator is successful moving; otherwise, false.
+            If false, the position of the navigator is unchanged.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Xml.XPath.NavigableNavigator.MoveToNext">
+            <summary>
+            Moves the XPathNavigator to the next sibling node of the current node.
+            </summary>
+            <returns>true if the XPathNavigator is successful moving to the next sibling node;
+            otherwise, false if there are no more siblings or if the XPathNavigator is currently
+            positioned on an attribute node. If false, the position of the XPathNavigator is unchanged.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Xml.XPath.NavigableNavigator.MoveToPrevious">
+            <summary>
+            Moves the XPathNavigator to the previous sibling node of the current node.
+            </summary>
+            <returns>Returns true if the XPathNavigator is successful moving to the previous sibling node;
+            otherwise, false if there is no previous sibling node or if the XPathNavigator is currently
+            positioned on an attribute node. If false, the position of the XPathNavigator is unchanged.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Xml.XPath.NavigableNavigator.MoveToNextAttribute">
+            <summary>
+            Moves the XPathNavigator to the next attribute.
+            </summary>
+            <returns>Returns true if the XPathNavigator is successful moving to the next attribute;
+            false if there are no more attributes. If false, the position of the XPathNavigator is unchanged.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Xml.XPath.NavigableNavigator.MoveToParent">
+            <summary>
+            Moves the XPathNavigator to the parent node of the current node.
+            </summary>
+            <returns>Returns true if the XPathNavigator is successful moving to the parent node of the current node;
+            otherwise, false. If false, the position of the XPathNavigator is unchanged.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Xml.XPath.NavigableNavigator.MoveToRoot">
+            <summary>
+            Moves the XPathNavigator to the root node that the current node belongs to.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Xml.XPath.NavigableNavigator.UnderlyingObject">
+            <summary>
+            Gets the underlying content object.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Xml.XPath.NavigableNavigator.IsEmptyElement">
+            <summary>
+            Gets a value indicating whether the current node is an empty element without an end element tag.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Xml.XPath.NavigableNavigator.Name">
+            <summary>
+            Gets the qualified name of the current node.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Xml.XPath.NavigableNavigator.LocalName">
+            <summary>
+            Gets the Name of the current node without any namespace prefix.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Xml.XPath.NavigableNavigator.BaseURI">
+            <summary>
+            Gets the base URI for the current node.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Xml.XPath.NavigableNavigator.NameTable">
+            <summary>
+            Gets the XmlNameTable of the XPathNavigator.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Xml.XPath.NavigableNavigator.NamespaceURI">
+            <summary>
+            Gets the namespace URI of the current node.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Xml.XPath.NavigableNavigator.NodeType">
+            <summary>
+            Gets the XPathNodeType of the current node.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Xml.XPath.NavigableNavigator.Prefix">
+            <summary>
+            Gets the namespace prefix associated with the current node.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Xml.XPath.NavigableNavigator.Value">
+            <summary>
+            Gets the string value of the item.
+            </summary>
+            <remarks>Does not fully behave as per the specs, as we report empty value on content elements, and we start
+            reporting values only on property elements. This is because, otherwise, we would dump the whole database
+            and it probably does not make sense at Umbraco level.</remarks>
+        </member>
+        <member name="T:Umbraco.Core.Xml.XPath.INavigableContent">
+            <summary>
+            Represents a content that can be navigated via XPath.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Xml.XPath.INavigableContent.Value(System.Int32)">
+            <summary>
+            Gets the value of a field of the navigable content for XPath navigation use.
+            </summary>
+            <param name="index">The field index.</param>
+            <returns>The value of the field for XPath navigation use.</returns>
+            <remarks>
+            <para>Fields are attributes or elements depending on their relative index value compared
+            to source.LastAttributeIndex.</para>
+            <para>For attributes, the value must be a string.</para>
+            <para>For elements, the value should an <c>XPathNavigator</c> instance if the field is xml
+            and has content (is not empty), <c>null</c> to indicate that the element is empty, or a string
+            which can be empty, whitespace... depending on what the data type wants to expose.</para>
+            </remarks>
+        </member>
+        <member name="P:Umbraco.Core.Xml.XPath.INavigableContent.Id">
+            <summary>
+            Gets the unique identifier of the navigable content.
+            </summary>
+            <remarks>The root node identifier should be <c>-1</c>.</remarks>
+        </member>
+        <member name="P:Umbraco.Core.Xml.XPath.INavigableContent.ParentId">
+            <summary>
+            Gets the unique identifier of parent of the navigable content.
+            </summary>
+            <remarks>The top-level content parent identifiers should be <c>-1</c> ie the identifier
+            of the root node, whose parent identifier should in turn be <c>-1</c>.</remarks>
+        </member>
+        <member name="P:Umbraco.Core.Xml.XPath.INavigableContent.Type">
+            <summary>
+            Gets the type of the navigable content.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Xml.XPath.INavigableContent.ChildIds">
+            <summary>
+            Gets the unique identifiers of the children of the navigable content.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Xml.XPath.INavigableFieldType">
+            <summary>
+            Represents the type of a field of a content that can be navigated via XPath.
+            </summary>
+            <remarks>A field can be an attribute or a property.</remarks>
+        </member>
+        <member name="P:Umbraco.Core.Xml.XPath.INavigableFieldType.Name">
+            <summary>
+            Gets the name of the field type.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Xml.XPath.INavigableFieldType.XmlStringConverter">
+            <summary>
+            Gets a method to convert the field value to a string.
+            </summary>
+            <remarks>This is for built-in properties, ie attributes. User-defined properties have their
+            own way to convert their value for XPath.</remarks>
+        </member>
+        <member name="T:Umbraco.Core.Xml.XPath.INavigableSource">
+            <summary>
+            Represents a source of content that can be navigated via XPath.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Xml.XPath.INavigableSource.Get(System.Int32)">
+            <summary>
+            Gets a content identified by its unique identifier.
+            </summary>
+            <param name="id">The unique identifier.</param>
+            <returns>The content identified by the unique identifier, or null.</returns>
+            <remarks>When <c>id</c> is <c>-1</c> (root content) implementations should return <c>null</c>.</remarks>
+        </member>
+        <member name="P:Umbraco.Core.Xml.XPath.INavigableSource.LastAttributeIndex">
+            <summary>
+            Gets the index of the last attribute in the fields collections.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Xml.XPath.INavigableSource.Root">
+            <summary>
+            Gets the content at the root of the source.
+            </summary>
+            <remarks>That content should have unique identifier <c>-1</c> and should not be gettable,
+            ie Get(-1) should return null. Its <c>ParentId</c> should be <c>-1</c>. It should provide
+            values for the attribute fields.</remarks>
         </member>
         <member name="T:Umbraco.Core.Xml.DynamicContext">
             <summary>

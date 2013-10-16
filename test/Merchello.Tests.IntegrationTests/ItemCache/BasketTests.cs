@@ -20,12 +20,28 @@ namespace Merchello.Tests.IntegrationTests.ItemCache
         [SetUp]
         public void Init()
         {
+            PreTestDataWorker.DeleteAllItemCaches();
             _merchelloContext = new MerchelloContext(new ServiceContext(new PetaPocoUnitOfWorkProvider()),
-                new CacheHelper(new ObjectCacheRuntimeCacheProvider(),
-                                    new StaticCacheProvider(),
+                new CacheHelper(new NullCacheProvider(),
+                                    new NullCacheProvider(),
                                     new NullCacheProvider()));
             _customer = PreTestDataWorker.MakeExistingAnonymousCustomer();
             _basket = Basket.GetBasket(_merchelloContext, _customer);
+        }
+
+
+        [Test]
+        public void Can_Retrieve_A_Customer_Basket_Mulitple_Times()
+        {
+            //// Arrange
+            
+            //// Act
+            var basket1 = Basket.GetBasket(_merchelloContext, _customer);
+            var basket2 = Basket.GetBasket(_merchelloContext, _customer);
+            var basket3 = Basket.GetBasket(_merchelloContext, _customer);
+            var basket4 = Basket.GetBasket(_merchelloContext, _customer);
+
+
         }
 
         /// <summary>
@@ -38,10 +54,30 @@ namespace Merchello.Tests.IntegrationTests.ItemCache
             var product = PreTestDataWorker.MakeExistingProduct();
 
             //// Act
-            _basket.AddItem(product.DefaultVariant);
+            _basket.AddItem(product.GetVariantForPurchase());
+            Basket.Save(_merchelloContext, _basket);
 
             //// Assert
             Assert.IsFalse(_basket.Items.IsEmpty);
         }
+
+        [Test]
+        public void Can_Call_Save_Multiple_Times_On_A_Basket()
+        {
+            //// Arrange
+            var product1 = PreTestDataWorker.MakeExistingProduct();
+            var product2 = PreTestDataWorker.MakeExistingProduct();
+
+            //// Act
+            _basket.AddItem(product1.GetVariantForPurchase());
+            Basket.Save(_merchelloContext, _basket);
+
+            _basket.AddItem(product2.GetVariantForPurchase());
+            Basket.Save(_merchelloContext, _basket);
+
+
+            
+        }
+       
     }
 }
