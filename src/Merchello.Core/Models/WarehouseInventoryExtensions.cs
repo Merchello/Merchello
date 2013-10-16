@@ -1,6 +1,4 @@
-﻿using Merchello.Core.Models;
-
-namespace Merchello.Core
+﻿namespace Merchello.Core.Models
 {
     /// <summary>
     /// Extension methods for <see cref="IWarehouseInventory"/> to simplify the <see cref="IProductVariant"/> to <see cref="IWarehouse"/> relationship

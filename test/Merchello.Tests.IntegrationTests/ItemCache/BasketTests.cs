@@ -54,7 +54,7 @@ namespace Merchello.Tests.IntegrationTests.ItemCache
             var product = PreTestDataWorker.MakeExistingProduct();
 
             //// Act
-            _basket.AddItem(product.GetVariantForPurchase());
+            _basket.AddItem(product.GetProductVariantForPurchase());
             Basket.Save(_merchelloContext, _basket);
 
             //// Assert
@@ -69,10 +69,10 @@ namespace Merchello.Tests.IntegrationTests.ItemCache
             var product2 = PreTestDataWorker.MakeExistingProduct();
 
             //// Act
-            _basket.AddItem(product1.GetVariantForPurchase());
+            _basket.AddItem(product1.GetProductVariantForPurchase());
             Basket.Save(_merchelloContext, _basket);
 
-            _basket.AddItem(product2.GetVariantForPurchase());
+            _basket.AddItem(product2.GetProductVariantForPurchase());
             Basket.Save(_merchelloContext, _basket);
 
 

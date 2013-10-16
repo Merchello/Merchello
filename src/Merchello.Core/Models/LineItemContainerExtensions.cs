@@ -1,7 +1,4 @@
-﻿using Merchello.Core.Models;
-using Umbraco.Core;
-
-namespace Merchello.Core
+﻿namespace Merchello.Core.Models
 {
     /// <summary>
     /// Extension methods for <see cref="IItemCache"/>

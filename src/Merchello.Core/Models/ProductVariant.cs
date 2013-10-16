@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 
@@ -115,5 +116,14 @@ namespace Merchello.Core.Models
             WarehouseInventory.Add(new WarehouseInventory(warehouseId, Key));
         }
 
+
+        /// <summary>
+        /// Returns the total (sum) of inventory "counts" accross all associated warehouses
+        /// </summary>
+        /// <returns></returns>
+        public int TotalInventoryCount
+        {
+            get { return Warehouses.Sum(x => x.Count); }
+        }
     }
 }

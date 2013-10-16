@@ -1,13 +1,17 @@
-﻿using Merchello.Core.Models;
+﻿using System.Net.Configuration;
+using Merchello.Core.Models;
 
 namespace Merchello.Web.Models
 {
     public interface IBasket
     {
         // Adds an item to the basket
+        void AddItem(IProduct product);
         void AddItem(IProductVariant productVariant);
+        void AddItem(IProductVariant productVariant, int quantity);
         void AddItem(string name, string sku, decimal price);
-        void AddItem(string name, string sku, decimal price, ExtendedDataCollection extendedData);
+        void AddItem(string name, string sku, int quantity, decimal price);
+        void AddItem(string name, string sku, int quantity, decimal price, ExtendedDataCollection extendedData);
 
         // Updates the quantity of an item in the basket
         void UpdateQuantity(int id, int quantity);
@@ -18,6 +22,11 @@ namespace Merchello.Web.Models
         void RemoveItem(int id);     
         void RemoveItem(string sku);        
         void RemoveItem(IProductVariant productVariant);
+
+        /// <summary>
+        /// True/false indicating whether or not the basket contains any items
+        /// </summary>
+        bool IsEmpty { get; }
 
         /// <summary>
         /// Empties the basket
