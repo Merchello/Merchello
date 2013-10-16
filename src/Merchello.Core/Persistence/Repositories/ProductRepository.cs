@@ -145,6 +145,9 @@ namespace Merchello.Core.Persistence.Repositories
             // save the product options
             SaveProductOptions(entity);
 
+            // synchronize the inventory
+            ((ProductVariantRepository)_productVariantRepository).SaveWarehouseInventory(((Product)entity).ProductVariantMaster);
+
             entity.ResetDirtyProperties();
         }
 
@@ -159,6 +162,9 @@ namespace Merchello.Core.Persistence.Repositories
             Database.Update(dto.ProductVariantDto);
             
             SaveProductOptions(entity);
+
+            // synchronize the inventory
+            ((ProductVariantRepository) _productVariantRepository).SaveWarehouseInventory(((Product)entity).ProductVariantMaster);
 
             entity.ResetDirtyProperties();
         }

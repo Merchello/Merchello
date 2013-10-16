@@ -16,7 +16,7 @@ namespace Merchello.Web.Models
 
         internal Basket(IItemCache itemCache, ICustomerBase customer)
         {
-            Mandate.ParameterNotNull(itemCache, "customerItemCache");
+            Mandate.ParameterNotNull(itemCache, "ItemCache");
             Mandate.ParameterNotNull(customer, "customer");
 
             _customer = customer;
