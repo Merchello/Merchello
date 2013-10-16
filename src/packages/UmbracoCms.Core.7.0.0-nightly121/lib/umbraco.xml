@@ -795,6 +795,14 @@
             </summary>
             <param name="controllerContext"></param>
         </member>
+        <member name="M:Umbraco.Web.Editors.AuthenticationController.GetRemainingTimeoutSeconds">
+            <summary>
+            This is a special method that will return the current users' remaining session seconds, the reason
+            it is special is because this route is ignored in the UmbracoModule so that the auth ticket doesn't get
+            updated with a new timeout.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Umbraco.Web.Editors.AuthenticationController.IsAuthenticated">
             <summary>
             Checks if the current user's cookie is valid and if so returns OK or a 400 (BadRequest)
@@ -803,7 +811,7 @@
         </member>
         <member name="M:Umbraco.Web.Editors.AuthenticationController.GetCurrentUser">
             <summary>
-            Checks if the current user's cookie is valid and if so returns the user object associated
+            Returns the currently logged in Umbraco user
             </summary>
             <returns></returns>
         </member>
@@ -840,6 +848,15 @@
             An abstract API controller that only supports JSON
             </summary>
         </member>
+        <member name="T:Umbraco.Web.WebApi.UmbracoAuthorizedApiController">
+            <summary>
+            A base controller that ensures all requests are authorized - the user is logged in. 
+            </summary>
+            <remarks>
+            This controller will also append a custom header to the response if the user is logged in using forms authentication 
+            which indicates the seconds remaining before their timeout expires.
+            </remarks>
+        </member>
         <member name="P:Umbraco.Web.WebApi.UmbracoAuthorizedApiController.UmbracoUser">
             <summary>
             Returns the currently logged in Umbraco User
@@ -861,6 +878,13 @@
             Constructor
             </summary>
             <param name="umbracoContext"></param>
+        </member>
+        <member name="M:Umbraco.Web.Editors.ContentControllerBase.MapPropertyValues``1(Umbraco.Web.Models.ContentEditing.ContentBaseItemSave{``0})">
+            <summary>
+            Maps the dto property values to the persisted model
+            </summary>
+            <typeparam name="TPersisted"></typeparam>
+            <param name="contentItem"></param>
         </member>
         <member name="M:Umbraco.Web.Editors.ContentControllerBase.GetEntityFromRequest``1(System.Func{``0})">
             <summary>
@@ -926,6 +950,24 @@
             Saves content
             </summary>
             <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Editors.ContentController.MapPropertyValues(Umbraco.Web.Models.ContentEditing.ContentItemSave)">
+            <summary>
+            Maps the dto property values to the persisted model
+            </summary>
+            <param name="contentItem"></param>
+        </member>
+        <member name="M:Umbraco.Web.Editors.ContentController.PostPublishById(System.Int32)">
+            <summary>
+            Publishes a document with a given ID
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+            <remarks>
+            The CanAccessContentAuthorize attribute will deny access to this method if the current user
+            does not have Publish access to this node.
+            </remarks>
+            
         </member>
         <member name="M:Umbraco.Web.Editors.ContentController.DeleteById(System.Int32)">
             <summary>
@@ -1183,6 +1225,11 @@
             </remarks>
         </member>
         <!-- Badly formed XML comment ignored for member "M:Umbraco.Web.Editors.MacroController.GetMacroResultAsHtmlForEditor(System.String,System.Int32,System.Collections.Generic.IDictionary{System.String,System.Object})" -->
+        <member name="T:Umbraco.Web.Editors.MembershipProviderValidationFilterAttribute">
+            <summary>
+            This validates the submitted data in regards to the current membership provider
+            </summary>
+        </member>
         <member name="T:Umbraco.Web.Editors.MemberTypeController">
             <summary>
             An API controller used for dealing with content types
@@ -1202,6 +1249,60 @@
         <member name="M:Umbraco.Web.Editors.MemberTypeController.GetAllTypes">
             <summary>
             Returns all member types
+            </summary>
+        </member>
+        <member name="T:Umbraco.Web.Editors.TagExtractor">
+            <summary>
+            A simple utility class to extract the tag values from a property/property editor and set them on the content
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.Editors.TagExtractor.SetPropertyTags(Umbraco.Core.Models.IContentBase,Umbraco.Core.Models.Property,System.Object,Umbraco.Core.PropertyEditors.SupportTagsAttribute)">
+            <summary>
+            Sets the tag values on the content property based on the property editor's tags attribute
+            </summary>
+            <param name="content"></param>
+            <param name="property"></param>
+            <param name="propertyValue"></param>
+            <param name="attribute"></param>
+        </member>
+        <member name="M:Umbraco.Web.MembershipProviderExtensions.GetConfiguration(System.Web.Security.MembershipProvider)">
+            <summary>
+            Returns the configuration of the membership provider used to configure change password editors
+            </summary>
+            <param name="membershipProvider"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Umbraco.Web.Models.ContentEditing.ChangePasswordModel">
+            <summary>
+            A model representing the data required to set a member/user password depending on the provider installed.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Models.ContentEditing.ChangePasswordModel.NewPassword">
+            <summary>
+            The password value
+            </summary>
+            <remarks>
+            This 
+            </remarks>
+        </member>
+        <member name="P:Umbraco.Web.Models.ContentEditing.ChangePasswordModel.OldPassword">
+            <summary>
+            The old password - used to change a password when: EnablePasswordRetrieval = false 
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Models.ContentEditing.ChangePasswordModel.Reset">
+            <summary>
+            Set to true if the password is to be reset - only valid when: EnablePasswordReset = true
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Models.ContentEditing.ChangePasswordModel.Answer">
+            <summary>
+            The password answer - required for reset when: RequiresQuestionAndAnswer = true 
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Models.ContentEditing.ChangePasswordModel.GeneratedPassword">
+            <summary>
+            This is filled in on the server side if the password has been reset/generated
             </summary>
         </member>
         <member name="T:Umbraco.Web.Editors.StylesheetController">
@@ -1264,6 +1365,11 @@
             A model representing a basic content item
             </summary>
         </member>
+        <member name="P:Umbraco.Web.Models.ContentEditing.EntityBasic.Key">
+            <summary>
+            This is the unique Id stored in the database - but could also be the unique id for a custom membership provider
+            </summary>
+        </member>
         <member name="P:Umbraco.Web.Models.ContentEditing.EntityBasic.Alias">
             <summary>
             This will only be populated for some entities like macros
@@ -1271,7 +1377,7 @@
         </member>
         <member name="P:Umbraco.Web.Models.ContentEditing.EntityBasic.Path">
             <summary>
-            For now we'll exclude this from the json results, this is needed for permissions check filtering
+            The path of the entity
             </summary>
         </member>
         <member name="P:Umbraco.Web.Models.ContentEditing.ContentItemBasic`2.PersistedContent">
@@ -1541,6 +1647,14 @@
             <param name="member"></param>
             <param name="display"></param>
         </member>
+        <member name="T:Umbraco.Web.Models.Mapping.MemberModelMapper.MemberDtoPropertiesValueResolver">
+            <summary>
+            This ensures that the custom membership provider properties are not mapped (currently since they weren't there in v6)
+            </summary>
+            <remarks>
+            Because these properties don't exist on the form, if we don't remove them for this map we'll get validation errors when posting data
+            </remarks>
+        </member>
         <member name="T:Umbraco.Web.PropertyEditors.ValueListPreValueEditor">
             <summary>
             Pre-value editor used to create a list of items
@@ -1641,12 +1755,11 @@
             <param name="key"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.Editors.MemberController.GetEmpty(System.String,System.String,System.String)">
+        <member name="M:Umbraco.Web.Editors.MemberController.GetEmpty(System.String)">
             <summary>
             Gets an empty content item for the 
             </summary>
             <param name="contentTypeAlias"></param>
-            <param name="parentId"></param>
             <returns></returns>
         </member>
         <member name="M:Umbraco.Web.Editors.MemberController.PostSave(Umbraco.Web.Models.ContentEditing.MemberSave)">
@@ -1654,6 +1767,41 @@
             Saves member
             </summary>
             <returns></returns>        
+        </member>
+        <member name="M:Umbraco.Web.Editors.MemberController.MapPropertyValues(Umbraco.Web.Models.ContentEditing.MemberSave)">
+            <summary>
+            Maps the property values to the persisted entity
+            </summary>
+            <param name="contentItem"></param>
+        </member>
+        <member name="M:Umbraco.Web.Editors.MemberController.UpdateWithMembershipProvider(Umbraco.Web.Models.ContentEditing.MemberSave)">
+            <summary>
+            Update the membership user using the membership provider (for things like email, etc...)
+            If a password change is detected then we'll try that too.
+            </summary>
+            <param name="contentItem"></param>
+            <returns>
+            If the password has been reset then this method will return the reset/generated password, otherwise will return null.
+            </returns>
+            <remarks>
+            
+            YES! It is completely insane how many options you have to take into account based on the membership provider. yikes!        
+            
+            TODO We should move this logic to a central helper class so we can re-use it when it comes to integrating with WebSecurity
+            
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.Editors.MemberController.CreateWithUmbracoProvider(Umbraco.Web.Models.ContentEditing.MemberSave,System.Web.Security.MembershipCreateStatus@)">
+            <summary>
+            This is going to create the user with the membership provider and check for validation
+            </summary>
+            <param name="contentItem"></param>
+            <param name="status"></param>
+            <returns></returns>
+            <remarks>
+            If this is successful, it will go and re-fetch the IMember from the db because it will now have an ID because the Umbraco provider 
+            uses the umbraco data store - then of course we need to re-map it to the saved property values.
+            </remarks>
         </member>
         <member name="M:Umbraco.Web.Editors.MemberController.DeleteByKey(System.Guid)">
             <summary>
@@ -1667,6 +1815,12 @@
             Controller to back the User.Resource service, used for fetching user data when already authenticated. user.service is currently used for handling authentication
             </summary>
         </member>
+        <member name="M:Umbraco.Web.Editors.UserController.GetMembershipProviderConfig">
+            <summary>
+            Returns the configuration for the backoffice user membership provider - used to configure the change password dialog
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Umbraco.Web.Editors.UserController.GetById(System.Int32)">
             <summary>
             Returns a user by id
@@ -1674,7 +1828,7 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.Editors.UserController.PostChangePassword(Umbraco.Web.Models.ContentEditing.UserPasswordChange)">
+        <member name="M:Umbraco.Web.Editors.UserController.PostChangePassword(Umbraco.Web.Models.ContentEditing.ChangePasswordModel)">
             <summary>
             Changes the users password
             </summary>
@@ -1791,20 +1945,6 @@
             <summary>
             Configure's model mappings for Data types
             </summary>
-        </member>
-        <member name="T:Umbraco.Web.Models.PagedResult`1">
-            <summary>
-            Represents a paged result for a model collection
-            </summary>
-            <typeparam name="T"></typeparam>
-        </member>
-        <member name="P:Umbraco.Web.Models.PagedResult`1.SkipSize">
-            <summary>
-            Calculates the skip size based on the paged parameters specified
-            </summary>
-            <remarks>
-            Returns 0 if the page number or page size is zero
-            </remarks>
         </member>
         <member name="T:Umbraco.Web.PropertyEditors.CheckBoxListPropertyEditor">
             <summary>
@@ -2375,7 +2515,7 @@
             <summary>
             Parses the CssResources.Main and returns a yepnop.injectCss format
             </summary>
-            <param name="replacements"></param>
+            <param name="files"></param>
             <returns></returns>
         </member>
         <member name="F:umbraco.presentation.create.DLRScripting.rename">
@@ -2754,7 +2894,7 @@
             <summary>
             Renders the specified tree item.
             </summary>
-            <param name="Tree">The tree.</param>
+            <param name="tree">The tree.</param>
         </member>
         <member name="P:umbraco.loadPackager.id">
             <summary>
@@ -2879,12 +3019,17 @@
             </summary>
             <param name="umbracoContext"></param>
         </member>
-        <member name="M:Umbraco.Web.Editors.LegacyController.DeleteLegacyItem(System.String,System.String)">
+        <member name="M:Umbraco.Web.Editors.LegacyController.DeleteLegacyItem(System.String,System.String,System.String)">
             <summary>
             This will perform the delete operation for legacy items which include any item that
             has functionality included in the ui.xml structure.
             </summary>
             <returns></returns>
+        </member>
+        <member name="T:Umbraco.Web.PublishedPropertyExtension">
+            <summary>
+            Provides extension methods for <c>IPublishedProperty</c>.
+            </summary>
         </member>
         <member name="T:Umbraco.Web.Mvc.MergeParentContextViewDataAttribute">
             <summary>
@@ -3095,6 +3240,11 @@
         <member name="P:Umbraco.Web.Models.ContentEditing.UserDetail.EmailHash">
             <summary>
             The MD5 lowercase hash of the email which can be used by gravatar
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Models.ContentEditing.UserDetail.SecondsUntilTimeout">
+            <summary>
+            Gets/sets the number of seconds for the user's auth ticket to expire
             </summary>
         </member>
         <!-- Badly formed XML comment ignored for member "M:Umbraco.Web.FormDataCollectionExtensions.ToQueryString(System.Net.Http.Formatting.FormDataCollection,System.String[])" -->
@@ -3466,6 +3616,21 @@
             <param name="nodeId"></param>
             <param name="nodeType"></param>
         </member>
+        <member name="M:Umbraco.Web.Trees.LegacyTreeDataConverter.ConvertFromLegacy(System.String,umbraco.cms.presentation.Trees.XmlTreeNode,System.Web.Http.Routing.UrlHelper,System.String,System.Net.Http.Formatting.FormDataCollection,System.Boolean)">
+            <summary>
+            Converts a legacy XmlTreeNode to a new TreeNode
+            </summary>
+            <param name="parentId"></param>
+            <param name="xmlTreeNode"></param>
+            <param name="urlHelper"></param>
+            <param name="currentSection"></param>
+            <param name="currentQueryStrings">
+            The current query strings for the request - this is used to append the query strings to the menu URL of the item being rendered since the menu
+            actually belongs to this same node (request) the query strings need to exist so the menu can be rendered in some cases.
+            </param>
+            <param name="isRoot"></param>
+            <returns></returns>
+        </member>
         <member name="T:Umbraco.Web.Trees.LegacyTreeJavascript">
             <summary>
             A class used to render the legacy JS requirements for trees and IActions.
@@ -3515,6 +3680,18 @@
             <summary>
             Used to specify the angular view that the dialog will launch
             </summary>
+        </member>
+        <member name="F:Umbraco.Web.Models.Trees.MenuItemExtensions.JsActionKey">
+            <summary>
+            Used to specify the js method to execute for the menu item 
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.Models.Trees.MenuItemExtensions.LaunchLegacyJs(Umbraco.Web.Models.Trees.MenuItem,System.String)">
+            <summary>
+            Adds the required meta data to the menu item so that angular knows to attempt to call the Js method.
+            </summary>
+            <param name="menuItem"></param>
+            <param name="jsToExecute"></param>
         </member>
         <member name="M:Umbraco.Web.Models.Trees.MenuItemExtensions.LaunchDialogView(Umbraco.Web.Models.Trees.MenuItem,System.String,System.String)">
             <summary>
@@ -3718,7 +3895,7 @@
             </summary>
             <param name="controllerContext"></param>
         </member>
-        <member name="M:Umbraco.Web.Trees.ApplicationTreeController.GetApplicationTrees(System.String,System.Net.Http.Formatting.FormDataCollection)">
+        <member name="M:Umbraco.Web.Trees.ApplicationTreeController.GetApplicationTrees(System.String,System.String,System.Net.Http.Formatting.FormDataCollection)">
             <summary>
             Returns the tree nodes for an application
             </summary>
@@ -3791,7 +3968,7 @@
         </member>
         <member name="M:Umbraco.Web.Editors.BackOfficeController.Application">
             <summary>
-            Returns the RequireJS file including all references found in manifests
+            Returns the JavaScript main file including all references found in manifests
             </summary>
             <returns></returns>
         </member>
@@ -3806,6 +3983,11 @@
             Returns the JavaScript blocks for any legacy trees declared
             </summary>
             <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Editors.BackOfficeController.GetLegacyActionJs(Umbraco.Web.Editors.BackOfficeController.LegacyJsActionType)">
+            <summary>
+            Renders out all JavaScript references that have bee declared in IActions
+            </summary>
         </member>
         <member name="T:Umbraco.Web.Security.Providers.MembersMembershipProvider">
             <summary>
@@ -3823,6 +4005,23 @@
             <see cref="M:System.Configuration.Provider.ProviderBase.Initialize(System.String,System.Collections.Specialized.NameValueCollection)"></see> on a provider after the provider 
             has already been initialized.</exception>
             <exception cref="T:System.ArgumentException">The name of the provider has a length of zero.</exception>       
+        </member>
+        <member name="M:Umbraco.Web.Security.Providers.MembersMembershipProvider.CreateUser(System.String,System.String,System.String,System.String,System.String,System.String,System.Boolean,System.Object,System.Web.Security.MembershipCreateStatus@)">
+            <summary>
+            Adds a new membership user to the data source with the specified member type
+            </summary>
+            <param name="memberType">A specific member type to create the member for</param>
+            <param name="username">The user name for the new user.</param>
+            <param name="password">The password for the new user.</param>
+            <param name="email">The e-mail address for the new user.</param>
+            <param name="passwordQuestion">The password question for the new user.</param>
+            <param name="passwordAnswer">The password answer for the new user</param>
+            <param name="isApproved">Whether or not the new user is approved to be validated.</param>
+            <param name="providerUserKey">The unique identifier from the membership data source for the user.</param>
+            <param name="status">A <see cref="T:System.Web.Security.MembershipCreateStatus"></see> enumeration value indicating whether the user was created successfully.</param>
+            <returns>
+            A <see cref="T:System.Web.Security.MembershipUser"></see> object populated with the information for the newly created user.
+            </returns>
         </member>
         <member name="M:Umbraco.Web.Security.Providers.MembersMembershipProvider.CreateUser(System.String,System.String,System.String,System.String,System.String,System.Boolean,System.Object,System.Web.Security.MembershipCreateStatus@)">
             <summary>
@@ -3990,7 +4189,7 @@
             A <see cref="T:System.Web.Security.MembershipUserCollection"></see> collection that contains a page of pageSize<see cref="T:System.Web.Security.MembershipUser"></see> objects beginning at the page specified by pageIndex.
             </returns>
         </member>
-        <member name="M:Umbraco.Web.Security.Providers.MembersMembershipProvider.EncodePassword(System.String)">
+        <member name="M:Umbraco.Web.Security.Providers.MembersMembershipProvider.EncryptOrHashPassword(System.String)">
             <summary>
             Encodes the password.
             </summary>
@@ -4125,7 +4324,7 @@
             main Umbraco initialization output.
             </summary>
         </member>
-        <member name="M:Umbraco.Web.UI.JavaScript.JsInitialization.GetJavascriptInitialization(Newtonsoft.Json.Linq.JArray)">
+        <member name="M:Umbraco.Web.UI.JavaScript.JsInitialization.GetJavascriptInitialization(Newtonsoft.Json.Linq.JArray,Newtonsoft.Json.Linq.JArray)">
             <summary>
             Processes all found manifest files and outputs the main.js file containing all plugin manifests
             </summary>
@@ -4534,11 +4733,6 @@
             The base dynamic model for views
             </summary>
         </member>
-        <member name="T:Umbraco.Web.Models.IOwnerCollectionAware`1">
-            <summary>
-            An interface describing that the object should be aware of it's containing collection
-            </summary>
-        </member>
         <member name="M:Umbraco.Web.Models.DynamicPublishedContent.TryInvokeMember(System.Dynamic.InvokeMemberBinder,System.Object[],System.Object@)">
             <summary>
             Attempts to call a method on the dynamic object
@@ -4614,36 +4808,22 @@
             <param name="recursive"></param>
             <returns></returns>
         </member>
-        <member name="P:Umbraco.Web.Models.DynamicPublishedContent.Umbraco#Web#Models#IOwnerCollectionAware{Umbraco#Core#Models#IPublishedContent}#OwnersCollection">
-            <summary>
-            Need to get/set the owner collection when an item is returned from the result set of a query
-            </summary>
-            <remarks>
-            Based on this issue here: http://issues.umbraco.org/issue/U4-1797
-            </remarks>
-        </member>
         <member name="T:Umbraco.Web.Models.DynamicPublishedContentList">
             <summary>
-            A collection of DynamicPublishedContent items
+            Represents a collection of DynamicPublishedContent items.
             </summary>
-            <remarks>
-            Implements many of the dynamic methods required for execution against this list. It also ensures
-            that the correct OwnersCollection properties is assigned to the underlying PublishedContentBase object
-            of the DynamicPublishedContent item (so long as the IPublishedContent item is actually PublishedContentBase).
-            All relates to this issue here: http://issues.umbraco.org/issue/U4-1797
-            </remarks>
         </member>
         <member name="M:Umbraco.Web.Models.DynamicPublishedContentList.Add(Umbraco.Web.Models.DynamicPublishedContent)">
             <summary>
-            Allows the adding of an item from the collection
+            Adds an item to the collection.
             </summary>
-            <param name="publishedContent"></param>
+            <param name="dynamicContent">The item to add.</param>
         </member>
         <member name="M:Umbraco.Web.Models.DynamicPublishedContentList.Remove(Umbraco.Web.Models.DynamicPublishedContent)">
             <summary>
-            Allows the removal of an item from the collection
+            Removes an item from the collection.
             </summary>
-            <param name="publishedContent"></param>
+            <param name="dynamicContent">The item to remove.</param>
         </member>
         <member name="T:Umbraco.Web.Models.PartialViewMacroModel">
             <summary>
@@ -4652,39 +4832,75 @@
         </member>
         <member name="T:Umbraco.Web.Models.PublishedContentBase">
             <summary>
-            An abstract base class to use for IPublishedContent which ensures that the Url and Indexed property return values
-            are consistently returned.
+            Provide an abstract base class for <c>IPublishedContent</c> implementations.
             </summary>
+            <remarks>This base class does which (a) consitently resolves and caches the Url, (b) provides an implementation
+            for this[alias], and (c) provides basic content set management.</remarks>
+        </member>
+        <member name="M:Umbraco.Web.Models.PublishedContentBase.GetProperty(System.String)">
+            <summary>
+            Gets a property identified by its alias.
+            </summary>
+            <param name="alias">The property alias.</param>
+            <returns>The property identified by the alias.</returns>
             <remarks>
-            This also ensures that we have an OwnersCollection property so that the IsFirst/IsLast/Index helper methods work 
-            when referenced inside the result of a collection. http://issues.umbraco.org/issue/U4-1797
+            <para>If no property with the specified alias exists, returns <c>null</c>.</para>
+            <para>The returned property may have no value (ie <c>HasValue</c> is <c>false</c>).</para>
+            <para>The alias is case-insensitive.</para>
             </remarks>
         </member>
-        <member name="P:Umbraco.Web.Models.PublishedContentBase.Umbraco#Web#Models#IOwnerCollectionAware{Umbraco#Core#Models#IPublishedContent}#OwnersCollection">
+        <member name="M:Umbraco.Web.Models.PublishedContentBase.GetProperty(System.String,System.Boolean)">
             <summary>
-            Need to get/set the owner collection when an item is returned from the result set of a query
+            Gets a property identified by its alias.
             </summary>
+            <param name="alias">The property alias.</param>
+            <param name="recurse">A value indicating whether to navigate the tree upwards until a property with a value is found.</param>
+            <returns>The property identified by the alias.</returns>
             <remarks>
-            Based on this issue here: http://issues.umbraco.org/issue/U4-1797
+            <para>Navigate the tree upwards and look for a property with that alias and with a value (ie <c>HasValue</c> is <c>true</c>).
+            If found, return the property. If no property with that alias is found, having a value or not, return <c>null</c>. Otherwise
+            return the first property that was found with the alias but had no value (ie <c>HasValue</c> is <c>false</c>).</para>
+            <para>The alias is case-insensitive.</para>
             </remarks>
         </member>
         <member name="P:Umbraco.Web.Models.PublishedContentBase.Url">
             <summary>
-            Returns the Url for this content item
+            Gets the url of the content.
             </summary>
             <remarks>
-            If this item type is media, the Url that is returned is the Url computed by the NiceUrlProvider, otherwise if it is media
-            the Url returned is the value found in the 'umbracoFile' property.
+            If this content is Content, the url that is returned is the one computed by the NiceUrlProvider, otherwise if 
+            this content is Media, the url returned is the value found in the 'umbracoFile' property.
             </remarks>
+        </member>
+        <member name="P:Umbraco.Web.Models.PublishedContentBase.Parent">
+            <summary>
+            Gets the parent of the content.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Models.PublishedContentBase.Children">
+            <summary>
+            Gets the children of the content.
+            </summary>
+            <remarks>Children are sorted by their sortOrder.</remarks>
+        </member>
+        <member name="P:Umbraco.Web.Models.PublishedContentBase.Properties">
+            <summary>
+            Gets the properties of the content.
+            </summary>
         </member>
         <member name="P:Umbraco.Web.Models.PublishedContentBase.Item(System.String)">
             <summary>
-            Returns the property value for the property alias specified
+            Gets the value of a property identified by its alias.
             </summary>
-            <param name="propertyAlias"></param>
-            <returns></returns>
+            <param name="alias">The property alias.</param>
+            <returns>The value of the property identified by the alias.</returns>
             <remarks>
-            Ensures that the value is executed through the IPropertyEditorValueConverters and that all internal links are are to date
+            <para>If <c>GetProperty(alias)</c> is <c>null</c> then returns <c>null</c> else return <c>GetProperty(alias).Value</c>.</para>
+            <para>So if the property has no value, returns the default value for that property type.</para>
+            <para>This one is defined here really because we cannot define index extension methods, but all it should do is:
+            <code>var p = GetProperty(alias); return p == null ? null : p.Value;</code> and nothing else.</para>
+            <para>The recursive syntax (eg "_title") is _not_ supported here.</para>
+            <para>The alias is case-insensitive.</para>
             </remarks>
         </member>
         <member name="M:Umbraco.Web.Mvc.AreaRegistrationExtensions.RouteControllerPlugin(System.Web.Mvc.AreaRegistration,System.String,System.Type,System.Web.Routing.RouteCollection,System.String,System.String,System.Object,System.String,System.String,System.Boolean)">
@@ -4827,6 +5043,8 @@
             Provides access to cached contents in a specified context.
             </summary>
             <typeparam name="T">The type of the underlying published cache.</typeparam>
+            <remarks>The type <typeparamref name="T"/> differenciates between the content cache and the media cache,
+            ie it will be either IPublishedContentCache or IPublishedMediaCache.</remarks>
         </member>
         <member name="T:Umbraco.Web.PublishedCache.ContextualPublishedCache">
             <summary>
@@ -4838,6 +5056,14 @@
             Initializes a new instance of the <see cref="T:Umbraco.Web.PublishedCache.ContextualPublishedCache"/> with a context.
             </summary>
             <param name="umbracoContext">The context.</param>
+        </member>
+        <member name="M:Umbraco.Web.PublishedCache.ContextualPublishedCache.ContentHasChanged">
+            <summary>
+            Informs the contextual cache that content has changed.
+            </summary>
+            <remarks>The contextual cache may, although that is not mandatory, provide an immutable snapshot of
+            the content over the duration of the context. If you make changes to the content and do want to have
+            the cache update its snapshot, you have to explicitely ask it to do so by calling ContentHasChanged.</remarks>
         </member>
         <member name="M:Umbraco.Web.PublishedCache.ContextualPublishedCache.GetById(System.Int32)">
             <summary>
@@ -5009,6 +5235,12 @@
             <param name="preview">A value indicating whether to consider unpublished content.</param>
             <returns>A value indicating whether the underlying non-contextual cache contains content.</returns>
         </member>
+        <member name="P:Umbraco.Web.PublishedCache.ContextualPublishedCache.XPathNavigatorIsNavigable">
+            <summary>
+            Gets a value indicating whether <c>GetXPathNavigator</c> returns an <c>XPathNavigator</c>
+            and that navigator is a <c>NavigableNavigator</c>.
+            </summary>
+        </member>
         <member name="M:Umbraco.Web.PublishedCache.ContextualPublishedCache`1.#ctor(Umbraco.Web.UmbracoContext,`0)">
             <summary>
             Initializes a new instance of the <see cref="T:Umbraco.Web.PublishedCache.ContextualPublishedCache`1"/> with a context and a published cache.
@@ -5106,6 +5338,12 @@
             Gets the underlying published cache.
             </summary>
         </member>
+        <member name="P:Umbraco.Web.PublishedCache.ContextualPublishedCache`1.XPathNavigatorIsNavigable">
+            <summary>
+            Gets a value indicating whether <c>GetXPathNavigator</c> returns an <c>XPathNavigator</c>
+            and that navigator is a <c>NavigableNavigator</c>.
+            </summary>
+        </member>
         <member name="M:Umbraco.Web.PublishedCache.ContextualPublishedContentCache.#ctor(Umbraco.Web.PublishedCache.IPublishedContentCache,Umbraco.Web.UmbracoContext)">
             <summary>
             Initializes a new instance of the <see cref="T:Umbraco.Web.PublishedCache.ContextualPublishedContentCache"/> class with a published content cache and a context.
@@ -5176,7 +5414,7 @@
             <param name="caches">The caches.</param>
             <remarks>The resolver is created by the <c>WebBootManager</c> and thus the constructor remains internal.</remarks>
         </member>
-        <member name="M:Umbraco.Web.PublishedCache.PublishedCachesResolver.SetCache(Umbraco.Web.PublishedCache.IPublishedCaches)">
+        <member name="M:Umbraco.Web.PublishedCache.PublishedCachesResolver.SetCaches(Umbraco.Web.PublishedCache.IPublishedCaches)">
             <summary>
             Sets the caches.
             </summary>
@@ -5327,6 +5565,12 @@
             <param name="preview">A value indicating whether to consider unpublished content.</param>
             <returns>A value indicating whether the cache contains published content.</returns>
             <remarks>The value of <paramref name="preview"/> overrides the context.</remarks>
+        </member>
+        <member name="P:Umbraco.Web.PublishedCache.IPublishedCache.XPathNavigatorIsNavigable">
+            <summary>
+            Gets a value indicating whether <c>GetXPathNavigator</c> returns an <c>XPathNavigator</c>
+            and that navigator is a <c>NavigableNavigator</c>.
+            </summary>
         </member>
         <member name="M:Umbraco.Web.PublishedCache.XmlPublishedCache.PublishedMediaCache.#ctor(Examine.Providers.BaseSearchProvider,Examine.Providers.BaseIndexProvider)">
             <summary>
@@ -5660,6 +5904,14 @@
             Logs a user in.
             </summary>
             <param name="userId">The user Id</param>
+            <returns>returns the number of seconds until their session times out</returns>
+        </member>
+        <member name="M:Umbraco.Web.Security.WebSecurity.PerformLogin(Umbraco.Core.Models.Membership.IUser)">
+            <summary>
+            Logs the user in
+            </summary>
+            <param name="user"></param>
+            <returns>returns the number of seconds until their session times out</returns>
         </member>
         <member name="M:Umbraco.Web.Security.WebSecurity.ClearCurrentLogin">
             <summary>
@@ -6490,6 +6742,23 @@
             To modify move field declaration from designer file to code-behind file.
             </remarks>
         </member>
+        <member name="T:Umbraco.Web.UmbracoContextExtensions">
+            <summary>
+            Provides extension methods for <see cref="T:Umbraco.Web.UmbracoContext"/>.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoContextExtensions.ContentHasChanged(Umbraco.Web.UmbracoContext)">
+            <summary>
+            Informs the context that content has changed.
+            </summary>
+            <param name="context">The context.</param>
+            <remarks>
+            <para>The contextual caches may, although that is not mandatory, provide an immutable snapshot of
+            the content over the duration of the context. If you make changes to the content and do want to have
+            the caches update their snapshot, you have to explicitely ask them to do so by calling ContentHasChanged.</para>
+            <para>The context informs the contextual caches that content has changed.</para>
+            </remarks>
+        </member>
         <member name="T:umbraco.cms.presentation.settings.stylesheet.editstylesheet">
             <summary>
             Summary description for editstylesheet.
@@ -6766,6 +7035,12 @@
             </summary>
             <returns></returns>        
         </member>
+        <member name="M:Umbraco.Web.Editors.MediaController.MapPropertyValues``1(Umbraco.Web.Models.ContentEditing.ContentBaseItemSave{``0})">
+            <summary>
+            Maps the property values to the persisted entity
+            </summary>
+            <param name="contentItem"></param>
+        </member>
         <member name="M:Umbraco.Web.Editors.MediaController.PostSort(Umbraco.Web.Models.ContentEditing.ContentSortOrder)">
             <summary>
             Change the sort order for media
@@ -6934,14 +7209,6 @@
             All property data validation goes into the modelstate with a prefix of "Properties"
             </remarks>
         </member>
-        <member name="M:Umbraco.Web.WebApi.Filters.ContentItemValidationHelper`2.AddError(System.Web.Http.ModelBinding.ModelStateDictionary,System.ComponentModel.DataAnnotations.ValidationResult,System.String)">
-            <summary>
-            Adds the error to model state correctly for a property so we can use it on the client side.
-            </summary>
-            <param name="modelState"></param>
-            <param name="result"></param>
-            <param name="propertyAlias"></param>
-        </member>
         <member name="T:Umbraco.Web.WebApi.Filters.EnsureUserPermissionForMediaAttribute">
             <summary>
             Auth filter to check if the current user has access to the content item
@@ -7024,6 +7291,12 @@
             <param name="appName">
             If the user has access to any of the specified apps, they will be authorized.
             </param>
+        </member>
+        <member name="M:Umbraco.Web.WebApi.HttpRequestMessageExtensions.TryGetHttpContext(System.Net.Http.HttpRequestMessage)">
+            <summary>
+            Tries to retreive the current HttpContext if one exists.
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:Umbraco.Web.WebApi.HttpRequestMessageExtensions.CreateUserNoAccessResponse(System.Net.Http.HttpRequestMessage)">
             <summary>
@@ -7245,123 +7518,325 @@
         </member>
         <member name="T:Umbraco.Web.PublishedContentExtensions">
             <summary>
-            Extension methods for IPublishedContent
+            Provides extension methods for <c>IPublishedContent</c>.
             </summary>
-            <remarks>
-            These methods exist in the web project as we need access to web based classes like NiceUrl provider
-            which is why they cannot exist in the Core project.
-            </remarks>
-        </member>
-        <member name="M:Umbraco.Web.PublishedContentExtensions.ConvertFromNode(umbraco.interfaces.INode)">
-            <summary>
-            Converts an INode to an IPublishedContent item
-            </summary>
-            <param name="node"></param>
-            <returns></returns>
         </member>
         <member name="M:Umbraco.Web.PublishedContentExtensions.NiceUrl(Umbraco.Core.Models.IPublishedContent)">
             <summary>
-            Gets the NiceUrl for the content item
+            Gets the url for the content.
             </summary>
-            <param name="doc"></param>
-            <returns></returns>
+            <param name="content">The content.</param>
+            <returns>The url for the content.</returns>
         </member>
         <member name="M:Umbraco.Web.PublishedContentExtensions.Url(Umbraco.Core.Models.IPublishedContent)">
             <summary>
-            Gets the Url for the content item
+            Gets the url for the content.
             </summary>
-            <param name="doc"></param>
-            <returns></returns>
+            <param name="content">The content.</param>
+            <returns>The url for the content.</returns>
+            <remarks>Better use the <c>Url</c> property but that method is here to complement <c>UrlAbsolute()</c>.</remarks>
         </member>
         <member name="M:Umbraco.Web.PublishedContentExtensions.NiceUrlWithDomain(Umbraco.Core.Models.IPublishedContent)">
             <summary>
-            Gets the NiceUrlWithDomain for the content item
+            Gets the absolute url for the content.
             </summary>
-            <param name="doc"></param>
-            <returns></returns>
+            <param name="content">The content.</param>
+            <returns>The absolute url for the content.</returns>
         </member>
         <member name="M:Umbraco.Web.PublishedContentExtensions.UrlWithDomain(Umbraco.Core.Models.IPublishedContent)">
             <summary>
-            Gets the UrlWithDomain for the content item
+            Gets the absolute url for the content.
             </summary>
-            <param name="doc"></param>
-            <returns></returns>
+            <param name="content">The content.</param>
+            <returns>The absolute url for the content.</returns>
+        </member>
+        <member name="M:Umbraco.Web.PublishedContentExtensions.UrlAbsolute(Umbraco.Core.Models.IPublishedContent)">
+            <summary>
+            Gets the absolute url for the content.
+            </summary>
+            <param name="content">The content.</param>
+            <returns>The absolute url for the content.</returns>
         </member>
         <member name="M:Umbraco.Web.PublishedContentExtensions.GetTemplateAlias(Umbraco.Core.Models.IPublishedContent)">
             <summary>
             Returns the current template Alias
             </summary>
-            <param name="doc"></param>
+            <param name="content"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.PublishedContentExtensions.GetValueWithParsedLinks(System.Object)">
+        <member name="M:Umbraco.Web.PublishedContentExtensions.HasProperty(Umbraco.Core.Models.IPublishedContent,System.String)">
             <summary>
-            if the val is a string, ensures all internal local links are parsed
+            Gets a value indicating whether the content has a property identified by its alias.
             </summary>
-            <param name="val"></param>
-            <returns></returns>
+            <param name="content">The content.</param>
+            <param name="alias">The property alias.</param>
+            <returns>A value indicating whether the content has the property identified by the alias.</returns>
+            <remarks>The content may have a property, and that property may not have a value.</remarks>
+        </member>
+        <member name="M:Umbraco.Web.PublishedContentExtensions.HasValue(Umbraco.Core.Models.IPublishedContent,System.String)">
+            <summary>
+            Gets a value indicating whether the content has a value for a property identified by its alias.
+            </summary>
+            <param name="content">The content.</param>
+            <param name="alias">The property alias.</param>
+            <returns>A value indicating whether the content has a value for the property identified by the alias.</returns>
+            <remarks>Returns true if <c>GetProperty(alias)</c> is not <c>null</c> and <c>GetProperty(alias).HasValue</c> is <c>true</c>.</remarks>
+        </member>
+        <member name="M:Umbraco.Web.PublishedContentExtensions.HasValue(Umbraco.Core.Models.IPublishedContent,System.String,System.Boolean)">
+            <summary>
+            Gets a value indicating whether the content has a value for a property identified by its alias.
+            </summary>
+            <param name="content">The content.</param>
+            <param name="alias">The property alias.</param>
+            <param name="recurse">A value indicating whether to navigate the tree upwards until a property with a value is found.</param>
+            <returns>A value indicating whether the content has a value for the property identified by the alias.</returns>
+            <remarks>Returns true if <c>GetProperty(alias, recurse)</c> is not <c>null</c> and <c>GetProperty(alias, recurse).HasValue</c> is <c>true</c>.</remarks>
+        </member>
+        <member name="M:Umbraco.Web.PublishedContentExtensions.HasValue(Umbraco.Core.Models.IPublishedContent,System.String,System.String,System.String)">
+            <summary>
+            Returns one of two strings depending on whether the content has a value for a property identified by its alias.
+            </summary>
+            <param name="content">The content.</param>
+            <param name="alias">The property alias.</param>
+            <param name="valueIfTrue">The value to return if the content has a value for the property.</param>
+            <param name="valueIfFalse">The value to return if the content has no value for the property.</param>
+            <returns>Either <paramref name="valueIfTrue"/> or <paramref name="valueIfFalse"/> depending on whether the content
+            has a value for the property identified by the alias.</returns>
+        </member>
+        <member name="M:Umbraco.Web.PublishedContentExtensions.HasValue(Umbraco.Core.Models.IPublishedContent,System.String,System.Boolean,System.String,System.String)">
+            <summary>
+            Returns one of two strings depending on whether the content has a value for a property identified by its alias.
+            </summary>
+            <param name="content">The content.</param>
+            <param name="alias">The property alias.</param>
+            <param name="recurse">A value indicating whether to navigate the tree upwards until a property with a value is found.</param>
+            <param name="valueIfTrue">The value to return if the content has a value for the property.</param>
+            <param name="valueIfFalse">The value to return if the content has no value for the property.</param>
+            <returns>Either <paramref name="valueIfTrue"/> or <paramref name="valueIfFalse"/> depending on whether the content
+            has a value for the property identified by the alias.</returns>
+        </member>
+        <member name="M:Umbraco.Web.PublishedContentExtensions.GetPropertyValue(Umbraco.Core.Models.IPublishedContent,System.String)">
+            <summary>
+            Gets the value of a content's property identified by its alias.
+            </summary>
+            <param name="content">The content.</param>
+            <param name="alias">The property alias.</param>
+            <returns>The value of the content's property identified by the alias.</returns>
+            <remarks>
+            <para>The value comes from <c>IPublishedProperty</c> field <c>Value</c> ie it is suitable for use when rendering content.</para>
+            <para>If no property with the specified alias exists, or if the property has no value, returns <c>null</c>.</para>
+            <para>If eg a numeric property wants to default to 0 when value source is empty, this has to be done in the converter.</para>
+            <para>The alias is case-insensitive.</para>
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.PublishedContentExtensions.GetPropertyValue(Umbraco.Core.Models.IPublishedContent,System.String,System.String)">
+            <summary>
+            Gets the value of a content's property identified by its alias, if it exists, otherwise a default value.
+            </summary>
+            <param name="content">The content.</param>
+            <param name="alias">The property alias.</param>
+            <param name="defaultValue">The default value.</param>
+            <returns>The value of the content's property identified by the alias, if it exists, otherwise a default value.</returns>
+            <remarks>
+            <para>The value comes from <c>IPublishedProperty</c> field <c>Value</c> ie it is suitable for use when rendering content.</para>
+            <para>If no property with the specified alias exists, or if the property has no value, returns <paramref name="defaultValue"/>.</para>
+            <para>If eg a numeric property wants to default to 0 when value source is empty, this has to be done in the converter.</para>
+            <para>The alias is case-insensitive.</para>
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.PublishedContentExtensions.GetPropertyValue(Umbraco.Core.Models.IPublishedContent,System.String,System.Object)">
+            <summary>
+            Gets the value of a content's property identified by its alias, if it exists, otherwise a default value.
+            </summary>
+            <param name="content">The content.</param>
+            <param name="alias">The property alias.</param>
+            <param name="defaultValue">The default value.</param>
+            <returns>The value of the content's property identified by the alias, if it exists, otherwise a default value.</returns>
+            <remarks>
+            <para>The value comes from <c>IPublishedProperty</c> field <c>Value</c> ie it is suitable for use when rendering content.</para>
+            <para>If no property with the specified alias exists, or if the property has no value, returns <paramref name="defaultValue"/>.</para>
+            <para>If eg a numeric property wants to default to 0 when value source is empty, this has to be done in the converter.</para>
+            <para>The alias is case-insensitive.</para>
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.PublishedContentExtensions.GetPropertyValue(Umbraco.Core.Models.IPublishedContent,System.String,System.Boolean)">
+            <summary>
+            Recursively gets the value of a content's property identified by its alias.
+            </summary>
+            <param name="content">The content.</param>
+            <param name="alias">The property alias.</param>
+            <param name="recurse">A value indicating whether to recurse.</param>
+            <returns>The recursive value of the content's property identified by the alias.</returns>
+            <remarks>
+            <para>Recursively means: walking up the tree from <paramref name="content"/>, get the first value that can be found.</para>
+            <para>The value comes from <c>IPublishedProperty</c> field <c>Value</c> ie it is suitable for use when rendering content.</para>
+            <para>If no property with the specified alias exists, or if the property has no value, returns <c>null</c>.</para>
+            <para>If eg a numeric property wants to default to 0 when value source is empty, this has to be done in the converter.</para>
+            <para>The alias is case-insensitive.</para>
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.PublishedContentExtensions.GetPropertyValue(Umbraco.Core.Models.IPublishedContent,System.String,System.Boolean,System.Object)">
+            <summary>
+            Recursively the value of a content's property identified by its alias, if it exists, otherwise a default value.
+            </summary>
+            <param name="content">The content.</param>
+            <param name="alias">The property alias.</param>
+            <param name="recurse">A value indicating whether to recurse.</param>
+            <param name="defaultValue">The default value.</param>
+            <returns>The value of the content's property identified by the alias, if it exists, otherwise a default value.</returns>
+            <remarks>
+            <para>Recursively means: walking up the tree from <paramref name="content"/>, get the first value that can be found.</para>
+            <para>The value comes from <c>IPublishedProperty</c> field <c>Value</c> ie it is suitable for use when rendering content.</para>
+            <para>If no property with the specified alias exists, or if the property has no value, returns <paramref name="defaultValue"/>.</para>
+            <para>If eg a numeric property wants to default to 0 when value source is empty, this has to be done in the converter.</para>
+            <para>The alias is case-insensitive.</para>
+            </remarks>
         </member>
         <member name="M:Umbraco.Web.PublishedContentExtensions.GetPropertyValue``1(Umbraco.Core.Models.IPublishedContent,System.String)">
             <summary>
-            Returns the property as the specified type, if the property is not found or does not convert
-            then the default value of type T is returned.
+            Gets the value of a content's property identified by its alias, converted to a specified type.
             </summary>
-            <typeparam name="T"></typeparam>
-            <param name="doc"></param>
-            <param name="alias"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Umbraco.Web.PublishedContentExtensions.AsDynamicPublishedContent(Umbraco.Core.Models.IPublishedContent)">
-            <summary>
-            Converts a IPublishedContent to a DynamicPublishedContent and tests for null
-            </summary>
-            <param name="content"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Umbraco.Web.PublishedContentExtensions.GetOwnersList(Umbraco.Core.Models.IPublishedContent)">
-            <summary>
-            Return the owners collection of the current content item. 
-            </summary>
-            <param name="content"></param>
-            <returns></returns>
+            <typeparam name="T">The target property type.</typeparam>
+            <param name="content">The content.</param>
+            <param name="alias">The property alias.</param>
+            <returns>The value of the content's property identified by the alias, converted to the specified type.</returns>
             <remarks>
-            If the content item is of type PublishedContentBase we will have a property called OwnersCollection which will 
-            be the collection of a resultant set (i.e. from a where clause, a call to Children(), etc...) otherwise it will
-            be the item's siblings. All relates to this issue: http://issues.umbraco.org/issue/U4-1797
+            <para>The value comes from <c>IPublishedProperty</c> field <c>Value</c> ie it is suitable for use when rendering content.</para>
+            <para>If no property with the specified alias exists, or if the property has no value, or if it could not be converted, returns <c>default(T)</c>.</para>
+            <para>If eg a numeric property wants to default to 0 when value source is empty, this has to be done in the converter.</para>
+            <para>The alias is case-insensitive.</para>
             </remarks>
         </member>
-        <member name="M:Umbraco.Web.PublishedContentExtensions.Siblings(Umbraco.Core.Models.IPublishedContent)">
+        <member name="M:Umbraco.Web.PublishedContentExtensions.GetPropertyValue``1(Umbraco.Core.Models.IPublishedContent,System.String,``0)">
             <summary>
-            Return the items siblings
+            Gets the value of a content's property identified by its alias, converted to a specified type, if it exists, otherwise a default value.
             </summary>
-            <param name="content"></param>
-            <returns></returns>
+            <typeparam name="T">The target property type.</typeparam>
+            <param name="content">The content.</param>
+            <param name="alias">The property alias.</param>
+            <param name="defaultValue">The default value.</param>
+            <returns>The value of the content's property identified by the alias, converted to the specified type, if it exists, otherwise a default value.</returns>
+            <remarks>
+            <para>The value comes from <c>IPublishedProperty</c> field <c>Value</c> ie it is suitable for use when rendering content.</para>
+            <para>If no property with the specified alias exists, or if the property has no value, or if it could not be converted, returns <paramref name="defaultValue"/>.</para>
+            <para>If eg a numeric property wants to default to 0 when value source is empty, this has to be done in the converter.</para>
+            <para>The alias is case-insensitive.</para>
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.PublishedContentExtensions.GetPropertyValue``1(Umbraco.Core.Models.IPublishedContent,System.String,System.Boolean)">
+            <summary>
+            Recursively gets the value of a content's property identified by its alias, converted to a specified type.
+            </summary>
+            <typeparam name="T">The target property type.</typeparam>
+            <param name="content">The content.</param>
+            <param name="alias">The property alias.</param>
+            <param name="recurse">A value indicating whether to recurse.</param>
+            <returns>The value of the content's property identified by the alias, converted to the specified type.</returns>
+            <remarks>
+            <para>Recursively means: walking up the tree from <paramref name="content"/>, get the first value that can be found.</para>
+            <para>The value comes from <c>IPublishedProperty</c> field <c>Value</c> ie it is suitable for use when rendering content.</para>
+            <para>If no property with the specified alias exists, or if the property has no value, or if it could not be converted, returns <c>default(T)</c>.</para>
+            <para>If eg a numeric property wants to default to 0 when value source is empty, this has to be done in the converter.</para>
+            <para>The alias is case-insensitive.</para>
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.PublishedContentExtensions.GetPropertyValue``1(Umbraco.Core.Models.IPublishedContent,System.String,System.Boolean,``0)">
+            <summary>
+            Recursively gets the value of a content's property identified by its alias, converted to a specified type, if it exists, otherwise a default value.
+            </summary>
+            <typeparam name="T">The target property type.</typeparam>
+            <param name="content">The content.</param>
+            <param name="alias">The property alias.</param>
+            <param name="recurse">A value indicating whether to recurse.</param>
+            <param name="defaultValue">The default value.</param>
+            <returns>The value of the content's property identified by the alias, converted to the specified type, if it exists, otherwise a default value.</returns>
+            <remarks>
+            <para>Recursively means: walking up the tree from <paramref name="content"/>, get the first value that can be found.</para>
+            <para>The value comes from <c>IPublishedProperty</c> field <c>Value</c> ie it is suitable for use when rendering content.</para>
+            <para>If no property with the specified alias exists, or if the property has no value, or if it could not be converted, returns <paramref name="defaultValue"/>.</para>
+            <para>If eg a numeric property wants to default to 0 when value source is empty, this has to be done in the converter.</para>
+            <para>The alias is case-insensitive.</para>
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.PublishedContentExtensions.ToContentSet``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Returns the content enumerable as a content set.
+            </summary>
+            <param name="source">The content enumerable.</param>
+            <returns>A content set wrapping the content enumerable.</returns>
+        </member>
+        <member name="M:Umbraco.Web.PublishedContentExtensions.ToContentSet``1(System.Linq.IOrderedEnumerable{``0})">
+            <summary>
+            Returns the ordered content enumerable as an ordered content set.
+            </summary>
+            <param name="source">The ordered content enumerable.</param>
+            <returns>A ordered content set wrapping the ordered content enumerable.</returns>
+        </member>
+        <member name="M:Umbraco.Web.PublishedContentExtensions.IsVisible(Umbraco.Core.Models.IPublishedContent)">
+            <summary>
+            Gets a value indicating whether the content is visible.
+            </summary>
+            <param name="content">The content.</param>
+            <returns>A value indicating whether the content is visible.</returns>
+            <remarks>A content is not visible if it has an umbracoNaviHide property with a value of "1". Otherwise,
+            the content is visible.</remarks>
+        </member>
+        <member name="M:Umbraco.Web.PublishedContentExtensions.Parent``1(Umbraco.Core.Models.IPublishedContent)">
+            <summary>
+            Gets the parent of the content, of a given content type.
+            </summary>
+            <typeparam name="T">The content type.</typeparam>
+            <param name="content">The content.</param>
+            <returns>The parent of content, of the given content type, else null.</returns>
         </member>
         <member name="M:Umbraco.Web.PublishedContentExtensions.Children(Umbraco.Core.Models.IPublishedContent)">
             <summary>
-            Method to return the Children of the content item
+            Gets the children of the content.
             </summary>
-            <param name="p"></param>
-            <returns></returns>
+            <param name="content">The content.</param>
+            <returns>The children of the content.</returns>
             <remarks>
-            This method exists for consistency, it is the same as calling content.Children as a property.
+            <para>Children are sorted by their sortOrder.</para>
+            <para>This method exists for consistency, it is the same as calling content.Children as a property.</para>
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.PublishedContentExtensions.Children(Umbraco.Core.Models.IPublishedContent,System.Func{Umbraco.Core.Models.IPublishedContent,System.Boolean})">
+            <summary>
+            Gets the children of the content, filtered by a predicate.
+            </summary>
+            <param name="content">The content.</param>
+            <param name="predicate">The predicate.</param>
+            <returns>The children of the content, filtered by the predicate.</returns>
+            <remarks>
+            <para>Children are sorted by their sortOrder.</para>
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.PublishedContentExtensions.Children``1(Umbraco.Core.Models.IPublishedContent)">
+            <summary>
+            Gets the children of the content, of a given content type.
+            </summary>
+            <typeparam name="T">The content type.</typeparam>
+            <param name="content">The content.</param>
+            <returns>The children of content, of the given content type.</returns>
+            <remarks>
+            <para>Children are sorted by their sortOrder.</para>
             </remarks>
         </member>
         <member name="M:Umbraco.Web.PublishedContentExtensions.ChildrenAsTable(Umbraco.Core.Models.IPublishedContent,System.String)">
             <summary>
-            Returns a DataTable object for the IPublishedContent
+            Gets the children of the content in a DataTable.
             </summary>
-            <param name="d"></param>
-            <param name="nodeTypeAliasFilter"></param>
-            <returns></returns>
+            <param name="content">The content.</param>
+            <param name="contentTypeAliasFilter">An optional content type alias.</param>
+            <returns>The children of the content.</returns>
         </member>
         <member name="M:Umbraco.Web.PublishedContentExtensions.GenerateDataTable(Umbraco.Core.Models.IPublishedContent,System.String)">
             <summary>
-            Generates the DataTable for the IPublishedContent
+            Gets the children of the content in a DataTable.
             </summary>
-            <param name="node"></param>
-            <param name="nodeTypeAliasFilter"> </param>
-            <returns></returns>
+            <param name="content">The content.</param>
+            <param name="contentTypeAliasFilter">An optional content type alias.</param>
+            <returns>The children of the content.</returns>
         </member>
         <member name="P:Umbraco.Web.PublishedContentExtensions.GetPropertyAliasesAndNames">
             <summary>
@@ -7803,6 +8278,14 @@
             <param name="prefix"></param>
             <returns></returns>
         </member>
+        <member name="M:Umbraco.Web.ModelStateExtensions.AddPropertyError(System.Web.Http.ModelBinding.ModelStateDictionary,System.ComponentModel.DataAnnotations.ValidationResult,System.String)">
+            <summary>
+            Adds the error to model state correctly for a property so we can use it on the client side.
+            </summary>
+            <param name="modelState"></param>
+            <param name="result"></param>
+            <param name="propertyAlias"></param>
+        </member>
         <member name="M:Umbraco.Web.ModelStateExtensions.ToJsonErrors(System.Web.Mvc.ModelStateDictionary)">
             <summary>
             Serializes the ModelState to JSON for JavaScript to interrogate the errors
@@ -8045,20 +8528,11 @@
             Cleans up the controller by releasing it using the controller factory, and by disposing it.
             </summary>
         </member>
-        <member name="T:Umbraco.Web.PropertyEditors.RteMacroRenderingPropertyValueConverter">
+        <member name="T:Umbraco.Web.PropertyEditors.ValueConverters.RteMacroRenderingValueConverter">
             <summary>
             A value converter for TinyMCE that will ensure any macro content is rendered properly even when 
             used dynamically.
             </summary>
-        </member>
-        <member name="M:Umbraco.Web.PropertyEditors.RteMacroRenderingPropertyValueConverter.ConvertSourceToObject(System.Object,Umbraco.Core.Models.PublishedPropertyDefinition,System.Boolean)">
-            <summary>
-            Return IHtmlString so devs doesn't need to decode html
-            </summary>
-            <param name="valueToConvert"></param>
-            <param name="propertyDefinition"></param>
-            <param name="isPreviewing"></param>
-            <returns></returns>
         </member>
         <member name="T:Umbraco.Web.RenderFieldCaseType">
             <summary>
@@ -8841,6 +9315,7 @@
             The RegEx matches any HTML attribute values that start with a tilde (~), those that match are passed to ResolveUrl to replace the tilde with the application path.
             </summary>
             <param name="text"></param>
+            <param name="preview"></param>
             <returns></returns>
             <remarks>
             When used with a Virtual-Directory set-up, this would resolve all URLs correctly.
@@ -11853,12 +12328,34 @@
             <param name="nodeId">Identifier for the node that should be returned</param>
             <returns>String with a friendly url from a node</returns>
         </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.Url(System.Int32)">
+            <summary>
+            Gets the url of a content identified by its identifier.
+            </summary>
+            <param name="contentId">The content identifier.</param>
+            <returns>The url for the content.</returns>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.Url(System.Int32,Umbraco.Web.Routing.UrlProviderMode)">
+            <summary>
+            Gets the url of a content identified by its identifier, in a specified mode.
+            </summary>
+            <param name="contentId">The content identifier.</param>
+            <param name="mode">The mode.</param>
+            <returns>The url for the content.</returns>
+        </member>
         <member name="M:Umbraco.Web.UmbracoHelper.NiceUrlWithDomain(System.Int32)">
             <summary>
             This method will always add the domain to the path if the hostnames are set up correctly. 
             </summary>
             <param name="nodeId">Identifier for the node that should be returned</param>
             <returns>String with a friendly url with full domain from a node</returns>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.UrlAbsolute(System.Int32)">
+            <summary>
+            Gets the absolute url of a content identified by its identifier.
+            </summary>
+            <param name="contentId">The content identifier.</param>
+            <returns>The absolute url for the content.</returns>
         </member>
         <member name="M:Umbraco.Web.UmbracoHelper.TypedMedia(System.Object)">
             <summary>
@@ -12037,42 +12534,37 @@
             Gets executed when no document can be found in Umbraco
             </summary>
         </member>
-        <member name="T:Umbraco.Web.Models.XmlPublishedContent">
+        <member name="T:Umbraco.Web.PublishedCache.XmlPublishedCache.XmlPublishedContent">
             <summary>
-            Represents an IPublishedContent which is created based on an Xml structure
+            Represents an IPublishedContent which is created based on an Xml structure.
             </summary>
         </member>
-        <member name="M:Umbraco.Web.Models.XmlPublishedContent.#ctor(System.Xml.XmlNode)">
+        <member name="M:Umbraco.Web.PublishedCache.XmlPublishedCache.XmlPublishedContent.#ctor(System.Xml.XmlNode,System.Boolean)">
             <summary>
-            Constructor
+            Initializes a new instance of the <c>XmlPublishedContent</c> class with an Xml node.
             </summary>
-            <param name="xmlNode"></param>
+            <param name="xmlNode">The Xml node.</param>
+            <param name="isPreviewing">A value indicating whether the published content is being previewed.</param>
         </member>
-        <member name="M:Umbraco.Web.Models.XmlPublishedContent.#ctor(System.Xml.XmlNode,System.Boolean)">
+        <member name="M:Umbraco.Web.PublishedCache.XmlPublishedCache.XmlPublishedContent.#ctor(System.Xml.XmlNode,System.Boolean,System.Boolean)">
             <summary>
-            Constructor
+            Initializes a new instance of the <c>XmlPublishedContent</c> class with an Xml node,
+            and a value indicating whether to lazy-initialize the instance.
             </summary>
-            <param name="xmlNode"></param>
-            <param name="disableInitializing"></param>
+            <param name="xmlNode">The Xml node.</param>
+            <param name="isPreviewing">A value indicating whether the published content is being previewed.</param>
+            <param name="lazyInitialize">A value indicating whether to lazy-initialize the instance.</param>
+            <remarks>Lazy-initializationg is NOT thread-safe.</remarks>
         </member>
-        <member name="P:Umbraco.Web.Models.XmlPublishedContent.ItemType">
-            <summary>
-            returns 'Content' as the ItemType
-            </summary>
-        </member>
-        <member name="T:Umbraco.Web.Models.XmlPublishedContentProperty">
+        <member name="T:Umbraco.Web.PublishedCache.XmlPublishedCache.XmlPublishedProperty">
             <summary>
             Represents an IDocumentProperty which is created based on an Xml structure.
             </summary>
         </member>
-        <member name="P:Umbraco.Web.Models.XmlPublishedContentProperty.Value">
+        <member name="P:Umbraco.Web.PublishedCache.XmlPublishedCache.XmlPublishedProperty.DataValue">
             <summary>
-            Returns the value of a property from the XML cache
+            Gets the raw value of the property.
             </summary>
-            <remarks>
-            This ensures that the result has any {localLink} syntax parsed and that urls are resolved correctly.
-            This also ensures that the parsing is only done once as the result is cached in a private field of this object.
-            </remarks>
         </member>
         <member name="T:Umbraco.Web.Mvc.Constants">
             <summary>
@@ -12374,7 +12866,7 @@
         <member name="T:Umbraco.Web.WebApi.UmbracoAuthorizeAttribute">
             <summary>
             Ensures authorization is successful for a back office user
-            </summary>
+            </summary>    
         </member>
         <member name="F:Umbraco.Web.WebApi.UmbracoAuthorizeAttribute.Enable">
             <summary>
@@ -12391,6 +12883,13 @@
             <summary>
             An action filter used to do basic validation against the model and return a result
             straight away if it fails.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Web.WebApi.Filters.UmbracoUserTimeoutFilterAttribute">
+            <summary>
+            This will check if the request is authenticated and if there's an auth ticket present we will 
+            add a custom header to the response indicating how many seconds are remaining for the current 
+            user's session. This allows us to keep track of a user's session effectively in the back office.
             </summary>
         </member>
         <member name="M:Umbraco.Web.WebApi.WebApiHelper.CreateContext(System.Net.Http.HttpMethod,System.Uri,System.Web.HttpContextBase)">
@@ -14482,6 +14981,13 @@
             Initializes a new instance of the <see cref="T:umbraco.page"/> class for a published document.
             </summary>
             <param name="node">The <c>XmlNode</c> representing the document.</param>
+        </member>
+        <member name="M:umbraco.page.#ctor(Umbraco.Core.Models.IContent)">
+            <summary>
+            Initializes a new instance of the page for a content.
+            </summary>
+            <param name="content">The content.</param>
+            <remarks>This is for <see cref="T:Umbraco.Web.Editors.MacroController"/> usage only.</remarks>
         </member>
         <member name="M:umbraco.page.PopulateElementData(Umbraco.Core.Models.IPublishedContent)">
             <summary>
@@ -25140,6 +25646,7 @@
             <summary>
             Determines whether the current user is in a preview mode and browsing the site (ie. not in the admin UI)
             </summary>
+            <remarks>Can be internally set by the RTE macro rendering to render macros in the appropriate mode.</remarks>
         </member>
         <member name="M:Umbraco.Web.UmbracoModule.BeginRequest(System.Web.HttpContextBase)">
             <summary>
@@ -25188,6 +25695,17 @@
             * it is an installer request
             * it is a /base request
             * it is a preview request
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoModule.ShouldIgnoreTicketRenew(System.Uri,System.Web.HttpContextBase)">
+            <summary>
+            Determines if the authentication ticket should be renewed with a new timeout
+            </summary>
+            <param name="url"></param>
+            <param name="httpContext"></param>
+            <returns></returns>
+            <remarks>
+            We do not want to renew the ticket when we are checking for the user's remaining timeout.
             </remarks>
         </member>
         <member name="M:Umbraco.Web.UmbracoModule.EnsureUmbracoRoutablePage(Umbraco.Web.UmbracoContext,System.Web.HttpContextBase)">

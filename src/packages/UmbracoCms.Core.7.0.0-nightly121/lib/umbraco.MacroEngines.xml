@@ -30,16 +30,6 @@
             <param name="result"></param>
             <returns></returns>
         </member>
-        <member name="T:umbraco.MacroEngines.Library.PublishedContentExtensions">
-            <summary>
-            Extension methods for converting DynamicPublishedContent to INode
-            </summary>
-        </member>
-        <member name="T:umbraco.MacroEngines.Library.PublishedContentExtensions.ConvertedNode">
-            <summary>
-            Internal custom INode class used for conversions from DynamicPublishedContent
-            </summary>
-        </member>
         <member name="F:umbraco.MacroEngines.DynamicNode.GetDataTypeCallback">
             <summary>
             This callback is used only so we can set it dynamically for use in unit tests

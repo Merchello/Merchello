@@ -36,7 +36,7 @@ namespace Merchello.Core.Persistence.Factories
                 Key = entity.Key,
                 UpdateDate = entity.UpdateDate,
                 CreateDate = entity.CreateDate,
-                ProductVariantDto = _productVariantFactory.BuildDto(((Product)entity).DefaultVariant)
+                ProductVariantDto = _productVariantFactory.BuildDto(((Product)entity).MasterVariant)
             };
 
             return dto;

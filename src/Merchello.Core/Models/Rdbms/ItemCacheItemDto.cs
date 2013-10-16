@@ -34,6 +34,7 @@ namespace Merchello.Core.Models.Rdbms
 
         [Column("extendedData")]
         [NullSetting(NullSetting = NullSettings.Null)]
+        [SpecialDbType(SpecialDbTypes.NTEXT)]
         public string ExtendedData { get; set; }
 
         [Column("exported")]
