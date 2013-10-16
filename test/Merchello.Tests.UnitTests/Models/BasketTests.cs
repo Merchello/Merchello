@@ -113,10 +113,10 @@ namespace Merchello.Tests.UnitTests.Models
             var product3 = MockProductDataMaker.MockProductComplete(Guid.NewGuid());
             var product4 = MockProductDataMaker.MockProductComplete(Guid.NewGuid());
             
-            basket.AddItem(product1, 1);
-            basket.AddItem(product2, 2);
-            basket.AddItem(product3, 3);
-            basket.AddItem(product4, 4);
+            basket.AddItem(product1, product1.Name, 1);
+            basket.AddItem(product2, product2.Name, 2);
+            basket.AddItem(product3, product3.Name, 3);
+            basket.AddItem(product4, product4.Name, 4);
 
             //// Act
             var sum = basket.TotalQuantityCount;
@@ -139,16 +139,16 @@ namespace Merchello.Tests.UnitTests.Models
             var product3 = MockProductDataMaker.MockProductComplete(Guid.NewGuid());
             var product4 = MockProductDataMaker.MockProductComplete(Guid.NewGuid());
 
-            basket.AddItem(product1, 1);
+            basket.AddItem(product1, product1.Name, 1);
             expectedPrice += product1.Price;
 
-            basket.AddItem(product2, 2);
+            basket.AddItem(product2, product2.Name, 2);
             expectedPrice += (product2.Price * 2);
 
-            basket.AddItem(product3, 3);
+            basket.AddItem(product3, product3.Name, 3);
             expectedPrice += (product3.Price * 3);
 
-            basket.AddItem(product4, 4);
+            basket.AddItem(product4, product4.Name, 4);
             expectedPrice += (product4.Price * 4);
 
             //// Act

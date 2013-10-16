@@ -57,7 +57,7 @@ namespace Merchello.Web.Models
         /// <param name="product"><see cref="IProduct"/></param>
         public void AddItem(IProduct product)
         {
-           AddItem(product, 1);
+           AddItem(product, product.Name, 1);
         }
 
         /// <summary>
@@ -65,18 +65,19 @@ namespace Merchello.Web.Models
         /// <see cref="IProductVariant"/> is added to the basket item collection
         /// </summary>
         /// <param name="product"><see cref="IProduct"/></param>
+        /// <param name="name"></param>
         /// <param name="quantity"></param>
-        public void AddItem(IProduct product, int quantity)
+        public void AddItem(IProduct product, string name, int quantity)
         {
             var variant = product.GetProductVariantForPurchase();
             if (variant != null)
             {
-                AddItem(variant, quantity);
+                AddItem(variant, name, quantity);
                 return;
             }
             if (!product.ProductVariants.Any()) return;
 
-            AddItem(product.ProductVariants.First(), quantity);
+            AddItem(product.ProductVariants.First(), name, quantity);
         }
 
         /// <summary>
@@ -84,19 +85,22 @@ namespace Merchello.Web.Models
         /// </summary>
         public void AddItem(IProductVariant productVariant)
         {
-            AddItem(productVariant, 1);  
+            AddItem(productVariant, productVariant.Name, 1);  
         }
 
 
         /// <summary>
         /// Adds a line item to the basket
         /// </summary>
-        public void AddItem(IProductVariant productVariant, int quantity)
+        public void AddItem(IProductVariant productVariant, string name, int quantity)
         {
             var extendedData = new ExtendedDataCollection();
             extendedData.AddProductVariantValues(productVariant);
 
-            AddItem(productVariant.Name, productVariant.Sku, quantity,
+            AddItem(
+                string.IsNullOrEmpty(name) ? productVariant.Name : name, 
+                productVariant.Sku, 
+                quantity,
                 productVariant.OnSale ?
                 productVariant.SalePrice != null ? productVariant.SalePrice.Value : productVariant.Price
                 : productVariant.Price, extendedData);

@@ -26,6 +26,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Web", "Merchello.Web\Merchello.Web.csproj", "{81D9E7DA-5A5A-444A-823F-1D97D7D5FEDF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{463673C8-16DA-466D-9306-011FB5A9105C}"
+	ProjectSection(SolutionItems) = preProject
+		umbracoconfig-product-content.xml = umbracoconfig-product-content.xml
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Tests.Base", "..\test\Merchello.Tests.Base\Merchello.Tests.Base.csproj", "{AC1A12FD-34CD-488A-90A1-528DE5941C33}"
 EndProject
