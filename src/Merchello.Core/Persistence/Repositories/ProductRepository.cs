@@ -146,7 +146,7 @@ namespace Merchello.Core.Persistence.Repositories
             SaveProductOptions(entity);
 
             // synchronize the inventory
-            ((ProductVariantRepository)_productVariantRepository).SynchronizeWarehouseAssociations(((Product)entity).ProductVariantMaster);
+            ((ProductVariantRepository)_productVariantRepository).SaveWarehouseInventory(((Product)entity).ProductVariantMaster);
 
             entity.ResetDirtyProperties();
         }
@@ -164,7 +164,7 @@ namespace Merchello.Core.Persistence.Repositories
             SaveProductOptions(entity);
 
             // synchronize the inventory
-            ((ProductVariantRepository) _productVariantRepository).SynchronizeWarehouseAssociations(((Product)entity).ProductVariantMaster);
+            ((ProductVariantRepository) _productVariantRepository).SaveWarehouseInventory(((Product)entity).ProductVariantMaster);
 
             entity.ResetDirtyProperties();
         }
