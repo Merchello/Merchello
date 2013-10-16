@@ -10,12 +10,17 @@
     ]
     ,
     javascript: [
-        '~/App_Plugins/Merchello/Common/Js/_module.js',
+        '~/App_Plugins/Merchello/lib/bootstrap/js/bootstrap.min.js',
+        '~/App_Plugins/Merchello/lib/select2/ui-select2.js',
         '~/App_Plugins/Merchello/Common/Js/merchello.product.service.js',
-        '~/App_Plugins/Merchello/PropertyEditors/Js/merchelloskuselector.controller.js',
         '~/App_Plugins/Merchello/PropertyEditors/Js/merchelloskuselector.controller.js',
         '~/App_Plugins/Merchello/Controllers/product.list.controller.js',
         '~/App_Plugins/Merchello/Controllers/product.create.controller.js',
         '~/App_Plugins/Merchello/Controllers/product.edit.controller.js'
-    ]
+    ],
+	stylesheet: [
+        '~/App_Plugins/Merchello/Common/Css/merchello.css',
+        '~/App_Plugins/Merchello/lib/bootstrap/css/bootstrap.min.css',
+        '~/App_Plugins/Merchello/lib/bootstrap/css/bootstrap-theme.min.css'
+	]
 }

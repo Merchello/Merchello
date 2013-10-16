@@ -7,7 +7,7 @@ using umbraco.interfaces;
 
 namespace Merchello.Web.UI.Trees
 {
-    [Application("merchello", "Merchello", "Merchello-Icon.gif", 10)]
+    [Application("merchello", "Merchello", "Merchello-Icon.png", 10)] // coin
     public class MerchelloApp : IApplication
     {
     }

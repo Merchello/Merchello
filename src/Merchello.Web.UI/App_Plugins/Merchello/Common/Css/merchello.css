@@ -1,0 +1,35 @@
+﻿
+.merchello-panel-body {
+    bottom: 0;
+    clear: both;
+    left: 0;
+    overflow: auto;
+    position: absolute;
+    right: 0;
+    top: 101px;
+    width: 100%;
+}
+
+.merchello-pane {
+    margin: 30px 20px;
+}
+
+.merchello-controls {
+    margin-left: 240px;
+    padding-top: 5px;
+}
+
+.merchello-control-label {
+    text-align: left;
+    float: left;
+    padding-top: 8px;
+    width: 160px;
+}
+
+table.merchello-selectable-table tr td {
+    cursor: pointer;
+}
+
+.form-horizontal .controls {
+     padding-top: 6px;
+}
