@@ -252,9 +252,25 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
             _product.AddToWarehouse(warehouseId);
 
             //// Assert
-            Assert.IsTrue(_product.Inventory.Count() == 1);
+            Assert.IsTrue(_product.Warehouses.Count() == 1);
         }
 
+        /// <summary>
+        /// Test verifies that a warehouse can be assoicated with a variant and saved
+        /// </summary>
+        [Test]
+        public void Can_Add_And_Save_A_Warehouse_To_A_ProductVariant()
+        {
+            //// Arrange
+            const int warehouseId = 1;
+
+            //// Act
+            _product.AddToWarehouse(warehouseId);
+            _productService.Save(_product);
+
+            //// Assert
+            Assert.IsTrue(_product.Warehouses.Count() == 1);
+        }
 
     }
 }
