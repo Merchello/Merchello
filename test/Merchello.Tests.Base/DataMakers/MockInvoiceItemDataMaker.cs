@@ -25,10 +25,7 @@ namespace Merchello.Tests.Base.DataMakers
             for (var i = 0; i < count; i++) yield return InvoiceLineItemForInserting(invoice, invoiceItemType);
         }
 
-        private static int Quanity()
-        {
-            return NoWhammyStop.Next(10);
-        }
+
 
         
 

@@ -243,6 +243,7 @@
     <Compile Include="DataMakers\MockInvoiceItemDataMaker.cs" />
     <Compile Include="DataMakers\MockInvoiceStatusDataMaker.cs" />
     <Compile Include="DataMakers\MockDataMakerBase.cs" />
+    <Compile Include="DataMakers\MockLineItemDataMaker.cs" />
     <Compile Include="DataMakers\MockPaymentDataMaker.cs" />
     <Compile Include="DataMakers\MockProductDataMaker.cs" />
     <Compile Include="DataMakers\MockShipmentDataMaker.cs" />
@@ -264,6 +265,7 @@
     <Compile Include="TypeFields\TypeFieldMock.cs" />
     <Compile Include="SqlSyntax\BaseUsingSqlServerSyntax.cs" />
     <Compile Include="Umbraco\ApplicationContext\FakeUmbracoApplication.cs" />
+    <Compile Include="Visitors\MockLineItemVistor.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Merchello.Core\Merchello.Core.csproj">

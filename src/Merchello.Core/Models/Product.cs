@@ -124,7 +124,7 @@ namespace Merchello.Core.Models
         /// Returns the "master" <see cref="IProductVariant"/> that defines this <see cref="IProduct" /> or null if this <see cref="IProduct" /> has options
         /// </summary>
         /// <returns><see cref="IProductVariant"/> or null if this <see cref="IProduct" /> has options</returns>
-        public IProductVariant GetVariantForPurchase()
+        public IProductVariant GetProductVariantForPurchase()
         {
             if (ProductOptions.Any()) return null;
             return MasterVariant;
@@ -136,7 +136,7 @@ namespace Merchello.Core.Models
         /// </summary>
         /// <param name="selectedChoices">A collection of <see cref="IProductAttribute"/> which define the specific <see cref="IProductVariant"/> of the <see cref="IProduct"/></param>
         /// <returns><see cref="IProductVariant"/> or null if no <see cref="IProductVariant"/> is found with a matching collection of <see cref="IProductAttribute"/></returns>
-        public IProductVariant GetVariantForPurchase(IEnumerable<IProductAttribute> selectedChoices)
+        public IProductVariant GetProductVariantForPurchase(IEnumerable<IProductAttribute> selectedChoices)
         {
             return
                 ProductVariants.FirstOrDefault(
@@ -155,7 +155,7 @@ namespace Merchello.Core.Models
         /// </summary>
         /// <param name="selectedChoiceIds"></param>
         /// <returns><see cref="IProductVariant"/> or null if no <see cref="IProductVariant"/> is found with a matching collection of <see cref="IProductAttribute"/></returns>
-        public IProductVariant GetVariantForPurchase(int[] selectedChoiceIds)
+        public IProductVariant GetProductVariantForPurchase(int[] selectedChoiceIds)
         {
             return
                 ProductVariants.FirstOrDefault(

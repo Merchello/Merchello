@@ -28,5 +28,11 @@ namespace Merchello.Core.Models
         /// <param name="warehouseId">The 'unique' id of the <see cref="IWarehouse"/></param>
         void AddToWarehouse(int warehouseId);
 
+        /// <summary>
+        /// Returns the total (sum) of inventory "counts" across all associated warehouses
+        /// </summary>
+        /// <returns></returns>
+        int TotalInventoryCount { get; }
+
     }
 }

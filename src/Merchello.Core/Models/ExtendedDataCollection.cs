@@ -75,7 +75,7 @@ namespace Merchello.Core.Models
         public string GetValue(string key)
         {
             var validKey = AssertValidKey(key);
-            return this[validKey];
+            return ContainsKey(validKey) ? this[validKey] : string.Empty;
         }
 
         private static string AssertValidKey(string key)

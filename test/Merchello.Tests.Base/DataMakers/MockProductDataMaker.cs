@@ -20,10 +20,11 @@ namespace Merchello.Tests.Base.DataMakers
         /// Represents a product as if it was returned from the database
         /// </summary>
         /// <param name="key">The key you want to use as the key for the product</param>
-        /// <returns><see cref="IProductVariant"/></returns>
+        /// <returns><see cref="IProduct"/></returns>
         public static IProduct MockProductComplete(Guid key)
         {
             var product = MockProductForInserting();
+            ((Product)product).AddingEntity();
             product.Key = key;
             product.ResetDirtyProperties();
             return product;

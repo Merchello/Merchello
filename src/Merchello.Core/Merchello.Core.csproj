@@ -93,9 +93,9 @@
     <Compile Include="Events\StatusChangeEventArgs.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ExtendedDataExtensions.cs" />
+    <Compile Include="Models\ExtendedDataExtensions.cs" />
     <Compile Include="IMerchelloContext.cs" />
-    <Compile Include="LineItemContainerExtensions.cs" />
+    <Compile Include="Models\LineItemContainerExtensions.cs" />
     <Compile Include="ModelExtensions.cs" />
     <Compile Include="Gateway\GatewayEnumerations.cs" />
     <Compile Include="Gateway\IGatewayProvider.cs" />
@@ -357,7 +357,7 @@
     <Compile Include="Services\CustomerService.cs" />
     <Compile Include="Services\Interfaces\ICustomerService.cs" />
     <Compile Include="Services\ServiceContext.cs" />
-    <Compile Include="WarehouseInventoryExtensions.cs" />
+    <Compile Include="Models\WarehouseInventoryExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

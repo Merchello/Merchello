@@ -44,7 +44,7 @@ namespace Merchello.Tests.UnitTests.Models
             var expected = ((Product) _product).MasterVariant;
 
             //// Act
-            var variant = _product.GetVariantForPurchase();
+            var variant = _product.GetProductVariantForPurchase();
 
             //// Assert
             Assert.NotNull(variant);
@@ -61,7 +61,7 @@ namespace Merchello.Tests.UnitTests.Models
             _product.ProductOptions.Add(new ProductOption("Option1") { Id = 1 });
 
             //// Act
-            var variant = _product.GetVariantForPurchase();
+            var variant = _product.GetProductVariantForPurchase();
 
             //// Assert
             Assert.IsNull(variant);
@@ -84,7 +84,7 @@ namespace Merchello.Tests.UnitTests.Models
             _product.ProductVariants.Add(expected);
 
             //// Act
-            var variant = _product.GetVariantForPurchase(attCollection);
+            var variant = _product.GetProductVariantForPurchase(attCollection);
 
             //// Assert
             Assert.NotNull(variant);
@@ -109,7 +109,7 @@ namespace Merchello.Tests.UnitTests.Models
             _product.ProductVariants.Add(expected);
 
             //// Act
-            var variant = _product.GetVariantForPurchase(new [] { 1 });
+            var variant = _product.GetProductVariantForPurchase(new [] { 1 });
 
             //// Assert
             Assert.NotNull(variant);
