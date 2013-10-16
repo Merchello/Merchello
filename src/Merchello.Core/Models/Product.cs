@@ -16,21 +16,21 @@ namespace Merchello.Core.Models
     internal class Product : KeyEntity, IProduct
     {
         
-        private readonly IProductVariant _variantMaster;
+        private readonly IProductVariant _variant;
         private ProductOptionCollection _productOptions;
         private ProductVariantCollection _productVariants;
 
-        public Product(IProductVariant variantMaster)
-            : this(variantMaster, new ProductOptionCollection(), new ProductVariantCollection())
+        public Product(IProductVariant variant)
+            : this(variant, new ProductOptionCollection(), new ProductVariantCollection())
         {}
 
-        public Product(IProductVariant variantMaster, ProductOptionCollection productOptions, ProductVariantCollection productVariants)
+        public Product(IProductVariant variant, ProductOptionCollection productOptions, ProductVariantCollection productVariants)
         {
-            Mandate.ParameterNotNull(variantMaster, "variantMaster");
+            Mandate.ParameterNotNull(variant, "variantMaster");
             Mandate.ParameterNotNull(productOptions, "optionCollection");
             Mandate.ParameterNotNull(productVariants, "productVariants");
 
-            _variantMaster = variantMaster;
+            _variant = variant;
             _productOptions = productOptions;
             _productVariants = productVariants;
         }
@@ -117,16 +117,16 @@ namespace Merchello.Core.Models
         /// <param name="warehouseId">The 'unique' id of the <see cref="IWarehouse"/></param>
         public void AddToWarehouse(int warehouseId)
         {
-            _variantMaster.AddToWarehouse(warehouseId);
+            _variant.AddToWarehouse(warehouseId);
         }
 
         #endregion
 
         #region Overrides IProductBase
 
-        internal IProductVariant ProductVariantMaster
+        public IProductVariant DefaultVariant
         {
-            get { return _variantMaster; }
+            get { return _variant; }
         }
 
         /// <summary>
@@ -135,7 +135,7 @@ namespace Merchello.Core.Models
         [DataMember]
         public Guid ProductVariantKey
         {
-            get { return _variantMaster.Key; }
+            get { return _variant.Key; }
         }
 
         /// <summary>
@@ -144,8 +144,8 @@ namespace Merchello.Core.Models
         [DataMember]
         public string Name
         {
-            get { return _variantMaster.Name; }
-            set { _variantMaster.Name = value; }
+            get { return _variant.Name; }
+            set { _variant.Name = value; }
         }
 
         /// <summary>
@@ -154,8 +154,8 @@ namespace Merchello.Core.Models
         [DataMember]
         public string Sku
         {
-            get { return _variantMaster.Sku; }
-            set { _variantMaster.Sku = value; }
+            get { return _variant.Sku; }
+            set { _variant.Sku = value; }
         }
 
         /// <summary>
@@ -164,8 +164,8 @@ namespace Merchello.Core.Models
         [DataMember]
         public decimal Price
         {
-            get { return _variantMaster.Price; }
-            set { _variantMaster.Price = value; }
+            get { return _variant.Price; }
+            set { _variant.Price = value; }
         }
 
         /// <summary>
@@ -174,8 +174,8 @@ namespace Merchello.Core.Models
         [DataMember]
         public decimal? CostOfGoods
         {
-            get { return _variantMaster.CostOfGoods; }
-            set { _variantMaster.CostOfGoods = value; }
+            get { return _variant.CostOfGoods; }
+            set { _variant.CostOfGoods = value; }
         }
 
         /// <summary>
@@ -184,8 +184,8 @@ namespace Merchello.Core.Models
         [DataMember]
         public decimal? SalePrice
         {
-            get { return _variantMaster.SalePrice; }
-            set { _variantMaster.SalePrice = value; }
+            get { return _variant.SalePrice; }
+            set { _variant.SalePrice = value; }
         }
 
         /// <summary>
@@ -194,8 +194,8 @@ namespace Merchello.Core.Models
         [DataMember]
         public bool OnSale
         {
-            get { return _variantMaster.OnSale; }
-            set { _variantMaster.OnSale = value; }
+            get { return _variant.OnSale; }
+            set { _variant.OnSale = value; }
         }
 
         /// <summary>
@@ -204,8 +204,8 @@ namespace Merchello.Core.Models
         [DataMember]
         public decimal? Weight
         {
-            get { return _variantMaster.Weight; }
-            set { _variantMaster.Weight = value; }
+            get { return _variant.Weight; }
+            set { _variant.Weight = value; }
         }
 
         /// <summary>
@@ -214,8 +214,8 @@ namespace Merchello.Core.Models
         [DataMember]
         public decimal? Length
         {
-            get { return _variantMaster.Length; }
-            set { _variantMaster.Length = value; }
+            get { return _variant.Length; }
+            set { _variant.Length = value; }
         }
 
         /// <summary>
@@ -224,8 +224,8 @@ namespace Merchello.Core.Models
         [DataMember]
         public decimal? Width
         {
-            get { return _variantMaster.Width; }
-            set { _variantMaster.Width = value; }
+            get { return _variant.Width; }
+            set { _variant.Width = value; }
         }
 
         /// <summary>
@@ -234,8 +234,8 @@ namespace Merchello.Core.Models
         [DataMember]
         public decimal? Height
         {
-            get { return _variantMaster.Height; }
-            set { _variantMaster.Height = value; }
+            get { return _variant.Height; }
+            set { _variant.Height = value; }
         }
 
         /// <summary>
@@ -244,8 +244,8 @@ namespace Merchello.Core.Models
         [DataMember]
         public string Barcode
         {
-            get { return _variantMaster.Barcode; }
-            set { _variantMaster.Barcode = value; }
+            get { return _variant.Barcode; }
+            set { _variant.Barcode = value; }
         }
 
         /// <summary>
@@ -254,8 +254,8 @@ namespace Merchello.Core.Models
         [DataMember]
         public bool Available
         {
-            get { return _variantMaster.Available; }
-            set { _variantMaster.Available = value; }
+            get { return _variant.Available; }
+            set { _variant.Available = value; }
         }
 
         /// <summary>
@@ -264,8 +264,8 @@ namespace Merchello.Core.Models
         [DataMember]
         public bool TrackInventory
         {
-            get { return _variantMaster.TrackInventory; }
-            set { _variantMaster.TrackInventory = value; }
+            get { return _variant.TrackInventory; }
+            set { _variant.TrackInventory = value; }
         }
 
         /// <summary>
@@ -274,8 +274,8 @@ namespace Merchello.Core.Models
         [DataMember]
         public bool OutOfStockPurchase
         {
-            get { return _variantMaster.OutOfStockPurchase; }
-            set { _variantMaster.OutOfStockPurchase = value; }
+            get { return _variant.OutOfStockPurchase; }
+            set { _variant.OutOfStockPurchase = value; }
         }
 
         /// <summary>
@@ -284,8 +284,8 @@ namespace Merchello.Core.Models
         [DataMember]
         public bool Taxable
         {
-            get { return _variantMaster.Taxable; }
-            set { _variantMaster.Taxable = value; }
+            get { return _variant.Taxable; }
+            set { _variant.Taxable = value; }
         }
 
         /// <summary>
@@ -294,8 +294,8 @@ namespace Merchello.Core.Models
         [DataMember]
         public bool Shippable
         {
-            get { return _variantMaster.Shippable; }
-            set { _variantMaster.Shippable = value; }
+            get { return _variant.Shippable; }
+            set { _variant.Shippable = value; }
         }
 
         /// <summary>
@@ -304,8 +304,8 @@ namespace Merchello.Core.Models
         [DataMember]
         public bool Download
         {
-            get { return _variantMaster.Download; }
-            set { _variantMaster.Download = value; }
+            get { return _variant.Download; }
+            set { _variant.Download = value; }
         }
 
         /// <summary>
@@ -314,8 +314,8 @@ namespace Merchello.Core.Models
         [DataMember]
         public int? DownloadMediaId
         {
-            get { return _variantMaster.DownloadMediaId; }
-            set { _variantMaster.DownloadMediaId = value; }
+            get { return _variant.DownloadMediaId; }
+            set { _variant.DownloadMediaId = value; }
         }
 
         /// <summary>
@@ -324,7 +324,7 @@ namespace Merchello.Core.Models
         [DataMember]
         public IEnumerable<IWarehouseInventory> Warehouses
         {
-            get { return _variantMaster.Warehouses; }
+            get { return _variant.Warehouses; }
         }
 
         #endregion
@@ -332,20 +332,20 @@ namespace Merchello.Core.Models
         public override void ResetDirtyProperties()
         {
             base.ResetDirtyProperties();
-            _variantMaster.ResetDirtyProperties();
+            _variant.ResetDirtyProperties();
         }
 
         internal override void AddingEntity()
         {
             base.AddingEntity();
-            ((ProductVariant) _variantMaster).Master = true;
-            ((ProductVariant) _variantMaster).AddingEntity();
+            ((ProductVariant) _variant).Master = true;
+            ((ProductVariant) _variant).AddingEntity();
         }
 
         internal override void UpdatingEntity()
         {
             base.UpdatingEntity();
-            ((ProductVariant)_variantMaster).UpdatingEntity();
+            ((ProductVariant)_variant).UpdatingEntity();
         }
 
 

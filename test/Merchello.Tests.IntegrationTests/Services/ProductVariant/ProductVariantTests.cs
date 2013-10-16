@@ -272,5 +272,19 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
             Assert.IsTrue(_product.Warehouses.Count() == 1);
         }
 
+        [Test]
+        public void Can_Update_A_ProductVariants_Inventory_Count()
+        {
+            //// Arrange
+            const int warehouseId = 1;
+
+            //// Act
+            _product.AddToWarehouse(warehouseId);
+            _product.Warehouses.First().Count = 10;
+            _productService.Save(_product);
+
+            //// Assert
+            Assert.IsTrue(_product.Warehouses.Count() == 1);
+        }
     }
 }

@@ -253,6 +253,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ItemCache\BasketTests.cs" />
     <Compile Include="Migration\InitialDataTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Migration\DatabaseSchema.cs" />
