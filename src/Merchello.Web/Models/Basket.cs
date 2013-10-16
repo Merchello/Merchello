@@ -57,15 +57,26 @@ namespace Merchello.Web.Models
         /// <param name="product"><see cref="IProduct"/></param>
         public void AddItem(IProduct product)
         {
+           AddItem(product, 1);
+        }
+
+        /// <summary>
+        /// Intended to be used by a <see cref="IProduct"/>s without options.  If the product does have options and a collection of <see cref="IProductVariant"/>s, the first
+        /// <see cref="IProductVariant"/> is added to the basket item collection
+        /// </summary>
+        /// <param name="product"><see cref="IProduct"/></param>
+        /// <param name="quantity"></param>
+        public void AddItem(IProduct product, int quantity)
+        {
             var variant = product.GetProductVariantForPurchase();
             if (variant != null)
             {
-                AddItem(variant);
+                AddItem(variant, quantity);
                 return;
             }
             if (!product.ProductVariants.Any()) return;
 
-            AddItem(product.ProductVariants.First());
+            AddItem(product.ProductVariants.First(), quantity);
         }
 
         /// <summary>
@@ -113,7 +124,7 @@ namespace Merchello.Web.Models
         /// </summary>
         public void AddItem(string name, string sku, int quantity, decimal price, ExtendedDataCollection extendedData)
         {
-            _itemCache.AddItem(LineItemType.Product, name, sku, 1, quantity, extendedData);
+            _itemCache.AddItem(LineItemType.Product, name, sku, quantity, price, extendedData);
         }
 
 
@@ -246,6 +257,22 @@ namespace Merchello.Web.Models
         public LineItemCollection Items
         {
             get { return _itemCache.Items; }
+        }
+
+        /// <summary>
+        /// Returns the sum of all basket item quantities
+        /// </summary>
+        public int TotalQuantityCount 
+        {
+            get { return Items.Sum(x => x.Quantity); }
+        }
+
+        /// <summary>
+        /// Returns the sum of all basket item "amount" (price)
+        /// </summary>
+        public decimal TotalBasketPrice
+        {
+            get { return Items.Sum(x => (x.Amount * x.Quantity)); }
         }
 
         #endregion

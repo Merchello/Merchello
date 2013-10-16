@@ -61,23 +61,29 @@ namespace Merchello.Tests.IntegrationTests.ItemCache
             Assert.IsFalse(_basket.Items.IsEmpty);
         }
 
+        /// <summary>
+        /// Test verifies that a products can be added and saved to the basket 
+        /// </summary>
         [Test]
         public void Can_Call_Save_Multiple_Times_On_A_Basket()
         {
             //// Arrange
             var product1 = PreTestDataWorker.MakeExistingProduct();
             var product2 = PreTestDataWorker.MakeExistingProduct();
+            var product3 = PreTestDataWorker.MakeExistingProduct();
 
             //// Act
-            _basket.AddItem(product1.GetProductVariantForPurchase());
+            _basket.AddItem(product1);
+            _basket.AddItem(product2);
             Basket.Save(_merchelloContext, _basket);
 
-            _basket.AddItem(product2.GetProductVariantForPurchase());
+            _basket.AddItem(product3);
             Basket.Save(_merchelloContext, _basket);
-
-
             
-        }
-       
+            //// Assert
+            Assert.IsFalse(_basket.IsEmpty);
+            Assert.AreEqual(3, _basket.Items.Count);
+        }       
+
     }
 }

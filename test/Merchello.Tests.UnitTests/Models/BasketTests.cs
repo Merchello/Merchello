@@ -98,5 +98,65 @@ namespace Merchello.Tests.UnitTests.Models
             //// Assert
             Assert.IsTrue(basket.IsEmpty);
         }
+
+        /// <summary>
+        /// Test verifies the the sum of the quanities 
+        /// </summary>
+        [Test]
+        public void Sum_Of_Basket_Item_Quanities_Equals_Baskets_TotalQuantityCount()
+        {
+            //// Arrange
+            const int expected = 10;
+            var basket = Basket.GetBasket(_customer, _itemCache);
+            var product1 = MockProductDataMaker.MockProductComplete(Guid.NewGuid());
+            var product2 = MockProductDataMaker.MockProductComplete(Guid.NewGuid());
+            var product3 = MockProductDataMaker.MockProductComplete(Guid.NewGuid());
+            var product4 = MockProductDataMaker.MockProductComplete(Guid.NewGuid());
+            
+            basket.AddItem(product1, 1);
+            basket.AddItem(product2, 2);
+            basket.AddItem(product3, 3);
+            basket.AddItem(product4, 4);
+
+            //// Act
+            var sum = basket.TotalQuantityCount;
+
+            //// Assert
+            Assert.AreEqual(expected, sum);
+        }
+
+        /// <summary>
+        /// Test verifies basket total price calculation
+        /// </summary>
+        [Test]
+        public void Sum_Of_Product_Prices_Mulitplied_By_Quantity_Equals_Baskets_TotalBasketPrice()
+        {
+            //// Arrange
+            decimal expectedPrice = 0;
+            var basket = Basket.GetBasket(_customer, _itemCache);
+            var product1 = MockProductDataMaker.MockProductComplete(Guid.NewGuid());
+            var product2 = MockProductDataMaker.MockProductComplete(Guid.NewGuid());
+            var product3 = MockProductDataMaker.MockProductComplete(Guid.NewGuid());
+            var product4 = MockProductDataMaker.MockProductComplete(Guid.NewGuid());
+
+            basket.AddItem(product1, 1);
+            expectedPrice += product1.Price;
+
+            basket.AddItem(product2, 2);
+            expectedPrice += (product2.Price * 2);
+
+            basket.AddItem(product3, 3);
+            expectedPrice += (product3.Price * 3);
+
+            basket.AddItem(product4, 4);
+            expectedPrice += (product4.Price * 4);
+
+            //// Act
+            var basketTotal = basket.TotalBasketPrice;
+
+            //// Assert
+            Assert.AreEqual(expectedPrice, basketTotal);
+        }
+
     }
 }

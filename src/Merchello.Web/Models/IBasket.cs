@@ -7,6 +7,7 @@ namespace Merchello.Web.Models
     {
         // Adds an item to the basket
         void AddItem(IProduct product);
+        void AddItem(IProduct product, int quantity);
         void AddItem(IProductVariant productVariant);
         void AddItem(IProductVariant productVariant, int quantity);
         void AddItem(string name, string sku, decimal price);
@@ -58,5 +59,15 @@ namespace Merchello.Web.Models
         /// The basket line items
         /// </summary>
         LineItemCollection Items { get; }
+
+        /// <summary>
+        /// Returns the sum of all basket item quantities
+        /// </summary>
+        int TotalQuantityCount { get; }
+
+        /// <summary>
+        /// Returns the sum of all basket item "amount" multiplied by quantity (price)
+        /// </summary>
+        decimal TotalBasketPrice { get; }
     }
 }
