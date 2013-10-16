@@ -120,11 +120,54 @@ namespace Merchello.Core.Models
             _variant.AddToWarehouse(warehouseId);
         }
 
+        /// <summary>
+        /// Returns the "master" <see cref="IProductVariant"/> that defines this <see cref="IProduct" /> or null if this <see cref="IProduct" /> has options
+        /// </summary>
+        /// <returns><see cref="IProductVariant"/> or null if this <see cref="IProduct" /> has options</returns>
+        public IProductVariant GetVariantForPurchase()
+        {
+            if (ProductOptions.Any()) return null;
+            return MasterVariant;
+        }
+
+        /// <summary>
+        /// Returns the <see cref="IProductVariant"/> of this <see cref="IProduct"/> that contains a matching collection of <see cref="IProductAttribute" />. 
+        /// If not match is found, returns null.
+        /// </summary>
+        /// <param name="selectedChoices">A collection of <see cref="IProductAttribute"/> which define the specific <see cref="IProductVariant"/> of the <see cref="IProduct"/></param>
+        /// <returns><see cref="IProductVariant"/> or null if no <see cref="IProductVariant"/> is found with a matching collection of <see cref="IProductAttribute"/></returns>
+        public IProductVariant GetVariantForPurchase(IEnumerable<IProductAttribute> selectedChoices)
+        {
+            return
+                ProductVariants.FirstOrDefault(
+                    variant =>
+                    {
+                        var productAttributes = selectedChoices as IProductAttribute[] ?? selectedChoices.ToArray();
+                        return variant.Attributes.Count() == productAttributes.Count() &&
+                                          productAttributes.All(item => ((ProductAttributeCollection)variant.Attributes).Contains(item.Id));
+                    });
+
+        }
+
+        /// <summary>
+        /// Returns the <see cref="IProductVariant"/> of this <see cref="IProduct"/> that contains a matching collection of <see cref="IProductAttribute" />. 
+        /// If not match is found, returns null.
+        /// </summary>
+        /// <param name="selectedChoiceIds"></param>
+        /// <returns><see cref="IProductVariant"/> or null if no <see cref="IProductVariant"/> is found with a matching collection of <see cref="IProductAttribute"/></returns>
+        public IProductVariant GetVariantForPurchase(int[] selectedChoiceIds)
+        {
+            return
+                ProductVariants.FirstOrDefault(
+                    variant => variant.Attributes.Count() == selectedChoiceIds.Length &&
+                               selectedChoiceIds.All(id => ((ProductAttributeCollection) variant.Attributes).Contains(id)));
+        }
+
         #endregion
 
         #region Overrides IProductBase
 
-        public IProductVariant DefaultVariant
+        internal IProductVariant MasterVariant
         {
             get { return _variant; }
         }

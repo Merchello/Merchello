@@ -109,19 +109,19 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
         #endregion
 
-        #region IBasket
+        #region IItemCache
 
         /// <summary>
         ///  Inserts an address record in the merchBasket table and returns an <see cref="IItemCache"/> object representation
         /// </summary>
-        public IItemCache MakeExistingCustomerItemCache(ICustomerBase customer, ItemCacheType itemCacheType)
+        public IItemCache MakeExistingItemCache(ICustomerBase customer, ItemCacheType itemCacheType)
         {
             var itemCache = MockCustomerItemCacheDataMaker.ConsumerItemCacheForInserting(customer, itemCacheType);
             ItemCacheService.Save(itemCache);
             return itemCache;
         }
 
-        public void DeleteAllCustomerItemCaches()
+        public void DeleteAllItemCaches()
         {
             var all = ((ItemCacheService) ItemCacheService).GetAll();
             ItemCacheService.Delete(all);

@@ -18,7 +18,7 @@ namespace Merchello.Tests.IntegrationTests.Services.Customer
         [SetUp]
         public void Initialize()
         {
-            PreTestDataWorker.DeleteAllCustomerItemCaches();
+            PreTestDataWorker.DeleteAllItemCaches();
             _itemCacheService = PreTestDataWorker.ItemCacheService;
             _anonymous = PreTestDataWorker.MakeExistingAnonymousCustomer();
         }
