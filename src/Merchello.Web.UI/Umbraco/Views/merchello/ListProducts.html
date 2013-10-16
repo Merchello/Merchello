@@ -1,4 +1,6 @@
-﻿<div 
+﻿<link href="/App_Plugins/Merchello/Common/Css/merchello.css" rel="stylesheet">
+
+<div 
     ng-controller="Merchello.Dashboards.Product.ListController"
     ng-show="loaded">
 
@@ -26,30 +28,38 @@
 
         </umb-header>
         
-        <div class="umb-panel-body umb-scrollable row-fluid">
-            <div class="tab-content form-horizontal">
-                <div class="umb-pane">
-                    <label for="productFilter">Filter Products:</label>
-                    <input id="productFilter" name="productFilter" data-ng-model="filtertext" placeholder="Filter Products" />
-                    <span>{{filtertext}}</span> - <span>{{watchCount}}</span>
+        <div class="merchello-panel-body">
+            <div class="">
+                <div class="merchello-pane">
+                    <form class="form-horizontal">
+                        <div class="form-group control-group">
+                            <label for="productFilter" class="col-xs-2 control-label">Filter Products:</label>
+                            <div class="col-xs-10 controls">
+                                <input id="productFilter" class="form-control" name="productFilter" data-ng-model="filtertext" placeholder="Start typing an item's name..." />
+                            </div>
+                        </div>
+                    </form>
                 </div>
-                <div class="umb-pane">
+                <div class="merchello-pane">
                     
-                    <table>
+                    <table class="table table-hover merchello-selectable-table">
                         <thead>
                             <tr>
                                 <th></th>
                                 <th>Product</th>
                                 <th>SKU</th>
                                 <th>Price</th>
+                                <th>&nbsp;</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr data-ng-repeat="product in filteredproducts">
-                                <td></td>
+                            <tr data-ng-repeat="product in filteredproducts" data-ng-show="([product] | filter:filtertext).length > 0"
+                                data-ng-class="{warning: product.selected}" data-ng-click="product.selected = !product.selected">
+                                <td><input type="checkbox" data-ng-model="product.selected"/></td>
                                 <td>{{product.name}}</td>
                                 <td>{{product.sku}}</td>
-                                <td>{{product.price}}</td>
+                                <td>{{product.price | currency}}</td>
+                                <td><a class="btn btn-default btn-xs btn-mini" href="#/merchello/merchello/edit/{{product.key}}">edit</a></td>
                             </tr>
                         </tbody>
                     </table>

@@ -10,7 +10,7 @@ namespace Merchello.Web.Models.ContentEditing
         {
         }
 
-        internal ProductDisplay(Product fromProduct)
+        internal ProductDisplay(IProduct fromProduct)
         {
             Key = fromProduct.Key;
             Name = fromProduct.Name;
@@ -22,6 +22,11 @@ namespace Merchello.Web.Models.ContentEditing
         public string Name { get; set; }
         public string Sku { get; set; }
         public decimal Price { get; set; }
+
+        private IProduct GetProduct()
+        {
+            return null;
+        }
 
     }
 }
