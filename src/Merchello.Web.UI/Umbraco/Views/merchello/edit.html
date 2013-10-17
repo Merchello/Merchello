@@ -52,8 +52,8 @@
                                         </div>
 
                                         <div class="form-group col-xs-6 span6">
-                                            <label for="compareatprice">Compare at Price</label>
-                                            <input id="compareatprice" name="compareatprice" class="form-control" data-ng-model="product.salePrice" />
+                                            <label for="saleprice">Sale Price</label>
+                                            <input id="saleprice" name="saleprice" class="form-control" data-ng-model="product.salePrice" />
                                         </div>
                                     </div>
 
@@ -70,7 +70,103 @@
                                     </div>
 
                                     <div class="row">
+                                        <label><input name="onsale" type="checkbox" data-ng-model="product.onSale"> This item is on sale</label>
                                         <label><input name="chargetaxes" type="checkbox" data-ng-model="product.taxable"> Charge Taxes</label>
+                                        <label><input name="chargetaxes" type="checkbox" data-ng-model="product.shippable"> Require a shipping address <small>(not required for services and digital goods)</small></label>
+                                    </div>
+
+                                    <div class="well" data-ng-show="product.shippable">
+                                        <div class="row">
+                                            <div class="span6 col-xs-6">
+                                                <label for="weight">Weight <small>(pounds)</small></label>
+                                                <input id="weight" name="weight" class="form-control" data-ng-model="product.weight" />
+                                            </div>
+                                            <div class="span6 col-xs-6">
+                                                <label for="length">Dimensions <small>(inches)</small></label>
+                                                <div class="form-inline">
+                                                    <div class="input-append"><input id="length" name="length" class="form-control input-mini" data-ng-model="product.length" /><span class="add-on">L</span></div>
+                                                    <div class="input-append"><input id="width" name="width" class="form-control input-mini" data-ng-model="product.width" /><span class="add-on">W</span></div>
+                                                    <div class="input-append"><input id="height" name="height" class="form-control input-mini" data-ng-model="product.height" /><span class="add-on">H</span></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="well">
+
+                                        <label>Digital Downloads:</label>
+                                        <div><a href="#">Choose Media</a></div>
+
+                                    </div>
+
+                                    <label><input name="hasoptions" type="checkbox" data-ng-model="product.hasoptions"> This product has multiple options <small>e.g. Multiple sizes and/or colors</small></label>
+                                    
+                                    <div class="well">
+
+                                        <table class="table">
+                                            <tr>
+                                                <th>
+                                                    Option Name
+                                                </th>
+                                                <th>
+                                                    Option Values
+                                                </th>
+                                            </tr>
+                                            <tr data-ng-repeat="option in productOptions">
+                                                <td>
+                                                    <input class="form-control" data-ng-model="option.name" />
+                                                </td>
+                                                <td>
+                                                    <span data-ng-repeat="choice in option.choices">
+                                                        {{choice.name}},
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </table>
+
+                                        <button>Add Another Option</button>
+
+                                        <table class="table">
+                                            <tr>
+                                                <th>
+                                                    Variant
+                                                </th>
+                                                <th>
+                                                    Price
+                                                </th>
+                                                <th>
+                                                    SKU <small>(optional)</small>
+                                                </th>
+                                                <th>
+                                                    Barcode <small>(optional)</small>
+                                                </th>
+                                                <th>
+                                                    Inventory
+                                                </th>
+                                            </tr>
+                                            <tr data-ng-repeat="variant in productVariants">
+                                                <td>
+                                                    <input type="checkbox" data-ng-model="variant.selected"/>
+                                                    <span data-ng-repeat="attribute in variant.productAttributes">
+                                                        <span>{{variant.name}}</span>
+                                                        <span data-ng-show="!$last"> / </span>
+                                                    </span>                                                    
+                                                </td>
+                                                <td>
+                                                    <input class="form-control input-mini" data-ng-model="variant.price" />
+                                                </td>
+                                                <td>
+                                                    <input class="form-control input-mini" data-ng-model="variant.sku" />
+                                                </td>
+                                                <td>
+                                                    <input class="form-control input-mini" data-ng-model="variant.barcode" />
+                                                </td>
+                                                <td>
+                                                    <input class="form-control input-mini" data-ng-model="variant.inventory" />
+                                                </td>
+                                            </tr>
+                                        </table>
+
                                     </div>
 
                                 </div>

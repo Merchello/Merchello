@@ -39,6 +39,8 @@ namespace Merchello.Web.Editors
             : base(merchelloContext)
         {
             _productService = MerchelloContext.Services.ProductService;
+            //AutoMapper.Mapper.CreateMap<ProductDisplay, Product>();
+            AutoMapper.Mapper.CreateMap<IProduct, ProductDisplay>();
         }
 
         /// <summary>
@@ -48,6 +50,8 @@ namespace Merchello.Web.Editors
             : base(merchelloContext, umbracoContext)
         {
             _productService = MerchelloContext.Services.ProductService;
+            //AutoMapper.Mapper.CreateMap<ProductDisplay, Product>();
+            AutoMapper.Mapper.CreateMap<IProduct, ProductDisplay>();
         }
 
         /// <summary>
@@ -66,7 +70,7 @@ namespace Merchello.Web.Editors
                     throw new HttpResponseException(HttpStatusCode.NotFound);
                 }
 
-                return new ProductDisplay(product);
+                return AutoMapper.Mapper.Map<ProductDisplay>(product);
             }
             else
             {
@@ -96,7 +100,7 @@ namespace Merchello.Web.Editors
 
             foreach (IProduct product in products)
             {
-                yield return new ProductDisplay(product as Product);
+                yield return AutoMapper.Mapper.Map<ProductDisplay>(product);
             }
         }
 
@@ -118,7 +122,7 @@ namespace Merchello.Web.Editors
 
                 foreach(IProduct product in products)
                 {
-                    yield return new ProductDisplay(product as Product);
+                    yield return AutoMapper.Mapper.Map<ProductDisplay>(product);
                 }
             }
             else
@@ -145,15 +149,14 @@ namespace Merchello.Web.Editors
 
             try
             {
-                newProduct = _productService.CreateProduct(sku, name, price) as Product;
-                _productService.Save(newProduct);
+                newProduct = _productService.CreateProductWithKey(sku, name, price) as Product;
             }
             catch (Exception ex)
             {
                 throw new HttpResponseException(HttpStatusCode.InternalServerError);
             }
 
-            return new ProductDisplay(newProduct);
+            return AutoMapper.Mapper.Map<ProductDisplay>(newProduct);
         }
 
         /// <summary>
@@ -161,23 +164,20 @@ namespace Merchello.Web.Editors
         ///
         /// PUT /umbraco/Merchello/ProductApi/PutProduct
         /// </summary>
-        /// <param name="key"></param>
-        /// <param name="item"></param>
+        /// <param name="product">ProductDisplay object serialized from WebApi</param>
         [AcceptVerbs("PUT")]
-        public HttpResponseMessage PutProduct(ProductDisplay productActual)
+        public HttpResponseMessage PutProduct(ProductDisplay product)
         {
-            // I think we should consider having a specific objects in .Web to pass back and forth
-            // via the Api like this so that we can take advantage of the Model.IsValid.  Umbraco does this with
-            // their various models in : Umbraco.Web.Models.ContentEditing
-
-            // Mapping between the models will be pretty straight forward with the AutoMapper stuff (http://automapper.org/)
-
+            // Using AutoMapper (http://automapper.org/)
 
             var response = Request.CreateResponse(HttpStatusCode.OK);
                         
             try
             {
-				//_productService.Save(productActual);
+                IProduct merchProduct = _productService.GetByKey(product.Key);
+                merchProduct = product.ToProduct(merchProduct);
+
+                _productService.Save(merchProduct);
             }
             catch (Exception ex) // I think this is not required as the server will create the error response message anyway
             {
