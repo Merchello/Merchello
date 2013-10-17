@@ -270,6 +270,8 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="config\ExamineIndex.config" />
+    <None Include="config\ExamineSettings.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -290,6 +292,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App_Data\" />
     <Folder Include="bin\Debug\" />
   </ItemGroup>
   <ItemGroup>

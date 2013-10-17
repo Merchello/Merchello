@@ -109,7 +109,7 @@ namespace Merchello.Web.Models
         /// <summary>
         /// Adds a line item to the basket
         /// </summary>
-        public void AddItem(string name, string sku, decimal price)
+        internal void AddItem(string name, string sku, decimal price)
         {
             AddItem(name, sku, 1, price, new ExtendedDataCollection());
         }
@@ -117,7 +117,7 @@ namespace Merchello.Web.Models
         /// <summary>
         /// Adds a line item to the basket
         /// </summary>
-        public void AddItem(string name, string sku, int quantity, decimal price)
+        internal void AddItem(string name, string sku, int quantity, decimal price)
         {
             AddItem(name, sku, quantity, price, new ExtendedDataCollection());
         }
@@ -126,7 +126,7 @@ namespace Merchello.Web.Models
         /// <summary>
         /// Adds a line item to the basket
         /// </summary>
-        public void AddItem(string name, string sku, int quantity, decimal price, ExtendedDataCollection extendedData)
+        internal void AddItem(string name, string sku, int quantity, decimal price, ExtendedDataCollection extendedData)
         {
             _itemCache.AddItem(LineItemType.Product, name, sku, quantity, price, extendedData);
         }

@@ -11,9 +11,9 @@ namespace Merchello.Web.Models
         void AddItem(IProduct product, string name, int quantity);
         void AddItem(IProductVariant productVariant);
         void AddItem(IProductVariant productVariant, string name, int quantity);
-        void AddItem(string name, string sku, decimal price);
-        void AddItem(string name, string sku, int quantity, decimal price);
-        void AddItem(string name, string sku, int quantity, decimal price, ExtendedDataCollection extendedData);
+        //void AddItem(string name, string sku, decimal price);
+        //void AddItem(string name, string sku, int quantity, decimal price);
+        //void AddItem(string name, string sku, int quantity, decimal price, ExtendedDataCollection extendedData);
 
         // Updates the quantity of an item in the basket
         void UpdateQuantity(int id, int quantity);

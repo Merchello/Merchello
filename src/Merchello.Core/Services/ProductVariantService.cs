@@ -293,6 +293,14 @@ namespace Merchello.Core.Services
             }
         }
 
+        internal IEnumerable<IProductVariant> GetAll(params Guid[] keys)
+        {
+            using (var repository = _repositoryFactory.CreateProductVariantRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetAll(keys);
+            }
+        }
+
         /// <summary>
         /// Gets a collection of <see cref="IProductVariant"/> object for a given Product Key
         /// </summary>
@@ -391,5 +399,7 @@ namespace Merchello.Core.Services
         public static event TypedEventHandler<IProductVariantService, DeleteEventArgs<IProductVariant>> Deleted;
 
         #endregion
+
+
     }
 }

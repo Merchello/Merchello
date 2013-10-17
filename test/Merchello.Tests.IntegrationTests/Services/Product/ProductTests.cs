@@ -141,7 +141,7 @@ namespace Merchello.Tests.IntegrationTests.Services.Product
         public void Can_Save_Multiple_Products()
         {
             //// Arrange
-            var expected = 3;
+            var expected = 1000;
             var generated = MockProductDataMaker.MockProductCollectionForInserting(expected);
 
             //// Act
