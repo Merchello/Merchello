@@ -10,23 +10,38 @@ namespace Merchello.Web.Models.ContentEditing
         {
         }
 
-        internal ProductDisplay(IProduct fromProduct)
-        {
-            Key = fromProduct.Key;
-            Name = fromProduct.Name;
-            Sku = fromProduct.Sku;
-            Price = fromProduct.Price;
-        }
-
         public Guid Key { get; set; }
         public string Name { get; set; }
         public string Sku { get; set; }
         public decimal Price { get; set; }
+        public decimal CostOfGoods { get; set; }
+        public decimal SalePrice { get; set; }
+        public bool OnSale { get; set; }
+        public decimal Weight { get; set; }
+        public decimal Length { get; set; }
+        public decimal Width { get; set; }
+        public decimal Height { get; set; }
+        public string Barcode { get; set; }
+        public bool Available { get; set; }
+        public bool TrackInventory { get; set; }
+        public bool OutOfStockPurchase { get; set; }
+        public bool Taxable { get; set; }
+        public bool Shippable { get; set; }
+        public bool Download { get; set; }
+        public int DownloadMediaId { get; set; }
 
-        private IProduct GetProduct()
+        public IEnumerable<IProductOption> ProductOptions { get; set; }
+
+        public IEnumerable<IProductVariant> ProductVariants { get; set; }
+
+        public IProduct ToProduct(IProduct destination)
         {
-            return null;
-        }
+            destination.Name = Name;
+            destination.Sku = Sku;
+            destination.Price = Price;
+            destination.CostOfGoods = CostOfGoods;
 
+            return destination;
+        }
     }
 }
