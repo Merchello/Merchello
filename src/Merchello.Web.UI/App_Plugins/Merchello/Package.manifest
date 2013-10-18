@@ -17,7 +17,14 @@
         '~/App_Plugins/Merchello/PropertyEditors/Js/merchelloskuselector.controller.js',
         '~/App_Plugins/Merchello/Controllers/product.list.controller.js',
         '~/App_Plugins/Merchello/Controllers/product.create.controller.js',
-        '~/App_Plugins/Merchello/Controllers/product.edit.controller.js'
+        '~/App_Plugins/Merchello/Controllers/product.edit.controller.js',
+        '~/App_Plugins/Merchello/Controllers/customer.list.controller.js',
+        '~/App_Plugins/Merchello/Controllers/customer.view.controller.js',
+        '~/App_Plugins/Merchello/Controllers/customer.edit.controller.js',
+        '~/App_Plugins/Merchello/Controllers/order.list.controller.js',
+        '~/App_Plugins/Merchello/Controllers/order.edit.controller.js',
+        '~/App_Plugins/Merchello/Controllers/order.view.controller.js',
+        '~/App_Plugins/Merchello/Controllers/reports.list.controller.js'
     ],
 	stylesheet: [
         '~/App_Plugins/Merchello/Common/Css/merchello.css',

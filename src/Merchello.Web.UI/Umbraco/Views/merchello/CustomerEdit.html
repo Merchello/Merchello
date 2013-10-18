@@ -1,0 +1,39 @@
+﻿<<link href="/App_Plugins/Merchello/Common/Css/merchello.css" rel="stylesheet">
+
+<form novalidate name="customerForm" 
+      data-ng-controller="Merchello.Editors.Customer.EditController" 
+      data-ng-show="loaded" 
+      data-ng-submit="save()">
+    <umb-panel val-show-validation>
+
+        <umb-header>
+
+            <div class="span4">
+                 <umb-content-name 
+                    ng-model="customer.name" 
+                    placeholder="[Customer Name]">
+                </umb-content-name>
+            </div>
+
+
+            <div class="span8">
+                <div class="btn-toolbar pull-right umb-btn-toolbar">
+                    
+                    <div class="btn-group">
+                        
+                        <button type="submit" class="btn btn-success">Save</button>
+
+                    </div>
+                </div>
+            </div>
+
+        </umb-header>
+        
+        <div class="merchello-panel-body row-fluid">
+
+            Forms and stuff goes here...
+
+        </div>
+
+    </umb-panel>
+</form>
