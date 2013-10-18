@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Deployment.Internal;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -54,7 +55,7 @@ namespace Merchello.Core.Models
         /// <summary>
         /// True/false indicating whether or not this group defines options
         /// </summary>
-        [DataMember]
+        [IgnoreDataMember]
         public bool DefinesOptions
         {
             get { return _productOptions.Any(); }
@@ -88,28 +89,11 @@ namespace Merchello.Core.Models
             }
         }
 
-        /// <summary>
-        /// Returns a collection of ProductOption given as list of attributes (choices)
-        /// </summary>
-        /// <param name="attributes">A collection of <see cref="IProductAttribute"/></param>
-        /// <remarks>
-        /// This is mainly used for suggesting sku defaults for ProductVariantes
-        /// </remarks>
-        public IEnumerable<IProductOption> ProductOptionsForAttributes(IEnumerable<IProductAttribute> attributes)
-        {
-            var options = new List<IProductOption>();
-            foreach (var att in attributes)
-            {
-                options.AddRange(_productOptions.Where(option => OptionContainsAttribute(option, att)));
-            }
-            return options;
-        }
 
-
-        public static bool OptionContainsAttribute(IProductOption option, IProductAttribute attribute)
-        {
-            return option.Choices.Any(choice => choice.Id == attribute.Id);
-        }
+        //public static bool OptionContainsAttribute(IProductOption option, IProductAttribute attribute)
+        //{
+        //    return option.Choices.Any(choice => choice.Id == attribute.Id);
+        //}
 
         /// <summary>
         /// Associates a product with a warehouse
@@ -120,48 +104,7 @@ namespace Merchello.Core.Models
             _variant.AddToWarehouse(warehouseId);
         }
 
-        /// <summary>
-        /// Returns the "master" <see cref="IProductVariant"/> that defines this <see cref="IProduct" /> or null if this <see cref="IProduct" /> has options
-        /// </summary>
-        /// <returns><see cref="IProductVariant"/> or null if this <see cref="IProduct" /> has options</returns>
-        public IProductVariant GetProductVariantForPurchase()
-        {
-            if (ProductOptions.Any()) return null;
-            return MasterVariant;
-        }
-
-        /// <summary>
-        /// Returns the <see cref="IProductVariant"/> of this <see cref="IProduct"/> that contains a matching collection of <see cref="IProductAttribute" />. 
-        /// If not match is found, returns null.
-        /// </summary>
-        /// <param name="selectedChoices">A collection of <see cref="IProductAttribute"/> which define the specific <see cref="IProductVariant"/> of the <see cref="IProduct"/></param>
-        /// <returns><see cref="IProductVariant"/> or null if no <see cref="IProductVariant"/> is found with a matching collection of <see cref="IProductAttribute"/></returns>
-        public IProductVariant GetProductVariantForPurchase(IEnumerable<IProductAttribute> selectedChoices)
-        {
-            return
-                ProductVariants.FirstOrDefault(
-                    variant =>
-                    {
-                        var productAttributes = selectedChoices as IProductAttribute[] ?? selectedChoices.ToArray();
-                        return variant.Attributes.Count() == productAttributes.Count() &&
-                                          productAttributes.All(item => ((ProductAttributeCollection)variant.Attributes).Contains(item.Id));
-                    });
-
-        }
-
-        /// <summary>
-        /// Returns the <see cref="IProductVariant"/> of this <see cref="IProduct"/> that contains a matching collection of <see cref="IProductAttribute" />. 
-        /// If not match is found, returns null.
-        /// </summary>
-        /// <param name="selectedChoiceIds"></param>
-        /// <returns><see cref="IProductVariant"/> or null if no <see cref="IProductVariant"/> is found with a matching collection of <see cref="IProductAttribute"/></returns>
-        public IProductVariant GetProductVariantForPurchase(int[] selectedChoiceIds)
-        {
-            return
-                ProductVariants.FirstOrDefault(
-                    variant => variant.Attributes.Count() == selectedChoiceIds.Length &&
-                               selectedChoiceIds.All(id => ((ProductAttributeCollection) variant.Attributes).Contains(id)));
-        }
+       
 
         #endregion
 
@@ -179,6 +122,7 @@ namespace Merchello.Core.Models
         public Guid ProductVariantKey
         {
             get { return _variant.Key; }
+            private set { _variant.Key = value; }
         }
 
         /// <summary>
