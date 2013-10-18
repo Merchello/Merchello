@@ -44,6 +44,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{D3BA
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shipping", "Shipping", "{D2C2BDB2-29A6-41BF-BF0B-7F38BDD64CF3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Examine", "Merchello.Examine\Merchello.Examine.csproj", "{28A665A9-2AAD-4230-AB8C-0F0B0F1B2115}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -142,6 +144,18 @@ Global
 		{DC644111-E837-43C1-B84C-1E1B27A6DAF7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{DC644111-E837-43C1-B84C-1E1B27A6DAF7}.Release|x64.ActiveCfg = Release|Any CPU
 		{DC644111-E837-43C1-B84C-1E1B27A6DAF7}.Release|x86.ActiveCfg = Release|Any CPU
+		{28A665A9-2AAD-4230-AB8C-0F0B0F1B2115}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28A665A9-2AAD-4230-AB8C-0F0B0F1B2115}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28A665A9-2AAD-4230-AB8C-0F0B0F1B2115}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{28A665A9-2AAD-4230-AB8C-0F0B0F1B2115}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{28A665A9-2AAD-4230-AB8C-0F0B0F1B2115}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{28A665A9-2AAD-4230-AB8C-0F0B0F1B2115}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{28A665A9-2AAD-4230-AB8C-0F0B0F1B2115}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28A665A9-2AAD-4230-AB8C-0F0B0F1B2115}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28A665A9-2AAD-4230-AB8C-0F0B0F1B2115}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{28A665A9-2AAD-4230-AB8C-0F0B0F1B2115}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{28A665A9-2AAD-4230-AB8C-0F0B0F1B2115}.Release|x64.ActiveCfg = Release|Any CPU
+		{28A665A9-2AAD-4230-AB8C-0F0B0F1B2115}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

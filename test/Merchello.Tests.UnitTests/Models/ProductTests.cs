@@ -14,7 +14,7 @@ namespace Merchello.Tests.UnitTests.Models
         public void Init()
         {
             var variant = new ProductVariant(Guid.NewGuid(), new ProductAttributeCollection(),
-                new WarehouseInventoryCollection(), true, "Master", "Master", 10M);
+                new WarehouseInventoryCollection(), true, "Product Name", "TestSku", 10M);
             _product = new Product(variant);
         }
 
@@ -114,6 +114,27 @@ namespace Merchello.Tests.UnitTests.Models
             //// Assert
             Assert.NotNull(variant);
             Assert.AreEqual(expected.Key, variant.Key);
+        }
+
+        [Test]
+        public void Can_Serialize_A_Product_To_Xml()
+        {
+            //// Arrange
+            var att = new ProductAttribute("Choice1", "choice") { Id = 1 };
+            var attCollection = new ProductAttributeCollection();
+            attCollection.Add(att);
+            var expected = new ProductVariant(Guid.NewGuid(), attCollection, new WarehouseInventoryCollection(), false,
+                "Variant", "variant", 5M);
+            _product.ProductOptions.Add(new ProductOption("Option1") { Id = 1 });
+            _product.ProductOptions["Option1"].Choices.Add(att);
+            _product.ProductVariants.Add(expected);
+
+            //// Act
+            var xml = _product.SerializeToXml();
+            Console.Write(xml.ToString());
+
+            //// Assert
+            Assert.NotNull(xml);
         }
 
     }
