@@ -28,9 +28,9 @@ namespace Merchello.Web.UI.Trees
             }
             else
             {
-                collection.Add(CreateTreeNode("catalog", queryStrings, "Catalog", "icon-autofill", false, "merchello/merchello/ListProducts/"));
-                collection.Add(CreateTreeNode("orders", queryStrings, "Orders", "icon-autofill", false, "merchello/merchello/ListOrders/"));
-                collection.Add(CreateTreeNode("customers", queryStrings, "Customers", "icon-autofill", false, "merchello/merchello/ListCustomers/"));
+                collection.Add(CreateTreeNode("catalog", queryStrings, "Catalog", "icon-autofill", false, "merchello/merchello/ProductList/"));
+                collection.Add(CreateTreeNode("orders", queryStrings, "Orders", "icon-autofill", false, "merchello/merchello/OrderList/"));
+                collection.Add(CreateTreeNode("customers", queryStrings, "Customers", "icon-autofill", false, "merchello/merchello/CustomerList/"));
                 collection.Add(CreateTreeNode("reports", queryStrings, "Reports", "icon-autofill", false, "merchello/merchello/Reports/"));
                 collection.Add(CreateTreeNode("settings", queryStrings, "Settings", "icon-autofill", true));
             }
@@ -64,11 +64,6 @@ namespace Merchello.Web.UI.Trees
             {
                 //create product
                 menu.Items.Add<MerchelloActionNewProduct>(ui.Text("actions", MerchelloActionNewProduct.Instance.Alias));
-            }
-            else if (id == "customers")
-            {
-                //create product
-                menu.Items.Add<CreateChildEntity, MerchelloActionNewCustomer>(ui.Text("actions", MerchelloActionNewCustomer.Instance.Alias));
             }
             else
             {
