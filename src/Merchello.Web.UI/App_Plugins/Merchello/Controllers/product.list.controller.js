@@ -13,16 +13,6 @@ function ProductListController($scope, $routeParams, $location, notificationsSer
     $scope.filteredproducts = [];
     $scope.watchCount = 0;
 
-    $scope.$watch('filtertext', function (newfilter, oldfilter) {
-        $scope.watchCount = $scope.watchCount + 1;
-
-        //var newFilteredProducts = jQuery.grep($scope.products, function (p, i) {
-        //    return p.name.test($scope.filtertext);
-        //});
-
-        //$scope.filteredproducts = newFilteredProducts;
-    }, true);
-
     $scope.loadProducts = function () {
 
         //we are editing so get the product from the server

@@ -28,25 +28,25 @@ function ProductEditController($scope, $routeParams, $location, notificationsSer
 
         }, function (reason) {
 
-            alert('Failed: ' + reason.message);
+            notificationsService.error("Product Load Failed", reason.message);
 
         });
     }
 
     $scope.save = function () {
 
-        $scope.$broadcast("Saving", { scope: $scope });
+        notificationsService.info("Saving...", "");
 
         //we are editing so get the product from the server
         var promise = merchelloProductService.save($scope.product);
 
         promise.then(function (product) {
 
-            $scope.$broadcast("Product Saved", { scope: $scope });
+            notificationsService.success("Product Saved", "H5YR!");
 
         }, function (reason) {
 
-            alert('Failed: ' + reason.message);
+            notificationsService.error("Product Save Failed", reason.message);
 
         });
     };

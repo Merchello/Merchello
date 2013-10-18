@@ -263,9 +263,16 @@
     <Content Include="App_Plugins\Merchello\Common\Css\merchello.css" />
     <Content Include="App_Plugins\Merchello\Common\Js\merchello.product.service.js" />
     <Content Include="App_Plugins\Merchello\Common\Js\_module.js" />
+    <Content Include="App_Plugins\Merchello\Controllers\customer.edit.controller.js" />
+    <Content Include="App_Plugins\Merchello\Controllers\customer.view.controller.js" />
+    <Content Include="App_Plugins\Merchello\Controllers\order.view.controller.js" />
+    <Content Include="App_Plugins\Merchello\Controllers\order.edit.controller.js" />
+    <Content Include="App_Plugins\Merchello\Controllers\customer.list.controller.js" />
+    <Content Include="App_Plugins\Merchello\Controllers\order.list.controller.js" />
     <Content Include="App_Plugins\Merchello\Controllers\product.create.controller.js" />
     <Content Include="App_Plugins\Merchello\Controllers\product.edit.controller.js" />
     <Content Include="App_Plugins\Merchello\Controllers\product.list.controller.js" />
+    <Content Include="App_Plugins\Merchello\Controllers\reports.list.controller.js" />
     <Content Include="App_Plugins\Merchello\Directives\tag.manager.directive.js" />
     <Content Include="App_Plugins\Merchello\lib\bootstrap\css\bootstrap-theme.min.css" />
     <Content Include="App_Plugins\Merchello\lib\bootstrap\css\bootstrap.min.css" />
@@ -278,6 +285,8 @@
     <Content Include="App_Plugins\Merchello\PropertyEditors\Js\merchelloskuselector.controller.js" />
     <Content Include="App_Plugins\Merchello\PropertyEditors\Views\merchelloskuselector.html" />
     <Content Include="Umbraco\images\tray\Merchello-Icon.png" />
+    <Content Include="Umbraco\Views\merchello\CustomerEdit.html" />
+    <Content Include="Umbraco\Views\merchello\CustomerView.html" />
     <Content Include="Umbraco\Views\merchello\CreateProduct.html" />
     <Content Include="Umbraco\Views\merchello\edit.html" />
     <Content Include="Umbraco\images\tray\Merchello-Icon.gif" />
@@ -286,10 +295,12 @@
     <Content Include="App_Plugins\Merchello\Config\merchello.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Umbraco\Views\merchello\ListCustomers.html" />
-    <Content Include="Umbraco\Views\merchello\ListOrders.html" />
-    <Content Include="Umbraco\Views\merchello\ListProducts.html" />
+    <Content Include="Umbraco\Views\merchello\OrderEdit.html" />
+    <Content Include="Umbraco\Views\merchello\CustomerList.html" />
+    <Content Include="Umbraco\Views\merchello\OrderList.html" />
+    <Content Include="Umbraco\Views\merchello\ProductList.html" />
     <Content Include="Umbraco\Views\merchello\Reports.html" />
+    <Content Include="Umbraco\Views\merchello\OrderView.html" />
     <Content Include="web.config" />
     <Content Include="packages.config" />
     <Content Include="App_Plugins\Merchello\lib\bootstrap\fonts\glyphicons-halflings-regular.eot" />
