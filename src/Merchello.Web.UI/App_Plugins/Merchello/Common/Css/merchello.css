@@ -1,11 +1,20 @@
-.active, .active td, .active:hover, .active td:hover { background-color: #f0f9ee; border-top: solid 1px #cfebc9; }
+.active, .active td, .active:hover, .active td:hover { background-color: #f0f9ee; }
 
-.well a { color: #53a93f; }
-.well .btn { color: #fff; }
+.well .add { margin-bottom: 20px; }
 
 .merchello-panel-body { position: absolute; top: 101px; bottom: 0; left: 0; right: 0; width: 100%; clear: both; overflow: auto; }
+.merchello-panel-body a { color: #049cdb; }
+.merchello-panel-body .btn { color: #000; }
+.merchello-panel-body .btn-primary { color: #fff; }
+.merchello-panel-body .label { font-size: 1em; line-height: 20px; text-shadow: none; }
+.merchello-panel-body .label-success { background: #8ecf7f; }
+.merchello-panel-body .label-warning { background: #f9af82; }
+.merchello-panel-body .label-info { background: #8cd0ec; }
+.merchello-panel-body .icon-loading:before { font-size: 1.15em; vertical-align: top; padding-top: 1px; }
 
-.merchello-pane { margin: 30px 20px; }
+.merchello-pane { padding: 30px 20px; }
+.merchello-pane.row-fluid { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; -ms-box-sizing: border-box; -o-box-sizing: border-box; box-sizing: border-box; }
+.merchello-pane div.warning { padding: 30px 20px; background: #feede3; border: solid 1px #f57020; color: #f57020; }
 
 .merchello-controls { margin-left: 240px; padding-top: 5px; }
 
@@ -13,9 +22,9 @@
 
 table.merchello-selectable-table tr td { cursor: pointer; }
 
-.table-hover tbody .active:hover > td, .table-hover tbody .active td:hover > td, .active .table-hover tbody td:hover > td { background-color: #e0f2dc; }
+.active td { border-top: solid 1px #cfebc9; }
 
-.add { margin-bottom: 20px; }
+.table-hover tbody .active:hover > td, .table-hover tbody .active td:hover > td, .active .table-hover tbody td:hover > td { background-color: #e0f2dc; }
 
 input[type="radio"], input[type="checkbox"] { margin-top: -2px; }
 
