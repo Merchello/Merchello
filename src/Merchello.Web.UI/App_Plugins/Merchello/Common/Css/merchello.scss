@@ -1,0 +1,55 @@
+
+//Variables
+$green: #53a93f; //Umbraco's green button color
+$active: lighten($green, 50%);
+
+//Global
+.active, .active:hover { background-color: $active; border-top: solid 1px darken($active, 10%); }
+
+.well {
+    a { color: $green; }
+    .btn { color: #fff; }
+}
+
+
+//Main Sections
+.merchello-panel-body { position: absolute; top: 101px; bottom: 0; left: 0; right: 0; width: 100%; clear: both; overflow: auto; }
+
+.merchello-pane { margin: 30px 20px; }
+
+.merchello-controls { margin-left: 240px; padding-top: 5px; }
+
+.merchello-control-label { text-align: left; float: left; padding-top: 8px; width: 160px; }
+
+
+//Tables
+table.merchello-selectable-table {
+    tr {
+        td { cursor: pointer; }
+    }
+}
+
+.active td { @extend .active}
+.table-hover tbody .active:hover > td { background-color: darken($active, 5%); }
+.add { margin-bottom: 20px; }
+
+
+//Forms
+input[type="radio"], input[type="checkbox"] { margin-top: -2px; }
+.input-append .add-on, .input-prepend .add-on { height: 14px; line-height: 14px; background: #ececec; }
+
+.label-checkbox { margin: 5px 0; }
+
+.form-horizontal { 
+    .controls { padding-top: 6px; }
+    .form-control { padding: 1px 5px; border: solid 1px #ccc; }
+}
+
+
+// Tags
+.tags { margin: 10px 0;
+    .tag { border-radius: 6px; background-color: #EFEFEF; border: 1px solid #DDD; padding: 5px; margin-right: 10px; 
+        &:hover { color: red; text-decoration: none;
+        }
+    }
+}

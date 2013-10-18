@@ -70,9 +70,9 @@
                                     </div>
 
                                     <div class="row">
-                                        <label><input name="onsale" type="checkbox" data-ng-model="product.onSale"> This item is on sale</label>
-                                        <label><input name="chargetaxes" type="checkbox" data-ng-model="product.taxable"> Charge Taxes</label>
-                                        <label><input name="chargetaxes" type="checkbox" data-ng-model="product.shippable"> Require a shipping address <small>(not required for services and digital goods)</small></label>
+                                        <label class="label-checkbox"><input name="onsale" type="checkbox" data-ng-model="product.onSale"> This item is on sale</label>
+                                        <label class="label-checkbox"><input name="chargetaxes" type="checkbox" data-ng-model="product.taxable"> Charge Taxes</label>
+                                        <label class="label-checkbox"><input name="shippable" type="checkbox" data-ng-model="product.shippable"> Require a shipping address <small>(not required for services and digital goods)</small></label>
                                     </div>
 
                                     <div class="well" data-ng-show="product.shippable">
@@ -125,7 +125,7 @@
                                             </tr>
                                         </table>
 
-                                        <a data-ng-click="addOption()" class="btn">Add Another Option</a>
+                                        <a data-ng-click="addOption()" class="btn btn-primary add">Add Another Option</a>
 
                                         <table class="table">
                                             <tr>

@@ -54,7 +54,7 @@
                         </thead>
                         <tbody>
                             <tr data-ng-repeat="product in filteredproducts" data-ng-show="([product] | filter:filtertext).length > 0"
-                                data-ng-class="{warning: product.selected}" data-ng-click="product.selected = !product.selected">
+                                data-ng-class="{active: product.selected}" data-ng-click="product.selected = !product.selected">
                                 <td><input type="checkbox" data-ng-model="product.selected"/></td>
                                 <td>{{product.name}}</td>
                                 <td>{{product.sku}}</td>
