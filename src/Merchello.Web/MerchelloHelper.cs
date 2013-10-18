@@ -1,8 +1,4 @@
-﻿using System;
-using Merchello.Core;
-using Merchello.Core.Models;
-using Merchello.Core.Models.Rdbms;
-using Umbraco.Web;
+﻿using Umbraco.Web;
 
 namespace Merchello.Web
 {

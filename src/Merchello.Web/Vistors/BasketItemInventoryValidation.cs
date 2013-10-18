@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 
-namespace Merchello.Web.Vistors.Basket
+namespace Merchello.Web.Vistors
 {
     /// <summary>
     /// Visitor to audit basket line item for inventory requirements

@@ -253,6 +253,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Indexer\MerchelloIndexDataServiceTests.cs" />
     <Compile Include="ItemCache\BasketTests.cs" />
     <Compile Include="DbInstall\InitialDataTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -270,6 +271,8 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="config\ExamineIndex.config" />
+    <None Include="config\ExamineSettings.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -290,6 +293,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App_Data\" />
     <Folder Include="bin\Debug\" />
   </ItemGroup>
   <ItemGroup>

@@ -18,7 +18,7 @@ namespace Merchello.Core.Models
         internal ExtendedDataCollection(string persistedXml)
         {
             var doc = XDocument.Parse(persistedXml);
-            var exData  = doc.Element("ExtendedData");
+            var exData  = doc.Element("extendedData");
             if (exData == null) return;
             foreach (var el in exData.Elements())
             {
@@ -34,7 +34,7 @@ namespace Merchello.Core.Models
                 using (var writer = new XmlTextWriter(sw))
                 {
                     writer.WriteStartDocument();
-                    writer.WriteStartElement("ExtendedData");
+                    writer.WriteStartElement("extendedData");
 
                     foreach (var key in Keys)
                     {

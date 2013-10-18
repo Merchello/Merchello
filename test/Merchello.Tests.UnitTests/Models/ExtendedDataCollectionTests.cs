@@ -82,7 +82,7 @@ namespace Merchello.Tests.UnitTests.Models
         public void Can_Deserialize_ExtendedData_To_Dictionary()
         {
             //// Arrange
-            var persisted = @"<?xml version=""1.0"" encoding=""utf-16""?><ExtendedData><key3>value3</key3><key2>value2</key2><key1>value1</key1><key5>value5</key5><key4>value4</key4></ExtendedData>";
+            var persisted = @"<?xml version=""1.0"" encoding=""utf-16""?><extendedData><key3>value3</key3><key2>value2</key2><key1>value1</key1><key5>value5</key5><key4>value4</key4></extendedData>";
 
             //// Act
             var extended = new ExtendedDataCollection(persisted);
