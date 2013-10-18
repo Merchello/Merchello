@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -9,6 +10,8 @@ namespace Merchello.Core.Models
     /// <summary>
     /// Represents an abstract class for base Product properties and methods
     /// </summary>
+    [Serializable]
+    [DataContract(IsReference = true)]
     public abstract class ProductBase : KeyEntity, IProductBase
     {
         private string _sku;
@@ -29,7 +32,6 @@ namespace Merchello.Core.Models
         private bool _shippable;
         private bool _download;
         private int? _downloadMediaId;
-
         private WarehouseInventoryCollection _warehouseInventory;
 
         protected ProductBase(string name, string sku, decimal price)
@@ -77,7 +79,7 @@ namespace Merchello.Core.Models
         /// <summary>
         /// Product variant inventory accross all warehouses
         /// </summary>
-        [DataMember]
+        [IgnoreDataMember]
         public IEnumerable<IWarehouseInventory> Warehouses
         {
             get { return _warehouseInventory; }

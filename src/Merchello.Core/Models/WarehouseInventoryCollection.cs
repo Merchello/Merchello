@@ -11,7 +11,7 @@ namespace Merchello.Core.Models
     /// Defines a product variant inventory collection
     /// </summary>
     [Serializable]
-    [DataContract(IsReference = true)]
+    [CollectionDataContract(IsReference = true)]
     public class WarehouseInventoryCollection : NotifiyCollectionBase<string, IWarehouseInventory>
     {
         private readonly ReaderWriterLockSlim _addLocker = new ReaderWriterLockSlim();

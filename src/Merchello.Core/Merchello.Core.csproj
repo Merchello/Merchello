@@ -119,6 +119,7 @@
     <Compile Include="Models\Interfaces\IWarehouseInventory.cs" />
     <Compile Include="Models\Interfaces\IInvoiceLineItem.cs" />
     <Compile Include="Models\Interfaces\ILineItemVisitor.cs" />
+    <Compile Include="Models\ProductExtensions.cs" />
     <Compile Include="Models\WarehouseInventory.cs" />
     <Compile Include="Models\WarehouseInventoryCollection.cs" />
     <Compile Include="Persistence\Mappers\WarehouseInventoryMapper.cs" />

@@ -1,13 +1,51 @@
-.sections img { max-width: 40%; }
+﻿
+.merchello-panel-body {
+    bottom: 0;
+    clear: both;
+    left: 0;
+    overflow: auto;
+    position: absolute;
+    right: 0;
+    top: 101px;
+    width: 100%;
+}
 
-.merchello-panel-body { position: absolute; top: 101px; bottom: 0; left: 0; right: 0; width: 100%; clear: both; overflow: auto; }
+.merchello-pane {
+    margin: 30px 20px;
+}
 
-.merchello-pane { margin: 30px 20px; }
+.merchello-controls {
+    margin-left: 240px;
+    padding-top: 5px;
+}
 
-.merchello-controls { margin-left: 240px; padding-top: 5px; }
+.merchello-control-label {
+    text-align: left;
+    float: left;
+    padding-top: 8px;
+    width: 160px;
+}
 
-.merchello-control-label { text-align: left; float: left; padding-top: 8px; width: 160px; }
+table.merchello-selectable-table tr td { 
+    cursor: pointer; 
+}
 
-table.merchello-selectable-table tr td { cursor: pointer; }
+.form-horizontal .controls {
+     padding-top: 6px;
+}
 
-.form-horizontal .controls { padding-top: 6px; }
+/* For the tags directive */
+.tags {
+    margin: 10px 0;
+}
+.tags .tag {
+    border-radius: 6px;
+    background-color: #EFEFEF;
+    border: 1px solid #DDD;
+    padding: 5px;
+    margin-right: 10px;
+}
+.tags .tag:hover {
+    color: red;
+    text-decoration: none;
+}
