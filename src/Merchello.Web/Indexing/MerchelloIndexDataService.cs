@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Examine;
 using Examine.LuceneEngine;
 using Lucene.Net.Documents;
@@ -13,7 +14,7 @@ namespace Merchello.Web.Indexing
 {
     public class MerchelloIndexDataService : ISimpleDataService
     {
-        private IProductVariantService _productVariantService;
+        private IProductService _productService;
 
         public MerchelloIndexDataService()
             : this(MerchelloContext.Current)
@@ -21,18 +22,18 @@ namespace Merchello.Web.Indexing
 
         public MerchelloIndexDataService(IMerchelloContext merchelloContext)
         {
-            _productVariantService = merchelloContext.Services.ProductVariantService;
+            _productService = merchelloContext.Services.ProductService;
         }
 
         public IEnumerable<SimpleDataSet> GetAllData(string indexType)
         {
-            var allVariants = ((ProductVariantService) _productVariantService).GetAll();
+            var allProducts = ((ProductService) _productService).GetAll();
 
             var dataSets = new List<SimpleDataSet>();
 
             var i = 1;
 
-            foreach (var variant in allVariants)
+            foreach (var product in allProducts)
             {
                 try
                 {
@@ -42,7 +43,7 @@ namespace Merchello.Web.Indexing
                         RowData = new Dictionary<string, string>()
                     };
 
-                    simpleDataSet = MapProductVariantToSimpleDataIndexItem(variant, simpleDataSet, i, indexType);
+                    simpleDataSet = MapProductVariantToSimpleDataIndexItem(product, simpleDataSet, i, indexType);
 
                     dataSets.Add(simpleDataSet);
                 }
@@ -57,11 +58,13 @@ namespace Merchello.Web.Indexing
             return dataSets;
         }
 
-        private static SimpleDataSet MapProductVariantToSimpleDataIndexItem(IProductVariant productVariant, SimpleDataSet simpleDataSet, int index, string indexType)
+        private static SimpleDataSet MapProductVariantToSimpleDataIndexItem(IProduct product, SimpleDataSet simpleDataSet, int index, string indexType)
         {
             simpleDataSet.NodeDefinition.NodeId = index;
             simpleDataSet.NodeDefinition.Type = indexType;
-            //simpleDataSet.NodeDefinition.
+            simpleDataSet.RowData.Add("Name", product.Name);
+            simpleDataSet.RowData.Add("Sku", product.Sku);
+            simpleDataSet.RowData.Add("Price", product.Price.ToString(CultureInfo.InvariantCulture));
 
             return simpleDataSet;
         }
