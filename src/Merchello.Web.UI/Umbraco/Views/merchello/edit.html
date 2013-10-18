@@ -1,9 +1,9 @@
 ﻿<link href="/App_Plugins/Merchello/Common/Css/merchello.css" rel="stylesheet">
 
 <form novalidate name="productForm" 
-      ng-controller="Merchello.Editors.Product.EditController" 
-      ng-show="loaded" 
-      ng-submit="save()">
+      data-ng-controller="Merchello.Editors.Product.EditController" 
+      data-ng-show="loaded" 
+      data-ng-submit="save()">
     <umb-panel val-show-validation>
 
         <umb-header>
@@ -112,11 +112,12 @@
                                                     Option Values
                                                 </th>
                                             </tr>
-                                            <tr data-ng-repeat="option in productOptions">
+                                            <tr data-ng-repeat="option in product.productOptions">
                                                 <td>
                                                     <input class="form-control" data-ng-model="option.name" />
                                                 </td>
                                                 <td>
+                                                    <tags-input data-ng-model="option.tags"></tags-input>
                                                     <span data-ng-repeat="choice in option.choices">
                                                         {{choice.name}},
                                                     </span>
@@ -124,7 +125,7 @@
                                             </tr>
                                         </table>
 
-                                        <button>Add Another Option</button>
+                                        <a data-ng-click="addOption()" class="btn">Add Another Option</a>
 
                                         <table class="table">
                                             <tr>
@@ -144,7 +145,7 @@
                                                     Inventory
                                                 </th>
                                             </tr>
-                                            <tr data-ng-repeat="variant in productVariants">
+                                            <tr data-ng-repeat="variant in product.productVariants">
                                                 <td>
                                                     <input type="checkbox" data-ng-model="variant.selected"/>
                                                     <span data-ng-repeat="attribute in variant.productAttributes">
