@@ -236,6 +236,7 @@
     <Compile Include="Editors\InvoiceApiController.cs" />
     <Compile Include="Editors\ProductApiController.cs" />
     <Compile Include="EncryptionHelper.cs" />
+    <Compile Include="Indexing\MerchelloIndexDataService.cs" />
     <Compile Include="MerchelloHelper.cs" />
     <Compile Include="MerchelloPackage.cs" />
     <Compile Include="CustomerContext.cs" />
