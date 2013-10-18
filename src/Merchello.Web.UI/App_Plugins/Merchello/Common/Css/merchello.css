@@ -1,4 +1,6 @@
-.merchello-panel-body { bottom: 0; clear: both; left: 0; overflow: auto; position: absolute; right: 0; top: 101px; width: 100%; }
+.sections img { max-width: 40%; }
+
+.merchello-panel-body { position: absolute; top: 101px; bottom: 0; left: 0; right: 0; width: 100%; clear: both; overflow: auto; }
 
 .merchello-pane { margin: 30px 20px; }
 
