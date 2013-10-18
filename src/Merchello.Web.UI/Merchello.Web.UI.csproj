@@ -248,6 +248,7 @@
     <Compile Include="PackageActions\AddConfigSection.cs" />
     <Compile Include="PackageActions\CreateDatabase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Trees\MerchelloActionNewCustomer.cs" />
     <Compile Include="Trees\MerchelloActionNewProduct.cs" />
     <Compile Include="Trees\MerchelloApplication.cs" />
     <Compile Include="Trees\MerchelloTreeController.cs" />
@@ -265,6 +266,7 @@
     <Content Include="App_Plugins\Merchello\Controllers\product.create.controller.js" />
     <Content Include="App_Plugins\Merchello\Controllers\product.edit.controller.js" />
     <Content Include="App_Plugins\Merchello\Controllers\product.list.controller.js" />
+    <Content Include="App_Plugins\Merchello\Directives\tag.manager.directive.js" />
     <Content Include="App_Plugins\Merchello\lib\bootstrap\css\bootstrap-theme.min.css" />
     <Content Include="App_Plugins\Merchello\lib\bootstrap\css\bootstrap.min.css" />
     <Content Include="App_Plugins\Merchello\lib\bootstrap\fonts\glyphicons-halflings-regular.svg" />
@@ -284,7 +286,10 @@
     <Content Include="App_Plugins\Merchello\Config\merchello.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Umbraco\Views\merchello\ListCustomers.html" />
+    <Content Include="Umbraco\Views\merchello\ListOrders.html" />
     <Content Include="Umbraco\Views\merchello\ListProducts.html" />
+    <Content Include="Umbraco\Views\merchello\Reports.html" />
     <Content Include="web.config" />
     <Content Include="packages.config" />
     <Content Include="App_Plugins\Merchello\lib\bootstrap\fonts\glyphicons-halflings-regular.eot" />

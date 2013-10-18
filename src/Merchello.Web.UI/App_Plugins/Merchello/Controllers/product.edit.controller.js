@@ -53,6 +53,11 @@ function ProductEditController($scope, $routeParams, $location, notificationsSer
 
     $scope.addOption = function () {
         $scope.product.productOptions.push({ name: "", required: 0, sortOrder: $scope.product.productOptions.length + 1, choices: [{name: "one", sku: "one-sku", sortOrder: 1}] });
+        createVariants();
+    };
+
+    createVariants = function () {
+        
     };
 }
 
