@@ -155,3 +155,4 @@ $RECYCLE.BIN/
 test/Merchello.Tests.UnitTests/App_Data/TEMP/
 *.hash
 src/Merchello.Web.UI/App_Plugins/Merchello/Common/Css/.sass-cache/
+test/Merchello.Tests.IntegrationTests/App_Data/
