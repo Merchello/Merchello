@@ -113,7 +113,7 @@ namespace Merchello.Core.Models
         /// <param name="warehouseId">The 'unique' id of the <see cref="IWarehouse"/></param>
         public void AddToWarehouse(int warehouseId)
         {
-            WarehouseInventory.Add(new WarehouseInventory(warehouseId, Key));
+            WarehouseInventory.Add(new WarehouseInventory(warehouseId, Id));
         }
 
 

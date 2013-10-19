@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using Merchello.Core.Models.EntityBase;
 
 namespace Merchello.Core.Models
 {
     /// <summary>
     /// Defines a product variant
     /// </summary>
-    public interface IProductVariant : IProductBase
+    public interface IProductVariant : IProductBase, IIdEntity
     {
         /// <summary>
         /// The key for the defining product

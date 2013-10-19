@@ -67,7 +67,7 @@ namespace Merchello.Core.Models
 
         public static string MakeKeyForItem(IWarehouseInventory item)
         {
-            return string.Format("{0}-{1}", item.ProductVariantKey, item.WarehouseId);
+            return string.Format("{0}-{1}", item.ProductVariantId, item.WarehouseId);
         }
         
     }

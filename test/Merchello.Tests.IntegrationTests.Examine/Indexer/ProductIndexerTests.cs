@@ -1,19 +1,9 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
+﻿using System.Diagnostics;
 using Examine;
-using Lucene.Net.Analysis;
-using Merchello.Core;
-using Merchello.Core.Cache;
-using Merchello.Core.Services;
-using Merchello.Examine;
-using Merchello.Examine.DataServices;
 using Merchello.Tests.IntegrationTests.Services;
 using NUnit.Framework;
-using Umbraco.Core;
-using Umbraco.Core.Persistence.UnitOfWork;
 
-namespace Merchello.Tests.IntegrationTests.Indexer
+namespace Merchello.Tests.IntegrationTests.Examine.Indexer
 {
     [TestFixture]
     public class ProductIndexerTests : ServiceIntegrationTestBase

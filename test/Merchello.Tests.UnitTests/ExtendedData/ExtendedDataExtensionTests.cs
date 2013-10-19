@@ -23,13 +23,13 @@ namespace Merchello.Tests.UnitTests.ExtendedData
         /// Can confirm that a product key and product variant key exists in a collection
         /// </summary>
         [Test]
-        public void Can_Confirm_ProductKey_And_ProductVariantKey_Exists_In_Collection()
+        public void Can_Confirm_ProductKey_And_ProductVariantId_Exists_In_Collection()
         {
             //// Arrange - in Init
             
             //// Act
             var pKeyExists = _extendedData.ContainsProductKey();
-            var pvKeyExists = _extendedData.ContainsProductVariantKey();
+            var pvKeyExists = _extendedData.ContainsProductVariantId();
 
             //// Assert
             Assert.IsTrue(pKeyExists);
