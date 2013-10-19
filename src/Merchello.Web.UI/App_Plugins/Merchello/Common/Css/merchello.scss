@@ -1,21 +1,38 @@
 
 //Variables
+$orange: #f57020; //Umbraco's orange
 $green: #53a93f; //Umbraco's green button color
+$blue: #049cdb; //Umbraco's blue nav tab hover color
 $active: lighten($green, 50%);
 
+//Mixins
+@mixin box-sizing { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; -ms-box-sizing: border-box; -o-box-sizing: border-box; box-sizing: border-box; }
+
 //Global
-.active, .active:hover { background-color: $active; border-top: solid 1px darken($active, 10%); }
+.active, .active:hover { background-color: $active; }
 
 .well {
-    a { color: $green; }
-    .btn { color: #fff; }
+    .add { margin-bottom: 20px; } //spacing below add buttons inslide .well
 }
 
 
 //Main Sections
-.merchello-panel-body { position: absolute; top: 101px; bottom: 0; left: 0; right: 0; width: 100%; clear: both; overflow: auto; }
+.merchello-panel-body { position: absolute; top: 101px; bottom: 0; left: 0; right: 0; width: 100%; clear: both; overflow: auto; 
+    a { color: $blue; }
+    .btn { color: #000; }
+    .btn-primary { color: #fff; }
 
-.merchello-pane { margin: 30px 20px; }
+    .label { font-size: 1em; line-height: 20px; text-shadow: none; }
+    .label-success { background: lighten($green, 20%); }
+    .label-warning { background: lighten($orange, 20%); }
+    .label-info { background: desaturate(lighten($blue, 30%), 25%); }
+    .icon-loading:before { font-size: 1.15em; vertical-align: top; padding-top: 1px; }
+}
+
+.merchello-pane { padding: 30px 20px; 
+    &.row-fluid { @include box-sizing; }
+    div.warning { padding: 30px 20px; background: lighten($orange, 40%); border: solid 1px $orange; color: $orange; }
+}
 
 .merchello-controls { margin-left: 240px; padding-top: 5px; }
 
@@ -29,14 +46,13 @@ table.merchello-selectable-table {
     }
 }
 
-.active td { @extend .active}
-.table-hover tbody .active:hover > td { background-color: darken($active, 5%); }
-.add { margin-bottom: 20px; }
+.active td { @extend .active; border-top: solid 1px darken($active, 10%); } //add the .active style to child table cells
+.table-hover tbody .active:hover > td { background-color: darken($active, 5%); } //override bootstrap hover styles for .active table cells
 
 
 //Forms
-input[type="radio"], input[type="checkbox"] { margin-top: -2px; }
-.input-append .add-on, .input-prepend .add-on { height: 14px; line-height: 14px; background: #ececec; }
+input[type="radio"], input[type="checkbox"] { margin-top: -2px; } //line up checkboxes with label text
+.input-append .add-on, .input-prepend .add-on { height: 14px; line-height: 14px; background: #ececec; } //fix umbraco's append & prepend input styles for merchello
 
 .label-checkbox { margin: 5px 0; }
 

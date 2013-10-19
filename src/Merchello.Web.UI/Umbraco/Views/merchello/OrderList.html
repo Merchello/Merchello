@@ -12,17 +12,33 @@
                 <div class="umb-headline-editor-wrapper">
                      <h1>Orders</h1>
                 </div>
+
+                <!-- Tabs for All Orders, Open, Unfulfilld, and Unpaid -->
+                <ul class="nav nav-tabs umb-nav-tabs span12">
+                    <li class="ng-scope active">
+    	                <a href="#tab6" data-toggle="tab" class="ng-binding">All Orders (5)</a>
+                    </li>
+                    <li class="ng-scope">
+                        <a href="#tab0" data-toggle="tab" class="ng-binding">Open (3)</a>
+                    </li>
+                    <li class="ng-scope">
+                        <a href="#tab0" data-toggle="tab" class="ng-binding">Unfulfilled (1)</a>
+                    </li>
+                    <li class="ng-scope">
+                        <a href="#tab0" data-toggle="tab" class="ng-binding">Unpaid (2)</a> 
+                    </li>
+    	        </ul>
             </div>
 
 
             <div class="span8">
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
                     
+                    <!-- New Order Button -->
                     <div class="btn-group">
-                        
                         <button type="submit" class="btn btn-success">New Order</button>
-
                     </div>
+
                 </div>
             </div>
 
@@ -30,7 +46,87 @@
         
         <div class="merchello-panel-body">
 
-            <a class="btn" href="#/merchello/merchello/OrderView/keygoeshere">Click to go to the OrderView.html page/view</a>
+            <!-- Order Filters -->
+            <div class="merchello-pane">
+                <form class="form-horizontal">
+                    <div class="form-group control-group row-fluid">
+                        <label for="orderFilter" class="col-xs-2 control-label">Filter Orders:</label>
+                        <div class="col-xs-10 controls">
+                            <input id="orderFilter" class="form-control span6" name="orderFilter" data-ng-model="filtertext" placeholder="Start typing an order number or name..." />
+                        </div>
+                    </div>
+                </form>
+
+                <div class="row warning">
+                    <h2><i class="icon-alert"></i> You Have Orders That Require Attention</h2>
+                    <p><a href="#">There is 1 payment authorization expiring</a>. You may not receive payment for expired authorization. </p>
+                </div>
+            </div>
+
+            <!-- Tabular Order List -->
+            <div class="merchello-pane">
+                <table class="table table-hover merchello-selectable-table">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" /></th>
+                            <th>Order</th>
+                            <th>Date</th>
+                            <th>Customer</th>
+                            <th>Payment Status</th>
+                            <th>Fulfillment Status</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="checkbox" /></td>
+                            <td>#<a href="#/merchello/merchello/OrderView/keygoeshere">1001</a></td>
+                            <td>Sep 01, 4:33pm PDT</td>
+                            <td>Heather Alvis</td>
+                            <td><span class="label label-success"><i class="icon-check"></i> Paid</span></td>
+                            <td><span class="label label-success"><i class="icon-check"></i> Fulfilled</span></td>
+                            <td>$20.00</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" /></td>
+                            <td>#<a href="#/merchello/merchello/OrderView/keygoeshere">1002</a></td>
+                            <td>Sep 01, 4:57pm PDT</td>
+                            <td>Kristen Miller</td>
+                            <td><span class="label label-info"><i class="icon-loading"></i> Authorized</span></td>
+                            <td><span class="label label-warning"><i class="icon-alert"></i> Not Fulfilled</span></td>
+                            <td>$45.50</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" /></td>
+                            <td>#<a href="#/merchello/merchello/OrderView/keygoeshere">1001</a></td>
+                            <td>Sep 01, 5:11pm PDT</td>
+                            <td>Buck Watson</td>
+                            <td><span class="label label-info"><i class="icon-loading"></i> Authorized</span></td>
+                            <td><span class="label label-warning"><i class="icon-alert"></i> Not Fulfilled</span></td>
+                            <td>$210.00</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" /></td>
+                            <td>#<a href="#/merchello/merchello/OrderView/keygoeshere">1001</a></td>
+                            <td>Sep 01, 5:36pm PDT</td>
+                            <td>Ginni Asher</td>
+                            <td><span class="label label-info"><i class="icon-loading"></i> Authorized</span></td>
+                            <td><span class="label label-warning"><i class="icon-alert"></i> Not Fulfilled</span></td>
+                            <td>$25.98</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" /></td>
+                            <td>#<a href="#/merchello/merchello/OrderView/keygoeshere">1001</a></td>
+                            <td>Sep 01, 6:17pm PDT</td>
+                            <td>Fritz Williams</td>
+                            <td><span class="label label-info"><i class="icon-loading"></i> Authorized</span></td>
+                            <td><span class="label label-info"><i class="icon-loading"></i> Partial</span></td>
+                            <td>$47.80</td>
+                        </tr>
+                    </tbody>
+                </table>
+                    
+            </div>
 
         </div>
             

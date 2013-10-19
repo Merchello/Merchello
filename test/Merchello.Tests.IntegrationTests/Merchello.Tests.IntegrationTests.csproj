@@ -253,7 +253,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Indexer\MerchelloIndexDataServiceTests.cs" />
+    <Compile Include="Indexer\ProductIndexerTests.cs" />
     <Compile Include="ItemCache\BasketTests.cs" />
     <Compile Include="DbInstall\InitialDataTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -266,15 +266,12 @@
     <Compile Include="Services\ServiceIntegrationTestBase.cs" />
     <Compile Include="Services\WarehouseServiceTests.cs" />
     <Compile Include="TestHelpers\DbPreTestDataWorker.cs" />
+    <Compile Include="TestHelpers\ExamineDataServices.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="config\ExamineIndex.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="config\ExamineSettings.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -284,6 +281,10 @@
     <ProjectReference Include="..\..\src\Merchello.Core\Merchello.Core.csproj">
       <Project>{2a83a229-c24b-4d8d-b806-7c9999eb9461}</Project>
       <Name>Merchello.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Merchello.Examine\Merchello.Examine.csproj">
+      <Project>{28a665a9-2aad-4230-ab8c-0f0b0f1b2115}</Project>
+      <Name>Merchello.Examine</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Merchello.Web\Merchello.Web.csproj">
       <Project>{81d9e7da-5a5a-444a-823f-1d97d7d5fedf}</Project>
