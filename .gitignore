@@ -154,3 +154,4 @@ $RECYCLE.BIN/
 .DS_Store
 test/Merchello.Tests.UnitTests/App_Data/TEMP/
 *.hash
+test/Merchello.Tests.IntegrationTests/App_Data/

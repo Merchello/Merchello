@@ -101,11 +101,11 @@ namespace Merchello.Core.Models
             var doc = XDocument.Parse(xml);
             if (doc.Root == null) return XDocument.Parse("<product />");
                 
-            doc.Root.Add(((Product)product).MasterVariant.SerializeToXml().Root);                      
+            doc.Root.Add(((Product)product).MasterVariant.SerializeToXml().Root);
+            
             foreach (var variant in product.ProductVariants)
             {
                 doc.Root.Add(variant.SerializeToXml().Root);
-
             }
             return doc;
         }
@@ -120,9 +120,9 @@ namespace Merchello.Core.Models
                 {
                     writer.WriteStartDocument();
                     writer.WriteStartElement("productVariant");
-                    writer.WriteAttributeString("key", productVariant.Key.ToString());
-                    writer.WriteAttributeString("master", ((ProductVariant)productVariant).Master.ToString());
                     writer.WriteElementString("productKey", productVariant.ProductKey.ToString());
+                    writer.WriteElementString("productVariantKey", productVariant.Key.ToString());
+                    writer.WriteElementString("master", ((ProductVariant)productVariant).Master.ToString());                    
                     writer.WriteElementString("name", productVariant.Name);
                     writer.WriteElementString("sku", productVariant.Sku);
                     writer.WriteElementString("price", productVariant.Price.ToString(CultureInfo.InvariantCulture));
