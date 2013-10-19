@@ -260,7 +260,12 @@
     <Folder Include="App_Plugins\Merchello\Views\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Plugins\Merchello\Common\Css\merchello.css" />
+    <Content Include="App_Plugins\Merchello\Common\Css\merchello.css">
+      <DependentUpon>merchello.scss</DependentUpon>
+    </Content>
+    <Content Include="App_Plugins\Merchello\Common\Css\merchello.min.css">
+      <DependentUpon>merchello.scss</DependentUpon>
+    </Content>
     <Content Include="App_Plugins\Merchello\Common\Js\merchello.product.service.js" />
     <Content Include="App_Plugins\Merchello\Common\Js\_module.js" />
     <Content Include="App_Plugins\Merchello\Controllers\customer.edit.controller.js" />
@@ -306,6 +311,8 @@
     <Content Include="App_Plugins\Merchello\lib\bootstrap\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="App_Plugins\Merchello\lib\bootstrap\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="App_Plugins\Merchello\lib\bootstrap\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="App_Plugins\Merchello\Common\Css\.sass-cache\ca4844db3fd674aaa0a6d987509a121f22ef5af1\merchello.scssc" />
+    <Content Include="App_Plugins\Merchello\Common\Css\merchello.scss" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

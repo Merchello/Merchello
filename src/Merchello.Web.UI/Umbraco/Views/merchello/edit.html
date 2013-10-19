@@ -95,13 +95,13 @@
                                     <div class="well">
 
                                         <label>Digital Downloads:</label>
-                                        <div><a href="#">Choose Media</a></div>
+                                        <div><a data-ng-click="chooseMedia()" class="btn btn-primary">Choose Media</a></div>
 
                                     </div>
 
                                     <label><input name="hasoptions" type="checkbox" data-ng-model="product.hasoptions"> This product has multiple options <small>e.g. Multiple sizes and/or colors</small></label>
                                     
-                                    <div class="well">
+                                    <div class="well" data-ng-show="product.hasoptions">
 
                                         <table class="table">
                                             <tr>
