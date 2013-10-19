@@ -1,0 +1,38 @@
+﻿<<link href="/App_Plugins/Merchello/Common/Css/merchello.css" rel="stylesheet">
+
+<form novalidate name="orderForm" 
+      data-ng-controller="Merchello.Editors.Order.ViewController" 
+      data-ng-show="loaded" 
+      data-ng-submit="save()">
+    <umb-panel val-show-validation>
+
+        <umb-header>
+
+            <div class="span4">
+                <div class="umb-headline-editor-wrapper">
+                    <h1>{{order.name}}</h1>
+                </div>
+            </div>
+
+
+            <div class="span8">
+                <div class="btn-toolbar pull-right umb-btn-toolbar">
+                    
+                    <div class="btn-group">
+                        
+                        <a href="#/merchello/merchello/OrderEdit/keygoeshere" type="submit" class="btn btn-success">Edit</a>
+
+                    </div>
+                </div>
+            </div>
+
+        </umb-header>
+        
+        <div class="merchello-panel-body row-fluid">
+
+            Order View HTML here
+
+        </div>
+
+    </umb-panel>
+</form>

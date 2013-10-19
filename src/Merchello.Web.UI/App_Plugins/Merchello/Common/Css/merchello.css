@@ -1,51 +1,40 @@
-﻿
-.merchello-panel-body {
-    bottom: 0;
-    clear: both;
-    left: 0;
-    overflow: auto;
-    position: absolute;
-    right: 0;
-    top: 101px;
-    width: 100%;
-}
+.active, .active td, .active:hover, .active td:hover { background-color: #f0f9ee; }
 
-.merchello-pane {
-    margin: 30px 20px;
-}
+.well .add { margin-bottom: 20px; }
 
-.merchello-controls {
-    margin-left: 240px;
-    padding-top: 5px;
-}
+.merchello-panel-body { position: absolute; top: 101px; bottom: 0; left: 0; right: 0; width: 100%; clear: both; overflow: auto; }
+.merchello-panel-body a { color: #049cdb; }
+.merchello-panel-body .btn { color: #000; }
+.merchello-panel-body .btn-primary { color: #fff; }
+.merchello-panel-body .label { font-size: 1em; line-height: 20px; text-shadow: none; }
+.merchello-panel-body .label-success { background: #8ecf7f; }
+.merchello-panel-body .label-warning { background: #f9af82; }
+.merchello-panel-body .label-info { background: #8cd0ec; }
+.merchello-panel-body .icon-loading:before { font-size: 1.15em; vertical-align: top; padding-top: 1px; }
 
-.merchello-control-label {
-    text-align: left;
-    float: left;
-    padding-top: 8px;
-    width: 160px;
-}
+.merchello-pane { padding: 30px 20px; }
+.merchello-pane.row-fluid { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; -ms-box-sizing: border-box; -o-box-sizing: border-box; box-sizing: border-box; }
+.merchello-pane div.warning { padding: 30px 20px; background: #feede3; border: solid 1px #f57020; color: #f57020; }
 
-table.merchello-selectable-table tr td { 
-    cursor: pointer; 
-}
+.merchello-controls { margin-left: 240px; padding-top: 5px; }
 
-.form-horizontal .controls {
-     padding-top: 6px;
-}
+.merchello-control-label { text-align: left; float: left; padding-top: 8px; width: 160px; }
 
-/* For the tags directive */
-.tags {
-    margin: 10px 0;
-}
-.tags .tag {
-    border-radius: 6px;
-    background-color: #EFEFEF;
-    border: 1px solid #DDD;
-    padding: 5px;
-    margin-right: 10px;
-}
-.tags .tag:hover {
-    color: red;
-    text-decoration: none;
-}
+table.merchello-selectable-table tr td { cursor: pointer; }
+
+.active td { border-top: solid 1px #cfebc9; }
+
+.table-hover tbody .active:hover > td, .table-hover tbody .active td:hover > td, .active .table-hover tbody td:hover > td { background-color: #e0f2dc; }
+
+input[type="radio"], input[type="checkbox"] { margin-top: -2px; }
+
+.input-append .add-on, .input-prepend .add-on { height: 14px; line-height: 14px; background: #ececec; }
+
+.label-checkbox { margin: 5px 0; }
+
+.form-horizontal .controls { padding-top: 6px; }
+.form-horizontal .form-control { padding: 1px 5px; border: solid 1px #ccc; }
+
+.tags { margin: 10px 0; }
+.tags .tag { border-radius: 6px; background-color: #EFEFEF; border: 1px solid #DDD; padding: 5px; margin-right: 10px; }
+.tags .tag:hover { color: red; text-decoration: none; }

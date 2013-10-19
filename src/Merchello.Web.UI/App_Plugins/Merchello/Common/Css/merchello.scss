@@ -1,0 +1,71 @@
+
+//Variables
+$orange: #f57020; //Umbraco's orange
+$green: #53a93f; //Umbraco's green button color
+$blue: #049cdb; //Umbraco's blue nav tab hover color
+$active: lighten($green, 50%);
+
+//Mixins
+@mixin box-sizing { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; -ms-box-sizing: border-box; -o-box-sizing: border-box; box-sizing: border-box; }
+
+//Global
+.active, .active:hover { background-color: $active; }
+
+.well {
+    .add { margin-bottom: 20px; } //spacing below add buttons inslide .well
+}
+
+
+//Main Sections
+.merchello-panel-body { position: absolute; top: 101px; bottom: 0; left: 0; right: 0; width: 100%; clear: both; overflow: auto; 
+    a { color: $blue; }
+    .btn { color: #000; }
+    .btn-primary { color: #fff; }
+
+    .label { font-size: 1em; line-height: 20px; text-shadow: none; }
+    .label-success { background: lighten($green, 20%); }
+    .label-warning { background: lighten($orange, 20%); }
+    .label-info { background: desaturate(lighten($blue, 30%), 25%); }
+    .icon-loading:before { font-size: 1.15em; vertical-align: top; padding-top: 1px; }
+}
+
+.merchello-pane { padding: 30px 20px; 
+    &.row-fluid { @include box-sizing; }
+    div.warning { padding: 30px 20px; background: lighten($orange, 40%); border: solid 1px $orange; color: $orange; }
+}
+
+.merchello-controls { margin-left: 240px; padding-top: 5px; }
+
+.merchello-control-label { text-align: left; float: left; padding-top: 8px; width: 160px; }
+
+
+//Tables
+table.merchello-selectable-table {
+    tr {
+        td { cursor: pointer; }
+    }
+}
+
+.active td { @extend .active; border-top: solid 1px darken($active, 10%); } //add the .active style to child table cells
+.table-hover tbody .active:hover > td { background-color: darken($active, 5%); } //override bootstrap hover styles for .active table cells
+
+
+//Forms
+input[type="radio"], input[type="checkbox"] { margin-top: -2px; } //line up checkboxes with label text
+.input-append .add-on, .input-prepend .add-on { height: 14px; line-height: 14px; background: #ececec; } //fix umbraco's append & prepend input styles for merchello
+
+.label-checkbox { margin: 5px 0; }
+
+.form-horizontal { 
+    .controls { padding-top: 6px; }
+    .form-control { padding: 1px 5px; border: solid 1px #ccc; }
+}
+
+
+// Tags
+.tags { margin: 10px 0;
+    .tag { border-radius: 6px; background-color: #EFEFEF; border: 1px solid #DDD; padding: 5px; margin-right: 10px; 
+        &:hover { color: red; text-decoration: none;
+        }
+    }
+}
