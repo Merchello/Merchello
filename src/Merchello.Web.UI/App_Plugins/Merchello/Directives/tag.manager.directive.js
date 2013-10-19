@@ -8,7 +8,7 @@ angular.module("umbraco").directive('tagManager', function () {
                 '<a ng-repeat="(idx, tag) in tags" class="tag" ng-click="remove(idx)">{{tag}}</a>' +
             '</div>' +
             '<input type="text" placeholder="Add a tag..." ng-model="new_value"></input> ' +
-            '<a class="btn" ng-click="add()">Add</a>',
+            '<a class="btn btn-primary" ng-click="add()">Add</a>',
         link: function ($scope, $element) {
             // FIXME: this is lazy and error-prone
             var input = angular.element($element.children()[1]);
