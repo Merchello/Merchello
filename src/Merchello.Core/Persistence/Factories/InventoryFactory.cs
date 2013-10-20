@@ -7,7 +7,7 @@ namespace Merchello.Core.Persistence.Factories
     {
         public IWarehouseInventory BuildEntity(WarehouseInventoryDto dto)
         {
-            return new WarehouseInventory(dto.WarehouseId, dto.ProductVariantKey)
+            return new WarehouseInventory(dto.WarehouseId, dto.ProductVariantId)
                 {
                     Count = dto.Count,
                     LowCount = dto.LowCount,
@@ -21,7 +21,7 @@ namespace Merchello.Core.Persistence.Factories
             return new WarehouseInventoryDto()
                 {
                     WarehouseId = entity.WarehouseId,
-                    ProductVariantKey = entity.ProductVariantKey,
+                    ProductVariantId = entity.ProductVariantId,
                     Count = entity.Count,
                     LowCount = entity.LowCount,
                     CreateDate = entity.CreateDate,

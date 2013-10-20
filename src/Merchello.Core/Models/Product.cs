@@ -119,10 +119,10 @@ namespace Merchello.Core.Models
         /// Exposes the product variant template's key
         /// </summary>
         [DataMember]
-        public Guid ProductVariantKey
+        public int ProductVariantId
         {
-            get { return _variant.Key; }
-            private set { _variant.Key = value; }
+            get { return _variant.Id; }
+            private set { _variant.Id = value; }
         }
 
         /// <summary>

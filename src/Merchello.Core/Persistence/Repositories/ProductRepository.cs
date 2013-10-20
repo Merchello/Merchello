@@ -51,7 +51,7 @@ namespace Merchello.Core.Persistence.Repositories
             // TODO - inventory
             ((ProductVariant) ((Product) product).MasterVariant).WarehouseInventory =
                 ((ProductVariantRepository) _productVariantRepository).GetWarehouseInventory(
-                    ((Product) product).ProductVariantKey);
+                    ((Product) product).ProductVariantId);
 
             // Build the list of options
             product.ProductOptions = GetProductOptionCollection(product.Key);
@@ -109,12 +109,12 @@ namespace Merchello.Core.Persistence.Repositories
         {
             var list = new List<string>
                 {                    
-                    "DELETE FROM merchProductVariant2ProductAttribute WHERE productVariantKey IN (SELECT pk FROM merchProductVariant WHERE productKey = @Id)",                    
+                    "DELETE FROM merchProductVariant2ProductAttribute WHERE productVariantId IN (SELECT id FROM merchProductVariant WHERE productKey = @Id)",                    
                     @"DELETE FROM merchProductAttribute WHERE optionId IN 
                         (SELECT optionId FROM merchProductOption WHERE id IN 
                         (SELECT optionId FROM merchProduct2ProductOption WHERE productKey = @Id))",
                     "DELETE FROM merchProduct2ProductOption WHERE productKey = @Id",
-                    "DELETE FROM merchWarehouseInventory WHERE productVariantKey IN (SELECT pk FROM merchProductVariant WHERE productKey = @Id)",
+                    "DELETE FROM merchWarehouseInventory WHERE productVariantId IN (SELECT id FROM merchProductVariant WHERE productKey = @Id)",
                     "DELETE FROM merchProductVariant WHERE productKey = @Id",
                     "DELETE FROM merchProduct WHERE pk = @Id",
                     "DELETE FROM merchProductOption WHERE id NOT IN (SELECT optionId FROM merchProduct2ProductOption)"
@@ -141,7 +141,8 @@ namespace Merchello.Core.Persistence.Repositories
             Database.Insert(dto.ProductVariantDto);
 
             ((Product) entity).MasterVariant.ProductKey = dto.ProductVariantDto.ProductKey;
-            
+            ((Product) entity).MasterVariant.Id = dto.ProductVariantDto.Id;
+
             // save the product options
             SaveProductOptions(entity);
 
@@ -235,7 +236,7 @@ namespace Merchello.Core.Persistence.Repositories
         {
             var executeClauses = new[]
                 {
-                    "DELETE FROM merchProductVariant2ProductAttribute WHERE productVariantKey IN (SELECT productVariantKey FROM merchProductVariant2ProductAttribute WHERE optionId = @Id)",
+                    "DELETE FROM merchProductVariant2ProductAttribute WHERE productVariantId IN (SELECT productVariantId FROM merchProductVariant2ProductAttribute WHERE optionId = @Id)",
                     "DELETE FROM merchProduct2ProductOption WHERE optionId = @Id",
                     "DELETE FROM merchProductAttribute WHERE optionId = @Id",
                     "DELETE FROM merchProductOption WHERE id = @Id"
@@ -357,7 +358,7 @@ namespace Merchello.Core.Persistence.Repositories
             // EnsureProductVariantsHaveAttributes called in the ProductVariantService cleans up the orphaned variants and fires off
             // the events
            
-            Database.Execute("DELETE FROM merchProductVariant2ProductAttribute WHERE productVariantKey IN (SELECT productVariantKey FROM merchProductVariant2ProductAttribute WHERE productAttributeId = @Id)", 
+            Database.Execute("DELETE FROM merchProductVariant2ProductAttribute WHERE productVariantId IN (SELECT productVariantId FROM merchProductVariant2ProductAttribute WHERE productAttributeId = @Id)", 
                 new { Id = productAttribute.Id});
             Database.Execute("DELETE FROM merchProductAttribute WHERE Id = @Id", new { Id = productAttribute.Id });
                       

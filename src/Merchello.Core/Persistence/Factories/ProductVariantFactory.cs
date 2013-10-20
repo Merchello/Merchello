@@ -9,7 +9,7 @@ namespace Merchello.Core.Persistence.Factories
         {
             var entity = new ProductVariant(dto.Name, dto.Sku, dto.Price)
             {
-                Key = dto.Key,
+                Id = dto.Id,
                 ProductKey = dto.ProductKey,
                 CostOfGoods = dto.CostOfGoods,
                 SalePrice = dto.SalePrice,
@@ -39,7 +39,7 @@ namespace Merchello.Core.Persistence.Factories
         {
             return new ProductVariantDto()
             {
-                Key = entity.Key,
+                Id = entity.Id,
                 ProductKey = entity.ProductKey,
                 Name = entity.Name,
                 Sku = entity.Sku,

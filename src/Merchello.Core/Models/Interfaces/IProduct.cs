@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using Merchello.Core.Models.EntityBase;
 
 namespace Merchello.Core.Models
 {
-    public interface IProduct : IProductBase
+    public interface IProduct : IProductBase, IKeyEntity
     {
 
         /// <summary>

@@ -11,7 +11,7 @@ namespace Merchello.Core.Models
         public static void AddProductVariantValues(this ExtendedDataCollection extendedData, IProductVariant productVariant)
         {
             extendedData.SetValue("merchProductKey", productVariant.ProductKey.ToString());
-            extendedData.SetValue("merchProductVariantKey", productVariant.Key.ToString());
+            extendedData.SetValue("merchProductVariantId", productVariant.Id.ToString());
             extendedData.SetValue("merchCostOfGoods", productVariant.CostOfGoods.ToString());
             extendedData.SetValue("merchWeight", productVariant.Weight.ToString());
             extendedData.SetValue("merchWidth", productVariant.Width.ToString());
@@ -27,23 +27,23 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
-        /// True/false indicating whether or not the colleciton contains a ProductVariantKey
+        /// True/false indicating whether or not the colleciton contains a ProductVariantId
         /// </summary>
         /// <param name="extendedData"></param>
         /// <returns></returns>
-        public static bool ContainsProductVariantKey(this ExtendedDataCollection extendedData)
+        public static bool ContainsProductVariantId(this ExtendedDataCollection extendedData)
         {
-            return extendedData.ContainsKey("merchProductVariantKey");
+            return extendedData.ContainsKey("merchProductVariantId");
         }
 
         /// <summary>
-        /// Return the ProductVariantKey
+        /// Return the ProductVariantId
         /// </summary>
         /// <param name="extendedData"></param>
         /// <returns></returns>
-        public static Guid GetProductVariantKey(this ExtendedDataCollection extendedData)
+        public static int GetProductVariantId(this ExtendedDataCollection extendedData)
         {
-            return GetGuidValue(extendedData.GetValue("merchProductVariantKey"));
+            return GetIntegerValue(extendedData.GetValue("merchProductVariantId"));
         }
 
         /// <summary>

@@ -7,7 +7,7 @@ namespace Merchello.Core.Models
     /// <summary>
     /// Defines a product
     /// </summary>
-    public interface IProductBase : IKeyEntity
+    public interface IProductBase
     {
         /// <summary>
         /// The sku for the Product

@@ -10,13 +10,13 @@ namespace Merchello.Core.Models.Rdbms
     internal class WarehouseInventoryDto
     {
         [Column("warehouseId")]
-        [PrimaryKeyColumn(AutoIncrement = false, Name = "PK_merchWarehouseInventory", OnColumns = "warehouseId, productVariantKey")]
+        [PrimaryKeyColumn(AutoIncrement = false, Name = "PK_merchWarehouseInventory", OnColumns = "warehouseId, productVariantId")]
         [ForeignKey(typeof(WarehouseDto), Name = "FK_merchWarehouseInventory_merchWarehouse", Column = "id")]
         public int WarehouseId { get; set; }
 
-        [Column("productVariantKey")]
-        [ForeignKey(typeof(ProductVariantDto), Name = "FK_merchWarehouseInventory_merchProductVariant", Column = "pk")]
-        public Guid ProductVariantKey { get; set; }
+        [Column("productVariantId")]
+        [ForeignKey(typeof(ProductVariantDto), Name = "FK_merchWarehouseInventory_merchProductVariant", Column = "id")]
+        public int ProductVariantId { get; set; }
 
         [Column("count")]
         public int Count { get; set; }

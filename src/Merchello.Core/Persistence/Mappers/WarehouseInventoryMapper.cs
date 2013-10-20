@@ -17,7 +17,7 @@ namespace Merchello.Core.Models
         internal override void BuildMap()
         {
             CacheMap<WarehouseInventory, WarehouseInventoryDto>(src => src.WarehouseId, dto => dto.WarehouseId);
-            CacheMap<WarehouseInventory, WarehouseInventoryDto>(src => src.ProductVariantKey, dto => dto.ProductVariantKey);
+            CacheMap<WarehouseInventory, WarehouseInventoryDto>(src => src.ProductVariantId, dto => dto.ProductVariantId);
             CacheMap<WarehouseInventory, WarehouseInventoryDto>(src => src.Count, dto => dto.Count);
             CacheMap<WarehouseInventory, WarehouseInventoryDto>(src => src.LowCount, dto => dto.LowCount);
             CacheMap<WarehouseInventory, WarehouseInventoryDto>(src => src.UpdateDate, dto => dto.UpdateDate);

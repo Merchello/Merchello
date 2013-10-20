@@ -1,21 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Umbraco.Core.Persistence;
 using Umbraco.Core.Persistence.DatabaseAnnotations;
 
 namespace Merchello.Core.Models.Rdbms
 {
     [TableName("merchProductVariant")]
-    [PrimaryKey("pk", autoIncrement = false)]
+    [PrimaryKey("id")]
     [ExplicitColumns]
     internal class ProductVariantDto
     {
-        [Column("pk")]
-        [PrimaryKeyColumn(AutoIncrement = false)]
-        public Guid Key { get; set; }
+        [Column("id")]
+        [PrimaryKeyColumn]
+        public int Id { get; set; }
 
         [Column("productKey")]
         [ForeignKey(typeof(ProductDto), Name = "FK_merchProductVariant_merchProduct", Column = "pk")]

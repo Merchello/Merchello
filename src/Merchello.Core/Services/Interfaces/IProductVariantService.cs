@@ -19,7 +19,7 @@ namespace Merchello.Core.Services
         /// <param name="attributes"><see cref="IProductVariant"/></param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         /// <returns>Either a new <see cref="IProductVariant"/> or, if one already exists with associated attributes, the existing <see cref="IProductVariant"/></returns>
-        IProductVariant CreateProductVariantWithKey(IProduct product, ProductAttributeCollection attributes, bool raiseEvents = true);
+        IProductVariant CreateProductVariantWithId(IProduct product, ProductAttributeCollection attributes, bool raiseEvents = true);
 
         /// <summary>
         /// Creates a <see cref="IProductVariant"/> of the <see cref="IProduct"/> passed defined by the collection of <see cref="IProductAttribute"/>
@@ -31,7 +31,7 @@ namespace Merchello.Core.Services
         /// <param name="attributes"><see cref="IProductVariant"/></param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         /// <returns>Either a new <see cref="IProductVariant"/> or, if one already exists with associated attributes, the existing <see cref="IProductVariant"/></returns>
-        IProductVariant CreateProductVariantWithKey(IProduct product, string name, string sku, decimal price, ProductAttributeCollection attributes, bool raiseEvents = true);
+        IProductVariant CreateProductVariantWithId(IProduct product, string name, string sku, decimal price, ProductAttributeCollection attributes, bool raiseEvents = true);
 
         /// <summary>
         /// Saves a single instance of a <see cref="IProductVariant"/>
@@ -74,18 +74,18 @@ namespace Merchello.Core.Services
         void Delete(IEnumerable<IProductVariant> productVariantList, bool raiseEvents = true);
 
         /// <summary>
-        /// Gets an <see cref="IProductVariant"/> object by its 'UniqueId'
+        /// Gets an <see cref="IProductVariant"/> object by its unique id
         /// </summary>
-        /// <param name="key">Guid key of the Product to retrieve</param>
+        /// <param name="id">id of the Product to retrieve</param>
         /// <returns><see cref="IProductVariant"/></returns>
-        IProductVariant GetByKey(Guid key);
+        IProductVariant GetById(int id);
 
         /// <summary>
         /// Gets list of <see cref="IProductVariant"/> objects given a list of Unique keys
         /// </summary>
-        /// <param name="keys">List of Guid keys for ProductVariant objects to retrieve</param>
+        /// <param name="ids">List of ids for ProductVariant objects to retrieve</param>
         /// <returns>List of <see cref="IProduct"/></returns>
-        IEnumerable<IProductVariant> GetByKeys(IEnumerable<Guid> keys);
+        IEnumerable<IProductVariant> GetByIds(IEnumerable<int> ids);
 
         /// <summary>
         /// Gets a collection of <see cref="IProductVariant"/> objects for a given Product Key

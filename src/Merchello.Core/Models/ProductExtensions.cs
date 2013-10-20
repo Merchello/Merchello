@@ -121,7 +121,7 @@ namespace Merchello.Core.Models
                     writer.WriteStartDocument();
                     writer.WriteStartElement("productVariant");
                     writer.WriteElementString("productKey", productVariant.ProductKey.ToString());
-                    writer.WriteElementString("productVariantKey", productVariant.Key.ToString());
+                    writer.WriteElementString("productVariantId", productVariant.Id.ToString());
                     writer.WriteElementString("master", ((ProductVariant)productVariant).Master.ToString());                    
                     writer.WriteElementString("name", productVariant.Name);
                     writer.WriteElementString("sku", productVariant.Sku);

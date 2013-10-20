@@ -47,7 +47,7 @@ namespace Merchello.Core.Services
         /// <param name="attributes"><see cref="IProductVariant"/></param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         /// <returns>Either a new <see cref="IProductVariant"/> or, if one already exists with associated attributes, the existing <see cref="IProductVariant"/></returns>
-        public IProductVariant CreateProductVariantWithKey(IProduct product, ProductAttributeCollection attributes, bool raiseEvents = true)
+        public IProductVariant CreateProductVariantWithId(IProduct product, ProductAttributeCollection attributes, bool raiseEvents = true)
         {
             var skuSeparator = MerchelloConfiguration.Current.DefaultSkuSeparator;
 
@@ -64,7 +64,7 @@ namespace Merchello.Core.Services
                 sku += skuSeparator + att.Sku;
             }
 
-            return CreateProductVariantWithKey(product, name.Trim(), sku, product.Price, attributes, raiseEvents);
+            return CreateProductVariantWithId(product, name.Trim(), sku, product.Price, attributes, raiseEvents);
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace Merchello.Core.Services
         /// <param name="attributes"><see cref="IProductVariant"/></param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         /// <returns>Either a new <see cref="IProductVariant"/> or, if one already exists with associated attributes, the existing <see cref="IProductVariant"/></returns>
-        public IProductVariant CreateProductVariantWithKey(IProduct product, string name, string sku, decimal price, ProductAttributeCollection attributes, bool raiseEvents = true)
+        public IProductVariant CreateProductVariantWithId(IProduct product, string name, string sku, decimal price, ProductAttributeCollection attributes, bool raiseEvents = true)
         {
             Mandate.ParameterNotNull(product, "product");
             Mandate.ParameterNotNull(attributes, "attributes");
@@ -270,34 +270,34 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Gets an <see cref="IProductVariant"/> object by its 'UniqueId'
         /// </summary>
-        /// <param name="key">Guid key of the Product to retrieve</param>
+        /// <param name="id">id of the Product to retrieve</param>
         /// <returns><see cref="IProductVariant"/></returns>
-        public IProductVariant GetByKey(Guid key)
+        public IProductVariant GetById(int id)
         {
             using (var repository = _repositoryFactory.CreateProductVariantRepository(_uowProvider.GetUnitOfWork()))
             {
-                return repository.Get(key);
+                return repository.Get(id);
             }
         }
 
         /// <summary>
-        /// Gets list of <see cref="IProductVariant"/> objects given a list of Unique keys
+        /// Gets list of <see cref="IProductVariant"/> objects given a list of Unique ids
         /// </summary>
-        /// <param name="keys">List of Guid keys for ProductVariant objects to retrieve</param>
+        /// <param name="ids">List of ids for ProductVariant objects to retrieve</param>
         /// <returns>List of <see cref="IProduct"/></returns>
-        public IEnumerable<IProductVariant> GetByKeys(IEnumerable<Guid> keys)
+        public IEnumerable<IProductVariant> GetByIds(IEnumerable<int> ids)
         {
             using (var repository = _repositoryFactory.CreateProductVariantRepository(_uowProvider.GetUnitOfWork()))
             {
-                return repository.GetAll(keys.ToArray());
+                return repository.GetAll(ids.ToArray());
             }
         }
 
-        internal IEnumerable<IProductVariant> GetAll(params Guid[] keys)
+        internal IEnumerable<IProductVariant> GetAll(params int[] ids)
         {
             using (var repository = _repositoryFactory.CreateProductVariantRepository(_uowProvider.GetUnitOfWork()))
             {
-                return repository.GetAll(keys);
+                return repository.GetAll(ids);
             }
         }
 

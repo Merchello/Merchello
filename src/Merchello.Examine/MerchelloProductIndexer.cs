@@ -93,7 +93,7 @@ namespace Merchello.Examine
             = new List<StaticField>()
             {
                 new StaticField("productKey", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
-                new StaticField("productVariantKey", FieldIndexTypes.ANALYZED, false, string.Empty),
+                new StaticField("productVariantId", FieldIndexTypes.ANALYZED, false, string.Empty),
                 new StaticField("name", FieldIndexTypes.ANALYZED, true, string.Empty),
                 new StaticField("sku", FieldIndexTypes.ANALYZED, true, string.Empty),
                 new StaticField("price", FieldIndexTypes.ANALYZED, true, "DOUBLE"),
