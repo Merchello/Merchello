@@ -18,7 +18,7 @@ namespace Merchello.Core.Services
         /// Crates an <see cref="IAnonymousCustomer"/> and saves it to the database
         /// </summary>
         /// <returns><see cref="IAnonymousCustomer"/></returns>
-        IAnonymousCustomer CreateAnonymousCustomerWithKey();
+        IAnonymousCustomer CreateAnonymousCustomerWithId();
 
         /// <summary>
         /// Creates a customer without saving to the database
@@ -38,14 +38,14 @@ namespace Merchello.Core.Services
         /// <param name="email">the email address of the customer</param>
         /// <param name="memberId">The Umbraco member Id of the customer</param>
         /// <returns><see cref="ICustomer"/></returns>
-        ICustomer CreateCustomerWithKey(string firstName, string lastName, string email, int? memberId = null);
+        ICustomer CreateCustomerWithId(string firstName, string lastName, string email, int? memberId = null);
 
         /// <summary>
         /// Creates a customer with the Umbraco member id passed
         /// </summary>
         /// <param name="memberId">The Umbraco member id (int)</param>
         /// <returns><see cref="ICustomer"/></returns>
-        ICustomer CreateCustomerWithKey(int memberId);
+        ICustomer CreateCustomerWithId(int memberId);
 
 
         /// <summary>
@@ -80,15 +80,16 @@ namespace Merchello.Core.Services
         /// Gets an <see cref="ICustomer"/> object by its 'UniqueId'
         /// </summary>
         /// <param name="key">Guid key of the Customer to retrieve</param>
+        /// <param name="id">Integer id of the customer to retrieve</param>
         /// <returns><see cref="ICustomer"/></returns>
-        ICustomer GetByKey(Guid key);
+        ICustomer GetById(int id);
 
         /// <summary>
         /// Gets an <see cref="ICustomer"/> or <see cref="IAnonymousCustomer"/> object by its 'UniqueId'
         /// </summary>
-        /// <param name="key">Guid key of either object to retrieve</param>
+        /// <param name="entityKey">Guid key of either object to retrieve</param>
         /// <returns><see cref="ICustomerBase"/></returns>
-        ICustomerBase GetAnyByKey(Guid key);
+        ICustomerBase GetAnyByKey(Guid entityKey);
 
         /// <summary>
         /// Gets an <see cref="ICustomer"/> object by its Umbraco MemberId
@@ -100,9 +101,9 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Gets list of <see cref="ICustomer"/> objects given a list of Unique keys
         /// </summary>
-        /// <param name="keys">List of Guid pk for customers to retrieve</param>
+        /// <param name="ids">List of Guid pk for customers to retrieve</param>
         /// <returns>List of <see cref="ICustomer"/></returns>
-        IEnumerable<ICustomer> GetByKeys(IEnumerable<Guid> keys);
+        IEnumerable<ICustomer> GetByIds(IEnumerable<int> ids);
 
      
     }

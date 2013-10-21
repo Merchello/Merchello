@@ -17,7 +17,7 @@ namespace Merchello.Core.Persistence.Mappers
         internal override void BuildMap()
         {
             CacheMap<Payment, PaymentDto>(src => src.Id, dto => dto.Id);                        
-            CacheMap<Payment, PaymentDto>(src => src.CustomerKey, dto => dto.CustomerKey);
+            CacheMap<Payment, PaymentDto>(src => src.CustomerId, dto => dto.CustomerId);
             CacheMap<Payment, PaymentDto>(src => src.ProviderKey, dto => dto.ProviderKey);
             CacheMap<Payment, PaymentDto>(src => src.PaymentTypeFieldKey, dto => dto.PaymentTfKey);                        
             CacheMap<Payment, PaymentDto>(src => src.PaymentMethodName, dto => dto.PaymentMethodName);

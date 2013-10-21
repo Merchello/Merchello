@@ -13,10 +13,10 @@ namespace Merchello.Core.Models.Rdbms
         [PrimaryKeyColumn]
         public int Id { get; set; }        
 
-        [Column("customerKey")]
-        [ForeignKey(typeof(CustomerDto), Name = "FK_merchPayment_merchCustomer", Column = "pk")]
+        [Column("customerId")]
+        [ForeignKey(typeof(CustomerDto), Name = "FK_merchPayment_merchCustomer", Column = "id")]
         [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchPaymentCustomer")]
-        public Guid CustomerKey { get; set; }
+        public int CustomerId { get; set; }
         
         [Column("providerKey")]
         public Guid ProviderKey { get; set; }

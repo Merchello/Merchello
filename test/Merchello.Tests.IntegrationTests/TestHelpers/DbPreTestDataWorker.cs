@@ -60,7 +60,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         /// </summary>
         public ICustomerAddress MakeExistingAddress(ICustomer customer, string label)
         {
-            var address = MockAddressDataMaker.RandomAddress(customer, label);
+            var address = MockCustomerAddressDataMaker.RandomAddress(customer, label);
             //AddressService.Save(address);
             return address;
         }
@@ -70,7 +70,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         /// </summary>        
         public IEnumerable<ICustomerAddress> MakeExistingAddressCollection(ICustomer customer, string label, int count)
         {
-            var addresses = MockAddressDataMaker.AddressCollectionForInserting(customer, label, count);
+            var addresses = MockCustomerAddressDataMaker.AddressCollectionForInserting(customer, label, count);
             //AddressService.Save(addresses);
             return addresses;
         }

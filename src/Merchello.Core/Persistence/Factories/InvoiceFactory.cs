@@ -44,7 +44,7 @@ namespace Merchello.Core.Persistence.Factories
             {
                 Id = entity.Id,
                 OrderId = entity.OrderId,
-                CustomerKey = entity.Customer.Key,
+                CustomerId = entity.Customer.Id,
                 InvoiceNumber = entity.InvoiceNumber,
                 InvoiceDate = entity.InvoiceDate,
                 InvoiceStatusId = entity.InvoiceStatus.Id,

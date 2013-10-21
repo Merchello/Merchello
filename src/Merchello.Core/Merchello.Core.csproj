@@ -93,6 +93,7 @@
     <Compile Include="Events\StatusChangeEventArgs.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\CustomerBase.cs" />
     <Compile Include="Models\ExtendedDataExtensions.cs" />
     <Compile Include="IMerchelloContext.cs" />
     <Compile Include="Models\LineItemContainerExtensions.cs" />
@@ -110,7 +111,7 @@
     <Compile Include="Models\ItemCacheLineItem.cs" />
     <Compile Include="Models\CustomerAddress.cs" />
     <Compile Include="Models\AnonymousCustomer.cs" />
-    <Compile Include="Models\CustomerBase.cs" />
+    <Compile Include="Models\AnonymousCustomerBase.cs" />
     <Compile Include="Models\ItemCache.cs" />
     <Compile Include="Models\ExtendedDataCollection.cs" />
     <Compile Include="Models\Interfaces\IAnonymousCustomer.cs" />
@@ -158,7 +159,7 @@
     <Compile Include="Models\ProductVariant.cs" />
     <Compile Include="Models\ProductVariantCollection.cs" />
     <Compile Include="Models\Rdbms\AppliedPaymentDto.cs" />
-    <Compile Include="Models\Rdbms\ILineItemDto.cs" />
+    <Compile Include="Models\Interfaces\ILineItemDto.cs" />
     <Compile Include="Models\Rdbms\OrderItemDto.cs" />
     <Compile Include="Models\Rdbms\OrderStatusDto.cs" />
     <Compile Include="Models\Rdbms\OrderDto.cs" />
@@ -286,7 +287,7 @@
     <Compile Include="Persistence\DatabaseModelDefinitions\DefinitionFactory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Persistence\Factories\AddressFactory.cs" />
+    <Compile Include="Persistence\Factories\CustomerAddressFactory.cs" />
     <Compile Include="Persistence\Migrations\Initial\PluginDatabaseSchemaResult.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\ICustomerRepository.cs" />
     <Compile Include="Persistence\Mappers\AddressMapper.cs" />

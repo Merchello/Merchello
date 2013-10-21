@@ -10,18 +10,19 @@ namespace Merchello.Core.Models
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    public abstract class CustomerBase : IdEntity, ICustomerBase
+    public abstract class AnonymousCustomerBase : KeyEntity, ICustomerBase
     {
         private DateTime _lastActivityDate;
-        private Guid _entityKey;
 
-        protected CustomerBase(bool isAnonymous)
+        protected AnonymousCustomerBase(bool isAnonymous)
         {
             IsAnonymous = isAnonymous;
         }
 
-        private static readonly PropertyInfo LastActivityDateSelector = ExpressionHelper.GetPropertyInfo<CustomerBase, DateTime>(x => x.LastActivityDate);
-        private static readonly PropertyInfo EntityKeySelector = ExpressionHelper.GetPropertyInfo<CustomerBase, Guid>(x => x.EntityKey);
+        private static readonly PropertyInfo LastActivityDateSelector = ExpressionHelper.GetPropertyInfo<AnonymousCustomerBase, DateTime>(x => x.LastActivityDate);
+
+
+        public Guid EntityKey { get { return Key; } }
 
         /// <summary>
         /// The date the customer was last active on the site
@@ -33,26 +34,10 @@ namespace Merchello.Core.Models
             set
             {
                 SetPropertyValueAndDetectChanges(o =>
-                {
-                    _lastActivityDate = value;
-                    return _lastActivityDate;
-                }, _lastActivityDate, LastActivityDateSelector);
-            }
-        }
-
-        /// <summary>
-        /// Entity key
-        /// </summary>
-        [DataMember]
-        public Guid EntityKey
-        {
-            get { return _entityKey; }
-            set {
-                SetPropertyValueAndDetectChanges(o =>
-                {
-                    _entityKey = value;
-                    return _entityKey;
-                }, _entityKey, EntityKeySelector);
+                    {
+                        _lastActivityDate = value;
+                        return _lastActivityDate;
+                    }, _lastActivityDate, LastActivityDateSelector);
             }
         }
 

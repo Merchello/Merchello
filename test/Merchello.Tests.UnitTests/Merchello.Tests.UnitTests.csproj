@@ -284,8 +284,6 @@
     <Compile Include="TypeFields\ProductTypeFieldTests.cs" />
     <Compile Include="TypeFields\ShipMethodTypeFieldTests.cs" />
     <Compile Include="Utilities\EncryptionHelperTests.cs" />
-    <Compile Include="WebControllers\CustomerControllerTests.cs" />
-    <Compile Include="WebControllers\InvoiceControllerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -307,7 +305,9 @@
       <Name>Merchello.Tests.Base</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="WebControllers\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -77,7 +77,7 @@ namespace Merchello.Core.Persistence.Repositories
             sql.Select(isCount ? "COUNT(*)" : "*")
                .From<PaymentDto>()
                .InnerJoin<CustomerDto>()
-               .On<PaymentDto, CustomerDto>(left => left.CustomerKey, right => right.Key);              
+               .On<PaymentDto, CustomerDto>(left => left.CustomerId, right => right.Id);              
 
             return sql;
         }

@@ -54,12 +54,12 @@ namespace Merchello.Web.Editors
         /// <summary>
         /// Returns customer by the key
         /// </summary>
-        /// <param name="key"></param>
-        public Customer GetCustomer(Guid key)
+        /// <param name="id"></param>
+        public Customer GetCustomer(int id)
         {
-			if (key != null)
+			if (id != 0)
 			{
-				var customer = MerchelloContext.Services.CustomerService.GetByKey(key) as Customer;
+				var customer = MerchelloContext.Services.CustomerService.GetById(id) as Customer;
 				if (customer == null)
 				{
 					throw new HttpResponseException(HttpStatusCode.NotFound);
@@ -108,7 +108,7 @@ namespace Merchello.Web.Editors
 		/// 
 		/// PUT /umbraco/Merchello/CustomerApi/PutCustomer
 		/// </summary>
-		/// <param name="customer">Customer To Update</param>
+		/// <param name="customer"> To Update</param>
 		/// <returns>Http Response</returns>
 		public HttpResponseMessage PutCustomer(Customer customer)
 		{
@@ -125,16 +125,16 @@ namespace Merchello.Web.Editors
 			return response;  	
 		}
 
-		/// <summary>
-		/// Deletes an existing customer
-		/// 
-		/// DELETE /umbraco/Merchello/CustomerApi/{guid}
-		/// </summary>
-		/// <param name="key">Guid of Customer</param>
-		/// <returns>Http Response</returns>
-		public HttpResponseMessage Delete(Guid key)
+        /// <summary>
+        /// Deletes an existing customer
+        /// 
+        /// DELETE /umbraco/Merchello/CustomerApi/{guid}
+        /// </summary>
+        /// <param name="id">The id of the customer</param>
+        /// <returns>Http Response</returns>
+        public HttpResponseMessage Delete(int id)
 		{
-			var customerToDelete = _customerService.GetByKey(key);
+			var customerToDelete = _customerService.GetById(id);
 			var response = Request.CreateResponse(HttpStatusCode.OK);
 
 			if (customerToDelete == null)

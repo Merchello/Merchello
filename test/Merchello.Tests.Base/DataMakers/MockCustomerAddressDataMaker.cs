@@ -10,14 +10,14 @@ namespace Merchello.Tests.Base.DataMakers
     /// <summary>
     /// Helper class to assist in putting together address data for testing
     /// </summary>
-    public class MockAddressDataMaker : MockDataMakerBase
+    public class MockCustomerAddressDataMaker : MockDataMakerBase
     {
         
-        public static ICustomerAddress AddressForInserting()
+        public static ICustomerAddress CustomerAddressForInserting(int customerId)
         {
             // this won't work for integration tests because of the database constraint.
 
-            var address = new CustomerAddress(Guid.NewGuid(), "Home")
+            var address = new CustomerAddress(customerId, "Home")
                 {
                     Address1 = "111 Somewhere",
                     AddressTypeFieldKey = new AddressTypeField().Residential.TypeKey,
@@ -34,9 +34,9 @@ namespace Merchello.Tests.Base.DataMakers
 
         }
 
-        public static ICustomerAddress MindflyAddressForInserting()
+        public static ICustomerAddress MindflyAddressForInserting(int customerId)
         {
-            var address = new CustomerAddress(Guid.NewGuid(), "Mindfly")
+            var address = new CustomerAddress(customerId, "Mindfly")
                 {
                     Address1 = "114 W. Magnolia St.",
                     Address2 = "Suite 504",

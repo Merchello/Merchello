@@ -37,7 +37,7 @@ namespace Merchello.Tests.Base.DataMakers
         {
             var dto = new CustomerDto()
                 {
-                    Key = c.Key,
+                    EntityKey = c.EntityKey,
                     FirstName = c.FirstName,
                     LastName = c.LastName,
                     Email = c.Email,

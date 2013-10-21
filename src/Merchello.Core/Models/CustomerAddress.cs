@@ -11,7 +11,7 @@ namespace Merchello.Core.Models
     [DataContract(IsReference = true)]
     public class CustomerAddress : IdEntity, ICustomerAddress
     {
-        private readonly Guid _customerKey;
+        private readonly int _customerId;
         private string _label;
         private string _fullName;
         private string _company;
@@ -24,9 +24,9 @@ namespace Merchello.Core.Models
         private string _countryCode;
         private string _phone;
 
-        internal CustomerAddress(Guid customerPk, string label)
+        internal CustomerAddress(int customerId, string label)
         {
-            _customerKey = customerPk;
+            _customerId = customerId;
             _label = label;
         }
 
@@ -35,7 +35,7 @@ namespace Merchello.Core.Models
         {            
             Mandate.ParameterNotNull(customer, "customer");
             Mandate.ParameterNotNull(label, "label");
-            _customerKey = customer.Key;
+            _customerId = customer.Id;
             _label = label;
 
         }
@@ -53,12 +53,12 @@ namespace Merchello.Core.Models
         private static readonly PropertyInfo PhoneSelector = ExpressionHelper.GetPropertyInfo<CustomerAddress, string>(x => x.Phone);
 
         /// <summary>
-        /// The customer key (key) associated with the address
+        /// The customer id associated with the address
         /// </summary>
         [DataMember]
-        public Guid CustomerKey
+        public int CustomerId
         {
-            get { return _customerKey; }
+            get { return _customerId; }
         }
 
         /// <summary>

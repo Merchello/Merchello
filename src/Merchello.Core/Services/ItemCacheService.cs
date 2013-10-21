@@ -51,14 +51,14 @@ namespace Merchello.Core.Services
             var itemCache = GetItemCacheByCustomer(customer, itemCacheType);
             if (itemCache != null) return itemCache;
 
-            itemCache = new ItemCache(customer.Key, itemCacheType);
+            itemCache = new ItemCache(customer.EntityKey, itemCacheType);
             if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<IItemCache>(itemCache), this))
             {
                 //registry.WasCancelled = true;
                 return itemCache;
             }
 
-            itemCache.EntityKey = customer.Key;
+            itemCache.EntityKey = customer.EntityKey;
 
             using (new WriteLock(Locker))
             {
@@ -216,7 +216,7 @@ namespace Merchello.Core.Services
         {
             using (var repository = _repositoryFactory.CreateCustomerItemCacheRepository(_uowProvider.GetUnitOfWork()))
             {
-                var query = Query<IItemCache>.Builder.Where(x => x.EntityKey == customer.Key);
+                var query = Query<IItemCache>.Builder.Where(x => x.EntityKey == customer.EntityKey);
                 return repository.GetByQuery(query);
             }
         }
@@ -228,7 +228,7 @@ namespace Merchello.Core.Services
         {
             using (var repository = _repositoryFactory.CreateCustomerItemCacheRepository(_uowProvider.GetUnitOfWork()))
             {
-                var query = Query<IItemCache>.Builder.Where(x => x.EntityKey == customer.Key && x.ItemCacheTfKey == itemCacheTfKey);
+                var query = Query<IItemCache>.Builder.Where(x => x.EntityKey == customer.EntityKey && x.ItemCacheTfKey == itemCacheTfKey);
                 return repository.GetByQuery(query).FirstOrDefault();
             }
         }

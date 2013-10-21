@@ -5,14 +5,13 @@ using Umbraco.Core.Persistence.DatabaseAnnotations;
 namespace Merchello.Core.Models.Rdbms
 {
     [TableName("merchCustomer")]
-    [PrimaryKey("pk", autoIncrement = false)]
+    [PrimaryKey("id")]
     [ExplicitColumns]
     internal class CustomerDto
     {
-        [Column("pk")]
-        [PrimaryKeyColumn(AutoIncrement = false)]
-        [Constraint(Default = "newid()")]
-        public Guid Key { get; set; }
+        [Column("id")]
+        [PrimaryKeyColumn]
+        public int Id { get; set; }
 
         [Column("memberId")]
         [NullSetting(NullSetting = NullSettings.Null)]
@@ -40,6 +39,10 @@ namespace Merchello.Core.Models.Rdbms
         [Column("lastActivityDate")]
         [Constraint(Default = "getdate()")]
         public DateTime LastActivityDate { get; set; }
+
+        [Column("entityKey")]
+        [Constraint(Default = "newid()")]
+        public Guid EntityKey { get; set; }
 
         [Column("updateDate")]
         [Constraint(Default = "getdate()")]

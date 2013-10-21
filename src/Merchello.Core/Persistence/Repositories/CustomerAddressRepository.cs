@@ -41,7 +41,7 @@ namespace Merchello.Core.Persistence.Repositories
             if (dto == null)
                 return null;
 
-            var factory = new AddressFactory();
+            var factory = new CustomerAddressFactory();
 
             var address = factory.BuildEntity(dto);
 
@@ -59,7 +59,7 @@ namespace Merchello.Core.Persistence.Repositories
             }
             else
             {
-                var factory = new AddressFactory();
+                var factory = new CustomerAddressFactory();
                 var dtos = Database.Fetch<CustomerAddressDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
@@ -100,7 +100,7 @@ namespace Merchello.Core.Persistence.Repositories
         {
             ((IdEntity)entity).AddingEntity();
 
-            var factory = new AddressFactory();
+            var factory = new CustomerAddressFactory();
             var dto = factory.BuildDto(entity);
 
             Database.Insert(dto);
@@ -112,7 +112,7 @@ namespace Merchello.Core.Persistence.Repositories
         {
             ((IdEntity)entity).UpdatingEntity();
 
-            var factory = new AddressFactory();
+            var factory = new CustomerAddressFactory();
             var dto = factory.BuildDto(entity);
 
             Database.Update(dto);

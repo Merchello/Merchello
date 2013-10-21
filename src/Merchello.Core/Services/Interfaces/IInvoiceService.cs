@@ -70,9 +70,9 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Gets a list of <see cref="IInvoice"/> objects given a customer key
         /// </summary>
-        /// <param name="key">Unique customer key (Guid)</param>
+        /// <param name="id">Unique customer id</param>
         /// <returns>A collection of <see cref="IInvoice"/></returns>
-        IEnumerable<IInvoice> GetInvoicesByCustomer(Guid key);
+        IEnumerable<IInvoice> GetInvoicesByCustomer(int id);
 
         /// <summary>
         /// Gets a list of <see cref="IInvoice"/> objects given an invoice status id

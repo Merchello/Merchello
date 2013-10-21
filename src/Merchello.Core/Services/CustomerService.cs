@@ -44,7 +44,7 @@ namespace Merchello.Core.Services
         /// Crates an <see cref="IAnonymousCustomer"/> and saves it to the database
         /// </summary>
         /// <returns><see cref="IAnonymousCustomer"/></returns>
-        public IAnonymousCustomer CreateAnonymousCustomerWithKey()
+        public IAnonymousCustomer CreateAnonymousCustomerWithId()
         {
             var anonymous = new AnonymousCustomer();
             using (new WriteLock(Locker))
@@ -91,7 +91,7 @@ namespace Merchello.Core.Services
         /// <param name="email">the email address of the customer</param>
         /// <param name="memberId">The Umbraco member Id of the customer</param>
         /// <returns><see cref="ICustomer"/></returns>
-        public ICustomer CreateCustomerWithKey(string firstName, string lastName, string email, int? memberId = null)
+        public ICustomer CreateCustomerWithId(string firstName, string lastName, string email, int? memberId = null)
         {
             var customer = new Customer(0, 0, null)
             {
@@ -127,9 +127,9 @@ namespace Merchello.Core.Services
         /// </summary>
         /// <param name="memberId">The Umbraco member id (int)</param>
         /// <returns><see cref="ICustomer"/></returns>
-        public ICustomer CreateCustomerWithKey(int memberId)
+        public ICustomer CreateCustomerWithId(int memberId)
         {
-            return CreateCustomerWithKey(string.Empty, string.Empty, string.Empty, memberId);
+            return CreateCustomerWithId(string.Empty, string.Empty, string.Empty, memberId);
         }
 
         /// <summary>yg
@@ -230,31 +230,31 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
-        /// Gets a customer by its unique id - key
+        /// Gets a customer by its unique id
         /// </summary>
-        /// <param name="key">Guid key for the customer</param>
+        /// <param name="id">Guid key for the customer</param>
         /// <returns><see cref="ICustomer"/></returns>
-        public ICustomer GetByKey(Guid key)
+        public ICustomer GetById(int id)
         {
             using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
             {
-                return repository.Get(key);
+                return repository.Get(id);
             }
         }
         
         /// <summary>
         /// Gets an <see cref="ICustomer"/> or <see cref="IAnonymousCustomer"/> object by its 'UniqueId'
         /// </summary>
-        /// <param name="key">Guid key of either object to retrieve</param>
+        /// <param name="entityKey">Guid key of either object to retrieve</param>
         /// <returns><see cref="ICustomerBase"/></returns>
-        public ICustomerBase GetAnyByKey(Guid key)
+        public ICustomerBase GetAnyByKey(Guid entityKey)
         {
             ICustomerBase customer;
 
             // try retrieving an anonymous customer first as in most situations this will be what is being queried
             using (var repository = _repositoryFactory.CreateAnonymousCustomerRepository(_uowProvider.GetUnitOfWork()))
             {
-                customer = repository.Get(key);
+                customer = repository.Get(entityKey);
             }
 
             if (customer != null) return customer;
@@ -262,20 +262,20 @@ namespace Merchello.Core.Services
             // try retrieving an existing customer
             using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
             {
-                return repository.Get(key);
+                return repository.GetByEntityKey(entityKey);
             }
         }
 
         /// <summary>
-        /// Gets a list of customer give a list of unique keys
+        /// Gets a list of customer give a list of unique ids
         /// </summary>
-        /// <param name="keys">List of unique keys</param>
+        /// <param name="ids">List of unique keys</param>
         /// <returns></returns>
-        public IEnumerable<ICustomer> GetByKeys(IEnumerable<Guid> keys)
+        public IEnumerable<ICustomer> GetByIds(IEnumerable<int> ids)
         {
             using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
             {
-                return repository.GetAll(keys.ToArray());
+                return repository.GetAll(ids.ToArray());
             }
         }
 

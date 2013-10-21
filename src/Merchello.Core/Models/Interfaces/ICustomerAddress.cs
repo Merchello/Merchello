@@ -11,10 +11,10 @@ namespace Merchello.Core.Models
     {
 
         /// <summary>
-        /// The Customer primary key Guid
+        /// The Customer id
         /// </summary>
         [DataMember]
-        Guid CustomerKey { get; }
+        int CustomerId { get; }
 
         /// <summary>
         /// The descriptive label for the address

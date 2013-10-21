@@ -28,7 +28,7 @@ namespace Merchello.Tests.UnitTests.Querying
             var expected = new Sql();
             expected.Select("*")
                 .From("[merchPayment]")
-                .InnerJoin("[merchCustomer]").On("[merchPayment].[customerKey] = [merchCustomer].[pk]")                
+                .InnerJoin("[merchCustomer]").On("[merchPayment].[customerId] = [merchCustomer].[id]")                
                 .Where("[merchPayment].[id] = " + id.ToString());
 
             //// Act
@@ -36,7 +36,7 @@ namespace Merchello.Tests.UnitTests.Querying
             sql.Select("*")
                 .From<PaymentDto>()
                 .InnerJoin<CustomerDto>()
-                .On<PaymentDto, CustomerDto>(left => left.CustomerKey, right => right.Key)                                
+                .On<PaymentDto, CustomerDto>(left => left.CustomerId, right => right.Id)                                
                 .Where<PaymentDto>(x => x.Id == id);
 
             //// Assert

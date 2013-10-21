@@ -101,11 +101,11 @@ namespace Merchello.Web.Editors
 		}
 
 
-		public IEnumerable<Invoice> GetInvoicesByCustomer(Guid key)
+		public IEnumerable<Invoice> GetInvoicesByCustomer(int id)
 		{
-			if (key != null)
+			if (id != 0)
 			{
-				var invoices = MerchelloContext.Services.InvoiceService.GetInvoicesByCustomer(key) as IEnumerable<Invoice>;
+				var invoices = MerchelloContext.Services.InvoiceService.GetInvoicesByCustomer(id) as IEnumerable<Invoice>;
 				if (invoices == null)
 				{
 					throw new HttpResponseException(HttpStatusCode.NotFound);

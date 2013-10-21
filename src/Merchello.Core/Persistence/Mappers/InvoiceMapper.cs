@@ -18,7 +18,7 @@ namespace Merchello.Core.Persistence.Mappers
         {
             CacheMap<Invoice, InvoiceDto>(src => src.Id, dto => dto.Id);
             CacheMap<Invoice, InvoiceDto>(src => src.OrderId, dto => dto.OrderId);     
-            CacheMap<Invoice, InvoiceDto>(src => src.CustomerKey, dto => dto.CustomerKey);
+            CacheMap<Invoice, InvoiceDto>(src => src.CustomerId, dto => dto.CustomerId);
             CacheMap<Invoice, InvoiceDto>(src => src.InvoiceNumber, dto => dto.InvoiceNumber);
             CacheMap<Invoice, InvoiceDto>(src => src.InvoiceDate, dto => dto.InvoiceDate);
             CacheMap<Invoice, InvoiceDto>(src => src.InvoiceStatusId, dto => dto.InvoiceStatusId);

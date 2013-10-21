@@ -26,10 +26,10 @@ namespace Merchello.Core.Models
         DateTime InvoiceDate { get; set; }
 
         /// <summary>
-        /// The customer key to associated with the invoice
+        /// The customer id to associated with the invoice
         /// </summary>
         [IgnoreDataMember]
-        Guid CustomerKey { get; }
+        int CustomerId { get; }
 
         [DataMember]
         ICustomer Customer { get; }
