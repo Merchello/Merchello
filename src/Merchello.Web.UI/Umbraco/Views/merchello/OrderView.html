@@ -17,12 +17,8 @@
 
             <div class="span8">
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
-                    
-                    <div class="btn-group">
-                        
-                        <a href="#/merchello/merchello/OrderEdit/keygoeshere" type="submit" class="btn btn-success">Edit</a>
-
-                    </div>
+                    <a href="#/merchello/merchello/OrderEdit/keygoeshere" type="submit" class="btn btn-success">Edit</a>
+                    <a href="#" type="submit" class="btn btn-success">Print</a>
                 </div>
             </div>
 
@@ -30,7 +26,56 @@
         
         <div class="merchello-panel-body row-fluid">
 
-            Order View HTML here
+            <div class="merchello-pane primary span9">
+                <div class="row warning">
+                    <span>You have a note from the customer.</span>
+                </div>
+
+                <div class="control-group">
+                    <label class="merchello-control-label">
+                        Order Information
+                        <small>Line items & costs</small>
+                    </label>
+                    Order View HTML here
+                </div>
+
+            </div>
+
+            <div class="merchello-pane secondary span3">
+
+                <div class="vcard">
+                    <a href="#" class="pull-right"><i class="icon-edit"></i> Edit</a>
+                    <h3>Shipping Address</h3>
+
+                    <h4 class="fn">Heather Alvis</h4>
+                    <span class="org">Mindfly</span>
+                    <span class="adr">
+                        <span class="street-address">114 W Magnolia St.</span>
+                        <span class="extended-address">Suite 504</span>
+                        <span class="locality">Bellingham</span>, <span class="region">WA</span>, <span class="postal-code">98225</span>
+                        <span class="country-name">USA</span>
+                        <span class="tel">360-990-0090</span>
+                    </span>
+                </div>
+
+                <div class="vcard">
+                    <a href="#" class="pull-right"><i class="icon-user"></i> View Profile</a>
+                    <h3>Billing Address</h3>
+
+                    <img class="photo pull-right" src="/media/1001/heather.jpg" /> <!-- Is this being uploaded or attached to gravatar? -->
+                    <h4 class="fn">Heather Alvis</h4>
+                    <span class="org">Mindfly</span>
+                    <span class="adr">
+                        <span class="street-address">114 W Magnolia St.</span>
+                        <span class="extended-address">Suite 504</span>
+                        <span class="locality">Bellingham</span>, <span class="region">WA</span>, <span class="postal-code">98225</span>
+                        <span class="country-name">USA</span>
+                        <span class="tel">360-990-0090</span>
+                        <a href="mailto:heather@mindfly.com" class="email">heather@mindfly.com</a>
+                    </span>
+                </div>
+
+            </div>
 
         </div>
 

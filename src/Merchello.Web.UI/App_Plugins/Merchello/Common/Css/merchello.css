@@ -16,49 +16,29 @@
 .merchello-pane.row-fluid { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; -ms-box-sizing: border-box; -o-box-sizing: border-box; box-sizing: border-box; }
 .merchello-pane div.warning { padding: 30px 20px; background: #feede3; border: solid 1px #f57020; color: #f57020; }
 
-.merchello-controls {
-  margin-left: 240px;
-  padding-top: 5px; }
+.merchello-controls { margin-left: 240px; padding-top: 5px; }
 
-.merchello-control-label {
-  text-align: left;
-  float: left;
-  padding-top: 8px;
-  width: 160px; }
+.merchello-control-label { text-align: left; float: left; padding-top: 8px; width: 160px; }
 
-table.merchello-selectable-table tr td {
-  cursor: pointer; }
+table.merchello-selectable-table tr td { cursor: pointer; }
 
 .active td { border-top: solid 1px #cfebc9; }
 
 .table-hover tbody .active:hover > td, .table-hover tbody .active td:hover > td, .active .table-hover tbody td:hover > td { background-color: #e0f2dc; }
 
-input[type="radio"], input[type="checkbox"] {
-  margin-top: -2px; }
+input[type="radio"], input[type="checkbox"] { margin-top: -2px; }
 
-.input-append .add-on, .input-prepend .add-on {
-  height: 14px;
-  line-height: 14px;
-  background: #ececec; }
+.input-append .add-on, .input-prepend .add-on { height: 14px; line-height: 14px; background: #ececec; }
 
-.label-checkbox {
-  margin: 5px 0; }
+.label-checkbox { margin: 5px 0; }
 
-.form-horizontal .controls {
-  padding-top: 6px; }
-.form-horizontal .form-control {
-  padding: 1px 5px;
-  border: solid 1px #ccc; }
+.form-horizontal .controls { padding-top: 6px; }
+.form-horizontal .form-control { padding: 1px 5px; border: solid 1px #ccc; }
 
-.tags {
-  margin: 10px 0; }
-  .tags .tag {
-    border-radius: 6px;
-    background-color: #EFEFEF;
-    border: 1px solid #DDD;
-    padding: 5px;
-    margin-right: 10px; }
-    .tags .tag:hover {
-      color: red;
-      text-decoration: none; }
+.tags { margin: 10px 0; }
+.tags .tag { border-radius: 6px; background-color: #EFEFEF; border: 1px solid #DDD; padding: 5px; margin-right: 10px; }
+.tags .tag:hover { color: red; text-decoration: none; }
 
+.org, .street-address, .extended-address, .adr, .country-name, .email { display: block; }
+
+.photo { border: solid 3px #53a93f; max-width: 30%; }
