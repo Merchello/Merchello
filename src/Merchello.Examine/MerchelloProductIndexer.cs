@@ -58,17 +58,10 @@ namespace Merchello.Examine
             var productsArray = products as IProduct[] ?? products.ToArray();
 
             if (!productsArray.Any()) return;
-            var id = 1000;
             var nodes = new List<XElement>();
             foreach (var p in productsArray)
             {
-                foreach (var el in p.SerializeToXml().Descendants("productVariant"))
-                {
-                    el.AddIdAttribute(id);
-                    
-                    nodes.Add(el);
-                    id++;
-                }                
+                nodes.AddRange(p.SerializeToXml().Descendants("productVariant"));
             }
 
             AddNodesToIndex(nodes, type);
@@ -92,8 +85,7 @@ namespace Merchello.Examine
         internal static readonly List<StaticField> IndexFieldPolicies
             = new List<StaticField>()
             {
-                new StaticField("productKey", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
-                new StaticField("productVariantId", FieldIndexTypes.ANALYZED, false, string.Empty),
+                new StaticField("productKey", FieldIndexTypes.ANALYZED, false, string.Empty),
                 new StaticField("name", FieldIndexTypes.ANALYZED, true, string.Empty),
                 new StaticField("sku", FieldIndexTypes.ANALYZED, true, string.Empty),
                 new StaticField("price", FieldIndexTypes.ANALYZED, true, "DOUBLE"),

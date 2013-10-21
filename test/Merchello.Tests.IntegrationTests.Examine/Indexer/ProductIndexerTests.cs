@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using Examine;
 using Merchello.Tests.IntegrationTests.Services;
 using NUnit.Framework;
@@ -20,10 +21,10 @@ namespace Merchello.Tests.IntegrationTests.Examine.Indexer
             //// Arrange
             var timer = new Stopwatch();
             ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"].RebuildIndex();
-            
             timer.Stop();
 
-           
+           //// Act
+            Console.Write("Time to index: " + timer.Elapsed.ToString());
 
         }
     }
