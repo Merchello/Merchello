@@ -1,5 +1,4 @@
-﻿
-(function(angular) {
+﻿(function (controllers, undefined) {
 
     /**
      * @ngdoc controller
@@ -9,7 +8,7 @@
      * @description
      * The controller for the product editor
      */
-    function ProductEditController($scope, $routeParams, $location, notificationsService, dialogService, angularHelper, serverValidationManager, merchelloProductService) {
+    controllers.ProductEditController = function($scope, $routeParams, $location, notificationsService, dialogService, angularHelper, serverValidationManager, merchelloProductService) {
 
         if ($routeParams.create) {
             $scope.loaded = true;
@@ -130,6 +129,7 @@
         };
     }
 
-    angular.module("umbraco").controller("Merchello.Editors.Product.EditController", ProductEditController);
+    angular.module("umbraco").controller("Merchello.Editors.Product.EditController", merchello.Controllers.ProductEditController);
 
-}(angular))
+}(window.merchello.Controllers = window.merchello.Controllers || {}));
+
