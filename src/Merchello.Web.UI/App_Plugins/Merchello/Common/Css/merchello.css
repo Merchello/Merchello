@@ -56,6 +56,10 @@ input[type="radio"], input[type="checkbox"] { margin-top: -2px; }
 .form-horizontal .controls { padding-top: 6px; }
 .form-horizontal .form-control { padding: 1px 5px; border: solid 1px #ccc; }
 
+.edit-address form { margin: 0; }
+.edit-address .controls-row { margin-left: 0 !important; }
+.edit-address input, .edit-address select { margin-top: 10px; }
+
 .tags { margin: 10px 0; }
 .tags .tag { border-radius: 6px; background-color: #EFEFEF; border: 1px solid #DDD; padding: 5px; margin-right: 10px; }
 .tags .tag:hover { color: red; text-decoration: none; }
