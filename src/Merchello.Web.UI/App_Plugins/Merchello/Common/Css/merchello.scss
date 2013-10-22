@@ -89,6 +89,13 @@ input[type="radio"], input[type="checkbox"] { margin-top: -2px; } //line up chec
     .form-control { padding: 1px 5px; border: solid 1px #ccc; }
 }
 
+.edit-address {
+    form { margin: 0; }
+    .controls-row { margin-left: 0 !important; }
+    input, select { margin-top: 10px; }
+    //select.region {width: 22%; }
+}
+
 // Tags
 .tags { margin: 10px 0;
     .tag { border-radius: 6px; background-color: #EFEFEF; border: 1px solid #DDD; padding: 5px; margin-right: 10px; 
