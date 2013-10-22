@@ -1,6 +1,14 @@
 .active, .active td, .active:hover, .active td:hover { background-color: #f0f9ee; }
 
+.well h3 { margin: 0; }
+.well h4 { margin-bottom: 0; }
 .well .add { margin-bottom: 20px; }
+
+blockquote p { font-size: 1em; line-height: 1.5em; }
+blockquote + cite { margin-left: 20px; font-style: italic; }
+blockquote + cite:before { content: '-'; }
+
+.row-fluid { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; -ms-box-sizing: border-box; -o-box-sizing: border-box; box-sizing: border-box; }
 
 .merchello-panel-body { position: absolute; top: 101px; bottom: 0; left: 0; right: 0; width: 100%; clear: both; overflow: auto; }
 .merchello-panel-body a { color: #049cdb; }
@@ -16,49 +24,54 @@
 .merchello-pane.row-fluid { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; -ms-box-sizing: border-box; -o-box-sizing: border-box; box-sizing: border-box; }
 .merchello-pane div.warning { padding: 30px 20px; background: #feede3; border: solid 1px #f57020; color: #f57020; }
 
-.merchello-controls {
-  margin-left: 240px;
-  padding-top: 5px; }
+.merchello-controls { margin-left: 240px; padding-top: 5px; }
 
-.merchello-control-label {
-  text-align: left;
-  float: left;
-  padding-top: 8px;
-  width: 160px; }
+.merchello-control-label, .merchello-section-label { text-align: left; float: left; padding-top: 8px; width: 160px; }
+.merchello-control-label small, .merchello-section-label small { display: block; color: #b3b3b3; padding-top: 5px; padding-bottom: 10px; font-size: 11px; line-height: 13px; }
 
-table.merchello-selectable-table tr td {
-  cursor: pointer; }
+table.merchello-selectable-table tr td { cursor: pointer; }
+
+.merchello-striped-table i { font-size: 1.7em; }
 
 .active td { border-top: solid 1px #cfebc9; }
 
 .table-hover tbody .active:hover > td, .table-hover tbody .active td:hover > td, .active .table-hover tbody td:hover > td { background-color: #e0f2dc; }
 
-input[type="radio"], input[type="checkbox"] {
-  margin-top: -2px; }
+.table .text-right { text-align: right; }
 
-.input-append .add-on, .input-prepend .add-on {
-  height: 14px;
-  line-height: 14px;
-  background: #ececec; }
+.order-items tr:last-of-type td { font-weight: bold; }
+.order-items ul { margin: 0; padding: 0; list-style-type: none; }
+.order-items li { display: inline-block; margin: 0; padding: 0; }
+.order-items li:before { content: '|'; padding-right: 5px; }
+.order-items li:first-child::before { content: ''; padding-right: 0; }
+.order-items a { font-size: 1.2em; }
+.order-items input[type="checkbox"] { margin-top: 2px; }
 
-.label-checkbox {
-  margin: 5px 0; }
+input[type="radio"], input[type="checkbox"] { margin-top: -2px; }
 
-.form-horizontal .controls {
-  padding-top: 6px; }
-.form-horizontal .form-control {
-  padding: 1px 5px;
-  border: solid 1px #ccc; }
+.input-append .add-on, .input-prepend .add-on { height: 14px; line-height: 14px; background: #ececec; }
 
-.tags {
-  margin: 10px 0; }
-  .tags .tag {
-    border-radius: 6px;
-    background-color: #EFEFEF;
-    border: 1px solid #DDD;
-    padding: 5px;
-    margin-right: 10px; }
-    .tags .tag:hover {
-      color: red;
-      text-decoration: none; }
+.label-checkbox { margin: 5px 0; }
 
+.form-horizontal .controls { padding-top: 6px; }
+.form-horizontal .form-control { padding: 1px 5px; border: solid 1px #ccc; }
+
+.tags { margin: 10px 0; }
+.tags .tag { border-radius: 6px; background-color: #EFEFEF; border: 1px solid #DDD; padding: 5px; margin-right: 10px; }
+.tags .tag:hover { color: red; text-decoration: none; }
+
+.vcard .photo { border: solid 3px #53a93f; max-width: 30%; }
+.vcard .pull-right { margin-top: 15px; line-height: 15px; }
+
+.org, .street-address, .extended-address, .country-name, .email { display: block; }
+
+.adr { display: block; margin-bottom: 1em; }
+
+.date-time { display: block; margin-left: 20px; color: #b3b3b3; font-variant: small-caps; }
+
+.notes { margin: 0; padding: 0; list-style-type: none; }
+.notes li { padding-top: 30px; margin-top: 20px; border-top: dashed 1px #dfdfdf; }
+.notes li:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+.notes #new { color: #f78f51; }
+.notes #new blockquote { border-left-color: #f57020; }
+.notes #new .date-time { color: #f9af82; }

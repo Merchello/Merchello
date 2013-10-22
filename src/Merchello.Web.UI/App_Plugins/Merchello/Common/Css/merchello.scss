@@ -12,9 +12,19 @@ $active: lighten($green, 50%);
 .active, .active:hover { background-color: $active; }
 
 .well {
+    h3 { margin: 0; }
+    h4 { margin-bottom: 0; }
     .add { margin-bottom: 20px; } //spacing below add buttons inslide .well
 }
 
+blockquote {
+    p { font-size: 1em; line-height: 1.5em; }
+    + cite { margin-left: 20px; font-style: italic;
+        &:before { content: '-'; }
+    }
+}
+
+.row-fluid { @include box-sizing; }
 
 //Main Sections
 .merchello-panel-body { position: absolute; top: 101px; bottom: 0; left: 0; right: 0; width: 100%; clear: both; overflow: auto; 
@@ -36,7 +46,9 @@ $active: lighten($green, 50%);
 
 .merchello-controls { margin-left: 240px; padding-top: 5px; }
 
-.merchello-control-label { text-align: left; float: left; padding-top: 8px; width: 160px; }
+.merchello-control-label, .merchello-section-label { text-align: left; float: left; padding-top: 8px; width: 160px; 
+    small { display: block; color: #b3b3b3; padding-top: 5px; padding-bottom: 10px; font-size: 11px; line-height: 13px; }
+}
 
 
 //Tables
@@ -46,9 +58,25 @@ table.merchello-selectable-table {
     }
 }
 
+.merchello-striped-table {
+    i { font-size: 1.7em; }
+}
+
 .active td { @extend .active; border-top: solid 1px darken($active, 10%); } //add the .active style to child table cells
 .table-hover tbody .active:hover > td { background-color: darken($active, 5%); } //override bootstrap hover styles for .active table cells
 
+.table .text-right { text-align: right; }
+
+.order-items {
+    tr:last-of-type td { font-weight: bold; }
+    ul { margin: 0; padding: 0; list-style-type: none; }
+    li { display: inline-block; margin: 0; padding: 0; 
+        &:before { content: '|'; padding-right: 5px; }
+        &:first-child::before { content: ''; padding-right: 0; }
+    }
+    a { font-size: 1.2em;}
+    input[type="checkbox"] { margin-top: 2px; }
+}
 
 //Forms
 input[type="radio"], input[type="checkbox"] { margin-top: -2px; } //line up checkboxes with label text
@@ -61,11 +89,30 @@ input[type="radio"], input[type="checkbox"] { margin-top: -2px; } //line up chec
     .form-control { padding: 1px 5px; border: solid 1px #ccc; }
 }
 
-
 // Tags
 .tags { margin: 10px 0;
     .tag { border-radius: 6px; background-color: #EFEFEF; border: 1px solid #DDD; padding: 5px; margin-right: 10px; 
         &:hover { color: red; text-decoration: none;
         }
+    }
+}
+
+// Address Formatting
+.vcard {
+    .photo { border: solid 3px $green; max-width: 30%; }
+    .pull-right { margin-top: 15px; line-height: 15px; }
+}
+.org, .street-address, .extended-address, .country-name, .email { display: block; }
+.adr { display: block; margin-bottom: 1em; }
+
+//Order Page
+.date-time { display: block; margin-left: 20px; color: #b3b3b3; font-variant: small-caps; }
+.notes { margin: 0; padding: 0; list-style-type: none; 
+    li { padding-top: 30px; margin-top: 20px; border-top: dashed 1px darken(#f8f8f8, 10%);
+        &:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+    }
+    #new { color: lighten($orange, 10%);
+        blockquote { border-left-color: $orange; }
+        .date-time { color: lighten($orange, 20%); }
     }
 }
