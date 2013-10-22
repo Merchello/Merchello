@@ -1,55 +1,60 @@
-﻿/**
-    * @ngdoc service
-    * @name umbraco.resources.merchelloProductService
-    * @description Loads in data for data types
-    **/
-function merchelloProductService($q, $http, umbDataFormatter, umbRequestHelper) {
+﻿(function (merchelloServices, undefined) {
 
-    return {
 
-        create: function (productname, sku, price) {
+    /**
+        * @ngdoc service
+        * @name umbraco.resources.MerchelloProductService
+        * @description Loads in data for data types
+        **/
+    merchelloServices.MerchelloProductService = function ($q, $http, umbDataFormatter, umbRequestHelper) {
 
-            return umbRequestHelper.resourcePromise(
-               $http({
-                   url: '/umbraco/Merchello/ProductApi/NewProduct',
-                   method: "POST",
-                   params: { sku: sku, name: productname, price: price }
-               }),
-               'Failed to create product sku ' + sku);
-        },
+        return {
 
-        getByKey: function (key) {
+            create: function (productname, sku, price) {
 
-            return umbRequestHelper.resourcePromise(
-               $http({
-                   url: '/umbraco/Merchello/ProductApi/GetProduct',
-                   method: "GET",
-                   params: { key: key }
-               }),
-               'Failed to retreive data for product key ' + key);
-        },
+                return umbRequestHelper.resourcePromise(
+                   $http({
+                       url: '/umbraco/Merchello/ProductApi/NewProduct',
+                       method: "POST",
+                       params: { sku: sku, name: productname, price: price }
+                   }),
+                   'Failed to create product sku ' + sku);
+            },
 
-        /** saves or updates a product object */
-        save: function (product) {
+            getByKey: function (key) {
 
-            return umbRequestHelper.resourcePromise(
-                $http.put(
-                    '/umbraco/Merchello/ProductApi/PutProduct',
-                    product
-                ),
-                'Failed to save data for product key ' + product.key);
-        },
+                return umbRequestHelper.resourcePromise(
+                   $http({
+                       url: '/umbraco/Merchello/ProductApi/GetProduct',
+                       method: "GET",
+                       params: { key: key }
+                   }),
+                   'Failed to retreive data for product key ' + key);
+            },
 
-        getAllProducts: function () {
+            /** saves or updates a product object */
+            save: function (product) {
 
-            return umbRequestHelper.resourcePromise(
-                $http.get(
-                    '/umbraco/Merchello/ProductApi/GetAllProducts'
-                ),
-                'Failed to get all products');
+                return umbRequestHelper.resourcePromise(
+                    $http.put(
+                        '/umbraco/Merchello/ProductApi/PutProduct',
+                        product
+                    ),
+                    'Failed to save data for product key ' + product.key);
+            },
 
-        }
-    };
-}
+            getAllProducts: function () {
 
-angular.module('umbraco.resources').factory('merchelloProductService', merchelloProductService);
+                return umbRequestHelper.resourcePromise(
+                    $http.get(
+                        '/umbraco/Merchello/ProductApi/GetAllProducts'
+                    ),
+                    'Failed to get all products');
+
+            }
+        };
+    }
+
+    angular.module('umbraco.resources').factory('merchelloProductService', merchello.Services.MerchelloProductService);
+
+}(window.merchello.Services = window.merchello.Services || {}));
