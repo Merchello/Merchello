@@ -25,6 +25,10 @@ blockquote {
     }
 }
 
+.open {display: block;}
+
+.closed {display: none;}
+
 .row-fluid { @include box-sizing; }
 p.span3 { vertical-align: middle; }
 
