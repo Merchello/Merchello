@@ -78,7 +78,7 @@ namespace Merchello.Web.Editors
             if (key != null)
             {
                 var productVariants = _productVariantService.GetByProductKey(key);
-                if (productVariants == null || productVariants.Count() == 0)
+                if (productVariants == null)
                 {
                     throw new HttpResponseException(HttpStatusCode.NotFound);
                 }

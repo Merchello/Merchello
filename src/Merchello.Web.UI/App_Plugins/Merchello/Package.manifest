@@ -17,6 +17,7 @@
         '~/App_Plugins/Merchello/Modules/Catalog/product.models.js',
         '~/App_Plugins/Merchello/Directives/tag.manager.directive.js',
         '~/App_Plugins/Merchello/Modules/Catalog/merchello.product.service.js',
+        '~/App_Plugins/Merchello/Modules/Catalog/merchello.productvariant.service.js',
         '~/App_Plugins/Merchello/PropertyEditors/ProductPicker/Js/merchelloskuselector.controller.js',
         '~/App_Plugins/Merchello/Modules/Catalog/product.list.controller.js',
         '~/App_Plugins/Merchello/Modules/Catalog/product.create.controller.js',

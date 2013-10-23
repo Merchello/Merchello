@@ -77,11 +77,25 @@
                                     <input id="Text1" name="sku" type="text" class="form-control span8"  />
                                 </div>
 
+<<<<<<< HEAD
+                                    <div class="row">
+                                        <div class="form-group col-xs-6 span6">
+                                            <label class="label-checkbox"><input name="onsale" type="checkbox" data-ng-model="productVariant.hasDigitalDownload"> This variant has digital goods</label>
+                                            <label class="label-checkbox"><input name="onsale" type="checkbox" data-ng-show="creatingVariant" data-ng-model="productVariant.hasOptions"> This variant has options (like size or color)</label>
+                                            <label class="label-checkbox"><input name="onsale" type="checkbox" data-ng-model="productVariant.taxable"> This variant is taxable</label>
+                                        </div>
+                                        <div class="form-group col-xs-6 span6">
+                                            <label class="label-checkbox"><input name="chargetaxes" type="checkbox" data-ng-model="productVariant.trackInventory" data-ng-disabled="productVariant.hasOptions"> Track inventory for this variant</label>
+                                            <label class="label-checkbox"><input name="shippable" type="checkbox" data-ng-model="productVariant.shippable"> This variant is shippable</label>
+                                        </div>
+                                    </div>
+=======
                                 <div class="form-group col-xs-6 span6">
                                     <label for="barcode">Manufacturer's Model No.</label>
                                     <input id="Text3" name="barcode" type="text" class="form-control span8"  />
                                 </div>
                             </div>
+>>>>>>> FETCH_HEAD
 
                             <div class="row">
                                 <div class="form-group col-xs-6 span6">
@@ -206,6 +220,7 @@
 
                         </div>
                     </div>
+
 
                     <div class="control-group umb-control-group" data-ng-class="{ 'open': (productVariant.trackInventory && !productVariant.hasOptions), 'closed': (!productVariant.trackInventory || productVariant.hasOptions) }">
                         <label class="merchello-control-label">
