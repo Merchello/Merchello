@@ -1,0 +1,221 @@
+﻿<link href="/App_Plugins/Merchello/Common/Css/merchello.css" rel="stylesheet">
+
+<form novalidate name="productVariantForm" 
+      data-ng-controller="Merchello.Editors.ProductVariant.EditController" 
+      data-ng-show="loaded" 
+      data-ng-submit="save()">
+    <umb-panel val-show-validation>
+
+        <umb-header>
+
+            <div class="span4">
+                 <umb-content-name 
+                    ng-model="productVariant.name" 
+                    placeholder="Enter a product name">
+                </umb-content-name>
+            </div>
+
+
+            <div class="span8">
+                <div class="btn-toolbar pull-right umb-btn-toolbar">
+                    
+                    <div class="btn-group">
+                        
+                        <button type="submit" class="btn btn-success">Save</button>
+
+                    </div>
+                </div>
+            </div>
+
+        </umb-header>
+        
+        <div class="merchello-panel-body row-fluid">
+            <div class="tab-content form-horizontal">
+                <div class="merchello-pane">
+                    
+                    <!-- Property classes from Umbraco styles -->
+                    <div class="">
+                        <div class="" >
+                        
+                            <div class="">
+                                <label class="merchello-control-label">
+                                    Variant Information
+                                    <small>Configure this variant</small>
+                                </label>
+
+                                <div class="merchello-controls">
+
+                                    <div data-ng-show="creatingVariant">
+                                        <h3>Create A Variant</h3>
+                                        <p>You can add more variants down below, but to keep it simple... let's just start with one.</p>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="form-group col-xs-6 span6">
+                                            <label for="price">Price</label>
+                                            <input id="price" name="price" class="form-control" data-ng-model="productVariant.price" />
+                                        </div>
+
+                                        <div class="form-group col-xs-6 span6">
+                                            <label for="saleprice">Sale Price</label>
+                                            <input id="saleprice" name="saleprice" class="form-control" data-ng-model="productVariant.salePrice" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="form-group col-xs-6 span6">
+                                            <label for="sku">Base Sku <small>Must have a unique SKU</small></label>
+                                            <input id="Text2" name="sku" class="form-control" data-ng-model="productVariant.sku" />
+                                        </div>
+
+                                        <div class="form-group col-xs-6 span6">
+                                            <label for="barcode">Barcode <small>e.g. UPC, ISBN</small></label>
+                                            <input id="barcode" name="barcode" class="form-control" data-ng-model="productVariant.barcode" />
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="form-group col-xs-6 span6">
+                                            <label for="sku">Manufacturer</label>
+                                            <input id="Text1" name="sku" class="form-control"  />
+                                        </div>
+
+                                        <div class="form-group col-xs-6 span6">
+                                            <label for="barcode">Manufacturer's Model No.</label>
+                                            <input id="Text3" name="barcode" class="form-control"  />
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="form-group col-xs-6 span6">
+                                            <label class="label-checkbox"><input name="onsale" type="checkbox" data-ng-model="productVariant.hasDigitalDownload"> This variant has digital goods</label>
+                                            <label class="label-checkbox"><input name="onsale" type="checkbox" data-ng-model="productVariant.hasOptions"> This variant has options (like size or color)</label>
+                                            <label class="label-checkbox"><input name="onsale" type="checkbox" data-ng-model="productVariant.taxable"> This variant is taxable</label>
+                                        </div>
+                                        <div class="form-group col-xs-6 span6">
+                                            <label class="label-checkbox"><input name="chargetaxes" type="checkbox" data-ng-model="productVariant.trackInventory"> Track inventory for this variant</label>
+                                            <label class="label-checkbox"><input name="shippable" type="checkbox" data-ng-model="productVariant.shippable"> This variant is shippable</label>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>                  
+                </div>
+                <!-- /merchello-pane -->
+
+                <div class="merchello-pane" data-ng-show="productVariant.hasDigitalDownload">
+                    <div class="">
+                        <div class="" >                 
+                            <div class="">
+                                <label class="merchello-control-label">
+                                    Digital Downloads
+                                    <small>help text</small>
+                                </label>
+
+                                <div class="merchello-controls">
+
+                                    <div><a data-ng-click="chooseMedia()" class="btn btn-primary">Choose Media</a></div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /merchello-pane -->
+
+                <div class="merchello-pane" data-ng-show="productVariant.trackInventory">
+                    <div class="" >
+                        <div class="" >                        
+                            <div class="">
+                                <label class="merchello-control-label">
+                                    Inventory Tracking
+                                    <small>Help text</small>
+                                </label>
+
+                                <div class="merchello-controls">
+
+                                    <p>How do you want to handle out of stock inventory?</p>
+
+                                    <label class="label-checkbox"><input name="onsale" type="checkbox"> Stop selling</label>
+                                    <label class="label-checkbox"><input name="onsale" type="checkbox" data-ng-model="productVariant.outOfStockPurchase"> Continue selling and...</label>
+
+                                    <div class="row">
+                                        <div class="span6 col-xs-6">
+                                            <label for="outOfStockMessage">Post the following message:</label>
+                                            <textarea id="outOfStockMessage" name="outOfStockMessage" ></textarea>
+                                        </div>
+                                        <div class="span6 col-xs-6">
+                                            <label for="stopSellingAmount">Stop selling at negative...</label>
+                                            <input id="stopSellingAmount" name="stopSellingAmount" type="text" />
+                                        </div>
+                                    </div>
+
+                                    <table class="table">
+                                        <tr>
+                                            <th></th>
+                                            <th>Warehouses</th>
+                                            <th>Inventory</th>
+                                            <th>Add</th>
+                                            <th>Set</th>
+                                        </tr>
+                                        <tr>
+                                            <td><input name="onsale" type="checkbox"></td>
+                                            <td>Warehouse 1</td>
+                                            <td>11</td>
+                                            <td><input type="text" /></td>
+                                            <td><input type="text" /></td>
+                                        </tr>
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /merchello-pane -->
+
+                <div class="merchello-pane" data-ng-show="productVariant.shippable">
+                    <div class="">
+                        <div class="" >                 
+                            <div class="">
+                                <label class="merchello-control-label">
+                                    Shipping Information
+                                    <small>Help text</small>
+                                </label>
+
+                                <div class="merchello-controls">
+
+                                    <div class="row">
+                                        <div class="span6 col-xs-6">
+                                            <label for="weight">Weight <small>(pounds)</small></label>
+                                            <input id="weight" name="weight" class="form-control" data-ng-model="productVariant.weight" />
+
+                                            <label for="length">Dimensions <small>(inches)</small></label>
+                                            <div class="form-inline">
+                                                <div class="input-append"><input id="length" name="length" class="form-control input-mini" data-ng-model="productVariant.length" /><span class="add-on">L</span></div>
+                                                <div class="input-append"><input id="width" name="width" class="form-control input-mini" data-ng-model="productVariant.width" /><span class="add-on">W</span></div>
+                                                <div class="input-append"><input id="height" name="height" class="form-control input-mini" data-ng-model="productVariant.height" /><span class="add-on">H</span></div>
+                                            </div>
+                                        </div>
+                                        <div class="span6 col-xs-6">
+                                            <label for="vendor">Vendor</label>
+                                            <select id="vendor" name="vendor" class="form-control">
+                                                <option>Your Vendor</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /merchello-pane -->
+
+            </div>
+        </div>
+
+    </umb-panel>
+</form>

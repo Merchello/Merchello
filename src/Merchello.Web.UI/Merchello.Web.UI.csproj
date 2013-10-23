@@ -254,7 +254,6 @@
     <Compile Include="Trees\MerchelloTreeController.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Plugins\Merchello\Controllers\" />
     <Folder Include="App_Plugins\Merchello\Modules\Settings\" />
     <Folder Include="App_Plugins\Merchello\PropertyEditors\ProductPicker\Css\" />
     <Folder Include="App_Plugins\Merchello\System\" />
@@ -272,6 +271,7 @@
     <Content Include="App_Plugins\Merchello\Modules\Catalog\merchello.product.service.js" />
     <Content Include="App_Plugins\Merchello\Common\Js\merchello.main.module.js" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\product.models.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Catalog\productvariant.edit.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Customer\customer.edit.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Customer\customer.view.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Order\order.view.controller.js" />
@@ -308,6 +308,7 @@
     <Content Include="Umbraco\Views\merchello\CustomerList.html" />
     <Content Include="Umbraco\Views\merchello\OrderList.html" />
     <Content Include="Umbraco\Views\merchello\ProductList.html" />
+    <Content Include="Umbraco\Views\merchello\ProductVariantEdit.html" />
     <Content Include="Umbraco\Views\merchello\Reports.html" />
     <Content Include="Umbraco\Views\merchello\OrderView.html" />
     <Content Include="web.config" />
