@@ -22,6 +22,7 @@ namespace Merchello.Web.Editors
     public class ProductApiController : MerchelloApiController
     {
         private IProductService _productService;
+        private IProductVariantService _productVariantService;
 
         /// <summary>
         /// Constructor
@@ -50,6 +51,7 @@ namespace Merchello.Web.Editors
             : base(merchelloContext, umbracoContext)
         {
             _productService = MerchelloContext.Services.ProductService;
+            _productVariantService = MerchelloContext.Services.ProductVariantService;
             //AutoMapper.Mapper.CreateMap<ProductDisplay, Product>();
             AutoMapper.Mapper.CreateMap<IProduct, ProductDisplay>();
         }
@@ -204,6 +206,35 @@ namespace Merchello.Web.Editors
             _productService.Delete(productToDelete);
 
             return Request.CreateResponse(HttpStatusCode.OK);
+        }
+
+        /// <summary>
+        /// Creates a product variant from Sku, Name, Price
+        ///
+        /// GET /umbraco/Merchello/ProductApi/NewProductVariant?key={guid}&attributes=[]
+        /// </summary>
+        /// <param name="item"></param>
+        //[AcceptVerbs("GET", "POST")]
+        public IProductVariant NewProductVariant(IProductVariant productVariant)
+        {
+            IProductVariant newProductVariant = null;
+
+            try
+            {
+                var product = _productService.GetByKey(productVariant.ProductKey);
+                var productAttributes = new ProductAttributeCollection();
+                foreach (var attribute in productVariant.Attributes)
+                {
+                    productAttributes.Add(attribute);
+                }
+                newProductVariant = _productVariantService.CreateProductVariantWithId(product, productAttributes, true);
+            }
+            catch (Exception ex)
+            {
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);
+            }
+
+            return newProductVariant;
         }
     }
 }
