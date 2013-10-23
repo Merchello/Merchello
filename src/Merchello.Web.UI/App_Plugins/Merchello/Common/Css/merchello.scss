@@ -133,7 +133,7 @@ input[type="radio"], input[type="checkbox"] { margin-top: -2px; } //line up chec
     ul { margin: 0; padding: 0; list-style-type: none; }
 }
 
-.gravatar {
+.gravatar { margin-bottom: 10px; color: $green;
     *[class*="span"] { float: none; display: inline-block; vertical-align: middle; }
     .span3 { width: 23%; }
     .span7 { padding-left: 2%; }

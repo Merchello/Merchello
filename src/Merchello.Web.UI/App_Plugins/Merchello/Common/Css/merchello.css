@@ -85,6 +85,7 @@ input[type="radio"], input[type="checkbox"] { margin-top: -2px; }
 
 .customer-details ul { margin: 0; padding: 0; list-style-type: none; }
 
+.gravatar { margin-bottom: 10px; color: #53a93f; }
 .gravatar *[class*="span"] { float: none; display: inline-block; vertical-align: middle; }
 .gravatar .span3 { width: 23%; }
 .gravatar .span7 { padding-left: 2%; }
