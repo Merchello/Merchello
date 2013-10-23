@@ -7,6 +7,7 @@ $active: lighten($green, 50%);
 
 //Mixins
 @mixin box-sizing { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; -ms-box-sizing: border-box; -o-box-sizing: border-box; box-sizing: border-box; }
+@mixin transition($timing: ease, $property: all, $duration: 0.5s) { -webkit-transition: $property $duration $timing; -moz-transition: $property $duration $timing; -ms-transition: $property $duration $timing; -o-transition: $property $duration $timing; transition: $property $duration $timing; }
 
 //Global
 .active, .active:hover { background-color: $active; }
@@ -24,9 +25,12 @@ blockquote {
     }
 }
 
-.open {display: block;}
-
-.closed {display: none;}
+.closed { opacity: 0; max-height: 0; overflow: hidden; @include transition; 
+    &.control-group { margin-bottom: 0 !important; padding-bottom: 0; border-bottom: solid 1px #fff; }
+}
+.open { opacity: 1; max-height: 1000px; @include transition; 
+    &.control-group { padding-bottom: 30px; margin-bottom: 25px !important; border-bottom: 1px solid #f8f8f8; }
+}
 
 .row-fluid { @include box-sizing; }
 p.span3 { vertical-align: middle; }
@@ -49,11 +53,15 @@ p.span3 { vertical-align: middle; }
     div.warning { padding: 30px 20px; background: lighten($orange, 40%); border: solid 1px $orange; color: $orange; }
 }
 
-.merchello-controls { margin-left: 240px; padding-top: 5px; @include box-sizing; width: auto; }
+.merchello-controls { margin-left: 240px; padding-top: 5px; @include box-sizing; width: auto; 
+    label small { padding-top: 0; }
+}
 
 .merchello-control-label, .merchello-section-label { text-align: left; float: left; padding-top: 8px; width: 160px; 
     small { display: block; color: #b3b3b3; padding-top: 5px; padding-bottom: 10px; font-size: 11px; line-height: 13px; }
 }
+
+.control-group { overflow: hidden; @include box-sizing; }
 
 
 //Tables
