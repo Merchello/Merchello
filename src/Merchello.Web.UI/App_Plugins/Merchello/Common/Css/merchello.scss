@@ -7,6 +7,7 @@ $active: lighten($green, 50%);
 
 //Mixins
 @mixin box-sizing { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; -ms-box-sizing: border-box; -o-box-sizing: border-box; box-sizing: border-box; }
+@mixin transition($property: all, $duration: 0.5s, $timing: ease, $delay: 0) { -webkit-transition: $property $duration $timing $delay; -moz-transition: $property $duration $timing $delay; -ms-transition: $property $duration $timing $delay; -o-transition: $property $duration $timing $delay; transition: $property $duration $timing $delay;}
 
 //Global
 .active, .active:hover { background-color: $active; }
@@ -45,11 +46,15 @@ p.span3 { vertical-align: middle; }
     div.warning { padding: 30px 20px; background: lighten($orange, 40%); border: solid 1px $orange; color: $orange; }
 }
 
-.merchello-controls { margin-left: 240px; padding-top: 5px; @include box-sizing; width: auto; }
+.merchello-controls { margin-left: 240px; padding-top: 5px; @include box-sizing; width: auto; 
+    label small { padding-top: 0; }
+}
 
 .merchello-control-label, .merchello-section-label { text-align: left; float: left; padding-top: 8px; width: 160px; 
     small { display: block; color: #b3b3b3; padding-top: 5px; padding-bottom: 10px; font-size: 11px; line-height: 13px; }
 }
+
+.control-group { overflow: hidden; @include transition; }
 
 
 //Tables

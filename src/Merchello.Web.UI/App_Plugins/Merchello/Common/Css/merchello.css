@@ -27,9 +27,12 @@ p.span3 { vertical-align: middle; }
 .merchello-pane div.warning { padding: 30px 20px; background: #feede3; border: solid 1px #f57020; color: #f57020; }
 
 .merchello-controls { margin-left: 240px; padding-top: 5px; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; -ms-box-sizing: border-box; -o-box-sizing: border-box; box-sizing: border-box; width: auto; }
+.merchello-controls label small { padding-top: 0; }
 
 .merchello-control-label, .merchello-section-label { text-align: left; float: left; padding-top: 8px; width: 160px; }
 .merchello-control-label small, .merchello-section-label small { display: block; color: #b3b3b3; padding-top: 5px; padding-bottom: 10px; font-size: 11px; line-height: 13px; }
+
+.control-group { overflow: hidden; -webkit-transition: all 0.5s ease 0; -moz-transition: all 0.5s ease 0; -ms-transition: all 0.5s ease 0; -o-transition: all 0.5s ease 0; transition: all 0.5s ease 0; }
 
 table.merchello-selectable-table tr td { cursor: pointer; }
 
