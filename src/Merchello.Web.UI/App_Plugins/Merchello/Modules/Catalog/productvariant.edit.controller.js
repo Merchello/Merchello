@@ -15,6 +15,7 @@
             $scope.loaded = true;
             $scope.preValuesLoaded = true;
             $scope.productVariant = {};
+            $scope.product = {};
             $(".content-column-body").css('background-image', 'none');
         }
         else {
@@ -23,6 +24,7 @@
             $scope.loaded = true;
             $scope.preValuesLoaded = true;
             $scope.productVariant = {};
+            $scope.product = {};
             $(".content-column-body").css('background-image', 'none');
 
             //we are editing so get the product from the server
