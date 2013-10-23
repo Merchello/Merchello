@@ -63,6 +63,10 @@ p.span3 { vertical-align: middle; }
 
 .control-group { overflow: hidden; @include box-sizing; }
 
+*[class*="icon"]{
+    &.large { font-size: 2em; float: left; display: block; }
+}
+
 
 //Tables
 table.merchello-selectable-table {
@@ -94,9 +98,13 @@ table.merchello-selectable-table {
     tr:last-of-type td { font-weight: bold; }
 }
 
+td.name { width: 45%; }
+
 //Forms
-input[type="radio"], input[type="checkbox"] { margin-top: -2px; } //line up checkboxes with label text
-.input-append .add-on, .input-prepend .add-on { height: 14px; line-height: 14px; background: #ececec; } //fix umbraco's append & prepend input styles for merchello
+input[type="radio"], input[type="checkbox"] { margin-top: -2px; //line up checkboxes with label text
+    td & { margin-top: 2px; }
+} 
+.input-append .add-on, .input-prepend .add-on { background: #ececec; } //fix umbraco's append & prepend input styles for merchello
 
 .label-checkbox { margin: 5px 0; }
 
@@ -110,6 +118,10 @@ input[type="radio"], input[type="checkbox"] { margin-top: -2px; } //line up chec
     .controls-row { margin-left: 0 !important; }
     input, select { margin-top: 10px; }
     //select.region {width: 22%; }
+}
+
+.radio-group {
+    + .open { margin-top: 1.5em; }
 }
 
 // Tags

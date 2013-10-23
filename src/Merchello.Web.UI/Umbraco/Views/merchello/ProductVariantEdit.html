@@ -117,85 +117,89 @@
                             <small>help text</small>
                         </label>
 
-                        <div class="merchello-controls">
+                        <div class="merchello-controls row-fluid">
 
-                            <table class="table">
-                                <tr>
-                                    <th>
-                                        Option Name
-                                    </th>
-                                    <th>
-                                        Option Values
-                                    </th>
-                                </tr>
-                                <tr data-ng-repeat="option in product.productOptions">
-                                    <td>
-                                        <input class="form-control" data-ng-model="option.name" />
-                                    </td>
-                                    <td>
-                                        <tag-manager tags="tags"></tag-manager>
-                                        <span data-ng-repeat="choice in option.choices">
-                                            {{choice.name}},
-                                        </span>
-                                    </td>
-                                </tr>
-                            </table>
+                            <div class="well span10">
+                                <table class="table">
+                                    <tr>
+                                        <th>
+                                            Option Name
+                                        </th>
+                                        <th>
+                                            Option Values
+                                        </th>
+                                    </tr>
+                                    <tr data-ng-repeat="option in product.productOptions">
+                                        <td>
+                                            <input class="form-control" type="text" data-ng-model="option.name" />
+                                        </td>
+                                        <td>
+                                            <tag-manager tags="tags"></tag-manager>
+                                            <span data-ng-repeat="choice in option.choices">
+                                                {{choice.name}},
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </table>
 
-                            <div>
-                                <a data-ng-click="addOption()" class="btn add">Add Another Option</a>
+                                <div>
+                                    <a data-ng-click="addOption()" class="btn add">Add Another Option</a>
+                                </div>
+
+                                <div>
+                                    <a data-ng-click="update()" class="btn btn-primary add">Update</a>
+                                </div>
                             </div>
 
-                            <div>
-                                <a data-ng-click="update()" class="btn btn-primary add">Update</a>
+                            <div class="span10">
+                                <table class="table">
+                                    <tr>
+                                        <th>
+                                            Variant
+                                        </th>
+                                        <th>
+                                            Price
+                                        </th>
+                                        <th>
+                                            SKU <small>(optional)</small>
+                                        </th>
+                                        <th>
+                                            Barcode <small>(optional)</small>
+                                        </th>
+                                        <th>
+                                            Inventory
+                                        </th>
+                                    </tr>
+                                    <tr data-ng-repeat="variant in product.productVariants">
+                                        <td>
+                                            <input type="checkbox" data-ng-model="variant.selected"/>
+                                            <span data-ng-repeat="attribute in variant.productAttributes">
+                                                <span>{{variant.name}}</span>
+                                                <span data-ng-show="!$last"> / </span>
+                                            </span>                                                    
+                                        </td>
+                                        <td>
+                                            <input class="form-control input-mini" data-ng-model="variant.price" />
+                                        </td>
+                                        <td>
+                                            <input class="form-control input-mini" data-ng-model="variant.sku" />
+                                        </td>
+                                        <td>
+                                            <input class="form-control input-mini" data-ng-model="variant.barcode" />
+                                        </td>
+                                        <td>
+                                            <input class="form-control input-mini" data-ng-model="variant.inventory" />
+                                        </td>
+                                    </tr>
+                                </table>
                             </div>
 
-                            <table class="table">
-                                <tr>
-                                    <th>
-                                        Variant
-                                    </th>
-                                    <th>
-                                        Price
-                                    </th>
-                                    <th>
-                                        SKU <small>(optional)</small>
-                                    </th>
-                                    <th>
-                                        Barcode <small>(optional)</small>
-                                    </th>
-                                    <th>
-                                        Inventory
-                                    </th>
-                                </tr>
-                                <tr data-ng-repeat="variant in product.productVariants">
-                                    <td>
-                                        <input type="checkbox" data-ng-model="variant.selected"/>
-                                        <span data-ng-repeat="attribute in variant.productAttributes">
-                                            <span>{{variant.name}}</span>
-                                            <span data-ng-show="!$last"> / </span>
-                                        </span>                                                    
-                                    </td>
-                                    <td>
-                                        <input class="form-control input-mini" data-ng-model="variant.price" />
-                                    </td>
-                                    <td>
-                                        <input class="form-control input-mini" data-ng-model="variant.sku" />
-                                    </td>
-                                    <td>
-                                        <input class="form-control input-mini" data-ng-model="variant.barcode" />
-                                    </td>
-                                    <td>
-                                        <input class="form-control input-mini" data-ng-model="variant.inventory" />
-                                    </td>
-                                </tr>
-                            </table>
+                            <div class="row span10">
 
-                            <div class="row">
-
-                                <p>Important: If you choose to track inventory, it must be set manually for each
-                                    variant (listed below) once this product has been saved.  However, you can set
-                                    a base default inventory, applied to <strong>all</strong> variants here.
-                                </p>
+                                <div class="warning">
+                                    <i class="icon-alert large"></i>
+                                    <p>Important: If you choose to track inventory, it must be set manually for each variant (listed below) once this product has been saved.  However, you can set a base default inventory, applied to <strong>all</strong> variants here.</p>
+                                </div>
 
                                 <div class="form-group col-xs-6 span6">
                                     <label for="base-inventory">Base Inventory</label>
@@ -211,45 +215,49 @@
                     <div class="control-group umb-control-group" data-ng-class="{ 'open': (productVariant.trackInventory && !productVariant.hasOptions), 'closed': (!productVariant.trackInventory || productVariant.hasOptions) }">
                         <label class="merchello-control-label">
                             Inventory Tracking
-                            <small>Help text</small>
+                            <small>Set preferences for handling out of stock and adjust inventory for this variant</small>
                         </label>
 
-                        <div class="merchello-controls">
+                        <div class="merchello-controls row-fluid">
 
-                            <div class="well">
+                            <div class="well span10">
                                 <p>How do you want to handle out of stock inventory?</p>
 
-                                <label class="label-radio"><input name="onsale" type="radio" value="noSale" checked="checked"> Stop selling</label>
-                                <label class="label-radio"><input name="onsale" type="radio" value="sale" data-ng-model="productVariant.outOfStockPurchase"> Continue selling and...</label>
+                                <div class="radio-group">
+                                    <label class="label-radio"><input name="onsale" type="radio" value="noSale" checked="checked"> Stop selling</label>
+                                    <label class="label-radio"><input name="onsale" type="radio" value="sale" data-ng-model="productVariant.outOfStockPurchase"> Continue selling and...</label>
+                                </div>
 
-                                <div class="form-group row" data-ng-class="{ 'open': productVariant.outOfStockPurchase, 'closed': (!productVariant.outOfStockPurchase) }">
-                                    <div class="span6 col-xs-6">
+                                <div class="form-group row-fluid" data-ng-class="{ 'open': productVariant.outOfStockPurchase, 'closed': (!productVariant.outOfStockPurchase) }">
+                                    <div class="span12 col-xs-12">
                                         <label for="outOfStockMessage">Post the following message:</label>
-                                        <textarea id="outOfStockMessage" name="outOfStockMessage" ></textarea>
+                                        <textarea id="outOfStockMessage" rows="3" name="outOfStockMessage" class="col-xs-5 span5" ></textarea>
                                     </div>
-                                    <div class="span6 col-xs-6">
+                                    <div class="span12 col-xs-12">
                                         <label for="stopSellingAmount">Stop selling at negative...</label>
-                                        <input id="stopSellingAmount" name="stopSellingAmount" type="text" />
+                                        <div class="input-append col-xs-12 span12"><input id="stopSellingAmount" name="stopSellingAmount" class="col-xs-2 span2" type="text" /><span class="add-on">items</span></div>
                                     </div>
                                 </div>
                             </div>
 
-                            <table class="table">
-                                <tr>
-                                    <th></th>
-                                    <th>Warehouses</th>
-                                    <th>Inventory</th>
-                                    <th>Add</th>
-                                    <th>Set</th>
-                                </tr>
-                                <tr>
-                                    <td><input name="onsale" type="checkbox"></td>
-                                    <td>Warehouse 1</td>
-                                    <td>11</td>
-                                    <td><input type="text" /></td>
-                                    <td><input type="text" /></td>
-                                </tr>
-                            </table>
+                            <div class="span10">
+                                <table class="table table-striped">
+                                    <tr>
+                                        <th></th>
+                                        <th class="name">Warehouses</th>
+                                        <th>Stock</th>
+                                        <th>Add a Few...</th>
+                                        <th>Set To...</th>
+                                    </tr>
+                                    <tr>
+                                        <td class="span1"><input name="onsale" type="checkbox" disabled="disabled"></td>
+                                        <td class="name">Warehouse 1</td>
+                                        <td>11</td>
+                                        <td><input type="text" class="span8" /></td>
+                                        <td><input type="text" class="span8" /></td>
+                                    </tr>
+                                </table>
+                            </div>
 
                         </div>
                     </div>
@@ -257,28 +265,29 @@
                     <div class="control-group umb-control-group" data-ng-class="{ 'open': productVariant.shippable, 'closed': (!productVariant.shippable) }">
                         <label class="merchello-control-label">
                             Shipping Information
-                            <small>Help text</small>
+                            <small>Set shipping variables: Weight, dimensions, and vendor</small>
                         </label>
 
                         <div class="merchello-controls">
 
-                            <div class="row">
-                                <div class="span6 col-xs-6">
-                                    <label for="weight">Weight <small>(pounds)</small></label>
-                                    <input id="weight" name="weight" class="form-control" data-ng-model="productVariant.weight" />
-
-                                    <label for="length">Dimensions <small>(inches)</small></label>
-                                    <div class="form-inline">
-                                        <div class="input-append"><input id="length" name="length" class="form-control input-mini" data-ng-model="productVariant.length" /><span class="add-on">L</span></div>
-                                        <div class="input-append"><input id="width" name="width" class="form-control input-mini" data-ng-model="productVariant.width" /><span class="add-on">W</span></div>
-                                        <div class="input-append"><input id="height" name="height" class="form-control input-mini" data-ng-model="productVariant.height" /><span class="add-on">H</span></div>
-                                    </div>
+                            <div class="row-fluid">
+                                <div class="form-group span6 col-xs-6">
+                                    <label for="weight">Weight <small>(in pounds)</small></label>
+                                    <input type="text" id="weight" name="weight" class="form-control col-xs-8 span8" data-ng-model="productVariant.weight" />
                                 </div>
-                                <div class="span6 col-xs-6">
-                                    <label for="vendor">Vendor</label>
-                                    <select id="vendor" name="vendor" class="form-control">
+                                <div class="form-group span6 col-xs-6">
+                                    <label for="vendor">Vendor<small>(ie Microsoft, American Apparel)</small></label>
+                                    <select id="vendor" name="vendor" disabled="disabled" class="form-control col-xs-8 span8">
                                         <option>Your Vendor</option>
                                     </select>
+                                </div>
+                                <div class="form-group span6 col-xs-6">
+                                    <label for="length">Dimensions <small>(inches)</small></label>
+                                    <div class="form-inline">
+                                        <div class="input-append col-xs-3 span3"><input type="text" id="length" name="length" class="form-control span8" data-ng-model="productVariant.length" /><span class="add-on">L</span></div>
+                                        <div class="input-append  col-xs-3 span3"><input type="text" id="width" name="width" class="form-control span8" data-ng-model="productVariant.width" /><span class="add-on">W</span></div>
+                                        <div class="input-append  col-xs-3 span3"><input type="text" id="height" name="height" class="form-control span8" data-ng-model="productVariant.height" /><span class="add-on">H</span></div>
+                                    </div>
                                 </div>
                             </div>
 

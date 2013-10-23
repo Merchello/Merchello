@@ -40,6 +40,8 @@ p.span3 { vertical-align: middle; }
 
 .control-group { overflow: hidden; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; -ms-box-sizing: border-box; -o-box-sizing: border-box; box-sizing: border-box; }
 
+*[class*="icon"].large { font-size: 2em; float: left; display: block; }
+
 table.merchello-selectable-table tr td { cursor: pointer; }
 
 .merchello-striped-table i { font-size: 1.7em; }
@@ -59,9 +61,12 @@ table.merchello-selectable-table tr td { cursor: pointer; }
 
 .order-items tr:last-of-type td, .customer-orders tr:last-of-type td { font-weight: bold; }
 
-input[type="radio"], input[type="checkbox"] { margin-top: -2px; }
+td.name { width: 45%; }
 
-.input-append .add-on, .input-prepend .add-on { height: 14px; line-height: 14px; background: #ececec; }
+input[type="radio"], input[type="checkbox"] { margin-top: -2px; }
+td input[type="radio"], td input[type="checkbox"] { margin-top: 2px; }
+
+.input-append .add-on, .input-prepend .add-on { background: #ececec; }
 
 .label-checkbox { margin: 5px 0; }
 
@@ -71,6 +76,8 @@ input[type="radio"], input[type="checkbox"] { margin-top: -2px; }
 .edit-address form { margin: 0; }
 .edit-address .controls-row { margin-left: 0 !important; }
 .edit-address input, .edit-address select { margin-top: 10px; }
+
+.radio-group + .open { margin-top: 1.5em; }
 
 .tags { margin: 10px 0; }
 .tags .tag { border-radius: 6px; background-color: #EFEFEF; border: 1px solid #DDD; padding: 5px; margin-right: 10px; }
