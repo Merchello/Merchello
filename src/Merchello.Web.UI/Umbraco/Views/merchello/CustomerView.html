@@ -30,7 +30,121 @@
         
         <div class="merchello-panel-body row-fluid">
 
-            Customer View HTML here
+            <div class="merchello-pane primary span9">
+
+                <div class="control-group umb-control-group">
+                
+                    <div class="merchello-section-label">
+                        Order History
+                        <small>A list of the customer's orders and their status</small>
+                    </div>
+                    
+                    <div class="merchello-controls">
+
+                        <table class="table table-hover merchello-selectable-table customer-orders">
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox" /></th> <!-- This needs to allow a user to select all orders and change the status, delete, etc -->
+                                    <th>Order</th>
+                                    <th>Date</th>
+                                    <th>Payment Status</th>
+                                    <th>Fulfillment Status</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="checkbox" /></td>
+                                    <td>#<a href="#/merchello/merchello/OrderView/keygoeshere">1001</a></td>
+                                    <td>Sep 01, 4:33pm PDT</td>
+                                    <td><span class="label label-success"><i class="icon-check"></i> Paid</span></td>
+                                    <td><span class="label label-success"><i class="icon-check"></i> Fulfilled</span></td>
+                                    <td>$20.00</td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox" /></td>
+                                    <td>#<a href="#/merchello/merchello/OrderView/keygoeshere">1002</a></td>
+                                    <td>Sep 01, 4:57pm PDT</td>
+                                    <td><span class="label label-success"><i class="icon-check"></i> Paid</span></td>
+                                    <td><span class="label label-success"><i class="icon-check"></i> Fulfilled</span></td>
+                                    <td>$45.50</td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox" /></td>
+                                    <td>#<a href="#/merchello/merchello/OrderView/keygoeshere">1001</a></td>
+                                    <td>Sep 01, 5:11pm PDT</td>
+                                    <td><span class="label label-success"><i class="icon-check"></i> Paid</span></td>
+                                    <td><span class="label label-success"><i class="icon-check"></i> Fulfilled</span></td>
+                                    <td>$210.00</td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox" /></td>
+                                    <td>#<a href="#/merchello/merchello/OrderView/keygoeshere">1001</a></td>
+                                    <td>Sep 01, 5:36pm PDT</td>
+                                    <td><span class="label label-success"><i class="icon-check"></i> Paid</span></td>
+                                    <td><span class="label label-success"><i class="icon-check"></i> Fulfilled</span></td>
+                                    <td>$25.98</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4"></td>
+                                    <td>Total Spent:</td>
+                                    <td>$301.48</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+
+                <div class="control-group umb-control-group">
+                
+                    <label class="merchello-section-label" for="customer-note">
+                        Customer Notes
+                        <small>Notes about the customer (not order specific)</small>
+                    </label>
+                    
+                    <div class="merchello-controls">
+
+                        <div class="well new-note row-fluid">
+                            <div class="form-group col-xs-12 span12">
+                                <textarea name="note-message" name="customer-note" rows="6" class="span12">Nulla mollis mauris nec erat ullamcorper, at vestibulum ipsum bibendum. Fusce leo lorem, tempor ac dapibus rhoncus, imperdiet at tellus. Quisque vel odio et dolor gravida sollicitudin et eu mi. Donec risus turpis, facilisis nec commodo sed, tempus sit amet enim. Sed vel eros vitae metus viverra ornare. Proin condimentum sodales elit eget elementum. Morbi adipiscing eget nisl ut lacinia. Ut molestie, ipsum auctor iaculis iaculis, mauris mi rutrum sapien, eget ultrices nulla justo ut lorem. Sed accumsan quis augue nec condimentum. Fusce ac iaculis felis. Duis viverra, eros eget varius molestie, metus felis mollis odio, sed rutrum nisi turpis quis quam. Mauris rutrum pellentesque sollicitudin.</textarea>
+                            </div>
+                            <input type="submit" class="btn btn-primary" value="Save Note" />
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="merchello-pane secondary span3">
+
+                <div class="vcard well">
+                    <h3>Billing Address</h3>
+
+                    <img class="photo pull-right" src="/media/1001/heather.jpg" /> <!-- Is this being uploaded or attached to gravatar? -->
+                    <h4 class="fn">Heather Alvis</h4>
+                    <span class="org">Mindfly</span>
+                    <span class="adr">
+                        <span class="street-address">114 W Magnolia St.</span>
+                        <span class="extended-address">Suite 504</span>
+                        <span class="locality">Bellingham</span>, <span class="region">WA</span>, <span class="postal-code">98225</span>
+                        <span class="country-name">USA</span>
+                    </span>
+                    <span class="tel">360-990-0090</span>
+                    <a href="mailto:heather@mindfly.com" class="email">heather@mindfly.com</a>
+                </div>
+
+                <div class="well customer-details">
+                    <h3>Customer Details</h3>
+                    <ul>
+                        <li><i class="icon-newspaper-alt"></i> Accepts Marketing</li>
+                        <li><i class="icon-user"></i> No Account</li>
+                    </ul>
+                </div>
+
+            </div>
 
         </div>
 

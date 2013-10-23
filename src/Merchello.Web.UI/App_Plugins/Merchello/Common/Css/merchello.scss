@@ -25,6 +25,7 @@ blockquote {
 }
 
 .row-fluid { @include box-sizing; }
+p.span3 { vertical-align: middle; }
 
 //Main Sections
 .merchello-panel-body { position: absolute; top: 101px; bottom: 0; left: 0; right: 0; width: 100%; clear: both; overflow: auto; 
@@ -44,7 +45,7 @@ blockquote {
     div.warning { padding: 30px 20px; background: lighten($orange, 40%); border: solid 1px $orange; color: $orange; }
 }
 
-.merchello-controls { margin-left: 240px; padding-top: 5px; }
+.merchello-controls { margin-left: 240px; padding-top: 5px; @include box-sizing; width: auto; }
 
 .merchello-control-label, .merchello-section-label { text-align: left; float: left; padding-top: 8px; width: 160px; 
     small { display: block; color: #b3b3b3; padding-top: 5px; padding-bottom: 10px; font-size: 11px; line-height: 13px; }
@@ -68,7 +69,6 @@ table.merchello-selectable-table {
 .table .text-right { text-align: right; }
 
 .order-items {
-    tr:last-of-type td { font-weight: bold; }
     ul { margin: 0; padding: 0; list-style-type: none; }
     li { display: inline-block; margin: 0; padding: 0; 
         &:before { content: '|'; padding-right: 5px; }
@@ -76,6 +76,10 @@ table.merchello-selectable-table {
     }
     a { font-size: 1.2em;}
     input[type="checkbox"] { margin-top: 2px; }
+}
+
+.order-items, .customer-orders {
+    tr:last-of-type td { font-weight: bold; }
 }
 
 //Forms
@@ -122,4 +126,16 @@ input[type="radio"], input[type="checkbox"] { margin-top: -2px; } //line up chec
         blockquote { border-left-color: $orange; }
         .date-time { color: lighten($orange, 20%); }
     }
+}
+
+//Customer Page
+.customer-details {
+    ul { margin: 0; padding: 0; list-style-type: none; }
+}
+
+.gravatar {
+    *[class*="span"] { float: none; display: inline-block; vertical-align: middle; }
+    .span3 { width: 23%; }
+    .span7 { padding-left: 2%; }
+    img { border: solid 3px $green; }
 }
