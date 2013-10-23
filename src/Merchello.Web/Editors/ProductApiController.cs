@@ -145,13 +145,13 @@ namespace Merchello.Web.Editors
         /// </summary>
         /// <param name="item"></param>
         [AcceptVerbs("GET","POST")]
-        public ProductDisplay NewProduct(string sku, string name, decimal price)
+        public ProductDisplay NewProduct(string name, string sku, decimal price)
         {
             Product newProduct = null;
 
             try
             {
-                newProduct = _productService.CreateProductWithKey(sku, name, price) as Product;
+                newProduct = _productService.CreateProductWithKey(name, sku, price) as Product;
             }
             catch (Exception ex)
             {
