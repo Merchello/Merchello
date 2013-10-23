@@ -30,62 +30,54 @@
         </umb-header>
         
         <div class="merchello-panel-body row-fluid">
-            <div class="tab-content form-horizontal">
+            <div class="tab-content">
                 <div class="merchello-pane">
                     
                     <!-- Property classes from Umbraco styles -->
-                    <div class="">
-                        <div class="" >
-                        
-                            <div class="">
-                                <label class="merchello-control-label">
-                                    Variant Information
-                                    <small>Configure this variant</small>
-                                </label>
+                    <div class="control-group umb-control-group">
+                        <label class="merchello-control-label">
+                            Variant Information
+                            <small>Configure this variant</small>
+                        </label>
 
-                                <div class="merchello-controls">
+                        <div class="merchello-controls">
 
-                                    <div data-ng-show="creatingVariant">
-                                        <h3>Create A Variant</h3>
-                                        <p>You can add more variants down below, but to keep it simple... let's just start with one.</p>
-                                    </div>
+                            <div data-ng-show="creatingVariant">
+                                <h3>Create A Variant</h3>
+                                <p>You can add more variants down below, but to keep it simple... let's just start with one.</p>
+                            </div>
 
-                                    <div class="row">
-                                        <div class="form-group col-xs-6 span6">
-                                            <label for="price">Price</label>
-                                            <input id="price" name="price" class="form-control" data-ng-model="productVariant.price" />
-                                        </div>
+                            <div class="row-fluid">
+                                <div class="form-group col-xs-6 span6">
+                                    <label for="price">Price</label>
+                                    <input id="price" name="price" type="text" class="form-control span8" data-ng-model="productVariant.price" />
+                                </div>
 
-                                        <div class="form-group col-xs-6 span6">
-                                            <label for="saleprice">Sale Price</label>
-                                            <input id="saleprice" name="saleprice" class="form-control" data-ng-model="productVariant.salePrice" />
-                                        </div>
-                                    </div>
+                                <div class="form-group col-xs-6 span6">
+                                    <label for="saleprice">Sale Price</label>
+                                    <input id="saleprice" name="saleprice" type="text" class="form-control span8" data-ng-model="productVariant.salePrice" />
+                                </div>
+                            </div>
 
-                                    <div class="row">
-                                        <div class="form-group col-xs-6 span6">
-                                            <label for="sku">Base Sku <small>Must have a unique SKU</small></label>
-                                            <input id="Text2" name="sku" class="form-control" data-ng-model="productVariant.sku" />
-                                        </div>
+                            <div class="row-fluid">
+                                <div class="form-group col-xs-6 span6">
+                                    <label for="sku">Base Sku <small>Must have a unique SKU</small></label>
+                                    <input id="Text2" name="sku" type="text" class="form-control span8" data-ng-model="productVariant.sku" />
+                                </div>
 
-                                        <div class="form-group col-xs-6 span6">
-                                            <label for="barcode">Barcode <small>e.g. UPC, ISBN</small></label>
-                                            <input id="barcode" name="barcode" class="form-control" data-ng-model="productVariant.barcode" />
-                                        </div>
-                                    </div>
+                                <div class="form-group col-xs-6 span6">
+                                    <label for="barcode">Barcode <small>e.g. UPC, ISBN</small></label>
+                                    <input id="barcode" name="barcode" type="text" class="form-control span8" data-ng-model="productVariant.barcode" />
+                                </div>
+                            </div>
                                     
-                                    <div class="row">
-                                        <div class="form-group col-xs-6 span6">
-                                            <label for="sku">Manufacturer</label>
-                                            <input id="Text1" name="sku" class="form-control"  />
-                                        </div>
+                            <div class="row">
+                                <div class="form-group col-xs-6 span6">
+                                    <label for="sku">Manufacturer</label>
+                                    <input id="Text1" name="sku" type="text" class="form-control span8"  />
+                                </div>
 
-                                        <div class="form-group col-xs-6 span6">
-                                            <label for="barcode">Manufacturer's Model No.</label>
-                                            <input id="Text3" name="barcode" class="form-control"  />
-                                        </div>
-                                    </div>
-
+<<<<<<< HEAD
                                     <div class="row">
                                         <div class="form-group col-xs-6 span6">
                                             <label class="label-checkbox"><input name="onsale" type="checkbox" data-ng-model="productVariant.hasDigitalDownload"> This variant has digital goods</label>
@@ -97,221 +89,213 @@
                                             <label class="label-checkbox"><input name="shippable" type="checkbox" data-ng-model="productVariant.shippable"> This variant is shippable</label>
                                         </div>
                                     </div>
-
+=======
+                                <div class="form-group col-xs-6 span6">
+                                    <label for="barcode">Manufacturer's Model No.</label>
+                                    <input id="Text3" name="barcode" type="text" class="form-control span8"  />
                                 </div>
                             </div>
-                        </div>
-                    </div>                  
-                </div>
-                <!-- /merchello-pane -->
+>>>>>>> FETCH_HEAD
 
-                <div class="merchello-pane" data-ng-class="{ 'open': productVariant.hasDigitalDownload, 'closed': (!productVariant.hasDigitalDownload) }" >
-                    <div class="">
-                        <div class="" >                 
-                            <div class="">
-                                <label class="merchello-control-label">
-                                    Digital Downloads
-                                    <small>help text</small>
-                                </label>
-
-                                <div class="merchello-controls">
-
-                                    <div><a data-ng-click="chooseMedia()" class="btn btn-primary">Choose Media</a></div>
-
+                            <div class="row">
+                                <div class="form-group col-xs-6 span6">
+                                    <label class="label-checkbox"><input name="onsale" type="checkbox" data-ng-model="productVariant.hasDigitalDownload"> This variant has digital goods</label>
+                                    <label class="label-checkbox"><input name="onsale" type="checkbox" data-ng-model="productVariant.hasOptions"> This variant has options (like size or color)</label>
+                                    <label class="label-checkbox"><input name="onsale" type="checkbox" data-ng-model="productVariant.taxable"> This variant is taxable</label>
+                                </div>
+                                <div class="form-group col-xs-6 span6">
+                                    <label class="label-checkbox"><input name="chargetaxes" type="checkbox" data-ng-model="productVariant.trackInventory"> Track inventory for this variant</label>
+                                    <label class="label-checkbox"><input name="shippable" type="checkbox" data-ng-model="productVariant.shippable"> This variant is shippable</label>
                                 </div>
                             </div>
+
                         </div>
                     </div>
-                </div>
-                <!-- /merchello-pane -->
+
+                    <div class="control-group umb-control-group" data-ng-class="{ 'open': productVariant.hasDigitalDownload, 'closed': (!productVariant.hasDigitalDownload) }" >
+                        <label class="merchello-control-label">
+                            Digital Downloads
+                            <small>Add a file to your product variant</small>
+                        </label>
+
+                        <div class="merchello-controls">
+
+                            <div><a data-ng-click="chooseMedia()" class="btn btn-primary">Choose Media</a></div>
+
+                        </div>
+                    </div>
               
-                <div class="merchello-pane" data-ng-class="{ 'open': productVariant.hasOptions, 'closed': (!productVariant.hasOptions) }" >
-                    <div class="">
-                        <div class="" >                 
-                            <div class="">
-                                <label class="merchello-control-label">
-                                    Multiple Options
-                                    <small>help text</small>
-                                </label>
+                    <div class="control-group umb-control-group" data-ng-class="{ 'open': productVariant.hasOptions, 'closed': (!productVariant.hasOptions) }" >
+                        <label class="merchello-control-label">
+                            Multiple Options
+                            <small>help text</small>
+                        </label>
 
-                                <div class="merchello-controls">
+                        <div class="merchello-controls">
 
-                                    <table class="table">
-                                        <tr>
-                                            <th>
-                                                Option Name
-                                            </th>
-                                            <th>
-                                                Option Values
-                                            </th>
-                                        </tr>
-                                        <tr data-ng-repeat="option in product.productOptions">
-                                            <td>
-                                                <input class="form-control" data-ng-model="option.name" />
-                                            </td>
-                                            <td>
-                                                <tag-manager tags="tags"></tag-manager>
-                                                <span data-ng-repeat="choice in option.choices">
-                                                    {{choice.name}},
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    </table>
+                            <table class="table">
+                                <tr>
+                                    <th>
+                                        Option Name
+                                    </th>
+                                    <th>
+                                        Option Values
+                                    </th>
+                                </tr>
+                                <tr data-ng-repeat="option in product.productOptions">
+                                    <td>
+                                        <input class="form-control" data-ng-model="option.name" />
+                                    </td>
+                                    <td>
+                                        <tag-manager tags="tags"></tag-manager>
+                                        <span data-ng-repeat="choice in option.choices">
+                                            {{choice.name}},
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
 
-                                    <div>
-                                        <a data-ng-click="addOption()" class="btn add">Add Another Option</a>
-                                    </div>
-
-                                    <div>
-                                        <a data-ng-click="update()" class="btn btn-primary add">Update</a>
-                                    </div>
-
-                                    <table class="table">
-                                        <tr>
-                                            <th>
-                                                Variant
-                                            </th>
-                                            <th>
-                                                Price
-                                            </th>
-                                            <th>
-                                                SKU <small>(optional)</small>
-                                            </th>
-                                            <th>
-                                                Barcode <small>(optional)</small>
-                                            </th>
-                                            <th>
-                                                Inventory
-                                            </th>
-                                        </tr>
-                                        <tr data-ng-repeat="variant in product.productVariants">
-                                            <td>
-                                                <input type="checkbox" data-ng-model="variant.selected"/>
-                                                <span data-ng-repeat="attribute in variant.productAttributes">
-                                                    <span>{{variant.name}}</span>
-                                                    <span data-ng-show="!$last"> / </span>
-                                                </span>                                                    
-                                            </td>
-                                            <td>
-                                                <input class="form-control input-mini" data-ng-model="variant.price" />
-                                            </td>
-                                            <td>
-                                                <input class="form-control input-mini" data-ng-model="variant.sku" />
-                                            </td>
-                                            <td>
-                                                <input class="form-control input-mini" data-ng-model="variant.barcode" />
-                                            </td>
-                                            <td>
-                                                <input class="form-control input-mini" data-ng-model="variant.inventory" />
-                                            </td>
-                                        </tr>
-                                    </table>
-
-                                    <div class="row">
-
-                                        <p>Important: If you choose to track inventory, it must be set manually for each
-                                            variant (listed below) once this product has been saved.  However, you can set
-                                            a base default inventory, applied to <strong>all</strong> variants here.
-                                        </p>
-
-                                        <div class="form-group col-xs-6 span6">
-                                            <label for="base-inventory">Base Inventory</label>
-                                            <input id="base-inventory" name="base-inventory" class="form-control"  />
-                                        </div>
-
-                                    </div>
-
-                                </div>
+                            <div>
+                                <a data-ng-click="addOption()" class="btn add">Add Another Option</a>
                             </div>
+
+                            <div>
+                                <a data-ng-click="update()" class="btn btn-primary add">Update</a>
+                            </div>
+
+                            <table class="table">
+                                <tr>
+                                    <th>
+                                        Variant
+                                    </th>
+                                    <th>
+                                        Price
+                                    </th>
+                                    <th>
+                                        SKU <small>(optional)</small>
+                                    </th>
+                                    <th>
+                                        Barcode <small>(optional)</small>
+                                    </th>
+                                    <th>
+                                        Inventory
+                                    </th>
+                                </tr>
+                                <tr data-ng-repeat="variant in product.productVariants">
+                                    <td>
+                                        <input type="checkbox" data-ng-model="variant.selected"/>
+                                        <span data-ng-repeat="attribute in variant.productAttributes">
+                                            <span>{{variant.name}}</span>
+                                            <span data-ng-show="!$last"> / </span>
+                                        </span>                                                    
+                                    </td>
+                                    <td>
+                                        <input class="form-control input-mini" data-ng-model="variant.price" />
+                                    </td>
+                                    <td>
+                                        <input class="form-control input-mini" data-ng-model="variant.sku" />
+                                    </td>
+                                    <td>
+                                        <input class="form-control input-mini" data-ng-model="variant.barcode" />
+                                    </td>
+                                    <td>
+                                        <input class="form-control input-mini" data-ng-model="variant.inventory" />
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <div class="row">
+
+                                <p>Important: If you choose to track inventory, it must be set manually for each
+                                    variant (listed below) once this product has been saved.  However, you can set
+                                    a base default inventory, applied to <strong>all</strong> variants here.
+                                </p>
+
+                                <div class="form-group col-xs-6 span6">
+                                    <label for="base-inventory">Base Inventory</label>
+                                    <input id="base-inventory" name="base-inventory" class="form-control"  />
+                                </div>
+
+                            </div>
+
                         </div>
                     </div>
-                </div>
-                <!-- /merchello-pane -->
 
-                <div class="merchello-pane" data-ng-class="{ 'open': (productVariant.trackInventory && !productVariant.hasOptions), 'closed': (!productVariant.trackInventory || productVariant.hasOptions) }" >
-                    <div class="" >
-                        <div class="" >                        
-                            <div class="">
-                                <label class="merchello-control-label">
-                                    Inventory Tracking
-                                    <small>Help text</small>
-                                </label>
 
-                                <div class="merchello-controls">
+                    <div class="control-group umb-control-group" data-ng-class="{ 'open': (productVariant.trackInventory && !productVariant.hasOptions), 'closed': (!productVariant.trackInventory || productVariant.hasOptions) }">
+                        <label class="merchello-control-label">
+                            Inventory Tracking
+                            <small>Help text</small>
+                        </label>
 
-                                    <p>How do you want to handle out of stock inventory?</p>
+                        <div class="merchello-controls">
 
-                                    <label class="label-checkbox"><input name="onsale" type="checkbox"> Stop selling</label>
-                                    <label class="label-checkbox"><input name="onsale" type="checkbox" data-ng-model="productVariant.outOfStockPurchase"> Continue selling and...</label>
+                            <div class="well">
+                                <p>How do you want to handle out of stock inventory?</p>
 
-                                    <div class="row" data-ng-class="{ 'open': productVariant.outOfStockPurchase, 'closed': (!productVariant.outOfStockPurchase) }" >
-                                        <div class="span6 col-xs-6">
-                                            <label for="outOfStockMessage">Post the following message:</label>
-                                            <textarea id="outOfStockMessage" name="outOfStockMessage" ></textarea>
-                                        </div>
-                                        <div class="span6 col-xs-6">
-                                            <label for="stopSellingAmount">Stop selling at negative...</label>
-                                            <input id="stopSellingAmount" name="stopSellingAmount" type="text" />
-                                        </div>
+                                <label class="label-radio"><input name="onsale" type="radio" value="noSale" checked="checked"> Stop selling</label>
+                                <label class="label-radio"><input name="onsale" type="radio" value="sale" data-ng-model="productVariant.outOfStockPurchase"> Continue selling and...</label>
+
+                                <div class="form-group row" data-ng-class="{ 'open': productVariant.outOfStockPurchase, 'closed': (!productVariant.outOfStockPurchase) }">
+                                    <div class="span6 col-xs-6">
+                                        <label for="outOfStockMessage">Post the following message:</label>
+                                        <textarea id="outOfStockMessage" name="outOfStockMessage" ></textarea>
                                     </div>
-
-                                    <table class="table">
-                                        <tr>
-                                            <th></th>
-                                            <th>Warehouses</th>
-                                            <th>Inventory</th>
-                                            <th>Add</th>
-                                            <th>Set</th>
-                                        </tr>
-                                        <tr>
-                                            <td><input name="onsale" type="checkbox"></td>
-                                            <td>Warehouse 1</td>
-                                            <td>11</td>
-                                            <td><input type="text" /></td>
-                                            <td><input type="text" /></td>
-                                        </tr>
-                                    </table>
-
+                                    <div class="span6 col-xs-6">
+                                        <label for="stopSellingAmount">Stop selling at negative...</label>
+                                        <input id="stopSellingAmount" name="stopSellingAmount" type="text" />
+                                    </div>
                                 </div>
                             </div>
+
+                            <table class="table">
+                                <tr>
+                                    <th></th>
+                                    <th>Warehouses</th>
+                                    <th>Inventory</th>
+                                    <th>Add</th>
+                                    <th>Set</th>
+                                </tr>
+                                <tr>
+                                    <td><input name="onsale" type="checkbox"></td>
+                                    <td>Warehouse 1</td>
+                                    <td>11</td>
+                                    <td><input type="text" /></td>
+                                    <td><input type="text" /></td>
+                                </tr>
+                            </table>
+
                         </div>
                     </div>
-                </div>
-                <!-- /merchello-pane -->
 
-                <div class="merchello-pane" data-ng-class="{ 'open': productVariant.shippable, 'closed': (!productVariant.shippable) }">
-                    <div class="">
-                        <div class="" >                 
-                            <div class="">
-                                <label class="merchello-control-label">
-                                    Shipping Information
-                                    <small>Help text</small>
-                                </label>
+                    <div class="control-group umb-control-group" data-ng-class="{ 'open': productVariant.shippable, 'closed': (!productVariant.shippable) }">
+                        <label class="merchello-control-label">
+                            Shipping Information
+                            <small>Help text</small>
+                        </label>
 
-                                <div class="merchello-controls">
+                        <div class="merchello-controls">
 
-                                    <div class="row">
-                                        <div class="span6 col-xs-6">
-                                            <label for="weight">Weight <small>(pounds)</small></label>
-                                            <input id="weight" name="weight" class="form-control" data-ng-model="productVariant.weight" />
+                            <div class="row">
+                                <div class="span6 col-xs-6">
+                                    <label for="weight">Weight <small>(pounds)</small></label>
+                                    <input id="weight" name="weight" class="form-control" data-ng-model="productVariant.weight" />
 
-                                            <label for="length">Dimensions <small>(inches)</small></label>
-                                            <div class="form-inline">
-                                                <div class="input-append"><input id="length" name="length" class="form-control input-mini" data-ng-model="productVariant.length" /><span class="add-on">L</span></div>
-                                                <div class="input-append"><input id="width" name="width" class="form-control input-mini" data-ng-model="productVariant.width" /><span class="add-on">W</span></div>
-                                                <div class="input-append"><input id="height" name="height" class="form-control input-mini" data-ng-model="productVariant.height" /><span class="add-on">H</span></div>
-                                            </div>
-                                        </div>
-                                        <div class="span6 col-xs-6">
-                                            <label for="vendor">Vendor</label>
-                                            <select id="vendor" name="vendor" class="form-control">
-                                                <option>Your Vendor</option>
-                                            </select>
-                                        </div>
+                                    <label for="length">Dimensions <small>(inches)</small></label>
+                                    <div class="form-inline">
+                                        <div class="input-append"><input id="length" name="length" class="form-control input-mini" data-ng-model="productVariant.length" /><span class="add-on">L</span></div>
+                                        <div class="input-append"><input id="width" name="width" class="form-control input-mini" data-ng-model="productVariant.width" /><span class="add-on">W</span></div>
+                                        <div class="input-append"><input id="height" name="height" class="form-control input-mini" data-ng-model="productVariant.height" /><span class="add-on">H</span></div>
                                     </div>
-
+                                </div>
+                                <div class="span6 col-xs-6">
+                                    <label for="vendor">Vendor</label>
+                                    <select id="vendor" name="vendor" class="form-control">
+                                        <option>Your Vendor</option>
+                                    </select>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
