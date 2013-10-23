@@ -8,61 +8,110 @@
      * @description
      * The controller for the product editor
      */
-    controllers.ProductVariantEditController = function ($scope, $routeParams, $location, notificationsService, dialogService, angularHelper, serverValidationManager, merchelloProductService) {
+    controllers.ProductVariantEditController = function ($scope, $routeParams, $location, notificationsService, dialogService, angularHelper, serverValidationManager, merchelloProductService, merchelloProductVariantService) {
 
         if ($routeParams.create) {
             $scope.creatingVariant = true;
             $scope.loaded = true;
             $scope.preValuesLoaded = true;
-            $scope.productVariant = {};
-            $scope.product = {};
+            $scope.productVariant = new merchello.Models.ProductVariant();
+            $scope.product = new merchello.Models.Product();
             $(".content-column-body").css('background-image', 'none');
         }
         else {
 
             $scope.creatingVariant = false;
-            $scope.loaded = true;
-            $scope.preValuesLoaded = true;
             $scope.productVariant = {};
             $scope.product = {};
-            $(".content-column-body").css('background-image', 'none');
 
-            //we are editing so get the product from the server
-            //var promise = merchelloProductService.getByKey($routeParams.id);
+            //we are editing so get the product variant and product from the server
+            var promiseVariant = merchelloProductVariantService.getById($routeParams.id);
+            var promiseProduct = merchelloProductService.getByKey($routeParams.productKey);
 
-            //promise.then(function (product) {
+            promiseVariant.then(function (productVariant) {
 
-            //    $scope.product = product;
-            //    if (product.productOptions.length > 0) {
-            //        $scope.product.hasoptions = true;
-            //    }
-            //    $scope.loaded = true;
-            //    $scope.preValuesLoaded = true;
-            //    $(".content-column-body").css('background-image', 'none');
+                $scope.productVariant = new merchello.Models.ProductVariant(productVariant);
 
-            //}, function (reason) {
+                $scope.loaded = true;
+                $scope.preValuesLoaded = true;
+                $(".content-column-body").css('background-image', 'none');
 
-            //    notificationsService.error("Product Load Failed", reason.message);
+            }, function (reason) {
 
-            //});
+                notificationsService.error("Product Variant Load Failed", reason.message);
+
+            });
+
+            promiseProduct.then(function (product) {
+
+                $scope.product = new merchello.Models.Product(product);
+                if (product.productOptions.length > 0) {
+                    $scope.product.hasOptions = true;
+                }
+
+                $scope.loaded = true;
+                $scope.preValuesLoaded = true;
+                $(".content-column-body").css('background-image', 'none');
+
+            }, function (reason) {
+
+                notificationsService.error("Product Load Failed", reason.message);
+
+            });
         }
 
         $scope.save = function () {
 
             notificationsService.info("Saving...", "");
 
-            ////we are editing so get the product from the server
-            //var promise = merchelloProductService.save($scope.product);
+            $scope.product.copyFromVariant($scope.productVariant);
 
-            //promise.then(function (product) {
+            if ($scope.creatingVariant)
+            {
+                var promiseCreate = merchelloProductService.create($scope.productVariant.name, $scope.productVariant.sku, $scope.productVariant.price);
+                promiseCreate.then(function (product) {
 
-            //    notificationsService.success("Product Saved", "H5YR!");
+                    $scope.product.key = product.Key;
+                    
+                    $scope.creatingVariant = false;
 
-            //}, function (reason) {
+                    // Created, now save the initial settings from the model
+                    var promiseSave = merchelloProductService.save($scope.product);
+                    promiseSave.then(function (product) {
 
-            //    notificationsService.error("Product Save Failed", reason.message);
+                        notificationsService.success("Product Saved!  H5YR!", product.Key);
 
-            //});
+                    }, function (reason) {
+
+                        notificationsService.error("Product Save Failed", reason.message);
+
+                    });
+
+                    notificationsService.success("Product Created", product.Key);
+
+                }, function (reason) {
+
+                    notificationsService.error("Product Creation Failed", reason.message);
+
+                });
+            }
+            else
+            {
+                notificationsService.error("Save Not Implemented", "");
+
+                //we are editing so get the product from the server
+                //var promise = merchelloProductService.save($scope.product);
+
+                //promise.then(function (product) {
+
+                //    notificationsService.success("Product Saved", "H5YR!");
+
+                //}, function (reason) {
+
+                //    notificationsService.error("Product Save Failed", reason.message);
+
+                //});
+            }
         };
 
         $scope.chooseMedia = function () {
