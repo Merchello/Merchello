@@ -93,7 +93,7 @@
                                             <label class="label-checkbox"><input name="onsale" type="checkbox" data-ng-model="productVariant.taxable"> This variant is taxable</label>
                                         </div>
                                         <div class="form-group col-xs-6 span6">
-                                            <label class="label-checkbox"><input name="chargetaxes" type="checkbox" data-ng-model="productVariant.trackInventory"> Track inventory for this variant</label>
+                                            <label class="label-checkbox"><input name="chargetaxes" type="checkbox" data-ng-model="productVariant.trackInventory" data-ng-disabled="productVariant.hasOptions"> Track inventory for this variant</label>
                                             <label class="label-checkbox"><input name="shippable" type="checkbox" data-ng-model="productVariant.shippable"> This variant is shippable</label>
                                         </div>
                                     </div>
@@ -105,7 +105,7 @@
                 </div>
                 <!-- /merchello-pane -->
 
-                <div class="merchello-pane" data-ng-show="productVariant.hasDigitalDownload">
+                <div class="merchello-pane" data-ng-class="{ 'open': productVariant.hasDigitalDownload, 'closed': (!productVariant.hasDigitalDownload) }" >
                     <div class="">
                         <div class="" >                 
                             <div class="">
@@ -124,8 +124,111 @@
                     </div>
                 </div>
                 <!-- /merchello-pane -->
+              
+                <div class="merchello-pane" data-ng-class="{ 'open': productVariant.hasOptions, 'closed': (!productVariant.hasOptions) }" >
+                    <div class="">
+                        <div class="" >                 
+                            <div class="">
+                                <label class="merchello-control-label">
+                                    Multiple Options
+                                    <small>help text</small>
+                                </label>
 
-                <div class="merchello-pane" data-ng-show="productVariant.trackInventory">
+                                <div class="merchello-controls">
+
+                                    <table class="table">
+                                        <tr>
+                                            <th>
+                                                Option Name
+                                            </th>
+                                            <th>
+                                                Option Values
+                                            </th>
+                                        </tr>
+                                        <tr data-ng-repeat="option in product.productOptions">
+                                            <td>
+                                                <input class="form-control" data-ng-model="option.name" />
+                                            </td>
+                                            <td>
+                                                <tag-manager tags="tags"></tag-manager>
+                                                <span data-ng-repeat="choice in option.choices">
+                                                    {{choice.name}},
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                    <div>
+                                        <a data-ng-click="addOption()" class="btn add">Add Another Option</a>
+                                    </div>
+
+                                    <div>
+                                        <a data-ng-click="update()" class="btn btn-primary add">Update</a>
+                                    </div>
+
+                                    <table class="table">
+                                        <tr>
+                                            <th>
+                                                Variant
+                                            </th>
+                                            <th>
+                                                Price
+                                            </th>
+                                            <th>
+                                                SKU <small>(optional)</small>
+                                            </th>
+                                            <th>
+                                                Barcode <small>(optional)</small>
+                                            </th>
+                                            <th>
+                                                Inventory
+                                            </th>
+                                        </tr>
+                                        <tr data-ng-repeat="variant in product.productVariants">
+                                            <td>
+                                                <input type="checkbox" data-ng-model="variant.selected"/>
+                                                <span data-ng-repeat="attribute in variant.productAttributes">
+                                                    <span>{{variant.name}}</span>
+                                                    <span data-ng-show="!$last"> / </span>
+                                                </span>                                                    
+                                            </td>
+                                            <td>
+                                                <input class="form-control input-mini" data-ng-model="variant.price" />
+                                            </td>
+                                            <td>
+                                                <input class="form-control input-mini" data-ng-model="variant.sku" />
+                                            </td>
+                                            <td>
+                                                <input class="form-control input-mini" data-ng-model="variant.barcode" />
+                                            </td>
+                                            <td>
+                                                <input class="form-control input-mini" data-ng-model="variant.inventory" />
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                    <div class="row">
+
+                                        <p>Important: If you choose to track inventory, it must be set manually for each
+                                            variant (listed below) once this product has been saved.  However, you can set
+                                            a base default inventory, applied to <strong>all</strong> variants here.
+                                        </p>
+
+                                        <div class="form-group col-xs-6 span6">
+                                            <label for="base-inventory">Base Inventory</label>
+                                            <input id="base-inventory" name="base-inventory" class="form-control"  />
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /merchello-pane -->
+
+                <div class="merchello-pane" data-ng-class="{ 'open': (productVariant.trackInventory && !productVariant.hasOptions), 'closed': (!productVariant.trackInventory || productVariant.hasOptions) }" >
                     <div class="" >
                         <div class="" >                        
                             <div class="">
@@ -176,7 +279,7 @@
                 </div>
                 <!-- /merchello-pane -->
 
-                <div class="merchello-pane" data-ng-show="productVariant.shippable">
+                <div class="merchello-pane" data-ng-class="{ 'open': productVariant.shippable, 'closed': (!productVariant.shippable) }">
                     <div class="">
                         <div class="" >                 
                             <div class="">
