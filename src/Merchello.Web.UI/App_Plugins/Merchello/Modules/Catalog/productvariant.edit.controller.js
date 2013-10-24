@@ -92,10 +92,12 @@
 
             notificationsService.info("Saving...", "");
 
-            $scope.product.copyFromVariant($scope.productVariant);
 
             if ($scope.creatingVariant)
             {
+                // Copy from master variant
+                $scope.product.copyFromVariant($scope.productVariant);
+
                 var promiseCreate = merchelloProductService.create($scope.productVariant.name, $scope.productVariant.sku, $scope.productVariant.price);
                 promiseCreate.then(function (product) {
 
@@ -125,20 +127,27 @@
             }
             else
             {
-                notificationsService.error("Save Not Implemented", "");
+                if ($scope.product.hasVariants)
+                {
+                    notificationsService.error("Save Not Implemented", "");
+                }
+                else
+                {
+                    // Copy from master variant
+                    $scope.product.copyFromVariant($scope.productVariant);
 
-                //we are editing so get the product from the server
-                //var promise = merchelloProductService.save($scope.product);
+                    var promise = merchelloProductService.save($scope.product);
 
-                //promise.then(function (product) {
+                    promise.then(function (product) {
 
-                //    notificationsService.success("Product Saved", "H5YR!");
+                        notificationsService.success("Product Saved", "H5YR!");
 
-                //}, function (reason) {
+                    }, function (reason) {
 
-                //    notificationsService.error("Product Save Failed", reason.message);
+                        notificationsService.error("Product Save Failed", reason.message);
 
-                //});
+                    });
+                }
             }
         };
 
