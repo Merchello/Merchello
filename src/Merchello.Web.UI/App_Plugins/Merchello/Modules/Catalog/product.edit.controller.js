@@ -11,9 +11,11 @@
     controllers.ProductEditController = function ($scope, $routeParams, $location, notificationsService, dialogService, angularHelper, serverValidationManager, merchelloProductService, merchelloProductVariantService) {
 
         if ($routeParams.create) {
+
+            // TODO: this should redirect to product variant edit
             $scope.loaded = true;
             $scope.preValuesLoaded = true;
-            $scope.product = {};
+            $scope.product = new merchello.Models.Product();
             $(".content-column-body").css('background-image', 'none');
         }
         else {
