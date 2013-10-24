@@ -28,54 +28,59 @@
         </umb-header>
         
         <div class="merchello-panel-body">
-            <div class="">
-                <div class="merchello-pane">
-                    <form class="form-horizontal">
-                        <div class="form-group control-group row-fluid">
+            <div class="merchello-pane">
+                <form class="form-horizontal">
+                    <div class="form-group control-group row-fluid">
 
-                            <div class="col-xs-10 controls">
-                                <label for="productFilter">Filter By</label>
-                                <input id="productFilter" class="form-control span6" name="productFilter" data-ng-model="filtertext" placeholder="Start typing an item's name..." />
-                            </div>
+                        <div class="col-xs-10 span8 controls">
+                            <label for="productFilter">Filter By</label>
+                            <input id="productFilter" class="form-control span8" name="productFilter" data-ng-model="filtertext" placeholder="Start typing an item's name..." />
                         </div>
-                    </form>
-                </div>
-                <div class="merchello-pane">
-
-                    <label for="limitSelect">Number of products to display</label>
-                    <select name="limitSelect" data-ng-model="limitAmount">
-                        <option selected value="5">5</option>
-                        <option selected value="10">10</option>
-                        <option selected value="25">25</option>
-                        <option selected value="100">100</option>
-                    </select>
+                        <div class="col-xs-2 span2">
+                            <label for="limitSelect">Number of products to display</label>
+                            <select name="limitSelect" class="col-xs-12 span12" data-ng-model="limitAmount">
+                                <option selected value="5">5</option>
+                                <option selected value="10">10</option>
+                                <option selected value="25">25</option>
+                                <option selected value="100">100</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="merchello-pane">
                     
-                    <table class="table table-hover merchello-selectable-table sortable">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th data-ng-click="changeSortOrder('name')" data-ng-class="{'sorted': sortProperty == 'name'}">Product</th>
-                                <th data-ng-click="changeSortOrder('sku')" data-ng-class="{'sorted': sortProperty == 'sku'}">SKU</th>
-                                <th data-ng-click="changeSortOrder('price')" data-ng-class="{'sorted': sortProperty == 'price'}">Price</th>
-                                <th>&nbsp;</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr data-ng-repeat="product in products | orderBy:sortProperty | limitTo:limitAmount" data-ng-show="([product] | filter:filtertext).length > 0"
-                                data-ng-class="{active: product.selected}" data-ng-click="product.selected = !product.selected">
-                                <td><input type="checkbox" data-ng-model="product.selected"/></td>
-                                <td>{{product.name}}</td>
-                                <td>{{product.sku}}</td>
-                                <td>{{product.price | currency}}</td>
-                                <td>
-                                    <a data-ng-hide="product.hasVariants" class="btn btn-default btn-xs btn-mini" data-ng-href="#/merchello/merchello/ProductVariantEdit/{{product.key}}">edit</a>
-                                    <a data-ng-show="product.hasVariants" class="btn btn-default btn-xs btn-mini" data-ng-href="#/merchello/merchello/ProductEdit/{{product.key}}">edit</a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <table class="table table-hover merchello-selectable-table sortable">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th data-ng-click="changeSortOrder('name')" data-ng-class="{'sorted': sortProperty == 'name'}">
+                                <i data-ng-class="{'icon-navigation-up': sortProperty == 'name', 'icon-navigation-down': sortProperty != 'name'}"></i> Product
+                            </th>
+                            <th data-ng-click="changeSortOrder('sku')" data-ng-class="{'sorted': sortProperty == 'sku'}">
+                                <i data-ng-class="{'icon-navigation-up': sortProperty == 'sku', 'icon-navigation-down': sortProperty != 'sku'}"></i> SKU
+                            </th>
+                            <th data-ng-click="changeSortOrder('price')" data-ng-class="{'sorted': sortProperty == 'price'}">
+                                <i data-ng-class="{'icon-navigation-down': sortProperty == 'price', 'icon-navigation-up': sortProperty != 'price'}"></i> Price
+                            </th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-ng-repeat="product in products | orderBy:sortProperty | limitTo:limitAmount" data-ng-show="([product] | filter:filtertext).length > 0"
+                            data-ng-class="{active: product.selected}" data-ng-click="product.selected = !product.selected">
+                            <td><input type="checkbox" data-ng-model="product.selected"/></td>
+                            <td>{{product.name}}</td>
+                            <td>{{product.sku}}</td>
+                            <td>{{product.price | currency}}</td>
+                            <td>
+                                <a data-ng-hide="product.hasVariants" class="btn btn-default btn-xs btn-mini" data-ng-href="#/merchello/merchello/ProductVariantEdit/{{product.key}}">edit</a>
+                                <a data-ng-show="product.hasVariants" class="btn btn-default btn-xs btn-mini" data-ng-href="#/merchello/merchello/ProductEdit/{{product.key}}">edit</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
                     
-                </div>
             </div>
         </div>
 

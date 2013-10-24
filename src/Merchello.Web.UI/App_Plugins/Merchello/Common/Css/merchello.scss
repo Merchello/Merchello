@@ -71,6 +71,12 @@ p.span3 { vertical-align: middle; }
     }
 }
 
+.reorder { margin: 0; list-style-type: none;
+    li { margin-bottom: 0; padding-top: 10px; border-top: solid 1px #e3e3e3; overflow: hidden; 
+        &:first-child { border-top: none;}
+    }
+}
+
 
 //Tables
 table.merchello-selectable-table {
@@ -125,7 +131,9 @@ input[type="radio"], input[type="checkbox"] { margin-top: -2px; //line up checkb
 .label-checkbox { margin: 5px 0; }
 
 .form-horizontal { 
-    .controls { padding-top: 6px; }
+    .controls { padding-top: 6px; 
+        &[class*="span"]:first-child { margin-left: 180px; }
+    }
     .form-control { padding: 1px 5px; border: solid 1px #ccc; }
 }
 
