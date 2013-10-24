@@ -40,11 +40,42 @@
                     </div>
                     
                     <div class="merchello-controls">
-                        
-                        <div class="btn-toolbar pull-right umb-btn-toolbar">
-                            <a class="btn btn-primary" href="#">Fulfill 4 Line Items</a>
-                            <a class="btn btn-primary" href="#">Capture up to $105.00</a>
-                            <a class="btn btn-warning" href="#">Archive</a>
+                        <div class="row-fluid">
+                            <div class="btn-toolbar pull-right umb-btn-toolbar">
+                                <a class="btn btn-primary" href="#">Fulfill 4 Line Items</a>
+                                <a class="btn btn-primary" href="#">Capture Up To $105.00</a>
+                            </div>
+                        </div>
+
+                        <!-- This section pops open when the Fullfill line items button is clicked -->
+                        <div class="well closed">
+                            <button class="btn close"><i class="icon-delete"></i></button>
+                            <h3>Fulfill Manually</h3>
+                            <div class="control-group row-fluid">
+                                <label for="trackingNo">Tracking Number:</label>
+                                <input name="trackingNo" type="text" class="col-xs-6 span6" />
+                                <label for="provider">Via</label>
+                                <select name="provider" class="col-xs-6 span6"><option>FedEx</option></select>
+                                <label><input type="checkbox" checked="checked" /> Email shipment notification to the customer</label>
+                                <button class="btn btn-primary">Fulfill Selected Line Items</button>
+                            </div>
+                        </div>
+
+                        <!-- This section pops open when the Capture button is clicked -->
+                        <div class="well closed">
+                            <button class="btn close"><i class="icon-delete"></i></button>
+                            <h3>Capture Payment</h3>
+                            <div class="control-group row-fluid">
+                                <p>
+                                    Processed by <strong>Authorize.NET</strong><br />
+                                    <i class="icon-credit-card"></i> Credit Card: <span>XXXX-XXXX-XXXX-1234</span>
+                                </p>
+                                <div class="input-prepend col-xs-12 span12">
+                                  <span class="add-on">$</span>
+                                  <input class="col-xs-2 span2" type="text" placeholder="00.00">
+                                </div>
+                            </div>
+                            <button class="btn btn-primary">Process Payment</button>
                         </div>
 
                         <table class="table table-striped merchello-striped-table order-items">
@@ -255,7 +286,7 @@
             <!-- Right sidebar -->
             <div class="merchello-pane secondary span3">
 
-                <!--div class="vcard well">
+                <div class="vcard well">
                     <a href="#" class="pull-right"><i class="icon-edit"></i> Edit</a>
                     <h3>Shipping Address</h3>
 
@@ -268,9 +299,10 @@
                         <span class="country-name">USA</span>
                     </span>
                     <span class="tel">360-990-0090</span>
-                </div-->
+                </div>
 
-                <div class="well edit-address">
+                <!-- This section swaps out with the above when Edit is clicked -->
+                <!--div class="well edit-address">
                     <a href="#" class="pull-right"><i class="icon-save"></i> Save</a>
                     <h3>Shipping Address</h3>
 
@@ -279,17 +311,17 @@
                         <input type="text" class="span12" placeholder="Company" value="Mindfly" />
                         <input type="text" class="span12" placeholder="Street Address" value="114 W. Magnolia St." />
                         <input type="text" class="span12" placeholder="Apartment, Suite, Etc" value="Suite 504" />
-                        <input type="text" class="span6" placeholder="City" value="Bellingham" />
-                        <select class="span3 region">
+                        <input type="text" class="span12" placeholder="City" value="Bellingham" />
+                        <select class="span12 region">
                             <option value="WA">WA</option>
                         </select>
-                        <input type="text" class="span3" placeholder="Postal Code" value="98225" />
-                        <select class="span6 country-name">
+                        <input type="text" class="span12" placeholder="Postal Code" value="98225" />
+                        <select class="span12 country-name">
                             <option>USA</option>
                         </select>
-                        <input type="text" class="span6" placeholder="Phone Number" value="360-990-0090" />
+                        <input type="text" class="span12" placeholder="Phone Number" value="360-990-0090" />
                     </form>
-                </div>
+                </div-->
 
                 <div class="vcard well">
                     <a href="#" class="pull-right"><i class="icon-user"></i> View Profile</a>
