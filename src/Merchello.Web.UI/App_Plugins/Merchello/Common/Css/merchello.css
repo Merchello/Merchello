@@ -30,7 +30,7 @@ p.span3 { vertical-align: middle; }
 
 .merchello-pane { padding: 30px 20px; }
 .merchello-pane.row-fluid { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; -ms-box-sizing: border-box; -o-box-sizing: border-box; box-sizing: border-box; }
-.merchello-pane div.warning { padding: 30px 20px; background: #feede3; border: solid 1px #f57020; color: #f57020; }
+.merchello-pane div.warning { padding: 30px 20px; margin-bottom: 20px; background: #feede3; border: solid 1px #f57020; color: #f57020; }
 
 .merchello-controls { margin-left: 240px; padding-top: 5px; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; -ms-box-sizing: border-box; -o-box-sizing: border-box; box-sizing: border-box; width: auto; }
 .merchello-controls label small { padding-top: 0; }
@@ -40,7 +40,8 @@ p.span3 { vertical-align: middle; }
 
 .control-group { overflow: hidden; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; -ms-box-sizing: border-box; -o-box-sizing: border-box; box-sizing: border-box; }
 
-*[class*="icon"].large { font-size: 2em; float: left; display: block; }
+*[class*="icon"].large { font-size: 2.5em; float: left; display: inline-block; margin-right: 10px; line-height: .8em; }
+*[class*="icon"].large + p { display: inline-block; width: 90%; }
 
 table.merchello-selectable-table tr td { cursor: pointer; }
 
@@ -78,6 +79,8 @@ td input[type="radio"], td input[type="checkbox"] { margin-top: 2px; }
 .edit-address input, .edit-address select { margin-top: 10px; }
 
 .radio-group + .open { margin-top: 1.5em; }
+
+input[type="checkbox"][disabled="disabled"] + span { color: #CCCCCC; font-style: italic; }
 
 .tags { margin: 10px 0; }
 .tags .tag { border-radius: 6px; background-color: #EFEFEF; border: 1px solid #DDD; padding: 5px; margin-right: 10px; }

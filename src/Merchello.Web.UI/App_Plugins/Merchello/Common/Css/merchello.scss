@@ -50,7 +50,7 @@ p.span3 { vertical-align: middle; }
 
 .merchello-pane { padding: 30px 20px; 
     &.row-fluid { @include box-sizing; }
-    div.warning { padding: 30px 20px; background: lighten($orange, 40%); border: solid 1px $orange; color: $orange; }
+    div.warning { padding: 30px 20px; margin-bottom: 20px; background: lighten($orange, 40%); border: solid 1px $orange; color: $orange; }
 }
 
 .merchello-controls { margin-left: 240px; padding-top: 5px; @include box-sizing; width: auto; 
@@ -64,7 +64,9 @@ p.span3 { vertical-align: middle; }
 .control-group { overflow: hidden; @include box-sizing; }
 
 *[class*="icon"]{
-    &.large { font-size: 2em; float: left; display: block; }
+    &.large { font-size: 2.5em; float: left; display: inline-block; margin-right: 10px; line-height: .8em;
+        + p { display: inline-block; width: 90%; }
+    }
 }
 
 
@@ -122,6 +124,10 @@ input[type="radio"], input[type="checkbox"] { margin-top: -2px; //line up checkb
 
 .radio-group {
     + .open { margin-top: 1.5em; }
+}
+
+input[type="checkbox"][disabled="disabled"] {
+    + span { color: #CCCCCC; font-style: italic; }
 }
 
 // Tags
