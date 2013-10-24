@@ -308,6 +308,7 @@
     <Content Include="Umbraco\Views\merchello\OrderEdit.html" />
     <Content Include="Umbraco\Views\merchello\CustomerList.html" />
     <Content Include="Umbraco\Views\merchello\OrderList.html" />
+    <Content Include="Umbraco\Views\merchello\ProductEdit.html" />
     <Content Include="Umbraco\Views\merchello\ProductList.html" />
     <Content Include="Umbraco\Views\merchello\ProductVariantEdit.html" />
     <Content Include="Umbraco\Views\merchello\Reports.html" />
