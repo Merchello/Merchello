@@ -102,6 +102,18 @@ table.merchello-selectable-table {
 
 td.name { width: 45%; }
 
+table.sortable {
+	th {
+		cursor: pointer;
+	}
+	th.sorted {
+		font-color: $orange;
+	}
+	th.sorted.desc {
+		font-style: italic;
+	}
+}
+
 //Forms
 input[type="radio"], input[type="checkbox"] { margin-top: -2px; //line up checkboxes with label text
     td & { margin-top: 2px; }
