@@ -45,6 +45,10 @@ p.span3 { vertical-align: middle; }
 *[class*="icon"].large { font-size: 2.5em; float: left; display: inline-block; margin-right: 10px; line-height: .8em; }
 *[class*="icon"].large + p { display: inline-block; width: 90%; }
 
+.reorder { margin: 0; list-style-type: none; }
+.reorder li { margin-bottom: 0; padding-top: 10px; border-top: solid 1px #e3e3e3; overflow: hidden; }
+.reorder li:first-child { border-top: none; }
+
 table.merchello-selectable-table tr td { cursor: pointer; }
 
 .merchello-striped-table i { font-size: 1.7em; }

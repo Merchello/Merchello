@@ -71,6 +71,12 @@ p.span3 { vertical-align: middle; }
     }
 }
 
+.reorder { margin: 0; list-style-type: none;
+    li { margin-bottom: 0; padding-top: 10px; border-top: solid 1px #e3e3e3; overflow: hidden; 
+        &:first-child { border-top: none;}
+    }
+}
+
 
 //Tables
 table.merchello-selectable-table {
