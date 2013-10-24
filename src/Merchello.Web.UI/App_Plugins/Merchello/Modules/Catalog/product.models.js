@@ -4,23 +4,23 @@
     models.ProductAttribute = function (productAttributeFromServer) {
 
         var self = this;
-        self.optionId = productAttributeFromServer.Name;
-        self.name = productAttributeFromServer.Name;
-        self.sku = productAttributeFromServer.Sku;
-        self.sortOrder = productAttributeFromServer.SortOrder;
+        self.optionId = productAttributeFromServer.optionId;
+        self.name = productAttributeFromServer.name;
+        self.sku = productAttributeFromServer.sku;
+        self.sortOrder = productAttributeFromServer.sortOrder;
 
     };
 
     models.ProductOption = function (productOptionFromServer) {
 
         var self = this;
-        self.key = productOptionFromServer.Key;
-        self.name = productOptionFromServer.Name;
-        self.required = productOptionFromServer.Required;
-        self.sortOrder = productOptionFromServer.SortOrder;
+        self.key = productOptionFromServer.key;
+        self.name = productOptionFromServer.name;
+        self.required = productOptionFromServer.required;
+        self.sortOrder = productOptionFromServer.sortOrder;
 
-        self.choices = _.map(productOptionFromServer.Choices, function (attribute) {
-            return new ProductAttribute(attribute);
+        self.choices = _.map(productOptionFromServer.choices, function (attribute) {
+            return new merchello.Models.ProductAttribute(attribute);
         });
     };
 
@@ -55,33 +55,57 @@
             self.attributes = [];
         }
         else {
-            self.id = productVariantFromServer.Id;
-            self.productKey = productVariantFromServer.ProductKey;
-            self.name = productVariantFromServer.Name;
-            self.sku = productVariantFromServer.Sku;
-            self.price = productVariantFromServer.Price;
-            self.costOfGoods = productVariantFromServer.CostOfGoods;
-            self.salePrice = productVariantFromServer.SalePrice;
-            self.onSale = productVariantFromServer.OnSale;
-            self.weight = productVariantFromServer.Weight;
-            self.length = productVariantFromServer.Length;
-            self.width = productVariantFromServer.Width;
-            self.height = productVariantFromServer.Height;
-            self.barcode = productVariantFromServer.Barcode;
-            self.available = productVariantFromServer.Available;
-            self.trackInventory = productVariantFromServer.TrackInventory;
-            self.outOfStockPurchase = productVariantFromServer.OutOfStockPurchase;
-            self.taxable = productVariantFromServer.Taxable;
-            self.shippable = productVariantFromServer.Shippable;
-            self.download = productVariantFromServer.Download;
-            self.downloadMediaId = productVariantFromServer.DownloadMediaId;
-            self.totalInventoryCount = productVariantFromServer.TotalInventoryCount;
+            self.id = productVariantFromServer.id;
+            self.productKey = productVariantFromServer.productKey;
+            self.name = productVariantFromServer.name;
+            self.sku = productVariantFromServer.sku;
+            self.price = productVariantFromServer.price;
+            self.costOfGoods = productVariantFromServer.costOfGoods;
+            self.salePrice = productVariantFromServer.salePrice;
+            self.onSale = productVariantFromServer.onSale;
+            self.weight = productVariantFromServer.weight;
+            self.length = productVariantFromServer.length;
+            self.width = productVariantFromServer.width;
+            self.height = productVariantFromServer.height;
+            self.barcode = productVariantFromServer.barcode;
+            self.available = productVariantFromServer.available;
+            self.trackInventory = productVariantFromServer.trackInventory;
+            self.outOfStockPurchase = productVariantFromServer.outOfStockPurchase;
+            self.taxable = productVariantFromServer.taxable;
+            self.shippable = productVariantFromServer.shippable;
+            self.download = productVariantFromServer.download;
+            self.downloadMediaId = productVariantFromServer.downloadMediaId;
+            self.totalInventoryCount = productVariantFromServer.totalInventoryCount;
 
-            self.attributes = _.map(productVariantFromServer.Attributes, function (attribute) {
-                return new ProductAttribute(attribute);
+            self.attributes = _.map(productVariantFromServer.attributes, function (attribute) {
+                return new merchello.Models.ProductAttribute(attribute);
             });
         }
 
+        // Helper to copy from product to create a master variant
+        self.copyFromProduct = function (product) {
+
+            self.name = product.name;
+            self.sku = product.sku;
+            self.price = product.price;
+            self.costOfGoods = product.costOfGoods;
+            self.salePrice = product.salePrice;
+            self.onSale = product.onSale;
+            self.weight = product.weight;
+            self.length = product.length;
+            self.width = product.width;
+            self.height = product.height;
+            self.barcode = product.barcode;
+            self.available = product.available;
+            self.trackInventory = product.trackInventory;
+            self.outOfStockPurchase = product.outOfStockPurchase;
+            self.taxable = product.taxable;
+            self.shippable = product.shippable;
+            self.download = product.download;
+            self.downloadMediaId = product.downloadMediaId;
+
+            self.attributes = [];
+        };
     };
 
     models.Product = function (productFromServer) {
@@ -109,6 +133,8 @@
             self.shippable = false;
             self.download = false;
             self.downloadMediaId = -1;
+            self.hasOptions = false;
+            self.hasVariants = false;
 
             self.productOptions = [];
 
@@ -116,33 +142,43 @@
         }
         else
         {
-            self.key = productFromServer.Key;
-            self.name = productFromServer.Name;
-            self.sku = productFromServer.Sku;
-            self.price = productFromServer.Price;
-            self.costOfGoods = productFromServer.CostOfGoods;
-            self.salePrice = productFromServer.SalePrice;
-            self.onSale = productFromServer.OnSale;
-            self.weight = productFromServer.Weight;
-            self.length = productFromServer.Length;
-            self.width = productFromServer.Width;
-            self.height = productFromServer.Height;
-            self.barcode = productFromServer.Barcode;
-            self.available = productFromServer.Available;
-            self.trackInventory = productFromServer.TrackInventory;
-            self.outOfStockPurchase = productFromServer.OutOfStockPurchase;
-            self.taxable = productFromServer.Taxable;
-            self.shippable = productFromServer.Shippable;
-            self.download = productFromServer.Download;
-            self.downloadMediaId = productFromServer.DownloadMediaId;
+            self.key = productFromServer.key;
+            self.name = productFromServer.name;
+            self.sku = productFromServer.sku;
+            self.price = productFromServer.price;
+            self.costOfGoods = productFromServer.costOfGoods;
+            self.salePrice = productFromServer.salePrice;
+            self.onSale = productFromServer.onSale;
+            self.weight = productFromServer.weight;
+            self.length = productFromServer.length;
+            self.width = productFromServer.width;
+            self.height = productFromServer.height;
+            self.barcode = productFromServer.barcode;
+            self.available = productFromServer.available;
+            self.trackInventory = productFromServer.trackInventory;
+            self.outOfStockPurchase = productFromServer.outOfStockPurchase;
+            self.taxable = productFromServer.taxable;
+            self.shippable = productFromServer.shippable;
+            self.download = productFromServer.download;
+            self.downloadMediaId = productFromServer.downloadMediaId;
+            self.hasOptions = false;
+            self.hasVariants = false;
 
-            self.productOptions = _.map(productFromServer.ProductOptions, function (option) {
-                return new ProductOption(option);
+            self.productOptions = _.map(productFromServer.productOptions, function (option) {
+                return new merchello.Models.ProductOption(option);
             });
 
-            self.productVariants = _.map(productFromServer.ProductVariants, function (variant) {
-                return new ProductVariant(variant);
+            if (self.productOptions.length > 0) {
+                self.hasOptions = true;
+            }
+
+            self.productVariants = _.map(productFromServer.productVariants, function (variant) {
+                return new merchello.Models.ProductVariant(variant);
             });
+
+            if (self.productVariants.length > 0) {
+                self.hasVariants = true;
+            }
 
         }
 
@@ -167,7 +203,7 @@
             self.shippable = productVariant.shippable;
             self.download = productVariant.download;
             self.downloadMediaId = productVariant.downloadMediaId;
-        }
+        };
 
     };
 

@@ -14,6 +14,9 @@
         $scope.products = [];
         $scope.filteredproducts = [];
         $scope.watchCount = 0;
+        $scope.sortProperty = "name";
+        $scope.sortOrder = "asc";
+        $scope.limitAmount = 5;
 
         $scope.loadProducts = function () {
 
@@ -22,8 +25,11 @@
 
             promise.then(function (products) {
 
-                $scope.products = products;
-                $scope.filteredproducts = products;
+                $scope.products = _.map(products, function (productFromServer) {
+                    return new merchello.Models.Product(productFromServer);
+                });
+
+                //$scope.filteredproducts = $scope.products;
                 $scope.loaded = true;
                 $scope.preValuesLoaded = true;
                 $(".content-column-body").css('background-image', 'none');
@@ -37,6 +43,30 @@
         };
 
         $scope.loadProducts();
+
+        $scope.changeSortOrder = function (propertyToSort) {
+
+            if ($scope.sortProperty == propertyToSort)
+            {
+                if ($scope.sortOrder == "asc")
+                {
+                    $scope.sortProperty = "-" + propertyToSort;
+                    $scope.sortOrder = "desc";
+                }
+                else
+                {
+                    $scope.sortProperty = propertyToSort;
+                    $scope.sortOrder = "asc";
+                }
+            }
+            else
+            {
+                $scope.sortProperty = propertyToSort;
+                $scope.sortOrder = "asc";
+            }
+
+        }
+
     }
 
     angular.module("umbraco").controller("Merchello.Dashboards.Product.ListController", merchello.Controllers.ProductListController);

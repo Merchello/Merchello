@@ -10,24 +10,9 @@
      */
     controllers.ProductVariantEditController = function ($scope, $routeParams, $location, notificationsService, dialogService, angularHelper, serverValidationManager, merchelloProductService, merchelloProductVariantService) {
 
-        if ($routeParams.create) {
-            $scope.creatingVariant = true;
-            $scope.loaded = true;
-            $scope.preValuesLoaded = true;
-            $scope.productVariant = new merchello.Models.ProductVariant();
-            $scope.product = new merchello.Models.Product();
-            $(".content-column-body").css('background-image', 'none');
-        }
-        else {
+        function loadProductVariant(id) {
 
-            $scope.creatingVariant = false;
-            $scope.productVariant = {};
-            $scope.product = {};
-
-            //we are editing so get the product variant and product from the server
-            var promiseVariant = merchelloProductVariantService.getById($routeParams.id);
-            var promiseProduct = merchelloProductService.getByKey($routeParams.productKey);
-
+            var promiseVariant = merchelloProductVariantService.getById(id);
             promiseVariant.then(function (productVariant) {
 
                 $scope.productVariant = new merchello.Models.ProductVariant(productVariant);
@@ -41,12 +26,19 @@
                 notificationsService.error("Product Variant Load Failed", reason.message);
 
             });
+        }
 
+        function loadProduct(key, hasVariants) {
+
+            var promiseProduct = merchelloProductService.getByKey(key);
             promiseProduct.then(function (product) {
 
                 $scope.product = new merchello.Models.Product(product);
-                if (product.productOptions.length > 0) {
-                    $scope.product.hasOptions = true;
+
+                if (!hasVariants)
+                {
+                    // create the master variant (since most form items are bound to the productVariant model)
+                    $scope.productVariant.copyFromProduct($scope.product);
                 }
 
                 $scope.loaded = true;
@@ -59,6 +51,42 @@
 
             });
         }
+
+        ////////////////////////////////////////////////
+        // Initialize state
+        if ($routeParams.create) {
+            $scope.creatingVariant = true;
+            $scope.loaded = true;
+            $scope.preValuesLoaded = true;
+            $scope.productVariant = new merchello.Models.ProductVariant();
+            $scope.product = new merchello.Models.Product();
+            $(".content-column-body").css('background-image', 'none');
+        }
+        else {
+
+            $scope.creatingVariant = false;
+            $scope.productVariant = new merchello.Models.ProductVariant();
+            $scope.product = {};
+
+            if ($routeParams.variantid == undefined)
+            {
+                //we are editing a product with no options so get the product from the server
+                loadProduct($routeParams.id, false);
+            }
+            else
+            {
+                //we are editing a variant so get the product variant and product from the server
+                loadProductVariant($routeParams.variantid);
+
+                loadProduct($routeParams.id, true);
+            }
+
+        }
+        ////////////////////////////////////////////////
+
+
+        ////////////////////////////////////////////////
+        // EVENTS
 
         $scope.save = function () {
 
@@ -79,7 +107,7 @@
                     var promiseSave = merchelloProductService.save($scope.product);
                     promiseSave.then(function (product) {
 
-                        notificationsService.success("Product Saved!  H5YR!", product.Key);
+                        notificationsService.success("Product Saved! H5YR!", product.Key);
 
                     }, function (reason) {
 
@@ -179,6 +207,9 @@
 
         //    }
         //};
+
+
+        ////////////////////////////////////////////////
     }
 
     angular.module("umbraco").controller("Merchello.Editors.ProductVariant.EditController", merchello.Controllers.ProductVariantEditController);
