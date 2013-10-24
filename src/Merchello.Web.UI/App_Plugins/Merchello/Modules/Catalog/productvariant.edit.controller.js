@@ -101,7 +101,7 @@
                 var promiseCreate = merchelloProductService.create($scope.productVariant.name, $scope.productVariant.sku, $scope.productVariant.price);
                 promiseCreate.then(function (product) {
 
-                    $scope.product.key = product.Key;
+                    $scope.product.key = product.key;
                     
                     $scope.creatingVariant = false;
 
@@ -109,7 +109,12 @@
                     var promiseSave = merchelloProductService.save($scope.product);
                     promiseSave.then(function (product) {
 
-                        notificationsService.success("Product Saved! H5YR!", product.Key);
+                        notificationsService.success("Product Saved! H5YR!");
+
+                        if ($scope.product.hasVariants)
+                        {
+                            $location.url("/merchello/merchello/ProductEdit/" + $scope.product.key, true);
+                        }
 
                     }, function (reason) {
 
@@ -117,7 +122,7 @@
 
                     });
 
-                    notificationsService.success("Product Created", product.Key);
+                    notificationsService.success("Product Created", $scope.product.Key);
 
                 }, function (reason) {
 

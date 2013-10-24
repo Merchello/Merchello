@@ -83,7 +83,7 @@
                             <div class="row">
                                 <div class="form-group col-xs-6 span6">
                                     <label class="label-checkbox"><input name="onsale" type="checkbox" data-ng-model="productVariant.hasDigitalDownload"> <span>This variant has digital goods</span></label>
-                                    <label class="label-checkbox"><input name="onsale" type="checkbox" data-ng-show="creatingVariant" data-ng-model="productVariant.hasOptions"> <span>This variant has options (like size or color)</span></label>
+                                    <label class="label-checkbox" data-ng-model="productVariant.hasOptions"><input name="onsale" type="checkbox" data-ng-show="creatingVariant" > <span>This variant has options (like size or color)</span></label>
                                     <label class="label-checkbox"><input name="onsale" type="checkbox" data-ng-model="productVariant.taxable"> <span>This variant is taxable</span></label>
                                 </div>
                                 <div class="form-group col-xs-6 span6">
@@ -221,8 +221,8 @@
                                 <p>How do you want to handle out of stock inventory?</p>
 
                                 <div class="radio-group">
-                                    <label class="label-radio"><input name="onsale" type="radio" value="noSale" checked="checked"> <span>Stop selling</span></label>
-                                    <label class="label-radio"><input name="onsale" type="radio" value="sale" data-ng-model="productVariant.outOfStockPurchase"> <span>Continue selling and...</span></label>
+                                    <label class="label-radio"><input name="onsale" type="radio" value="" data-ng-model="productVariant.outOfStockPurchase" checked="checked"> <span>Stop selling</span></label>
+                                    <label class="label-radio"><input name="onsale" type="radio" value="true" data-ng-model="productVariant.outOfStockPurchase"> <span>Continue selling and...</span></label>
                                 </div>
 
                                 <div class="form-group row-fluid" data-ng-class="{ 'open': productVariant.outOfStockPurchase, 'closed': (!productVariant.outOfStockPurchase) }">
