@@ -125,7 +125,9 @@ input[type="radio"], input[type="checkbox"] { margin-top: -2px; //line up checkb
 .label-checkbox { margin: 5px 0; }
 
 .form-horizontal { 
-    .controls { padding-top: 6px; }
+    .controls { padding-top: 6px; 
+        &[class*="span"]:first-child { margin-left: 180px; }
+    }
     .form-control { padding: 1px 5px; border: solid 1px #ccc; }
 }
 

@@ -15,17 +15,41 @@
             </div>
 
 
-            <div class="span8">
-
+            <div class="col-xs-8 span8">
+                <div class="btn-toolbar pull-right umb-btn-toolbar">
+                    <div class="btn-group">
+                        <a href="#" class="btn btn-success">Add a Variant</a>
+                    </div>
+                </div>
             </div>
+
+            <!-- Tabs for Variants & Options -->
+            <ul class="nav nav-tabs umb-nav-tabs span12">
+                <li class="ng-scope active">
+    	            <a href="#tab0" data-toggle="tab" class="ng-binding">Variants</a>
+                </li>
+                <li class="ng-scope">
+                    <a href="#tab1" data-toggle="tab" class="ng-binding">Options</a>
+                </li>
+    	    </ul>
 
         </umb-header>
         
         <div class="merchello-panel-body">
-            <div class="">
+            <div class="control-group umb-control-group">
                 <div class="merchello-pane">
 
-                    <p>stuff</p>
+                    <label class="merchello-control-label">
+                        Variant Information
+                        <small>Edit the variants for this product.</small>
+                        <a href="#"><i class="icon-ordered-list"></i> Reorder variants</a>
+                    </label>
+
+                    <div class="merchello-controls row-fluid">
+                        <div class="well col-xs-10 span10">
+                            Select: <a href="#">All</a>, <a href="#">None</a>, <a href="#">Women's</a>, <a href="#">Men's</a>, <a href="#">Small</a>, <a href="#">Medium</a>, <a href="#">Large</a>
+                        </div>
+                    </div>
                     
                 </div>
             </div>
