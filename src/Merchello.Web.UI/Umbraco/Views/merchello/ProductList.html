@@ -54,9 +54,15 @@
                     <thead>
                         <tr>
                             <th></th>
-                            <th data-ng-click="changeSortOrder('name')" data-ng-class="{'sorted': sortProperty == 'name'}">Product</th>
-                            <th data-ng-click="changeSortOrder('sku')" data-ng-class="{'sorted': sortProperty == 'sku'}">SKU</th>
-                            <th data-ng-click="changeSortOrder('price')" data-ng-class="{'sorted': sortProperty == 'price'}">Price</th>
+                            <th data-ng-click="changeSortOrder('name')" data-ng-class="{'sorted': sortProperty == 'name'}">
+                                <i data-ng-class="{'icon-navigation-up': sortProperty == 'name', 'icon-navigation-down': sortProperty != 'name'}"></i> Product
+                            </th>
+                            <th data-ng-click="changeSortOrder('sku')" data-ng-class="{'sorted': sortProperty == 'sku'}">
+                                <i data-ng-class="{'icon-navigation-up': sortProperty == 'sku', 'icon-navigation-down': sortProperty != 'sku'}"></i> SKU
+                            </th>
+                            <th data-ng-click="changeSortOrder('price')" data-ng-class="{'sorted': sortProperty == 'price'}">
+                                <i data-ng-class="{'icon-navigation-down': sortProperty == 'price', 'icon-navigation-up': sortProperty != 'price'}"></i> Price
+                            </th>
                             <th>&nbsp;</th>
                         </tr>
                     </thead>
