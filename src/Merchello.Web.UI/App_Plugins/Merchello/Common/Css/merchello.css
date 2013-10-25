@@ -58,6 +58,15 @@ table.merchello-selectable-table tr td { cursor: pointer; }
 .table-hover tbody .active:hover > td, .table-hover tbody .active td:hover > td, .active .table-hover tbody td:hover > td { background-color: #e0f2dc; }
 
 .table .text-right { text-align: right; }
+.table th { border-top: none; }
+
+table.sortable th { cursor: pointer; }
+table.sortable th.sorted { font-color: #f57020; }
+table.sortable th.sorted.desc { font-style: italic; }
+
+td.name { width: 45%; }
+
+.order-items tr:last-of-type td, .customer-orders tr:last-of-type td { font-weight: bold; }
 
 .order-items ul { margin: 0; padding: 0; list-style-type: none; }
 .order-items li { display: inline-block; margin: 0; padding: 0; }
@@ -66,16 +75,13 @@ table.merchello-selectable-table tr td { cursor: pointer; }
 .order-items a { font-size: 1.2em; }
 .order-items input[type="checkbox"] { margin-top: 2px; }
 
-.order-items tr:last-of-type td, .customer-orders tr:last-of-type td { font-weight: bold; }
-
-td.name { width: 45%; }
-
-table.sortable th { cursor: pointer; }
-table.sortable th.sorted { font-color: #f57020; }
-table.sortable th.sorted.desc { font-style: italic; }
+.product-options td:first-of-type, .product-options th:first-of-type { width: 30%; }
+.product-options input[type="text"] { margin-bottom: 0; }
+.product-options small { display: block; color: #999; font-size: 11px; }
 
 input[type="radio"], input[type="checkbox"] { margin-top: -2px; }
 td input[type="radio"], td input[type="checkbox"] { margin-top: 2px; }
+input[type="radio"][disabled="disabled"] + span, input[type="checkbox"][disabled="disabled"] + span { color: #CCCCCC; font-style: italic; }
 
 .input-append .add-on, .input-prepend .add-on { background: #ececec; }
 
@@ -91,11 +97,11 @@ td input[type="radio"], td input[type="checkbox"] { margin-top: 2px; }
 
 .radio-group + .open { margin-top: 1.5em; }
 
-input[type="checkbox"][disabled="disabled"] + span { color: #CCCCCC; font-style: italic; }
-
-.tags { margin: 10px 0; }
-.tags .tag { border-radius: 6px; background-color: #EFEFEF; border: 1px solid #DDD; padding: 5px; margin-right: 10px; }
-.tags .tag:hover { color: red; text-decoration: none; }
+.tags { display: inline-block; width: 48%; vertical-align: top; float: right; }
+.tags .tag { display: inline-block; border-radius: 6px; background-color: #afdda4; border: 1px solid #53a93f; color: green; padding: 3px 5px; margin: 0 10px 5px 0; cursor: pointer; }
+.tags .tag:hover { color: #f57020; text-decoration: none; border-color: #f57020; background: #fcceb2; }
+.tags .tag:after { content: "\e1a4"; padding-left: 5px; font-family: 'icomoon'; line-height: 20px; vertical-align: top; }
+.tags + input[type="text"] { width: 30%; }
 
 .vcard .photo { border: solid 3px #53a93f; max-width: 30%; }
 .vcard .pull-right { margin-top: 15px; line-height: 15px; }
