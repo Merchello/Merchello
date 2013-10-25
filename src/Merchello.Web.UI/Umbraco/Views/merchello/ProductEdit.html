@@ -15,20 +15,163 @@
             </div>
 
 
-            <div class="span8">
-
+            <div class="col-xs-8 span8">
+                <div class="btn-toolbar pull-right umb-btn-toolbar">
+                    <div class="btn-group">
+                        <a href="#" class="btn btn-success">Add a Variant</a>
+                    </div>
+                </div>
             </div>
+
+            <!-- Tabs for Variants & Options -->
+            <ul class="nav nav-tabs umb-nav-tabs span12">
+                <li class="ng-scope active">
+    	            <a href="#tab0" data-toggle="tab" class="ng-binding">Variants</a>
+                </li>
+                <li class="ng-scope">
+                    <a href="#tab1" data-toggle="tab" class="ng-binding">Options</a>
+                </li>
+    	    </ul>
 
         </umb-header>
         
         <div class="merchello-panel-body">
-            <div class="">
-                <div class="merchello-pane">
+            <div class="merchello-pane">
+                <!-- Variants Tab -->
+                <div class="control-group umb-control-group">
+                    <label class="merchello-control-label">
+                        Variant Information
+                        <small>Edit the variants for this product.</small>
+                        <a href="#"><i class="icon-ordered-list"></i> Reorder variants</a>
+                    </label>
 
-                    <p>stuff</p>
+                    <div class="merchello-controls row-fluid">
+                        <!-- Appears when Reorder Variants is clicked -->
+                        <div class="well row-fluid col-xs-10 span10 open">
+                            <button class="btn close"><i class="icon-delete"></i></button>
+                            <h3>Drag to Reorder Options and Variants</h3>
+                            <p>If you reorder your options and variants, it will change the order in which they appear on your storefront. Drag your options (ie size, style) vertically and variants (ie women's, small) horizontally.</p>
+
+                            <ul class="reorder">
+                                <li>
+                                    <span class="col-xs-3 span3">
+                                        <button class="btn btn-link variant"><i class="icon-thumbnail-list"></i> Style</button>
+                                    </span>
+                                    <span class="options col-xs-9 span9">
+                                        <button class="btn btn-link option"><i class="icon-thumbnail-list"></i> Women's</button>
+                                        <button class="btn btn-link option"><i class="icon-thumbnail-list"></i> Men's</button>
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="col-xs-3 span3">
+                                        <button class="btn btn-link variant"><i class="icon-thumbnail-list"></i> Size</button>
+                                    </span>
+                                    <span class="options col-xs-9 span9">
+                                        <button class="btn btn-link option"><i class="icon-thumbnail-list"></i> Small</button>
+                                        <button class="btn btn-link option"><i class="icon-thumbnail-list"></i> Medium</button>
+                                        <button class="btn btn-link option"><i class="icon-thumbnail-list"></i> Large</button>
+                                    </span>
+                                </li>
+                            </ul>
+
+                        </div>
+
+                        <div class="well col-xs-10 span10">
+                            Select: <a href="#">All</a>, <a href="#">None</a>, <a href="#">Women's</a>, <a href="#">Men's</a>, <a href="#">Small</a>, <a href="#">Medium</a>, <a href="#">Large</a>
+                        </div>
+
+                        <div class="col-xs-10 span10">
+                            <table class="table table-hover merchello-selectable-table sortable">
+                                <thead>
+                                    <tr>
+                                        <th><input type="checkbox" /></th>
+                                        <th>Style</th>
+                                        <th>Size</th>
+                                        <th>SKU</th>
+                                        <th>Price</th>
+                                        <th>Total Qty</th>
+                                        <th><a href="#">edit</a></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><input type="checkbox" /></td>
+                                        <td>Women's</td>
+                                        <td>Small</td>
+                                        <td>shirt125-ws</td>
+                                        <td>25.00</td>
+                                        <td>10</td>
+                                        <td><a href="#">edit</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox" /></td>
+                                        <td>Women's</td>
+                                        <td>Medium</td>
+                                        <td>shirt125-wm</td>
+                                        <td>25.00</td>
+                                        <td>10</td>
+                                        <td><a href="#">edit</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox" /></td>
+                                        <td>Women's</td>
+                                        <td>Large</td>
+                                        <td>shirt125-wl</td>
+                                        <td>25.00</td>
+                                        <td>10</td>
+                                        <td><a href="#">edit</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox" /></td>
+                                        <td>Men's</td>
+                                        <td>Small</td>
+                                        <td>shirt125-ms</td>
+                                        <td>25.00</td>
+                                        <td>10</td>
+                                        <td><a href="#">edit</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox" /></td>
+                                        <td>Men's</td>
+                                        <td>Medium</td>
+                                        <td>shirt125-mm</td>
+                                        <td>25.00</td>
+                                        <td>10</td>
+                                        <td><a href="#">edit</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox" /></td>
+                                        <td>Men's</td>
+                                        <td>Large</td>
+                                        <td>shirt125-ml</td>
+                                        <td>25.00</td>
+                                        <td>10</td>
+                                        <td><a href="#">edit</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                     
                 </div>
-            </div>
+
+                <!-- Edit Options Tab -->
+                <!--div class="control-group umb-control-group">
+                    <label class="merchello-control-label">
+                        Edit Options
+                        <small>Edit or add options, which will auto-update your variants</small>
+                    </label>
+
+                    <div class="merchello-controls row-fluid">
+                        <div class="col-xs-10 span10"-->
+
+                            <!-- Content goes here that matches the style, formatting, and function of the multiple options on the Create Product page -->
+
+                        <!--/div>
+                    </div>
+                <div-->
+
+            </div-->
         </div>
 
     </umb-panel>
