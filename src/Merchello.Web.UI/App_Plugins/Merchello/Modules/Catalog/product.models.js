@@ -4,10 +4,21 @@
     models.ProductAttribute = function (productAttributeFromServer) {
 
         var self = this;
-        self.optionId = productAttributeFromServer.optionId;
-        self.name = productAttributeFromServer.name;
-        self.sku = productAttributeFromServer.sku;
-        self.sortOrder = productAttributeFromServer.sortOrder;
+
+        if (productAttributeFromServer == undefined)
+        {
+            self.optionId = "";
+            self.name = "";
+            self.sku = "";
+            self.sortOrder = "";
+        }
+        else
+        {
+            self.optionId = productAttributeFromServer.optionId;
+            self.name = productAttributeFromServer.name;
+            self.sku = productAttributeFromServer.sku;
+            self.sortOrder = productAttributeFromServer.sortOrder;
+        }
 
     };
 
@@ -35,6 +46,22 @@
                 return new merchello.Models.ProductAttribute(attribute);
             });
         }
+
+        // Helper to add a choice to this option
+        self.addChoice = function (name) {
+
+            var newChoice = new merchello.Models.ProductAttribute();
+            newChoice.name = name;
+            newChoice.sortOrder = self.choices.length + 1;
+
+            self.choices.push(newChoice);
+        };
+
+        // Helper to remove a choice to this option
+        self.removeChoice = function (idx) {
+
+            self.choices.splice(idx, 1);
+        };
     };
 
     models.ProductVariant = function (productVariantFromServer) {
@@ -218,7 +245,7 @@
             self.downloadMediaId = productVariant.downloadMediaId;
         };
 
-        // Helper to copy from master variant
+        // Helper to add a variant to this product
         self.addBlankOption = function () {
 
             var newOption = new merchello.Models.ProductOption();

@@ -16,7 +16,7 @@
         $scope.watchCount = 0;
         $scope.sortProperty = "name";
         $scope.sortOrder = "asc";
-        $scope.limitAmount = 5;
+        $scope.limitAmount = 10;
 
         $scope.loadProducts = function () {
 
