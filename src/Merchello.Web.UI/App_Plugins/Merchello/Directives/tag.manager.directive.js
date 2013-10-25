@@ -11,12 +11,12 @@
     directives.TagManagerDirective = function () {
         return {
             restrict: 'E',
-            scope: { tags: '=' },
+            scope: { option: '=' },
             template:
                 '<div class="tags">' +
-                    '<a ng-repeat="(idx, tag) in tags" class="tag" ng-click="remove(idx)">{{tag}}</a>' +
+                    '<a ng-repeat="(idx, choice) in option.choices" class="tag" ng-click="remove(idx)">{{choice.name}}</a>' +
                 '</div>' +
-                '<input type="text" placeholder="Add a tag..." ng-model="new_value"></input> ' +
+                '<input type="text" placeholder="Add a choice..." ng-model="new_value"></input> ' +
                 '<a class="btn btn-primary" ng-click="add()">Add</a>',
             link: function ($scope, $element) {
                 // FIXME: this is lazy and error-prone
@@ -24,13 +24,13 @@
 
                 // This adds the new tag to the tags array
                 $scope.add = function () {
-                    $scope.tags.push($scope.new_value);
+                    $scope.option.addChoice($scope.new_value)
                     $scope.new_value = "";
                 };
 
                 // This is the ng-click handler to remove an item
                 $scope.remove = function (idx) {
-                    $scope.tags.splice(idx, 1);
+                    $scope.option.removeChoice(idx)
                 };
 
                 // Capture all keypresses

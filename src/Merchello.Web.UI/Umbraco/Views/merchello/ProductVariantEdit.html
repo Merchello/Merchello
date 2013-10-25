@@ -133,10 +133,7 @@
                                             <input class="form-control col-xs-12 span12" type="text" placeholder="Add a style..." data-ng-model="option.name" />
                                         </td>
                                         <td>
-                                            <tag-manager tags="option.choices"></tag-manager>
-                                            <span data-ng-repeat="choice in option.choices">
-                                                {{choice.name}}
-                                            </span>
+                                            <tag-manager option="option"></tag-manager>
                                         </td>
                                     </tr>
                                 </table>
