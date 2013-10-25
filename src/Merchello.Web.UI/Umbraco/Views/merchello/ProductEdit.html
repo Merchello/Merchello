@@ -84,8 +84,23 @@
                             <table class="table table-hover merchello-selectable-table sortable">
                                 <thead>
                                     <tr>
-                                        <th><input type="checkbox" /></th>
+                                        <th><input type="checkbox" class="btn dropdown-toggle" data-toggle="dropdown" /></th> <!-- Swaps out the current Style TH for the btn-group TH below to display the bulk action & dropdown menu -->
                                         <th>Style</th>
+                                        <!-- Displays the bulk action button & dropdown menu when the checkbox is selected -->
+                                        <!--<th>
+                                            <div class="btn-group">
+                                                <a href="#" class="btn dropdown-toggle" data-toggle="dropdown">Bulk Action (3 Variants) <i class="icon-navigation-down"></i></a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="#">Change prices</a></li>
+                                                    <li><a href="#">Update inventory</a></li>
+                                                    <li><a href="#">Delete Variants</a></li>
+                                                    <li class="divider"></li>
+                                                    <li class="header">Duplicate Variants</li>
+                                                    <li><a href="#">In another style</a></li>
+                                                    <li class="disabled"><a href="#">In another size</a></li>
+                                                </ul>
+                                            </div>
+                                        </th>-->
                                         <th>Size</th>
                                         <th>SKU</th>
                                         <th>Price</th>
@@ -171,7 +186,7 @@
                     </div>
                 <div-->
 
-            </div-->
+            </div>
         </div>
 
     </umb-panel>

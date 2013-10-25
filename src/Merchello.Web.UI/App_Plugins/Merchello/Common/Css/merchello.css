@@ -20,6 +20,10 @@ blockquote + cite:before { content: '-'; }
 
 p.span3 { vertical-align: middle; }
 
+.dropdown-menu { width: 100%; }
+.dropdown-menu .header { padding: 3px 20px; cursor: auto; }
+.dropdown-menu > li > a { color: #049cdb; }
+
 .merchello-panel-body { position: absolute; top: 101px; bottom: 0; left: 0; right: 0; width: 100%; clear: both; overflow: auto; }
 .merchello-panel-body a { color: #049cdb; }
 .merchello-panel-body .btn { color: #000; }

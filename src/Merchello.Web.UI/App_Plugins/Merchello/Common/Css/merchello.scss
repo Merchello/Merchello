@@ -37,6 +37,11 @@ blockquote {
 .row-fluid { @include box-sizing; }
 p.span3 { vertical-align: middle; }
 
+.dropdown-menu { width: 100%;
+    .header { padding: 3px 20px; cursor: auto; }
+    > li > a { color: $blue; }
+}
+
 //Main Sections
 .merchello-panel-body { position: absolute; top: 101px; bottom: 0; left: 0; right: 0; width: 100%; clear: both; overflow: auto; 
     a { color: $blue; }
