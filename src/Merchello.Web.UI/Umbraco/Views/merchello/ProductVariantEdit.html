@@ -19,7 +19,7 @@
             <div class="col-xs-8 span8">
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
                     <div class="btn-group">
-                        <button type="submit" data-ng-disabled="productVariantForm.$invalid" data-ng-click="save(productVariantForm)" class="btn btn-success">Save</button>
+                        <a data-ng-disabled="productVariantForm.$invalid" data-ng-click="save(productVariantForm)" class="btn btn-success">Save</a>
                     </div>
                 </div>
             </div>
@@ -83,7 +83,7 @@
                             <div class="row">
                                 <div class="form-group col-xs-6 span6">
                                     <label class="label-checkbox"><input name="onsale" type="checkbox" data-ng-model="productVariant.hasDigitalDownload"> <span>This variant has digital goods</span></label>
-                                    <label class="label-checkbox" data-ng-show="creatingVariant || !product.hasVariants"><input name="onsale" type="checkbox" data-ng-model="productVariant.hasOptions"> <span>This variant has options (like size or color)</span></label>
+                                    <label class="label-checkbox" data-ng-show="creatingVariant || !product.hasVariants"><input name="onsale" type="checkbox" data-ng-model="productVariant.hasOptions" data-ng-click="ensureInitialOption()"> <span>This variant has options (like size or color)</span></label>
                                     <label class="label-checkbox"><input name="onsale" type="checkbox" data-ng-model="productVariant.taxable"> <span>This variant is taxable</span></label>
                                 </div>
                                 <div class="form-group col-xs-6 span6">
@@ -140,7 +140,7 @@
 
                                 <div>
                                     <a data-ng-click="addOption()" class="btn add">Add Another Option</a>
-                                    <a data-ng-click="update()" class="btn btn-primary add">Update</a>
+                                    <a data-ng-click="updateVariants()" class="btn btn-primary add">Update</a>
                                 </div>
                             </div>
 
@@ -166,8 +166,8 @@
                                     <tr data-ng-repeat="variant in product.productVariants">
                                         <td>
                                             <input type="checkbox" data-ng-model="variant.selected"/>
-                                            <span data-ng-repeat="attribute in variant.productAttributes">
-                                                <span>{{variant.name}}</span>
+                                            <span data-ng-repeat="attribute in variant.attributes">
+                                                <span>{{attribute.name}}</span>
                                                 <span data-ng-show="!$last"> / </span>
                                             </span>                                                    
                                         </td>

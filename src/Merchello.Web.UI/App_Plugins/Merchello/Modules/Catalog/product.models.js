@@ -256,6 +256,24 @@
 
         };
 
+
+        // Helper to add a variant to this product
+        self.addVariant = function (attributes) {
+
+            var newVariant = new merchello.Models.ProductVariant();
+            newVariant.copyFromProduct(self);
+            newVariant.attributes = attributes.slice(0);
+
+            self.productVariants.push(newVariant);
+            self.hasVariants = true;
+        };
+
+        // Helper to remove a variant from this product
+        self.removeVariant = function (idx) {
+
+            //self.choices.splice(idx, 1);
+        };
+
     };
 
 
