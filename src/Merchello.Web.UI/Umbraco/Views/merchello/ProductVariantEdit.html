@@ -21,7 +21,7 @@
                     
                     <div class="btn-group">
                         
-                        <button type="submit" class="btn btn-success">Save</button>
+                        <button type="submit" data-ng-disabled="productVariantForm.$invalid" data-ng-click="save(productVariantForm)" class="btn btn-success">Save</button>
 
                     </div>
                 </div>
@@ -50,7 +50,7 @@
                             <div class="row-fluid">
                                 <div class="form-group col-xs-6 span6">
                                     <label for="price">Price</label>
-                                    <input id="price" name="price" type="text" class="form-control col-xs-8 span8" data-ng-model="productVariant.price" />
+                                    <input id="price" name="price" required data-ng-pattern="/^\d+(\.\d+)?$/" type="text" class="form-control col-xs-8 span8" data-ng-model="productVariant.price" />
                                 </div>
 
                                 <div class="form-group col-xs-6 span6">
@@ -62,7 +62,7 @@
                             <div class="row-fluid">
                                 <div class="form-group col-xs-6 span6">
                                     <label for="sku">Base Sku <small>Must have a unique SKU</small></label>
-                                    <input id="Text2" name="sku" type="text" class="form-control col-xs-8 span8" data-ng-model="productVariant.sku" />
+                                    <input id="Text2" name="sku" required type="text" class="form-control col-xs-8 span8" data-ng-model="productVariant.sku" />
                                 </div>
 
                                 <div class="form-group col-xs-6 span6">
@@ -86,7 +86,7 @@
                             <div class="row">
                                 <div class="form-group col-xs-6 span6">
                                     <label class="label-checkbox"><input name="onsale" type="checkbox" data-ng-model="productVariant.hasDigitalDownload"> <span>This variant has digital goods</span></label>
-                                    <label class="label-checkbox" data-ng-model="productVariant.hasOptions"><input name="onsale" type="checkbox" data-ng-show="creatingVariant" > <span>This variant has options (like size or color)</span></label>
+                                    <label class="label-checkbox" data-ng-show="creatingVariant || !product.hasVariants"><input name="onsale" type="checkbox" data-ng-model="productVariant.hasOptions"> <span>This variant has options (like size or color)</span></label>
                                     <label class="label-checkbox"><input name="onsale" type="checkbox" data-ng-model="productVariant.taxable"> <span>This variant is taxable</span></label>
                                 </div>
                                 <div class="form-group col-xs-6 span6">
@@ -129,12 +129,12 @@
                                             Option Values
                                         </th>
                                     </tr>
-                                    <tr data-ng-repeat="option in product.productOptions">
+                                    <tr data-ng-repeat="option in product.productOptions | orderBy:'sortOrder'">
                                         <td>
                                             <input class="form-control" type="text" data-ng-model="option.name" />
                                         </td>
                                         <td>
-                                            <tag-manager tags="tags"></tag-manager>
+                                            <tag-manager tags="option.choices"></tag-manager>
                                             <span data-ng-repeat="choice in option.choices">
                                                 {{choice.name}},
                                             </span>
