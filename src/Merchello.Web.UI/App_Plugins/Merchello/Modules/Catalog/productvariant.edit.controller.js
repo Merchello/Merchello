@@ -88,70 +88,74 @@
         ////////////////////////////////////////////////
         // EVENTS
 
-        $scope.save = function () {
+        $scope.save = function (thisForm) {
 
-            notificationsService.info("Saving...", "");
-
-
-            if ($scope.creatingVariant)
+            if (thisForm.$valid)
             {
-                // Copy from master variant
-                $scope.product.copyFromVariant($scope.productVariant);
 
-                var promiseCreate = merchelloProductService.create($scope.productVariant.name, $scope.productVariant.sku, $scope.productVariant.price);
-                promiseCreate.then(function (product) {
+                notificationsService.info("Saving...", "");
 
-                    $scope.product.key = product.key;
-                    
-                    $scope.creatingVariant = false;
 
-                    // Created, now save the initial settings from the model
-                    var promiseSave = merchelloProductService.save($scope.product);
-                    promiseSave.then(function (product) {
-
-                        notificationsService.success("Product Saved! H5YR!");
-
-                        if ($scope.product.hasVariants)
-                        {
-                            $location.url("/merchello/merchello/ProductEdit/" + $scope.product.key, true);
-                        }
-
-                    }, function (reason) {
-
-                        notificationsService.error("Product Save Failed", reason.message);
-
-                    });
-
-                    notificationsService.success("Product Created", $scope.product.Key);
-
-                }, function (reason) {
-
-                    notificationsService.error("Product Creation Failed", reason.message);
-
-                });
-            }
-            else
-            {
-                if ($scope.product.hasVariants)
-                {
-                    notificationsService.error("Save Not Implemented", "");
-                }
-                else
+                if ($scope.creatingVariant)
                 {
                     // Copy from master variant
                     $scope.product.copyFromVariant($scope.productVariant);
 
-                    var promise = merchelloProductService.save($scope.product);
+                    var promiseCreate = merchelloProductService.create($scope.productVariant.name, $scope.productVariant.sku, $scope.productVariant.price);
+                    promiseCreate.then(function (product) {
 
-                    promise.then(function (product) {
+                        $scope.product.key = product.key;
+                    
+                        $scope.creatingVariant = false;
 
-                        notificationsService.success("Product Saved", "H5YR!");
+                        // Created, now save the initial settings from the model
+                        var promiseSave = merchelloProductService.save($scope.product);
+                        promiseSave.then(function (product) {
+
+                            notificationsService.success("Product Saved! H5YR!");
+
+                            if ($scope.product.hasVariants)
+                            {
+                                $location.url("/merchello/merchello/ProductEdit/" + $scope.product.key, true);
+                            }
+
+                        }, function (reason) {
+
+                            notificationsService.error("Product Save Failed", reason.message);
+
+                        });
+
+                        notificationsService.success("Product Created", $scope.product.Key);
 
                     }, function (reason) {
 
-                        notificationsService.error("Product Save Failed", reason.message);
+                        notificationsService.error("Product Creation Failed", reason.message);
 
                     });
+                }
+                else
+                {
+                    if ($scope.product.hasVariants)
+                    {
+                        notificationsService.error("Save Not Implemented", "");
+                    }
+                    else
+                    {
+                        // Copy from master variant
+                        $scope.product.copyFromVariant($scope.productVariant);
+
+                        var promise = merchelloProductService.save($scope.product);
+
+                        promise.then(function (product) {
+
+                            notificationsService.success("Product Saved", "H5YR!");
+
+                        }, function (reason) {
+
+                            notificationsService.error("Product Save Failed", reason.message);
+
+                        });
+                    }
                 }
             }
         };
@@ -180,6 +184,9 @@
         };
 
         $scope.addOption = function () {
+
+            $scope.product.addBlankOption();
+
             //$scope.product.productOptions.push({ name: "", required: 0, sortOrder: $scope.product.productOptions.length + 1, choices: [{ name: "one", sku: "one-sku", sortOrder: 1 }] });
             //createVariants();
         };

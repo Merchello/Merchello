@@ -36,13 +36,14 @@
                             <label for="productFilter">Filter By</label>
                             <input id="productFilter" class="form-control span8" name="productFilter" data-ng-model="filtertext" placeholder="Start typing an item's name..." />
                         </div>
+
                         <div class="col-xs-2 span2">
                             <label for="limitSelect">Number of products to display</label>
                             <select name="limitSelect" class="col-xs-12 span12" data-ng-model="limitAmount">
-                                <option selected value="5">5</option>
                                 <option selected value="10">10</option>
-                                <option selected value="25">25</option>
-                                <option selected value="100">100</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
                             </select>
                         </div>
                     </div>
