@@ -14,7 +14,7 @@ $active: lighten($green, 50%);
 
 .well {
     h3 { margin: 0; }
-    h4 { margin-bottom: 0; }
+    h4 { margin-bottom: 5px; }
     .add { margin-bottom: 20px; } //spacing below add buttons inslide .well
 }
 
@@ -41,6 +41,8 @@ p.span3 { vertical-align: middle; }
     .header { padding: 3px 20px; cursor: auto; }
     > li > a { color: $blue; }
 }
+
+p.warning { color: $orange; }
 
 //Main Sections
 .merchello-panel-body { position: absolute; top: 101px; bottom: 0; left: 0; right: 0; width: 100%; clear: both; overflow: auto; 
