@@ -183,52 +183,63 @@
 
         };
 
+        $scope.ensureInitialOption = function () {
+
+            if ($scope.product.productOptions.length == 0)
+            {
+                $scope.product.addBlankOption();
+            }
+        };
+
         $scope.addOption = function () {
 
             $scope.product.addBlankOption();
 
-            //$scope.product.productOptions.push({ name: "", required: 0, sortOrder: $scope.product.productOptions.length + 1, choices: [{ name: "one", sku: "one-sku", sortOrder: 1 }] });
-            //createVariants();
+        };
+        
+        $scope.updateVariants = function () {
+
+            var choiceSets = [];
+            var permutation = [];
+
+            for(var i=0; i < $scope.product.productOptions.length; i++)
+            {
+                var currentOption = $scope.product.productOptions[i];
+                choiceSets.push(currentOption.choices);
+                permutation.push('');
+            }
+ 
+            $scope.possibleProductVariants = [];
+            
+            permute(choiceSets, 0, permutation);
+
+            for (var p = 0; p < $scope.possibleProductVariants.length; p++)
+            {
+                $scope.product.addVariant($scope.possibleProductVariants[p]);
+            }
         };
 
-        //createVariants = function () {
 
-        //    var choicesIndex = new Array();
-        //    var choicesLength = new Array();
+        // Builds the possible variants
+        // sets = array or arrays of choices
+        // set = current iteration
+        // permutation = array of variant combinations
+        function permute(sets, set, permutation)
+        {
+            for (var i = 0; i < sets[set].length; ++i)
+            {
+                permutation[set] = sets[set][i];
 
-        //    $scope.product.productVariants = [];
-
-        //    // Init indexes and lengths
-        //    for (var o = 0; o < $scope.product.productOptions.length; o++) {
-        //        choicesIndex.push(0);
-        //        choicesLength.push($scope.product.productOptions[o].choices.length);
-        //    }
-
-        //    while (choicesIndex[0] < choicesLength[0]) {
-        //        // get current choices from indexes and create variants if they don't exist
-        //        var variant = { productAttributes: [] }
-        //        for (c = 0; c < choicesIndex.length; c++) {
-        //            variant.productAttributes.push($scope.product.productOptions[c].choices[choicesIndex[c]]);
-        //        }
-
-        //        $scope.product.productVariants.push(variant);
-
-        //        // loop through indexes from the last one to the first one (check if the last exists and increment the next one up)
-        //        for (var i = choicesIndex.length - 1; i >= 0; i--) {
-
-        //            choicesIndex[i] = choicesIndex[i] + 1;
-
-        //            if (choicesIndex[i] <= choicesLength[i]) {
-        //                break;
-        //            }
-        //            else {
-        //                choicesIndex[i] = 0;
-        //            }
-        //        }
-
-        //    }
-        //};
-
+                if (set < (sets.length - 1))
+                {
+                    permute(sets, set + 1, permutation);
+                }
+                else
+                {
+                    $scope.possibleProductVariants.push(permutation.slice(0));
+                }
+            }
+        }
 
         ////////////////////////////////////////////////
     }
