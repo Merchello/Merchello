@@ -210,11 +210,13 @@
             }
  
             $scope.possibleProductVariants = [];
-            
+            $scope.product.productVariants = [];
+
             permute(choiceSets, 0, permutation);
 
             for (var p = 0; p < $scope.possibleProductVariants.length; p++)
             {
+                // Todo: check if already exists
                 $scope.product.addVariant($scope.possibleProductVariants[p]);
             }
         };
