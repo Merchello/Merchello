@@ -92,7 +92,23 @@ table.merchello-selectable-table {
 .active td { @extend .active; border-top: solid 1px darken($active, 10%); } //add the .active style to child table cells
 .table-hover tbody .active:hover > td { background-color: darken($active, 5%); } //override bootstrap hover styles for .active table cells
 
-.table .text-right { text-align: right; }
+.table {
+    .text-right { text-align: right; }
+    th { border-top: none; }
+}
+
+table.sortable {
+	th { cursor: pointer; }
+	th.sorted { font-color: $orange;
+	   &.desc { font-style: italic; }
+    }
+}
+
+td.name { width: 45%; }
+
+.order-items, .customer-orders {
+    tr:last-of-type td { font-weight: bold; }
+}
 
 .order-items {
     ul { margin: 0; padding: 0; list-style-type: none; }
@@ -104,28 +120,22 @@ table.merchello-selectable-table {
     input[type="checkbox"] { margin-top: 2px; }
 }
 
-.order-items, .customer-orders {
-    tr:last-of-type td { font-weight: bold; }
-}
-
-td.name { width: 45%; }
-
-table.sortable {
-	th {
-		cursor: pointer;
-	}
-	th.sorted {
-		font-color: $orange;
-	}
-	th.sorted.desc {
-		font-style: italic;
-	}
+.product-options {
+    td, th {
+        &:first-of-type { width: 30%; }
+    }
+    input[type="text"]{ margin-bottom: 0; }
+    small { display: block; color: #999; font-size: 11px; }
 }
 
 //Forms
 input[type="radio"], input[type="checkbox"] { margin-top: -2px; //line up checkboxes with label text
     td & { margin-top: 2px; }
-} 
+    &[disabled="disabled"] {
+        + span { color: #CCCCCC; font-style: italic; }
+    }
+}
+
 .input-append .add-on, .input-prepend .add-on { background: #ececec; } //fix umbraco's append & prepend input styles for merchello
 
 .label-checkbox { margin: 5px 0; }
@@ -148,16 +158,13 @@ input[type="radio"], input[type="checkbox"] { margin-top: -2px; //line up checkb
     + .open { margin-top: 1.5em; }
 }
 
-input[type="checkbox"][disabled="disabled"] {
-    + span { color: #CCCCCC; font-style: italic; }
-}
-
 // Tags
-.tags { margin: 10px 0;
-    .tag { border-radius: 6px; background-color: #EFEFEF; border: 1px solid #DDD; padding: 5px; margin-right: 10px; 
-        &:hover { color: red; text-decoration: none;
-        }
+.tags { display: inline-block; width: 48%; vertical-align: top; float: right;
+    .tag { display: inline-block; border-radius: 6px; background-color: lighten($green, 30%); border: 1px solid $green; color: green; padding: 3px 5px; margin: 0 10px 5px 0; cursor: pointer;
+        &:hover { color: $orange; text-decoration: none; border-color: $orange; background: lighten($orange, 30%); }
+        &:after { content: "\e1a4"; padding-left: 5px; font-family: 'icomoon'; line-height: 20px; vertical-align: top; }
     }
+    + input[type="text"] { width: 30%; }
 }
 
 // Address Formatting
