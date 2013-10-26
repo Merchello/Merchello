@@ -1,7 +1,6 @@
-﻿using Merchello.Core.Models;
-using Merchello.Core.Services;
+﻿using Merchello.Core.Services;
 
-namespace Merchello.Core.ConversionStrategies
+namespace Merchello.Core.Strategies.Customer
 {
     public abstract class BaseAnonymousCustomerConversionStrategy
     {

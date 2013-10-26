@@ -79,10 +79,10 @@
     <Compile Include="CloneHelper.cs" />
     <Compile Include="Configuration\Outline\SettingsCollection.cs" />
     <Compile Include="Configuration\Outline\SettingsElement.cs" />
-    <Compile Include="ConversionStrategies\BaseAnonymousCustomerConversionStrategy.cs" />
-    <Compile Include="ConversionStrategies\AnonymousCustomerToNewCustomerStrategy.cs" />
-    <Compile Include="ConversionStrategies\IAnonymousBasketConversionStrategy.cs" />
-    <Compile Include="ConversionStrategies\IAnonymousCustomerConversionStrategy.cs" />
+    <Compile Include="Strategies\Customer\BaseAnonymousCustomerConversionStrategy.cs" />
+    <Compile Include="Strategies\Customer\AnonymousCustomerConversionStrategy.cs" />
+    <Compile Include="Strategies\Customer\IAnonymousBasketConversionStrategy.cs" />
+    <Compile Include="Strategies\Customer\IAnonymousCustomerConversionStrategy.cs" />
     <Compile Include="BootManagerBase.cs" />
     <Compile Include="Events\DatabaseCreationEventArgs.cs">
       <SubType>Code</SubType>

@@ -1,6 +1,6 @@
 ﻿using Merchello.Core.Models;
 
-namespace Merchello.Core.ConversionStrategies
+namespace Merchello.Core.Strategies.Customer
 {
     /// <summary>
     /// Defines the anonymous customer conversion strategy
@@ -11,6 +11,12 @@ namespace Merchello.Core.ConversionStrategies
         /// Converts an anonymous customer into a customer.
         /// </summary>
         ICustomer ConvertToCustomer();
+
+        /// <summary>
+        /// Converts an anonymous customer's basket to a customer basket
+        /// </summary>
+        /// <returns><see cref="IItemCache"/></returns>
+        IItemCache ConvertBasket();
 
     }
 }
