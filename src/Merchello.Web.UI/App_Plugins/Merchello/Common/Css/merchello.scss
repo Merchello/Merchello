@@ -7,14 +7,42 @@ $active: lighten($green, 50%);
 
 //Mixins
 @mixin box-sizing { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; -ms-box-sizing: border-box; -o-box-sizing: border-box; box-sizing: border-box; }
+@mixin transition($timing: ease, $property: all, $duration: 0.5s) { -webkit-transition: $property $duration $timing; -moz-transition: $property $duration $timing; -ms-transition: $property $duration $timing; -o-transition: $property $duration $timing; transition: $property $duration $timing; }
 
 //Global
 .active, .active:hover { background-color: $active; }
 
 .well {
+    h3 { margin: 0; }
+    h4 { margin-bottom: 5px; }
     .add { margin-bottom: 20px; } //spacing below add buttons inslide .well
 }
 
+blockquote {
+    p { font-size: 1em; line-height: 1.5em; }
+    + cite { margin-left: 20px; font-style: italic;
+        &:before { content: '-'; }
+    }
+}
+
+.closed { opacity: 0; max-height: 0; overflow: hidden; @include transition; 
+    &.control-group { margin-bottom: 0 !important; padding-bottom: 0; border-bottom: solid 1px #fff; }
+    &.well { padding: 0; margin-bottom: 0; min-height: 0; }
+}
+.open { opacity: 1; max-height: 99999px; @include transition; 
+    &.control-group { padding-bottom: 30px; margin-bottom: 25px !important; border-bottom: 1px solid #f8f8f8; }
+    &.well { padding: 19px; margin-bottom: 20px; }
+}
+
+.row-fluid { @include box-sizing; }
+p.span3 { vertical-align: middle; }
+
+.dropdown-menu { width: 100%;
+    .header { padding: 3px 20px; cursor: auto; }
+    > li > a { color: $blue; }
+}
+
+p.warning { color: $orange; }
 
 //Main Sections
 .merchello-panel-body { position: absolute; top: 101px; bottom: 0; left: 0; right: 0; width: 100%; clear: both; overflow: auto; 
@@ -31,12 +59,30 @@ $active: lighten($green, 50%);
 
 .merchello-pane { padding: 30px 20px; 
     &.row-fluid { @include box-sizing; }
-    div.warning { padding: 30px 20px; background: lighten($orange, 40%); border: solid 1px $orange; color: $orange; }
+    div.warning { padding: 30px 20px; margin-bottom: 20px; background: lighten($orange, 40%); border: solid 1px $orange; color: $orange; }
 }
 
-.merchello-controls { margin-left: 240px; padding-top: 5px; }
+.merchello-controls { margin-left: 240px; padding-top: 5px; @include box-sizing; width: auto; 
+    label small { padding-top: 0; }
+}
 
-.merchello-control-label { text-align: left; float: left; padding-top: 8px; width: 160px; }
+.merchello-control-label, .merchello-section-label { text-align: left; float: left; padding-top: 8px; width: 160px; 
+    small { display: block; color: #b3b3b3; padding-top: 5px; padding-bottom: 10px; font-size: 11px; line-height: 13px; }
+}
+
+.control-group { overflow: hidden; @include box-sizing; }
+
+*[class*="icon"]{
+    &.large { font-size: 2.5em; float: left; display: inline-block; margin-right: 10px; line-height: .8em;
+        + p { display: inline-block; width: 90%; }
+    }
+}
+
+.reorder { margin: 0; list-style-type: none;
+    li { margin-bottom: 0; padding-top: 10px; border-top: solid 1px #e3e3e3; overflow: hidden; 
+        &:first-child { border-top: none;}
+    }
+}
 
 
 //Tables
@@ -46,26 +92,116 @@ table.merchello-selectable-table {
     }
 }
 
+.merchello-striped-table {
+    i { font-size: 1.7em; }
+}
+
 .active td { @extend .active; border-top: solid 1px darken($active, 10%); } //add the .active style to child table cells
 .table-hover tbody .active:hover > td { background-color: darken($active, 5%); } //override bootstrap hover styles for .active table cells
 
+.table {
+    .text-right { text-align: right; }
+    th { border-top: none; }
+}
+
+table.sortable {
+	th { cursor: pointer; }
+	th.sorted { font-color: $orange;
+	   &.desc { font-style: italic; }
+    }
+}
+
+td.name { width: 45%; }
+
+.order-items, .customer-orders {
+    tr:last-of-type td { font-weight: bold; }
+}
+
+.order-items {
+    ul { margin: 0; padding: 0; list-style-type: none; }
+    li { display: inline-block; margin: 0; padding: 0; 
+        &:before { content: '|'; padding-right: 5px; }
+        &:first-child::before { content: ''; padding-right: 0; }
+    }
+    a { font-size: 1.2em;}
+    input[type="checkbox"] { margin-top: 2px; }
+}
+
+.product-options {
+    td, th {
+        &:first-of-type { width: 30%; }
+    }
+    input[type="text"]{ margin-bottom: 0; }
+    small { display: block; color: #999; font-size: 11px; }
+}
 
 //Forms
-input[type="radio"], input[type="checkbox"] { margin-top: -2px; } //line up checkboxes with label text
-.input-append .add-on, .input-prepend .add-on { height: 14px; line-height: 14px; background: #ececec; } //fix umbraco's append & prepend input styles for merchello
+input[type="radio"], input[type="checkbox"] { margin-top: -2px; //line up checkboxes with label text
+    td & { margin-top: 2px; }
+    &[disabled="disabled"] {
+        + span { color: #CCCCCC; font-style: italic; }
+    }
+}
+
+.input-append .add-on, .input-prepend .add-on { background: #ececec; } //fix umbraco's append & prepend input styles for merchello
 
 .label-checkbox { margin: 5px 0; }
 
 .form-horizontal { 
-    .controls { padding-top: 6px; }
+    .controls { padding-top: 6px; 
+        &[class*="span"]:first-child { margin-left: 180px; }
+    }
     .form-control { padding: 1px 5px; border: solid 1px #ccc; }
 }
 
+.edit-address {
+    form { margin: 0; }
+    .controls-row { margin-left: 0 !important; }
+    input, select { margin-top: 10px; }
+    //select.region {width: 22%; }
+}
+
+.radio-group {
+    + .open { margin-top: 1.5em; }
+}
 
 // Tags
-.tags { margin: 10px 0;
-    .tag { border-radius: 6px; background-color: #EFEFEF; border: 1px solid #DDD; padding: 5px; margin-right: 10px; 
-        &:hover { color: red; text-decoration: none;
-        }
+.tags { display: inline-block; width: 48%; vertical-align: top; float: right;
+    .tag { display: inline-block; border-radius: 6px; background-color: lighten($green, 30%); border: 1px solid $green; color: green; padding: 3px 5px; margin: 0 10px 5px 0; cursor: pointer;
+        &:hover { color: $orange; text-decoration: none; border-color: $orange; background: lighten($orange, 30%); }
+        &:after { content: "\e1a4"; padding-left: 5px; font-family: 'icomoon'; line-height: 20px; vertical-align: top; }
     }
+    + input[type="text"] { width: 30%; }
+}
+
+// Address Formatting
+.vcard {
+    .photo { border: solid 3px $green; max-width: 30%; }
+    .pull-right { margin-top: 15px; line-height: 15px; }
+}
+.org, .street-address, .extended-address, .country-name, .email { display: block; }
+.adr { display: block; margin-bottom: 1em; }
+
+//Order Page
+.date-time { display: block; margin-left: 20px; color: #b3b3b3; font-variant: small-caps; }
+.notes { margin: 0; padding: 0; list-style-type: none; 
+    li { padding-top: 30px; margin-top: 20px; border-top: dashed 1px darken(#f8f8f8, 10%);
+        &:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+    }
+    #new { color: lighten($orange, 10%);
+        blockquote { border-left-color: $orange; }
+        .date-time { color: lighten($orange, 20%); }
+    }
+}
+
+//Customer Page
+.customer-details {
+    ul { margin: 0; padding: 0; list-style-type: none; }
+}
+
+.gravatar { margin-bottom: 10px; color: $green;
+    *[class*="span"] { float: none; display: inline-block; vertical-align: middle; }
+    .span3 { width: 23%; }
+    .span7 { padding-left: 2%; }
+    img { border: solid 3px $green; }
 }

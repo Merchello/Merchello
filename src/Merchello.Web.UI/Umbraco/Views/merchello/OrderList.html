@@ -68,14 +68,28 @@
                 <table class="table table-hover merchello-selectable-table">
                     <thead>
                         <tr>
-                            <th><input type="checkbox" /></th>
-                            <th>Order</th>
+                            <th><input type="checkbox" /></th> <!-- Toggles the bulk action dropdown -->
+                            <th>Order #</th>
                             <th>Date</th>
                             <th>Customer</th>
                             <th>Payment Status</th>
                             <th>Fulfillment Status</th>
                             <th>Total</th>
                         </tr>
+                        <!-- Displays the bulk action button & dropdown menu when the checkbox is selected, which replaces normal heading TR -->
+                        <!--<tr>
+                            <th><input type="checkbox" /></th>
+                            <th colspan="6">
+                                <div class="btn-group">
+                                    <a href="#" class="btn dropdown-toggle" data-toggle="dropdown">Bulk Action (3 Variants) <i class="icon-navigation-down"></i></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#">Capture Payments</a></li>
+                                        <li><a href="#">Print Packing Slips</a></li>
+                                        <li><a href="#">Mark as Shipped</a></li>
+                                    </ul>
+                                </div>
+                            </th>
+                        </tr>-->
                     </thead>
                     <tbody>
                         <tr>

@@ -22,6 +22,7 @@ namespace Merchello.Web.Editors
     public class ProductApiController : MerchelloApiController
     {
         private IProductService _productService;
+        private IProductVariantService _productVariantService;
 
         /// <summary>
         /// Constructor
@@ -50,6 +51,7 @@ namespace Merchello.Web.Editors
             : base(merchelloContext, umbracoContext)
         {
             _productService = MerchelloContext.Services.ProductService;
+            _productVariantService = MerchelloContext.Services.ProductVariantService;
             //AutoMapper.Mapper.CreateMap<ProductDisplay, Product>();
             AutoMapper.Mapper.CreateMap<IProduct, ProductDisplay>();
         }
@@ -143,13 +145,13 @@ namespace Merchello.Web.Editors
         /// </summary>
         /// <param name="item"></param>
         [AcceptVerbs("GET","POST")]
-        public ProductDisplay NewProduct(string sku, string name, decimal price)
+        public ProductDisplay NewProduct(string name, string sku, decimal price)
         {
             Product newProduct = null;
 
             try
             {
-                newProduct = _productService.CreateProductWithKey(sku, name, price) as Product;
+                newProduct = _productService.CreateProductWithKey(name, sku, price) as Product;
             }
             catch (Exception ex)
             {
@@ -204,6 +206,35 @@ namespace Merchello.Web.Editors
             _productService.Delete(productToDelete);
 
             return Request.CreateResponse(HttpStatusCode.OK);
+        }
+
+        /// <summary>
+        /// Creates a product variant from Sku, Name, Price
+        ///
+        /// GET /umbraco/Merchello/ProductApi/NewProductVariant?key={guid}&attributes=[]
+        /// </summary>
+        /// <param name="item"></param>
+        //[AcceptVerbs("GET", "POST")]
+        public IProductVariant NewProductVariant(IProductVariant productVariant)
+        {
+            IProductVariant newProductVariant = null;
+
+            try
+            {
+                var product = _productService.GetByKey(productVariant.ProductKey);
+                var productAttributes = new ProductAttributeCollection();
+                foreach (var attribute in productVariant.Attributes)
+                {
+                    productAttributes.Add(attribute);
+                }
+                newProductVariant = _productVariantService.CreateProductVariantWithId(product, productAttributes, true);
+            }
+            catch (Exception ex)
+            {
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);
+            }
+
+            return newProductVariant;
         }
     }
 }
