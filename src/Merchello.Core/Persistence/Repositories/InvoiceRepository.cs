@@ -78,7 +78,7 @@ namespace Merchello.Core.Persistence.Repositories
             sql.Select(isCount ? "COUNT(*)" : "*")
                .From<InvoiceDto>()
                .InnerJoin<CustomerDto>()
-               .On<InvoiceDto, CustomerDto>(left => left.CustomerKey, right => right.Key)
+               .On<InvoiceDto, CustomerDto>(left => left.CustomerId, right => right.Id)
                .InnerJoin<InvoiceStatusDto>()
                .On<InvoiceDto, InvoiceStatusDto>(left => left.InvoiceStatusId, right => right.Id);
 

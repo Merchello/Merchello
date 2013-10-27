@@ -19,18 +19,18 @@ namespace Merchello.Tests.UnitTests.Querying
         public void Can_Verify_Customer_Base_Clause()
         {
             //// Arrange
-            var key = Guid.NewGuid();
+            var id = 10;
 
             var expected = new Sql();
             expected.Select("*")
                 .From("[merchCustomer]")
-                .Where("[merchCustomer].[pk] = '" + key.ToString() + "'");
+                .Where("[merchCustomer].[id] = " + id.ToString());
 
             //// Act
             var sql = new Sql();
             sql.Select("*")
                 .From<CustomerDto>()
-                .Where<CustomerDto>(x => x.Key == key);
+                .Where<CustomerDto>(x => x.Id == id);
 
             //// Assert
             Assert.That(sql.SQL, Is.EqualTo(expected.SQL));
@@ -67,18 +67,18 @@ namespace Merchello.Tests.UnitTests.Querying
         public void Can_Verify_A_Customer_Count_Query()
         {
             //// Arrange
-            var key = Guid.Empty;
+            var id = 10;
 
             var expected = new Sql();
             expected.Select("COUNT(*)")
                     .From("[merchCustomer]")
-                    .Where("[merchCustomer].[pk] <> '" + key.ToString() + "'");
+                    .Where("[merchCustomer].[id] <> " + id.ToString());
 
             //// Act
             var sql = new Sql();
             sql.Select("COUNT(*)")
                 .From<CustomerDto>()
-                .Where<CustomerDto>(x => x.Key != Guid.Empty);
+                .Where<CustomerDto>(x => x.Id != id);
 
             //var query = Query<ICustomer>.Builder.Where(x => x.Key != Guid.Empty);
             //var translated = TranslateQuery(sql, query);

@@ -13,7 +13,7 @@ namespace Merchello.Core.Models
     {
         
         private ICustomer _customer;
-        private Guid _customerKey;
+        private int _customerId;
         private Guid _providerKey;
         private Guid _paymentTypeFieldKey;
         private string _paymentMethodName;
@@ -33,12 +33,12 @@ namespace Merchello.Core.Models
             Mandate.ParameterNotNull(customer, "customer");
            
             _customer = customer;
-            _customerKey = customer.Key;            
+            _customerId = customer.Id;            
             _amount = amount;
             _paymentTypeFieldKey = paymentTypeFieldKey;
         }        
 
-        private static readonly PropertyInfo CustomerKeySelector = ExpressionHelper.GetPropertyInfo<Payment, Guid>(x => x.CustomerKey); 
+        private static readonly PropertyInfo CustomerIdSelector = ExpressionHelper.GetPropertyInfo<Payment, int>(x => x.CustomerId); 
         private static readonly PropertyInfo ProviderKeySelector = ExpressionHelper.GetPropertyInfo<Payment, Guid>(x => x.ProviderKey);  
         private static readonly PropertyInfo PaymentTypeFieldKeySelector = ExpressionHelper.GetPropertyInfo<Payment, Guid>(x => x.PaymentTypeFieldKey);  
         private static readonly PropertyInfo PaymentMethodNameSelector = ExpressionHelper.GetPropertyInfo<Payment, string>(x => x.PaymentMethodName);  
@@ -52,16 +52,16 @@ namespace Merchello.Core.Models
         /// The customerKey associated with the Payment
         /// </summary>
         [IgnoreDataMember]
-        public Guid CustomerKey
+        public int CustomerId
         {
-            get { return _customer.Key; }
+            get { return _customer.Id; }
             internal set
             {
                 SetPropertyValueAndDetectChanges(o =>
                 {
-                    _customerKey = value;
-                    return _customerKey;
-                }, _customerKey, CustomerKeySelector);
+                    _customerId = value;
+                    return _customerId;
+                }, _customerId, CustomerIdSelector);
             }
         }
     
@@ -76,7 +76,7 @@ namespace Merchello.Core.Models
             {
                 Mandate.ParameterNotNull(value, "value");
                 _customer = value;
-                CustomerKey = _customer.Key;
+                CustomerId = _customer.Id;
             }
         }
 

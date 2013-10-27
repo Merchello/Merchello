@@ -104,10 +104,9 @@ namespace Merchello.Tests.UnitTests.Services
         public void Delete_Triggers_Events_And_Customer_Is_Passed()
         {
             //// Arrange
-            var key = Guid.NewGuid();
             var customer =  MockCustomerDataMaker
                             .CustomerForInserting()
-                            .MockSavedWithKey(key);
+                            .MockSavedWithId(111);
 
             //// Act
             _customerService.Delete(customer);
@@ -124,8 +123,7 @@ namespace Merchello.Tests.UnitTests.Services
         public void Delete_Is_Committed()
         {
             //// Arrange
-            var key = Guid.NewGuid();
-            var customer = MockCustomerDataMaker.CustomerForInserting().MockSavedWithKey(key);
+            var customer = MockCustomerDataMaker.CustomerForInserting().MockSavedWithId(111);
 
             //// Act
             _customerService.Delete(customer);

@@ -47,7 +47,7 @@ namespace Merchello.Web
             if (cachedKey != null)
             {
                 var key = (Guid) cachedKey;
-                var customer = _cache.RuntimeCache.GetCacheItem(CachingBacker.ConsumerCacheKey(key));
+                var customer = _cache.RuntimeCache.GetCacheItem(CachingBacker.CostumerCacheKey(key));
                 if (customer != null) return;
                 TryGetCustomer(key);
                 return;
@@ -83,7 +83,7 @@ namespace Merchello.Web
         /// <param name="key">The key of the customer to retrieve</param>
         private void TryGetCustomer(Guid key)
         {
-            ICustomerBase customer = (CustomerBase)_cache.RuntimeCache.GetCacheItem(CachingBacker.ConsumerCacheKey(key));
+            ICustomerBase customer = (CustomerBase)_cache.RuntimeCache.GetCacheItem(CachingBacker.CostumerCacheKey(key));
             
             // check the cache for a previously retrieved customer
             if (customer != null)
@@ -99,7 +99,7 @@ namespace Merchello.Web
                 var member = Member.GetCurrentMember();
 
                 customer = _customerService.GetByMemberId(member.Id) ??
-                               _customerService.CreateCustomerWithKey(member.Id);
+                               _customerService.CreateCustomerWithId(member.Id);
 
                 CacheCustomer(customer);
                 CurrentCustomer = customer;
@@ -126,15 +126,15 @@ namespace Merchello.Web
         /// </summary>
         private void CreateAnonymousCustomer()
         {
-            var customer = _customerService.CreateAnonymousCustomerWithKey();
+            var customer = _customerService.CreateAnonymousCustomerWithId();
             CurrentCustomer = customer;
             CacheCustomer(customer);
         }
 
-        private void CacheCustomer(IEntity customer)
+        private void CacheCustomer(ICustomerBase customer)
         {
-            _cache.RequestCache.GetCacheItem(ConsumerCookieKey, () => customer.Key);
-            _cache.RuntimeCache.GetCacheItem(CachingBacker.ConsumerCacheKey(customer.Key), () => customer, TimeSpan.FromMinutes(5), true);
+            _cache.RequestCache.GetCacheItem(ConsumerCookieKey, () => customer.EntityKey);
+            _cache.RuntimeCache.GetCacheItem(CachingBacker.CostumerCacheKey(customer.EntityKey), () => customer, TimeSpan.FromMinutes(5), true);
         }
     }
 }

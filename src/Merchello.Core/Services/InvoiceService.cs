@@ -231,15 +231,15 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
-        /// Gets a list of <see cref="IInvoice"/> objects give a customer key
+        /// Gets a list of <see cref="IInvoice"/> objects give a customer id
         /// </summary>
-        /// <param name="key">Unique customer key (Guid)</param>
+        /// <param name="id">Unique customer id</param>
         /// <returns>A collection of <see cref="IInvoice"/></returns>
-        public IEnumerable<IInvoice> GetInvoicesByCustomer(Guid key)
+        public IEnumerable<IInvoice> GetInvoicesByCustomer(int id)
         {
             using (var repository = _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))
             {
-                var query = Query<IInvoice>.Builder.Where(x => x.CustomerKey == key);
+                var query = Query<IInvoice>.Builder.Where(x => x.CustomerId == id);
                 return repository.GetByQuery(query);
             }
         }

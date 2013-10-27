@@ -27,7 +27,7 @@ namespace Merchello.Tests.UnitTests.Querying
             var expected = new Sql();
             expected.Select("*")
                 .From("[merchInvoice]")
-                .InnerJoin("[merchCustomer]").On("[merchCustomer].[pk] = [merchInvoice].[customerKey]")
+                .InnerJoin("[merchCustomer]").On("[merchCustomer].[id] = [merchInvoice].[customerId]")
                 .InnerJoin("[merchInvoiceStatus]").On("[merchInvoiceStatus].[id] = [merchInvoice].[invoiceStatusId]")
                 .Where("[merchInvoice].[id] = " + id.ToString());
 
@@ -36,7 +36,7 @@ namespace Merchello.Tests.UnitTests.Querying
             sql.Select("*")
                 .From<InvoiceDto>()
                 .InnerJoin<CustomerDto>()
-                .On<CustomerDto, InvoiceDto>(left => left.Key, right => right.CustomerKey)
+                .On<CustomerDto, InvoiceDto>(left => left.Id, right => right.CustomerId)
                 .InnerJoin<InvoiceStatusDto>()
                 .On<InvoiceStatusDto, InvoiceDto>(left => left.Id, right => right.InvoiceStatusId)
                 .Where<InvoiceDto>(x => x.Id == id);
@@ -52,18 +52,18 @@ namespace Merchello.Tests.UnitTests.Querying
         public void Can_Verify_Sql_For_Invoices_By_Customer_Query()
         {
             //// Arrange
-            var key = new Guid("E7ADD433-DF59-42AC-B195-BAF0E4F4392A");
+            var id = 10;
 
             var expected = new Sql();
             expected.Select("*")
                 .From("[merchInvoice]")
-                .Where("[merchInvoice].[customerKey] = '" + key.ToString() + "'");
+                .Where("[merchInvoice].[customerId] = " + id.ToString());
 
             //// Act
             var sql = new Sql();
             sql.Select("*")
                 .From<InvoiceDto>()
-                .Where<InvoiceDto>(x => x.CustomerKey == key);
+                .Where<InvoiceDto>(x => x.CustomerId == id);
 
 
             //// Assert

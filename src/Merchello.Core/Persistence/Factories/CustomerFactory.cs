@@ -9,7 +9,8 @@ namespace Merchello.Core.Persistence.Factories
         {
             var customer = new Customer(dto.TotalInvoiced, dto.TotalPayments, dto.LastPaymentDate)
                 {
-                    Key = dto.Key,
+                    Id = dto.Id,
+                    EntityKey = dto.EntityKey,
                     MemberId = dto.MemberId,
                     FirstName = dto.FirstName,
                     LastName = dto.LastName,
@@ -27,7 +28,7 @@ namespace Merchello.Core.Persistence.Factories
         {
             var dto = new CustomerDto()
                 {
-                    Key = entity.Key,
+                    Id = entity.Id,
                     MemberId = entity.MemberId == 0 || entity.MemberId == null ? null : entity.MemberId,
                     FirstName = entity.FirstName,
                     LastName = entity.LastName,
@@ -35,6 +36,7 @@ namespace Merchello.Core.Persistence.Factories
                     TotalInvoiced = entity.TotalInvoiced,
                     TotalPayments = entity.TotalPayments,
                     LastPaymentDate = entity.LastPaymentDate,
+                    EntityKey = entity.EntityKey,
                     UpdateDate = entity.UpdateDate,
                     CreateDate = entity.CreateDate
                 };

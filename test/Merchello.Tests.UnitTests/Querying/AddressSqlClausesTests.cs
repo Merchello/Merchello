@@ -46,18 +46,18 @@ namespace Merchello.Tests.UnitTests.Querying
         public void Can_Verify_Sql_For_Address_By_Customer_Query()
         {
             //// Arrange
-            var key = new Guid("E7ADD433-DF59-42AC-B195-BAF0E4F4392A");
+            var id = 10;
 
             var expected = new Sql();
             expected.Select("*")
                 .From("[merchCustomerAddress]")
-                .Where("[merchCustomerAddress].[customerKey] = '" + key.ToString() + "'");
+                .Where("[merchCustomerAddress].[customerId] = " + id.ToString());
 
             //// Act
             var sql = new Sql();
             sql.Select("*")
                 .From<CustomerAddressDto>()
-                .Where<CustomerAddressDto>(x => x.CustomerKey == key);
+                .Where<CustomerAddressDto>(x => x.CustomerId == id);
 
             
             //// Assert

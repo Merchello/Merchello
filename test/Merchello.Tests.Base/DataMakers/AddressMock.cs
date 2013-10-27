@@ -16,7 +16,7 @@ namespace Merchello.Tests.Base.DataMakers
 
         public ICustomerAddress MakeAddress(ICustomer customer, string label)
         {
-            return new CustomerAddress(customer.Key, label)
+            return new CustomerAddress(customer.Id, label)
             {
                 FullName = string.Format("{0} {1}", customer.FirstName, customer.LastName).Trim(),
                 Address1 = this.Address1,

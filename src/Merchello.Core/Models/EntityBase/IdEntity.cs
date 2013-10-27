@@ -14,7 +14,6 @@ namespace Merchello.Core.Models.EntityBase
     [DebuggerDisplay("Id: {Id}")]
     public abstract class IdEntity : Entity
     {        
-       
         /// <summary>
         /// Locks down the Key value
         /// </summary>
@@ -37,7 +36,5 @@ namespace Merchello.Core.Models.EntityBase
 
             return false;
         }
-
-
     }
 }

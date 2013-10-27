@@ -13,7 +13,7 @@ namespace Merchello.Web.Cache
         /// </summary>
         /// <param name="customerKey"></param>
         /// <returns></returns>
-        public static string ConsumerCacheKey(Guid customerKey)
+        public static string CostumerCacheKey(Guid customerKey)
         {
             return string.Format("merchello.consumer.{0}", customerKey);   
         }

@@ -301,7 +301,7 @@ namespace Merchello.Tests.UnitTests.WebControllers
 			Invoice invoice = CreateFakeInvoice(id, key);
 
 
-			var customer = new Customer(100.00m, 100.00m, DateTime.Now);			 
+			var customer = new AnonymousCustomer(100.00m, 100.00m, DateTime.Now);			 
 				customer.FirstName = "John";
 				customer.LastName = "Jones";
 				customer.Email = "john.jones@gmail.com";
@@ -368,7 +368,7 @@ namespace Merchello.Tests.UnitTests.WebControllers
 		/// <returns></returns>
 		private Invoice CreateFakeInvoice(int id, Guid key)
 		{
-			var customer = new Customer(100.00m, 100.00m, DateTime.Now)
+			var customer = new AnonymousCustomer(100.00m, 100.00m, DateTime.Now)
 			{
 				FirstName = "John",
 				LastName = "Jones",

@@ -16,7 +16,7 @@ namespace Merchello.Core.Models
         private string _invoiceNumber;
         private DateTime _invoiceDate;
         private ICustomer _customer;
-        private Guid _customerKey;
+        private int _customerId;
         private IInvoiceStatus _invoiceStatus;
         private int _invoiceStatusId;
         private string _billToName;
@@ -56,7 +56,7 @@ namespace Merchello.Core.Models
         private static readonly PropertyInfo OrderIdSelector = ExpressionHelper.GetPropertyInfo<Invoice, int?>(x => x.OrderId);
         private static readonly PropertyInfo InvoiceNumberSelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.InvoiceNumber);  
         private static readonly PropertyInfo InvoiceDateSelector = ExpressionHelper.GetPropertyInfo<Invoice, DateTime>(x => x.InvoiceDate);
-        private static readonly PropertyInfo CustomerKeySelector = ExpressionHelper.GetPropertyInfo<Invoice, Guid>(x => x.CustomerKey);
+        private static readonly PropertyInfo CustomerIdSelector = ExpressionHelper.GetPropertyInfo<Invoice, int>(x => x.CustomerId);
         private static readonly PropertyInfo InvoiceStatusIdSelector = ExpressionHelper.GetPropertyInfo<Invoice, int>(x => x.InvoiceStatusId);
         private static readonly PropertyInfo BillToNameSelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.BillToName);  
         private static readonly PropertyInfo BillToAddress1Selector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.BillToAddress1);  
@@ -94,16 +94,16 @@ namespace Merchello.Core.Models
         /// The customer key associated with the Invoice
         /// </summary>
         [IgnoreDataMember]
-        public Guid CustomerKey
+        public int CustomerId
         {
-            get { return _customerKey; }
+            get { return _customerId; }
             internal set
             {
                 SetPropertyValueAndDetectChanges(o =>
                     {
-                        _customerKey = value;
-                        return _customerKey;
-                    }, _customerKey, CustomerKeySelector);
+                        _customerId = value;
+                        return _customerId;
+                    }, _customerId, CustomerIdSelector);
 
             }
         }
@@ -118,7 +118,7 @@ namespace Merchello.Core.Models
             internal set
             {
                 _customer = value;
-                CustomerKey = _customer.Key;
+                CustomerId = _customer.Id;
             }
         }
 

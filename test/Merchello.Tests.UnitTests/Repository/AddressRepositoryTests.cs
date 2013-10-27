@@ -23,7 +23,7 @@ namespace Merchello.Tests.UnitTests.Repository
         public void Save_Calls_Insert()
         {
             //// Arrange
-            var address = MockAddressDataMaker.AddressForInserting();
+            var address = MockCustomerAddressDataMaker.CustomerAddressForInserting(10);
 
             //// Act
             _repository.AddOrUpdate(address);
@@ -37,7 +37,7 @@ namespace Merchello.Tests.UnitTests.Repository
         {
             //// Arrange
             var id = 111;
-            var address = MockAddressDataMaker.AddressForInserting().MockSavedWithId(id);
+            var address = MockCustomerAddressDataMaker.CustomerAddressForInserting(id).MockSavedWithId(id);
 
             //// Act
             _repository.AddOrUpdate(address);
@@ -51,7 +51,7 @@ namespace Merchello.Tests.UnitTests.Repository
         {
             //// Arrange
             var id = 111;
-            var address = MockAddressDataMaker.AddressForInserting().MockSavedWithId(id);
+            var address = MockCustomerAddressDataMaker.CustomerAddressForInserting(id).MockSavedWithId(id);
 
             //// Act
             _repository.Delete(address);

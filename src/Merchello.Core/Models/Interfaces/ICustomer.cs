@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using Merchello.Core.Models.EntityBase;
 
 namespace Merchello.Core.Models
 {
     /// <summary>
     /// Defines a Merchello customer
     /// </summary>
-    public interface ICustomer : ICustomerBase
+    public interface ICustomer : ICustomerBase, IIdEntity
     {
        
         /// <summary>
@@ -38,6 +39,16 @@ namespace Merchello.Core.Models
         /// </summary>
         [DataMember]
         int? MemberId { get; set; }
+
+        /// <summary>
+        /// 
+        /// The entity key of the customer
+        /// </summary>
+        /// <remarks>
+        /// The should eventual be refactored to simply use the "Entity.Key" 
+        /// </remarks>
+        [DataMember]
+        Guid EntityKey { get; set; }
 
         /// <summary>
         /// The total amount this customer has been invoiced

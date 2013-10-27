@@ -1,14 +1,15 @@
-﻿using Merchello.Core.Events;
+﻿using Merchello.Core.ConversionStrategies;
+using Merchello.Core.Events;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Umbraco.Core.Events;
 
-namespace Merchello.Core.ConversionStrategies
+namespace Merchello.Core.Strategies.Customer
 {
     /// <summary>
     /// Strategy to convert an anonymous customer into a new customer
     /// </summary>
-    public class AnonymousCustomerToNewCustomerStrategy : BaseAnonymousCustomerConversionStrategy, IAnonymousCustomerConversionStrategy
+    public class AnonymousCustomerConversionStrategy : BaseAnonymousCustomerConversionStrategy, IAnonymousCustomerConversionStrategy
     {
 
         private readonly IAnonymousCustomer _anonymous;
@@ -17,7 +18,7 @@ namespace Merchello.Core.ConversionStrategies
         private readonly string _email;
         
         
-        public AnonymousCustomerToNewCustomerStrategy(IAnonymousCustomer anonymous, string firstName, string lastName, string email, ICustomerService customerService)
+        public AnonymousCustomerConversionStrategy(IAnonymousCustomer anonymous, string firstName, string lastName, string email, ICustomerService customerService)
             : base(customerService)
         {
             _anonymous = anonymous;
@@ -30,10 +31,10 @@ namespace Merchello.Core.ConversionStrategies
         public ICustomer ConvertToCustomer()
         {
 
-            Converting.RaiseEvent(new ConvertEventArgs<IAnonymousCustomer>(_anonymous), this);
+            Converting.RaiseEvent(new ConvertEventArgs<IAnonymousCustomer>(_anonymous), this) ;
 
             var customer = CustomerService.CreateCustomer(_firstName, _lastName, _email);
-            customer.Key = _anonymous.Key;
+            customer.EntityKey = _anonymous.Key;
             CustomerService.Save(customer);
 
             Converted.RaiseEvent(new ConvertEventArgs<ICustomer>(customer), this);
@@ -41,18 +42,22 @@ namespace Merchello.Core.ConversionStrategies
             return customer;
         }
 
-        
+        public IItemCache ConvertBasket()
+        {
+            throw new System.NotImplementedException();
+        }
+
         #region Events
 
         /// <summary>
         /// Occurs before Converting anonymous users to customer
         /// </summary>
-        public static event TypedEventHandler<AnonymousCustomerToNewCustomerStrategy, ConvertEventArgs<IAnonymousCustomer>> Converting;
+        public static event TypedEventHandler<AnonymousCustomerConversionStrategy, ConvertEventArgs<IAnonymousCustomer>> Converting;
 
         /// <summary>
         /// Occurs after Converting anonymous users to customer
         /// </summary>
-        public static event TypedEventHandler<AnonymousCustomerToNewCustomerStrategy, ConvertEventArgs<ICustomer>> Converted;
+        public static event TypedEventHandler<AnonymousCustomerConversionStrategy, ConvertEventArgs<ICustomer>> Converted;
 
         #endregion
     }

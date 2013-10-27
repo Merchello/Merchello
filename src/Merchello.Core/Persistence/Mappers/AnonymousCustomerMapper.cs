@@ -4,7 +4,7 @@ using Merchello.Core.Models.Rdbms;
 namespace Merchello.Core.Persistence.Mappers
 {
     /// <summary>
-    /// Represents a <see cref="AnonymousCustomer"/> to DTO mapper used to translate the properties of the public api 
+    /// Represents a <see cref="Merchello.Core.Models.AnonymousCustomer"/> to DTO mapper used to translate the properties of the public api 
     /// implementation to that of the database's DTO as sql: [tableName].[columnName].
     /// </summary>
     internal sealed class AnonymousCustomerMapper : MerchelloBaseMapper

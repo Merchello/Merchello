@@ -31,7 +31,7 @@ namespace Merchello.Core.Persistence.Factories
             var dto = new PaymentDto()
             {
                 Id = entity.Id,                
-                CustomerKey = entity.CustomerKey,
+                CustomerId = entity.CustomerId,
                 ProviderKey = entity.ProviderKey,
                 PaymentTfKey = entity.PaymentTypeFieldKey,
                 PaymentMethodName = entity.PaymentMethodName,

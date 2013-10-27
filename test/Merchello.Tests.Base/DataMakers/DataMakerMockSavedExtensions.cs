@@ -104,10 +104,12 @@ namespace Merchello.Tests.Base.DataMakers
 
         #region KeyEntity
 
-        public static ICustomer MockSavedWithKey(this ICustomer entity, Guid key)
+        public static ICustomer MockSavedWithId(this ICustomer entity, int id)
         {
-            ((KeyEntity)entity).UpdatingEntity();
-            entity.Key = key;
+            ((IdEntity)entity).UpdatingEntity();
+            entity.Key = Guid.NewGuid();
+            entity.EntityKey = Guid.NewGuid();
+            entity.Id = id;
             entity.ResetDirtyProperties();
             return entity;
         }
@@ -120,10 +122,10 @@ namespace Merchello.Tests.Base.DataMakers
             return entity;
         }
 
-        public static IProductVariant MockSavedWithKey(this IProductVariant entity, Guid key)
+        public static IProductVariant MockSavedWithId(this IProductVariant entity, int id)
         {
-            ((KeyEntity)entity).UpdatingEntity();
-            entity.Key = key;
+            ((IdEntity)entity).UpdatingEntity();
+            entity.Id = id;
             entity.ResetDirtyProperties();
             return entity;
         }

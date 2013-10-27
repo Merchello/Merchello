@@ -19,7 +19,7 @@ namespace Merchello.Tests.UnitTests.Models
         public void Init()
         {
             _customer = new AnonymousCustomer() { Key = Guid.NewGuid() };
-            _itemCache = new ItemCache(_customer.Key, ItemCacheType.Basket) {Id = 111};
+            _itemCache = new ItemCache(_customer.EntityKey, ItemCacheType.Basket) {Id = 111};
 
             _product = MockProductDataMaker.MockProductComplete(Guid.NewGuid());            
 
