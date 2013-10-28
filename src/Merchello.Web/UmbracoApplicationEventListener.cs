@@ -38,7 +38,7 @@ namespace Merchello.Web
                 Log.Error("Initialization of Merchello failed - no merchello.config file found", ex);
             }
 
-            ProductService.Created += {}
+            
         }
         
     }

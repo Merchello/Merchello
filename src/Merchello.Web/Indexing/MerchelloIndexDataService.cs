@@ -14,7 +14,7 @@ namespace Merchello.Web.Indexing
 {
     public class MerchelloIndexDataService : ISimpleDataService
     {
-        private IProductService _productService;
+        private readonly IProductService _productService;
 
         public MerchelloIndexDataService()
             : this(MerchelloContext.Current)
