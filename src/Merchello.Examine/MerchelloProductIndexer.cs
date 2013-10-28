@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security;
@@ -10,7 +9,6 @@ using Examine.LuceneEngine.Config;
 using Lucene.Net.Analysis;
 using Merchello.Core.Models;
 using Merchello.Examine.DataServices;
-using UmbracoExamine.Config;
 
 
 namespace Merchello.Examine
