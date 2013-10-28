@@ -1,10 +1,13 @@
-﻿using log4net;
+﻿using System.Net.Mime;
+using log4net;
 using Merchello.Core;
 using System;
 using System.IO;
 using System.Reflection;
+using Merchello.Core.Services;
 using umbraco.interfaces;
 using Umbraco.Core;
+using Umbraco.Web;
 
 namespace Merchello.Web
 {
@@ -17,6 +20,8 @@ namespace Merchello.Web
             LogManager.GetLogger(
                 MethodBase.GetCurrentMethod().DeclaringType
             );
+
+
 
         protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
@@ -32,6 +37,9 @@ namespace Merchello.Web
             {
                 Log.Error("Initialization of Merchello failed - no merchello.config file found", ex);
             }
+
+            
         }
+        
     }
 }
