@@ -4,6 +4,7 @@ using System.Security;
 using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
+using Merchello.Examine.Providers;
 
 namespace Merchello.Examine.DataServices
 {

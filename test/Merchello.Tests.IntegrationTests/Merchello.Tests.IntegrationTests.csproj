@@ -265,7 +265,7 @@
     <Compile Include="Services\ServiceIntegrationTestBase.cs" />
     <Compile Include="Services\WarehouseServiceTests.cs" />
     <Compile Include="TestHelpers\DbPreTestDataWorker.cs" />
-    <Compile Include="TestHelpers\ExamineDataServices.cs" />
+    <Compile Include="TestHelpers\TestMerchelloDataService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

@@ -10,14 +10,12 @@ using Lucene.Net.Analysis;
 using Merchello.Core.Models;
 using Merchello.Examine.DataServices;
 
-
-namespace Merchello.Examine
+namespace Merchello.Examine.Providers
 {
     public class MerchelloProductIndexer : BaseMerchelloIndexer
     {
 
         public MerchelloProductIndexer()
-            :base()
         {}
 
                 /// <summary>
@@ -74,6 +72,21 @@ namespace Merchello.Examine
         }
 
 
+        public override void RebuildIndex()
+        {
+            DataService.LogService.AddVerboseLog(-1, "Rebuilding index");
+            base.RebuildIndex();
+        }
+
+
+        public void AddProductToIndex(IProduct product)
+        {
+            var nodes = new List<XElement>();
+            nodes.AddRange(product.SerializeToXml().Descendants("productVariant"));
+            AddNodesToIndex(nodes, IndexTypes.ProductVariant);
+        }
+
+
         protected override IEnumerable<string> SupportedTypes
         {
             get { return new[] { IndexTypes.ProductVariant }; }
@@ -104,12 +117,6 @@ namespace Merchello.Examine
             };
 
 
-        public override void RebuildIndex()
-        {
-            DataService.LogService.AddVerboseLog(-1, "Rebuilding index");
-            base.RebuildIndex();
-        }
-
         /// <summary>
         /// Creates an IIndexCriteria object based on the indexSet passed in and our DataService
         /// </summary>
@@ -131,7 +138,6 @@ namespace Merchello.Examine
 
         }
         
-
         /// <summary>
         /// return the index policy for the field name passed in, if not found, return normal
         /// </summary>

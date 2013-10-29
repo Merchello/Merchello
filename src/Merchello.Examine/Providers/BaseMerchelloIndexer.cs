@@ -6,15 +6,12 @@ using System.Linq;
 using System.Security;
 using System.Xml.Linq;
 using Examine;
-using Examine.LuceneEngine.Config;
 using Examine.LuceneEngine.Providers;
 using Lucene.Net.Analysis;
 using Merchello.Core;
 using Merchello.Examine.DataServices;
-using umbraco.interfaces;
-using UmbracoExamine.Config;
 
-namespace Merchello.Examine
+namespace Merchello.Examine.Providers
 {
     public abstract class BaseMerchelloIndexer : LuceneIndexer
     {
@@ -174,23 +171,23 @@ namespace Merchello.Examine
         #region Protected
 
         /// <summary>
-        /// Returns true if the Umbraco application is in a state that we can initialize the examine indexes
+        /// Returns true if the Merchello application is in a state that we can initialize the examine indexes
         /// </summary>
         /// <returns></returns>
         [SecuritySafeCritical]
         protected bool CanInitialize()
         {
             //check the DisableInitializationCheck and ensure that it is not set to true
-            //if (!DisableInitializationCheck.HasValue || !DisableInitializationCheck.Value)
-            //{
-            //    //We need to check if we actually can initialize, if not then don't continue
-            //    if (MerchelloContext.Current == null
-            //        || !MerchelloContext.Current.IsConfigured
-            //        || !MerchelloContext.Current.IsReady)
-            //    {
-            //        return false;
-            //    }
-            //}
+            if (!DisableInitializationCheck.HasValue || !DisableInitializationCheck.Value)
+            {
+                //We need to check if we actually can initialize, if not then don't continue
+                if (MerchelloContext.Current == null
+                    || !MerchelloContext.Current.IsConfigured
+                    || !MerchelloContext.Current.IsReady)
+                {
+                    return false;
+                }
+            }
 
             return true;
         }

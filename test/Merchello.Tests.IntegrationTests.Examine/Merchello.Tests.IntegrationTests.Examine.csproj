@@ -201,7 +201,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Indexer\ProductIndexerTests.cs" />
+    <Compile Include="Provider\ProductProductTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -218,6 +218,10 @@
     <ProjectReference Include="..\..\src\Merchello.Examine\Merchello.Examine.csproj">
       <Project>{28a665a9-2aad-4230-ab8c-0f0b0f1b2115}</Project>
       <Name>Merchello.Examine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Merchello.Tests.Base\Merchello.Tests.Base.csproj">
+      <Project>{AC1A12FD-34CD-488A-90A1-528DE5941C33}</Project>
+      <Name>Merchello.Tests.Base</Name>
     </ProjectReference>
     <ProjectReference Include="..\Merchello.Tests.IntegrationTests\Merchello.Tests.IntegrationTests.csproj">
       <Project>{7efa61bd-198a-4cd9-8176-c266fd1d4e1d}</Project>
