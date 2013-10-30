@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Merchello.Core</id>
-    <version>0.9.3.0</version>
+    <version>0.9.4.0</version>
     <title>Merchello Core Binaries</title>
     <authors>Rusty Swayne, Joe Payne, Jason Prothero</authors>
     <owners>Meritage, LLC.</owners>
@@ -15,7 +15,7 @@
     <language>en-US</language>
     <tags>umbraco, merchello</tags>
     <dependencies>
-      <dependency id="UmbracoCms.Core" version="6.1.3" />
+      <dependency id="UmbracoCms.Core" version="7.0.0-nightly132" />
     </dependencies>
   </metadata>
   <files>
@@ -23,5 +23,9 @@
     <file src="..\Temp\bin\Merchello.Core.pdb" target="lib\net40\Merchello.Core.pdb" />
     <file src="..\Temp\bin\Merchello.Web.dll" target="lib\net40\Merchello.Web.dll" />
     <file src="..\Temp\bin\Merchello.Web.pdb" target="lib\net40\Merchello.Web.pdb" />
+	<file src="..\Temp\bin\Merchello.Web.UI.dll" target="lib\net40\Merchello.Web.UI.dll" />
+    <file src="..\Temp\bin\Merchello.Web.UI.pdb" target="lib\net40\Merchello.Web.UI.pdb" />
+	<file src="..\Temp\bin\Merchello.Examine.dll" target="lib\net40\Merchello.Examine.dll" />
+    <file src="..\Temp\bin\Merchello.Examine.pdb" target="lib\net40\Merchello.Examine.pdb" />
   </files>
 </package>
