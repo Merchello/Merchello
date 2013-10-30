@@ -196,7 +196,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Providers\BaseIndexer.cs" />
+    <Compile Include="Providers\BaseMerchelloIndexer.cs" />
     <Compile Include="DataServices\IDataService.cs" />
     <Compile Include="DataServices\IIndexDataService.cs" />
     <Compile Include="DataServices\ILogService.cs" />

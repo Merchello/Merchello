@@ -6,6 +6,9 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using Formatting = Newtonsoft.Json.Formatting;
 
 namespace Merchello.Core.Models
 {
@@ -141,12 +144,12 @@ namespace Merchello.Core.Models
                     writer.WriteAttributeString("shippable", productVariant.Shippable.ToString());
                     writer.WriteAttributeString("download", productVariant.Download.ToString());
                     writer.WriteAttributeString("downloadMediaId", productVariant.DownloadMediaId.ToString());
+                    writer.WriteAttributeString("totalInventoryCount", productVariant.TotalInventoryCount.ToString());
+                    writer.WriteAttributeString("attributes", GetAttributesJson(productVariant));
                     writer.WriteAttributeString("createDate", productVariant.CreateDate.ToString());
-                    writer.WriteAttributeString("updateDate", productVariant.UpdateDate.ToString());
+                    writer.WriteAttributeString("updateDate", productVariant.UpdateDate.ToString());                    
                     writer.WriteAttributeString("allDocs", "1");
-
                     
-
                     writer.WriteStartElement("warehouses");
                     foreach (var warehouse in productVariant.Warehouses)
                     {
@@ -168,36 +171,30 @@ namespace Merchello.Core.Models
             return XDocument.Parse(xml); 
         }
 
-        private static XDocument GetAttributesXml(IProductVariant productVariant)
+
+
+        private static string GetAttributesJson(IProductVariant productVariant)
         {
 
-            string xml;
-            using (var sw = new StringWriter())
-            {
-                using (var writer = new XmlTextWriter(sw))
-                {
-                    writer.WriteStartDocument();
-                    // attributes
-                    writer.WriteStartElement("attributes");
-                    foreach (var attribute in productVariant.Attributes)
-                    {
-                        writer.WriteStartElement("attribute");
-                        writer.WriteAttributeString("id", attribute.Id.ToString(CultureInfo.InvariantCulture));
-                        writer.WriteAttributeString("optionId",
-                                                    attribute.OptionId.ToString(CultureInfo.InvariantCulture));
-                        writer.WriteAttributeString("name", attribute.Name);
-                        writer.WriteAttributeString("sku", attribute.Sku);
-                        writer.WriteAttributeString("sortOrder",
-                                                    attribute.SortOrder.ToString(CultureInfo.InvariantCulture));
-                        writer.WriteEndElement(); // end attribute
-                    }
-                    writer.WriteEndElement(); // product attributes
-                    writer.WriteEndDocument();
 
-                    xml = sw.ToString();
-                }
+            var json = "[{0}]";
+            var atts = "";
+
+            foreach (var attribute in productVariant.Attributes)
+            {
+                if (atts.Length > 0) atts += ",";
+                atts += JsonConvert.SerializeObject(
+                new 
+                { 
+                    optionId = attribute.OptionId,
+                    name = attribute.Name,
+                    sku = attribute.Sku,
+                    sortOrder = attribute.SortOrder                    
+                }, 
+                Formatting.None);
             }
-            return XDocument.Parse(xml);
+            json = string.Format(json, atts);
+            return json;
         }
 
         #endregion

@@ -13,7 +13,7 @@ using Merchello.Examine.DataServices;
 
 namespace Merchello.Examine.Providers
 {
-    public class ProductIndexer : BaseIndexer
+    public class ProductIndexer : BaseMerchelloIndexer
     {
 
         public ProductIndexer()
@@ -75,7 +75,8 @@ namespace Merchello.Examine.Providers
         /// Adds all variants for a given product to the index
         /// </summary>
         /// <param name="product"></param>
-        public void AddProductToIndex(IProduct product)
+        /// <remarks>For testing</remarks>
+        internal void AddProductToIndex(IProduct product)
         {
             var nodes = new List<XElement>();
             nodes.AddRange(product.SerializeToXml().Descendants("productVariant"));
@@ -86,7 +87,8 @@ namespace Merchello.Examine.Providers
         /// Removes all variants for a given product from the index
         /// </summary>
         /// <param name="product"></param>
-        public void DeleteProductFromIndex(IProduct product)
+        /// <remarks>For testing</remarks>
+        internal void DeleteProductFromIndex(IProduct product)
         {
             var ids = product.ProductVariants.Select(x => x.Id).ToList();
             ids.Add(((Product) product).MasterVariant.Id);
@@ -126,6 +128,8 @@ namespace Merchello.Examine.Providers
                 new StaticField("download", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
                 new StaticField("downloadMediaId", FieldIndexTypes.NOT_ANALYZED, false, "NUMBER"),
                 new StaticField("master", FieldIndexTypes.ANALYZED, false, string.Empty),
+                new StaticField("totalInventoryCount", FieldIndexTypes.NOT_ANALYZED, false, "NUMBER"),
+                new StaticField("attributes", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
                 new StaticField("createDate", FieldIndexTypes.NOT_ANALYZED, false, "DATETIME"),
                 new StaticField("updateDate", FieldIndexTypes.NOT_ANALYZED, false, "DATETIME"),
                 new StaticField("allDocs", FieldIndexTypes.ANALYZED, false, string.Empty)
