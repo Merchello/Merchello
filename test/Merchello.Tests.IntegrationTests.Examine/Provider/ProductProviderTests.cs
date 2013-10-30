@@ -15,36 +15,40 @@ using Umbraco.Core.Persistence.DatabaseAnnotations;
 namespace Merchello.Tests.IntegrationTests.Examine.Provider
 {
     [TestFixture]
-    public class ProductProductTests : ServiceIntegrationTestBase
+    public class ProductProviderTests : ServiceIntegrationTestBase
     {
-        private const int ProductCount = 100;
+        private const int ProductCount = 10;
         private IProductService _productService;
-        private IProduct _randomProduct;
-
+        
         [SetUp]
         public void Init()
         {
             _productService = PreTestDataWorker.ProductService;
-           // PreTestDataWorker.DeleteAllProducts();            
-
-           // var products = MockProductDataMaker.MockProductCollectionForInserting(ProductCount);
-           //_productService.Save(products);
-
-           //_randomProduct = products.OrderBy(x => Guid.NewGuid()).First();
         }
 
         [Test]
         public void Can_Index_Products()
         {
             //// Arrange
-            BaseMerchelloIndexer.DisableInitializationCheck = true;
+            PreTestDataWorker.DeleteAllProducts();
+            var products = MockProductDataMaker.MockProductCollectionForInserting(ProductCount);
+            _productService.Save(products);
+
+            //// Act
+            BaseIndexer.DisableInitializationCheck = true;
             var timer = new Stopwatch();
             timer.Start();
             ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"].RebuildIndex();            
             timer.Stop();
-
-           //// Act
             Console.Write("Time to index: " + timer.Elapsed.ToString());
+            
+            //// Assert
+            var searcher = ExamineManager.Instance.SearchProviderCollection["MerchelloProductSearcher"];
+            var criteria = searcher.CreateSearchCriteria(Merchello.Examine.IndexTypes.ProductVariant);
+            criteria.Field("allDocs", "1");
+            var results = searcher.Search(criteria);
+
+            Assert.AreEqual(products.Count(), results.Count());
 
         }
 
@@ -52,20 +56,19 @@ namespace Merchello.Tests.IntegrationTests.Examine.Provider
         public void Can_Add_A_New_Product_To_The_Index()
         {
             //// Arrange            
-            BaseMerchelloIndexer.DisableInitializationCheck = true;
-            var provider = (MerchelloProductIndexer) ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"];
+            BaseIndexer.DisableInitializationCheck = true;
+            var provider = (ProductIndexer) ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"];
 
-            MerchelloSearcher.DisableInitializationCheck = true;
             var searcher = ExamineManager.Instance.SearchProviderCollection["MerchelloProductSearcher"];
 
             //// Act
             var product = MockProductDataMaker.MockProductCollectionForInserting(1).First();
             _productService.Save(product);
             provider.AddProductToIndex(product);
+            
 
 
             //// Assert
-   
             var criteria = searcher.CreateSearchCriteria("productvariant", BooleanOperation.And);
             criteria.Field("productKey", product.Key.ToString()).And().Field("master", "true");
 

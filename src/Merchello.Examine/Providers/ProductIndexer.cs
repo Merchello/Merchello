@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Security;
@@ -12,10 +13,10 @@ using Merchello.Examine.DataServices;
 
 namespace Merchello.Examine.Providers
 {
-    public class MerchelloProductIndexer : BaseMerchelloIndexer
+    public class ProductIndexer : BaseIndexer
     {
 
-        public MerchelloProductIndexer()
+        public ProductIndexer()
         {}
 
                 /// <summary>
@@ -26,7 +27,7 @@ namespace Merchello.Examine.Providers
         /// <param name="dataService"></param>
         /// <param name="analyzer"></param>
 		[SecuritySafeCritical]
-		public MerchelloProductIndexer(IIndexCriteria indexerData, DirectoryInfo indexPath, IDataService dataService, Analyzer analyzer, bool async)
+		public ProductIndexer(IIndexCriteria indexerData, DirectoryInfo indexPath, IDataService dataService, Analyzer analyzer, bool async)
             : base(indexerData, indexPath, dataService, analyzer, async) { }
 
 		/// <summary>
@@ -38,7 +39,7 @@ namespace Merchello.Examine.Providers
 		/// <param name="analyzer"></param>
 		/// <param name="async"></param>
 		[SecuritySafeCritical]
-        public MerchelloProductIndexer(IIndexCriteria indexerData, Lucene.Net.Store.Directory luceneDirectory, IDataService dataService, Analyzer analyzer, bool async)
+        public ProductIndexer(IIndexCriteria indexerData, Lucene.Net.Store.Directory luceneDirectory, IDataService dataService, Analyzer analyzer, bool async)
 			: base(indexerData, luceneDirectory, dataService, analyzer, async) { }
         
 
@@ -63,14 +64,6 @@ namespace Merchello.Examine.Providers
             AddNodesToIndex(nodes, type);
         }
 
-        protected override void PerformIndexRebuild()
-        {
-            foreach (var t in SupportedTypes)
-            {
-                IndexAll(t);
-            }
-        }
-
 
         public override void RebuildIndex()
         {
@@ -78,7 +71,10 @@ namespace Merchello.Examine.Providers
             base.RebuildIndex();
         }
 
-
+        /// <summary>
+        /// Adds all variants for a given product to the index
+        /// </summary>
+        /// <param name="product"></param>
         public void AddProductToIndex(IProduct product)
         {
             var nodes = new List<XElement>();
@@ -86,6 +82,20 @@ namespace Merchello.Examine.Providers
             AddNodesToIndex(nodes, IndexTypes.ProductVariant);
         }
 
+        /// <summary>
+        /// Removes all variants for a given product from the index
+        /// </summary>
+        /// <param name="product"></param>
+        public void DeleteProductFromIndex(IProduct product)
+        {
+            var ids = product.ProductVariants.Select(x => x.Id).ToList();
+            ids.Add(((Product) product).MasterVariant.Id);
+            
+            foreach (var id in ids)
+            {
+                DeleteFromIndex(id.ToString());
+            }
+        }
 
         protected override IEnumerable<string> SupportedTypes
         {
@@ -102,9 +112,11 @@ namespace Merchello.Examine.Providers
                 new StaticField("price", FieldIndexTypes.ANALYZED, true, "DOUBLE"),
                 new StaticField("onSale", FieldIndexTypes.ANALYZED, true, string.Empty),
                 new StaticField("salePrice", FieldIndexTypes.NOT_ANALYZED, true, "DOUBLE"),
+                new StaticField("costOfGoods", FieldIndexTypes.NOT_ANALYZED, false, "DOUBLE"),
                 new StaticField("weight", FieldIndexTypes.NOT_ANALYZED, false, "DOUBLE"),
                 new StaticField("length", FieldIndexTypes.NOT_ANALYZED, false, "DOUBLE"),
                 new StaticField("height", FieldIndexTypes.NOT_ANALYZED, false, "DOUBLE"),
+                new StaticField("width", FieldIndexTypes.NOT_ANALYZED, false, "DOUBLE"),
                 new StaticField("barcode", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),                
                 new StaticField("available", FieldIndexTypes.ANALYZED, false, string.Empty),
                 new StaticField("trackInventory", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
@@ -113,7 +125,10 @@ namespace Merchello.Examine.Providers
                 new StaticField("shippable", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
                 new StaticField("download", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
                 new StaticField("downloadMediaId", FieldIndexTypes.NOT_ANALYZED, false, "NUMBER"),
-                new StaticField("master", FieldIndexTypes.ANALYZED, false, string.Empty)
+                new StaticField("master", FieldIndexTypes.ANALYZED, false, string.Empty),
+                new StaticField("createDate", FieldIndexTypes.NOT_ANALYZED, false, "DATETIME"),
+                new StaticField("updateDate", FieldIndexTypes.NOT_ANALYZED, false, "DATETIME"),
+                new StaticField("allDocs", FieldIndexTypes.ANALYZED, false, string.Empty)
             };
 
 

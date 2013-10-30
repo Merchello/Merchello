@@ -141,23 +141,11 @@ namespace Merchello.Core.Models
                     writer.WriteAttributeString("shippable", productVariant.Shippable.ToString());
                     writer.WriteAttributeString("download", productVariant.Download.ToString());
                     writer.WriteAttributeString("downloadMediaId", productVariant.DownloadMediaId.ToString());
-                    writer.WriteAttributeString("createDate", productVariant.CreateDate.ToString("yyyy-MM-dd-HH:mm:ss"));
-                    writer.WriteAttributeString("updateDate", productVariant.UpdateDate.ToString("yyyy-MM-dd-HH:mm:ss"));
+                    writer.WriteAttributeString("createDate", productVariant.CreateDate.ToString());
+                    writer.WriteAttributeString("updateDate", productVariant.UpdateDate.ToString());
+                    writer.WriteAttributeString("allDocs", "1");
 
-                    // attributes
-                    writer.WriteStartElement("attributes");
-                    foreach (var attribute in productVariant.Attributes)
-                    {
-                        writer.WriteStartElement("attribute");
-                        writer.WriteAttributeString("id", attribute.Id.ToString(CultureInfo.InvariantCulture));
-                        writer.WriteAttributeString("optionId", attribute.OptionId.ToString(CultureInfo.InvariantCulture));
-                        writer.WriteAttributeString("name", attribute.Name);
-                        writer.WriteAttributeString("sku", attribute.Sku);
-                        writer.WriteAttributeString("sortOrder", attribute.SortOrder.ToString(CultureInfo.InvariantCulture));
-                        writer.WriteEndElement(); // end attribute
-                    }                    
-                    writer.WriteEndElement(); // product attributes
-
+                    
 
                     writer.WriteStartElement("warehouses");
                     foreach (var warehouse in productVariant.Warehouses)
@@ -178,6 +166,38 @@ namespace Merchello.Core.Models
             }
 
             return XDocument.Parse(xml); 
+        }
+
+        private static XDocument GetAttributesXml(IProductVariant productVariant)
+        {
+
+            string xml;
+            using (var sw = new StringWriter())
+            {
+                using (var writer = new XmlTextWriter(sw))
+                {
+                    writer.WriteStartDocument();
+                    // attributes
+                    writer.WriteStartElement("attributes");
+                    foreach (var attribute in productVariant.Attributes)
+                    {
+                        writer.WriteStartElement("attribute");
+                        writer.WriteAttributeString("id", attribute.Id.ToString(CultureInfo.InvariantCulture));
+                        writer.WriteAttributeString("optionId",
+                                                    attribute.OptionId.ToString(CultureInfo.InvariantCulture));
+                        writer.WriteAttributeString("name", attribute.Name);
+                        writer.WriteAttributeString("sku", attribute.Sku);
+                        writer.WriteAttributeString("sortOrder",
+                                                    attribute.SortOrder.ToString(CultureInfo.InvariantCulture));
+                        writer.WriteEndElement(); // end attribute
+                    }
+                    writer.WriteEndElement(); // product attributes
+                    writer.WriteEndDocument();
+
+                    xml = sw.ToString();
+                }
+            }
+            return XDocument.Parse(xml);
         }
 
         #endregion

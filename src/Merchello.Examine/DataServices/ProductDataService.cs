@@ -34,7 +34,7 @@ namespace Merchello.Examine.DataServices
         /// <returns></returns>
         public IEnumerable<string> GetIndexFieldNames()
         {
-            return MerchelloProductIndexer.IndexFieldPolicies.Select(x => x.Name);
+            return ProductIndexer.IndexFieldPolicies.Select(x => x.Name);
         }
 
     }

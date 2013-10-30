@@ -201,7 +201,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Provider\ProductProductTests.cs" />
+    <Compile Include="Provider\ProductProviderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

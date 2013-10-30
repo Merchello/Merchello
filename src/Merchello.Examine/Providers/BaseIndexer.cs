@@ -13,12 +13,12 @@ using Merchello.Examine.DataServices;
 
 namespace Merchello.Examine.Providers
 {
-    public abstract class BaseMerchelloIndexer : LuceneIndexer
+    public abstract class BaseIndexer : LuceneIndexer
     {
 
         #region Constructors
 
-        protected BaseMerchelloIndexer()
+        protected BaseIndexer()
             : base()
         { }
 
@@ -32,14 +32,14 @@ namespace Merchello.Examine.Providers
         /// <param name="analyzer"></param>
         /// <param name="async"></param>
         [SecuritySafeCritical]
-        protected BaseMerchelloIndexer(IIndexCriteria indexerData, DirectoryInfo indexPath, IDataService dataService, Analyzer analyzer, bool async)
+        protected BaseIndexer(IIndexCriteria indexerData, DirectoryInfo indexPath, IDataService dataService, Analyzer analyzer, bool async)
             : base(indexerData, indexPath, analyzer, async)
         {
             DataService = dataService;
         }
 
         [SecuritySafeCritical]
-        protected BaseMerchelloIndexer(IIndexCriteria indexerData, Lucene.Net.Store.Directory luceneDirectory, IDataService dataService, Analyzer analyzer, bool async)
+        protected BaseIndexer(IIndexCriteria indexerData, Lucene.Net.Store.Directory luceneDirectory, IDataService dataService, Analyzer analyzer, bool async)
 			: base(indexerData, luceneDirectory, analyzer, async)
 		{
 			DataService = dataService;
@@ -127,6 +127,7 @@ namespace Merchello.Examine.Providers
                 base.RebuildIndex();
             }
         }
+        
 
         /// <summary>
         /// override to check if we can actually initialize. 
@@ -203,7 +204,6 @@ namespace Merchello.Examine.Providers
                 IndexAll(t);
             }
         }
-
 
         #endregion
 
