@@ -21,12 +21,12 @@
             has already been initialized.</exception>
             <exception cref="T:System.ArgumentException">The name of the provider has a length of zero.</exception>
         </member>
-        <member name="M:umbraco.providers.members.UmbracoMembershipProvider.ChangePassword(System.String,System.String,System.String)">
+        <member name="M:umbraco.providers.members.UmbracoMembershipProvider.PerformChangePassword(System.String,System.String,System.String)">
             <summary>
             Processes a request to update the password for a membership user.
             </summary>
             <param name="username">The user to update the password for.</param>
-            <param name="oldPassword">The current password for the specified user.</param>
+            <param name="oldPassword">This property is ignore for this provider</param>
             <param name="newPassword">The new password for the specified user.</param>
             <returns>
             true if the password was updated successfully; otherwise, false.
@@ -189,8 +189,6 @@
         <member name="M:umbraco.providers.members.UmbracoMembershipProvider.UpdateUser(System.Web.Security.MembershipUser)">
             <summary>
             Updates e-mail and potentially approved status, lock status and comment on a user.
-            Note: To automatically support lock, approve and comments you'll need to add references to the membertype properties in the 
-            'Member' element in web.config by adding their aliases to the 'umbracoApprovePropertyTypeAlias', 'umbracoLockPropertyTypeAlias' and 'umbracoCommentPropertyTypeAlias' attributes
             </summary>
             <param name="user">A <see cref="T:System.Web.Security.MembershipUser"></see> object that represents the user to update and the updated information for the user.</param>
         </member>
@@ -240,82 +238,25 @@
             <param name="m">The m.</param>
             <returns></returns>
         </member>
-        <member name="P:umbraco.providers.members.UmbracoMembershipProvider.ApplicationName">
+        <member name="P:umbraco.providers.members.UmbracoMembershipProvider.DefaultMinNonAlphanumericChars">
             <summary>
-            The name of the application using the custom membership provider.
+            Override to maintain backwards compatibility with 0 required non-alphanumeric chars
             </summary>
-            <value></value>
-            <returns>The name of the application using the custom membership provider.</returns>
         </member>
-        <member name="P:umbraco.providers.members.UmbracoMembershipProvider.EnablePasswordReset">
+        <member name="P:umbraco.providers.members.UmbracoMembershipProvider.DefaultMinPasswordLength">
             <summary>
-            Indicates whether the membership provider is configured to allow users to reset their passwords.
+            Override to maintain backwards compatibility with only 4 required length
             </summary>
-            <value></value>
-            <returns>true if the membership provider supports password reset; otherwise, false. The default is true.</returns>
         </member>
-        <member name="P:umbraco.providers.members.UmbracoMembershipProvider.EnablePasswordRetrieval">
+        <member name="P:umbraco.providers.members.UmbracoMembershipProvider.DefaultUseLegacyEncoding">
             <summary>
-            Indicates whether the membership provider is configured to allow users to retrieve their passwords.
+            Override to maintain backwards compatibility
             </summary>
-            <value></value>
-            <returns>true if the membership provider is configured to support password retrieval; otherwise, false. The default is false.</returns>
         </member>
-        <member name="P:umbraco.providers.members.UmbracoMembershipProvider.MaxInvalidPasswordAttempts">
+        <member name="P:umbraco.providers.members.UmbracoMembershipProvider.AllowManuallyChangingPassword">
             <summary>
-            Gets the number of invalid password or password-answer attempts allowed before the membership user is locked out.
+            For backwards compatibility, this provider supports this option
             </summary>
-            <value></value>
-            <returns>The number of invalid password or password-answer attempts allowed before the membership user is locked out.</returns>
-        </member>
-        <member name="P:umbraco.providers.members.UmbracoMembershipProvider.MinRequiredNonAlphanumericCharacters">
-            <summary>
-            Gets the minimum number of special characters that must be present in a valid password.
-            </summary>
-            <value></value>
-            <returns>The minimum number of special characters that must be present in a valid password.</returns>
-        </member>
-        <member name="P:umbraco.providers.members.UmbracoMembershipProvider.MinRequiredPasswordLength">
-            <summary>
-            Gets the minimum length required for a password.
-            </summary>
-            <value></value>
-            <returns>The minimum length required for a password. </returns>
-        </member>
-        <member name="P:umbraco.providers.members.UmbracoMembershipProvider.PasswordAttemptWindow">
-            <summary>
-            Gets the number of minutes in which a maximum number of invalid password or password-answer attempts are allowed before the membership user is locked out.
-            </summary>
-            <value></value>
-            <returns>The number of minutes in which a maximum number of invalid password or password-answer attempts are allowed before the membership user is locked out.</returns>
-        </member>
-        <member name="P:umbraco.providers.members.UmbracoMembershipProvider.PasswordFormat">
-            <summary>
-            Gets a value indicating the format for storing passwords in the membership data store.
-            </summary>
-            <value></value>
-            <returns>One of the <see cref="T:System.Web.Security.MembershipPasswordFormat"></see> values indicating the format for storing passwords in the data store.</returns>
-        </member>
-        <member name="P:umbraco.providers.members.UmbracoMembershipProvider.PasswordStrengthRegularExpression">
-            <summary>
-            Gets the regular expression used to evaluate a password.
-            </summary>
-            <value></value>
-            <returns>A regular expression used to evaluate a password.</returns>
-        </member>
-        <member name="P:umbraco.providers.members.UmbracoMembershipProvider.RequiresQuestionAndAnswer">
-            <summary>
-            Gets a value indicating whether the membership provider is configured to require the user to answer a password question for password reset and retrieval.
-            </summary>
-            <value></value>
-            <returns>true if a password answer is required for password reset and retrieval; otherwise, false. The default is true.</returns>
-        </member>
-        <member name="P:umbraco.providers.members.UmbracoMembershipProvider.RequiresUniqueEmail">
-            <summary>
-            Gets a value indicating whether the membership provider is configured to require a unique e-mail address for each user name.
-            </summary>
-            <value></value>
-            <returns>true if the membership provider requires a unique e-mail address; otherwise, false. The default is true.</returns>
         </member>
         <member name="M:umbraco.providers.members.UmbracoProfileProvider.GetPropertyValues(System.Configuration.SettingsContext,System.Configuration.SettingsPropertyCollection)">
             <summary>
@@ -523,19 +464,7 @@
             Custom Membership Provider for Umbraco Users (User authentication for Umbraco Backend CMS)  
             </summary>
         </member>
-        <member name="M:umbraco.providers.UsersMembershipProvider.Initialize(System.String,System.Collections.Specialized.NameValueCollection)">
-            <summary>
-            Initializes the provider.
-            </summary>
-            <param name="name">The friendly name of the provider.</param>
-            <param name="config">A collection of the name/value pairs representing the provider-specific attributes specified in the configuration for this provider.</param>
-            <exception cref="T:System.ArgumentNullException">The name of the provider is null.</exception>
-            <exception cref="T:System.InvalidOperationException">An attempt is made to call 
-            <see cref="M:System.Configuration.Provider.ProviderBase.Initialize(System.String,System.Collections.Specialized.NameValueCollection)"></see> on a provider after the provider 
-            has already been initialized.</exception>
-            <exception cref="T:System.ArgumentException">The name of the provider has a length of zero.</exception>
-        </member>
-        <member name="M:umbraco.providers.UsersMembershipProvider.ChangePassword(System.String,System.String,System.String)">
+        <member name="M:umbraco.providers.UsersMembershipProvider.PerformChangePassword(System.String,System.String,System.String)">
             <summary>
             Processes a request to update the password for a membership user.
             </summary>
@@ -545,6 +474,10 @@
             <returns>
             true if the password was updated successfully; otherwise, false.
             </returns>
+            <remarks>
+            During installation the application will not be configured, if this is the case and the 'default' password 
+            is stored in the database then we will validate the user - this will allow for an admin password reset if required
+            </remarks>
         </member>
         <member name="M:umbraco.providers.UsersMembershipProvider.ChangePasswordQuestionAndAnswer(System.String,System.String,System.String,System.String)">
             <summary>
@@ -729,82 +662,20 @@
             <param name="user">The user.</param>
             <returns></returns>
         </member>
-        <member name="P:umbraco.providers.UsersMembershipProvider.ApplicationName">
+        <member name="P:umbraco.providers.UsersMembershipProvider.DefaultMinNonAlphanumericChars">
             <summary>
-            The name of the application using the custom membership provider.
+            Override to maintain backwards compatibility with 0 required non-alphanumeric chars
             </summary>
-            <value></value>
-            <returns>The name of the application using the custom membership provider.</returns>
         </member>
-        <member name="P:umbraco.providers.UsersMembershipProvider.EnablePasswordReset">
+        <member name="P:umbraco.providers.UsersMembershipProvider.DefaultMinPasswordLength">
             <summary>
-            Indicates whether the membership provider is configured to allow users to reset their passwords.
+            Override to maintain backwards compatibility with only 4 required length
             </summary>
-            <value></value>
-            <returns>true if the membership provider supports password reset; otherwise, false. The default is true.</returns>
         </member>
-        <member name="P:umbraco.providers.UsersMembershipProvider.EnablePasswordRetrieval">
+        <member name="P:umbraco.providers.UsersMembershipProvider.DefaultUseLegacyEncoding">
             <summary>
-            Indicates whether the membership provider is configured to allow users to retrieve their passwords.
+            Override to maintain backwards compatibility
             </summary>
-            <value></value>
-            <returns>true if the membership provider is configured to support password retrieval; otherwise, false. The default is false.</returns>
-        </member>
-        <member name="P:umbraco.providers.UsersMembershipProvider.MaxInvalidPasswordAttempts">
-            <summary>
-            Gets the number of invalid password or password-answer attempts allowed before the membership user is locked out.
-            </summary>
-            <value></value>
-            <returns>The number of invalid password or password-answer attempts allowed before the membership user is locked out.</returns>
-        </member>
-        <member name="P:umbraco.providers.UsersMembershipProvider.MinRequiredNonAlphanumericCharacters">
-            <summary>
-            Gets the minimum number of special characters that must be present in a valid password.
-            </summary>
-            <value></value>
-            <returns>The minimum number of special characters that must be present in a valid password.</returns>
-        </member>
-        <member name="P:umbraco.providers.UsersMembershipProvider.MinRequiredPasswordLength">
-            <summary>
-            Gets the minimum length required for a password.
-            </summary>
-            <value></value>
-            <returns>The minimum length required for a password. </returns>
-        </member>
-        <member name="P:umbraco.providers.UsersMembershipProvider.PasswordAttemptWindow">
-            <summary>
-            Gets the number of minutes in which a maximum number of invalid password or password-answer attempts are allowed before the membership user is locked out.
-            </summary>
-            <value></value>
-            <returns>The number of minutes in which a maximum number of invalid password or password-answer attempts are allowed before the membership user is locked out.</returns>
-        </member>
-        <member name="P:umbraco.providers.UsersMembershipProvider.PasswordFormat">
-            <summary>
-            Gets a value indicating the format for storing passwords in the membership data store.
-            </summary>
-            <value></value>
-            <returns>One of the <see cref="T:System.Web.Security.MembershipPasswordFormat"></see> values indicating the format for storing passwords in the data store.</returns>
-        </member>
-        <member name="P:umbraco.providers.UsersMembershipProvider.PasswordStrengthRegularExpression">
-            <summary>
-            Gets the regular expression used to evaluate a password.
-            </summary>
-            <value></value>
-            <returns>A regular expression used to evaluate a password.</returns>
-        </member>
-        <member name="P:umbraco.providers.UsersMembershipProvider.RequiresQuestionAndAnswer">
-            <summary>
-            Gets a value indicating whether the membership provider is configured to require the user to answer a password question for password reset and retrieval.
-            </summary>
-            <value></value>
-            <returns>true if a password answer is required for password reset and retrieval; otherwise, false. The default is true.</returns>
-        </member>
-        <member name="P:umbraco.providers.UsersMembershipProvider.RequiresUniqueEmail">
-            <summary>
-            Gets a value indicating whether the membership provider is configured to require a unique e-mail address for each user name.
-            </summary>
-            <value></value>
-            <returns>true if the membership provider requires a unique e-mail address; otherwise, false. The default is true.</returns>
         </member>
         <member name="T:umbraco.providers.UsersMembershipUser">
             <summary>

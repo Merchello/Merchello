@@ -35,11 +35,6 @@
             </summary>
             <param name="cacheHelper"></param>
         </member>
-        <member name="T:Umbraco.Web.CacheHelperExtensions.CacheHelperApplicationEventListener">
-            <summary>
-            Application event handler to bind to events to clear the cache for the cache helper extensions
-            </summary>		
-        </member>
         <member name="T:Umbraco.Web.Cache.ApplicationCacheRefresher">
             <summary>
             Handles Application cache invalidation/refreshing
@@ -886,7 +881,7 @@
             <typeparam name="TPersisted"></typeparam>
             <param name="contentItem"></param>
         </member>
-        <member name="M:Umbraco.Web.Editors.ContentControllerBase.GetEntityFromRequest``1(System.Func{``0})">
+        <member name="M:Umbraco.Web.Editors.ContentControllerBase.GetObjectFromRequest``1(System.Func{``0})">
             <summary>
             A helper method to attempt to get the instance from the request storage if it can be found there,
             otherwise gets it from the callback specified
@@ -1184,6 +1179,13 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:Umbraco.Web.Editors.DataTypeController.DeleteById(System.Int32)">
+            <summary>
+            Deletes a data type wth a given ID
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
         <member name="M:Umbraco.Web.Editors.DataTypeController.GetPreValues(System.String,System.Int32)">
             <summary>
             Returns the pre-values for the specified property editor
@@ -1202,6 +1204,104 @@
         <member name="T:Umbraco.Web.Editors.DataTypeValidateAttribute">
             <summary>
             An action filter that wires up the persisted entity of the DataTypeSave model and validates the whole request
+            </summary>
+        </member>
+        <member name="T:Umbraco.Web.Models.ContentEditing.EntityTypeSearchResult">
+            <summary>
+            Represents a search result by entity type
+            </summary>
+        </member>
+        <member name="T:Umbraco.Web.Models.RenderModel">
+            <summary>
+            Represents the model for the current rendering page in Umbraco
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.Models.RenderModel.#ctor(Umbraco.Core.Models.IPublishedContent,System.Globalization.CultureInfo)">
+            <summary>
+            Constructor specifying both the IPublishedContent and the CultureInfo
+            </summary>
+            <param name="content"></param>
+            <param name="culture"></param>
+        </member>
+        <member name="M:Umbraco.Web.Models.RenderModel.#ctor(Umbraco.Core.Models.IPublishedContent)">
+            <summary>
+            Constructor to set the IPublishedContent and the CurrentCulture is set by the UmbracoContext
+            </summary>
+            <param name="content"></param>
+        </member>
+        <member name="P:Umbraco.Web.Models.RenderModel.Content">
+            <summary>
+            Returns the current IPublishedContent object
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Models.RenderModel.CurrentCulture">
+            <summary>
+            Returns the current Culture assigned to the page being rendered
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.Models.RenderModel`1.#ctor(`0,System.Globalization.CultureInfo)">
+            <summary>
+            Constructor specifying both the IPublishedContent and the CultureInfo
+            </summary>
+            <param name="content"></param>
+            <param name="culture"></param>
+        </member>
+        <member name="M:Umbraco.Web.Models.RenderModel`1.#ctor(`0)">
+            <summary>
+            Constructor to set the IPublishedContent and the CurrentCulture is set by the UmbracoContext
+            </summary>
+            <param name="content"></param>
+        </member>
+        <member name="P:Umbraco.Web.Models.RenderModel`1.Content">
+            <summary>
+            Returns the current IPublishedContent object
+            </summary>
+        </member>
+        <member name="T:Umbraco.Web.Mvc.UmbracoViewPage`1">
+            <summary>
+            The View that umbraco front-end views inherit from
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.Mvc.UmbracoViewPage`1.InitializePage">
+            <summary>
+            Ensure that the current view context is added to the route data tokens so we can extract it if we like
+            </summary>
+            <remarks>
+            Currently this is required by mvc macro engines
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.Mvc.UmbracoViewPage`1.WriteLiteral(System.Object)">
+            <summary>
+            This will detect the end /body tag and insert the preview badge if in preview mode
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="P:Umbraco.Web.Mvc.UmbracoViewPage`1.UmbracoContext">
+            <summary>
+            Returns the current UmbracoContext
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Mvc.UmbracoViewPage`1.ApplicationContext">
+            <summary>
+            Returns the current ApplicationContext
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Mvc.UmbracoViewPage`1.PublishedContentRequest">
+            <summary>
+            Returns the current PublishedContentRequest
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Mvc.UmbracoViewPage`1.Umbraco">
+            <summary>
+            Gets an UmbracoHelper
+            </summary>
+            <remarks>
+            This constructs the UmbracoHelper with the content model of the page routed to
+            </remarks>
+        </member>
+        <member name="P:Umbraco.Web.Mvc.UmbracoTemplatePage`1.CurrentPage">
+            <summary>
+            Returns the content as a dynamic object
             </summary>
         </member>
         <member name="T:Umbraco.Web.Editors.LogController">
@@ -1256,14 +1356,23 @@
             A simple utility class to extract the tag values from a property/property editor and set them on the content
             </summary>
         </member>
-        <member name="M:Umbraco.Web.Editors.TagExtractor.SetPropertyTags(Umbraco.Core.Models.IContentBase,Umbraco.Core.Models.Property,System.Object,Umbraco.Core.PropertyEditors.SupportTagsAttribute)">
+        <member name="M:Umbraco.Web.Editors.TagExtractor.SetPropertyTags(Umbraco.Core.Models.IContentBase,Umbraco.Core.Models.Property,Umbraco.Core.Models.Editors.ContentPropertyData,System.Object,Umbraco.Core.PropertyEditors.SupportTagsAttribute)">
             <summary>
             Sets the tag values on the content property based on the property editor's tags attribute
             </summary>
             <param name="content"></param>
             <param name="property"></param>
-            <param name="propertyValue"></param>
+            <param name="propertyData"></param>
+            <param name="convertedPropertyValue"></param>
             <param name="attribute"></param>
+        </member>
+        <member name="T:Umbraco.Web.Editors.UpdateCheckController.UpdateCheckResponseFilter">
+            <summary>
+            Adds the cookie response if it was successful
+            </summary>
+            <remarks>
+            A filter is required because we are returning an object from the get method and not an HttpResponseMessage
+            </remarks>
         </member>
         <member name="M:Umbraco.Web.MembershipProviderExtensions.GetConfiguration(System.Web.Security.MembershipProvider)">
             <summary>
@@ -1272,12 +1381,12 @@
             <param name="membershipProvider"></param>
             <returns></returns>
         </member>
-        <member name="T:Umbraco.Web.Models.ContentEditing.ChangePasswordModel">
+        <member name="T:Umbraco.Web.Models.ChangingPasswordModel">
             <summary>
             A model representing the data required to set a member/user password depending on the provider installed.
             </summary>
         </member>
-        <member name="P:Umbraco.Web.Models.ContentEditing.ChangePasswordModel.NewPassword">
+        <member name="P:Umbraco.Web.Models.ChangingPasswordModel.NewPassword">
             <summary>
             The password value
             </summary>
@@ -1285,24 +1394,45 @@
             This 
             </remarks>
         </member>
-        <member name="P:Umbraco.Web.Models.ContentEditing.ChangePasswordModel.OldPassword">
+        <member name="P:Umbraco.Web.Models.ChangingPasswordModel.OldPassword">
             <summary>
             The old password - used to change a password when: EnablePasswordRetrieval = false 
             </summary>
         </member>
-        <member name="P:Umbraco.Web.Models.ContentEditing.ChangePasswordModel.Reset">
+        <member name="P:Umbraco.Web.Models.ChangingPasswordModel.Reset">
             <summary>
             Set to true if the password is to be reset - only valid when: EnablePasswordReset = true
             </summary>
         </member>
-        <member name="P:Umbraco.Web.Models.ContentEditing.ChangePasswordModel.Answer">
+        <member name="P:Umbraco.Web.Models.ChangingPasswordModel.Answer">
             <summary>
             The password answer - required for reset when: RequiresQuestionAndAnswer = true 
             </summary>
         </member>
-        <member name="P:Umbraco.Web.Models.ContentEditing.ChangePasswordModel.GeneratedPassword">
+        <member name="P:Umbraco.Web.Models.ChangingPasswordModel.GeneratedPassword">
             <summary>
             This is filled in on the server side if the password has been reset/generated
+            </summary>
+        </member>
+        <member name="T:Umbraco.Web.Models.ContentEditing.ModelWithNotifications`1">
+            <summary>
+            A generic model supporting notifications, this is useful for returning any model type to include notifications from api controllers
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:Umbraco.Web.Models.ContentEditing.INotificationModel.Notifications">
+            <summary>
+            This is used to add custom localized messages/strings to the response for the app to use for localized UI purposes.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Models.ContentEditing.ModelWithNotifications`1.Value">
+            <summary>
+            The generic value
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Models.ContentEditing.ModelWithNotifications`1.Notifications">
+            <summary>
+            The notifications
             </summary>
         </member>
         <member name="T:Umbraco.Web.Editors.StylesheetController">
@@ -1380,6 +1510,11 @@
             The path of the entity
             </summary>
         </member>
+        <member name="P:Umbraco.Web.Models.ContentEditing.EntityBasic.AdditionalData">
+            <summary>
+            A collection of extra data that is available for this specific entity/entity type
+            </summary>
+        </member>
         <member name="P:Umbraco.Web.Models.ContentEditing.ContentItemBasic`2.PersistedContent">
             <summary>
             The real persisted content object
@@ -1407,11 +1542,6 @@
             <remarks>
             This property cannot be set
             </remarks>
-        </member>
-        <member name="P:Umbraco.Web.Models.ContentEditing.INotificationModel.Notifications">
-            <summary>
-            This is used to add custom localized messages/strings to the response for the app to use for localized UI purposes.
-            </summary>
         </member>
         <member name="P:Umbraco.Web.Models.ContentEditing.IErrorModel.Errors">
             <summary>
@@ -1444,6 +1574,13 @@
             
             NOTE: The ProperCase is important because when we return ModeState normally it will always be proper case.
             </remarks>
+        </member>
+        <member name="P:Umbraco.Web.Models.ContentEditing.MemberDisplay.MemberProviderFieldMapping">
+            <summary>
+            This is used to indicate how to map the membership provider properties to the save model, this mapping
+            will change if a developer has opted to have custom member property aliases specified in their membership provider config, 
+            or if we are editing a member that is not an Umbraco member (custom provider)
+            </summary>
         </member>
         <member name="T:Umbraco.Web.Models.ContentEditing.MemberSave">
             <summary>
@@ -1538,6 +1675,16 @@
         <member name="F:Umbraco.Web.Models.ContentEditing.UmbracoEntityTypes.DataType">
             <summary>
             Data Type
+            </summary>
+        </member>
+        <member name="F:Umbraco.Web.Models.ContentEditing.UmbracoEntityTypes.PropertyType">
+            <summary>
+            Property Type
+            </summary>
+        </member>
+        <member name="F:Umbraco.Web.Models.ContentEditing.UmbracoEntityTypes.PropertyGroup">
+            <summary>
+            Property Group
             </summary>
         </member>
         <member name="T:Umbraco.Web.Models.ContentEditing.AuditLogType">
@@ -1647,13 +1794,75 @@
             <param name="member"></param>
             <param name="display"></param>
         </member>
+        <member name="M:Umbraco.Web.Models.Mapping.MemberModelMapper.GetLoginProperty(Umbraco.Core.Models.IMember,Umbraco.Web.Models.ContentEditing.MemberDisplay)">
+            <summary>
+            Returns the login property display field
+            </summary>
+            <param name="member"></param>
+            <param name="display"></param>
+            <returns></returns>
+            <remarks>
+            If the membership provider installed is the umbraco membership provider, then we will allow changing the username, however if
+            the membership provider is a custom one, we cannot allow chaning the username because MembershipProvider's do not actually natively 
+            allow that.
+            </remarks>
+        </member>
         <member name="T:Umbraco.Web.Models.Mapping.MemberModelMapper.MemberDtoPropertiesValueResolver">
             <summary>
-            This ensures that the custom membership provider properties are not mapped (currently since they weren't there in v6)
+            This ensures that the custom membership provider properties are not mapped - these property values are controller by the membership provider
             </summary>
             <remarks>
             Because these properties don't exist on the form, if we don't remove them for this map we'll get validation errors when posting data
             </remarks>
+        </member>
+        <member name="T:Umbraco.Web.Models.Mapping.MemberModelMapper.MemberTabsAndPropertiesResolver">
+            <summary>
+            A custom tab/property resolver for members which will ensure that the built-in membership properties are or arent' displayed
+            depending on if the member type has these properties
+            </summary>
+            <remarks>
+            This also ensures that the IsLocked out property is readonly when the member is not locked out - this is because
+            an admin cannot actually set isLockedOut = true, they can only unlock. 
+            </remarks>
+        </member>
+        <member name="T:Umbraco.Web.Models.Mapping.TabsAndPropertiesResolver">
+            <summary>
+            Creates the tabs collection with properties assigned for display models
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.Models.Mapping.TabsAndPropertiesResolver.MapGenericProperties``1(``0,Umbraco.Web.Models.ContentEditing.ContentItemDisplayBase{Umbraco.Web.Models.ContentEditing.ContentPropertyDisplay,``0},Umbraco.Web.Models.ContentEditing.ContentPropertyDisplay[])">
+            <summary>
+            Maps properties on to the generic properties tab
+            </summary>
+            <param name="content"></param>
+            <param name="display"></param>
+            <param name="customProperties">
+            Any additional custom properties to assign to the generic properties tab. 
+            </param>
+            <remarks>
+            The generic properties tab is mapped during AfterMap and is responsible for 
+            setting up the properties such as Created date, udpated date, template selected, etc...
+            </remarks>
+        </member>
+        <member name="T:Umbraco.Web.Models.Mapping.MemberModelMapper.MemberProviderFieldMappingResolver">
+            <summary>
+            A resolver to map the provider field aliases
+            </summary>
+        </member>
+        <member name="T:Umbraco.Web.Models.PasswordChangedModel">
+            <summary>
+            A model representing an attempt at changing a password
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Models.PasswordChangedModel.ChangeError">
+            <summary>
+            The error affiliated with the failing password changes, null if changing was successful
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Models.PasswordChangedModel.ResetPassword">
+            <summary>
+            If the password was reset, this is the value it has been changed to
+            </summary>
         </member>
         <member name="T:Umbraco.Web.PropertyEditors.ValueListPreValueEditor">
             <summary>
@@ -1669,7 +1878,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.PropertyEditors.ValueListPreValueEditor.FormatDataForEditor(System.Collections.Generic.IDictionary{System.String,System.Object},Umbraco.Core.Models.PreValueCollection)">
+        <member name="M:Umbraco.Web.PropertyEditors.ValueListPreValueEditor.ConvertDbToEditor(System.Collections.Generic.IDictionary{System.String,System.Object},Umbraco.Core.Models.PreValueCollection)">
             <summary>
             The editor is expecting a json array for a field with a key named "items" so we need to format the persisted values
             to this format to be used in the editor.
@@ -1678,7 +1887,7 @@
             <param name="persistedPreVals"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.PropertyEditors.ValueListPreValueEditor.FormatDataForPersistence(System.Collections.Generic.IDictionary{System.String,System.Object},Umbraco.Core.Models.PreValueCollection)">
+        <member name="M:Umbraco.Web.PropertyEditors.ValueListPreValueEditor.ConvertEditorToDb(System.Collections.Generic.IDictionary{System.String,System.Object},Umbraco.Core.Models.PreValueCollection)">
             <summary>
             Need to format the delimited posted string to individual values
             </summary>
@@ -1709,12 +1918,48 @@
             Some objects such as macros are not based on CMSNode
             </remarks>
         </member>
+        <member name="M:Umbraco.Web.Editors.EntityController.SearchAll(System.String)">
+            <summary>
+            Searches for all content that the user is allowed to see (based on their allowed sections)
+            </summary>
+            <param name="query"></param>
+            <returns></returns>
+            <remarks>
+            Even though a normal entity search will allow any user to search on a entity type that they may not have access to edit, we need
+            to filter these results to the sections they are allowed to edit since this search function is explicitly for the global search 
+            so if we showed entities that they weren't allowed to edit they would get errors when clicking on the result.
+            
+            The reason a user is allowed to search individual entity types that they are not allowed to edit is because those search
+            methods might be used in things like pickers in the content editor.
+            </remarks>
+        </member>
         <member name="M:Umbraco.Web.Editors.EntityController.GetPath(System.Int32,Umbraco.Web.Models.ContentEditing.UmbracoEntityTypes)">
             <summary>
             Gets the path for a given node ID
             </summary>
             <param name="id"></param>
             <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Editors.EntityController.MemberFromSearchResults(Examine.ISearchResults)">
+            <summary>
+            Returns a collection of entities for media based on search results
+            </summary>
+            <param name="results"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Editors.EntityController.MediaFromSearchResults(Examine.ISearchResults)">
+            <summary>
+            Returns a collection of entities for media based on search results
+            </summary>
+            <param name="results"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Editors.EntityController.ContentFromSearchResults(Examine.ISearchResults)">
+            <summary>
+            Returns a collection of entities for content based on search results
+            </summary>
+            <param name="results"></param>
             <returns></returns>
         </member>
         <member name="M:Umbraco.Web.Editors.EntityController.GetResultForAll(Umbraco.Web.Models.ContentEditing.UmbracoEntityTypes,System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
@@ -1724,6 +1969,16 @@
             <param name="entityType"></param>
             <param name="postFilter">A string where filter that will filter the results dynamically with linq - optional</param>
             <param name="postFilterParams">the parameters to fill in the string where filter - optional</param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Editors.EntityController.ExecutePostFilter``1(System.Collections.Generic.IEnumerable{``0},System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Executes the post filter against a collection of objects
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="entities"></param>
+            <param name="postFilter"></param>
+            <param name="postFilterParams"></param>
             <returns></returns>
         </member>
         <member name="T:Umbraco.Web.Editors.MediaPostValidateAttribute">
@@ -1783,12 +2038,16 @@
             <returns>
             If the password has been reset then this method will return the reset/generated password, otherwise will return null.
             </returns>
+        </member>
+        <member name="M:Umbraco.Web.Editors.MemberController.HasMembershipUserChanged(System.Web.Security.MembershipUser,Umbraco.Web.Models.ContentEditing.MemberSave)">
+            <summary>
+            Quick check to see if the 'normal' settable properties for the membership provider have changed
+            </summary>
+            <param name="membershipUser"></param>
+            <param name="contentItem"></param>
+            <returns></returns>
             <remarks>
-            
-            YES! It is completely insane how many options you have to take into account based on the membership provider. yikes!        
-            
-            TODO We should move this logic to a central helper class so we can re-use it when it comes to integrating with WebSecurity
-            
+            By 'normal' we mean that they can simply be set on the membership user and don't require method calls like ChangePassword or UnlockUser
             </remarks>
         </member>
         <member name="M:Umbraco.Web.Editors.MemberController.CreateWithUmbracoProvider(Umbraco.Web.Models.ContentEditing.MemberSave,System.Web.Security.MembershipCreateStatus@)">
@@ -1828,12 +2087,14 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.Editors.UserController.PostChangePassword(Umbraco.Web.Models.ContentEditing.ChangePasswordModel)">
+        <member name="M:Umbraco.Web.Editors.UserController.PostChangePassword(Umbraco.Web.Models.ChangingPasswordModel)">
             <summary>
             Changes the users password
             </summary>
             <param name="data"></param>
-            <returns></returns>
+            <returns>
+            If the password is being reset it will return the newly reset password, otherwise will return an empty value
+            </returns>
         </member>
         <member name="M:Umbraco.Web.Editors.UserController.GetAll">
             <summary>
@@ -1945,6 +2206,14 @@
             <summary>
             Configure's model mappings for Data types
             </summary>
+        </member>
+        <member name="M:Umbraco.Web.Models.Mapping.PreValueDisplayResolver.MapPreValueValuesToPreValueFields(Umbraco.Web.Models.ContentEditing.PreValueFieldDisplay[],System.Collections.Generic.IDictionary{System.String,System.Object},System.Boolean)">
+            <summary>
+            Maps pre-values in the dictionary to the values for the fields
+            </summary>
+            <param name="fields"></param>
+            <param name="preValues"></param>
+            <param name="isDictionaryBased"></param>
         </member>
         <member name="T:Umbraco.Web.PropertyEditors.CheckBoxListPropertyEditor">
             <summary>
@@ -2066,7 +2335,7 @@
             This is mostly to maintain backwards compatibility with old property editors. Devs can now simply use the Drop down property editor and check the multiple pre-value checkbox
             </remarks>
         </member>
-        <member name="M:Umbraco.Web.PropertyEditors.DropDownMultipleWithKeysPropertyEditor.DropDownMultiplePreValueEditor.FormatDataForEditor(System.Collections.Generic.IDictionary{System.String,System.Object},Umbraco.Core.Models.PreValueCollection)">
+        <member name="M:Umbraco.Web.PropertyEditors.DropDownMultipleWithKeysPropertyEditor.DropDownMultiplePreValueEditor.ConvertDbToEditor(System.Collections.Generic.IDictionary{System.String,System.Object},Umbraco.Core.Models.PreValueCollection)">
             <summary>
             Always
             </summary>
@@ -2085,7 +2354,7 @@
             A custom pre-value editor class to deal with the legacy way that the pre-value data is stored.
             </summary>
         </member>
-        <member name="M:Umbraco.Web.PropertyEditors.MultipleTextStringPropertyEditor.MultipleTextStringPreValueEditor.FormatDataForPersistence(System.Collections.Generic.IDictionary{System.String,System.Object},Umbraco.Core.Models.PreValueCollection)">
+        <member name="M:Umbraco.Web.PropertyEditors.MultipleTextStringPropertyEditor.MultipleTextStringPreValueEditor.ConvertEditorToDb(System.Collections.Generic.IDictionary{System.String,System.Object},Umbraco.Core.Models.PreValueCollection)">
             <summary>
             Need to change how we persist the values so they are compatible with the legacy way we store values
             </summary>
@@ -2093,7 +2362,7 @@
             <param name="currentValue"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.PropertyEditors.MultipleTextStringPropertyEditor.MultipleTextStringPreValueEditor.FormatDataForEditor(System.Collections.Generic.IDictionary{System.String,System.Object},Umbraco.Core.Models.PreValueCollection)">
+        <member name="M:Umbraco.Web.PropertyEditors.MultipleTextStringPropertyEditor.MultipleTextStringPreValueEditor.ConvertDbToEditor(System.Collections.Generic.IDictionary{System.String,System.Object},Umbraco.Core.Models.PreValueCollection)">
             <summary>
             Need to deal with the legacy way of storing pre-values and turn them into nice values for the editor
             </summary>
@@ -2191,6 +2460,25 @@
             ApiController to provide RTE configuration with available plugins and commands from the RTE config
             </summary>
         </member>
+        <member name="T:Umbraco.Web.PropertyEditors.TagPropertyEditorTagDefinition">
+            <summary>
+            Used to dynamically change the tag group based on the pre-values
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.PropertyEditors.TagsPropertyEditor.DefaultPreValues">
+            <summary>
+            Override to supply the default group
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.PropertyEditors.LabelPropertyEditor.LabelPreValueEditor.ConvertDbToEditor(System.Collections.Generic.IDictionary{System.String,System.Object},Umbraco.Core.Models.PreValueCollection)">
+            <summary>
+            Chuck all the values into one field so devs can see what is stored there - we want this in case we've converted a legacy proeprty editor over to a label
+            we should still show the pre-values stored for the data type.
+            </summary>
+            <param name="defaultPreVals"></param>
+            <param name="persistedPreVals"></param>
+            <returns></returns>
+        </member>
         <member name="T:Umbraco.Web.PropertyEditors.LabelPropertyValueEditor">
             <summary>
             Custom value editor to mark it as readonly
@@ -2200,6 +2488,45 @@
             <summary>
             This editor is for display purposes only, any values bound to it will not be saved back to the database
             </summary>
+        </member>
+        <member name="T:Umbraco.Web.PublishedQueryContext">
+            <summary>
+            A class used to query for published content, media items
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.PublishedQueryContext.Search(System.String,System.Boolean,System.String)">
+            <summary>
+            Searches content
+            </summary>
+            <param name="term"></param>
+            <param name="useWildCards"></param>
+            <param name="searchProvider"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.PublishedQueryContext.Search(Examine.SearchCriteria.ISearchCriteria,Examine.Providers.BaseSearchProvider)">
+            <summary>
+            Searhes content
+            </summary>
+            <param name="criteria"></param>
+            <param name="searchProvider"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.PublishedQueryContext.TypedSearch(System.String,System.Boolean,System.String)">
+            <summary>
+            Searches content
+            </summary>
+            <param name="term"></param>
+            <param name="useWildCards"></param>
+            <param name="searchProvider"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.PublishedQueryContext.TypedSearch(Examine.SearchCriteria.ISearchCriteria,Examine.Providers.BaseSearchProvider)">
+            <summary>
+            Searhes content
+            </summary>
+            <param name="criteria"></param>
+            <param name="searchProvider"></param>
+            <returns></returns>
         </member>
         <member name="M:Umbraco.Web.Routing.UrlProviderExtensions.GetContentUrls(Umbraco.Core.Models.IContent)">
             <summary>
@@ -2211,6 +2538,54 @@
             Use this when displaying URLs, if there are errors genertaing the urls the urls themselves will
             contain the errors.
             </remarks>
+        </member>
+        <member name="T:Umbraco.Web.TagQueryContext">
+            <summary>
+            A class that exposes methods used to query tag data in views
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.TagQueryContext.GetAllTags(System.String)">
+            <summary>
+            Get every tag stored in the database (with optional group)
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.TagQueryContext.GetAllContentTags(System.String)">
+            <summary>
+            Get all tags for content items (with optional group)
+            </summary>
+            <param name="group"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.TagQueryContext.GetAllMediaTags(System.String)">
+            <summary>
+            Get all tags for media items (with optional group)
+            </summary>
+            <param name="group"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.TagQueryContext.GetAllMemberTags(System.String)">
+            <summary>
+            Get all tags for member items (with optional group)
+            </summary>
+            <param name="group"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.TagQueryContext.GetTagsForProperty(System.Int32,System.String,System.String)">
+            <summary>
+            Returns all tags attached to a property by entity id
+            </summary>
+            <param name="contentId"></param>
+            <param name="propertyTypeAlias"></param>
+            <param name="tagGroup"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.TagQueryContext.GetTagsForEntity(System.Int32,System.String)">
+            <summary>
+            Returns all tags attached to an entity (content, media or member) by entity id
+            </summary>
+            <param name="contentId"></param>
+            <param name="tagGroup"></param>
+            <returns></returns>
         </member>
         <member name="T:Umbraco.Web.Trees.CoreTreeAttribute">
             <summary>
@@ -2225,13 +2600,19 @@
             The base controller for all tree requests
             </summary>
         </member>
-        <member name="M:Umbraco.Web.Trees.TreeController.Initialize(System.Web.Http.Controllers.HttpControllerContext)">
+        <member name="T:Umbraco.Web.Trees.TreeControllerBase">
+            <summary>
+            A base controller reference for non-attributed trees (un-registered). Developers should inherit from
+            TreeController.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.Trees.TreeControllerBase.Initialize(System.Web.Http.Controllers.HttpControllerContext)">
             <summary>
             Remove the xml formatter... only support JSON!
             </summary>
             <param name="controllerContext"></param>
         </member>
-        <member name="M:Umbraco.Web.Trees.TreeController.GetTreeNodes(System.String,System.Net.Http.Formatting.FormDataCollection)">
+        <member name="M:Umbraco.Web.Trees.TreeControllerBase.GetTreeNodes(System.String,System.Net.Http.Formatting.FormDataCollection)">
             <summary>
             The method called to render the contents of the tree structure
             </summary>
@@ -2244,7 +2625,7 @@
             to the back end to be used in the query for model data.
             </remarks>
         </member>
-        <member name="M:Umbraco.Web.Trees.TreeController.GetMenuForNode(System.String,System.Net.Http.Formatting.FormDataCollection)">
+        <member name="M:Umbraco.Web.Trees.TreeControllerBase.GetMenuForNode(System.String,System.Net.Http.Formatting.FormDataCollection)">
             <summary>
             Returns the menu structure for the node
             </summary>
@@ -2252,14 +2633,14 @@
             <param name="queryStrings"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.Trees.TreeController.GetRootNode(System.Net.Http.Formatting.FormDataCollection)">
+        <member name="M:Umbraco.Web.Trees.TreeControllerBase.GetRootNode(System.Net.Http.Formatting.FormDataCollection)">
             <summary>
             Returns the root node for the tree
             </summary>
             <param name="queryStrings"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.Trees.TreeController.GetNodes(System.String,System.Net.Http.Formatting.FormDataCollection)">
+        <member name="M:Umbraco.Web.Trees.TreeControllerBase.GetNodes(System.String,System.Net.Http.Formatting.FormDataCollection)">
             <summary>
             The action called to render the contents of the tree structure
             </summary>
@@ -2273,7 +2654,7 @@
             to the back end to be used in the query for model data.
             </remarks>
         </member>
-        <member name="M:Umbraco.Web.Trees.TreeController.GetMenu(System.String,System.Net.Http.Formatting.FormDataCollection)">
+        <member name="M:Umbraco.Web.Trees.TreeControllerBase.GetMenu(System.String,System.Net.Http.Formatting.FormDataCollection)">
             <summary>
             The action called to render the menu for a tree node
             </summary>
@@ -2281,19 +2662,57 @@
             <param name="queryStrings"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.Trees.TreeController.CreateRootNode(System.Net.Http.Formatting.FormDataCollection)">
+        <member name="M:Umbraco.Web.Trees.TreeControllerBase.CreateRootNode(System.Net.Http.Formatting.FormDataCollection)">
             <summary>
             Helper method to create a root model for a tree
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.Trees.TreeController.AddQueryStringsToAdditionalData(Umbraco.Web.Models.Trees.TreeNode,System.Net.Http.Formatting.FormDataCollection)">
+        <member name="M:Umbraco.Web.Trees.TreeControllerBase.AddQueryStringsToAdditionalData(Umbraco.Web.Models.Trees.TreeNode,System.Net.Http.Formatting.FormDataCollection)">
             <summary>
             The AdditionalData of a node is always populated with the query string data, this method performs this
             operation and ensures that special values are not inserted or that duplicate keys are not added.
             </summary>
             <param name="node"></param>
             <param name="queryStrings"></param>
+        </member>
+        <member name="M:Umbraco.Web.Trees.TreeControllerBase.IsDialog(System.Net.Http.Formatting.FormDataCollection)">
+            <summary>
+            If the request is for a dialog mode tree
+            </summary>
+            <param name="queryStrings"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Umbraco.Web.Trees.TreeControllerBase.RootNodeDisplayName">
+            <summary>
+            The name to display on the root node
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Trees.TreeControllerBase.TreeAlias">
+            <summary>
+            Gets the current tree alias from the attribute assigned to it.
+            </summary>
+        </member>
+        <member name="E:Umbraco.Web.Trees.TreeControllerBase.TreeNodesRendering">
+            <summary>
+            An event that allows developers to modify the tree node collection that is being rendered
+            </summary>
+            <remarks>
+            Developers can add/remove/replace/insert/update/etc... any of the tree items in the collection.
+            </remarks>
+        </member>
+        <member name="E:Umbraco.Web.Trees.TreeControllerBase.RootNodeRendering">
+            <summary>
+            An event that allows developer to modify the root tree node that is being rendered
+            </summary>
+        </member>
+        <member name="E:Umbraco.Web.Trees.TreeControllerBase.MenuRendering">
+            <summary>
+            An event that allows developers to modify the meun that is being rendered
+            </summary>
+            <remarks>
+            Developers can add/remove/replace/insert/update/etc... any of the tree items in the collection.
+            </remarks>
         </member>
         <member name="M:Umbraco.Web.Trees.TreeController.CreateTreeNode(System.String,System.Net.Http.Formatting.FormDataCollection,System.String)">
             <summary>
@@ -2348,13 +2767,6 @@
             <param name="icon"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.Trees.TreeController.IsDialog(System.Net.Http.Formatting.FormDataCollection)">
-            <summary>
-            If the request is for a dialog mode tree
-            </summary>
-            <param name="queryStrings"></param>
-            <returns></returns>
-        </member>
         <member name="P:Umbraco.Web.Trees.TreeController.RootNodeDisplayName">
             <summary>
             The name to display on the root node
@@ -2364,27 +2776,6 @@
             <summary>
             Gets the current tree alias from the attribute assigned to it.
             </summary>
-        </member>
-        <member name="E:Umbraco.Web.Trees.TreeController.TreeNodesRendering">
-            <summary>
-            An event that allows developers to modify the tree node collection that is being rendered
-            </summary>
-            <remarks>
-            Developers can add/remove/replace/insert/update/etc... any of the tree items in the collection.
-            </remarks>
-        </member>
-        <member name="E:Umbraco.Web.Trees.TreeController.RootNodeRendering">
-            <summary>
-            An event that allows developer to modify the root tree node that is being rendered
-            </summary>
-        </member>
-        <member name="E:Umbraco.Web.Trees.TreeController.MenuRendering">
-            <summary>
-            An event that allows developers to modify the meun that is being rendered
-            </summary>
-            <remarks>
-            Developers can add/remove/replace/insert/update/etc... any of the tree items in the collection.
-            </remarks>
         </member>
         <member name="P:Umbraco.Web.Trees.MenuRenderingEventArgs.NodeId">
             <summary>
@@ -2940,6 +3331,58 @@
             Constructor
             </summary>
         </member>
+        <member name="T:Umbraco.Web.WebApi.Binders.MemberBinder.MemberValidationHelper">
+            <summary>
+            Custom validation helper so that we can exclude the Member.StandardPropertyTypeStubs from being validating for existence
+            </summary>
+        </member>
+        <member name="T:Umbraco.Web.WebApi.Filters.ContentItemValidationHelper`2">
+            <summary>
+            A validation helper class used with ContentItemValidationFilterAttribute to be shared between content, media, etc...
+            </summary>
+            <typeparam name="TPersisted"></typeparam>
+            <typeparam name="TModelSave"></typeparam>
+            <remarks>
+            If any severe errors occur then the response gets set to an error and execution will not continue. Property validation
+            errors will just be added to the ModelState.
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.WebApi.Filters.ContentItemValidationHelper`2.ValidateExistingContent(Umbraco.Web.Models.ContentEditing.ContentItemBasic{Umbraco.Web.Models.ContentEditing.ContentPropertyBasic,`0},System.Web.Http.Controllers.HttpActionContext)">
+            <summary>
+            Ensure the content exists
+            </summary>
+            <param name="postedItem"></param>
+            <param name="actionContext"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.WebApi.Filters.ContentItemValidationHelper`2.ValidateProperties(Umbraco.Web.Models.ContentEditing.ContentItemBasic{Umbraco.Web.Models.ContentEditing.ContentPropertyBasic,`0},System.Web.Http.Controllers.HttpActionContext)">
+            <summary>
+            Ensure all of the ids in the post are valid
+            </summary>
+            <param name="postedItem"></param>
+            <param name="actionContext"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.WebApi.Filters.ContentItemValidationHelper`2.ValidateProperties(Umbraco.Web.Models.ContentEditing.ContentPropertyBasic[],Umbraco.Core.Models.Property[],System.Web.Http.Controllers.HttpActionContext)">
+            <summary>
+            This validates that all of the posted properties exist on the persisted entity
+            </summary>
+            <param name="postedProperties"></param>
+            <param name="persistedProperties"></param>
+            <param name="actionContext"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.WebApi.Filters.ContentItemValidationHelper`2.ValidatePropertyData(Umbraco.Web.Models.ContentEditing.ContentItemBasic{Umbraco.Web.Models.ContentEditing.ContentPropertyBasic,`0},System.Web.Http.Controllers.HttpActionContext)">
+            <summary>
+            Validates the data for each property
+            </summary>
+            <param name="postedItem"></param>
+            <param name="actionContext"></param>
+            <returns></returns>
+            <remarks>
+            All property data validation goes into the modelstate with a prefix of "Properties"
+            </remarks>
+        </member>
         <member name="M:Umbraco.Web.WebApi.ControllerContextExtensions.SetOutgoingDateTimeFormat(System.Web.Http.Controllers.HttpControllerContext,System.String)">
             <summary>
             Sets the JSON datetime format to be a custom one
@@ -3350,25 +3793,6 @@
             </summary>
             <typeparam name="TPersisted"></typeparam>
         </member>
-        <member name="T:Umbraco.Web.Models.Mapping.TabsAndPropertiesResolver">
-            <summary>
-            Creates the tabs collection with properties assigned for display models
-            </summary>
-        </member>
-        <member name="M:Umbraco.Web.Models.Mapping.TabsAndPropertiesResolver.MapGenericProperties``1(``0,Umbraco.Web.Models.ContentEditing.ContentItemDisplayBase{Umbraco.Web.Models.ContentEditing.ContentPropertyDisplay,``0},Umbraco.Web.Models.ContentEditing.ContentPropertyDisplay[])">
-            <summary>
-            Maps properties on to the generic properties tab
-            </summary>
-            <param name="content"></param>
-            <param name="display"></param>
-            <param name="customProperties">
-            Any additional custom properties to assign to the generic properties tab. 
-            </param>
-            <remarks>
-            The generic properties tab is mapped during AfterMap and is responsible for 
-            setting up the properties such as Created date, udpated date, template selected, etc...
-            </remarks>
-        </member>
         <member name="M:Umbraco.Web.PropertyEditors.FileUploadPropertyEditor.#cctor">
             <summary>
             We're going to bind to the MediaService Saving event so that we can populate the umbracoFile size, type, etc... label fields
@@ -3389,7 +3813,7 @@
             A custom pre-val editor to ensure that the data is stored how the legacy data was stored in 
             </summary>
         </member>
-        <member name="M:Umbraco.Web.PropertyEditors.FileUploadPropertyEditor.FileUploadPreValueEditor.FormatDataForEditor(System.Collections.Generic.IDictionary{System.String,System.Object},Umbraco.Core.Models.PreValueCollection)">
+        <member name="M:Umbraco.Web.PropertyEditors.FileUploadPropertyEditor.FileUploadPreValueEditor.ConvertDbToEditor(System.Collections.Generic.IDictionary{System.String,System.Object},Umbraco.Core.Models.PreValueCollection)">
             <summary>
             Format the persisted value to work with our multi-val editor.
             </summary>
@@ -3397,7 +3821,7 @@
             <param name="persistedPreVals"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.PropertyEditors.FileUploadPropertyEditor.FileUploadPreValueEditor.FormatDataForPersistence(System.Collections.Generic.IDictionary{System.String,System.Object},Umbraco.Core.Models.PreValueCollection)">
+        <member name="M:Umbraco.Web.PropertyEditors.FileUploadPropertyEditor.FileUploadPreValueEditor.ConvertEditorToDb(System.Collections.Generic.IDictionary{System.String,System.Object},Umbraco.Core.Models.PreValueCollection)">
             <summary>
             Take the posted values and convert them to a semi-colon separated list so that its backwards compatible
             </summary>
@@ -3436,6 +3860,12 @@
             <summary>
             A custom value editor to ensure that macro syntax is parsed when being persisted and formatted correctly for display in the editor
             </summary>
+        </member>
+        <member name="M:Umbraco.Web.PropertyEditors.RichTextPropertyEditor.RichTextPropertyValueEditor.ConfigureForDisplay(Umbraco.Core.Models.PreValueCollection)">
+            <summary>
+            override so that we can hide the label based on the pre-value
+            </summary>
+            <param name="preValues"></param>
         </member>
         <member name="M:Umbraco.Web.PropertyEditors.RichTextPropertyEditor.RichTextPropertyValueEditor.ConvertDbToEditor(System.Object)">
             <summary>
@@ -3538,26 +3968,6 @@
             <summary>
             This is used to output JSON from legacy trees
             </summary>
-        </member>
-        <member name="M:Umbraco.Web.Trees.LegacyTreeController.GetNodes(System.String,System.Net.Http.Formatting.FormDataCollection)">
-            <summary>
-            Convert a legacy tree to a new tree result
-            </summary>
-            <param name="id"></param>
-            <param name="queryStrings"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Umbraco.Web.Trees.LegacyTreeController.GetMenu(System.String,System.Net.Http.Formatting.FormDataCollection)">
-            <summary>
-            This will return the menu item collection for the tree node with the specified Id
-            </summary>
-            <param name="id"></param>
-            <param name="queryStrings"></param>
-            <returns></returns>
-            <remarks>
-            Due to the nature of legacy trees this means that we need to lookup the parent node, render
-            the TreeNodeCollection and then find the node we're looking for and render it's menu.
-            </remarks>
         </member>
         <member name="T:Umbraco.Web.Trees.LegacyBaseTreeAttribute">
             <summary>
@@ -3899,7 +4309,8 @@
             <summary>
             Returns the tree nodes for an application
             </summary>
-            <param name="application"></param>
+            <param name="application">The application to load tree for</param>
+            <param name="tree">An optional single tree alias, if specified will only load the single tree for the request app</param>
             <param name="queryStrings"></param>
             <returns></returns>
         </member>
@@ -4433,7 +4844,7 @@
             Gets the instance of the standalone Umbraco application.
             </summary>
         </member>
-        <member name="M:Umbraco.Web.Standalone.StandaloneApplication.Start">
+        <member name="M:Umbraco.Web.Standalone.StandaloneApplication.Start(System.Boolean)">
             <summary>
             Starts the application.
             </summary>
@@ -4680,48 +5091,6 @@
             <summary>
             The base view class that PartialViewMacro views need to inherit from
             </summary>
-        </member>
-        <member name="T:Umbraco.Web.Mvc.UmbracoViewPage`1">
-            <summary>
-            The View that umbraco front-end views inherit from
-            </summary>
-        </member>
-        <member name="M:Umbraco.Web.Mvc.UmbracoViewPage`1.InitializePage">
-            <summary>
-            Ensure that the current view context is added to the route data tokens so we can extract it if we like
-            </summary>
-            <remarks>
-            Currently this is required by mvc macro engines
-            </remarks>
-        </member>
-        <member name="M:Umbraco.Web.Mvc.UmbracoViewPage`1.WriteLiteral(System.Object)">
-            <summary>
-            This will detect the end /body tag and insert the preview badge if in preview mode
-            </summary>
-            <param name="value"></param>
-        </member>
-        <member name="P:Umbraco.Web.Mvc.UmbracoViewPage`1.UmbracoContext">
-            <summary>
-            Returns the current UmbracoContext
-            </summary>
-        </member>
-        <member name="P:Umbraco.Web.Mvc.UmbracoViewPage`1.ApplicationContext">
-            <summary>
-            Returns the current ApplicationContext
-            </summary>
-        </member>
-        <member name="P:Umbraco.Web.Mvc.UmbracoViewPage`1.PublishedContentRequest">
-            <summary>
-            Returns the current PublishedContentRequest
-            </summary>
-        </member>
-        <member name="P:Umbraco.Web.Mvc.UmbracoViewPage`1.Umbraco">
-            <summary>
-            Gets an UmbracoHelper
-            </summary>
-            <remarks>
-            This constructs the UmbracoHelper with the content model of the page routed to
-            </remarks>
         </member>
         <member name="P:Umbraco.Web.Macros.PartialViewMacroPage.CurrentPage">
             <summary>
@@ -5926,13 +6295,17 @@
             <param name="password"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.Security.WebSecurity.ChangePassword(System.String,System.String)">
+        <member name="M:Umbraco.Web.Security.WebSecurity.ChangePassword(System.String,Umbraco.Web.Models.ChangingPasswordModel,System.Web.Security.MembershipProvider)">
             <summary>
-            Changes password for a back office user
+            Changes password for a member/user given the membership provider and the password change model
             </summary>
-            <param name="oldpassword"></param>
-            <param name="newpassword"></param>
+            <param name="username"></param>
+            <param name="passwordModel"></param>
+            <param name="membershipProvider"></param>
             <returns></returns>
+            <remarks>
+            YES! It is completely insane how many options you have to take into account based on the membership provider. yikes!        
+            </remarks>
         </member>
         <member name="M:Umbraco.Web.Security.WebSecurity.ValidateUserNodeTreePermissions(umbraco.BusinessLogic.User,System.String,System.String)">
             <summary>
@@ -6076,10 +6449,63 @@
             A logger for ClientDependency
             </summary>
         </member>
-        <member name="T:umbraco.ActionHandlers.SimilarNodeNameComparer">
+        <member name="F:umbraco.controls.passwordChanger.umbPasswordChanger_passwordNew">
             <summary>
-            Comparer that takes into account the duplicate index of a node name
-            This is needed as a normal alphabetic sort would go Page (1), Page (10), Page (2) etc.
+            umbPasswordChanger_passwordNew control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:umbraco.controls.passwordChanger.umbPasswordChanger_passwordNewConfirm">
+            <summary>
+            umbPasswordChanger_passwordNewConfirm control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:umbraco.controls.passwordChanger.ConfirmPasswordValidator">
+            <summary>
+            CompareValidator1 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:umbraco.controls.passwordChanger.IsChangingPasswordField">
+            <summary>
+            IsChangingPassword control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:umbraco.controls.passwordChanger.ResetPasswordCheckBox">
+            <summary>
+            ResetPasswordCheckBox control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:umbraco.controls.passwordChanger.umbPasswordChanger_passwordCurrent">
+            <summary>
+            umbPasswordChanger_passwordCurrent control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="P:umbraco.controls.passwordChanger.ShowOldPassword">
+            <summary>
+            Determines whether to show the old password field or not
             </summary>
         </member>
         <member name="T:Umbraco.Web.UI.Controls.UmbracoUserControl">
@@ -6742,6 +7168,32 @@
             To modify move field declaration from designer file to code-behind file.
             </remarks>
         </member>
+        <member name="T:umbraco.cms.presentation.user.EditUser">
+            <summary>
+            Summary description for EditUser.
+            </summary>
+        </member>
+        <member name="M:umbraco.cms.presentation.user.EditUser.SetupForm">
+            <summary>
+            Setups the form.
+            </summary>
+        </member>
+        <member name="M:umbraco.cms.presentation.user.EditUser.SaveUser_Click(System.Object,System.EventArgs)">
+            <summary>
+            Handles the Click event of the saveUser control.
+            </summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">The <see cref="T:System.Web.UI.ImageClickEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="F:umbraco.cms.presentation.user.EditUser.UserTabs">
+            <summary>
+            UserTabs control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
         <member name="T:Umbraco.Web.UmbracoContextExtensions">
             <summary>
             Provides extension methods for <see cref="T:Umbraco.Web.UmbracoContext"/>.
@@ -7029,6 +7481,13 @@
             <param name="id"></param>
             <returns></returns> 
         </member>
+        <member name="M:Umbraco.Web.Editors.MediaController.PostMove(Umbraco.Web.Models.ContentEditing.MoveOrCopy)">
+            <summary>
+            Change the sort order for media
+            </summary>
+            <param name="move"></param>
+            <returns></returns>
+        </member>
         <member name="M:Umbraco.Web.Editors.MediaController.PostSave(Umbraco.Web.Models.ContentEditing.MediaItemSave)">
             <summary>
             Saves content
@@ -7058,6 +7517,13 @@
             
             TOOD: Validate this request properly!
             </remarks>
+        </member>
+        <member name="M:Umbraco.Web.Editors.MediaController.ValidateMoveOrCopy(Umbraco.Web.Models.ContentEditing.MoveOrCopy)">
+            <summary>
+            Ensures the item can be moved/copied to the new location
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
         </member>
         <member name="M:Umbraco.Web.Editors.MediaController.CheckPermissions(System.Collections.Generic.IDictionary{System.String,System.Object},Umbraco.Core.Models.Membership.IUser,Umbraco.Core.Services.IMediaService,System.Int32,Umbraco.Core.Models.IMedia)">
             <summary>
@@ -7170,44 +7636,6 @@
             <summary>
             This constructor will only be able to test the start node access
             </summary>
-        </member>
-        <member name="T:Umbraco.Web.WebApi.Filters.ContentItemValidationHelper`2">
-            <summary>
-            A validation helper class used with ContentItemValidationFilterAttribute to be shared between content, media, etc...
-            </summary>
-            <typeparam name="TPersisted"></typeparam>
-            <typeparam name="TModelSave"></typeparam>
-            <remarks>
-            If any severe errors occur then the response gets set to an error and execution will not continue. Property validation
-            errors will just be added to the ModelState.
-            </remarks>
-        </member>
-        <member name="M:Umbraco.Web.WebApi.Filters.ContentItemValidationHelper`2.ValidateExistingContent(Umbraco.Web.Models.ContentEditing.ContentItemBasic{Umbraco.Web.Models.ContentEditing.ContentPropertyBasic,`0},System.Web.Http.Controllers.HttpActionContext)">
-            <summary>
-            Ensure the content exists
-            </summary>
-            <param name="postedItem"></param>
-            <param name="actionContext"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Umbraco.Web.WebApi.Filters.ContentItemValidationHelper`2.ValidateProperties(Umbraco.Web.Models.ContentEditing.ContentItemBasic{Umbraco.Web.Models.ContentEditing.ContentPropertyBasic,`0},System.Web.Http.Controllers.HttpActionContext)">
-            <summary>
-            Ensure all of the ids in the post are valid
-            </summary>
-            <param name="postedItem"></param>
-            <param name="actionContext"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Umbraco.Web.WebApi.Filters.ContentItemValidationHelper`2.ValidatePropertyData(Umbraco.Web.Models.ContentEditing.ContentItemBasic{Umbraco.Web.Models.ContentEditing.ContentPropertyBasic,`0},System.Web.Http.Controllers.HttpActionContext)">
-            <summary>
-            Validates the data for each property
-            </summary>
-            <param name="postedItem"></param>
-            <param name="actionContext"></param>
-            <returns></returns>
-            <remarks>
-            All property data validation goes into the modelstate with a prefix of "Properties"
-            </remarks>
         </member>
         <member name="T:Umbraco.Web.WebApi.Filters.EnsureUserPermissionForMediaAttribute">
             <summary>
@@ -7780,6 +8208,44 @@
             <returns>A value indicating whether the content is visible.</returns>
             <remarks>A content is not visible if it has an umbracoNaviHide property with a value of "1". Otherwise,
             the content is visible.</remarks>
+        </member>
+        <member name="M:Umbraco.Web.PublishedContentExtensions.IsDocumentType(Umbraco.Core.Models.IPublishedContent,System.String)">
+            <summary>
+            Determines whether the specified content is a specified content type.
+            </summary>
+            <param name="content">The content to determine content type of.</param>
+            <param name="docTypeAlias">The alias of the content type to test against.</param>
+            <returns>True if the content is of the specified content type; otherwise false.</returns>
+        </member>
+        <member name="M:Umbraco.Web.PublishedContentExtensions.IsDocumentType(Umbraco.Core.Models.IPublishedContent,System.String,System.Boolean)">
+            <summary>
+            Determines whether the specified content is a specified content type or it's derived types.
+            </summary>
+            <param name="content">The content to determine content type of.</param>
+            <param name="docTypeAlias">The alias of the content type to test against.</param>
+            <param name="recursive">When true, recurses up the content type tree to check inheritance; when false just calls IsDocumentType(this IPublishedContent content, string docTypeAlias).</param>
+            <returns>True if the content is of the specified content type or a derived content type; otherwise false.</returns>
+        </member>
+        <member name="M:Umbraco.Web.PublishedContentExtensions.DescendantsOrSelf(System.Collections.Generic.IEnumerable{Umbraco.Core.Models.IPublishedContent},System.String)">
+            <summary>
+            Returns all DescendantsOrSelf of all content referenced
+            </summary>
+            <param name="parentNodes"></param>
+            <param name="docTypeAlias"></param>
+            <returns></returns>
+            <remarks>
+            This can be useful in order to return all nodes in an entire site by a type when combined with TypedContentAtRoot
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.PublishedContentExtensions.DescendantsOrSelf``1(System.Collections.Generic.IEnumerable{Umbraco.Core.Models.IPublishedContent})">
+            <summary>
+            Returns all DescendantsOrSelf of all content referenced
+            </summary>
+            <param name="parentNodes"></param>
+            <returns></returns>
+            <remarks>
+            This can be useful in order to return all nodes in an entire site by a type when combined with TypedContentAtRoot
+            </remarks>
         </member>
         <member name="M:Umbraco.Web.PublishedContentExtensions.Parent``1(Umbraco.Core.Models.IPublishedContent)">
             <summary>
@@ -12222,6 +12688,11 @@
             A helper class that provides many useful methods and functionality for using Umbraco in templates
             </summary>
         </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.#ctor">
+            <summary>
+            Empty constructor to create an umbraco helper for access to methods that don't have dependencies or used for testing
+            </summary>
+        </member>
         <member name="M:Umbraco.Web.UmbracoHelper.#ctor(Umbraco.Web.UmbracoContext,Umbraco.Core.Models.IPublishedContent)">
             <summary>
             Custom constructor setting the current page to the parameter passed in
@@ -12369,59 +12840,6 @@
             This method will throw an exception if the value is not of type int or string.
             </remarks>
         </member>
-        <member name="M:Umbraco.Web.UmbracoHelper.TypedDocumentById(System.Object,Umbraco.Web.PublishedCache.ContextualPublishedCache)">
-            <summary>
-            Overloaded method accepting an 'object' type
-            </summary>
-            <param name="id"></param>
-            <param name="cache"> </param>
-            <returns></returns>
-            <remarks>
-            We accept an object type because GetPropertyValue now returns an 'object', we still want to allow people to pass 
-            this result in to this method.
-            This method will throw an exception if the value is not of type int or string.
-            </remarks>
-        </member>
-        <member name="M:Umbraco.Web.UmbracoHelper.TypedDocumentsbyIds(Umbraco.Web.PublishedCache.ContextualPublishedCache,System.Object[])">
-            <summary>
-            Overloaded method accepting an 'object' type
-            </summary>
-            <param name="ids"></param>
-            <param name="cache"> </param>
-            <returns></returns>
-            <remarks>
-            We accept an object type because GetPropertyValue now returns an 'object', we still want to allow people to pass 
-            this result in to this method.
-            This method will throw an exception if the value is not of type int or string.
-            </remarks>
-        </member>
-        <member name="M:Umbraco.Web.UmbracoHelper.DocumentById(System.Object,Umbraco.Web.PublishedCache.ContextualPublishedCache,System.Object)">
-            <summary>
-            Overloaded method accepting an 'object' type
-            </summary>
-            <param name="id"></param>
-            <param name="cache"> </param>
-            <param name="ifNotFound"> </param>
-            <returns></returns>
-            <remarks>
-            We accept an object type because GetPropertyValue now returns an 'object', we still want to allow people to pass 
-            this result in to this method.
-            This method will throw an exception if the value is not of type int or string.
-            </remarks>
-        </member>
-        <member name="M:Umbraco.Web.UmbracoHelper.DocumentByIds(Umbraco.Web.PublishedCache.ContextualPublishedCache,System.Object[])">
-            <summary>
-            Overloaded method accepting an 'object' type
-            </summary>
-            <param name="ids"></param>
-            <param name="cache"> </param>
-            <returns></returns>
-            <remarks>
-            We accept an object type because GetPropertyValue now returns an 'object', we still want to allow people to pass 
-            this result in to this method.
-            This method will throw an exception if the value is not of type int or string.
-            </remarks>
-        </member>
         <member name="M:Umbraco.Web.UmbracoHelper.Search(System.String,System.Boolean,System.String)">
             <summary>
             Searches content
@@ -12480,6 +12898,21 @@
             <param name="area"></param>
             <param name="additionalRouteVals"></param>
             <returns></returns>
+        </member>
+        <member name="P:Umbraco.Web.UmbracoHelper.Tags">
+            <summary>
+            Lazy instantiates the tag context
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.UmbracoHelper.QueryContext">
+            <summary>
+            Lazy instantiates the query context
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.UmbracoHelper.UmbracoContext">
+            <summary>
+            Helper method to ensure an umbraco context is set when it is needed
+            </summary>
         </member>
         <member name="P:Umbraco.Web.UmbracoHelper.AssignedContentItem">
             <summary>
@@ -12634,34 +13067,6 @@
             <param name="actionName"></param>
             <returns></returns>
         </member>
-        <member name="T:Umbraco.Web.Models.RenderModel">
-            <summary>
-            Represents the model for the current rendering page in Umbraco
-            </summary>
-        </member>
-        <member name="M:Umbraco.Web.Models.RenderModel.#ctor(Umbraco.Core.Models.IPublishedContent,System.Globalization.CultureInfo)">
-            <summary>
-            Constructor specifying both the IPublishedContent and the CultureInfo
-            </summary>
-            <param name="content"></param>
-            <param name="culture"></param>
-        </member>
-        <member name="M:Umbraco.Web.Models.RenderModel.#ctor(Umbraco.Core.Models.IPublishedContent)">
-            <summary>
-            Constructor to set the IPublishedContent and the CurrentCulture is set by the UmbracoContext
-            </summary>
-            <param name="content"></param>
-        </member>
-        <member name="P:Umbraco.Web.Models.RenderModel.Content">
-            <summary>
-            Returns the current IPublishedContent object
-            </summary>
-        </member>
-        <member name="P:Umbraco.Web.Models.RenderModel.CurrentCulture">
-            <summary>
-            Returns the current Culture assigned to the page being rendered
-            </summary>
-        </member>
         <member name="M:Umbraco.Web.Mvc.RenderModelBinder.BindModel(System.Web.Mvc.ControllerContext,System.Web.Mvc.ModelBindingContext)">
             <summary>
             Binds the model to a value by using the specified controller context and binding context.
@@ -12808,16 +13213,8 @@
         </member>
         <member name="P:Umbraco.Web.Mvc.UmbracoTemplatePage.CurrentPage">
             <summary>
-            Returns the a DynamicPublishedContent object
+            Returns the content as a dynamic object
             </summary>
-        </member>
-        <member name="P:Umbraco.Web.Mvc.UmbracoTemplatePage.Umbraco">
-            <summary>
-            Gets an UmbracoHelper
-            </summary>
-            <remarks>
-            This ensures that the UmbracoHelper is constructed with the content model of this view
-            </remarks>
         </member>
         <member name="M:Umbraco.Web.Mvc.RouteValueDictionaryExtensions.ToFormCollection(System.Web.Routing.RouteValueDictionary)">
             <summary>
@@ -15283,34 +15680,6 @@
             </summary>
             <value>The content XML.</value>
         </member>
-        <member name="T:umbraco.ActionHandlers.umbEnsureUniqueName">
-            <summary>
-            umbEnsureUniqueName is a standard Umbraco action handler.
-            It ensures that new content nodes gets a unique name, and thereby avoiding conflictiong URLs.
-            It can be disabled in the umbracoSettings.config file.
-            </summary>
-        </member>
-        <member name="M:umbraco.ActionHandlers.umbEnsureUniqueName.HandlerName">
-            <summary>
-            Actionhandler name
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:umbraco.ActionHandlers.umbEnsureUniqueName.Execute(umbraco.cms.businesslogic.web.Document,umbraco.interfaces.IAction)">
-            <summary>
-            Executes on the current document object when the specified actions occur
-            </summary>
-            <param name="documentObject">The document object.</param>
-            <param name="action">The action.</param>
-            <returns>Returns true if successfull, otherwise false</returns>
-        </member>
-        <member name="M:umbraco.ActionHandlers.umbEnsureUniqueName.ReturnActions">
-            <summary>
-            Returns a collection of Iactions this handler reacts on.
-            The umbEnsureUniqueName handler reacts on ActionNew() actions by default.
-            </summary>
-            <returns></returns>
-        </member>
         <member name="F:umbraco.presentation.actions.delete.Panel2">
             <summary>
             Panel2 control.
@@ -16049,33 +16418,6 @@
             Gets the parameter values.
             </summary>
             <value>The parameter values.</value>
-        </member>
-        <member name="F:umbraco.controls.passwordChanger.umbPasswordChanger_passwordNew">
-            <summary>
-            umbPasswordChanger_passwordNew control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.controls.passwordChanger.umbPasswordChanger_passwordNewConfirm">
-            <summary>
-            umbPasswordChanger_passwordNewConfirm control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.controls.passwordChanger.CompareValidator1">
-            <summary>
-            CompareValidator1 control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
         </member>
         <member name="T:umbraco.controls.Tree.CustomTreeControl">
             <summary>
@@ -18109,12 +18451,6 @@
             Summary description for autoDoc.
             </summary>
         </member>
-        <member name="M:umbraco.presentation.developer.packages.BrowseRepository.InitializeComponent">
-            <summary>
-            Required method for Designer support - do not modify
-            the contents of this method with the code editor.
-            </summary>
-        </member>
         <member name="F:umbraco.presentation.developer.packages.BrowseRepository.Panel1">
             <summary>
             Panel1 control.
@@ -18682,33 +19018,6 @@
             To modify move field declaration from designer file to code-behind file.
             </remarks>
         </member>
-        <member name="F:umbraco.presentation.developer.packages.installedPackage.packageUninstalled">
-            <summary>
-            packageUninstalled control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.developer.packages.installedPackage.pane_uninstalled">
-            <summary>
-            pane_uninstalled control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.developer.packages.installedPackage.installedPackagePanel">
-            <summary>
-            installedPackagePanel control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
         <member name="F:umbraco.presentation.developer.packages.installedPackage.pane_meta">
             <summary>
             pane_meta control.
@@ -18862,60 +19171,6 @@
             To modify move field declaration from designer file to code-behind file.
             </remarks>
         </member>
-        <member name="F:umbraco.presentation.developer.packages.installedPackage.pane_options">
-            <summary>
-            pane_options control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.developer.packages.installedPackage.lt_noUpdate">
-            <summary>
-            lt_noUpdate control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.developer.packages.installedPackage.bt_update">
-            <summary>
-            bt_update control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.developer.packages.installedPackage.bt_uninstall">
-            <summary>
-            bt_uninstall control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.developer.packages.installedPackage.pane_noItems">
-            <summary>
-            pane_noItems control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.developer.packages.installedPackage.bt_deletePackage">
-            <summary>
-            bt_deletePackage control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
         <member name="F:umbraco.presentation.developer.packages.installedPackage.pane_upgrade">
             <summary>
             pane_upgrade control.
@@ -18946,6 +19201,24 @@
         <member name="F:umbraco.presentation.developer.packages.installedPackage.bt_gotoUpgrade">
             <summary>
             bt_gotoUpgrade control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:umbraco.presentation.developer.packages.installedPackage.pane_noItems">
+            <summary>
+            pane_noItems control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:umbraco.presentation.developer.packages.installedPackage.bt_deletePackage">
+            <summary>
+            bt_deletePackage control.
             </summary>
             <remarks>
             Auto-generated field.
@@ -19108,6 +19381,15 @@
         <member name="F:umbraco.presentation.developer.packages.installedPackage.progbar">
             <summary>
             progbar control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:umbraco.presentation.developer.packages.installedPackage.pane_uninstalled">
+            <summary>
+            pane_uninstalled control.
             </summary>
             <remarks>
             Auto-generated field.
@@ -20999,38 +21281,6 @@
             Required method for Designer support - do not modify
             the contents of this method with the code editor.
             </summary>
-        </member>
-        <member name="T:umbraco.cms.presentation.members.EditMember">
-            <summary>
-            Summary description for EditMember.
-            </summary>
-        </member>
-        <member name="F:umbraco.cms.presentation.members.EditMember.doSave">
-            <summary>
-            doSave control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.cms.presentation.members.EditMember.doPublish">
-            <summary>
-            doPublish control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.cms.presentation.members.EditMember.plc">
-            <summary>
-            plc control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
         </member>
         <member name="T:umbraco.presentation.members.EditMemberGroup">
             <summary>
@@ -24782,32 +25032,6 @@
             <param name="serializer"></param>
             <returns></returns>
         </member>
-        <member name="T:umbraco.cms.presentation.user.EditUser">
-            <summary>
-            Summary description for EditUser.
-            </summary>
-        </member>
-        <member name="M:umbraco.cms.presentation.user.EditUser.setupForm">
-            <summary>
-            Setups the form.
-            </summary>
-        </member>
-        <member name="M:umbraco.cms.presentation.user.EditUser.saveUser_Click(System.Object,System.EventArgs)">
-            <summary>
-            Handles the Click event of the saveUser control.
-            </summary>
-            <param name="sender">The source of the event.</param>
-            <param name="e">The <see cref="T:System.Web.UI.ImageClickEventArgs"/> instance containing the event data.</param>
-        </member>
-        <member name="F:umbraco.cms.presentation.user.EditUser.UserTabs">
-            <summary>
-            UserTabs control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
         <member name="F:umbraco.cms.presentation.user.EditUserType.pnlUmbraco">
             <summary>
             pnlUmbraco control.
@@ -25539,6 +25763,30 @@
             See: http://issues.umbraco.org/issue/U4-1890, http://issues.umbraco.org/issue/U4-1717
             </remarks>
         </member>
+        <member name="M:Umbraco.Web.UmbracoContext.EnsureContext(System.Web.HttpContextBase,Umbraco.Core.ApplicationContext,Umbraco.Web.Security.WebSecurity,System.Boolean,System.Nullable{System.Boolean})">
+            <summary>
+            This is a helper method which is called to ensure that the singleton context is created and the nice url and routing
+            context is created and assigned.
+            </summary>
+            <param name="httpContext"></param>
+            <param name="applicationContext"></param>
+            <param name="webSecurity"></param>
+            <param name="replaceContext">
+            if set to true will replace the current singleton with a new one, this is generally only ever used because
+            during application startup the base url domain will not be available so after app startup we'll replace the current
+            context with a new one in which we can access the httpcontext.Request object.
+            </param>
+            <param name="preview"></param>
+            <returns>
+            The Singleton context object
+            </returns>
+            <remarks>
+            This is created in order to standardize the creation of the singleton. Normally it is created during a request
+            in the UmbracoModule, however this module does not execute during application startup so we need to ensure it
+            during the startup process as well.
+            See: http://issues.umbraco.org/issue/U4-1890, http://issues.umbraco.org/issue/U4-1717
+            </remarks>
+        </member>
         <member name="M:Umbraco.Web.UmbracoContext.#ctor(System.Web.HttpContextBase,Umbraco.Core.ApplicationContext,Umbraco.Web.PublishedCache.IPublishedCaches,Umbraco.Web.Security.WebSecurity,System.Nullable{System.Boolean})">
             <summary>
             Creates a new Umbraco context.
@@ -25917,6 +26165,58 @@
             Checks if the index is optimized
             </summary>
             <param name="indexerName"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Umbraco.Web.WebServices.TagsController">
+            <summary>
+            A public web service for querying tags
+            </summary>
+            <remarks>
+            This controller does not contain methods to query for content, media or members based on tags, those methods would require
+            authentication and should not be exposed publicly.
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.WebServices.TagsController.GetAllTags(System.String)">
+            <summary>
+            Get every tag stored in the database (with optional group)
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.WebServices.TagsController.GetAllContentTags(System.String)">
+            <summary>
+            Get all tags for content items (with optional group)
+            </summary>
+            <param name="group"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.WebServices.TagsController.GetAllMediaTags(System.String)">
+            <summary>
+            Get all tags for media items (with optional group)
+            </summary>
+            <param name="group"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.WebServices.TagsController.GetAllMemberTags(System.String)">
+            <summary>
+            Get all tags for member items (with optional group)
+            </summary>
+            <param name="group"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.WebServices.TagsController.GetTagsForProperty(System.Int32,System.String,System.String)">
+            <summary>
+            Returns all tags attached to a property by entity id
+            </summary>
+            <param name="contentId"></param>
+            <param name="propertyTypeAlias"></param>
+            <param name="tagGroup"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.WebServices.TagsController.GetTagsForEntity(System.Int32,System.String)">
+            <summary>
+            Returns all tags attached to an entity (content, media or member) by entity id
+            </summary>
+            <param name="contentId"></param>
+            <param name="tagGroup"></param>
             <returns></returns>
         </member>
         <member name="T:Umbraco.Web.WebServices.SaveFileController">

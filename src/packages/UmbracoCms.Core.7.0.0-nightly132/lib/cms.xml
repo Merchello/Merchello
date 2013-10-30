@@ -28,19 +28,6 @@
             TODO: this shouldn't be needed... we should restart the app pool when a package is installed!
             </remarks>		
         </member>
-        <member name="M:umbraco.BusinessLogic.Actions.Action.RegisterIActionHandlers">
-            <summary>
-            Stores all IActionHandlers that have been loaded into memory into a list
-            </summary>
-        </member>
-        <member name="M:umbraco.BusinessLogic.Actions.Action.RunActionHandlers(umbraco.cms.businesslogic.web.Document,umbraco.interfaces.IAction)">
-            <summary>
-            Whenever an action is performed upon a document/media/member, this method is executed, ensuring that 
-            all registered handlers will have an oppotunity to handle the action.
-            </summary>
-            <param name="d">The document being operated on</param>
-            <param name="action">The action triggered</param>
-        </member>
         <member name="M:umbraco.BusinessLogic.Actions.Action.ReturnJavascript(System.String)">
             <summary>
             Jacascript for the contextmenu
@@ -471,17 +458,6 @@
             All Umbraco assemblies should use the singleton instantiation (this.Instance).
             When this applicatio is refactored, this constuctor should be made private.
             </summary>
-        </member>
-        <member name="T:umbraco.BusinessLogic.Actions.IActionHandler">
-            <summary>
-            Implement the IActionHandler interface in order to automatically get code
-            run whenever a document, member or media changed, deleted, created etc.
-            The Clases implementing IActionHandler are loaded at runtime which means
-            that there are no other setup when creating a custom actionhandler.
-            </summary>
-            <example>
-            
-            </example>
         </member>
         <member name="T:umbraco.BusinessLogic.Actions.LegacyActionMenuItemAttribute">
             <summary>
@@ -1041,13 +1017,6 @@
             <summary>
             Extension methods for the PluginTypeResolver
             </summary>
-        </member>
-        <member name="M:umbraco.cms.PluginManagerExtensions.ResolveActionHandlers(Umbraco.Core.PluginManager)">
-            <summary>
-            Returns all available IActionHandler in application
-            </summary>
-            <param name="resolver"></param>
-            <returns></returns>
         </member>
         <member name="M:umbraco.cms.PluginManagerExtensions.ResolveActions(Umbraco.Core.PluginManager)">
             <summary>
@@ -3229,12 +3198,6 @@
             <param name="Readme">The readme text</param>
             <param name="Control">The name of the usercontrol used to configure the package after install</param>
         </member>
-        <member name="M:umbraco.cms.businesslogic.packager.Installer.AddMacro(umbraco.cms.businesslogic.macro.Macro)">
-            <summary>
-            Adds the macro to the package
-            </summary>
-            <param name="MacroToAdd">Macro to add</param>
-        </member>
         <member name="M:umbraco.cms.businesslogic.packager.Installer.Import(System.String)">
             <summary>
             Imports the specified package
@@ -3248,14 +3211,6 @@
             </summary>
             <param name="packageId"></param>
             <param name="tempDir"></param>
-        </member>
-        <member name="M:umbraco.cms.businesslogic.packager.Installer.Install(System.String,System.String,System.String)">
-            <summary>
-            Invoking this method installs the entire current package
-            </summary>
-            <param name="tempDir">Temporary folder where the package's content are extracted to</param>
-            <param name="guid"></param>
-            <param name="repoGuid"></param>
         </member>
         <member name="M:umbraco.cms.businesslogic.packager.Installer.LoadConfig(System.String)">
             <summary>
@@ -3280,18 +3235,25 @@
             <param name="fileName">Name of the file.</param>
             <returns>The name of the file in the specified path.</returns>
         </member>
+        <member name="P:umbraco.cms.businesslogic.packager.Installer.ContainsBinaryFileErrors">
+            <summary>
+            Indicates that the package contains assembly reference errors
+            </summary>
+        </member>
+        <member name="P:umbraco.cms.businesslogic.packager.Installer.BinaryFileErrors">
+            <summary>
+            List each assembly reference error
+            </summary>
+        </member>
+        <member name="P:umbraco.cms.businesslogic.packager.Installer.ContainsLegacyPropertyEditors">
+            <summary>
+            Indicates that the package contains legacy property editors
+            </summary>
+        </member>
         <member name="P:umbraco.cms.businesslogic.packager.Installer.Config">
             <summary>
             The xmldocument, describing the contents of a package.
             </summary>
-        </member>
-        <member name="M:umbraco.cms.businesslogic.packager.Package.#ctor(System.Int32)">
-            <summary>
-            Initialize package install status object by specifying the internal id of the installation. 
-            The id is specific to the local umbraco installation and cannot be used to identify the package in general. 
-            Use the Package(Guid) constructor to check whether a package has been installed
-            </summary>
-            <param name="Id">The internal id.</param>
         </member>
         <member name="T:umbraco.cms.businesslogic.media.Media">
             <summary>
@@ -3738,6 +3700,18 @@
             <summary>
             Deltes the current member
             </summary>
+        </member>
+        <member name="M:umbraco.cms.businesslogic.member.Member.ChangePassword(System.String)">
+            <summary>
+            Sets the password for the user - ensure it is encrypted or hashed based on the active membership provider.
+            </summary>
+            <param name="newPassword"></param>
+        </member>
+        <member name="M:umbraco.cms.businesslogic.member.Member.GetPassword">
+            <summary>
+            Returns the currently stored password - this may be encrypted or hashed string depending on the active membership provider
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:umbraco.cms.businesslogic.member.Member.AddGroup(System.Int32)">
             <summary>
