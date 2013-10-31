@@ -146,15 +146,7 @@ namespace Merchello.Examine.Providers
         /// </remarks>
         protected override IIndexCriteria GetIndexerData(IndexSet indexSet)
         {
-            if (CanInitialize())
-            {
-                return indexSet.ToIndexCriteria(DataService.ProductDataService.GetIndexFieldNames(),  IndexFieldPolicies);
-            }
-            else
-            {
-                return base.GetIndexerData(indexSet);
-            }
-
+            return indexSet.ToIndexCriteria(DataService.ProductDataService.GetIndexFieldNames(),  IndexFieldPolicies);
         }
         
         /// <summary>

@@ -47,12 +47,6 @@ namespace Merchello.Examine.Providers
 
         #endregion
 
-        /// <summary>
-        /// Used for unit tests
-        /// </summary>
-        internal static bool? DisableInitializationCheck = null;
-
-
         #region Properties
         
         /// <summary>
@@ -113,84 +107,12 @@ namespace Merchello.Examine.Providers
 
         #endregion
 
-
-        /// <summary>
-        /// override to check if we can actually initialize. 
-        /// </summary>
-        /// <remarks>
-        /// This check is required since the base examine lib will try to rebuild on startup
-        /// </remarks>
-        public override void RebuildIndex()
-        {
-            if (CanInitialize())
-            {
-                base.RebuildIndex();
-            }
-        }
         
-
-        /// <summary>
-        /// override to check if we can actually initialize. 
-        /// </summary>
-        /// <remarks>
-        /// This check is required since the base examine lib will try to rebuild on startup
-        /// </remarks>
-        public override void IndexAll(string type)
-        {
-            if (CanInitialize())
-            {
-                base.IndexAll(type);
-            }
-        }
-
         public override void ReIndexNode(XElement node, string type)
-        {
-            if (CanInitialize())
-            {
-                if (!SupportedTypes.Contains(type))
-                    return;
-
-                base.ReIndexNode(node, type);
-            }
-        }
-
-        /// <summary>
-        /// override to check if we can actually initialize. 
-        /// </summary>
-        /// <remarks>
-        /// This check is required since the base examine lib will try to rebuild on startup
-        /// </remarks>
-        public override void DeleteFromIndex(string nodeId)
-        {
-            if (CanInitialize())
-            {
-                base.DeleteFromIndex(nodeId);
-            }
-        }
-
-
-        #region Protected
-
-        /// <summary>
-        /// Returns true if the Merchello application is in a state that we can initialize the examine indexes
-        /// </summary>
-        /// <returns></returns>
-        [SecuritySafeCritical]
-        protected bool CanInitialize()
-        {
-            //check the DisableInitializationCheck and ensure that it is not set to true
-            if (!DisableInitializationCheck.HasValue || !DisableInitializationCheck.Value)
-            {
-                //We need to check if we actually can initialize, if not then don't continue
-                if (MerchelloContext.Current == null
-                    || !MerchelloContext.Current.IsConfigured)
-                    //|| !MerchelloContext.Current.IsReady)
-                {
-                    return false;
-                }
-            }
-
-            return true;
+        {           
+            if (!SupportedTypes.Contains(type))
+                return;
+            base.ReIndexNode(node, type);            
         }
 
 
@@ -205,7 +127,6 @@ namespace Merchello.Examine.Providers
             }
         }
 
-        #endregion
 
 
         protected override void OnIndexingError(IndexingErrorEventArgs e)

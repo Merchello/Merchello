@@ -226,6 +226,7 @@
   <ItemGroup>
     <Compile Include="Provider\ProductProviderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StartupTests\StartupExamineEventTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

@@ -7,7 +7,6 @@ using Merchello.Examine.Providers;
 using Umbraco.Core;
 using Umbraco.Core.Events;
 using Umbraco.Core.Logging;
-using Umbraco.Web.UI.Umbraco.Dashboard;
 
 namespace Merchello.Web.Search
 {
@@ -90,15 +89,14 @@ namespace Merchello.Web.Search
 
 
         private static void IndexProduct(IProduct product)
-        {            
+        {
             product.ProductVariants.ForEach(IndexProductVariant);
             IndexProductVariant(((Product)product).MasterVariant);
         }
 
         private static void IndexProductVariant(IProductVariant productVariant)
         {
-            ExamineManager.Instance.ReIndexNode(productVariant.SerializeToXml().Root, IndexTypes.ProductVariant, 
-                ExamineManager.Instance.IndexProviderCollection.OfType<ProductIndexer>().Where(x => x.EnableDefaultEventHandler));
+            ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"].ReIndexNode(productVariant.SerializeToXml().Root, IndexTypes.ProductVariant);
         }
 
         private static void DeleteProductFromIndex(IProduct product)
@@ -109,8 +107,7 @@ namespace Merchello.Web.Search
 
         private static void DeleteProductVariantFromIndex(IProductVariant productVariant)
         {
-            ExamineManager.Instance.DeleteFromIndex(productVariant.Id.ToString(),
-                ExamineManager.Instance.IndexProviderCollection.OfType<ProductIndexer>().Where(x => x.EnableDefaultEventHandler));
+            ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"].DeleteFromIndex(productVariant.Id.ToString());
         }
     }
 }

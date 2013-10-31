@@ -36,7 +36,6 @@ namespace Merchello.Tests.IntegrationTests.Examine.Provider
             _productService.Save(products);
 
             //// Act
-            BaseMerchelloIndexer.DisableInitializationCheck = true;
             var timer = new Stopwatch();
             timer.Start();
             ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"].RebuildIndex();            
@@ -61,7 +60,6 @@ namespace Merchello.Tests.IntegrationTests.Examine.Provider
         public void Can_Add_A_New_Product_To_The_Index()
         {
             //// Arrange            
-            BaseMerchelloIndexer.DisableInitializationCheck = true;
             var provider = (ProductIndexer) ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"];
 
             var searcher = ExamineManager.Instance.SearchProviderCollection["MerchelloProductSearcher"];
@@ -114,7 +112,6 @@ namespace Merchello.Tests.IntegrationTests.Examine.Provider
         public void Can_Remove_A_Product_From_The_Index()
         {
             //// Arrange            
-            BaseMerchelloIndexer.DisableInitializationCheck = true;
             var provider = (ProductIndexer)ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"];
 
             var searcher = ExamineManager.Instance.SearchProviderCollection["MerchelloProductSearcher"];
