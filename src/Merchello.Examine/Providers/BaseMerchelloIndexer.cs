@@ -183,8 +183,8 @@ namespace Merchello.Examine.Providers
             {
                 //We need to check if we actually can initialize, if not then don't continue
                 if (MerchelloContext.Current == null
-                    || !MerchelloContext.Current.IsConfigured
-                    || !MerchelloContext.Current.IsReady)
+                    || !MerchelloContext.Current.IsConfigured)
+                    //|| !MerchelloContext.Current.IsReady)
                 {
                     return false;
                 }
