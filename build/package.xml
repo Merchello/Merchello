@@ -28,6 +28,17 @@
   <Actions>
     <Action runat="install" undo="true" alias="Merchello_AddConfigSection" />
     <Action runat="install" undo="true" alias="Merchello_CreateDatabase" />
+    <Action runat="install" undo="true" alias="Merchello_AddExamineConfigs">
+      <MerchelloIndexSets>
+        <IndexSet SetName="MerchelloProductIndexSet" IndexPath="~/App_Data/TEMP/ExamineIndexes/Merchello/Product/" />
+      </MerchelloIndexSets>
+      <MerchelloIndexProviders>
+        <add name="MerchelloProductIndexer" type="Merchello.Examine.Providers.ProductIndexer, Merchello.Examine" />
+      </MerchelloIndexProviders>
+      <MerchelloSearchProviders>
+        <add name="MerchelloProductSearcher" type="Examine.LuceneEngine.Providers.LuceneSearcher, Examine" />
+      </MerchelloSearchProviders>
+    </Action>
   </Actions>
   <control />
   <files />

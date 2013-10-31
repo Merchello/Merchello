@@ -13,7 +13,8 @@ using Merchello.Core.Configuration.Outline;
 namespace Merchello.Web.UI.PackageActions
 {
     /// <summary>
-    /// This package action will Add a new HTTP Module to the web.config file.
+    /// This package action will Add a the Merchello configuration section to the web.config file and establish wire up the configSource attribute to point
+    /// to the App_Plugins directory
     /// </summary>
     /// <remarks>
     /// This package action has been customized from the PackageActionsContrib Project.
@@ -46,13 +47,13 @@ namespace Merchello.Web.UI.PackageActions
                     webConfig.Sections.Add(MerchelloConfiguration.ConfigurationName, new MerchelloSection());
 
                     var configPath = string.Concat("App_Plugins", Path.DirectorySeparatorChar, MerchelloConfiguration.ApplicationName, Path.DirectorySeparatorChar, "Config", Path.DirectorySeparatorChar, MerchelloConfiguration.ConfigurationName, ".config");
-                    var xmlPath = IOHelper.MapPath(string.Concat("~/", configPath));
-                    string xml;
+                    //var xmlPath = IOHelper.MapPath(string.Concat("~/", configPath));
+                    //string xml;
 
-                    using (var reader = new StreamReader(xmlPath))
-                    {
-                        xml = reader.ReadToEnd();
-                    }
+                    //using (var reader = new StreamReader(xmlPath))
+                    //{
+                    //    xml = reader.ReadToEnd();
+                    //}
 
                     webConfig.Sections[MerchelloConfiguration.ConfigurationName].SectionInformation.ConfigSource = configPath;
 
