@@ -296,24 +296,24 @@
     <Content Include="App_Plugins\Merchello\PropertyEditors\ProductPicker\Js\merchelloskuselector.controller.js" />
     <Content Include="App_Plugins\Merchello\PropertyEditors\ProductPicker\Views\merchelloskuselector.html" />
     <Content Include="Umbraco\images\tray\Merchello-Icon.png" />
-    <Content Include="Umbraco\Views\merchello\CustomerEdit.html" />
-    <Content Include="Umbraco\Views\merchello\CustomerView.html" />
-    <Content Include="Umbraco\Views\merchello\CreateProduct.html" />
-    <Content Include="Umbraco\Views\merchello\edit.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\CustomerEdit.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\CustomerView.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\CreateProduct.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\edit.html" />
     <Content Include="Umbraco\images\tray\Merchello-Icon.gif" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Plugins\Merchello\Config\merchello.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Umbraco\Views\merchello\OrderEdit.html" />
-    <Content Include="Umbraco\Views\merchello\CustomerList.html" />
-    <Content Include="Umbraco\Views\merchello\OrderList.html" />
-    <Content Include="Umbraco\Views\merchello\ProductEdit.html" />
-    <Content Include="Umbraco\Views\merchello\ProductList.html" />
-    <Content Include="Umbraco\Views\merchello\ProductVariantEdit.html" />
-    <Content Include="Umbraco\Views\merchello\Reports.html" />
-    <Content Include="Umbraco\Views\merchello\OrderView.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\OrderEdit.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\CustomerList.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\OrderList.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ProductEdit.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ProductList.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ProductVariantEdit.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\Reports.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\OrderView.html" />
     <Content Include="web.config" />
     <Content Include="packages.config" />
     <Content Include="App_Plugins\Merchello\lib\bootstrap\fonts\glyphicons-halflings-regular.eot" />

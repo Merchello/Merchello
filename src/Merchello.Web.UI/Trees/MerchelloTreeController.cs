@@ -30,10 +30,10 @@ namespace Merchello.Web.UI.Trees
             }
             else
             {
-                collection.Add(CreateTreeNode("catalog", queryStrings, "Catalog", "icon-barcode", false, "merchello/ProductList/"));
-                collection.Add(CreateTreeNode("orders", queryStrings, "Orders", "icon-receipt-dollar", false, "merchello/OrderList/"));
-                collection.Add(CreateTreeNode("customers", queryStrings, "Customers", "icon-user", false, "merchello/CustomerList/"));
-                collection.Add(CreateTreeNode("reports", queryStrings, "Reports", "icon-bar-chart", false, "merchello/Reports/"));
+                collection.Add(CreateTreeNode("catalog", queryStrings, "Catalog", "icon-barcode", false, "merchello/merchello/ProductList/"));
+                collection.Add(CreateTreeNode("orders", queryStrings, "Orders", "icon-receipt-dollar", false, "merchello/merchello/OrderList/"));
+                collection.Add(CreateTreeNode("customers", queryStrings, "Customers", "icon-user", false, "merchello/merchello/CustomerList/"));
+                collection.Add(CreateTreeNode("reports", queryStrings, "Reports", "icon-bar-chart", false, "merchello/merchello/Reports/"));
                 collection.Add(CreateTreeNode("settings", queryStrings, "Settings", "icon-settings", true));
             }
 

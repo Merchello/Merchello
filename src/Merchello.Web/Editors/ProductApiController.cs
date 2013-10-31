@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Formatting;
 using System.Web.Http;
-using System.Web.Http.ModelBinding;
 using Umbraco.Web.Mvc;
 using Merchello.Core;
 using Merchello.Core.Models;
@@ -21,8 +16,8 @@ namespace Merchello.Web.Editors
     [PluginController("Merchello")]
     public class ProductApiController : MerchelloApiController
     {
-        private IProductService _productService;
-        private IProductVariantService _productVariantService;
+        private readonly IProductService _productService;
+        private readonly IProductVariantService _productVariantService;
 
         /// <summary>
         /// Constructor
@@ -181,7 +176,7 @@ namespace Merchello.Web.Editors
 
                 _productService.Save(merchProduct);
             }
-            catch (Exception ex) // I think this is not required as the server will create the error response message anyway
+            catch (Exception ex) 
             {
                 response = Request.CreateResponse(HttpStatusCode.NotFound, String.Format("{0}", ex.Message));
             }

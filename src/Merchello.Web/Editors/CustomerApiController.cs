@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Formatting;
 using System.Web.Http;
-using System.Web.Http.ModelBinding;
 using Umbraco.Web.Mvc;
 using Merchello.Core;
 using Merchello.Core.Models;

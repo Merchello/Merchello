@@ -54,7 +54,6 @@
 		<ItemGroup>
 			<BinFiles Include="$(BuildBinariesFolder)*.*" />
       <AppTrayIcon Include="$(RootDir)\src\Merchello.Web.UI\Umbraco\images\tray\*.*" />
-      <AngularViews Include="$(RootDir)\src\Merchello.Web.UI\Umbraco\Views\merchello\**\*.*" />
       <AppPluginFiles Include="$(RootDir)\src\Merchello.Web.UI\App_Plugins\Merchello\**\*.*" Exclude="$(RootDir)\src\Merchello.Web.UI\App_Plugins\Merchello\**\*.scss" />
 			<PackageFile Include="$(MSBuildProjectDirectory)\package.xml" />
 
@@ -62,7 +61,7 @@
 
 		<Copy SourceFiles="@(BinFiles)" DestinationFolder="$(BuildPackageFolder)bin" />
     <Copy SourceFiles="@(AppTrayIcon)" DestinationFolder="$(BuildPackageFolder)umbraco\images\tray" />
-    <Copy SourceFiles="@(AngularViews)" DestinationFolder="$(BuildPackageFolder)umbraco\views\merchello" />
+
     <Copy SourceFiles="@(AppPluginFiles)" DestinationFiles="@(AppPluginFiles->'$(BuildPackageFolder)App_Plugins\Merchello\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(PackageFile)" DestinationFolder="$(BuildPackageFolder)" />
 		
