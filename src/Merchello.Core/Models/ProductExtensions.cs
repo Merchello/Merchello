@@ -146,8 +146,9 @@ namespace Merchello.Core.Models
                     writer.WriteAttributeString("downloadMediaId", productVariant.DownloadMediaId.ToString());
                     writer.WriteAttributeString("totalInventoryCount", productVariant.TotalInventoryCount.ToString());
                     writer.WriteAttributeString("attributes", GetAttributesJson(productVariant));
-                    writer.WriteAttributeString("createDate", productVariant.CreateDate.ToString());
-                    writer.WriteAttributeString("updateDate", productVariant.UpdateDate.ToString());                    
+                    //TODO figure out correct for lucene indexer date formatting
+                    //writer.WriteAttributeString("createDate", productVariant.CreateDate.ToString());
+                    //writer.WriteAttributeString("updateDate", productVariant.UpdateDate.ToString());                    
                     writer.WriteAttributeString("allDocs", "1");
                     
                     writer.WriteStartElement("warehouses");
