@@ -4,6 +4,7 @@ using System.Security;
 using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
+using Merchello.Examine.Providers;
 
 namespace Merchello.Examine.DataServices
 {
@@ -33,7 +34,7 @@ namespace Merchello.Examine.DataServices
         /// <returns></returns>
         public IEnumerable<string> GetIndexFieldNames()
         {
-            return MerchelloProductIndexer.IndexFieldPolicies.Select(x => x.Name);
+            return ProductIndexer.IndexFieldPolicies.Select(x => x.Name);
         }
 
     }

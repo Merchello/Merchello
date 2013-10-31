@@ -1,6 +1,7 @@
 ﻿using System.Net.Http.Formatting;
 using umbraco;
 using Umbraco.Core;
+using Umbraco.Web.Mvc;
 using Umbraco.Web.Trees;
 using umbraco.BusinessLogic.Actions;
 using Umbraco.Web.Models.Trees;
@@ -8,6 +9,7 @@ using Umbraco.Web.Models.Trees;
 namespace Merchello.Web.UI.Trees
 {
     [Tree("merchello", "merchello", "Merchello Tree")]
+    [PluginController("Merchello")]
     public class MerchelloTreeController : TreeController
     {
         protected override TreeNodeCollection GetTreeNodes(string id, FormDataCollection queryStrings)

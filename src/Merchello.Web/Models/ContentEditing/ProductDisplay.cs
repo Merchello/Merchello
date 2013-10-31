@@ -32,8 +32,15 @@ namespace Merchello.Web.Models.ContentEditing
 
         public IEnumerable<IProductOption> ProductOptions { get; set; }
 
+        // Product Option -> Choices = ProductAttribute
+
         public IEnumerable<IProductVariant> ProductVariants { get; set; }
 
+        //public IEnumerable<IWarehouseInventory> WarehouseInventory { get; set; } // not in lucene
+
+        //public IEnumerable<IProductAttribute> Attributes { get; set; }
+
+        /// Move this to an extensions class on ProductDisplay
         public IProduct ToProduct(IProduct destination)
         {
             destination.Name = Name;

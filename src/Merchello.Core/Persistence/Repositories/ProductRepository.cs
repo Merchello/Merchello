@@ -109,7 +109,9 @@ namespace Merchello.Core.Persistence.Repositories
         {
             var list = new List<string>
                 {                    
-                    "DELETE FROM merchProductVariant2ProductAttribute WHERE productVariantId IN (SELECT id FROM merchProductVariant WHERE productKey = @Id)",                    
+                    @"DELETE FROM merchProductVariant2ProductAttribute WHERE optionId IN 
+                        (SELECT optionId FROM merchProductOption WHERE id IN 
+                        (SELECT optionId FROM merchProduct2ProductOption WHERE productKey = @Id))",                    
                     @"DELETE FROM merchProductAttribute WHERE optionId IN 
                         (SELECT optionId FROM merchProductOption WHERE id IN 
                         (SELECT optionId FROM merchProduct2ProductOption WHERE productKey = @Id))",

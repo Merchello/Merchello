@@ -1,39 +1,39 @@
 ﻿{     
-    propertyEditors: [      
-        { 
-            id: "2EFE5776-7981-47A1-B037-04508E427111",
-            name: "Merchello SKU Selector",
-            editor: {
-                view: "~/App_Plugins/Merchello/PropertyEditors/Views/merchelloskuselector.html"
-            }
-        }
-    ]
-    ,
-    javascript: [
-        '~/App_Plugins/Merchello/lib/bootstrap/js/bootstrap.min.js',
-        '~/App_Plugins/Merchello/lib/select2/ui-select2.js',
-        '~/App_Plugins/Merchello/lib/ngTagsInput/ng-tags-input.min.js',
-        '~/App_Plugins/Merchello/Common/Js/merchello.namespaces.js',
-        '~/App_Plugins/Merchello/Modules/Catalog/product.models.js',
-        '~/App_Plugins/Merchello/Directives/tag.manager.directive.js',
-        '~/App_Plugins/Merchello/Modules/Catalog/merchello.product.service.js',
-        '~/App_Plugins/Merchello/Modules/Catalog/merchello.productvariant.service.js',
-        '~/App_Plugins/Merchello/PropertyEditors/ProductPicker/Js/merchelloskuselector.controller.js',
-        '~/App_Plugins/Merchello/Modules/Catalog/product.list.controller.js',
-        '~/App_Plugins/Merchello/Modules/Catalog/product.create.controller.js',
-        '~/App_Plugins/Merchello/Modules/Catalog/product.edit.controller.js',
-        '~/App_Plugins/Merchello/Modules/Catalog/productvariant.edit.controller.js',
-        '~/App_Plugins/Merchello/Modules/Customer/customer.list.controller.js',
-        '~/App_Plugins/Merchello/Modules/Customer/customer.view.controller.js',
-        '~/App_Plugins/Merchello/Modules/Customer/customer.edit.controller.js',
-        '~/App_Plugins/Merchello/Modules/Order/order.list.controller.js',
-        '~/App_Plugins/Merchello/Modules/Order/order.edit.controller.js',
-        '~/App_Plugins/Merchello/Modules/Order/order.view.controller.js',
-        '~/App_Plugins/Merchello/Modules/Report/reports.list.controller.js',
-        '~/App_Plugins/Merchello/Common/Js/merchello.main.module.js'
-    ],
+	propertyEditors: [      
+		{ 
+			alias: "Merchello.SkuSelector",
+			name: "Merchello SKU Selector",
+			editor: {
+				view: "~/App_Plugins/Merchello/PropertyEditors/Views/merchelloskuselector.html"
+			}
+		}
+	]
+	,
+	javascript: [
+		'~/App_Plugins/Merchello/lib/bootstrap/js/bootstrap.min.js',
+		'~/App_Plugins/Merchello/lib/select2/ui-select2.js',
+		'~/App_Plugins/Merchello/lib/ngTagsInput/ng-tags-input.min.js',
+		'~/App_Plugins/Merchello/Common/Js/merchello.namespaces.js',
+		'~/App_Plugins/Merchello/Modules/Catalog/product.models.js',
+		'~/App_Plugins/Merchello/Directives/tag.manager.directive.js',
+		'~/App_Plugins/Merchello/Modules/Catalog/merchello.product.service.js',
+		'~/App_Plugins/Merchello/Modules/Catalog/merchello.productvariant.service.js',
+		'~/App_Plugins/Merchello/PropertyEditors/ProductPicker/Js/merchelloskuselector.controller.js',
+		'~/App_Plugins/Merchello/Modules/Catalog/product.list.controller.js',
+		'~/App_Plugins/Merchello/Modules/Catalog/product.create.controller.js',
+		'~/App_Plugins/Merchello/Modules/Catalog/product.edit.controller.js',
+		'~/App_Plugins/Merchello/Modules/Catalog/productvariant.edit.controller.js',
+		'~/App_Plugins/Merchello/Modules/Customer/customer.list.controller.js',
+		'~/App_Plugins/Merchello/Modules/Customer/customer.view.controller.js',
+		'~/App_Plugins/Merchello/Modules/Customer/customer.edit.controller.js',
+		'~/App_Plugins/Merchello/Modules/Order/order.list.controller.js',
+		'~/App_Plugins/Merchello/Modules/Order/order.edit.controller.js',
+		'~/App_Plugins/Merchello/Modules/Order/order.view.controller.js',
+		'~/App_Plugins/Merchello/Modules/Report/reports.list.controller.js',
+		'~/App_Plugins/Merchello/Common/Js/merchello.main.module.js'
+	],
 	stylesheet: [
-        '~/App_Plugins/Merchello/Common/Css/merchello.css',
-        '~/App_Plugins/Merchello/lib/ngTagsInput/ng-tags-input.min.css',
+		'~/App_Plugins/Merchello/Common/Css/merchello.css',
+		'~/App_Plugins/Merchello/lib/ngTagsInput/ng-tags-input.min.css',
 	]
 }

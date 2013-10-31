@@ -22,11 +22,11 @@ namespace Merchello.Web
             );
 
 
-
         protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
             base.ApplicationStarted(umbracoApplication, applicationContext);
 
+            // Initialize Merchello
             Log.Info("Attempting to initialize Merchello");
             try
             {
@@ -38,6 +38,7 @@ namespace Merchello.Web
                 Log.Error("Initialization of Merchello failed - no merchello.config file found", ex);
             }
 
+            // Register 
             
         }
         
