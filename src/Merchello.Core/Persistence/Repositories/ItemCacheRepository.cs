@@ -47,7 +47,8 @@ namespace Merchello.Core.Persistence.Repositories
 
             var itemCache = factory.BuildEntity(dto);
 
-            ((ItemCache)itemCache).Items = GetLineItemCollection(itemCache.Id);
+
+            ((ItemCache) itemCache).Items = GetLineItemCollection(itemCache.Id);
 
             itemCache.ResetDirtyProperties();
 
@@ -83,6 +84,8 @@ namespace Merchello.Core.Persistence.Repositories
                 .Where<ItemCacheItemDto>(x => x.ContainerId == itemCacheId);
 
             var dtos = Database.Fetch<ItemCacheItemDto>(sql);
+
+            //var lineItems = _lineItemRepository.GetByContainerId(itemCacheId);
 
             var factory = new LineItemFactory();
             var collection = new LineItemCollection();

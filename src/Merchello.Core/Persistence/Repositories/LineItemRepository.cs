@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Merchello.Core.Models;
 using Merchello.Core.Models.EntityBase;
@@ -8,8 +7,6 @@ using Merchello.Core.Persistence.Caching;
 using Merchello.Core.Persistence.Factories;
 using Merchello.Core.Persistence.Querying;
 using Umbraco.Core;
-using Umbraco.Core.Events;
-using Umbraco.Core.Models.EntityBase;
 using Umbraco.Core.Persistence;
 using Umbraco.Core.Persistence.Querying;
 using Umbraco.Core.Persistence.UnitOfWork;
@@ -207,10 +204,30 @@ namespace Merchello.Core.Persistence.Repositories
 
         #endregion
 
+        public IEnumerable<ILineItem> GetByContainerId(int containerId)
+        {
+            var query = Querying.Query<ILineItem>.Builder.Where(x => x.ContainerId == containerId);
+            return GetByQuery(query);
+        }
 
         public void SaveLineItem(IEnumerable<ILineItem> items)
         {
-            foreach (var item in items)
+            var lineItems = items as ILineItem[] ?? items.ToArray();
+            if (!lineItems.Any()) return;
+
+            var existing = GetByContainerId(lineItems.First().ContainerId);
+
+            // assert there are no existing items not in the new set of items.  If there are ... delete them
+            var toDelete = existing.Where(x => items.Any(item => item.Id != x.Id));
+            if (toDelete.Any())
+            {
+                foreach (var d in toDelete)
+                {
+                    Delete(d);
+                }
+            }
+
+            foreach (var item in lineItems)
             {
                 SaveLineItem(item);
             }

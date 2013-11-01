@@ -90,6 +90,8 @@ namespace Merchello.Core.Persistence.Repositories
         {
             var list = new List<string>
                 {
+                    "DELETE FROM merchItemCacheItem WHERE itemCacheId = (SELECT id FROM merchItemCache WHERE entityKey = @Id)",
+                    "DELETE FROM merchItemCache WHERE entityKey = @Id",
                     "DELETE FROM merchAnonymousCustomer WHERE pk = @Id",
                 };
 

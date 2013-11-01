@@ -44,7 +44,7 @@ namespace Merchello.Core.Services
         /// Crates an <see cref="IAnonymousCustomer"/> and saves it to the database
         /// </summary>
         /// <returns><see cref="IAnonymousCustomer"/></returns>
-        public IAnonymousCustomer CreateAnonymousCustomerWithId()
+        public IAnonymousCustomer CreateAnonymousCustomerWithKey()
         {
             var anonymous = new AnonymousCustomer();
             using (new WriteLock(Locker))
@@ -132,6 +132,23 @@ namespace Merchello.Core.Services
             return CreateCustomerWithId(string.Empty, string.Empty, string.Empty, memberId);
         }
 
+        /// <summary>
+        /// Saves a single <see cref="IAnonymousCustomer"/>
+        /// </summary>
+        /// <param name="anonymous">The <see cref="IAnonymousCustomer"/> to save</param>
+        public void Save(IAnonymousCustomer anonymous)
+        {
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreateAnonymousCustomerRepository(uow))
+                {
+                    repository.AddOrUpdate(anonymous);
+                    uow.Commit();
+                }
+            }
+        }
+
         /// <summary>yg
         /// Saves a single <see cref="ICustomer"/> object
         /// </summary>
@@ -179,6 +196,43 @@ namespace Merchello.Core.Services
             }
 
             if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<ICustomer>(customerArray), this);
+        }
+
+        /// <summary>
+        /// Deletes a single <see cref="IAnonymousCustomer"/>
+        /// </summary>
+        /// <param name="anonymous">The <see cref="IAnonymousCustomer"/> to delete</param>
+        public void Delete(IAnonymousCustomer anonymous)
+        {
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreateAnonymousCustomerRepository(uow))
+                {
+                    repository.Delete(anonymous);
+                    uow.Commit();
+                }
+            }
+        }        
+
+        /// <summary>
+        /// Deletes a collection of <see cref="IAnonymousCustomer"/> objects
+        /// </summary>
+        /// <param name="anonymouses">Collection of <see cref="IAnonymousCustomer"/> to delete</param>
+        public void Delete(IEnumerable<IAnonymousCustomer> anonymouses)
+        {
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreateAnonymousCustomerRepository(uow))
+                {
+                    foreach (var anonymous in anonymouses)
+                    {
+                        repository.Delete(anonymous);
+                    }
+                    uow.Commit();
+                }
+            }
         }
 
         /// <summary>
@@ -294,8 +348,19 @@ namespace Merchello.Core.Services
 
         #endregion
 
+        /// <summary>
+        /// For testing
+        /// </summary>
+        internal IEnumerable<IAnonymousCustomer> GetAllAnonymousCustomers()
+        {
+            using (var repository = _repositoryFactory.CreateAnonymousCustomerRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetAll();
+            }
+        }
 
-        internal IEnumerable<ICustomer> GetAll()
+
+        public IEnumerable<ICustomer> GetAll()
         {
             using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
             {
