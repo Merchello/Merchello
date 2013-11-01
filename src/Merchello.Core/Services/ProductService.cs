@@ -261,7 +261,7 @@ namespace Merchello.Core.Services
 
         #endregion
 
-        internal IEnumerable<IProduct> GetAll()
+        public IEnumerable<IProduct> GetAll()
         {
             using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
             {
