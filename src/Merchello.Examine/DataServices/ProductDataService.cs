@@ -5,6 +5,7 @@ using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Merchello.Examine.Providers;
+using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Examine.DataServices
 {
@@ -19,13 +20,17 @@ namespace Merchello.Examine.DataServices
 
         public ProductDataService(IMerchelloContext merchelloContext)
         {
+            //TODO Figure out how to get MerchelloContext instantiated before ExamineManager 
+            // attempts to interact with the index
+            //Mandate.ParameterNotNull(merchelloContext, "MerchelloContext");
             _merchelloContext = merchelloContext;
         }
 
 
         public IEnumerable<IProduct> GetAll()
         {
-            return ((ProductService) _merchelloContext.Services.ProductService).GetAll();
+            return new ProductService().GetAll();
+            //return ((ProductService) _merchelloContext.Services.ProductService).GetAll();
         }
 
         /// <summary>
