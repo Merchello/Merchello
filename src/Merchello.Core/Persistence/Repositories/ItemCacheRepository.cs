@@ -133,7 +133,7 @@ namespace Merchello.Core.Persistence.Repositories
             Database.Insert(dto);
             entity.Id = dto.Id;
 
-            _lineItemRepository.SaveLineItem(entity.Items);
+            _lineItemRepository.SaveLineItem(entity.Items, entity.Id);
 
             entity.ResetDirtyProperties();
         }
@@ -146,7 +146,7 @@ namespace Merchello.Core.Persistence.Repositories
             var dto = factory.BuildDto(entity);
             Database.Update(dto);
 
-            _lineItemRepository.SaveLineItem(entity.Items);
+            _lineItemRepository.SaveLineItem(entity.Items, entity.Id);
 
             entity.ResetDirtyProperties();
         }

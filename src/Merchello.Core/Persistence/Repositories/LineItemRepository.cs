@@ -206,24 +206,39 @@ namespace Merchello.Core.Persistence.Repositories
 
         public IEnumerable<ILineItem> GetByContainerId(int containerId)
         {
-            var query = Querying.Query<ILineItem>.Builder.Where(x => x.ContainerId == containerId);
-            return GetByQuery(query);
+            
+            if (typeof(TDto) == typeof(InvoiceItemDto))
+            {
+
+                var query = Querying.Query<IInvoiceLineItem>.Builder.Where(x => x.ContainerId == containerId);
+                return PerformGetByQuery(query);
+            }
+
+            if (typeof(TDto) == typeof(OrderItemDto))
+            {
+                var query = Querying.Query<IOrderLineItem>.Builder.Where(x => x.ContainerId == containerId);
+                return PerformGetByQuery(query);
+            }
+
+            var itemCacheItemQuery = Querying.Query<IItemCacheLineItem>.Builder.Where(x => x.ContainerId == containerId);                      
+            return PerformGetByQuery(itemCacheItemQuery);
+            
         }
 
-        public void SaveLineItem(IEnumerable<ILineItem> items)
+        public void SaveLineItem(IEnumerable<ILineItem> items, int containerId)
         {
             var lineItems = items as ILineItem[] ?? items.ToArray();
-            if (!lineItems.Any()) return;
 
-            var existing = GetByContainerId(lineItems.First().ContainerId);
+            var existing = GetByContainerId(containerId);
 
             // assert there are no existing items not in the new set of items.  If there are ... delete them
-            var toDelete = existing.Where(x => items.Any(item => item.Id != x.Id));
+            var toDelete = existing.Where(x => !items.Any(item => item.Id == x.Id));
             if (toDelete.Any())
             {
                 foreach (var d in toDelete)
                 {
-                    Delete(d);
+                    var dto = GetDto(d);
+                    Database.Delete(dto);
                 }
             }
 

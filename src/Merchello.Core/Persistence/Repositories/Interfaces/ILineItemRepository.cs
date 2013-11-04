@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Configuration;
 using Merchello.Core.Models;
 using Umbraco.Core.Persistence.Repositories;
 
@@ -8,7 +9,7 @@ namespace Merchello.Core.Persistence.Repositories
     {
         IEnumerable<ILineItem> GetByContainerId(int containerId);
 
-        void SaveLineItem(IEnumerable<ILineItem> items);
+        void SaveLineItem(IEnumerable<ILineItem> items, int containerId);
         void SaveLineItem(ILineItem items);
 
     }
