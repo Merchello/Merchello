@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Web;
 using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Merchello.Web.Cache;
 using Merchello.Web.Models;
+using Umbraco.Core.Logging;
 using Umbraco.Core.Models.EntityBase;
 using umbraco.cms.businesslogic.member;
 using Umbraco.Core;
@@ -28,7 +30,7 @@ namespace Merchello.Web
             : this(MerchelloContext.Current, umbracoContext)
         {}
 
-        public CustomerContext(MerchelloContext merchelloContext, UmbracoContext umbracoContext)
+        public CustomerContext(IMerchelloContext merchelloContext, UmbracoContext umbracoContext)
         {
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
             Mandate.ParameterNotNull(umbracoContext, "umbracoContext");
@@ -44,26 +46,29 @@ namespace Merchello.Web
         {
             // see if the key is already in the request cache
             var cachedKey = _cache.RequestCache.GetCacheItem(ConsumerCookieKey);
+
             if (cachedKey != null)
             {
-                var key = (Guid) cachedKey;
-                var customer = _cache.RuntimeCache.GetCacheItem(CachingBacker.CostumerCacheKey(key));
-                if (customer != null) return;
+                var key = (Guid) cachedKey;              
                 TryGetCustomer(key);
                 return;
             }
 
             // retrieve the merchello consumer cookie
-            var cookie = _umbracoContext.HttpContext.Request.Cookies[ConsumerCookieKey];         
+            var cookie = _umbracoContext.HttpContext.Request.Cookies[ConsumerCookieKey];
    
             if (cookie != null)
             {                
                 Guid key;
-                if (!Guid.TryParse(EncryptionHelper.Decrypt(cookie.Value), out key))
-                { 
+                if (Guid.TryParse(EncryptionHelper.Decrypt(cookie.Value), out key))
+                {
                     TryGetCustomer(key);
                 }
-                else { CreateAnonymousCustomer(); } // consumer key parsing failed ... start over
+                else
+                {
+                    LogHelper.Debug<CustomerContext>("Decrypted guid did not parse");
+                    CreateAnonymousCustomer();
+                } // consumer key parsing failed ... start over
             }
             else { CreateAnonymousCustomer(); } // a cookie was not found
 
@@ -83,7 +88,7 @@ namespace Merchello.Web
         /// <param name="key">The key of the customer to retrieve</param>
         private void TryGetCustomer(Guid key)
         {
-            ICustomerBase customer = (CustomerBase)_cache.RuntimeCache.GetCacheItem(CachingBacker.CostumerCacheKey(key));
+            var customer = (ICustomerBase)_cache.RuntimeCache.GetCacheItem(CachingBacker.CostumerCacheKey(key));
             
             // check the cache for a previously retrieved customer
             if (customer != null)
@@ -94,18 +99,18 @@ namespace Merchello.Web
 
             // If the member has been authenticated there is no need to create an anonymous record.
             // Either return an existing customer or create a new one for the member.
-            if (_umbracoContext.Security.IsMemberAuthorized())
-            {
-                var member = Member.GetCurrentMember();
+            //if (_umbracoContext.Security.IsMemberAuthorized())
+            //{
+            //    var member = Member.GetCurrentMember();
 
-                customer = _customerService.GetByMemberId(member.Id) ??
-                               _customerService.CreateCustomerWithId(member.Id);
+            //    customer = _customerService.GetByMemberId(member.Id) ??
+            //                   _customerService.CreateCustomerWithId(member.Id);
 
-                CacheCustomer(customer);
-                CurrentCustomer = customer;
+            //    CacheCustomer(customer);
+            //    CurrentCustomer = customer;
                 
-                return;                
-            }
+            //    return;                
+            //}
            
             // try to get the customer
             customer = _customerService.GetAnyByKey(key);
@@ -126,13 +131,21 @@ namespace Merchello.Web
         /// </summary>
         private void CreateAnonymousCustomer()
         {
-            var customer = _customerService.CreateAnonymousCustomerWithId();
+            var customer = _customerService.CreateAnonymousCustomerWithKey();
             CurrentCustomer = customer;
             CacheCustomer(customer);
         }
 
         private void CacheCustomer(ICustomerBase customer)
         {
+            // set/reset the cookie 
+            // TODO decide how we want to deal with cookie persistence options - session based to start
+            var cookie = new HttpCookie(ConsumerCookieKey)
+            {
+                Value = EncryptionHelper.Encrypt(customer.EntityKey.ToString())
+            };
+            _umbracoContext.HttpContext.Response.Cookies.Add(cookie);
+
             _cache.RequestCache.GetCacheItem(ConsumerCookieKey, () => customer.EntityKey);
             _cache.RuntimeCache.GetCacheItem(CachingBacker.CostumerCacheKey(customer.EntityKey), () => customer, TimeSpan.FromMinutes(5), true);
         }

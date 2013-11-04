@@ -1,8 +1,10 @@
 ﻿using System.Linq;
+using log4net.Repository.Hierarchy;
 using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Core.Models.TypeFields;
 using Merchello.Web.Cache;
+using Umbraco.Core.Logging;
 
 namespace Merchello.Web.Models
 {
@@ -161,6 +163,7 @@ namespace Merchello.Web.Models
                 return;
             }
             _itemCache.Items[sku].Quantity = quantity;
+
         }
 
         /// <summary>
@@ -193,8 +196,10 @@ namespace Merchello.Web.Models
         /// </summary>
         public void RemoveItem(string sku)
         {
-            Mandate.ParameterNotNullOrEmpty(sku, "sku");
-            if(_itemCache.Items.Contains(sku)) _itemCache.Items.RemoveItem(sku);
+            LogHelper.Debug<Basket>("Before Attempting to remove - count: " + _itemCache.Items.Count);
+            LogHelper.Debug<Basket>("Attempting to remove sku: " + sku);
+            _itemCache.Items.RemoveItem(sku);
+            LogHelper.Debug<Basket>("After Attempting to remove - count: " + _itemCache.Items.Count);
         }
 
         /// <summary>

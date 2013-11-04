@@ -106,6 +106,11 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
             return anonymous;
         }
 
+        public void DeleteAllAnonymousCustomers()
+        {
+            var allAnonymous = ((CustomerService) CustomerService).GetAllAnonymousCustomers();
+            CustomerService.Delete(allAnonymous);
+        }
 
         #endregion
 
@@ -162,6 +167,8 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
             CustomerService.Save(customers);
             return customers;
         }
+
+
 
         /// <summary>
         /// Deletes all of the customers from the database

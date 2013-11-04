@@ -83,7 +83,32 @@ namespace Merchello.Tests.IntegrationTests.ItemCache
             //// Assert
             Assert.IsFalse(_basket.IsEmpty);
             Assert.AreEqual(3, _basket.Items.Count);
-        }       
+        }
 
+        /// <summary>
+        /// Test verifies that an existing item can be removed from the basket
+        /// </summary>
+        [Test]
+        public void Can_Remove_An_Existing_Item_From_A_Basket()
+        {
+            //// Arrange
+            var product1 = PreTestDataWorker.MakeExistingProduct();
+            var product2 = PreTestDataWorker.MakeExistingProduct();
+            var product3 = PreTestDataWorker.MakeExistingProduct();
+            _basket.AddItem(product1);
+            _basket.AddItem(product2);
+            _basket.AddItem(product3);
+            Basket.Save(_merchelloContext, _basket);
+            Assert.IsTrue(3 == _basket.Items.Count);
+
+            //// Act
+            _basket.RemoveItem(product2.Sku);
+            Basket.Save(_merchelloContext, _basket);
+            _basket = Basket.GetBasket(_merchelloContext, _customer);
+
+            //// Assert
+            Assert.IsTrue(2 == _basket.Items.Count);
+            
+        }
     }
 }

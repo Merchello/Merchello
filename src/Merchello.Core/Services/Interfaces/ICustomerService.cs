@@ -18,7 +18,7 @@ namespace Merchello.Core.Services
         /// Crates an <see cref="IAnonymousCustomer"/> and saves it to the database
         /// </summary>
         /// <returns><see cref="IAnonymousCustomer"/></returns>
-        IAnonymousCustomer CreateAnonymousCustomerWithId();
+        IAnonymousCustomer CreateAnonymousCustomerWithKey();
 
         /// <summary>
         /// Creates a customer without saving to the database
@@ -47,6 +47,11 @@ namespace Merchello.Core.Services
         /// <returns><see cref="ICustomer"/></returns>
         ICustomer CreateCustomerWithId(int memberId);
 
+        /// <summary>
+        /// Saves a single <see cref="IAnonymousCustomer"/>
+        /// </summary>
+        /// <param name="anonymous">The <see cref="IAnonymousCustomer"/> to save</param>
+        void Save(IAnonymousCustomer anonymous);
 
         /// <summary>
         /// Saves a single <see cref="ICustomer"/> object
@@ -61,6 +66,18 @@ namespace Merchello.Core.Services
         /// <param name="customers"></param>
         /// <param name="raiseEvents"></param>
         void Save(IEnumerable<ICustomer> customers, bool raiseEvents = true);
+
+        /// <summary>
+        /// Deletes a single <see cref="IAnonymousCustomer"/>
+        /// </summary>
+        /// <param name="anonymous">The <see cref="IAnonymousCustomer"/> to delete</param>
+        void Delete(IAnonymousCustomer anonymous);
+
+        /// <summary>
+        /// Deletes a collection of <see cref="IAnonymousCustomer"/> objects
+        /// </summary>
+        /// <param name="anonymouses">Collection of <see cref="IAnonymousCustomer"/> to delete</param>
+        void Delete(IEnumerable<IAnonymousCustomer> anonymouses);
 
         /// <summary>
         /// Deletes a single <see cref="ICustomer"/> object

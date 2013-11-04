@@ -108,16 +108,6 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
-        /// Associates a product variant with a warehouse
-        /// </summary>
-        /// <param name="warehouseId">The 'unique' id of the <see cref="IWarehouse"/></param>
-        public void AddToWarehouse(int warehouseId)
-        {
-            WarehouseInventory.Add(new WarehouseInventory(warehouseId, Id));
-        }
-
-
-        /// <summary>
         /// Returns the total (sum) of inventory "counts" accross all associated warehouses
         /// </summary>
         /// <returns></returns>

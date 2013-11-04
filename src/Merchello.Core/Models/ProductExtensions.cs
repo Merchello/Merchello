@@ -82,9 +82,30 @@ namespace Merchello.Core.Models
 
         #endregion
 
-        #region XML Methods
+
+        #region IProductVariant Collections
+
+        /// <summary>
+        /// Associates a product variant with a warehouse
+        /// </summary>
+        /// <param name="productVariant"></param>
+        /// <param name="warehouseId">The 'unique' id of the <see cref="IWarehouse"/></param>
+        public static void AddToWarehouse(this IProductVariant productVariant, int warehouseId)
+        {
+            ((WarehouseInventoryCollection)productVariant.Warehouses).Add(new WarehouseInventory(warehouseId, productVariant.Id));
+        }
 
 
+        #endregion
+
+        #region Examine Serialization
+
+        /// <summary>
+        /// Serializes <see cref="IProduct"/> object's variants
+        /// </summary>
+        /// <remarks>
+        /// Intended to be used by the Merchello.Examine.Providers.MerchelloProductIndexer
+        /// </remarks>
         public static XDocument SerializeToXml(this IProduct product)
         {
             string xml;
@@ -146,8 +167,9 @@ namespace Merchello.Core.Models
                     writer.WriteAttributeString("downloadMediaId", productVariant.DownloadMediaId.ToString());
                     writer.WriteAttributeString("totalInventoryCount", productVariant.TotalInventoryCount.ToString());
                     writer.WriteAttributeString("attributes", GetAttributesJson(productVariant));
-                    writer.WriteAttributeString("createDate", productVariant.CreateDate.ToString());
-                    writer.WriteAttributeString("updateDate", productVariant.UpdateDate.ToString());                    
+                    //TODO figure out correct for lucene indexer date formatting
+                    //writer.WriteAttributeString("createDate", productVariant.CreateDate.ToString());
+                    //writer.WriteAttributeString("updateDate", productVariant.UpdateDate.ToString());                    
                     writer.WriteAttributeString("allDocs", "1");
                     
                     writer.WriteStartElement("warehouses");
@@ -170,8 +192,6 @@ namespace Merchello.Core.Models
 
             return XDocument.Parse(xml); 
         }
-
-
 
         private static string GetAttributesJson(IProductVariant productVariant)
         {

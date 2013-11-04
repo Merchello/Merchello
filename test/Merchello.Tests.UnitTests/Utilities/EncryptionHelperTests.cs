@@ -24,5 +24,22 @@ namespace Merchello.Tests.UnitTests.Utilities
             Assert.AreNotEqual(value, encrypted);
             Assert.AreEqual(value, decrypted);
         }
+
+        [Test]
+        public void Can_Encrypt_And_Decrypt_A_Guid()
+        {
+            //// Arrange
+            var guid = new Guid("2D88E063-43C7-4DE3-83BC-0FE879853ACD");
+
+            //// Act
+            var encrypted = EncryptionHelper.Encrypt(guid.ToString());
+            Guid decrypted;
+
+            var success = Guid.TryParse(EncryptionHelper.Decrypt(encrypted), out decrypted);
+
+            //// Assert
+            Assert.IsTrue(success);
+            Assert.AreEqual(guid, decrypted);
+        }
     }
 }
