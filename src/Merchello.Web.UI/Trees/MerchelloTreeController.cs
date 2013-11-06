@@ -8,7 +8,7 @@ using Umbraco.Web.Models.Trees;
 
 namespace Merchello.Web.UI.Trees
 {
-    [Tree("merchello", "merchello", "Merchello Tree")]
+    [Tree("merchello", "merchello", "Merchello")]
     [PluginController("Merchello")]
     public class MerchelloTreeController : TreeController
     {
@@ -56,22 +56,22 @@ namespace Merchello.Web.UI.Trees
         {
             var menu = new MenuItemCollection();
 
-            if (id == Constants.System.Root.ToInvariantString())
-            {
-                // root actions              
-                menu.Items.Add<RefreshNode, ActionRefresh>(ui.Text("actions", ActionRefresh.Instance.Alias), true);
-                return menu;
-            }
-            else if (id == "catalog")
-            {
-                //create product
-                menu.Items.Add<MerchelloActionNewProduct>(ui.Text("actions", MerchelloActionNewProduct.Instance.Alias));
-            }
-            else
-            {
+            //if (id == Constants.System.Root.ToInvariantString())
+            //{
+            //    // root actions              
+            //    menu.Items.Add<RefreshNode, ActionRefresh>(ui.Text("actions", ActionRefresh.Instance.Alias), true);
+            //    return menu;
+            //}
+            //else if (id == "catalog")
+            //{
+            //    //create product
+            //    menu.Items.Add<MerchelloActionNewProduct>(ui.Text("actions", MerchelloActionNewProduct.Instance.Alias));
+            //}
+            //else
+            //{
                 //only have refres for each node
-                menu.Items.Add<RefreshNode, ActionRefresh>(ui.Text("actions", ActionRefresh.Instance.Alias), true);
-            }
+             menu.Items.Add<RefreshNode, ActionRefresh>(ui.Text("actions", ActionRefresh.Instance.Alias), true);
+            //}
 
             return menu;
         }
