@@ -398,6 +398,20 @@
             </summary>
             <param name="dc"></param>
         </member>
+        <member name="M:Umbraco.Web.Cache.DistributedCacheExtensions.RefreshMacroCache(Umbraco.Web.Cache.DistributedCache,Umbraco.Core.Models.IMacro)">
+            <summary>
+            Refreshes the cache amongst servers for a macro item
+            </summary>
+            <param name="dc"></param>
+            <param name="macro"></param>
+        </member>
+        <member name="M:Umbraco.Web.Cache.DistributedCacheExtensions.RemoveMacroCache(Umbraco.Web.Cache.DistributedCache,Umbraco.Core.Models.IMacro)">
+            <summary>
+            Removes the cache amongst servers for a macro item
+            </summary>
+            <param name="dc"></param>
+            <param name="macro"></param>
+        </member>
         <member name="M:Umbraco.Web.Cache.DistributedCacheExtensions.RefreshMacroCache(Umbraco.Web.Cache.DistributedCache,umbraco.cms.businesslogic.macro.Macro)">
             <summary>
             Refreshes the cache amongst servers for a macro item
@@ -605,11 +619,25 @@
             <param name="macros"></param>
             <returns></returns>
         </member>
+        <member name="M:Umbraco.Web.Cache.MacroCacheRefresher.SerializeToJsonPayload(Umbraco.Core.Models.IMacro[])">
+            <summary>
+            Creates the custom Json payload used to refresh cache amongst the servers
+            </summary>
+            <param name="macros"></param>
+            <returns></returns>
+        </member>
         <member name="M:Umbraco.Web.Cache.MacroCacheRefresher.SerializeToJsonPayload(umbraco.macro[])">
             <summary>
             Creates the custom Json payload used to refresh cache amongst the servers
             </summary>
             <param name="macros"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Cache.MacroCacheRefresher.FromMacro(Umbraco.Core.Models.IMacro)">
+            <summary>
+            Converts a macro to a jsonPayload object
+            </summary>
+            <param name="macro"></param>
             <returns></returns>
         </member>
         <member name="M:Umbraco.Web.Cache.MacroCacheRefresher.FromMacro(umbraco.cms.businesslogic.macro.Macro)">
@@ -894,6 +922,13 @@
             to look it up again.
             </remarks>
         </member>
+        <member name="M:Umbraco.Web.Editors.ContentControllerBase.IsCreatingAction(Umbraco.Web.Models.ContentEditing.ContentSaveAction)">
+            <summary>
+            Returns true if the action passed in means we need to create something new
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
         <member name="M:Umbraco.Web.Editors.ContentController.#ctor">
             <summary>
             Constructor
@@ -1019,7 +1054,7 @@
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.Editors.ContentController.CheckPermissions(System.Collections.Generic.IDictionary{System.String,System.Object},Umbraco.Core.Models.Membership.IUser,Umbraco.Core.Services.IUserService,Umbraco.Core.Services.IContentService,System.Int32,System.Nullable{System.Char},Umbraco.Core.Models.IContent)">
+        <member name="M:Umbraco.Web.Editors.ContentController.CheckPermissions(System.Collections.Generic.IDictionary{System.String,System.Object},Umbraco.Core.Models.Membership.IUser,Umbraco.Core.Services.IUserService,Umbraco.Core.Services.IContentService,System.Int32,System.Char[],Umbraco.Core.Models.IContent)">
             <summary>
             Performs a permissions check for the user to check if it has access to the node based on 
             start node and/or permissions for the node
@@ -1029,7 +1064,7 @@
             <param name="userService"></param>
             <param name="contentService"></param>
             <param name="nodeId">The content to lookup, if the contentItem is not specified</param>
-            <param name="permissionToCheck"></param>
+            <param name="permissionsToCheck"></param>
             <param name="contentItem">Specifies the already resolved content item to check against</param>
             <returns></returns>
         </member>
@@ -1204,6 +1239,11 @@
         <member name="T:Umbraco.Web.Editors.DataTypeValidateAttribute">
             <summary>
             An action filter that wires up the persisted entity of the DataTypeSave model and validates the whole request
+            </summary>
+        </member>
+        <member name="T:Umbraco.Web.Editors.EntityControllerActionSelector">
+            <summary>
+            This allows for calling GetById with a GUID... so it will automatically route to GetByKey
             </summary>
         </member>
         <member name="T:Umbraco.Web.Models.ContentEditing.EntityTypeSearchResult">
@@ -1941,6 +1981,14 @@
             <param name="type"></param>
             <returns></returns>
         </member>
+        <member name="M:Umbraco.Web.Editors.EntityController.GetByKey(System.Guid,Umbraco.Web.Models.ContentEditing.UmbracoEntityTypes)">
+            <summary>
+            Gets an entity by it's unique id if the entity supports that
+            </summary>
+            <param name="id"></param>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
         <member name="M:Umbraco.Web.Editors.EntityController.MemberFromSearchResults(Examine.ISearchResults)">
             <summary>
             Returns a collection of entities for media based on search results
@@ -2489,12 +2537,12 @@
             This editor is for display purposes only, any values bound to it will not be saved back to the database
             </summary>
         </member>
-        <member name="T:Umbraco.Web.PublishedQueryContext">
+        <member name="T:Umbraco.Web.PublishedContentQuery">
             <summary>
             A class used to query for published content, media items
             </summary>
         </member>
-        <member name="M:Umbraco.Web.PublishedQueryContext.Search(System.String,System.Boolean,System.String)">
+        <member name="M:Umbraco.Web.PublishedContentQuery.Search(System.String,System.Boolean,System.String)">
             <summary>
             Searches content
             </summary>
@@ -2503,7 +2551,7 @@
             <param name="searchProvider"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.PublishedQueryContext.Search(Examine.SearchCriteria.ISearchCriteria,Examine.Providers.BaseSearchProvider)">
+        <member name="M:Umbraco.Web.PublishedContentQuery.Search(Examine.SearchCriteria.ISearchCriteria,Examine.Providers.BaseSearchProvider)">
             <summary>
             Searhes content
             </summary>
@@ -2511,7 +2559,7 @@
             <param name="searchProvider"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.PublishedQueryContext.TypedSearch(System.String,System.Boolean,System.String)">
+        <member name="M:Umbraco.Web.PublishedContentQuery.TypedSearch(System.String,System.Boolean,System.String)">
             <summary>
             Searches content
             </summary>
@@ -2520,7 +2568,7 @@
             <param name="searchProvider"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.PublishedQueryContext.TypedSearch(Examine.SearchCriteria.ISearchCriteria,Examine.Providers.BaseSearchProvider)">
+        <member name="M:Umbraco.Web.PublishedContentQuery.TypedSearch(Examine.SearchCriteria.ISearchCriteria,Examine.Providers.BaseSearchProvider)">
             <summary>
             Searhes content
             </summary>
@@ -2539,38 +2587,38 @@
             contain the errors.
             </remarks>
         </member>
-        <member name="T:Umbraco.Web.TagQueryContext">
+        <member name="T:Umbraco.Web.TagQuery">
             <summary>
             A class that exposes methods used to query tag data in views
             </summary>
         </member>
-        <member name="M:Umbraco.Web.TagQueryContext.GetAllTags(System.String)">
+        <member name="M:Umbraco.Web.TagQuery.GetAllTags(System.String)">
             <summary>
             Get every tag stored in the database (with optional group)
             </summary>
         </member>
-        <member name="M:Umbraco.Web.TagQueryContext.GetAllContentTags(System.String)">
+        <member name="M:Umbraco.Web.TagQuery.GetAllContentTags(System.String)">
             <summary>
             Get all tags for content items (with optional group)
             </summary>
             <param name="group"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.TagQueryContext.GetAllMediaTags(System.String)">
+        <member name="M:Umbraco.Web.TagQuery.GetAllMediaTags(System.String)">
             <summary>
             Get all tags for media items (with optional group)
             </summary>
             <param name="group"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.TagQueryContext.GetAllMemberTags(System.String)">
+        <member name="M:Umbraco.Web.TagQuery.GetAllMemberTags(System.String)">
             <summary>
             Get all tags for member items (with optional group)
             </summary>
             <param name="group"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.TagQueryContext.GetTagsForProperty(System.Int32,System.String,System.String)">
+        <member name="M:Umbraco.Web.TagQuery.GetTagsForProperty(System.Int32,System.String,System.String)">
             <summary>
             Returns all tags attached to a property by entity id
             </summary>
@@ -2579,7 +2627,7 @@
             <param name="tagGroup"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.TagQueryContext.GetTagsForEntity(System.Int32,System.String)">
+        <member name="M:Umbraco.Web.TagQuery.GetTagsForEntity(System.Int32,System.String)">
             <summary>
             Returns all tags attached to an entity (content, media or member) by entity id
             </summary>
@@ -2668,6 +2716,59 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Umbraco.Web.Trees.TreeControllerBase.CreateTreeNode(System.String,System.Net.Http.Formatting.FormDataCollection,System.String)">
+            <summary>
+            Helper method to create tree nodes
+            </summary>
+            <param name="id"></param>
+            <param name="queryStrings"></param>
+            <param name="title"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Trees.TreeControllerBase.CreateTreeNode(System.String,System.Net.Http.Formatting.FormDataCollection,System.String,System.String)">
+            <summary>
+            Helper method to create tree nodes
+            </summary>
+            <param name="id"></param>
+            <param name="queryStrings"></param>
+            <param name="title"></param>
+            <param name="icon"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Trees.TreeControllerBase.CreateTreeNode(System.String,System.Net.Http.Formatting.FormDataCollection,System.String,System.String,System.String)">
+            <summary>
+            Helper method to create tree nodes
+            </summary>
+            <param name="id"></param>
+            <param name="queryStrings"></param>
+            <param name="title"></param>
+            <param name="routePath"></param>
+            <param name="icon"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Trees.TreeControllerBase.CreateTreeNode(System.String,System.Net.Http.Formatting.FormDataCollection,System.String,System.String,System.Boolean)">
+            <summary>
+            Helper method to create tree nodes and automatically generate the json url
+            </summary>
+            <param name="id"></param>
+            <param name="queryStrings"></param>
+            <param name="title"></param>
+            <param name="icon"></param>
+            <param name="hasChildren"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Trees.TreeControllerBase.CreateTreeNode(System.String,System.Net.Http.Formatting.FormDataCollection,System.String,System.String,System.Boolean,System.String)">
+            <summary>
+            Helper method to create tree nodes and automatically generate the json url
+            </summary>
+            <param name="id"></param>
+            <param name="queryStrings"></param>
+            <param name="title"></param>
+            <param name="routePath"></param>
+            <param name="hasChildren"></param>
+            <param name="icon"></param>
+            <returns></returns>
+        </member>
         <member name="M:Umbraco.Web.Trees.TreeControllerBase.AddQueryStringsToAdditionalData(Umbraco.Web.Models.Trees.TreeNode,System.Net.Http.Formatting.FormDataCollection)">
             <summary>
             The AdditionalData of a node is always populated with the query string data, this method performs this
@@ -2714,59 +2815,6 @@
             Developers can add/remove/replace/insert/update/etc... any of the tree items in the collection.
             </remarks>
         </member>
-        <member name="M:Umbraco.Web.Trees.TreeController.CreateTreeNode(System.String,System.Net.Http.Formatting.FormDataCollection,System.String)">
-            <summary>
-            Helper method to create tree nodes
-            </summary>
-            <param name="id"></param>
-            <param name="queryStrings"></param>
-            <param name="title"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Umbraco.Web.Trees.TreeController.CreateTreeNode(System.String,System.Net.Http.Formatting.FormDataCollection,System.String,System.String)">
-            <summary>
-            Helper method to create tree nodes
-            </summary>
-            <param name="id"></param>
-            <param name="queryStrings"></param>
-            <param name="title"></param>
-            <param name="icon"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Umbraco.Web.Trees.TreeController.CreateTreeNode(System.String,System.Net.Http.Formatting.FormDataCollection,System.String,System.String,System.String)">
-            <summary>
-            Helper method to create tree nodes
-            </summary>
-            <param name="id"></param>
-            <param name="queryStrings"></param>
-            <param name="title"></param>
-            <param name="routePath"></param>
-            <param name="icon"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Umbraco.Web.Trees.TreeController.CreateTreeNode(System.String,System.Net.Http.Formatting.FormDataCollection,System.String,System.String,System.Boolean)">
-            <summary>
-            Helper method to create tree nodes and automatically generate the json url
-            </summary>
-            <param name="id"></param>
-            <param name="queryStrings"></param>
-            <param name="title"></param>
-            <param name="icon"></param>
-            <param name="hasChildren"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Umbraco.Web.Trees.TreeController.CreateTreeNode(System.String,System.Net.Http.Formatting.FormDataCollection,System.String,System.String,System.Boolean,System.String)">
-            <summary>
-            Helper method to create tree nodes and automatically generate the json url
-            </summary>
-            <param name="id"></param>
-            <param name="queryStrings"></param>
-            <param name="title"></param>
-            <param name="routePath"></param>
-            <param name="hasChildren"></param>
-            <param name="icon"></param>
-            <returns></returns>
-        </member>
         <member name="P:Umbraco.Web.Trees.TreeController.RootNodeDisplayName">
             <summary>
             The name to display on the root node
@@ -2776,6 +2824,15 @@
             <summary>
             Gets the current tree alias from the attribute assigned to it.
             </summary>
+        </member>
+        <member name="T:Umbraco.Web.Trees.LegacyBaseTreeAttribute">
+            <summary>
+            This attribute is used purely to maintain some compatibility with legacy webform tree pickers
+            </summary>
+            <remarks>
+            This allows us to attribute new trees with their legacy counterparts and when a legacy tree is loaded this will indicate 
+            on the new tree which legacy tree to load (it won't actually render using the new tree)
+            </remarks>
         </member>
         <member name="P:Umbraco.Web.Trees.MenuRenderingEventArgs.NodeId">
             <summary>
@@ -3040,6 +3097,56 @@
             To modify move field declaration from designer file to code-behind file.
             </remarks>
         </member>
+        <member name="T:umbraco.dialogs.cruds">
+            <summary>
+            Summary description for cruds.
+            </summary>
+        </member>
+        <member name="F:umbraco.dialogs.cruds.pane_form">
+            <summary>
+            pane_form control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:umbraco.dialogs.cruds.feedback1">
+            <summary>
+            feedback1 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:umbraco.dialogs.cruds.PlaceHolder1">
+            <summary>
+            PlaceHolder1 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:umbraco.dialogs.cruds.panel_buttons">
+            <summary>
+            panel_buttons control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:umbraco.dialogs.cruds.Button1">
+            <summary>
+            Button1 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
         <member name="T:umbraco.loadPackager">
             <summary>
             Handles loading of the packager application into the developer application tree
@@ -3298,6 +3405,327 @@
             Sets the app.
             </summary>
             <value>The app.</value>
+        </member>
+        <member name="T:Umbraco.Web.org.umbraco.our.Repository">
+            <remarks/>
+        </member>
+        <member name="M:Umbraco.Web.org.umbraco.our.Repository.#ctor">
+            <remarks/>
+        </member>
+        <member name="M:Umbraco.Web.org.umbraco.our.Repository.Categories(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Umbraco.Web.org.umbraco.our.Repository.CategoriesAsync(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Umbraco.Web.org.umbraco.our.Repository.CategoriesAsync(System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Umbraco.Web.org.umbraco.our.Repository.Modules">
+            <remarks/>
+        </member>
+        <member name="M:Umbraco.Web.org.umbraco.our.Repository.ModulesAsync">
+            <remarks/>
+        </member>
+        <member name="M:Umbraco.Web.org.umbraco.our.Repository.ModulesAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Umbraco.Web.org.umbraco.our.Repository.ModulesCategorized">
+            <remarks/>
+        </member>
+        <member name="M:Umbraco.Web.org.umbraco.our.Repository.ModulesCategorizedAsync">
+            <remarks/>
+        </member>
+        <member name="M:Umbraco.Web.org.umbraco.our.Repository.ModulesCategorizedAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Umbraco.Web.org.umbraco.our.Repository.Nitros">
+            <remarks/>
+        </member>
+        <member name="M:Umbraco.Web.org.umbraco.our.Repository.NitrosAsync">
+            <remarks/>
+        </member>
+        <member name="M:Umbraco.Web.org.umbraco.our.Repository.NitrosAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Umbraco.Web.org.umbraco.our.Repository.NitrosCategorized">
+            <remarks/>
+        </member>
+        <member name="M:Umbraco.Web.org.umbraco.our.Repository.NitrosCategorizedAsync">
+            <remarks/>
+        </member>
+        <member name="M:Umbraco.Web.org.umbraco.our.Repository.NitrosCategorizedAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Umbraco.Web.org.umbraco.our.Repository.authenticate(System.String,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Umbraco.Web.org.umbraco.our.Repository.authenticateAsync(System.String,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Umbraco.Web.org.umbraco.our.Repository.authenticateAsync(System.String,System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Umbraco.Web.org.umbraco.our.Repository.fetchPackage(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Umbraco.Web.org.umbraco.our.Repository.fetchPackageAsync(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Umbraco.Web.org.umbraco.our.Repository.fetchPackageAsync(System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Umbraco.Web.org.umbraco.our.Repository.fetchPackageByVersion(System.String,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Umbraco.Web.org.umbraco.our.Repository.fetchPackageByVersionAsync(System.String,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Umbraco.Web.org.umbraco.our.Repository.fetchPackageByVersionAsync(System.String,System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Umbraco.Web.org.umbraco.our.Repository.fetchProtectedPackage(System.String,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Umbraco.Web.org.umbraco.our.Repository.fetchProtectedPackageAsync(System.String,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Umbraco.Web.org.umbraco.our.Repository.fetchProtectedPackageAsync(System.String,System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Umbraco.Web.org.umbraco.our.Repository.SubmitPackage(System.String,System.String,System.String,System.Byte[],System.Byte[],System.Byte[],System.String,System.String,System.String,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Umbraco.Web.org.umbraco.our.Repository.SubmitPackageAsync(System.String,System.String,System.String,System.Byte[],System.Byte[],System.Byte[],System.String,System.String,System.String,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Umbraco.Web.org.umbraco.our.Repository.SubmitPackageAsync(System.String,System.String,System.String,System.Byte[],System.Byte[],System.Byte[],System.String,System.String,System.String,System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Umbraco.Web.org.umbraco.our.Repository.PackageByGuid(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Umbraco.Web.org.umbraco.our.Repository.PackageByGuidAsync(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Umbraco.Web.org.umbraco.our.Repository.PackageByGuidAsync(System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Umbraco.Web.org.umbraco.our.Repository.CancelAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="E:Umbraco.Web.org.umbraco.our.Repository.CategoriesCompleted">
+            <remarks/>
+        </member>
+        <member name="E:Umbraco.Web.org.umbraco.our.Repository.ModulesCompleted">
+            <remarks/>
+        </member>
+        <member name="E:Umbraco.Web.org.umbraco.our.Repository.ModulesCategorizedCompleted">
+            <remarks/>
+        </member>
+        <member name="E:Umbraco.Web.org.umbraco.our.Repository.NitrosCompleted">
+            <remarks/>
+        </member>
+        <member name="E:Umbraco.Web.org.umbraco.our.Repository.NitrosCategorizedCompleted">
+            <remarks/>
+        </member>
+        <member name="E:Umbraco.Web.org.umbraco.our.Repository.authenticateCompleted">
+            <remarks/>
+        </member>
+        <member name="E:Umbraco.Web.org.umbraco.our.Repository.fetchPackageCompleted">
+            <remarks/>
+        </member>
+        <member name="E:Umbraco.Web.org.umbraco.our.Repository.fetchPackageByVersionCompleted">
+            <remarks/>
+        </member>
+        <member name="E:Umbraco.Web.org.umbraco.our.Repository.fetchProtectedPackageCompleted">
+            <remarks/>
+        </member>
+        <member name="E:Umbraco.Web.org.umbraco.our.Repository.SubmitPackageCompleted">
+            <remarks/>
+        </member>
+        <member name="E:Umbraco.Web.org.umbraco.our.Repository.PackageByGuidCompleted">
+            <remarks/>
+        </member>
+        <member name="T:Umbraco.Web.org.umbraco.our.Category">
+            <remarks/>
+        </member>
+        <member name="P:Umbraco.Web.org.umbraco.our.Category.Text">
+            <remarks/>
+        </member>
+        <member name="P:Umbraco.Web.org.umbraco.our.Category.Description">
+            <remarks/>
+        </member>
+        <member name="P:Umbraco.Web.org.umbraco.our.Category.Url">
+            <remarks/>
+        </member>
+        <member name="P:Umbraco.Web.org.umbraco.our.Category.Id">
+            <remarks/>
+        </member>
+        <member name="P:Umbraco.Web.org.umbraco.our.Category.Packages">
+            <remarks/>
+        </member>
+        <member name="T:Umbraco.Web.org.umbraco.our.Package">
+            <remarks/>
+        </member>
+        <member name="P:Umbraco.Web.org.umbraco.our.Package.RepoGuid">
+            <remarks/>
+        </member>
+        <member name="P:Umbraco.Web.org.umbraco.our.Package.Text">
+            <remarks/>
+        </member>
+        <member name="P:Umbraco.Web.org.umbraco.our.Package.Description">
+            <remarks/>
+        </member>
+        <member name="P:Umbraco.Web.org.umbraco.our.Package.Icon">
+            <remarks/>
+        </member>
+        <member name="P:Umbraco.Web.org.umbraco.our.Package.Thumbnail">
+            <remarks/>
+        </member>
+        <member name="P:Umbraco.Web.org.umbraco.our.Package.Documentation">
+            <remarks/>
+        </member>
+        <member name="P:Umbraco.Web.org.umbraco.our.Package.Demo">
+            <remarks/>
+        </member>
+        <member name="P:Umbraco.Web.org.umbraco.our.Package.Accepted">
+            <remarks/>
+        </member>
+        <member name="P:Umbraco.Web.org.umbraco.our.Package.IsModule">
+            <remarks/>
+        </member>
+        <member name="P:Umbraco.Web.org.umbraco.our.Package.EditorsPick">
+            <remarks/>
+        </member>
+        <member name="P:Umbraco.Web.org.umbraco.our.Package.Protected">
+            <remarks/>
+        </member>
+        <member name="P:Umbraco.Web.org.umbraco.our.Package.HasUpgrade">
+            <remarks/>
+        </member>
+        <member name="P:Umbraco.Web.org.umbraco.our.Package.UpgradeVersion">
+            <remarks/>
+        </member>
+        <member name="P:Umbraco.Web.org.umbraco.our.Package.UpgradeReadMe">
+            <remarks/>
+        </member>
+        <member name="P:Umbraco.Web.org.umbraco.our.Package.Url">
+            <remarks/>
+        </member>
+        <member name="T:Umbraco.Web.org.umbraco.our.SubmitStatus">
+            <remarks/>
+        </member>
+        <member name="F:Umbraco.Web.org.umbraco.our.SubmitStatus.Complete">
+            <remarks/>
+        </member>
+        <member name="F:Umbraco.Web.org.umbraco.our.SubmitStatus.Exists">
+            <remarks/>
+        </member>
+        <member name="F:Umbraco.Web.org.umbraco.our.SubmitStatus.NoAccess">
+            <remarks/>
+        </member>
+        <member name="F:Umbraco.Web.org.umbraco.our.SubmitStatus.Error">
+            <remarks/>
+        </member>
+        <member name="T:Umbraco.Web.org.umbraco.our.CategoriesCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Umbraco.Web.org.umbraco.our.CategoriesCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Umbraco.Web.org.umbraco.our.CategoriesCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Umbraco.Web.org.umbraco.our.ModulesCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Umbraco.Web.org.umbraco.our.ModulesCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Umbraco.Web.org.umbraco.our.ModulesCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Umbraco.Web.org.umbraco.our.ModulesCategorizedCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Umbraco.Web.org.umbraco.our.ModulesCategorizedCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Umbraco.Web.org.umbraco.our.ModulesCategorizedCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Umbraco.Web.org.umbraco.our.NitrosCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Umbraco.Web.org.umbraco.our.NitrosCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Umbraco.Web.org.umbraco.our.NitrosCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Umbraco.Web.org.umbraco.our.NitrosCategorizedCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Umbraco.Web.org.umbraco.our.NitrosCategorizedCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Umbraco.Web.org.umbraco.our.NitrosCategorizedCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Umbraco.Web.org.umbraco.our.authenticateCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Umbraco.Web.org.umbraco.our.authenticateCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Umbraco.Web.org.umbraco.our.authenticateCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Umbraco.Web.org.umbraco.our.fetchPackageCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Umbraco.Web.org.umbraco.our.fetchPackageCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Umbraco.Web.org.umbraco.our.fetchPackageCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Umbraco.Web.org.umbraco.our.fetchPackageByVersionCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Umbraco.Web.org.umbraco.our.fetchPackageByVersionCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Umbraco.Web.org.umbraco.our.fetchPackageByVersionCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Umbraco.Web.org.umbraco.our.fetchProtectedPackageCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Umbraco.Web.org.umbraco.our.fetchProtectedPackageCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Umbraco.Web.org.umbraco.our.fetchProtectedPackageCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Umbraco.Web.org.umbraco.our.SubmitPackageCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Umbraco.Web.org.umbraco.our.SubmitPackageCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Umbraco.Web.org.umbraco.our.SubmitPackageCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Umbraco.Web.org.umbraco.our.PackageByGuidCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Umbraco.Web.org.umbraco.our.PackageByGuidCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Umbraco.Web.org.umbraco.our.PackageByGuidCompletedEventArgs.Result">
+            <remarks/>
         </member>
         <member name="T:Umbraco.Web.WebApi.Binders.ContentItemBaseBinder`2">
             <summary>
@@ -3619,7 +4047,7 @@
         </member>
         <member name="F:Umbraco.Web.Models.ContentEditing.ContentSaveAction.SaveNew">
             <summary>
-            Saves a new content item
+            Creates a new content item
             </summary>
         </member>
         <member name="F:Umbraco.Web.Models.ContentEditing.ContentSaveAction.Publish">
@@ -3629,7 +4057,17 @@
         </member>
         <member name="F:Umbraco.Web.Models.ContentEditing.ContentSaveAction.PublishNew">
             <summary>
-            Saves an publishes a new content item
+            Creates and publishes a new content item
+            </summary>
+        </member>
+        <member name="F:Umbraco.Web.Models.ContentEditing.ContentSaveAction.SendPublish">
+            <summary>
+            Saves and sends publish notification
+            </summary>
+        </member>
+        <member name="F:Umbraco.Web.Models.ContentEditing.ContentSaveAction.SendPublishNew">
+            <summary>
+            Creates and sends publish notification
             </summary>
         </member>
         <member name="T:Umbraco.Web.Models.ContentEditing.ContentTypeBasic">
@@ -3786,6 +4224,11 @@
             <param name="content"></param>
             <param name="applicationContext"></param>
             <returns></returns>
+        </member>
+        <member name="T:Umbraco.Web.Models.Mapping.ContentModelMapper.ActionButtonsResolver">
+            <summary>
+            Creates the list of action buttons allowed for this user - Publish, Send to publish, save, unpublish returned as the button's 'letter'
+            </summary>
         </member>
         <member name="T:Umbraco.Web.Models.Mapping.OwnerResolver`1">
             <summary>
@@ -3968,15 +4411,6 @@
             <summary>
             This is used to output JSON from legacy trees
             </summary>
-        </member>
-        <member name="T:Umbraco.Web.Trees.LegacyBaseTreeAttribute">
-            <summary>
-            This attribute is used purely to maintain some compatibility with legacy webform tree pickers
-            </summary>
-            <remarks>
-            This allows us to attribute new trees with their legacy counterparts and when a legacy tree is loaded this will indicate 
-            on the new tree which legacy tree to load (it won't actually render using the new tree)
-            </remarks>
         </member>
         <member name="T:Umbraco.Web.Trees.LegacyTreeDataConverter">
             <summary>
@@ -4757,6 +5191,14 @@
             <summary>
             A model representing a content item to be displayed in the back office
             </summary>    
+        </member>
+        <member name="P:Umbraco.Web.Models.ContentEditing.ContentItemDisplay.AllowedActions">
+            <summary>
+            The allowed 'actions' based on the user's permissions - Create, Update, Publish, Send to publish
+            </summary>
+            <remarks>
+            Each char represents a button which we can then map on the front-end to the correct actions
+            </remarks>
         </member>
         <member name="T:Umbraco.Web.Models.ContentEditing.ContentItemDto`1">
             <summary>
@@ -7178,6 +7620,14 @@
             Setups the form.
             </summary>
         </member>
+        <member name="M:umbraco.cms.presentation.user.EditUser.ChangePassword(umbraco.controls.passwordChanger,System.Web.Security.MembershipUser,System.Web.UI.WebControls.CustomValidator)">
+            <summary>
+            This handles changing the password
+            </summary>
+            <param name="passwordChangerControl"></param>
+            <param name="membershipUser"></param>
+            <param name="passwordChangerValidator"></param>
+        </member>
         <member name="M:umbraco.cms.presentation.user.EditUser.SaveUser_Click(System.Object,System.EventArgs)">
             <summary>
             Handles the Click event of the saveUser control.
@@ -7499,6 +7949,12 @@
             Maps the property values to the persisted entity
             </summary>
             <param name="contentItem"></param>
+        </member>
+        <member name="M:Umbraco.Web.Editors.MediaController.EmptyRecycleBin">
+            <summary>
+            Empties the recycle bin
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:Umbraco.Web.Editors.MediaController.PostSort(Umbraco.Web.Models.ContentEditing.ContentSortOrder)">
             <summary>
@@ -9903,7 +10359,9 @@
             <param name="op"></param>
             <param name="nodeType"></param>
             <param name="httpContext"></param>
-            <returns></returns>
+            <returns>
+            Returns the ITask if one is found and can be made, otherwise null
+            </returns>
             <remarks>
             This will first check if we've already created the ITask in the current Http request
             </remarks>
@@ -12899,12 +13357,12 @@
             <param name="additionalRouteVals"></param>
             <returns></returns>
         </member>
-        <member name="P:Umbraco.Web.UmbracoHelper.Tags">
+        <member name="P:Umbraco.Web.UmbracoHelper.TagQuery">
             <summary>
             Lazy instantiates the tag context
             </summary>
         </member>
-        <member name="P:Umbraco.Web.UmbracoHelper.QueryContext">
+        <member name="P:Umbraco.Web.UmbracoHelper.ContentQuery">
             <summary>
             Lazy instantiates the query context
             </summary>
@@ -19957,56 +20415,6 @@
         <member name="F:umbraco.dialogs.create.phCreate">
             <summary>
             phCreate control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="T:umbraco.dialogs.cruds">
-            <summary>
-            Summary description for cruds.
-            </summary>
-        </member>
-        <member name="F:umbraco.dialogs.cruds.pane_form">
-            <summary>
-            pane_form control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.dialogs.cruds.feedback1">
-            <summary>
-            feedback1 control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.dialogs.cruds.PlaceHolder1">
-            <summary>
-            PlaceHolder1 control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.dialogs.cruds.panel_buttons">
-            <summary>
-            panel_buttons control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.dialogs.cruds.Button1">
-            <summary>
-            Button1 control.
             </summary>
             <remarks>
             Auto-generated field.

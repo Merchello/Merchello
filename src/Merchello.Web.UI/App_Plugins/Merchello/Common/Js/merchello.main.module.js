@@ -3,9 +3,9 @@
 	'umbraco.resources',
 	'umbraco.services',
 	'umbraco.packages',
-    'ngCookies',
-    'ngMobile',
-    'ngSanitize',
-    'blueimp.fileupload',
+	'ngCookies',
+	'ngMobile',
+	'ngSanitize',
+	'blueimp.fileupload'
 ]);
 

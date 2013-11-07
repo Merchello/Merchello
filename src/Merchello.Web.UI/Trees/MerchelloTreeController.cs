@@ -56,6 +56,11 @@ namespace Merchello.Web.UI.Trees
         {
             var menu = new MenuItemCollection();
 
+            if (id == "settings")
+            {
+                menu.Items.Add<RefreshNode, ActionRefresh>(ui.Text("actions", ActionRefresh.Instance.Alias), true);
+            }
+
             //if (id == Constants.System.Root.ToInvariantString())
             //{
             //    // root actions              
@@ -70,7 +75,7 @@ namespace Merchello.Web.UI.Trees
             //else
             //{
                 //only have refres for each node
-             menu.Items.Add<RefreshNode, ActionRefresh>(ui.Text("actions", ActionRefresh.Instance.Alias), true);
+             //menu.Items.Add<RefreshNode, ActionRefresh>(ui.Text("actions", ActionRefresh.Instance.Alias), true);
             //}
 
             return menu;
