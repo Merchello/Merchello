@@ -238,11 +238,13 @@
     <Compile Include="Editors\ProductApiController.cs" />
     <Compile Include="Editors\ProductVariantApiController.cs" />
     <Compile Include="EncryptionHelper.cs" />
-    <Compile Include="Indexing\MerchelloIndexDataService.cs" />
     <Compile Include="MerchelloHelper.cs" />
     <Compile Include="CustomerContext.cs" />
     <Compile Include="Models\Basket.cs" />
     <Compile Include="Models\ContentEditing\ProductDisplay.cs" />
+    <Compile Include="Models\ContentEditing\ProductDisplayBase.cs" />
+    <Compile Include="Models\ContentEditing\ProductDisplayExtensions.cs" />
+    <Compile Include="Models\ContentEditing\ProductVariantDisplay.cs" />
     <Compile Include="Models\IBasket.cs" />
     <Compile Include="Mvc\MerchelloTemplatePage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
