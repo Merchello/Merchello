@@ -241,10 +241,11 @@
     <Compile Include="MerchelloHelper.cs" />
     <Compile Include="CustomerContext.cs" />
     <Compile Include="Models\Basket.cs" />
-    <Compile Include="Models\ContentEditing\ExamineDisplayExtensions.cs" />
+    <Compile Include="Models\ContentEditing\ProductAttributeDisplay.cs" />
     <Compile Include="Models\ContentEditing\ProductDisplay.cs" />
     <Compile Include="Models\ContentEditing\ProductDisplayBase.cs" />
     <Compile Include="Models\ContentEditing\ProductDisplayExtensions.cs" />
+    <Compile Include="Models\ContentEditing\ProductOptionDisplay.cs" />
     <Compile Include="Models\ContentEditing\ProductVariantDisplay.cs" />
     <Compile Include="Models\IBasket.cs" />
     <Compile Include="Mvc\MerchelloTemplatePage.cs" />

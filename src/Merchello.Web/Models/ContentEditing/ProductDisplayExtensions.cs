@@ -33,6 +33,27 @@ namespace Merchello.Web.Models.ContentEditing
             destination.Download = productDisplay.Download;
             destination.DownloadMediaId = productDisplay.DownloadMediaId;
 
+            //destination.ProductOptions.Clear();
+            foreach (var option in productDisplay.ProductOptions)
+            {
+                IProductOption destinationProductOption;
+                if (destination.ProductOptions.Contains(option.Name))
+                {
+                    destinationProductOption = destination.ProductOptions[option.Name];
+                    destinationProductOption.Required = option.Required;
+                    destinationProductOption.SortOrder = option.SortOrder;
+                }
+                else
+                {
+                    destinationProductOption = new ProductOption(option.Name, option.Required);
+                    destinationProductOption.SortOrder = option.SortOrder;
+                    destinationProductOption.Key = option.Key;
+                }
+
+
+                destination.ProductOptions.Add(destinationProductOption);
+            }
+
             return destination;
         }
          
