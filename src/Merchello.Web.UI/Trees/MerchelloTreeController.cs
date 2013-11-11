@@ -22,11 +22,11 @@ namespace Merchello.Web.UI.Trees
             var collection = new TreeNodeCollection();
             if (id == "settings")
             {
-                collection.Add(CreateTreeNode("regions", queryStrings, "Regions", "icon-map", false));
-                collection.Add(CreateTreeNode("shipping", queryStrings, "Shipping", "icon-truck", false));
-                collection.Add(CreateTreeNode("taxation", queryStrings, "Taxation", "icon-piggy-bank", false));
-                collection.Add(CreateTreeNode("payment", queryStrings, "Payment", "icon-bill-dollar", false));
-                collection.Add(CreateTreeNode("debuglog", queryStrings, "Debug Log", "icon-alert", false));
+                collection.Add(CreateTreeNode("regions", queryStrings, "Regions", "icon-map", false, "merchello/merchello/Regions/"));
+                collection.Add(CreateTreeNode("shipping", queryStrings, "Shipping", "icon-truck", false, "merchello/merchello/Shipping/"));
+                collection.Add(CreateTreeNode("taxation", queryStrings, "Taxation", "icon-piggy-bank", false, "merchello/merchello/Taxation/"));
+                collection.Add(CreateTreeNode("payment", queryStrings, "Payment", "icon-bill-dollar", false, "merchello/merchello/Payment/"));
+                collection.Add(CreateTreeNode("debuglog", queryStrings, "Debug Log", "icon-alert", false, "merchello/merchello/Debug/"));
             }
             else
             {
@@ -34,7 +34,7 @@ namespace Merchello.Web.UI.Trees
                 collection.Add(CreateTreeNode("orders", queryStrings, "Orders", "icon-receipt-dollar", false, "merchello/merchello/OrderList/"));
                 collection.Add(CreateTreeNode("customers", queryStrings, "Customers", "icon-user", false, "merchello/merchello/CustomerList/"));
                 collection.Add(CreateTreeNode("reports", queryStrings, "Reports", "icon-bar-chart", false, "merchello/merchello/Reports/"));
-                collection.Add(CreateTreeNode("settings", queryStrings, "Settings", "icon-settings", true));
+                collection.Add(CreateTreeNode("settings", queryStrings, "Settings", "icon-settings", true, "merchello/merchello/Settings/"));
             }
 
             //collection.AddRange(
