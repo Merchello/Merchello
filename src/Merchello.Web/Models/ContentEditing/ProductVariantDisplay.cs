@@ -5,7 +5,6 @@ namespace Merchello.Web.Models.ContentEditing
 {
     public class ProductVariantDisplay : ProductDisplayBase
     {
-        public IEnumerable<IWarehouseInventory> WarehouseInventory { get; set; } // not in lucene
-        public IEnumerable<IProductAttribute> Attributes { get; set; }
+        public IEnumerable<ProductAttributeDisplay> Attributes { get; set; }
     }
 }
