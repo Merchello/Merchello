@@ -53,8 +53,8 @@
 
             }
         };
-    }
-
+    };
+    
     angular.module('umbraco.resources').factory('merchelloProductService', merchello.Services.MerchelloProductService);
 
 }(window.merchello.Services = window.merchello.Services || {}));
