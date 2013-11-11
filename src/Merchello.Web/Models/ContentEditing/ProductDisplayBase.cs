@@ -1,4 +1,7 @@
-﻿namespace Merchello.Web.Models.ContentEditing
+﻿using System.Collections.Generic;
+using Merchello.Core.Models;
+
+namespace Merchello.Web.Models.ContentEditing
 {
     public abstract class ProductDisplayBase
     {
@@ -19,6 +22,8 @@
         public bool Taxable { get; set; }
         public bool Shippable { get; set; }
         public bool Download { get; set; }
-        public int DownloadMediaId { get; set; } 
+        public int DownloadMediaId { get; set; }
+
+        public IEnumerable<IWarehouseInventory> WarehouseInventory { get; set; }
     }
 }

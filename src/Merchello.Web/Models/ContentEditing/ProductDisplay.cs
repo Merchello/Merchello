@@ -12,7 +12,7 @@ namespace Merchello.Web.Models.ContentEditing
 
         public Guid Key { get; set; }        
 
-        public IEnumerable<IProductOption> ProductOptions { get; set; }
+        public IEnumerable<ProductOptionDisplay> ProductOptions { get; set; }
         public IEnumerable<ProductVariantDisplay> ProductVariants { get; set; }
 
        

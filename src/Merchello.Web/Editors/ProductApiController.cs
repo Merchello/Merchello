@@ -35,8 +35,11 @@ namespace Merchello.Web.Editors
             : base(merchelloContext)
         {
             _productService = MerchelloContext.Services.ProductService;
-            //AutoMapper.Mapper.CreateMap<ProductDisplay, Product>();
+
             AutoMapper.Mapper.CreateMap<IProduct, ProductDisplay>();
+            AutoMapper.Mapper.CreateMap<IProductAttribute, ProductAttributeDisplay>();
+            AutoMapper.Mapper.CreateMap<IProductOption, ProductOptionDisplay>();
+            AutoMapper.Mapper.CreateMap<IProductVariant, ProductVariantDisplay>();
         }
 
         /// <summary>
@@ -47,8 +50,11 @@ namespace Merchello.Web.Editors
         {
             _productService = MerchelloContext.Services.ProductService;
             _productVariantService = MerchelloContext.Services.ProductVariantService;
-            //AutoMapper.Mapper.CreateMap<ProductDisplay, Product>();
+
             AutoMapper.Mapper.CreateMap<IProduct, ProductDisplay>();
+            AutoMapper.Mapper.CreateMap<IProductAttribute, ProductAttributeDisplay>();
+            AutoMapper.Mapper.CreateMap<IProductOption, ProductOptionDisplay>();
+            AutoMapper.Mapper.CreateMap<IProductVariant, ProductVariantDisplay>();
         }
 
         /// <summary>
