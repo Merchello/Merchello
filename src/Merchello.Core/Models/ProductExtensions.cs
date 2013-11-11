@@ -125,7 +125,7 @@ namespace Merchello.Core.Models
             var doc = XDocument.Parse(xml);
             if (doc.Root == null) return XDocument.Parse("<product />");
                 
-            doc.Root.Add(((Product)product).MasterVariant.SerializeToXml().Root);
+            doc.Root.Add(((Product)product).MasterVariant.SerializeToXml(product.ProductOptions).Root);
             
             foreach (var variant in product.ProductVariants)
             {
@@ -135,7 +135,7 @@ namespace Merchello.Core.Models
         }
 
 
-        public static XDocument SerializeToXml(this IProductVariant productVariant)
+        public static XDocument SerializeToXml(this IProductVariant productVariant, ProductOptionCollection productOptions = null)
         {
             string xml;
             using (var sw = new StringWriter())
@@ -167,21 +167,12 @@ namespace Merchello.Core.Models
                     writer.WriteAttributeString("downloadMediaId", productVariant.DownloadMediaId.ToString());
                     writer.WriteAttributeString("totalInventoryCount", productVariant.TotalInventoryCount.ToString());
                     writer.WriteAttributeString("attributes", GetAttributesJson(productVariant));
-                    //TODO figure out correct for lucene indexer date formatting
-                    //writer.WriteAttributeString("createDate", productVariant.CreateDate.ToString());
-                    //writer.WriteAttributeString("updateDate", productVariant.UpdateDate.ToString());                    
+                    writer.WriteAttributeString("warehouses", GetWarehousesJson(productVariant));
+                    if(productOptions != null) writer.WriteAttributeString("options", GetProductOptionsJson(productOptions));
+                    writer.WriteAttributeString("createDate", productVariant.CreateDate.ToString("s"));
+                    writer.WriteAttributeString("updateDate", productVariant.UpdateDate.ToString("s"));                    
                     writer.WriteAttributeString("allDocs", "1");
-                    
-                    writer.WriteStartElement("warehouses");
-                    foreach (var warehouse in productVariant.Warehouses)
-                    {
-                        writer.WriteStartElement("warehouse");
-                        writer.WriteAttributeString("warehouseId", warehouse.WarehouseId.ToString(CultureInfo.InvariantCulture));
-                        writer.WriteAttributeString("count", warehouse.Count.ToString(CultureInfo.InvariantCulture));
-                        writer.WriteAttributeString("lowCount", warehouse.LowCount.ToString(CultureInfo.InvariantCulture));
-                        writer.WriteEndElement(); // warehouse
-                    }
-                    writer.WriteEndElement(); // warehouse Inventory
+                                        
 
                     writer.WriteEndElement(); // product variant
                     writer.WriteEndDocument();
@@ -191,6 +182,63 @@ namespace Merchello.Core.Models
             }
 
             return XDocument.Parse(xml); 
+        }
+
+        private static string GetProductOptionsJson(IEnumerable<IProductOption> productOptions)
+        {
+            var json = "[{0}]";
+            var options = "";
+
+            foreach (var option in productOptions)
+            {
+                var optionChoices = new List<object>();                
+                foreach (var choice in option.Choices)
+                {
+                    optionChoices.Add(
+                            new
+                            {
+                                attributeId = choice.Id,
+                                optionId = choice.OptionId,
+                                name = choice.Name,
+                                sortOrder = choice.SortOrder
+                            }
+                        );
+                }
+                if (options.Length > 0) options += ",";
+                options += JsonConvert.SerializeObject(
+                        new
+                        {
+                            optionId = option.Id,
+                            name = option.Name,
+                            required = option.Required,
+                            choices = optionChoices
+                        }
+                    );
+            }
+            json = string.Format(json, options);
+            return json;
+        }
+
+        private static string GetWarehousesJson(IProductVariant productVariant)
+        {
+            var json = "[{0}]";
+            var warehouses = "";
+
+            foreach (var wh in productVariant.Warehouses)
+            {
+                if (warehouses.Length > 0) warehouses += ",";
+                warehouses += JsonConvert.SerializeObject(
+                new
+                {
+                    warehouseId = wh.WarehouseId,
+                    productVariantId = wh.ProductVariantId,
+                    count = wh.Count,
+                    lowCount = wh.LowCount
+                },
+                Formatting.None);
+            }
+            json = string.Format(json, warehouses);
+            return json;
         }
 
         private static string GetAttributesJson(IProductVariant productVariant)

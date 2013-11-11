@@ -1,9 +1,8 @@
-﻿using Lucene.Net.Search;
-using Merchello.Core;
+﻿using Merchello.Core;
 using Merchello.Core.Models;
 
 namespace Merchello.Web.Models.ContentEditing
-{
+{    
     public static class ProductDisplayExtensions
     {
 
