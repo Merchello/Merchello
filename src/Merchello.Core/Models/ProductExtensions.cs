@@ -168,7 +168,9 @@ namespace Merchello.Core.Models
                     writer.WriteAttributeString("totalInventoryCount", productVariant.TotalInventoryCount.ToString());
                     writer.WriteAttributeString("attributes", GetAttributesJson(productVariant));
                     writer.WriteAttributeString("warehouses", GetWarehousesJson(productVariant));
+
                     if(productOptions != null) writer.WriteAttributeString("options", GetProductOptionsJson(productOptions));
+
                     writer.WriteAttributeString("createDate", productVariant.CreateDate.ToString("s"));
                     writer.WriteAttributeString("updateDate", productVariant.UpdateDate.ToString("s"));                    
                     writer.WriteAttributeString("allDocs", "1");
@@ -211,6 +213,7 @@ namespace Merchello.Core.Models
                             optionId = option.Id,
                             name = option.Name,
                             required = option.Required,
+                            sortOrder = option.SortOrder,
                             choices = optionChoices
                         }
                     );

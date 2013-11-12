@@ -8,6 +8,7 @@ namespace Merchello.Web.Models.ContentEditing
         {
         }
         
+        public int AttributeId { get; set; }
         public int OptionId { get; set; }
         public string Name { get; set; }
         public string Sku { get; set; }

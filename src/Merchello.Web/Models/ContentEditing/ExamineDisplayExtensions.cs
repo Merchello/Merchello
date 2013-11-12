@@ -1,77 +1,137 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data.SqlServerCe;
 using System.Linq;
 using Examine;
 using Examine.LuceneEngine;
+using Merchello.Core.Models;
+using Merchello.Examine;
+using Newtonsoft.Json;
 
 namespace Merchello.Web.Models.ContentEditing
 {
     /// <summary>
     /// Extension methods to map examine (lucene) documents to respective "Display" object classes
     /// </summary>
-    public static class ExamineDisplayExtensions
+    internal static class ExamineDisplayExtensions
     {
 
+        // TODO : This should be moved and split between the "contexttual cache" and a factory
+        internal static ProductDisplay ToProductDisplay(this SearchResult result)
+        {
+            // this should be the master variant
+            var productDisplay = new ProductDisplay(result.ToProductVariantDisplay());
 
+            var searcher = ExamineManager.Instance.SearchProviderCollection["MerchelloProductSearcher"];
+            var criteria = ExamineManager.Instance.CreateSearchCriteria(IndexTypes.ProductVariant);
+            criteria.Field("productKey", productDisplay.Key.ToString()).Not().Field("master", "True");
 
-        public static ProductVariantDisplay ToProductVariantDisplay(this SearchResult result)
+            var variants = searcher.Search(criteria);
+
+            productDisplay.ProductVariants =  variants.Select(variant => variant.ToProductVariantDisplay()).ToList();
+            productDisplay.ProductOptions = RawJsonFieldAsCollection<ProductOptionDisplay>(result, "options");
+
+            return productDisplay;
+        }
+
+        // TODO : This should be moved and split between the "contexttual cache" and a factory
+        internal static ProductVariantDisplay ToProductVariantDisplay(this SearchResult result)
         {
             var pvd = new ProductVariantDisplay()
             {
                 Id = result.Id,
-                ProductKey = FieldAsGuid(result.Fields["productKey"]),
+                ProductKey = FieldAsGuid(result, "productKey"),
                 Name = result.Fields["name"],
                 Sku = result.Fields["sku"],
-                Price = FieldAsDecimal(result.Fields["price"]) ,
+                Price = FieldAsDecimal(result, "price"),
                 OnSale = FieldAsBoolean(result.Fields["onSale"]),
-                SalePrice = FieldAsDecimal(result.Fields["salePrice"]),
-                /*CostOfGoods = FieldAsDecimal(result.Fields["costOfGoods"]),
-                Weight = FieldAsDecimal(result.Fields["weight"]),
-                Length = FieldAsDecimal(result.Fields["length"]),
-                Height = FieldAsDecimal(result.Fields["height"]),
-                Width = FieldAsDecimal(result.Fields["width"]),
-                Barcode = result.Fields["barcode"],*/
+                SalePrice = FieldAsDecimal(result, "salePrice"),
+                CostOfGoods = FieldAsDecimal(result,"costOfGoods"),
+                Weight = FieldAsDecimal(result,"weight"),
+                Length = FieldAsDecimal(result, "length"),
+                Height = FieldAsDecimal(result, "height"),
+                Width = FieldAsDecimal(result, "width"),
+                Barcode = result.Fields.ContainsKey("barcode") ? result.Fields["barcode"] : string.Empty,
                 Available = FieldAsBoolean(result.Fields["available"]),
                 TrackInventory = FieldAsBoolean(result.Fields["trackInventory"]),
                 OutOfStockPurchase = FieldAsBoolean(result.Fields["outOfStockPurchase"]),
                 Taxable = FieldAsBoolean(result.Fields["taxable"]),
-                Shippable = FieldAsBoolean(result.Fields["shippable"])//,
-               // Download = FieldAsBoolean(result.Fields["download"]),
-                //DownloadMediaId = FieldAsInteger(result.Fields["downloadMediaId"]) */
+                Shippable = FieldAsBoolean(result.Fields["shippable"]),
+                Download = FieldAsBoolean(result.Fields["download"]),
+                DownloadMediaId = FieldAsInteger(result, "downloadMediaId"),
+                Attributes = RawJsonFieldAsCollection<ProductAttributeDisplay>(result, "attributes"),
+                WarehouseInventory = RawJsonFieldAsCollection<WarehouseInventory>(result, "warehouses")
             };
 
             return pvd;
         }
 
         #region "Utility methods"
-        
-
-       
 
 
-        private static Guid FieldAsGuid(string value)
+        /// <summary>
+        /// Deserializes the a raw JSON field
+        /// </summary>
+        private static IEnumerable<T> RawJsonFieldAsCollection<T>(SearchResult result, string alias)
         {
+            return !result.Fields.ContainsKey(alias)
+                ? new List<T>()
+                : JsonConvert.DeserializeObject<IEnumerable<T>>(result.Fields[alias]);
+
+        }
+
+        /// <summary>
+        /// Converts a field value to a Guid or Guid.Empty if not found
+        /// </summary>
+        private static Guid FieldAsGuid(SearchResult result, string alias)
+        {
+            if (!result.Fields.ContainsKey(alias)) return Guid.Empty;
+
+            var value = result.Fields[alias];
             Guid converted;
             return Guid.TryParse(value, out converted) ? converted : Guid.Empty;
         }
 
-        public static Decimal FieldAsDecimal(string value)
+        /// <summary>
+        /// Converts a field value to a decimal or 0 if not found
+        /// </summary>
+        public static decimal FieldAsDecimal(SearchResult result, string alias)
         {
+            if (!result.Fields.ContainsKey(alias)) return 0;
+            var value = result.Fields[alias];
+
             decimal converted;
             return decimal.TryParse(value, out converted) ? converted : 0;
         }
 
-        public static int FieldAsInteger(string value)
+        /// <summary>
+        /// Converts a field value to an int or 0 if not found
+        /// </summary>
+        public static int FieldAsInteger(SearchResult result, string alias)
         {
+            if (!result.Fields.ContainsKey(alias)) return 0;
+            var value = result.Fields[alias];
+
             int converted;
             return int.TryParse(value, out converted) ? converted : 0;
         }
 
-        public static DateTime FieldAsDateTime(string value)
+        /// <summary>
+        /// Converts a field value to a DateTime or DateTime.MinValue if not found
+        /// </summary>
+        public static DateTime FieldAsDateTime(SearchResult result, string alias)
         {
+            if (!result.Fields.ContainsKey(alias)) return DateTime.MinValue;
+            var value = result.Fields[alias];
+
             DateTime converted;
             return DateTime.TryParse(value, out converted) ? converted : DateTime.MinValue;
         }
 
+        /// <summary>
+        /// Converts a field value to a boolean
+        /// </summary>
         public static bool FieldAsBoolean(string value)
         {
             return string.Equals("True", value);

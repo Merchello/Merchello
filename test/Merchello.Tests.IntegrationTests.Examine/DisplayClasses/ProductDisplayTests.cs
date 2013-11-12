@@ -16,6 +16,7 @@ namespace Merchello.Tests.IntegrationTests.Examine.DisplayClasses
     public class ProductDisplayTests : ServiceIntegrationTestBase
     {
         private Guid _productKey;
+        private int _productVariantId;
 
         [SetUp]
         public void Init()
@@ -55,19 +56,22 @@ namespace Merchello.Tests.IntegrationTests.Examine.DisplayClasses
                 product.ProductOptions["Size"].Choices["XL"]
             };
 
-            productVariantService.CreateProductVariantWithId(product, attributes);
+            var variant = productVariantService.CreateProductVariantWithId(product, attributes);
+            variant.AddToWarehouse(1);
+            productVariantService.Save(variant);
+            _productVariantId = variant.Id;
 
             provider.AddProductToIndex(product);
         }
 
         [Test]
-        public void Can_Build_ProductVariantDisplay_From_Indexed_Product()
+        public void Can_Build_ProductVariantDisplay_From_Indexed_ProductVariant()
         {
             //// Arrange
             var searcher = ExamineManager.Instance.SearchProviderCollection["MerchelloProductSearcher"];
             var criteria = searcher.CreateSearchCriteria("productvariant", BooleanOperation.And);
-            criteria.Field("productKey", _productKey.ToString()).And().Field("master", "true");
-
+            criteria.Id(_productVariantId);
+            
             var result = searcher.Search(criteria).FirstOrDefault();
 
             //// Act
@@ -75,6 +79,25 @@ namespace Merchello.Tests.IntegrationTests.Examine.DisplayClasses
 
             //// Assert
             Assert.NotNull(productVariantDisplay);
+            Assert.IsTrue(2 == productVariantDisplay.Attributes.Count());
+            Assert.IsTrue(productVariantDisplay.WarehouseInventory.Any());
+        }
+
+        [Test]
+        public void Can_Build_ProductDisplay_From_Indexed_Product()
+        {
+            //// Arrange
+            var searcher = ExamineManager.Instance.SearchProviderCollection["MerchelloProductSearcher"];
+            var criteria = searcher.CreateSearchCriteria("productvariant", BooleanOperation.And);
+            criteria.Field("productKey", _productKey.ToString()).And().Field("master", "True");
+
+            var result = searcher.Search(criteria).FirstOrDefault();
+
+            //// Act
+            var product = result.ToProductDisplay();
+
+            //// Assert
+            Assert.NotNull(product);
         }
     }
 }
