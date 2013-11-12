@@ -224,6 +224,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DisplayClasses\ProductDisplayTests.cs" />
     <Compile Include="Provider\ProductProviderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StartupTests\StartupExamineEventTests.cs" />
@@ -242,6 +243,10 @@
     <ProjectReference Include="..\..\src\Merchello.Examine\Merchello.Examine.csproj">
       <Project>{28a665a9-2aad-4230-ab8c-0f0b0f1b2115}</Project>
       <Name>Merchello.Examine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Merchello.Web\Merchello.Web.csproj">
+      <Project>{81D9E7DA-5A5A-444A-823F-1D97D7D5FEDF}</Project>
+      <Name>Merchello.Web</Name>
     </ProjectReference>
     <ProjectReference Include="..\Merchello.Tests.Base\Merchello.Tests.Base.csproj">
       <Project>{AC1A12FD-34CD-488A-90A1-528DE5941C33}</Project>

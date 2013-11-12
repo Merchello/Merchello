@@ -1,7 +1,5 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Examine;
-using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Merchello.Examine;
@@ -98,7 +96,12 @@ namespace Merchello.Web.Search
 
         private static void IndexProductVariant(IProductVariant productVariant)
         {
-            ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"].ReIndexNode(productVariant.SerializeToXml().Root, IndexTypes.ProductVariant);
+            IndexProductVariant(productVariant, null);
+        }
+
+        private static void IndexProductVariant(IProductVariant productVariant, ProductOptionCollection productOptions)
+        {
+            ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"].ReIndexNode(productVariant.SerializeToXml(productOptions).Root, IndexTypes.ProductVariant);
         }
 
         private static void DeleteProductFromIndex(IProduct product)
