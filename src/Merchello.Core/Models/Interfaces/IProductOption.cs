@@ -3,7 +3,7 @@ using Merchello.Core.Models.EntityBase;
 
 namespace Merchello.Core.Models
 {
-    public interface IProductOption : IIdEntity
+    public interface IProductOption : ISimpleEntity
     {
         /// <summary>
         /// The name of the option

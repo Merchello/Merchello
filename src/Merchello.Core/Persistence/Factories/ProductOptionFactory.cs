@@ -16,7 +16,6 @@ namespace Merchello.Core.Persistence.Factories
                     CreateDate = dto.CreateDate
                 };
 
-            option.ResetDirtyProperties();
 
             return option;
         }

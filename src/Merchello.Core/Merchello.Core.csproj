@@ -82,6 +82,8 @@
     <Compile Include="CloneHelper.cs" />
     <Compile Include="Configuration\Outline\SettingsCollection.cs" />
     <Compile Include="Configuration\Outline\SettingsElement.cs" />
+    <Compile Include="Models\EntityBase\ISimpleEntity.cs" />
+    <Compile Include="Models\EntityBase\SimpleEntity.cs" />
     <Compile Include="Strategies\Customer\BaseAnonymousCustomerConversionStrategy.cs" />
     <Compile Include="Strategies\Customer\AnonymousCustomerConversionStrategy.cs" />
     <Compile Include="Strategies\Customer\IAnonymousBasketConversionStrategy.cs" />

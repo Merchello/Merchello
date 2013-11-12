@@ -40,7 +40,7 @@ namespace Merchello.Core.Persistence
         internal virtual IAnonymousCustomerRepository CreateAnonymousCustomerRepository(IDatabaseUnitOfWork uow)
         {
             return new AnonymousCustomerRepository(uow,
-                _disableAllCache ? (IRepositoryCacheProvider)NullCacheProvider.Current : RuntimeCacheProvider.Current);
+                _disableAllCache ? (IRepositoryCacheProvider)NullCacheProvider.Current : NullCacheProvider.Current);
         }
 
         /// <summary>

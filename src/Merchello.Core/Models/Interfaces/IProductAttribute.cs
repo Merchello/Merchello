@@ -6,8 +6,9 @@ namespace Merchello.Core.Models
     /// <summary>
     /// Defines a product attribute
     /// </summary>
-    public interface IProductAttribute : IIdEntity
+    public interface IProductAttribute : ISimpleEntity
     {
+
         /// <summary>
         /// The id of the option which defines the attribute group this attribute belongs to
         /// </summary>

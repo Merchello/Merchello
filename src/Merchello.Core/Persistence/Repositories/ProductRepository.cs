@@ -288,7 +288,7 @@ namespace Merchello.Core.Persistence.Repositories
 
             if (!productOption.HasIdentity)
             {
-                ((IdEntity)productOption).AddingEntity();
+                ((SimpleEntity)productOption).AddingEntity();
                 var dto = factory.BuildDto(productOption);
 
                 Database.Insert(dto);
@@ -309,7 +309,7 @@ namespace Merchello.Core.Persistence.Repositories
             }
             else
             {
-                ((IdEntity)productOption).UpdatingEntity();
+                ((SimpleEntity)productOption).UpdatingEntity();
                 var dto = factory.BuildDto(productOption);
                 Database.Update(dto);
 
@@ -405,14 +405,14 @@ namespace Merchello.Core.Persistence.Repositories
 
             if (!productAttribute.HasIdentity)
             {
-                ((IdEntity)productAttribute).AddingEntity();
+                ((SimpleEntity)productAttribute).AddingEntity();
                 var dto = factory.BuildDto(productAttribute);
                 Database.Insert(dto);
                 productAttribute.Id = dto.Id;
             }
             else
             {
-                ((IdEntity)productAttribute).UpdatingEntity();
+                ((SimpleEntity)productAttribute).UpdatingEntity();
                 var dto = factory.BuildDto(productAttribute);
                 Database.Update(dto);
             }
