@@ -137,7 +137,23 @@
                 {
                     if ($scope.product.hasVariants)
                     {
-                        notificationsService.error("Save Not Implemented", "");
+                        // TODO: Anything different when saving a product and new variants are created?
+
+
+                        // Copy from master variant
+                        $scope.product.copyFromVariant($scope.productVariant);
+
+                        var promise = merchelloProductService.save($scope.product);
+
+                        promise.then(function (product) {
+
+                            notificationsService.success("Product Saved", "H5YR!");
+
+                        }, function (reason) {
+
+                            notificationsService.error("Product Save Failed", reason.message);
+
+                        });
                     }
                     else
                     {
