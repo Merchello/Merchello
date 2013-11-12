@@ -9,7 +9,7 @@ namespace Merchello.Web.Models.ContentEditing
         {
         }
         
-        public Guid Key { get; set; }
+        public int OptionId { get; set; }
         public string Name { get; set; }
         public bool Required { get; set; }
         public int SortOrder { get; set; }

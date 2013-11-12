@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Lucene.Net.Util;
 using Merchello.Core.Models;
 
 namespace Merchello.Web.Models.ContentEditing
@@ -7,39 +8,34 @@ namespace Merchello.Web.Models.ContentEditing
     public class ProductDisplay : ProductDisplayBase
     {
         public ProductDisplay()
+        { }
+
+        internal ProductDisplay(ProductVariantDisplay masterVariant)
         {
+            Key = masterVariant.ProductKey;
+            Name = masterVariant.Name;
+            Sku = masterVariant.Sku;
+            Price = masterVariant.Price;
+            CostOfGoods = masterVariant.CostOfGoods;
+            SalePrice = masterVariant.SalePrice;
+            OnSale = masterVariant.OnSale;
+            Weight = masterVariant.Weight;
+            Length = masterVariant.Length;
+            Height = masterVariant.Height;
+            Barcode = masterVariant.Barcode;
+            Available = masterVariant.Available;
+            TrackInventory = masterVariant.TrackInventory;
+            OutOfStockPurchase = masterVariant.OutOfStockPurchase;
+            Taxable = masterVariant.Taxable;
+            Shippable = masterVariant.Shippable;
+            Download = masterVariant.Download;
+            DownloadMediaId = masterVariant.DownloadMediaId;            
         }
 
         public Guid Key { get; set; }        
 
         public IEnumerable<ProductOptionDisplay> ProductOptions { get; set; }
         public IEnumerable<ProductVariantDisplay> ProductVariants { get; set; }
-
-       
-
-        ///// Move this to an extensions class on ProductDisplay
-        //public IProduct ToProduct(IProduct destination)
-        //{
-        //    destination.Name = Name;
-        //    destination.Sku = Sku;
-        //    destination.Price = Price;
-        //    destination.CostOfGoods = CostOfGoods;
-        //    destination.SalePrice = SalePrice;
-        //    destination.OnSale = OnSale;
-        //    destination.Weight = Weight;
-        //    destination.Length = Length;
-        //    destination.Width = Width;
-        //    destination.Height = Height;
-        //    destination.Barcode = Barcode;
-        //    destination.Available = Available;
-        //    destination.TrackInventory = TrackInventory;
-        //    destination.OutOfStockPurchase = OutOfStockPurchase;
-        //    destination.Taxable = Taxable;
-        //    destination.Shippable = Shippable;
-        //    destination.Download = Download;
-        //    destination.DownloadMediaId = DownloadMediaId;
-
-        //    return destination;
-        //}
+      
     }
 }
