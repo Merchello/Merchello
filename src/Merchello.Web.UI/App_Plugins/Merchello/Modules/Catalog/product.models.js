@@ -273,6 +273,7 @@
             var newVariant = new merchello.Models.ProductVariant();
             newVariant.copyFromProduct(self);
             newVariant.attributes = attributes.slice(0);
+            newVariant.selected = true;
 
             self.productVariants.push(newVariant);
             self.hasVariants = true;
