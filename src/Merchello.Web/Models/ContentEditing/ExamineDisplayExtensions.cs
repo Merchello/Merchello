@@ -17,26 +17,26 @@ namespace Merchello.Web.Models.ContentEditing
         {
             var pvd = new ProductVariantDisplay()
             {
-                Id = FieldAsInteger(result.Fields["id"]),
+                Id = result.Id,
                 ProductKey = FieldAsGuid(result.Fields["productKey"]),
                 Name = result.Fields["name"],
                 Sku = result.Fields["sku"],
-                Price = FieldAsDecimal(result.Fields["price"]),
+                Price = FieldAsDecimal(result.Fields["price"]) ,
                 OnSale = FieldAsBoolean(result.Fields["onSale"]),
                 SalePrice = FieldAsDecimal(result.Fields["salePrice"]),
-                CostOfGoods = FieldAsDecimal(result.Fields["costOfGoods"]),
+                /*CostOfGoods = FieldAsDecimal(result.Fields["costOfGoods"]),
                 Weight = FieldAsDecimal(result.Fields["weight"]),
                 Length = FieldAsDecimal(result.Fields["length"]),
                 Height = FieldAsDecimal(result.Fields["height"]),
                 Width = FieldAsDecimal(result.Fields["width"]),
-                Barcode = result.Fields["barcode"],
+                Barcode = result.Fields["barcode"],*/
                 Available = FieldAsBoolean(result.Fields["available"]),
                 TrackInventory = FieldAsBoolean(result.Fields["trackInventory"]),
                 OutOfStockPurchase = FieldAsBoolean(result.Fields["outOfStockPurchase"]),
                 Taxable = FieldAsBoolean(result.Fields["taxable"]),
-                Shippable = FieldAsBoolean(result.Fields["shippable"]),
-                Download = FieldAsBoolean(result.Fields["download"]),
-                DownloadMediaId = FieldAsInteger(result.Fields["downloadMediaId"])
+                Shippable = FieldAsBoolean(result.Fields["shippable"])//,
+               // Download = FieldAsBoolean(result.Fields["download"]),
+                //DownloadMediaId = FieldAsInteger(result.Fields["downloadMediaId"]) */
             };
 
             return pvd;

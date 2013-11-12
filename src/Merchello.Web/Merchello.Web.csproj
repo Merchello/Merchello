@@ -241,6 +241,7 @@
     <Compile Include="MerchelloHelper.cs" />
     <Compile Include="CustomerContext.cs" />
     <Compile Include="Models\Basket.cs" />
+    <Compile Include="Models\ContentEditing\ExamineDisplayExtensions.cs" />
     <Compile Include="Models\ContentEditing\ProductAttributeDisplay.cs" />
     <Compile Include="Models\ContentEditing\ProductDisplay.cs" />
     <Compile Include="Models\ContentEditing\ProductDisplayBase.cs" />
