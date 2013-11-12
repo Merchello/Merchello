@@ -63,10 +63,8 @@ namespace Merchello.Core.Persistence.Mappers
         /// </summary>
         private static readonly IEnumerable<Type> KeyedTypes = new List<Type>()
             {
-                { typeof(ICustomer) },
                 { typeof(IAnonymousCustomer) },
-                { typeof(IProduct) },
-                { typeof(IProductVariant) }
+                { typeof(IProduct) }
             };
 
         /// <summary>

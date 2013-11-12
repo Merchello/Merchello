@@ -11,11 +11,10 @@ namespace Merchello.Core.Models
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    public class ProductOption : IdEntity, IProductOption
+    public class ProductOption : SimpleEntity, IProductOption
     {
         private string _name;
         private bool _required;
-        private int _sortOrder;
         private ProductAttributeCollection _choices;
 
         public ProductOption(string name)
@@ -33,15 +32,7 @@ namespace Merchello.Core.Models
             _choices = choices;
         }
 
-        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<ProductOption, string>(x => x.Name);
-        private static readonly PropertyInfo RequiredSelector = ExpressionHelper.GetPropertyInfo<ProductOption, bool>(x => x.Required);
-        private static readonly PropertyInfo SortOrderSelector = ExpressionHelper.GetPropertyInfo<ProductOption, int>(x => x.SortOrder);
-        private static readonly PropertyInfo ChoicesChangedSelector = ExpressionHelper.GetPropertyInfo<ProductOption, ProductAttributeCollection>(x => x.Choices);
-
-        private void ProductAttributeChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            OnPropertyChanged(ChoicesChangedSelector);
-        }
+       
 
         /// <summary>
         /// The name of the option
@@ -51,11 +42,7 @@ namespace Merchello.Core.Models
             get { return _name; }
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
-                {
-                    _name = value;
-                    return _name;
-                }, _name, NameSelector);
+                _name = value;
             }
         }
 
@@ -71,11 +58,7 @@ namespace Merchello.Core.Models
             get { return _required; }
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
-                {
-                    _required = value;
-                    return _required;
-                }, _required, RequiredSelector);
+                _required = value;
             }
         }
 
@@ -83,18 +66,7 @@ namespace Merchello.Core.Models
         /// The order in which to list product option with respect to its product association
         /// </summary>
         [DataMember]
-        public int SortOrder
-        {
-            get { return _sortOrder; }
-            set
-            {
-                SetPropertyValueAndDetectChanges(o =>
-                {
-                    _sortOrder = value;
-                    return _sortOrder;
-                }, _sortOrder, SortOrderSelector);
-            }
-        }
+        public int SortOrder { get; set; }
 
 
         /// <summary>
@@ -104,8 +76,7 @@ namespace Merchello.Core.Models
         public ProductAttributeCollection Choices {
             get { return _choices; }
             set { 
-                _choices = value;
-                _choices.CollectionChanged += ProductAttributeChanged;
+                _choices = value;                
             }
         }
     }
