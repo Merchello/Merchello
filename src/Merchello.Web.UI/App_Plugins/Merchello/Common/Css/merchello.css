@@ -26,6 +26,8 @@ p.span3 { vertical-align: middle; }
 
 p.warning { color: #f57020; }
 
+.umb-panel-header h1.umb-headline:hover { border-bottom: none; }
+
 .merchello-panel-body { position: absolute; top: 101px; bottom: 0; left: 0; right: 0; width: 100%; clear: both; overflow: auto; }
 .merchello-panel-body a { color: #049cdb; }
 .merchello-panel-body .btn { color: #000; }
@@ -100,6 +102,7 @@ input[type="radio"][disabled="disabled"] + span, input[type="checkbox"][disabled
 .edit-address form { margin: 0; }
 .edit-address .controls-row { margin-left: 0 !important; }
 .edit-address input, .edit-address select { margin-top: 10px; }
+.edit-address a { margin-top: 20px; }
 
 .radio-group + .open { margin-top: 1.5em; }
 
@@ -110,7 +113,7 @@ input[type="radio"][disabled="disabled"] + span, input[type="checkbox"][disabled
 .tags + input[type="text"] { width: 30%; }
 
 .vcard .photo { border: solid 3px #53a93f; max-width: 30%; }
-.vcard .pull-right { margin-top: 15px; line-height: 15px; }
+.vcard .pull-right { margin-top: 24px; line-height: 15px; }
 
 .org, .street-address, .extended-address, .country-name, .email { display: block; }
 

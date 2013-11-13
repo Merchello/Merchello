@@ -10,7 +10,7 @@
 
             <div class="span4">
                 <div class="umb-headline-editor-wrapper">
-                    <h1>{{order.name}}</h1>
+                    <h1 class="umb-headline">{{order.name}}</h1>
                 </div>
             </div>
 
@@ -27,9 +27,98 @@
         <div class="merchello-panel-body row-fluid">
 
             <!-- Main content area -->
-            <div class="merchello-pane primary span9">
+            <div class="merchello-pane span10">
                 <div class="row warning">
                     <span><i class="icon-notepad"></i> <a href="#">You have a note from the customer</a>.</span> <!-- This should link down the page to the new note -->
+                </div>
+
+                <div class="control-group umb-control-group">
+
+                    <div class="merchello-section-label">
+                        Customer Information
+                        <small>Billing and Shipping addresses</small>
+                    </div>
+                    
+                    <div class="merchello-controls">
+
+                        <div class="vcard span5">
+                            <a href="#" class="pull-right"><i class="icon-edit"></i> Edit</a>
+                            <h3>Shipping Address</h3>
+
+                            <h4 class="fn">Heather Alvis</h4>
+                            <span class="org">Mindfly</span>
+                            <span class="adr">
+                                <span class="street-address">114 W Magnolia St.</span>
+                                <span class="extended-address">Suite 504</span>
+                                <span class="locality">Bellingham</span>, <span class="region">WA</span>, <span class="postal-code">98225</span>
+                                <span class="country-name">USA</span>
+                            </span>
+                            <span class="tel">360-990-0090</span>
+                        </div>
+
+                        <!-- This section swaps out with shipping info when Edit is clicked -->
+                        <!--<div class="span5 edit-address">
+                            <a href="#" class="pull-right"><i class="icon-save"></i> Save</a>
+                            <h3>Shipping Address</h3>
+
+                            <form class="row-fluid form-horizontal controls-row controls">
+                                <input type="text" class="span12" placeholder="Name" value="Heather Alvis" />
+                                <input type="text" class="span12" placeholder="Company" value="Mindfly" />
+                                <input type="text" class="span12" placeholder="Street Address" value="114 W. Magnolia St." />
+                                <input type="text" class="span12" placeholder="Apartment, Suite, Etc" value="Suite 504" />
+                                <input type="text" class="span12" placeholder="City" value="Bellingham" />
+                                <select class="span12 region">
+                                    <option value="WA">WA</option>
+                                </select>
+                                <input type="text" class="span12" placeholder="Postal Code" value="98225" />
+                                <select class="span12 country-name">
+                                    <option>USA</option>
+                                </select>
+                                <input type="text" class="span12" placeholder="Phone Number" value="360-990-0090" />
+                            </form>
+                        </div>-->
+
+                        <div class="vcard span5 pull-right">
+                            <a href="#" class="pull-right"><i class="icon-edit"></i> Edit</a>
+                            <h3>Billing Address</h3>
+
+                            <img class="photo pull-right" src="/media/1001/heather.jpg" />
+                            <h4 class="fn">Heather Alvis</h4>
+                            <span class="org">Mindfly</span>
+                            <span class="adr">
+                                <span class="street-address">114 W Magnolia St.</span>
+                                <span class="extended-address">Suite 504</span>
+                                <span class="locality">Bellingham</span>, <span class="region">WA</span>, <span class="postal-code">98225</span>
+                                <span class="country-name">USA</span>
+                            </span>
+                            <span class="tel">360-990-0090</span>
+                            <a href="mailto:heather@mindfly.com" class="email">heather@mindfly.com</a>
+                        </div>
+
+                        <!-- This section swaps out with the billing info when Edit is clicked -->
+                        <!--<div class="span5 edit-address pull-right">
+                            <a href="#" class="pull-right"><i class="icon-save"></i> Save</a>
+                            <h3>Billing</h3>
+
+                            <form class="row-fluid form-horizontal controls-row controls">
+                                <input type="text" class="span12" placeholder="Name" value="Heather Alvis" />
+                                <input type="text" class="span12" placeholder="Company" value="Mindfly" />
+                                <input type="text" class="span12" placeholder="Street Address" value="114 W. Magnolia St." />
+                                <input type="text" class="span12" placeholder="Apartment, Suite, Etc" value="Suite 504" />
+                                <input type="text" class="span12" placeholder="City" value="Bellingham" />
+                                <select class="span12 region">
+                                    <option value="WA">WA</option>
+                                </select>
+                                <input type="text" class="span12" placeholder="Postal Code" value="98225" />
+                                <select class="span12 country-name">
+                                    <option>USA</option>
+                                </select>
+                                <input type="text" class="span12" placeholder="Phone Number" value="360-990-0090" />
+                                <input type="email" class="span12" placeholder="Email" value="heather@mindfly.com" />
+                            </form>
+                        </div>-->
+
+                    </div>
                 </div>
 
                 <div class="control-group umb-control-group">
@@ -278,66 +367,6 @@
                         </table>
 
                     </div>
-                </div>
-
-            </div>
-
-
-            <!-- Right sidebar -->
-            <div class="merchello-pane secondary span3">
-
-                <div class="vcard well">
-                    <a href="#" class="pull-right"><i class="icon-edit"></i> Edit</a>
-                    <h3>Shipping Address</h3>
-
-                    <h4 class="fn">Heather Alvis</h4>
-                    <span class="org">Mindfly</span>
-                    <span class="adr">
-                        <span class="street-address">114 W Magnolia St.</span>
-                        <span class="extended-address">Suite 504</span>
-                        <span class="locality">Bellingham</span>, <span class="region">WA</span>, <span class="postal-code">98225</span>
-                        <span class="country-name">USA</span>
-                    </span>
-                    <span class="tel">360-990-0090</span>
-                </div>
-
-                <!-- This section swaps out with the above when Edit is clicked -->
-                <!--div class="well edit-address">
-                    <a href="#" class="pull-right"><i class="icon-save"></i> Save</a>
-                    <h3>Shipping Address</h3>
-
-                    <form class="row-fluid form-horizontal controls-row controls">
-                        <input type="text" class="span12" placeholder="Name" value="Heather Alvis" />
-                        <input type="text" class="span12" placeholder="Company" value="Mindfly" />
-                        <input type="text" class="span12" placeholder="Street Address" value="114 W. Magnolia St." />
-                        <input type="text" class="span12" placeholder="Apartment, Suite, Etc" value="Suite 504" />
-                        <input type="text" class="span12" placeholder="City" value="Bellingham" />
-                        <select class="span12 region">
-                            <option value="WA">WA</option>
-                        </select>
-                        <input type="text" class="span12" placeholder="Postal Code" value="98225" />
-                        <select class="span12 country-name">
-                            <option>USA</option>
-                        </select>
-                        <input type="text" class="span12" placeholder="Phone Number" value="360-990-0090" />
-                    </form>
-                </div-->
-
-                <div class="vcard well">
-                    <a href="#" class="pull-right"><i class="icon-user"></i> View Profile</a>
-                    <h3>Billing Address</h3>
-
-                    <img class="photo pull-right" src="/media/1001/heather.jpg" /> <!-- Is this being uploaded or attached to gravatar? -->
-                    <h4 class="fn">Heather Alvis</h4>
-                    <span class="org">Mindfly</span>
-                    <span class="adr">
-                        <span class="street-address">114 W Magnolia St.</span>
-                        <span class="extended-address">Suite 504</span>
-                        <span class="locality">Bellingham</span>, <span class="region">WA</span>, <span class="postal-code">98225</span>
-                        <span class="country-name">USA</span>
-                    </span>
-                    <span class="tel">360-990-0090</span>
-                    <a href="mailto:heather@mindfly.com" class="email">heather@mindfly.com</a>
                 </div>
 
             </div>
