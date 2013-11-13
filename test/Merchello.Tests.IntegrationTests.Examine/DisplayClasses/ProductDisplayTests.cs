@@ -16,20 +16,16 @@ namespace Merchello.Tests.IntegrationTests.Examine.DisplayClasses
     public class ProductDisplayTests : ServiceIntegrationTestBase
     {
         private Guid _productKey;
-        private int _productVariantId;
+        private int _productVariantId;        
 
         [SetUp]
         public void Init()
         {
-            //// Arrange            
-            var provider = (ProductIndexer)ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"];
-
-            var searcher = ExamineManager.Instance.SearchProviderCollection["MerchelloProductSearcher"];
-
+               
+            
             var productVariantService = PreTestDataWorker.ProductVariantService;
             var productService = PreTestDataWorker.ProductService;
 
-            //// Act
             var product = MockProductDataMaker.MockProductCollectionForInserting(1).First();
             product.ProductOptions.Add(new ProductOption("Color"));
             product.ProductOptions["Color"].Choices.Add(new ProductAttribute("Blue", "Blue"));
@@ -61,6 +57,7 @@ namespace Merchello.Tests.IntegrationTests.Examine.DisplayClasses
             productVariantService.Save(variant);
             _productVariantId = variant.Id;
 
+            var provider = (ProductIndexer)ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"];
             provider.AddProductToIndex(product);
         }
 
@@ -99,5 +96,7 @@ namespace Merchello.Tests.IntegrationTests.Examine.DisplayClasses
             //// Assert
             Assert.NotNull(product);
         }
+
+
     }
 }
