@@ -46,6 +46,8 @@ p.warning { color: $orange; }
 
 .umb-panel-header h1.umb-headline:hover { border-bottom: none; }
 
+.break { padding: 0 10px; height: 30px; line-height: 30px; display: inline-block; float: left; }
+
 //Main Sections
 .merchello-panel-body { position: absolute; top: 101px; bottom: 0; left: 0; right: 0; width: 100%; clear: both; overflow: auto; 
     a { color: $blue; }
@@ -137,6 +139,22 @@ td.name { width: 45%; }
     small { display: block; color: #999; font-size: 11px; }
 }
 
+.settings-table {
+    th:last-of-type { width: 123px; padding-right: 0; }
+}
+
+.shipping-table {
+    td {
+        &:nth-child(2) { width: 20%; }
+        &:nth-child(3) { width: 10%; }
+    }
+}
+
+td.edit { text-align: center;
+    .btn { display: inline-block; margin: 0 auto; }
+}
+td.adr, td.org { display: table-cell; }
+
 //Forms
 input[type="radio"], input[type="checkbox"] { margin-top: -2px; //line up checkboxes with label text
     td & { margin-top: 2px; }
@@ -166,6 +184,10 @@ input[type="radio"], input[type="checkbox"] { margin-top: -2px; //line up checkb
 
 .radio-group {
     + .open { margin-top: 1.5em; }
+}
+
+.country-dropdown {
+    .btn { height: 30px; }
 }
 
 // Tags

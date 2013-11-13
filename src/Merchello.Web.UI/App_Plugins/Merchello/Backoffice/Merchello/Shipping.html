@@ -19,15 +19,268 @@
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
                     
                     <div class="btn-group">
-                        
-
+                        <a href="#" class="btn btn-primary">Save</a>
                     </div>
+
                 </div>
             </div>
 
         </umb-header>
         
         <div class="merchello-panel-body">
+
+            <div class="merchello-pane row-fluid">
+                    
+                <!-- Property classes from Umbraco styles -->
+                <div class="control-group umb-control-group">
+                    <label class="merchello-control-label">
+                        Shipping Methods
+                        <small>Add shipping methods to existing regions or create a new region</small>
+                        <a href="#"><i class="icon-map"></i> Add a Country</a>
+                    </label>
+
+                    <div class="merchello-controls">
+
+                        <div class="row-fluid span10 col-xs-10">
+
+                            <!-- Add a Country Flyout -->
+                            <div class="well col-xs-12 span12 closed">
+                                <button class="btn close"><i class="icon-delete"></i></button>
+                                <h4>Add a Country</h4>
+                                <div class="form-group row-fluid country-dropdown">
+                                    <label for="country-name">Type your Country Name</label>
+                                    <div class="input-append col-xs-12 span12">
+                                        <!-- A country list should fly out beneath this input when the user starts typing or if they select the dropdown button -->
+                                        <input name="country-name" class="col-xs-6 span6" type="text" placeholder="United Republic of Tanzania" />
+                                        <div class="btn-group">
+                                            <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                                <i class="icon-navigation-down"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <input type="submit" class="btn" value="Cancel" />
+                                    <input type="submit" class="btn btn-primary" value="Save" />
+                                </div>
+                            </div>
+
+                            <!-- Add a Shipping Method Flyout -->
+                            <div class="well col-xs-12 span12 closed">
+                                <button class="btn close"><i class="icon-delete"></i></button>
+                                <h4>Add a Shipping Method for Canada</h4>
+                                <div class="form-group row-fluid">
+                                    <label for="method-name">Shipping Method Name</label>
+                                    <input name="method-name" class="col-xs-6 span6" type="text" />
+                                </div>
+
+                                <div class="form-group row-fluid">
+                                    <label for="method-type">Method Type</label>
+                                    <div class="col-xs-4 span4 row-fluid">
+                                        <select name="method-type" class="col-xs-11 span11">
+                                            <option>Vary by Weight</option>
+                                        </select>
+                                    </div>
+                                    <!-- The fields below display depending on the selection. Vary by weight will show start/end weight fields. Vary by price will show start/end price fields. Free will show no fields -->
+                                    <div class="input-append col-xs-1 span1">
+                                        <input type="text" class="col-xs-7 span7" />
+                                        <span class="add-on">lbs</span> <!-- This value is pulled in by lbs or g/kg depending on the user's preferred system in settings -->
+                                    </div>
+                                    <span class="text-center break">-</span>
+                                    <div class="input-append col-xs-1 span1">
+                                        <input type="text" class="col-xs-7 span7" />
+                                        <span class="add-on">lbs</span> <!-- This value is pulled in by lbs or g/kg depending on the user's preferred system in settings -->
+                                    </div>
+                                </div>
+
+                                <div class="form-group row-fluid">
+                                    <label for="shipping-cost">Shipping Cost</label>
+                                    <div class="input-prepend col-xs-6 span6">
+                                        <span class="add-on">$</span> <!-- This value is pulled in by the user's currency settings -->
+                                        <input type="text" class="col-xs-3 span3" />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <input type="submit" class="btn" value="Cancel" />
+                                    <input type="submit" class="btn btn-primary" value="Save" />
+                                </div>
+                            </div>
+
+                            <table class="table table-striped merchello-striped-table settings-table shipping-table">
+                                <thead>
+                                    <tr>
+                                        <th colspan="3">Canada</th>
+                                        <th><a href="#" class="btn btn-primary">Add a Method</a></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Standard Shipping</td>
+                                        <td>0lbs-5lbs</td>
+                                        <td>$10.00</td>
+                                        <td class="edit"><a href="#" class="btn btn-default btn-xs btn-mini">edit</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Heavy Goods Shipping</td>
+                                        <td>5lbs-20lbs</td>
+                                        <td>$20.00</td>
+                                        <td class="edit"><a href="#" class="btn btn-default btn-xs btn-mini">edit</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <table class="table table-striped merchello-striped-table settings-table shipping-table">
+                                <thead>
+                                    <tr>
+                                        <th colspan="3">United Kingdom</th>
+                                        <th><a href="#" class="btn btn-primary">Add a Method</a></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Standard Shipping</td>
+                                        <td>0lbs-5lbs</td>
+                                        <td>$50.00</td>
+                                        <td class="edit"><a href="#" class="btn btn-default btn-xs btn-mini">edit</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <table class="table table-striped merchello-striped-table settings-table">
+                                <thead>
+                                    <tr>
+                                        <th colspan="3">United States</th>
+                                        <th><a href="#" class="btn btn-primary">Add a Method</a></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Standard Shipping</td>
+                                        <td>0lbs-5lbs</td>
+                                        <td>$5.00</td>
+                                        <td class="edit"><a href="#" class="btn btn-default btn-xs btn-mini">edit</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Heavy Goods Shipping</td>
+                                        <td>5lbs-20lbs</td>
+                                        <td>$10.00</td>
+                                        <td class="edit"><a href="#" class="btn btn-default btn-xs btn-mini">edit</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <table class="table table-striped merchello-striped-table settings-table shipping-table">
+                                <thead>
+                                    <tr>
+                                        <th colspan="3">Everywhere Else</th>
+                                        <th><a href="#" class="btn btn-primary">Add a Method</a></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Standard Shipping</td>
+                                        <td>0lbs-5lbs</td>
+                                        <td>$50.00</td>
+                                        <td class="edit"><a href="#" class="btn btn-default btn-xs btn-mini">edit</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="control-group umb-control-group">
+                    <label class="merchello-control-label">
+                        Warehouses
+                        <small>Add or edit warehouses</small>
+
+                        <a href="#"><i class="icon-door-open"></i> Add a Warehouse</a>
+                    </label>
+
+                    <div class="merchello-controls">
+
+                        <div class="row-fluid span10 col-xs-10">
+
+                            <!-- Add a Warehouse Flyout -->
+                            <div class="well col-xs-12 span12 closed">
+                                <button class="btn close"><i class="icon-delete"></i></button>
+                                <h4>Add a Warehouse</h4>
+                                <div class="form-group row-fluid">
+                                    <label for="name">Name</label>
+                                    <input class="span6" name="name" type="text" />
+                                </div>
+                                <div class="form-group row-fluid">
+                                    <label for="address">Address</label>
+                                    <input class="span6" name="address" type="text" placeholder="Street Address" />
+                                    <input class="span6" name="extended-address" type="text" placeholder="Extended Address" />
+                                    <input class="span6" name="city" type="text" placeholder="City" />
+                                </div>
+                                <div class="form-group row-fluid">
+                                    <input class="span3" name="state-province" type="text" placeholder="State/Province" />
+                                    <input class="span3" name="postal-code" type="text" placeholder="Zip/Postal Code" />
+                                </div>
+                                <div class="form-group row-fluid">
+                                    <input class="span6" name="country" type="text" placeholder="Country" />
+                                    <label class="label-checkbox"><input name="primary" type="checkbox"> <span>Make this my primary warehouse</span></label>
+                                </div>
+
+                                <div>
+                                    <input type="submit" class="btn" value="Cancel" />
+                                    <input type="submit" class="btn btn-primary" value="Save" />
+                                </div>
+                            </div>
+
+                            <table class="table table-striped merchello-striped-table settings-table warehouse-table">
+                                <thead>
+                                    <tr>
+                                        <th>Primary</th>
+                                        <th>Name</th>
+                                        <th>Address</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="vcard">
+                                        <td><input type="radio" name="primary" checked="checked" /></td>
+                                        <td class="org">Bramble Berry</td>
+                                        <td class="adr">
+                                            <span class="street-address">114 W. Magnolia St</span>
+                                            <span class="extended-address">Suite 504</span>
+                                            <span class="locality">Bellingham</span>, <span class="region">WA</span> <span class="postal-code">98225</span>
+                                        </td>
+                                        <td class="edit">
+                                            <div class="btn-toolbar umb-btn-toolbar">
+                                                <a class="btn btn-default btn-xs btn-mini">edit</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="vcard">
+                                        <td><input type="radio" name="primary" /></td>
+                                        <td class="org">Mindfly</td>
+                                        <td class="adr">
+                                            <span class="street-address">105 W Holly St</span>
+                                            <span class="extended-address">H22</span>
+                                            <span class="locality">Bellingham</span>, <span class="region">WA</span> <span class="postal-code">98225</span>
+                                        </td>
+                                        <td class="edit">
+                                            <div class="btn-toolbar umb-btn-toolbar">
+                                                <a class="btn btn-default btn-xs btn-mini">edit</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                    </div>
+
+            </div>
+
         </div>
             
     </umb-panel>
