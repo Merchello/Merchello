@@ -253,10 +253,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DisplayClasses\ProductDisplayTests.cs" />
+    <Compile Include="Examine\StartupExamineEventTests.cs" />
     <Compile Include="ItemCache\BasketTests.cs" />
     <Compile Include="DbInstall\InitialDataTests.cs" />
+    <Compile Include="MerchelloHelperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DbInstall\DatabaseSchema.cs" />
+    <Compile Include="Examine\ProductProviderTests.cs" />
     <Compile Include="Services\Customer\CustomerItemCacheServiceTests.cs" />
     <Compile Include="Services\Customer\CustomerServiceTests.cs" />
     <Compile Include="Services\ProductVariant\ProductVariantTests.cs" />

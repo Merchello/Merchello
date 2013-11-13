@@ -10,7 +10,7 @@ using Merchello.Tests.Base.DataMakers;
 using Merchello.Tests.IntegrationTests.Services;
 using NUnit.Framework;
 
-namespace Merchello.Tests.IntegrationTests.Examine.Provider
+namespace Merchello.Tests.IntegrationTests.Examine
 {
     [TestFixture]
     public class ProductProviderTests : ServiceIntegrationTestBase
