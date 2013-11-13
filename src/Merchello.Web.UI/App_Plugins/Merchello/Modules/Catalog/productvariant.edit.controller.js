@@ -213,29 +213,121 @@
 
         };
         
-        $scope.updateVariants = function () {
+        $scope.updateVariants = function (thisForm) {
 
+            // Create the product if not created
+            if ($scope.creatingVariant)
+            {
+                if (thisForm.$valid)
+                {
+                    notificationsService.info("Creating and saving new product", "");
+
+                    // Copy from master variant
+                    $scope.product.copyFromVariant($scope.productVariant);
+
+                    var promiseCreate = merchelloProductService.create($scope.productVariant.name, $scope.productVariant.sku, $scope.productVariant.price);
+                    promiseCreate.then(function (product) {
+
+                        $scope.product.key = product.key;
+                    
+                        $scope.creatingVariant = false;
+
+                        // Created, now save the initial settings from the model
+                        var promiseSave = merchelloProductService.save($scope.product);
+                        promiseSave.then(function (product) {
+
+                            notificationsService.success("Product Saved! H5YR!");
+
+                            // Get updated product and options
+                            var promiseProduct = merchelloProductService.getByKey($scope.product.key);
+                            promiseProduct.then(function (product) {
+
+                                $scope.product = new merchello.Models.Product(product);
+                                $scope.productVariant.copyFromProduct($scope.product);
+
+                                updateVariants();
+
+                            }, function (reason) {
+
+                                notificationsService.error("Product Load Failed", reason.message);
+
+                            });
+
+                        }, function (reason) {
+
+                            notificationsService.error("Product Save Failed", reason.message);
+
+                        });
+
+                        notificationsService.success("Product Created", $scope.product.Key);
+
+                    }, function (reason) {
+
+                        notificationsService.error("Product Creation Failed", reason.message);
+
+                    });
+                }
+                else
+                {
+                    notificationsService.error("Please verify a valid name, sku, and price has been entered", "");
+                }
+            }
+            else
+            {
+                // Copy from master variant
+                $scope.product.copyFromVariant($scope.productVariant);
+
+                var promise = merchelloProductService.save($scope.product);
+
+                promise.then(function (product) {
+
+                    notificationsService.success("Product Saved", "H5YR!");
+
+                    // Get updated product and options
+                    var promiseProduct = merchelloProductService.getByKey($scope.product.key);
+                    promiseProduct.then(function (product) {
+
+                        $scope.product = new merchello.Models.Product(product);
+                        $scope.productVariant.copyFromProduct($scope.product);
+
+                        updateVariants();
+
+                    }, function (reason) {
+
+                        notificationsService.error("Product Load Failed", reason.message);
+
+                    });
+
+                }, function (reason) {
+
+                    notificationsService.error("Product Save Failed", reason.message);
+
+                });
+            }
+        };
+
+        // Setup variants
+        function updateVariants()
+        {
             var choiceSets = [];
             var permutation = [];
 
-            for(var i=0; i < $scope.product.productOptions.length; i++)
-            {
+            for (var i = 0; i < $scope.product.productOptions.length; i++) {
                 var currentOption = $scope.product.productOptions[i];
                 choiceSets.push(currentOption.choices);
                 permutation.push('');
             }
- 
+
             $scope.possibleProductVariants = [];
             $scope.product.productVariants = [];
 
             permute(choiceSets, 0, permutation);
 
-            for (var p = 0; p < $scope.possibleProductVariants.length; p++)
-            {
+            for (var p = 0; p < $scope.possibleProductVariants.length; p++) {
                 // Todo: check if already exists
                 $scope.product.addVariant($scope.possibleProductVariants[p]);
             }
-        };
+        }
 
 
         // Builds the possible variants
