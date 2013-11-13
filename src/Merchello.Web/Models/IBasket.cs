@@ -8,6 +8,7 @@ namespace Merchello.Web.Models
     {
         // Adds an item to the basket
         void AddItem(IProduct product);
+        void AddItem(IProduct product, int quantity);
         void AddItem(IProduct product, string name, int quantity);
         void AddItem(IProductVariant productVariant);
         void AddItem(IProductVariant productVariant, string name, int quantity);
