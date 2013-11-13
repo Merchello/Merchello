@@ -1,4 +1,12 @@
-﻿using Umbraco.Web;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Web.UI.WebControls;
+using Examine.SearchCriteria;
+using Merchello.Core.Models;
+using Merchello.Web.Cache;
+using Merchello.Web.Models.ContentEditing;
+using Umbraco.Web;
 
 namespace Merchello.Web
 {
@@ -7,20 +15,28 @@ namespace Merchello.Web
     /// </summary> 
     public class MerchelloHelper
     {
-        //private MerchelloContext _merchelloContext;
-        private UmbracoContext _umbracoContext;
+        
+        #region Product
 
-        public MerchelloHelper(UmbracoContext umbracoContext)
+        public ProductDisplay Product(string key)
         {
-
-            //_merchelloContext = merchelloContext;
-            _umbracoContext = umbracoContext;
+            return ProductQuery.GetByKey(key);
         }
 
-        #region Customer
+        public ProductDisplay Product(Guid key)
+        {
+            return ProductQuery.GetByKey(key);
+        }
 
+        public IEnumerable<ProductDisplay> SearchProducts(string term)
+        {
+            return ProductQuery.Search(term);
+        }
 
-
+        public IEnumerable<ProductDisplay> SearchProducts(ISearchCriteria criteria)
+        {
+            return ProductQuery.Search(criteria);
+        }
 
         #endregion
 

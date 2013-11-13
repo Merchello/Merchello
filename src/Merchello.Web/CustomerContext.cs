@@ -88,7 +88,7 @@ namespace Merchello.Web
         /// <param name="key">The key of the customer to retrieve</param>
         private void TryGetCustomer(Guid key)
         {
-            var customer = (ICustomerBase)_cache.RuntimeCache.GetCacheItem(CachingBacker.CostumerCacheKey(key));
+            var customer = (ICustomerBase)_cache.RuntimeCache.GetCacheItem(HttpCachingBacker.CostumerCacheKey(key));
             
             // check the cache for a previously retrieved customer
             if (customer != null)
@@ -147,7 +147,7 @@ namespace Merchello.Web
             _umbracoContext.HttpContext.Response.Cookies.Add(cookie);
 
             _cache.RequestCache.GetCacheItem(ConsumerCookieKey, () => customer.EntityKey);
-            _cache.RuntimeCache.GetCacheItem(CachingBacker.CostumerCacheKey(customer.EntityKey), () => customer, TimeSpan.FromMinutes(5), true);
+            _cache.RuntimeCache.GetCacheItem(HttpCachingBacker.CostumerCacheKey(customer.EntityKey), () => customer, TimeSpan.FromMinutes(5), true);
         }
     }
 }
