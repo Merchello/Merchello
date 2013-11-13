@@ -8,9 +8,8 @@ using Merchello.Tests.Base.DataMakers;
 using Merchello.Tests.IntegrationTests.Services;
 using Merchello.Web.Models.ContentEditing;
 using NUnit.Framework;
-using umbraco.presentation.dialogs;
 
-namespace Merchello.Tests.IntegrationTests.Examine.DisplayClasses
+namespace Merchello.Tests.IntegrationTests.DisplayClasses
 {
     [TestFixture]
     public class ProductDisplayTests : ServiceIntegrationTestBase

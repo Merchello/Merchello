@@ -66,6 +66,15 @@ namespace Merchello.Web.Models
         /// Intended to be used by a <see cref="IProduct"/>s without options.  If the product does have options and a collection of <see cref="IProductVariant"/>s, the first
         /// <see cref="IProductVariant"/> is added to the basket item collection
         /// </summary>
+        public void AddItem(IProduct product, int quantity)
+        {
+            AddItem(product, product.Name, quantity);
+        }
+
+        /// <summary>
+        /// Intended to be used by a <see cref="IProduct"/>s without options.  If the product does have options and a collection of <see cref="IProductVariant"/>s, the first
+        /// <see cref="IProductVariant"/> is added to the basket item collection
+        /// </summary>
         /// <param name="product"><see cref="IProduct"/></param>
         /// <param name="name"></param>
         /// <param name="quantity"></param>

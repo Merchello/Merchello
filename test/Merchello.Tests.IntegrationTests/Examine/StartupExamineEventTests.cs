@@ -10,7 +10,7 @@ using NUnit.Framework;
 using Umbraco.Core;
 using Umbraco.Core.Events;
 
-namespace Merchello.Tests.IntegrationTests.Examine.StartupTests
+namespace Merchello.Tests.IntegrationTests.Examine
 {
     [TestFixture]
     public class StartupExamineEventTests : ServiceIntegrationTestBase
