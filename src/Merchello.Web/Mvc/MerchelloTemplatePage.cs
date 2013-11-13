@@ -30,7 +30,7 @@ namespace Merchello.Web.Mvc
 
         public MerchelloHelper Merchello
         {
-            get { return _helper ?? (_helper = new MerchelloHelper(UmbracoContext)); }
+            get { return _helper ?? (_helper = new MerchelloHelper()); }
         }
     }
 }

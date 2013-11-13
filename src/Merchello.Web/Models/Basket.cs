@@ -293,7 +293,7 @@ namespace Merchello.Web.Models
         /// <returns></returns>
         private static string MakeCacheKey(ICustomerBase customer)
         {
-            return CachingBacker.CustomerBasketCacheKey(customer.EntityKey, EnumTypeFieldConverter.CustomerItemItemCache.Basket.TypeKey);
+            return HttpCachingBacker.CustomerBasketCacheKey(customer.EntityKey, EnumTypeFieldConverter.CustomerItemItemCache.Basket.TypeKey);
         }
 
         

@@ -1,12 +1,10 @@
 ﻿using System;
-using Merchello.Core;
 using Merchello.Core.Models;
-using Merchello.Core.Models.TypeFields;
 using Merchello.Web.Models;
 
 namespace Merchello.Web.Cache
 {
-    internal static class CachingBacker
+    internal static class HttpCachingBacker
     {
         /// <summary>
         /// Returns a cache key intended for runtime caching of a <see cref="ICustomerBase"/>
