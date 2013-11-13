@@ -68,7 +68,7 @@
                                 </div>
                             </div>
                                     
-                            <div class="row">
+                            <div class="row-fluid">
                                 <div class="form-group col-xs-6 span6">
                                     <label for="sku">Manufacturer</label>
                                     <input id="Text1" name="sku" type="text" class="form-control col-xs-8 span8"  />
@@ -80,14 +80,14 @@
                                 </div>
                             </div>
 
-                            <div class="row">
+                            <div class="row-fluid">
                                 <div class="form-group col-xs-6 span6">
-                                    <label class="label-checkbox"><input name="onsale" type="checkbox" data-ng-model="productVariant.hasDigitalDownload"> <span>This variant has digital goods</span></label>
-                                    <label class="label-checkbox" data-ng-show="creatingVariant || !product.hasVariants"><input name="onsale" type="checkbox" data-ng-model="productVariant.hasOptions" data-ng-click="ensureInitialOption()"> <span>This variant has options (like size or color)</span></label>
-                                    <label class="label-checkbox"><input name="onsale" type="checkbox" data-ng-model="productVariant.taxable"> <span>This variant is taxable</span></label>
+                                    <label class="label-checkbox"><input name="digital" type="checkbox" data-ng-model="productVariant.hasDigitalDownload"> <span>This variant has digital goods</span></label>
+                                    <label class="label-checkbox" data-ng-show="creatingVariant || !product.hasVariants"><input name="hasoptions" type="checkbox" data-ng-model="productVariant.hasOptions" data-ng-click="ensureInitialOption()"> <span>This variant has options (like size or color)</span></label>
+                                    <label class="label-checkbox"><input name="taxable" type="checkbox" data-ng-model="productVariant.taxable"> <span>This variant is taxable</span></label>
                                 </div>
                                 <div class="form-group col-xs-6 span6">
-                                    <label class="label-checkbox"><input name="chargetaxes" type="checkbox" data-ng-model="productVariant.trackInventory" data-ng-disabled="productVariant.hasOptions"> <span>Track inventory for this variant</span></label>
+                                    <label class="label-checkbox"><input name="trackinventory" type="checkbox" data-ng-model="productVariant.trackInventory" data-ng-disabled="productVariant.hasOptions"> <span>Track inventory for this variant</span></label>
                                     <label class="label-checkbox"><input name="shippable" type="checkbox" data-ng-model="productVariant.shippable"> <span>This variant is shippable</span></label>
                                 </div>
                             </div>
