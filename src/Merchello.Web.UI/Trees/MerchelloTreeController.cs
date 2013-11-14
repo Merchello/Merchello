@@ -24,16 +24,24 @@ namespace Merchello.Web.UI.Trees
             {
                 collection.Add(CreateTreeNode("regions", queryStrings, "Regions", "icon-map", false, "merchello/merchello/Regions/"));
                 collection.Add(CreateTreeNode("shipping", queryStrings, "Shipping", "icon-truck", false, "merchello/merchello/Shipping/"));
+                collection.Add(CreateTreeNode("vendors", queryStrings, "Vendors", "icon-piggy-bank", false, "merchello/merchello/Vendors/"));
                 collection.Add(CreateTreeNode("taxation", queryStrings, "Taxation", "icon-piggy-bank", false, "merchello/merchello/Taxation/"));
                 collection.Add(CreateTreeNode("payment", queryStrings, "Payment", "icon-bill-dollar", false, "merchello/merchello/Payment/"));
+                collection.Add(CreateTreeNode("notifications", queryStrings, "Notifications", "icon-alert", false, "merchello/merchello/Notifications/"));
                 collection.Add(CreateTreeNode("debuglog", queryStrings, "Debug Log", "icon-alert", false, "merchello/merchello/Debug/"));
+            }
+            else if (id == "reports")
+            {
+                collection.Add(CreateTreeNode("salesOverTime", queryStrings, "Sales Over Time", "icon-bar-chart", false, "merchello/merchello/SalesOverTime/"));
+                collection.Add(CreateTreeNode("salesByItem", queryStrings, "Sales By Item", "icon-bar-chart", false, "merchello/merchello/SalesByItem/"));
+                collection.Add(CreateTreeNode("taxesByDestination", queryStrings, "Taxes By Destination", "icon-bar-chart", false, "merchello/merchello/TaxesByDestination/"));
             }
             else
             {
                 collection.Add(CreateTreeNode("catalog", queryStrings, "Catalog", "icon-barcode", false, "merchello/merchello/ProductList/"));
                 collection.Add(CreateTreeNode("orders", queryStrings, "Orders", "icon-receipt-dollar", false, "merchello/merchello/OrderList/"));
                 collection.Add(CreateTreeNode("customers", queryStrings, "Customers", "icon-user", false, "merchello/merchello/CustomerList/"));
-                collection.Add(CreateTreeNode("reports", queryStrings, "Reports", "icon-bar-chart", false, "merchello/merchello/Reports/"));
+                collection.Add(CreateTreeNode("reports", queryStrings, "Reports", "icon-bar-chart", true, "merchello/merchello/Reports/"));
                 collection.Add(CreateTreeNode("settings", queryStrings, "Settings", "icon-settings", true, "merchello/merchello/Settings/"));
             }
 

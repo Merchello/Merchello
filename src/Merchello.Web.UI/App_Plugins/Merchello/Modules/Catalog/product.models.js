@@ -274,6 +274,7 @@
             newVariant.copyFromProduct(self);
             newVariant.attributes = attributes.slice(0);
             newVariant.selected = true;
+            newVariant.sku = newVariant.sku + '-' + self.productVariants.length + 1;    // TODO: replace with settings "skuSeparator"
 
             self.productVariants.push(newVariant);
             self.hasVariants = true;

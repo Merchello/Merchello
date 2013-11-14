@@ -10,6 +10,16 @@
 
         return {
 
+            create: function (productVariant) {
+
+                return umbRequestHelper.resourcePromise(
+                   $http.post(
+                       '/umbraco/Merchello/ProductVariantApi/NewProductVariant',
+                       productVariant
+                   ),
+                   'Failed to create product variant ' + productVariant.sku);
+            },
+
             getById: function (id) {
 
                 return umbRequestHelper.resourcePromise(
