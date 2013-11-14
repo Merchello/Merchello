@@ -143,11 +143,11 @@ namespace Merchello.Web.Editors
         /// <summary>
         /// Creates a product variant from Product & Attributes
         ///
-        /// POST /umbraco/Merchello/ProductVariantApi/NewProduct
+        /// POST /umbraco/Merchello/ProductVariantApi/NewProductVariant
         /// </summary>
         /// <param name="item"></param>
         [AcceptVerbs("GET", "POST")]
-        public ProductVariantDisplay NewProduct(ProductVariantDisplay productVariant)
+        public ProductVariantDisplay NewProductVariant(ProductVariantDisplay productVariant)
         {
             IProductVariant newProductVariant = null;
 
@@ -158,8 +158,8 @@ namespace Merchello.Web.Editors
                 ProductAttributeCollection productAttributes = new ProductAttributeCollection();
                 foreach (var attribute in productVariant.Attributes)
                 {
-                    ProductOption productOption = product.ProductOptions[attribute.OptionId] as ProductOption;
-                    IProductAttribute productAttribute = productOption.Choices[attribute.AttributeId];
+                    ProductOption productOption = product.ProductOptions.FirstOrDefault(x => x.Id == attribute.OptionId) as ProductOption;
+                    IProductAttribute productAttribute = productOption.Choices.FirstOrDefault(x => x.Id == attribute.AttributeId);
                     productAttributes.Add(attribute.ToProductAttribute(productAttribute));
                 }
 

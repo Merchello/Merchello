@@ -1,0 +1,90 @@
+﻿<link href="/App_Plugins/Merchello/Common/Css/merchello.css" rel="stylesheet">
+
+<div 
+    ng-controller="Merchello.Dashboards.Settings.VendorsController"
+    ng-show="loaded">
+
+    <umb-panel>
+
+        <umb-header>
+
+            <div class="span4">
+                <div class="umb-headline-editor-wrapper">
+                     <h1 class="umb-headline">Vendors</h1>
+                </div>
+            </div>
+
+
+            <div class="span8">
+                <div class="btn-toolbar pull-right umb-btn-toolbar">
+                    
+                    <div class="btn-group">
+
+                    </div>
+                </div>
+            </div>
+
+        </umb-header>
+        
+        <div class="merchello-panel-body">
+            
+            <div class="merchello-pane row-fluid">
+
+                <div class="control-group umb-control-group">
+                    <label class="merchello-control-label">
+                        Tax Methods
+                        <small>Set flat tax rates for your shipping regions</small>
+                    </label>
+
+                    <div class="merchello-controls row-fluid">
+
+                        <div class="row-fluid col-xs-4 span4">
+                            <table class="table table-striped merchello-striped-table settings-table tax-table form-horizontal">
+                                <tbody>
+                                    <tr>
+                                        <td class="control-group">
+                                            <label class="control-label">Canada</label>
+                                            <div class="input-append span2 pull-right">
+                                                <input type="text" class="form-control col-xs-7 span7">
+                                                <span class="add-on">%</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="control-group">
+                                            <label class="control-label">United Kingdom</label>
+                                            <div class="input-append span2 pull-right">
+                                                <input type="text" class="form-control col-xs-7 span7">
+                                                <span class="add-on">%</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="control-group">
+                                            <label class="control-label">United States</label>
+                                            <div class="input-append span2 pull-right">
+                                                <input type="text" class="form-control col-xs-7 span7">
+                                                <span class="add-on">%</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="control-group">
+                                            <label class="control-label">Everywhere Else</label>
+                                            <div class="input-append span2 pull-right">
+                                                <input type="text" class="form-control col-xs-7 span7">
+                                                <span class="add-on">%</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+            
+    </umb-panel>
+</div>

@@ -259,6 +259,11 @@
     <Folder Include="App_Plugins\Merchello\Views\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\TaxesByDestination.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\SalesByItem.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\SalesOverTime.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\Notifications.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\Vendors.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\Taxation.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\Shipping.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\Regions.html" />
@@ -287,6 +292,9 @@
     <Content Include="App_Plugins\Merchello\Modules\Catalog\product.create.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\product.edit.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\product.list.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Report\reports.salesByItem.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Report\reports.taxesByDestination.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Report\reports.salesOverTime.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Report\reports.list.controller.js" />
     <Content Include="App_Plugins\Merchello\Directives\tag.manager.directive.js" />
     <Content Include="App_Plugins\Merchello\lib\bootstrap\css\bootstrap-theme.min.css" />
@@ -296,6 +304,8 @@
     <Content Include="App_Plugins\Merchello\lib\ngTagsInput\ng-tags-input.min.css" />
     <Content Include="App_Plugins\Merchello\lib\ngTagsInput\ng-tags-input.min.js" />
     <Content Include="App_Plugins\Merchello\lib\select2\ui-select2.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\vendors.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\notifications.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\shipping.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\taxation.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\debug.controller.js" />

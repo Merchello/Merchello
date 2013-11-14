@@ -8,7 +8,7 @@
      * @description
      * The controller for the product editor
      */
-    controllers.ProductVariantEditController = function ($scope, $routeParams, $location, notificationsService, dialogService, angularHelper, serverValidationManager, merchelloProductService, merchelloProductVariantService) {
+    controllers.ProductVariantEditController = function ($scope, $routeParams, $location, $q, notificationsService, dialogService, angularHelper, serverValidationManager, merchelloProductService, merchelloProductVariantService) {
 
         function loadProductVariant(id) {
 
@@ -28,17 +28,21 @@
             });
         }
 
-        function loadProduct(key, hasVariants) {
+        function loadProduct(key, isVariant) {
 
             var promiseProduct = merchelloProductService.getByKey(key);
             promiseProduct.then(function (product) {
 
                 $scope.product = new merchello.Models.Product(product);
 
-                if (!hasVariants)
+                if (!isVariant)
                 {
                     // create the master variant (since most form items are bound to the productVariant model)
                     $scope.productVariant.copyFromProduct($scope.product);
+                }
+                else
+                {
+                    // Load variant
                 }
 
                 $scope.loaded = true;
@@ -137,13 +141,22 @@
                 {
                     if ($scope.product.hasVariants)
                     {
-                        // TODO: Anything different when saving a product and new variants are created?
-
-
                         // Copy from master variant
                         $scope.product.copyFromVariant($scope.productVariant);
 
-                        var promise = merchelloProductService.save($scope.product);
+                        var promisesArray = [];
+
+                        // Save product
+                        promisesArray.push(merchelloProductService.save($scope.product));
+
+                        // Create Variants
+                        for (var v = 0; v < $scope.product.productVariants.length; v++)
+                        {
+                            var currentVariant = $scope.product.productVariants[v];
+                            promisesArray.push(merchelloProductVariantService.create(currentVariant));
+                        }
+
+                        var promise = $q.all(promisesArray);
 
                         promise.then(function (product) {
 
