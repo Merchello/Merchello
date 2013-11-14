@@ -26,6 +26,10 @@ p.span3 { vertical-align: middle; }
 
 p.warning { color: #f57020; }
 
+.umb-panel-header h1.umb-headline:hover { border-bottom: none; }
+
+.break { padding: 0 10px; height: 30px; line-height: 30px; display: inline-block; float: left; }
+
 .merchello-panel-body { position: absolute; top: 101px; bottom: 0; left: 0; right: 0; width: 100%; clear: both; overflow: auto; }
 .merchello-panel-body a { color: #049cdb; }
 .merchello-panel-body .btn { color: #000; }
@@ -85,6 +89,18 @@ td.name { width: 45%; }
 .product-options input[type="text"] { margin-bottom: 0; }
 .product-options small { display: block; color: #999; font-size: 11px; }
 
+.settings-table th:last-of-type { width: 123px; padding-right: 0; }
+
+.shipping-table td:nth-child(2) { width: 20%; }
+.shipping-table td:nth-child(3) { width: 10%; }
+
+td.edit { text-align: center; }
+td.edit .btn { display: inline-block; margin: 0 auto; }
+
+td.adr, td.org { display: table-cell; }
+
+.settings-table tbody .btn-mini { font-variant: small-caps; }
+
 input[type="radio"], input[type="checkbox"] { margin-top: -2px; }
 td input[type="radio"], td input[type="checkbox"] { margin-top: 2px; }
 input[type="radio"][disabled="disabled"] + span, input[type="checkbox"][disabled="disabled"] + span { color: #CCCCCC; font-style: italic; }
@@ -100,8 +116,11 @@ input[type="radio"][disabled="disabled"] + span, input[type="checkbox"][disabled
 .edit-address form { margin: 0; }
 .edit-address .controls-row { margin-left: 0 !important; }
 .edit-address input, .edit-address select { margin-top: 10px; }
+.edit-address a { margin-top: 20px; }
 
 .radio-group + .open { margin-top: 1.5em; }
+
+.country-dropdown .btn { height: 30px; }
 
 .tags { display: inline-block; width: 48%; vertical-align: top; float: right; }
 .tags .tag { display: inline-block; border-radius: 6px; background-color: #afdda4; border: 1px solid #53a93f; color: green; padding: 3px 5px; margin: 0 10px 5px 0; cursor: pointer; }
@@ -110,7 +129,7 @@ input[type="radio"][disabled="disabled"] + span, input[type="checkbox"][disabled
 .tags + input[type="text"] { width: 30%; }
 
 .vcard .photo { border: solid 3px #53a93f; max-width: 30%; }
-.vcard .pull-right { margin-top: 15px; line-height: 15px; }
+.vcard .pull-right { margin-top: 24px; line-height: 15px; }
 
 .org, .street-address, .extended-address, .country-name, .email { display: block; }
 

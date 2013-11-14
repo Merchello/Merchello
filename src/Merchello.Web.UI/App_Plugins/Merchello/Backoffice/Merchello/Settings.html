@@ -10,7 +10,7 @@
 
             <div class="span4">
                 <div class="umb-headline-editor-wrapper">
-                     <h1>Settings</h1>
+                     <h1 class="umb-headline">Settings</h1>
                 </div>
             </div>
 
@@ -19,8 +19,7 @@
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
                     
                     <div class="btn-group">
-                        
-
+                        <a href="#" class="btn btn-success">Save</a>
                     </div>
                 </div>
             </div>
@@ -28,6 +27,85 @@
         </umb-header>
         
         <div class="merchello-panel-body">
+            
+            <div class="merchello-pane row-fluid">
+
+                <div class="control-group umb-control-group">
+                    <label class="merchello-control-label">
+                        Store Defaults
+                        <small>Set the default settings</small>
+                    </label>
+
+                    <div class="merchello-controls">
+
+                        <div class="form-group col-xs-6 span6">
+                            <label for="currency">Currency</label>
+                            <select class="form-control col-xs-8 span8" name="currency">
+                                <option>US Dollars</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-xs-6 span6">
+                            <label for="unit-system">Unit System</label>
+                            <select class="form-control col-xs-8 span8" name="unit-system">
+                                <option>Imperial System (Pound, Inch)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-xs-6 span6">
+                            <label for="starting-order">Starting Order No.</label>
+                            <input type="text" class="form-control col-xs-8 span8" name="starting-order" />
+                        </div>
+
+                        <div class="form-group col-xs-6 span6">
+                            <label for="time-zone">Time Zone</label>
+                            <select class="form-control col-xs-8 span8" name="time-zone">
+                                <option>Pacific Standard (GMT-8)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-xs-6 span6">
+                            <label for="date-format">Date Format</label>
+                            <select class="form-control col-xs-8 span8" name="date-format">
+                                <option>dd/mm/yy</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-xs-6 span6">
+                            <label for="time-format">Time Format</label>
+                            <select class="form-control col-xs-8 span8" name="time-format">
+                                <option>AM/PM</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                </div>
+            
+
+                <div class="control-group umb-control-group">
+                    <label class="merchello-control-label">
+                        Catalog Defaults
+                        <small>Set the default catalog item (product) options. Can be changed later on a per item basis.</small>
+                    </label>
+
+                    <div class="merchello-controls">
+
+                        <div class="row-fluid">
+                            <div class="form-group col-xs-6 span6">
+                                <label class="label-checkbox"><input name="digital" type="checkbox"> <span>All items have/are digital goods</span></label>
+                                <label class="label-checkbox"><input name="taxable" type="checkbox"> <span>All items are taxable</span></label>
+                            </div>
+                            <div class="form-group col-xs-6 span6">
+                                <label class="label-checkbox"><input name="trackinventory" type="checkbox"> <span>Track inventory for all items & variants</span></label>
+                                <label class="label-checkbox"><input name="shippable" type="checkbox"> <span>All items are shippable</span></label>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
         </div>
             
     </umb-panel>
