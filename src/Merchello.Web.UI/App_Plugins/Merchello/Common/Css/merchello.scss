@@ -155,6 +155,10 @@ td.edit { text-align: center;
 }
 td.adr, td.org { display: table-cell; }
 
+.settings-table tbody { 
+    .btn-mini { font-variant: small-caps; }
+}
+
 //Forms
 input[type="radio"], input[type="checkbox"] { margin-top: -2px; //line up checkboxes with label text
     td & { margin-top: 2px; }

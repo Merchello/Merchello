@@ -99,6 +99,8 @@ td.edit .btn { display: inline-block; margin: 0 auto; }
 
 td.adr, td.org { display: table-cell; }
 
+.settings-table tbody .btn-mini { font-variant: small-caps; }
+
 input[type="radio"], input[type="checkbox"] { margin-top: -2px; }
 td input[type="radio"], td input[type="checkbox"] { margin-top: 2px; }
 input[type="radio"][disabled="disabled"] + span, input[type="checkbox"][disabled="disabled"] + span { color: #CCCCCC; font-style: italic; }
