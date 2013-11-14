@@ -232,6 +232,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cache\HttpCachingBacker.cs" />
+    <Compile Include="Models\ContentEditing\ProductVariantDisplayExtensions.cs" />
     <Compile Include="ProductQuery.cs" />
     <Compile Include="CustomerExtensions.cs" />
     <Compile Include="Editors\CustomerApiController.cs" />

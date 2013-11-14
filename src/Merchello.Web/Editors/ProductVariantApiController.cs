@@ -22,6 +22,7 @@ namespace Merchello.Web.Editors
     public class ProductVariantApiController : MerchelloApiController
     {
         private IProductVariantService _productVariantService;
+        private IProductService _productService;
 
         /// <summary>
         /// Constructor
@@ -38,7 +39,11 @@ namespace Merchello.Web.Editors
         public ProductVariantApiController(MerchelloContext merchelloContext)
             : base(merchelloContext)
         {
+            _productService = MerchelloContext.Services.ProductService;
             _productVariantService = MerchelloContext.Services.ProductVariantService;
+
+            AutoMapper.Mapper.CreateMap<IProductVariant, ProductVariantDisplay>();
+            AutoMapper.Mapper.CreateMap<IProductAttribute, ProductAttributeDisplay>();
         }
 
         /// <summary>
@@ -47,7 +52,11 @@ namespace Merchello.Web.Editors
         internal ProductVariantApiController(MerchelloContext merchelloContext, UmbracoContext umbracoContext)
             : base(merchelloContext, umbracoContext)
         {
+            _productService = MerchelloContext.Services.ProductService;
             _productVariantService = MerchelloContext.Services.ProductVariantService;
+
+            AutoMapper.Mapper.CreateMap<IProductVariant, ProductVariantDisplay>();
+            AutoMapper.Mapper.CreateMap<IProductAttribute, ProductAttributeDisplay>();
         }
 
         /// <summary>
@@ -56,7 +65,7 @@ namespace Merchello.Web.Editors
         /// GET /umbraco/Merchello/ProductVariantApi/GetProductVariant?id={int}
         /// </summary>
         /// <param name="key"></param>
-        public IProductVariant GetProductVariant(int id)
+        public ProductVariantDisplay GetProductVariant(int id)
         {
             var productVariant = _productVariantService.GetById(id);
             if (productVariant == null)
@@ -64,7 +73,7 @@ namespace Merchello.Web.Editors
                 throw new HttpResponseException(HttpStatusCode.NotFound);
             }
 
-            return productVariant;
+            return AutoMapper.Mapper.Map<ProductVariantDisplay>(productVariant);
         }
 
         /// <summary>
@@ -73,7 +82,7 @@ namespace Merchello.Web.Editors
         /// GET /umbraco/Merchello/ProductVariantApi/GetByProduct?key={guid}
         /// </summary>
         /// <param name="key"></param>
-        public IEnumerable<IProductVariant> GetByProduct(Guid key)
+        public IEnumerable<ProductVariantDisplay> GetByProduct(Guid key)
         {
             if (key != null)
             {
@@ -83,7 +92,10 @@ namespace Merchello.Web.Editors
                     throw new HttpResponseException(HttpStatusCode.NotFound);
                 }
 
-                return productVariants;
+                foreach (IProductVariant productVariant in productVariants)
+                {
+                    yield return AutoMapper.Mapper.Map<ProductVariantDisplay>(productVariant);
+                }
             }
             else
             {
@@ -102,7 +114,7 @@ namespace Merchello.Web.Editors
         /// GET /umbraco/Merchello/ProductVariantApi/GetProductVariants?ids={int}&ids={int}
         /// </summary>
         /// <param name="ids"></param>
-        public IEnumerable<IProductVariant> GetProductVariants([FromUri]IEnumerable<int> ids)
+        public IEnumerable<ProductVariantDisplay> GetProductVariants([FromUri]IEnumerable<int> ids)
         {
             if (ids != null)
             {
@@ -112,7 +124,10 @@ namespace Merchello.Web.Editors
                     //throw new HttpResponseException(HttpStatusCode.NotFound);
                 }
 
-                return productVariants;
+                foreach (IProductVariant productVariant in productVariants)
+                {
+                    yield return AutoMapper.Mapper.Map<ProductVariantDisplay>(productVariant);
+                }
             }
             else
             {
@@ -125,21 +140,54 @@ namespace Merchello.Web.Editors
             }
         }
 
+        /// <summary>
+        /// Creates a product variant from Product & Attributes
+        ///
+        /// POST /umbraco/Merchello/ProductVariantApi/NewProduct
+        /// </summary>
+        /// <param name="item"></param>
+        [AcceptVerbs("GET", "POST")]
+        public ProductVariantDisplay NewProduct(ProductVariantDisplay productVariant)
+        {
+            IProductVariant newProductVariant = null;
+
+            try
+            {
+                Product product = _productService.GetByKey(productVariant.ProductKey) as Product;
+
+                ProductAttributeCollection productAttributes = new ProductAttributeCollection();
+                foreach (var attribute in productVariant.Attributes)
+                {
+                    ProductOption productOption = product.ProductOptions[attribute.OptionId] as ProductOption;
+                    IProductAttribute productAttribute = productOption.Choices[attribute.AttributeId];
+                    productAttributes.Add(attribute.ToProductAttribute(productAttribute));
+                }
+
+                newProductVariant = _productVariantService.CreateProductVariantWithId(product, productAttributes, true);
+            }
+            catch (Exception ex)
+            {
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);
+            }
+
+            return AutoMapper.Mapper.Map<ProductVariantDisplay>(newProductVariant);
+        }
 
         /// <summary>
         /// Updates an existing product
         ///
         /// PUT /umbraco/Merchello/ProductVariantApi/PutProductVariant
         /// </summary>
-        /// <param name="product">ProductDisplay object serialized from WebApi</param>
+        /// <param name="product">ProductVariantDisplay object serialized from WebApi</param>
         [AcceptVerbs("PUT")]
-        public HttpResponseMessage PutProduct(IProductVariant productVariant)
+        public HttpResponseMessage PutProductVariant(ProductVariantDisplay productVariant)
         {
             var response = Request.CreateResponse(HttpStatusCode.OK);
 
             try
             {
                 IProductVariant merchProductVariant = _productVariantService.GetById(productVariant.Id);
+                merchProductVariant = productVariant.ToProduct(merchProductVariant);
 
                 _productVariantService.Save(merchProductVariant);
             }
