@@ -158,12 +158,22 @@ namespace Merchello.Web.Editors
                 ProductAttributeCollection productAttributes = new ProductAttributeCollection();
                 foreach (var attribute in productVariant.Attributes)
                 {
+                    // TODO: This should be refactored into an extension method
                     ProductOption productOption = product.ProductOptions.FirstOrDefault(x => x.Id == attribute.OptionId) as ProductOption;
-                    IProductAttribute productAttribute = productOption.Choices.FirstOrDefault(x => x.Id == attribute.AttributeId);
+                    // TODO: This should be refactored into an extension method
+                    IProductAttribute productAttribute = null;
+                    foreach (var attr in productOption.Choices)
+                    {
+                        if( attr.Name == attribute.Name )
+                        {
+                            productAttribute = attr;
+                            break;
+                        }
+                    }
                     productAttributes.Add(attribute.ToProductAttribute(productAttribute));
                 }
 
-                newProductVariant = _productVariantService.CreateProductVariantWithId(product, productAttributes, true);
+                newProductVariant = _productVariantService.CreateProductVariantWithId(product, productVariant.Name, productVariant.Sku, productVariant.Price, productAttributes, true);
             }
             catch (Exception ex)
             {

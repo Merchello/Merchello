@@ -81,7 +81,7 @@ namespace Merchello.Core.Services
         {
             Mandate.ParameterNotNull(product, "product");
             Mandate.ParameterNotNull(attributes, "attributes");
-            Mandate.ParameterCondition(attributes.Count == product.ProductOptions.Count(x => x.Required), "An attribute must be assigned for every required option");            
+            Mandate.ParameterCondition(attributes.Count >= product.ProductOptions.Count(x => x.Required), "An attribute must be assigned for every required option");            
             // verify there is not already a variant with these attributes
             Mandate.ParameterCondition(false == ProductVariantWithAttributesExists(product, attributes), "A ProductVariant already exists for the ProductAttributeCollection");
 

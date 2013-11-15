@@ -118,8 +118,7 @@
 
                             notificationsService.success("Product Saved! H5YR!");
 
-                            if ($scope.product.hasVariants)
-                            {
+                            if ($scope.product.hasVariants) {
                                 $location.url("/merchello/merchello/ProductEdit/" + $scope.product.key, true);
                             }
 
@@ -160,11 +159,15 @@
 
                         promise.then(function (product) {
 
-                            notificationsService.success("Product Saved", "H5YR!");
+                            notificationsService.success("Product Saved and Variants Created", "H5YR!");
+
+                            if ($scope.product.hasVariants) {
+                                $location.url("/merchello/merchello/ProductEdit/" + $scope.product.key, true);
+                            }
 
                         }, function (reason) {
 
-                            notificationsService.error("Product Save Failed", reason.message);
+                            notificationsService.error("Product Save or Variant Creation Failed", reason.message);
 
                         });
                     }

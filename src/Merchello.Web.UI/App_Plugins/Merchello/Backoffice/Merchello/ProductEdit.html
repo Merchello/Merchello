@@ -160,14 +160,17 @@
                         <div class="col-xs-10 span10">
                             <table class="table table-hover merchello-selectable-table sortable">
                                 <thead>
-                                    <tr>
-                                        <th><input type="checkbox" /></th> <!-- Swaps out the current TR with headings in it for the bulk action TR -->
-                                        <th>Style</th>
+                                    <!--<tr>
+                                        <th><input type="checkbox" /></th>--> <!-- Swaps out the current TR with headings in it for the bulk action TR -->
+                                       <!-- <th>Style</th>
                                         <th>Size</th>
                                         <th>SKU</th>
                                         <th>Price</th>
                                         <th>Total Qty</th>
                                         <th><a href="#">edit</a></th>
+                                    </tr>-->
+                                    <tr data-ng-repeat="option in product.productOptions | orderBy:'sortOrder'">
+                                        <th data-ng-model="option.name"></th>
                                     </tr>
                                     <!-- Displays the bulk action button & dropdown menu when the checkbox is selected. Replaces the normal header TR -->
                                     <!--<tr>

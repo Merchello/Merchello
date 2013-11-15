@@ -10,6 +10,7 @@
      */
     controllers.ProductEditController = function ($scope, $routeParams, $location, notificationsService, dialogService, angularHelper, serverValidationManager, merchelloProductService, merchelloProductVariantService) {
 
+
         if ($routeParams.create) {
 
             // TODO: this should redirect to product variant edit
