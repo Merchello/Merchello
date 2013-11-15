@@ -89,7 +89,7 @@ td.name { width: 45%; }
 .product-options input[type="text"] { margin-bottom: 0; }
 .product-options small { display: block; color: #999; font-size: 11px; }
 
-.settings-table th:last-of-type { width: 123px; padding-right: 0; }
+.settings-table th:last-of-type, .settings-table td:last-of-type { width: 123px; padding-right: 0; }
 
 .shipping-table td:nth-child(2) { width: 20%; }
 .shipping-table td:nth-child(3) { width: 10%; }
@@ -98,8 +98,6 @@ td.edit { text-align: center; }
 td.edit .btn { display: inline-block; margin: 0 auto; }
 
 td.adr, td.org { display: table-cell; }
-
-.settings-table tbody .btn-mini { font-variant: small-caps; }
 
 input[type="radio"], input[type="checkbox"] { margin-top: -2px; }
 td input[type="radio"], td input[type="checkbox"] { margin-top: 2px; }

@@ -140,7 +140,9 @@ td.name { width: 45%; }
 }
 
 .settings-table {
-    th:last-of-type { width: 123px; padding-right: 0; }
+    th, td{
+        &:last-of-type { width: 123px; padding-right: 0; }
+    }
 }
 
 .shipping-table {
@@ -154,10 +156,6 @@ td.edit { text-align: center;
     .btn { display: inline-block; margin: 0 auto; }
 }
 td.adr, td.org { display: table-cell; }
-
-.settings-table tbody { 
-    .btn-mini { font-variant: small-caps; }
-}
 
 //Forms
 input[type="radio"], input[type="checkbox"] { margin-top: -2px; //line up checkboxes with label text
