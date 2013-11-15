@@ -37,7 +37,7 @@ namespace Merchello.Tests.UnitTests.Repository
         {
             //// Arrange
             var id = 111;
-            var address = MockCustomerAddressDataMaker.CustomerAddressForInserting(id).MockSavedWithId(id);
+            var address = MockCustomerAddressDataMaker.CustomerAddressForInserting(id).MockSavedWithKey(id);
 
             //// Act
             _repository.AddOrUpdate(address);
@@ -51,7 +51,7 @@ namespace Merchello.Tests.UnitTests.Repository
         {
             //// Arrange
             var id = 111;
-            var address = MockCustomerAddressDataMaker.CustomerAddressForInserting(id).MockSavedWithId(id);
+            var address = MockCustomerAddressDataMaker.CustomerAddressForInserting(id).MockSavedWithKey(id);
 
             //// Act
             _repository.Delete(address);

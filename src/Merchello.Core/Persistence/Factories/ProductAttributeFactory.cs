@@ -9,8 +9,8 @@ namespace Merchello.Core.Persistence.Factories
         {
             var attribute = new ProductAttribute(dto.Name, dto.Sku)
                 {
-                    Id = dto.Id,
-                    OptionId = dto.OptionId,
+                    Key = dto.Key,
+                    OptionKey = dto.OptionKey,
                     SortOrder = dto.SortOrder,
                     UpdateDate = dto.UpdateDate,
                     CreateDate = dto.CreateDate
@@ -24,8 +24,8 @@ namespace Merchello.Core.Persistence.Factories
         {
             return new ProductAttributeDto()
                 {
-                    Id = entity.Id,
-                    OptionId = entity.OptionId,
+                    Key = entity.Key,
+                    OptionKey = entity.OptionKey,
                     Name = entity.Name,
                     Sku = entity.Sku,
                     SortOrder = entity.SortOrder,

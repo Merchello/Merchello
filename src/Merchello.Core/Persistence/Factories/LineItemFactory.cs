@@ -9,8 +9,8 @@ namespace Merchello.Core.Persistence.Factories
         {
             var dto = new ItemCacheItemDto()
             {
-                Id = entity.Id,
-                ContainerId = entity.ContainerId,
+                Key = entity.Key,
+                ContainerKey = entity.ContainerKey,
                 LineItemTfKey = entity.LineItemTfKey,
                 Sku = entity.Sku,
                 Name = entity.Name,
@@ -29,8 +29,8 @@ namespace Merchello.Core.Persistence.Factories
         {
             var dto = new InvoiceItemDto()
             {
-                Id = entity.Id,
-                ContainerId = entity.ContainerId,
+                Key = entity.Key,
+                ContainerKey = entity.ContainerKey,
                 LineItemTfKey = entity.LineItemTfKey,
                 Sku = entity.Sku,
                 Name = entity.Name,
@@ -49,8 +49,8 @@ namespace Merchello.Core.Persistence.Factories
         {
             var dto = new OrderItemDto()
             {
-                Id = entity.Id,
-                ContainerId = entity.ContainerId,
+                Key = entity.Key,
+                ContainerKey = entity.ContainerKey,
                 LineItemTfKey = entity.LineItemTfKey,
                 Sku = entity.Sku,
                 Name = entity.Name,
@@ -67,10 +67,10 @@ namespace Merchello.Core.Persistence.Factories
 
         public ItemCacheLineItem BuildEntity(ItemCacheItemDto dto)
         {
-             var lineItem = new ItemCacheLineItem(dto.ContainerId, dto.LineItemTfKey, dto.Name, dto.Sku, dto.Quantity, dto.Amount,
+             var lineItem = new ItemCacheLineItem(dto.ContainerKey, dto.LineItemTfKey, dto.Name, dto.Sku, dto.Quantity, dto.Amount,
                  string.IsNullOrEmpty(dto.ExtendedData) ? new ExtendedDataCollection() : new ExtendedDataCollection(dto.ExtendedData))
             {
-                Id = dto.Id,
+                Key = dto.Key,
                 Exported = dto.Exported,
                 UpdateDate = dto.UpdateDate,
                 CreateDate = dto.CreateDate
@@ -83,10 +83,10 @@ namespace Merchello.Core.Persistence.Factories
 
         public InvoiceLineItem BuildEntity(InvoiceItemDto dto)
         {
-          var lineItem = new InvoiceLineItem(dto.ContainerId, dto.LineItemTfKey, dto.Name, dto.Sku, dto.Quantity, dto.Amount,
+          var lineItem = new InvoiceLineItem(dto.ContainerKey, dto.LineItemTfKey, dto.Name, dto.Sku, dto.Quantity, dto.Amount,
               string.IsNullOrEmpty(dto.ExtendedData) ? new ExtendedDataCollection() : new ExtendedDataCollection(dto.ExtendedData))
             {
-                Id = dto.Id,
+                Key = dto.Key,
                 Exported = dto.Exported,
                 UpdateDate = dto.UpdateDate,
                 CreateDate = dto.CreateDate
@@ -99,10 +99,10 @@ namespace Merchello.Core.Persistence.Factories
 
         public OrderLineItem BuildEntity(OrderItemDto dto)
         {
-            var lineItem = new OrderLineItem(dto.ContainerId, dto.LineItemTfKey, dto.Name, dto.Sku, dto.Quantity, dto.Amount,
+            var lineItem = new OrderLineItem(dto.ContainerKey, dto.LineItemTfKey, dto.Name, dto.Sku, dto.Quantity, dto.Amount,
                 string.IsNullOrEmpty(dto.ExtendedData) ? new ExtendedDataCollection() : new ExtendedDataCollection(dto.ExtendedData))
             {
-                Id = dto.Id,
+                Key = dto.Key,
                 Exported = dto.Exported,
                 UpdateDate = dto.UpdateDate,
                 CreateDate = dto.CreateDate

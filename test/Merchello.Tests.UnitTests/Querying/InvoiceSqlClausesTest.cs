@@ -22,24 +22,24 @@ namespace Merchello.Tests.UnitTests.Querying
         public void Can_Verify_Invoice_Base_Sql_Clause()
         {
             //// Arrange
-            var id = 10;
+            var key = Guid.NewGuid();
 
             var expected = new Sql();
             expected.Select("*")
                 .From("[merchInvoice]")
-                .InnerJoin("[merchCustomer]").On("[merchCustomer].[id] = [merchInvoice].[customerId]")
-                .InnerJoin("[merchInvoiceStatus]").On("[merchInvoiceStatus].[id] = [merchInvoice].[invoiceStatusId]")
-                .Where("[merchInvoice].[id] = " + id.ToString());
+                .InnerJoin("[merchCustomer]").On("[merchCustomer].[pk] = [merchInvoice].[customerKey]")
+                .InnerJoin("[merchInvoiceStatus]").On("[merchInvoiceStatus].[pk] = [merchInvoice].[invoiceStatusKey]")
+                .Where("[merchInvoice].[pk] = '" + key.ToString() + "'");
 
             //// Act
             var sql = new Sql();
             sql.Select("*")
                 .From<InvoiceDto>()
                 .InnerJoin<CustomerDto>()
-                .On<CustomerDto, InvoiceDto>(left => left.Id, right => right.CustomerId)
+                .On<CustomerDto, InvoiceDto>(left => left.Key, right => right.CustomerKey)
                 .InnerJoin<InvoiceStatusDto>()
-                .On<InvoiceStatusDto, InvoiceDto>(left => left.Id, right => right.InvoiceStatusId)
-                .Where<InvoiceDto>(x => x.Id == id);
+                .On<InvoiceStatusDto, InvoiceDto>(left => left.Key, right => right.InvoiceStatusKey)
+                .Where<InvoiceDto>(x => x.Key == key);
 
             //// Assert
             Assert.That(sql.SQL, Is.EqualTo(expected.SQL));
@@ -52,18 +52,18 @@ namespace Merchello.Tests.UnitTests.Querying
         public void Can_Verify_Sql_For_Invoices_By_Customer_Query()
         {
             //// Arrange
-            var id = 10;
+            var key = Guid.NewGuid();
 
             var expected = new Sql();
             expected.Select("*")
                 .From("[merchInvoice]")
-                .Where("[merchInvoice].[customerId] = " + id.ToString());
+                .Where("[merchInvoice].[customerKey] = '" + key.ToString() + "'");
 
             //// Act
             var sql = new Sql();
             sql.Select("*")
                 .From<InvoiceDto>()
-                .Where<InvoiceDto>(x => x.CustomerId == id);
+                .Where<InvoiceDto>(x => x.CustomerKey == key);
 
 
             //// Assert
@@ -77,18 +77,18 @@ namespace Merchello.Tests.UnitTests.Querying
         public void Can_Verify_Sql_For_Invoices_By_InvoiceStatus_Query()
         {
             //// Arrange
-            const int invoiceStatusId = 1;
+            var invoiceStatusKey = Guid.NewGuid();
 
             var expected = new Sql();
             expected.Select("*")
                 .From("[merchInvoice]")
-                .Where("[merchInvoice].[invoiceStatusId] = " + invoiceStatusId.ToString());
+                .Where("[merchInvoice].[invoiceStatusKey] = '" + invoiceStatusKey.ToString() + "'");
 
             //// Act
             var sql = new Sql();
             sql.Select("*")
                 .From<InvoiceDto>()
-                .Where<InvoiceDto>(x => x.InvoiceStatusId == invoiceStatusId);
+                .Where<InvoiceDto>(x => x.InvoiceStatusKey == invoiceStatusKey);
 
             //var query = Query<IInvoice>.Builder.Where(x => x.InvoiceStatusId == invoiceStatusId);
             //var translated = TranslateQuery(sql, query);

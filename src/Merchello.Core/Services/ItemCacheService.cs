@@ -6,9 +6,10 @@ using Merchello.Core.Models;
 using Merchello.Core.Models.TypeFields;
 using Merchello.Core.Persistence;
 using Merchello.Core.Persistence.Querying;
+using Merchello.Core.Persistence.UnitOfWork;
 using Umbraco.Core;
 using Umbraco.Core.Events;
-using Umbraco.Core.Persistence.UnitOfWork;
+
 
 namespace Merchello.Core.Services
 {
@@ -44,7 +45,7 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Creates a basket for a consumer with a given type
         /// </summary>
-        public IItemCache GetItemCacheWithId(ICustomerBase customer, ItemCacheType itemCacheType)
+        public IItemCache GetItemCacheWithKey(ICustomerBase customer, ItemCacheType itemCacheType)
         {
 
             // determine if the consumer already has a item cache of this type, if so return it.
@@ -175,26 +176,26 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Gets a Basket by its unique id - pk
         /// </summary>
-        /// <param name="id">int Id for the Basket</param>
+        /// <param name="key">int Id for the Basket</param>
         /// <returns><see cref="IItemCache"/></returns>
-        public IItemCache GetById(int id)
+        public IItemCache GetByKey(Guid key)
         {
             using (var repository = _repositoryFactory.CreateCustomerItemCacheRepository(_uowProvider.GetUnitOfWork()))
             {
-                return repository.Get(id);
+                return repository.Get(key);
             }
         }
 
         /// <summary>
         /// Gets a list of Basket give a list of unique keys
         /// </summary>
-        /// <param name="ids">List of unique keys</param>
+        /// <param name="keys">List of unique keys</param>
         /// <returns></returns>
-        public IEnumerable<IItemCache> GetByIds(IEnumerable<int> ids)
+        public IEnumerable<IItemCache> GetByKeys(IEnumerable<Guid> keys)
         {
             using (var repository = _repositoryFactory.CreateCustomerItemCacheRepository(_uowProvider.GetUnitOfWork()))
             {
-                return repository.GetAll(ids.ToArray());
+                return repository.GetAll(keys.ToArray());
             }
         }
 

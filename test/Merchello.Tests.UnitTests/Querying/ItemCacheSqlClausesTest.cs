@@ -20,19 +20,19 @@ namespace Merchello.Tests.UnitTests.Querying
         public void Can_Verify_Base_ItemCache_Clause()
         {
             //// Arrange
-            var id = 12;
+            var key = Guid.NewGuid();
 
             var expected = new Sql();
             expected.Select("*")
                 .From("[merchItemCache]")
-                .Where("[merchItemCache].[id] = " + id.ToString());
+                .Where("[merchItemCache].[pk] = '" + key.ToString() + "'");
                 //.Where("[merchCustomerItemCache].[itemCacheTfKey] = '" +  + "'")
 
             //// Act
             var sql = new Sql();
             sql.Select("*")
                 .From<ItemCacheDto>()
-                .Where<ItemCacheDto>(x => x.Id == id);
+                .Where<ItemCacheDto>(x => x.Key == key);
 
             //// Assert
             Assert.That(sql.SQL, Is.EqualTo(expected.SQL));
@@ -45,18 +45,18 @@ namespace Merchello.Tests.UnitTests.Querying
         public void Can_Verify_Base_ItemCacheItem_Clause()
         {
             //// Arrange
-            var id = 125;
+            var key = Guid.NewGuid();
 
             var expected = new Sql();
             expected.Select("*")
                 .From("[merchItemCacheItem]")
-                .Where("[merchItemCacheItem].[id] = " + id.ToString());
+                .Where("[merchItemCacheItem].[pk] = '" + key.ToString() + "'");
 
             //// Act
             var sql = new Sql();
             sql.Select("*")
                 .From<ItemCacheItemDto>()
-                .Where<ItemCacheItemDto>(x => x.Id == id);
+                .Where<ItemCacheItemDto>(x => x.Key == key);
 
             //// Assert
             Assert.That(sql.SQL, Is.EqualTo(expected.SQL));

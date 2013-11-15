@@ -1,11 +1,9 @@
 ﻿using System;
-using Merchello.Core.Gateway;
 using Merchello.Core.Models.Rdbms;
 using Merchello.Tests.Base.SqlSyntax;
 using Merchello.Tests.Base.TypeFields;
 using NUnit.Framework;
 using Umbraco.Core.Persistence;
-using umbraco.editorControls.tinyMCE3.webcontrol.plugin;
 
 namespace Merchello.Tests.UnitTests.Querying
 {

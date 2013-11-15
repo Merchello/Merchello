@@ -14,7 +14,7 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Creates an item cache (or retrieves an existing one) based on type and saves it to the database
         /// </summary>
-        IItemCache GetItemCacheWithId(ICustomerBase customer, ItemCacheType itemCacheType);
+        IItemCache GetItemCacheWithKey(ICustomerBase customer, ItemCacheType itemCacheType);
 
         /// <summary>
         /// Saves a single <see cref="IItemCache"/> object
@@ -47,9 +47,9 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Gets an <see cref="IItemCache"/> object by its Id
         /// </summary>
-        /// <param name="id">int Id of the Address to retrieve</param>
+        /// <param name="key">unique 'key' of the Address to retrieve</param>
         /// <returns><see cref="IItemCache"/></returns>
-        IItemCache GetById(int id);
+        IItemCache GetByKey(Guid key);
 
         /// <summary>
         /// Gets a collection of <see cref="IItemCache"/> objects by the <see cref="ICustomerBase"/>
@@ -78,11 +78,11 @@ namespace Merchello.Core.Services
         IItemCache GetItemCacheByCustomer(ICustomerBase customer, ItemCacheType itemCacheType);
             
         /// <summary>
-        /// Gets list of <see cref="IItemCache"/> objects given a list of Ids
+        /// Gets list of <see cref="IItemCache"/> objects given a list of Keys
         /// </summary>
-        /// <param name="ids">List of int Id for customer registries to retrieve</param>
+        /// <param name="keys">List of guid 'key' for customer registries to retrieve</param>
         /// <returns>List of <see cref="IItemCache"/></returns>
-        IEnumerable<IItemCache> GetByIds(IEnumerable<int> ids);
+        IEnumerable<IItemCache> GetByKeys(IEnumerable<Guid> keys);
 
     }
 }

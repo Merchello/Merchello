@@ -5,13 +5,13 @@ using Merchello.Core.Models.EntityBase;
 
 namespace Merchello.Core.Models
 {
-    public interface IInvoice : IIdEntity
+    public interface IInvoice : IEntity
     {
         /// <summary>
-        /// Optional id of the order assoicated with the invoice
+        /// Optional unique 'key' of the order assoicated with the invoice
         /// </summary>
         [DataMember]
-        int? OrderId { get; set; }
+        Guid? OrderKey { get; set; }
 
         /// <summary>
         /// The invoice number
@@ -26,25 +26,16 @@ namespace Merchello.Core.Models
         DateTime InvoiceDate { get; set; }
 
         /// <summary>
-        /// The customer id to associated with the invoice
+        /// The unique customer 'key' to associated with the invoice
         /// </summary>
-        [IgnoreDataMember]
-        int CustomerId { get; }
-
         [DataMember]
-        ICustomer Customer { get; }
+        Guid? CustomerKey { get; }
 
         /// <summary>
         /// The id for the invoice status associated with this invoice
         /// </summary>
         [DataMember]
-        int InvoiceStatusId { get; }
-
-        /// <summary>
-        /// The status of the invoice
-        /// </summary>
-        [DataMember]
-        IInvoiceStatus InvoiceStatus { get; set; }
+        Guid InvoiceStatusKey { get; }
 
         /// <summary>
         /// The full name to use for billing.  Generally copied from customer address.

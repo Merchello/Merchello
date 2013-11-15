@@ -1,4 +1,5 @@
-﻿using Merchello.Core.Models;
+﻿using System;
+using Merchello.Core.Models;
 using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Services;
 using Merchello.Tests.Base.SqlSyntax;
@@ -19,18 +20,18 @@ namespace Merchello.Tests.UnitTests.Querying
         public void Can_Verify_InvoiceStatus_Base_Sql_Clause()
         {
             //// Arrange
-            var id = 1;
+            var key = Guid.NewGuid();
 
             var expected = new Sql();
             expected.Select("*")
                 .From("[merchInvoiceStatus]")
-                .Where("[merchInvoiceStatus].[id] = " + id.ToString());
+                .Where("[merchInvoiceStatus].[pk] = '" + key.ToString() + "'");
 
             //// Act
             var sql = new Sql();
             sql.Select("*")
                 .From<InvoiceStatusDto>()
-                .Where<InvoiceStatusDto>(x => x.Id == id);
+                .Where<InvoiceStatusDto>(x => x.Key == key);
 
             //// Assert
             Assert.That(sql.SQL, Is.EqualTo(expected.SQL));

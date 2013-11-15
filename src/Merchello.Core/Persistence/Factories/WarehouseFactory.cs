@@ -9,7 +9,7 @@ namespace Merchello.Core.Persistence.Factories
         {
             var warehouse = new Warehouse()
             {
-                Id = dto.Id,
+                Key = dto.Key,
                 Name = dto.Name,
                 Address1 = dto.Address1,
                 Address2 = dto.Address2,
@@ -29,7 +29,7 @@ namespace Merchello.Core.Persistence.Factories
         {
             var dto = new WarehouseDto()
             {
-                Id = entity.Id,
+                Key = entity.Key,
                 Name = entity.Name,
                 Address1 = entity.Address1,
                 Address2 = entity.Address2,

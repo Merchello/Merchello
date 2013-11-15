@@ -9,7 +9,7 @@ namespace Merchello.Core.Persistence.Repositories
     /// <summary>
     /// Marker interface for the customer registry repository
     /// </summary>
-    public interface IItemCacheRepository : IRepositoryQueryable<int, IItemCache>
+    public interface IItemCacheRepository : IRepositoryQueryable<Guid, IItemCache>
     {
 
     }

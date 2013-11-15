@@ -12,9 +12,9 @@ namespace Merchello.Core.Models
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    public abstract class LineItemBase : IdEntity, ILineItem
+    public abstract class LineItemBase : Entity, ILineItem
     {
-        private int _containerId;     
+        private Guid _containerKey;     
         private Guid _lineItemTfKey;
         private string _sku;
         private string _name;
@@ -23,31 +23,31 @@ namespace Merchello.Core.Models
         private ExtendedDataCollection _extendedData;
         private bool _exported;
 
-        protected LineItemBase(int containerId, string name, string sku, decimal amount)
-            : this(containerId, name, sku, 1, amount)
+        protected LineItemBase(Guid containerKey, string name, string sku, decimal amount)
+            : this(containerKey, name, sku, 1, amount)
         { }
 
-        protected LineItemBase(int containerId, string name, string sku, int quantity, decimal amount)
-            : this(containerId, LineItemType.Product, name, sku, quantity, amount)
+        protected LineItemBase(Guid containerKey, string name, string sku, int quantity, decimal amount)
+            : this(containerKey, LineItemType.Product, name, sku, quantity, amount)
         { }
 
-        protected LineItemBase(int containerId, LineItemType lineItemType, string name, string sku, int quantity, decimal amount)
-            : this(containerId, EnumTypeFieldConverter.LineItemType.GetTypeField(lineItemType).TypeKey, name, sku, quantity, amount, new ExtendedDataCollection())
+        protected LineItemBase(Guid containerKey, LineItemType lineItemType, string name, string sku, int quantity, decimal amount)
+            : this(containerKey, EnumTypeFieldConverter.LineItemType.GetTypeField(lineItemType).TypeKey, name, sku, quantity, amount, new ExtendedDataCollection())
         { }
 
-        protected LineItemBase(int containerId, LineItemType lineItemType, string name, string sku, int quantity, decimal amount, ExtendedDataCollection extendedData)
-            : this(containerId, EnumTypeFieldConverter.LineItemType.GetTypeField(lineItemType).TypeKey, name, sku, quantity, amount, extendedData)
+        protected LineItemBase(Guid containerKey, LineItemType lineItemType, string name, string sku, int quantity, decimal amount, ExtendedDataCollection extendedData)
+            : this(containerKey, EnumTypeFieldConverter.LineItemType.GetTypeField(lineItemType).TypeKey, name, sku, quantity, amount, extendedData)
         { }
 
-        protected LineItemBase(int containerId, Guid lineItemTfKey, string name, string sku, int quantity, decimal amount, ExtendedDataCollection extendedData)  
+        protected LineItemBase(Guid containerKey, Guid lineItemTfKey, string name, string sku, int quantity, decimal amount, ExtendedDataCollection extendedData)  
         {
-            Mandate.ParameterCondition(containerId != 0, "containerId");
+            Mandate.ParameterCondition(containerKey != Guid.Empty, "containerId");
             Mandate.ParameterCondition(lineItemTfKey != Guid.Empty, "lineItemTfKey");
             Mandate.ParameterNotNull(extendedData, "extendedData");
             Mandate.ParameterNotNullOrEmpty(name, "name");
             Mandate.ParameterNotNullOrEmpty(sku, "sku");
             
-            _containerId = containerId;
+            _containerKey = containerKey;
             _lineItemTfKey = lineItemTfKey;
             _name = name;
             _sku = sku;
@@ -74,12 +74,12 @@ namespace Merchello.Core.Models
         /// The customer registry id associated with the Customer Registry
         /// </summary>
         [DataMember]
-        public int ContainerId
+        public Guid ContainerKey
         {
-            get { return _containerId; }
+            get { return _containerKey; }
             internal set
             {
-                _containerId = value;
+                _containerKey = value;
             }
         }
     

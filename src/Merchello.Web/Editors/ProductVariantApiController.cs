@@ -21,8 +21,8 @@ namespace Merchello.Web.Editors
     [PluginController("Merchello")]
     public class ProductVariantApiController : MerchelloApiController
     {
-        private IProductVariantService _productVariantService;
-        private IProductService _productService;
+        private readonly IProductVariantService _productVariantService;
+        private readonly IProductService _productService;
 
         /// <summary>
         /// Constructor
@@ -62,12 +62,12 @@ namespace Merchello.Web.Editors
         /// <summary>
         /// Returns Product by id (key)
         /// 
-        /// GET /umbraco/Merchello/ProductVariantApi/GetProductVariant?id={int}
+        /// GET /umbraco/Merchello/ProductVariantApi/GetProductVariant?key={Guid}
         /// </summary>
         /// <param name="key"></param>
-        public ProductVariantDisplay GetProductVariant(int id)
+        public ProductVariantDisplay GetProductVariant(Guid key)
         {
-            var productVariant = _productVariantService.GetById(id);
+            var productVariant = _productVariantService.GetByKey(key);
             if (productVariant == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);
@@ -81,12 +81,12 @@ namespace Merchello.Web.Editors
         /// 
         /// GET /umbraco/Merchello/ProductVariantApi/GetByProduct?key={guid}
         /// </summary>
-        /// <param name="key"></param>
-        public IEnumerable<ProductVariantDisplay> GetByProduct(Guid key)
+        /// <param name="id"></param>
+        public IEnumerable<ProductVariantDisplay> GetByProduct(Guid id)
         {
-            if (key != null)
+            if (id != Guid.Empty)
             {
-                var productVariants = _productVariantService.GetByProductKey(key);
+                var productVariants = _productVariantService.GetByProductKey(id);
                 if (productVariants == null)
                 {
                     throw new HttpResponseException(HttpStatusCode.NotFound);
@@ -114,11 +114,11 @@ namespace Merchello.Web.Editors
         /// GET /umbraco/Merchello/ProductVariantApi/GetProductVariants?ids={int}&ids={int}
         /// </summary>
         /// <param name="ids"></param>
-        public IEnumerable<ProductVariantDisplay> GetProductVariants([FromUri]IEnumerable<int> ids)
+        public IEnumerable<ProductVariantDisplay> GetProductVariants([FromUri]IEnumerable<Guid> ids)
         {
             if (ids != null)
             {
-                var productVariants = _productVariantService.GetByIds(ids);
+                var productVariants = _productVariantService.GetByKeys(ids);
                 if (productVariants == null)
                 {
                     //throw new HttpResponseException(HttpStatusCode.NotFound);
@@ -140,12 +140,12 @@ namespace Merchello.Web.Editors
             }
         }
 
-        /// <summary>
-        /// Creates a product variant from Product & Attributes
-        ///
-        /// POST /umbraco/Merchello/ProductVariantApi/NewProductVariant
-        /// </summary>
-        /// <param name="item"></param>
+        ///  <summary>
+        ///  Creates a product variant from Product & Attributes
+        /// 
+        ///  POST /umbraco/Merchello/ProductVariantApi/NewProductVariant
+        ///  </summary>
+        /// <param name="productVariant"></param>
         [AcceptVerbs("GET", "POST")]
         public ProductVariantDisplay NewProductVariant(ProductVariantDisplay productVariant)
         {
@@ -159,7 +159,7 @@ namespace Merchello.Web.Editors
                 foreach (var attribute in productVariant.Attributes)
                 {
                     // TODO: This should be refactored into an extension method
-                    ProductOption productOption = product.ProductOptions.FirstOrDefault(x => x.Id == attribute.OptionId) as ProductOption;
+                    ProductOption productOption = product.ProductOptions.FirstOrDefault(x => x.Key == attribute.OptionKey) as ProductOption;
                     // TODO: This should be refactored into an extension method
                     IProductAttribute productAttribute = null;
                     foreach (var attr in productOption.Choices)
@@ -173,9 +173,9 @@ namespace Merchello.Web.Editors
                     productAttributes.Add(attribute.ToProductAttribute(productAttribute));
                 }
 
-                newProductVariant = _productVariantService.CreateProductVariantWithId(product, productVariant.Name, productVariant.Sku, productVariant.Price, productAttributes, true);
+                newProductVariant = _productVariantService.CreateProductVariantWithKey(product, productVariant.Name, productVariant.Sku, productVariant.Price, productAttributes, true);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw new HttpResponseException(HttpStatusCode.InternalServerError);
             }
@@ -188,7 +188,7 @@ namespace Merchello.Web.Editors
         ///
         /// PUT /umbraco/Merchello/ProductVariantApi/PutProductVariant
         /// </summary>
-        /// <param name="product">ProductVariantDisplay object serialized from WebApi</param>
+        /// <param name="productVariant">ProductVariantDisplay object serialized from WebApi</param>
         [AcceptVerbs("PUT")]
         public HttpResponseMessage PutProductVariant(ProductVariantDisplay productVariant)
         {
@@ -196,7 +196,7 @@ namespace Merchello.Web.Editors
 
             try
             {
-                IProductVariant merchProductVariant = _productVariantService.GetById(productVariant.Id);
+                IProductVariant merchProductVariant = _productVariantService.GetByKey(productVariant.Key);
                 merchProductVariant = productVariant.ToProduct(merchProductVariant);
 
                 _productVariantService.Save(merchProductVariant);
@@ -212,12 +212,12 @@ namespace Merchello.Web.Editors
         /// <summary>
         /// Deletes an existing product
         ///
-        /// DELETE /umbraco/Merchello/ProductVariantApi/{id}
+        /// DELETE /umbraco/Merchello/ProductVariantApi/{key}
         /// </summary>
         /// <param name="key"></param>
-        public HttpResponseMessage Delete(int id)
+        public HttpResponseMessage Delete(Guid key)
         {
-            var productVariantToDelete = _productVariantService.GetById(id);
+            var productVariantToDelete = _productVariantService.GetByKey(key);
             if (productVariantToDelete == null)
             {
                 return Request.CreateResponse(HttpStatusCode.NotFound);

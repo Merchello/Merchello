@@ -1,4 +1,6 @@
-﻿namespace Merchello.Core.Models
+﻿using System;
+
+namespace Merchello.Core.Models
 {
     /// <summary>
     /// Extension methods for <see cref="IWarehouseInventory"/> to simplify the <see cref="IProductVariant"/> to <see cref="IWarehouse"/> relationship
@@ -14,7 +16,8 @@
         /// </summary>
         public static IWarehouse Warehouse(this IWarehouseInventory warehouseInventory)
         {
-            return MerchelloContext.Current.Services.WarehouseService.GetById(warehouseInventory.WarehouseId);
+            throw new NotImplementedException();
+            //return MerchelloContext.Current.Services.WarehouseService.GetById(warehouseInventory.WarehouseKey);
         }
 
 

@@ -9,7 +9,7 @@ namespace Merchello.Tests.Base.DataMakers
         {
             return new InvoiceStatus()
             {
-                Id = 1,
+                Key = Guid.NewGuid(),
                 Alias = "unpaid",
                 Name = "Unpaid",
                 Active = true,
@@ -25,7 +25,7 @@ namespace Merchello.Tests.Base.DataMakers
         {
             return new InvoiceStatus()
             {
-                Id = 3,
+                Key = Guid.NewGuid(),
                 Alias = "completed",
                 Name = "Completed",
                 Active = true,

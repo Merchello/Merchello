@@ -28,12 +28,12 @@ namespace Merchello.Web.Vistors
         public void Visit(ILineItem lineItem)
         {
             // if the line item does not have a product variant reference this vistor cannot check it 
-            if (!lineItem.ExtendedData.ContainsProductVariantId()) return;           
+            if (!lineItem.ExtendedData.ContainsProductVariantKey()) return;           
 
             // if the variants inventory is not tracked or if out of stock purchases are allowed check is not necessary
             if (!lineItem.ExtendedData.GetTrackInventoryValue() || lineItem.ExtendedData.GetOutOfStockPurchaseValue()) return;
 
-            var variant = _productVariantService.GetById(lineItem.ExtendedData.GetProductVariantId());
+            var variant = _productVariantService.GetByKey(lineItem.ExtendedData.GetProductVariantKey());
 
             if (variant == null) return;
 

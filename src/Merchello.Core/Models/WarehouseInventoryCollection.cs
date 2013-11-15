@@ -48,9 +48,9 @@ namespace Merchello.Core.Models
             return this.Any(x => MakeKeyForItem(x) == key);
         }
 
-        public bool Contains(int warehouseId)
+        public bool Contains(Guid warehouseKey)
         {
-            return this.Any(x => x.WarehouseId == warehouseId);
+            return this.Any(x => x.WarehouseKey == warehouseKey);
         }
 
         public override int IndexOfKey(string key)
@@ -67,7 +67,7 @@ namespace Merchello.Core.Models
 
         public static string MakeKeyForItem(IWarehouseInventory item)
         {
-            return string.Format("{0}-{1}", item.ProductVariantId, item.WarehouseId);
+            return string.Format("{0}-{1}", item.ProductVariantKey, item.WarehouseKey);
         }
         
     }

@@ -11,7 +11,7 @@ namespace Merchello.Core.Models
         public static void AddProductVariantValues(this ExtendedDataCollection extendedData, IProductVariant productVariant)
         {
             extendedData.SetValue("merchProductKey", productVariant.ProductKey.ToString());
-            extendedData.SetValue("merchProductVariantId", productVariant.Id.ToString());
+            extendedData.SetValue("merchProductVariantKey", productVariant.Key.ToString());
             extendedData.SetValue("merchCostOfGoods", productVariant.CostOfGoods.ToString());
             extendedData.SetValue("merchWeight", productVariant.Weight.ToString());
             extendedData.SetValue("merchWidth", productVariant.Width.ToString());
@@ -31,9 +31,9 @@ namespace Merchello.Core.Models
         /// </summary>
         /// <param name="extendedData"></param>
         /// <returns></returns>
-        public static bool ContainsProductVariantId(this ExtendedDataCollection extendedData)
+        public static bool ContainsProductVariantKey(this ExtendedDataCollection extendedData)
         {
-            return extendedData.ContainsKey("merchProductVariantId");
+            return extendedData.ContainsKey("merchProductVariantKey");
         }
 
         /// <summary>
@@ -41,9 +41,9 @@ namespace Merchello.Core.Models
         /// </summary>
         /// <param name="extendedData"></param>
         /// <returns></returns>
-        public static int GetProductVariantId(this ExtendedDataCollection extendedData)
+        public static Guid GetProductVariantKey(this ExtendedDataCollection extendedData)
         {
-            return GetIntegerValue(extendedData.GetValue("merchProductVariantId"));
+            return GetGuidValue(extendedData.GetValue("merchProductVariantKey"));
         }
 
         /// <summary>

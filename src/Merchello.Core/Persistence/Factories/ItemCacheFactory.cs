@@ -10,7 +10,7 @@ namespace Merchello.Core.Persistence.Factories
         {
             var itemCache = new ItemCache(dto.EntityKey, dto.ItemCacheTfKey)
             {
-                Id = dto.Id,
+                Key = dto.Key,
                 UpdateDate = dto.UpdateDate,
                 CreateDate = dto.CreateDate
             };
@@ -24,7 +24,7 @@ namespace Merchello.Core.Persistence.Factories
         {
             var dto = new ItemCacheDto()
             {
-                Id = entity.Id,
+                Key = entity.Key,
                 EntityKey = entity.EntityKey,
                 ItemCacheTfKey = entity.ItemCacheTfKey,
                 UpdateDate = entity.UpdateDate,

@@ -31,15 +31,15 @@ namespace Merchello.Core.Services
         /// </summary>
         IItemCacheService ItemCacheService { get; }
 
-        /// <summary>
-        /// Gets the <see cref="IInvoiceService"/>
-        /// </summary>
-        IInvoiceService InvoiceService { get; }
+        ///// <summary>
+        ///// Gets the <see cref="IInvoiceService"/>
+        ///// </summary>
+        //IInvoiceService InvoiceService { get; }
 
-        /// <summary>
-        /// Gets the <see cref="IShippingService"/>
-        /// </summary>
-        IShippingService ShippingService { get; }
+        ///// <summary>
+        ///// Gets the <see cref="IShippingService"/>
+        ///// </summary>
+        //IShippingService ShippingService { get; }
         
         /// <summary>
         /// Gets the <see cref="IWarehouseService"/>

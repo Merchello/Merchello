@@ -25,10 +25,9 @@ namespace Merchello.Tests.UnitTests.Models
         public void Can_Add_A_Warehouse_To_A_Product()
         {
             //// Arrange
-            const int warehouseId = 1;
-
+            
             //// Act
-            _product.AddToWarehouse(warehouseId);
+            _product.AddToWarehouse(Guid.NewGuid());
 
             //// Assert
             Assert.IsTrue(_product.Warehouses.Any());
@@ -58,7 +57,7 @@ namespace Merchello.Tests.UnitTests.Models
         public void Can_verify_null_Is_Returned_For_Default_GetVariantForPurchase_For_A_Product_With_Options()
         {
             //// Arrange
-            _product.ProductOptions.Add(new ProductOption("Option1") { Id = 1 });
+            _product.ProductOptions.Add(new ProductOption("Option1") { Key = Guid.NewGuid() });
 
             //// Act
             var variant = _product.GetProductVariantForPurchase();
@@ -74,12 +73,12 @@ namespace Merchello.Tests.UnitTests.Models
         public void Can_Get_A_ProductVariant_From_GetVariantForPurchase_Method_Given_A_List_Of_Attributes()
         {            
             //// Arrange
-            var att = new ProductAttribute("Choice1", "choice") {Id = 1};
+            var att = new ProductAttribute("Choice1", "choice") { Key = Guid.NewGuid() };
             var attCollection = new ProductAttributeCollection();
             attCollection.Add(att);
             var expected = new ProductVariant(Guid.NewGuid(), attCollection, new WarehouseInventoryCollection(), false,
                 "Variant", "variant", 5M);
-            _product.ProductOptions.Add(new ProductOption("Option1") { Id = 1 });
+            _product.ProductOptions.Add(new ProductOption("Option1") { Key = Guid.NewGuid() });
             _product.ProductOptions["Option1"].Choices.Add(att);
             _product.ProductVariants.Add(expected);
 
@@ -96,20 +95,20 @@ namespace Merchello.Tests.UnitTests.Models
         /// Test verifies that a product variant can be retrieved from GetVariantForPurchase method given a list of ids
         /// </summary>
         [Test]
-        public void Can_Get_A_ProductVariant_From_GetVariantForPurchase_Method_Given_A_List_Of_AttributeIds()
+        public void Can_Get_A_ProductVariant_From_GetVariantForPurchase_Method_Given_A_List_Of_AttributeKeys()
         {
             //// Arrange
-            var att = new ProductAttribute("Choice1", "choice") { Id = 1 };
-            var attCollection = new ProductAttributeCollection();
-            attCollection.Add(att);
+            var att = new ProductAttribute("Choice1", "choice") { Key = Guid.NewGuid() };
+            var key = att.Key;
+            var attCollection = new ProductAttributeCollection {att};
             var expected = new ProductVariant(Guid.NewGuid(), attCollection, new WarehouseInventoryCollection(), false,
                 "Variant", "variant", 5M);
-            _product.ProductOptions.Add(new ProductOption("Option1") { Id = 1 });
+            _product.ProductOptions.Add(new ProductOption("Option1") { Key = Guid.NewGuid() });
             _product.ProductOptions["Option1"].Choices.Add(att);
             _product.ProductVariants.Add(expected);
 
             //// Act
-            var variant = _product.GetProductVariantForPurchase(new [] { 1 });
+            var variant = _product.GetProductVariantForPurchase(new [] { key });
 
             //// Assert
             Assert.NotNull(variant);
@@ -120,12 +119,12 @@ namespace Merchello.Tests.UnitTests.Models
         public void Can_Serialize_A_Product_To_Xml()
         {
             //// Arrange
-            var att = new ProductAttribute("Choice1", "choice") { Id = 1 };
+            var att = new ProductAttribute("Choice1", "choice") { Key = Guid.NewGuid() };
             var attCollection = new ProductAttributeCollection();
             attCollection.Add(att);
             var expected = new ProductVariant(Guid.NewGuid(), attCollection, new WarehouseInventoryCollection(), false,
                 "Variant", "variant", 5M);
-            _product.ProductOptions.Add(new ProductOption("Option1") { Id = 1 });
+            _product.ProductOptions.Add(new ProductOption("Option1") { Key = Guid.NewGuid() });
             _product.ProductOptions["Option1"].Choices.Add(att);
             _product.ProductVariants.Add(expected);
 

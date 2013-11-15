@@ -10,7 +10,7 @@ namespace Merchello.Core.Models
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    public abstract class CustomerBase : IdEntity, ICustomerBase
+    public abstract class CustomerBase : Entity, ICustomerBase
     {
         private DateTime _lastActivityDate;
         private Guid _entityKey;

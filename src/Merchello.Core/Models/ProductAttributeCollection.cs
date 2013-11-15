@@ -47,7 +47,7 @@ namespace Merchello.Core.Models
 
         public bool Equals(ProductAttributeCollection compare)
         {
-            return Count == compare.Count && compare.All(item => Contains(item.Id));
+            return Count == compare.Count && compare.All(item => Contains(item.Key));
         }
 
         public override int IndexOfKey(string key)
@@ -68,9 +68,9 @@ namespace Merchello.Core.Models
             return this.Any(x => x.Sku  == sku);
         }
 
-        public bool Contains(int id)
+        public bool Contains(Guid key)
         {
-            return this.Any(x => x.Id == id);
+            return this.Any(x => x.Key == key);
         }
 
         

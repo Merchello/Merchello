@@ -8,26 +8,26 @@ namespace Merchello.Core.Models
 
     [Serializable]
     [DataContract(IsReference = true)]
-    internal class Shipment : IdEntity, IShipment
+    internal class Shipment : Entity, IShipment
     {
-        private readonly int _invoiceId;
+        private readonly Guid _orderKey;
         private string _address1;
         private string _address2;
         private string _locality;
         private string _region;
         private string _postalCode;
         private string _countryCode;
-        private int? _shipMethodId;
+        private Guid? _shipMethodKey;
         private string _phone;
 
         
-        public Shipment(int invoiceId)
+        public Shipment(Guid orderKey)
         {
-            _invoiceId = invoiceId;
+            _orderKey = orderKey;
         }
 
 
-        private static readonly PropertyInfo ShipMethodIdSelector = ExpressionHelper.GetPropertyInfo<Shipment, int?>(x => x.ShipMethodId);
+        private static readonly PropertyInfo ShipMethodIdSelector = ExpressionHelper.GetPropertyInfo<Shipment, Guid?>(x => x.ShipMethodKey);
         private static readonly PropertyInfo Address1Selector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.Address1);  
         private static readonly PropertyInfo Address2Selector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.Address2);  
         private static readonly PropertyInfo LocalitySelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.Locality);  
@@ -37,12 +37,12 @@ namespace Merchello.Core.Models
         private static readonly PropertyInfo PhoneSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.Phone);  
         
         /// <summary>
-        /// The invoiceId associated with the Shipment
+        /// The order key associated with the Shipment
         /// </summary>
         [DataMember]
-        public int InvoiceId
+        public Guid OrderKey
         {
-            get { return _invoiceId; }
+            get { return _orderKey; }
         }
     
         /// <summary>
@@ -151,16 +151,16 @@ namespace Merchello.Core.Models
         /// The shipMethodId associated with the Shipment
         /// </summary>
         [DataMember]
-        public int? ShipMethodId
+        public Guid? ShipMethodKey
         {
-            get { return _shipMethodId; }
+            get { return _shipMethodKey; }
             set
             {
                 SetPropertyValueAndDetectChanges(o =>
                 {
-                    _shipMethodId = value;
-                    return _shipMethodId;
-                }, _shipMethodId, ShipMethodIdSelector);
+                    _shipMethodKey = value;
+                    return _shipMethodKey;
+                }, _shipMethodKey, ShipMethodIdSelector);
             }
         }
 

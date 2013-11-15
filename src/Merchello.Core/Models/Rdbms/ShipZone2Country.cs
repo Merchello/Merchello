@@ -5,14 +5,14 @@ using Umbraco.Core.Persistence.DatabaseAnnotations;
 namespace Merchello.Core.Models.Rdbms
 {
     [TableName("merchShipZone2Country")]
-    [PrimaryKey("shipZoneId", autoIncrement = false)]
+    [PrimaryKey("shipZoneKey", autoIncrement = false)]
     [ExplicitColumns]
     public class ShipZone2Country
     {
-        [Column("shipZoneId")]
-        [PrimaryKeyColumn(AutoIncrement = false, Name = "PK_merchShipZone2Country", OnColumns = "shipZoneId, countryCode")]
-        [ForeignKey(typeof(ShipZoneDto), Name = "FK_merchShipZone2Country_merchShipZone", Column = "id")]
-        public int ShipZoneId { get; set; }
+        [Column("shipZoneKey")]
+        [PrimaryKeyColumn(AutoIncrement = false, Name = "PK_merchShipZone2Country", OnColumns = "shipZoneKey, countryCode")]
+        [ForeignKey(typeof(ShipZoneDto), Name = "FK_merchShipZone2Country_merchShipZone", Column = "pk")]
+        public Guid ShipZoneKey { get; set; }
 
         [Column("countryCode")]
         [Length(2)]

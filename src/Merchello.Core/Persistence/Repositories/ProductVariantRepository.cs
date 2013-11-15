@@ -4,32 +4,30 @@ using System.Linq;
 using Merchello.Core.Models;
 using Merchello.Core.Models.EntityBase;
 using Merchello.Core.Models.Rdbms;
-using Merchello.Core.Persistence.Caching;
 using Merchello.Core.Persistence.Factories;
 using Merchello.Core.Persistence.Querying;
+using Merchello.Core.Persistence.UnitOfWork;
 using Umbraco.Core;
+using Umbraco.Core.Cache;
 using Umbraco.Core.Persistence;
 using Umbraco.Core.Persistence.Querying;
-using Umbraco.Core.Persistence.UnitOfWork;
+
 
 namespace Merchello.Core.Persistence.Repositories
 {
-    internal class ProductVariantRepository : MerchelloPetaPocoRepositoryBase<int, IProductVariant>, IProductVariantRepository
+    internal class ProductVariantRepository : MerchelloPetaPocoRepositoryBase<IProductVariant>, IProductVariantRepository
     {
-        public ProductVariantRepository(IDatabaseUnitOfWork work) 
-            : base(work)
-        { }
 
-        public ProductVariantRepository(IDatabaseUnitOfWork work, IRepositoryCacheProvider cache) 
+        public ProductVariantRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache) 
             : base(work, cache)
         { }
 
         #region Overrides MerchelloPetaPocoRepositoryBase
 
-        protected override IProductVariant PerformGet(int id)
+        protected override IProductVariant PerformGet(Guid key)
         {
             var sql = GetBaseQuery(false)
-               .Where(GetBaseWhereClause(), new { Id = id });
+               .Where(GetBaseWhereClause(), new { Key = key });
 
             var dto = Database.Fetch<ProductDto, ProductVariantDto>(sql).FirstOrDefault();
 
@@ -40,23 +38,23 @@ namespace Merchello.Core.Persistence.Repositories
             var variant = factory.BuildEntity(dto.ProductVariantDto);
 
             // set the attributes collection
-            ((ProductVariant)variant).ProductAttributes = GetProductAttributeCollection(variant.Id);
+            ((ProductVariant)variant).ProductAttributes = GetProductAttributeCollection(variant.Key);
 
             // set the inventory collection
-            ((ProductVariant) variant).WarehouseInventory = GetWarehouseInventory(variant.Id);
+            ((ProductVariant) variant).WarehouseInventory = GetWarehouseInventory(variant.Key);
 
             variant.ResetDirtyProperties();
 
             return variant;
         }
 
-        protected override IEnumerable<IProductVariant> PerformGetAll(params int[] ids)
+        protected override IEnumerable<IProductVariant> PerformGetAll(params Guid[] keys)
         {
-            if (ids.Any())
+            if (keys.Any())
             {
-                foreach (var id in ids)
+                foreach (var key in keys)
                 {
-                    yield return Get(id);
+                    yield return Get(key);
                 }
             }
             else
@@ -64,7 +62,7 @@ namespace Merchello.Core.Persistence.Repositories
                 var dtos = Database.Fetch<ProductDto, ProductVariantDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
-                    yield return Get(dto.ProductVariantDto.Id);
+                    yield return Get(dto.ProductVariantDto.Key);
                 }
             }
         }
@@ -77,7 +75,7 @@ namespace Merchello.Core.Persistence.Repositories
 
             var dtos = Database.Fetch<ProductDto, ProductVariantDto>(sql);
 
-            return dtos.DistinctBy(x => x.ProductVariantDto.Id).Select(dto => Get(dto.ProductVariantDto.Id));
+            return dtos.DistinctBy(x => x.ProductVariantDto.Key).Select(dto => Get(dto.ProductVariantDto.Key));
 
         }
 
@@ -95,16 +93,16 @@ namespace Merchello.Core.Persistence.Repositories
 
         protected override string GetBaseWhereClause()
         {
-            return "merchProductVariant.id = @Id";
+            return "merchProductVariant.pk = @Key";
         }
 
         protected override IEnumerable<string> GetDeleteClauses()
         {
             var list = new List<string>
             {
-                "DELETE FROM merchWarehouseInventory WHERE productVariantId = @Id",
-                "DELETE FROM merchProductVariant2ProductAttribute WHERE productVariantId = @Id",
-                "DELETE FROM merchProductVariant WHERE id = @Id"
+                "DELETE FROM merchWarehouseInventory WHERE productVariantKey = @Key",
+                "DELETE FROM merchProductVariant2ProductAttribute WHERE productVariantKey = @Key",
+                "DELETE FROM merchProductVariant WHERE pk = @Key"
             };
 
             return list;
@@ -123,14 +121,14 @@ namespace Merchello.Core.Persistence.Repositories
 
             // insert the variant
             Database.Insert(dto);
-            entity.Id = dto.Id;
+            entity.Key = dto.Key; // to set HasIdentity
 
             // insert associations for every attribute
             foreach (var association in entity.Attributes.Select(att => new ProductVariant2ProductAttributeDto()
             {
-                ProductVariantId = entity.Id,
-                OptionId = att.OptionId,
-                ProductAttributeId = att.Id,
+                ProductVariantKey = entity.Key,
+                OptionKey = att.OptionKey,
+                ProductAttributeKey = att.Key,
                 UpdateDate = DateTime.Now,
                 CreateDate = DateTime.Now
             }))
@@ -147,7 +145,7 @@ namespace Merchello.Core.Persistence.Repositories
         {
             if (!MandateProductVariantRules(entity)) return;
 
-            Mandate.ParameterCondition(!SkuExists(entity.Sku, entity.Id), "Entity cannot be updated.  The sku already exists.");
+            Mandate.ParameterCondition(!SkuExists(entity.Sku, entity.Key), "Entity cannot be updated.  The sku already exists.");
 
             ((Entity)entity).UpdatingEntity();
 
@@ -167,7 +165,7 @@ namespace Merchello.Core.Persistence.Repositories
             var deletes = GetDeleteClauses();
             foreach (var delete in deletes)
             {
-                Database.Execute(delete, new { entity.Id });
+                Database.Execute(delete, new { entity.Key });
             }
         }
 
@@ -184,14 +182,14 @@ namespace Merchello.Core.Persistence.Repositories
             return true;
         }
 
-        private ProductAttributeCollection GetProductAttributeCollection(int productVariantId)
+        private ProductAttributeCollection GetProductAttributeCollection(Guid productVariantKey)
         {
             var sql = new Sql();
             sql.Select("*")
                 .From<ProductVariant2ProductAttributeDto>()
                 .InnerJoin<ProductAttributeDto>()
-                .On<ProductVariant2ProductAttributeDto, ProductAttributeDto>(left => left.ProductAttributeId, right => right.Id)
-                .Where<ProductVariant2ProductAttributeDto>(x => x.ProductVariantId == productVariantId);
+                .On<ProductVariant2ProductAttributeDto, ProductAttributeDto>(left => left.ProductAttributeKey, right => right.Key)
+                .Where<ProductVariant2ProductAttributeDto>(x => x.ProductVariantKey == productVariantKey);
 
             var dtos = Database.Fetch<ProductVariant2ProductAttributeDto, ProductAttributeDto>(sql);
 
@@ -209,19 +207,19 @@ namespace Merchello.Core.Persistence.Repositories
         // this merely asserts that an assoicate between the warehouse and the variant has been made
         internal void SaveWarehouseInventory(IProductVariant productVariant)
         {
-            var existing = GetWarehouseInventory(productVariant.Id);
+            var existing = GetWarehouseInventory(productVariant.Key);
 
-            foreach (var inv in existing.Where(inv => !((ProductVariant) productVariant).WarehouseInventory.Contains(inv.WarehouseId)))
+            foreach (var inv in existing.Where(inv => !((ProductVariant) productVariant).WarehouseInventory.Contains(inv.WarehouseKey)))
             {
-                DeleteWarehouseInventory(productVariant.Id, inv.WarehouseId);
+                DeleteWarehouseInventory(productVariant.Key, inv.WarehouseKey);
             }
 
-            foreach (var inv in productVariant.Warehouses.Where((inv => !existing.Contains(inv.WarehouseId))))
+            foreach (var inv in productVariant.Warehouses.Where((inv => !existing.Contains(inv.WarehouseKey))))
             {
                 AddWarehouseInventory(inv);
             }
 
-            foreach (var inv in productVariant.Warehouses.Where((inv => existing.Contains(inv.WarehouseId))))
+            foreach (var inv in productVariant.Warehouses.Where((inv => existing.Contains(inv.WarehouseKey))))
             {
                 UpdateWarehouseInventory(inv);
             }
@@ -231,8 +229,8 @@ namespace Merchello.Core.Persistence.Repositories
         {
             var dto = new WarehouseInventoryDto()
             {
-                WarehouseId = inv.WarehouseId,
-                ProductVariantId = inv.ProductVariantId,
+                WarehouseKey = inv.WarehouseKey,
+                ProductVariantKey = inv.ProductVariantKey,
                 Count = inv.Count,
                 LowCount = inv.LowCount,
                 CreateDate = DateTime.Now,
@@ -246,8 +244,8 @@ namespace Merchello.Core.Persistence.Repositories
         {
             var dto = new WarehouseInventoryDto()
             {
-                WarehouseId = inv.WarehouseId,
-                ProductVariantId = inv.ProductVariantId,
+                WarehouseKey = inv.WarehouseKey,
+                ProductVariantKey = inv.ProductVariantKey,
                 Count = inv.Count,
                 LowCount = inv.LowCount,
                 CreateDate = inv.CreateDate,
@@ -257,21 +255,21 @@ namespace Merchello.Core.Persistence.Repositories
             Database.Update(dto);
         }
 
-        private void DeleteWarehouseInventory(int productVariantId, int warehouseId)
+        private void DeleteWarehouseInventory(Guid productVariantKey, Guid warehouseKey)
         {
-            const string sql = "DELETE FROM mercheWarehouseInventory WHERE productVariantId = @pvId AND warehouseId = @wId";
-            Database.Execute(sql, new {@pvId = productVariantId, @wId = warehouseId});
+            const string sql = "DELETE FROM mercheWarehouseInventory WHERE productVariantKey = @pvKey AND warehouseKey = @wKey";
+            Database.Execute(sql, new {@pvKey = productVariantKey, @wKey = warehouseKey});
         }
 
 
-        internal WarehouseInventoryCollection GetWarehouseInventory(int productVariantId)
+        internal WarehouseInventoryCollection GetWarehouseInventory(Guid productVariantKey)
         {
             var sql = new Sql();
             sql.Select("*")
                .From<WarehouseInventoryDto>()
                .InnerJoin<WarehouseDto>()
-               .On<WarehouseInventoryDto, WarehouseDto>(left => left.WarehouseId, right => right.Id)
-               .Where<WarehouseInventoryDto>(x => x.ProductVariantId == productVariantId);
+               .On<WarehouseInventoryDto, WarehouseDto>(left => left.WarehouseKey, right => right.Key)
+               .Where<WarehouseInventoryDto>(x => x.ProductVariantKey == productVariantKey);
 
             var dtos = Database.Fetch<WarehouseInventoryDto, WarehouseDto>(sql);
 
@@ -288,28 +286,28 @@ namespace Merchello.Core.Persistence.Repositories
         /// <summary>
         /// Gets a collection of <see cref="IProductVariant"/> objects associated with a given warehouse 
         /// </summary>
-        /// <param name="warehouseId">The 'unique' id of the warehouse</param>
+        /// <param name="warehouseKey">The 'unique' id of the warehouse</param>
         /// <returns>A collection of <see cref="IProductVariant"/></returns>
-        public IEnumerable<IProductVariant> GetByWarehouseId(int warehouseId)
+        public IEnumerable<IProductVariant> GetByWarehouseKey(Guid warehouseKey)
         {
             var sql = new Sql();
             sql.Select("*")
                 .From<WarehouseInventoryDto>()
-                .Where<WarehouseInventoryDto>(x => x.WarehouseId == warehouseId);
+                .Where<WarehouseInventoryDto>(x => x.WarehouseKey == warehouseKey);
 
             var dtos = Database.Fetch<WarehouseInventoryDto>(sql);
 
-            return dtos.Select(dto => Get(dto.ProductVariantId));
+            return dtos.Select(dto => Get(dto.ProductVariantKey));
 
         }
 
         /// <summary>
         /// Returns <see cref="IProductVariant"/> given the product and the collection of attribute ids that defines the<see cref="IProductVariant"/>
         /// </summary>
-        public IProductVariant GetProductVariantWithAttributes(IProduct product, int[] attributeIds)
+        public IProductVariant GetProductVariantWithAttributes(IProduct product, Guid[] attributeKeys)
         {
             var variants = GetByProductKey(product.Key);
-            return variants.FirstOrDefault(x => x.Attributes.Count() == attributeIds.Count() && attributeIds.All(id => x.Attributes.FirstOrDefault(att => att.Id == id) != null));
+            return variants.FirstOrDefault(x => x.Attributes.Count() == attributeKeys.Count() && attributeKeys.All(key => x.Attributes.FirstOrDefault(att => att.Key == key) != null));
         }
 
         #endregion
@@ -360,14 +358,14 @@ namespace Merchello.Core.Persistence.Repositories
         /// True/false indicating whether or not a sku exists on a record other than the record with the id passed
         /// </summary>
         /// <param name="sku">The sku to be tested</param>
-        /// <param name="productVariantId">The key of the <see cref="IProductVariant"/> to be excluded</param>
+        /// <param name="productVariantKey">The key of the <see cref="IProductVariant"/> to be excluded</param>
         /// <returns></returns>
-        private bool SkuExists(string sku, int productVariantId)
+        private bool SkuExists(string sku, Guid productVariantKey)
         {
             var sql = new Sql();
             sql.Select("*")
                 .From<ProductVariantDto>()
-                .Where<ProductVariantDto>(x => x.Sku == sku && x.Id != productVariantId);
+                .Where<ProductVariantDto>(x => x.Sku == sku && x.Key != productVariantKey);
 
             return Database.Fetch<ProductAttributeDto>(sql).Any();
         }

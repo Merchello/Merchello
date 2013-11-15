@@ -15,7 +15,9 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
     public class ProductDisplayTests : ServiceIntegrationTestBase
     {
         private Guid _productKey;
-        private int _productVariantId;        
+        private Guid _productVariantKey;
+        private int _examineId;
+        private readonly Guid _defaultWarehouseKey = new Guid("268D4007-8853-455A-89F7-A28398843E5F");
 
         [SetUp]
         public void Init()
@@ -51,10 +53,11 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
                 product.ProductOptions["Size"].Choices["XL"]
             };
 
-            var variant = productVariantService.CreateProductVariantWithId(product, attributes);
-            variant.AddToWarehouse(1);
+            var variant = productVariantService.CreateProductVariantWithKey(product, attributes);
+            variant.AddToWarehouse(_defaultWarehouseKey);
             productVariantService.Save(variant);
-            _productVariantId = variant.Id;
+            _productVariantKey = variant.Key;
+            _examineId = ((ProductVariant) variant).ExamineId;
 
             var provider = (ProductIndexer)ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"];
             provider.AddProductToIndex(product);
@@ -66,7 +69,7 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
             //// Arrange
             var searcher = ExamineManager.Instance.SearchProviderCollection["MerchelloProductSearcher"];
             var criteria = searcher.CreateSearchCriteria("productvariant", BooleanOperation.And);
-            criteria.Id(_productVariantId);
+            criteria.Id(_examineId);
             
             var result = searcher.Search(criteria).FirstOrDefault();
 

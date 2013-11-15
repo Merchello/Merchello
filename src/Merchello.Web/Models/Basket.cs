@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using log4net.Repository.Hierarchy;
 using Merchello.Core;
 using Merchello.Core.Models;
@@ -37,7 +38,7 @@ namespace Merchello.Web.Models
             var basket = (IBasket)merchelloContext.Cache.RuntimeCache.GetCacheItem(cacheKey);
             if (basket != null) return basket;
 
-            var customerItemCache = merchelloContext.Services.ItemCacheService.GetItemCacheWithId(customer, ItemCacheType.Basket);
+            var customerItemCache = merchelloContext.Services.ItemCacheService.GetItemCacheWithKey(customer, ItemCacheType.Basket);
             basket = new Basket(customerItemCache, customer);
             merchelloContext.Cache.RuntimeCache.GetCacheItem(cacheKey, () => basket);
             
@@ -154,9 +155,9 @@ namespace Merchello.Web.Models
         /// <summary>
         /// Updates a basket item's quantity
         /// </summary>
-        public void UpdateQuantity(int id, int quantity)
+        public void UpdateQuantity(Guid key, int quantity)
         {
-            var item = _itemCache.Items.FirstOrDefault(x => x.Id == id);
+            var item = _itemCache.Items.FirstOrDefault(x => x.Key == key);
             if(item != null) UpdateQuantity(item.Sku, quantity);
         }
 
@@ -178,9 +179,9 @@ namespace Merchello.Web.Models
         /// <summary>
         /// Removes a basket line item
         /// </summary>
-        public void RemoveItem(int id)
+        public void RemoveItem(Guid key)
         {
-            var item = _itemCache.Items.FirstOrDefault(x => x.Id == id);
+            var item = _itemCache.Items.FirstOrDefault(x => x.Key == key);
             if(item != null) RemoveItem(item.Sku);
         }        
 
@@ -232,7 +233,7 @@ namespace Merchello.Web.Models
             var cacheKey = MakeCacheKey(basket.Customer);
             merchelloContext.Cache.RuntimeCache.ClearCacheItem(cacheKey);
 
-            var customerItemCache = merchelloContext.Services.ItemCacheService.GetItemCacheWithId(basket.Customer, ItemCacheType.Basket);
+            var customerItemCache = merchelloContext.Services.ItemCacheService.GetItemCacheWithKey(basket.Customer, ItemCacheType.Basket);
             basket = new Basket(customerItemCache, basket.Customer);
             merchelloContext.Cache.RuntimeCache.GetCacheItem(cacheKey, () => basket);
         }

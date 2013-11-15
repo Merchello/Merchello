@@ -12,7 +12,7 @@ namespace Merchello.Core.Models
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    public abstract class ProductBase : IdEntity, IProductBase
+    public abstract class ProductBase : Entity, IProductBase
     {
         private string _sku;
         private string _name;

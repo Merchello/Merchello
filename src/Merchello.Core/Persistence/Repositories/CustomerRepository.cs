@@ -4,26 +4,22 @@ using System.Linq;
 using Merchello.Core.Models;
 using Merchello.Core.Models.EntityBase;
 using Merchello.Core.Models.Rdbms;
-using Merchello.Core.Persistence.Caching;
 using Merchello.Core.Persistence.Factories;
 using Merchello.Core.Persistence.Querying;
+using Merchello.Core.Persistence.UnitOfWork;
 using Umbraco.Core;
+using Umbraco.Core.Cache;
 using Umbraco.Core.Persistence;
 using Umbraco.Core.Persistence.Querying;
-using Umbraco.Core.Persistence.UnitOfWork;
+
 
 namespace Merchello.Core.Persistence.Repositories
 {
-    internal class CustomerRepository : MerchelloPetaPocoRepositoryBase<int, ICustomer>, ICustomerRepository
+    internal class CustomerRepository : MerchelloPetaPocoRepositoryBase<ICustomer>, ICustomerRepository
     {
         
-        public CustomerRepository(IDatabaseUnitOfWork work) 
-            : base(work)
-        {
-            
-        }
 
-        public CustomerRepository(IDatabaseUnitOfWork work, IRepositoryCacheProvider cache) 
+        public CustomerRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache) 
             : base(work, cache)
         {
         }
@@ -31,10 +27,10 @@ namespace Merchello.Core.Persistence.Repositories
         #region Overrides of RepositoryBase<ICustomer>
         
 
-        protected override ICustomer PerformGet(int id)
+        protected override ICustomer PerformGet(Guid key)
         {
             var sql = GetBaseQuery(false)
-                .Where(GetBaseWhereClause(), new {Id = id});
+                .Where(GetBaseWhereClause(), new {Key = key});
 
 
             var dto = Database.Fetch<CustomerDto>(sql).FirstOrDefault();
@@ -49,13 +45,13 @@ namespace Merchello.Core.Persistence.Repositories
             return customer;
         }
 
-        protected override IEnumerable<ICustomer> PerformGetAll(params int[] ids)
+        protected override IEnumerable<ICustomer> PerformGetAll(params Guid[] keys)
         {
-            if (ids.Any())
+            if (keys.Any())
             {
-                foreach (var id in ids)
+                foreach (var key in keys)
                 {
-                    yield return Get(id);
+                    yield return Get(key);
                 }
             }
             else
@@ -118,27 +114,27 @@ namespace Merchello.Core.Persistence.Repositories
 
         protected override string GetBaseWhereClause()
         {
-            return "merchCustomer.id = @Id";
+            return "merchCustomer.pk = @Key";
         }
 
         protected override IEnumerable<string> GetDeleteClauses()
         {
-            const string invoiceIdById = "(SELECT id FROM merchInvoice WHERE customerId = @Id)";
+            const string invoiceIdByKey = "(SELECT pk FROM merchInvoice WHERE customerKey = @Key)";
 
             var list = new List<string>
                 {
                     // TODO : this needs to be totally refactored
-                    "DELETE FROM merchItemCacheItem WHERE ItemCacheId IN (SELECT id FROM merchItemCache WHERE entityKey = (SELECT entityKey FROM merchCustomer WHERE id = @Id))",
-                    "DELETE FROM merchItemCache WHERE entityKey = (SELECT entityKey FROM merchCustomer WHERE id = @Id)",
-                    "DELETE FROM merchInvoiceItem WHERE invoiceId IN " + invoiceIdById,
-                    "DELETE FROM merchShipment WHERE orderId IN (SELECT id FROM merchOrder WHERE customerId = @Id)",
-                    "DELETE FROM merchOrderItem WHERE orderId IN (SELECT id FROM merchOrder WHERE customerId = @Id)",
-                    "DELETE FROM merchOrder WHERE orderId IN (SELECT id FROM merchOrder WHERE customerId = @Id)",
-                    "DELETE FROM merchAppliedPayment WHERE invoiceId IN " + invoiceIdById,
-                    "DELETE FROM merchPayment WHERE customerId = @Id",
-                    "DELETE FROM merchInvoice WHERE customerId = @Id",
-                    "DELETE FROM merchCustomerAddress WHERE customerId = @Id",
-                    "DELETE FROM merchCustomer WHERE id = @Id"
+                    "DELETE FROM merchItemCacheItem WHERE ItemCacheKey IN (SELECT pk FROM merchItemCache WHERE entityKey = (SELECT entityKey FROM merchCustomer WHERE pk = @Key))",
+                    "DELETE FROM merchItemCache WHERE entityKey = (SELECT entityKey FROM merchCustomer WHERE pk = @Key)",
+                    "DELETE FROM merchInvoiceItem WHERE invoiceKey IN " + invoiceIdByKey,
+                    "DELETE FROM merchShipment WHERE orderKey IN (SELECT pk FROM merchOrder WHERE customerKey = @Key)",
+                    "DELETE FROM merchOrderItem WHERE orderKey IN (SELECT pk FROM merchOrder WHERE customerKey = @Key)",
+                    "DELETE FROM merchOrder WHERE orderKey IN (SELECT pk FROM merchOrder WHERE customerKey = @Key)",
+                    "DELETE FROM merchAppliedPayment WHERE invoiceKey IN " + invoiceIdByKey,
+                    "DELETE FROM merchPayment WHERE customerKey = @Key",
+                    "DELETE FROM merchInvoice WHERE customerKey = @Key",
+                    "DELETE FROM merchCustomerAddress WHERE customerKey = @Key",
+                    "DELETE FROM merchCustomer WHERE pk = @Key"
                 };
 
             return list;
@@ -146,7 +142,7 @@ namespace Merchello.Core.Persistence.Repositories
 
         protected override void PersistNewItem(ICustomer entity)
         {
-            ((IdEntity)entity).AddingEntity();
+            ((Entity)entity).AddingEntity();
 
             var factory = new CustomerFactory();
             var dto = factory.BuildDto(entity);
@@ -158,7 +154,7 @@ namespace Merchello.Core.Persistence.Repositories
 
         protected override void PersistUpdatedItem(ICustomer entity)
         {
-            ((IdEntity)entity).UpdatingEntity();
+            ((Entity)entity).UpdatingEntity();
 
             var factory = new CustomerFactory();
             var dto = factory.BuildDto(entity);
@@ -173,7 +169,7 @@ namespace Merchello.Core.Persistence.Repositories
             var deletes = GetDeleteClauses();
             foreach (var delete in deletes)
             {
-                Database.Execute(delete, new { Id = entity.Key });
+                Database.Execute(delete, new { Key = entity.Key });
             }
         }
 
@@ -186,7 +182,7 @@ namespace Merchello.Core.Persistence.Repositories
 
             var dtos = Database.Fetch<CustomerDto>(sql);
 
-            return dtos.DistinctBy(x => x.Id).Select(dto => Get(dto.Id));
+            return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
 
         }
 

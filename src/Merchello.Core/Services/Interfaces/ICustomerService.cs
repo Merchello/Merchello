@@ -38,14 +38,14 @@ namespace Merchello.Core.Services
         /// <param name="email">the email address of the customer</param>
         /// <param name="memberId">The Umbraco member Id of the customer</param>
         /// <returns><see cref="ICustomer"/></returns>
-        ICustomer CreateCustomerWithId(string firstName, string lastName, string email, int? memberId = null);
+        ICustomer CreateCustomerWithKey(string firstName, string lastName, string email, int? memberId = null);
 
         /// <summary>
         /// Creates a customer with the Umbraco member id passed
         /// </summary>
         /// <param name="memberId">The Umbraco member id (int)</param>
         /// <returns><see cref="ICustomer"/></returns>
-        ICustomer CreateCustomerWithId(int memberId);
+        ICustomer CreateCustomerWithKey(int memberId);
 
         /// <summary>
         /// Saves a single <see cref="IAnonymousCustomer"/>
@@ -97,9 +97,8 @@ namespace Merchello.Core.Services
         /// Gets an <see cref="ICustomer"/> object by its 'UniqueId'
         /// </summary>
         /// <param name="key">Guid key of the Customer to retrieve</param>
-        /// <param name="id">Integer id of the customer to retrieve</param>
         /// <returns><see cref="ICustomer"/></returns>
-        ICustomer GetById(int id);
+        ICustomer GetByKey(Guid key);
 
         /// <summary>
         /// Gets an <see cref="ICustomer"/> or <see cref="IAnonymousCustomer"/> object by its 'UniqueId'
@@ -120,7 +119,7 @@ namespace Merchello.Core.Services
         /// </summary>
         /// <param name="ids">List of Guid pk for customers to retrieve</param>
         /// <returns>List of <see cref="ICustomer"/></returns>
-        IEnumerable<ICustomer> GetByIds(IEnumerable<int> ids);
+        IEnumerable<ICustomer> GetByKeys(IEnumerable<Guid> keys);
 
      
     }

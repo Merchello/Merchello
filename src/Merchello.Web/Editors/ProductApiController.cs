@@ -60,12 +60,12 @@ namespace Merchello.Web.Editors
         /// 
         /// GET /umbraco/Merchello/ProductApi/GetProduct?key={guid}
         /// </summary>
-        /// <param name="key"></param>
-        public ProductDisplay GetProduct(Guid key)
+        /// <param name="id"></param>
+        public ProductDisplay GetProduct(Guid id)
         {
-            if (key != null)
+            if (id != null)
             {
-                var product = _productService.GetByKey(key) as Product;
+                var product = _productService.GetByKey(id) as Product;
                 if (product == null)
                 {
                     throw new HttpResponseException(HttpStatusCode.NotFound);
@@ -110,12 +110,12 @@ namespace Merchello.Web.Editors
         /// 
         /// GET /umbraco/Merchello/ProductApi/GetProducts?keys={guid}&keys={guid}
         /// </summary>
-        /// <param name="keys"></param>
-        public IEnumerable<ProductDisplay> GetProducts([FromUri]IEnumerable<Guid> keys)
+        /// <param name="ids"></param>
+        public IEnumerable<ProductDisplay> GetProducts([FromUri]IEnumerable<Guid> ids)
         {
-            if (keys != null)
+            if (ids != null)
             {
-                var products = _productService.GetByKeys(keys);
+                var products = _productService.GetByKeys(ids);
                 if (products == null)
                 {
                     //throw new HttpResponseException(HttpStatusCode.NotFound);
@@ -193,10 +193,10 @@ namespace Merchello.Web.Editors
         ///
         /// DELETE /umbraco/Merchello/ProductApi/{guid}
         /// </summary>
-        /// <param name="key"></param>
-        public HttpResponseMessage Delete(Guid key)
+        /// <param name="id"></param>
+        public HttpResponseMessage Delete(Guid id)
         {
-            var productToDelete = _productService.GetByKey(key);
+            var productToDelete = _productService.GetByKey(id);
             if (productToDelete == null)
             {
                 return Request.CreateResponse(HttpStatusCode.NotFound);

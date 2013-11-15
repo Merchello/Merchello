@@ -7,7 +7,7 @@ namespace Merchello.Core.Models
     /// <summary>
     /// Defines a Merchello Invoice Status object
     /// </summary>
-    public interface IInvoiceStatus : IIdEntity
+    public interface IInvoiceStatus : IEntity
     {
         /// <summary>
         /// The name of the invoice status

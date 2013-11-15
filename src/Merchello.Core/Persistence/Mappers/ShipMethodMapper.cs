@@ -18,7 +18,7 @@ namespace Merchello.Core.Persistence.Mappers
 
         internal override void BuildMap()
         {
-            CacheMap<ShipMethod, ShipMethodDto>(src => src.Id, dto => dto.Id);
+            CacheMap<ShipMethod, ShipMethodDto>(src => src.Key, dto => dto.Key);
             CacheMap<ShipMethod, ShipMethodDto>(src => src.Name, dto => dto.Name);
             CacheMap<ShipMethod, ShipMethodDto>(src => src.ProviderKey, dto => dto.ProviderKey);
             CacheMap<ShipMethod, ShipMethodDto>(src => src.ShipMethodTypeFieldKey, dto => dto.ShipMethodTfKey);

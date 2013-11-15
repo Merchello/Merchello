@@ -19,9 +19,9 @@ namespace Merchello.Tests.UnitTests.LineItem
         {
             //// Arrange
             const int itemCount = 10;
-            var itemCache = new ItemCache(Guid.NewGuid(), ItemCacheType.Basket) { Id = 111 };
+            var itemCache = new ItemCache(Guid.NewGuid(), ItemCacheType.Basket) { Key = Guid.NewGuid() };
             for (var i = 0; i < itemCount; i++)
-            { itemCache.AddItem(MockLineItemDataMaker.MockItemCacheLineItemComplete(itemCache.Id)); }
+            { itemCache.AddItem(MockLineItemDataMaker.MockItemCacheLineItemComplete(itemCache.Key)); }
 
             //// Act
             var vistor = new MockLineItemVistor();

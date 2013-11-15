@@ -57,7 +57,7 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
             };
 
             //// Act
-            var variant = _productVariantService.CreateProductVariantWithId(_product, attributes);
+            var variant = _productVariantService.CreateProductVariantWithKey(_product, attributes);
 
             //// Assert
             Assert.IsTrue(variant.HasIdentity);
@@ -76,13 +76,13 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
                 _product.ProductOptions["Color"].Choices["Blk"],
                 _product.ProductOptions["Size"].Choices["Lg"]
             };
-            var variant = _productVariantService.CreateProductVariantWithId(_product, attributes);
+            var variant = _productVariantService.CreateProductVariantWithKey(_product, attributes);
 
             //// Act 
             
  
             //// Assert
-            Assert.Throws<ArgumentException>(() => _productVariantService.CreateProductVariantWithId(_product, attributes));
+            Assert.Throws<ArgumentException>(() => _productVariantService.CreateProductVariantWithKey(_product, attributes));
         }
 
         /// <summary>
@@ -97,16 +97,16 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
                 _product.ProductOptions["Color"].Choices["Blk"],
                 _product.ProductOptions["Size"].Choices["Lg"]
             };
-            var expected = _productVariantService.CreateProductVariantWithId(_product, attributes);
-            var id = expected.Id;
-            Assert.AreNotEqual(id, 0);
+            var expected = _productVariantService.CreateProductVariantWithKey(_product, attributes);
+            var id = expected.Key;
+            Assert.AreNotEqual(id, Guid.Empty);
 
             //// Act
-            var retrieved = _productVariantService.GetById(id);
+            var retrieved = _productVariantService.GetByKey(id);
 
             //// Assert
             Assert.NotNull(retrieved);
-            Assert.IsTrue(id == retrieved.Id);
+            Assert.IsTrue(id == retrieved.Key);
         }
 
         /// <summary>
@@ -126,8 +126,8 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
                 _product.ProductOptions["Color"].Choices["Blk"],
                 _product.ProductOptions["Size"].Choices["XL"]
             };
-            _productVariantService.CreateProductVariantWithId(_product, attributes1);
-            _productVariantService.CreateProductVariantWithId(_product, attributes2);
+            _productVariantService.CreateProductVariantWithKey(_product, attributes1);
+            _productVariantService.CreateProductVariantWithKey(_product, attributes2);
 
             Assert.IsTrue(_product.ProductVariants.Count == 2);
 
@@ -152,15 +152,15 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
                 _product.ProductOptions["Color"].Choices["Blk"],
                 _product.ProductOptions["Size"].Choices["Lg"]
             };
-            var variant = _productVariantService.CreateProductVariantWithId(_product, attributes);
-            var id = variant.Id;
+            var variant = _productVariantService.CreateProductVariantWithKey(_product, attributes);
+            var key = variant.Key;
             Assert.IsTrue(_product.ProductVariants.Any());
 
             //// Act
             _productVariantService.Delete(variant);
 
             //// Assert
-            var retrieved = _productVariantService.GetById(id);
+            var retrieved = _productVariantService.GetByKey(key);
 
             Assert.IsNull(retrieved);
         }
@@ -177,7 +177,7 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
                 _product.ProductOptions["Color"].Choices["Blk"],
                 _product.ProductOptions["Size"].Choices["Lg"]
             };
-            _productVariantService.CreateProductVariantWithId(_product, attributes);
+            _productVariantService.CreateProductVariantWithKey(_product, attributes);
             
             Assert.IsTrue(_product.ProductVariants.Any());
 
@@ -201,7 +201,7 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
                 _product.ProductOptions["Color"].Choices["Blk"],
                 _product.ProductOptions["Size"].Choices["Lg"]
             };
-            _productVariantService.CreateProductVariantWithId(_product, attributes);
+            _productVariantService.CreateProductVariantWithKey(_product, attributes);
 
             Assert.IsTrue(_product.ProductVariants.Any());
 
@@ -225,11 +225,11 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
                 _product.ProductOptions["Color"].Choices["Blk"],
                 _product.ProductOptions["Size"].Choices["Lg"]
             };
-            _productVariantService.CreateProductVariantWithId(_product, attributes);
+            _productVariantService.CreateProductVariantWithKey(_product, attributes);
             
             Assert.IsTrue(_product.ProductVariants.Any());
 
-            var ids = _product.ProductVariants.First().Attributes.Select(att => att.Id).ToArray();
+            var ids = _product.ProductVariants.First().Attributes.Select(att => att.Key).ToArray();
 
             //// Act
             var retrieved = _productVariantService.GetProductVariantWithAttributes(_product, ids);
@@ -246,10 +246,9 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
         public void Can_Add_A_Warehouse_To_A_ProductVariant()
         {
             //// Arrange
-            const int warehouseId = 1;
-
+            
             //// Act
-            _product.AddToWarehouse(warehouseId);
+            _product.AddToWarehouse(new Guid("268D4007-8853-455A-89F7-A28398843E5F"));
 
             //// Assert
             Assert.IsTrue(_product.Warehouses.Count() == 1);
@@ -265,7 +264,7 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
             const int warehouseId = 1;
 
             //// Act
-            _product.AddToWarehouse(warehouseId);
+            _product.AddToWarehouse(new Guid("268D4007-8853-455A-89F7-A28398843E5F"));
             _productService.Save(_product);
 
             //// Assert
@@ -279,7 +278,7 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
             const int warehouseId = 1;
 
             //// Act
-            _product.AddToWarehouse(warehouseId);
+            _product.AddToWarehouse(new Guid("268D4007-8853-455A-89F7-A28398843E5F"));
             _product.Warehouses.First().Count = 10;
             _productService.Save(_product);
 

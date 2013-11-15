@@ -9,7 +9,7 @@ namespace Merchello.Core.Models
 
     [Serializable]
     [DataContract(IsReference = true)]
-    internal class ShipMethod : IdEntity, IShipMethod
+    internal class ShipMethod : Entity, IShipMethod
     {
         private string _name;
         private Guid _providerKey;

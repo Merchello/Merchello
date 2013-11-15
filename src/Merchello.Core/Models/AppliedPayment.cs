@@ -9,10 +9,10 @@ namespace Merchello.Core.Models
 
     [Serializable]
     [DataContract(IsReference = true)]
-    internal class AppliedPayment : IdEntity, IAppliedPayment
+    internal class AppliedPayment : Entity, IAppliedPayment
     {
-        private readonly int _invoiceId;
-        private readonly int _paymentId;
+        private readonly Guid _invoiceKey;
+        private readonly Guid _paymentKey;
         private Guid _appliedPaymentTfKey;
         private string _description;
         private decimal _amount;
@@ -24,13 +24,13 @@ namespace Merchello.Core.Models
         { }
 
         internal AppliedPayment (IPayment payment, IInvoice invoice, Guid appliedPaymentTfKey)
-            : this(payment.Id, invoice.Id, appliedPaymentTfKey)
+            : this(payment.Key, invoice.Key, appliedPaymentTfKey)
         { }
 
-        internal AppliedPayment(int paymentId, int invoiceId, Guid appliedPaymentTfKey)
+        internal AppliedPayment(Guid paymentKey, Guid invoiceKey, Guid appliedPaymentTfKey)
         {
-            _paymentId = paymentId;
-            _invoiceId = invoiceId;
+            _paymentKey = paymentKey;
+            _invoiceKey = invoiceKey;
             _appliedPaymentTfKey = appliedPaymentTfKey;
         }
         
@@ -40,21 +40,21 @@ namespace Merchello.Core.Models
         private static readonly PropertyInfo ExportedSelector = ExpressionHelper.GetPropertyInfo<AppliedPayment, bool>(x => x.Exported);  
         
         /// <summary>
-        /// The payment Id associated with the Transaction
+        /// The payment key associated with the Transaction
         /// </summary>
         [DataMember]
-        public int PaymentId
+        public Guid PaymentKey
         {
-            get { return _paymentId; }
+            get { return _paymentKey; }
         }
 
         /// <summary>
-        /// The invoice Id associated with the Transaction
+        /// The invoice key associated with the Transaction
         /// </summary>
         [DataMember]
-        public int InvoiceId
+        public Guid InvoiceKey
         {
-            get { return _invoiceId; }
+            get { return _invoiceKey; }
         }
     
         /// <summary>

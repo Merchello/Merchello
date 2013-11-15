@@ -7,20 +7,20 @@ namespace Merchello.Core.Models
     /// <summary>
     /// Defines a Merchello Transaction object interface
     /// </summary>
-    public interface IAppliedPayment : IIdEntity
+    public interface IAppliedPayment : IEntity
     {
             
         /// <summary>
         /// The paymentId for the Transaction
         /// </summary>
         [DataMember]
-        int PaymentId { get;}
+        Guid PaymentKey { get;}
 
         /// <summary>
         /// The id of the invoice associated with this transaction
         /// </summary>
         [DataMember]
-        int InvoiceId { get; }
+        Guid InvoiceKey { get; }
             
         /// <summary>
         /// The type field for the Applied Payment

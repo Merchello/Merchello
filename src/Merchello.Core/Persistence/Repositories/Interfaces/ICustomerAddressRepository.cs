@@ -7,7 +7,7 @@ namespace Merchello.Core.Persistence.Repositories
     /// <summary>
     /// Marker interface for the address repository
     /// </summary>
-    public interface ICustomerAddressRepository : IRepositoryQueryable<int, ICustomerAddress>
+    public interface ICustomerAddressRepository : IRepositoryQueryable<Guid, ICustomerAddress>
     {
     }
 }

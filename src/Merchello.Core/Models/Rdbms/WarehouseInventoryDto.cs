@@ -5,18 +5,18 @@ using Umbraco.Core.Persistence.DatabaseAnnotations;
 namespace Merchello.Core.Models.Rdbms
 {
     [TableName("merchWarehouseInventory")]
-    [PrimaryKey("warehouseId", autoIncrement = false)]
+    [PrimaryKey("warehouseKey", autoIncrement = false)]
     [ExplicitColumns]
     internal class WarehouseInventoryDto
     {
-        [Column("warehouseId")]
-        [PrimaryKeyColumn(AutoIncrement = false, Name = "PK_merchWarehouseInventory", OnColumns = "warehouseId, productVariantId")]
-        [ForeignKey(typeof(WarehouseDto), Name = "FK_merchWarehouseInventory_merchWarehouse", Column = "id")]
-        public int WarehouseId { get; set; }
+        [Column("warehouseKey")]
+        [PrimaryKeyColumn(AutoIncrement = false, Name = "PK_merchWarehouseInventory", OnColumns = "warehouseKey, productVariantKey")]
+        [ForeignKey(typeof(WarehouseDto), Name = "FK_merchWarehouseInventory_merchWarehouse", Column = "pk")]
+        public Guid WarehouseKey { get; set; }
 
-        [Column("productVariantId")]
-        [ForeignKey(typeof(ProductVariantDto), Name = "FK_merchWarehouseInventory_merchProductVariant", Column = "id")]
-        public int ProductVariantId { get; set; }
+        [Column("productVariantKey")]
+        [ForeignKey(typeof(ProductVariantDto), Name = "FK_merchWarehouseInventory_merchProductVariant", Column = "pk")]
+        public Guid ProductVariantKey { get; set; }
 
         [Column("count")]
         public int Count { get; set; }

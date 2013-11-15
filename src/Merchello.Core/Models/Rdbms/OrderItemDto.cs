@@ -5,17 +5,18 @@ using Umbraco.Core.Persistence.DatabaseAnnotations;
 namespace Merchello.Core.Models.Rdbms
 {
     [TableName("merchOrderItem")]
-    [PrimaryKey("id")]
+    [PrimaryKey("pk", autoIncrement = false)]
     [ExplicitColumns]
     internal class OrderItemDto : ILineItemDto
     {
-        [Column("id")]
-        [PrimaryKeyColumn]
-        public int Id { get; set; }
+        [Column("pk")]
+        [PrimaryKeyColumn(AutoIncrement = false)]
+        [Constraint(Default = "newid()")]
+        public Guid Key { get; set; }
 
-        [Column("orderId")]
-        [ForeignKey(typeof(OrderDto), Name = "FK_merchOrderItem_merchOrder", Column = "id")]
-        public int ContainerId { get; set; }
+        [Column("orderKey")]
+        [ForeignKey(typeof(OrderDto), Name = "FK_merchOrderItem_merchOrder", Column = "pk")]
+        public Guid ContainerKey { get; set; }
         
         [Column("lineItemTfKey")]
         public Guid LineItemTfKey { get; set; }

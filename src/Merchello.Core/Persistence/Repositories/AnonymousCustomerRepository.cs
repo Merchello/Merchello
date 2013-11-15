@@ -4,26 +4,21 @@ using System.Linq;
 using Merchello.Core.Models;
 using Merchello.Core.Models.EntityBase;
 using Merchello.Core.Models.Rdbms;
-using Merchello.Core.Persistence.Caching;
 using Merchello.Core.Persistence.Factories;
 using Merchello.Core.Persistence.Querying;
 using Umbraco.Core;
+using Umbraco.Core.Cache;
 using Umbraco.Core.Persistence;
 using Umbraco.Core.Persistence.Querying;
-using Umbraco.Core.Persistence.UnitOfWork;
+using Merchello.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Core.Persistence.Repositories
 {
-    internal class AnonymousCustomerRepository : MerchelloPetaPocoRepositoryBase<Guid, IAnonymousCustomer>, IAnonymousCustomerRepository
+    internal class AnonymousCustomerRepository : MerchelloPetaPocoRepositoryBase<IAnonymousCustomer>, IAnonymousCustomerRepository
     {
 
-        public AnonymousCustomerRepository(IDatabaseUnitOfWork work)
-            : base(work)
-        {
 
-        }
-
-        public AnonymousCustomerRepository(IDatabaseUnitOfWork work, IRepositoryCacheProvider cache)
+        public AnonymousCustomerRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache)
             : base(work, cache)
         {
         }
@@ -31,10 +26,10 @@ namespace Merchello.Core.Persistence.Repositories
         #region Overrides of RepositoryBase<IAnonymous>
 
 
-        protected override IAnonymousCustomer PerformGet(Guid id)
+        protected override IAnonymousCustomer PerformGet(Guid key)
         {
             var sql = GetBaseQuery(false)
-                .Where(GetBaseWhereClause(), new { Id = id });
+                .Where(GetBaseWhereClause(), new { Key = key });
 
             var dto = Database.Fetch<AnonymousCustomerDto>(sql).FirstOrDefault();
 
@@ -83,16 +78,16 @@ namespace Merchello.Core.Persistence.Repositories
 
         protected override string GetBaseWhereClause()
         {
-            return "merchAnonymousCustomer.pk = @Id";
+            return "merchAnonymousCustomer.pk = @Key";
         }
 
         protected override IEnumerable<string> GetDeleteClauses()
         {
             var list = new List<string>
                 {
-                    "DELETE FROM merchItemCacheItem WHERE itemCacheId IN (SELECT id FROM merchItemCache WHERE entityKey = @Id)",
-                    "DELETE FROM merchItemCache WHERE entityKey = @Id",
-                    "DELETE FROM merchAnonymousCustomer WHERE pk = @Id",
+                    "DELETE FROM merchItemCacheItem WHERE itemCacheKey IN (SELECT pk FROM merchItemCache WHERE entityKey = @Key)",
+                    "DELETE FROM merchItemCache WHERE entityKey = @Key",
+                    "DELETE FROM merchAnonymousCustomer WHERE pk = @Key",
                 };
 
             return list;
@@ -100,7 +95,7 @@ namespace Merchello.Core.Persistence.Repositories
 
         protected override void PersistNewItem(IAnonymousCustomer entity)
         {
-            ((KeyEntity)entity).AddingEntity();
+            ((Entity)entity).AddingEntity();
 
             var factory = new AnonymousCustomerFactory();
             var dto = factory.BuildDto(entity);
@@ -112,7 +107,7 @@ namespace Merchello.Core.Persistence.Repositories
 
         protected override void PersistUpdatedItem(IAnonymousCustomer entity)
         {
-            ((KeyEntity)entity).UpdatingEntity();
+            ((Entity)entity).UpdatingEntity();
 
             var factory = new AnonymousCustomerFactory();
             var dto = factory.BuildDto(entity);
@@ -127,7 +122,7 @@ namespace Merchello.Core.Persistence.Repositories
             var deletes = GetDeleteClauses();
             foreach (var delete in deletes)
             {
-                Database.Execute(delete, new { Id = entity.Key });
+                Database.Execute(delete, new { Key = entity.Key });
             }
         }
 

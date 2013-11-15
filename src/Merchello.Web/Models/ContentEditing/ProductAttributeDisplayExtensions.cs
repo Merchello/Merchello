@@ -5,13 +5,13 @@ using Merchello.Core.Models;
 
 namespace Merchello.Web.Models.ContentEditing
 {
-    public static class ProductAttributeDisplayExtensions
+    internal static class ProductAttributeDisplayExtensions
     {
-        public static IProductAttribute ToProductAttribute(this ProductAttributeDisplay productAttributeDisplay, IProductAttribute destinationProductAttribute)
+        internal static IProductAttribute ToProductAttribute(this ProductAttributeDisplay productAttributeDisplay, IProductAttribute destinationProductAttribute)
         {
             destinationProductAttribute.Name = productAttributeDisplay.Name;
             destinationProductAttribute.Sku = productAttributeDisplay.Sku;
-            destinationProductAttribute.OptionId = productAttributeDisplay.OptionId;
+            destinationProductAttribute.OptionKey = productAttributeDisplay.OptionKey;
             destinationProductAttribute.SortOrder = productAttributeDisplay.SortOrder;
 
             return destinationProductAttribute;

@@ -16,8 +16,8 @@ namespace Merchello.Core.Persistence.Mappers
 
         internal override void BuildMap()
         {
-            CacheMap<InvoiceLineItem, InvoiceItemDto>(src => src.Id, dto => dto.Id);
-            CacheMap<InvoiceLineItem, InvoiceItemDto>(src => src.ContainerId, dto => dto.ContainerId);
+            CacheMap<InvoiceLineItem, InvoiceItemDto>(src => src.Key, dto => dto.Key);
+            CacheMap<InvoiceLineItem, InvoiceItemDto>(src => src.ContainerKey, dto => dto.ContainerKey);
             CacheMap<InvoiceLineItem, InvoiceItemDto>(src => src.LineItemTfKey, dto => dto.LineItemTfKey);
             CacheMap<InvoiceLineItem, InvoiceItemDto>(src => src.Sku, dto => dto.Sku);
             CacheMap<InvoiceLineItem, InvoiceItemDto>(src => src.Name, dto => dto.Name);

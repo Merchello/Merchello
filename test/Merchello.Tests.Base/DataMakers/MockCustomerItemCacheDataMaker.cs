@@ -14,7 +14,7 @@ namespace Merchello.Tests.Base.DataMakers
         {
             var itemCache =  new ItemCache(anonymous.Key, itemCacheType)
             {
-                Id = 1,
+                Key = Guid.NewGuid(),
                 CreateDate = DateTime.Now,
                 UpdateDate = DateTime.Now
             };

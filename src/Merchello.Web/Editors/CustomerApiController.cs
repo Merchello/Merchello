@@ -49,11 +49,12 @@ namespace Merchello.Web.Editors
         /// Returns customer by the key
         /// </summary>
         /// <param name="id"></param>
-        public Customer GetCustomer(int id)
+        /// <param name="key"></param>
+        public Customer GetCustomer(Guid key)
         {
-			if (id != 0)
+			if (key != Guid.Empty)
 			{
-				var customer = MerchelloContext.Services.CustomerService.GetById(id) as Customer;
+				var customer = MerchelloContext.Services.CustomerService.GetByKey(key) as Customer;
 				if (customer == null)
 				{
 					throw new HttpResponseException(HttpStatusCode.NotFound);
@@ -126,9 +127,9 @@ namespace Merchello.Web.Editors
         /// </summary>
         /// <param name="id">The id of the customer</param>
         /// <returns>Http Response</returns>
-        public HttpResponseMessage Delete(int id)
+        public HttpResponseMessage Delete(Guid id)
 		{
-			var customerToDelete = _customerService.GetById(id);
+			var customerToDelete = _customerService.GetByKey(id);
 			var response = Request.CreateResponse(HttpStatusCode.OK);
 
 			if (customerToDelete == null)

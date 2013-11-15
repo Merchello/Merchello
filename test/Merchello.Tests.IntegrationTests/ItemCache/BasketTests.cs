@@ -1,12 +1,12 @@
 ﻿using Merchello.Core;
 using Merchello.Core.Cache;
 using Merchello.Core.Models;
+using Merchello.Core.Persistence.UnitOfWork;
 using Merchello.Core.Services;
 using Merchello.Tests.IntegrationTests.Services;
 using Merchello.Web.Models;
 using NUnit.Framework;
 using Umbraco.Core;
-using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Tests.IntegrationTests.ItemCache
 {
@@ -20,6 +20,7 @@ namespace Merchello.Tests.IntegrationTests.ItemCache
         [SetUp]
         public void Init()
         {
+
             PreTestDataWorker.DeleteAllItemCaches();
             _merchelloContext = new MerchelloContext(new ServiceContext(new PetaPocoUnitOfWorkProvider()),
                 new CacheHelper(new NullCacheProvider(),
@@ -27,6 +28,8 @@ namespace Merchello.Tests.IntegrationTests.ItemCache
                                     new NullCacheProvider()));
             _customer = PreTestDataWorker.MakeExistingAnonymousCustomer();
             _basket = Basket.GetBasket(_merchelloContext, _customer);
+            
+
         }
 
 

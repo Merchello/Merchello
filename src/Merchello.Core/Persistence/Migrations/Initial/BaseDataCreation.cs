@@ -83,17 +83,17 @@ namespace Merchello.Core.Persistence.Migrations.Initial
 
         private void CreateInvoiceStatusData()
         {
-            _database.Insert("merchInvoiceStatus", "id", new InvoiceStatusDto() { Alias = "unpaid", Name = "Unpaid", Active = true, Reportable = true, SortOrder = 1, CreateDate = DateTime.Now, UpdateDate = DateTime.Now});
-            _database.Insert("merchInvoiceStatus", "id", new InvoiceStatusDto() { Alias = "unshipped", Name = "Unshipped", Active = true, Reportable = true, SortOrder = 2, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
-            _database.Insert("merchInvoiceStatus", "id", new InvoiceStatusDto() { Alias = "completed", Name = "Completed", Active = true, Reportable = true, SortOrder = 3, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
-            _database.Insert("merchInvoiceStatus", "id", new InvoiceStatusDto() { Alias = "cancelled", Name = "Cancelled", Active = true, Reportable = true, SortOrder = 4, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
-            _database.Insert("merchInvoiceStatus", "id", new InvoiceStatusDto() { Alias = "fraud", Name = "Fraud", Active = true, Reportable = true, SortOrder = 5, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchInvoiceStatus", "Key", new InvoiceStatusDto() { Key = new Guid("17ADA9AC-C893-4C26-AA26-234ECEB2FA75"), Alias = "unpaid", Name = "Unpaid", Active = true, Reportable = true, SortOrder = 1, CreateDate = DateTime.Now, UpdateDate = DateTime.Now});
+            _database.Insert("merchInvoiceStatus", "Key", new InvoiceStatusDto() { Key = new Guid("1F872A1A-F0DD-4C3E-80AB-99799A28606E"), Alias = "unshipped", Name = "Unshipped", Active = true, Reportable = true, SortOrder = 2, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchInvoiceStatus", "Key", new InvoiceStatusDto() { Key = new Guid("6606B0EA-15B6-44AA-8557-B2D9D049645C"), Alias = "completed", Name = "Completed", Active = true, Reportable = true, SortOrder = 3, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchInvoiceStatus", "Key", new InvoiceStatusDto() { Key = new Guid("53077EFD-6BF0-460D-9565-0E00567B5176"), Alias = "cancelled", Name = "Cancelled", Active = true, Reportable = true, SortOrder = 4, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchInvoiceStatus", "Key", new InvoiceStatusDto() { Key = new Guid("75E1E5EB-33E8-4904-A8E5-4B64A37D6087"), Alias = "fraud", Name = "Fraud", Active = true, Reportable = true, SortOrder = 5, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
         }
 
 
         private void CreateWarehouseData()
         {
-            _database.Insert("merchWarehouse", "id", new WarehouseDto() { Name = "Default Warehouse", CountryCode = "", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchWarehouse", "Key", new WarehouseDto() { Key = new Guid("268D4007-8853-455A-89F7-A28398843E5F"), Name = "Default Warehouse", CountryCode = "", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
         }
     }
 }

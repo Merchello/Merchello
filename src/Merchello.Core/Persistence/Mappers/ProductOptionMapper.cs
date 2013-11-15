@@ -14,7 +14,7 @@ namespace Merchello.Core.Persistence.Mappers
         internal override void BuildMap()
         {
 
-            CacheMap<ProductOption, ProductOptionDto>(src => src.Id, dto => dto.Id);
+            CacheMap<ProductOption, ProductOptionDto>(src => src.Key, dto => dto.Key);
             CacheMap<ProductOption, ProductOptionDto>(src => src.Name, dto => dto.Name);
             CacheMap<ProductOption, ProductOptionDto>(src => src.UpdateDate, dto => dto.UpdateDate);
             CacheMap<ProductOption, ProductOptionDto>(src => src.CreateDate, dto => dto.CreateDate);

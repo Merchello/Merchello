@@ -51,15 +51,11 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutoMapper">
-      <HintPath>..\packages\AutoMapper.2.2.1\lib\net40\AutoMapper.dll</HintPath>
-    </Reference>
-    <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\UmbracoCms.Core.7.0.0-nightly153\lib\log4net.dll</HintPath>
+    <Reference Include="log4net">
+      <HintPath>..\packages\UmbracoCms.Core.7.0.0-nightly159\lib\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -72,9 +68,8 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Umbraco.Core, Version=1.0.5051.16273, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\UmbracoCms.Core.7.0.0-nightly153\lib\Umbraco.Core.dll</HintPath>
+    <Reference Include="Umbraco.Core">
+      <HintPath>..\packages\UmbracoCms.Core.7.0.0-nightly159\lib\Umbraco.Core.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -82,12 +77,276 @@
     <Compile Include="CloneHelper.cs" />
     <Compile Include="Configuration\Outline\SettingsCollection.cs" />
     <Compile Include="Configuration\Outline\SettingsElement.cs" />
-    <Compile Include="Models\EntityBase\ISimpleEntity.cs" />
-    <Compile Include="Models\EntityBase\SimpleEntity.cs" />
-    <Compile Include="Strategies\Customer\BaseAnonymousCustomerConversionStrategy.cs" />
-    <Compile Include="Strategies\Customer\AnonymousCustomerConversionStrategy.cs" />
-    <Compile Include="Strategies\Customer\IAnonymousBasketConversionStrategy.cs" />
-    <Compile Include="Strategies\Customer\IAnonymousCustomerConversionStrategy.cs" />
+    <Compile Include="Models\AppliedPayment.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Customer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\CustomerAddress.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\CustomerBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\ExtendedDataCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\ExtendedDataExtensions.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Interfaces\IAppliedPayment.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Interfaces\ICustomer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Interfaces\ICustomerAddress.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Interfaces\ICustomerBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Interfaces\IInvoice.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Interfaces\IInvoiceLineItem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Interfaces\IInvoiceStatus.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Interfaces\IItemCache.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Interfaces\IItemCacheLineItem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Interfaces\ILineItem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Interfaces\ILineItemContainer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Interfaces\ILineItemDto.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\EntityBase\Entity.cs" />
+    <Compile Include="Models\EntityBase\IEntity.cs" />
+    <Compile Include="Models\EntityBase\ITracksDirty.cs" />
+    <Compile Include="Models\Interfaces\ILineItemVisitor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Interfaces\IOrderLineItem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Interfaces\IPayment.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Interfaces\IProduct.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Interfaces\IProductAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Interfaces\IProductBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Interfaces\IProductOption.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Interfaces\IProductVariant.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Interfaces\IShipment.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Interfaces\IShipMethod.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Interfaces\IWarehouse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Interfaces\IWarehouseInventory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\InvoiceLineItem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\InvoiceStatus.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\ItemCache.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\ItemCacheLineItem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\LineItemBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\LineItemCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\LineItemContainerExtensions.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\NotifiyCollectionBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\OrderLineItem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Payment.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Product.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\ProductAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\ProductAttributeCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\ProductBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\ProductExtensions.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\ProductOption.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\ProductOptionCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\ProductVariant.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\ProductVariantCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Shipment.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\ShipMethod.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Warehouse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\WarehouseInventory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\WarehouseInventoryCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\WarehouseInventoryExtensions.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Persistence\DefaultDatabaseFactory.cs" />
+    <Compile Include="Persistence\Factories\AppliedPaymentFactory.cs" />
+    <Compile Include="Persistence\Factories\CustomerAddressFactory.cs" />
+    <Compile Include="Persistence\Factories\CustomerFactory.cs" />
+    <Compile Include="Persistence\Factories\ExtendedDataFactory.cs" />
+    <Compile Include="Persistence\Factories\IEntityFactory.cs" />
+    <Compile Include="Persistence\Factories\InventoryFactory.cs" />
+    <Compile Include="Persistence\Factories\InvoiceStatusFactory.cs" />
+    <Compile Include="Persistence\Factories\ItemCacheFactory.cs" />
+    <Compile Include="Persistence\Factories\LineItemFactory.cs" />
+    <Compile Include="Persistence\Factories\PaymentFactory.cs" />
+    <Compile Include="Persistence\Factories\ProductAttributeFactory.cs" />
+    <Compile Include="Persistence\Factories\ProductFactory.cs" />
+    <Compile Include="Persistence\Factories\ProductOptionFactory.cs" />
+    <Compile Include="Persistence\Factories\ProductVariantFactory.cs" />
+    <Compile Include="Persistence\Factories\ShipmentFactory.cs" />
+    <Compile Include="Persistence\Factories\ShipMethodFactory.cs" />
+    <Compile Include="Persistence\Factories\WarehouseFactory.cs" />
+    <Compile Include="Persistence\Mappers\AppliedPaymentMapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Persistence\Mappers\BaseMapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Persistence\Mappers\CustomerAddressMapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Persistence\Mappers\CustomerMapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Persistence\Mappers\DtoMapModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Persistence\Mappers\InvoiceLineItemMapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Persistence\Mappers\InvoiceStatusMapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Persistence\Mappers\ItemCacheLineItemMapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Persistence\Mappers\ItemCacheMapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Persistence\Mappers\MerchelloBaseMapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Persistence\Mappers\MerchelloMapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Persistence\Mappers\OrderLineItemMapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Persistence\Mappers\PaymentMapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Persistence\Mappers\ProductMapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Persistence\Mappers\ProductOptionMapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Persistence\Mappers\ProductVariantMapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Persistence\Mappers\ShipmentMapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Persistence\Mappers\ShipMethodMapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Persistence\Mappers\WarehouseInventoryMapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Persistence\Mappers\WarehouseMapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Persistence\Repositories\CustomerAddressRepository.cs" />
+    <Compile Include="Persistence\Repositories\CustomerRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\ICustomerAddressRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\ICustomerRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IInvoiceRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IItemCacheRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\ILineItemRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IPaymentRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IProductRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IProductVariantRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IShipmentRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IWarehouseRepository.cs" />
+    <Compile Include="Persistence\Repositories\ItemCacheRepository.cs" />
+    <Compile Include="Persistence\Repositories\LineItemRepository.cs" />
+    <Compile Include="Persistence\Repositories\PaymentRepository.cs" />
+    <Compile Include="Persistence\Repositories\ProductRepository.cs" />
+    <Compile Include="Persistence\Repositories\ProductVariantRepository.cs" />
+    <Compile Include="Persistence\Repositories\ShipmentRepository.cs" />
+    <Compile Include="Persistence\Repositories\WarehouseRepository.cs" />
+    <Compile Include="Persistence\TransactionType.cs" />
+    <Compile Include="Persistence\UnitOfWork\IDatabaseUnitOfWork.cs" />
+    <Compile Include="Persistence\UnitOfWork\IDatabaseUnitOfWorkProvider.cs" />
+    <Compile Include="Persistence\UnitOfWork\IUnitOfWork.cs" />
+    <Compile Include="Persistence\UnitOfWork\IUnitOfWorkRepository.cs" />
     <Compile Include="BootManagerBase.cs" />
     <Compile Include="Events\DatabaseCreationEventArgs.cs">
       <SubType>Code</SubType>
@@ -98,13 +357,7 @@
     <Compile Include="Events\StatusChangeEventArgs.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\CustomerBase.cs" />
-    <Compile Include="Models\ExtendedDataExtensions.cs" />
     <Compile Include="IMerchelloContext.cs" />
-    <Compile Include="Models\LineItemContainerExtensions.cs" />
-    <Compile Include="ModelExtensions.cs" />
-    <Compile Include="Gateway\GatewayEnumerations.cs" />
-    <Compile Include="Gateway\IGatewayProvider.cs" />
     <Compile Include="MerchelloBootstrapper.cs" />
     <Compile Include="Cache\NullCacheProvider.cs" />
     <Compile Include="Configuration\MerchelloConfiguration.cs" />
@@ -112,59 +365,10 @@
     <Compile Include="Events\ConvertEventArgs.cs" />
     <Compile Include="IBootManager.cs" />
     <Compile Include="MerchelloContext.cs" />
-    <Compile Include="Models\Interfaces\ILineItemContainer.cs" />
-    <Compile Include="Models\ItemCacheLineItem.cs" />
-    <Compile Include="Models\CustomerAddress.cs" />
     <Compile Include="Models\AnonymousCustomer.cs" />
     <Compile Include="Models\AnonymousCustomerBase.cs" />
-    <Compile Include="Models\ItemCache.cs" />
-    <Compile Include="Models\ExtendedDataCollection.cs" />
     <Compile Include="Models\Interfaces\IAnonymousCustomer.cs" />
-    <Compile Include="Models\Interfaces\ICustomerBase.cs" />
-    <Compile Include="Models\Interfaces\IItemCacheLineItem.cs" />
-    <Compile Include="Models\Interfaces\IWarehouseInventory.cs" />
-    <Compile Include="Models\Interfaces\IInvoiceLineItem.cs" />
-    <Compile Include="Models\Interfaces\ILineItemVisitor.cs" />
-    <Compile Include="Models\ProductExtensions.cs" />
-    <Compile Include="Models\WarehouseInventory.cs" />
-    <Compile Include="Models\WarehouseInventoryCollection.cs" />
-    <Compile Include="Persistence\Mappers\WarehouseInventoryMapper.cs" />
-    <Compile Include="Models\InvoiceLineItem.cs" />
-    <Compile Include="Models\Interfaces\IOrderLineItem.cs" />
-    <Compile Include="Models\Interfaces\IProductOption.cs" />
-    <Compile Include="Models\Interfaces\IProduct.cs" />
-    <Compile Include="Models\Interfaces\IProductAttribute.cs" />
-    <Compile Include="Models\Interfaces\IProductBase.cs" />
-    <Compile Include="Models\Interfaces\IProductVariant.cs" />
-    <Compile Include="Models\NotifiyCollectionBase.cs" />
-    <Compile Include="Models\ProductAttribute.cs" />
-    <Compile Include="Models\ProductOption.cs" />
-    <Compile Include="Models\ProductOptionCollection.cs" />
-    <Compile Include="Models\OrderLineItem.cs" />
-    <Compile Include="Models\Interfaces\IGatewayProvider.cs" />
-    <Compile Include="Models\GatewayProvider.cs" />
-    <Compile Include="Models\Interfaces\ICustomerAddress.cs" />
-    <Compile Include="Models\Interfaces\IItemCache.cs" />
-    <Compile Include="Gateway\IGatewayResponse.cs" />
-    <Compile Include="Models\Interfaces\IInvoiceStatus.cs" />
-    <Compile Include="Models\Interfaces\ILineItem.cs" />
-    <Compile Include="Models\Invoice.cs" />
-    <Compile Include="Models\InvoiceStatus.cs" />
-    <Compile Include="Models\Interfaces\IPayment.cs" />
-    <Compile Include="Models\Interfaces\IShipment.cs" />
-    <Compile Include="Models\Interfaces\IShipMethod.cs" />
-    <Compile Include="Models\Interfaces\IAppliedPayment.cs" />
-    <Compile Include="Models\Interfaces\IWarehouse.cs" />
-    <Compile Include="Models\LineItemBase.cs" />
-    <Compile Include="Models\LineItemCollection.cs" />
-    <Compile Include="Models\Payment.cs" />
-    <Compile Include="Models\Product.cs" />
-    <Compile Include="Models\ProductAttributeCollection.cs" />
-    <Compile Include="Models\ProductBase.cs" />
-    <Compile Include="Models\ProductVariant.cs" />
-    <Compile Include="Models\ProductVariantCollection.cs" />
     <Compile Include="Models\Rdbms\AppliedPaymentDto.cs" />
-    <Compile Include="Models\Interfaces\ILineItemDto.cs" />
     <Compile Include="Models\Rdbms\OrderItemDto.cs" />
     <Compile Include="Models\Rdbms\OrderStatusDto.cs" />
     <Compile Include="Models\Rdbms\OrderDto.cs" />
@@ -181,10 +385,6 @@
     <Compile Include="Models\Rdbms\ShipZone2Region.cs" />
     <Compile Include="Models\Rdbms\ShipZoneDto.cs" />
     <Compile Include="Models\Rdbms\ShipZone2Country.cs" />
-    <Compile Include="Models\GatewayProviderBase.cs" />
-    <Compile Include="Models\Shipment.cs" />
-    <Compile Include="Models\ShipMethod.cs" />
-    <Compile Include="Models\AppliedPayment.cs" />
     <Compile Include="Models\TypeFields\IGatewayProviderTypeField.cs" />
     <Compile Include="Models\TypeFields\IAppliedPaymentTypeField.cs" />
     <Compile Include="Models\TypeFields\GatewayProviderTypeField.cs" />
@@ -202,88 +402,25 @@
     <Compile Include="Cache\ObjectCacheRuntimeCacheProvider.cs" />
     <Compile Include="Cache\StaticCacheProvider.cs" />
     <Compile Include="Models\TypeFields\LineItemTypeField.cs" />
-    <Compile Include="Models\Warehouse.cs" />
     <Compile Include="ObjectResolution\Resolution.cs" />
-    <Compile Include="Models\Interfaces\IGatewayProviderBase.cs" />
-    <Compile Include="Persistence\Caching\InMemoryCacheProvider.cs" />
-    <Compile Include="Persistence\Factories\ExtendedDataFactory.cs" />
-    <Compile Include="Persistence\Factories\InventoryFactory.cs" />
-    <Compile Include="Persistence\Factories\ProductAttributeFactory.cs" />
-    <Compile Include="Persistence\Factories\ProductOptionFactory.cs" />
-    <Compile Include="Persistence\Factories\ProductVariantFactory.cs" />
-    <Compile Include="Persistence\Factories\GatewayProviderFactory.cs" />
-    <Compile Include="Persistence\Mappers\CustomerItemCacheLineItemMapper.cs" />
-    <Compile Include="Persistence\Mappers\GatewayProviderMapper.cs" />
-    <Compile Include="Gateway\GatewayContext.cs" />
-    <Compile Include="Gateway\GatewayContextBase.cs" />
-    <Compile Include="Gateway\IGatewayContext.cs" />
-    <Compile Include="Persistence\Mappers\OrderLineItemMapper.cs" />
-    <Compile Include="Persistence\Mappers\ProductMapper.cs" />
-    <Compile Include="Persistence\Mappers\ProductOptionMapper.cs" />
-    <Compile Include="Persistence\Mappers\WarehouseMapper.cs" />
     <Compile Include="Persistence\Repositories\AnonymousCustomerRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IAnonymousCustomerRepository.cs" />
-    <Compile Include="Persistence\Repositories\Interfaces\ILineItemRepository.cs" />
-    <Compile Include="Persistence\Repositories\Interfaces\IProductVariantRepository.cs" />
-    <Compile Include="Persistence\Repositories\LineItemRepository.cs" />
-    <Compile Include="Persistence\Repositories\ProductVariantRepository.cs" />
-    <Compile Include="Services\Interfaces\IProductVariantService.cs" />
-    <Compile Include="Services\ProductVariantService.cs" />
-    <Compile Include="Services\GatewayProviderService.cs" />
-    <Compile Include="Services\Interfaces\IGatewayProviderService.cs" />
-    <Compile Include="Strategies\IGatewayProviderStrategy.cs" />
-    <Compile Include="Strategies\IStrategy.cs" />
-    <Compile Include="Strategies\Payment\IPaymentApplicationStrategyBase.cs" />
     <Compile Include="Persistence\Factories\AnonymousCustomerFactory.cs" />
-    <Compile Include="Persistence\Factories\ItemCacheFactory.cs" />
-    <Compile Include="Persistence\Factories\LineItemFactory.cs" />
-    <Compile Include="Persistence\Factories\InvoiceFactory.cs" />
-    <Compile Include="Persistence\Factories\InvoiceStatusFactory.cs" />
-    <Compile Include="Persistence\Factories\PaymentFactory.cs" />
-    <Compile Include="Persistence\Factories\ProductFactory.cs" />
-    <Compile Include="Persistence\Factories\ShipmentFactory.cs" />
-    <Compile Include="Persistence\Factories\ShipMethodFactory.cs" />
-    <Compile Include="Persistence\Factories\AppliedPaymentFactory.cs" />
-    <Compile Include="Persistence\Factories\WarehouseFactory.cs" />
     <Compile Include="Persistence\Mappers\AnonymousCustomerMapper.cs" />
-    <Compile Include="Persistence\Mappers\CustomerItemCacheItemMapper.cs" />
-    <Compile Include="Persistence\Mappers\CustomerItemCacheMapper.cs" />
-    <Compile Include="Persistence\Mappers\ProductVariantMapper.cs" />
-    <Compile Include="Persistence\Mappers\ShipMethodMapper.cs" />
-    <Compile Include="Persistence\Mappers\PaymentMapper.cs" />
-    <Compile Include="Persistence\Mappers\InvoiceLineItemMapper.cs" />
-    <Compile Include="Persistence\Mappers\InvoiceMapper.cs" />
-    <Compile Include="Persistence\Mappers\InvoiceStatusMapper.cs" />
-    <Compile Include="Persistence\Mappers\MerchelloBaseMapper.cs" />
-    <Compile Include="Persistence\Mappers\ShipmentMapper.cs" />
-    <Compile Include="Persistence\Mappers\AppliedPaymentMapper.cs" />
     <Compile Include="Persistence\Querying\Query.cs" />
-    <Compile Include="Persistence\Repositories\ItemCacheRepository.cs" />
-    <Compile Include="Persistence\Repositories\Interfaces\IItemCacheRepository.cs" />
-    <Compile Include="Persistence\Repositories\Interfaces\IInvoiceRepository.cs" />
-    <Compile Include="Persistence\Repositories\Interfaces\IPaymentRepository.cs" />
-    <Compile Include="Persistence\Repositories\Interfaces\IProductRepository.cs" />
-    <Compile Include="Persistence\Repositories\Interfaces\IShipmentRepository.cs" />
-    <Compile Include="Persistence\Repositories\Interfaces\IWarehouseRepository.cs" />
-    <Compile Include="Persistence\Repositories\InvoiceRepository.cs" />
-    <Compile Include="Persistence\Repositories\PaymentRepository.cs" />
-    <Compile Include="Persistence\Repositories\ProductRepository.cs" />
-    <Compile Include="Persistence\Repositories\ShipmentRepository.cs" />
-    <Compile Include="Persistence\Repositories\WarehouseRepository.cs" />
-    <Compile Include="Services\ItemCacheService.cs" />
+    <Compile Include="Persistence\UnitOfWork\PetaPocoUnitOfWork.cs" />
+    <Compile Include="Persistence\UnitOfWork\PetaPocoUnitOfWorkProvider.cs" />
     <Compile Include="Services\Interfaces\IItemCacheService.cs" />
-    <Compile Include="Services\Interfaces\IInvoiceService.cs" />
     <Compile Include="Services\Interfaces\IProductService.cs" />
+    <Compile Include="Services\Interfaces\IProductVariantService.cs" />
     <Compile Include="Services\Interfaces\IServiceContext.cs" />
     <Compile Include="Services\Interfaces\IShippingService.cs" />
     <Compile Include="Services\Interfaces\IWarehouseService.cs" />
-    <Compile Include="Services\InvoiceService.cs" />
+    <Compile Include="Services\ItemCacheService.cs" />
     <Compile Include="Services\ProductService.cs" />
-    <Compile Include="Services\ShippingService.cs" />
+    <Compile Include="Services\ProductVariantService.cs" />
+    <Compile Include="Services\ServiceContext.cs" />
     <Compile Include="Services\WarehouseService.cs" />
-    <Compile Include="Strategies\Payment\IPaymentApplicationStrategy.cs" />
-    <Compile Include="Strategies\Shipping\IShippingQuatationStrategy.cs" />
-    <Compile Include="Strategies\Taxation\ITaxationStrategy.cs" />
     <Compile Include="TypeFieldMapperEnumerations.cs" />
     <Compile Include="Models\TypeFields\ProductTypeField.cs" />
     <Compile Include="Models\Rdbms\TypeFieldDto.cs" />
@@ -292,26 +429,11 @@
     <Compile Include="Persistence\DatabaseModelDefinitions\DefinitionFactory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Persistence\Factories\CustomerAddressFactory.cs" />
     <Compile Include="Persistence\Migrations\Initial\PluginDatabaseSchemaResult.cs" />
-    <Compile Include="Persistence\Repositories\Interfaces\ICustomerRepository.cs" />
-    <Compile Include="Persistence\Mappers\AddressMapper.cs" />
-    <Compile Include="Persistence\Mappers\MerchelloMapper.cs" />
     <Compile Include="Persistence\Migrations\Initial\BaseDataCreation.cs" />
-    <Compile Include="Models\EntityBase\ISingularRoot.cs" />
-    <Compile Include="Persistence\Mappers\CustomerMapper.cs" />
-    <Compile Include="Persistence\Mappers\DtoMapModel.cs" />
     <Compile Include="Models\TypeFields\AddressTypeField.cs" />
     <Compile Include="Models\TypeFields\CustomerItemCacheTypeField.cs" />
     <Compile Include="Configuration\Outline\TypeFieldDefinitionsElement.cs" />
-    <Compile Include="Models\EntityBase\Entity.cs" />
-    <Compile Include="Models\EntityBase\IdEntity.cs" />
-    <Compile Include="Models\EntityBase\IIdEntity.cs" />
-    <Compile Include="Models\EntityBase\IKeyEntity.cs" />
-    <Compile Include="Models\EntityBase\ITracksDirty.cs" />
-    <Compile Include="Models\EntityBase\KeyEntity.cs" />
-    <Compile Include="Models\EntityBase\MerchelloEntityBase.cs" />
-    <Compile Include="Models\Interfaces\ICustomer.cs" />
     <Compile Include="Models\TypeFields\ITypeField.cs" />
     <Compile Include="Configuration\Outline\TypeFieldCollection.cs" />
     <Compile Include="Configuration\Outline\TypeFieldElement.cs" />
@@ -321,8 +443,6 @@
     <Compile Include="Models\TypeFields\InvoiceItemTypeField.cs" />
     <Compile Include="LambdaExpressionCacheKey.cs" />
     <Compile Include="Mandate.cs" />
-    <Compile Include="Models\Customer.cs" />
-    <Compile Include="Models\Interfaces\IInvoice.cs" />
     <Compile Include="Models\TypeFields\PaymentMethodTypeField.cs" />
     <Compile Include="Models\Rdbms\CustomerAddressDto.cs" />
     <Compile Include="Models\Rdbms\AnonymousCustomerDto.cs" />
@@ -341,21 +461,12 @@
     <Compile Include="Models\Rdbms\ShipMethodDto.cs" />
     <Compile Include="Models\Rdbms\WarehouseDto.cs" />
     <Compile Include="Models\TypeFields\TypeField.cs" />
-    <Compile Include="Persistence\Caching\IRepositoryCacheProvider.cs" />
-    <Compile Include="Persistence\Caching\NullCacheProvider.cs" />
-    <Compile Include="Persistence\Caching\RuntimeCacheProvider.cs" />
-    <Compile Include="Persistence\Factories\CustomerFactory.cs" />
-    <Compile Include="Persistence\Factories\IEntityFactory.cs" />
-    <Compile Include="Persistence\Mappers\BaseMapper.cs" />
     <Compile Include="Persistence\Migrations\Initial\DatabaseSchemaCreation.cs" />
     <Compile Include="Models\Rdbms\ShipMethod2WarehouseDto.cs" />
     <Compile Include="Persistence\Querying\BaseExpressionHelper.cs" />
     <Compile Include="Persistence\Querying\ModelToSqlExpressionHelper.cs" />
     <Compile Include="Persistence\Querying\SqlTranslator.cs" />
-    <Compile Include="Persistence\Repositories\CustomerAddressRepository.cs" />
-    <Compile Include="Persistence\Repositories\Interfaces\ICustomerAddressRepository.cs" />
     <Compile Include="Persistence\RepositoryFactory.cs" />
-    <Compile Include="Persistence\Repositories\CustomerRepository.cs" />
     <Compile Include="Persistence\Repositories\MerchelloPetaPocoRepositoryBase.cs" />
     <Compile Include="Persistence\Repositories\MerchelloRepositoryBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -363,11 +474,6 @@
     <Compile Include="Properties\AssemblyVisibility.cs" />
     <Compile Include="Services\CustomerService.cs" />
     <Compile Include="Services\Interfaces\ICustomerService.cs" />
-    <Compile Include="Services\ServiceContext.cs" />
-    <Compile Include="Models\WarehouseInventoryExtensions.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

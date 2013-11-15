@@ -17,6 +17,7 @@ namespace Merchello.Core.Models
         private Guid _productKey;
         private ProductAttributeCollection _attibutes;
         private bool _master;
+        private int _examineId = 1;
 
         internal ProductVariant(string name, string sku, decimal price)
             : this(Guid.Empty, new ProductAttributeCollection(), new WarehouseInventoryCollection(), false, name, sku, price)
@@ -105,6 +106,12 @@ namespace Merchello.Core.Models
                     return _master;
                 }, _master, MasterSelector);
             }
+        }
+
+        [IgnoreDataMember]
+        internal int ExamineId {
+            get { return  _examineId; }
+            set { _examineId = value;  }
         }
 
         /// <summary>

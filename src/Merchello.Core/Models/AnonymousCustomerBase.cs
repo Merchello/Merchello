@@ -10,7 +10,7 @@ namespace Merchello.Core.Models
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    public abstract class AnonymousCustomerBase : KeyEntity, ICustomerBase
+    public abstract class AnonymousCustomerBase : Entity, ICustomerBase
     {
         private DateTime _lastActivityDate;
 

@@ -22,18 +22,18 @@ namespace Merchello.Tests.UnitTests.Querying
         public void Can_Verify_Address_Base_Clause()
         {
             //// Arrange
-            var id = 111;
+            var key = Guid.NewGuid();
 
             var expected = new Sql();
             expected.Select("*")
                 .From("[merchCustomerAddress]")
-                .Where("[merchCustomerAddress].[id] = 111");
+                .Where("[merchCustomerAddress].[pk] = '" + key.ToString() + "'");
 
             //// Act
             var sql = new Sql();
             sql.Select("*")
                 .From<CustomerAddressDto>()
-                .Where<CustomerAddressDto>(x => x.Id == id);
+                .Where<CustomerAddressDto>(x => x.Key == key);
 
             //// Assert
             Assert.That(sql.SQL, Is.EqualTo(expected.SQL));
@@ -46,18 +46,18 @@ namespace Merchello.Tests.UnitTests.Querying
         public void Can_Verify_Sql_For_Address_By_Customer_Query()
         {
             //// Arrange
-            var id = 10;
+            var key = Guid.NewGuid();
 
             var expected = new Sql();
             expected.Select("*")
                 .From("[merchCustomerAddress]")
-                .Where("[merchCustomerAddress].[customerId] = " + id.ToString());
+                .Where("[merchCustomerAddress].[customerKey] = '" + key.ToString() + "'");
 
             //// Act
             var sql = new Sql();
             sql.Select("*")
                 .From<CustomerAddressDto>()
-                .Where<CustomerAddressDto>(x => x.CustomerId == id);
+                .Where<CustomerAddressDto>(x => x.CustomerKey == key);
 
             
             //// Assert

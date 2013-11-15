@@ -9,7 +9,7 @@ namespace Merchello.Core.Models
 
     [Serializable]
     [DataContract(IsReference = true)]
-    public class InvoiceStatus : IdEntity, IInvoiceStatus
+    public class InvoiceStatus : Entity, IInvoiceStatus
     {
         private string _name;
         private string _alias;

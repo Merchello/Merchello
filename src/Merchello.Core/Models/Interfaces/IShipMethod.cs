@@ -7,7 +7,7 @@ namespace Merchello.Core.Models
     /// <summary>
     /// Defines a Merchello ShipMethod object interface
     /// </summary>
-    public interface IShipMethod : IIdEntity
+    public interface IShipMethod : IEntity
     {
             
             /// <summary>

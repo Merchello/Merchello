@@ -1,4 +1,5 @@
-﻿using System.Net.Configuration;
+﻿using System;
+using System.Net.Configuration;
 using ICSharpCode.SharpZipLib.Core;
 using Merchello.Core.Models;
 
@@ -17,12 +18,12 @@ namespace Merchello.Web.Models
         //void AddItem(string name, string sku, int quantity, decimal price, ExtendedDataCollection extendedData);
 
         // Updates the quantity of an item in the basket
-        void UpdateQuantity(int id, int quantity);
+        void UpdateQuantity(Guid key, int quantity);
         void UpdateQuantity(string sku, int quantity);
         void UpdateQuantity(IProductVariant productVariant, int quantity);
       
         /// Removes an item from the basket      
-        void RemoveItem(int id);     
+        void RemoveItem(Guid key);     
         void RemoveItem(string sku);        
         void RemoveItem(IProductVariant productVariant);
 

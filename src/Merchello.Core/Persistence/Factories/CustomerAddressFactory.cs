@@ -9,9 +9,9 @@ namespace Merchello.Core.Persistence.Factories
 
         public ICustomerAddress BuildEntity(CustomerAddressDto dto)
         {
-            var address = new CustomerAddress(dto.CustomerId, dto.Label)
+            var address = new CustomerAddress(dto.CustomerKey, dto.Label)
             {
-                Id = dto.Id, 
+                Key = dto.Key, 
                 FullName = dto.FullName,
                 Company =  dto.Company,
                 AddressTypeFieldKey = dto.AddressTfKey,
@@ -35,8 +35,8 @@ namespace Merchello.Core.Persistence.Factories
         {
             var dto = new CustomerAddressDto()
             {
-                Id = entity.Id,
-                CustomerId = entity.CustomerId,
+                Key = entity.Key,
+                CustomerKey = entity.CustomerKey,
                 Label = entity.Label,
                 FullName = entity.FullName,
                 Company = entity.Company,

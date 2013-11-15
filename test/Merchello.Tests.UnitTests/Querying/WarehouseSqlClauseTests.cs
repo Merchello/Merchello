@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using System;
+using System.Security.Cryptography;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Services;
@@ -19,18 +20,18 @@ namespace Merchello.Tests.UnitTests.Querying
         public void Can_Verify_Warehouse_Base_Clause()
         {
             //// Arrange
-            var id = 1000;
+            var key = Guid.NewGuid();
 
             var expected = new Sql();
             expected.Select("*")
                 .From("[merchWarehouse]")
-                .Where("[merchWarehouse].[id] = " + id.ToString());
+                .Where("[merchWarehouse].[pk] = '" + key.ToString() + "'");
 
             //// Act
             var sql = new Sql();
             sql.Select("*")
                 .From<WarehouseDto>()
-                .Where<WarehouseDto>(x => x.Id == id);
+                .Where<WarehouseDto>(x => x.Key == key);
 
             //// Assert
             Assert.AreEqual(expected.SQL, sql.SQL);

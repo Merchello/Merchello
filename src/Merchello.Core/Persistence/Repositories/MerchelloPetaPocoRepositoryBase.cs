@@ -1,27 +1,27 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Merchello.Core.Models.EntityBase;
-using Merchello.Core.Persistence.Caching;
 using Merchello.Core.Persistence.Querying;
+using Merchello.Core.Persistence.UnitOfWork;
+using Umbraco.Core.Cache;
 using Umbraco.Core.Persistence;
 using Umbraco.Core.Persistence.Querying;
-using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Core.Persistence.Repositories
 {
-	/// <summary>
-	/// Represent an abstract Repository for PetaPoco based repositories
-	/// </summary>
-	/// <typeparam name="TId"></typeparam>
-	/// <typeparam name="TEntity"></typeparam>
-	internal abstract class MerchelloPetaPocoRepositoryBase<TId, TEntity> : MerchelloRepositoryBase<TId, TEntity>
-		where TEntity : class, ISingularRoot
+    /// <summary>
+    /// Represent an abstract Repository for PetaPoco based repositories
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    internal abstract class MerchelloPetaPocoRepositoryBase<TEntity> : MerchelloRepositoryBase<TEntity>
+		where TEntity : IEntity
 	{
-		protected MerchelloPetaPocoRepositoryBase(IDatabaseUnitOfWork work)
-			: base(work)
-		{
-		}
+        //protected MerchelloPetaPocoRepositoryBase(IDatabaseUnitOfWork work)
+        //    : base(work)
+        //{
+        //}
 
-		protected MerchelloPetaPocoRepositoryBase(IDatabaseUnitOfWork work, IRepositoryCacheProvider cache)
+        protected MerchelloPetaPocoRepositoryBase(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache)
 			: base(work, cache)
 		{
 		}
@@ -49,10 +49,10 @@ namespace Merchello.Core.Persistence.Repositories
 
 		#endregion
 
-		protected override bool PerformExists(TId id)
+		protected override bool PerformExists(Guid key)
 		{
 			var sql = GetBaseQuery(true);
-			sql.Where(GetBaseWhereClause(), new { Id = id});
+			sql.Where(GetBaseWhereClause(), new { Key = key});
 			var count = Database.ExecuteScalar<int>(sql);
 			return count == 1;
 		}
@@ -71,7 +71,7 @@ namespace Merchello.Core.Persistence.Repositories
 			var deletes = GetDeleteClauses();
 			foreach (var delete in deletes)
 			{
-				Database.Execute(delete, new {Id = entity.Id});
+				Database.Execute(delete, new {Key = entity.Key});
 			}
 		}
 	}

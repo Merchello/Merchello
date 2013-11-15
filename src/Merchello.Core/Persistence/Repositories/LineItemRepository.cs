@@ -1,37 +1,34 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Merchello.Core.Models;
 using Merchello.Core.Models.EntityBase;
 using Merchello.Core.Models.Rdbms;
-using Merchello.Core.Persistence.Caching;
 using Merchello.Core.Persistence.Factories;
 using Merchello.Core.Persistence.Querying;
+using Merchello.Core.Persistence.UnitOfWork;
 using Umbraco.Core;
+using Umbraco.Core.Cache;
 using Umbraco.Core.Persistence;
 using Umbraco.Core.Persistence.Querying;
-using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Core.Persistence.Repositories
 {
-    internal class LineItemRepository<TDto> : MerchelloPetaPocoRepositoryBase<int, ILineItem>, ILineItemRepository
+    internal class LineItemRepository<TDto> : MerchelloPetaPocoRepositoryBase<ILineItem>, ILineItemRepository
         where TDto : ILineItemDto
     {
-      
-       
-        public LineItemRepository(IDatabaseUnitOfWork work) : base(work)
-        { }
 
-        public LineItemRepository(IDatabaseUnitOfWork work, IRepositoryCacheProvider cache)
+        public LineItemRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache)
             : base(work, cache)
         { }
 
         #region Overrides ILineItemRepository
         
 
-        protected override ILineItem PerformGet(int id)
+        protected override ILineItem PerformGet(Guid key)
         {
             var sql = GetBaseQuery(false)
-               .Where(GetBaseWhereClause(), new { Id = id });
+               .Where(GetBaseWhereClause(), new { Key = key });
 
             var dto = (ILineItemDto)Database.Fetch<TDto>(sql).FirstOrDefault();
 
@@ -44,18 +41,17 @@ namespace Merchello.Core.Persistence.Repositories
             return lineItem;
         }
 
-        protected override IEnumerable<ILineItem> PerformGetAll(params int[] ids)
+        protected override IEnumerable<ILineItem> PerformGetAll(params Guid[] keys)
         {
-            if (ids.Any())
+            if (keys.Any())
             {
-                foreach (var id in ids)
+                foreach (var key in keys)
                 {
-                    yield return Get(id);
+                    yield return Get(key);
                 }
             }
             else
             {
-                var factory = new LineItemFactory();
                 var dtos = Database.Fetch<TDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
@@ -106,7 +102,7 @@ namespace Merchello.Core.Persistence.Repositories
 
             var dtos = Database.Fetch<InvoiceItemDto>(sql);
 
-            return dtos.DistinctBy(x => x.Id).Select(dto => (IInvoiceLineItem)Get(dto.Id));
+            return dtos.DistinctBy(x => x.Key).Select(dto => (IInvoiceLineItem)Get(dto.Key));
         }
 
         protected IEnumerable<IOrderLineItem> PerformGetByQuery(IQuery<IOrderLineItem> query)
@@ -118,7 +114,7 @@ namespace Merchello.Core.Persistence.Repositories
 
             var dtos = Database.Fetch<OrderItemDto>(sql);
 
-            return dtos.DistinctBy(x => x.Id).Select(dto => (IOrderLineItem)Get(dto.Id));
+            return dtos.DistinctBy(x => x.Key).Select(dto => (IOrderLineItem)Get(dto.Key));
         }
 
         protected IEnumerable<IItemCacheLineItem> PerformGetByQuery(IQuery<IItemCacheLineItem> query)
@@ -130,7 +126,7 @@ namespace Merchello.Core.Persistence.Repositories
 
             var dtos = Database.Fetch<InvoiceItemDto>(sql);
 
-            return dtos.DistinctBy(x => x.Id).Select(dto => (IItemCacheLineItem)Get(dto.Id));
+            return dtos.DistinctBy(x => x.Key).Select(dto => (IItemCacheLineItem)Get(dto.Key));
         }
         
         protected override Sql GetBaseQuery(bool isCount)
@@ -170,31 +166,30 @@ namespace Merchello.Core.Persistence.Repositories
 
         protected override string GetBaseWhereClause()
         {
-            return GetMerchTableName() + ".id = @Id";
+            return GetMerchTableName() + ".pk = @Key";
         }
 
         protected override IEnumerable<string> GetDeleteClauses()
         {
             return new List<string>()
             {
-                "DELETE FROM " + GetMerchTableName() + " WHERE id = @Id"
+                "DELETE FROM " + GetMerchTableName() + " WHERE pk = @Key"
             };
         }
 
         protected override void PersistNewItem(ILineItem entity)
         {
-            ((IdEntity)entity).AddingEntity();
+            ((Entity)entity).AddingEntity();
            
             var dto = GetDto(entity);
 
             Database.Insert(dto);
-            entity.Id = dto.Id;
             entity.ResetDirtyProperties();
         }
 
         protected override void PersistUpdatedItem(ILineItem entity)
         {
-            ((IdEntity)entity).UpdatingEntity();
+            ((Entity)entity).UpdatingEntity();
 
             var dto = GetDto(entity);
 
@@ -204,35 +199,35 @@ namespace Merchello.Core.Persistence.Repositories
 
         #endregion
 
-        public IEnumerable<ILineItem> GetByContainerId(int containerId)
+        public IEnumerable<ILineItem> GetByContainerKey(Guid containerKey)
         {
             
             if (typeof(TDto) == typeof(InvoiceItemDto))
             {
 
-                var query = Querying.Query<IInvoiceLineItem>.Builder.Where(x => x.ContainerId == containerId);
+                var query = Querying.Query<IInvoiceLineItem>.Builder.Where(x => x.ContainerKey == containerKey);
                 return PerformGetByQuery(query);
             }
 
             if (typeof(TDto) == typeof(OrderItemDto))
             {
-                var query = Querying.Query<IOrderLineItem>.Builder.Where(x => x.ContainerId == containerId);
+                var query = Querying.Query<IOrderLineItem>.Builder.Where(x => x.ContainerKey == containerKey);
                 return PerformGetByQuery(query);
             }
 
-            var itemCacheItemQuery = Querying.Query<IItemCacheLineItem>.Builder.Where(x => x.ContainerId == containerId);                      
+            var itemCacheItemQuery = Querying.Query<IItemCacheLineItem>.Builder.Where(x => x.ContainerKey == containerKey);                      
             return PerformGetByQuery(itemCacheItemQuery);
             
         }
 
-        public void SaveLineItem(IEnumerable<ILineItem> items, int containerId)
+        public void SaveLineItem(IEnumerable<ILineItem> items, Guid containerKey)
         {
             var lineItems = items as ILineItem[] ?? items.ToArray();
 
-            var existing = GetByContainerId(containerId);
+            var existing = GetByContainerKey(containerKey);
 
             // assert there are no existing items not in the new set of items.  If there are ... delete them
-            var toDelete = existing.Where(x => !items.Any(item => item.Id == x.Id));
+            var toDelete = existing.Where(x => !items.Any(item => item.Key == x.Key));
             if (toDelete.Any())
             {
                 foreach (var d in toDelete)
@@ -252,12 +247,12 @@ namespace Merchello.Core.Persistence.Repositories
         {          
             if (!item.HasIdentity)
             {
-                ((IdEntity)item).AddingEntity();
+                ((Entity)item).AddingEntity();
                 PersistNewItem(item);
             }
             else
             {
-                ((IdEntity)item).UpdatingEntity();
+                ((Entity)item).UpdatingEntity();
                 PersistUpdatedItem(item);
             }            
         }       
