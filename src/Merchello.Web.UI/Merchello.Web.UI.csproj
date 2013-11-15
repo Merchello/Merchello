@@ -266,7 +266,6 @@
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\Vendors.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\Taxation.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\Shipping.html" />
-    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\Regions.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\Payment.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\Debug.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\Settings.html" />
@@ -310,7 +309,6 @@
     <Content Include="App_Plugins\Merchello\Modules\Settings\taxation.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\debug.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\payment.controller.js" />
-    <Content Include="App_Plugins\Merchello\Modules\Settings\regions.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\settings.controller.js" />
     <Content Include="App_Plugins\Merchello\Package.manifest" />
     <Content Include="App_Plugins\Merchello\PropertyEditors\ProductPicker\Js\merchelloskuselector.controller.js" />

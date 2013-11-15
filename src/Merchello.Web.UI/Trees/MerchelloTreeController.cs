@@ -22,19 +22,18 @@ namespace Merchello.Web.UI.Trees
             var collection = new TreeNodeCollection();
             if (id == "settings")
             {
-                collection.Add(CreateTreeNode("regions", queryStrings, "Regions", "icon-map", false, "merchello/merchello/Regions/"));
                 collection.Add(CreateTreeNode("shipping", queryStrings, "Shipping", "icon-truck", false, "merchello/merchello/Shipping/"));
-                collection.Add(CreateTreeNode("vendors", queryStrings, "Vendors", "icon-piggy-bank", false, "merchello/merchello/Vendors/"));
+                collection.Add(CreateTreeNode("vendors", queryStrings, "Vendors", "icon-handshake", false, "merchello/merchello/Vendors/"));
                 collection.Add(CreateTreeNode("taxation", queryStrings, "Taxation", "icon-piggy-bank", false, "merchello/merchello/Taxation/"));
                 collection.Add(CreateTreeNode("payment", queryStrings, "Payment", "icon-bill-dollar", false, "merchello/merchello/Payment/"));
-                collection.Add(CreateTreeNode("notifications", queryStrings, "Notifications", "icon-alert", false, "merchello/merchello/Notifications/"));
+                collection.Add(CreateTreeNode("notifications", queryStrings, "Notifications", "icon-chat", false, "merchello/merchello/Notifications/"));
                 collection.Add(CreateTreeNode("debuglog", queryStrings, "Debug Log", "icon-alert", false, "merchello/merchello/Debug/"));
             }
             else if (id == "reports")
             {
-                collection.Add(CreateTreeNode("salesOverTime", queryStrings, "Sales Over Time", "icon-bar-chart", false, "merchello/merchello/SalesOverTime/"));
-                collection.Add(CreateTreeNode("salesByItem", queryStrings, "Sales By Item", "icon-bar-chart", false, "merchello/merchello/SalesByItem/"));
-                collection.Add(CreateTreeNode("taxesByDestination", queryStrings, "Taxes By Destination", "icon-bar-chart", false, "merchello/merchello/TaxesByDestination/"));
+                collection.Add(CreateTreeNode("salesOverTime", queryStrings, "Sales Over Time", "icon-loading", false, "merchello/merchello/SalesOverTime/"));
+                collection.Add(CreateTreeNode("salesByItem", queryStrings, "Sales By Item", "icon-barcode", false, "merchello/merchello/SalesByItem/"));
+                collection.Add(CreateTreeNode("taxesByDestination", queryStrings, "Taxes By Destination", "icon-piggy-bank", false, "merchello/merchello/TaxesByDestination/"));
             }
             else
             {

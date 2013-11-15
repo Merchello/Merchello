@@ -347,7 +347,7 @@ namespace Merchello.Core.Persistence.Repositories
             foreach (var dto in dtos)
             {
                 var attribute = factory.BuildEntity(dto);
-                attributes.Insert(attribute.SortOrder - 1, attribute);
+                attributes.Add(attribute);
             }
             return attributes;
         }
