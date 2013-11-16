@@ -89,7 +89,7 @@ td.name { width: 45%; }
 .product-options input[type="text"] { margin-bottom: 0; }
 .product-options small { display: block; color: #999; font-size: 11px; }
 
-.settings-table th:last-of-type { width: 123px; padding-right: 0; }
+.settings-table th:last-of-type, .settings-table td:last-of-type { width: 123px; padding-right: 0; }
 
 .shipping-table td:nth-child(2) { width: 20%; }
 .shipping-table td:nth-child(3) { width: 10%; }
@@ -98,8 +98,6 @@ td.edit { text-align: center; }
 td.edit .btn { display: inline-block; margin: 0 auto; }
 
 td.adr, td.org { display: table-cell; }
-
-.settings-table tbody .btn-mini { font-variant: small-caps; }
 
 input[type="radio"], input[type="checkbox"] { margin-top: -2px; }
 td input[type="radio"], td input[type="checkbox"] { margin-top: 2px; }
@@ -151,3 +149,24 @@ input[type="radio"][disabled="disabled"] + span, input[type="checkbox"][disabled
 .gravatar .span3 { width: 23%; }
 .gravatar .span7 { padding-left: 2%; }
 .gravatar img { border: solid 3px #53a93f; }
+
+.bar-graph li { display: inline-block; margin-right: .8%; text-align: center; color: #d9d9d9; margin-left: -4px; }
+.bar-graph li:last-child { margin-right: 0; }
+.bar-graph li:first-child { margin-left: 0; }
+.graph li { height: 5px; overflow: hidden; text-indent: -9999em; background: #d9d9d9; cursor: pointer; vertical-align: bottom; }
+.graph li:hover { background: #f8f8f8; }
+.day li { width: 3.4%; }
+.week li { width: 13.6%; }
+.month li { width: 2.5%; }
+.ninety li { width: .81%; margin-right: .3%; overflow: hidden; text-indent: -9999em; }
+.ninety .key li:nth-child(5n), .ninety .key li:first-child { text-indent: 0; overflow: visible; }
+
+.bar-graph ol { margin-left: 0; margin-bottom: 10px; padding-bottom: 10px; }
+.bar-graph .graph { border-bottom: solid 1px #d9d9d9; }
+.bar-graph .mid { background: #8cd0ec; }
+.bar-graph .high { background: #8ecf7f; }
+.bar-graph .low { background: #f9af82; }
+
+@media screen and (max-width: 88em) { .day li { margin-right: .8%; }
+  .month li { margin-right: .8%; }
+  .ninety li { margin-right: .3%; } }
