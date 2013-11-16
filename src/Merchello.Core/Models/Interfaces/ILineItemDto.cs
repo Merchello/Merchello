@@ -7,6 +7,7 @@ namespace Merchello.Core.Models.Rdbms
     /// </summary>
     internal interface ILineItemDto
     {
+        Guid Key { get; set; }
         Guid ContainerKey { get; set; }
         Guid LineItemTfKey { get; set; }
         string Sku { get; set; }

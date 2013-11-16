@@ -29,7 +29,7 @@ namespace Merchello.Core.Persistence.Repositories
             var sql = GetBaseQuery(false)
                .Where(GetBaseWhereClause(), new { Key = key });
 
-            var dto = Database.Fetch<ProductDto, ProductVariantDto>(sql).FirstOrDefault();
+            var dto = Database.Fetch<ProductDto, ProductVariantDto, ProductVariantIndexDto>(sql).FirstOrDefault();
 
             if (dto == null || dto.ProductVariantDto == null)
                 return null;
@@ -59,7 +59,7 @@ namespace Merchello.Core.Persistence.Repositories
             }
             else
             {                
-                var dtos = Database.Fetch<ProductDto, ProductVariantDto>(GetBaseQuery(false));
+                var dtos = Database.Fetch<ProductDto, ProductVariantDto, ProductVariantIndexDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
                     yield return Get(dto.ProductVariantDto.Key);
@@ -73,7 +73,7 @@ namespace Merchello.Core.Persistence.Repositories
             var translator = new SqlTranslator<IProductVariant>(sqlClause, query);
             var sql = translator.Translate();
 
-            var dtos = Database.Fetch<ProductDto, ProductVariantDto>(sql);
+            var dtos = Database.Fetch<ProductDto, ProductVariantDto, ProductVariantIndexDto>(sql);
 
             return dtos.DistinctBy(x => x.ProductVariantDto.Key).Select(dto => Get(dto.ProductVariantDto.Key));
 
@@ -86,6 +86,8 @@ namespace Merchello.Core.Persistence.Repositories
                 .From<ProductDto>()
                 .InnerJoin<ProductVariantDto>()
                 .On<ProductDto, ProductVariantDto>(left => left.Key, right => right.ProductKey)
+                .InnerJoin<ProductVariantIndexDto>()
+                .On<ProductVariantDto, ProductVariantIndexDto>(left => left.Key, right => right.ProductVariantKey)
                 .Where<ProductVariantDto>(x => x.Master == false);
 
             return sql;
@@ -101,6 +103,7 @@ namespace Merchello.Core.Persistence.Repositories
             var list = new List<string>
             {
                 "DELETE FROM merchWarehouseInventory WHERE productVariantKey = @Key",
+                "DELETE FROM merchProductVariantIndex WHERE productVariantKey = @Key",
                 "DELETE FROM merchProductVariant2ProductAttribute WHERE productVariantKey = @Key",
                 "DELETE FROM merchProductVariant WHERE pk = @Key"
             };
@@ -122,6 +125,9 @@ namespace Merchello.Core.Persistence.Repositories
             // insert the variant
             Database.Insert(dto);
             entity.Key = dto.Key; // to set HasIdentity
+
+            Database.Insert(dto.ProductVariantIndexDto);
+            ((ProductVariant) entity).ExamineId = dto.ProductVariantIndexDto.Id;
 
             // insert associations for every attribute
             foreach (var association in entity.Attributes.Select(att => new ProductVariant2ProductAttributeDto()

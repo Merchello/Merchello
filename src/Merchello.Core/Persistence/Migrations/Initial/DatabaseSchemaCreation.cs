@@ -62,7 +62,8 @@ namespace Merchello.Core.Persistence.Migrations.Initial
                 {31, typeof(ShipZone2Country)},
                 {32, typeof(ShipMethod2ShipZone)},*/
                 {33, typeof(GatewayProviderDto)},
-                {34, typeof(AppliedPaymentDto)}
+                {34, typeof(AppliedPaymentDto)},
+                {35, typeof(ProductVariantIndexDto)}
             };
 
         #endregion

@@ -27,6 +27,7 @@ namespace Merchello.Core.Persistence.Factories
                 Download = dto.Download,
                 DownloadMediaId = dto.DownloadMediaId,
                 Master = dto.Master,
+                ExamineId = dto.ProductVariantIndexDto.Id,
                 UpdateDate = dto.UpdateDate,
                 CreateDate = dto.CreateDate
             };
@@ -60,6 +61,13 @@ namespace Merchello.Core.Persistence.Factories
                 Download = entity.Download,
                 DownloadMediaId = entity.DownloadMediaId,
                 Master = ((ProductVariant)entity).Master,
+                ProductVariantIndexDto = new ProductVariantIndexDto()
+                    {
+                      Id = ((ProductVariant)entity).ExamineId,
+                      ProductVariantKey = entity.Key,
+                      UpdateDate = entity.UpdateDate,
+                      CreateDate = entity.CreateDate
+                    },
                 UpdateDate = entity.UpdateDate,
                 CreateDate = entity.CreateDate
             };

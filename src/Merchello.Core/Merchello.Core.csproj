@@ -227,6 +227,7 @@
     <Compile Include="Models\ProductVariantCollection.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\Rdbms\ProductVariantIndexDto.cs" />
     <Compile Include="Models\Shipment.cs">
       <SubType>Code</SubType>
     </Compile>

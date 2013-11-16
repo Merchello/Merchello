@@ -26,14 +26,20 @@ namespace Merchello.Tests.UnitTests.Querying
                 .From("[merchProduct]")
                 .InnerJoin("[merchProductVariant]")
                 .On("[merchProduct].[pk] = [merchProductVariant].[productKey]")
+                .InnerJoin("[merchProductVariantIndex]")
+                .On("[merchProductVariant].[pk] = [merchProductVariantIndex].[productVariantKey]")
                 .Where("[merchProductVariant].[master]=1")
                 .Where("[merchProduct].[pk] = '" + key.ToString() + "'");
+
+            Console.Write(expected.SQL);
 
             var sql = new Sql();
             sql.Select("*")
                .From<ProductDto>()
                .InnerJoin<ProductVariantDto>()
                .On<ProductDto, ProductVariantDto>(left => left.Key, right => right.ProductKey)
+               .InnerJoin<ProductVariantIndexDto>()
+               .On<ProductVariantDto, ProductVariantIndexDto>(left => left.Key, right => right.ProductVariantKey)
                .Where<ProductVariantDto>(x => x.Master)
                .Where<ProductDto>(x => x.Key == key);
 

@@ -122,7 +122,7 @@ namespace Merchello.Core.Persistence.Repositories
 		{
 			if (keys.Any())
 			{
-                throw new NotImplementedException();
+               // TODO
                 //var entities = _cache.GetByIds(typeof(TEntity), ids.Select(id => id is int ? ConvertIdToGuid(id) : ConvertStringIdToGuid(id.ToString())).ToList());
                 //if (ids.Count().Equals(entities.Count()) && entities.Any(x => x == null) == false)
                 //    return entities.Select(x => (TEntity)x);

@@ -182,8 +182,8 @@ namespace Merchello.Core.Persistence.Repositories
             ((Entity)entity).AddingEntity();
            
             var dto = GetDto(entity);
-
             Database.Insert(dto);
+            entity.Key = dto.Key;
             entity.ResetDirtyProperties();
         }
 

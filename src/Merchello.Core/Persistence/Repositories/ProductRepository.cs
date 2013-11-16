@@ -35,7 +35,7 @@ namespace Merchello.Core.Persistence.Repositories
             var sql = GetBaseQuery(false)
                 .Where(GetBaseWhereClause(), new { Key = key });
 
-            var dto = Database.Fetch<ProductDto, ProductVariantDto>(sql).FirstOrDefault();
+            var dto = Database.Fetch<ProductDto, ProductVariantDto, ProductVariantIndexDto>(sql).FirstOrDefault();
 
             if (dto == null)
                 return null;
@@ -71,7 +71,7 @@ namespace Merchello.Core.Persistence.Repositories
             else
             {
                 //var factory = new ProductFactory();
-                var dtos = Database.Fetch<ProductDto, ProductVariantDto>(GetBaseQuery(false));
+                var dtos = Database.Fetch<ProductDto, ProductVariantDto, ProductVariantIndexDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
                     yield return Get(dto.Key);
@@ -90,6 +90,8 @@ namespace Merchello.Core.Persistence.Repositories
                .From<ProductDto>()
                .InnerJoin<ProductVariantDto>()
                .On<ProductDto, ProductVariantDto>(left => left.Key, right => right.ProductKey)
+               .InnerJoin<ProductVariantIndexDto>()
+               .On<ProductVariantDto, ProductVariantIndexDto>(left => left.Key, right => right.ProductVariantKey)
                .Where<ProductVariantDto>(x => x.Master);
             
             return sql;
@@ -112,6 +114,7 @@ namespace Merchello.Core.Persistence.Repositories
                         (SELECT optionKey FROM merchProduct2ProductOption WHERE productKey = @Key))",
                     "DELETE FROM merchProduct2ProductOption WHERE productKey = @Key",
                     "DELETE FROM merchWarehouseInventory WHERE productVariantKey IN (SELECT pk FROM merchProductVariant WHERE productKey = @Key)",
+                    "DELETE FROM merchProductVariantIndex WHERE productVariantKey IN (SELECT pk FROM merchProductVariant WHERE productKey = @Key)",
                     "DELETE FROM merchProductVariant WHERE productKey = @Key",
                     "DELETE FROM merchProduct WHERE pk = @Key",
                     "DELETE FROM merchProductOption WHERE pk NOT IN (SELECT optionKey FROM merchProduct2ProductOption)"
@@ -136,10 +139,11 @@ namespace Merchello.Core.Persistence.Repositories
             // setup and save the master (singular) variant
             dto.ProductVariantDto.ProductKey = dto.Key;
             Database.Insert(dto.ProductVariantDto);
+            Database.Insert(dto.ProductVariantDto.ProductVariantIndexDto);
 
             ((Product) entity).MasterVariant.ProductKey = dto.ProductVariantDto.ProductKey;
             ((Product) entity).MasterVariant.Key = dto.ProductVariantDto.Key;
-            
+            ((ProductVariant) ((Product)entity).MasterVariant).ExamineId = dto.ProductVariantDto.ProductVariantIndexDto.Id;
 
             // save the product options
             SaveProductOptions(entity);
@@ -183,7 +187,7 @@ namespace Merchello.Core.Persistence.Repositories
             var translator = new SqlTranslator<IProduct>(sqlClause, query);
             var sql = translator.Translate();
 
-            var dtos = Database.Fetch<ProductDto, ProductVariantDto>(sql);
+            var dtos = Database.Fetch<ProductDto, ProductVariantDto, ProductVariantIndexDto>(sql);
 
             return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
 
