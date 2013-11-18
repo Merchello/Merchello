@@ -1830,17 +1830,19 @@
             Declares model mappings for members.
             </summary>
         </member>
-        <member name="M:Umbraco.Web.Models.Mapping.MemberModelMapper.MapGenericCustomProperties(Umbraco.Core.Models.IMember,Umbraco.Web.Models.ContentEditing.MemberDisplay)">
+        <member name="M:Umbraco.Web.Models.Mapping.MemberModelMapper.MapGenericCustomProperties(Umbraco.Core.Services.IMemberService,Umbraco.Core.Models.IMember,Umbraco.Web.Models.ContentEditing.MemberDisplay)">
             <summary>
             Maps the generic tab with custom properties for content
             </summary>
+            <param name="memberService"></param>
             <param name="member"></param>
             <param name="display"></param>
         </member>
-        <member name="M:Umbraco.Web.Models.Mapping.MemberModelMapper.GetLoginProperty(Umbraco.Core.Models.IMember,Umbraco.Web.Models.ContentEditing.MemberDisplay)">
+        <member name="M:Umbraco.Web.Models.Mapping.MemberModelMapper.GetLoginProperty(Umbraco.Core.Services.IMemberService,Umbraco.Core.Models.IMember,Umbraco.Web.Models.ContentEditing.MemberDisplay)">
             <summary>
             Returns the login property display field
             </summary>
+            <param name="memberService"></param>
             <param name="member"></param>
             <param name="display"></param>
             <returns></returns>
@@ -2062,6 +2064,12 @@
             </summary>
             <param name="umbracoContext"></param>
         </member>
+        <member name="M:Umbraco.Web.Editors.MemberController.Initialize(System.Web.Http.Controllers.HttpControllerContext)">
+            <summary>
+            Ensure all GUIDs are formatted without hyphens
+            </summary>
+            <param name="controllerContext"></param>
+        </member>
         <member name="M:Umbraco.Web.Editors.MemberController.GetByKey(System.Guid)">
             <summary>
             Gets the content json for the member
@@ -2098,6 +2106,15 @@
             If the password has been reset then this method will return the reset/generated password, otherwise will return null.
             </returns>
         </member>
+        <member name="M:Umbraco.Web.Editors.MemberController.RefetchMemberData(Umbraco.Web.Models.ContentEditing.MemberSave)">
+            <summary>
+            Re-fetches the database data to map to the PersistedContent object and re-maps the posted properties so that the display object is up-to-date
+            </summary>
+            <param name="contentItem"></param>
+            <remarks>
+            This is done during an update if the membership provider has changed some underlying data - we need to ensure that our model is consistent with that data
+            </remarks>
+        </member>
         <member name="M:Umbraco.Web.Editors.MemberController.HasMembershipUserChanged(System.Web.Security.MembershipUser,Umbraco.Web.Models.ContentEditing.MemberSave)">
             <summary>
             Quick check to see if the 'normal' settable properties for the membership provider have changed
@@ -2109,7 +2126,7 @@
             By 'normal' we mean that they can simply be set on the membership user and don't require method calls like ChangePassword or UnlockUser
             </remarks>
         </member>
-        <member name="M:Umbraco.Web.Editors.MemberController.CreateWithUmbracoProvider(Umbraco.Web.Models.ContentEditing.MemberSave,System.Web.Security.MembershipCreateStatus@)">
+        <member name="M:Umbraco.Web.Editors.MemberController.CreateWithMembershipProvider(Umbraco.Web.Models.ContentEditing.MemberSave,System.Web.Security.MembershipCreateStatus@)">
             <summary>
             This is going to create the user with the membership provider and check for validation
             </summary>
@@ -2117,6 +2134,18 @@
             <param name="status"></param>
             <returns></returns>
             <remarks>
+            Depending on if the Umbraco membership provider is active or not, the process differs slightly:
+            
+            * If the umbraco membership provider is used - we create the membership user first with the membership provider, since 
+                it's the umbraco membership provider, this writes to the umbraco tables. When that is complete we re-fetch the IMember
+                model data from the db. In this case we don't care what the provider user key is.
+            * If we're using a non-umbraco membership provider - we check if there is a 'Member' member type - if so 
+                we create an empty IMember instance first (of type 'Member'), this gives us a unique ID (GUID)
+                that we then use to create the member in the custom membership provider. This acts as the link between Umbraco data and 
+                the custom membership provider data. This gives us the ability to eventually have custom membership properties but still use
+                a custom memberhip provider. If there is no 'Member' member type, then we will simply just create the membership provider member
+                with no link to our data.
+            
             If this is successful, it will go and re-fetch the IMember from the db because it will now have an ID because the Umbraco provider 
             uses the umbraco data store - then of course we need to re-map it to the saved property values.
             </remarks>
@@ -2127,6 +2156,12 @@
             </summary>
             <param name="key"></param>
             <returns></returns>        
+        </member>
+        <member name="P:Umbraco.Web.Editors.MemberController.MembershipScenario">
+            <summary>
+            Returns the currently configured membership scenario for members in umbraco
+            </summary>
+            <value></value>
         </member>
         <member name="T:Umbraco.Web.Editors.CurrentUserController">
             <summary>
@@ -2837,6 +2872,13 @@
             on the new tree which legacy tree to load (it won't actually render using the new tree)
             </remarks>
         </member>
+        <member name="M:Umbraco.Web.Trees.MemberTreeController.GetNodeIdForCustomProvider(System.Object)">
+            <summary>
+            We'll see if it is a GUID, if so we'll ensure to format it without hyphens
+            </summary>
+            <param name="providerUserKey"></param>
+            <returns></returns>
+        </member>
         <member name="P:Umbraco.Web.Trees.MenuRenderingEventArgs.NodeId">
             <summary>
             The tree node id that the menu is rendering for
@@ -2871,6 +2913,71 @@
             <summary>
             A context menu item
             </summary>
+        </member>
+        <member name="F:Umbraco.Web.Models.Trees.MenuItem.DialogTitleKey">
+            <summary>
+            Used as a key for the AdditionalData to specify a specific dialog title instead of the menu title
+            </summary>
+        </member>
+        <member name="F:Umbraco.Web.Models.Trees.MenuItem.ActionUrlKey">
+            <summary>
+            Used to specify the URL that the dialog will launch to in an iframe
+            </summary>
+        </member>
+        <member name="F:Umbraco.Web.Models.Trees.MenuItem.ActionViewKey">
+            <summary>
+            Used to specify the angular view that the dialog will launch
+            </summary>
+        </member>
+        <member name="F:Umbraco.Web.Models.Trees.MenuItem.JsActionKey">
+            <summary>
+            Used to specify the js method to execute for the menu item 
+            </summary>
+        </member>
+        <member name="F:Umbraco.Web.Models.Trees.MenuItem.ActionRouteKey">
+            <summary>
+            Used to specify an angular route to go to for the menu item
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.Models.Trees.MenuItem.NavigateToRoute(System.String)">
+            <summary>
+            Sets the menu item to navigate to the specified angular route path
+            </summary>
+            <param name="route"></param>
+        </member>
+        <member name="M:Umbraco.Web.Models.Trees.MenuItem.ExecuteLegacyJs(System.String)">
+            <summary>
+            Adds the required meta data to the menu item so that angular knows to attempt to call the Js method.
+            </summary>
+            <param name="jsToExecute"></param>
+        </member>
+        <member name="M:Umbraco.Web.Models.Trees.MenuItem.LaunchDialogView(System.String,System.String)">
+            <summary>
+            Sets the menu item to display a dialog based on an angular view path
+            </summary>
+            <param name="view"></param>
+            <param name="dialogTitle"></param>
+        </member>
+        <member name="M:Umbraco.Web.Models.Trees.MenuItem.LaunchDialogUrl(System.String,System.String)">
+            <summary>
+            Sets the menu item to display a dialog based on a url path in an iframe
+            </summary>
+            <param name="url"></param>
+            <param name="dialogTitle"></param>
+        </member>
+        <member name="M:Umbraco.Web.Models.Trees.MenuItem.SetDialogTitle(System.String)">
+            <summary>
+            Puts a dialog title into the meta data to be displayed on the dialog of the menu item (if there is one)
+            instead of the menu name
+            </summary>
+            <param name="dialogTitle"></param>
+        </member>
+        <member name="M:Umbraco.Web.Models.Trees.MenuItem.SetActionUrl(System.String,Umbraco.Web.Trees.ActionUrlMethod)">
+            <summary>
+            Configures the menu item to launch a URL with the specified action (dialog or new window)
+            </summary>
+            <param name="url"></param>
+            <param name="method"></param>
         </member>
         <member name="P:Umbraco.Web.Models.Trees.MenuItem.AdditionalData">
             <summary>
@@ -3762,6 +3869,31 @@
             Constructor
             </summary>
         </member>
+        <member name="M:Umbraco.Web.WebApi.Binders.MemberBinder.GetExisting(Umbraco.Web.Models.ContentEditing.MemberSave)">
+            <summary>
+            Returns an IMember instance used to bind values to and save (depending on the membership scenario)
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.WebApi.Binders.MemberBinder.CreateNew(Umbraco.Web.Models.ContentEditing.MemberSave)">
+            <summary>
+            Gets an instance of IMember used when creating a member
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+            <remarks>
+            Depending on whether a custom membership provider is configured this will return different results.
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.WebApi.Binders.MemberBinder.FilterMembershipProviderProperties(Umbraco.Core.Models.IContentTypeBase)">
+            <summary>
+            This will remove all of the special membership provider properties which were required to display the property editors
+            for editing - but the values have been mapped back ot the MemberSave object directly - we don't want to keep these properties
+            on the IMember because they will attempt to be persisted which we don't want since they might not even exist.
+            </summary>
+            <param name="contentType"></param>
+        </member>
         <member name="T:Umbraco.Web.WebApi.Binders.MemberBinder.MemberValidationHelper">
             <summary>
             Custom validation helper so that we can exclude the Member.StandardPropertyTypeStubs from being validating for existence
@@ -3813,6 +3945,12 @@
             <remarks>
             All property data validation goes into the modelstate with a prefix of "Properties"
             </remarks>
+        </member>
+        <member name="M:Umbraco.Web.WebApi.ControllerContextExtensions.SetOutgoingNoHyphenGuidFormat(System.Web.Http.Controllers.HttpControllerContext)">
+            <summary>
+            Sets the JSON GUID format to not have hyphens
+            </summary>
+            <param name="controllerContext"></param>
         </member>
         <member name="M:Umbraco.Web.WebApi.ControllerContextExtensions.SetOutgoingDateTimeFormat(System.Web.Http.Controllers.HttpControllerContext,System.String)">
             <summary>
@@ -4517,65 +4655,6 @@
             <remarks>
             We require this so the json serialization works correctly
             </remarks>
-        </member>
-        <member name="F:Umbraco.Web.Models.Trees.MenuItemExtensions.DialogTitleKey">
-            <summary>
-            Used as a key for the AdditionalData to specify a specific dialog title instead of the menu title
-            </summary>
-        </member>
-        <member name="F:Umbraco.Web.Models.Trees.MenuItemExtensions.ActionUrlKey">
-            <summary>
-            Used to specify the URL that the dialog will launch to in an iframe
-            </summary>
-        </member>
-        <member name="F:Umbraco.Web.Models.Trees.MenuItemExtensions.ActionViewKey">
-            <summary>
-            Used to specify the angular view that the dialog will launch
-            </summary>
-        </member>
-        <member name="F:Umbraco.Web.Models.Trees.MenuItemExtensions.JsActionKey">
-            <summary>
-            Used to specify the js method to execute for the menu item 
-            </summary>
-        </member>
-        <member name="M:Umbraco.Web.Models.Trees.MenuItemExtensions.LaunchLegacyJs(Umbraco.Web.Models.Trees.MenuItem,System.String)">
-            <summary>
-            Adds the required meta data to the menu item so that angular knows to attempt to call the Js method.
-            </summary>
-            <param name="menuItem"></param>
-            <param name="jsToExecute"></param>
-        </member>
-        <member name="M:Umbraco.Web.Models.Trees.MenuItemExtensions.LaunchDialogView(Umbraco.Web.Models.Trees.MenuItem,System.String,System.String)">
-            <summary>
-            Sets the menu item to display a dialog based on an angular view path
-            </summary>
-            <param name="menuItem"></param>
-            <param name="view"></param>
-            <param name="dialogTitle"></param>
-        </member>
-        <member name="M:Umbraco.Web.Models.Trees.MenuItemExtensions.LaunchDialogUrl(Umbraco.Web.Models.Trees.MenuItem,System.String,System.String)">
-            <summary>
-            Sets the menu item to display a dialog based on a url path in an iframe
-            </summary>
-            <param name="menuItem"></param>
-            <param name="url"></param>
-            <param name="dialogTitle"></param>
-        </member>
-        <member name="M:Umbraco.Web.Models.Trees.MenuItemExtensions.SetDialogTitle(Umbraco.Web.Models.Trees.MenuItem,System.String)">
-            <summary>
-            Puts a dialog title into the meta data to be displayed on the dialog of the menu item (if there is one)
-            instead of the menu name
-            </summary>
-            <param name="menuItem"></param>
-            <param name="dialogTitle"></param>
-        </member>
-        <member name="M:Umbraco.Web.Models.Trees.MenuItemExtensions.SetActionUrl(Umbraco.Web.Models.Trees.MenuItem,System.String,Umbraco.Web.Trees.ActionUrlMethod)">
-            <summary>
-            Configures the menu item to launch a URL with the specified action (dialog or new window)
-            </summary>
-            <param name="menuItem"></param>
-            <param name="url"></param>
-            <param name="method"></param>
         </member>
         <member name="T:Umbraco.Web.Models.Trees.RefreshNode">
             <summary>
@@ -8184,6 +8263,11 @@
             <param name="appName">
             If the user has access to any of the specified apps, they will be authorized.
             </param>
+        </member>
+        <member name="T:Umbraco.Web.WebApi.GuidNoHyphenConverter">
+            <summary>
+            A custom converter for GUID's to format without hyphens
+            </summary>
         </member>
         <member name="M:Umbraco.Web.WebApi.HttpRequestMessageExtensions.TryGetHttpContext(System.Net.Http.HttpRequestMessage)">
             <summary>

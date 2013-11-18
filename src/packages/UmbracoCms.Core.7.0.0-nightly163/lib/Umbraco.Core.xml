@@ -4946,6 +4946,35 @@
             </summary>
             <remarks>Corresponds to the NodeObjectType in the umbracoNode table</remarks>
         </member>
+        <member name="T:Umbraco.Core.Models.Membership.MembershipScenario">
+            <summary>
+            How membership is implemented in the current install.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Models.Membership.MembershipScenario.NativeUmbraco">
+            <summary>
+            The member is based on the native Umbraco members (IMember + Umbraco membership provider)
+            </summary>
+            <remarks>
+            This supports custom member properties
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Core.Models.Membership.MembershipScenario.CustomProviderWithUmbracoLink">
+            <summary>
+            The member is based on a custom member provider but it is linked to an IMember
+            </summary>
+            <remarks>
+            This supports custom member properties (but that is not enabled yet)
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Core.Models.Membership.MembershipScenario.StandaloneCustomProvider">
+            <summary>
+            The member is based purely on a custom member provider and is not linked to umbraco data
+            </summary>
+            <remarks>
+            This does not support custom member properties.
+            </remarks>
+        </member>
         <member name="T:Umbraco.Core.Models.PublishedContent.IPublishedContentExtended">
             <summary>
             Provides methods to handle extended content.
@@ -6784,6 +6813,12 @@
             <summary>
             Gets the ContentType used by this content object
             </summary>
+        </member>
+        <member name="M:Umbraco.Core.Models.Membership.MembershipExtensions.GetMembershipScenario(Umbraco.Core.Services.IMemberService)">
+            <summary>
+            Returns the currently configured membership scenario for members in umbraco
+            </summary>
+            <value></value>
         </member>
         <member name="M:Umbraco.Core.Models.Membership.UmbracoMembershipUser`1.#ctor(`0)">
             <summary>
@@ -17893,6 +17928,12 @@
             </summary>
             <param name="member"></param>
             <param name="raiseEvents"></param>
+        </member>
+        <member name="M:Umbraco.Core.Services.MemberService.CreateGenericMembershipProviderMember(System.String,System.String,System.String,System.String)">
+            <summary>
+            A helper method that will create a basic/generic member for use with a generic membership provider
+            </summary>
+            <returns></returns>
         </member>
         <member name="E:Umbraco.Core.Services.MemberService.Deleting">
             <summary>
