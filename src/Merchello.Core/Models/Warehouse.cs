@@ -9,7 +9,7 @@ namespace Merchello.Core.Models
 
     [Serializable]
     [DataContract(IsReference = true)]
-    internal class Warehouse : IdEntity, IWarehouse
+    internal class Warehouse : Entity, IWarehouse
     {
         private string _name;
         private string _address1;
@@ -21,10 +21,6 @@ namespace Merchello.Core.Models
         private string _phone;
         private string _email;
 
-        public Warehouse ()  
-        {
-        }
-        
         private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<Warehouse, string>(x => x.Name);  
         private static readonly PropertyInfo Address1Selector = ExpressionHelper.GetPropertyInfo<Warehouse, string>(x => x.Address1);  
         private static readonly PropertyInfo Address2Selector = ExpressionHelper.GetPropertyInfo<Warehouse, string>(x => x.Address2);  

@@ -10,11 +10,11 @@ namespace Merchello.Core.Persistence.Factories
 
 
             var transaction = new AppliedPayment(
-                dto.PaymentId, 
-                dto.InvoiceId, 
+                dto.PaymentKey, 
+                dto.InvoiceKey, 
                 dto.AppliedPaymentTfKey)
             {
-                Id = dto.Id,
+                Key = dto.Key,
                 Description = dto.Description,
                 Amount = dto.Amount,
                 Exported = dto.Exported,
@@ -31,9 +31,9 @@ namespace Merchello.Core.Persistence.Factories
         {
             var dto = new AppliedPaymentDto()
             {
-                Id = entity.Id,
-                PaymentId = entity.PaymentId,
-                InvoiceId = entity.InvoiceId,
+                Key = entity.Key,
+                PaymentKey = entity.PaymentKey,
+                InvoiceKey = entity.InvoiceKey,
                 AppliedPaymentTfKey = entity.AppliedPaymentTfKey,
                 Description = entity.Description,
                 Amount = entity.Amount,

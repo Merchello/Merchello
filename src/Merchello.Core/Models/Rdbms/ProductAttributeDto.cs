@@ -9,17 +9,18 @@ using Umbraco.Core.Persistence.DatabaseAnnotations;
 namespace Merchello.Core.Models.Rdbms
 {
     [TableName("merchProductAttribute")]
-    [PrimaryKey("id")]
+    [PrimaryKey("pk", autoIncrement = false)]
     [ExplicitColumns]
     internal class ProductAttributeDto
     {
-        [Column("id")]
-        [PrimaryKeyColumn]
-        public int Id { get; set; }
+        [Column("pk")]
+        [PrimaryKeyColumn(AutoIncrement = false)]
+        [Constraint(Default = "newid()")]
+        public Guid Key { get; set; }
 
-        [Column("optionId")]
-        [ForeignKey(typeof(ProductOptionDto), Name = "FK_merchProductAttribute_merchOption", Column = "id")]
-        public int OptionId { get; set; }
+        [Column("optionKey")]
+        [ForeignKey(typeof(ProductOptionDto), Name = "FK_merchProductAttribute_merchOption", Column = "pk")]
+        public Guid OptionKey { get; set; }
 
         [Column("name")]
         public string Name { get; set; }

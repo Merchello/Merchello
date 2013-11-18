@@ -90,12 +90,14 @@ namespace Merchello.Examine.Providers
         /// <remarks>For testing</remarks>
         internal void DeleteProductFromIndex(IProduct product)
         {
-            var ids = product.ProductVariants.Select(x => x.Id).ToList();
-            ids.Add(((Product) product).MasterVariant.Id);
+            var ids = product.ProductVariants.Select(x => ((ProductVariant)x).ExamineId).ToList();
+            ids.Add(
+                ((ProductVariant)((Product) product).MasterVariant).ExamineId
+                );
             
             foreach (var id in ids)
             {
-                DeleteFromIndex(id.ToString());
+                DeleteFromIndex(id.ToString(CultureInfo.InvariantCulture));
             }
         }
 
@@ -109,6 +111,7 @@ namespace Merchello.Examine.Providers
             = new List<StaticField>()
             {
                 new StaticField("productKey", FieldIndexTypes.ANALYZED, false, string.Empty),
+                new StaticField("productVariantKey", FieldIndexTypes.ANALYZED, false, string.Empty),
                 new StaticField("name", FieldIndexTypes.ANALYZED, true, string.Empty),
                 new StaticField("sku", FieldIndexTypes.ANALYZED, true, string.Empty),
                 new StaticField("price", FieldIndexTypes.ANALYZED, true, "DOUBLE"),

@@ -1,37 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using Merchello.Core.Persistence.Mappers;
+using Merchello.Core.Models.EntityBase;
+using Merchello.Core.Persistence.UnitOfWork;
 using Umbraco.Core;
-using Umbraco.Core.Models.EntityBase;
+using Umbraco.Core.Cache;
 using Umbraco.Core.Persistence.Querying;
 using Umbraco.Core.Persistence.Repositories;
-using Umbraco.Core.Persistence.UnitOfWork;
-
-using Merchello.Core.Models.EntityBase;
-using Merchello.Core.Persistence.Caching;
 
 namespace Merchello.Core.Persistence.Repositories
 {
-
-	/// <summary>
-	/// Represent an abstract Repository, which is the base of the Repository implementations
-	/// </summary>
-	/// <typeparam name="TEntity">Type of <see cref="ISingularRoot"/> entity for which the repository is used</typeparam>
-	/// <typeparam name="TId">Type of the Id used for this entity</typeparam>
-	internal abstract class MerchelloRepositoryBase<TId, TEntity> : DisposableObject, IRepositoryQueryable<TId, TEntity>, IUnitOfWorkRepository 
-		where TEntity : class, ISingularRoot
+    /// <summary>
+    /// Represent an abstract Repository, which is the base of the Repository implementations
+    /// </summary>
+    /// <typeparam name="TEntity">Type of <see cref="IEntity"/> entity for which the repository is used</typeparam>
+    internal abstract class MerchelloRepositoryBase<TEntity> : DisposableObject, IRepositoryQueryable<Guid, TEntity>, IUnitOfWorkRepository 
+		where TEntity : IEntity
 	{
 		private readonly IUnitOfWork _work;
-		private readonly IRepositoryCacheProvider _cache;
+        private readonly IRuntimeCacheProvider _cache;
 
-		protected MerchelloRepositoryBase(IUnitOfWork work)
-			: this(work, RuntimeCacheProvider.Current)
-		{
-		}
-
-		internal MerchelloRepositoryBase(IUnitOfWork work, IRepositoryCacheProvider cache)
+        protected MerchelloRepositoryBase(IUnitOfWork work, IRuntimeCacheProvider cache)
 		{
 			_work = work;
 			_cache = cache;
@@ -58,7 +47,7 @@ namespace Merchello.Core.Persistence.Repositories
 		/// <summary>
 		/// Adds or Updates an entity of type TEntity
 		/// </summary>
-		/// <remarks>This method is backed by an <see cref="IRepositoryCacheProvider"/> cache</remarks>
+		/// <remarks>This method is backed by an <see cref="ICacheProvider"/> cache</remarks>
 		/// <param name="entity"></param>
 		public void AddOrUpdate(TEntity entity)
 		{
@@ -84,89 +73,84 @@ namespace Merchello.Core.Persistence.Repositories
 			}
 		}
 
-		protected abstract TEntity PerformGet(TId id);
+		protected abstract TEntity PerformGet(Guid key);
 		/// <summary>
 		/// Gets an entity by the passed in Id
 		/// </summary>
-		/// <param name="id"></param>
 		/// <returns></returns>
-		public TEntity Get(TId id)
+		public TEntity Get(Guid key)
 		{
-			var fromCache = TryGetFromCache(id);
+			var fromCache = TryGetFromCache(key);
 			if (fromCache.Success)
 			{
 				return fromCache.Result;
 			}
 
-			var entity = PerformGet(id);
+			var entity = PerformGet(key);
 			if (entity != null)
 			{
-				_cache.Save(typeof(TEntity), entity);
+				//_cache.GetCacheItem()
 			}
 
 			if (entity != null)
 			{
-			
-
-				var asEntity = entity as Models.EntityBase.Entity;
-				if (asEntity != null)
-				{
-					asEntity.ResetDirtyProperties();
-				}
+			    entity.ResetDirtyProperties();
 			}
 			
 			return entity;
 		}
 
-		protected Attempt<TEntity> TryGetFromCache(TId id)
+		protected Attempt<TEntity> TryGetFromCache(Guid key)
 		{
-			Guid key = id is Guid ? new Guid(id.ToString()) : ConvertIdToGuid(id);
-			var rEntity = _cache.GetById(typeof(TEntity), key);
-			if (rEntity != null)
-			{
-				return new Attempt<TEntity>(true, (TEntity) rEntity);
-			}
-			return Attempt<TEntity>.False;
+            // TODO
+		    var cacheKey = key.ToString();
+		    var rEntity = _cache.GetCacheItem(cacheKey); 
+
+			return rEntity != null ? 
+                Attempt<TEntity>.Succeed((TEntity) rEntity) : 
+                Attempt<TEntity>.Fail();
 		} 
 
-		protected abstract IEnumerable<TEntity> PerformGetAll(params TId[] ids);
-		/// <summary>
-		/// Gets all entities of type TEntity or a list according to the passed in Ids
-		/// </summary>
-		/// <param name="ids"></param>
-		/// <returns></returns>
-		public IEnumerable<TEntity> GetAll(params TId[] ids)
+		protected abstract IEnumerable<TEntity> PerformGetAll(params Guid[] keys);
+
+        /// <summary>
+        /// Gets all entities of type TEntity or a list according to the passed in Ids
+        /// </summary>
+        /// <param name="keys"></param>
+        /// <returns></returns>
+        public IEnumerable<TEntity> GetAll(params Guid[] keys)
 		{
-			if (ids.Any())
+			if (keys.Any())
 			{
-				var entities = _cache.GetByIds(typeof(TEntity), ids.Select(id => id is int ? ConvertIdToGuid(id) : ConvertStringIdToGuid(id.ToString())).ToList());
-				if (ids.Count().Equals(entities.Count()) && entities.Any(x => x == null) == false)
-					return entities.Select(x => (TEntity)x);
+               // TODO
+                //var entities = _cache.GetByIds(typeof(TEntity), ids.Select(id => id is int ? ConvertIdToGuid(id) : ConvertStringIdToGuid(id.ToString())).ToList());
+                //if (ids.Count().Equals(entities.Count()) && entities.Any(x => x == null) == false)
+                //    return entities.Select(x => (TEntity)x);
 			}
 			else
 			{
-				var allEntities = _cache.GetAllByType(typeof(TEntity));
+			    var allEntities = _cache.GetCacheItemsByKeySearch(typeof (TEntity).Name); //_cache.GetAllByType(typeof(TEntity));
 				
 				if (allEntities.Any())
 				{
-                    // TODO  Refactor: this is the where the intermittent customer query error happens
-                    var query = MerchelloMapper.IsKeyBasedType(typeof(TEntity))
-				        ? Querying.Query<TEntity>.Builder.Where(x => x.Key != Guid.Empty)
-				        : Querying.Query<TEntity>.Builder.Where(x => x.Id != 0);
-					int totalCount = PerformCount(query);
+                    
+				    var query = Querying.Query<TEntity>.Builder.Where(x => x.Key != Guid.Empty);
+                    var totalCount = PerformCount(query);
 
-					if(allEntities.Count() == totalCount)
-						return allEntities.Select(x => (TEntity)x);
+                    if (allEntities.Count() == totalCount)
+                        return allEntities.Select(x => (TEntity)x);
 				}
 			}
 
-			var entityCollection = PerformGetAll(ids);
+			var entityCollection = PerformGetAll(keys);
 
 			foreach (var entity in entityCollection)
 			{
 				if (entity != null)
 				{
-					_cache.Save(typeof(TEntity), entity);
+                    // TODO move a version of the CachingBacker to the Core
+                    //_cache.GetCacheItem()
+					
 				}
 			}
 
@@ -184,20 +168,21 @@ namespace Merchello.Core.Persistence.Repositories
 			return PerformGetByQuery(query);
 		}
 
-		protected abstract bool PerformExists(TId id);
-		/// <summary>
-		/// Returns a boolean indicating whether an entity with the passed Id exists
-		/// </summary>
-		/// <param name="id"></param>
-		/// <returns></returns>
-		public bool Exists(TId id)
+		protected abstract bool PerformExists(Guid key);
+
+	    /// <summary>
+	    /// Returns a boolean indicating whether an entity with the passed Key exists
+	    /// </summary>
+	    /// <param name="key"></param>
+	    /// <returns></returns>
+	    public bool Exists(Guid key)
 		{
-			var fromCache = TryGetFromCache(id);
+			var fromCache = TryGetFromCache(key);
 			if (fromCache.Success)
 			{
 				return true;
 			}
-			return PerformExists(id);            
+			return PerformExists(key);            
 		}
 
 		protected abstract int PerformCount(IQuery<TEntity> query);
@@ -222,7 +207,7 @@ namespace Merchello.Core.Persistence.Repositories
 		public virtual void PersistNewItem(IEntity entity)
 		{
 			PersistNewItem((TEntity)entity);
-			_cache.Save(typeof(TEntity), entity);
+			//_cache.GetCacheItem()
 		}
 
 		/// <summary>
@@ -232,7 +217,7 @@ namespace Merchello.Core.Persistence.Repositories
 		public virtual void PersistUpdatedItem(IEntity entity)
 		{
 			PersistUpdatedItem((TEntity)entity);
-			_cache.Save(typeof(TEntity), entity);
+            //_cache.GetCacheItem()
 		}
 
 		/// <summary>
@@ -242,7 +227,8 @@ namespace Merchello.Core.Persistence.Repositories
 		public virtual void PersistDeletedItem(IEntity entity)
 		{
 			PersistDeletedItem((TEntity)entity);
-			_cache.Delete(typeof(TEntity), entity);
+			//_cache.ClearCacheItem();
+            //_cache.Delete(typeof(TEntity), entity);
 		}
 
 		#endregion
@@ -255,30 +241,7 @@ namespace Merchello.Core.Persistence.Repositories
 
 		#endregion
 
-		/// <summary>
-		/// Internal method that handles the convertion of an object Id
-		/// to an Integer and then a Guid Id.
-		/// </summary>
-		/// <remarks>In the future it should be possible to change this method
-		/// so it converts from object to guid if/when we decide to go from
-		/// int to guid based ids.</remarks>
-		/// <param name="id"></param>
-		/// <returns></returns>
-		protected virtual Guid ConvertIdToGuid(TId id)
-		{
-			int i = 0;
-			if(int.TryParse(id.ToString(), out i))
-			{
-				return i.ToGuid();
-			}
-			return ConvertStringIdToGuid(id.ToString());
-		}
-
-		protected virtual Guid ConvertStringIdToGuid(string id)
-		{
-			return id.EncodeAsGuid();
-		}
-
+		
 		/// <summary>
 		/// Dispose disposable properties
 		/// </summary>

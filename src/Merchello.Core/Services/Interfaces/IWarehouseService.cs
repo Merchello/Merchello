@@ -51,23 +51,23 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Gets an <see cref="IWarehouse"/> object by its 'UniqueId'
         /// </summary>
-        /// <param name="id">int Id of the Warehouse to retrieve</param>
+        /// <param name="key">key of the Warehouse to retrieve</param>
         /// <returns><see cref="IWarehouse"/></returns>
-        IWarehouse GetById(int id);
+        IWarehouse GetByKey(Guid key);
 
         /// <summary>
         /// Gets list of <see cref="IWarehouse"/> objects given a list of Unique keys
         /// </summary>
-        /// <param name="ids">List of int Id for Warehouse objects to retrieve</param>
+        /// <param name="keys">List of int Id for Warehouse objects to retrieve</param>
         /// <returns>List of <see cref="IWarehouse"/></returns>
-        IEnumerable<IWarehouse> GetByIds(IEnumerable<int> ids);
+        IEnumerable<IWarehouse> GetByKeys(IEnumerable<Guid> keys);
 
         /// <summary>
         /// Gets a list of warehouses associated with a ship method
         /// </summary>
-        /// <param name="shipMethodId">The id of the <see cref="IShipMethod"/></param>
+        /// <param name="shipMethodKey">The key of the <see cref="IShipMethod"/></param>
         /// <returns>A collection of <see cref="IWarehouse"/></returns>
-        IEnumerable<IWarehouse> GetWarehousesForShipMethod(int shipMethodId);
+        IEnumerable<IWarehouse> GetWarehousesForShipMethod(Guid shipMethodKey);
 
     }
 }

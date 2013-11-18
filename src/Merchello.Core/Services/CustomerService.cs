@@ -5,9 +5,9 @@ using System.Threading;
 using Merchello.Core.Events;
 using Merchello.Core.Models;
 using Merchello.Core.Persistence;
+using Merchello.Core.Persistence.UnitOfWork;
 using Umbraco.Core;
 using Umbraco.Core.Events;
-using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Core.Services
 {
@@ -91,7 +91,7 @@ namespace Merchello.Core.Services
         /// <param name="email">the email address of the customer</param>
         /// <param name="memberId">The Umbraco member Id of the customer</param>
         /// <returns><see cref="ICustomer"/></returns>
-        public ICustomer CreateCustomerWithId(string firstName, string lastName, string email, int? memberId = null)
+        public ICustomer CreateCustomerWithKey(string firstName, string lastName, string email, int? memberId = null)
         {
             var customer = new Customer(0, 0, null)
             {
@@ -127,9 +127,9 @@ namespace Merchello.Core.Services
         /// </summary>
         /// <param name="memberId">The Umbraco member id (int)</param>
         /// <returns><see cref="ICustomer"/></returns>
-        public ICustomer CreateCustomerWithId(int memberId)
+        public ICustomer CreateCustomerWithKey(int memberId)
         {
-            return CreateCustomerWithId(string.Empty, string.Empty, string.Empty, memberId);
+            return CreateCustomerWithKey(string.Empty, string.Empty, string.Empty, memberId);
         }
 
         /// <summary>
@@ -286,13 +286,13 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Gets a customer by its unique id
         /// </summary>
-        /// <param name="id">Guid key for the customer</param>
+        /// <param name="key">Guid key for the customer</param>
         /// <returns><see cref="ICustomer"/></returns>
-        public ICustomer GetById(int id)
+        public ICustomer GetByKey(Guid key)
         {
             using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
             {
-                return repository.Get(id);
+                return repository.Get(key);
             }
         }
         
@@ -321,15 +321,15 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
-        /// Gets a list of customer give a list of unique ids
+        /// Gets a list of customer give a list of unique keys
         /// </summary>
-        /// <param name="ids">List of unique keys</param>
+        /// <param name="keys">List of unique keys</param>
         /// <returns></returns>
-        public IEnumerable<ICustomer> GetByIds(IEnumerable<int> ids)
+        public IEnumerable<ICustomer> GetByKeys(IEnumerable<Guid> keys)
         {
             using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
             {
-                return repository.GetAll(ids.ToArray());
+                return repository.GetAll(keys.ToArray());
             }
         }
 
@@ -381,17 +381,6 @@ namespace Merchello.Core.Services
         /// Occurs after Create
         /// </summary>
         public static event TypedEventHandler<ICustomerService, Events.NewEventArgs<ICustomer>> Created;
-
-
-        /// <summary>
-        /// Occurs before convert
-        /// </summary>
-        public static event TypedEventHandler<ICustomerService, ConvertEventArgs<ICustomer>> Converting;
-
-        /// <summary>
-        /// Occurs after convert
-        /// </summary>
-        public static event TypedEventHandler<ICustomerService, ConvertEventArgs<ICustomer>> Converted;
 
         /// <summary>
         /// Occurs before Save

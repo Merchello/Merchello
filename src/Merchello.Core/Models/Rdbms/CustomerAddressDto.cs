@@ -5,17 +5,18 @@ using Umbraco.Core.Persistence.DatabaseAnnotations;
 namespace Merchello.Core.Models.Rdbms
 {
     [TableName("merchCustomerAddress")]
-    [PrimaryKey("id")]
+    [PrimaryKey("pk", autoIncrement = false)]
     [ExplicitColumns]
     internal class CustomerAddressDto 
     {
-        [Column("id")]
-        [PrimaryKeyColumn]
-        public int Id { get; set; }
+        [Column("pk")]
+        [PrimaryKeyColumn(AutoIncrement = false)]
+        [Constraint(Default = "newid()")]
+        public Guid Key { get; set; }
 
-        [Column("customerId")]
-        [ForeignKey(typeof(CustomerDto), Name = "FK_merchCustomerAddress_merchCustomer", Column = "id")]
-        public int CustomerId { get; set; }
+        [Column("customerKey")]
+        [ForeignKey(typeof(CustomerDto), Name = "FK_merchCustomerAddress_merchCustomer", Column = "pk")]
+        public Guid CustomerKey { get; set; }
 
         [Column("label")]
         public string Label { get; set; }

@@ -43,7 +43,7 @@ namespace Merchello.Tests.UnitTests.Services
             _statusBefore = false;
             _statusAfter = false;
 
-            _customer = MockCustomerDataMaker.CustomerForInserting().MockSavedWithId(111);
+            _customer = MockCustomerDataMaker.CustomerForInserting().MockSavedWithKey(111);
 
             _invoiceStatus = MockInvoiceStatusDataMaker.InvoiceStatusUnpaidMock();
 

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Globalization;
+using System.Linq;
 using Examine;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
@@ -112,7 +113,7 @@ namespace Merchello.Web.Search
 
         private static void DeleteProductVariantFromIndex(IProductVariant productVariant)
         {
-            ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"].DeleteFromIndex(productVariant.Id.ToString());
+            ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"].DeleteFromIndex(((ProductVariant)productVariant).ExamineId.ToString(CultureInfo.InvariantCulture));
         }
     }
 }

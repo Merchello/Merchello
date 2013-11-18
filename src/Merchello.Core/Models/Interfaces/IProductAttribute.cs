@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using Merchello.Core.Models.EntityBase;
 
 namespace Merchello.Core.Models
@@ -6,14 +7,14 @@ namespace Merchello.Core.Models
     /// <summary>
     /// Defines a product attribute
     /// </summary>
-    public interface IProductAttribute : ISimpleEntity
+    public interface IProductAttribute : IEntity
     {
 
         /// <summary>
-        /// The id of the option which defines the attribute group this attribute belongs to
+        /// The key of the option which defines the attribute group this attribute belongs to
         /// </summary>
         [DataMember]
-        int OptionId { get; set;  }
+        Guid OptionKey { get; set;  }
 
         /// <summary>
         /// The name of the attribute

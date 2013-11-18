@@ -1,13 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using Formatting = Newtonsoft.Json.Formatting;
 
 namespace Merchello.Core.Models
@@ -30,7 +28,7 @@ namespace Merchello.Core.Models
             var options = new List<IProductOption>();
             foreach (var att in attributes)
             {
-                options.AddRange(product.ProductOptions.Where(option => option.Choices.Any(choice => choice.Id == att.Id)));
+                options.AddRange(product.ProductOptions.Where(option => option.Choices.Any(choice => choice.Key == att.Key)));
             }
             return options;
         }
@@ -60,7 +58,7 @@ namespace Merchello.Core.Models
                     {
                         var productAttributes = selectedChoices as IProductAttribute[] ?? selectedChoices.ToArray();
                         return variant.Attributes.Count() == productAttributes.Count() &&
-                                          productAttributes.All(item => ((ProductAttributeCollection)variant.Attributes).Contains(item.Id));
+                                          productAttributes.All(item => ((ProductAttributeCollection)variant.Attributes).Contains(item.Key));
                     });
 
         }
@@ -70,14 +68,14 @@ namespace Merchello.Core.Models
         /// If not match is found, returns null.
         /// </summary>
         /// <param name="product"></param>
-        /// <param name="selectedChoiceIds"></param>
+        /// <param name="selectedChoiceKeys"></param>
         /// <returns><see cref="IProductVariant"/> or null if no <see cref="IProductVariant"/> is found with a matching collection of <see cref="IProductAttribute"/></returns>
-        public static IProductVariant GetProductVariantForPurchase(this IProduct product, int[] selectedChoiceIds)
+        public static IProductVariant GetProductVariantForPurchase(this IProduct product, Guid[] selectedChoiceKeys)
         {
             return
                 product.ProductVariants.FirstOrDefault(
-                    variant => variant.Attributes.Count() == selectedChoiceIds.Length &&
-                               selectedChoiceIds.All(id => ((ProductAttributeCollection)variant.Attributes).Contains(id)));
+                    variant => variant.Attributes.Count() == selectedChoiceKeys.Length &&
+                               selectedChoiceKeys.All(key => ((ProductAttributeCollection)variant.Attributes).Contains(key)));
         }
 
         #endregion
@@ -86,13 +84,25 @@ namespace Merchello.Core.Models
         #region IProductVariant Collections
 
         /// <summary>
+        /// Associates a product with a warehouse
+        /// </summary>
+        /// <param name="product"></param>
+        /// <param name="warehouseKey">The 'unique' id of the <see cref="IWarehouse"/></param>
+        public static void AddToWarehouse(this IProduct product, Guid warehouseKey)
+        {
+            ((Product)product).MasterVariant.AddToWarehouse(warehouseKey);
+        }
+
+       
+
+        /// <summary>
         /// Associates a product variant with a warehouse
         /// </summary>
         /// <param name="productVariant"></param>
-        /// <param name="warehouseId">The 'unique' id of the <see cref="IWarehouse"/></param>
-        public static void AddToWarehouse(this IProductVariant productVariant, int warehouseId)
+        /// <param name="warehouseKey">The 'unique' id of the <see cref="IWarehouse"/></param>
+        public static void AddToWarehouse(this IProductVariant productVariant, Guid warehouseKey)
         {
-            ((WarehouseInventoryCollection)productVariant.Warehouses).Add(new WarehouseInventory(warehouseId, productVariant.Id));
+            ((WarehouseInventoryCollection)productVariant.Warehouses).Add(new WarehouseInventory(warehouseKey, productVariant.Key));
         }
 
 
@@ -144,8 +154,10 @@ namespace Merchello.Core.Models
                 {
                     writer.WriteStartDocument();
                     writer.WriteStartElement("productVariant");
-                    writer.WriteAttributeString("id", productVariant.Id.ToString());
+                   // TODO construct the id
+                    writer.WriteAttributeString("id", ((ProductVariant)productVariant).ExamineId.ToString(CultureInfo.InvariantCulture));
                     writer.WriteAttributeString("productKey", productVariant.ProductKey.ToString());
+                    writer.WriteAttributeString("productVariantKey", productVariant.Key.ToString());
                     writer.WriteAttributeString("master", ((ProductVariant)productVariant).Master.ToString());
                     writer.WriteAttributeString("name", productVariant.Name);
                     writer.WriteAttributeString("sku", productVariant.Sku);
@@ -199,8 +211,8 @@ namespace Merchello.Core.Models
                     optionChoices.Add(
                             new
                             {
-                                attributeId = choice.Id,
-                                optionId = choice.OptionId,
+                                attributeKey = choice.Key,
+                                optionKey = choice.OptionKey,
                                 name = choice.Name,
                                 sortOrder = choice.SortOrder
                             }
@@ -210,7 +222,7 @@ namespace Merchello.Core.Models
                 options += JsonConvert.SerializeObject(
                         new
                         {
-                            optionId = option.Id,
+                            optionKey = option.Key,
                             name = option.Name,
                             required = option.Required,
                             sortOrder = option.SortOrder,
@@ -233,8 +245,8 @@ namespace Merchello.Core.Models
                 warehouses += JsonConvert.SerializeObject(
                 new
                 {
-                    warehouseId = wh.WarehouseId,
-                    productVariantId = wh.ProductVariantId,
+                    warehouseId = wh.WarehouseKey,
+                    productVariantId = wh.ProductVariantKey,
                     count = wh.Count,
                     lowCount = wh.LowCount
                 },
@@ -257,7 +269,7 @@ namespace Merchello.Core.Models
                 atts += JsonConvert.SerializeObject(
                 new 
                 { 
-                    optionId = attribute.OptionId,
+                    optionId = attribute.OptionKey,
                     name = attribute.Name,
                     sku = attribute.Sku,
                     sortOrder = attribute.SortOrder                    

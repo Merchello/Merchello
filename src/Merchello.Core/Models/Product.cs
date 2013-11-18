@@ -14,7 +14,7 @@ namespace Merchello.Core.Models
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    internal class Product : KeyEntity, IProduct
+    internal class Product : Entity, IProduct
     {
         
         private readonly IProductVariant _variant;
@@ -95,16 +95,6 @@ namespace Merchello.Core.Models
         //    return option.Choices.Any(choice => choice.Id == attribute.Id);
         //}
 
-        /// <summary>
-        /// Associates a product with a warehouse
-        /// </summary>
-        /// <param name="warehouseId">The 'unique' id of the <see cref="IWarehouse"/></param>
-        public void AddToWarehouse(int warehouseId)
-        {
-            _variant.AddToWarehouse(warehouseId);
-        }
-
-       
 
         #endregion
 
@@ -119,10 +109,10 @@ namespace Merchello.Core.Models
         /// Exposes the product variant template's key
         /// </summary>
         [DataMember]
-        public int ProductVariantId
+        public Guid ProductVariantKey
         {
-            get { return _variant.Id; }
-            private set { _variant.Id = value; }
+            get { return _variant.Key; }
+            private set { _variant.Key = value; }
         }
 
         /// <summary>

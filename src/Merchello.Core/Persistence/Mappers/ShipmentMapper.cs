@@ -18,15 +18,15 @@ namespace Merchello.Core.Persistence.Mappers
 
         internal override void BuildMap()
         {
-            CacheMap<Shipment, ShipmentDto>(src => src.Id, dto => dto.Id);
-            CacheMap<Shipment, ShipmentDto>(src => src.InvoiceId, dto => dto.OrderId);
+            CacheMap<Shipment, ShipmentDto>(src => src.Key, dto => dto.Key);
+            CacheMap<Shipment, ShipmentDto>(src => src.OrderKey, dto => dto.OrderKey);
             CacheMap<Shipment, ShipmentDto>(src => src.Address1, dto => dto.Address1);
             CacheMap<Shipment, ShipmentDto>(src => src.Address2, dto => dto.Address2);
             CacheMap<Shipment, ShipmentDto>(src => src.Locality, dto => dto.Locality);
             CacheMap<Shipment, ShipmentDto>(src => src.Region, dto => dto.Region);
             CacheMap<Shipment, ShipmentDto>(src => src.PostalCode, dto => dto.PostalCode);
             CacheMap<Shipment, ShipmentDto>(src => src.CountryCode, dto => dto.CountryCode);
-            CacheMap<Shipment, ShipmentDto>(src => src.ShipMethodId, dto => dto.ShipMethodId);
+            CacheMap<Shipment, ShipmentDto>(src => src.ShipMethodKey, dto => dto.ShipMethodKey);
             CacheMap<Shipment, ShipmentDto>(src => src.Phone, dto => dto.Phone);
             CacheMap<Shipment, ShipmentDto>(src => src.UpdateDate, dto => dto.UpdateDate);
             CacheMap<Shipment, ShipmentDto>(src => src.CreateDate, dto => dto.CreateDate);

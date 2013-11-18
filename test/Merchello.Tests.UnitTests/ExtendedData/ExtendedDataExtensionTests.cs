@@ -29,7 +29,7 @@ namespace Merchello.Tests.UnitTests.ExtendedData
             
             //// Act
             var pKeyExists = _extendedData.ContainsProductKey();
-            var pvKeyExists = _extendedData.ContainsProductVariantId();
+            var pvKeyExists = _extendedData.ContainsProductVariantKey();
 
             //// Assert
             Assert.IsTrue(pKeyExists);

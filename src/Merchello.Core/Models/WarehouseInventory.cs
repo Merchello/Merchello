@@ -11,30 +11,30 @@ namespace Merchello.Core.Models
     [DataContract(IsReference = true)]
     internal class WarehouseInventory : IWarehouseInventory
     {
-        private readonly int _warehouseId;
-        private readonly int _productVariantId;
+        private readonly Guid _warehouseKey;
+        private readonly Guid _productVariantKey;
 
-        public WarehouseInventory(int warehouseId, int productVariantId)
+        public WarehouseInventory(Guid warehouseKey, Guid productVariantKey)
         {            
-            _warehouseId = warehouseId;
-            _productVariantId = productVariantId;
+            _warehouseKey = warehouseKey;
+            _productVariantKey = productVariantKey;
         }
 
         /// <summary>
-        /// The warehouse Id
+        /// The warehouse key
         /// </summary>
         [DataMember]
-        public int WarehouseId
+        public Guid WarehouseKey
         {
-            get { return _warehouseId; }
+            get { return _warehouseKey; }
         }
 
         /// <summary>
-        /// The unique id of the product variant
+        /// The unique key of the product variant
         /// </summary>
         [DataMember]
-        public int ProductVariantId {
-            get { return _productVariantId; }
+        public Guid ProductVariantKey {
+            get { return _productVariantKey; }
         }
 
         /// <summary>

@@ -1,5 +1,4 @@
 ﻿using System;
-using Merchello.Core.Gateway;
 using Merchello.Core.Services;
 using Umbraco.Core;
 
@@ -20,10 +19,6 @@ namespace Merchello.Core
         /// </summary>
         IServiceContext Services { get; }
 
-        /// <summary>
-        /// The Merchello <see cref="IGatewayContext"/>
-        /// </summary>
-        IGatewayContext Gateways { get; }
 
         /// <summary>
         /// True/false indicating whether or not <see cref="CoreBootManager"/> has successfully booted

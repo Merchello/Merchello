@@ -9,9 +9,9 @@ namespace Merchello.Core.Models
 
     [Serializable]
     [DataContract(IsReference = true)]
-    public class CustomerAddress : IdEntity, ICustomerAddress
+    public class CustomerAddress : Entity, ICustomerAddress
     {
-        private readonly int _customerId;
+        private readonly Guid _customerKey;
         private string _label;
         private string _fullName;
         private string _company;
@@ -24,9 +24,9 @@ namespace Merchello.Core.Models
         private string _countryCode;
         private string _phone;
 
-        internal CustomerAddress(int customerId, string label)
+        internal CustomerAddress(Guid customerKey, string label)
         {
-            _customerId = customerId;
+            _customerKey = customerKey;
             _label = label;
         }
 
@@ -35,7 +35,7 @@ namespace Merchello.Core.Models
         {            
             Mandate.ParameterNotNull(customer, "customer");
             Mandate.ParameterNotNull(label, "label");
-            _customerId = customer.Id;
+            _customerKey = customer.Key;
             _label = label;
 
         }
@@ -56,9 +56,9 @@ namespace Merchello.Core.Models
         /// The customer id associated with the address
         /// </summary>
         [DataMember]
-        public int CustomerId
+        public Guid CustomerKey
         {
-            get { return _customerId; }
+            get { return _customerKey; }
         }
 
         /// <summary>

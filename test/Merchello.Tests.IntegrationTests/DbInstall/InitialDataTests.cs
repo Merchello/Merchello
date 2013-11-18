@@ -47,7 +47,7 @@ namespace Merchello.Tests.IntegrationTests.DbInstall
 
             //// Act
             _creation.InitializeBaseData("merchInvoiceStatus");
-            var dtos = _database.Query<InvoiceStatusDto>("SELECT * FROM merchInvoiceStatus");
+            var dtos = _database.Query<InvoiceStatusDto>("SELECT * FROM merchInvoiceStatus").OrderBy(x => x.SortOrder);
 
             //// Assert
             Assert.IsTrue(dtos.Any());

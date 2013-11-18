@@ -5,17 +5,18 @@ using Umbraco.Core.Persistence.DatabaseAnnotations;
 namespace Merchello.Core.Models.Rdbms
 {
     [TableName("merchShipment")]
-    [PrimaryKey("id")]
+    [PrimaryKey("pk", autoIncrement = false)]
     [ExplicitColumns]
     internal class ShipmentDto
     {
-        [Column("id")]
-        [PrimaryKeyColumn]
-        public int Id { get; set; }
+        [Column("pk")]
+        [PrimaryKeyColumn(AutoIncrement = false)]
+        [Constraint(Default = "newid()")]
+        public Guid Key { get; set; }
 
-        [Column("orderId")]
-        [ForeignKey(typeof(OrderDto), Name = "FK_merchShipment_merchOrder", Column = "id")]
-        public int OrderId { get; set; }
+        [Column("orderKey")]
+        [ForeignKey(typeof(OrderDto), Name = "FK_merchShipment_merchOrder", Column = "pk")]
+        public Guid OrderKey { get; set; }
 
         [Column("address1")]
         [NullSetting(NullSetting = NullSettings.Null)]
@@ -53,10 +54,10 @@ namespace Merchello.Core.Models.Rdbms
         [NullSetting(NullSetting = NullSettings.Null)]
         public string Phone { get; set; }
 
-        [Column("shipMethodId")]
-        [ForeignKey(typeof(ShipMethodDto), Name = "FK_merchShipment_merchShipMethod", Column = "id")]
+        [Column("shipMethodKey")]
+        [ForeignKey(typeof(ShipMethodDto), Name = "FK_merchShipment_merchShipMethod", Column = "pk")]
         [NullSetting(NullSetting = NullSettings.Null)]
-        public int? ShipMethodId { get; set; }
+        public Guid? ShipMethodKey { get; set; }
 
         [Column("updateDate")]
         [Constraint(Default = "getdate()")]

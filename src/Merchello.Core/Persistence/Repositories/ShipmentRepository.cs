@@ -4,26 +4,22 @@ using System.Linq;
 using Merchello.Core.Models;
 using Merchello.Core.Models.EntityBase;
 using Merchello.Core.Models.Rdbms;
-using Merchello.Core.Persistence.Caching;
 using Merchello.Core.Persistence.Factories;
 using Merchello.Core.Persistence.Querying;
+using Merchello.Core.Persistence.UnitOfWork;
 using Umbraco.Core;
+using Umbraco.Core.Cache;
 using Umbraco.Core.Persistence;
 using Umbraco.Core.Persistence.Querying;
-using Umbraco.Core.Persistence.UnitOfWork;
+
 
 namespace Merchello.Core.Persistence.Repositories
 {
-    internal class ShipmentRepository : MerchelloPetaPocoRepositoryBase<int, IShipment>, IShipmentRepository
+    internal class ShipmentRepository : MerchelloPetaPocoRepositoryBase<IShipment>, IShipmentRepository
     {
 
-        public ShipmentRepository(IDatabaseUnitOfWork work)
-            : base(work)
-        {
 
-        }
-
-        public ShipmentRepository(IDatabaseUnitOfWork work, IRepositoryCacheProvider cache)
+        public ShipmentRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache)
             : base(work, cache)
         {
         }
@@ -31,10 +27,10 @@ namespace Merchello.Core.Persistence.Repositories
         #region Overrides of RepositoryBase<IShipment>
 
 
-        protected override IShipment PerformGet(int id)
+        protected override IShipment PerformGet(Guid key)
         {
             var sql = GetBaseQuery(false)
-                .Where(GetBaseWhereClause(), new { Id = id });
+                .Where(GetBaseWhereClause(), new { Key = key });
 
             var dto = Database.Fetch<ShipmentDto>(sql).FirstOrDefault();
 
@@ -48,13 +44,13 @@ namespace Merchello.Core.Persistence.Repositories
             return shipment;
         }
 
-        protected override IEnumerable<IShipment> PerformGetAll(params int[] ids)
+        protected override IEnumerable<IShipment> PerformGetAll(params Guid[] keys)
         {
-            if (ids.Any())
+            if (keys.Any())
             {
-                foreach (var id in ids)
+                foreach (var key in keys)
                 {
-                    yield return Get(id);
+                    yield return Get(key);
                 }
             }
             else
@@ -83,14 +79,14 @@ namespace Merchello.Core.Persistence.Repositories
 
         protected override string GetBaseWhereClause()
         {
-            return "merchShipment.id = @Id";
+            return "merchShipment.pk = @Key";
         }
 
         protected override IEnumerable<string> GetDeleteClauses()
         {
             var list = new List<string>
                 {
-                    "DELETE FROM merchShipment WHERE id = @Id",
+                    "DELETE FROM merchShipment WHERE pk = @Key",
                 };
 
             return list;
@@ -98,19 +94,19 @@ namespace Merchello.Core.Persistence.Repositories
 
         protected override void PersistNewItem(IShipment entity)
         {
-            ((IdEntity)entity).AddingEntity();
+            ((Entity)entity).AddingEntity();
 
             var factory = new ShipmentFactory();
             var dto = factory.BuildDto(entity);
 
             Database.Insert(dto);
-            entity.Id = dto.Id;
+
             entity.ResetDirtyProperties();
         }
 
         protected override void PersistUpdatedItem(IShipment entity)
         {
-            ((IdEntity)entity).UpdatingEntity();
+            ((Entity)entity).UpdatingEntity();
 
             var factory = new ShipmentFactory();
             var dto = factory.BuildDto(entity);
@@ -125,7 +121,7 @@ namespace Merchello.Core.Persistence.Repositories
             var deletes = GetDeleteClauses();
             foreach (var delete in deletes)
             {
-                Database.Execute(delete, new { Id = entity.Id });
+                Database.Execute(delete, new { Key = entity.Key });
             }
         }
 
@@ -138,7 +134,7 @@ namespace Merchello.Core.Persistence.Repositories
 
             var dtos = Database.Fetch<ShipmentDto>(sql);
 
-            return dtos.DistinctBy(x => x.Id).Select(dto => Get(dto.Id));
+            return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
 
         }
 

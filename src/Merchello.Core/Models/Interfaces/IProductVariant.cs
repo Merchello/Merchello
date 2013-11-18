@@ -7,7 +7,7 @@ namespace Merchello.Core.Models
     /// <summary>
     /// Defines a product variant
     /// </summary>
-    public interface IProductVariant : IProductBase, IIdEntity
+    public interface IProductVariant : IProductBase, IEntity
     {
         /// <summary>
         /// The key for the defining product

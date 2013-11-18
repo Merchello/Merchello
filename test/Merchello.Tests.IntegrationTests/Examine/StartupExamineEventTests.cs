@@ -85,7 +85,7 @@ namespace Merchello.Tests.IntegrationTests.Examine
 
         private static void DeleteProductVariantFromIndex(IProductVariant productVariant)
         {
-            ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"].DeleteFromIndex(productVariant.Id.ToString());            
+            ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"].DeleteFromIndex(((ProductVariant)productVariant).ExamineId.ToString());            
         }
 
         #endregion

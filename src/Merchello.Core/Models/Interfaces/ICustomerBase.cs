@@ -7,7 +7,7 @@ namespace Merchello.Core.Models
     /// <summary>
     /// Defines the customer base class 
     /// </summary>
-    public interface ICustomerBase 
+    public interface ICustomerBase : IEntity
     {
         [DataMember]
         Guid EntityKey { get; }

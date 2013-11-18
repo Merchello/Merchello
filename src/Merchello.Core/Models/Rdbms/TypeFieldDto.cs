@@ -11,6 +11,7 @@ namespace Merchello.Core.Models.Rdbms
     {
         [Column("pk")]
         [PrimaryKeyColumn(AutoIncrement = false)]
+        [Constraint(Default = "newid()")]
         public Guid Key { get; set; }
 
         [Column("name")]

@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Data.SqlServerCe;
 using System.Linq;
 using Examine;
-using Examine.LuceneEngine;
 using Merchello.Core.Models;
 using Merchello.Examine;
 using Newtonsoft.Json;
@@ -40,7 +37,7 @@ namespace Merchello.Web.Models.ContentEditing
         {
             var pvd = new ProductVariantDisplay()
             {
-                Id = result.Id,
+                Key = FieldAsGuid(result, "productVariantKey"),
                 ProductKey = FieldAsGuid(result, "productKey"),
                 Name = result.Fields["name"],
                 Sku = result.Fields["sku"],

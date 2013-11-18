@@ -1,28 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Merchello.Core.Models;
 using Merchello.Core.Models.EntityBase;
 using Merchello.Core.Models.Rdbms;
-using Merchello.Core.Persistence.Caching;
 using Merchello.Core.Persistence.Factories;
 using Merchello.Core.Persistence.Querying;
 using Umbraco.Core;
+using Umbraco.Core.Cache;
 using Umbraco.Core.Persistence;
 using Umbraco.Core.Persistence.Querying;
-using Umbraco.Core.Persistence.UnitOfWork;
+using IDatabaseUnitOfWork = Merchello.Core.Persistence.UnitOfWork.IDatabaseUnitOfWork;
 
 namespace Merchello.Core.Persistence.Repositories
 {
-    internal class PaymentRepository : MerchelloPetaPocoRepositoryBase<int, IPayment>, IPaymentRepository
+    internal class PaymentRepository : MerchelloPetaPocoRepositoryBase<IPayment>, IPaymentRepository
     {
 
-        public PaymentRepository(IDatabaseUnitOfWork work)
-            : base(work)
-        {
-
-        }
-
-        public PaymentRepository(IDatabaseUnitOfWork work, IRepositoryCacheProvider cache)
+        public PaymentRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache)
             : base(work, cache)
         {
         }
@@ -30,10 +25,10 @@ namespace Merchello.Core.Persistence.Repositories
         #region Overrides of RepositoryBase<IPayment>
 
 
-        protected override IPayment PerformGet(int id)
+        protected override IPayment PerformGet(Guid key)
         {
             var sql = GetBaseQuery(false)
-                .Where(GetBaseWhereClause(), new { Id = id });
+                .Where(GetBaseWhereClause(), new { Key = key });
 
             var dto = Database.Fetch<PaymentDto, CustomerDto>(sql).FirstOrDefault();
 
@@ -47,11 +42,11 @@ namespace Merchello.Core.Persistence.Repositories
             return payment;
         }
 
-        protected override IEnumerable<IPayment> PerformGetAll(params int[] ids)
+        protected override IEnumerable<IPayment> PerformGetAll(params Guid[] keys)
         {
-            if (ids.Any())
+            if (keys.Any())
             {
-                foreach (var id in ids)
+                foreach (var id in keys)
                 {
                     yield return Get(id);
                 }
@@ -77,22 +72,22 @@ namespace Merchello.Core.Persistence.Repositories
             sql.Select(isCount ? "COUNT(*)" : "*")
                .From<PaymentDto>()
                .InnerJoin<CustomerDto>()
-               .On<PaymentDto, CustomerDto>(left => left.CustomerId, right => right.Id);              
+               .On<PaymentDto, CustomerDto>(left => left.CustomerKey, right => right.Key);              
 
             return sql;
         }
 
         protected override string GetBaseWhereClause()
         {
-            return "merchPayment.id = @Id";
+            return "merchPayment.pk = @Key";
         }
 
         protected override IEnumerable<string> GetDeleteClauses()
         {
             var list = new List<string>
                 {
-                    "DELETE FROM merchTransaction WHERE paymentId = @Id",
-                    "DELETE FROM merchPayment WHERE id = @Id"
+                    "DELETE FROM merchTransaction WHERE paymentKey = @Key",
+                    "DELETE FROM merchPayment WHERE pk = @Key"
                 };
 
             return list;
@@ -100,19 +95,19 @@ namespace Merchello.Core.Persistence.Repositories
 
         protected override void PersistNewItem(IPayment entity)
         {
-            ((IdEntity)entity).AddingEntity();
+            ((Entity)entity).AddingEntity();
 
             var factory = new PaymentFactory();
             var dto = factory.BuildDto(entity);
 
             Database.Insert(dto);
-            entity.Id = dto.Id;
+
             entity.ResetDirtyProperties();
         }
 
         protected override void PersistUpdatedItem(IPayment entity)
         {
-            ((IdEntity)entity).UpdatingEntity();
+            ((Entity)entity).UpdatingEntity();
 
             var factory = new PaymentFactory();
             var dto = factory.BuildDto(entity);
@@ -127,7 +122,7 @@ namespace Merchello.Core.Persistence.Repositories
             var deletes = GetDeleteClauses();
             foreach (var delete in deletes)
             {
-                Database.Execute(delete, new { Id = entity.Id });
+                Database.Execute(delete, new { Key = entity.Key });
             }
         }
 
@@ -140,13 +135,12 @@ namespace Merchello.Core.Persistence.Repositories
 
             var dtos = Database.Fetch<PaymentDto, CustomerDto>(sql);
 
-            return dtos.DistinctBy(x => x.Id).Select(dto => Get(dto.Id));
+            return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
 
         }
 
 
         #endregion
-
 
 
     }

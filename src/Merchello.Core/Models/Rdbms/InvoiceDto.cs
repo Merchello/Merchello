@@ -5,23 +5,24 @@ using Umbraco.Core.Persistence.DatabaseAnnotations;
 namespace Merchello.Core.Models.Rdbms
 {
     [TableName("merchInvoice")]
-    [PrimaryKey("id")]
+    [PrimaryKey("pk", autoIncrement = false)]
     [ExplicitColumns]
     internal class InvoiceDto
     {
-        [Column("id")]
-        [PrimaryKeyColumn]
-        public int Id { get; set; }
+        [Column("pk")]
+        [PrimaryKeyColumn(AutoIncrement = false)]
+        [Constraint(Default = "newid()")]
+        public Guid Key { get; set; }
 
-        [Column("orderId")]
-        [ForeignKey(typeof(OrderDto), Name = "FK_merchInvoice_merchOrder", Column = "id")]
+        [Column("orderKey")]
+        [ForeignKey(typeof(OrderDto), Name = "FK_merchInvoice_merchOrder", Column = "pk")]
         [NullSetting(NullSetting = NullSettings.Null)]
-        public int? OrderId { get; set; }
+        public Guid? OrderKey { get; set; }
 
-        [Column("customerId")]
-        [ForeignKey(typeof(CustomerDto), Name = "FK_merchInvoice_merchCustomer",Column = "id")]
-        [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchInvoiceCustomer")]
-        public int CustomerId { get; set; }
+        [Column("customerKey")]
+        [ForeignKey(typeof(CustomerDto), Name = "FK_merchInvoice_merchCustomer",Column = "pk")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public Guid? CustomerKey { get; set; }
 
         [Column("invoiceNumber")]
         [IndexAttribute(IndexTypes.UniqueNonClustered, Name = "IX_merchInvoiceNumber")]
@@ -31,9 +32,9 @@ namespace Merchello.Core.Models.Rdbms
         [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchInvoiceDate")]
         public DateTime InvoiceDate { get; set; }
 
-        [Column("invoiceStatusId")]
-        [ForeignKey(typeof(InvoiceStatusDto), Name = "FK_merchInvoice_merchInvoiceStatus", Column = "id")]
-        public int InvoiceStatusId { get; set; }
+        [Column("invoiceStatusKey")]
+        [ForeignKey(typeof(InvoiceStatusDto), Name = "FK_merchInvoice_merchInvoiceStatus", Column = "pk")]
+        public Guid InvoiceStatusKey { get; set; }
 
         [Column("billToName")]
         [NullSetting(NullSetting = NullSettings.Null)]

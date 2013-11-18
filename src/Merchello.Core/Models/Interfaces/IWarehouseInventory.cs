@@ -10,16 +10,16 @@ namespace Merchello.Core.Models
     public interface IWarehouseInventory
     {
         /// <summary>
-        /// The warehouse Id
+        /// The warehouse key
         /// </summary>
         [DataMember]
-        int WarehouseId { get; }
+        Guid WarehouseKey { get; }
 
         /// <summary>
         /// The unique id of the product variant
         /// </summary>
         [DataMember]
-        int ProductVariantId { get; }
+        Guid ProductVariantKey { get; }
 
         /// <summary>
         /// The number of products in inventory for the warehouse

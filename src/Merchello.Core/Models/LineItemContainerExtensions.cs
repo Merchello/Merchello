@@ -32,7 +32,7 @@
         /// </summary>
         public static void AddItem(this ILineItemContainer container, LineItemType lineItemType, string name, string sku, int quantity, decimal amount, ExtendedDataCollection extendedData)
         {
-            container.AddItem(new ItemCacheLineItem(container.Id, lineItemType, name, sku, quantity, amount, extendedData));
+            container.AddItem(new ItemCacheLineItem(container.Key, lineItemType, name, sku, quantity, amount, extendedData));
         }
 
         /// <summary>

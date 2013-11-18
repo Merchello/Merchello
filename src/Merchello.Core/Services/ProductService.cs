@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Merchello.Core.Persistence.UnitOfWork;
 using Umbraco.Core.Events;
 using Merchello.Core.Models;
 using Merchello.Core.Persistence;
 using Umbraco.Core;
-using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Core.Services
 {

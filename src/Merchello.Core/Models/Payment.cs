@@ -9,11 +9,10 @@ namespace Merchello.Core.Models
 
     [Serializable]
     [DataContract(IsReference = true)]
-    public class Payment : IdEntity, IPayment
+    public class Payment : Entity, IPayment
     {
         
-        private ICustomer _customer;
-        private int _customerId;
+        private Guid _customerKey;
         private Guid _providerKey;
         private Guid _paymentTypeFieldKey;
         private string _paymentMethodName;
@@ -31,14 +30,13 @@ namespace Merchello.Core.Models
         {
             // customer can make a payment without an invoice (credit) so invoice can be null
             Mandate.ParameterNotNull(customer, "customer");
-           
-            _customer = customer;
-            _customerId = customer.Id;            
+
+            _customerKey = customer.Key;            
             _amount = amount;
             _paymentTypeFieldKey = paymentTypeFieldKey;
         }        
 
-        private static readonly PropertyInfo CustomerIdSelector = ExpressionHelper.GetPropertyInfo<Payment, int>(x => x.CustomerId); 
+        private static readonly PropertyInfo CustomerKeySelector = ExpressionHelper.GetPropertyInfo<Payment, Guid>(x => x.CustomerKey); 
         private static readonly PropertyInfo ProviderKeySelector = ExpressionHelper.GetPropertyInfo<Payment, Guid>(x => x.ProviderKey);  
         private static readonly PropertyInfo PaymentTypeFieldKeySelector = ExpressionHelper.GetPropertyInfo<Payment, Guid>(x => x.PaymentTypeFieldKey);  
         private static readonly PropertyInfo PaymentMethodNameSelector = ExpressionHelper.GetPropertyInfo<Payment, string>(x => x.PaymentMethodName);  
@@ -52,33 +50,19 @@ namespace Merchello.Core.Models
         /// The customerKey associated with the Payment
         /// </summary>
         [IgnoreDataMember]
-        public int CustomerId
+        public Guid CustomerKey
         {
-            get { return _customer.Id; }
+            get { return _customerKey; }
             internal set
             {
                 SetPropertyValueAndDetectChanges(o =>
                 {
-                    _customerId = value;
-                    return _customerId;
-                }, _customerId, CustomerIdSelector);
+                    _customerKey = value;
+                    return _customerKey;
+                }, _customerKey, CustomerKeySelector);
             }
         }
-    
-        /// <summary>
-        /// The customer assoicated with the Payment
-        /// </summary>
-        [DataMember]
-        public ICustomer Customer
-        {
-            get { return _customer;  }
-            set
-            {
-                Mandate.ParameterNotNull(value, "value");
-                _customer = value;
-                CustomerId = _customer.Id;
-            }
-        }
+   
 
         /// <summary>
         /// The provider key associated with the fulfillment provider for this payment

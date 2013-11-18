@@ -6,21 +6,22 @@ using Umbraco.Core.Persistence.DatabaseAnnotations;
 namespace Merchello.Core.Models.Rdbms
 {
     [TableName("merchAppliedPayment")]
-    [PrimaryKey("id")]
+    [PrimaryKey("pk", autoIncrement = false)]
     [ExplicitColumns]
     internal class AppliedPaymentDto
     {
-        [Column("id")]
-        [PrimaryKeyColumn]
-        public int Id { get; set; }
+        [Column("pk")]
+        [PrimaryKeyColumn(AutoIncrement = false)]
+        [Constraint(Default = "newid()")]
+        public Guid Key { get; set; }
 
-        [Column("paymentId")]
-        [ForeignKey(typeof(PaymentDto), Name = "FK_merchAppliedPayment_merchPayment", Column = "id")]
-        public int PaymentId { get; set; }
+        [Column("paymentKey")]
+        [ForeignKey(typeof(PaymentDto), Name = "FK_merchAppliedPayment_merchPayment", Column = "pk")]
+        public Guid PaymentKey { get; set; }
 
-        [Column("invoiceId")]
-        [ForeignKey(typeof(InvoiceDto), Name = "FK_merchAppliedPayment_merchInvoice", Column = "id")]
-        public int InvoiceId { get; set; }
+        [Column("invoiceKey")]
+        [ForeignKey(typeof(InvoiceDto), Name = "FK_merchAppliedPayment_merchInvoice", Column = "pk")]
+        public Guid InvoiceKey { get; set; }
 
         [Column("appliedPaymentTfKey")]
         public Guid AppliedPaymentTfKey { get; set; }

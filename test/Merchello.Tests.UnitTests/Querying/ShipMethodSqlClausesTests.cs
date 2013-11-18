@@ -22,18 +22,18 @@ namespace Merchello.Tests.UnitTests.Querying
         public void Can_Verify_ShipMethod_Base_Sql_Clause()
         {
             //// Arrange
-            var id = 10;
+            var key = Guid.NewGuid();
 
             var expected = new Sql();
             expected.Select("*")
                 .From("[merchShipMethod]")
-                .Where("[merchShipMethod].[id] = " + id.ToString());
+                .Where("[merchShipMethod].[pk] = '" + key.ToString() + "'");
 
             //// Act
             var sql = new Sql();
             sql.Select("*")
                 .From<ShipMethodDto>()
-                .Where<ShipMethodDto>(x => x.Id == id);
+                .Where<ShipMethodDto>(x => x.Key == key);
 
             //// Assert
             Assert.That(sql.SQL, Is.EqualTo(expected.SQL));

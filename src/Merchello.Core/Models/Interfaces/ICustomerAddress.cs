@@ -7,14 +7,14 @@ namespace Merchello.Core.Models
     /// <summary>
     /// Defines a Merchello customer
     /// </summary>
-    public interface ICustomerAddress : IIdEntity
+    public interface ICustomerAddress : IEntity
     {
 
         /// <summary>
         /// The Customer id
         /// </summary>
         [DataMember]
-        int CustomerId { get; }
+        Guid CustomerKey { get; }
 
         /// <summary>
         /// The descriptive label for the address

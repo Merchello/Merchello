@@ -27,12 +27,12 @@ namespace Merchello.Core.Persistence.Mappers
 
         private MerchelloMapper()
         {
-            CacheMapper(typeof(ICustomerAddress), typeof(AddressMapper));
+            CacheMapper(typeof(ICustomerAddress), typeof(CustomerAddressMapper));
             CacheMapper(typeof(IAnonymousCustomer), typeof(AnonymousCustomerMapper));
-            CacheMapper(typeof(IItemCache), typeof(CustomerItemCacheMapper));            
-            CacheMapper(typeof(IItemCacheLineItem), typeof(CustomerItemCacheItemMapper));
+            CacheMapper(typeof(IItemCache), typeof(ItemCacheMapper));
+            CacheMapper(typeof(IItemCacheLineItem), typeof(ItemCacheLineItemMapper));
             CacheMapper(typeof(ICustomer), typeof(CustomerMapper));
-            CacheMapper(typeof(IInvoice), typeof(InvoiceMapper));
+           // CacheMapper(typeof(IInvoice), typeof(InvoiceMapper));
             CacheMapper(typeof(IInvoiceLineItem), typeof(InvoiceLineItemMapper));
             CacheMapper(typeof(IInvoiceStatus), typeof(InvoiceStatusMapper));
             CacheMapper(typeof(IOrderLineItem), typeof(OrderLineItemMapper));
@@ -42,8 +42,7 @@ namespace Merchello.Core.Persistence.Mappers
             CacheMapper(typeof(IProductOption), typeof(ProductOptionMapper));
             CacheMapper(typeof(IAppliedPayment), typeof(AppliedPaymentMapper));
             CacheMapper(typeof(IShipment), typeof(ShipmentMapper));
-            CacheMapper(typeof(IShipMethod), typeof (ShipMethodMapper));
-            CacheMapper(typeof(IGatewayProvider), typeof(RegisteredGatewayProviderMapper));
+            CacheMapper(typeof(IShipMethod), typeof(ShipMethodMapper));
         }
 
 
@@ -58,22 +57,6 @@ namespace Merchello.Core.Persistence.Mappers
             MapperCache.AddOrUpdate(key, mapper, (x, y) => mapper);
         }
         
-        /// <summary>
-        /// Returns a list of entities that use guids as their primary keys
-        /// </summary>
-        private static readonly IEnumerable<Type> KeyedTypes = new List<Type>()
-            {
-                { typeof(IAnonymousCustomer) },
-                { typeof(IProduct) }
-            };
-
-        /// <summary>
-        /// Returns True/false indicating whether or not the type was registered as a KeyBasedType
-        /// </summary>
-        internal static bool IsKeyBasedType(Type type)
-        {
-            return KeyedTypes.Contains(type);
-        }
 
         internal Attempt<BaseMapper> ResolveByType(Type entityType)
         {

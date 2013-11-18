@@ -1,137 +1,128 @@
 ﻿using System;
 using Merchello.Core.Models;
 using Merchello.Core.Models.EntityBase;
-using Umbraco.Core.Models.EntityBase;
+
 
 namespace Merchello.Tests.Base.DataMakers
 {
     public static class DataMakerMockSavedExtensions
     {
-
-        #region IdEntity
         
 
-        public static ICustomerAddress MockSavedWithId(this ICustomerAddress entity, int id)
+        public static ICustomerAddress MockSavedWithKey(this ICustomerAddress entity, Guid key)
         {
-            entity.Id = id;
-            ((IdEntity) entity).AddingEntity();
+            entity.Key = key;
+            ((Entity) entity).AddingEntity();
             entity.ResetDirtyProperties();
             return entity;            
         }
 
-        public static IItemCache MockSavedWithId(this IItemCache entity, int id)
+        public static IItemCache MockSavedWithKey(this IItemCache entity, Guid key)
         {
-            entity.Id = id;
-            ((IdEntity)entity).AddingEntity();
+            entity.Key = key;
+            ((Entity)entity).AddingEntity();
             entity.ResetDirtyProperties();
             return entity;
         }
 
-        public static IOrderLineItem MockSavedWithId(this IOrderLineItem entity, int id)
+        public static IOrderLineItem MockSavedWithKey(this IOrderLineItem entity, Guid key)
         {
-            entity.Id = id;
-            ((IdEntity)entity).AddingEntity();
+            entity.Key = key;
+            ((Entity)entity).AddingEntity();
             entity.ResetDirtyProperties();
             return entity;
         }
 
-        public static IInvoice MockSavedWithId(this IInvoice entity, int id)
+        //public static IInvoice MockSavedWithId(this IInvoice entity, Guid key)
+        //{
+        //    entity.Key = key;
+        //    ((Entity)entity).AddingEntity();
+        //    entity.ResetDirtyProperties();
+        //    return entity;
+        //}
+
+        public static IInvoiceLineItem MockSavedWithKey(this IInvoiceLineItem entity, Guid key)
         {
-            entity.Id = id;
-            ((IdEntity)entity).AddingEntity();
+            entity.Key = key;
+            ((Entity)entity).AddingEntity();
             entity.ResetDirtyProperties();
             return entity;
         }
 
-        public static IInvoiceLineItem MockSavedWithId(this IInvoiceLineItem entity, int id)
+        public static IInvoiceStatus MockSavedWithKey(this IInvoiceStatus entity, Guid key)
         {
-            entity.Id = id;
-            ((IdEntity)entity).AddingEntity();
+            entity.Key = key;
+            ((Entity)entity).AddingEntity();
             entity.ResetDirtyProperties();
             return entity;
         }
 
-        public static IInvoiceStatus MockSavedWithId(this IInvoiceStatus entity, int id)
+        public static IPayment MockSavedWithKey(this IPayment entity, Guid key)
         {
-            entity.Id = id;
-            ((IdEntity)entity).AddingEntity();
+            entity.Key = key;
+            ((Entity)entity).AddingEntity();
             entity.ResetDirtyProperties();
             return entity;
         }
 
-        public static IPayment MockSavedWithId(this IPayment entity, int id)
+        public static IShipment MockSavedWithKey(this IShipment entity, Guid key)
         {
-            entity.Id = id;
-            ((IdEntity)entity).AddingEntity();
+            entity.Key = key;
+            ((Entity)entity).AddingEntity();
             entity.ResetDirtyProperties();
             return entity;
         }
 
-        public static IShipment MockSavedWithId(this IShipment entity, int id)
+        public static IShipMethod MockSavedWithKey(this IShipMethod entity, Guid key)
         {
-            entity.Id = id;
-            ((IdEntity)entity).AddingEntity();
+            entity.Key = key;
+            ((Entity)entity).AddingEntity();
             entity.ResetDirtyProperties();
             return entity;
         }
 
-        public static IShipMethod MockSavedWithId(this IShipMethod entity, int id)
+        public static IAppliedPayment MockSavedWithKey(this IAppliedPayment entity, Guid key)
         {
-            entity.Id = id;
-            ((IdEntity)entity).AddingEntity();
+            entity.Key = key;
+            ((Entity)entity).AddingEntity();
             entity.ResetDirtyProperties();
             return entity;
         }
 
-        public static IAppliedPayment MockSavedWithId(this IAppliedPayment entity, int id)
+        public static IWarehouse MockSavedWithKey(this IWarehouse entity, Guid key)
         {
-            entity.Id = id;
-            ((IdEntity)entity).AddingEntity();
+            entity.Key = key;
+            ((Entity)entity).AddingEntity();
             entity.ResetDirtyProperties();
             return entity;
         }
 
-        public static IWarehouse MockSavedWithId(this IWarehouse entity, int id)
+
+
+        public static ICustomer MockSavedWithKey(this ICustomer entity, Guid key)
         {
-            entity.Id = id;
-            ((IdEntity)entity).AddingEntity();
-            entity.ResetDirtyProperties();
-            return entity;
-        }
-
-        #endregion
-
-
-        #region KeyEntity
-
-        public static ICustomer MockSavedWithId(this ICustomer entity, int id)
-        {
-            ((IdEntity)entity).UpdatingEntity();
+            ((Entity)entity).UpdatingEntity();
             entity.Key = Guid.NewGuid();
-            entity.EntityKey = Guid.NewGuid();
-            entity.Id = id;
+            entity.Key = key;
             entity.ResetDirtyProperties();
             return entity;
         }
 
         public static IAnonymousCustomer MockSavedWithKey(this IAnonymousCustomer entity, Guid key)
         {
-            ((KeyEntity)entity).UpdatingEntity();
+            ((Entity)entity).UpdatingEntity();
             entity.Key = key;
             entity.ResetDirtyProperties();
             return entity;
         }
 
-        public static IProductVariant MockSavedWithId(this IProductVariant entity, int id)
+        public static IProductVariant MockSavedWithKey(this IProductVariant entity, Guid key)
         {
-            ((IdEntity)entity).UpdatingEntity();
-            entity.Id = id;
+            ((Entity)entity).UpdatingEntity();
+            entity.Key = key;
             entity.ResetDirtyProperties();
             return entity;
         }
-
-
-        #endregion
 
     }
 }

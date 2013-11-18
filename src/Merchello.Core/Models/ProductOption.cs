@@ -11,7 +11,7 @@ namespace Merchello.Core.Models
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    public class ProductOption : SimpleEntity, IProductOption
+    public class ProductOption : Entity, IProductOption
     {
         private string _name;
         private bool _required;

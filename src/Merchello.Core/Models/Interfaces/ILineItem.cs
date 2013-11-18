@@ -5,13 +5,13 @@ using Merchello.Core.Models.TypeFields;
 
 namespace Merchello.Core.Models
 {
-    public interface ILineItem : IIdEntity
+    public interface ILineItem : IEntity
     {
         /// <summary>
-        /// The ContainerId of the container collection
+        /// The key of the container collection
         /// </summary>
         [DataMember]
-        int ContainerId { get; }
+        Guid ContainerKey { get; }
 
         /// <summary>
         /// The line item type field key (<see cref="ITypeField"/>.TypeKey) for the registry item

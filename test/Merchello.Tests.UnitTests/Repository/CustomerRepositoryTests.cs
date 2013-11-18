@@ -37,7 +37,7 @@ namespace Merchello.Tests.UnitTests.Repository
         public void Save_Calls_Update()
         {
             //// Arrange
-            var customer = MockCustomerDataMaker.CustomerForInserting().MockSavedWithId(111);
+            var customer = MockCustomerDataMaker.CustomerForInserting().MockSavedWithKey(111);
 
             //// Act
             _repository.AddOrUpdate(customer);
@@ -50,7 +50,7 @@ namespace Merchello.Tests.UnitTests.Repository
         public void Delete_Calls_Delete()
         {
             //// Arrange
-            var customer = MockCustomerDataMaker.CustomerForInserting().MockSavedWithId(111);
+            var customer = MockCustomerDataMaker.CustomerForInserting().MockSavedWithKey(111);
 
             //// Act
             _repository.Delete(customer);

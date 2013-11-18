@@ -7,14 +7,14 @@ namespace Merchello.Core.Models
     /// <summary>
     /// Defines a Merchello Shipment object interface
     /// </summary>
-    public interface IShipment : IIdEntity
+    public interface IShipment : IEntity
     {
             
             /// <summary>
-            /// The invoiceId for the Shipment
+            /// The unique order 'key' for the Shipment
             /// </summary>
             [DataMember]
-            int InvoiceId { get; }
+            Guid OrderKey { get; }
             
             /// <summary>
             /// The line 1 of the shipping address for the Shipment
@@ -53,10 +53,10 @@ namespace Merchello.Core.Models
             string CountryCode { get; set;}
             
             /// <summary>
-            /// The shipMethodId for the Shipment
+            /// The shipMethod Key for the Shipment
             /// </summary>
             [DataMember]
-            int? ShipMethodId { get; set; }
+            Guid? ShipMethodKey { get; set; }
             
             /// <summary>
             /// The phone number at the shipping address for the Shipment

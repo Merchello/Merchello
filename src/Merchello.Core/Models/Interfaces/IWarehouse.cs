@@ -7,7 +7,7 @@ namespace Merchello.Core.Models
     /// <summary>
     /// Defines a Merchello Warehouse object interface
     /// </summary>
-    public interface IWarehouse : IIdEntity
+    public interface IWarehouse : IEntity
     {
             
         /// <summary>

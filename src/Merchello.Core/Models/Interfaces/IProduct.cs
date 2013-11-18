@@ -3,7 +3,7 @@ using Merchello.Core.Models.EntityBase;
 
 namespace Merchello.Core.Models
 {
-    public interface IProduct : IProductBase, IKeyEntity
+    public interface IProduct : IProductBase, IEntity
     {
 
         /// <summary>
@@ -24,15 +24,6 @@ namespace Merchello.Core.Models
         /// A product variant is the culmination of a product with product option choices selected
         /// </remarks>
         ProductVariantCollection ProductVariants { get; set; }
-
-
-
-        /// <summary>
-        /// Associates a product with a warehouse
-        /// </summary>
-        /// <param name="warehouseId">The 'unique' id of the <see cref="IWarehouse"/></param>
-        void AddToWarehouse(int warehouseId);
-
 
     }
 }

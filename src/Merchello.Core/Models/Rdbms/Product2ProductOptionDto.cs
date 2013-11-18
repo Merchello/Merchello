@@ -11,13 +11,13 @@ namespace Merchello.Core.Models.Rdbms
     internal class Product2ProductOptionDto
     {
         [Column("productKey")]
-        [PrimaryKeyColumn(AutoIncrement = false, Name = "PK_merchProduct2Option", OnColumns = "productKey, optionId")]
+        [PrimaryKeyColumn(AutoIncrement = false, Name = "PK_merchProduct2Option", OnColumns = "productKey, optionKey")]
         [ForeignKey(typeof(ProductDto), Name = "FK_merchProduct2Option_merchProduct", Column = "pk")]
         public Guid ProductKey { get; set; }
 
-        [Column("optionId")]
-        [ForeignKey(typeof(ProductOptionDto), Name = "FK_merchProduct2Option_merchOption", Column = "id")]
-        public int OptionId { get; set; }
+        [Column("optionKey")]
+        [ForeignKey(typeof(ProductOptionDto), Name = "FK_merchProduct2Option_merchOption", Column = "pk")]
+        public Guid OptionKey { get; set; }
 
         [Column("sortOrder")]
         public int SortOrder { get; set; }

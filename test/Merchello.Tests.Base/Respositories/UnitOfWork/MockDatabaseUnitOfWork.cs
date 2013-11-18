@@ -1,8 +1,9 @@
 ﻿using System;
+using Merchello.Core.Models.EntityBase;
+using Merchello.Core.Persistence.UnitOfWork;
 using Umbraco.Core;
-using Umbraco.Core.Models.EntityBase;
 using Umbraco.Core.Persistence;
-using Umbraco.Core.Persistence.UnitOfWork;
+
 
 namespace Merchello.Tests.Base.Respositories.UnitOfWork
 {

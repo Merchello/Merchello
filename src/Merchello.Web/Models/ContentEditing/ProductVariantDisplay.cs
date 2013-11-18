@@ -6,7 +6,7 @@ namespace Merchello.Web.Models.ContentEditing
 {
     public class ProductVariantDisplay : ProductDisplayBase
     {
-        public int Id { get; set; }
+        public Guid Key { get; set; }
         
         public Guid ProductKey { get; set; }
 

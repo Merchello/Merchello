@@ -7,13 +7,13 @@ namespace Merchello.Core.Models
     /// <summary>
     /// Defines a Merchello Payment 
     /// </summary>
-    public interface IPayment : IIdEntity
+    public interface IPayment : IEntity
     {                                               
         /// <summary>
-        /// The id of the customer associated with the Payment
+        /// The key of the customer associated with the Payment
         /// </summary>
         [DataMember]
-        int CustomerId { get; }
+        Guid CustomerKey { get; }
             
         /// <summary>
         /// The provider key for the payment provider

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading;
 using Merchello.Core.Models;
 using Merchello.Core.Persistence;
+using Merchello.Core.Persistence.UnitOfWork;
 using Umbraco.Core;
 using Umbraco.Core.Events;
-using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Core.Services
 {
@@ -157,35 +157,35 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Gets a Warehouse by its unique id - pk
         /// </summary>
-        /// <param name="id">int Id for the Warehouse</param>
+        /// <param name="key">int Id for the Warehouse</param>
         /// <returns><see cref="IWarehouse"/></returns>
-        public IWarehouse GetById(int id)
+        public IWarehouse GetByKey(Guid key)
         {
             using (var repository = _repositoryFactory.CreateWarehouseRepository(_uowProvider.GetUnitOfWork()))
             {
-                return repository.Get(id);
+                return repository.Get(key);
             }
         }
 
         /// <summary>
         /// Gets a list of Warehouse give a list of unique keys
         /// </summary>
-        /// <param name="ids">List of unique keys</param>
+        /// <param name="keys">List of unique keys</param>
         /// <returns></returns>
-        public IEnumerable<IWarehouse> GetByIds(IEnumerable<int> ids)
+        public IEnumerable<IWarehouse> GetByKeys(IEnumerable<Guid> keys)
         {
             using (var repository = _repositoryFactory.CreateWarehouseRepository(_uowProvider.GetUnitOfWork()))
             {
-                return repository.GetAll(ids.ToArray());
+                return repository.GetAll(keys.ToArray());
             }
         }
 
         /// <summary>
         /// Gets a list of warehouses associated with a ship method
         /// </summary>
-        /// <param name="shipMethodId">The id of the <see cref="IShipMethod"/></param>
+        /// <param name="shipMethodKey">The key of the <see cref="IShipMethod"/></param>
         /// <returns>A collection of <see cref="IWarehouse"/></returns>
-        public IEnumerable<IWarehouse> GetWarehousesForShipMethod(int shipMethodId)
+        public IEnumerable<IWarehouse> GetWarehousesForShipMethod(Guid shipMethodKey)
         {
             throw new NotImplementedException();
         }

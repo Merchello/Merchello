@@ -92,7 +92,7 @@ namespace Merchello.Tests.IntegrationTests.Examine
                 product.ProductOptions["Size"].Choices["XL"]
             };
 
-            productVariantService.CreateProductVariantWithId(product, attributes);
+            productVariantService.CreateProductVariantWithKey(product, attributes);
 
             provider.AddProductToIndex(product);
 

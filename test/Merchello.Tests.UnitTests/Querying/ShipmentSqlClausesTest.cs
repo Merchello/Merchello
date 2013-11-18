@@ -22,18 +22,18 @@ namespace Merchello.Tests.UnitTests.Querying
         public void Can_Verify_Shipment_Base_Sql_Clause()
         {
             //// Arrange
-            var id = 10;
+            var key = Guid.NewGuid();
 
             var expected = new Sql();
             expected.Select("*")
                 .From("[merchShipment]")
-                .Where("[merchShipment].[id] = " + id.ToString());
+                .Where("[merchShipment].[pk] = '" + key.ToString() + "'");
 
             //// Act
             var sql = new Sql();
             sql.Select("*")
                 .From<ShipmentDto>()
-                .Where<ShipmentDto>(x => x.Id == id);
+                .Where<ShipmentDto>(x => x.Key == key);
 
             //// Assert
             Assert.That(sql.SQL, Is.EqualTo(expected.SQL));
@@ -42,17 +42,17 @@ namespace Merchello.Tests.UnitTests.Querying
         [Test]
         public void Can_Verify_ShipMethod_Base_Sql_Clause()
         {
-            var id = 10;
+            var key = Guid.NewGuid();
 
             var expected = new Sql();
             expected.Select("*")
                 .From("[merchShipMethod]")
-                .Where("[merchShipMethod].[id] = " + id.ToString());
+                .Where("[merchShipMethod].[pk] = '" + key.ToString() + "'");
 
             var sql = new Sql();
             sql.Select("*")
                 .From<ShipMethodDto>()
-                .Where<ShipMethodDto>(x => x.Id == id);
+                .Where<ShipMethodDto>(x => x.Key == key);
 
             Assert.That(sql.SQL, Is.EqualTo(expected.SQL));
         }

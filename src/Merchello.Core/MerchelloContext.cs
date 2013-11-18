@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using Merchello.Core.Configuration;
-using Merchello.Core.Gateway;
 using Merchello.Core.Services;
 using Umbraco.Core;
 using Umbraco.Core.Logging;
@@ -58,7 +57,6 @@ namespace Merchello.Core
         bool _isReady = false;
         readonly ManualResetEventSlim _isReadyEvent = new System.Threading.ManualResetEventSlim(false);
         private IServiceContext _services;
-        private IGatewayContext _gatewayContext;
 
         public bool IsReady
         {
@@ -147,20 +145,7 @@ namespace Merchello.Core
             internal set { _services = value; }
         }
 
-        /// <summary>
-        /// Gets the current GatewayProviderRegistry
-        /// </summary>
-        public IGatewayContext Gateways
-        {
-            get
-            {
-                if(_gatewayContext == null)
-                    throw new InvalidOperationException("GatewayProvider have not been set on the MerchelloContext");
-                return _gatewayContext;
-            }
-            internal set { _gatewayContext = value; }
-        }
-
+       
         private volatile bool _disposed;
         private readonly ReaderWriterLockSlim _disposalLocker = new ReaderWriterLockSlim();
 

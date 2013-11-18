@@ -9,7 +9,7 @@ namespace Merchello.Core.Persistence.Factories
         {
             var entity = new ProductVariant(dto.Name, dto.Sku, dto.Price)
             {
-                Id = dto.Id,
+                Key = dto.Key,
                 ProductKey = dto.ProductKey,
                 CostOfGoods = dto.CostOfGoods,
                 SalePrice = dto.SalePrice,
@@ -27,6 +27,7 @@ namespace Merchello.Core.Persistence.Factories
                 Download = dto.Download,
                 DownloadMediaId = dto.DownloadMediaId,
                 Master = dto.Master,
+                ExamineId = dto.ProductVariantIndexDto.Id,
                 UpdateDate = dto.UpdateDate,
                 CreateDate = dto.CreateDate
             };
@@ -39,7 +40,7 @@ namespace Merchello.Core.Persistence.Factories
         {
             return new ProductVariantDto()
             {
-                Id = entity.Id,
+                Key = entity.Key,
                 ProductKey = entity.ProductKey,
                 Name = entity.Name,
                 Sku = entity.Sku,
@@ -60,6 +61,13 @@ namespace Merchello.Core.Persistence.Factories
                 Download = entity.Download,
                 DownloadMediaId = entity.DownloadMediaId,
                 Master = ((ProductVariant)entity).Master,
+                ProductVariantIndexDto = new ProductVariantIndexDto()
+                    {
+                      Id = ((ProductVariant)entity).ExamineId,
+                      ProductVariantKey = entity.Key,
+                      UpdateDate = entity.UpdateDate,
+                      CreateDate = entity.CreateDate
+                    },
                 UpdateDate = entity.UpdateDate,
                 CreateDate = entity.CreateDate
             };

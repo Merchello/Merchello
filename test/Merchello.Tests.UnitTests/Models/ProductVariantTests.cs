@@ -16,9 +16,9 @@ namespace Merchello.Tests.UnitTests.Models
         {
             _attributes = new ProductAttributeCollection()
                 {
-                    new ProductAttribute("Att1", "Sku1") { Id = 1 },
-                    new ProductAttribute("Att2", "Sku2") { Id = 2 },
-                    new ProductAttribute("Att3", "Sku3") { Id = 3 }
+                    new ProductAttribute("Att1", "Sku1") { Key = Guid.NewGuid() },
+                    new ProductAttribute("Att2", "Sku2") { Key = Guid.NewGuid() },
+                    new ProductAttribute("Att3", "Sku3") { Key = Guid.NewGuid() }
                 };
 
             _productVariant = new ProductVariant(Guid.NewGuid(), _attributes, new WarehouseInventoryCollection(), false, "Product1", "P1", 11M);
@@ -45,9 +45,9 @@ namespace Merchello.Tests.UnitTests.Models
             //// Arrange
             var collection = new ProductAttributeCollection()
                 {
-                    new ProductAttribute("Att1", "Sku1") { Id = 1 },
-                    new ProductAttribute("Att6", "Sku6") { Id = 6 },
-                    new ProductAttribute("Att3", "Sku3") { Id = 3 }
+                    new ProductAttribute("Att1", "Sku1") { Key = Guid.NewGuid() },
+                    new ProductAttribute("Att6", "Sku6") { Key = Guid.NewGuid() },
+                    new ProductAttribute("Att3", "Sku3") { Key = Guid.NewGuid() }
                 };
             
             //// Act / Assert
@@ -65,10 +65,10 @@ namespace Merchello.Tests.UnitTests.Models
             //// Arrange
             var collection = new ProductAttributeCollection()
                 {
-                    new ProductAttribute("Att1", "Sku1") { Id = 1 },
-                    new ProductAttribute("Att2", "Sku2") { Id = 2 },
-                    new ProductAttribute("Att3", "Sku3") { Id = 3 },
-                    new ProductAttribute("Att4", "Sku4") { Id = 4 },
+                    new ProductAttribute("Att1", "Sku1") { Key = Guid.NewGuid() },
+                    new ProductAttribute("Att2", "Sku2") { Key = Guid.NewGuid() },
+                    new ProductAttribute("Att3", "Sku3") { Key = Guid.NewGuid() },
+                    new ProductAttribute("Att4", "Sku4") { Key = Guid.NewGuid() },
                 };
 
             //// Act / Assert

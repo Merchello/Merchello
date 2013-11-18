@@ -9,7 +9,7 @@ namespace Merchello.Core.Persistence.Factories
         {
             var shipMethod = new ShipMethod()
             {
-                Id = dto.Id,
+                Key = dto.Key,
                 Name = dto.Name,
                 ProviderKey = dto.ProviderKey,
                 ShipMethodTypeFieldKey = dto.ShipMethodTfKey,
@@ -28,7 +28,7 @@ namespace Merchello.Core.Persistence.Factories
         {
             var dto = new ShipMethodDto()
             {
-                Id = entity.Id,
+                Key = entity.Key,
                 Name = entity.Name,
                 ProviderKey = entity.ProviderKey,
                 ShipMethodTfKey = entity.ShipMethodTypeFieldKey,

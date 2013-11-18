@@ -19,8 +19,8 @@ namespace Merchello.Core.Persistence.Mappers
         {
             if (!PropertyInfoCache.IsEmpty) return;
 
-            CacheMap<AppliedPayment, AppliedPaymentDto>(src => src.Id, dto => dto.Id);
-            CacheMap<AppliedPayment, AppliedPaymentDto>(src => src.PaymentId, dto => dto.PaymentId);
+            CacheMap<AppliedPayment, AppliedPaymentDto>(src => src.Key, dto => dto.Key);
+            CacheMap<AppliedPayment, AppliedPaymentDto>(src => src.PaymentKey, dto => dto.PaymentKey);
             CacheMap<AppliedPayment, AppliedPaymentDto>(src => src.AppliedPaymentTfKey, dto => dto.AppliedPaymentTfKey);
             CacheMap<AppliedPayment, AppliedPaymentDto>(src => src.Description, dto => dto.Description);
             CacheMap<AppliedPayment, AppliedPaymentDto>(src => src.Amount, dto => dto.Amount);

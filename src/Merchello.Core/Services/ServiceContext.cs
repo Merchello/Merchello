@@ -1,10 +1,7 @@
 ﻿using System;
-using System.ComponentModel;
-using Merchello.Core.Configuration;
-using Merchello.Core.Models;
 using Merchello.Core.Persistence;
-using Merchello.Core.Strategies.Payment;
-using Umbraco.Core.Persistence.UnitOfWork;
+using Merchello.Core.Persistence.UnitOfWork;
+
 
 namespace Merchello.Core.Services
 {
@@ -16,10 +13,10 @@ namespace Merchello.Core.Services
     {        
         private Lazy<CustomerService> _customerService;
         private Lazy<ItemCacheService> _basketService;    
-        private Lazy<InvoiceService> _invoiceService;
+        //private Lazy<InvoiceService> _invoiceService;
         private Lazy<ProductService> _productService;
         private Lazy<ProductVariantService> _productVariantService;
-        private Lazy<ShippingService> _shipmentService;        
+        //private Lazy<ShippingService> _shipmentService;        
         private Lazy<WarehouseService> _warehouseService;
 
         
@@ -49,8 +46,8 @@ namespace Merchello.Core.Services
                 _basketService = new Lazy<ItemCacheService>(() => new ItemCacheService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
 
-            if(_invoiceService == null)
-                _invoiceService = new Lazy<InvoiceService>(() => new InvoiceService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+            //if(_invoiceService == null)
+            //    _invoiceService = new Lazy<InvoiceService>(() => new InvoiceService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
             //if (_appliedPaymentService == null)
             //    _appliedPaymentService = new Lazy<AppliedPaymentService>(() => new AppliedPaymentService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
@@ -76,8 +73,8 @@ namespace Merchello.Core.Services
             if(_productService == null)
                 _productService = new Lazy<ProductService>(() => new ProductService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _productVariantService.Value));
 
-            if(_shipmentService == null)
-                _shipmentService = new Lazy<ShippingService>(() => new ShippingService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+            //if(_shipmentService == null)
+            //    _shipmentService = new Lazy<ShippingService>(() => new ShippingService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
 
             if(_warehouseService == null)
@@ -104,13 +101,13 @@ namespace Merchello.Core.Services
             get { return _basketService.Value;  }
         }
 
-        /// <summary>
-        /// Gets the <see cref="IInvoiceService"/>
-        /// </summary>
-        public IInvoiceService InvoiceService
-        {
-            get { return _invoiceService.Value; }
-        }
+        ///// <summary>
+        ///// Gets the <see cref="IInvoiceService"/>
+        ///// </summary>
+        //public IInvoiceService InvoiceService
+        //{
+        //    get { return _invoiceService.Value; }
+        //}
     
         /// <summary>
         /// Gets the <see cref="IProductService"/>
@@ -128,10 +125,10 @@ namespace Merchello.Core.Services
             get { return _productVariantService.Value; }
         }
 
-        public IShippingService ShippingService
-        {
-            get { return _shipmentService.Value; }
-        }        
+        //public IShippingService ShippingService
+        //{
+        //    get { return _shipmentService.Value; }
+        //}        
 
         public IWarehouseService WarehouseService
         {

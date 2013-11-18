@@ -10,7 +10,7 @@ namespace Merchello.Core.Persistence.Factories
             var payment = new Payment(
                new CustomerFactory().BuildEntity(dto.CustomerDto), dto.PaymentTfKey, dto.Amount)
             {
-                Id = dto.Id,
+                Key = dto.Key,
                 ProviderKey = dto.ProviderKey,
                 PaymentMethodName = dto.PaymentMethodName,
                 ReferenceNumber = dto.ReferenceNumber,
@@ -30,8 +30,8 @@ namespace Merchello.Core.Persistence.Factories
         {
             var dto = new PaymentDto()
             {
-                Id = entity.Id,                
-                CustomerId = entity.CustomerId,
+                Key = entity.Key,                
+                CustomerKey = entity.CustomerKey,
                 ProviderKey = entity.ProviderKey,
                 PaymentTfKey = entity.PaymentTypeFieldKey,
                 PaymentMethodName = entity.PaymentMethodName,

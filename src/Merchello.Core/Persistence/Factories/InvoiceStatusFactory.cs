@@ -9,7 +9,7 @@ namespace Merchello.Core.Persistence.Factories
         {
             var invoiceStatus = new InvoiceStatus()
             {
-                Id = dto.Id,
+                Key = dto.Key,
                 Name = dto.Name,
                 Alias = dto.Alias,
                 Reportable = dto.Reportable,
@@ -28,7 +28,7 @@ namespace Merchello.Core.Persistence.Factories
         {
             var dto = new InvoiceStatusDto()
             {
-                Id = entity.Id,
+                Key = entity.Key,
                 Name = entity.Name,
                 Alias = entity.Alias,
                 Reportable = entity.Reportable,

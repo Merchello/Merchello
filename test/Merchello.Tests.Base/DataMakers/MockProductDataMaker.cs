@@ -25,7 +25,6 @@ namespace Merchello.Tests.Base.DataMakers
         {
             var product = MockProductForInserting();
             ((Product)product).AddingEntity();
-            product.Key = key;
             product.ResetDirtyProperties();
             return product;
         }

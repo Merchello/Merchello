@@ -5,7 +5,7 @@ using Merchello.Core.Configuration;
 using Merchello.Core.ObjectResolution;
 using Merchello.Core.Services;
 using Umbraco.Core;
-using Umbraco.Core.Persistence.UnitOfWork;
+using Merchello.Core.Persistence.UnitOfWork;
 
 
 namespace Merchello.Core

@@ -1,9 +1,9 @@
-﻿using System;
-using System.Data;
+﻿using Merchello.Core.Cache;
 using Merchello.Core.Models.Rdbms;
-using Merchello.Core.Persistence.Caching;
 using Merchello.Core.Persistence.Repositories;
-using Umbraco.Core.Persistence.UnitOfWork;
+using Merchello.Core.Persistence.UnitOfWork;
+using Umbraco.Core.Cache;
+
 
 namespace Merchello.Core.Persistence
 {
@@ -13,14 +13,18 @@ namespace Merchello.Core.Persistence
     public class RepositoryFactory
     {
         private readonly bool _disableAllCache;
+        private readonly IRuntimeCacheProvider _nullCacheProvider;
+        private readonly IRuntimeCacheProvider _runtimeCacheProvider;
 
         public RepositoryFactory()
-            : this(false)
+            : this(false, new NullCacheProvider(), new ObjectCacheRuntimeCacheProvider())
         { }
 
-        public RepositoryFactory(bool disableAllCache)
+        public RepositoryFactory(bool disableAllCache, IRuntimeCacheProvider nullCacheProvider, IRuntimeCacheProvider runtimeCacheProvider)
         {
             _disableAllCache = disableAllCache;
+            _nullCacheProvider = nullCacheProvider;
+            _runtimeCacheProvider = runtimeCacheProvider;
         }
 
         /// <summary>
@@ -29,7 +33,7 @@ namespace Merchello.Core.Persistence
         internal virtual ICustomerRepository CreateCustomerRepository(IDatabaseUnitOfWork uow)
         {
             return new CustomerRepository(uow,
-                _disableAllCache ? (IRepositoryCacheProvider)NullCacheProvider.Current : RuntimeCacheProvider.Current);
+                _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
         }
 
         /// <summary>
@@ -39,8 +43,7 @@ namespace Merchello.Core.Persistence
         /// <returns></returns>
         internal virtual IAnonymousCustomerRepository CreateAnonymousCustomerRepository(IDatabaseUnitOfWork uow)
         {
-            return new AnonymousCustomerRepository(uow,
-                _disableAllCache ? (IRepositoryCacheProvider)NullCacheProvider.Current : NullCacheProvider.Current);
+            return new AnonymousCustomerRepository(uow, _nullCacheProvider);                
         }
 
         /// <summary>
@@ -48,7 +51,7 @@ namespace Merchello.Core.Persistence
         /// </summary>        
         internal virtual ICustomerAddressRepository CreateCustomerAddressRepository(IDatabaseUnitOfWork uow)
         {
-            return new CustomerAddressRepository(uow, NullCacheProvider.Current);
+            return new CustomerAddressRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
         }
 
         /// <summary>
@@ -59,21 +62,21 @@ namespace Merchello.Core.Persistence
         internal virtual IItemCacheRepository CreateCustomerItemCacheRepository(IDatabaseUnitOfWork uow)
         {
             return new ItemCacheRepository(uow,
-                _disableAllCache ? (IRepositoryCacheProvider)NullCacheProvider.Current : NullCacheProvider.Current,
+                _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider,
                 CreateLineItemRepository<ItemCacheItemDto>(uow));
         }
 
 
-        /// <summary>
-        /// Returns an instance of the <see cref="IInvoiceRepository"/>
-        /// </summary>
-        /// <param name="uow"></param>
-        /// <returns></returns>
-        internal virtual IInvoiceRepository CreateInvoiceRepository(IDatabaseUnitOfWork uow)
-        {
-            return new InvoiceRepository(uow,
-                _disableAllCache ? (IRepositoryCacheProvider)NullCacheProvider.Current : RuntimeCacheProvider.Current);
-        }
+        ///// <summary>
+        ///// Returns an instance of the <see cref="IInvoiceRepository"/>
+        ///// </summary>
+        ///// <param name="uow"></param>
+        ///// <returns></returns>
+        //internal virtual IInvoiceRepository CreateInvoiceRepository(IDatabaseUnitOfWork uow)
+        //{
+        //    return new InvoiceRepository(uow,
+        //        _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
+        //}
 
         /// <summary>
         /// Returns an instance of the <see cref="ILineItemRepository"/>
@@ -85,7 +88,7 @@ namespace Merchello.Core.Persistence
             where TDto : ILineItemDto
         {
             return new LineItemRepository<TDto>(uow,
-                _disableAllCache ? (IRepositoryCacheProvider)NullCacheProvider.Current : NullCacheProvider.Current);
+                _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
         }
 
         /// <summary>
@@ -96,7 +99,7 @@ namespace Merchello.Core.Persistence
         internal virtual IPaymentRepository CreatePaymentRepository(IDatabaseUnitOfWork uow)
         {
             return new PaymentRepository(uow,
-                _disableAllCache ? (IRepositoryCacheProvider)NullCacheProvider.Current : RuntimeCacheProvider.Current);
+                _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
         }
 
         /// <summary>
@@ -107,7 +110,7 @@ namespace Merchello.Core.Persistence
         internal virtual IShipmentRepository CreateShipmentRepository(IDatabaseUnitOfWork uow)
         {
             return new ShipmentRepository(uow,
-                _disableAllCache ? (IRepositoryCacheProvider)NullCacheProvider.Current : RuntimeCacheProvider.Current);
+                _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
         }
 
 
@@ -119,7 +122,7 @@ namespace Merchello.Core.Persistence
         internal virtual IProductRepository CreateProductRepository(IDatabaseUnitOfWork uow)
         {
             return new ProductRepository(uow,
-                _disableAllCache ? (IRepositoryCacheProvider)NullCacheProvider.Current : RuntimeCacheProvider.Current, 
+                _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider,
                 CreateProductVariantRepository(uow));
         }
 
@@ -131,7 +134,7 @@ namespace Merchello.Core.Persistence
         internal virtual IProductVariantRepository CreateProductVariantRepository(IDatabaseUnitOfWork uow)
         {
             return new ProductVariantRepository(uow,
-               _disableAllCache ? (IRepositoryCacheProvider)NullCacheProvider.Current : NullCacheProvider.Current);
+               _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
         }
 
         /// <summary>
@@ -142,7 +145,7 @@ namespace Merchello.Core.Persistence
         internal virtual IWarehouseRepository CreateWarehouseRepository(IDatabaseUnitOfWork uow)
         {
             return new WarehouseRepository(uow,
-                _disableAllCache ? (IRepositoryCacheProvider)NullCacheProvider.Current : InMemoryCacheProvider.Current);
+               _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
         }
 
     }

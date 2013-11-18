@@ -23,21 +23,21 @@ namespace Merchello.Tests.UnitTests.Querying
         public void Can_Verify_Payment_Base_Sql_Clause()
         {
             //// Arrange
-            var id = 10;
+            var key = Guid.NewGuid();
 
             var expected = new Sql();
             expected.Select("*")
                 .From("[merchPayment]")
-                .InnerJoin("[merchCustomer]").On("[merchPayment].[customerId] = [merchCustomer].[id]")                
-                .Where("[merchPayment].[id] = " + id.ToString());
+                .InnerJoin("[merchCustomer]").On("[merchPayment].[customerKey] = [merchCustomer].[pk]")                
+                .Where("[merchPayment].[pk] = '" + key.ToString() + "'");
 
             //// Act
             var sql = new Sql();
             sql.Select("*")
                 .From<PaymentDto>()
                 .InnerJoin<CustomerDto>()
-                .On<PaymentDto, CustomerDto>(left => left.CustomerId, right => right.Id)                                
-                .Where<PaymentDto>(x => x.Id == id);
+                .On<PaymentDto, CustomerDto>(left => left.CustomerKey, right => right.Key)                                
+                .Where<PaymentDto>(x => x.Key == key);
 
             //// Assert
             Assert.That(sql.SQL, Is.EqualTo(expected.SQL));

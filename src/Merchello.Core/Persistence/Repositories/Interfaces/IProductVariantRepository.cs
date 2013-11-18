@@ -8,12 +8,12 @@ namespace Merchello.Core.Persistence.Repositories
     /// <summary>
     /// Defines the product variant repository
     /// </summary>
-    public interface IProductVariantRepository : IRepositoryQueryable<int, IProductVariant>
+    public interface IProductVariantRepository : IRepositoryQueryable<Guid, IProductVariant>
     {
         /// <summary>
         /// Returns <see cref="IProductVariant"/> given the product and the collection of attribute ids that defines the<see cref="IProductVariant"/>
         /// </summary>
-        IProductVariant GetProductVariantWithAttributes(IProduct product, int[] attributeIds);
+        IProductVariant GetProductVariantWithAttributes(IProduct product, Guid[] attributeKeys);
 
         /// <summary>
         /// Compares the <see cref="ProductAttributeCollection"/> with other <see cref="IProductVariant"/>s of the <see cref="IProduct"/> pass
@@ -35,9 +35,9 @@ namespace Merchello.Core.Persistence.Repositories
         /// <summary>
         /// Gets a collection of <see cref="IProductVariant"/> objects associated with a given warehouse 
         /// </summary>
-        /// <param name="warehouseId">The 'unique' id of the warehouse</param>
+        /// <param name="warehouseKey">The 'unique' id of the warehouse</param>
         /// <returns>A collection of <see cref="IProductVariant"/></returns>
-        IEnumerable<IProductVariant> GetByWarehouseId(int warehouseId);
+        IEnumerable<IProductVariant> GetByWarehouseKey(Guid warehouseKey);
 
         /// <summary>
         /// True/false indicating whether or not a sku is already exists in the database

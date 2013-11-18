@@ -10,7 +10,7 @@ namespace Merchello.Core.Persistence.Factories
         {
             var option = new ProductOption(dto.Name, dto.Required)
                 {
-                    Id = dto.Id,
+                    Key = dto.Key,
                     SortOrder = dto.Product2ProductOptionDto.SortOrder,
                     UpdateDate = dto.UpdateDate,
                     CreateDate = dto.CreateDate
@@ -24,7 +24,7 @@ namespace Merchello.Core.Persistence.Factories
         {
             return new ProductOptionDto()
                 {
-                    Id = entity.Id,
+                    Key = entity.Key,
                     Name = entity.Name,
                     Required = entity.Required,
                     CreateDate = entity.CreateDate,

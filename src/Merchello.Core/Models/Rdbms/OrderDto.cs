@@ -5,18 +5,19 @@ using Umbraco.Core.Persistence.DatabaseAnnotations;
 namespace Merchello.Core.Models.Rdbms
 {
     [TableName("merchOrder")]
-    [PrimaryKey("id")]
+    [PrimaryKey("pk", autoIncrement = false)]
     [ExplicitColumns]
     internal class OrderDto
     {
-        [Column("id")]
-        [PrimaryKeyColumn]
-        public int Id { get; set; }
+        [Column("pk")]
+        [PrimaryKeyColumn(AutoIncrement = false)]
+        [Constraint(Default = "newid()")]
+        public Guid Key { get; set; }
 
-        [Column("customerId")]
-        [ForeignKey(typeof(CustomerDto), Name = "FK_merchOrder_merchCustomer",Column = "id")]
-        [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchOrderCustomer")]
-        public int CustomerId { get; set; }
+        [Column("customerKey")]
+        [ForeignKey(typeof(CustomerDto), Name = "FK_merchOrder_merchCustomer",Column = "pk")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public Guid? CustomerKey { get; set; }
 
         [Column("orderNumber")]
         [IndexAttribute(IndexTypes.UniqueNonClustered, Name = "IX_merchOrderNumber")]
@@ -26,9 +27,9 @@ namespace Merchello.Core.Models.Rdbms
         [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchOrderDate")]
         public DateTime OrdereDate { get; set; }
 
-        [Column("orderStatusId")]
-        [ForeignKey(typeof(OrderStatusDto), Name = "FK_merchOrder_merchOrderStatus", Column = "id")]
-        public int OrderStatusId { get; set; }
+        [Column("orderStatusKey")]
+        [ForeignKey(typeof(OrderStatusDto), Name = "FK_merchOrder_merchOrderStatus", Column = "pk")]
+        public Guid OrderStatusKey { get; set; }
         
         [Column("exported")]
         public bool Exported { get; set; }

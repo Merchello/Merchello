@@ -9,7 +9,7 @@ namespace Merchello.Core.Models
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    internal class ProductAttribute : SimpleEntity, IProductAttribute
+    internal class ProductAttribute : Entity, IProductAttribute
     {
         private string _name;
         private string _sku;
@@ -28,7 +28,7 @@ namespace Merchello.Core.Models
         /// The id of the option which defines the attribute group this attribute belongs to
         /// </summary>
         [DataMember]
-        public int OptionId { get; set; }
+        public Guid OptionKey { get; set; }
 
 
         /// <summary>

@@ -5,10 +5,10 @@ using System.Threading;
 using Merchello.Core.Configuration;
 using Merchello.Core.Models;
 using Merchello.Core.Persistence;
-using Merchello.Core.Persistence.Querying;
+using Merchello.Core.Persistence.UnitOfWork;
 using Umbraco.Core;
 using Umbraco.Core.Events;
-using Umbraco.Core.Persistence.UnitOfWork;
+
 
 namespace Merchello.Core.Services
 {
@@ -47,24 +47,24 @@ namespace Merchello.Core.Services
         /// <param name="attributes"><see cref="IProductVariant"/></param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         /// <returns>Either a new <see cref="IProductVariant"/> or, if one already exists with associated attributes, the existing <see cref="IProductVariant"/></returns>
-        public IProductVariant CreateProductVariantWithId(IProduct product, ProductAttributeCollection attributes, bool raiseEvents = true)
+        public IProductVariant CreateProductVariantWithKey(IProduct product, ProductAttributeCollection attributes, bool raiseEvents = true)
         {
             var skuSeparator = MerchelloConfiguration.Current.DefaultSkuSeparator;
 
             // verify the order of the attributes so that a sku can be constructed in the same order as the UI
-            var optionIds = product.ProductOptionsForAttributes(attributes).OrderBy(x => x.SortOrder).Select(x => x.Id).Distinct();
+            var optionIds = product.ProductOptionsForAttributes(attributes).OrderBy(x => x.SortOrder).Select(x => x.Key).Distinct();
 
             // the base sku
             var sku = product.Sku;
             var name = string.Format("{0} - ", product.Name);
 
-            foreach (var att in optionIds.Select(id => attributes.FirstOrDefault(x => x.OptionId == id)).Where(att => att != null))
+            foreach (var att in optionIds.Select(key => attributes.FirstOrDefault(x => x.OptionKey == key)).Where(att => att != null))
             {
                 name += att.Name + " ";
                 sku += skuSeparator + att.Sku;
             }
 
-            return CreateProductVariantWithId(product, name.Trim(), sku, product.Price, attributes, raiseEvents);
+            return CreateProductVariantWithKey(product, name.Trim(), sku, product.Price, attributes, raiseEvents);
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace Merchello.Core.Services
         /// <param name="attributes"><see cref="IProductVariant"/></param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         /// <returns>Either a new <see cref="IProductVariant"/> or, if one already exists with associated attributes, the existing <see cref="IProductVariant"/></returns>
-        public IProductVariant CreateProductVariantWithId(IProduct product, string name, string sku, decimal price, ProductAttributeCollection attributes, bool raiseEvents = true)
+        public IProductVariant CreateProductVariantWithKey(IProduct product, string name, string sku, decimal price, ProductAttributeCollection attributes, bool raiseEvents = true)
         {
             Mandate.ParameterNotNull(product, "product");
             Mandate.ParameterNotNull(attributes, "attributes");
@@ -270,34 +270,34 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Gets an <see cref="IProductVariant"/> object by its 'UniqueId'
         /// </summary>
-        /// <param name="id">id of the Product to retrieve</param>
+        /// <param name="key">key of the Product to retrieve</param>
         /// <returns><see cref="IProductVariant"/></returns>
-        public IProductVariant GetById(int id)
+        public IProductVariant GetByKey(Guid key)
         {
             using (var repository = _repositoryFactory.CreateProductVariantRepository(_uowProvider.GetUnitOfWork()))
             {
-                return repository.Get(id);
+                return repository.Get(key);
             }
         }
 
         /// <summary>
         /// Gets list of <see cref="IProductVariant"/> objects given a list of Unique ids
         /// </summary>
-        /// <param name="ids">List of ids for ProductVariant objects to retrieve</param>
+        /// <param name="keys">List of keys for ProductVariant objects to retrieve</param>
         /// <returns>List of <see cref="IProduct"/></returns>
-        public IEnumerable<IProductVariant> GetByIds(IEnumerable<int> ids)
+        public IEnumerable<IProductVariant> GetByKeys(IEnumerable<Guid> keys)
         {
             using (var repository = _repositoryFactory.CreateProductVariantRepository(_uowProvider.GetUnitOfWork()))
             {
-                return repository.GetAll(ids.ToArray());
+                return repository.GetAll(keys.ToArray());
             }
         }
 
-        internal IEnumerable<IProductVariant> GetAll(params int[] ids)
+        internal IEnumerable<IProductVariant> GetAll(params Guid[] keys)
         {
             using (var repository = _repositoryFactory.CreateProductVariantRepository(_uowProvider.GetUnitOfWork()))
             {
-                return repository.GetAll(ids);
+                return repository.GetAll(keys);
             }
         }
 
@@ -317,24 +317,24 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Gets a collection of <see cref="IProductVariant"/> objects associated with a given warehouse 
         /// </summary>
-        /// <param name="warehouseId">The 'unique' id of the warehouse</param>
+        /// <param name="warehouseKey">The 'unique' key of the warehouse</param>
         /// <returns>A collection of <see cref="IProductVariant"/></returns>
-        public IEnumerable<IProductVariant> GetByWarehouseId(int warehouseId)
+        public IEnumerable<IProductVariant> GetByWarehouseKey(Guid warehouseKey)
         {
             using (var repository = _repositoryFactory.CreateProductVariantRepository(_uowProvider.GetUnitOfWork()))
             {
-                return repository.GetByWarehouseId(warehouseId);
+                return repository.GetByWarehouseKey(warehouseKey);
             }
         }
 
         /// <summary>
         /// Returns <see cref="IProductVariant"/> given the product and the collection of attribute ids that defines the<see cref="IProductVariant"/>
         /// </summary>
-        public IProductVariant GetProductVariantWithAttributes(IProduct product, int[] attributeIds)
+        public IProductVariant GetProductVariantWithAttributes(IProduct product, Guid[] attributeKeys)
         {
             using (var repository = _repositoryFactory.CreateProductVariantRepository(_uowProvider.GetUnitOfWork()))
             {
-                return repository.GetProductVariantWithAttributes(product, attributeIds);
+                return repository.GetProductVariantWithAttributes(product, attributeKeys);
             }
         }
 
