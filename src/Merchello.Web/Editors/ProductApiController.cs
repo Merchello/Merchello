@@ -58,7 +58,7 @@ namespace Merchello.Web.Editors
         /// <summary>
         /// Returns Product by id (key)
         /// 
-        /// GET /umbraco/Merchello/ProductApi/GetProduct?key={guid}
+        /// GET /umbraco/Merchello/ProductApi/GetProduct/{guid}
         /// </summary>
         /// <param name="id"></param>
         public ProductDisplay GetProduct(Guid id)
@@ -77,7 +77,7 @@ namespace Merchello.Web.Editors
             {
                 var resp = new HttpResponseMessage(HttpStatusCode.NotFound)
                 {
-                    Content = new StringContent(string.Format("Parameter key is null")),
+                    Content = new StringContent(string.Format("Parameter id is null")),
                     ReasonPhrase = "Invalid Parameter"
                 };
                 throw new HttpResponseException(resp);
@@ -110,12 +110,12 @@ namespace Merchello.Web.Editors
         /// 
         /// GET /umbraco/Merchello/ProductApi/GetProducts?keys={guid}&keys={guid}
         /// </summary>
-        /// <param name="ids"></param>
-        public IEnumerable<ProductDisplay> GetProducts([FromUri]IEnumerable<Guid> ids)
+        /// <param name="keys"></param>
+        public IEnumerable<ProductDisplay> GetProducts([FromUri]IEnumerable<Guid> keys)
         {
-            if (ids != null)
+            if (keys != null)
             {
-                var products = _productService.GetByKeys(ids);
+                var products = _productService.GetByKeys(keys);
                 if (products == null)
                 {
                     //throw new HttpResponseException(HttpStatusCode.NotFound);

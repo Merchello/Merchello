@@ -155,25 +155,32 @@ namespace Merchello.Web.Editors
             {
                 Product product = _productService.GetByKey(productVariant.ProductKey) as Product;
 
-                ProductAttributeCollection productAttributes = new ProductAttributeCollection();
-                foreach (var attribute in productVariant.Attributes)
+                if (product != null)
                 {
-                    // TODO: This should be refactored into an extension method
-                    ProductOption productOption = product.ProductOptions.FirstOrDefault(x => x.Key == attribute.OptionKey) as ProductOption;
-                    // TODO: This should be refactored into an extension method
-                    IProductAttribute productAttribute = null;
-                    foreach (var attr in productOption.Choices)
+                    ProductAttributeCollection productAttributes = new ProductAttributeCollection();
+                    foreach (var attribute in productVariant.Attributes)
                     {
-                        if( attr.Name == attribute.Name )
+                        // TODO: This should be refactored into an extension method
+                        ProductOption productOption = product.ProductOptions.FirstOrDefault(x => x.Key == attribute.OptionKey) as ProductOption;
+                        // TODO: This should be refactored into an extension method
+                        IProductAttribute productAttribute = null;
+                        foreach (var attr in productOption.Choices)
                         {
-                            productAttribute = attr;
-                            break;
+                            if (attr.Name == attribute.Name)
+                            {
+                                productAttribute = attr;
+                                break;
+                            }
                         }
+                        productAttributes.Add(attribute.ToProductAttribute(productAttribute));
                     }
-                    productAttributes.Add(attribute.ToProductAttribute(productAttribute));
-                }
 
-                newProductVariant = _productVariantService.CreateProductVariantWithKey(product, productVariant.Name, productVariant.Sku, productVariant.Price, productAttributes, true);
+                    newProductVariant = _productVariantService.CreateProductVariantWithKey(product, productVariant.Name, productVariant.Sku, productVariant.Price, productAttributes, true);
+                }
+                else
+                {
+                    throw new HttpResponseException(HttpStatusCode.InternalServerError);
+                }
             }
             catch (Exception)
             {
