@@ -25,9 +25,8 @@
 
                 return umbRequestHelper.resourcePromise(
                    $http({
-                       url: '/umbraco/Merchello/ProductApi/GetProduct',
-                       method: "GET",
-                       params: { key: key }
+                       url: '/umbraco/Merchello/ProductApi/GetProduct/' + key,
+                       method: "GET"
                    }),
                    'Failed to retreive data for product key ' + key);
             },
