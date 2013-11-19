@@ -63,33 +63,29 @@ namespace Merchello.Tests.Base.TypeFields
 
         #endregion
 
-        #region InvoiceItemType TypeFields
+        #region LineItemType TypeFields
 
-        public static ITypeField InvoiceItemItem
+        public static ITypeField LineItemProduct
         {
-            get { return new TypeField("Item", "Item", new Guid("576CB1FB-5C0D-45F5-8CCD-94F63D174902")); }
+            get { return new TypeField("Product", "Product", new Guid("D462C051-07F4-45F5-AAD2-D5C844159F04")); }
         }
 
-        public static ITypeField InvoiceItemCharge
+        public static ITypeField LineItemShipping
         {
-            get { return new TypeField("Charge", "Charge or Fee", new Guid("5574BB84-1C96-4F7E-91FB-CFD7C11162A0")); }
+            get { return new TypeField("Shipping", "Shipping", new Guid("6F3119EA-53F8-41D0-9249-167B8D32AE81")); }
         }
 
-        public static ITypeField InvoiceItemShipping
+        public static ITypeField LineItemTax
         {
-            get { return new TypeField("Shipping", "Shipping", new Guid("7E69FFD2-394C-44BF-9442-B86F67AEC110")); }
+            get { return new TypeField("Tax", "Tax", new Guid("B73C17BC-50D8-4B67-B343-9F0AF7A6E62E")); }
         }
 
-        public static ITypeField InvoiceItemTax
+        public static ITypeField LineItemDiscount
         {
-            get { return new TypeField("Tax", "Tax", new Guid("3F4830C8-FB7C-4393-831D-3953525541B3")); }
+            get { return new TypeField("Discount", "Discount", new Guid("E7CC502D-DE7C-4C37-8A9C-837760533A76")); }
         }
 
-        public static ITypeField InvoiceItemCredit
-        {
-            get { return new TypeField("Credit", "Credit", new Guid("18DEF584-E92A-42F5-9F6F-A49034DAB34F")); }
-        }
-
+       
         #endregion
 
         #region PaymentMethodType TypeFields

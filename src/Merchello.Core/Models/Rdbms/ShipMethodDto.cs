@@ -31,6 +31,9 @@ namespace Merchello.Core.Models.Rdbms
         [NullSetting(NullSetting = NullSettings.Null)]
         public string ServiceCode { get; set; }
 
+        [Column("taxable")]
+        public bool Taxable { get; set; }
+
         [Column("updateDate")]
         [Constraint(Default = "getdate()")]
         public DateTime UpdateDate { get; set; }

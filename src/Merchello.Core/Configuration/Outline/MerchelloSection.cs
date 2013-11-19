@@ -66,5 +66,14 @@ namespace Merchello.Core.Configuration.Outline
             get { return (TypeFieldDefinitionsElement) this["typeFieldDefinitions"];  }
         }
 
+        /// <summary>
+        /// Gets the RegionalProvince collection
+        /// </summary>
+        [ConfigurationProperty("regionalProvinces", IsRequired = true), ConfigurationCollection(typeof(RegionalProvinceCollection), AddItemName = "region")]
+        public RegionalProvinceCollection RegionalProvinces
+        {
+            get { return (RegionalProvinceCollection) this["regionalProvinces"]; }
+        }
+
     }
 }

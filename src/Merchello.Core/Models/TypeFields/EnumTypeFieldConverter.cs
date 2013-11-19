@@ -35,15 +35,7 @@ namespace Merchello.Core.Models.TypeFields
             get { return new LineItemTypeField(); }
         }
 
-        /// <summary>
-        /// Creates an instance of an <see cref="IInvoiceItemTypeField"/> object
-        /// </summary>
-        /// <returns></returns>
-        internal static IInvoiceItemTypeField InvoiceItem
-        {
-            get { return new InvoiceItemTypeField(); }
-        }
-
+      
         /// <summary>
         /// Creates an instance of an <see cref="IPaymentMethodTypeField"/> object
         /// </summary>
