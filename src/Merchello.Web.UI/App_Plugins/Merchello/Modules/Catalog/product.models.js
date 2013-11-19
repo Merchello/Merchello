@@ -1,5 +1,7 @@
 ﻿(function (models, undefined) {
 
+    models.emptyGuid = "00000000-0000-0000-0000-000000000000";
+
 
     models.ProductAttribute = function (productAttributeFromServer) {
 
@@ -7,14 +9,16 @@
 
         if (productAttributeFromServer == undefined)
         {
-            self.optionId = "";
+            self.attributeKey = "";
+            self.optionKey = "";
             self.name = "";
             self.sku = "";
             self.sortOrder = "";
         }
         else
         {
-            self.optionId = productAttributeFromServer.optionId;
+            self.attributeKey = productAttributeFromServer.attributeKey;
+            self.optionKey = productAttributeFromServer.optionKey;
             self.name = productAttributeFromServer.name;
             self.sku = productAttributeFromServer.sku;
             self.sortOrder = productAttributeFromServer.sortOrder;
@@ -54,6 +58,7 @@
             newChoice.name = name;
             newChoice.sortOrder = self.choices.length + 1;
             newChoice.sku = newChoice.sortOrder;
+            newChoice.optionKey = self.key;
 
             for (var i = 0; i < self.choices.length; i++)
             {
@@ -80,7 +85,7 @@
 
         if (productVariantFromServer == undefined)
         {
-            self.id = -1;
+            self.key = merchello.Models.emptyGuid;
             self.productKey = "";
             self.name = "";
             self.sku = "";
@@ -105,7 +110,7 @@
             self.attributes = [];
         }
         else {
-            self.id = productVariantFromServer.id;
+            self.key = productVariantFromServer.key;
             self.productKey = productVariantFromServer.productKey;
             self.name = productVariantFromServer.name;
             self.sku = productVariantFromServer.sku;
@@ -135,6 +140,7 @@
         // Helper to copy from product to create a master variant
         self.copyFromProduct = function (product) {
 
+            self.productKey = product.key;
             self.name = product.name;
             self.sku = product.sku;
             self.price = product.price;
