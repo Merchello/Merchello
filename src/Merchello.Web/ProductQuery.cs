@@ -4,6 +4,9 @@ using System.Linq;
 using Examine;
 using Examine.LuceneEngine.SearchCriteria;
 using Examine.SearchCriteria;
+using Merchello.Core;
+using Merchello.Core.Models;
+using Merchello.Examine;
 using Merchello.Web.Models.ContentEditing;
 
 namespace Merchello.Web
@@ -30,8 +33,20 @@ namespace Merchello.Web
         {
             var criteria = ExamineManager.Instance.CreateSearchCriteria(BooleanOperation.And);
             criteria.Field("productKey", key).And().Field("master", "True");
-            return ExamineManager.Instance.SearchProviderCollection["MerchelloProductSearcher"]
+            var product = ExamineManager.Instance.SearchProviderCollection["MerchelloProductSearcher"]
                 .Search(criteria).Select(result => result.ToProductDisplay()).FirstOrDefault();
+
+            if (product != null) return product;
+            var retrieved = MerchelloContext.Current.Services.ProductService.GetByKey(new Guid(key));
+            if(retrieved != null) ReindexProduct(retrieved);
+
+            // TODO refactor this with the ProductApiController
+            AutoMapper.Mapper.CreateMap<IProduct, ProductDisplay>();
+            AutoMapper.Mapper.CreateMap<IProductAttribute, ProductAttributeDisplay>();
+            AutoMapper.Mapper.CreateMap<IProductOption, ProductOptionDisplay>();
+            AutoMapper.Mapper.CreateMap<IProductVariant, ProductVariantDisplay>();           
+
+            return AutoMapper.Mapper.Map<ProductDisplay>(retrieved);
         }
 
         /// <summary>
@@ -55,6 +70,27 @@ namespace Merchello.Web
             return ExamineManager.Instance.SearchProviderCollection["MerchelloProductSearcher"]
                 .Search(criteria).OrderByDescending(x => x.Score)
                 .Select(result => result.ToProductDisplay());
+        }
+
+
+        /// <summary>
+        /// This is a sort of fall back, in the event that the index becomes corrupted or the product was not indexed for some reason.
+        /// </summary>
+        /// <param name="product"></param>
+        private static void ReindexProduct(IProduct product)
+        {
+            foreach (var variant in product.ProductVariants)
+            {
+                ReindexProductVariant(variant, null);
+            }
+            ReindexProductVariant(((Product)product).MasterVariant, product.ProductOptions);
+
+        }
+
+        private static void ReindexProductVariant(IProductVariant productVariant, ProductOptionCollection productOptions)
+        {
+            ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"]
+                .ReIndexNode(productVariant.SerializeToXml(productOptions).Root, IndexTypes.ProductVariant);
         }
      
     }
