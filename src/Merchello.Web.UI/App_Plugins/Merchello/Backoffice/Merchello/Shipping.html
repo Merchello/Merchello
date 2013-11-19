@@ -67,16 +67,16 @@
                             </div>
 
                             <!-- Add a Shipping Method Flyout -->
-                            <div class="well col-xs-12 span12 closed">
+                            <div class="well col-xs-12 span12 open">
                                 <button class="btn close"><i class="icon-delete"></i></button>
-                                <h4>Add a Shipping Method for Canada</h4>
+                                <h4>Add/Edit a Shipping Method & Rate for Canada</h4>
                                 <div class="form-group row-fluid">
-                                    <label for="method-name">Shipping Method Name</label>
+                                    <label for="method-name">Name</label>
                                     <input name="method-name" class="col-xs-6 span6" type="text" />
                                 </div>
 
                                 <div class="form-group row-fluid">
-                                    <label for="method-type">Method Type</label>
+                                    <label for="method-type">Method</label>
                                     <div class="col-xs-4 span4 row-fluid">
                                         <select name="method-type" class="col-xs-11 span11">
                                             <option>Vary by Weight</option>
@@ -102,6 +102,40 @@
                                     </div>
                                 </div>
 
+                                <h5>Adjust for Individual Regions</h5>
+
+                                <table class="table table-striped merchello-striped-table settings-table adjustment-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Region</th>
+                                            <th>Adjust Rate</th>
+                                            <th>Final Rate</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Alberta</td>
+                                            <td>
+                                                <div class="input-prepend">
+                                                    <span class="add-on">$</span>
+                                                    <input type="number" class="span5" />
+                                                </div>
+                                            </td>
+                                            <td>$25.00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>British Columbia</td>
+                                            <td>
+                                                <div class="input-prepend">
+                                                    <span class="add-on">$</span>
+                                                    <input type="number" class="span5" />
+                                                </div>
+                                            </td>
+                                            <td>$20.00</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
                                 <div>
                                     <input type="submit" class="btn" value="Cancel" />
                                     <input type="submit" class="btn btn-primary" value="Save" />
@@ -111,19 +145,21 @@
                             <table class="table table-striped merchello-striped-table settings-table shipping-table">
                                 <thead>
                                     <tr>
-                                        <th colspan="3">Canada</th>
+                                        <th colspan="4">Canada</th>
                                         <th><a href="#" class="btn btn-primary">Add a Method</a></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
                                         <td>Standard Shipping</td>
+                                        <td>Bramble Berry, Mindfly</td>
                                         <td>0lbs-5lbs</td>
                                         <td>$10.00</td>
                                         <td class="edit"><a href="#" class="btn btn-default btn-xs btn-mini">edit</a> <a class="btn btn-warning btn-xs btn-mini" href="#">x</a></td>
                                     </tr>
                                     <tr>
                                         <td>Heavy Goods Shipping</td>
+                                        <td>Bramble Berry</td>
                                         <td>5lbs-20lbs</td>
                                         <td>$20.00</td>
                                         <td class="edit"><a href="#" class="btn btn-default btn-xs btn-mini">edit</a> <a class="btn btn-warning btn-xs btn-mini" href="#">x</a></td>
@@ -134,13 +170,14 @@
                             <table class="table table-striped merchello-striped-table settings-table shipping-table">
                                 <thead>
                                     <tr>
-                                        <th colspan="3">United Kingdom</th>
+                                        <th colspan="4">United Kingdom</th>
                                         <th><a href="#" class="btn btn-primary">Add a Method</a></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
                                         <td>Standard Shipping</td>
+                                        <td>Bramble Berry, Mindfly</td>
                                         <td>0lbs-5lbs</td>
                                         <td>$50.00</td>
                                         <td class="edit"><a href="#" class="btn btn-default btn-xs btn-mini">edit</a> <a class="btn btn-warning btn-xs btn-mini" href="#">x</a></td>
@@ -148,22 +185,24 @@
                                 </tbody>
                             </table>
 
-                            <table class="table table-striped merchello-striped-table settings-table">
+                            <table class="table table-striped merchello-striped-table settings-table shipping-table">
                                 <thead>
                                     <tr>
-                                        <th colspan="3">United States</th>
+                                        <th colspan="4">United States</th>
                                         <th><a href="#" class="btn btn-primary">Add a Method</a></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
                                         <td>Standard Shipping</td>
+                                        <td>Bramble Berry, Mindfly</td>
                                         <td>0lbs-5lbs</td>
                                         <td>$5.00</td>
                                         <td class="edit"><a href="#" class="btn btn-default btn-xs btn-mini">edit</a> <a class="btn btn-warning btn-xs btn-mini" href="#">x</a></td>
                                     </tr>
                                     <tr>
                                         <td>Heavy Goods Shipping</td>
+                                        <td>Bramble Berry, Mindfly</td>
                                         <td>5lbs-20lbs</td>
                                         <td>$10.00</td>
                                         <td class="edit"><a href="#" class="btn btn-default btn-xs btn-mini">edit</a> <a class="btn btn-warning btn-xs btn-mini" href="#">x</a></td>
@@ -174,13 +213,14 @@
                             <table class="table table-striped merchello-striped-table settings-table shipping-table">
                                 <thead>
                                     <tr>
-                                        <th colspan="3">Everywhere Else</th>
+                                        <th colspan="4">Everywhere Else</th>
                                         <th><a href="#" class="btn btn-primary">Add a Method</a></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
                                         <td>Standard Shipping</td>
+                                        <td>Bramble Berry</td>
                                         <td>0lbs-5lbs</td>
                                         <td>$50.00</td>
                                         <td class="edit"><a href="#" class="btn btn-default btn-xs btn-mini">edit</a> <a class="btn btn-warning btn-xs btn-mini" href="#">x</a></td>
