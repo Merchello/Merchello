@@ -77,6 +77,10 @@
   <ItemGroup>
     <Compile Include="ActivatorHelper.cs" />
     <Compile Include="CloneHelper.cs" />
+    <Compile Include="Configuration\Outline\ProvinceCollection.cs" />
+    <Compile Include="Configuration\Outline\ProvinceElement.cs" />
+    <Compile Include="Configuration\Outline\RegionalProvinceCollection.cs" />
+    <Compile Include="Configuration\Outline\RegionElement.cs" />
     <Compile Include="Configuration\Outline\SettingsCollection.cs" />
     <Compile Include="Configuration\Outline\SettingsElement.cs" />
     <Compile Include="Models\AppliedPayment.cs">
@@ -236,6 +240,12 @@
     <Compile Include="Models\ShipMethod.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\TypeFields\AppliedPaymentTypeField.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\TypeFields\IAppliedPaymentTypeField.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Models\Warehouse.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -389,13 +399,10 @@
     <Compile Include="Models\Rdbms\ShipZoneDto.cs" />
     <Compile Include="Models\Rdbms\ShipZone2Country.cs" />
     <Compile Include="Models\TypeFields\IGatewayProviderTypeField.cs" />
-    <Compile Include="Models\TypeFields\IAppliedPaymentTypeField.cs" />
     <Compile Include="Models\TypeFields\GatewayProviderTypeField.cs" />
-    <Compile Include="Models\TypeFields\AppliedPaymentTypeField.cs" />
     <Compile Include="Models\TypeFields\IAddressTypeField.cs" />
     <Compile Include="Models\TypeFields\ICustomerItemCacheTypeField.cs" />
     <Compile Include="Models\TypeFields\ICustomTypeField.cs" />
-    <Compile Include="Models\TypeFields\IInvoiceItemTypeField.cs" />
     <Compile Include="Models\TypeFields\ILineItemTypeField.cs" />
     <Compile Include="Models\TypeFields\IPaymentMethodTypeField.cs" />
     <Compile Include="Models\TypeFields\IProductTypeField.cs" />
@@ -443,7 +450,6 @@
     <Compile Include="Configuration\Outline\MerchelloSection.cs" />
     <Compile Include="Configuration\MerchelloVersion.cs" />
     <Compile Include="ExpressionHelper.cs" />
-    <Compile Include="Models\TypeFields\InvoiceItemTypeField.cs" />
     <Compile Include="LambdaExpressionCacheKey.cs" />
     <Compile Include="Mandate.cs" />
     <Compile Include="Models\TypeFields\PaymentMethodTypeField.cs" />

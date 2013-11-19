@@ -17,18 +17,21 @@
     public enum LineItemType
     {
         Product,
-        Customer
-    }
-
-    public enum InvoiceItemType
-    {
-        Item,
-        Charge,
         Shipping,
         Tax,
-        Credit,
+        Discount,
         Custom
     }
+
+    //public enum InvoiceItemType
+    //{
+    //    Item,
+    //    Charge,
+    //    Shipping,
+    //    Tax,
+    //    Credit,
+    //    Custom
+    //}
 
     public enum PaymentMethodType
     {
@@ -38,7 +41,7 @@
         Custom
     }
 
-   
+
 
     public enum AppliedPaymentType
     {

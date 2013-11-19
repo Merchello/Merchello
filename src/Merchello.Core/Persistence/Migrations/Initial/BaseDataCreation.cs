@@ -48,13 +48,19 @@ namespace Merchello.Core.Persistence.Migrations.Initial
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = basket.Basket.TypeKey, Alias = basket.Basket.Alias, Name = basket.Basket.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = basket.Wishlist.TypeKey, Alias = basket.Wishlist.Alias, Name = basket.Wishlist.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
 
-            // InvoiceItemType
-            var itf = new InvoiceItemTypeField();
-            _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = itf.Item.TypeKey, Alias = itf.Item.Alias, Name = itf.Item.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
-            _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = itf.Charge.TypeKey, Alias = itf.Charge.Alias, Name = itf.Charge.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
-            _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = itf.Credit.TypeKey, Alias = itf.Credit.Alias, Name = itf.Credit.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
-            _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = itf.Shipping.TypeKey, Alias = itf.Shipping.Alias, Name = itf.Shipping.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
-            _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = itf.Tax.TypeKey, Alias = itf.Tax.Alias, Name = itf.Tax.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
+            //// InvoiceItemType
+            //var itf = new InvoiceItemTypeField();
+            //_database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = itf.Item.TypeKey, Alias = itf.Item.Alias, Name = itf.Item.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
+            //_database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = itf.Charge.TypeKey, Alias = itf.Charge.Alias, Name = itf.Charge.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
+            //_database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = itf.Credit.TypeKey, Alias = itf.Credit.Alias, Name = itf.Credit.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
+            //_database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = itf.Shipping.TypeKey, Alias = itf.Shipping.Alias, Name = itf.Shipping.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
+            //_database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = itf.Tax.TypeKey, Alias = itf.Tax.Alias, Name = itf.Tax.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
+
+            var litf = new LineItemTypeField();
+            _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = litf.Product.TypeKey, Alias = litf.Product.Alias, Name = litf.Product.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
+            _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = litf.Shipping.TypeKey, Alias = litf.Shipping.Alias, Name = litf.Shipping.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
+            _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = litf.Tax.TypeKey, Alias = litf.Tax.Alias, Name = litf.Tax.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
+            _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = litf.Discount.TypeKey, Alias = litf.Discount.Alias, Name = litf.Discount.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
 
             // PaymentMethodType
             var ptf = new PaymentMethodTypeField();
@@ -68,7 +74,7 @@ namespace Merchello.Core.Persistence.Migrations.Initial
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = stf.Carrier.TypeKey, Alias = stf.Carrier.Alias, Name = stf.Carrier.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = stf.PercentTotal.TypeKey, Alias = stf.PercentTotal.Alias, Name = stf.PercentTotal.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
 
-            // AppliedPaymentType
+            //// AppliedPaymentType
             var apf = new AppliedPaymentTypeField();
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = apf.Debit.TypeKey, Alias = apf.Debit.Alias, Name = apf.Debit.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = apf.Credit.TypeKey, Alias = apf.Credit.Alias, Name = apf.Credit.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });

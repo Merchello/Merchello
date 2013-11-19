@@ -10,7 +10,6 @@ namespace Merchello.Tests.UnitTests.Configuration
     public class MerchelloSectionTests
     {
         private MerchelloSection _config;
-        private TypeFieldCollection _invoiceItems;
 
         /// <summary>
         /// Setup values for each test
@@ -19,7 +18,6 @@ namespace Merchello.Tests.UnitTests.Configuration
         public void Setup()
         {
             _config = ConfigurationManager.GetSection("merchello") as MerchelloSection;
-            _invoiceItems = _config.TypeFields.InvoiceItem;
         }
 
 
