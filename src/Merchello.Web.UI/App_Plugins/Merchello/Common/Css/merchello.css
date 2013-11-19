@@ -91,8 +91,11 @@ td.name { width: 45%; }
 
 .settings-table th:last-of-type, .settings-table td:last-of-type { width: 123px; padding-right: 0; }
 
-.shipping-table td:nth-child(2) { width: 20%; }
-.shipping-table td:nth-child(3) { width: 10%; }
+.adjustment-table td:first-child { width: 55%; }
+
+.shipping-table td:first-child { width: 30%; }
+.shipping-table td:nth-child(3) { width: 20%; }
+.shipping-table td:nth-child(4) { width: 10%; }
 
 td.edit { text-align: center; }
 td.edit .btn { display: inline-block; margin: 0 auto; }
