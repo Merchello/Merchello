@@ -145,10 +145,15 @@ td.name { width: 45%; }
     }
 }
 
+.adjustment-table {
+    td:first-child { width: 55%; }
+}
+
 .shipping-table {
     td {
-        &:nth-child(2) { width: 20%; }
-        &:nth-child(3) { width: 10%; }
+        &:first-child { width: 30%; }
+        &:nth-child(3) { width: 20%; }
+        &:nth-child(4) { width: 10%; }
     }
 }
 
