@@ -1,6 +1,6 @@
 ﻿(function (models, undefined) {
 
-    models.shippingCountry = function (shippingCountryFromServer) {
+    models.ShippingCountry = function (shippingCountryFromServer) {
         
         var self = this;
 
@@ -12,7 +12,7 @@
             self.key = shippingCountryFromServer.key;
             self.name = shippingCountryFromServer.name;
             self.shippingMethods = _.map(shippingCountryFromServer, function (attribute) {
-                return new merchello.Models.shippingMethod(attribute);
+                return new merchello.Models.ShippingMethod(attribute);
             });
         }
 
@@ -25,11 +25,42 @@
         if (shippingMethodFromServer == undefined) {
             self.key = "";
             self.name = "";
-            self.warehousesSupported = [];
-            var 
+            self.areWarehousesSupported = [];
+            self.type = "";
+            self.minVariance = 0;
+            self.maxVariance = 0;
+            self.cost = 0;
+            self.shippingRegions = [];
         } else {
-
+            self.key = shippingMethodFromServer.key;
+            self.name = shippingMethodFromServer.name;
+            self.areWarehousesSupported = shippingMethodFromServer.areWarehousesSupported;
+            self.type = shippingMethodFromServer.type;
+            self.minVariance = shippingMethodFromServer.minVariance;
+            self.maxVariance = shippingMethodFromServer.maxVariance;
+            self.cost = shippingMethodFromServer.cost;
+            self.shippingRegions = _.map(shippingMethodFromServer, function (attribute) {
+                return new merchello.Models.ShippingRegion(attribute);
+            });
         }
+
+    };
+
+    models.ShippingRegion = function (shippingRegionFromServer) {
+
+        var self = this;
+
+        if (shippingRegionFromServer == undefined) {
+            self.key = "";
+            self.name = "";
+            self.adjustRate = 0;
+            self.finalRate = 0;
+        } else {
+            self.key = shippingRegionFromServer.key;
+            self.name = shippingRegionFromServer.name;
+            self.adjustRate = shippingRegionFromServer.adjustRate;
+            self.finalRate = shippingRegionFromServer.finalRate;
+        };
 
     };
 
