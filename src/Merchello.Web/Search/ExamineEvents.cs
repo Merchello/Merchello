@@ -92,7 +92,7 @@ namespace Merchello.Web.Search
         private static void IndexProduct(IProduct product)
         {
             product.ProductVariants.ForEach(IndexProductVariant);
-            IndexProductVariant(((Product)product).MasterVariant);
+            IndexProductVariant(((Product)product).MasterVariant, product.ProductOptions);
         }
 
         private static void IndexProductVariant(IProductVariant productVariant)

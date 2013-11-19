@@ -222,6 +222,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationContextExtensions.cs" />
     <Compile Include="Cache\HttpCachingBacker.cs" />
     <Compile Include="Models\ContentEditing\ProductVariantDisplayExtensions.cs" />
     <Compile Include="ProductQuery.cs" />
