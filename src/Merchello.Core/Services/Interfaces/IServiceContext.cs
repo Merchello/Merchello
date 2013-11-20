@@ -40,7 +40,12 @@ namespace Merchello.Core.Services
         ///// Gets the <see cref="IShippingService"/>
         ///// </summary>
         //IShippingService ShippingService { get; }
-        
+
+        /// <summary>
+        /// Gets the <see cref="IRegionService"/>
+        /// </summary>
+        IRegionService RegionService { get; }
+
         /// <summary>
         /// Gets the <see cref="IWarehouseService"/>
         /// </summary>
