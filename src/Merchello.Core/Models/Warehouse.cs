@@ -2,7 +2,6 @@
 using System.Reflection;
 using System.Runtime.Serialization;
 using Merchello.Core.Models.EntityBase;
-using Merchello.Core.Models.TypeFields;
 
 namespace Merchello.Core.Models
 {
@@ -20,6 +19,7 @@ namespace Merchello.Core.Models
         private string _countryCode;
         private string _phone;
         private string _email;
+        private bool _primary;
 
         private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<Warehouse, string>(x => x.Name);  
         private static readonly PropertyInfo Address1Selector = ExpressionHelper.GetPropertyInfo<Warehouse, string>(x => x.Address1);  
@@ -29,7 +29,8 @@ namespace Merchello.Core.Models
         private static readonly PropertyInfo PostalCodeSelector = ExpressionHelper.GetPropertyInfo<Warehouse, string>(x => x.PostalCode);
         private static readonly PropertyInfo CountryCodeSelector = ExpressionHelper.GetPropertyInfo<Warehouse, string>(x => x.CountryCode);
         private static readonly PropertyInfo PhoneSelector = ExpressionHelper.GetPropertyInfo<Warehouse, string>(x => x.Phone);
-        private static readonly PropertyInfo EmailSelector = ExpressionHelper.GetPropertyInfo<Warehouse, string>(x => x.Email);  
+        private static readonly PropertyInfo EmailSelector = ExpressionHelper.GetPropertyInfo<Warehouse, string>(x => x.Email);
+        private static readonly PropertyInfo PrimarySelector = ExpressionHelper.GetPropertyInfo<Warehouse, bool>(x => x.Primary);
         
         /// <summary>
         /// The name associated with the Warehouse
@@ -181,6 +182,23 @@ namespace Merchello.Core.Models
                     _email = value;
                     return _email;
                 }, _email, EmailSelector);
+            }
+        }
+
+        /// <summary>
+        /// True/false indicating whether or not this warehouse is the primary (or default) warehouse
+        /// </summary>
+        [DataMember]
+        public bool Primary
+        {
+            get { return _primary; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _primary = value;
+                    return _primary;
+                }, _primary, PrimarySelector);
             }
         }
     }

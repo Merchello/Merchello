@@ -87,6 +87,8 @@ namespace Merchello.Web.UI.PackageActions
         {
             baseDataCreation.InitializeBaseData("merchDBTypeField");
             baseDataCreation.InitializeBaseData("merchInvoiceStatus");
+            baseDataCreation.InitializeBaseData("merchOrderStatus");
+            baseDataCreation.InitializeBaseData("merchWarehouse");
 
             return true;
         }
