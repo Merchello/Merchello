@@ -33,6 +33,8 @@ namespace Merchello.Core.Persistence.Migrations.Initial
             if(tableName.Equals("merchInvoiceStatus")) CreateInvoiceStatusData();
 
             if(tableName.Equals("merchWarehouse")) CreateWarehouseData();
+
+            if(tableName.EndsWith("merchOrderStatus")) CreateOrderStatusData();
             
         }
 
@@ -47,14 +49,7 @@ namespace Merchello.Core.Persistence.Migrations.Initial
             var basket = new CustomerItemCacheTypeField();
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = basket.Basket.TypeKey, Alias = basket.Basket.Alias, Name = basket.Basket.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = basket.Wishlist.TypeKey, Alias = basket.Wishlist.Alias, Name = basket.Wishlist.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
-
-            //// InvoiceItemType
-            //var itf = new InvoiceItemTypeField();
-            //_database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = itf.Item.TypeKey, Alias = itf.Item.Alias, Name = itf.Item.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
-            //_database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = itf.Charge.TypeKey, Alias = itf.Charge.Alias, Name = itf.Charge.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
-            //_database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = itf.Credit.TypeKey, Alias = itf.Credit.Alias, Name = itf.Credit.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
-            //_database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = itf.Shipping.TypeKey, Alias = itf.Shipping.Alias, Name = itf.Shipping.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
-            //_database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = itf.Tax.TypeKey, Alias = itf.Tax.Alias, Name = itf.Tax.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
+            
 
             var litf = new LineItemTypeField();
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = litf.Product.TypeKey, Alias = litf.Product.Alias, Name = litf.Product.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
@@ -90,16 +85,24 @@ namespace Merchello.Core.Persistence.Migrations.Initial
         private void CreateInvoiceStatusData()
         {
             _database.Insert("merchInvoiceStatus", "Key", new InvoiceStatusDto() { Key = new Guid("17ADA9AC-C893-4C26-AA26-234ECEB2FA75"), Alias = "unpaid", Name = "Unpaid", Active = true, Reportable = true, SortOrder = 1, CreateDate = DateTime.Now, UpdateDate = DateTime.Now});
-            _database.Insert("merchInvoiceStatus", "Key", new InvoiceStatusDto() { Key = new Guid("1F872A1A-F0DD-4C3E-80AB-99799A28606E"), Alias = "unshipped", Name = "Unshipped", Active = true, Reportable = true, SortOrder = 2, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
-            _database.Insert("merchInvoiceStatus", "Key", new InvoiceStatusDto() { Key = new Guid("6606B0EA-15B6-44AA-8557-B2D9D049645C"), Alias = "completed", Name = "Completed", Active = true, Reportable = true, SortOrder = 3, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchInvoiceStatus", "Key", new InvoiceStatusDto() { Key = new Guid("1F872A1A-F0DD-4C3E-80AB-99799A28606E"), Alias = "paid", Name = "Paid", Active = true, Reportable = true, SortOrder = 2, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchInvoiceStatus", "Key", new InvoiceStatusDto() { Key = new Guid("6606B0EA-15B6-44AA-8557-B2D9D049645C"), Alias = "partial", Name = "Partial", Active = true, Reportable = true, SortOrder = 3, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
             _database.Insert("merchInvoiceStatus", "Key", new InvoiceStatusDto() { Key = new Guid("53077EFD-6BF0-460D-9565-0E00567B5176"), Alias = "cancelled", Name = "Cancelled", Active = true, Reportable = true, SortOrder = 4, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
             _database.Insert("merchInvoiceStatus", "Key", new InvoiceStatusDto() { Key = new Guid("75E1E5EB-33E8-4904-A8E5-4B64A37D6087"), Alias = "fraud", Name = "Fraud", Active = true, Reportable = true, SortOrder = 5, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+        }
+
+        private void CreateOrderStatusData()
+        {
+            _database.Insert("merchOrderStatus", "Key", new InvoiceStatusDto() { Key = new Guid("C54D47E6-D1C9-40D5-9BAF-18C6ADFFE9D0"), Alias = "notfulfilled", Name = "Not Fulfilled", Active = true, Reportable = true, SortOrder = 1, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchOrderStatus", "Key", new InvoiceStatusDto() { Key = new Guid("D5369B84-8CCA-4586-8FBA-F3020F5E06EC"), Alias = "fulfilled", Name = "Fulfilled", Active = true, Reportable = true, SortOrder = 2, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchOrderStatus", "Key", new InvoiceStatusDto() { Key = new Guid("C47D475F-A075-4635-BBB9-4B9C49AA8EBE"), Alias = "partial", Name = "Partial", Active = true, Reportable = true, SortOrder = 3, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchOrderStatus", "Key", new InvoiceStatusDto() { Key = new Guid("77DAF52E-C79C-4E1B-898C-5E977A9A6027"), Alias = "cancelled", Name = "Cancelled", Active = true, Reportable = true, SortOrder = 4, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });            
         }
 
 
         private void CreateWarehouseData()
         {
-            _database.Insert("merchWarehouse", "Key", new WarehouseDto() { Key = new Guid("268D4007-8853-455A-89F7-A28398843E5F"), Name = "Default Warehouse", CountryCode = "", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchWarehouse", "Key", new WarehouseDto() { Key = new Guid("268D4007-8853-455A-89F7-A28398843E5F"), Name = "Default Warehouse", CountryCode = "", Primary = true, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
         }
     }
 }

@@ -8,12 +8,12 @@ namespace Merchello.Core.Services
 {
     /// <summary>
     /// The Merchello ServiceContext, which provides access to the following services:
-    /// <see cref="ICustomerService"/>
+    /// <see cref="ICustomerService"/>, <see cref="IItemCacheService"/>, <see cref="IProductService"/>, <see cref="IProductVariantService"/>
     /// </summary>
     public class ServiceContext : IServiceContext
     {        
         private Lazy<CustomerService> _customerService;
-        private Lazy<ItemCacheService> _basketService;    
+        private Lazy<ItemCacheService> _itemCacheService;    
         //private Lazy<InvoiceService> _invoiceService;
         private Lazy<ProductService> _productService;
         private Lazy<ProductVariantService> _productVariantService;
@@ -44,8 +44,8 @@ namespace Merchello.Core.Services
             if(_customerService == null)
                 _customerService = new Lazy<CustomerService>(() => new CustomerService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
-            if(_basketService == null)
-                _basketService = new Lazy<ItemCacheService>(() => new ItemCacheService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+            if(_itemCacheService == null)
+                _itemCacheService = new Lazy<ItemCacheService>(() => new ItemCacheService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
             
             if(_productVariantService == null)
                 _productVariantService = new Lazy<ProductVariantService>(() => new ProductVariantService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
@@ -62,7 +62,6 @@ namespace Merchello.Core.Services
 
 
         #region IServiceContext Members
-
     
         /// <summary>
         /// Gets the <see cref="ICustomerService"/>
@@ -77,7 +76,7 @@ namespace Merchello.Core.Services
         /// </summary>
         public IItemCacheService ItemCacheService
         {
-            get { return _basketService.Value;  }
+            get { return _itemCacheService.Value;  }
         }
 
         /// <summary>
@@ -96,11 +95,17 @@ namespace Merchello.Core.Services
             get { return _productVariantService.Value; }
         }
 
-        public IRegionService RegionService
+        /// <summary>
+        /// Gets the <see cref="IRegionService"/>
+        /// </summary>
+        internal IRegionService RegionService
         {
             get { return _regionService.Value; }
         }
 
+        /// <summary>
+        /// Gets the <see cref="IWarehouseService"/>
+        /// </summary>
         public IWarehouseService WarehouseService
         {
             get { return _warehouseService.Value; }

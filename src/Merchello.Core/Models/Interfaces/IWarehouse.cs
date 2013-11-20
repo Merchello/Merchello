@@ -8,8 +8,7 @@ namespace Merchello.Core.Models
     /// Defines a Merchello Warehouse object interface
     /// </summary>
     public interface IWarehouse : IEntity
-    {
-            
+    {            
         /// <summary>
         /// The name for the Warehouse
         /// </summary>
@@ -63,6 +62,12 @@ namespace Merchello.Core.Models
         /// </summary>
         [DataMember]
         string Email { get; set; }
+
+        /// <summary>
+        /// True/false indicating whether or not this warehouse is the primary (or default) warehouse
+        /// </summary>
+        [DataMember]
+        bool Primary { get; set; }
     }
 }
 

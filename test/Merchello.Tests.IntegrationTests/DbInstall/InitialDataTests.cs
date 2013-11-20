@@ -28,7 +28,7 @@ namespace Merchello.Tests.IntegrationTests.DbInstall
         public void Can_Populate_typeFieldData_Into_merchTypeField()
         {
             //// Arrange
-            var expected = 21;
+            const int expected = 20;
 
             //// Act
             _creation.InitializeBaseData("merchTypeField");
@@ -55,6 +55,21 @@ namespace Merchello.Tests.IntegrationTests.DbInstall
             Assert.IsTrue(dtos.First().SortOrder == 1);
             Assert.IsTrue(dtos.Last().Name == "Fraud");
             Assert.IsTrue(dtos.Last().SortOrder == 5);
+        }
+
+        [Test]
+        public void Can_Populate_OrderStatusData_Into_merchOrderStatus()
+        {
+            //// Act
+            _creation.InitializeBaseData("merchOrderStatus");
+            var dtos = _database.Query<OrderStatusDto>("SELECT * FROM merchOrderStatus").OrderBy(x => x.SortOrder);
+
+            //// Assert
+            Assert.IsTrue(dtos.Any());
+            Assert.IsTrue(dtos.First().Name == "Not Fulfilled");
+            Assert.IsTrue(dtos.First().SortOrder == 1);
+            Assert.IsTrue(dtos.Last().Name == "Cancelled");
+            Assert.IsTrue(dtos.Last().SortOrder == 4);
         }
 
         [Test]

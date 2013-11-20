@@ -49,6 +49,9 @@ namespace Merchello.Core.Models.Rdbms
         [NullSetting(NullSetting = NullSettings.Null)]
         public string Email { get; set; }
 
+        [Column("primary")]
+        public bool Primary { get; set; }
+
         [Column("updateDate")]
         [Constraint(Default = "getdate()")]
         public DateTime UpdateDate { get; set; }

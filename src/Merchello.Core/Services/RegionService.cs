@@ -10,7 +10,7 @@ using Merchello.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Core.Services
 {
-    public class RegionService : IRegionService
+    internal class RegionService : IRegionService
     {
         private readonly static ConcurrentDictionary<string, IEnumerable<IProvince>> RegionProvinceCache = new ConcurrentDictionary<string, IEnumerable<IProvince>>();
         private readonly IDatabaseUnitOfWorkProvider _uowProvider;
