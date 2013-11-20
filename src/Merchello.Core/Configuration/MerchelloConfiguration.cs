@@ -24,7 +24,6 @@ namespace Merchello.Core.Configuration
         #endregion
 
 
-
         private string _rootDir = "";
 
         /// <summary>

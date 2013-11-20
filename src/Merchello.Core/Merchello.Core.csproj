@@ -426,9 +426,13 @@
     <Compile Include="Services\Interfaces\IServiceContext.cs" />
     <Compile Include="Services\Interfaces\IShippingService.cs" />
     <Compile Include="Services\Interfaces\IWarehouseService.cs" />
+    <Compile Include="Models\Interfaces\IProvince.cs" />
+    <Compile Include="Services\Interfaces\IRegionService.cs" />
     <Compile Include="Services\ItemCacheService.cs" />
     <Compile Include="Services\ProductService.cs" />
     <Compile Include="Services\ProductVariantService.cs" />
+    <Compile Include="Models\Province.cs" />
+    <Compile Include="Services\RegionService.cs" />
     <Compile Include="Services\ServiceContext.cs" />
     <Compile Include="Services\WarehouseService.cs" />
     <Compile Include="TypeFieldMapperEnumerations.cs" />

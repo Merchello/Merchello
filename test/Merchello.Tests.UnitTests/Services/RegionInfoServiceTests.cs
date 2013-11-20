@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Runtime.Serialization;
-using Merchello.Core;
-using Merchello.Core.Configuration;
-using Merchello.Core.Configuration.Outline;
+using Merchello.Core.Models;
+using Merchello.Core.Services;
 using NUnit.Framework;
+using Newtonsoft.Json;
 
 namespace Merchello.Tests.UnitTests.Services
 {
@@ -22,100 +20,91 @@ namespace Merchello.Tests.UnitTests.Services
             _regionService = new RegionService();
         }
         
+        /// <summary>
+        /// Test verifies that the service correctly removes countries passed an array of country codes
+        /// </summary>
         [Test]
-        public void Countries()
+        public void Can_Retrieve_A_RegionList_That_Excludes_Countries()
         {
-            foreach (var regionInfo in _regionService.GetRegionInfoList(new [] { "SA", "DK" }))
-            {
-                Console.WriteLine("{0} {1} {2}", regionInfo.EnglishName, regionInfo.TwoLetterISORegionName.ToUpper(), regionInfo.CurrencySymbol);
-            }
+            //// Arrange
+            var excludes = new[] {"SA", "DK"};
+
+            //// Act
+            var regions = _regionService.GetRegionInfoList(excludes);
+
+            //// Assert
+            Assert.IsTrue(regions.Any());
+            Assert.IsFalse(regions.Contains(new RegionInfo("SA")));
+            Assert.IsFalse(regions.Contains(new RegionInfo("DK")));
+
+        }
+
+        /// <summary>
+        /// Test verifies that the service correctly returns the RegionInfo for Denmark given the country code DK
+        /// </summary>
+        [Test]
+        public void Can_Retrieve_Denmark_Region_By_DK_Code()
+        {
+            //// Arrange
+            const string countryCode = "DK";
+
+            //// Act
+            var denmark = _regionService.GetRegionInfoByCode(countryCode);
+
+            //// Assert
+            Assert.NotNull(denmark);
+            Assert.AreEqual(countryCode, denmark.TwoLetterISORegionName);
+        }
+
+        /// <summary>
+        /// Test verifies the the US region does have a corresponding collection of provinces
+        /// </summary>
+        [Test]
+        public void US_Region_Returns_True_For_Provinces()
+        {
+            //// Arrange
+            const string countryCode = "US";
+
+            //// Act
+            var hasProvinces = _regionService.RegionHasProvinces(countryCode);
+
+            //// Assert
+            Assert.IsTrue(hasProvinces);
+        }
+        
+        /// <summary>
+        /// Test verifies that the US region contains 62 states (provinces in config xml).  62 includes
+        /// US territories and Armed Forces codes
+        /// </summary>
+        [Test]
+        public void US_Region_Contains_62_Provinces()
+        {
+            //// Arrange
+            const string countryCode = "US";
+            const int expected = 62;
+
+            //// Act
+            var states = _regionService.GetProvincesByCode(countryCode);
+
+            //// Assert
+            Assert.NotNull(states);
+            Assert.AreEqual(expected, states.Count());
         }
 
         [Test]
-        public void UsRegion()
+        public void Can_Serialize_ProvinceCodes()
         {
-            var regionInfo = _regionService.GetRegionInfoByCode("CA");
-            Console.Write("{0} {1} {2}", regionInfo.EnglishName, regionInfo.TwoLetterISORegionName.ToUpper(), regionInfo.CurrencySymbol);
+            var states = _regionService.GetProvincesByCode("US");
+
+            var json = JsonConvert.SerializeObject(states.ToArray());
+
+
+            var reversed = JsonConvert.DeserializeObject<IEnumerable<Province>>(json);
+
+
+            Console.Write(json);
         }
-        
     }
 
-   public class RegionService : IRegionService
-   {
-       private readonly static ConcurrentDictionary<string, IEnumerable<IProvince>> RegionProvinceCache = new ConcurrentDictionary<string, IEnumerable<IProvince>>();
-
-       public RegionService()
-           : this(MerchelloConfiguration.Current)
-       { }
-
-       public RegionService(MerchelloConfiguration configuration)
-       {
-           Mandate.ParameterNotNull(configuration, "configuration");
-
-           BuildCache(configuration);   
-       }
-
-
-       private static void BuildCache(MerchelloConfiguration configuration)
-       {
-           foreach (RegionElement region in configuration.Section.RegionalProvinces)
-           {
-               CacheRegion(region.Code, (from ProvinceElement pe in region.Provinces
-                                         select new Province()
-                                             {
-                                                 Code = pe.Code, Name = pe.Name
-                                             }).Cast<IProvince>().ToArray());
-           }
-       }
-
-       private static void CacheRegion(string code, IProvince[] provinces)
-       {
-           RegionProvinceCache.AddOrUpdate(code, provinces, (x, y) => provinces);
-       }
-
-       public RegionInfo GetRegionInfoByCode(string code)
-       {
-           return new RegionInfo(code);
-       }
-
-       public IEnumerable<RegionInfo> GetRegionInfoList()
-       {
-           return CultureInfo.GetCultures(CultureTypes.SpecificCultures)
-               .Select(culture => new RegionInfo(culture.Name));
-       }
-
-       public IEnumerable<RegionInfo> GetRegionInfoList(string[] excludeCodes)
-       {
-           return GetRegionInfoList().Where(x => !excludeCodes.Contains(x.TwoLetterISORegionName));
-       }
-
-   }
-
-
-    [Serializable]
-    [DataContract(IsReference=true)]
-    internal class Province : IProvince
-    {
-        [DataMember]
-        public string Name { get; set; }
-        
-        [DataMember]
-        public string Code { get; set; }
-    }
-
-    internal interface IProvince
-    {
-        [DataMember]
-        string Name { get; set; }
-        
-        [DataMember]
-        string Code { get; set; }
-    }
-
-    public interface IRegionService
-    {
-        RegionInfo GetRegionInfoByCode(string code);
-        IEnumerable<RegionInfo> GetRegionInfoList();
-        IEnumerable<RegionInfo> GetRegionInfoList(string[] strings);
-    }
+  
 }
