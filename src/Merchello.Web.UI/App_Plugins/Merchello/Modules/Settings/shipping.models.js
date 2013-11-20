@@ -16,6 +16,23 @@
             });
         }
 
+
+        // Helper to add a new shipping method to the country.
+        self.addBlankShippingMethod = function () {
+
+            var newShippingMethod = new merchello.Models.ShippingMethod();
+
+            self.shippingMethods.push(newShippingMethod);
+
+        };
+
+        // Helper to remove a shipping method from a country.
+        self.removeShippingMethod = function (idx) {
+
+            self.shippingMethods.splice(idx, 1);
+
+        };
+
     };
 
     models.ShippingMethod = function (shippingMethodFromServer) {
@@ -43,6 +60,25 @@
                 return new merchello.Models.ShippingRegion(attribute);
             });
         }
+
+
+        // Helper to add a shipping region adjustment to this shipping method.
+        self.addShippingRegion = function (properties) {
+
+            var newShippingRegion = new merchello.Models.ShippingRegion();
+
+            // Note From Kyle: Not sure what preferred method we have on this project to inject the properties (if any) into the newly created region.
+            
+            self.shippingRegions.push(newShippingRegion);
+
+        };
+
+        // Helper to remove a shipping region adjustment from this shipping method.
+        self.removeShippingRegion = function (idx) {
+
+            self.shippingRegions.splice(idx, 1);
+
+        };
 
     };
 
