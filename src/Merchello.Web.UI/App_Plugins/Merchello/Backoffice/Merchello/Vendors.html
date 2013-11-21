@@ -95,29 +95,14 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr class="vcard">
-                                        <td class="org">Bramble Berry</td>
-                                        <td class="n">Anne-Marie</td>
-                                        <td class="tel">360-647-7470</td>
+                                    <tr class="vcard" data-ng-repeat="vendor in vendors | orderBy:sortProperty">
+                                        <td class="org">{{vendor.name}}</td>
+                                        <td class="n">{{vendor.contact}}</td>
+                                        <td class="tel">{{vendor.phone}}</td>
                                         <td class="adr">
-                                            <span class="street-address">114 W. Magnolia St</span>
-                                            <span class="extended-address">Suite 504</span>
-                                            <span class="locality">Bellingham</span>, <span class="region">WA</span> <span class="postal-code">98225</span>
-                                        </td>
-                                        <td class="edit">
-                                            <div class="btn-toolbar umb-btn-toolbar">
-                                                <a href="#" class="btn btn-default btn-xs btn-mini">edit</a> <a class="btn btn-warning btn-xs btn-mini" href="#">x</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr class="vcard">
-                                        <td class="org">Mindfly</td>
-                                        <td class="n">Heather</td>
-                                        <td class="tel">360-647-7470</td>
-                                        <td class="adr">
-                                            <span class="street-address">105 W Holly St</span>
-                                            <span class="extended-address">H22</span>
-                                            <span class="locality">Bellingham</span>, <span class="region">WA</span> <span class="postal-code">98225</span>
+                                            <span class="street-address">{{vendor.address1}}</span>
+                                            <span class="extended-address" data-ng-show="vendor.address2">{{vendor.address2}}</span>
+                                            <span class="locality">{{vendor.locality}}</span>, <span class="region">{{vendor.region}}</span> <span class="postal-code">{{vendor.postalCode}}</span>
                                         </td>
                                         <td class="edit">
                                             <div class="btn-toolbar umb-btn-toolbar">
