@@ -16,22 +16,5 @@ namespace Merchello.Core.Models
         [DataMember]
         string Code { get; }
 
-        /// <summary>
-        /// True/false indicating whether or not to allow shipping to the province
-        /// </summary>
-        [DataMember]
-        bool ShipTo { get; set; }
-
-        /// <summary>
-        /// Price adjustment when shipping to this province
-        /// </summary>
-        [DataMember]
-        decimal ShippingAdjustment { get; set; }
-
-        /// <summary>
-        /// Tax percentage adjustment for orders shipped to this province
-        /// </summary>
-        [DataMember]
-        decimal TaxPercentAdjustment { get; set; }
     }
 }
