@@ -41,9 +41,6 @@ namespace Merchello.Web.Editors
         {
             _productService = MerchelloContext.Services.ProductService;
             _productVariantService = MerchelloContext.Services.ProductVariantService;
-
-            AutoMapper.Mapper.CreateMap<IProductVariant, ProductVariantDisplay>();
-            AutoMapper.Mapper.CreateMap<IProductAttribute, ProductAttributeDisplay>();
         }
 
         /// <summary>
@@ -54,9 +51,6 @@ namespace Merchello.Web.Editors
         {
             _productService = MerchelloContext.Services.ProductService;
             _productVariantService = MerchelloContext.Services.ProductVariantService;
-
-            AutoMapper.Mapper.CreateMap<IProductVariant, ProductVariantDisplay>();
-            AutoMapper.Mapper.CreateMap<IProductAttribute, ProductAttributeDisplay>();
         }
 
         /// <summary>
@@ -73,7 +67,7 @@ namespace Merchello.Web.Editors
                 throw new HttpResponseException(HttpStatusCode.NotFound);
             }
 
-            return AutoMapper.Mapper.Map<ProductVariantDisplay>(productVariant);
+            return productVariant.ToProductDisplay();
         }
 
         /// <summary>
@@ -94,7 +88,7 @@ namespace Merchello.Web.Editors
 
                 foreach (IProductVariant productVariant in productVariants)
                 {
-                    yield return AutoMapper.Mapper.Map<ProductVariantDisplay>(productVariant);
+                    yield return productVariant.ToProductDisplay();
                 }
             }
             else
@@ -126,7 +120,7 @@ namespace Merchello.Web.Editors
 
                 foreach (IProductVariant productVariant in productVariants)
                 {
-                    yield return AutoMapper.Mapper.Map<ProductVariantDisplay>(productVariant);
+                    yield return productVariant.ToProductDisplay();
                 }
             }
             else
@@ -187,7 +181,7 @@ namespace Merchello.Web.Editors
                 throw new HttpResponseException(HttpStatusCode.InternalServerError);
             }
 
-            return AutoMapper.Mapper.Map<ProductVariantDisplay>(newProductVariant);
+            return newProductVariant.ToProductDisplay();
         }
 
         /// <summary>

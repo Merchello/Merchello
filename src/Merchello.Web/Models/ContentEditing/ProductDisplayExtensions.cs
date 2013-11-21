@@ -6,6 +6,12 @@ namespace Merchello.Web.Models.ContentEditing
     public static class ProductDisplayExtensions
     {
 
+        public static ProductDisplay FromProduct(this ProductDisplay productDisplay, IProduct product)
+        {
+            AutoMapper.Mapper.CreateMap<IProduct, ProductDisplay>();
+            return AutoMapper.Mapper.Map<ProductDisplay>(product);
+        }
+
         public static IProduct ToProduct(this ProductDisplay productDisplay, string name, string sku, decimal price)
         {
             var destination = MerchelloContext.Current.Services.ProductService.CreateProduct(name, sku, price);

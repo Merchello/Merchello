@@ -224,6 +224,10 @@
   <ItemGroup>
     <Compile Include="ApplicationContextExtensions.cs" />
     <Compile Include="Cache\HttpCachingBacker.cs" />
+    <Compile Include="Models\ContentEditing\IProductAttributeExtensions.cs" />
+    <Compile Include="Models\ContentEditing\IProductOptionExtensions.cs" />
+    <Compile Include="Models\ContentEditing\IProductVariantExtensions.cs" />
+    <Compile Include="Models\ContentEditing\IProductExtensions.cs" />
     <Compile Include="Models\ContentEditing\ProductVariantDisplayExtensions.cs" />
     <Compile Include="ProductQuery.cs" />
     <Compile Include="CustomerExtensions.cs" />
