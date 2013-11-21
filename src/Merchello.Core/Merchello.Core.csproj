@@ -237,7 +237,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\Rdbms\ProductVariantIndexDto.cs" />
+    <Compile Include="Models\Rdbms\ShipRateTierDto.cs" />
     <Compile Include="Models\Rdbms\ShipRegion.cs" />
+    <Compile Include="Models\Rdbms\ShipRegion2GatewayProviderDto.cs" />
     <Compile Include="Models\Rdbms\TaxRegionDto.cs" />
     <Compile Include="Models\Region.cs" />
     <Compile Include="Models\Shipment.cs">

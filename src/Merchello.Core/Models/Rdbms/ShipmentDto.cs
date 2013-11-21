@@ -14,10 +14,6 @@ namespace Merchello.Core.Models.Rdbms
         [Constraint(Default = "newid()")]
         public Guid Key { get; set; }
 
-        [Column("orderKey")]
-        [ForeignKey(typeof(OrderDto), Name = "FK_merchShipment_merchOrder", Column = "pk")]
-        public Guid OrderKey { get; set; }
-
         [Column("address1")]
         [NullSetting(NullSetting = NullSettings.Null)]
         public string Address1 { get; set; }
@@ -58,6 +54,12 @@ namespace Merchello.Core.Models.Rdbms
         [ForeignKey(typeof(ShipMethodDto), Name = "FK_merchShipment_merchShipMethod", Column = "pk")]
         [NullSetting(NullSetting = NullSettings.Null)]
         public Guid? ShipMethodKey { get; set; }
+
+        [Column("invoiceItemKey")]
+        [ForeignKey(typeof(InvoiceItemDto), Name = "FK_merchShipment_merchInvoiceItem", Column = "pk")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public Guid? InvoiceItemKey { get; set; }
+
 
         [Column("updateDate")]
         [Constraint(Default = "getdate()")]
