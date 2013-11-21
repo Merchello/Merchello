@@ -15,7 +15,7 @@ namespace Merchello.Core.Models.Rdbms
         public Guid ShipMethodKey { get; set; }
         
         [Column("warehouseKey")]
-        [ForeignKey(typeof(WarehouseDto), Name = "FK_merchShipMethod2Warehouse_merchWarehouse", Column = "pk")]
+        //[ForeignKey(typeof(WarehouseDto), Name = "FK_merchShipMethod2Warehouse_merchWarehouse", Column = "pk")]
         public Guid WarehouseKey { get; set; }
 
         [Column("updateDate")]

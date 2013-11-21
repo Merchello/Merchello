@@ -164,12 +164,15 @@
     <Compile Include="Models\Interfaces\IProductVariant.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\Interfaces\IRegion.cs" />
     <Compile Include="Models\Interfaces\IShipment.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\Interfaces\IShipMethod.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\Interfaces\IShippingProvince.cs" />
+    <Compile Include="Models\Interfaces\ITaxProvince.cs" />
     <Compile Include="Models\Interfaces\IWarehouse.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -234,12 +237,17 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\Rdbms\ProductVariantIndexDto.cs" />
+    <Compile Include="Models\Rdbms\ShipRegion.cs" />
+    <Compile Include="Models\Rdbms\TaxRegionDto.cs" />
+    <Compile Include="Models\Region.cs" />
     <Compile Include="Models\Shipment.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\ShipMethod.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\ShippingProvince.cs" />
+    <Compile Include="Models\TaxProvince.cs" />
     <Compile Include="Models\TypeFields\AppliedPaymentTypeField.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -346,6 +354,7 @@
     <Compile Include="Persistence\Repositories\Interfaces\IPaymentRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IProductRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IProductVariantRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IRegionRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IShipmentRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IWarehouseRepository.cs" />
     <Compile Include="Persistence\Repositories\ItemCacheRepository.cs" />
@@ -353,6 +362,7 @@
     <Compile Include="Persistence\Repositories\PaymentRepository.cs" />
     <Compile Include="Persistence\Repositories\ProductRepository.cs" />
     <Compile Include="Persistence\Repositories\ProductVariantRepository.cs" />
+    <Compile Include="Persistence\Repositories\RegionRepository.cs" />
     <Compile Include="Persistence\Repositories\ShipmentRepository.cs" />
     <Compile Include="Persistence\Repositories\WarehouseRepository.cs" />
     <Compile Include="Persistence\TransactionType.cs" />
@@ -469,7 +479,6 @@
     <Compile Include="Models\Rdbms\WarehouseDto.cs" />
     <Compile Include="Models\TypeFields\TypeField.cs" />
     <Compile Include="Persistence\Migrations\Initial\DatabaseSchemaCreation.cs" />
-    <Compile Include="Models\Rdbms\ShipMethod2WarehouseDto.cs" />
     <Compile Include="Persistence\Querying\BaseExpressionHelper.cs" />
     <Compile Include="Persistence\Querying\ModelToSqlExpressionHelper.cs" />
     <Compile Include="Persistence\Querying\SqlTranslator.cs" />

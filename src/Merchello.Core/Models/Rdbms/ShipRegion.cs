@@ -4,39 +4,25 @@ using Umbraco.Core.Persistence.DatabaseAnnotations;
 
 namespace Merchello.Core.Models.Rdbms
 {
-    [TableName("merchShipMethod")]
+    [TableName("merchShipRegion")]
     [PrimaryKey("pk", autoIncrement = false)]
     [ExplicitColumns]
-    internal class ShipMethodDto
+    public class ShipRegionDto
     {
         [Column("pk")]
         [PrimaryKeyColumn(AutoIncrement = false)]
         [Constraint(Default = "newid()")]
         public Guid Key { get; set; }
 
+        [Column("warehouseKey")]
+        [ForeignKey(typeof(WarehouseDto), Name = "FK_merchShipRegion_merchWarehouse", Column = "pk")]
+        public Guid WarehouseKey { get; set; }
+
+        [Column("code")]
+        public string Code { get; set; }
+
         [Column("name")]
         public string Name { get; set; }
-
-        [Column("regionKey")]
-        [ForeignKey(typeof(ShipRegionDto), Name = "FK_merchShipMethod_merchShipRegion", Column = "pk")]
-        public Guid RegionKey { get; set; }
-
-        [Column("providerKey")]
-        public Guid ProviderKey { get; set; }
-
-        [Column("shipMethodTfKey")]
-        public Guid ShipMethodTfKey { get; set; }
-
-        [Column("surcharge")]
-        [Constraint(Default = "0")]
-        public decimal Surcharge { get; set; }        
-
-        [Column("serviceCode")]
-        [NullSetting(NullSetting = NullSettings.Null)]
-        public string ServiceCode { get; set; }
-
-        [Column("taxable")]
-        public bool Taxable { get; set; }
 
         [Column("provinceData")]
         [NullSetting(NullSetting = NullSettings.Null)]
@@ -50,6 +36,5 @@ namespace Merchello.Core.Models.Rdbms
         [Column("createDate")]
         [Constraint(Default = "getdate()")]
         public DateTime CreateDate { get; set; }
-
     }
 }
