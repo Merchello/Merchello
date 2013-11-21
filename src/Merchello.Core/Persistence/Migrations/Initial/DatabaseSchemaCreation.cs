@@ -26,45 +26,42 @@ namespace Merchello.Core.Persistence.Migrations.Initial
 
         private static readonly Dictionary<int, Type> OrderedTables = new Dictionary<int, Type>
         {
+
                 {0, typeof(TypeFieldDto)},
                 {1, typeof(AnonymousCustomerDto)},
                 {2, typeof(CustomerDto)},
                 {3, typeof(CustomerAddressDto)},             
                 {4, typeof(ItemCacheDto)},
                 {5, typeof(ItemCacheItemDto)},
-                {6, typeof(WarehouseDto)},
-                {7, typeof(ShipRegionDto)},
-                {8, typeof(ShipMethodDto)},
-                //{9, typeof(ShipMethod2WarehouseDto)},
-                
-                {10, typeof(OrderStatusDto)},
-                {11, typeof(OrderDto)},
-                {12, typeof(OrderItemDto)},
+                {6, typeof(GatewayProviderDto)},
 
-                {13, typeof(InvoiceStatusDto)},
-                {14, typeof(InvoiceDto)},
-                {15, typeof(InvoiceItemDto)},
+                {7, typeof(WarehouseDto)},
+                {8, typeof(ShipRegionDto)},
+                {9, typeof(ShipMethodDto)},
+                {10, typeof(ShipRateTierDto)},
+                {11, typeof(ShipRegion2GatewayProviderDto)},
                 
-                {16, typeof(ShipmentDto)},                
-                {17, typeof(PaymentDto)},                
-                {18, typeof(TransactionDto)},
-                {19, typeof(ProductDto)},
-                {20, typeof(ProductVariantDto)},
-                {21, typeof(ProductOptionDto)},
-                {22, typeof(ProductAttributeDto)},
-                {23, typeof(Product2ProductOptionDto)},
-                {24, typeof(WarehouseInventoryDto)},
-                {25, typeof(TaxRegionDto)},
-                {26, typeof(ProductVariant2ProductAttributeDto)},
-               /* {27, typeof(ShipZoneDto)},
-                {28, typeof(CountryDto)},
-                {29, typeof(RegionDto)},
-                {30, typeof(ShipZone2Region)},
-                {31, typeof(ShipZone2Country)},
-                {32, typeof(ShipMethod2ShipZone)},*/
-                {33, typeof(GatewayProviderDto)},
-                {34, typeof(AppliedPaymentDto)},
-                {35, typeof(ProductVariantIndexDto)}
+                {12, typeof(OrderStatusDto)},
+                {13, typeof(OrderDto)}, 
+                {14, typeof(InvoiceStatusDto)},                
+                {15, typeof(InvoiceDto)},                   
+                {16, typeof(InvoiceItemDto)},
+                {17, typeof(ShipmentDto)},                 
+                {18, typeof(OrderItemDto)},
+    
+                {19, typeof(PaymentDto)},                
+                {20, typeof(TransactionDto)},
+                {21, typeof(ProductDto)},
+                {22, typeof(ProductVariantDto)},
+                {23, typeof(ProductOptionDto)},
+                {24, typeof(ProductAttributeDto)},
+                {25, typeof(Product2ProductOptionDto)},
+                {26, typeof(WarehouseInventoryDto)},
+                {27, typeof(TaxRegionDto)},
+                {28, typeof(ProductVariant2ProductAttributeDto)},
+           
+                {29, typeof(AppliedPaymentDto)},
+                {30, typeof(ProductVariantIndexDto)}
             };
 
         #endregion

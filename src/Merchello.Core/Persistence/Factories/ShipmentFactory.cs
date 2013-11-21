@@ -1,4 +1,5 @@
-﻿using Merchello.Core.Models;
+﻿using System.Text;
+using Merchello.Core.Models;
 using Merchello.Core.Models.Rdbms;
 
 namespace Merchello.Core.Persistence.Factories
@@ -7,7 +8,7 @@ namespace Merchello.Core.Persistence.Factories
     {
         public IShipment BuildEntity(ShipmentDto dto)
         {
-            var shipment = new Shipment(dto.OrderKey)
+            var shipment = new Shipment()
             {
                 Key = dto.Key,
                 Address1 = dto.Address1,
@@ -17,7 +18,8 @@ namespace Merchello.Core.Persistence.Factories
                 PostalCode = dto.PostalCode,
                 CountryCode = dto.CountryCode,
                 Phone = dto.Phone,
-                ShipMethodKey = dto.ShipMethodKey,
+                ShipMethodKey = dto.ShipMethodKey,       
+                InvoiceItemKey = dto.InvoiceItemKey,
                 UpdateDate = dto.UpdateDate,
                 CreateDate = dto.CreateDate
             };
@@ -32,7 +34,6 @@ namespace Merchello.Core.Persistence.Factories
             var dto = new ShipmentDto()
             {
                 Key = entity.Key,
-                OrderKey = entity.OrderKey,
                 Address1 = entity.Address1,
                 Address2 = entity.Address2,
                 Locality = entity.Locality,
@@ -40,6 +41,7 @@ namespace Merchello.Core.Persistence.Factories
                 PostalCode = entity.PostalCode,
                 CountryCode = entity.CountryCode,
                 ShipMethodKey = entity.ShipMethodKey,
+                InvoiceItemKey = entity.InvoiceItemKey,
                 Phone = entity.Phone,
                 UpdateDate = entity.UpdateDate,
                 CreateDate = entity.CreateDate                
