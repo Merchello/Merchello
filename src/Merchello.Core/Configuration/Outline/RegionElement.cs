@@ -15,6 +15,16 @@ namespace Merchello.Core.Configuration.Outline
         }
 
         /// <summary>
+        /// Gets/sets the label for provinces (eg. for US this may be 'States')
+        /// </summary>
+        [ConfigurationProperty("provinceLabel", DefaultValue = "Provinces", IsRequired = false)]
+        public string ProvinceLabel
+        {
+            get { return (string) this["provinceLabel"]; }
+            set { this["provinceLabel"] = value; }
+        }
+
+        /// <summary>
         /// Gets the province collection
         /// </summary>
         [ConfigurationProperty("provinces", IsRequired = true), ConfigurationCollection(typeof(ProvinceCollection), AddItemName = "province")]

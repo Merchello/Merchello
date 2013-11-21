@@ -34,11 +34,6 @@ namespace Merchello.Web.Editors
             : base(merchelloContext)
         {
             _productService = MerchelloContext.Services.ProductService;
-
-            AutoMapper.Mapper.CreateMap<IProduct, ProductDisplay>();
-            AutoMapper.Mapper.CreateMap<IProductAttribute, ProductAttributeDisplay>();
-            AutoMapper.Mapper.CreateMap<IProductOption, ProductOptionDisplay>();
-            AutoMapper.Mapper.CreateMap<IProductVariant, ProductVariantDisplay>();
         }
 
         /// <summary>
@@ -48,11 +43,6 @@ namespace Merchello.Web.Editors
             : base(merchelloContext, umbracoContext)
         {
             _productService = MerchelloContext.Services.ProductService;
-
-            AutoMapper.Mapper.CreateMap<IProduct, ProductDisplay>();
-            AutoMapper.Mapper.CreateMap<IProductAttribute, ProductAttributeDisplay>();
-            AutoMapper.Mapper.CreateMap<IProductOption, ProductOptionDisplay>();
-            AutoMapper.Mapper.CreateMap<IProductVariant, ProductVariantDisplay>();
         }
 
         /// <summary>
@@ -71,7 +61,7 @@ namespace Merchello.Web.Editors
                     throw new HttpResponseException(HttpStatusCode.NotFound);
                 }
 
-                return AutoMapper.Mapper.Map<ProductDisplay>(product);
+                return product.ToProductDisplay();
             }
             else
             {
@@ -101,7 +91,7 @@ namespace Merchello.Web.Editors
 
             foreach (IProduct product in products)
             {
-                yield return AutoMapper.Mapper.Map<ProductDisplay>(product);
+                yield return product.ToProductDisplay();
             }
         }
 
@@ -123,7 +113,7 @@ namespace Merchello.Web.Editors
 
                 foreach(IProduct product in products)
                 {
-                    yield return AutoMapper.Mapper.Map<ProductDisplay>(product);
+                    yield return product.ToProductDisplay();
                 }
             }
             else
@@ -157,7 +147,7 @@ namespace Merchello.Web.Editors
                 throw new HttpResponseException(HttpStatusCode.InternalServerError);
             }
 
-            return AutoMapper.Mapper.Map<ProductDisplay>(newProduct);
+            return newProduct.ToProductDisplay();
         }
 
         /// <summary>
@@ -169,8 +159,6 @@ namespace Merchello.Web.Editors
         [AcceptVerbs("PUT")]
         public HttpResponseMessage PutProduct(ProductDisplay product)
         {
-            // Using AutoMapper (http://automapper.org/)
-
             var response = Request.CreateResponse(HttpStatusCode.OK);
                         
             try

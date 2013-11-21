@@ -260,10 +260,12 @@
     <Compile Include="Querying\ShipMethodSqlClausesTests.cs" />
     <Compile Include="Querying\TransactionSqlClauseTests.cs" />
     <Compile Include="Querying\WarehouseSqlClauseTests.cs" />
-    <Compile Include="Services\RegionInfoServiceTests.cs" />
     <Compile Include="Services\CustomerRegistryServiceTests.cs" />
     <Compile Include="Services\CustomerServiceTests.cs" />
     <Compile Include="Services\ProductServiceTests.cs" />
+    <Compile Include="Services\RegionInfoServiceTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="TypeFields\AddressTypeFieldTests.cs" />
     <Compile Include="TypeFields\BasketTypeFieldTests.cs" />
     <Compile Include="TypeFields\GatewayProviderTypeFieldTests.cs" />

@@ -44,6 +44,8 @@
                         <small>Edit the variants for this product.</small>
                         <a href="#"><i class="icon-ordered-list"></i> Reorder variants</a>
                     </label>
+                    
+
 
                     <div class="merchello-controls row-fluid">
 
@@ -169,8 +171,12 @@
                                         <th>Total Qty</th>
                                         <th><a href="#">edit</a></th>
                                     </tr>-->
-                                    <tr data-ng-repeat="option in product.productOptions | orderBy:'sortOrder'">
-                                        <th data-ng-model="option.name"></th>
+                                    <tr>
+                                        <th><input type="checkbox" /></th> <!-- Swaps out the current TR with headings in it for the bulk action TR -->
+                                        <th product-options-repeat="product.productOptions"></th>
+                                        <th>SKU</th>
+                                        <th>Price</th>
+                                        <th>Total Qty</th>
                                     </tr>
                                     <!-- Displays the bulk action button & dropdown menu when the checkbox is selected. Replaces the normal header TR -->
                                     <!--<tr>
@@ -192,62 +198,32 @@
                                     </tr>-->
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td><input type="checkbox" /></td>
-                                        <td>Women's</td>
-                                        <td>Small</td>
-                                        <td>shirt125-ws</td>
-                                        <td>25.00</td>
-                                        <td>10</td>
-                                        <td><a href="#">edit</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="checkbox" /></td>
-                                        <td>Women's</td>
-                                        <td>Medium</td>
-                                        <td>shirt125-wm</td>
-                                        <td>25.00</td>
-                                        <td>10</td>
-                                        <td><a href="#">edit</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="checkbox" /></td>
-                                        <td>Women's</td>
-                                        <td>Large</td>
-                                        <td>shirt125-wl</td>
-                                        <td>25.00</td>
-                                        <td>10</td>
-                                        <td><a href="#">edit</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="checkbox" /></td>
-                                        <td>Men's</td>
-                                        <td>Small</td>
-                                        <td>shirt125-ms</td>
-                                        <td>25.00</td>
-                                        <td>10</td>
-                                        <td><a href="#">edit</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="checkbox" /></td>
-                                        <td>Men's</td>
-                                        <td>Medium</td>
-                                        <td>shirt125-mm</td>
-                                        <td>25.00</td>
-                                        <td>10</td>
-                                        <td><a href="#">edit</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="checkbox" /></td>
-                                        <td>Men's</td>
-                                        <td>Large</td>
-                                        <td>shirt125-ml</td>
-                                        <td>25.00</td>
-                                        <td>10</td>
-                                        <td><a href="#">edit</a></td>
+                                    <tr data-ng-repeat="variant in product.productVariants" data-ng-class="{active: variant.selected}" data-ng-click="variant.selected = !variant.selected">
+                                        <td><input type="checkbox" data-ng-model="variant.selected" /></td>
+                                        <td product-options-repeat="variant.attributes"></td>
+                                        <td>{{variant.sku}}</td>
+                                        <td>{{variant.price}}</td>
+                                        <td>{{variant.totalInventoryCount}}</td>
+                                        <td><a data-ng-href="#/merchello/merchello/ProductVariantEdit/{{variant.productKey}}?variantid={{variant.key}}">edit</a></td>
                                     </tr>
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+
+                    <div class="control-group umb-control-group">
+                        <label class="merchello-control-label">
+                            <label><input data-ng-model="debugging" type="checkbox" /> Debug</label>
+                            <small>Check to show debugging info</small>
+                        </label>
+
+                        <div class="merchello-controls">
+
+                            <div data-ng-show="debugging">
+                                <h3>Product</h3>
+                                <div>{{product | json}}</div>
+                           </div>
+
                         </div>
                     </div>
                     
