@@ -10,6 +10,19 @@
      */
     controllers.ProductEditController = function ($scope, $routeParams, $location, notificationsService, dialogService, angularHelper, serverValidationManager, merchelloProductService, merchelloProductVariantService) {
 
+        $scope.currentTab = "Variants";
+
+        $scope.sortProperty = "sku";
+        $scope.sortOrder = "asc";
+        $scope.allVariants = false;
+
+        $scope.reorderVariants = false;
+        $scope.bulkAction = false;
+        $scope.changePrices = false;
+        $scope.updateInventory = false;
+        $scope.deleteVariants = false;
+        $scope.duplicateVariants = false;
+
 
         if ($routeParams.create) {
 
@@ -79,6 +92,79 @@
             });
 
         };
+
+
+        $scope.changeSortOrder = function (propertyToSort) {
+
+            if ($scope.sortProperty == propertyToSort) {
+                if ($scope.sortOrder == "asc") {
+                    $scope.sortProperty = "-" + propertyToSort;
+                    $scope.sortOrder = "desc";
+                }
+                else {
+                    $scope.sortProperty = propertyToSort;
+                    $scope.sortOrder = "asc";
+                }
+            }
+            else {
+                $scope.sortProperty = propertyToSort;
+                $scope.sortOrder = "asc";
+            }
+
+        }
+
+        $scope.selectVariants = function (attributeToSelect) {
+
+            for (var i = 0; i < $scope.product.productVariants.length; i++) {
+                $scope.product.productVariants[i].selected = false;
+            }
+
+            var filteredVariants = [];
+
+            if (attributeToSelect == "All")
+            {
+                filteredVariants = $scope.product.productVariants;
+            }
+            else if (attributeToSelect == "None") {
+
+            }
+            else {
+                var filteredVariants = _.filter($scope.product.productVariants,
+                    function (variant) {
+                        return _.where(variant.attributes, { name: attributeToSelect }).length > 0;
+                    });
+            }
+
+            for (var v = 0; v < filteredVariants.length; v++)
+            {
+                filteredVariants[v].selected = true;
+            }
+
+        }
+
+        $scope.showFlyout = function (flyout) {
+            $scope.reorderVariants = false;
+            flyout = true;
+            $scope.bulkAction = false;
+        }
+
+        $scope.hideFlyout = function (flyout) {
+            flyout = false;
+        }
+
+        $scope.selectTab = function (tabname) {
+            $scope.currentTab = tabname;
+        }
+
+
+        $scope.addOption = function () {
+
+            $scope.product.addBlankOption();
+
+        };
+        
+        $scope.updateVariants = function (thisForm) {
+        }
 
     }
 
