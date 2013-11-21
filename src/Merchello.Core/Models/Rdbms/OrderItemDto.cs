@@ -17,6 +17,11 @@ namespace Merchello.Core.Models.Rdbms
         [Column("orderKey")]
         [ForeignKey(typeof(OrderDto), Name = "FK_merchOrderItem_merchOrder", Column = "pk")]
         public Guid ContainerKey { get; set; }
+
+        [Column("shipmentKey")]
+        [ForeignKey(typeof(ShipmentDto), Name = "FK_merchOrderItem_merchShipment", Column = "pk")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public Guid? ShipmentKey { get; set; }
         
         [Column("lineItemTfKey")]
         public Guid LineItemTfKey { get; set; }
