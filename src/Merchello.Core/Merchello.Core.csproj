@@ -385,7 +385,6 @@
     <Compile Include="Models\Rdbms\OrderItemDto.cs" />
     <Compile Include="Models\Rdbms\OrderStatusDto.cs" />
     <Compile Include="Models\Rdbms\OrderDto.cs" />
-    <Compile Include="Models\Rdbms\CountryDto.cs" />
     <Compile Include="Models\Rdbms\GatewayProviderDto.cs" />
     <Compile Include="Models\Rdbms\ProductAttributeDto.cs" />
     <Compile Include="Models\Rdbms\ProductOptionDto.cs" />
@@ -393,11 +392,6 @@
     <Compile Include="Models\Rdbms\ProductVariantDto.cs" />
     <Compile Include="Models\Rdbms\ProductVariant2ProductAttributeDto.cs" />
     <Compile Include="Models\Rdbms\ProductDto.cs" />
-    <Compile Include="Models\Rdbms\RegionDto.cs" />
-    <Compile Include="Models\Rdbms\ShipMethod2ShipZone.cs" />
-    <Compile Include="Models\Rdbms\ShipZone2Region.cs" />
-    <Compile Include="Models\Rdbms\ShipZoneDto.cs" />
-    <Compile Include="Models\Rdbms\ShipZone2Country.cs" />
     <Compile Include="Models\TypeFields\IGatewayProviderTypeField.cs" />
     <Compile Include="Models\TypeFields\GatewayProviderTypeField.cs" />
     <Compile Include="Models\TypeFields\IAddressTypeField.cs" />

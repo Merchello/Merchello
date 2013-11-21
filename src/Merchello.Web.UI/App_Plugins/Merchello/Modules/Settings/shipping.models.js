@@ -108,8 +108,8 @@
             self.key = "";
             self.name = "";
             self.address = {
-                streetAddress: "",
-                streetAddress2: "",
+                address: "",
+                address2: "",
                 locality: "",
                 region: "",
                 postalCode: "",
