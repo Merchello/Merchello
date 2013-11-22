@@ -84,6 +84,14 @@
                                 </div>
                             </form>
 
+                            <form name="deleteVendorForm" class="well" data-ng-class="{ 'open': flyouts.deleteVendor, 'closed': !flyouts.deleteVendor }">
+                                <h4>Are you sure you want to remove the vendor '{{deleteVendor.name}}'?</h4>
+                                <div>
+                                    <input type="submit" class="btn" value="No" data-ng-click="deleteVendorFlyout.close()" />
+                                    <input type="submit" class="btn btn-primary" value="Yes" data-ng-click="deleteVendorFlyout.confirm()" />
+                                </div>
+                            </form>
+
                             <table class="table table-striped merchello-striped-table settings-table warehouse-table">
                                 <thead>
                                     <tr>
@@ -106,7 +114,7 @@
                                         </td>
                                         <td class="edit">
                                             <div class="btn-toolbar umb-btn-toolbar">
-                                                <a href="#" class="btn btn-default btn-xs btn-mini">edit</a> <a class="btn btn-warning btn-xs btn-mini" href="#">x</a>
+                                                <a class="btn btn-default btn-xs btn-mini" data-ng-click="addVendorFlyout.open(vendor)">edit</a> <a class="btn btn-warning btn-xs btn-mini" data-ng-click="deleteVendorFlyout.open(vendor);">x</a>
                                             </div>
                                         </td>
                                     </tr>
