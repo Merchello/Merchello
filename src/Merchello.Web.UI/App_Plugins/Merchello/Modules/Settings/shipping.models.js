@@ -1,37 +1,18 @@
 ﻿(function (models, undefined) {
 
-    models.ShippingCountry = function (shippingCountryFromServer) {
-        
+    models.ProvinceData = function (provinceDataFromServer) {
+
         var self = this;
 
-        if (shippingRegionFromServer == undefined) {
-            self.key = "";
+        if (provinceDataFromServer == undefined) {
             self.name = "";
-            self.shippingMethods = [];
+            self.adjustRate = "";
+            self.isSupportedDestination = true;
         } else {
-            self.key = shippingCountryFromServer.key;
-            self.name = shippingCountryFromServer.name;
-            self.shippingMethods = _.map(shippingCountryFromServer, function (attribute) {
-                return new merchello.Models.ShippingMethod(attribute);
-            });
+            self.name = provinceDataFromServer.name;
+            self.adjustRate = provinceDataFromServer.adjustRate;
+            self.isSupportedDestination = provinceDataFromServer.isSupportedDestination;
         }
-
-
-        // Helper to add a new shipping method to the country.
-        self.addBlankShippingMethod = function () {
-
-            var newShippingMethod = new merchello.Models.ShippingMethod();
-
-            self.shippingMethods.push(newShippingMethod);
-
-        };
-
-        // Helper to remove a shipping method from a country.
-        self.removeShippingMethod = function (idx) {
-
-            self.shippingMethods.splice(idx, 1);
-
-        };
 
     };
 
@@ -40,43 +21,48 @@
         var self = this;
 
         if (shippingMethodFromServer == undefined) {
-            self.key = "";
+            self.pk = "";
             self.name = "";
-            self.areWarehousesSupported = [];
-            self.type = "";
-            self.minVariance = 0;
-            self.maxVariance = 0;
-            self.cost = 0;
-            self.shippingRegions = [];
+            self.regionKey = "";
+            self.providerKey = "";
+            self.shipMethodTfKey = "";
+            self.surcharge = "";
+            self.serviceCode = "";
+            self.taxable = false;
+            self.provinceData = [];
         } else {
-            self.key = shippingMethodFromServer.key;
+            self.pk = shippingMethodFromServer.pk;
             self.name = shippingMethodFromServer.name;
-            self.areWarehousesSupported = shippingMethodFromServer.areWarehousesSupported;
-            self.type = shippingMethodFromServer.type;
-            self.minVariance = shippingMethodFromServer.minVariance;
-            self.maxVariance = shippingMethodFromServer.maxVariance;
-            self.cost = shippingMethodFromServer.cost;
-            self.shippingRegions = _.map(shippingMethodFromServer, function (attribute) {
-                return new merchello.Models.ShippingRegion(attribute);
+            self.regionKey = shippingMethodFromServer.regionKey;
+            self.providerKey = shippingMethodFromServer.providerKey;
+            self.shipMethodTfKey = shippingMethodFromServer.shipMethodTfKey;
+            self.surcharge = shippingMethodFromServer.surcharge;
+            self.serviceCode = shippingMethodFromServer.serviceCode;
+            self.taxable = shippingMethodFromServer.taxable;
+            self.provinceData = _.map(shippingMethodFromServer, function (attribute) {
+                return new merchello.Models.ProvinceData(attribute);
             });
         }
 
 
         // Helper to add a shipping region adjustment to this shipping method.
-        self.addShippingRegion = function (properties) {
+        self.addProvince = function (province) {
 
-            var newShippingRegion = new merchello.Models.ShippingRegion();
-
+            if (province) {
+                var newShippingRegion = province;
+            } else {
+                var newShippingRegion = new merchello.Models.ShippingRegion();
+            }
             // Note From Kyle: Not sure what preferred method we have on this project to inject the properties (if any) into the newly created region.
             
-            self.shippingRegions.push(newShippingRegion);
+            self.provinceData.push(newShippingRegion);
 
         };
 
         // Helper to remove a shipping region adjustment from this shipping method.
-        self.removeShippingRegion = function (idx) {
+        self.removeProvince = function (idx) {
 
-            self.shippingRegions.splice(idx, 1);
+            self.provinceData.splice(idx, 1);
 
         };
 
@@ -87,15 +73,15 @@
         var self = this;
 
         if (shippingRegionFromServer == undefined) {
-            self.key = "";
+            self.pk = "";
+            self.warehouseKey = "";
+            self.code = "";
             self.name = "";
-            self.adjustRate = 0;
-            self.finalRate = 0;
         } else {
-            self.key = shippingRegionFromServer.key;
+            self.pk = shippingRegionFromServer.pk;
+            self.warehouseKey = shippingRegionFromServer.warehouseKey;
+            self.code = shippingRegionFromServer.code;
             self.name = shippingRegionFromServer.name;
-            self.adjustRate = shippingRegionFromServer.adjustRate;
-            self.finalRate = shippingRegionFromServer.finalRate;
         };
 
     };
@@ -105,22 +91,29 @@
         var self = this;
 
         if (warehouseFromServer == undefined) {
-            self.key = "";
+            self.pk = "";
             self.name = "";
-            self.address = {
-                address: "",
-                address2: "",
-                locality: "",
-                region: "",
-                postalCode: "",
-                country: ""
-            };
-            self.isPrimary = true;
+            self.address1 = "";
+            self.address2 = "";
+            self.locality = "";
+            self.region = "";
+            self.postalCode = "";
+            self.countryCode = "";
+            self.phone = "";
+            self.email = "";
+            self.primary = true;
         } else {
-            self.key = warehouseFromServer.key;
+            self.pk = warehouseFromServer.pk;
             self.name = warehouseFromServer.name;
-            self.address = warehouseFromServer.address;
-            self.isPrimary = warehouseFromServer.isPrimary;
+            self.address1 = warehouseFromServer.address1;
+            self.address2 = warehouseFromServer.address2;
+            self.locality = warehouseFromServer.locality;
+            self.region = warehouseFromServer.region;
+            self.postalCode = warehouseFromServer.postalCode;
+            self.countryCode = warehouseFromServer.countryCode;
+            self.phone = warehouseFromServer.phone;
+            self.email = warehouseFromServer.email;
+            self.primary = warehouseFromServer.primary;
         }
 
     };

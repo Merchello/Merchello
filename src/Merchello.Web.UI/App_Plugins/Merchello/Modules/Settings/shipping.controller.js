@@ -10,11 +10,17 @@
      */
     controllers.ShippingController = function ($scope, $routeParams, $location, notificationsService, angularHelper, serverValidationManager, merchelloProductService) {
 
+        $scope.warehouses = [];
+        $scope.visible = {
+            warehouseInfoPanel: false,
+            warehouseListPanel: true,
+            shippingMethodPanel: false
+        };
+
         $scope.loaded = true;
         $scope.preValuesLoaded = true;
 
     }
-
 
     angular.module("umbraco").controller("Merchello.Dashboards.Settings.ShippingController", merchello.Controllers.ShippingController);
 

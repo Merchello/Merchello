@@ -29,7 +29,94 @@
         
         <div class="merchello-panel-body">
 
-            <div class="merchello-pane row-fluid">
+            <div class="merchello-pane row-fluid" data-ng-class="{ 'open': visible.warehouseListPanel, 'closed': !visible.warehouseListPanel }">
+                <div class="control-group umb-control-group">
+                    <label class="merchello-control-label">
+                        Warehouses
+                        <small>Add or edit warehouses</small>
+
+                        <a href="#"><i class="icon-door-open"></i> Add a Warehouse</a>
+                    </label>
+
+                    <div class="merchello-controls">
+
+                        <div class="row-fluid span10 col-xs-10">
+
+                            <!-- Add a Warehouse Flyout -->
+                            <div class="well col-xs-12 span12 closed">
+                                <button class="btn close"><i class="icon-delete"></i></button>
+                                <h4>Add a Warehouse</h4>
+                                <div class="form-group row-fluid">
+                                    <label for="name">Name</label>
+                                    <input class="span6" name="name" type="text" />
+                                </div>
+                                <div class="form-group row-fluid">
+                                    <label for="address">Address</label>
+                                    <input class="span6" name="address" type="text" placeholder="Street Address" />
+                                    <input class="span6" name="extended-address" type="text" placeholder="Extended Address" />
+                                    <input class="span6" name="city" type="text" placeholder="City" />
+                                </div>
+                                <div class="form-group row-fluid">
+                                    <input class="span3" name="state-province" type="text" placeholder="State/Province" />
+                                    <input class="span3" name="postal-code" type="text" placeholder="Zip/Postal Code" />
+                                </div>
+                                <div class="form-group row-fluid">
+                                    <input class="span6" name="country" type="text" placeholder="Country" />
+                                    <label class="label-checkbox"><input name="primary" type="checkbox"> <span>Make this my primary warehouse</span></label>
+                                </div>
+
+                                <div>
+                                    <input type="submit" class="btn" value="Cancel" />
+                                    <input type="submit" class="btn btn-primary" value="Save" />
+                                </div>
+                            </div>
+
+                            <table class="table table-striped merchello-striped-table settings-table warehouse-table">
+                                <thead>
+                                    <tr>
+                                        <th>Primary</th>
+                                        <th>Name</th>
+                                        <th>Address</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="vcard">
+                                        <td><input type="radio" name="primary" checked="checked" /></td>
+                                        <td class="org">Bramble Berry</td>
+                                        <td class="adr">
+                                            <span class="street-address">114 W. Magnolia St</span>
+                                            <span class="extended-address">Suite 504</span>
+                                            <span class="locality">Bellingham</span>, <span class="region">WA</span> <span class="postal-code">98225</span>
+                                        </td>
+                                        <td class="edit">
+                                            <div class="btn-toolbar umb-btn-toolbar">
+                                                <a href="#" class="btn btn-default btn-xs btn-mini">edit</a> <a class="btn btn-warning btn-xs btn-mini" href="#">x</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="vcard">
+                                        <td><input type="radio" name="primary" /></td>
+                                        <td class="org">Mindfly</td>
+                                        <td class="adr">
+                                            <span class="street-address">105 W Holly St</span>
+                                            <span class="extended-address">H22</span>
+                                            <span class="locality">Bellingham</span>, <span class="region">WA</span> <span class="postal-code">98225</span>
+                                        </td>
+                                        <td class="edit">
+                                            <div class="btn-toolbar umb-btn-toolbar">
+                                                <a href="#" class="btn btn-default btn-xs btn-mini">edit</a> <a class="btn btn-warning btn-xs btn-mini" href="#">x</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="merchello-pane row-fluid" data-ng-class="{ 'open': visible.shippingMethodPanel, 'closed': !visible.shippingMethodPanel }">
                     
                 <!-- Property classes from Umbraco styles -->
                 <div class="control-group umb-control-group">
@@ -232,96 +319,9 @@
 
                     </div>
                 </div>
-
-                <div class="control-group umb-control-group">
-                    <label class="merchello-control-label">
-                        Warehouses
-                        <small>Add or edit warehouses</small>
-
-                        <a href="#"><i class="icon-door-open"></i> Add a Warehouse</a>
-                    </label>
-
-                    <div class="merchello-controls">
-
-                        <div class="row-fluid span10 col-xs-10">
-
-                            <!-- Add a Warehouse Flyout -->
-                            <div class="well col-xs-12 span12 closed">
-                                <button class="btn close"><i class="icon-delete"></i></button>
-                                <h4>Add a Warehouse</h4>
-                                <div class="form-group row-fluid">
-                                    <label for="name">Name</label>
-                                    <input class="span6" name="name" type="text" />
-                                </div>
-                                <div class="form-group row-fluid">
-                                    <label for="address">Address</label>
-                                    <input class="span6" name="address" type="text" placeholder="Street Address" />
-                                    <input class="span6" name="extended-address" type="text" placeholder="Extended Address" />
-                                    <input class="span6" name="city" type="text" placeholder="City" />
-                                </div>
-                                <div class="form-group row-fluid">
-                                    <input class="span3" name="state-province" type="text" placeholder="State/Province" />
-                                    <input class="span3" name="postal-code" type="text" placeholder="Zip/Postal Code" />
-                                </div>
-                                <div class="form-group row-fluid">
-                                    <input class="span6" name="country" type="text" placeholder="Country" />
-                                    <label class="label-checkbox"><input name="primary" type="checkbox"> <span>Make this my primary warehouse</span></label>
-                                </div>
-
-                                <div>
-                                    <input type="submit" class="btn" value="Cancel" />
-                                    <input type="submit" class="btn btn-primary" value="Save" />
-                                </div>
-                            </div>
-
-                            <table class="table table-striped merchello-striped-table settings-table warehouse-table">
-                                <thead>
-                                    <tr>
-                                        <th>Primary</th>
-                                        <th>Name</th>
-                                        <th>Address</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr class="vcard">
-                                        <td><input type="radio" name="primary" checked="checked" /></td>
-                                        <td class="org">Bramble Berry</td>
-                                        <td class="adr">
-                                            <span class="street-address">114 W. Magnolia St</span>
-                                            <span class="extended-address">Suite 504</span>
-                                            <span class="locality">Bellingham</span>, <span class="region">WA</span> <span class="postal-code">98225</span>
-                                        </td>
-                                        <td class="edit">
-                                            <div class="btn-toolbar umb-btn-toolbar">
-                                                <a href="#" class="btn btn-default btn-xs btn-mini">edit</a> <a class="btn btn-warning btn-xs btn-mini" href="#">x</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr class="vcard">
-                                        <td><input type="radio" name="primary" /></td>
-                                        <td class="org">Mindfly</td>
-                                        <td class="adr">
-                                            <span class="street-address">105 W Holly St</span>
-                                            <span class="extended-address">H22</span>
-                                            <span class="locality">Bellingham</span>, <span class="region">WA</span> <span class="postal-code">98225</span>
-                                        </td>
-                                        <td class="edit">
-                                            <div class="btn-toolbar umb-btn-toolbar">
-                                                <a href="#" class="btn btn-default btn-xs btn-mini">edit</a> <a class="btn btn-warning btn-xs btn-mini" href="#">x</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-
-                        </div>
-
-                    </div>
-
             </div>
 
         </div>
-            
+           
     </umb-panel>
 </div>
