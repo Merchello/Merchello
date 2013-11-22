@@ -18,7 +18,6 @@ namespace Merchello.Core.Services
         private Lazy<ProductService> _productService;
         private Lazy<ProductVariantService> _productVariantService;
         //private Lazy<ShippingService> _shipmentService; 
-        private Lazy<RegionService> _regionService; 
         private Lazy<WarehouseService> _warehouseService;
 
         
@@ -52,9 +51,7 @@ namespace Merchello.Core.Services
 
             if(_productService == null)
                 _productService = new Lazy<ProductService>(() => new ProductService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _productVariantService.Value));
-
-            if(_regionService == null)
-                _regionService = new Lazy<RegionService>(() => new RegionService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, MerchelloConfiguration.Current));
+            
 
             if(_warehouseService == null)
                 _warehouseService = new Lazy<WarehouseService>(() => new WarehouseService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
@@ -93,14 +90,6 @@ namespace Merchello.Core.Services
         public IProductVariantService ProductVariantService
         {
             get { return _productVariantService.Value; }
-        }
-
-        /// <summary>
-        /// Gets the <see cref="IRegionService"/>
-        /// </summary>
-        internal IRegionService RegionService
-        {
-            get { return _regionService.Value; }
         }
 
         /// <summary>

@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
+using Merchello.Core.Configuration;
+using Merchello.Core.Configuration.Outline;
 using Merchello.Core.Models;
 using Merchello.Core.Persistence;
 using Merchello.Core.Persistence.UnitOfWork;
@@ -15,6 +19,8 @@ namespace Merchello.Core.Services
     /// </summary>
     public class WarehouseService : IWarehouseService
     {
+        private readonly static ConcurrentDictionary<string, IEnumerable<IProvince>> RegionProvinceCache = new ConcurrentDictionary<string, IEnumerable<IProvince>>();
+
         private readonly IDatabaseUnitOfWorkProvider _uowProvider;
         private readonly RepositoryFactory _repositoryFactory;
 
@@ -35,7 +41,21 @@ namespace Merchello.Core.Services
 
             _uowProvider = provider;
             _repositoryFactory = repositoryFactory;
+
+            if (!RegionProvinceCache.IsEmpty) return;
+
+            foreach (RegionElement region in MerchelloConfiguration.Current.Section.RegionalProvinces)
+            {
+                CacheRegion(region.Code, (from ProvinceElement pe in region.ProvincesConfiguration
+                    select new Province(pe.Code, pe.Name)).Cast<IProvince>().ToArray());
+            }
         }
+
+        private static void CacheRegion(string code, IProvince[] provinces)
+        {
+            RegionProvinceCache.AddOrUpdate(code, provinces, (x, y) => provinces);
+        }
+        
 
         #region IWarehouseService Members
 
@@ -190,16 +210,76 @@ namespace Merchello.Core.Services
             throw new NotImplementedException();
         }
 
-        #endregion
-
-        public IEnumerable<IWarehouse> GetAll()
+        /// <summary>
+        /// Returns the <see cref="CountryBase" /> for the country code passed.
+        /// </summary>
+        /// <param name="countryCode">The two letter ISO Region code (country code)</param>
+        /// <returns><see cref="RegionInfo"/> for the country corresponding the the country code passed</returns>
+        public ICountryBase GetCountryByCode(string countryCode)
         {
-            using (var repository = _repositoryFactory.CreateWarehouseRepository(_uowProvider.GetUnitOfWork()))
-            {
-                return repository.GetAll();
-            }
+            return new Country(countryCode);
         }
 
+        /// <summary>
+        /// Returns a Region collection for all countries
+        /// </summary>
+        /// <returns>A collection of <see cref="RegionInfo"/></returns>
+        public IEnumerable<ICountryBase> GetAllCountries()
+        {
+            return CultureInfo.GetCultures(CultureTypes.SpecificCultures)
+                .Select(culture => new RegionInfo(culture.Name))
+                .Select(ri =>
+                    new Country(ri.TwoLetterISORegionName, GetProvincesByCountryCode(ri.TwoLetterISORegionName))
+                    {
+                        ProvinceLabel = GetProvinceLabelForCountry(ri.TwoLetterISORegionName)
+                    });
+        }
+
+        /// <summary>
+        /// Returns a Region collection for all countries excluding codes passed
+        /// </summary>
+        /// <param name="excludeCountryCodes">A collection of country codes to exclude from the result set</param>
+        /// <returns>A collection of <see cref="RegionInfo"/></returns>
+        public IEnumerable<ICountryBase> GetAllCountries(string[] excludeCountryCodes)
+        {
+            return GetAllCountries().Where(x => !excludeCountryCodes.Contains(x.RegionInfo.TwoLetterISORegionName));
+        }
+
+        /// <summary>
+        /// True/false indicating whether or not the region has provinces configured in the Merchello.config file
+        /// </summary>
+        /// <param name="countryCode">The two letter ISO Region code (country code)</param>
+        /// <returns></returns>
+        private bool CountryHasProvinces(string countryCode)
+        {
+            return RegionProvinceCache.ContainsKey(countryCode);
+        }
+
+        /// <summary>
+        /// Returns the province label from the configuration file
+        /// </summary>
+        /// <param name="countryCode">The two letter ISO Region code</param>
+        /// <returns></returns>
+        private string GetProvinceLabelForCountry(string countryCode)
+        {
+            return CountryHasProvinces(countryCode)
+                ? MerchelloConfiguration.Current.Section.RegionalProvinces[countryCode].ProvinceLabel
+                : string.Empty;
+        }
+
+        /// <summary>
+        /// Returns a collection of <see cref="IProvince"/> given a region code
+        /// </summary>
+        /// <param name="countryCode">The two letter ISO Region code (country code)</param>
+        /// <returns>A collection of <see cref="IProvince"/></returns>
+        private IEnumerable<IProvince> GetProvincesByCountryCode(string countryCode)
+        {
+            return CountryHasProvinces(countryCode) ?
+                RegionProvinceCache[countryCode] :
+                new List<IProvince>();
+        }
+
+        #endregion
 
         #region Event Handlers
 

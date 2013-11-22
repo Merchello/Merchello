@@ -8,23 +8,23 @@ using Umbraco.Core.Persistence.Querying;
 
 namespace Merchello.Core.Persistence.Repositories
 {
-    internal class RegionRepository : MerchelloPetaPocoRepositoryBase<IRegion>, IRegionRepository
+    internal class ShipRegionRepository : MerchelloPetaPocoRepositoryBase<IShipCountry>, IShipRegionRepository
     {
-        public RegionRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache)
-            : base(work, cache)
-        { }
+        public ShipRegionRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache) : base(work, cache)
+        {
+        }
 
-        protected override IRegion PerformGet(Guid key)
+        protected override IShipCountry PerformGet(Guid key)
         {
             throw new NotImplementedException();
         }
 
-        protected override IEnumerable<IRegion> PerformGetAll(params Guid[] keys)
+        protected override IEnumerable<IShipCountry> PerformGetAll(params Guid[] keys)
         {
             throw new NotImplementedException();
         }
 
-        protected override IEnumerable<IRegion> PerformGetByQuery(IQuery<IRegion> query)
+        protected override IEnumerable<IShipCountry> PerformGetByQuery(IQuery<IShipCountry> query)
         {
             throw new NotImplementedException();
         }
@@ -44,12 +44,12 @@ namespace Merchello.Core.Persistence.Repositories
             throw new NotImplementedException();
         }
 
-        protected override void PersistNewItem(IRegion entity)
+        protected override void PersistNewItem(IShipCountry entity)
         {
             throw new NotImplementedException();
         }
 
-        protected override void PersistUpdatedItem(IRegion entity)
+        protected override void PersistUpdatedItem(IShipCountry entity)
         {
             throw new NotImplementedException();
         }

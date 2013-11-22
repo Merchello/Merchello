@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -68,6 +69,27 @@ namespace Merchello.Core.Services
         /// <param name="shipMethodKey">The key of the <see cref="IShipMethod"/></param>
         /// <returns>A collection of <see cref="IWarehouse"/></returns>
         IEnumerable<IWarehouse> GetWarehousesForShipMethod(Guid shipMethodKey);
+
+
+        /// <summary>
+        /// Returns the <see cref="Merchello.Core.Models.ICountry"/> for the country code passed.
+        /// </summary>
+        /// <param name="countryCode">The two letter ISO Region code (country code)</param>
+        /// <returns><see cref="RegionInfo"/> for the country corresponding the the country code passed</returns>
+        ICountryBase GetCountryByCode(string countryCode);
+
+        /// <summary>
+        /// Returns a Region collection for all countries
+        /// </summary>
+        /// <returns>A collection of <see cref="Merchello.Core.Models.ICountry"/></returns>
+        IEnumerable<ICountryBase> GetAllCountries();
+
+        /// <summary>
+        /// Returns a RegionInfo collection for all countries excluding codes passed
+        /// </summary>
+        /// <param name="excludeCountryCodes">A collection of country codes to exclude from the result set</param>
+        /// <returns>A collection of <see cref="RegionInfo"/></returns>
+        IEnumerable<ICountryBase> GetAllCountries(string[] excludeCountryCodes);
 
     }
 }
