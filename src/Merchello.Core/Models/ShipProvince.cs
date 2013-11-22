@@ -9,13 +9,14 @@ namespace Merchello.Core.Models
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    internal class ShippingProvince : Province, IShippingProvince
+    internal class ShipProvince : Province, IShipProvince
     {
-        public ShippingProvince(string code, string name)
+        public ShipProvince(string code, string name)
             : base(code, name)
         {
             ShipTo = true;
-            ShippingAdjustment = 0;
+            RateAdjustment = 0;
+            RateAdjustmentType = RateAdjustmentType.Numeric;
         }
 
         /// <summary>
@@ -28,6 +29,12 @@ namespace Merchello.Core.Models
         /// Price adjustment when shipping to this province
         /// </summary>
         [DataMember]
-        public decimal ShippingAdjustment { get; set; }
+        public decimal RateAdjustment { get; set; }
+
+        /// <summary>
+        /// Defines whether a rate adjustment should be a fixed numeric adjustment or calculated as a percentage
+        /// </summary>
+        [DataMember]
+        public RateAdjustmentType RateAdjustmentType { get; set; }
     }
 }

@@ -3,7 +3,7 @@ using Merchello.Core.Models.Rdbms;
 
 namespace Merchello.Core.Persistence.Factories
 {
-    internal partial class WarehouseFactory : IEntityFactory<IWarehouse, WarehouseDto>
+    internal class WarehouseFactory : IEntityFactory<IWarehouse, WarehouseDto>
     {
         public IWarehouse BuildEntity(WarehouseDto dto)
         {

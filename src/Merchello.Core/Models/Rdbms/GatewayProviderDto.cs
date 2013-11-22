@@ -14,8 +14,8 @@ namespace Merchello.Core.Models.Rdbms
         [Constraint(Default = "newid()")]
         public Guid Key { get; set; }
 
-        [Column("gatewayProviderTfKey")]
-        public Guid GatewayProviderTfKey { get; set; }
+        [Column("providerTfKey")]
+        public Guid ProviderTfKey { get; set; }
 
         [Column("name")]
         public string Name { get; set; }
