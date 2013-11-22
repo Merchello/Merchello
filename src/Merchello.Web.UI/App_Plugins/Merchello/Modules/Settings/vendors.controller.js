@@ -26,6 +26,7 @@
             // just a mock of getting the vendor objects
             var mockVendors = [
                 {
+                    key: 1,
                     name: "Geeky Soap",
                     contact: "Anne-Marie",
                     phone: "360-647-7470",
@@ -37,6 +38,7 @@
                     country: "United States of America"
                 },
                 {
+                    key: 2,
                     name: "Nerdy Soap",
                     contact: "Heather",
                     phone: "360-647-7470",
@@ -66,16 +68,31 @@
             close: function () {
                 $scope.flyouts.addVendor = false;
             },
-            open: function () {
+            open: function (vendor) {
+                if (vendor) {
+                    $scope.newVendor = vendor;
+                }
                 $scope.flyouts.addVendor = true;
             },
-            save: function (vendor) {
-                // Note From Kyle: An API call will need to be wired in here to save the new Vendors in the database.
-                if (!vendor) {
-                    $scope.vendors.push($scope.newVendor);
-                    $scope.addVendorFlyout.clear();
-                    $scope.addVendorFlyout.close();
+            save: function () {
+                var idx = -1;
+                for (i = 0; i < $scope.vendors.length; i++) {
+                    if ($scope.vendors[i].key == $scope.newVendor.key) {
+                        idx = i;
+                    }
                 }
+                if (idx > -1) {
+                    $scope.vendors[idx] = $scope.newVendor;
+                    // Note From Kyle: An API call will need to be wired in here to edit the existing Vendor in the database.
+                } else {
+                    var newKey = $scope.vendors.length;
+                    // Note From Kyle: This key-creation logic will need to be modified to fit whatever works for the database.
+                    $scope.newVendor.key = newKey;
+                    $scope.vendors.push($scope.newVendor);
+                    // Note From Kyle: An API call will need to be wired in here to add the new Vendor to the database.
+                }
+                $scope.addVendorFlyout.clear();
+                $scope.addVendorFlyout.close();
             },
             toggle: function () {
                 $scope.flyouts.addVendor = !$scope.flyouts.addVendor;
@@ -89,14 +106,16 @@
             confirm: function() {
                 var idx = -1;
                 for (i = 0; i < $scope.vendors.length; i++) {
-                    if ($scope.vendors[i].key == $scope.deleteVendor.key && $scope.vendors[i].name == $scope.deleteVendor.name) {
+                    if ($scope.vendors[i].key == $scope.deleteVendor.key) {
                         idx = i;
                     }
                 }
                 if (idx > -1) {
                     $scope.vendors.splice(idx, 1);
                 }
+                // Note From Kyle: Some sort of logic to confirm there are no products currently associated with this vendor might be needed.
                 $scope.deleteVendor = new merchello.Models.Vendor();
+                // Note From Kyle: An API call will need to be wired in here to delete the Vendor in the database.
                 $scope.deleteVendorFlyout.close();
             },
             open: function (vendor) {
