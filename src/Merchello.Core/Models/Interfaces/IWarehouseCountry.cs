@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 
 namespace Merchello.Core.Models
 {
-    public interface IWarehouseCountry : ICountryBase
+    public interface IShipCountry : ICountryBase
     {
         /// <summary>
         /// The unique warehouse key (guid)

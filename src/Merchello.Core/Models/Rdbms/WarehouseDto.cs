@@ -49,8 +49,8 @@ namespace Merchello.Core.Models.Rdbms
         [NullSetting(NullSetting = NullSettings.Null)]
         public string Email { get; set; }
 
-        [Column("primary")]
-        public bool Primary { get; set; }
+        [Column("isDefault")]
+        public bool IsDefault { get; set; }
 
         [Column("updateDate")]
         [Constraint(Default = "getdate()")]
@@ -58,7 +58,10 @@ namespace Merchello.Core.Models.Rdbms
 
         [Column("createDate")]
         [Constraint(Default = "getdate()")]
-        public DateTime CreateDate { get; set; }        
+        public DateTime CreateDate { get; set; }
+
+        [ResultColumn]
+        public WarehouseCatalogDto WarehouseCatalogDto { get; set; }
 
     }
 }

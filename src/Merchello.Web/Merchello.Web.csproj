@@ -225,6 +225,7 @@
     <Compile Include="ApplicationContextExtensions.cs" />
     <Compile Include="Cache\HttpCachingBacker.cs" />
     <Compile Include="Models\ContentEditing\ProductMappingExtensions.cs" />
+    <Compile Include="Models\ContentEditing\WarehouseInventoryDisplay.cs" />
     <Compile Include="ProductQuery.cs" />
     <Compile Include="CustomerExtensions.cs" />
     <Compile Include="Editors\CustomerApiController.cs" />

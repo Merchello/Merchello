@@ -58,7 +58,7 @@ namespace Merchello.Web.Models.ContentEditing
                 Download = FieldAsBoolean(result.Fields["download"]),
                 DownloadMediaId = FieldAsInteger(result, "downloadMediaId"),
                 Attributes = RawJsonFieldAsCollection<ProductAttributeDisplay>(result, "attributes"),
-                WarehouseInventory = RawJsonFieldAsCollection<WarehouseInventory>(result, "warehouses")
+                WarehouseInventory = RawJsonFieldAsCollection<WarehouseInventoryDisplay>(result, "warehouses")
             };
 
             return pvd;

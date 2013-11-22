@@ -8,14 +8,14 @@ using NUnit.Framework;
 namespace Merchello.Tests.UnitTests.Services
 {
     [TestFixture]
-    public class WarehouseServiceTests
+    public class SettingsServiceTests
     {
-        private IWarehouseService _warehouseService;
+        private ISettingsService _settingsService;
 
         [SetUp]
         public void Init()
         {
-            _warehouseService = new WarehouseService(new MockUnitOfWorkProvider(), new RepositoryFactory());
+            _settingsService = new SettingsService();
         }
         
         /// <summary>
@@ -29,7 +29,7 @@ namespace Merchello.Tests.UnitTests.Services
             var excludes = new[] {"SA", "DK"};
 
             //// Act
-            var regions = _warehouseService.GetAllCountries(excludes);
+            var regions = _settingsService.GetAllCountries(excludes);
 
             //// Assert
             Assert.IsTrue(regions.Any());
@@ -48,11 +48,11 @@ namespace Merchello.Tests.UnitTests.Services
             const string countryCode = "DK";
 
             //// Act
-            var denmark = _warehouseService.GetCountryByCode(countryCode);
+            var denmark = _settingsService.GetCountryByCode(countryCode);
 
             //// Assert
             Assert.NotNull(denmark);
-            Assert.AreEqual(countryCode, denmark.RegionInfo.TwoLetterISORegionName);
+            Assert.AreEqual(countryCode, denmark.CountryCode);
         }
 
        

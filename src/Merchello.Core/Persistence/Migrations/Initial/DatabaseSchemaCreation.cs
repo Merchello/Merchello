@@ -36,9 +36,13 @@ namespace Merchello.Core.Persistence.Migrations.Initial
                 {6, typeof(GatewayProviderDto)},
 
                 {7, typeof(WarehouseDto)},
-                {8, typeof(WarehouseCountryDto)},
-                {9, typeof(ShipMethodDto)},
-                {10, typeof(ShipRateTierDto)},
+                {8, typeof(WarehouseCatalogDto)},
+                
+                //{8, typeof(WarehouseCountryDto)},
+                {9, typeof(ShipCountryDto)},
+                {10, typeof(ShipMethodDto)},
+                
+                {11, typeof(ShipRateTierDto)},
                 
                 {12, typeof(OrderStatusDto)},
                 {13, typeof(OrderDto)}, 
@@ -55,7 +59,8 @@ namespace Merchello.Core.Persistence.Migrations.Initial
                 {23, typeof(ProductOptionDto)},
                 {24, typeof(ProductAttributeDto)},
                 {25, typeof(Product2ProductOptionDto)},
-                {26, typeof(WarehouseInventoryDto)},
+                //{26, typeof(WarehouseInventoryDto)},
+                {26, typeof(CatalogInventoryDto)},
                 {27, typeof(TaxRegionDto)},
                 {28, typeof(ProductVariant2ProductAttributeDto)},
            

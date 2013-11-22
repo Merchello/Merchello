@@ -3,24 +3,26 @@ using Merchello.Core.Models.Rdbms;
 
 namespace Merchello.Core.Persistence.Factories
 {
-    internal class InventoryFactory : IEntityFactory<IWarehouseInventory, WarehouseInventoryDto>
+    internal class InventoryFactory : IEntityFactory<IWarehouseInventory, CatalogInventoryDto>
     {
-        public IWarehouseInventory BuildEntity(WarehouseInventoryDto dto)
+        public IWarehouseInventory BuildEntity(CatalogInventoryDto dto)
         {
-            return new WarehouseInventory(dto.WarehouseKey, dto.ProductVariantKey)
+            var catalog = new WarehouseCatalogFactory().BuildEntity(dto.WarehouseCatalogDto);
+
+            return new WarehouseInventory(catalog, dto.ProductVariantKey)
                 {
                     Count = dto.Count,
                     LowCount = dto.LowCount,
                     CreateDate = dto.CreateDate,
                     UpdateDate = dto.UpdateDate
-                };
+                };           
         }
 
-        public WarehouseInventoryDto BuildDto(IWarehouseInventory entity)
+        public CatalogInventoryDto BuildDto(IWarehouseInventory entity)
         {
-            return new WarehouseInventoryDto()
+            return new CatalogInventoryDto()
                 {
-                    WarehouseKey = entity.WarehouseKey,
+                    CatalogKey = ((WarehouseInventory)entity).CatalogKey,
                     ProductVariantKey = entity.ProductVariantKey,
                     Count = entity.Count,
                     LowCount = entity.LowCount,

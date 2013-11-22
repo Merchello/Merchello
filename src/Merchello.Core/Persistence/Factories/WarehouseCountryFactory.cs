@@ -4,11 +4,11 @@ using Merchello.Core.Models.Rdbms;
 
 namespace Merchello.Core.Persistence.Factories
 {
-    public class WarehouseCountryFactory : IEntityFactory<IWarehouseCountry, WarehouseCountryDto>
+    public class WarehouseCountryFactory : IEntityFactory<IShipCountry, WarehouseCountryDto>
     {
-        public IWarehouseCountry BuildEntity(WarehouseCountryDto dto)
+        public IShipCountry BuildEntity(WarehouseCountryDto dto)
         {
-            var entity = new WarehouseCountry(dto.WarehouseKey, dto.CountryCode)
+            var entity = new ShipCountry(dto.WarehouseKey, dto.CountryCode)
             {
                 Key = dto.Key,
                 UpdateDate = dto.UpdateDate,
@@ -18,7 +18,7 @@ namespace Merchello.Core.Persistence.Factories
             return entity;
         }
 
-        public WarehouseCountryDto BuildDto(IWarehouseCountry entity)
+        public WarehouseCountryDto BuildDto(IShipCountry entity)
         {
             return new WarehouseCountryDto()
             {

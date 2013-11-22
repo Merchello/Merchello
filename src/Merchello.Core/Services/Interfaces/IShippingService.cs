@@ -10,7 +10,7 @@ using Umbraco.Core.Services;
 namespace Merchello.Core.Services
 {
     /// <summary>
-    /// Defines the AddressService, which provides access to operations involving <see cref="IShipment"/>
+    /// Defines the ShippingService, which provides access to shipping operations
     /// </summary>
     public interface IShippingService : IService
     {

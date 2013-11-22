@@ -18,20 +18,20 @@ namespace Merchello.Tests.UnitTests.Models
             _product = new Product(variant);
         }
 
-        /// <summary>
-        /// Test verifies a ware house can be associated with a product
-        /// </summary>
-        [Test]
-        public void Can_Add_A_Warehouse_To_A_Product()
-        {
-            //// Arrange
+        ///// <summary>
+        ///// Test verifies a ware house can be associated with a product
+        ///// </summary>
+        //[Test]
+        //public void Can_Add_A_Warehouse_To_A_Product()
+        //{
+        //    //// Arrange
             
-            //// Act
-            _product.AddToWarehouse(Guid.NewGuid());
+        //    //// Act
+        //    _product.AddToWarehouseCatalog(new WarehouseCatalog(Guid.NewGuid()));
 
-            //// Assert
-            Assert.IsTrue(_product.Warehouses.Any());
-        }
+        //    //// Assert
+        //    Assert.IsTrue(_product.Warehouses.Any());
+        //}
 
         /// <summary>
         /// Test verifies that a purchasable variant can be retrieved for a product with no options

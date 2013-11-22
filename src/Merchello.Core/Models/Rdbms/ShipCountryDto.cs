@@ -4,25 +4,27 @@ using Umbraco.Core.Persistence.DatabaseAnnotations;
 
 namespace Merchello.Core.Models.Rdbms
 {
-    [TableName("merchWarehouseCountry")]
+    [TableName("merchShipCountry")]
     [PrimaryKey("pk", autoIncrement = false)]
     [ExplicitColumns]
-    public class WarehouseCountryDto
+    internal class ShipCountryDto
     {
         [Column("pk")]
         [PrimaryKeyColumn(AutoIncrement = false)]
         [Constraint(Default = "newid()")]
         public Guid Key { get; set; }
 
-        [Column("warehouseKey")]
-        [ForeignKey(typeof(WarehouseDto), Name = "FK_merchWarehouseCountry_merchWarehouse", Column = "pk")]
-        public Guid WarehouseKey { get; set; }
+        [Column("catalogKey")]
+        [ForeignKey(typeof(WarehouseCatalogDto), Name = "FK_merchCatalogCountry_merchWarehouseCatalog", Column = "pk")]
+        public Guid CatalogKey { get; set; }
+
 
         [Column("countryCode")]
         public string CountryCode { get; set; }
 
         [Column("name")]
         public string Name { get; set; }
+
 
         [Column("updateDate")]
         [Constraint(Default = "getdate()")]
