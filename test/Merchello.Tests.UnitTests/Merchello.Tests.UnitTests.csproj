@@ -263,7 +263,7 @@
     <Compile Include="Services\CustomerRegistryServiceTests.cs" />
     <Compile Include="Services\CustomerServiceTests.cs" />
     <Compile Include="Services\ProductServiceTests.cs" />
-    <Compile Include="Services\WarehouseServiceTests.cs">
+    <Compile Include="Services\SettingsServiceTests.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TypeFields\AddressTypeFieldTests.cs" />

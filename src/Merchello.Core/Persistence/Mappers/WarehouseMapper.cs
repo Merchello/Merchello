@@ -26,6 +26,7 @@ namespace Merchello.Core.Persistence.Mappers
             CacheMap<Warehouse, WarehouseDto>(src => src.CountryCode, dto => dto.CountryCode);
             CacheMap<Warehouse, WarehouseDto>(src => src.Phone, dto => dto.Phone);
             CacheMap<Warehouse, WarehouseDto>(src => src.Email, dto => dto.Email);
+            CacheMap<Warehouse, WarehouseDto>(src => src.IsDefault, dto => dto.IsDefault);
             CacheMap<Warehouse, WarehouseDto>(src => src.UpdateDate, dto => dto.UpdateDate);
             CacheMap<Warehouse, WarehouseDto>(src => src.CreateDate, dto => dto.CreateDate);
         }

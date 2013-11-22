@@ -1,7 +1,12 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using Merchello.Core.Models.EntityBase;
+using Merchello.Core.Models.Interfaces;
 
 namespace Merchello.Core.Models
 {
@@ -19,7 +24,19 @@ namespace Merchello.Core.Models
         private string _countryCode;
         private string _phone;
         private string _email;
-        private bool _primary;
+        private bool _isDefault;
+        private readonly IEnumerable<IWarehouseCatalog> _catalogs;
+
+        public Warehouse()
+            : this(new List<IWarehouseCatalog>())
+        {}
+
+        internal Warehouse(IEnumerable<IWarehouseCatalog> catalogs)
+        {
+            var warehouseCatalogs = catalogs as IWarehouseCatalog[] ?? catalogs.ToArray();
+            Mandate.ParameterNotNull(warehouseCatalogs, "catalogs");
+            _catalogs = warehouseCatalogs;
+        }
 
         private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<Warehouse, string>(x => x.Name);  
         private static readonly PropertyInfo Address1Selector = ExpressionHelper.GetPropertyInfo<Warehouse, string>(x => x.Address1);  
@@ -30,8 +47,10 @@ namespace Merchello.Core.Models
         private static readonly PropertyInfo CountryCodeSelector = ExpressionHelper.GetPropertyInfo<Warehouse, string>(x => x.CountryCode);
         private static readonly PropertyInfo PhoneSelector = ExpressionHelper.GetPropertyInfo<Warehouse, string>(x => x.Phone);
         private static readonly PropertyInfo EmailSelector = ExpressionHelper.GetPropertyInfo<Warehouse, string>(x => x.Email);
-        private static readonly PropertyInfo PrimarySelector = ExpressionHelper.GetPropertyInfo<Warehouse, bool>(x => x.Primary);
+        private static readonly PropertyInfo PrimarySelector = ExpressionHelper.GetPropertyInfo<Warehouse, bool>(x => x.IsDefault);
         
+        
+
         /// <summary>
         /// The name associated with the Warehouse
         /// </summary>
@@ -189,18 +208,27 @@ namespace Merchello.Core.Models
         /// True/false indicating whether or not this warehouse is the primary (or default) warehouse
         /// </summary>
         [DataMember]
-        public bool Primary
+        public bool IsDefault
         {
-            get { return _primary; }
+            get { return _isDefault; }
             set
             {
                 SetPropertyValueAndDetectChanges(o =>
                 {
-                    _primary = value;
-                    return _primary;
-                }, _primary, PrimarySelector);
+                    _isDefault = value;
+                    return _isDefault;
+                }, _isDefault, PrimarySelector);
             }
         }
+
+        /// <summary>
+        /// A list of catalogs (used for inventory)
+        /// </summary>
+        [IgnoreDataMember]
+        internal IEnumerable<IWarehouseCatalog> InventoryCatalogs {
+            get { return _catalogs; }
+        }
+
     }
 
 }

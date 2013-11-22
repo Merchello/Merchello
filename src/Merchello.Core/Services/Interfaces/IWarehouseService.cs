@@ -16,10 +16,10 @@ namespace Merchello.Core.Services
     public interface IWarehouseService : IService
     {
 
-        /// <summary>
-        /// Creates a Warehouse
-        /// </summary>
-        IWarehouse CreateWarehouse(string name);
+        ///// <summary>
+        ///// Creates a Warehouse
+        ///// </summary>
+        //IWarehouse CreateWarehouse(string name);
 
         /// <summary>
         /// Saves a single <see cref="IWarehouse"/> object
@@ -35,19 +35,25 @@ namespace Merchello.Core.Services
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         void Save(IEnumerable<IWarehouse> warehouseList, bool raiseEvents = true);
 
-        /// <summary>
-        /// Deletes a single <see cref="IWarehouse"/> object
-        /// </summary>
-        /// <param name="warehouse"><see cref="IWarehouse"/> to delete</param>
-        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        void Delete(IWarehouse warehouse, bool raiseEvents = true);
+        ///// <summary>
+        ///// Deletes a single <see cref="IWarehouse"/> object
+        ///// </summary>
+        ///// <param name="warehouse"><see cref="IWarehouse"/> to delete</param>
+        ///// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        //void Delete(IWarehouse warehouse, bool raiseEvents = true);
+
+        ///// <summary>
+        ///// Deletes a collection of <see cref="IWarehouse"/> objects
+        ///// </summary>
+        ///// <param name="warehouseList">Collection of <see cref="IWarehouse"/> to delete</param>
+        ///// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        //void Delete(IEnumerable<IWarehouse> warehouseList, bool raiseEvents = true);
 
         /// <summary>
-        /// Deletes a collection of <see cref="IWarehouse"/> objects
+        /// Gets the default <see cref="IWarehouse"/>
         /// </summary>
-        /// <param name="warehouseList">Collection of <see cref="IWarehouse"/> to delete</param>
-        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        void Delete(IEnumerable<IWarehouse> warehouseList, bool raiseEvents = true);
+        /// <returns></returns>
+        IWarehouse GetDefaultWarehouse();
 
         /// <summary>
         /// Gets an <see cref="IWarehouse"/> object by its 'UniqueId'
@@ -62,34 +68,7 @@ namespace Merchello.Core.Services
         /// <param name="keys">List of int Id for Warehouse objects to retrieve</param>
         /// <returns>List of <see cref="IWarehouse"/></returns>
         IEnumerable<IWarehouse> GetByKeys(IEnumerable<Guid> keys);
-
-        /// <summary>
-        /// Gets a list of warehouses associated with a ship method
-        /// </summary>
-        /// <param name="shipMethodKey">The key of the <see cref="IShipMethod"/></param>
-        /// <returns>A collection of <see cref="IWarehouse"/></returns>
-        IEnumerable<IWarehouse> GetWarehousesForShipMethod(Guid shipMethodKey);
-
-
-        /// <summary>
-        /// Returns the <see cref="Merchello.Core.Models.ICountry"/> for the country code passed.
-        /// </summary>
-        /// <param name="countryCode">The two letter ISO Region code (country code)</param>
-        /// <returns><see cref="RegionInfo"/> for the country corresponding the the country code passed</returns>
-        ICountryBase GetCountryByCode(string countryCode);
-
-        /// <summary>
-        /// Returns a Region collection for all countries
-        /// </summary>
-        /// <returns>A collection of <see cref="Merchello.Core.Models.ICountry"/></returns>
-        IEnumerable<ICountryBase> GetAllCountries();
-
-        /// <summary>
-        /// Returns a RegionInfo collection for all countries excluding codes passed
-        /// </summary>
-        /// <param name="excludeCountryCodes">A collection of country codes to exclude from the result set</param>
-        /// <returns>A collection of <see cref="RegionInfo"/></returns>
-        IEnumerable<ICountryBase> GetAllCountries(string[] excludeCountryCodes);
+      
 
     }
 }

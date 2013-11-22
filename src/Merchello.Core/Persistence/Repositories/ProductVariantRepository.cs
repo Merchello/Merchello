@@ -102,7 +102,7 @@ namespace Merchello.Core.Persistence.Repositories
         {
             var list = new List<string>
             {
-                "DELETE FROM merchWarehouseInventory WHERE productVariantKey = @Key",
+                "DELETE FROM merchCatalogInventory WHERE productVariantKey = @Key",
                 "DELETE FROM merchProductVariantIndex WHERE productVariantKey = @Key",
                 "DELETE FROM merchProductVariant2ProductAttribute WHERE productVariantKey = @Key",
                 "DELETE FROM merchProductVariant WHERE pk = @Key"
@@ -213,29 +213,29 @@ namespace Merchello.Core.Persistence.Repositories
         // this merely asserts that an assoicate between the warehouse and the variant has been made
         internal void SaveWarehouseInventory(IProductVariant productVariant)
         {
-            var existing = GetWarehouseInventory(productVariant.Key);
+            //var existing = GetWarehouseInventory(productVariant.Key);
 
-            foreach (var inv in existing.Where(inv => !((ProductVariant) productVariant).WarehouseInventory.Contains(inv.WarehouseKey)))
-            {
-                DeleteWarehouseInventory(productVariant.Key, inv.WarehouseKey);
-            }
+            //foreach (var inv in existing.Where(inv => !((ProductVariant) productVariant).WarehouseInventory.Contains(inv.WarehouseKey)))
+            //{
+            //    DeleteWarehouseInventory(productVariant.Key, inv.WarehouseKey);
+            //}
 
-            foreach (var inv in productVariant.Warehouses.Where((inv => !existing.Contains(inv.WarehouseKey))))
-            {
-                AddWarehouseInventory(inv);
-            }
+            //foreach (var inv in productVariant.Warehouses.Where((inv => !existing.Contains(inv.WarehouseKey))))
+            //{
+            //    AddWarehouseInventory(inv);
+            //}
 
-            foreach (var inv in productVariant.Warehouses.Where((inv => existing.Contains(inv.WarehouseKey))))
-            {
-                UpdateWarehouseInventory(inv);
-            }
+            //foreach (var inv in productVariant.Warehouses.Where((inv => existing.Contains(inv.WarehouseKey))))
+            //{
+            //    UpdateWarehouseInventory(inv);
+            //}
         }
 
-        private void AddWarehouseInventory(IWarehouseInventory inv)
+        private void AddWarehouseInventory(WarehouseInventory inv)
         {
-            var dto = new WarehouseInventoryDto()
+            var dto = new CatalogInventoryDto()
             {
-                WarehouseKey = inv.WarehouseKey,
+                CatalogKey = inv.CatalogKey,
                 ProductVariantKey = inv.ProductVariantKey,
                 Count = inv.Count,
                 LowCount = inv.LowCount,
@@ -246,11 +246,11 @@ namespace Merchello.Core.Persistence.Repositories
             Database.Insert(dto);
         }
 
-        private void UpdateWarehouseInventory(IWarehouseInventory inv)
+        private void UpdateWarehouseInventory(WarehouseInventory inv)
         {
-            var dto = new WarehouseInventoryDto()
+            var dto = new CatalogInventoryDto()
             {
-                WarehouseKey = inv.WarehouseKey,
+                CatalogKey = inv.CatalogKey,
                 ProductVariantKey = inv.ProductVariantKey,
                 Count = inv.Count,
                 LowCount = inv.LowCount,
@@ -272,12 +272,12 @@ namespace Merchello.Core.Persistence.Repositories
         {
             var sql = new Sql();
             sql.Select("*")
-               .From<WarehouseInventoryDto>()
-               .InnerJoin<WarehouseDto>()
-               .On<WarehouseInventoryDto, WarehouseDto>(left => left.WarehouseKey, right => right.Key)
-               .Where<WarehouseInventoryDto>(x => x.ProductVariantKey == productVariantKey);
+               .From<CatalogInventoryDto>()
+               .InnerJoin<WarehouseCatalogDto>()
+               .On<CatalogInventoryDto, WarehouseCatalogDto>(left => left.CatalogKey, right => right.Key)
+               .Where<CatalogInventoryDto>(x => x.ProductVariantKey == productVariantKey);
 
-            var dtos = Database.Fetch<WarehouseInventoryDto, WarehouseDto>(sql);
+            var dtos = Database.Fetch<CatalogInventoryDto, WarehouseCatalogDto>(sql);
 
             var collection = new WarehouseInventoryCollection();
             var factory = new InventoryFactory();
@@ -292,18 +292,20 @@ namespace Merchello.Core.Persistence.Repositories
         /// <summary>
         /// Gets a collection of <see cref="IProductVariant"/> objects associated with a given warehouse 
         /// </summary>
-        /// <param name="warehouseKey">The 'unique' id of the warehouse</param>
+        /// <param name="warehouseKey">The 'unique' key of the warehouse</param>
         /// <returns>A collection of <see cref="IProductVariant"/></returns>
         public IEnumerable<IProductVariant> GetByWarehouseKey(Guid warehouseKey)
         {
             var sql = new Sql();
             sql.Select("*")
-                .From<WarehouseInventoryDto>()
-                .Where<WarehouseInventoryDto>(x => x.WarehouseKey == warehouseKey);
+                .From<CatalogInventoryDto>()
+                .InnerJoin<WarehouseCatalogDto>()
+                .On<CatalogInventoryDto, WarehouseCatalogDto>(left => left.CatalogKey, right => right.Key)
+                .Where<WarehouseCatalogDto>(x => x.WarehouseKey == warehouseKey);
 
-            var dtos = Database.Fetch<WarehouseInventoryDto>(sql);
+            var dtos = Database.Fetch<CatalogInventoryDto, WarehouseCatalogDto>(sql);
 
-            return dtos.Select(dto => Get(dto.ProductVariantKey));
+            return dtos.DistinctBy(dto => dto.ProductVariantKey).Select(dto => Get(dto.ProductVariantKey));
 
         }
 

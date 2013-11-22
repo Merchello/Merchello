@@ -15,10 +15,13 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
         private IProductService _productService;
         private IProductVariantService _productVariantService;
         private IProduct _product;
-
+        private IWarehouse _warehouse;
         [SetUp]
         public void Init()
         {
+
+            _warehouse = PreTestDataWorker.WarehouseService.GetDefaultWarehouse();
+
             PreTestDataWorker.DeleteAllProducts();
             _productService = PreTestDataWorker.ProductService;
             _productVariantService = PreTestDataWorker.ProductVariantService;
@@ -248,7 +251,7 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
             //// Arrange
             
             //// Act
-            _product.AddToWarehouse(new Guid("268D4007-8853-455A-89F7-A28398843E5F"));
+            _product.AddToWarehouseCatalog(_warehouse.DefaultCatalog());
 
             //// Assert
             Assert.IsTrue(_product.Warehouses.Count() == 1);
@@ -264,7 +267,7 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
             const int warehouseId = 1;
 
             //// Act
-            _product.AddToWarehouse(new Guid("268D4007-8853-455A-89F7-A28398843E5F"));
+            _product.AddToWarehouseCatalog(_warehouse.DefaultCatalog());
             _productService.Save(_product);
 
             //// Assert
@@ -278,7 +281,7 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
             const int warehouseId = 1;
 
             //// Act
-            _product.AddToWarehouse(new Guid("268D4007-8853-455A-89F7-A28398843E5F"));
+            _product.AddToWarehouseCatalog(_warehouse.DefaultCatalog());
             _product.Warehouses.First().Count = 10;
             _productService.Save(_product);
 

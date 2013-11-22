@@ -113,7 +113,7 @@ namespace Merchello.Core.Persistence.Repositories
                         (SELECT optionKey FROM merchProductOption WHERE pk IN 
                         (SELECT optionKey FROM merchProduct2ProductOption WHERE productKey = @Key))",
                     "DELETE FROM merchProduct2ProductOption WHERE productKey = @Key",
-                    "DELETE FROM merchWarehouseInventory WHERE productVariantKey IN (SELECT pk FROM merchProductVariant WHERE productKey = @Key)",
+                    "DELETE FROM merchCatalogInventory WHERE productVariantKey IN (SELECT pk FROM merchProductVariant WHERE productKey = @Key)",
                     "DELETE FROM merchProductVariantIndex WHERE productVariantKey IN (SELECT pk FROM merchProductVariant WHERE productKey = @Key)",
                     "DELETE FROM merchProductVariant WHERE productKey = @Key",
                     "DELETE FROM merchProduct WHERE pk = @Key",

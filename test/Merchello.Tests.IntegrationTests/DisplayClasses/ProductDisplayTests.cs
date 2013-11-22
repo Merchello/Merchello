@@ -17,13 +17,15 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
         private Guid _productKey;
         private Guid _productVariantKey;
         private int _examineId;
-        private readonly Guid _defaultWarehouseKey = new Guid("268D4007-8853-455A-89F7-A28398843E5F");
+        private IWarehouse _warehouse;
 
         [SetUp]
         public void Init()
         {
-               
-            
+
+            var warehouseService = PreTestDataWorker.WarehouseService;
+            _warehouse = warehouseService.GetDefaultWarehouse();
+
             var productVariantService = PreTestDataWorker.ProductVariantService;
             var productService = PreTestDataWorker.ProductService;
 
@@ -54,7 +56,7 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
             };
 
             var variant = productVariantService.CreateProductVariantWithKey(product, attributes);
-            variant.AddToWarehouse(_defaultWarehouseKey);
+            variant.AddToWarehouseCatalog(_warehouse.DefaultCatalog());
             productVariantService.Save(variant);
             _productVariantKey = variant.Key;
             _examineId = ((ProductVariant) variant).ExamineId;

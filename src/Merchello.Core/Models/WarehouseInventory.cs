@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
-using Merchello.Core.Models.EntityBase;
+using Merchello.Core.Models.Interfaces;
 
 namespace Merchello.Core.Models
 {
@@ -11,23 +11,42 @@ namespace Merchello.Core.Models
     [DataContract(IsReference = true)]
     internal class WarehouseInventory : IWarehouseInventory
     {
-        private readonly Guid _warehouseKey;
+        private readonly IWarehouseCatalog _catalog;
         private readonly Guid _productVariantKey;
 
-        public WarehouseInventory(Guid warehouseKey, Guid productVariantKey)
+        public WarehouseInventory(IWarehouseCatalog catalog, Guid productVariantKey)
         {            
-            _warehouseKey = warehouseKey;
+            Mandate.ParameterNotNull(catalog, "catalog");
+            Mandate.ParameterCondition(productVariantKey != Guid.Empty, "productVariantKey");
+            _catalog = catalog;
             _productVariantKey = productVariantKey;
         }
 
         /// <summary>
-        /// The warehouse key
+        /// The unique key identifying the warehouse that maintains this catalog
         /// </summary>
         [DataMember]
         public Guid WarehouseKey
         {
-            get { return _warehouseKey; }
+            get { return _catalog.WarehouseKey; }
         }
+
+        /// <summary>
+        /// The warehouse catalog key
+        /// </summary>
+        [IgnoreDataMember]
+        internal Guid CatalogKey {
+            get { return _catalog.Key; }
+        }
+
+        /// <summary>
+        /// The optional name or title of the catalog
+        /// </summary>
+        [IgnoreDataMember]
+        internal string CatalogName 
+        {
+            get { return _catalog.Name; }
+        }     
 
         /// <summary>
         /// The unique key of the product variant

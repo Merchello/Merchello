@@ -17,6 +17,7 @@ namespace Merchello.Core.Services
         //private Lazy<InvoiceService> _invoiceService;
         private Lazy<ProductService> _productService;
         private Lazy<ProductVariantService> _productVariantService;
+        private Lazy<SettingsService> _settingsService; 
         //private Lazy<ShippingService> _shipmentService; 
         private Lazy<WarehouseService> _warehouseService;
 
@@ -52,6 +53,8 @@ namespace Merchello.Core.Services
             if(_productService == null)
                 _productService = new Lazy<ProductService>(() => new ProductService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _productVariantService.Value));
             
+            if(_settingsService == null)
+                _settingsService = new Lazy<SettingsService>(() => new SettingsService());
 
             if(_warehouseService == null)
                 _warehouseService = new Lazy<WarehouseService>(() => new WarehouseService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
@@ -74,6 +77,14 @@ namespace Merchello.Core.Services
         public IItemCacheService ItemCacheService
         {
             get { return _itemCacheService.Value;  }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="ISettingsService"/>
+        /// </summary>
+        public ISettingsService SettingsService 
+        {
+            get { return _settingsService.Value; }
         }
 
         /// <summary>

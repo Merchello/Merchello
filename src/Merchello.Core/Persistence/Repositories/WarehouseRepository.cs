@@ -31,7 +31,7 @@ namespace Merchello.Core.Persistence.Repositories
             var sql = GetBaseQuery(false)
                 .Where(GetBaseWhereClause(), new { Key = key });
 
-            var dto = Database.Fetch<WarehouseDto>(sql).FirstOrDefault();
+            var dto = Database.Fetch<WarehouseDto, WarehouseCatalogDto>(sql).FirstOrDefault();
 
             if (dto == null)
                 return null;
@@ -39,6 +39,7 @@ namespace Merchello.Core.Persistence.Repositories
             var factory = new WarehouseFactory();
 
             var warehouse = factory.BuildEntity(dto);
+
 
             return warehouse;
         }
@@ -55,7 +56,7 @@ namespace Merchello.Core.Persistence.Repositories
             else
             {
                 var factory = new WarehouseFactory();
-                var dtos = Database.Fetch<WarehouseDto>(GetBaseQuery(false));
+                var dtos = Database.Fetch<WarehouseDto, WarehouseCatalogDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
                     yield return factory.BuildEntity(dto);
@@ -67,11 +68,15 @@ namespace Merchello.Core.Persistence.Repositories
 
         #region Overrides of MerchelloPetaPocoRepositoryBase<IWarehouse>
 
+
         protected override Sql GetBaseQuery(bool isCount)
         {
+            // TODO VERSION NEXT: this will need to be refactored when we open up Multiple Warehouses
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-               .From<WarehouseDto>();
+                .From<WarehouseDto>()
+                .InnerJoin<WarehouseCatalogDto>()
+                .On<WarehouseDto, WarehouseCatalogDto>(left => left.Key, right => right.WarehouseKey);
 
             return sql;
         }
@@ -82,11 +87,12 @@ namespace Merchello.Core.Persistence.Repositories
         }
 
         protected override IEnumerable<string> GetDeleteClauses()
-        {
-            var list = new List<string>
-                {
-                    "DELETE FROM merchWarehouse WHERE pk = @Key",
-                };
+        {            
+            var list = new List<string>();
+                //{
+
+                //    "DELETE FROM merchWarehouse WHERE pk = @Key",
+                //};
 
             return list;
         }
@@ -99,6 +105,9 @@ namespace Merchello.Core.Persistence.Repositories
             var dto = factory.BuildDto(entity);
 
             Database.Insert(dto);
+            entity.Key = dto.Key;
+
+            // TODO : warehouses will need to have a default WarehouseCatalog
 
             entity.ResetDirtyProperties();
         }
@@ -131,10 +140,9 @@ namespace Merchello.Core.Persistence.Repositories
             var translator = new SqlTranslator<IWarehouse>(sqlClause, query);
             var sql = translator.Translate();
 
-            var dtos = Database.Fetch<WarehouseDto>(sql);
+            var dtos = Database.Fetch<WarehouseDto, WarehouseCatalogDto>(sql);
 
             return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
-
         }
 
 

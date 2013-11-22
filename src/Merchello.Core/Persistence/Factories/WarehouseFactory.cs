@@ -1,4 +1,7 @@
-﻿using Merchello.Core.Models;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Merchello.Core.Models;
+using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Models.Rdbms;
 
 namespace Merchello.Core.Persistence.Factories
@@ -7,7 +10,12 @@ namespace Merchello.Core.Persistence.Factories
     {
         public IWarehouse BuildEntity(WarehouseDto dto)
         {
-            var warehouse = new Warehouse()
+            var catalogs = new List<IWarehouseCatalog>()
+            {
+                new WarehouseCatalogFactory().BuildEntity(dto.WarehouseCatalogDto)
+            };
+
+            var warehouse = new Warehouse(catalogs)
             {
                 Key = dto.Key,
                 Name = dto.Name,
@@ -27,6 +35,7 @@ namespace Merchello.Core.Persistence.Factories
 
         public WarehouseDto BuildDto(IWarehouse entity)
         {
+            var catalog = ((Warehouse) entity).InventoryCatalogs.FirstOrDefault();
             var dto = new WarehouseDto()
             {
                 Key = entity.Key,
@@ -37,7 +46,8 @@ namespace Merchello.Core.Persistence.Factories
                 Region = entity.Region,
                 PostalCode = entity.PostalCode,
                 UpdateDate = entity.UpdateDate,
-                CreateDate = entity.CreateDate                
+                CreateDate = entity.CreateDate,
+                WarehouseCatalogDto = catalog != null ? new WarehouseCatalogFactory().BuildDto(catalog) : null
             };
 
             return dto;
