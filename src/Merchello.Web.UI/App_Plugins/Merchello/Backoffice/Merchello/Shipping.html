@@ -71,6 +71,14 @@
                                 </div>
                             </div>
 
+                            <form name="deleteWarehouseForm" class="well" data-ng-class="{ 'open': visible.deleteWarehouseFlyout, 'closed': !flyouts.deleteWarehouseFlyout }">
+                                <h4>Are you sure you want to remove the warehouse '{{deleteWarehouse.name}}'?</h4>
+                                <div>
+                                    <input type="submit" class="btn" value="No" data-ng-click="deleteWarehouseFlyout.close()" />
+                                    <input type="submit" class="btn btn-primary" value="Yes" data-ng-click="deleteWarehouseFlyout.confirm()" />
+                                </div>
+                            </form>
+
                             <table class="table table-striped merchello-striped-table settings-table warehouse-table">
                                 <thead>
                                     <tr>
@@ -81,31 +89,17 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr class="vcard">
-                                        <td><input type="radio" name="primary" checked="checked" /></td>
-                                        <td class="org">Bramble Berry</td>
+                                    <tr class="vcard" data-ng-repeat="warehouse in warehouses | orderBy:sortProperty">
+                                        <td><input type="radio" name="primary" data-ng-click="changePrimaryWarehouse(warehouse)" data-ng-checked="warehouse.primary" /></td>
+                                        <td class="org">{{warehouse.name}}</td>
                                         <td class="adr">
-                                            <span class="street-address">114 W. Magnolia St</span>
-                                            <span class="extended-address">Suite 504</span>
-                                            <span class="locality">Bellingham</span>, <span class="region">WA</span> <span class="postal-code">98225</span>
+                                            <span class="street-address">{{warehouse.address1}}</span>
+                                            <span class="extended-address">{{warehouse.address2}}</span>
+                                            <span class="locality">{{warehouse.locality}}</span>, <span class="region">{{warehouse.region}}</span> <span class="postal-code">{{warehouse.postalCode}}</span>
                                         </td>
                                         <td class="edit">
                                             <div class="btn-toolbar umb-btn-toolbar">
-                                                <a href="#" class="btn btn-default btn-xs btn-mini">edit</a> <a class="btn btn-warning btn-xs btn-mini" href="#">x</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr class="vcard">
-                                        <td><input type="radio" name="primary" /></td>
-                                        <td class="org">Mindfly</td>
-                                        <td class="adr">
-                                            <span class="street-address">105 W Holly St</span>
-                                            <span class="extended-address">H22</span>
-                                            <span class="locality">Bellingham</span>, <span class="region">WA</span> <span class="postal-code">98225</span>
-                                        </td>
-                                        <td class="edit">
-                                            <div class="btn-toolbar umb-btn-toolbar">
-                                                <a href="#" class="btn btn-default btn-xs btn-mini">edit</a> <a class="btn btn-warning btn-xs btn-mini" href="#">x</a>
+                                                <a class="btn btn-default btn-xs btn-mini">edit</a> <a class="btn btn-warning btn-xs btn-mini" data-ng-click="deleteWarehouseFlyout.open(warehouse)">x</a>
                                             </div>
                                         </td>
                                     </tr>
