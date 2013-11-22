@@ -43,7 +43,7 @@ namespace Merchello.Core.Services
 
             foreach (RegionElement region in configuration.Section.RegionalProvinces)
             {
-                CacheRegion(region.Code, (from ProvinceElement pe in region.Provinces
+                CacheRegion(region.Code, (from ProvinceElement pe in region.ProvincesConfiguration
                     select new Province(pe.Code, pe.Name)).Cast<IProvince>().ToArray());
             }
         }
@@ -54,13 +54,13 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
-        /// Returns the <see cref="Region" /> for the country code passed.
+        /// Returns the <see cref="WarehouseCountryBase" /> for the country code passed.
         /// </summary>
         /// <param name="regionCode">The two letter ISO Region code (country code)</param>
         /// <returns><see cref="RegionInfo"/> for the country corresponding the the country code passed</returns>
-        public Region GetRegionByCode(string regionCode)
+        public IWarehouseCountry GetRegionByCode(string regionCode)
         {
-            return new Region(regionCode, GetProvincesByCode(regionCode))
+            return new WarehouseCountry(regionCode, GetProvincesByCode(regionCode))
             {
                 ProvinceLabel = GetProvinceLabelForRegion(regionCode)
             };
@@ -70,12 +70,12 @@ namespace Merchello.Core.Services
         /// Returns a Region collection for all countries
         /// </summary>
         /// <returns>A collection of <see cref="RegionInfo"/></returns>
-        public IEnumerable<Region> GetAllRegions()
+        public IEnumerable<WarehouseCountry> GetAllRegions()
         {
             return CultureInfo.GetCultures(CultureTypes.SpecificCultures)
                 .Select(culture => new RegionInfo(culture.Name))
                 .Select(ri => 
-                    new Region(ri.TwoLetterISORegionName, GetProvincesByCode(ri.TwoLetterISORegionName))
+                    new WarehouseCountry(ri.TwoLetterISORegionName, GetProvincesByCode(ri.TwoLetterISORegionName))
                     {
                         ProvinceLabel = GetProvinceLabelForRegion(ri.TwoLetterISORegionName)
                     }
@@ -87,7 +87,7 @@ namespace Merchello.Core.Services
         /// </summary>
         /// <param name="excludeCodes">A collection of country codes to exclude from the result set</param>
         /// <returns>A collection of <see cref="RegionInfo"/></returns>
-        public IEnumerable<Region> GetAllRegions(string[] excludeCodes)
+        public IEnumerable<WarehouseCountry> GetAllRegions(string[] excludeCodes)
         {
             return GetAllRegions().Where(x => !excludeCodes.Contains(x.RegionInfo.TwoLetterISORegionName));
         }

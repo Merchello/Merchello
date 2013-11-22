@@ -2,7 +2,7 @@
 
 namespace Merchello.Core.Configuration.Outline
 {
-    public class ProvinceCollection : ConfigurationElementCollection
+    public class ProvinceConfigurationCollection : ConfigurationElementCollection
     {
         protected override ConfigurationElement CreateNewElement()
         {

@@ -27,10 +27,10 @@ namespace Merchello.Core.Configuration.Outline
         /// <summary>
         /// Gets the province collection
         /// </summary>
-        [ConfigurationProperty("provinces", IsRequired = true), ConfigurationCollection(typeof(ProvinceCollection), AddItemName = "province")]
-        public ProvinceCollection Provinces
+        [ConfigurationProperty("provinces", IsRequired = true), ConfigurationCollection(typeof(ProvinceConfigurationCollection), AddItemName = "province")]
+        public ProvinceConfigurationCollection ProvincesConfiguration
         {
-            get { return (ProvinceCollection)this["provinces"]; }
+            get { return (ProvinceConfigurationCollection)this["provinces"]; }
         }
     }
 }

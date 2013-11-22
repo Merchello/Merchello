@@ -8,7 +8,7 @@ namespace Merchello.Core.Persistence.Repositories
     /// <summary>
     /// Marker interface for the region repository
     /// </summary>
-    internal interface IRegionRepository : IRepositoryQueryable<Guid, IRegion>
+    internal interface IShipRegionRepository : IRepositoryQueryable<Guid, IShipCountry>
     {
          
     }

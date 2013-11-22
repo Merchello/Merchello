@@ -17,7 +17,7 @@ namespace Merchello.Tests.Base.DataMakers
                 {
                     Name = "Flat Rate",
                     ProviderKey = Guid.NewGuid(),
-                    ShipMethodTypeFieldKey = new ShipMethodTypeField().GetTypeField(ShipMethodType.FlatRate).TypeKey,
+                    ShipMethodTfKey = new ShipMethodTypeField().GetTypeField(ShipMethodType.FlatRate).TypeKey,
                     Surcharge = 0M,
                     ServiceCode = string.Empty
                 };
@@ -29,7 +29,7 @@ namespace Merchello.Tests.Base.DataMakers
             {
                 Name = "Carrier Shipping Supreme",
                 ProviderKey = Guid.NewGuid(),
-                ShipMethodTypeFieldKey = new ShipMethodTypeField().GetTypeField(ShipMethodType.Carrier).TypeKey,
+                ShipMethodTfKey = new ShipMethodTypeField().GetTypeField(ShipMethodType.Carrier).TypeKey,
                 Surcharge = 1M,
                 ServiceCode = "CSS"
             };

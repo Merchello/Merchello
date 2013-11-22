@@ -46,12 +46,12 @@ namespace Merchello.Tests.UnitTests.Configuration
 
             //// Act
             var us = _config.RegionalProvinces["US"];
-            Console.Write(us.Provinces.Count);
+            Console.Write(us.ProvincesConfiguration.Count);
 
             //// Assert
             Assert.NotNull(us);
             Assert.AreEqual("US", us.Code);
-            Assert.AreEqual(expected, us.Provinces.Count);
+            Assert.AreEqual(expected, us.ProvincesConfiguration.Count);
             
         }
     }

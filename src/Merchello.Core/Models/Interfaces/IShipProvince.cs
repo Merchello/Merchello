@@ -2,7 +2,7 @@
 
 namespace Merchello.Core.Models.Interfaces
 {
-    public interface IShippingProvince : IProvince
+    public interface IShipProvince : IProvince
     {
         /// <summary>
         /// True/false indicating whether or not to allow shipping to the province
@@ -11,10 +11,15 @@ namespace Merchello.Core.Models.Interfaces
         bool ShipTo { get; set; }
 
         /// <summary>
-        /// Price adjustment when shipping to this province
+        /// Rate adjustment when shipping to this province
         /// </summary>
         [DataMember]
-        decimal ShippingAdjustment { get; set; }
-
+        decimal RateAdjustment { get; set; }
+        
+        /// <summary>
+        /// Defines the type of rate adjustment
+        /// </summary>
+        [DataMember]
+        RateAdjustmentType RateAdjustmentType { get; set; }
     }
 }

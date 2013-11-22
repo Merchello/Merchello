@@ -77,7 +77,7 @@
   <ItemGroup>
     <Compile Include="ActivatorHelper.cs" />
     <Compile Include="CloneHelper.cs" />
-    <Compile Include="Configuration\Outline\ProvinceCollection.cs" />
+    <Compile Include="Configuration\Outline\ProvinceConfigurationCollection.cs" />
     <Compile Include="Configuration\Outline\ProvinceElement.cs" />
     <Compile Include="Configuration\Outline\RegionalProvinceCollection.cs" />
     <Compile Include="Configuration\Outline\RegionElement.cs" />
@@ -86,6 +86,7 @@
     <Compile Include="Models\AppliedPayment.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\Country.cs" />
     <Compile Include="Models\Customer.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -101,6 +102,7 @@
     <Compile Include="Models\ExtendedDataExtensions.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\GatewayProviderCollection.cs" />
     <Compile Include="Models\Interfaces\IAppliedPayment.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -113,6 +115,7 @@
     <Compile Include="Models\Interfaces\ICustomerBase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\Interfaces\IGatewayProviderBase.cs" />
     <Compile Include="Models\Interfaces\IInvoice.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -164,18 +167,21 @@
     <Compile Include="Models\Interfaces\IProductVariant.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\Interfaces\IRegion.cs" />
+    <Compile Include="Models\Interfaces\ICountryBase.cs" />
+    <Compile Include="Models\Interfaces\IShipGatewayProvider.cs" />
     <Compile Include="Models\Interfaces\IShipment.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\Interfaces\IShipMethod.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\Interfaces\IShippingProvince.cs" />
+    <Compile Include="Models\Interfaces\IShipProvince.cs" />
+    <Compile Include="Models\Interfaces\IShipCountry.cs" />
     <Compile Include="Models\Interfaces\ITaxProvince.cs" />
     <Compile Include="Models\Interfaces\IWarehouse.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\Interfaces\IWarehouseCountry.cs" />
     <Compile Include="Models\Interfaces\IWarehouseInventory.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -185,6 +191,7 @@
     <Compile Include="Models\InvoiceStatus.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\Interfaces\ICountry.cs" />
     <Compile Include="Models\ItemCache.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -236,19 +243,20 @@
     <Compile Include="Models\ProductVariantCollection.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\ProvinceCollection.cs" />
     <Compile Include="Models\Rdbms\ProductVariantIndexDto.cs" />
     <Compile Include="Models\Rdbms\ShipRateTierDto.cs" />
-    <Compile Include="Models\Rdbms\ShipRegion.cs" />
-    <Compile Include="Models\Rdbms\ShipRegion2GatewayProviderDto.cs" />
+    <Compile Include="Models\Rdbms\WarehouseCountryDto.cs" />
     <Compile Include="Models\Rdbms\TaxRegionDto.cs" />
-    <Compile Include="Models\Region.cs" />
+    <Compile Include="Models\CountryBase.cs" />
     <Compile Include="Models\Shipment.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\ShipMethod.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\ShippingProvince.cs" />
+    <Compile Include="Models\ShipMethodCollection.cs" />
+    <Compile Include="Models\ShipProvince.cs" />
     <Compile Include="Models\TaxProvince.cs" />
     <Compile Include="Models\TypeFields\AppliedPaymentTypeField.cs">
       <SubType>Code</SubType>
@@ -259,6 +267,7 @@
     <Compile Include="Models\Warehouse.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\WarehouseCountry.cs" />
     <Compile Include="Models\WarehouseInventory.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -285,6 +294,7 @@
     <Compile Include="Persistence\Factories\ProductVariantFactory.cs" />
     <Compile Include="Persistence\Factories\ShipmentFactory.cs" />
     <Compile Include="Persistence\Factories\ShipMethodFactory.cs" />
+    <Compile Include="Persistence\Factories\WarehouseCountryFactory.cs" />
     <Compile Include="Persistence\Factories\WarehouseFactory.cs" />
     <Compile Include="Persistence\Mappers\AppliedPaymentMapper.cs">
       <SubType>Code</SubType>
@@ -356,7 +366,7 @@
     <Compile Include="Persistence\Repositories\Interfaces\IPaymentRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IProductRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IProductVariantRepository.cs" />
-    <Compile Include="Persistence\Repositories\Interfaces\IRegionRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IShipRegionRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IShipmentRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IWarehouseRepository.cs" />
     <Compile Include="Persistence\Repositories\ItemCacheRepository.cs" />
@@ -364,7 +374,7 @@
     <Compile Include="Persistence\Repositories\PaymentRepository.cs" />
     <Compile Include="Persistence\Repositories\ProductRepository.cs" />
     <Compile Include="Persistence\Repositories\ProductVariantRepository.cs" />
-    <Compile Include="Persistence\Repositories\RegionRepository.cs" />
+    <Compile Include="Persistence\Repositories\ShipRegionRepository.cs" />
     <Compile Include="Persistence\Repositories\ShipmentRepository.cs" />
     <Compile Include="Persistence\Repositories\WarehouseRepository.cs" />
     <Compile Include="Persistence\TransactionType.cs" />
@@ -426,6 +436,7 @@
     <Compile Include="Persistence\Querying\Query.cs" />
     <Compile Include="Persistence\UnitOfWork\PetaPocoUnitOfWork.cs" />
     <Compile Include="Persistence\UnitOfWork\PetaPocoUnitOfWorkProvider.cs" />
+    <Compile Include="RateAdjustmentType.cs" />
     <Compile Include="Services\Interfaces\IItemCacheService.cs" />
     <Compile Include="Services\Interfaces\IProductService.cs" />
     <Compile Include="Services\Interfaces\IProductVariantService.cs" />
@@ -433,12 +444,10 @@
     <Compile Include="Services\Interfaces\IShippingService.cs" />
     <Compile Include="Services\Interfaces\IWarehouseService.cs" />
     <Compile Include="Models\Interfaces\IProvince.cs" />
-    <Compile Include="Services\Interfaces\IRegionService.cs" />
     <Compile Include="Services\ItemCacheService.cs" />
     <Compile Include="Services\ProductService.cs" />
     <Compile Include="Services\ProductVariantService.cs" />
     <Compile Include="Models\Province.cs" />
-    <Compile Include="Services\RegionService.cs" />
     <Compile Include="Services\ServiceContext.cs" />
     <Compile Include="Services\WarehouseService.cs" />
     <Compile Include="TypeFieldMapperEnumerations.cs" />
