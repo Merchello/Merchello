@@ -303,6 +303,7 @@
     <Content Include="App_Plugins\Merchello\Modules\Settings\debug.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\payment.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\settings.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\vendors.models.js" />
     <Content Include="App_Plugins\Merchello\Package.manifest" />
     <Content Include="App_Plugins\Merchello\PropertyEditors\ProductPicker\Js\merchelloskuselector.controller.js" />
     <Content Include="App_Plugins\Merchello\PropertyEditors\ProductPicker\Views\merchelloskuselector.html" />

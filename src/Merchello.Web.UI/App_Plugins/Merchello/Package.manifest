@@ -36,6 +36,7 @@
 		'~/App_Plugins/Merchello/Modules/Report/reports.salesOverTime.controller.js',
 		'~/App_Plugins/Merchello/Modules/Report/reports.taxesByDestination.controller.js',
 		'~/App_Plugins/Merchello/Modules/Settings/shipping.models.js',
+		'~/App_Plugins/Merchello/Modules/Settings/vendors.models.js',
 		'~/App_Plugins/Merchello/Modules/Settings/settings.controller.js',
 		'~/App_Plugins/Merchello/Modules/Settings/debug.controller.js',
 		'~/App_Plugins/Merchello/Modules/Settings/payment.controller.js',
