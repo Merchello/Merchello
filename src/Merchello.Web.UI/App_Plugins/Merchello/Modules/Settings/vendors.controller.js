@@ -26,7 +26,7 @@
             // just a mock of getting the vendor objects
             var mockVendors = [
                 {
-                    key: 1,
+                    key: 0,
                     name: "Geeky Soap",
                     contact: "Anne-Marie",
                     phone: "360-647-7470",
@@ -38,7 +38,7 @@
                     country: "United States of America"
                 },
                 {
-                    key: 2,
+                    key: 1,
                     name: "Nerdy Soap",
                     contact: "Heather",
                     phone: "360-647-7470",
@@ -64,6 +64,7 @@
         $scope.addVendorFlyout = {
             clear: function() {
                 $scope.newVendor = new merchello.Models.Vendor();
+		$scope.newVendor.key = "no key created";
             },
             close: function () {
                 $scope.flyouts.addVendor = false;
@@ -71,7 +72,9 @@
             open: function (vendor) {
                 if (vendor) {
                     $scope.newVendor = vendor;
-                }
+                } else {
+                    $scope.addVendorFlyout.clear();
+        		}
                 $scope.flyouts.addVendor = true;
             },
             save: function () {
