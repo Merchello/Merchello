@@ -13,6 +13,11 @@
         $scope.vendors = [];
         $scope.sortProperty = "name";
         $scope.sortOrder = "asc";
+        $scope.newVendor = new merchello.Models.Vendor();
+
+        $scope.flyouts = {
+            addVendor: false
+        };
 
         $scope.loadVendors = function () {
 
@@ -50,6 +55,29 @@
             $scope.loaded = true;
             $scope.preValuesLoaded = true;
 
+        };
+
+        $scope.addVendorFlyout = {
+            clear: function() {
+                $scope.newVendor = new merchello.Models.Vendor();
+            },
+            close: function () {
+                $scope.flyouts.addVendor = false;
+            },
+            open: function () {
+                $scope.flyouts.addVendor = true;
+            },
+            save: function (vendor) {
+                // Note From Kyle: An API call will need to be wired in here to save the new Vendors in the database.
+                if (!vendor) {
+                    $scope.vendors.push($scope.newVendor);
+                    $scope.addVendorFlyout.clear();
+                    $scope.addVendorFlyout.close();
+                }
+            },
+            toggle: function () {
+                $scope.flyouts.addVendor = !$scope.flyouts.addVendor;
+            }
         };
 
         $scope.loadVendors();
