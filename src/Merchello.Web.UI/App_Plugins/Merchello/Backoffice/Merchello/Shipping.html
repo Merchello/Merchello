@@ -35,7 +35,7 @@
                         Warehouses
                         <small>Add or edit warehouses</small>
 
-                        <a href="#"><i class="icon-door-open"></i> Add a Warehouse</a>
+                        <a data-ng-click="addWarehouseFlyout.open()"><i class="icon-door-open"></i> Add a Warehouse</a>
                     </label>
 
                     <div class="merchello-controls">
@@ -43,33 +43,36 @@
                         <div class="row-fluid span10 col-xs-10">
 
                             <!-- Add a Warehouse Flyout -->
-                            <div class="well col-xs-12 span12 closed">
-                                <button class="btn close"><i class="icon-delete"></i></button>
-                                <h4>Add a Warehouse</h4>
+                            <form name="addWarehouseForm" class="well col-xs-12 span12" data-ng-class="{ 'open': visible.addWarehouseFlyout, 'closed': !flyouts.addWarehouseFlyout }">
+                                <button class="btn close" data-ng-click="addWarehouseFlyout.close()"><i class="icon-delete"></i></button>
+                                <h4 data-ng-switch="newWarehouse.pk">
+                                    <span data-ng-switch-when="no key created">Add a Warehouse</span>
+                                    <span data-ng-switch-default="">Edit Warehouse</span>
+                                </h4>
                                 <div class="form-group row-fluid">
                                     <label for="name">Name</label>
-                                    <input class="span6" name="name" type="text" />
+                                    <input class="span6" name="name" type="text" data-ng-model="newWarehouse.name" />
                                 </div>
                                 <div class="form-group row-fluid">
                                     <label for="address">Address</label>
-                                    <input class="span6" name="address" type="text" placeholder="Street Address" />
-                                    <input class="span6" name="extended-address" type="text" placeholder="Extended Address" />
-                                    <input class="span6" name="city" type="text" placeholder="City" />
+                                    <input class="span6" name="address" type="text" placeholder="Street Address" data-ng-model="newWarehouse.address1" />
+                                    <input class="span6" name="extended-address" type="text" placeholder="Extended Address" data-ng-model="newWarehouse.address2" />
+                                    <input class="span6" name="city" type="text" placeholder="City" data-ng-model="newWarehouse.locality" />
                                 </div>
                                 <div class="form-group row-fluid">
-                                    <input class="span3" name="state-province" type="text" placeholder="State/Province" />
-                                    <input class="span3" name="postal-code" type="text" placeholder="Zip/Postal Code" />
+                                    <input class="span3" name="state-province" type="text" placeholder="State/Province" data-ng-model="newWarehouse.region" />
+                                    <input class="span3" name="postal-code" type="text" placeholder="Zip/Postal Code" data-ng-model="newWarehouse.postalCode" />
                                 </div>
                                 <div class="form-group row-fluid">
-                                    <input class="span6" name="country" type="text" placeholder="Country" />
-                                    <label class="label-checkbox"><input name="primary" type="checkbox"> <span>Make this my primary warehouse</span></label>
+                                    <input class="span6" name="country" type="text" placeholder="Country" data-ng-model="newWarehouse.countryCode" />
+                                    <label class="label-checkbox"><input name="primary" type="checkbox" data-ng-model="newWarehouse.primary"> <span>Make this my primary warehouse</span></label>
                                 </div>
 
                                 <div>
-                                    <input type="submit" class="btn" value="Cancel" />
-                                    <input type="submit" class="btn btn-primary" value="Save" />
+                                    <input type="submit" class="btn" value="Cancel" data-ng-click="addWarehouseFlyout.close()" />
+                                    <input type="submit" class="btn btn-primary" value="Save" data-ng-click="addWarehouseFlyout.save()" />
                                 </div>
-                            </div>
+                            </form>
 
                             <form name="deleteWarehouseForm" class="well" data-ng-class="{ 'open': visible.deleteWarehouseFlyout, 'closed': !flyouts.deleteWarehouseFlyout }">
                                 <h4>Are you sure you want to remove the warehouse '{{deleteWarehouse.name}}'?</h4>
@@ -99,7 +102,7 @@
                                         </td>
                                         <td class="edit">
                                             <div class="btn-toolbar umb-btn-toolbar">
-                                                <a class="btn btn-default btn-xs btn-mini">edit</a> <a class="btn btn-warning btn-xs btn-mini" data-ng-click="deleteWarehouseFlyout.open(warehouse)">x</a>
+                                                <a class="btn btn-default btn-xs btn-mini" data-ng-click="addWarehouseFlyout.open(warehouse)">edit</a> <a class="btn btn-warning btn-xs btn-mini" data-ng-click="deleteWarehouseFlyout.open(warehouse)">x</a>
                                             </div>
                                         </td>
                                     </tr>

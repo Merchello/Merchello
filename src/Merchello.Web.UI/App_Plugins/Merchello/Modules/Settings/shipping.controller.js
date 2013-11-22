@@ -12,19 +12,21 @@
 
         $scope.sortProperty = "name";
         $scope.warehouses = [];
+        $scope.newWarehouse = new merchello.Models.Warehouse();
         $scope.deleteWarehouse = new merchello.Models.Warehouse();
         $scope.visible = {
-            warehouseInfoPanel: false,
-            warehouseListPanel: true,
+            addWarehouseFlyout: false,
+            deleteWarehouseFlyout: false,
             shippingMethodPanel: false,
-            deleteWarehouseFlyout: false
+            warehouseInfoPanel: false,
+            warehouseListPanel: true
         };
 
         $scope.loadWarehouses = function () {
             // Note From Kyle: Mocks for data returned from Warehouse API call
             var mockWarehouses = [
                 {
-                    pk: 1,
+                    pk: 0,
                     name: "Bramble Berry",
                     address1: "114 W. Magnolia St",
                     address2: "Suite 504",
@@ -37,7 +39,7 @@
                     primary: true
                 },
                 {
-                    pk: 2,
+                    pk: 1,
                     name: "Mindfly",
                     address1: "105 W Holly St",
                     address2: "H22",
@@ -57,7 +59,7 @@
 
         };
 
-        $scope.changePrimaryWareouse = function (warehouse) {
+        $scope.changePrimaryWarehouse = function (warehouse) {
             if (warehouse) {
                 for (i = 0; i < $scope.warehouses.length; i++) {
                     if (warehouse.pk == $scope.warehouses[i].pk) {
@@ -70,6 +72,53 @@
             }
         };
 
+        // Functions to control the Add/Edit Warehouse flyout
+        $scope.addWarehouseFlyout = {
+            clear: function() {
+                $scope.newWarehouse = new merchello.Models.Warehouse();
+                $scope.newWarehouse.pk = "no key created";
+            },
+            close: function () {
+                $scope.visible.addWarehouseFlyout = false;
+            },
+            open: function (warehouse) {
+                if (warehouse) {
+                    $scope.newWarehouse = warehouse;
+                } else {
+                    $scope.addWarehouseFlyout.clear();
+                }
+                $scope.deleteWarehouseFlyout.close();
+                $scope.visible.addWarehouseFlyout = true;
+            },
+            save: function () {
+                var idx = -1;
+                for (i = 0; i < $scope.warehouses.length; i++) {
+                    if ($scope.warehouses[i].pk == $scope.newWarehouse.pk) {
+                        idx = i;
+                    }
+                }
+                if (idx > -1) {
+                    $scope.warehouses[idx] = $scope.newWarehouse;
+                    // Note From Kyle: An API call will need to be wired in here to edit the existing Warehouse in the database.
+                } else {
+                    var newKey = $scope.warehouses.length;
+                    // Note From Kyle: This key-creation logic will need to be modified to fit whatever works for the database.
+                    $scope.newWarehouse.pk = newKey;
+                    $scope.warehouses.push($scope.newWarehouse);
+                    // Note From Kyle: An API call will need to be wired in here to add the new Warehouse to the database.
+                }
+                if ($scope.newWarehouse.primary) {
+                    $scope.changePrimaryWarehouse($scope.newWarehouse);
+                }
+                $scope.addWarehouseFlyout.clear();
+                $scope.addWarehouseFlyout.close();
+            },
+            toggle: function () {
+                $scope.visible.addWarehouseFlyout = !$scope.visible.addWarehouseFlyout;
+            }
+        };
+
+        // Functions to control the Delete Warehouse flyout
         $scope.deleteWarehouseFlyout = {
             close: function () {
                 $scope.visible.deleteWarehouseFlyout = false;
@@ -91,6 +140,8 @@
             open: function (warehouse) {
                 if (warehouse) {
                     $scope.deleteWarehouse = warehouse;
+                    $scope.addWarehouseFlyout.clear();
+                    $scope.addWarehouseFlyout.close();
                     $scope.visible.deleteWarehouseFlyout = true;
                 }
             },
