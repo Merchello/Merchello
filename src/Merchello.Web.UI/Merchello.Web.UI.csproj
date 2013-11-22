@@ -267,6 +267,7 @@
     </Content>
     <Content Include="App_Plugins\Merchello\Common\Js\merchello.app.js" />
     <Content Include="App_Plugins\Merchello\Common\Js\merchello.namespaces.js" />
+    <Content Include="App_Plugins\Merchello\Directives\productvariant.filter.directive.js" />
     <Content Include="App_Plugins\Merchello\Directives\productoptions.repeat.directive.js" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\merchello.productvariant.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\merchello.product.service.js" />

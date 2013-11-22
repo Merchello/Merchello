@@ -272,6 +272,21 @@
 
         };
 
+        // Create an array of all the Choices in a list
+        self.flattened = function () {
+            var flat = [];
+            for(var o = 0; o < self.productOptions.length; o++)
+            {
+                var thisOption = self.productOptions[o];
+                for(var a = 0; a < thisOption.choices.length; a++)
+                {
+                    flat.push(thisOption.choices[a]);
+                }
+            }
+
+            return flat;
+        }
+
 
         // Helper to add a variant to this product
         self.addVariant = function (attributes) {

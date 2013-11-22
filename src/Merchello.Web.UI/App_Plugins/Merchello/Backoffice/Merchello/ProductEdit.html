@@ -25,11 +25,11 @@
 
             <!-- Tabs for Variants & Options -->
             <ul class="nav nav-tabs umb-nav-tabs span12">
-                <li class="ng-scope active">
-    	            <a href="#tab0" data-toggle="tab" class="ng-binding">Variants</a>
+                <li class="ng-scope" data-ng-class="{active: currentTab == 'Variants'}" >
+    	            <a href="" data-ng-click="selectTab('Variants')"  data-toggle="tab" class="ng-binding">Variants</a>
                 </li>
-                <li class="ng-scope">
-                    <a href="#tab1" data-toggle="tab" class="ng-binding">Options</a>
+                <li class="ng-scope" data-ng-class="{active: currentTab == 'Options'}">
+                    <a href="" data-ng-click="selectTab('Options')" data-toggle="tab" class="ng-binding">Options</a>
                 </li>
     	    </ul>
 
@@ -38,11 +38,11 @@
         <div class="merchello-panel-body">
             <div class="merchello-pane">
                 <!-- Variants Tab -->
-                <div class="control-group umb-control-group">
+                <div class="control-group umb-control-group" data-ng-show="currentTab == 'Variants'">
                     <label class="merchello-control-label">
                         Variant Information
                         <small>Edit the variants for this product.</small>
-                        <a href="#"><i class="icon-ordered-list"></i> Reorder variants</a>
+                        <a href="" data-ng-click="showFlyout(reorderVariants)"><i class="icon-ordered-list"></i> Reorder variants</a>
                     </label>
                     
 
@@ -54,8 +54,8 @@
                         ----------------------------------------------------------------------------------------->
 
                         <!-- Appears when Reorder Variants is clicked -->
-                        <!--<div class="well row-fluid col-xs-10 span10 open">
-                            <button class="btn close"><i class="icon-delete"></i></button>
+                        <div class="well row-fluid col-xs-10 span10"  data-ng-class="{ 'open': reorderVariants, 'closed': (!reorderVariants) }">
+                            <button class="btn close" data-ng-click="hideFlyout(reorderVariants)"><i class="icon-delete"></i></button>
                             <h3>Drag to Reorder Options and Variants</h3>
                             <p>If you reorder your options and variants, it will change the order in which they appear on your storefront. Drag your options (ie size, style) vertically and variants (ie women's, small) horizontally.</p>
 
@@ -81,15 +81,15 @@
                                 </li>
                             </ul>
 
-                        </div>-->
+                        </div>
 
                         <!---------------------------------------------------------------------------------------
                             Bulk Action Flyouts
                         ----------------------------------------------------------------------------------------->
 
                         <!-- Change Prices -->
-                        <!--<div class="well col-xs-10 span10">
-                            <button class="btn close"><i class="icon-delete"></i></button>
+                        <div class="well col-xs-10 span10" data-ng-class="{ 'open': changePrices, 'closed': (!changePrices) }">
+                            <button class="btn close" data-ng-click="hideFlyout(changePrices)"><i class="icon-delete"></i></button>
                             <h4>Change Prices For All Selected Items</h4>
                             <div class="form-group row-fluid">
                                 <div class="input-prepend col-xs-3 span3">
@@ -100,14 +100,14 @@
                             </div>
 
                             <div>
-                                <input type="submit" class="btn" value="Cancel" />
+                                <input type="submit" class="btn" data-ng-click="hideFlyout(changePrices)" value="Cancel" />
                                 <input type="submit" class="btn btn-primary" value="Save" />
                             </div>
-                        </div>-->
+                        </div>
 
                         <!-- Update Inventory -->
-                        <!--<div class="well col-xs-10 span10">
-                            <button class="btn close"><i class="icon-delete"></i></button>
+                        <div class="well col-xs-10 span10" data-ng-class="{ 'open': updateInventory, 'closed': (!updateInventory) }">
+                            <button class="btn close" data-ng-click="hideFlyout(updateInventory)"><i class="icon-delete"></i></button>
                             <h4>Update Inventory For All Selected Items</h4>
                             <p class="warning">Note: This will update the inventory for <strong>all warehouses</strong> on <strong>all selected variants</strong></p>
                             <div class="form-group row-fluid">
@@ -116,14 +116,14 @@
                             </div>
 
                             <div>
-                                <input type="submit" class="btn" value="Cancel" />
+                                <input type="submit" class="btn" data-ng-click="hideFlyout(updateInventory)" value="Cancel" />
                                 <input type="submit" class="btn btn-primary" value="Save" />
                             </div>
-                        </div>-->
+                        </div>
 
                         <!-- Delete Variants -->
-                        <!--<div class="well col-xs-10 span10">
-                            <button class="btn close"><i class="icon-delete"></i></button>
+                        <div class="well col-xs-10 span10" data-ng-class="{ 'open': deleteVariants, 'closed': (!deleteVariants) }">
+                            <button class="btn close" data-ng-click="hideFlyout(deleteVariants)"><i class="icon-delete"></i></button>
                             <h4>Delete the Selected Variants</h4>
                             <p class="warning">You cannot recover deleted product variants. Are you sure you want to continue?</p>
                             <div class="form-group row-fluid">
@@ -131,76 +131,85 @@
                             </div>
 
                             <div>
-                                <input type="submit" class="btn" value="Cancel" />
+                                <input type="submit" class="btn" data-ng-click="hideFlyout(deleteVariants)" value="Cancel" />
                                 <input type="submit" class="btn btn-warning" value="Delete" />
                             </div>
-                        </div>-->
+                        </div>
 
                         <!-- Duplicate Variants -->
-                        <!--<div class="well col-xs-10 span10">
-                            <button class="btn close"><i class="icon-delete"></i></button>
+                        <div class="well col-xs-10 span10" data-ng-class="{ 'open': duplicateVariants, 'closed': (!duplicateVariants) }">
+                            <button class="btn close" data-ng-click="hideFlyout(duplicateVariants)"><i class="icon-delete"></i></button>
                             <h4>Duplicate Variants Based on Selected Items</h4>
                             <div class="form-group row-fluid">
-                                <label for="new-style">What Size do you want to add to the new variants?</label>--> <!-- Size should be replaced with whatever option name they are choosing to duplicate -->
-                                <!--<input name="new-style" class="col-xs-3 span3" type="text" />
+                                <label for="new-style">What Size do you want to add to the new variants?</label> <!-- Size should be replaced with whatever option name they are choosing to duplicate -->
+                                <input name="new-style" class="col-xs-3 span3" type="text" />
                             </div>
 
                             <div>
-                                <input type="submit" class="btn" value="Cancel" />
+                                <input type="submit" class="btn" data-ng-click="hideFlyout(duplicateVariants)" value="Cancel" />
                                 <input type="submit" class="btn btn-primary" value="Save" />
                             </div>
-                        </div>-->
+                        </div>
 
 
                         <!---------------------------------------------------------------------------------------
                             Variants selection and table
                         ----------------------------------------------------------------------------------------->
-                        <div class="well col-xs-10 span10">
-                            Select: <a href="#">All</a>, <a href="#">None</a>, <a href="#">Women's</a>, <a href="#">Men's</a>, <a href="#">Small</a>, <a href="#">Medium</a>, <a href="#">Large</a>
+
+                        <div class="well col-xs-10 span10">                           
+                            Select: <span><a href="" data-ng-click="selectVariants('All')">All</a></span><span>, <a href="" data-ng-click="selectVariants('None')">None</a></span><span data-ng-repeat="attribute in product.flattened()">, <a href="" data-ng-click="selectVariants(attribute.name)">{{attribute.name}}</a></span>
                         </div>
 
                         <div class="col-xs-10 span10">
                             <table class="table table-hover merchello-selectable-table sortable">
                                 <thead>
-                                    <!--<tr>
-                                        <th><input type="checkbox" /></th>--> <!-- Swaps out the current TR with headings in it for the bulk action TR -->
-                                       <!-- <th>Style</th>
-                                        <th>Size</th>
-                                        <th>SKU</th>
-                                        <th>Price</th>
-                                        <th>Total Qty</th>
+
+                                    <tr data-ng-hide="allVariants">
+                                        <th><input type="checkbox" data-ng-model="allVariants"  /></th> <!-- Swaps out the current TR with headings in it for the bulk action TR -->
+                                        <th data-ng-repeat="option in product.productOptions"
+                                            data-ng-click="changeSortOrder(option.name)" data-ng-class="{'sorted': sortProperty == option.name}">
+                                            <i data-ng-class="{'icon-navigation-up': sortProperty == option.name, 'icon-navigation-down': sortProperty != option.name}"></i>
+                                            {{option.name}}
+                                        </th>
+                                        <th data-ng-click="changeSortOrder('sku')" data-ng-class="{'sorted': sortProperty == 'sku'}">
+                                            <i data-ng-class="{'icon-navigation-up': sortProperty == 'sku', 'icon-navigation-down': sortProperty != 'sku'}"></i>
+                                            SKU
+                                        </th>
+                                        <th data-ng-click="changeSortOrder('price')" data-ng-class="{'sorted': sortProperty == 'price'}">
+                                            <i data-ng-class="{'icon-navigation-up': sortProperty == 'price', 'icon-navigation-down': sortProperty != 'price'}"></i>
+                                            Price
+                                        </th>
+                                        <th data-ng-click="changeSortOrder('totalInventoryCount')" data-ng-class="{'sorted': sortProperty == 'totalInventoryCount'}">
+                                            <i data-ng-class="{'icon-navigation-up': sortProperty == 'totalInventoryCount', 'icon-navigation-down': sortProperty != 'totalInventoryCount'}"></i> 
+                                            Total Qty
+                                        </th>
                                         <th><a href="#">edit</a></th>
-                                    </tr>-->
-                                    <tr>
-                                        <th><input type="checkbox" /></th> <!-- Swaps out the current TR with headings in it for the bulk action TR -->
-                                        <th product-options-repeat="product.productOptions"></th>
-                                        <th>SKU</th>
-                                        <th>Price</th>
-                                        <th>Total Qty</th>
                                     </tr>
                                     <!-- Displays the bulk action button & dropdown menu when the checkbox is selected. Replaces the normal header TR -->
-                                    <!--<tr>
-                                        <th><input type="checkbox" /></th>
-                                        <th colspan="6">
-                                            <div class="btn-group">
-                                                <a href="#" class="btn dropdown-toggle" data-toggle="dropdown">Bulk Action (3 Variants) <i class="icon-navigation-down"></i></a>
+                                    <tr data-ng-show="allVariants">
+                                        <th><input type="checkbox" data-ng-model="allVariants" /></th>
+                                        <th colspan="{{product.productOptions.length + 4}}">
+                                            <div class="btn-group" data-ng-class="{ 'open': bulkAction }">
+                                                <a href="" data-ng-click="bulkAction = !bulkAction" class="btn dropdown-toggle" data-toggle="dropdown">Bulk Action (3 Variants) <i class="icon-navigation-down"></i></a>
                                                 <ul class="dropdown-menu">
-                                                    <li><a href="#">Change prices</a></li>
-                                                    <li><a href="#">Update inventory</a></li>
-                                                    <li><a href="#">Delete Variants</a></li>
+                                                    <li><a href="" data-ng-click="showFlyout(changePrices)">Change prices</a></li>
+                                                    <li><a href="" data-ng-click="showFlyout(updateInventory)">Update inventory</a></li>
+                                                    <li><a href="" data-ng-click="showFlyout(deleteVariants)">Delete Variants</a></li>
                                                     <li class="divider"></li>
                                                     <li class="header">Duplicate Variants</li>
-                                                    <li><a href="#">In another style</a></li>
-                                                    <li class="disabled"><a href="#">In another size</a></li>
+                                                    <li data-ng-repeat="option in product.productOptions"><a href="" data-ng-click="showFlyout(duplicateVariants)">In another {{option.name}}</a></li>
                                                 </ul>
                                             </div>
                                         </th>
-                                    </tr>-->
+                                    </tr>
                                 </thead>
                                 <tbody>
-                                    <tr data-ng-repeat="variant in product.productVariants" data-ng-class="{active: variant.selected}" data-ng-click="variant.selected = !variant.selected">
+                                    <tr data-ng-repeat="variant in product.productVariants | orderBy:sortProperty" 
+                                        data-ng-class="{active: variant.selected}" 
+                                        data-ng-click="variant.selected = !variant.selected"
+                                    >
                                         <td><input type="checkbox" data-ng-model="variant.selected" /></td>
-                                        <td product-options-repeat="variant.attributes"></td>
+                                        <td data-ng-repeat="attribute in variant.attributes">{{attribute.name}}</td>
                                         <td>{{variant.sku}}</td>
                                         <td>{{variant.price}}</td>
                                         <td>{{variant.totalInventoryCount}}</td>
@@ -232,20 +241,61 @@
                 <!---------------------------------------------------------------------------------------
                     Edit Options tab
                 ----------------------------------------------------------------------------------------->
-                <!--<div class="control-group umb-control-group">
+                <div class="control-group umb-control-group" data-ng-show="currentTab == 'Options'">
                     <label class="merchello-control-label">
                         Edit Options
                         <small>Edit or add options, which will auto-update your variants</small>
                     </label>
 
                     <div class="merchello-controls row-fluid">
-                        <div class="col-xs-10 span10">-->
+                        <div class="col-xs-10 span10">
 
-                            <!-- Content goes here that matches the style, formatting, and function of the multiple options on the Create Product page -->
+                            <table class="table product-options">
+                                <tr>
+                                    <th>
+                                        Option Name
+                                        <small>(e.g. Size, Style, Color)</small>
+                                    </th>
+                                    <th>
+                                        Option Values
+                                        <small>(e.g. red, green, blue)</small>
+                                    </th>
+                                </tr>
+                                <tr data-ng-repeat="option in product.productOptions | orderBy:'sortOrder'">
+                                    <td>
+                                        <input class="form-control col-xs-12 span12" type="text" placeholder="Add a style..." data-ng-model="option.name" />
+                                    </td>
+                                    <td>
+                                        <tag-manager option="option"></tag-manager>
+                                    </td>
+                                </tr>
+                            </table>
 
-                        <!--</div>
+                            <div>
+                                <a data-ng-click="addOption()" class="btn add">Add Another Option</a>
+                                <a data-ng-click="updateVariants(productVariantForm)" class="btn btn-primary add">Update</a>
+                            </div>
+
+                        </div>
                     </div>
-                <div>-->
+
+                    
+                    <div class="control-group umb-control-group">
+                        <label class="merchello-control-label">
+                            <label><input data-ng-model="debugging" type="checkbox" /> Debug</label>
+                            <small>Check to show debugging info</small>
+                        </label>
+
+                        <div class="merchello-controls">
+
+                            <div data-ng-show="debugging">
+                                <h3>Product</h3>
+                                <div>{{product | json}}</div>
+                           </div>
+
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </div>
