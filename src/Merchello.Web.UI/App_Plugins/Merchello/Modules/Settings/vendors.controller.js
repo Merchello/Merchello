@@ -13,10 +13,12 @@
         $scope.vendors = [];
         $scope.sortProperty = "name";
         $scope.sortOrder = "asc";
+        $scope.deleteVendor = new merchello.Models.Vendor();
         $scope.newVendor = new merchello.Models.Vendor();
 
         $scope.flyouts = {
-            addVendor: false
+            addVendor: false,
+            deleteVendor: false
         };
 
         $scope.loadVendors = function () {
@@ -77,6 +79,34 @@
             },
             toggle: function () {
                 $scope.flyouts.addVendor = !$scope.flyouts.addVendor;
+            }
+        };
+
+        $scope.deleteVendorFlyout = {
+            close: function () {
+                $scope.flyouts.deleteVendor = false;
+            },
+            confirm: function() {
+                var idx = -1;
+                for (i = 0; i < $scope.vendors.length; i++) {
+                    if ($scope.vendors[i].key == $scope.deleteVendor.key && $scope.vendors[i].name == $scope.deleteVendor.name) {
+                        idx = i;
+                    }
+                }
+                if (idx > -1) {
+                    $scope.vendors.splice(idx, 1);
+                }
+                $scope.deleteVendor = new merchello.Models.Vendor();
+                $scope.deleteVendorFlyout.close();
+            },
+            open: function (vendor) {
+                if (vendor) {
+                    $scope.deleteVendor = vendor;
+                }
+                $scope.flyouts.deleteVendor = true;
+            },
+            toggle: function () {
+                $scope.flyouts.deleteVendor = !$scope.flyouts.deleteVendor;
             }
         };
 
