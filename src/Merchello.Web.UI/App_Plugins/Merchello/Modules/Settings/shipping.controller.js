@@ -36,7 +36,7 @@
                     countryCode: "US",
                     phone: "(360) 555-5555",
                     email: "info@brambleberry.com",
-                    primary: true
+                    isDefault: true
                 },
                 {
                     pk: 1,
@@ -49,7 +49,7 @@
                     countryCode: "US",
                     phone: "(360) 555-6666",
                     email: "hello@mindfly.com",
-                    primary: false
+                    isDefault: false
                 }
             ];
             $scope.warehouses = _.map(mockWarehouses, function (warehouseFromServer) {
@@ -63,9 +63,9 @@
             if (warehouse) {
                 for (i = 0; i < $scope.warehouses.length; i++) {
                     if (warehouse.pk == $scope.warehouses[i].pk) {
-                        $scope.warehouses[i].primary = true;
+                        $scope.warehouses[i].isDefault = true;
                     } else {
-                        $scope.warehouses[i].primary = false;
+                        $scope.warehouses[i].isDefault = false;
                     }
                 }
                 // Note From Kyle: An API call will need to be wired in here to change the primary values in the database.
@@ -107,7 +107,7 @@
                     $scope.warehouses.push($scope.newWarehouse);
                     // Note From Kyle: An API call will need to be wired in here to add the new Warehouse to the database.
                 }
-                if ($scope.newWarehouse.primary) {
+                if ($scope.newWarehouse.isDefault) {
                     $scope.changePrimaryWarehouse($scope.newWarehouse);
                 }
                 $scope.addWarehouseFlyout.clear();
@@ -147,6 +147,19 @@
             },
             toggle: function () {
                 $scope.visible.deleteWarehouseFlyout = !$scope.visible.deleteWarehouseFlyout;
+            }
+        };
+
+        // Functions to control the Shipping Methods panel
+        $scope.shippingMethodPanel = {
+            close: function () {
+                $scope.visible.shippingMethodPanel = false;
+            },
+            open: function () {
+                $scope.visible.shippingMethodPanel = true;
+            },
+            toggle: function () {
+                $scope.visible.shippingMethodPanel = !$scope.visible.shippingMethodPanel;
             }
         };
 

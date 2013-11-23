@@ -16,6 +16,41 @@
 
     };
 
+
+    models.ShippingCountry = function (shippingCountryFromServer) {
+
+        var self = this;
+
+        if (shippingRegionFromServer == undefined) {
+            self.pk = "";
+            self.catalogKey = "";
+            self.countryCode = "";
+            self.name = "";
+            self.shipMethods = [];
+        } else {
+            self.pk = shippingCountryFromServer.pk;
+            self.catalogKey = shippingCountryFromServer.catalogKey;
+            self.countryCode = shippingCountryFromServer.countryCode;
+            self.name = shippingCountryFromServer.name;
+            self.shipMethods = _.map(shippingCountryFromServer, function (attribute) {
+                return new merchello.Models
+            });
+        };
+
+        self.addMethod = function (shippingMethod) {
+            if (shippingMethod) {
+                var newShippingMethod = shippingMethod;
+            } else {
+                var newShippingMethod = new merchello.Models.ShippingMethod();
+            }
+            self.shipMethods.push(newShippingMethod);
+        };
+
+        self.removeMethod = function (idx) {
+            self.shipMethods.splice(idx, 1);
+        };
+    };
+
     models.ShippingMethod = function (shippingMethodFromServer) {
 
         var self = this;
@@ -23,7 +58,7 @@
         if (shippingMethodFromServer == undefined) {
             self.pk = "";
             self.name = "";
-            self.regionKey = "";
+            self.shipCountryKey = "";
             self.providerKey = "";
             self.shipMethodTfKey = "";
             self.surcharge = "";
@@ -33,7 +68,7 @@
         } else {
             self.pk = shippingMethodFromServer.pk;
             self.name = shippingMethodFromServer.name;
-            self.regionKey = shippingMethodFromServer.regionKey;
+            self.shipCountryKey = shippingMethodFromServer.shipCountryKey;
             self.providerKey = shippingMethodFromServer.providerKey;
             self.shipMethodTfKey = shippingMethodFromServer.shipMethodTfKey;
             self.surcharge = shippingMethodFromServer.surcharge;
@@ -43,46 +78,42 @@
                 return new merchello.Models.ProvinceData(attribute);
             });
         }
-
-
         // Helper to add a shipping region adjustment to this shipping method.
         self.addProvince = function (province) {
-
             if (province) {
                 var newShippingRegion = province;
             } else {
                 var newShippingRegion = new merchello.Models.ShippingRegion();
             }
             // Note From Kyle: Not sure what preferred method we have on this project to inject the properties (if any) into the newly created region.
-            
             self.provinceData.push(newShippingRegion);
-
         };
 
         // Helper to remove a shipping region adjustment from this shipping method.
         self.removeProvince = function (idx) {
-
             self.provinceData.splice(idx, 1);
-
         };
 
     };
 
-    models.ShippingRegion = function (shippingRegionFromServer) {
+    models.ShippingRateTier = function (shippingRateTierFromServer) {
 
         var self = this;
 
-        if (shippingRegionFromServer == undefined) {
+        if (shippingRateTierFromServer == undefined) {
             self.pk = "";
-            self.warehouseKey = "";
-            self.code = "";
-            self.name = "";
+            self.shipMethodKey = "";
+            self.rangeLow = "";
+            self.rangeHigh = "";
+            self.rate = "";
         } else {
-            self.pk = shippingRegionFromServer.pk;
-            self.warehouseKey = shippingRegionFromServer.warehouseKey;
-            self.code = shippingRegionFromServer.code;
-            self.name = shippingRegionFromServer.name;
-        };
+            self.pk = shippingRateTierFromServer.pk;
+            self.shipMethodKey = shippingRateTierFromServer.shipMethodKey;
+            self.rangeLow = shippingRateTierFromServer.rangeLow;
+            self.rangeHigh = shippingRateTierFromServer.rangeHigh;
+            self.rate = shippingRateTierFromServer.rate;
+        }
+
 
     };
 
@@ -101,7 +132,7 @@
             self.countryCode = "";
             self.phone = "";
             self.email = "";
-            self.primary = true;
+            self.isDefault = true;
         } else {
             self.pk = warehouseFromServer.pk;
             self.name = warehouseFromServer.name;
@@ -113,7 +144,29 @@
             self.countryCode = warehouseFromServer.countryCode;
             self.phone = warehouseFromServer.phone;
             self.email = warehouseFromServer.email;
-            self.primary = warehouseFromServer.primary;
+            self.isDefault = warehouseFromServer.isDefault;
+        }
+
+    };
+
+    models.WarehouseInventory = function (warehouseInventoryFromSever) {
+
+        var self = this;
+
+        if (warehouseInventoryFromSever == undefined) {
+            self.catalogKey = "";
+            self.warehouseKey = "";
+            self.productVariantKey = "";
+            self.count = "";
+            self.lowCount = "";
+            self.catalogName = "";
+        } else {
+            self.catalogKey = warehouseInventoryFromSever.catalogKey;
+            self.warehouseKey = warehouseInventoryFromSever.warehouseKey;
+            self.productVariantKey = warehouseInventoryFromSever.productVariantKey;
+            self.count = warehouseInventoryFromSever.count;
+            self.lowCount = warehouseInventoryFromSever.lowCount;
+            self.catalogName = warehouseInventoryFromSever.catalogName;
         }
 
     };
