@@ -65,7 +65,7 @@
                                 </div>
                                 <div class="form-group row-fluid">
                                     <input class="span6" name="country" type="text" placeholder="Country" data-ng-model="newWarehouse.countryCode" />
-                                    <label class="label-checkbox"><input name="primary" type="checkbox" data-ng-model="newWarehouse.primary"> <span>Make this my primary warehouse</span></label>
+                                    <label class="label-checkbox"><input name="primary" type="checkbox" data-ng-model="newWarehouse.isDefault"> <span>Make this my primary warehouse</span></label>
                                 </div>
 
                                 <div>
@@ -93,7 +93,7 @@
                                 </thead>
                                 <tbody>
                                     <tr class="vcard" data-ng-repeat="warehouse in warehouses | orderBy:sortProperty">
-                                        <td><input type="radio" name="primary" data-ng-click="changePrimaryWarehouse(warehouse)" data-ng-checked="warehouse.primary" /></td>
+                                        <td><input type="radio" name="primary" data-ng-click="changePrimaryWarehouse(warehouse)" data-ng-checked="warehouse.isDefault" /></td>
                                         <td class="org">{{warehouse.name}}</td>
                                         <td class="adr">
                                             <span class="street-address">{{warehouse.address1}}</span>
