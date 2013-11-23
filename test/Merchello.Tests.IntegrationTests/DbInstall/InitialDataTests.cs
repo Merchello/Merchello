@@ -81,9 +81,11 @@ namespace Merchello.Tests.IntegrationTests.DbInstall
             //// Act
             _creation.InitializeBaseData("merchWarehouse");
             var dtos = _database.Query<WarehouseDto>("SELECT * FROM merchWarehouse");
+            var catalogs = _database.Query<WarehouseCatalogDto>("SELECT * FROM merchWarehouseCatalog");
 
             //// Assert
             Assert.IsTrue(dtos.Any());
+            Assert.IsTrue(catalogs.Any());
         }
 
 }

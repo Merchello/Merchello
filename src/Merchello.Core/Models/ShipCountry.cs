@@ -12,20 +12,20 @@ namespace Merchello.Core.Models
     /// <summary>
     /// Represents a country associated with a warehouse
     /// </summary>
-    public class WarehouseCountry : CountryBase, IWarehouseCountry
+    public class ShipCountry : CountryBase, IShipCountry
     {
         private ShipMethodCollection _shipMethodCollection;
         private Guid _warehouseKey;
 
-        public WarehouseCountry(Guid warehouseKey, string countryCode) 
+        public ShipCountry(Guid warehouseKey, string countryCode) 
             : this(warehouseKey, countryCode, new ShipMethodCollection())
         { }
 
-        public WarehouseCountry(Guid warehouseKey, string countryCode, ShipMethodCollection shipMethods)
+        public ShipCountry(Guid warehouseKey, string countryCode, ShipMethodCollection shipMethods)
             : this(warehouseKey, countryCode, new List<IProvince>(), shipMethods)
         {}
 
-        internal WarehouseCountry(Guid warehouseKey, string countryCode, IEnumerable<IProvince> provinces, ShipMethodCollection shipMethods)
+        internal ShipCountry(Guid warehouseKey, string countryCode, IEnumerable<IProvince> provinces, ShipMethodCollection shipMethods)
             : base(countryCode, provinces)
         {
             Mandate.ParameterCondition(warehouseKey != Guid.Empty, "warehouseKey");
@@ -35,8 +35,8 @@ namespace Merchello.Core.Models
             _shipMethodCollection = shipMethods;
         }
 
-        private static readonly PropertyInfo WarehouseKeySelector = ExpressionHelper.GetPropertyInfo<WarehouseCountry, Guid>(x => x.WarehouseKey);
-        private static readonly PropertyInfo ShipMethodsChangedSelector = ExpressionHelper.GetPropertyInfo<WarehouseCountry, ShipMethodCollection>(x => x.ShipMethods);
+        private static readonly PropertyInfo WarehouseKeySelector = ExpressionHelper.GetPropertyInfo<ShipCountry, Guid>(x => x.WarehouseKey);
+        private static readonly PropertyInfo ShipMethodsChangedSelector = ExpressionHelper.GetPropertyInfo<ShipCountry, ShipMethodCollection>(x => x.ShipMethods);
 
         private void ShipMethodsChanged(object sender, NotifyCollectionChangedEventArgs e)
         {

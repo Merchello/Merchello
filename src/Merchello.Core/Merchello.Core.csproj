@@ -181,6 +181,7 @@
     <Compile Include="Models\Interfaces\IWarehouse.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\Interfaces\IWarehouseCatalog.cs" />
     <Compile Include="Models\Interfaces\IWarehouseCountry.cs" />
     <Compile Include="Models\Interfaces\IWarehouseInventory.cs">
       <SubType>Code</SubType>
@@ -244,8 +245,11 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\ProvinceCollection.cs" />
+    <Compile Include="Models\Rdbms\ShipCountryDto.cs" />
+    <Compile Include="Models\Rdbms\CatalogInventoryDto.cs" />
     <Compile Include="Models\Rdbms\ProductVariantIndexDto.cs" />
     <Compile Include="Models\Rdbms\ShipRateTierDto.cs" />
+    <Compile Include="Models\Rdbms\WarehouseCatalogDto.cs" />
     <Compile Include="Models\Rdbms\WarehouseCountryDto.cs" />
     <Compile Include="Models\Rdbms\TaxRegionDto.cs" />
     <Compile Include="Models\CountryBase.cs" />
@@ -267,14 +271,13 @@
     <Compile Include="Models\Warehouse.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\WarehouseCountry.cs" />
+    <Compile Include="Models\ShipCountry.cs" />
+    <Compile Include="Models\WarehouseCatalog.cs" />
+    <Compile Include="Models\WarehouseExtensions.cs" />
     <Compile Include="Models\WarehouseInventory.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\WarehouseInventoryCollection.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Models\WarehouseInventoryExtensions.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Persistence\DefaultDatabaseFactory.cs" />
@@ -294,6 +297,7 @@
     <Compile Include="Persistence\Factories\ProductVariantFactory.cs" />
     <Compile Include="Persistence\Factories\ShipmentFactory.cs" />
     <Compile Include="Persistence\Factories\ShipMethodFactory.cs" />
+    <Compile Include="Persistence\Factories\WarehouseCatalogFactory.cs" />
     <Compile Include="Persistence\Factories\WarehouseCountryFactory.cs" />
     <Compile Include="Persistence\Factories\WarehouseFactory.cs" />
     <Compile Include="Persistence\Mappers\AppliedPaymentMapper.cs">
@@ -302,6 +306,7 @@
     <Compile Include="Persistence\Mappers\BaseMapper.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Persistence\Mappers\CatalogInventoryMapper.cs" />
     <Compile Include="Persistence\Mappers\CustomerAddressMapper.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -348,9 +353,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Persistence\Mappers\ShipMethodMapper.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Persistence\Mappers\WarehouseInventoryMapper.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Persistence\Mappers\WarehouseMapper.cs">
@@ -441,6 +443,7 @@
     <Compile Include="Services\Interfaces\IProductService.cs" />
     <Compile Include="Services\Interfaces\IProductVariantService.cs" />
     <Compile Include="Services\Interfaces\IServiceContext.cs" />
+    <Compile Include="Services\Interfaces\ISettingsService.cs" />
     <Compile Include="Services\Interfaces\IShippingService.cs" />
     <Compile Include="Services\Interfaces\IWarehouseService.cs" />
     <Compile Include="Models\Interfaces\IProvince.cs" />
@@ -449,6 +452,7 @@
     <Compile Include="Services\ProductVariantService.cs" />
     <Compile Include="Models\Province.cs" />
     <Compile Include="Services\ServiceContext.cs" />
+    <Compile Include="Services\SettingsService.cs" />
     <Compile Include="Services\WarehouseService.cs" />
     <Compile Include="TypeFieldMapperEnumerations.cs" />
     <Compile Include="Models\TypeFields\ProductTypeField.cs" />
@@ -476,7 +480,6 @@
     <Compile Include="Models\Rdbms\AnonymousCustomerDto.cs" />
     <Compile Include="Models\Rdbms\ItemCacheItemDto.cs" />
     <Compile Include="Models\Rdbms\CustomerDto.cs" />
-    <Compile Include="Models\Rdbms\WarehouseInventoryDto.cs" />
     <Compile Include="Models\Rdbms\InvoiceDto.cs" />
     <Compile Include="Models\Rdbms\InvoiceItemDto.cs" />
     <Compile Include="Models\Rdbms\InvoiceStatusDto.cs" />

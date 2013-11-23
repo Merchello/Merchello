@@ -24,6 +24,6 @@ namespace Merchello.Web.Models.ContentEditing
         public bool Download { get; set; }
         public int DownloadMediaId { get; set; }
 
-        public IEnumerable<IWarehouseInventory> WarehouseInventory { get; set; }
+        public IEnumerable<WarehouseInventoryDisplay> WarehouseInventory { get; set; }
     }
 }

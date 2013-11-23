@@ -31,11 +31,10 @@ namespace Merchello.Core.Services
         /// </summary>
         IItemCacheService ItemCacheService { get; }
 
-
-        ///// <summary>
-        ///// Gets the <see cref="IRegionService"/>
-        ///// </summary>
-        //IRegionService RegionService { get; }
+        /// <summary>
+        /// Gets the <see cref="ISettingsService"/>
+        /// </summary>
+        ISettingsService SettingsService { get; }
 
         /// <summary>
         /// Gets the <see cref="IWarehouseService"/>

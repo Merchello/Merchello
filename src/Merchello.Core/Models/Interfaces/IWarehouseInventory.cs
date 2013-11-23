@@ -9,23 +9,35 @@ namespace Merchello.Core.Models
     /// </summary>
     public interface IWarehouseInventory
     {
-        /// <summary>
-        /// The warehouse key
-        /// </summary>
-        [DataMember]
-        Guid WarehouseKey { get; }
+        ///// <summary>
+        ///// The catalog key
+        ///// </summary>
+        //[DataMember]
+        //Guid CatalogKey { get; }
 
         /// <summary>
-        /// The unique id of the product variant
+        /// The unique key of the product variant
         /// </summary>
         [DataMember]
         Guid ProductVariantKey { get; }
 
         /// <summary>
+        /// The unique warehouse key
+        /// </summary>
+        [DataMember]
+        Guid WarehouseKey { get; }
+
+        ///// <summary>
+        ///// The name of the warehouse catalog
+        ///// </summary>
+        //[DataMember]
+        //string CatalogName { get; }
+
+        /// <summary>
         /// The number of products in inventory for the warehouse
         /// </summary>
         [DataMember]
-        int Count { get; set;  }
+        int Count { get; set; }
         /// <summary>
         /// The number at which inventory for the product is considered to be low
         /// </summary>
@@ -36,6 +48,6 @@ namespace Merchello.Core.Models
         DateTime UpdateDate { get; set; }
 
         [DataMember]
-        DateTime CreateDate { get; set; }
+        DateTime CreateDate { get; set; } 
     }
 }

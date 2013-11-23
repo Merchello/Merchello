@@ -21,20 +21,21 @@ namespace Merchello.Tests.IntegrationTests.Services
             _warehouseService = PreTestDataWorker.WarehouseService;
         }
 
-        /// <summary>
-        /// Test to verify the service can create a warehouse
-        /// </summary>
-        [Test]
-        public void Can_Create_A_Warehouse()
-        {
-            //// Arrange
-            IWarehouse warehouse;
+        // MOVED TO INTERNAL
+        ///// <summary>
+        ///// Test to verify the service can create a warehouse
+        ///// </summary>
+        //[Test]
+        //public void Can_Create_A_Warehouse()
+        //{
+        //    //// Arrange
+        //    IWarehouse warehouse;
 
-            //// Act
-            warehouse = _warehouseService.CreateWarehouse("Expected");
+        //    //// Act
+        //    warehouse = _warehouseService.CreateWarehouse("Expected");
 
-            //// Assert
-            Assert.NotNull(warehouse);
-        }
+        //    //// Assert
+        //    Assert.NotNull(warehouse);
+        //}
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Runtime.Serialization;
 using Merchello.Core.Models.EntityBase;
+using Merchello.Core.Models.Interfaces;
 
 namespace Merchello.Core.Models
 {
@@ -67,7 +69,8 @@ namespace Merchello.Core.Models
         /// True/false indicating whether or not this warehouse is the primary (or default) warehouse
         /// </summary>
         [DataMember]
-        bool Primary { get; set; }
+        bool IsDefault { get; set; }
+
     }
 }
 

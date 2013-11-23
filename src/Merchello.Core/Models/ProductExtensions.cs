@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
+using Merchello.Core.Models.Interfaces;
 using Newtonsoft.Json;
 using Formatting = Newtonsoft.Json.Formatting;
 
@@ -84,13 +85,13 @@ namespace Merchello.Core.Models
         #region IProductVariant Collections
 
         /// <summary>
-        /// Associates a product with a warehouse
+        /// Associates a product with a warehouse catalog
         /// </summary>
         /// <param name="product"></param>
-        /// <param name="warehouseKey">The 'unique' id of the <see cref="IWarehouse"/></param>
-        public static void AddToWarehouse(this IProduct product, Guid warehouseKey)
+        /// <param name="catalog"><see cref="IWarehouseCatalog"/></param>
+        internal static void AddToWarehouseCatalog(this IProduct product, IWarehouseCatalog catalog)
         {
-            ((Product)product).MasterVariant.AddToWarehouse(warehouseKey);
+            ((Product)product).MasterVariant.AddToWarehouseCatalog(catalog);
         }
 
        
@@ -99,10 +100,10 @@ namespace Merchello.Core.Models
         /// Associates a product variant with a warehouse
         /// </summary>
         /// <param name="productVariant"></param>
-        /// <param name="warehouseKey">The 'unique' id of the <see cref="IWarehouse"/></param>
-        public static void AddToWarehouse(this IProductVariant productVariant, Guid warehouseKey)
+        /// <param name="catalog"><see cref="IWarehouseCatalog"/></param>
+        internal static void AddToWarehouseCatalog(this IProductVariant productVariant, IWarehouseCatalog catalog)
         {
-            ((WarehouseInventoryCollection)productVariant.Warehouses).Add(new WarehouseInventory(warehouseKey, productVariant.Key));
+            ((WarehouseInventoryCollection)productVariant.Warehouses).Add(new WarehouseInventory(catalog, productVariant.Key));
         }
 
 
@@ -187,7 +188,6 @@ namespace Merchello.Core.Models
                     writer.WriteAttributeString("updateDate", productVariant.UpdateDate.ToString("s"));                    
                     writer.WriteAttributeString("allDocs", "1");
                                         
-
                     writer.WriteEndElement(); // product variant
                     writer.WriteEndDocument();
 
@@ -244,9 +244,9 @@ namespace Merchello.Core.Models
                 if (warehouses.Length > 0) warehouses += ",";
                 warehouses += JsonConvert.SerializeObject(
                 new
-                {
-                    warehouseId = wh.WarehouseKey,
-                    productVariantId = wh.ProductVariantKey,
+                {   catalogKey = ((WarehouseInventory)wh).CatalogKey,
+                    warehouseKey = wh.WarehouseKey,
+                    productVariantKey = wh.ProductVariantKey,
                     count = wh.Count,
                     lowCount = wh.LowCount
                 },
@@ -258,8 +258,6 @@ namespace Merchello.Core.Models
 
         private static string GetAttributesJson(IProductVariant productVariant)
         {
-
-
             var json = "[{0}]";
             var atts = "";
 
@@ -281,8 +279,5 @@ namespace Merchello.Core.Models
         }
 
         #endregion
-
-
-
     }
 }
