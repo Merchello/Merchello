@@ -5329,6 +5329,16 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:Umbraco.Core.PropertyEditors.DefaultPropertyValueConverterAttribute">
+            <summary>
+            Indicates that this is a default property value converter (shipped with Umbraco)
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Persistence.Migrations.IMigration">
+            <summary>
+            Marker interface for database migrations
+            </summary>
+        </member>
         <member name="T:Umbraco.Core.PropertyEditors.IValueEditor">
             <summary>
             An interface that is shared between parameter and property value editors to access their views
@@ -5588,6 +5598,14 @@
             </summary>        
             <remarks>
             if the ConvertEditorToDb doesn't return an IEnumerable{string} then an exception will be thrown.
+            </remarks>
+        </member>
+        <member name="T:Umbraco.Core.PropertyEditors.ValueConverters.JsonValueConverter">
+            <summary>
+            The default converter for all property editors that expose a JSON value type
+            </summary>
+            <remarks>
+            Since this is a default (umbraco) converter it will be ignored if another converter found conflicts with this one.
             </remarks>
         </member>
         <member name="M:Umbraco.Core.PropertyEditors.ValueConverters.JsonValueConverter.IsConverter(Umbraco.Core.Models.PublishedContent.PublishedPropertyType)">
@@ -7286,11 +7304,12 @@
             <param name="property"><see cref="T:Umbraco.Core.Models.Property"/> to generate xml for</param>
             <returns>Xml of the property and its value</returns>
         </member>
-        <member name="M:Umbraco.Core.Models.PropertyExtensions.ToXml(Umbraco.Core.Models.Property,Umbraco.Core.Services.IDataTypeService)">
+        <member name="M:Umbraco.Core.Models.PropertyExtensions.ToXml(Umbraco.Core.Models.Property,Umbraco.Core.Models.PropertyType,Umbraco.Core.Services.IDataTypeService)">
             <summary>
             Creates the xml representation for the <see cref="T:Umbraco.Core.Models.Property"/> object
             </summary>
             <param name="property"><see cref="T:Umbraco.Core.Models.Property"/> to generate xml for</param>
+            <param name="propertyType"></param>
             <param name="dataTypeService"></param>
             <returns>Xml of the property and its value</returns>
         </member>
@@ -8584,11 +8603,6 @@
             We are removing the cmsMacroPropertyType which the cmsMacroProperty references and the cmsMacroProperty.macroPropertyType column
             needs to be changed to editorAlias, we'll do this by removing the constraint,changing the macroPropertyType to the new 
             editorAlias column (and maintaing data so we can reference it)
-            </summary>
-        </member>
-        <member name="T:Umbraco.Core.Persistence.Migrations.IMigration">
-            <summary>
-            Marker interface for database migrations
             </summary>
         </member>
         <member name="T:Umbraco.Core.Persistence.Migrations.Upgrades.TargetVersionSeven.AddIndexToCmsMacroPropertyTable">
@@ -11029,6 +11043,9 @@
             <remarks>
             This is generally not going to be used by anything unless a property editor wants to change the merging
             functionality or needs to convert some legacy persisted data, or convert the string values to strongly typed values in json (i.e. booleans)
+            
+            IMPORTANT! When using this method the default pre values dictionary should not be modified which would change the property editor's global 
+            singleton pre-values!
             </remarks>
         </member>
         <member name="P:Umbraco.Core.PropertyEditors.PreValueEditor.Fields">
@@ -11257,35 +11274,43 @@
             value to the DB will fail when it tries to validate the value type.
             </remarks>
         </member>
-        <member name="M:Umbraco.Core.PropertyEditors.PropertyValueEditor.ConvertDbToEditor(System.Object)">
+        <member name="M:Umbraco.Core.PropertyEditors.PropertyValueEditor.ConvertDbToEditor(Umbraco.Core.Models.Property,Umbraco.Core.Models.PropertyType,Umbraco.Core.Services.IDataTypeService)">
             <summary>
             A method used to format the database value to a value that can be used by the editor
             </summary>
-            <param name="dbValue"></param>
+            <param name="property"></param>
+            <param name="propertyType"></param>
+            <param name="dataTypeService"></param>
             <returns></returns>
             <remarks>
             The object returned will automatically be serialized into json notation. For most property editors
             the value returned is probably just a string but in some cases a json structure will be returned.
             </remarks>
         </member>
-        <member name="M:Umbraco.Core.PropertyEditors.PropertyValueEditor.ConvertDbToXml(Umbraco.Core.Models.Property)">
+        <member name="M:Umbraco.Core.PropertyEditors.PropertyValueEditor.ConvertDbToXml(Umbraco.Core.Models.Property,Umbraco.Core.Models.PropertyType,Umbraco.Core.Services.IDataTypeService)">
             <summary>
             Converts the property db value to an XML fragment
             </summary>
             <param name="property"></param>
+            <param name="propertyType"></param>
+            <param name="dataTypeService"></param>
             <returns></returns>
             <remarks>
             By default this will just return the value of ConvertDbToString but ensure that if the db value type is nvarchar or text
             it is a CDATA fragment, otherwise it is just a text fragment.
             
             This method by default will only return XText or XCData which must be wrapped in an element!
+            
+            If the value is empty we will not return as CDATA since that will just take up more space in the file.
             </remarks>
         </member>
-        <member name="M:Umbraco.Core.PropertyEditors.PropertyValueEditor.ConvertDbToString(Umbraco.Core.Models.Property)">
+        <member name="M:Umbraco.Core.PropertyEditors.PropertyValueEditor.ConvertDbToString(Umbraco.Core.Models.Property,Umbraco.Core.Models.PropertyType,Umbraco.Core.Services.IDataTypeService)">
             <summary>
             Converts the property value for use in the front-end cache
             </summary>
             <param name="property"></param>
+            <param name="propertyType"></param>
+            <param name="dataTypeService"></param>
             <returns></returns>
         </member>
         <member name="P:Umbraco.Core.PropertyEditors.PropertyValueEditor.View">
@@ -20448,11 +20473,14 @@
             Writes the assembly hash file
             </summary>
         </member>
-        <member name="M:Umbraco.Core.PluginManager.GetAssembliesHash(System.Collections.Generic.IEnumerable{System.IO.FileSystemInfo})">
+        <member name="M:Umbraco.Core.PluginManager.GetFileHash(System.Collections.Generic.IEnumerable{System.Tuple{System.IO.FileSystemInfo,System.Boolean}})">
             <summary>
             Returns a unique hash for the combination of FileInfo objects passed in
             </summary>
-            <param name="filesAndFolders"></param>
+            <param name="filesAndFolders">
+            A collection of files and whether or not to use their file contents to determine the hash or the file's properties 
+            (true will make a hash based on it's contents)
+            </param>
             <returns></returns>
         </member>
         <member name="M:Umbraco.Core.PluginManager.ConvertPluginsHashFromHex(System.String)">
@@ -20587,12 +20615,14 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Core.PluginManager.FindAndCreateInstances``1(System.Boolean)">
+        <member name="M:Umbraco.Core.PluginManager.FindAndCreateInstances``1(System.Boolean,System.Boolean,System.Collections.Generic.IEnumerable{System.Reflection.Assembly})">
             <summary>
             Used to resolve and create instances of the specified type based on the resolved/cached plugin types
             </summary>
             <typeparam name="T"></typeparam>
             <param name="throwException">set to true if an exception is to be thrown if there is an error during instantiation</param>
+            <param name="cacheResult"></param>
+            <param name="specificAssemblies"></param>
             <returns></returns>
         </member>
         <member name="M:Umbraco.Core.PluginManager.CreateInstances``1(System.Collections.Generic.IEnumerable{System.Type},System.Boolean)">
