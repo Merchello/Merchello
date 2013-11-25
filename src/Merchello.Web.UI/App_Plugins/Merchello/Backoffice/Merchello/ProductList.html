@@ -35,6 +35,7 @@
                         <div class="col-xs-7 span7 controls">
                             <label for="productFilter">Filter By</label>
                             <input id="productFilter" class="form-control span8" name="productFilter" data-ng-model="filtertext" placeholder="Start typing an item's name..." />
+                            <button id="productFilterGo" class="btn" data-ng-click="getFilteredProducts(filtertext)">Filter</button>
                         </div>
 
                         <div class="col-xs-2 span2">
@@ -50,6 +51,16 @@
                 </form>
             </div>
             <div class="merchello-pane">
+
+                <div>
+                    <button data-ng-disabled="currentPage == 0" data-ng-click="currentPage=currentPage-1">
+                        Previous
+                    </button>
+                    {{currentPage+1}}/{{numberOfPages()}}
+                    <button data-ng-disabled="currentPage >= data.length/limitAmount - 1" data-ng-click="currentPage=currentPage+1">
+                        Next
+                    </button>
+                </div>
                     
                 <table class="table table-hover merchello-selectable-table sortable">
                     <thead>
@@ -67,8 +78,8 @@
                             <th>&nbsp;</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr data-ng-repeat="product in products | orderBy:sortProperty | limitTo:limitAmount" data-ng-show="([product] | filter:filtertext).length > 0"
+                    <tbody>  <!--data-ng-show="([product] | filter:filtertext).length > 0"-->
+                        <tr data-ng-repeat="product in products | orderBy:sortProperty | startfrom:currentPage * limitAmount | limitTo:limitAmount" 
                             data-ng-class="{active: product.selected}" data-ng-click="product.selected = !product.selected">
                             <!--<td><input type="checkbox" data-ng-model="product.selected"/></td>-->
                             <td>{{product.name}}</td>

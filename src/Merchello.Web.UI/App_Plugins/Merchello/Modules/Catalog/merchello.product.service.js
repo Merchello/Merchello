@@ -50,6 +50,17 @@
                     ),
                     'Failed to get all products');
 
+            },
+
+            filterProducts: function (term) {
+
+                return umbRequestHelper.resourcePromise(
+                    $http.get(
+                        '/umbraco/Merchello/ProductApi/GetFilteredProducts',
+                        { params: { term: term } }
+                    ),
+                    'Failed to get filtered products');
+
             }
         };
     };

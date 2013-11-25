@@ -17,10 +17,14 @@
         $scope.sortProperty = "name";
         $scope.sortOrder = "asc";
         $scope.limitAmount = 10;
+        $scope.currentPage = 0;
+
+        $scope.numberOfPages = function () {
+            return Math.ceil($scope.products.length / $scope.limitAmount);
+        }
 
         $scope.loadProducts = function () {
 
-            //we are editing so get the product from the server
             var promise = merchelloProductService.getAllProducts();
 
             promise.then(function (products) {
@@ -65,6 +69,27 @@
                 $scope.sortOrder = "asc";
             }
 
+        }
+
+        $scope.getFilteredProducts = function (filter)
+        {
+            notificationsService.info("Filtering...", "");
+
+            var promise = merchelloProductService.filterProducts(filter);
+
+            promise.then(function (products) {
+
+                $scope.products = _.map(products, function (productFromServer) {
+                    return new merchello.Models.Product(productFromServer);
+                });
+
+                notificationsService.success("Filtered Products Loaded", "");
+
+            }, function (reason) {
+
+                alert('Failed: ' + reason.message);
+
+            });
         }
 
     }

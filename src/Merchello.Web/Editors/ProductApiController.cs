@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Linq;
 using Umbraco.Web.Mvc;
 using Merchello.Core;
 using Merchello.Core.Models;
@@ -10,6 +11,8 @@ using Merchello.Core.Services;
 using Merchello.Web.WebApi;
 using Umbraco.Web;
 using Merchello.Web.Models.ContentEditing;
+using Examine;
+
 
 namespace Merchello.Web.Editors
 {
@@ -82,17 +85,57 @@ namespace Merchello.Web.Editors
         /// <param name="keys"></param>
         public IEnumerable<ProductDisplay> GetAllProducts()
         {
-            ProductService tempProductService = _productService as ProductService;
-            var products = tempProductService.GetAll();
-            if (products == null)
-            {
-                // ?
-            }
+            MerchelloHelper merchello = new MerchelloHelper();
 
-            foreach (IProduct product in products)
-            {
-                yield return product.ToProductDisplay();
-            }
+            var criteria = ExamineManager.Instance.CreateSearchCriteria();
+            criteria.Field("allDocs", "1");
+
+            return merchello.SearchProducts(criteria);
+        }
+
+        /// <summary>
+        /// Returns All Products
+        /// 
+        /// GET /umbraco/Merchello/ProductApi/GetProducts
+        /// </summary>
+        /// <param name="keys"></param>
+        public IEnumerable<ProductDisplay> GetAllProducts(int page, int perPage)
+        {
+            MerchelloHelper merchello = new MerchelloHelper();
+
+            var criteria = ExamineManager.Instance.CreateSearchCriteria();
+            criteria.Field("allDocs", "1");
+
+            var products = merchello.SearchProducts(criteria);
+
+            return products.Skip((page-1) * perPage).Take(perPage);
+        }
+
+        /// <summary>
+        /// Returns All Products
+        /// 
+        /// GET /umbraco/Merchello/ProductApi/GetFilteredProducts
+        /// </summary>
+        /// <param name="term"></param>
+        public IEnumerable<ProductDisplay> GetFilteredProducts(string term)
+        {
+            MerchelloHelper merchello = new MerchelloHelper();
+
+            return merchello.SearchProducts(term);
+        }
+
+
+        /// <summary>
+        /// Returns All Products
+        /// 
+        /// GET /umbraco/Merchello/ProductApi/GetFilteredProducts
+        /// </summary>
+        /// <param name="term"></param>
+        public IEnumerable<ProductDisplay> GetFilteredProducts(string term, int page, int perPage)
+        {
+            MerchelloHelper merchello = new MerchelloHelper();
+
+            return merchello.SearchProducts(term).Skip((page - 1) * perPage).Take(perPage);
         }
 
         /// <summary>
