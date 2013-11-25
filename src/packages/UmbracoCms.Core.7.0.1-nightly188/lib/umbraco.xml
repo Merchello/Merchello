@@ -1837,6 +1837,9 @@
             <param name="memberService"></param>
             <param name="member"></param>
             <param name="display"></param>
+            <remarks>
+            If this is a new entity and there is an approved field then we'll set it to true by default.
+            </remarks>
         </member>
         <member name="M:Umbraco.Web.Models.Mapping.MemberModelMapper.GetLoginProperty(Umbraco.Core.Services.IMemberService,Umbraco.Core.Models.IMember,Umbraco.Web.Models.ContentEditing.MemberDisplay)">
             <summary>
@@ -2467,12 +2470,14 @@
             We will also check the pre-values here, if there are more items than what is allowed we'll just trim the end
             </remarks>
         </member>
-        <member name="M:Umbraco.Web.PropertyEditors.MultipleTextStringPropertyEditor.MultipleTextStringPropertyValueEditor.ConvertDbToEditor(System.Object)">
+        <member name="M:Umbraco.Web.PropertyEditors.MultipleTextStringPropertyEditor.MultipleTextStringPropertyValueEditor.ConvertDbToEditor(Umbraco.Core.Models.Property,Umbraco.Core.Models.PropertyType,Umbraco.Core.Services.IDataTypeService)">
             <summary>
             We are actually passing back an array of simple objects instead of an array of strings because in angular a primitive (string) value
             cannot have 2 way binding, so to get around that each item in the array needs to be an object with a string.
             </summary>
-            <param name="dbValue"></param>
+            <param name="property"></param>
+            <param name="propertyType"></param>
+            <param name="dataTypeService"></param>
             <returns></returns>
             <remarks>
             The legacy property editor saved this data as new line delimited! strange but we have to maintain that.
@@ -2496,25 +2501,31 @@
             needing additional lookups.
             </remarks>
         </member>
-        <member name="M:Umbraco.Web.PropertyEditors.PublishValueValueEditor.ConvertDbToString(Umbraco.Core.Models.Property)">
+        <member name="M:Umbraco.Web.PropertyEditors.PublishValueValueEditor.ConvertDbToString(Umbraco.Core.Models.Property,Umbraco.Core.Models.PropertyType,Umbraco.Core.Services.IDataTypeService)">
             <summary>
             Need to lookup the pre-values and put the string version in cache, not the ID (which is what is stored in the db)
             </summary>
             <param name="property"></param>
+            <param name="propertyType"></param>
+            <param name="dataTypeService"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.PropertyEditors.PublishValuesMultipleValueEditor.ConvertDbToString(Umbraco.Core.Models.Property)">
+        <member name="M:Umbraco.Web.PropertyEditors.PublishValuesMultipleValueEditor.ConvertDbToString(Umbraco.Core.Models.Property,Umbraco.Core.Models.PropertyType,Umbraco.Core.Services.IDataTypeService)">
             <summary>
             If publishing ids, we don't need to do anything, otherwise we need to look up the pre-values and get the string values
             </summary>
             <param name="property"></param>
+            <param name="propertyType"></param>
+            <param name="dataTypeService"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.PropertyEditors.PublishValuesMultipleValueEditor.ConvertDbToEditor(System.Object)">
+        <member name="M:Umbraco.Web.PropertyEditors.PublishValuesMultipleValueEditor.ConvertDbToEditor(Umbraco.Core.Models.Property,Umbraco.Core.Models.PropertyType,Umbraco.Core.Services.IDataTypeService)">
             <summary>
             Override so that we can return a json array to the editor for multi-select values
             </summary>
-            <param name="dbValue"></param>
+            <param name="property"></param>
+            <param name="propertyType"></param>
+            <param name="dataTypeService"></param>
             <returns></returns>
         </member>
         <member name="M:Umbraco.Web.PropertyEditors.PublishValuesMultipleValueEditor.ConvertEditorToDb(Umbraco.Core.Models.Editors.ContentPropertyData,System.Object)">
@@ -2870,6 +2881,16 @@
             <remarks>
             This allows us to attribute new trees with their legacy counterparts and when a legacy tree is loaded this will indicate 
             on the new tree which legacy tree to load (it won't actually render using the new tree)
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.Trees.MemberTreeController.FindUsersByName(System.Char)">
+            <summary>
+            Allows for developers to override this in case their provider does some funky stuff to search
+            </summary>
+            <param name="letter"></param>
+            <returns></returns>
+            <remarks>
+            We're going to do a special check here - for active dir provider or sql provider
             </remarks>
         </member>
         <member name="M:Umbraco.Web.Trees.MemberTreeController.GetNodeIdForCustomProvider(System.Object)">
@@ -3946,25 +3967,47 @@
             All property data validation goes into the modelstate with a prefix of "Properties"
             </remarks>
         </member>
-        <member name="M:Umbraco.Web.WebApi.ControllerContextExtensions.SetOutgoingNoHyphenGuidFormat(System.Web.Http.Controllers.HttpControllerContext)">
+        <member name="T:Umbraco.Web.WebApi.Filters.FilterGrouping">
+            <summary>
+            Quickly split filters into different types 
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.WebApi.HttpControllerContextExtensions.InvokeAuthorizationFiltersForRequest(System.Web.Http.Controllers.HttpControllerContext)">
+            <summary>
+            This method will go an execute the authorization filters for the controller action, if any fail
+            it will return their response, otherwise we'll return null.
+            </summary>
+            <param name="controllerContext"></param>
+        </member>
+        <member name="M:Umbraco.Web.WebApi.HttpControllerContextExtensions.FilterContinuation(System.Web.Http.Controllers.HttpActionContext,System.Threading.CancellationToken,System.Collections.Generic.IList{System.Web.Http.Filters.IAuthorizationFilter},System.Int32)">
+            <summary>
+            This method is how you execute a chain of filters, it needs to recursively call in to itself as the continuation for the next filter in the chain
+            </summary>
+            <param name="actionContext"></param>
+            <param name="token"></param>
+            <param name="filters"></param>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.WebApi.HttpControllerContextExtensions.SetOutgoingNoHyphenGuidFormat(System.Web.Http.Controllers.HttpControllerContext)">
             <summary>
             Sets the JSON GUID format to not have hyphens
             </summary>
             <param name="controllerContext"></param>
         </member>
-        <member name="M:Umbraco.Web.WebApi.ControllerContextExtensions.SetOutgoingDateTimeFormat(System.Web.Http.Controllers.HttpControllerContext,System.String)">
+        <member name="M:Umbraco.Web.WebApi.HttpControllerContextExtensions.SetOutgoingDateTimeFormat(System.Web.Http.Controllers.HttpControllerContext,System.String)">
             <summary>
             Sets the JSON datetime format to be a custom one
             </summary>
             <param name="controllerContext"></param>
             <param name="format"></param>
         </member>
-        <member name="M:Umbraco.Web.WebApi.ControllerContextExtensions.SetOutgoingDateTimeFormat(System.Web.Http.Controllers.HttpControllerContext)">
+        <member name="M:Umbraco.Web.WebApi.HttpControllerContextExtensions.SetOutgoingDateTimeFormat(System.Web.Http.Controllers.HttpControllerContext)">
             <summary>
             Sets the JSON datetime format to be our regular iso standard
             </summary>
         </member>
-        <member name="M:Umbraco.Web.WebApi.ControllerContextExtensions.EnsureJsonOutputOnly(System.Web.Http.Controllers.HttpControllerContext)">
+        <member name="M:Umbraco.Web.WebApi.HttpControllerContextExtensions.EnsureJsonOutputOnly(System.Web.Http.Controllers.HttpControllerContext)">
             <summary>
             Removes the xml formatter so it only outputs json
             </summary>
@@ -4456,11 +4499,13 @@
             </summary>
             <param name="preValues"></param>
         </member>
-        <member name="M:Umbraco.Web.PropertyEditors.RichTextPropertyEditor.RichTextPropertyValueEditor.ConvertDbToEditor(System.Object)">
+        <member name="M:Umbraco.Web.PropertyEditors.RichTextPropertyEditor.RichTextPropertyValueEditor.ConvertDbToEditor(Umbraco.Core.Models.Property,Umbraco.Core.Models.PropertyType,Umbraco.Core.Services.IDataTypeService)">
             <summary>
             Format the data for the editor
             </summary>
-            <param name="dbValue"></param>
+            <param name="property"></param>
+            <param name="propertyType"></param>
+            <param name="dataTypeService"></param>
             <returns></returns>
         </member>
         <member name="M:Umbraco.Web.PropertyEditors.RichTextPropertyEditor.RichTextPropertyValueEditor.ConvertEditorToDb(Umbraco.Core.Models.Editors.ContentPropertyData,System.Object)">
@@ -4469,6 +4514,14 @@
             </summary>
             <param name="editorValue"></param>
             <param name="currentValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Trees.ContentTreeControllerBase.HasPathAccess(System.String,System.Net.Http.Formatting.FormDataCollection)">
+            <summary>
+            Returns true or false if the current user has access to the node based on the user's allowed start node (path) access
+            </summary>
+            <param name="id"></param>
+            <param name="queryStrings"></param>
             <returns></returns>
         </member>
         <member name="M:Umbraco.Web.Trees.ContentTreeControllerBase.GetTreeNodes(System.String,System.Net.Http.Formatting.FormDataCollection)">
@@ -4519,6 +4572,14 @@
             <summary>
             Returns the user's start node for this tree
             </summary>
+        </member>
+        <member name="M:Umbraco.Web.Trees.MediaTreeController.HasPathAccess(System.String,System.Net.Http.Formatting.FormDataCollection)">
+            <summary>
+            Returns true or false if the current user has access to the node based on the user's allowed start node (path) access
+            </summary>
+            <param name="id"></param>
+            <param name="queryStrings"></param>
+            <returns></returns>
         </member>
         <member name="T:Umbraco.Web.Models.Trees.ActionMenuItemAttribute">
             <summary>
@@ -4751,6 +4812,18 @@
             <summary>
             A list of additional/custom css classes to assign to the node
             </summary>
+        </member>
+        <member name="M:Umbraco.Web.Trees.ApplicationTreeExtensions.TryGetRootNodeFromControllerTree(Umbraco.Core.Models.ApplicationTree,System.Net.Http.Formatting.FormDataCollection,System.Web.Http.Controllers.HttpControllerContext)">
+            <summary>
+            This will go and get the root node from a controller tree by executing the tree's GetRootNode method
+            </summary>
+            <param name="appTree"></param>
+            <param name="formCollection"></param>
+            <param name="controllerContext"></param>
+            <returns></returns>
+            <remarks>
+            This ensures that authorization filters are applied to the sub request 
+            </remarks>
         </member>
         <member name="T:Umbraco.Web.Trees.TreeAttribute">
             <summary>
@@ -5238,6 +5311,14 @@
             <remarks>
             If the content item is a container node then we will not return anything
             </remarks>
+        </member>
+        <member name="M:Umbraco.Web.Trees.ContentTreeController.HasPathAccess(System.String,System.Net.Http.Formatting.FormDataCollection)">
+            <summary>
+            Returns true or false if the current user has access to the node based on the user's allowed start node (path) access
+            </summary>
+            <param name="id"></param>
+            <param name="queryStrings"></param>
+            <returns></returns>
         </member>
         <member name="M:Umbraco.Web.Trees.ContentTreeController.GetAllNodeMenuItems(Umbraco.Core.Models.EntityBase.IUmbracoEntity)">
             <summary>
@@ -6824,6 +6905,25 @@
             <param name="username"></param>
             <param name="password"></param>
             <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Security.WebSecurity.GetBackOfficeMembershipUser(System.String,System.Boolean)">
+            <summary>
+            Returns the MembershipUser from the back office membership provider
+            </summary>
+            <param name="username"></param>
+            <param name="setOnline"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Security.WebSecurity.GetBackOfficeUser(System.String)">
+            <summary>
+            Returns the back office IUser instance for the username specified
+            </summary>
+            <param name="username"></param>
+            <returns></returns>
+            <remarks>
+            This will return an Iuser instance no matter what membership provider is installed for the back office, it will automatically
+            create any missing Iuser accounts if one is not found and a custom membership provider is being used. 
+            </remarks>
         </member>
         <member name="M:Umbraco.Web.Security.WebSecurity.ChangePassword(System.String,Umbraco.Web.Models.ChangingPasswordModel,System.Web.Security.MembershipProvider)">
             <summary>
@@ -15035,6 +15135,13 @@
             <param name="nodeID">Always use -1</param>
             <param name="SaveToDisk">Not used</param>
         </member>
+        <member name="M:umbraco.library.JsonToXml(System.String)">
+            <summary>
+            This will convert a json structure to xml for use in xslt
+            </summary>
+            <param name="json"></param>
+            <returns></returns>
+        </member>
         <member name="M:umbraco.library.setSession(System.String,System.String)">
             <summary>
             Add a session variable to the current user
@@ -18817,18 +18924,18 @@
             	the contents of this method with the code editor.
             </summary>
         </member>
-        <member name="F:umbraco.presentation.umbraco.create.script.RequiredFieldValidator1">
+        <member name="F:umbraco.presentation.umbraco.create.script.rename">
             <summary>
-            RequiredFieldValidator1 control.
+            rename control.
             </summary>
             <remarks>
             Auto-generated field.
             To modify move field declaration from designer file to code-behind file.
             </remarks>
         </member>
-        <member name="F:umbraco.presentation.umbraco.create.script.rename">
+        <member name="F:umbraco.presentation.umbraco.create.script.RequiredFieldValidator1">
             <summary>
-            rename control.
+            RequiredFieldValidator1 control.
             </summary>
             <remarks>
             Auto-generated field.
@@ -18844,9 +18951,9 @@
             To modify move field declaration from designer file to code-behind file.
             </remarks>
         </member>
-        <member name="F:umbraco.presentation.umbraco.create.script.Textbox1">
+        <member name="F:umbraco.presentation.umbraco.create.script.CreateMacroCheckBox">
             <summary>
-            Textbox1 control.
+            CreateMacroCheckBox control.
             </summary>
             <remarks>
             Auto-generated field.

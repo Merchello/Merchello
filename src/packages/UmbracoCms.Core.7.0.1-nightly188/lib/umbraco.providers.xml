@@ -258,6 +258,11 @@
             For backwards compatibility, this provider supports this option
             </summary>
         </member>
+        <member name="T:umbraco.providers.members.MembershipEventHandler">
+            <summary>
+            Adds some event handling
+            </summary>
+        </member>
         <member name="M:umbraco.providers.members.UmbracoProfileProvider.GetPropertyValues(System.Configuration.SettingsContext,System.Configuration.SettingsPropertyCollection)">
             <summary>
             Returns the collection of settings property values for the current umbraco member.
