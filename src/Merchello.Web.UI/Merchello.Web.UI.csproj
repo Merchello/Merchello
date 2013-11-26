@@ -266,6 +266,7 @@
       <DependentUpon>merchello.scss</DependentUpon>
     </Content>
     <Content Include="App_Plugins\Merchello\Common\Js\merchello.app.js" />
+    <Content Include="App_Plugins\Merchello\Common\Js\merchello.models.js" />
     <Content Include="App_Plugins\Merchello\Common\Js\merchello.namespaces.js" />
     <Content Include="App_Plugins\Merchello\Directives\productvariant.filter.directive.js" />
     <Content Include="App_Plugins\Merchello\Directives\productoptions.repeat.directive.js" />
