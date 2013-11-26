@@ -41,25 +41,25 @@
                         <div class="row-fluid col-xs-10 span10">
 
                             <!-- Flyout when edit is clicked -->
-                            <div class="well closed">
-                                <button class="btn close"><i class="icon-delete"></i></button>
-                                <h4>Edit <b>Order Confirmation</b> Notification</h4>
+                            <form name="editTemplateForm" class="well" data-ng-class="{ 'open': flyouts.editTemplate, 'closed': !flyouts.editTemplate }">
+                                <button class="btn close" data-ng-click="editTemplateFlyout.close()"><i class="icon-delete"></i></button>
+                                <h4>Edit <b>{{editTemplateFlyout.model.name}}</b> Notification</h4>
                                 <p>You may add basic HTML tags to your email header and footer templates such as &lt;br /&gt; to create a new line of text.</p>
 
                                 <div class="form-group">
                                     <label>Header</label>
-                                    <textarea class="col-xs-12 span12" rows="4"></textarea>
+                                    <textarea class="col-xs-12 span12" rows="4" data-ng-model="editTemplateFlyout.model.header"></textarea>
                                 </div>
                                 <div class="form-group">
                                     <label>Footer</label>
-                                    <textarea class="col-xs-12 span12" rows="4"></textarea>
+                                    <textarea class="col-xs-12 span12" rows="4" data-ng-model="editTemplateFlyout.model.footer"></textarea>
                                 </div>
 
                                 <div>
-                                    <input type="submit" class="btn" value="Cancel" />
-                                    <input type="submit" class="btn btn-primary" value="Save" />
+                                    <input type="submit" class="btn" value="Cancel" data-ng-click="editTemplateFlyout.close()" />
+                                    <input type="submit" class="btn btn-primary" value="Save"  data-ng-click="editTemplateFlyout.confirm()" />
                                 </div>
-                            </div>
+                            </form>
 
                             <table class="table table-striped merchello-striped-table settings-table notifications-table form-horizontal">
                                 <thead>
@@ -69,30 +69,10 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>Order Confirmation</td>
-                                        <td>Sent to the customer and users requesting notification (set below)</td>
-                                        <td class="edit"><a href="#" class="btn btn-default btn-xs btn-mini">edit</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Order Shipped</td>
-                                        <td>Sent to the customer upon order fulfillment</td>
-                                        <td class="edit"><a href="#" class="btn btn-default btn-xs btn-mini">edit</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Problems with Payment Authorization</td>
-                                        <td>Sent with a request to contact support when credit card is denied or there is an error such as wrong billing address</td>
-                                        <td class="edit"><a href="#" class="btn btn-default btn-xs btn-mini">edit</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Payment Received</td>
-                                        <td>Sent to the customer and users requesting notifiation upon payment processing</td>
-                                        <td class="edit"><a href="#" class="btn btn-default btn-xs btn-mini">edit</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Order Canceled</td>
-                                        <td>Sent to the customer after an order is manually canceled</td>
-                                        <td class="edit"><a href="#" class="btn btn-default btn-xs btn-mini">edit</a></td>
+                                    <tr data-ng-repeat="template in emailTemplates">
+                                        <td>{{template.name}}</td>
+                                        <td>{{template.description}}</td>
+                                        <td class="edit"><a class="btn btn-default btn-xs btn-mini" data-ng-click="editTemplateFlyout.open(template)">edit</a></td>
                                     </tr>
                                 </tbody>
                             </table>
