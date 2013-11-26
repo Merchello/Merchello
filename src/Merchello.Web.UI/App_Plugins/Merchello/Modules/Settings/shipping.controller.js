@@ -23,6 +23,7 @@
         };
 
         $scope.loadWarehouses = function () {
+
             // Note From Kyle: Mocks for data returned from Warehouse API call
             var mockWarehouses = [
                 {
