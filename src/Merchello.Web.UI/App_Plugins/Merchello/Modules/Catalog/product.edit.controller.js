@@ -15,14 +15,16 @@
         $scope.sortProperty = "sku";
         $scope.sortOrder = "asc";
         $scope.allVariants = false;
+        $scope.bulkAction = false,
+        $scope.selectedVariants = [];
 
-        $scope.reorderVariants = false;
-        $scope.bulkAction = false;
-        $scope.changePrices = false;
-        $scope.updateInventory = false;
-        $scope.deleteVariants = false;
-        $scope.duplicateVariants = false;
-
+        $scope.flyouts = {
+            reorderVariants: false,
+            changePrices: false,
+            updateInventory: false,
+            deleteVariants: false,
+            duplicateVariants: false
+        };
 
         if ($routeParams.create) {
 
@@ -113,6 +115,31 @@
 
         }
 
+        $scope.selectedVariants = function () {
+            return _.filter($scope.product.productVariants, function (v) {
+                return v.selected;
+            });
+        }
+
+        $scope.checkBulkVariantsSelected = function() {
+            var v = $scope.selectedVariants();
+            if (v.length > 1) {
+                $scope.allVariants = true;
+            }
+            else {
+                $scope.allVariants = false;
+            }
+        }
+
+        $scope.toggleAVariant = function(variant) {
+            variant.selected = !variant.selected;
+            $scope.checkBulkVariantsSelected();
+        }
+
+        $scope.toggleAllVariants = function () {
+            
+        }
+
         $scope.selectVariants = function (attributeToSelect) {
 
             for (var i = 0; i < $scope.product.productVariants.length; i++) {
@@ -126,7 +153,6 @@
                 filteredVariants = $scope.product.productVariants;
             }
             else if (attributeToSelect == "None") {
-
             }
             else {
                 var filteredVariants = _.filter($scope.product.productVariants,
@@ -140,27 +166,64 @@
                 filteredVariants[v].selected = true;
             }
 
+            $scope.checkBulkVariantsSelected();
         }
 
-        $scope.showFlyout = function (flyout) {
-            $scope.reorderVariants = false;
-            flyout = true;
-            $scope.bulkAction = false;
-        }
+        $scope.changePricesFlyout = new merchello.Models.Flyout(
+            $scope.flyouts.changePrices,
+            function (isOpen) {
+                $scope.flyouts.changePrices = isOpen;
+                $scope.reorderVariants = false;
+                $scope.bulkAction = false;
+            }, {
+                confirm: function () {
+                    notificationsService.success("Confirmed prices update", $scope.changePricesFlyout.newPrice);
+                }
+            });
 
-        $scope.hideFlyout = function (flyout) {
-            flyout = false;
-        }
+        $scope.updateInventoryFlyout = new merchello.Models.Flyout(
+            $scope.flyouts.updateInventory,
+            function (isOpen) {
+                $scope.flyouts.updateInventory = isOpen;
+                $scope.reorderVariants = false;
+                $scope.bulkAction = false;
+            }, {
+                confirm: function () {
+                    notificationsService.success("Confirmed inventory update", $scope.updateInventoryFlyout.newInventory);
+                }
+            });
+
+        $scope.deleteVariantsFlyout = new merchello.Models.Flyout(
+            $scope.flyouts.deleteVariants,
+            function (isOpen) {
+                $scope.flyouts.deleteVariants = isOpen;
+                $scope.reorderVariants = false;
+                $scope.bulkAction = false;
+            }, {
+                confirm: function () {
+                    notificationsService.success("Confirmed variants deleted");
+                }
+            });
+
+        $scope.duplicateVariantsFlyout = new merchello.Models.Flyout(
+            $scope.flyouts.duplicateVariants,
+            function (isOpen) {
+                $scope.flyouts.duplicateVariants = isOpen;
+                $scope.reorderVariants = false;
+                $scope.bulkAction = false;
+            }, {
+                confirm: function () {
+                    notificationsService.success("Confirmed variants duplicated");
+                }
+            });
+
 
         $scope.selectTab = function (tabname) {
             $scope.currentTab = tabname;
         }
 
-
         $scope.addOption = function () {
-
             $scope.product.addBlankOption();
-
         };
         
         $scope.updateVariants = function (thisForm) {

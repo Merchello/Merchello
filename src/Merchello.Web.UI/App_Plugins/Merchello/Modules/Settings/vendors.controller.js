@@ -64,7 +64,7 @@
         $scope.addVendorFlyout = {
             clear: function() {
                 $scope.newVendor = new merchello.Models.Vendor();
-		$scope.newVendor.key = "no key created";
+		        $scope.newVendor.key = "no key created";
             },
             close: function () {
                 $scope.flyouts.addVendor = false;
