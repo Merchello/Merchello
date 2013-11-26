@@ -35,7 +35,7 @@
                     <label class="merchello-control-label">
                         Manual Methods
                         <small>Set manual payment providers</small>
-                        <a href="#"><i class="icon-bill-dollar"></i> Add a Method</a>
+                        <a data-ng-click="addManualPaymentMethodFlyout.open()"><i class="icon-bill-dollar"></i> Add a Method</a>
                     </label>
 
                     <div class="merchello-controls row-fluid">
@@ -43,24 +43,33 @@
                         <div class="row-fluid col-xs-10 span10">
 
                             <!-- Flyout when edit or Add a Method is clicked -->
-                            <div class="well closed">
-                                <button class="btn close"><i class="icon-delete"></i></button>
+                            <form name="addManualPaymentMethodForm" class="well" data-ng-class="{ 'open': flyouts.addManualPaymentMethod, 'closed': !flyouts.addManualPaymentMethod }">
+                                <button class="btn close" data-ng-click="addManualPaymentMethodFlyout.close()"><i class="icon-delete"></i></button>
                                 <h4>Add/Edit a Payment Method</h4>
 
                                 <div class="form-group">
                                     <label>Name</label>
-                                    <input type="text" class="col-xs-6 span6" />
+                                    <input type="text" class="col-xs-6 span6" data-ng-model="addManualPaymentMethodFlyout.model.name" />
                                 </div>
                                 <div class="form-group">
                                     <label>Description</label>
-                                    <textarea class="col-xs-12 span12" rows="4"></textarea>
+                                    <textarea class="col-xs-12 span12" rows="4" data-ng-model="addManualPaymentMethodFlyout.model.description"></textarea>
                                 </div>
 
                                 <div>
-                                    <input type="submit" class="btn" value="Cancel" />
-                                    <input type="submit" class="btn btn-primary" value="Save" />
+                                    <input type="submit" class="btn" value="Cancel" data-ng-click="addManualPaymentMethodFlyout.close()"/>
+                                    <input type="submit" class="btn btn-primary" value="Save" data-ng-click="addManualPaymentMethodFlyout.confirm()"/>
                                 </div>
-                            </div>
+                            </form>
+
+                            <!-- Flyout when Delete Method is clicked -->
+                            <form name="deleteManualPaymentMethodForm" class="well" data-ng-class="{ 'open': flyouts.deleteManualPaymentMethod, 'closed': !flyouts.deleteManualPaymentMethod }">
+                                <h4>Are you sure you want to remove the method '{{deleteManualPaymentMethodFlyout.model.name}}'?</h4>
+                                <div>
+                                    <input type="submit" class="btn" value="No" data-ng-click="deleteManualPaymentMethodFlyout.close()" />
+                                    <input type="submit" class="btn btn-primary" value="Yes" data-ng-click="deleteManualPaymentMethodFlyout.confirm()" />
+                                </div>
+                            </form>
 
                             <table class="table table-striped merchello-striped-table settings-table notifications-table form-horizontal">
                                 <thead>
@@ -70,20 +79,10 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>Pay by Phone</td>
-                                        <td>Please call us at 1-888-699-7234 to pay for your order</td>
-                                        <td class="edit"><a href="#" class="btn btn-default btn-xs btn-mini">edit</a> <a class="btn btn-warning btn-xs btn-mini" href="#">x</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>CoD</td>
-                                        <td>We will exect cash delivered upon receipt of your order</td>
-                                        <td class="edit"><a href="#" class="btn btn-default btn-xs btn-mini">edit</a> <a class="btn btn-warning btn-xs btn-mini" href="#">x</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Check</td>
-                                        <td>Please mail your check to 114 W. Magnolia St, Suite 504, Belingham, WA 98225 USA. We will ship your order and notify you upon receipt of your check.</td>
-                                        <td class="edit"><a href="#" class="btn btn-default btn-xs btn-mini">edit</a> <a class="btn btn-warning btn-xs btn-mini" href="#">x</a></td>
+                                    <tr data-ng-repeat="method in manualPaymentMethods">
+                                        <td>{{method.name}}</td>
+                                        <td>{{method.description}}</td>
+                                        <td class="edit"><a class="btn btn-default btn-xs btn-mini" data-ng-click="addManualPaymentMethodFlyout.open(method)">edit</a> <a class="btn btn-warning btn-xs btn-mini" data-ng-click="deleteManualPaymentMethodFlyout.open(method)">x</a></td>
                                     </tr>
                                 </tbody>
                             </table>
