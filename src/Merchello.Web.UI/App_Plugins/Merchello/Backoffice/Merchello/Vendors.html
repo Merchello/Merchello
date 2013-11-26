@@ -1,8 +1,8 @@
 ﻿<link href="/App_Plugins/Merchello/Common/Css/merchello.css" rel="stylesheet">
 
 <div 
-    ng-controller="Merchello.Dashboards.Settings.VendorsController"
-    ng-show="loaded">
+    data-ng-controller="Merchello.Dashboards.Settings.VendorsController"
+    data-ng-show="loaded">
 
     <umb-panel>
 
@@ -44,48 +44,48 @@
 
                             <!-- Add/Edit a Vendr Flyout -->
                             <form name="newVendorForm" class="well" data-ng-class="{ 'open': flyouts.addVendor, 'closed': !flyouts.addVendor }">
-                                <button class="btn close"><i class="icon-delete"></i></button>
+                                <button class="btn close" data-ng-click="addVendorFlyout.close()"><i class="icon-delete"></i></button>
                                 <h4>Add/Edit a Vendor</h4>
                                 
                                 <div class="col-xs-6 span6">
                                     <div class="form-group row-fluid">
                                         <label for="name">Name</label>
-                                        <input data-ng-model="newVendor.name" class="span8" name="name" type="text" />
+                                        <input data-ng-model="addVendorFlyout.model.name" class="span8" name="name" type="text" />
                                     </div>
                                     <div class="form-group row-fluid">
                                         <label for="contact">Contact</label>
-                                        <input data-ng-model="newVendor.contact" class="span8" name="contact" type="text" />
+                                        <input data-ng-model="addVendorFlyout.model.contact" class="span8" name="contact" type="text" />
                                     </div>
                                     <div class="form-group row-fluid">
                                         <label for="phone">Phone</label>
-                                        <input data-ng-model="newVendor.phone" class="span8" name="phone" type="text" />
+                                        <input data-ng-model="addVendorFlyout.model.phone" class="span8" name="phone" type="text" />
                                     </div>
                                 </div>
 
                                 <div class="col-xs-6 span6">
                                     <div class="form-group row-fluid">
                                         <label for="address">Address</label>
-                                        <input data-ng-model="newVendor.address1" class="span8" name="address" type="text" placeholder="Street Address" />
-                                        <input data-ng-model="newVendor.address2" class="span8" name="extended-address" type="text" placeholder="Extended Address" />
-                                        <input data-ng-model="newVendor.locality" class="span8" name="city" type="text" placeholder="City" />
+                                        <input data-ng-model="addVendorFlyout.model.address1" class="span8" name="address" type="text" placeholder="Street Address" />
+                                        <input data-ng-model="addVendorFlyout.model.address2" class="span8" name="extended-address" type="text" placeholder="Extended Address" />
+                                        <input data-ng-model="addVendorFlyout.model.locality" class="span8" name="city" type="text" placeholder="City" />
                                     </div>
                                     <div class="form-group row-fluid">
-                                        <input data-ng-model="newVendor.region" class="span4" name="state-province" type="text" placeholder="State/Province" />
-                                        <input data-ng-model="newVendor.postalCode" class="span4" name="postal-code" type="text" placeholder="Zip/Postal Code" />
+                                        <input data-ng-model="addVendorFlyout.model.region" class="span4" name="state-province" type="text" placeholder="State/Province" />
+                                        <input data-ng-model="addVendorFlyout.model.postalCode" class="span4" name="postal-code" type="text" placeholder="Zip/Postal Code" />
                                     </div>
                                     <div class="form-group row-fluid">
-                                        <input data-ng-model="newVendor.country" class="span8" name="country" type="text" placeholder="Country" />
+                                        <input data-ng-model="addVendorFlyout.model.country" class="span8" name="country" type="text" placeholder="Country" />
                                     </div>
                                 </div>
 
                                 <div>
                                     <input type="submit" class="btn" value="Cancel" data-ng-click="addVendorFlyout.close()" />
-                                    <input type="submit" class="btn btn-primary" data-ng-click="addVendorFlyout.save()" value="Save" />
+                                    <input type="submit" class="btn btn-primary" data-ng-click="addVendorFlyout.confirm()" value="Save" />
                                 </div>
                             </form>
 
                             <form name="deleteVendorForm" class="well" data-ng-class="{ 'open': flyouts.deleteVendor, 'closed': !flyouts.deleteVendor }">
-                                <h4>Are you sure you want to remove the vendor '{{deleteVendor.name}}'?</h4>
+                                <h4>Are you sure you want to remove the vendor '{{deleteVendorFlyout.model.name}}'?</h4>
                                 <div>
                                     <input type="submit" class="btn" value="No" data-ng-click="deleteVendorFlyout.close()" />
                                     <input type="submit" class="btn btn-primary" value="Yes" data-ng-click="deleteVendorFlyout.confirm()" />

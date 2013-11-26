@@ -13,9 +13,6 @@
         $scope.vendors = [];
         $scope.sortProperty = "name";
         $scope.sortOrder = "asc";
-        $scope.deleteVendor = new merchello.Models.Vendor();
-        $scope.newVendor = new merchello.Models.Vendor();
-
         $scope.flyouts = {
             addVendor: false,
             deleteVendor: false
@@ -54,86 +51,73 @@
                 return new merchello.Models.Vendor(vendorFromServer);
             });
             // end of mocks
-
-
             $scope.loaded = true;
             $scope.preValuesLoaded = true;
 
         };
 
-        $scope.addVendorFlyout = {
-            clear: function() {
-                $scope.newVendor = new merchello.Models.Vendor();
-		        $scope.newVendor.key = "no key created";
+        $scope.addVendorFlyout = new merchello.Models.Flyout(
+            $scope.flyouts.addVendor,
+            function (isOpen) {
+                $scope.flyouts.addVendor = isOpen;
             },
-            close: function () {
-                $scope.flyouts.addVendor = false;
-            },
-            open: function (vendor) {
-                if (vendor) {
-                    $scope.newVendor = vendor;
-                } else {
-                    $scope.addVendorFlyout.clear();
-        		}
-                $scope.flyouts.addVendor = true;
-            },
-            save: function () {
-                var idx = -1;
-                for (i = 0; i < $scope.vendors.length; i++) {
-                    if ($scope.vendors[i].key == $scope.newVendor.key) {
-                        idx = i;
+            {
+                clear: function () {
+                    self.model = new merchello.Models.Vendor();
+                },
+                confirm: function () {
+                    var self = $scope.addVendorFlyout;
+                    if ((typeof self.model.key) == "undefined") {
+                        var newKey = $scope.vendors.length;
+                        // Note From Kyle: This key-creation logic will need to be modified to fit whatever works for the database.
+                        $scope.newVendor.key = newKey;
+                        $scope.vendors.push(self.model);
+                        // Note From Kyle: An API call will need to be wired in here to add the new Vendor to the database.
+                    } else {
+                        // Note From Kyle: An API call will need to be wired in here to edit the existing Vendor in the database.
+                    }
+                    self.clear();
+                    self.close();
+                },
+                open: function (model) {
+                    if (!model) {
+                        $scope.addVendorFlyout.clear();
                     }
                 }
-                if (idx > -1) {
-                    $scope.vendors[idx] = $scope.newVendor;
-                    // Note From Kyle: An API call will need to be wired in here to edit the existing Vendor in the database.
-                } else {
-                    var newKey = $scope.vendors.length;
-                    // Note From Kyle: This key-creation logic will need to be modified to fit whatever works for the database.
-                    $scope.newVendor.key = newKey;
-                    $scope.vendors.push($scope.newVendor);
-                    // Note From Kyle: An API call will need to be wired in here to add the new Vendor to the database.
-                }
-                $scope.addVendorFlyout.clear();
-                $scope.addVendorFlyout.close();
-            },
-            toggle: function () {
-                $scope.flyouts.addVendor = !$scope.flyouts.addVendor;
-            }
-        };
+            });
 
-        $scope.deleteVendorFlyout = {
-            close: function () {
-                $scope.flyouts.deleteVendor = false;
+        $scope.deleteVendorFlyout = new merchello.Models.Flyout(
+            $scope.flyouts.deleteVendor,
+            function(isOpen) {
+                $scope.flyouts.deleteVendor = isOpen;
             },
-            confirm: function() {
-                var idx = -1;
-                for (i = 0; i < $scope.vendors.length; i++) {
-                    if ($scope.vendors[i].key == $scope.deleteVendor.key) {
-                        idx = i;
+            {
+                clear: function() {
+                    self.model = new merchello.Models.Vendor();
+                },
+                confirm: function () {
+                    var self = $scope.deleteVendorFlyout;
+                    var idx = -1;
+                    for (i = 0; i < $scope.vendors.length; i++) {
+                        if ($scope.vendors[i].key == self.model.key) {
+                            idx = i;
+                        }
+                    }
+                    if (idx > -1) {
+                        $scope.vendors.splice(idx, 1);
+                        // Note From Kyle: An API call will need to be wired in here to delete the Vendor in the database.
+                    }
+                    self.clear();
+                    self.close();
+                },
+                open: function (model) {
+                    if (!model) {
+                        $scope.deleteVendorFlyout.clear();
                     }
                 }
-                if (idx > -1) {
-                    $scope.vendors.splice(idx, 1);
-                }
-                // Note From Kyle: Some sort of logic to confirm there are no products currently associated with this vendor might be needed.
-                $scope.deleteVendor = new merchello.Models.Vendor();
-                // Note From Kyle: An API call will need to be wired in here to delete the Vendor in the database.
-                $scope.deleteVendorFlyout.close();
-            },
-            open: function (vendor) {
-                if (vendor) {
-                    $scope.deleteVendor = vendor;
-                }
-                $scope.flyouts.deleteVendor = true;
-            },
-            toggle: function () {
-                $scope.flyouts.deleteVendor = !$scope.flyouts.deleteVendor;
-            }
-        };
+            });
 
         $scope.loadVendors();
-
 
     }
 
