@@ -56,8 +56,9 @@ namespace Merchello.Web
         /// <returns>A collection of <see cref="ProductDisplay"/></returns>
         public static IEnumerable<ProductDisplay> Search(string term)
         {
-            var criteria = ExamineManager.Instance.CreateSearchCriteria(BooleanOperation.Or);
-            criteria.Field("name", term.Fuzzy(0.8f)).Or().Field("sku", term);
+            var criteria = ExamineManager.Instance.CreateSearchCriteria();
+            //criteria.Field("name", term.Fuzzy(0.8f)).Or().Field("sku", term);
+            criteria.Field("master", "True").And().GroupedOr(new[] { "name", "sku" }, term);
             return Search(criteria);
         }
 
