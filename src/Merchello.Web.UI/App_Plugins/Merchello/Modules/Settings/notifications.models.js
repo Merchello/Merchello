@@ -20,4 +20,17 @@
 
     };
 
+    models.NotificationSubscriber = function (notificationSubscriberFromServer) {
+
+        var self = this;
+
+        if (notificationSubscriberFromServer == undefined) {
+            self.pk = "",
+            self.email = ""
+        } else {
+            self.pk = notificationSubscriberFromServer.pk,
+            self.email = notificationSubscriberFromServer.email
+        }
+    }
+
 }(window.merchello.Models = window.merchello.Models || {}));
