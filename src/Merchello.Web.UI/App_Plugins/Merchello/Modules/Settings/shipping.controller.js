@@ -17,7 +17,7 @@
         $scope.visible = {
             addWarehouseFlyout: false,
             deleteWarehouseFlyout: false,
-            shippingMethodPanel: false,
+            shippingMethodPanel: true,
             warehouseInfoPanel: false,
             warehouseListPanel: true
         };
