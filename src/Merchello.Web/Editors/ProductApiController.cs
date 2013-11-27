@@ -88,7 +88,7 @@ namespace Merchello.Web.Editors
             MerchelloHelper merchello = new MerchelloHelper();
 
             var criteria = ExamineManager.Instance.CreateSearchCriteria();
-            criteria.Field("allDocs", "1");
+            criteria.Field("master", "True");
 
             return merchello.SearchProducts(criteria);
         }
@@ -104,7 +104,7 @@ namespace Merchello.Web.Editors
             MerchelloHelper merchello = new MerchelloHelper();
 
             var criteria = ExamineManager.Instance.CreateSearchCriteria();
-            criteria.Field("allDocs", "1");
+            criteria.Field("master", "True");
 
             var products = merchello.SearchProducts(criteria);
 
