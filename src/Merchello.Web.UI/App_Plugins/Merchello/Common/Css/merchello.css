@@ -123,6 +123,11 @@ input[type="radio"][disabled="disabled"] + span, input[type="checkbox"][disabled
 
 .country-dropdown .btn { height: 30px; }
 
+.dropdown-list .options { background: white; border: solid 1px #ccc; list-style-type: none; }
+.dropdown-list .options li { line-height: 30px; font-size: 14px; }
+.dropdown-list .options a { cursor: pointer; display: block; padding: 0 10px; }
+.dropdown-list .options a:hover { background: #e4e4e4; color: black; }
+
 .tags { display: inline-block; width: 48%; vertical-align: top; float: right; }
 .tags .tag { display: inline-block; border-radius: 6px; background-color: #afdda4; border: 1px solid #53a93f; color: green; padding: 3px 5px; margin: 0 10px 5px 0; cursor: pointer; }
 .tags .tag:hover { color: #f57020; text-decoration: none; border-color: #f57020; background: #fcceb2; }

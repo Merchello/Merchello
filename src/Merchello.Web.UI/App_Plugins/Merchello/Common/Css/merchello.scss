@@ -197,6 +197,15 @@ input[type="radio"], input[type="checkbox"] { margin-top: -2px; //line up checkb
     .btn { height: 30px; }
 }
 
+.dropdown-list {
+    .options { background: white; border: solid 1px #ccc; list-style-type: none;
+        li { line-height: 30px; font-size: 14px; }
+        a { cursor: pointer; display: block; padding: 0 10px;
+            &:hover { background: #e4e4e4; color: black; }
+         }
+    }
+}
+
 // Tags
 .tags { display: inline-block; width: 48%; vertical-align: top; float: right;
     .tag { display: inline-block; border-radius: 6px; background-color: lighten($green, 30%); border: 1px solid $green; color: green; padding: 3px 5px; margin: 0 10px 5px 0; cursor: pointer;

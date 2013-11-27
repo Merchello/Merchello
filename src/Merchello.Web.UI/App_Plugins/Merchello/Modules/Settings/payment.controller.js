@@ -52,6 +52,7 @@
             },
             {
                 clear: function () {
+                    var self = $scope.addManualPaymentMethodFlyout;
                     self.model = new merchello.Models.ManualPaymentMethod();
                 },
                 confirm: function () {
@@ -81,6 +82,7 @@
                 $scope.flyouts.deleteManualPaymentMethod = isOpen;
             }, {
                 clear: function () {
+                    var self = $scope.deleteManualPaymentMethodFlyout;
                     self.model = new merchello.Models.ManualPaymentMethod();
                 },
                 confirm: function () {

@@ -21,7 +21,7 @@
 
         var self = this;
 
-        if (shippingRegionFromServer == undefined) {
+        if (shippingCountryFromServer == undefined) {
             self.pk = "";
             self.catalogKey = "";
             self.countryCode = "";

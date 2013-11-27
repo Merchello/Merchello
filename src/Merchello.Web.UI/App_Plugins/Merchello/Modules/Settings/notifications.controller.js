@@ -96,6 +96,7 @@
             },
             {
                 clear: function () {
+                    var self = $scope.editTemplateFlyout;
                     self.model = new merchello.Models.EmailTemplate();
                 },
                 confirm: function () {
@@ -113,6 +114,7 @@
             },
             {
                 clear: function () {
+                    var self = $scope.addAddressFlyout;
                     self.model = new merchello.Models.NotificationSubscriber();
                 },
                 confirm: function () {
@@ -134,6 +136,7 @@
             },
             {
                 clear: function () {
+                    var self = $scope.deleteAddressFlyout;
                     self.model = new merchello.Models.NotificationSubscriber();
                 },
                 confirm: function () {

@@ -73,6 +73,7 @@
                                 </div>
                             </form>
 
+                            <!-- Delete a Warehouse Flyout -->
                             <form name="deleteWarehouseForm" class="well" data-ng-class="{ 'open': visible.deleteWarehouseFlyout, 'closed': !flyouts.deleteWarehouseFlyout }">
                                 <h4>Are you sure you want to remove the warehouse '{{deleteWarehouse.name}}'?</h4>
                                 <div>
@@ -80,6 +81,18 @@
                                     <input type="submit" class="btn btn-primary" value="Yes" data-ng-click="deleteWarehouseFlyout.confirm()" />
                                 </div>
                             </form>
+
+                            <div>
+                                <h3>{{primaryWarehouse.name}}</h3>
+                                <div class="adr">
+                                    <div class="street-address">{{primaryWarehouse.address1}}</div>
+                                    <div class="extended-address">{{primaryWarehouse.address2}}</div>
+                                    <span class="locality">{{primaryWarehouse.locality}}</span>, <span class="region">{{primaryWarehouse.region}}</span> <span class="postal-code">{{primary.postalCode}}</span>
+                                    <div class="country">{{primaryWarehouse.countryCode}}</div>
+                                </div>
+                            </div>
+
+
                             <!--
                             <table class="table table-striped merchello-striped-table settings-table warehouse-table">
                                 <thead>
@@ -120,7 +133,7 @@
                     <label class="merchello-control-label">
                         Shipping Methods
                         <small>Add shipping methods to existing regions or create a new region</small>
-                        <a href="#"><i class="icon-map"></i> Add a Country</a>
+                        <a data-ng-click="addCountryFlyout.open()"><i class="icon-map"></i> Add a Country</a>
                     </label>
 
                     <div class="merchello-controls">
@@ -128,27 +141,22 @@
                         <div class="row-fluid span10 col-xs-10">
 
                             <!-- Add a Country Flyout -->
-                            <div class="well col-xs-12 span12 closed">
-                                <button class="btn close"><i class="icon-delete"></i></button>
+                            <form  name="addCountryForm" class="well col-xs-12 span12" data-ng-class="{ 'open': visible.addCountryFlyout, 'closed': !visible.addCountryFlyout }">
+                                <button class="btn close" data-ng-click="addCountryFlyout.close()"><i class="icon-delete"></i></button>
                                 <h4>Add a Country</h4>
                                 <div class="form-group row-fluid country-dropdown">
                                     <label for="country-name">Type your Country Name</label>
                                     <div class="input-append col-xs-12 span12">
                                         <!-- A country list should fly out beneath this input when the user starts typing or if they select the dropdown button -->
-                                        <input name="country-name" class="col-xs-6 span6" type="text" placeholder="United Republic of Tanzania" />
-                                        <div class="btn-group">
-                                            <button class="btn dropdown-toggle" data-toggle="dropdown">
-                                                <i class="icon-navigation-down"></i>
-                                            </button>
-                                        </div>
+                                        <dropdown-list options="countryOptions"></dropdown-list>
                                     </div>
                                 </div>
 
                                 <div>
-                                    <input type="submit" class="btn" value="Cancel" />
-                                    <input type="submit" class="btn btn-primary" value="Save" />
+                                    <input type="submit" class="btn" value="Cancel" data-ng-click="addCountryFlyout.close()" />
+                                    <input type="submit" class="btn btn-primary" value="Save" data-ng-click="addCountryFlyout.confirm()" />
                                 </div>
-                            </div>
+                            </form>
 
                             <!-- Add a Shipping Method Flyout -->
                             <div class="well col-xs-12 span12 closed">
