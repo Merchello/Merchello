@@ -11,15 +11,34 @@
     controllers.ShippingController = function ($scope, $routeParams, $location, notificationsService, angularHelper, serverValidationManager, merchelloProductService) {
 
         $scope.sortProperty = "name";
+        $scope.countries = [];
         $scope.warehouses = [];
         $scope.newWarehouse = new merchello.Models.Warehouse();
         $scope.deleteWarehouse = new merchello.Models.Warehouse();
+        $scope.primaryWarehouse = new merchello.Models.Warehouse();
         $scope.visible = {
+            addCountryFlyout: false,
             addWarehouseFlyout: false,
             deleteWarehouseFlyout: false,
-            shippingMethodPanel: false,
+            shippingMethodPanel: true,
             warehouseInfoPanel: false,
             warehouseListPanel: true
+        };
+
+        $scope.countryOptions = {
+            placeholder: "United Republic of Tanzania",
+            value: "",
+            choices: [
+                {
+                    name: "United States of America"
+                },
+                {
+                    name: "United Kingdom"
+                },
+                {
+                    name: "United Republic of Tanzia"
+                }
+            ]
         };
 
         $scope.loadWarehouses = function () {
@@ -56,22 +75,76 @@
             $scope.warehouses = _.map(mockWarehouses, function (warehouseFromServer) {
                 return new merchello.Models.Warehouse(warehouseFromServer);
             });
+
+            $scope.changePrimaryWarehouse();
+
             // End of Warehouse API Mocks
 
         };
 
+        $scope.loadCountries = function () {
+            // Note From Kyle: This will have to change once the warehouse/catalog functionality is wired in.
+            var catalogKey = $scope.primaryWarehouse.pk;
+
+            // Note From Kyle: Mocks from data returned from Shipping Country API call, where the countries have the catalogKey as the selected warehouse/catalog.
+            var mockCountries = [
+            ];
+            $scope.countries = _.map(mockCountries, function (shippingCountryFromServer) {
+                return new merchello.Models.ShippingCountry(shippingCountryFromServer);
+            });
+        };
+
         $scope.changePrimaryWarehouse = function (warehouse) {
-            if (warehouse) {
-                for (i = 0; i < $scope.warehouses.length; i++) {
+            for (i = 0; i < $scope.warehouses.length; i++) {
+                if (warehouse) {
                     if (warehouse.pk == $scope.warehouses[i].pk) {
                         $scope.warehouses[i].isDefault = true;
+                        $scope.primaryWarehouse = $scope.warehouses[i];
                     } else {
                         $scope.warehouses[i].isDefault = false;
                     }
+                } else {
+                    if ($scope.warehouses[i].isDefault == true) {
+                        $scope.primaryWarehouse = $scope.warehouses[i];
+                    }
                 }
-                // Note From Kyle: An API call will need to be wired in here to change the primary values in the database.
             }
+            // Note From Kyle: An API call will need to be wired in here to change the primary values in the database.
         };
+
+        // Functions to control the Add/Edit Country flyout
+        $scope.addCountryFlyout = new merchello.Models.Flyout(
+            $scope.visible.addCountryFlyout,
+            function (isOpen) {
+                $scope.visible.addCountryFlyout = isOpen;
+            },
+            {
+                clear: function () {
+                    var self = $scope.addCountryFlyout;
+                    self.model = new merchello.Models.ShippingCountry();
+                },
+                confirm: function () {
+                    var self = $scope.addCountryFlyout;
+                    if ((typeof self.model.pk) == "undefined") {
+                        var newKey = $scope.countries.length;
+                        // Note From Kyle: This key-creation logic will need to be modified to fit whatever works for the database.
+                        self.model.pk = newKey;
+                        self.model.name = $scope.countryOptions.value;
+                        self.model.catalogKey = $scope.primaryWarehouse.pk;
+                        $scope.countries.push(self.model);
+                        // Note From Kyle: An API call will need to be wired in here to add the new Country to the database.
+                    } else {
+                        // Note From Kyle: An API call will need to be wired in here to edit the existing Country in the database.
+                    }
+                    self.clear();
+                    self.close();
+                },
+                open: function (model) {
+                    if (!model) {
+                        $scope.addCountryFlyout.clear();
+                    }
+                }
+            });
 
         // Functions to control the Add/Edit Warehouse flyout
         $scope.addWarehouseFlyout = {

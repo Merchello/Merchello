@@ -63,6 +63,7 @@
             },
             {
                 clear: function () {
+                    var self = $scope.addVendorFlyout;
                     self.model = new merchello.Models.Vendor();
                 },
                 confirm: function () {
@@ -92,7 +93,8 @@
                 $scope.flyouts.deleteVendor = isOpen;
             },
             {
-                clear: function() {
+                clear: function () {
+                    var self = $scope.deleteVendorFlyout;
                     self.model = new merchello.Models.Vendor();
                 },
                 confirm: function () {

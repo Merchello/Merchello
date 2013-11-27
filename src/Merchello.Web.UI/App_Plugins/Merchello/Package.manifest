@@ -17,6 +17,7 @@
 		'~/App_Plugins/Merchello/Common/Js/startfrom.filter.js',
 		'~/App_Plugins/Merchello/Common/Js/merchello.models.js',
 		'~/App_Plugins/Merchello/Modules/Catalog/product.models.js',
+		'~/App_Plugins/Merchello/Directives/dropdownlist.directive.js',
 		'~/App_Plugins/Merchello/Directives/tag.manager.directive.js',
 		'~/App_Plugins/Merchello/Directives/productoptions.repeat.directive.js',
 		'~/App_Plugins/Merchello/Directives/productvariant.filter.directive.js',
