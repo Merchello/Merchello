@@ -198,7 +198,7 @@ namespace Merchello.Web.Editors
             try
             {
                 IProductVariant merchProductVariant = _productVariantService.GetByKey(productVariant.Key);
-                merchProductVariant = productVariant.ToProduct(merchProductVariant);
+                merchProductVariant = productVariant.ToProductVariant(merchProductVariant);
 
                 _productVariantService.Save(merchProductVariant);
             }

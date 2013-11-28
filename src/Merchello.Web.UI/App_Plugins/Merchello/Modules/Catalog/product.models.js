@@ -9,7 +9,7 @@
 
         if (productAttributeFromServer == undefined)
         {
-            self.attributeKey = "";
+            self.key = "";
             self.optionKey = "";
             self.name = "";
             self.sku = "";
@@ -17,7 +17,7 @@
         }
         else
         {
-            self.attributeKey = productAttributeFromServer.attributeKey;
+            self.key = productAttributeFromServer.key;
             self.optionKey = productAttributeFromServer.optionKey;
             self.name = productAttributeFromServer.name;
             self.sku = productAttributeFromServer.sku;
@@ -85,7 +85,7 @@
 
         if (productVariantFromServer == undefined)
         {
-            self.key = merchello.Models.emptyGuid;
+            self.key = ""; //merchello.Models.emptyGuid;
             self.productKey = "";
             self.name = "";
             self.sku = "";
@@ -241,6 +241,7 @@
         // Helper to copy from master variant
         self.copyFromVariant = function (productVariant) {
 
+            self.key = productVariant.productKey;
             self.name = productVariant.name;
             self.sku = productVariant.sku;
             self.price = productVariant.price;
@@ -295,7 +296,8 @@
             newVariant.copyFromProduct(self);
             newVariant.attributes = attributes.slice(0);
             newVariant.selected = true;
-            newVariant.sku = newVariant.sku + '-' + self.productVariants.length + 1;    // TODO: replace with settings "skuSeparator"
+            var skuPostfix = self.productVariants.length + 1;
+            newVariant.sku = newVariant.sku + '-' + skuPostfix;    // TODO: replace with settings "skuSeparator"
 
             self.productVariants.push(newVariant);
             self.hasVariants = true;
@@ -304,7 +306,7 @@
         // Helper to remove a variant from this product
         self.removeVariant = function (idx) {
 
-            //self.choices.splice(idx, 1);
+            self.productVariants.splice(idx, 1);
         };
 
     };
