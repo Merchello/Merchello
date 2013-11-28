@@ -1,5 +1,7 @@
-﻿using Merchello.Core;
+﻿using System.Linq;
+using Merchello.Core;
 using Merchello.Core.Models;
+using System;
 
 namespace Merchello.Web.Models.ContentEditing
 {
@@ -10,6 +12,10 @@ namespace Merchello.Web.Models.ContentEditing
 
         internal static IProduct ToProduct(this ProductDisplay productDisplay, IProduct destination)
         {
+            if (productDisplay.Key != Guid.Empty)
+            {
+                destination.Key = productDisplay.Key;
+            }
             destination.Name = productDisplay.Name;
             destination.Sku = productDisplay.Sku;
             destination.Price = productDisplay.Price;
@@ -70,12 +76,6 @@ namespace Merchello.Web.Models.ContentEditing
 
             return AutoMapper.Mapper.Map<ProductDisplay>(product);
         }
-
-        internal static ProductDisplay FromProduct(this ProductDisplay productDisplay, IProduct product)
-        {
-            AutoMapper.Mapper.CreateMap<IProduct, ProductDisplay>();
-            return AutoMapper.Mapper.Map<ProductDisplay>(product);
-        }
                
         #endregion
 
@@ -85,6 +85,10 @@ namespace Merchello.Web.Models.ContentEditing
 
         internal static IProductAttribute ToProductAttribute(this ProductAttributeDisplay productAttributeDisplay, IProductAttribute destinationProductAttribute)
         {
+            if (productAttributeDisplay.Key != Guid.Empty)
+            {
+                destinationProductAttribute.Key = productAttributeDisplay.Key;
+            }
             destinationProductAttribute.Name = productAttributeDisplay.Name;
             destinationProductAttribute.Sku = productAttributeDisplay.Sku;
             destinationProductAttribute.OptionKey = productAttributeDisplay.OptionKey;
@@ -93,7 +97,7 @@ namespace Merchello.Web.Models.ContentEditing
             return destinationProductAttribute;
         }
 
-        internal static ProductAttributeDisplay ToProductDisplay(this IProductAttribute productAttribute)
+        internal static ProductAttributeDisplay ToProductAttributeDisplay(this IProductAttribute productAttribute)
         {
             AutoMapper.Mapper.CreateMap<IProductAttribute, ProductAttributeDisplay>();
 
@@ -107,6 +111,10 @@ namespace Merchello.Web.Models.ContentEditing
 
         internal static IProductOption ToProductOption(this ProductOptionDisplay productOptionDisplay, IProductOption destinationProductOption)
         {
+            if (productOptionDisplay.Key != Guid.Empty)
+            {
+                destinationProductOption.Key = productOptionDisplay.Key;
+            }
             destinationProductOption.Required = productOptionDisplay.Required;
             destinationProductOption.SortOrder = productOptionDisplay.SortOrder;
 
@@ -132,7 +140,7 @@ namespace Merchello.Web.Models.ContentEditing
             return destinationProductOption;
         }
 
-        internal static ProductOptionDisplay ToProductDisplay(this IProductOption productOption)
+        internal static ProductOptionDisplay ToProductOptionDisplay(this IProductOption productOption)
         {
             AutoMapper.Mapper.CreateMap<IProductAttribute, ProductAttributeDisplay>();
             AutoMapper.Mapper.CreateMap<IProductOption, ProductOptionDisplay>();
@@ -152,8 +160,12 @@ namespace Merchello.Web.Models.ContentEditing
             return AutoMapper.Mapper.Map<ProductVariantDisplay>(productVariant);
         }
 
-        internal static IProductVariant ToProduct(this ProductVariantDisplay productVariantDisplay, IProductVariant destination)
+        internal static IProductVariant ToProductVariant(this ProductVariantDisplay productVariantDisplay, IProductVariant destination)
         {
+            if (productVariantDisplay.Key != Guid.Empty)
+            {
+                destination.Key = productVariantDisplay.Key;
+            }
             destination.Name = productVariantDisplay.Name;
             destination.Sku = productVariantDisplay.Sku;
             destination.Price = productVariantDisplay.Price;
@@ -183,21 +195,21 @@ namespace Merchello.Web.Models.ContentEditing
             //{
             //    IProductAttribute destinationProductAttribute;
 
-
-            //    if (destination.Attributes.Contains(attribute.Name))
+            //    var attr = destination.Attributes.Where(x => x.Name == attribute.Name).First();
+            //    if ( attr != null )
             //    {
-            //        destinationProductOption = destination.ProductOptions[attribute.Name];
+            //        destinationProductAttribute = attr;
 
-            //        destinationProductOption = attribute.ToProductOption(destinationProductOption);
+            //        destinationProductAttribute = attribute.ToProductAttribute(destinationProductAttribute);
             //    }
             //    else
             //    {
-            //        destinationProductOption = new ProductOption(attribute.Name, attribute.Required);
+            //        destinationProductAttribute = new ProductOption(attribute.Name, attribute.Required);
 
-            //        destinationProductOption = attribute.ToProductOption(destinationProductOption);
+            //        destinationProductAttribute = attribute.ToProductAttribute(destinationProductAttribute);
             //    }
 
-            //    destination.ProductOptions.Add(destinationProductOption);
+            //    destination.Attributes.Add(destinationProductAttribute);
             //}
 
             return destination;
