@@ -30,6 +30,8 @@ p.warning { color: #f57020; }
 
 .break { padding: 0 10px; height: 30px; line-height: 30px; display: inline-block; float: left; }
 
+.row-fluid .span6 { width: 49.98%; }
+
 .merchello-panel-body { position: absolute; top: 101px; bottom: 0; left: 0; right: 0; width: 100%; clear: both; overflow: auto; }
 .merchello-panel-body a { color: #049cdb; }
 .merchello-panel-body .btn { color: #000; }
