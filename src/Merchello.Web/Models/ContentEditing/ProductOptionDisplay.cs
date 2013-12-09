@@ -5,7 +5,7 @@ namespace Merchello.Web.Models.ContentEditing
 {
     public class ProductOptionDisplay
     {
-        public Guid OptionKey { get; set; }
+        public Guid Key { get; set; }
         public string Name { get; set; }
         public bool Required { get; set; }
         public int SortOrder { get; set; }
