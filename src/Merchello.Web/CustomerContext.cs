@@ -30,7 +30,7 @@ namespace Merchello.Web
             : this(MerchelloContext.Current, umbracoContext)
         {}
 
-        public CustomerContext(IMerchelloContext merchelloContext, UmbracoContext umbracoContext)
+        internal CustomerContext(IMerchelloContext merchelloContext, UmbracoContext umbracoContext)
         {
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
             Mandate.ParameterNotNull(umbracoContext, "umbracoContext");

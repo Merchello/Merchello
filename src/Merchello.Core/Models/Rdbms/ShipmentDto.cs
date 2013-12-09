@@ -14,41 +14,69 @@ namespace Merchello.Core.Models.Rdbms
         [Constraint(Default = "newid()")]
         public Guid Key { get; set; }
 
-        [Column("address1")]
+        [Column("fromName")]
         [NullSetting(NullSetting = NullSettings.Null)]
-        public string Address1 { get; set; }
+        public string FromName { get; set; }
 
-        [Column("address2")]
+        [Column("fromAddress1")]
         [NullSetting(NullSetting = NullSettings.Null)]
-        public string Address2 { get; set; }
+        public string FromAddress1 { get; set; }
 
-        [Column("locality")]
+        [Column("fromAddress2")]
         [NullSetting(NullSetting = NullSettings.Null)]
-        public string Locality { get; set; }
+        public string FromAddress2 { get; set; }
 
-        [Column("region")]
+        [Column("fromLocality")]
         [NullSetting(NullSetting = NullSettings.Null)]
-        public string Region { get; set; }
+        public string FromLocality { get; set; }
 
-        [Column("postalCode")]
+        [Column("fromRegion")]
         [NullSetting(NullSetting = NullSettings.Null)]
-        public string PostalCode { get; set; }
+        public string FromRegion { get; set; }
 
-        [Column("email")]
+        [Column("fromPostalCode")]
         [NullSetting(NullSetting = NullSettings.Null)]
-        public string Email { get; set; }
+        public string FromPostalCode { get; set; }
 
-        [Column("company")]
+        [Column("fromCountryCode")]
         [NullSetting(NullSetting = NullSettings.Null)]
-        public string Company { get; set; }
+        public string FromCountryCode { get; set; }
 
-        [Column("countryCode")]
+        [Column("toName")]
         [NullSetting(NullSetting = NullSettings.Null)]
-        public string CountryCode { get; set; }
+        public string ToName { get; set; }
+
+        [Column("toAddress1")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public string ToAddress1 { get; set; }
+
+        [Column("toAddress2")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public string ToAddress2 { get; set; }
+
+        [Column("toLocality")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public string ToLocality { get; set; }
+
+        [Column("toRegion")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public string ToRegion { get; set; }
+
+        [Column("toPostalCode")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public string ToPostalCode { get; set; }
+
+        [Column("toCountryCode")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public string ToCountryCode { get; set; }
 
         [Column("phone")]
         [NullSetting(NullSetting = NullSettings.Null)]
         public string Phone { get; set; }
+
+        [Column("email")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public string Email { get; set; }
 
         [Column("shipMethodKey")]
         [ForeignKey(typeof(ShipMethodDto), Name = "FK_merchShipment_merchShipMethod", Column = "pk")]
@@ -59,7 +87,6 @@ namespace Merchello.Core.Models.Rdbms
         [ForeignKey(typeof(InvoiceItemDto), Name = "FK_merchShipment_merchInvoiceItem", Column = "pk")]
         [NullSetting(NullSetting = NullSettings.Null)]
         public Guid? InvoiceItemKey { get; set; }
-
 
         [Column("updateDate")]
         [Constraint(Default = "getdate()")]
