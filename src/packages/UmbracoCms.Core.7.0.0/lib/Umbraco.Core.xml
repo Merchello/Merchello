@@ -11043,9 +11043,6 @@
             <remarks>
             This is generally not going to be used by anything unless a property editor wants to change the merging
             functionality or needs to convert some legacy persisted data, or convert the string values to strongly typed values in json (i.e. booleans)
-            
-            IMPORTANT! When using this method the default pre values dictionary should not be modified which would change the property editor's global 
-            singleton pre-values!
             </remarks>
         </member>
         <member name="P:Umbraco.Core.PropertyEditors.PreValueEditor.Fields">

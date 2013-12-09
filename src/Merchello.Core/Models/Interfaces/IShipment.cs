@@ -8,42 +8,91 @@ namespace Merchello.Core.Models
     /// Defines a Merchello Shipment object interface
     /// </summary>
     public interface IShipment : IEntity
-    {                        
+    {
+
         /// <summary>
-        /// The line 1 of the shipping address for the Shipment
+        /// The origin address's name for the Shipment
         /// </summary>
         [DataMember]
-        string Address1 { get; set;}
+        string FromName { get; set; }
+
+        /// <summary>
+        /// The origin address line 1 for the Shipment
+        /// </summary>
+        [DataMember]
+        string FromAddress1 { get; set; }
+
+        /// <summary>
+        /// The origin address line 2 for the Shipment
+        /// </summary>
+        [DataMember]
+        string FromAddress2 { get; set; }
+
+        /// <summary>
+        /// The origin address locality or city for the Shipment
+        /// </summary>
+        [DataMember]
+        string FromLocality { get; set; }
+
+        /// <summary>
+        /// The origin address region, state or province for the Shipment
+        /// </summary>
+        [DataMember]
+        string FromRegion { get; set; }
+
+        /// <summary>
+        /// The origin address's postal code for the Shipment
+        /// </summary>
+        [DataMember]
+        string FromPostalCode { get; set; }
+
+        /// <summary>
+        /// The origin address's country code for the Shipment
+        /// </summary>
+        [DataMember]
+        string FromCountryCode { get; set; }
+
+        /// <summary>
+        /// The destination address's name or company for the Shipment
+        /// </summary>
+        [DataMember]
+        string ToName { get; set; }
+
+        /// <summary>
+        /// The destination address line 1 for the Shipment
+        /// </summary>
+        [DataMember]
+        string ToAddress1 { get; set;}
             
         /// <summary>
-        /// The line 2 of the shipping address for the Shipment
+        /// The destination address line 2 for the Shipment
         /// </summary>
         [DataMember]
-        string Address2 { get; set;}
+        string ToAddress2 { get; set;}
             
         /// <summary>
-        /// The locality or city of the shipping address for the Shipment
+        /// The destination address locality or city for the Shipment
         /// </summary>
         [DataMember]
-        string Locality { get; set;}
+        string ToLocality { get; set;}
             
         /// <summary>
-        /// The region, state or province of the shipping address for the Shipment
+        /// The destination address region, state or province for the Shipment
         /// </summary>
         [DataMember]
-        string Region { get; set;}
+        string ToRegion { get; set;}
             
         /// <summary>
-        /// The postal or zip code of the shipping address for the Shipment
+        /// The destination address's postal code for the Shipment
         /// </summary>
         [DataMember]
-        string PostalCode { get; set;}
+        string ToPostalCode { get; set;}
             
         /// <summary>
-        /// The country code of the shipping address for the Shipment
+        /// The destination address's country code for the Shipment
         /// </summary>
         [DataMember]
-        string CountryCode { get; set;}
+        string ToCountryCode { get; set;}
             
         /// <summary>
         /// The ship method associated with this shipment
