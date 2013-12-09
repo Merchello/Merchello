@@ -56,25 +56,15 @@ namespace Merchello.Web.Editors
         /// <param name="id"></param>
         public ProductDisplay GetProduct(Guid id)
         {
-            if (id != null)
+           
+            var product = _productService.GetByKey(id) as Product;
+            if (product == null)
             {
-                var product = _productService.GetByKey(id) as Product;
-                if (product == null)
-                {
-                    throw new HttpResponseException(HttpStatusCode.NotFound);
-                }
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
 
-                return product.ToProductDisplay();
-            }
-            else
-            {
-                var resp = new HttpResponseMessage(HttpStatusCode.NotFound)
-                {
-                    Content = new StringContent(string.Format("Parameter id is null")),
-                    ReasonPhrase = "Invalid Parameter"
-                };
-                throw new HttpResponseException(resp);
-            }
+            return product.ToProductDisplay();
+           
         }
 
         /// <summary>
