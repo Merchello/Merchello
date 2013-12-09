@@ -10,40 +10,194 @@ namespace Merchello.Core.Models
     [DataContract(IsReference = true)]
     internal class Shipment : Entity, IShipment
     {
-        private string _address1;
-        private string _address2;
-        private string _locality;
-        private string _region;
-        private string _postalCode;
-        private string _countryCode;
+        private string _fromName;
+        private string _fromAddress1;
+        private string _fromAddress2;
+        private string _fromLocality;
+        private string _fromRegion;
+        private string _fromPostalCode;
+        private string _fromCountryCode;
+        private string _toName;
+        private string _toAddress1;
+        private string _toAddress2;
+        private string _toLocality;
+        private string _toRegion;
+        private string _toPostalCode;
+        private string _toCountryCode;       
         private Guid? _shipMethodKey;
         private Guid? _invoiceItemKey;
         private string _phone;
        
         private static readonly PropertyInfo ShipMethodKeySelector = ExpressionHelper.GetPropertyInfo<Shipment, Guid?>(x => x.ShipMethodKey);
         private static readonly PropertyInfo InvoiceItemKeySelector = ExpressionHelper.GetPropertyInfo<Shipment, Guid?>(x => x.InvoiceItemKey);
-        private static readonly PropertyInfo Address1Selector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.Address1);  
-        private static readonly PropertyInfo Address2Selector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.Address2);  
-        private static readonly PropertyInfo LocalitySelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.Locality);  
-        private static readonly PropertyInfo RegionSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.Region);  
-        private static readonly PropertyInfo PostalCodeSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.PostalCode);  
-        private static readonly PropertyInfo CountryCodeSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.CountryCode);  
-        private static readonly PropertyInfo PhoneSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.Phone);  
-        
+        private static readonly PropertyInfo FromNameSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.FromName); 
+        private static readonly PropertyInfo FromAddress1Selector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.FromAddress1);
+        private static readonly PropertyInfo FromAddress2Selector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.FromAddress2);
+        private static readonly PropertyInfo FromLocalitySelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.FromLocality);
+        private static readonly PropertyInfo FromRegionSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.FromRegion);
+        private static readonly PropertyInfo FromPostalCodeSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.FromPostalCode);
+        private static readonly PropertyInfo FromCountryCodeSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.FromCountryCode);
+        private static readonly PropertyInfo ToNameSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.ToName); 
+        private static readonly PropertyInfo ToAddress1Selector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.ToAddress1);  
+        private static readonly PropertyInfo ToAddress2Selector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.ToAddress2);  
+        private static readonly PropertyInfo ToLocalitySelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.ToLocality);  
+        private static readonly PropertyInfo ToRegionSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.ToRegion);  
+        private static readonly PropertyInfo ToPostalCodeSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.ToPostalCode);  
+        private static readonly PropertyInfo ToCountryCodeSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.ToCountryCode);         
+        private static readonly PropertyInfo PhoneSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.Phone);
+
+        /// <summary>
+        /// The name of origin address's name associated with the Shipment
+        /// </summary>
+        [DataMember]
+        public string FromName
+        {
+            get { return _fromName; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _fromName = value;
+                    return _fromName;
+                }, _fromName, FromNameSelector);
+            }
+        }
+
+
         /// <summary>
         /// The first line of the shipping address associated with the Shipment
         /// </summary>
         [DataMember]
-        public string Address1
+        public string FromAddress1
         {
-            get { return _address1; }
+            get { return _fromAddress1; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _fromAddress1 = value;
+                    return _fromAddress1;
+                }, _fromAddress1, FromAddress1Selector);
+            }
+        }
+
+        /// <summary>
+        /// The second line of the shipping address associated with the Shipment
+        /// </summary>
+        [DataMember]
+        public string FromAddress2
+        {
+            get { return _fromAddress2; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _fromAddress2 = value;
+                    return _fromAddress2;
+                }, _fromAddress2, FromAddress2Selector);
+            }
+        }
+
+        /// <summary>
+        /// The locality or city of the shipping address associated with the Shipment
+        /// </summary>
+        [DataMember]
+        public string FromLocality
+        {
+            get { return _fromLocality; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _fromLocality = value;
+                    return _toLocality;
+                }, _fromLocality, FromLocalitySelector);
+            }
+        }
+
+        /// <summary>
+        /// The region, state, or province of the shipping address associated with the Shipment
+        /// </summary>
+        [DataMember]
+        public string FromRegion
+        {
+            get { return _fromRegion; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _fromRegion = value;
+                    return _fromRegion;
+                }, _toRegion, FromRegionSelector);
+            }
+        }
+
+        /// <summary>
+        /// The postal or zip code of the shipping address associated with the Shipment
+        /// </summary>
+        [DataMember]
+        public string FromPostalCode
+        {
+            get { return _fromPostalCode; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _fromPostalCode = value;
+                    return _fromPostalCode;
+                }, _fromPostalCode, FromPostalCodeSelector);
+            }
+        }
+
+        /// <summary>
+        /// The country code of the shipping address associated with the Shipment
+        /// </summary>
+        [DataMember]
+        public string FromCountryCode
+        {
+            get { return _fromCountryCode; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _fromCountryCode = value;
+                    return _fromCountryCode;
+                }, _fromCountryCode, FromCountryCodeSelector);
+            }
+        }
+
+
+        /// <summary>
+        /// The name of destination address associated with the Shipment
+        /// </summary>
+        [DataMember]
+        public string ToName
+        {
+            get { return _toName; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _toName = value;
+                    return _toName;
+                }, _toName, ToNameSelector);
+            }
+        }
+
+        /// <summary>
+        /// The first line of the shipping address associated with the Shipment
+        /// </summary>
+        [DataMember]
+        public string ToAddress1
+        {
+            get { return _toAddress1; }
                 set 
                 { 
                     SetPropertyValueAndDetectChanges(o =>
                     {
-                        _address1 = value;
-                        return _address1;
-                    }, _address1, Address1Selector); 
+                        _toAddress1 = value;
+                        return _toAddress1;
+                    }, _toAddress1, ToAddress1Selector); 
                 }
         }
     
@@ -51,16 +205,16 @@ namespace Merchello.Core.Models
         /// The second line of the shipping address associated with the Shipment
         /// </summary>
         [DataMember]
-        public string Address2
+        public string ToAddress2
         {
-            get { return _address2; }
+            get { return _toAddress2; }
                 set 
                 { 
                     SetPropertyValueAndDetectChanges(o =>
                     {
-                        _address2 = value;
-                        return _address2;
-                    }, _address2, Address2Selector); 
+                        _toAddress2 = value;
+                        return _toAddress2;
+                    }, _toAddress2, ToAddress2Selector); 
                 }
         }
     
@@ -68,16 +222,16 @@ namespace Merchello.Core.Models
         /// The locality or city of the shipping address associated with the Shipment
         /// </summary>
         [DataMember]
-        public string Locality
+        public string ToLocality
         {
-            get { return _locality; }
+            get { return _toLocality; }
                 set 
                 { 
                     SetPropertyValueAndDetectChanges(o =>
                     {
-                        _locality = value;
-                        return _locality;
-                    }, _locality, LocalitySelector); 
+                        _toLocality = value;
+                        return _toLocality;
+                    }, _toLocality, ToLocalitySelector); 
                 }
         }
     
@@ -85,16 +239,16 @@ namespace Merchello.Core.Models
         /// The region, state, or province of the shipping address associated with the Shipment
         /// </summary>
         [DataMember]
-        public string Region
+        public string ToRegion
         {
-            get { return _region; }
+            get { return _toRegion; }
                 set 
                 { 
                     SetPropertyValueAndDetectChanges(o =>
                     {
-                        _region = value;
-                        return _region;
-                    }, _region, RegionSelector); 
+                        _toRegion = value;
+                        return _toRegion;
+                    }, _toRegion, ToRegionSelector); 
                 }
         }
     
@@ -102,16 +256,16 @@ namespace Merchello.Core.Models
         /// The postal or zip code of the shipping address associated with the Shipment
         /// </summary>
         [DataMember]
-        public string PostalCode
+        public string ToPostalCode
         {
-            get { return _postalCode; }
+            get { return _toPostalCode; }
                 set 
                 { 
                     SetPropertyValueAndDetectChanges(o =>
                     {
-                        _postalCode = value;
-                        return _postalCode;
-                    }, _postalCode, PostalCodeSelector); 
+                        _toPostalCode = value;
+                        return _toPostalCode;
+                    }, _toPostalCode, ToPostalCodeSelector); 
                 }
         }
     
@@ -119,16 +273,16 @@ namespace Merchello.Core.Models
         /// The country code of the shipping address associated with the Shipment
         /// </summary>
         [DataMember]
-        public string CountryCode
+        public string ToCountryCode
         {
-            get { return _countryCode; }
+            get { return _toCountryCode; }
                 set 
                 { 
                     SetPropertyValueAndDetectChanges(o =>
                     {
-                        _countryCode = value;
-                        return _countryCode;
-                    }, _countryCode, CountryCodeSelector); 
+                        _toCountryCode = value;
+                        return _toCountryCode;
+                    }, _toCountryCode, ToCountryCodeSelector); 
                 }
         }
 
