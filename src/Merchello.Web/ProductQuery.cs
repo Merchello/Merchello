@@ -49,6 +49,29 @@ namespace Merchello.Web
             return AutoMapper.Mapper.Map<ProductDisplay>(retrieved);
         }
 
+
+        /// <summary>
+        /// Retrieves a <see cref="ProductVariantDisplay"/> given it's 'unique' key (string representation of the Guid)
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public static ProductVariantDisplay GetVariantDisplayByKey(string key)
+        {
+            var criteria = ExamineManager.Instance.CreateSearchCriteria();
+            criteria.Field("productVariantKey", key);
+
+            var variant = ExamineManager.Instance.SearchProviderCollection["MerchelloProductSearcher"]
+                .Search(criteria).Select(result => result.ToProductVariantDisplay()).FirstOrDefault();
+
+            if (variant != null) return variant;
+
+            var retrieved = MerchelloContext.Current.Services.ProductVariantService.GetByKey(new Guid(key));
+            if(retrieved != null) ReindexProductVariant(retrieved, null);
+
+            return retrieved.ToProductVariantDisplay();
+        }
+
+
         /// <summary>
         /// Searches ProductIndex by name and sku for the 'term' passed
         /// </summary>

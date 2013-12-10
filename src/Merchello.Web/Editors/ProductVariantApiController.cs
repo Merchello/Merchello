@@ -67,7 +67,7 @@ namespace Merchello.Web.Editors
                 throw new HttpResponseException(HttpStatusCode.NotFound);
             }
 
-            return productVariant.ToProductDisplay();
+            return productVariant.ToProductVariantDisplay();
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace Merchello.Web.Editors
 
                 foreach (IProductVariant productVariant in productVariants)
                 {
-                    yield return productVariant.ToProductDisplay();
+                    yield return productVariant.ToProductVariantDisplay();
                 }
             }
             else
@@ -120,7 +120,7 @@ namespace Merchello.Web.Editors
 
                 foreach (IProductVariant productVariant in productVariants)
                 {
-                    yield return productVariant.ToProductDisplay();
+                    yield return productVariant.ToProductVariantDisplay();
                 }
             }
             else
@@ -181,7 +181,7 @@ namespace Merchello.Web.Editors
                 throw new HttpResponseException(HttpStatusCode.InternalServerError);
             }
 
-            return newProductVariant.ToProductDisplay();
+            return newProductVariant.ToProductVariantDisplay();
         }
 
         /// <summary>

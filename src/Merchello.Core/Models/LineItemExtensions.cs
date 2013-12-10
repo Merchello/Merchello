@@ -3,8 +3,11 @@
     /// <summary>
     /// Extension methods for <see cref="IItemCache"/>
     /// </summary>
-    public static class LineItemContainerExtensions
+    public static class LineItemExtensions
     {
+
+        #region LineItemContainer
+        
 
         #region AddItem
 
@@ -45,6 +48,8 @@
 
         #endregion
 
+
+        #endregion
     }
 }
 

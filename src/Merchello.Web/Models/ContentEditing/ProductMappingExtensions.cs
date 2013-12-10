@@ -152,7 +152,7 @@ namespace Merchello.Web.Models.ContentEditing
 
         #region IProductVariant
 
-        internal static ProductVariantDisplay ToProductDisplay(this IProductVariant productVariant)
+        internal static ProductVariantDisplay ToProductVariantDisplay(this IProductVariant productVariant)
         {
             AutoMapper.Mapper.CreateMap<IProductAttribute, ProductAttributeDisplay>();
             AutoMapper.Mapper.CreateMap<IProductVariant, ProductVariantDisplay>();
