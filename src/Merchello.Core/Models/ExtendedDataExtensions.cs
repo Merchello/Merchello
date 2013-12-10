@@ -183,7 +183,7 @@ namespace Merchello.Core.Models
         private static bool GetBooleanValue(string value)
         {
             bool converted;
-            return bool.TryParse(value, out converted) ? converted : false;
+            return bool.TryParse(value, out converted) && converted;
         }
 
         private static decimal GetDecimalValue(string value)

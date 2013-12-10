@@ -14,7 +14,7 @@ namespace Merchello.Core.Services
     /// <summary>
     /// Represents the Warehouse Service 
     /// </summary>
-    public class WarehouseService : IWarehouseService
+    internal class WarehouseService : IWarehouseService
     {
         
         private readonly IDatabaseUnitOfWorkProvider _uowProvider;
@@ -222,10 +222,10 @@ namespace Merchello.Core.Services
         /// </summary>
         public static event TypedEventHandler<IWarehouseService, SaveEventArgs<IWarehouse>> Saved;
 
-        /// <summary>
-        /// Occurs before Create
-        /// </summary>
-        public static event TypedEventHandler<IWarehouseService, Events.NewEventArgs<IWarehouse>> Creating;
+        ///// <summary>
+        ///// Occurs before Create
+        ///// </summary>
+        //public static event TypedEventHandler<IWarehouseService, Events.NewEventArgs<IWarehouse>> Creating;
 
         /// <summary>
         /// Occurs after Create

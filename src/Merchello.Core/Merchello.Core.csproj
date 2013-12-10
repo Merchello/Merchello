@@ -452,6 +452,11 @@
     <Compile Include="Services\ServiceContext.cs" />
     <Compile Include="Services\SettingsService.cs" />
     <Compile Include="Services\WarehouseService.cs" />
+    <Compile Include="Strategies\IGatewayProviderStrategy.cs" />
+    <Compile Include="Strategies\IStrategy.cs" />
+    <Compile Include="Strategies\Shipping\IPackagingStrategy.cs" />
+    <Compile Include="Strategies\Shipping\IShippingQuatationStrategy.cs" />
+    <Compile Include="Strategies\Taxation\ITaxationStrategy.cs" />
     <Compile Include="TypeFieldMapperEnumerations.cs" />
     <Compile Include="Models\TypeFields\ProductTypeField.cs" />
     <Compile Include="Models\Rdbms\TypeFieldDto.cs" />
