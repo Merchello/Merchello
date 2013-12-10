@@ -269,6 +269,7 @@
     <Content Include="App_Plugins\Merchello\Common\Js\merchello.app.js" />
     <Content Include="App_Plugins\Merchello\Common\Js\merchello.models.js" />
     <Content Include="App_Plugins\Merchello\Common\Js\merchello.namespaces.js" />
+    <Content Include="App_Plugins\Merchello\Directives\dropdownlist.directive.js" />
     <Content Include="App_Plugins\Merchello\Directives\productvariant.filter.directive.js" />
     <Content Include="App_Plugins\Merchello\Directives\productoptions.repeat.directive.js" />
     <Content Include="App_Plugins\Merchello\Common\Js\startfrom.filter.js" />
@@ -311,8 +312,8 @@
     <Content Include="App_Plugins\Merchello\Modules\Settings\settings.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\vendors.models.js" />
     <Content Include="App_Plugins\Merchello\Package.manifest" />
-    <Content Include="App_Plugins\Merchello\PropertyEditors\ProductPicker\Js\merchelloskuselector.controller.js" />
-    <Content Include="App_Plugins\Merchello\PropertyEditors\ProductPicker\Views\merchelloskuselector.html" />
+    <Content Include="App_Plugins\Merchello\PropertyEditors\ProductPicker\Js\merchelloproductselector.controller.js" />
+    <Content Include="App_Plugins\Merchello\PropertyEditors\ProductPicker\Views\merchelloproductselector.html" />
     <Content Include="Umbraco\images\tray\Merchello-Icon.png" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\CustomerEdit.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\CustomerView.html" />

@@ -1,10 +1,10 @@
 ﻿{     
 	propertyEditors: [      
 		{ 
-			alias: "Merchello.SkuSelector",
-			name: "Merchello SKU Selector",
+			alias: "Merchello.ProductSelector",
+			name: "Merchello Product Selector",
 			editor: {
-				view: "~/App_Plugins/Merchello/PropertyEditors/Views/merchelloskuselector.html"
+				view: "~/App_Plugins/Merchello/PropertyEditors/ProductPicker/Views/merchelloproductselector.html"
 			}
 		}
 	]
@@ -23,7 +23,6 @@
 		'~/App_Plugins/Merchello/Directives/productvariant.filter.directive.js',
 		'~/App_Plugins/Merchello/Modules/Catalog/merchello.product.service.js',
 		'~/App_Plugins/Merchello/Modules/Catalog/merchello.productvariant.service.js',
-		'~/App_Plugins/Merchello/PropertyEditors/ProductPicker/Js/merchelloskuselector.controller.js',
 		'~/App_Plugins/Merchello/Modules/Catalog/product.list.controller.js',
 		'~/App_Plugins/Merchello/Modules/Catalog/product.create.controller.js',
 		'~/App_Plugins/Merchello/Modules/Catalog/product.edit.controller.js',
@@ -51,6 +50,7 @@
 		'~/App_Plugins/Merchello/Modules/Settings/taxation.controller.js',
 		'~/App_Plugins/Merchello/Modules/Settings/notifications.controller.js',
 		'~/App_Plugins/Merchello/Modules/Settings/vendors.controller.js',
+		'~/App_Plugins/Merchello/PropertyEditors/ProductPicker/Js/merchelloproductselector.controller.js',
 		'~/App_Plugins/Merchello/Common/Js/merchello.main.module.js'
 	],
 	stylesheet: [

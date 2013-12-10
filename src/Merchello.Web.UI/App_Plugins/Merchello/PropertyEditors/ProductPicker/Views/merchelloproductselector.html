@@ -1,0 +1,9 @@
+﻿<div data-ng-controller="Merchello.PropertyEditors.MerchelloProductSelector">
+    <select data-ng-model="model.value" data-placeholder="Pick a Product">
+        <option data-ng-selected="{{product.key == model.value}}"
+            data-ng-repeat="product in products"
+            value="{{product.key}}">
+            {{product.name}}
+        </option>
+    </select>
+</div>
