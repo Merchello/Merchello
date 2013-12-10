@@ -3,11 +3,16 @@ using System.Web.Http.Controllers;
 using Merchello.Core;
 using Newtonsoft.Json.Serialization;
 using Umbraco.Web;
+using Umbraco.Web.Editors;
+using Umbraco.Web.Mvc;
 using Umbraco.Web.WebApi;
+using Umbraco.Web.WebApi.Binders;
+using Umbraco.Web.WebApi.Filters;
 
 namespace Merchello.Web.WebApi
 {
-    public abstract class MerchelloApiController : UmbracoApiController //  : UmbracoAuthorizedJsonController we will eventually want to inherit this
+    [PluginController("Merchello")]
+    public abstract class MerchelloApiController : UmbracoAuthorizedJsonController
     {
         protected MerchelloApiController()
             : this(MerchelloContext.Current)
