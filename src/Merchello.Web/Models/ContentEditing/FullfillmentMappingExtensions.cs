@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 
@@ -71,9 +66,9 @@ namespace Merchello.Web.Models.ContentEditing
 
         #region ShipCountryDisplay
 
-        internal static ShipCountryDisplay ToShipCountryDisplay(this Merchello.Core.Models.Interfaces.IShipCountry shipCountry)
+        internal static ShipCountryDisplay ToShipCountryDisplay(this IShipCountry shipCountry)
         {
-            AutoMapper.Mapper.CreateMap<Merchello.Core.Models.Interfaces.IShipCountry, ShipCountryDisplay>();
+            AutoMapper.Mapper.CreateMap<IShipCountry, ShipCountryDisplay>();
 
             return AutoMapper.Mapper.Map<ShipCountryDisplay>(shipCountry);
         }

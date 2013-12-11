@@ -1,22 +1,20 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+using System.Runtime.Serialization;
 
-namespace Merchello.Core.Models.Interfaces
+namespace Merchello.Core.Models
 {
-    /// <summary>
-    /// Defines a ship region
-    /// </summary>
-    internal interface IShipCountry : ICountryBase
+    public interface IShipCountry : ICountryBase
     {
         /// <summary>
-        /// The unique WarehouseKey (Guid)
+        /// The unique warehouse key (guid)
         /// </summary>
-         Guid WarehouseKey { get; }
+        [DataMember]
+        Guid WarehouseKey { get; }
 
         /// <summary>
-        /// The collection of ship methods associated with warehouse region
+        /// The ship methods associated with the country
         /// </summary>
-        GatewayProviderCollection<IShipGatewayProvider> Providers { get; }
+        [DataMember]
+        ShipMethodCollection ShipMethods { get; }
     }
 }

@@ -177,14 +177,13 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\Interfaces\IShipProvince.cs" />
-    <Compile Include="Models\Interfaces\IShipCountry.cs" />
     <Compile Include="Models\Interfaces\IShipRateTier.cs" />
     <Compile Include="Models\Interfaces\ITaxProvince.cs" />
     <Compile Include="Models\Interfaces\IWarehouse.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\Interfaces\IWarehouseCatalog.cs" />
-    <Compile Include="Models\Interfaces\IWarehouseCountry.cs" />
+    <Compile Include="Models\Interfaces\IShipCountry.cs" />
     <Compile Include="Models\Interfaces\IWarehouseInventory.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -370,7 +369,6 @@
     <Compile Include="Persistence\Repositories\Interfaces\IPaymentRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IProductRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IProductVariantRepository.cs" />
-    <Compile Include="Persistence\Repositories\Interfaces\IShipRegionRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IShipmentRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IWarehouseRepository.cs" />
     <Compile Include="Persistence\Repositories\ItemCacheRepository.cs" />
@@ -378,7 +376,6 @@
     <Compile Include="Persistence\Repositories\PaymentRepository.cs" />
     <Compile Include="Persistence\Repositories\ProductRepository.cs" />
     <Compile Include="Persistence\Repositories\ProductVariantRepository.cs" />
-    <Compile Include="Persistence\Repositories\ShipRegionRepository.cs" />
     <Compile Include="Persistence\Repositories\ShipmentRepository.cs" />
     <Compile Include="Persistence\Repositories\WarehouseRepository.cs" />
     <Compile Include="Persistence\TransactionType.cs" />
