@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Merchello.Core;
 using Merchello.Core.Models;
+using Merchello.Core.Models.Interfaces;
 
 namespace Merchello.Web.Models.ContentEditing
 {
@@ -41,6 +42,73 @@ namespace Merchello.Web.Models.ContentEditing
             destination.IsDefault = warehouseDisplay.IsDefault;
 
             return destination;
+        }
+
+        #endregion
+
+        #region WarehouseInventoryDisplay
+
+        internal static WarehouseInventoryDisplay ToWarehouseInventoryDisplay(this IWarehouseInventory warehouseInventory)
+        {
+            AutoMapper.Mapper.CreateMap<IWarehouseInventory, WarehouseInventoryDisplay>();
+
+            return AutoMapper.Mapper.Map<WarehouseInventoryDisplay>(warehouseInventory);
+        }
+
+        #endregion
+
+        #region IWarehouseInventory
+
+        internal static IWarehouseInventory ToWarehouseInventory(this WarehouseInventoryDisplay warehouseInventoryDisplay, IWarehouseInventory destination)
+        {
+            destination.Count = warehouseInventoryDisplay.Count;
+            destination.LowCount = warehouseInventoryDisplay.LowCount;
+
+            return destination;
+        }
+
+        #endregion
+
+        #region ShipCountryDisplay
+
+        internal static ShipCountryDisplay ToShipCountryDisplay(this Merchello.Core.Models.Interfaces.IShipCountry shipCountry)
+        {
+            AutoMapper.Mapper.CreateMap<Merchello.Core.Models.Interfaces.IShipCountry, ShipCountryDisplay>();
+
+            return AutoMapper.Mapper.Map<ShipCountryDisplay>(shipCountry);
+        }
+
+        #endregion
+
+        #region ShipGatewayProviderDisplay
+
+        internal static ShipGatewayProviderDisplay ToShipGatewayProviderDisplay(this IShipGatewayProvider shipGatewayProvider)
+        {
+            AutoMapper.Mapper.CreateMap<IShipGatewayProvider, ShipGatewayProviderDisplay>();
+
+            return AutoMapper.Mapper.Map<ShipGatewayProviderDisplay>(shipGatewayProvider);
+        }
+
+        #endregion
+
+        #region ShipMethodDisplay
+
+        internal static ShipMethodDisplay ToShipMethodDisplay(this IShipMethod shipMethod)
+        {
+            AutoMapper.Mapper.CreateMap<IShipMethod, ShipMethodDisplay>();
+
+            return AutoMapper.Mapper.Map<ShipMethodDisplay>(shipMethod);
+        }
+
+        #endregion
+
+        #region ShipProvinceDisplay
+
+        internal static ShipProvinceDisplay ToShipProvinceDisplay(this IShipProvince shipProvince)
+        {
+            AutoMapper.Mapper.CreateMap<IShipProvince, ShipProvinceDisplay>();
+
+            return AutoMapper.Mapper.Map<ShipProvinceDisplay>(shipProvince);
         }
 
         #endregion

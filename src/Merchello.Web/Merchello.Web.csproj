@@ -237,12 +237,17 @@
     <Compile Include="BasketExtensions.cs" />
     <Compile Include="Cache\HttpCachingBacker.cs" />
     <Compile Include="Editors\SettingsApiController.cs" />
+    <Compile Include="Editors\ShippingMethodsApiController.cs" />
     <Compile Include="Editors\WarehouseApiController.cs" />
     <Compile Include="Models\ContentEditing\FullfillmentMappingExtensions.cs" />
     <Compile Include="Models\ContentEditing\ProductMappingExtensions.cs" />
     <Compile Include="Models\ContentEditing\CountryDisplay.cs" />
     <Compile Include="Models\ContentEditing\ProvinceDisplay.cs" />
     <Compile Include="Models\ContentEditing\SettingsMappingExtensions.cs" />
+    <Compile Include="Models\ContentEditing\ShipCountryDisplay.cs" />
+    <Compile Include="Models\ContentEditing\ShipGatewayProviderDisplay.cs" />
+    <Compile Include="Models\ContentEditing\ShipMethodDisplay.cs" />
+    <Compile Include="Models\ContentEditing\ShipProvinceDisplay.cs" />
     <Compile Include="Models\ContentEditing\WarehouseDisplay.cs" />
     <Compile Include="Models\ContentEditing\WarehouseInventoryDisplay.cs" />
     <Compile Include="ProductQuery.cs" />
