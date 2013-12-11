@@ -255,10 +255,10 @@ namespace Merchello.Web.Models
         /// <summary>
         /// Accepts visitor class to visit basket items
         /// </summary>
-        /// <param name="vistor"><see cref="ILineItemVisitor"/></param>
-        public void Accept(ILineItemVisitor vistor)
+        /// <param name="visitor"><see cref="ILineItemVisitor"/></param>
+        public void Accept(ILineItemVisitor visitor)
         {
-            _itemCache.Items.Accept(vistor);
+            _itemCache.Items.Accept(visitor);
         }
 
         internal IItemCache ItemCache

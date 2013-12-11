@@ -12,6 +12,7 @@ using Merchello.Web.Models;
 using Merchello.Web.Shipping;
 using NUnit.Framework;
 using Umbraco.Core;
+using Umbraco.Web.Editors;
 
 namespace Merchello.Tests.IntegrationTests.ItemCache
 {

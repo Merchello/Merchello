@@ -13,7 +13,7 @@ namespace Merchello.Core.Models
         /// </summary>
         internal static IWarehouseCatalog DefaultCatalog(this IWarehouse warehouse)
         {
-            return ((Warehouse) warehouse).InventoryCatalogs.FirstOrDefault();
+            return ((Warehouse) warehouse).WarehouseCatalogs.FirstOrDefault();
         }
 
         internal static IAddress AsAddress(this IWarehouse warehouse)
