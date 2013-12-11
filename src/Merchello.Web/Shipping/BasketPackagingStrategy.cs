@@ -51,7 +51,7 @@ namespace Merchello.Web.Shipping
                 shipment.Items.Add(lineItem);
             }
 
-            return new List<IShipment> { shipment};
+            return new List<IShipment> { shipment };
         }
     }
 }

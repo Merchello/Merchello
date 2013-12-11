@@ -11,14 +11,12 @@ namespace Merchello.Web.Shipping
     public class ShippableProductVisitor : ILineItemVisitor
     {
         private readonly List<ILineItem> _lineItems = new List<ILineItem>();
-        private readonly MerchelloHelper _merchello  = new MerchelloHelper();
 
         public void Visit(ILineItem lineItem)
         {
-            // For the first release we are going to assume everything shippable is a product listed in the Merchello catalog - thus will
-            // have a product variant and should be queryable via the ProductQuery/MerchelloHelper
+            // For the first release we are going to assume everything shippable is a product listed in the Merchello catalog
             if (lineItem.ExtendedData.ContainsProductVariantKey() && lineItem.ExtendedData.GetShippableValue() && lineItem.LineItemType == LineItemType.Product)
-            {                           
+            {                
               _lineItems.Add(lineItem);
             }
         }

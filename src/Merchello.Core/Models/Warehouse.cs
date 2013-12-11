@@ -225,7 +225,8 @@ namespace Merchello.Core.Models
         /// A list of catalogs (used for inventory)
         /// </summary>
         [IgnoreDataMember]
-        internal IEnumerable<IWarehouseCatalog> InventoryCatalogs {
+        internal IEnumerable<IWarehouseCatalog> WarehouseCatalogs 
+        {
             get { return _catalogs; }
         }
 

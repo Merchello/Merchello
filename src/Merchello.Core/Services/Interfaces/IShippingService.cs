@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Merchello.Core.Models;
+using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Models.TypeFields;
 using Umbraco.Core.Services;
 
@@ -14,21 +15,7 @@ namespace Merchello.Core.Services
     /// </summary>
     public interface IShippingService : IService
     {
-        /// <summary>
-        /// Creates a Shipment
-        /// </summary>
-        IShipment CreateShipment(IShipMethod shipMethod, IInvoice invoice, string address1, string address2, string locality, string region, string postalCode, string countryCode, string phone);
-
-        /// <summary>
-        /// Creates a Shipment
-        /// </summary>
-        IShipment CreateShipment(IInvoice invoice, string address1, string address2, string locality, string region, string postalCode, string countryCode, string phone);
-
-        /// <summary>
-        /// Creates a Shipment
-        /// </summary>
-        IShipment CreateShipment(IShipMethod shipMethod, IInvoice invoice, ICustomerAddress customerAddress);
-
+        
         /// <summary>
         /// Saves a single <see cref="IShipment"/> object
         /// </summary>
@@ -44,11 +31,47 @@ namespace Merchello.Core.Services
         void Save(IEnumerable<IShipment> shipmentList, bool raiseEvents = true);
 
         /// <summary>
+        /// Saves a single <see cref="shipCountry"/>
+        /// </summary>
+        /// <param name="shipCountry"></param>
+        void Save(IShipCountry shipCountry);
+
+        /// <summary>
+        /// Saves a single <see cref="IShipMethod"/>
+        /// </summary>
+        /// <param name="shipMethod"></param>
+        void Save(IShipMethod shipMethod);
+
+        /// <summary>
+        /// Saves a collection of <see cref="IShipMethod"/>
+        /// </summary>
+        /// <param name="shipMethodList">Collection of <see cref="IShipMethod"/></param>
+        void Save(IEnumerable<IShipMethod> shipMethodList);
+
+        /// <summary>
+        /// Saves a single <see cref="IShipRateTier"/>
+        /// </summary>
+        /// <param name="shipRateTier"></param>
+        void Save(IShipRateTier shipRateTier);
+
+        /// <summary>
+        /// Saves a collection of <see cref="IShipRateTier"/>
+        /// </summary>
+        /// <param name="shipRateTierList"></param>
+        void Save(IEnumerable<IShipRateTier> shipRateTierList);
+
+        /// <summary>
         /// Deletes a single <see cref="IShipment"/> object
         /// </summary>
         /// <param name="shipment"><see cref="IShipment"/> to delete</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         void Delete(IShipment shipment, bool raiseEvents = true);
+
+        /// <summary>
+        /// Deletes a single <see cref="IShipCountry"/> object
+        /// </summary>
+        /// <param name="shipCountry"></param>
+        void Delete(IShipCountry shipCountry);
 
         /// <summary>
         /// Deletes a collection of <see cref="IShipment"/> objects
@@ -58,34 +81,65 @@ namespace Merchello.Core.Services
         void Delete(IEnumerable<IShipment> shipmentList, bool raiseEvents = true);
 
         /// <summary>
+        /// Deletes a <see cref="IShipMethod"/>
+        /// </summary>
+        /// <param name="shipMethod"></param>
+        void Delete(IShipMethod shipMethod);
+
+        /// <summary>
+        /// Deletes a <see cref="IShipRateTier"/>
+        /// </summary>
+        /// <param name="shipRateTier"></param>
+        void Delete(IShipRateTier shipRateTier);
+
+        /// <summary>
         /// Gets an <see cref="IShipment"/> object by its 'UniqueId'
         /// </summary>
-        /// <param name="id">int Id of the Shipment to retrieve</param>
+        /// <param name="key">Guid pk of the Shipment to retrieve</param>
         /// <returns><see cref="IShipment"/></returns>
-        IShipment GetById(int id);
+        IShipment GetByKey(Guid key);
 
         /// <summary>
-        /// Gets a list of <see cref="IShipment"/> object given a ship method id
+        /// Gets a list of <see cref="IShipment"/> object given a ship method Key
         /// </summary>
-        /// <param name="shipMethodId">The id of the shipMethod</param>
+        /// <param name="shipMethodKey">The pk of the shipMethod</param>
         /// <returns>A collection of <see cref="IShipment"/></returns>
-        IEnumerable<IShipment> GetShipmentsForShipMethod(int shipMethodId);
-
+        IEnumerable<IShipment> GetShipmentsForShipMethod(Guid shipMethodKey);
 
         /// <summary>
-        /// Gets a list of <see cref="IShipment"/> object given a invoice id
+        /// Gets a list of <see cref="IShipCountry"/> objects given a <see cref="IWarehouseCatalog"/> key
         /// </summary>
-        /// <param name="invoiceId">The id of the invoice</param>
-        /// <returns>A collection of <see cref="IShipment"/></returns>
-        IEnumerable<IShipment> GetShipmentsForInvoice(int invoiceId);
-            
+        /// <param name="catalogKey">Guid</param>
+        /// <returns>A collection of <see cref="IShipCountry"/></returns>
+        IEnumerable<IShipCountry> GetShipCountriesByWarehouseCatalogKey(Guid catalogKey);
+
+        /// <summary>
+        /// Gets a list of <see cref="IShipMethod"/> objects given a <see cref="IShipCountry"/> key
+        /// </summary>
+        /// <param name="shipCountryKey">Guid</param>
+        /// <returns>A collection of <see cref="IShipMethod"/></returns>
+        IEnumerable<IShipMethod> GetShipMethodsByShipCountryKey(Guid shipCountryKey);
+               
+        /// <summary>
+        /// Gets a list of <see cref="IShipMethod"/> objects give a <see cref="IGatewayProviderBase"/> key
+        /// </summary>
+        /// <param name="gatewayProviderKey">Guid</param>
+        /// <returns>A collection of <see cref="IShipMethod"/></returns>
+        IEnumerable<IShipMethod> GetShipMethodsByGatewayProviderKey(Guid gatewayProviderKey);
+
+        /// <summary>
+        /// Gets a list of <see cref="IShipRateTier"/> objects given a <see cref="IShipMethod"/> key
+        /// </summary>
+        /// <param name="shipMethodKey">Guid</param>
+        /// <returns>A collection of <see cref="IShipRateTier"/></returns>
+        IEnumerable<IShipRateTier> GetShipRateTiersByShipMethodKey(Guid shipMethodKey); 
             
         /// <summary>
         /// Gets list of <see cref="IShipment"/> objects given a list of Unique keys
         /// </summary>
-        /// <param name="ids">List of int Id for Shipment objects to retrieve</param>
+        /// <param name="keys">List of Guid keys for Shipment objects to retrieve</param>
         /// <returns>List of <see cref="IShipment"/></returns>
-        IEnumerable<IShipment> GetByIds(IEnumerable<int> ids);
+        IEnumerable<IShipment> GetByKeys(IEnumerable<Guid> keys);
 
     }
 }
