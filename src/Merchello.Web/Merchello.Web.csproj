@@ -266,6 +266,7 @@
     <Compile Include="Properties\AssemblyVisibility.cs" />
     <Compile Include="Search\ExamineEvents.cs" />
     <Compile Include="Shipping\BasketPackagingStrategy.cs" />
+    <Compile Include="Shipping\BasketPackagingStrategyBase.cs" />
     <Compile Include="Shipping\IBasketPackagingStrategy.cs" />
     <Compile Include="Shipping\ShippableProductVisitor.cs" />
     <Compile Include="UmbracoApplicationEventListener.cs" />

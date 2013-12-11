@@ -222,6 +222,7 @@
   <ItemGroup>
     <Compile Include="DisplayClasses\ProductDisplayTests.cs" />
     <Compile Include="Examine\StartupExamineEventTests.cs" />
+    <Compile Include="ItemCache\BasketPackagingTests.cs" />
     <Compile Include="ItemCache\BasketTests.cs" />
     <Compile Include="DbInstall\InitialDataTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

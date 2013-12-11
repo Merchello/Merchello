@@ -58,6 +58,7 @@ namespace Merchello.Core.Models
             _toRegion = destination.Region;
             _toPostalCode = destination.PostalCode;
             _toCountryCode = destination.CountryCode;
+            _items = items;
         }
 
         private static readonly PropertyInfo ShipMethodKeySelector = ExpressionHelper.GetPropertyInfo<Shipment, Guid?>(x => x.ShipMethodKey);
