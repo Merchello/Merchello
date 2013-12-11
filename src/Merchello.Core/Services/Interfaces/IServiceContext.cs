@@ -17,6 +17,11 @@ namespace Merchello.Core.Services
         ICustomerService CustomerService { get; }
 
         /// <summary>
+        /// Gets the <see cref="ItemCacheService"/>
+        /// </summary>
+        IItemCacheService ItemCacheService { get; }
+
+        /// <summary>
         /// Gets the <see cref="IProductService"/>
         /// </summary>
         IProductService ProductService { get; }
@@ -27,14 +32,14 @@ namespace Merchello.Core.Services
         IProductVariantService ProductVariantService { get; }
 
         /// <summary>
-        /// Gets the <see cref="ItemCacheService"/>
-        /// </summary>
-        IItemCacheService ItemCacheService { get; }
-
-        /// <summary>
         /// Gets the <see cref="ISettingsService"/>
         /// </summary>
         ISettingsService SettingsService { get; }
+
+        /// <summary>
+        /// Gets the <see cref="IShippingService"/>
+        /// </summary>
+        IShippingService ShippingService { get; }
 
         /// <summary>
         /// Gets the <see cref="IWarehouseService"/>

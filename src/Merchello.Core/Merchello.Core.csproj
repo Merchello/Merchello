@@ -455,6 +455,7 @@
     <Compile Include="Models\Province.cs" />
     <Compile Include="Services\ServiceContext.cs" />
     <Compile Include="Services\SettingsService.cs" />
+    <Compile Include="Services\ShippingService.cs" />
     <Compile Include="Services\WarehouseService.cs" />
     <Compile Include="Strategies\IStrategy.cs" />
     <Compile Include="Strategies\Shipping\IPackagingStrategy.cs" />

@@ -13,7 +13,7 @@ namespace Merchello.Core.Models
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    public class GatewayProviderBase : Entity, IGatewayProviderBase
+    public abstract class GatewayProviderBase : Entity, IGatewayProviderBase
     {
         private string _name;
         private Guid _providerTfKey;

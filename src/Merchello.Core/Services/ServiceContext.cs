@@ -13,14 +13,12 @@ namespace Merchello.Core.Services
     public class ServiceContext : IServiceContext
     {        
         private Lazy<CustomerService> _customerService;
-        private Lazy<ItemCacheService> _itemCacheService;    
-        //private Lazy<InvoiceService> _invoiceService;
+        private Lazy<ItemCacheService> _itemCacheService;            
         private Lazy<ProductService> _productService;
         private Lazy<ProductVariantService> _productVariantService;
         private Lazy<SettingsService> _settingsService; 
-        //private Lazy<ShippingService> _shipmentService; 
+        private Lazy<ShippingService> _shippingService; 
         private Lazy<WarehouseService> _warehouseService;
-
         
         /// <summary>
         /// Constructor
@@ -30,7 +28,6 @@ namespace Merchello.Core.Services
         {
             BuildServiceContext(dbUnitOfWorkProvider, new Lazy<RepositoryFactory>(() => new RepositoryFactory()));
         }
-
 
         /// <summary>
         /// Builds the various services
@@ -56,6 +53,9 @@ namespace Merchello.Core.Services
             if(_settingsService == null)
                 _settingsService = new Lazy<SettingsService>(() => new SettingsService());
 
+            if(_shippingService == null)
+                _shippingService = new Lazy<ShippingService>(() => new ShippingService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+
             if(_warehouseService == null)
                 _warehouseService = new Lazy<WarehouseService>(() => new WarehouseService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
         }
@@ -80,19 +80,11 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
-        /// Gets the <see cref="ISettingsService"/>
-        /// </summary>
-        public ISettingsService SettingsService 
-        {
-            get { return _settingsService.Value; }
-        }
-
-        /// <summary>
         /// Gets the <see cref="IProductService"/>
         /// </summary>
         public IProductService ProductService
         {
-            get { return _productService.Value;  }
+            get { return _productService.Value; }
         }
 
         /// <summary>
@@ -101,6 +93,22 @@ namespace Merchello.Core.Services
         public IProductVariantService ProductVariantService
         {
             get { return _productVariantService.Value; }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="ISettingsService"/>
+        /// </summary>
+        public ISettingsService SettingsService 
+        {
+            get { return _settingsService.Value; }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IShippingService"/>
+        /// </summary>
+        public IShippingService ShippingService
+        {
+            get { return _shippingService.Value; }
         }
 
         /// <summary>

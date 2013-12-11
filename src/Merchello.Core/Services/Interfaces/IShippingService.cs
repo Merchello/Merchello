@@ -14,21 +14,7 @@ namespace Merchello.Core.Services
     /// </summary>
     public interface IShippingService : IService
     {
-        /// <summary>
-        /// Creates a Shipment
-        /// </summary>
-        IShipment CreateShipment(IShipMethod shipMethod, IInvoice invoice, string address1, string address2, string locality, string region, string postalCode, string countryCode, string phone);
-
-        /// <summary>
-        /// Creates a Shipment
-        /// </summary>
-        IShipment CreateShipment(IInvoice invoice, string address1, string address2, string locality, string region, string postalCode, string countryCode, string phone);
-
-        /// <summary>
-        /// Creates a Shipment
-        /// </summary>
-        IShipment CreateShipment(IShipMethod shipMethod, IInvoice invoice, ICustomerAddress customerAddress);
-
+        
         /// <summary>
         /// Saves a single <see cref="IShipment"/> object
         /// </summary>
@@ -60,32 +46,24 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Gets an <see cref="IShipment"/> object by its 'UniqueId'
         /// </summary>
-        /// <param name="id">int Id of the Shipment to retrieve</param>
+        /// <param name="key">Guid pk of the Shipment to retrieve</param>
         /// <returns><see cref="IShipment"/></returns>
-        IShipment GetById(int id);
+        IShipment GetByKey(Guid key);
 
         /// <summary>
-        /// Gets a list of <see cref="IShipment"/> object given a ship method id
+        /// Gets a list of <see cref="IShipment"/> object given a ship method Key
         /// </summary>
-        /// <param name="shipMethodId">The id of the shipMethod</param>
+        /// <param name="shipMethodKey">The pk of the shipMethod</param>
         /// <returns>A collection of <see cref="IShipment"/></returns>
-        IEnumerable<IShipment> GetShipmentsForShipMethod(int shipMethodId);
-
-
-        /// <summary>
-        /// Gets a list of <see cref="IShipment"/> object given a invoice id
-        /// </summary>
-        /// <param name="invoiceId">The id of the invoice</param>
-        /// <returns>A collection of <see cref="IShipment"/></returns>
-        IEnumerable<IShipment> GetShipmentsForInvoice(int invoiceId);
+        IEnumerable<IShipment> GetShipmentsForShipMethod(Guid shipMethodKey);
             
             
         /// <summary>
         /// Gets list of <see cref="IShipment"/> objects given a list of Unique keys
         /// </summary>
-        /// <param name="ids">List of int Id for Shipment objects to retrieve</param>
+        /// <param name="keys">List of Guid keys for Shipment objects to retrieve</param>
         /// <returns>List of <see cref="IShipment"/></returns>
-        IEnumerable<IShipment> GetByIds(IEnumerable<int> ids);
+        IEnumerable<IShipment> GetByKeys(IEnumerable<Guid> keys);
 
     }
 }
