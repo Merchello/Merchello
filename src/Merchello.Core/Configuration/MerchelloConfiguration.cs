@@ -45,6 +45,14 @@ namespace Merchello.Core.Configuration
             get { return Section.Settings["DefaultApplyPaymentStrategy"].Value; }
         }
 
+        /// <summary>
+        /// The configuration setting for the DefaultBasketPackagingStrategy
+        /// </summary>
+        public string DefaultBasketPackagingStrategy
+        {
+            get { return Section.Settings["DefaultBasketPackagingStrategy"].Value; }
+        }
+
         public string DefaultSkuSeparator
         {
             get { return Section.Settings["DefaultSkuSeparator"].Value; }

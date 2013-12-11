@@ -29,6 +29,23 @@ namespace Merchello.Web
             return ProductQuery.GetByKey(key);
         }
 
+
+        /// <summary>
+        /// Retrieves a <see cref="ProductVariantDisplay"/> from the Merchello Product index.
+        /// </summary>
+        public ProductVariantDisplay ProductVariant(string key)
+        {
+            return ProductQuery.GetVariantDisplayByKey(key);
+        }
+
+        /// <summary>
+        /// Retrieves a <see cref="ProductVariantDisplay"/> from the Merchello Product index.
+        /// </summary>
+        public ProductVariantDisplay ProductVariant(Guid key)
+        {
+            return ProductVariant(key.ToString());
+        }
+
         /// <summary>
         /// Searches the Merchello Product index.  NOTE:  This returns a ProductDisplay and is not a Content search.  Use the the UmbracoHelper.Search for content searches.
         /// </summary>
