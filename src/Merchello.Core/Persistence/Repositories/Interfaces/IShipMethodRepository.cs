@@ -1,0 +1,14 @@
+﻿using System;
+using Merchello.Core.Models;
+using Umbraco.Core.Persistence.Repositories;
+
+namespace Merchello.Core.Persistence.Repositories
+{
+    /// <summary>
+    /// Marker interface for the ship method repository
+    /// </summary>
+    public interface IShipMethodRepository : IRepositoryQueryable<Guid, IShipMethod>
+    {
+        
+    }
+}

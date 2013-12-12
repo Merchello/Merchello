@@ -94,10 +94,10 @@ namespace Merchello.Tests.UnitTests.Mappers
         //}
 
         /// <summary>
-        /// Test to verify <see cref="MerchelloMapper"/> correctly maps IBasket to BasketMapper
+        /// Test to verify <see cref="MerchelloMapper"/> correctly maps IItemCache to ItemCacheMapper
         /// </summary>
         [Test]
-        public void Mapper_Resolves_IBasket_To_BasketMapper()
+        public void Mapper_Resolves_IItemCache_To_ItemCacheMapper()
         {
 
             //// Arrage
@@ -200,6 +200,25 @@ namespace Merchello.Tests.UnitTests.Mappers
             Assert.IsTrue(resolved.Success);
             Assert.AreSame(expected, resolved.Result.GetType());
         }
+
+        /// <summary>
+        /// Test to verify <see cref="MerchelloMapper"/> correctly maps IShipCountry to ShipCountryMapper
+        /// </summary>
+        [Test]
+        public void Mapper_Resolves_IShipCountry_To_ShipCountryMapper()
+        {
+
+            //// Arrage
+            var expected = typeof(ShipCountryMapper);
+
+            //// Act
+            var resolved = MerchelloMapper.Current.ResolveByType(typeof(IShipCountry));
+
+            //// Assert
+            Assert.IsTrue(resolved.Success);
+            Assert.AreSame(expected, resolved.Result.GetType());
+        }
+
 
         /// <summary>
         /// Test to verify <see cref="MerchelloMapper"/> correctly maps IShipment to ShipmentMapper

@@ -13,8 +13,7 @@ namespace Merchello.Web.Models.ContentEditing
     /// </summary>
     internal static class ExamineDisplayExtensions
     {
-
-        // TODO : This should/could be moved and split between the "contexttual cache" and a factory
+        
         internal static ProductDisplay ToProductDisplay(this SearchResult result)
         {
             // this should be the master variant
@@ -32,7 +31,6 @@ namespace Merchello.Web.Models.ContentEditing
             return productDisplay;
         }
 
-        // TODO : This should/could be moved and split between the "contexttual cache" and a factory
         internal static ProductVariantDisplay ToProductVariantDisplay(this SearchResult result)
         {
             var pvd = new ProductVariantDisplay()

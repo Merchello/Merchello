@@ -8,6 +8,9 @@ namespace Merchello.Core.Models
     public static class ExtendedDataCollectionExtensions
     {
 
+        #region Product / ProductVariant
+        
+
         public static void AddProductVariantValues(this ExtendedDataCollection extendedData, IProductVariant productVariant)
         {
             extendedData.SetValue("merchProductKey", productVariant.ProductKey.ToString());
@@ -174,6 +177,14 @@ namespace Merchello.Core.Models
             return extendedData.GetValue("MerchBarcode");
         }
 
+        #endregion
+
+
+
+
+        #region Utility
+        
+
         private static Guid GetGuidValue(string value)
         {
             Guid converted;
@@ -183,7 +194,7 @@ namespace Merchello.Core.Models
         private static bool GetBooleanValue(string value)
         {
             bool converted;
-            return bool.TryParse(value, out converted) ? converted : false;
+            return bool.TryParse(value, out converted) && converted;
         }
 
         private static decimal GetDecimalValue(string value)
@@ -197,5 +208,7 @@ namespace Merchello.Core.Models
             int converted;
             return int.TryParse(value, out converted) ? converted : 0;
         }
+
+        #endregion
     }
 }

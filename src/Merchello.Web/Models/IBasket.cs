@@ -50,8 +50,8 @@ namespace Merchello.Web.Models
         /// <summary>
         /// Accepts visitor class to visit basket items
         /// </summary>
-        /// <param name="vistor"><see cref="ILineItemVisitor"/></param>
-        void Accept(ILineItemVisitor vistor);
+        /// <param name="visitor"><see cref="ILineItemVisitor"/></param>
+        void Accept(ILineItemVisitor visitor);
 
         /// <summary>
         /// The customer assoicated with the basket

@@ -35,7 +35,7 @@ namespace Merchello.Core.Persistence.Factories
 
         public WarehouseDto BuildDto(IWarehouse entity)
         {
-            var catalog = ((Warehouse) entity).InventoryCatalogs.FirstOrDefault();
+            var catalog = ((Warehouse) entity).WarehouseCatalogs.FirstOrDefault();
             var dto = new WarehouseDto()
             {
                 Key = entity.Key,

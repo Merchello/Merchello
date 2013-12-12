@@ -2,6 +2,7 @@
 using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Persistence.Repositories;
 using Merchello.Core.Persistence.UnitOfWork;
+using Merchello.Core.Services;
 using Umbraco.Core.Cache;
 
 
@@ -67,17 +68,6 @@ namespace Merchello.Core.Persistence
         }
 
 
-        ///// <summary>
-        ///// Returns an instance of the <see cref="IInvoiceRepository"/>
-        ///// </summary>
-        ///// <param name="uow"></param>
-        ///// <returns></returns>
-        //internal virtual IInvoiceRepository CreateInvoiceRepository(IDatabaseUnitOfWork uow)
-        //{
-        //    return new InvoiceRepository(uow,
-        //        _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
-        //}
-
         /// <summary>
         /// Returns an instance of the <see cref="ILineItemRepository"/>
         /// </summary>
@@ -103,18 +93,6 @@ namespace Merchello.Core.Persistence
         }
 
         /// <summary>
-        /// Returns an instance of the <see cref="IShipmentRepository"/>
-        /// </summary>
-        /// <param name="uow"></param>
-        /// <returns></returns>
-        internal virtual IShipmentRepository CreateShipmentRepository(IDatabaseUnitOfWork uow)
-        {
-            return new ShipmentRepository(uow,
-                _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
-        }
-
-
-        /// <summary>
         /// Returns an instance of the <see cref="IProductRepository"/>
         /// </summary>
         /// <param name="uow"></param>
@@ -136,6 +114,31 @@ namespace Merchello.Core.Persistence
             return new ProductVariantRepository(uow,
                _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
         }
+
+        /// <summary>
+        /// Returns an instance of the <see cref="IShipCountryRepository"/>
+        /// </summary>
+        /// <param name="uow"></param>
+        /// <param name="settingsService"></param>
+        /// <returns></returns>
+        internal virtual IShipCountryRepository CreateShipCountryRepository(IDatabaseUnitOfWork uow, ISettingsService settingsService)
+        {
+            return new ShipCountryRepository(uow,
+                _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider,
+                settingsService);
+        }
+
+        /// <summary>
+        /// Returns an instance of the <see cref="IShipmentRepository"/>
+        /// </summary>
+        /// <param name="uow"></param>
+        /// <returns></returns>
+        internal virtual IShipmentRepository CreateShipmentRepository(IDatabaseUnitOfWork uow)
+        {
+            return new ShipmentRepository(uow,
+                _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
+        }
+
 
         /// <summary>
         /// Returns an instance of the <see cref="IWarehouseRepository"/>

@@ -12,16 +12,16 @@ namespace Merchello.Core.Models
     [DataContract(IsReference = true)]
     public class Country : CountryBase
     {
-        public Country(string countryCode) : base(countryCode)
-        {
-        }
+        public Country(string countryCode) 
+            : base(countryCode)
+        { }
 
-        public Country(string countryCode, IEnumerable<IProvince> provinces) : base(countryCode, provinces)
-        {
-        }
+        public Country(string countryCode, IEnumerable<IProvince> provinces) 
+            : base(countryCode, provinces)
+        { }
 
-        public Country(string countryCode, RegionInfo regionInfo, IEnumerable<IProvince> provinces) : base(countryCode, regionInfo, provinces)
-        {
-        }
+        public Country(string countryCode, RegionInfo regionInfo, IEnumerable<IProvince> provinces) 
+            : base(countryCode, regionInfo, provinces)
+        { }
     }
 }

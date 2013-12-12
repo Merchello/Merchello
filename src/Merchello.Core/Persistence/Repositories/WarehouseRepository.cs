@@ -71,7 +71,7 @@ namespace Merchello.Core.Persistence.Repositories
 
         protected override Sql GetBaseQuery(bool isCount)
         {
-            // TODO VERSION NEXT: this will need to be refactored when we open up Multiple Warehouses
+            // TODO VERSION NEXT: this will need to be refactored when we open up Multiple Warehouse Catalogs!!!
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
                 .From<WarehouseDto>()

@@ -9,15 +9,15 @@ namespace Merchello.Core.Models.Interfaces
     /// Defines a warehouse catalog
     /// </summary>
     /// <remarks>
+    /// 
     /// Warehouses can have mulitple catalogs for inventory purposes.  The idea here is to 
     /// provide a way to seperate out Shipping Methods based on types of products - eg.  If an product 
     /// can only ship overnight and refrigerated (such as Live Lobster) we need to be able to seperate
     /// this out from a T-Shirt.  In this case there could be a Warehouse Catalog with common items and
     /// a separate Warehouse Catalog for Frozen/Live Items.
     /// 
-    /// This feature is will not be exposed in the first version of Merchello.
     /// </remarks>
-    internal interface IWarehouseCatalog : IEntity
+    public interface IWarehouseCatalog : IEntity
     {
         /// <summary>
         /// The unique key identifying the warehouse that maintains this catalog

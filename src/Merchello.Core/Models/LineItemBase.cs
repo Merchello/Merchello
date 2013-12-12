@@ -182,6 +182,18 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
+        /// Converts the LineItemTfKey to it's enum equivalent
+        /// </summary>
+        [DataMember]
+        public LineItemType LineItemType
+        {
+            get
+            {
+                return EnumTypeFieldConverter.LineItemType.GetTypeField(_lineItemTfKey);
+            }
+        }
+
+        /// <summary>
         /// True/false indicating whether or not this line item has been exported to an external system
         /// </summary>
         [DataMember]
@@ -206,5 +218,7 @@ namespace Merchello.Core.Models
         {
             vistor.Visit(this);
         }
+
+        
     }
 }

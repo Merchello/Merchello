@@ -38,7 +38,10 @@ namespace Merchello.Core.Services
         /// <returns><see cref="RegionInfo"/> for the country corresponding the the country code passed</returns>
         public ICountry GetCountryByCode(string countryCode)
         {
-            return new Country(countryCode);
+            return new Country(countryCode, GetProvincesByCountryCode(countryCode))
+            {
+                ProvinceLabel = GetProvinceLabelForCountry(countryCode)
+            };
         }
 
         /// <summary>
@@ -49,11 +52,7 @@ namespace Merchello.Core.Services
         {
             return CultureInfo.GetCultures(CultureTypes.SpecificCultures)
                 .Select(culture => new RegionInfo(culture.Name))
-                .Select(ri =>
-                    new Country(ri.TwoLetterISORegionName, GetProvincesByCountryCode(ri.TwoLetterISORegionName))
-                    {
-                        ProvinceLabel = GetProvinceLabelForCountry(ri.TwoLetterISORegionName)
-                    });
+                .Select(ri => GetCountryByCode(ri.TwoLetterISORegionName));
         }
 
         /// <summary>

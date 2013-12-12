@@ -13,8 +13,22 @@ namespace Merchello.Core.Models
         /// </summary>
         internal static IWarehouseCatalog DefaultCatalog(this IWarehouse warehouse)
         {
-            return ((Warehouse) warehouse).InventoryCatalogs.FirstOrDefault();
+            return ((Warehouse) warehouse).WarehouseCatalogs.FirstOrDefault();
         }
-         
+
+        internal static IAddress AsAddress(this IWarehouse warehouse)
+        {
+            return new Address()
+            {
+                Name = warehouse.Name,
+                Address1 = warehouse.Address1,
+                Address2 = warehouse.Address2,
+                Locality = warehouse.Locality,
+                Region = warehouse.Region,
+                PostalCode = warehouse.PostalCode,
+                CountryCode = warehouse.CountryCode,
+                Phone = warehouse.Phone
+            };
+        }
     }
 }

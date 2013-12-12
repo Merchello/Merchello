@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Runtime.Serialization;
 using Merchello.Core.Models.EntityBase;
+using Merchello.Core.Models.Interfaces;
 
 namespace Merchello.Core.Models
 {
@@ -27,7 +28,39 @@ namespace Merchello.Core.Models
         private Guid? _shipMethodKey;
         private Guid? _invoiceItemKey;
         private string _phone;
-       
+        private LineItemCollection _items;
+
+        public Shipment()
+            :this(new Address(), new Address(), new LineItemCollection())
+        {}
+
+        public Shipment(IAddress origin, IAddress destination)
+            : this(origin, destination, new LineItemCollection())
+        { }
+
+        internal Shipment(IAddress origin, IAddress destination, LineItemCollection items)
+        {
+            Mandate.ParameterNotNull(origin, "origin");
+            Mandate.ParameterNotNull(destination, "destination");
+            Mandate.ParameterNotNull(items, "items");
+
+            _fromName = origin.Name;
+            _fromAddress1 = origin.Address1;
+            _fromAddress2 = origin.Address2;
+            _fromLocality = origin.Locality;
+            _fromRegion = origin.Region;
+            _fromPostalCode = origin.PostalCode;
+            _fromCountryCode = origin.CountryCode;
+            _toName = destination.Name;
+            _toAddress1 = destination.Address1;
+            _toAddress2 = destination.Address2;
+            _toLocality = destination.Locality;
+            _toRegion = destination.Region;
+            _toPostalCode = destination.PostalCode;
+            _toCountryCode = destination.CountryCode;
+            _items = items;
+        }
+
         private static readonly PropertyInfo ShipMethodKeySelector = ExpressionHelper.GetPropertyInfo<Shipment, Guid?>(x => x.ShipMethodKey);
         private static readonly PropertyInfo InvoiceItemKeySelector = ExpressionHelper.GetPropertyInfo<Shipment, Guid?>(x => x.InvoiceItemKey);
         private static readonly PropertyInfo FromNameSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.FromName); 
@@ -45,6 +78,7 @@ namespace Merchello.Core.Models
         private static readonly PropertyInfo ToPostalCodeSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.ToPostalCode);  
         private static readonly PropertyInfo ToCountryCodeSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.ToCountryCode);         
         private static readonly PropertyInfo PhoneSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.Phone);
+
 
         /// <summary>
         /// The name of origin address's name associated with the Shipment
@@ -339,7 +373,22 @@ namespace Merchello.Core.Models
                     }, _phone, PhoneSelector); 
                 }
         }
-                    
+
+        /// <summary>
+        /// The <see cref="ILineItem"/>s in the shipment
+        /// </summary>
+        [DataMember]
+        public LineItemCollection Items
+        {
+            get
+            {
+                return _items;
+            }
+            internal set
+            {
+                _items = value;
+            }
+        }
     }
 
 }

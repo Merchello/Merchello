@@ -31,6 +31,18 @@ namespace Merchello.Core.Models.Interfaces
         /// Extended data for the provider
         /// </summary>
         [DataMember]
-        ExtendedDataCollection ExtendedData { get; set; }
+        ExtendedDataCollection ExtendedData { get; }
+
+        /// <summary>
+        /// True/false indicating whether or the ExtendedData collection should be encrypted before persisted.
+        /// </summary>
+        [DataMember]
+        bool EncryptExtendedData { get; set; }
+
+        /// <summary>
+        /// Enum type of the Gateway Provider
+        /// </summary>
+        [DataMember]
+        GatewayProviderType GatewayProviderType { get; }
     }
 }

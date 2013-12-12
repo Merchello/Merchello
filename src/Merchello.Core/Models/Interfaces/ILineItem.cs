@@ -56,9 +56,17 @@ namespace Merchello.Core.Models
         ExtendedDataCollection ExtendedData { get; }
 
         /// <summary>
+        /// The line item type
+        /// </summary>
+        [DataMember]
+        LineItemType LineItemType { get; }
+
+        /// <summary>
         /// Accept for visitor operations
         /// </summary>
         /// <param name="vistor"><see cref="ILineItemVisitor"/></param>
         void Accept(ILineItemVisitor vistor);
+
+        
     }
 }

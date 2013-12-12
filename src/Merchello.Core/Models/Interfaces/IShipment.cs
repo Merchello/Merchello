@@ -7,7 +7,7 @@ namespace Merchello.Core.Models
     /// <summary>
     /// Defines a Merchello Shipment object interface
     /// </summary>
-    public interface IShipment : IEntity
+    public interface IShipment : ILineItemContainer
     {
 
         /// <summary>
@@ -114,6 +114,8 @@ namespace Merchello.Core.Models
         /// </summary>
         [DataMember]
         string Phone { get; set;}
+
+
     }
 }
 
