@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Merchello.Core.Models.EntityBase;
 using Merchello.Core.Models.Interfaces;
@@ -71,6 +72,8 @@ namespace Merchello.Core.Models
         [DataMember]
         bool IsDefault { get; set; }
 
+
+        IEnumerable<IWarehouseCatalog> WarehouseCatalogs { get; }
     }
 }
 

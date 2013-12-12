@@ -332,6 +332,44 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
         #endregion
 
+
+        #region Shipping (IShipment, IShipCounty)
+
+        public void DeleteAllShipCountries()
+        {
+            var shipCountries = ((ShippingService) ShippingService).GetAllShipCountries();
+            foreach (var country in shipCountries)
+            {
+                ShippingService.Delete(country);
+            }
+
+        }
+
+        /// <summary>
+        /// Returns the Shipping Service
+        /// </summary>
+        public IShippingService ShippingService
+        {
+            get
+            {
+                return _serviceContext.ShippingService;
+            }
+        }
+
+        #endregion
+
+        #region Settings
+
+        /// <summary>
+        /// Returns the <see cref="ISettingsService"/>
+        /// </summary>
+        public ISettingsService SettingsService
+        {
+            get { return _serviceContext.SettingsService; }
+        }
+
+        #endregion
+
         //#region IShipment
 
 

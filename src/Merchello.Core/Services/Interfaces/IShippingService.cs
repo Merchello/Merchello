@@ -14,8 +14,7 @@ namespace Merchello.Core.Services
     /// Defines the ShippingService, which provides access to shipping operations
     /// </summary>
     public interface IShippingService : IService
-    {
-        
+    {        
         /// <summary>
         /// Saves a single <see cref="IShipment"/> object
         /// </summary>
@@ -107,11 +106,26 @@ namespace Merchello.Core.Services
         IEnumerable<IShipment> GetShipmentsForShipMethod(Guid shipMethodKey);
 
         /// <summary>
+        /// Gets a single <see cref="IShipCountry"/> by it's unique key (Guid pk)
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        IShipCountry GetShipCountryByKey(Guid key);
+
+        /// <summary>
+        /// Gets a single <see cref="IShipCountry"/>
+        /// </summary>
+        /// <param name="catalogKey">The warehouse catalog key (guid)</param>
+        /// <param name="countryCode">The two letter ISO country code</param>
+        /// <returns></returns>
+        IShipCountry GetShipCountryByCountryCode(Guid catalogKey, string countryCode);
+
+        /// <summary>
         /// Gets a list of <see cref="IShipCountry"/> objects given a <see cref="IWarehouseCatalog"/> key
         /// </summary>
         /// <param name="catalogKey">Guid</param>
         /// <returns>A collection of <see cref="IShipCountry"/></returns>
-        IEnumerable<IShipCountry> GetShipCountriesByWarehouseCatalogKey(Guid catalogKey);
+        IEnumerable<IShipCountry> GetShipCountriesByCatalogKey(Guid catalogKey);
 
         /// <summary>
         /// Gets a list of <see cref="IShipMethod"/> objects given a <see cref="IShipCountry"/> key

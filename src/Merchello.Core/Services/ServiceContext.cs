@@ -54,7 +54,7 @@ namespace Merchello.Core.Services
                 _settingsService = new Lazy<SettingsService>(() => new SettingsService());
 
             if(_shippingService == null)
-                _shippingService = new Lazy<ShippingService>(() => new ShippingService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+                _shippingService = new Lazy<ShippingService>(() => new ShippingService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _settingsService.Value));
 
             if(_warehouseService == null)
                 _warehouseService = new Lazy<WarehouseService>(() => new WarehouseService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));

@@ -9,19 +9,19 @@ using Umbraco.Core.Persistence.Querying;
 
 namespace Merchello.Core.Persistence.Repositories
 {
-    /// <summary>
-    /// Represent an abstract Repository for PetaPoco based repositories
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    internal abstract class MerchelloPetaPocoRepositoryBase<TEntity> : MerchelloRepositoryBase<TEntity>
+	/// <summary>
+	/// Represent an abstract Repository for PetaPoco based repositories
+	/// </summary>
+	/// <typeparam name="TEntity"></typeparam>
+	internal abstract class MerchelloPetaPocoRepositoryBase<TEntity> : MerchelloRepositoryBase<TEntity>
 		where TEntity : IEntity
 	{
-        //protected MerchelloPetaPocoRepositoryBase(IDatabaseUnitOfWork work)
-        //    : base(work)
-        //{
-        //}
+		//protected MerchelloPetaPocoRepositoryBase(IDatabaseUnitOfWork work)
+		//    : base(work)
+		//{
+		//}
 
-        protected MerchelloPetaPocoRepositoryBase(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache)
+		protected MerchelloPetaPocoRepositoryBase(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache)
 			: base(work, cache)
 		{
 		}
