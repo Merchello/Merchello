@@ -6,10 +6,10 @@ namespace Merchello.Core.Models
     public interface IShipCountry : ICountryBase
     {
         /// <summary>
-        /// The unique warehouse key (guid)
+        /// The unique warehouse catalog key (guid)
         /// </summary>
         [DataMember]
-        Guid WarehouseKey { get; }
+        Guid CatalogKey { get; }
 
         /// <summary>
         /// The ship methods associated with the country

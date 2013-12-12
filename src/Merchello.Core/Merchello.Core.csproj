@@ -251,7 +251,6 @@
     <Compile Include="Models\Rdbms\ProductVariantIndexDto.cs" />
     <Compile Include="Models\Rdbms\ShipRateTierDto.cs" />
     <Compile Include="Models\Rdbms\WarehouseCatalogDto.cs" />
-    <Compile Include="Models\Rdbms\WarehouseCountryDto.cs" />
     <Compile Include="Models\Rdbms\TaxRegionDto.cs" />
     <Compile Include="Models\CountryBase.cs" />
     <Compile Include="Models\Shipment.cs">
@@ -296,10 +295,10 @@
     <Compile Include="Persistence\Factories\ProductFactory.cs" />
     <Compile Include="Persistence\Factories\ProductOptionFactory.cs" />
     <Compile Include="Persistence\Factories\ProductVariantFactory.cs" />
+    <Compile Include="Persistence\Factories\ShipCountryFactory.cs" />
     <Compile Include="Persistence\Factories\ShipmentFactory.cs" />
     <Compile Include="Persistence\Factories\ShipMethodFactory.cs" />
     <Compile Include="Persistence\Factories\WarehouseCatalogFactory.cs" />
-    <Compile Include="Persistence\Factories\WarehouseCountryFactory.cs" />
     <Compile Include="Persistence\Factories\WarehouseFactory.cs" />
     <Compile Include="Persistence\Mappers\AppliedPaymentMapper.cs">
       <SubType>Code</SubType>
@@ -350,6 +349,7 @@
     <Compile Include="Persistence\Mappers\ProductVariantMapper.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Persistence\Mappers\ShipCountryMapper.cs" />
     <Compile Include="Persistence\Mappers\ShipmentMapper.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -369,13 +369,17 @@
     <Compile Include="Persistence\Repositories\Interfaces\IPaymentRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IProductRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IProductVariantRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IShipCountryRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IShipmentRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IShipMethodRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IShipRateTierRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IWarehouseRepository.cs" />
     <Compile Include="Persistence\Repositories\ItemCacheRepository.cs" />
     <Compile Include="Persistence\Repositories\LineItemRepository.cs" />
     <Compile Include="Persistence\Repositories\PaymentRepository.cs" />
     <Compile Include="Persistence\Repositories\ProductRepository.cs" />
     <Compile Include="Persistence\Repositories\ProductVariantRepository.cs" />
+    <Compile Include="Persistence\Repositories\ShipCountryRepository.cs" />
     <Compile Include="Persistence\Repositories\ShipmentRepository.cs" />
     <Compile Include="Persistence\Repositories\WarehouseRepository.cs" />
     <Compile Include="Persistence\TransactionType.cs" />

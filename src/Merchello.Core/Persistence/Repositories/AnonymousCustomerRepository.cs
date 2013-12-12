@@ -43,11 +43,11 @@ namespace Merchello.Core.Persistence.Repositories
             return anonymous;
         }
 
-        protected override IEnumerable<IAnonymousCustomer> PerformGetAll(params Guid[] ids)
+        protected override IEnumerable<IAnonymousCustomer> PerformGetAll(params Guid[] keys)
         {
-            if (ids.Any())
+            if (keys.Any())
             {
-                foreach (var id in ids)
+                foreach (var id in keys)
                 {
                     yield return Get(id);
                 }

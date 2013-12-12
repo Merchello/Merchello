@@ -59,11 +59,11 @@ namespace Merchello.Core.Persistence.Repositories
             return product;
         }
 
-        protected override IEnumerable<IProduct> PerformGetAll(params Guid[] ids)
+        protected override IEnumerable<IProduct> PerformGetAll(params Guid[] keys)
         {
-            if (ids.Any())
+            if (keys.Any())
             {
-                foreach (var id in ids)
+                foreach (var id in keys)
                 {
                     yield return Get(id);
                 }

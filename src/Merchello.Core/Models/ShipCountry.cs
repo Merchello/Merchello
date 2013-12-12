@@ -15,27 +15,27 @@ namespace Merchello.Core.Models
     public class ShipCountry : CountryBase, IShipCountry
     {
         private ShipMethodCollection _shipMethodCollection;
-        private Guid _warehouseKey;
+        private Guid _catalogKey;
 
-        public ShipCountry(Guid warehouseKey, string countryCode) 
-            : this(warehouseKey, countryCode, new ShipMethodCollection())
+        public ShipCountry(Guid catalogKey, ICountry country)
+            : this(catalogKey, country, new ShipMethodCollection())
         { }
 
-        public ShipCountry(Guid warehouseKey, string countryCode, ShipMethodCollection shipMethods)
-            : this(warehouseKey, countryCode, new List<IProvince>(), shipMethods)
+        public ShipCountry(Guid catalogKey, ICountry country, ShipMethodCollection shipMethods)
+            : this(catalogKey, country.CountryCode, country.Provinces, shipMethods)
         {}
 
-        internal ShipCountry(Guid warehouseKey, string countryCode, IEnumerable<IProvince> provinces, ShipMethodCollection shipMethods)
+        internal ShipCountry(Guid catalogKey, string countryCode, IEnumerable<IProvince> provinces, ShipMethodCollection shipMethods)
             : base(countryCode, provinces)
         {
-            Mandate.ParameterCondition(warehouseKey != Guid.Empty, "warehouseKey");
+            Mandate.ParameterCondition(catalogKey != Guid.Empty, "catalogKey");
             Mandate.ParameterNotNull(shipMethods, "shipMethods");
 
-            _warehouseKey = warehouseKey;
+            _catalogKey = catalogKey;
             _shipMethodCollection = shipMethods;
         }
 
-        private static readonly PropertyInfo WarehouseKeySelector = ExpressionHelper.GetPropertyInfo<ShipCountry, Guid>(x => x.WarehouseKey);
+        private static readonly PropertyInfo CatalogKeySelector = ExpressionHelper.GetPropertyInfo<ShipCountry, Guid>(x => x.CatalogKey);
         private static readonly PropertyInfo ShipMethodsChangedSelector = ExpressionHelper.GetPropertyInfo<ShipCountry, ShipMethodCollection>(x => x.ShipMethods);
 
         private void ShipMethodsChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -44,19 +44,19 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
-        /// The warehouse key
+        /// The warehouse catalog key
         /// </summary>
         [DataMember]
-        public Guid WarehouseKey
+        public Guid CatalogKey
         {
-            get { return _warehouseKey; }
+            get { return _catalogKey; }
             internal set
             {
                 SetPropertyValueAndDetectChanges(o =>
                 {
-                    _warehouseKey = value;
-                    return _warehouseKey;
-                }, _warehouseKey, WarehouseKeySelector); 
+                    _catalogKey = value;
+                    return _catalogKey;
+                }, _catalogKey, CatalogKeySelector); 
             }
         }
 

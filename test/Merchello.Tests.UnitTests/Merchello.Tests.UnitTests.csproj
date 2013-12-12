@@ -253,7 +253,6 @@
     <Compile Include="Configuration\MerchelloSectionTests.cs" />
     <Compile Include="Configuration\Versioning.cs" />
     <Compile Include="Contexts\MerchelloBootstrapperTests.cs" />
-    <Compile Include="Gateway\GatewayProviderPrototyping.cs" />
     <Compile Include="LineItem\LineItemCollectionTest.cs" />
     <Compile Include="Mappers\MerchelloMapperTests.cs" />
     <Compile Include="Models\ExtendedDataCollectionTests.cs" />
@@ -267,6 +266,7 @@
     <Compile Include="Querying\InvoiceStatusSqlClausesTests.cs" />
     <Compile Include="Querying\PaymentSqlClausesTests.cs" />
     <Compile Include="Querying\ProductVariantSqlClausesTests.cs" />
+    <Compile Include="Querying\ShipCountrySqlClausesTest.cs" />
     <Compile Include="Querying\ShipmentSqlClausesTest.cs" />
     <Compile Include="Querying\ShipMethodSqlClausesTests.cs" />
     <Compile Include="Querying\TransactionSqlClauseTests.cs" />
