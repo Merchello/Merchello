@@ -94,7 +94,7 @@ namespace Merchello.Web.Editors
         /// <summary>
         /// Returns All ShipCountries with ShipMethods in them
         ///
-        /// GET /umbraco/Merchello/ShippingMethodsApi/GetAllShipCountries
+        /// GET /umbraco/Merchello/ShippingMethodsApi/GetAllShipCountries/{guid}
         /// </summary>
         /// <param name="id">CatalogKey Guid to get countries for</param>
         public IEnumerable<ShipCountryDisplay> GetAllShipCountries(Guid id)
