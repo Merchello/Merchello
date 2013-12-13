@@ -107,5 +107,16 @@ namespace Merchello.Web.Models.ContentEditing
         }
 
         #endregion
+
+        #region TaxProvinceDisplay
+
+        internal static TaxProvinceDisplay ToTaxProvinceDisplay(this TaxProvince taxProvince)
+        {
+            AutoMapper.Mapper.CreateMap<TaxProvince, TaxProvinceDisplay>();
+
+            return AutoMapper.Mapper.Map<TaxProvinceDisplay>(taxProvince);
+        }
+
+        #endregion
     }
 }

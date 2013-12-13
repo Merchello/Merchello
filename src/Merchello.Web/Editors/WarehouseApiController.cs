@@ -89,7 +89,7 @@ namespace Merchello.Web.Editors
         /// GET /umbraco/Merchello/WarehouseApi/GetWarehouses?keys={guid}&keys={guid}
         /// </summary>
         /// <param name="keys">Warehouse keys to retrieve</param>
-        public IEnumerable<WarehouseDisplay> GetWarehouses([FromUri]IEnumerable<Guid> keys)
+        internal IEnumerable<WarehouseDisplay> GetWarehouses([FromUri]IEnumerable<Guid> keys)
         {
             if (keys != null)
             {
@@ -148,7 +148,7 @@ namespace Merchello.Web.Editors
         /// </summary>
         /// <param name="warehouses">IEnumerable<WarehouseDisplay> object serialized from WebApi</param>
         [AcceptVerbs("PUT")]
-        public HttpResponseMessage PutWarehouses(IEnumerable<WarehouseDisplay> warehouses)
+        internal HttpResponseMessage PutWarehouses(IEnumerable<WarehouseDisplay> warehouses)
         {
             var response = Request.CreateResponse(HttpStatusCode.OK);
 
