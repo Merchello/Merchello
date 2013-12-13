@@ -4,7 +4,7 @@ using Merchello.Web.Models;
 
 namespace Merchello.Web.Gateways.Shipping
 {
-    public interface IRateTableShippingProvider : IShippingGatewayProvider
+    public interface IFlatRateShippingProvider : IShippingGatewayProvider
     {
             IEnumerable<IRateTableShipMethod> ShipMethods { get; set; }
     }

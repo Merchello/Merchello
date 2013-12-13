@@ -14,8 +14,10 @@ namespace Merchello.Web.Models
         /// <summary>
         /// Adds a rate tier row to the ship rate table
         /// </summary>
-        /// <param name="shipRateTier"></param>
-        void AddRow(IShipRateTier shipRateTier);
+        /// <param name="rangeLow">The lowest qualifying value defining the range</param>
+        /// <param name="rangeHigh">The highest qualifying value defining the range</param>
+        /// <param name="rate">The rate or cost assoicated with the range</param>
+        void AddRow(decimal rangeLow, decimal rangeHigh, decimal rate);
 
         /// <summary>
         /// Deletes a rate tier row from the ship rate table

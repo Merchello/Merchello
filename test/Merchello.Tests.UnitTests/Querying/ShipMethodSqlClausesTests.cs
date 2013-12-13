@@ -38,5 +38,8 @@ namespace Merchello.Tests.UnitTests.Querying
             //// Assert
             Assert.That(sql.SQL, Is.EqualTo(expected.SQL));
         }
+
+
+        //public void Can_Verify_ShipMethod_ShipRat
     }
 }

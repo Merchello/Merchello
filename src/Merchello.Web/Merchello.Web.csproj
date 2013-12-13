@@ -240,7 +240,7 @@
     <Compile Include="Editors\ShippingMethodsApiController.cs" />
     <Compile Include="Editors\WarehouseApiController.cs" />
     <Compile Include="Gateways\Shipping\IShippingGatewayProvider.cs" />
-    <Compile Include="Gateways\Shipping\IRateTableShippingProvider.cs" />
+    <Compile Include="Gateways\Shipping\IFlatRateShippingProvider.cs" />
     <Compile Include="Gateways\Shipping\ShippingGatewayProviderBase.cs" />
     <Compile Include="Models\ContentEditing\FullfillmentMappingExtensions.cs" />
     <Compile Include="Models\ContentEditing\ProductMappingExtensions.cs" />
