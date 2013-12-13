@@ -29,7 +29,7 @@ namespace Merchello.Core.Models
                 var key = GetKeyForItem(item);
                 if (Guid.Empty != key)
                 {
-                    var exists = Contains(item.Sku);
+                    var exists = Contains(item.Key);
                     if (exists)
                     {
                         this[key].SortOrder = item.SortOrder;
