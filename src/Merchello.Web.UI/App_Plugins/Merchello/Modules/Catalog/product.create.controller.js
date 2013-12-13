@@ -7,11 +7,13 @@
      * @description
      * The controller for the product creation dialog
      */
-    controllers.ProductCreateController = function($scope, $routeParams, $location, merchelloProductService) {
+    controllers.ProductCreateController = function($scope, $routeParams, $location, assetsService, merchelloProductService) {
 
         $scope.productname = "";
         $scope.sku = "";
         $scope.price = 0.0;
+
+        assetsService.loadCss("/App_Plugins/Merchello/Common/Css/merchello.css");
 
         $scope.create = function () {
 

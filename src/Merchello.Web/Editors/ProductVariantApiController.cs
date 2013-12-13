@@ -156,17 +156,8 @@ namespace Merchello.Web.Editors
                     {
                         // TODO: This should be refactored into an extension method
                         ProductOption productOption = product.ProductOptions.FirstOrDefault(x => x.Key == attribute.OptionKey) as ProductOption;
-                        // TODO: This should be refactored into an extension method
-                        IProductAttribute productAttribute = null;
-                        foreach (var attr in productOption.Choices)
-                        {
-                            if (attr.Name == attribute.Name)
-                            {
-                                productAttribute = attr;
-                                break;
-                            }
-                        }
-                        productAttributes.Add(attribute.ToProductAttribute(productAttribute));
+
+                        productAttributes.Add(productOption.Choices[attribute.Sku]);
                     }
 
                     newProductVariant = _productVariantService.CreateProductVariantWithKey(product, productVariant.Name, productVariant.Sku, productVariant.Price, productAttributes, true);

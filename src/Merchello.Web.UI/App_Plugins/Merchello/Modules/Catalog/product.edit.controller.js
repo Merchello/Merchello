@@ -8,7 +8,7 @@
      * @description
      * The controller for the product editor
      */
-    controllers.ProductEditController = function ($scope, $routeParams, $location, notificationsService, dialogService, angularHelper, serverValidationManager, merchelloProductService, merchelloProductVariantService) {
+    controllers.ProductEditController = function ($scope, $routeParams, $location, assetsService, notificationsService, dialogService, angularHelper, serverValidationManager, merchelloProductService, merchelloProductVariantService) {
 
         $scope.currentTab = "Variants";
 
@@ -25,6 +25,10 @@
             deleteVariants: false,
             duplicateVariants: false
         };
+
+        //load the seperat css for the editor to avoid it blocking our js loading
+        assetsService.loadCss("/App_Plugins/Merchello/Common/Css/merchello.css");
+        assetsService.loadCss("/App_Plugins/Merchello/lib/JsonTree/jsontree.css");
 
         if ($routeParams.create) {
 
@@ -227,6 +231,12 @@
         };
         
         $scope.updateVariants = function (thisForm) {
+        }
+
+
+        $scope.prettyJson = function () {
+            var $jsonInfo = $(".jsonInfo");
+            $jsonInfo.jsontree($jsonInfo.html())
         }
 
     }
