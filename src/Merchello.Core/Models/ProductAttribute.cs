@@ -20,6 +20,9 @@ namespace Merchello.Core.Models
             Mandate.ParameterNotNullOrEmpty(name, "name");
             Mandate.ParameterNotNullOrEmpty(sku, "sku");
             
+            // This is required so that we can create attributes from the WebApi without a lot of 
+            // round trip traffic to the db to generate the Key(s).  Key is virtual so also forces
+            // this class to be sealed
             Key = Guid.NewGuid();
             HasIdentity = false;
 
