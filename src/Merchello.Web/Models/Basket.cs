@@ -28,7 +28,7 @@ namespace Merchello.Web.Models
             return GetBasket(MerchelloContext.Current, customer);
         }
 
-        public static IBasket GetBasket(IMerchelloContext merchelloContext, ICustomerBase customer)
+        internal static IBasket GetBasket(IMerchelloContext merchelloContext, ICustomerBase customer)
         {
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
             Mandate.ParameterNotNull(customer, "customer");
@@ -246,7 +246,7 @@ namespace Merchello.Web.Models
             Save(MerchelloContext.Current, this);
         }
 
-        public static void Save(IMerchelloContext merchelloContext, IBasket basket)
+        internal static void Save(IMerchelloContext merchelloContext, IBasket basket)
         {
             merchelloContext.Services.ItemCacheService.Save(((Basket)basket).ItemCache);
             Refresh(merchelloContext, basket);
@@ -303,7 +303,7 @@ namespace Merchello.Web.Models
         /// <returns></returns>
         private static string MakeCacheKey(ICustomerBase customer)
         {
-            return HttpCachingBacker.CustomerBasketCacheKey(customer.EntityKey, EnumTypeFieldConverter.CustomerItemItemCache.Basket.TypeKey);
+            return CacheKeys.CustomerBasketCacheKey(customer.EntityKey, EnumTypeFieldConverter.CustomerItemItemCache.Basket.TypeKey);
         }
 
         

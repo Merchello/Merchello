@@ -13,13 +13,13 @@ namespace Merchello.Web.Shipping
     /// 
     /// The class is responsible for breaking the products in a basket into one or more shipments.
     /// </summary>
-    public class BasketPackagingStrategy : BasketPackagingStrategyBase
+    public class DefaultWarehousePackagingStrategy : BasketPackagingStrategyBase
     {
-        public BasketPackagingStrategy(IBasket basket, IAddress destination) 
+        public DefaultWarehousePackagingStrategy(IBasket basket, IAddress destination) 
             : base(basket, destination)
         { }
 
-        public BasketPackagingStrategy(IMerchelloContext merchelloContext, IBasket basket, IAddress destination) 
+        public DefaultWarehousePackagingStrategy(IMerchelloContext merchelloContext, IBasket basket, IAddress destination) 
             : base(merchelloContext, basket, destination)
         { }
 
