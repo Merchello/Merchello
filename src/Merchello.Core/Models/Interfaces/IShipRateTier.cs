@@ -13,7 +13,7 @@ namespace Merchello.Core.Models.Interfaces
         /// The 'unique' key of the ship method
         /// </summary>
         [DataMember]
-        Guid ShipMethodKey { get; set; }
+        Guid ShipMethodKey { get; }
 
         /// <summary>
         /// The low end of the range defined by this tier

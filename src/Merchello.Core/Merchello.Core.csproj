@@ -263,6 +263,7 @@
     </Compile>
     <Compile Include="Models\ShipMethodCollection.cs" />
     <Compile Include="Models\ShipProvince.cs" />
+    <Compile Include="Models\ShipRateTier.cs" />
     <Compile Include="Models\TaxProvince.cs" />
     <Compile Include="Models\TypeFields\AppliedPaymentTypeField.cs">
       <SubType>Code</SubType>
@@ -358,6 +359,7 @@
     <Compile Include="Persistence\Mappers\ShipMethodMapper.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Persistence\Mappers\ShipRateTierMapper.cs" />
     <Compile Include="Persistence\Mappers\WarehouseMapper.cs">
       <SubType>Code</SubType>
     </Compile>

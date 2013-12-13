@@ -25,13 +25,13 @@ namespace Merchello.Core.Models
         {
             using (new WriteLock(_addLocker))
             {
-                var key = GetKeyForItem(item);
-                if (!string.IsNullOrEmpty(key))
+                var name = GetKeyForItem(item);
+                if (!string.IsNullOrEmpty(name))
                 {
                     var exists = Contains(item.Name);
                     if (exists)
                     {
-                        this[key].SortOrder = item.SortOrder;
+                        this[name].SortOrder = item.SortOrder;
                         return;
                     }
                 }
@@ -50,11 +50,11 @@ namespace Merchello.Core.Models
             return this.Any(x => x.Name == name);
         }
 
-        public override int IndexOfKey(string key)
+        public override int IndexOfKey(string name)
         {
             for (var i = 0; i < Count; i++)
             {
-                if (this[i].Name == key)
+                if (this[i].Name == name)
                 {
                     return i;
                 }

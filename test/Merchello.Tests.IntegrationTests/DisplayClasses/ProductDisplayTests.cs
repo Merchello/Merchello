@@ -51,8 +51,8 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
 
             var attributes = new ProductAttributeCollection()
             {
-                product.ProductOptions["Color"].Choices["Blue"],
-                product.ProductOptions["Size"].Choices["XL"]
+                product.ProductOptions["Color"].Choices.First(x => x.Sku == "Blue"),
+                product.ProductOptions["Size"].Choices.First(x => x.Sku == "XL" )
             };
 
             var variant = productVariantService.CreateProductVariantWithKey(product, attributes);

@@ -123,7 +123,7 @@ namespace Merchello.Web.Models.ContentEditing
                 IProductAttribute destinationProductAttribute;
                 if (destinationProductOption.Choices.Contains(choice.Sku))
                 {
-                    destinationProductAttribute = destinationProductOption.Choices[choice.Sku];
+                    destinationProductAttribute = destinationProductOption.Choices[choice.Key];
 
                     destinationProductAttribute = choice.ToProductAttribute(destinationProductAttribute);
                 }

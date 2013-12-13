@@ -13,13 +13,13 @@ namespace Merchello.Core.Models
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    public class ProductAttributeCollection : NotifiyCollectionBase<string, IProductAttribute>
+    public class ProductAttributeCollection : NotifiyCollectionBase<Guid, IProductAttribute>
     {
         private readonly ReaderWriterLockSlim _addLocker = new ReaderWriterLockSlim();
 
-        protected override string GetKeyForItem(IProductAttribute item)
+        protected override Guid GetKeyForItem(IProductAttribute item)
         {
-            return item.Sku;
+            return item.Key;
         }
 
         internal new void Add(IProductAttribute item)
@@ -27,7 +27,7 @@ namespace Merchello.Core.Models
             using (new WriteLock(_addLocker))
             {
                 var key = GetKeyForItem(item);
-                if (!string.IsNullOrEmpty(key))
+                if (Guid.Empty != key)
                 {
                     var exists = Contains(item.Sku);
                     if (exists)
@@ -50,11 +50,11 @@ namespace Merchello.Core.Models
             return Count == compare.Count && compare.All(item => Contains(item.Key));
         }
 
-        public override int IndexOfKey(string key)
+        public override int IndexOfKey(Guid key)
         {
             for (var i = 0; i < Count; i++)
             {
-                if (this[i].Sku == key)
+                if (this[i].Key == key)
                 {
                     return i;
                 }
@@ -63,15 +63,15 @@ namespace Merchello.Core.Models
         }
 
 
-        public new bool Contains(string sku)
+        public bool Contains(string sku)
         {
-            return this.Any(x => x.Sku  == sku);
+            return this.Any(x => x.Sku == sku);
         }
 
-        public bool Contains(Guid key)
-        {
-            return this.Any(x => x.Key == key);
-        }
+        //public bool Contains(Guid key)
+        //{
+        //    return this.Any(x => x.Key == key);
+        //}
 
         
 
