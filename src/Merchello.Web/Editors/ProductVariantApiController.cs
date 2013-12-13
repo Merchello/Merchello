@@ -167,7 +167,7 @@ namespace Merchello.Web.Editors
                     throw new HttpResponseException(HttpStatusCode.InternalServerError);
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 throw new HttpResponseException(HttpStatusCode.InternalServerError);
             }
