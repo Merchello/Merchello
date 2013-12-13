@@ -1,6 +1,4 @@
-﻿<link href="/App_Plugins/Merchello/Common/Css/merchello.css" rel="stylesheet">
-
-<div 
+﻿<div 
     ng-controller="Merchello.Editors.Product.EditController"
     ng-show="loaded">
 
@@ -284,13 +282,14 @@
                         <label class="merchello-control-label">
                             <label><input data-ng-model="debugging" type="checkbox" /> Debug</label>
                             <small>Check to show debugging info</small>
+                            <a class="btn" data-ng-click="prettyJson()">Make Pretty</a>
                         </label>
 
                         <div class="merchello-controls">
 
                             <div data-ng-show="debugging">
                                 <h3>Product</h3>
-                                <div>{{product | json}}</div>
+                                <div class="jsonInfo">{{product | json}}</div>
                            </div>
 
                         </div>
