@@ -44,7 +44,7 @@
                 }
                 else
                 {
-                    // Load variant
+                    // Let the variant load from the loadProductVariant() call
                 }
 
                 $scope.loaded = true;
@@ -67,12 +67,14 @@
             $scope.productVariant = new merchello.Models.ProductVariant();
             $scope.product = new merchello.Models.Product();
             $(".content-column-body").css('background-image', 'none');
+            $scope.editingVariant = false;
         }
         else {
 
             $scope.creatingVariant = false;
             $scope.productVariant = new merchello.Models.ProductVariant();
             $scope.product = {};
+            $scope.editingVariant = false;
 
             if ($routeParams.variantid == undefined)
             {
@@ -84,7 +86,13 @@
                 //we are editing a variant so get the product variant and product from the server
                 loadProductVariant($routeParams.variantid);
 
-                loadProduct($routeParams.id, true);
+                //loadProduct($routeParams.id, true);
+                $scope.product = {};
+                $scope.product.hasOptions = false;
+                $scope.product.hasVariants = true;
+
+
+                $scope.editingVariant = true;
             }
 
         }
@@ -102,7 +110,7 @@
                 notificationsService.info("Saving...", "");
 
 
-                if ($scope.creatingVariant)
+                if ($scope.creatingVariant) // Save on initial create
                 {
                     // Copy from master variant
                     $scope.product.copyFromVariant($scope.productVariant);
@@ -138,9 +146,25 @@
 
                     });
                 }
-                else
+                else if ($scope.editingVariant)  // Save a variant that is being edited
                 {
-                    if ($scope.product.hasVariants)
+                    var promise = merchelloProductVariantService.save($scope.productVariant);
+
+                    promise.then(function (product) {
+
+                        notificationsService.success("Product Variant Saved", "H5YR!");
+
+                        $location.url("/merchello/merchello/ProductEdit/" + $scope.productVariant.productKey, true);
+
+                    }, function (reason) {
+
+                        notificationsService.error("Product Variant Save Failed", reason.message);
+
+                    });
+                }
+                else   // if saving a product (not a variant)
+                {                    
+                    if ($scope.product.hasVariants)   // We added options / variants to a product that previously did not have them
                     {
                         // Copy from master variant
                         $scope.product.copyFromVariant($scope.productVariant);
@@ -173,7 +197,7 @@
 
                         });
                     }
-                    else
+                    else  // Simple product save with no options or variants
                     {
                         // Copy from master variant
                         $scope.product.copyFromVariant($scope.productVariant);

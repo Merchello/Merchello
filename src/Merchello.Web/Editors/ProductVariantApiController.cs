@@ -56,12 +56,12 @@ namespace Merchello.Web.Editors
         /// <summary>
         /// Returns Product by id (key)
         /// 
-        /// GET /umbraco/Merchello/ProductVariantApi/GetProductVariant?key={Guid}
+        /// GET /umbraco/Merchello/ProductVariantApi/GetProductVariant?id={Guid}
         /// </summary>
-        /// <param name="key"></param>
-        public ProductVariantDisplay GetProductVariant(Guid key)
+        /// <param name="id">ProductVariant Key</param>
+        public ProductVariantDisplay GetProductVariant(Guid id)
         {
-            var productVariant = _productVariantService.GetByKey(key);
+            var productVariant = _productVariantService.GetByKey(id);
             if (productVariant == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);
@@ -75,7 +75,7 @@ namespace Merchello.Web.Editors
         /// 
         /// GET /umbraco/Merchello/ProductVariantApi/GetByProduct?key={guid}
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Product Key</param>
         public IEnumerable<ProductVariantDisplay> GetByProduct(Guid id)
         {
             if (id != Guid.Empty)
@@ -107,7 +107,7 @@ namespace Merchello.Web.Editors
         /// 
         /// GET /umbraco/Merchello/ProductVariantApi/GetProductVariants?ids={int}&ids={int}
         /// </summary>
-        /// <param name="ids"></param>
+        /// <param name="ids">Product Variant Keys</param>
         public IEnumerable<ProductVariantDisplay> GetProductVariants([FromUri]IEnumerable<Guid> ids)
         {
             if (ids != null)
@@ -139,7 +139,7 @@ namespace Merchello.Web.Editors
         /// 
         ///  POST /umbraco/Merchello/ProductVariantApi/NewProductVariant
         ///  </summary>
-        /// <param name="productVariant"></param>
+        /// <param name="productVariant">Product variant object serialized from JSON</param>
         [AcceptVerbs("GET", "POST")]
         public ProductVariantDisplay NewProductVariant(ProductVariantDisplay productVariant)
         {
@@ -206,7 +206,7 @@ namespace Merchello.Web.Editors
         ///
         /// DELETE /umbraco/Merchello/ProductVariantApi/{key}
         /// </summary>
-        /// <param name="key"></param>
+        /// <param name="key">Product Variant key</param>
         public HttpResponseMessage Delete(Guid key)
         {
             var productVariantToDelete = _productVariantService.GetByKey(key);
