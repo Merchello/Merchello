@@ -95,6 +95,8 @@
     <Compile Include="Models\CustomerBase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\EntityBase\ICustomEntity.cs" />
+    <Compile Include="Models\EntityBase\IEntityBase.cs" />
     <Compile Include="Models\ExtendedDataCollection.cs">
       <SubType>Code</SubType>
     </Compile>

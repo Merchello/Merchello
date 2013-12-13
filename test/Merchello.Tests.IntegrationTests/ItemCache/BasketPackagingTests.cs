@@ -1,18 +1,15 @@
-﻿using System.Diagnostics;
-using System.Linq;
+﻿using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Cache;
 using Merchello.Core.Models;
 using Merchello.Core.Persistence.UnitOfWork;
 using Merchello.Core.Services;
-using Merchello.Tests.Base.DataMakers;
 using Merchello.Tests.IntegrationTests.Services;
 using Merchello.Web;
 using Merchello.Web.Models;
 using Merchello.Web.Shipping;
 using NUnit.Framework;
 using Umbraco.Core;
-using Umbraco.Web.Editors;
 
 namespace Merchello.Tests.IntegrationTests.ItemCache
 {
@@ -76,7 +73,7 @@ namespace Merchello.Tests.IntegrationTests.ItemCache
             };
             
             //// Act
-            var strategy = new BasketPackagingStrategy(_merchelloContext, _basket, destination);
+            var strategy = new DefaultWarehousePackagingStrategy(_merchelloContext, _basket, destination);
             var shipments = strategy.PackageShipments();
 
             //// Assert
