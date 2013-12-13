@@ -69,14 +69,14 @@ namespace Merchello.Tests.IntegrationTests.Examine
             //// Act
             var product = MockProductDataMaker.MockProductCollectionForInserting(1).First();
             product.ProductOptions.Add(new ProductOption("Color"));
-            product.ProductOptions["Color"].Choices.Add(new ProductAttribute("Blue", "Blue"));
-            product.ProductOptions["Color"].Choices.Add(new ProductAttribute("Red", "Red"));
-            product.ProductOptions["Color"].Choices.Add(new ProductAttribute("Green", "Green"));
+            product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Blue", "Blue"));
+            product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Red", "Red"));
+            product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Green", "Green"));
             product.ProductOptions.Add(new ProductOption("Size"));
-            product.ProductOptions["Size"].Choices.Add(new ProductAttribute("Small", "Sm"));
-            product.ProductOptions["Size"].Choices.Add(new ProductAttribute("Medium", "Med"));
-            product.ProductOptions["Size"].Choices.Add(new ProductAttribute("Large", "Lg"));
-            product.ProductOptions["Size"].Choices.Add(new ProductAttribute("X-Large", "XL"));
+            product.ProductOptions.First(x => x.Name == "Size").Choices.Add(new ProductAttribute("Small", "Sm"));
+            product.ProductOptions.First(x => x.Name == "Size").Choices.Add(new ProductAttribute("Medium", "Med"));
+            product.ProductOptions.First(x => x.Name == "Size").Choices.Add(new ProductAttribute("Large", "Lg"));
+            product.ProductOptions.First(x => x.Name == "Size").Choices.Add(new ProductAttribute("X-Large", "XL"));
             product.Height = 11M;
             product.Width = 11M;
             product.Length = 11M;
@@ -88,8 +88,8 @@ namespace Merchello.Tests.IntegrationTests.Examine
 
             var attributes = new ProductAttributeCollection()
             {
-                product.ProductOptions["Color"].Choices.First(x => x.Sku == "Blue" ),
-                product.ProductOptions["Size"].Choices.First(x => x.Sku == "XL")
+                product.ProductOptions.First(x => x.Name == "Color").Choices.First(x => x.Sku == "Blue" ),
+                product.ProductOptions.First(x => x.Name == "Size").Choices.First(x => x.Sku == "XL")
             };
 
             productVariantService.CreateProductVariantWithKey(product, attributes);

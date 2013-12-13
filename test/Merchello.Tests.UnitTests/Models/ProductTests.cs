@@ -79,7 +79,7 @@ namespace Merchello.Tests.UnitTests.Models
             var expected = new ProductVariant(Guid.NewGuid(), attCollection, new WarehouseInventoryCollection(), false,
                 "Variant", "variant", 5M);
             _product.ProductOptions.Add(new ProductOption("Option1") { Key = Guid.NewGuid() });
-            _product.ProductOptions["Option1"].Choices.Add(att);
+            _product.ProductOptions.First(x => x.Name == "Option1").Choices.Add(att);
             _product.ProductVariants.Add(expected);
 
             //// Act
@@ -104,7 +104,7 @@ namespace Merchello.Tests.UnitTests.Models
             var expected = new ProductVariant(Guid.NewGuid(), attCollection, new WarehouseInventoryCollection(), false,
                 "Variant", "variant", 5M);
             _product.ProductOptions.Add(new ProductOption("Option1") { Key = Guid.NewGuid() });
-            _product.ProductOptions["Option1"].Choices.Add(att);
+            _product.ProductOptions.First(x => x.Name == "Option1").Choices.Add(att);
             _product.ProductVariants.Add(expected);
 
             //// Act
@@ -125,7 +125,7 @@ namespace Merchello.Tests.UnitTests.Models
             var expected = new ProductVariant(Guid.NewGuid(), attCollection, new WarehouseInventoryCollection(), false,
                 "Variant", "variant", 5M);
             _product.ProductOptions.Add(new ProductOption("Option1") { Key = Guid.NewGuid() });
-            _product.ProductOptions["Option1"].Choices.Add(att);
+            _product.ProductOptions.First(x => x.Name == "Option1").Choices.Add(att);
             _product.ProductVariants.Add(expected);
 
             //// Act

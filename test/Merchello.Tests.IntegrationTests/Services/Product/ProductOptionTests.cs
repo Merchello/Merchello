@@ -101,11 +101,11 @@ namespace Merchello.Tests.IntegrationTests.Services.Product
             product.ProductOptions.Add(new ProductOption("Color"));
             
             //// Act
-            product.ProductOptions["Color"].Choices.Add(new ProductAttribute("Black", "Black"));
-            product.ProductOptions["Color"].Choices.Add(new ProductAttribute("Black", "Blue"));
+            product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Black", "Black"));
+            product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Black", "Blue"));
 
             //// Assert
-            Assert.IsTrue(product.ProductOptions["Color"].Choices.Any());
+            Assert.IsTrue(product.ProductOptions.First(x => x.Name == "Color").Choices.Any());
         }
 
         /// <summary>
@@ -119,12 +119,12 @@ namespace Merchello.Tests.IntegrationTests.Services.Product
             product.ProductOptions.Add(new ProductOption("Color"));
 
             //// Act
-            product.ProductOptions["Color"].Choices.Add(new ProductAttribute("Black", "Black"));
-            product.ProductOptions["Color"].Choices.Add(new ProductAttribute("Black", "Blue"));
+            product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Black", "Black"));
+            product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Black", "Blue"));
             _productService.Save(product);
 
             //// Assert
-            Assert.IsTrue(product.ProductOptions["Color"].Choices.Any());   
+            Assert.IsTrue(product.ProductOptions.First(x => x.Name == "Color").Choices.Any());   
         }
 
         /// <summary>
@@ -136,19 +136,19 @@ namespace Merchello.Tests.IntegrationTests.Services.Product
             //// Arrange
             var product = PreTestDataWorker.MakeExistingProduct();
             product.ProductOptions.Add(new ProductOption("Color"));
-            product.ProductOptions["Color"].Choices.Add(new ProductAttribute("Black", "Black"));
-            product.ProductOptions["Color"].Choices.Add(new ProductAttribute("Blue", "Blue"));
+            product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Black", "Black"));
+            product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Blue", "Blue"));
             var removeChoice = new ProductAttribute("Grey", "Grey");
-            product.ProductOptions["Color"].Choices.Add(removeChoice);
-            product.ProductOptions["Color"].Choices.Add(new ProductAttribute("Green", "Green"));
+            product.ProductOptions.First(x => x.Name == "Color").Choices.Add(removeChoice);
+            product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Green", "Green"));
             _productService.Save(product);
 
             //// Act
-            product.ProductOptions["Color"].Choices.Remove(removeChoice);
+            product.ProductOptions.First(x => x.Name == "Color").Choices.Remove(removeChoice);
             _productService.Save(product);
            
             //// Assert
-            Assert.IsTrue(product.ProductOptions["Color"].Choices.Count == 3);   
+            Assert.IsTrue(product.ProductOptions.First(x => x.Name == "Color").Choices.Count == 3);   
             
         }
        

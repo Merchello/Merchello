@@ -40,7 +40,7 @@ namespace Merchello.Web.Models.ContentEditing
                 IProductOption destinationProductOption;
                 if (destination.ProductOptions.Contains(option.Name))
                 {
-                    destinationProductOption = destination.ProductOptions[option.Name];
+                    destinationProductOption = destination.ProductOptions[option.Key];
 
                     destinationProductOption = option.ToProductOption(destinationProductOption);
                 }

@@ -28,15 +28,15 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
 
             _product = PreTestDataWorker.MakeExistingProduct();
             _product.ProductOptions.Add(new ProductOption("Color"));
-            _product.ProductOptions["Color"].Choices.Add(new ProductAttribute("Black", "Blk"));
-            _product.ProductOptions["Color"].Choices.Add(new ProductAttribute("Blue", "Blu"));
-            _product.ProductOptions["Color"].Choices.Add(new ProductAttribute("Red", "Red"));
-            _product.ProductOptions["Color"].Choices.Add(new ProductAttribute("Green", "Gre"));
+            _product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Black", "Blk"));
+            _product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Blue", "Blu"));
+            _product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Red", "Red"));
+            _product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Green", "Gre"));
             _product.ProductOptions.Add(new ProductOption("Size"));
-            _product.ProductOptions["Size"].Choices.Add(new ProductAttribute("Small", "Sm"));
-            _product.ProductOptions["Size"].Choices.Add(new ProductAttribute("Medium", "M"));
-            _product.ProductOptions["Size"].Choices.Add(new ProductAttribute("Large", "Lg"));
-            _product.ProductOptions["Size"].Choices.Add(new ProductAttribute("X-Large", "XL"));
+            _product.ProductOptions.First(x => x.Name == "Size").Choices.Add(new ProductAttribute("Small", "Sm"));
+            _product.ProductOptions.First(x => x.Name == "Size").Choices.Add(new ProductAttribute("Medium", "M"));
+            _product.ProductOptions.First(x => x.Name == "Size").Choices.Add(new ProductAttribute("Large", "Lg"));
+            _product.ProductOptions.First(x => x.Name == "Size").Choices.Add(new ProductAttribute("X-Large", "XL"));
             _product.Height = 20;
             _product.Weight = 20;
             _product.Length = 20;
@@ -55,8 +55,8 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
             //// Arrange
             var attributes = new ProductAttributeCollection
             {
-                _product.ProductOptions["Color"].Choices.First(x => x.Sku == "Blk"),
-                _product.ProductOptions["Size"].Choices.First(x => x.Sku == "Lg" )
+                _product.ProductOptions.First(x => x.Name == "Color").Choices.First(x => x.Sku == "Blk"),
+                _product.ProductOptions.First(x => x.Name == "Size").Choices.First(x => x.Sku == "Lg" )
             };
 
             //// Act
@@ -76,8 +76,8 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
             //// Arrange
             var attributes = new ProductAttributeCollection
             {
-                _product.ProductOptions["Color"].Choices.First(x => x.Sku == "Blk"),
-                _product.ProductOptions["Size"].Choices.First(x => x.Sku == "Lg" )
+                _product.ProductOptions.First(x => x.Name == "Color").Choices.First(x => x.Sku == "Blk"),
+                _product.ProductOptions.First(x => x.Name == "Size").Choices.First(x => x.Sku == "Lg" )
             };
             var variant = _productVariantService.CreateProductVariantWithKey(_product, attributes);
 
@@ -97,8 +97,8 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
             //// Arrange
             var attributes = new ProductAttributeCollection
             {
-                _product.ProductOptions["Color"].Choices.First(x => x.Sku == "Blk"),
-                _product.ProductOptions["Size"].Choices.First(x => x.Sku == "Lg" )
+                _product.ProductOptions.First(x => x.Name == "Color").Choices.First(x => x.Sku == "Blk"),
+                _product.ProductOptions.First(x => x.Name == "Size").Choices.First(x => x.Sku == "Lg" )
             };
             var expected = _productVariantService.CreateProductVariantWithKey(_product, attributes);
             var id = expected.Key;
@@ -121,13 +121,13 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
             //// Arrange
             var attributes1 = new ProductAttributeCollection
             {
-                _product.ProductOptions["Color"].Choices.First(x => x.Sku == "Blk"),
-                _product.ProductOptions["Size"].Choices.First(x => x.Sku == "Lg" )
+                _product.ProductOptions.First(x => x.Name == "Color").Choices.First(x => x.Sku == "Blk"),
+                _product.ProductOptions.First(x => x.Name == "Size").Choices.First(x => x.Sku == "Lg" )
             };
             var attributes2 = new ProductAttributeCollection
             {
-                _product.ProductOptions["Color"].Choices.First(x => x.Sku == "Blk"),
-                _product.ProductOptions["Size"].Choices.First(x => x.Sku == "XL" )
+                _product.ProductOptions.First(x => x.Name == "Color").Choices.First(x => x.Sku == "Blk"),
+                _product.ProductOptions.First(x => x.Name == "Size").Choices.First(x => x.Sku == "XL" )
             };
             _productVariantService.CreateProductVariantWithKey(_product, attributes1);
             _productVariantService.CreateProductVariantWithKey(_product, attributes2);
@@ -152,8 +152,8 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
             //// Arrange
             var attributes = new ProductAttributeCollection
             {
-               _product.ProductOptions["Color"].Choices.First(x => x.Sku == "Blk"),
-                _product.ProductOptions["Size"].Choices.First(x => x.Sku == "Lg" )
+               _product.ProductOptions.First(x => x.Name == "Color").Choices.First(x => x.Sku == "Blk"),
+                _product.ProductOptions.First(x => x.Name == "Size").Choices.First(x => x.Sku == "Lg" )
             };
             var variant = _productVariantService.CreateProductVariantWithKey(_product, attributes);
             var key = variant.Key;
@@ -177,15 +177,15 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
             //// Arrange
             var attributes = new ProductAttributeCollection
             {
-                _product.ProductOptions["Color"].Choices.First(x => x.Sku == "Blk"),
-                _product.ProductOptions["Size"].Choices.First(x => x.Sku == "Lg" )
+                _product.ProductOptions.First(x => x.Name == "Color").Choices.First(x => x.Sku == "Blk"),
+                _product.ProductOptions.First(x => x.Name == "Size").Choices.First(x => x.Sku == "Lg" )
             };
             _productVariantService.CreateProductVariantWithKey(_product, attributes);
             
             Assert.IsTrue(_product.ProductVariants.Any());
 
             //// Act
-            _product.ProductOptions.Remove("Size");
+            _product.ProductOptions.Remove(_product.ProductOptions.First(x => x.Name == "Size"));
             _productService.Save(_product);
 
             //// Assert
@@ -201,15 +201,15 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
             //// Arrange
             var attributes = new ProductAttributeCollection
             {
-                _product.ProductOptions["Color"].Choices.First(x => x.Sku == "Blk"),
-                _product.ProductOptions["Size"].Choices.First(x => x.Sku == "Lg")
+                _product.ProductOptions.First(x => x.Name == "Color").Choices.First(x => x.Sku == "Blk"),
+                _product.ProductOptions.First(x => x.Name == "Size").Choices.First(x => x.Sku == "Lg")
             };
             _productVariantService.CreateProductVariantWithKey(_product, attributes);
 
             Assert.IsTrue(_product.ProductVariants.Any());
 
             //// Act
-            _product.ProductOptions["Size"].Choices.Remove(_product.ProductOptions["Size"].Choices.First(x => x.Sku == "Lg"));
+            _product.ProductOptions.First(x => x.Name == "Size").Choices.Remove(_product.ProductOptions.First(x => x.Name == "Size").Choices.First(x => x.Sku == "Lg"));
             _productService.Save(_product);
 
             //// Assert
@@ -225,8 +225,8 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
             //// Arrange
             var attributes = new ProductAttributeCollection
             {
-                _product.ProductOptions["Color"].Choices.First(x => x.Sku == "Blk"),
-                _product.ProductOptions["Size"].Choices.First(x => x.Sku == "Lg")
+                _product.ProductOptions.First(x => x.Name == "Color").Choices.First(x => x.Sku == "Blk"),
+                _product.ProductOptions.First(x => x.Name == "Size").Choices.First(x => x.Sku == "Lg")
             };
             _productVariantService.CreateProductVariantWithKey(_product, attributes);
             
