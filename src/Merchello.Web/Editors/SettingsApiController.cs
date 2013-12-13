@@ -103,5 +103,31 @@ namespace Merchello.Web.Editors
                 yield return country.ToCountryDisplay();
             }
         }
+
+        /// <summary>
+        /// Returns All Tax Provinces
+        /// 
+        /// GET /umbraco/Merchello/SettingsApi/GetAllTaxProvinces
+        /// </summary>
+        public IEnumerable<TaxProvinceDisplay> GetAllTaxProvinces()
+        {
+            // TODO: replace with call to service
+            var taxProvinces = new List<TaxProvince>();
+
+            var oregon = new TaxProvince("OR", "Oregon");
+            oregon.PercentAdjustment = 0.01M;
+            taxProvinces.Add(oregon);
+
+            var washington = new TaxProvince("WA", "Washington");
+            washington.PercentAdjustment = 0.09M;
+            taxProvinces.Add(washington);
+
+            // END TEST DATA
+
+            foreach (TaxProvince taxProvince in taxProvinces)
+            {
+                yield return taxProvince.ToTaxProvinceDisplay();
+            }
+        }
     }
 }

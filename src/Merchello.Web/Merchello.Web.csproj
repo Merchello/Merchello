@@ -251,6 +251,7 @@
     <Compile Include="Models\ContentEditing\ShipGatewayProviderDisplay.cs" />
     <Compile Include="Models\ContentEditing\ShipMethodDisplay.cs" />
     <Compile Include="Models\ContentEditing\ShipProvinceDisplay.cs" />
+    <Compile Include="Models\ContentEditing\TaxProvinceDisplay.cs" />
     <Compile Include="Models\ContentEditing\WarehouseDisplay.cs" />
     <Compile Include="Models\ContentEditing\WarehouseInventoryDisplay.cs" />
     <Compile Include="Models\IShipRateTable.cs" />
