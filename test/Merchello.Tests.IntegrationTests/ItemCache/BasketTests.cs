@@ -4,6 +4,7 @@ using Merchello.Core.Models;
 using Merchello.Core.Persistence.UnitOfWork;
 using Merchello.Core.Services;
 using Merchello.Tests.IntegrationTests.Services;
+using Merchello.Web;
 using Merchello.Web.Models;
 using NUnit.Framework;
 using Umbraco.Core;

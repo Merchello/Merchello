@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using Merchello.Core.Models;
-using Merchello.Web.Models;
 
-namespace Merchello.Web.Gateways.Shipping
+namespace Merchello.Web.Shipping
 {
     public interface IFlatRateShippingProvider : IShippingGatewayProvider
     {

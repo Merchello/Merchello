@@ -5,8 +5,9 @@ using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Web.Cache;
+using Umbraco.Core;
 
-namespace Merchello.Web.Models
+namespace Merchello.Web.Shipping
 {
     public class ShipRateTable : IShipRateTable
     {
@@ -72,7 +73,12 @@ namespace Merchello.Web.Models
         /// </remarks>
         public void AddRow(decimal rangeLow, decimal rangeHigh, decimal rate)
         {
-            throw new NotImplementedException();
+            AddRow(new ShipRateTier(_shipMethodKey)
+                    {
+                        RangeLow = rangeLow,
+                        RangeHigh = rangeHigh,
+                        Rate = rate
+                    });
         }
 
         /// <summary>
@@ -84,7 +90,64 @@ namespace Merchello.Web.Models
         /// </remarks>
         internal void AddRow(IShipRateTier shipRateTier)
         {
-            throw new System.NotImplementedException();
+            if (!ValidateRateTier(ref shipRateTier)) return;
+                        
+            // TODO : Refactor this validation
+            if (!Rows.Any())
+            {
+                shipRateTier.RangeLow = 0;
+                _shipRateTiers.Add(shipRateTier);
+            }
+            else
+            {
+                // confirm there is not already a matching tier
+                if(Rows.FirstOrDefault(x => x.RangeLow == shipRateTier.RangeLow && x.RangeHigh == shipRateTier.RangeHigh) != null) return;
+                
+                // find the insertion point
+                var index = Rows.IndexOf(Rows.Where(y => y.RangeHigh >= shipRateTier.RangeLow).OrderBy(z => z.RangeLow).FirstOrDefault());
+                if (index < 0)
+                {
+                    shipRateTier.RangeLow = Rows.Last().RangeHigh;
+                    AddRow(shipRateTier);
+                    return;
+                }
+
+                // not found or at the end of the table
+                if (index < 0 || index == Rows.IndexOf(Rows.Last()))
+                {
+                    shipRateTier.RangeLow = Rows.Last().RangeHigh;
+                    if (shipRateTier.RangeHigh <= shipRateTier.RangeLow) return;
+                    _shipRateTiers.Add(shipRateTier);
+                }
+                else // insert in the middle of the table
+                {
+                    // verify that inserting this tier will not create a span encapsulating another tier
+                    if (shipRateTier.RangeHigh >= _shipRateTiers[index + 1].RangeHigh) return;
+                    if (shipRateTier.RangeLow <= _shipRateTiers[index].RangeLow) return;
+
+                    // match the range low to range high in the following tier
+                    _shipRateTiers[index + 1].RangeLow = shipRateTier.RangeHigh;
+
+                    // verify that the high value at the current index is equal to the low value of the tier to be insert
+                    _shipRateTiers[index].RangeHigh = shipRateTier.RangeLow;
+
+                    _shipRateTiers.Insert(index + 1, shipRateTier);
+
+                }
+            }
+ 
+        }
+
+        private static bool ValidateRateTier(ref IShipRateTier shipRateTier)
+        {
+            if (shipRateTier.RangeLow < 0 || shipRateTier.RangeHigh < 0) return false;
+            if (shipRateTier.RangeLow == shipRateTier.RangeHigh) return false;
+            if (shipRateTier.RangeHigh > shipRateTier.RangeLow) return true;
+
+            var temp = shipRateTier.RangeLow;
+            shipRateTier.RangeLow = shipRateTier.RangeHigh;
+            shipRateTier.RangeHigh = temp;
+            return true;
         }
 
         /// <summary>

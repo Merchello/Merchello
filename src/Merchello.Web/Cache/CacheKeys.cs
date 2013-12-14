@@ -1,6 +1,7 @@
 ﻿using System;
 using Merchello.Core.Models;
 using Merchello.Web.Models;
+using Merchello.Web.Shipping;
 
 namespace Merchello.Web.Cache
 {

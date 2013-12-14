@@ -239,9 +239,9 @@
     <Compile Include="Editors\SettingsApiController.cs" />
     <Compile Include="Editors\ShippingMethodsApiController.cs" />
     <Compile Include="Editors\WarehouseApiController.cs" />
-    <Compile Include="Gateways\Shipping\IShippingGatewayProvider.cs" />
-    <Compile Include="Gateways\Shipping\IFlatRateShippingProvider.cs" />
-    <Compile Include="Gateways\Shipping\ShippingGatewayProviderBase.cs" />
+    <Compile Include="Shipping\IShippingGatewayProvider.cs" />
+    <Compile Include="Shipping\IFlatRateShippingProvider.cs" />
+    <Compile Include="Shipping\ShippingGatewayProviderBase.cs" />
     <Compile Include="Models\ContentEditing\FullfillmentMappingExtensions.cs" />
     <Compile Include="Models\ContentEditing\ProductMappingExtensions.cs" />
     <Compile Include="Models\ContentEditing\CountryDisplay.cs" />
@@ -254,8 +254,8 @@
     <Compile Include="Models\ContentEditing\TaxProvinceDisplay.cs" />
     <Compile Include="Models\ContentEditing\WarehouseDisplay.cs" />
     <Compile Include="Models\ContentEditing\WarehouseInventoryDisplay.cs" />
-    <Compile Include="Models\IShipRateTable.cs" />
-    <Compile Include="Models\ShipRateTable.cs" />
+    <Compile Include="Shipping\IShipRateTable.cs" />
+    <Compile Include="Shipping\ShipRateTable.cs" />
     <Compile Include="ProductQuery.cs" />
     <Compile Include="CustomerExtensions.cs" />
     <Compile Include="Editors\CustomerApiController.cs" />
@@ -264,14 +264,14 @@
     <Compile Include="EncryptionHelper.cs" />
     <Compile Include="MerchelloHelper.cs" />
     <Compile Include="CustomerContext.cs" />
-    <Compile Include="Models\Basket.cs" />
+    <Compile Include="Basket.cs" />
     <Compile Include="Models\ContentEditing\ExamineDisplayExtensions.cs" />
     <Compile Include="Models\ContentEditing\ProductAttributeDisplay.cs" />
     <Compile Include="Models\ContentEditing\ProductDisplay.cs" />
     <Compile Include="Models\ContentEditing\ProductDisplayBase.cs" />
     <Compile Include="Models\ContentEditing\ProductOptionDisplay.cs" />
     <Compile Include="Models\ContentEditing\ProductVariantDisplay.cs" />
-    <Compile Include="Models\IBasket.cs" />
+    <Compile Include="IBasket.cs" />
     <Compile Include="Mvc\MerchelloTemplatePage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyVisibility.cs" />
@@ -286,6 +286,7 @@
     <Compile Include="WebBootManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Gateways\" />
     <Folder Include="Vistors\Basket\" />
   </ItemGroup>
   <ItemGroup>
