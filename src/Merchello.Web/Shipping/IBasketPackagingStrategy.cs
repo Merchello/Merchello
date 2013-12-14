@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using Merchello.Core.Models;
-using Merchello.Core.Strategies.Shipping;
+﻿using Merchello.Core.Strategies.Shipping;
 
 namespace Merchello.Web.Shipping
 {

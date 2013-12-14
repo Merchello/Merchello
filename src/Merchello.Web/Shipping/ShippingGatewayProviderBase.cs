@@ -2,7 +2,7 @@
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 
-namespace Merchello.Web.Gateways.Shipping
+namespace Merchello.Web.Shipping
 {
     public class ShippingGatewayProviderBase : GatewayProviderBase, IShippingGatewayProvider
     {

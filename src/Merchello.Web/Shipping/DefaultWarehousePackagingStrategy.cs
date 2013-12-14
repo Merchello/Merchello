@@ -4,7 +4,6 @@ using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Web.Models;
-using Umbraco.Core;
 
 namespace Merchello.Web.Shipping
 {

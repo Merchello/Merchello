@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Linq;
-using log4net.Repository.Hierarchy;
 using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Core.Models.TypeFields;
 using Merchello.Web.Cache;
+using Merchello.Web.Models;
 using Umbraco.Core.Logging;
 
-namespace Merchello.Web.Models
+namespace Merchello.Web
 {
     public class Basket : IBasket
     {
