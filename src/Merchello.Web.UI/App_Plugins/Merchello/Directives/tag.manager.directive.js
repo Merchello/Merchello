@@ -24,8 +24,11 @@
 
                 // This adds the new tag to the tags array
                 $scope.add = function () {
-                    $scope.option.addChoice($scope.new_value)
-                    $scope.new_value = "";
+                    if ($scope.new_value.length > 0)
+                    {
+                        $scope.option.addChoice($scope.new_value)
+                        $scope.new_value = "";
+                    }
                 };
 
                 // This is the ng-click handler to remove an item

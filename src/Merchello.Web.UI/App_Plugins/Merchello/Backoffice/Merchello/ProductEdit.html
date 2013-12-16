@@ -1,15 +1,18 @@
-﻿<div 
-    ng-controller="Merchello.Editors.Product.EditController"
-    ng-show="loaded">
+﻿<form novalidate name="productForm" 
+    data-ng-controller="Merchello.Editors.Product.EditController"
+    data-ng-show="loaded"
+    data-ng-submit="save()">
 
-    <umb-panel>
+
+    <umb-panel val-show-validation>
 
         <umb-header>
 
             <div class="span4">
-                <div class="umb-headline-editor-wrapper">
-                     <h1 class="umb-headline">{{product.name}}</h1>
-                </div>
+                <umb-content-name 
+                    ng-model="product.name" 
+                    placeholder="Enter a product name">
+                </umb-content-name>
             </div>
 
 
@@ -17,6 +20,7 @@
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
                     <div class="btn-group">
                         <a class="btn btn-success">Add a Variant</a>
+                        <a data-ng-disabled="productForm.$invalid" data-ng-click="save(productForm)" class="btn btn-success">Save</a>
                     </div>
                 </div>
             </div>
@@ -164,7 +168,7 @@
 
                                     <tr data-ng-hide="allVariants">
                                         <th><input type="checkbox" data-ng-model="allVariants" data-ng-click="toggleAllVariants()" /></th> <!-- Swaps out the current TR with headings in it for the bulk action TR -->
-                                        <th data-ng-repeat="option in product.productOptions"
+                                        <th data-ng-repeat="option in product.productOptions | orderBy:'sortOrder'"
                                             data-ng-click="changeSortOrder(option.name)" data-ng-class="{'sorted': sortProperty == option.name}">
                                             <i data-ng-class="{'icon-navigation-up': sortProperty == option.name, 'icon-navigation-down': sortProperty != option.name}"></i>
                                             {{option.name}}
@@ -181,7 +185,7 @@
                                             <i data-ng-class="{'icon-navigation-up': sortProperty == 'totalInventoryCount', 'icon-navigation-down': sortProperty != 'totalInventoryCount'}"></i> 
                                             Total Qty
                                         </th>
-                                        <th><a>edit</a></th>
+                                        <th>Edit</th>
                                     </tr>
                                     <!-- Displays the bulk action button & dropdown menu when the checkbox is selected. Replaces the normal header TR -->
                                     <tr data-ng-show="allVariants">
@@ -207,7 +211,7 @@
                                         data-ng-click="toggleAVariant(variant)"
                                     >
                                         <td><input type="checkbox" data-ng-model="variant.selected" data-ng-change="checkBulkVariantsSelected()" /></td>
-                                        <td data-ng-repeat="attribute in variant.attributes">{{attribute.name}}</td>
+                                        <td data-ng-repeat="attribute in variant.attributes | orderBy:'sortOrder'">{{attribute.name}}</td>
                                         <td>{{variant.sku}}</td>
                                         <td>{{variant.price}}</td>
                                         <td>{{variant.totalInventoryCount}}</td>
@@ -271,7 +275,7 @@
 
                             <div>
                                 <a data-ng-click="addOption()" class="btn add">Add Another Option</a>
-                                <a data-ng-click="updateVariants(productVariantForm)" class="btn btn-primary add">Update</a>
+                                <a data-ng-click="updateVariants(productForm)" class="btn btn-primary add">Update</a>
                             </div>
 
                         </div>
@@ -300,4 +304,4 @@
         </div>
 
     </umb-panel>
-</div>
+</form>
