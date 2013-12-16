@@ -41,31 +41,32 @@ namespace Merchello.Core.Persistence.Migrations.Initial
                 //{8, typeof(WarehouseCountryDto)},
                 {9, typeof(ShipCountryDto)},
                 {10, typeof(ShipMethodDto)},
+                {11, typeof(GatewayProvider2ShipCountryDto)},
                 
-                {11, typeof(ShipRateTierDto)},
+                {12, typeof(ShipRateTierDto)},
                 
-                {12, typeof(OrderStatusDto)},
-                {13, typeof(OrderDto)}, 
-                {14, typeof(InvoiceStatusDto)},                
-                {15, typeof(InvoiceDto)},                   
-                {16, typeof(InvoiceItemDto)},
-                {17, typeof(ShipmentDto)},                 
-                {18, typeof(OrderItemDto)},
+                {13, typeof(OrderStatusDto)},
+                {14, typeof(OrderDto)}, 
+                {15, typeof(InvoiceStatusDto)},                
+                {16, typeof(InvoiceDto)},                   
+                {17, typeof(InvoiceItemDto)},
+                {18, typeof(ShipmentDto)},                 
+                {19, typeof(OrderItemDto)},
     
-                {19, typeof(PaymentDto)},                
-                {20, typeof(TransactionDto)},
-                {21, typeof(ProductDto)},
-                {22, typeof(ProductVariantDto)},
-                {23, typeof(ProductOptionDto)},
-                {24, typeof(ProductAttributeDto)},
-                {25, typeof(Product2ProductOptionDto)},
+                {20, typeof(PaymentDto)},                
+                {21, typeof(TransactionDto)},
+                {22, typeof(ProductDto)},
+                {23, typeof(ProductVariantDto)},
+                {24, typeof(ProductOptionDto)},
+                {25, typeof(ProductAttributeDto)},
+                {26, typeof(Product2ProductOptionDto)},
                 //{26, typeof(WarehouseInventoryDto)},
-                {26, typeof(CatalogInventoryDto)},
-                {27, typeof(TaxRegionDto)},
-                {28, typeof(ProductVariant2ProductAttributeDto)},
+                {27, typeof(CatalogInventoryDto)},
+                {28, typeof(TaxRegionDto)},
+                {29, typeof(ProductVariant2ProductAttributeDto)},
            
-                {29, typeof(AppliedPaymentDto)},
-                {30, typeof(ProductVariantIndexDto)}
+                {30, typeof(AppliedPaymentDto)},
+                {31, typeof(ProductVariantIndexDto)}
             };
 
         #endregion
