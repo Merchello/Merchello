@@ -15,12 +15,6 @@ namespace Merchello.Core.Models
         /// </summary>
         [DataMember]
         string Name { get; set;}
-        
-        /// <summary>
-        /// The key (guid) associated with the Warehouse Country that offers this ship method
-        /// </summary>
-        [DataMember]
-        Guid WarehouseCountryKey { get; set; }
 
         /// <summary>
         /// The key associated with the gateway provider for the Ship Method

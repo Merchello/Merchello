@@ -2,7 +2,6 @@
 using System.Collections.Specialized;
 using System.Reflection;
 using System.Runtime.Serialization;
-using Merchello.Core.Configuration.Outline;
 using Merchello.Core.Models.EntityBase;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Models.TypeFields;
@@ -15,7 +14,6 @@ namespace Merchello.Core.Models
     internal class ShipMethod : Entity, IShipMethod
     {
         private string _name;
-        private Guid _warehouseCountryKey;
         private Guid _providerKey;
         private Guid _shipMethodTfKey;
         private decimal _surcharge;
@@ -23,7 +21,6 @@ namespace Merchello.Core.Models
         private ProvinceCollection<IShipProvince> _provinces;
 
         private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<ShipMethod, string>(x => x.Name);
-        private static readonly PropertyInfo WarehouseCountryKeySelector = ExpressionHelper.GetPropertyInfo<ShipMethod, Guid>(x => x.WarehouseCountryKey);  
         private static readonly PropertyInfo ProviderKeySelector = ExpressionHelper.GetPropertyInfo<ShipMethod, Guid>(x => x.ProviderKey);  
         private static readonly PropertyInfo ShipMethodTypeFieldKeySelector = ExpressionHelper.GetPropertyInfo<ShipMethod, Guid>(x => x.ShipMethodTfKey);  
         private static readonly PropertyInfo SurchargeSelector = ExpressionHelper.GetPropertyInfo<ShipMethod, decimal>(x => x.Surcharge);  
@@ -52,22 +49,6 @@ namespace Merchello.Core.Models
                 }
         }
 
-        /// <summary>
-        /// The key (guid) associated with the Warehouse Country that offers this ship method
-        /// </summary>
-        [DataMember]
-        public Guid WarehouseCountryKey
-        {
-            get { return _warehouseCountryKey; }
-            set
-            {
-                SetPropertyValueAndDetectChanges(o =>
-                {
-                    _warehouseCountryKey = value;
-                    return _warehouseCountryKey;
-                }, _warehouseCountryKey, WarehouseCountryKeySelector);
-            }
-        }
 
         /// <summary>
         /// The provider key associated with the ship method

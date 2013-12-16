@@ -248,6 +248,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\ProvinceCollection.cs" />
+    <Compile Include="Models\Rdbms\GatewayProvider2ShipCountryDto.cs" />
     <Compile Include="Models\Rdbms\ShipCountryDto.cs" />
     <Compile Include="Models\Rdbms\CatalogInventoryDto.cs" />
     <Compile Include="Models\Rdbms\ProductVariantIndexDto.cs" />
