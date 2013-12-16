@@ -189,10 +189,9 @@
                                     </tr>
                                     <!-- Displays the bulk action button & dropdown menu when the checkbox is selected. Replaces the normal header TR -->
                                     <tr data-ng-show="allVariants">
-                                        <th><input type="checkbox" data-ng-model="allVariants" /></th>
-                                        <th colspan="{{product.productOptions.length + 4}}">
+                                        <th colspan="{{product.productOptions.length + 5}}">
                                             <div class="btn-group" data-ng-class="{ 'open': bulkAction }">
-                                                <a data-ng-click="bulkAction = !bulkAction" class="btn dropdown-toggle" data-toggle="dropdown">Bulk Action (3 Variants) <i class="icon-navigation-down"></i></a>
+                                                <a data-ng-click="bulkAction = !bulkAction" class="btn dropdown-toggle" data-toggle="dropdown">Bulk Action ({{selectedVariants().length}} Variants) <i class="icon-navigation-down"></i></a>
                                                 <ul class="dropdown-menu">
                                                     <li><a data-ng-click="changePricesFlyout.open()">Change prices</a></li>
                                                     <li><a data-ng-click="updateInventoryFlyout.open()">Update inventory</a></li>

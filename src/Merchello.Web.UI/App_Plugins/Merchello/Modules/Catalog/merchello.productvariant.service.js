@@ -31,15 +31,36 @@
                    'Failed to retreive data for product variant id ' + id);
             },
 
-            getByProduct: function (key) {
+            getByProduct: function (productkey) {
 
                 return umbRequestHelper.resourcePromise(
                    $http({
                        url: '/umbraco/Merchello/ProductVariantApi/GetByProduct',
                        method: "GET",
-                       params: { key: key }
+                       params: { key: productkey }
                    }),
-                   'Failed to retreive data for product key ' + key);
+                   'Failed to retreive data for product key ' + productkey);
+            },
+
+            deleteVariant: function (key) {
+
+                return umbRequestHelper.resourcePromise(
+                   $http({
+                       url: '/umbraco/Merchello/ProductVariantApi/' + key,
+                       method: "DELETE"
+                   }),
+                   'Failed to delete variant data for key ' + key);
+            },
+
+            deleteAllByProduct: function (productkey) {
+
+                return umbRequestHelper.resourcePromise(
+                   $http({
+                       url: '/umbraco/Merchello/ProductVariantApi/DeleteAllVariants',
+                       method: "GET",
+                       params: { productkey: productkey }
+                   }),
+                   'Failed to delete variants data for product key ' + productkey);
             },
 
             /** saves or updates a product variant object */

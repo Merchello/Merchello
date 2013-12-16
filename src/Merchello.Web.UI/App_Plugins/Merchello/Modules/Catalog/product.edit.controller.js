@@ -126,14 +126,21 @@
         }
 
         $scope.selectedVariants = function () {
-            return _.filter($scope.product.productVariants, function (v) {
-                return v.selected;
-            });
+            if ($scope.product != undefined)
+            {
+                return _.filter($scope.product.productVariants, function (v) {
+                    return v.selected;
+                });
+            }
+            else
+            {
+                return [];
+            }
         }
 
         $scope.checkBulkVariantsSelected = function() {
             var v = $scope.selectedVariants();
-            if (v.length > 1) {
+            if (v.length >= 1) {
                 $scope.allVariants = true;
             }
             else {
@@ -146,8 +153,10 @@
             $scope.checkBulkVariantsSelected();
         }
 
-        $scope.toggleAllVariants = function () {
-            
+        $scope.toggleAllVariants = function (newstate) {
+            for (var i = 0; i < $scope.product.productVariants.length; i++) {
+                $scope.product.productVariants[i].selected = newstate;
+            }
         }
 
         $scope.selectVariants = function (attributeToSelect) {
@@ -239,6 +248,8 @@
 
         $scope.rebuildAndSaveVariants = function()
         {
+            merchelloProductVariantService.deleteAllByProduct($scope.product.key);
+
             $scope.product = merchelloProductService.createVariantsFromOptions($scope.product);
 
             // Save immediately
@@ -263,6 +274,7 @@
                 {
                     $scope.rebuildAndSaveVariants();
                     $scope.rebuildVariants = false;
+                    $scope.toggleAllVariants(false);
                 }
 
             }, function (reason) {
