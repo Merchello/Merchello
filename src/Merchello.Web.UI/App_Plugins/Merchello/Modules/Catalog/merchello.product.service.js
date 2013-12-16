@@ -6,29 +6,50 @@
         * @name umbraco.resources.MerchelloProductService
         * @description Loads in data for data types
         **/
-    merchelloServices.MerchelloProductService = function ($q, $http, umbDataFormatter, umbRequestHelper) {
+    merchelloServices.MerchelloProductService = function ($q, $http, umbDataFormatter, umbRequestHelper, notificationsService, merchelloProductVariantService) {
 
-        return {
+        var prodservice = {
 
+            possibleProductVariants: [],
+
+            // Builds the possible variants
+            // sets = array or arrays of choices
+            // set = current iteration
+            // permutation = array of variant combinations
+            permute: function (sets, set, permutation) {
+                for (var i = 0; i < sets[set].length; ++i) {
+                    permutation[set] = sets[set][i];
+
+                    if (set < (sets.length - 1)) {
+                        prodservice.permute(sets, set + 1, permutation);
+                    }
+                    else {
+                        prodservice.possibleProductVariants.push(permutation.slice(0));
+                    }
+                }
+            },
+
+            /// Server http requests
+ 
             create: function (productname, sku, price) {
 
                 return umbRequestHelper.resourcePromise(
-                   $http({
-                       url: '/umbraco/Merchello/ProductApi/NewProduct',
-                       method: "POST",
-                       params: { sku: sku, name: productname, price: price }
-                   }),
-                   'Failed to create product sku ' + sku);
+                    $http({
+                        url: '/umbraco/Merchello/ProductApi/NewProduct',
+                        method: "POST",
+                        params: { sku: sku, name: productname, price: price }
+                    }),
+                    'Failed to create product sku ' + sku);
             },
 
             getByKey: function (key) {
 
                 return umbRequestHelper.resourcePromise(
-                   $http({
-                       url: '/umbraco/Merchello/ProductApi/GetProduct/' + key,
-                       method: "GET"
-                   }),
-                   'Failed to retreive data for product key ' + key);
+                    $http({
+                        url: '/umbraco/Merchello/ProductApi/GetProduct/' + key,
+                        method: "GET"
+                    }),
+                    'Failed to retreive data for product key ' + key);
             },
 
             /** saves or updates a product object */
@@ -61,8 +82,141 @@
                     ),
                     'Failed to get filtered products');
 
+            },
+
+            /// Business logic
+            
+            createProduct: function (product, notifyMethodCallback) {  // The notify callback is here until the angular version is revved to 1.2.x+
+
+                var deferred = $q.defer();
+
+                var promiseCreate = prodservice.create(product.name, product.sku, product.price);
+                promiseCreate.then(function (newproduct) {
+                    //deferred.notify("created");
+
+                    product.key = newproduct.key;
+
+                    // Created, now save the initial settings from the model
+                    var promiseSave = prodservice.save(product);
+                    promiseSave.then(function () {
+                        //deferred.notify("saved");
+                        notifyMethodCallback();
+
+                        // Get updated product and options
+                        var promiseProduct = prodservice.getByKey(product.key);
+                        promiseProduct.then(function (dbproduct) {
+
+                            product = new merchello.Models.Product(dbproduct);
+
+                            deferred.resolve(product);
+
+                        }, function (reason) {
+                            deferred.reject(reason);
+                        });
+
+                    }, function (reason) {
+                        deferred.reject(reason);
+                    });
+
+                }, function (reason) {
+                    deferred.reject(reason);
+                });
+
+                return deferred.promise;
+            },
+
+            updateProduct: function (product) {
+
+                var deferred = $q.defer();
+
+                var promise = prodservice.save(product);
+
+                promise.then(function () {
+                    //deferred.notify("saved");
+
+                    // Get updated product and options
+                    var promiseProduct = prodservice.getByKey(product.key);
+                    promiseProduct.then(function (dbproduct) {
+
+                        product = new merchello.Models.Product(dbproduct);
+
+                        deferred.resolve(product);
+
+                    }, function (reason) {
+                        deferred.reject(reason);
+                    });
+
+                }, function (reason) {
+                    deferred.reject(reason);
+                });
+
+                return deferred.promise;
+            },
+
+            updateProductWithVariants: function (product) {
+
+                var deferred = $q.defer();
+
+                var promisesArray = [];
+
+                // Save product
+                promisesArray.push(prodservice.save(product));
+
+                // Create Variants
+                for (var v = 0; v < product.productVariants.length; v++) {
+                    var currentVariant = product.productVariants[v];
+                    promisesArray.push(merchelloProductVariantService.create(currentVariant));
+                }
+
+                var promise = $q.all(promisesArray);
+
+                promise.then(function () {
+                    //deferred.notify("saved");
+
+                    // Get updated product and options
+                    var promiseProduct = prodservice.getByKey(product.key);
+                    promiseProduct.then(function (dbproduct) {
+
+                        product = new merchello.Models.Product(dbproduct);
+
+                        deferred.resolve(product);
+
+                    }, function (reason) {
+                        deferred.reject(reason);
+                    });
+
+                }, function (reason) {
+                    deferred.reject(reason);
+                });
+
+                return deferred.promise;
+            },
+
+            createVariantsFromOptions: function (product) {
+                var choiceSets = [];
+                var permutation = [];
+                prodservice.possibleProductVariants = [];
+
+                for (var i = 0; i < product.productOptions.length; i++) {
+                    var currentOption = product.productOptions[i];
+                    choiceSets.push(currentOption.choices);
+                    permutation.push('');
+                }
+
+                product.productVariants = [];
+
+                prodservice.permute(choiceSets, 0, permutation);
+
+                for (var p = 0; p < prodservice.possibleProductVariants.length; p++) {
+                    // Todo: check if already exists
+                    product.addVariant(prodservice.possibleProductVariants[p]);
+                }
+
+                return product;
             }
         };
+
+        return prodservice;
     };
     
     angular.module('umbraco.resources').factory('merchelloProductService', merchello.Services.MerchelloProductService);

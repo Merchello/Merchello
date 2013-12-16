@@ -17,6 +17,7 @@
         $scope.allVariants = false;
         $scope.bulkAction = false,
         $scope.selectedVariants = [];
+        $scope.rebuildVariants = false;
 
         $scope.flyouts = {
             reorderVariants: false,
@@ -52,28 +53,33 @@
                 $(".content-column-body").css('background-image', 'none');
 
             }, function (reason) {
-
                 notificationsService.error("Product Load Failed", reason.message);
-
             });
         }
 
-        $scope.save = function () {
+        $scope.save = function (thisForm) {
 
-            notificationsService.info("Saving...", "");
+            if (thisForm.$valid) {
 
-            //we are editing so get the product from the server
-            var promise = merchelloProductService.save($scope.product);
+                notificationsService.info("Saving...", "");
 
-            promise.then(function (product) {
+                //we are editing so get the product from the server
+                var promise = merchelloProductService.updateProduct($scope.product);
 
-                notificationsService.success("Product Saved", "H5YR!");
+                promise.then(function (product) {
+                    notificationsService.success("Product Saved", "H5YR!");
 
-            }, function (reason) {
+                    $scope.product = product;
 
-                notificationsService.error("Product Save Failed", reason.message);
+                    if ($scope.rebuildVariants) {
+                        $scope.rebuildAndSaveVariants();
+                        $scope.rebuildVariants = false;
+                    }
 
-            });
+                }, function (reason) {
+                    notificationsService.error("Product Save Failed", reason.message);
+                });
+            }
         };
 
         $scope.chooseMedia = function () {
@@ -227,10 +233,41 @@
         }
 
         $scope.addOption = function () {
+            $scope.rebuildVariants = true;
             $scope.product.addBlankOption();
         };
+
+        $scope.rebuildAndSaveVariants = function()
+        {
+            $scope.product = merchelloProductService.createVariantsFromOptions($scope.product);
+
+            // Save immediately
+            var savepromise = merchelloProductService.updateProductWithVariants($scope.product);
+            savepromise.then(function (product) {
+                $scope.product = product;
+            }, function (reason) {
+                notificationsService.error("Product Save Failed", reason.message);
+            });
+        }
         
         $scope.updateVariants = function (thisForm) {
+
+            var promise = merchelloProductService.updateProduct($scope.product);
+
+            promise.then(function (product) {
+                notificationsService.success("Product Saved", "H5YR!");
+
+                $scope.product = product;
+
+                if ($scope.rebuildVariants)
+                {
+                    $scope.rebuildAndSaveVariants();
+                    $scope.rebuildVariants = false;
+                }
+
+            }, function (reason) {
+                notificationsService.error("Product Save Failed", reason.message);
+            });
         }
 
 
