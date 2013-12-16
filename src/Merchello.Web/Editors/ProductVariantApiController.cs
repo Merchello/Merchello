@@ -202,7 +202,7 @@ namespace Merchello.Web.Editors
         }
 
         /// <summary>
-        /// Deletes an existing product
+        /// Deletes an existing product variant
         ///
         /// DELETE /umbraco/Merchello/ProductVariantApi/{key}
         /// </summary>
@@ -216,6 +216,26 @@ namespace Merchello.Web.Editors
             }
 
             _productVariantService.Delete(productVariantToDelete);
+
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
+
+        /// <summary>
+        /// Deletes all product variants for a specific product
+        ///
+        /// GET /umbraco/Merchello/ProductVariantApi/DeleteAllVariants?productkey={key}
+        /// </summary>
+        /// <param name="key">Product Variant key</param>
+        [AcceptVerbs("GET","DELETE")]
+        public HttpResponseMessage DeleteAllVariants(Guid productkey)
+        {
+            var productWithVariantsToDelete = _productService.GetByKey(productkey);
+            if (productWithVariantsToDelete == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+
+            _productVariantService.Delete(productWithVariantsToDelete.ProductVariants);
 
             return Request.CreateResponse(HttpStatusCode.OK);
         }

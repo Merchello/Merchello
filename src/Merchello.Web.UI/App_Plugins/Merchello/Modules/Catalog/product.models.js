@@ -108,6 +108,8 @@
             self.totalInventoryCount = 0;
 
             self.attributes = [];
+
+            self.selected = false;
         }
         else {
             self.key = productVariantFromServer.key;
@@ -135,6 +137,8 @@
             self.attributes = _.map(productVariantFromServer.attributes, function (attribute) {
                 return new merchello.Models.ProductAttribute(attribute);
             });
+
+            self.selected = false;
         }
 
         // Helper to copy from product to create a master variant

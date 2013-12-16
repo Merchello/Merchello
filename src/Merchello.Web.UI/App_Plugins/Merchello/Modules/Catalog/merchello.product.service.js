@@ -153,7 +153,7 @@
                 return deferred.promise;
             },
 
-            updateProductWithVariants: function (product) {
+            updateProductWithVariants: function (product, tocreatevariants) {
 
                 var deferred = $q.defer();
 
@@ -165,7 +165,17 @@
                 // Create Variants
                 for (var v = 0; v < product.productVariants.length; v++) {
                     var currentVariant = product.productVariants[v];
-                    promisesArray.push(merchelloProductVariantService.create(currentVariant));
+
+                    if (currentVariant.key.length > 0)
+                    {
+                        promisesArray.push(merchelloProductVariantService.save(currentVariant));
+                    }
+                    else
+                    {
+                        if (currentVariant.selected) {
+                            promisesArray.push(merchelloProductVariantService.create(currentVariant));
+                        }
+                    }
                 }
 
                 var promise = $q.all(promisesArray);
