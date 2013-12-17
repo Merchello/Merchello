@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>UmbracoCms.Core</id>
-    <version>7.0.0</version>
+    <version>7.0.1</version>
     <title>Umbraco Cms Core Binaries</title>
     <authors>Morten Christensen</authors>
     <owners>Morten Christensen</owners>
@@ -12,8 +12,6 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Contains the core assemblies needed to run Umbraco Cms. This package only contains assemblies and can be used for package development. Use the UmbracoCms-package to setup Umbraco in Visual Studio as an ASP.NET project.</description>
     <summary>Contains the core assemblies needed to run Umbraco Cms</summary>
-    <releaseNotes />
-    <copyright />
     <language>en-US</language>
     <tags>umbraco</tags>
     <dependencies>
