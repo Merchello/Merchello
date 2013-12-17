@@ -14,15 +14,24 @@ namespace Merchello.Core.Models
     internal class ShipMethod : Entity, IShipMethod
     {
         private string _name;
-        private Guid _providerKey;
-        private Guid _shipMethodTfKey;
+        private readonly Guid _providerKey;
+        private readonly Guid _shipCountryKey;
+        //private Guid _shipMethodTfKey;
         private decimal _surcharge;
         private string _serviceCode;
         private ProvinceCollection<IShipProvince> _provinces;
 
-        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<ShipMethod, string>(x => x.Name);
-        private static readonly PropertyInfo ProviderKeySelector = ExpressionHelper.GetPropertyInfo<ShipMethod, Guid>(x => x.ProviderKey);  
-        private static readonly PropertyInfo ShipMethodTypeFieldKeySelector = ExpressionHelper.GetPropertyInfo<ShipMethod, Guid>(x => x.ShipMethodTfKey);  
+        public ShipMethod(Guid providerKey, Guid shipCountryKey)
+        {
+            Mandate.ParameterCondition(Guid.Empty != providerKey, "providerKey");
+            Mandate.ParameterCondition(Guid.Empty != shipCountryKey, "shipCountryKey");
+
+            _providerKey = providerKey;
+            _shipCountryKey = shipCountryKey;
+        }
+
+        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<ShipMethod, string>(x => x.Name); 
+        //private static readonly PropertyInfo ShipMethodTfKeySelector = ExpressionHelper.GetPropertyInfo<ShipMethod, Guid>(x => x.ShipMethodTfKey);  
         private static readonly PropertyInfo SurchargeSelector = ExpressionHelper.GetPropertyInfo<ShipMethod, decimal>(x => x.Surcharge);  
         private static readonly PropertyInfo ServiceCodeSelector = ExpressionHelper.GetPropertyInfo<ShipMethod, string>(x => x.ServiceCode);
         private static readonly PropertyInfo ProvincesChangedSelector = ExpressionHelper.GetPropertyInfo<ShipMethod, ProvinceCollection<IShipProvince>>(x => x.Provinces);
@@ -56,33 +65,33 @@ namespace Merchello.Core.Models
         [DataMember]
         public Guid ProviderKey
         {
-            get { return _providerKey; }
-            set 
-            { 
-                SetPropertyValueAndDetectChanges(o =>
-                {
-                    _providerKey = value;
-                    return _providerKey;
-                }, _providerKey, ProviderKeySelector); 
-            }
+            get { return _providerKey; }           
         }
-    
+
         /// <summary>
-        /// The shipMethodTypeFieldKey associated with the ShipMethod
+        /// The key associated with the ship country for the Ship Method
         /// </summary>
-        [DataMember]
-        public Guid ShipMethodTfKey
+        public Guid ShipCountryKey
         {
-            get { return _shipMethodTfKey; }
-            set 
-            { 
-                SetPropertyValueAndDetectChanges(o =>
-                {
-                    _shipMethodTfKey = value;
-                    return _shipMethodTfKey;
-                }, _shipMethodTfKey, ShipMethodTypeFieldKeySelector); 
-            }
+            get { return _shipCountryKey; }           
         }
+
+        ///// <summary>
+        ///// The shipMethodTypeFieldKey associated with the ShipMethod
+        ///// </summary>
+        //[DataMember]
+        //public Guid ShipMethodTfKey
+        //{
+        //    get { return _shipMethodTfKey; }
+        //    set 
+        //    { 
+        //        SetPropertyValueAndDetectChanges(o =>
+        //        {
+        //            _shipMethodTfKey = value;
+        //            return _shipMethodTfKey;
+        //        }, _shipMethodTfKey, ShipMethodTfKeySelector); 
+        //    }
+        //}
     
         /// <summary>
         /// The surcharge associated with the ShipMethod
@@ -133,23 +142,23 @@ namespace Merchello.Core.Models
         }
 
 
-        /// <summary>
-        /// The ship method type 
-        /// </summary>
-        [DataMember]
-        public ShipMethodType ShipMethodType
-        {
-            get { return EnumTypeFieldConverter.ShipmentMethod.GetTypeField(_shipMethodTfKey); }
-            set
-            {
-                var reference = EnumTypeFieldConverter.ShipmentMethod.GetTypeField(value);
-                if (!ReferenceEquals(TypeFieldMapperBase.NotFound, reference))
-                {
-                    // call through the property to flag the dirty property
-                    ShipMethodTfKey = reference.TypeKey;
-                }
-            }
-        }
+        ///// <summary>
+        ///// The ship method type 
+        ///// </summary>
+        //[DataMember]
+        //public ShipMethodType ShipMethodType
+        //{
+        //    get { return EnumTypeFieldConverter.ShipmentMethod.GetTypeField(_shipMethodTfKey); }
+        //    set
+        //    {
+        //        var reference = EnumTypeFieldConverter.ShipmentMethod.GetTypeField(value);
+        //        if (!ReferenceEquals(TypeFieldMapperBase.NotFound, reference))
+        //        {
+        //            // call through the property to flag the dirty property
+        //            ShipMethodTfKey = reference.TypeKey;
+        //        }
+        //    }
+        //}
                     
     }
 }

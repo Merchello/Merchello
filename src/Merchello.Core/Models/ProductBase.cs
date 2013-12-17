@@ -20,6 +20,8 @@ namespace Merchello.Core.Models
         private decimal? _costOfGoods;
         private bool _onSale;
         private decimal? _salePrice;
+        private string _manufacturer;
+        private string _manufacturerModelNumber;
         private decimal? _weight;
         private decimal? _length;
         private decimal? _width;
@@ -56,6 +58,8 @@ namespace Merchello.Core.Models
         private static readonly PropertyInfo CostOfGoodsSelector = ExpressionHelper.GetPropertyInfo<ProductBase, decimal?>(x => x.CostOfGoods);
         private static readonly PropertyInfo SalePriceSelector = ExpressionHelper.GetPropertyInfo<ProductBase, decimal?>(x => x.SalePrice);
         private static readonly PropertyInfo OnSaleSelector = ExpressionHelper.GetPropertyInfo<ProductBase, bool>(x => x.OnSale);
+        private static readonly PropertyInfo ManufacturerSelector = ExpressionHelper.GetPropertyInfo<ProductBase, string>(x => x.Manufacturer);
+        private static readonly PropertyInfo ManufacturerModelNumberSelector = ExpressionHelper.GetPropertyInfo<ProductBase, string>(x => x.ManufacturerModelNumber);
         private static readonly PropertyInfo WeightSelector = ExpressionHelper.GetPropertyInfo<ProductBase, decimal?>(x => x.Weight);
         private static readonly PropertyInfo LengthSelector = ExpressionHelper.GetPropertyInfo<ProductBase, decimal?>(x => x.Length);
         private static readonly PropertyInfo WidthSelector = ExpressionHelper.GetPropertyInfo<ProductBase, decimal?>(x => x.Width);
@@ -196,6 +200,42 @@ namespace Merchello.Core.Models
                 }, _onSale, OnSaleSelector);
             }
         }
+
+
+        /// <summary>
+        /// The manufacturer of the product
+        /// </summary>
+        [DataMember]
+        public string Manufacturer
+        {
+            get { return _manufacturer; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _manufacturer = value;
+                    return _manufacturer;
+                }, _manufacturer, ManufacturerSelector);
+            }
+        }
+
+        /// <summary>
+        /// The manufacturer model number of the product
+        /// </summary>
+        [DataMember]
+        public string ManufacturerModelNumber
+        {
+            get { return _manufacturerModelNumber; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _manufacturerModelNumber = value;
+                    return _manufacturerModelNumber;
+                }, _manufacturerModelNumber, ManufacturerModelNumberSelector);
+            }
+        }
+
 
         /// <summary>
         /// The weight associated with the Product

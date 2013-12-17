@@ -1,6 +1,6 @@
 ﻿using Merchello.Core.Models;
 
-namespace Merchello.Web.Shipping.Gateway
+namespace Merchello.Core.Gateways.Shipping
 {
     public interface IGatewayShipMethod
     {
@@ -9,6 +9,6 @@ namespace Merchello.Web.Shipping.Gateway
         /// </summary>
         /// <param name="shipment"></param>
         /// <returns></returns>
-        decimal QuoteRate(IShipment shipment);
+        decimal QuoteShipment(IShipment shipment);
     }
 }

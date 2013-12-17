@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Specialized;
+using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 using System.Threading;
-using Merchello.Core.Models.Interfaces;
-using Merchello.Core.Models.TypeFields;
 using Umbraco.Core;
 
 namespace Merchello.Core.Models
@@ -13,34 +11,33 @@ namespace Merchello.Core.Models
     /// </summary>
     [Serializable]
     [CollectionDataContract(IsReference = true)]
-    public class GatewayProviderCollection<T> : NotifiyCollectionBase<Guid, IGatewayProvider>
-        where T : IGatewayProvider
+    public class ShipMethodCollection<T> : KeyedCollection<string, IShipMethod>
+        where T : IShipMethod
     {
         private readonly ReaderWriterLockSlim _addLocker = new ReaderWriterLockSlim();
 
-        protected override Guid GetKeyForItem(IGatewayProvider item)
+        protected override string GetKeyForItem(IShipMethod item)
         {
-            return item.Key;
+            return item.ServiceCode;
         }
 
-        internal new void Add(IGatewayProvider item)
+        internal new void Add(IShipMethod item)
         {
             using (new WriteLock(_addLocker))
             {
 
-                if (Contains(item.Key)) return;
+                if (Contains(item.ServiceCode)) return;
 
                 base.Add(item);
 
-                OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));
             }
         }
 
-        public override int IndexOfKey(Guid key)
+        public int IndexOfKey(string serviceCode)
         {
             for (var i = 0; i < Count; i++)
             {
-                if (GetKeyForItem(this[i]) == key)
+                if (GetKeyForItem(this[i]) == serviceCode)
                 {
                     return i;
                 }

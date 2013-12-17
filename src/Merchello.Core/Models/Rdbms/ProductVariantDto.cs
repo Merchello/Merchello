@@ -38,6 +38,14 @@ namespace Merchello.Core.Models.Rdbms
         [Column("onSale")]
         public bool OnSale { get; set; }
 
+        [Column("manufacturer")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public string Manufacturer { get; set; }
+
+        [Column("modelNumber")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public string ManufacturerModelNumber { get; set; } 
+
         [Column("weight")]
         [NullSetting(NullSetting = NullSettings.Null)]
         public decimal? Weight { get; set; }

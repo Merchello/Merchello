@@ -7,12 +7,10 @@ namespace Merchello.Core.Persistence.Factories
     {
         public IShipMethod BuildEntity(ShipMethodDto dto)
         {
-            var shipMethod = new ShipMethod()
+            var shipMethod = new ShipMethod(dto.ProviderKey, dto.ShipCountryKey)
             {
                 Key = dto.Key,
-                Name = dto.Name,
-                ProviderKey = dto.ProviderKey,
-                ShipMethodTfKey = dto.ShipMethodTfKey,
+                Name = dto.Name,              
                 Surcharge = dto.Surcharge,
                 ServiceCode = dto.ServiceCode,
                 UpdateDate = dto.UpdateDate,
@@ -31,7 +29,7 @@ namespace Merchello.Core.Persistence.Factories
                 Key = entity.Key,
                 Name = entity.Name,
                 ProviderKey = entity.ProviderKey,
-                ShipMethodTfKey = entity.ShipMethodTfKey,
+                ShipCountryKey = entity.ShipCountryKey,
                 Surcharge = entity.Surcharge,
                 ServiceCode = entity.ServiceCode,
                 UpdateDate = entity.UpdateDate,

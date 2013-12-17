@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Merchello.Core;
+using Merchello.Core.Cache;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
-using Merchello.Web.Cache;
 using Umbraco.Core;
 
-namespace Merchello.Web.Shipping.Gateway.FlatRate
+
+namespace Merchello.Core.Gateways.Shipping
 {
     public class ShipRateTable : IShipRateTable
     {
@@ -187,7 +187,7 @@ namespace Merchello.Web.Shipping.Gateway.FlatRate
         /// </summary>
         /// <param name="rangeValue">The value within a range used to determine which rate to return</param>
         /// <returns>A decimal rate or zero (0) if not found</returns>
-        public decimal GetRate(decimal rangeValue)
+        public decimal FindRate(decimal rangeValue)
         {
             var rateTier = Rows.FirstOrDefault(x => x.RangeLow < rangeValue && x.RangeHigh >= rangeValue);
             return rateTier == null ? 0M : rateTier.Rate;

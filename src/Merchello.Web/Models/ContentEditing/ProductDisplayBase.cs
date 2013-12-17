@@ -11,6 +11,8 @@ namespace Merchello.Web.Models.ContentEditing
         public decimal CostOfGoods { get; set; }
         public decimal SalePrice { get; set; }
         public bool OnSale { get; set; }
+        public string Manufacturer { get; set; }
+        public string ManufacturerModelNumber { get; set; }
         public decimal Weight { get; set; }
         public decimal Length { get; set; }
         public decimal Width { get; set; }

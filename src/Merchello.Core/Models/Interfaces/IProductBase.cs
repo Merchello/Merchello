@@ -46,6 +46,18 @@ namespace Merchello.Core.Models
         bool OnSale { get; set; }
 
         /// <summary>
+        /// The manufacturer of the product
+        /// </summary>
+        [DataMember]
+        string Manufacturer { get; set; }
+
+        /// <summary>
+        /// The manufacturer model number of the product
+        /// </summary>
+        [DataMember]
+        string ManufacturerModelNumber { get; set; }
+
+        /// <summary>
         /// The weight of the product - intended to be used for shipping
         /// </summary>
         [DataMember]

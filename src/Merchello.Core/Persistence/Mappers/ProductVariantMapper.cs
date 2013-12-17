@@ -23,6 +23,8 @@ namespace Merchello.Core.Persistence.Mappers
             CacheMap<ProductVariant, ProductVariantDto>(src => src.Price, dto => dto.Price);
             CacheMap<ProductVariant, ProductVariantDto>(src => src.CostOfGoods, dto => dto.CostOfGoods);
             CacheMap<ProductVariant, ProductVariantDto>(src => src.SalePrice, dto => dto.SalePrice);
+            CacheMap<ProductVariant, ProductVariantDto>(src => src.Manufacturer, dto => dto.Manufacturer);
+            CacheMap<ProductVariant, ProductVariantDto>(src => src.ManufacturerModelNumber, dto => dto.ManufacturerModelNumber);
             CacheMap<ProductVariant, ProductVariantDto>(src => src.OnSale, dto => dto.OnSale);
             CacheMap<ProductVariant, ProductVariantDto>(src => src.Weight, dto => dto.Weight);
             CacheMap<ProductVariant, ProductVariantDto>(src => src.Length, dto => dto.Length);

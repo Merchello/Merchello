@@ -1,26 +1,32 @@
 ﻿using System.Collections.Generic;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
-using Merchello.Web.Models;
-using IGatewayMethod = Merchello.Core.Models.IGatewayMethod;
+using Merchello.Core.Services;
 
-namespace Merchello.Web.Shipping.Gateway
+namespace Merchello.Core.Gateways.Shipping
 {
-    public interface IShippingGatewayProvider<out T>
+    public abstract class ShippingProviderBase<T> : GatewayProviderBase, IShippingGateway<T>
         where T : IGatewayShipMethod
-    {
+    {        
+
+        protected ShippingProviderBase(IMerchelloContext merchelloContext, IGatewayProvider gatewayProvider)
+            : base(merchelloContext, gatewayProvider)
+        { }
 
         /// <summary>
         /// Returns a collection of all possible gateway methods associated with this provider
         /// </summary>
         /// <returns></returns>
-        IEnumerable<IGatewayMethod> ListAvailableMethods();
+        public abstract IEnumerable<IGatewayMethod> ListAvailableMethods();
 
         /// <summary>
         /// Returns a collection of ship methods assigned for this specific provider configuration (associated with the ShipCountry)
         /// </summary>
         /// <returns></returns>
-        IEnumerable<T> GetActiveShipMethods(IShipCountry shipCountry);
+        public abstract IEnumerable<T> ActiveShipMethods(IShipCountry shipCountry);
+
 
     }
+
+
 }

@@ -5,15 +5,26 @@ namespace Merchello.Core.Gateways
     /// <summary>
     /// Defines the GatewayBase
     /// </summary>
-    public abstract class GatewayBase : IGatewayBase
+    public abstract class GatewayProviderBase : IGatewayProviderBase
     {
         private readonly IGatewayProvider _gatewayProvider;
+        private readonly IMerchelloContext _merchelloContext;
 
-        protected GatewayBase(IGatewayProvider gatewayProvider)
+        protected GatewayProviderBase(IMerchelloContext merchelloContext, IGatewayProvider gatewayProvider)
         {
+            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
             Mandate.ParameterNotNull(gatewayProvider, "gatewayProvider");
 
+            _merchelloContext = merchelloContext;
             _gatewayProvider = gatewayProvider;
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IMerchelloContext"/>
+        /// </summary>
+        protected IMerchelloContext MerchelloContext
+        {
+            get { return _merchelloContext; }
         }
 
         /// <summary>
