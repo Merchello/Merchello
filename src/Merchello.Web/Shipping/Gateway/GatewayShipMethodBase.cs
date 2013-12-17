@@ -1,7 +1,8 @@
-﻿using Merchello.Core;
+﻿using System.Collections.Generic;
+using Merchello.Core;
 using Merchello.Core.Models;
 
-namespace Merchello.Web.Shipping
+namespace Merchello.Web.Shipping.Gateway
 {
     public abstract class GatewayShipMethodBase : IGatewayShipMethod
     {
@@ -14,6 +15,12 @@ namespace Merchello.Web.Shipping
         }
 
         public abstract decimal QuoteRate(IShipment shipment);
+
+        /// <summary>
+        /// Returns a collection of all possible gateway methods associated with this provider
+        /// </summary>
+        /// <returns></returns>
+        public abstract IEnumerable<IGatewayMethod> ListAvailableMethods();
     
     }
 }

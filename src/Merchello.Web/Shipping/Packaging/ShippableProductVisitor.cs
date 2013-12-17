@@ -2,7 +2,7 @@
 using Merchello.Core;
 using Merchello.Core.Models;
 
-namespace Merchello.Web.Shipping
+namespace Merchello.Web.Shipping.Packaging
 {
     /// <summary>
     /// 

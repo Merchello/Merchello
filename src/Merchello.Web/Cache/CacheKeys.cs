@@ -2,6 +2,7 @@
 using Merchello.Core.Models;
 using Merchello.Web.Models;
 using Merchello.Web.Shipping;
+using Merchello.Web.Shipping.Gateway.FlatRate;
 
 namespace Merchello.Web.Cache
 {

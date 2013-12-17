@@ -13,17 +13,17 @@ namespace Merchello.Core.Models
     /// </summary>
     [Serializable]
     [CollectionDataContract(IsReference = true)]
-    public class GatewayProviderCollection<T> : NotifiyCollectionBase<Guid, IGatewayProviderBase>
-        where T : IGatewayProviderBase
+    public class GatewayProviderCollection<T> : NotifiyCollectionBase<Guid, IGatewayProvider>
+        where T : IGatewayProvider
     {
         private readonly ReaderWriterLockSlim _addLocker = new ReaderWriterLockSlim();
 
-        protected override Guid GetKeyForItem(IGatewayProviderBase item)
+        protected override Guid GetKeyForItem(IGatewayProvider item)
         {
             return item.Key;
         }
 
-        internal new void Add(IGatewayProviderBase item)
+        internal new void Add(IGatewayProvider item)
         {
             using (new WriteLock(_addLocker))
             {

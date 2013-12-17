@@ -7,6 +7,7 @@ using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Web.Models;
 using Merchello.Web.Shipping;
+using Merchello.Web.Shipping.Packaging;
 using Umbraco.Web.org.umbraco.our;
 
 namespace Merchello.Web

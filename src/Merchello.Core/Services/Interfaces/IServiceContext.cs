@@ -17,6 +17,11 @@ namespace Merchello.Core.Services
         ICustomerService CustomerService { get; }
 
         /// <summary>
+        /// Gets the <see cref="IGatewayProviderService"/>
+        /// </summary>
+        IGatewayProviderService GatewayProviderService { get; }
+
+        /// <summary>
         /// Gets the <see cref="ItemCacheService"/>
         /// </summary>
         IItemCacheService ItemCacheService { get; }

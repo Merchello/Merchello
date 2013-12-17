@@ -5,7 +5,7 @@ using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Web.Models;
 
-namespace Merchello.Web.Shipping
+namespace Merchello.Web.Shipping.Packaging
 {
     /// <summary>
     /// Represents the default basket packaging strategy.  

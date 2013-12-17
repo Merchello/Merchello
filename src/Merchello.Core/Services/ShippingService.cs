@@ -173,60 +173,9 @@ namespace Merchello.Core.Services
 
         #endregion
 
-        #region ShipMethod
 
 
-        public void Save(IShipMethod shipMethod)
-        {
-            throw new NotImplementedException();
-        }
 
-        public void Save(IEnumerable<IShipMethod> shipMethodList)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(IShipMethod shipMethod)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<IShipMethod> GetShipMethodsByShipCountryKey(Guid shipCountryKey)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<IShipMethod> GetShipMethodsByGatewayProviderKey(Guid gatewayProviderKey)
-        {
-            throw new NotImplementedException();
-        }
-
-        #endregion
-
-
-        #region ShipRateTier
-
-        public void Save(IShipRateTier shipRateTier)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Save(IEnumerable<IShipRateTier> shipRateTierList)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(IShipRateTier shipRateTier)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<IShipRateTier> GetShipRateTiersByShipMethodKey(Guid shipMethodKey)
-        {
-            throw new NotImplementedException();
-        }
-
-        #endregion
 
 
 

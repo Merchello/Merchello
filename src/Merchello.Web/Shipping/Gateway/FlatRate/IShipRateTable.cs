@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Merchello.Core.Models.Interfaces;
 
-namespace Merchello.Web.Shipping
+namespace Merchello.Web.Shipping.Gateway.FlatRate
 {
     public interface IShipRateTable
     {
