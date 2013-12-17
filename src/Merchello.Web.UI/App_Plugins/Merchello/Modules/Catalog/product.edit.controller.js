@@ -199,8 +199,15 @@
                     var selected = $scope.selectedVariants();
                     for (var i = 0; i < selected.length; i++) {
                         selected[i].price = $scope.changePricesFlyout.newPrice;
+                        var savepromise = merchelloProductVariantService.save(selected[i]);
+                        savepromise.then(function () {
+                            notificationsService.success("Variant saved ", "");
+                        }, function (reason) {
+                            notificationsService.error("Product Variant Save Failed", reason.message);
+                        });
                     }
                     notificationsService.success("Confirmed prices update", "");
+                    $scope.changePricesFlyout.close();
                 }
             });
 
