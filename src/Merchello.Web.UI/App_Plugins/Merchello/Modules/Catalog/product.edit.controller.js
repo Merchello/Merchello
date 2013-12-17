@@ -196,7 +196,11 @@
                 $scope.bulkAction = false;
             }, {
                 confirm: function () {
-                    notificationsService.success("Confirmed prices update", $scope.changePricesFlyout.newPrice);
+                    var selected = $scope.selectedVariants();
+                    for (var i = 0; i < selected.length; i++) {
+                        selected[i].price = $scope.changePricesFlyout.newPrice;
+                    }
+                    notificationsService.success("Confirmed prices update", "");
                 }
             });
 

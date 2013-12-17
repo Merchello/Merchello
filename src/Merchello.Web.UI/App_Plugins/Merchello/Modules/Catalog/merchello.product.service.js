@@ -218,8 +218,12 @@
                 prodservice.permute(choiceSets, 0, permutation);
 
                 for (var p = 0; p < prodservice.possibleProductVariants.length; p++) {
-                    // Todo: check if already exists
-                    product.addVariant(prodservice.possibleProductVariants[p]);
+                    var variant = prodservice.possibleProductVariants[p];
+                    // Fix sort orders
+                    // Todo: check if already exists?
+                    var merchVariant = product.addVariant(variant);
+
+                    merchVariant.fixAttributeSortOrders(product.productOptions);
                 }
 
                 return product;

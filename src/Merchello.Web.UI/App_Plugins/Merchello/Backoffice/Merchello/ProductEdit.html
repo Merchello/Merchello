@@ -167,7 +167,7 @@
                                 <thead>
 
                                     <tr data-ng-hide="allVariants">
-                                        <th><input type="checkbox" data-ng-model="allVariants" data-ng-click="toggleAllVariants()" /></th> <!-- Swaps out the current TR with headings in it for the bulk action TR -->
+                                        <th>&nbsp;</th> <!-- Swaps out the current TR with headings in it for the bulk action TR -->
                                         <th data-ng-repeat="option in product.productOptions | orderBy:'sortOrder'"
                                             data-ng-click="changeSortOrder(option.name)" data-ng-class="{'sorted': sortProperty == option.name}">
                                             <i data-ng-class="{'icon-navigation-up': sortProperty == option.name, 'icon-navigation-down': sortProperty != option.name}"></i>
@@ -210,7 +210,7 @@
                                         data-ng-click="toggleAVariant(variant)"
                                     >
                                         <td><input type="checkbox" data-ng-model="variant.selected" data-ng-change="checkBulkVariantsSelected()" /></td>
-                                        <td data-ng-repeat="attribute in variant.attributes | orderBy:'sortOrder'">{{attribute.name}}</td>
+                                        <td data-ng-repeat="attribute in variant.attributes | orderBy:'optionOrder'">{{attribute.name}}</td>
                                         <td>{{variant.sku}}</td>
                                         <td>{{variant.price}}</td>
                                         <td>{{variant.totalInventoryCount}}</td>
