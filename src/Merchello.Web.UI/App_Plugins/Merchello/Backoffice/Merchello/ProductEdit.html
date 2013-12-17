@@ -124,7 +124,7 @@
                         </div>
 
                         <!-- Delete Variants -->
-                        <div class="well col-xs-10 span10" data-ng-class="{ 'open': deleteVariants, 'closed': (!deleteVariants) }">
+                        <div class="well col-xs-10 span10" data-ng-class="{ 'open': flyouts.deleteVariants, 'closed': (!flyouts.deleteVariants) }">
                             <button class="btn close" data-ng-click="deleteVariantsFlyout.close()"><i class="icon-delete"></i></button>
                             <h4>Delete the Selected Variants</h4>
                             <p class="warning">You cannot recover deleted product variants. Are you sure you want to continue?</p>
@@ -139,7 +139,7 @@
                         </div>
 
                         <!-- Duplicate Variants -->
-                        <div class="well col-xs-10 span10" data-ng-class="{ 'open': duplicateVariants, 'closed': (!duplicateVariants) }">
+                        <div class="well col-xs-10 span10" data-ng-class="{ 'open': flyouts.duplicateVariants, 'closed': (!flyouts.duplicateVariants) }">
                             <button class="btn close" data-ng-click="duplicateVariantsFlyout.close()"><i class="icon-delete"></i></button>
                             <h4>Duplicate Variants Based on Selected Items</h4>
                             <div class="form-group row-fluid">
