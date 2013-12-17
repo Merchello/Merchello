@@ -83,6 +83,8 @@
     <Compile Include="Configuration\Outline\RegionElement.cs" />
     <Compile Include="Configuration\Outline\SettingsCollection.cs" />
     <Compile Include="Configuration\Outline\SettingsElement.cs" />
+    <Compile Include="Gateways\GatewayBase.cs" />
+    <Compile Include="Gateways\IGatewayBase.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\AppliedPayment.cs">
       <SubType>Code</SubType>

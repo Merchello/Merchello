@@ -232,7 +232,7 @@
     <Compile Include="Shipping\Gateway\IGatewayShipMethod.cs" />
     <Compile Include="Shipping\Gateway\IShippingGatewayProvider.cs" />
     <Compile Include="Shipping\Gateway\FlatRate\IFlatRateShippingProvider.cs" />
-    <Compile Include="Shipping\Gateway\ShippingGatewayProvider.cs" />
+    <Compile Include="Shipping\Gateway\ShippingGatewayBase.cs" />
     <Compile Include="Models\ContentEditing\FullfillmentMappingExtensions.cs" />
     <Compile Include="Models\ContentEditing\ProductMappingExtensions.cs" />
     <Compile Include="Models\ContentEditing\CountryDisplay.cs" />

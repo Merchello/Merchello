@@ -1,21 +1,19 @@
 ﻿using System.Collections.Generic;
 using Merchello.Core;
+using Merchello.Core.Gateways;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Services;
 
 namespace Merchello.Web.Shipping.Gateway
 {
-    public abstract class ShippingGatewayProvider<T> : GatewayProvider, IShippingGatewayProvider<T>
+    public abstract class ShippingGatewayBase<T> : GatewayBase, IShippingGatewayProvider<T>
         where T : IGatewayShipMethod
     {
         private readonly IShippingService _shippingService;
 
-        protected ShippingGatewayProvider()
-            : this(MerchelloContext.Current)
-        { }
-
-        internal ShippingGatewayProvider(IMerchelloContext merchelloContext)
+        protected ShippingGatewayBase(IMerchelloContext merchelloContext, IGatewayProvider gatewayProvider)
+            : base(gatewayProvider)
         {
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
 

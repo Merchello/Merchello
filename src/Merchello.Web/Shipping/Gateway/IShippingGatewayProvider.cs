@@ -6,7 +6,7 @@ using IGatewayMethod = Merchello.Core.Models.IGatewayMethod;
 
 namespace Merchello.Web.Shipping.Gateway
 {
-    public interface IShippingGatewayProvider<out T> : IGatewayProvider
+    public interface IShippingGatewayProvider<out T>
         where T : IGatewayShipMethod
     {
 
