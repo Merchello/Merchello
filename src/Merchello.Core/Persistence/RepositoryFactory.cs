@@ -67,6 +67,12 @@ namespace Merchello.Core.Persistence
                 CreateLineItemRepository<ItemCacheItemDto>(uow));
         }
 
+        internal virtual IGatewayProviderRepository CreateGatewayProviderRepository(IDatabaseUnitOfWork uow, ISettingsService settingsService)
+        {
+            return new GatewayProviderRepository(uow,
+                _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider,
+                settingsService);
+        }
 
         /// <summary>
         /// Returns an instance of the <see cref="ILineItemRepository"/>
@@ -127,6 +133,19 @@ namespace Merchello.Core.Persistence
                 _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider,
                 settingsService);
         }
+
+
+        /// <summary>
+        /// Returns an instance of the <see cref="IShipMethodRepository"/>
+        /// </summary>
+        /// <param name="uow"></param>
+        /// <returns></returns>
+        internal virtual IShipMethodRepository CreateShipMethodRepository(IDatabaseUnitOfWork uow)
+        {
+            return new ShipMethodRepository(uow,
+                _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
+        }
+
 
         /// <summary>
         /// Returns an instance of the <see cref="IShipmentRepository"/>

@@ -7,7 +7,7 @@ using Merchello.Core.Models.Interfaces;
 using Merchello.Web.Cache;
 using Umbraco.Core;
 
-namespace Merchello.Web.Shipping
+namespace Merchello.Web.Shipping.Gateway.FlatRate
 {
     public class ShipRateTable : IShipRateTable
     {
@@ -48,7 +48,7 @@ namespace Merchello.Web.Shipping
 
         internal static ShipRateTable GetShipRateTable(IMerchelloContext merchelloContext, Guid shipMethodKey)
         {
-            var rows = merchelloContext.Services.ShippingService.GetShipRateTiersByShipMethodKey(shipMethodKey);
+            var rows = merchelloContext.Services.GatewayProviderService.GetShipRateTiersByShipMethodKey(shipMethodKey);
             return new ShipRateTable(shipMethodKey, rows);
         }
 
@@ -178,7 +178,7 @@ namespace Merchello.Web.Shipping
             cache.ClearCacheItem(CacheKeys.ShipRateTableCacheKey(rateTable.ShipMethodKey));
 
             // persist and enter into cache
-            merchelloContext.Services.ShippingService.Save(rateTable.Rows);
+            merchelloContext.Services.GatewayProviderService.Save(rateTable.Rows);
             cache.GetCacheItem(CacheKeys.ShipRateTableCacheKey(rateTable.ShipMethodKey), () => rateTable);   
         }
 

@@ -95,16 +95,16 @@
     <Compile Include="Models\CustomerBase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\EntityBase\ICustomEntity.cs" />
-    <Compile Include="Models\EntityBase\IEntityBase.cs" />
     <Compile Include="Models\ExtendedDataCollection.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\ExtendedDataExtensions.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\GatewayProviderBase.cs" />
+    <Compile Include="Models\GatewayMethod.cs" />
+    <Compile Include="Models\GatewayProvider.cs" />
     <Compile Include="Models\GatewayProviderCollection.cs" />
+    <Compile Include="Models\Interfaces\IGatewayMethod.cs" />
     <Compile Include="Models\Interfaces\IAddress.cs" />
     <Compile Include="Models\Interfaces\IAppliedPayment.cs">
       <SubType>Code</SubType>
@@ -118,7 +118,7 @@
     <Compile Include="Models\Interfaces\ICustomerBase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\Interfaces\IGatewayProviderBase.cs" />
+    <Compile Include="Models\Interfaces\IGatewayProvider.cs" />
     <Compile Include="Models\Interfaces\IInvoice.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -264,6 +264,7 @@
     </Compile>
     <Compile Include="Models\ShipMethodCollection.cs" />
     <Compile Include="Models\ShipProvince.cs" />
+    <Compile Include="Models\ShipProvinceCollection.cs" />
     <Compile Include="Models\ShipRateTier.cs" />
     <Compile Include="Models\TaxProvince.cs" />
     <Compile Include="Models\TypeFields\AppliedPaymentTypeField.cs">
@@ -289,6 +290,7 @@
     <Compile Include="Persistence\Factories\CustomerAddressFactory.cs" />
     <Compile Include="Persistence\Factories\CustomerFactory.cs" />
     <Compile Include="Persistence\Factories\ExtendedDataFactory.cs" />
+    <Compile Include="Persistence\Factories\GatewayProviderFactory.cs" />
     <Compile Include="Persistence\Factories\IEntityFactory.cs" />
     <Compile Include="Persistence\Factories\InventoryFactory.cs" />
     <Compile Include="Persistence\Factories\InvoiceStatusFactory.cs" />
@@ -320,6 +322,7 @@
     <Compile Include="Persistence\Mappers\DtoMapModel.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Persistence\Mappers\GatewayProviderMapper.cs" />
     <Compile Include="Persistence\Mappers\InvoiceLineItemMapper.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -366,8 +369,10 @@
     </Compile>
     <Compile Include="Persistence\Repositories\CustomerAddressRepository.cs" />
     <Compile Include="Persistence\Repositories\CustomerRepository.cs" />
+    <Compile Include="Persistence\Repositories\GatewayProviderRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\ICustomerAddressRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\ICustomerRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IGatewayProviderRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IInvoiceRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IItemCacheRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\ILineItemRepository.cs" />
@@ -386,6 +391,7 @@
     <Compile Include="Persistence\Repositories\ProductVariantRepository.cs" />
     <Compile Include="Persistence\Repositories\ShipCountryRepository.cs" />
     <Compile Include="Persistence\Repositories\ShipmentRepository.cs" />
+    <Compile Include="Persistence\Repositories\ShipMethodRepository.cs" />
     <Compile Include="Persistence\Repositories\WarehouseRepository.cs" />
     <Compile Include="Persistence\TransactionType.cs" />
     <Compile Include="Persistence\UnitOfWork\IDatabaseUnitOfWork.cs" />
@@ -447,6 +453,8 @@
     <Compile Include="Persistence\UnitOfWork\PetaPocoUnitOfWork.cs" />
     <Compile Include="Persistence\UnitOfWork\PetaPocoUnitOfWorkProvider.cs" />
     <Compile Include="RateAdjustmentType.cs" />
+    <Compile Include="Services\GatewayProviderService.cs" />
+    <Compile Include="Services\Interfaces\IGatewayProviderService.cs" />
     <Compile Include="Services\Interfaces\IItemCacheService.cs" />
     <Compile Include="Services\Interfaces\IProductService.cs" />
     <Compile Include="Services\Interfaces\IProductVariantService.cs" />

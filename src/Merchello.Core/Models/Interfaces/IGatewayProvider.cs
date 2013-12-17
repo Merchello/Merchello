@@ -7,7 +7,7 @@ namespace Merchello.Core.Models.Interfaces
     /// <summary>
     /// Defines a Gateway Provider
     /// </summary>
-    public interface IGatewayProviderBase : IEntity
+    public interface IGatewayProvider : IEntity
     {
         /// <summary>
         /// The type field key for the provider
@@ -44,5 +44,7 @@ namespace Merchello.Core.Models.Interfaces
         /// </summary>
         [DataMember]
         GatewayProviderType GatewayProviderType { get; }
+
+
     }
 }

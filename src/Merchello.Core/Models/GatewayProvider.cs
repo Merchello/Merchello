@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -13,7 +14,7 @@ namespace Merchello.Core.Models
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    public abstract class GatewayProviderBase : Entity, IGatewayProviderBase
+    public class GatewayProvider : Entity, IGatewayProvider
     {
         private string _name;
         private Guid _providerTfKey;
@@ -21,11 +22,13 @@ namespace Merchello.Core.Models
         private ExtendedDataCollection _extendedData;
         private bool _encryptExtendedData;
 
-        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<GatewayProviderBase, string>(x => x.Name);
-        private static readonly PropertyInfo ProviderTfKeySelector = ExpressionHelper.GetPropertyInfo<GatewayProviderBase, Guid>(x => x.ProviderTfKey);
-        private static readonly PropertyInfo TypeFullNameSelector = ExpressionHelper.GetPropertyInfo<GatewayProviderBase, string>(x => x.TypeFullName);
-        private static readonly PropertyInfo ExtendedDataChangedSelector = ExpressionHelper.GetPropertyInfo<GatewayProviderBase, ExtendedDataCollection>(x => x.ExtendedData);
-        private static readonly PropertyInfo EncryptExtendedDataSelector = ExpressionHelper.GetPropertyInfo<GatewayProviderBase, bool>(x => x.EncryptExtendedData);
+
+        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<GatewayProvider, string>(x => x.Name);
+        private static readonly PropertyInfo ProviderTfKeySelector = ExpressionHelper.GetPropertyInfo<GatewayProvider, Guid>(x => x.ProviderTfKey);
+        private static readonly PropertyInfo TypeFullNameSelector = ExpressionHelper.GetPropertyInfo<GatewayProvider, string>(x => x.TypeFullName);
+        private static readonly PropertyInfo ExtendedDataChangedSelector = ExpressionHelper.GetPropertyInfo<GatewayProvider, ExtendedDataCollection>(x => x.ExtendedData);
+        private static readonly PropertyInfo EncryptExtendedDataSelector = ExpressionHelper.GetPropertyInfo<GatewayProvider, bool>(x => x.EncryptExtendedData);
+
 
         private void ExtendedDataChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
@@ -126,5 +129,6 @@ namespace Merchello.Core.Models
                 return EnumTypeFieldConverter.GatewayProvider.GetTypeField(ProviderTfKey);
             }
         }
+ 
     }
 }

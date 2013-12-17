@@ -4,7 +4,7 @@ using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Web.Models;
 
-namespace Merchello.Web.Shipping
+namespace Merchello.Web.Shipping.Packaging
 {
     public abstract class BasketPackagingStrategyBase : IBasketPackagingStrategy
     {
