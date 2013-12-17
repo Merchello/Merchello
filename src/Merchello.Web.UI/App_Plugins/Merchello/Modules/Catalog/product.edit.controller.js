@@ -231,7 +231,27 @@
                 $scope.bulkAction = false;
             }, {
                 confirm: function () {
-                    notificationsService.success("Confirmed variants deleted");
+                    var selected = $scope.selectedVariants();
+                    var promisesArray = [];
+
+                    for (var i = 0; i < selected.length; i++) {
+                        promisesArray.push(merchelloProductVariantService.deleteVariant(selected[i].key));
+
+                        var promise = $q.all(promisesArray);
+
+                        promise.then(function () {
+
+                            var promiseLoadProduct = merchelloProductService.getByKey($scope.product.key);
+                            promiseProduct.then(function (dbproduct) {
+                                product = new merchello.Models.Product(dbproduct);
+                                notificationsService.success("Variants deleted");
+                            }, function (reason) {
+                                notificationsService.error("Product Variant Delete Failed", reason.message);
+                            });
+                        }, function (reason) {
+                            notificationsService.error("Product Variant Delete Failed", reason.message);
+                        });
+                    }
                 }
             });
 
