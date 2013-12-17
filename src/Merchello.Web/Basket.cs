@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 using Merchello.Core;
+using Merchello.Core.Cache;
 using Merchello.Core.Models;
 using Merchello.Core.Models.TypeFields;
-using Merchello.Web.Cache;
 using Merchello.Web.Models;
 using Umbraco.Core.Logging;
 
@@ -303,7 +303,7 @@ namespace Merchello.Web
         /// <returns></returns>
         private static string MakeCacheKey(ICustomerBase customer)
         {
-            return CacheKeys.CustomerBasketCacheKey(customer.EntityKey, EnumTypeFieldConverter.CustomerItemItemCache.Basket.TypeKey);
+            return CacheKeys.ItemCacheCacheKey(customer.EntityKey, EnumTypeFieldConverter.CustomerItemItemCache.Basket.TypeKey);
         }
 
         

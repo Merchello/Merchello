@@ -5,7 +5,7 @@ namespace Merchello.Core.Gateways
     /// <summary>
     /// Defines a gateway
     /// </summary>
-    public interface IGatewayBase
+    public interface IGatewayProviderBase
     {
     }
 }

@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Runtime.Caching;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Web.Caching;
 using Umbraco.Core.Cache;
-using Umbraco.Core.Logging;
 using Umbraco.Core;
 using CacheItemPriority = System.Web.Caching.CacheItemPriority;
 

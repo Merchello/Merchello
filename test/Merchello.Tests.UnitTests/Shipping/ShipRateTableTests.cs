@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Web.Shipping;
-using Merchello.Web.Shipping.Gateway.FlatRate;
 using NUnit.Framework;
 
 namespace Merchello.Tests.UnitTests.Shipping

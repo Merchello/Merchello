@@ -274,7 +274,6 @@
     <Compile Include="TypeFields\LineItemTypeFieldTests.cs" />
     <Compile Include="TypeFields\PaymentMethodTypeFieldTests.cs" />
     <Compile Include="TypeFields\ProductTypeFieldTests.cs" />
-    <Compile Include="TypeFields\ShipMethodTypeFieldTests.cs" />
     <Compile Include="Utilities\EncryptionHelperTests.cs" />
   </ItemGroup>
   <ItemGroup>

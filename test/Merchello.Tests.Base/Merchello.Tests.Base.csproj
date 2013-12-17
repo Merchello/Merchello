@@ -236,7 +236,6 @@
     <Compile Include="DataMakers\MockProductDataMaker.cs" />
     <Compile Include="DataMakers\MockCustomerAddressDataMaker.cs" />
     <Compile Include="DataMakers\MockCustomerDataMaker.cs" />
-    <Compile Include="DataMakers\MockShipMethodDataMaker.cs" />
     <Compile Include="DataMakers\MockTransactionDataMaker.cs" />
     <Compile Include="DataMakers\MockWarehouseDataMaker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

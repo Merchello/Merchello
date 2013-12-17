@@ -67,10 +67,10 @@ namespace Merchello.Core.Persistence.Migrations.Initial
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = ptf.PurchaseOrder.TypeKey, Alias = ptf.PurchaseOrder.Alias, Name = ptf.PurchaseOrder.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
 
             // ShipmentMethodType
-            var stf = new ShipMethodTypeField();
-            _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = stf.FlatRate.TypeKey, Alias = stf.FlatRate.Alias, Name = stf.FlatRate.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
-            _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = stf.Carrier.TypeKey, Alias = stf.Carrier.Alias, Name = stf.Carrier.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
-            _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = stf.PercentTotal.TypeKey, Alias = stf.PercentTotal.Alias, Name = stf.PercentTotal.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
+            //var stf = new ShipMethodTypeField();
+            //_database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = stf.FlatRate.TypeKey, Alias = stf.FlatRate.Alias, Name = stf.FlatRate.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
+            //_database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = stf.Carrier.TypeKey, Alias = stf.Carrier.Alias, Name = stf.Carrier.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
+            //_database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = stf.PercentTotal.TypeKey, Alias = stf.PercentTotal.Alias, Name = stf.PercentTotal.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
 
             //// AppliedPaymentType
             var apf = new AppliedPaymentTypeField();

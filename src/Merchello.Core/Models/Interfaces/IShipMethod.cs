@@ -20,13 +20,19 @@ namespace Merchello.Core.Models
         /// The key associated with the gateway provider for the Ship Method
         /// </summary>
         [DataMember]
-        Guid ProviderKey { get; set;}
+        Guid ProviderKey { get; }
             
         /// <summary>
-        /// The shipMethodTypeFieldKey for the ShipMethod
+        /// The key associated with the ship country for the Ship Method
         /// </summary>
         [DataMember]
-        Guid ShipMethodTfKey { get; set;}
+        Guid ShipCountryKey { get; }
+
+        ///// <summary>
+        ///// The shipMethodTypeFieldKey for the ShipMethod
+        ///// </summary>
+        //[DataMember]
+        //Guid ShipMethodTfKey { get; set;}
             
         /// <summary>
         /// The surcharge for the ShipMethod

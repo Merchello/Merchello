@@ -37,8 +37,11 @@ namespace Merchello.Core.Services
         /// </summary>
         /// <param name="gatewayProviderType"></param>
         /// <returns></returns>
-        IEnumerable<IGatewayProvider> GetGatewayProvidersByType(GatewayProviderType gatewayProviderType); 
-            
+        IEnumerable<IGatewayProvider> GetGatewayProvidersByType(GatewayProviderType gatewayProviderType);
+
+
+        //IEnumerable<IGatewayProvider> GetGatewayProvidersByShipCountry(IShipCountry shipCountry); 
+
         /// <summary>
         /// Gets a collection containing all <see cref="IGatewayProvider"/>
         /// </summary>

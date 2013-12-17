@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Merchello.Core.Models.Interfaces;
 
-namespace Merchello.Web.Shipping.Gateway.FlatRate
+namespace Merchello.Core.Gateways.Shipping
 {
     public interface IShipRateTable
     {
@@ -35,7 +35,7 @@ namespace Merchello.Web.Shipping.Gateway.FlatRate
         /// </summary>
         /// <param name="rangeValue">The value within a range used to determine which rate to return</param>
         /// <returns>A decimal rate</returns>
-        decimal GetRate(decimal rangeValue);
+        decimal FindRate(decimal rangeValue);
 
         /// <summary>
         /// The rows of the rate table

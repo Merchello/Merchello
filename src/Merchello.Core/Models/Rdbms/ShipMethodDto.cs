@@ -17,6 +17,10 @@ namespace Merchello.Core.Models.Rdbms
         [Column("name")]
         public string Name { get; set; }
 
+        [Column("shipCountryKey")]
+        [ForeignKey(typeof(ShipCountryDto), Name = "FK_merchGatewayProvider2ShipCountry_merchShipCountry", Column = "pk")]
+        public Guid ShipCountryKey { get; set; }
+
         [Column("providerKey")]
         [ForeignKey(typeof(GatewayProviderDto), Name = "FK_merchShipMethod_merchGatewayProvider", Column = "pk")]
         public Guid ProviderKey { get; set; }

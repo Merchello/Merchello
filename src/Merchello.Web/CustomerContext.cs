@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Web;
 using Merchello.Core;
+using Merchello.Core.Cache;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
-using Merchello.Web.Cache;
 using Merchello.Web.Models;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Models.EntityBase;
