@@ -2033,6 +2033,21 @@
             The integer identifier for media's recycle bin.
             </summary>
         </member>
+        <member name="T:Umbraco.Core.Constants.Web">
+            <summary>
+            Defines the identifiers for Umbraco system nodes.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Constants.Web.PreviewCookieName">
+            <summary>
+            The preview cookie name
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Constants.Web.AuthCookieName">
+            <summary>
+            The auth cookie name
+            </summary>
+        </member>
         <member name="T:Umbraco.Core.CoreBootManager">
             <summary>
             A bootstrapper for the Umbraco application which initializes all objects for the Core of the application 
@@ -2188,6 +2203,12 @@
             <summary>
             Set the lazy resolution of determining the SQL server version if that is the db type we're using
             </summary>
+        </member>
+        <member name="M:Umbraco.Core.DatabaseContext.UpgradeSchemaAndData">
+            <summary>
+            This assumes all of the previous checks are done!
+            </summary>
+            <returns></returns>
         </member>
         <member name="P:Umbraco.Core.DatabaseContext.Database">
             <summary>
@@ -3518,6 +3539,29 @@
             <summary>
             A helper class used for imaging
             </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.ImageHelper.GenerateMediaThumbnails(Umbraco.Core.IO.IFileSystem,System.String,System.String,System.Drawing.Image,System.Collections.Generic.IEnumerable{System.Int32})">
+            <summary>
+            Creates the thumbnails if the image is larger than all of the specified ones.
+            </summary>
+            <param name="fs"></param>
+            <param name="fileName"></param>
+            <param name="extension"></param>
+            <param name="originalImage"></param>
+            <param name="additionalThumbSizes"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Media.ImageHelper.Resize(Umbraco.Core.IO.IFileSystem,System.String,System.String,System.Int32,System.String,System.Drawing.Image)">
+            <summary>
+            Performs an image resize
+            </summary>
+            <param name="fileSystem"></param>
+            <param name="path"></param>
+            <param name="extension"></param>
+            <param name="maxWidthHeight"></param>
+            <param name="fileNameAddition"></param>
+            <param name="originalImage"></param>
+            <returns></returns>
         </member>
         <member name="T:Umbraco.Core.Media.MediaSubfolderCounter">
             <summary>
@@ -8718,12 +8762,12 @@
             <param name="group">Optional group</param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Core.Persistence.Repositories.ITagsRepository.AssignTagsToProperty(System.Int32,System.String,System.Collections.Generic.IEnumerable{Umbraco.Core.Models.ITag},System.Boolean)">
+        <member name="M:Umbraco.Core.Persistence.Repositories.ITagsRepository.AssignTagsToProperty(System.Int32,System.Int32,System.Collections.Generic.IEnumerable{Umbraco.Core.Models.ITag},System.Boolean)">
             <summary>
             Assigns the given tags to a content item's property
             </summary>
             <param name="contentId"></param>
-            <param name="propertyTypeAlias"></param>
+            <param name="propertyTypeId"></param>
             <param name="tags">The tags to assign</param>
             <param name="replaceTags">
             If set to true, this will replace all tags with the given tags, 
@@ -8734,12 +8778,12 @@
             This can also be used to remove all tags from a property by specifying replaceTags = true and an empty tag list.
             </remarks>
         </member>
-        <member name="M:Umbraco.Core.Persistence.Repositories.ITagsRepository.RemoveTagsFromProperty(System.Int32,System.String,System.Collections.Generic.IEnumerable{Umbraco.Core.Models.ITag})">
+        <member name="M:Umbraco.Core.Persistence.Repositories.ITagsRepository.RemoveTagsFromProperty(System.Int32,System.Int32,System.Collections.Generic.IEnumerable{Umbraco.Core.Models.ITag})">
             <summary>
             Removes any of the given tags from the property association
             </summary>
             <param name="contentId"></param>
-            <param name="propertyTypeAlias"></param>
+            <param name="propertyTypeId"></param>
             <param name="tags">The tags to remove from the property</param>
         </member>
         <member name="T:Umbraco.Core.Persistence.Repositories.PetaPocoRepositoryBase`2">
@@ -8885,12 +8929,12 @@
             Returns the database Unit of Work added to the repository
             </summary>
         </member>
-        <member name="M:Umbraco.Core.Persistence.Repositories.TagsRepository.AssignTagsToProperty(System.Int32,System.String,System.Collections.Generic.IEnumerable{Umbraco.Core.Models.ITag},System.Boolean)">
+        <member name="M:Umbraco.Core.Persistence.Repositories.TagsRepository.AssignTagsToProperty(System.Int32,System.Int32,System.Collections.Generic.IEnumerable{Umbraco.Core.Models.ITag},System.Boolean)">
             <summary>
             Assigns the given tags to a content item's property
             </summary>
             <param name="contentId"></param>
-            <param name="propertyTypeAlias"></param>
+            <param name="propertyTypeId"></param>
             <param name="tags">The tags to assign</param>
             <param name="replaceTags">
             If set to true, this will replace all tags with the given tags, 
@@ -8901,12 +8945,12 @@
             This can also be used to remove all tags from a property by specifying replaceTags = true and an empty tag list.
             </remarks>
         </member>
-        <member name="M:Umbraco.Core.Persistence.Repositories.TagsRepository.RemoveTagsFromProperty(System.Int32,System.String,System.Collections.Generic.IEnumerable{Umbraco.Core.Models.ITag})">
+        <member name="M:Umbraco.Core.Persistence.Repositories.TagsRepository.RemoveTagsFromProperty(System.Int32,System.Int32,System.Collections.Generic.IEnumerable{Umbraco.Core.Models.ITag})">
             <summary>
             Removes any of the given tags from the property association
             </summary>
             <param name="contentId"></param>
-            <param name="propertyTypeAlias"></param>
+            <param name="propertyTypeId"></param>
             <param name="tags">The tags to remove from the property</param>
         </member>
         <member name="M:Umbraco.Core.Persistence.Repositories.TagsRepository.GetTagSet(System.Collections.Generic.IEnumerable{Umbraco.Core.Models.ITag})">
@@ -8923,19 +8967,35 @@
             <param name="tagsToInsert"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Core.Persistence.Repositories.TagsRepository.EnsureContentProperty(System.Int32,System.String)">
-            <summary>
-            Ensures the content and property alias exist, then returns the property type id for the alias
-            </summary>
-            <param name="contentId"></param>
-            <param name="propertyAlias"></param>
-            <returns></returns>
-        </member>
         <member name="T:Umbraco.Core.PropertyEditors.BackwardsCompatibleData">
             <summary>
             This is used purelty to attempt to maintain some backwards compatibility with new property editors that don't have a 
             legacy property editor predecessor when developers are using the legacy APIs
             </summary>
+        </member>
+        <member name="M:Umbraco.Core.PropertyEditors.BackwardsCompatibleData.umbraco#interfaces#IDataValueSetter#SetValue(System.Object,System.String)">
+            <summary>
+            This is here for performance reasons since in some cases we will have already resolved the value from the db
+            and want to just give this object the value so it doesn't go re-look it up from the database.
+            </summary>
+            <param name="val"></param>
+            <param name="strDbType"></param>
+        </member>
+        <member name="M:Umbraco.Core.PropertyEditors.BackwardsCompatibleData.LoadValueFromDatabase">
+            <summary>
+            In the case where the value is not set, this will go get it from the db ourselves - this shouldn't really ever be needed,
+            the value should always be set with IDataValueSetter.SetValue
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.PropertyEditors.BackwardsCompatibleData.Value">
+            <summary>
+            This returns the value
+            </summary>
+            <remarks>
+            There's code here to load the data from the db just like the legacy DefaultData does but in theory the value of this
+            IData should always be set using the IDataValueSetter.SetValue which is done externally. Just in case there's some edge
+            case out there that doesn't set this value, we'll go and get it based on the same logic in DefaultData.
+            </remarks>
         </member>
         <member name="T:Umbraco.Core.PropertyEditors.BackwardsCompatibleDataType">
             <summary>
@@ -9993,6 +10053,13 @@
             <param name="groupName"></param>
             <returns></returns>
         </member>
+        <member name="M:Umbraco.Core.Persistence.Repositories.IMemberRepository.Exists(System.String)">
+            <summary>
+            Checks if a member with the username exists
+            </summary>
+            <param name="username"></param>
+            <returns></returns>
+        </member>
         <member name="M:Umbraco.Core.Persistence.Repositories.ITemplateRepository.GetTemplateNode(System.String)">
             <summary>
             Returns a template as a template node which can be traversed (parent, children)
@@ -11043,6 +11110,9 @@
             <remarks>
             This is generally not going to be used by anything unless a property editor wants to change the merging
             functionality or needs to convert some legacy persisted data, or convert the string values to strongly typed values in json (i.e. booleans)
+            
+            IMPORTANT! When using this method the default pre values dictionary should not be modified which would change the property editor's global 
+            singleton pre-values!
             </remarks>
         </member>
         <member name="P:Umbraco.Core.PropertyEditors.PreValueEditor.Fields">
@@ -13818,6 +13888,18 @@
             This clears the forms authentication cookie
             </summary>
         </member>
+        <member name="M:Umbraco.Core.Security.AuthenticationExtensions.UmbracoLogout(System.Net.Http.HttpResponseMessage)">
+            <summary>
+            This clears the forms authentication cookie
+            </summary>
+            <param name="response"></param>
+        </member>
+        <member name="M:Umbraco.Core.Security.AuthenticationExtensions.UmbracoLogout(System.Web.HttpContext)">
+            <summary>
+            This clears the forms authentication cookie
+            </summary>
+            <param name="http"></param>
+        </member>
         <member name="M:Umbraco.Core.Security.AuthenticationExtensions.RenewUmbracoAuthTicket(System.Web.HttpContextBase)">
             <summary>
             Renews the Umbraco authentication ticket
@@ -13860,7 +13942,7 @@
             <param name="http"></param>
             <param name="cookieName"></param>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:Umbraco.Core.Security.AuthenticationExtensions.RenewAuthTicket(System.Web.HttpContextBase,System.String,System.String)" -->
+        <!-- Badly formed XML comment ignored for member "M:Umbraco.Core.Security.AuthenticationExtensions.RenewAuthTicket(System.Web.HttpContextBase,System.String,System.String,System.Int32)" -->
         <member name="M:Umbraco.Core.Security.AuthenticationExtensions.CreateAuthTicketAndCookie(System.Web.HttpContextBase,System.String,System.String,System.Int32,System.Int32,System.String,System.String,System.String)">
             <summary>
             Creates a custom FormsAuthentication ticket with the data specified
@@ -14070,6 +14152,20 @@
             <summary>
             Data structure used to store information in the authentication cookie
             </summary>
+        </member>
+        <member name="M:Umbraco.Core.Security.UserData.#ctor(System.String)">
+            <summary>
+            Use this constructor to create/assign new UserData to the ticket
+            </summary>
+            <param name="sessionId">
+            A unique id that is assigned to this ticket
+            </param>
+        </member>
+        <member name="P:Umbraco.Core.Security.UserData.SessionId">
+            <summary>
+            This is used to Id the current ticket which we can then use to mitigate csrf attacks
+            and other things that require request validation.
+            </summary>        
         </member>
         <member name="M:Umbraco.Core.Serialization.AbstractSerializationService.FromStream(System.IO.Stream,System.Type,System.String)">
             <summary>
@@ -16892,6 +16988,20 @@
             Idea is to have this is an isolated interface so that it can be easily 'replaced' in the membership provider impl.
             </remarks>
         </member>
+        <member name="M:Umbraco.Core.Services.IMembershipMemberService.Exists(System.String)">
+            <summary>
+            Checks if a member with the username exists
+            </summary>
+            <param name="username"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.IMemberService.Exists(System.Int32)">
+            <summary>
+            Checks if a member with the id exists
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
         <member name="T:Umbraco.Core.Services.IMembershipUserService">
             <summary>
             Defines part of the UserService, which is specific to methods used by the membership provider.
@@ -17825,6 +17935,20 @@
             Represents the MemberService.
             </summary>
         </member>
+        <member name="M:Umbraco.Core.Services.MemberService.Exists(System.String)">
+            <summary>
+            Checks if a member with the username exists
+            </summary>
+            <param name="username"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.MemberService.Exists(System.Int32)">
+            <summary>
+            Checks if a member with the id exists
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
         <member name="M:Umbraco.Core.Services.MemberService.GetById(System.Int32)">
             <summary>
             Gets a Member by its integer Id
@@ -18333,6 +18457,13 @@
             <param name="importStructure">Boolean indicating whether or not to import the </param>
             <param name="userId">Optional id of the User performing the operation. Default is zero (admin).</param>
             <returns>An enumrable list of generated ContentTypes</returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.PackagingService.Export(System.Collections.Generic.IEnumerable{Umbraco.Core.Models.IDataTypeDefinition})">
+            <summary>
+            Export a list of data types
+            </summary>
+            <param name="dataTypeDefinitions"></param>
+            <returns></returns>
         </member>
         <member name="M:Umbraco.Core.Services.PackagingService.ImportDataTypeDefinitions(System.Xml.Linq.XElement,System.Int32)">
             <summary>
@@ -20538,12 +20669,12 @@
         </member>
         <member name="M:Umbraco.Core.PluginManager.ResolvePropertyEditors">
             <summary>
-            Returns all found property editors
+            Returns all found property editors (based on the resolved Iparameter editors - this saves a scan)
             </summary>
         </member>
         <member name="M:Umbraco.Core.PluginManager.ResolveParameterEditors">
             <summary>
-            Returns all found parameter editors
+            Returns all found parameter editors (which includes property editors)
             </summary>
         </member>
         <member name="M:Umbraco.Core.PluginManager.ResolveApplicationStartupHandlers">
@@ -20719,13 +20850,13 @@
         </member>
         <member name="M:Umbraco.Core.PluginManager.TypeList`1.IsTypeList``1(Umbraco.Core.PluginManager.TypeResolutionKind)">
             <summary>
-            Returns true if the current TypeList is of the same type and of the same type
+            Returns true if the current TypeList is of the same lookup type
             </summary>
             <typeparam name="TLookup"></typeparam>
             <param name="resolutionType"></param>
             <returns></returns>
         </member>
-        <member name="T:Umbraco.Core.PluginManager.CachedPluginNotFoundInFile">
+        <member name="T:Umbraco.Core.PluginManager.CachedPluginNotFoundInFileException">
             <summary>
             This class is used simply to determine that a plugin was not found in the cache plugin list with the specified
             TypeResolutionKind.
@@ -20841,6 +20972,13 @@
             <summary>
             This tries to detect a json string, this is not a fail safe way but it is quicker than doing 
             a try/catch when deserializing when it is not json.
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.StringExtensions.CleanForXss(System.String)">
+            <summary>
+            Cleans string to aid in preventing xss attacks.
             </summary>
             <param name="input"></param>
             <returns></returns>
@@ -21572,13 +21710,6 @@
             Converts from an XmlDocument to an XDocument
             </summary>
             <param name="xmlDocument"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Umbraco.Core.XmlExtensions.ToXmlElement(System.Xml.Linq.XContainer)">
-            <summary>
-            Converts from an XElement to an XmlElement
-            </summary>
-            <param name="xElement"></param>
             <returns></returns>
         </member>
         <member name="M:Umbraco.Core.XmlExtensions.ToXElement(System.Xml.XmlNode)">

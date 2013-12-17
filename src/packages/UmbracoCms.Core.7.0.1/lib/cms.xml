@@ -583,6 +583,14 @@
             <param name="InitValue">The init value.</param>
             <param name="InitPropertyId">The init property id.</param>
         </member>
+        <member name="M:umbraco.cms.businesslogic.datatype.DefaultData.umbraco#interfaces#IDataValueSetter#SetValue(System.Object,System.String)">
+            <summary>
+            This is here for performance reasons since in some cases we will have already resolved the value from the db
+            and want to just give this object the value so it doesn't go re-look it up from the database.
+            </summary>
+            <param name="val"></param>
+            <param name="strDbType"></param>
+        </member>
         <member name="M:umbraco.cms.businesslogic.datatype.DefaultData.LoadValueFromDatabase">
             <summary>
             Loads the data value from the database.
@@ -694,7 +702,7 @@
             Saves this instance.
             </summary>
         </member>
-        <member name="M:umbraco.cms.businesslogic.datatype.PreValue.initialize">
+        <member name="M:umbraco.cms.businesslogic.datatype.PreValue.Initialize">
             <summary>
             Initializes this instance.
             </summary>
@@ -718,6 +726,12 @@
             <value>The value.</value>
         </member>
         <member name="P:umbraco.cms.businesslogic.datatype.PreValue.SortOrder">
+            <summary>
+            Gets or sets the sort order.
+            </summary>
+            <value>The sort order.</value>
+        </member>
+        <member name="P:umbraco.cms.businesslogic.datatype.PreValue.Alias">
             <summary>
             Gets or sets the sort order.
             </summary>
@@ -3808,11 +3822,11 @@
             </summary>
             <returns>True if the the current visitor is logged in</returns>
         </member>
-        <member name="M:umbraco.cms.businesslogic.member.Member.memberExists(System.Int32)">
+        <member name="M:umbraco.cms.businesslogic.member.Member.MemberExists(System.Int32)">
             <summary>
             Make a lookup in the database to verify if a member truely exists
             </summary>
-            <param name="NodeId">The node id of the member</param>
+            <param name="nodeId">The node id of the member</param>
             <returns>True is a record exists in db</returns>
         </member>
         <member name="M:umbraco.cms.businesslogic.member.Member.CurrentMemberId">

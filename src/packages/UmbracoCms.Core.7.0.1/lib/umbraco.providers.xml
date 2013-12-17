@@ -4,6 +4,11 @@
         <name>umbraco.providers</name>
     </assembly>
     <members>
+        <member name="T:umbraco.providers.members.MembershipEventHandler">
+            <summary>
+            Adds some event handling
+            </summary>
+        </member>
         <member name="T:umbraco.providers.members.UmbracoMembershipProvider">
             <summary>
             Custom Membership Provider for Umbraco Members (User authentication for Frontend applications NOT umbraco CMS)  
@@ -256,11 +261,6 @@
         <member name="P:umbraco.providers.members.UmbracoMembershipProvider.AllowManuallyChangingPassword">
             <summary>
             For backwards compatibility, this provider supports this option
-            </summary>
-        </member>
-        <member name="T:umbraco.providers.members.MembershipEventHandler">
-            <summary>
-            Adds some event handling
             </summary>
         </member>
         <member name="M:umbraco.providers.members.UmbracoProfileProvider.GetPropertyValues(System.Configuration.SettingsContext,System.Configuration.SettingsPropertyCollection)">
