@@ -1,6 +1,6 @@
 ﻿namespace Merchello.Core.Models
 {
-    public interface IGatewayMethod
+    public interface IGatewayResource
     {
         /// <summary>
         /// The unique provider service code or 'alias' for the gateway method.

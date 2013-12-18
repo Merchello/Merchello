@@ -220,23 +220,19 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
-        /// Gets a list of <see cref="IShipMethod"/> objects given a <see cref="IShipCountry"/> key
+        /// Gets a list of <see cref="IShipMethod"/> objects given a <see cref="IGatewayProvider"/> key and a <see cref="IShipCountry"/> key
         /// </summary>
-        /// <param name="shipCountryKey">Guid</param>
         /// <returns>A collection of <see cref="IShipMethod"/></returns>
-        public IEnumerable<IShipMethod> GetShipMethodsByShipCountryKey(Guid shipCountryKey)
+        public IEnumerable<IShipMethod> GetGatewayProviderShipMethods(Guid providerKey, Guid shipCountryKey)
         {
-            throw new NotImplementedException();
-        }
+            using (var repository = _repositoryFactory.CreateShipMethodRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query =
+                    Query<IShipMethod>.Builder.Where(
+                        x => x.ProviderKey == providerKey && x.ShipCountryKey == shipCountryKey);
 
-        /// <summary>
-        /// Gets a list of <see cref="IShipMethod"/> objects give a <see cref="IGatewayProvider"/> key
-        /// </summary>
-        /// <param name="gatewayProviderKey">Guid</param>
-        /// <returns>A collection of <see cref="IShipMethod"/></returns>
-        public IEnumerable<IShipMethod> GetShipMethodsByGatewayProviderKey(Guid gatewayProviderKey)
-        {
-            throw new NotImplementedException();
+                return repository.GetByQuery(query);
+            }
         }
 
         /// <summary>

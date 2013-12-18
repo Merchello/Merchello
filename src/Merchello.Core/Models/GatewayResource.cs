@@ -8,9 +8,9 @@ namespace Merchello.Core.Models
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    public class GatewayMethod : IGatewayMethod
+    public class GatewayResource : IGatewayResource
     {
-        public GatewayMethod(string serviceCode, string name)
+        public GatewayResource(string serviceCode, string name)
         {
             Mandate.ParameterNotNullOrEmpty(serviceCode, "serviceCode");
             Mandate.ParameterNotNullOrEmpty(name, "name");
