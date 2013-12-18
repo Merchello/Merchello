@@ -90,18 +90,11 @@ namespace Merchello.Core.Services
         void Delete(IShipRateTier shipRateTier);
 
         /// <summary>
-        /// Gets a list of <see cref="IShipMethod"/> objects given a <see cref="IShipCountry"/> key
+        /// Gets a list of <see cref="IShipMethod"/> objects given a <see cref="IGatewayProvider"/> key and a <see cref="IShipCountry"/> key
         /// </summary>
-        /// <param name="shipCountryKey">Guid</param>
         /// <returns>A collection of <see cref="IShipMethod"/></returns>
-        IEnumerable<IShipMethod> GetShipMethodsByShipCountryKey(Guid shipCountryKey);
+        IEnumerable<IShipMethod> GetGatewayProviderShipMethods(Guid providerKey, Guid shipCountryKey);
 
-        /// <summary>
-        /// Gets a list of <see cref="IShipMethod"/> objects give a <see cref="IGatewayProvider"/> key
-        /// </summary>
-        /// <param name="gatewayProviderKey">Guid</param>
-        /// <returns>A collection of <see cref="IShipMethod"/></returns>
-        IEnumerable<IShipMethod> GetShipMethodsByGatewayProviderKey(Guid gatewayProviderKey);
 
         /// <summary>
         /// Gets a list of <see cref="IShipRateTier"/> objects given a <see cref="IShipMethod"/> key

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Merchello.Core.Models;
+﻿using Merchello.Core.Models;
 
 namespace Merchello.Core.Gateways.Shipping
 {
@@ -9,10 +8,14 @@ namespace Merchello.Core.Gateways.Shipping
     public abstract class GatewayShipMethodBase : IGatewayShipMethod
     {
         private readonly IShipMethod _shipMethod;
+        private readonly IGatewayResource _gatewayResource;
 
-        protected GatewayShipMethodBase(IShipMethod shipMethod)
+        protected GatewayShipMethodBase(IGatewayResource gatewayResource, IShipMethod shipMethod)
         {
+            Mandate.ParameterNotNull(gatewayResource, "gatewayResource");
             Mandate.ParameterNotNull(shipMethod, "shipMethod");
+
+            _gatewayResource = gatewayResource;
             _shipMethod = shipMethod;
         }
 
@@ -26,10 +29,17 @@ namespace Merchello.Core.Gateways.Shipping
         /// <summary>
         /// Gets the ship method
         /// </summary>
-        protected IShipMethod ShipMethod
+        public IShipMethod ShipMethod
         {
             get { return _shipMethod; }
         }
 
+        /// <summary>
+        /// Gets the gateway method
+        /// </summary>
+        public IGatewayResource GatewayResource
+        {
+            get { return _gatewayResource; }
+        }
     }
 }

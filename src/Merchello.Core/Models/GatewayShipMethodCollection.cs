@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 using System.Threading;
+using Merchello.Core.Gateways.Shipping;
 using Umbraco.Core;
 
 namespace Merchello.Core.Models
@@ -11,33 +12,33 @@ namespace Merchello.Core.Models
     /// </summary>
     [Serializable]
     [CollectionDataContract(IsReference = true)]
-    public class ShipMethodCollection<T> : KeyedCollection<string, IShipMethod>
-        where T : IShipMethod
+    public class GatewayShipMethodCollection<T> : KeyedCollection<Guid, IGatewayShipMethod>
+        where T : IGatewayShipMethod
     {
         private readonly ReaderWriterLockSlim _addLocker = new ReaderWriterLockSlim();
 
-        protected override string GetKeyForItem(IShipMethod item)
+        protected override Guid GetKeyForItem(IGatewayShipMethod item)
         {
-            return item.ServiceCode;
+            return item.ShipMethod.Key;
         }
 
-        internal new void Add(IShipMethod item)
+        internal new void Add(IGatewayShipMethod item)
         {
             using (new WriteLock(_addLocker))
             {
 
-                if (Contains(item.ServiceCode)) return;
+                if (Contains(GetKeyForItem(item))) return;
 
                 base.Add(item);
 
             }
         }
 
-        public int IndexOfKey(string serviceCode)
+        public int IndexOfKey(Guid shipMethodKey)
         {
             for (var i = 0; i < Count; i++)
             {
-                if (GetKeyForItem(this[i]) == serviceCode)
+                if (GetKeyForItem(this[i]) == shipMethodKey)
                 {
                     return i;
                 }

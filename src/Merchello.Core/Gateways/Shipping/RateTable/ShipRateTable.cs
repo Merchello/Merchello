@@ -6,8 +6,7 @@ using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Umbraco.Core;
 
-
-namespace Merchello.Core.Gateways.Shipping
+namespace Merchello.Core.Gateways.Shipping.RateTable
 {
     public class ShipRateTable : IShipRateTable
     {
@@ -42,7 +41,7 @@ namespace Merchello.Core.Gateways.Shipping
             var context = MerchelloContext.Current;
 
             return (ShipRateTable)context.Cache
-                .RequestCache.GetCacheItem(CacheKeys.ShipRateTableCacheKey(shipMethodKey), 
+                .RequestCache.GetCacheItem(CacheKeys.GatewayShipMethodCacheKey(shipMethodKey), 
                 () => GetShipRateTable(MerchelloContext.Current, shipMethodKey));
         }
 
@@ -175,11 +174,11 @@ namespace Merchello.Core.Gateways.Shipping
             var cache = merchelloContext.Cache.RequestCache;
 
             // clear the current cached item
-            cache.ClearCacheItem(CacheKeys.ShipRateTableCacheKey(rateTable.ShipMethodKey));
+            cache.ClearCacheItem(CacheKeys.GatewayShipMethodCacheKey(rateTable.ShipMethodKey));
 
             // persist and enter into cache
             merchelloContext.Services.GatewayProviderService.Save(rateTable.Rows);
-            cache.GetCacheItem(CacheKeys.ShipRateTableCacheKey(rateTable.ShipMethodKey), () => rateTable);   
+            cache.GetCacheItem(CacheKeys.GatewayShipMethodCacheKey(rateTable.ShipMethodKey), () => rateTable);   
         }
 
         /// <summary>
