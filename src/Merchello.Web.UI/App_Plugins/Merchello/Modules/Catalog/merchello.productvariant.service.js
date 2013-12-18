@@ -46,8 +46,8 @@
 
                 return umbRequestHelper.resourcePromise(
                    $http({
-                       url: '/umbraco/Merchello/ProductVariantApi/' + key,
-                       method: "DELETE"
+                       url: '/umbraco/Merchello/ProductVariantApi/DeleteVariant?key=' + key,
+                       method: "GET"
                    }),
                    'Failed to delete variant data for key ' + key);
             },

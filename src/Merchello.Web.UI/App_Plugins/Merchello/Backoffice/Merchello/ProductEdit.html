@@ -62,23 +62,12 @@
                             <p>If you reorder your options and variants, it will change the order in which they appear on your storefront. Drag your options (ie size, style) vertically and variants (ie women's, small) horizontally.</p>
 
                             <ul class="reorder">
-                                <li>
+                                <li data-ng-repeat="option in product.productOptions | orderBy:'sortOrder'">
                                     <span class="col-xs-3 span3">
-                                        <button class="btn btn-link variant"><i class="icon-thumbnail-list"></i> Style</button>
+                                        <button class="btn btn-link variant"><i class="icon-thumbnail-list"></i> {{option.name}}</button>
                                     </span>
                                     <span class="options col-xs-9 span9">
-                                        <button class="btn btn-link option"><i class="icon-thumbnail-list"></i> Women's</button>
-                                        <button class="btn btn-link option"><i class="icon-thumbnail-list"></i> Men's</button>
-                                    </span>
-                                </li>
-                                <li>
-                                    <span class="col-xs-3 span3">
-                                        <button class="btn btn-link variant"><i class="icon-thumbnail-list"></i> Size</button>
-                                    </span>
-                                    <span class="options col-xs-9 span9">
-                                        <button class="btn btn-link option"><i class="icon-thumbnail-list"></i> Small</button>
-                                        <button class="btn btn-link option"><i class="icon-thumbnail-list"></i> Medium</button>
-                                        <button class="btn btn-link option"><i class="icon-thumbnail-list"></i> Large</button>
+                                        <button class="btn btn-link option" data-ng-repeat="attribute in option.choices | orderBy:'optionOrder'"><i class="icon-thumbnail-list"></i> {{attribute.name}}</button>
                                     </span>
                                 </li>
                             </ul>
@@ -102,8 +91,8 @@
                             </div>
 
                             <div>
-                                <input type="submit" class="btn" data-ng-click="changePricesFlyout.close()" value="Cancel" />
-                                <input type="submit" class="btn btn-primary" data-ng-click="changePricesFlyout.confirm()" value="Save" />
+                                <input type="button" class="btn" data-ng-click="changePricesFlyout.close()" value="Cancel" />
+                                <input type="button" class="btn btn-primary" data-ng-click="changePricesFlyout.confirm()" value="Save" />
                             </div>
                         </div>
 
@@ -118,8 +107,8 @@
                             </div>
 
                             <div>
-                                <input type="submit" class="btn" data-ng-click="updateInventoryFlyout.close()" value="Cancel" />
-                                <input type="submit" class="btn btn-primary" data-ng-click="updateInventoryFlyout.confirm()" value="Save" />
+                                <input type="button" class="btn" data-ng-click="updateInventoryFlyout.close()" value="Cancel" />
+                                <input type="button" class="btn btn-primary" data-ng-click="updateInventoryFlyout.confirm()" value="Save" />
                             </div>
                         </div>
 
@@ -133,8 +122,8 @@
                             </div>
 
                             <div>
-                                <input type="submit" class="btn" data-ng-click="deleteVariantsFlyout.close()" value="Cancel" />
-                                <input type="submit" class="btn btn-warning" data-ng-click="deleteVariantsFlyout.confirm()" value="Delete" />
+                                <input type="button" class="btn" data-ng-click="deleteVariantsFlyout.close()" value="Cancel" />
+                                <input type="button" class="btn btn-warning" data-ng-click="deleteVariantsFlyout.confirm()" value="Delete" />
                             </div>
                         </div>
 
@@ -148,8 +137,8 @@
                             </div>
 
                             <div>
-                                <input type="submit" class="btn" data-ng-click="duplicateVariantsFlyout.close()" value="Cancel" />
-                                <input type="submit" class="btn btn-primary" data-ng-click="duplicateVariantsFlyout.confirm()" value="Save" />
+                                <input type="button" class="btn" data-ng-click="duplicateVariantsFlyout.close()" value="Cancel" />
+                                <input type="button" class="btn btn-primary" data-ng-click="duplicateVariantsFlyout.confirm()" value="Save" />
                             </div>
                         </div>
 

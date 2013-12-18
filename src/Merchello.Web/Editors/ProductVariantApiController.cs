@@ -204,10 +204,11 @@ namespace Merchello.Web.Editors
         /// <summary>
         /// Deletes an existing product variant
         ///
-        /// DELETE /umbraco/Merchello/ProductVariantApi/{key}
+        /// DELETE /umbraco/Merchello/ProductVariantApi/DeleteVariant?key={key}
         /// </summary>
         /// <param name="key">Product Variant key</param>
-        public HttpResponseMessage Delete(Guid key)
+        [AcceptVerbs("GET", "DELETE")]
+        public HttpResponseMessage DeleteVariant(Guid key)
         {
             var productVariantToDelete = _productVariantService.GetByKey(key);
             if (productVariantToDelete == null)

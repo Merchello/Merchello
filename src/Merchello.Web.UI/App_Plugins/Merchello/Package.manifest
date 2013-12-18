@@ -52,7 +52,7 @@
 		'~/App_Plugins/Merchello/PropertyEditors/ProductPicker/Js/merchelloproductselector.controller.js',
 		'~/App_Plugins/Merchello/Common/Js/merchello.main.module.js'
 	],
-	stylesheet: [
+	css: [
 		'~/App_Plugins/Merchello/Common/Css/merchello.css',
 		'~/App_Plugins/Merchello/lib/ngTagsInput/ng-tags-input.min.css',
 	]
