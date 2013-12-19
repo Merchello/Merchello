@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Examine;
-using Examine.LuceneEngine.SearchCriteria;
 using Examine.SearchCriteria;
 using Merchello.Core;
 using Merchello.Core.Models;
@@ -11,7 +10,7 @@ using Merchello.Web.Models.ContentEditing;
 
 namespace Merchello.Web
 {
-    public class ProductQuery
+    internal class ProductQuery
     {
 
         /// <summary>

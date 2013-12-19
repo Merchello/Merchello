@@ -14,10 +14,10 @@ namespace Merchello.Core.Models.Rdbms
         [Constraint(Default = "newid()")]
         public Guid Key { get; set; }
 
-        [Column("customerKey")]
-        [ForeignKey(typeof(CustomerDto), Name = "FK_merchOrder_merchCustomer",Column = "pk")]
+        [Column("invoiceKey")]
+        [ForeignKey(typeof(InvoiceDto), Name = "FK_merchOrder_merchInvoice",Column = "pk")]
         [NullSetting(NullSetting = NullSettings.Null)]
-        public Guid? CustomerKey { get; set; }
+        public Guid InvoiceKey { get; set; }
 
         [Column("orderNumber")]
         [IndexAttribute(IndexTypes.UniqueNonClustered, Name = "IX_merchOrderNumber")]

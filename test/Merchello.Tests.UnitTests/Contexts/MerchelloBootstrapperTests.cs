@@ -47,14 +47,14 @@ namespace Merchello.Tests.UnitTests.Contexts
         [Test]
         public void Core_BootManager_Can_Create_MerchelloContext()
         {
-            MerchelloBootstrapper.Init(new CoreBootManager());
+            MerchelloBootstrapper.Init(new CoreBootManager() { IsUnitTest = true });
 
             var context = MerchelloContext.Current;
             Assert.NotNull(context);
             
             var service = context.Services.CustomerService;
             Assert.NotNull(service);
-
+             
             Assert.IsTrue(_initEventCalled);
             Assert.IsTrue(_startingEventCalled);
             Assert.IsTrue(_completedEventCalled);
@@ -66,7 +66,7 @@ namespace Merchello.Tests.UnitTests.Contexts
         [Test]
         public void Web_BootManager_Can_Create_MerchelloContext()
         {
-            MerchelloBootstrapper.Init(new WebBootManager(true));
+            MerchelloBootstrapper.Init(new WebBootManager(true) { IsUnitTest = true });
 
             var context = MerchelloContext.Current;
             Assert.NotNull(context);

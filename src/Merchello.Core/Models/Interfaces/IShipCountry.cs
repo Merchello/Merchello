@@ -11,10 +11,5 @@ namespace Merchello.Core.Models
         [DataMember]
         Guid CatalogKey { get; }
 
-        /// <summary>
-        /// The ship methods associated with the country
-        /// </summary>
-        [DataMember]
-        ShipMethodCollection ShipMethods { get; }
     }
 }

@@ -163,6 +163,8 @@ namespace Merchello.Core.Models
                     writer.WriteAttributeString("name", productVariant.Name);
                     writer.WriteAttributeString("sku", productVariant.Sku);
                     writer.WriteAttributeString("price", productVariant.Price.ToString(CultureInfo.InvariantCulture));
+                    writer.WriteAttributeString("manufacturer", productVariant.Manufacturer);
+                    writer.WriteAttributeString("modelNumber", productVariant.ManufacturerModelNumber);
                     writer.WriteAttributeString("costOfGoods", productVariant.CostOfGoods.ToString());
                     writer.WriteAttributeString("salePrice", productVariant.SalePrice.ToString());
                     writer.WriteAttributeString("onSale", productVariant.OnSale.ToString());

@@ -12,13 +12,13 @@ namespace Merchello.Core.Models
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    public class ProductOptionCollection : NotifiyCollectionBase<string, IProductOption>
+    public class ProductOptionCollection : NotifiyCollectionBase<Guid, IProductOption>
     {
         private readonly ReaderWriterLockSlim _addLocker = new ReaderWriterLockSlim();
 
-        protected override string GetKeyForItem(IProductOption item)
+        protected override Guid GetKeyForItem(IProductOption item)
         {
-            return item.Name;
+            return item.Key;
         }
 
         internal new void Add(IProductOption item)
@@ -26,9 +26,9 @@ namespace Merchello.Core.Models
             using (new WriteLock(_addLocker))
             {
                 var key = GetKeyForItem(item);
-                if (!string.IsNullOrEmpty(key))
+                if (Guid.Empty != key)
                 {
-                    var exists = Contains(item.Name);
+                    var exists = Contains(item.Key);
                     if (exists)
                     {
                         this[key].SortOrder = item.SortOrder;
@@ -45,16 +45,16 @@ namespace Merchello.Core.Models
         }
 
        
-        public new bool Contains(string name)
+        public bool Contains(string name)
         {
             return this.Any(x => x.Name == name);
         }
 
-        public override int IndexOfKey(string key)
+        public override int IndexOfKey(Guid key)
         {
             for (var i = 0; i < Count; i++)
             {
-                if (this[i].Name == key)
+                if (this[i].Key == key)
                 {
                     return i;
                 }

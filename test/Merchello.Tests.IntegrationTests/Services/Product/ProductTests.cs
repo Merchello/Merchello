@@ -108,19 +108,19 @@ namespace Merchello.Tests.IntegrationTests.Services.Product
             var key = expected.Key;
             expected.ProductOptions.Add(new ProductOption("Color"));
 
-            expected.ProductOptions["Color"].Choices.Add(new ProductAttribute("Black", "Black"));
-            expected.ProductOptions["Color"].Choices.Add(new ProductAttribute("Red", "Red"));
-            expected.ProductOptions["Color"].Choices.Add(new ProductAttribute("Grey", "Grey"));
+            expected.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Black", "Black"));
+            expected.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Red", "Red"));
+            expected.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Grey", "Grey"));
 
             expected.ProductOptions.Add(new ProductOption("Size"));
-            expected.ProductOptions["Size"].Choices.Add(new ProductAttribute("Small", "Sm"));
-            expected.ProductOptions["Size"].Choices.Add(new ProductAttribute("Medium", "M"));
-            expected.ProductOptions["Size"].Choices.Add(new ProductAttribute("Large", "Lg"));
-            expected.ProductOptions["Size"].Choices.Add(new ProductAttribute("X-Large", "XL"));
+            expected.ProductOptions.First(x => x.Name == "Size").Choices.Add(new ProductAttribute("Small", "Sm"));
+            expected.ProductOptions.First(x => x.Name == "Size").Choices.Add(new ProductAttribute("Medium", "M"));
+            expected.ProductOptions.First(x => x.Name == "Size").Choices.Add(new ProductAttribute("Large", "Lg"));
+            expected.ProductOptions.First(x => x.Name == "Size").Choices.Add(new ProductAttribute("X-Large", "XL"));
 
             expected.ProductOptions.Add(new ProductOption("Material"));
-            expected.ProductOptions["Material"].Choices.Add(new ProductAttribute("Cotton", "Cotton"));
-            expected.ProductOptions["Material"].Choices.Add(new ProductAttribute("Wool", "Wool"));
+            expected.ProductOptions.First(x => x.Name == "Material").Choices.Add(new ProductAttribute("Cotton", "Cotton"));
+            expected.ProductOptions.First(x => x.Name == "Material").Choices.Add(new ProductAttribute("Wool", "Wool"));
 
             _productService.Save(expected);
 
@@ -130,7 +130,7 @@ namespace Merchello.Tests.IntegrationTests.Services.Product
             //// Assert
             Assert.NotNull(retrieved);
             Assert.IsTrue(3 == retrieved.ProductOptions.Count);
-            Assert.IsTrue(3 == retrieved.ProductOptions["Color"].Choices.Count);
+            Assert.IsTrue(3 == retrieved.ProductOptions.First(x => x.Name == "Color").Choices.Count);
             Assert.IsFalse(retrieved.IsDirty());
         }
 

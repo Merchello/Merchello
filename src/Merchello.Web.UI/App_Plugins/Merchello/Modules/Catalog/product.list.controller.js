@@ -8,7 +8,7 @@
      * @description
      * The controller for the product editor
      */
-    controllers.ProductListController = function($scope, $routeParams, $location, notificationsService, angularHelper, serverValidationManager, merchelloProductService) {
+    controllers.ProductListController = function ($scope, $routeParams, $location, assetsService, notificationsService, angularHelper, serverValidationManager, merchelloProductService) {
 
         $scope.filtertext = "";
         $scope.products = [];
@@ -18,6 +18,8 @@
         $scope.sortOrder = "asc";
         $scope.limitAmount = 10;
         $scope.currentPage = 0;
+
+        assetsService.loadCss("/App_Plugins/Merchello/Common/Css/merchello.css");
 
         $scope.numberOfPages = function () {
             return Math.ceil($scope.products.length / $scope.limitAmount);

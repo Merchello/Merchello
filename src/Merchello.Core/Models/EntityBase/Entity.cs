@@ -22,7 +22,8 @@ namespace Merchello.Core.Models.EntityBase
         private static readonly PropertyInfo CreateDateSelector = ExpressionHelper.GetPropertyInfo<Entity, DateTime>(x => x.CreateDate);
         private static readonly PropertyInfo UpdateDateSelector = ExpressionHelper.GetPropertyInfo<Entity, DateTime>(x => x.UpdateDate);
         private static readonly PropertyInfo HasIdentitySelector = ExpressionHelper.GetPropertyInfo<Entity, bool>(x => x.HasIdentity);
-
+        
+      
         #region IEntity Members        
 
         /// <summary>
@@ -45,6 +46,12 @@ namespace Merchello.Core.Models.EntityBase
                 }, _key, KeySelector);
             }
         }
+
+#endregion
+
+
+        #region IEntityBase Memebers
+
 
         /// <summary>
         /// Gets or sets the Created Date
@@ -103,18 +110,6 @@ namespace Merchello.Core.Models.EntityBase
         #endregion
 
         /// <summary>
-        /// Method to call on entity saved when first added
-        /// </summary>
-        internal virtual void AddingEntity()
-        {
-            if (Key == Guid.Empty)
-                _key = Guid.NewGuid(); // set the _key so that the HasIdentity flag is not set
-
-            CreateDate = DateTime.Now;
-            UpdateDate = DateTime.Now;
-        }
-
-        /// <summary>
         /// Gets or sets the WasCancelled flag, which is used to track
         /// whether some action against an entity was cancelled through some event.
         /// </summary>
@@ -132,6 +127,19 @@ namespace Merchello.Core.Models.EntityBase
             }
         }
 
+
+        /// <summary>
+        /// Method to call on entity saved when first added
+        /// </summary>
+        internal virtual void AddingEntity()
+        {
+            if (Key == Guid.Empty)
+                _key = Guid.NewGuid(); // set the _key so that the HasIdentity flag is not set
+
+            CreateDate = DateTime.Now;
+            UpdateDate = DateTime.Now;
+        }
+
         /// <summary>
         /// Method to call on entity saved/updated
         /// </summary>
@@ -139,7 +147,6 @@ namespace Merchello.Core.Models.EntityBase
         {
             UpdateDate = DateTime.Now;
         }
-
 
         /// <summary>
         /// Tracks the properties that have changed
@@ -196,7 +203,6 @@ namespace Merchello.Core.Models.EntityBase
         }
 
         #endregion
-
 
         /// <summary>
         /// Used by inheritors to set the value of properties, this will detect if the property value actually changed and if it did
@@ -262,5 +268,9 @@ namespace Merchello.Core.Models.EntityBase
         {
             return GetType();
         }
+
+
+
+       
     }
 }

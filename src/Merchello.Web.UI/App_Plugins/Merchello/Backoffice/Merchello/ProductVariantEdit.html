@@ -1,6 +1,4 @@
-﻿<link href="/App_Plugins/Merchello/Common/Css/merchello.css" rel="stylesheet">
-
-<form novalidate name="productVariantForm" 
+﻿<form novalidate name="productVariantForm" 
       data-ng-controller="Merchello.Editors.ProductVariant.EditController" 
       data-ng-show="loaded" 
       data-ng-submit="save()">
@@ -8,13 +6,17 @@
 
         <umb-header>
 
-            <div class="span4">
+            <div class="span4" data-ng-show="!editingVariant">
                  <umb-content-name 
                     ng-model="productVariant.name" 
                     placeholder="Enter a product name">
                 </umb-content-name>
             </div>
-
+            <div class="span4" data-ng-show="editingVariant">
+                <div class="umb-headline-editor-wrapper">
+                     <h1 class="umb-headline">{{productVariant.name}}</h1>
+                </div>
+            </div>
 
             <div class="col-xs-8 span8">
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
@@ -83,7 +85,7 @@
                             <div class="row-fluid">
                                 <div class="form-group col-xs-6 span6">
                                     <label class="label-checkbox"><input name="digital" type="checkbox" data-ng-model="productVariant.hasDigitalDownload"> <span>This variant has digital goods</span></label>
-                                    <label class="label-checkbox" data-ng-show="creatingVariant || !product.hasVariants"><input name="hasoptions" type="checkbox" data-ng-model="productVariant.hasOptions" data-ng-click="ensureInitialOption()"> <span>This variant has options (like size or color)</span></label>
+                                    <label class="label-checkbox" data-ng-show="creatingVariant || !product.hasVariants || !editingVariant"><input name="hasoptions" type="checkbox" data-ng-model="productVariant.hasOptions" data-ng-click="ensureInitialOption()"> <span>This variant has options (like size or color)</span></label>
                                     <label class="label-checkbox"><input name="taxable" type="checkbox" data-ng-model="productVariant.taxable"> <span>This variant is taxable</span></label>
                                 </div>
                                 <div class="form-group col-xs-6 span6">

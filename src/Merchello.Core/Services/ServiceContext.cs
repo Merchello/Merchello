@@ -13,7 +13,8 @@ namespace Merchello.Core.Services
     public class ServiceContext : IServiceContext
     {        
         private Lazy<CustomerService> _customerService;
-        private Lazy<ItemCacheService> _itemCacheService;            
+        private Lazy<ItemCacheService> _itemCacheService;   
+        private Lazy<GatewayProviderService> _gatewayProviderService ;  
         private Lazy<ProductService> _productService;
         private Lazy<ProductVariantService> _productVariantService;
         private Lazy<SettingsService> _settingsService; 
@@ -56,6 +57,9 @@ namespace Merchello.Core.Services
             if(_shippingService == null)
                 _shippingService = new Lazy<ShippingService>(() => new ShippingService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _settingsService.Value));
 
+            if(_gatewayProviderService == null)
+                _gatewayProviderService = new Lazy<GatewayProviderService>(() => new GatewayProviderService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _settingsService.Value));
+
             if(_warehouseService == null)
                 _warehouseService = new Lazy<WarehouseService>(() => new WarehouseService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
         }
@@ -69,6 +73,14 @@ namespace Merchello.Core.Services
         public ICustomerService CustomerService
         {
             get { return _customerService.Value;  }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IGatewayProviderService"/>
+        /// </summary>
+        public IGatewayProviderService GatewayProviderService
+        {
+            get { return _gatewayProviderService.Value; }
         }
 
         /// <summary>

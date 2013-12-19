@@ -11,7 +11,7 @@ namespace Merchello.Core.Models
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    public class ProductOption : Entity, IProductOption
+    public sealed class ProductOption : Entity, IProductOption
     {
         private string _name;
         private bool _required;
@@ -27,6 +27,13 @@ namespace Merchello.Core.Models
 
         internal ProductOption(string name, bool required, ProductAttributeCollection choices)
         {
+            
+            // This is required so that we can create attributes from the WebApi without a lot of             
+            // round trip traffic to the db to generate the Key(s).  Key is virtual so also forces
+            // this class to be sealed
+            Key = Guid.NewGuid();
+            HasIdentity = false;
+
             _name = name;
             _required = required;
             _choices = choices;

@@ -77,12 +77,12 @@ namespace Merchello.Web.Models.ContentEditing
 
         #region ShipGatewayProviderDisplay
 
-        internal static ShipGatewayProviderDisplay ToShipGatewayProviderDisplay(this IShipGatewayProvider shipGatewayProvider)
-        {
-            AutoMapper.Mapper.CreateMap<IShipGatewayProvider, ShipGatewayProviderDisplay>();
+        //internal static ShipGatewayProviderDisplay ToShipGatewayProviderDisplay(this IShipGatewayProvider shipGatewayProvider)
+        //{
+        //    AutoMapper.Mapper.CreateMap<IShipGatewayProvider, ShipGatewayProviderDisplay>();
 
-            return AutoMapper.Mapper.Map<ShipGatewayProviderDisplay>(shipGatewayProvider);
-        }
+        //    return AutoMapper.Mapper.Map<ShipGatewayProviderDisplay>(shipGatewayProvider);
+        //}
 
         #endregion
 
@@ -104,6 +104,17 @@ namespace Merchello.Web.Models.ContentEditing
             AutoMapper.Mapper.CreateMap<IShipProvince, ShipProvinceDisplay>();
 
             return AutoMapper.Mapper.Map<ShipProvinceDisplay>(shipProvince);
+        }
+
+        #endregion
+
+        #region TaxProvinceDisplay
+
+        internal static TaxProvinceDisplay ToTaxProvinceDisplay(this TaxProvince taxProvince)
+        {
+            AutoMapper.Mapper.CreateMap<TaxProvince, TaxProvinceDisplay>();
+
+            return AutoMapper.Mapper.Map<TaxProvinceDisplay>(taxProvince);
         }
 
         #endregion

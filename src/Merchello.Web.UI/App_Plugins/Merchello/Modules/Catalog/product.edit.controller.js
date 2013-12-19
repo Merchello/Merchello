@@ -8,7 +8,7 @@
      * @description
      * The controller for the product editor
      */
-    controllers.ProductEditController = function ($scope, $routeParams, $location, notificationsService, dialogService, angularHelper, serverValidationManager, merchelloProductService, merchelloProductVariantService) {
+    controllers.ProductEditController = function ($scope, $routeParams, $location, $q, assetsService, notificationsService, dialogService, angularHelper, serverValidationManager, merchelloProductService, merchelloProductVariantService) {
 
         $scope.currentTab = "Variants";
 
@@ -17,6 +17,7 @@
         $scope.allVariants = false;
         $scope.bulkAction = false,
         $scope.selectedVariants = [];
+        $scope.rebuildVariants = false;
 
         $scope.flyouts = {
             reorderVariants: false,
@@ -25,6 +26,10 @@
             deleteVariants: false,
             duplicateVariants: false
         };
+
+        //load the seperat css for the editor to avoid it blocking our js loading
+        assetsService.loadCss("/App_Plugins/Merchello/Common/Css/merchello.css");
+        assetsService.loadCss("/App_Plugins/Merchello/lib/JsonTree/jsontree.css");
 
         if ($routeParams.create) {
 
@@ -48,28 +53,33 @@
                 $(".content-column-body").css('background-image', 'none');
 
             }, function (reason) {
-
                 notificationsService.error("Product Load Failed", reason.message);
-
             });
         }
 
-        $scope.save = function () {
+        $scope.save = function (thisForm) {
 
-            notificationsService.info("Saving...", "");
+            if (thisForm.$valid) {
 
-            //we are editing so get the product from the server
-            var promise = merchelloProductService.save($scope.product);
+                notificationsService.info("Saving...", "");
 
-            promise.then(function (product) {
+                //we are editing so get the product from the server
+                var promise = merchelloProductService.updateProduct($scope.product);
 
-                notificationsService.success("Product Saved", "H5YR!");
+                promise.then(function (product) {
+                    notificationsService.success("Product Saved", "H5YR!");
 
-            }, function (reason) {
+                    $scope.product = product;
 
-                notificationsService.error("Product Save Failed", reason.message);
+                    if ($scope.rebuildVariants) {
+                        $scope.rebuildAndSaveVariants();
+                        $scope.rebuildVariants = false;
+                    }
 
-            });
+                }, function (reason) {
+                    notificationsService.error("Product Save Failed", reason.message);
+                });
+            }
         };
 
         $scope.chooseMedia = function () {
@@ -114,16 +124,52 @@
             }
 
         }
+        
+        $scope.sortableOptions = {
+            stop: function (e, ui) {
+                for (var i = 0; i < $scope.product.productOptions.length; i++)
+                {
+                    $scope.product.productOptions[i].setSortOrder(i + 1);
+                }
+                $scope.product.fixAttributeSortOrders();
+            },
+            axis: 'y',
+            cursor: "move"
+        };
+
+        $scope.sortableChoices = {
+            start: function (e, ui) {
+                $(e.target).data("ui-sortable").floating = true;    // fix for jQui horizontal sorting issue https://github.com/angular-ui/ui-sortable/issues/19
+            },
+            stop: function (e, ui) {
+                var attr = ui.item.scope().attribute
+                var attrOption = attr.findMyOption($scope.product.productOptions);
+                attrOption.resetChoiceSortOrder();
+            }, 
+            update: function (e, ui) {
+                var attr = ui.item.scope().attribute
+                var attrOption = attr.findMyOption($scope.product.productOptions);
+                attrOption.resetChoiceSortOrder();
+            },
+            cursor: "move"
+        };
 
         $scope.selectedVariants = function () {
-            return _.filter($scope.product.productVariants, function (v) {
-                return v.selected;
-            });
+            if ($scope.product != undefined)
+            {
+                return _.filter($scope.product.productVariants, function (v) {
+                    return v.selected;
+                });
+            }
+            else
+            {
+                return [];
+            }
         }
 
         $scope.checkBulkVariantsSelected = function() {
             var v = $scope.selectedVariants();
-            if (v.length > 1) {
+            if (v.length >= 1) {
                 $scope.allVariants = true;
             }
             else {
@@ -136,8 +182,10 @@
             $scope.checkBulkVariantsSelected();
         }
 
-        $scope.toggleAllVariants = function () {
-            
+        $scope.toggleAllVariants = function (newstate) {
+            for (var i = 0; i < $scope.product.productVariants.length; i++) {
+                $scope.product.productVariants[i].selected = newstate;
+            }
         }
 
         $scope.selectVariants = function (attributeToSelect) {
@@ -177,7 +225,19 @@
                 $scope.bulkAction = false;
             }, {
                 confirm: function () {
-                    notificationsService.success("Confirmed prices update", $scope.changePricesFlyout.newPrice);
+                    var selected = $scope.selectedVariants();
+                    for (var i = 0; i < selected.length; i++) {
+                        selected[i].price = $scope.changePricesFlyout.newPrice;
+                        var savepromise = merchelloProductVariantService.save(selected[i]);
+                        savepromise.then(function () {
+                            notificationsService.success("Variant saved ", "");
+                        }, function (reason) {
+                            notificationsService.error("Product Variant Save Failed", reason.message);
+                        });
+                    }
+                    notificationsService.success("Confirmed prices update", "");
+                    $scope.changePricesFlyout.close();
+                    $scope.changePricesFlyout.confirmText = newPrice;
                 }
             });
 
@@ -201,7 +261,36 @@
                 $scope.bulkAction = false;
             }, {
                 confirm: function () {
-                    notificationsService.success("Confirmed variants deleted");
+                    if ($scope.deleteVariantsFlyout.confirmText == "DELETE")
+                    {
+                        var selected = $scope.selectedVariants();
+                        var promisesArray = [];
+
+                        for (var i = 0; i < selected.length; i++) {
+                            promisesArray.push(merchelloProductVariantService.deleteVariant(selected[i].key));
+                        }
+
+                        var promise = $q.all(promisesArray);
+
+                        promise.then(function () {
+
+                            var promiseLoadProduct = merchelloProductService.getByKey($scope.product.key);
+                            promiseLoadProduct.then(function (dbproduct) {
+                                $scope.product = new merchello.Models.Product(dbproduct);
+                                notificationsService.success("Variants deleted");
+                            }, function (reason) {
+                                notificationsService.error("Product Variant Delete Failed", reason.message);
+                            });
+                        }, function (reason) {
+                            notificationsService.error("Product Variant Delete Failed", reason.message);
+                        });
+                        $scope.deleteVariantsFlyout.close();
+                        $scope.deleteVariantsFlyout.confirmText = "";
+                    }
+                    else
+                    {
+                        notificationsService.error("Type the word DELETE in the box to confirm deletion", "");
+                    }
                 }
             });
 
@@ -213,7 +302,63 @@
                 $scope.bulkAction = false;
             }, {
                 confirm: function () {
-                    notificationsService.success("Confirmed variants duplicated");
+                    var submittedChoiceName = $scope.duplicateVariantsFlyout.newChoiceName;
+                    if (submittedChoiceName != undefined) {
+                        if (submittedChoiceName.length > 0) {
+
+                            var options = [];
+                            for (var o = 0; o < $scope.product.productOptions.length; o++) {
+
+                                var currentOption = $scope.product.productOptions[o];
+
+                                var tempOption = new merchello.Models.ProductOption();
+                                tempOption.name = currentOption.name;
+                                tempOption.key = currentOption.key;
+                                tempOption.sortOrder = currentOption.sortOrder;
+
+                                if (currentOption.key == $scope.duplicateVariantsFlyout.model.key) {
+                                    var foundChoice = currentOption.findChoiceByName(submittedChoiceName);
+                                    if (foundChoice != undefined)
+                                    {
+                                        tempOption.choices.push(foundChoice);
+                                    }
+                                    else
+                                    {
+                                        currentOption.addChoice(submittedChoiceName);
+                                        tempOption.addChoice(submittedChoiceName);
+                                    }
+                                }
+
+                                options.push(tempOption);
+                            }
+
+                            var selected = $scope.selectedVariants();
+                            for (var i = 0; i < selected.length; i++) {
+
+                                var thisVariant = selected[i];
+
+                                for (var a = 0; a < thisVariant.attributes.length; a++)
+                                {
+                                    var attr = thisVariant.attributes[a];
+                                    if (attr.optionKey != $scope.duplicateVariantsFlyout.model.key)
+                                    {
+                                        // add this attribute to the correct option
+                                        var myOption = attr.findMyOption(options);
+
+                                        if (!myOption.choiceExists(attr)) {
+                                            myOption.choices.push(attr);
+                                        }
+                                    }
+                                }
+                            }
+
+                            merchelloProductService.createVariantsFromDetachedOptionsList($scope.product, options);
+
+                            notificationsService.success("Confirmed variants duplicated");
+                            $scope.duplicateVariantsFlyout.close();
+                            $scope.duplicateVariantsFlyout.newChoiceName = "";
+                        }
+                    }
                 }
             });
 
@@ -223,10 +368,50 @@
         }
 
         $scope.addOption = function () {
+            $scope.rebuildVariants = true;
             $scope.product.addBlankOption();
         };
+
+        $scope.rebuildAndSaveVariants = function()
+        {
+            merchelloProductVariantService.deleteAllByProduct($scope.product.key);
+
+            $scope.product = merchelloProductService.createVariantsFromOptions($scope.product);
+
+            // Save immediately
+            var savepromise = merchelloProductService.updateProductWithVariants($scope.product);
+            savepromise.then(function (product) {
+                $scope.product = product;
+            }, function (reason) {
+                notificationsService.error("Product Save Failed", reason.message);
+            });
+        }
         
         $scope.updateVariants = function (thisForm) {
+
+            var promise = merchelloProductService.updateProduct($scope.product);
+
+            promise.then(function (product) {
+                notificationsService.success("Product Saved", "H5YR!");
+
+                $scope.product = product;
+
+                if ($scope.rebuildVariants)
+                {
+                    $scope.rebuildAndSaveVariants();
+                    $scope.rebuildVariants = false;
+                    $scope.toggleAllVariants(false);
+                }
+
+            }, function (reason) {
+                notificationsService.error("Product Save Failed", reason.message);
+            });
+        }
+
+
+        $scope.prettyJson = function () {
+            var $jsonInfo = $(".jsonInfo");
+            $jsonInfo.jsontree($jsonInfo.html())
         }
 
     }

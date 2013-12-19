@@ -11,7 +11,7 @@
 	,
 	javascript: [
 		'~/App_Plugins/Merchello/lib/bootstrap/js/bootstrap.min.js',
-		'~/App_Plugins/Merchello/lib/select2/ui-select2.js',
+		'~/App_Plugins/Merchello/lib/JsonTree/jsontree.js',
 		'~/App_Plugins/Merchello/lib/ngTagsInput/ng-tags-input.min.js',
 		'~/App_Plugins/Merchello/Common/Js/merchello.namespaces.js',
 		'~/App_Plugins/Merchello/Common/Js/startfrom.filter.js',
@@ -21,12 +21,12 @@
 		'~/App_Plugins/Merchello/Directives/tag.manager.directive.js',
 		'~/App_Plugins/Merchello/Directives/productoptions.repeat.directive.js',
 		'~/App_Plugins/Merchello/Directives/productvariant.filter.directive.js',
-		'~/App_Plugins/Merchello/Modules/Catalog/merchello.product.service.js',
+		'~/App_Plugins/Merchello/Modules/Catalog/merchello.product.service.js?v=3',
 		'~/App_Plugins/Merchello/Modules/Catalog/merchello.productvariant.service.js',
 		'~/App_Plugins/Merchello/Modules/Catalog/product.list.controller.js',
 		'~/App_Plugins/Merchello/Modules/Catalog/product.create.controller.js',
 		'~/App_Plugins/Merchello/Modules/Catalog/product.edit.controller.js',
-		'~/App_Plugins/Merchello/Modules/Catalog/productvariant.edit.controller.js',
+		'~/App_Plugins/Merchello/Modules/Catalog/productvariant.edit.controller.js?v=3',
 		'~/App_Plugins/Merchello/Modules/Customer/customer.list.controller.js',
 		'~/App_Plugins/Merchello/Modules/Customer/customer.view.controller.js',
 		'~/App_Plugins/Merchello/Modules/Customer/customer.edit.controller.js',
@@ -45,7 +45,6 @@
 		'~/App_Plugins/Merchello/Modules/Settings/settings.controller.js',
 		'~/App_Plugins/Merchello/Modules/Settings/debug.controller.js',
 		'~/App_Plugins/Merchello/Modules/Settings/payment.controller.js',
-		'~/App_Plugins/Merchello/Modules/Settings/regions.controller.js',
 		'~/App_Plugins/Merchello/Modules/Settings/shipping.controller.js',
 		'~/App_Plugins/Merchello/Modules/Settings/taxation.controller.js',
 		'~/App_Plugins/Merchello/Modules/Settings/notifications.controller.js',
@@ -53,7 +52,7 @@
 		'~/App_Plugins/Merchello/PropertyEditors/ProductPicker/Js/merchelloproductselector.controller.js',
 		'~/App_Plugins/Merchello/Common/Js/merchello.main.module.js'
 	],
-	stylesheet: [
+	css: [
 		'~/App_Plugins/Merchello/Common/Css/merchello.css',
 		'~/App_Plugins/Merchello/lib/ngTagsInput/ng-tags-input.min.css',
 	]

@@ -12,7 +12,7 @@ namespace Merchello.Web
         /// <returns><see cref="IBasket"/></returns>
         public static IBasket Basket(this ICustomerBase customer)
         {
-            return Models.Basket.GetBasket(customer);
+            return Web.Basket.GetBasket(customer);
         }
          
     }

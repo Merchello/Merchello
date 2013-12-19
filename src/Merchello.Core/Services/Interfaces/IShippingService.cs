@@ -14,7 +14,7 @@ namespace Merchello.Core.Services
     /// Defines the ShippingService, which provides access to shipping operations
     /// </summary>
     public interface IShippingService : IService
-    {        
+    {
         /// <summary>
         /// Saves a single <see cref="IShipment"/> object
         /// </summary>
@@ -35,30 +35,7 @@ namespace Merchello.Core.Services
         /// <param name="shipCountry"></param>
         void Save(IShipCountry shipCountry);
 
-        /// <summary>
-        /// Saves a single <see cref="IShipMethod"/>
-        /// </summary>
-        /// <param name="shipMethod"></param>
-        void Save(IShipMethod shipMethod);
-
-        /// <summary>
-        /// Saves a collection of <see cref="IShipMethod"/>
-        /// </summary>
-        /// <param name="shipMethodList">Collection of <see cref="IShipMethod"/></param>
-        void Save(IEnumerable<IShipMethod> shipMethodList);
-
-        /// <summary>
-        /// Saves a single <see cref="IShipRateTier"/>
-        /// </summary>
-        /// <param name="shipRateTier"></param>
-        void Save(IShipRateTier shipRateTier);
-
-        /// <summary>
-        /// Saves a collection of <see cref="IShipRateTier"/>
-        /// </summary>
-        /// <param name="shipRateTierList"></param>
-        void Save(IEnumerable<IShipRateTier> shipRateTierList);
-
+       
         /// <summary>
         /// Deletes a single <see cref="IShipment"/> object
         /// </summary>
@@ -78,18 +55,6 @@ namespace Merchello.Core.Services
         /// <param name="shipmentList">Collection of <see cref="IShipment"/> to delete</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         void Delete(IEnumerable<IShipment> shipmentList, bool raiseEvents = true);
-
-        /// <summary>
-        /// Deletes a <see cref="IShipMethod"/>
-        /// </summary>
-        /// <param name="shipMethod"></param>
-        void Delete(IShipMethod shipMethod);
-
-        /// <summary>
-        /// Deletes a <see cref="IShipRateTier"/>
-        /// </summary>
-        /// <param name="shipRateTier"></param>
-        void Delete(IShipRateTier shipRateTier);
 
         /// <summary>
         /// Gets an <see cref="IShipment"/> object by its 'UniqueId'
@@ -127,26 +92,7 @@ namespace Merchello.Core.Services
         /// <returns>A collection of <see cref="IShipCountry"/></returns>
         IEnumerable<IShipCountry> GetShipCountriesByCatalogKey(Guid catalogKey);
 
-        /// <summary>
-        /// Gets a list of <see cref="IShipMethod"/> objects given a <see cref="IShipCountry"/> key
-        /// </summary>
-        /// <param name="shipCountryKey">Guid</param>
-        /// <returns>A collection of <see cref="IShipMethod"/></returns>
-        IEnumerable<IShipMethod> GetShipMethodsByShipCountryKey(Guid shipCountryKey);
-               
-        /// <summary>
-        /// Gets a list of <see cref="IShipMethod"/> objects give a <see cref="IGatewayProviderBase"/> key
-        /// </summary>
-        /// <param name="gatewayProviderKey">Guid</param>
-        /// <returns>A collection of <see cref="IShipMethod"/></returns>
-        IEnumerable<IShipMethod> GetShipMethodsByGatewayProviderKey(Guid gatewayProviderKey);
 
-        /// <summary>
-        /// Gets a list of <see cref="IShipRateTier"/> objects given a <see cref="IShipMethod"/> key
-        /// </summary>
-        /// <param name="shipMethodKey">Guid</param>
-        /// <returns>A collection of <see cref="IShipRateTier"/></returns>
-        IEnumerable<IShipRateTier> GetShipRateTiersByShipMethodKey(Guid shipMethodKey); 
             
         /// <summary>
         /// Gets list of <see cref="IShipment"/> objects given a list of Unique keys

@@ -13,7 +13,8 @@
             self.optionKey = "";
             self.name = "";
             self.sku = "";
-            self.sortOrder = "";
+            self.sortOrder = 0;
+            self.optionOrder = 0;
         }
         else
         {
@@ -22,7 +23,12 @@
             self.name = productAttributeFromServer.name;
             self.sku = productAttributeFromServer.sku;
             self.sortOrder = productAttributeFromServer.sortOrder;
+            self.optionOrder = self.sortOrder;
         }
+
+        self.findMyOption = function (options) {
+            return _.find(options, function (option) { return option.key == self.optionKey; });
+        };
 
     };
 
@@ -47,8 +53,12 @@
             self.sortOrder = productOptionFromServer.sortOrder;
 
             self.choices = _.map(productOptionFromServer.choices, function (attribute) {
-                return new merchello.Models.ProductAttribute(attribute);
+                var attr = new merchello.Models.ProductAttribute(attribute);
+                attr.optionOrder = self.sortOrder;
+                return attr;
             });
+
+            self.choices = _.sortBy(self.choices, function (choice) { return choice.sortOrder; });
         }
 
         // Helper to add a choice to this option
@@ -76,6 +86,45 @@
         self.removeChoice = function (idx) {
 
             self.choices.splice(idx, 1);
+        };
+
+        // Helper to remove a choice to this option
+        self.setSortOrder = function (neworder) {
+
+            self.sortOrder = neworder;
+
+            for (var i = 0; i < self.choices.length; i++) {
+                self.choices[i].optionOrder = neworder;
+            }
+        };
+
+        // Helper to make the sortOrder sync with the order in the choices array
+        self.resetChoiceSortOrder = function () {
+
+            for (var i = 0; i < self.choices.length; i++) {
+                self.choices[i].sortOrder = i + 1;
+            }
+        };
+
+        // Helper to check if this choice exists in my choices array
+        self.choiceExists = function (choice) {
+
+            var choiceInArray = _.find(self.choices, function (c) { return c.key == choice.key; });
+            if (choiceInArray == undefined)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        };
+
+        // Helper to find a choice by name and return it.  undefined if not found
+        self.findChoiceByName = function (name) {
+
+            var choiceInArray = _.find(self.choices, function (c) { return c.name == name; });
+            return choiceInArray;
         };
     };
 
@@ -108,6 +157,8 @@
             self.totalInventoryCount = 0;
 
             self.attributes = [];
+
+            self.selected = false;
         }
         else {
             self.key = productVariantFromServer.key;
@@ -135,6 +186,10 @@
             self.attributes = _.map(productVariantFromServer.attributes, function (attribute) {
                 return new merchello.Models.ProductAttribute(attribute);
             });
+
+            self.attributes = _.sortBy(self.attributes, function (attr) { return attr.sortOrder; });
+
+            self.selected = false;
         }
 
         // Helper to copy from product to create a master variant
@@ -161,6 +216,16 @@
             self.downloadMediaId = product.downloadMediaId;
 
             self.attributes = [];
+        };
+
+        self.fixAttributeSortOrders = function (options) {
+            for (var i = 0; i < self.attributes.length; i++)
+            {
+                var attr = self.attributes[i];
+                var option = attr.findMyOption(options);
+                attr.optionOrder = option.sortOrder;
+            }
+            self.attributes = _.sortBy(self.attributes, function (attr) { return attr.optionOrder; });
         };
     };
 
@@ -224,12 +289,16 @@
                 return new merchello.Models.ProductOption(option);
             });
 
+            self.productOptions = _.sortBy(self.productOptions, function (option) { return option.sortOrder; });
+
             if (self.productOptions.length > 0) {
                 self.hasOptions = true;
             }
 
             self.productVariants = _.map(productFromServer.productVariants, function (variant) {
-                return new merchello.Models.ProductVariant(variant);
+                var jsvariant = new merchello.Models.ProductVariant(variant);
+                jsvariant.fixAttributeSortOrders(self.productOptions)
+                return jsvariant;
             });
 
             if (self.productVariants.length > 0) {
@@ -297,10 +366,12 @@
             newVariant.attributes = attributes.slice(0);
             newVariant.selected = true;
             var skuPostfix = self.productVariants.length + 1;
-            newVariant.sku = newVariant.sku + '-' + skuPostfix;    // TODO: replace with settings "skuSeparator"
+            newVariant.sku = _.uniqueId(newVariant.sku + '-' + skuPostfix);   // TODO: replace with settings "skuSeparator"
 
             self.productVariants.push(newVariant);
             self.hasVariants = true;
+
+            return newVariant;
         };
 
         // Helper to remove a variant from this product
@@ -309,6 +380,11 @@
             self.productVariants.splice(idx, 1);
         };
 
+        self.fixAttributeSortOrders = function () {
+            for (var i = 0; i < self.productVariants.length; i++) {
+                self.productVariants[i].fixAttributeSortOrders(self.productOptions);
+            }
+        };
     };
 
 

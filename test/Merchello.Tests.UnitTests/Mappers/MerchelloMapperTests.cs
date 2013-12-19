@@ -1,4 +1,5 @@
 ﻿using Merchello.Core.Models;
+using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Persistence.Mappers;
 using NUnit.Framework;
 
@@ -58,6 +59,24 @@ namespace Merchello.Tests.UnitTests.Mappers
             Assert.IsTrue(resolved.Success);
             Assert.AreSame(expected, resolved.Result.GetType());
         }
+
+        /// <summary>
+        /// Test to verify <see cref="MerchelloMapper"/> correctly maps IGatewayProvider to GatewayProviderMapper
+        /// </summary>
+        [Test]
+        public void Mapper_Resolves_IGatewayProvider_To_GatewayProviderMapper()
+        {
+            //// Arrange
+            var expected = typeof(GatewayProviderMapper);
+
+            //// Act
+            var resolved = MerchelloMapper.Current.ResolveByType(typeof(IGatewayProvider));
+
+            //// Assert
+            Assert.IsTrue(resolved.Success);
+            Assert.AreSame(expected, resolved.Result.GetType());
+        }
+
 
         /// <summary>
         /// Test to verify <see cref="MerchelloMapper"/> correctly maps IInvoiceStatus to InvoiceStatusMapper

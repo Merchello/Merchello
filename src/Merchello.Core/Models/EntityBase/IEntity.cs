@@ -8,7 +8,7 @@ namespace Merchello.Core.Models.EntityBase
     /// Entities should always have an Id, Created and Modified date
     /// </summary>
     public interface IEntity : ITracksDirty
-    {        
+    {
         /// <summary>
         /// Guid based Id
         /// </summary>
@@ -31,6 +31,7 @@ namespace Merchello.Core.Models.EntityBase
         /// Indicates whether the current entity has an identity, eg. Id.
         /// </summary>
         [IgnoreDataMember]
-        bool HasIdentity { get; }
+        bool HasIdentity { get; } 
+           
     }
 }

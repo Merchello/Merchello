@@ -45,14 +45,14 @@ namespace Merchello.Core.Models.TypeFields
             get { return new PaymentMethodTypeField(); }
         }
 
-        /// <summary>
-        /// Creates an instance of an <see cref="IShipmentMethodTypeField"/> object
-        /// </summary>
-        /// <returns></returns>
-        internal static IShipmentMethodTypeField ShipmentMethod
-        {
-            get { return new ShipMethodTypeField(); }
-        }
+        ///// <summary>
+        ///// Creates an instance of an <see cref="IShipmentMethodTypeField"/> object
+        ///// </summary>
+        ///// <returns></returns>
+        //internal static IShipmentMethodTypeField ShipmentMethod
+        //{
+        //    get { return new ShipMethodTypeField(); }
+        //}
 
         /// <summary>
         /// Creates an instance of an <see cref="IAppliedPaymentTypeField"/>

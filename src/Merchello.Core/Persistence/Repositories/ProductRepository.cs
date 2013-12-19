@@ -405,7 +405,10 @@ namespace Merchello.Core.Persistence.Repositories
 
             if (!productAttribute.HasIdentity)
             {
-                ((Entity)productAttribute).AddingEntity();
+                //((Entity)productAttribute).AddingEntity();
+                productAttribute.CreateDate = DateTime.Now;
+                productAttribute.UpdateDate = DateTime.Now;
+
                 var dto = factory.BuildDto(productAttribute);
                 Database.Insert(dto);
                 productAttribute.Key = dto.Key;

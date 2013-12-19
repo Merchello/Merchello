@@ -15,24 +15,24 @@ namespace Merchello.Core.Models
         /// </summary>
         [DataMember]
         string Name { get; set;}
-        
-        /// <summary>
-        /// The key (guid) associated with the Warehouse Country that offers this ship method
-        /// </summary>
-        [DataMember]
-        Guid WarehouseCountryKey { get; set; }
 
         /// <summary>
         /// The key associated with the gateway provider for the Ship Method
         /// </summary>
         [DataMember]
-        Guid ProviderKey { get; set;}
+        Guid ProviderKey { get; }
             
         /// <summary>
-        /// The shipMethodTypeFieldKey for the ShipMethod
+        /// The key associated with the ship country for the Ship Method
         /// </summary>
         [DataMember]
-        Guid ShipMethodTfKey { get; set;}
+        Guid ShipCountryKey { get; }
+
+        ///// <summary>
+        ///// The shipMethodTypeFieldKey for the ShipMethod
+        ///// </summary>
+        //[DataMember]
+        //Guid ShipMethodTfKey { get; set;}
             
         /// <summary>
         /// The surcharge for the ShipMethod
@@ -45,6 +45,12 @@ namespace Merchello.Core.Models
         /// </summary>
         [DataMember]
         string ServiceCode { get; set;}
+
+        /// <summary>
+        /// True/false indicating whether or not this shipmethod is taxable
+        /// </summary>
+        [DataMember]
+        bool Taxable { get; set; }
 
         /// <summary>
         /// Stores province settings for this ship method

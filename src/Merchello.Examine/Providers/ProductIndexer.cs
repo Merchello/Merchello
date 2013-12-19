@@ -116,6 +116,8 @@ namespace Merchello.Examine.Providers
                 new StaticField("sku", FieldIndexTypes.ANALYZED, true, string.Empty),
                 new StaticField("price", FieldIndexTypes.ANALYZED, true, "DOUBLE"),
                 new StaticField("onSale", FieldIndexTypes.ANALYZED, true, string.Empty),
+                new StaticField("manufacturer", FieldIndexTypes.ANALYZED,false, string.Empty),
+                new StaticField("modelNumber", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
                 new StaticField("salePrice", FieldIndexTypes.NOT_ANALYZED, true, "DOUBLE"),
                 new StaticField("costOfGoods", FieldIndexTypes.NOT_ANALYZED, false, "DOUBLE"),
                 new StaticField("weight", FieldIndexTypes.NOT_ANALYZED, false, "DOUBLE"),

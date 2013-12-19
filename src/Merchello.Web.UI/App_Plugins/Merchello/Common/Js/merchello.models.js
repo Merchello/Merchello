@@ -50,7 +50,9 @@
             self.options.clear();
         };
 
-
+        self.getModel = function () {
+            return self.model;
+        };
     };
 
 

@@ -21,16 +21,12 @@ namespace Merchello.Core.Models.Rdbms
         [ForeignKey(typeof(ShipCountryDto), Name = "FK_merchShipMethod_merchShipCountry", Column = "pk")]
         public Guid ShipCountryKey { get; set; }
 
-        //[Column("warehouseCountryKey")]
-        //[ForeignKey(typeof(WarehouseCountryDto), Name = "FK_merchShipMethod_merchWarehouseCountry", Column = "pk")]
-        //public Guid WarehouseCountryKey { get; set; }
-
         [Column("providerKey")]
         [ForeignKey(typeof(GatewayProviderDto), Name = "FK_merchShipMethod_merchGatewayProvider", Column = "pk")]
         public Guid ProviderKey { get; set; }
 
-        [Column("shipMethodTfKey")]
-        public Guid ShipMethodTfKey { get; set; }
+        //[Column("shipMethodTfKey")]
+        //public Guid ShipMethodTfKey { get; set; }
 
         [Column("surcharge")]
         [Constraint(Default = "0")]

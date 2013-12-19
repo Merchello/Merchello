@@ -1,17 +1,18 @@
-﻿<link href="/App_Plugins/Merchello/Common/Css/merchello.css" rel="stylesheet">
+﻿<form novalidate name="productForm" 
+    data-ng-controller="Merchello.Editors.Product.EditController"
+    data-ng-show="loaded"
+    data-ng-submit="save()">
 
-<div 
-    ng-controller="Merchello.Editors.Product.EditController"
-    ng-show="loaded">
 
-    <umb-panel>
+    <umb-panel val-show-validation>
 
         <umb-header>
 
             <div class="span4">
-                <div class="umb-headline-editor-wrapper">
-                     <h1 class="umb-headline">{{product.name}}</h1>
-                </div>
+                <umb-content-name 
+                    ng-model="product.name" 
+                    placeholder="Enter a product name">
+                </umb-content-name>
             </div>
 
 
@@ -19,6 +20,7 @@
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
                     <div class="btn-group">
                         <a class="btn btn-success">Add a Variant</a>
+                        <a data-ng-disabled="productForm.$invalid" data-ng-click="save(productForm)" class="btn btn-success">Save</a>
                     </div>
                 </div>
             </div>
@@ -59,24 +61,13 @@
                             <h3>Drag to Reorder Options and Variants</h3>
                             <p>If you reorder your options and variants, it will change the order in which they appear on your storefront. Drag your options (ie size, style) vertically and variants (ie women's, small) horizontally.</p>
 
-                            <ul class="reorder">
-                                <li>
+                            <ul class="reorder" ui-sortable="sortableOptions" ng-model="product.productOptions">
+                                <li data-ng-repeat="option in product.productOptions">
                                     <span class="col-xs-3 span3">
-                                        <button class="btn btn-link variant"><i class="icon-thumbnail-list"></i> Style</button>
+                                        <a class="btn btn-link variant"><i class="icon-thumbnail-list"></i> {{option.name}} - {{option.sortOrder}}</a>
                                     </span>
-                                    <span class="options col-xs-9 span9">
-                                        <button class="btn btn-link option"><i class="icon-thumbnail-list"></i> Women's</button>
-                                        <button class="btn btn-link option"><i class="icon-thumbnail-list"></i> Men's</button>
-                                    </span>
-                                </li>
-                                <li>
-                                    <span class="col-xs-3 span3">
-                                        <button class="btn btn-link variant"><i class="icon-thumbnail-list"></i> Size</button>
-                                    </span>
-                                    <span class="options col-xs-9 span9">
-                                        <button class="btn btn-link option"><i class="icon-thumbnail-list"></i> Small</button>
-                                        <button class="btn btn-link option"><i class="icon-thumbnail-list"></i> Medium</button>
-                                        <button class="btn btn-link option"><i class="icon-thumbnail-list"></i> Large</button>
+                                    <span class="options col-xs-9 span9" ui-sortable="sortableChoices" ng-model="option.choices">
+                                        <a class="btn btn-link option" data-ng-repeat="attribute in option.choices"><i class="icon-thumbnail-list"></i> {{attribute.name}} - {{attribute.sortOrder}} - {{attribute.optionOrder}}</a>
                                     </span>
                                 </li>
                             </ul>
@@ -89,7 +80,7 @@
 
                         <!-- Change Prices -->
                         <div class="well col-xs-10 span10" data-ng-class="{ 'open': flyouts.changePrices, 'closed': (!flyouts.changePrices) }">
-                            <button class="btn close" data-ng-click="changePricesFlyout.close()"><i class="icon-delete"></i></button>
+                            <a class="btn close" data-ng-click="changePricesFlyout.close()"><i class="icon-delete"></i></a>
                             <h4>Change Prices For All Selected Items</h4>
                             <div class="form-group row-fluid">
                                 <div class="input-prepend col-xs-3 span3">
@@ -100,14 +91,14 @@
                             </div>
 
                             <div>
-                                <input type="submit" class="btn" data-ng-click="changePricesFlyout.close()" value="Cancel" />
-                                <input type="submit" class="btn btn-primary" data-ng-click="changePricesFlyout.confirm()" value="Save" />
+                                <input type="button" class="btn" data-ng-click="changePricesFlyout.close()" value="Cancel" />
+                                <input type="button" class="btn btn-primary" data-ng-click="changePricesFlyout.confirm()" value="Save" />
                             </div>
                         </div>
 
                         <!-- Update Inventory -->
                         <div class="well col-xs-10 span10" data-ng-class="{ 'open': flyouts.updateInventory, 'closed': (!flyouts.updateInventory) }">
-                            <button class="btn close" data-ng-click="updateInventoryFlyout.close()"><i class="icon-delete"></i></button>
+                            <a class="btn close" data-ng-click="updateInventoryFlyout.close()"><i class="icon-delete"></i></a>
                             <h4>Update Inventory For All Selected Items</h4>
                             <p class="warning">Note: This will update the inventory for <strong>all warehouses</strong> on <strong>all selected variants</strong></p>
                             <div class="form-group row-fluid">
@@ -116,38 +107,38 @@
                             </div>
 
                             <div>
-                                <input type="submit" class="btn" data-ng-click="updateInventoryFlyout.close()" value="Cancel" />
-                                <input type="submit" class="btn btn-primary" data-ng-click="updateInventoryFlyout.confirm()" value="Save" />
+                                <input type="button" class="btn" data-ng-click="updateInventoryFlyout.close()" value="Cancel" />
+                                <input type="button" class="btn btn-primary" data-ng-click="updateInventoryFlyout.confirm()" value="Save" />
                             </div>
                         </div>
 
                         <!-- Delete Variants -->
-                        <div class="well col-xs-10 span10" data-ng-class="{ 'open': deleteVariants, 'closed': (!deleteVariants) }">
-                            <button class="btn close" data-ng-click="deleteVariantsFlyout.close()"><i class="icon-delete"></i></button>
+                        <div class="well col-xs-10 span10" data-ng-class="{ 'open': flyouts.deleteVariants, 'closed': (!flyouts.deleteVariants) }">
+                            <a class="btn close" data-ng-click="deleteVariantsFlyout.close()"><i class="icon-delete"></i></a>
                             <h4>Delete the Selected Variants</h4>
                             <p class="warning">You cannot recover deleted product variants. Are you sure you want to continue?</p>
                             <div class="form-group row-fluid">
-                                <input name="delete-variant" class="col-xs-3 span3" type="text" placeholder="Yes or No" />
+                                <input name="delete-variant" data-ng-model="deleteVariantsFlyout.confirmText" class="col-xs-3 span3" type="text" placeholder="Type DELETE to confirm" />
                             </div>
 
                             <div>
-                                <input type="submit" class="btn" data-ng-click="deleteVariantsFlyout.close()" value="Cancel" />
-                                <input type="submit" class="btn btn-warning" data-ng-click="deleteVariantsFlyout.confirm()" value="Delete" />
+                                <input type="button" class="btn" data-ng-click="deleteVariantsFlyout.close()" value="Cancel" />
+                                <input type="button" class="btn btn-warning" data-ng-click="deleteVariantsFlyout.confirm()" value="Delete" />
                             </div>
                         </div>
 
                         <!-- Duplicate Variants -->
-                        <div class="well col-xs-10 span10" data-ng-class="{ 'open': duplicateVariants, 'closed': (!duplicateVariants) }">
-                            <button class="btn close" data-ng-click="duplicateVariantsFlyout.close()"><i class="icon-delete"></i></button>
+                        <div class="well col-xs-10 span10" data-ng-class="{ 'open': flyouts.duplicateVariants, 'closed': (!flyouts.duplicateVariants) }">
+                            <a class="btn close" data-ng-click="duplicateVariantsFlyout.close()"><i class="icon-delete"></i></a>
                             <h4>Duplicate Variants Based on Selected Items</h4>
                             <div class="form-group row-fluid">
-                                <label for="new-style">What Size do you want to add to the new variants?</label> <!-- Size should be replaced with whatever option name they are choosing to duplicate -->
-                                <input name="new-style" class="col-xs-3 span3" type="text" />
+                                <label for="new-style">What {{duplicateVariantsFlyout.getModel().name}} do you want to add to the new variants?</label> <!-- Size should be replaced with whatever option name they are choosing to duplicate -->
+                                <input name="new-style" class="col-xs-3 span3" data-ng-model="duplicateVariantsFlyout.newChoiceName" type="text" />
                             </div>
 
                             <div>
-                                <input type="submit" class="btn" data-ng-click="duplicateVariantsFlyout.close()" value="Cancel" />
-                                <input type="submit" class="btn btn-primary" data-ng-click="duplicateVariantsFlyout.confirm()" value="Save" />
+                                <input type="button" class="btn" data-ng-click="duplicateVariantsFlyout.close()" value="Cancel" />
+                                <input type="button" class="btn btn-primary" data-ng-click="duplicateVariantsFlyout.confirm()" value="Save" />
                             </div>
                         </div>
 
@@ -165,8 +156,8 @@
                                 <thead>
 
                                     <tr data-ng-hide="allVariants">
-                                        <th><input type="checkbox" data-ng-model="allVariants" data-ng-click="toggleAllVariants()" /></th> <!-- Swaps out the current TR with headings in it for the bulk action TR -->
-                                        <th data-ng-repeat="option in product.productOptions"
+                                        <th>&nbsp;</th> <!-- Swaps out the current TR with headings in it for the bulk action TR -->
+                                        <th data-ng-repeat="option in product.productOptions | orderBy:'sortOrder'"
                                             data-ng-click="changeSortOrder(option.name)" data-ng-class="{'sorted': sortProperty == option.name}">
                                             <i data-ng-class="{'icon-navigation-up': sortProperty == option.name, 'icon-navigation-down': sortProperty != option.name}"></i>
                                             {{option.name}}
@@ -183,21 +174,20 @@
                                             <i data-ng-class="{'icon-navigation-up': sortProperty == 'totalInventoryCount', 'icon-navigation-down': sortProperty != 'totalInventoryCount'}"></i> 
                                             Total Qty
                                         </th>
-                                        <th><a>edit</a></th>
+                                        <th>Edit</th>
                                     </tr>
                                     <!-- Displays the bulk action button & dropdown menu when the checkbox is selected. Replaces the normal header TR -->
                                     <tr data-ng-show="allVariants">
-                                        <th><input type="checkbox" data-ng-model="allVariants" /></th>
-                                        <th colspan="{{product.productOptions.length + 4}}">
+                                        <th colspan="{{product.productOptions.length + 5}}">
                                             <div class="btn-group" data-ng-class="{ 'open': bulkAction }">
-                                                <a data-ng-click="bulkAction = !bulkAction" class="btn dropdown-toggle" data-toggle="dropdown">Bulk Action (3 Variants) <i class="icon-navigation-down"></i></a>
+                                                <a data-ng-click="bulkAction = !bulkAction" class="btn dropdown-toggle" data-toggle="dropdown">Bulk Action ({{selectedVariants().length}} Variants) <i class="icon-navigation-down"></i></a>
                                                 <ul class="dropdown-menu">
                                                     <li><a data-ng-click="changePricesFlyout.open()">Change prices</a></li>
                                                     <li><a data-ng-click="updateInventoryFlyout.open()">Update inventory</a></li>
                                                     <li><a data-ng-click="deleteVariantsFlyout.open()">Delete Variants</a></li>
                                                     <li class="divider"></li>
                                                     <li class="header">Duplicate Variants</li>
-                                                    <li data-ng-repeat="option in product.productOptions"><a data-ng-click="duplicateVariantsFlyout.open()">In another {{option.name}}</a></li>
+                                                    <li data-ng-repeat="option in product.productOptions"><a data-ng-click="duplicateVariantsFlyout.open(option)">In another {{option.name}}</a></li>
                                                 </ul>
                                             </div>
                                         </th>
@@ -209,7 +199,7 @@
                                         data-ng-click="toggleAVariant(variant)"
                                     >
                                         <td><input type="checkbox" data-ng-model="variant.selected" data-ng-change="checkBulkVariantsSelected()" /></td>
-                                        <td data-ng-repeat="attribute in variant.attributes">{{attribute.name}}</td>
+                                        <td data-ng-repeat="attribute in variant.attributes | orderBy:'optionOrder'">{{attribute.name}}</td>
                                         <td>{{variant.sku}}</td>
                                         <td>{{variant.price}}</td>
                                         <td>{{variant.totalInventoryCount}}</td>
@@ -273,7 +263,7 @@
 
                             <div>
                                 <a data-ng-click="addOption()" class="btn add">Add Another Option</a>
-                                <a data-ng-click="updateVariants(productVariantForm)" class="btn btn-primary add">Update</a>
+                                <a data-ng-click="updateVariants(productForm)" class="btn btn-primary add">Update</a>
                             </div>
 
                         </div>
@@ -284,13 +274,14 @@
                         <label class="merchello-control-label">
                             <label><input data-ng-model="debugging" type="checkbox" /> Debug</label>
                             <small>Check to show debugging info</small>
+                            <a class="btn" data-ng-click="prettyJson()">Make Pretty</a>
                         </label>
 
                         <div class="merchello-controls">
 
                             <div data-ng-show="debugging">
                                 <h3>Product</h3>
-                                <div>{{product | json}}</div>
+                                <div class="jsonInfo">{{product | json}}</div>
                            </div>
 
                         </div>
@@ -301,4 +292,4 @@
         </div>
 
     </umb-panel>
-</div>
+</form>

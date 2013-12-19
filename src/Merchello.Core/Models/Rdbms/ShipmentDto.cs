@@ -83,11 +83,6 @@ namespace Merchello.Core.Models.Rdbms
         [NullSetting(NullSetting = NullSettings.Null)]
         public Guid? ShipMethodKey { get; set; }
 
-        [Column("invoiceItemKey")]
-        [ForeignKey(typeof(InvoiceItemDto), Name = "FK_merchShipment_merchInvoiceItem", Column = "pk")]
-        [NullSetting(NullSetting = NullSettings.Null)]
-        public Guid? InvoiceItemKey { get; set; }
-
         [Column("updateDate")]
         [Constraint(Default = "getdate()")]
         public DateTime UpdateDate { get; set; }

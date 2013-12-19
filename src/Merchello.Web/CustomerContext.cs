@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Web;
 using Merchello.Core;
+using Merchello.Core.Cache;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
-using Merchello.Web.Cache;
 using Merchello.Web.Models;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Models.EntityBase;
@@ -88,7 +88,7 @@ namespace Merchello.Web
         /// <param name="key">The key of the customer to retrieve</param>
         private void TryGetCustomer(Guid key)
         {
-            var customer = (ICustomerBase)_cache.RuntimeCache.GetCacheItem(HttpCachingBacker.CostumerCacheKey(key));
+            var customer = (ICustomerBase)_cache.RuntimeCache.GetCacheItem(CacheKeys.CostumerCacheKey(key));
             
             // check the cache for a previously retrieved customer
             if (customer != null)
@@ -147,7 +147,7 @@ namespace Merchello.Web
             _umbracoContext.HttpContext.Response.Cookies.Add(cookie);
 
             _cache.RequestCache.GetCacheItem(ConsumerCookieKey, () => customer.EntityKey);
-            _cache.RuntimeCache.GetCacheItem(HttpCachingBacker.CostumerCacheKey(customer.EntityKey), () => customer, TimeSpan.FromMinutes(5), true);
+            _cache.RuntimeCache.GetCacheItem(CacheKeys.CostumerCacheKey(customer.EntityKey), () => customer, TimeSpan.FromMinutes(5), true);
         }
     }
 }

@@ -38,9 +38,9 @@ namespace Merchello.Web.Models.ContentEditing
             foreach (var option in productDisplay.ProductOptions)
             {
                 IProductOption destinationProductOption;
-                if (destination.ProductOptions.Contains(option.Name))
+                if (destination.ProductOptions.Contains(option.Key))
                 {
-                    destinationProductOption = destination.ProductOptions[option.Name];
+                    destinationProductOption = destination.ProductOptions[option.Key];
 
                     destinationProductOption = option.ToProductOption(destinationProductOption);
                 }
@@ -123,7 +123,7 @@ namespace Merchello.Web.Models.ContentEditing
                 IProductAttribute destinationProductAttribute;
                 if (destinationProductOption.Choices.Contains(choice.Sku))
                 {
-                    destinationProductAttribute = destinationProductOption.Choices[choice.Sku];
+                    destinationProductAttribute = destinationProductOption.Choices[choice.Key];
 
                     destinationProductAttribute = choice.ToProductAttribute(destinationProductAttribute);
                 }
@@ -190,27 +190,27 @@ namespace Merchello.Web.Models.ContentEditing
             // TODO: Warehouse Inventory
 
 
-            // JASON: Not sure we event need to do this...
-            //foreach (var attribute in productVariantDisplay.Attributes)
-            //{
-            //    IProductAttribute destinationProductAttribute;
+            foreach (var attribute in productVariantDisplay.Attributes)
+            {
+                IProductAttribute destinationProductAttribute;
 
-            //    var attr = destination.Attributes.Where(x => x.Name == attribute.Name).First();
-            //    if ( attr != null )
-            //    {
-            //        destinationProductAttribute = attr;
+                var attr = destination.Attributes.Where(x => x.Key == attribute.Key).First();
+                if (attr != null)
+                {
+                    destinationProductAttribute = attr;
 
-            //        destinationProductAttribute = attribute.ToProductAttribute(destinationProductAttribute);
-            //    }
-            //    else
-            //    {
-            //        destinationProductAttribute = new ProductOption(attribute.Name, attribute.Required);
+                    destinationProductAttribute = attribute.ToProductAttribute(destinationProductAttribute);
+                }
+                else
+                {
+                    destinationProductAttribute = new ProductAttribute(attribute.Name, attribute.Sku);
 
-            //        destinationProductAttribute = attribute.ToProductAttribute(destinationProductAttribute);
-            //    }
+                    destinationProductAttribute = attribute.ToProductAttribute(destinationProductAttribute);
+                }
 
-            //    destination.Attributes.Add(destinationProductAttribute);
-            //}
+                ProductAttributeCollection variantAttributes = destination.Attributes as ProductAttributeCollection;
+                variantAttributes.Add(destinationProductAttribute);
+            }
 
             return destination;
         }

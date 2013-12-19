@@ -176,6 +176,26 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
+        /// Exposes the product variant template's manufacturer
+        /// </summary>
+        [DataMember]
+        public string Manufacturer
+        {
+            get { return _variant.Manufacturer; }
+            set { _variant.Manufacturer = value; }
+        }
+
+        /// <summary>
+        /// Exposes the product variant template's manufacturer
+        /// </summary>
+        [DataMember]
+        public string ManufacturerModelNumber
+        {
+            get { return _variant.Manufacturer; }
+            set { _variant.ManufacturerModelNumber = value; }
+        }
+
+        /// <summary>
         /// Exposes the product variant template's weight
         /// </summary>
         [DataMember]

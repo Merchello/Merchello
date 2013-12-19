@@ -3,6 +3,7 @@ using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Tests.Base.DataMakers;
+using Merchello.Web;
 using Merchello.Web.Models;
 using NUnit.Framework;
 

@@ -56,12 +56,12 @@ namespace Merchello.Web.Editors
         /// <summary>
         /// Returns Product by id (key)
         /// 
-        /// GET /umbraco/Merchello/ProductVariantApi/GetProductVariant?key={Guid}
+        /// GET /umbraco/Merchello/ProductVariantApi/GetProductVariant?id={Guid}
         /// </summary>
-        /// <param name="key"></param>
-        public ProductVariantDisplay GetProductVariant(Guid key)
+        /// <param name="id">ProductVariant Key</param>
+        public ProductVariantDisplay GetProductVariant(Guid id)
         {
-            var productVariant = _productVariantService.GetByKey(key);
+            var productVariant = _productVariantService.GetByKey(id);
             if (productVariant == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);
@@ -75,7 +75,7 @@ namespace Merchello.Web.Editors
         /// 
         /// GET /umbraco/Merchello/ProductVariantApi/GetByProduct?key={guid}
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Product Key</param>
         public IEnumerable<ProductVariantDisplay> GetByProduct(Guid id)
         {
             if (id != Guid.Empty)
@@ -107,7 +107,7 @@ namespace Merchello.Web.Editors
         /// 
         /// GET /umbraco/Merchello/ProductVariantApi/GetProductVariants?ids={int}&ids={int}
         /// </summary>
-        /// <param name="ids"></param>
+        /// <param name="ids">Product Variant Keys</param>
         public IEnumerable<ProductVariantDisplay> GetProductVariants([FromUri]IEnumerable<Guid> ids)
         {
             if (ids != null)
@@ -139,7 +139,7 @@ namespace Merchello.Web.Editors
         /// 
         ///  POST /umbraco/Merchello/ProductVariantApi/NewProductVariant
         ///  </summary>
-        /// <param name="productVariant"></param>
+        /// <param name="productVariant">Product variant object serialized from JSON</param>
         [AcceptVerbs("GET", "POST")]
         public ProductVariantDisplay NewProductVariant(ProductVariantDisplay productVariant)
         {
@@ -156,17 +156,8 @@ namespace Merchello.Web.Editors
                     {
                         // TODO: This should be refactored into an extension method
                         ProductOption productOption = product.ProductOptions.FirstOrDefault(x => x.Key == attribute.OptionKey) as ProductOption;
-                        // TODO: This should be refactored into an extension method
-                        IProductAttribute productAttribute = null;
-                        foreach (var attr in productOption.Choices)
-                        {
-                            if (attr.Name == attribute.Name)
-                            {
-                                productAttribute = attr;
-                                break;
-                            }
-                        }
-                        productAttributes.Add(attribute.ToProductAttribute(productAttribute));
+
+                        productAttributes.Add(productOption.Choices[attribute.Key]);
                     }
 
                     newProductVariant = _productVariantService.CreateProductVariantWithKey(product, productVariant.Name, productVariant.Sku, productVariant.Price, productAttributes, true);
@@ -176,7 +167,7 @@ namespace Merchello.Web.Editors
                     throw new HttpResponseException(HttpStatusCode.InternalServerError);
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 throw new HttpResponseException(HttpStatusCode.InternalServerError);
             }
@@ -211,12 +202,13 @@ namespace Merchello.Web.Editors
         }
 
         /// <summary>
-        /// Deletes an existing product
+        /// Deletes an existing product variant
         ///
-        /// DELETE /umbraco/Merchello/ProductVariantApi/{key}
+        /// DELETE /umbraco/Merchello/ProductVariantApi/DeleteVariant?key={key}
         /// </summary>
-        /// <param name="key"></param>
-        public HttpResponseMessage Delete(Guid key)
+        /// <param name="key">Product Variant key</param>
+        [AcceptVerbs("GET", "DELETE")]
+        public HttpResponseMessage DeleteVariant(Guid key)
         {
             var productVariantToDelete = _productVariantService.GetByKey(key);
             if (productVariantToDelete == null)
@@ -225,6 +217,26 @@ namespace Merchello.Web.Editors
             }
 
             _productVariantService.Delete(productVariantToDelete);
+
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
+
+        /// <summary>
+        /// Deletes all product variants for a specific product
+        ///
+        /// GET /umbraco/Merchello/ProductVariantApi/DeleteAllVariants?productkey={key}
+        /// </summary>
+        /// <param name="key">Product Variant key</param>
+        [AcceptVerbs("GET","DELETE")]
+        public HttpResponseMessage DeleteAllVariants(Guid productkey)
+        {
+            var productWithVariantsToDelete = _productService.GetByKey(productkey);
+            if (productWithVariantsToDelete == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+
+            _productVariantService.Delete(productWithVariantsToDelete.ProductVariants);
 
             return Request.CreateResponse(HttpStatusCode.OK);
         }

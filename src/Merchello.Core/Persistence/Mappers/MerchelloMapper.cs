@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using Merchello.Core.Models;
+using Merchello.Core.Models.Interfaces;
 using Umbraco.Core;
 using Umbraco.Core.Logging;
 
@@ -30,6 +31,7 @@ namespace Merchello.Core.Persistence.Mappers
             CacheMapper(typeof(IItemCache), typeof(ItemCacheMapper));
             CacheMapper(typeof(IItemCacheLineItem), typeof(ItemCacheLineItemMapper));
             CacheMapper(typeof(ICustomer), typeof(CustomerMapper));
+            CacheMapper(typeof(IGatewayProvider), typeof(GatewayProviderMapper));
             CacheMapper(typeof(IInvoiceLineItem), typeof(InvoiceLineItemMapper));
             CacheMapper(typeof(IInvoiceStatus), typeof(InvoiceStatusMapper));
             CacheMapper(typeof(IOrderLineItem), typeof(OrderLineItemMapper));

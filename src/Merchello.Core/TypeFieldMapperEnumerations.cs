@@ -58,13 +58,13 @@
         Custom
     }
 
-    public enum ShipMethodType
-    {
-        FlatRate,
-        PercentTotal,
-        Carrier,
-        Custom
-    }
+    //public enum ShipMethodType
+    //{
+    //    FlatRate,
+    //    PercentTotal,
+    //    Carrier,
+    //    Custom
+    //}
 
     public enum GatewayProviderType
     {
