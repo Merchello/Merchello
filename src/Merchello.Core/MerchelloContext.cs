@@ -15,13 +15,17 @@ namespace Merchello.Core
         {}
 
         internal MerchelloContext(IServiceContext serviceContext, CacheHelper cache)
+            : this(serviceContext, cache, false)
+        { }
+
+        internal MerchelloContext(IServiceContext serviceContext, CacheHelper cache, bool isUnitTest)
         {
             Mandate.ParameterNotNull(serviceContext, "serviceContext");
             Mandate.ParameterNotNull(cache, "cache");
 
             
             _services = serviceContext;
-            _gateways = new GatewayContext(serviceContext.GatewayProviderService, cache.RuntimeCache);
+            if(!isUnitTest) _gateways = new GatewayContext(serviceContext.GatewayProviderService, cache.RuntimeCache);
             Cache = cache;
 
         }

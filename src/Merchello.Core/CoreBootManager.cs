@@ -24,7 +24,8 @@ namespace Merchello.Core
         private bool _isInitialized = false;
         private bool _isStarted = false;
         private bool _isComplete = false;
-        
+        private bool _isTest = false;
+
         private MerchelloContext MerchelloContext { get; set; }       
 
         
@@ -75,7 +76,7 @@ namespace Merchello.Core
                                     new NullCacheProvider())
                             : ApplicationContext.Current.ApplicationCache;
 
-            MerchelloContext = MerchelloContext.Current = new MerchelloContext(serviceContext, cache);
+            MerchelloContext = MerchelloContext.Current = new MerchelloContext(serviceContext, cache, _isTest);
         }
 
         /// <summary>
@@ -124,6 +125,14 @@ namespace Merchello.Core
             Resolution.Freeze();
         }
 
+        /// <summary>
+        /// Flag for unit testing
+        /// </summary>
+        internal bool IsUnitTest
+        {
+            get { return _isTest; }
+            set { _isTest = value; }
+        }
 
     }
 }
