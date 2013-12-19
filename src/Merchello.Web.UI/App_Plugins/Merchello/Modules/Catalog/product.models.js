@@ -87,6 +87,24 @@
 
             self.choices.splice(idx, 1);
         };
+
+        // Helper to remove a choice to this option
+        self.setSortOrder = function (neworder) {
+
+            self.sortOrder = neworder;
+
+            for (var i = 0; i < self.choices.length; i++) {
+                self.choices[i].optionOrder = neworder;
+            }
+        };
+
+        // Helper to make the sortOrder sync with the order in the choices array
+        self.resetChoiceSortOrder = function () {
+
+            for (var i = 0; i < self.choices.length; i++) {
+                self.choices[i].sortOrder = i + 1;
+            }
+        };
     };
 
     models.ProductVariant = function (productVariantFromServer) {
@@ -341,6 +359,11 @@
             self.productVariants.splice(idx, 1);
         };
 
+        self.fixAttributeSortOrders = function () {
+            for (var i = 0; i < self.productVariants.length; i++) {
+                self.productVariants[i].fixAttributeSortOrders(self.productOptions);
+            }
+        };
     };
 
 

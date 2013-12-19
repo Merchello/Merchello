@@ -8,7 +8,7 @@
      * @description
      * The controller for the product editor
      */
-    controllers.ProductEditController = function ($scope, $routeParams, $location, assetsService, notificationsService, dialogService, angularHelper, serverValidationManager, merchelloProductService, merchelloProductVariantService) {
+    controllers.ProductEditController = function ($scope, $routeParams, $location, $q, assetsService, notificationsService, dialogService, angularHelper, serverValidationManager, merchelloProductService, merchelloProductVariantService) {
 
         $scope.currentTab = "Variants";
 
@@ -124,6 +124,35 @@
             }
 
         }
+        
+        $scope.sortableOptions = {
+            stop: function (e, ui) {
+                for (var i = 0; i < $scope.product.productOptions.length; i++)
+                {
+                    $scope.product.productOptions[i].setSortOrder(i + 1);
+                }
+                $scope.product.fixAttributeSortOrders();
+            },
+            axis: 'y',
+            cursor: "move"
+        };
+
+        $scope.sortableChoices = {
+            start: function (e, ui) {
+                $(e.target).data("ui-sortable").floating = true;    // fix for jQui horizontal sorting issue https://github.com/angular-ui/ui-sortable/issues/19
+            },
+            stop: function (e, ui) {
+                var attr = ui.item.scope().attribute
+                var attrOption = attr.findMyOption($scope.product.productOptions);
+                attrOption.resetChoiceSortOrder();
+            }, 
+            update: function (e, ui) {
+                var attr = ui.item.scope().attribute
+                var attrOption = attr.findMyOption($scope.product.productOptions);
+                attrOption.resetChoiceSortOrder();
+            },
+            cursor: "move"
+        };
 
         $scope.selectedVariants = function () {
             if ($scope.product != undefined)
@@ -231,19 +260,22 @@
                 $scope.bulkAction = false;
             }, {
                 confirm: function () {
-                    var selected = $scope.selectedVariants();
-                    var promisesArray = [];
+                    if ($scope.deleteVariantsFlyout.confirmText == "DELETE")
+                    {
+                        var selected = $scope.selectedVariants();
+                        var promisesArray = [];
 
-                    for (var i = 0; i < selected.length; i++) {
-                        promisesArray.push(merchelloProductVariantService.deleteVariant(selected[i].key));
+                        for (var i = 0; i < selected.length; i++) {
+                            promisesArray.push(merchelloProductVariantService.deleteVariant(selected[i].key));
+                        }
 
                         var promise = $q.all(promisesArray);
 
                         promise.then(function () {
 
                             var promiseLoadProduct = merchelloProductService.getByKey($scope.product.key);
-                            promiseProduct.then(function (dbproduct) {
-                                product = new merchello.Models.Product(dbproduct);
+                            promiseLoadProduct.then(function (dbproduct) {
+                                $scope.product = new merchello.Models.Product(dbproduct);
                                 notificationsService.success("Variants deleted");
                             }, function (reason) {
                                 notificationsService.error("Product Variant Delete Failed", reason.message);
@@ -251,6 +283,11 @@
                         }, function (reason) {
                             notificationsService.error("Product Variant Delete Failed", reason.message);
                         });
+                        $scope.deleteVariantsFlyout.close();
+                    }
+                    else
+                    {
+                        notificationsService.error("Type the word DELETE in the box to confirm deletion", "");
                     }
                 }
             });
@@ -263,7 +300,11 @@
                 $scope.bulkAction = false;
             }, {
                 confirm: function () {
-                    notificationsService.success("Confirmed variants duplicated");
+                    if ($scope.duplicateVariantsFlyout.newChoiceName != undefined){
+                        if ($scope.duplicateVariantsFlyout.newChoiceName.length > 0) {
+                            notificationsService.success("Confirmed variants duplicated");
+                        }
+                    }
                 }
             });
 
