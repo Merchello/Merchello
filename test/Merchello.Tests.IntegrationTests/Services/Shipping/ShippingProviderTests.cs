@@ -2,7 +2,9 @@
 using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Cache;
+using Merchello.Core.Gateways;
 using Merchello.Core.Gateways.Shipping;
+using Merchello.Core.Gateways.Shipping.RateTable;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Models.Rdbms;
@@ -11,6 +13,7 @@ using Merchello.Core.Services;
 using NUnit.Framework;
 using Rhino.Mocks.Constraints;
 using Umbraco.Core;
+using Umbraco.Core.Cache;
 
 namespace Merchello.Tests.IntegrationTests.Services.Shipping
 {
@@ -97,12 +100,50 @@ namespace Merchello.Tests.IntegrationTests.Services.Shipping
             Assert.NotNull(provider);
 
             //// Act
+            var ctorArgs = new[] { typeof(IGatewayProviderService), typeof(IGatewayProvider), typeof(IRuntimeCacheProvider) };
+            var ctoArgValues = new object[] { _gatewayProviderService, provider, _merchelloContext.Cache.RuntimeCache };
+            var gateway = ActivatorHelper.CreateInstance<GatewayBase>(Type.GetType(provider.TypeFullName), ctorArgs, ctoArgValues);
 
-            var ctorArgs = new[] { typeof(MerchelloContext), typeof(ShippingGatewayBase<>)};
-            var ctoArgValues = new object[] { merchelloContext, basket, destination };
-            var strategy = ActivatorHelper.CreateInstance<BasketPackagingStrategyBase>(Type.GetType(defaultStrategy), ctorArgs, ctoArgValues);
+            //// Assert
+            Assert.NotNull(gateway);
+            Assert.IsTrue(GatewayProviderType.Shipping == gateway.GatewayProvider.GatewayProviderType);
         }
 
+        /// <summary>
+        /// Test verifies that a list of all shipping providers can be retrieved from the GatewayContext
+        /// </summary>
+        [Test]
+        public void Can_Retrieve_A_List_Of_All_ShippingProviders_From_The_GatewayContext()
+        {
+            //// Arrange
+            const GatewayProviderType gatewayProviderType = GatewayProviderType.Shipping;
+
+            //// Act
+            var providers = _merchelloContext.Gateways.GetGatewayProviders(gatewayProviderType);
+
+            //// Assert
+            Assert.NotNull(providers);
+            Assert.IsTrue(providers.Any());
+        }
+
+
+        /// <summary>
+        /// Test verifies that a ShippingGateway class can be instantiated from a IGatewayProvider reference from the GatewayContext
+        /// </summary>
+        [Test]
+        public void Can_Instantiate_A_ShippingProvider_From_The_GatewayContext()
+        {
+            //// Arrange
+            const GatewayProviderType gatewayProviderType = GatewayProviderType.Shipping;
+            var provider = _merchelloContext.Gateways.GetGatewayProviders(gatewayProviderType).FirstOrDefault();
+            Assert.NotNull(provider);
+
+            //// Act
+            var shippingProvider = _merchelloContext.Gateways.InstantiateShippingGateway(provider);
+
+            //// Assert
+            Assert.NotNull(shippingProvider);
+        }
 
         /// <summary>
         /// Test verifies that a provider can be associated with a ShipCountry

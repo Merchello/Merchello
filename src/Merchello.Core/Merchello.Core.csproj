@@ -222,7 +222,9 @@
     <Compile Include="Configuration\Outline\SettingsCollection.cs" />
     <Compile Include="Configuration\Outline\SettingsElement.cs" />
     <Compile Include="Gateways\GatewayBase.cs" />
+    <Compile Include="Gateways\GatewayContext.cs" />
     <Compile Include="Gateways\IGateway.cs" />
+    <Compile Include="Gateways\IGatewayContext.cs" />
     <Compile Include="Gateways\Shipping\GatewayShipMethodBase.cs" />
     <Compile Include="Gateways\Shipping\IGatewayShipMethod.cs" />
     <Compile Include="Gateways\Shipping\IShippingGatewayBase.cs" />
@@ -254,7 +256,6 @@
     </Compile>
     <Compile Include="Models\GatewayResource.cs" />
     <Compile Include="Models\GatewayProvider.cs" />
-    <Compile Include="Models\GatewayShipMethodCollection.cs" />
     <Compile Include="Models\Interfaces\IGatewayResource.cs" />
     <Compile Include="Models\Interfaces\IAddress.cs" />
     <Compile Include="Models\Interfaces\IAppliedPayment.cs">

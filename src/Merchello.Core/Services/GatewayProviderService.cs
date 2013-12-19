@@ -153,7 +153,7 @@ namespace Merchello.Core.Services
         /// Gets a collection containing all <see cref="IGatewayProvider"/>
         /// </summary>
         /// <returns></returns>
-        internal IEnumerable<IGatewayProvider> GetAllGatewayProviders()
+        public IEnumerable<IGatewayProvider> GetAllGatewayProviders()
         {
             using (var repository = _repositoryFactory.CreateGatewayProviderRepository(_uowProvider.GetUnitOfWork(), _settingsService))
             {

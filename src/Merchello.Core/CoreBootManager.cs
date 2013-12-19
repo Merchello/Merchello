@@ -2,6 +2,7 @@
 using System.Configuration;
 using Merchello.Core.Cache;
 using Merchello.Core.Configuration;
+using Merchello.Core.Gateways;
 using Merchello.Core.ObjectResolution;
 using Merchello.Core.Services;
 using Umbraco.Core;
@@ -41,7 +42,6 @@ namespace Merchello.Core
             var connString = ConfigurationManager.ConnectionStrings[MerchelloConfiguration.Current.Section.DefaultConnectionStringName].ConnectionString;
             var providerName = ConfigurationManager.ConnectionStrings[MerchelloConfiguration.Current.Section.DefaultConnectionStringName].ProviderName;                
             var serviceContext = new ServiceContext(new PetaPocoUnitOfWorkProvider(connString, providerName));
-            
 
             CreateMerchelloContext(serviceContext);
 

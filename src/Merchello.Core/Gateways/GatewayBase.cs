@@ -1,4 +1,5 @@
 ﻿using Merchello.Core.Models.Interfaces;
+using Merchello.Core.Services;
 using Umbraco.Core.Cache;
 
 namespace Merchello.Core.Gateways
@@ -9,31 +10,31 @@ namespace Merchello.Core.Gateways
     public abstract class GatewayBase : IGateway
     {        
         private readonly IGatewayProvider _gatewayProvider;
-        private readonly IMerchelloContext _merchelloContext;
+        private readonly IGatewayProviderService _gatewayProviderService;
 
-        protected GatewayBase(IMerchelloContext merchelloContext, IGatewayProvider gatewayProvider)
+        protected GatewayBase(IGatewayProviderService gatewayProviderService, IGatewayProvider gatewayProvider)
         {
-            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
+            Mandate.ParameterNotNull(gatewayProviderService, "merchelloContext");
             Mandate.ParameterNotNull(gatewayProvider, "gatewayProvider");
 
-            _merchelloContext = merchelloContext;
+            _gatewayProviderService = gatewayProviderService;
             _gatewayProvider = gatewayProvider;
         }
 
 
 
         /// <summary>
-        /// Gets the <see cref="IMerchelloContext"/>
+        /// Gets the <see cref="IGatewayProviderService"/>
         /// </summary>
-        protected IMerchelloContext MerchelloContext
+        protected IGatewayProviderService GatewayProviderService
         {
-            get { return _merchelloContext; }
+            get { return _gatewayProviderService; }
         }
 
         /// <summary>
         /// Gets the <see cref="IGatewayProvider"/>
         /// </summary>
-        protected virtual IGatewayProvider GatewayProvider 
+        public virtual IGatewayProvider GatewayProvider 
         {
             get { return _gatewayProvider; }
         }

@@ -46,7 +46,7 @@ namespace Merchello.Core.Services
         /// Gets a collection containing all <see cref="IGatewayProvider"/>
         /// </summary>
         /// <returns></returns>
-        //IEnumerable<IGatewayProvider> GetAllGatewayProviders(); 
+        IEnumerable<IGatewayProvider> GetAllGatewayProviders(); 
 
         #endregion
 
