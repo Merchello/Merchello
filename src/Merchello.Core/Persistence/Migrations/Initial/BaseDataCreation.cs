@@ -37,7 +37,9 @@ namespace Merchello.Core.Persistence.Migrations.Initial
 
             if(tableName.Equals("merchWarehouse")) CreateWarehouseData();
 
-            if(tableName.Equals("merchOrderStatus")) CreateOrderStatusData();            
+            if(tableName.Equals("merchOrderStatus")) CreateOrderStatusData();   
+         
+            if(tableName.EndsWith("merchGatewayProvider")) CreateGatewayProviderData();
             
         }
 
@@ -107,6 +109,13 @@ namespace Merchello.Core.Persistence.Migrations.Initial
         {
             _database.Insert("merchWarehouse", "Key", new WarehouseDto() { Key = WarehouseKey, Name = "Default Warehouse", CountryCode = "", IsDefault = true, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
             _database.Insert("merchWarehouseCatalog", "Key", new WarehouseCatalogDto() { Key = WarehouseCatalogKey, WarehouseKey = WarehouseKey, Name = "Default Catalog", Description = null, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+        }
+
+        private void CreateGatewayProviderData()
+        {
+            var extended = new ExtendedDataCollection();
+
+            _database.Insert("merchGatewayProvider", "Key", new GatewayProviderDto() { Key = new Guid("AEC7A923-9F64-41D0-B17B-0EF64725F576"), Name = "Rate table lookup gateway", ProviderTfKey = EnumTypeFieldConverter.GatewayProvider.GetTypeField(GatewayProviderType.Shipping).TypeKey, ExtendedData = new ExtendedDataCollection().Serialize(), EncryptExtendedData = false, TypeFullName = "Merchello.Core.Gateways.Shipping.RateTable.RateTableLookupGateway, Merchello.Core", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
         }
 
     }

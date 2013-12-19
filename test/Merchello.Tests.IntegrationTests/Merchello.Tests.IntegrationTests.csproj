@@ -241,6 +241,7 @@
     <Compile Include="Examine\ProductProviderTests.cs" />
     <Compile Include="Services\Customer\CustomerItemCacheServiceTests.cs" />
     <Compile Include="Services\Customer\CustomerServiceTests.cs" />
+    <Compile Include="Services\Shipping\ShippingProviderTests.cs" />
     <Compile Include="Services\ProductVariant\ProductVariantTests.cs" />
     <Compile Include="Services\Product\ProductOptionTests.cs" />
     <Compile Include="Services\Product\ProductTests.cs" />
@@ -280,6 +281,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="bin\Debug\" />
+    <Folder Include="Services\GatewayProvider\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">

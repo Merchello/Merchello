@@ -1,5 +1,9 @@
-﻿using Merchello.Core.Models;
+﻿using System;
+using System.Web.Helpers;
+using Merchello.Core.Models;
+using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Models.Rdbms;
+using Newtonsoft.Json;
 
 namespace Merchello.Core.Persistence.Factories
 {
@@ -13,6 +17,8 @@ namespace Merchello.Core.Persistence.Factories
                 Name = dto.Name,              
                 Surcharge = dto.Surcharge,
                 ServiceCode = dto.ServiceCode,
+                Taxable = dto.Taxable,
+                Provinces = JsonConvert.DeserializeObject<ProvinceCollection<IShipProvince>>(dto.ProvinceData),
                 UpdateDate = dto.UpdateDate,
                 CreateDate = dto.CreateDate
             };
@@ -32,6 +38,8 @@ namespace Merchello.Core.Persistence.Factories
                 ShipCountryKey = entity.ShipCountryKey,
                 Surcharge = entity.Surcharge,
                 ServiceCode = entity.ServiceCode,
+                Taxable = entity.Taxable,
+                ProvinceData = JsonConvert.SerializeObject(entity.Provinces),
                 UpdateDate = entity.UpdateDate,
                 CreateDate = entity.CreateDate                
             };
