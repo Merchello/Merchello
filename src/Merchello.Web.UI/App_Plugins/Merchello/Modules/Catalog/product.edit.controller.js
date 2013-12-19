@@ -237,6 +237,7 @@
                     }
                     notificationsService.success("Confirmed prices update", "");
                     $scope.changePricesFlyout.close();
+                    $scope.changePricesFlyout.confirmText = newPrice;
                 }
             });
 
@@ -284,6 +285,7 @@
                             notificationsService.error("Product Variant Delete Failed", reason.message);
                         });
                         $scope.deleteVariantsFlyout.close();
+                        $scope.deleteVariantsFlyout.confirmText = "";
                     }
                     else
                     {
@@ -300,9 +302,61 @@
                 $scope.bulkAction = false;
             }, {
                 confirm: function () {
-                    if ($scope.duplicateVariantsFlyout.newChoiceName != undefined){
-                        if ($scope.duplicateVariantsFlyout.newChoiceName.length > 0) {
+                    var submittedChoiceName = $scope.duplicateVariantsFlyout.newChoiceName;
+                    if (submittedChoiceName != undefined) {
+                        if (submittedChoiceName.length > 0) {
+
+                            var options = [];
+                            for (var o = 0; o < $scope.product.productOptions.length; o++) {
+
+                                var currentOption = $scope.product.productOptions[o];
+
+                                var tempOption = new merchello.Models.ProductOption();
+                                tempOption.name = currentOption.name;
+                                tempOption.key = currentOption.key;
+                                tempOption.sortOrder = currentOption.sortOrder;
+
+                                if (currentOption.key == $scope.duplicateVariantsFlyout.model.key) {
+                                    var foundChoice = currentOption.findChoiceByName(submittedChoiceName);
+                                    if (foundChoice != undefined)
+                                    {
+                                        tempOption.choices.push(foundChoice);
+                                    }
+                                    else
+                                    {
+                                        currentOption.addChoice(submittedChoiceName);
+                                        tempOption.addChoice(submittedChoiceName);
+                                    }
+                                }
+
+                                options.push(tempOption);
+                            }
+
+                            var selected = $scope.selectedVariants();
+                            for (var i = 0; i < selected.length; i++) {
+
+                                var thisVariant = selected[i];
+
+                                for (var a = 0; a < thisVariant.attributes.length; a++)
+                                {
+                                    var attr = thisVariant.attributes[a];
+                                    if (attr.optionKey != $scope.duplicateVariantsFlyout.model.key)
+                                    {
+                                        // add this attribute to the correct option
+                                        var myOption = attr.findMyOption(options);
+
+                                        if (!myOption.choiceExists(attr)) {
+                                            myOption.choices.push(attr);
+                                        }
+                                    }
+                                }
+                            }
+
+                            merchelloProductService.createVariantsFromDetachedOptionsList($scope.product, options);
+
                             notificationsService.success("Confirmed variants duplicated");
+                            $scope.duplicateVariantsFlyout.close();
+                            $scope.duplicateVariantsFlyout.newChoiceName = "";
                         }
                     }
                 }
