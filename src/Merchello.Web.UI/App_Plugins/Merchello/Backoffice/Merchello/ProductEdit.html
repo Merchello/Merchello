@@ -61,13 +61,13 @@
                             <h3>Drag to Reorder Options and Variants</h3>
                             <p>If you reorder your options and variants, it will change the order in which they appear on your storefront. Drag your options (ie size, style) vertically and variants (ie women's, small) horizontally.</p>
 
-                            <ul class="reorder">
-                                <li data-ng-repeat="option in product.productOptions | orderBy:'sortOrder'">
+                            <ul class="reorder" ui-sortable="sortableOptions" ng-model="product.productOptions">
+                                <li data-ng-repeat="option in product.productOptions">
                                     <span class="col-xs-3 span3">
-                                        <button class="btn btn-link variant"><i class="icon-thumbnail-list"></i> {{option.name}}</button>
+                                        <a class="btn btn-link variant"><i class="icon-thumbnail-list"></i> {{option.name}} - {{option.sortOrder}}</a>
                                     </span>
-                                    <span class="options col-xs-9 span9">
-                                        <button class="btn btn-link option" data-ng-repeat="attribute in option.choices | orderBy:'optionOrder'"><i class="icon-thumbnail-list"></i> {{attribute.name}}</button>
+                                    <span class="options col-xs-9 span9" ui-sortable="sortableChoices" ng-model="option.choices">
+                                        <a class="btn btn-link option" data-ng-repeat="attribute in option.choices"><i class="icon-thumbnail-list"></i> {{attribute.name}} - {{attribute.sortOrder}} - {{attribute.optionOrder}}</a>
                                     </span>
                                 </li>
                             </ul>
@@ -80,7 +80,7 @@
 
                         <!-- Change Prices -->
                         <div class="well col-xs-10 span10" data-ng-class="{ 'open': flyouts.changePrices, 'closed': (!flyouts.changePrices) }">
-                            <button class="btn close" data-ng-click="changePricesFlyout.close()"><i class="icon-delete"></i></button>
+                            <a class="btn close" data-ng-click="changePricesFlyout.close()"><i class="icon-delete"></i></a>
                             <h4>Change Prices For All Selected Items</h4>
                             <div class="form-group row-fluid">
                                 <div class="input-prepend col-xs-3 span3">
@@ -98,7 +98,7 @@
 
                         <!-- Update Inventory -->
                         <div class="well col-xs-10 span10" data-ng-class="{ 'open': flyouts.updateInventory, 'closed': (!flyouts.updateInventory) }">
-                            <button class="btn close" data-ng-click="updateInventoryFlyout.close()"><i class="icon-delete"></i></button>
+                            <a class="btn close" data-ng-click="updateInventoryFlyout.close()"><i class="icon-delete"></i></a>
                             <h4>Update Inventory For All Selected Items</h4>
                             <p class="warning">Note: This will update the inventory for <strong>all warehouses</strong> on <strong>all selected variants</strong></p>
                             <div class="form-group row-fluid">
@@ -114,11 +114,11 @@
 
                         <!-- Delete Variants -->
                         <div class="well col-xs-10 span10" data-ng-class="{ 'open': flyouts.deleteVariants, 'closed': (!flyouts.deleteVariants) }">
-                            <button class="btn close" data-ng-click="deleteVariantsFlyout.close()"><i class="icon-delete"></i></button>
+                            <a class="btn close" data-ng-click="deleteVariantsFlyout.close()"><i class="icon-delete"></i></a>
                             <h4>Delete the Selected Variants</h4>
                             <p class="warning">You cannot recover deleted product variants. Are you sure you want to continue?</p>
                             <div class="form-group row-fluid">
-                                <input name="delete-variant" class="col-xs-3 span3" type="text" placeholder="Yes or No" />
+                                <input name="delete-variant" data-ng-model="deleteVariantsFlyout.confirmText" class="col-xs-3 span3" type="text" placeholder="Type DELETE to confirm" />
                             </div>
 
                             <div>
@@ -129,11 +129,11 @@
 
                         <!-- Duplicate Variants -->
                         <div class="well col-xs-10 span10" data-ng-class="{ 'open': flyouts.duplicateVariants, 'closed': (!flyouts.duplicateVariants) }">
-                            <button class="btn close" data-ng-click="duplicateVariantsFlyout.close()"><i class="icon-delete"></i></button>
+                            <a class="btn close" data-ng-click="duplicateVariantsFlyout.close()"><i class="icon-delete"></i></a>
                             <h4>Duplicate Variants Based on Selected Items</h4>
                             <div class="form-group row-fluid">
-                                <label for="new-style">What Size do you want to add to the new variants?</label> <!-- Size should be replaced with whatever option name they are choosing to duplicate -->
-                                <input name="new-style" class="col-xs-3 span3" type="text" />
+                                <label for="new-style">What {{duplicateVariantsFlyout.getModel().name}} do you want to add to the new variants?</label> <!-- Size should be replaced with whatever option name they are choosing to duplicate -->
+                                <input name="new-style" class="col-xs-3 span3" data-ng-model="duplicateVariantsFlyout.newChoiceName" type="text" />
                             </div>
 
                             <div>
@@ -187,7 +187,7 @@
                                                     <li><a data-ng-click="deleteVariantsFlyout.open()">Delete Variants</a></li>
                                                     <li class="divider"></li>
                                                     <li class="header">Duplicate Variants</li>
-                                                    <li data-ng-repeat="option in product.productOptions"><a data-ng-click="duplicateVariantsFlyout.open()">In another {{option.name}}</a></li>
+                                                    <li data-ng-repeat="option in product.productOptions"><a data-ng-click="duplicateVariantsFlyout.open(option)">In another {{option.name}}</a></li>
                                                 </ul>
                                             </div>
                                         </th>
