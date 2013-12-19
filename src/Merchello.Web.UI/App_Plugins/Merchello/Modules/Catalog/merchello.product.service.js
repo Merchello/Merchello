@@ -219,7 +219,7 @@
 
                 for (var p = 0; p < prodservice.possibleProductVariants.length; p++) {
                     var variant = prodservice.possibleProductVariants[p];
-                    // Fix sort orders
+
                     // Todo: check if already exists?
                     var merchVariant = product.addVariant(variant);
 
@@ -227,7 +227,34 @@
                 }
 
                 return product;
+            },
+
+            // Used when duplicating variants with a new option
+            createVariantsFromDetachedOptionsList: function (product, options) {
+                var choiceSets = [];
+                var permutation = [];
+                prodservice.possibleProductVariants = [];
+
+                for (var i = 0; i < options.length; i++) {
+                    var currentOption = options[i];
+                    choiceSets.push(currentOption.choices);
+                    permutation.push('');
+                }
+
+                prodservice.permute(choiceSets, 0, permutation);
+
+                for (var p = 0; p < prodservice.possibleProductVariants.length; p++) {
+                    var variant = prodservice.possibleProductVariants[p];
+
+                    // Todo: check if already exists?
+                    var merchVariant = product.addVariant(variant);
+
+                    merchVariant.fixAttributeSortOrders(options);
+                }
+
+                return product;
             }
+
         };
 
         return prodservice;

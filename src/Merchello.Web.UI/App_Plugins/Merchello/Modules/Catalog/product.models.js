@@ -105,6 +105,27 @@
                 self.choices[i].sortOrder = i + 1;
             }
         };
+
+        // Helper to check if this choice exists in my choices array
+        self.choiceExists = function (choice) {
+
+            var choiceInArray = _.find(self.choices, function (c) { return c.key == choice.key; });
+            if (choiceInArray == undefined)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        };
+
+        // Helper to find a choice by name and return it.  undefined if not found
+        self.findChoiceByName = function (name) {
+
+            var choiceInArray = _.find(self.choices, function (c) { return c.name == name; });
+            return choiceInArray;
+        };
     };
 
     models.ProductVariant = function (productVariantFromServer) {
@@ -345,7 +366,7 @@
             newVariant.attributes = attributes.slice(0);
             newVariant.selected = true;
             var skuPostfix = self.productVariants.length + 1;
-            newVariant.sku = newVariant.sku + '-' + skuPostfix;    // TODO: replace with settings "skuSeparator"
+            newVariant.sku = _.uniqueId(newVariant.sku + '-' + skuPostfix);   // TODO: replace with settings "skuSeparator"
 
             self.productVariants.push(newVariant);
             self.hasVariants = true;
