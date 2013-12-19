@@ -26,6 +26,31 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
             : base(merchelloContext, gatewayProvider)
         { }
 
+        public override IRateTableShipMethod CreateShipMethod(IGatewayResource gatewayResource, IShipCountry shipCountry, string name)
+        {
+            Mandate.ParameterNotNull(gatewayResource, "gatewayResource");
+            Mandate.ParameterNotNull(shipCountry, "shipCountry");
+            Mandate.ParameterNotNullOrEmpty(name, "name");
+
+            
+
+            var shipMethod = new ShipMethod(GatewayProvider.ProviderTfKey, shipCountry.Key)
+                            {
+                                Name = name,
+                                ServiceCode = gatewayResource.ServiceCode,
+                                Taxable = false,
+                                Surcharge = 0M,
+                                Provinces = shipCountry.Provinces.ToShipProvinceCollection()
+                            };
+
+            return new RateTableShipMethod(gatewayResource, shipMethod);
+        }
+
+        public override void SaveShipMethod(IRateTableShipMethod shipMethod)
+        {
+            MerchelloContext.Services.GatewayProviderService.Save(shipMethod.ShipMethod);
+        }
+
         /// <summary>
         /// Returns a collection of all possible gateway methods associated with this provider
         /// </summary>

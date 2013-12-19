@@ -47,6 +47,12 @@ namespace Merchello.Core.Models
         string ServiceCode { get; set;}
 
         /// <summary>
+        /// True/false indicating whether or not this shipmethod is taxable
+        /// </summary>
+        [DataMember]
+        bool Taxable { get; set; }
+
+        /// <summary>
         /// Stores province settings for this ship method
         /// </summary>
         [DataMember]

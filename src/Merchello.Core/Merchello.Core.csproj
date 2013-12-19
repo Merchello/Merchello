@@ -398,6 +398,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\ProvinceCollection.cs" />
+    <Compile Include="Models\CountryProvinceExtensions.cs" />
     <Compile Include="Models\Rdbms\GatewayProvider2ShipCountryDto.cs" />
     <Compile Include="Models\Rdbms\ShipCountryDto.cs" />
     <Compile Include="Models\Rdbms\CatalogInventoryDto.cs" />
@@ -413,7 +414,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\ShipProvince.cs" />
-    <Compile Include="Models\ShipProvinceCollection.cs" />
     <Compile Include="Models\ShipRateTier.cs" />
     <Compile Include="Models\TaxProvince.cs" />
     <Compile Include="Models\TypeFields\AppliedPaymentTypeField.cs">
@@ -653,9 +653,6 @@
     <Compile Include="Models\Rdbms\InvoiceStatusDto.cs" />
     <Compile Include="Models\Rdbms\ItemCacheDto.cs" />
     <Compile Include="Models\Rdbms\PaymentDto.cs" />
-    <Compile Include="Models\Rdbms\TransactionDto.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Models\Rdbms\ShipmentDto.cs" />
     <Compile Include="Models\Rdbms\ShipMethodDto.cs" />
     <Compile Include="Models\Rdbms\WarehouseDto.cs" />

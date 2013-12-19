@@ -14,11 +14,6 @@ namespace Merchello.Core.Models.Rdbms
         [Constraint(Default = "newid()")]
         public Guid Key { get; set; }
 
-        [Column("orderKey")]
-        [ForeignKey(typeof(OrderDto), Name = "FK_merchInvoice_merchOrder", Column = "pk")]
-        [NullSetting(NullSetting = NullSettings.Null)]
-        public Guid? OrderKey { get; set; }
-
         [Column("customerKey")]
         [ForeignKey(typeof(CustomerDto), Name = "FK_merchInvoice_merchCustomer",Column = "pk")]
         [NullSetting(NullSetting = NullSettings.Null)]

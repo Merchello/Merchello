@@ -190,7 +190,17 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
         #endregion
 
-       
+        #region IGatewayProvider
+
+        /// <summary>
+        /// Gets the gateway provider service
+        /// </summary>
+        public IGatewayProviderService GatewayProviderService
+        {
+            get { return _serviceContext.GatewayProviderService; }
+        }
+
+        #endregion
 
         #region IInvoice
 
