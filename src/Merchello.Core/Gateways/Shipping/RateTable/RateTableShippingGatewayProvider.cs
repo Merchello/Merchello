@@ -11,7 +11,7 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
     /// <summary>
     /// Defines the RateTableLookupGateway
     /// </summary>
-    public class RateTableLookupGateway : ShippingGatewayBase
+    public class RateTableShippingGatewayProvider : ShippingGatewayProvider
     {
         #region "Available Methods"
         
@@ -24,7 +24,7 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
         #endregion
 
 
-        public RateTableLookupGateway(IGatewayProviderService gatewayProviderService, IGatewayProvider gatewayProvider, IRuntimeCacheProvider runtimeCacheProvider)
+        public RateTableShippingGatewayProvider(IGatewayProviderService gatewayProviderService, IGatewayProvider gatewayProvider, IRuntimeCacheProvider runtimeCacheProvider)
             : base(gatewayProviderService, gatewayProvider, runtimeCacheProvider)
         { }
 

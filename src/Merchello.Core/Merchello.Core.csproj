@@ -230,9 +230,9 @@
     <Compile Include="Gateways\Shipping\IShippingGatewayBase.cs" />
     <Compile Include="Gateways\Shipping\RateTable\IRateTableShipMethod.cs" />
     <Compile Include="Gateways\Shipping\RateTable\IShipRateTable.cs" />
-    <Compile Include="Gateways\Shipping\RateTable\RateTableLookupGateway.cs" />
+    <Compile Include="Gateways\Shipping\RateTable\RateTableShippingGatewayProvider.cs" />
     <Compile Include="Gateways\Shipping\RateTable\RateTableShipMethod.cs" />
-    <Compile Include="Gateways\Shipping\ShippingGatewayBase.cs" />
+    <Compile Include="Gateways\Shipping\ShippingGatewayProvider.cs" />
     <Compile Include="Gateways\Shipping\RateTable\ShipRateTable.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\AppliedPayment.cs">

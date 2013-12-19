@@ -139,7 +139,7 @@ namespace Merchello.Tests.IntegrationTests.Services.Shipping
             Assert.NotNull(provider);
 
             //// Act
-            var shippingProvider = _merchelloContext.Gateways.InstantiateShippingGateway(provider);
+            var shippingProvider = _merchelloContext.Gateways.GetShippingGatewayProvider(provider);
 
             //// Assert
             Assert.NotNull(shippingProvider);

@@ -14,11 +14,11 @@ namespace Merchello.Core.Gateways
         IEnumerable<IGatewayProvider> GetGatewayProviders(GatewayProviderType gatewayProviderType);
 
         /// <summary>
-        /// Returns an instantiation of a <see cref="ShippingGatewayBase"/>
+        /// Returns an instantiation of a <see cref="ShippingGatewayProvider"/>
         /// </summary>
         /// <param name="provider"><see cref="IGatewayProvider"/></param>
         /// <returns></returns>
-        ShippingGatewayBase InstantiateShippingGateway(IGatewayProvider provider);
+        ShippingGatewayProvider GetShippingGatewayProvider(IGatewayProvider provider);
 
         /// <summary>
         /// Refreshes the <see cref="GatewayBase"/> cache
