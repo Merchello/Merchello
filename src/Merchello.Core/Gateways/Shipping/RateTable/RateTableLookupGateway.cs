@@ -2,14 +2,16 @@
 using System.Linq;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
+using Merchello.Core.Services;
 using Umbraco.Core;
+using Umbraco.Core.Cache;
 
 namespace Merchello.Core.Gateways.Shipping.RateTable
 {
     /// <summary>
     /// Defines the RateTableLookupGateway
     /// </summary>
-    public class RateTableLookupGateway : ShippingGatewayBase<IRateTableShipMethod>
+    public class RateTableLookupGateway : ShippingGatewayBase
     {
         #region "Available Methods"
         
@@ -22,9 +24,34 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
         #endregion
 
 
-        public RateTableLookupGateway(IMerchelloContext merchelloContext, IGatewayProvider gatewayProvider)
-            : base(merchelloContext, gatewayProvider)
+        public RateTableLookupGateway(IGatewayProviderService gatewayProviderService, IGatewayProvider gatewayProvider, IRuntimeCacheProvider runtimeCacheProvider)
+            : base(gatewayProviderService, gatewayProvider, runtimeCacheProvider)
         { }
+
+        public override IGatewayShipMethod CreateShipMethod(IGatewayResource gatewayResource, IShipCountry shipCountry, string name)
+        {
+            Mandate.ParameterNotNull(gatewayResource, "gatewayResource");
+            Mandate.ParameterNotNull(shipCountry, "shipCountry");
+            Mandate.ParameterNotNullOrEmpty(name, "name");
+
+            
+
+            var shipMethod = new ShipMethod(GatewayProvider.ProviderTfKey, shipCountry.Key)
+                            {
+                                Name = name,
+                                ServiceCode = gatewayResource.ServiceCode,
+                                Taxable = false,
+                                Surcharge = 0M,
+                                Provinces = shipCountry.Provinces.ToShipProvinceCollection()
+                            };
+
+            return new RateTableShipMethod(gatewayResource, shipMethod);
+        }
+
+        public override void SaveShipMethod(IGatewayShipMethod shipMethod)
+        {
+            GatewayProviderService.Save(shipMethod.ShipMethod);
+        }
 
         /// <summary>
         /// Returns a collection of all possible gateway methods associated with this provider
@@ -39,9 +66,9 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
         /// Returns a collection of ship methods assigned for this specific provider configuration (associated with the ShipCountry)
         /// </summary>
         /// <returns></returns>
-        public override IEnumerable<IRateTableShipMethod> ActiveShipMethods(IShipCountry shipCountry)
+        public override IEnumerable<IGatewayShipMethod> ActiveShipMethods(IShipCountry shipCountry)
         {
-            var methods = MerchelloContext.Services.GatewayProviderService.GetGatewayProviderShipMethods(GatewayProvider.Key, shipCountry.Key);
+            var methods = GatewayProviderService.GetGatewayProviderShipMethods(GatewayProvider.Key, shipCountry.Key);
             return methods
                 .Select(
                 shipMethod => new RateTableShipMethod(AvailableMethods.FirstOrDefault(x => x.ServiceCode == shipMethod.ServiceCode), shipMethod)

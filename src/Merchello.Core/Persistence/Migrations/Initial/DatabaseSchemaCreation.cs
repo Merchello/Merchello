@@ -45,28 +45,30 @@ namespace Merchello.Core.Persistence.Migrations.Initial
                 
                 {12, typeof(ShipRateTierDto)},
                 
-                {13, typeof(OrderStatusDto)},
-                {14, typeof(OrderDto)}, 
-                {15, typeof(InvoiceStatusDto)},                
-                {16, typeof(InvoiceDto)},                   
-                {17, typeof(InvoiceItemDto)},
+                {13, typeof(InvoiceStatusDto)},  
+                {14, typeof(InvoiceDto)},                   
+                {15, typeof(InvoiceItemDto)},
+
+                {16, typeof(OrderStatusDto)},
+                {17, typeof(OrderDto)}, 
+                              
+               
                 {18, typeof(ShipmentDto)},                 
                 {19, typeof(OrderItemDto)},
     
                 {20, typeof(PaymentDto)},                
-                {21, typeof(TransactionDto)},
-                {22, typeof(ProductDto)},
-                {23, typeof(ProductVariantDto)},
-                {24, typeof(ProductOptionDto)},
-                {25, typeof(ProductAttributeDto)},
-                {26, typeof(Product2ProductOptionDto)},
+                {21, typeof(ProductDto)},
+                {22, typeof(ProductVariantDto)},
+                {23, typeof(ProductOptionDto)},
+                {24, typeof(ProductAttributeDto)},
+                {25, typeof(Product2ProductOptionDto)},
                 //{26, typeof(WarehouseInventoryDto)},
-                {27, typeof(CatalogInventoryDto)},
-                {28, typeof(TaxRegionDto)},
-                {29, typeof(ProductVariant2ProductAttributeDto)},
+                {26, typeof(CatalogInventoryDto)},
+                {27, typeof(TaxRegionDto)},
+                {28, typeof(ProductVariant2ProductAttributeDto)},
            
-                {30, typeof(AppliedPaymentDto)},
-                {31, typeof(ProductVariantIndexDto)}
+                {29, typeof(AppliedPaymentDto)},
+                {30, typeof(ProductVariantIndexDto)}
             };
 
         #endregion

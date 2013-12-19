@@ -241,6 +241,7 @@
     <Compile Include="Examine\ProductProviderTests.cs" />
     <Compile Include="Services\Customer\CustomerItemCacheServiceTests.cs" />
     <Compile Include="Services\Customer\CustomerServiceTests.cs" />
+    <Compile Include="Services\Shipping\ShippingProviderTests.cs" />
     <Compile Include="Services\ProductVariant\ProductVariantTests.cs" />
     <Compile Include="Services\Product\ProductOptionTests.cs" />
     <Compile Include="Services\Product\ProductTests.cs" />

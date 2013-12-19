@@ -3,9 +3,16 @@ using Merchello.Core.Models;
 
 namespace Merchello.Core.Gateways.Shipping
 {
-    public interface IShippingGatewayBase<out T>
-        where T : IGatewayShipMethod
+    /// <summary>
+    /// Defines the base shipping gateway
+    /// </summary>
+    public interface IShippingGatewayBase
     {
+        /// <summary>
+        /// Saves a shipmethod
+        /// </summary>
+        /// <param name="shipMethod"></param>
+        void SaveShipMethod(IGatewayShipMethod shipMethod);
 
         /// <summary>
         /// Returns a collection of all possible gateway methods associated with this provider
@@ -17,7 +24,7 @@ namespace Merchello.Core.Gateways.Shipping
         /// Returns a collection of ship methods assigned for this specific provider configuration (associated with the ShipCountry)
         /// </summary>
         /// <returns></returns>
-        IEnumerable<T> ActiveShipMethods(IShipCountry shipCountry);
+        IEnumerable<IGatewayShipMethod> ActiveShipMethods(IShipCountry shipCountry);
 
     }
 }

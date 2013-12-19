@@ -88,5 +88,20 @@ namespace Merchello.Tests.IntegrationTests.DbInstall
             Assert.IsTrue(catalogs.Any());
         }
 
-}
+
+        [Test]
+        public void Can_Populate_GatewayProviders()
+        {
+            //// Arrange
+            var expected = 1;
+
+            //// Act
+            _creation.InitializeBaseData("merchGatewayProvider");
+            var dtos = _database.Query<WarehouseDto>("SELECT * FROM merchGatewayProvider");
+
+            //// Assert
+            Assert.IsTrue(dtos.Any());
+            Assert.AreEqual(expected, dtos.Count());
+        }
+    }
 }

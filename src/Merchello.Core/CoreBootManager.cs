@@ -2,6 +2,7 @@
 using System.Configuration;
 using Merchello.Core.Cache;
 using Merchello.Core.Configuration;
+using Merchello.Core.Gateways;
 using Merchello.Core.ObjectResolution;
 using Merchello.Core.Services;
 using Umbraco.Core;
@@ -23,7 +24,8 @@ namespace Merchello.Core
         private bool _isInitialized = false;
         private bool _isStarted = false;
         private bool _isComplete = false;
-        
+        private bool _isTest = false;
+
         private MerchelloContext MerchelloContext { get; set; }       
 
         
@@ -41,7 +43,6 @@ namespace Merchello.Core
             var connString = ConfigurationManager.ConnectionStrings[MerchelloConfiguration.Current.Section.DefaultConnectionStringName].ConnectionString;
             var providerName = ConfigurationManager.ConnectionStrings[MerchelloConfiguration.Current.Section.DefaultConnectionStringName].ProviderName;                
             var serviceContext = new ServiceContext(new PetaPocoUnitOfWorkProvider(connString, providerName));
-            
 
             CreateMerchelloContext(serviceContext);
 
@@ -75,7 +76,7 @@ namespace Merchello.Core
                                     new NullCacheProvider())
                             : ApplicationContext.Current.ApplicationCache;
 
-            MerchelloContext = MerchelloContext.Current = new MerchelloContext(serviceContext, cache);
+            MerchelloContext = MerchelloContext.Current = new MerchelloContext(serviceContext, cache, _isTest);
         }
 
         /// <summary>
@@ -124,6 +125,14 @@ namespace Merchello.Core
             Resolution.Freeze();
         }
 
+        /// <summary>
+        /// Flag for unit testing
+        /// </summary>
+        internal bool IsUnitTest
+        {
+            get { return _isTest; }
+            set { _isTest = value; }
+        }
 
     }
 }

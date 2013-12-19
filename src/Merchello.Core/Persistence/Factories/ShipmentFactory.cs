@@ -27,7 +27,6 @@ namespace Merchello.Core.Persistence.Factories
                 ToCountryCode = dto.ToCountryCode,
                 Phone = dto.Phone,
                 ShipMethodKey = dto.ShipMethodKey,       
-                InvoiceItemKey = dto.InvoiceItemKey,
                 UpdateDate = dto.UpdateDate,
                 CreateDate = dto.CreateDate
             };
@@ -57,7 +56,6 @@ namespace Merchello.Core.Persistence.Factories
                 ToPostalCode = entity.ToPostalCode,
                 ToCountryCode = entity.ToCountryCode,                
                 ShipMethodKey = entity.ShipMethodKey,
-                InvoiceItemKey = entity.InvoiceItemKey,
                 Phone = entity.Phone,
                 UpdateDate = entity.UpdateDate,
                 CreateDate = entity.CreateDate                
