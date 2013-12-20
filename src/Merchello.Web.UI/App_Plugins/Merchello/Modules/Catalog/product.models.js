@@ -15,6 +15,7 @@
             self.sku = "";
             self.sortOrder = 0;
             self.optionOrder = 0;
+            self.isRemoved = false;
         }
         else
         {
@@ -24,6 +25,7 @@
             self.sku = productAttributeFromServer.sku;
             self.sortOrder = productAttributeFromServer.sortOrder;
             self.optionOrder = self.sortOrder;
+            self.isRemoved = false;
         }
 
         self.findMyOption = function (options) {
@@ -85,7 +87,13 @@
         // Helper to remove a choice to this option
         self.removeChoice = function (idx) {
 
-            self.choices.splice(idx, 1);
+            var removedItems = self.choices.splice(idx, 1);
+
+            for (var i = 0; i < removedItems.length; i++) {
+                removedItems[i].isRemoved = true;
+            }
+
+            return removedItems;
         };
 
         // Helper to remove a choice to this option
@@ -227,6 +235,15 @@
             }
             self.attributes = _.sortBy(self.attributes, function (attr) { return attr.optionOrder; });
         };
+
+        // for sorting in a table
+        self.addAttributesAsProperties = function (options) {
+            for (var i = 0; i < self.attributes.length; i++) {
+                var attr = self.attributes[i];
+                var option = attr.findMyOption(options);
+                self[option.name] = attr.name;
+            }
+        };
     };
 
     models.Product = function (productFromServer) {
@@ -297,7 +314,8 @@
 
             self.productVariants = _.map(productFromServer.productVariants, function (variant) {
                 var jsvariant = new merchello.Models.ProductVariant(variant);
-                jsvariant.fixAttributeSortOrders(self.productOptions)
+                jsvariant.fixAttributeSortOrders(self.productOptions);
+                jsvariant.addAttributesAsProperties(self.productOptions);
                 return jsvariant;
             });
 
@@ -383,6 +401,13 @@
         self.fixAttributeSortOrders = function () {
             for (var i = 0; i < self.productVariants.length; i++) {
                 self.productVariants[i].fixAttributeSortOrders(self.productOptions);
+            }
+        };
+
+        // for sorting in a table
+        self.addAttributesAsPropertiesToVariants = function () {
+            for (var i = 0; i < self.productVariants.length; i++) {
+                self.productVariants[i].addAttributesAsProperties(self.productOptions);
             }
         };
     };

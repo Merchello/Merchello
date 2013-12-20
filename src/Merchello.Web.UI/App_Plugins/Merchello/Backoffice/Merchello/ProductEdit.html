@@ -159,19 +159,19 @@
                                         <th>&nbsp;</th> <!-- Swaps out the current TR with headings in it for the bulk action TR -->
                                         <th data-ng-repeat="option in product.productOptions | orderBy:'sortOrder'"
                                             data-ng-click="changeSortOrder(option.name)" data-ng-class="{'sorted': sortProperty == option.name}">
-                                            <i data-ng-class="{'icon-navigation-up': sortProperty == option.name, 'icon-navigation-down': sortProperty != option.name}"></i>
+                                            <i data-ng-class="{'icon-navigation-up': sortProperty == option.name, 'icon-navigation-down': sortProperty == ('-' + option.name)}"></i>
                                             {{option.name}}
                                         </th>
                                         <th data-ng-click="changeSortOrder('sku')" data-ng-class="{'sorted': sortProperty == 'sku'}">
-                                            <i data-ng-class="{'icon-navigation-up': sortProperty == 'sku', 'icon-navigation-down': sortProperty != 'sku'}"></i>
+                                            <i data-ng-class="{'icon-navigation-up': sortProperty == 'sku', 'icon-navigation-down': sortProperty == '-sku'}"></i>
                                             SKU
                                         </th>
                                         <th data-ng-click="changeSortOrder('price')" data-ng-class="{'sorted': sortProperty == 'price'}">
-                                            <i data-ng-class="{'icon-navigation-up': sortProperty == 'price', 'icon-navigation-down': sortProperty != 'price'}"></i>
+                                            <i data-ng-class="{'icon-navigation-up': sortProperty == 'price', 'icon-navigation-down': sortProperty == '-price'}"></i>
                                             Price
                                         </th>
                                         <th data-ng-click="changeSortOrder('totalInventoryCount')" data-ng-class="{'sorted': sortProperty == 'totalInventoryCount'}">
-                                            <i data-ng-class="{'icon-navigation-up': sortProperty == 'totalInventoryCount', 'icon-navigation-down': sortProperty != 'totalInventoryCount'}"></i> 
+                                            <i data-ng-class="{'icon-navigation-up': sortProperty == 'totalInventoryCount', 'icon-navigation-down': sortProperty == '-totalInventoryCount'}"></i> 
                                             Total Qty
                                         </th>
                                         <th>Edit</th>
@@ -263,7 +263,7 @@
 
                             <div>
                                 <a data-ng-click="addOption()" class="btn add">Add Another Option</a>
-                                <a data-ng-click="updateVariants(productForm)" class="btn btn-primary add">Update</a>
+                                <a data-ng-click="save(productForm)" class="btn btn-primary add">Update</a>
                             </div>
 
                         </div>
