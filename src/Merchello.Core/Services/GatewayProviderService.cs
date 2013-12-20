@@ -171,7 +171,15 @@ namespace Merchello.Core.Services
         /// <param name="shipMethod"></param>
         public void Save(IShipMethod shipMethod)
         {
-            throw new NotImplementedException();
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreateShipMethodRepository(uow))
+                {
+                    repository.AddOrUpdate(shipMethod);
+                    uow.Commit();
+                }
+            }
         }
 
         /// <summary>
@@ -180,7 +188,18 @@ namespace Merchello.Core.Services
         /// <param name="shipMethodList">Collection of <see cref="IShipMethod"/></param>
         public void Save(IEnumerable<IShipMethod> shipMethodList)
         {
-            throw new NotImplementedException();
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreateShipMethodRepository(uow))
+                {
+                    foreach (var shipMethod in shipMethodList)
+                    {
+                        repository.AddOrUpdate(shipMethod);
+                    }
+                    uow.Commit();
+                }
+            }
         }
 
         /// <summary>
@@ -189,7 +208,15 @@ namespace Merchello.Core.Services
         /// <param name="shipRateTier"></param>
         public void Save(IShipRateTier shipRateTier)
         {
-            throw new NotImplementedException();
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreateShipRateTierRepository(uow))
+                {
+                    repository.AddOrUpdate(shipRateTier);
+                    uow.Commit();
+                }
+            }
         }
 
         /// <summary>
@@ -198,7 +225,18 @@ namespace Merchello.Core.Services
         /// <param name="shipRateTierList"></param>
         public void Save(IEnumerable<IShipRateTier> shipRateTierList)
         {
-            throw new NotImplementedException();
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreateShipRateTierRepository(uow))
+                {
+                    foreach (var shipRateTier in shipRateTierList)
+                    {
+                        repository.AddOrUpdate(shipRateTier);    
+                    }
+                    uow.Commit();
+                }
+            }
         }
 
         /// <summary>
@@ -207,7 +245,15 @@ namespace Merchello.Core.Services
         /// <param name="shipMethod"></param>
         public void Delete(IShipMethod shipMethod)
         {
-            throw new NotImplementedException();
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreateShipMethodRepository(uow))
+                {
+                    repository.Delete(shipMethod);
+                    uow.Commit();
+                }
+            }
         }
 
         /// <summary>
@@ -216,7 +262,15 @@ namespace Merchello.Core.Services
         /// <param name="shipRateTier"></param>
         public void Delete(IShipRateTier shipRateTier)
         {
-            throw new NotImplementedException();
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreateShipRateTierRepository(uow))
+                {
+                    repository.Delete(shipRateTier);
+                    uow.Commit();
+                }
+            }
         }
 
         /// <summary>
@@ -242,7 +296,11 @@ namespace Merchello.Core.Services
         /// <returns>A collection of <see cref="IShipRateTier"/></returns>
         public IEnumerable<IShipRateTier> GetShipRateTiersByShipMethodKey(Guid shipMethodKey)
         {
-            throw new NotImplementedException();
+            using (var repository = _repositoryFactory.CreateShipRateTierRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Query<IShipRateTier>.Builder.Where(x => x.ShipMethodKey == shipMethodKey);
+                return repository.GetByQuery(query);
+            }
         }
 
         #endregion

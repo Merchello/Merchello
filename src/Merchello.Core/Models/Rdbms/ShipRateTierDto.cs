@@ -17,7 +17,7 @@ namespace Merchello.Core.Models.Rdbms
 
         [Column("shipMethodKey")]
         [ForeignKey(typeof(ShipMethodDto), Name = "FK_merchShipmentRateTier_merchShipMethod", Column = "pk")]
-        public Guid? ShipMethodKey { get; set; }
+        public Guid ShipMethodKey { get; set; }
 
         [Column("rangeLow")]
         public decimal RangeLow { get; set; }

@@ -6,7 +6,7 @@ namespace Merchello.Core.Gateways.Shipping
     /// <summary>
     /// Defines the base shipping gateway
     /// </summary>
-    public interface IShippingGatewayBase
+    public interface IShippingGatewayProvider
     {
         /// <summary>
         /// Saves a shipmethod

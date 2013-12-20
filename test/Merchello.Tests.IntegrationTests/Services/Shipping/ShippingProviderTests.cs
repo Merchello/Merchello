@@ -1,17 +1,15 @@
 ﻿using System;
+using System.Data;
 using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Cache;
 using Merchello.Core.Gateways;
-using Merchello.Core.Gateways.Shipping;
-using Merchello.Core.Gateways.Shipping.RateTable;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Persistence.UnitOfWork;
 using Merchello.Core.Services;
 using NUnit.Framework;
-using Rhino.Mocks.Constraints;
 using Umbraco.Core;
 using Umbraco.Core.Cache;
 
@@ -102,7 +100,7 @@ namespace Merchello.Tests.IntegrationTests.Services.Shipping
             //// Act
             var ctorArgs = new[] { typeof(IGatewayProviderService), typeof(IGatewayProvider), typeof(IRuntimeCacheProvider) };
             var ctoArgValues = new object[] { _gatewayProviderService, provider, _merchelloContext.Cache.RuntimeCache };
-            var gateway = ActivatorHelper.CreateInstance<GatewayBase>(Type.GetType(provider.TypeFullName), ctorArgs, ctoArgValues);
+            var gateway = ActivatorHelper.CreateInstance<GatewayProviderBase>(Type.GetType(provider.TypeFullName), ctorArgs, ctoArgValues);
 
             //// Assert
             Assert.NotNull(gateway);
@@ -139,7 +137,7 @@ namespace Merchello.Tests.IntegrationTests.Services.Shipping
             Assert.NotNull(provider);
 
             //// Act
-            var shippingProvider = _merchelloContext.Gateways.InstantiateShippingGateway(provider);
+            var shippingProvider = _merchelloContext.Gateways.GetShippingGatewayProvider(provider);
 
             //// Assert
             Assert.NotNull(shippingProvider);
@@ -149,15 +147,42 @@ namespace Merchello.Tests.IntegrationTests.Services.Shipping
         /// Test verifies that a provider can be associated with a ShipCountry
         /// </summary>
         [Test]
-        public void Can_Associate_A_Provider_With_A_ShipCountry()
+        public void Can_Add_A_Shipmethod_To_A_Provider_With_A_ShipCountry()
         {
             //// Arrange
             var country = _shippingService.GetShipCountryByCountryCode(_catalog.Key, "US");
-            var provider = _gatewayProviderService.GetGatewayProvidersByType(GatewayProviderType.Shipping).FirstOrDefault();
-            Assert.NotNull(provider);
+            var provider = _merchelloContext.Gateways.GetGatewayProviders(GatewayProviderType.Shipping).FirstOrDefault();
+            var shippingProvider = _merchelloContext.Gateways.GetShippingGatewayProvider(provider);
+            Assert.NotNull(shippingProvider);
             
             //// Act
-            
+            var resource = shippingProvider.ListAvailableMethods().FirstOrDefault();
+            var gatewayShipMethod = shippingProvider.CreateShipMethod(resource, country, "Ground");
+            shippingProvider.SaveShipMethod(gatewayShipMethod);
+
+            //// Assert
+            Assert.IsTrue(gatewayShipMethod.ShipMethod.HasIdentity);
+
+        }
+
+        /// <summary>
+        /// Test verifies that a constraint violation is thrown if a duplicate shipmethod is added per for a country
+        /// </summary>
+        [Test]
+        public void Attempting_To_Add_A_Duplicate_Provider_ShipMethod_For_ShipCountry_Results_In_A_Error()
+        {
+            var country = _shippingService.GetShipCountryByCountryCode(_catalog.Key, "US");
+            var provider = _merchelloContext.Gateways.GetGatewayProviders(GatewayProviderType.Shipping).FirstOrDefault();
+            var shippingProvider = _merchelloContext.Gateways.GetShippingGatewayProvider(provider);
+            Assert.NotNull(shippingProvider);
+            var resource = shippingProvider.ListAvailableMethods().FirstOrDefault();
+            var gatewayShipMethod = shippingProvider.CreateShipMethod(resource, country, "Ground");
+            shippingProvider.SaveShipMethod(gatewayShipMethod);
+
+            //// Act
+
+            //// Assert
+            Assert.Throws<ConstraintException>(() => shippingProvider.CreateShipMethod(resource, country, "Ground"));
 
         }
     }

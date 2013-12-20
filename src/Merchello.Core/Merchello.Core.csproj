@@ -221,18 +221,20 @@
     <Compile Include="Configuration\Outline\RegionElement.cs" />
     <Compile Include="Configuration\Outline\SettingsCollection.cs" />
     <Compile Include="Configuration\Outline\SettingsElement.cs" />
-    <Compile Include="Gateways\GatewayBase.cs" />
+    <Compile Include="Gateways\GatewayProviderBase.cs" />
     <Compile Include="Gateways\GatewayContext.cs" />
+    <Compile Include="Gateways\GatewayProviderFactory.cs" />
     <Compile Include="Gateways\IGateway.cs" />
     <Compile Include="Gateways\IGatewayContext.cs" />
+    <Compile Include="Gateways\IGatewayProviderFactory.cs" />
     <Compile Include="Gateways\Shipping\GatewayShipMethodBase.cs" />
     <Compile Include="Gateways\Shipping\IGatewayShipMethod.cs" />
-    <Compile Include="Gateways\Shipping\IShippingGatewayBase.cs" />
+    <Compile Include="Gateways\Shipping\IShippingGatewayProvider.cs" />
     <Compile Include="Gateways\Shipping\RateTable\IRateTableShipMethod.cs" />
     <Compile Include="Gateways\Shipping\RateTable\IShipRateTable.cs" />
-    <Compile Include="Gateways\Shipping\RateTable\RateTableLookupGateway.cs" />
+    <Compile Include="Gateways\Shipping\RateTable\RateTableShippingGatewayProvider.cs" />
     <Compile Include="Gateways\Shipping\RateTable\RateTableShipMethod.cs" />
-    <Compile Include="Gateways\Shipping\ShippingGatewayBase.cs" />
+    <Compile Include="Gateways\Shipping\ShippingGatewayProvider.cs" />
     <Compile Include="Gateways\Shipping\RateTable\ShipRateTable.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\AppliedPayment.cs">
@@ -400,7 +402,6 @@
     </Compile>
     <Compile Include="Models\ProvinceCollection.cs" />
     <Compile Include="Models\CountryProvinceExtensions.cs" />
-    <Compile Include="Models\Rdbms\GatewayProvider2ShipCountryDto.cs" />
     <Compile Include="Models\Rdbms\ShipCountryDto.cs" />
     <Compile Include="Models\Rdbms\CatalogInventoryDto.cs" />
     <Compile Include="Models\Rdbms\ProductVariantIndexDto.cs" />
@@ -454,6 +455,7 @@
     <Compile Include="Persistence\Factories\ShipCountryFactory.cs" />
     <Compile Include="Persistence\Factories\ShipmentFactory.cs" />
     <Compile Include="Persistence\Factories\ShipMethodFactory.cs" />
+    <Compile Include="Persistence\Factories\ShipRateTierFactory.cs" />
     <Compile Include="Persistence\Factories\WarehouseCatalogFactory.cs" />
     <Compile Include="Persistence\Factories\WarehouseFactory.cs" />
     <Compile Include="Persistence\Mappers\AppliedPaymentMapper.cs">
@@ -542,6 +544,7 @@
     <Compile Include="Persistence\Repositories\ShipCountryRepository.cs" />
     <Compile Include="Persistence\Repositories\ShipmentRepository.cs" />
     <Compile Include="Persistence\Repositories\ShipMethodRepository.cs" />
+    <Compile Include="Persistence\Repositories\ShipRateTierRepository.cs" />
     <Compile Include="Persistence\Repositories\WarehouseRepository.cs" />
     <Compile Include="Persistence\TransactionType.cs" />
     <Compile Include="Persistence\UnitOfWork\IDatabaseUnitOfWork.cs" />

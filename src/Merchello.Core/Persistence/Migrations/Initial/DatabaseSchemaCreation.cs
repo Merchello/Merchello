@@ -41,7 +41,7 @@ namespace Merchello.Core.Persistence.Migrations.Initial
                 //{8, typeof(WarehouseCountryDto)},
                 {9, typeof(ShipCountryDto)},
                 {10, typeof(ShipMethodDto)},
-                {11, typeof(GatewayProvider2ShipCountryDto)},
+                //{11, typeof(GatewayProvider2ShipCountryDto)},
                 
                 {12, typeof(ShipRateTierDto)},
                 
