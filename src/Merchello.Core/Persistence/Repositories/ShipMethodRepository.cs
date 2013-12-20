@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using Merchello.Core.Models;
 using Merchello.Core.Models.EntityBase;
@@ -94,7 +95,14 @@ namespace Merchello.Core.Persistence.Repositories
 
         protected override void PersistNewItem(IShipMethod entity)
         {
-            ((Entity)entity).AddingEntity();
+            // assert a shipmethod does not already exist for this country with this service code
+            var query =
+                Querying.Query<IShipMethod>.Builder.Where(
+                    x => x.ShipCountryKey == entity.ShipCountryKey && x.ServiceCode == entity.ServiceCode);
+
+            if(GetByQuery(query).Any()) throw new ConstraintException("A Shipmethod already exists for this ShipCountry with this ServiceCode");
+                
+                ((Entity)entity).AddingEntity();
 
             var factory = new ShipMethodFactory();
             var dto = factory.BuildDto(entity);

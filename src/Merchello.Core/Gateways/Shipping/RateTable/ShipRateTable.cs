@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Merchello.Core.Cache;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
+using Merchello.Core.Services;
 using Umbraco.Core;
+using Umbraco.Core.Cache;
+using CacheKeys = Merchello.Core.Cache.CacheKeys;
 
 namespace Merchello.Core.Gateways.Shipping.RateTable
 {
@@ -31,24 +33,15 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
 
         }
 
-        /// <summary>
-        /// Retrieves 
-        /// </summary>
-        /// <param name="shipMethodKey">The 'unique' ShipMethodKey of the <see cref="IShipMethod"/> associated</param>
-        /// <returns></returns>
-        public static ShipRateTable GetShipRateTable(Guid shipMethodKey)
+        internal static ShipRateTable GetShipRateTable(IGatewayProviderService gatewayProviderService, IRuntimeCacheProvider runtimeCacheProvider, Guid shipMethodKey)
         {
-            var context = MerchelloContext.Current;
-
-            return (ShipRateTable)context.Cache
-                .RequestCache.GetCacheItem(CacheKeys.GatewayShipMethodCacheKey(shipMethodKey), 
-                () => GetShipRateTable(MerchelloContext.Current, shipMethodKey));
-        }
-
-        internal static ShipRateTable GetShipRateTable(IMerchelloContext merchelloContext, Guid shipMethodKey)
-        {
-            var rows = merchelloContext.Services.GatewayProviderService.GetShipRateTiersByShipMethodKey(shipMethodKey);
-            return new ShipRateTable(shipMethodKey, rows);
+            return (ShipRateTable) runtimeCacheProvider.GetCacheItem(
+                CacheKeys.GatewayShipMethodCacheKey(shipMethodKey),
+                delegate
+                    {
+                        var rows = gatewayProviderService.GetShipRateTiersByShipMethodKey(shipMethodKey);
+                        return new ShipRateTable(shipMethodKey, rows);
+                    });
         }
 
         /// <summary>
@@ -166,19 +159,19 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
         /// </summary>
         public void Save()
         {
-            Save(MerchelloContext.Current, this);
+            if(MerchelloContext.Current == null) throw new InvalidOperationException("MerchelloContext.Current is null");
+            Save(MerchelloContext.Current.Services.GatewayProviderService, MerchelloContext.Current.Cache.RuntimeCache, this);
         }
 
-        internal static void Save(IMerchelloContext merchelloContext, IShipRateTable rateTable)
+        internal static void Save(IGatewayProviderService gatewayProviderService, IRuntimeCacheProvider cache, IShipRateTable rateTable)
         {
-            var cache = merchelloContext.Cache.RequestCache;
-
+           
             // clear the current cached item
             cache.ClearCacheItem(CacheKeys.GatewayShipMethodCacheKey(rateTable.ShipMethodKey));
 
             // persist and enter into cache
-            merchelloContext.Services.GatewayProviderService.Save(rateTable.Rows);
-            cache.GetCacheItem(CacheKeys.GatewayShipMethodCacheKey(rateTable.ShipMethodKey), () => rateTable);   
+           gatewayProviderService.Save(rateTable.Rows);
+           cache.GetCacheItem(CacheKeys.GatewayShipMethodCacheKey(rateTable.ShipMethodKey), () => rateTable);   
         }
 
         /// <summary>

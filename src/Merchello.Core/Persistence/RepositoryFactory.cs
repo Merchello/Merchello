@@ -146,6 +146,16 @@ namespace Merchello.Core.Persistence
                 _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
         }
 
+        /// <summary>
+        /// Returns an instance of the <see cref="IShipRateTierRepository"/>
+        /// </summary>
+        /// <param name="uow"></param>
+        /// <returns></returns>
+        internal virtual IShipRateTierRepository CreateShipRateTierRepository(IDatabaseUnitOfWork uow)
+        {
+            return new ShipRateTierRepository(uow, _nullCacheProvider);
+       
+        }
 
         /// <summary>
         /// Returns an instance of the <see cref="IShipmentRepository"/>

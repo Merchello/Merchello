@@ -30,13 +30,15 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
 
         public override IGatewayShipMethod CreateShipMethod(IGatewayResource gatewayResource, IShipCountry shipCountry, string name)
         {
+
             Mandate.ParameterNotNull(gatewayResource, "gatewayResource");
             Mandate.ParameterNotNull(shipCountry, "shipCountry");
             Mandate.ParameterNotNullOrEmpty(name, "name");
 
-            
+            // TODO : Assert that this provider does not already have a shipmethod defined with this service code for this country
+            // this constraint is already applied in the ShipMethodRepository ... review
 
-            var shipMethod = new ShipMethod(GatewayProvider.ProviderTfKey, shipCountry.Key)
+            var shipMethod = new ShipMethod(GatewayProvider.Key, shipCountry.Key)
                             {
                                 Name = name,
                                 ServiceCode = gatewayResource.ServiceCode,
@@ -45,12 +47,19 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
                                 Provinces = shipCountry.Provinces.ToShipProvinceCollection()
                             };
 
+            GatewayProviderService.Save(shipMethod);
+
             return new RateTableShipMethod(gatewayResource, shipMethod);
         }
 
+        /// <summary>
+        /// Saves a <see cref="RateTableShipMethod"/> 
+        /// </summary>
+        /// <param name="shipMethod"></param>
         public override void SaveShipMethod(IGatewayShipMethod shipMethod)
         {
             GatewayProviderService.Save(shipMethod.ShipMethod);
+            ShipRateTable.Save(GatewayProviderService, RuntimeCache, ((RateTableShipMethod) shipMethod).RateTable);
         }
 
         /// <summary>

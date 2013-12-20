@@ -91,7 +91,6 @@ namespace Merchello.Core.Persistence.Repositories
                 "DELETE FROM merchShipRateTier WHERE shipMethodKey IN (SELECT pk FROM merchShipMethod WHERE providerKey IN (SELECT pk FROM merchGatewayProvider WHERE pk = @Key))",                
                 "UPDATE merchShipment SET shipMethodKey = NULL WHERE shipMethodKey IN (SELECT pk FROM merchShipMethod WHERE providerKey IN (SELECT pk FROM merchGatewayProvider WHERE pk  = @Key))",
                 "DELETE FROM merchShipMethod WHERE providerKey IN (SELECT pk FROM merchGatewayProvider WHERE pk = @Key)",
-                "DELETE FROM merchGatewayProvider2ShipCountry WHERE gatewayProviderKey = @Key",
                 "DELETE FROM merchGatewayProvider WHERE pk = @Key"
             };
 

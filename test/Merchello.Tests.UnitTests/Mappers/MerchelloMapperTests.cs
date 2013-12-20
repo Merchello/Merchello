@@ -238,6 +238,23 @@ namespace Merchello.Tests.UnitTests.Mappers
             Assert.AreSame(expected, resolved.Result.GetType());
         }
 
+        /// <summary>
+        /// Test to verify <see cref="MerchelloMapper"/> correctly maps IShipCountry to ShipCountryMapper
+        /// </summary>
+        [Test]
+        public void Mapper_Resolves_IShipRateTier_To_ShipRateTierMapper()
+        {
+
+            //// Arrage
+            var expected = typeof(ShipRateTierMapper);
+
+            //// Act
+            var resolved = MerchelloMapper.Current.ResolveByType(typeof(IShipRateTier));
+
+            //// Assert
+            Assert.IsTrue(resolved.Success);
+            Assert.AreSame(expected, resolved.Result.GetType());
+        }
 
         /// <summary>
         /// Test to verify <see cref="MerchelloMapper"/> correctly maps IShipment to ShipmentMapper

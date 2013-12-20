@@ -11,6 +11,14 @@ namespace Merchello.Core.Persistence.Factories
     {
         public IShipMethod BuildEntity(ShipMethodDto dto)
         {
+            var deserialized = JsonConvert.DeserializeObject<ProvinceCollection<ShipProvince>>(dto.ProvinceData);
+            // TODO : fix this mapping
+            var provinces = new ProvinceCollection<IShipProvince>();
+            foreach (var p in deserialized)
+            {
+                provinces.Add(p);
+            }
+
             var shipMethod = new ShipMethod(dto.ProviderKey, dto.ShipCountryKey)
             {
                 Key = dto.Key,
@@ -18,7 +26,7 @@ namespace Merchello.Core.Persistence.Factories
                 Surcharge = dto.Surcharge,
                 ServiceCode = dto.ServiceCode,
                 Taxable = dto.Taxable,
-                Provinces = JsonConvert.DeserializeObject<ProvinceCollection<IShipProvince>>(dto.ProvinceData),
+                Provinces = provinces,
                 UpdateDate = dto.UpdateDate,
                 CreateDate = dto.CreateDate
             };

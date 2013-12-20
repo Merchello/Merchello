@@ -95,10 +95,9 @@ namespace Merchello.Core.Persistence.Repositories
             // TODO : RSS - The update in the middle of these delete clauses needs to be refactored - just a quick fix for now
             var list = new List<string>
             {
-                "DELETE FROM merchShipRateTier WHERE shipMethodKey IN (SELECT pk FROM merchShipMethod WHERE providerKey IN (SELECT pk FROM merchGatewayProvider WHERE pk IN (SELECT gatewayProviderKey FROM merchGatewayProvider2ShipCountry WHERE shipCountryKey = @Key)))",                
-                "UPDATE merchShipment SET shipMethodKey = NULL WHERE shipMethodKey IN (SELECT pk FROM merchShipMethod WHERE providerKey IN (SELECT pk FROM merchGatewayProvider WHERE pk IN (SELECT gatewayProviderKey FROM merchGatewayProvider2ShipCountry WHERE shipCountryKey = @Key)))",
-                "DELETE FROM merchShipMethod WHERE providerKey IN (SELECT pk FROM merchGatewayProvider WHERE pk IN (SELECT gatewayProviderKey FROM merchGatewayProvider2ShipCountry WHERE shipCountryKey = @Key))",
-                "DELETE FROM merchGatewayProvider2ShipCountry WHERE shipCountryKey = @Key",
+                "DELETE FROM merchShipRateTier WHERE shipMethodKey IN (SELECT pk FROM merchShipMethod WHERE shipCountryKey = @Key)",                
+                "UPDATE merchShipment SET shipMethodKey = NULL WHERE shipMethodKey IN (SELECT pk FROM merchShipMethod WHERE shipCountryKey = @Key)",
+                "DELETE FROM merchShipMethod WHERE shipCountryKey = @Key",
                 "DELETE FROM merchShipCountry WHERE pk = @Key"
             };
 

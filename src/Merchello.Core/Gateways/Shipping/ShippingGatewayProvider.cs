@@ -11,7 +11,7 @@ namespace Merchello.Core.Gateways.Shipping
     /// <summary>
     /// Defines the Shipping Gateway abstract class
     /// </summary>
-    public abstract class ShippingGatewayProvider : GatewayBase, IShippingGatewayBase        
+    public abstract class ShippingGatewayProvider : GatewayProviderBase, IShippingGatewayProvider        
     {
         private readonly IRuntimeCacheProvider _runtimeCache;
 
