@@ -37,7 +37,6 @@
             $scope.loaded = true;
             $scope.preValuesLoaded = true;
             $scope.product = new merchello.Models.Product();
-            $(".content-column-body").css('background-image', 'none');
         }
         else {
 
@@ -50,7 +49,6 @@
 
                 $scope.loaded = true;
                 $scope.preValuesLoaded = true;
-                $(".content-column-body").css('background-image', 'none');
 
             }, function (reason) {
                 notificationsService.error("Product Load Failed", reason.message);
@@ -74,6 +72,7 @@
                     if ($scope.rebuildVariants) {
                         $scope.rebuildAndSaveVariants();
                         $scope.rebuildVariants = false;
+                        $scope.toggleAllVariants(false);
                     }
 
                 }, function (reason) {
@@ -237,7 +236,7 @@
                     }
                     notificationsService.success("Confirmed prices update", "");
                     $scope.changePricesFlyout.close();
-                    $scope.changePricesFlyout.confirmText = newPrice;
+                    $scope.changePricesFlyout.confirmText = "";
                 }
             });
 
@@ -249,7 +248,19 @@
                 $scope.bulkAction = false;
             }, {
                 confirm: function () {
-                    notificationsService.success("Confirmed inventory update", $scope.updateInventoryFlyout.newInventory);
+                    var selected = $scope.selectedVariants();
+                    for (var i = 0; i < selected.length; i++) {
+                        selected[i].totalInventoryCount = $scope.updateInventoryFlyout.newInventory;
+                        var savepromise = merchelloProductVariantService.save(selected[i]);
+                        savepromise.then(function () {
+                            notificationsService.success("Product Variant Saved", "");
+                        }, function (reason) {
+                            notificationsService.error("Product Variant Save Failed", reason.message);
+                        });
+                    }
+                    notificationsService.success("Confirmed inventory update", "");
+                    $scope.updateInventoryFlyout.close();
+                    $scope.updateInventoryFlyout.newInventory = "";
                 }
             });
 
@@ -354,9 +365,18 @@
 
                             merchelloProductService.createVariantsFromDetachedOptionsList($scope.product, options);
 
-                            notificationsService.success("Confirmed variants duplicated");
-                            $scope.duplicateVariantsFlyout.close();
-                            $scope.duplicateVariantsFlyout.newChoiceName = "";
+                            // Save immediately
+                            var savepromise = merchelloProductService.updateProductWithVariants($scope.product);
+                            savepromise.then(function (product) {
+                                $scope.product = product;
+
+                                notificationsService.success("Confirmed variants duplicated");
+                                $scope.duplicateVariantsFlyout.close();
+                                $scope.duplicateVariantsFlyout.newChoiceName = "";
+
+                            }, function (reason) {
+                                notificationsService.error("Product Save Failed", reason.message);
+                            });
                         }
                     }
                 }
