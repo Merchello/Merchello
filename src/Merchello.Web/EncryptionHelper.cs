@@ -1,6 +1,4 @@
-﻿using System;
-using System.Security.Cryptography;
-using System.Text;
+﻿using Umbraco.Core;
 
 namespace Merchello.Web
 {
@@ -13,8 +11,8 @@ namespace Merchello.Web
         /// <returns></returns>
         public static string Encrypt(string value)
         {
-            var bytes = Encoding.UTF8.GetBytes(value);
-            return Convert.ToBase64String(ProtectedData.Protect(bytes, null, DataProtectionScope.CurrentUser));
+            return value.EncryptWithMachineKey();
+            
         }
 
         /// <summary>
@@ -24,8 +22,7 @@ namespace Merchello.Web
         /// <returns></returns>
         public static string Decrypt(string value)
         {
-            var encrypedBytes = Convert.FromBase64String(value);
-            return Encoding.UTF8.GetString(ProtectedData.Unprotect(encrypedBytes, null, DataProtectionScope.CurrentUser));
+            return value.DecryptWithMachineKey();            
         }
     }
 }
