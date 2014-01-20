@@ -16,13 +16,16 @@ namespace Merchello.Core.Persistence.Querying
 
         public Query()
             : base()
-        { }
+        {
 
-        // TODO : figure out if this is an error when call simultaniously using different types.
-        // Unit tests error if called all at the same time
+        }
+
         public static IQuery<T> Builder
         {
-            get { return new Query<T>(); }
+            get
+            {
+                return new Query<T>();
+            }
         }
 
         public virtual IQuery<T> Where(Expression<Func<T, bool>> predicate)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using Umbraco.Core;
+using Umbraco.Core.Persistence;
 
 namespace Merchello.Core.Persistence.Querying
 {
@@ -65,10 +66,7 @@ namespace Merchello.Core.Persistence.Querying
 
         public virtual string EscapeAtArgument(string exp)
         {
-            if (exp.StartsWith("@"))
-                return string.Concat("@", exp);
-
-            return exp;
+            return PetaPocoExtensions.EscapeAtSymbols(exp);
         }
 
         public virtual bool ShouldQuoteValue(Type fieldType)

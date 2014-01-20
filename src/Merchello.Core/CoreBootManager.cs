@@ -2,8 +2,6 @@
 using System.Configuration;
 using Merchello.Core.Cache;
 using Merchello.Core.Configuration;
-using Merchello.Core.Gateways;
-using Merchello.Core.ObjectResolution;
 using Merchello.Core.Services;
 using Umbraco.Core;
 using Merchello.Core.Persistence.UnitOfWork;
@@ -45,10 +43,7 @@ namespace Merchello.Core
             var serviceContext = new ServiceContext(new PetaPocoUnitOfWorkProvider(connString, providerName));
 
             CreateMerchelloContext(serviceContext);
-
-            // TODO: this is where we need to resolve shipping, tax, and payment providers
-            // TODO: Then wire in the Resolution
-
+            
             _isInitialized = true;
 
             return this;
@@ -67,8 +62,7 @@ namespace Merchello.Core
         protected void CreateMerchelloContext(ServiceContext serviceContext)
         {
            
-            // TODO: Mock the ApplicationContext.  ApplicationContext should never be null but we need this for unit testing at this point  
-            
+            // TODO: Mock the ApplicationContext.  ApplicationContext should never be null but we need this for unit testing at this point              
             var cache = ApplicationContext.Current == null
                             ? new CacheHelper(
                                     new ObjectCacheRuntimeCacheProvider(),
@@ -105,7 +99,7 @@ namespace Merchello.Core
             if(_isComplete)
                 throw new InvalidOperationException("The boot manager has already been completed");
 
-            FreezeResolution();
+           // FreezeResolution();
 
             if (afterComplete != null)
             {
@@ -118,11 +112,6 @@ namespace Merchello.Core
             MerchelloContext.IsReady = true;
 
             return this;
-        }
-
-        protected virtual void FreezeResolution()
-        {
-            Resolution.Freeze();
         }
 
         /// <summary>
