@@ -276,7 +276,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Regions\" />
     <Folder Include="Repository\" />
     <Folder Include="WebControllers\" />
   </ItemGroup>

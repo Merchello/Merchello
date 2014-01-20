@@ -95,8 +95,8 @@ namespace Merchello.Core
             {
                 try
                 {
-                    string configVersion = ConfigurationVersion;
-                    string currentVersion = MerchelloVersion.Current.ToString(3);
+                    var configVersion = ConfigurationVersion;
+                    var currentVersion = MerchelloVersion.Current.ToString(3);
 
 
                     if (currentVersion != configVersion)
