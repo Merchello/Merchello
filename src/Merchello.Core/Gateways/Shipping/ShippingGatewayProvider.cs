@@ -32,7 +32,6 @@ namespace Merchello.Core.Gateways.Shipping
         /// </remarks>
         public abstract IGatewayShipMethod CreateShipMethod(IGatewayResource gatewayResource, IShipCountry shipCountry, string name);
         
-
         /// <summary>
         /// Saves a shipmethod
         /// </summary>
@@ -61,6 +60,5 @@ namespace Merchello.Core.Gateways.Shipping
         }
         
     }
-
 
 }

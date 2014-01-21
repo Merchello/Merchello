@@ -74,5 +74,18 @@ namespace Merchello.Tests.UnitTests.Contexts
             Assert.IsTrue(_completedEventCalled);
         }
 
+        ///// <summary>
+        ///// Test verifies that the Merchello configuration returns true
+        ///// </summary>
+        //[Test]
+        //public void MerchelloContext_Returns_IsConfigured_True()
+        //{
+        //    MerchelloBootstrapper.Init(new WebBootManager(true) { IsUnitTest = true });
+
+        //    var context = MerchelloContext.Current;
+
+        //    Assert.IsTrue(context.IsConfigured);
+        //}
+
     }
 }

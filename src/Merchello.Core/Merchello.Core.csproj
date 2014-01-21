@@ -116,6 +116,7 @@
     <Compile Include="Models\ExtendedDataExtensions.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\GatewayProviderCollection.cs" />
     <Compile Include="Models\GatewayResource.cs" />
     <Compile Include="Models\GatewayProvider.cs" />
     <Compile Include="Models\Interfaces\IGatewayResource.cs" />
@@ -262,6 +263,7 @@
     </Compile>
     <Compile Include="Models\ProvinceCollection.cs" />
     <Compile Include="Models\CountryProvinceExtensions.cs" />
+    <Compile Include="Models\Rdbms\ShipCountry2GatewayProviderDto.cs" />
     <Compile Include="Models\Rdbms\ShipCountryDto.cs" />
     <Compile Include="Models\Rdbms\CatalogInventoryDto.cs" />
     <Compile Include="Models\Rdbms\ProductVariantIndexDto.cs" />

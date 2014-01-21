@@ -143,6 +143,8 @@ namespace Merchello.Tests.IntegrationTests.Services.Shipping
             Assert.NotNull(shippingProvider);
         }
 
+        
+
         /// <summary>
         /// Test verifies that a provider can be associated with a ShipCountry
         /// </summary>
@@ -165,25 +167,26 @@ namespace Merchello.Tests.IntegrationTests.Services.Shipping
 
         }
 
-        /// <summary>
-        /// Test verifies that a constraint violation is thrown if a duplicate shipmethod is added per for a country
-        /// </summary>
-        [Test]
-        public void Attempting_To_Add_A_Duplicate_Provider_ShipMethod_For_ShipCountry_Results_In_A_Error()
-        {
-            var country = _shippingService.GetShipCountryByCountryCode(_catalog.Key, "US");
-            var provider = _merchelloContext.Gateways.GetGatewayProviders(GatewayProviderType.Shipping).FirstOrDefault();
-            var shippingProvider = _merchelloContext.Gateways.GetShippingGatewayProvider(provider);
-            Assert.NotNull(shippingProvider);
-            var resource = shippingProvider.ListAvailableMethods().FirstOrDefault();
-            var gatewayShipMethod = shippingProvider.CreateShipMethod(resource, country, "Ground");
-            shippingProvider.SaveShipMethod(gatewayShipMethod);
+        ///// <summary>
+        ///// Test verifies that a constraint violation is thrown if a duplicate shipmethod is added per for a country
+        ///// </summary>
+        //[Test]
+        //public void Attempting_To_Add_A_Duplicate_Provider_ShipMethod_For_ShipCountry_Results_In_A_Error()
+        //{
+        //    var country = _shippingService.GetShipCountryByCountryCode(_catalog.Key, "US");
+        //    var provider = _merchelloContext.Gateways.GetGatewayProviders(GatewayProviderType.Shipping).FirstOrDefault();
+        //    var shippingProvider = _merchelloContext.Gateways.GetShippingGatewayProvider(provider);
+        //    Assert.NotNull(shippingProvider);
+        //    var resource = shippingProvider.ListAvailableMethods().FirstOrDefault();
+        //    var gatewayShipMethod = shippingProvider.CreateShipMethod(resource, country, "Ground");
+        //    shippingProvider.SaveShipMethod(gatewayShipMethod);
 
-            //// Act
+        //    //// Act
 
-            //// Assert
-            Assert.Throws<ConstraintException>(() => shippingProvider.CreateShipMethod(resource, country, "Ground"));
+        //    //// Assert
+        //    Assert.Throws<ConstraintException>(() => shippingProvider.CreateShipMethod(resource, country, "Ground"));
 
-        }
+        //}
+
     }
 }

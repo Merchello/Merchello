@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Services;
-using Umbraco.Core;
 using Umbraco.Core.Cache;
 
 namespace Merchello.Core.Gateways.Shipping.RateTable
@@ -15,6 +15,7 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
     {
         #region "Available Methods"
         
+        // In this case, the GatewayResource can be used to create multiple shipmethods of the same resource type.
         private static readonly IEnumerable<IGatewayResource> AvailableMethods  = new List<IGatewayResource>()
             {
                 new GatewayResource("VBW", "Vary by Weight"),
@@ -35,13 +36,10 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
             Mandate.ParameterNotNull(shipCountry, "shipCountry");
             Mandate.ParameterNotNullOrEmpty(name, "name");
 
-            // TODO : Assert that this provider does not already have a shipmethod defined with this service code for this country
-            // this constraint is already applied in the ShipMethodRepository ... review
-
             var shipMethod = new ShipMethod(GatewayProvider.Key, shipCountry.Key)
                             {
                                 Name = name,
-                                ServiceCode = gatewayResource.ServiceCode,
+                                ServiceCode = gatewayResource.ServiceCode + string.Format("-{0:s}", DateTime.Now),
                                 Taxable = false,
                                 Surcharge = 0M,
                                 Provinces = shipCountry.Provinces.ToShipProvinceCollection()
@@ -80,7 +78,7 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
             var methods = GatewayProviderService.GetGatewayProviderShipMethods(GatewayProvider.Key, shipCountry.Key);
             return methods
                 .Select(
-                shipMethod => new RateTableShipMethod(AvailableMethods.FirstOrDefault(x => x.ServiceCode == shipMethod.ServiceCode), shipMethod)
+                shipMethod => new RateTableShipMethod(AvailableMethods.FirstOrDefault(x => shipMethod.ServiceCode.StartsWith(x.ServiceCode)), shipMethod)
                 ).OrderBy(x => x.ShipMethod.Name);
         }
     }

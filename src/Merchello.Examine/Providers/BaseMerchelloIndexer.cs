@@ -8,7 +8,6 @@ using System.Xml.Linq;
 using Examine;
 using Examine.LuceneEngine.Providers;
 using Lucene.Net.Analysis;
-using Merchello.Core;
 using Merchello.Examine.DataServices;
 
 namespace Merchello.Examine.Providers

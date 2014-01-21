@@ -221,13 +221,13 @@
     <Compile Include="Examine\ProductProviderTests.cs" />
     <Compile Include="Services\Customer\CustomerItemCacheServiceTests.cs" />
     <Compile Include="Services\Customer\CustomerServiceTests.cs" />
+    <Compile Include="Services\GatewayProvider\GatewayProviderServiceTests.cs" />
     <Compile Include="Services\Shipping\ShippingProviderTests.cs" />
     <Compile Include="Services\ProductVariant\ProductVariantTests.cs" />
     <Compile Include="Services\Product\ProductOptionTests.cs" />
     <Compile Include="Services\Product\ProductTests.cs" />
     <Compile Include="Services\ServiceIntegrationTestBase.cs" />
     <Compile Include="Services\Shipping\ShipCountryTests.cs" />
-    <Compile Include="Services\WarehouseServiceTests.cs" />
     <Compile Include="TestHelpers\DbPreTestDataWorker.cs" />
     <Compile Include="TestHelpers\TestMerchelloDataService.cs" />
   </ItemGroup>
