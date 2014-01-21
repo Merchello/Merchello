@@ -92,5 +92,24 @@ namespace Merchello.Tests.UnitTests.Shipping
             Assert.IsFalse(_shipRateTable.Rows.Any(x => x.RangeLow == 4));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        [Test]
+        public void Can_Verify_That_A_Rate_Tier_Can_Be_Deleted()
+        {
+            //// Arrange
+            _shipRateTable.AddRow(0, 5, 1);
+            _shipRateTable.AddRow(5, 10, 1);
+            _shipRateTable.AddRow(10, 20, 1);
+            _shipRateTable.AddRow(20, 25, 1);
+
+            //// Act
+            _shipRateTable.DeleteRow(_shipRateTable.Rows.First(x => x.RangeLow == 5));
+    
+            //// Assert
+            Assert.AreEqual(3, _shipRateTable.Rows.Count());
+        }
+
     }
 }

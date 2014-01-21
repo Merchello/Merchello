@@ -122,5 +122,19 @@ namespace Merchello.Core.Persistence.Repositories
             
             entity.ResetDirtyProperties();
         }
+
+        public IEnumerable<IGatewayProvider> GetGatewayProvidersByShipCountryKey(Guid shipCountryKey)
+        {
+            var sql = new Sql();
+            sql.Select("*")
+                .From<ShipMethodDto>()
+                .InnerJoin<GatewayProviderDto>()
+                .On<ShipMethodDto, GatewayProviderDto>(left => left.ProviderKey, right => right.Key)
+                .Where<ShipMethodDto>(x => x.ShipCountryKey == shipCountryKey);
+
+            var dtos = Database.Fetch<ShipMethodDto, GatewayProviderDto>(sql);
+            var factory = new GatewayProviderFactory();
+            return dtos.DistinctBy(x => x.GatewayProviderDto.Key).Select(dto => factory.BuildEntity(dto.GatewayProviderDto));
+        }
     }
 }

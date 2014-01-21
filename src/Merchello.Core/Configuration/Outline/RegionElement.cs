@@ -15,6 +15,17 @@ namespace Merchello.Core.Configuration.Outline
         }
 
         /// <summary>
+        /// Gets/sets the region 'requirePostalCode' for the region collection element.  Presumably this is an enum value.
+        /// </summary>
+        [ConfigurationProperty("requirePostalCode", DefaultValue = false, IsRequired = false)]
+        public bool RequirePostalCode
+        {
+            get { return (bool)this["requirePostalCode"]; }
+            set { this["requirePostalCode"] = value; }
+        }
+
+
+        /// <summary>
         /// Gets/sets the label for provinces (eg. for US this may be 'States')
         /// </summary>
         [ConfigurationProperty("provinceLabel", DefaultValue = "Provinces", IsRequired = false)]
