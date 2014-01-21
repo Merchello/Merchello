@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace Merchello.Tests.IntegrationTests.Services.Shipping
 {
     [TestFixture]
-    [Category("Service Integration")]
+    [Category("Shipping")]
     public class ShipCountryTests : ServiceIntegrationTestBase
     {
 

@@ -303,7 +303,7 @@ namespace Merchello.Web
         /// <returns></returns>
         private static string MakeCacheKey(ICustomerBase customer)
         {
-            return CacheKeys.ItemCacheCacheKey(customer.EntityKey, EnumTypeFieldConverter.CustomerItemItemCache.Basket.TypeKey);
+            return CacheKeys.ItemCacheCacheKey(customer.EntityKey, EnumTypeFieldConverter.ItemItemCache.Basket.TypeKey);
         }
 
         
