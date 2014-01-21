@@ -81,6 +81,10 @@
     <Compile Include="Configuration\Outline\RegionElement.cs" />
     <Compile Include="Configuration\Outline\SettingsCollection.cs" />
     <Compile Include="Configuration\Outline\SettingsElement.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="Constants-Keys.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
     <Compile Include="Gateways\GatewayProviderBase.cs" />
     <Compile Include="Gateways\GatewayContext.cs" />
     <Compile Include="Gateways\GatewayProviderFactory.cs" />
@@ -448,7 +452,7 @@
     <Compile Include="Models\TypeFields\IGatewayProviderTypeField.cs" />
     <Compile Include="Models\TypeFields\GatewayProviderTypeField.cs" />
     <Compile Include="Models\TypeFields\IAddressTypeField.cs" />
-    <Compile Include="Models\TypeFields\ICustomerItemCacheTypeField.cs" />
+    <Compile Include="Models\TypeFields\IItemCacheTypeField.cs" />
     <Compile Include="Models\TypeFields\ICustomTypeField.cs" />
     <Compile Include="Models\TypeFields\ILineItemTypeField.cs" />
     <Compile Include="Models\TypeFields\IPaymentMethodTypeField.cs" />
@@ -498,7 +502,7 @@
     <Compile Include="Persistence\Migrations\Initial\PluginDatabaseSchemaResult.cs" />
     <Compile Include="Persistence\Migrations\Initial\BaseDataCreation.cs" />
     <Compile Include="Models\TypeFields\AddressTypeField.cs" />
-    <Compile Include="Models\TypeFields\CustomerItemCacheTypeField.cs" />
+    <Compile Include="Models\TypeFields\ItemCacheTypeField.cs" />
     <Compile Include="Configuration\Outline\TypeFieldDefinitionsElement.cs" />
     <Compile Include="Models\TypeFields\ITypeField.cs" />
     <Compile Include="Configuration\Outline\TypeFieldCollection.cs" />
