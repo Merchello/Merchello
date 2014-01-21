@@ -11,12 +11,13 @@ namespace Merchello.Tests.UnitTests.Shipping
     public class ShipRateTableTests
     {
 
-        private IShipRateTable _shipRateTable;
+        private ShipRateTable _shipRateTable;
 
         [SetUp]
         public void Init()
         {
             _shipRateTable = new ShipRateTable(Guid.NewGuid(), new List<IShipRateTier>());
+            _shipRateTable.IsTest = true;
         }
 
         /// <summary>
