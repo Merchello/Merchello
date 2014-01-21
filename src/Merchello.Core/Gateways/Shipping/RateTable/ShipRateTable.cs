@@ -21,6 +21,7 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
 
         internal ShipRateTable(Guid shipMethodKey, IEnumerable<IShipRateTier> rows)
         {
+            IsTest = false;
             var shipRateTiers = rows as IShipRateTier[] ?? rows.ToArray();
 
             Mandate.ParameterCondition(shipMethodKey != Guid.Empty, "shipMethodKey");
@@ -163,7 +164,7 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
             }
             _shipRateTiers.Remove(row);
 
-            DeleteRow(MerchelloContext.Current.Services.GatewayProviderService, MerchelloContext.Current.Cache.RuntimeCache, this, shipRateTier);
+            if(!IsTest) DeleteRow(MerchelloContext.Current.Services.GatewayProviderService, MerchelloContext.Current.Cache.RuntimeCache, this, shipRateTier);
         }
 
         /// <summary>
@@ -216,5 +217,7 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
             get { return _shipRateTiers.OrderBy(x => x.RangeLow); }
 
         }
+
+        internal bool IsTest { get; set; }
     }
 }
