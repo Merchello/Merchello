@@ -204,7 +204,7 @@ namespace Merchello.Core.Services
         /// </summary>
         public IItemCache GetItemCacheByCustomer(ICustomerBase customer, ItemCacheType itemCacheType)
         {
-            var typeKey = EnumTypeFieldConverter.CustomerItemItemCache.GetTypeField(itemCacheType).TypeKey;
+            var typeKey = EnumTypeFieldConverter.ItemItemCache.GetTypeField(itemCacheType).TypeKey;
             return GetItemCacheByCustomer(customer, typeKey);
         }
 

@@ -19,11 +19,11 @@ namespace Merchello.Core.Models.TypeFields
         }
 
         /// <summary>
-        /// Creates an instance of an <see cref="ICustomerItemCacheTypeField"/> object
+        /// Creates an instance of an <see cref="IItemCacheTypeField"/> object
         /// </summary>
-        internal static ICustomerItemCacheTypeField CustomerItemItemCache
+        internal static IItemCacheTypeField ItemItemCache
         {
-            get { return new CustomerItemCacheTypeField(); }            
+            get { return new ItemCacheTypeField(); }            
         }
 
         /// <summary>

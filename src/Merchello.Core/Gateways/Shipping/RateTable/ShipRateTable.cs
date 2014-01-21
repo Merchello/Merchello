@@ -27,7 +27,6 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
             Mandate.ParameterCondition(shipMethodKey != Guid.Empty, "shipMethodKey");
             Mandate.ParameterNotNull(shipRateTiers, "rows");
             
-
             _shipMethodKey = shipMethodKey;
             _shipRateTiers = new List<IShipRateTier>();
             _shipRateTiers.AddRange(shipRateTiers);

@@ -12,9 +12,9 @@ namespace Merchello.Core.Models.TypeFields
 
         internal override void BuildCache()
         {
-            AddUpdateCache(PaymentMethodType.Cash, new TypeField("Cash", "Cash", new Guid("9C9A7E61-D79C-4ECC-B0E0-B2A502F252C5")));
-            AddUpdateCache(PaymentMethodType.CreditCard, new TypeField("CreditCard", "Credit Card", new Guid("CB1354FE-B30C-449E-BD5C-CD50BCBD804A")));
-            AddUpdateCache(PaymentMethodType.PurchaseOrder, new TypeField("PurchaseOrder", "Purchase Order", new Guid("2B588AE0-7B76-430F-9341-270A8C943E7E")));
+            AddUpdateCache(PaymentMethodType.Cash, new TypeField("Cash", "Cash", Constants.TypeFieldKeys.PaymentMethod.CashKey));
+            AddUpdateCache(PaymentMethodType.CreditCard, new TypeField("CreditCard", "Credit Card", Constants.TypeFieldKeys.PaymentMethod.CreditCardKey));
+            AddUpdateCache(PaymentMethodType.PurchaseOrder, new TypeField("PurchaseOrder", "Purchase Order", Constants.TypeFieldKeys.PaymentMethod.PurchaseOrderKey));
         }
 
         /// <summary>

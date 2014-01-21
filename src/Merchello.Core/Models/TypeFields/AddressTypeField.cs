@@ -19,8 +19,8 @@ namespace Merchello.Core.Models.TypeFields
 
         internal override void BuildCache()
         {
-            AddUpdateCache(AddressType.Residential, new TypeField("Residential", "Residential", new Guid("D32D7B40-2FF2-453F-9AC5-51CF1A981E46")));
-            AddUpdateCache(AddressType.Commercial,  new TypeField("Commercial", "Commercial", new Guid("5C2A8638-EA32-49AD-8167-EDDFB45A7360")));
+            AddUpdateCache(AddressType.Residential, new TypeField("Residential", "Residential", Constants.TypeFieldKeys.Address.ResidentialKey));
+            AddUpdateCache(AddressType.Commercial,  new TypeField("Commercial", "Commercial", Constants.TypeFieldKeys.Address.CommercialKey));
         }
 
 #endregion
