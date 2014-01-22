@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -22,9 +18,7 @@ namespace Merchello.Web.Trees
             ServerVariablesParser.Parsing += ServerVariablesParserParsing;
         }
         
-        /// <summary>
-        /// Adds a product with all of its variants to the index if the product has an identity
-        /// </summary>
+        
         static void ServerVariablesParserParsing(object sender, Dictionary<string, object> items)
         {
             if (items.ContainsKey("umbracoUrls"))
