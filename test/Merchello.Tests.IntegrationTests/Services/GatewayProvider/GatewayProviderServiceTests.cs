@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Cache;
+using Merchello.Core.Gateways.Shipping.RateTable;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Persistence.UnitOfWork;
@@ -39,11 +40,12 @@ namespace Merchello.Tests.IntegrationTests.Services.GatewayProvider
             var shipCountry = new ShipCountry(_catalog.Key, country);
             _shippingService.Save(shipCountry);
            
-            var provider = _merchelloContext.Gateways.GetGatewayProviders(GatewayProviderType.Shipping).FirstOrDefault();
-            var shippingProvider = _merchelloContext.Gateways.GetShippingGatewayProvider(provider);
+       
+            var shippingProvider =
+                _merchelloContext.Gateways.ResolveByKey<RateTableShippingGatewayProvider>(Core.Constants.ProviderKeys.Shipping.RateTableShippingProviderKey);
             Assert.NotNull(shippingProvider);
 
-            var resource = shippingProvider.ListAvailableMethods().FirstOrDefault();
+            var resource = shippingProvider.ListAvailableResources().FirstOrDefault();
             var gatewayShipMethod = shippingProvider.CreateShipMethod(resource, shipCountry, "Ground");
             shippingProvider.SaveShipMethod(gatewayShipMethod);
         }

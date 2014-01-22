@@ -2,6 +2,7 @@
 using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Gateways;
+using Merchello.Core.Gateways.Shipping.RateTable;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Services;
@@ -18,15 +19,9 @@ namespace Merchello.Tests.IntegrationTests.Services.Shipping
               
         [SetUp]
         public void Init()
-        {
-            GatewayProviderService = PreTestDataWorker.GatewayProviderService;
-            PreTestDataWorker.DeleteAllShipCountries();
-            const string countryCode = "US";
-
-            var country = SettingsService.GetCountryByCode(countryCode);
+        {            
             
-            var shipCountry = new ShipCountry(Catalog.Key, country);
-            ShippingService.Save(shipCountry);
+            
         }
 
         /// <summary>
@@ -96,7 +91,7 @@ namespace Merchello.Tests.IntegrationTests.Services.Shipping
             Assert.NotNull(provider);
 
             //// Act
-            var shippingProvider = MerchelloContext.Gateways.GetShippingGatewayProvider(provider);
+            var shippingProvider = MerchelloContext.Gateways.ResolveByGatewayProvider<RateTableShippingGatewayProvider>(provider);
 
             //// Assert
             Assert.NotNull(shippingProvider);
@@ -111,11 +106,11 @@ namespace Merchello.Tests.IntegrationTests.Services.Shipping
             //// Arrange
             var country = ShippingService.GetShipCountryByCountryCode(Catalog.Key, "US");
             var provider = MerchelloContext.Gateways.GetGatewayProviders(GatewayProviderType.Shipping).FirstOrDefault();
-            var shippingProvider = MerchelloContext.Gateways.GetShippingGatewayProvider(provider);
+            var shippingProvider = MerchelloContext.Gateways.ResolveByGatewayProvider<RateTableShippingGatewayProvider>(provider);
             Assert.NotNull(shippingProvider);
             
             //// Act
-            var resource = shippingProvider.ListAvailableMethods().FirstOrDefault();
+            var resource = shippingProvider.ListAvailableResources().FirstOrDefault();
             var gatewayShipMethod = shippingProvider.CreateShipMethod(resource, country, "Ground");
             shippingProvider.SaveShipMethod(gatewayShipMethod);
 

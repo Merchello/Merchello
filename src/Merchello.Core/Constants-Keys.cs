@@ -1,5 +1,4 @@
 ﻿using System;
-using Merchello.Core.Models;
 
 namespace Merchello.Core
 {

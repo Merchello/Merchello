@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Cache;
+using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Persistence.UnitOfWork;
@@ -17,7 +18,7 @@ namespace Merchello.Tests.IntegrationTests.Services.Shipping
         protected ISettingsService SettingsService;
         protected IShippingService ShippingService;
         protected IMerchelloContext MerchelloContext;
-
+        
         [TestFixtureSetUp]
         public void FixtureInit()
         {
@@ -42,6 +43,15 @@ namespace Merchello.Tests.IntegrationTests.Services.Shipping
             SettingsService = PreTestDataWorker.SettingsService;
             ShippingService = PreTestDataWorker.ShippingService;
 
+
+            PreTestDataWorker.DeleteAllShipCountries();
+            const string countryCode = "US";
+
+            var country = SettingsService.GetCountryByCode(countryCode);
+            var shipCountry = new ShipCountry(Catalog.Key, country);
+            ShippingService.Save(shipCountry);
+
+            
             MerchelloContext = new MerchelloContext(new ServiceContext(new PetaPocoUnitOfWorkProvider()),
                 new CacheHelper(new NullCacheProvider(),
                     new NullCacheProvider(),

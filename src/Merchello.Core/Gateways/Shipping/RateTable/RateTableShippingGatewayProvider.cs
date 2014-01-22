@@ -16,7 +16,7 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
         #region "Available Methods"
         
         // In this case, the GatewayResource can be used to create multiple shipmethods of the same resource type.
-        private static readonly IEnumerable<IGatewayResource> AvailableMethods  = new List<IGatewayResource>()
+        private static readonly IEnumerable<IGatewayResource> AvailableResources  = new List<IGatewayResource>()
             {
                 new GatewayResource("VBW", "Vary by Weight"),
                 new GatewayResource("POT", "Percentage of Total")
@@ -29,6 +29,33 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
             : base(gatewayProviderService, gatewayProvider, runtimeCacheProvider)
         { }
 
+        /// <summary>
+        /// Creates a GatewayShipMethod
+        /// </summary>     
+        /// <remarks>
+        /// 
+        /// This method is really specific to the RateTableShippingGateway due to the odd fact that additional shipmethods can be created 
+        /// rather than defined up front.  
+        /// 
+        /// </remarks>   
+        public IGatewayShipMethod CreateShipMethod(RateTableShipMethod.QuoteType quoteType, IShipCountry shipCountry, string name)
+        {
+            var resource = quoteType == RateTableShipMethod.QuoteType.VaryByWeight
+                ? AvailableResources.First(x => x.ServiceCode == "VBW")
+                : AvailableResources.First(x => x.ServiceCode == "POT");
+
+            return CreateShipMethod(resource, shipCountry, name);
+        }
+
+        /// <summary>
+        /// Creates an instance of a ship method (T) without persisting it to the database
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>
+        /// 
+        /// ShipMethods should be unique with respect to <see cref="IShipCountry"/> and <see cref="IGatewayResource"/>
+        /// 
+        /// </remarks>    
         public override IGatewayShipMethod CreateShipMethod(IGatewayResource gatewayResource, IShipCountry shipCountry, string name)
         {
 
@@ -64,9 +91,9 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
         /// Returns a collection of all possible gateway methods associated with this provider
         /// </summary>
         /// <returns></returns>
-        public override IEnumerable<IGatewayResource> ListAvailableMethods()
+        public override IEnumerable<IGatewayResource> ListAvailableResources()
         {
-            return AvailableMethods;
+            return AvailableResources;
         }
 
         /// <summary>
@@ -78,7 +105,7 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
             var methods = GatewayProviderService.GetGatewayProviderShipMethods(GatewayProvider.Key, shipCountry.Key);
             return methods
                 .Select(
-                shipMethod => new RateTableShipMethod(AvailableMethods.FirstOrDefault(x => shipMethod.ServiceCode.StartsWith(x.ServiceCode)), shipMethod)
+                shipMethod => new RateTableShipMethod(AvailableResources.FirstOrDefault(x => shipMethod.ServiceCode.StartsWith(x.ServiceCode)), shipMethod)
                 ).OrderBy(x => x.ShipMethod.Name);
         }
     }
