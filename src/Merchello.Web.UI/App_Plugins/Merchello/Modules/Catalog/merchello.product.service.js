@@ -35,7 +35,8 @@
 
                 return umbRequestHelper.resourcePromise(
                     $http({
-                        url: '/umbraco/Merchello/ProductApi/NewProduct',
+                        //url: umbRequestHelper.getApiUrl('Merchello') + 'NewProduct',
+                        url: umbRequestHelper.getApiUrl('merchelloProductApiBaseUrl', 'NewProduct'),
                         method: "POST",
                         params: { sku: sku, name: productname, price: price }
                     }),
@@ -45,8 +46,8 @@
             getByKey: function (key) {
 
                 return umbRequestHelper.resourcePromise(
-                    $http({
-                        url: '/umbraco/Merchello/ProductApi/GetProduct/' + key,
+                    $http({                     
+                        url: umbRequestHelper.getApiUrl('merchelloProductApiBaseUrl', 'GetProduct', [{ id: key }]), //'/umbraco/Merchello/ProductApi/GetProduct/' + key,
                         method: "GET"
                     }),
                     'Failed to retreive data for product key ' + key);
@@ -57,7 +58,8 @@
 
                 return umbRequestHelper.resourcePromise(
                     $http.put(
-                        '/umbraco/Merchello/ProductApi/PutProduct',
+                        umbRequestHelper.getApiUrl('merchelloProductApiBaseUrl', 'PutProduct'),
+                        //'/umbraco/Merchello/ProductApi/PutProduct',
                         product
                     ),
                     'Failed to save data for product key ' + product.key);
@@ -67,7 +69,8 @@
 
                 return umbRequestHelper.resourcePromise(
                     $http.get(
-                        '/umbraco/Merchello/ProductApi/GetAllProducts'
+                        umbRequestHelper.getApiUrl('merchelloProductApiBaseUrl', 'GetAllProducts')
+                        //'/umbraco/Merchello/ProductApi/GetAllProducts'
                     ),
                     'Failed to get all products');
 
@@ -77,7 +80,8 @@
 
                 return umbRequestHelper.resourcePromise(
                     $http.get(
-                        '/umbraco/Merchello/ProductApi/GetFilteredProducts',
+                        umbRequestHelper.getApiUrl('merchelloProductApiBaseUrl', 'GetFilteredProducts'),
+                        //'/umbraco/Merchello/ProductApi/GetFilteredProducts',
                         { params: { term: term } }
                     ),
                     'Failed to get filtered products');

@@ -12,7 +12,7 @@ using Umbraco.Web.WebApi.Filters;
 namespace Merchello.Web.WebApi
 {
     [PluginController("Merchello")]
-    public abstract class MerchelloApiController : UmbracoAuthorizedJsonController
+    public abstract class MerchelloApiController : UmbracoAuthorizedApiController
     {
         protected MerchelloApiController()
             : this(MerchelloContext.Current)
