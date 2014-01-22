@@ -46,16 +46,29 @@ namespace Merchello.Core.Gateways
             return providers;
         }
 
-
         /// <summary>
-        /// Returns an instantiation of a <see cref="ShippingGatewayProvider"/>
+        /// Returns an instantiation of a <see cref="T"/>
         /// </summary>
         /// <param name="provider"><see cref="IGatewayProvider"/></param>
         /// <returns></returns>
-        public ShippingGatewayProvider GetShippingGatewayProvider(IGatewayProvider provider)
+        public T ResolveByGatewayProvider<T>(IGatewayProvider provider) where T : GatewayProviderBase
         {
-            if(GatewayProviderType.Shipping != provider.GatewayProviderType) throw new InvalidOperationException("This provider cannot be instantiated as a Shipping Provider");
-            return _gatewayProviderFactory.GetInstance<ShippingGatewayProvider>(provider);
+
+            if (typeof(ShippingGatewayProvider).IsAssignableFrom(typeof(T))) return _gatewayProviderFactory.GetInstance<ShippingGatewayProvider>(provider) as T;
+
+            return null;
+        }
+        
+        /// <summary>
+        /// Instantiates a GatewayProvider given its registered Key
+        /// </summary>
+        /// <typeparam name="T">The Type of the GatewayProvider.  Must inherit from GatewayProviderBase</typeparam>
+        /// <param name="gatewayProviderKey"></param>
+        /// <returns>An instantiated GatewayProvider</returns>
+        public T ResolveByKey<T>(Guid gatewayProviderKey) where T : GatewayProviderBase
+        {
+            var provider = _gatewayProviderCache.FirstOrDefault(x => x.Key == gatewayProviderKey).Value;
+            return provider == null ? null : ResolveByGatewayProvider<T>(provider);
         }
 
         /// <summary>

@@ -42,7 +42,7 @@ namespace Merchello.Core.Gateways.Shipping
         /// Returns a collection of all possible gateway methods associated with this provider
         /// </summary>
         /// <returns></returns>
-        public abstract IEnumerable<IGatewayResource> ListAvailableMethods();
+        public abstract IEnumerable<IGatewayResource> ListAvailableResources();
 
         /// <summary>
         /// Returns a collection of ship methods assigned for this specific provider configuration (associated with the ShipCountry)

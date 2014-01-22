@@ -24,7 +24,7 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
         }
 
 
-        private enum QuoteType
+        public enum QuoteType
         {
             VaryByWeight,
             PercentTotal
