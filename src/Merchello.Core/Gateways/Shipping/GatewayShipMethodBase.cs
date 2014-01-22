@@ -35,7 +35,7 @@ namespace Merchello.Core.Gateways.Shipping
         }
 
         /// <summary>
-        /// Gets the gateway method
+        /// Gets the gateway resource
         /// </summary>
         public IGatewayResource GatewayResource
         {
