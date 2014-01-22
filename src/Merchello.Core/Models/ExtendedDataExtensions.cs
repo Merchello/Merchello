@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Merchello.Core.Models.Interfaces;
 
 namespace Merchello.Core.Models
 {
@@ -30,7 +33,7 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
-        /// True/false indicating whether or not the colleciton contains a ProductVariantId
+        /// True/false indicating whether or not the colleciton contains a ProductVariantKey
         /// </summary>
         /// <param name="extendedData"></param>
         /// <returns></returns>
@@ -40,7 +43,7 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
-        /// Return the ProductVariantId
+        /// Return the ProductVariantKey
         /// </summary>
         /// <param name="extendedData"></param>
         /// <returns></returns>
@@ -174,16 +177,38 @@ namespace Merchello.Core.Models
         /// <returns>decimal</returns>
         public static string GetBarcodeValue(this ExtendedDataCollection extendedData)
         {
-            return extendedData.GetValue("MerchBarcode");
+            return extendedData.GetValue("merchBarcode");
+        }
+
+        #endregion
+
+        #region IShipment
+
+        /// <summary>
+        /// True/false indicating whether or not the colleciton contains a WarehouseCatalogKey
+        /// </summary>
+        /// <param name="extendedData"></param>
+        /// <returns></returns>
+        public static bool ContainsWarehouseCatalogKey(this ExtendedDataCollection extendedData)
+        {
+            return extendedData.ContainsKey("merchWarehouseCatalogKey");
+        }
+
+        /// <summary>
+        /// Return the WarehouseCatalogKey
+        /// </summary>
+        /// <param name="extendedData"></param>
+        /// <returns></returns>
+        public static Guid GetWarehouseCatalogKey(this ExtendedDataCollection extendedData)
+        {
+            return GetGuidValue(extendedData.GetValue("merchWarehouseCatalogKey"));
         }
 
         #endregion
 
 
-
-
         #region Utility
-        
+
 
         private static Guid GetGuidValue(string value)
         {

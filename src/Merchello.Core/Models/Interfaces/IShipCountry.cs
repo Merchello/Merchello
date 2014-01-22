@@ -11,5 +11,9 @@ namespace Merchello.Core.Models
         [DataMember]
         Guid CatalogKey { get; }
 
+        /// <summary>
+        /// True/false indicating whether or not this <see cref="IShipCountry"/> defines a province collection.
+        /// </summary>
+        bool HasProvinces { get; }
     }
 }

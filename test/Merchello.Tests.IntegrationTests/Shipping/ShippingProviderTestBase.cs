@@ -6,10 +6,11 @@ using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Persistence.UnitOfWork;
 using Merchello.Core.Services;
+using Merchello.Tests.IntegrationTests.Services;
 using NUnit.Framework;
 using Umbraco.Core;
 
-namespace Merchello.Tests.IntegrationTests.Services.Shipping
+namespace Merchello.Tests.IntegrationTests.Shipping
 {
     public class ShippingProviderTestBase : ServiceIntegrationTestBase
     {

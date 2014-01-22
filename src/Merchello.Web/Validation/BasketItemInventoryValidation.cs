@@ -4,7 +4,7 @@ using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 
-namespace Merchello.Web.Vistors
+namespace Merchello.Web.Validation
 {
     /// <summary>
     /// Visitor to audit basket line item for inventory requirements

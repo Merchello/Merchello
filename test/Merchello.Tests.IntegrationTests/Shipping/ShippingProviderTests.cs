@@ -3,13 +3,12 @@ using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Gateways;
 using Merchello.Core.Gateways.Shipping.RateTable;
-using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Services;
 using NUnit.Framework;
 using Umbraco.Core.Cache;
 
-namespace Merchello.Tests.IntegrationTests.Services.Shipping
+namespace Merchello.Tests.IntegrationTests.Shipping
 {
 
     [TestFixture]

@@ -98,7 +98,8 @@
     <Compile Include="Gateways\Shipping\RateTable\IShipRateTable.cs" />
     <Compile Include="Gateways\Shipping\RateTable\RateTableShippingGatewayProvider.cs" />
     <Compile Include="Gateways\Shipping\RateTable\RateTableShipMethod.cs" />
-    <Compile Include="Gateways\Shipping\ShippingGatewayProvider.cs" />
+    <Compile Include="Gateways\Shipping\ShimpmentWarehouseCatalogValidationVisitor.cs" />
+    <Compile Include="Gateways\Shipping\ShippingGatewayProviderBase.cs" />
     <Compile Include="Gateways\Shipping\RateTable\ShipRateTable.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\AppliedPayment.cs">
@@ -272,6 +273,7 @@
     <Compile Include="Models\Rdbms\CatalogInventoryDto.cs" />
     <Compile Include="Models\Rdbms\ProductVariantIndexDto.cs" />
     <Compile Include="Models\Rdbms\ShipRateTierDto.cs" />
+    <Compile Include="Models\Rdbms\StoreSettingDto.cs" />
     <Compile Include="Models\Rdbms\WarehouseCatalogDto.cs" />
     <Compile Include="Models\Rdbms\TaxRegionDto.cs" />
     <Compile Include="Models\CountryBase.cs" />

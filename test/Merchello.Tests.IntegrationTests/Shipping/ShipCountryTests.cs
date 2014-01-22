@@ -4,9 +4,10 @@ using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Services;
+using Merchello.Tests.IntegrationTests.Services;
 using NUnit.Framework;
 
-namespace Merchello.Tests.IntegrationTests.Services.Shipping
+namespace Merchello.Tests.IntegrationTests.Shipping
 {
     [TestFixture]
     [Category("Shipping")]

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 
@@ -45,5 +46,11 @@ namespace Merchello.Core.Models
             }
         }
 
+        /// <summary>
+        /// True/false indicating whether or not this <see cref="IShipCountry"/> defines a province collection.
+        /// </summary>
+        public bool HasProvinces {
+            get { return Provinces.Any(); }
+        }
     }
 }
