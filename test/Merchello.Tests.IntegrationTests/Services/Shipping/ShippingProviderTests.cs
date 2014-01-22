@@ -110,7 +110,7 @@ namespace Merchello.Tests.IntegrationTests.Services.Shipping
             Assert.NotNull(shippingProvider);
             
             //// Act
-            var resource = shippingProvider.ListAvailableResources().FirstOrDefault();
+            var resource = shippingProvider.ListResourcesOffered().FirstOrDefault();
             var gatewayShipMethod = shippingProvider.CreateShipMethod(resource, country, "Ground");
             shippingProvider.SaveShipMethod(gatewayShipMethod);
 

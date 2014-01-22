@@ -36,11 +36,13 @@ namespace Merchello.Tests.IntegrationTests.Services.Shipping
             gwShipMethod.ShipMethod.Provinces["WA"].RateAdjustment = expected;
             rateTableProvider.SaveShipMethod(gwShipMethod);
 
-            var retrieved = rateTableProvider.ActiveShipMethods(_shipCountry).FirstOrDefault();
+            var retrieved = rateTableProvider.GetActiveShipMethods(_shipCountry).FirstOrDefault();
 
             //// Assert
             Assert.NotNull(retrieved);
             Assert.AreEqual(expected, retrieved.ShipMethod.Provinces["WA"].RateAdjustment);
         }
+
+
     }
 }

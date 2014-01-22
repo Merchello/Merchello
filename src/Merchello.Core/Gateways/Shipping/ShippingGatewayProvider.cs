@@ -42,13 +42,18 @@ namespace Merchello.Core.Gateways.Shipping
         /// Returns a collection of all possible gateway methods associated with this provider
         /// </summary>
         /// <returns></returns>
-        public abstract IEnumerable<IGatewayResource> ListAvailableResources();
+        public abstract IEnumerable<IGatewayResource> ListResourcesOffered();
 
         /// <summary>
         /// Returns a collection of ship methods assigned for this specific provider configuration (associated with the ShipCountry)
         /// </summary>
         /// <returns></returns>
-        public abstract IEnumerable<IGatewayShipMethod> ActiveShipMethods(IShipCountry shipCountry);
+        public abstract IEnumerable<IGatewayShipMethod> GetActiveShipMethods(IShipCountry shipCountry);
+
+        //public virtual IEnumerable<IGatewayShipMethod> GetShipMethodsForShippingDestination(IAddress destination)
+        //{
+            
+        //}
 
         /// <summary>
         /// Gets the RuntimeCache

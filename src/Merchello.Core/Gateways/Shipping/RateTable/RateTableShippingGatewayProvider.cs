@@ -91,7 +91,7 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
         /// Returns a collection of all possible gateway methods associated with this provider
         /// </summary>
         /// <returns></returns>
-        public override IEnumerable<IGatewayResource> ListAvailableResources()
+        public override IEnumerable<IGatewayResource> ListResourcesOffered()
         {
             return AvailableResources;
         }
@@ -100,7 +100,7 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
         /// Returns a collection of ship methods assigned for this specific provider configuration (associated with the ShipCountry)
         /// </summary>
         /// <returns></returns>
-        public override IEnumerable<IGatewayShipMethod> ActiveShipMethods(IShipCountry shipCountry)
+        public override IEnumerable<IGatewayShipMethod> GetActiveShipMethods(IShipCountry shipCountry)
         {
             var methods = GatewayProviderService.GetGatewayProviderShipMethods(GatewayProvider.Key, shipCountry.Key);
             return methods
