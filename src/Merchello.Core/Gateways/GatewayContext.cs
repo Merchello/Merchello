@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Merchello.Core.Gateways.Shipping;
-using Merchello.Core.Models.Interfaces;
+using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Umbraco.Core.Cache;
 

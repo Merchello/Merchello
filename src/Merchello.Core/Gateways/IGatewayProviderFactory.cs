@@ -1,4 +1,4 @@
-﻿using Merchello.Core.Models.Interfaces;
+﻿using Merchello.Core.Models;
 
 namespace Merchello.Core.Gateways
 {

@@ -90,6 +90,7 @@ namespace Merchello.Web.PackageActions
             baseDataCreation.InitializeBaseData("merchOrderStatus");
             baseDataCreation.InitializeBaseData("merchWarehouse");
             baseDataCreation.InitializeBaseData("merchGatewayProvider");
+            baseDataCreation.InitializeBaseData("merchStoreSetting");
             return true;
         }
     }

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Merchello.Core.Gateways.Shipping;
-using Merchello.Core.Models.Interfaces;
-using Merchello.Core.Services;
+using Merchello.Core.Models;
 
 namespace Merchello.Core.Gateways
 {

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Merchello.Core.Models;
 using Merchello.Core.Models.EntityBase;
-using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Persistence.Factories;
 using Merchello.Core.Persistence.Querying;
@@ -17,9 +17,9 @@ namespace Merchello.Core.Persistence.Repositories
 {
     internal class GatewayProviderRepository : MerchelloPetaPocoRepositoryBase<IGatewayProvider>, IGatewayProviderRepository
     {
-        private readonly ISettingsService _settingsService;
+        private readonly IStoreSettingService _storeSettingService;
 
-        public GatewayProviderRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ISettingsService settingsService) 
+        public GatewayProviderRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, IStoreSettingService storeSettingService) 
             : base(work, cache)
         { }
 

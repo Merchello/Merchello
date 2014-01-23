@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Merchello.Core.Gateways.Shipping.RateTable;
-using Merchello.Core.Models.Interfaces;
+using Merchello.Core.Models;
 using NUnit.Framework;
 
 namespace Merchello.Tests.UnitTests.Shipping

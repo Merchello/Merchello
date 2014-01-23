@@ -18,14 +18,14 @@ namespace Merchello.Core.Persistence.Repositories
 {
     internal class ShipCountryRepository : MerchelloPetaPocoRepositoryBase<IShipCountry>, IShipCountryRepository
     {
-        private readonly ISettingsService _settingsService;
+        private readonly IStoreSettingService _storeSettingService;
 
-        public ShipCountryRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ISettingsService settingsService) 
+        public ShipCountryRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, IStoreSettingService storeSettingService) 
             : base(work, cache)
         {
-            Mandate.ParameterNotNull(settingsService, "settingsService");
+            Mandate.ParameterNotNull(storeSettingService, "settingsService");
 
-            _settingsService = settingsService;
+            _storeSettingService = storeSettingService;
         }     
 
         protected override IShipCountry PerformGet(Guid key)
@@ -38,7 +38,7 @@ namespace Merchello.Core.Persistence.Repositories
             if (dto == null)
                 return null;
 
-            var factory = new ShipCountryFactory(_settingsService);
+            var factory = new ShipCountryFactory(_storeSettingService);
             return factory.BuildEntity(dto);
         }
 
@@ -53,7 +53,7 @@ namespace Merchello.Core.Persistence.Repositories
             }
             else
             {
-                var factory = new ShipCountryFactory(_settingsService);
+                var factory = new ShipCountryFactory(_storeSettingService);
                 var dtos = Database.Fetch<ShipCountryDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
@@ -112,7 +112,7 @@ namespace Merchello.Core.Persistence.Repositories
 
             ((Entity)entity).AddingEntity();
 
-            var factory = new ShipCountryFactory(_settingsService);
+            var factory = new ShipCountryFactory(_storeSettingService);
             var dto = factory.BuildDto(entity);
 
             Database.Insert(dto);
@@ -126,7 +126,7 @@ namespace Merchello.Core.Persistence.Repositories
         {
             ((Entity)entity).UpdatingEntity();
 
-            var factory = new ShipCountryFactory(_settingsService);
+            var factory = new ShipCountryFactory(_storeSettingService);
 
             var dto = factory.BuildDto(entity);
 

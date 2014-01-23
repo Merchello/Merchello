@@ -199,6 +199,7 @@
     </Compile>
     <Compile Include="Models\Interfaces\IShipProvince.cs" />
     <Compile Include="Models\Interfaces\IShipRateTier.cs" />
+    <Compile Include="Models\Interfaces\IStoreSetting.cs" />
     <Compile Include="Models\Interfaces\ITaxProvince.cs" />
     <Compile Include="Models\Interfaces\IWarehouse.cs">
       <SubType>Code</SubType>
@@ -285,6 +286,7 @@
     </Compile>
     <Compile Include="Models\ShipProvince.cs" />
     <Compile Include="Models\ShipRateTier.cs" />
+    <Compile Include="Models\StoreSetting.cs" />
     <Compile Include="Models\TaxProvince.cs" />
     <Compile Include="Models\TypeFields\AppliedPaymentTypeField.cs">
       <SubType>Code</SubType>
@@ -324,6 +326,7 @@
     <Compile Include="Persistence\Factories\ShipmentFactory.cs" />
     <Compile Include="Persistence\Factories\ShipMethodFactory.cs" />
     <Compile Include="Persistence\Factories\ShipRateTierFactory.cs" />
+    <Compile Include="Persistence\Factories\StoreSettingFactory.cs" />
     <Compile Include="Persistence\Factories\WarehouseCatalogFactory.cs" />
     <Compile Include="Persistence\Factories\WarehouseFactory.cs" />
     <Compile Include="Persistence\Mappers\AppliedPaymentMapper.cs">
@@ -403,6 +406,7 @@
     <Compile Include="Persistence\Repositories\Interfaces\IShipmentRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IShipMethodRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IShipRateTierRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IStoreSettingRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IWarehouseRepository.cs" />
     <Compile Include="Persistence\Repositories\ItemCacheRepository.cs" />
     <Compile Include="Persistence\Repositories\LineItemRepository.cs" />
@@ -413,6 +417,7 @@
     <Compile Include="Persistence\Repositories\ShipmentRepository.cs" />
     <Compile Include="Persistence\Repositories\ShipMethodRepository.cs" />
     <Compile Include="Persistence\Repositories\ShipRateTierRepository.cs" />
+    <Compile Include="Persistence\Repositories\StoreSettingRepository.cs" />
     <Compile Include="Persistence\Repositories\WarehouseRepository.cs" />
     <Compile Include="Persistence\TransactionType.cs" />
     <Compile Include="Persistence\UnitOfWork\IDatabaseUnitOfWork.cs" />
@@ -478,7 +483,7 @@
     <Compile Include="Services\Interfaces\IProductService.cs" />
     <Compile Include="Services\Interfaces\IProductVariantService.cs" />
     <Compile Include="Services\Interfaces\IServiceContext.cs" />
-    <Compile Include="Services\Interfaces\ISettingsService.cs" />
+    <Compile Include="Services\Interfaces\IStoreSettingService.cs" />
     <Compile Include="Services\Interfaces\IShippingService.cs" />
     <Compile Include="Services\Interfaces\IWarehouseService.cs" />
     <Compile Include="Models\Interfaces\IProvince.cs" />
@@ -487,7 +492,7 @@
     <Compile Include="Services\ProductVariantService.cs" />
     <Compile Include="Models\Province.cs" />
     <Compile Include="Services\ServiceContext.cs" />
-    <Compile Include="Services\SettingsService.cs" />
+    <Compile Include="Services\StoreSettingService.cs" />
     <Compile Include="Services\ShippingService.cs" />
     <Compile Include="Services\WarehouseService.cs" />
     <Compile Include="Strategies\IStrategy.cs" />

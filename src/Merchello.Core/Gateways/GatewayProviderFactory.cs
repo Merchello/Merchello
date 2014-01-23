@@ -1,5 +1,5 @@
 ﻿using System;
-using Merchello.Core.Models.Interfaces;
+using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Umbraco.Core.Cache;
 

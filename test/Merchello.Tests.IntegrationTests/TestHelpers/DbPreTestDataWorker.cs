@@ -371,11 +371,11 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         #region Settings
 
         /// <summary>
-        /// Returns the <see cref="ISettingsService"/>
+        /// Returns the <see cref="IStoreSettingService"/>
         /// </summary>
-        public ISettingsService SettingsService
+        public IStoreSettingService StoreSettingService
         {
-            get { return _serviceContext.SettingsService; }
+            get { return _serviceContext.StoreSettingService; }
         }
 
         #endregion

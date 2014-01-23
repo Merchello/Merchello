@@ -18,27 +18,27 @@ namespace Merchello.Core.Services
 
         private readonly IDatabaseUnitOfWorkProvider _uowProvider;
         private readonly RepositoryFactory _repositoryFactory;
-        private readonly ISettingsService _settingsService;
+        private readonly IStoreSettingService _storeSettingService;
 
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
          public GatewayProviderService()
-            : this(new RepositoryFactory(), new SettingsService())
+            : this(new RepositoryFactory(), new StoreSettingService())
         { }
 
-        public GatewayProviderService(RepositoryFactory repositoryFactory, ISettingsService settingsService)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, settingsService)
+        public GatewayProviderService(RepositoryFactory repositoryFactory, IStoreSettingService storeSettingService)
+            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, storeSettingService)
         { }
 
-        public GatewayProviderService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ISettingsService settingsService)
+        public GatewayProviderService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, IStoreSettingService storeSettingService)
         {
             Mandate.ParameterNotNull(provider, "provider");
             Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
-            Mandate.ParameterNotNull(settingsService, "settingsService");
+            Mandate.ParameterNotNull(storeSettingService, "settingsService");
 
             _uowProvider = provider;
             _repositoryFactory = repositoryFactory;
-            _settingsService = settingsService;
+            _storeSettingService = storeSettingService;
         }
 
 
@@ -56,7 +56,7 @@ namespace Merchello.Core.Services
             using (new WriteLock(Locker))
             {
                 var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateGatewayProviderRepository(uow, _settingsService))
+                using (var repository = _repositoryFactory.CreateGatewayProviderRepository(uow, _storeSettingService))
                 {
                     repository.AddOrUpdate(gatewayProvider);
                     uow.Commit();
@@ -78,7 +78,7 @@ namespace Merchello.Core.Services
             using (new WriteLock(Locker))
             {
                 var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateGatewayProviderRepository(uow, _settingsService))
+                using (var repository = _repositoryFactory.CreateGatewayProviderRepository(uow, _storeSettingService))
                 {
                     repository.Delete(gatewayProvider);
                     uow.Commit();
@@ -104,7 +104,7 @@ namespace Merchello.Core.Services
             using (new WriteLock(Locker))
             {
                 var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateGatewayProviderRepository(uow, _settingsService))
+                using (var repository = _repositoryFactory.CreateGatewayProviderRepository(uow, _storeSettingService))
                 {
                     foreach (var gatewayProvider in gatewayProviderArray)
                     {
@@ -124,7 +124,7 @@ namespace Merchello.Core.Services
         /// <returns></returns>
         public IGatewayProvider GetGatewayProviderByKey(Guid key)
         {
-            using (var repository = _repositoryFactory.CreateGatewayProviderRepository(_uowProvider.GetUnitOfWork(), _settingsService))
+            using (var repository = _repositoryFactory.CreateGatewayProviderRepository(_uowProvider.GetUnitOfWork(), _storeSettingService))
             {
                 return repository.Get(key);
             }
@@ -137,7 +137,7 @@ namespace Merchello.Core.Services
         /// <returns></returns>
         public IEnumerable<IGatewayProvider> GetGatewayProvidersByType(GatewayProviderType gatewayProviderType)
         {
-            using (var repository = _repositoryFactory.CreateGatewayProviderRepository(_uowProvider.GetUnitOfWork(), _settingsService))
+            using (var repository = _repositoryFactory.CreateGatewayProviderRepository(_uowProvider.GetUnitOfWork(), _storeSettingService))
             {
                 var query =
                     Query<IGatewayProvider>.Builder.Where(
@@ -156,7 +156,7 @@ namespace Merchello.Core.Services
         /// <returns></returns>
         public IEnumerable<IGatewayProvider> GetGatewayProvidersByShipCountry(IShipCountry shipCountry)
         {
-            using (var repository = _repositoryFactory.CreateGatewayProviderRepository(_uowProvider.GetUnitOfWork(),_settingsService))
+            using (var repository = _repositoryFactory.CreateGatewayProviderRepository(_uowProvider.GetUnitOfWork(),_storeSettingService))
             {
                 return repository.GetGatewayProvidersByShipCountryKey(shipCountry.Key);
             }
@@ -168,7 +168,7 @@ namespace Merchello.Core.Services
         /// <returns></returns>
         public IEnumerable<IGatewayProvider> GetAllGatewayProviders()
         {
-            using (var repository = _repositoryFactory.CreateGatewayProviderRepository(_uowProvider.GetUnitOfWork(), _settingsService))
+            using (var repository = _repositoryFactory.CreateGatewayProviderRepository(_uowProvider.GetUnitOfWork(), _storeSettingService))
             {
                 return repository.GetAll();
             }

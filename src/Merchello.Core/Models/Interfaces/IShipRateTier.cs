@@ -2,7 +2,7 @@
 using System.Runtime.Serialization;
 using Merchello.Core.Models.EntityBase;
 
-namespace Merchello.Core.Models.Interfaces
+namespace Merchello.Core.Models
 {
     /// <summary>
     /// Defines a shipment rate tier

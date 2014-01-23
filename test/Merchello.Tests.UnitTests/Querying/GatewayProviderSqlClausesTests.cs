@@ -1,5 +1,5 @@
 ﻿using System;
-using Merchello.Core.Models.Interfaces;
+using Merchello.Core.Models;
 using Merchello.Core.Models.Rdbms;
 using Merchello.Tests.Base.SqlSyntax;
 using NUnit.Framework;

@@ -103,5 +103,21 @@ namespace Merchello.Tests.IntegrationTests.DbInstall
             Assert.IsTrue(dtos.Any());
             Assert.AreEqual(expected, dtos.Count());
         }
+
+        [Test]
+        public void Can_Populate_StoreSettings()
+        {
+            //// Arrange
+            var expected = 8;
+
+            //// Act
+            _creation.InitializeBaseData("merchStoreSetting");
+            var dtos = _database.Query<StoreSettingDto>("SELECT * FROM merchStoreSetting");
+
+            //// Assert
+            Assert.IsTrue(dtos.Any());
+            Assert.AreEqual(expected, dtos.Count());
+
+        }
     }
 }

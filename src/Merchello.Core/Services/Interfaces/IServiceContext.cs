@@ -37,9 +37,9 @@ namespace Merchello.Core.Services
         IProductVariantService ProductVariantService { get; }
 
         /// <summary>
-        /// Gets the <see cref="ISettingsService"/>
+        /// Gets the <see cref="IStoreSettingService"/>
         /// </summary>
-        ISettingsService SettingsService { get; }
+        IStoreSettingService StoreSettingService { get; }
 
         /// <summary>
         /// Gets the <see cref="IShippingService"/>
