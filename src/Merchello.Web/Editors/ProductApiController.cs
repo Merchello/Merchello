@@ -20,6 +20,7 @@ namespace Merchello.Web.Editors
     public class ProductApiController : MerchelloApiController
     {
         private readonly IProductService _productService;
+        private readonly IWarehouseService _warehouseService;
 
         /// <summary>
         /// Constructor
@@ -37,6 +38,7 @@ namespace Merchello.Web.Editors
             : base(merchelloContext)
         {
             _productService = MerchelloContext.Services.ProductService;
+            _warehouseService = MerchelloContext.Services.WarehouseService;
         }
 
         /// <summary>
@@ -46,6 +48,7 @@ namespace Merchello.Web.Editors
             : base(merchelloContext, umbracoContext)
         {
             _productService = MerchelloContext.Services.ProductService;
+            _warehouseService = MerchelloContext.Services.WarehouseService;
         }
 
         /// <summary>
@@ -174,6 +177,13 @@ namespace Merchello.Web.Editors
             try
             {
                 newProduct = _productService.CreateProductWithKey(name, sku, price) as Product;
+
+                if (!newProduct.Download)
+                {
+                    newProduct.AddToCatalogInventory(_warehouseService.GetDefaultWarehouse().DefaultCatalog());
+                    newProduct.CatalogInventories.First().Count = 10;
+                    _productService.Save(newProduct);
+                }
             }
             catch (Exception ex)
             {
