@@ -11,8 +11,8 @@ namespace Merchello.Core.Gateways.Shipping
         /// <summary>
         /// Saves a shipmethod
         /// </summary>
-        /// <param name="shipMethod"></param>
-        void SaveShipMethod(IGatewayShipMethod shipMethod);
+        /// <param name="gatewayShipMethod"></param>
+        void SaveShipMethod(IGatewayShipMethod gatewayShipMethod);
 
         /// <summary>
         /// Returns a collection of all possible gateway methods associated with this provider
