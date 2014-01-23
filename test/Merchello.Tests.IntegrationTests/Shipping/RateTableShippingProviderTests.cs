@@ -14,8 +14,9 @@ namespace Merchello.Tests.IntegrationTests.Shipping
 
         [SetUp]
         public void Init()
-        {
+        {            
             _shipCountry = ShippingService.GetShipCountryByCountryCode(Catalog.Key, "US");
+
         }
 
         /// <summary>
@@ -29,6 +30,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             var key = Constants.ProviderKeys.Shipping.RateTableShippingProviderKey;
             var rateTableProvider = MerchelloContext.Gateways.ResolveByKey<RateTableShippingGatewayProvider>(key);
             const decimal expected = 5M;
+            rateTableProvider.DeleteAllActiveShipMethods(_shipCountry);
 
             //// Act
             var gwShipMethod = rateTableProvider.CreateShipMethod(RateTableShipMethod.QuoteType.VaryByWeight, _shipCountry, "Vary By Weight - Ground");
@@ -52,6 +54,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             //// Arrange
             var key = Constants.ProviderKeys.Shipping.RateTableShippingProviderKey;
             var rateTableProvider = MerchelloContext.Gateways.ResolveByKey<RateTableShippingGatewayProvider>(key);
+            rateTableProvider.DeleteAllActiveShipMethods(_shipCountry);
             var expected = 4;
 
             //// Act

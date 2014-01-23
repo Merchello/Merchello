@@ -37,8 +37,8 @@ namespace Merchello.Core.Gateways.Shipping
         /// <summary>
         /// Saves a shipmethod
         /// </summary>
-        /// <param name="shipMethod"></param>
-        public abstract void SaveShipMethod(IGatewayShipMethod shipMethod);
+        /// <param name="gatewayShipMethod"></param>
+        public abstract void SaveShipMethod(IGatewayShipMethod gatewayShipMethod);
 
         /// <summary>
         /// Returns a collection of all possible gateway methods associated with this provider
@@ -51,6 +51,29 @@ namespace Merchello.Core.Gateways.Shipping
         /// </summary>
         /// <returns></returns>
         public abstract IEnumerable<IGatewayShipMethod> GetActiveShipMethods(IShipCountry shipCountry);
+
+        /// <summary>
+        /// Deletes an Active ShipMethod
+        /// </summary>
+        /// <param name="gatewayShipMethod"></param>
+        public virtual void DeleteActiveShipMethod(IGatewayShipMethod gatewayShipMethod)
+        {
+            GatewayProviderService.Delete(gatewayShipMethod.ShipMethod);
+        }
+
+        /// <summary>
+        /// Deletes all active shipMethods
+        /// </summary>
+        /// <remarks>
+        /// Used for testing
+        /// </remarks>
+        internal virtual void DeleteAllActiveShipMethods(IShipCountry shipCountry)
+        {
+            foreach (var gatewayShipMethod in GetActiveShipMethods(shipCountry))
+            {
+                DeleteActiveShipMethod(gatewayShipMethod);
+            }
+        }
 
         public virtual IEnumerable<IGatewayShipMethod> GetAvailableShipMethodsForDestination(IShipment shipment)
         {

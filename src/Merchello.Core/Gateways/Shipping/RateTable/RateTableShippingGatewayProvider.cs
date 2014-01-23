@@ -80,11 +80,11 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
         /// <summary>
         /// Saves a <see cref="RateTableShipMethod"/> 
         /// </summary>
-        /// <param name="shipMethod"></param>
-        public override void SaveShipMethod(IGatewayShipMethod shipMethod)
+        /// <param name="gatewayShipMethod"></param>
+        public override void SaveShipMethod(IGatewayShipMethod gatewayShipMethod)
         {
-            GatewayProviderService.Save(shipMethod.ShipMethod);
-            ShipRateTable.Save(GatewayProviderService, RuntimeCache, ((RateTableShipMethod) shipMethod).RateTable);
+            GatewayProviderService.Save(gatewayShipMethod.ShipMethod);
+            ShipRateTable.Save(GatewayProviderService, RuntimeCache, ((RateTableShipMethod) gatewayShipMethod).RateTable);
         }
 
         /// <summary>

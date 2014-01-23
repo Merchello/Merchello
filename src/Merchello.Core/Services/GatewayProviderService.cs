@@ -176,7 +176,7 @@ namespace Merchello.Core.Services
 
         #endregion
 
-        #region ShippingGatewayProvider
+        #region ShipMethod
 
         /// <summary>
         /// Saves a single <see cref="IShipMethod"/>
