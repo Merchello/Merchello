@@ -7,6 +7,7 @@ using Merchello.Core.Models.Interfaces;
 using Merchello.Web;
 using Merchello.Web.Models;
 using NUnit.Framework;
+using Rhino.Mocks;
 
 namespace Merchello.Tests.IntegrationTests.Shipping
 {
@@ -19,6 +20,8 @@ namespace Merchello.Tests.IntegrationTests.Shipping
         private IBasket _basket;
         private const int ProductCount = 5;
         private IAddress _destination;
+        private const decimal WeightPerProduct = 2M;
+        private const decimal PricePerProduct = 10M;
 
         [SetUp]
         public void Init()
@@ -37,9 +40,9 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             _customer = PreTestDataWorker.MakeExistingAnonymousCustomer();
             _basket = Basket.GetBasket(MerchelloContext, _customer);
 
-            for (var i = 0; i < ProductCount; i++) _basket.AddItem(PreTestDataWorker.MakeExistingProduct());
+            for (var i = 0; i < ProductCount; i++) _basket.AddItem(PreTestDataWorker.MakeExistingProduct(true, WeightPerProduct, PricePerProduct));
             ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"].RebuildIndex();  
-            _basket.AddItem(PreTestDataWorker.MakeExistingProduct(false));
+
 
             Basket.Save(MerchelloContext, _basket);
 
@@ -116,7 +119,8 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             gwshipMethod.RateTable.AddRow(10, 15, 10);
             gwshipMethod.RateTable.AddRow(15, 25, 25);
             gwshipMethod.RateTable.AddRow(25, 10000, 100);
-           
+
+            var expectedRate = 10M;
 
             //// Act
             var shipments = _basket.PackageBasket(MerchelloContext, _destination);
@@ -125,6 +129,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
 
             //// Assert
             Assert.IsTrue(attempt.Success);
+            Assert.AreEqual(expectedRate, attempt.Result.Rate);
         }
     }
 }

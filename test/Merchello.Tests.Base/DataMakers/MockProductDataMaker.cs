@@ -11,9 +11,10 @@ namespace Merchello.Tests.Base.DataMakers
     public class MockProductDataMaker : MockDataMakerBase
     {
 
-        public static IProduct MockProductForInserting(bool shippable = true)
+        public static IProduct MockProductForInserting(bool shippable = true, decimal weight = 0, decimal price = 0)
         {
-            var product = MockProductForInserting(ProductItemName(), MockSku(), PriceCheck());
+            var mockPrice = price == 0 ? PriceCheck() : price;
+            var product = MockProductForInserting(ProductItemName(), MockSku(), mockPrice, weight);
             product.Shippable = shippable;
             return product;
         }
