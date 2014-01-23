@@ -218,7 +218,7 @@
     <Compile Include="Models\ContentEditing\ShipProvinceDisplay.cs" />
     <Compile Include="Models\ContentEditing\TaxProvinceDisplay.cs" />
     <Compile Include="Models\ContentEditing\WarehouseDisplay.cs" />
-    <Compile Include="Models\ContentEditing\WarehouseInventoryDisplay.cs" />
+    <Compile Include="Models\ContentEditing\CatalogInventoryDisplay.cs" />
     <Compile Include="PackageActions\AddConfigSection.cs" />
     <Compile Include="PackageActions\AddExamineConfigs.cs" />
     <Compile Include="PackageActions\CreateDatabase.cs" />

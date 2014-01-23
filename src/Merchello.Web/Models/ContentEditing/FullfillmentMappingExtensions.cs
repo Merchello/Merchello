@@ -43,21 +43,21 @@ namespace Merchello.Web.Models.ContentEditing
 
         #region WarehouseInventoryDisplay
 
-        internal static WarehouseInventoryDisplay ToWarehouseInventoryDisplay(this ICatalogInventory catalogInventory)
+        internal static CatalogInventoryDisplay ToWarehouseInventoryDisplay(this ICatalogInventory catalogInventory)
         {
-            AutoMapper.Mapper.CreateMap<ICatalogInventory, WarehouseInventoryDisplay>();
+            AutoMapper.Mapper.CreateMap<ICatalogInventory, CatalogInventoryDisplay>();
 
-            return AutoMapper.Mapper.Map<WarehouseInventoryDisplay>(catalogInventory);
+            return AutoMapper.Mapper.Map<CatalogInventoryDisplay>(catalogInventory);
         }
 
         #endregion
 
         #region IWarehouseInventory
 
-        internal static ICatalogInventory ToWarehouseInventory(this WarehouseInventoryDisplay warehouseInventoryDisplay, ICatalogInventory destination)
+        internal static ICatalogInventory ToWarehouseInventory(this CatalogInventoryDisplay catalogInventoryDisplay, ICatalogInventory destination)
         {
-            destination.Count = warehouseInventoryDisplay.Count;
-            destination.LowCount = warehouseInventoryDisplay.LowCount;
+            destination.Count = catalogInventoryDisplay.Count;
+            destination.LowCount = catalogInventoryDisplay.LowCount;
 
             return destination;
         }
