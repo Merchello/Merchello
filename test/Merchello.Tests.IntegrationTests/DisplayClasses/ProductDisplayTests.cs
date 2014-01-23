@@ -56,7 +56,7 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
             };
 
             var variant = productVariantService.CreateProductVariantWithKey(product, attributes);
-            variant.AddToWarehouseCatalog(_warehouse.DefaultCatalog());
+            variant.AddToCatalogInventory(_warehouse.DefaultCatalog());
             productVariantService.Save(variant);
             _productVariantKey = variant.Key;
             _examineId = ((ProductVariant) variant).ExamineId;

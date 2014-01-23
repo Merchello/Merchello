@@ -7,13 +7,8 @@ namespace Merchello.Core.Models
     /// <summary>
     /// Defines product inventory for a warehouse
     /// </summary>
-    public interface IWarehouseInventory
+    public interface ICatalogInventory
     {
-        ///// <summary>
-        ///// The catalog key
-        ///// </summary>
-        //[DataMember]
-        //Guid CatalogKey { get; }
 
         /// <summary>
         /// The unique key of the product variant
@@ -22,16 +17,11 @@ namespace Merchello.Core.Models
         Guid ProductVariantKey { get; }
 
         /// <summary>
-        /// The unique warehouse key
+        /// The unique catalog key
         /// </summary>
         [DataMember]
-        Guid WarehouseKey { get; }
+        Guid CatalogKey { get; }
 
-        ///// <summary>
-        ///// The name of the warehouse catalog
-        ///// </summary>
-        //[DataMember]
-        //string CatalogName { get; }
 
         /// <summary>
         /// The number of products in inventory for the warehouse

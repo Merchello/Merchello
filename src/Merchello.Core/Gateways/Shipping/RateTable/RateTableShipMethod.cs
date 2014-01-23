@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Globalization;
+using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using Merchello.Core.Models;
+using Umbraco.Core;
 
 namespace Merchello.Core.Gateways.Shipping.RateTable
 {
@@ -22,23 +26,49 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
             RateTable = rateTable;
         }
 
-
-        public override decimal QuoteShipment(IShipment shipment)
+        public override Attempt<IShipmentRateQuote> QuoteShipment(IShipment shipment)
         {
+            var visitor = new RateTableShipMethodShipmentLineItemVisitor { UseOnSalePriceIfOnSale = false };
+
+            shipment.Items.Accept(visitor);
+
             return _quoteType == QuoteType.VaryByWeight
-                ? CalculateVaryByWeight(shipment)
-                : CalculatePercentTotal(shipment);
+                ? CalculateVaryByWeight(visitor.TotalWeight)
+                : CalculatePercentTotal(visitor.TotalPrice);
+        }
+       
+
+        private Attempt<IShipmentRateQuote> CalculateVaryByWeight(decimal totalWeight)
+        {
+            var tier = RateTable.Rows.FirstOrDefault(x => x.RangeLow <= totalWeight && x.RangeHigh < totalWeight);
+            if (tier == null)
+                return
+                    Attempt<IShipmentRateQuote>.Fail(
+                        new IndexOutOfRangeException("The shipments total weight was calculated to be : " +
+                                                     totalWeight.ToString(CultureInfo.InvariantCulture) +
+                                                     " which is outside any rate tier defined by the current rate table."));
+
+
+            return Attempt<IShipmentRateQuote>.Succeed(new ShipmentRateQuote() {Rate = tier.Rate});
         }
 
-
-        private decimal CalculateVaryByWeight(IShipment shipment)
+        /// <summary>
+        /// Calculates the rate based on the percentage of the total shipment item price
+        /// </summary>
+        /// <param name="totalPrice"></param>
+        /// <returns></returns>
+        private Attempt<IShipmentRateQuote> CalculatePercentTotal(decimal totalPrice)
         {
-            return 0;
-        }
+            var tier = RateTable.Rows.FirstOrDefault(x => x.RangeLow <= totalPrice && x.RangeHigh < totalPrice);
+            if (tier == null)
+                return
+                    Attempt<IShipmentRateQuote>.Fail(
+                        new IndexOutOfRangeException("The shipments total weight was calculated to be : " +
+                                                     totalPrice.ToString(CultureInfo.InvariantCulture) +
+                                                     " which is outside any rate tier defined by the current rate table."));
 
-        private decimal CalculatePercentTotal(IShipment shipment)
-        {
-            return 0;
+
+            return Attempt<IShipmentRateQuote>.Succeed(new ShipmentRateQuote() { Rate = (tier.Rate * .01M) * totalPrice  });
         }
 
         public enum QuoteType
@@ -51,5 +81,6 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
         /// Gets the rate table
         /// </summary>
         public IShipRateTable RateTable { get; private set; }
+  
     }
 }

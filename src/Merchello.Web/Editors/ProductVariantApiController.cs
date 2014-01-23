@@ -165,9 +165,9 @@ namespace Merchello.Web.Editors
 
                     newProductVariant = _productVariantService.CreateProductVariantWithKey(product, productVariant.Name, productVariant.Sku, productVariant.Price, productAttributes, true);
 
-                    newProductVariant.AddToWarehouseCatalog(_warehouseService.GetDefaultWarehouse().DefaultCatalog());
-                    newProductVariant.Warehouses.First().Count = 10;
-                    newProductVariant.Warehouses.First().LowCount = 3;
+                    newProductVariant.AddToCatalogInventory(_warehouseService.GetDefaultWarehouse().DefaultCatalog());
+                    newProductVariant.CatalogInventories.First().Count = 10;
+                    newProductVariant.CatalogInventories.First().LowCount = 3;
                     //newProductVariant.Warehouses.First().Count = productVariant.WarehouseInventory.First().Count;
                     //newProductVariant.Warehouses.First().LowCount = productVariant.WarehouseInventory.First().LowCount;
                     _productVariantService.Save(newProductVariant);
