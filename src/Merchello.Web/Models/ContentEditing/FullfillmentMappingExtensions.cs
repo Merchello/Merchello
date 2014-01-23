@@ -43,7 +43,7 @@ namespace Merchello.Web.Models.ContentEditing
 
         #region WarehouseInventoryDisplay
 
-        internal static CatalogInventoryDisplay ToWarehouseInventoryDisplay(this ICatalogInventory catalogInventory)
+        internal static CatalogInventoryDisplay ToCatalogInventoryDisplay(this ICatalogInventory catalogInventory)
         {
             AutoMapper.Mapper.CreateMap<ICatalogInventory, CatalogInventoryDisplay>();
 
@@ -54,7 +54,7 @@ namespace Merchello.Web.Models.ContentEditing
 
         #region IWarehouseInventory
 
-        internal static ICatalogInventory ToWarehouseInventory(this CatalogInventoryDisplay catalogInventoryDisplay, ICatalogInventory destination)
+        internal static ICatalogInventory ToCatalogInventory(this CatalogInventoryDisplay catalogInventoryDisplay, ICatalogInventory destination)
         {
             destination.Count = catalogInventoryDisplay.Count;
             destination.LowCount = catalogInventoryDisplay.LowCount;
