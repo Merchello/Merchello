@@ -93,12 +93,15 @@
     <Compile Include="Gateways\IGatewayProviderFactory.cs" />
     <Compile Include="Gateways\Shipping\GatewayShipMethodBase.cs" />
     <Compile Include="Gateways\Shipping\IGatewayShipMethod.cs" />
+    <Compile Include="Gateways\Shipping\IShipmentRateQuote.cs" />
     <Compile Include="Gateways\Shipping\IShippingGatewayProvider.cs" />
     <Compile Include="Gateways\Shipping\RateTable\IRateTableShipMethod.cs" />
     <Compile Include="Gateways\Shipping\RateTable\IShipRateTable.cs" />
+    <Compile Include="Gateways\Shipping\RateTable\RateTableShipmentLineItemVisitor.cs" />
     <Compile Include="Gateways\Shipping\RateTable\RateTableShippingGatewayProvider.cs" />
     <Compile Include="Gateways\Shipping\RateTable\RateTableShipMethod.cs" />
     <Compile Include="Gateways\Shipping\ShimpmentWarehouseCatalogValidationVisitor.cs" />
+    <Compile Include="Gateways\Shipping\ShipmentRateQuote.cs" />
     <Compile Include="Gateways\Shipping\ShippingGatewayProviderBase.cs" />
     <Compile Include="Gateways\Shipping\RateTable\ShipRateTable.cs" />
     <Compile Include="Models\Address.cs" />
@@ -206,7 +209,7 @@
     </Compile>
     <Compile Include="Models\Interfaces\IWarehouseCatalog.cs" />
     <Compile Include="Models\Interfaces\IShipCountry.cs" />
-    <Compile Include="Models\Interfaces\IWarehouseInventory.cs">
+    <Compile Include="Models\Interfaces\ICatalogInventory.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\InvoiceLineItem.cs">
@@ -300,7 +303,7 @@
     <Compile Include="Models\ShipCountry.cs" />
     <Compile Include="Models\WarehouseCatalog.cs" />
     <Compile Include="Models\WarehouseExtensions.cs" />
-    <Compile Include="Models\WarehouseInventory.cs">
+    <Compile Include="Models\CatalogInventory.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\WarehouseInventoryCollection.cs">

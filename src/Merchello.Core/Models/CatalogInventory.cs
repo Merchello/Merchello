@@ -9,12 +9,12 @@ namespace Merchello.Core.Models
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    internal class WarehouseInventory : IWarehouseInventory
+    internal class CatalogInventory : ICatalogInventory
     {
         private readonly IWarehouseCatalog _catalog;
         private readonly Guid _productVariantKey;
 
-        public WarehouseInventory(IWarehouseCatalog catalog, Guid productVariantKey)
+        public CatalogInventory(IWarehouseCatalog catalog, Guid productVariantKey)
         {            
             Mandate.ParameterNotNull(catalog, "catalog");
             Mandate.ParameterCondition(productVariantKey != Guid.Empty, "productVariantKey");
@@ -26,16 +26,8 @@ namespace Merchello.Core.Models
         /// The unique key identifying the warehouse that maintains this catalog
         /// </summary>
         [DataMember]
-        public Guid WarehouseKey
+        public Guid CatalogKey
         {
-            get { return _catalog.WarehouseKey; }
-        }
-
-        /// <summary>
-        /// The warehouse catalog key
-        /// </summary>
-        [IgnoreDataMember]
-        internal Guid CatalogKey {
             get { return _catalog.Key; }
         }
 

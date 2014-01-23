@@ -27,15 +27,15 @@ namespace Merchello.Core.Models
             : this(productKey, attributes, new WarehouseInventoryCollection(), false, name, sku, price)
         {}
 
-        internal ProductVariant(Guid productKey, ProductAttributeCollection attributes, WarehouseInventoryCollection warehouseInventory, string name, string sku, decimal price)
-            : this(productKey, attributes, warehouseInventory, false, name, sku, price)
+        internal ProductVariant(Guid productKey, ProductAttributeCollection attributes, WarehouseInventoryCollection catalogInventoryInventory, string name, string sku, decimal price)
+            : this(productKey, attributes, catalogInventoryInventory, false, name, sku, price)
         { }
 
-        internal ProductVariant(Guid productKey, ProductAttributeCollection attributes, WarehouseInventoryCollection warehouseInventory, bool master, string name, string sku, decimal price)
-            : base(name, sku, price, warehouseInventory)
+        internal ProductVariant(Guid productKey, ProductAttributeCollection attributes, WarehouseInventoryCollection catalogInventoryInventory, bool master, string name, string sku, decimal price)
+            : base(name, sku, price, catalogInventoryInventory)
         {
             Mandate.ParameterNotNull(attributes, "attributes");
-            Mandate.ParameterNotNull(warehouseInventory, "warehouseInventory");
+            Mandate.ParameterNotNull(catalogInventoryInventory, "warehouseInventory");
             _productKey = productKey;
             _attibutes = attributes;
             _master = master;
@@ -120,7 +120,7 @@ namespace Merchello.Core.Models
         /// <returns></returns>
         public int TotalInventoryCount
         {
-            get { return Warehouses.Sum(x => x.Count); }
+            get { return CatalogInventories.Sum(x => x.Count); }
         }
     }
 }

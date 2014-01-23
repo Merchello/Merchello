@@ -44,7 +44,7 @@ namespace Merchello.Core.Persistence.Repositories
             var product = factory.BuildEntity(dto);
 
             // TODO - inventory
-            ((ProductVariant) ((Product) product).MasterVariant).WarehouseInventory =
+            ((ProductVariant) ((Product) product).MasterVariant).CatalogInventoryInventory =
                 ((ProductVariantRepository) _productVariantRepository).GetWarehouseInventory(
                     ((Product) product).ProductVariantKey);
 

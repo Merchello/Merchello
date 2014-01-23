@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Merchello.Core.Models;
-using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Services;
 using Umbraco.Core.Cache;
 
@@ -48,12 +47,14 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
         }
 
         /// <summary>
-        /// Creates an instance of a ship method (T) without persisting it to the database
+        /// Creates an instance of a ship method
         /// </summary>
         /// <returns></returns>
         /// <remarks>
         /// 
-        /// ShipMethods should be unique with respect to <see cref="IShipCountry"/> and <see cref="IGatewayResource"/>
+        /// GatewayShipMethods (in general) should be unique with respect to <see cref="IShipCountry"/> and <see cref="IGatewayResource"/>.  However, this is a
+        /// a provider is sort of a unique case, sense we want to be able to add as many ship methods with rate tables as needed in order to facilitate 
+        /// tiered rate tables for various ship methods without requiring a carrier based shipping provider.
         /// 
         /// </remarks>    
         public override IGatewayShipMethod CreateShipMethod(IGatewayResource gatewayResource, IShipCountry shipCountry, string name)

@@ -251,10 +251,10 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
             //// Arrange
             
             //// Act
-            _product.AddToWarehouseCatalog(_warehouse.DefaultCatalog());
+            _product.AddToCatalogInventory(_warehouse.DefaultCatalog());
 
             //// Assert
-            Assert.IsTrue(_product.Warehouses.Count() == 1);
+            Assert.IsTrue(_product.CatalogInventories.Count() == 1);
         }
 
         /// <summary>
@@ -267,11 +267,11 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
             const int warehouseId = 1;
 
             //// Act
-            _product.AddToWarehouseCatalog(_warehouse.DefaultCatalog());
+            _product.AddToCatalogInventory(_warehouse.DefaultCatalog());
             _productService.Save(_product);
 
             //// Assert
-            Assert.IsTrue(_product.Warehouses.Count() == 1);
+            Assert.IsTrue(_product.CatalogInventories.Count() == 1);
         }
 
         [Test]
@@ -281,12 +281,12 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
             const int warehouseId = 1;
 
             //// Act
-            _product.AddToWarehouseCatalog(_warehouse.DefaultCatalog());
-            _product.Warehouses.First().Count = 10;
+            _product.AddToCatalogInventory(_warehouse.DefaultCatalog());
+            _product.CatalogInventories.First().Count = 10;
             _productService.Save(_product);
 
             //// Assert
-            Assert.IsTrue(_product.Warehouses.Count() == 1);
+            Assert.IsTrue(_product.CatalogInventories.Count() == 1);
         }
     }
 }

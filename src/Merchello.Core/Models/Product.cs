@@ -319,9 +319,9 @@ namespace Merchello.Core.Models
         /// Exposes the product variant template's inventory collection
         /// </summary>
         [DataMember]
-        public IEnumerable<IWarehouseInventory> Warehouses
+        public IEnumerable<ICatalogInventory> CatalogInventories
         {
-            get { return _variant.Warehouses; }
+            get { return _variant.CatalogInventories; }
         }
 
         #endregion

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Merchello.Core.Models.Interfaces;
 
@@ -24,12 +25,26 @@ namespace Merchello.Core.Models
             extendedData.SetValue("merchHeight", productVariant.Height.ToString());
             extendedData.SetValue("merchLength", productVariant.Length.ToString());
             extendedData.SetValue("merchBarcode", productVariant.Barcode);
+            extendedData.SetValue("merchPrice", productVariant.Price.ToString(CultureInfo.InvariantCulture));
+            extendedData.SetValue("merchOnSale", productVariant.OnSale.ToString());
+            extendedData.SetValue("merchSalePrice", productVariant.SalePrice == null ? 0.ToString(CultureInfo.InvariantCulture) : productVariant.SalePrice.ToString());
             extendedData.SetValue("merchTrackInventory", productVariant.TrackInventory.ToString());
             extendedData.SetValue("merchOutOfStockPurchase", productVariant.OutOfStockPurchase.ToString());
             extendedData.SetValue("merchTaxable", productVariant.Taxable.ToString());
             extendedData.SetValue("merchShippable", productVariant.Shippable.ToString());
             extendedData.SetValue("merchDownload", productVariant.Download.ToString());
             extendedData.SetValue("merchDownloadMediaId", productVariant.DownloadMediaId.ToString());
+        }
+
+        /// <summary>
+        /// True/falce indicating whether or not this extended data collection contains information 
+        /// which could define a <see cref="IProductVariant"/>
+        /// </summary>
+        /// <param name="extendedData"></param>
+        /// <returns></returns>
+        public static bool DefinesProductVariant(this ExtendedDataCollection extendedData)
+        {
+            return extendedData.ContainsProductVariantKey() && extendedData.ContainsProductKey();
         }
 
         /// <summary>
@@ -40,7 +55,7 @@ namespace Merchello.Core.Models
         public static bool ContainsProductVariantKey(this ExtendedDataCollection extendedData)
         {
             return extendedData.ContainsKey("merchProductVariantKey");
-        }
+        }       
 
         /// <summary>
         /// Return the ProductVariantKey
@@ -71,7 +86,7 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
-        /// Returns the "MerchTaxable" value
+        /// Returns the "merchTaxable" value
         /// </summary>
         /// <param name="extendedData"><see cref="ExtendedDataCollection"/></param>
         /// <returns>bool</returns>
@@ -81,7 +96,7 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
-        /// Returns the "MerchTrackInventory" value
+        /// Returns the "merchTrackInventory" value
         /// </summary>
         /// <param name="extendedData"><see cref="ExtendedDataCollection"/></param>
         /// <returns>bool</returns>
@@ -91,7 +106,7 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
-        /// Returns the "MerchTrackInventory" value
+        /// Returns the "merchOutOfStockPurchase" value
         /// </summary>
         /// <param name="extendedData"><see cref="ExtendedDataCollection"/></param>
         /// <returns>bool</returns>
@@ -101,7 +116,7 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
-        /// Returns the "MerchTrackInventory" value
+        /// Returns the "merchTrackInventory" value
         /// </summary>
         /// <param name="extendedData"><see cref="ExtendedDataCollection"/></param>
         /// <returns>bool</returns>
@@ -111,7 +126,7 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
-        /// Returns the "MerchDownload" value
+        /// Returns the "merchDownload" value
         /// </summary>
         /// <param name="extendedData"><see cref="ExtendedDataCollection"/></param>
         /// <returns>bool</returns>
@@ -121,7 +136,7 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
-        /// Returns the "MerchTrackInventory" value
+        /// Returns the "merchTrackInventory" value
         /// </summary>
         /// <param name="extendedData"><see cref="ExtendedDataCollection"/></param>
         /// <returns>bool</returns>
@@ -131,7 +146,37 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
-        /// returns the "MerchWeight" value
+        /// Returns the "merchPrice" value
+        /// </summary>
+        /// <param name="extendedData"></param>
+        /// <returns></returns>
+        public static decimal GetPriceValue(this ExtendedDataCollection extendedData)
+        {
+            return GetDecimalValue(extendedData.GetValue("merchPrice"));
+        }
+
+        /// <summary>
+        /// Returns the "merchOnSale" value as a boolean
+        /// </summary>
+        /// <param name="extendedData"></param>
+        /// <returns></returns>
+        public static bool GetOnSaleValue(this ExtendedDataCollection extendedData)
+        {
+            return GetBooleanValue(extendedData.GetValue("merchOnSale"));
+        }
+
+        /// <summary>
+        /// Returns the "merchSalePrice" value
+        /// </summary>
+        /// <param name="extendedData"></param>
+        /// <returns></returns>
+        public static decimal GetSalePriceValue(this ExtendedDataCollection extendedData)
+        {
+            return GetDecimalValue(extendedData.GetValue("merchSalePrice"));
+        }
+
+        /// <summary>
+        /// returns the "merchWeight" value
         /// </summary>
         /// <param name="extendedData"><see cref="ExtendedDataCollection"/></param>
         /// <returns>decimal</returns>
@@ -141,7 +186,7 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
-        /// returns the "MerchHeight" value
+        /// returns the "merchHeight" value
         /// </summary>
         /// <param name="extendedData"><see cref="ExtendedDataCollection"/></param>
         /// <returns>decimal</returns>
@@ -151,7 +196,7 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
-        /// returns the "MerchWidth" value
+        /// returns the "merchWidth" value
         /// </summary>
         /// <param name="extendedData"><see cref="ExtendedDataCollection"/></param>
         /// <returns>decimal</returns>
@@ -161,7 +206,7 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
-        /// returns the "MerchLength" value
+        /// returns the "merchLength" value
         /// </summary>
         /// <param name="extendedData"><see cref="ExtendedDataCollection"/></param>
         /// <returns>decimal</returns>
@@ -171,7 +216,7 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
-        /// returns the "MerchWeight" value
+        /// returns the "merchWeight" value
         /// </summary>
         /// <param name="extendedData"><see cref="ExtendedDataCollection"/></param>
         /// <returns>decimal</returns>
