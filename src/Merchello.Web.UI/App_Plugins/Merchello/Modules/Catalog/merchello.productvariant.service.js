@@ -14,7 +14,7 @@
 
                 return umbRequestHelper.resourcePromise(
                    $http.post(
-                       '/umbraco/Merchello/ProductVariantApi/NewProductVariant',
+                       umbRequestHelper.getApiUrl('merchelloProductVariantsApiBaseUrl', 'NewProductVariant'),
                        productVariant
                    ),
                    'Failed to create product variant ' + productVariant.sku);
@@ -24,7 +24,7 @@
 
                 return umbRequestHelper.resourcePromise(
                    $http({
-                       url: '/umbraco/Merchello/ProductVariantApi/GetProductVariant',
+                       url: umbRequestHelper.getApiUrl('merchelloProductVariantsApiBaseUrl', 'GetProductVariant'),
                        method: "GET",
                        params: { id: id }
                    }),
@@ -35,7 +35,7 @@
 
                 return umbRequestHelper.resourcePromise(
                    $http({
-                       url: '/umbraco/Merchello/ProductVariantApi/GetByProduct',
+                       url: umbRequestHelper.getApiUrl('merchelloProductVariantsApiBaseUrl', 'GetByProduct'),
                        method: "GET",
                        params: { key: productkey }
                    }),
@@ -46,7 +46,7 @@
 
                 return umbRequestHelper.resourcePromise(
                    $http({
-                       url: '/umbraco/Merchello/ProductVariantApi/DeleteVariant?key=' + key,
+                       url: umbRequestHelper.getApiUrl('merchelloProductVariantsApiBaseUrl', 'DeleteVariant', [{ id: key }]),
                        method: "GET"
                    }),
                    'Failed to delete variant data for key ' + key);
@@ -56,7 +56,7 @@
 
                 return umbRequestHelper.resourcePromise(
                    $http({
-                       url: '/umbraco/Merchello/ProductVariantApi/DeleteAllVariants',
+                       url: umbRequestHelper.getApiUrl('merchelloProductVariantsApiBaseUrl', 'DeleteAllVariants'),
                        method: "GET",
                        params: { productkey: productkey }
                    }),
@@ -68,7 +68,7 @@
 
                 return umbRequestHelper.resourcePromise(
                     $http.put(
-                        '/umbraco/Merchello/ProductVariantApi/PutProductVariant',
+                        umbRequestHelper.getApiUrl('merchelloProductVariantsApiBaseUrl', 'PutProductVariant'),
                         productVariant
                     ),
                     'Failed to save data for product variant id ' + productVariant.id);

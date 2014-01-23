@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Merchello.Web.Models.ContentEditing
 {
@@ -15,5 +16,7 @@ namespace Merchello.Web.Models.ContentEditing
         public string Phone { get; set; }
         public string Email { get; set; }
         public bool IsDefault { get; set; }
+
+        public IEnumerable<WarehouseCatalogDisplay> WarehouseCatalogs { get; set; }
     }
 }
