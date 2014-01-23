@@ -41,9 +41,9 @@ namespace Merchello.Tests.Base.DataMakers
             for (var i = 0; i < count; i++) yield return MockProductForInserting(ProductItemName(), Guid.NewGuid().ToString().Replace("-", string.Empty), PriceCheck());
         }
 
-        public static IProduct MockProductForInserting(string name, string sku, decimal price)
+        public static IProduct MockProductForInserting(string name, string sku, decimal price, decimal weight = 0)
         {
-            return new Product(new ProductVariant(name, sku, price));
+            return new Product(new ProductVariant(name, sku, price) { Weight = weight});
         }
     }
 }

@@ -3,13 +3,12 @@ using Merchello.Core.Models.Rdbms;
 
 namespace Merchello.Core.Persistence.Factories
 {
-    internal class InventoryFactory : IEntityFactory<ICatalogInventory, CatalogInventoryDto>
+    internal class CatalogInventoryFactory : IEntityFactory<ICatalogInventory, CatalogInventoryDto>
     {
         public ICatalogInventory BuildEntity(CatalogInventoryDto dto)
         {
-            var catalog = new WarehouseCatalogFactory().BuildEntity(dto.WarehouseCatalogDto);
-
-            return new CatalogInventory(catalog, dto.ProductVariantKey)
+           
+            return new CatalogInventory(dto.CatalogKey, dto.ProductVariantKey)
                 {
                     Count = dto.Count,
                     LowCount = dto.LowCount,
@@ -22,7 +21,7 @@ namespace Merchello.Core.Persistence.Factories
         {
             return new CatalogInventoryDto()
                 {
-                    CatalogKey = ((CatalogInventory)entity).CatalogKey,
+                    CatalogKey = entity.CatalogKey,
                     ProductVariantKey = entity.ProductVariantKey,
                     Count = entity.Count,
                     LowCount = entity.LowCount,

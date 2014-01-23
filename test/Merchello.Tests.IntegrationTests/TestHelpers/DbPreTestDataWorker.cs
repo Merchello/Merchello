@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Models;
+using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Models.TypeFields;
 using Merchello.Core.Persistence.Migrations.Initial;
 using Merchello.Core.Persistence.UnitOfWork;
@@ -25,7 +26,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         
         private readonly ServiceContext _serviceContext;
         public UmbracoDatabase Database { get; private set; }
-
+        public IWarehouseCatalog _warehouseCatalog;
         public DbPreTestDataWorker()
             : this(new ServiceContext(new PetaPocoUnitOfWorkProvider()))
         { }
@@ -43,6 +44,11 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
             Database = uowProvider.GetUnitOfWork().Database;
 
             _serviceContext = serviceContext;
+
+            _warehouseCatalog = new WarehouseCatalog(Constants.DefaultKeys.DefaultWarehouseKey)
+            {
+                Key = Constants.DefaultKeys.DefaultWarehouseCatalogKey
+            };
         }
 
         #region IAddress
@@ -276,7 +282,9 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         /// <returns><see cref="IProduct"/></returns>
         public IProduct MakeExistingProduct(bool shippable = true)
         {
-            var product = MockProductDataMaker.MockProductForInserting(shippable);
+            var product = MockProductDataMaker.MockProductForInserting(shippable);            
+            ProductService.Save(product);
+            product.AddToCatalogInventory(_warehouseCatalog);
             ProductService.Save(product);
             return product;
         }

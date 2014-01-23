@@ -1,10 +1,22 @@
-﻿using Merchello.Core.Models;
+﻿using System.Collections;
+using System.Collections.Generic;
+using Merchello.Core.Models;
 using Merchello.Core.Models.Rdbms;
 
 namespace Merchello.Core.Persistence.Factories
 {
     internal class ProductVariantFactory : IEntityFactory<IProductVariant, ProductVariantDto>
     {
+        private readonly ProductAttributeCollection _productAttributeCollection;
+        private readonly CatalogInventoryCollection _catalogInventories;
+
+        public ProductVariantFactory(ProductAttributeCollection productAttributes,
+            CatalogInventoryCollection catalogInventories)
+        {
+            _productAttributeCollection = productAttributes;
+            _catalogInventories = catalogInventories;
+        }
+
         public IProductVariant BuildEntity(ProductVariantDto dto)
         {
             var entity = new ProductVariant(dto.Name, dto.Sku, dto.Price)
@@ -29,7 +41,9 @@ namespace Merchello.Core.Persistence.Factories
                 Download = dto.Download,
                 DownloadMediaId = dto.DownloadMediaId,
                 Master = dto.Master,
-                ExamineId = dto.ProductVariantIndexDto.Id,
+                ExamineId = dto.ProductVariantIndexDto.Id,   
+                CatalogInventoryCollection = _catalogInventories,
+                ProductAttributes = _productAttributeCollection,
                 UpdateDate = dto.UpdateDate,
                 CreateDate = dto.CreateDate
             };

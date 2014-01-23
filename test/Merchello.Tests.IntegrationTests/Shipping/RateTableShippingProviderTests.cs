@@ -104,27 +104,27 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             Assert.AreEqual(expected, retrieved.RateTable.Rows.Count());
         }
 
-        //[Test]
-        //public void Can_Get_A_Quote_For_A_Shipment()
-        //{
-        //    //// Arrange
-        //    var key = Constants.ProviderKeys.Shipping.RateTableShippingProviderKey;
-        //    var rateTableProvider = MerchelloContext.Gateways.ResolveByKey<RateTableShippingGatewayProvider>(key);
-        //    rateTableProvider.DeleteAllActiveShipMethods(_shipCountry);
-        //    var gwshipMethod = (RateTableShipMethod)rateTableProvider.CreateShipMethod(RateTableShipMethod.QuoteType.VaryByWeight, _shipCountry, "Ground (VBW)");
-        //    gwshipMethod.RateTable.AddRow(0, 10, 5);
-        //    gwshipMethod.RateTable.AddRow(10, 15, 10);
-        //    gwshipMethod.RateTable.AddRow(15, 25, 25);
-        //    gwshipMethod.RateTable.AddRow(25, 10000, 100);
-        //    ShipRateTable.Save(GatewayProviderService, MerchelloContext.Cache.RuntimeCache, gwshipMethod.RateTable);
+        [Test]
+        public void Can_Get_A_Quote_For_A_Shipment()
+        {
+            //// Arrange
+            var key = Constants.ProviderKeys.Shipping.RateTableShippingProviderKey;
+            var rateTableProvider = MerchelloContext.Gateways.ResolveByKey<RateTableShippingGatewayProvider>(key);
+            rateTableProvider.DeleteAllActiveShipMethods(_shipCountry);
+            var gwshipMethod = (RateTableShipMethod)rateTableProvider.CreateShipMethod(RateTableShipMethod.QuoteType.VaryByWeight, _shipCountry, "Ground (VBW)");
+            gwshipMethod.RateTable.AddRow(0, 10, 5);
+            gwshipMethod.RateTable.AddRow(10, 15, 10);
+            gwshipMethod.RateTable.AddRow(15, 25, 25);
+            gwshipMethod.RateTable.AddRow(25, 10000, 100);
+           
 
-        //    //// Act
-        //    var shipments = _basket.PackageBasket(MerchelloContext, _destination);
+            //// Act
+            var shipments = _basket.PackageBasket(MerchelloContext, _destination);
 
-        //    var attempt = gwshipMethod.QuoteShipment(shipments.First());
+            var attempt = gwshipMethod.QuoteShipment(shipments.First());
 
-        //    //// Assert
-        //    Assert.IsTrue(attempt.Success);
-        //}
+            //// Assert
+            Assert.IsTrue(attempt.Success);
+        }
     }
 }

@@ -14,9 +14,7 @@ namespace Merchello.Core.Persistence.Migrations.Initial
     {
         private readonly Database _database;
 
-        private static readonly Guid WarehouseKey = new Guid("268D4007-8853-455A-89F7-A28398843E5F");
-        private static readonly Guid WarehouseCatalogKey = new Guid("B25C2B00-578E-49B9-BEA2-BF3712053C63");
-
+        
         public BaseDataCreation(Database database)
         {
             _database = database;
@@ -109,8 +107,8 @@ namespace Merchello.Core.Persistence.Migrations.Initial
 
         private void CreateWarehouseData()
         {
-            _database.Insert("merchWarehouse", "Key", new WarehouseDto() { Key = WarehouseKey, Name = "Default Warehouse", CountryCode = "", IsDefault = true, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
-            _database.Insert("merchWarehouseCatalog", "Key", new WarehouseCatalogDto() { Key = WarehouseCatalogKey, WarehouseKey = WarehouseKey, Name = "Default Catalog", Description = null, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchWarehouse", "Key", new WarehouseDto() { Key = Constants.DefaultKeys.DefaultWarehouseKey, Name = "Default Warehouse", CountryCode = "", IsDefault = true, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchWarehouseCatalog", "Key", new WarehouseCatalogDto() { Key = Constants.DefaultKeys.DefaultWarehouseCatalogKey, WarehouseKey = Constants.DefaultKeys.DefaultWarehouseKey, Name = "Default Catalog", Description = null, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
         }
 
         private void CreateGatewayProviderData()
