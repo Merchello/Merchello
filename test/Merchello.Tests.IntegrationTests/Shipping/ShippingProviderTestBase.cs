@@ -6,16 +6,17 @@ using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Persistence.UnitOfWork;
 using Merchello.Core.Services;
+using Merchello.Tests.IntegrationTests.Services;
 using NUnit.Framework;
 using Umbraco.Core;
 
-namespace Merchello.Tests.IntegrationTests.Services.Shipping
+namespace Merchello.Tests.IntegrationTests.Shipping
 {
     public class ShippingProviderTestBase : ServiceIntegrationTestBase
     {
         protected IGatewayProviderService GatewayProviderService;
         protected IWarehouseCatalog Catalog;
-        protected ISettingsService SettingsService;
+        protected IStoreSettingService StoreSettingService;
         protected IShippingService ShippingService;
         protected IMerchelloContext MerchelloContext;
         
@@ -40,14 +41,14 @@ namespace Merchello.Tests.IntegrationTests.Services.Shipping
             }
 
             GatewayProviderService = PreTestDataWorker.GatewayProviderService;
-            SettingsService = PreTestDataWorker.SettingsService;
+            StoreSettingService = PreTestDataWorker.StoreSettingService;
             ShippingService = PreTestDataWorker.ShippingService;
 
 
             PreTestDataWorker.DeleteAllShipCountries();
             const string countryCode = "US";
 
-            var country = SettingsService.GetCountryByCode(countryCode);
+            var country = StoreSettingService.GetCountryByCode(countryCode);
             var shipCountry = new ShipCountry(Catalog.Key, country);
             ShippingService.Save(shipCountry);
 

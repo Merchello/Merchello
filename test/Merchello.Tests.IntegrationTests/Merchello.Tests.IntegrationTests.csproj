@@ -213,7 +213,8 @@
   <ItemGroup>
     <Compile Include="DisplayClasses\ProductDisplayTests.cs" />
     <Compile Include="Examine\StartupExamineEventTests.cs" />
-    <Compile Include="ItemCache\BasketPackagingTests.cs" />
+    <Compile Include="Services\StoreSettings\StoreSettingsServiceTests.cs" />
+    <Compile Include="Shipping\BasketPackagingTests.cs" />
     <Compile Include="ItemCache\BasketTests.cs" />
     <Compile Include="DbInstall\InitialDataTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -222,14 +223,14 @@
     <Compile Include="Services\Customer\CustomerItemCacheServiceTests.cs" />
     <Compile Include="Services\Customer\CustomerServiceTests.cs" />
     <Compile Include="Services\GatewayProvider\GatewayProviderServiceTests.cs" />
-    <Compile Include="Services\Shipping\RateTableShippingProviderTests.cs" />
-    <Compile Include="Services\Shipping\ShippingProviderTestBase.cs" />
-    <Compile Include="Services\Shipping\ShippingProviderTests.cs" />
+    <Compile Include="Shipping\RateTableShippingProviderTests.cs" />
+    <Compile Include="Shipping\ShippingProviderTestBase.cs" />
+    <Compile Include="Shipping\ShippingProviderTests.cs" />
     <Compile Include="Services\ProductVariant\ProductVariantTests.cs" />
     <Compile Include="Services\Product\ProductOptionTests.cs" />
     <Compile Include="Services\Product\ProductTests.cs" />
     <Compile Include="Services\ServiceIntegrationTestBase.cs" />
-    <Compile Include="Services\Shipping\ShipCountryTests.cs" />
+    <Compile Include="Shipping\ShipCountryTests.cs" />
     <Compile Include="TestHelpers\DbPreTestDataWorker.cs" />
     <Compile Include="TestHelpers\TestMerchelloDataService.cs" />
   </ItemGroup>

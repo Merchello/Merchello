@@ -7,7 +7,7 @@ namespace Merchello.Core.Persistence.Repositories
     /// <summary>
     /// Marker interface for the address repository
     /// </summary>
-    public interface IAnonymousCustomerRepository : IRepository<Guid, IAnonymousCustomer>
+    internal interface IAnonymousCustomerRepository : IRepository<Guid, IAnonymousCustomer>
     {
     }
 }

@@ -68,7 +68,8 @@ namespace Merchello.Core.Persistence.Migrations.Initial
                 {28, typeof(ProductVariant2ProductAttributeDto)},
            
                 {29, typeof(AppliedPaymentDto)},
-                {30, typeof(ProductVariantIndexDto)}
+                {30, typeof(ProductVariantIndexDto)},
+                {31, typeof(StoreSettingDto)}
             };
 
         #endregion

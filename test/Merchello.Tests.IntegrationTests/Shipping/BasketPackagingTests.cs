@@ -7,12 +7,11 @@ using Merchello.Core.Services;
 using Merchello.Tests.IntegrationTests.Services;
 using Merchello.Web;
 using Merchello.Web.Models;
-using Merchello.Web.Shipping;
 using Merchello.Web.Shipping.Packaging;
 using NUnit.Framework;
 using Umbraco.Core;
 
-namespace Merchello.Tests.IntegrationTests.ItemCache
+namespace Merchello.Tests.IntegrationTests.Shipping
 {
     public class BasketPackagingTests : ServiceIntegrationTestBase
     {

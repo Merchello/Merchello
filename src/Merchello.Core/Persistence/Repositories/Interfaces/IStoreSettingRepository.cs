@@ -5,10 +5,10 @@ using Umbraco.Core.Persistence.Repositories;
 namespace Merchello.Core.Persistence.Repositories
 {
     /// <summary>
-    /// Marker interface for the ship method repository
+    /// Marker interface for the StoreSettingRepository
     /// </summary>
-    internal interface IShipMethodRepository : IRepositoryQueryable<Guid, IShipMethod>
+    internal interface IStoreSettingRepository : IRepository<Guid, IStoreSetting>
     {
-        
+         
     }
 }

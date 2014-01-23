@@ -21,7 +21,7 @@ namespace Merchello.Web.Editors
     public class ShippingMethodsApiController : MerchelloApiController
     {
         private readonly IShippingService _shippingService;
-        private readonly ISettingsService _settingsService;
+        private readonly IStoreSettingService _storeSettingService;
 
         /// <summary>
         /// Constructor
@@ -39,7 +39,7 @@ namespace Merchello.Web.Editors
             : base(merchelloContext)
         {
             _shippingService = MerchelloContext.Services.ShippingService;
-            _settingsService = MerchelloContext.Services.SettingsService;
+            _storeSettingService = MerchelloContext.Services.StoreSettingService;
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace Merchello.Web.Editors
             : base(merchelloContext, umbracoContext)
         {
             _shippingService = MerchelloContext.Services.ShippingService;
-            _settingsService = MerchelloContext.Services.SettingsService;
+            _storeSettingService = MerchelloContext.Services.StoreSettingService;
         }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace Merchello.Web.Editors
 
             try
             {
-                ICountry country = _settingsService.GetCountryByCode(countryCode);
+                ICountry country = _storeSettingService.GetCountryByCode(countryCode);
                 newShipCountry = new ShipCountry(catalogKey, country);
                 _shippingService.Save(newShipCountry);
                 newShipCountry = _shippingService.GetShipCountryByCountryCode(catalogKey, countryCode) as ShipCountry;

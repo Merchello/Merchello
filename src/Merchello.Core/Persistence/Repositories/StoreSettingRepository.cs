@@ -12,44 +12,48 @@ using Umbraco.Core.Cache;
 using Umbraco.Core.Persistence;
 using Umbraco.Core.Persistence.Querying;
 
+
 namespace Merchello.Core.Persistence.Repositories
 {
     /// <summary>
-    /// Represents the ShipRateTierRepository
+    /// Represents the Store Settings Repository
     /// </summary>
-    internal class ShipRateTierRepository : MerchelloPetaPocoRepositoryBase<IShipRateTier>, IShipRateTierRepository
+    internal class StoreSettingRepository :  MerchelloPetaPocoRepositoryBase<IStoreSetting>, IStoreSettingRepository
     {
-        public ShipRateTierRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache) 
+        public StoreSettingRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache) 
             : base(work, cache)
         { }
 
-        protected override IShipRateTier PerformGet(Guid key)
+        protected override IStoreSetting PerformGet(Guid key)
         {
             var sql = GetBaseQuery(false)
-              .Where(GetBaseWhereClause(), new { Key = key });
+               .Where(GetBaseWhereClause(), new { Key = key });
 
-            var dto = Database.Fetch<ShipRateTierDto>(sql).FirstOrDefault();
+            var dto = Database.Fetch<StoreSettingDto>(sql).FirstOrDefault();
 
             if (dto == null)
                 return null;
 
-            var factory = new ShipRateTierFactory();
-            return factory.BuildEntity(dto);
+            var factory = new StoreSettingFactory();
+
+            var setting = factory.BuildEntity(dto);
+
+            return setting;
         }
 
-        protected override IEnumerable<IShipRateTier> PerformGetAll(params Guid[] keys)
+        protected override IEnumerable<IStoreSetting> PerformGetAll(params Guid[] keys)
         {
             if (keys.Any())
             {
-                foreach (var key in keys)
+                foreach (var id in keys)
                 {
-                    yield return Get(key);
+                    yield return Get(id);
                 }
             }
             else
             {
-                var factory = new ShipRateTierFactory();
-                var dtos = Database.Fetch<ShipRateTierDto>(GetBaseQuery(false));
+                var factory = new StoreSettingFactory();
+                var dtos = Database.Fetch<StoreSettingDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
                     yield return factory.BuildEntity(dto);
@@ -57,13 +61,13 @@ namespace Merchello.Core.Persistence.Repositories
             }
         }
 
-        protected override IEnumerable<IShipRateTier> PerformGetByQuery(IQuery<IShipRateTier> query)
+        protected override IEnumerable<IStoreSetting> PerformGetByQuery(IQuery<IStoreSetting> query)
         {
             var sqlClause = GetBaseQuery(false);
-            var translator = new SqlTranslator<IShipRateTier>(sqlClause, query);
+            var translator = new SqlTranslator<IStoreSetting>(sqlClause, query);
             var sql = translator.Translate();
 
-            var dtos = Database.Fetch<ShipRateTierDto>(sql);
+            var dtos = Database.Fetch<StoreSettingDto>(sql);
 
             return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
         }
@@ -72,31 +76,32 @@ namespace Merchello.Core.Persistence.Repositories
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-                .From<ShipRateTierDto>();
+                .From<StoreSettingDto>();
 
             return sql;
         }
 
         protected override string GetBaseWhereClause()
         {
-            return "merchShipRateTier.pk = @Key";
+            return "merchStoreSetting.pk = @Key";
         }
 
         protected override IEnumerable<string> GetDeleteClauses()
         {
             var list = new List<string>
             {
-                "DELETE FROM merchShipRateTier WHERE pk = @Key"
+                "DELETE FROM merchStoreSetting WHERE pk = @Key"
             };
 
             return list;
         }
 
-        protected override void PersistNewItem(IShipRateTier entity)
+        protected override void PersistNewItem(IStoreSetting entity)
         {
+
             ((Entity)entity).AddingEntity();
 
-            var factory = new ShipRateTierFactory();
+            var factory = new StoreSettingFactory();
             var dto = factory.BuildDto(entity);
 
             Database.Insert(dto);
@@ -106,11 +111,11 @@ namespace Merchello.Core.Persistence.Repositories
             entity.ResetDirtyProperties();
         }
 
-        protected override void PersistUpdatedItem(IShipRateTier entity)
+        protected override void PersistUpdatedItem(IStoreSetting entity)
         {
-            ((Entity)entity).AddingEntity();
+            ((Entity)entity).UpdatingEntity();
 
-            var factory = new ShipRateTierFactory();
+            var factory = new StoreSettingFactory();
             var dto = factory.BuildDto(entity);
 
             Database.Update(dto);

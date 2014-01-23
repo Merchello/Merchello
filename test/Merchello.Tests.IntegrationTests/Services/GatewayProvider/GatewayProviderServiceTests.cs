@@ -17,7 +17,7 @@ namespace Merchello.Tests.IntegrationTests.Services.GatewayProvider
     {
         private IGatewayProviderService _gatewayProviderService;
         private IWarehouseCatalog _catalog;
-        private ISettingsService _settingsService;
+        private IStoreSettingService _storeSettingService;
         private IShippingService _shippingService;
         private IMerchelloContext _merchelloContext;
 
@@ -25,7 +25,7 @@ namespace Merchello.Tests.IntegrationTests.Services.GatewayProvider
         public void Init()
         {
             _gatewayProviderService = PreTestDataWorker.GatewayProviderService;
-            _settingsService = PreTestDataWorker.SettingsService;
+            _storeSettingService = PreTestDataWorker.StoreSettingService;
             _shippingService = PreTestDataWorker.ShippingService;
 
             _merchelloContext = new MerchelloContext(new ServiceContext(new PetaPocoUnitOfWorkProvider()),
@@ -36,7 +36,7 @@ namespace Merchello.Tests.IntegrationTests.Services.GatewayProvider
             _catalog = PreTestDataWorker.WarehouseService.GetDefaultWarehouse().WarehouseCatalogs.FirstOrDefault();
 
             PreTestDataWorker.DeleteAllShipCountries();
-            var country = _settingsService.GetCountryByCode("US");
+            var country = _storeSettingService.GetCountryByCode("US");
             var shipCountry = new ShipCountry(_catalog.Key, country);
             _shippingService.Save(shipCountry);
            

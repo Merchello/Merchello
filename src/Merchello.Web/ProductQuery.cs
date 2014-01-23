@@ -48,6 +48,15 @@ namespace Merchello.Web
             return AutoMapper.Mapper.Map<ProductDisplay>(retrieved);
         }
 
+        /// <summary>
+        /// Retrieves a <see cref="ProductVariantDisplay"/> given it's 'unique' key
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public static ProductVariantDisplay GetVariantDisplayByKey(Guid key)
+        {
+            return GetVariantDisplayByKey(key.ToString());
+        }
 
         /// <summary>
         /// Retrieves a <see cref="ProductVariantDisplay"/> given it's 'unique' key (string representation of the Guid)

@@ -19,7 +19,7 @@ namespace Merchello.Web.Editors
     [PluginController("Merchello")]
     public class SettingsApiController : MerchelloApiController
     {
-        private readonly ISettingsService _settingsService;
+        private readonly IStoreSettingService _storeSettingService;
 
         /// <summary>
         /// Constructor
@@ -36,7 +36,7 @@ namespace Merchello.Web.Editors
         public SettingsApiController(MerchelloContext merchelloContext)
             : base(merchelloContext)
         {
-            _settingsService = MerchelloContext.Services.SettingsService;
+            _storeSettingService = MerchelloContext.Services.StoreSettingService;
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace Merchello.Web.Editors
         internal SettingsApiController(MerchelloContext merchelloContext, UmbracoContext umbracoContext)
             : base(merchelloContext, umbracoContext)
         {
-            _settingsService = MerchelloContext.Services.SettingsService;
+            _storeSettingService = MerchelloContext.Services.StoreSettingService;
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace Merchello.Web.Editors
         /// <param name="id">Country code to get</param>
         public CountryDisplay GetCountry(string id)
         {
-            ICountry country = _settingsService.GetCountryByCode(id);
+            ICountry country = _storeSettingService.GetCountryByCode(id);
             if (country == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);
@@ -72,7 +72,7 @@ namespace Merchello.Web.Editors
         /// </summary>
         public IEnumerable<CountryDisplay> GetAllCountries()
         {
-            var countries = _settingsService.GetAllCountries();
+            var countries = _storeSettingService.GetAllCountries();
             if (countries == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);
@@ -92,7 +92,7 @@ namespace Merchello.Web.Editors
         /// <param name="codes">Country codes to exclude</param>
         public IEnumerable<CountryDisplay> GetAllCountriesExcludeCodes([FromUri]string[] codes)
         {
-            var countries = _settingsService.GetAllCountries(codes);
+            var countries = _storeSettingService.GetAllCountries(codes);
             if (countries == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);

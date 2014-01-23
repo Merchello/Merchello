@@ -9,7 +9,7 @@ namespace Merchello.Core.Persistence.Repositories
     /// <summary>
     /// Marker interface for the address repository
     /// </summary>
-    public interface IWarehouseRepository : IRepositoryQueryable<Guid, IWarehouse>
+    internal interface IWarehouseRepository : IRepositoryQueryable<Guid, IWarehouse>
     {
        
     }

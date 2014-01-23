@@ -11,7 +11,7 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
     /// <summary>
     /// Defines the RateTableLookupGateway
     /// </summary>
-    public class RateTableShippingGatewayProvider : ShippingGatewayProvider
+    public class RateTableShippingGatewayProvider : ShippingGatewayProviderBase
     {
         #region "Available Methods"
         
@@ -66,7 +66,7 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
             var shipMethod = new ShipMethod(GatewayProvider.Key, shipCountry.Key)
                             {
                                 Name = name,
-                                ServiceCode = gatewayResource.ServiceCode + string.Format("-{0:s}", DateTime.Now),
+                                ServiceCode = gatewayResource.ServiceCode + string.Format("-{0}", Guid.NewGuid().ToString()),
                                 Taxable = false,
                                 Surcharge = 0M,
                                 Provinces = shipCountry.Provinces.ToShipProvinceCollection()
@@ -105,7 +105,7 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
             var methods = GatewayProviderService.GetGatewayProviderShipMethods(GatewayProvider.Key, shipCountry.Key);
             return methods
                 .Select(
-                shipMethod => new RateTableShipMethod(AvailableResources.FirstOrDefault(x => shipMethod.ServiceCode.StartsWith(x.ServiceCode)), shipMethod)
+                shipMethod => new RateTableShipMethod(AvailableResources.FirstOrDefault(x => shipMethod.ServiceCode.StartsWith(x.ServiceCode)), shipMethod, ShipRateTable.GetShipRateTable(GatewayProviderService, RuntimeCache, shipMethod.Key))
                 ).OrderBy(x => x.ShipMethod.Name);
         }
     }

@@ -11,10 +11,15 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
         private readonly QuoteType _quoteType;
 
         public RateTableShipMethod(IGatewayResource gatewayResource, IShipMethod shipMethod)
+            :this(gatewayResource, shipMethod, new ShipRateTable(shipMethod.Key))
+        {}
+
+        public RateTableShipMethod(IGatewayResource gatewayResource, IShipMethod shipMethod, IShipRateTable rateTable)
             : base(gatewayResource, shipMethod)
         {
             RateTable = new ShipRateTable(shipMethod.Key);
             _quoteType = GatewayResource.ServiceCode == "VBW" ? QuoteType.VaryByWeight : QuoteType.PercentTotal;
+            RateTable = rateTable;
         }
 
 

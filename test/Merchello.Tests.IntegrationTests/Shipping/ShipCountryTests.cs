@@ -4,9 +4,10 @@ using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Services;
+using Merchello.Tests.IntegrationTests.Services;
 using NUnit.Framework;
 
-namespace Merchello.Tests.IntegrationTests.Services.Shipping
+namespace Merchello.Tests.IntegrationTests.Shipping
 {
     [TestFixture]
     [Category("Shipping")]
@@ -14,7 +15,7 @@ namespace Merchello.Tests.IntegrationTests.Services.Shipping
     {
 
         private IWarehouseCatalog _catalog;
-        private ISettingsService _settingsService;
+        private IStoreSettingService _storeSettingService;
         private IShippingService _shippingService;
         
         [TestFixtureSetUp]
@@ -37,7 +38,7 @@ namespace Merchello.Tests.IntegrationTests.Services.Shipping
                 Assert.Ignore("Warehouse Catalog is null");
             }
 
-            _settingsService = PreTestDataWorker.SettingsService;
+            _storeSettingService = PreTestDataWorker.StoreSettingService;
             _shippingService = PreTestDataWorker.ShippingService;
         }
 
@@ -55,7 +56,7 @@ namespace Merchello.Tests.IntegrationTests.Services.Shipping
         {
             //// Arrange
             const string countryCode = "US";
-            var country = _settingsService.GetCountryByCode(countryCode);
+            var country = _storeSettingService.GetCountryByCode(countryCode);
 
             //// Act
             var shipCountry = new ShipCountry(_catalog.Key, country);
@@ -76,7 +77,7 @@ namespace Merchello.Tests.IntegrationTests.Services.Shipping
         {
             //// Arrange
             const string countryCode = "US";
-            var country = _settingsService.GetCountryByCode(countryCode);
+            var country = _storeSettingService.GetCountryByCode(countryCode);
 
             //// Act
             var shipCountry1 = new ShipCountry(_catalog.Key, country);
@@ -96,7 +97,7 @@ namespace Merchello.Tests.IntegrationTests.Services.Shipping
         {
             //// Arrange
             const string countryCode = "US";
-            var country = _settingsService.GetCountryByCode(countryCode);
+            var country = _storeSettingService.GetCountryByCode(countryCode);
             var shipCountry = new ShipCountry(_catalog.Key, country);
             _shippingService.Save(shipCountry);
             Assert.IsTrue(shipCountry.HasIdentity);
@@ -119,7 +120,7 @@ namespace Merchello.Tests.IntegrationTests.Services.Shipping
         {
             //// Arrange
             const string countryCode = "US";
-            var country = _settingsService.GetCountryByCode(countryCode);
+            var country = _storeSettingService.GetCountryByCode(countryCode);
             var shipCountry = new ShipCountry(_catalog.Key, country);
             _shippingService.Save(shipCountry);
             Assert.IsTrue(shipCountry.HasIdentity);
@@ -141,11 +142,11 @@ namespace Merchello.Tests.IntegrationTests.Services.Shipping
             //// Arrange
             var countries = new[]
             {
-                new ShipCountry(_catalog.Key, _settingsService.GetCountryByCode("US")),
-                new ShipCountry(_catalog.Key, _settingsService.GetCountryByCode("FR")),
-                new ShipCountry(_catalog.Key, _settingsService.GetCountryByCode("AU")),
-                new ShipCountry(_catalog.Key, _settingsService.GetCountryByCode("GB")),
-                new ShipCountry(_catalog.Key, _settingsService.GetCountryByCode("TR"))
+                new ShipCountry(_catalog.Key, _storeSettingService.GetCountryByCode("US")),
+                new ShipCountry(_catalog.Key, _storeSettingService.GetCountryByCode("FR")),
+                new ShipCountry(_catalog.Key, _storeSettingService.GetCountryByCode("AU")),
+                new ShipCountry(_catalog.Key, _storeSettingService.GetCountryByCode("GB")),
+                new ShipCountry(_catalog.Key, _storeSettingService.GetCountryByCode("TR"))
             };
 
             var expected = countries.Count();
