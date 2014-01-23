@@ -135,7 +135,7 @@ namespace Merchello.Examine.Providers
                 new StaticField("master", FieldIndexTypes.ANALYZED, false, string.Empty),
                 new StaticField("totalInventoryCount", FieldIndexTypes.NOT_ANALYZED, false, "NUMBER"),
                 new StaticField("attributes", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
-                new StaticField("warehouses", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
+                new StaticField("catalogInventories", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
                 new StaticField("options", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
                 new StaticField("createDate", FieldIndexTypes.NOT_ANALYZED, false, "DATETIME"),
                 new StaticField("updateDate", FieldIndexTypes.NOT_ANALYZED, false, "DATETIME"),
