@@ -40,7 +40,7 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
 
         private Attempt<IShipmentRateQuote> CalculateVaryByWeight(decimal totalWeight)
         {
-            var tier = RateTable.Rows.FirstOrDefault(x => x.RangeLow <= totalWeight && x.RangeHigh < totalWeight);
+            var tier = RateTable.Rows.FirstOrDefault(x => x.RangeLow <= totalWeight && totalWeight < x.RangeHigh);
             if (tier == null)
                 return
                     Attempt<IShipmentRateQuote>.Fail(
@@ -59,7 +59,7 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
         /// <returns></returns>
         private Attempt<IShipmentRateQuote> CalculatePercentTotal(decimal totalPrice)
         {
-            var tier = RateTable.Rows.FirstOrDefault(x => x.RangeLow <= totalPrice && x.RangeHigh < totalPrice);
+            var tier = RateTable.Rows.FirstOrDefault(x => x.RangeLow <= totalPrice && totalPrice < x.RangeHigh);
             if (tier == null)
                 return
                     Attempt<IShipmentRateQuote>.Fail(

@@ -306,7 +306,7 @@
     <Compile Include="Models\CatalogInventory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\WarehouseInventoryCollection.cs">
+    <Compile Include="Models\CatalogInventoryCollection.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Persistence\DefaultDatabaseFactory.cs" />
@@ -316,7 +316,7 @@
     <Compile Include="Persistence\Factories\ExtendedDataFactory.cs" />
     <Compile Include="Persistence\Factories\GatewayProviderFactory.cs" />
     <Compile Include="Persistence\Factories\IEntityFactory.cs" />
-    <Compile Include="Persistence\Factories\InventoryFactory.cs" />
+    <Compile Include="Persistence\Factories\CatalogInventoryFactory.cs" />
     <Compile Include="Persistence\Factories\InvoiceStatusFactory.cs" />
     <Compile Include="Persistence\Factories\ItemCacheFactory.cs" />
     <Compile Include="Persistence\Factories\LineItemFactory.cs" />

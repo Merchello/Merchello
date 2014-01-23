@@ -4,6 +4,13 @@ namespace Merchello.Core
 {
     public static partial class Constants
     {
+
+        public static class DefaultKeys
+        {
+            public static Guid DefaultWarehouseKey = new Guid("268D4007-8853-455A-89F7-A28398843E5F");
+            public static Guid DefaultWarehouseCatalogKey = new Guid("B25C2B00-578E-49B9-BEA2-BF3712053C63");
+        }
+
         /// <summary>
         /// GatewayProviders
         /// </summary>

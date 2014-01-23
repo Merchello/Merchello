@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Models;
+using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Models.TypeFields;
 using Merchello.Core.Persistence.Migrations.Initial;
 using Merchello.Core.Persistence.UnitOfWork;
@@ -25,7 +26,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         
         private readonly ServiceContext _serviceContext;
         public UmbracoDatabase Database { get; private set; }
-
+        public IWarehouseCatalog _warehouseCatalog;
         public DbPreTestDataWorker()
             : this(new ServiceContext(new PetaPocoUnitOfWorkProvider()))
         { }
@@ -43,6 +44,11 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
             Database = uowProvider.GetUnitOfWork().Database;
 
             _serviceContext = serviceContext;
+
+            _warehouseCatalog = new WarehouseCatalog(Constants.DefaultKeys.DefaultWarehouseKey)
+            {
+                Key = Constants.DefaultKeys.DefaultWarehouseCatalogKey
+            };
         }
 
         #region IAddress
@@ -274,9 +280,11 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         /// Saves a product record to the database and returns and instance of <see cref="IProduct"/> represents that record
         /// </summary>
         /// <returns><see cref="IProduct"/></returns>
-        public IProduct MakeExistingProduct(bool shippable = true)
+        public IProduct MakeExistingProduct(bool shippable = true, decimal weight = 0, decimal price = 0)
         {
-            var product = MockProductDataMaker.MockProductForInserting(shippable);
+            var product = MockProductDataMaker.MockProductForInserting(shippable, weight, price);            
+            ProductService.Save(product);
+            product.AddToCatalogInventory(_warehouseCatalog);
             ProductService.Save(product);
             return product;
         }

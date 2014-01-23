@@ -20,22 +20,22 @@ namespace Merchello.Core.Models
         private int _examineId = 1;
 
         internal ProductVariant(string name, string sku, decimal price)
-            : this(Guid.Empty, new ProductAttributeCollection(), new WarehouseInventoryCollection(), false, name, sku, price)
+            : this(Guid.Empty, new ProductAttributeCollection(), new CatalogInventoryCollection(), false, name, sku, price)
         { }
 
         internal ProductVariant(Guid productKey, ProductAttributeCollection attributes, string name, string sku, decimal price)
-            : this(productKey, attributes, new WarehouseInventoryCollection(), false, name, sku, price)
+            : this(productKey, attributes, new CatalogInventoryCollection(), false, name, sku, price)
         {}
 
-        internal ProductVariant(Guid productKey, ProductAttributeCollection attributes, WarehouseInventoryCollection catalogInventoryInventory, string name, string sku, decimal price)
-            : this(productKey, attributes, catalogInventoryInventory, false, name, sku, price)
+        internal ProductVariant(Guid productKey, ProductAttributeCollection attributes, CatalogInventoryCollection catalogInventoryCollection, string name, string sku, decimal price)
+            : this(productKey, attributes, catalogInventoryCollection, false, name, sku, price)
         { }
 
-        internal ProductVariant(Guid productKey, ProductAttributeCollection attributes, WarehouseInventoryCollection catalogInventoryInventory, bool master, string name, string sku, decimal price)
-            : base(name, sku, price, catalogInventoryInventory)
+        internal ProductVariant(Guid productKey, ProductAttributeCollection attributes, CatalogInventoryCollection catalogInventoryCollection, bool master, string name, string sku, decimal price)
+            : base(name, sku, price, catalogInventoryCollection)
         {
             Mandate.ParameterNotNull(attributes, "attributes");
-            Mandate.ParameterNotNull(catalogInventoryInventory, "warehouseInventory");
+            Mandate.ParameterNotNull(catalogInventoryCollection, "warehouseInventory");
             _productKey = productKey;
             _attibutes = attributes;
             _master = master;

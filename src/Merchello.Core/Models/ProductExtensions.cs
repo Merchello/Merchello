@@ -103,7 +103,7 @@ namespace Merchello.Core.Models
         /// <param name="catalog"><see cref="IWarehouseCatalog"/></param>
         internal static void AddToCatalogInventory(this IProductVariant productVariant, IWarehouseCatalog catalog)
         {
-            ((WarehouseInventoryCollection)productVariant.CatalogInventories).Add(new CatalogInventory(catalog, productVariant.Key));
+            ((CatalogInventoryCollection)productVariant.CatalogInventories).Add(new CatalogInventory(catalog.Key, productVariant.Key));
         }
 
 
