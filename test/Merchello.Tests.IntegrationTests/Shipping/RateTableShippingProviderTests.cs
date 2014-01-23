@@ -116,7 +116,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             rateTableProvider.DeleteAllActiveShipMethods(_shipCountry);
             var gwshipMethod = (RateTableShipMethod)rateTableProvider.CreateShipMethod(RateTableShipMethod.QuoteType.VaryByWeight, _shipCountry, "Ground (VBW)");
             gwshipMethod.RateTable.AddRow(0, 10, 5);
-            gwshipMethod.RateTable.AddRow(10, 15, 10);
+            gwshipMethod.RateTable.AddRow(10, 15, 10); // total weight should be 10M so we should hit this tier
             gwshipMethod.RateTable.AddRow(15, 25, 25);
             gwshipMethod.RateTable.AddRow(25, 10000, 100);
 
