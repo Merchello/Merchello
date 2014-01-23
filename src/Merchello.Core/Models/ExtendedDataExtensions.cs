@@ -33,6 +33,17 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
+        /// True/falce indicating whether or not this extended data collection contains information 
+        /// which could define a <see cref="IProductVariant"/>
+        /// </summary>
+        /// <param name="extendedData"></param>
+        /// <returns></returns>
+        public static bool DefinesProductVariant(this ExtendedDataCollection extendedData)
+        {
+            return extendedData.ContainsProductVariantKey() && extendedData.ContainsProductKey();
+        }
+
+        /// <summary>
         /// True/false indicating whether or not the colleciton contains a ProductVariantKey
         /// </summary>
         /// <param name="extendedData"></param>
@@ -40,7 +51,7 @@ namespace Merchello.Core.Models
         public static bool ContainsProductVariantKey(this ExtendedDataCollection extendedData)
         {
             return extendedData.ContainsKey("merchProductVariantKey");
-        }
+        }       
 
         /// <summary>
         /// Return the ProductVariantKey

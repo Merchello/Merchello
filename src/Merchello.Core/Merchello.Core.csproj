@@ -96,6 +96,7 @@
     <Compile Include="Gateways\Shipping\IShippingGatewayProvider.cs" />
     <Compile Include="Gateways\Shipping\RateTable\IRateTableShipMethod.cs" />
     <Compile Include="Gateways\Shipping\RateTable\IShipRateTable.cs" />
+    <Compile Include="Gateways\Shipping\RateTable\RateTableShipmentLineItemVisitor.cs" />
     <Compile Include="Gateways\Shipping\RateTable\RateTableShippingGatewayProvider.cs" />
     <Compile Include="Gateways\Shipping\RateTable\RateTableShipMethod.cs" />
     <Compile Include="Gateways\Shipping\ShimpmentWarehouseCatalogValidationVisitor.cs" />

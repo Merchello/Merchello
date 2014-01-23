@@ -24,10 +24,22 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
 
 
         public override decimal QuoteShipment(IShipment shipment)
-        {            
-            throw new NotImplementedException();
+        {
+            return _quoteType == QuoteType.VaryByWeight
+                ? CalculateVaryByWeight(shipment)
+                : CalculatePercentTotal(shipment);
         }
 
+
+        private decimal CalculateVaryByWeight(IShipment shipment)
+        {
+            return 0;
+        }
+
+        private decimal CalculatePercentTotal(IShipment shipment)
+        {
+            return 0;
+        }
 
         public enum QuoteType
         {
