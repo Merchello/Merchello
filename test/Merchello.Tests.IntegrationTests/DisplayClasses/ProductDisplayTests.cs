@@ -81,7 +81,7 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
             //// Assert
             Assert.NotNull(productVariantDisplay);
             Assert.IsTrue(2 == productVariantDisplay.Attributes.Count());
-            Assert.IsTrue(productVariantDisplay.WarehouseInventory.Any());
+            Assert.IsTrue(productVariantDisplay.CatalogInventories.Any());
         }
 
         [Test]

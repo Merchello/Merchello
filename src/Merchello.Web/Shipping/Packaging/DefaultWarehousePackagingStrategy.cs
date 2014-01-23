@@ -54,13 +54,13 @@ namespace Merchello.Web.Shipping.Packaging
             {
                 // We need to know what Warehouse Catalog this product is associated with for shipping and inventory
                 var variant = ProductQuery.GetVariantDisplayByKey(lineItem.ExtendedData.GetProductVariantKey());
-                if (variant.WarehouseInventory.FirstOrDefault() == null)
+                if (variant.CatalogInventories.FirstOrDefault() == null)
                 {
                     LogHelper.Error<ShippableProductVisitor>("ProductVariant marked as shippable was not assoicated with a WarehouseCatalog.  Product was: " + variant.Key.ToString() + " -  " + variant.Name, new InvalidDataException());
                 }
                 else
                 {                    
-                    lineItem.ExtendedData.SetValue("merchWarehouseCatalogKey", variant.WarehouseInventory.First().WarehouseCatalogKey.ToString());
+                    lineItem.ExtendedData.SetValue("merchWarehouseCatalogKey", variant.CatalogInventories.First().CatalogKey.ToString());
                     shipment.Items.Add(lineItem);    
                 }
                           
