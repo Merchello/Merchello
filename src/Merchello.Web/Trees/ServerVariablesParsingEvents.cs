@@ -6,6 +6,7 @@ using Umbraco.Core;
 using Umbraco.Web;
 using Umbraco.Web.UI.JavaScript;
 using Merchello.Web.Editors;
+using System;
 
 namespace Merchello.Web.Trees
 {
@@ -29,6 +30,8 @@ namespace Merchello.Web.Trees
 
                 umbracoUrls.Add("merchelloProductApiBaseUrl", Url.GetUmbracoApiServiceBaseUrl<ProductApiController>(
                                                        controller => controller.GetAllProducts()));
+                umbracoUrls.Add("merchelloProductVariantsApiBaseUrl", Url.GetUmbracoApiServiceBaseUrl<ProductVariantApiController>(
+                                                       controller => controller.GetProductVariant(Guid.NewGuid())));
             }
         }
     }

@@ -23,6 +23,7 @@ namespace Merchello.Web.Editors
     {
         private readonly IProductVariantService _productVariantService;
         private readonly IProductService _productService;
+        private readonly IWarehouseService _warehouseService;
 
         /// <summary>
         /// Constructor
@@ -41,6 +42,7 @@ namespace Merchello.Web.Editors
         {
             _productService = MerchelloContext.Services.ProductService;
             _productVariantService = MerchelloContext.Services.ProductVariantService;
+            _warehouseService = MerchelloContext.Services.WarehouseService;
         }
 
         /// <summary>
@@ -51,6 +53,7 @@ namespace Merchello.Web.Editors
         {
             _productService = MerchelloContext.Services.ProductService;
             _productVariantService = MerchelloContext.Services.ProductVariantService;
+            _warehouseService = MerchelloContext.Services.WarehouseService;
         }
 
         /// <summary>
@@ -161,6 +164,13 @@ namespace Merchello.Web.Editors
                     }
 
                     newProductVariant = _productVariantService.CreateProductVariantWithKey(product, productVariant.Name, productVariant.Sku, productVariant.Price, productAttributes, true);
+
+                    newProductVariant.AddToWarehouseCatalog(_warehouseService.GetDefaultWarehouse().DefaultCatalog());
+                    newProductVariant.Warehouses.First().Count = 10;
+                    newProductVariant.Warehouses.First().LowCount = 3;
+                    //newProductVariant.Warehouses.First().Count = productVariant.WarehouseInventory.First().Count;
+                    //newProductVariant.Warehouses.First().LowCount = productVariant.WarehouseInventory.First().LowCount;
+                    _productVariantService.Save(newProductVariant);
                 }
                 else
                 {
