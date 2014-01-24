@@ -46,6 +46,25 @@ namespace Merchello.Core.Gateways
             return providers;
         }
 
+
+        /// <summary>
+        /// Gets a collection of instantiated gateway providers
+        /// </summary>
+        /// <param name="gatewayProviderType"></param>
+        /// <returns></returns>
+        public IEnumerable<GatewayProviderBase> ResolveByGatewayProviderType(GatewayProviderType gatewayProviderType)
+        {
+            var providers = GetGatewayProviders(gatewayProviderType);
+
+            var gatewayProviders = new List<GatewayProviderBase>();
+            foreach (var provider in providers)
+            {
+                if(gatewayProviderType == GatewayProviderType.Shipping)
+                    gatewayProviders.Add(ResolveByGatewayProvider<ShippingGatewayProviderBase>(provider));
+            }
+            return gatewayProviders;
+        }
+
         /// <summary>
         /// Returns an instantiation of a <see cref="T"/>
         /// </summary>

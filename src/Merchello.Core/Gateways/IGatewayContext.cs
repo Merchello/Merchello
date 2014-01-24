@@ -12,6 +12,14 @@ namespace Merchello.Core.Gateways
         /// <returns></returns>
         IEnumerable<IGatewayProvider> GetGatewayProviders(GatewayProviderType gatewayProviderType);
 
+
+        /// <summary>
+        /// Gets a collection of instantiated gateway providers
+        /// </summary>
+        /// <param name="gatewayProviderType"></param>
+        /// <returns></returns>
+        IEnumerable<GatewayProviderBase> ResolveByGatewayProviderType(GatewayProviderType gatewayProviderType);
+            
         /// <summary>
         /// Returns an instantiation of a <see cref="T"/>
         /// </summary>

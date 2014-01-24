@@ -1,4 +1,5 @@
-﻿using Merchello.Core.Models;
+﻿using System;
+using Merchello.Core.Models;
 using Merchello.Core.Services;
 
 namespace Merchello.Core.Gateways
@@ -20,7 +21,15 @@ namespace Merchello.Core.Gateways
             _gatewayProvider = gatewayProvider;
         }
 
+        /// <summary>
+        /// The name of the GatewayProvider
+        /// </summary>
+        protected abstract string Name { get; }
 
+        /// <summary>
+        /// The unique Key that will be used
+        /// </summary>
+        public abstract Guid Key { get;  }
 
         /// <summary>
         /// Gets the <see cref="IGatewayProviderService"/>

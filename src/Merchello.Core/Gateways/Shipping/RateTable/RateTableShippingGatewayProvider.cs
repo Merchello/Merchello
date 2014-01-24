@@ -109,5 +109,15 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
                 shipMethod => new RateTableShipMethod(AvailableResources.FirstOrDefault(x => shipMethod.ServiceCode.StartsWith(x.ServiceCode)), shipMethod, shipCountry, ShipRateTable.GetShipRateTable(GatewayProviderService, RuntimeCache, shipMethod.Key))
                 ).OrderBy(x => x.ShipMethod.Name);
         }
+
+        protected override string Name
+        {
+            get { return "Rate Table Shipping Provider"; }
+        }
+
+        public override Guid Key
+        {
+            get { return Constants.ProviderKeys.Shipping.RateTableShippingProviderKey; }
+        }
     }
 }
