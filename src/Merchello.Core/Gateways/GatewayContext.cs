@@ -14,6 +14,7 @@ namespace Merchello.Core.Gateways
         
         private readonly ConcurrentDictionary<Guid, IGatewayProvider> _gatewayProviderCache = new ConcurrentDictionary<Guid, IGatewayProvider>();
         private readonly IGatewayProviderFactory _gatewayProviderFactory;
+        private readonly IGatewayProviderService _gatewayProviderService;
 
         public GatewayContext(IGatewayProviderService gatewayProviderService, IRuntimeCacheProvider runtimeCache)
         {
@@ -21,7 +22,7 @@ namespace Merchello.Core.Gateways
             Mandate.ParameterNotNull(runtimeCache, "runtimeCache");
             
             _gatewayProviderFactory = new GatewayProviderFactory(gatewayProviderService, runtimeCache);
-
+            _gatewayProviderService = gatewayProviderService;
             BuildGatewayProviderCache(gatewayProviderService);
 
         }
@@ -46,6 +47,16 @@ namespace Merchello.Core.Gateways
             return providers;
         }
 
+        public IEnumerable<IShipmentRateQuote> GetShipRateQuotesForShipment(IShipment shipment)
+        {
+            var providers = ResolveByGatewayProviderType(GatewayProviderType.Shipping);
+            var quotes = new List<IShipmentRateQuote>();
+            foreach (var provider in providers)
+            {
+                quotes.AddRange(((ShippingGatewayProviderBase)provider).QuoteAvailableShipMethodsForShipment(shipment));
+            }
+            return quotes.OrderBy(x => x.Rate);
+        }
 
         /// <summary>
         /// Gets a collection of instantiated gateway providers

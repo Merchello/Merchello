@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Models;
 
 namespace Merchello.Core.Gateways
@@ -12,6 +13,7 @@ namespace Merchello.Core.Gateways
         /// <returns></returns>
         IEnumerable<IGatewayProvider> GetGatewayProviders(GatewayProviderType gatewayProviderType);
 
+        IEnumerable<IShipmentRateQuote> GetShipRateQuotesForShipment(IShipment shipment);
 
         /// <summary>
         /// Gets a collection of instantiated gateway providers
