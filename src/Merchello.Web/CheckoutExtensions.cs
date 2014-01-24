@@ -3,19 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Configuration;
+using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Web.Models;
-using Merchello.Web.Shipping;
 using Merchello.Web.Shipping.Packaging;
-using Umbraco.Web.org.umbraco.our;
 
 namespace Merchello.Web
 {
     /// <summary>
     /// Extension methods for the <see cref="IBasket"/>
     /// </summary>
-    public static class BasketExtensions
+    public static class CheckoutExtensions
     {
         /// <summary>
         /// Packages the current basket instantiation into a collection of <see cref="IShipment"/>s
@@ -38,6 +37,21 @@ namespace Merchello.Web
             var strategy = ActivatorHelper.CreateInstance<BasketPackagingStrategyBase>(Type.GetType(defaultStrategy), ctorArgs, ctoArgValues);
 
             return strategy.PackageShipments();
+        }
+
+        /// <summary>
+        /// Returns a collection of <see cref="IShipmentRateQuote"/> from the various configured shipping providers
+        /// </summary>
+        /// <param name="shipment"><see cref="IShipment"/></param>
+        /// <returns>A collection of <see cref="IShipmentRateQuote"/></returns>
+        public static IEnumerable<IShipmentRateQuote> ShipmentRateQuotes(this IShipment shipment)
+        {
+            return shipment.ShipmentRateQuotes(MerchelloContext.Current);
+        }
+
+        internal static IEnumerable<IShipmentRateQuote> ShipmentRateQuotes(this IShipment shipment, IMerchelloContext merchelloContext)
+        {
+            return merchelloContext.Gateways.GetShipRateQuotesForShipment(shipment);
         }
     }
 }
