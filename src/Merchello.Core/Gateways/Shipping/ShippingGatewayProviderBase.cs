@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.ModelBinding;
 using Merchello.Core.Models;
-using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Services;
 using Umbraco.Core.Cache;
 using Umbraco.Core.Logging;
@@ -75,20 +73,24 @@ namespace Merchello.Core.Gateways.Shipping
             }
         }
 
-        public virtual IEnumerable<IGatewayShipMethod> GetAvailableShipMethodsForDestination(IShipment shipment)
+        /// <summary>
+        /// Returns a collection of available <see cref="IGatewayShipMethod"/> associated by this provider for a given shipment
+        /// </summary>
+        /// <param name="shipment"><see cref="IShipment"/></param>
+        /// <returns>A collection of <see cref="IGatewayShipMethod"/></returns>
+        public virtual IEnumerable<IGatewayShipMethod> GetAvailableShipMethodsForShipment(IShipment shipment)
         {
-                      
-            var visitor = new ShimpmentWarehouseCatalogValidationVisitor();
-            shipment.Items.Accept(visitor);
+
+            var attempt = shipment.GetValidatedShipCountry(GatewayProviderService);
 
             // quick validation of shipment
-            if (visitor.CatalogValidationStatus != ShimpmentWarehouseCatalogValidationVisitor.ShipmentCatalogValidationStatus.Ok)
+            if (!attempt.Success)
             {
-                LogHelper.Error<ShippingGatewayProviderBase>("ShipMethods could not be determined for Shipment passed to GetAvailableShipMethodsForDestination method. Validator returned: " + visitor.CatalogValidationStatus, new ArgumentException("merchWarehouseCatalogKey"));
+                LogHelper.Error<ShippingGatewayProviderBase>("ShipMethods could not be determined for Shipment passed to GetAvailableShipMethodsForDestination method. Attempt message: " + attempt.Exception.Message, new ArgumentException("merchWarehouseCatalogKey"));
                 return new List<IGatewayShipMethod>();
             }
-
-            var shipCountry = new ShipCountry(visitor.WarehouseCatalogKey, new Country(shipment.ToCountryCode));
+            
+            var shipCountry = attempt.Result;
 
             var shipmethods = GetActiveShipMethods(shipCountry);
 
@@ -114,6 +116,28 @@ namespace Merchello.Core.Gateways.Shipping
 
             return available;
         }
+
+        /// <summary>
+        /// Returns a collection of all available <see cref="IShipmentRateQuote"/> for a given shipment
+        /// </summary>
+        /// <param name="shipment"><see cref="IShipmentRateQuote"/></param>
+        /// <returns>A collection of <see cref="IShipmentRateQuote"/></returns>
+        public virtual IEnumerable<IShipmentRateQuote> QuoteAvailableShipMethodsForShipment(IShipment shipment)
+        {
+            var gatewayShipMethods = GetAvailableShipMethodsForShipment(shipment);
+
+            var quotes = new List<IShipmentRateQuote>();
+            foreach (var gwShipMethod in gatewayShipMethods)
+            {
+                var attempt = gwShipMethod.QuoteShipment(shipment);
+                if(attempt.Success)
+                    quotes.Add(attempt.Result);
+            }
+
+            return quotes;
+        }
+
+        //public virtual 
 
         /// <summary>
         /// Gets the RuntimeCache

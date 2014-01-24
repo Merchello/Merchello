@@ -108,5 +108,11 @@ namespace Merchello.Core.Services
         IEnumerable<IShipRateTier> GetShipRateTiersByShipMethodKey(Guid shipMethodKey);
 
         #endregion
+
+        #region ShipCountry
+
+        IShipCountry GetShipCountry(Guid catalogKey, string countryCode);
+
+        #endregion
     }
 }

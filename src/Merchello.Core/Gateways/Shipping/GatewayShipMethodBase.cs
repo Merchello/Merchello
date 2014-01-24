@@ -10,15 +10,17 @@ namespace Merchello.Core.Gateways.Shipping
     {
         private readonly IShipMethod _shipMethod;
         private readonly IGatewayResource _gatewayResource;
-        private IShipCountry _shipCountry;
+        private readonly IShipCountry _shipCountry;
 
-        protected GatewayShipMethodBase(IGatewayResource gatewayResource, IShipMethod shipMethod)
+        protected GatewayShipMethodBase(IGatewayResource gatewayResource, IShipMethod shipMethod, IShipCountry shipCountry)
         {
             Mandate.ParameterNotNull(gatewayResource, "gatewayResource");
             Mandate.ParameterNotNull(shipMethod, "shipMethod");
+            Mandate.ParameterNotNull(shipCountry, "shipCountry");
 
             _gatewayResource = gatewayResource;
             _shipMethod = shipMethod;
+            _shipCountry = shipCountry;
         }
 
         /// <summary>
@@ -34,6 +36,14 @@ namespace Merchello.Core.Gateways.Shipping
         public IShipMethod ShipMethod
         {
             get { return _shipMethod; }
+        }
+
+        /// <summary>
+        /// Gets the ship country
+        /// </summary>
+        public IShipCountry ShipCountry
+        {
+            get { return _shipCountry; }
         }
 
         /// <summary>

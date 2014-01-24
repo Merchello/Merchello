@@ -75,7 +75,7 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
 
             GatewayProviderService.Save(shipMethod);
 
-            return new RateTableShipMethod(gatewayResource, shipMethod);
+            return new RateTableShipMethod(gatewayResource, shipMethod, shipCountry);
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
             var methods = GatewayProviderService.GetGatewayProviderShipMethods(GatewayProvider.Key, shipCountry.Key);
             return methods
                 .Select(
-                shipMethod => new RateTableShipMethod(AvailableResources.FirstOrDefault(x => shipMethod.ServiceCode.StartsWith(x.ServiceCode)), shipMethod, ShipRateTable.GetShipRateTable(GatewayProviderService, RuntimeCache, shipMethod.Key))
+                shipMethod => new RateTableShipMethod(AvailableResources.FirstOrDefault(x => shipMethod.ServiceCode.StartsWith(x.ServiceCode)), shipMethod, shipCountry, ShipRateTable.GetShipRateTable(GatewayProviderService, RuntimeCache, shipMethod.Key))
                 ).OrderBy(x => x.ShipMethod.Name);
         }
     }

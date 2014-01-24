@@ -26,5 +26,19 @@ namespace Merchello.Core.Gateways.Shipping
         /// <returns></returns>
         IEnumerable<IGatewayShipMethod> GetActiveShipMethods(IShipCountry shipCountry);
 
+        /// <summary>
+        /// Returns a collection of available <see cref="IGatewayShipMethod"/> associated by this provider for a given shipment
+        /// </summary>
+        /// <param name="shipment"><see cref="IShipment"/></param>
+        /// <returns>A collection of <see cref="IGatewayShipMethod"/></returns>
+        IEnumerable<IGatewayShipMethod> GetAvailableShipMethodsForShipment(IShipment shipment);
+
+        /// <summary>
+        /// Returns a collection of all available <see cref="IShipmentRateQuote"/> for a given shipment
+        /// </summary>
+        /// <param name="shipment"><see cref="IShipmentRateQuote"/></param>
+        /// <returns>A collection of <see cref="IShipmentRateQuote"/></returns>
+        IEnumerable<IShipmentRateQuote> QuoteAvailableShipMethodsForShipment(IShipment shipment);
+
     }
 }

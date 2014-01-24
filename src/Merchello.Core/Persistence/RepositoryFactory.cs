@@ -67,11 +67,10 @@ namespace Merchello.Core.Persistence
                 CreateLineItemRepository<ItemCacheItemDto>(uow));
         }
 
-        internal virtual IGatewayProviderRepository CreateGatewayProviderRepository(IDatabaseUnitOfWork uow, IStoreSettingService storeSettingService)
+        internal virtual IGatewayProviderRepository CreateGatewayProviderRepository(IDatabaseUnitOfWork uow)
         {
             return new GatewayProviderRepository(uow,
-                _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider,
-                storeSettingService);
+                _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
         }
 
         /// <summary>

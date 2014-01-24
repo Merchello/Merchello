@@ -7,7 +7,6 @@ using Merchello.Core.Models.Interfaces;
 using Merchello.Web;
 using Merchello.Web.Models;
 using NUnit.Framework;
-using Rhino.Mocks;
 
 namespace Merchello.Tests.IntegrationTests.Shipping
 {
@@ -162,6 +161,78 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             //// Assert
             Assert.IsTrue(attempt.Success);
             Assert.AreEqual(expectedRate, attempt.Result.Rate);
+        }
+
+        /// <summary>
+        /// GetActiveShipMethods returns a valid list of GatewayShipMethods
+        /// </summary>
+        [Test]
+        public void Can_Return_A_Valid_List_Of_ActiveShipMethods()
+        {
+            //// Arrange
+            var dkCountry = ShippingService.GetShipCountryByCountryCode(Catalog.Key, "DK");
+            var key = Constants.ProviderKeys.Shipping.RateTableShippingProviderKey;
+            var rateTableProvider = MerchelloContext.Gateways.ResolveByKey<RateTableShippingGatewayProvider>(key);
+            rateTableProvider.DeleteAllActiveShipMethods(_shipCountry);
+            var gwshipMethod1 = (RateTableShipMethod)rateTableProvider.CreateShipMethod(RateTableShipMethod.QuoteType.PercentTotal, _shipCountry, "Ground (PercentTotal) 1");
+            var gwshipMethod2 = (RateTableShipMethod)rateTableProvider.CreateShipMethod(RateTableShipMethod.QuoteType.PercentTotal, _shipCountry, "Ground (PercentTotal) 2");
+            var gwshipMethod3 = (RateTableShipMethod)rateTableProvider.CreateShipMethod(RateTableShipMethod.QuoteType.PercentTotal, dkCountry, "Ground (PercentTotal) 3");
+
+            //// Act
+            var shipments = _basket.PackageBasket(MerchelloContext, _destination);
+            Assert.IsTrue(shipments.Any());
+            var retrievedMethods = rateTableProvider.GetAvailableShipMethodsForShipment(shipments.First());
+
+            //// Assert
+            Assert.IsTrue(retrievedMethods.Any());
+            Assert.AreEqual(2, retrievedMethods.Count());
+        }
+
+        /// <summary>
+        /// Test confirms that valid quotes are returned for all available/active shipmethods for the provider
+        /// </summary>
+        [Test]
+        public void Can_Get_Quotes_For_All_Active_ShipMethods()
+        {
+            //// Arrange
+            var dkCountry = ShippingService.GetShipCountryByCountryCode(Catalog.Key, "DK");
+            var key = Constants.ProviderKeys.Shipping.RateTableShippingProviderKey;
+            var rateTableProvider = MerchelloContext.Gateways.ResolveByKey<RateTableShippingGatewayProvider>(key);
+            rateTableProvider.DeleteAllActiveShipMethods(_shipCountry);
+            var gwshipMethod1 = (RateTableShipMethod)rateTableProvider.CreateShipMethod(RateTableShipMethod.QuoteType.PercentTotal, _shipCountry, "Ground (PercentTotal) 1");
+            gwshipMethod1.RateTable.AddRow(0, 10, 5);
+            gwshipMethod1.RateTable.AddRow(10, 15, 10);
+            gwshipMethod1.RateTable.AddRow(15, 25, 25);
+            gwshipMethod1.RateTable.AddRow(25, 60, 30); // total price should be 50M so we should hit this tier
+            gwshipMethod1.RateTable.AddRow(25, 10000, 50);
+            rateTableProvider.SaveShipMethod(gwshipMethod1);    
+            
+            var gwshipMethod2 = (RateTableShipMethod)rateTableProvider.CreateShipMethod(RateTableShipMethod.QuoteType.VaryByWeight, _shipCountry, "Ground (VBW)");
+            gwshipMethod2.RateTable.AddRow(0, 10, 5);
+            gwshipMethod2.RateTable.AddRow(10, 15, 10); // total weight should be 10M so we should hit this tier
+            gwshipMethod2.RateTable.AddRow(15, 25, 25);
+            gwshipMethod2.RateTable.AddRow(25, 10000, 100);
+            rateTableProvider.SaveShipMethod(gwshipMethod2);
+
+            var gwshipMethod3 = (RateTableShipMethod)rateTableProvider.CreateShipMethod(RateTableShipMethod.QuoteType.PercentTotal, dkCountry, "Ground (PercentTotal) 3");
+            gwshipMethod3.RateTable.AddRow(0, 10, 5);
+            gwshipMethod3.RateTable.AddRow(10, 15, 10);
+            gwshipMethod3.RateTable.AddRow(15, 25, 25);
+            gwshipMethod3.RateTable.AddRow(25, 60, 30); // total price should be 50M so we should hit this tier
+            gwshipMethod3.RateTable.AddRow(25, 10000, 50);
+            rateTableProvider.SaveShipMethod(gwshipMethod3);
+        
+
+            //// Act
+            var shipments = _basket.PackageBasket(MerchelloContext, _destination);
+            Assert.IsTrue(shipments.Any());
+            var quotes = rateTableProvider.QuoteAvailableShipMethodsForShipment(shipments.First()).OrderBy(x => x.Rate);
+
+            //// Assert
+            Assert.IsTrue(quotes.Any());
+            Assert.AreEqual(2, quotes.Count()); 
+            Assert.AreEqual(10M, quotes.First().Rate);
+            Assert.AreEqual(15M, quotes.Last().Rate);
         }
     }
 }

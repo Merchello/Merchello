@@ -13,7 +13,7 @@ namespace Merchello.Core.Gateways
 
         protected GatewayProviderBase(IGatewayProviderService gatewayProviderService, IGatewayProvider gatewayProvider)
         {
-            Mandate.ParameterNotNull(gatewayProviderService, "merchelloContext");
+            Mandate.ParameterNotNull(gatewayProviderService, "gatewayProviderService");
             Mandate.ParameterNotNull(gatewayProvider, "gatewayProvider");
 
             _gatewayProviderService = gatewayProviderService;
