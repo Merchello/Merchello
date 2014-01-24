@@ -89,7 +89,7 @@ namespace Merchello.Core.Persistence.Repositories
 			var entity = PerformGet(key);
 			if (entity != null)
 			{
-				//_cache.GetCacheItem()
+			    _cache.GetCacheItem(GetCacheKey(key), () => entity);
 			}
 
 			if (entity != null)
@@ -102,8 +102,7 @@ namespace Merchello.Core.Persistence.Repositories
 
 		protected Attempt<TEntity> TryGetFromCache(Guid key)
 		{
-            // TODO
-		    var cacheKey = key.ToString();
+		    var cacheKey = GetCacheKey(key);
 		    var rEntity = _cache.GetCacheItem(cacheKey); 
 
 			return rEntity != null ? 
@@ -122,10 +121,16 @@ namespace Merchello.Core.Persistence.Repositories
 		{
 			if (keys.Any())
 			{
-               // TODO
-                //var entities = _cache.GetByIds(typeof(TEntity), ids.Select(id => id is int ? ConvertIdToGuid(id) : ConvertStringIdToGuid(id.ToString())).ToList());
-                //if (ids.Count().Equals(entities.Count()) && entities.Any(x => x == null) == false)
-                //    return entities.Select(x => (TEntity)x);
+			    var entities = new List<TEntity>();
+			    foreach (var key in keys)
+			    {
+			        var entity = _cache.GetCacheItem(GetCacheKey(key));
+                    if(entity != null) entities.Add((TEntity)entity);
+			        
+			    }
+
+                if (entities.Count().Equals(keys.Count()) && entities.Any(x => x == null) == false)
+                    return entities;
 			}
 			else
 			{
@@ -148,9 +153,7 @@ namespace Merchello.Core.Persistence.Repositories
 			{
 				if (entity != null)
 				{
-                    // TODO move a version of the CachingBacker to the Core
-                    //_cache.GetCacheItem()
-					
+				    _cache.GetCacheItem(GetCacheKey(entity.Key), () => entity);
 				}
 			}
 
@@ -207,7 +210,7 @@ namespace Merchello.Core.Persistence.Repositories
 		public virtual void PersistNewItem(IEntity entity)
 		{
 			PersistNewItem((TEntity)entity);
-			//_cache.GetCacheItem()
+		    _cache.GetCacheItem(GetCacheKey(entity.Key), () => entity);
 		}
 
 		/// <summary>
@@ -216,8 +219,9 @@ namespace Merchello.Core.Persistence.Repositories
 		/// <param name="entity"></param>
 		public virtual void PersistUpdatedItem(IEntity entity)
 		{
+            _cache.ClearCacheItem(GetCacheKey(entity.Key));
 			PersistUpdatedItem((TEntity)entity);
-            //_cache.GetCacheItem()
+		    _cache.GetCacheItem(GetCacheKey(entity.Key), () => entity);
 		}
 
 		/// <summary>
@@ -227,8 +231,7 @@ namespace Merchello.Core.Persistence.Repositories
 		public virtual void PersistDeletedItem(IEntity entity)
 		{
 			PersistDeletedItem((TEntity)entity);
-			//_cache.ClearCacheItem();
-            //_cache.Delete(typeof(TEntity), entity);
+            _cache.ClearCacheItem(GetCacheKey(entity.Key));
 		}
 
 		#endregion
@@ -252,5 +255,16 @@ namespace Merchello.Core.Persistence.Repositories
 		{
 			UnitOfWork.DisposeIfDisposable();
 		}
+
+        protected IRuntimeCacheProvider RuntimeCache
+        {
+            get { return _cache; }
+        }
+
+        protected static string GetCacheKey(Guid key)
+        {
+            return Cache.CacheKeys.GetEntityCacheKey<TEntity>(key);
+        }
+
 	}
 }

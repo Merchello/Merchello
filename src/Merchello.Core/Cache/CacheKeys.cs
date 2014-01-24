@@ -47,6 +47,17 @@ namespace Merchello.Core.Cache
         {
             return string.Format("merchello.shippingateway.shipmethods.{0}", providerKey);
         }
+
+        /// <summary>
+        /// Returns a cache key intened for use in repository caching
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        internal static string GetEntityCacheKey<TEntity>(Guid key)
+        {
+            return string.Format("{0}-{1}", typeof (TEntity).Name, key.ToString());
+        }
        
     }
 }

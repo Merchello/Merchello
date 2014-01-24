@@ -18,7 +18,7 @@ namespace Merchello.Core.Persistence.Repositories
     internal class ProductVariantRepository : MerchelloPetaPocoRepositoryBase<IProductVariant>, IProductVariantRepository
     {
 
-        public ProductVariantRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache) 
+        public ProductVariantRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache)
             : base(work, cache)
         { }
 
@@ -36,12 +36,6 @@ namespace Merchello.Core.Persistence.Repositories
 
             var factory = new ProductVariantFactory(GetProductAttributeCollection(key), GetCategoryInventoryCollection(key));
             var variant = factory.BuildEntity(dto.ProductVariantDto);
-
-            //// set the attributes collection
-            //((ProductVariant)variant).ProductAttributes = GetProductAttributeCollection(variant.Key);
-
-            //// set the inventory collection
-            //((ProductVariant) variant).CatalogInventoryInventory = GetCategoryInventoryCollection(variant.Key);
 
             variant.ResetDirtyProperties();
 
@@ -173,6 +167,7 @@ namespace Merchello.Core.Persistence.Repositories
             {
                 Database.Execute(delete, new { entity.Key });
             }
+            
         }
 
         #endregion
