@@ -1,4 +1,6 @@
-﻿using Merchello.Core.Models;
+﻿using System.Linq;
+using Merchello.Core.Models;
+using Merchello.Core.Models.Interfaces;
 using Umbraco.Core;
 
 namespace Merchello.Core.Gateways.Shipping
@@ -23,6 +25,20 @@ namespace Merchello.Core.Gateways.Shipping
             _shipCountry = shipCountry;
         }
 
+        /// <summary>
+        /// Adjusts the rate of the quote based on the province Associated with the ShipMethod
+        /// </summary>
+        /// <param name="baseRate">The base (unadjusted) rate</param>
+        /// <param name="province">The <see cref="IShipProvince"/> associated with the ShipMethod</param>
+        /// <returns></returns>
+        protected decimal AdjustedRate(decimal baseRate, IShipProvince province)
+        {
+            if (province == null) return baseRate;
+            return province.RateAdjustmentType == RateAdjustmentType.Numeric
+                       ? baseRate + province.RateAdjustment
+                       : baseRate*(1 + (province.RateAdjustment/100));
+        }
+        
         /// <summary>
         /// Returns a rate quote for a given shipment
         /// </summary>
