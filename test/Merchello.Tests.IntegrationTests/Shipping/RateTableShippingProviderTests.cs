@@ -258,7 +258,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             //// Act
             var shipments = _basket.PackageBasket(MerchelloContext, _destination);
             Assert.IsTrue(shipments.Any());
-            var quotes = rateTableProvider.QuoteAvailableShipMethodsForShipment(shipments.First()).OrderBy(x => x.Rate);
+            var quotes = MerchelloContext.Gateways.GetShipRateQuotesForShipment(shipments.First());
 
             //// Assert
             Assert.IsTrue(quotes.Any());
