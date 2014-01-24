@@ -48,10 +48,12 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             PreTestDataWorker.DeleteAllShipCountries();
             const string countryCode = "US";
 
-            var country = StoreSettingService.GetCountryByCode(countryCode);
-            var shipCountry = new ShipCountry(Catalog.Key, country);
+            var us = StoreSettingService.GetCountryByCode(countryCode);
+            var shipCountry = new ShipCountry(Catalog.Key, us);
             ShippingService.Save(shipCountry);
 
+            var dk = StoreSettingService.GetCountryByCode("DK");
+            ShippingService.Save(new ShipCountry(Catalog.Key, dk));
             
             MerchelloContext = new MerchelloContext(new ServiceContext(new PetaPocoUnitOfWorkProvider()),
                 new CacheHelper(new NullCacheProvider(),

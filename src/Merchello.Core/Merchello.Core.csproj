@@ -284,6 +284,7 @@
     <Compile Include="Models\Shipment.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\ShipmentExtensions.cs" />
     <Compile Include="Models\ShipMethod.cs">
       <SubType>Code</SubType>
     </Compile>

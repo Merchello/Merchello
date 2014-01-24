@@ -56,7 +56,7 @@ namespace Merchello.Core.Services
             using (new WriteLock(Locker))
             {
                 var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateGatewayProviderRepository(uow, _storeSettingService))
+                using (var repository = _repositoryFactory.CreateGatewayProviderRepository(uow))
                 {
                     repository.AddOrUpdate(gatewayProvider);
                     uow.Commit();
@@ -78,7 +78,7 @@ namespace Merchello.Core.Services
             using (new WriteLock(Locker))
             {
                 var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateGatewayProviderRepository(uow, _storeSettingService))
+                using (var repository = _repositoryFactory.CreateGatewayProviderRepository(uow))
                 {
                     repository.Delete(gatewayProvider);
                     uow.Commit();
@@ -104,7 +104,7 @@ namespace Merchello.Core.Services
             using (new WriteLock(Locker))
             {
                 var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateGatewayProviderRepository(uow, _storeSettingService))
+                using (var repository = _repositoryFactory.CreateGatewayProviderRepository(uow))
                 {
                     foreach (var gatewayProvider in gatewayProviderArray)
                     {
@@ -124,7 +124,7 @@ namespace Merchello.Core.Services
         /// <returns></returns>
         public IGatewayProvider GetGatewayProviderByKey(Guid key)
         {
-            using (var repository = _repositoryFactory.CreateGatewayProviderRepository(_uowProvider.GetUnitOfWork(), _storeSettingService))
+            using (var repository = _repositoryFactory.CreateGatewayProviderRepository(_uowProvider.GetUnitOfWork()))
             {
                 return repository.Get(key);
             }
@@ -137,7 +137,7 @@ namespace Merchello.Core.Services
         /// <returns></returns>
         public IEnumerable<IGatewayProvider> GetGatewayProvidersByType(GatewayProviderType gatewayProviderType)
         {
-            using (var repository = _repositoryFactory.CreateGatewayProviderRepository(_uowProvider.GetUnitOfWork(), _storeSettingService))
+            using (var repository = _repositoryFactory.CreateGatewayProviderRepository(_uowProvider.GetUnitOfWork()))
             {
                 var query =
                     Query<IGatewayProvider>.Builder.Where(
@@ -156,7 +156,7 @@ namespace Merchello.Core.Services
         /// <returns></returns>
         public IEnumerable<IGatewayProvider> GetGatewayProvidersByShipCountry(IShipCountry shipCountry)
         {
-            using (var repository = _repositoryFactory.CreateGatewayProviderRepository(_uowProvider.GetUnitOfWork(),_storeSettingService))
+            using (var repository = _repositoryFactory.CreateGatewayProviderRepository(_uowProvider.GetUnitOfWork()))
             {
                 return repository.GetGatewayProvidersByShipCountryKey(shipCountry.Key);
             }
@@ -168,7 +168,7 @@ namespace Merchello.Core.Services
         /// <returns></returns>
         public IEnumerable<IGatewayProvider> GetAllGatewayProviders()
         {
-            using (var repository = _repositoryFactory.CreateGatewayProviderRepository(_uowProvider.GetUnitOfWork(), _storeSettingService))
+            using (var repository = _repositoryFactory.CreateGatewayProviderRepository(_uowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll();
             }
@@ -313,6 +313,31 @@ namespace Merchello.Core.Services
             {
                 var query = Query<IShipRateTier>.Builder.Where(x => x.ShipMethodKey == shipMethodKey);
                 return repository.GetByQuery(query);
+            }
+        }
+
+        /// <summary>
+        /// Gets a <see cref="IShipCountry"/> by CatalogKey and CountryCode
+        /// </summary>
+        /// <param name="catalogKey"></param>
+        /// <param name="countryCode"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// 
+        /// TODO this should be refactored out of this service, but it was needed for ShippingGatewayProviders
+        /// 
+        /// </remarks>
+        public IShipCountry GetShipCountry(Guid catalogKey, string countryCode)
+        {
+            using (var repository = _repositoryFactory.CreateShipCountryRepository(_uowProvider.GetUnitOfWork(),
+                                                                                new StoreSettingService(_uowProvider,
+                                                                                                        _repositoryFactory))
+                )
+            {
+                var query =
+                    Query<IShipCountry>.Builder.Where(x => x.CatalogKey == catalogKey && x.CountryCode == countryCode);
+
+                return repository.GetByQuery(query).FirstOrDefault();
             }
         }
 

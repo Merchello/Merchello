@@ -61,7 +61,7 @@ namespace Merchello.Core.Persistence.Repositories
             var translator = new SqlTranslator<IShipMethod>(sqlClause, query);
             var sql = translator.Translate();
 
-            var dtos = Database.Fetch<ShipCountryDto>(sql);
+            var dtos = Database.Fetch<ShipMethodDto>(sql);
 
             return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
         }

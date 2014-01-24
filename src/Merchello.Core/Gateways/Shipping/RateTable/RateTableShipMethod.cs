@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using Merchello.Core.Models;
@@ -14,12 +15,12 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
     {
         private readonly QuoteType _quoteType;
 
-        public RateTableShipMethod(IGatewayResource gatewayResource, IShipMethod shipMethod)
-            :this(gatewayResource, shipMethod, new ShipRateTable(shipMethod.Key))
+        public RateTableShipMethod(IGatewayResource gatewayResource, IShipMethod shipMethod, IShipCountry shipCountry)
+            :this(gatewayResource, shipMethod, shipCountry, new ShipRateTable(shipMethod.Key))
         {}
 
-        public RateTableShipMethod(IGatewayResource gatewayResource, IShipMethod shipMethod, IShipRateTable rateTable)
-            : base(gatewayResource, shipMethod)
+        public RateTableShipMethod(IGatewayResource gatewayResource, IShipMethod shipMethod, IShipCountry shipCountry, IShipRateTable rateTable)
+            : base(gatewayResource, shipMethod, shipCountry)
         {
             RateTable = new ShipRateTable(shipMethod.Key);
             _quoteType = GatewayResource.ServiceCode == "VBW" ? QuoteType.VaryByWeight : QuoteType.PercentTotal;
@@ -29,7 +30,6 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
         public override Attempt<IShipmentRateQuote> QuoteShipment(IShipment shipment)
         {
             var visitor = new RateTableShipMethodShipmentLineItemVisitor { UseOnSalePriceIfOnSale = false };
-
             shipment.Items.Accept(visitor);
 
             return _quoteType == QuoteType.VaryByWeight
@@ -48,8 +48,7 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
                                                      totalWeight.ToString(CultureInfo.InvariantCulture) +
                                                      " which is outside any rate tier defined by the current rate table."));
 
-
-            return Attempt<IShipmentRateQuote>.Succeed(new ShipmentRateQuote() {Rate = tier.Rate});
+                return Attempt<IShipmentRateQuote>.Succeed(new ShipmentRateQuote(ShipMethod) {Rate = tier.Rate});
         }
 
         /// <summary>
@@ -68,7 +67,7 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
                                                      " which is outside any rate tier defined by the current rate table."));
 
 
-            return Attempt<IShipmentRateQuote>.Succeed(new ShipmentRateQuote() { Rate = (tier.Rate * .01M) * totalPrice  });
+            return Attempt<IShipmentRateQuote>.Succeed(new ShipmentRateQuote(ShipMethod) { Rate = (tier.Rate * .01M) * totalPrice  });
         }
 
         public enum QuoteType
