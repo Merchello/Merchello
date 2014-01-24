@@ -107,8 +107,11 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             Assert.AreEqual(expected, retrieved.RateTable.Rows.Count());
         }
 
+        /// <summary>
+        /// Can quote a shipment with a VaryByRate RateTable
+        /// </summary>
         [Test]
-        public void Can_Get_A_Quote_For_A_Shipment()
+        public void Can_Get_A_Quote_For_A_Shipment_VaryByWeight()
         {
             //// Arrange
             var key = Constants.ProviderKeys.Shipping.RateTableShippingProviderKey;
@@ -121,6 +124,35 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             gwshipMethod.RateTable.AddRow(25, 10000, 100);
 
             var expectedRate = 10M;
+
+            //// Act
+            var shipments = _basket.PackageBasket(MerchelloContext, _destination);
+
+            var attempt = gwshipMethod.QuoteShipment(shipments.First());            
+
+            //// Assert
+            Assert.IsTrue(attempt.Success);
+            Assert.AreEqual(expectedRate, attempt.Result.Rate);
+        }
+
+        /// <summary>
+        /// Can quote a shipment with a PercentTotal RateTable
+        /// </summary>
+        [Test]
+        public void Can_Get_A_Quote_For_A_Shipment_PercentTotal()
+        {
+            //// Arrange
+            var key = Constants.ProviderKeys.Shipping.RateTableShippingProviderKey;
+            var rateTableProvider = MerchelloContext.Gateways.ResolveByKey<RateTableShippingGatewayProvider>(key);
+            rateTableProvider.DeleteAllActiveShipMethods(_shipCountry);
+            var gwshipMethod = (RateTableShipMethod)rateTableProvider.CreateShipMethod(RateTableShipMethod.QuoteType.PercentTotal, _shipCountry, "Ground (PercentTotal)");
+            gwshipMethod.RateTable.AddRow(0, 10, 5);
+            gwshipMethod.RateTable.AddRow(10, 15, 10); 
+            gwshipMethod.RateTable.AddRow(15, 25, 25);
+            gwshipMethod.RateTable.AddRow(25, 60, 30); // total price should be 50M so we should hit this tier
+            gwshipMethod.RateTable.AddRow(25, 10000, 50);
+
+            var expectedRate = 15M; // .3*50
 
             //// Act
             var shipments = _basket.PackageBasket(MerchelloContext, _destination);

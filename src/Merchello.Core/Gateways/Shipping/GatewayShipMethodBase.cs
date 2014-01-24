@@ -10,6 +10,7 @@ namespace Merchello.Core.Gateways.Shipping
     {
         private readonly IShipMethod _shipMethod;
         private readonly IGatewayResource _gatewayResource;
+        private IShipCountry _shipCountry;
 
         protected GatewayShipMethodBase(IGatewayResource gatewayResource, IShipMethod shipMethod)
         {
@@ -41,6 +42,6 @@ namespace Merchello.Core.Gateways.Shipping
         public IGatewayResource GatewayResource
         {
             get { return _gatewayResource; }
-        }
+        }        
     }
 }
