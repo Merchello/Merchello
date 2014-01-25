@@ -22,6 +22,7 @@ namespace Merchello.Web.Editors
     {
         private readonly IShippingService _shippingService;
         private readonly IStoreSettingService _storeSettingService;
+        private readonly IShipCountryService _shipCountryService;
 
         /// <summary>
         /// Constructor
@@ -40,6 +41,7 @@ namespace Merchello.Web.Editors
         {
             _shippingService = MerchelloContext.Services.ShippingService;
             _storeSettingService = MerchelloContext.Services.StoreSettingService;
+            _shipCountryService = ((ServiceContext)merchelloContext.Services).ShipCountryService;
         }
 
         /// <summary>
@@ -50,6 +52,7 @@ namespace Merchello.Web.Editors
         {
             _shippingService = MerchelloContext.Services.ShippingService;
             _storeSettingService = MerchelloContext.Services.StoreSettingService;
+            _shipCountryService = ((ServiceContext)merchelloContext.Services).ShipCountryService;
         }
 
         /// <summary>
@@ -61,7 +64,7 @@ namespace Merchello.Web.Editors
         public ShipCountryDisplay GetShipCountry(Guid id)
         {
 
-            var shipCountry = _shippingService.GetShipCountryByKey(id);
+            var shipCountry = _shipCountryService.GetByKey(id);
             if (shipCountry == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);
@@ -81,7 +84,7 @@ namespace Merchello.Web.Editors
         public ShipCountryDisplay GetShipCountryByCode(Guid catalogKey, string countryCode)
         {
 
-            var shipCountry = _shippingService.GetShipCountryByCountryCode(catalogKey, countryCode);
+            var shipCountry = _shipCountryService.GetShipCountryByCountryCode(catalogKey, countryCode);
             if (shipCountry == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);
@@ -99,7 +102,7 @@ namespace Merchello.Web.Editors
         /// <param name="id">CatalogKey Guid to get countries for</param>
         public IEnumerable<ShipCountryDisplay> GetAllShipCountries(Guid id)
         {
-            var countries = _shippingService.GetShipCountriesByCatalogKey(id);
+            var countries = _shipCountryService.GetShipCountriesByCatalogKey(id);
             if (countries == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);
@@ -125,10 +128,19 @@ namespace Merchello.Web.Editors
 
             try
             {
-                ICountry country = _storeSettingService.GetCountryByCode(countryCode);
-                newShipCountry = new ShipCountry(catalogKey, country);
-                _shippingService.Save(newShipCountry);
-                newShipCountry = _shippingService.GetShipCountryByCountryCode(catalogKey, countryCode) as ShipCountry;
+                //ICountry country = _storeSettingService.GetCountryByCode(countryCode);
+                //newShipCountry = new ShipCountry(catalogKey, country);
+                //_shipCountryService.Save(newShipCountry);
+                //newShipCountry = _shipCountryService.GetShipCountryByCountryCode(catalogKey, countryCode) as ShipCountry;
+                var attempt = ((ShipCountryService) _shipCountryService).CreateShipCountryWithKey(catalogKey, countryCode);
+                if (attempt.Success)
+                {
+                    newShipCountry = attempt.Result as ShipCountry;
+                }
+                else
+                {
+                    throw attempt.Exception;
+                }
             }
             catch (Exception ex)
             {
@@ -146,13 +158,13 @@ namespace Merchello.Web.Editors
         /// <param name="id"></param>
         public HttpResponseMessage Delete(Guid id)
         {
-            var shipCountryToDelete = _shippingService.GetShipCountryByKey(id);
+            var shipCountryToDelete = _shipCountryService.GetByKey(id);
             if (shipCountryToDelete == null)
             {
                 return Request.CreateResponse(HttpStatusCode.NotFound);
             }
 
-            _shippingService.Delete(shipCountryToDelete);
+            _shipCountryService.Delete(shipCountryToDelete);
 
             return Request.CreateResponse(HttpStatusCode.OK);
         }
@@ -166,13 +178,13 @@ namespace Merchello.Web.Editors
         /// <param name="countryCode">Country code string</param>
         public HttpResponseMessage DeleteByCountryCode(Guid catalogKey, string countryCode)
         {
-            var shipCountryToDelete = _shippingService.GetShipCountryByCountryCode(catalogKey, countryCode);
+            var shipCountryToDelete = _shipCountryService.GetShipCountryByCountryCode(catalogKey, countryCode);
             if (shipCountryToDelete == null)
             {
                 return Request.CreateResponse(HttpStatusCode.NotFound);
             }
 
-            _shippingService.Delete(shipCountryToDelete);
+            _shipCountryService.Delete(shipCountryToDelete);
 
             return Request.CreateResponse(HttpStatusCode.OK);
         }

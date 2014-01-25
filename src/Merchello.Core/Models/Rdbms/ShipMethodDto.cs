@@ -25,9 +25,6 @@ namespace Merchello.Core.Models.Rdbms
         [ForeignKey(typeof(GatewayProviderDto), Name = "FK_merchShipMethod_merchGatewayProvider", Column = "pk")]
         public Guid ProviderKey { get; set; }
 
-        //[Column("shipMethodTfKey")]
-        //public Guid ShipMethodTfKey { get; set; }
-
         [Column("surcharge")]
         [Constraint(Default = "0")]
         public decimal Surcharge { get; set; }        

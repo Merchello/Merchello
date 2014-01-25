@@ -1,4 +1,6 @@
-﻿using Merchello.Core.Persistence.Migrations.Initial;
+﻿using System;
+using System.Configuration;
+using Merchello.Core.Persistence.Migrations.Initial;
 using Merchello.Tests.Base.SqlSyntax;
 using Merchello.Tests.IntegrationTests.TestHelpers;
 using NUnit.Framework;
@@ -14,7 +16,8 @@ namespace Merchello.Tests.IntegrationTests.DbInstall
         [SetUp]
         public void Init()
         {
-            var worker = new DbPreTestDataWorker {SqlSyntax = DbSyntax.SqlServer };
+            var syntax = (DbSyntax)Enum.Parse(typeof(DbSyntax), ConfigurationManager.AppSettings["syntax"]);
+            var worker = new DbPreTestDataWorker {SqlSyntax = syntax };
             _database = worker.Database;
         }
 

@@ -17,9 +17,6 @@ namespace Merchello.Core.Models
         private readonly RegionInfo _regionInfo;
         private readonly IEnumerable<IProvince> _provinces; 
 
-        protected CountryBase(string countryCode)
-            : this(countryCode, new List<IProvince>())
-        {}
 
         protected CountryBase(string countryCode, IEnumerable<IProvince> provinces)
             : this(countryCode, new RegionInfo(countryCode), provinces)
@@ -67,7 +64,7 @@ namespace Merchello.Core.Models
         /// <summary>
         /// Provinces (if any) associated with the country
         /// </summary>
-        [DataMember]
+        [IgnoreDataMember]
         public IEnumerable<IProvince> Provinces {
             get { return _provinces; }
         }

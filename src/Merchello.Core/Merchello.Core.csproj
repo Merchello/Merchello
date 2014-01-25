@@ -104,6 +104,7 @@
     <Compile Include="Gateways\Shipping\ShipmentRateQuote.cs" />
     <Compile Include="Gateways\Shipping\ShippingGatewayProviderBase.cs" />
     <Compile Include="Gateways\Shipping\RateTable\ShipRateTable.cs" />
+    <Compile Include="Gateways\Taxation\ITaxationGatewayProvider.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\AppliedPayment.cs">
       <SubType>Code</SubType>
@@ -279,7 +280,7 @@
     <Compile Include="Models\Rdbms\ShipRateTierDto.cs" />
     <Compile Include="Models\Rdbms\StoreSettingDto.cs" />
     <Compile Include="Models\Rdbms\WarehouseCatalogDto.cs" />
-    <Compile Include="Models\Rdbms\TaxRegionDto.cs" />
+    <Compile Include="Models\Rdbms\TaxMethodDto.cs" />
     <Compile Include="Models\CountryBase.cs" />
     <Compile Include="Models\Shipment.cs">
       <SubType>Code</SubType>
@@ -488,6 +489,7 @@
     <Compile Include="Services\Interfaces\IProductService.cs" />
     <Compile Include="Services\Interfaces\IProductVariantService.cs" />
     <Compile Include="Services\Interfaces\IServiceContext.cs" />
+    <Compile Include="Services\Interfaces\IShipCountryService.cs" />
     <Compile Include="Services\Interfaces\IStoreSettingService.cs" />
     <Compile Include="Services\Interfaces\IShippingService.cs" />
     <Compile Include="Services\Interfaces\IWarehouseService.cs" />
@@ -497,6 +499,7 @@
     <Compile Include="Services\ProductVariantService.cs" />
     <Compile Include="Models\Province.cs" />
     <Compile Include="Services\ServiceContext.cs" />
+    <Compile Include="Services\ShipCountryService.cs" />
     <Compile Include="Services\StoreSettingService.cs" />
     <Compile Include="Services\ShippingService.cs" />
     <Compile Include="Services\WarehouseService.cs" />
@@ -556,6 +559,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

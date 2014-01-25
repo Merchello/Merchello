@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using Merchello.Core.Models;
-using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Persistence;
-using Merchello.Core.Persistence.Querying;
 using Merchello.Core.Persistence.UnitOfWork;
-using Umbraco.Core;
 using Umbraco.Core.Events;
 
 namespace Merchello.Core.Services
@@ -22,22 +17,20 @@ namespace Merchello.Core.Services
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
          public ShippingService()
-            : this(new RepositoryFactory(), new StoreSettingService())
+            : this(new RepositoryFactory())
         { }
 
-        public ShippingService(RepositoryFactory repositoryFactory, IStoreSettingService storeSettingService)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, storeSettingService)
+        public ShippingService(RepositoryFactory repositoryFactory)
+            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory)
         { }
 
-        public ShippingService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, IStoreSettingService storeSettingService)
+        public ShippingService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
         {
             Mandate.ParameterNotNull(provider, "provider");
             Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
-            Mandate.ParameterNotNull(storeSettingService, "settingsService");
 
             _uowProvider = provider;
             _repositoryFactory = repositoryFactory;
-            _storeSettingService = storeSettingService;
         }
 
 
@@ -85,99 +78,9 @@ namespace Merchello.Core.Services
 
         #region ShipCountry
 
-        /// <summary>
-        /// Saves a single <see cref="shipCountry"/>
-        /// </summary>
-        /// <param name="shipCountry"></param>
-        public void Save(IShipCountry shipCountry)
-        {            
-            using (new WriteLock(Locker))
-            {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateShipCountryRepository(uow, _storeSettingService))
-                {
-                    repository.AddOrUpdate(shipCountry);
-                    uow.Commit();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Deletes a single <see cref="IShipCountry"/> object
-        /// </summary>
-        /// <param name="shipCountry"></param>
-        public void Delete(IShipCountry shipCountry)
-        {
-            using (new WriteLock(Locker))
-            {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateShipCountryRepository(uow,_storeSettingService))
-                {
-                    repository.Delete(shipCountry);
-                    uow.Commit();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets a list of <see cref="IShipCountry"/> objects given a <see cref="IWarehouseCatalog"/> key
-        /// </summary>
-        /// <param name="catalogKey">Guid</param>
-        /// <returns>A collection of <see cref="IShipCountry"/></returns>
-        public IEnumerable<IShipCountry> GetShipCountriesByCatalogKey(Guid catalogKey)
-        {
-            using (var repository = _repositoryFactory.CreateShipCountryRepository(_uowProvider.GetUnitOfWork(),_storeSettingService))
-            {
-                var query = Query<IShipCountry>.Builder.Where(x => x.CatalogKey == catalogKey);
-                return repository.GetByQuery(query);
-            }
-        }
-
-        /// <summary>
-        /// Gets a single <see cref="IShipCountry"/>
-        /// </summary>
-        /// <param name="catalogKey">The warehouse catalog key (guid)</param>
-        /// <param name="countryCode">The two letter ISO country code</param>
-        /// <returns></returns>
-        public IShipCountry GetShipCountryByCountryCode(Guid catalogKey, string countryCode)
-        {
-            using (var repository = _repositoryFactory.CreateShipCountryRepository(_uowProvider.GetUnitOfWork(),_storeSettingService))
-            {
-                var query = Query<IShipCountry>.Builder.Where(x => x.CatalogKey == catalogKey && x.CountryCode == countryCode);
-                return repository.GetByQuery(query).FirstOrDefault();
-            }
-        }
-
-
-        /// <summary>
-        /// Gets a single <see cref="IShipCountry"/> by it's unique key (Guid pk)
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public IShipCountry GetShipCountryByKey(Guid key)
-        {
-            using (var repository = _repositoryFactory.CreateShipCountryRepository(_uowProvider.GetUnitOfWork(),_storeSettingService))
-            {
-                return repository.Get(key);
-            }
-        }
-
-        // used for testing
-        internal IEnumerable<IShipCountry> GetAllShipCountries()
-        {
-            using (var repository = _repositoryFactory.CreateShipCountryRepository(_uowProvider.GetUnitOfWork(),_storeSettingService))
-            {
-                return repository.GetAll();
-            }
-        }
+        
 
         #endregion
-
-
-
-
-
-
 
         #region Event Handlers
 
