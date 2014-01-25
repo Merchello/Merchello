@@ -26,7 +26,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         
         private readonly ServiceContext _serviceContext;
         public UmbracoDatabase Database { get; private set; }
-        public IWarehouseCatalog _warehouseCatalog;
+        public IWarehouseCatalog WarehouseCatalog;
         public DbPreTestDataWorker()
             : this(new ServiceContext(new PetaPocoUnitOfWorkProvider()))
         { }
@@ -45,7 +45,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
             _serviceContext = serviceContext;
 
-            _warehouseCatalog = new WarehouseCatalog(Constants.DefaultKeys.DefaultWarehouseKey)
+            WarehouseCatalog = new WarehouseCatalog(Constants.DefaultKeys.DefaultWarehouseKey)
             {
                 Key = Constants.DefaultKeys.DefaultWarehouseCatalogKey
             };
@@ -284,7 +284,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         {
             var product = MockProductDataMaker.MockProductForInserting(shippable, weight, price);            
             ProductService.Save(product);
-            product.AddToCatalogInventory(_warehouseCatalog);
+            product.AddToCatalogInventory(WarehouseCatalog);
             ProductService.Save(product);
             return product;
         }
@@ -353,15 +353,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
         #region Shipping (IShipment, IShipCounty)
 
-        public void DeleteAllShipCountries()
-        {
-            var shipCountries = ((ShippingService) ShippingService).GetAllShipCountries();
-            foreach (var country in shipCountries)
-            {
-                ShippingService.Delete(country);
-            }
-
-        }
+        
 
         /// <summary>
         /// Returns the Shipping Service
@@ -372,6 +364,25 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
             {
                 return _serviceContext.ShippingService;
             }
+        }
+
+        #endregion
+
+        #region ShipCountry
+
+        public void DeleteAllShipCountries()
+        {
+            var shipCountries = ((ShipCountryService)ShipCountryService).GetAllShipCountries();
+            foreach (var country in shipCountries)
+            {
+                ShipCountryService.Delete(country);
+            }
+
+        }
+
+        internal IShipCountryService ShipCountryService
+        {
+            get { return _serviceContext.ShipCountryService; }
         }
 
         #endregion

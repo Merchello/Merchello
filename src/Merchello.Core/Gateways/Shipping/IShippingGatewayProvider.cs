@@ -4,7 +4,7 @@ using Merchello.Core.Models;
 namespace Merchello.Core.Gateways.Shipping
 {
     /// <summary>
-    /// Defines the base shipping gateway
+    /// Defines the base shipping gateway provider
     /// </summary>
     public interface IShippingGatewayProvider
     {

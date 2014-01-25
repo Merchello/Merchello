@@ -63,7 +63,7 @@ namespace Merchello.Core.Gateways
         /// </summary>
         /// <param name="gatewayProviderType"></param>
         /// <returns></returns>
-        public IEnumerable<GatewayProviderBase> ResolveByGatewayProviderType(GatewayProviderType gatewayProviderType)
+        internal IEnumerable<GatewayProviderBase> ResolveByGatewayProviderType(GatewayProviderType gatewayProviderType)
         {
             var providers = GetGatewayProviders(gatewayProviderType);
 
@@ -81,7 +81,7 @@ namespace Merchello.Core.Gateways
         /// </summary>
         /// <param name="provider"><see cref="IGatewayProvider"/></param>
         /// <returns></returns>
-        public T ResolveByGatewayProvider<T>(IGatewayProvider provider) where T : GatewayProviderBase
+        internal T ResolveByGatewayProvider<T>(IGatewayProvider provider) where T : GatewayProviderBase
         {
 
             if (typeof(ShippingGatewayProviderBase).IsAssignableFrom(typeof(T))) return _gatewayProviderFactory.GetInstance<ShippingGatewayProviderBase>(provider) as T;
@@ -95,7 +95,7 @@ namespace Merchello.Core.Gateways
         /// <typeparam name="T">The Type of the GatewayProvider.  Must inherit from GatewayProviderBase</typeparam>
         /// <param name="gatewayProviderKey"></param>
         /// <returns>An instantiated GatewayProvider</returns>
-        public T ResolveByKey<T>(Guid gatewayProviderKey) where T : GatewayProviderBase
+        internal T ResolveByKey<T>(Guid gatewayProviderKey) where T : GatewayProviderBase
         {
             var provider = _gatewayProviderCache.FirstOrDefault(x => x.Key == gatewayProviderKey).Value;
             return provider == null ? null : ResolveByGatewayProvider<T>(provider);
@@ -104,7 +104,7 @@ namespace Merchello.Core.Gateways
         /// <summary>
         /// Refreshes the <see cref="GatewayProviderBase"/> cache
         /// </summary>
-        public void RefreshCache()
+        internal void RefreshCache()
         {
             BuildGatewayProviderCache(((GatewayProviderFactory)_gatewayProviderFactory).GatewayProviderService);
         }

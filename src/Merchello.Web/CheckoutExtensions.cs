@@ -30,6 +30,7 @@ namespace Merchello.Web
             if (!basket.Items.Any()) return new List<IShipment>();
 
             // get the default strategy from the configuration file
+            // TODO move this to a resolver
             var defaultStrategy = MerchelloConfiguration.Current.DefaultBasketPackagingStrategy;
 
             var ctorArgs = new[] { typeof(MerchelloContext), typeof(Basket), typeof(Address) };

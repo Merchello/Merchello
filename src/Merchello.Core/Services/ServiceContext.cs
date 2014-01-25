@@ -1,5 +1,4 @@
 ﻿using System;
-using Merchello.Core.Configuration;
 using Merchello.Core.Persistence;
 using Merchello.Core.Persistence.UnitOfWork;
 
@@ -17,7 +16,8 @@ namespace Merchello.Core.Services
         private Lazy<GatewayProviderService> _gatewayProviderService ;  
         private Lazy<ProductService> _productService;
         private Lazy<ProductVariantService> _productVariantService;
-        private Lazy<StoreSettingService> _settingsService; 
+        private Lazy<StoreSettingService> _settingsService;
+        private Lazy<ShipCountryService> _shipCountryService; 
         private Lazy<ShippingService> _shippingService; 
         private Lazy<WarehouseService> _warehouseService;
         
@@ -54,8 +54,11 @@ namespace Merchello.Core.Services
             if(_settingsService == null)
                 _settingsService = new Lazy<StoreSettingService>(() => new StoreSettingService());
 
+            if(_shipCountryService == null)
+                _shipCountryService = new Lazy<ShipCountryService>(() => new ShipCountryService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _settingsService.Value));
+
             if(_shippingService == null)
-                _shippingService = new Lazy<ShippingService>(() => new ShippingService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _settingsService.Value));
+                _shippingService = new Lazy<ShippingService>(() => new ShippingService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
             if(_gatewayProviderService == null)
                 _gatewayProviderService = new Lazy<GatewayProviderService>(() => new GatewayProviderService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _settingsService.Value));
@@ -113,6 +116,14 @@ namespace Merchello.Core.Services
         public IStoreSettingService StoreSettingService 
         {
             get { return _settingsService.Value; }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IShipCountryService"/>
+        /// </summary>
+        internal IShipCountryService ShipCountryService
+        {
+            get { return _shipCountryService.Value; }
         }
 
         /// <summary>

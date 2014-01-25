@@ -90,7 +90,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             Assert.NotNull(provider);
 
             //// Act
-            var shippingProvider = MerchelloContext.Gateways.ResolveByGatewayProvider<RateTableShippingGatewayProvider>(provider);
+            var shippingProvider = ((GatewayContext)MerchelloContext.Gateways).ResolveByGatewayProvider<RateTableShippingGatewayProvider>(provider);
 
             //// Assert
             Assert.NotNull(shippingProvider);
@@ -103,9 +103,9 @@ namespace Merchello.Tests.IntegrationTests.Shipping
         public void Can_Add_A_Shipmethod_To_A_Provider_With_A_ShipCountry()
         {
             //// Arrange
-            var country = ShippingService.GetShipCountryByCountryCode(Catalog.Key, "US");
+            var country = ShipCountryService.GetShipCountryByCountryCode(Catalog.Key, "US");
             var provider = MerchelloContext.Gateways.GetGatewayProviders(GatewayProviderType.Shipping).FirstOrDefault();
-            var shippingProvider = MerchelloContext.Gateways.ResolveByGatewayProvider<RateTableShippingGatewayProvider>(provider);
+            var shippingProvider = ((GatewayContext)MerchelloContext.Gateways).ResolveByGatewayProvider<RateTableShippingGatewayProvider>(provider);
             Assert.NotNull(shippingProvider);
             
             //// Act
