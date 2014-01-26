@@ -67,7 +67,7 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
             var shipMethod = new ShipMethod(GatewayProvider.Key, shipCountry.Key)
                             {
                                 Name = name,
-                                ServiceCode = gatewayResource.ServiceCode + string.Format("-{0}", Guid.NewGuid().ToString()),
+                                ServiceCode = gatewayResource.ServiceCode + string.Format("-{0}", Guid.NewGuid()),
                                 Taxable = false,
                                 Surcharge = 0M,
                                 Provinces = shipCountry.Provinces.ToShipProvinceCollection()

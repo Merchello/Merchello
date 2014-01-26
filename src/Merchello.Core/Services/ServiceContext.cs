@@ -7,7 +7,9 @@ namespace Merchello.Core.Services
 {
     /// <summary>
     /// The Merchello ServiceContext, which provides access to the following services:
-    /// <see cref="ICustomerService"/>, <see cref="IItemCacheService"/>, <see cref="IProductService"/>, <see cref="IProductVariantService"/>
+    /// <see cref="ICustomerService"/>, <see cref="IItemCacheService"/>, <see cref="IGatewayProviderService"/>, <see cref="IProductService"/>, 
+    /// <see cref="IProductVariantService"/>, <see cref="IStoreSettingService"/>, <see cref="IShipCountryService"/>, <see cref="IShipMethodService"/>
+    /// and <see cref="IWarehouseService"/>
     /// </summary>
     public class ServiceContext : IServiceContext
     {        
@@ -16,9 +18,11 @@ namespace Merchello.Core.Services
         private Lazy<GatewayProviderService> _gatewayProviderService ;  
         private Lazy<ProductService> _productService;
         private Lazy<ProductVariantService> _productVariantService;
-        private Lazy<StoreSettingService> _settingsService;
-        private Lazy<ShipCountryService> _shipCountryService; 
-        private Lazy<ShippingService> _shippingService; 
+        private Lazy<StoreSettingService> _storeSettingsService;
+        private Lazy<ShipCountryService> _shipCountryService;
+        private Lazy<ShipMethodService> _shipMethodService;
+        private Lazy<IShipRateTierService> _shipRateTierService; 
+        private Lazy<ShipmentService> _shipmentService; 
         private Lazy<WarehouseService> _warehouseService;
         
         /// <summary>
@@ -51,17 +55,23 @@ namespace Merchello.Core.Services
             if(_productService == null)
                 _productService = new Lazy<ProductService>(() => new ProductService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _productVariantService.Value));
             
-            if(_settingsService == null)
-                _settingsService = new Lazy<StoreSettingService>(() => new StoreSettingService());
+            if(_storeSettingsService == null)
+                _storeSettingsService = new Lazy<StoreSettingService>(() => new StoreSettingService());
 
             if(_shipCountryService == null)
-                _shipCountryService = new Lazy<ShipCountryService>(() => new ShipCountryService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _settingsService.Value));
+                _shipCountryService = new Lazy<ShipCountryService>(() => new ShipCountryService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _storeSettingsService.Value));
 
-            if(_shippingService == null)
-                _shippingService = new Lazy<ShippingService>(() => new ShippingService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+            if(_shipMethodService == null)
+                _shipMethodService = new Lazy<ShipMethodService>(() => new ShipMethodService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+
+            if(_shipRateTierService == null)
+                _shipRateTierService = new Lazy<IShipRateTierService>(() => new ShipRateTierService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+
+            if(_shipmentService == null)
+                _shipmentService = new Lazy<ShipmentService>(() => new ShipmentService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
             if(_gatewayProviderService == null)
-                _gatewayProviderService = new Lazy<GatewayProviderService>(() => new GatewayProviderService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _settingsService.Value));
+                _gatewayProviderService = new Lazy<GatewayProviderService>(() => new GatewayProviderService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _shipMethodService.Value, _shipRateTierService.Value, _shipCountryService.Value));
 
             if(_warehouseService == null)
                 _warehouseService = new Lazy<WarehouseService>(() => new WarehouseService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
@@ -115,7 +125,7 @@ namespace Merchello.Core.Services
         /// </summary>
         public IStoreSettingService StoreSettingService 
         {
-            get { return _settingsService.Value; }
+            get { return _storeSettingsService.Value; }
         }
 
         /// <summary>
@@ -127,11 +137,19 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
-        /// Gets the <see cref="IShippingService"/>
+        /// Gets the <see cref="IShipMethodService"/>
         /// </summary>
-        public IShippingService ShippingService
+        internal IShipMethodService ShipMethodService
         {
-            get { return _shippingService.Value; }
+            get { return _shipMethodService.Value; }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IShipmentService"/>
+        /// </summary>
+        public IShipmentService ShipmentService
+        {
+            get { return _shipmentService.Value; }
         }
 
         /// <summary>

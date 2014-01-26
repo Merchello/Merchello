@@ -358,11 +358,11 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         /// <summary>
         /// Returns the Shipping Service
         /// </summary>
-        public IShippingService ShippingService
+        public IShipmentService ShipmentService
         {
             get
             {
-                return _serviceContext.ShippingService;
+                return _serviceContext.ShipmentService;
             }
         }
 
