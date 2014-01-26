@@ -204,6 +204,7 @@
     <Compile Include="Models\Interfaces\IShipProvince.cs" />
     <Compile Include="Models\Interfaces\IShipRateTier.cs" />
     <Compile Include="Models\Interfaces\IStoreSetting.cs" />
+    <Compile Include="Models\Interfaces\ICountryTaxRate.cs" />
     <Compile Include="Models\Interfaces\ITaxProvince.cs" />
     <Compile Include="Models\Interfaces\IWarehouse.cs">
       <SubType>Code</SubType>
@@ -280,7 +281,7 @@
     <Compile Include="Models\Rdbms\ShipRateTierDto.cs" />
     <Compile Include="Models\Rdbms\StoreSettingDto.cs" />
     <Compile Include="Models\Rdbms\WarehouseCatalogDto.cs" />
-    <Compile Include="Models\Rdbms\TaxMethodDto.cs" />
+    <Compile Include="Models\Rdbms\TaxCountryDto.cs" />
     <Compile Include="Models\CountryBase.cs" />
     <Compile Include="Models\Shipment.cs">
       <SubType>Code</SubType>
@@ -292,7 +293,7 @@
     <Compile Include="Models\ShipProvince.cs" />
     <Compile Include="Models\ShipRateTier.cs" />
     <Compile Include="Models\StoreSetting.cs" />
-    <Compile Include="Models\TaxProvince.cs" />
+    <Compile Include="Models\CountryTaxRate.cs" />
     <Compile Include="Models\TypeFields\AppliedPaymentTypeField.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -315,7 +316,6 @@
     <Compile Include="Persistence\Factories\AppliedPaymentFactory.cs" />
     <Compile Include="Persistence\Factories\CustomerAddressFactory.cs" />
     <Compile Include="Persistence\Factories\CustomerFactory.cs" />
-    <Compile Include="Persistence\Factories\ExtendedDataFactory.cs" />
     <Compile Include="Persistence\Factories\GatewayProviderFactory.cs" />
     <Compile Include="Persistence\Factories\IEntityFactory.cs" />
     <Compile Include="Persistence\Factories\CatalogInventoryFactory.cs" />
@@ -490,8 +490,10 @@
     <Compile Include="Services\Interfaces\IProductVariantService.cs" />
     <Compile Include="Services\Interfaces\IServiceContext.cs" />
     <Compile Include="Services\Interfaces\IShipCountryService.cs" />
+    <Compile Include="Services\Interfaces\IShipMethodService.cs" />
+    <Compile Include="Services\Interfaces\IShipRateTierService.cs" />
     <Compile Include="Services\Interfaces\IStoreSettingService.cs" />
-    <Compile Include="Services\Interfaces\IShippingService.cs" />
+    <Compile Include="Services\Interfaces\IShipmentService.cs" />
     <Compile Include="Services\Interfaces\IWarehouseService.cs" />
     <Compile Include="Models\Interfaces\IProvince.cs" />
     <Compile Include="Services\ItemCacheService.cs" />
@@ -500,8 +502,10 @@
     <Compile Include="Models\Province.cs" />
     <Compile Include="Services\ServiceContext.cs" />
     <Compile Include="Services\ShipCountryService.cs" />
+    <Compile Include="Services\ShipMethodService.cs" />
+    <Compile Include="Services\ShipRateTierService.cs" />
     <Compile Include="Services\StoreSettingService.cs" />
-    <Compile Include="Services\ShippingService.cs" />
+    <Compile Include="Services\ShipmentService.cs" />
     <Compile Include="Services\WarehouseService.cs" />
     <Compile Include="Strategies\IStrategy.cs" />
     <Compile Include="Strategies\Shipping\IPackagingStrategy.cs" />

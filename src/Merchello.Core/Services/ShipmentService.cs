@@ -8,7 +8,10 @@ using Umbraco.Core.Events;
 
 namespace Merchello.Core.Services
 {
-    public class ShippingService : IShippingService
+    /// <summary>
+    /// Represents the ShipmentService
+    /// </summary>
+    public class ShipmentService : IShipmentService
     {
         private readonly IDatabaseUnitOfWorkProvider _uowProvider;
         private readonly RepositoryFactory _repositoryFactory;
@@ -16,15 +19,15 @@ namespace Merchello.Core.Services
 
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
-         public ShippingService()
+         public ShipmentService()
             : this(new RepositoryFactory())
         { }
 
-        public ShippingService(RepositoryFactory repositoryFactory)
+        public ShipmentService(RepositoryFactory repositoryFactory)
             : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory)
         { }
 
-        public ShippingService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
+        public ShipmentService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
         {
             Mandate.ParameterNotNull(provider, "provider");
             Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
@@ -76,44 +79,40 @@ namespace Merchello.Core.Services
 
         #endregion
 
-        #region ShipCountry
 
-        
-
-        #endregion
 
         #region Event Handlers
 
         /// <summary>
         /// Occurs after Create
         /// </summary>
-        public static event TypedEventHandler<IShippingService, Events.NewEventArgs<IShipment>> Creating;
+        public static event TypedEventHandler<IShipmentService, Events.NewEventArgs<IShipment>> Creating;
 
 
         /// <summary>
         /// Occurs after Create
         /// </summary>
-        public static event TypedEventHandler<IShippingService, Events.NewEventArgs<IShipment>> Created;
+        public static event TypedEventHandler<IShipmentService, Events.NewEventArgs<IShipment>> Created;
 
         /// <summary>
         /// Occurs before Save
         /// </summary>
-        public static event TypedEventHandler<IShippingService, SaveEventArgs<IShipment>> Saving;
+        public static event TypedEventHandler<IShipmentService, SaveEventArgs<IShipment>> Saving;
 
         /// <summary>
         /// Occurs after Save
         /// </summary>
-        public static event TypedEventHandler<IShippingService, SaveEventArgs<IShipment>> Saved;
+        public static event TypedEventHandler<IShipmentService, SaveEventArgs<IShipment>> Saved;
 
         /// <summary>
         /// Occurs before Delete
         /// </summary>		
-        public static event TypedEventHandler<IShippingService, DeleteEventArgs<IShipment>> Deleting;
+        public static event TypedEventHandler<IShipmentService, DeleteEventArgs<IShipment>> Deleting;
 
         /// <summary>
         /// Occurs after Delete
         /// </summary>
-        public static event TypedEventHandler<IShippingService, DeleteEventArgs<IShipment>> Deleted;
+        public static event TypedEventHandler<IShipmentService, DeleteEventArgs<IShipment>> Deleted;
 
         #endregion
      

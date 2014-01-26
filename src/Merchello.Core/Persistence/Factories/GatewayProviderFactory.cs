@@ -1,10 +1,9 @@
 ﻿using Merchello.Core.Models;
-using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Models.Rdbms;
 
 namespace Merchello.Core.Persistence.Factories
 {
-    public class GatewayProviderFactory : IEntityFactory<IGatewayProvider, GatewayProviderDto>
+    internal class GatewayProviderFactory : IEntityFactory<IGatewayProvider, GatewayProviderDto>
     {
         public IGatewayProvider BuildEntity(GatewayProviderDto dto)
         {

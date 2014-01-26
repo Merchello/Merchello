@@ -94,6 +94,13 @@ namespace Merchello.Core.Services
         /// <param name="raiseEvents"></param>
         public void Save(IShipCountry shipCountry, bool raiseEvents = true)
         {
+            if(raiseEvents)
+            if (Saving.IsRaisedEventCancelled(new SaveEventArgs<IShipCountry>(shipCountry), this))
+            {
+                ((ShipCountry) shipCountry).WasCancelled = true;
+                return;
+            }
+            
             using (new WriteLock(Locker))
             {
                 var uow = _uowProvider.GetUnitOfWork();
@@ -103,6 +110,8 @@ namespace Merchello.Core.Services
                     uow.Commit();
                 }
             }
+
+            if(raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IShipCountry>(shipCountry), this);
         }
 
         /// <summary>
@@ -112,6 +121,13 @@ namespace Merchello.Core.Services
         /// <param name="raiseEvents"></param>
         public void Delete(IShipCountry shipCountry, bool raiseEvents = true)
         {
+            if(raiseEvents)
+            if (Deleting.IsRaisedEventCancelled(new DeleteEventArgs<IShipCountry>(shipCountry), this))
+            {
+                ((ShipCountry) shipCountry).WasCancelled = true;
+                return;
+            }
+
             using (new WriteLock(Locker))
             {
                 var uow = _uowProvider.GetUnitOfWork();
@@ -121,6 +137,8 @@ namespace Merchello.Core.Services
                     uow.Commit();
                 }
             }
+            
+            if(raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<IShipCountry>(shipCountry), this);
         }
 
         /// <summary>

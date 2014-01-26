@@ -10,7 +10,7 @@ namespace Merchello.Core.Services
     /// <summary>
     /// Defines the ShipCountryServcie
     /// </summary>
-    internal interface IShipCountryService : IService
+    public interface IShipCountryService : IService
     {
 
         //Attempt<IShipCountry> CreateShipCountryWithKey(Guid warehouseCatalogKey, string countryCode, bool raiseEvents = true);

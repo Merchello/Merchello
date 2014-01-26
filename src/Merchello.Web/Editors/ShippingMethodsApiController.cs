@@ -20,7 +20,7 @@ namespace Merchello.Web.Editors
     [PluginController("Merchello")]
     public class ShippingMethodsApiController : MerchelloApiController
     {
-        private readonly IShippingService _shippingService;
+        private readonly IShipmentService _shipmentService;
         private readonly IStoreSettingService _storeSettingService;
         private readonly IShipCountryService _shipCountryService;
 
@@ -39,7 +39,7 @@ namespace Merchello.Web.Editors
         public ShippingMethodsApiController(MerchelloContext merchelloContext)
             : base(merchelloContext)
         {
-            _shippingService = MerchelloContext.Services.ShippingService;
+            _shipmentService = MerchelloContext.Services.ShipmentService;
             _storeSettingService = MerchelloContext.Services.StoreSettingService;
             _shipCountryService = ((ServiceContext)merchelloContext.Services).ShipCountryService;
         }
@@ -50,7 +50,7 @@ namespace Merchello.Web.Editors
         internal ShippingMethodsApiController(MerchelloContext merchelloContext, UmbracoContext umbracoContext)
             : base(merchelloContext, umbracoContext)
         {
-            _shippingService = MerchelloContext.Services.ShippingService;
+            _shipmentService = MerchelloContext.Services.ShipmentService;
             _storeSettingService = MerchelloContext.Services.StoreSettingService;
             _shipCountryService = ((ServiceContext)merchelloContext.Services).ShipCountryService;
         }

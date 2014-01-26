@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using Merchello.Core.Configuration.Outline;
 using Merchello.Core.Models;
-using Merchello.Core.Models.Interfaces;
+using Umbraco.Core.Services;
 
 namespace Merchello.Core.Services
 {
-    public interface IGatewayProviderService
+    /// <summary>
+    /// Defines the GatewayProviderService
+    /// </summary>
+    public interface IGatewayProviderService : IService
     {
 
         #region GatewayProvider
@@ -54,8 +56,7 @@ namespace Merchello.Core.Services
 
         #endregion
 
-
-        #region Shipping Gateway Provider
+        #region ShipMethod
 
         /// <summary>
         /// Saves a single <see cref="IShipMethod"/>
@@ -70,6 +71,22 @@ namespace Merchello.Core.Services
         void Save(IEnumerable<IShipMethod> shipMethodList);
 
         /// <summary>
+        /// Deletes a <see cref="IShipMethod"/>
+        /// </summary>
+        /// <param name="shipMethod"></param>
+        void Delete(IShipMethod shipMethod);
+
+        /// <summary>
+        /// Gets a list of <see cref="IShipMethod"/> objects given a <see cref="IGatewayProvider"/> key and a <see cref="IShipCountry"/> key
+        /// </summary>
+        /// <returns>A collection of <see cref="IShipMethod"/></returns>
+        IEnumerable<IShipMethod> GetGatewayProviderShipMethods(Guid providerKey, Guid shipCountryKey);
+
+        #endregion
+
+        #region ShipRateTier
+
+        /// <summary>
         /// Saves a single <see cref="IShipRateTier"/>
         /// </summary>
         /// <param name="shipRateTier"></param>
@@ -82,23 +99,10 @@ namespace Merchello.Core.Services
         void Save(IEnumerable<IShipRateTier> shipRateTierList);
 
         /// <summary>
-        /// Deletes a <see cref="IShipMethod"/>
-        /// </summary>
-        /// <param name="shipMethod"></param>
-        void Delete(IShipMethod shipMethod);
-
-        /// <summary>
         /// Deletes a <see cref="IShipRateTier"/>
         /// </summary>
         /// <param name="shipRateTier"></param>
         void Delete(IShipRateTier shipRateTier);
-
-        /// <summary>
-        /// Gets a list of <see cref="IShipMethod"/> objects given a <see cref="IGatewayProvider"/> key and a <see cref="IShipCountry"/> key
-        /// </summary>
-        /// <returns>A collection of <see cref="IShipMethod"/></returns>
-        IEnumerable<IShipMethod> GetGatewayProviderShipMethods(Guid providerKey, Guid shipCountryKey);
-
 
         /// <summary>
         /// Gets a list of <see cref="IShipRateTier"/> objects given a <see cref="IShipMethod"/> key
