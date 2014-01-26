@@ -166,6 +166,8 @@
 
             self.attributes = [];
 
+            self.catalogInventories = [];
+
             self.selected = false;
         }
         else {
@@ -197,6 +199,10 @@
 
             self.attributes = _.sortBy(self.attributes, function (attr) { return attr.sortOrder; });
 
+            self.catalogInventories = _.map(productVariantFromServer.catalogInventories, function (catalogInventory) {
+                return new merchello.Models.CatalogInventory(catalogInventory);
+            });
+
             self.selected = false;
         }
 
@@ -224,6 +230,8 @@
             self.downloadMediaId = product.downloadMediaId;
 
             self.attributes = [];
+
+            self.catalogInventories = product.catalogInventories.slice(0);
         };
 
         self.fixAttributeSortOrders = function (options) {
@@ -277,6 +285,8 @@
             self.productOptions = [];
 
             self.productVariants = [];
+
+            self.catalogInventories = [];
         }
         else
         {
@@ -323,6 +333,10 @@
                 self.hasVariants = true;
             }
 
+            self.catalogInventories = _.map(productFromServer.catalogInventories, function (catalogInventory) {
+                return new merchello.Models.CatalogInventory(catalogInventory);
+            });
+
         }
 
         // Helper to copy from master variant
@@ -347,6 +361,8 @@
             self.shippable = productVariant.shippable;
             self.download = productVariant.download;
             self.downloadMediaId = productVariant.downloadMediaId;
+
+            self.catalogInventories = productVariant.catalogInventories.slice(0);
         };
 
         // Helper to add a variant to this product

@@ -56,4 +56,5 @@
     };
 
 
+
 }(window.merchello.Models = window.merchello.Models || {}));

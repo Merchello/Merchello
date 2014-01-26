@@ -29,7 +29,9 @@ namespace Merchello.Web.Models.ContentEditing
             Taxable = masterVariant.Taxable;
             Shippable = masterVariant.Shippable;
             Download = masterVariant.Download;
-            DownloadMediaId = masterVariant.DownloadMediaId;            
+            DownloadMediaId = masterVariant.DownloadMediaId;
+
+            CatalogInventories = masterVariant.CatalogInventories;
         }
 
         public Guid Key { get; set; }        

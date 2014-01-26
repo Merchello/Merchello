@@ -194,7 +194,7 @@ namespace Merchello.Web.Editors
         /// PUT /umbraco/Merchello/ProductVariantApi/PutProductVariant
         /// </summary>
         /// <param name="productVariant">ProductVariantDisplay object serialized from WebApi</param>
-        [AcceptVerbs("PUT")]
+        [AcceptVerbs("POST", "PUT")]
         public HttpResponseMessage PutProductVariant(ProductVariantDisplay productVariant)
         {
             var response = Request.CreateResponse(HttpStatusCode.OK);
