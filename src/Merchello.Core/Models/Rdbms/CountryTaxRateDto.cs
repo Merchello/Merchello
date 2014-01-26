@@ -21,9 +21,9 @@ namespace Merchello.Core.Models.Rdbms
         [Column("countryCode")]
         public string CountryCode { get; set; }
 
-        [Column("rate")]
+        [Column("percentageTaxRate")]
         [Constraint(Default = "0")]
-        public decimal Rate { get; set; }        
+        public decimal PercentageTaxRate { get; set; }        
 
         [Column("provinceData")]
         [NullSetting(NullSetting = NullSettings.Null)]

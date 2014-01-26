@@ -1,4 +1,6 @@
-﻿namespace Merchello.Core.Models
+﻿using System.Runtime.Serialization;
+
+namespace Merchello.Core.Models
 {
     /// <summary>
     /// Defines a Tax Province
@@ -8,6 +10,7 @@
         /// <summary>
         /// The percentage rate adjustment to the tax rate
         /// </summary>
+        [DataMember]
         decimal PercentRateAdjustment { get; set; }
     }
 }
