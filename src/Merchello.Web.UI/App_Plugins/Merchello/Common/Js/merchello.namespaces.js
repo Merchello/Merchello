@@ -7,5 +7,6 @@
     merchello.Directives = {};
     merchello.Filters = {};
     merchello.Services = {};
+    merchello.Helpers = {};
 
 }(window.merchello = window.merchello || {}));
