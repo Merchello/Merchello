@@ -18,8 +18,8 @@ namespace Merchello.Core.Models.Rdbms
         [ForeignKey(typeof(GatewayProviderDto), Name = "FK_merchCountryTaxRate_merchGatewayProvider", Column = "pk")]
         public Guid ProviderKey { get; set; }
 
-        [Column("countryCode")]
-        public string CountryCode { get; set; }
+        [Column("code")]
+        public string Code { get; set; }
 
         [Column("percentageTaxRate")]
         [Constraint(Default = "0")]

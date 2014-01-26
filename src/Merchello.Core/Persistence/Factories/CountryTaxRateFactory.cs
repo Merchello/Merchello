@@ -16,7 +16,7 @@ namespace Merchello.Core.Persistence.Factories
                 provinces.Add(p);
             }
 
-            var countryTaxRate = new CountryTaxRate(dto.ProviderKey, dto.CountryCode)
+            var countryTaxRate = new CountryTaxRate(dto.ProviderKey, dto.Code)
             {
                 Key = dto.Key,
                 PercentageTaxRate = dto.PercentageTaxRate,
@@ -36,7 +36,7 @@ namespace Merchello.Core.Persistence.Factories
             return new CountryTaxRateDto()
                 {
                     Key = entity.Key,
-                    CountryCode = entity.CountryCode,
+                    Code = entity.Code,
                     ProviderKey = entity.ProviderKey,
                     PercentageTaxRate = entity.PercentageTaxRate,
                     ProvinceData = provinceData,

@@ -16,17 +16,17 @@ namespace Merchello.Core.Models
     internal class CountryTaxRate : Entity, ICountryTaxRate
     {
         private readonly Guid _providerKey;
-        private readonly string _countryCode;
+        private readonly string _code;
         private decimal _percentageTaxRate;
         private ProvinceCollection<ITaxProvince> _taxProvinces;
 
-        internal CountryTaxRate(Guid providerKey, string countryCode)
+        internal CountryTaxRate(Guid providerKey, string code)
         {
             Mandate.ParameterCondition(providerKey != Guid.Empty, "providerKey");
-            Mandate.ParameterNotNullOrEmpty(countryCode, "countryCode");
+            Mandate.ParameterNotNullOrEmpty(code, "countryCode");
 
             _providerKey = providerKey;
-            _countryCode = countryCode;
+            _code = code;
             PercentageTaxRate = 0;
         }
 
@@ -50,8 +50,8 @@ namespace Merchello.Core.Models
         /// The two digit ISO Country code
         /// </summary>
         [DataMember]
-        public string CountryCode {
-            get { return _countryCode; }
+        public string Code {
+            get { return _code; }
         }
 
         /// <summary>

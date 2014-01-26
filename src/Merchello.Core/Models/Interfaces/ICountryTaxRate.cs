@@ -16,7 +16,7 @@ namespace Merchello.Core.Models
         /// The two digit ISO Country code
         /// </summary>
         [DataMember]
-        string CountryCode { get; }
+        string Code { get; }
 
         /// <summary>
         /// Percentage tax rate

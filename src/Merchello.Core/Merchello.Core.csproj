@@ -343,6 +343,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Persistence\Mappers\CatalogInventoryMapper.cs" />
+    <Compile Include="Persistence\Mappers\CountryTaxRateMapper.cs" />
     <Compile Include="Persistence\Mappers\CustomerAddressMapper.cs">
       <SubType>Code</SubType>
     </Compile>

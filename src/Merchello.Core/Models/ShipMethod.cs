@@ -20,11 +20,11 @@ namespace Merchello.Core.Models
         private bool _taxable;
         private ProvinceCollection<IShipProvince> _shipProvinces;
 
-        public ShipMethod(Guid providerKey, Guid shipCountryKey)
+        internal ShipMethod(Guid providerKey, Guid shipCountryKey)
             : this(providerKey,shipCountryKey, new ProvinceCollection<IShipProvince>())
         {}
 
-        public ShipMethod(Guid providerKey, Guid shipCountryKey, ProvinceCollection<IShipProvince> shipProvinces)
+        internal ShipMethod(Guid providerKey, Guid shipCountryKey, ProvinceCollection<IShipProvince> shipProvinces)
         {
             Mandate.ParameterCondition(Guid.Empty != providerKey, "providerKey");
             Mandate.ParameterCondition(Guid.Empty != shipCountryKey, "shipCountryKey");

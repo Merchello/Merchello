@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading;
 using Merchello.Core.Models;
@@ -38,6 +39,65 @@ namespace Merchello.Core.Services
             _repositoryFactory = repositoryFactory;
         }
 
+        /// <summary>
+        /// Creates a <see cref="IShipMethod"/>.  This is useful due to the data constraint
+        /// preventing two ShipMethods being created with the same ShipCountry and ServiceCode for any provider.
+        /// </summary>
+        /// <param name="providerKey">The unique gateway provider key (Guid)</param>
+        /// <param name="shipCountryKey">The unique ship country key (Guid)</param>
+        /// <param name="name">The required name of the <see cref="IShipMethod"/></param>
+        /// <param name="serviceCode">The ShipMethods service code</param>
+        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        internal Attempt<IShipMethod> CreateShipMethodWithKey(Guid providerKey, Guid shipCountryKey, string name, string serviceCode, bool raiseEvents = true)
+        {
+            Mandate.ParameterCondition(providerKey != Guid.Empty, "providerKey");
+            Mandate.ParameterCondition(shipCountryKey != Guid.Empty, "shipCountryKey");
+            Mandate.ParameterNotNullOrEmpty(name, "name");
+            Mandate.ParameterNotNullOrEmpty(serviceCode, "serviceCode");
+
+            if (ShipMethodExists(providerKey, shipCountryKey, serviceCode)) 
+                return Attempt<IShipMethod>.Fail(new ConstraintException("A Shipmethod already exists for this ShipCountry with this ServiceCode"));
+
+            var shipMethod = new ShipMethod(providerKey, shipCountryKey)
+                {
+                    Name = name,
+                    ServiceCode = serviceCode
+                };
+
+            if(raiseEvents)
+            if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<IShipMethod>(shipMethod), this))
+            {
+                shipMethod.WasCancelled = true;
+                return Attempt<IShipMethod>.Fail(shipMethod);
+            }
+            
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreateShipMethodRepository(uow))
+                {
+                    repository.AddOrUpdate(shipMethod);
+                    uow.Commit();
+                }
+            }
+
+            if(raiseEvents) Created.RaiseEvent(new Events.NewEventArgs<IShipMethod>(shipMethod), this);
+
+            return Attempt<IShipMethod>.Succeed(shipMethod);
+        }
+
+        private bool ShipMethodExists(Guid providerKey, Guid shipCountryKey, string serviceCode)
+        {
+            using(var repository = _repositoryFactory.CreateShipMethodRepository(_uowProvider.GetUnitOfWork()))
+            {
+            var query =
+               Query<IShipMethod>.Builder.Where(
+                   x => x.ShipCountryKey == shipCountryKey && x.ServiceCode == serviceCode && x.ProviderKey == providerKey);
+
+                return repository.GetByQuery(query).Any();
+
+            }
+        }
 
         /// <summary>
         /// Saves a single <see cref="IShipMethod"/>
@@ -137,16 +197,16 @@ namespace Merchello.Core.Services
 
         #region Event Handlers
 
-        ///// <summary>
-        ///// Occurs after Create
-        ///// </summary>
-        //public static event TypedEventHandler<IGatewayProviderService, Events.NewEventArgs<IGatewayProvider>> Creating;
+        /// <summary>
+        /// Occurs after Create
+        /// </summary>
+        public static event TypedEventHandler<IShipMethodService, Events.NewEventArgs<IShipMethod>> Creating;
 
 
-        ///// <summary>
-        ///// Occurs after Create
-        ///// </summary>
-        //public static event TypedEventHandler<IGatewayProviderService, Events.NewEventArgs<IGatewayProvider>> Created;
+        /// <summary>
+        /// Occurs after Create
+        /// </summary>
+        public static event TypedEventHandler<IShipMethodService, Events.NewEventArgs<IShipMethod>> Created;
 
         /// <summary>
         /// Occurs before Save

@@ -20,25 +20,26 @@ namespace Merchello.Core.Services
         private readonly IShipMethodService _shipMethodService;
         private readonly IShipRateTierService _shipRateTierService;
         private readonly IShipCountryService _shipCountryService;
+        private readonly ICountryTaxRateService _countryTaxRateService;
         
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
          public GatewayProviderService()
-            : this(new RepositoryFactory(), new ShipMethodService(), new ShipRateTierService(), new ShipCountryService())
+            : this(new RepositoryFactory(), new ShipMethodService(), new ShipRateTierService(), new ShipCountryService(), new CountryTaxRateService())
         { }
 
-        public GatewayProviderService(RepositoryFactory repositoryFactory, IShipMethodService shipMethodService, IShipRateTierService shipRateTierService, IShipCountryService shipCountryService)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, shipMethodService, shipRateTierService, shipCountryService)
+        public GatewayProviderService(RepositoryFactory repositoryFactory, IShipMethodService shipMethodService, IShipRateTierService shipRateTierService, IShipCountryService shipCountryService, ICountryTaxRateService countryTaxRateService)
+            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, shipMethodService, shipRateTierService, shipCountryService, countryTaxRateService)
         { }
 
-        public GatewayProviderService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, IShipMethodService shipMethodService, IShipRateTierService shipRateTierService, IShipCountryService shipCountryService)
+        public GatewayProviderService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, IShipMethodService shipMethodService, IShipRateTierService shipRateTierService, IShipCountryService shipCountryService, ICountryTaxRateService countryTaxRateService)
         {
             Mandate.ParameterNotNull(provider, "provider");
             Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
             Mandate.ParameterNotNull(shipMethodService, "shipMethodService");
             Mandate.ParameterNotNull(shipRateTierService, "shipRateTierService");
             Mandate.ParameterNotNull(shipCountryService, "shipCountryService");
-
+            Mandate.ParameterNotNull(countryTaxRateService, "countryTaxRateService");
             _uowProvider = provider;
             _repositoryFactory = repositoryFactory;
             _shipMethodService = shipMethodService;
@@ -184,6 +185,19 @@ namespace Merchello.Core.Services
         #region ShipMethod
 
         /// <summary>
+        /// Creates a <see cref="IShipMethod"/>.  This is useful due to the data constraint
+        /// preventing two ShipMethods being created with the same ShipCountry and ServiceCode for any provider.
+        /// </summary>
+        /// <param name="providerKey">The unique gateway provider key (Guid)</param>
+        /// <param name="shipCountryKey">The unique ship country key (Guid)</param>
+        /// <param name="name">The required name of the <see cref="IShipMethod"/></param>
+        /// <param name="serviceCode">The ShipMethods service code</param>
+        public Attempt<IShipMethod> CreateShipMethodWithKey(Guid providerKey, Guid shipCountryKey, string name, string serviceCode)
+        {
+            return ((ShipMethodService)_shipMethodService).CreateShipMethodWithKey(providerKey, shipCountryKey, name, serviceCode);
+        }
+
+        /// <summary>
         /// Saves a single <see cref="IShipMethod"/>
         /// </summary>
         /// <param name="shipMethod"></param>
@@ -280,6 +294,18 @@ namespace Merchello.Core.Services
             return _shipCountryService.GetShipCountryByCountryCode(catalogKey, countryCode);
         }
 
+        /// <summary>
+        /// Attempts to create a <see cref="ICountryTaxRate"/> for a given provider and country.  If the provider already 
+        /// defines a tax rate for the country, the creation fails.
+        /// </summary>
+        /// <param name="providerKey">The unique 'key' (Guid) of the TaxationGatewayProvider</param>
+        /// <param name="countryCode">The two character ISO country code</param>
+        /// <param name="percentageTaxRate">The tax rate in percentage for the country</param>
+        /// <returns><see cref="Attempt"/> indicating whether or not the creation of the <see cref="ICountryTaxRate"/> with respective success or fail</returns>
+        public Attempt<ICountryTaxRate> CreateCountryTaxRateWithKey(Guid providerKey, string countryCode, decimal percentageTaxRate)
+        {
+            return ((CountryTaxRateService)_countryTaxRateService).CreateCountryTaxRateWithKey(providerKey, countryCode, percentageTaxRate);
+        }
 
         #endregion
 

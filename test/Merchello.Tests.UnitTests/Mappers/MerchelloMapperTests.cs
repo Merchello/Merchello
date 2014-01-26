@@ -10,6 +10,40 @@ namespace Merchello.Tests.UnitTests.Mappers
     public class MerchelloMapperTests
     {
         /// <summary>
+        /// Test to verify <see cref="MerchelloMapper"/> correctly maps ICatalogInventory to the CatalogInventoryMapper
+        /// </summary>
+        [Test]
+        public void Mapper_Resolves_ICatalogInventor_To_CatalogInventoryMapper()
+        {
+            //// Arrange
+            var expected = typeof(CatalogInventoryMapper);
+
+            //// Act
+            var resolved = MerchelloMapper.Current.ResolveByType(typeof(ICatalogInventory));
+
+            //// Assert
+            Assert.IsTrue(resolved.Success);
+            Assert.AreSame(expected, resolved.Result.GetType());
+        }
+
+        /// <summary>
+        /// Test to verify <see cref="MerchelloMapper"/> correctly maps ICountryTaxRate to the CountryTaxRateMapper
+        /// </summary>
+        [Test]
+        public void Mapper_Resolves_ICountryTaxRate_To_CountryTaxRateMapper()
+        {
+            //// Arrange
+            var expected = typeof(CountryTaxRateMapper);
+
+            //// Act
+            var resolved = MerchelloMapper.Current.ResolveByType(typeof(ICountryTaxRate));
+
+            //// Assert
+            Assert.IsTrue(resolved.Success);
+            Assert.AreSame(expected, resolved.Result.GetType());   
+        }
+
+        /// <summary>
         /// Test to verify <see cref="MerchelloMapper"/> correctly maps ICustomer to CustomerMapper
         /// </summary>
         [Test]
@@ -134,7 +168,7 @@ namespace Merchello.Tests.UnitTests.Mappers
         /// Test to verify <see cref="MerchelloMapper"/> correctly maps IBasketItem to BasketItemMapper
         /// </summary>
         [Test]
-        public void Mapper_Resolves_ICustomerItemCache_To_ICustomerItemCachetMapper()
+        public void Mapper_Resolves_IItemCacheLineItem_To_ItemCacheLineItemMapper()
         {
 
             //// Arrage
