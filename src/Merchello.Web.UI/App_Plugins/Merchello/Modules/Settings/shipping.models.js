@@ -149,11 +149,11 @@
 
     };
 
-    models.WarehouseInventory = function (warehouseInventoryFromSever) {
+    models.CatalogInventory = function (catalogInventoryFromServer) {
 
         var self = this;
 
-        if (warehouseInventoryFromSever == undefined) {
+        if (catalogInventoryFromServer == undefined) {
             self.catalogKey = "";
             self.warehouseKey = "";
             self.productVariantKey = "";
@@ -161,12 +161,12 @@
             self.lowCount = "";
             self.catalogName = "";
         } else {
-            self.catalogKey = warehouseInventoryFromSever.catalogKey;
-            self.warehouseKey = warehouseInventoryFromSever.warehouseKey;
-            self.productVariantKey = warehouseInventoryFromSever.productVariantKey;
-            self.count = warehouseInventoryFromSever.count;
-            self.lowCount = warehouseInventoryFromSever.lowCount;
-            self.catalogName = warehouseInventoryFromSever.catalogName;
+            self.catalogKey = catalogInventoryFromServer.catalogKey;
+            self.warehouseKey = catalogInventoryFromServer.warehouseKey;
+            self.productVariantKey = catalogInventoryFromServer.productVariantKey;
+            self.count = catalogInventoryFromServer.count;
+            self.lowCount = catalogInventoryFromServer.lowCount;
+            self.catalogName = catalogInventoryFromServer.catalogName;
         }
 
     };
