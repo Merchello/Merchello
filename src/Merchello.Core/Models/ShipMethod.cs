@@ -81,8 +81,6 @@ namespace Merchello.Core.Models
             get { return _shipCountryKey; }           
         }
 
-
-    
         /// <summary>
         /// The surcharge associated with the ShipMethod
         /// </summary>

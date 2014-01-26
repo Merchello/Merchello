@@ -13,6 +13,12 @@ namespace Merchello.Core.Models
         Guid ProviderKey { get; }
 
         /// <summary>
+        /// The two digit ISO Country code
+        /// </summary>
+        [DataMember]
+        string CountryCode { get; }
+
+        /// <summary>
         /// Percentage tax rate
         /// </summary>
         [DataMember]
