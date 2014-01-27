@@ -30,7 +30,7 @@
             },
 
             /// Server http requests
- 
+
             create: function (productname, sku, price) {
 
                 return umbRequestHelper.resourcePromise(
@@ -40,6 +40,15 @@
                         method: "POST",
                         params: { sku: sku, name: productname, price: price }
                     }),
+                    'Failed to create product sku ' + sku);
+            },
+
+            createFromProduct: function (product) {
+
+                return umbRequestHelper.resourcePromise(
+                    $http.post(umbRequestHelper.getApiUrl('merchelloProductApiBaseUrl', 'NewProductFromProduct'),
+                        product
+                    ),
                     'Failed to create product sku ' + sku);
             },
 
@@ -93,7 +102,8 @@
 
                 var deferred = $q.defer();
 
-                var promiseCreate = prodservice.create(product.name, product.sku, product.price);
+                //var promiseCreate = prodservice.create(product.name, product.sku, product.price);
+                var promiseCreate = prodservice.createFromProduct(product);
                 promiseCreate.then(function (newproduct) {
                     //deferred.notify("created");
 

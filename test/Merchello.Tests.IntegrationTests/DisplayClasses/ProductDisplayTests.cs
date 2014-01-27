@@ -45,6 +45,8 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
             product.CostOfGoods = 15M;
             product.OnSale = true;
             product.SalePrice = 18M;
+            product.Manufacturer = "Nike";
+            product.ManufacturerModelNumber = "N01-012021-A";
             productService.Save(product);
 
             _productKey = product.Key;
@@ -126,6 +128,9 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
             Assert.AreEqual(product.Height, productDisplay.Height);
             Assert.AreEqual(product.OnSale, productDisplay.OnSale);
             Assert.AreEqual(product.Sku, productDisplay.Sku);
+            Assert.AreEqual(product.Manufacturer, productDisplay.Manufacturer);
+            Assert.AreEqual(product.ManufacturerModelNumber, productDisplay.ManufacturerModelNumber);
+            Assert.AreNotEqual(productDisplay.ManufacturerModelNumber, productDisplay.Manufacturer);
             Assert.AreEqual(product.ProductOptions.Count, productDisplay.ProductOptions.Count());
             Assert.AreEqual(product.ProductVariants.Count, productDisplay.ProductVariants.Count());
 
