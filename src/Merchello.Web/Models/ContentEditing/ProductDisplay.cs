@@ -19,6 +19,8 @@ namespace Merchello.Web.Models.ContentEditing
             CostOfGoods = masterVariant.CostOfGoods;
             SalePrice = masterVariant.SalePrice;
             OnSale = masterVariant.OnSale;
+            Manufacturer = masterVariant.Manufacturer;
+            ManufacturerModelNumber = masterVariant.ManufacturerModelNumber;
             Weight = masterVariant.Weight;
             Length = masterVariant.Length;
             Height = masterVariant.Height;
