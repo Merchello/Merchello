@@ -150,6 +150,8 @@
             self.costOfGoods = 0.00;
             self.salePrice = 0.00;
             self.onSale = false;
+            self.manufacturer = "";
+            self.manufacturerModelNumber = "";
             self.weight = 0;
             self.length = 0;
             self.width = 0;
@@ -179,6 +181,8 @@
             self.costOfGoods = productVariantFromServer.costOfGoods;
             self.salePrice = productVariantFromServer.salePrice;
             self.onSale = productVariantFromServer.onSale;
+            self.manufacturer = productVariantFromServer.manufacturer;
+            self.manufacturerModelNumber = productVariantFromServer.manufacturerModelNumber;
             self.weight = productVariantFromServer.weight;
             self.length = productVariantFromServer.length;
             self.width = productVariantFromServer.width;
@@ -216,6 +220,8 @@
             self.costOfGoods = product.costOfGoods;
             self.salePrice = product.salePrice;
             self.onSale = product.onSale;
+            self.manufacturer = product.manufacturer;
+            self.manufacturerModelNumber = product.manufacturerModelNumber;
             self.weight = product.weight;
             self.length = product.length;
             self.width = product.width;
@@ -267,6 +273,8 @@
             self.costOfGoods = 0.00;
             self.salePrice = 0.00;
             self.onSale = false;
+            self.manufacturer = "";
+            self.manufacturerModelNumber = "";
             self.weight = 0;
             self.length = 0;
             self.width = 0;
@@ -297,6 +305,8 @@
             self.costOfGoods = productFromServer.costOfGoods;
             self.salePrice = productFromServer.salePrice;
             self.onSale = productFromServer.onSale;
+            self.manufacturer = productFromServer.manufacturer;
+            self.manufacturerModelNumber = productFromServer.manufacturerModelNumber;
             self.weight = productFromServer.weight;
             self.length = productFromServer.length;
             self.width = productFromServer.width;
@@ -349,6 +359,8 @@
             self.costOfGoods = productVariant.costOfGoods;
             self.salePrice = productVariant.salePrice;
             self.onSale = productVariant.onSale;
+            self.manufacturer = productVariant.manufacturer;
+            self.manufacturerModelNumber = productVariant.manufacturerModelNumber;
             self.weight = productVariant.weight;
             self.length = productVariant.length;
             self.width = productVariant.width;
@@ -400,7 +412,7 @@
             newVariant.attributes = attributes.slice(0);
             newVariant.selected = true;
             var skuPostfix = self.productVariants.length + 1;
-            newVariant.sku = _.uniqueId(newVariant.sku + '-' + skuPostfix);   // TODO: replace with settings "skuSeparator"
+            newVariant.sku = _.uniqueId(newVariant.sku + '-' + skuPostfix);   // TODO: replace '-' with settings "skuSeparator"
 
             self.productVariants.push(newVariant);
             self.hasVariants = true;
