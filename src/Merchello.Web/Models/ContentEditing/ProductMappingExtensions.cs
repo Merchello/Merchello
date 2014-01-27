@@ -23,6 +23,8 @@ namespace Merchello.Web.Models.ContentEditing
             destination.CostOfGoods = productDisplay.CostOfGoods;
             destination.SalePrice = productDisplay.SalePrice;
             destination.OnSale = productDisplay.OnSale;
+            destination.Manufacturer = productDisplay.Manufacturer;
+            destination.ManufacturerModelNumber = productDisplay.ManufacturerModelNumber;
             destination.Weight = productDisplay.Weight;
             destination.Length = productDisplay.Length;
             destination.Width = productDisplay.Width;
@@ -35,6 +37,28 @@ namespace Merchello.Web.Models.ContentEditing
             destination.Shippable = productDisplay.Shippable;
             destination.Download = productDisplay.Download;
             destination.DownloadMediaId = productDisplay.DownloadMediaId;
+
+            foreach (var catalogInventory in productDisplay.CatalogInventories)
+            {
+                ICatalogInventory destinationCatalogInventory;
+
+                var catInv = destination.CatalogInventories.Where(x => x.CatalogKey == catalogInventory.CatalogKey).First();
+                if (catInv != null)
+                {
+                    destinationCatalogInventory = catInv;
+
+                    destinationCatalogInventory = catalogInventory.ToCatalogInventory(destinationCatalogInventory);
+                }
+                else
+                {
+                    //destinationCatalogInventory = new CatalogInventory(catalogInventory.CatalogKey, catalogInventory.ProductVariantKey);
+
+                    //destinationCatalogInventory = catalogInventory.ToCatalogInventory(destinationCatalogInventory);
+
+                    //List<ICatalogInventory> destinationCatalogInventories = destination.CatalogInventories as List<ICatalogInventory>;
+                    //destinationCatalogInventories.Add(destinationCatalogInventory);
+                }
+            }
 
             foreach (var option in productDisplay.ProductOptions)
             {
@@ -175,6 +199,8 @@ namespace Merchello.Web.Models.ContentEditing
             destination.CostOfGoods = productVariantDisplay.CostOfGoods;
             destination.SalePrice = productVariantDisplay.SalePrice;
             destination.OnSale = productVariantDisplay.OnSale;
+            destination.Manufacturer = productVariantDisplay.Manufacturer;
+            destination.ManufacturerModelNumber = productVariantDisplay.ManufacturerModelNumber;
             destination.Weight = productVariantDisplay.Weight;
             destination.Length = productVariantDisplay.Length;
             destination.Width = productVariantDisplay.Width;
