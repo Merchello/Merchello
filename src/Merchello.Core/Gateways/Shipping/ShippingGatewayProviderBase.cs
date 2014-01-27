@@ -13,12 +13,11 @@ namespace Merchello.Core.Gateways.Shipping
     /// </summary>
     public abstract class ShippingGatewayProviderBase : GatewayProviderBase, IShippingGatewayProvider        
     {
-        private readonly IRuntimeCacheProvider _runtimeCache;
-
+        
         protected ShippingGatewayProviderBase(IGatewayProviderService gatewayProviderService, IGatewayProvider gatewayProvider, IRuntimeCacheProvider runtimeCacheProvider)
-            : base(gatewayProviderService, gatewayProvider)
+            : base(gatewayProviderService, gatewayProvider, runtimeCacheProvider)
         {
-            _runtimeCache = runtimeCacheProvider;
+
         }
 
         /// <summary>
@@ -135,17 +134,6 @@ namespace Merchello.Core.Gateways.Shipping
             }
 
             return quotes;
-        }
-
-        //public virtual 
-
-        /// <summary>
-        /// Gets the RuntimeCache
-        /// </summary>
-        /// <returns></returns>
-        protected IRuntimeCacheProvider RuntimeCache
-        {
-            get { return _runtimeCache; }
         }
         
     }

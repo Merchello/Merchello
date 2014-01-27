@@ -29,6 +29,15 @@ namespace Merchello.Core.Persistence
         }
 
         /// <summary>
+        /// Returns an instance of the <see cref="ICountryTaxRateRepository"/>
+        /// </summary>
+        internal virtual ICountryTaxRateRepository CreateCountryTaxRateRepository(IDatabaseUnitOfWork uow)
+        {
+            return new CountryTaxRateRepository(uow,
+                _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
+        }
+
+        /// <summary>
         /// Returns an instance of the <see cref="ICustomerRepository"/>
         /// </summary>        
         internal virtual ICustomerRepository CreateCustomerRepository(IDatabaseUnitOfWork uow)

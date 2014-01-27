@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Merchello.Core.Models;
-using Umbraco.Core;
 using Umbraco.Core.Services;
 
 namespace Merchello.Core.Services
@@ -11,7 +10,17 @@ namespace Merchello.Core.Services
     /// </summary>
     public interface ICountryTaxRateService : IService
     {
-        //Attempt<ICountryTaxRate> CreateCountryTaxRateWithKey(Guid providerKey, string countryCode, bool raiseEvents = true);
+        ///// <summary>
+        ///// Attempts to create a <see cref="ICountryTaxRate"/> for a given provider and country.  If the provider already 
+        ///// defines a tax rate for the country, the creation fails.
+        ///// </summary>
+        ///// <param name="providerKey">The unique 'key' (Guid) of the TaxationGatewayProvider</param>
+        ///// <param name="countryCode">The two character ISO country code</param>
+        ///// <param name="percentageTaxRate">The tax rate in percentage for the country</param>
+        ///// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        ///// <returns><see cref="Attempt"/> indicating whether or not the creation of the <see cref="ICountryTaxRate"/> with respective success or fail</returns>
+        //Attempt<ICountryTaxRate> CreateCountryTaxRateWithKey(Guid providerKey, string countryCode, decimal percentageTaxRate, bool raiseEvents = true);
+        
         //Attempt<ICountryTaxRate> CreateCountryTaxRateWithKey(Guid providerKey, ICountry country, bool raiseEvents = true);
 
         /// <summary>

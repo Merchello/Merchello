@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Runtime.Serialization;
 using Merchello.Core.Models.EntityBase;
 
@@ -29,6 +30,12 @@ namespace Merchello.Core.Models
         /// </summary>
         [DataMember]
         ProvinceCollection<ITaxProvince> Provinces { get; set; }
+
+        /// <summary>
+        /// The <see cref="RegionInfo"/> for the country
+        /// </summary>
+        [IgnoreDataMember]
+        RegionInfo RegionInfo { get; }
  
     }
 }

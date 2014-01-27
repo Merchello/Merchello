@@ -12,7 +12,8 @@ namespace Merchello.Core.Services
     /// and <see cref="IWarehouseService"/>
     /// </summary>
     public class ServiceContext : IServiceContext
-    {        
+    {
+        private Lazy<CountryTaxRateService> _countryTaxRateService; 
         private Lazy<CustomerService> _customerService;
         private Lazy<ItemCacheService> _itemCacheService;   
         private Lazy<GatewayProviderService> _gatewayProviderService ;  
@@ -42,7 +43,7 @@ namespace Merchello.Core.Services
         private void BuildServiceContext(IDatabaseUnitOfWorkProvider dbDatabaseUnitOfWorkProvider,
             Lazy<RepositoryFactory> repositoryFactory)
         {
-            
+
             if(_customerService == null)
                 _customerService = new Lazy<CustomerService>(() => new CustomerService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
@@ -70,8 +71,11 @@ namespace Merchello.Core.Services
             if(_shipmentService == null)
                 _shipmentService = new Lazy<ShipmentService>(() => new ShipmentService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
+            if (_countryTaxRateService == null)
+                _countryTaxRateService = new Lazy<CountryTaxRateService>(() => new CountryTaxRateService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _storeSettingsService.Value));
+            
             if(_gatewayProviderService == null)
-                _gatewayProviderService = new Lazy<GatewayProviderService>(() => new GatewayProviderService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _shipMethodService.Value, _shipRateTierService.Value, _shipCountryService.Value));
+                _gatewayProviderService = new Lazy<GatewayProviderService>(() => new GatewayProviderService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _shipMethodService.Value, _shipRateTierService.Value, _shipCountryService.Value, _countryTaxRateService.Value));
 
             if(_warehouseService == null)
                 _warehouseService = new Lazy<WarehouseService>(() => new WarehouseService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));

@@ -26,6 +26,7 @@ namespace Merchello.Core.Persistence.Mappers
 
         private MerchelloMapper()
         {
+            CacheMapper(typeof(ICountryTaxRate), typeof(CountryTaxRateMapper));
             CacheMapper(typeof(ICustomerAddress), typeof(CustomerAddressMapper));
             CacheMapper(typeof(IAnonymousCustomer), typeof(AnonymousCustomerMapper));
             CacheMapper(typeof(IItemCache), typeof(ItemCacheMapper));

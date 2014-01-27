@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Globalization;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Merchello.Core.Models.EntityBase;
@@ -18,15 +19,16 @@ namespace Merchello.Core.Models
         private readonly Guid _providerKey;
         private readonly string _countryCode;
         private decimal _percentageTaxRate;
+        private RegionInfo _regionInfo;
         private ProvinceCollection<ITaxProvince> _taxProvinces;
-
-        internal CountryTaxRate(Guid providerKey, string countryCode)
+        
+        internal CountryTaxRate(Guid providerKey, string code)
         {
             Mandate.ParameterCondition(providerKey != Guid.Empty, "providerKey");
-            Mandate.ParameterNotNullOrEmpty(countryCode, "countryCode");
+            Mandate.ParameterNotNullOrEmpty(code, "code");
 
             _providerKey = providerKey;
-            _countryCode = countryCode;
+            _countryCode = code;
             PercentageTaxRate = 0;
         }
 
@@ -83,6 +85,12 @@ namespace Merchello.Core.Models
                 _taxProvinces = value;
                 _taxProvinces.CollectionChanged += TaxProvincesChanged;
             }
+        }
+
+        [IgnoreDataMember]
+        public RegionInfo RegionInfo
+        {
+            get { return _regionInfo ?? (_regionInfo = new RegionInfo(_countryCode)); }
         }
     }
 }
