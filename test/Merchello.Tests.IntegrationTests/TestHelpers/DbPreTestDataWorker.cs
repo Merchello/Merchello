@@ -121,6 +121,31 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
         #endregion
 
+        #region ICountryTaxRegion
+
+        /// <summary>
+        /// Deletes all country tax rates for a given provider
+        /// </summary>
+        /// <param name="providerKey"></param>
+        public void DeleteAllCountryTaxRates(Guid providerKey)
+        {
+            var countryTaxRates = CountryTaxRateService.GetCountryTaxRatesByProviderKey(providerKey);
+            foreach (var countryTaxRate in countryTaxRates)
+            {
+                CountryTaxRateService.Delete(countryTaxRate);
+            }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="ICountryTaxRateService"/>
+        /// </summary>
+        public ICountryTaxRateService CountryTaxRateService
+        {
+            get { return _serviceContext.CountryTaxRateService; }
+        }
+
+        #endregion
+
         #region IItemCache
 
         /// <summary>

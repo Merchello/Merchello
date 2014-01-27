@@ -25,6 +25,12 @@ namespace Merchello.Core.Gateways.Taxation.CountryTaxRate
         ICountryTaxRate CreateCountryTaxRate(string countryCode, decimal percentageTaxRate);
 
         /// <summary>
+        /// Saves a single instance of a <see cref="ICountryTaxRate"/>
+        /// </summary>
+        /// <param name="countryTaxRate">The <see cref="ICountryTaxRate"/> to save</param>
+        void SaveCountryTaxRate(ICountryTaxRate countryTaxRate);
+
+        /// <summary>
         /// Gets a <see cref="ICountryTaxRate"/> by it's unique 'key' (Guid)
         /// </summary>
         /// <param name="countryCode">The two char ISO country code</param>

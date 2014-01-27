@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Merchello.Core.Gateways.Shipping;
+using Merchello.Core.Gateways.Taxation;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Umbraco.Core.Cache;
@@ -84,7 +85,11 @@ namespace Merchello.Core.Gateways
         internal T ResolveByGatewayProvider<T>(IGatewayProvider provider) where T : GatewayProviderBase
         {
 
-            if (typeof(ShippingGatewayProviderBase).IsAssignableFrom(typeof(T))) return _gatewayProviderFactory.GetInstance<ShippingGatewayProviderBase>(provider) as T;
+            if (typeof(ShippingGatewayProviderBase).IsAssignableFrom(typeof(T))) 
+                return _gatewayProviderFactory.GetInstance<ShippingGatewayProviderBase>(provider) as T;
+
+            if (typeof(TaxationGatewayProviderBase).IsAssignableFrom(typeof(T))) 
+                return _gatewayProviderFactory.GetInstance<TaxationGatewayProviderBase>(provider) as T;
 
             return null;
         }

@@ -36,6 +36,10 @@ namespace Merchello.Core.Models
         /// </summary>
         [IgnoreDataMember]
         RegionInfo RegionInfo { get; }
- 
+
+        /// <summary>
+        /// True/false indicating whether or not the CountryTaxRate has provinces
+        /// </summary>
+        bool HasProvinces { get; }
     }
 }
