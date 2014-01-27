@@ -231,6 +231,9 @@
     <Compile Include="Services\Product\ProductTests.cs" />
     <Compile Include="Services\ServiceIntegrationTestBase.cs" />
     <Compile Include="Shipping\ShipCountryTests.cs" />
+    <Compile Include="Taxation\CountryTaxRateTaxationGatewayProviderTests.cs" />
+    <Compile Include="Taxation\TaxationProviderTestBase.cs" />
+    <Compile Include="Taxation\TaxationProviderTests.cs" />
     <Compile Include="TestHelpers\DbPreTestDataWorker.cs" />
     <Compile Include="TestHelpers\TestMerchelloDataService.cs" />
   </ItemGroup>

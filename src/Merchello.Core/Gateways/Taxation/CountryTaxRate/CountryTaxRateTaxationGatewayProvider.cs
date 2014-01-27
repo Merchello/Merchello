@@ -45,6 +45,14 @@ namespace Merchello.Core.Gateways.Taxation.CountryTaxRate
             return attempt.Result;
         }
 
+        /// <summary>
+        /// Saves a single instance of a <see cref="ICountryTaxRate"/>
+        /// </summary>
+        /// <param name="countryTaxRate">The <see cref="ICountryTaxRate"/> to save</param>
+        public void SaveCountryTaxRate(ICountryTaxRate countryTaxRate)
+        {
+            GatewayProviderService.Save(countryTaxRate);
+        }
 
         /// <summary>
         /// Gets a <see cref="ICountryTaxRate"/> by it's unique 'key' (Guid)

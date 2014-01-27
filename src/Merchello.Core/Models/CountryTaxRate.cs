@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Merchello.Core.Models.EntityBase;
@@ -91,6 +92,13 @@ namespace Merchello.Core.Models
         public RegionInfo RegionInfo
         {
             get { return _regionInfo ?? (_regionInfo = new RegionInfo(_countryCode)); }
+        }
+
+        /// <summary>
+        /// True/false indicating whether or not the CountryTaxRate has provinces
+        /// </summary>
+        public bool HasProvinces {
+            get { return _taxProvinces.Any(); }
         }
     }
 }

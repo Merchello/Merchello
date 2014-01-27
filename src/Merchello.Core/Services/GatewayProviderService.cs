@@ -321,6 +321,15 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
+        /// Saves a single <see cref="ICountryTaxRate"/>
+        /// </summary>
+        /// <param name="countryTaxRate">The <see cref="ICountryTaxRate"/> to be saved</param>
+        public void Save(ICountryTaxRate countryTaxRate)
+        {
+            _countryTaxRateService.Save(countryTaxRate);
+        }
+
+        /// <summary>
         /// Gets a collection of <see cref="ICountryTaxRate"/> for a given TaxationGatewayProvider
         /// </summary>
         /// <param name="providerKey">The unique 'key' of the TaxationGatewayProvider</param>

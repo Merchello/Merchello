@@ -83,7 +83,16 @@ namespace Merchello.Core.Services
 
 
         #region IServiceContext Members
+
+        /// <summary>
+        /// Gets the <see cref="ICountryTaxRateService"/>
+        /// </summary>
+        internal ICountryTaxRateService CountryTaxRateService
+        {
+            get { return _countryTaxRateService.Value; }
+        }
     
+
         /// <summary>
         /// Gets the <see cref="ICustomerService"/>
         /// </summary>
