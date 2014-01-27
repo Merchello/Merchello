@@ -13,10 +13,10 @@ namespace Merchello.Core.Services
         ///// preventing two ShipMethods being created with the same ShipCountry and ServiceCode for any provider.
         ///// </summary>
         ///// <param name="providerKey">The unique gateway provider key (Guid)</param>
-        ///// <param name="shipCountryKey">The unique ship country key (Guid)</param>
+        ///// <param name="IShipCountry"></param>
         ///// <param name="serviceCode">The ShipMethods service code</param>
         ///// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        //Attempt<IShipMethod> CreateShipMethodWithKey(Guid providerKey, Guid shipCountryKey, string name, string serviceCode, bool raiseEvents = true);
+        //Attempt<IShipMethod> CreateShipMethodWithKey(Guid providerKey, IShipCountry shipCountryKey, string name, string serviceCode, bool raiseEvents = true);
 
         /// <summary>
         /// Saves a single <see cref="IShipMethod"/>

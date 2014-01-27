@@ -36,7 +36,7 @@ namespace Merchello.Core.Persistence.Factories
             return new CountryTaxRateDto()
                 {
                     Key = entity.Key,
-                    Code = entity.Code,
+                    Code = entity.CountryCode,
                     ProviderKey = entity.ProviderKey,
                     PercentageTaxRate = entity.PercentageTaxRate,
                     ProvinceData = provinceData,

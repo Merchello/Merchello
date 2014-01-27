@@ -63,7 +63,8 @@ namespace Merchello.Core.Services
 
             var countryTaxRate = new CountryTaxRate(providerKey, country.CountryCode)
                 {
-                    PercentageTaxRate = percentageTaxRate
+                    PercentageTaxRate = percentageTaxRate,
+                    Provinces = country.Provinces.ToTaxProvinceCollection()
                 };
 
             if(raiseEvents)
@@ -90,13 +91,7 @@ namespace Merchello.Core.Services
 
         private bool CountryTaxRateExists(Guid providerKey, string countryCode)
         {
-            using (var repository = _repositoryFactory.CreateCountryTaxRateRepository(_uowProvider.GetUnitOfWork()))
-            {
-                var query =
-                    Query<ICountryTaxRate>.Builder.Where(x => x.Code == countryCode && x.ProviderKey == providerKey);
-
-                return repository.GetByQuery(query).Any();
-            }
+            return GetCountryTaxRateByCountryCode(providerKey, countryCode) != null;
         }
 
         /// <summary>
@@ -160,22 +155,69 @@ namespace Merchello.Core.Services
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         public void Delete(ICountryTaxRate countryTaxRate, bool raiseEvents = true)
         {
-            throw new NotImplementedException();
+            if(raiseEvents)
+            if (Deleting.IsRaisedEventCancelled(new DeleteEventArgs<ICountryTaxRate>(countryTaxRate), this))
+            {
+                ((CountryTaxRate) countryTaxRate).WasCancelled = true;
+                return;
+            }
+
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreateCountryTaxRateRepository(uow))
+                {
+                    repository.Delete(countryTaxRate);
+                    uow.Commit();
+                }
+            }
+
+            if(raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<ICountryTaxRate>(countryTaxRate), this);
         }
 
+        /// <summary>
+        /// Gets a <see cref="ICountryTaxRate"/>
+        /// </summary>
+        /// <param name="key">The unique 'key' (Guid) of the <see cref="ICountryTaxRate"/></param>
+        /// <returns><see cref="ICountryTaxRate"/></returns>
         public ICountryTaxRate GetByKey(Guid key)
         {
-            throw new NotImplementedException();
+            using (var repository = _repositoryFactory.CreateCountryTaxRateRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.Get(key);
+            }
         }
 
+        /// <summary>
+        /// Gets a <see cref="ICountryTaxRate"/> based on a provider and country code
+        /// </summary>
+        /// <param name="providerKey">The unique 'key' of the <see cref="IGatewayProvider"/></param>
+        /// <param name="countryCode">The country code of the <see cref="ICountryTaxRate"/></param>
+        /// <returns><see cref="ICountryTaxRate"/></returns>
         public ICountryTaxRate GetCountryTaxRateByCountryCode(Guid providerKey, string countryCode)
         {
-            throw new NotImplementedException();
+            using (var repository = _repositoryFactory.CreateCountryTaxRateRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query =
+                    Query<ICountryTaxRate>.Builder.Where(x => x.ProviderKey == providerKey && x.CountryCode == countryCode);
+                
+                return repository.GetByQuery(query).FirstOrDefault();
+            }
         }
 
+        /// <summary>
+        /// Gets a collection of <see cref="ICountryTaxRate"/> for a given TaxationGatewayProvider
+        /// </summary>
+        /// <param name="providerKey">The unique 'key' of the TaxationGatewayProvider</param>
+        /// <returns>A collection of <see cref="ICountryTaxRate"/></returns>
         public IEnumerable<ICountryTaxRate> GetCountryTaxRatesByProviderKey(Guid providerKey)
         {
-            throw new NotImplementedException();
+            using (var repository = _repositoryFactory.CreateCountryTaxRateRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Query<ICountryTaxRate>.Builder.Where(x => x.ProviderKey == providerKey);
+
+                return repository.GetByQuery(query);
+            }
         }
 
 

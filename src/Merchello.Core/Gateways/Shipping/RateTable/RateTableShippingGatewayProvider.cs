@@ -10,6 +10,11 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
     /// <summary>
     /// Defines the RateTableLookupGateway
     /// </summary>
+    /// <remarks>
+    /// 
+    /// This is Merchello's default ShippingGatewayProvider
+    /// 
+    /// </remarks>
     public class RateTableShippingGatewayProvider : ShippingGatewayProviderBase
     {
         #region "Available Methods"
@@ -64,17 +69,11 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
             Mandate.ParameterNotNull(shipCountry, "shipCountry");
             Mandate.ParameterNotNullOrEmpty(name, "name");
 
-            var attempt = GatewayProviderService.CreateShipMethodWithKey(GatewayProvider.Key, shipCountry.Key, name, gatewayResource.ServiceCode + string.Format("-{0}", Guid.NewGuid()));
+            var attempt = GatewayProviderService.CreateShipMethodWithKey(GatewayProvider.Key, shipCountry, name, gatewayResource.ServiceCode + string.Format("-{0}", Guid.NewGuid()));
             
             if (!attempt.Success) throw attempt.Exception;
 
-            var shipMethodData = attempt.Result;
-            shipMethodData.Surcharge = 0M;
-            shipMethodData.Taxable = false;
-            shipMethodData.Provinces = shipCountry.Provinces.ToShipProvinceCollection();
-            GatewayProviderService.Save(shipMethodData);
-
-            return new RateTableShipMethod(gatewayResource, shipMethodData, shipCountry);
+            return new RateTableShipMethod(gatewayResource, attempt.Result, shipCountry);
         }
 
         /// <summary>
@@ -109,7 +108,7 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
                 ).OrderBy(x => x.ShipMethod.Name);
         }
 
-        protected override string Name
+        public override string Name
         {
             get { return "Rate Table Shipping Provider"; }
         }

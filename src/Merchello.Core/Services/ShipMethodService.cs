@@ -44,24 +44,25 @@ namespace Merchello.Core.Services
         /// preventing two ShipMethods being created with the same ShipCountry and ServiceCode for any provider.
         /// </summary>
         /// <param name="providerKey">The unique gateway provider key (Guid)</param>
-        /// <param name="shipCountryKey">The unique ship country key (Guid)</param>
+        /// <param name="shipCountry">The <see cref="IShipCountry"/> this ship method is to be associated with</param>
         /// <param name="name">The required name of the <see cref="IShipMethod"/></param>
         /// <param name="serviceCode">The ShipMethods service code</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        internal Attempt<IShipMethod> CreateShipMethodWithKey(Guid providerKey, Guid shipCountryKey, string name, string serviceCode, bool raiseEvents = true)
+        internal Attempt<IShipMethod> CreateShipMethodWithKey(Guid providerKey, IShipCountry shipCountry, string name, string serviceCode, bool raiseEvents = true)
         {
             Mandate.ParameterCondition(providerKey != Guid.Empty, "providerKey");
-            Mandate.ParameterCondition(shipCountryKey != Guid.Empty, "shipCountryKey");
+            Mandate.ParameterNotNull(shipCountry, "shipCountry");
             Mandate.ParameterNotNullOrEmpty(name, "name");
             Mandate.ParameterNotNullOrEmpty(serviceCode, "serviceCode");
 
-            if (ShipMethodExists(providerKey, shipCountryKey, serviceCode)) 
+            if (ShipMethodExists(providerKey, shipCountry.Key, serviceCode)) 
                 return Attempt<IShipMethod>.Fail(new ConstraintException("A Shipmethod already exists for this ShipCountry with this ServiceCode"));
 
-            var shipMethod = new ShipMethod(providerKey, shipCountryKey)
+            var shipMethod = new ShipMethod(providerKey, shipCountry.Key)
                 {
                     Name = name,
-                    ServiceCode = serviceCode
+                    ServiceCode = serviceCode,
+                    Provinces = shipCountry.Provinces.ToShipProvinceCollection()
                 };
 
             if(raiseEvents)

@@ -40,11 +40,13 @@ namespace Merchello.Core.Services
             Mandate.ParameterNotNull(shipRateTierService, "shipRateTierService");
             Mandate.ParameterNotNull(shipCountryService, "shipCountryService");
             Mandate.ParameterNotNull(countryTaxRateService, "countryTaxRateService");
+
             _uowProvider = provider;
             _repositoryFactory = repositoryFactory;
             _shipMethodService = shipMethodService;
             _shipRateTierService = shipRateTierService;
             _shipCountryService = shipCountryService;
+            _countryTaxRateService = countryTaxRateService;
         }
 
 
@@ -189,12 +191,12 @@ namespace Merchello.Core.Services
         /// preventing two ShipMethods being created with the same ShipCountry and ServiceCode for any provider.
         /// </summary>
         /// <param name="providerKey">The unique gateway provider key (Guid)</param>
-        /// <param name="shipCountryKey">The unique ship country key (Guid)</param>
+        /// <param name="shipCountry">The <see cref="IShipCountry"/> this ship method is to be associated with</param>
         /// <param name="name">The required name of the <see cref="IShipMethod"/></param>
         /// <param name="serviceCode">The ShipMethods service code</param>
-        public Attempt<IShipMethod> CreateShipMethodWithKey(Guid providerKey, Guid shipCountryKey, string name, string serviceCode)
-        {
-            return ((ShipMethodService)_shipMethodService).CreateShipMethodWithKey(providerKey, shipCountryKey, name, serviceCode);
+        public Attempt<IShipMethod> CreateShipMethodWithKey(Guid providerKey, IShipCountry shipCountry, string name, string serviceCode)
+        {            
+            return ((ShipMethodService)_shipMethodService).CreateShipMethodWithKey(providerKey, shipCountry, name, serviceCode);
         }
 
         /// <summary>
@@ -305,6 +307,27 @@ namespace Merchello.Core.Services
         public Attempt<ICountryTaxRate> CreateCountryTaxRateWithKey(Guid providerKey, string countryCode, decimal percentageTaxRate)
         {
             return ((CountryTaxRateService)_countryTaxRateService).CreateCountryTaxRateWithKey(providerKey, countryCode, percentageTaxRate);
+        }
+
+        /// <summary>
+        /// Gets a <see cref="ICountryTaxRate"/> based on a provider and country code
+        /// </summary>
+        /// <param name="providerKey">The unique 'key' of the <see cref="IGatewayProvider"/></param>
+        /// <param name="countryCode">The country code of the <see cref="ICountryTaxRate"/></param>
+        /// <returns><see cref="ICountryTaxRate"/></returns>
+        public ICountryTaxRate GetCountryTaxRateByCountryCode(Guid providerKey, string countryCode)
+        {
+            return _countryTaxRateService.GetCountryTaxRateByCountryCode(providerKey, countryCode);
+        }
+
+        /// <summary>
+        /// Gets a collection of <see cref="ICountryTaxRate"/> for a given TaxationGatewayProvider
+        /// </summary>
+        /// <param name="providerKey">The unique 'key' of the TaxationGatewayProvider</param>
+        /// <returns>A collection of <see cref="ICountryTaxRate"/></returns>
+        public IEnumerable<ICountryTaxRate> GetCountryTaxRatesByProviderKey(Guid providerKey)
+        {
+            return _countryTaxRateService.GetCountryTaxRatesByProviderKey(providerKey);
         }
 
         #endregion

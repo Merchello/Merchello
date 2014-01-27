@@ -40,7 +40,7 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
                 ? CalculateVaryByWeight(visitor.TotalWeight, province)
                 : CalculatePercentTotal(visitor.TotalPrice, province);
         }
-       
+      
 
         private Attempt<IShipmentRateQuote> CalculateVaryByWeight(decimal totalWeight, IShipProvince province = null)
         {

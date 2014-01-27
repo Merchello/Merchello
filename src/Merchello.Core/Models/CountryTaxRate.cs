@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Globalization;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Merchello.Core.Models.EntityBase;
@@ -16,17 +17,18 @@ namespace Merchello.Core.Models
     internal class CountryTaxRate : Entity, ICountryTaxRate
     {
         private readonly Guid _providerKey;
-        private readonly string _code;
+        private readonly string _countryCode;
         private decimal _percentageTaxRate;
+        private RegionInfo _regionInfo;
         private ProvinceCollection<ITaxProvince> _taxProvinces;
-
+        
         internal CountryTaxRate(Guid providerKey, string code)
         {
             Mandate.ParameterCondition(providerKey != Guid.Empty, "providerKey");
-            Mandate.ParameterNotNullOrEmpty(code, "countryCode");
+            Mandate.ParameterNotNullOrEmpty(code, "code");
 
             _providerKey = providerKey;
-            _code = code;
+            _countryCode = code;
             PercentageTaxRate = 0;
         }
 
@@ -50,8 +52,8 @@ namespace Merchello.Core.Models
         /// The two digit ISO Country code
         /// </summary>
         [DataMember]
-        public string Code {
-            get { return _code; }
+        public string CountryCode {
+            get { return _countryCode; }
         }
 
         /// <summary>
@@ -83,6 +85,12 @@ namespace Merchello.Core.Models
                 _taxProvinces = value;
                 _taxProvinces.CollectionChanged += TaxProvincesChanged;
             }
+        }
+
+        [IgnoreDataMember]
+        public RegionInfo RegionInfo
+        {
+            get { return _regionInfo ?? (_regionInfo = new RegionInfo(_countryCode)); }
         }
     }
 }

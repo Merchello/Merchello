@@ -64,10 +64,10 @@ namespace Merchello.Core.Services
         /// preventing two ShipMethods being created with the same ShipCountry and ServiceCode for any provider.
         /// </summary>
         /// <param name="providerKey">The unique gateway provider key (Guid)</param>
-        /// <param name="shipCountryKey">The unique ship country key (Guid)</param>
+        /// <param name="shipCountry">The <see cref="IShipCountry"/> this ship method is to be associated with</param>
         /// <param name="name">The required name of the <see cref="IShipMethod"/></param>
         /// <param name="serviceCode">The ShipMethods service code</param>
-        Attempt<IShipMethod> CreateShipMethodWithKey(Guid providerKey, Guid shipCountryKey, string name, string serviceCode);
+        Attempt<IShipMethod> CreateShipMethodWithKey(Guid providerKey, IShipCountry shipCountry, string name, string serviceCode);
 
         /// <summary>
         /// Saves a single <see cref="IShipMethod"/>
@@ -141,6 +141,21 @@ namespace Merchello.Core.Services
         /// <param name="percentageTaxRate">The tax rate in percentage for the country</param>
         /// <returns><see cref="Attempt"/> indicating whether or not the creation of the <see cref="ICountryTaxRate"/> with respective success or fail</returns>
         Attempt<ICountryTaxRate> CreateCountryTaxRateWithKey(Guid providerKey, string countryCode, decimal percentageTaxRate);
+
+        /// <summary>
+        /// Gets a <see cref="ICountryTaxRate"/> based on a provider and country code
+        /// </summary>
+        /// <param name="providerKey">The unique 'key' of the <see cref="IGatewayProvider"/></param>
+        /// <param name="countryCode">The country code of the <see cref="ICountryTaxRate"/></param>
+        /// <returns><see cref="ICountryTaxRate"/></returns>
+        ICountryTaxRate GetCountryTaxRateByCountryCode(Guid providerKey, string countryCode);
+
+        /// <summary>
+        /// Gets a collection of <see cref="ICountryTaxRate"/> for a given TaxationGatewayProvider
+        /// </summary>
+        /// <param name="providerKey">The unique 'key' of the TaxationGatewayProvider</param>
+        /// <returns>A collection of <see cref="ICountryTaxRate"/></returns>
+        IEnumerable<ICountryTaxRate> GetCountryTaxRatesByProviderKey(Guid providerKey);
 
         #endregion
     }

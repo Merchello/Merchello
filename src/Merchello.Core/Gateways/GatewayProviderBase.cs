@@ -1,6 +1,7 @@
 ﻿using System;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
+using Umbraco.Core.Cache;
 
 namespace Merchello.Core.Gateways
 {
@@ -11,20 +12,27 @@ namespace Merchello.Core.Gateways
     {        
         private readonly IGatewayProvider _gatewayProvider;
         private readonly IGatewayProviderService _gatewayProviderService;
+        private readonly IRuntimeCacheProvider _runtimeCache;
 
-        protected GatewayProviderBase(IGatewayProviderService gatewayProviderService, IGatewayProvider gatewayProvider)
+        protected GatewayProviderBase(IGatewayProviderService gatewayProviderService, IGatewayProvider gatewayProvider, IRuntimeCacheProvider runtimeCacheProvider)
         {
             Mandate.ParameterNotNull(gatewayProviderService, "gatewayProviderService");
             Mandate.ParameterNotNull(gatewayProvider, "gatewayProvider");
+            Mandate.ParameterNotNull(runtimeCacheProvider, "runtimeCacheProvider");
 
             _gatewayProviderService = gatewayProviderService;
             _gatewayProvider = gatewayProvider;
+            _runtimeCache = runtimeCacheProvider;
         }
 
+
+        // TODO The properties Name and Key will be used by GatewayProvider plugin resolver to 
+        // enable devs to define each of these values. 
+        
         /// <summary>
         /// The name of the GatewayProvider
         /// </summary>
-        protected abstract string Name { get; }
+        public abstract string Name { get; }
 
         /// <summary>
         /// The unique Key that will be used
@@ -45,6 +53,15 @@ namespace Merchello.Core.Gateways
         public virtual IGatewayProvider GatewayProvider 
         {
             get { return _gatewayProvider; }
+        }
+
+        /// <summary>
+        /// Gets the RuntimeCache
+        /// </summary>
+        /// <returns></returns>
+        protected IRuntimeCacheProvider RuntimeCache
+        {
+            get { return _runtimeCache; }
         }
     }
 }
