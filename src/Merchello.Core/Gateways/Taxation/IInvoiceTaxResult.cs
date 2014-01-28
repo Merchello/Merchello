@@ -16,5 +16,11 @@ namespace Merchello.Core.Gateways.Taxation
         /// The calculated tax amount
         /// </summary>
         decimal TaxAmount { get; set; }
+
+        /// <summary>
+        /// An extended data collection to store any additional information returned by the Tax Provider.
+        /// Ex. may include an itemization of Country, State, Local / Municipal taxes
+        /// </summary>
+        ExtendedDataCollection ExtendedData { get; }
     }
 }
