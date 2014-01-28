@@ -16,7 +16,6 @@
 
     };
 
-
     models.ShippingCountry = function (shippingCountryFromServer) {
 
         var self = this;
@@ -122,7 +121,7 @@
         var self = this;
 
         if (warehouseFromServer == undefined) {
-            self.pk = "";
+            self.key = "";
             self.name = "";
             self.address1 = "";
             self.address2 = "";
@@ -133,8 +132,9 @@
             self.phone = "";
             self.email = "";
             self.isDefault = true;
+            self.warehouseCatalogs = [];
         } else {
-            self.pk = warehouseFromServer.pk;
+            self.key = warehouseFromServer.key;
             self.name = warehouseFromServer.name;
             self.address1 = warehouseFromServer.address1;
             self.address2 = warehouseFromServer.address2;
@@ -145,6 +145,28 @@
             self.phone = warehouseFromServer.phone;
             self.email = warehouseFromServer.email;
             self.isDefault = warehouseFromServer.isDefault;
+
+            self.warehouseCatalogs = _.map(warehouseFromServer.warehouseCatalogs, function (warehouseCatalog) {
+                return new merchello.Models.WarehouseCatalog(warehouseCatalog);
+            });
+        }
+
+    };
+
+    models.WarehouseCatalog = function (warehouseCatalogFromServer) {
+
+        var self = this;
+
+        if (warehouseCatalogFromServer == undefined) {
+            self.key = "";
+            self.warehouseKey = "";
+            self.name = "";
+            self.description = "";
+        } else {
+            self.key = warehouseCatalogFromServer.key;
+            self.warehouseKey = warehouseCatalogFromServer.warehouseKey;
+            self.name = warehouseCatalogFromServer.name;
+            self.description = warehouseCatalogFromServer.description;
         }
 
     };

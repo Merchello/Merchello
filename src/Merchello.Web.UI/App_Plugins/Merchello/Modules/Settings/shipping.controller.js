@@ -8,7 +8,7 @@
      * @description
      * The controller for the reports list page
      */
-    controllers.ShippingController = function ($scope, $routeParams, $location, notificationsService, angularHelper, serverValidationManager, merchelloProductService) {
+    controllers.ShippingController = function ($scope, $routeParams, $location, notificationsService, angularHelper, serverValidationManager, merchelloWarehouseService) {
 
         $scope.sortProperty = "name";
         $scope.countries = [];
@@ -43,42 +43,19 @@
 
         $scope.loadWarehouses = function () {
 
-            // Note From Kyle: Mocks for data returned from Warehouse API call
-            var mockWarehouses = [
-                {
-                    pk: 0,
-                    name: "Bramble Berry",
-                    address1: "114 W. Magnolia St",
-                    address2: "Suite 504",
-                    locality: "Bellingham",
-                    region: "WA",
-                    postalCode: "98225",
-                    countryCode: "US",
-                    phone: "(360) 555-5555",
-                    email: "info@brambleberry.com",
-                    isDefault: true
-                },
-                {
-                    pk: 1,
-                    name: "Mindfly",
-                    address1: "105 W Holly St",
-                    address2: "H22",
-                    locality: "Bellingham",
-                    region: "WA",
-                    postalCode: "98225",
-                    countryCode: "US",
-                    phone: "(360) 555-6666",
-                    email: "hello@mindfly.com",
-                    isDefault: false
-                }
-            ];
-            $scope.warehouses = _.map(mockWarehouses, function (warehouseFromServer) {
-                return new merchello.Models.Warehouse(warehouseFromServer);
+            var promiseWarehouses = merchelloWarehouseService.getDefaultWarehouse();    // Only a default warehouse in v1
+            promiseWarehouses.then(function (warehouseFromServer) {
+
+                warehouseFromServer.isDefault = true;
+                $scope.warehouses.push(new merchello.Models.Warehouse(warehouseFromServer));
+
+                $scope.changePrimaryWarehouse();
+
+            }, function (reason) {
+
+                notificationsService.error("Warehouses Load Failed", reason.message);
+
             });
-
-            $scope.changePrimaryWarehouse();
-
-            // End of Warehouse API Mocks
 
         };
 
@@ -97,7 +74,7 @@
         $scope.changePrimaryWarehouse = function (warehouse) {
             for (i = 0; i < $scope.warehouses.length; i++) {
                 if (warehouse) {
-                    if (warehouse.pk == $scope.warehouses[i].pk) {
+                    if (warehouse.key == $scope.warehouses[i].key) {
                         $scope.warehouses[i].isDefault = true;
                         $scope.primaryWarehouse = $scope.warehouses[i];
                     } else {
