@@ -173,7 +173,7 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
             var mappedProduct = productDisplay.ToProduct(product);
 
             //// Assert
-            Assert.NotNull(productDisplay);
+            Assert.NotNull(mappedProduct);
             Assert.IsTrue(mappedProduct.HasIdentity);
             Assert.AreEqual(mappedProduct.Price, productDisplay.Price);
             Assert.AreEqual(mappedProduct.SalePrice, productDisplay.SalePrice);
