@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using Merchello.Core.Events;
 using Merchello.Core.Models;
 using Merchello.Core.Persistence;
 using Merchello.Core.Persistence.UnitOfWork;
+using Umbraco.Core.Events;
 
 namespace Merchello.Core.Services
 {
@@ -108,5 +110,51 @@ namespace Merchello.Core.Services
         {
             throw new NotImplementedException();
         }
+
+
+        #region Event Handlers
+
+        /// <summary>
+        /// Occurs after Create
+        /// </summary>
+        public static event TypedEventHandler<IInvoiceService, Events.NewEventArgs<IInvoice>> Creating;
+
+        /// <summary>
+        /// Occurs after Create
+        /// </summary>
+        public static event TypedEventHandler<IInvoiceService, Events.NewEventArgs<IInvoice>> Created;
+
+        /// <summary>
+        /// Occurs before Save
+        /// </summary>
+        public static event TypedEventHandler<IInvoiceService, SaveEventArgs<IInvoice>> Saving;
+
+        /// <summary>
+        /// Occurs after Save
+        /// </summary>
+        public static event TypedEventHandler<IInvoiceService, SaveEventArgs<IInvoice>> Saved;
+
+        /// <summary>
+        /// Occurs before an invoice status has changed
+        /// </summary>
+        public static event TypedEventHandler<IInvoiceService, StatusChangeEventArgs<IInvoiceService>> StatusChanging; 
+
+        /// <summary>
+        /// Occurs after an invoice status has changed
+        /// </summary>
+        public static event TypedEventHandler<IInvoiceService, StatusChangeEventArgs<IInvoiceService>> StatusChanged; 
+
+        /// <summary>
+        /// Occurs before Delete
+        /// </summary>		
+        public static event TypedEventHandler<IInvoiceService, DeleteEventArgs<IInvoice>> Deleting;
+
+        /// <summary>
+        /// Occurs after Delete
+        /// </summary>
+        public static event TypedEventHandler<IInvoiceService, DeleteEventArgs<IInvoice>> Deleted;
+
+        #endregion
+
     }
 }
