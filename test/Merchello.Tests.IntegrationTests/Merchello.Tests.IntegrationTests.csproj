@@ -212,6 +212,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DisplayClasses\ProductDisplayTests.cs" />
+    <Compile Include="DisplayClasses\WarehouseDisplayTests.cs" />
     <Compile Include="Examine\StartupExamineEventTests.cs" />
     <Compile Include="Services\StoreSettings\StoreSettingsServiceTests.cs" />
     <Compile Include="Shipping\BasketPackagingTests.cs" />
