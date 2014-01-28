@@ -73,7 +73,7 @@ namespace Merchello.Core.Services
                 _shipmentService = new Lazy<ShipmentService>(() => new ShipmentService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
             if (_invoiceService == null)
-                _invoiceService = new Lazy<InvoiceService>(() => new InvoiceService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+                _invoiceService = new Lazy<InvoiceService>(() => new InvoiceService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _storeSettingsService.Value));
 
             if (_countryTaxRateService == null)
                 _countryTaxRateService = new Lazy<CountryTaxRateService>(() => new CountryTaxRateService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _storeSettingsService.Value));
