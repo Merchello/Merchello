@@ -213,6 +213,8 @@
   <ItemGroup>
     <Compile Include="DisplayClasses\ProductDisplayTests.cs" />
     <Compile Include="Examine\StartupExamineEventTests.cs" />
+    <Compile Include="Services\Invoicing\InvoiceServiceTests.cs" />
+    <Compile Include="Services\Invoicing\InvoicingTestsBase.cs" />
     <Compile Include="Services\StoreSettings\StoreSettingsServiceTests.cs" />
     <Compile Include="Shipping\BasketPackagingTests.cs" />
     <Compile Include="ItemCache\BasketTests.cs" />

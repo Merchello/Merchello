@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Threading;
 using Merchello.Core.Events;
 using Merchello.Core.Models;
@@ -21,17 +22,21 @@ namespace Merchello.Core.Services
         private readonly RepositoryFactory _repositoryFactory;
         private readonly IStoreSettingService _storeSettingService;
 
-        private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+        private static readonly ReaderWriterLockSlim Locker =
+            new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
 
         public InvoiceService()
             : this(new RepositoryFactory(), new StoreSettingService())
-        { }
+        {
+        }
 
         public InvoiceService(RepositoryFactory repositoryFactory, IStoreSettingService storeSettingService)
             : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, storeSettingService)
-        { }
+        {
+        }
 
-        public InvoiceService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, IStoreSettingService storeSettingService)
+        public InvoiceService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory,
+            IStoreSettingService storeSettingService)
         {
             Mandate.ParameterNotNull(provider, "provider");
             Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
@@ -52,21 +57,21 @@ namespace Merchello.Core.Services
         {
             Mandate.ParameterCondition(Guid.Empty != invoiceStatusKey, "invoiceStatusKey");
 
-            var invoice = new Invoice(invoiceStatusKey);
+            var invoice = new Invoice(invoiceStatusKey) { InvoiceDate = DateTime.Now };
 
-            if(raiseEvents)
-            if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<IInvoice>(invoice), this))
-            {
-                invoice.WasCancelled = true;
-                return invoice;
-            }
+            if (raiseEvents)
+                if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<IInvoice>(invoice), this))
+                {
+                    invoice.WasCancelled = true;
+                    return invoice;
+                }
 
-            if(raiseEvents) Created.RaiseEvent(new Events.NewEventArgs<IInvoice>(invoice), this);
+            if (raiseEvents) Created.RaiseEvent(new Events.NewEventArgs<IInvoice>(invoice), this);
 
             return invoice;
         }
 
-   
+
 
         /// <summary>
         /// Saves a single <see cref="IInvoice"/>
@@ -81,9 +86,10 @@ namespace Merchello.Core.Services
                 ((Invoice) invoice).InvoiceNumber = ((StoreSettingService) _storeSettingService).GetNextInvoiceNumber();
             }
 
-            var includesStatusChange = ((Invoice) invoice).IsPropertyDirty("InvoiceStatusKey") && ((Invoice)invoice).HasIdentity == false;
+            var includesStatusChange = ((Invoice) invoice).IsPropertyDirty("InvoiceStatusKey") &&
+                                       ((Invoice) invoice).HasIdentity == false;
 
-            if(raiseEvents)
+            if (raiseEvents)
             {
                 if (Saving.IsRaisedEventCancelled(new SaveEventArgs<IInvoice>(invoice), this))
                 {
@@ -92,7 +98,7 @@ namespace Merchello.Core.Services
                 }
 
                 if (includesStatusChange) StatusChanging.RaiseEvent(new StatusChangeEventArgs<IInvoice>(invoice), this);
-             
+
             }
 
             using (new WriteLock(Locker))
@@ -108,7 +114,7 @@ namespace Merchello.Core.Services
             if (!raiseEvents) return;
 
             Saved.RaiseEvent(new SaveEventArgs<IInvoice>(invoice), this);
-            if(includesStatusChange) StatusChanged.RaiseEvent(new StatusChangeEventArgs<IInvoice>(invoice), this);
+            if (includesStatusChange) StatusChanged.RaiseEvent(new StatusChangeEventArgs<IInvoice>(invoice), this);
         }
 
         /// <summary>
@@ -123,21 +129,26 @@ namespace Merchello.Core.Services
             var newInvoiceCount = invoicesArray.Count(x => x.InvoiceNumber <= 0 && !((Invoice) x).HasIdentity);
             if (newInvoiceCount > 0)
             {
-                var lastInvoiceNumber = ((StoreSettingService)_storeSettingService).GetNextInvoiceNumber(newInvoiceCount);
-                foreach (var newInvoice in invoicesArray.Where(x => x.InvoiceNumber <= 0 && !((Invoice)x).HasIdentity))
+                var lastInvoiceNumber =
+                    ((StoreSettingService) _storeSettingService).GetNextInvoiceNumber(newInvoiceCount);
+                foreach (var newInvoice in invoicesArray.Where(x => x.InvoiceNumber <= 0 && !((Invoice) x).HasIdentity))
                 {
-                    ((Invoice)newInvoice).InvoiceNumber = lastInvoiceNumber;
+                    ((Invoice) newInvoice).InvoiceNumber = lastInvoiceNumber;
                     lastInvoiceNumber = lastInvoiceNumber - 1;
                 }
             }
 
             var existingInvoicesWithStatusChanges =
-                invoicesArray.Where(x => ((Invoice) x).HasIdentity == false && ((Invoice) x).IsPropertyDirty("InvoiceStatusKey")).ToArray();
+                invoicesArray.Where(
+                    x => ((Invoice) x).HasIdentity == false && ((Invoice) x).IsPropertyDirty("InvoiceStatusKey"))
+                    .ToArray();
 
             if (raiseEvents)
             {
                 Saving.RaiseEvent(new SaveEventArgs<IInvoice>(invoicesArray), this);
-                if(existingInvoicesWithStatusChanges.Any()) StatusChanging.RaiseEvent(new StatusChangeEventArgs<IInvoice>(existingInvoicesWithStatusChanges), this);
+                if (existingInvoicesWithStatusChanges.Any())
+                    StatusChanging.RaiseEvent(new StatusChangeEventArgs<IInvoice>(existingInvoicesWithStatusChanges),
+                        this);
             }
 
             using (new WriteLock(Locker))
@@ -147,9 +158,8 @@ namespace Merchello.Core.Services
                 {
                     foreach (var invoice in invoicesArray)
                     {
-                        
-                        repository.AddOrUpdate(invoice);    
-                    }                    
+                        repository.AddOrUpdate(invoice);
+                    }
                     uow.Commit();
                 }
             }
@@ -157,9 +167,11 @@ namespace Merchello.Core.Services
             if (raiseEvents)
             {
                 Saved.RaiseEvent(new SaveEventArgs<IInvoice>(invoicesArray), this);
-                if (existingInvoicesWithStatusChanges.Any()) StatusChanged.RaiseEvent(new StatusChangeEventArgs<IInvoice>(existingInvoicesWithStatusChanges), this);
+                if (existingInvoicesWithStatusChanges.Any())
+                    StatusChanged.RaiseEvent(new StatusChangeEventArgs<IInvoice>(existingInvoicesWithStatusChanges),
+                        this);
             }
-                       
+
         }
 
         /// <summary>
@@ -169,8 +181,26 @@ namespace Merchello.Core.Services
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         public void Delete(IInvoice invoice, bool raiseEvents = true)
         {
-            throw new NotImplementedException();
+            if (raiseEvents)
+                if (Deleting.IsRaisedEventCancelled(new DeleteEventArgs<IInvoice>(invoice), this))
+                {
+                    ((Invoice) invoice).WasCancelled = true;
+                    return;
+                }
+
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreateInvoiceRepository(uow))
+                {
+                    repository.Delete(invoice);
+                    uow.Commit();
+                }
+            }
+
+            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<IInvoice>(invoice), this);
         }
+
 
         /// <summary>
         /// Deletes a collection <see cref="IInvoice"/>
@@ -179,7 +209,22 @@ namespace Merchello.Core.Services
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         public void Delete(IEnumerable<IInvoice> invoices, bool raiseEvents = true)
         {
-            throw new NotImplementedException();
+            var invoicesArray = invoices as IInvoice[] ?? invoices.ToArray();
+            if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<IInvoice>(invoicesArray), this);
+
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreateInvoiceRepository(uow))
+                {
+                    foreach (var invoice in invoicesArray)
+                    {
+                        repository.Delete(invoice);
+                    }
+                    uow.Commit();
+                }
+            }
+            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<IInvoice>(invoicesArray), this);
         }
 
         /// <summary>
@@ -223,8 +268,19 @@ namespace Merchello.Core.Services
             }
         }
 
+        /// <summary>
+        /// Gets list of all <see cref="IInvoice"/>
+        /// </summary>
+        internal IEnumerable<IInvoice> GetAll()
+        {
+            using (var repository = _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetAll();
+            } 
+        }
 
-        #region Event Handlers
+
+    #region Event Handlers
 
         /// <summary>
         /// Occurs after Create

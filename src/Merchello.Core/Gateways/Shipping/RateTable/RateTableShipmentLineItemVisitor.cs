@@ -19,7 +19,7 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
             if (!lineItem.ExtendedData.DefinesProductVariant()) return;
 
             // adjust the total weight
-            TotalWeight += lineItem.ExtendedData.GetWeightValue();
+            TotalWeight += lineItem.ExtendedData.GetWeightValue() * lineItem.Quantity;
 
             // adjust the total price
             if(UseOnSalePriceIfOnSale)
@@ -30,7 +30,7 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
             }
             else
             {
-                TotalPrice += lineItem.ExtendedData.GetPriceValue();
+                TotalPrice += lineItem.ExtendedData.GetPriceValue() * lineItem.Quantity;
             }
         }
 
