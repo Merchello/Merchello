@@ -125,6 +125,7 @@
     <Content Include="App_Plugins\Merchello\Modules\Settings\notifications.models.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\payment.models.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\shipping.models.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\merchello.warehouse.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\taxation.models.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\vendors.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\notifications.controller.js" />

@@ -32,9 +32,16 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
             //// Arrange
             var warehouseService = PreTestDataWorker.WarehouseService;
             var warehouse = warehouseService.GetByKey(_warehouse.Key);
+            var warehouseCatalogs = warehouse.WarehouseCatalogs;
+            IWarehouseCatalog warehouseCatalog = null;
+            if (warehouseCatalogs.Count() > 0)
+            {
+                warehouseCatalog = warehouseCatalogs.First();
+            }
 
             //// Act
             var warehouseDisplay = warehouse.ToWarehouseDisplay();
+            WarehouseCatalogDisplay warehouseCatalogDisplay = warehouseDisplay.WarehouseCatalogs.First();
 
             //// Assert
             Assert.NotNull(warehouseDisplay);
@@ -51,6 +58,11 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
             Assert.AreEqual(warehouse.IsDefault, warehouseDisplay.IsDefault);
             Assert.AreEqual(warehouse.WarehouseCatalogs.Count(), warehouseDisplay.WarehouseCatalogs.Count());
 
+            Assert.NotNull(warehouseCatalogDisplay);
+            Assert.AreEqual(warehouseCatalog.Key, warehouseCatalogDisplay.Key);
+            Assert.AreEqual(warehouseCatalog.WarehouseKey, warehouseCatalogDisplay.WarehouseKey);
+            Assert.AreEqual(warehouseCatalog.Name, warehouseCatalogDisplay.Name);
+            Assert.AreEqual(warehouseCatalog.Description, warehouseCatalogDisplay.Description);
         }
 
         [Test]
