@@ -10,7 +10,13 @@ namespace Merchello.Core.Services
     /// </summary>
     public interface IInvoiceService : IService
     {
-        IInvoice CreateInvoice(Guid invoiceStatusKey);
+        /// <summary>
+        /// Creates a <see cref="IInvoice"/> without saving it to the database
+        /// </summary>
+        /// <param name="invoiceStatusKey">The <see cref="IInvoiceStatus"/> key</param>
+        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        /// <returns><see cref="IInvoice"/></returns>
+        IInvoice CreateInvoice(Guid invoiceStatusKey, bool raiseEvents = true);
 
         /// <summary>
         /// Saves a single <see cref="IInvoice"/>

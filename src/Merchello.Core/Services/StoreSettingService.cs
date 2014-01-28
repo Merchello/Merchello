@@ -180,6 +180,32 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
+        /// Gets the next usable InvoiceNumber
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>
+        /// 
+        /// TODO
+        /// This method breaks convention by not throwing events for Saving a store setting
+        /// 
+        /// </remarks>
+        internal int GetNextInvoiceNumber(int invoicesCount = 1)
+        {
+            var invoiceNumber = 0;
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreateStoreSettingRepository(uow))
+                {
+                    invoiceNumber = repository.GetNextInvoiceNumber(Constants.StoreSettingKeys.NextInvoiceNumberSettingKey, invoicesCount);
+                    uow.Commit();
+                }
+            }
+
+            return invoiceNumber;
+        }
+
+        /// <summary>
         /// Returns the <see cref="CountryBase" /> for the country code passed.
         /// </summary>
         /// <param name="countryCode">The two letter ISO Region code (country code)</param>
