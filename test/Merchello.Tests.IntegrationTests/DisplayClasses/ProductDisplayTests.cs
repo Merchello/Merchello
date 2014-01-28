@@ -159,6 +159,35 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
         }
 
         [Test]
+        public void Can_Build_Product_From_ProductDisplay()
+        {
+            //// Arrange
+            var productService = PreTestDataWorker.ProductService;
+            var product = productService.GetByKey(_productKey);
+            var productDisplay = product.ToProductDisplay();
+
+            productDisplay.Barcode = "test-barcode";
+            productDisplay.SalePrice = 17M;
+
+            //// Act
+            var mappedProduct = productDisplay.ToProduct(product);
+
+            //// Assert
+            Assert.NotNull(productDisplay);
+            Assert.IsTrue(mappedProduct.HasIdentity);
+            Assert.AreEqual(mappedProduct.Price, productDisplay.Price);
+            Assert.AreEqual(mappedProduct.SalePrice, productDisplay.SalePrice);
+            Assert.AreEqual(mappedProduct.Height, productDisplay.Height);
+            Assert.AreEqual(mappedProduct.OnSale, productDisplay.OnSale);
+            Assert.AreEqual(mappedProduct.Sku, productDisplay.Sku);
+            Assert.AreEqual(mappedProduct.Manufacturer, productDisplay.Manufacturer);
+            Assert.AreEqual(mappedProduct.ManufacturerModelNumber, productDisplay.ManufacturerModelNumber);
+            //Assert.AreNotEqual(mappedProduct.ManufacturerModelNumber, mappedProduct.Manufacturer);
+            Assert.AreEqual(mappedProduct.ProductOptions.Count, mappedProduct.ProductOptions.Count());
+            Assert.AreEqual(mappedProduct.ProductVariants.Count, mappedProduct.ProductVariants.Count());
+        }
+
+        [Test]
         public void Can_Find_All_Products_From_Index()
         {
             //// Arrange
