@@ -64,7 +64,7 @@ namespace Merchello.Core.Services
             using (new WriteLock(Locker))
             {
                 var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateCustomerItemCacheRepository(uow))
+                using (var repository = _repositoryFactory.CreateItemCacheRepository(uow))
                 {
                     repository.AddOrUpdate(itemCache);
                     uow.Commit();
@@ -88,7 +88,7 @@ namespace Merchello.Core.Services
             using (new WriteLock(Locker))
             {
                 var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateCustomerItemCacheRepository(uow))
+                using (var repository = _repositoryFactory.CreateItemCacheRepository(uow))
                 {
                     repository.AddOrUpdate(itemCache);
                     uow.Commit();
@@ -112,7 +112,7 @@ namespace Merchello.Core.Services
             using (new WriteLock(Locker))
             {
                 var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateCustomerItemCacheRepository(uow))
+                using (var repository = _repositoryFactory.CreateItemCacheRepository(uow))
                 {
                     foreach (var basket in basketArray)
                     {
@@ -137,7 +137,7 @@ namespace Merchello.Core.Services
             using (new WriteLock(Locker))
             {
                 var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateCustomerItemCacheRepository(uow))
+                using (var repository = _repositoryFactory.CreateItemCacheRepository(uow))
                 {
                     repository.Delete(itemCache);
                     uow.Commit();
@@ -160,7 +160,7 @@ namespace Merchello.Core.Services
             using (new WriteLock(Locker))
             {
                 var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateCustomerItemCacheRepository(uow))
+                using (var repository = _repositoryFactory.CreateItemCacheRepository(uow))
                 {
                     foreach (var basket in caches)
                     {
@@ -180,7 +180,7 @@ namespace Merchello.Core.Services
         /// <returns><see cref="IItemCache"/></returns>
         public IItemCache GetByKey(Guid key)
         {
-            using (var repository = _repositoryFactory.CreateCustomerItemCacheRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = _repositoryFactory.CreateItemCacheRepository(_uowProvider.GetUnitOfWork()))
             {
                 return repository.Get(key);
             }
@@ -193,7 +193,7 @@ namespace Merchello.Core.Services
         /// <returns></returns>
         public IEnumerable<IItemCache> GetByKeys(IEnumerable<Guid> keys)
         {
-            using (var repository = _repositoryFactory.CreateCustomerItemCacheRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = _repositoryFactory.CreateItemCacheRepository(_uowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll(keys.ToArray());
             }
@@ -215,7 +215,7 @@ namespace Merchello.Core.Services
         /// <returns></returns>
         public IEnumerable<IItemCache> GetItemCacheByCustomer(ICustomerBase customer)
         {
-            using (var repository = _repositoryFactory.CreateCustomerItemCacheRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = _repositoryFactory.CreateItemCacheRepository(_uowProvider.GetUnitOfWork()))
             {
                 var query = Query<IItemCache>.Builder.Where(x => x.EntityKey == customer.EntityKey);
                 return repository.GetByQuery(query);
@@ -227,7 +227,7 @@ namespace Merchello.Core.Services
         /// </summary>
         public IItemCache GetItemCacheByCustomer(ICustomerBase customer, Guid itemCacheTfKey)
         {
-            using (var repository = _repositoryFactory.CreateCustomerItemCacheRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = _repositoryFactory.CreateItemCacheRepository(_uowProvider.GetUnitOfWork()))
             {
                 var query = Query<IItemCache>.Builder.Where(x => x.EntityKey == customer.EntityKey && x.ItemCacheTfKey == itemCacheTfKey);
                 return repository.GetByQuery(query).FirstOrDefault();
@@ -238,7 +238,7 @@ namespace Merchello.Core.Services
 
         public IEnumerable<IItemCache> GetAll()
         {
-            using (var repository = _repositoryFactory.CreateCustomerItemCacheRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = _repositoryFactory.CreateItemCacheRepository(_uowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll();
             }
