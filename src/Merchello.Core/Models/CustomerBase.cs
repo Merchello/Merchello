@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Merchello.Core.Models.EntityBase;
@@ -14,14 +15,29 @@ namespace Merchello.Core.Models
     {
         private DateTime _lastActivityDate;
         private Guid _entityKey;
+        private ExtendedDataCollection _extendedData;
 
         protected CustomerBase(bool isAnonymous)
+            : this(isAnonymous, new ExtendedDataCollection())
+        {
+            
+        }
+
+        protected CustomerBase(bool isAnonymous, ExtendedDataCollection extendedData)
         {
             IsAnonymous = isAnonymous;
+            _extendedData = extendedData;
         }
 
         private static readonly PropertyInfo LastActivityDateSelector = ExpressionHelper.GetPropertyInfo<CustomerBase, DateTime>(x => x.LastActivityDate);
         private static readonly PropertyInfo EntityKeySelector = ExpressionHelper.GetPropertyInfo<CustomerBase, Guid>(x => x.EntityKey);
+        private static readonly PropertyInfo ExtendedDataChangedSelector = ExpressionHelper.GetPropertyInfo<LineItemBase, ExtendedDataCollection>(x => x.ExtendedData);
+
+
+        private void ExtendedDataChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            OnPropertyChanged(ExtendedDataChangedSelector);
+        }
 
         /// <summary>
         /// The date the customer was last active on the site
@@ -61,6 +77,20 @@ namespace Merchello.Core.Models
         /// </summary>
         [IgnoreDataMember]
         public bool IsAnonymous { get; private set; }
+
+        /// <summary>
+        /// A collection to store custom/extended data for the customer
+        /// </summary>
+        [DataMember]
+        public ExtendedDataCollection ExtendedData
+        {
+            get { return _extendedData; }
+            internal set
+            {
+                _extendedData = value;
+                _extendedData.CollectionChanged += ExtendedDataChanged;
+            }
+        }
 
         /// <summary>
         /// Asserts that the last activity date is set to the current date time
