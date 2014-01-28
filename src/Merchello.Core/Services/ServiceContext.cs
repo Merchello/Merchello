@@ -15,6 +15,7 @@ namespace Merchello.Core.Services
     {
         private Lazy<CountryTaxRateService> _countryTaxRateService; 
         private Lazy<CustomerService> _customerService;
+        private Lazy<InvoiceService> _invoiceService; 
         private Lazy<ItemCacheService> _itemCacheService;   
         private Lazy<GatewayProviderService> _gatewayProviderService ;  
         private Lazy<ProductService> _productService;
@@ -71,6 +72,9 @@ namespace Merchello.Core.Services
             if(_shipmentService == null)
                 _shipmentService = new Lazy<ShipmentService>(() => new ShipmentService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
+            if (_invoiceService == null)
+                _invoiceService = new Lazy<InvoiceService>(() => new InvoiceService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+
             if (_countryTaxRateService == null)
                 _countryTaxRateService = new Lazy<CountryTaxRateService>(() => new CountryTaxRateService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _storeSettingsService.Value));
             
@@ -92,7 +96,6 @@ namespace Merchello.Core.Services
             get { return _countryTaxRateService.Value; }
         }
     
-
         /// <summary>
         /// Gets the <see cref="ICustomerService"/>
         /// </summary>
@@ -107,6 +110,14 @@ namespace Merchello.Core.Services
         public IGatewayProviderService GatewayProviderService
         {
             get { return _gatewayProviderService.Value; }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IInvoiceService"/>
+        /// </summary>
+        public IInvoiceService InvoiceService
+        {
+            get { return _invoiceService.Value; }
         }
 
         /// <summary>

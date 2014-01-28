@@ -17,7 +17,7 @@ namespace Merchello.Core.Models
         /// The invoice number
         /// </summary>
         [DataMember]
-        string InvoiceNumber { get; }
+        int InvoiceNumber { get; }
 
         /// <summary>
         /// The date the invoice was issued to customer
@@ -109,7 +109,12 @@ namespace Merchello.Core.Models
         [DataMember]
         decimal Amount { get; }
 
+
+        /// <summary>
+        /// The <see cref="ILineItem"/>s in the invoice
+        /// </summary>
+        [DataMember]
+        LineItemCollection Items { get; }
+
     }
-
-
 }

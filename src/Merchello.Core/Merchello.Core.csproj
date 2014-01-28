@@ -218,6 +218,7 @@
     <Compile Include="Models\Interfaces\ICatalogInventory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\Invoice.cs" />
     <Compile Include="Models\InvoiceLineItem.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -325,6 +326,7 @@
     <Compile Include="Persistence\Factories\GatewayProviderFactory.cs" />
     <Compile Include="Persistence\Factories\IEntityFactory.cs" />
     <Compile Include="Persistence\Factories\CatalogInventoryFactory.cs" />
+    <Compile Include="Persistence\Factories\InvoiceFactory.cs" />
     <Compile Include="Persistence\Factories\InvoiceStatusFactory.cs" />
     <Compile Include="Persistence\Factories\ItemCacheFactory.cs" />
     <Compile Include="Persistence\Factories\LineItemFactory.cs" />
@@ -361,6 +363,7 @@
     <Compile Include="Persistence\Mappers\InvoiceLineItemMapper.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Persistence\Mappers\InvoiceMapper.cs" />
     <Compile Include="Persistence\Mappers\InvoiceStatusMapper.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -423,6 +426,7 @@
     <Compile Include="Persistence\Repositories\Interfaces\IShipRateTierRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IStoreSettingRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IWarehouseRepository.cs" />
+    <Compile Include="Persistence\Repositories\InvoiceRepository.cs" />
     <Compile Include="Persistence\Repositories\ItemCacheRepository.cs" />
     <Compile Include="Persistence\Repositories\LineItemRepository.cs" />
     <Compile Include="Persistence\Repositories\PaymentRepository.cs" />
@@ -496,6 +500,7 @@
     <Compile Include="Services\GatewayProviderService.cs" />
     <Compile Include="Services\Interfaces\ICountryTaxRateService.cs" />
     <Compile Include="Services\Interfaces\IGatewayProviderService.cs" />
+    <Compile Include="Services\Interfaces\IInvoiceService.cs" />
     <Compile Include="Services\Interfaces\IItemCacheService.cs" />
     <Compile Include="Services\Interfaces\IProductService.cs" />
     <Compile Include="Services\Interfaces\IProductVariantService.cs" />
@@ -507,6 +512,7 @@
     <Compile Include="Services\Interfaces\IShipmentService.cs" />
     <Compile Include="Services\Interfaces\IWarehouseService.cs" />
     <Compile Include="Models\Interfaces\IProvince.cs" />
+    <Compile Include="Services\InvoiceService.cs" />
     <Compile Include="Services\ItemCacheService.cs" />
     <Compile Include="Services\ProductService.cs" />
     <Compile Include="Services\ProductVariantService.cs" />

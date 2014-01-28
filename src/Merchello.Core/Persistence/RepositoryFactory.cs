@@ -69,11 +69,24 @@ namespace Merchello.Core.Persistence
         /// </summary>
         /// <param name="uow"></param>
         /// <returns></returns>
-        internal virtual IItemCacheRepository CreateCustomerItemCacheRepository(IDatabaseUnitOfWork uow)
+        internal virtual IItemCacheRepository CreateItemCacheRepository(IDatabaseUnitOfWork uow)
         {
             return new ItemCacheRepository(uow,
                 _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider,
                 CreateLineItemRepository<ItemCacheItemDto>(uow));
+        }
+
+        /// <summary>
+        /// Returns an instance of the <see cref="IInvoiceRepository"/>
+        /// </summary>
+        /// <param name="uow"></param>
+        /// <returns></returns>
+        internal virtual IInvoiceRepository CreateInvoiceRepository(IDatabaseUnitOfWork uow)
+        {
+            return new InvoiceRepository(uow,
+                _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider,
+                CreateLineItemRepository<InvoiceItemDto>(uow)
+                );
         }
 
         internal virtual IGatewayProviderRepository CreateGatewayProviderRepository(IDatabaseUnitOfWork uow)

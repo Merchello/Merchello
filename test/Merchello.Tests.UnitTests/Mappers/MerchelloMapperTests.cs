@@ -111,6 +111,22 @@ namespace Merchello.Tests.UnitTests.Mappers
             Assert.AreSame(expected, resolved.Result.GetType());
         }
 
+        /// <summary>
+        /// Test to verify <see cref="MerchelloMapper"/> correctly maps IInvoice to InvoiceMapper
+        /// </summary>
+        [Test]
+        public void Mapper_Resolves_IInvoice_To_InvoiceMapper()
+        {
+            //// Arrange
+            var expected = typeof(InvoiceMapper);
+
+            //// Act
+            var resolved = MerchelloMapper.Current.ResolveByType(typeof(IInvoice));
+
+            //// Assert
+            Assert.IsTrue(resolved.Success);
+            Assert.AreSame(expected, resolved.Result.GetType());
+        }
 
         /// <summary>
         /// Test to verify <see cref="MerchelloMapper"/> correctly maps IInvoiceStatus to InvoiceStatusMapper
