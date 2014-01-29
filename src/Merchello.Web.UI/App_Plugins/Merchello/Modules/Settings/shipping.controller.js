@@ -61,7 +61,7 @@
 
         $scope.loadCountries = function () {
             // Note From Kyle: This will have to change once the warehouse/catalog functionality is wired in.
-            var catalogKey = $scope.primaryWarehouse.pk;
+            var catalogKey = $scope.primaryWarehouse.key;
 
             // Note From Kyle: Mocks from data returned from Shipping Country API call, where the countries have the catalogKey as the selected warehouse/catalog.
             var mockCountries = [
@@ -102,12 +102,12 @@
                 },
                 confirm: function () {
                     var self = $scope.addCountryFlyout;
-                    if ((typeof self.model.pk) == "undefined") {
+                    if ((typeof self.model.key) == "undefined") {
                         var newKey = $scope.countries.length;
                         // Note From Kyle: This key-creation logic will need to be modified to fit whatever works for the database.
-                        self.model.pk = newKey;
+                        self.model.key = newKey;
                         self.model.name = $scope.countryOptions.value;
-                        self.model.catalogKey = $scope.primaryWarehouse.pk;
+                        self.model.catalogKey = $scope.primaryWarehouse.key;
                         $scope.countries.push(self.model);
                         // Note From Kyle: An API call will need to be wired in here to add the new Country to the database.
                     } else {
@@ -127,7 +127,7 @@
         $scope.addWarehouseFlyout = {
             clear: function() {
                 $scope.newWarehouse = new merchello.Models.Warehouse();
-                $scope.newWarehouse.pk = "no key created";
+                $scope.newWarehouse.key = "no key created";
             },
             close: function () {
                 $scope.visible.addWarehouseFlyout = false;
@@ -142,27 +142,25 @@
                 $scope.visible.addWarehouseFlyout = true;
             },
             save: function () {
-                var idx = -1;
-                for (i = 0; i < $scope.warehouses.length; i++) {
-                    if ($scope.warehouses[i].pk == $scope.newWarehouse.pk) {
-                        idx = i;
+
+                var promiseWarehouseSave = merchelloWarehouseService.save($scope.newWarehouse);    // Only a default warehouse in v1
+                promiseWarehouseSave.then(function (result) {
+
+                    notificationsService.success("Warehouse Saved", "");
+
+                    if ($scope.newWarehouse.isDefault) {
+                        $scope.changePrimaryWarehouse($scope.newWarehouse);
                     }
-                }
-                if (idx > -1) {
-                    $scope.warehouses[idx] = $scope.newWarehouse;
-                    // Note From Kyle: An API call will need to be wired in here to edit the existing Warehouse in the database.
-                } else {
-                    var newKey = $scope.warehouses.length;
-                    // Note From Kyle: This key-creation logic will need to be modified to fit whatever works for the database.
-                    $scope.newWarehouse.pk = newKey;
-                    $scope.warehouses.push($scope.newWarehouse);
-                    // Note From Kyle: An API call will need to be wired in here to add the new Warehouse to the database.
-                }
-                if ($scope.newWarehouse.isDefault) {
-                    $scope.changePrimaryWarehouse($scope.newWarehouse);
-                }
-                $scope.addWarehouseFlyout.clear();
-                $scope.addWarehouseFlyout.close();
+                    $scope.addWarehouseFlyout.clear();
+                    $scope.addWarehouseFlyout.close();
+
+                }, function (reason) {
+
+                    notificationsService.error("Warehouses Save Failed", reason.message);
+                    $scope.addWarehouseFlyout.clear();
+                    $scope.addWarehouseFlyout.close();
+
+                });
             },
             toggle: function () {
                 $scope.visible.addWarehouseFlyout = !$scope.visible.addWarehouseFlyout;
@@ -177,7 +175,7 @@
             confirm: function () {
                 var idx = -1;
                 for (i = 0; i < $scope.warehouses.length; i++) {
-                    if ($scope.warehouses[i].pk == $scope.deleteWarehouse.pk) {
+                    if ($scope.warehouses[i].key == $scope.deleteWarehouse.key) {
                         idx = i;
                     }
                 }

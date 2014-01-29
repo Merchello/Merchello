@@ -21,13 +21,13 @@
         var self = this;
 
         if (shippingCountryFromServer == undefined) {
-            self.pk = "";
+            self.key = "";
             self.catalogKey = "";
             self.countryCode = "";
             self.name = "";
             self.shipMethods = [];
         } else {
-            self.pk = shippingCountryFromServer.pk;
+            self.key = shippingCountryFromServer.key;
             self.catalogKey = shippingCountryFromServer.catalogKey;
             self.countryCode = shippingCountryFromServer.countryCode;
             self.name = shippingCountryFromServer.name;
@@ -55,7 +55,7 @@
         var self = this;
 
         if (shippingMethodFromServer == undefined) {
-            self.pk = "";
+            self.key = "";
             self.name = "";
             self.shipCountryKey = "";
             self.providerKey = "";
@@ -65,7 +65,7 @@
             self.taxable = false;
             self.provinceData = [];
         } else {
-            self.pk = shippingMethodFromServer.pk;
+            self.key = shippingMethodFromServer.key;
             self.name = shippingMethodFromServer.name;
             self.shipCountryKey = shippingMethodFromServer.shipCountryKey;
             self.providerKey = shippingMethodFromServer.providerKey;
@@ -100,13 +100,13 @@
         var self = this;
 
         if (shippingRateTierFromServer == undefined) {
-            self.pk = "";
+            self.key = "";
             self.shipMethodKey = "";
             self.rangeLow = "";
             self.rangeHigh = "";
             self.rate = "";
         } else {
-            self.pk = shippingRateTierFromServer.pk;
+            self.key = shippingRateTierFromServer.key;
             self.shipMethodKey = shippingRateTierFromServer.shipMethodKey;
             self.rangeLow = shippingRateTierFromServer.rangeLow;
             self.rangeHigh = shippingRateTierFromServer.rangeHigh;
