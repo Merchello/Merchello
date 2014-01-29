@@ -283,18 +283,18 @@ namespace Merchello.Tests.IntegrationTests.Shipping
 
         }
 
-        [Test]
-        public void Can_Serialize_A_Shipment_To_Json()
-        {
-            var shipments = _basket.PackageBasket(MerchelloContext, _destination);
+        //[Test]
+        //public void Can_Serialize_A_Shipment_To_Json()
+        //{
+        //    var shipments = _basket.PackageBasket(MerchelloContext, _destination);
 
-            var shipment = shipments.First() as Shipment;
+        //    var shipment = shipments.First() as Shipment;
 
-            var json = JsonConvert.SerializeObject(shipment);
+        //    var json = JsonConvert.SerializeObject(shipment);
 
-            Console.Write(json);
+        //    Console.Write(json);
 
-            var deserialized = JsonConvert.DeserializeObject<Shipment>(json);
-        }
+        //    var deserialized = JsonConvert.DeserializeObject<Shipment>(json);
+        //}
     }
 }
