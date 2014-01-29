@@ -73,7 +73,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActivatorHelper.cs" />
+    <Compile Include="Builders\IBuilder.cs" />
     <Compile Include="Cache\CacheKeys.cs" />
+    <Compile Include="Builders\Checkout\ICheckoutBuilder.cs" />
     <Compile Include="CloneHelper.cs" />
     <Compile Include="Configuration\Outline\ProvinceConfigurationCollection.cs" />
     <Compile Include="Configuration\Outline\ProvinceElement.cs" />
