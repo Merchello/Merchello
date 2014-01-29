@@ -8,6 +8,7 @@ using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Web;
 using Merchello.Web.Models;
+using Merchello.Web.Workflow;
 using Newtonsoft.Json;
 using NUnit.Framework;
 
@@ -97,7 +98,6 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             gwshipMethod.RateTable.AddRow(15, 25, 25);
             gwshipMethod.RateTable.AddRow(25, 10000, 100);
 
-            
             // have to call this via the static method due o the MerchelloContext.Current not present in the ShipRateTable object.
             ShipRateTable.Save(GatewayProviderService, MerchelloContext.Cache.RuntimeCache, gwshipMethod.RateTable);
 
@@ -272,8 +272,9 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             //// Act
             var shipments = _basket.PackageBasket(MerchelloContext, _destination);
             Assert.IsTrue(shipments.Any());
-            var quotes = MerchelloContext.Gateways.GetShipRateQuotesForShipment(shipments.First());            
-            
+            var quotes = MerchelloContext.Gateways.GetShipRateQuotesForShipment(shipments.First());
+
+
             // var invoice = _basket.CheckOut();
 
             //// Assert

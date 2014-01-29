@@ -183,7 +183,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         public ICustomer MakeExistingCustomer()
         {
             var customer = MockCustomerDataMaker.CustomerForInserting();
-            CustomerService.Save(customer);
+            ((CustomerService)CustomerService).Save(customer);
             return customer;
         }
 
@@ -196,11 +196,9 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         {
             var customers = new List<ICustomer>();
             for(var i =0; i < count; i++) customers.Add(MockCustomerDataMaker.CustomerForInserting());
-            CustomerService.Save(customers);
+            ((CustomerService)CustomerService).Save(customers);
             return customers;
         }
-
-
 
         /// <summary>
         /// Deletes all of the customers from the database
@@ -208,7 +206,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         public void DeleteAllCustomers()
         {
             var all = ((CustomerService) CustomerService).GetAll();
-            CustomerService.Delete(all);
+            ((CustomerService)CustomerService).Delete(all);
         }
 
         /// <summary>
@@ -234,8 +232,6 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         #endregion
 
         #region IInvoice
-
-
 
         /// <summary>
         /// Deletes all invoices

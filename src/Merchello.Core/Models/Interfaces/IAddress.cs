@@ -8,7 +8,6 @@ namespace Merchello.Core.Models.Interfaces
     /// </summary>
     public interface IAddress
     {
-
         /// <summary>
         /// The name for the address
         /// </summary>
@@ -56,5 +55,16 @@ namespace Merchello.Core.Models.Interfaces
         /// </summary>
         [DataMember]
         string Phone { get; set; }
+
+        /// <summary>
+        /// True/false indicating whether or not this record represents commercial or business address
+        /// </summary>
+        /// <remarks>
+        /// Used by certain shipping providers in shipping rate quotations
+        /// </remarks>
+        [DataMember]
+        bool IsCommercial { get; set; }
+
+
     }
 }

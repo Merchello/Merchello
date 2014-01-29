@@ -55,14 +55,15 @@ namespace Merchello.Core
         {
             public static class Address
             {
-                public static Guid ResidentialKey = new Guid("D32D7B40-2FF2-453F-9AC5-51CF1A981E46");
-                public static Guid CommercialKey = new Guid("5C2A8638-EA32-49AD-8167-EDDFB45A7360");
+                public static Guid ShippingAddressKey = new Guid("D32D7B40-2FF2-453F-9AC5-51CF1A981E46");
+                public static Guid BillingAddressKey = new Guid("5C2A8638-EA32-49AD-8167-EDDFB45A7360");
             }
 
             public static class ItemCache
             {
                 public static Guid BasketKey = new Guid("C53E3100-2DFD-408A-872E-4380383FAD35");
                 public static Guid WishlistKey = new Guid("B3EBB9E0-C7CE-4BA6-B379-BEDA3465D6D5");
+                public static Guid CheckoutKey = new Guid("25608A4E-F3DB-43DE-B137-A9E55B1412CE");
             }
 
             public static class LineItem

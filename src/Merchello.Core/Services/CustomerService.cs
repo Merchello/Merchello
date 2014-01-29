@@ -67,7 +67,7 @@ namespace Merchello.Core.Services
         /// <param name="email">the email address of the customer</param>
         /// <param name="memberId">The Umbraco member Id of the customer</param>
         /// <returns><see cref="ICustomer"/></returns>
-        public ICustomer CreateCustomer(string firstName, string lastName, string email, int? memberId = null)
+        internal ICustomer CreateCustomer(string firstName, string lastName, string email, int? memberId = null)
         {
 
             var customer = new Customer(0, 0, null)
@@ -91,7 +91,7 @@ namespace Merchello.Core.Services
         /// <param name="email">the email address of the customer</param>
         /// <param name="memberId">The Umbraco member Id of the customer</param>
         /// <returns><see cref="ICustomer"/></returns>
-        public ICustomer CreateCustomerWithKey(string firstName, string lastName, string email, int? memberId = null)
+        internal ICustomer CreateCustomerWithKey(string firstName, string lastName, string email, int? memberId = null)
         {
             var customer = new Customer(0, 0, null)
             {
@@ -127,7 +127,7 @@ namespace Merchello.Core.Services
         /// </summary>
         /// <param name="memberId">The Umbraco member id (int)</param>
         /// <returns><see cref="ICustomer"/></returns>
-        public ICustomer CreateCustomerWithKey(int memberId)
+        internal ICustomer CreateCustomerWithKey(int memberId)
         {
             return CreateCustomerWithKey(string.Empty, string.Empty, string.Empty, memberId);
         }
@@ -154,7 +154,7 @@ namespace Merchello.Core.Services
         /// </summary>
         /// <param name="customer">The <see cref="ICustomer"/> to save</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events.</param>
-        public void Save(ICustomer customer, bool raiseEvents = true)
+        internal void Save(ICustomer customer, bool raiseEvents = true)
         {
             if(raiseEvents) Saving.RaiseEvent(new SaveEventArgs<ICustomer>(customer), this);
 
@@ -176,7 +176,7 @@ namespace Merchello.Core.Services
         /// </summary>
         /// <param name="customers">Collection of <see cref="ICustomer"/> to save</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        public void Save(IEnumerable<ICustomer> customers, bool raiseEvents = true)
+        internal void Save(IEnumerable<ICustomer> customers, bool raiseEvents = true)
         {
             var customerArray = customers as ICustomer[] ?? customers.ToArray();
 
@@ -240,7 +240,7 @@ namespace Merchello.Core.Services
         /// </summary>
         /// <param name="customer">The <see cref="ICustomer"/> to delete</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        public void Delete(ICustomer customer, bool raiseEvents = true)
+        internal void Delete(ICustomer customer, bool raiseEvents = true)
         {
             if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<ICustomer>(customer), this);
 
@@ -261,7 +261,7 @@ namespace Merchello.Core.Services
         /// </summary>
         /// <param name="customers">Collection of <see cref="ICustomer"/> to delete</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        public void Delete(IEnumerable<ICustomer> customers, bool raiseEvents = true)
+        internal void Delete(IEnumerable<ICustomer> customers, bool raiseEvents = true)
         {
             var customerArray = customers as ICustomer[] ?? customers.ToArray();
 
@@ -288,7 +288,7 @@ namespace Merchello.Core.Services
         /// </summary>
         /// <param name="key">Guid key for the customer</param>
         /// <returns><see cref="ICustomer"/></returns>
-        public ICustomer GetByKey(Guid key)
+        internal ICustomer GetByKey(Guid key)
         {
             using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
             {
@@ -325,7 +325,7 @@ namespace Merchello.Core.Services
         /// </summary>
         /// <param name="keys">List of unique keys</param>
         /// <returns></returns>
-        public IEnumerable<ICustomer> GetByKeys(IEnumerable<Guid> keys)
+        internal IEnumerable<ICustomer> GetByKeys(IEnumerable<Guid> keys)
         {
             using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
             {
@@ -360,7 +360,7 @@ namespace Merchello.Core.Services
         }
 
 
-        public IEnumerable<ICustomer> GetAll()
+        internal IEnumerable<ICustomer> GetAll()
         {
             using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
             {

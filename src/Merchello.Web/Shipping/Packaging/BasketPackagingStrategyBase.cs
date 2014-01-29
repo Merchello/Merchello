@@ -3,6 +3,7 @@ using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Web.Models;
+using Merchello.Web.Workflow;
 
 namespace Merchello.Web.Shipping.Packaging
 {

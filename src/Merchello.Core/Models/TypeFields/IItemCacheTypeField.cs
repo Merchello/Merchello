@@ -15,6 +15,11 @@
         /// The wishlist type
         /// </summary>
         ITypeField Wishlist { get; }
+
+        /// <summary>
+        /// The checkout type
+        /// </summary>
+        ITypeField Checkout { get; }
    
     }
 }

@@ -65,6 +65,7 @@ namespace Merchello.Core.Services
         /// <param name="providerKey">The unique 'key' of the TaxationGatewayProvider</param>
         /// <returns>A collection of <see cref="ICountryTaxRate"/></returns>
         IEnumerable<ICountryTaxRate> GetCountryTaxRatesByProviderKey(Guid providerKey);
+        
 
     }
 }

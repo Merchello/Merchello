@@ -58,5 +58,20 @@ namespace Merchello.Core.Models
         /// </summary>
         [DataMember]
         public string Phone { get; set; }
+
+        /// <summary>
+        /// True/false indicating whether or not this record represents commercial or business address
+        /// </summary>
+        /// <remarks>
+        /// Used by certain shipping providers in shipping rate quotations
+        /// </remarks>
+        [DataMember]
+        public bool IsCommercial { get; set; }
+
+        /// <summary>
+        /// The <see cref="AddressType"/> of the address
+        /// </summary>
+        [DataMember]
+        AddressType AddressType { get; set; }
     }
 }

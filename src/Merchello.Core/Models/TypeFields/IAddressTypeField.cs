@@ -8,11 +8,11 @@
         /// <summary>
         /// The residential type
         /// </summary>
-        ITypeField Residential { get; }     
+        ITypeField Shipping { get; }     
 
         /// <summary>
         /// The commercial type
         /// </summary>
-        ITypeField Commercial { get; }
+        ITypeField Billing { get; }
     }
 }
