@@ -81,8 +81,8 @@ namespace Merchello.Core.Persistence.Repositories
                 .InnerJoin<ProductVariantDto>()
                 .On<ProductDto, ProductVariantDto>(left => left.Key, right => right.ProductKey)
                 .InnerJoin<ProductVariantIndexDto>()
-                .On<ProductVariantDto, ProductVariantIndexDto>(left => left.Key, right => right.ProductVariantKey)
-                .Where<ProductVariantDto>(x => x.Master == false);
+                .On<ProductVariantDto, ProductVariantIndexDto>(left => left.Key, right => right.ProductVariantKey);
+                //.Where<ProductVariantDto>(x => x.Master == false);
 
             return sql;
         }

@@ -5,15 +5,20 @@ using Examine;
 using Examine.LuceneEngine.SearchCriteria;
 using Examine.SearchCriteria;
 using Merchello.Core;
+using Merchello.Core.Cache;
 using Merchello.Core.Models;
+using Merchello.Core.Persistence.UnitOfWork;
+using Merchello.Core.Services;
 using Merchello.Examine;
 using Merchello.Web.Models.ContentEditing;
+using Umbraco.Core;
 using Umbraco.Core.Logging;
 
 namespace Merchello.Web
 {
     internal class ProductQuery
     {
+        private readonly IMerchelloContext _merchelloContext;
 
         /// <summary>
         /// Retrieves a <see cref="ProductDisplay"/> given it's 'unique' Key
@@ -81,11 +86,16 @@ namespace Merchello.Web
             {
                 LogHelper.Error<ProductQuery>("GetVariantDisplayByKey", ex);
             }
+            
+            // Assists in unit testing
+            var merchelloContext = MerchelloContext.Current ?? 
+                new MerchelloContext(new ServiceContext(new PetaPocoUnitOfWorkProvider()),
+                                        new CacheHelper(new NullCacheProvider(), new NullCacheProvider(), new NullCacheProvider()));
 
-            var retrieved = MerchelloContext.Current.Services.ProductVariantService.GetByKey(new Guid(key));
+            var retrieved = merchelloContext.Services.ProductVariantService.GetByKey(new Guid(key));
             if (retrieved != null) ReindexProductVariant(retrieved, null);
 
-            return retrieved.ToProductVariantDisplay();
+            return retrieved != null ? retrieved.ToProductVariantDisplay() : null;
         }
 
 
