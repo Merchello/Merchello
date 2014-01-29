@@ -15,8 +15,8 @@
         }
         else {
             self.currencyCode = settingsFromServer.currencyCode;
-            self.nextOrderNumber = settingsFromServer.nextOrderNumber;
-            self.nextInvoiceNumber = settingsFromServer.nextInvoiceNumber;
+            self.nextOrderNumber = parseInt(settingsFromServer.nextOrderNumber);
+            self.nextInvoiceNumber = parseInt(settingsFromServer.nextInvoiceNumber);
             self.dateFormat = settingsFromServer.dateFormat;
             self.timeFormat = settingsFromServer.timeFormat;
             self.globalShippable = settingsFromServer.globalShippable;

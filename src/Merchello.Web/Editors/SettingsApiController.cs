@@ -158,8 +158,7 @@ namespace Merchello.Web.Editors
 		/// </summary>
 		/// <param name="id"></param>
 		public SettingDisplay GetAllSettings()
-		{
-
+		{																								   
 			IEnumerable<IStoreSetting> settings = _storeSettingService.GetAll();
 			SettingDisplay settingDisplay = new SettingDisplay();
 
@@ -177,7 +176,7 @@ namespace Merchello.Web.Editors
 		/// PUT /umbraco/Merchello/ProductApi/PutSettings
 		/// </summary>
 		/// <param name="setting">SettingDisplay object serialized from WebApi</param>
-		[AcceptVerbs("PUT", "POST")]
+		[AcceptVerbs("POST", "PUT")]
 		public HttpResponseMessage PutSettings(SettingDisplay setting)
 		{
 			var response = Request.CreateResponse(HttpStatusCode.OK);
