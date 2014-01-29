@@ -1,8 +1,4 @@
-﻿using System;
-using Merchello.Core.Persistence;
-using Umbraco.Core.Persistence.UnitOfWork;
-
-namespace Merchello.Core.Services
+﻿namespace Merchello.Core.Services
 {
     /// <summary>
     /// Defines the ServiceContext, which provides access to the following services:
@@ -10,7 +6,6 @@ namespace Merchello.Core.Services
     /// </summary>
     public interface IServiceContext
     {
-
         /// <summary>
         /// Gets the <see cref="ICustomerService"/>
         /// </summary>
@@ -20,6 +15,11 @@ namespace Merchello.Core.Services
         /// Gets the <see cref="IGatewayProviderService"/>
         /// </summary>
         IGatewayProviderService GatewayProviderService { get; }
+
+        /// <summary>
+        /// Gets the <see cref="IInvoiceService"/>
+        /// </summary>
+        IInvoiceService InvoiceService { get; }
 
         /// <summary>
         /// Gets the <see cref="ItemCacheService"/>
@@ -42,9 +42,9 @@ namespace Merchello.Core.Services
         IStoreSettingService StoreSettingService { get; }
 
         /// <summary>
-        /// Gets the <see cref="IShippingService"/>
+        /// Gets the <see cref="IShipmentService"/>
         /// </summary>
-        IShippingService ShippingService { get; }
+        IShipmentService ShipmentService { get; }
 
         /// <summary>
         /// Gets the <see cref="IWarehouseService"/>

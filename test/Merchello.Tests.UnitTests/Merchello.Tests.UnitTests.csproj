@@ -213,7 +213,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Activator\ActivatorHelperTests.cs" />
     <Compile Include="Configuration\RegionalProvinceConfigurationCollectionTest.cs" />
     <Compile Include="ExtendedData\ExtendedDataExtensionTests.cs" />
     <Compile Include="Models\BasketTests.cs" />

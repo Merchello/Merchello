@@ -104,6 +104,11 @@
     <Compile Include="Gateways\Shipping\ShipmentRateQuote.cs" />
     <Compile Include="Gateways\Shipping\ShippingGatewayProviderBase.cs" />
     <Compile Include="Gateways\Shipping\RateTable\ShipRateTable.cs" />
+    <Compile Include="Gateways\Taxation\CountryTaxRate\CountryTaxRateTaxationGatewayProvider.cs" />
+    <Compile Include="Gateways\Taxation\CountryTaxRate\ICountryTaxRateTaxationGatewayProvider.cs" />
+    <Compile Include="Gateways\Taxation\IInvoiceTaxResult.cs" />
+    <Compile Include="Gateways\Taxation\ITaxationGatewayProvider.cs" />
+    <Compile Include="Gateways\Taxation\TaxationGatewayProviderBase.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\AppliedPayment.cs">
       <SubType>Code</SubType>
@@ -203,6 +208,7 @@
     <Compile Include="Models\Interfaces\IShipProvince.cs" />
     <Compile Include="Models\Interfaces\IShipRateTier.cs" />
     <Compile Include="Models\Interfaces\IStoreSetting.cs" />
+    <Compile Include="Models\Interfaces\ICountryTaxRate.cs" />
     <Compile Include="Models\Interfaces\ITaxProvince.cs" />
     <Compile Include="Models\Interfaces\IWarehouse.cs">
       <SubType>Code</SubType>
@@ -212,6 +218,7 @@
     <Compile Include="Models\Interfaces\ICatalogInventory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\Invoice.cs" />
     <Compile Include="Models\InvoiceLineItem.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -279,7 +286,7 @@
     <Compile Include="Models\Rdbms\ShipRateTierDto.cs" />
     <Compile Include="Models\Rdbms\StoreSettingDto.cs" />
     <Compile Include="Models\Rdbms\WarehouseCatalogDto.cs" />
-    <Compile Include="Models\Rdbms\TaxRegionDto.cs" />
+    <Compile Include="Models\Rdbms\CountryTaxRateDto.cs" />
     <Compile Include="Models\CountryBase.cs" />
     <Compile Include="Models\Shipment.cs">
       <SubType>Code</SubType>
@@ -291,6 +298,7 @@
     <Compile Include="Models\ShipProvince.cs" />
     <Compile Include="Models\ShipRateTier.cs" />
     <Compile Include="Models\StoreSetting.cs" />
+    <Compile Include="Models\CountryTaxRate.cs" />
     <Compile Include="Models\TaxProvince.cs" />
     <Compile Include="Models\TypeFields\AppliedPaymentTypeField.cs">
       <SubType>Code</SubType>
@@ -312,12 +320,13 @@
     </Compile>
     <Compile Include="Persistence\DefaultDatabaseFactory.cs" />
     <Compile Include="Persistence\Factories\AppliedPaymentFactory.cs" />
+    <Compile Include="Persistence\Factories\CountryTaxRateFactory.cs" />
     <Compile Include="Persistence\Factories\CustomerAddressFactory.cs" />
     <Compile Include="Persistence\Factories\CustomerFactory.cs" />
-    <Compile Include="Persistence\Factories\ExtendedDataFactory.cs" />
     <Compile Include="Persistence\Factories\GatewayProviderFactory.cs" />
     <Compile Include="Persistence\Factories\IEntityFactory.cs" />
     <Compile Include="Persistence\Factories\CatalogInventoryFactory.cs" />
+    <Compile Include="Persistence\Factories\InvoiceFactory.cs" />
     <Compile Include="Persistence\Factories\InvoiceStatusFactory.cs" />
     <Compile Include="Persistence\Factories\ItemCacheFactory.cs" />
     <Compile Include="Persistence\Factories\LineItemFactory.cs" />
@@ -340,6 +349,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Persistence\Mappers\CatalogInventoryMapper.cs" />
+    <Compile Include="Persistence\Mappers\CountryTaxRateMapper.cs" />
     <Compile Include="Persistence\Mappers\CustomerAddressMapper.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -353,6 +363,7 @@
     <Compile Include="Persistence\Mappers\InvoiceLineItemMapper.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Persistence\Mappers\InvoiceMapper.cs" />
     <Compile Include="Persistence\Mappers\InvoiceStatusMapper.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -391,12 +402,15 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Persistence\Mappers\ShipRateTierMapper.cs" />
+    <Compile Include="Persistence\Mappers\StoreSettingMapper.cs" />
     <Compile Include="Persistence\Mappers\WarehouseMapper.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Persistence\Repositories\CountryTaxRateRepository.cs" />
     <Compile Include="Persistence\Repositories\CustomerAddressRepository.cs" />
     <Compile Include="Persistence\Repositories\CustomerRepository.cs" />
     <Compile Include="Persistence\Repositories\GatewayProviderRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\ICountryTaxRateRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\ICustomerAddressRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\ICustomerRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IGatewayProviderRepository.cs" />
@@ -412,6 +426,7 @@
     <Compile Include="Persistence\Repositories\Interfaces\IShipRateTierRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IStoreSettingRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IWarehouseRepository.cs" />
+    <Compile Include="Persistence\Repositories\InvoiceRepository.cs" />
     <Compile Include="Persistence\Repositories\ItemCacheRepository.cs" />
     <Compile Include="Persistence\Repositories\LineItemRepository.cs" />
     <Compile Include="Persistence\Repositories\PaymentRepository.cs" />
@@ -481,23 +496,33 @@
     <Compile Include="Persistence\UnitOfWork\PetaPocoUnitOfWork.cs" />
     <Compile Include="Persistence\UnitOfWork\PetaPocoUnitOfWorkProvider.cs" />
     <Compile Include="RateAdjustmentType.cs" />
+    <Compile Include="Services\CountryTaxRateService.cs" />
     <Compile Include="Services\GatewayProviderService.cs" />
+    <Compile Include="Services\Interfaces\ICountryTaxRateService.cs" />
     <Compile Include="Services\Interfaces\IGatewayProviderService.cs" />
+    <Compile Include="Services\Interfaces\IInvoiceService.cs" />
     <Compile Include="Services\Interfaces\IItemCacheService.cs" />
     <Compile Include="Services\Interfaces\IProductService.cs" />
     <Compile Include="Services\Interfaces\IProductVariantService.cs" />
     <Compile Include="Services\Interfaces\IServiceContext.cs" />
+    <Compile Include="Services\Interfaces\IShipCountryService.cs" />
+    <Compile Include="Services\Interfaces\IShipMethodService.cs" />
+    <Compile Include="Services\Interfaces\IShipRateTierService.cs" />
     <Compile Include="Services\Interfaces\IStoreSettingService.cs" />
-    <Compile Include="Services\Interfaces\IShippingService.cs" />
+    <Compile Include="Services\Interfaces\IShipmentService.cs" />
     <Compile Include="Services\Interfaces\IWarehouseService.cs" />
     <Compile Include="Models\Interfaces\IProvince.cs" />
+    <Compile Include="Services\InvoiceService.cs" />
     <Compile Include="Services\ItemCacheService.cs" />
     <Compile Include="Services\ProductService.cs" />
     <Compile Include="Services\ProductVariantService.cs" />
     <Compile Include="Models\Province.cs" />
     <Compile Include="Services\ServiceContext.cs" />
+    <Compile Include="Services\ShipCountryService.cs" />
+    <Compile Include="Services\ShipMethodService.cs" />
+    <Compile Include="Services\ShipRateTierService.cs" />
     <Compile Include="Services\StoreSettingService.cs" />
-    <Compile Include="Services\ShippingService.cs" />
+    <Compile Include="Services\ShipmentService.cs" />
     <Compile Include="Services\WarehouseService.cs" />
     <Compile Include="Strategies\IStrategy.cs" />
     <Compile Include="Strategies\Shipping\IPackagingStrategy.cs" />
@@ -550,11 +575,9 @@
     <Compile Include="Services\Interfaces\ICustomerService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

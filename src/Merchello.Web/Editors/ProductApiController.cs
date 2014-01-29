@@ -183,6 +183,42 @@ namespace Merchello.Web.Editors
                     newProduct.AddToCatalogInventory(_warehouseService.GetDefaultWarehouse().DefaultCatalog());
                     newProduct.CatalogInventories.First().Count = 10;
                     _productService.Save(newProduct);
+
+                    //newProduct = _productService.GetByKey(newProduct.Key) as Product;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);
+            }
+
+            return newProduct.ToProductDisplay();
+        }
+
+        /// <summary>
+        /// Creates a product from ProductDisplay
+        ///
+        /// POST /umbraco/Merchello/ProductApi/NewProduct
+        /// </summary>
+        /// <param name="product">POSTed JSON product model</param>
+        [AcceptVerbs("GET", "POST")]
+        public ProductDisplay NewProductFromProduct(ProductDisplay product)
+        {
+            IProduct newProduct = null;
+
+            try
+            {
+                newProduct = _productService.CreateProduct(product.Name, product.Sku, product.Price);
+                newProduct = product.ToProduct(newProduct);
+                _productService.Save(newProduct);
+
+                if (!newProduct.Download)
+                {
+                    newProduct.AddToCatalogInventory(_warehouseService.GetDefaultWarehouse().DefaultCatalog());
+                    newProduct.CatalogInventories.First().Count = 10;
+                    _productService.Save(newProduct);
+
+                    //newProduct = _productService.GetByKey(newProduct.Key) as Product;
                 }
             }
             catch (Exception ex)
@@ -199,7 +235,7 @@ namespace Merchello.Web.Editors
         /// PUT /umbraco/Merchello/ProductApi/PutProduct
         /// </summary>
         /// <param name="product">ProductDisplay object serialized from WebApi</param>
-        [AcceptVerbs("PUT")]
+        [AcceptVerbs("POST", "PUT")]
         public HttpResponseMessage PutProduct(ProductDisplay product)
         {
             var response = Request.CreateResponse(HttpStatusCode.OK);
@@ -207,7 +243,7 @@ namespace Merchello.Web.Editors
             try
             {
                 IProduct merchProduct = _productService.GetByKey(product.Key);
-                merchProduct = product.ToProduct(merchProduct);
+                //merchProduct = product.ToProduct(merchProduct);
 
                 _productService.Save(merchProduct);
             }

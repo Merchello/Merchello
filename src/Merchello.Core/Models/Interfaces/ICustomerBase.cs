@@ -22,6 +22,12 @@ namespace Merchello.Core.Models
         /// True/false indicating whether or not this customer is anonymous
         /// </summary>
         [DataMember]
-        bool IsAnonymous { get; } 
+        bool IsAnonymous { get; }
+
+        /// <summary>
+        /// A collection to store custom/extended data for the customer
+        /// </summary>
+        [DataMember]
+        ExtendedDataCollection ExtendedData { get; }
     }
 }

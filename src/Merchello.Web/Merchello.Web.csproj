@@ -201,7 +201,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationContextExtensions.cs" />
-    <Compile Include="BasketExtensions.cs" />
+    <Compile Include="CheckoutExtensions.cs" />
     <Compile Include="Editors\SettingsApiController.cs" />
     <Compile Include="Editors\ShippingMethodsApiController.cs" />
     <Compile Include="Editors\WarehouseApiController.cs" />
@@ -225,7 +225,6 @@
     <Compile Include="PackageActions\CreateDatabase.cs" />
     <Compile Include="ProductQuery.cs" />
     <Compile Include="CustomerExtensions.cs" />
-    <Compile Include="Editors\CustomerApiController.cs" />
     <Compile Include="Editors\ProductApiController.cs" />
     <Compile Include="Editors\ProductVariantApiController.cs" />
     <Compile Include="EncryptionHelper.cs" />

@@ -64,7 +64,7 @@ namespace Merchello.Core.Persistence.Migrations.Initial
                 {25, typeof(Product2ProductOptionDto)},
                 //{26, typeof(WarehouseInventoryDto)},
                 {26, typeof(CatalogInventoryDto)},
-                {27, typeof(TaxRegionDto)},
+                {27, typeof(CountryTaxRateDto)},
                 {28, typeof(ProductVariant2ProductAttributeDto)},
            
                 {29, typeof(AppliedPaymentDto)},

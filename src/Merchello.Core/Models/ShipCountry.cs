@@ -9,7 +9,7 @@ namespace Merchello.Core.Models
     /// <summary>
     /// Represents a country associated with a warehouse
     /// </summary>
-    public class ShipCountry : CountryBase, IShipCountry
+    internal class ShipCountry : CountryBase, IShipCountry
     {
         private Guid _catalogKey;
 

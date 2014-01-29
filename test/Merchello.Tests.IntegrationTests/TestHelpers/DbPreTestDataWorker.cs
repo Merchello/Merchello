@@ -26,7 +26,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         
         private readonly ServiceContext _serviceContext;
         public UmbracoDatabase Database { get; private set; }
-        public IWarehouseCatalog _warehouseCatalog;
+        public IWarehouseCatalog WarehouseCatalog;
         public DbPreTestDataWorker()
             : this(new ServiceContext(new PetaPocoUnitOfWorkProvider()))
         { }
@@ -45,7 +45,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
             _serviceContext = serviceContext;
 
-            _warehouseCatalog = new WarehouseCatalog(Constants.DefaultKeys.DefaultWarehouseKey)
+            WarehouseCatalog = new WarehouseCatalog(Constants.DefaultKeys.DefaultWarehouseKey)
             {
                 Key = Constants.DefaultKeys.DefaultWarehouseCatalogKey
             };
@@ -117,6 +117,31 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         {
             var allAnonymous = ((CustomerService) CustomerService).GetAllAnonymousCustomers();
             CustomerService.Delete(allAnonymous);
+        }
+
+        #endregion
+
+        #region ICountryTaxRegion
+
+        /// <summary>
+        /// Deletes all country tax rates for a given provider
+        /// </summary>
+        /// <param name="providerKey"></param>
+        public void DeleteAllCountryTaxRates(Guid providerKey)
+        {
+            var countryTaxRates = CountryTaxRateService.GetCountryTaxRatesByProviderKey(providerKey);
+            foreach (var countryTaxRate in countryTaxRates)
+            {
+                CountryTaxRateService.Delete(countryTaxRate);
+            }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="ICountryTaxRateService"/>
+        /// </summary>
+        public ICountryTaxRateService CountryTaxRateService
+        {
+            get { return _serviceContext.CountryTaxRateService; }
         }
 
         #endregion
@@ -284,7 +309,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         {
             var product = MockProductDataMaker.MockProductForInserting(shippable, weight, price);            
             ProductService.Save(product);
-            product.AddToCatalogInventory(_warehouseCatalog);
+            product.AddToCatalogInventory(WarehouseCatalog);
             ProductService.Save(product);
             return product;
         }
@@ -353,25 +378,36 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
         #region Shipping (IShipment, IShipCounty)
 
-        public void DeleteAllShipCountries()
-        {
-            var shipCountries = ((ShippingService) ShippingService).GetAllShipCountries();
-            foreach (var country in shipCountries)
-            {
-                ShippingService.Delete(country);
-            }
-
-        }
+        
 
         /// <summary>
         /// Returns the Shipping Service
         /// </summary>
-        public IShippingService ShippingService
+        public IShipmentService ShipmentService
         {
             get
             {
-                return _serviceContext.ShippingService;
+                return _serviceContext.ShipmentService;
             }
+        }
+
+        #endregion
+
+        #region ShipCountry
+
+        public void DeleteAllShipCountries()
+        {
+            var shipCountries = ((ShipCountryService)ShipCountryService).GetAllShipCountries();
+            foreach (var country in shipCountries)
+            {
+                ShipCountryService.Delete(country);
+            }
+
+        }
+
+        internal IShipCountryService ShipCountryService
+        {
+            get { return _serviceContext.ShipCountryService; }
         }
 
         #endregion

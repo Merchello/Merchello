@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
+using System.Collections.Generic;
 
 namespace Merchello.Web.Models.ContentEditing
 {
@@ -11,6 +13,7 @@ namespace Merchello.Web.Models.ContentEditing
         internal static WarehouseDisplay ToWarehouseDisplay(this IWarehouse warehouse)
         {
             AutoMapper.Mapper.CreateMap<IWarehouse, WarehouseDisplay>();
+            AutoMapper.Mapper.CreateMap<IWarehouseCatalog, WarehouseCatalogDisplay>();
 
             return AutoMapper.Mapper.Map<WarehouseDisplay>(warehouse);
         }
@@ -36,12 +39,66 @@ namespace Merchello.Web.Models.ContentEditing
             destination.Email = warehouseDisplay.Email;
             destination.IsDefault = warehouseDisplay.IsDefault;
 
+            foreach (var warehouseCatalogDisplay in warehouseDisplay.WarehouseCatalogs)
+            {
+                IWarehouseCatalog destinationWarehouseCatalog;
+
+                var matchingItems = destination.WarehouseCatalogs.Where(x => x.Key == warehouseCatalogDisplay.Key);
+                if (matchingItems.Count() > 0)
+                {
+                    var existingWarehouseCatalog = matchingItems.First();
+                    if (existingWarehouseCatalog != null)
+                    {
+                        destinationWarehouseCatalog = existingWarehouseCatalog;
+
+                        destinationWarehouseCatalog = warehouseCatalogDisplay.ToWarehouseCatalog(destinationWarehouseCatalog);
+                    }
+                }
+                else
+                {
+                    // Case if one was created in the back-office.  Not planned for v1
+
+                    //destinationWarehouseCatalog = new WarehouseCatalog(warehouseDisplay.Key);
+
+                    //destinationWarehouseCatalog = warehouseCatalogDisplay.ToWarehouseCatalog(destinationWarehouseCatalog);
+
+                    //destination.WarehouseCatalogs.Add(destinationWarehouseCatalog);
+                }
+            }
+
             return destination;
         }
 
         #endregion
 
-        #region WarehouseInventoryDisplay
+        #region WarehouseCatalogDisplay
+
+        internal static WarehouseCatalogDisplay ToWarehouseCatalogDisplay(this IWarehouseCatalog warehouseCatalog)
+        {
+            AutoMapper.Mapper.CreateMap<IWarehouseCatalog, WarehouseCatalogDisplay>();
+
+            return AutoMapper.Mapper.Map<WarehouseCatalogDisplay>(warehouseCatalog);
+        }
+
+        #endregion
+
+        #region IWarehouseCatalog
+
+        internal static IWarehouseCatalog ToWarehouseCatalog(this WarehouseCatalogDisplay warehouseCatalogDisplay, IWarehouseCatalog destination)
+        {
+            if (warehouseCatalogDisplay.Key != Guid.Empty)
+            {
+                destination.Key = warehouseCatalogDisplay.Key;
+            }
+            destination.Name = warehouseCatalogDisplay.Name;
+            destination.Description = warehouseCatalogDisplay.Description;
+
+            return destination;
+        }
+
+        #endregion
+
+        #region CatalogInventoryDisplay
 
         internal static CatalogInventoryDisplay ToCatalogInventoryDisplay(this ICatalogInventory catalogInventory)
         {
@@ -52,7 +109,7 @@ namespace Merchello.Web.Models.ContentEditing
 
         #endregion
 
-        #region IWarehouseInventory
+        #region ICatalogInventory
 
         internal static ICatalogInventory ToCatalogInventory(this CatalogInventoryDisplay catalogInventoryDisplay, ICatalogInventory destination)
         {
@@ -110,11 +167,11 @@ namespace Merchello.Web.Models.ContentEditing
 
         #region TaxProvinceDisplay
 
-        internal static TaxProvinceDisplay ToTaxProvinceDisplay(this TaxProvince taxProvince)
+        internal static TaxProvinceDisplay ToTaxProvinceDisplay(this CountryTaxRate countryTaxRate)
         {
-            AutoMapper.Mapper.CreateMap<TaxProvince, TaxProvinceDisplay>();
+            AutoMapper.Mapper.CreateMap<CountryTaxRate, TaxProvinceDisplay>();
 
-            return AutoMapper.Mapper.Map<TaxProvinceDisplay>(taxProvince);
+            return AutoMapper.Mapper.Map<TaxProvinceDisplay>(countryTaxRate);
         }
 
         #endregion

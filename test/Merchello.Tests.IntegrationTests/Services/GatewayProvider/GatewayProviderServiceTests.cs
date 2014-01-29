@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Cache;
+using Merchello.Core.Gateways;
 using Merchello.Core.Gateways.Shipping.RateTable;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
@@ -18,7 +19,7 @@ namespace Merchello.Tests.IntegrationTests.Services.GatewayProvider
         private IGatewayProviderService _gatewayProviderService;
         private IWarehouseCatalog _catalog;
         private IStoreSettingService _storeSettingService;
-        private IShippingService _shippingService;
+        private IShipCountryService _shipCountryService;
         private IMerchelloContext _merchelloContext;
 
         [SetUp]
@@ -26,7 +27,7 @@ namespace Merchello.Tests.IntegrationTests.Services.GatewayProvider
         {
             _gatewayProviderService = PreTestDataWorker.GatewayProviderService;
             _storeSettingService = PreTestDataWorker.StoreSettingService;
-            _shippingService = PreTestDataWorker.ShippingService;
+            _shipCountryService = PreTestDataWorker.ShipCountryService;
 
             _merchelloContext = new MerchelloContext(new ServiceContext(new PetaPocoUnitOfWorkProvider()),
                 new CacheHelper(new NullCacheProvider(),
@@ -38,11 +39,11 @@ namespace Merchello.Tests.IntegrationTests.Services.GatewayProvider
             PreTestDataWorker.DeleteAllShipCountries();
             var country = _storeSettingService.GetCountryByCode("US");
             var shipCountry = new ShipCountry(_catalog.Key, country);
-            _shippingService.Save(shipCountry);
+            _shipCountryService.Save(shipCountry);
            
        
             var shippingProvider =
-                _merchelloContext.Gateways.ResolveByKey<RateTableShippingGatewayProvider>(Core.Constants.ProviderKeys.Shipping.RateTableShippingProviderKey);
+               ((GatewayContext) _merchelloContext.Gateways).ResolveByKey<RateTableShippingGatewayProvider>(Core.Constants.ProviderKeys.Shipping.RateTableShippingProviderKey);
             Assert.NotNull(shippingProvider);
 
             var resource = shippingProvider.ListResourcesOffered().FirstOrDefault();
@@ -57,7 +58,7 @@ namespace Merchello.Tests.IntegrationTests.Services.GatewayProvider
         public void Can_Query_A_List_Of_GatewayProviders_By_Country()
         {
             //// Arrange
-            var shipCountry = _shippingService.GetShipCountriesByCatalogKey(_catalog.Key).First();
+            var shipCountry = _shipCountryService.GetShipCountriesByCatalogKey(_catalog.Key).First();
 
             
             //// Act

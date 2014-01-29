@@ -121,6 +121,7 @@
                         $scope.product = product;
                         $scope.productVariant.copyFromProduct($scope.product);
 
+                        $scope.creatingVariant = false;    // For the variant edit/create view.
                         notificationsService.success("Product Created and Saved", "H5YR!");
 
                     }, function (reason) {
@@ -248,6 +249,7 @@
 
                         $scope.product = merchelloProductService.createVariantsFromOptions($scope.product);
 
+                        $scope.creatingVariant = false;    // For the variant edit/create view.
                         notificationsService.success("Product Variants Created", "");
 
                     }, function (reason) {

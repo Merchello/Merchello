@@ -8,34 +8,28 @@ namespace Merchello.Core.Models
     public interface IInvoice : IEntity
     {
         /// <summary>
-        /// Optional unique 'key' of the order assoicated with the invoice
-        /// </summary>
-        [DataMember]
-        Guid? OrderKey { get; set; }
-
-        /// <summary>
-        /// The invoice number
-        /// </summary>
-        [DataMember]
-        string InvoiceNumber { get; }
-
-        /// <summary>
-        /// The date the invoice was issued to customer
-        /// </summary>
-        [DataMember]
-        DateTime InvoiceDate { get; set; }
-
-        /// <summary>
         /// The unique customer 'key' to associated with the invoice
         /// </summary>
         [DataMember]
         Guid? CustomerKey { get; }
 
         /// <summary>
+        /// The invoice number
+        /// </summary>
+        [DataMember]
+        int InvoiceNumber { get; }
+
+        /// <summary>
+        /// The date the invoice was issued to customer
+        /// </summary>
+        [DataMember]
+        DateTime InvoiceDate { get; set; }
+        
+        /// <summary>
         /// The id for the invoice status associated with this invoice
         /// </summary>
         [DataMember]
-        Guid InvoiceStatusKey { get; }
+        Guid InvoiceStatusKey { get; set; }
 
         /// <summary>
         /// The full name to use for billing.  Generally copied from customer address.
@@ -115,7 +109,12 @@ namespace Merchello.Core.Models
         [DataMember]
         decimal Amount { get; }
 
+
+        /// <summary>
+        /// The <see cref="ILineItem"/>s in the invoice
+        /// </summary>
+        [DataMember]
+        LineItemCollection Items { get; }
+
     }
-
-
 }

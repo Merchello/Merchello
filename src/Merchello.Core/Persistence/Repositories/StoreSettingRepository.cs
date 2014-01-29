@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Merchello.Core.Models;
 using Merchello.Core.Models.EntityBase;
@@ -121,6 +122,26 @@ namespace Merchello.Core.Persistence.Repositories
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
+        }
+
+        /// <summary>
+        /// Gets the next invoice number (int)
+        /// </summary>
+        /// <param name="storeSettingKey">Constant Guid Key of the NextInvoiceNumber store setting</param>
+        /// <param name="invoicesCount">The number of invoices needing invoice numbers.  Useful when saving multiple new invoices.</param>
+        /// <returns></returns>
+        public int GetNextInvoiceNumber(Guid storeSettingKey, int invoicesCount = 1)
+        {
+            Mandate.ParameterCondition(1 >= invoicesCount, "invoicesCount");
+
+            var nextInvoiceNumber = Get(storeSettingKey);
+            var invoiceNumber = (int.Parse(nextInvoiceNumber.Value) + invoicesCount);
+
+            nextInvoiceNumber.Value = invoiceNumber.ToString(CultureInfo.InvariantCulture);
+
+            AddOrUpdate(nextInvoiceNumber); // this will deal with the cache as well
+
+            return invoiceNumber;
         }
     }
 }

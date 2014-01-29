@@ -16,7 +16,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
 
         private IWarehouseCatalog _catalog;
         private IStoreSettingService _storeSettingService;
-        private IShippingService _shippingService;
+        private IShipCountryService _shipCountryService;
         
         [TestFixtureSetUp]
         public void FixtureInit()
@@ -39,7 +39,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             }
 
             _storeSettingService = PreTestDataWorker.StoreSettingService;
-            _shippingService = PreTestDataWorker.ShippingService;
+            _shipCountryService = PreTestDataWorker.ShipCountryService;
         }
 
         [SetUp]
@@ -62,11 +62,28 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             var shipCountry = new ShipCountry(_catalog.Key, country);
             Assert.IsFalse(shipCountry.HasIdentity);
             
-            _shippingService.Save(shipCountry);
+            _shipCountryService.Save(shipCountry);
 
             //// Assert
             Assert.IsTrue(shipCountry.HasIdentity);
 
+        }
+
+        /// <summary>
+        /// Test verifies the 
+        /// </summary>
+        [Test]
+        public void Can_Create_A_ShipCountryWithKey_Using_ServiceMethod()
+        {
+            //// Arrange
+            const string countryCode = "US";
+
+            //// Act
+            var attempt = ((ShipCountryService) _shipCountryService).CreateShipCountryWithKey(_catalog.Key, countryCode);
+
+            //// Assert
+            Assert.IsTrue(attempt.Success);
+            Assert.IsTrue(attempt.Result.HasIdentity);
         }
 
         /// <summary>
@@ -83,10 +100,10 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             var shipCountry1 = new ShipCountry(_catalog.Key, country);
             var shipCountry2 = new ShipCountry(_catalog.Key, country);
 
-            _shippingService.Save(shipCountry1);
+            _shipCountryService.Save(shipCountry1);
 
             //// Assert
-            Assert.Throws<ConstraintException>(() => _shippingService.Save(shipCountry2));
+            Assert.Throws<ConstraintException>(() => _shipCountryService.Save(shipCountry2));
         }
 
         /// <summary>
@@ -99,12 +116,12 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             const string countryCode = "US";
             var country = _storeSettingService.GetCountryByCode(countryCode);
             var shipCountry = new ShipCountry(_catalog.Key, country);
-            _shippingService.Save(shipCountry);
+            _shipCountryService.Save(shipCountry);
             Assert.IsTrue(shipCountry.HasIdentity);
             var key = shipCountry.Key;
 
             //// Act
-            var retrieved = _shippingService.GetShipCountryByKey(key);
+            var retrieved = _shipCountryService.GetByKey(key);
 
             //// Assert
             Assert.NotNull(retrieved);
@@ -122,15 +139,15 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             const string countryCode = "US";
             var country = _storeSettingService.GetCountryByCode(countryCode);
             var shipCountry = new ShipCountry(_catalog.Key, country);
-            _shippingService.Save(shipCountry);
+            _shipCountryService.Save(shipCountry);
             Assert.IsTrue(shipCountry.HasIdentity);
             var key = shipCountry.Key;
 
             //// Act
-            _shippingService.Delete(shipCountry);            
+            _shipCountryService.Delete(shipCountry);            
 
             //// Assert
-            Assert.IsNull(_shippingService.GetShipCountryByKey(key));
+            Assert.IsNull(_shipCountryService.GetByKey(key));
         }
 
         /// <summary>
@@ -153,11 +170,11 @@ namespace Merchello.Tests.IntegrationTests.Shipping
 
             foreach (var country in countries)
             { 
-                _shippingService.Save(country);
+                _shipCountryService.Save(country);
             }
 
             //// Act
-            var retrieved = _shippingService.GetShipCountriesByCatalogKey(_catalog.Key);
+            var retrieved = _shipCountryService.GetShipCountriesByCatalogKey(_catalog.Key);
 
             //// Assert
             Assert.NotNull(retrieved);

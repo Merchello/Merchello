@@ -17,7 +17,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
         protected IGatewayProviderService GatewayProviderService;
         protected IWarehouseCatalog Catalog;
         protected IStoreSettingService StoreSettingService;
-        protected IShippingService ShippingService;
+        internal IShipCountryService ShipCountryService;
         protected IMerchelloContext MerchelloContext;
         
         [TestFixtureSetUp]
@@ -42,7 +42,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
 
             GatewayProviderService = PreTestDataWorker.GatewayProviderService;
             StoreSettingService = PreTestDataWorker.StoreSettingService;
-            ShippingService = PreTestDataWorker.ShippingService;
+            ShipCountryService = PreTestDataWorker.ShipCountryService;
 
 
             PreTestDataWorker.DeleteAllShipCountries();
@@ -50,10 +50,10 @@ namespace Merchello.Tests.IntegrationTests.Shipping
 
             var us = StoreSettingService.GetCountryByCode(countryCode);
             var shipCountry = new ShipCountry(Catalog.Key, us);
-            ShippingService.Save(shipCountry);
+            ShipCountryService.Save(shipCountry);
 
             var dk = StoreSettingService.GetCountryByCode("DK");
-            ShippingService.Save(new ShipCountry(Catalog.Key, dk));
+            ShipCountryService.Save(new ShipCountry(Catalog.Key, dk));
             
             MerchelloContext = new MerchelloContext(new ServiceContext(new PetaPocoUnitOfWorkProvider()),
                 new CacheHelper(new NullCacheProvider(),

@@ -20,6 +20,11 @@ namespace Merchello.Core
             {
                 public static Guid RateTableShippingProviderKey = new Guid("AEC7A923-9F64-41D0-B17B-0EF64725F576");
             }
+
+            public static class Taxation
+            {
+                public static Guid CountryTaxRateTaxationProviderKey = new Guid("A4AD4331-C278-4231-8607-925E0839A6CD");
+            }
         }
 
         /// <summary>

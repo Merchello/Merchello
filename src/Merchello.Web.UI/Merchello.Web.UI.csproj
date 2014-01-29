@@ -87,6 +87,7 @@
     <Content Include="App_Plugins\Merchello\Common\Css\merchello.min.css">
       <DependentUpon>merchello.scss</DependentUpon>
     </Content>
+    <Content Include="App_Plugins\Merchello\Common\Js\merchello.helpers.js" />
     <Content Include="App_Plugins\Merchello\Common\Js\merchello.app.js" />
     <Content Include="App_Plugins\Merchello\Common\Js\merchello.models.js" />
     <Content Include="App_Plugins\Merchello\Common\Js\merchello.namespaces.js" />
@@ -107,7 +108,6 @@
     <Content Include="App_Plugins\Merchello\Modules\Order\order.edit.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Customer\customer.list.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Order\order.list.controller.js" />
-    <Content Include="App_Plugins\Merchello\Modules\Catalog\product.create.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\product.edit.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\product.list.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Report\reports.salesByItem.controller.js" />
@@ -127,6 +127,7 @@
     <Content Include="App_Plugins\Merchello\Modules\Settings\payment.models.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\settings.models.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\shipping.models.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\merchello.warehouse.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\taxation.models.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\vendors.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\notifications.controller.js" />
@@ -142,7 +143,6 @@
     <Content Include="Umbraco\images\tray\Merchello-Icon.png" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\CustomerEdit.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\CustomerView.html" />
-    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\CreateProduct.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\edit.html" />
     <Content Include="Umbraco\images\tray\Merchello-Icon.gif" />
   </ItemGroup>

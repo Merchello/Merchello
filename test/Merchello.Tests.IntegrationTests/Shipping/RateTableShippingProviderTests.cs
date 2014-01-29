@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Examine;
 using Merchello.Core;
+using Merchello.Core.Gateways;
 using Merchello.Core.Gateways.Shipping.RateTable;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
@@ -17,7 +18,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
         private IShipCountry _shipCountry;
         private ICustomerBase _customer;
         private IBasket _basket;
-        private const int ProductCount = 5;
+        private const int ProductCount = 3;
         private IAddress _destination;
         private const decimal WeightPerProduct = 2M;
         private const decimal PricePerProduct = 10M;
@@ -40,12 +41,12 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             _basket = Basket.GetBasket(MerchelloContext, _customer);
 
             for (var i = 0; i < ProductCount; i++) _basket.AddItem(PreTestDataWorker.MakeExistingProduct(true, WeightPerProduct, PricePerProduct));
-            ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"].RebuildIndex();  
+            
 
 
             Basket.Save(MerchelloContext, _basket);
 
-            _shipCountry = ShippingService.GetShipCountryByCountryCode(Catalog.Key, "US");
+            _shipCountry = ShipCountryService.GetShipCountryByCountryCode(Catalog.Key, "US");
 
         }
 
@@ -58,7 +59,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             //// Arrange            
             // Get the RateTableShippingProvider
             var key = Constants.ProviderKeys.Shipping.RateTableShippingProviderKey;
-            var rateTableProvider = MerchelloContext.Gateways.ResolveByKey<RateTableShippingGatewayProvider>(key);
+            var rateTableProvider = ((GatewayContext)MerchelloContext.Gateways).ResolveByKey<RateTableShippingGatewayProvider>(key);
             const decimal expected = 5M;
             rateTableProvider.DeleteAllActiveShipMethods(_shipCountry);
 
@@ -83,7 +84,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
         {
             //// Arrange
             var key = Constants.ProviderKeys.Shipping.RateTableShippingProviderKey;
-            var rateTableProvider = MerchelloContext.Gateways.ResolveByKey<RateTableShippingGatewayProvider>(key);
+            var rateTableProvider = ((GatewayContext)MerchelloContext.Gateways).ResolveByKey<RateTableShippingGatewayProvider>(key);
             rateTableProvider.DeleteAllActiveShipMethods(_shipCountry);
             var expected = 4;
 
@@ -114,7 +115,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
         {
             //// Arrange
             var key = Constants.ProviderKeys.Shipping.RateTableShippingProviderKey;
-            var rateTableProvider = MerchelloContext.Gateways.ResolveByKey<RateTableShippingGatewayProvider>(key);
+            var rateTableProvider = ((GatewayContext)MerchelloContext.Gateways).ResolveByKey<RateTableShippingGatewayProvider>(key);
             rateTableProvider.DeleteAllActiveShipMethods(_shipCountry);
             var gwshipMethod = (RateTableShipMethod)rateTableProvider.CreateShipMethod(RateTableShipMethod.QuoteType.VaryByWeight, _shipCountry, "Ground (VBW)");
             gwshipMethod.RateTable.AddRow(0, 10, 5);
@@ -122,7 +123,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             gwshipMethod.RateTable.AddRow(15, 25, 25);
             gwshipMethod.RateTable.AddRow(25, 10000, 100);
 
-            var expectedRate = 10M;
+            var expectedRate = 5M;
 
             //// Act
             var shipments = _basket.PackageBasket(MerchelloContext, _destination);
@@ -142,7 +143,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
         {
             //// Arrange
             var key = Constants.ProviderKeys.Shipping.RateTableShippingProviderKey;
-            var rateTableProvider = MerchelloContext.Gateways.ResolveByKey<RateTableShippingGatewayProvider>(key);
+            var rateTableProvider = ((GatewayContext)MerchelloContext.Gateways).ResolveByKey<RateTableShippingGatewayProvider>(key);
             rateTableProvider.DeleteAllActiveShipMethods(_shipCountry);
             var gwshipMethod = (RateTableShipMethod)rateTableProvider.CreateShipMethod(RateTableShipMethod.QuoteType.PercentTotal, _shipCountry, "Ground (PercentTotal)");
             gwshipMethod.RateTable.AddRow(0, 10, 5);
@@ -151,7 +152,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             gwshipMethod.RateTable.AddRow(25, 60, 30); // total price should be 50M so we should hit this tier
             gwshipMethod.RateTable.AddRow(25, 10000, 50);
 
-            var expectedRate = 15M; // .3*50
+            var expectedRate = 9M; // .3*30
 
             //// Act
             var shipments = _basket.PackageBasket(MerchelloContext, _destination);
@@ -170,9 +171,9 @@ namespace Merchello.Tests.IntegrationTests.Shipping
         public void Can_Return_A_Valid_List_Of_ActiveShipMethods()
         {
             //// Arrange
-            var dkCountry = ShippingService.GetShipCountryByCountryCode(Catalog.Key, "DK");
+            var dkCountry = ShipCountryService.GetShipCountryByCountryCode(Catalog.Key, "DK");
             var key = Constants.ProviderKeys.Shipping.RateTableShippingProviderKey;
-            var rateTableProvider = MerchelloContext.Gateways.ResolveByKey<RateTableShippingGatewayProvider>(key);
+            var rateTableProvider = ((GatewayContext)MerchelloContext.Gateways).ResolveByKey<RateTableShippingGatewayProvider>(key);
             rateTableProvider.DeleteAllActiveShipMethods(_shipCountry);
             var gwshipMethod1 = (RateTableShipMethod)rateTableProvider.CreateShipMethod(RateTableShipMethod.QuoteType.PercentTotal, _shipCountry, "Ground (PercentTotal) 1");
             var gwshipMethod2 = (RateTableShipMethod)rateTableProvider.CreateShipMethod(RateTableShipMethod.QuoteType.PercentTotal, _shipCountry, "Ground (PercentTotal) 2");
@@ -195,9 +196,9 @@ namespace Merchello.Tests.IntegrationTests.Shipping
         public void Can_Get_Quotes_For_All_Active_ShipMethods()
         {
             //// Arrange
-            var dkCountry = ShippingService.GetShipCountryByCountryCode(Catalog.Key, "DK");
+            var dkCountry = ShipCountryService.GetShipCountryByCountryCode(Catalog.Key, "DK");
             var key = Constants.ProviderKeys.Shipping.RateTableShippingProviderKey;
-            var rateTableProvider = MerchelloContext.Gateways.ResolveByKey<RateTableShippingGatewayProvider>(key);
+            var rateTableProvider = ((GatewayContext)MerchelloContext.Gateways).ResolveByKey<RateTableShippingGatewayProvider>(key);
             rateTableProvider.DeleteAllActiveShipMethods(_shipCountry);
             var gwshipMethod1 = (RateTableShipMethod)rateTableProvider.CreateShipMethod(RateTableShipMethod.QuoteType.PercentTotal, _shipCountry, "Ground (PercentTotal) 1");
             gwshipMethod1.RateTable.AddRow(0, 10, 5);
@@ -231,8 +232,40 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             //// Assert
             Assert.IsTrue(quotes.Any());
             Assert.AreEqual(2, quotes.Count()); 
-            Assert.AreEqual(10M, quotes.First().Rate);
-            Assert.AreEqual(15M, quotes.Last().Rate);
+            Assert.AreEqual(5M, quotes.First().Rate);
+            Assert.AreEqual(9M, quotes.Last().Rate);
+        }
+
+        /// <summary>
+        /// Test verifies that an adjusted rate is returned for Alaska
+        /// </summary>
+        [Test]
+        public void Can_Get_A_Numerically_Adjusted_Quote_For_Alaska_Region()
+        {
+            //// Arrange
+            var key = Constants.ProviderKeys.Shipping.RateTableShippingProviderKey;
+            var rateTableProvider = ((GatewayContext)MerchelloContext.Gateways).ResolveByKey<RateTableShippingGatewayProvider>(key);
+            rateTableProvider.DeleteAllActiveShipMethods(_shipCountry);
+            var gwshipMethod1 = (RateTableShipMethod)rateTableProvider.CreateShipMethod(RateTableShipMethod.QuoteType.PercentTotal, _shipCountry, "Ground (PercentTotal) 1");
+            gwshipMethod1.RateTable.AddRow(0, 10, 5);
+            gwshipMethod1.RateTable.AddRow(10, 15, 10);
+            gwshipMethod1.RateTable.AddRow(15, 25, 25);
+            gwshipMethod1.RateTable.AddRow(25, 60, 30); // total price should be 50M so we should hit this tier
+            gwshipMethod1.RateTable.AddRow(25, 10000, 50);
+            gwshipMethod1.ShipMethod.Provinces["AK"].RateAdjustment = 5M;
+            rateTableProvider.SaveShipMethod(gwshipMethod1);
+            _destination.Region = "AK";
+
+            //// Act
+            var shipments = _basket.PackageBasket(MerchelloContext, _destination);
+            Assert.IsTrue(shipments.Any());
+            var quotes = MerchelloContext.Gateways.GetShipRateQuotesForShipment(shipments.First());
+
+            //// Assert
+            Assert.IsTrue(quotes.Any());
+            Assert.AreEqual(1, quotes.Count());
+            Assert.AreEqual(14M, quotes.First().Rate);
+
         }
     }
 }
