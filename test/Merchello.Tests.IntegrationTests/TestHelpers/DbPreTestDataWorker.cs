@@ -235,65 +235,24 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
         #region IInvoice
 
-        ///// <summary>
-        ///// Makes an invoice record in the database and returns an instance of IInvoice representing that record
-        ///// 
-        ///// </summary>
-        ///// <param name="customerAddress"></param>
-        ///// <param name="maxItemCount">If itemCount is greater than 0, invoice items will be added to the invoice</param>
-        ///// <param name="customer"></param>
-        ///// <param name="invoiceStatus"></param>
-        //public IInvoice MakeExistingInvoice(ICustomer customer, IInvoiceStatus invoiceStatus, ICustomerAddress customerAddress, int maxItemCount = 0)
-        //{
-        //    var invoice = MockInvoiceDataMaker.InvoiceForInserting(customer, invoiceStatus, customerAddress);
-        //    InvoiceService.Save(invoice);
-
-        //    //if(maxItemCount > 0) MakeExistingInvoiceItemCollection(invoice, InvoiceItemType.Product, MockDataMakerBase.NoWhammyStop.Next(maxItemCount));
-
-        //    return invoice;
-        //}
-
-        ///// <summary>
-        ///// Makes a list of invoices (without items) in the database and returns a collection of IInvoice representing these records
-        ///// </summary>
-        //public IEnumerable<IInvoice> MakeExistingInvoiceCollection(ICustomer customer, IInvoiceStatus invoiceStatus, ICustomerAddress customerAddress, int count)
-        //{
-        //    var invoices = MockInvoiceDataMaker.InvoiceCollectionForInserting(customer, invoiceStatus, customerAddress, count);
-        //    InvoiceService.Save(invoices);
-        //    return invoices;
-        //}
-
-        ///// <summary>
-        ///// Makes a list of invoices (with items) in the database and returns a collection of IInvoice representing these records
-        ///// </summary>
-        ///// <param name="customer"><see cref="ICustomer"/></param>
-        ///// <param name="invoiceStatus"><see cref="IInvoiceStatus"/></param>
-        ///// <param name="customerAddress"><see cref="ICustomerAddress"/></param>
-        ///// <param name="count">the number of invoices to generate</param>
-        ///// <param name="maxItemCount">The maximum number of invoice items for each invoice</param>
-        ///// <returns></returns>
-        //public IEnumerable<IInvoice> MakeExistingInvoiceCollection(ICustomer customer, IInvoiceStatus invoiceStatus, ICustomerAddress customerAddress, int count, int maxItemCount)
-        //{
-        //    for(var i = 0; i < count; i++) yield return MakeExistingInvoice(customer, invoiceStatus, customerAddress, maxItemCount);
-        //}
 
 
-        ///// <summary>
-        ///// Deletes all invoices
-        ///// </summary>
-        //public void DeleteAllInvoices()
-        //{
-        //    var all = ((InvoiceService)InvoiceService).GetAll().ToArray();
-        //    InvoiceService.Delete(all);
-        //}
+        /// <summary>
+        /// Deletes all invoices
+        /// </summary>
+        public void DeleteAllInvoices()
+        {
+            var all = ((InvoiceService)InvoiceService).GetAll().ToArray();
+            InvoiceService.Delete(all);
+        }
 
-        ///// <summary>
-        ///// The invoice service
-        ///// </summary>
-        //public IInvoiceService InvoiceService
-        //{
-        //    get { return _serviceContext.InvoiceService; }
-        //}
+        /// <summary>
+        /// The invoice service
+        /// </summary>
+        public IInvoiceService InvoiceService
+        {
+            get { return _serviceContext.InvoiceService; }
+        }
 
         #endregion
 

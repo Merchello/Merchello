@@ -14,7 +14,7 @@ namespace Merchello.Tests.IntegrationTests.Services
         [TestFixtureSetUp]
         public virtual void FixtureSetup()
         {
-            ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"].RebuildIndex();  
+            //ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"].RebuildIndex();  
         }
 
         protected DbPreTestDataWorker PreTestDataWorker { get; private set; }

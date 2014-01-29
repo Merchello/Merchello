@@ -23,7 +23,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
         [SetUp]
         public void Init()
         {
-
+            PreTestDataWorker.DeleteAllProducts();
             PreTestDataWorker.DeleteAllItemCaches();
             _merchelloContext = new MerchelloContext(new ServiceContext(new PetaPocoUnitOfWorkProvider()),
                 new CacheHelper(new NullCacheProvider(),
