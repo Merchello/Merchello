@@ -34,11 +34,19 @@ namespace Merchello.Web.Models.ContentEditing
 					case "currencyCode":
 						settingDisplay.currencyCode = setting.Value;
 						break;
-					case "nextOrderNumber":						
-						settingDisplay.nextOrderNumber = setting.Value;
+					case "nextOrderNumber":
+						if (!int.TryParse(setting.Value, out intValue))
+						{
+							intValue = 0;
+						}	 
+						settingDisplay.nextOrderNumber = intValue;
 						break;
 					case "nextInvoiceNumber":
-						settingDisplay.nextInvoiceNumber = setting.Value;
+						if (!int.TryParse(setting.Value, out intValue))
+						{
+							intValue = 0;
+						}
+						settingDisplay.nextInvoiceNumber = intValue;
 						break;
 					case "dateFormat":
 						settingDisplay.dateFormat = setting.Value;

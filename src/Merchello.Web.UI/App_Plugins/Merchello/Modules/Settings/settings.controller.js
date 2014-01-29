@@ -13,8 +13,8 @@
         ////////////////////////////////////////////////
             $scope.loaded = true;
             $scope.preValuesLoaded = true;            
-            $(".content-column-body").css('background-image', 'none');
-
+            $(".content-column-body").css('background-image', 'none');                
+            $scope.savingStoreSettings = false;
             $scope.settingsDisplay = new merchello.Models.SettingDisplay();
         ////////////////////////////////////////////////
 
@@ -45,20 +45,23 @@
 
             if (thisForm.$valid) {
 
-                notificationsService.info("Saving...", "");             
-                
-                    $scope.creatingStoreSettings = true;                    
-                    var promise = merchelloSettingsService.save($scope.settingsDisplay);
+                notificationsService.info("Saving...", "");
 
-                    promise.then(function (settingDisplay) {
-                        notificationsService.success("Store Settings Saved", "H5YR!");
+                $scope.savingStoreSettings = true;
+                var promise = merchelloSettingsService.save($scope.settingsDisplay);
 
-                        $scope.settingDisplay = new merchello.Models.SettingDisplay(settingDisplay);
+                promise.then(function (settingDisplay) {
+                    notificationsService.success("Store Settings Saved", "H5YR!");
+                    $scope.savingStoreSettings = false;
+                    $scope.settingDisplay = new merchello.Models.SettingDisplay(settingDisplay);
 
-                    }, function (reason) {
-                        notificationsService.error("Store Settings Save Failed", reason.message);
-                    });
-                }
+                }, function (reason) {
+                    notificationsService.error("Store Settings Save Failed", reason.message);
+                });
+            }
+            else {     
+                notificationsService.info("Store Settings Save Failed...The Form Was Not Valid", "");
+            }
             }
         };
 
