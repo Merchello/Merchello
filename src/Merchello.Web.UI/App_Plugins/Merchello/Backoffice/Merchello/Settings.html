@@ -19,7 +19,7 @@
                     <div class="btn-toolbar pull-right umb-btn-toolbar">
                     
                         <div class="btn-group">
-                            <a href="#" class="btn btn-success" data-ng-click="save(storeSettingsForm)">Save</a>
+                            <a class="btn btn-success" data-ng-disabled="storeSettingsForm.$invalid" data-ng-click="save(storeSettingsForm)">Save</a>
                         </div>
                     </div>
                 </div>
@@ -49,14 +49,14 @@
                             <div class="form-group col-xs-6 span6">
                                 <label for="dateformat">Date Format</label>
                                 <select class="form-control col-xs-8 span8" name="dateformat" data-ng-model="settingsDisplay.dateFormat">
-                                    <option value="dd-mm-yy">dd/mm/yy</option>
+                                    <option value="dd-mm-yyyy">dd/mm/yyyy</option>
                                 </select>
                             </div>
 
                         
                             <div class="form-group col-xs-6 span6">
                                 <label for="startingorder">Starting Order No.</label>
-                                <input type="text" class="form-control col-xs-8 span8" name="startingorder" data-ng-model="settingsDisplay.nextOrderNumber" />
+                                <input type="number" class="form-control col-xs-8 span8" name="startingorder" Required data-ng-model="settingsDisplay.nextOrderNumber" />
                             </div>
 
                       
@@ -69,7 +69,7 @@
 
                             <div class="form-group col-xs-6 span6">
                                 <label for="startinginvoice">Starting Invoice No.</label>
-                                <input type="text" class="form-control col-xs-8 span8" name="startinginvoice" data-ng-model="settingsDisplay.nextInvoiceNumber" />
+                                <input type="number" class="form-control col-xs-8 span8" name="startinginvoice" Required data-ng-model="settingsDisplay.nextInvoiceNumber" />
                             </div>
                         
                             <!-- Unit System and Time Zone will be included in version 2 -->

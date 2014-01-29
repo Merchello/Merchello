@@ -15,7 +15,7 @@
                 
                 return umbRequestHelper.resourcePromise(
                    $http.post(
-                        umbRequestHelper.getApiUrl('merchellSettingsApiBaseUrl', 'PutSetting'),
+                        umbRequestHelper.getApiUrl('merchelloSettingsApiBaseUrl', 'PutSettings'),
                         settingDisplay
                     ),
                     'Failed to save data for Store Settings');
@@ -25,7 +25,7 @@
 
                 return umbRequestHelper.resourcePromise(
                     $http.get(
-                        umbRequestHelper.getApiUrl('merchellSettingsApiBaseUrl', 'GetAllSettings')
+                        umbRequestHelper.getApiUrl('merchelloSettingsApiBaseUrl', 'GetAllSettings')
                     ),
                     'Failed to get all Settings');     
             },                      

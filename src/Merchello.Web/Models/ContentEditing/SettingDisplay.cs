@@ -9,8 +9,8 @@ namespace Merchello.Web.Models.ContentEditing
 	public class SettingDisplay
 	{
 		public string currencyCode { get; set; }											 
-		public string nextOrderNumber { get; set; }
-		public string nextInvoiceNumber { get; set; }
+		public int nextOrderNumber { get; set; }
+		public int nextInvoiceNumber { get; set; }
 		public string dateFormat { get; set; }
 		public string timeFormat { get; set; }
 		public bool globalShippable { get; set; }
