@@ -122,8 +122,10 @@
     <Content Include="App_Plugins\Merchello\lib\ngTagsInput\ng-tags-input.min.css" />
     <Content Include="App_Plugins\Merchello\lib\ngTagsInput\ng-tags-input.min.js" />
     <Content Include="App_Plugins\Merchello\lib\select2\ui-select2.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\merchello.settings.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\notifications.models.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\payment.models.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\settings.models.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\shipping.models.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\merchello.warehouse.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\taxation.models.js" />
