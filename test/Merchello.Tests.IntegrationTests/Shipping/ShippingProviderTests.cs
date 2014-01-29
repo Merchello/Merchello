@@ -37,6 +37,8 @@ namespace Merchello.Tests.IntegrationTests.Shipping
 
             //// Assert
             Assert.IsTrue(providers.Any());
+            Assert.IsNull(providers.FirstOrDefault(x => x.GatewayProviderType != GatewayProviderType.Shipping));
+            Assert.AreEqual(expected, providers.Count());
             Console.WriteLine("Provider name: {0}", providers.First().Name);
         }
 
@@ -90,7 +92,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             Assert.NotNull(provider);
 
             //// Act
-            var shippingProvider = MerchelloContext.Gateways.ResolveByGatewayProvider<RateTableShippingGatewayProvider>(provider);
+            var shippingProvider = ((GatewayContext)MerchelloContext.Gateways).ResolveByGatewayProvider<RateTableShippingGatewayProvider>(provider);
 
             //// Assert
             Assert.NotNull(shippingProvider);
@@ -103,9 +105,9 @@ namespace Merchello.Tests.IntegrationTests.Shipping
         public void Can_Add_A_Shipmethod_To_A_Provider_With_A_ShipCountry()
         {
             //// Arrange
-            var country = ShippingService.GetShipCountryByCountryCode(Catalog.Key, "US");
+            var country = ShipCountryService.GetShipCountryByCountryCode(Catalog.Key, "US");
             var provider = MerchelloContext.Gateways.GetGatewayProviders(GatewayProviderType.Shipping).FirstOrDefault();
-            var shippingProvider = MerchelloContext.Gateways.ResolveByGatewayProvider<RateTableShippingGatewayProvider>(provider);
+            var shippingProvider = ((GatewayContext)MerchelloContext.Gateways).ResolveByGatewayProvider<RateTableShippingGatewayProvider>(provider);
             Assert.NotNull(shippingProvider);
             
             //// Act
@@ -118,26 +120,6 @@ namespace Merchello.Tests.IntegrationTests.Shipping
 
         }
 
-        ///// <summary>
-        ///// Test verifies that a constraint violation is thrown if a duplicate shipmethod is added per for a country
-        ///// </summary>
-        //[Test]
-        //public void Attempting_To_Add_A_Duplicate_Provider_ShipMethod_For_ShipCountry_Results_In_A_Error()
-        //{
-        //    var country = _shippingService.GetShipCountryByCountryCode(_catalog.Key, "US");
-        //    var provider = _merchelloContext.Gateways.GetGatewayProviders(GatewayProviderType.Shipping).FirstOrDefault();
-        //    var shippingProvider = _merchelloContext.Gateways.GetShippingGatewayProvider(provider);
-        //    Assert.NotNull(shippingProvider);
-        //    var resource = shippingProvider.ListAvailableMethods().FirstOrDefault();
-        //    var gatewayShipMethod = shippingProvider.CreateShipMethod(resource, country, "Ground");
-        //    shippingProvider.SaveShipMethod(gatewayShipMethod);
-
-        //    //// Act
-
-        //    //// Assert
-        //    Assert.Throws<ConstraintException>(() => shippingProvider.CreateShipMethod(resource, country, "Ground"));
-
-        //}
 
     }
 }

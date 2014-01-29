@@ -13,6 +13,7 @@ using Merchello.Core.Services;
 using Merchello.Web.WebApi;
 using Merchello.Web.Models.ContentEditing;
 using System.Net;
+using System.Net.Http;
 
 namespace Merchello.Web.Editors
 {
@@ -112,22 +113,89 @@ namespace Merchello.Web.Editors
         public IEnumerable<TaxProvinceDisplay> GetAllTaxProvinces()
         {
             // TODO: replace with call to service
-            var taxProvinces = new List<TaxProvince>();
+            var taxProvinces = new List<CountryTaxRate>();
 
-            var oregon = new TaxProvince("OR", "Oregon");
-            oregon.PercentAdjustment = 0.01M;
-            taxProvinces.Add(oregon);
+            //var oregon = new TaxCountry("OR", "Oregon");
+            //oregon.Rate = 0.01M;
+            //taxProvinces.Add(oregon);
 
-            var washington = new TaxProvince("WA", "Washington");
-            washington.PercentAdjustment = 0.09M;
-            taxProvinces.Add(washington);
+            //var washington = new TaxCountry("WA", "Washington");
+            //washington.Rate = 0.09M;
+            //taxProvinces.Add(washington);
 
             // END TEST DATA
 
-            foreach (TaxProvince taxProvince in taxProvinces)
+            foreach (CountryTaxRate taxProvince in taxProvinces)
             {
                 yield return taxProvince.ToTaxProvinceDisplay();
             }
         }
+
+		/// <summary>
+		/// Returns All Tax Provinces
+		/// 
+		/// GET /umbraco/Merchello/SettingsApi/GetAllTaxProvinces
+		/// </summary>
+		public IEnumerable<KeyValuePair<string, string>> GetAllCurrency()
+		{
+			// TODO: replace with call to service
+			List<KeyValuePair<string, string>> currencyList = new List<KeyValuePair<string, string>>();
+
+			KeyValuePair<string, string> usd = new KeyValuePair<string,string>("USD", "US Dollars");
+			KeyValuePair<string, string> cad = new KeyValuePair<string,string>("CAD", "Canadian Dollars");
+			currencyList.Add(usd);
+			currencyList.Add(cad);
+
+			// END TEST DATA
+			IEnumerable<KeyValuePair<string, string>> currency = currencyList;
+			return currency;
+		}
+
+		/// <summary>
+		/// Returns Product by id (key)
+		/// 
+		/// GET /umbraco/Merchello/ProductApi/GetProduct/{guid}
+		/// </summary>
+		/// <param name="id"></param>
+		public SettingDisplay GetAllSettings()
+		{
+
+			IEnumerable<IStoreSetting> settings = _storeSettingService.GetAll();
+			SettingDisplay settingDisplay = new SettingDisplay();
+
+			if (settings == null)
+			{
+				throw new HttpResponseException(HttpStatusCode.NotFound);
+			}
+
+			return settingDisplay.ToStoreSettingDisplay(settings);
+		}
+
+		/// <summary>
+		/// Updates existing global settings
+		///
+		/// PUT /umbraco/Merchello/ProductApi/PutSettings
+		/// </summary>
+		/// <param name="setting">SettingDisplay object serialized from WebApi</param>
+		[AcceptVerbs("PUT", "POST")]
+		public HttpResponseMessage PutSettings(SettingDisplay setting)
+		{
+			var response = Request.CreateResponse(HttpStatusCode.OK);
+
+			try
+			{
+				IEnumerable<IStoreSetting> merchSetting = setting.ToStoreSetting(_storeSettingService.GetAll());
+				foreach(var s in merchSetting)
+				{
+					_storeSettingService.Save(s);
+				}
+			}
+			catch (Exception ex)
+			{
+				response = Request.CreateResponse(HttpStatusCode.NotFound, String.Format("{0}", ex.Message));
+			}
+
+			return response;
+		}
     }
 }

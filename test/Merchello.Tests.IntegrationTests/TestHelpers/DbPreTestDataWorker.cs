@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Models;
+using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Models.TypeFields;
 using Merchello.Core.Persistence.Migrations.Initial;
 using Merchello.Core.Persistence.UnitOfWork;
@@ -25,7 +26,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         
         private readonly ServiceContext _serviceContext;
         public UmbracoDatabase Database { get; private set; }
-
+        public IWarehouseCatalog WarehouseCatalog;
         public DbPreTestDataWorker()
             : this(new ServiceContext(new PetaPocoUnitOfWorkProvider()))
         { }
@@ -43,6 +44,11 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
             Database = uowProvider.GetUnitOfWork().Database;
 
             _serviceContext = serviceContext;
+
+            WarehouseCatalog = new WarehouseCatalog(Constants.DefaultKeys.DefaultWarehouseKey)
+            {
+                Key = Constants.DefaultKeys.DefaultWarehouseCatalogKey
+            };
         }
 
         #region IAddress
@@ -111,6 +117,31 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         {
             var allAnonymous = ((CustomerService) CustomerService).GetAllAnonymousCustomers();
             CustomerService.Delete(allAnonymous);
+        }
+
+        #endregion
+
+        #region ICountryTaxRegion
+
+        /// <summary>
+        /// Deletes all country tax rates for a given provider
+        /// </summary>
+        /// <param name="providerKey"></param>
+        public void DeleteAllCountryTaxRates(Guid providerKey)
+        {
+            var countryTaxRates = CountryTaxRateService.GetCountryTaxRatesByProviderKey(providerKey);
+            foreach (var countryTaxRate in countryTaxRates)
+            {
+                CountryTaxRateService.Delete(countryTaxRate);
+            }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="ICountryTaxRateService"/>
+        /// </summary>
+        public ICountryTaxRateService CountryTaxRateService
+        {
+            get { return _serviceContext.CountryTaxRateService; }
         }
 
         #endregion
@@ -274,9 +305,11 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         /// Saves a product record to the database and returns and instance of <see cref="IProduct"/> represents that record
         /// </summary>
         /// <returns><see cref="IProduct"/></returns>
-        public IProduct MakeExistingProduct(bool shippable = true)
+        public IProduct MakeExistingProduct(bool shippable = true, decimal weight = 0, decimal price = 0)
         {
-            var product = MockProductDataMaker.MockProductForInserting(shippable);
+            var product = MockProductDataMaker.MockProductForInserting(shippable, weight, price);            
+            ProductService.Save(product);
+            product.AddToCatalogInventory(WarehouseCatalog);
             ProductService.Save(product);
             return product;
         }
@@ -345,25 +378,36 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
         #region Shipping (IShipment, IShipCounty)
 
-        public void DeleteAllShipCountries()
-        {
-            var shipCountries = ((ShippingService) ShippingService).GetAllShipCountries();
-            foreach (var country in shipCountries)
-            {
-                ShippingService.Delete(country);
-            }
-
-        }
+        
 
         /// <summary>
         /// Returns the Shipping Service
         /// </summary>
-        public IShippingService ShippingService
+        public IShipmentService ShipmentService
         {
             get
             {
-                return _serviceContext.ShippingService;
+                return _serviceContext.ShipmentService;
             }
+        }
+
+        #endregion
+
+        #region ShipCountry
+
+        public void DeleteAllShipCountries()
+        {
+            var shipCountries = ((ShipCountryService)ShipCountryService).GetAllShipCountries();
+            foreach (var country in shipCountries)
+            {
+                ShipCountryService.Delete(country);
+            }
+
+        }
+
+        internal IShipCountryService ShipCountryService
+        {
+            get { return _serviceContext.ShipCountryService; }
         }
 
         #endregion

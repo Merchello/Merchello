@@ -165,12 +165,15 @@ namespace Merchello.Web.Editors
 
                     newProductVariant = _productVariantService.CreateProductVariantWithKey(product, productVariant.Name, productVariant.Sku, productVariant.Price, productAttributes, true);
 
-                    newProductVariant.AddToCatalogInventory(_warehouseService.GetDefaultWarehouse().DefaultCatalog());
-                    newProductVariant.CatalogInventories.First().Count = 10;
-                    newProductVariant.CatalogInventories.First().LowCount = 3;
-                    //newProductVariant.Warehouses.First().Count = productVariant.WarehouseInventory.First().Count;
-                    //newProductVariant.Warehouses.First().LowCount = productVariant.WarehouseInventory.First().LowCount;
-                    _productVariantService.Save(newProductVariant);
+                    if (!newProductVariant.Download)
+                    {
+                        newProductVariant.AddToCatalogInventory(_warehouseService.GetDefaultWarehouse().DefaultCatalog());
+                        newProductVariant.CatalogInventories.First().Count = 10;
+                        newProductVariant.CatalogInventories.First().LowCount = 3;
+                        //newProductVariant.Warehouses.First().Count = productVariant.WarehouseInventory.First().Count;
+                        //newProductVariant.Warehouses.First().LowCount = productVariant.WarehouseInventory.First().LowCount;
+                        _productVariantService.Save(newProductVariant);
+                    }
                 }
                 else
                 {
@@ -191,7 +194,7 @@ namespace Merchello.Web.Editors
         /// PUT /umbraco/Merchello/ProductVariantApi/PutProductVariant
         /// </summary>
         /// <param name="productVariant">ProductVariantDisplay object serialized from WebApi</param>
-        [AcceptVerbs("PUT")]
+        [AcceptVerbs("POST", "PUT")]
         public HttpResponseMessage PutProductVariant(ProductVariantDisplay productVariant)
         {
             var response = Request.CreateResponse(HttpStatusCode.OK);

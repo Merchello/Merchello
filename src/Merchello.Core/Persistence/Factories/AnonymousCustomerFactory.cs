@@ -11,6 +11,7 @@ namespace Merchello.Core.Persistence.Factories
             {
                 Key = dto.Key,
                 LastActivityDate = dto.LastActivityDate,
+                ExtendedData = new ExtendedDataCollection(dto.ExtendedData),
                 UpdateDate = dto.UpdateDate,
                 CreateDate = dto.CreateDate                
             };
@@ -22,6 +23,7 @@ namespace Merchello.Core.Persistence.Factories
             {
                 Key = entity.Key,
                 LastActivityDate = entity.LastActivityDate,
+                ExtendedData = entity.ExtendedData.Serialize(),
                 UpdateDate = entity.UpdateDate,
                 CreateDate = entity.CreateDate
             };

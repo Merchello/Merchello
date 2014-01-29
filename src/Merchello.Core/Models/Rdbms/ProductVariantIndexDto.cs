@@ -7,7 +7,7 @@ namespace Merchello.Core.Models.Rdbms
     [TableName("merchProductVariantIndex")]
     [PrimaryKey("id")]
     [ExplicitColumns]
-    public class ProductVariantIndexDto
+    internal class ProductVariantIndexDto
     {
         [Column("id")]
         [PrimaryKeyColumn]

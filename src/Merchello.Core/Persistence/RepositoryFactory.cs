@@ -29,6 +29,15 @@ namespace Merchello.Core.Persistence
         }
 
         /// <summary>
+        /// Returns an instance of the <see cref="ICountryTaxRateRepository"/>
+        /// </summary>
+        internal virtual ICountryTaxRateRepository CreateCountryTaxRateRepository(IDatabaseUnitOfWork uow)
+        {
+            return new CountryTaxRateRepository(uow,
+                _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
+        }
+
+        /// <summary>
         /// Returns an instance of the <see cref="ICustomerRepository"/>
         /// </summary>        
         internal virtual ICustomerRepository CreateCustomerRepository(IDatabaseUnitOfWork uow)
@@ -60,18 +69,30 @@ namespace Merchello.Core.Persistence
         /// </summary>
         /// <param name="uow"></param>
         /// <returns></returns>
-        internal virtual IItemCacheRepository CreateCustomerItemCacheRepository(IDatabaseUnitOfWork uow)
+        internal virtual IItemCacheRepository CreateItemCacheRepository(IDatabaseUnitOfWork uow)
         {
             return new ItemCacheRepository(uow,
                 _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider,
                 CreateLineItemRepository<ItemCacheItemDto>(uow));
         }
 
-        internal virtual IGatewayProviderRepository CreateGatewayProviderRepository(IDatabaseUnitOfWork uow, IStoreSettingService storeSettingService)
+        /// <summary>
+        /// Returns an instance of the <see cref="IInvoiceRepository"/>
+        /// </summary>
+        /// <param name="uow"></param>
+        /// <returns></returns>
+        internal virtual IInvoiceRepository CreateInvoiceRepository(IDatabaseUnitOfWork uow)
+        {
+            return new InvoiceRepository(uow,
+                _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider,
+                CreateLineItemRepository<InvoiceItemDto>(uow)
+                );
+        }
+
+        internal virtual IGatewayProviderRepository CreateGatewayProviderRepository(IDatabaseUnitOfWork uow)
         {
             return new GatewayProviderRepository(uow,
-                _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider,
-                storeSettingService);
+                _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
         }
 
         /// <summary>

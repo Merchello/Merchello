@@ -8,7 +8,11 @@ namespace Merchello.Core.Models
     internal class AnonymousCustomer :  AnonymousCustomerBase, IAnonymousCustomer
     {
         public AnonymousCustomer() 
-            : base(true)
+            : this(new ExtendedDataCollection())
+        {}
+
+        public AnonymousCustomer(ExtendedDataCollection extendedData)
+            : base(true, extendedData)
         {}
     }
 }

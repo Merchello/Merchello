@@ -14,9 +14,7 @@ namespace Merchello.Core.Persistence.Migrations.Initial
     {
         private readonly Database _database;
 
-        private static readonly Guid WarehouseKey = new Guid("268D4007-8853-455A-89F7-A28398843E5F");
-        private static readonly Guid WarehouseCatalogKey = new Guid("B25C2B00-578E-49B9-BEA2-BF3712053C63");
-
+        
         public BaseDataCreation(Database database)
         {
             _database = database;
@@ -109,22 +107,23 @@ namespace Merchello.Core.Persistence.Migrations.Initial
 
         private void CreateWarehouseData()
         {
-            _database.Insert("merchWarehouse", "Key", new WarehouseDto() { Key = WarehouseKey, Name = "Default Warehouse", CountryCode = "", IsDefault = true, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
-            _database.Insert("merchWarehouseCatalog", "Key", new WarehouseCatalogDto() { Key = WarehouseCatalogKey, WarehouseKey = WarehouseKey, Name = "Default Catalog", Description = null, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchWarehouse", "Key", new WarehouseDto() { Key = Constants.DefaultKeys.DefaultWarehouseKey, Name = "Default Warehouse", CountryCode = "", IsDefault = true, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchWarehouseCatalog", "Key", new WarehouseCatalogDto() { Key = Constants.DefaultKeys.DefaultWarehouseCatalogKey, WarehouseKey = Constants.DefaultKeys.DefaultWarehouseKey, Name = "Default Catalog", Description = null, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
         }
 
         private void CreateGatewayProviderData()
         {
             var extended = new ExtendedDataCollection();
 
-            _database.Insert("merchGatewayProvider", "Key", new GatewayProviderDto() { Key = new Guid("AEC7A923-9F64-41D0-B17B-0EF64725F576"), Name = "Rate Table Shipping Provider", ProviderTfKey = EnumTypeFieldConverter.GatewayProvider.GetTypeField(GatewayProviderType.Shipping).TypeKey, ExtendedData = new ExtendedDataCollection().Serialize(), EncryptExtendedData = false, TypeFullName = "Merchello.Core.Gateways.Shipping.RateTable.RateTableShippingGatewayProvider, Merchello.Core", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchGatewayProvider", "Key", new GatewayProviderDto() { Key = Constants.ProviderKeys.Shipping.RateTableShippingProviderKey, Name = "Rate Table Shipping Provider", ProviderTfKey = EnumTypeFieldConverter.GatewayProvider.GetTypeField(GatewayProviderType.Shipping).TypeKey, ExtendedData = new ExtendedDataCollection().Serialize(), EncryptExtendedData = false, TypeFullName = "Merchello.Core.Gateways.Shipping.RateTable.RateTableShippingGatewayProvider, Merchello.Core", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchGatewayProvider", "Key", new GatewayProviderDto() { Key = Constants.ProviderKeys.Taxation.CountryTaxRateTaxationProviderKey, Name = "Fixed Rate Tax Provider", ProviderTfKey = EnumTypeFieldConverter.GatewayProvider.GetTypeField(GatewayProviderType.Taxation).TypeKey, ExtendedData = new ExtendedDataCollection().Serialize(), EncryptExtendedData = false, TypeFullName = "Merchello.Core.Gateways.Taxation.CountryTaxRate.CountryTaxRateTaxationGatewayProvider, Merchello.Core", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
         }
 
         private void CreateStoreSettingData()
         {
             _database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Constants.StoreSettingKeys.CurrencyCodeSettingKey, Name = "currencyCode", Value = "USD", TypeName = "System.String", CreateDate = DateTime.Now, UpdateDate = DateTime.Now});
-            _database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Constants.StoreSettingKeys.NextOrderNumberSettingKey, Name = "nextOrderNumber", Value = "0", TypeName = "System.Int32", CreateDate = DateTime.Now, UpdateDate = DateTime.Now});
-            _database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Constants.StoreSettingKeys.NextInvoiceNumberSettingKey, Name = "nextInvoiceNumber", Value = "0", TypeName = "System.Int32", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Constants.StoreSettingKeys.NextOrderNumberSettingKey, Name = "nextOrderNumber", Value = "1", TypeName = "System.Int32", CreateDate = DateTime.Now, UpdateDate = DateTime.Now});
+            _database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Constants.StoreSettingKeys.NextInvoiceNumberSettingKey, Name = "nextInvoiceNumber", Value = "1", TypeName = "System.Int32", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
             _database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Constants.StoreSettingKeys.DateFormatSettingKey, Name = "dateFormat", Value = "dd-mm-yyyy", TypeName = "System.String", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
             _database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Constants.StoreSettingKeys.TimeFormatSettingKey, Name = "timeFormat", Value = "am-pm", TypeName = "System.String", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
             _database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Constants.StoreSettingKeys.GlobalShippableSettingKey, Name = "globalShippable", Value = "false", TypeName = "System.Boolean", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });

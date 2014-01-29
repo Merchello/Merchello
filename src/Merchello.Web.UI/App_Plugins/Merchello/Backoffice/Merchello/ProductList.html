@@ -50,12 +50,12 @@
             </div>
             <div class="merchello-pane">
 
-                <div>
+                <div class="pager">
                     <button class="btn" data-ng-disabled="currentPage == 0" data-ng-click="currentPage=currentPage-1">
                         Previous
                     </button>
                     {{currentPage+1}}/{{numberOfPages()}}
-                    <button class="btn" data-ng-disabled="currentPage >= data.length/limitAmount - 1" data-ng-click="currentPage=currentPage+1">
+                    <button class="btn" data-ng-disabled="currentPage >= numberOfPages() - 1" data-ng-click="currentPage=currentPage+1">
                         Next
                     </button>
                 </div>
@@ -90,7 +90,17 @@
                         </tr>
                     </tbody>
                 </table>
-                    
+   
+                <div class="pager">
+                    <button class="btn" data-ng-disabled="currentPage == 0" data-ng-click="currentPage=currentPage-1">
+                        Previous
+                    </button>
+                    {{currentPage+1}}/{{numberOfPages()}}
+                    <button class="btn" data-ng-disabled="currentPage >= numberOfPages() - 1" data-ng-click="currentPage=currentPage+1">
+                        Next
+                    </button>
+                </div>
+                                 
             </div>
         </div>
 

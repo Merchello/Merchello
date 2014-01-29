@@ -18,7 +18,7 @@ namespace Merchello.Core.Persistence.Repositories
     internal class ProductVariantRepository : MerchelloPetaPocoRepositoryBase<IProductVariant>, IProductVariantRepository
     {
 
-        public ProductVariantRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache) 
+        public ProductVariantRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache)
             : base(work, cache)
         { }
 
@@ -34,14 +34,8 @@ namespace Merchello.Core.Persistence.Repositories
             if (dto == null || dto.ProductVariantDto == null)
                 return null;
 
-            var factory = new ProductVariantFactory();
+            var factory = new ProductVariantFactory(GetProductAttributeCollection(key), GetCategoryInventoryCollection(key));
             var variant = factory.BuildEntity(dto.ProductVariantDto);
-
-            // set the attributes collection
-            ((ProductVariant)variant).ProductAttributes = GetProductAttributeCollection(variant.Key);
-
-            // set the inventory collection
-            ((ProductVariant) variant).CatalogInventoryInventory = GetWarehouseInventory(variant.Key);
 
             variant.ResetDirtyProperties();
 
@@ -119,7 +113,7 @@ namespace Merchello.Core.Persistence.Repositories
 
             ((Entity)entity).AddingEntity();
 
-            var factory = new ProductVariantFactory();
+            var factory = new ProductVariantFactory(((ProductVariant)entity).ProductAttributes, ((ProductVariant)entity).CatalogInventoryCollection);
             var dto = factory.BuildDto(entity);
 
             // insert the variant
@@ -142,7 +136,7 @@ namespace Merchello.Core.Persistence.Repositories
                 Database.Insert(association);
             }
 
-            SaveWarehouseInventory(entity);
+            SaveCatalogInventory(entity);
 
             entity.ResetDirtyProperties();
         }
@@ -155,13 +149,13 @@ namespace Merchello.Core.Persistence.Repositories
 
             ((Entity)entity).UpdatingEntity();
 
-            var factory = new ProductVariantFactory();
+            var factory = new ProductVariantFactory(((ProductVariant)entity).ProductAttributes, ((ProductVariant)entity).CatalogInventoryCollection);
             var dto = factory.BuildDto(entity);
 
             // update the variant
             Database.Update(dto);
 
-            SaveWarehouseInventory(entity);
+            SaveCatalogInventory(entity);
 
             entity.ResetDirtyProperties();
         }
@@ -173,6 +167,7 @@ namespace Merchello.Core.Persistence.Repositories
             {
                 Database.Execute(delete, new { entity.Key });
             }
+            
         }
 
         #endregion
@@ -188,7 +183,7 @@ namespace Merchello.Core.Persistence.Repositories
             return true;
         }
 
-        private ProductAttributeCollection GetProductAttributeCollection(Guid productVariantKey)
+        internal ProductAttributeCollection GetProductAttributeCollection(Guid productVariantKey)
         {
             var sql = new Sql();
             sql.Select("*")
@@ -211,11 +206,11 @@ namespace Merchello.Core.Persistence.Repositories
         #region WarehouseInventory
 
         // this merely asserts that an assoicate between the warehouse and the variant has been made
-        internal void SaveWarehouseInventory(IProductVariant productVariant)
+        internal void SaveCatalogInventory(IProductVariant productVariant)
         {
-            var existing = GetWarehouseInventory(productVariant.Key);
+            var existing = GetCategoryInventoryCollection(productVariant.Key);
 
-            foreach (var inv in existing.Where(inv => !((ProductVariant)productVariant).CatalogInventoryInventory.Contains(inv.CatalogKey)))
+            foreach (var inv in existing.Where(inv => !((ProductVariant)productVariant).CatalogInventoryCollection.Contains(inv.CatalogKey)))
             {
                 DeleteCatalogInventory(productVariant.Key, inv.CatalogKey);
             }
@@ -225,7 +220,7 @@ namespace Merchello.Core.Persistence.Repositories
                 AddCatalogInventory(inv);
             }
 
-            foreach (var inv in productVariant.CatalogInventories.Where((inv => existing.Contains(inv.CatalogKey))))
+            foreach (var inv in productVariant.CatalogInventories.Where((x => existing.Contains(x.CatalogKey))))
             {
                 UpdateCatalogInventory(inv);
             }
@@ -233,21 +228,9 @@ namespace Merchello.Core.Persistence.Repositories
 
         private void AddCatalogInventory(ICatalogInventory inv)
         {
-            var dto = new CatalogInventoryDto()
-            {
-                CatalogKey = inv.CatalogKey,
-                ProductVariantKey = inv.ProductVariantKey,
-                Count = inv.Count,
-                LowCount = inv.LowCount,
-                CreateDate = DateTime.Now,
-                UpdateDate = DateTime.Now
-            };
+            inv.CreateDate = DateTime.Now;
+            inv.UpdateDate = DateTime.Now;
 
-            Database.Insert(dto);
-        }
-
-        private void UpdateCatalogInventory(ICatalogInventory inv)
-        {
             var dto = new CatalogInventoryDto()
             {
                 CatalogKey = inv.CatalogKey,
@@ -255,7 +238,23 @@ namespace Merchello.Core.Persistence.Repositories
                 Count = inv.Count,
                 LowCount = inv.LowCount,
                 CreateDate = inv.CreateDate,
-                UpdateDate = DateTime.Now
+                UpdateDate = inv.UpdateDate
+            };
+
+            Database.Insert(dto);
+        }
+
+        private void UpdateCatalogInventory(ICatalogInventory inv)
+        {
+            inv.UpdateDate = DateTime.Now;
+            var dto = new CatalogInventoryDto()
+            {
+                CatalogKey = inv.CatalogKey,
+                ProductVariantKey = inv.ProductVariantKey,
+                Count = inv.Count,
+                LowCount = inv.LowCount,
+                CreateDate = inv.CreateDate,
+                UpdateDate = inv.UpdateDate
             };
 
             Database.Update(dto);
@@ -268,7 +267,7 @@ namespace Merchello.Core.Persistence.Repositories
         }
 
 
-        internal WarehouseInventoryCollection GetWarehouseInventory(Guid productVariantKey)
+        internal CatalogInventoryCollection GetCategoryInventoryCollection(Guid productVariantKey)
         {
             var sql = new Sql();
             sql.Select("*")
@@ -279,8 +278,8 @@ namespace Merchello.Core.Persistence.Repositories
 
             var dtos = Database.Fetch<CatalogInventoryDto, WarehouseCatalogDto>(sql);
 
-            var collection = new WarehouseInventoryCollection();
-            var factory = new InventoryFactory();
+            var collection = new CatalogInventoryCollection();
+            var factory = new CatalogInventoryFactory();
 
             foreach (var dto in dtos)
             {

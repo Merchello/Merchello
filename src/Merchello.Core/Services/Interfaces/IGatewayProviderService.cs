@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using Merchello.Core.Configuration.Outline;
 using Merchello.Core.Models;
-using Merchello.Core.Models.Interfaces;
+using Umbraco.Core;
+using Umbraco.Core.Services;
 
 namespace Merchello.Core.Services
 {
-    public interface IGatewayProviderService
+    /// <summary>
+    /// Defines the GatewayProviderService
+    /// </summary>
+    public interface IGatewayProviderService : IService
     {
 
         #region GatewayProvider
@@ -54,8 +57,17 @@ namespace Merchello.Core.Services
 
         #endregion
 
+        #region ShipMethod
 
-        #region Shipping Gateway Provider
+        /// <summary>
+        /// Creates a <see cref="IShipMethod"/>.  This is useful due to the data constraint
+        /// preventing two ShipMethods being created with the same ShipCountry and ServiceCode for any provider.
+        /// </summary>
+        /// <param name="providerKey">The unique gateway provider key (Guid)</param>
+        /// <param name="shipCountry">The <see cref="IShipCountry"/> this ship method is to be associated with</param>
+        /// <param name="name">The required name of the <see cref="IShipMethod"/></param>
+        /// <param name="serviceCode">The ShipMethods service code</param>
+        Attempt<IShipMethod> CreateShipMethodWithKey(Guid providerKey, IShipCountry shipCountry, string name, string serviceCode);
 
         /// <summary>
         /// Saves a single <see cref="IShipMethod"/>
@@ -70,6 +82,22 @@ namespace Merchello.Core.Services
         void Save(IEnumerable<IShipMethod> shipMethodList);
 
         /// <summary>
+        /// Deletes a <see cref="IShipMethod"/>
+        /// </summary>
+        /// <param name="shipMethod"></param>
+        void Delete(IShipMethod shipMethod);
+
+        /// <summary>
+        /// Gets a list of <see cref="IShipMethod"/> objects given a <see cref="IGatewayProvider"/> key and a <see cref="IShipCountry"/> key
+        /// </summary>
+        /// <returns>A collection of <see cref="IShipMethod"/></returns>
+        IEnumerable<IShipMethod> GetGatewayProviderShipMethods(Guid providerKey, Guid shipCountryKey);
+
+        #endregion
+
+        #region ShipRateTier
+
+        /// <summary>
         /// Saves a single <see cref="IShipRateTier"/>
         /// </summary>
         /// <param name="shipRateTier"></param>
@@ -82,23 +110,10 @@ namespace Merchello.Core.Services
         void Save(IEnumerable<IShipRateTier> shipRateTierList);
 
         /// <summary>
-        /// Deletes a <see cref="IShipMethod"/>
-        /// </summary>
-        /// <param name="shipMethod"></param>
-        void Delete(IShipMethod shipMethod);
-
-        /// <summary>
         /// Deletes a <see cref="IShipRateTier"/>
         /// </summary>
         /// <param name="shipRateTier"></param>
         void Delete(IShipRateTier shipRateTier);
-
-        /// <summary>
-        /// Gets a list of <see cref="IShipMethod"/> objects given a <see cref="IGatewayProvider"/> key and a <see cref="IShipCountry"/> key
-        /// </summary>
-        /// <returns>A collection of <see cref="IShipMethod"/></returns>
-        IEnumerable<IShipMethod> GetGatewayProviderShipMethods(Guid providerKey, Guid shipCountryKey);
-
 
         /// <summary>
         /// Gets a list of <see cref="IShipRateTier"/> objects given a <see cref="IShipMethod"/> key
@@ -106,6 +121,47 @@ namespace Merchello.Core.Services
         /// <param name="shipMethodKey">Guid</param>
         /// <returns>A collection of <see cref="IShipRateTier"/></returns>
         IEnumerable<IShipRateTier> GetShipRateTiersByShipMethodKey(Guid shipMethodKey);
+
+        #endregion
+
+        #region ShipCountry
+
+        IShipCountry GetShipCountry(Guid catalogKey, string countryCode);
+
+        #endregion
+
+        #region CountryTaxRate
+
+        /// <summary>
+        /// Attempts to create a <see cref="ICountryTaxRate"/> for a given provider and country.  If the provider already 
+        /// defines a tax rate for the country, the creation fails.
+        /// </summary>
+        /// <param name="providerKey">The unique 'key' (Guid) of the TaxationGatewayProvider</param>
+        /// <param name="countryCode">The two character ISO country code</param>
+        /// <param name="percentageTaxRate">The tax rate in percentage for the country</param>
+        /// <returns><see cref="Attempt"/> indicating whether or not the creation of the <see cref="ICountryTaxRate"/> with respective success or fail</returns>
+        Attempt<ICountryTaxRate> CreateCountryTaxRateWithKey(Guid providerKey, string countryCode, decimal percentageTaxRate);
+
+        /// <summary>
+        /// Gets a <see cref="ICountryTaxRate"/> based on a provider and country code
+        /// </summary>
+        /// <param name="providerKey">The unique 'key' of the <see cref="IGatewayProvider"/></param>
+        /// <param name="countryCode">The country code of the <see cref="ICountryTaxRate"/></param>
+        /// <returns><see cref="ICountryTaxRate"/></returns>
+        ICountryTaxRate GetCountryTaxRateByCountryCode(Guid providerKey, string countryCode);
+
+        /// <summary>
+        /// Saves a single <see cref="ICountryTaxRate"/>
+        /// </summary>
+        /// <param name="countryTaxRate">The <see cref="ICountryTaxRate"/> to be saved</param>        
+        void Save(ICountryTaxRate countryTaxRate);
+
+        /// <summary>
+        /// Gets a collection of <see cref="ICountryTaxRate"/> for a given TaxationGatewayProvider
+        /// </summary>
+        /// <param name="providerKey">The unique 'key' of the TaxationGatewayProvider</param>
+        /// <returns>A collection of <see cref="ICountryTaxRate"/></returns>
+        IEnumerable<ICountryTaxRate> GetCountryTaxRatesByProviderKey(Guid providerKey);
 
         #endregion
     }

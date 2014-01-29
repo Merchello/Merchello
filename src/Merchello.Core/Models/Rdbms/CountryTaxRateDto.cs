@@ -4,21 +4,26 @@ using Umbraco.Core.Persistence.DatabaseAnnotations;
 
 namespace Merchello.Core.Models.Rdbms
 {
-    [TableName("merchTaxRegion")]
+    [TableName("merchCountryTaxRate")]
     [PrimaryKey("pk", autoIncrement = false)]
     [ExplicitColumns]
-    public class TaxRegionDto
+    internal class CountryTaxRateDto
     {
         [Column("pk")]
         [PrimaryKeyColumn(AutoIncrement = false)]
         [Constraint(Default = "newid()")]
         public Guid Key { get; set; }
 
+        [Column("providerKey")]
+        [ForeignKey(typeof(GatewayProviderDto), Name = "FK_merchCountryTaxRate_merchGatewayProvider", Column = "pk")]
+        public Guid ProviderKey { get; set; }
+
         [Column("code")]
         public string Code { get; set; }
 
-        [Column("name")]
-        public string Name { get; set; }
+        [Column("percentageTaxRate")]
+        [Constraint(Default = "0")]
+        public decimal PercentageTaxRate { get; set; }        
 
         [Column("provinceData")]
         [NullSetting(NullSetting = NullSettings.Null)]

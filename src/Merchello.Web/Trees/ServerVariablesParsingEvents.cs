@@ -32,6 +32,10 @@ namespace Merchello.Web.Trees
                                                        controller => controller.GetAllProducts()));
                 umbracoUrls.Add("merchelloProductVariantsApiBaseUrl", Url.GetUmbracoApiServiceBaseUrl<ProductVariantApiController>(
                                                        controller => controller.GetProductVariant(Guid.NewGuid())));
+                umbracoUrls.Add("merchelloSettingsApiBaseUrl", Url.GetUmbracoApiServiceBaseUrl<SettingsApiController>(
+                                                       controller => controller.GetAllCountries()));
+                umbracoUrls.Add("merchelloWarehouseApiBaseUrl", Url.GetUmbracoApiServiceBaseUrl<WarehouseApiController>(
+                                                       controller => controller.GetDefaultWarehouse()));
             }
         }
     }

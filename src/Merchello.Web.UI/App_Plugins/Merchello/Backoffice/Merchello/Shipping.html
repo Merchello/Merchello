@@ -34,7 +34,7 @@
                     <label class="merchello-control-label">
                         Warehouse Info
                         <small>Edit your warehouse</small>
-                        <a data-ng-click="addWarehouseFlyout.open()"><i class="icon-door-open"></i> Edit Warehouse</a>
+                        <a data-ng-click="addWarehouseFlyout.open(primaryWarehouse)"><i class="icon-door-open"></i> Edit Warehouse</a>
                     </label>
 
                     <div class="merchello-controls">
@@ -44,7 +44,7 @@
                             <!-- Add a Warehouse Flyout -->
                             <form name="addWarehouseForm" class="well col-xs-12 span12" data-ng-class="{ 'open': visible.addWarehouseFlyout, 'closed': !flyouts.addWarehouseFlyout }">
                                 <button class="btn close" data-ng-click="addWarehouseFlyout.close()"><i class="icon-delete"></i></button>
-                                <h4 data-ng-switch="newWarehouse.pk">
+                                <h4 data-ng-switch="newWarehouse.key">
                                     <span data-ng-switch-when="no key created">Add a Warehouse</span>
                                     <span data-ng-switch-default="">Edit Warehouse</span>
                                 </h4>
@@ -323,6 +323,22 @@
                         </div>
 
                     </div>
+                </div>
+            </div>
+
+            <div class="control-group umb-control-group">
+                <label class="merchello-control-label">
+                    <label><input data-ng-model="debugging" type="checkbox" /> Debug</label>
+                    <small>Check to show debugging info</small>
+                </label>
+
+                <div class="merchello-controls">
+
+                    <div data-ng-show="debugging">
+                        <h3>Warehouse</h3>
+                        <div class="jsonInfo">{{warehouses | json}}</div>
+                    </div>
+
                 </div>
             </div>
 

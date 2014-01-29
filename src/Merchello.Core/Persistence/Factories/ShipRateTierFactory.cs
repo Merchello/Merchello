@@ -1,10 +1,9 @@
 ﻿using Merchello.Core.Models;
-using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Models.Rdbms;
 
 namespace Merchello.Core.Persistence.Factories
 {
-    public class ShipRateTierFactory : IEntityFactory<IShipRateTier, ShipRateTierDto>
+    internal class ShipRateTierFactory : IEntityFactory<IShipRateTier, ShipRateTierDto>
     {
         public IShipRateTier BuildEntity(ShipRateTierDto dto)
         {

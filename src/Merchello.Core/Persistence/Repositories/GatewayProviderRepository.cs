@@ -17,11 +17,12 @@ namespace Merchello.Core.Persistence.Repositories
 {
     internal class GatewayProviderRepository : MerchelloPetaPocoRepositoryBase<IGatewayProvider>, IGatewayProviderRepository
     {
-        private readonly IStoreSettingService _storeSettingService;
 
-        public GatewayProviderRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, IStoreSettingService storeSettingService) 
+        public GatewayProviderRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache) 
             : base(work, cache)
-        { }
+        {
+            
+        }
 
         protected override IGatewayProvider PerformGet(Guid key)
         {
@@ -91,6 +92,7 @@ namespace Merchello.Core.Persistence.Repositories
                 "DELETE FROM merchShipRateTier WHERE shipMethodKey IN (SELECT pk FROM merchShipMethod WHERE providerKey IN (SELECT pk FROM merchGatewayProvider WHERE pk = @Key))",                
                 "UPDATE merchShipment SET shipMethodKey = NULL WHERE shipMethodKey IN (SELECT pk FROM merchShipMethod WHERE providerKey IN (SELECT pk FROM merchGatewayProvider WHERE pk  = @Key))",
                 "DELETE FROM merchShipMethod WHERE providerKey IN (SELECT pk FROM merchGatewayProvider WHERE pk = @Key)",
+                "DELETE FROM merchCountryTaxRate WHERE providerKey IN (SELECT pk FROM merchGatewayProvider WHERE pk = @Key)",
                 "DELETE FROM merchGatewayProvider WHERE pk = @Key"
             };
 

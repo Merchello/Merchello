@@ -153,7 +153,7 @@ namespace Merchello.Core.Services
             }
 
             if (raiseEvents)
-            Saving.IsRaisedEventCancelled(new SaveEventArgs<IProductVariant>(productVariant), this);
+            Saved.RaiseEvent(new SaveEventArgs<IProductVariant>(productVariant), this);
         }
 
         /// <summary>

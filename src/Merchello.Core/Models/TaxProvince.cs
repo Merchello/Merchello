@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.Serialization;
-using Merchello.Core.Models.Interfaces;
 
 namespace Merchello.Core.Models
 {
@@ -11,16 +10,16 @@ namespace Merchello.Core.Models
     [DataContract(IsReference = true)]
     internal class TaxProvince : Province, ITaxProvince
     {
-        public TaxProvince(string code, string name)
+        public TaxProvince(string code, string name) 
             : base(code, name)
         {
-            PercentAdjustment = 0;
+            PercentRateAdjustment = 0M;
         }
 
         /// <summary>
-        /// Tax percentage adjustment for orders shipped to this province
+        /// The percentage rate adjustment to the tax rate
         /// </summary>
         [DataMember]
-        public decimal PercentAdjustment { get; set; }
+        public decimal PercentRateAdjustment { get; set; }
     }
 }

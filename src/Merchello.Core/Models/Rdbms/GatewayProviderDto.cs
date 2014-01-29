@@ -7,7 +7,7 @@ namespace Merchello.Core.Models.Rdbms
     [TableName("merchGatewayProvider")]
     [PrimaryKey("pk", autoIncrement = false)]
     [ExplicitColumns]
-    public class GatewayProviderDto
+    internal class GatewayProviderDto
     {
         [Column("pk")]
         [PrimaryKeyColumn(AutoIncrement = false)]

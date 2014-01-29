@@ -18,13 +18,13 @@ namespace Merchello.Core.Persistence.Repositories
     internal class ProductRepository : MerchelloPetaPocoRepositoryBase<IProduct>, IProductRepository
     {
         private readonly IProductVariantRepository _productVariantRepository;
-
+        
 
         public ProductRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, IProductVariantRepository productVariantRepository)
             : base(work, cache)
         {
            Mandate.ParameterNotNull(productVariantRepository, "productVariantRepository");
-           _productVariantRepository = productVariantRepository;
+           _productVariantRepository = productVariantRepository;        
         }
 
         #region Overrides of RepositoryBase<IProduct>
@@ -40,19 +40,22 @@ namespace Merchello.Core.Persistence.Repositories
             if (dto == null)
                 return null;
 
-            var factory = new ProductFactory();
+            var inventoryCollection =((ProductVariantRepository) _productVariantRepository).GetCategoryInventoryCollection(dto.ProductVariantDto.Key);
+            var productAttributeCollection = ((ProductVariantRepository) _productVariantRepository).GetProductAttributeCollection(dto.ProductVariantDto.Key);
+
+            var factory = new ProductFactory(productAttributeCollection, inventoryCollection, GetProductOptionCollection(dto.Key), GetProductVariantCollection(dto.Key));
             var product = factory.BuildEntity(dto);
 
             // TODO - inventory
-            ((ProductVariant) ((Product) product).MasterVariant).CatalogInventoryInventory =
-                ((ProductVariantRepository) _productVariantRepository).GetWarehouseInventory(
-                    ((Product) product).ProductVariantKey);
+            //((ProductVariant) ((Product) product).MasterVariant).CatalogInventoryInventory =
+            //    ((ProductVariantRepository) _productVariantRepository).GetCategoryInventoryCollection(
+            //        ((Product) product).ProductVariantKey);
 
-            // Build the list of options
-            product.ProductOptions = GetProductOptionCollection(product.Key);
+            //// Build the list of options
+            //product.ProductOptions = GetProductOptionCollection(product.Key);
 
-            // Build the list of product variants
-            product.ProductVariants = GetProductVariantCollection(product.Key);
+            //// Build the list of product variants
+            //product.ProductVariants = GetProductVariantCollection(product.Key);
 
             product.ResetDirtyProperties();
 
@@ -149,7 +152,7 @@ namespace Merchello.Core.Persistence.Repositories
             SaveProductOptions(entity);
 
             // synchronize the inventory
-            ((ProductVariantRepository)_productVariantRepository).SaveWarehouseInventory(((Product)entity).MasterVariant);
+            ((ProductVariantRepository)_productVariantRepository).SaveCatalogInventory(((Product)entity).MasterVariant);
             
             entity.ResetDirtyProperties();
         }
@@ -167,9 +170,11 @@ namespace Merchello.Core.Persistence.Repositories
             SaveProductOptions(entity);
 
             // synchronize the inventory
-            ((ProductVariantRepository) _productVariantRepository).SaveWarehouseInventory(((Product)entity).MasterVariant);
+            ((ProductVariantRepository) _productVariantRepository).SaveCatalogInventory(((Product)entity).MasterVariant);
 
             entity.ResetDirtyProperties();
+
+         
         }
 
         protected override void PersistDeletedItem(IProduct entity)
@@ -359,11 +364,11 @@ namespace Merchello.Core.Persistence.Repositories
             // is to delete all associations from the merchProductVariant2ProductAttribute table so that the follow up
             // EnsureProductVariantsHaveAttributes called in the ProductVariantService cleans up the orphaned variants and fires off
             // the events
-           
+
             Database.Execute("DELETE FROM merchProductVariant2ProductAttribute WHERE productVariantKey IN (SELECT productVariantKey FROM merchProductVariant2ProductAttribute WHERE productAttributeKey = @Key)", 
                 new { Key = productAttribute.Key});
             Database.Execute("DELETE FROM merchProductAttribute WHERE pk = @Key", new { Key = productAttribute.Key });
-                      
+            
         }
 
         private void SaveProductAttributes(IProduct product, IProductOption productOption)
@@ -390,12 +395,16 @@ namespace Merchello.Core.Persistence.Repositories
                     productOption.Choices.Add(o);
                 }
             }
-
             foreach (var att in productOption.Choices.OrderBy(x => x.SortOrder))
             {
                 // ensure the id is set
                 att.OptionKey = productOption.Key;
                 SaveProductAttribute(att);
+            }
+            // this is required due to the special case relation between a product and product variants
+            foreach (var variant in product.ProductVariants)
+            {
+                RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProductVariant>(variant.Key));
             }
         }
 
@@ -432,8 +441,6 @@ namespace Merchello.Core.Persistence.Repositories
         {
             return _productVariantRepository.SkuExists(sku);
         }
-
-
 
     }
 }

@@ -7,7 +7,7 @@ namespace Merchello.Core.Models.Rdbms
     [TableName("merchStoreSetting")]
     [PrimaryKey("pk", autoIncrement = false)]
     [ExplicitColumns]
-    public class StoreSettingDto
+    internal class StoreSettingDto
     {
         [Column("pk")]
         [PrimaryKeyColumn(AutoIncrement = false)]

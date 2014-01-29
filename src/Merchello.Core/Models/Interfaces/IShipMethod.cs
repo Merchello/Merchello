@@ -27,12 +27,6 @@ namespace Merchello.Core.Models
         /// </summary>
         [DataMember]
         Guid ShipCountryKey { get; }
-
-        ///// <summary>
-        ///// The shipMethodTypeFieldKey for the ShipMethod
-        ///// </summary>
-        //[DataMember]
-        //Guid ShipMethodTfKey { get; set;}
             
         /// <summary>
         /// The surcharge for the ShipMethod

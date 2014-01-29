@@ -47,7 +47,7 @@ namespace Merchello.Core.Services
         /// </summary>
         /// <returns></returns>
         IEnumerable<IStoreSetting> GetAll();
-            
+
         /// <summary>
         /// Returns the <see cref="ICountry"/> for the country code passed.
         /// </summary>

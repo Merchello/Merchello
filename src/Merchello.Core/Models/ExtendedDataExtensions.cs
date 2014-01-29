@@ -182,7 +182,7 @@ namespace Merchello.Core.Models
         /// <returns>decimal</returns>
         public static decimal GetWeightValue(this ExtendedDataCollection extendedData)
         {
-            return GetDecimalValue(extendedData.GetValue("MerchWeight"));
+            return GetDecimalValue(extendedData.GetValue("merchWeight"));
         }
 
         /// <summary>
