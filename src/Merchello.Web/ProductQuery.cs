@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using Examine;
+using Examine.LuceneEngine.SearchCriteria;
 using Examine.SearchCriteria;
 using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Examine;
 using Merchello.Web.Models.ContentEditing;
+using Umbraco.Core.Logging;
 
 namespace Merchello.Web
 {
@@ -67,14 +69,21 @@ namespace Merchello.Web
         {
             var criteria = ExamineManager.Instance.CreateSearchCriteria();
             criteria.Field("productVariantKey", key);
-
-            var variant = ExamineManager.Instance.SearchProviderCollection["MerchelloProductSearcher"]
+            try
+            {
+                var variant = ExamineManager.Instance.SearchProviderCollection["MerchelloProductSearcher"]
                 .Search(criteria).Select(result => result.ToProductVariantDisplay()).FirstOrDefault();
 
-            if (variant != null) return variant;
+                if (variant != null) return variant;
+
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error<ProductQuery>("GetVariantDisplayByKey", ex);
+            }
 
             var retrieved = MerchelloContext.Current.Services.ProductVariantService.GetByKey(new Guid(key));
-            if(retrieved != null) ReindexProductVariant(retrieved, null);
+            if (retrieved != null) ReindexProductVariant(retrieved, null);
 
             return retrieved.ToProductVariantDisplay();
         }
@@ -89,7 +98,7 @@ namespace Merchello.Web
         {
             var criteria = ExamineManager.Instance.CreateSearchCriteria();
             //criteria.Field("name", term.Fuzzy(0.8f)).Or().Field("sku", term);
-            criteria.Field("master", "True").And().GroupedOr(new[] { "name", "sku" }, term);
+            criteria.Field("master", "True").And().GroupedOr(new[] { "name", "sku" }, term.Fuzzy(0.8f));
             return Search(criteria);
         }
 
