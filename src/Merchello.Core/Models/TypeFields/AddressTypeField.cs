@@ -19,8 +19,8 @@ namespace Merchello.Core.Models.TypeFields
 
         internal override void BuildCache()
         {
-            AddUpdateCache(AddressType.Residential, new TypeField("Residential", "Residential", Constants.TypeFieldKeys.Address.ResidentialKey));
-            AddUpdateCache(AddressType.Commercial,  new TypeField("Commercial", "Commercial", Constants.TypeFieldKeys.Address.CommercialKey));
+            AddUpdateCache(AddressType.Shipping, new TypeField("Shipping", "Shipping", Constants.TypeFieldKeys.Address.ShippingAddressKey));
+            AddUpdateCache(AddressType.Billing,  new TypeField("Billing", "Billing", Constants.TypeFieldKeys.Address.BillingAddressKey));
         }
 
 #endregion
@@ -28,17 +28,17 @@ namespace Merchello.Core.Models.TypeFields
         /// <summary>
         /// Indicates the address is a residential address
         /// </summary>
-        public ITypeField Residential
+        public ITypeField Shipping
         {
-            get { return GetTypeField(AddressType.Residential); }
+            get { return GetTypeField(AddressType.Shipping); }
         }
 
         /// <summary>
         /// Indicates the address is a commercial address
         /// </summary>
-        public ITypeField Commercial
+        public ITypeField Billing
         {
-            get { return GetTypeField(AddressType.Commercial); }
+            get { return GetTypeField(AddressType.Billing); }
         }
 
         /// <summary>

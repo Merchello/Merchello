@@ -7,7 +7,7 @@ using Merchello.Core.Models.TypeFields;
 using Merchello.Web.Models;
 using Umbraco.Core.Logging;
 
-namespace Merchello.Web
+namespace Merchello.Web.Workflow
 {
     public class Basket : IBasket
     {
@@ -106,12 +106,19 @@ namespace Merchello.Web
         /// </summary>
         public void AddItem(IProductVariant productVariant, string name, int quantity)
         {
-            var extendedData = new ExtendedDataCollection();
-            extendedData.AddProductVariantValues(productVariant);
+            AddItem(productVariant, name, quantity, new ExtendedDataCollection());
+        }
+
+        /// <summary>
+        /// Adds a line item to the basket
+        /// </summary>
+        public void AddItem(IProductVariant productVariant, string name, int quantity, ExtendedDataCollection extendedData)
+        {
+            if(!extendedData.DefinesProductVariant()) extendedData.AddProductVariantValues(productVariant);
 
             AddItem(
-                string.IsNullOrEmpty(name) ? productVariant.Name : name, 
-                productVariant.Sku, 
+                string.IsNullOrEmpty(name) ? productVariant.Name : name,
+                productVariant.Sku,
                 quantity,
                 productVariant.OnSale ?
                 productVariant.SalePrice != null ? productVariant.SalePrice.Value : productVariant.Price

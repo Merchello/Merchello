@@ -5,6 +5,7 @@ using Merchello.Core.Models;
 using Merchello.Tests.Base.DataMakers;
 using Merchello.Web;
 using Merchello.Web.Models;
+using Merchello.Web.Workflow;
 using NUnit.Framework;
 
 namespace Merchello.Tests.UnitTests.Models

@@ -5,6 +5,7 @@ using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Web.Models;
+using Merchello.Web.Workflow;
 using Umbraco.Core.Logging;
 
 namespace Merchello.Web.Shipping.Packaging

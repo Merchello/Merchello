@@ -8,6 +8,7 @@ using Merchello.Tests.IntegrationTests.Services;
 using Merchello.Web;
 using Merchello.Web.Models;
 using Merchello.Web.Shipping.Packaging;
+using Merchello.Web.Workflow;
 using NUnit.Framework;
 using Umbraco.Core;
 

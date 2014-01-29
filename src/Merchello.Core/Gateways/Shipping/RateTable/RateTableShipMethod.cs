@@ -24,7 +24,7 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
             : base(gatewayResource, shipMethod, shipCountry)
         {
             RateTable = new ShipRateTable(shipMethod.Key);
-            _quoteType = GatewayResource.ServiceCode == "VBW" ? QuoteType.VaryByWeight : QuoteType.PercentTotal;
+            _quoteType = GatewayResource.ServiceCode == RateTableShippingGatewayProvider.VaryByWeightPrefix ? QuoteType.VaryByWeight : QuoteType.PercentTotal;
             RateTable = rateTable;
         }
 
