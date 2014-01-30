@@ -26,15 +26,15 @@ namespace Merchello.Core.Models
         private string _toPostalCode;
         private string _toCountryCode;       
         private Guid? _shipMethodKey;
-        private Guid? _invoiceItemKey;
+        private string _email;
         private string _phone;
         private LineItemCollection _items;
 
-        public Shipment()
+        internal Shipment()
             :this(new Address(), new Address(), new LineItemCollection())
         {}
 
-        public Shipment(IAddress origin, IAddress destination)
+        internal Shipment(IAddress origin, IAddress destination)
             : this(origin, destination, new LineItemCollection())
         { }
 
@@ -62,7 +62,6 @@ namespace Merchello.Core.Models
         }
 
         private static readonly PropertyInfo ShipMethodKeySelector = ExpressionHelper.GetPropertyInfo<Shipment, Guid?>(x => x.ShipMethodKey);
-        private static readonly PropertyInfo InvoiceItemKeySelector = ExpressionHelper.GetPropertyInfo<Shipment, Guid?>(x => x.InvoiceItemKey);
         private static readonly PropertyInfo FromNameSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.FromName); 
         private static readonly PropertyInfo FromAddress1Selector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.FromAddress1);
         private static readonly PropertyInfo FromAddress2Selector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.FromAddress2);
@@ -78,6 +77,7 @@ namespace Merchello.Core.Models
         private static readonly PropertyInfo ToPostalCodeSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.ToPostalCode);  
         private static readonly PropertyInfo ToCountryCodeSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.ToCountryCode);         
         private static readonly PropertyInfo PhoneSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.Phone);
+        private static readonly PropertyInfo EmailSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.Email);
 
 
         /// <summary>
@@ -341,37 +341,37 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
-        /// The invoice item, if any, associated with this shipment
-        /// </summary>
-        [DataMember]
-        public Guid? InvoiceItemKey
-        {
-            get { return _invoiceItemKey; }
-            set
-            {
-                SetPropertyValueAndDetectChanges(o =>
-                {
-                    _invoiceItemKey = value;
-                    return _invoiceItemKey;
-                }, _invoiceItemKey, InvoiceItemKeySelector);
-            }
-        }
-
-        /// <summary>
         /// The phone at the shipping address associated with the Shipment
         /// </summary>
         [DataMember]
         public string Phone
         {
             get { return _phone; }
-                set 
-                { 
-                    SetPropertyValueAndDetectChanges(o =>
-                    {
-                        _phone = value;
-                        return _phone;
-                    }, _phone, PhoneSelector); 
-                }
+            set 
+            { 
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _phone = value;
+                    return _phone;
+                }, _phone, PhoneSelector); 
+            }
+        }
+
+        /// <summary>
+        /// The contact email address associated with this shipment
+        /// </summary>
+        [DataMember]
+        public string Email
+        {
+            get { return _email; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _email = value;
+                    return _email;
+                }, _email, EmailSelector);
+            }
         }
 
         /// <summary>
