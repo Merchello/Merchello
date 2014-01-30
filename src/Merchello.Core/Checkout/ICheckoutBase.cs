@@ -1,4 +1,7 @@
-﻿using Merchello.Core.Models.Interfaces;
+﻿using System.Collections.Generic;
+using Merchello.Core.Gateways.Shipping;
+using Merchello.Core.Models;
+using Merchello.Core.Models.Interfaces;
 
 namespace Merchello.Core.Checkout
 {
@@ -8,11 +11,39 @@ namespace Merchello.Core.Checkout
     public interface ICheckoutBase
     {
         /// <summary>
-        /// Starts the checkout process over
+        /// Saves the bill to address
         /// </summary>
-        void StartOver();
+        /// <param name="billToAddress"></param>
+        void SaveBillToAddress(IAddress billToAddress);
 
-        //void SaveAddress(IAddress shipTo, );
+        /// <summary>
+        /// Saves a single <see cref="IShipmentRateQuote"/>
+        /// </summary>
+        /// <param name="approvedShipmentRateQuote">The selected <see cref="IShipmentRateQuote"/> to be used when invoicing the order</param>
+        void SaveShipmentRateQuote(IShipmentRateQuote approvedShipmentRateQuote);
 
+        /// <summary>
+        /// Saves a collection <see cref="IShipmentRateQuote"/>
+        /// </summary>
+        /// <param name="approvedShipmentRateQuotes"></param>
+        /// <remarks>
+        /// 
+        /// This will be useful when multiple shipments are exposed
+        /// 
+        /// </remarks>
+        void SaveShipmentRateQuote(IEnumerable<IShipmentRateQuote> approvedShipmentRateQuotes);
+
+        /// <summary>
+        /// Generates an <see cref="IInvoice"/> representing the bill for the current "checkout order"
+        /// </summary>
+        /// <param name="applyTax">True/false indicating whether or not to apply taxes to the invoice.  Defaults to true</param>
+        /// <returns>An <see cref="IInvoice"/> that is not persisted to the database.</returns>
+        IInvoice GenerateInvoice(bool applyTax = true);
+
+        /// <summary>
+        /// Does preliminary validation of the checkout process and then executes the start of the order fulfillment pipeline
+        /// </summary>
+        /// <param name="payment">The <see cref="IPayment"/> to be applied to the invoice.</param>
+        void CompleteCheckout(IPayment payment);
     }
 }

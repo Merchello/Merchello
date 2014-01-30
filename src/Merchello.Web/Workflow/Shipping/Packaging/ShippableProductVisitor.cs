@@ -2,7 +2,7 @@
 using Merchello.Core;
 using Merchello.Core.Models;
 
-namespace Merchello.Web.Shipping.Packaging
+namespace Merchello.Web.Workflow.Shipping.Packaging
 {
     /// <summary>
     /// Line item visitor intended to filter "Basket" items for shippable products

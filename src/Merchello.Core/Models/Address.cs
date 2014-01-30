@@ -11,6 +11,11 @@ namespace Merchello.Core.Models
     [DataContract(IsReference = true)]
     internal class Address : IAddress
     {
+        public Address()
+        {
+            AddressType = AddressType.Shipping;
+        }
+
         /// <summary>
         /// The name for the address
         /// </summary>
