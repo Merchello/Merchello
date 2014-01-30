@@ -29,6 +29,9 @@ namespace Merchello.Core.Cache
         {
         }
 
+
+
+
         public virtual void ClearCacheByKeySearch(string keyStartsWith)
         {
         }
