@@ -253,7 +253,6 @@
     <Compile Include="Validation\BasketItemInventoryValidation.cs" />
     <Compile Include="WebApi\MerchelloApiController.cs" />
     <Compile Include="WebBootManager.cs" />
-    <Compile Include="Workflow\WebsiteCheckout.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

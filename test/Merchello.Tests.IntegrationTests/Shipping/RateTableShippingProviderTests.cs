@@ -273,8 +273,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             var shipments = _basket.PackageBasket(MerchelloContext, _destination);
             Assert.IsTrue(shipments.Any());
             var quotes = MerchelloContext.Gateways.GetShipRateQuotesForShipment(shipments.First());
-
-
+            
             // var invoice = _basket.CheckOut();
 
             //// Assert
