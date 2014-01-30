@@ -49,6 +49,17 @@ namespace Merchello.Core.Cache
         }
 
         /// <summary>
+        /// Returns a cache key intended for ShippingGatewayProviders rate quotes
+        /// </summary>
+        /// <param name="shipmentKey"></param>
+        /// <param name="shipMethodKey"></param>
+        /// <returns></returns>
+        internal static string ShippingGatewayProviderShippingRateQuoteCacheKey(Guid shipmentKey, Guid shipMethodKey)
+        {
+            return string.Format("merchello.shippingratequote.{0}-{1}", shipmentKey, shipMethodKey);
+        }
+
+        /// <summary>
         /// Returns a cache key intened for use in repository caching
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
@@ -59,5 +70,6 @@ namespace Merchello.Core.Cache
             return string.Format("{0}-{1}", typeof (TEntity).Name, key.ToString());
         }
        
+        
     }
 }

@@ -128,14 +128,34 @@ namespace Merchello.Core.Gateways.Shipping
             var quotes = new List<IShipmentRateQuote>();
             foreach (var gwShipMethod in gatewayShipMethods)
             {
-                var attempt = gwShipMethod.QuoteShipment(shipment);
-                if(attempt.Success)
-                    quotes.Add(attempt.Result);
+                var rateQuote = TryGetCachedShipmentRateQuote(shipment, gwShipMethod);
+
+                if (rateQuote == null)
+                { 
+                    var attempt = gwShipMethod.QuoteShipment(shipment);
+                    if (attempt.Success)
+                    { 
+                        rateQuote = attempt.Result;
+
+                        RuntimeCache.GetCacheItem(GetCacheKey(shipment, gwShipMethod), () => rateQuote);
+                    }
+                    
+                }
+                if(rateQuote != null) quotes.Add(rateQuote);
             }
 
             return quotes;
         }
-        
+
+        private IShipmentRateQuote TryGetCachedShipmentRateQuote(IShipment shipment, IGatewayShipMethod gatewayShipMethod)
+        {            
+            return RuntimeCache.GetCacheItem(GetCacheKey(shipment, gatewayShipMethod)) as ShipmentRateQuote;
+        }
+
+        private static string GetCacheKey(IShipment shipment, IGatewayShipMethod gatewayShipMethod)
+        {
+            return Cache.CacheKeys.ShippingGatewayProviderShippingRateQuoteCacheKey(shipment.Key, gatewayShipMethod.ShipMethod.Key);
+        }
     }
 
 }
