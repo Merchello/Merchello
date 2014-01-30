@@ -22,21 +22,20 @@ namespace Merchello.Web.Trees
         
         static void ServerVariablesParserParsing(object sender, Dictionary<string, object> items)
         {
-            if (items.ContainsKey("umbracoUrls"))
-            {
-                var umbracoUrls = (Dictionary<string, object>)items["umbracoUrls"];
+            if (!items.ContainsKey("umbracoUrls")) return;
 
-                var url = new UrlHelper(new RequestContext(new HttpContextWrapper(HttpContext.Current), new RouteData()));
+            var umbracoUrls = (Dictionary<string, object>)items["umbracoUrls"];
 
-                umbracoUrls.Add("merchelloProductApiBaseUrl", url.GetUmbracoApiServiceBaseUrl<ProductApiController>(
-                                                       controller => controller.GetAllProducts()));
-                umbracoUrls.Add("merchelloProductVariantsApiBaseUrl", url.GetUmbracoApiServiceBaseUrl<ProductVariantApiController>(
-                                                       controller => controller.GetProductVariant(Guid.NewGuid())));
-                umbracoUrls.Add("merchelloSettingsApiBaseUrl", url.GetUmbracoApiServiceBaseUrl<SettingsApiController>(
-                                                       controller => controller.GetAllCountries()));
-                umbracoUrls.Add("merchelloWarehouseApiBaseUrl", url.GetUmbracoApiServiceBaseUrl<WarehouseApiController>(
-                                                       controller => controller.GetDefaultWarehouse()));
-            }
+            var url = new UrlHelper(new RequestContext(new HttpContextWrapper(HttpContext.Current), new RouteData()));
+
+            umbracoUrls.Add("merchelloProductApiBaseUrl", url.GetUmbracoApiServiceBaseUrl<ProductApiController>(
+                controller => controller.GetAllProducts()));
+            umbracoUrls.Add("merchelloProductVariantsApiBaseUrl", url.GetUmbracoApiServiceBaseUrl<ProductVariantApiController>(
+                controller => controller.GetProductVariant(Guid.NewGuid())));
+            umbracoUrls.Add("merchelloSettingsApiBaseUrl", url.GetUmbracoApiServiceBaseUrl<SettingsApiController>(
+                controller => controller.GetAllCountries()));
+            umbracoUrls.Add("merchelloWarehouseApiBaseUrl", url.GetUmbracoApiServiceBaseUrl<WarehouseApiController>(
+                controller => controller.GetDefaultWarehouse()));
         }
     }
 }
