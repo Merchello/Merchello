@@ -7,8 +7,8 @@ using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Web.Models;
-using Merchello.Web.Shipping.Packaging;
 using Merchello.Web.Workflow;
+using Merchello.Web.Workflow.Shipping.Packaging;
 
 namespace Merchello.Web
 {

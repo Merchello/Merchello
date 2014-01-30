@@ -5,13 +5,10 @@ using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
-using Merchello.Core.Models.TypeFields;
-using Merchello.Core.Persistence.Migrations.Initial;
 using Merchello.Core.Persistence.UnitOfWork;
 using Merchello.Core.Services;
 using Merchello.Tests.Base.DataMakers;
 using Merchello.Tests.Base.SqlSyntax;
-using Moq;
 using Umbraco.Core.Persistence;
 
 

@@ -7,6 +7,10 @@ namespace Merchello.Core.Gateways.Shipping
     /// </summary>
     public interface IShipmentRateQuote
     {
+        /// <summary>
+        /// The <see cref="IShipment"/> associated with this rate quote
+        /// </summary>
+        IShipment Shipment { get; }
 
         /// <summary>
         /// The <see cref="IShipMethod"/> used to obtain the quote

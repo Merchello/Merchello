@@ -1,4 +1,6 @@
-﻿using Merchello.Core.Models.Interfaces;
+﻿using System.Collections.Generic;
+using Merchello.Core.Models;
+using Merchello.Core.Models.Interfaces;
 
 namespace Merchello.Core.Checkout
 {
@@ -12,7 +14,9 @@ namespace Merchello.Core.Checkout
         /// </summary>
         void StartOver();
 
-        //void SaveAddress(IAddress shipTo, );
+        void RegisterBillToAddress(IAddress billToAddress);
+
+        void RegisterShipments(IEnumerable<IShipment> shipments);
 
     }
 }
