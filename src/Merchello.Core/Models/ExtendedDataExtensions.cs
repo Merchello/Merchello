@@ -16,7 +16,7 @@ namespace Merchello.Core.Models
 
         public static void AddExtendedDataCollection(this ExtendedDataCollection extendedData, ExtendedDataCollection extendedDataToSerialize)
         {
-            extendedData.SetValue(Constants.ExtendedDataKeys.ExtendedData, extendedDataToSerialize.Serialize());
+            extendedData.SetValue(Constants.ExtendedDataKeys.ExtendedData, extendedDataToSerialize.SerializeToXml());
         }
 
         /// <summary>
@@ -39,6 +39,20 @@ namespace Merchello.Core.Models
 
         #endregion
 
+        #region ILineItem
+
+        /// <summary>
+        /// Adds a <see cref="ILineItem"/> to the <see cref="ExtendedDataCollection"/>
+        /// </summary>
+        /// <param name="extendedData"></param>
+        /// <param name="lineItem"></param>
+        public static void AddLineItem(this ExtendedDataCollection extendedData, ILineItem lineItem)
+        {
+            
+        }
+
+        #endregion
+
         #region Product / ProductVariant
 
 
@@ -54,6 +68,8 @@ namespace Merchello.Core.Models
             extendedData.SetValue(Constants.ExtendedDataKeys.Barcode, productVariant.Barcode);
             extendedData.SetValue(Constants.ExtendedDataKeys.Price, productVariant.Price.ToString(CultureInfo.InvariantCulture));
             extendedData.SetValue(Constants.ExtendedDataKeys.OnSale, productVariant.OnSale.ToString());
+            extendedData.SetValue(Constants.ExtendedDataKeys.Manufacturer, productVariant.Manufacturer);
+            extendedData.SetValue(Constants.ExtendedDataKeys.ManufacturerModelNumber, productVariant.ManufacturerModelNumber);
             extendedData.SetValue(Constants.ExtendedDataKeys.SalePrice, productVariant.SalePrice == null ? 0.ToString(CultureInfo.InvariantCulture) : productVariant.SalePrice.ToString());
             extendedData.SetValue(Constants.ExtendedDataKeys.TrackInventory, productVariant.TrackInventory.ToString());
             extendedData.SetValue(Constants.ExtendedDataKeys.OutOfStockPurchase, productVariant.OutOfStockPurchase.ToString());
@@ -200,6 +216,24 @@ namespace Merchello.Core.Models
         public static decimal GetSalePriceValue(this ExtendedDataCollection extendedData)
         {
             return GetDecimalValue(extendedData.GetValue(Constants.ExtendedDataKeys.SalePrice));
+        }
+
+        /// <summary>
+        /// Returns the "merchManufacturer" value
+        /// </summary>
+        public static string GetManufacturerValue(this ExtendedDataCollection extendedData)
+        {
+            return extendedData.GetValue(Constants.ExtendedDataKeys.Manufacturer);
+        }
+
+        /// <summary>
+        /// Returns the "merchManufacturerModelNumber" value
+        /// </summary>
+        /// <param name="extendedData"></param>
+        /// <returns></returns>
+        public static string GetManufacturerModelNumberValue(this ExtendedDataCollection extendedData)
+        {
+            return extendedData.GetValue(Constants.ExtendedDataKeys.ManufacturerModelNumber);
         }
 
         /// <summary>

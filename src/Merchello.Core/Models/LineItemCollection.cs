@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
 using System.Net.Configuration;
 using System.Runtime.Serialization;
 using System.Threading;
+using System.Xml;
 using Umbraco.Core;
 
 namespace Merchello.Core.Models
@@ -79,7 +81,6 @@ namespace Merchello.Core.Models
             return this.Any(x => x.Sku == sku);
         }
 
-
         /// <summary>
         /// True/false indicating whether or not the current collection is empty
         /// </summary>
@@ -99,6 +100,6 @@ namespace Merchello.Core.Models
             {
                 visitor.Visit(item);
             }
-        }
+        }       
     }
 }

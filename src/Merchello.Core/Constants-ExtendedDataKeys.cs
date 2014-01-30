@@ -14,6 +14,9 @@ namespace Merchello.Core
             get { return new[]
                 {
                     "merchExtendedData", 
+                    "merchName",
+                    "merchSku",
+                    "merchExported",
                     "merchProductKey",
                     "merchProductVariantKey",
                     "merchCostOfGoods",
@@ -24,6 +27,8 @@ namespace Merchello.Core
                     "merchBarcode",
                     "merchPrice",
                     "merchOnSale",
+                    "merchManufacturer",
+                    "merchManufacturerModelNumber",
                     "merchSalePrice",
                     "merchTrackInventory",
                     "merchOutOfStockPurchase",
@@ -31,14 +36,21 @@ namespace Merchello.Core
                     "merchShippalbe",
                     "merchDownload",
                     "merchDownloadMediaId",
-                    "merchWarhouseCatalogKey"
+                    "merchWarhouseCatalogKey",
+                    "merchContainerKey",
+                    "merchLineItemTfKey",
+                    "merchQuantity",
+                    "merchAmount"
                 }; }
         }
 
         public static class ExtendedDataKeys
         {
-            // ExtendedDataCollection
+            // Common
             public static string ExtendedData = "merchExtendedData";
+            public static string Name = "merchName";
+            public static string Sku = "merchSku";
+            public static string Exported = "merchExported";
 
             // ProductVariant
             public static string ProductKey = "merchProductKey";
@@ -51,6 +63,8 @@ namespace Merchello.Core
             public static string Barcode = "merchBarcode";
             public static string Price = "merchPrice";
             public static string OnSale = "merchOnSale";
+            public static string Manufacturer = "merchManufacturer";
+            public static string ManufacturerModelNumber = "merchManufacturerModelNumber";
             public static string SalePrice = "merchSalePrice";
             public static string TrackInventory = "merchTrackInventory";
             public static string OutOfStockPurchase = "merchOutOfStockPurchase";
@@ -61,6 +75,12 @@ namespace Merchello.Core
 
             // Shipment
             public static string WarehouseCatalogKey = "merchWarehouseCatalogKey";
+
+            // LineItem
+            public static string ContainerKey = "merchContainerKey";
+            public static string LineItemTfKey = "merchLineItemTfKey";
+            public static string Quantity = "merchQuantity";
+            public static string Amount = "merchAmount";
         }
     }
 }

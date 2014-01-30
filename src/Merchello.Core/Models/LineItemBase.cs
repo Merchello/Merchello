@@ -1,7 +1,13 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Globalization;
+using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization;
+using System.Xml;
+using System.Xml.Linq;
 using Merchello.Core.Models.EntityBase;
 using Merchello.Core.Models.TypeFields;
 
@@ -23,6 +29,14 @@ namespace Merchello.Core.Models
         private ExtendedDataCollection _extendedData;
         private bool _exported;
 
+        protected LineItemBase()
+        { }
+
+        internal LineItemBase(string lineItemXml)
+        {
+            DeserializeXml(lineItemXml);
+        }
+
         protected LineItemBase(Guid containerKey, string name, string sku, decimal amount)
             : this(containerKey, name, sku, 1, amount)
         { }
@@ -41,7 +55,7 @@ namespace Merchello.Core.Models
 
         protected LineItemBase(Guid containerKey, Guid lineItemTfKey, string name, string sku, int quantity, decimal amount, ExtendedDataCollection extendedData)  
         {
-            Mandate.ParameterCondition(containerKey != Guid.Empty, "containerId");
+            Mandate.ParameterCondition(containerKey != Guid.Empty, "containerKey");
             Mandate.ParameterCondition(lineItemTfKey != Guid.Empty, "lineItemTfKey");
             Mandate.ParameterNotNull(extendedData, "extendedData");
             Mandate.ParameterNotNullOrEmpty(name, "name");
@@ -219,6 +233,84 @@ namespace Merchello.Core.Models
             vistor.Visit(this);
         }
 
-        
+        /// <summary>
+        /// Serializes the current instance to an Xml representation - intended to be persisted in an <see cref="ExtendedDataCollection"/>  
+        /// </summary>
+        /// <returns>An Xml string</returns>
+        internal string SerializeToXml()
+        {
+            string xml;
+            using (var sw = new StringWriter())
+            {
+                using (var writer = new XmlTextWriter(sw))
+                {
+                    writer.WriteStartDocument();
+                    writer.WriteStartElement("lineItem");
+
+
+                    writer.WriteElementString(Constants.ExtendedDataKeys.ContainerKey, ContainerKey.ToString());
+                    writer.WriteElementString(Constants.ExtendedDataKeys.LineItemTfKey, LineItemTfKey.ToString());
+                    writer.WriteElementString(Constants.ExtendedDataKeys.Sku, Sku);
+                    writer.WriteElementString(Constants.ExtendedDataKeys.Name, Name);
+                    writer.WriteElementString(Constants.ExtendedDataKeys.Quantity, Quantity.ToString(CultureInfo.InvariantCulture));
+                    writer.WriteElementString(Constants.ExtendedDataKeys.Amount, Amount.ToString(CultureInfo.InvariantCulture));
+                    writer.WriteElementString(Constants.ExtendedDataKeys.ExtendedData, ExtendedData.SerializeToXml());
+                    writer.WriteEndElement(); // ExtendedData
+                    writer.WriteEndDocument();
+
+                    xml = sw.ToString();
+                }
+            }
+            return xml;
+        }
+
+        /// <summary>
+        /// Deserializes the xml string and populates local member values
+        /// </summary>
+        /// <param name="lineItemXml">The string Xml representation of the line item</param>
+        /// <remarks>
+        /// 
+        /// Note This method will ALWAYS create a NEW line item (.HasIdentity == false)
+        /// 
+        /// </remarks>
+        private void DeserializeXml(string lineItemXml)
+        {
+            var dictionary = GetXmlValues(lineItemXml);
+
+            _containerKey = new Guid(dictionary[Constants.ExtendedDataKeys.ContainerKey]);
+            _lineItemTfKey = new Guid(dictionary[Constants.ExtendedDataKeys.LineItemTfKey]);
+            _sku = dictionary[Constants.ExtendedDataKeys.Sku];
+            _name = dictionary[Constants.ExtendedDataKeys.Name];
+            int.TryParse(dictionary[Constants.ExtendedDataKeys.Quantity], out _quantity);
+            decimal.TryParse(dictionary[Constants.ExtendedDataKeys.Amount], out _amount);
+            _extendedData = new ExtendedDataCollection(dictionary[Constants.ExtendedDataKeys.ExtendedData]);
+        }
+
+        private IDictionary<string, string> GetXmlValues(string lineItemXml)
+        {
+            var xdoc = XDocument.Parse(lineItemXml);
+
+            var dictionary = new Dictionary<string, string>
+            {
+                {Constants.ExtendedDataKeys.ContainerKey, GetXmlValue(xdoc,Constants.ExtendedDataKeys.ContainerKey)},
+                {Constants.ExtendedDataKeys.LineItemTfKey, GetXmlValue(xdoc,Constants.ExtendedDataKeys.LineItemTfKey)},
+                {Constants.ExtendedDataKeys.Sku, GetXmlValue(xdoc,Constants.ExtendedDataKeys.Sku)},
+                {Constants.ExtendedDataKeys.Name, GetXmlValue(xdoc,Constants.ExtendedDataKeys.Name)},
+                {Constants.ExtendedDataKeys.Quantity, GetXmlValue(xdoc,Constants.ExtendedDataKeys.Quantity)},
+                {Constants.ExtendedDataKeys.Amount, GetXmlValue(xdoc,Constants.ExtendedDataKeys.Amount)},
+                {Constants.ExtendedDataKeys.ExtendedData, GetXmlValue(xdoc,Constants.ExtendedDataKeys.ExtendedData)}
+            };
+            return dictionary;
+        }
+
+
+        private string GetXmlValue(XDocument xdoc, string elementName)
+        {
+            var element = xdoc.Element(elementName);            
+            if(element == null) throw new NullReferenceException(elementName);
+
+            return element.Value;
+        }
+
     }
 }

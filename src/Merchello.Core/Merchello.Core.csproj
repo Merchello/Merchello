@@ -87,9 +87,9 @@
     <Compile Include="Constants-Keys.cs">
       <DependentUpon>Constants.cs</DependentUpon>
     </Compile>
-	<Compile Include="Constants-ExtendedDataKeys.cs">
+    <Compile Include="Constants-ExtendedDataKeys.cs">
       <DependentUpon>Constants.cs</DependentUpon>
-	</Compile>
+    </Compile>
     <Compile Include="Gateways\GatewayProviderBase.cs" />
     <Compile Include="Gateways\GatewayContext.cs" />
     <Compile Include="Gateways\GatewayProviderFactory.cs" />
@@ -584,6 +584,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Gateways\Payment\" />
+    <Folder Include="Proxies\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

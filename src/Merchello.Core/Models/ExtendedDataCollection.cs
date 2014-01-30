@@ -26,7 +26,7 @@ namespace Merchello.Core.Models
             }
         }
 
-        internal string Serialize()
+        internal string SerializeToXml()
         {
             string xml;
             using (var sw = new StringWriter())
