@@ -87,6 +87,9 @@
     <Compile Include="Constants-Keys.cs">
       <DependentUpon>Constants.cs</DependentUpon>
     </Compile>
+	<Compile Include="Constants-ExtendedDataKeys.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+	</Compile>
     <Compile Include="Gateways\GatewayProviderBase.cs" />
     <Compile Include="Gateways\GatewayContext.cs" />
     <Compile Include="Gateways\GatewayProviderFactory.cs" />
