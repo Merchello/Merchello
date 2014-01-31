@@ -151,5 +151,28 @@ namespace Merchello.Tests.UnitTests.Serialization
             Assert.NotNull(lineItemCollection);
             Assert.IsTrue(lineItemCollection.Any());
         }
+
+        /// <summary>
+        /// Test shows that a LineItemCollection can be deserialized from a serialized ExtendedDataCollection
+        /// </summary>
+        [Test]
+        public void Can_Deserialize_A_LineItemCollection_Stored_In_A_Serialized_ExtendedDataCollection()
+        {
+            //// Arrange
+            var extendedDataContainer = new ExtendedDataCollection();
+            var extendedDataWrapper = new ExtendedDataCollection();
+            extendedDataWrapper.AddLineItemCollection(_shipment.Items);
+            extendedDataContainer.AddExtendedDataCollection(extendedDataWrapper);
+
+            //// Act
+            var retrievedExtendedDataWrapper = extendedDataContainer.GetExtendedDataCollection();
+            Assert.NotNull(retrievedExtendedDataWrapper);
+            var lineItemCollection = retrievedExtendedDataWrapper.GetLineItemCollection<ItemCacheLineItem>();
+
+            //// Assert
+            Assert.NotNull(lineItemCollection);
+            Assert.IsTrue(lineItemCollection.Any());
+        }
+
     }
 }

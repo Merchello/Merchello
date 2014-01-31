@@ -19,8 +19,8 @@ namespace Merchello.Web.Trees
             ServerVariablesParser.Parsing += ServerVariablesParserParsing;
         }
         
-        
-        static void ServerVariablesParserParsing(object sender, Dictionary<string, object> items)
+
+        private static void ServerVariablesParserParsing(object sender, Dictionary<string, object> items)
         {
             if (!items.ContainsKey("umbracoUrls")) return;
 
