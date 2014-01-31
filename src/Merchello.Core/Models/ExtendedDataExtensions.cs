@@ -54,20 +54,26 @@ namespace Merchello.Core.Models
          
             using (var sw = new StringWriter())
             {
-                using (var writer = new XmlTextWriter(sw))
+                var settings = new XmlWriterSettings()
+                    {
+                        OmitXmlDeclaration = true
+                    };
+                
+                using (var writer = XmlWriter.Create(sw, settings))
                 {
                     writer.WriteStartDocument();
                     writer.WriteStartElement(Constants.ExtendedDataKeys.LineItemCollection);
 
                     foreach (var lineItem in lineItemCollection)
                     {
-                        writer.WriteElementString(Constants.ExtendedDataKeys.LineItem, ((LineItemBase)lineItem).SerializeToXml());
+                        //writer.WriteStartElement(Constants);
+                        writer.WriteRaw(((LineItemBase)lineItem).SerializeToXml());
                     }
 
                     writer.WriteEndElement(); // ExtendedData
                     writer.WriteEndDocument();                  
                 }
-                extendedData.SetValue(Constants.ExtendedDataKeys.ExtendedData, sw.ToString());
+                extendedData.SetValue(Constants.ExtendedDataKeys.LineItemCollection, sw.ToString());
             }
         }
 
@@ -85,9 +91,8 @@ namespace Merchello.Core.Models
             var lineItemCollection = new LineItemCollection();
             foreach (var element in xdoc.Descendants(Constants.ExtendedDataKeys.LineItem))
             {
-                var ctorArgs = new[] { typeof(string) };
-                var ctoArgValues = new object[] { element.Value };
-                var lineItem = ActivatorHelper.CreateInstance<T>(typeof (LineItemBase), ctorArgs, ctoArgValues);
+
+                var lineItem = new ItemCacheLineItem(element.ToString());
 
                 lineItemCollection.Add(lineItem);
             }

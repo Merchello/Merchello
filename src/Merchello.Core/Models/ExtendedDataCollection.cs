@@ -35,9 +35,15 @@ namespace Merchello.Core.Models
             string xml;
             using (var sw = new StringWriter())
             {
-                using (var writer = new XmlTextWriter(sw))
+                var settings = new XmlWriterSettings()
+                    {
+                        OmitXmlDeclaration = false,
+                        ConformanceLevel = ConformanceLevel.Fragment
+                    };
+
+                using (var writer = XmlWriter.Create(sw, settings))
                 {
-                    writer.WriteStartDocument();
+                    //writer.WriteStartDocument();
                     writer.WriteStartElement("extendedData");
 
                     foreach (var key in Keys)
@@ -46,10 +52,10 @@ namespace Merchello.Core.Models
                     }
 
                     writer.WriteEndElement(); // ExtendedData
-                    writer.WriteEndDocument();
-
-                    xml = sw.ToString();
+                    //writer.WriteEndDocument();
                 }
+
+                xml = sw.ToString();
             }
 
             return xml;
