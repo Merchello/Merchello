@@ -11,10 +11,10 @@ using Umbraco.Core;
 namespace Merchello.Core.Models
 {
     /// <summary>
-    /// Represents a Collection of <see cref="ILineItem"/> objects
+    /// Represents a Collection of <see cref="T"/> objects
     /// </summary>
     [Serializable]
-    [DataContract(IsReference = true)]
+    [CollectionDataContract(IsReference = true)]   
     public class LineItemCollection : NotifiyCollectionBase<string, ILineItem>
     {
         private readonly ReaderWriterLockSlim _addLocker = new ReaderWriterLockSlim();
@@ -71,7 +71,7 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
-        /// Determines whether this collection contains a <see cref="ILineItem"/> whose sku matches the specified sku.
+        /// Determines whether this collection contains a <see cref="T"/> whose sku matches the specified sku.
         /// </summary>
         /// <param name="sku">Sku of the line item.</param>
         /// <returns><c>true</c> if the collection contains the specified sku; otherwise, <c>false</c>.</returns>

@@ -13,6 +13,10 @@ namespace Merchello.Core.Models
     [DataContract(IsReference = true)]
     public class ItemCacheLineItem : LineItemBase, IItemCacheLineItem
     {
+        internal ItemCacheLineItem(string lineItemXml)
+            : base(lineItemXml)
+        { }
+
         public ItemCacheLineItem(Guid containerKey, string name, string sku, decimal amount) 
             : base(containerKey, name, sku, amount)
         {}

@@ -501,6 +501,7 @@
     <Compile Include="Persistence\UnitOfWork\PetaPocoUnitOfWork.cs" />
     <Compile Include="Persistence\UnitOfWork\PetaPocoUnitOfWorkProvider.cs" />
     <Compile Include="RateAdjustmentType.cs" />
+    <Compile Include="SerializationHelper.cs" />
     <Compile Include="Services\CountryTaxRateService.cs" />
     <Compile Include="Services\GatewayProviderService.cs" />
     <Compile Include="Services\Interfaces\ICountryTaxRateService.cs" />
@@ -584,7 +585,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Gateways\Payment\" />
-    <Folder Include="Proxies\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

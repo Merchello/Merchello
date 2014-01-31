@@ -29,8 +29,6 @@ namespace Merchello.Core.Models
         private ExtendedDataCollection _extendedData;
         private bool _exported;
 
-        protected LineItemBase()
-        { }
 
         internal LineItemBase(string lineItemXml)
         {

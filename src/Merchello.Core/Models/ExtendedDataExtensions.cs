@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Xml;
+using System.Xml.Linq;
 using Merchello.Core.Models.Interfaces;
 
 namespace Merchello.Core.Models
@@ -39,16 +42,57 @@ namespace Merchello.Core.Models
 
         #endregion
 
-        #region ILineItem
+        #region LineItemCollection
 
         /// <summary>
-        /// Adds a <see cref="ILineItem"/> to the <see cref="ExtendedDataCollection"/>
+        /// Adds a <see cref="LineItemCollection"/> to the <see cref="ExtendedDataCollection"/>
         /// </summary>
         /// <param name="extendedData"></param>
-        /// <param name="lineItem"></param>
-        public static void AddLineItem(this ExtendedDataCollection extendedData, ILineItem lineItem)
+        /// <param name="lineItemCollection"></param>
+        public static void AddLineItemCollection(this ExtendedDataCollection extendedData, LineItemCollection lineItemCollection)
         {
-            
+         
+            using (var sw = new StringWriter())
+            {
+                using (var writer = new XmlTextWriter(sw))
+                {
+                    writer.WriteStartDocument();
+                    writer.WriteStartElement(Constants.ExtendedDataKeys.LineItemCollection);
+
+                    foreach (var lineItem in lineItemCollection)
+                    {
+                        writer.WriteElementString(Constants.ExtendedDataKeys.LineItem, ((LineItemBase)lineItem).SerializeToXml());
+                    }
+
+                    writer.WriteEndElement(); // ExtendedData
+                    writer.WriteEndDocument();                  
+                }
+                extendedData.SetValue(Constants.ExtendedDataKeys.ExtendedData, sw.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Creates an instance of <see cref="LineItemCollection"/> from a serialized collection in the ExtendedDataCollection
+        /// </summary>
+        /// <typeparam name="T">The type of the <see cref="ILineItem"/></typeparam>
+        /// <param name="extendedData"></param>
+        /// <returns><see cref="LineItemCollection"/></returns>
+        public static LineItemCollection GetLineItemCollection<T>(this ExtendedDataCollection extendedData) where T : ILineItem
+        {
+            if (!extendedData.ContainsKey(Constants.ExtendedDataKeys.LineItemCollection)) return null;
+
+            var xdoc = XDocument.Parse(extendedData.GetValue(Constants.ExtendedDataKeys.LineItemCollection));
+            var lineItemCollection = new LineItemCollection();
+            foreach (var element in xdoc.Descendants(Constants.ExtendedDataKeys.LineItem))
+            {
+                var ctorArgs = new[] { typeof(string) };
+                var ctoArgValues = new object[] { element.Value };
+                var lineItem = ActivatorHelper.CreateInstance<T>(typeof (LineItemBase), ctorArgs, ctoArgValues);
+
+                lineItemCollection.Add(lineItem);
+            }
+
+            return lineItemCollection;
         }
 
         #endregion

@@ -114,6 +114,7 @@ namespace Merchello.Core.Models
         /// </summary>
         [DataMember]
         string Email { get; set; }
+
     }
 }
 

@@ -1,6 +1,4 @@
-﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
-using Merchello.Core.Models;
+﻿using System.Collections.Generic;
 
 namespace Merchello.Core
 {
@@ -14,6 +12,9 @@ namespace Merchello.Core
             get { return new[]
                 {
                     "merchExtendedData", 
+                    "merchLineItemCollection",
+                    "merchLineItem",
+
                     "merchName",
                     "merchSku",
                     "merchExported",
@@ -40,14 +41,21 @@ namespace Merchello.Core
                     "merchContainerKey",
                     "merchLineItemTfKey",
                     "merchQuantity",
-                    "merchAmount"
+                    "merchAmount",
+                    "merchShipmentKey",
+                    "merchWarehouseCatalogKey"
                 }; }
         }
 
         public static class ExtendedDataKeys
         {
-            // Common
+            // Common - serialized classes
             public static string ExtendedData = "merchExtendedData";
+            public static string LineItemCollection = "merchLineItemCollection";
+            public static string LineItem = "merchLineItem";
+            public static string ProductVariant = "merchProductVariant";
+
+            // Common            
             public static string Name = "merchName";
             public static string Sku = "merchSku";
             public static string Exported = "merchExported";
@@ -74,7 +82,11 @@ namespace Merchello.Core
             public static string DownloadMediaId = "merchDownloadMediaId";
 
             // Shipment
+            public static string ShipmentKey = "merchShipmentKey";
             public static string WarehouseCatalogKey = "merchWarehouseCatalogKey";
+            public static string OriginAddress = "merchOriginAddress";
+            public static string DestinationAddress = "merchDestinationAddress";
+
 
             // LineItem
             public static string ContainerKey = "merchContainerKey";

@@ -60,6 +60,7 @@ namespace Merchello.Web.Workflow.Shipping.Packaging
                 else
                 {                    
                     lineItem.ExtendedData.SetValue("merchWarehouseCatalogKey", variant.CatalogInventories.First().CatalogKey.ToString());
+                    // TODO note - this retains the it's ItemCacheLineItem.Key and the ContainerKey associated with the ItemCache
                     shipment.Items.Add(lineItem);    
                 }
                           
