@@ -116,39 +116,40 @@ namespace Merchello.Tests.UnitTests.Serialization
             Assert.IsTrue(attempt.Success);            
         }
 
-        ///// <summary>
-        ///// Test shows that a LineItem can be serialized
-        ///// </summary>
-        //[Test]
-        //public void Can_Serialize_A_LineItem()
-        //{
-        //    //// Arrange
-            
-        //    //// Act
-        //    var xml = SerializationHelper.SerializeToXml(_shipment.Items.First() as ItemCacheLineItem);
-        //    Console.Write(xml);
+        /// <summary>
+        /// Test shows that a LineItemCollection can be serialized and added to Extended Data
+        /// </summary>
+        [Test]
+        public void Can_Serialize_A_LineItemCollection_And_Store_In_ExtendedData()
+        {
+            //// Arrange
+            var extendedData = new ExtendedDataCollection();
 
-        //    //// Assert
-        //    Assert.IsFalse(string.IsNullOrEmpty(xml));
-        //    Assert.DoesNotThrow(() => XDocument.Parse(xml)); 
-        //}
+            //// Act
+            extendedData.AddLineItemCollection(_shipment.Items);
+            Console.Write(extendedData.GetValue(Constants.ExtendedDataKeys.LineItemCollection));
 
-        ///// <summary>
-        ///// Test shows that a LineItemCollection can be deserialized
-        ///// </summary>
-        //[Test]
-        //public void Can_Deserialize_A_LineItemCollection()
-        //{
-        //    //// Arrange
-        //    var xml = SerializationHelper.SerializeToXml(_shipment.Items); ;
-        //    Console.Write(xml);
+            //// Assert
+            Assert.DoesNotThrow(() => XDocument.Parse(extendedData.GetValue(Constants.ExtendedDataKeys.LineItemCollection)));
+        }
 
-        //    //// Act
-        //    var attempt = SerializationHelper.DeserializeXml<LineItemCollection>(xml);
-        //    if (!attempt.Success) Console.Write(attempt.Exception.Message);
+        /// <summary>
+        /// Test shows that a LineItemCollection can be deserialized from an ExtendedDataCollection
+        /// </summary>
+        [Test]
+        public void Can_Deserialize_A_LineItemCollection_From_ExtendedDataCollection()
+        {
+            //// Arrange
+            var extendedData = new ExtendedDataCollection();
+            extendedData.AddLineItemCollection(_shipment.Items);
+            Console.Write(extendedData.GetValue(Constants.ExtendedDataKeys.LineItemCollection));
 
-        //    //// Assert
-        //    Assert.IsTrue(attempt.Success); 
-        //}
+            //// Act
+            var lineItemCollection = extendedData.GetLineItemCollection<ItemCacheLineItem>();
+
+            //// Assert
+            Assert.NotNull(lineItemCollection);
+            Assert.IsTrue(lineItemCollection.Any());
+        }
     }
 }

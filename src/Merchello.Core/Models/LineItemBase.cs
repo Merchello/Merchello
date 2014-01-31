@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Xml;
@@ -30,7 +31,7 @@ namespace Merchello.Core.Models
         private bool _exported;
 
 
-        internal LineItemBase(string lineItemXml)
+        protected LineItemBase(string lineItemXml)
         {
             DeserializeXml(lineItemXml);
         }
@@ -240,10 +241,15 @@ namespace Merchello.Core.Models
             string xml;
             using (var sw = new StringWriter())
             {
-                using (var writer = new XmlTextWriter(sw))
+                var settings = new XmlWriterSettings
+                    {
+                        OmitXmlDeclaration = true
+                    };
+
+                using (var writer = XmlWriter.Create(sw,settings))
                 {
                     writer.WriteStartDocument();
-                    writer.WriteStartElement("lineItem");
+                    writer.WriteStartElement(Constants.ExtendedDataKeys.LineItem);
 
 
                     writer.WriteElementString(Constants.ExtendedDataKeys.ContainerKey, ContainerKey.ToString());
@@ -252,12 +258,14 @@ namespace Merchello.Core.Models
                     writer.WriteElementString(Constants.ExtendedDataKeys.Name, Name);
                     writer.WriteElementString(Constants.ExtendedDataKeys.Quantity, Quantity.ToString(CultureInfo.InvariantCulture));
                     writer.WriteElementString(Constants.ExtendedDataKeys.Amount, Amount.ToString(CultureInfo.InvariantCulture));
-                    writer.WriteElementString(Constants.ExtendedDataKeys.ExtendedData, ExtendedData.SerializeToXml());
+                    writer.WriteStartElement(Constants.ExtendedDataKeys.ExtendedData);
+                    writer.WriteRaw(ExtendedData.SerializeToXml());
+                    writer.WriteEndElement();
                     writer.WriteEndElement(); // ExtendedData
                     writer.WriteEndDocument();
-
-                    xml = sw.ToString();
+                    
                 }
+                xml = sw.ToString();
             }
             return xml;
         }
@@ -304,10 +312,10 @@ namespace Merchello.Core.Models
 
         private string GetXmlValue(XDocument xdoc, string elementName)
         {
-            var element = xdoc.Element(elementName);            
+            var element = xdoc.Descendants(elementName).FirstOrDefault();            
             if(element == null) throw new NullReferenceException(elementName);
 
-            return element.Value;
+            return element.ToString().StartsWith("<" + Constants.ExtendedDataKeys.ExtendedData + ">") ? element.ToString() : element.Value;
         }
 
     }
