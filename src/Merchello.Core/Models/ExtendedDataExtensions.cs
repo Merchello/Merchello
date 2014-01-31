@@ -83,7 +83,7 @@ namespace Merchello.Core.Models
         /// <typeparam name="T">The type of the <see cref="ILineItem"/></typeparam>
         /// <param name="extendedData"></param>
         /// <returns><see cref="LineItemCollection"/></returns>
-        public static LineItemCollection GetLineItemCollection<T>(this ExtendedDataCollection extendedData) where T : ILineItem
+        public static LineItemCollection GetLineItemCollection<T>(this ExtendedDataCollection extendedData) where T : LineItemBase
         {
             if (!extendedData.ContainsKey(Constants.ExtendedDataKeys.LineItemCollection)) return null;
 
@@ -91,13 +91,53 @@ namespace Merchello.Core.Models
             var lineItemCollection = new LineItemCollection();
             foreach (var element in xdoc.Descendants(Constants.ExtendedDataKeys.LineItem))
             {
+                
+            var dictionary = GetLineItemXmlValues(element.ToString());            
+            var ctrArgs = new[]
+                {
+                    typeof (Guid), typeof (Guid), typeof (string), typeof (string), typeof (int), typeof (decimal), typeof (ExtendedDataCollection)
+                };
 
-                var lineItem = new ItemCacheLineItem(element.ToString());
-
+                var ctrValues = new object[]
+                    {
+                        new Guid(dictionary[Constants.ExtendedDataKeys.ContainerKey]),
+                        new Guid(dictionary[Constants.ExtendedDataKeys.LineItemTfKey]),
+                        dictionary[Constants.ExtendedDataKeys.Sku],
+                        dictionary[Constants.ExtendedDataKeys.Name],
+                        int.Parse(dictionary[Constants.ExtendedDataKeys.Quantity]),
+                        decimal.Parse(dictionary[Constants.ExtendedDataKeys.Amount]),
+                        new ExtendedDataCollection(dictionary[Constants.ExtendedDataKeys.ExtendedData])
+                    };
+               
+                
+                var lineItem = ActivatorHelper.CreateInstance<LineItemBase>(typeof (T), ctrArgs, ctrValues);
+                
                 lineItemCollection.Add(lineItem);
             }
 
             return lineItemCollection;
+        }
+
+        /// <summary>
+        /// Helper method to parse Xml document
+        /// </summary>
+        /// <param name="lineItemXml"></param>
+        /// <returns></returns>
+        private static IDictionary<string, string> GetLineItemXmlValues(string lineItemXml)
+        {
+            var xdoc = XDocument.Parse(lineItemXml);
+
+            var dictionary = new Dictionary<string, string>
+            {
+                {Constants.ExtendedDataKeys.ContainerKey, GetXmlValue(xdoc,Constants.ExtendedDataKeys.ContainerKey)},
+                {Constants.ExtendedDataKeys.LineItemTfKey, GetXmlValue(xdoc,Constants.ExtendedDataKeys.LineItemTfKey)},
+                {Constants.ExtendedDataKeys.Sku, GetXmlValue(xdoc,Constants.ExtendedDataKeys.Sku)},
+                {Constants.ExtendedDataKeys.Name, GetXmlValue(xdoc,Constants.ExtendedDataKeys.Name)},
+                {Constants.ExtendedDataKeys.Quantity, GetXmlValue(xdoc,Constants.ExtendedDataKeys.Quantity)},
+                {Constants.ExtendedDataKeys.Amount, GetXmlValue(xdoc,Constants.ExtendedDataKeys.Amount)},
+                {Constants.ExtendedDataKeys.ExtendedData, GetXmlValue(xdoc,Constants.ExtendedDataKeys.ExtendedData)}
+            };
+            return dictionary;
         }
 
         #endregion
@@ -337,6 +377,66 @@ namespace Merchello.Core.Models
 
         #endregion
 
+        #region IAddress
+
+        /// <summary>
+        /// Adds an <see cref="IAddress"/> to extended data.  This is intended for shipment addresses
+        /// </summary>
+        /// <param name="extendedData"></param>
+        /// <param name="address"></param>
+        /// <param name="addressType">The Origin or Destination addresses</param>
+        public static void AddAddress(this ExtendedDataCollection extendedData, IAddress address, AddressType addressType)
+        {
+            
+            extendedData.AddAddress(address, addressType == AddressType.Shipping
+                            ? Constants.ExtendedDataKeys.DestinationAddress
+                            : Constants.ExtendedDataKeys.OriginAddress);
+        }
+
+        /// <summary>
+        /// Adds an <see cref="IAddress"/> to extended data.  This is intended for shipment addresses
+        /// </summary>
+        /// <param name="extendedData"></param>
+        /// <param name="address">The <see cref="IAddress"/> to be added to extended data</param>
+        /// <param name="dictionaryKey">The dictionary key used to reference the serialized <see cref="IAddress"/></param>
+        public static void AddAddress(this ExtendedDataCollection extendedData, IAddress address, string dictionaryKey)
+        {
+            var addressXml = SerializationHelper.SerializeToXml(address as Address);
+            extendedData.SetValue(dictionaryKey, addressXml);
+        }
+
+        /// <summary>
+        /// Gets an <see cref="IAddress"/> from the <see cref="ExtendedDataCollection"/>
+        /// </summary>
+        /// <param name="extendedData"></param>
+        /// <param name="addressType"></param>
+        /// <returns></returns>
+        public static IAddress GetAddress(this ExtendedDataCollection extendedData, AddressType addressType)
+        {
+            return extendedData.GetAddress(addressType == AddressType.Shipping
+                                               ? Constants.ExtendedDataKeys.DestinationAddress
+                                               : Constants.ExtendedDataKeys.OriginAddress);
+        }
+
+
+        /// <summary>
+        /// Gets an <see cref="IAddress"/> from the <see cref="ExtendedDataCollection"/>
+        /// </summary>
+        /// <param name="extendedData"></param>
+        /// <param name="dictionaryKey"></param>
+        /// <returns></returns>
+        public static IAddress GetAddress(this ExtendedDataCollection extendedData, string dictionaryKey)
+        {
+            if (!extendedData.ContainsKey(dictionaryKey)) return null;
+
+            var attempt =  SerializationHelper.DeserializeXml<Address>(extendedData.GetValue(dictionaryKey));
+
+            if (attempt.Success) return attempt.Result;
+            return null;
+        }
+
+        #endregion
+
         #region IShipment
 
         /// <summary>
@@ -387,6 +487,14 @@ namespace Merchello.Core.Models
         {
             int converted;
             return int.TryParse(value, out converted) ? converted : 0;
+        }
+
+        private static string GetXmlValue(XDocument xdoc, string elementName)
+        {
+            var element = xdoc.Descendants(elementName).FirstOrDefault();
+            if (element == null) throw new NullReferenceException(elementName);
+
+            return element.ToString().StartsWith("<" + Constants.ExtendedDataKeys.ExtendedData + ">") ? element.ToString() : element.Value;
         }
 
         #endregion
