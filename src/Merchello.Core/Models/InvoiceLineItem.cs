@@ -13,6 +13,11 @@ namespace Merchello.Core.Models
     [DataContract(IsReference = true)]
     public class InvoiceLineItem : LineItemBase, IInvoiceLineItem
     {
+
+        internal InvoiceLineItem(string lineItemXml)
+            : base(lineItemXml)
+        { }
+
         public InvoiceLineItem(Guid containerKey, string name, string sku, decimal amount) 
             : base(containerKey, name, sku, amount)
         {

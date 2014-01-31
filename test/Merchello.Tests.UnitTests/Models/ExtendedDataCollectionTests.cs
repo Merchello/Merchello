@@ -71,7 +71,7 @@ namespace Merchello.Tests.UnitTests.Models
             _extendedData.SetValue("key5", "value5");
 
             //// Act
-            var xml = _extendedData.Serialize();
+            var xml = _extendedData.SerializeToXml();
 
             //// Assert
             Console.Write(xml);

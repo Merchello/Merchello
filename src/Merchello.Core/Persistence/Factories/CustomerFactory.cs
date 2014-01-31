@@ -38,7 +38,7 @@ namespace Merchello.Core.Persistence.Factories
                     TotalPayments = entity.TotalPayments,
                     LastPaymentDate = entity.LastPaymentDate,
                     EntityKey = entity.EntityKey,
-                    ExtendedData = entity.ExtendedData.Serialize(),
+                    ExtendedData = entity.ExtendedData.SerializeToXml(),
                     UpdateDate = entity.UpdateDate,
                     CreateDate = entity.CreateDate
                 };

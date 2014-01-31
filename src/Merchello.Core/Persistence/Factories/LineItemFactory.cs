@@ -16,7 +16,7 @@ namespace Merchello.Core.Persistence.Factories
                 Name = entity.Name,
                 Quantity = entity.Quantity,
                 Amount = entity.Amount,
-                ExtendedData = entity.ExtendedData.Serialize(),
+                ExtendedData = entity.ExtendedData.SerializeToXml(),
                 Exported = entity.Exported,
                 UpdateDate = entity.UpdateDate,
                 CreateDate = entity.CreateDate
@@ -36,7 +36,7 @@ namespace Merchello.Core.Persistence.Factories
                 Name = entity.Name,
                 Quantity = entity.Quantity,
                 Amount = entity.Amount,
-                ExtendedData = entity.ExtendedData.Serialize(),
+                ExtendedData = entity.ExtendedData.SerializeToXml(),
                 Exported = entity.Exported,
                 UpdateDate = entity.UpdateDate,
                 CreateDate = entity.CreateDate
@@ -56,7 +56,7 @@ namespace Merchello.Core.Persistence.Factories
                 Name = entity.Name,
                 Quantity = entity.Quantity,
                 Amount = entity.Amount,
-                ExtendedData = entity.ExtendedData.Serialize(),
+                ExtendedData = entity.ExtendedData.SerializeToXml(),
                 Exported = entity.Exported,
                 UpdateDate = entity.UpdateDate,
                 CreateDate = entity.CreateDate

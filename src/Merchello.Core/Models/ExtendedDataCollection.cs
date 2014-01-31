@@ -1,6 +1,8 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Specialized;
 using System.IO;
+using System.Runtime.Serialization;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -9,6 +11,8 @@ namespace Merchello.Core.Models
     /// <summary>
     /// Represents an ExtendedDataCollection
     /// </summary>
+    [Serializable]
+    [CollectionDataContract(IsReference = true)]
     public class ExtendedDataCollection : ConcurrentDictionary<string, string>, INotifyCollectionChanged
     {
 
@@ -26,7 +30,7 @@ namespace Merchello.Core.Models
             }
         }
 
-        internal string Serialize()
+        internal string SerializeToXml()
         {
             string xml;
             using (var sw = new StringWriter())

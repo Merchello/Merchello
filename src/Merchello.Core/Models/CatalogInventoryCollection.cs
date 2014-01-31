@@ -12,6 +12,7 @@ namespace Merchello.Core.Models
     /// </summary>
     [Serializable]
     [CollectionDataContract(IsReference = true)]
+    [KnownType(typeof(CatalogInventory))]
     public class CatalogInventoryCollection : NotifiyCollectionBase<string, ICatalogInventory>
     {
         private readonly ReaderWriterLockSlim _addLocker = new ReaderWriterLockSlim();

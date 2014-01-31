@@ -32,7 +32,7 @@ namespace Merchello.Core.Persistence.Factories
                 ProviderTfKey = entity.ProviderTfKey,
                 Name = entity.Name,
                 TypeFullName = entity.TypeFullName,
-                ExtendedData = entity.ExtendedData.Serialize(),
+                ExtendedData = entity.ExtendedData.SerializeToXml(),
                 EncryptExtendedData = entity.EncryptExtendedData,
                 UpdateDate = entity.UpdateDate,
                 CreateDate = entity.CreateDate

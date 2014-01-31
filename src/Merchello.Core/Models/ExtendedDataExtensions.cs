@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Xml;
+using System.Xml.Linq;
 using Merchello.Core.Models.Interfaces;
 
 namespace Merchello.Core.Models
@@ -16,7 +19,7 @@ namespace Merchello.Core.Models
 
         public static void AddExtendedDataCollection(this ExtendedDataCollection extendedData, ExtendedDataCollection extendedDataToSerialize)
         {
-            extendedData.SetValue(Constants.ExtendedDataKeys.ExtendedData, extendedDataToSerialize.Serialize());
+            extendedData.SetValue(Constants.ExtendedDataKeys.ExtendedData, extendedDataToSerialize.SerializeToXml());
         }
 
         /// <summary>
@@ -39,6 +42,61 @@ namespace Merchello.Core.Models
 
         #endregion
 
+        #region LineItemCollection
+
+        /// <summary>
+        /// Adds a <see cref="LineItemCollection"/> to the <see cref="ExtendedDataCollection"/>
+        /// </summary>
+        /// <param name="extendedData"></param>
+        /// <param name="lineItemCollection"></param>
+        public static void AddLineItemCollection(this ExtendedDataCollection extendedData, LineItemCollection lineItemCollection)
+        {
+         
+            using (var sw = new StringWriter())
+            {
+                using (var writer = new XmlTextWriter(sw))
+                {
+                    writer.WriteStartDocument();
+                    writer.WriteStartElement(Constants.ExtendedDataKeys.LineItemCollection);
+
+                    foreach (var lineItem in lineItemCollection)
+                    {
+                        writer.WriteElementString(Constants.ExtendedDataKeys.LineItem, ((LineItemBase)lineItem).SerializeToXml());
+                    }
+
+                    writer.WriteEndElement(); // ExtendedData
+                    writer.WriteEndDocument();                  
+                }
+                extendedData.SetValue(Constants.ExtendedDataKeys.ExtendedData, sw.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Creates an instance of <see cref="LineItemCollection"/> from a serialized collection in the ExtendedDataCollection
+        /// </summary>
+        /// <typeparam name="T">The type of the <see cref="ILineItem"/></typeparam>
+        /// <param name="extendedData"></param>
+        /// <returns><see cref="LineItemCollection"/></returns>
+        public static LineItemCollection GetLineItemCollection<T>(this ExtendedDataCollection extendedData) where T : ILineItem
+        {
+            if (!extendedData.ContainsKey(Constants.ExtendedDataKeys.LineItemCollection)) return null;
+
+            var xdoc = XDocument.Parse(extendedData.GetValue(Constants.ExtendedDataKeys.LineItemCollection));
+            var lineItemCollection = new LineItemCollection();
+            foreach (var element in xdoc.Descendants(Constants.ExtendedDataKeys.LineItem))
+            {
+                var ctorArgs = new[] { typeof(string) };
+                var ctoArgValues = new object[] { element.Value };
+                var lineItem = ActivatorHelper.CreateInstance<T>(typeof (LineItemBase), ctorArgs, ctoArgValues);
+
+                lineItemCollection.Add(lineItem);
+            }
+
+            return lineItemCollection;
+        }
+
+        #endregion
+
         #region Product / ProductVariant
 
 
@@ -54,6 +112,8 @@ namespace Merchello.Core.Models
             extendedData.SetValue(Constants.ExtendedDataKeys.Barcode, productVariant.Barcode);
             extendedData.SetValue(Constants.ExtendedDataKeys.Price, productVariant.Price.ToString(CultureInfo.InvariantCulture));
             extendedData.SetValue(Constants.ExtendedDataKeys.OnSale, productVariant.OnSale.ToString());
+            extendedData.SetValue(Constants.ExtendedDataKeys.Manufacturer, productVariant.Manufacturer);
+            extendedData.SetValue(Constants.ExtendedDataKeys.ManufacturerModelNumber, productVariant.ManufacturerModelNumber);
             extendedData.SetValue(Constants.ExtendedDataKeys.SalePrice, productVariant.SalePrice == null ? 0.ToString(CultureInfo.InvariantCulture) : productVariant.SalePrice.ToString());
             extendedData.SetValue(Constants.ExtendedDataKeys.TrackInventory, productVariant.TrackInventory.ToString());
             extendedData.SetValue(Constants.ExtendedDataKeys.OutOfStockPurchase, productVariant.OutOfStockPurchase.ToString());
@@ -200,6 +260,24 @@ namespace Merchello.Core.Models
         public static decimal GetSalePriceValue(this ExtendedDataCollection extendedData)
         {
             return GetDecimalValue(extendedData.GetValue(Constants.ExtendedDataKeys.SalePrice));
+        }
+
+        /// <summary>
+        /// Returns the "merchManufacturer" value
+        /// </summary>
+        public static string GetManufacturerValue(this ExtendedDataCollection extendedData)
+        {
+            return extendedData.GetValue(Constants.ExtendedDataKeys.Manufacturer);
+        }
+
+        /// <summary>
+        /// Returns the "merchManufacturerModelNumber" value
+        /// </summary>
+        /// <param name="extendedData"></param>
+        /// <returns></returns>
+        public static string GetManufacturerModelNumberValue(this ExtendedDataCollection extendedData)
+        {
+            return extendedData.GetValue(Constants.ExtendedDataKeys.ManufacturerModelNumber);
         }
 
         /// <summary>

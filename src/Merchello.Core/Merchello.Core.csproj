@@ -87,9 +87,9 @@
     <Compile Include="Constants-Keys.cs">
       <DependentUpon>Constants.cs</DependentUpon>
     </Compile>
-	<Compile Include="Constants-ExtendedDataKeys.cs">
+    <Compile Include="Constants-ExtendedDataKeys.cs">
       <DependentUpon>Constants.cs</DependentUpon>
-	</Compile>
+    </Compile>
     <Compile Include="Gateways\GatewayProviderBase.cs" />
     <Compile Include="Gateways\GatewayContext.cs" />
     <Compile Include="Gateways\GatewayProviderFactory.cs" />
@@ -501,6 +501,7 @@
     <Compile Include="Persistence\UnitOfWork\PetaPocoUnitOfWork.cs" />
     <Compile Include="Persistence\UnitOfWork\PetaPocoUnitOfWorkProvider.cs" />
     <Compile Include="RateAdjustmentType.cs" />
+    <Compile Include="SerializationHelper.cs" />
     <Compile Include="Services\CountryTaxRateService.cs" />
     <Compile Include="Services\GatewayProviderService.cs" />
     <Compile Include="Services\Interfaces\ICountryTaxRateService.cs" />

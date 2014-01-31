@@ -78,5 +78,7 @@ namespace Merchello.Core.Models
         /// </summary>
         [DataMember]
         AddressType AddressType { get; set; }
+
+
     }
 }

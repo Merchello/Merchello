@@ -1,15 +1,11 @@
-﻿using System;
-using System.Linq;
-using Examine;
+﻿using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Gateways;
 using Merchello.Core.Gateways.Shipping.RateTable;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Web;
-using Merchello.Web.Models;
 using Merchello.Web.Workflow;
-using Newtonsoft.Json;
 using NUnit.Framework;
 
 namespace Merchello.Tests.IntegrationTests.Shipping

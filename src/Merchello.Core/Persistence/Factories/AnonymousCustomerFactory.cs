@@ -23,7 +23,7 @@ namespace Merchello.Core.Persistence.Factories
             {
                 Key = entity.Key,
                 LastActivityDate = entity.LastActivityDate,
-                ExtendedData = entity.ExtendedData.Serialize(),
+                ExtendedData = entity.ExtendedData.SerializeToXml(),
                 UpdateDate = entity.UpdateDate,
                 CreateDate = entity.CreateDate
             };
