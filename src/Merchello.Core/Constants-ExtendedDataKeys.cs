@@ -43,7 +43,10 @@ namespace Merchello.Core
                     "merchQuantity",
                     "merchAmount",
                     "merchShipmentKey",
-                    "merchWarehouseCatalogKey"
+                    "merchWarehouseCatalogKey",
+                    "merchShippingOriginAddress",
+                    "merchShippingDestinationAddress",
+                    "merchBillingAddress"
                 }; }
         }
 
@@ -84,9 +87,9 @@ namespace Merchello.Core
             // Shipment
             public static string ShipmentKey = "merchShipmentKey";
             public static string WarehouseCatalogKey = "merchWarehouseCatalogKey";
-            public static string OriginAddress = "merchOriginAddress";
-            public static string DestinationAddress = "merchDestinationAddress";
-
+            public static string ShippingOriginAddress = "merchShippingOriginAddress";
+            public static string ShippingDestinationAddress = "merchShippingDestinationAddress";
+            public static string BillingAddress = "merchBillingAddress";
 
             // LineItem
             public static string ContainerKey = "merchContainerKey";

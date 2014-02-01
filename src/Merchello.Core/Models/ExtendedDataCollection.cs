@@ -42,8 +42,7 @@ namespace Merchello.Core.Models
                     };
 
                 using (var writer = XmlWriter.Create(sw, settings))
-                {
-                    //writer.WriteStartDocument();
+                {                    
                     writer.WriteStartElement("extendedData");
 
                     foreach (var key in Keys)
@@ -52,7 +51,6 @@ namespace Merchello.Core.Models
                     }
 
                     writer.WriteEndElement(); // ExtendedData
-                    //writer.WriteEndDocument();
                 }
 
                 xml = sw.ToString();

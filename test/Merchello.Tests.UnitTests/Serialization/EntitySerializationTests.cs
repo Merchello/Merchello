@@ -163,6 +163,7 @@ namespace Merchello.Tests.UnitTests.Serialization
             var extendedDataWrapper = new ExtendedDataCollection();
             extendedDataWrapper.AddLineItemCollection(_shipment.Items);
             extendedDataContainer.AddExtendedDataCollection(extendedDataWrapper);
+            Console.Write(extendedDataContainer.SerializeToXml());
 
             //// Act
             var retrievedExtendedDataWrapper = extendedDataContainer.GetExtendedDataCollection();
@@ -174,5 +175,60 @@ namespace Merchello.Tests.UnitTests.Serialization
             Assert.IsTrue(lineItemCollection.Any());
         }
 
+        /// <summary>
+        /// Test shows that an Address can be serialized and stored in an ExtendedDataCollection
+        /// </summary>
+        [Test]
+        public void Can_Serialize_An_Address_And_Store_In_ExtendedDataCollection()
+        {
+            //// Arrange
+            var extendedData = new ExtendedDataCollection();
+
+            //// Act
+            extendedData.AddAddress(_address, AddressType.Billing);
+            Console.Write(extendedData.SerializeToXml());
+
+            //// Assert
+            Assert.DoesNotThrow(() => XDocument.Parse(extendedData.GetValue(Constants.ExtendedDataKeys.BillingAddress)));
+        }
+
+        /// <summary>
+        /// Test shows that an Address can be retrieved from an ExtendedDataCollection and deserialized 
+        /// </summary>
+        [Test]
+        public void Can_Deserialize_An_Address_Stored_in_ExtendedDataCollection()
+        {
+            //// Arrange
+            var extendedData = new ExtendedDataCollection();
+            extendedData.AddAddress(_address, AddressType.Billing);
+
+            //// Act
+            var address = extendedData.GetAddress(AddressType.Billing);
+
+            //// Assert
+            Assert.NotNull(address);
+            Assert.AreEqual(typeof(Address), address.GetType());
+        }
+
+        /// <summary>
+        /// Test shows that an address can be retrieved from a serialized ExtendedDataCollection and deserialized
+        /// </summary>
+        [Test]
+        public void Can_Deserialize_An_Address_Stored_In_A_Serialized_ExtendedDataCollection()
+        {
+            //// Arrange
+            var extendedDataContainer = new ExtendedDataCollection();
+            var extendedDataWrapper = new ExtendedDataCollection();
+            extendedDataWrapper.AddAddress(_address, AddressType.Shipping);
+            extendedDataContainer.AddExtendedDataCollection(extendedDataWrapper);
+
+            //// Act
+            var wrapper = extendedDataContainer.GetExtendedDataCollection();
+            var address = wrapper.GetAddress(AddressType.Shipping);
+
+            //// Assert
+            Assert.NotNull(address);
+            Assert.AreEqual(typeof(Address), address.GetType());
+        }
     }
 }
