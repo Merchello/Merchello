@@ -3,6 +3,7 @@ using System.Linq;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using System.Collections.Generic;
+using Merchello.Core.Gateways.Shipping.RateTable;
 
 namespace Merchello.Web.Models.ContentEditing
 {
@@ -126,8 +127,20 @@ namespace Merchello.Web.Models.ContentEditing
         internal static ShipCountryDisplay ToShipCountryDisplay(this IShipCountry shipCountry)
         {
             AutoMapper.Mapper.CreateMap<IShipCountry, ShipCountryDisplay>();
+            AutoMapper.Mapper.CreateMap<IProvince, ShipProvinceDisplay>();
 
             return AutoMapper.Mapper.Map<ShipCountryDisplay>(shipCountry);
+        }
+
+        #endregion
+
+        #region IShipCountry
+
+        internal static IShipCountry ToShipCountry(this ShipCountryDisplay shipCountryDisplay, IShipCountry destination)
+        {
+            // May not be any mapping
+
+            return destination;
         }
 
         #endregion
@@ -148,8 +161,48 @@ namespace Merchello.Web.Models.ContentEditing
         internal static ShipMethodDisplay ToShipMethodDisplay(this IShipMethod shipMethod)
         {
             AutoMapper.Mapper.CreateMap<IShipMethod, ShipMethodDisplay>();
+            AutoMapper.Mapper.CreateMap<IShipProvince, ShipProvinceDisplay>();
 
             return AutoMapper.Mapper.Map<ShipMethodDisplay>(shipMethod);
+        }
+
+        #endregion
+
+        #region IShipMethod
+
+        internal static IShipMethod ToShipMethod(this ShipMethodDisplay shipMethodDisplay, IShipMethod destination)
+        {
+            if (shipMethodDisplay.Key != Guid.Empty)
+            {
+                destination.Key = shipMethodDisplay.Key;
+            }
+            destination.Name = shipMethodDisplay.Name;
+            destination.ServiceCode = shipMethodDisplay.ServiceCode;
+            destination.Surcharge = shipMethodDisplay.Surcharge;
+            destination.Taxable = shipMethodDisplay.Taxable;
+
+            foreach (var shipProvinceDisplay in shipMethodDisplay.Provinces)
+            {
+                IShipProvince destinationShipProvince;
+
+                var matchingItems = destination.Provinces.Where(x => x.Code == shipProvinceDisplay.Code);
+                if (matchingItems.Count() > 0)
+                {
+                    var existingShipProvince = matchingItems.First();
+                    if (existingShipProvince != null)
+                    {
+                        destinationShipProvince = existingShipProvince;
+
+                        destinationShipProvince = shipProvinceDisplay.ToShipProvince(destinationShipProvince);
+                    }
+                }
+                else
+                {
+                    // Case if one was created in the back-office.
+                }
+            }
+
+            return destination;
         }
 
         #endregion
@@ -161,6 +214,90 @@ namespace Merchello.Web.Models.ContentEditing
             AutoMapper.Mapper.CreateMap<IShipProvince, ShipProvinceDisplay>();
 
             return AutoMapper.Mapper.Map<ShipProvinceDisplay>(shipProvince);
+        }
+
+        #endregion
+
+        #region IShipProvince
+
+        internal static IShipProvince ToShipProvince(this ShipProvinceDisplay shipProvinceDisplay, IShipProvince destination)
+        {
+            destination.AllowShipping = shipProvinceDisplay.AllowShipping;
+            destination.RateAdjustment = shipProvinceDisplay.RateAdjustment;
+            destination.RateAdjustmentType = shipProvinceDisplay.RateAdjustmentType;
+
+            return destination;
+        }
+
+        #endregion
+
+        #region ShipRateTableDisplay
+
+        internal static ShipRateTableDisplay ToShipRateTableDisplay(this IShipRateTable shipRateTable)
+        {
+            AutoMapper.Mapper.CreateMap<IShipRateTable, ShipRateTableDisplay>();
+            AutoMapper.Mapper.CreateMap<IShipRateTier, ShipRateTierDisplay>();
+
+            return AutoMapper.Mapper.Map<ShipRateTableDisplay>(shipRateTable);
+        }
+
+        #endregion
+
+        #region IShipRateTable
+
+        internal static IShipRateTable ToShipRateTable(this ShipRateTableDisplay shipRateTableDisplay, IShipRateTable destination)
+        {
+            foreach (var shipRateTierDisplay in shipRateTableDisplay.Rows)
+            {
+                IShipRateTier destinationShipRateTier;
+
+                var matchingItems = destination.Rows.Where(x => x.Key == shipRateTierDisplay.Key);
+                if (matchingItems.Count() > 0)
+                {
+                    var existingshipRateTier = matchingItems.First();
+                    if (existingshipRateTier != null)
+                    {
+                        destinationShipRateTier = existingshipRateTier;
+
+                        destinationShipRateTier = shipRateTierDisplay.ToShipRateTier(destinationShipRateTier);
+                    }
+                }
+                else
+                {
+                    // Case if one was created in the back-office.  Not planned for v1
+                    destination.AddRow(shipRateTierDisplay.RangeLow, shipRateTierDisplay.RangeHigh, shipRateTierDisplay.Rate);
+                }
+            }
+
+            return destination;
+        }
+
+        #endregion
+
+        #region ShipRateTierDisplay
+
+        internal static ShipRateTierDisplay ToShipRateTableDisplay(this IShipRateTier shipRateTier)
+        {
+            AutoMapper.Mapper.CreateMap<IShipRateTier, ShipRateTierDisplay>();
+
+            return AutoMapper.Mapper.Map<ShipRateTierDisplay>(shipRateTier);
+        }
+
+        #endregion
+
+        #region IShipRateTier
+
+        internal static IShipRateTier ToShipRateTier(this ShipRateTierDisplay shipRateTierDisplay, IShipRateTier destination)
+        {
+            if (shipRateTierDisplay.Key != Guid.Empty)
+            {
+                destination.Key = shipRateTierDisplay.Key;
+            }
+            destination.RangeHigh = shipRateTierDisplay.RangeHigh;
+            destination.RangeLow = shipRateTierDisplay.RangeLow;
+            destination.Rate = shipRateTierDisplay.Rate;
+
+            return destination;
         }
 
         #endregion
