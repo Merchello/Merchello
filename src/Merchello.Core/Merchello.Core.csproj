@@ -73,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActivatorHelper.cs" />
+    <Compile Include="Checkout\CheckoutBase.cs" />
     <Compile Include="Checkout\ICheckoutBase.cs" />
     <Compile Include="Builders\IBuilder.cs" />
     <Compile Include="Cache\CacheKeys.cs" />
@@ -115,6 +116,9 @@
     <Compile Include="Gateways\Taxation\ITaxationGatewayProvider.cs" />
     <Compile Include="Gateways\Taxation\TaxationGatewayProviderBase.cs" />
     <Compile Include="Models\Address.cs" />
+    <Compile Include="Models\AnonymousCustomerBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Models\AppliedPayment.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -467,7 +471,6 @@
     <Compile Include="IBootManager.cs" />
     <Compile Include="MerchelloContext.cs" />
     <Compile Include="Models\AnonymousCustomer.cs" />
-    <Compile Include="Models\AnonymousCustomerBase.cs" />
     <Compile Include="Models\Interfaces\IAnonymousCustomer.cs" />
     <Compile Include="Models\Rdbms\AppliedPaymentDto.cs" />
     <Compile Include="Models\Rdbms\OrderItemDto.cs" />

@@ -4,7 +4,6 @@ using Merchello.Core;
 using Merchello.Core.Cache;
 using Merchello.Core.Models;
 using Merchello.Core.Models.TypeFields;
-using Merchello.Web.Models;
 using Umbraco.Core.Logging;
 
 namespace Merchello.Web.Workflow
@@ -17,6 +16,7 @@ namespace Merchello.Web.Workflow
         internal Basket(IItemCache itemCache, ICustomerBase customer)
         {
             Mandate.ParameterNotNull(itemCache, "ItemCache");
+            Mandate.ParameterCondition(itemCache.ItemCacheType == ItemCacheType.Basket, "itemCache");
             Mandate.ParameterNotNull(customer, "customer");
 
             _customer = customer;

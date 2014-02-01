@@ -9,6 +9,11 @@ namespace Merchello.Core.Models
     /// </summary>
     public interface IShipment : ILineItemContainer
     {
+        /// <summary>
+        /// The organization or company name associated with the address
+        /// </summary>
+        [DataMember]
+        string FromOrganization { get; set; }
 
         /// <summary>
         /// The origin address's name for the Shipment
@@ -57,6 +62,12 @@ namespace Merchello.Core.Models
         /// </summary>
         [DataMember]
         bool FromIsCommercial { get; set; }
+
+        /// <summary>
+        /// The organization or company name associated with the address
+        /// </summary>
+        [DataMember]
+        string ToOrganization { get; set; }
 
         /// <summary>
         /// The destination address's name or company for the Shipment

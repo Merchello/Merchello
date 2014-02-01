@@ -1,7 +1,6 @@
-﻿using System;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
-namespace Merchello.Core.Models.Interfaces
+namespace Merchello.Core.Models
 {
     /// <summary>
     /// Defines a standard address
@@ -55,6 +54,18 @@ namespace Merchello.Core.Models.Interfaces
         /// </summary>
         [DataMember]
         string Phone { get; set; }
+
+        /// <summary>
+        /// The email address associated with the address
+        /// </summary>
+        [DataMember]
+        string Email { get; set; }
+
+        /// <summary>
+        /// The organization or company name associated with the address
+        /// </summary>
+        [DataMember]
+        string Organization { get; set; }
 
         /// <summary>
         /// True/false indicating whether or not this record represents commercial or business address

@@ -65,6 +65,18 @@ namespace Merchello.Core.Models
         public string Phone { get; set; }
 
         /// <summary>
+        /// The email address associated with the address
+        /// </summary>
+        [DataMember]
+        public string Email { get; set; }
+
+        /// <summary>
+        /// The organization or company name associated with the address
+        /// </summary>
+        [DataMember]
+        public string Organization { get; set; }
+
+        /// <summary>
         /// True/false indicating whether or not this record represents commercial or business address
         /// </summary>
         /// <remarks>

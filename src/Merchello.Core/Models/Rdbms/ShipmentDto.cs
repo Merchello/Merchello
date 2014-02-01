@@ -14,6 +14,10 @@ namespace Merchello.Core.Models.Rdbms
         [Constraint(Default = "newid()")]
         public Guid Key { get; set; }
 
+        [Column("fromOrganization")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public string FromOrganization { get; set; }
+
         [Column("fromName")]
         [NullSetting(NullSetting = NullSettings.Null)]
         public string FromName { get; set; }
@@ -44,6 +48,10 @@ namespace Merchello.Core.Models.Rdbms
 
         [Column("fromIsCommercial")]
         public bool FromIsCommercial { get; set; }
+
+        [Column("toOrganization")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public string ToOrganization { get; set; }
 
         [Column("toName")]
         [NullSetting(NullSetting = NullSettings.Null)]
