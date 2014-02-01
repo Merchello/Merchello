@@ -52,7 +52,7 @@ namespace Merchello.Core.Models
 
         protected LineItemBase(Guid containerKey, Guid lineItemTfKey, string name, string sku, int quantity, decimal amount, ExtendedDataCollection extendedData)  
         {
-            Mandate.ParameterCondition(containerKey != Guid.Empty, "containerKey");
+            //Mandate.ParameterCondition(containerKey != Guid.Empty, "containerKey");
             Mandate.ParameterCondition(lineItemTfKey != Guid.Empty, "lineItemTfKey");
             Mandate.ParameterNotNull(extendedData, "extendedData");
             Mandate.ParameterNotNullOrEmpty(name, "name");

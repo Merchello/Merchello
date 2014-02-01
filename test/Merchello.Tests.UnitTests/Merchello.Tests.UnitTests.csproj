@@ -219,7 +219,7 @@
     <Compile Include="Configuration\MerchelloSectionTests.cs" />
     <Compile Include="Configuration\Versioning.cs" />
     <Compile Include="Contexts\MerchelloBootstrapperTests.cs" />
-    <Compile Include="LineItem\LineItemCollectionTest.cs" />
+    <Compile Include="LineItem\LineItemTests.cs" />
     <Compile Include="Mappers\MerchelloMapperTests.cs" />
     <Compile Include="Models\ExtendedDataCollectionTests.cs" />
     <Compile Include="Models\ProductTests.cs" />
