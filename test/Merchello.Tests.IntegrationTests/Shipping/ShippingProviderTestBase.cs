@@ -21,8 +21,10 @@ namespace Merchello.Tests.IntegrationTests.Shipping
         protected IMerchelloContext MerchelloContext;
         
         [TestFixtureSetUp]
-        public void FixtureInit()
+        public override void FixtureSetup()
         {
+            base.FixtureSetup();
+
             // assert we have our defaults setup
             var dtos = PreTestDataWorker.Database.Query<WarehouseDto>("SELECT * FROM merchWarehouse");
             var catalogs = PreTestDataWorker.Database.Query<WarehouseCatalogDto>("SELECT * FROM merchWarehouseCatalog");

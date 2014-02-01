@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
 using System.Net.Configuration;
 using System.Runtime.Serialization;
 using System.Threading;
+using System.Xml;
 using Umbraco.Core;
 
 namespace Merchello.Core.Models
 {
     /// <summary>
-    /// Represents a Collection of <see cref="ILineItem"/> objects
+    /// Represents a Collection of <see cref="T"/> objects
     /// </summary>
     [Serializable]
-    [DataContract(IsReference = true)]
+    [CollectionDataContract(IsReference = true)]   
     public class LineItemCollection : NotifiyCollectionBase<string, ILineItem>
     {
         private readonly ReaderWriterLockSlim _addLocker = new ReaderWriterLockSlim();
@@ -69,7 +71,7 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
-        /// Determines whether this collection contains a <see cref="ILineItem"/> whose sku matches the specified sku.
+        /// Determines whether this collection contains a <see cref="T"/> whose sku matches the specified sku.
         /// </summary>
         /// <param name="sku">Sku of the line item.</param>
         /// <returns><c>true</c> if the collection contains the specified sku; otherwise, <c>false</c>.</returns>
@@ -78,7 +80,6 @@ namespace Merchello.Core.Models
         {
             return this.Any(x => x.Sku == sku);
         }
-
 
         /// <summary>
         /// True/false indicating whether or not the current collection is empty
@@ -99,6 +100,6 @@ namespace Merchello.Core.Models
             {
                 visitor.Visit(item);
             }
-        }
+        }       
     }
 }

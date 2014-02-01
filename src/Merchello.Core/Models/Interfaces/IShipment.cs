@@ -102,12 +102,6 @@ namespace Merchello.Core.Models
         /// </remarks>
         [DataMember]
         Guid? ShipMethodKey { get; set; }
-
-        /// <summary>
-        /// The invoice item, if any, associated with this shipment
-        /// </summary>
-        [DataMember]
-        Guid? InvoiceItemKey { get; set; }
             
         /// <summary>
         /// The phone number at the shipping address for the Shipment
@@ -115,6 +109,11 @@ namespace Merchello.Core.Models
         [DataMember]
         string Phone { get; set;}
 
+        /// <summary>
+        /// The contact email address associated with this shipment
+        /// </summary>
+        [DataMember]
+        string Email { get; set; }
 
     }
 }

@@ -1,12 +1,11 @@
 ﻿using System.Linq;
-using Examine;
 using Merchello.Core;
 using Merchello.Core.Gateways;
 using Merchello.Core.Gateways.Shipping.RateTable;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Web;
-using Merchello.Web.Models;
+using Merchello.Web.Workflow;
 using NUnit.Framework;
 
 namespace Merchello.Tests.IntegrationTests.Shipping
@@ -95,7 +94,6 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             gwshipMethod.RateTable.AddRow(15, 25, 25);
             gwshipMethod.RateTable.AddRow(25, 10000, 100);
 
-            
             // have to call this via the static method due o the MerchelloContext.Current not present in the ShipRateTable object.
             ShipRateTable.Save(GatewayProviderService, MerchelloContext.Cache.RuntimeCache, gwshipMethod.RateTable);
 
@@ -195,10 +193,16 @@ namespace Merchello.Tests.IntegrationTests.Shipping
         [Test]
         public void Can_Get_Quotes_For_All_Active_ShipMethods()
         {
+
+            #region BackOffice
+            
+
             //// Arrange
             var dkCountry = ShipCountryService.GetShipCountryByCountryCode(Catalog.Key, "DK");
             var key = Constants.ProviderKeys.Shipping.RateTableShippingProviderKey;
+            
             var rateTableProvider = ((GatewayContext)MerchelloContext.Gateways).ResolveByKey<RateTableShippingGatewayProvider>(key);
+
             rateTableProvider.DeleteAllActiveShipMethods(_shipCountry);
             var gwshipMethod1 = (RateTableShipMethod)rateTableProvider.CreateShipMethod(RateTableShipMethod.QuoteType.PercentTotal, _shipCountry, "Ground (PercentTotal) 1");
             gwshipMethod1.RateTable.AddRow(0, 10, 5);
@@ -222,11 +226,15 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             gwshipMethod3.RateTable.AddRow(25, 60, 30); // total price should be 50M so we should hit this tier
             gwshipMethod3.RateTable.AddRow(25, 10000, 50);
             rateTableProvider.SaveShipMethod(gwshipMethod3);
-        
+
+            #endregion
+
+            // var shipments =  CurrentCustomer.Basket.PackageBasket(_destinationAddress);
 
             //// Act
             var shipments = _basket.PackageBasket(MerchelloContext, _destination);
             Assert.IsTrue(shipments.Any());
+
             var quotes = rateTableProvider.QuoteAvailableShipMethodsForShipment(shipments.First()).OrderBy(x => x.Rate);
 
             //// Assert
@@ -246,6 +254,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             var key = Constants.ProviderKeys.Shipping.RateTableShippingProviderKey;
             var rateTableProvider = ((GatewayContext)MerchelloContext.Gateways).ResolveByKey<RateTableShippingGatewayProvider>(key);
             rateTableProvider.DeleteAllActiveShipMethods(_shipCountry);
+
             var gwshipMethod1 = (RateTableShipMethod)rateTableProvider.CreateShipMethod(RateTableShipMethod.QuoteType.PercentTotal, _shipCountry, "Ground (PercentTotal) 1");
             gwshipMethod1.RateTable.AddRow(0, 10, 5);
             gwshipMethod1.RateTable.AddRow(10, 15, 10);
@@ -260,6 +269,8 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             var shipments = _basket.PackageBasket(MerchelloContext, _destination);
             Assert.IsTrue(shipments.Any());
             var quotes = MerchelloContext.Gateways.GetShipRateQuotesForShipment(shipments.First());
+            
+            // var invoice = _basket.CheckOut();
 
             //// Assert
             Assert.IsTrue(quotes.Any());
@@ -267,5 +278,19 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             Assert.AreEqual(14M, quotes.First().Rate);
 
         }
+
+        //[Test]
+        //public void Can_Serialize_A_Shipment_To_Json()
+        //{
+        //    var shipments = _basket.PackageBasket(MerchelloContext, _destination);
+
+        //    var shipment = shipments.First() as Shipment;
+
+        //    var json = JsonConvert.SerializeObject(shipment);
+
+        //    Console.Write(json);
+
+        //    var deserialized = JsonConvert.DeserializeObject<Shipment>(json);
+        //}
     }
 }

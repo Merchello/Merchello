@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Umbraco.Core;
@@ -24,7 +22,7 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
             : base(gatewayResource, shipMethod, shipCountry)
         {
             RateTable = new ShipRateTable(shipMethod.Key);
-            _quoteType = GatewayResource.ServiceCode == "VBW" ? QuoteType.VaryByWeight : QuoteType.PercentTotal;
+            _quoteType = GatewayResource.ServiceCode == RateTableShippingGatewayProvider.VaryByWeightPrefix ? QuoteType.VaryByWeight : QuoteType.PercentTotal;
             RateTable = rateTable;
         }
 
@@ -37,12 +35,18 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
             var province = ShipMethod.Provinces.FirstOrDefault(x => x.Code == shipment.ToRegion);
 
             return _quoteType == QuoteType.VaryByWeight
-                ? CalculateVaryByWeight(visitor.TotalWeight, province)
-                : CalculatePercentTotal(visitor.TotalPrice, province);
+                ? CalculateVaryByWeight(shipment, visitor.TotalWeight, province)
+                : CalculatePercentTotal(shipment, visitor.TotalPrice, province);
         }
       
-
-        private Attempt<IShipmentRateQuote> CalculateVaryByWeight(decimal totalWeight, IShipProvince province = null)
+        /// <summary>
+        /// Calculates the rate based on the total weight of the items in the shipment
+        /// </summary>
+        /// <param name="shipment">The associated <see cref="IShipment"/></param>
+        /// <param name="totalWeight">The total weight of the items in the shipment</param>
+        /// <param name="province">The <see cref="IShipProvince"/> associated with the shipment destination.  Used for rate adjustments</param>
+        /// <returns>Returns an <see cref="Attempt"/> to quote a rate using 'this' ship method</returns>
+        private Attempt<IShipmentRateQuote> CalculateVaryByWeight(IShipment shipment, decimal totalWeight, IShipProvince province = null)
         {
             var tier = RateTable.Rows.FirstOrDefault(x => x.RangeLow <= totalWeight && totalWeight < x.RangeHigh);
             if (tier == null)
@@ -52,15 +56,17 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
                                                      totalWeight.ToString(CultureInfo.InvariantCulture) +
                                                      " which is outside any rate tier defined by the current rate table."));
 
-                return Attempt<IShipmentRateQuote>.Succeed(new ShipmentRateQuote(ShipMethod) {Rate = AdjustedRate(tier.Rate, province)});
+                return Attempt<IShipmentRateQuote>.Succeed(new ShipmentRateQuote(shipment, ShipMethod) {Rate = AdjustedRate(tier.Rate, province)});
         }
 
         /// <summary>
         /// Calculates the rate based on the percentage of the total shipment item price
         /// </summary>
-        /// <param name="totalPrice"></param>
-        /// <returns></returns>
-        private Attempt<IShipmentRateQuote> CalculatePercentTotal(decimal totalPrice, IShipProvince province = null)
+        /// <param name="shipment">The associated <see cref="IShipment"/></param>
+        /// <param name="totalPrice">The total price of the items in the shipment</param>
+        /// <param name="province">The <see cref="IShipProvince"/> associated with the shipment destination.  Used for rate adjustments</param>
+        /// <returns>Returns an <see cref="Attempt"/> to quote a rate using 'this' ship method</returns>
+        private Attempt<IShipmentRateQuote> CalculatePercentTotal(IShipment shipment, decimal totalPrice, IShipProvince province = null)
         {
             var tier = RateTable.Rows.FirstOrDefault(x => x.RangeLow <= totalPrice && totalPrice < x.RangeHigh);
             if (tier == null)
@@ -71,7 +77,7 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
                                                      " which is outside any rate tier defined by the current rate table."));
 
 
-            return Attempt<IShipmentRateQuote>.Succeed(new ShipmentRateQuote(ShipMethod) { Rate = AdjustedRate((tier.Rate * .01M) * totalPrice, province)  });
+            return Attempt<IShipmentRateQuote>.Succeed(new ShipmentRateQuote(shipment, ShipMethod) { Rate = AdjustedRate((tier.Rate * .01M) * totalPrice, province)  });
         }
 
         public enum QuoteType

@@ -6,7 +6,7 @@ namespace Merchello.Core.Models
 {
     [Serializable]
     [DataContract(IsReference = true)]
-    public class Customer : CustomerBase, ICustomer
+    internal class Customer : CustomerBase, ICustomer
     {
         private int? _memberId;
         private string _firstName;
@@ -16,7 +16,7 @@ namespace Merchello.Core.Models
         private readonly decimal _totalPayments;
         private readonly DateTime? _lastPaymentDate;
 
-        public Customer(decimal totalInvoice, decimal totalPayments, DateTime? lastPaymentDate)
+        internal Customer(decimal totalInvoice, decimal totalPayments, DateTime? lastPaymentDate)
             :base(false)
         {
             _totalInvoiced = totalInvoice;

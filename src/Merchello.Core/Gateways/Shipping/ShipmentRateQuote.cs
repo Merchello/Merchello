@@ -8,18 +8,25 @@ namespace Merchello.Core.Gateways.Shipping
     public class ShipmentRateQuote : IShipmentRateQuote
     {
 
-        public ShipmentRateQuote(IShipMethod shipMethod)
-            : this(shipMethod, new ExtendedDataCollection())
+        public ShipmentRateQuote(IShipment shipment, IShipMethod shipMethod)
+            : this(shipment, shipMethod, new ExtendedDataCollection())
         { }
 
-        public ShipmentRateQuote(IShipMethod shipMethod, ExtendedDataCollection extendedData)
+        public ShipmentRateQuote(IShipment shipment, IShipMethod shipMethod, ExtendedDataCollection extendedData)
         {
+            Mandate.ParameterNotNull(shipment, "shipment");
             Mandate.ParameterNotNull(shipMethod, "shipMethod");
             Mandate.ParameterNotNull(extendedData, "extendedData");
 
+            Shipment = shipment;
             ShipMethod = shipMethod;
             ExtendedData = extendedData;
         }
+
+        /// <summary>
+        /// The <see cref="IShipment"/> associated with this rate quote
+        /// </summary>
+        public IShipment Shipment { get; private set; }
 
         /// <summary>
         /// The ShipMethod used to quote the rate

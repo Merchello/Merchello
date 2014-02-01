@@ -47,15 +47,15 @@ namespace Merchello.Core.Persistence.Migrations.Initial
         {
             // address
             var address = new AddressTypeField();
-            _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = address.Residential.TypeKey, Alias = address.Residential.Alias, Name = address.Residential.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now});
-            _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = address.Commercial.TypeKey, Alias = address.Commercial.Alias, Name = address.Commercial.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
+            _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = address.Shipping.TypeKey, Alias = address.Shipping.Alias, Name = address.Shipping.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now});
+            _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = address.Billing.TypeKey, Alias = address.Billing.Alias, Name = address.Billing.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
 
-            // BasketTypeField
-            var basket = new ItemCacheTypeField();
-            _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = basket.Basket.TypeKey, Alias = basket.Basket.Alias, Name = basket.Basket.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
-            _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = basket.Wishlist.TypeKey, Alias = basket.Wishlist.Alias, Name = basket.Wishlist.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
+            // ItemCacheTypeField
+            var itemcCache = new ItemCacheTypeField();
+            _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = itemcCache.Basket.TypeKey, Alias = itemcCache.Basket.Alias, Name = itemcCache.Basket.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
+            _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = itemcCache.Wishlist.TypeKey, Alias = itemcCache.Wishlist.Alias, Name = itemcCache.Wishlist.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
+            _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = itemcCache.Checkout.TypeKey, Alias = itemcCache.Checkout.Alias, Name = itemcCache.Checkout.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
             
-
             var litf = new LineItemTypeField();
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = litf.Product.TypeKey, Alias = litf.Product.Alias, Name = litf.Product.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = litf.Shipping.TypeKey, Alias = litf.Shipping.Alias, Name = litf.Shipping.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
@@ -67,12 +67,6 @@ namespace Merchello.Core.Persistence.Migrations.Initial
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = ptf.Cash.TypeKey, Alias = ptf.Cash.Alias, Name = ptf.Cash.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = ptf.CreditCard.TypeKey, Alias = ptf.CreditCard.Alias, Name = ptf.CreditCard.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = ptf.PurchaseOrder.TypeKey, Alias = ptf.PurchaseOrder.Alias, Name = ptf.PurchaseOrder.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
-
-            // ShipmentMethodType
-            //var stf = new ShipMethodTypeField();
-            //_database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = stf.FlatRate.TypeKey, Alias = stf.FlatRate.Alias, Name = stf.FlatRate.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
-            //_database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = stf.Carrier.TypeKey, Alias = stf.Carrier.Alias, Name = stf.Carrier.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
-            //_database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = stf.PercentTotal.TypeKey, Alias = stf.PercentTotal.Alias, Name = stf.PercentTotal.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
 
             //// AppliedPaymentType
             var apf = new AppliedPaymentTypeField();
@@ -89,11 +83,11 @@ namespace Merchello.Core.Persistence.Migrations.Initial
 
         private void CreateInvoiceStatusData()
         {
-            _database.Insert("merchInvoiceStatus", "Key", new InvoiceStatusDto() { Key = new Guid("17ADA9AC-C893-4C26-AA26-234ECEB2FA75"), Alias = "unpaid", Name = "Unpaid", Active = true, Reportable = true, SortOrder = 1, CreateDate = DateTime.Now, UpdateDate = DateTime.Now});
-            _database.Insert("merchInvoiceStatus", "Key", new InvoiceStatusDto() { Key = new Guid("1F872A1A-F0DD-4C3E-80AB-99799A28606E"), Alias = "paid", Name = "Paid", Active = true, Reportable = true, SortOrder = 2, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
-            _database.Insert("merchInvoiceStatus", "Key", new InvoiceStatusDto() { Key = new Guid("6606B0EA-15B6-44AA-8557-B2D9D049645C"), Alias = "partial", Name = "Partial", Active = true, Reportable = true, SortOrder = 3, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
-            _database.Insert("merchInvoiceStatus", "Key", new InvoiceStatusDto() { Key = new Guid("53077EFD-6BF0-460D-9565-0E00567B5176"), Alias = "cancelled", Name = "Cancelled", Active = true, Reportable = true, SortOrder = 4, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
-            _database.Insert("merchInvoiceStatus", "Key", new InvoiceStatusDto() { Key = new Guid("75E1E5EB-33E8-4904-A8E5-4B64A37D6087"), Alias = "fraud", Name = "Fraud", Active = true, Reportable = true, SortOrder = 5, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchInvoiceStatus", "Key", new InvoiceStatusDto() { Key = Constants.DefaultKeys.UnpaidInvoiceStatusKey, Alias = "unpaid", Name = "Unpaid", Active = true, Reportable = true, SortOrder = 1, CreateDate = DateTime.Now, UpdateDate = DateTime.Now});
+            _database.Insert("merchInvoiceStatus", "Key", new InvoiceStatusDto() { Key = Constants.DefaultKeys.PaidInvoiceStatusKey, Alias = "paid", Name = "Paid", Active = true, Reportable = true, SortOrder = 2, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchInvoiceStatus", "Key", new InvoiceStatusDto() { Key = Constants.DefaultKeys.PartialInvoiceStatusKey, Alias = "partial", Name = "Partial", Active = true, Reportable = true, SortOrder = 3, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchInvoiceStatus", "Key", new InvoiceStatusDto() { Key = Constants.DefaultKeys.CancelledInvoiceStatusKey, Alias = "cancelled", Name = "Cancelled", Active = true, Reportable = true, SortOrder = 4, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchInvoiceStatus", "Key", new InvoiceStatusDto() { Key = Constants.DefaultKeys.FraudInvoiceStatusKey, Alias = "fraud", Name = "Fraud", Active = true, Reportable = true, SortOrder = 5, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
         }
 
         private void CreateOrderStatusData()
@@ -115,8 +109,8 @@ namespace Merchello.Core.Persistence.Migrations.Initial
         {
             var extended = new ExtendedDataCollection();
 
-            _database.Insert("merchGatewayProvider", "Key", new GatewayProviderDto() { Key = Constants.ProviderKeys.Shipping.RateTableShippingProviderKey, Name = "Rate Table Shipping Provider", ProviderTfKey = EnumTypeFieldConverter.GatewayProvider.GetTypeField(GatewayProviderType.Shipping).TypeKey, ExtendedData = new ExtendedDataCollection().Serialize(), EncryptExtendedData = false, TypeFullName = "Merchello.Core.Gateways.Shipping.RateTable.RateTableShippingGatewayProvider, Merchello.Core", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
-            _database.Insert("merchGatewayProvider", "Key", new GatewayProviderDto() { Key = Constants.ProviderKeys.Taxation.CountryTaxRateTaxationProviderKey, Name = "Fixed Rate Tax Provider", ProviderTfKey = EnumTypeFieldConverter.GatewayProvider.GetTypeField(GatewayProviderType.Taxation).TypeKey, ExtendedData = new ExtendedDataCollection().Serialize(), EncryptExtendedData = false, TypeFullName = "Merchello.Core.Gateways.Taxation.CountryTaxRate.CountryTaxRateTaxationGatewayProvider, Merchello.Core", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchGatewayProvider", "Key", new GatewayProviderDto() { Key = Constants.ProviderKeys.Shipping.RateTableShippingProviderKey, Name = "Rate Table Shipping Provider", ProviderTfKey = EnumTypeFieldConverter.GatewayProvider.GetTypeField(GatewayProviderType.Shipping).TypeKey, ExtendedData = new ExtendedDataCollection().SerializeToXml(), EncryptExtendedData = false, TypeFullName = "Merchello.Core.Gateways.Shipping.RateTable.RateTableShippingGatewayProvider, Merchello.Core", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchGatewayProvider", "Key", new GatewayProviderDto() { Key = Constants.ProviderKeys.Taxation.CountryTaxRateTaxationProviderKey, Name = "Fixed Rate Tax Provider", ProviderTfKey = EnumTypeFieldConverter.GatewayProvider.GetTypeField(GatewayProviderType.Taxation).TypeKey, ExtendedData = new ExtendedDataCollection().SerializeToXml(), EncryptExtendedData = false, TypeFullName = "Merchello.Core.Gateways.Taxation.CountryTaxRate.CountryTaxRateTaxationGatewayProvider, Merchello.Core", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
         }
 
         private void CreateStoreSettingData()

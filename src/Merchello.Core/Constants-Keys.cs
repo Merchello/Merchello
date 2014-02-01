@@ -6,9 +6,15 @@ namespace Merchello.Core
     {
 
         public static class DefaultKeys
-        {
+        {            
             public static Guid DefaultWarehouseKey = new Guid("268D4007-8853-455A-89F7-A28398843E5F");
             public static Guid DefaultWarehouseCatalogKey = new Guid("B25C2B00-578E-49B9-BEA2-BF3712053C63");
+
+            public static Guid UnpaidInvoiceStatusKey = new Guid("17ADA9AC-C893-4C26-AA26-234ECEB2FA75");
+            public static Guid PaidInvoiceStatusKey = new Guid("1F872A1A-F0DD-4C3E-80AB-99799A28606E");
+            public static Guid PartialInvoiceStatusKey = new Guid("6606B0EA-15B6-44AA-8557-B2D9D049645C");
+            public static Guid CancelledInvoiceStatusKey = new Guid("53077EFD-6BF0-460D-9565-0E00567B5176");
+            public static Guid FraudInvoiceStatusKey = new Guid("75E1E5EB-33E8-4904-A8E5-4B64A37D6087");
         }
 
         /// <summary>
@@ -49,14 +55,15 @@ namespace Merchello.Core
         {
             public static class Address
             {
-                public static Guid ResidentialKey = new Guid("D32D7B40-2FF2-453F-9AC5-51CF1A981E46");
-                public static Guid CommercialKey = new Guid("5C2A8638-EA32-49AD-8167-EDDFB45A7360");
+                public static Guid ShippingAddressKey = new Guid("D32D7B40-2FF2-453F-9AC5-51CF1A981E46");
+                public static Guid BillingAddressKey = new Guid("5C2A8638-EA32-49AD-8167-EDDFB45A7360");
             }
 
             public static class ItemCache
             {
                 public static Guid BasketKey = new Guid("C53E3100-2DFD-408A-872E-4380383FAD35");
                 public static Guid WishlistKey = new Guid("B3EBB9E0-C7CE-4BA6-B379-BEDA3465D6D5");
+                public static Guid CheckoutKey = new Guid("25608A4E-F3DB-43DE-B137-A9E55B1412CE");
             }
 
             public static class LineItem

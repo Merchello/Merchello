@@ -18,12 +18,15 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
     public class RateTableShippingGatewayProvider : ShippingGatewayProviderBase
     {
         #region "Available Methods"
-        
+
+        public static string VaryByWeightPrefix = "VBW";
+        public static string PercentOfTotalPrefix = "POT";
+
         // In this case, the GatewayResource can be used to create multiple shipmethods of the same resource type.
         private static readonly IEnumerable<IGatewayResource> AvailableResources  = new List<IGatewayResource>()
             {
-                new GatewayResource("VBW", "Vary by Weight"),
-                new GatewayResource("POT", "Percentage of Total")
+                new GatewayResource(VaryByWeightPrefix, "Vary by Weight"),
+                new GatewayResource(PercentOfTotalPrefix, "Percentage of Total")
             };
 
         #endregion

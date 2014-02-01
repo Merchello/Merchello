@@ -7,7 +7,8 @@ using Merchello.Core.Services;
 using Merchello.Tests.IntegrationTests.Services;
 using Merchello.Web;
 using Merchello.Web.Models;
-using Merchello.Web.Shipping.Packaging;
+using Merchello.Web.Workflow;
+using Merchello.Web.Workflow.Shipping.Packaging;
 using NUnit.Framework;
 using Umbraco.Core;
 
@@ -23,7 +24,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
         [SetUp]
         public void Init()
         {
-
+            PreTestDataWorker.DeleteAllProducts();
             PreTestDataWorker.DeleteAllItemCaches();
             _merchelloContext = new MerchelloContext(new ServiceContext(new PetaPocoUnitOfWorkProvider()),
                 new CacheHelper(new NullCacheProvider(),

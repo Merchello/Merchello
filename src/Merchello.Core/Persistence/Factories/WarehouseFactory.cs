@@ -24,6 +24,9 @@ namespace Merchello.Core.Persistence.Factories
                 Locality = dto.Locality,
                 Region = dto.Region,
                 PostalCode = dto.PostalCode,
+                CountryCode = dto.CountryCode,
+                Email = dto.Email,
+                IsDefault = dto.IsDefault,
                 UpdateDate = dto.UpdateDate,
                 CreateDate = dto.CreateDate
             };
@@ -45,6 +48,9 @@ namespace Merchello.Core.Persistence.Factories
                 Locality = entity.Locality,
                 Region = entity.Region,
                 PostalCode = entity.PostalCode,
+                CountryCode = entity.CountryCode,
+                Email = entity.Email,
+                IsDefault = entity.IsDefault,
                 UpdateDate = entity.UpdateDate,
                 CreateDate = entity.CreateDate,
                 WarehouseCatalogDto = catalog != null ? new WarehouseCatalogFactory().BuildDto(catalog) : null

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ClientDependency.Core;
 using Merchello.Core.Models;
 using Merchello.Core.Models.TypeFields;
 
@@ -18,14 +19,14 @@ namespace Merchello.Tests.Base.TypeFields
 
         #region Customer AddressType TypeFields
 
-        public static ITypeField AddressTypeResidential
+        public static ITypeField AddressTypeShipping
         {
-            get { return new TypeField("Residential", "Residential", new Guid("D32D7B40-2FF2-453F-9AC5-51CF1A981E46")); }
+            get { return new TypeField("Shipping", "Shipping", Core.Constants.TypeFieldKeys.Address.ShippingAddressKey); }
         }
 
-        public static ITypeField AddressTypeCommercial
+        public static ITypeField AddressTypeBilling
         {
-            get { return new TypeField("Commercial", "Commercial", new Guid("5C2A8638-EA32-49AD-8167-EDDFB45A7360")); }
+            get { return new TypeField("Billing", "Billing", Core.Constants.TypeFieldKeys.Address.BillingAddressKey); }
         }
 
         #endregion

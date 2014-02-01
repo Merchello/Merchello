@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Net.Configuration;
-using ICSharpCode.SharpZipLib.Core;
 using Merchello.Core.Models;
 
-namespace Merchello.Web.Models
+namespace Merchello.Web.Workflow
 {
     public interface IBasket
     {
@@ -13,6 +11,7 @@ namespace Merchello.Web.Models
         void AddItem(IProduct product, string name, int quantity);
         void AddItem(IProductVariant productVariant);
         void AddItem(IProductVariant productVariant, string name, int quantity);
+        void AddItem(IProductVariant productVariant, string name, int quantity, ExtendedDataCollection extendedData);
         //void AddItem(string name, string sku, decimal price);
         //void AddItem(string name, string sku, int quantity, decimal price);
         //void AddItem(string name, string sku, int quantity, decimal price, ExtendedDataCollection extendedData);

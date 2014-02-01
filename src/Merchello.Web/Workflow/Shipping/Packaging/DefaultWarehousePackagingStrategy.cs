@@ -4,10 +4,9 @@ using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
-using Merchello.Web.Models;
 using Umbraco.Core.Logging;
 
-namespace Merchello.Web.Shipping.Packaging
+namespace Merchello.Web.Workflow.Shipping.Packaging
 {
     /// <summary>
     /// Represents the default basket packaging strategy.  
@@ -61,6 +60,7 @@ namespace Merchello.Web.Shipping.Packaging
                 else
                 {                    
                     lineItem.ExtendedData.SetValue("merchWarehouseCatalogKey", variant.CatalogInventories.First().CatalogKey.ToString());
+                    // TODO note - this retains the it's ItemCacheLineItem.Key and the ContainerKey associated with the ItemCache
                     shipment.Items.Add(lineItem);    
                 }
                           

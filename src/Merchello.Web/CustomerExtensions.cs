@@ -1,5 +1,6 @@
 ﻿using Merchello.Core.Models;
 using Merchello.Web.Models;
+using Merchello.Web.Workflow;
 
 namespace Merchello.Web
 {
@@ -12,7 +13,7 @@ namespace Merchello.Web
         /// <returns><see cref="IBasket"/></returns>
         public static IBasket Basket(this ICustomerBase customer)
         {
-            return Web.Basket.GetBasket(customer);
+            return Workflow.Basket.GetBasket(customer);
         }
          
     }

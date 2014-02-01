@@ -2,6 +2,19 @@
 
 A new high performance, open source eCommerce package for Umbraco being built with store owners and designers in mind.
 
+## Building the Merchello Package
+
+Building the Merchello Package can be accomplished by executing the \Build\Build.bat batch script.
+
+Execute the \Build\Build.bat file - this should create a couple of new directories \Build\TEMP\Artifacts\
+
+The Build.bat file should generate the following files in the \Build\TEMP\Artifacts\ folder.
+
+* Merchello.AllBinaries.[VERSION].zip - Merchello binaries
+* Merchello.Core.[VERSION].nupkg - Merchello Core NuGet package
+* Merchello_[VERSION].zip - The Merchello Umbraco Package 
+
+
 ## Installing and Building SASS
 
 To install and build the [SASS](http://sass-lang.com/) scripts, you must have Ruby installed via the following steps:

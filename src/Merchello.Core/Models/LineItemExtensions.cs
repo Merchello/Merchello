@@ -1,4 +1,9 @@
-﻿namespace Merchello.Core.Models
+﻿using System.Data;
+using System.Globalization;
+using System.IO;
+using System.Xml;
+
+namespace Merchello.Core.Models
 {
     /// <summary>
     /// Extension methods for <see cref="IItemCache"/>
@@ -8,8 +13,6 @@
 
         #region LineItemContainer
         
-
-        #region AddItem
 
         /// <summary>
         /// Adds a <see cref="IProductVariant"/> line item to the collection
@@ -49,7 +52,6 @@
         #endregion
 
 
-        #endregion
     }
 }
 

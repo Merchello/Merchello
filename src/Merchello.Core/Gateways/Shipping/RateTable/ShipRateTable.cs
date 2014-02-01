@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Merchello.Core.Models;
-using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Services;
 using Umbraco.Core;
 using Umbraco.Core.Cache;
