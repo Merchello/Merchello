@@ -12,6 +12,7 @@ namespace Merchello.Core.Models
     [KnownType(typeof(LineItemCollection))]
     internal class Shipment : Entity, IShipment
     {
+        private string _fromOrganization;
         private string _fromName;
         private string _fromAddress1;
         private string _fromAddress2;
@@ -20,6 +21,7 @@ namespace Merchello.Core.Models
         private string _fromPostalCode;
         private string _fromCountryCode;
         private bool _fromIsCommercial;
+        private string _toOrganization;
         private string _toName;
         private string _toAddress1;
         private string _toAddress2;
@@ -47,6 +49,7 @@ namespace Merchello.Core.Models
             Mandate.ParameterNotNull(destination, "destination");
             Mandate.ParameterNotNull(items, "items");
 
+            _fromOrganization = origin.Organization;
             _fromName = origin.Name;
             _fromAddress1 = origin.Address1;
             _fromAddress2 = origin.Address2;
@@ -55,6 +58,7 @@ namespace Merchello.Core.Models
             _fromPostalCode = origin.PostalCode;
             _fromCountryCode = origin.CountryCode;
             _fromIsCommercial = origin.IsCommercial;
+            _toOrganization = destination.Organization;
             _toName = destination.Name;
             _toAddress1 = destination.Address1;
             _toAddress2 = destination.Address2;
@@ -63,10 +67,15 @@ namespace Merchello.Core.Models
             _toPostalCode = destination.PostalCode;
             _toCountryCode = destination.CountryCode;
             _toIsCommercial = destination.IsCommercial;
+
+            _phone = destination.Phone;
+            _email = destination.Email;
+
             _items = items;
         }
 
         private static readonly PropertyInfo ShipMethodKeySelector = ExpressionHelper.GetPropertyInfo<Shipment, Guid?>(x => x.ShipMethodKey);
+        private static readonly PropertyInfo FromOrganizationSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.FromOrganization); 
         private static readonly PropertyInfo FromNameSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.FromName); 
         private static readonly PropertyInfo FromAddress1Selector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.FromAddress1);
         private static readonly PropertyInfo FromAddress2Selector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.FromAddress2);
@@ -75,6 +84,7 @@ namespace Merchello.Core.Models
         private static readonly PropertyInfo FromPostalCodeSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.FromPostalCode);
         private static readonly PropertyInfo FromCountryCodeSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.FromCountryCode);
         private static readonly PropertyInfo FromIsCommercialSelector = ExpressionHelper.GetPropertyInfo<Shipment, bool>(x => x.FromIsCommercial);
+        private static readonly PropertyInfo ToOrganizationSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.ToOrganization); 
         private static readonly PropertyInfo ToNameSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.ToName); 
         private static readonly PropertyInfo ToAddress1Selector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.ToAddress1);  
         private static readonly PropertyInfo ToAddress2Selector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.ToAddress2);  
@@ -86,6 +96,22 @@ namespace Merchello.Core.Models
         private static readonly PropertyInfo PhoneSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.Phone);
         private static readonly PropertyInfo EmailSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.Email);
 
+        /// <summary>
+        /// The organization or company name associated with the address
+        /// </summary>
+        [DataMember]
+        public string FromOrganization
+        {
+            get { return _fromOrganization; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _fromOrganization = value;
+                    return _fromOrganization;
+                }, _fromOrganization, FromOrganizationSelector);
+            }
+        }
 
         /// <summary>
         /// The name of origin address's name associated with the Shipment
@@ -221,6 +247,22 @@ namespace Merchello.Core.Models
                     _fromIsCommercial = value;
                     return _fromIsCommercial;
                 }, _fromIsCommercial, FromIsCommercialSelector);
+            }
+        }
+
+        /// <summary>
+        /// The organization or company name associated with the address
+        /// </summary>
+        [DataMember]
+        public string ToOrganization {
+            get { return _toOrganization; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _toOrganization = value;
+                    return _toOrganization;
+                }, _toOrganization, ToOrganizationSelector);
             }
         }
 

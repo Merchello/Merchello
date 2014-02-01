@@ -11,6 +11,11 @@ namespace Merchello.Core.Checkout
     public interface ICheckoutBase
     {
         /// <summary>
+        /// Restarts the checkout process, deleting all persisted data
+        /// </summary>
+        void RestartCheckout();
+
+        /// <summary>
         /// Saves the bill to address
         /// </summary>
         /// <param name="billToAddress"></param>

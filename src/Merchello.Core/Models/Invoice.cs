@@ -29,8 +29,30 @@ namespace Merchello.Core.Models
         private LineItemCollection _items;
 
         internal Invoice(Guid invoiceStatusKey)
+            : this(invoiceStatusKey, new Address())
+        { }
+
+        internal Invoice(Guid invoiceStatusKey, IAddress billToAddress)
+            : this(invoiceStatusKey, billToAddress, new LineItemCollection())
+        { }
+
+        internal Invoice(Guid invoiceStatusKey, IAddress billToAddress, LineItemCollection lineItemCollection)
         {
+            Mandate.ParameterCondition(Guid.Empty != invoiceStatusKey, "invoiceStatusKey");
+            Mandate.ParameterNotNull(billToAddress, "billToAddress");
+            Mandate.ParameterNotNull(lineItemCollection, "lineItemCollection");
+
             _invoiceStatusKey = invoiceStatusKey;
+
+            _billToName = billToAddress.Name;
+            _billToAddress1 = billToAddress.Address1;
+            _billToAddress2 = billToAddress.Address2;
+            _billToLocality = billToAddress.Locality;
+            _billToRegion = billToAddress.Region;
+            _billToPostalCode = billToAddress.PostalCode;
+            _billToCountryCode = billToAddress.CountryCode;
+            _billToPhone = billToAddress.Phone;
+
         }
 
         private static readonly PropertyInfo CustomerKeySelector = ExpressionHelper.GetPropertyInfo<Invoice, Guid?>(x => x.CustomerKey);

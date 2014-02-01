@@ -438,6 +438,56 @@ namespace Merchello.Core.Models
 
         #region IShipment
 
+
+        /// <summary>
+        /// Adds a <see cref="IShipment"/> to the extended data collection
+        /// </summary>
+        /// <param name="extendedData"></param>
+        /// <param name="shipment"></param>
+        public static void AddShipment(this ExtendedDataCollection extendedData, IShipment shipment)
+        {
+            extendedData.AddAddress(shipment.OriginAddress(), Constants.ExtendedDataKeys.ShippingOriginAddress);
+            extendedData.AddAddress(shipment.DestinationAddress(), Constants.ExtendedDataKeys.ShippingDestinationAddress);
+            extendedData.AddLineItemCollection(shipment.Items);
+        }
+
+        /// <summary>
+        /// Gets (creates a new <see cref="IShipment"/>) from values saved in the <see cref="ExtendedDataCollection"/>
+        /// </summary>
+        /// <param name="extendedData"></param>
+        public static IShipment GetShipment<T>(this ExtendedDataCollection extendedData) where T : LineItemBase
+        {
+            var origin = extendedData.GetAddress(Constants.ExtendedDataKeys.ShippingOriginAddress);
+            var destination = extendedData.GetAddress(Constants.ExtendedDataKeys.ShippingDestinationAddress);
+            var lineItemCollection = extendedData.GetLineItemCollection<T>();
+
+            if(origin == null) throw new NullReferenceException("ExtendedDataCollection does not contain an 'origin shipping address'");
+            if(destination == null) throw new NullReferenceException("ExtendedDataCollection does not container a 'destination shipping address'");
+            if (lineItemCollection == null) new NullReferenceException("ExtendedDataCollection does not contain a 'line item collection'");
+
+            return new Shipment(origin, destination, lineItemCollection);
+        }
+
+        /// <summary>
+        /// True/false indicating whether or not the collection contains a ShipmentKey
+        /// </summary>
+        /// <param name="extendedData"></param>
+        /// <returns></returns>
+        public static bool ContainsShipmentKey(this ExtendedDataCollection extendedData)
+        {
+            return extendedData.ContainsKey(Constants.ExtendedDataKeys.ShipmentKey);
+        }
+
+        /// <summary>
+        /// Returns the merchShipmentKey value as a Guid
+        /// </summary>
+        /// <param name="extendedData"></param>
+        /// <returns>The Guid based 'Key' of the <see cref="IShipment"/></returns>
+        public static Guid GetShipmentKey(this ExtendedDataCollection extendedData)
+        {
+            return GetGuidValue(extendedData.GetValue(Constants.ExtendedDataKeys.ShipmentKey));
+        }
+
         /// <summary>
         /// True/false indicating whether or not the colleciton contains a WarehouseCatalogKey
         /// </summary>
