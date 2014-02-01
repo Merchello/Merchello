@@ -52,7 +52,7 @@ namespace Merchello.Core.Checkout
         }
 
         /// <summary>
-        /// Saves a <see cref="IShipmentRateQuote"/>
+        /// Saves a <see cref="IShipmentRateQuote"/> as a shipment line item
         /// </summary>
         /// <param name="approvedShipmentRateQuote"></param>
         public virtual void SaveShipmentRateQuote(IShipmentRateQuote approvedShipmentRateQuote)
@@ -61,6 +61,10 @@ namespace Merchello.Core.Checkout
             MerchelloContext.Services.ItemCacheService.Save(_itemCache);
         }
 
+        /// <summary>
+        /// Saves a collection of <see cref="IShipmentRateQuote"/>s as shipment line items
+        /// </summary>
+        /// <param name="approvedShipmentRateQuotes"></param>
         public virtual void SaveShipmentRateQuote(IEnumerable<IShipmentRateQuote> approvedShipmentRateQuotes)
         {
             approvedShipmentRateQuotes.ForEach(AddShipmentRateQuoteLineItem);
@@ -90,6 +94,7 @@ namespace Merchello.Core.Checkout
 
             var billToAddress = _customer.ExtendedData.GetAddress(Constants.ExtendedDataKeys.BillingAddress);
             var lineItemCollection = _itemCache.Items;
+
 
             return billToAddress != null ?
                 new Invoice(invoiceStatusKey, billToAddress, lineItemCollection) :

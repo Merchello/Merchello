@@ -463,7 +463,7 @@ namespace Merchello.Core.Models
 
             if(origin == null) throw new NullReferenceException("ExtendedDataCollection does not contain an 'origin shipping address'");
             if(destination == null) throw new NullReferenceException("ExtendedDataCollection does not container a 'destination shipping address'");
-            if (lineItemCollection == null) new NullReferenceException("ExtendedDataCollection does not contain a 'line item collection'");
+            if (lineItemCollection == null) throw new NullReferenceException("ExtendedDataCollection does not contain a 'line item collection'");
 
             return new Shipment(origin, destination, lineItemCollection);
         }
