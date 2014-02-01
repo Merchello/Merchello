@@ -1,5 +1,42 @@
 ﻿(function (models, undefined) {                                                                                                          
 
+    models.Province = function (provinceFromServer) {
+
+        var self = this;
+
+        if (provinceFromServer == undefined) {
+            self.name = "";
+            self.code = "";
+        } else {
+            self.name = provinceFromServer.name;
+            self.code = provinceFromServer.code;
+        }
+
+    };
+
+    models.Country = function (countryFromServer) {
+
+        var self = this;
+
+        if (countryFromServer == undefined) {
+            self.key = "";
+            self.countryCode = "";
+            self.name = "";
+            self.provinceLabel = "";
+            self.provinces = [];
+        } else {
+            self.key = countryFromServer.key;
+            self.countryCode = countryFromServer.countryCode;
+            self.name = countryFromServer.name;
+            self.provinceLabel = countryFromServer.provinceLabel;
+            self.provinces = _.map(countryFromServer.provinces, function (province) {
+                return new merchello.Models.Province(province)
+            });
+        };
+
+    };
+
+
     models.SettingDisplay = function (settingsFromServer) {
 
         var self = this;

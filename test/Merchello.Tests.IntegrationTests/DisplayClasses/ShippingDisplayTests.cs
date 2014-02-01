@@ -58,7 +58,8 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
             //// Arrange
 
             //// Act
-            var shipMethod = gwshipMethod.ShipMethod;
+            var gatewayShipMethod = (RateTableShipMethod)rateTableProvider.CreateShipMethod(RateTableShipMethod.QuoteType.VaryByWeight, _shipCountry, "Ground (VBW)");
+            var shipMethod = gatewayShipMethod.ShipMethod;
             var shipProvince = shipMethod.Provinces.First();
 
             var shipMethodDisplay = shipMethod.ToShipMethodDisplay();
@@ -215,5 +216,6 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
         //    Assert.AreEqual(shipCountryDisplay.ProvinceLabel, shipCountry.ProvinceLabel);
         //    Assert.AreEqual(shipCountryDisplay.CountryCode, shipCountry.CountryCode);
         //}
+
     }
 }
