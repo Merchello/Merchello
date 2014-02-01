@@ -276,7 +276,7 @@ namespace Merchello.Web.Models.ContentEditing
 
         #region ShipRateTierDisplay
 
-        internal static ShipRateTierDisplay ToShipRateTableDisplay(this IShipRateTier shipRateTier)
+        internal static ShipRateTierDisplay ToShipRateTierDisplay(this IShipRateTier shipRateTier)
         {
             AutoMapper.Mapper.CreateMap<IShipRateTier, ShipRateTierDisplay>();
 
