@@ -8,9 +8,10 @@
      * @description
      * The controller for the reports list page
      */
-    controllers.ShippingController = function ($scope, $routeParams, $location, notificationsService, angularHelper, serverValidationManager, merchelloWarehouseService) {
+    controllers.ShippingController = function ($scope, $routeParams, $location, notificationsService, angularHelper, serverValidationManager, merchelloWarehouseService, merchelloSettingsService) {
 
         $scope.sortProperty = "name";
+        $scope.availableCountries = [];
         $scope.countries = [];
         $scope.warehouses = [];
         $scope.newWarehouse = new merchello.Models.Warehouse();
@@ -41,12 +42,29 @@
             ]
         };
 
+        $scope.loadAllAvailableCountries = function () {
+
+            var promiseAllCountries = merchelloSettingsService.getAllCountries();
+            promiseAllCountries.then(function (allCountries) {
+
+                $scope.availableCountries = _.map(allCountries, function (country) {
+                    return new merchello.Models.Country(country)
+                });
+
+            }, function (reason) {
+
+                notificationsService.error("Available Countries Load Failed", reason.message);
+
+            });
+
+        };
+
         $scope.loadWarehouses = function () {
 
             var promiseWarehouses = merchelloWarehouseService.getDefaultWarehouse();    // Only a default warehouse in v1
             promiseWarehouses.then(function (warehouseFromServer) {
 
-                warehouseFromServer.isDefault = true;
+                //warehouseFromServer.isDefault = true;
                 $scope.warehouses.push(new merchello.Models.Warehouse(warehouseFromServer));
 
                 $scope.changePrimaryWarehouse();
@@ -212,6 +230,7 @@
             }
         };
 
+        $scope.loadAllAvailableCountries();
         $scope.loadWarehouses();
 
         $scope.loaded = true;

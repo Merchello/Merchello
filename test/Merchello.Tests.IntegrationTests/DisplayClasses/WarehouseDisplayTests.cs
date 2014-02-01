@@ -16,6 +16,7 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
         private IWarehouse _warehouse;
         private IWarehouseCatalog _warehouseCatalog;
 
+
         [SetUp]
         public void Init()
         {
@@ -150,6 +151,26 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
             Assert.AreEqual(mappedWarehouseCatalog.WarehouseKey, warehouseCatalogDisplay.WarehouseKey);
             Assert.AreEqual(mappedWarehouseCatalog.Name, warehouseCatalogDisplay.Name);
             Assert.AreEqual(mappedWarehouseCatalog.Description, warehouseCatalogDisplay.Description);
+        }
+
+        [Test]
+        public void Can_Build_CountryDisplay_From_Country()
+        {
+            //// Arrange
+            var storeSettingService = PreTestDataWorker.StoreSettingService;
+            var countries = storeSettingService.GetAllCountries();
+            var country = countries.Where(x => x.CountryCode == "US").First();
+
+            //// Act
+            var countryDisplay = country.ToCountryDisplay();
+
+            //// Assert
+            Assert.NotNull(countryDisplay);
+            Assert.AreEqual(country.Key, countryDisplay.Key);
+            Assert.AreEqual(country.Name, countryDisplay.Name);
+            Assert.AreEqual(country.ProvinceLabel, countryDisplay.ProvinceLabel);
+            Assert.AreEqual(country.CountryCode, countryDisplay.CountryCode);
+            Assert.AreEqual(country.Provinces.Count(), countryDisplay.Provinces.Count());
         }
 
     }

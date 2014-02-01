@@ -23,6 +23,17 @@ namespace Merchello.Web.Models.ContentEditing
 
         #endregion
 
+        #region ProvinceDisplay
+
+        internal static ProvinceDisplay ToProvinceDisplay(this IProvince province)
+        {
+            AutoMapper.Mapper.CreateMap<IProvince, ProvinceDisplay>();
+
+            return AutoMapper.Mapper.Map<ProvinceDisplay>(province);
+        }
+
+        #endregion
+
 		internal static SettingDisplay ToStoreSettingDisplay(this SettingDisplay settingDisplay, IEnumerable<IStoreSetting> storeSettings)
 		{
 			int intValue;

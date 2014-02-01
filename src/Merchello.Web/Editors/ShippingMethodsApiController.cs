@@ -20,9 +20,9 @@ namespace Merchello.Web.Editors
     [PluginController("Merchello")]
     public class ShippingMethodsApiController : MerchelloApiController
     {
-        private readonly IShipmentService _shipmentService;
+        private readonly IWarehouseService _warehouseService;
+        private readonly IGatewayProviderService _gatewayProviderService;
         private readonly IStoreSettingService _storeSettingService;
-        private readonly IShipCountryService _shipCountryService;
 
         /// <summary>
         /// Constructor
@@ -39,9 +39,9 @@ namespace Merchello.Web.Editors
         public ShippingMethodsApiController(MerchelloContext merchelloContext)
             : base(merchelloContext)
         {
-            _shipmentService = MerchelloContext.Services.ShipmentService;
+            _warehouseService = MerchelloContext.Services.WarehouseService;
+            _gatewayProviderService = MerchelloContext.Services.GatewayProviderService;
             _storeSettingService = MerchelloContext.Services.StoreSettingService;
-            _shipCountryService = ((ServiceContext)merchelloContext.Services).ShipCountryService;
         }
 
         /// <summary>
@@ -50,11 +50,12 @@ namespace Merchello.Web.Editors
         internal ShippingMethodsApiController(MerchelloContext merchelloContext, UmbracoContext umbracoContext)
             : base(merchelloContext, umbracoContext)
         {
-            _shipmentService = MerchelloContext.Services.ShipmentService;
+            _warehouseService = MerchelloContext.Services.WarehouseService;
+            _gatewayProviderService = MerchelloContext.Services.GatewayProviderService;
             _storeSettingService = MerchelloContext.Services.StoreSettingService;
-            _shipCountryService = ((ServiceContext)merchelloContext.Services).ShipCountryService;
         }
 
+        /*
         /// <summary>
         /// Returns ShipCountry by id (key)
         /// 
@@ -102,7 +103,7 @@ namespace Merchello.Web.Editors
         /// <param name="id">CatalogKey Guid to get countries for</param>
         public IEnumerable<ShipCountryDisplay> GetAllShipCountries(Guid id)
         {
-            var countries = _shipCountryService.GetShipCountriesByCatalogKey(id);
+            var countries = _gatewayProviderService.GetShipCountriesByCatalogKey(id);
             if (countries == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);
@@ -188,5 +189,6 @@ namespace Merchello.Web.Editors
 
             return Request.CreateResponse(HttpStatusCode.OK);
         }
+          */
     }
 }
