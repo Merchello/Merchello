@@ -389,8 +389,8 @@ namespace Merchello.Core.Models
         {
             
             extendedData.AddAddress(address, addressType == AddressType.Shipping
-                            ? Constants.ExtendedDataKeys.DestinationAddress
-                            : Constants.ExtendedDataKeys.OriginAddress);
+                            ? Constants.ExtendedDataKeys.ShippingDestinationAddress
+                            : Constants.ExtendedDataKeys.BillingAddress);
         }
 
         /// <summary>
@@ -414,8 +414,8 @@ namespace Merchello.Core.Models
         public static IAddress GetAddress(this ExtendedDataCollection extendedData, AddressType addressType)
         {
             return extendedData.GetAddress(addressType == AddressType.Shipping
-                                               ? Constants.ExtendedDataKeys.DestinationAddress
-                                               : Constants.ExtendedDataKeys.OriginAddress);
+                                               ? Constants.ExtendedDataKeys.ShippingDestinationAddress
+                                               : Constants.ExtendedDataKeys.BillingAddress);
         }
 
 
@@ -431,8 +431,7 @@ namespace Merchello.Core.Models
 
             var attempt =  SerializationHelper.DeserializeXml<Address>(extendedData.GetValue(dictionaryKey));
 
-            if (attempt.Success) return attempt.Result;
-            return null;
+            return attempt.Success ? attempt.Result : null;
         }
 
         #endregion
@@ -466,6 +465,7 @@ namespace Merchello.Core.Models
 
 
         private static Guid GetGuidValue(string value)
+
         {
             Guid converted;
             return Guid.TryParse(value, out converted) ? converted : Guid.Empty;

@@ -19,13 +19,15 @@ namespace Merchello.Core.Models
         private string _fromRegion;
         private string _fromPostalCode;
         private string _fromCountryCode;
+        private bool _fromIsCommercial;
         private string _toName;
         private string _toAddress1;
         private string _toAddress2;
         private string _toLocality;
         private string _toRegion;
         private string _toPostalCode;
-        private string _toCountryCode;       
+        private string _toCountryCode;
+        private bool _toIsCommercial;
         private Guid? _shipMethodKey;
         private string _email;
         private string _phone;
@@ -52,6 +54,7 @@ namespace Merchello.Core.Models
             _fromRegion = origin.Region;
             _fromPostalCode = origin.PostalCode;
             _fromCountryCode = origin.CountryCode;
+            _fromIsCommercial = origin.IsCommercial;
             _toName = destination.Name;
             _toAddress1 = destination.Address1;
             _toAddress2 = destination.Address2;
@@ -59,6 +62,7 @@ namespace Merchello.Core.Models
             _toRegion = destination.Region;
             _toPostalCode = destination.PostalCode;
             _toCountryCode = destination.CountryCode;
+            _toIsCommercial = destination.IsCommercial;
             _items = items;
         }
 
@@ -70,13 +74,15 @@ namespace Merchello.Core.Models
         private static readonly PropertyInfo FromRegionSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.FromRegion);
         private static readonly PropertyInfo FromPostalCodeSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.FromPostalCode);
         private static readonly PropertyInfo FromCountryCodeSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.FromCountryCode);
+        private static readonly PropertyInfo FromIsCommercialSelector = ExpressionHelper.GetPropertyInfo<Shipment, bool>(x => x.FromIsCommercial);
         private static readonly PropertyInfo ToNameSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.ToName); 
         private static readonly PropertyInfo ToAddress1Selector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.ToAddress1);  
         private static readonly PropertyInfo ToAddress2Selector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.ToAddress2);  
         private static readonly PropertyInfo ToLocalitySelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.ToLocality);  
         private static readonly PropertyInfo ToRegionSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.ToRegion);  
         private static readonly PropertyInfo ToPostalCodeSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.ToPostalCode);  
-        private static readonly PropertyInfo ToCountryCodeSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.ToCountryCode);         
+        private static readonly PropertyInfo ToCountryCodeSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.ToCountryCode);
+        private static readonly PropertyInfo ToIsCommercialSelector = ExpressionHelper.GetPropertyInfo<Shipment, bool>(x => x.ToIsCommercial);  
         private static readonly PropertyInfo PhoneSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.Phone);
         private static readonly PropertyInfo EmailSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.Email);
 
@@ -203,6 +209,23 @@ namespace Merchello.Core.Models
 
 
         /// <summary>
+        /// True/false indicating whether or not the origin's address is a commercial address. Used by some shipping providers.
+        /// </summary>
+        [DataMember]
+        public bool FromIsCommercial {
+            get { return _fromIsCommercial; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _fromIsCommercial = value;
+                    return _fromIsCommercial;
+                }, _fromIsCommercial, FromIsCommercialSelector);
+            }
+        }
+
+
+        /// <summary>
         /// The name of destination address associated with the Shipment
         /// </summary>
         [DataMember]
@@ -319,6 +342,24 @@ namespace Merchello.Core.Models
                         return _toCountryCode;
                     }, _toCountryCode, ToCountryCodeSelector); 
                 }
+        }
+
+
+        /// <summary>
+        /// True/false indicating whether or not the destination address is a commercial address.  Used by some shipping providers.
+        /// </summary>
+        [DataMember]
+        public bool ToIsCommercial 
+        {
+            get { return _toIsCommercial; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _toIsCommercial = value;
+                    return _toIsCommercial;
+                }, _toIsCommercial, ToIsCommercialSelector); 
+            }
         }
 
         /// <summary>

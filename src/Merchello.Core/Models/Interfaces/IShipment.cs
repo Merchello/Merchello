@@ -53,6 +53,12 @@ namespace Merchello.Core.Models
         string FromCountryCode { get; set; }
 
         /// <summary>
+        /// True/false indicating whether or not the origin's address is a commercial address. Used by some shipping providers.
+        /// </summary>
+        [DataMember]
+        bool FromIsCommercial { get; set; }
+
+        /// <summary>
         /// The destination address's name or company for the Shipment
         /// </summary>
         [DataMember]
@@ -93,7 +99,13 @@ namespace Merchello.Core.Models
         /// </summary>
         [DataMember]
         string ToCountryCode { get; set;}
-            
+
+        /// <summary>
+        /// True/false indicating whether or not the destination address is a commercial address.  Used by some shipping providers.
+        /// </summary>
+        [DataMember]
+        bool ToIsCommercial { get; set; }
+                        
         /// <summary>
         /// The ship method associated with this shipment
         /// </summary>

@@ -80,5 +80,21 @@ namespace Merchello.Core.Models
         AddressType AddressType { get; set; }
 
 
+        public virtual bool Equals(IAddress other)
+        {
+            if (ReferenceEquals(null, other))
+                return false;
+            if (ReferenceEquals(this, other))
+                return true;
+
+            return Name == other.Name &&
+                   Address1 == other.Address1 &&
+                   Address2 == other.Address2 &&
+                   Locality == other.Locality &&
+                   Region == other.Region &&
+                   PostalCode == other.PostalCode &&
+                   CountryCode == other.CountryCode &&
+                   IsCommercial == other.IsCommercial;
+        }
     }
 }

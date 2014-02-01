@@ -14,11 +14,16 @@ namespace Merchello.Core
         /// </summary>
         /// <returns>An Xml string</returns>
         public static string SerializeToXml<T>(T entity)
-        {
-
+        {            
             using (var sw = new StringWriter())
-            { 
-                using (var xmlWriter = XmlWriter.Create(sw))
+            {
+                var settings = new XmlWriterSettings()
+                {
+                    OmitXmlDeclaration = true,
+                    ConformanceLevel = ConformanceLevel.Fragment
+                };
+
+                using (var xmlWriter = XmlWriter.Create(sw, settings))
                 {
                     var serializer = new DataContractSerializer(typeof (T));                
                     serializer.WriteObject(xmlWriter, entity);                   
