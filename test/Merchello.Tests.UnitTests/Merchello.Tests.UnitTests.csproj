@@ -245,6 +245,7 @@
     <Compile Include="Services\SettingsServiceTests.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Shipping\ShipmentTests.cs" />
     <Compile Include="Shipping\ShipRateTableTests.cs" />
     <Compile Include="TypeFields\AddressTypeFieldTests.cs" />
     <Compile Include="TypeFields\BasketTypeFieldTests.cs" />

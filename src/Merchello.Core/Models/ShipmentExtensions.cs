@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using Merchello.Core.Gateways.Shipping;
+using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Services;
 using Umbraco.Core;
 using Umbraco.Core.Logging;
@@ -18,8 +19,9 @@ namespace Merchello.Core.Models
         /// 
         /// </summary>
         /// <param name="shipment"></param>
+        /// <param name="gatewayProviderService"></param>
         /// <returns></returns>
-         public static Attempt<IShipCountry> GetValidatedShipCountry(this IShipment shipment, IGatewayProviderService gatewayProviderService)
+        public static Attempt<IShipCountry> GetValidatedShipCountry(this IShipment shipment, IGatewayProviderService gatewayProviderService)
          {
 
              var visitor = new ShimpmentWarehouseCatalogValidationVisitor();
@@ -38,5 +40,45 @@ namespace Merchello.Core.Models
 
              return Attempt<IShipCountry>.Succeed(gatewayProviderService.GetShipCountry(visitor.WarehouseCatalogKey, shipment.ToCountryCode));
          }
+    
+        /// <summary>
+        /// Gets an <see cref="IAddress"/> representing the origin address of the <see cref="IShipment"/>
+        /// </summary>
+        /// <param name="shipment">The <see cref="IShipment"/></param>
+        /// <returns>Returns a <see cref="IAddress"/></returns>
+        public static IAddress OriginAddress(this IShipment shipment)
+        {
+            return new Address()
+                {
+                    Name = shipment.FromName,
+                    Address1 = shipment.FromAddress1,
+                    Address2 = shipment.FromAddress2,
+                    Locality = shipment.FromLocality,
+                    Region = shipment.FromRegion,
+                    PostalCode = shipment.FromPostalCode,
+                    CountryCode = shipment.FromCountryCode,
+                    IsCommercial = shipment.FromIsCommercial
+                };
+        }
+
+        /// <summary>
+        /// Gets an <see cref="IAddress"/> representing the destination address of the <see cref="IShipment"/>
+        /// </summary>
+        /// <param name="shipment">The <see cref="IShipment"/></param>
+        /// <returns>Returns a <see cref="IAddress"/></returns>
+        public static IAddress DestinationAddress(this IShipment shipment)
+        {
+            return new Address()
+            {
+                Name = shipment.ToName,
+                Address1 = shipment.ToAddress1,
+                Address2 = shipment.ToAddress2,
+                Locality = shipment.ToLocality,
+                Region = shipment.ToRegion,
+                PostalCode = shipment.ToPostalCode,
+                CountryCode = shipment.ToCountryCode,
+                IsCommercial = shipment.ToIsCommercial
+            };
+        }
     }
 }

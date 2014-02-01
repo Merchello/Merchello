@@ -42,6 +42,9 @@ namespace Merchello.Core.Models.Rdbms
         [NullSetting(NullSetting = NullSettings.Null)]
         public string FromCountryCode { get; set; }
 
+        [Column("fromIsCommercial")]
+        public bool FromIsCommercial { get; set; }
+
         [Column("toName")]
         [NullSetting(NullSetting = NullSettings.Null)]
         public string ToName { get; set; }
@@ -69,6 +72,9 @@ namespace Merchello.Core.Models.Rdbms
         [Column("toCountryCode")]
         [NullSetting(NullSetting = NullSettings.Null)]
         public string ToCountryCode { get; set; }
+
+        [Column("toIsCommercial")]
+        public bool ToIsCommercial { get; set; }
 
         [Column("phone")]
         [NullSetting(NullSetting = NullSettings.Null)]

@@ -26,6 +26,7 @@ namespace Merchello.Core.Persistence.Mappers
             CacheMap<Shipment, ShipmentDto>(src => src.FromRegion, dto => dto.FromRegion);
             CacheMap<Shipment, ShipmentDto>(src => src.FromPostalCode, dto => dto.FromPostalCode);
             CacheMap<Shipment, ShipmentDto>(src => src.FromCountryCode, dto => dto.FromCountryCode);
+            CacheMap<Shipment, ShipmentDto>(src => src.FromIsCommercial, dto => dto.FromIsCommercial);
             CacheMap<Shipment, ShipmentDto>(src => src.ToName, dto => dto.ToName);
             CacheMap<Shipment, ShipmentDto>(src => src.ToAddress1, dto => dto.ToAddress1);
             CacheMap<Shipment, ShipmentDto>(src => src.ToAddress2, dto => dto.ToAddress2);
@@ -33,6 +34,7 @@ namespace Merchello.Core.Persistence.Mappers
             CacheMap<Shipment, ShipmentDto>(src => src.ToRegion, dto => dto.ToRegion);
             CacheMap<Shipment, ShipmentDto>(src => src.ToPostalCode, dto => dto.ToPostalCode);
             CacheMap<Shipment, ShipmentDto>(src => src.ToCountryCode, dto => dto.ToCountryCode);
+            CacheMap<Shipment, ShipmentDto>(src => src.ToIsCommercial, dto => dto.ToIsCommercial);
             CacheMap<Shipment, ShipmentDto>(src => src.ShipMethodKey, dto => dto.ShipMethodKey);
             CacheMap<Shipment, ShipmentDto>(src => src.Phone, dto => dto.Phone);
             CacheMap<Shipment, ShipmentDto>(src => src.UpdateDate, dto => dto.UpdateDate);

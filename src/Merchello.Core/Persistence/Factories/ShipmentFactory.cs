@@ -17,7 +17,7 @@ namespace Merchello.Core.Persistence.Factories
                 FromLocality = dto.FromLocality,
                 FromRegion = dto.FromRegion,
                 FromPostalCode = dto.FromPostalCode,
-                FromCountryCode = dto.FromCountryCode,
+                FromCountryCode = dto.FromCountryCode,                
                 ToName = dto.ToName,
                 ToAddress1 = dto.ToAddress1,
                 ToAddress2 = dto.ToAddress2,
