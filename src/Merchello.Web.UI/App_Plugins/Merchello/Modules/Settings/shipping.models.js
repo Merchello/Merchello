@@ -48,6 +48,12 @@
         self.removeMethod = function (idx) {
             self.shipMethods.splice(idx, 1);
         };
+
+        self.fromCountry = function (country)
+        {
+            self.countryCode = country.countryCode;
+            self.name = country.name;
+        };
     };
 
     models.ShippingMethod = function (shippingMethodFromServer) {
