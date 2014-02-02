@@ -89,7 +89,10 @@ namespace Merchello.Tests.IntegrationTests.Services.Customer
             var basket = _itemCacheService.GetItemCacheWithKey(_anonymous, ItemCacheType.Basket);
 
             //// Act
-            var lineItem = new ItemCacheLineItem(basket.Key, "Kosher Salt", "KS", 1, 2.5M);            
+            var lineItem = new ItemCacheLineItem(LineItemType.Product, "Kosher Salt", "KS", 1, 2.5M)
+                {
+                    ContainerKey = basket.Key
+                };
             basket.Items.Add(lineItem);
 
 
@@ -106,7 +109,10 @@ namespace Merchello.Tests.IntegrationTests.Services.Customer
         {
             //// Arrange
             var basket = _itemCacheService.GetItemCacheWithKey(_anonymous, ItemCacheType.Basket);
-            var lineItem = new ItemCacheLineItem(basket.Key, "Kosher Salt", "KS", 1, 2.5M);
+            var lineItem = new ItemCacheLineItem(LineItemType.Product, "Kosher Salt", "KS", 1, 2.5M)
+                {
+                    ContainerKey = basket.Key
+                };
             basket.Items.Add(lineItem);
             
             //// Act
@@ -131,11 +137,21 @@ namespace Merchello.Tests.IntegrationTests.Services.Customer
             var basket2 = _itemCacheService.GetItemCacheWithKey(customer2, ItemCacheType.Basket);
 
             //// Act            
-            basket1.Items.Add(new ItemCacheLineItem(basket1.Key, "Kosher Salt", "KS", 1, 2.5M));
+            basket1.Items.Add(new ItemCacheLineItem(LineItemType.Product, "Kosher Salt", "KS", 1, 2.5M)
+                {
+                    ContainerKey = basket1.Key
+                });
             _itemCacheService.Save(basket1);
             
-            basket2.Items.Add(new ItemCacheLineItem(basket2.Key, "Kosher Salt", "KS", 1, 2.5M));
-            basket2.Items.Add(new ItemCacheLineItem(basket2.Key, "Pickle dust", "PD", 20, 25.50M));
+            basket2.Items.Add(new ItemCacheLineItem(LineItemType.Product, "Kosher Salt", "KS", 1, 2.5M)
+                {
+                    ContainerKey = basket2.Key
+                });
+
+            basket2.Items.Add(new ItemCacheLineItem(LineItemType.Product, "Pickle dust", "PD", 20, 25.50M)
+                {
+                    ContainerKey = basket2.Key
+                });
             _itemCacheService.Save(basket2);
 
             //// Assert
@@ -154,7 +170,10 @@ namespace Merchello.Tests.IntegrationTests.Services.Customer
         {
             //// Arrange
             var basket1 = _itemCacheService.GetItemCacheWithKey(_anonymous, ItemCacheType.Basket);
-            basket1.Items.Add(new ItemCacheLineItem(basket1.Key, "Kosher Salt", "KS", 1, 2.5M));
+            basket1.Items.Add(new ItemCacheLineItem(LineItemType.Product, "Kosher Salt", "KS", 1, 2.5M)
+                {
+                    ContainerKey = basket1.Key
+                });
             _itemCacheService.Save(basket1);
 
             //// Act

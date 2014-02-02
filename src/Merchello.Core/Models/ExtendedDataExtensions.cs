@@ -95,12 +95,11 @@ namespace Merchello.Core.Models
             var dictionary = GetLineItemXmlValues(element.ToString());            
             var ctrArgs = new[]
                 {
-                    typeof (Guid), typeof (Guid), typeof (string), typeof (string), typeof (int), typeof (decimal), typeof (ExtendedDataCollection)
+                    typeof (Guid), typeof (string), typeof (string), typeof (int), typeof (decimal), typeof (ExtendedDataCollection)
                 };
 
                 var ctrValues = new object[]
-                    {
-                        new Guid(dictionary[Constants.ExtendedDataKeys.ContainerKey]),
+                    {                        
                         new Guid(dictionary[Constants.ExtendedDataKeys.LineItemTfKey]),
                         dictionary[Constants.ExtendedDataKeys.Sku],
                         dictionary[Constants.ExtendedDataKeys.Name],
@@ -111,7 +110,8 @@ namespace Merchello.Core.Models
                
                 
                 var lineItem = ActivatorHelper.CreateInstance<LineItemBase>(typeof (T), ctrArgs, ctrValues);
-                
+                lineItem.ContainerKey = new Guid(dictionary[Constants.ExtendedDataKeys.ContainerKey]);
+
                 lineItemCollection.Add(lineItem);
             }
 

@@ -40,7 +40,12 @@ namespace Merchello.Core.Models
         /// </summary>
         public static void AddItem(this ILineItemContainer container, LineItemType lineItemType, string name, string sku, int quantity, decimal amount, ExtendedDataCollection extendedData)
         {
-            container.AddItem(new ItemCacheLineItem(container.Key, lineItemType, name, sku, quantity, amount, extendedData));
+            var lineItem = new ItemCacheLineItem(lineItemType, name, sku, quantity, amount, extendedData)
+                {
+                    ContainerKey = container.Key
+                };
+            
+            container.AddItem(lineItem);
         }
 
         /// <summary>
@@ -63,12 +68,11 @@ namespace Merchello.Core.Models
         {
             var ctrArgs = new[]
                 {
-                    typeof (Guid), typeof (Guid), typeof (string), typeof (string), typeof (int), typeof (decimal), typeof (ExtendedDataCollection)
+                    typeof (Guid), typeof (string), typeof (string), typeof (int), typeof (decimal), typeof (ExtendedDataCollection)
                 };
             
             var ctrValues = new object[]
-                {
-                    Guid.Empty,
+                {                    
                     lineItem.LineItemTfKey,
                     lineItem.Sku,
                     lineItem.Name,

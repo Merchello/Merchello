@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
@@ -48,7 +49,7 @@ namespace Merchello.Core.Checkout
         /// <summary>
         /// Does preliminary validation of the checkout process and then executes the start of the order fulfillment pipeline
         /// </summary>
-        /// <param name="payment">The <see cref="IPayment"/> to be applied to the invoice.</param>
-        void CompleteCheckout(IPayment payment);
+        /// <param name="paymentGatewayProvider">The see <see cref="IPaymentGatewayProvider"/> to be used in payment processing and <see cref="IOrder"/> creation approval</param>
+        void CompleteCheckout(IPaymentGatewayProvider paymentGatewayProvider);
     }
 }

@@ -67,10 +67,11 @@ namespace Merchello.Core.Persistence.Factories
 
         public ItemCacheLineItem BuildEntity(ItemCacheItemDto dto)
         {
-             var lineItem = new ItemCacheLineItem(dto.ContainerKey, dto.LineItemTfKey, dto.Name, dto.Sku, dto.Quantity, dto.Amount,
+             var lineItem = new ItemCacheLineItem(dto.LineItemTfKey, dto.Name, dto.Sku, dto.Quantity, dto.Amount,
                  string.IsNullOrEmpty(dto.ExtendedData) ? new ExtendedDataCollection() : new ExtendedDataCollection(dto.ExtendedData))
             {
                 Key = dto.Key,
+                ContainerKey = dto.ContainerKey,
                 Exported = dto.Exported,
                 UpdateDate = dto.UpdateDate,
                 CreateDate = dto.CreateDate
@@ -83,10 +84,11 @@ namespace Merchello.Core.Persistence.Factories
 
         public InvoiceLineItem BuildEntity(InvoiceItemDto dto)
         {
-          var lineItem = new InvoiceLineItem(dto.ContainerKey, dto.LineItemTfKey, dto.Name, dto.Sku, dto.Quantity, dto.Amount,
+          var lineItem = new InvoiceLineItem(dto.LineItemTfKey, dto.Name, dto.Sku, dto.Quantity, dto.Amount,
               string.IsNullOrEmpty(dto.ExtendedData) ? new ExtendedDataCollection() : new ExtendedDataCollection(dto.ExtendedData))
             {
                 Key = dto.Key,
+                ContainerKey = dto.ContainerKey,
                 Exported = dto.Exported,
                 UpdateDate = dto.UpdateDate,
                 CreateDate = dto.CreateDate
@@ -99,10 +101,11 @@ namespace Merchello.Core.Persistence.Factories
 
         public OrderLineItem BuildEntity(OrderItemDto dto)
         {
-            var lineItem = new OrderLineItem(dto.ContainerKey, dto.LineItemTfKey, dto.Name, dto.Sku, dto.Quantity, dto.Amount,
+            var lineItem = new OrderLineItem(dto.LineItemTfKey, dto.Name, dto.Sku, dto.Quantity, dto.Amount,
                 string.IsNullOrEmpty(dto.ExtendedData) ? new ExtendedDataCollection() : new ExtendedDataCollection(dto.ExtendedData))
             {
                 Key = dto.Key,
+                ContainerKey = dto.ContainerKey,
                 Exported = dto.Exported,
                 UpdateDate = dto.UpdateDate,
                 CreateDate = dto.CreateDate

@@ -42,7 +42,7 @@ namespace Merchello.Tests.UnitTests.LineItem
             var product = MockProductDataMaker.MockProductForInserting();
             var extendedData = new ExtendedDataCollection();
             extendedData.AddProductVariantValues(((Product)product).MasterVariant);
-            var itemCacheLineItem = new ItemCacheLineItem(Guid.NewGuid(), LineItemType.Product, product.Name,
+            var itemCacheLineItem = new ItemCacheLineItem(LineItemType.Product, product.Name,
                                                           product.Sku, 2, 2*product.Price, extendedData);
 
             //// Act

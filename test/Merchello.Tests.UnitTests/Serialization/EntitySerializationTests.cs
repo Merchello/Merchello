@@ -37,12 +37,11 @@ namespace Merchello.Tests.UnitTests.Serialization
             extendedData.SetValue("merchProductVariantKey", Guid.NewGuid().ToString());
             extendedData.SetValue("merchWeight", "12");
 
-            var containerKey = Guid.NewGuid();
             var lineItemCollection = new LineItemCollection()
             {
-                {new ItemCacheLineItem(containerKey, LineItemType.Product, "Product1", "Sku1", 1, 10, extendedData)},
-                {new ItemCacheLineItem(containerKey, LineItemType.Product, "Product2", "Sku2", 2, 12, extendedData)},
-                {new ItemCacheLineItem(containerKey, LineItemType.Product, "Product3", "Sku3", 3, 14, extendedData)},
+                {new ItemCacheLineItem(LineItemType.Product, "Product1", "Sku1", 1, 10, extendedData)},
+                {new ItemCacheLineItem(LineItemType.Product, "Product2", "Sku2", 2, 12, extendedData)},
+                {new ItemCacheLineItem(LineItemType.Product, "Product3", "Sku3", 3, 14, extendedData)},
             };
 
             _shipment = new Shipment(_address, _address, lineItemCollection);

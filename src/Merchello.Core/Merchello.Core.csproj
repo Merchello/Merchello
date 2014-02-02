@@ -97,6 +97,7 @@
     <Compile Include="Gateways\IGateway.cs" />
     <Compile Include="Gateways\IGatewayContext.cs" />
     <Compile Include="Gateways\IGatewayProviderFactory.cs" />
+    <Compile Include="Gateways\Payment\IPaymentGatewayProvider.cs" />
     <Compile Include="Gateways\Shipping\GatewayShipMethodBase.cs" />
     <Compile Include="Gateways\Shipping\IGatewayShipMethod.cs" />
     <Compile Include="Gateways\Shipping\IShipmentRateQuote.cs" />
@@ -586,9 +587,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Gateways\Payment\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

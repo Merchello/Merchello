@@ -18,24 +18,24 @@ namespace Merchello.Core.Models
 
         private Guid? _shipmentKey;
 
-        public OrderLineItem(Guid containerKey, string name, string sku, decimal amount) 
-            : base(containerKey, name, sku, amount)
+        public OrderLineItem(string name, string sku, decimal amount) 
+            : base(name, sku, amount)
         { }
 
-        public OrderLineItem(Guid containerKey, string name, string sku, int quantity, decimal amount)
-            : base(containerKey, name, sku, quantity, amount)
+        public OrderLineItem(string name, string sku, int quantity, decimal amount)
+            : base(name, sku, quantity, amount)
         { }
 
-        public OrderLineItem(Guid containerKey, LineItemType lineItemType, string name, string sku, int quantity, decimal amount) 
-            : base(containerKey, lineItemType, name, sku, quantity, amount)
+        public OrderLineItem(LineItemType lineItemType, string name, string sku, int quantity, decimal amount) 
+            : base(lineItemType, name, sku, quantity, amount)
         { }
 
-        public OrderLineItem(Guid containerKey, LineItemType lineItemType, string name, string sku, int quantity, decimal amount, ExtendedDataCollection extendedData) 
-            : base(containerKey, lineItemType, name, sku, quantity, amount, extendedData)
+        public OrderLineItem(LineItemType lineItemType, string name, string sku, int quantity, decimal amount, ExtendedDataCollection extendedData) 
+            : base(lineItemType, name, sku, quantity, amount, extendedData)
         { }
 
-        public OrderLineItem(Guid containerKey, Guid lineItemTfKey, string name, string sku, int quantity, decimal amount, ExtendedDataCollection extendedData) 
-            : base(containerKey, lineItemTfKey, name, sku, quantity, amount, extendedData)
+        public OrderLineItem(Guid lineItemTfKey, string name, string sku, int quantity, decimal amount, ExtendedDataCollection extendedData) 
+            : base(lineItemTfKey, name, sku, quantity, amount, extendedData)
         { }
 
         private static readonly PropertyInfo ShipmentKeySelector = ExpressionHelper.GetPropertyInfo<OrderLineItem, Guid?>(x => x.LineItemTfKey);
