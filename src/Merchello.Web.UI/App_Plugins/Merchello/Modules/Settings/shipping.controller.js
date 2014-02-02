@@ -22,25 +22,13 @@
             addWarehouseFlyout: false,
             deleteWarehouseFlyout: false,
             shippingMethodPanel: true,
+            addEditShippingMethodFlyout: false,
             warehouseInfoPanel: false,
             warehouseListPanel: true
         };
+        $scope.countryToAdd = new merchello.Models.Country();
 
-        $scope.countryOptions = {
-            placeholder: "United Republic of Tanzania",
-            value: "",
-            choices: [
-                {
-                    name: "United States of America"
-                },
-                {
-                    name: "United Kingdom"
-                },
-                {
-                    name: "United Republic of Tanzia"
-                }
-            ]
-        };
+
 
         $scope.loadAllAvailableCountries = function () {
 
@@ -104,7 +92,6 @@
                     }
                 }
             }
-            // Note From Kyle: An API call will need to be wired in here to change the primary values in the database.
         };
 
         // Functions to control the Add/Edit Country flyout
@@ -120,17 +107,14 @@
                 },
                 confirm: function () {
                     var self = $scope.addCountryFlyout;
-                    if ((typeof self.model.key) == "undefined") {
-                        var newKey = $scope.countries.length;
-                        // Note From Kyle: This key-creation logic will need to be modified to fit whatever works for the database.
-                        self.model.key = newKey;
-                        self.model.name = $scope.countryOptions.value;
-                        self.model.catalogKey = $scope.primaryWarehouse.key;
-                        $scope.countries.push(self.model);
-                        // Note From Kyle: An API call will need to be wired in here to add the new Country to the database.
-                    } else {
-                        // Note From Kyle: An API call will need to be wired in here to edit the existing Country in the database.
+
+                    if (!_.contains($scope.countries, $scope.countryToAdd)) {
+                        var newShipCountry = new merchello.Models.ShippingCountry();
+                        newShipCountry.catalogKey = $scope.primaryWarehouse.warehouseCatalogs[0].key;
+                        newShipCountry.fromCountry($scope.countryToAdd);
+                        $scope.countries.push(newShipCountry);
                     }
+                    
                     self.clear();
                     self.close();
                 },
@@ -222,11 +206,25 @@
             close: function () {
                 $scope.visible.shippingMethodPanel = false;
             },
-            open: function () {
+            open: function (country) {
                 $scope.visible.shippingMethodPanel = true;
             },
             toggle: function () {
                 $scope.visible.shippingMethodPanel = !$scope.visible.shippingMethodPanel;
+            }
+        };
+
+
+        // Functions to control the Shipping Methods flyout
+        $scope.addEditShippingMethodFlyout = {
+            close: function () {
+                $scope.visible.addEditShippingMethodFlyout = false;
+            },
+            open: function (country) {
+                $scope.visible.addEditShippingMethodFlyout = true;
+            },
+            toggle: function () {
+                $scope.visible.addEditShippingMethodFlyout = !$scope.visible.addEditShippingMethodFlyout;
             }
         };
 
