@@ -81,7 +81,7 @@
                 return umbRequestHelper.resourcePromise(
                    $http.post(
                         umbRequestHelper.getApiUrl('merchelloSettingsApiBaseUrl', 'PutSettings'),
-                        settingDisplay
+                        storeSettings
                     ),
                     'Failed to save data for Store Settings');
             },
