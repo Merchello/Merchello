@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Umbraco.Core;
+using Umbraco.Core.Cache;
 
 namespace Merchello.Core.Checkout
 {
@@ -79,7 +81,10 @@ namespace Merchello.Core.Checkout
             var extentedData = new ExtendedDataCollection();
             extentedData.AddShipment(shipment);
 
-            var item = new ItemCacheLineItem(_itemCache.Key, LineItemType.Shipping, shipmentName, Guid.NewGuid().ToString(), 1, shipmentRateQuote.Rate, extentedData);
+            var item = new ItemCacheLineItem(LineItemType.Shipping, shipmentName, Guid.NewGuid().ToString(), 1, shipmentRateQuote.Rate, extentedData)
+                {
+                    ContainerKey = _itemCache.Key
+                };
             _itemCache.AddItem(item);
         }
 
@@ -104,7 +109,11 @@ namespace Merchello.Core.Checkout
                     };
         }
 
-        public abstract void CompleteCheckout(IPayment payment);
+        /// <summary>
+        /// Does preliminary validation of the checkout process and then executes the start of the order fulfillment pipeline
+        /// </summary>
+        /// <param name="paymentGatewayProvider">The see <see cref="IPaymentGatewayProvider"/> to be used in payment processing and <see cref="IOrder"/> creation approval</param>
+        public abstract void CompleteCheckout(IPaymentGatewayProvider paymentGatewayProvider);
 
 
         /// <summary>
@@ -136,6 +145,14 @@ namespace Merchello.Core.Checkout
         protected IMerchelloContext MerchelloContext
         {
             get { return _merchelloContext; }
+        }
+
+        /// <summary>
+        /// Shortcut to configured <see cref="IRuntimeCacheProvider"/>
+        /// </summary>
+        protected IRuntimeCacheProvider RuntimeCache
+        {
+            get { return _merchelloContext.Cache.RuntimeCache; }
         }
 
         /// <summary>

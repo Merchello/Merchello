@@ -304,7 +304,7 @@ namespace Merchello.Web.Workflow
         #endregion
 
         /// <summary>
-        /// Generates a unique cache key for runtime caching of the basket
+        /// Generates a unique cache key for runtime caching of the <see cref="Basket"/>
         /// </summary>
         /// <param name="customer"><see cref="ICustomerBase"/></param>
         /// <returns></returns>

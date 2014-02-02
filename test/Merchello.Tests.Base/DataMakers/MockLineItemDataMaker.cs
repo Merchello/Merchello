@@ -8,7 +8,10 @@ namespace Merchello.Tests.Base.DataMakers
     {
         public static IItemCacheLineItem MockItemCacheLineItemForInserting(Guid containerKey)
         {
-            return new ItemCacheLineItem(containerKey, LineItemType.Product, ProductItemName(), MockSku(), Quanity(), PriceCheck());
+            return new ItemCacheLineItem(LineItemType.Product, ProductItemName(), MockSku(), Quanity(), PriceCheck())
+                {
+                    ContainerKey = containerKey
+                };
         }
 
         /// <summary>

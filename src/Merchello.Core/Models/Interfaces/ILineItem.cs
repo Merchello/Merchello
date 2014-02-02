@@ -11,7 +11,7 @@ namespace Merchello.Core.Models
         /// The key of the container collection
         /// </summary>
         [DataMember]
-        Guid ContainerKey { get; }
+        Guid ContainerKey { get; set; }
 
         /// <summary>
         /// The line item type field key (<see cref="ITypeField"/>.TypeKey) for the registry item
