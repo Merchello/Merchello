@@ -37,7 +37,7 @@
     };
 
 
-    models.SettingDisplay = function (settingsFromServer) {
+    models.StoreSettings = function (settingsFromServer) {
 
         var self = this;
         if (settingsFromServer == undefined) {
