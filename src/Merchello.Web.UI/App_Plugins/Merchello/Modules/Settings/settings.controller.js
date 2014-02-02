@@ -15,7 +15,7 @@
             $scope.preValuesLoaded = true;            
             $(".content-column-body").css('background-image', 'none');                
             $scope.savingStoreSettings = false;
-            $scope.settingsDisplay = new merchello.Models.SettingDisplay();
+            $scope.settingsDisplay = new merchello.Models.StoreSettings();
         ////////////////////////////////////////////////
 
 
@@ -25,7 +25,7 @@
 
             promise.then(function (settingsFromServer) {
 
-                $scope.settingsDisplay = new merchello.Models.SettingDisplay(settingsFromServer);
+                $scope.settingsDisplay = new merchello.Models.StoreSettings(settingsFromServer);
 
                 $scope.loaded = true;
                 $scope.preValuesLoaded = true;
@@ -53,7 +53,7 @@
                 promise.then(function (settingDisplay) {
                     notificationsService.success("Store Settings Saved", "H5YR!");
                     $scope.savingStoreSettings = false;
-                    $scope.settingDisplay = new merchello.Models.SettingDisplay(settingDisplay);
+                    $scope.settingDisplay = new merchello.Models.StoreSettings(settingDisplay);
 
                 }, function (reason) {
                     notificationsService.error("Store Settings Save Failed", reason.message);
