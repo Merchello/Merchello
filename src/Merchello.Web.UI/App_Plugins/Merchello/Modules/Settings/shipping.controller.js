@@ -101,10 +101,6 @@
                 $scope.visible.addCountryFlyout = isOpen;
             },
             {
-                clear: function () {
-                    var self = $scope.addCountryFlyout;
-                    self.model = new merchello.Models.ShippingCountry();
-                },
                 confirm: function () {
                     var self = $scope.addCountryFlyout;
 
@@ -117,11 +113,6 @@
                     
                     self.clear();
                     self.close();
-                },
-                open: function (model) {
-                    if (!model) {
-                        $scope.addCountryFlyout.clear();
-                    }
                 }
             });
 

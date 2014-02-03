@@ -243,7 +243,7 @@ namespace Merchello.Web.Editors
             try
             {
                 IProduct merchProduct = _productService.GetByKey(product.Key);
-                //merchProduct = product.ToProduct(merchProduct);
+                merchProduct = product.ToProduct(merchProduct);
 
                 _productService.Save(merchProduct);
             }
