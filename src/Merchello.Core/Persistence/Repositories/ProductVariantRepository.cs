@@ -203,7 +203,7 @@ namespace Merchello.Core.Persistence.Repositories
             return collection;
         }
 
-        #region WarehouseInventory
+        #region CatalogInventory
 
         // this merely asserts that an assoicate between the warehouse and the variant has been made
         internal void SaveCatalogInventory(IProductVariant productVariant)
@@ -257,7 +257,16 @@ namespace Merchello.Core.Persistence.Repositories
                 UpdateDate = inv.UpdateDate
             };
 
-            Database.Update(dto);
+            //Database.Update(dto);
+
+            Database.Execute(
+                "UPDATE merchCataglogInventory SET Count = @invCount, LowCount = @invLowCount, UpdateDate = @invUpdateDate",
+                new
+                {
+                    invCount = inv.Count,
+                    invLowCount = inv.LowCount,
+                    invUpdateDate = inv.UpdateDate
+                });
         }
 
         private void DeleteCatalogInventory(Guid productVariantKey, Guid catalogKey)
