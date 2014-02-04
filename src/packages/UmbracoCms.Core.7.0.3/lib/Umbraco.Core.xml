@@ -5782,6 +5782,18 @@
             <param name="propertyType"></param>
             <returns></returns>
         </member>
+        <member name="T:Umbraco.Core.PropertyEditors.ValueConverters.MustBeStringValueConverter">
+            <summary>
+            Ensures that no matter what is selected in (editor), the value results in a string.
+            </summary>
+            <remarks>
+            <para>For more details see issues http://issues.umbraco.org/issue/U4-3776 (MNTP)
+            and http://issues.umbraco.org/issue/U4-4160 (media picker).</para>
+            <para>The cache level is set to .Content because the string is supposed to depend
+            on the source value only, and not on any other content. It is NOT appropriate
+            to use that converter for values whose .ToString() would depend on other content.</para>
+            </remarks>
+        </member>
         <member name="T:Umbraco.Core.PropertyEditors.ValueConverters.TinyMceValueConverter">
             <summary>
             Value converter for the RTE so that it always returns IHtmlString so that Html.Raw doesn't have to be used.

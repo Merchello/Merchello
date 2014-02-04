@@ -2186,6 +2186,15 @@
             <param name="type"></param>
             <returns></returns>
         </member>
+        <member name="M:Umbraco.Web.Editors.EntityController.GetByQuery(System.String,System.Int32,Umbraco.Web.Models.ContentEditing.UmbracoEntityTypes)">
+            <summary>
+            Gets an entity by a xpath query
+            </summary>
+            <param name="query"></param>
+            <param name="nodeContextId"></param>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
         <member name="M:Umbraco.Web.Editors.EntityController.MemberFromSearchResults(Examine.ISearchResults)">
             <summary>
             Returns a collection of entities for media based on search results
@@ -2742,14 +2751,6 @@
             <summary>
             Override to supply the default group
             </summary>
-        </member>
-        <member name="T:Umbraco.Web.PropertyEditors.ValueConverters.MntpStringValueConverter">
-            <summary>
-            Ensures that no matter what is selected in MNTP that the value results in a string
-            </summary>
-            <remarks>
-            See here for full details:http://issues.umbraco.org/issue/U4-3776
-            </remarks>
         </member>
         <member name="T:Umbraco.Web.PropertyEditors.LabelPropertyEditor.LabelPropertyValueEditor">
             <summary>
@@ -7844,7 +7845,7 @@
              </summary>
         </member>
         <!-- Badly formed XML comment ignored for member "P:Umbraco.Web.UI.JavaScript.Resources.ServerVariables" -->
-        <member name="F:Umbraco.Web.UI.JavaScript.ServerVariablesParser.Parsing">
+        <member name="E:Umbraco.Web.UI.JavaScript.ServerVariablesParser.Parsing">
             <summary>
             Could allow developers to add custom variables on startup
             </summary>
