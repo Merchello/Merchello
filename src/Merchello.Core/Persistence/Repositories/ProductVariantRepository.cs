@@ -260,12 +260,14 @@ namespace Merchello.Core.Persistence.Repositories
             //Database.Update(dto);
 
             Database.Execute(
-                "UPDATE merchCatalogInventory SET Count = @invCount, LowCount = @invLowCount, UpdateDate = @invUpdateDate",
+                "UPDATE merchCatalogInventory SET Count = @invCount, LowCount = @invLowCount, UpdateDate = @invUpdateDate WHERE catalogKey = @catalogKey AND productVariantKey = @productVariantKey",
                 new
                 {
                     invCount = inv.Count,
                     invLowCount = inv.LowCount,
-                    invUpdateDate = inv.UpdateDate
+                    invUpdateDate = inv.UpdateDate,
+                    catalogKey = inv.CatalogKey,
+                    productVariantKey = inv.ProductVariantKey                    
                 });
         }
 
