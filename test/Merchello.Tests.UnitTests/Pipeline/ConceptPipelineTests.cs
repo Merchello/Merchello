@@ -9,7 +9,7 @@ using Umbraco.Core;
 namespace Merchello.Tests.UnitTests.Pipeline
 {
     // Generate Invoice (method in checkoutbase)
-    // this could be a pipeline
+    // 
     //  Create a new Invoice copying line items for basket -> add shipping line item(s) -> calculate taxes -> apply discounts -> end of chain
     // 
     // ---> persist invoice (complete checkout) 
@@ -28,8 +28,6 @@ namespace Merchello.Tests.UnitTests.Pipeline
         [SetUp]
         public void Init()
         {         
-
-
             var taskList = new List<TestPipelineTaskHandler>();
 
             for (var i = 0; i < _taskCount; i++)
