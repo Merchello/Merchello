@@ -7,8 +7,18 @@ using Umbraco.Core;
 
 namespace Merchello.Tests.UnitTests.Pipeline
 {
+    // Generate Invoice (method in checkoutbase)
+    // this could be a pipeline
+    //  Create a new Invoice copying line items for basket -> add shipping line item(s) -> calculate taxes -> apply discounts -> end of chain
+    // 
+    // ---> persist invoice (complete checkout) 
+    // -----> process payment -> persist payment -> apply payment (payment provider should do all of this) and return Approval to generate an order  
+    //
+    // Order Pipeline
+    // Generate order( invoice ) -> Generate shipment(s) (invoice)
+
     [TestFixture]
-    public class MockPipelineTests
+    public class ConceptPipelineTests
     {
         private IEnumerable<TestPipelineTaskHandler> _tasks;
         private int _taskCount = 10;
