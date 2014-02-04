@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 
@@ -8,7 +9,7 @@ namespace Merchello.Core.Models
     /// <summary>
     /// Represents a country associated with a warehouse
     /// </summary>
-    public class ShipCountry : CountryBase, IShipCountry
+    internal class ShipCountry : CountryBase, IShipCountry
     {
         private Guid _catalogKey;
 
@@ -45,5 +46,11 @@ namespace Merchello.Core.Models
             }
         }
 
+        /// <summary>
+        /// True/false indicating whether or not this <see cref="IShipCountry"/> defines a province collection.
+        /// </summary>
+        public bool HasProvinces {
+            get { return Provinces.Any(); }
+        }
     }
 }

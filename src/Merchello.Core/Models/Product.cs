@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Deployment.Internal;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -191,7 +190,7 @@ namespace Merchello.Core.Models
         [DataMember]
         public string ManufacturerModelNumber
         {
-            get { return _variant.Manufacturer; }
+            get { return _variant.ManufacturerModelNumber; }
             set { _variant.ManufacturerModelNumber = value; }
         }
 
@@ -319,9 +318,9 @@ namespace Merchello.Core.Models
         /// Exposes the product variant template's inventory collection
         /// </summary>
         [DataMember]
-        public IEnumerable<IWarehouseInventory> Warehouses
+        public IEnumerable<ICatalogInventory> CatalogInventories
         {
-            get { return _variant.Warehouses; }
+            get { return _variant.CatalogInventories; }
         }
 
         #endregion

@@ -20,7 +20,7 @@ namespace Merchello.Tests.Base.DataMakers
             var address = new CustomerAddress(customerKey, "Home")
                 {
                     Address1 = "111 Somewhere",
-                    AddressTypeFieldKey = new AddressTypeField().Residential.TypeKey,
+                    AddressTypeFieldKey = new AddressTypeField().Shipping.TypeKey,
                     Company = "Demo Co.",
                     Locality = "Seattle",
                     Region = "WA",

@@ -12,7 +12,8 @@ namespace Merchello.Core.Models
     /// Defines a product attribute collection
     /// </summary>
     [Serializable]
-    [DataContract(IsReference = true)]
+    [CollectionDataContract(IsReference = true)]
+    [KnownType(typeof(ProductAttribute))]
     public class ProductAttributeCollection : NotifiyCollectionBase<Guid, IProductAttribute>
     {
         private readonly ReaderWriterLockSlim _addLocker = new ReaderWriterLockSlim();

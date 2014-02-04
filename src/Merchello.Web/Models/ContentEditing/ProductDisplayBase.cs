@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Merchello.Core.Models;
 
 namespace Merchello.Web.Models.ContentEditing
 {
@@ -26,6 +25,6 @@ namespace Merchello.Web.Models.ContentEditing
         public bool Download { get; set; }
         public int DownloadMediaId { get; set; }
 
-        public IEnumerable<WarehouseInventoryDisplay> WarehouseInventory { get; set; }
+        public IEnumerable<CatalogInventoryDisplay> CatalogInventories { get; set; }
     }
 }

@@ -2,16 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using Examine;
+using Examine.LuceneEngine.SearchCriteria;
 using Examine.SearchCriteria;
 using Merchello.Core;
+using Merchello.Core.Cache;
 using Merchello.Core.Models;
+using Merchello.Core.Persistence.UnitOfWork;
+using Merchello.Core.Services;
 using Merchello.Examine;
 using Merchello.Web.Models.ContentEditing;
+using Umbraco.Core;
+using Umbraco.Core.Logging;
 
 namespace Merchello.Web
 {
     internal class ProductQuery
     {
+        private readonly IMerchelloContext _merchelloContext;
 
         /// <summary>
         /// Retrieves a <see cref="ProductDisplay"/> given it's 'unique' Key
@@ -48,6 +55,15 @@ namespace Merchello.Web
             return AutoMapper.Mapper.Map<ProductDisplay>(retrieved);
         }
 
+        /// <summary>
+        /// Retrieves a <see cref="ProductVariantDisplay"/> given it's 'unique' key
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public static ProductVariantDisplay GetVariantDisplayByKey(Guid key)
+        {
+            return GetVariantDisplayByKey(key.ToString());
+        }
 
         /// <summary>
         /// Retrieves a <see cref="ProductVariantDisplay"/> given it's 'unique' key (string representation of the Guid)
@@ -58,16 +74,28 @@ namespace Merchello.Web
         {
             var criteria = ExamineManager.Instance.CreateSearchCriteria();
             criteria.Field("productVariantKey", key);
-
-            var variant = ExamineManager.Instance.SearchProviderCollection["MerchelloProductSearcher"]
+            try
+            {
+                var variant = ExamineManager.Instance.SearchProviderCollection["MerchelloProductSearcher"]
                 .Search(criteria).Select(result => result.ToProductVariantDisplay()).FirstOrDefault();
 
-            if (variant != null) return variant;
+                if (variant != null) return variant;
 
-            var retrieved = MerchelloContext.Current.Services.ProductVariantService.GetByKey(new Guid(key));
-            if(retrieved != null) ReindexProductVariant(retrieved, null);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error<ProductQuery>("GetVariantDisplayByKey", ex);
+            }
+            
+            // Assists in unit testing
+            var merchelloContext = MerchelloContext.Current ?? 
+                new MerchelloContext(new ServiceContext(new PetaPocoUnitOfWorkProvider()),
+                                        new CacheHelper(new NullCacheProvider(), new NullCacheProvider(), new NullCacheProvider()));
 
-            return retrieved.ToProductVariantDisplay();
+            var retrieved = merchelloContext.Services.ProductVariantService.GetByKey(new Guid(key));
+            if (retrieved != null) ReindexProductVariant(retrieved, null);
+
+            return retrieved != null ? retrieved.ToProductVariantDisplay() : null;
         }
 
 
@@ -80,7 +108,7 @@ namespace Merchello.Web
         {
             var criteria = ExamineManager.Instance.CreateSearchCriteria();
             //criteria.Field("name", term.Fuzzy(0.8f)).Or().Field("sku", term);
-            criteria.Field("master", "True").And().GroupedOr(new[] { "name", "sku" }, term);
+            criteria.Field("master", "True").And().GroupedOr(new[] { "name", "sku" }, term.Fuzzy(0.8f));
             return Search(criteria);
         }
 

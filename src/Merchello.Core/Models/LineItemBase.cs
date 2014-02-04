@@ -1,7 +1,14 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Globalization;
+using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
+using System.Xml;
+using System.Xml.Linq;
 using Merchello.Core.Models.EntityBase;
 using Merchello.Core.Models.TypeFields;
 
@@ -23,31 +30,34 @@ namespace Merchello.Core.Models
         private ExtendedDataCollection _extendedData;
         private bool _exported;
 
-        protected LineItemBase(Guid containerKey, string name, string sku, decimal amount)
-            : this(containerKey, name, sku, 1, amount)
-        { }
-
-        protected LineItemBase(Guid containerKey, string name, string sku, int quantity, decimal amount)
-            : this(containerKey, LineItemType.Product, name, sku, quantity, amount)
-        { }
-
-        protected LineItemBase(Guid containerKey, LineItemType lineItemType, string name, string sku, int quantity, decimal amount)
-            : this(containerKey, EnumTypeFieldConverter.LineItemType.GetTypeField(lineItemType).TypeKey, name, sku, quantity, amount, new ExtendedDataCollection())
-        { }
-
-        protected LineItemBase(Guid containerKey, LineItemType lineItemType, string name, string sku, int quantity, decimal amount, ExtendedDataCollection extendedData)
-            : this(containerKey, EnumTypeFieldConverter.LineItemType.GetTypeField(lineItemType).TypeKey, name, sku, quantity, amount, extendedData)
-        { }
-
-        protected LineItemBase(Guid containerKey, Guid lineItemTfKey, string name, string sku, int quantity, decimal amount, ExtendedDataCollection extendedData)  
+        internal LineItemBase()
         {
-            Mandate.ParameterCondition(containerKey != Guid.Empty, "containerId");
+        }
+
+        protected LineItemBase(string name, string sku, decimal amount)
+            : this(name, sku, 1, amount)
+        { }
+
+        protected LineItemBase(string name, string sku, int quantity, decimal amount)
+            : this(LineItemType.Product, name, sku, quantity, amount)
+        { }
+
+        protected LineItemBase(LineItemType lineItemType, string name, string sku, int quantity, decimal amount)
+            : this(EnumTypeFieldConverter.LineItemType.GetTypeField(lineItemType).TypeKey, name, sku, quantity, amount, new ExtendedDataCollection())
+        { }
+
+        protected LineItemBase(LineItemType lineItemType, string name, string sku, int quantity, decimal amount, ExtendedDataCollection extendedData)
+            : this(EnumTypeFieldConverter.LineItemType.GetTypeField(lineItemType).TypeKey, name, sku, quantity, amount, extendedData)
+        { }
+
+        protected LineItemBase(Guid lineItemTfKey, string name, string sku, int quantity, decimal amount, ExtendedDataCollection extendedData)  
+        {
+            
             Mandate.ParameterCondition(lineItemTfKey != Guid.Empty, "lineItemTfKey");
             Mandate.ParameterNotNull(extendedData, "extendedData");
             Mandate.ParameterNotNullOrEmpty(name, "name");
             Mandate.ParameterNotNullOrEmpty(sku, "sku");
-            
-            _containerKey = containerKey;
+                        
             _lineItemTfKey = lineItemTfKey;
             _name = name;
             _sku = sku;
@@ -56,6 +66,7 @@ namespace Merchello.Core.Models
             _extendedData = extendedData;
         }
 
+        private static readonly PropertyInfo ContainerKeySelector = ExpressionHelper.GetPropertyInfo<LineItemBase, Guid>(x => x.ContainerKey);
         private static readonly PropertyInfo LineItemTfKeySelector = ExpressionHelper.GetPropertyInfo<LineItemBase, Guid>(x => x.LineItemTfKey);
         private static readonly PropertyInfo SkuSelector = ExpressionHelper.GetPropertyInfo<LineItemBase, string>(x => x.Sku);
         private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<LineItemBase, string>(x => x.Name);
@@ -71,15 +82,19 @@ namespace Merchello.Core.Models
 
 
         /// <summary>
-        /// The customer registry id associated with the Customer Registry
+        /// The "container" or parent of collection's primary 'key' (Guid)
         /// </summary>
         [DataMember]
         public Guid ContainerKey
         {
             get { return _containerKey; }
-            internal set
+            set
             {
-                _containerKey = value;
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _containerKey = value;
+                    return _containerKey;
+                }, _containerKey, ContainerKeySelector); 
             }
         }
     
@@ -219,6 +234,43 @@ namespace Merchello.Core.Models
             vistor.Visit(this);
         }
 
+        /// <summary>
+        /// Serializes the current instance to an Xml representation - intended to be persisted in an <see cref="ExtendedDataCollection"/>  
+        /// </summary>
+        /// <returns>An Xml string</returns>
+        internal string SerializeToXml()
+        {
+            string xml;
+            using (var sw = new StringWriter())
+            {
+                var settings = new XmlWriterSettings
+                    {
+                        OmitXmlDeclaration = true
+                    };
+
+                using (var writer = XmlWriter.Create(sw,settings))
+                {
+                    writer.WriteStartDocument();
+                    writer.WriteStartElement(Constants.ExtendedDataKeys.LineItem);
+
+
+                    writer.WriteElementString(Constants.ExtendedDataKeys.ContainerKey, ContainerKey.ToString());
+                    writer.WriteElementString(Constants.ExtendedDataKeys.LineItemTfKey, LineItemTfKey.ToString());
+                    writer.WriteElementString(Constants.ExtendedDataKeys.Sku, Sku);
+                    writer.WriteElementString(Constants.ExtendedDataKeys.Name, Name);
+                    writer.WriteElementString(Constants.ExtendedDataKeys.Quantity, Quantity.ToString(CultureInfo.InvariantCulture));
+                    writer.WriteElementString(Constants.ExtendedDataKeys.Amount, Amount.ToString(CultureInfo.InvariantCulture));
+                    writer.WriteStartElement(Constants.ExtendedDataKeys.ExtendedData);
+                    writer.WriteRaw(ExtendedData.SerializeToXml());
+                    writer.WriteEndElement();
+                    writer.WriteEndElement(); // ExtendedData
+                    writer.WriteEndDocument();
+                    
+                }
+                xml = sw.ToString();
+            }
+            return xml;
+        }
         
     }
 }

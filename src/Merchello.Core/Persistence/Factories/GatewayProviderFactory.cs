@@ -1,10 +1,9 @@
 ﻿using Merchello.Core.Models;
-using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Models.Rdbms;
 
 namespace Merchello.Core.Persistence.Factories
 {
-    public class GatewayProviderFactory : IEntityFactory<IGatewayProvider, GatewayProviderDto>
+    internal class GatewayProviderFactory : IEntityFactory<IGatewayProvider, GatewayProviderDto>
     {
         public IGatewayProvider BuildEntity(GatewayProviderDto dto)
         {
@@ -33,7 +32,7 @@ namespace Merchello.Core.Persistence.Factories
                 ProviderTfKey = entity.ProviderTfKey,
                 Name = entity.Name,
                 TypeFullName = entity.TypeFullName,
-                ExtendedData = entity.ExtendedData.Serialize(),
+                ExtendedData = entity.ExtendedData.SerializeToXml(),
                 EncryptExtendedData = entity.EncryptExtendedData,
                 UpdateDate = entity.UpdateDate,
                 CreateDate = entity.CreateDate

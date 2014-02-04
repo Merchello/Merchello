@@ -121,7 +121,7 @@ namespace Merchello.Web.Editors
         /// PUT /umbraco/Merchello/WarehouseApi/PutWarehouse
         /// </summary>
         /// <param name="warehouse">WarehouseDisplay object serialized from WebApi</param>
-        [AcceptVerbs("PUT")]
+        [AcceptVerbs("PUT","POST")]
         public HttpResponseMessage PutWarehouse(WarehouseDisplay warehouse)
         {
             var response = Request.CreateResponse(HttpStatusCode.OK);

@@ -1,4 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Xml;
+using System.Xml.Linq;
+using Merchello.Core.Models.Interfaces;
 
 namespace Merchello.Core.Models
 {
@@ -8,45 +15,188 @@ namespace Merchello.Core.Models
     public static class ExtendedDataCollectionExtensions
     {
 
-        #region Product / ProductVariant
-        
+        #region ExtendedDataCollection
 
-        public static void AddProductVariantValues(this ExtendedDataCollection extendedData, IProductVariant productVariant)
+        public static void AddExtendedDataCollection(this ExtendedDataCollection extendedData, ExtendedDataCollection extendedDataToSerialize)
         {
-            extendedData.SetValue("merchProductKey", productVariant.ProductKey.ToString());
-            extendedData.SetValue("merchProductVariantKey", productVariant.Key.ToString());
-            extendedData.SetValue("merchCostOfGoods", productVariant.CostOfGoods.ToString());
-            extendedData.SetValue("merchWeight", productVariant.Weight.ToString());
-            extendedData.SetValue("merchWidth", productVariant.Width.ToString());
-            extendedData.SetValue("merchHeight", productVariant.Height.ToString());
-            extendedData.SetValue("merchLength", productVariant.Length.ToString());
-            extendedData.SetValue("merchBarcode", productVariant.Barcode);
-            extendedData.SetValue("merchTrackInventory", productVariant.TrackInventory.ToString());
-            extendedData.SetValue("merchOutOfStockPurchase", productVariant.OutOfStockPurchase.ToString());
-            extendedData.SetValue("merchTaxable", productVariant.Taxable.ToString());
-            extendedData.SetValue("merchShippable", productVariant.Shippable.ToString());
-            extendedData.SetValue("merchDownload", productVariant.Download.ToString());
-            extendedData.SetValue("merchDownloadMediaId", productVariant.DownloadMediaId.ToString());
+            extendedData.SetValue(Constants.ExtendedDataKeys.ExtendedData, extendedDataToSerialize.SerializeToXml());
         }
 
         /// <summary>
-        /// True/false indicating whether or not the colleciton contains a ProductVariantId
+        /// True/false indicating whether or not this extended data collection contains a child serialized extended data collection
+        /// </summary>
+        public static bool ContainsExtendedDataSerialization(this ExtendedDataCollection extendedData)
+        {
+            return extendedData.ContainsKey(Constants.ExtendedDataKeys.ExtendedData);
+        }
+
+        /// <summary>
+        /// Gets a <see cref="ExtendedDataCollection"/> from the <see cref="ExtendedDataCollection"/>
+        /// </summary>
+        public static ExtendedDataCollection GetExtendedDataCollection(this ExtendedDataCollection extendedData)
+        {
+            return extendedData.ContainsExtendedDataSerialization()
+                       ? new ExtendedDataCollection(extendedData.GetValue(Constants.ExtendedDataKeys.ExtendedData))
+                       : null;
+        }
+
+        #endregion
+
+        #region LineItemCollection
+
+        /// <summary>
+        /// Adds a <see cref="LineItemCollection"/> to the <see cref="ExtendedDataCollection"/>
+        /// </summary>
+        /// <param name="extendedData"></param>
+        /// <param name="lineItemCollection"></param>
+        public static void AddLineItemCollection(this ExtendedDataCollection extendedData, LineItemCollection lineItemCollection)
+        {
+         
+            using (var sw = new StringWriter())
+            {
+                var settings = new XmlWriterSettings()
+                    {
+                        OmitXmlDeclaration = true
+                    };
+                
+                using (var writer = XmlWriter.Create(sw, settings))
+                {
+                    writer.WriteStartDocument();
+                    writer.WriteStartElement(Constants.ExtendedDataKeys.LineItemCollection);
+
+                    foreach (var lineItem in lineItemCollection)
+                    {
+                        //writer.WriteStartElement(Constants);
+                        writer.WriteRaw(((LineItemBase)lineItem).SerializeToXml());
+                    }
+
+                    writer.WriteEndElement(); // ExtendedData
+                    writer.WriteEndDocument();                  
+                }
+                extendedData.SetValue(Constants.ExtendedDataKeys.LineItemCollection, sw.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Creates an instance of <see cref="LineItemCollection"/> from a serialized collection in the ExtendedDataCollection
+        /// </summary>
+        /// <typeparam name="T">The type of the <see cref="ILineItem"/></typeparam>
+        /// <param name="extendedData"></param>
+        /// <returns><see cref="LineItemCollection"/></returns>
+        public static LineItemCollection GetLineItemCollection<T>(this ExtendedDataCollection extendedData) where T : LineItemBase
+        {
+            if (!extendedData.ContainsKey(Constants.ExtendedDataKeys.LineItemCollection)) return null;
+
+            var xdoc = XDocument.Parse(extendedData.GetValue(Constants.ExtendedDataKeys.LineItemCollection));
+            var lineItemCollection = new LineItemCollection();
+            foreach (var element in xdoc.Descendants(Constants.ExtendedDataKeys.LineItem))
+            {
+                
+            var dictionary = GetLineItemXmlValues(element.ToString());            
+            var ctrArgs = new[]
+                {
+                    typeof (Guid), typeof (string), typeof (string), typeof (int), typeof (decimal), typeof (ExtendedDataCollection)
+                };
+
+                var ctrValues = new object[]
+                    {                        
+                        new Guid(dictionary[Constants.ExtendedDataKeys.LineItemTfKey]),
+                        dictionary[Constants.ExtendedDataKeys.Sku],
+                        dictionary[Constants.ExtendedDataKeys.Name],
+                        int.Parse(dictionary[Constants.ExtendedDataKeys.Quantity]),
+                        decimal.Parse(dictionary[Constants.ExtendedDataKeys.Amount]),
+                        new ExtendedDataCollection(dictionary[Constants.ExtendedDataKeys.ExtendedData])
+                    };
+               
+                
+                var lineItem = ActivatorHelper.CreateInstance<LineItemBase>(typeof (T), ctrArgs, ctrValues);
+                lineItem.ContainerKey = new Guid(dictionary[Constants.ExtendedDataKeys.ContainerKey]);
+
+                lineItemCollection.Add(lineItem);
+            }
+
+            return lineItemCollection;
+        }
+
+        /// <summary>
+        /// Helper method to parse Xml document
+        /// </summary>
+        /// <param name="lineItemXml"></param>
+        /// <returns></returns>
+        private static IDictionary<string, string> GetLineItemXmlValues(string lineItemXml)
+        {
+            var xdoc = XDocument.Parse(lineItemXml);
+
+            var dictionary = new Dictionary<string, string>
+            {
+                {Constants.ExtendedDataKeys.ContainerKey, GetXmlValue(xdoc,Constants.ExtendedDataKeys.ContainerKey)},
+                {Constants.ExtendedDataKeys.LineItemTfKey, GetXmlValue(xdoc,Constants.ExtendedDataKeys.LineItemTfKey)},
+                {Constants.ExtendedDataKeys.Sku, GetXmlValue(xdoc,Constants.ExtendedDataKeys.Sku)},
+                {Constants.ExtendedDataKeys.Name, GetXmlValue(xdoc,Constants.ExtendedDataKeys.Name)},
+                {Constants.ExtendedDataKeys.Quantity, GetXmlValue(xdoc,Constants.ExtendedDataKeys.Quantity)},
+                {Constants.ExtendedDataKeys.Amount, GetXmlValue(xdoc,Constants.ExtendedDataKeys.Amount)},
+                {Constants.ExtendedDataKeys.ExtendedData, GetXmlValue(xdoc,Constants.ExtendedDataKeys.ExtendedData)}
+            };
+            return dictionary;
+        }
+
+        #endregion
+
+        #region Product / ProductVariant
+
+
+        public static void AddProductVariantValues(this ExtendedDataCollection extendedData, IProductVariant productVariant)
+        {
+            extendedData.SetValue(Constants.ExtendedDataKeys.ProductKey, productVariant.ProductKey.ToString());
+            extendedData.SetValue(Constants.ExtendedDataKeys.ProductVariantKey, productVariant.Key.ToString());
+            extendedData.SetValue(Constants.ExtendedDataKeys.CostOfGoods, productVariant.CostOfGoods.ToString());
+            extendedData.SetValue(Constants.ExtendedDataKeys.Weight, productVariant.Weight.ToString());
+            extendedData.SetValue(Constants.ExtendedDataKeys.Width, productVariant.Width.ToString());
+            extendedData.SetValue(Constants.ExtendedDataKeys.Height, productVariant.Height.ToString());
+            extendedData.SetValue(Constants.ExtendedDataKeys.Length, productVariant.Length.ToString());
+            extendedData.SetValue(Constants.ExtendedDataKeys.Barcode, productVariant.Barcode);
+            extendedData.SetValue(Constants.ExtendedDataKeys.Price, productVariant.Price.ToString(CultureInfo.InvariantCulture));
+            extendedData.SetValue(Constants.ExtendedDataKeys.OnSale, productVariant.OnSale.ToString());
+            extendedData.SetValue(Constants.ExtendedDataKeys.Manufacturer, productVariant.Manufacturer);
+            extendedData.SetValue(Constants.ExtendedDataKeys.ManufacturerModelNumber, productVariant.ManufacturerModelNumber);
+            extendedData.SetValue(Constants.ExtendedDataKeys.SalePrice, productVariant.SalePrice == null ? 0.ToString(CultureInfo.InvariantCulture) : productVariant.SalePrice.ToString());
+            extendedData.SetValue(Constants.ExtendedDataKeys.TrackInventory, productVariant.TrackInventory.ToString());
+            extendedData.SetValue(Constants.ExtendedDataKeys.OutOfStockPurchase, productVariant.OutOfStockPurchase.ToString());
+            extendedData.SetValue(Constants.ExtendedDataKeys.Taxable, productVariant.Taxable.ToString());
+            extendedData.SetValue(Constants.ExtendedDataKeys.Shippable, productVariant.Shippable.ToString());
+            extendedData.SetValue(Constants.ExtendedDataKeys.Download, productVariant.Download.ToString());
+            extendedData.SetValue(Constants.ExtendedDataKeys.DownloadMediaId, productVariant.DownloadMediaId.ToString());
+        }
+
+        /// <summary>
+        /// True/falce indicating whether or not this extended data collection contains information 
+        /// which could define a <see cref="IProductVariant"/>
+        /// </summary>
+        /// <param name="extendedData"></param>
+        /// <returns></returns>
+        public static bool DefinesProductVariant(this ExtendedDataCollection extendedData)
+        {
+            return extendedData.ContainsProductVariantKey() && extendedData.ContainsProductKey();
+        }
+
+        /// <summary>
+        /// True/false indicating whether or not the colleciton contains a ProductVariantKey
         /// </summary>
         /// <param name="extendedData"></param>
         /// <returns></returns>
         public static bool ContainsProductVariantKey(this ExtendedDataCollection extendedData)
         {
-            return extendedData.ContainsKey("merchProductVariantKey");
-        }
+            return extendedData.ContainsKey(Constants.ExtendedDataKeys.ProductVariantKey);
+        }       
 
         /// <summary>
-        /// Return the ProductVariantId
+        /// Return the ProductVariantKey
         /// </summary>
         /// <param name="extendedData"></param>
         /// <returns></returns>
         public static Guid GetProductVariantKey(this ExtendedDataCollection extendedData)
         {
-            return GetGuidValue(extendedData.GetValue("merchProductVariantKey"));
+            return GetGuidValue(extendedData.GetValue(Constants.ExtendedDataKeys.ProductVariantKey));
         }
 
         /// <summary>
@@ -54,7 +204,7 @@ namespace Merchello.Core.Models
         /// </summary>
         public static bool ContainsProductKey(this ExtendedDataCollection extendedData)
         {
-            return extendedData.ContainsKey("merchProductKey");
+            return extendedData.ContainsKey(Constants.ExtendedDataKeys.ProductKey);
         }
 
         /// <summary>
@@ -64,128 +214,308 @@ namespace Merchello.Core.Models
         /// <returns></returns>
         public static Guid GetProductKey(this ExtendedDataCollection extendedData)
         {
-            return GetGuidValue(extendedData.GetValue("merchProductKey"));
+            return GetGuidValue(extendedData.GetValue(Constants.ExtendedDataKeys.ProductKey));
         }
 
         /// <summary>
-        /// Returns the "MerchTaxable" value
+        /// Returns the "merchTaxable" value
         /// </summary>
         /// <param name="extendedData"><see cref="ExtendedDataCollection"/></param>
         /// <returns>bool</returns>
         public static bool GetTaxableValue(this ExtendedDataCollection extendedData)
         {
-            return GetBooleanValue(extendedData.GetValue("merchTaxable"));
+            return GetBooleanValue(extendedData.GetValue(Constants.ExtendedDataKeys.Taxable));
         }
 
         /// <summary>
-        /// Returns the "MerchTrackInventory" value
+        /// Returns the "merchTrackInventory" value
         /// </summary>
         /// <param name="extendedData"><see cref="ExtendedDataCollection"/></param>
         /// <returns>bool</returns>
         public static bool GetTrackInventoryValue(this ExtendedDataCollection extendedData)
         {
-            return GetBooleanValue(extendedData.GetValue("merchTrackInventory"));
+            return GetBooleanValue(extendedData.GetValue(Constants.ExtendedDataKeys.TrackInventory));
         }
 
         /// <summary>
-        /// Returns the "MerchTrackInventory" value
+        /// Returns the "merchOutOfStockPurchase" value
         /// </summary>
         /// <param name="extendedData"><see cref="ExtendedDataCollection"/></param>
         /// <returns>bool</returns>
         public static bool GetOutOfStockPurchaseValue(this ExtendedDataCollection extendedData)
         {
-            return GetBooleanValue(extendedData.GetValue("merchOutOfStockPurchase"));
+            return GetBooleanValue(extendedData.GetValue(Constants.ExtendedDataKeys.OutOfStockPurchase));
         }
 
         /// <summary>
-        /// Returns the "MerchTrackInventory" value
+        /// Returns the "merchTrackInventory" value
         /// </summary>
         /// <param name="extendedData"><see cref="ExtendedDataCollection"/></param>
         /// <returns>bool</returns>
         public static bool GetShippableValue(this ExtendedDataCollection extendedData)
         {
-            return GetBooleanValue(extendedData.GetValue("merchShippable"));
+            return GetBooleanValue(extendedData.GetValue(Constants.ExtendedDataKeys.Shippable));
         }
 
         /// <summary>
-        /// Returns the "MerchDownload" value
+        /// Returns the "merchDownload" value
         /// </summary>
         /// <param name="extendedData"><see cref="ExtendedDataCollection"/></param>
         /// <returns>bool</returns>
         public static bool GetDownloadValue(this ExtendedDataCollection extendedData)
         {
-            return GetBooleanValue(extendedData.GetValue("merchDownload"));
+            return GetBooleanValue(extendedData.GetValue(Constants.ExtendedDataKeys.Download));
         }
 
         /// <summary>
-        /// Returns the "MerchTrackInventory" value
+        /// Returns the "merchTrackInventory" value
         /// </summary>
         /// <param name="extendedData"><see cref="ExtendedDataCollection"/></param>
         /// <returns>bool</returns>
         public static int GetDownloadMediaIdValue(this ExtendedDataCollection extendedData)
         {
-            return GetIntegerValue(extendedData.GetValue("merchDownloadMediaId"));
+            return GetIntegerValue(extendedData.GetValue(Constants.ExtendedDataKeys.DownloadMediaId));
         }
 
         /// <summary>
-        /// returns the "MerchWeight" value
+        /// Returns the "merchPrice" value
+        /// </summary>
+        /// <param name="extendedData"></param>
+        /// <returns></returns>
+        public static decimal GetPriceValue(this ExtendedDataCollection extendedData)
+        {
+            return GetDecimalValue(extendedData.GetValue(Constants.ExtendedDataKeys.Price));
+        }
+
+        /// <summary>
+        /// Returns the "merchOnSale" value as a boolean
+        /// </summary>
+        /// <param name="extendedData"></param>
+        /// <returns></returns>
+        public static bool GetOnSaleValue(this ExtendedDataCollection extendedData)
+        {
+            return GetBooleanValue(extendedData.GetValue(Constants.ExtendedDataKeys.OnSale));
+        }
+
+        /// <summary>
+        /// Returns the "merchSalePrice" value
+        /// </summary>
+        /// <param name="extendedData"></param>
+        /// <returns></returns>
+        public static decimal GetSalePriceValue(this ExtendedDataCollection extendedData)
+        {
+            return GetDecimalValue(extendedData.GetValue(Constants.ExtendedDataKeys.SalePrice));
+        }
+
+        /// <summary>
+        /// Returns the "merchManufacturer" value
+        /// </summary>
+        public static string GetManufacturerValue(this ExtendedDataCollection extendedData)
+        {
+            return extendedData.GetValue(Constants.ExtendedDataKeys.Manufacturer);
+        }
+
+        /// <summary>
+        /// Returns the "merchManufacturerModelNumber" value
+        /// </summary>
+        /// <param name="extendedData"></param>
+        /// <returns></returns>
+        public static string GetManufacturerModelNumberValue(this ExtendedDataCollection extendedData)
+        {
+            return extendedData.GetValue(Constants.ExtendedDataKeys.ManufacturerModelNumber);
+        }
+
+        /// <summary>
+        /// returns the "merchWeight" value
         /// </summary>
         /// <param name="extendedData"><see cref="ExtendedDataCollection"/></param>
         /// <returns>decimal</returns>
         public static decimal GetWeightValue(this ExtendedDataCollection extendedData)
         {
-            return GetDecimalValue(extendedData.GetValue("MerchWeight"));
+            return GetDecimalValue(extendedData.GetValue(Constants.ExtendedDataKeys.Weight));
         }
 
         /// <summary>
-        /// returns the "MerchHeight" value
+        /// returns the "merchHeight" value
         /// </summary>
         /// <param name="extendedData"><see cref="ExtendedDataCollection"/></param>
         /// <returns>decimal</returns>
         public static decimal GetHeightValue(this ExtendedDataCollection extendedData)
         {
-            return GetDecimalValue(extendedData.GetValue("merchHeight"));
+            return GetDecimalValue(extendedData.GetValue(Constants.ExtendedDataKeys.Height));
         }
 
         /// <summary>
-        /// returns the "MerchWidth" value
+        /// returns the "merchWidth" value
         /// </summary>
         /// <param name="extendedData"><see cref="ExtendedDataCollection"/></param>
         /// <returns>decimal</returns>
         public static decimal GetWidthValue(this ExtendedDataCollection extendedData)
         {
-            return GetDecimalValue(extendedData.GetValue("merchWidth"));
+            return GetDecimalValue(extendedData.GetValue(Constants.ExtendedDataKeys.Width));
         }
 
         /// <summary>
-        /// returns the "MerchLength" value
+        /// returns the "merchLength" value
         /// </summary>
         /// <param name="extendedData"><see cref="ExtendedDataCollection"/></param>
         /// <returns>decimal</returns>
         public static decimal GetLengthValue(this ExtendedDataCollection extendedData)
         {
-            return GetDecimalValue(extendedData.GetValue("merchLength"));
+            return GetDecimalValue(extendedData.GetValue(Constants.ExtendedDataKeys.Length));
         }
 
         /// <summary>
-        /// returns the "MerchWeight" value
+        /// returns the "merchWeight" value
         /// </summary>
         /// <param name="extendedData"><see cref="ExtendedDataCollection"/></param>
         /// <returns>decimal</returns>
         public static string GetBarcodeValue(this ExtendedDataCollection extendedData)
         {
-            return extendedData.GetValue("MerchBarcode");
+            return extendedData.GetValue(Constants.ExtendedDataKeys.Barcode);
+        }
+
+        #endregion
+
+        #region IAddress
+
+        /// <summary>
+        /// Adds an <see cref="IAddress"/> to extended data.  This is intended for shipment addresses
+        /// </summary>
+        /// <param name="extendedData"></param>
+        /// <param name="address"></param>
+        /// <param name="addressType">The Origin or Destination addresses</param>
+        public static void AddAddress(this ExtendedDataCollection extendedData, IAddress address, AddressType addressType)
+        {
+            
+            extendedData.AddAddress(address, addressType == AddressType.Shipping
+                            ? Constants.ExtendedDataKeys.ShippingDestinationAddress
+                            : Constants.ExtendedDataKeys.BillingAddress);
+        }
+
+        /// <summary>
+        /// Adds an <see cref="IAddress"/> to extended data.  This is intended for shipment addresses
+        /// </summary>
+        /// <param name="extendedData"></param>
+        /// <param name="address">The <see cref="IAddress"/> to be added to extended data</param>
+        /// <param name="dictionaryKey">The dictionary key used to reference the serialized <see cref="IAddress"/></param>
+        public static void AddAddress(this ExtendedDataCollection extendedData, IAddress address, string dictionaryKey)
+        {
+            var addressXml = SerializationHelper.SerializeToXml(address as Address);
+            extendedData.SetValue(dictionaryKey, addressXml);
+        }
+
+        /// <summary>
+        /// Gets an <see cref="IAddress"/> from the <see cref="ExtendedDataCollection"/>
+        /// </summary>
+        /// <param name="extendedData"></param>
+        /// <param name="addressType"></param>
+        /// <returns></returns>
+        public static IAddress GetAddress(this ExtendedDataCollection extendedData, AddressType addressType)
+        {
+            return extendedData.GetAddress(addressType == AddressType.Shipping
+                                               ? Constants.ExtendedDataKeys.ShippingDestinationAddress
+                                               : Constants.ExtendedDataKeys.BillingAddress);
+        }
+
+
+        /// <summary>
+        /// Gets an <see cref="IAddress"/> from the <see cref="ExtendedDataCollection"/>
+        /// </summary>
+        /// <param name="extendedData"></param>
+        /// <param name="dictionaryKey"></param>
+        /// <returns></returns>
+        public static IAddress GetAddress(this ExtendedDataCollection extendedData, string dictionaryKey)
+        {
+            if (!extendedData.ContainsKey(dictionaryKey)) return null;
+
+            var attempt =  SerializationHelper.DeserializeXml<Address>(extendedData.GetValue(dictionaryKey));
+
+            return attempt.Success ? attempt.Result : null;
+        }
+
+        #endregion
+
+        #region IShipment
+
+
+        /// <summary>
+        /// Adds a <see cref="IShipment"/> to the extended data collection
+        /// </summary>
+        /// <param name="extendedData"></param>
+        /// <param name="shipment"></param>
+        public static void AddShipment(this ExtendedDataCollection extendedData, IShipment shipment)
+        {
+            extendedData.AddAddress(shipment.OriginAddress(), Constants.ExtendedDataKeys.ShippingOriginAddress);
+            extendedData.AddAddress(shipment.DestinationAddress(), Constants.ExtendedDataKeys.ShippingDestinationAddress);
+            extendedData.AddLineItemCollection(shipment.Items);
+        }
+
+        /// <summary>
+        /// Gets (creates a new <see cref="IShipment"/>) from values saved in the <see cref="ExtendedDataCollection"/>
+        /// </summary>
+        /// <param name="extendedData"></param>
+        public static IShipment GetShipment<T>(this ExtendedDataCollection extendedData) where T : LineItemBase
+        {
+            var origin = extendedData.GetAddress(Constants.ExtendedDataKeys.ShippingOriginAddress);
+            var destination = extendedData.GetAddress(Constants.ExtendedDataKeys.ShippingDestinationAddress);
+            var lineItemCollection = extendedData.GetLineItemCollection<T>();
+
+            if(origin == null) throw new NullReferenceException("ExtendedDataCollection does not contain an 'origin shipping address'");
+            if(destination == null) throw new NullReferenceException("ExtendedDataCollection does not container a 'destination shipping address'");
+            if (lineItemCollection == null) throw new NullReferenceException("ExtendedDataCollection does not contain a 'line item collection'");
+
+            return new Shipment(origin, destination, lineItemCollection);
+        }
+
+        /// <summary>
+        /// True/false indicating whether or not the collection contains a ShipmentKey
+        /// </summary>
+        /// <param name="extendedData"></param>
+        /// <returns></returns>
+        public static bool ContainsShipmentKey(this ExtendedDataCollection extendedData)
+        {
+            return extendedData.ContainsKey(Constants.ExtendedDataKeys.ShipmentKey);
+        }
+
+        /// <summary>
+        /// Returns the merchShipmentKey value as a Guid
+        /// </summary>
+        /// <param name="extendedData"></param>
+        /// <returns>The Guid based 'Key' of the <see cref="IShipment"/></returns>
+        public static Guid GetShipmentKey(this ExtendedDataCollection extendedData)
+        {
+            return GetGuidValue(extendedData.GetValue(Constants.ExtendedDataKeys.ShipmentKey));
+        }
+
+        /// <summary>
+        /// True/false indicating whether or not the colleciton contains a WarehouseCatalogKey
+        /// </summary>
+        /// <param name="extendedData"></param>
+        /// <returns></returns>
+        public static bool ContainsWarehouseCatalogKey(this ExtendedDataCollection extendedData)
+        {
+            return extendedData.ContainsKey(Constants.ExtendedDataKeys.WarehouseCatalogKey);
+        }
+
+        /// <summary>
+        /// Return the WarehouseCatalogKey
+        /// </summary>
+        /// <param name="extendedData"></param>
+        /// <returns></returns>
+        public static Guid GetWarehouseCatalogKey(this ExtendedDataCollection extendedData)
+        {
+            return GetGuidValue(extendedData.GetValue(Constants.ExtendedDataKeys.WarehouseCatalogKey));
         }
 
         #endregion
 
 
-
-
         #region Utility
-        
+
 
         private static Guid GetGuidValue(string value)
+
         {
             Guid converted;
             return Guid.TryParse(value, out converted) ? converted : Guid.Empty;
@@ -207,6 +537,14 @@ namespace Merchello.Core.Models
         {
             int converted;
             return int.TryParse(value, out converted) ? converted : 0;
+        }
+
+        private static string GetXmlValue(XDocument xdoc, string elementName)
+        {
+            var element = xdoc.Descendants(elementName).FirstOrDefault();
+            if (element == null) throw new NullReferenceException(elementName);
+
+            return element.ToString().StartsWith("<" + Constants.ExtendedDataKeys.ExtendedData + ">") ? element.ToString() : element.Value;
         }
 
         #endregion

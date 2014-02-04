@@ -8,9 +8,10 @@
      * @description
      * The controller for the reports list page
      */
-    controllers.ShippingController = function ($scope, $routeParams, $location, notificationsService, angularHelper, serverValidationManager, merchelloProductService) {
+    controllers.ShippingController = function ($scope, $routeParams, $location, notificationsService, angularHelper, serverValidationManager, merchelloWarehouseService, merchelloSettingsService) {
 
         $scope.sortProperty = "name";
+        $scope.availableCountries = [];
         $scope.countries = [];
         $scope.warehouses = [];
         $scope.newWarehouse = new merchello.Models.Warehouse();
@@ -21,70 +22,52 @@
             addWarehouseFlyout: false,
             deleteWarehouseFlyout: false,
             shippingMethodPanel: true,
+            addEditShippingMethodFlyout: false,
             warehouseInfoPanel: false,
             warehouseListPanel: true
         };
+        $scope.countryToAdd = new merchello.Models.Country();
 
-        $scope.countryOptions = {
-            placeholder: "United Republic of Tanzania",
-            value: "",
-            choices: [
-                {
-                    name: "United States of America"
-                },
-                {
-                    name: "United Kingdom"
-                },
-                {
-                    name: "United Republic of Tanzia"
-                }
-            ]
+
+
+        $scope.loadAllAvailableCountries = function () {
+
+            var promiseAllCountries = merchelloSettingsService.getAllCountries();
+            promiseAllCountries.then(function (allCountries) {
+
+                $scope.availableCountries = _.map(allCountries, function (country) {
+                    return new merchello.Models.Country(country)
+                });
+
+            }, function (reason) {
+
+                notificationsService.error("Available Countries Load Failed", reason.message);
+
+            });
+
         };
 
         $scope.loadWarehouses = function () {
 
-            // Note From Kyle: Mocks for data returned from Warehouse API call
-            var mockWarehouses = [
-                {
-                    pk: 0,
-                    name: "Bramble Berry",
-                    address1: "114 W. Magnolia St",
-                    address2: "Suite 504",
-                    locality: "Bellingham",
-                    region: "WA",
-                    postalCode: "98225",
-                    countryCode: "US",
-                    phone: "(360) 555-5555",
-                    email: "info@brambleberry.com",
-                    isDefault: true
-                },
-                {
-                    pk: 1,
-                    name: "Mindfly",
-                    address1: "105 W Holly St",
-                    address2: "H22",
-                    locality: "Bellingham",
-                    region: "WA",
-                    postalCode: "98225",
-                    countryCode: "US",
-                    phone: "(360) 555-6666",
-                    email: "hello@mindfly.com",
-                    isDefault: false
-                }
-            ];
-            $scope.warehouses = _.map(mockWarehouses, function (warehouseFromServer) {
-                return new merchello.Models.Warehouse(warehouseFromServer);
+            var promiseWarehouses = merchelloWarehouseService.getDefaultWarehouse();    // Only a default warehouse in v1
+            promiseWarehouses.then(function (warehouseFromServer) {
+
+                //warehouseFromServer.isDefault = true;
+                $scope.warehouses.push(new merchello.Models.Warehouse(warehouseFromServer));
+
+                $scope.changePrimaryWarehouse();
+
+            }, function (reason) {
+
+                notificationsService.error("Warehouses Load Failed", reason.message);
+
             });
-
-            $scope.changePrimaryWarehouse();
-
-            // End of Warehouse API Mocks
 
         };
 
         $scope.loadCountries = function () {
             // Note From Kyle: This will have to change once the warehouse/catalog functionality is wired in.
-            var catalogKey = $scope.primaryWarehouse.pk;
+            var catalogKey = $scope.primaryWarehouse.key;
 
             // Note From Kyle: Mocks from data returned from Shipping Country API call, where the countries have the catalogKey as the selected warehouse/catalog.
             var mockCountries = [
@@ -97,7 +80,7 @@
         $scope.changePrimaryWarehouse = function (warehouse) {
             for (i = 0; i < $scope.warehouses.length; i++) {
                 if (warehouse) {
-                    if (warehouse.pk == $scope.warehouses[i].pk) {
+                    if (warehouse.key == $scope.warehouses[i].key) {
                         $scope.warehouses[i].isDefault = true;
                         $scope.primaryWarehouse = $scope.warehouses[i];
                     } else {
@@ -109,7 +92,6 @@
                     }
                 }
             }
-            // Note From Kyle: An API call will need to be wired in here to change the primary values in the database.
         };
 
         // Functions to control the Add/Edit Country flyout
@@ -119,30 +101,18 @@
                 $scope.visible.addCountryFlyout = isOpen;
             },
             {
-                clear: function () {
-                    var self = $scope.addCountryFlyout;
-                    self.model = new merchello.Models.ShippingCountry();
-                },
                 confirm: function () {
                     var self = $scope.addCountryFlyout;
-                    if ((typeof self.model.pk) == "undefined") {
-                        var newKey = $scope.countries.length;
-                        // Note From Kyle: This key-creation logic will need to be modified to fit whatever works for the database.
-                        self.model.pk = newKey;
-                        self.model.name = $scope.countryOptions.value;
-                        self.model.catalogKey = $scope.primaryWarehouse.pk;
-                        $scope.countries.push(self.model);
-                        // Note From Kyle: An API call will need to be wired in here to add the new Country to the database.
-                    } else {
-                        // Note From Kyle: An API call will need to be wired in here to edit the existing Country in the database.
+
+                    if (!_.contains($scope.countries, $scope.countryToAdd)) {
+                        var newShipCountry = new merchello.Models.ShippingCountry();
+                        newShipCountry.catalogKey = $scope.primaryWarehouse.warehouseCatalogs[0].key;
+                        newShipCountry.fromCountry($scope.countryToAdd);
+                        $scope.countries.push(newShipCountry);
                     }
+                    
                     self.clear();
                     self.close();
-                },
-                open: function (model) {
-                    if (!model) {
-                        $scope.addCountryFlyout.clear();
-                    }
                 }
             });
 
@@ -150,7 +120,7 @@
         $scope.addWarehouseFlyout = {
             clear: function() {
                 $scope.newWarehouse = new merchello.Models.Warehouse();
-                $scope.newWarehouse.pk = "no key created";
+                $scope.newWarehouse.key = "no key created";
             },
             close: function () {
                 $scope.visible.addWarehouseFlyout = false;
@@ -165,27 +135,25 @@
                 $scope.visible.addWarehouseFlyout = true;
             },
             save: function () {
-                var idx = -1;
-                for (i = 0; i < $scope.warehouses.length; i++) {
-                    if ($scope.warehouses[i].pk == $scope.newWarehouse.pk) {
-                        idx = i;
+
+                var promiseWarehouseSave = merchelloWarehouseService.save($scope.newWarehouse);    // Only a default warehouse in v1
+                promiseWarehouseSave.then(function (result) {
+
+                    notificationsService.success("Warehouse Saved", "");
+
+                    if ($scope.newWarehouse.isDefault) {
+                        $scope.changePrimaryWarehouse($scope.newWarehouse);
                     }
-                }
-                if (idx > -1) {
-                    $scope.warehouses[idx] = $scope.newWarehouse;
-                    // Note From Kyle: An API call will need to be wired in here to edit the existing Warehouse in the database.
-                } else {
-                    var newKey = $scope.warehouses.length;
-                    // Note From Kyle: This key-creation logic will need to be modified to fit whatever works for the database.
-                    $scope.newWarehouse.pk = newKey;
-                    $scope.warehouses.push($scope.newWarehouse);
-                    // Note From Kyle: An API call will need to be wired in here to add the new Warehouse to the database.
-                }
-                if ($scope.newWarehouse.isDefault) {
-                    $scope.changePrimaryWarehouse($scope.newWarehouse);
-                }
-                $scope.addWarehouseFlyout.clear();
-                $scope.addWarehouseFlyout.close();
+                    $scope.addWarehouseFlyout.clear();
+                    $scope.addWarehouseFlyout.close();
+
+                }, function (reason) {
+
+                    notificationsService.error("Warehouses Save Failed", reason.message);
+                    $scope.addWarehouseFlyout.clear();
+                    $scope.addWarehouseFlyout.close();
+
+                });
             },
             toggle: function () {
                 $scope.visible.addWarehouseFlyout = !$scope.visible.addWarehouseFlyout;
@@ -200,7 +168,7 @@
             confirm: function () {
                 var idx = -1;
                 for (i = 0; i < $scope.warehouses.length; i++) {
-                    if ($scope.warehouses[i].pk == $scope.deleteWarehouse.pk) {
+                    if ($scope.warehouses[i].key == $scope.deleteWarehouse.key) {
                         idx = i;
                     }
                 }
@@ -229,7 +197,7 @@
             close: function () {
                 $scope.visible.shippingMethodPanel = false;
             },
-            open: function () {
+            open: function (country) {
                 $scope.visible.shippingMethodPanel = true;
             },
             toggle: function () {
@@ -237,6 +205,21 @@
             }
         };
 
+
+        // Functions to control the Shipping Methods flyout
+        $scope.addEditShippingMethodFlyout = {
+            close: function () {
+                $scope.visible.addEditShippingMethodFlyout = false;
+            },
+            open: function (country) {
+                $scope.visible.addEditShippingMethodFlyout = true;
+            },
+            toggle: function () {
+                $scope.visible.addEditShippingMethodFlyout = !$scope.visible.addEditShippingMethodFlyout;
+            }
+        };
+
+        $scope.loadAllAvailableCountries();
         $scope.loadWarehouses();
 
         $scope.loaded = true;

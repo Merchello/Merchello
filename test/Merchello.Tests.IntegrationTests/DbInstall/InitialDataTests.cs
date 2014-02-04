@@ -28,7 +28,7 @@ namespace Merchello.Tests.IntegrationTests.DbInstall
         public void Can_Populate_typeFieldData_Into_merchTypeField()
         {
             //// Arrange
-            const int expected = 17;
+            const int expected = 18;
 
             //// Act
             _creation.InitializeBaseData("merchTypeField");
@@ -93,7 +93,7 @@ namespace Merchello.Tests.IntegrationTests.DbInstall
         public void Can_Populate_GatewayProviders()
         {
             //// Arrange
-            var expected = 1;
+            var expected = 2;
 
             //// Act
             _creation.InitializeBaseData("merchGatewayProvider");
@@ -102,6 +102,22 @@ namespace Merchello.Tests.IntegrationTests.DbInstall
             //// Assert
             Assert.IsTrue(dtos.Any());
             Assert.AreEqual(expected, dtos.Count());
+        }
+
+        [Test]
+        public void Can_Populate_StoreSettings()
+        {
+            //// Arrange
+            var expected = 8;
+
+            //// Act
+            _creation.InitializeBaseData("merchStoreSetting");
+            var dtos = _database.Query<StoreSettingDto>("SELECT * FROM merchStoreSetting");
+
+            //// Assert
+            Assert.IsTrue(dtos.Any());
+            Assert.AreEqual(expected, dtos.Count());
+
         }
     }
 }

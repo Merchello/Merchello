@@ -13,24 +13,25 @@ namespace Merchello.Core.Models
     [DataContract(IsReference = true)]
     public class ItemCacheLineItem : LineItemBase, IItemCacheLineItem
     {
-        public ItemCacheLineItem(Guid containerKey, string name, string sku, decimal amount) 
-            : base(containerKey, name, sku, amount)
+
+        public ItemCacheLineItem(string name, string sku, decimal amount) 
+            : base(name, sku, amount)
         {}
 
-        public ItemCacheLineItem(Guid containerKey, string name, string sku, int quantity, decimal amount) 
-            : base(containerKey, name, sku, quantity, amount)
+        public ItemCacheLineItem(string name, string sku, int quantity, decimal amount) 
+            : base(name, sku, quantity, amount)
         {}
 
-        public ItemCacheLineItem(Guid containerKey, LineItemType lineItemType, string name, string sku, int quantity, decimal amount) 
-            : base(containerKey, lineItemType, name, sku, quantity, amount)
+        public ItemCacheLineItem(LineItemType lineItemType, string name, string sku, int quantity, decimal amount) 
+            : base(lineItemType, name, sku, quantity, amount)
         {}
 
-        public ItemCacheLineItem(Guid containerKey, LineItemType lineItemType, string name, string sku, int quantity, decimal amount, ExtendedDataCollection extendedData) 
-            : base(containerKey, lineItemType, name, sku, quantity, amount, extendedData)
+        public ItemCacheLineItem(LineItemType lineItemType, string name, string sku, int quantity, decimal amount, ExtendedDataCollection extendedData) 
+            : base(lineItemType, name, sku, quantity, amount, extendedData)
         {}
 
-        public ItemCacheLineItem(Guid containerKey, Guid lineItemTfKey, string name, string sku, int quantity, decimal amount, ExtendedDataCollection extendedData) 
-            : base(containerKey, lineItemTfKey, name, sku, quantity, amount, extendedData)
+        public ItemCacheLineItem(Guid lineItemTfKey, string name, string sku, int quantity, decimal amount, ExtendedDataCollection extendedData) 
+            : base(lineItemTfKey, name, sku, quantity, amount, extendedData)
         {}
     }
 }

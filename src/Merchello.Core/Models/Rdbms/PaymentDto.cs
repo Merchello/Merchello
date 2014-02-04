@@ -17,7 +17,8 @@ namespace Merchello.Core.Models.Rdbms
         [Column("customerKey")]
         [ForeignKey(typeof(CustomerDto), Name = "FK_merchPayment_merchCustomer", Column = "pk")]
         [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchPaymentCustomer")]
-        public Guid CustomerKey { get; set; }
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public Guid? CustomerKey { get; set; }
         
         [Column("providerKey")]
         public Guid ProviderKey { get; set; }

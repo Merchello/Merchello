@@ -11,13 +11,15 @@ namespace Merchello.Core.Persistence.Factories
             var shipment = new Shipment()
             {
                 Key = dto.Key,
+                FromOrganization = dto.FromOrganization,
                 FromName = dto.FromName,
                 FromAddress1 = dto.FromAddress1,
                 FromAddress2 = dto.FromAddress2,
                 FromLocality = dto.FromLocality,
                 FromRegion = dto.FromRegion,
                 FromPostalCode = dto.FromPostalCode,
-                FromCountryCode = dto.FromCountryCode,
+                FromCountryCode = dto.FromCountryCode,  
+                ToOrganization = dto.ToOrganization,
                 ToName = dto.ToName,
                 ToAddress1 = dto.ToAddress1,
                 ToAddress2 = dto.ToAddress2,
@@ -41,6 +43,7 @@ namespace Merchello.Core.Persistence.Factories
             var dto = new ShipmentDto()
             {
                 Key = entity.Key,
+                FromOrganization = entity.FromOrganization,
                 FromName = entity.FromName,
                 FromAddress1 = entity.FromAddress1,
                 FromAddress2 = entity.FromAddress2,
@@ -48,6 +51,7 @@ namespace Merchello.Core.Persistence.Factories
                 FromRegion = entity.FromRegion,
                 FromPostalCode = entity.FromPostalCode,
                 FromCountryCode = entity.FromCountryCode,
+                ToOrganization = entity.ToOrganization,
                 ToName = entity.ToName,
                 ToAddress1 = entity.ToAddress1,
                 ToAddress2 = entity.ToAddress2,

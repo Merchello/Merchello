@@ -15,6 +15,7 @@ namespace Merchello.Core.Persistence.Factories
                     FirstName = dto.FirstName,
                     LastName = dto.LastName,
                     Email = dto.Email,
+                    ExtendedData = new ExtendedDataCollection(dto.ExtendedData),
                     CreateDate = dto.CreateDate,
                     UpdateDate = dto.UpdateDate
                 };
@@ -37,6 +38,7 @@ namespace Merchello.Core.Persistence.Factories
                     TotalPayments = entity.TotalPayments,
                     LastPaymentDate = entity.LastPaymentDate,
                     EntityKey = entity.EntityKey,
+                    ExtendedData = entity.ExtendedData.SerializeToXml(),
                     UpdateDate = entity.UpdateDate,
                     CreateDate = entity.CreateDate
                 };

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Merchello.Core.Models.Interfaces;
+using Merchello.Core.Models;
 
 namespace Merchello.Core.Gateways.Shipping.RateTable
 {

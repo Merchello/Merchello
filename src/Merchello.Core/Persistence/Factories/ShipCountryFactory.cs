@@ -7,16 +7,16 @@ namespace Merchello.Core.Persistence.Factories
 {
     internal class ShipCountryFactory : IEntityFactory<IShipCountry, ShipCountryDto>
     {
-        private readonly ISettingsService _settingsService;
+        private readonly IStoreSettingService _storeSettingService;
 
-        public ShipCountryFactory(ISettingsService settingsService)
+        public ShipCountryFactory(IStoreSettingService storeSettingService)
         {
-            _settingsService = settingsService;
+            _storeSettingService = storeSettingService;
         }
 
         public IShipCountry BuildEntity(ShipCountryDto dto)
         {
-            var country = _settingsService.GetCountryByCode(dto.CountryCode);
+            var country = _storeSettingService.GetCountryByCode(dto.CountryCode);
 
             var shipCountry = new ShipCountry(dto.CatalogKey, country)
             {

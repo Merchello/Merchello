@@ -1,10 +1,6 @@
-﻿using System;
-using Lucene.Net.Documents;
-using Merchello.Core;
-using Merchello.Core.ObjectResolution;
+﻿using Merchello.Core;
 using Merchello.Web;
 using NUnit.Framework;
-using Umbraco.Core;
 using CoreBootManager = Merchello.Core.CoreBootManager;
 
 
@@ -26,7 +22,6 @@ namespace Merchello.Tests.UnitTests.Contexts
             _completedEventCalled = false;
 
             MerchelloContext.Current = null;
-            Resolution.Reset();
 
             BootManagerBase.MerchelloInit += delegate {
                 _initEventCalled = true;
@@ -78,6 +73,19 @@ namespace Merchello.Tests.UnitTests.Contexts
             Assert.IsTrue(_startingEventCalled);
             Assert.IsTrue(_completedEventCalled);
         }
+
+        ///// <summary>
+        ///// Test verifies that the Merchello configuration returns true
+        ///// </summary>
+        //[Test]
+        //public void MerchelloContext_Returns_IsConfigured_True()
+        //{
+        //    MerchelloBootstrapper.Init(new WebBootManager(true) { IsUnitTest = true });
+
+        //    var context = MerchelloContext.Current;
+
+        //    Assert.IsTrue(context.IsConfigured);
+        //}
 
     }
 }

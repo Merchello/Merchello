@@ -1,6 +1,4 @@
-﻿using System;
-using System.Web.Helpers;
-using Merchello.Core.Models;
+﻿using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Models.Rdbms;
 using Newtonsoft.Json;
@@ -38,6 +36,7 @@ namespace Merchello.Core.Persistence.Factories
 
         public ShipMethodDto BuildDto(IShipMethod entity)
         {
+            var provinceData = JsonConvert.SerializeObject(entity.Provinces);
             var dto = new ShipMethodDto()
             {
                 Key = entity.Key,
@@ -47,7 +46,7 @@ namespace Merchello.Core.Persistence.Factories
                 Surcharge = entity.Surcharge,
                 ServiceCode = entity.ServiceCode,
                 Taxable = entity.Taxable,
-                ProvinceData = JsonConvert.SerializeObject(entity.Provinces),
+                ProvinceData = provinceData,
                 UpdateDate = entity.UpdateDate,
                 CreateDate = entity.CreateDate                
             };

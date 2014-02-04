@@ -89,9 +89,9 @@ namespace Merchello.Core.Models
         /// </summary>
         /// <param name="product"></param>
         /// <param name="catalog"><see cref="IWarehouseCatalog"/></param>
-        internal static void AddToWarehouseCatalog(this IProduct product, IWarehouseCatalog catalog)
+        internal static void AddToCatalogInventory(this IProduct product, IWarehouseCatalog catalog)
         {
-            ((Product)product).MasterVariant.AddToWarehouseCatalog(catalog);
+            ((Product)product).MasterVariant.AddToCatalogInventory(catalog);
         }
 
        
@@ -101,9 +101,9 @@ namespace Merchello.Core.Models
         /// </summary>
         /// <param name="productVariant"></param>
         /// <param name="catalog"><see cref="IWarehouseCatalog"/></param>
-        internal static void AddToWarehouseCatalog(this IProductVariant productVariant, IWarehouseCatalog catalog)
+        internal static void AddToCatalogInventory(this IProductVariant productVariant, IWarehouseCatalog catalog)
         {
-            ((WarehouseInventoryCollection)productVariant.Warehouses).Add(new WarehouseInventory(catalog, productVariant.Key));
+            ((CatalogInventoryCollection)productVariant.CatalogInventories).Add(new CatalogInventory(catalog.Key, productVariant.Key));
         }
 
 
@@ -182,7 +182,7 @@ namespace Merchello.Core.Models
                     writer.WriteAttributeString("downloadMediaId", productVariant.DownloadMediaId.ToString());
                     writer.WriteAttributeString("totalInventoryCount", productVariant.TotalInventoryCount.ToString());
                     writer.WriteAttributeString("attributes", GetAttributesJson(productVariant));
-                    writer.WriteAttributeString("warehouses", GetWarehousesJson(productVariant));
+                    writer.WriteAttributeString("catalogInventories", GetCatalogInventoriesJson(productVariant));
 
                     if(productOptions != null) writer.WriteAttributeString("options", GetProductOptionsJson(productOptions));
 
@@ -236,25 +236,24 @@ namespace Merchello.Core.Models
             return json;
         }
 
-        private static string GetWarehousesJson(IProductVariant productVariant)
+        private static string GetCatalogInventoriesJson(IProductVariant productVariant)
         {
             var json = "[{0}]";
-            var warehouses = "";
+            var catalogInventories = "";
 
-            foreach (var wh in productVariant.Warehouses)
+            foreach (var ch in productVariant.CatalogInventories)
             {
-                if (warehouses.Length > 0) warehouses += ",";
-                warehouses += JsonConvert.SerializeObject(
+                if (catalogInventories.Length > 0) catalogInventories += ",";
+                catalogInventories += JsonConvert.SerializeObject(
                 new
-                {   catalogKey = ((WarehouseInventory)wh).CatalogKey,
-                    warehouseKey = wh.WarehouseKey,
-                    productVariantKey = wh.ProductVariantKey,
-                    count = wh.Count,
-                    lowCount = wh.LowCount
+                {   catalogKey = ch.CatalogKey,
+                    productVariantKey = ch.ProductVariantKey,
+                    count = ch.Count,
+                    lowCount = ch.LowCount
                 },
                 Formatting.None);
             }
-            json = string.Format(json, warehouses);
+            json = string.Format(json, catalogInventories);
             return json;
         }
 

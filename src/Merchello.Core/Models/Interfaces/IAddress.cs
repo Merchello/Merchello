@@ -1,14 +1,12 @@
-﻿using System;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
-namespace Merchello.Core.Models.Interfaces
+namespace Merchello.Core.Models
 {
     /// <summary>
     /// Defines a standard address
     /// </summary>
     public interface IAddress
     {
-
         /// <summary>
         /// The name for the address
         /// </summary>
@@ -56,5 +54,28 @@ namespace Merchello.Core.Models.Interfaces
         /// </summary>
         [DataMember]
         string Phone { get; set; }
+
+        /// <summary>
+        /// The email address associated with the address
+        /// </summary>
+        [DataMember]
+        string Email { get; set; }
+
+        /// <summary>
+        /// The organization or company name associated with the address
+        /// </summary>
+        [DataMember]
+        string Organization { get; set; }
+
+        /// <summary>
+        /// True/false indicating whether or not this record represents commercial or business address
+        /// </summary>
+        /// <remarks>
+        /// Used by certain shipping providers in shipping rate quotations
+        /// </remarks>
+        [DataMember]
+        bool IsCommercial { get; set; }
+
+
     }
 }

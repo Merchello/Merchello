@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Merchello.Core.Gateways.Shipping.RateTable;
-using Merchello.Core.Models.Interfaces;
+using Merchello.Core.Models;
 using NUnit.Framework;
 
 namespace Merchello.Tests.UnitTests.Shipping
@@ -11,12 +11,13 @@ namespace Merchello.Tests.UnitTests.Shipping
     public class ShipRateTableTests
     {
 
-        private IShipRateTable _shipRateTable;
+        private ShipRateTable _shipRateTable;
 
         [SetUp]
         public void Init()
         {
             _shipRateTable = new ShipRateTable(Guid.NewGuid(), new List<IShipRateTier>());
+            _shipRateTable.IsTest = true;
         }
 
         /// <summary>
@@ -90,6 +91,25 @@ namespace Merchello.Tests.UnitTests.Shipping
             //// Assert
             Assert.AreEqual(5, _shipRateTable.Rows.Count());
             Assert.IsFalse(_shipRateTable.Rows.Any(x => x.RangeLow == 4));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [Test]
+        public void Can_Verify_That_A_Rate_Tier_Can_Be_Deleted()
+        {
+            //// Arrange
+            _shipRateTable.AddRow(0, 5, 1);
+            _shipRateTable.AddRow(5, 10, 1);
+            _shipRateTable.AddRow(10, 20, 1);
+            _shipRateTable.AddRow(20, 25, 1);
+
+            //// Act
+            _shipRateTable.DeleteRow(_shipRateTable.Rows.First(x => x.RangeLow == 5));
+    
+            //// Assert
+            Assert.AreEqual(3, _shipRateTable.Rows.Count());
         }
 
     }

@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
+using Merchello.Core.Models.EntityBase;
 
 namespace Merchello.Core.Models
 {
@@ -20,22 +21,22 @@ namespace Merchello.Core.Models
         private int _examineId = 1;
 
         internal ProductVariant(string name, string sku, decimal price)
-            : this(Guid.Empty, new ProductAttributeCollection(), new WarehouseInventoryCollection(), false, name, sku, price)
+            : this(Guid.Empty, new ProductAttributeCollection(), new CatalogInventoryCollection(), false, name, sku, price)
         { }
 
         internal ProductVariant(Guid productKey, ProductAttributeCollection attributes, string name, string sku, decimal price)
-            : this(productKey, attributes, new WarehouseInventoryCollection(), false, name, sku, price)
+            : this(productKey, attributes, new CatalogInventoryCollection(), false, name, sku, price)
         {}
 
-        internal ProductVariant(Guid productKey, ProductAttributeCollection attributes, WarehouseInventoryCollection warehouseInventory, string name, string sku, decimal price)
-            : this(productKey, attributes, warehouseInventory, false, name, sku, price)
+        internal ProductVariant(Guid productKey, ProductAttributeCollection attributes, CatalogInventoryCollection catalogInventoryCollection, string name, string sku, decimal price)
+            : this(productKey, attributes, catalogInventoryCollection, false, name, sku, price)
         { }
 
-        internal ProductVariant(Guid productKey, ProductAttributeCollection attributes, WarehouseInventoryCollection warehouseInventory, bool master, string name, string sku, decimal price)
-            : base(name, sku, price, warehouseInventory)
+        internal ProductVariant(Guid productKey, ProductAttributeCollection attributes, CatalogInventoryCollection catalogInventoryCollection, bool master, string name, string sku, decimal price)
+            : base(name, sku, price, catalogInventoryCollection)
         {
             Mandate.ParameterNotNull(attributes, "attributes");
-            Mandate.ParameterNotNull(warehouseInventory, "warehouseInventory");
+            Mandate.ParameterNotNull(catalogInventoryCollection, "warehouseInventory");
             _productKey = productKey;
             _attibutes = attributes;
             _master = master;
@@ -73,7 +74,7 @@ namespace Merchello.Core.Models
         /// <summary>
         /// The collection of attributes that makes this variant different from other variants of the same product
         /// </summary>
-        [DataMember]
+        [IgnoreDataMember]
         public IEnumerable<IProductAttribute> Attributes 
         {
             get { return _attibutes; }
@@ -118,9 +119,10 @@ namespace Merchello.Core.Models
         /// Returns the total (sum) of inventory "counts" accross all associated warehouses
         /// </summary>
         /// <returns></returns>
+        [IgnoreDataMember]
         public int TotalInventoryCount
         {
-            get { return Warehouses.Sum(x => x.Count); }
+            get { return CatalogInventories.Sum(x => x.Count); }
         }
     }
 }

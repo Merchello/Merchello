@@ -7,10 +7,19 @@ namespace Merchello.Core.Persistence.Factories
     {
 
         private readonly ProductVariantFactory _productVariantFactory;
+        private readonly ProductOptionCollection _productOptionCollection;
+        private readonly ProductVariantCollection _productVariantCollection;
 
         public ProductFactory()
+            : this(new ProductAttributeCollection(), new CatalogInventoryCollection(), new ProductOptionCollection(), new ProductVariantCollection())
+        {}
+
+        public ProductFactory(ProductAttributeCollection productAttributes,
+            CatalogInventoryCollection catalogInventories, ProductOptionCollection productOptions, ProductVariantCollection productVariantCollection)
         {
-            _productVariantFactory = new ProductVariantFactory();
+            _productVariantFactory = new ProductVariantFactory(productAttributes, catalogInventories);
+            _productOptionCollection = productOptions;
+            _productVariantCollection = productVariantCollection;
         }
 
         public IProduct BuildEntity(ProductDto dto)
@@ -19,6 +28,8 @@ namespace Merchello.Core.Persistence.Factories
             var product = new Product(variant)
             {
                 Key = dto.Key,
+                ProductOptions = _productOptionCollection,
+                ProductVariants = _productVariantCollection,
                 UpdateDate = dto.UpdateDate,
                 CreateDate = dto.CreateDate
             };

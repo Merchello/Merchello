@@ -6,6 +6,7 @@ using Merchello.Core.Services;
 using Merchello.Tests.IntegrationTests.Services;
 using Merchello.Web;
 using Merchello.Web.Models;
+using Merchello.Web.Workflow;
 using NUnit.Framework;
 using Umbraco.Core;
 

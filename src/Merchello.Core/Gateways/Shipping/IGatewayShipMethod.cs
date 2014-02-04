@@ -1,4 +1,5 @@
 ﻿using Merchello.Core.Models;
+using Umbraco.Core;
 
 namespace Merchello.Core.Gateways.Shipping
 {
@@ -19,6 +20,7 @@ namespace Merchello.Core.Gateways.Shipping
         /// </summary>
         /// <param name="shipment"></param>
         /// <returns></returns>
-        decimal QuoteShipment(IShipment shipment);
+        Attempt<IShipmentRateQuote> QuoteShipment(IShipment shipment);
+
     }
 }

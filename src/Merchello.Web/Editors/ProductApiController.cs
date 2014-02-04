@@ -20,6 +20,7 @@ namespace Merchello.Web.Editors
     public class ProductApiController : MerchelloApiController
     {
         private readonly IProductService _productService;
+        private readonly IWarehouseService _warehouseService;
 
         /// <summary>
         /// Constructor
@@ -37,6 +38,7 @@ namespace Merchello.Web.Editors
             : base(merchelloContext)
         {
             _productService = MerchelloContext.Services.ProductService;
+            _warehouseService = MerchelloContext.Services.WarehouseService;
         }
 
         /// <summary>
@@ -46,6 +48,7 @@ namespace Merchello.Web.Editors
             : base(merchelloContext, umbracoContext)
         {
             _productService = MerchelloContext.Services.ProductService;
+            _warehouseService = MerchelloContext.Services.WarehouseService;
         }
 
         /// <summary>
@@ -174,6 +177,49 @@ namespace Merchello.Web.Editors
             try
             {
                 newProduct = _productService.CreateProductWithKey(name, sku, price) as Product;
+
+                if (!newProduct.Download)
+                {
+                    newProduct.AddToCatalogInventory(_warehouseService.GetDefaultWarehouse().DefaultCatalog());
+                    newProduct.CatalogInventories.First().Count = 10;
+                    _productService.Save(newProduct);
+
+                    //newProduct = _productService.GetByKey(newProduct.Key) as Product;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);
+            }
+
+            return newProduct.ToProductDisplay();
+        }
+
+        /// <summary>
+        /// Creates a product from ProductDisplay
+        ///
+        /// POST /umbraco/Merchello/ProductApi/NewProduct
+        /// </summary>
+        /// <param name="product">POSTed JSON product model</param>
+        [AcceptVerbs("GET", "POST")]
+        public ProductDisplay NewProductFromProduct(ProductDisplay product)
+        {
+            IProduct newProduct = null;
+
+            try
+            {
+                newProduct = _productService.CreateProduct(product.Name, product.Sku, product.Price);
+                newProduct = product.ToProduct(newProduct);
+                _productService.Save(newProduct);
+
+                if (!newProduct.Download)
+                {
+                    newProduct.AddToCatalogInventory(_warehouseService.GetDefaultWarehouse().DefaultCatalog());
+                    newProduct.CatalogInventories.First().Count = 10;
+                    _productService.Save(newProduct);
+
+                    //newProduct = _productService.GetByKey(newProduct.Key) as Product;
+                }
             }
             catch (Exception ex)
             {
@@ -189,7 +235,7 @@ namespace Merchello.Web.Editors
         /// PUT /umbraco/Merchello/ProductApi/PutProduct
         /// </summary>
         /// <param name="product">ProductDisplay object serialized from WebApi</param>
-        [AcceptVerbs("PUT")]
+        [AcceptVerbs("POST", "PUT")]
         public HttpResponseMessage PutProduct(ProductDisplay product)
         {
             var response = Request.CreateResponse(HttpStatusCode.OK);

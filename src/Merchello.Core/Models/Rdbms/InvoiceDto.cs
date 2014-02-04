@@ -21,7 +21,7 @@ namespace Merchello.Core.Models.Rdbms
 
         [Column("invoiceNumber")]
         [IndexAttribute(IndexTypes.UniqueNonClustered, Name = "IX_merchInvoiceNumber")]
-        public string InvoiceNumber { get; set; }
+        public int InvoiceNumber { get; set; }
 
         [Column("invoiceDate")]
         [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchInvoiceDate")]

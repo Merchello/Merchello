@@ -51,168 +51,32 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutoMapper">
-      <HintPath>..\packages\AutoMapper.3.0.0\lib\net40\AutoMapper.dll</HintPath>
-    </Reference>
-    <Reference Include="AutoMapper.Net4">
-      <HintPath>..\packages\AutoMapper.3.0.0\lib\net40\AutoMapper.Net4.dll</HintPath>
-    </Reference>
-    <Reference Include="businesslogic">
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\businesslogic.dll</HintPath>
-    </Reference>
-    <Reference Include="ClientDependency.Core">
-      <HintPath>..\packages\ClientDependency.1.7.0.4\lib\ClientDependency.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="ClientDependency.Core.Mvc">
-      <HintPath>..\packages\ClientDependency-Mvc.1.7.0.4\lib\ClientDependency.Core.Mvc.dll</HintPath>
-    </Reference>
-    <Reference Include="cms">
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\cms.dll</HintPath>
-    </Reference>
-    <Reference Include="controls">
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\controls.dll</HintPath>
-    </Reference>
-    <Reference Include="CookComputing.XmlRpcV2">
-      <HintPath>..\packages\xmlrpcnet.2.5.0\lib\net20\CookComputing.XmlRpcV2.dll</HintPath>
-    </Reference>
-    <Reference Include="Examine">
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\Examine.dll</HintPath>
-    </Reference>
-    <Reference Include="HtmlAgilityPack">
-      <HintPath>..\packages\HtmlAgilityPack.1.4.6\lib\Net45\HtmlAgilityPack.dll</HintPath>
-    </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
-    </Reference>
-    <Reference Include="interfaces, Version=1.0.5095.27250, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\interfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="Lucene.Net">
-      <HintPath>..\packages\Lucene.Net.2.9.4.1\lib\net40\Lucene.Net.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.ApplicationBlocks.Data">
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\Microsoft.ApplicationBlocks.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Web.Helpers">
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\Microsoft.Web.Helpers.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Web.Mvc.FixedDisplayModes">
-      <HintPath>..\packages\Microsoft.AspNet.Mvc.FixedDisplayModes.1.0.1\lib\net40\Microsoft.Web.Mvc.FixedDisplayModes.dll</HintPath>
-    </Reference>
-    <Reference Include="MiniProfiler">
-      <HintPath>..\packages\MiniProfiler.2.1.0\lib\net40\MiniProfiler.dll</HintPath>
-    </Reference>
-    <Reference Include="MySql.Data, Version=6.6.5.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MySql.Data.6.6.5\lib\net40\MySql.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="SQLCE4Umbraco">
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\SQLCE4Umbraco.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\System.Data.SqlServerCe.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Data.SqlServerCe.Entity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\System.Data.SqlServerCe.Entity.dll</HintPath>
-    </Reference>
     <Reference Include="System.Net.Http" />
-    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.4.0.30506.0\lib\net40\System.Net.Http.Formatting.dll</HintPath>
-    </Reference>
     <Reference Include="System.Net.Http.WebRequest" />
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.Helpers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.4.0.30506.0\lib\net40\System.Web.Http.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Http.WebHost, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.4.0.30506.0\lib\net40\System.Web.Http.WebHost.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\Microsoft.AspNet.Mvc.4.0.30506.0\lib\net40\System.Web.Mvc.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\Microsoft.AspNet.Razor.2.0.30506.0\lib\net40\System.Web.Razor.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.WebPages.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.WebPages.Deployment, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.WebPages.Deployment.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.WebPages.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="TidyNet">
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\TidyNet.dll</HintPath>
-    </Reference>
-    <Reference Include="umbraco">
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\umbraco.dll</HintPath>
-    </Reference>
-    <Reference Include="Umbraco.Core, Version=1.0.5095.27251, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Umbraco.Core, Version=1.0.5133.26607, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\Umbraco.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="umbraco.DataLayer">
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\umbraco.DataLayer.dll</HintPath>
-    </Reference>
-    <Reference Include="umbraco.editorControls">
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\umbraco.editorControls.dll</HintPath>
-    </Reference>
-    <Reference Include="umbraco.MacroEngines">
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\umbraco.MacroEngines.dll</HintPath>
-    </Reference>
-    <Reference Include="umbraco.providers">
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\umbraco.providers.dll</HintPath>
-    </Reference>
-    <Reference Include="Umbraco.Web.UI">
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\Umbraco.Web.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="umbraco.XmlSerializers">
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\umbraco.XmlSerializers.dll</HintPath>
-    </Reference>
-    <Reference Include="UmbracoExamine">
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\UmbracoExamine.dll</HintPath>
-    </Reference>
-    <Reference Include="UrlRewritingNet.UrlRewriter">
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\UrlRewritingNet.UrlRewriter.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.0.3\lib\Umbraco.Core.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActivatorHelper.cs" />
+    <Compile Include="Checkout\CheckoutBase.cs" />
+    <Compile Include="Checkout\ICheckoutBase.cs" />
+    <Compile Include="Builders\IBuilder.cs" />
     <Compile Include="Cache\CacheKeys.cs" />
     <Compile Include="CloneHelper.cs" />
     <Compile Include="Configuration\Outline\ProvinceConfigurationCollection.cs" />
@@ -221,22 +85,42 @@
     <Compile Include="Configuration\Outline\RegionElement.cs" />
     <Compile Include="Configuration\Outline\SettingsCollection.cs" />
     <Compile Include="Configuration\Outline\SettingsElement.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="Constants-Keys.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants-ExtendedDataKeys.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
     <Compile Include="Gateways\GatewayProviderBase.cs" />
     <Compile Include="Gateways\GatewayContext.cs" />
     <Compile Include="Gateways\GatewayProviderFactory.cs" />
     <Compile Include="Gateways\IGateway.cs" />
     <Compile Include="Gateways\IGatewayContext.cs" />
     <Compile Include="Gateways\IGatewayProviderFactory.cs" />
+    <Compile Include="Gateways\Payment\IPaymentGatewayProvider.cs" />
     <Compile Include="Gateways\Shipping\GatewayShipMethodBase.cs" />
     <Compile Include="Gateways\Shipping\IGatewayShipMethod.cs" />
+    <Compile Include="Gateways\Shipping\IShipmentRateQuote.cs" />
     <Compile Include="Gateways\Shipping\IShippingGatewayProvider.cs" />
     <Compile Include="Gateways\Shipping\RateTable\IRateTableShipMethod.cs" />
     <Compile Include="Gateways\Shipping\RateTable\IShipRateTable.cs" />
+    <Compile Include="Gateways\Shipping\RateTable\RateTableShipmentLineItemVisitor.cs" />
     <Compile Include="Gateways\Shipping\RateTable\RateTableShippingGatewayProvider.cs" />
     <Compile Include="Gateways\Shipping\RateTable\RateTableShipMethod.cs" />
-    <Compile Include="Gateways\Shipping\ShippingGatewayProvider.cs" />
+    <Compile Include="Gateways\Shipping\ShimpmentWarehouseCatalogValidationVisitor.cs" />
+    <Compile Include="Gateways\Shipping\ShipmentRateQuote.cs" />
+    <Compile Include="Gateways\Shipping\ShippingGatewayProviderBase.cs" />
     <Compile Include="Gateways\Shipping\RateTable\ShipRateTable.cs" />
+    <Compile Include="Gateways\Taxation\CountryTaxRate\CountryTaxRateTaxationGatewayProvider.cs" />
+    <Compile Include="Gateways\Taxation\CountryTaxRate\ICountryTaxRateTaxationGatewayProvider.cs" />
+    <Compile Include="Gateways\Taxation\IInvoiceTaxResult.cs" />
+    <Compile Include="Gateways\Taxation\ITaxationGatewayProvider.cs" />
+    <Compile Include="Gateways\Taxation\TaxationGatewayProviderBase.cs" />
     <Compile Include="Models\Address.cs" />
+    <Compile Include="Models\AnonymousCustomerBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Models\AppliedPayment.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -256,6 +140,7 @@
     <Compile Include="Models\ExtendedDataExtensions.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\GatewayProviderCollection.cs" />
     <Compile Include="Models\GatewayResource.cs" />
     <Compile Include="Models\GatewayProvider.cs" />
     <Compile Include="Models\Interfaces\IGatewayResource.cs" />
@@ -333,15 +218,18 @@
     </Compile>
     <Compile Include="Models\Interfaces\IShipProvince.cs" />
     <Compile Include="Models\Interfaces\IShipRateTier.cs" />
+    <Compile Include="Models\Interfaces\IStoreSetting.cs" />
+    <Compile Include="Models\Interfaces\ICountryTaxRate.cs" />
     <Compile Include="Models\Interfaces\ITaxProvince.cs" />
     <Compile Include="Models\Interfaces\IWarehouse.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\Interfaces\IWarehouseCatalog.cs" />
     <Compile Include="Models\Interfaces\IShipCountry.cs" />
-    <Compile Include="Models\Interfaces\IWarehouseInventory.cs">
+    <Compile Include="Models\Interfaces\ICatalogInventory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\Invoice.cs" />
     <Compile Include="Models\InvoiceLineItem.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -402,21 +290,26 @@
     </Compile>
     <Compile Include="Models\ProvinceCollection.cs" />
     <Compile Include="Models\CountryProvinceExtensions.cs" />
+    <Compile Include="Models\Rdbms\ShipCountry2GatewayProviderDto.cs" />
     <Compile Include="Models\Rdbms\ShipCountryDto.cs" />
     <Compile Include="Models\Rdbms\CatalogInventoryDto.cs" />
     <Compile Include="Models\Rdbms\ProductVariantIndexDto.cs" />
     <Compile Include="Models\Rdbms\ShipRateTierDto.cs" />
+    <Compile Include="Models\Rdbms\StoreSettingDto.cs" />
     <Compile Include="Models\Rdbms\WarehouseCatalogDto.cs" />
-    <Compile Include="Models\Rdbms\TaxRegionDto.cs" />
+    <Compile Include="Models\Rdbms\CountryTaxRateDto.cs" />
     <Compile Include="Models\CountryBase.cs" />
     <Compile Include="Models\Shipment.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\ShipmentExtensions.cs" />
     <Compile Include="Models\ShipMethod.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\ShipProvince.cs" />
     <Compile Include="Models\ShipRateTier.cs" />
+    <Compile Include="Models\StoreSetting.cs" />
+    <Compile Include="Models\CountryTaxRate.cs" />
     <Compile Include="Models\TaxProvince.cs" />
     <Compile Include="Models\TypeFields\AppliedPaymentTypeField.cs">
       <SubType>Code</SubType>
@@ -430,20 +323,21 @@
     <Compile Include="Models\ShipCountry.cs" />
     <Compile Include="Models\WarehouseCatalog.cs" />
     <Compile Include="Models\WarehouseExtensions.cs" />
-    <Compile Include="Models\WarehouseInventory.cs">
+    <Compile Include="Models\CatalogInventory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\WarehouseInventoryCollection.cs">
+    <Compile Include="Models\CatalogInventoryCollection.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Persistence\DefaultDatabaseFactory.cs" />
     <Compile Include="Persistence\Factories\AppliedPaymentFactory.cs" />
+    <Compile Include="Persistence\Factories\CountryTaxRateFactory.cs" />
     <Compile Include="Persistence\Factories\CustomerAddressFactory.cs" />
     <Compile Include="Persistence\Factories\CustomerFactory.cs" />
-    <Compile Include="Persistence\Factories\ExtendedDataFactory.cs" />
     <Compile Include="Persistence\Factories\GatewayProviderFactory.cs" />
     <Compile Include="Persistence\Factories\IEntityFactory.cs" />
-    <Compile Include="Persistence\Factories\InventoryFactory.cs" />
+    <Compile Include="Persistence\Factories\CatalogInventoryFactory.cs" />
+    <Compile Include="Persistence\Factories\InvoiceFactory.cs" />
     <Compile Include="Persistence\Factories\InvoiceStatusFactory.cs" />
     <Compile Include="Persistence\Factories\ItemCacheFactory.cs" />
     <Compile Include="Persistence\Factories\LineItemFactory.cs" />
@@ -456,6 +350,7 @@
     <Compile Include="Persistence\Factories\ShipmentFactory.cs" />
     <Compile Include="Persistence\Factories\ShipMethodFactory.cs" />
     <Compile Include="Persistence\Factories\ShipRateTierFactory.cs" />
+    <Compile Include="Persistence\Factories\StoreSettingFactory.cs" />
     <Compile Include="Persistence\Factories\WarehouseCatalogFactory.cs" />
     <Compile Include="Persistence\Factories\WarehouseFactory.cs" />
     <Compile Include="Persistence\Mappers\AppliedPaymentMapper.cs">
@@ -465,6 +360,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Persistence\Mappers\CatalogInventoryMapper.cs" />
+    <Compile Include="Persistence\Mappers\CountryTaxRateMapper.cs" />
     <Compile Include="Persistence\Mappers\CustomerAddressMapper.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -478,6 +374,7 @@
     <Compile Include="Persistence\Mappers\InvoiceLineItemMapper.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Persistence\Mappers\InvoiceMapper.cs" />
     <Compile Include="Persistence\Mappers\InvoiceStatusMapper.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -516,12 +413,15 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Persistence\Mappers\ShipRateTierMapper.cs" />
+    <Compile Include="Persistence\Mappers\StoreSettingMapper.cs" />
     <Compile Include="Persistence\Mappers\WarehouseMapper.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Persistence\Repositories\CountryTaxRateRepository.cs" />
     <Compile Include="Persistence\Repositories\CustomerAddressRepository.cs" />
     <Compile Include="Persistence\Repositories\CustomerRepository.cs" />
     <Compile Include="Persistence\Repositories\GatewayProviderRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\ICountryTaxRateRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\ICustomerAddressRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\ICustomerRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IGatewayProviderRepository.cs" />
@@ -535,7 +435,9 @@
     <Compile Include="Persistence\Repositories\Interfaces\IShipmentRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IShipMethodRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IShipRateTierRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IStoreSettingRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IWarehouseRepository.cs" />
+    <Compile Include="Persistence\Repositories\InvoiceRepository.cs" />
     <Compile Include="Persistence\Repositories\ItemCacheRepository.cs" />
     <Compile Include="Persistence\Repositories\LineItemRepository.cs" />
     <Compile Include="Persistence\Repositories\PaymentRepository.cs" />
@@ -545,6 +447,7 @@
     <Compile Include="Persistence\Repositories\ShipmentRepository.cs" />
     <Compile Include="Persistence\Repositories\ShipMethodRepository.cs" />
     <Compile Include="Persistence\Repositories\ShipRateTierRepository.cs" />
+    <Compile Include="Persistence\Repositories\StoreSettingRepository.cs" />
     <Compile Include="Persistence\Repositories\WarehouseRepository.cs" />
     <Compile Include="Persistence\TransactionType.cs" />
     <Compile Include="Persistence\UnitOfWork\IDatabaseUnitOfWork.cs" />
@@ -570,7 +473,6 @@
     <Compile Include="IBootManager.cs" />
     <Compile Include="MerchelloContext.cs" />
     <Compile Include="Models\AnonymousCustomer.cs" />
-    <Compile Include="Models\AnonymousCustomerBase.cs" />
     <Compile Include="Models\Interfaces\IAnonymousCustomer.cs" />
     <Compile Include="Models\Rdbms\AppliedPaymentDto.cs" />
     <Compile Include="Models\Rdbms\OrderItemDto.cs" />
@@ -586,7 +488,7 @@
     <Compile Include="Models\TypeFields\IGatewayProviderTypeField.cs" />
     <Compile Include="Models\TypeFields\GatewayProviderTypeField.cs" />
     <Compile Include="Models\TypeFields\IAddressTypeField.cs" />
-    <Compile Include="Models\TypeFields\ICustomerItemCacheTypeField.cs" />
+    <Compile Include="Models\TypeFields\IItemCacheTypeField.cs" />
     <Compile Include="Models\TypeFields\ICustomTypeField.cs" />
     <Compile Include="Models\TypeFields\ILineItemTypeField.cs" />
     <Compile Include="Models\TypeFields\IPaymentMethodTypeField.cs" />
@@ -596,7 +498,6 @@
     <Compile Include="Cache\ObjectCacheRuntimeCacheProvider.cs" />
     <Compile Include="Cache\StaticCacheProvider.cs" />
     <Compile Include="Models\TypeFields\LineItemTypeField.cs" />
-    <Compile Include="ObjectResolution\Resolution.cs" />
     <Compile Include="Persistence\Repositories\AnonymousCustomerRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IAnonymousCustomerRepository.cs" />
     <Compile Include="Persistence\Factories\AnonymousCustomerFactory.cs" />
@@ -604,24 +505,39 @@
     <Compile Include="Persistence\Querying\Query.cs" />
     <Compile Include="Persistence\UnitOfWork\PetaPocoUnitOfWork.cs" />
     <Compile Include="Persistence\UnitOfWork\PetaPocoUnitOfWorkProvider.cs" />
+    <Compile Include="Pipelines\IPipelineBase.cs" />
+    <Compile Include="Pipelines\IPipelineEndOfChain.cs" />
+    <Compile Include="Pipelines\IPipelineTask.cs" />
+    <Compile Include="Pipelines\PipeLineBase.cs" />
     <Compile Include="RateAdjustmentType.cs" />
+    <Compile Include="SerializationHelper.cs" />
+    <Compile Include="Services\CountryTaxRateService.cs" />
     <Compile Include="Services\GatewayProviderService.cs" />
+    <Compile Include="Services\Interfaces\ICountryTaxRateService.cs" />
     <Compile Include="Services\Interfaces\IGatewayProviderService.cs" />
+    <Compile Include="Services\Interfaces\IInvoiceService.cs" />
     <Compile Include="Services\Interfaces\IItemCacheService.cs" />
     <Compile Include="Services\Interfaces\IProductService.cs" />
     <Compile Include="Services\Interfaces\IProductVariantService.cs" />
     <Compile Include="Services\Interfaces\IServiceContext.cs" />
-    <Compile Include="Services\Interfaces\ISettingsService.cs" />
-    <Compile Include="Services\Interfaces\IShippingService.cs" />
+    <Compile Include="Services\Interfaces\IShipCountryService.cs" />
+    <Compile Include="Services\Interfaces\IShipMethodService.cs" />
+    <Compile Include="Services\Interfaces\IShipRateTierService.cs" />
+    <Compile Include="Services\Interfaces\IStoreSettingService.cs" />
+    <Compile Include="Services\Interfaces\IShipmentService.cs" />
     <Compile Include="Services\Interfaces\IWarehouseService.cs" />
     <Compile Include="Models\Interfaces\IProvince.cs" />
+    <Compile Include="Services\InvoiceService.cs" />
     <Compile Include="Services\ItemCacheService.cs" />
     <Compile Include="Services\ProductService.cs" />
     <Compile Include="Services\ProductVariantService.cs" />
     <Compile Include="Models\Province.cs" />
     <Compile Include="Services\ServiceContext.cs" />
-    <Compile Include="Services\SettingsService.cs" />
-    <Compile Include="Services\ShippingService.cs" />
+    <Compile Include="Services\ShipCountryService.cs" />
+    <Compile Include="Services\ShipMethodService.cs" />
+    <Compile Include="Services\ShipRateTierService.cs" />
+    <Compile Include="Services\StoreSettingService.cs" />
+    <Compile Include="Services\ShipmentService.cs" />
     <Compile Include="Services\WarehouseService.cs" />
     <Compile Include="Strategies\IStrategy.cs" />
     <Compile Include="Strategies\Shipping\IPackagingStrategy.cs" />
@@ -637,7 +553,7 @@
     <Compile Include="Persistence\Migrations\Initial\PluginDatabaseSchemaResult.cs" />
     <Compile Include="Persistence\Migrations\Initial\BaseDataCreation.cs" />
     <Compile Include="Models\TypeFields\AddressTypeField.cs" />
-    <Compile Include="Models\TypeFields\CustomerItemCacheTypeField.cs" />
+    <Compile Include="Models\TypeFields\ItemCacheTypeField.cs" />
     <Compile Include="Configuration\Outline\TypeFieldDefinitionsElement.cs" />
     <Compile Include="Models\TypeFields\ITypeField.cs" />
     <Compile Include="Configuration\Outline\TypeFieldCollection.cs" />
@@ -676,9 +592,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

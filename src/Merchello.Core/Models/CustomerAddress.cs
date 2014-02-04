@@ -9,7 +9,7 @@ namespace Merchello.Core.Models
 
     [Serializable]
     [DataContract(IsReference = true)]
-    public class CustomerAddress : Entity, ICustomerAddress
+    internal class CustomerAddress : Entity, ICustomerAddress
     {
         private readonly Guid _customerKey;
         private string _label;
@@ -31,7 +31,7 @@ namespace Merchello.Core.Models
         }
 
         ///TODO: We need to talk about the contstructor.  An empty address does not make a lot of sense.
-        public CustomerAddress(ICustomer customer, string label)
+        internal CustomerAddress(ICustomer customer, string label)
         {            
             Mandate.ParameterNotNull(customer, "customer");
             Mandate.ParameterNotNull(label, "label");

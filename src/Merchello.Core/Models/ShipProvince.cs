@@ -14,7 +14,7 @@ namespace Merchello.Core.Models
         public ShipProvince(string code, string name)
             : base(code, name)
         {
-            ShipTo = true;
+            AllowShipping = true;
             RateAdjustment = 0;
             RateAdjustmentType = RateAdjustmentType.Numeric;
         }
@@ -23,7 +23,7 @@ namespace Merchello.Core.Models
         /// True/false indicating whether or not to allow shipping to the province
         /// </summary>
         [DataMember]
-        public bool ShipTo { get; set; }
+        public bool AllowShipping { get; set; }
 
         /// <summary>
         /// Price adjustment when shipping to this province

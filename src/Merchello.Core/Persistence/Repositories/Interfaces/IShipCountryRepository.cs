@@ -7,7 +7,7 @@ namespace Merchello.Core.Persistence.Repositories
     /// <summary>
     /// Marker interface for teh ship country repository
     /// </summary>
-    public interface IShipCountryRepository : IRepositoryQueryable<Guid, IShipCountry>
+    internal interface IShipCountryRepository : IRepositoryQueryable<Guid, IShipCountry>
     {
         bool Exists(Guid catalogKey, string countryCode);
     }

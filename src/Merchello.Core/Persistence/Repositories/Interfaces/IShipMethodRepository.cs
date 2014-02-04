@@ -7,7 +7,7 @@ namespace Merchello.Core.Persistence.Repositories
     /// <summary>
     /// Marker interface for the ship method repository
     /// </summary>
-    public interface IShipMethodRepository : IRepositoryQueryable<Guid, IShipMethod>
+    internal interface IShipMethodRepository : IRepositoryQueryable<Guid, IShipMethod>
     {
         
     }

@@ -35,6 +35,7 @@ namespace Merchello.Core
             Mandate.ParameterNotNull(ctrValues, "ctrValues");
             
             var constructor = type.GetConstructor(ctrArgs);
+            if (constructor == null) return default(T);
             return (T)constructor.Invoke(ctrValues);
         }
 	}

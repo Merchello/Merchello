@@ -2,6 +2,7 @@
 using Merchello.Core;
 using Merchello.Core.Models;
 using System;
+using System.Collections.Generic;
 
 namespace Merchello.Web.Models.ContentEditing
 {
@@ -22,6 +23,8 @@ namespace Merchello.Web.Models.ContentEditing
             destination.CostOfGoods = productDisplay.CostOfGoods;
             destination.SalePrice = productDisplay.SalePrice;
             destination.OnSale = productDisplay.OnSale;
+            destination.Manufacturer = productDisplay.Manufacturer;
+            destination.ManufacturerModelNumber = productDisplay.ManufacturerModelNumber;
             destination.Weight = productDisplay.Weight;
             destination.Length = productDisplay.Length;
             destination.Width = productDisplay.Width;
@@ -34,6 +37,28 @@ namespace Merchello.Web.Models.ContentEditing
             destination.Shippable = productDisplay.Shippable;
             destination.Download = productDisplay.Download;
             destination.DownloadMediaId = productDisplay.DownloadMediaId;
+
+            foreach (var catalogInventory in productDisplay.CatalogInventories)
+            {
+                ICatalogInventory destinationCatalogInventory;
+
+                var catInv = destination.CatalogInventories.Where(x => x.CatalogKey == catalogInventory.CatalogKey).First();
+                if (catInv != null)
+                {
+                    destinationCatalogInventory = catInv;
+
+                    destinationCatalogInventory = catalogInventory.ToCatalogInventory(destinationCatalogInventory);
+                }
+                else
+                {
+                    //destinationCatalogInventory = new CatalogInventory(catalogInventory.CatalogKey, catalogInventory.ProductVariantKey);
+
+                    //destinationCatalogInventory = catalogInventory.ToCatalogInventory(destinationCatalogInventory);
+
+                    //List<ICatalogInventory> destinationCatalogInventories = destination.CatalogInventories as List<ICatalogInventory>;
+                    //destinationCatalogInventories.Add(destinationCatalogInventory);
+                }
+            }
 
             foreach (var option in productDisplay.ProductOptions)
             {
@@ -71,6 +96,7 @@ namespace Merchello.Web.Models.ContentEditing
         {
             AutoMapper.Mapper.CreateMap<IProductAttribute, ProductAttributeDisplay>();
             AutoMapper.Mapper.CreateMap<IProductOption, ProductOptionDisplay>();
+            AutoMapper.Mapper.CreateMap<ICatalogInventory, CatalogInventoryDisplay>();
             AutoMapper.Mapper.CreateMap<IProductVariant, ProductVariantDisplay>();
             AutoMapper.Mapper.CreateMap<IProduct, ProductDisplay>();
 
@@ -155,6 +181,7 @@ namespace Merchello.Web.Models.ContentEditing
         internal static ProductVariantDisplay ToProductVariantDisplay(this IProductVariant productVariant)
         {
             AutoMapper.Mapper.CreateMap<IProductAttribute, ProductAttributeDisplay>();
+            AutoMapper.Mapper.CreateMap<ICatalogInventory, CatalogInventoryDisplay>();
             AutoMapper.Mapper.CreateMap<IProductVariant, ProductVariantDisplay>();
 
             return AutoMapper.Mapper.Map<ProductVariantDisplay>(productVariant);
@@ -172,6 +199,8 @@ namespace Merchello.Web.Models.ContentEditing
             destination.CostOfGoods = productVariantDisplay.CostOfGoods;
             destination.SalePrice = productVariantDisplay.SalePrice;
             destination.OnSale = productVariantDisplay.OnSale;
+            destination.Manufacturer = productVariantDisplay.Manufacturer;
+            destination.ManufacturerModelNumber = productVariantDisplay.ManufacturerModelNumber;
             destination.Weight = productVariantDisplay.Weight;
             destination.Length = productVariantDisplay.Length;
             destination.Width = productVariantDisplay.Width;
@@ -187,8 +216,27 @@ namespace Merchello.Web.Models.ContentEditing
 
             destination.ProductKey = productVariantDisplay.ProductKey;
 
-            // TODO: Warehouse Inventory
+            foreach (var catalogInventory in productVariantDisplay.CatalogInventories)
+            {
+                ICatalogInventory destinationCatalogInventory;
 
+                var catInv = destination.CatalogInventories.Where(x => x.CatalogKey == catalogInventory.CatalogKey).First();
+                if (catInv != null)
+                {
+                    destinationCatalogInventory = catInv;
+
+                    destinationCatalogInventory = catalogInventory.ToCatalogInventory(destinationCatalogInventory);
+                }
+                else
+                {
+                    //destinationCatalogInventory = new CatalogInventory(catalogInventory.CatalogKey, catalogInventory.ProductVariantKey);
+
+                    //destinationCatalogInventory = catalogInventory.ToCatalogInventory(destinationCatalogInventory);
+
+                    //List<ICatalogInventory> destinationCatalogInventories = destination.CatalogInventories as List<ICatalogInventory>;
+                    //destinationCatalogInventories.Add(destinationCatalogInventory);
+                }
+            }
 
             foreach (var attribute in productVariantDisplay.Attributes)
             {
@@ -206,10 +254,10 @@ namespace Merchello.Web.Models.ContentEditing
                     destinationProductAttribute = new ProductAttribute(attribute.Name, attribute.Sku);
 
                     destinationProductAttribute = attribute.ToProductAttribute(destinationProductAttribute);
-                }
 
-                ProductAttributeCollection variantAttributes = destination.Attributes as ProductAttributeCollection;
-                variantAttributes.Add(destinationProductAttribute);
+                    ProductAttributeCollection variantAttributes = destination.Attributes as ProductAttributeCollection;
+                    variantAttributes.Add(destinationProductAttribute);
+                }
             }
 
             return destination;

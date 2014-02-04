@@ -11,6 +11,11 @@ namespace Merchello.Core.Models
     [DataContract(IsReference = true)]
     internal class Address : IAddress
     {
+        public Address()
+        {
+            AddressType = AddressType.Shipping;
+        }
+
         /// <summary>
         /// The name for the address
         /// </summary>
@@ -58,5 +63,50 @@ namespace Merchello.Core.Models
         /// </summary>
         [DataMember]
         public string Phone { get; set; }
+
+        /// <summary>
+        /// The email address associated with the address
+        /// </summary>
+        [DataMember]
+        public string Email { get; set; }
+
+        /// <summary>
+        /// The organization or company name associated with the address
+        /// </summary>
+        [DataMember]
+        public string Organization { get; set; }
+
+        /// <summary>
+        /// True/false indicating whether or not this record represents commercial or business address
+        /// </summary>
+        /// <remarks>
+        /// Used by certain shipping providers in shipping rate quotations
+        /// </remarks>
+        [DataMember]
+        public bool IsCommercial { get; set; }
+
+        /// <summary>
+        /// The <see cref="AddressType"/> of the address
+        /// </summary>
+        [DataMember]
+        AddressType AddressType { get; set; }
+
+
+        public virtual bool Equals(IAddress other)
+        {
+            if (ReferenceEquals(null, other))
+                return false;
+            if (ReferenceEquals(this, other))
+                return true;
+
+            return Name == other.Name &&
+                   Address1 == other.Address1 &&
+                   Address2 == other.Address2 &&
+                   Locality == other.Locality &&
+                   Region == other.Region &&
+                   PostalCode == other.PostalCode &&
+                   CountryCode == other.CountryCode &&
+                   IsCommercial == other.IsCommercial;
+        }
     }
 }

@@ -19,6 +19,8 @@ namespace Merchello.Web.Models.ContentEditing
             CostOfGoods = masterVariant.CostOfGoods;
             SalePrice = masterVariant.SalePrice;
             OnSale = masterVariant.OnSale;
+            Manufacturer = masterVariant.Manufacturer;
+            ManufacturerModelNumber = masterVariant.ManufacturerModelNumber;
             Weight = masterVariant.Weight;
             Length = masterVariant.Length;
             Height = masterVariant.Height;
@@ -29,7 +31,9 @@ namespace Merchello.Web.Models.ContentEditing
             Taxable = masterVariant.Taxable;
             Shippable = masterVariant.Shippable;
             Download = masterVariant.Download;
-            DownloadMediaId = masterVariant.DownloadMediaId;            
+            DownloadMediaId = masterVariant.DownloadMediaId;
+
+            CatalogInventories = masterVariant.CatalogInventories;
         }
 
         public Guid Key { get; set; }        

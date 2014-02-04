@@ -40,25 +40,25 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\AutoMapper.3.0.0\lib\net40\AutoMapper.Net4.dll</HintPath>
     </Reference>
-    <Reference Include="businesslogic, Version=1.0.5095.27252, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="businesslogic, Version=1.0.5147.18552, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\businesslogic.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.0.3\lib\businesslogic.dll</HintPath>
     </Reference>
-    <Reference Include="ClientDependency.Core, Version=1.7.0.4, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ClientDependency.Core, Version=1.7.1.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ClientDependency.1.7.0.4\lib\ClientDependency.Core.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.0.3\lib\ClientDependency.Core.dll</HintPath>
     </Reference>
     <Reference Include="ClientDependency.Core.Mvc, Version=1.7.0.4, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\ClientDependency-Mvc.1.7.0.4\lib\ClientDependency.Core.Mvc.dll</HintPath>
     </Reference>
-    <Reference Include="cms, Version=1.0.5095.27252, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="cms, Version=1.0.5147.18553, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\cms.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.0.3\lib\cms.dll</HintPath>
     </Reference>
-    <Reference Include="controls, Version=1.0.5095.27254, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="controls, Version=1.0.5147.18555, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\controls.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.0.3\lib\controls.dll</HintPath>
     </Reference>
     <Reference Include="CookComputing.XmlRpcV2, Version=2.5.0.0, Culture=neutral, PublicKeyToken=a7d6e17aa302004d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -66,7 +66,7 @@
     </Reference>
     <Reference Include="Examine, Version=0.1.52.2941, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\Examine.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.0.3\lib\Examine.dll</HintPath>
     </Reference>
     <Reference Include="HtmlAgilityPack, Version=1.4.6.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -76,13 +76,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
-    <Reference Include="interfaces, Version=1.0.5095.27250, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="interfaces, Version=1.0.5147.18550, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\interfaces.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.0.3\lib\interfaces.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\log4net.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.0.3\lib\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Lucene.Net, Version=2.9.4.1, Culture=neutral, PublicKeyToken=85089178b9ac3181, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -90,11 +90,11 @@
     </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data, Version=1.0.1559.20655, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\Microsoft.ApplicationBlocks.Data.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.0.3\lib\Microsoft.ApplicationBlocks.Data.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Helpers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\Microsoft.Web.Helpers.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.0.3\lib\Microsoft.Web.Helpers.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -116,9 +116,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="SQLCE4Umbraco, Version=1.0.5095.27253, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="SQLCE4Umbraco, Version=1.0.5147.18554, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\SQLCE4Umbraco.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.0.3\lib\SQLCE4Umbraco.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -126,11 +126,11 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <Private>True</Private>
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\System.Data.SqlServerCe.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.0.3\lib\System.Data.SqlServerCe.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.SqlServerCe.Entity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <Private>True</Private>
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\System.Data.SqlServerCe.Entity.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.0.3\lib\System.Data.SqlServerCe.Entity.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -177,55 +177,59 @@
     <Reference Include="System.Xml" />
     <Reference Include="TidyNet, Version=1.0.0.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\TidyNet.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.0.3\lib\TidyNet.dll</HintPath>
     </Reference>
-    <Reference Include="umbraco, Version=1.0.5095.27255, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="umbraco, Version=1.0.5147.18556, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\umbraco.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.0.3\lib\umbraco.dll</HintPath>
     </Reference>
-    <Reference Include="Umbraco.Core, Version=1.0.5095.27251, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Umbraco.Core, Version=1.0.5147.18550, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\Umbraco.Core.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.0.3\lib\Umbraco.Core.dll</HintPath>
     </Reference>
-    <Reference Include="umbraco.DataLayer, Version=1.0.5095.27252, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="umbraco.DataLayer, Version=1.0.5147.18552, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\umbraco.DataLayer.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.0.3\lib\umbraco.DataLayer.dll</HintPath>
     </Reference>
-    <Reference Include="umbraco.editorControls, Version=1.0.5095.27257, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="umbraco.editorControls, Version=1.0.5147.18559, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\umbraco.editorControls.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.0.3\lib\umbraco.editorControls.dll</HintPath>
     </Reference>
-    <Reference Include="umbraco.MacroEngines, Version=1.0.5095.27257, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="umbraco.MacroEngines, Version=1.0.5147.18560, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\umbraco.MacroEngines.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.0.3\lib\umbraco.MacroEngines.dll</HintPath>
     </Reference>
-    <Reference Include="umbraco.providers, Version=1.0.5095.27254, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="umbraco.providers, Version=1.0.5147.18555, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\umbraco.providers.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.0.3\lib\umbraco.providers.dll</HintPath>
     </Reference>
-    <Reference Include="Umbraco.Web.UI, Version=1.0.5095.27258, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Umbraco.Web.UI, Version=1.0.5147.18561, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\Umbraco.Web.UI.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.0.3\lib\Umbraco.Web.UI.dll</HintPath>
     </Reference>
-    <Reference Include="umbraco.XmlSerializers, Version=1.0.5095.27255, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="umbraco.XmlSerializers, Version=1.0.5147.18556, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\umbraco.XmlSerializers.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.0.3\lib\umbraco.XmlSerializers.dll</HintPath>
     </Reference>
-    <Reference Include="UmbracoExamine, Version=0.6.0.27253, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="UmbracoExamine, Version=0.6.0.18553, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\UmbracoExamine.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.0.3\lib\UmbracoExamine.dll</HintPath>
     </Reference>
     <Reference Include="UrlRewritingNet.UrlRewriter, Version=2.0.60829.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\UmbracoCms.Core.7.0.1\lib\UrlRewritingNet.UrlRewriter.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.0.3\lib\UrlRewritingNet.UrlRewriter.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationContextExtensions.cs" />
-    <Compile Include="BasketExtensions.cs" />
+    <Compile Include="CheckoutExtensions.cs" />
     <Compile Include="Editors\SettingsApiController.cs" />
     <Compile Include="Editors\ShippingMethodsApiController.cs" />
     <Compile Include="Editors\WarehouseApiController.cs" />
+    <Compile Include="Models\ContentEditing\ShipRateTableDisplay.cs" />
+    <Compile Include="Models\ContentEditing\ShipRateTierDisplay.cs" />
+    <Compile Include="Models\ContentEditing\SettingDisplay.cs" />
+    <Compile Include="Models\ContentEditing\WarehouseCatalogDisplay.cs" />
     <Compile Include="Models\IGatewayMethod.cs" />
     <Compile Include="Models\ContentEditing\FullfillmentMappingExtensions.cs" />
     <Compile Include="Models\ContentEditing\ProductMappingExtensions.cs" />
@@ -238,39 +242,44 @@
     <Compile Include="Models\ContentEditing\ShipProvinceDisplay.cs" />
     <Compile Include="Models\ContentEditing\TaxProvinceDisplay.cs" />
     <Compile Include="Models\ContentEditing\WarehouseDisplay.cs" />
-    <Compile Include="Models\ContentEditing\WarehouseInventoryDisplay.cs" />
+    <Compile Include="Models\ContentEditing\CatalogInventoryDisplay.cs" />
+    <Compile Include="PackageActions\AddConfigSection.cs" />
+    <Compile Include="PackageActions\AddExamineConfigs.cs" />
+    <Compile Include="PackageActions\CreateDatabase.cs" />
     <Compile Include="ProductQuery.cs" />
     <Compile Include="CustomerExtensions.cs" />
-    <Compile Include="Editors\CustomerApiController.cs" />
     <Compile Include="Editors\ProductApiController.cs" />
     <Compile Include="Editors\ProductVariantApiController.cs" />
     <Compile Include="EncryptionHelper.cs" />
     <Compile Include="MerchelloHelper.cs" />
     <Compile Include="CustomerContext.cs" />
-    <Compile Include="Basket.cs" />
+    <Compile Include="Workflow\Basket.cs" />
     <Compile Include="Models\ContentEditing\ExamineDisplayExtensions.cs" />
     <Compile Include="Models\ContentEditing\ProductAttributeDisplay.cs" />
     <Compile Include="Models\ContentEditing\ProductDisplay.cs" />
     <Compile Include="Models\ContentEditing\ProductDisplayBase.cs" />
     <Compile Include="Models\ContentEditing\ProductOptionDisplay.cs" />
     <Compile Include="Models\ContentEditing\ProductVariantDisplay.cs" />
-    <Compile Include="IBasket.cs" />
+    <Compile Include="Workflow\BasketCheckout.cs" />
+    <Compile Include="Workflow\IBasket.cs" />
     <Compile Include="Mvc\MerchelloTemplatePage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyVisibility.cs" />
     <Compile Include="Search\ExamineEvents.cs" />
-    <Compile Include="Shipping\Packaging\BasketPackagingStrategyBase.cs" />
-    <Compile Include="Shipping\Packaging\DefaultWarehousePackagingStrategy.cs" />
-    <Compile Include="Shipping\Packaging\IBasketPackagingStrategy.cs" />
-    <Compile Include="Shipping\Packaging\ShippableProductVisitor.cs" />
+    <Compile Include="Workflow\IBasketCheckout.cs" />
+    <Compile Include="Workflow\Shipping\Packaging\BasketPackagingStrategyBase.cs" />
+    <Compile Include="Workflow\Shipping\Packaging\DefaultWarehousePackagingStrategy.cs" />
+    <Compile Include="Workflow\Shipping\Packaging\IBasketPackagingStrategy.cs" />
+    <Compile Include="Workflow\Shipping\Packaging\ShippableProductVisitor.cs" />
+    <Compile Include="Trees\MerchelloApplication.cs" />
+    <Compile Include="Trees\MerchelloTreeController.cs" />
+    <Compile Include="Trees\ServerVariablesParsingEvents.cs" />
     <Compile Include="UmbracoApplicationEventListener.cs" />
-    <Compile Include="Vistors\BasketItemInventoryValidation.cs" />
+    <Compile Include="Validation\BasketItemInventoryValidation.cs" />
     <Compile Include="WebApi\MerchelloApiController.cs" />
     <Compile Include="WebBootManager.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Vistors\Basket\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Merchello.Core\Merchello.Core.csproj">
       <Project>{2a83a229-c24b-4d8d-b806-7c9999eb9461}</Project>

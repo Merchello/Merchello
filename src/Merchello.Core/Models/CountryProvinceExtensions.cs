@@ -10,9 +10,9 @@ namespace Merchello.Core.Models
     public static class CountryProvinceExtensions
     {
         /// <summary>
-        /// Casts a collection of <see cref="IProvince"/> to a new collection of <see cref="IShipProvince"/>
+        /// Converts a collection of <see cref="IProvince"/> to a new collection of <see cref="IShipProvince"/>
         /// </summary>
-        /// <param name="provinces"></param>
+        /// <param name="provinces">A collection of <see cref="IProvince"/></param>
         /// <returns>A collection of <see cref="IShipProvince"/></returns>
         public static ProvinceCollection<IShipProvince> ToShipProvinceCollection(this IEnumerable<IProvince> provinces)
         {
@@ -22,6 +22,21 @@ namespace Merchello.Core.Models
                 provinceCollection.Add(new ShipProvince(p.Code, p.Name));
             }
 
+            return provinceCollection;
+        }
+
+        /// <summary>
+        /// Converts a collection of <see cref="IProvince"/> to a new collection of <see cref="ITaxProvince"/>
+        /// </summary>
+        /// <param name="provinces">A collection of <see cref="IProvince"/></param>
+        /// <returns>A collection of <see cref="ITaxProvince"/></returns>
+        public static ProvinceCollection<ITaxProvince> ToTaxProvinceCollection(this IEnumerable<IProvince> provinces)
+        {
+            var provinceCollection = new ProvinceCollection<ITaxProvince>();
+            foreach (var p in provinces)
+            {
+                provinceCollection.Add(new TaxProvince(p.Code, p.Name));
+            }
             return provinceCollection;
         }
     }

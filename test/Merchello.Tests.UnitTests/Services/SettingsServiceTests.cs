@@ -10,12 +10,12 @@ namespace Merchello.Tests.UnitTests.Services
     [TestFixture]
     public class SettingsServiceTests
     {
-        private ISettingsService _settingsService;
+        private IStoreSettingService _storeSettingService;
 
         [SetUp]
         public void Init()
         {
-            _settingsService = new SettingsService();
+            _storeSettingService = new StoreSettingService();
         }
         
         /// <summary>
@@ -29,7 +29,7 @@ namespace Merchello.Tests.UnitTests.Services
             var excludes = new[] {"SA", "DK"};
 
             //// Act
-            var regions = _settingsService.GetAllCountries(excludes);
+            var regions = _storeSettingService.GetAllCountries(excludes);
 
             //// Assert
             Assert.IsTrue(regions.Any());
@@ -48,7 +48,7 @@ namespace Merchello.Tests.UnitTests.Services
             const string countryCode = "DK";
 
             //// Act
-            var denmark = _settingsService.GetCountryByCode(countryCode);
+            var denmark = _storeSettingService.GetCountryByCode(countryCode);
 
             //// Assert
             Assert.NotNull(denmark);

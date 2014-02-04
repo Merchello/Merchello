@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Merchello.Core.Models;
 using Merchello.Core.Models.EntityBase;
-using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Persistence.Factories;
 using Merchello.Core.Persistence.Querying;
@@ -17,11 +17,12 @@ namespace Merchello.Core.Persistence.Repositories
 {
     internal class GatewayProviderRepository : MerchelloPetaPocoRepositoryBase<IGatewayProvider>, IGatewayProviderRepository
     {
-        private readonly ISettingsService _settingsService;
 
-        public GatewayProviderRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ISettingsService settingsService) 
+        public GatewayProviderRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache) 
             : base(work, cache)
-        { }
+        {
+            
+        }
 
         protected override IGatewayProvider PerformGet(Guid key)
         {
@@ -91,6 +92,7 @@ namespace Merchello.Core.Persistence.Repositories
                 "DELETE FROM merchShipRateTier WHERE shipMethodKey IN (SELECT pk FROM merchShipMethod WHERE providerKey IN (SELECT pk FROM merchGatewayProvider WHERE pk = @Key))",                
                 "UPDATE merchShipment SET shipMethodKey = NULL WHERE shipMethodKey IN (SELECT pk FROM merchShipMethod WHERE providerKey IN (SELECT pk FROM merchGatewayProvider WHERE pk  = @Key))",
                 "DELETE FROM merchShipMethod WHERE providerKey IN (SELECT pk FROM merchGatewayProvider WHERE pk = @Key)",
+                "DELETE FROM merchCountryTaxRate WHERE providerKey IN (SELECT pk FROM merchGatewayProvider WHERE pk = @Key)",
                 "DELETE FROM merchGatewayProvider WHERE pk = @Key"
             };
 
@@ -121,6 +123,20 @@ namespace Merchello.Core.Persistence.Repositories
             Database.Update(dto);
             
             entity.ResetDirtyProperties();
+        }
+
+        public IEnumerable<IGatewayProvider> GetGatewayProvidersByShipCountryKey(Guid shipCountryKey)
+        {
+            var sql = new Sql();
+            sql.Select("*")
+                .From<ShipMethodDto>()
+                .InnerJoin<GatewayProviderDto>()
+                .On<ShipMethodDto, GatewayProviderDto>(left => left.ProviderKey, right => right.Key)
+                .Where<ShipMethodDto>(x => x.ShipCountryKey == shipCountryKey);
+
+            var dtos = Database.Fetch<ShipMethodDto, GatewayProviderDto>(sql);
+            var factory = new GatewayProviderFactory();
+            return dtos.DistinctBy(x => x.GatewayProviderDto.Key).Select(dto => factory.BuildEntity(dto.GatewayProviderDto));
         }
     }
 }

@@ -18,7 +18,7 @@ namespace Merchello.Core.Models
         private LineItemCollection _items;
  
         public ItemCache(Guid entityKey, ItemCacheType itemCacheType)
-            : this(entityKey, EnumTypeFieldConverter.CustomerItemItemCache.GetTypeField(itemCacheType).TypeKey, new LineItemCollection())
+            : this(entityKey, EnumTypeFieldConverter.ItemItemCache.GetTypeField(itemCacheType).TypeKey, new LineItemCollection())
         { }
 
         internal ItemCache(Guid entityKey, Guid itemCacheTfKey)
@@ -26,7 +26,7 @@ namespace Merchello.Core.Models
         { }
 
         public ItemCache(Guid entityKey, ItemCacheType itemCacheType, LineItemCollection items)
-            : this(entityKey, EnumTypeFieldConverter.CustomerItemItemCache.GetTypeField(itemCacheType).TypeKey, items)
+            : this(entityKey, EnumTypeFieldConverter.ItemItemCache.GetTypeField(itemCacheType).TypeKey, items)
         { }
 
         internal ItemCache(Guid entityKey, Guid itemCacheTfKey, LineItemCollection items)
@@ -83,10 +83,10 @@ namespace Merchello.Core.Models
         [DataMember]
         public ItemCacheType ItemCacheType
         {
-            get { return EnumTypeFieldConverter.CustomerItemItemCache.GetTypeField(_itemCacheTfKey); }
+            get { return EnumTypeFieldConverter.ItemItemCache.GetTypeField(_itemCacheTfKey); }
             set
             {
-                var reference = EnumTypeFieldConverter.CustomerItemItemCache.GetTypeField(value);
+                var reference = EnumTypeFieldConverter.ItemItemCache.GetTypeField(value);
                 if (!ReferenceEquals(TypeFieldMapperBase.NotFound, reference))
                 {
                     // call through the property to flag the dirty property

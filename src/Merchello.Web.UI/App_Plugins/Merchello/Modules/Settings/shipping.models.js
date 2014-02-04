@@ -16,19 +16,18 @@
 
     };
 
-
     models.ShippingCountry = function (shippingCountryFromServer) {
 
         var self = this;
 
         if (shippingCountryFromServer == undefined) {
-            self.pk = "";
+            self.key = "";
             self.catalogKey = "";
             self.countryCode = "";
             self.name = "";
             self.shipMethods = [];
         } else {
-            self.pk = shippingCountryFromServer.pk;
+            self.key = shippingCountryFromServer.key;
             self.catalogKey = shippingCountryFromServer.catalogKey;
             self.countryCode = shippingCountryFromServer.countryCode;
             self.name = shippingCountryFromServer.name;
@@ -49,6 +48,12 @@
         self.removeMethod = function (idx) {
             self.shipMethods.splice(idx, 1);
         };
+
+        self.fromCountry = function (country)
+        {
+            self.countryCode = country.countryCode;
+            self.name = country.name;
+        };
     };
 
     models.ShippingMethod = function (shippingMethodFromServer) {
@@ -56,7 +61,7 @@
         var self = this;
 
         if (shippingMethodFromServer == undefined) {
-            self.pk = "";
+            self.key = "";
             self.name = "";
             self.shipCountryKey = "";
             self.providerKey = "";
@@ -66,7 +71,7 @@
             self.taxable = false;
             self.provinceData = [];
         } else {
-            self.pk = shippingMethodFromServer.pk;
+            self.key = shippingMethodFromServer.key;
             self.name = shippingMethodFromServer.name;
             self.shipCountryKey = shippingMethodFromServer.shipCountryKey;
             self.providerKey = shippingMethodFromServer.providerKey;
@@ -101,13 +106,13 @@
         var self = this;
 
         if (shippingRateTierFromServer == undefined) {
-            self.pk = "";
+            self.key = "";
             self.shipMethodKey = "";
             self.rangeLow = "";
             self.rangeHigh = "";
             self.rate = "";
         } else {
-            self.pk = shippingRateTierFromServer.pk;
+            self.key = shippingRateTierFromServer.key;
             self.shipMethodKey = shippingRateTierFromServer.shipMethodKey;
             self.rangeLow = shippingRateTierFromServer.rangeLow;
             self.rangeHigh = shippingRateTierFromServer.rangeHigh;
@@ -122,7 +127,7 @@
         var self = this;
 
         if (warehouseFromServer == undefined) {
-            self.pk = "";
+            self.key = "";
             self.name = "";
             self.address1 = "";
             self.address2 = "";
@@ -133,8 +138,9 @@
             self.phone = "";
             self.email = "";
             self.isDefault = true;
+            self.warehouseCatalogs = [];
         } else {
-            self.pk = warehouseFromServer.pk;
+            self.key = warehouseFromServer.key;
             self.name = warehouseFromServer.name;
             self.address1 = warehouseFromServer.address1;
             self.address2 = warehouseFromServer.address2;
@@ -145,15 +151,37 @@
             self.phone = warehouseFromServer.phone;
             self.email = warehouseFromServer.email;
             self.isDefault = warehouseFromServer.isDefault;
+
+            self.warehouseCatalogs = _.map(warehouseFromServer.warehouseCatalogs, function (warehouseCatalog) {
+                return new merchello.Models.WarehouseCatalog(warehouseCatalog);
+            });
         }
 
     };
 
-    models.WarehouseInventory = function (warehouseInventoryFromSever) {
+    models.WarehouseCatalog = function (warehouseCatalogFromServer) {
 
         var self = this;
 
-        if (warehouseInventoryFromSever == undefined) {
+        if (warehouseCatalogFromServer == undefined) {
+            self.key = "";
+            self.warehouseKey = "";
+            self.name = "";
+            self.description = "";
+        } else {
+            self.key = warehouseCatalogFromServer.key;
+            self.warehouseKey = warehouseCatalogFromServer.warehouseKey;
+            self.name = warehouseCatalogFromServer.name;
+            self.description = warehouseCatalogFromServer.description;
+        }
+
+    };
+
+    models.CatalogInventory = function (catalogInventoryFromServer) {
+
+        var self = this;
+
+        if (catalogInventoryFromServer == undefined) {
             self.catalogKey = "";
             self.warehouseKey = "";
             self.productVariantKey = "";
@@ -161,12 +189,12 @@
             self.lowCount = "";
             self.catalogName = "";
         } else {
-            self.catalogKey = warehouseInventoryFromSever.catalogKey;
-            self.warehouseKey = warehouseInventoryFromSever.warehouseKey;
-            self.productVariantKey = warehouseInventoryFromSever.productVariantKey;
-            self.count = warehouseInventoryFromSever.count;
-            self.lowCount = warehouseInventoryFromSever.lowCount;
-            self.catalogName = warehouseInventoryFromSever.catalogName;
+            self.catalogKey = catalogInventoryFromServer.catalogKey;
+            self.warehouseKey = catalogInventoryFromServer.warehouseKey;
+            self.productVariantKey = catalogInventoryFromServer.productVariantKey;
+            self.count = catalogInventoryFromServer.count;
+            self.lowCount = catalogInventoryFromServer.lowCount;
+            self.catalogName = catalogInventoryFromServer.catalogName;
         }
 
     };

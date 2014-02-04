@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Merchello.Core.Models;
-using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Services;
 using Umbraco.Core;
 using Umbraco.Core.Cache;
@@ -21,12 +20,12 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
 
         internal ShipRateTable(Guid shipMethodKey, IEnumerable<IShipRateTier> rows)
         {
+            IsTest = false;
             var shipRateTiers = rows as IShipRateTier[] ?? rows.ToArray();
 
             Mandate.ParameterCondition(shipMethodKey != Guid.Empty, "shipMethodKey");
             Mandate.ParameterNotNull(shipRateTiers, "rows");
             
-
             _shipMethodKey = shipMethodKey;
             _shipRateTiers = new List<IShipRateTier>();
             _shipRateTiers.AddRange(shipRateTiers);
@@ -130,6 +129,11 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
  
         }
 
+        /// <summary>
+        /// Asserts the ranges in the rate tier are low to high, non zero and not equal.
+        /// </summary>
+        /// <param name="shipRateTier"></param>
+        /// <returns></returns>
         private static bool ValidateRateTier(ref IShipRateTier shipRateTier)
         {
             if (shipRateTier.RangeLow < 0 || shipRateTier.RangeHigh < 0) return false;
@@ -143,15 +147,22 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
         }
 
         /// <summary>
-        /// 
+        /// Deletes a row
         /// </summary>
         /// <param name="shipRateTier"></param>
-        /// <remarks>
-        /// Requires a call to save to persist
-        /// </remarks>
         public void DeleteRow(IShipRateTier shipRateTier)
         {
-            throw new System.NotImplementedException();
+            if (MerchelloContext.Current == null) throw new InvalidOperationException("MerchelloContext.Current is null");
+
+            var row = Rows.FirstOrDefault(x => x.Key == shipRateTier.Key);
+            if (!Rows.Any() || row == null) return;
+            if (Rows.IndexOf(Rows.Last()) != Rows.IndexOf(row))
+            { 
+                _shipRateTiers[Rows.IndexOf(row) + 1].RangeLow = row.RangeLow;
+            }
+            _shipRateTiers.Remove(row);
+
+            if(!IsTest) DeleteRow(MerchelloContext.Current.Services.GatewayProviderService, MerchelloContext.Current.Cache.RuntimeCache, this, shipRateTier);
         }
 
         /// <summary>
@@ -167,11 +178,22 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
         {
            
             // clear the current cached item
+            // TODO : This should use the distributed cache referesher
             cache.ClearCacheItem(CacheKeys.GatewayShipMethodCacheKey(rateTable.ShipMethodKey));
 
             // persist and enter into cache
            gatewayProviderService.Save(rateTable.Rows);
            cache.GetCacheItem(CacheKeys.GatewayShipMethodCacheKey(rateTable.ShipMethodKey), () => rateTable);   
+        }
+
+        internal static void DeleteRow(IGatewayProviderService gatewayProviderService, IRuntimeCacheProvider cache, IShipRateTable rateTable, IShipRateTier shipRateTier)
+        {
+            // clear the current cached item
+            // TODO : This should use the distributed cache referesher
+            cache.ClearCacheItem(CacheKeys.GatewayShipMethodCacheKey(rateTable.ShipMethodKey));
+
+            gatewayProviderService.Delete(shipRateTier);
+            cache.GetCacheItem(CacheKeys.GatewayShipMethodCacheKey(rateTable.ShipMethodKey), () => rateTable);   
         }
 
         /// <summary>
@@ -193,5 +215,7 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
             get { return _shipRateTiers.OrderBy(x => x.RangeLow); }
 
         }
+
+        internal bool IsTest { get; set; }
     }
 }

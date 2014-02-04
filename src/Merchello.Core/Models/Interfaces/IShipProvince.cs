@@ -8,7 +8,7 @@ namespace Merchello.Core.Models.Interfaces
         /// True/false indicating whether or not to allow shipping to the province
         /// </summary>
         [DataMember]
-        bool ShipTo { get; set; }
+        bool AllowShipping { get; set; }
 
         /// <summary>
         /// Rate adjustment when shipping to this province

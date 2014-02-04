@@ -251,10 +251,10 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
             //// Arrange
             
             //// Act
-            _product.AddToWarehouseCatalog(_warehouse.DefaultCatalog());
+            _product.AddToCatalogInventory(_warehouse.DefaultCatalog());
 
             //// Assert
-            Assert.IsTrue(_product.Warehouses.Count() == 1);
+            Assert.IsTrue(_product.CatalogInventories.Count() == 1);
         }
 
         /// <summary>
@@ -267,26 +267,74 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
             const int warehouseId = 1;
 
             //// Act
-            _product.AddToWarehouseCatalog(_warehouse.DefaultCatalog());
+            _product.AddToCatalogInventory(_warehouse.DefaultCatalog());
             _productService.Save(_product);
 
             //// Assert
-            Assert.IsTrue(_product.Warehouses.Count() == 1);
+            Assert.IsTrue(_product.CatalogInventories.Count() == 1);
         }
 
         [Test]
         public void Can_Update_A_ProductVariants_Inventory_Count()
         {
             //// Arrange
-            const int warehouseId = 1;
 
             //// Act
-            _product.AddToWarehouseCatalog(_warehouse.DefaultCatalog());
-            _product.Warehouses.First().Count = 10;
+            _product.AddToCatalogInventory(_warehouse.DefaultCatalog());
+            _product.CatalogInventories.First().Count = 10;
             _productService.Save(_product);
 
             //// Assert
-            Assert.IsTrue(_product.Warehouses.Count() == 1);
+            Assert.IsTrue(_product.CatalogInventories.Count() == 1);
         }
+
+        /// <summary>
+        /// Test verifies that a CatalogInventory record can be updated once persisted
+        /// </summary>
+        [Test]
+        public void Can_Update_A_ProductVariants_CatalogInventory_After_Its_Been_Saved()
+        {
+            //// Arrange
+            var key = _product.Key;
+            _product.AddToCatalogInventory(_warehouse.DefaultCatalog());
+            _productService.Save(_product);
+            Assert.IsTrue(_product.CatalogInventories.Any());
+            
+            //// Act
+            _product.CatalogInventories.First().Count = 10;
+            _productService.Save(_product);
+
+            var retrieved = _productService.GetByKey(key);
+            retrieved.CatalogInventories.First().Count = 9;
+            _productService.Save(retrieved);
+
+            //// Assert
+            Assert.NotNull(retrieved);
+            Assert.IsTrue(retrieved.CatalogInventories.Any());
+            Assert.AreEqual(9, retrieved.CatalogInventories.First().Count);
+
+        }
+
+        /// <summary>
+        /// Quick test to verify the CatalogInventoryCollection is treating keys correctly
+        /// </summary>
+        [Test]
+        public void Can_Add_A_ProductVariant_To_CategoryInventory_Twice_Without_Causing_An_Error()
+        {
+            //// Arrange
+            var key = _product.Key;
+            _product.AddToCatalogInventory(_warehouse.DefaultCatalog());
+            _productService.Save(_product);
+            Assert.IsTrue(_product.CatalogInventories.Any());
+
+            //// Act
+            _product.AddToCatalogInventory(_warehouse.DefaultCatalog());
+            _productService.Save(_product);
+
+            //// Assert
+            Assert.IsTrue(_product.CatalogInventories.Any());
+            Assert.IsTrue(1 == _product.CatalogInventories.Count());
+        }
+
     }
 }

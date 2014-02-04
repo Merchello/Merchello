@@ -17,9 +17,9 @@ namespace Merchello.Core.Models.TypeFields
 
         internal override sealed void BuildCache()
         {
-            AddUpdateCache(AppliedPaymentType.Credit, new TypeField("Credit", "Credit", new Guid("020F6FF8-1F66-4D90-9FF4-C32A7A5AB32B")));
-            AddUpdateCache(AppliedPaymentType.Debit, new TypeField("Debit", "Debit", new Guid("916929F0-96FB-430A-886D-F7A83E9A4B9A")));
-            AddUpdateCache(AppliedPaymentType.Void, new TypeField("Void", "Void", new Guid("F59C7DA6-8252-4891-A5A2-7F6C38766649")));
+            AddUpdateCache(AppliedPaymentType.Credit, new TypeField("Credit", "Credit", Constants.TypeFieldKeys.AppliedPayment.CreditRecordKey));
+            AddUpdateCache(AppliedPaymentType.Debit, new TypeField("Debit", "Debit", Constants.TypeFieldKeys.AppliedPayment.DebitRecordKey));
+            AddUpdateCache(AppliedPaymentType.Void, new TypeField("Void", "Void", Constants.TypeFieldKeys.AppliedPayment.VoidRecordKey));
         }
 
         /// <summary>

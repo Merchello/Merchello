@@ -9,6 +9,11 @@ namespace Merchello.Core.Models
     /// </summary>
     public interface IShipment : ILineItemContainer
     {
+        /// <summary>
+        /// The organization or company name associated with the address
+        /// </summary>
+        [DataMember]
+        string FromOrganization { get; set; }
 
         /// <summary>
         /// The origin address's name for the Shipment
@@ -53,6 +58,18 @@ namespace Merchello.Core.Models
         string FromCountryCode { get; set; }
 
         /// <summary>
+        /// True/false indicating whether or not the origin's address is a commercial address. Used by some shipping providers.
+        /// </summary>
+        [DataMember]
+        bool FromIsCommercial { get; set; }
+
+        /// <summary>
+        /// The organization or company name associated with the address
+        /// </summary>
+        [DataMember]
+        string ToOrganization { get; set; }
+
+        /// <summary>
         /// The destination address's name or company for the Shipment
         /// </summary>
         [DataMember]
@@ -93,7 +110,13 @@ namespace Merchello.Core.Models
         /// </summary>
         [DataMember]
         string ToCountryCode { get; set;}
-            
+
+        /// <summary>
+        /// True/false indicating whether or not the destination address is a commercial address.  Used by some shipping providers.
+        /// </summary>
+        [DataMember]
+        bool ToIsCommercial { get; set; }
+                        
         /// <summary>
         /// The ship method associated with this shipment
         /// </summary>
@@ -102,12 +125,6 @@ namespace Merchello.Core.Models
         /// </remarks>
         [DataMember]
         Guid? ShipMethodKey { get; set; }
-
-        /// <summary>
-        /// The invoice item, if any, associated with this shipment
-        /// </summary>
-        [DataMember]
-        Guid? InvoiceItemKey { get; set; }
             
         /// <summary>
         /// The phone number at the shipping address for the Shipment
@@ -115,6 +132,11 @@ namespace Merchello.Core.Models
         [DataMember]
         string Phone { get; set;}
 
+        /// <summary>
+        /// The contact email address associated with this shipment
+        /// </summary>
+        [DataMember]
+        string Email { get; set; }
 
     }
 }

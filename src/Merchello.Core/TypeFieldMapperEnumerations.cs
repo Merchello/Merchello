@@ -2,8 +2,8 @@
 {
     public enum AddressType
     {
-        Residential,
-        Commercial,
+        Shipping,
+        Billing,
         Custom
     }
 
@@ -11,6 +11,7 @@
     {
         Basket,
         Wishlist,
+        Checkout,
         Custom
     }
 

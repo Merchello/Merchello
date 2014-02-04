@@ -34,7 +34,7 @@
                     <label class="merchello-control-label">
                         Warehouse Info
                         <small>Edit your warehouse</small>
-                        <a data-ng-click="addWarehouseFlyout.open()"><i class="icon-door-open"></i> Edit Warehouse</a>
+                        <a data-ng-click="addWarehouseFlyout.open(primaryWarehouse)"><i class="icon-door-open"></i> Edit Warehouse</a>
                     </label>
 
                     <div class="merchello-controls">
@@ -44,7 +44,7 @@
                             <!-- Add a Warehouse Flyout -->
                             <form name="addWarehouseForm" class="well col-xs-12 span12" data-ng-class="{ 'open': visible.addWarehouseFlyout, 'closed': !flyouts.addWarehouseFlyout }">
                                 <button class="btn close" data-ng-click="addWarehouseFlyout.close()"><i class="icon-delete"></i></button>
-                                <h4 data-ng-switch="newWarehouse.pk">
+                                <h4 data-ng-switch="newWarehouse.key">
                                     <span data-ng-switch-when="no key created">Add a Warehouse</span>
                                     <span data-ng-switch-default="">Edit Warehouse</span>
                                 </h4>
@@ -148,8 +148,9 @@
                                     <label for="country-name">Type your Country Name</label>
                                     <div class="input-append col-xs-12 span12">
                                         <!-- A country list should fly out beneath this input when the user starts typing or if they select the dropdown button -->
-                                        <dropdown-list options="countryOptions"></dropdown-list>
+                                        <dropdown-list selected="countryToAdd" placeholder="Type a country name" countries="availableCountries"></dropdown-list>
                                     </div>
+                                    <div>{{countryToAdd.name}}</div>
                                 </div>
 
                                 <div>
@@ -159,9 +160,9 @@
                             </form>
 
                             <!-- Add a Shipping Method Flyout -->
-                            <div class="well col-xs-12 span12 closed">
-                                <button class="btn close"><i class="icon-delete"></i></button>
-                                <h4>Add/Edit a Shipping Method & Rate for Canada</h4>
+                            <div class="well col-xs-12 span12" data-ng-class="{ 'open': visible.addEditShippingMethodFlyout, 'closed': !visible.addEditShippingMethodFlyout }">
+                                <button class="btn close" data-ng-click="addEditShippingMethodFlyout.close()"><i class="icon-delete"></i></button>
+                                <h4>Add/Edit a Shipping Method & Rate for {{addEditShippingMethodFlyout.model.name}}</h4>
                                 <div class="form-group row-fluid">
                                     <label for="method-name">Name</label>
                                     <input name="method-name" class="col-xs-6 span6" type="text" />
@@ -205,8 +206,8 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>Alberta</td>
+                                        <tr data-ng-repeat="province in addEditShippingMethodFlyout.model.provinces">
+                                            <td>{{province.name}}</td>
                                             <td>
                                                 <div class="input-prepend">
                                                     <span class="add-on">$</span>
@@ -215,30 +216,20 @@
                                             </td>
                                             <td>$25.00</td>
                                         </tr>
-                                        <tr>
-                                            <td>British Columbia</td>
-                                            <td>
-                                                <div class="input-prepend">
-                                                    <span class="add-on">$</span>
-                                                    <input type="number" class="span5" />
-                                                </div>
-                                            </td>
-                                            <td>$20.00</td>
-                                        </tr>
                                     </tbody>
                                 </table>
 
                                 <div>
-                                    <input type="submit" class="btn" value="Cancel" />
-                                    <input type="submit" class="btn btn-primary" value="Save" />
+                                    <input type="submit" class="btn" value="Cancel" data-ng-click="addEditShippingMethodFlyout.close()" />
+                                    <input type="submit" class="btn btn-primary" value="Save" data-ng-click="addEditShippingMethodFlyout.confirm()" />
                                 </div>
                             </div>
 
-                            <table class="table table-striped merchello-striped-table settings-table shipping-table">
+                            <table data-ng-repeat="country in countries" class="table table-striped merchello-striped-table settings-table shipping-table">
                                 <thead>
                                     <tr>
-                                        <th colspan="4">Canada</th>
-                                        <th><a href="#" class="btn btn-primary">Add a Method</a></th>
+                                        <th colspan="4">{{country.name}}</th>
+                                        <th><a data-ng-click="addEditShippingMethodFlyout.open(country)" class="btn btn-primary">Add a Method</a></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -319,6 +310,34 @@
                                     </tr>
                                 </tbody>
                             </table>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="merchello-pane row-fluid">
+                <div class="control-group umb-control-group">
+                    <label class="merchello-control-label">
+                        <label><input data-ng-model="debugging" type="checkbox" /> Debug</label>
+                        <small>Check to show debugging info</small>
+                    </label>
+
+                    <div class="merchello-controls">
+
+                        <div data-ng-show="debugging">
+                            <h3>Warehouse</h3>
+                            <div class="jsonInfo">{{warehouses | json}}</div>
+                                                
+                            <h3>countryToAdd</h3>
+                            <div class="jsonInfo">{{countryToAdd | json}}</div>
+                                                
+                            <h3>countries</h3>
+                            <div class="jsonInfo">{{countries | json}}</div>
+                                                
+                            <h3>Available Countries</h3>
+                            <div class="jsonInfo">{{availableCountries | json}}</div>
 
                         </div>
 

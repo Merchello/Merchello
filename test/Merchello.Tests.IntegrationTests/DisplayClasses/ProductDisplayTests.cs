@@ -45,6 +45,8 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
             product.CostOfGoods = 15M;
             product.OnSale = true;
             product.SalePrice = 18M;
+            product.Manufacturer = "Nike";
+            product.ManufacturerModelNumber = "N01-012021-A";
             productService.Save(product);
 
             _productKey = product.Key;
@@ -56,7 +58,7 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
             };
 
             var variant = productVariantService.CreateProductVariantWithKey(product, attributes);
-            variant.AddToWarehouseCatalog(_warehouse.DefaultCatalog());
+            variant.AddToCatalogInventory(_warehouse.DefaultCatalog());
             productVariantService.Save(variant);
             _productVariantKey = variant.Key;
             _examineId = ((ProductVariant) variant).ExamineId;
@@ -81,7 +83,7 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
             //// Assert
             Assert.NotNull(productVariantDisplay);
             Assert.IsTrue(2 == productVariantDisplay.Attributes.Count());
-            Assert.IsTrue(productVariantDisplay.WarehouseInventory.Any());
+            Assert.IsTrue(productVariantDisplay.CatalogInventories.Any());
         }
 
         [Test]
@@ -101,6 +103,106 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
             Assert.NotNull(product);
         }
 
+        [Test]
+        public void Can_Build_ProductDisplay_From_Product()
+        {
+            //// Arrange
+            var productService = PreTestDataWorker.ProductService;
+            var product = productService.GetByKey(_productKey);
+            var productVariant = product.ProductVariants.First();
+            var productOption = product.ProductOptions.First();
+            var productChoice = productOption.Choices.First();
+            var catalogInventory = productVariant.CatalogInventories.First();
+
+            //// Act
+            var productDisplay = product.ToProductDisplay();
+            var productVariantDisplay = productDisplay.ProductVariants.First();
+            var productOptionDisplay = productDisplay.ProductOptions.First();
+            var productChoiceDisplay = productOptionDisplay.Choices.First();
+            var catalogInventoryDisplay = productVariantDisplay.CatalogInventories.First();
+
+            //// Assert
+            Assert.NotNull(productDisplay);
+            Assert.AreEqual(product.Price, productDisplay.Price);
+            Assert.AreEqual(product.SalePrice, productDisplay.SalePrice);
+            Assert.AreEqual(product.Height, productDisplay.Height);
+            Assert.AreEqual(product.OnSale, productDisplay.OnSale);
+            Assert.AreEqual(product.Sku, productDisplay.Sku);
+            Assert.AreEqual(product.Manufacturer, productDisplay.Manufacturer);
+            Assert.AreEqual(product.ManufacturerModelNumber, productDisplay.ManufacturerModelNumber);
+            Assert.AreNotEqual(productDisplay.ManufacturerModelNumber, productDisplay.Manufacturer);
+            Assert.AreEqual(product.ProductOptions.Count, productDisplay.ProductOptions.Count());
+            Assert.AreEqual(product.ProductVariants.Count, productDisplay.ProductVariants.Count());
+
+            Assert.NotNull(productVariantDisplay);
+            Assert.AreEqual(productVariant.Sku, productVariantDisplay.Sku);
+            Assert.AreEqual(productVariant.Price, productVariantDisplay.Price);
+            Assert.AreEqual(productVariant.ProductKey, productVariantDisplay.ProductKey);
+            Assert.AreEqual(productVariant.Attributes.Count(), productVariantDisplay.Attributes.Count());
+            Assert.IsTrue(productVariantDisplay.CatalogInventories.Any());
+
+            Assert.NotNull(catalogInventoryDisplay);
+            Assert.AreEqual(catalogInventory.CatalogKey, catalogInventoryDisplay.CatalogKey);
+            Assert.AreEqual(catalogInventory.Count, catalogInventoryDisplay.Count);
+            Assert.AreEqual(catalogInventory.ProductVariantKey, catalogInventoryDisplay.ProductVariantKey);
+            Assert.AreEqual(catalogInventory.LowCount, catalogInventoryDisplay.LowCount);
+
+            Assert.NotNull(productOptionDisplay);
+            Assert.AreEqual(productOption.Name, productOptionDisplay.Name);
+            Assert.AreEqual(productOption.SortOrder, productOptionDisplay.SortOrder);
+            Assert.AreEqual(productOption.Choices.Count(), productOptionDisplay.Choices.Count());
+
+            Assert.NotNull(productChoiceDisplay);
+            Assert.AreEqual(productChoice.Name, productChoiceDisplay.Name);
+            Assert.AreEqual(productChoice.SortOrder, productChoiceDisplay.SortOrder);
+            Assert.AreEqual(productChoice.Sku, productChoiceDisplay.Sku);
+        }
+
+        [Test]
+        public void Can_Build_Product_From_ProductDisplay()
+        {
+            //// Arrange
+            var productService = PreTestDataWorker.ProductService;
+            var product = productService.GetByKey(_productKey);
+            var productDisplay = product.ToProductDisplay();
+
+            productDisplay.Barcode = "test-barcode";
+            productDisplay.SalePrice = 17M;
+
+            //// Act
+            var mappedProduct = productDisplay.ToProduct(product);
+
+            //// Assert
+            Assert.NotNull(mappedProduct);
+            Assert.IsTrue(mappedProduct.HasIdentity);
+            Assert.AreEqual(mappedProduct.Price, productDisplay.Price);
+            Assert.AreEqual(mappedProduct.SalePrice, productDisplay.SalePrice);
+            Assert.AreEqual(mappedProduct.Height, productDisplay.Height);
+            Assert.AreEqual(mappedProduct.OnSale, productDisplay.OnSale);
+            Assert.AreEqual(mappedProduct.Sku, productDisplay.Sku);
+            Assert.AreEqual(mappedProduct.Manufacturer, productDisplay.Manufacturer);
+            Assert.AreEqual(mappedProduct.ManufacturerModelNumber, productDisplay.ManufacturerModelNumber);
+            //Assert.AreNotEqual(mappedProduct.ManufacturerModelNumber, mappedProduct.Manufacturer);
+            Assert.AreEqual(mappedProduct.ProductOptions.Count, mappedProduct.ProductOptions.Count());
+            Assert.AreEqual(mappedProduct.ProductVariants.Count, mappedProduct.ProductVariants.Count());
+        }
+
+        [Test]
+        public void Can_Find_All_Products_From_Index()
+        {
+            //// Arrange
+            var searcher = ExamineManager.Instance.SearchProviderCollection["MerchelloProductSearcher"];
+            var criteria = searcher.CreateSearchCriteria();
+            criteria.Field("master", "True");
+
+            //// Act
+            var allProducts = searcher.Search(criteria).OrderByDescending(x => x.Score)
+                                      .Select(result => result.ToProductDisplay());
+
+            //// Assert
+            Assert.NotNull(allProducts);
+            Assert.IsTrue(allProducts.Any());
+        }
 
     }
 }

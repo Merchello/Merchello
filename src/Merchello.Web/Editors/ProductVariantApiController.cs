@@ -23,6 +23,7 @@ namespace Merchello.Web.Editors
     {
         private readonly IProductVariantService _productVariantService;
         private readonly IProductService _productService;
+        private readonly IWarehouseService _warehouseService;
 
         /// <summary>
         /// Constructor
@@ -41,6 +42,7 @@ namespace Merchello.Web.Editors
         {
             _productService = MerchelloContext.Services.ProductService;
             _productVariantService = MerchelloContext.Services.ProductVariantService;
+            _warehouseService = MerchelloContext.Services.WarehouseService;
         }
 
         /// <summary>
@@ -51,6 +53,7 @@ namespace Merchello.Web.Editors
         {
             _productService = MerchelloContext.Services.ProductService;
             _productVariantService = MerchelloContext.Services.ProductVariantService;
+            _warehouseService = MerchelloContext.Services.WarehouseService;
         }
 
         /// <summary>
@@ -161,6 +164,16 @@ namespace Merchello.Web.Editors
                     }
 
                     newProductVariant = _productVariantService.CreateProductVariantWithKey(product, productVariant.Name, productVariant.Sku, productVariant.Price, productAttributes, true);
+
+                    if (!newProductVariant.Download)
+                    {
+                        newProductVariant.AddToCatalogInventory(_warehouseService.GetDefaultWarehouse().DefaultCatalog());
+                        newProductVariant.CatalogInventories.First().Count = 10;
+                        newProductVariant.CatalogInventories.First().LowCount = 3;
+                        //newProductVariant.Warehouses.First().Count = productVariant.WarehouseInventory.First().Count;
+                        //newProductVariant.Warehouses.First().LowCount = productVariant.WarehouseInventory.First().LowCount;
+                        _productVariantService.Save(newProductVariant);
+                    }
                 }
                 else
                 {
@@ -181,7 +194,7 @@ namespace Merchello.Web.Editors
         /// PUT /umbraco/Merchello/ProductVariantApi/PutProductVariant
         /// </summary>
         /// <param name="productVariant">ProductVariantDisplay object serialized from WebApi</param>
-        [AcceptVerbs("PUT")]
+        [AcceptVerbs("POST", "PUT")]
         public HttpResponseMessage PutProductVariant(ProductVariantDisplay productVariant)
         {
             var response = Request.CreateResponse(HttpStatusCode.OK);
