@@ -505,6 +505,7 @@
     <Compile Include="Persistence\Querying\Query.cs" />
     <Compile Include="Persistence\UnitOfWork\PetaPocoUnitOfWork.cs" />
     <Compile Include="Persistence\UnitOfWork\PetaPocoUnitOfWorkProvider.cs" />
+    <Compile Include="Pipelines\IPipelineBase.cs" />
     <Compile Include="Pipelines\IPipelineTask.cs" />
     <Compile Include="Pipelines\IPipelineTaskHandler.cs" />
     <Compile Include="Pipelines\PipelineEndOfChainHandler.cs" />
