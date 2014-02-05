@@ -75,5 +75,14 @@ namespace Merchello.Core.Configuration.Outline
             get { return (RegionalProvinceCollection) this["regionalProvinces"]; }
         }
 
+        /// <summary>
+        /// Gets the task chain collection
+        /// </summary>
+        [ConfigurationProperty("taskChains", IsRequired = true), ConfigurationCollection(typeof(TaskChainsCollection), AddItemName = "taskChain")]
+        public TaskChainsCollection TaskChains
+        {
+            get { return (TaskChainsCollection)this["taskChains"]; }
+        }
+
     }
 }

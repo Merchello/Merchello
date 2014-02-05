@@ -20,6 +20,7 @@ namespace Merchello.Tests.IntegrationTests.Services.Product
         {
             PreTestDataWorker.DeleteAllProducts();
             _productService = PreTestDataWorker.ProductService;
+            Thread.Sleep(200); // pause for the index
         }
 
         /// <summary>

@@ -1,11 +1,11 @@
 ﻿using Umbraco.Core;
 
-namespace Merchello.Core.Pipelines
+namespace Merchello.Core.Chains
 {
     /// <summary>
     /// Defines a pipeline task
     /// </summary>
-    internal interface IPipelineTask<T>
+    public interface IAttemptChainTask<T>
     {   
         Attempt<T> PerformTask(T arg);
     }
