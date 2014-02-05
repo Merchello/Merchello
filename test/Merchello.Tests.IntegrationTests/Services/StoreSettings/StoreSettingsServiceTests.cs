@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Services;
+using Merchello.Tests.IntegrationTests.TestHelpers;
 using NUnit.Framework;
 using StackExchange.Profiling;
 using umbraco.cms.businesslogic.datatype;
@@ -11,7 +12,7 @@ namespace Merchello.Tests.IntegrationTests.Services.StoreSettings
 {
     [TestFixture]
     [Category("Service Integration")]
-    public class StoreSettingsServiceTests : ServiceIntegrationTestBase
+    public class StoreSettingsServiceTests : DatabaseIntegrationTestBase
     {
         private IStoreSettingService _settingsService;
 

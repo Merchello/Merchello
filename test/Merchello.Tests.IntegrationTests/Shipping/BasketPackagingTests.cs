@@ -5,6 +5,7 @@ using Merchello.Core.Models;
 using Merchello.Core.Persistence.UnitOfWork;
 using Merchello.Core.Services;
 using Merchello.Tests.IntegrationTests.Services;
+using Merchello.Tests.IntegrationTests.TestHelpers;
 using Merchello.Web;
 using Merchello.Web.Models;
 using Merchello.Web.Workflow;
@@ -14,7 +15,7 @@ using Umbraco.Core;
 
 namespace Merchello.Tests.IntegrationTests.Shipping
 {
-    public class BasketPackagingTests : ServiceIntegrationTestBase
+    public class BasketPackagingTests : DatabaseIntegrationTestBase
     {
         private IMerchelloContext _merchelloContext;
         private ICustomerBase _customer;

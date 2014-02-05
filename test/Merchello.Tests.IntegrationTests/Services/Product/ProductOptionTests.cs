@@ -1,13 +1,14 @@
 ﻿using System.Linq;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
+using Merchello.Tests.IntegrationTests.TestHelpers;
 using NUnit.Framework;
 
 namespace Merchello.Tests.IntegrationTests.Services.Product
 {
     [TestFixture]
     [Category("Service Integration")]
-    public class ProductOptionTests : ServiceIntegrationTestBase
+    public class ProductOptionTests : DatabaseIntegrationTestBase
     {
         private IProductService _productService;
 

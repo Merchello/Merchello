@@ -7,12 +7,13 @@ using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Persistence.UnitOfWork;
 using Merchello.Core.Services;
 using Merchello.Tests.IntegrationTests.Services;
+using Merchello.Tests.IntegrationTests.TestHelpers;
 using NUnit.Framework;
 using Umbraco.Core;
 
 namespace Merchello.Tests.IntegrationTests.Shipping
 {
-    public class ShippingProviderTestBase : ServiceIntegrationTestBase
+    public class ShippingProviderTestBase : DatabaseIntegrationTestBase
     {
         protected IGatewayProviderService GatewayProviderService;
         protected IWarehouseCatalog Catalog;

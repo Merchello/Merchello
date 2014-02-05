@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Examine;
-using Merchello.Tests.IntegrationTests.TestHelpers;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
-namespace Merchello.Tests.IntegrationTests.Services
+namespace Merchello.Tests.IntegrationTests.TestHelpers
 {
-    public abstract class ServiceIntegrationTestBase
+    public abstract class DatabaseIntegrationTestBase
     {
         [TestFixtureSetUp]
         public virtual void FixtureSetup()
@@ -19,7 +12,7 @@ namespace Merchello.Tests.IntegrationTests.Services
 
         protected DbPreTestDataWorker PreTestDataWorker { get; private set; }
 
-        protected ServiceIntegrationTestBase()
+        protected DatabaseIntegrationTestBase()
         {
             PreTestDataWorker = new DbPreTestDataWorker();
         }

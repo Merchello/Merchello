@@ -4,13 +4,14 @@ using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Core.Models.TypeFields;
 using Merchello.Core.Services;
+using Merchello.Tests.IntegrationTests.TestHelpers;
 using NUnit.Framework;
 
 namespace Merchello.Tests.IntegrationTests.Services.Customer
 {
     [TestFixture]
     [NUnit.Framework.Category("Service Integration")]
-    public class CustomerItemCacheServiceTests : ServiceIntegrationTestBase
+    public class CustomerItemCacheServiceTests : DatabaseIntegrationTestBase
     {
         private IAnonymousCustomer _anonymous;
         private IItemCacheService _itemCacheService;   

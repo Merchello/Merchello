@@ -5,13 +5,14 @@ using System.Threading;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Merchello.Tests.Base.DataMakers;
+using Merchello.Tests.IntegrationTests.TestHelpers;
 using NUnit.Framework;
 
 namespace Merchello.Tests.IntegrationTests.Services.Product
 {
     [TestFixture]
     [Category("Service Integration")]
-    public class ProductTests : ServiceIntegrationTestBase
+    public class ProductTests : DatabaseIntegrationTestBase
     {
         private IProductService _productService;
 
@@ -20,6 +21,7 @@ namespace Merchello.Tests.IntegrationTests.Services.Product
         {
             PreTestDataWorker.DeleteAllProducts();
             _productService = PreTestDataWorker.ProductService;
+            Thread.Sleep(200); // pause for the index
         }
 
         /// <summary>
