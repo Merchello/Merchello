@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using Merchello.Core.Pipelines;
+using Merchello.Core.Chains;
 using NUnit.Framework;
-using Umbraco.Core;
 
-namespace Merchello.Tests.UnitTests.Pipeline
+namespace Merchello.Tests.UnitTests.Chains
 {
     // Generate Invoice (method in checkoutbase)
     // 
@@ -19,20 +17,20 @@ namespace Merchello.Tests.UnitTests.Pipeline
     // Generate order( invoice ) -> Generate shipment(s) (invoice)
 
     [TestFixture]
-    public class ConceptPipelineTests
+    public class TaskChainConceptTests
     {
-        private IEnumerable<TestPipelineTaskHandler> _tasks;
+        private IEnumerable<AttemptChainTaskHandler<int>> _tasks;
         private int _taskCount = 10;
 
 
         [SetUp]
         public void Init()
-        {         
-            var taskList = new List<TestPipelineTaskHandler>();
+        {
+            var taskList = new List<AttemptChainTaskHandler<int>>();
 
             for (var i = 0; i < _taskCount; i++)
             {
-                var newTask = new TestPipelineTaskHandler(new DemoPipelineTask() {Index = i});
+                var newTask = new AttemptChainTaskHandler<int>(new DemoAttemptChainTask() { Index = i });
                 taskList.Add(newTask);
             }
 
@@ -46,7 +44,7 @@ namespace Merchello.Tests.UnitTests.Pipeline
         }
 
         [Test]
-        public void Can_Execute_All_Tasks_In_The_Pipeline()
+        public void Can_Execute_All_Tasks_In_The_TaskChain()
         {
             //// Arrange
             var first = _tasks.FirstOrDefault();
@@ -64,23 +62,5 @@ namespace Merchello.Tests.UnitTests.Pipeline
 
        
 
-    }
-
-    internal class TestPipelineTaskHandler : PipelineTaskHandlerBase<int>
-    {
-        public TestPipelineTaskHandler(IPipelineTask<int> task) : base(task)
-        {
-        }
-    }
-
-    internal class DemoPipelineTask : IPipelineTask<int>
-    {
-        public int Index { get; set; }
-
-        public Attempt<int> PerformTask(int arg)
-        {
-            var addOne = arg + 1;
-            return Attempt.Succeed(addOne);
-        }
     }
 }

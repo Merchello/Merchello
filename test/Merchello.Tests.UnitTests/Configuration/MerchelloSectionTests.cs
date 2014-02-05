@@ -80,6 +80,24 @@ namespace Merchello.Tests.UnitTests.Configuration
             //// Assert
             Assert.AreEqual(expected, actual);
         }
+
+        /// <summary>
+        /// Test to verify that a task chain can be retrieved by its alias
+        /// </summary>
+        [Test]
+        public void Can_Retrieve_A_TaskChain_By_Alias()
+        {
+            //// Arrange
+            const string alias = "CheckoutInvoiceCreate";
+
+            //// Act
+            var taskChain = _config.TaskChains[alias];
+
+            //// Assert
+            Assert.NotNull(taskChain);
+            Assert.AreEqual(typeof(TaskChainElement), taskChain.GetType());
+
+        }
     }
 
 

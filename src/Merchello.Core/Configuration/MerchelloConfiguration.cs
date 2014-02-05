@@ -3,7 +3,6 @@ using System.Configuration;
 using System.IO;
 using System.Reflection;
 using Merchello.Core.Configuration.Outline;
-using Umbraco.Core.IO;
 
 namespace Merchello.Core.Configuration
 {
@@ -56,6 +55,25 @@ namespace Merchello.Core.Configuration
         public string DefaultSkuSeparator
         {
             get { return Section.Settings["DefaultSkuSeparator"].Value; }
+        }
+
+        /// <summary>
+        /// Gets a <see cref="TaskChainElement"/> by its configuration alias
+        /// </summary>
+        /// <param name="alias">The alias (configuration key) of the <see cref="TaskChainElement"/></param>
+        /// <returns><see cref="TaskChainElement"/></returns>
+        public TaskChainElement GetTaskChainElement(string alias)
+        {
+            try
+            {
+                return Section.TaskChains[alias];
+            }
+            catch (Exception)
+            {
+
+                return null;
+            }
+            
         }
 
         /// <summary>

@@ -74,6 +74,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActivatorHelper.cs" />
+    <Compile Include="Builders\IInvoiceBuilder.cs" />
+    <Compile Include="Builders\InvoiceBuilder.cs" />
+    <Compile Include="Chains\ChainTaskResolver.cs" />
+    <Compile Include="Chains\CheckOut\CheckoutAddShipmentLineItemsToInvoiceTask.cs" />
+    <Compile Include="Chains\CheckOut\CheckoutApplyTaxesToInvoiceTax.cs" />
+    <Compile Include="Chains\CheckOut\CheckoutCreateInvoiceTask.cs" />
+    <Compile Include="Chains\CheckOut\CheckoutAttemptChainTaskBase.cs" />
+    <Compile Include="Chains\Invoices\InvoiceAttemptChainTaskBase.cs" />
+    <Compile Include="Chains\Invoices\InvoiceAttemptChainTaskHandler.cs" />
     <Compile Include="Checkout\CheckoutBase.cs" />
     <Compile Include="Checkout\ICheckoutBase.cs" />
     <Compile Include="Builders\IBuilder.cs" />
@@ -85,7 +94,14 @@
     <Compile Include="Configuration\Outline\RegionElement.cs" />
     <Compile Include="Configuration\Outline\SettingsCollection.cs" />
     <Compile Include="Configuration\Outline\SettingsElement.cs" />
+    <Compile Include="Configuration\Outline\TaskChainElement.cs" />
+    <Compile Include="Configuration\Outline\TaskChainsCollection.cs" />
+    <Compile Include="Configuration\Outline\TaskElement.cs" />
+    <Compile Include="Configuration\Outline\TasksConfigurationCollection.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Constants-TaskChains.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
     <Compile Include="Constants-Keys.cs">
       <DependentUpon>Constants.cs</DependentUpon>
     </Compile>
@@ -505,10 +521,10 @@
     <Compile Include="Persistence\Querying\Query.cs" />
     <Compile Include="Persistence\UnitOfWork\PetaPocoUnitOfWork.cs" />
     <Compile Include="Persistence\UnitOfWork\PetaPocoUnitOfWorkProvider.cs" />
-    <Compile Include="Pipelines\IPipelineTask.cs" />
-    <Compile Include="Pipelines\IPipelineTaskHandler.cs" />
-    <Compile Include="Pipelines\PipelineEndOfChainHandler.cs" />
-    <Compile Include="Pipelines\PipelineTaskHandlerBase.cs" />
+    <Compile Include="Chains\IAttemptChainTask.cs" />
+    <Compile Include="Chains\IAttemptChainTaskHandler.cs" />
+    <Compile Include="Chains\AttemptChainEndOfChainHandler.cs" />
+    <Compile Include="Chains\AttemptChainTaskHandler.cs" />
     <Compile Include="RateAdjustmentType.cs" />
     <Compile Include="SerializationHelper.cs" />
     <Compile Include="Services\CountryTaxRateService.cs" />

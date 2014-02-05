@@ -1,18 +1,18 @@
 ﻿using System;
 using Umbraco.Core;
 
-namespace Merchello.Core.Pipelines
+namespace Merchello.Core.Chains
 {
     /// <summary>
     /// Represents an end of chain PipelineTaskHander.  This terminates the task chain.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    internal class PipelineEndOfChainHandler<T> : IPipelineTaskHandler<T>
+    internal class AttemptChainEndOfChainHandler<T> : IAttemptChainTaskHandler<T>
 
     {
-        private static readonly PipelineEndOfChainHandler<T> _instance = new PipelineEndOfChainHandler<T>();
+        private static readonly AttemptChainEndOfChainHandler<T> _instance = new AttemptChainEndOfChainHandler<T>();
 
-        public static PipelineEndOfChainHandler<T> Instance
+        public static AttemptChainEndOfChainHandler<T> Instance
         {
             get { return _instance; }
         }
@@ -31,7 +31,7 @@ namespace Merchello.Core.Pipelines
         /// Registers the next task
         /// </summary>
         /// <param name="next"></param>
-        public void RegisterNext(IPipelineTaskHandler<T> next)
+        public void RegisterNext(IAttemptChainTaskHandler<T> next)
         {
             throw new InvalidOperationException("Cannot register next on the end of chain.");
         }
