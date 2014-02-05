@@ -6,6 +6,7 @@ using Merchello.Examine;
 using Merchello.Examine.Providers;
 using Merchello.Tests.Base.DataMakers;
 using Merchello.Tests.IntegrationTests.Services;
+using Merchello.Tests.IntegrationTests.TestHelpers;
 using NUnit.Framework;
 using Umbraco.Core;
 using Umbraco.Core.Events;
@@ -13,7 +14,7 @@ using Umbraco.Core.Events;
 namespace Merchello.Tests.IntegrationTests.Examine
 {
     [TestFixture]
-    public class StartupExamineEventTests : ServiceIntegrationTestBase
+    public class StartupExamineEventTests : DatabaseIntegrationTestBase
     {
         private bool _productSavedEventTriggered;
         private IProductService _productService;

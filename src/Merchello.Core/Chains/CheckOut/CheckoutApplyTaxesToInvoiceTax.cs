@@ -6,7 +6,7 @@ namespace Merchello.Core.Chains.CheckOut
 {
     internal class CheckoutApplyTaxesToInvoiceTax : CheckoutAttemptChainTaskBase
     {
-        internal CheckoutApplyTaxesToInvoiceTax(CheckoutBase checkout) 
+        public CheckoutApplyTaxesToInvoiceTax(CheckoutBase checkout) 
             : base(checkout)
         { }
 

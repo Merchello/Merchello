@@ -232,6 +232,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Invoicing\InvoiceBuilderTests.cs" />
     <Compile Include="DisplayClasses\ProductDisplayTests.cs" />
     <Compile Include="DisplayClasses\ShippingDisplayTests.cs" />
     <Compile Include="DisplayClasses\WarehouseDisplayTests.cs" />
@@ -254,7 +255,7 @@
     <Compile Include="Services\ProductVariant\ProductVariantTests.cs" />
     <Compile Include="Services\Product\ProductOptionTests.cs" />
     <Compile Include="Services\Product\ProductTests.cs" />
-    <Compile Include="Services\ServiceIntegrationTestBase.cs" />
+    <Compile Include="TestHelpers\DatabaseIntegrationTestBase.cs" />
     <Compile Include="Shipping\ShipCountryTests.cs" />
     <Compile Include="Taxation\CountryTaxRateTaxationGatewayProviderTests.cs" />
     <Compile Include="Taxation\TaxationProviderTestBase.cs" />

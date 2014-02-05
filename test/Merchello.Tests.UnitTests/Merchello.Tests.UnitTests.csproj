@@ -234,7 +234,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Chains\InvoiceBuilderTests.cs" />
     <Compile Include="Configuration\RegionalProvinceConfigurationCollectionTest.cs" />
     <Compile Include="ExtendedData\ExtendedDataExtensionTests.cs" />
     <Compile Include="Models\BasketTests.cs" />
