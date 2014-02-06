@@ -1,5 +1,7 @@
-﻿using Merchello.Core.Models;
+﻿using System;
+using Merchello.Core.Models;
 using Merchello.Core.Services;
+using Merchello.Core.Strategies.Taxation;
 using Umbraco.Core.Cache;
 
 namespace Merchello.Core.Gateways.Taxation
@@ -18,6 +20,18 @@ namespace Merchello.Core.Gateways.Taxation
         /// </summary>
         /// <param name="invoice"><see cref="IInvoice"/></param>
         /// <returns><see cref="IInvoiceTaxResult"/></returns>
-        public abstract IInvoiceTaxResult CalculateTaxForInvoice(IInvoice invoice);
+        public virtual IInvoiceTaxResult CalculateTaxForInvoice(IInvoice invoice)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IInvoiceTaxResult CalculateTaxForInvoice(IInvoice invoice, IInvoiceTaxationStrategy strategy)
+        {
+            var attempt = strategy.GetInvoiceTaxResult(invoice);
+
+            if (!attempt.Success) throw attempt.Exception;
+
+            return attempt.Result;
+        }
     }
 }

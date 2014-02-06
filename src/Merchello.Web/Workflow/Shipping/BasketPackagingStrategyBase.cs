@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using Merchello.Core;
 using Merchello.Core.Models;
-using Merchello.Core.Models.Interfaces;
 
-namespace Merchello.Web.Workflow.Shipping.Packaging
+namespace Merchello.Web.Workflow.Shipping
 {
     public abstract class BasketPackagingStrategyBase : IBasketPackagingStrategy
     {

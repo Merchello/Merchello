@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using ClientDependency.Core;
 using Merchello.Core.Configuration.Outline;
 using NUnit.Framework;
 
@@ -66,16 +67,16 @@ namespace Merchello.Tests.UnitTests.Configuration
         }
 
         /// <summary>
-        /// Test to verify that the DefaultApplyPaymentStrategy can be retrieved
+        /// Test to verify that the DefaultBasketPackagingStrategy can be retrieved
         /// </summary>
         [Test]
-        public void Can_Retrieve_DefaultApplyPaymentStrategy_Setting()
+        public void Can_Retrieve_DefaultBasketPackagingStrategy_Setting()
         {
             //// Arrage
-            const string expected = "Merchello.Core.Strategies.Payment.PaymentApplicationStrategy, Merchello.Core";
+            const string expected = "Merchello.Web.Workflow.Shipping.DefaultWarehousePackagingStrategy, Merchello.Web";
 
             //// Act
-            var actual = _config.Settings["DefaultApplyPaymentStrategy"].Value;
+            var actual = _config.Strategies[Core.Constants.StrategyTypeAlias.DefaultBasketPackaging].Type;
 
             //// Assert
             Assert.AreEqual(expected, actual);

@@ -30,6 +30,7 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
         {
             // TODO this should be made configurable
             var visitor = new RateTableShipMethodShipmentLineItemVisitor { UseOnSalePriceIfOnSale = false };
+
             shipment.Items.Accept(visitor);
 
             var province = ShipMethod.Provinces.FirstOrDefault(x => x.Code == shipment.ToRegion);

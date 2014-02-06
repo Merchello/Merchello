@@ -3,10 +3,9 @@ using System.IO;
 using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Models;
-using Merchello.Core.Models.Interfaces;
 using Umbraco.Core.Logging;
 
-namespace Merchello.Web.Workflow.Shipping.Packaging
+namespace Merchello.Web.Workflow.Shipping
 {
     /// <summary>
     /// Represents the default basket packaging strategy.  
