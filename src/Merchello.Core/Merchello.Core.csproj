@@ -79,7 +79,7 @@
     <Compile Include="Chains\ChainTaskResolver.cs" />
     <Compile Include="Chains\CheckOut\CheckoutAddShipmentLineItemsToInvoiceTask.cs" />
     <Compile Include="Chains\CheckOut\CheckoutApplyTaxesToInvoiceTax.cs" />
-    <Compile Include="Chains\CheckOut\CheckoutCreateInvoiceTask.cs" />
+    <Compile Include="Chains\CheckOut\CheckoutAddBillingInfoToInvoiceTask.cs" />
     <Compile Include="Chains\CheckOut\CheckoutAttemptChainTaskBase.cs" />
     <Compile Include="Chains\Invoices\InvoiceAttemptChainTaskBase.cs" />
     <Compile Include="Chains\Invoices\InvoiceAttemptChainTaskHandler.cs" />
@@ -246,6 +246,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\Invoice.cs" />
+    <Compile Include="Models\InvoiceExtensions.cs" />
     <Compile Include="Models\InvoiceLineItem.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -11,9 +11,5 @@ namespace Merchello.Tests.Base.DataMakers
         {
         }
 
-        public override void CompleteCheckout(IPaymentGatewayProvider paymentGatewayProvider)
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }
