@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Examine;
+using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Merchello.Examine;

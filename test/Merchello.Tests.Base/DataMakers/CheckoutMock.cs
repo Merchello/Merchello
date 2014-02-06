@@ -7,13 +7,11 @@ namespace Merchello.Tests.Base.DataMakers
 {
     internal class CheckoutMock : CheckoutBase
     {
-        public CheckoutMock(IMerchelloContext merchelloContext, IItemCache itemCache, ICustomerBase customer) : base(merchelloContext, itemCache, customer)
+        public CheckoutMock(IMerchelloContext merchelloContext, IItemCache itemCache, ICustomerBase customer) 
+            : base(merchelloContext, itemCache, customer)
         {
+
         }
 
-        public override void CompleteCheckout(IPaymentGatewayProvider paymentGatewayProvider)
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }

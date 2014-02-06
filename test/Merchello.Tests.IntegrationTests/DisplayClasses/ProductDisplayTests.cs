@@ -2,6 +2,7 @@
 using System.Linq;
 using Examine;
 using Examine.SearchCriteria;
+using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Examine.Providers;
 using Merchello.Tests.Base.DataMakers;

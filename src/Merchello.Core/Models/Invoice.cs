@@ -53,6 +53,8 @@ namespace Merchello.Core.Models
             _billToCountryCode = billToAddress.CountryCode;
             _billToPhone = billToAddress.Phone;
 
+            _items = lineItemCollection;
+
         }
 
         private static readonly PropertyInfo CustomerKeySelector = ExpressionHelper.GetPropertyInfo<Invoice, Guid?>(x => x.CustomerKey);

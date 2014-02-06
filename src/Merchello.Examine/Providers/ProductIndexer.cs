@@ -8,6 +8,7 @@ using Examine;
 using Examine.LuceneEngine;
 using Examine.LuceneEngine.Config;
 using Lucene.Net.Analysis;
+using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Examine.DataServices;
 

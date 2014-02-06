@@ -88,32 +88,32 @@ namespace Merchello.Core.Checkout
             _itemCache.AddItem(item);
         }
 
-        /// <summary>
-        /// Generates an <see cref="IInvoice"/>
-        /// </summary>
-        /// <param name="applyTax">True/false indicating whether or not to apply taxes to the invoice</param>
-        /// <returns>An <see cref="IInvoice"/></returns>
-        public virtual IInvoice GenerateInvoice(bool applyTax = true)
-        {
-            var invoiceStatusKey = Constants.DefaultKeys.UnpaidInvoiceStatusKey;
+        ///// <summary>
+        ///// Generates an <see cref="IInvoice"/>
+        ///// </summary>
+        ///// <param name="applyTax">True/false indicating whether or not to apply taxes to the invoice</param>
+        ///// <returns>An <see cref="IInvoice"/></returns>
+        //public virtual IInvoice GenerateInvoice(bool applyTax = true)
+        //{
+        //    var invoiceStatusKey = Constants.DefaultKeys.UnpaidInvoiceStatusKey;
 
-            var billToAddress = _customer.ExtendedData.GetAddress(Constants.ExtendedDataKeys.BillingAddress);
-            var lineItemCollection = _itemCache.Items;
+        //    var billToAddress = _customer.ExtendedData.GetAddress(Constants.ExtendedDataKeys.BillingAddress);
+        //    var lineItemCollection = _itemCache.Items;
 
 
-            return billToAddress != null ?
-                new Invoice(invoiceStatusKey, billToAddress, lineItemCollection) :
-                new Invoice(invoiceStatusKey)
-                    {
-                        Items = lineItemCollection
-                    };
-        }
+        //    return billToAddress != null ?
+        //        new Invoice(invoiceStatusKey, billToAddress, lineItemCollection) :
+        //        new Invoice(invoiceStatusKey)
+        //            {
+        //                Items = lineItemCollection
+        //            };
+        //}
 
-        /// <summary>
-        /// Does preliminary validation of the checkout process and then executes the start of the order fulfillment pipeline
-        /// </summary>
-        /// <param name="paymentGatewayProvider">The see <see cref="IPaymentGatewayProvider"/> to be used in payment processing and <see cref="IOrder"/> creation approval</param>
-        public abstract void CompleteCheckout(IPaymentGatewayProvider paymentGatewayProvider);
+        ///// <summary>
+        ///// Does preliminary validation of the checkout process and then executes the start of the order fulfillment pipeline
+        ///// </summary>
+        ///// <param name="paymentGatewayProvider">The see <see cref="IPaymentGatewayProvider"/> to be used in payment processing and <see cref="IOrder"/> creation approval</param>
+        //public abstract void CompleteCheckout(IPaymentGatewayProvider paymentGatewayProvider);
 
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace Merchello.Core.Checkout
         /// <summary>
         /// The <see cref="ICustomerBase"/>
         /// </summary>
-        protected ICustomerBase Customer
+        public ICustomerBase Customer
         {
             get { return _customer; }
         }
@@ -142,7 +142,7 @@ namespace Merchello.Core.Checkout
         /// <summary>
         /// The <see cref="IMerchelloContext"/>
         /// </summary>
-        protected IMerchelloContext MerchelloContext
+        public IMerchelloContext MerchelloContext
         {
             get { return _merchelloContext; }
         }
@@ -150,7 +150,7 @@ namespace Merchello.Core.Checkout
         /// <summary>
         /// Shortcut to configured <see cref="IRuntimeCacheProvider"/>
         /// </summary>
-        protected IRuntimeCacheProvider RuntimeCache
+        public IRuntimeCacheProvider RuntimeCache
         {
             get { return _merchelloContext.Cache.RuntimeCache; }
         }
@@ -158,7 +158,7 @@ namespace Merchello.Core.Checkout
         /// <summary>
         /// The <see cref="IItemCache"/>
         /// </summary>
-        protected IItemCache ItemCache
+        public IItemCache ItemCache
         {
             get { return _itemCache; }
         }

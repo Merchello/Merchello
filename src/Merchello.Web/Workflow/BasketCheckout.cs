@@ -23,10 +23,10 @@ namespace Merchello.Web.Workflow
             throw new System.NotImplementedException();
         }
 
-        public override void CompleteCheckout(IPaymentGatewayProvider paymentGatewayProvider)
-        {
-            throw new System.NotImplementedException();
-        }
+        //public override void CompleteCheckout(IPaymentGatewayProvider paymentGatewayProvider)
+        //{
+        //    throw new System.NotImplementedException();
+        //}
 
 
         /// <summary>

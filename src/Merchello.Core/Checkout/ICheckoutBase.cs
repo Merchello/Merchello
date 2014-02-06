@@ -39,17 +39,17 @@ namespace Merchello.Core.Checkout
         /// </remarks>
         void SaveShipmentRateQuote(IEnumerable<IShipmentRateQuote> approvedShipmentRateQuotes);
 
-        /// <summary>
-        /// Generates an <see cref="IInvoice"/> representing the bill for the current "checkout order"
-        /// </summary>
-        /// <param name="applyTax">True/false indicating whether or not to apply taxes to the invoice.  Defaults to true</param>
-        /// <returns>An <see cref="IInvoice"/> that is not persisted to the database.</returns>
-        IInvoice GenerateInvoice(bool applyTax = true);
+        ///// <summary>
+        ///// Generates an <see cref="IInvoice"/> representing the bill for the current "checkout order"
+        ///// </summary>
+        ///// <param name="applyTax">True/false indicating whether or not to apply taxes to the invoice.  Defaults to true</param>
+        ///// <returns>An <see cref="IInvoice"/> that is not persisted to the database.</returns>
+        //IInvoice GenerateInvoice(bool applyTax = true);
 
-        /// <summary>
-        /// Does preliminary validation of the checkout process and then executes the start of the order fulfillment pipeline
-        /// </summary>
-        /// <param name="paymentGatewayProvider">The see <see cref="IPaymentGatewayProvider"/> to be used in payment processing and <see cref="IOrder"/> creation approval</param>
-        void CompleteCheckout(IPaymentGatewayProvider paymentGatewayProvider);
+        ///// <summary>
+        ///// Does preliminary validation of the checkout process and then executes the start of the order fulfillment pipeline
+        ///// </summary>
+        ///// <param name="paymentGatewayProvider">The see <see cref="IPaymentGatewayProvider"/> to be used in payment processing and <see cref="IOrder"/> creation approval</param>
+        //void CompleteCheckout(IPaymentGatewayProvider paymentGatewayProvider);
     }
 }

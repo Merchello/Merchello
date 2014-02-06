@@ -12,7 +12,7 @@ namespace Merchello.Core.Chains.CheckOut
 
         public override Attempt<IInvoice> PerformTask(IInvoice invoice)
         {
-            throw new System.NotImplementedException();
+            return Attempt<IInvoice>.Succeed(invoice);
         }
     }
 }

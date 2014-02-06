@@ -1,4 +1,5 @@
 ﻿using System;
+using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Tests.Base.DataMakers;
 using NUnit.Framework;
