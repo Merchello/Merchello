@@ -120,9 +120,12 @@ namespace Merchello.Web.Workflow
                 string.IsNullOrEmpty(name) ? productVariant.Name : name,
                 productVariant.Sku,
                 quantity,
+                quantity * (
                 productVariant.OnSale ?
-                productVariant.SalePrice != null ? productVariant.SalePrice.Value : productVariant.Price
-                : productVariant.Price, extendedData);
+                extendedData.GetSalePriceValue()
+                : extendedData.GetPriceValue()), extendedData); // get the price information from extended data in case it has been overriden
+
+            //productVariant.SalePrice.Value : productVariant.Price 
         }
 
         /// <summary>
