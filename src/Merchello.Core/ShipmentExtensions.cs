@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.IO;
 using Merchello.Core.Gateways.Shipping;
-using Merchello.Core.Models.Interfaces;
+using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Umbraco.Core;
 using Umbraco.Core.Logging;
 
-namespace Merchello.Core.Models
+namespace Merchello.Core
 {
     public static class ShipmentExtensions
     {
@@ -46,7 +44,7 @@ namespace Merchello.Core.Models
         /// </summary>
         /// <param name="shipment">The <see cref="IShipment"/></param>
         /// <returns>Returns a <see cref="IAddress"/></returns>
-        public static IAddress OriginAddress(this IShipment shipment)
+        public static IAddress GetOriginAddress(this IShipment shipment)
         {
             return new Address()
                 {
@@ -65,8 +63,8 @@ namespace Merchello.Core.Models
         /// Gets an <see cref="IAddress"/> representing the destination address of the <see cref="IShipment"/>
         /// </summary>
         /// <param name="shipment">The <see cref="IShipment"/></param>
-        /// <returns>Returns a <see cref="IAddress"/></returns>
-        public static IAddress DestinationAddress(this IShipment shipment)
+        /// <returns>Returns a <see cref="IAddress"/></returns>        
+        public static IAddress GetDestinationAddress(this IShipment shipment)
         {
             return new Address()
             {
@@ -80,5 +78,6 @@ namespace Merchello.Core.Models
                 IsCommercial = shipment.ToIsCommercial
             };
         }
+
     }
 }

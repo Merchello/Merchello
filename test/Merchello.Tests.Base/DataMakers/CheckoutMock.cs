@@ -7,8 +7,10 @@ namespace Merchello.Tests.Base.DataMakers
 {
     internal class CheckoutMock : CheckoutBase
     {
-        public CheckoutMock(IMerchelloContext merchelloContext, IItemCache itemCache, ICustomerBase customer) : base(merchelloContext, itemCache, customer)
+        public CheckoutMock(IMerchelloContext merchelloContext, IItemCache itemCache, ICustomerBase customer) 
+            : base(merchelloContext, itemCache, customer)
         {
+
         }
 
     }

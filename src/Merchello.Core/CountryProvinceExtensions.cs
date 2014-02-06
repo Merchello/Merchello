@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 
-namespace Merchello.Core.Models
+namespace Merchello.Core
 {
     /// <summary>
     /// Extension methods for the generic <see cref="ICountry"/> and <see cref="IProvince"/>

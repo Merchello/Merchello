@@ -5,9 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
-using Merchello.Core.Models.Interfaces;
+using Merchello.Core.Models;
 
-namespace Merchello.Core.Models
+namespace Merchello.Core
 {
     /// <summary>
     /// Extension methods for <see cref="ExtendedDataCollection"/>
@@ -446,8 +446,8 @@ namespace Merchello.Core.Models
         /// <param name="shipment"></param>
         public static void AddShipment(this ExtendedDataCollection extendedData, IShipment shipment)
         {
-            extendedData.AddAddress(shipment.OriginAddress(), Constants.ExtendedDataKeys.ShippingOriginAddress);
-            extendedData.AddAddress(shipment.DestinationAddress(), Constants.ExtendedDataKeys.ShippingDestinationAddress);
+            extendedData.AddAddress(shipment.GetOriginAddress(), Constants.ExtendedDataKeys.ShippingOriginAddress);
+            extendedData.AddAddress(shipment.GetDestinationAddress(), Constants.ExtendedDataKeys.ShippingDestinationAddress);
             extendedData.AddLineItemCollection(shipment.Items);
         }
 
