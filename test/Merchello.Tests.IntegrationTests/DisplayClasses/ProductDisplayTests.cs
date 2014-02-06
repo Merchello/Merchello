@@ -6,13 +6,14 @@ using Merchello.Core.Models;
 using Merchello.Examine.Providers;
 using Merchello.Tests.Base.DataMakers;
 using Merchello.Tests.IntegrationTests.Services;
+using Merchello.Tests.IntegrationTests.TestHelpers;
 using Merchello.Web.Models.ContentEditing;
 using NUnit.Framework;
 
 namespace Merchello.Tests.IntegrationTests.DisplayClasses
 {
     [TestFixture]
-    public class ProductDisplayTests : ServiceIntegrationTestBase
+    public class ProductDisplayTests : DatabaseIntegrationTestBase
     {
         private Guid _productKey;
         private Guid _productVariantKey;

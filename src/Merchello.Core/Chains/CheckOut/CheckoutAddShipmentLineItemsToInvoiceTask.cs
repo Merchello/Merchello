@@ -6,7 +6,7 @@ namespace Merchello.Core.Chains.CheckOut
 {
     internal class CheckoutAddShipmentLineItemsToInvoiceTask : CheckoutAttemptChainTaskBase
     {
-        internal CheckoutAddShipmentLineItemsToInvoiceTask(CheckoutBase checkout) 
+        public CheckoutAddShipmentLineItemsToInvoiceTask(CheckoutBase checkout) 
             : base(checkout)
         { }
 

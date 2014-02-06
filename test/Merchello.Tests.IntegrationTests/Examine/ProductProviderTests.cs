@@ -8,12 +8,13 @@ using Merchello.Core.Services;
 using Merchello.Examine.Providers;
 using Merchello.Tests.Base.DataMakers;
 using Merchello.Tests.IntegrationTests.Services;
+using Merchello.Tests.IntegrationTests.TestHelpers;
 using NUnit.Framework;
 
 namespace Merchello.Tests.IntegrationTests.Examine
 {
     [TestFixture]
-    public class ProductProviderTests : ServiceIntegrationTestBase
+    public class ProductProviderTests : DatabaseIntegrationTestBase
     {
         private const int ProductCount = 10;
         private IProductService _productService;

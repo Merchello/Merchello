@@ -7,6 +7,7 @@ using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Persistence.UnitOfWork;
 using Merchello.Core.Services;
+using Merchello.Tests.IntegrationTests.TestHelpers;
 using NUnit.Framework;
 using Umbraco.Core;
 
@@ -14,7 +15,7 @@ namespace Merchello.Tests.IntegrationTests.Services.GatewayProvider
 {
     [TestFixture]
     [Category("Service Integration")]
-    public class GatewayProviderServiceTests : ServiceIntegrationTestBase
+    public class GatewayProviderServiceTests : DatabaseIntegrationTestBase
     {
         private IGatewayProviderService _gatewayProviderService;
         private IWarehouseCatalog _catalog;

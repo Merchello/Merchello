@@ -5,13 +5,14 @@ using Merchello.Core.Chains;
 using Merchello.Core.Chains.CheckOut;
 using Merchello.Core.Checkout;
 using Merchello.Core.Models;
+using Umbraco.Core;
 
 namespace Merchello.Core.Builders
 {
     internal class InvoiceBuilder : IInvoiceBuilder
     {
         private readonly CheckoutBase _checkout;
-        private IEnumerable<CheckoutAttemptChainTaskBase> _tasks; 
+        private IEnumerable<AttemptChainTaskHandler<IInvoice>> _taskHandlers; 
 
         internal InvoiceBuilder(CheckoutBase checkout)
         {
@@ -22,24 +23,42 @@ namespace Merchello.Core.Builders
             BuildChain();
         }
 
+        /// <summary>
+        /// Constructs the task chain
+        /// </summary>
         private void BuildChain()
         {
             // Type[] ctrArgs, object[] ctrValues
             var ctrArgs = new[] {typeof (CheckoutBase)};
             var ctrValues = new object[] { _checkout };
-                               
-            var tasks = new List<CheckoutAttemptChainTaskBase>();
-            var typeList = ChainTaskResolver.GetTypesForChain(Constants.TaskChainAlias.CheckoutInvoiceCreate).ToArray();
-            if(!typeList.Any()) _tasks = new List<CheckoutAttemptChainTaskBase>();
 
-            tasks.AddRange(typeList.Select(type => ActivatorHelper.CreateInstance<CheckoutAttemptChainTaskBase>(Type.GetType(type), ctrArgs, ctrValues)));
-            
-            _tasks = tasks;
+            // Types from the merchello.config file
+            var taskHandlers = new List<AttemptChainTaskHandler<IInvoice>>();
+            var typeList = ChainTaskResolver.GetTypesForChain(Constants.TaskChainAlias.CheckoutInvoiceCreate).ToArray();
+            if (!typeList.Any()) _taskHandlers = taskHandlers;
+
+            // instantiate each task in the chain
+            taskHandlers.AddRange(
+                typeList.Select(
+                typeName => new AttemptChainTaskHandler<IInvoice>(
+                    ActivatorHelper.CreateInstance<CheckoutAttemptChainTaskBase>(Type.GetType(typeName), ctrArgs, ctrValues)
+                    )));
+
+            // RegisterNext
+            foreach (var taskHandler in taskHandlers.Where(task => taskHandlers.IndexOf(task) != taskHandlers.IndexOf(taskHandlers.Last())))
+            {
+                taskHandler.RegisterNext(taskHandlers[taskHandlers.IndexOf(taskHandler) + 1]);
+            }
+
+            _taskHandlers = taskHandlers;
         }
 
-        public IInvoice BuildInvoice()
+        public Attempt<IInvoice> BuildInvoice()
         {
-            throw new System.NotImplementedException();
+            return (_taskHandlers.Any())
+                       ? _taskHandlers.First().Execute(new Invoice(Constants.DefaultKeys.UnpaidInvoiceStatusKey))
+                       : Attempt<IInvoice>.Fail(
+                           new InvalidOperationException("The configuration Chain Task List could not be instantiated"));
         }
 
         /// <summary>
@@ -47,7 +66,7 @@ namespace Merchello.Core.Builders
         /// </summary>
         internal int TaskCount
         {
-            get { return _tasks.Count(); }
+            get { return _taskHandlers.Count(); }
         }
     }
 }

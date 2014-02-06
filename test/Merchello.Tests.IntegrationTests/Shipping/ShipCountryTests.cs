@@ -5,13 +5,14 @@ using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Services;
 using Merchello.Tests.IntegrationTests.Services;
+using Merchello.Tests.IntegrationTests.TestHelpers;
 using NUnit.Framework;
 
 namespace Merchello.Tests.IntegrationTests.Shipping
 {
     [TestFixture]
     [Category("Shipping")]
-    public class ShipCountryTests : ServiceIntegrationTestBase
+    public class ShipCountryTests : DatabaseIntegrationTestBase
     {
 
         private IWarehouseCatalog _catalog;
