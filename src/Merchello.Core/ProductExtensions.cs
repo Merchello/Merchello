@@ -5,11 +5,12 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
+using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Newtonsoft.Json;
 using Formatting = Newtonsoft.Json.Formatting;
 
-namespace Merchello.Core.Models
+namespace Merchello.Core
 {
     public static class ProductExtensions
     {

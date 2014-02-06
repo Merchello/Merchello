@@ -81,6 +81,7 @@
     <Compile Include="Chains\CheckOut\CheckoutApplyTaxesToInvoiceTax.cs" />
     <Compile Include="Chains\CheckOut\CheckoutAddBillingInfoToInvoiceTask.cs" />
     <Compile Include="Chains\CheckOut\CheckoutAttemptChainTaskBase.cs" />
+    <Compile Include="Chains\CheckOut\CheckoutConvertItemCacheItemsToInvoiceItemsTask.cs" />
     <Compile Include="Chains\Invoices\InvoiceAttemptChainTaskBase.cs" />
     <Compile Include="Chains\Invoices\InvoiceAttemptChainTaskHandler.cs" />
     <Compile Include="Checkout\CheckoutBase.cs" />
@@ -154,7 +155,7 @@
     <Compile Include="Models\ExtendedDataCollection.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\ExtendedDataExtensions.cs">
+    <Compile Include="ExtendedDataExtensions.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\GatewayProviderCollection.cs" />
@@ -247,7 +248,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\Invoice.cs" />
-    <Compile Include="Models\InvoiceExtensions.cs" />
+    <Compile Include="InvoiceExtensions.cs" />
     <Compile Include="Models\InvoiceLineItem.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -267,7 +268,7 @@
     <Compile Include="Models\LineItemCollection.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\LineItemExtensions.cs">
+    <Compile Include="LineItemExtensions.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\NotifiyCollectionBase.cs">
@@ -291,7 +292,7 @@
     <Compile Include="Models\ProductBase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\ProductExtensions.cs">
+    <Compile Include="ProductExtensions.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\ProductOption.cs">
@@ -307,7 +308,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\ProvinceCollection.cs" />
-    <Compile Include="Models\CountryProvinceExtensions.cs" />
+    <Compile Include="CountryProvinceExtensions.cs" />
     <Compile Include="Models\Rdbms\ShipCountry2GatewayProviderDto.cs" />
     <Compile Include="Models\Rdbms\ShipCountryDto.cs" />
     <Compile Include="Models\Rdbms\CatalogInventoryDto.cs" />
@@ -320,7 +321,7 @@
     <Compile Include="Models\Shipment.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\ShipmentExtensions.cs" />
+    <Compile Include="ShipmentExtensions.cs" />
     <Compile Include="Models\ShipMethod.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -340,7 +341,7 @@
     </Compile>
     <Compile Include="Models\ShipCountry.cs" />
     <Compile Include="Models\WarehouseCatalog.cs" />
-    <Compile Include="Models\WarehouseExtensions.cs" />
+    <Compile Include="WarehouseExtensions.cs" />
     <Compile Include="Models\CatalogInventory.cs">
       <SubType>Code</SubType>
     </Compile>

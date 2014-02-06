@@ -1,7 +1,8 @@
 ﻿using System.Linq;
+using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 
-namespace Merchello.Core.Models
+namespace Merchello.Core
 {
     /// <summary>
     /// Extension methods for <see cref="IWarehouse"/>

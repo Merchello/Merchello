@@ -65,7 +65,7 @@ namespace Merchello.Tests.UnitTests.Shipping
             // handled by SetUp
 
             //// Act
-            var origin = _shipment.OriginAddress();
+            var origin = _shipment.GetOriginAddress();
 
             //// Arrange
             Assert.NotNull(origin);
@@ -82,7 +82,7 @@ namespace Merchello.Tests.UnitTests.Shipping
             // handled by SetUp
 
             //// Act
-            var destination = _shipment.DestinationAddress();
+            var destination = _shipment.GetDestinationAddress();
 
             //// Arrange
             Assert.NotNull(destination);

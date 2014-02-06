@@ -25,7 +25,7 @@ namespace Merchello.Core.Chains.CheckOut
             var address = Checkout.Customer.ExtendedData.GetAddress(Constants.ExtendedDataKeys.BillingAddress);
             if (address == null) return Attempt<IInvoice>.Fail(new InvalidDataException("Billing information could not be retrieved from the Checkout"));
 
-            invoice.AddBillingAddress(address);
+            invoice.SetBillingAddress(address);
 
             return Attempt<IInvoice>.Succeed(invoice);
             
