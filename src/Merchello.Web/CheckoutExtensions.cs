@@ -8,7 +8,7 @@ using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Web.Models;
 using Merchello.Web.Workflow;
-using Merchello.Web.Workflow.Shipping.Packaging;
+using Merchello.Web.Workflow.Shipping;
 
 namespace Merchello.Web
 {
@@ -26,19 +26,30 @@ namespace Merchello.Web
             return basket.PackageBasket(MerchelloContext.Current, destination);
         }
 
+        /// <summary>
+        /// Packages the current basket instantiation into a collection of <see cref="IShipment"/> using the <see cref="BasketPackagingStrategyBase"/> strategy
+        /// </summary>        
+        /// <returns>A collection of <see cref="IShipment"/></returns>
+        public static IEnumerable<IShipment> PackageBasket(this IBasket basket, IAddress destination, BasketPackagingStrategyBase strategy)
+        {
+            return basket.PackageBasket(MerchelloContext.Current, destination, strategy);
+        }
+
+
         internal static IEnumerable<IShipment> PackageBasket(this IBasket basket, IMerchelloContext merchelloContext, IAddress destination)
         {
-            if (!basket.Items.Any()) return new List<IShipment>();
-
-            // get the default strategy from the configuration file
-            // TODO move this to a resolver
-            var defaultStrategy = MerchelloConfiguration.Current.DefaultBasketPackagingStrategy;
+            var defaultStrategy = MerchelloConfiguration.Current.GetStrategyElement(Constants.StrategyTypeAlias.DefaultBasketPackaging).Type;
 
             var ctorArgs = new[] { typeof(MerchelloContext), typeof(Basket), typeof(Address) };
             var ctoArgValues = new object[] { merchelloContext, basket, destination };
             var strategy = ActivatorHelper.CreateInstance<BasketPackagingStrategyBase>(Type.GetType(defaultStrategy), ctorArgs, ctoArgValues);
 
-            return strategy.PackageShipments();
+            return basket.PackageBasket(merchelloContext, destination, strategy);
+        }
+
+        internal static IEnumerable<IShipment> PackageBasket(this IBasket basket, IMerchelloContext merchelloContext, IAddress destination, BasketPackagingStrategyBase strategy)
+        {
+            return !basket.Items.Any() ? new List<IShipment>() : strategy.PackageShipments();
         }
 
         /// <summary>

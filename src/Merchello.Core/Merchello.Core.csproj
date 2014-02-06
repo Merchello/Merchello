@@ -95,12 +95,13 @@
     <Compile Include="Configuration\Outline\RegionElement.cs" />
     <Compile Include="Configuration\Outline\SettingsCollection.cs" />
     <Compile Include="Configuration\Outline\SettingsElement.cs" />
+    <Compile Include="Configuration\Outline\StrategiesCollection.cs" />
     <Compile Include="Configuration\Outline\TaskChainElement.cs" />
     <Compile Include="Configuration\Outline\TaskChainsCollection.cs" />
     <Compile Include="Configuration\Outline\TaskElement.cs" />
     <Compile Include="Configuration\Outline\TasksConfigurationCollection.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="Constants-TaskChains.cs">
+    <Compile Include="Constants-ActivatorTypes.cs">
       <DependentUpon>Constants.cs</DependentUpon>
     </Compile>
     <Compile Include="Constants-Keys.cs">
@@ -559,7 +560,7 @@
     <Compile Include="Services\WarehouseService.cs" />
     <Compile Include="Strategies\IStrategy.cs" />
     <Compile Include="Strategies\Shipping\IPackagingStrategy.cs" />
-    <Compile Include="Strategies\Taxation\ITaxationStrategy.cs" />
+    <Compile Include="Strategies\Taxation\IInvoiceTaxationStrategy.cs" />
     <Compile Include="TypeFieldMapperEnumerations.cs" />
     <Compile Include="Models\TypeFields\ProductTypeField.cs" />
     <Compile Include="Models\Rdbms\TypeFieldDto.cs" />

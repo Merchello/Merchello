@@ -267,10 +267,10 @@
     <Compile Include="Properties\AssemblyVisibility.cs" />
     <Compile Include="Search\ExamineEvents.cs" />
     <Compile Include="Workflow\IBasketCheckout.cs" />
-    <Compile Include="Workflow\Shipping\Packaging\BasketPackagingStrategyBase.cs" />
-    <Compile Include="Workflow\Shipping\Packaging\DefaultWarehousePackagingStrategy.cs" />
-    <Compile Include="Workflow\Shipping\Packaging\IBasketPackagingStrategy.cs" />
-    <Compile Include="Workflow\Shipping\Packaging\ShippableProductVisitor.cs" />
+    <Compile Include="Workflow\Shipping\BasketPackagingStrategyBase.cs" />
+    <Compile Include="Workflow\Shipping\DefaultWarehousePackagingStrategy.cs" />
+    <Compile Include="Workflow\Shipping\IBasketPackagingStrategy.cs" />
+    <Compile Include="Workflow\Shipping\ShippableProductVisitor.cs" />
     <Compile Include="Trees\MerchelloApplication.cs" />
     <Compile Include="Trees\MerchelloTreeController.cs" />
     <Compile Include="Trees\ServerVariablesParsingEvents.cs" />
@@ -279,7 +279,9 @@
     <Compile Include="WebApi\MerchelloApiController.cs" />
     <Compile Include="WebBootManager.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Workflow\Shipping\Packaging\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Merchello.Core\Merchello.Core.csproj">
       <Project>{2a83a229-c24b-4d8d-b806-7c9999eb9461}</Project>

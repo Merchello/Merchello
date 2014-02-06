@@ -3,6 +3,7 @@ using System.Configuration;
 using System.IO;
 using System.Reflection;
 using Merchello.Core.Configuration.Outline;
+using Umbraco.Core.Logging;
 
 namespace Merchello.Core.Configuration
 {
@@ -36,20 +37,33 @@ namespace Merchello.Core.Configuration
             get { return (MerchelloSection)ConfigurationManager.GetSection(ConfigurationName); }
         }
         
-        /// <summary>
-        /// The configuration setting for DefaultApplyPaymentStrategy
-        /// </summary>
-        public string DefaultApplyPaymentStrategy
-        {
-            get { return Section.Settings["DefaultApplyPaymentStrategy"].Value; }
-        }
+
+        ///// <summary>
+        ///// The configuration setting for the DefaultBasketPackagingStrategy
+        ///// </summary>
+        //public string DefaultBasketPackagingStrategy
+        //{
+        //    get { return Section.Strategies["DefaultBasketPackagingStrategy"].Type; }
+        //}
 
         /// <summary>
-        /// The configuration setting for the DefaultBasketPackagingStrategy
+        /// Gets the <see cref="StrategyElement"/> by it's configuration alias
         /// </summary>
-        public string DefaultBasketPackagingStrategy
+        /// <param name="alias">The alias (configuration key) of the <see cref="StrategyElement"/></param>
+        /// <returns>
+        /// <see cref="StrategyElement"/>
+        /// </returns>
+        public StrategyElement GetStrategyElement(string alias)
         {
-            get { return Section.Settings["DefaultBasketPackagingStrategy"].Value; }
+            try
+            {
+                return Section.Strategies[alias];
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Info<MerchelloConfiguration>(ex.Message);
+                return null;
+            }
         }
 
         public string DefaultSkuSeparator
@@ -68,9 +82,9 @@ namespace Merchello.Core.Configuration
             {
                 return Section.TaskChains[alias];
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                LogHelper.Info<MerchelloConfiguration>(ex.Message);
                 return null;
             }
             

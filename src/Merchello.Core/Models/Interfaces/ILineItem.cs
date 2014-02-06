@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Runtime.Serialization;
 using Merchello.Core.Models.EntityBase;
 using Merchello.Core.Models.TypeFields;
@@ -67,6 +68,5 @@ namespace Merchello.Core.Models
         /// <param name="vistor"><see cref="ILineItemVisitor"/></param>
         void Accept(ILineItemVisitor vistor);
 
-        
     }
 }

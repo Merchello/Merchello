@@ -73,11 +73,6 @@ namespace Merchello.Core.Gateways.Taxation.CountryTaxRate
             return GatewayProviderService.GetCountryTaxRatesByProviderKey(GatewayProvider.Key);
         }
 
-        public override IInvoiceTaxResult CalculateTaxForInvoice(IInvoice invoice)
-        {
-            throw new NotImplementedException();
-        }
-
 
         public override string Name
         {

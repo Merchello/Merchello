@@ -75,6 +75,16 @@ namespace Merchello.Core.Configuration.Outline
             get { return (RegionalProvinceCollection) this["regionalProvinces"]; }
         }
 
+
+        /// <summary>
+        /// Gets the strategies collection
+        /// </summary>
+        [ConfigurationProperty("strategies", IsRequired = true), ConfigurationCollection(typeof(StrategiesCollection), AddItemName = "strategy")]
+        public StrategiesCollection Strategies
+        {
+            get { return (StrategiesCollection)this["strategies"]; }
+        }
+
         /// <summary>
         /// Gets the task chain collection
         /// </summary>
