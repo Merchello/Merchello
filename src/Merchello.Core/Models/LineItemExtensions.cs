@@ -1,9 +1,8 @@
 ﻿using System;
 using Merchello.Core.Gateways.Shipping;
-using Merchello.Core.Models;
 using Merchello.Core.Models.TypeFields;
 
-namespace Merchello.Core
+namespace Merchello.Core.Models
 {
     /// <summary>
     /// Extension methods for <see cref="IItemCache"/>

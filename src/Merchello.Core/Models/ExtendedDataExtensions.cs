@@ -5,9 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
-using Merchello.Core.Models;
 
-namespace Merchello.Core
+namespace Merchello.Core.Models
 {
     /// <summary>
     /// Extension methods for <see cref="ExtendedDataCollection"/>

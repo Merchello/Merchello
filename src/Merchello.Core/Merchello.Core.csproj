@@ -155,7 +155,7 @@
     <Compile Include="Models\ExtendedDataCollection.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ExtendedDataExtensions.cs">
+    <Compile Include="Models\ExtendedDataExtensions.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\GatewayProviderCollection.cs" />
@@ -268,7 +268,7 @@
     <Compile Include="Models\LineItemCollection.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="LineItemExtensions.cs">
+    <Compile Include="Models\LineItemExtensions.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\NotifiyCollectionBase.cs">
@@ -292,7 +292,7 @@
     <Compile Include="Models\ProductBase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ProductExtensions.cs">
+    <Compile Include="Models\ProductExtensions.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\ProductOption.cs">
@@ -308,7 +308,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\ProvinceCollection.cs" />
-    <Compile Include="CountryProvinceExtensions.cs" />
+    <Compile Include="Models\CountryProvinceExtensions.cs" />
     <Compile Include="Models\Rdbms\ShipCountry2GatewayProviderDto.cs" />
     <Compile Include="Models\Rdbms\ShipCountryDto.cs" />
     <Compile Include="Models\Rdbms\CatalogInventoryDto.cs" />
@@ -321,7 +321,7 @@
     <Compile Include="Models\Shipment.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ShipmentExtensions.cs" />
+    <Compile Include="Models\ShipmentExtensions.cs" />
     <Compile Include="Models\ShipMethod.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -341,7 +341,7 @@
     </Compile>
     <Compile Include="Models\ShipCountry.cs" />
     <Compile Include="Models\WarehouseCatalog.cs" />
-    <Compile Include="WarehouseExtensions.cs" />
+    <Compile Include="Models\WarehouseExtensions.cs" />
     <Compile Include="Models\CatalogInventory.cs">
       <SubType>Code</SubType>
     </Compile>

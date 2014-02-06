@@ -1,12 +1,11 @@
 ﻿using System;
 using System.IO;
 using Merchello.Core.Gateways.Shipping;
-using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Umbraco.Core;
 using Umbraco.Core.Logging;
 
-namespace Merchello.Core
+namespace Merchello.Core.Models
 {
     public static class ShipmentExtensions
     {
