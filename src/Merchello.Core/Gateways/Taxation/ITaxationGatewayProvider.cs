@@ -1,5 +1,4 @@
 ﻿using Merchello.Core.Models;
-using Merchello.Core.Strategies.Taxation;
 
 namespace Merchello.Core.Gateways.Taxation
 {
@@ -12,15 +11,15 @@ namespace Merchello.Core.Gateways.Taxation
         /// Calculates the tax amount for an invoice
         /// </summary>
         /// <param name="invoice"><see cref="IInvoice"/></param>
+        /// <param name="taxAddress">The <see cref="IAddress"/> to base taxation rates.  Either origin or destination address.</param>
         /// <returns><see cref="IInvoiceTaxResult"/></returns>
-        IInvoiceTaxResult CalculateTaxForInvoice(IInvoice invoice);
+        IInvoiceTaxResult CalculateTaxForInvoice(IInvoice invoice, IAddress taxAddress);
 
         /// <summary>
         /// Calculates the tax amount for an invoice
         /// </summary>
-        /// <param name="invoice"><see cref="IInvoice"/></param>
-        /// <param name="strategy">The <see cref="IInvoiceTaxationStrategy"/> to use when in the tax computation</param>
+        /// <param name="strategy">The strategy to use when calculating the tax amount</param>
         /// <returns><see cref="IInvoiceTaxResult"/></returns>
-        IInvoiceTaxResult CalculateTaxForInvoice(IInvoice invoice, IInvoiceTaxationStrategy strategy);
+        IInvoiceTaxResult CalculateTaxForInvoice(IInvoiceTaxationStrategy strategy);
     }
 }

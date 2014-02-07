@@ -2,14 +2,11 @@
 
 namespace Merchello.Core.Chains
 {
-    /// <summary>
-    /// Defines a pipeline task
-    /// </summary>
-    public interface IAttemptChainTask<T>
+    public abstract class AttemptChainTaskBase<T> : IAttemptChainTask<T>
     {
         /// <summary>
         /// Defines an attempt chain task
         /// </summary>
-        Attempt<T> PerformTask(T arg);
+        public abstract Attempt<T> PerformTask(T value);
     }
 }

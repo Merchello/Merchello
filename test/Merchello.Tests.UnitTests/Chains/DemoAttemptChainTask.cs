@@ -7,9 +7,9 @@ namespace Merchello.Tests.UnitTests.Chains
     {
         public int Index { get; set; }
 
-        public Attempt<int> PerformTask(int arg)
+        public Attempt<int> PerformTask(int value)
         {
-            var addOne = arg + 1;
+            var addOne = value + 1;
             return Attempt.Succeed(addOne);
         }
     }

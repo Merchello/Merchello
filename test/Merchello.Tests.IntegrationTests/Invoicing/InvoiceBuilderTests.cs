@@ -106,7 +106,7 @@ namespace Merchello.Tests.IntegrationTests.Invoicing
             const int taskCount = 4;
 
             //// Act
-            var invoiceBuild = new InvoiceBuilder(_checkoutMock);
+            var invoiceBuild = new InvoiceBuilderChain(_checkoutMock);
 
             //// Assert
             Assert.NotNull(invoiceBuild);
@@ -121,10 +121,10 @@ namespace Merchello.Tests.IntegrationTests.Invoicing
         {
             //// Arrange
             var expected = _billingAddress;
-            var invoiceBuilder = new InvoiceBuilder(_checkoutMock);
+            var invoiceBuilder = new InvoiceBuilderChain(_checkoutMock);
 
             //// Arrange
-            var attempt = invoiceBuilder.BuildInvoice();
+            var attempt = invoiceBuilder.Build();
             Assert.IsTrue(attempt.Success);
             var invoice = attempt.Result;
 
@@ -142,10 +142,10 @@ namespace Merchello.Tests.IntegrationTests.Invoicing
             //// Arrange
             const decimal expectedProducts = ProductCount;
             const int expectedShipments = 1;
-            var invoiceBuilder = new InvoiceBuilder(_checkoutMock);
+            var invoiceBuilder = new InvoiceBuilderChain(_checkoutMock);
 
             //// Act
-            var attempt = invoiceBuilder.BuildInvoice();
+            var attempt = invoiceBuilder.Build();
             Assert.IsTrue(attempt.Success);
             var invoice = attempt.Result;
 

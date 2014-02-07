@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Merchello.Core.Configuration;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Umbraco.Core.Cache;
@@ -71,6 +72,27 @@ namespace Merchello.Core.Gateways.Taxation.CountryTaxRate
         public IEnumerable<ICountryTaxRate> GetAllCountryTaxRates()
         {
             return GatewayProviderService.GetCountryTaxRatesByProviderKey(GatewayProvider.Key);
+        }
+
+        /// <summary>
+        /// Calculates the tax amount for an invoice
+        /// </summary>
+        /// <param name="invoice"><see cref="IInvoice"/></param>
+        /// <param name="taxAddress">The <see cref="IAddress"/> to base taxation rates.  Either origin or destination address.</param>
+        /// <returns><see cref="IInvoiceTaxResult"/></returns>
+        public override IInvoiceTaxResult CalculateTaxForInvoice(IInvoice invoice, IAddress taxAddress)
+        {
+            var countryTaxRate = GetCountryTaxRateByCountryCode(taxAddress.CountryCode);
+            if (countryTaxRate == null) return null;
+
+            var ctrArgs = new[] {typeof (IInvoice), typeof (IAddress), typeof (ICountryTaxRate)};
+            var ctrValues = new object[] { invoice, taxAddress, countryTaxRate };
+
+            var typeName = MerchelloConfiguration.Current.GetStrategyElement(Constants.StrategyTypeAlias.DefaultInvoiceTaxRateQuote).Type;
+
+            var strategy = ActivatorHelper.CreateInstance<InvoiceTaxationStrategyBase>(Type.GetType(typeName), ctrArgs, ctrValues);
+
+            return CalculateTaxForInvoice(strategy);
         }
 
 
