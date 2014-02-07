@@ -9,6 +9,7 @@ using Merchello.Core.Models.Interfaces;
 using Merchello.Tests.Base.DataMakers;
 using Merchello.Tests.IntegrationTests.Shipping;
 using Merchello.Web;
+using Merchello.Web.Editors;
 using Merchello.Web.Models;
 using Merchello.Web.Models.ContentEditing;
 using NUnit.Framework;
@@ -169,6 +170,8 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
 
          
             var shipRateTable = shipRateTableDisplay.ToShipRateTable(_gwshipMethod.RateTable);
+            // if you want to save it .. it should go here.
+
             var shipRateTier = _gwshipMethod.RateTable.Rows.First();
 
             //// Assert
@@ -183,6 +186,11 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
             Assert.AreEqual(shipRateTier.RangeLow, shipRateTierDisplay.RangeLow);
             Assert.AreEqual(shipRateTier.RangeHigh, shipRateTierDisplay.RangeHigh);
             Assert.AreEqual(shipRateTier.Rate, shipRateTierDisplay.Rate);
+
+            foreach (var row in shipRateTable.Rows.OrderBy(x => x.RangeLow))
+            {
+                Console.WriteLine("Low: {1} {0}High: {2} {0}Rate: {3}", '\t', row.RangeLow, row.RangeHigh, row.Rate);
+            }
         }
 
         [Test]

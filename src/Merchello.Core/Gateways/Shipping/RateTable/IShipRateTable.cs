@@ -19,6 +19,12 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
         /// <param name="rate">The rate or cost assoicated with the range</param>
         void AddRow(decimal rangeLow, decimal rangeHigh, decimal rate);
 
+        ///// <summary>
+        ///// Updates an existing <see cref="IShipRateTier"/> in the <see cref="IShipRateTable"/>
+        ///// </summary>
+        ///// <param name="shipRateTier">The <see cref="IShipRateTier"/> to update</param>
+        //void UpdateRow(IShipRateTier shipRateTier);
+
         /// <summary>
         /// Deletes a rate tier row from the ship rate table
         /// </summary>
