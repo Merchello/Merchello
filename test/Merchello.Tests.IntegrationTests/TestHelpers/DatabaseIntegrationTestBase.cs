@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using Merchello.Web;
+using NUnit.Framework;
 
 namespace Merchello.Tests.IntegrationTests.TestHelpers
 {
@@ -7,6 +8,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         [TestFixtureSetUp]
         public virtual void FixtureSetup()
         {
+            AutoMapperMappings.Initialize();
             //ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"].RebuildIndex();  
         }
 
