@@ -73,6 +73,14 @@ namespace Merchello.Core.Gateways.Taxation.CountryTaxRate
             return GatewayProviderService.GetCountryTaxRatesByProviderKey(GatewayProvider.Key);
         }
 
+        public override IInvoiceTaxResult CalculateTaxForInvoice(IInvoice invoice)
+        {
+            var countryTaxRate = GetCountryTaxRateByCountryCode(invoice.BillToCountryCode);
+            if (countryTaxRate == null) return null;
+
+            throw new NotImplementedException();
+
+        }
 
         public override string Name
         {
@@ -83,5 +91,7 @@ namespace Merchello.Core.Gateways.Taxation.CountryTaxRate
         {
             get { return Constants.ProviderKeys.Taxation.CountryTaxRateTaxationProviderKey; }
         }
+
+        
     }
 }

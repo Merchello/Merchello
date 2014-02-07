@@ -117,6 +117,7 @@
     <Compile Include="Gateways\IGatewayContext.cs" />
     <Compile Include="Gateways\IGatewayProviderFactory.cs" />
     <Compile Include="Gateways\Payment\IPaymentGatewayProvider.cs" />
+    <Compile Include="Gateways\Shipping\DefaultShipmentRateQuoteStrategy.cs" />
     <Compile Include="Gateways\Shipping\GatewayShipMethodBase.cs" />
     <Compile Include="Gateways\Shipping\IGatewayShipMethod.cs" />
     <Compile Include="Gateways\Shipping\IShipmentRateQuote.cs" />
@@ -126,7 +127,8 @@
     <Compile Include="Gateways\Shipping\RateTable\RateTableShipmentLineItemVisitor.cs" />
     <Compile Include="Gateways\Shipping\RateTable\RateTableShippingGatewayProvider.cs" />
     <Compile Include="Gateways\Shipping\RateTable\RateTableShipMethod.cs" />
-    <Compile Include="Gateways\Shipping\ShimpmentWarehouseCatalogValidationVisitor.cs" />
+    <Compile Include="Gateways\Shipping\ShipmentRateQuoteStrategyBase.cs" />
+    <Compile Include="Gateways\Shipping\WarehouseCatalogValidationVisitor.cs" />
     <Compile Include="Gateways\Shipping\ShipmentRateQuote.cs" />
     <Compile Include="Gateways\Shipping\ShippingGatewayProviderBase.cs" />
     <Compile Include="Gateways\Shipping\RateTable\ShipRateTable.cs" />
@@ -558,9 +560,9 @@
     <Compile Include="Services\StoreSettingService.cs" />
     <Compile Include="Services\ShipmentService.cs" />
     <Compile Include="Services\WarehouseService.cs" />
-    <Compile Include="Strategies\IStrategy.cs" />
-    <Compile Include="Strategies\Shipping\IPackagingStrategy.cs" />
-    <Compile Include="Strategies\Taxation\IInvoiceTaxationStrategy.cs" />
+    <Compile Include="IStrategy.cs" />
+    <Compile Include="Gateways\Shipping\IShipmentRateQuoteStrategy.cs" />
+    <Compile Include="Gateways\Taxation\IInvoiceTaxationStrategy.cs" />
     <Compile Include="TypeFieldMapperEnumerations.cs" />
     <Compile Include="Models\TypeFields\ProductTypeField.cs" />
     <Compile Include="Models\Rdbms\TypeFieldDto.cs" />

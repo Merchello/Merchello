@@ -1,4 +1,4 @@
-﻿namespace Merchello.Core.Strategies
+﻿namespace Merchello.Core
 {
     /// <summary>
     /// Marker interface - defines a strategy

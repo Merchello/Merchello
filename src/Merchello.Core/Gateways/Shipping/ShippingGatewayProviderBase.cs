@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Merchello.Core.Configuration;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Umbraco.Core.Cache;
@@ -16,9 +17,7 @@ namespace Merchello.Core.Gateways.Shipping
         
         protected ShippingGatewayProviderBase(IGatewayProviderService gatewayProviderService, IGatewayProvider gatewayProvider, IRuntimeCacheProvider runtimeCacheProvider)
             : base(gatewayProviderService, gatewayProvider, runtimeCacheProvider)
-        {
-
-        }
+        { }
 
         /// <summary>
         /// Creates an instance of a ship method (T) without persisting it to the database
@@ -125,45 +124,24 @@ namespace Merchello.Core.Gateways.Shipping
         {
             var gatewayShipMethods = GetAvailableShipMethodsForShipment(shipment);
 
-            var quotes = new List<IShipmentRateQuote>();
-            foreach (var gwShipMethod in gatewayShipMethods)
-            {
-                var rateQuote = TryGetCachedShipmentRateQuote(shipment, gwShipMethod);
+            var ctrArgs = new[] { typeof(IShipment), typeof(IGatewayShipMethod[]),typeof(IRuntimeCacheProvider) };
+            var ctrValues = new object[] {shipment, gatewayShipMethods.ToArray(), RuntimeCache};
 
-                if (rateQuote == null)
-                { 
-                    var attempt = gwShipMethod.QuoteShipment(shipment);
-                    if (attempt.Success)
-                    { 
-                        rateQuote = attempt.Result;
+            var typeName = MerchelloConfiguration.Current.GetStrategyElement(Constants.StrategyTypeAlias.DefaultShipmentRateQuote).Type;
+            
+            var strategy = ActivatorHelper.CreateInstance<ShipmentRateQuoteStrategyBase>(Type.GetType(typeName), ctrArgs, ctrValues);
 
-                        RuntimeCache.GetCacheItem(GetShipmentRateQuoteCacheKey(shipment, gwShipMethod), () => rateQuote);
-                    }
-                    
-                }
-                if(rateQuote != null) quotes.Add(rateQuote);
-            }
-
-            return quotes;
+            return QuoteAvailableShipMethodsForShipment(strategy);
         }
 
         /// <summary>
-        /// Returns the cached <see cref="IShipmentRateQuote"/> if it exists
+        /// Returns a collection of all available <see cref="IShipmentRateQuote"/> for a given shipment
         /// </summary>
-        private IShipmentRateQuote TryGetCachedShipmentRateQuote(IShipment shipment, IGatewayShipMethod gatewayShipMethod)
-        {   
-            return RuntimeCache.GetCacheItem(GetShipmentRateQuoteCacheKey(shipment, gatewayShipMethod)) as ShipmentRateQuote;
-        }
-
-        /// <summary>
-        /// Creates a cache key for caching <see cref="IShipmentRateQuote"/>s
-        /// </summary>
-        /// <param name="shipment"></param>
-        /// <param name="gatewayShipMethod"></param>
-        /// <returns></returns>
-        private static string GetShipmentRateQuoteCacheKey(IShipment shipment, IGatewayShipMethod gatewayShipMethod)
+        /// <param name="strategy">The quotation strategy</param>
+        /// <returns>A collection of <see cref="IShipmentRateQuote"/></returns>
+        public IEnumerable<IShipmentRateQuote> QuoteAvailableShipMethodsForShipment(ShipmentRateQuoteStrategyBase strategy)
         {
-            return Cache.CacheKeys.ShippingGatewayProviderShippingRateQuoteCacheKey(shipment.Key, gatewayShipMethod.ShipMethod.Key);
+            return strategy.GetShipmentRateQuotes();
         }
     }
 

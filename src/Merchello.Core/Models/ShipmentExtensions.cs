@@ -21,15 +21,15 @@ namespace Merchello.Core.Models
         public static Attempt<IShipCountry> GetValidatedShipCountry(this IShipment shipment, IGatewayProviderService gatewayProviderService)
          {
 
-             var visitor = new ShimpmentWarehouseCatalogValidationVisitor();
+             var visitor = new WarehouseCatalogValidationVisitor();
              shipment.Items.Accept(visitor);
 
              // quick validation of shipment
-             if (visitor.CatalogValidationStatus != ShimpmentWarehouseCatalogValidationVisitor.ShipmentCatalogValidationStatus.Ok)
+             if (visitor.CatalogCatalogValidationStatus != WarehouseCatalogValidationVisitor.CatalogValidationStatus.Ok)
              {
-                 LogHelper.Error<ShippingGatewayProviderBase>("ShipMethods could not be determined for Shipment passed to GetAvailableShipMethodsForDestination method. Validator returned: " + visitor.CatalogValidationStatus, new ArgumentException("merchWarehouseCatalogKey"));
-                 return visitor.CatalogValidationStatus ==
-                        ShimpmentWarehouseCatalogValidationVisitor.ShipmentCatalogValidationStatus.ErrorMultipleCatalogs
+                 LogHelper.Error<ShippingGatewayProviderBase>("ShipMethods could not be determined for Shipment passed to GetAvailableShipMethodsForDestination method. Validator returned: " + visitor.CatalogCatalogValidationStatus, new ArgumentException("merchWarehouseCatalogKey"));
+                 return visitor.CatalogCatalogValidationStatus ==
+                        WarehouseCatalogValidationVisitor.CatalogValidationStatus.ErrorMultipleCatalogs
                             ? Attempt<IShipCountry>.Fail(
                                 new InvalidDataException("Multiple CatalogKeys found in Shipment Items"))
                             : Attempt<IShipCountry>.Fail(new InvalidDataException("No CatalogKeys found in Shipment Items"));

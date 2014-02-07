@@ -1,8 +1,7 @@
-﻿using Merchello.Core.Gateways.Taxation;
-using Merchello.Core.Models;
+﻿using Merchello.Core.Models;
 using Umbraco.Core;
 
-namespace Merchello.Core.Strategies.Taxation
+namespace Merchello.Core.Gateways.Taxation
 {
     /// <summary>
     /// Defines a taxation strategy

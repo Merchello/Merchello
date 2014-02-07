@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using Merchello.Core;
 using Merchello.Core.Models;
 
-namespace Merchello.Core.Strategies.Shipping
+namespace Merchello.Web.Workflow.Shipping
 {
     /// <summary>
     /// Defines a shipment packaging strategy

@@ -5,6 +5,7 @@
         public static class StrategyTypeAlias
         {
             public static string DefaultBasketPackaging = "DefaultBasketPackaging";
+            public static string DefaultShipmentRateQuote = "DefaultShipmentRateQuote";
         }
 
         public static class TaskChainAlias
