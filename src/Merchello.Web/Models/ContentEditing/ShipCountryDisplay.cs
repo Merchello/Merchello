@@ -11,7 +11,7 @@ namespace Merchello.Web.Models.ContentEditing
         public string ProvinceLabel { get; set; }
         public Guid CatalogKey { get; set; }
         public bool HasProvinces { get; set; }
-        public IEnumerable<ShipProvinceDisplay> Provinces { get; set; }
+        public IEnumerable<ProvinceDisplay> Provinces { get; set; }
         //public IEnumerable<ShipGatewayProviderDisplay> Providers { get; set; }
     }
 }
