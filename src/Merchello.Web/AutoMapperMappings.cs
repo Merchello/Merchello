@@ -16,13 +16,11 @@ namespace Merchello.Web
             
             // products
             AutoMapper.Mapper.CreateMap<IProduct, ProductDisplay>();
-            AutoMapper.Mapper.CreateMap<IProduct, ProductDisplay>();
             AutoMapper.Mapper.CreateMap<IProductAttribute, ProductAttributeDisplay>();
             AutoMapper.Mapper.CreateMap<IProductOption, ProductOptionDisplay>();
             AutoMapper.Mapper.CreateMap<IProductVariant, ProductVariantDisplay>();
 
             AutoMapper.Mapper.CreateMap<IProvince, ProvinceDisplay>();
-            AutoMapper.Mapper.CreateMap<IProvince, ShipProvinceDisplay>();
 
             // shipping            
             AutoMapper.Mapper.CreateMap<IShipCountry, ShipCountryDisplay>();
@@ -36,4 +34,5 @@ namespace Merchello.Web
             AutoMapper.Mapper.CreateMap<IWarehouseCatalog, WarehouseCatalogDisplay>();            
         }
     }
+
 }

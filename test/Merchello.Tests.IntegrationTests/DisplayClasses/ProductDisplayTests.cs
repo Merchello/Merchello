@@ -6,7 +6,6 @@ using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Examine.Providers;
 using Merchello.Tests.Base.DataMakers;
-using Merchello.Tests.IntegrationTests.Services;
 using Merchello.Tests.IntegrationTests.TestHelpers;
 using Merchello.Web.Models.ContentEditing;
 using NUnit.Framework;
