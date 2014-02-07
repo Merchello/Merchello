@@ -18,16 +18,16 @@ namespace Merchello.Core.Chains.CheckOut
         /// <summary>
         /// Adds billing information to the invoice
         /// </summary>
-        /// <param name="invoice">The <see cref="IInvoice"/></param>
+        /// <param name="value">The <see cref="IInvoice"/></param>
         /// <returns></returns>
-        public override Attempt<IInvoice> PerformTask(IInvoice invoice)
+        public override Attempt<IInvoice> PerformTask(IInvoice value)
         {
             var address = Checkout.Customer.ExtendedData.GetAddress(Constants.ExtendedDataKeys.BillingAddress);
             if (address == null) return Attempt<IInvoice>.Fail(new InvalidDataException("Billing information could not be retrieved from the Checkout"));
 
-            invoice.SetBillingAddress(address);
+            value.SetBillingAddress(address);
 
-            return Attempt<IInvoice>.Succeed(invoice);
+            return Attempt<IInvoice>.Succeed(value);
             
         }
     }

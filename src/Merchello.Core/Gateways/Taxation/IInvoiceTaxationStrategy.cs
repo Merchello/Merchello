@@ -11,8 +11,7 @@ namespace Merchello.Core.Gateways.Taxation
         /// <summary>
         /// Computes the invoice tax result
         /// </summary>
-        /// <param name="invoice">The <see cref="IInvoice"/> to be used in the tax calculation</param>
         /// <returns>The <see cref="IInvoiceTaxResult"/></returns>
-        Attempt<IInvoiceTaxResult> GetInvoiceTaxResult(IInvoice invoice);
+        Attempt<IInvoiceTaxResult> GetInvoiceTaxResult();
     }
 }

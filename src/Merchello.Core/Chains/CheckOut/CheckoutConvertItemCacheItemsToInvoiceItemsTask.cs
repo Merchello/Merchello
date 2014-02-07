@@ -17,15 +17,15 @@ namespace Merchello.Core.Chains.CheckOut
         /// <summary>
         /// Task converts ItemCacheLineItems to InvoiceLineItems and adds them to the invoice
         /// </summary>
-        /// <param name="invoice">The <see cref="IInvoice"/> to which to add the line items</param>
+        /// <param name="value">The <see cref="IInvoice"/> to which to add the line items</param>
         /// <returns>The <see cref="Attempt"/></returns>
-        public override Attempt<IInvoice> PerformTask(IInvoice invoice)
+        public override Attempt<IInvoice> PerformTask(IInvoice value)
         {
             foreach (var lineItem in Checkout.ItemCache.Items)
             {
                 try
                 {
-                    invoice.Items.Add(lineItem.ConvertToNewLineItemOf<InvoiceLineItem>());
+                    value.Items.Add(lineItem.ConvertToNewLineItemOf<InvoiceLineItem>());
                 }
                 catch (Exception ex)
                 {
@@ -33,7 +33,7 @@ namespace Merchello.Core.Chains.CheckOut
                 }                
             }
 
-            return Attempt<IInvoice>.Succeed(invoice);
+            return Attempt<IInvoice>.Succeed(value);
         }
     }
 }

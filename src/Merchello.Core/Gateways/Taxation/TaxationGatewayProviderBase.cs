@@ -6,7 +6,7 @@ using Umbraco.Core.Cache;
 namespace Merchello.Core.Gateways.Taxation
 {
     /// <summary>
-    /// Defines
+    /// Defines a base taxation gateway provider
     /// </summary>
     public abstract class TaxationGatewayProviderBase : GatewayProviderBase, ITaxationGatewayProvider
     {
@@ -18,12 +18,19 @@ namespace Merchello.Core.Gateways.Taxation
         /// Calculates the tax amount for an invoice
         /// </summary>
         /// <param name="invoice"><see cref="IInvoice"/></param>
+        /// <param name="taxAddress">The <see cref="IAddress"/> to base taxation rates.  Either origin or destination address.</param>
         /// <returns><see cref="IInvoiceTaxResult"/></returns>
-        public abstract IInvoiceTaxResult CalculateTaxForInvoice(IInvoice invoice);
+        public abstract IInvoiceTaxResult CalculateTaxForInvoice(IInvoice invoice, IAddress taxAddress);
 
-        public IInvoiceTaxResult CalculateTaxForInvoice(IInvoice invoice, IInvoiceTaxationStrategy strategy)
+
+        /// <summary>
+        /// Calculates the tax amount for an invoice
+        /// </summary>
+        /// <param name="strategy">The invoice taxation strategy to use when calculating the tax amount</param>
+        /// <returns><see cref="IInvoiceTaxResult"/></returns>
+        public IInvoiceTaxResult CalculateTaxForInvoice(IInvoiceTaxationStrategy strategy)
         {
-            var attempt = strategy.GetInvoiceTaxResult(invoice);
+            var attempt = strategy.GetInvoiceTaxResult();
 
             if (!attempt.Success) throw attempt.Exception;
 

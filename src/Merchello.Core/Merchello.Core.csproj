@@ -74,19 +74,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActivatorHelper.cs" />
-    <Compile Include="Builders\IInvoiceBuilder.cs" />
-    <Compile Include="Builders\InvoiceBuilder.cs" />
+    <Compile Include="Builders\BuildChainBase.cs" />
+    <Compile Include="Builders\InvoiceBuilderChain.cs" />
+    <Compile Include="Chains\AttemptChainTaskBase.cs" />
     <Compile Include="Chains\ChainTaskResolver.cs" />
     <Compile Include="Chains\CheckOut\CheckoutAddShipmentLineItemsToInvoiceTask.cs" />
     <Compile Include="Chains\CheckOut\CheckoutApplyTaxesToInvoiceTax.cs" />
     <Compile Include="Chains\CheckOut\CheckoutAddBillingInfoToInvoiceTask.cs" />
     <Compile Include="Chains\CheckOut\CheckoutAttemptChainTaskBase.cs" />
     <Compile Include="Chains\CheckOut\CheckoutConvertItemCacheItemsToInvoiceItemsTask.cs" />
-    <Compile Include="Chains\Invoices\InvoiceAttemptChainTaskBase.cs" />
-    <Compile Include="Chains\Invoices\InvoiceAttemptChainTaskHandler.cs" />
     <Compile Include="Checkout\CheckoutBase.cs" />
     <Compile Include="Checkout\ICheckoutBase.cs" />
-    <Compile Include="Builders\IBuilder.cs" />
+    <Compile Include="Builders\IBuilderChain.cs" />
     <Compile Include="Cache\CacheKeys.cs" />
     <Compile Include="CloneHelper.cs" />
     <Compile Include="Configuration\Outline\ProvinceConfigurationCollection.cs" />
@@ -134,7 +133,9 @@
     <Compile Include="Gateways\Shipping\RateTable\ShipRateTable.cs" />
     <Compile Include="Gateways\Taxation\CountryTaxRate\CountryTaxRateTaxationGatewayProvider.cs" />
     <Compile Include="Gateways\Taxation\CountryTaxRate\ICountryTaxRateTaxationGatewayProvider.cs" />
+    <Compile Include="Gateways\Taxation\CountryTaxRate\CountryTaxRateInvoiceQuoteStrategy.cs" />
     <Compile Include="Gateways\Taxation\IInvoiceTaxResult.cs" />
+    <Compile Include="Gateways\Taxation\InvoiceTaxationStrategyBase.cs" />
     <Compile Include="Gateways\Taxation\ITaxationGatewayProvider.cs" />
     <Compile Include="Gateways\Taxation\TaxationGatewayProviderBase.cs" />
     <Compile Include="Models\Address.cs" />

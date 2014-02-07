@@ -10,9 +10,9 @@ namespace Merchello.Core.Chains.CheckOut
             : base(checkout)
         { }
 
-        public override Attempt<IInvoice> PerformTask(IInvoice invoice)
+        public override Attempt<IInvoice> PerformTask(IInvoice value)
         {
-            return Attempt<IInvoice>.Succeed(invoice);
+            return Attempt<IInvoice>.Succeed(value);
         }
     }
 }
