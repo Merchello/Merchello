@@ -8,7 +8,7 @@
      * @description
      * The controller for the product editor
      */
-    controllers.ProductVariantEditController = function ($scope, $routeParams, $location, $q, assetsService, notificationsService, dialogService, angularHelper, serverValidationManager, merchelloProductService, merchelloProductVariantService) {
+    controllers.ProductVariantEditController = function ($scope, $routeParams, $location, $q, assetsService, notificationsService, dialogService, angularHelper, serverValidationManager, merchelloProductService, merchelloProductVariantService, merchelloWarehouseService) {
 
         assetsService.loadCss("/App_Plugins/Merchello/Common/Css/merchello.css");
 
@@ -60,6 +60,15 @@
 
         ////////////////////////////////////////////////
         // Initialize state
+
+        $scope.warehouses = [];
+        var promise = merchelloWarehouseService.getDefaultWarehouse();
+        promise.then(function (warehouse) {
+            $scope.defaultWarehouse = new merchello.Models.Warehouse(warehouse);
+            $scope.warehouses.push($scope.defaultWarehouse);
+        });
+
+
         if ($routeParams.create) {
             $scope.creatingVariant = true;
             $scope.loaded = true;

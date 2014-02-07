@@ -196,7 +196,6 @@
             self.lowCount = catalogInventoryFromServer.lowCount;
             self.catalogName = catalogInventoryFromServer.catalogName;
         }
-
     };
 
 }(window.merchello.Models = window.merchello.Models || {}));

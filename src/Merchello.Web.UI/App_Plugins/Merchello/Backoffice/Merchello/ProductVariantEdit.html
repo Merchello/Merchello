@@ -243,15 +243,13 @@
                                         <th></th>
                                         <th class="name">Warehouses</th>
                                         <th>Stock</th>
-                                        <th>Add a Few...</th>
-                                        <th>Set To...</th>
+                                        <th>Low Count</th>
                                     </tr>
-                                    <tr>
-                                        <td class="span1"><input name="onsale" type="checkbox" disabled="disabled"></td>
-                                        <td class="name">Warehouse 1</td>
-                                        <td>11</td>
-                                        <td><input type="text" class="col-xs-8 span8" /></td>
-                                        <td><input type="text" class="col-xs-8 span8" /></td>
+                                    <tr data-ng-repeat="catalogInv in productVariant.catalogInventories">
+                                        <td class="span1"><input name="incatalog" type="checkbox" disabled="disabled" checked="checked"></td>
+                                        <td class="name">{{defaultWarehouse.name}}</td>
+                                        <td><input type="text" class="col-xs-8 span8" data-ng-model="catalogInv.count" /></td>
+                                        <td><input type="text" class="col-xs-8 span8" data-ng-model="catalogInv.lowCount" /></td>
                                     </tr>
                                 </table>
                             </div>
@@ -262,7 +260,7 @@
                     <div class="control-group umb-control-group" data-ng-class="{ 'open': productVariant.shippable, 'closed': (!productVariant.shippable) }">
                         <label class="merchello-control-label">
                             Shipping Information
-                            <small>Set shipping variables: Weight, dimensions, and vendor</small>
+                            <small>Set shipping variables: Weight, and dimensions</small>
                         </label>
 
                         <div class="merchello-controls">
@@ -272,12 +270,12 @@
                                     <label for="weight">Weight <small>(in pounds)</small></label>
                                     <input type="text" id="weight" name="weight" class="form-control col-xs-8 span8" data-ng-model="productVariant.weight" />
                                 </div>
-                                <div class="form-group span6 col-xs-6">
+                                <!--<div class="form-group span6 col-xs-6">
                                     <label for="vendor">Vendor<small>(ie Microsoft, American Apparel)</small></label>
                                     <select id="vendor" name="vendor" disabled="disabled" class="form-control col-xs-8 span8">
                                         <option>Your Vendor</option>
                                     </select>
-                                </div>
+                                </div>-->
                                 <div class="form-group span6 col-xs-6">
                                     <label for="length">Dimensions <small>(inches)</small></label>
                                     <div class="form-inline">
