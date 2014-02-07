@@ -4,9 +4,9 @@ using Umbraco.Core;
 
 namespace Merchello.Core.Chains.CheckOut
 {
-    internal class CheckoutApplyTaxesToInvoiceTax : CheckoutAttemptChainTaskBase
+    internal class ApplyTaxesToInvoiceTax : CheckoutAttemptChainTaskBase
     {
-        public CheckoutApplyTaxesToInvoiceTax(CheckoutBase checkout) 
+        public ApplyTaxesToInvoiceTax(CheckoutBase checkout) 
             : base(checkout)
         { }
 

@@ -9,9 +9,9 @@ namespace Merchello.Core.Chains.CheckOut
     /// Represents a task responsible for adding billing information collected a checkout process to the
     /// invoice.
     /// </summary>
-    internal class CheckoutAddBillingInfoToInvoiceTask : CheckoutAttemptChainTaskBase
+    internal class AddBillingInfoToInvoiceTask : CheckoutAttemptChainTaskBase
     {
-        public CheckoutAddBillingInfoToInvoiceTask(CheckoutBase checkout) 
+        public AddBillingInfoToInvoiceTask(CheckoutBase checkout) 
             : base(checkout)
         { }
 

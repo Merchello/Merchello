@@ -12,7 +12,7 @@
         public static class TaskChainAlias
         {
             public static string CheckoutInvoiceCreate = "CheckoutInvoiceCreate";
-            public static string CountryTaxRateCalculation = "CountryTaxRateCalculation";
+            public static string InvoiceTaxRateQuote = "InvoiceTaxRateQuote";
         }
     }
 }
