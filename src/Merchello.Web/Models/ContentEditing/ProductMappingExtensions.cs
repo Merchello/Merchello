@@ -42,21 +42,12 @@ namespace Merchello.Web.Models.ContentEditing
             {
                 ICatalogInventory destinationCatalogInventory;
 
-                var catInv = destination.CatalogInventories.Where(x => x.CatalogKey == catalogInventory.CatalogKey).First();
+                var catInv = destination.CatalogInventories.First(x => x.CatalogKey == catalogInventory.CatalogKey);
                 if (catInv != null)
                 {
                     destinationCatalogInventory = catInv;
 
                     destinationCatalogInventory = catalogInventory.ToCatalogInventory(destinationCatalogInventory);
-                }
-                else
-                {
-                    //destinationCatalogInventory = new CatalogInventory(catalogInventory.CatalogKey, catalogInventory.ProductVariantKey);
-
-                    //destinationCatalogInventory = catalogInventory.ToCatalogInventory(destinationCatalogInventory);
-
-                    //List<ICatalogInventory> destinationCatalogInventories = destination.CatalogInventories as List<ICatalogInventory>;
-                    //destinationCatalogInventories.Add(destinationCatalogInventory);
                 }
             }
 
@@ -93,13 +84,7 @@ namespace Merchello.Web.Models.ContentEditing
         #region ProductDisplay
 
         internal static ProductDisplay ToProductDisplay(this IProduct product)
-        {
-            AutoMapper.Mapper.CreateMap<IProductAttribute, ProductAttributeDisplay>();
-            AutoMapper.Mapper.CreateMap<IProductOption, ProductOptionDisplay>();
-            AutoMapper.Mapper.CreateMap<ICatalogInventory, CatalogInventoryDisplay>();
-            AutoMapper.Mapper.CreateMap<IProductVariant, ProductVariantDisplay>();
-            AutoMapper.Mapper.CreateMap<IProduct, ProductDisplay>();
-
+        {            
             return AutoMapper.Mapper.Map<ProductDisplay>(product);
         }
                
@@ -124,9 +109,7 @@ namespace Merchello.Web.Models.ContentEditing
         }
 
         internal static ProductAttributeDisplay ToProductAttributeDisplay(this IProductAttribute productAttribute)
-        {
-            AutoMapper.Mapper.CreateMap<IProductAttribute, ProductAttributeDisplay>();
-
+        {            
             return AutoMapper.Mapper.Map<ProductAttributeDisplay>(productAttribute);
         }
 
@@ -167,10 +150,7 @@ namespace Merchello.Web.Models.ContentEditing
         }
 
         internal static ProductOptionDisplay ToProductOptionDisplay(this IProductOption productOption)
-        {
-            AutoMapper.Mapper.CreateMap<IProductAttribute, ProductAttributeDisplay>();
-            AutoMapper.Mapper.CreateMap<IProductOption, ProductOptionDisplay>();
-
+        {            
             return AutoMapper.Mapper.Map<ProductOptionDisplay>(productOption);
         }
 
@@ -179,11 +159,7 @@ namespace Merchello.Web.Models.ContentEditing
         #region IProductVariant
 
         internal static ProductVariantDisplay ToProductVariantDisplay(this IProductVariant productVariant)
-        {
-            AutoMapper.Mapper.CreateMap<IProductAttribute, ProductAttributeDisplay>();
-            AutoMapper.Mapper.CreateMap<ICatalogInventory, CatalogInventoryDisplay>();
-            AutoMapper.Mapper.CreateMap<IProductVariant, ProductVariantDisplay>();
-
+        {            
             return AutoMapper.Mapper.Map<ProductVariantDisplay>(productVariant);
         }
 
@@ -227,22 +203,13 @@ namespace Merchello.Web.Models.ContentEditing
 
                     destinationCatalogInventory = catalogInventory.ToCatalogInventory(destinationCatalogInventory);
                 }
-                else
-                {
-                    //destinationCatalogInventory = new CatalogInventory(catalogInventory.CatalogKey, catalogInventory.ProductVariantKey);
-
-                    //destinationCatalogInventory = catalogInventory.ToCatalogInventory(destinationCatalogInventory);
-
-                    //List<ICatalogInventory> destinationCatalogInventories = destination.CatalogInventories as List<ICatalogInventory>;
-                    //destinationCatalogInventories.Add(destinationCatalogInventory);
-                }
             }
 
             foreach (var attribute in productVariantDisplay.Attributes)
             {
                 IProductAttribute destinationProductAttribute;
 
-                var attr = destination.Attributes.Where(x => x.Key == attribute.Key).First();
+                var attr = destination.Attributes.First(x => x.Key == attribute.Key);
                 if (attr != null)
                 {
                     destinationProductAttribute = attr;

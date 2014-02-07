@@ -12,10 +12,7 @@ namespace Merchello.Web.Models.ContentEditing
         #region WarehouseDisplay
 
         internal static WarehouseDisplay ToWarehouseDisplay(this IWarehouse warehouse)
-        {
-            AutoMapper.Mapper.CreateMap<IWarehouse, WarehouseDisplay>();
-            AutoMapper.Mapper.CreateMap<IWarehouseCatalog, WarehouseCatalogDisplay>();
-
+        {           
             return AutoMapper.Mapper.Map<WarehouseDisplay>(warehouse);
         }
 
@@ -45,7 +42,7 @@ namespace Merchello.Web.Models.ContentEditing
                 IWarehouseCatalog destinationWarehouseCatalog;
 
                 var matchingItems = destination.WarehouseCatalogs.Where(x => x.Key == warehouseCatalogDisplay.Key);
-                if (matchingItems.Count() > 0)
+                if (matchingItems.Any())
                 {
                     var existingWarehouseCatalog = matchingItems.First();
                     if (existingWarehouseCatalog != null)
@@ -54,16 +51,6 @@ namespace Merchello.Web.Models.ContentEditing
 
                         destinationWarehouseCatalog = warehouseCatalogDisplay.ToWarehouseCatalog(destinationWarehouseCatalog);
                     }
-                }
-                else
-                {
-                    // Case if one was created in the back-office.  Not planned for v1
-
-                    //destinationWarehouseCatalog = new WarehouseCatalog(warehouseDisplay.Key);
-
-                    //destinationWarehouseCatalog = warehouseCatalogDisplay.ToWarehouseCatalog(destinationWarehouseCatalog);
-
-                    //destination.WarehouseCatalogs.Add(destinationWarehouseCatalog);
                 }
             }
 
@@ -75,9 +62,7 @@ namespace Merchello.Web.Models.ContentEditing
         #region WarehouseCatalogDisplay
 
         internal static WarehouseCatalogDisplay ToWarehouseCatalogDisplay(this IWarehouseCatalog warehouseCatalog)
-        {
-            AutoMapper.Mapper.CreateMap<IWarehouseCatalog, WarehouseCatalogDisplay>();
-
+        {            
             return AutoMapper.Mapper.Map<WarehouseCatalogDisplay>(warehouseCatalog);
         }
 
@@ -102,9 +87,7 @@ namespace Merchello.Web.Models.ContentEditing
         #region CatalogInventoryDisplay
 
         internal static CatalogInventoryDisplay ToCatalogInventoryDisplay(this ICatalogInventory catalogInventory)
-        {
-            AutoMapper.Mapper.CreateMap<ICatalogInventory, CatalogInventoryDisplay>();
-
+        {            
             return AutoMapper.Mapper.Map<CatalogInventoryDisplay>(catalogInventory);
         }
 
@@ -125,10 +108,7 @@ namespace Merchello.Web.Models.ContentEditing
         #region ShipCountryDisplay
 
         internal static ShipCountryDisplay ToShipCountryDisplay(this IShipCountry shipCountry)
-        {
-            AutoMapper.Mapper.CreateMap<IShipCountry, ShipCountryDisplay>();
-            AutoMapper.Mapper.CreateMap<IProvince, ShipProvinceDisplay>();
-
+        {            
             return AutoMapper.Mapper.Map<ShipCountryDisplay>(shipCountry);
         }
 
@@ -159,10 +139,7 @@ namespace Merchello.Web.Models.ContentEditing
         #region ShipMethodDisplay
 
         internal static ShipMethodDisplay ToShipMethodDisplay(this IShipMethod shipMethod)
-        {
-            AutoMapper.Mapper.CreateMap<IShipMethod, ShipMethodDisplay>();
-            AutoMapper.Mapper.CreateMap<IShipProvince, ShipProvinceDisplay>();
-
+        {            
             return AutoMapper.Mapper.Map<ShipMethodDisplay>(shipMethod);
         }
 
@@ -196,10 +173,6 @@ namespace Merchello.Web.Models.ContentEditing
                         destinationShipProvince = shipProvinceDisplay.ToShipProvince(destinationShipProvince);
                     }
                 }
-                else
-                {
-                    // Case if one was created in the back-office.
-                }
             }
 
             return destination;
@@ -210,9 +183,7 @@ namespace Merchello.Web.Models.ContentEditing
         #region ShipProvinceDisplay
 
         internal static ShipProvinceDisplay ToShipProvinceDisplay(this IShipProvince shipProvince)
-        {
-            AutoMapper.Mapper.CreateMap<IShipProvince, ShipProvinceDisplay>();
-
+        {            
             return AutoMapper.Mapper.Map<ShipProvinceDisplay>(shipProvince);
         }
 
@@ -234,10 +205,7 @@ namespace Merchello.Web.Models.ContentEditing
         #region ShipRateTableDisplay
 
         internal static ShipRateTableDisplay ToShipRateTableDisplay(this IShipRateTable shipRateTable)
-        {
-            AutoMapper.Mapper.CreateMap<IShipRateTable, ShipRateTableDisplay>();
-            AutoMapper.Mapper.CreateMap<IShipRateTier, ShipRateTierDisplay>();
-
+        {            
             return AutoMapper.Mapper.Map<ShipRateTableDisplay>(shipRateTable);
         }
 
@@ -317,9 +285,7 @@ namespace Merchello.Web.Models.ContentEditing
         #region ShipRateTierDisplay
 
         internal static ShipRateTierDisplay ToShipRateTierDisplay(this IShipRateTier shipRateTier)
-        {
-            AutoMapper.Mapper.CreateMap<IShipRateTier, ShipRateTierDisplay>();
-
+        {            
             return AutoMapper.Mapper.Map<ShipRateTierDisplay>(shipRateTier);
         }
 
@@ -345,9 +311,7 @@ namespace Merchello.Web.Models.ContentEditing
         #region TaxProvinceDisplay
 
         internal static TaxProvinceDisplay ToTaxProvinceDisplay(this CountryTaxRate countryTaxRate)
-        {
-            AutoMapper.Mapper.CreateMap<CountryTaxRate, TaxProvinceDisplay>();
-
+        {            
             return AutoMapper.Mapper.Map<TaxProvinceDisplay>(countryTaxRate);
         }
 

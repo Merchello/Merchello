@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Merchello.Core;
+﻿using System.Collections.Generic;
 using Merchello.Core.Models;
 
 namespace Merchello.Web.Models.ContentEditing
@@ -14,10 +9,7 @@ namespace Merchello.Web.Models.ContentEditing
         #region CountryDisplay
 
         internal static CountryDisplay ToCountryDisplay(this ICountry country)
-        {
-            AutoMapper.Mapper.CreateMap<ICountry, CountryDisplay>();
-            AutoMapper.Mapper.CreateMap<IProvince, ProvinceDisplay>();
-
+        {            
             return AutoMapper.Mapper.Map<CountryDisplay>(country);
         }
 
@@ -26,9 +18,7 @@ namespace Merchello.Web.Models.ContentEditing
         #region ProvinceDisplay
 
         internal static ProvinceDisplay ToProvinceDisplay(this IProvince province)
-        {
-            AutoMapper.Mapper.CreateMap<IProvince, ProvinceDisplay>();
-
+        {            
             return AutoMapper.Mapper.Map<ProvinceDisplay>(province);
         }
 

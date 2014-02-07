@@ -46,12 +46,6 @@ namespace Merchello.Web
             var retrieved = MerchelloContext.Current.Services.ProductService.GetByKey(new Guid(key));
             if(retrieved != null) ReindexProduct(retrieved);
 
-            // TODO refactor this with the ProductApiController
-            AutoMapper.Mapper.CreateMap<IProduct, ProductDisplay>();
-            AutoMapper.Mapper.CreateMap<IProductAttribute, ProductAttributeDisplay>();
-            AutoMapper.Mapper.CreateMap<IProductOption, ProductOptionDisplay>();
-            AutoMapper.Mapper.CreateMap<IProductVariant, ProductVariantDisplay>();           
-
             return AutoMapper.Mapper.Map<ProductDisplay>(retrieved);
         }
 
