@@ -8,14 +8,14 @@
         **/
     merchelloServices.MerchelloWarehouseService = function ($q, $http, $cacheFactory, umbDataFormatter, umbRequestHelper) {
 
-        /* cacheFactory instance for cached items in the merchelloSettingsService */
-        var _settingsCache = $cacheFactory('merchelloSettings');
+        /* cacheFactory instance for cached items in the merchelloWarehouseService */
+        var _warehouseCache = $cacheFactory('merchelloWarehouse');
 
         /* helper method to get from cache or fall back to an http api call */
         function getCachedOrApi(cacheKey, apiMethod, entityName) {
             var deferred = $q.defer();
 
-            var dataFromCache = _settingsCache.get(cacheKey);
+            var dataFromCache = _warehouseCache.get(cacheKey);
 
             if (dataFromCache) {
                 deferred.resolve(dataFromCache);
@@ -28,7 +28,7 @@
                     'Failed to get ' + entityName);
 
                 promiseFromApi.then(function (dataFromApi) {
-                    _settingsCache.put(cacheKey, dataFromApi);
+                    _warehouseCache.put(cacheKey, dataFromApi);
                     deferred.resolve(dataFromApi);
                 }, function (reason) {
                     deferred.reject(reason);
@@ -66,7 +66,7 @@
             /** saves or updates a product variant object */
             save: function (warehouse) {
 
-                _settingsCache.remove("DefaultWarehouse");
+                _warehouseCache.remove("DefaultWarehouse");
 
                 return umbRequestHelper.resourcePromise(
                     $http.post(
