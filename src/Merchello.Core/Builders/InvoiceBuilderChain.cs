@@ -6,6 +6,9 @@ using Umbraco.Core;
 
 namespace Merchello.Core.Builders
 {
+    /// <summary>
+    /// Represents an invoice builder
+    /// </summary>
     internal sealed class InvoiceBuilderChain : BuildChainBase<IInvoice>
     {
         private readonly CheckoutBase _checkout;

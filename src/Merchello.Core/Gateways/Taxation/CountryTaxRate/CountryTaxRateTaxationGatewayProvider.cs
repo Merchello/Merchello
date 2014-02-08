@@ -95,7 +95,6 @@ namespace Merchello.Core.Gateways.Taxation.CountryTaxRate
             return CalculateTaxForInvoice(strategy);
         }
 
-
         public override string Name
         {
             get { return "Fixed Rate Tax Provider"; }

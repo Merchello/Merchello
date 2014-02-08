@@ -2,27 +2,21 @@
 using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Builders;
-using Merchello.Core.Cache;
 using Merchello.Core.Checkout;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Models;
-using Merchello.Core.Persistence.UnitOfWork;
-using Merchello.Core.Services;
 using Merchello.Tests.Base.DataMakers;
-using Merchello.Tests.IntegrationTests.TestHelpers;
 using Merchello.Web;
 using Merchello.Web.Workflow;
 using NUnit.Framework;
-using Umbraco.Core;
 
-namespace Merchello.Tests.IntegrationTests.Invoicing
+namespace Merchello.Tests.IntegrationTests.Builders
 {
 
     [TestFixture]
     [Category("Builders")]
-    public class InvoiceBuilderTests : DatabaseIntegrationTestBase
+    public class InvoiceBuilderTests : BuilderTestBase
     {
-        private IMerchelloContext _merchelloContext;
         private IItemCache _itemCache;
         private ICustomerBase _customer;
         private CheckoutBase _checkoutMock;
@@ -32,22 +26,12 @@ namespace Merchello.Tests.IntegrationTests.Invoicing
         private const decimal WeightPerProduct = 3;
         private const decimal PricePerProduct = 5;
 
-        [TestFixtureSetUp]
-        public override void FixtureSetup()
-        {
-            base.FixtureSetup();
-
-            _merchelloContext = new MerchelloContext(new ServiceContext(new PetaPocoUnitOfWorkProvider()),
-                new CacheHelper(new NullCacheProvider(),
-                    new NullCacheProvider(),
-                    new NullCacheProvider()));
-        }
 
         [SetUp]
         public void Init()
         {
             _customer = PreTestDataWorker.MakeExistingAnonymousCustomer();
-            _basket = Basket.GetBasket(_merchelloContext, _customer);
+            _basket = Basket.GetBasket(MerchelloContext, _customer);
 
             for (var i = 0; i < ProductCount; i++) _basket.AddItem(PreTestDataWorker.MakeExistingProduct(true, WeightPerProduct, PricePerProduct));
             
@@ -73,17 +57,24 @@ namespace Merchello.Tests.IntegrationTests.Invoicing
 
 
 
+            PreTestDataWorker.DeleteAllItemCaches();
+
             _customer.ExtendedData.AddAddress(_billingAddress, AddressType.Billing);
             _itemCache = new Core.Models.ItemCache(_customer.EntityKey, ItemCacheType.Checkout);
+            
+            PreTestDataWorker.ItemCacheService.Save(_itemCache);
 
-            foreach(var item in _basket.Items) _itemCache.AddItem(item as ItemCacheLineItem);
+            foreach (var item in _basket.Items)
+            {
+                _itemCache.AddItem(item.ConvertToNewLineItemOf<ItemCacheLineItem>());
+            }
 
 
             // setup the checkout
-            _checkoutMock = new CheckoutMock(_merchelloContext, _itemCache, _customer);
+            _checkoutMock = new CheckoutMock(MerchelloContext, _itemCache, _customer);
 
             // add the shipment rate quote
-            var shipment = _basket.PackageBasket(_merchelloContext, _billingAddress).First();
+            var shipment = _basket.PackageBasket(MerchelloContext, _billingAddress).First();
             var shipRateQuote = new ShipmentRateQuote(shipment, new ShipMethod(Guid.NewGuid(), Guid.NewGuid())
             {
                 Name = "Unit test rate quote",
@@ -93,7 +84,8 @@ namespace Merchello.Tests.IntegrationTests.Invoicing
                 Rate = 5M
             };
 
-            _checkoutMock.ItemCache.Items.Add(shipRateQuote.AsLineItemOf<InvoiceLineItem>());
+            //_checkoutMock.ItemCache.Items.Add(shipRateQuote.AsLineItemOf<InvoiceLineItem>());
+            _checkoutMock.SaveShipmentRateQuote(shipRateQuote);
         }
 
         /// <summary>

@@ -61,7 +61,7 @@ namespace Merchello.Core.Models
         /// <typeparam name="T"></typeparam>
         /// <param name="lineItem"></param>
         /// <returns>A <see cref="LineItemBase"/> of type T</returns>
-        public static T ConvertToNewLineItemOf<T>(this ILineItem lineItem) where T : LineItemBase
+        public static T ConvertToNewLineItemOf<T>(this ILineItem lineItem) where T : class, ILineItem
         {    
             var ctrValues = new object[]
                 {                    
@@ -86,22 +86,24 @@ namespace Merchello.Core.Models
         /// <typeparam name="T">The type of the line item to create</typeparam>
         /// <param name="shipmentRateQuote">The <see cref="ShipmentRateQuote"/> to be translated to a line item</param>
         /// <returns>A <see cref="LineItemBase"/> of type T</returns>
-        public static ILineItem AsLineItemOf<T>(this IShipmentRateQuote shipmentRateQuote) where T : LineItemBase
+        public static T AsLineItemOf<T>(this IShipmentRateQuote shipmentRateQuote) where T : LineItemBase
         {
             var extendedData = new ExtendedDataCollection();
             extendedData.AddShipment(shipmentRateQuote.Shipment);
 
+            var shipmentName = string.Format("Shipment - {0} - {1} items", shipmentRateQuote.ShipMethod.Name, shipmentRateQuote.Shipment.Items.Count);
+            
             var ctrValues = new object[]
                 {
                     EnumTypeFieldConverter.LineItemType.Shipping.TypeKey,
-                    shipmentRateQuote.ShipMethod.Name,
-                    shipmentRateQuote.ShipMethod.ServiceCode, // TODO this may not be unique once multiple shipments are exposed
+                    shipmentName,
+                    shipmentRateQuote.ShipMethod.ServiceCode, // TODO this may not be unique (SKU) once multiple shipments are exposed
                     1,
                     shipmentRateQuote.Rate,
                     extendedData
                 };
 
-            return ActivatorHelper.CreateInstance<LineItemBase>(typeof (T), LineItemConstructorArgs, ctrValues);
+            return ActivatorHelper.CreateInstance<LineItemBase>(typeof (T), LineItemConstructorArgs, ctrValues) as T;
         }
 
 

@@ -232,7 +232,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Invoicing\InvoiceBuilderTests.cs" />
+    <Compile Include="Builders\BuilderTestBase.cs" />
+    <Compile Include="Builders\InvoiceBuilderTests.cs" />
+    <Compile Include="Builders\TaxationQuoteBuilderTests.cs" />
     <Compile Include="DisplayClasses\ProductDisplayTests.cs" />
     <Compile Include="DisplayClasses\ShippingDisplayTests.cs" />
     <Compile Include="DisplayClasses\WarehouseDisplayTests.cs" />
@@ -242,9 +244,9 @@
     <Compile Include="Services\StoreSettings\StoreSettingsServiceTests.cs" />
     <Compile Include="Shipping\BasketPackagingTests.cs" />
     <Compile Include="ItemCache\BasketTests.cs" />
-    <Compile Include="DbInstall\InitialDataTests.cs" />
+    <Compile Include="A.DbInstall\InitialDataTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DbInstall\DatabaseSchema.cs" />
+    <Compile Include="A.DbInstall\DatabaseSchema.cs" />
     <Compile Include="Examine\ProductProviderTests.cs" />
     <Compile Include="Services\Customer\CustomerItemCacheServiceTests.cs" />
     <Compile Include="Services\Customer\CustomerServiceTests.cs" />

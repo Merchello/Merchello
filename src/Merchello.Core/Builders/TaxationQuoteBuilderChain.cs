@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Linq;
 using Merchello.Core.Models;
 using Umbraco.Core;
 
 namespace Merchello.Core.Builders
 {
     /// <summary>
-    /// Represents the 
+    /// Represents the taxation quote builder
     /// </summary>
     internal sealed class TaxationQuoteBuilderChain : BuildChainBase<IInvoice>
     {
@@ -23,6 +24,14 @@ namespace Merchello.Core.Builders
         protected override Tuple<Type[], object[]> ConstructorParameters
         {
             get { throw new NotImplementedException(); }
+        }
+
+        /// <summary>
+        /// Used for testing
+        /// </summary>
+        internal int TaskCount
+        {
+            get { return TaskHandlers.Count(); }
         }
     }
 }

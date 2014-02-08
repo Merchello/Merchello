@@ -6,5 +6,19 @@ namespace Merchello.Core.Chains.InvoiceTaxRateQuote
     {
         private readonly IInvoice _invoice;
 
+        protected InvoiceTaxRateQuoteBase(IInvoice invoice)
+        {
+            Mandate.ParameterNotNull(invoice, "invoice");
+
+            _invoice = invoice;
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IInvoice"/>
+        /// </summary>
+        protected IInvoice Invoice
+        {
+            get { return _invoice; }
+        }
     }
 }

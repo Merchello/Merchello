@@ -5,7 +5,7 @@ using Merchello.Tests.IntegrationTests.TestHelpers;
 using NUnit.Framework;
 using Umbraco.Core.Persistence;
 
-namespace Merchello.Tests.IntegrationTests.DbInstall
+namespace Merchello.Tests.IntegrationTests.A.DbInstall
 {
     [TestFixture]
     public class InitialDataTests
