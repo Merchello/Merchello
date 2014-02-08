@@ -25,6 +25,10 @@
             return Math.ceil($scope.products.length / $scope.limitAmount);
         }
 
+        $scope.limitChanged = function (newVal) {
+            $scope.limitAmount = newVal;
+        }
+
         $scope.loadProducts = function () {
 
             var promise = merchelloProductService.getAllProducts();
@@ -32,7 +36,7 @@
             promise.then(function (products) {
 
                 $scope.products = _.map(products, function (productFromServer) {
-                    return new merchello.Models.Product(productFromServer);
+                    return new merchello.Models.Product(productFromServer, true);
                 });
 
                 //$scope.filteredproducts = $scope.products;
@@ -79,6 +83,7 @@
 
             if (merchello.Helpers.Strings.isNullOrEmpty(filter)) {
                 $scope.loadProducts();
+                notificationsService.success("Filtered Products Loaded", "");
             }
             else {
                 var promise = merchelloProductService.filterProducts(filter);
