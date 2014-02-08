@@ -260,7 +260,7 @@
         };
     };
 
-    models.Product = function (productFromServer) {
+    models.Product = function (productFromServer, dontMapChildren) {
 
         var self = this;
 
@@ -322,31 +322,33 @@
             self.hasOptions = false;
             self.hasVariants = false;
 
-            self.productOptions = _.map(productFromServer.productOptions, function (option) {
-                return new merchello.Models.ProductOption(option);
-            });
+            if (!dontMapChildren)
+            {
+                self.productOptions = _.map(productFromServer.productOptions, function (option) {
+                    return new merchello.Models.ProductOption(option);
+                });
 
-            self.productOptions = _.sortBy(self.productOptions, function (option) { return option.sortOrder; });
+                self.productOptions = _.sortBy(self.productOptions, function (option) { return option.sortOrder; });
 
-            if (self.productOptions.length > 0) {
-                self.hasOptions = true;
+                if (self.productOptions.length > 0) {
+                    self.hasOptions = true;
+                }
+
+                self.productVariants = _.map(productFromServer.productVariants, function (variant) {
+                    var jsvariant = new merchello.Models.ProductVariant(variant);
+                    jsvariant.fixAttributeSortOrders(self.productOptions);
+                    jsvariant.addAttributesAsProperties(self.productOptions);
+                    return jsvariant;
+                });
+
+                if (self.productVariants.length > 0) {
+                    self.hasVariants = true;
+                }
+
+                self.catalogInventories = _.map(productFromServer.catalogInventories, function (catalogInventory) {
+                    return new merchello.Models.CatalogInventory(catalogInventory);
+                });
             }
-
-            self.productVariants = _.map(productFromServer.productVariants, function (variant) {
-                var jsvariant = new merchello.Models.ProductVariant(variant);
-                jsvariant.fixAttributeSortOrders(self.productOptions);
-                jsvariant.addAttributesAsProperties(self.productOptions);
-                return jsvariant;
-            });
-
-            if (self.productVariants.length > 0) {
-                self.hasVariants = true;
-            }
-
-            self.catalogInventories = _.map(productFromServer.catalogInventories, function (catalogInventory) {
-                return new merchello.Models.CatalogInventory(catalogInventory);
-            });
-
         }
 
         // Helper to copy from master variant
