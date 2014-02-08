@@ -12,6 +12,8 @@ namespace Merchello.Core.Persistence.Mappers
 
         internal override void BuildMap()
         {
+            if (!PropertyInfoCache.IsEmpty) return;
+
             CacheMap<ShipRateTier, ShipRateTierDto>(src => src.Key, dto => dto.Key);
             CacheMap<ShipRateTier, ShipRateTierDto>(src => src.ShipMethodKey, dto => dto.ShipMethodKey);
             CacheMap<ShipRateTier, ShipRateTierDto>(src => src.RangeLow, dto => dto.RangeLow);

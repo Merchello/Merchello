@@ -22,7 +22,7 @@ namespace Merchello.Web.Workflow
         void UpdateQuantity(IProductVariant productVariant, int quantity);
       
         /// Removes an item from the basket      
-        void RemoveItem(Guid key);     
+        void RemoveItem(Guid itemKey);     
         void RemoveItem(string sku);        
         void RemoveItem(IProductVariant productVariant);
 
@@ -61,6 +61,11 @@ namespace Merchello.Web.Workflow
         /// The basket line items
         /// </summary>
         LineItemCollection Items { get; }
+
+        /// <summary>
+        /// Returns the basket's item count
+        /// </summary>
+        int TotalItemCount { get; }
 
         /// <summary>
         /// Returns the sum of all basket item quantities

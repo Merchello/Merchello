@@ -90,13 +90,11 @@ namespace Merchello.Core.Models
         {
             var extendedData = new ExtendedDataCollection();
             extendedData.AddShipment(shipmentRateQuote.Shipment);
-
-            var shipmentName = string.Format("Shipment - {0} - {1} items", shipmentRateQuote.ShipMethod.Name, shipmentRateQuote.Shipment.Items.Count);
             
             var ctrValues = new object[]
                 {
                     EnumTypeFieldConverter.LineItemType.Shipping.TypeKey,
-                    shipmentName,
+                    shipmentRateQuote.ShimpentLineItemName(),
                     shipmentRateQuote.ShipMethod.ServiceCode, // TODO this may not be unique (SKU) once multiple shipments are exposed
                     1,
                     shipmentRateQuote.Rate,

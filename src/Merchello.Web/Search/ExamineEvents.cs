@@ -21,7 +21,7 @@ namespace Merchello.Web.Search
         {
             base.ApplicationStarted(umbracoApplication, applicationContext);
 
-            LogHelper.Info<ExamineEvents>("Initializing Examine and binding to Merchello business logic events");
+            LogHelper.Info<ExamineEvents>("Initializing Merchello ProductIndex binding events");
 
             // Merchello registered providers
             var registeredProviders =

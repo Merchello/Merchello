@@ -262,6 +262,7 @@
     <Compile Include="Models\ContentEditing\ProductOptionDisplay.cs" />
     <Compile Include="Models\ContentEditing\ProductVariantDisplay.cs" />
     <Compile Include="Workflow\BasketCheckout.cs" />
+    <Compile Include="Workflow\BasketCheckoutEvents.cs" />
     <Compile Include="Workflow\IBasket.cs" />
     <Compile Include="Mvc\MerchelloTemplatePage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

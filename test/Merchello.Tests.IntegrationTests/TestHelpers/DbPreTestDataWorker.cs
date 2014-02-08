@@ -5,6 +5,8 @@ using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
+using Merchello.Core.Models.Rdbms;
+using Merchello.Core.Persistence.Migrations.Initial;
 using Merchello.Core.Persistence.UnitOfWork;
 using Merchello.Core.Services;
 using Merchello.Tests.Base.DataMakers;
@@ -405,5 +407,49 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         }
         #endregion
 
+
+        public void ValidateDatabaseSetup()
+        {
+            try
+            {
+                var providerDtos =  Database.Query<GatewayProviderDto>("SELECT * FROM merchGatewayProvider");
+                var warehouseDtos = Database.Query<WarehouseDto>("SELECT * FROM merchWarehouse");
+                var catalogDtos =   Database.Query<WarehouseCatalogDto>("SELECT * FROM merchWarehouseCatalog");
+                var typeFieldDtos = Database.Query<TypeFieldDto>("SELECT * FROM merchTypeField");
+                var invoiceStatusDtos = Database.Query<InvoiceStatusDto>("SELECT * FROM merchInvoiceStatus");
+                var orderStatusDtos = Database.Query<OrderStatusDto>("SELECT * FROM merchOrderStatus");
+                var storeSettingDtos = Database.Query<StoreSettingDto>("SELECT * FROM merchStoreSetting");
+
+                if (!providerDtos.Any() || !warehouseDtos.Any() || !catalogDtos.Any() || !typeFieldDtos.Any() || !invoiceStatusDtos.Any() || !orderStatusDtos.Any() || !storeSettingDtos.Any())
+                {
+                    RebuildDatabase();
+                }
+            }
+            catch (Exception ex)
+            {
+                RebuildDatabase();
+            }
+        }
+
+        private void RebuildDatabase()
+        {
+            // migration
+            var schema = new DatabaseSchemaCreation(Database);
+
+            // drop all the tables
+            schema.UninstallDatabaseSchema();
+
+            // install the schema
+            schema.InitializeDatabaseSchema();
+
+            // add the default data
+            var baseDataCreation = new BaseDataCreation(Database);
+            baseDataCreation.InitializeBaseData("merchDBTypeField");
+            baseDataCreation.InitializeBaseData("merchInvoiceStatus");
+            baseDataCreation.InitializeBaseData("merchOrderStatus");
+            baseDataCreation.InitializeBaseData("merchWarehouse");
+            baseDataCreation.InitializeBaseData("merchGatewayProvider");
+            baseDataCreation.InitializeBaseData("merchStoreSetting");
+        }
     }
 }
