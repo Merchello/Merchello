@@ -49,7 +49,9 @@ namespace Merchello.Core.Builders
         /// <returns><see cref="Attempt"/> of T</returns>
         public abstract Attempt<T> Build();
 
-
+        /// <summary>
+        /// Defines the arguements required for task instantiation
+        /// </summary>
         protected abstract Tuple<Type[], object[]> ConstructorParameters { get; } 
 
         /// <summary>

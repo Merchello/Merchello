@@ -18,6 +18,7 @@ namespace Merchello.Core.Chains.CheckOut
         /// <returns></returns>
         public override Attempt<IInvoice> PerformTask(IInvoice value)
         {
+
             return Attempt<IInvoice>.Succeed(value);
         }
     }

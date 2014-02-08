@@ -12,6 +12,9 @@ namespace Merchello.Core.Chains.CheckOut
 
         public override Attempt<IInvoice> PerformTask(IInvoice value)
         {
+            // if taxes are not to be applied, skip this step
+            if(!Checkout.ApplyTaxesToInvoice) return Attempt<IInvoice>.Succeed(value);
+
             return Attempt<IInvoice>.Succeed(value);
         }
     }

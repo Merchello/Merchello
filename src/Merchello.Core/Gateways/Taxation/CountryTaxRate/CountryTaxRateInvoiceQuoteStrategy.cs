@@ -1,4 +1,5 @@
 ﻿using System;
+using Merchello.Core.Configuration;
 using Merchello.Core.Models;
 using Umbraco.Core;
 
@@ -16,12 +17,16 @@ namespace Merchello.Core.Gateways.Taxation.CountryTaxRate
             _countryTaxRate = countryTaxRate;
         }
 
+
+
         /// <summary>
         /// Computes the invoice tax result
         /// </summary>
         /// <returns>The <see cref="IInvoiceTaxResult"/></returns>
         public override Attempt<IInvoiceTaxResult> GetInvoiceTaxResult()
         {
+            // instantiate the task chain
+            
             throw new NotImplementedException();
         }
     }

@@ -39,6 +39,9 @@ namespace Merchello.Core.Checkout
         /// </remarks>
         void SaveShipmentRateQuote(IEnumerable<IShipmentRateQuote> approvedShipmentRateQuotes);
 
+
+        bool ApplyTaxesToInvoice { get; set; }
+
         ///// <summary>
         ///// Generates an <see cref="IInvoice"/> representing the bill for the current "checkout order"
         ///// </summary>

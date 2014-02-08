@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
@@ -73,19 +72,13 @@ namespace Merchello.Core.Checkout
             MerchelloContext.Services.ItemCacheService.Save(_itemCache);
         }
 
+        /// <summary>
+        /// Maps the <see cref="IShipmentRateQuote"/> to a <see cref="ILineItem"/> 
+        /// </summary>
+        /// <param name="shipmentRateQuote">The <see cref="IShipmentRateQuote"/> to be added as a <see cref="ILineItem"/></param>
         private void AddShipmentRateQuoteLineItem(IShipmentRateQuote shipmentRateQuote)
         {
-            var shipment = shipmentRateQuote.Shipment;
-            var shipmentName = string.Format("Shipment - {0} - {1} items", shipmentRateQuote.ShipMethod.Name, shipment.Items.Count);
-
-            var extentedData = new ExtendedDataCollection();
-            extentedData.AddShipment(shipment);
-
-            var item = new ItemCacheLineItem(LineItemType.Shipping, shipmentName, Guid.NewGuid().ToString(), 1, shipmentRateQuote.Rate, extentedData)
-                {
-                    ContainerKey = _itemCache.Key
-                };
-            _itemCache.AddItem(item);
+            _itemCache.AddItem(shipmentRateQuote.AsLineItemOf<ItemCacheLineItem>());
         }
 
         ///// <summary>
@@ -162,5 +155,7 @@ namespace Merchello.Core.Checkout
         {
             get { return _itemCache; }
         }
+
+        public bool ApplyTaxesToInvoice { get; set; }
     }
 }
