@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Services;
@@ -78,5 +79,29 @@ namespace Merchello.Core.Models
             };
         }
 
+        /// <summary>
+        /// Returns a collection of <see cref="IShipmentRateQuote"/> from the various configured shipping providers
+        /// </summary>
+        /// <param name="shipment"><see cref="IShipment"/></param>
+        /// <returns>A collection of <see cref="IShipmentRateQuote"/></returns>
+        public static IEnumerable<IShipmentRateQuote> ShipmentRateQuotes(this IShipment shipment)
+        {
+            return shipment.ShipmentRateQuotes(MerchelloContext.Current);
+        }
+
+        internal static IEnumerable<IShipmentRateQuote> ShipmentRateQuotes(this IShipment shipment, IMerchelloContext merchelloContext)
+        {
+            return merchelloContext.Gateways.GetShipRateQuotesForShipment(shipment);
+        }
+
+
+        /// <summary>
+        /// Returns a string intended to be used as a 'Shipment Line Item' title or name
+        /// </summary>
+        /// <param name="shipmentRateQuote">The <see cref="IShipmentRateQuote"/> used to quote the line item</param>
+        public static string ShimpentLineItemName(this IShipmentRateQuote shipmentRateQuote)
+        {
+            return string.Format("Shipment - {0} - {1} items", shipmentRateQuote.ShipMethod.Name, shipmentRateQuote.Shipment.Items.Count);
+        }
     }
 }

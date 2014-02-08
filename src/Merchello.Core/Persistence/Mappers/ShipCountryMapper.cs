@@ -12,6 +12,8 @@ namespace Merchello.Core.Persistence.Mappers
 
         internal override void BuildMap()
         {
+            if (!PropertyInfoCache.IsEmpty) return;
+
             CacheMap<ShipCountry, ShipCountryDto>(src => src.Key, dto => dto.Key);
             CacheMap<ShipCountry, ShipCountryDto>(src => src.CatalogKey, dto => dto.CatalogKey);
             CacheMap<ShipCountry, ShipCountryDto>(src => src.CountryCode, dto => dto.CountryCode);

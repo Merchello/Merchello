@@ -3,6 +3,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Umbraco.Core;
+using Umbraco.Core.Logging;
 using Umbraco.Web;
 using Umbraco.Web.UI.JavaScript;
 using Merchello.Web.Editors;
@@ -15,6 +16,8 @@ namespace Merchello.Web.Trees
         protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
             base.ApplicationStarted(umbracoApplication, applicationContext);
+
+            LogHelper.Info<ServerVariablesParsingEvents>("Initializing Merchello ServerVariablesParsingEvents");
 
             ServerVariablesParser.Parsing += ServerVariablesParserParsing;
         }

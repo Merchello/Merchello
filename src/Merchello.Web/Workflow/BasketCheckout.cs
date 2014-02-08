@@ -7,7 +7,7 @@ using Merchello.Core.Models.TypeFields;
 
 namespace Merchello.Web.Workflow
 {
-    internal class BasketCheckout : CheckoutBase, IBasketCheckout 
+    public class BasketCheckout : CheckoutBase, IBasketCheckout 
     {
         internal BasketCheckout(IMerchelloContext merchelloContext, IItemCache itemCache, ICustomerBase customer) 
             : base(merchelloContext, itemCache, customer)
@@ -20,14 +20,11 @@ namespace Merchello.Web.Workflow
 
         internal static BasketCheckout GetBasketCheckout(IMerchelloContext merchelloContext, IBasket basket)
         {
-            throw new System.NotImplementedException();
+            var customer = basket.Customer;
+            var itemCache = GetItemCache(merchelloContext, customer);
+
+            return new BasketCheckout(merchelloContext, itemCache, customer);
         }
-
-        //public override void CompleteCheckout(IPaymentGatewayProvider paymentGatewayProvider)
-        //{
-        //    throw new System.NotImplementedException();
-        //}
-
 
         /// <summary>
         /// Generates a unique cache key for runtime caching of the <see cref="BasketCheckout"/>

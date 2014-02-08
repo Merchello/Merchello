@@ -1,0 +1,261 @@
+﻿using System;
+using System.Linq;
+using Merchello.Core;
+using Merchello.Core.Gateways;
+using Merchello.Core.Gateways.Shipping;
+using Merchello.Core.Gateways.Shipping.RateTable;
+using Merchello.Core.Models;
+using Merchello.Tests.IntegrationTests.TestHelpers;
+using Merchello.Web;
+using NUnit.Framework;
+
+namespace Merchello.Tests.IntegrationTests.Checkout
+{
+    [TestFixture]
+    public class CheckoutProcessesTests : MerchelloAllInTestBase
+    {
+        private IProduct _product1;
+        private IProduct _product2;
+        private IProduct _product3;
+        private IProduct _product4;
+        private IProduct _product5;
+
+
+        [TestFixtureSetUp]
+        public override void FixtureSetup()
+        {
+            base.FixtureSetup();
+
+            DbPreTestDataWorker.DeleteAllShipCountries();
+
+            #region Back Office
+
+            #region Product Entry
+
+            _product1 = DbPreTestDataWorker.MakeExistingProduct(true, 1, 1);
+            _product2 = DbPreTestDataWorker.MakeExistingProduct(true, 1, 2);
+            _product3 = DbPreTestDataWorker.MakeExistingProduct(true, 1, 3);
+            _product4 = DbPreTestDataWorker.MakeExistingProduct(true, 1, 4);
+            _product5 = DbPreTestDataWorker.MakeExistingProduct(true, 1, 5);
+
+            #endregion
+
+            #region WarehouseCatalog
+
+            var defaultCatalog = DbPreTestDataWorker.WarehouseService.GetDefaultWarehouse().WarehouseCatalogs.FirstOrDefault();
+            if (defaultCatalog == null) Assert.Ignore("Default WarehouseCatalog is null");
+
+            #endregion // WarehouseCatalog
+
+            #region Settings -> Shipping
+
+            // Add countries (US & DK) to default catalog
+            #region Add Countries
+
+            var us = MerchelloContext.Current.Services.StoreSettingService.GetCountryByCode("US");
+            var usCountry = new ShipCountry(defaultCatalog.Key, us);
+            MerchelloContext.Current.Services.ShipCountryService.Save(usCountry);
+
+            var dk = MerchelloContext.Current.Services.StoreSettingService.GetCountryByCode("DK");
+            var dkCountry = new ShipCountry(defaultCatalog.Key, dk);
+            MerchelloContext.Current.Services.ShipCountryService.Save(dkCountry);
+
+            #endregion // ShipCountry
+
+            #region Add a GatewayProvider (RateTableShippingGatewayProvider)
+
+            var key = Constants.ProviderKeys.Shipping.RateTableShippingProviderKey;
+            var rateTableProvider = ((GatewayContext)MerchelloContext.Current.Gateways).ResolveByKey<RateTableShippingGatewayProvider>(key);
+
+            #region Add and configure 3 rate table shipmethods
+
+            var gwshipMethod1 = (RateTableShipMethod)rateTableProvider.CreateShipMethod(RateTableShipMethod.QuoteType.PercentTotal, usCountry, "Ground (PercentTotal) 1");
+            gwshipMethod1.RateTable.AddRow(0, 10, 25);
+            gwshipMethod1.RateTable.AddRow(10, 15, 30);
+            gwshipMethod1.RateTable.AddRow(15, 25, 35);
+            gwshipMethod1.RateTable.AddRow(25, 60, 40); // total price should be 50M so we should hit this tier
+            gwshipMethod1.RateTable.AddRow(25, 10000, 50);
+            rateTableProvider.SaveShipMethod(gwshipMethod1);
+
+            var gwshipMethod2 = (RateTableShipMethod)rateTableProvider.CreateShipMethod(RateTableShipMethod.QuoteType.VaryByWeight, usCountry, "Ground (VBW)");
+            gwshipMethod2.RateTable.AddRow(0, 10, 5);
+            gwshipMethod2.RateTable.AddRow(10, 15, 10); // total weight should be 10M so we should hit this tier
+            gwshipMethod2.RateTable.AddRow(15, 25, 25);
+            gwshipMethod2.RateTable.AddRow(25, 10000, 100);
+            rateTableProvider.SaveShipMethod(gwshipMethod2);
+
+            var gwshipMethod3 = (RateTableShipMethod)rateTableProvider.CreateShipMethod(RateTableShipMethod.QuoteType.PercentTotal, dkCountry, "Ground (PercentTotal) 3");
+            gwshipMethod3.RateTable.AddRow(0, 10, 5);
+            gwshipMethod3.RateTable.AddRow(10, 15, 10);
+            gwshipMethod3.RateTable.AddRow(15, 25, 25);
+            gwshipMethod3.RateTable.AddRow(25, 60, 30); // total price should be 50M so we should hit this tier
+            gwshipMethod3.RateTable.AddRow(25, 10000, 50);
+            rateTableProvider.SaveShipMethod(gwshipMethod3);
+
+            #endregion // ShipMethods
+
+            #endregion // GatewayProvider
+
+            #endregion  // Shipping
+
+            #endregion  // Back Office
+
+        }
+
+        [SetUp]
+        public void Init()
+        {
+            DbPreTestDataWorker.DeleteAllAnonymousCustomers();
+        }
+
+        /// <summary>
+        /// Test verifies that a simple checkout scenario
+        /// </summary>
+        [Test]
+        public void Can_Complete_Simple_Checkout_Scenario()
+        {
+            // The basket is empty
+            WriteBasketInfoToConsole();
+
+            #region Customer Does Basket Operations
+
+            // -------------------------
+            // Add a couple of products
+            // -------------------------
+            Console.WriteLine("Adding 10 'Product1' to the Basket");
+            CurrentCustomer.Basket().AddItem(_product1, 10);
+
+            Console.WriteLine("Adding 2 'Product2' to the Basket");
+            CurrentCustomer.Basket().AddItem(_product2, 2);
+            CurrentCustomer.Basket().Save();
+            
+            WriteBasketInfoToConsole();
+            Assert.AreEqual(12, CurrentCustomer.Basket().TotalQuantityCount);
+            Assert.AreEqual(14, CurrentCustomer.Basket().TotalBasketPrice);
+            Assert.AreEqual(2, CurrentCustomer.Basket().TotalItemCount);
+
+            // -------------------------
+            // Add another product2
+            // -------------------------
+            Console.WriteLine("Adding another 'Product2' to the Basket");
+            CurrentCustomer.Basket().AddItem(_product2);
+            CurrentCustomer.Basket().Save();
+
+            WriteBasketInfoToConsole();
+            Assert.AreEqual(13, CurrentCustomer.Basket().TotalQuantityCount);
+            Assert.AreEqual(16, CurrentCustomer.Basket().TotalBasketPrice);
+            Assert.AreEqual(2, CurrentCustomer.Basket().TotalItemCount);
+
+            // -------------------------
+            // Add products - product3 and product4
+            // -------------------------
+            Console.WriteLine("Adding 2 'Product4' to the Basket");
+            CurrentCustomer.Basket().AddItem(_product4, 2);
+
+            WriteBasketInfoToConsole();
+            Assert.AreEqual(15, CurrentCustomer.Basket().TotalQuantityCount);
+            Assert.AreEqual(24, CurrentCustomer.Basket().TotalBasketPrice);
+            Assert.AreEqual(3, CurrentCustomer.Basket().TotalItemCount);
+
+            Console.WriteLine("Adding 1 'Product3' to the Basket");
+            CurrentCustomer.Basket().AddItem(_product3, 1);
+            CurrentCustomer.Basket().Save();
+
+            WriteBasketInfoToConsole();
+            Assert.AreEqual(16, CurrentCustomer.Basket().TotalQuantityCount);
+            Assert.AreEqual(27, CurrentCustomer.Basket().TotalBasketPrice);
+            Assert.AreEqual(4, CurrentCustomer.Basket().TotalItemCount);
+
+            // -------------------------
+            // Update Product4's quantity to 1
+            // -------------------------
+            CurrentCustomer.Basket().Items.First(x => x.Sku == _product4.Sku).Quantity = 1;
+            CurrentCustomer.Basket().Save();
+
+            WriteBasketInfoToConsole();
+            Assert.AreEqual(15, CurrentCustomer.Basket().TotalQuantityCount);
+            Assert.AreEqual(23, CurrentCustomer.Basket().TotalBasketPrice);
+            Assert.AreEqual(4, CurrentCustomer.Basket().TotalItemCount);
+
+            // -------------------------
+            // Remove Product3 from the basket
+            // -------------------------
+            CurrentCustomer.Basket().RemoveItem(_product3.Sku);
+            CurrentCustomer.Basket().Save();
+
+            WriteBasketInfoToConsole();
+            Assert.AreEqual(14, CurrentCustomer.Basket().TotalQuantityCount);
+            Assert.AreEqual(20, CurrentCustomer.Basket().TotalBasketPrice);
+            Assert.AreEqual(3, CurrentCustomer.Basket().TotalItemCount);
+
+
+            #endregion
+
+
+            #region CheckOut
+
+            // ------------- Customer Shipping Address Entry -------------------------
+
+            // Customer enters the destination shipping address
+            var destination = new Address()
+                {
+                    Name = "Mindfly Web Design Studio",
+                    Address1 = "115 W. Magnolia St.",
+                    Address2 = "Suite 504",
+                    Locality = "Bellingham",
+                    Region = "WA",
+                    PostalCode = "98225",
+                    CountryCode = "US"
+                };
+
+            // --------------- ShipMethod Selection ----------------------------------
+
+            // Package the shipments 
+            //
+            // This should return a collection containing a single shipment
+            //
+            var shipments = CurrentCustomer.Basket().PackageBasket(destination).ToArray();
+
+            Assert.IsTrue(shipments.Any());
+            Assert.AreEqual(1, shipments.Count());
+
+            var shipment = shipments.First();
+
+            // Get a shipment rate quote
+            //
+            // This should return a collection containing 2 shipment rate quotes (for US)
+            //
+            var shipRateQuotes = shipment.ShipmentRateQuotes().ToArray();
+
+            foreach (var srq in shipRateQuotes)
+            {
+                WriteShipRateQuote(srq);
+            }
+
+            // Customer chooses the cheapest shipping rate
+            var approvedShipRateQuote = shipRateQuotes.FirstOrDefault();
+
+
+            #endregion
+
+        }
+
+
+        private void WriteBasketInfoToConsole()
+        {
+            Console.WriteLine("----------- Basket Item Info ---------------------");
+            Console.WriteLine("Total quantity count: {0}", CurrentCustomer.Basket().TotalQuantityCount);
+            Console.WriteLine("Total basket price: {0}", CurrentCustomer.Basket().TotalBasketPrice);
+            Console.WriteLine("Total item count: {0}", CurrentCustomer.Basket().TotalItemCount);
+            
+        }
+
+        private void WriteShipRateQuote(IShipmentRateQuote srq)
+        {
+            Console.WriteLine("---------- Shipment Rate Quote ---------------------");
+            Console.WriteLine("Name: {0}", srq.ShimpentLineItemName());
+            Console.WriteLine("Rate Quote: {0}", srq.Rate);
+            
+        }
+    }
+}

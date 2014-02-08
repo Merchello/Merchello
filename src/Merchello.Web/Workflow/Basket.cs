@@ -188,9 +188,9 @@ namespace Merchello.Web.Workflow
         /// <summary>
         /// Removes a basket line item
         /// </summary>
-        public void RemoveItem(Guid key)
+        public void RemoveItem(Guid itemKey)
         {
-            var item = _itemCache.Items.FirstOrDefault(x => x.Key == key);
+            var item = _itemCache.Items.FirstOrDefault(x => x.Key == itemKey);
             if(item != null) RemoveItem(item.Sku);
         }        
 
@@ -285,6 +285,14 @@ namespace Merchello.Web.Workflow
         public LineItemCollection Items
         {
             get { return _itemCache.Items; }
+        }
+
+        /// <summary>
+        /// Returns the basket's item count
+        /// </summary>
+        public int TotalItemCount 
+        {
+            get { return Items.Count; }
         }
 
         /// <summary>

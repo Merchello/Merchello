@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Models;
+using Merchello.Core.Models.TypeFields;
 using Merchello.Core.Services;
 using Umbraco.Core;
 using Umbraco.Core.Cache;
@@ -31,15 +33,40 @@ namespace Merchello.Core.Checkout
         }
 
         /// <summary>
-        /// Purges all checkout information persisted
+        /// Purges persisted checkout information
         /// </summary>
         public virtual void RestartCheckout()
         {
-            _customer.ExtendedData.RemoveValue(Constants.ExtendedDataKeys.BillingAddress);
-            SaveCustomer();
+            RestartCheckout(_merchelloContext, _customer);
+        }
 
-            // TODO this needs to be refactored
-            MerchelloContext.Services.ItemCacheService.Delete(_itemCache);
+        /// <summary>
+        /// Purges persisted checkout information
+        /// </summary>
+        internal static void RestartCheckout(IMerchelloContext merchelloContext, Guid entityKey)
+        {
+            var customer = merchelloContext.Services.CustomerService.GetAnyByKey(entityKey);
+            if(customer == null) return;
+
+            RestartCheckout(merchelloContext, customer);
+        }
+
+        /// <summary>
+        /// Purges persisted checkout information
+        /// </summary>
+        private static void RestartCheckout(IMerchelloContext merchelloContext, ICustomerBase customer)
+        {
+            customer.ExtendedData.RemoveValue(Constants.ExtendedDataKeys.BillingAddress);
+            SaveCustomer(merchelloContext, customer);
+
+            var cacheKey = MakeCacheKey(customer);
+
+            var itemCache = GetItemCache(merchelloContext, customer);
+            merchelloContext.Cache.RuntimeCache.ClearCacheItem(cacheKey);
+
+            if(itemCache == null) return;
+            
+            merchelloContext.Services.ItemCacheService.Delete(itemCache);
         }
 
         /// <summary>
@@ -49,7 +76,16 @@ namespace Merchello.Core.Checkout
         public virtual void SaveBillToAddress(IAddress billToAddress)
         {
             _customer.ExtendedData.AddAddress(billToAddress, AddressType.Billing);
-            SaveCustomer();
+            SaveCustomer(_merchelloContext, _customer);
+        }
+
+        /// <summary>
+        /// Gets the bill to address
+        /// </summary>
+        /// <returns>Return the billing <see cref="IAddress"/></returns>
+        public IAddress GetBillToAddress()
+        {
+            return _customer.ExtendedData.GetAddress(AddressType.Billing);
         }
 
         /// <summary>
@@ -59,7 +95,7 @@ namespace Merchello.Core.Checkout
         public virtual void SaveShipmentRateQuote(IShipmentRateQuote approvedShipmentRateQuote)
         {
             AddShipmentRateQuoteLineItem(approvedShipmentRateQuote);         
-            MerchelloContext.Services.ItemCacheService.Save(_itemCache);
+            _merchelloContext.Services.ItemCacheService.Save(_itemCache);
         }
 
         /// <summary>
@@ -69,7 +105,7 @@ namespace Merchello.Core.Checkout
         public virtual void SaveShipmentRateQuote(IEnumerable<IShipmentRateQuote> approvedShipmentRateQuotes)
         {
             approvedShipmentRateQuotes.ForEach(AddShipmentRateQuoteLineItem);
-            MerchelloContext.Services.ItemCacheService.Save(_itemCache);
+            _merchelloContext.Services.ItemCacheService.Save(_itemCache);
         }
 
         /// <summary>
@@ -80,6 +116,8 @@ namespace Merchello.Core.Checkout
         {
             _itemCache.AddItem(shipmentRateQuote.AsLineItemOf<ItemCacheLineItem>());
         }
+
+
 
         ///// <summary>
         ///// Generates an <see cref="IInvoice"/>
@@ -112,16 +150,63 @@ namespace Merchello.Core.Checkout
         /// <summary>
         /// Saves the current customer
         /// </summary>
-        private void SaveCustomer()
+        private static void SaveCustomer(IMerchelloContext merchelloContext, ICustomerBase customer)
         {
-            if (typeof(AnonymousCustomer) == _customer.GetType())
+            if (typeof(AnonymousCustomer) == customer.GetType())
             {
-                _merchelloContext.Services.CustomerService.Save(_customer as AnonymousCustomer);
+                merchelloContext.Services.CustomerService.Save(customer as AnonymousCustomer);
             }
             else
             {
-                ((CustomerService)_merchelloContext.Services.CustomerService).Save(_customer as Customer);
+                ((CustomerService)merchelloContext.Services.CustomerService).Save(customer as Customer);
             }
+        }
+
+        /// <summary>
+        /// Gets the checkout <see cref="IItemCache"/> for the <see cref="ICustomerBase"/>
+        /// </summary>
+        /// <param name="customer">The customer associated with the checkout</param>
+        /// <param name="merchelloContext">The <see cref="IMerchelloContext"/></param>
+        /// <returns>The <see cref="IItemCache"/> associated with the customer checkout</returns>
+        protected static IItemCache GetItemCache(IMerchelloContext merchelloContext, ICustomerBase customer)
+        {
+            var runtimeCache = merchelloContext.Cache.RuntimeCache;
+
+            var cacheKey = MakeCacheKey(customer);
+            var itemCache = runtimeCache.GetCacheItem(cacheKey) as IItemCache;
+            if (itemCache != null) return itemCache;
+
+            var itemCacheTfKey = EnumTypeFieldConverter.ItemItemCache.Checkout.TypeKey;
+            itemCache = new ItemCache(customer.EntityKey, itemCacheTfKey);
+            merchelloContext.Services.ItemCacheService.Save(itemCache);
+            
+            runtimeCache.InsertCacheItem(cacheKey, () => itemCache);
+            return itemCache;
+        }
+
+        /// <summary>
+        /// Makes the 'unique' RuntimeCache Key for the RuntimeCache
+        /// </summary>
+        protected string MakeCacheKey()
+        {
+            return MakeCacheKey(_customer);
+        }
+
+        /// <summary>
+        /// Generates a unique cache key for runtime caching of the <see cref="CheckoutBase"/>
+        /// </summary>
+        /// <param name="customer"><see cref="ICustomerBase"/></param>
+        /// <returns>The unique CacheKey string</returns>
+        /// <remarks>
+        /// 
+        /// CacheKey is assumed to be unique per customer and globally for CheckoutBase.  Therefore this will NOT be unique if 
+        /// to different checkouts are happening for the same customer at the same time - we consider that an extreme edge case.
+        /// 
+        /// </remarks>
+        private static string MakeCacheKey(ICustomerBase customer)
+        {
+            var itemCacheTfKey = EnumTypeFieldConverter.ItemItemCache.Checkout.TypeKey;
+            return Cache.CacheKeys.ItemCacheCacheKey(customer.EntityKey, itemCacheTfKey);
         }
 
         /// <summary>
@@ -135,7 +220,7 @@ namespace Merchello.Core.Checkout
         /// <summary>
         /// The <see cref="IMerchelloContext"/>
         /// </summary>
-        public IMerchelloContext MerchelloContext
+        protected IMerchelloContext MerchelloContext
         {
             get { return _merchelloContext; }
         }
@@ -143,7 +228,7 @@ namespace Merchello.Core.Checkout
         /// <summary>
         /// Shortcut to configured <see cref="IRuntimeCacheProvider"/>
         /// </summary>
-        public IRuntimeCacheProvider RuntimeCache
+        protected IRuntimeCacheProvider RuntimeCache
         {
             get { return _merchelloContext.Cache.RuntimeCache; }
         }
@@ -157,5 +242,6 @@ namespace Merchello.Core.Checkout
         }
 
         public bool ApplyTaxesToInvoice { get; set; }
+
     }
 }

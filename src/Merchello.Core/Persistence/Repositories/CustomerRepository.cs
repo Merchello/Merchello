@@ -93,8 +93,7 @@ namespace Merchello.Core.Persistence.Repositories
         {
             Mandate.ParameterCondition(entityKey != Guid.Empty, "entityKey");
 
-            var q = new Querying.Query<ICustomer>()
-                .Where(c => c.EntityKey == entityKey);
+            var q = Querying.Query<ICustomer>.Builder.Where(c => c.EntityKey == entityKey);
 
             return PerformGetByQuery(q).FirstOrDefault();
         }

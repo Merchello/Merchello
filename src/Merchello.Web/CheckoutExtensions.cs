@@ -5,8 +5,6 @@ using Merchello.Core;
 using Merchello.Core.Configuration;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Models;
-using Merchello.Core.Models.Interfaces;
-using Merchello.Web.Models;
 using Merchello.Web.Workflow;
 using Merchello.Web.Workflow.Shipping;
 
@@ -52,19 +50,26 @@ namespace Merchello.Web
             return !basket.Items.Any() ? new List<IShipment>() : strategy.PackageShipments();
         }
 
+
         /// <summary>
-        /// Returns a collection of <see cref="IShipmentRateQuote"/> from the various configured shipping providers
+        /// Gets the <see cref="IBasketCheckout"/>
         /// </summary>
-        /// <param name="shipment"><see cref="IShipment"/></param>
-        /// <returns>A collection of <see cref="IShipmentRateQuote"/></returns>
-        public static IEnumerable<IShipmentRateQuote> ShipmentRateQuotes(this IShipment shipment)
+        /// <param name="basket">The basket with items use in the checkout</param>
+        /// <returns>A <see cref="IBasketCheckout"/></returns>
+        public static BasketCheckout Checkout(this IBasket basket)
         {
-            return shipment.ShipmentRateQuotes(MerchelloContext.Current);
+            return basket.Checkout(MerchelloContext.Current);
         }
 
-        internal static IEnumerable<IShipmentRateQuote> ShipmentRateQuotes(this IShipment shipment, IMerchelloContext merchelloContext)
+        /// <summary>
+        /// Gets the <see cref="IBasketCheckout"/>
+        /// </summary>
+        /// <param name="basket">The basket with items use in the checkout</param>
+        /// <param name="merchelloContext">The <see cref="IMerchelloContext"/></param>
+        /// <returns>A <see cref="IBasketCheckout"/></returns>
+        internal static BasketCheckout Checkout(this IBasket basket, IMerchelloContext merchelloContext)
         {
-            return merchelloContext.Gateways.GetShipRateQuotesForShipment(shipment);
+            return BasketCheckout.GetBasketCheckout(merchelloContext, basket);
         }
     }
 }

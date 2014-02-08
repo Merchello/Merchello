@@ -155,7 +155,7 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Gets the <see cref="IShipCountryService"/>
         /// </summary>
-        internal IShipCountryService ShipCountryService
+        public IShipCountryService ShipCountryService
         {
             get { return _shipCountryService.Value; }
         }

@@ -16,6 +16,8 @@ namespace Merchello.Core.Persistence.Mappers
 
         internal override void BuildMap()
         {
+            if (!PropertyInfoCache.IsEmpty) return;
+
             CacheMap<InvoiceStatus, InvoiceStatusDto>(src => src.Key, dto => dto.Key);
             CacheMap<InvoiceStatus, InvoiceStatusDto>(src => src.Name, dto => dto.Name);
             CacheMap<InvoiceStatus, InvoiceStatusDto>(src => src.Alias, dto => dto.Alias);
