@@ -7,6 +7,7 @@ using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Models;
 using Merchello.Web.Workflow;
 using Merchello.Web.Workflow.Shipping;
+using Umbraco.Core.Logging;
 
 namespace Merchello.Web
 {
@@ -38,11 +39,16 @@ namespace Merchello.Web
         {
             var defaultStrategy = MerchelloConfiguration.Current.GetStrategyElement(Constants.StrategyTypeAlias.DefaultBasketPackaging).Type;
 
-            var ctorArgs = new[] { typeof(MerchelloContext), typeof(Basket), typeof(Address) };
             var ctoArgValues = new object[] { merchelloContext, basket, destination };
-            var strategy = ActivatorHelper.CreateInstance<BasketPackagingStrategyBase>(Type.GetType(defaultStrategy), ctorArgs, ctoArgValues);
+            var strategy = ActivatorHelper.CreateInstance<BasketPackagingStrategyBase>(defaultStrategy, ctoArgValues);
 
-            return basket.PackageBasket(merchelloContext, destination, strategy);
+            if (!strategy.Success)
+            {
+                LogHelper.Error<BasketPackagingStrategyBase>("PackageBasket failed to instantiate the defaultStrategy.", strategy.Exception);
+                throw strategy.Exception;
+            }
+
+            return basket.PackageBasket(merchelloContext, destination, strategy.Result);
         }
 
         internal static IEnumerable<IShipment> PackageBasket(this IBasket basket, IMerchelloContext merchelloContext, IAddress destination, BasketPackagingStrategyBase strategy)
