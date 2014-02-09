@@ -7,27 +7,31 @@ using Merchello.Core.Models.TypeFields;
 
 namespace Merchello.Web.Workflow
 {
-    public class BasketCheckout : CheckoutBase, IBasketCheckout 
+    public class BasketCheckoutPreparation : CheckoutPreparationBase, IBasketCheckoutPreparation 
     {
-        internal BasketCheckout(IMerchelloContext merchelloContext, IItemCache itemCache, ICustomerBase customer) 
+        internal BasketCheckoutPreparation(IMerchelloContext merchelloContext, IItemCache itemCache, ICustomerBase customer) 
             : base(merchelloContext, itemCache, customer)
         { }
 
-        internal static BasketCheckout GetBasketCheckout(IBasket basket)
+        internal static BasketCheckoutPreparation GetBasketCheckout(IBasket basket)
         {
             return GetBasketCheckout(Core.MerchelloContext.Current, basket);
         }
 
-        internal static BasketCheckout GetBasketCheckout(IMerchelloContext merchelloContext, IBasket basket)
+        internal static BasketCheckoutPreparation GetBasketCheckout(IMerchelloContext merchelloContext, IBasket basket)
         {
             var customer = basket.Customer;
             var itemCache = GetItemCache(merchelloContext, customer);
-
-            return new BasketCheckout(merchelloContext, itemCache, customer);
+            foreach (var item in basket.Items)
+            {
+                // convert to a LineItem of the same type for use in the CheckoutPrepartion collection
+                itemCache.AddItem(item.AsLineItemOf<ItemCacheLineItem>());
+            }
+            return new BasketCheckoutPreparation(merchelloContext, itemCache, customer);
         }
 
         /// <summary>
-        /// Generates a unique cache key for runtime caching of the <see cref="BasketCheckout"/>
+        /// Generates a unique cache key for runtime caching of the <see cref="BasketCheckoutPreparation"/>
         /// </summary>
         /// <param name="customer"><see cref="ICustomerBase"/></param>
         /// <returns>The unique CacheKey string</returns>

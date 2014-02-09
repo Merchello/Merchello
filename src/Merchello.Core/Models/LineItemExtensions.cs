@@ -61,7 +61,7 @@ namespace Merchello.Core.Models
         /// <typeparam name="T"></typeparam>
         /// <param name="lineItem"></param>
         /// <returns>A <see cref="LineItemBase"/> of type T</returns>
-        public static T ConvertToNewLineItemOf<T>(this ILineItem lineItem) where T : class, ILineItem
+        public static T AsLineItemOf<T>(this ILineItem lineItem) where T : class, ILineItem
         {    
             var ctrValues = new object[]
                 {                    

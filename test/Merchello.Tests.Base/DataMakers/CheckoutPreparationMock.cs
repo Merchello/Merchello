@@ -5,9 +5,9 @@ using Merchello.Core.Models;
 
 namespace Merchello.Tests.Base.DataMakers
 {
-    internal class CheckoutMock : CheckoutBase
+    internal class CheckoutPreparationMock : CheckoutPreparationBase
     {
-        public CheckoutMock(IMerchelloContext merchelloContext, IItemCache itemCache, ICustomerBase customer) 
+        public CheckoutPreparationMock(IMerchelloContext merchelloContext, IItemCache itemCache, ICustomerBase customer) 
             : base(merchelloContext, itemCache, customer)
         {
 

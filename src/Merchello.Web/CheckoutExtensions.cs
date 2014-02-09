@@ -52,24 +52,24 @@ namespace Merchello.Web
 
 
         /// <summary>
-        /// Gets the <see cref="IBasketCheckout"/>
+        /// Gets the <see cref="IBasketCheckoutPreparation"/>
         /// </summary>
         /// <param name="basket">The basket with items use in the checkout</param>
-        /// <returns>A <see cref="IBasketCheckout"/></returns>
-        public static BasketCheckout Checkout(this IBasket basket)
+        /// <returns>A <see cref="IBasketCheckoutPreparation"/></returns>
+        public static BasketCheckoutPreparation CheckoutPreparation(this IBasket basket)
         {
-            return basket.Checkout(MerchelloContext.Current);
+            return basket.CheckoutPreparation(MerchelloContext.Current);
         }
 
         /// <summary>
-        /// Gets the <see cref="IBasketCheckout"/>
+        /// Gets the <see cref="IBasketCheckoutPreparation"/>
         /// </summary>
         /// <param name="basket">The basket with items use in the checkout</param>
         /// <param name="merchelloContext">The <see cref="IMerchelloContext"/></param>
-        /// <returns>A <see cref="IBasketCheckout"/></returns>
-        internal static BasketCheckout Checkout(this IBasket basket, IMerchelloContext merchelloContext)
+        /// <returns>A <see cref="IBasketCheckoutPreparation"/></returns>
+        internal static BasketCheckoutPreparation CheckoutPreparation(this IBasket basket, IMerchelloContext merchelloContext)
         {
-            return BasketCheckout.GetBasketCheckout(merchelloContext, basket);
+            return BasketCheckoutPreparation.GetBasketCheckout(merchelloContext, basket);
         }
     }
 }

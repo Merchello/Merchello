@@ -19,7 +19,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
     {
         private IItemCache _itemCache;
         private ICustomerBase _customer;
-        private CheckoutBase _checkoutMock;
+        private CheckoutPreparationBase _checkoutPreparationMock;
         private IAddress _billingAddress;
         private IBasket _basket;
         private const decimal ProductCount = 5;
@@ -66,12 +66,12 @@ namespace Merchello.Tests.IntegrationTests.Builders
 
             foreach (var item in _basket.Items)
             {
-                _itemCache.AddItem(item.ConvertToNewLineItemOf<ItemCacheLineItem>());
+                _itemCache.AddItem(item.AsLineItemOf<ItemCacheLineItem>());
             }
 
 
             // setup the checkout
-            _checkoutMock = new CheckoutMock(MerchelloContext, _itemCache, _customer);
+            _checkoutPreparationMock = new CheckoutPreparationMock(MerchelloContext, _itemCache, _customer);
 
             // add the shipment rate quote
             var shipment = _basket.PackageBasket(MerchelloContext, _billingAddress).First();
@@ -85,7 +85,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
             };
 
             //_checkoutMock.ItemCache.Items.Add(shipRateQuote.AsLineItemOf<InvoiceLineItem>());
-            _checkoutMock.SaveShipmentRateQuote(shipRateQuote);
+            _checkoutPreparationMock.SaveShipmentRateQuote(shipRateQuote);
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
             const int taskCount = 4;
 
             //// Act
-            var invoiceBuild = new InvoiceBuilderChain(_checkoutMock);
+            var invoiceBuild = new InvoiceBuilderChain(_checkoutPreparationMock);
 
             //// Assert
             Assert.NotNull(invoiceBuild);
@@ -113,7 +113,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
         {
             //// Arrange
             var expected = _billingAddress;
-            var invoiceBuilder = new InvoiceBuilderChain(_checkoutMock);
+            var invoiceBuilder = new InvoiceBuilderChain(_checkoutPreparationMock);
 
             //// Arrange
             var attempt = invoiceBuilder.Build();
@@ -134,7 +134,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
             //// Arrange
             const decimal expectedProducts = ProductCount;
             const int expectedShipments = 1;
-            var invoiceBuilder = new InvoiceBuilderChain(_checkoutMock);
+            var invoiceBuilder = new InvoiceBuilderChain(_checkoutPreparationMock);
 
             //// Act
             var attempt = invoiceBuilder.Build();

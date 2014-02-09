@@ -1,15 +1,13 @@
 ﻿using System.Collections.Generic;
-using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Models;
-using Merchello.Core.Models.Interfaces;
 
 namespace Merchello.Core.Checkout
 {
     /// <summary>
     /// Defines a Checkout base class
     /// </summary>
-    public interface ICheckoutBase
+    public interface ICheckoutPreparationBase
     {
         /// <summary>
         /// Restarts the checkout process, deleting all persisted data

@@ -6,21 +6,21 @@ namespace Merchello.Core.Chains.CheckOut
 {
     public abstract class CheckoutAttemptChainTaskBase : AttemptChainTaskBase<IInvoice>
     {
-        private readonly CheckoutBase _checkout;
+        private readonly CheckoutPreparationBase _checkoutPreparation;
 
-        protected CheckoutAttemptChainTaskBase(CheckoutBase checkout)
+        protected CheckoutAttemptChainTaskBase(CheckoutPreparationBase checkoutPreparation)
         {
-            Mandate.ParameterNotNull(checkout, "checkout");
+            Mandate.ParameterNotNull(checkoutPreparation, "checkout");
 
-            _checkout = checkout;
+            _checkoutPreparation = checkoutPreparation;
         }
 
         /// <summary>
-        /// Gets the <see cref="CheckoutBase"/> object
+        /// Gets the <see cref="CheckoutPreparationBase"/> object
         /// </summary>
-        protected CheckoutBase Checkout
+        protected CheckoutPreparationBase CheckoutPreparation
         {
-            get { return _checkout; }
+            get { return _checkoutPreparation; }
         }
     }
 }

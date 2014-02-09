@@ -16,7 +16,7 @@ namespace Merchello.Web.Workflow.Shipping
             // For the first release we are going to assume everything shippable is a product listed in the Merchello catalog
             if (lineItem.ExtendedData.ContainsProductVariantKey() && lineItem.ExtendedData.GetShippableValue() && lineItem.LineItemType == LineItemType.Product)
             {                
-                _lineItems.Add(lineItem.ConvertToNewLineItemOf<OrderLineItem>());
+                _lineItems.Add(lineItem.AsLineItemOf<OrderLineItem>());
             }
         }
 

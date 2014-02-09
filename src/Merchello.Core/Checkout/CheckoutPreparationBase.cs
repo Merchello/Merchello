@@ -14,13 +14,13 @@ namespace Merchello.Core.Checkout
     /// Represents a CheckoutBase class resposible for temporarily persisting invoice and order information
     /// while it's being collected
     /// </summary>
-    public abstract class CheckoutBase : ICheckoutBase
+    public abstract class CheckoutPreparationBase : ICheckoutPreparationBase
     {
         private readonly IItemCache _itemCache;
         private readonly ICustomerBase _customer;
         private readonly IMerchelloContext _merchelloContext;
 
-        internal CheckoutBase(IMerchelloContext merchelloContext, IItemCache itemCache, ICustomerBase customer)
+        internal CheckoutPreparationBase(IMerchelloContext merchelloContext, IItemCache itemCache, ICustomerBase customer)
         {                       
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
             Mandate.ParameterNotNull(itemCache, "ItemCache");
@@ -193,7 +193,7 @@ namespace Merchello.Core.Checkout
         }
 
         /// <summary>
-        /// Generates a unique cache key for runtime caching of the <see cref="CheckoutBase"/>
+        /// Generates a unique cache key for runtime caching of the <see cref="CheckoutPreparationBase"/>
         /// </summary>
         /// <param name="customer"><see cref="ICustomerBase"/></param>
         /// <returns>The unique CacheKey string</returns>

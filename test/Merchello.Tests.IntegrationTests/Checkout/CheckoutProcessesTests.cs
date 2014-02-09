@@ -235,6 +235,23 @@ namespace Merchello.Tests.IntegrationTests.Checkout
             // Customer chooses the cheapest shipping rate
             var approvedShipRateQuote = shipRateQuotes.FirstOrDefault();
 
+            // start the Checkout process
+            Assert.AreEqual(CurrentCustomer.Basket().TotalItemCount, CurrentCustomer.Basket().CheckoutPreparation().ItemCache.Items.Count);
+
+            CurrentCustomer.Basket().CheckoutPreparation().SaveShipmentRateQuote(approvedShipRateQuote);
+
+            // Customer changes their mind and adds Product 5 to the basket
+            CurrentCustomer.Basket().AddItem(_product5);
+            CurrentCustomer.Basket().Save();
+
+            WriteBasketInfoToConsole();
+            Assert.AreEqual(15, CurrentCustomer.Basket().TotalQuantityCount);
+            Assert.AreEqual(25, CurrentCustomer.Basket().TotalBasketPrice);
+            Assert.AreEqual(4, CurrentCustomer.Basket().TotalItemCount);
+
+            // This should have cleared the CheckoutPreparation
+            Assert.AreEqual(0, CurrentCustomer.Basket().CheckoutPreparation().ItemCache.Items.Count());
+            Console.WriteLine("CheckoutPrepartion was cleared!");
 
             #endregion
 

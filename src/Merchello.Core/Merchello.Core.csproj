@@ -86,8 +86,8 @@
     <Compile Include="Chains\CheckOut\ConvertItemCacheItemsToInvoiceItemsTask.cs" />
     <Compile Include="Chains\InvoiceTaxRateQuote\IdentifyTaxableLineItems.cs" />
     <Compile Include="Chains\InvoiceTaxRateQuote\InvoiceTaxRateQuoteBase.cs" />
-    <Compile Include="Checkout\CheckoutBase.cs" />
-    <Compile Include="Checkout\ICheckoutBase.cs" />
+    <Compile Include="Checkout\CheckoutPreparationBase.cs" />
+    <Compile Include="Checkout\ICheckoutPreparationBase.cs" />
     <Compile Include="Builders\IBuilderChain.cs" />
     <Compile Include="Cache\CacheKeys.cs" />
     <Compile Include="CloneHelper.cs" />
