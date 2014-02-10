@@ -14,7 +14,12 @@
             </div>
             <div class="span4" data-ng-show="editingVariant">
                 <div class="umb-headline-editor-wrapper">
-                     <h1 class="umb-headline">{{productVariant.name}}</h1>
+                     <h1 class="umb-headline">{{productVariant.name}} - 
+                        <span data-ng-repeat="attribute in productVariant.attributes">
+                            <span>{{attribute.name}}</span>
+                            <span data-ng-show="!$last"> / </span>
+                        </span>     
+                     </h1>
                 </div>
             </div>
 
@@ -201,7 +206,8 @@
                                     <label for="base-inventory">Base Inventory
                                         <small>(Will set starting inventory for <strong>all variants</strong> and <strong>all warehouses</strong>)</small>
                                     </label>
-                                    <input id="base-inventory" type="text" name="base-inventory" class="form-control col-xs-8 span8"  />
+                                    <input id="base-inventory" type="text" name="base-inventory" data-ng-model="allVariantInventories" class="form-control col-xs-8 span8"  />
+                                    <a data-ng-click="applyAllVariantInventories(allVariantInventories)" class="btn btn-primary">Apply</a>
                                 </div>
 
                             </div>
