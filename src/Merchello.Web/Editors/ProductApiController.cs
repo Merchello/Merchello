@@ -177,15 +177,11 @@ namespace Merchello.Web.Editors
             try
             {
                 newProduct = _productService.CreateProductWithKey(name, sku, price) as Product;
+                _productService.Save(newProduct);
 
-                if (!newProduct.Download)
-                {
-                    newProduct.AddToCatalogInventory(_warehouseService.GetDefaultWarehouse().DefaultCatalog());
-                    newProduct.CatalogInventories.First().Count = 10;
-                    _productService.Save(newProduct);
-
-                    //newProduct = _productService.GetByKey(newProduct.Key) as Product;
-                }
+                newProduct.AddToCatalogInventory(_warehouseService.GetDefaultWarehouse().DefaultCatalog());
+                newProduct.CatalogInventories.First().Count = 10;
+                _productService.Save(newProduct);
             }
             catch (Exception ex)
             {
@@ -209,17 +205,17 @@ namespace Merchello.Web.Editors
             try
             {
                 newProduct = _productService.CreateProduct(product.Name, product.Sku, product.Price);
-                newProduct = product.ToProduct(newProduct);
                 _productService.Save(newProduct);
 
-                if (!newProduct.Download)
-                {
+                //if (product.TrackInventory)
+                //{
                     newProduct.AddToCatalogInventory(_warehouseService.GetDefaultWarehouse().DefaultCatalog());
                     newProduct.CatalogInventories.First().Count = 10;
-                    _productService.Save(newProduct);
+                    //_productService.Save(newProduct);
+                //}
 
-                    //newProduct = _productService.GetByKey(newProduct.Key) as Product;
-                }
+                newProduct = product.ToProduct(newProduct);
+                _productService.Save(newProduct);
             }
             catch (Exception ex)
             {

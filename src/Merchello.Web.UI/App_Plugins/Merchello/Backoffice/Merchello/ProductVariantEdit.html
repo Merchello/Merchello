@@ -89,7 +89,7 @@
                                     <label class="label-checkbox"><input name="taxable" type="checkbox" data-ng-model="productVariant.taxable"> <span>This variant is taxable</span></label>
                                 </div>
                                 <div class="form-group col-xs-6 span6">
-                                    <label class="label-checkbox"><input name="trackinventory" type="checkbox" data-ng-model="productVariant.trackInventory" data-ng-disabled="productVariant.hasOptions"> <span>Track inventory for this variant</span></label>
+                                    <label class="label-checkbox"><input name="trackinventory" type="checkbox" data-ng-model="productVariant.trackInventory" data-ng-disabled="productVariant.hasOptions || productVariant.hasDigitalDownload" data-ng-click="ensureCatalogInventory()"> <span>Track inventory for this variant</span></label>
                                     <label class="label-checkbox"><input name="shippable" type="checkbox" data-ng-model="productVariant.shippable"> <span>This variant is shippable</span></label>
                                 </div>
                             </div>
@@ -183,7 +183,8 @@
                                             <input class="form-control input-mini" data-ng-model="variant.barcode" />
                                         </td>
                                         <td>
-                                            <input class="form-control input-mini" data-ng-model="variant.inventory" />
+                                            <input type="checkbox" data-ng-model="variant.trackInventory" />
+                                            <input class="form-control input-mini" data-ng-show="variant.trackInventory" data-ng-model="variant.totalInventoryCount" data-ng-change="variant.globalInventoryChanged(variant.totalInventoryCount)" />
                                         </td>
                                     </tr>
                                 </table>
@@ -247,7 +248,7 @@
                                     </tr>
                                     <tr data-ng-repeat="catalogInv in productVariant.catalogInventories">
                                         <td class="span1"><input name="incatalog" type="checkbox" disabled="disabled" checked="checked"></td>
-                                        <td class="name">{{defaultWarehouse.name}}</td>
+                                        <td class="name">{{defaultWarehouse.name}} - {{defaultWarehouse.warehouseCatalogs[0].name}}</td>
                                         <td><input type="text" class="col-xs-8 span8" data-ng-model="catalogInv.count" /></td>
                                         <td><input type="text" class="col-xs-8 span8" data-ng-model="catalogInv.lowCount" /></td>
                                     </tr>

@@ -196,12 +196,15 @@ namespace Merchello.Web.Models.ContentEditing
             {
                 ICatalogInventory destinationCatalogInventory;
 
-                var catInv = destination.CatalogInventories.Where(x => x.CatalogKey == catalogInventory.CatalogKey).First();
-                if (catInv != null)
+                if (destination.CatalogInventories.Count() > 0)
                 {
-                    destinationCatalogInventory = catInv;
+                    var catInv = destination.CatalogInventories.Where(x => x.CatalogKey == catalogInventory.CatalogKey).First();
+                    if (catInv != null)
+                    {
+                        destinationCatalogInventory = catInv;
 
-                    destinationCatalogInventory = catalogInventory.ToCatalogInventory(destinationCatalogInventory);
+                        destinationCatalogInventory = catalogInventory.ToCatalogInventory(destinationCatalogInventory);
+                    }
                 }
             }
 

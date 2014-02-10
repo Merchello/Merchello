@@ -237,7 +237,10 @@
 
             self.attributes = [];
 
-            self.catalogInventories = product.catalogInventories.slice(0);
+            for (var i = 0; i < product.catalogInventories.length; i++) {
+                self.catalogInventories.push(new merchello.Models.CatalogInventory(product.catalogInventories[i]));
+            }
+            //self.catalogInventories = product.catalogInventories.slice(0);
         };
 
         self.fixAttributeSortOrders = function (options) {
@@ -258,6 +261,38 @@
                 self[option.name] = attr.name;
             }
         };
+
+        self.ensureCatalogInventory = function(defaultWarehouse)
+        {
+            if (self.catalogInventories.length == 0)
+            {
+                self.addCatalogInventory(defaultWarehouse);
+            }
+        }
+
+        // Helper to add a variant to this product
+        self.addCatalogInventory = function (warehouse) {
+
+            var newCatalogInventory = new merchello.Models.CatalogInventory();
+            newCatalogInventory.productVariantKey = self.key;
+            newCatalogInventory.warehouseKey = warehouse.key;
+            newCatalogInventory.catalogKey = warehouse.warehouseCatalogs[0].key;
+            newCatalogInventory.catalogName = warehouse.warehouseCatalogs[0].name;
+
+            self.catalogInventories.push(newCatalogInventory);
+
+            return newCatalogInventory;
+        };
+
+        self.globalInventoryChanged = function (newVal) {
+            if (newVal)
+            {
+                for (var i = 0; i < self.catalogInventories.length; i++)
+                {
+                    self.catalogInventories[i].count = newVal;
+                }
+            }
+        }
     };
 
     models.Product = function (productFromServer, dontMapChildren) {
@@ -440,6 +475,7 @@
                 self.productVariants[i].addAttributesAsProperties(self.productOptions);
             }
         };
+
     };
 
 

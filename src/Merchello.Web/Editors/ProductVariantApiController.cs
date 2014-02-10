@@ -165,15 +165,16 @@ namespace Merchello.Web.Editors
 
                     newProductVariant = _productVariantService.CreateProductVariantWithKey(product, productVariant.Name, productVariant.Sku, productVariant.Price, productAttributes, true);
 
-                    if (!newProductVariant.Download)
+                    if (productVariant.TrackInventory)
                     {
                         newProductVariant.AddToCatalogInventory(_warehouseService.GetDefaultWarehouse().DefaultCatalog());
-                        newProductVariant.CatalogInventories.First().Count = 10;
-                        newProductVariant.CatalogInventories.First().LowCount = 3;
-                        //newProductVariant.Warehouses.First().Count = productVariant.WarehouseInventory.First().Count;
-                        //newProductVariant.Warehouses.First().LowCount = productVariant.WarehouseInventory.First().LowCount;
-                        _productVariantService.Save(newProductVariant);
+                        //newProductVariant.CatalogInventories.First().Count = 10;
+                        //newProductVariant.CatalogInventories.First().LowCount = 3;
                     }
+
+                    newProductVariant = productVariant.ToProductVariant(newProductVariant);
+
+                    _productVariantService.Save(newProductVariant);
                 }
                 else
                 {
@@ -202,6 +203,12 @@ namespace Merchello.Web.Editors
             try
             {
                 IProductVariant merchProductVariant = _productVariantService.GetByKey(productVariant.Key);
+
+                if (productVariant.TrackInventory && merchProductVariant.CatalogInventories.Count() == 0)
+                {
+                    merchProductVariant.AddToCatalogInventory(_warehouseService.GetDefaultWarehouse().DefaultCatalog());
+                }
+
                 merchProductVariant = productVariant.ToProductVariant(merchProductVariant);
 
                 _productVariantService.Save(merchProductVariant);
