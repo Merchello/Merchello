@@ -21,7 +21,7 @@ namespace Merchello.Core.Services
         private readonly IDatabaseUnitOfWorkProvider _uowProvider;
         private readonly RepositoryFactory _repositoryFactory;
 
-        private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+        private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
 
         public ItemCacheService()
             : this(new RepositoryFactory())
@@ -52,7 +52,11 @@ namespace Merchello.Core.Services
             var itemCache = GetItemCacheByCustomer(customer, itemCacheType);
             if (itemCache != null) return itemCache;
 
-            itemCache = new ItemCache(customer.EntityKey, itemCacheType);
+            itemCache = new ItemCache(customer.EntityKey, itemCacheType)
+                {
+                    VersionKey = Guid.NewGuid()
+                };
+
             if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<IItemCache>(itemCache), this))
             {
                 //registry.WasCancelled = true;

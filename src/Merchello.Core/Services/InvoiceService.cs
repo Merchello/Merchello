@@ -57,7 +57,11 @@ namespace Merchello.Core.Services
         {
             Mandate.ParameterCondition(Guid.Empty != invoiceStatusKey, "invoiceStatusKey");
 
-            var invoice = new Invoice(invoiceStatusKey) { InvoiceDate = DateTime.Now };
+            var invoice = new Invoice(invoiceStatusKey)
+                {
+                    VersionKey = Guid.NewGuid(),
+                    InvoiceDate = DateTime.Now
+                };
 
             if (raiseEvents)
                 if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<IInvoice>(invoice), this))

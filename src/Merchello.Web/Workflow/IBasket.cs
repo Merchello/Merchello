@@ -5,6 +5,8 @@ namespace Merchello.Web.Workflow
 {
     public interface IBasket
     {
+        Guid VersionKey { get; }
+
         // Adds an item to the basket
         void AddItem(IProduct product);
         void AddItem(IProduct product, int quantity);

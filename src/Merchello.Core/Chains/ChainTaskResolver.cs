@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Merchello.Core.Configuration;
 using System.Linq;
+using Umbraco.Core.Logging;
 
 namespace Merchello.Core.Chains
 {
@@ -32,17 +33,25 @@ namespace Merchello.Core.Chains
         /// </summary>
         /// <typeparam name="T">The type of the task</typeparam>
         /// <param name="chainAlias">The 'configuration' alias of the chain.  This is the merchello.config value</param>
-        /// <param name="ctrArgs"></param>
         /// <param name="ctrValues"></param>
         /// <returns>A collection of instantiated of AttemptChainTask</returns>
-        internal static IEnumerable<T> ResolveAttemptChainByAlias<T>(string chainAlias, Type[] ctrArgs, object[] ctrValues) where T : class, IAttemptChainTask<T>, new()
+        internal static IEnumerable<T> ResolveAttemptChainByAlias<T>(string chainAlias, object[] ctrValues) where T : class, IAttemptChainTask<T>, new()
         {
             var types = new List<T>();
-            var typeList = GetTypesForChain(chainAlias).ToArray();
-            if (!typeList.Any()) return types;
+            var typeNameList = GetTypesForChain(chainAlias).ToArray();
+            if (!typeNameList.Any()) return types;
 
+            foreach (var typeName in typeNameList)
+            {
+                var attempt = ActivatorHelper.CreateInstance<T>(typeName, ctrValues);
+                if (!attempt.Success)
+                {
+                    LogHelper.Error<ChainTaskResolver>("ResolveAttemptByAlias<T> failed to resolve type " + typeName, attempt.Exception);
+                    throw attempt.Exception;
+                }
+                types.Add(attempt.Result);
+            }
 
-            types.AddRange(typeList.Select(type => ActivatorHelper.CreateInstance<T>(Type.GetType(type), ctrArgs, ctrValues)));
             return types;
         }
 

@@ -31,6 +31,10 @@ namespace Merchello.Core.Models.Rdbms
         [ForeignKey(typeof(InvoiceStatusDto), Name = "FK_merchInvoice_merchInvoiceStatus", Column = "pk")]
         public Guid InvoiceStatusKey { get; set; }
 
+        [Column("versionKey")]
+        [Constraint(Default = "newid()")]
+        public Guid VersionKey { get; set; }
+        
         [Column("billToName")]
         [NullSetting(NullSetting = NullSettings.Null)]
         public string BillToName { get; set; }

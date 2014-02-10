@@ -105,7 +105,7 @@ namespace Merchello.Tests.IntegrationTests.Checkout
         [SetUp]
         public void Init()
         {
-            DbPreTestDataWorker.DeleteAllAnonymousCustomers();
+            
         }
 
         /// <summary>
@@ -208,6 +208,9 @@ namespace Merchello.Tests.IntegrationTests.Checkout
                     CountryCode = "US"
                 };
 
+            // Assume customer selects billing address is same as shipping address
+            CurrentCustomer.Basket().CheckoutPreparation().SaveBillToAddress(destination);
+
             // --------------- ShipMethod Selection ----------------------------------
 
             // Package the shipments 
@@ -249,9 +252,51 @@ namespace Merchello.Tests.IntegrationTests.Checkout
             Assert.AreEqual(25, CurrentCustomer.Basket().TotalBasketPrice);
             Assert.AreEqual(4, CurrentCustomer.Basket().TotalItemCount);
 
-            // This should have cleared the CheckoutPreparation
-            Assert.AreEqual(0, CurrentCustomer.Basket().CheckoutPreparation().ItemCache.Items.Count());
+            // This should have cleared the CheckoutPreparation and reconstructed so that it matches the basket again
+            Assert.AreEqual(CurrentCustomer.Basket().TotalItemCount, CurrentCustomer.Basket().CheckoutPreparation().ItemCache.Items.Count());
             Console.WriteLine("CheckoutPrepartion was cleared!");
+
+            // Because the customer went back and added another item the checkout workflow needs to 
+            // be restarted
+
+            // User is finally finished and going to checkout
+            #region Final Checkout Prepartion 
+
+            #region Shipping information
+
+            // Save the billing information (again - the same as shipping information)
+            CurrentCustomer.Basket().CheckoutPreparation().SaveBillToAddress(destination);
+
+            shipments = CurrentCustomer.Basket().PackageBasket(destination).ToArray();
+            Assert.IsTrue(shipments.Any());
+
+            shipment = shipments.First();
+            
+            // shipment should have all four items packaged in it since they all were marked shippable
+            Assert.AreEqual(CurrentCustomer.Basket().TotalItemCount, shipment.Items.Count, "Shipment did not contain all of the items");
+
+            var shipmentRateQuotes = shipment.ShipmentRateQuotes().ToArray();
+            Assert.AreEqual(2, shipmentRateQuotes.Count());
+
+            
+            // customer picks faster delivery so picks the more expensive rate from a drop down
+            var dropDownListValue = shipmentRateQuotes.Last().ShipMethod.Key.ToString();
+
+            var approvedShipmentRateQuote = shipment.ShipmentRateQuoteByShipMethod(dropDownListValue);
+
+            // The shipment in the rate quote should have all four items packaged in it since they all were marked shippable 
+            Assert.AreEqual(CurrentCustomer.Basket().Items.Count, approvedShipmentRateQuote.Shipment.Items.Count);
+
+            Assert.NotNull(approvedShipRateQuote);
+            WriteShipRateQuote(approvedShipmentRateQuote);
+            
+            // save the rate quote 
+            CurrentCustomer.Basket().CheckoutPreparation().SaveShipmentRateQuote(approvedShipmentRateQuote);
+
+
+            #endregion // end shipping info round 2
+
+            #endregion // completed checkout preparation
 
             #endregion
 

@@ -75,7 +75,7 @@ namespace Merchello.Web
         /// <returns>A <see cref="IBasketCheckoutPreparation"/></returns>
         internal static BasketCheckoutPreparation CheckoutPreparation(this IBasket basket, IMerchelloContext merchelloContext)
         {
-            return BasketCheckoutPreparation.GetBasketCheckout(merchelloContext, basket);
+            return BasketCheckoutPreparation.GetBasketCheckoutPreparation(merchelloContext, basket);
         }
     }
 }

@@ -19,17 +19,7 @@ namespace Merchello.Web.Workflow
 
             LogHelper.Info<BasketCheckoutEvents>("Initializing Merchello ServerVariablesParsingEvents");
 
-            ItemCacheService.Created += BasketItemCacheCreated;
             ItemCacheService.Saved += BasketItemCacheSaved;
-        }
-
-        /// <summary>
-        /// Purges customer <see cref="BasketCheckoutPreparation"/> information on customer <see cref="IBasket"/> creation
-        /// </summary>
-        static void BasketItemCacheCreated(IItemCacheService sender, Core.Events.NewEventArgs<IItemCache> e)
-        {
-            if (e.Entity.ItemCacheType != ItemCacheType.Basket) return;
-            ClearCheckoutItemCache(e.Entity.EntityKey);
         }
 
         /// <summary>
@@ -40,14 +30,8 @@ namespace Merchello.Web.Workflow
         {
             foreach (var item in e.SavedEntities.Where(item => item.ItemCacheType == ItemCacheType.Basket))
             {
-                ClearCheckoutItemCache(item.EntityKey);
+                CheckoutPreparationBase.RestartCheckout(MerchelloContext.Current, item.EntityKey);  
             }
-        }
-
-        
-        private static void ClearCheckoutItemCache(Guid entityKey)
-        {
-            CheckoutPreparationBase.RestartCheckout(MerchelloContext.Current, entityKey);   
         }
     }
 }

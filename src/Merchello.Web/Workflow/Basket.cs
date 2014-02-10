@@ -54,6 +54,15 @@ namespace Merchello.Web.Workflow
         #region Overrides IBasket
 
         /// <summary>
+        /// Gets/sets the version of the basket
+        /// </summary>
+        public Guid VersionKey
+        {
+            get { return _itemCache.VersionKey; }
+            internal set { _itemCache.VersionKey = value; }
+        }
+
+        /// <summary>
         /// Intended to be used by a <see cref="IProduct"/>s without options.  If the product does have options and a collection of <see cref="IProductVariant"/>s, the first
         /// <see cref="IProductVariant"/> is added to the basket item collection
         /// </summary>
@@ -239,7 +248,7 @@ namespace Merchello.Web.Workflow
 
         public static void Refresh(IMerchelloContext merchelloContext, IBasket basket)
         {
-            var cacheKey = MakeCacheKey(basket.Customer);
+            var cacheKey = MakeCacheKey(basket.Customer, basket.VersionKey);
             merchelloContext.Cache.RuntimeCache.ClearCacheItem(cacheKey);
 
             var customerItemCache = merchelloContext.Services.ItemCacheService.GetItemCacheWithKey(basket.Customer, ItemCacheType.Basket);
@@ -257,6 +266,9 @@ namespace Merchello.Web.Workflow
 
         internal static void Save(IMerchelloContext merchelloContext, IBasket basket)
         {
+            // Update the basket item cache version so that it can be validated in the checkout
+            ((Basket)basket).VersionKey = Guid.NewGuid();
+
             merchelloContext.Services.ItemCacheService.Save(((Basket)basket).ItemCache);
             Refresh(merchelloContext, basket);
         }
@@ -317,10 +329,11 @@ namespace Merchello.Web.Workflow
         /// Generates a unique cache key for runtime caching of the <see cref="Basket"/>
         /// </summary>
         /// <param name="customer"><see cref="ICustomerBase"/></param>
+        /// <param name="versionKey">The <see cref="IBasket"/> version key</param>
         /// <returns></returns>
-        private static string MakeCacheKey(ICustomerBase customer)
+        private static string MakeCacheKey(ICustomerBase customer, Guid versionKey)
         {
-            return CacheKeys.ItemCacheCacheKey(customer.EntityKey, EnumTypeFieldConverter.ItemItemCache.Basket.TypeKey);
+            return CacheKeys.ItemCacheCacheKey(customer.EntityKey, EnumTypeFieldConverter.ItemItemCache.Basket.TypeKey, versionKey);
         }
 
         

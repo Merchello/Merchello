@@ -46,7 +46,10 @@ namespace Merchello.Web.Workflow.Shipping
             var origin = warehouse.AsAddress();
             
             //For the initial version we are only exposing a single shipment
-            var shipment = new Shipment(origin, Destination);
+            var shipment = new Shipment(origin, Destination)
+                {
+                    VersionKey = Basket.VersionKey // this is used in cache keys
+                };
 
             foreach (var lineItem in shippableVisitor.ShippableItems)
             {

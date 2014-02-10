@@ -7,7 +7,7 @@ namespace Merchello.Core.Models
 {
     [Serializable]
     [DataContract(IsReference = true)]
-    public class Invoice : Entity, IInvoice
+    public class Invoice : VersionTaggedEntity, IInvoice
     {
         private Guid? _customerKey;
         private int _invoiceNumber;

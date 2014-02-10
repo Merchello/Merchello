@@ -4,6 +4,7 @@ using Merchello.Core.Configuration;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Umbraco.Core.Cache;
+using Umbraco.Core.Logging;
 
 namespace Merchello.Core.Gateways.Taxation.CountryTaxRate
 {
@@ -85,14 +86,19 @@ namespace Merchello.Core.Gateways.Taxation.CountryTaxRate
             var countryTaxRate = GetCountryTaxRateByCountryCode(taxAddress.CountryCode);
             if (countryTaxRate == null) return null;
 
-            var ctrArgs = new[] {typeof (IInvoice), typeof (IAddress), typeof (ICountryTaxRate)};
             var ctrValues = new object[] { invoice, taxAddress, countryTaxRate };
 
             var typeName = MerchelloConfiguration.Current.GetStrategyElement(Constants.StrategyTypeAlias.DefaultInvoiceTaxRateQuote).Type;
 
-            var strategy = ActivatorHelper.CreateInstance<InvoiceTaxationStrategyBase>(Type.GetType(typeName), ctrArgs, ctrValues);
+            var attempt = ActivatorHelper.CreateInstance<InvoiceTaxationStrategyBase>(typeName, ctrValues);
 
-            return CalculateTaxForInvoice(strategy);
+            if (!attempt.Success)
+            {
+                LogHelper.Error<CountryTaxRateTaxationGatewayProvider>("Failed to instantiate the tax rate quote strategy '" + typeName +"'", attempt.Exception);
+                throw attempt.Exception;
+            }
+
+            return CalculateTaxForInvoice(attempt.Result);
         }
 
         public override string Name

@@ -1,7 +1,7 @@
-﻿using Merchello.Core;
+﻿using System;
+using Merchello.Core;
 using Merchello.Core.Cache;
 using Merchello.Core.Checkout;
-using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Models;
 using Merchello.Core.Models.TypeFields;
 
@@ -13,12 +13,12 @@ namespace Merchello.Web.Workflow
             : base(merchelloContext, itemCache, customer)
         { }
 
-        internal static BasketCheckoutPreparation GetBasketCheckout(IBasket basket)
+        internal static BasketCheckoutPreparation GetBasketCheckoutPreparation(IBasket basket)
         {
-            return GetBasketCheckout(Core.MerchelloContext.Current, basket);
+            return GetBasketCheckoutPreparation(Core.MerchelloContext.Current, basket);
         }
 
-        internal static BasketCheckoutPreparation GetBasketCheckout(IMerchelloContext merchelloContext, IBasket basket)
+        internal static BasketCheckoutPreparation GetBasketCheckoutPreparation(IMerchelloContext merchelloContext, IBasket basket)
         {
             var customer = basket.Customer;
             var itemCache = GetItemCache(merchelloContext, customer);
@@ -34,6 +34,7 @@ namespace Merchello.Web.Workflow
         /// Generates a unique cache key for runtime caching of the <see cref="BasketCheckoutPreparation"/>
         /// </summary>
         /// <param name="customer"><see cref="ICustomerBase"/></param>
+        /// <param name="versionKey">The CheckoutPreparation's version key</param>
         /// <returns>The unique CacheKey string</returns>
         /// <remarks>
         /// 
@@ -41,9 +42,9 @@ namespace Merchello.Web.Workflow
         /// to different checkouts are happening for the same customer at the same time - we consider that an extreme edge case.
         /// 
         /// </remarks>
-        private static string MakeCacheKey(ICustomerBase customer)
+        private static string MakeCacheKey(ICustomerBase customer, Guid versionKey)
         {
-            return CacheKeys.ItemCacheCacheKey(customer.EntityKey, EnumTypeFieldConverter.ItemItemCache.Checkout.TypeKey);
+            return CacheKeys.ItemCacheCacheKey(customer.EntityKey, EnumTypeFieldConverter.ItemItemCache.Checkout.TypeKey, versionKey);
         }
 
     }

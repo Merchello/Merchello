@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using Merchello.Core.Gateways;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Services;
 using Umbraco.Core;
@@ -94,6 +96,50 @@ namespace Merchello.Core.Models
             return merchelloContext.Gateways.GetShipRateQuotesForShipment(shipment);
         }
 
+        /// <summary>
+        /// Returns a <see cref="IShipmentRateQuote"/> for a <see cref="IShipment"/> given the 'unique' key of the <see cref="IShipMethod"/>
+        /// </summary>
+        /// <param name="shipment">The <see cref="IShipment"/></param>
+        /// <param name="shipMethodKey">The Guid key as a string of the <see cref="IShipMethod"/></param>
+        /// <returns>The <see cref="IShipmentRateQuote"/> for the shipment by the specific <see cref="IShipMethod"/> specified</returns>
+        public static IShipmentRateQuote ShipmentRateQuoteByShipMethod(this IShipment shipment, string shipMethodKey)
+        {
+            return shipment.ShipmentRateQuoteByShipMethod(new Guid(shipMethodKey));
+        }
+
+        /// <summary>
+        /// Returns a <see cref="IShipmentRateQuote"/> for a <see cref="IShipment"/> given the 'unique' key of the <see cref="IShipMethod"/>
+        /// </summary>
+        /// <param name="shipment">The <see cref="IShipment"/></param>
+        /// <param name="shipMethodKey">The Guid key of the <see cref="IShipMethod"/></param>
+        /// <returns>The <see cref="IShipmentRateQuote"/> for the shipment by the specific <see cref="IShipMethod"/> specified</returns>
+        public static IShipmentRateQuote ShipmentRateQuoteByShipMethod(this IShipment shipment, Guid shipMethodKey)
+        {
+            return shipment.ShipmentRateQuoteByShipMethod(MerchelloContext.Current, shipMethodKey);
+        }
+
+        /// <summary>
+        /// Returns a <see cref="IShipmentRateQuote"/> for a <see cref="IShipment"/> given the 'unique' key of the <see cref="IShipMethod"/>
+        /// </summary>
+        /// <param name="shipment">The <see cref="IShipment"/></param>
+        /// <param name="merchelloContext">The <see cref="IMerchelloContext"/></param>
+        /// <param name="shipMethodKey">The Guid key of the <see cref="IShipMethod"/></param>
+        /// <returns>The <see cref="IShipmentRateQuote"/> for the shipment by the specific <see cref="IShipMethod"/> specified</returns>
+        internal static IShipmentRateQuote ShipmentRateQuoteByShipMethod(this IShipment shipment, IMerchelloContext merchelloContext, Guid shipMethodKey)
+        {
+            var shipMethod = ((ServiceContext) merchelloContext.Services).ShipMethodService.GetByKey(shipMethodKey);
+            if (shipMethod == null) return null;
+
+            // Get the gateway provider to generate the shipment rate quote
+            var provider = ((GatewayContext) merchelloContext.Gateways).ResolveByKey<ShippingGatewayProviderBase>(shipMethod.ProviderKey);
+
+            // get the GatewayShipMethod from the provider
+            var gwShipMethod = provider.GetAvailableShipMethodsForShipment(shipment).FirstOrDefault(x => x.ShipMethod.Key == shipMethodKey);
+
+            if (gwShipMethod == null) return null;
+
+            return provider.QuoteShipMethodForShipment(shipment, gwShipMethod);
+        }
 
         /// <summary>
         /// Returns a string intended to be used as a 'Shipment Line Item' title or name

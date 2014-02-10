@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
+using Umbraco.Core.Logging;
 
 namespace Merchello.Core.Models
 {
@@ -92,11 +93,7 @@ namespace Merchello.Core.Models
             {
                 
             var dictionary = GetLineItemXmlValues(element.ToString());            
-            var ctrArgs = new[]
-                {
-                    typeof (Guid), typeof (string), typeof (string), typeof (int), typeof (decimal), typeof (ExtendedDataCollection)
-                };
-
+            
                 var ctrValues = new object[]
                     {                        
                         new Guid(dictionary[Constants.ExtendedDataKeys.LineItemTfKey]),
@@ -108,10 +105,17 @@ namespace Merchello.Core.Models
                     };
                
                 
-                var lineItem = ActivatorHelper.CreateInstance<LineItemBase>(typeof (T), ctrArgs, ctrValues);
-                lineItem.ContainerKey = new Guid(dictionary[Constants.ExtendedDataKeys.ContainerKey]);
+                var attempt = ActivatorHelper.CreateInstance<LineItemBase>(typeof (T).FullName, ctrValues);
 
-                lineItemCollection.Add(lineItem);
+                if (!attempt.Success)
+                {
+                    LogHelper.Error<LineItemCollection>("Failed to instantiate a LineItemCollection from ExtendedData", attempt.Exception);
+                    throw attempt.Exception;
+                }
+                
+                attempt.Result.ContainerKey = new Guid(dictionary[Constants.ExtendedDataKeys.ContainerKey]);
+
+                lineItemCollection.Add(attempt.Result);
             }
 
             return lineItemCollection;

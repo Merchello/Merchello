@@ -27,6 +27,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
             // Sets Umbraco SqlSytax and ensure database is setup
             DbPreTestDataWorker = new DbPreTestDataWorker();
             DbPreTestDataWorker.ValidateDatabaseSetup();
+            DbPreTestDataWorker.DeleteAllAnonymousCustomers();
 
             // Merchello CoreBootStrap
             var bootManager = new WebBootManager();
@@ -45,8 +46,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
             ProductVariantService.Saved += ProductVariantServiceSaved;
             ProductVariantService.Deleted += ProductVariantServiceDeleted;
 
-            // BasketCheckout 
-            ItemCacheService.Created += BasketItemCacheCreated;
+            // BasketCheckout             
             ItemCacheService.Saved += BasketItemCacheSaved;
 
 
@@ -65,22 +65,11 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
             ProductVariantService.Deleted -= ProductVariantServiceDeleted;
 
             // BasketCheckout 
-            ItemCacheService.Created -= BasketItemCacheCreated;
             ItemCacheService.Saved -= BasketItemCacheSaved;
             
         }
 
         #region BasketCheckoutEvents
-
-
-        /// <summary>
-        /// Purges customer <see cref="BasketCheckoutPreparation"/> information on customer <see cref="IBasket"/> creation
-        /// </summary>
-        static void BasketItemCacheCreated(IItemCacheService sender, Core.Events.NewEventArgs<IItemCache> e)
-        {
-            if (e.Entity.ItemCacheType != ItemCacheType.Basket) return;
-            ClearCheckoutItemCache(e.Entity.EntityKey);
-        }
 
         /// <summary>
         /// Purges customer <see cref="BasketCheckoutPreparation"/> information on customer <see cref="IBasket"/> saves.  The will
@@ -90,14 +79,8 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         {
             foreach (var item in e.SavedEntities.Where(item => item.ItemCacheType == ItemCacheType.Basket))
             {
-                ClearCheckoutItemCache(item.EntityKey);
+                CheckoutPreparationBase.RestartCheckout(MerchelloContext.Current, item.EntityKey);
             }
-        }
-
-
-        private static void ClearCheckoutItemCache(Guid entityKey)
-        {
-            CheckoutPreparationBase.RestartCheckout(MerchelloContext.Current, entityKey);
         }
 
         #endregion
