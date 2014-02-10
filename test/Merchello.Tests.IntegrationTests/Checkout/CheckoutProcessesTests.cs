@@ -253,7 +253,7 @@ namespace Merchello.Tests.IntegrationTests.Checkout
             Assert.AreEqual(4, CurrentCustomer.Basket().TotalItemCount);
 
             // This should have cleared the CheckoutPreparation and reconstructed so that it matches the basket again
-            Assert.AreEqual(CurrentCustomer.Basket().TotalItemCount, CurrentCustomer.Basket().CheckoutPreparation().ItemCache.Items.Count());
+            Assert.AreEqual(CurrentCustomer.Basket().TotalItemCount, CurrentCustomer.Basket().CheckoutPreparation().ItemCache.Items.Count(x => x.LineItemType == LineItemType.Product));
             Console.WriteLine("CheckoutPrepartion was cleared!");
 
             // Because the customer went back and added another item the checkout workflow needs to 

@@ -47,7 +47,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
             ProductVariantService.Deleted += ProductVariantServiceDeleted;
 
             // BasketCheckout             
-            ItemCacheService.Saved += BasketItemCacheSaved;
+           // ItemCacheService.Saved += BasketItemCacheSaved;
 
 
         }
@@ -65,25 +65,25 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
             ProductVariantService.Deleted -= ProductVariantServiceDeleted;
 
             // BasketCheckout 
-            ItemCacheService.Saved -= BasketItemCacheSaved;
+            //ItemCacheService.Saved -= BasketItemCacheSaved;
             
         }
 
-        #region BasketCheckoutEvents
+        //#region BasketCheckoutEvents
 
-        /// <summary>
-        /// Purges customer <see cref="BasketCheckoutPreparation"/> information on customer <see cref="IBasket"/> saves.  The will
-        /// also handle the Basket items saves & deletes
-        /// </summary>
-        static void BasketItemCacheSaved(IItemCacheService sender, SaveEventArgs<IItemCache> e)
-        {
-            foreach (var item in e.SavedEntities.Where(item => item.ItemCacheType == ItemCacheType.Basket))
-            {
-                CheckoutPreparationBase.RestartCheckout(MerchelloContext.Current, item.EntityKey);
-            }
-        }
+        ///// <summary>
+        ///// Purges customer <see cref="BasketCheckoutPreparation"/> information on customer <see cref="IBasket"/> saves.  The will
+        ///// also handle the Basket items saves & deletes
+        ///// </summary>
+        //static void BasketItemCacheSaved(IItemCacheService sender, SaveEventArgs<IItemCache> e)
+        //{
+        //    foreach (var item in e.SavedEntities.Where(item => item.ItemCacheType == ItemCacheType.Basket))
+        //    {
+        //        CheckoutPreparationBase.RestartCheckout(MerchelloContext.Current, item.EntityKey);
+        //    }
+        //}
 
-        #endregion
+        //#endregion
 
         #region ExamineEvents
 

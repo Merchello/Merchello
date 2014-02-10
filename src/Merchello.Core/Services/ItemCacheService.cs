@@ -47,15 +47,24 @@ namespace Merchello.Core.Services
         /// </summary>
         public IItemCache GetItemCacheWithKey(ICustomerBase customer, ItemCacheType itemCacheType)
         {
+            return GetItemCacheWithKey(customer, itemCacheType, Guid.NewGuid());
+        }
+
+        /// <summary>
+        /// Creates a basket for a consumer with a given type
+        /// </summary>
+        public IItemCache GetItemCacheWithKey(ICustomerBase customer, ItemCacheType itemCacheType, Guid versionKey)
+        {
+            Mandate.ParameterCondition(Guid.Empty != versionKey, "versionKey");
 
             // determine if the consumer already has a item cache of this type, if so return it.
             var itemCache = GetItemCacheByCustomer(customer, itemCacheType);
             if (itemCache != null) return itemCache;
 
             itemCache = new ItemCache(customer.EntityKey, itemCacheType)
-                {
-                    VersionKey = Guid.NewGuid()
-                };
+            {
+                VersionKey = versionKey
+            };
 
             if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<IItemCache>(itemCache), this))
             {

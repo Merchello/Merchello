@@ -37,36 +37,27 @@ namespace Merchello.Core.Checkout
         /// </summary>
         public virtual void RestartCheckout()
         {
-            RestartCheckout(_merchelloContext, _customer);
+            RestartCheckout(_merchelloContext, _customer, ItemCache.VersionKey);
         }
 
         /// <summary>
         /// Purges persisted checkout information
         /// </summary>
-        internal static void RestartCheckout(IMerchelloContext merchelloContext, Guid entityKey)
+        internal static void RestartCheckout(IMerchelloContext merchelloContext, Guid entityKey, Guid versionKey)
         {
             var customer = merchelloContext.Services.CustomerService.GetAnyByKey(entityKey);
             if(customer == null) return;
 
-            RestartCheckout(merchelloContext, customer);
+            RestartCheckout(merchelloContext, customer, versionKey);
         }
 
         /// <summary>
         /// Purges persisted checkout information
         /// </summary>
-        private static void RestartCheckout(IMerchelloContext merchelloContext, ICustomerBase customer)
+        private static void RestartCheckout(IMerchelloContext merchelloContext, ICustomerBase customer, Guid versionKey)
         {
             customer.ExtendedData.RemoveValue(Constants.ExtendedDataKeys.BillingAddress);
             SaveCustomer(merchelloContext, customer);
-
-            var cacheKey = MakeCacheKey(customer);
-
-            var itemCache = GetItemCache(merchelloContext, customer);
-            merchelloContext.Cache.RuntimeCache.ClearCacheItem(cacheKey);
-
-            if(itemCache == null) return;
-            
-            merchelloContext.Services.ItemCacheService.Delete(itemCache);
         }
 
         /// <summary>
@@ -176,11 +167,22 @@ namespace Merchello.Core.Checkout
             var cacheKey = MakeCacheKey(customer, versionKey);
             var itemCache = runtimeCache.GetCacheItem(cacheKey) as IItemCache;
             if (itemCache != null) return itemCache;
-
-            var itemCacheTfKey = EnumTypeFieldConverter.ItemItemCache.Checkout.TypeKey;
-            itemCache = new ItemCache(customer.EntityKey, itemCacheTfKey);
-            merchelloContext.Services.ItemCacheService.Save(itemCache);
             
+            
+            itemCache = merchelloContext.Services.ItemCacheService.GetItemCacheWithKey(customer, ItemCacheType.Checkout, versionKey);
+
+            // this is probably an invalid version of the checkout
+            if (!itemCache.VersionKey.Equals(versionKey))
+            {
+                var oldCacheKey = MakeCacheKey(customer, itemCache.VersionKey);
+                runtimeCache.ClearCacheItem(oldCacheKey);
+                RestartCheckout(merchelloContext, customer, versionKey);
+
+                // delete the old version
+                merchelloContext.Services.ItemCacheService.Delete(itemCache);
+                return GetItemCache(merchelloContext, customer, versionKey);
+            }
+
             runtimeCache.InsertCacheItem(cacheKey, () => itemCache);
             return itemCache;
         }

@@ -248,7 +248,7 @@ namespace Merchello.Web.Workflow
 
         public static void Refresh(IMerchelloContext merchelloContext, IBasket basket)
         {
-            var cacheKey = MakeCacheKey(basket.Customer, basket.VersionKey);
+            var cacheKey = MakeCacheKey(basket.Customer);
             merchelloContext.Cache.RuntimeCache.ClearCacheItem(cacheKey);
 
             var customerItemCache = merchelloContext.Services.ItemCacheService.GetItemCacheWithKey(basket.Customer, ItemCacheType.Basket);
@@ -328,12 +328,12 @@ namespace Merchello.Web.Workflow
         /// <summary>
         /// Generates a unique cache key for runtime caching of the <see cref="Basket"/>
         /// </summary>
-        /// <param name="customer"><see cref="ICustomerBase"/></param>
-        /// <param name="versionKey">The <see cref="IBasket"/> version key</param>
+        /// <param name="customer"><see cref="ICustomerBase"/></param>        
         /// <returns></returns>
-        private static string MakeCacheKey(ICustomerBase customer, Guid versionKey)
+        private static string MakeCacheKey(ICustomerBase customer)
         {
-            return CacheKeys.ItemCacheCacheKey(customer.EntityKey, EnumTypeFieldConverter.ItemItemCache.Basket.TypeKey, versionKey);
+            // the version key here is not important since there can only ever be one basket
+            return CacheKeys.ItemCacheCacheKey(customer.EntityKey, EnumTypeFieldConverter.ItemItemCache.Basket.TypeKey, Guid.Empty);
         }
 
         
