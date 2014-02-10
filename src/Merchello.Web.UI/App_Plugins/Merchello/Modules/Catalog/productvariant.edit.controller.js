@@ -88,6 +88,7 @@
             }
         });
 
+        $scope.allVariantInventories = 0;
 
         if (isCreating()) {
             $scope.creatingVariant = true;
@@ -321,6 +322,11 @@
             }
         };
 
+        $scope.applyAllVariantInventories = function (allVariantInventories) {
+
+            console.log(allVariantInventories);
+
+        };
 
         ////////////////////////////////////////////////
     }
