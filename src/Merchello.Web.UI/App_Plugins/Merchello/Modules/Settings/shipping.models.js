@@ -185,8 +185,8 @@
             self.catalogKey = "";
             self.warehouseKey = "";
             self.productVariantKey = "";
-            self.count = "";
-            self.lowCount = "";
+            self.count = 0;
+            self.lowCount = 0;
             self.catalogName = "";
         } else {
             self.catalogKey = catalogInventoryFromServer.catalogKey;

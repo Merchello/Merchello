@@ -58,6 +58,11 @@
             });
         }
 
+        function isCreating()
+        {
+            return $routeParams.create;
+        }
+
         ////////////////////////////////////////////////
         // Initialize state
 
@@ -66,13 +71,17 @@
         promise.then(function (warehouse) {
             $scope.defaultWarehouse = new merchello.Models.Warehouse(warehouse);
             $scope.warehouses.push($scope.defaultWarehouse);
+            if (isCreating())
+            {
+                $scope.productVariant.ensureCatalogInventory($scope.defaultWarehouse);
+            }
         });
 
         $scope.settings = {};
         var promiseSettings = merchelloSettingsService.getAllSettings();
         promiseSettings.then(function (settings) {
             $scope.settings = new merchello.Models.StoreSettings(settings);
-            if ($routeParams.create) {
+            if (isCreating()) {
                 $scope.productVariant.shippable = $scope.settings.globalShippable;
                 $scope.productVariant.taxable = $scope.settings.globalTaxable;
                 $scope.productVariant.trackInventory = $scope.settings.globalTrackInventory;
@@ -80,7 +89,7 @@
         });
 
 
-        if ($routeParams.create) {
+        if (isCreating()) {
             $scope.creatingVariant = true;
             $scope.loaded = true;
             $scope.preValuesLoaded = true;
@@ -239,6 +248,11 @@
             {
                 $scope.product.addBlankOption();
             }
+        };
+
+        $scope.ensureCatalogInventory = function () {
+
+            $scope.productVariant.ensureCatalogInventory($scope.defaultWarehouse);
         };
 
         $scope.addOption = function () {
