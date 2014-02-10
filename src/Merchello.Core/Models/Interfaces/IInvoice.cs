@@ -5,7 +5,7 @@ using Merchello.Core.Models.EntityBase;
 
 namespace Merchello.Core.Models
 {
-    public interface IInvoice : IEntity
+    public interface IInvoice : ILineItemContainer
     {
         /// <summary>
         /// The unique customer 'key' to associated with the invoice

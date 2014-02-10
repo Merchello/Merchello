@@ -31,9 +31,8 @@ namespace Merchello.Core.Builders
                 typeList.Select(
                 typeName => new AttemptChainTaskHandler<T>(
                     ActivatorHelper.CreateInstance<AttemptChainTaskBase<T>>(
-                        Type.GetType(typeName), 
-                        ConstructorParameters.Item1, 
-                        ConstructorParameters.Item2)
+                        typeName, 
+                        ConstructorArgumentValues.ToArray()).Result
                     )));
 
             foreach (var taskHandler in TaskHandlers.Where(task => TaskHandlers.IndexOf(task) != TaskHandlers.IndexOf(TaskHandlers.Last())))
@@ -50,9 +49,9 @@ namespace Merchello.Core.Builders
         public abstract Attempt<T> Build();
 
         /// <summary>
-        /// Defines the arguements required for task instantiation
+        /// Defines the arguements required by the task's constructors to instantiate the chain
         /// </summary>
-        protected abstract Tuple<Type[], object[]> ConstructorParameters { get; } 
+        protected abstract IEnumerable<object> ConstructorArgumentValues { get; } 
 
         /// <summary>
         /// Gets the list of task handlers

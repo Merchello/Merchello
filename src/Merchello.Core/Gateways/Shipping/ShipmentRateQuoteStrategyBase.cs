@@ -71,7 +71,7 @@ namespace Merchello.Core.Gateways.Shipping
         /// <returns></returns>
         protected static string GetShipmentRateQuoteCacheKey(IShipment shipment, IGatewayShipMethod gatewayShipMethod)
         {
-            return Cache.CacheKeys.ShippingGatewayProviderShippingRateQuoteCacheKey(shipment.Key, gatewayShipMethod.ShipMethod.Key);
+            return Cache.CacheKeys.ShippingGatewayProviderShippingRateQuoteCacheKey(shipment.Key, gatewayShipMethod.ShipMethod.Key, shipment.VersionKey);
         }
     }
 }

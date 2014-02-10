@@ -54,6 +54,15 @@ namespace Merchello.Web.Workflow
         #region Overrides IBasket
 
         /// <summary>
+        /// Gets/sets the version of the basket
+        /// </summary>
+        public Guid VersionKey
+        {
+            get { return _itemCache.VersionKey; }
+            internal set { _itemCache.VersionKey = value; }
+        }
+
+        /// <summary>
         /// Intended to be used by a <see cref="IProduct"/>s without options.  If the product does have options and a collection of <see cref="IProductVariant"/>s, the first
         /// <see cref="IProductVariant"/> is added to the basket item collection
         /// </summary>
@@ -257,6 +266,9 @@ namespace Merchello.Web.Workflow
 
         internal static void Save(IMerchelloContext merchelloContext, IBasket basket)
         {
+            // Update the basket item cache version so that it can be validated in the checkout
+            ((Basket)basket).VersionKey = Guid.NewGuid();
+
             merchelloContext.Services.ItemCacheService.Save(((Basket)basket).ItemCache);
             Refresh(merchelloContext, basket);
         }
@@ -316,11 +328,12 @@ namespace Merchello.Web.Workflow
         /// <summary>
         /// Generates a unique cache key for runtime caching of the <see cref="Basket"/>
         /// </summary>
-        /// <param name="customer"><see cref="ICustomerBase"/></param>
+        /// <param name="customer"><see cref="ICustomerBase"/></param>        
         /// <returns></returns>
         private static string MakeCacheKey(ICustomerBase customer)
         {
-            return CacheKeys.ItemCacheCacheKey(customer.EntityKey, EnumTypeFieldConverter.ItemItemCache.Basket.TypeKey);
+            // the version key here is not important since there can only ever be one basket
+            return CacheKeys.ItemCacheCacheKey(customer.EntityKey, EnumTypeFieldConverter.ItemItemCache.Basket.TypeKey, Guid.Empty);
         }
 
         

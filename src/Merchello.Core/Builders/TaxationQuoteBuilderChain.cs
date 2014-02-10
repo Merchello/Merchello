@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Merchello.Core.Models;
 using Umbraco.Core;
@@ -20,11 +21,11 @@ namespace Merchello.Core.Builders
             throw new NotImplementedException();
         }
 
-
-        protected override Tuple<Type[], object[]> ConstructorParameters
+        protected override IEnumerable<object> ConstructorArgumentValues
         {
             get { throw new NotImplementedException(); }
         }
+
 
         /// <summary>
         /// Used for testing

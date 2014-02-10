@@ -7,6 +7,7 @@ using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Models;
 using Merchello.Web.Workflow;
 using Merchello.Web.Workflow.Shipping;
+using Umbraco.Core.Logging;
 
 namespace Merchello.Web
 {
@@ -38,11 +39,16 @@ namespace Merchello.Web
         {
             var defaultStrategy = MerchelloConfiguration.Current.GetStrategyElement(Constants.StrategyTypeAlias.DefaultBasketPackaging).Type;
 
-            var ctorArgs = new[] { typeof(MerchelloContext), typeof(Basket), typeof(Address) };
             var ctoArgValues = new object[] { merchelloContext, basket, destination };
-            var strategy = ActivatorHelper.CreateInstance<BasketPackagingStrategyBase>(Type.GetType(defaultStrategy), ctorArgs, ctoArgValues);
+            var strategy = ActivatorHelper.CreateInstance<BasketPackagingStrategyBase>(defaultStrategy, ctoArgValues);
 
-            return basket.PackageBasket(merchelloContext, destination, strategy);
+            if (!strategy.Success)
+            {
+                LogHelper.Error<BasketPackagingStrategyBase>("PackageBasket failed to instantiate the defaultStrategy.", strategy.Exception);
+                throw strategy.Exception;
+            }
+
+            return basket.PackageBasket(merchelloContext, destination, strategy.Result);
         }
 
         internal static IEnumerable<IShipment> PackageBasket(this IBasket basket, IMerchelloContext merchelloContext, IAddress destination, BasketPackagingStrategyBase strategy)
@@ -52,24 +58,24 @@ namespace Merchello.Web
 
 
         /// <summary>
-        /// Gets the <see cref="IBasketCheckout"/>
+        /// Gets the <see cref="IBasketCheckoutPreparation"/>
         /// </summary>
         /// <param name="basket">The basket with items use in the checkout</param>
-        /// <returns>A <see cref="IBasketCheckout"/></returns>
-        public static BasketCheckout Checkout(this IBasket basket)
+        /// <returns>A <see cref="IBasketCheckoutPreparation"/></returns>
+        public static BasketCheckoutPreparation CheckoutPreparation(this IBasket basket)
         {
-            return basket.Checkout(MerchelloContext.Current);
+            return basket.CheckoutPreparation(MerchelloContext.Current);
         }
 
         /// <summary>
-        /// Gets the <see cref="IBasketCheckout"/>
+        /// Gets the <see cref="IBasketCheckoutPreparation"/>
         /// </summary>
         /// <param name="basket">The basket with items use in the checkout</param>
         /// <param name="merchelloContext">The <see cref="IMerchelloContext"/></param>
-        /// <returns>A <see cref="IBasketCheckout"/></returns>
-        internal static BasketCheckout Checkout(this IBasket basket, IMerchelloContext merchelloContext)
+        /// <returns>A <see cref="IBasketCheckoutPreparation"/></returns>
+        internal static BasketCheckoutPreparation CheckoutPreparation(this IBasket basket, IMerchelloContext merchelloContext)
         {
-            return BasketCheckout.GetBasketCheckout(merchelloContext, basket);
+            return BasketCheckoutPreparation.GetBasketCheckoutPreparation(merchelloContext, basket);
         }
     }
 }

@@ -21,6 +21,10 @@ namespace Merchello.Core.Models.Rdbms
         [Column("itemCacheTfKey")]
         public Guid ItemCacheTfKey { get; set; }
 
+        [Column("versionKey")]
+        [Constraint(Default = "newid()")]
+        public Guid VersionKey { get; set; }
+
         [Column("updateDate")]
         [Constraint(Default = "getdate()")]
         public DateTime UpdateDate { get; set; }

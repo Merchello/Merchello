@@ -39,6 +39,14 @@ namespace Merchello.Core.Services
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         void Delete(IShipMethod shipMethod, bool raiseEvents = true);
 
+
+        /// <summary>
+        /// Gets a <see cref="IShipMethod"/> given it's unique 'key' (Guid)
+        /// </summary>
+        /// <param name="key">The <see cref="IShipMethod"/>'s unique 'key' (Guid)</param>
+        /// <returns><see cref="IShipMethod"/></returns>
+        IShipMethod GetByKey(Guid key);
+
         /// <summary>
         /// Gets a list of <see cref="IShipMethod"/> objects given a <see cref="IGatewayProvider"/> key and a <see cref="IShipCountry"/> key
         /// </summary>

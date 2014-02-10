@@ -410,25 +410,22 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
         public void ValidateDatabaseSetup()
         {
-            try
-            {
-                var providerDtos =  Database.Query<GatewayProviderDto>("SELECT * FROM merchGatewayProvider");
-                var warehouseDtos = Database.Query<WarehouseDto>("SELECT * FROM merchWarehouse");
-                var catalogDtos =   Database.Query<WarehouseCatalogDto>("SELECT * FROM merchWarehouseCatalog");
-                var typeFieldDtos = Database.Query<TypeFieldDto>("SELECT * FROM merchTypeField");
-                var invoiceStatusDtos = Database.Query<InvoiceStatusDto>("SELECT * FROM merchInvoiceStatus");
-                var orderStatusDtos = Database.Query<OrderStatusDto>("SELECT * FROM merchOrderStatus");
-                var storeSettingDtos = Database.Query<StoreSettingDto>("SELECT * FROM merchStoreSetting");
+            if (!Database.TableExist("merchGatewayProvider"))
+                RebuildDatabase();
+    
+            var providerDtos =  Database.Query<GatewayProviderDto>("SELECT * FROM merchGatewayProvider");
+            var warehouseDtos = Database.Query<WarehouseDto>("SELECT * FROM merchWarehouse");
+            var catalogDtos =   Database.Query<WarehouseCatalogDto>("SELECT * FROM merchWarehouseCatalog");
+            var typeFieldDtos = Database.Query<TypeFieldDto>("SELECT * FROM merchTypeField");
+            var invoiceStatusDtos = Database.Query<InvoiceStatusDto>("SELECT * FROM merchInvoiceStatus");
+            var orderStatusDtos = Database.Query<OrderStatusDto>("SELECT * FROM merchOrderStatus");
+            var storeSettingDtos = Database.Query<StoreSettingDto>("SELECT * FROM merchStoreSetting");
 
-                if (!providerDtos.Any() || !warehouseDtos.Any() || !catalogDtos.Any() || !typeFieldDtos.Any() || !invoiceStatusDtos.Any() || !orderStatusDtos.Any() || !storeSettingDtos.Any())
-                {
-                    RebuildDatabase();
-                }
-            }
-            catch (Exception ex)
+            if (!providerDtos.Any() || !warehouseDtos.Any() || !catalogDtos.Any() || !typeFieldDtos.Any() || !invoiceStatusDtos.Any() || !orderStatusDtos.Any() || !storeSettingDtos.Any())
             {
                 RebuildDatabase();
             }
+            
         }
 
         private void RebuildDatabase()

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Merchello.Core.Checkout;
 using Merchello.Core.Models;
@@ -11,12 +12,12 @@ namespace Merchello.Core.Builders
     /// </summary>
     internal sealed class InvoiceBuilderChain : BuildChainBase<IInvoice>
     {
-        private readonly CheckoutBase _checkout;
+        private readonly CheckoutPreparationBase _checkoutPreparation;
 
-        internal InvoiceBuilderChain(CheckoutBase checkout)
+        internal InvoiceBuilderChain(CheckoutPreparationBase checkoutPreparation)
         {
-            Mandate.ParameterNotNull(checkout, "checkout");
-            _checkout = checkout;
+            Mandate.ParameterNotNull(checkoutPreparation, "checkout");
+            _checkoutPreparation = checkoutPreparation;
 
             ResolveChain(Constants.TaskChainAlias.CheckoutInvoiceCreate);
         }
@@ -32,13 +33,13 @@ namespace Merchello.Core.Builders
         /// <summary>
         /// Constructor parameters for the base class activator
         /// </summary>
-        private Tuple<Type[], object[]> _constructorParameters; 
-        protected override Tuple<Type[], object[]> ConstructorParameters
+        private IEnumerable<object> _constructorParameters; 
+        protected override IEnumerable<object> ConstructorArgumentValues
         {
             get
             {
                 return _constructorParameters ?? 
-                    (_constructorParameters =  new Tuple<Type[], object[]>(new[] {typeof (CheckoutBase)},new object[] {_checkout} ));
+                    (_constructorParameters =  new List<object>(new object[] {_checkoutPreparation} ));
             }
         }
 

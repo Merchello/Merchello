@@ -124,15 +124,45 @@ namespace Merchello.Core.Gateways.Shipping
         {
             var gatewayShipMethods = GetAvailableShipMethodsForShipment(shipment);
 
-            var ctrArgs = new[] { typeof(IShipment), typeof(IGatewayShipMethod[]),typeof(IRuntimeCacheProvider) };
             var ctrValues = new object[] {shipment, gatewayShipMethods.ToArray(), RuntimeCache};
 
             var typeName = MerchelloConfiguration.Current.GetStrategyElement(Constants.StrategyTypeAlias.DefaultShipmentRateQuote).Type;
             
-            var strategy = ActivatorHelper.CreateInstance<ShipmentRateQuoteStrategyBase>(Type.GetType(typeName), ctrArgs, ctrValues);
+            var attempt = ActivatorHelper.CreateInstance<ShipmentRateQuoteStrategyBase>(typeName, ctrValues);
 
-            return QuoteAvailableShipMethodsForShipment(strategy);
+            if (!attempt.Success)
+            {
+                LogHelper.Error<ShippingGatewayProviderBase>("Failed to instantiate strategy " + typeName, attempt.Exception);
+                throw attempt.Exception;
+            }
+
+            return QuoteAvailableShipMethodsForShipment(attempt.Result);
         }
+
+        /// <summary>
+        /// Quotes a single GatewayShipMethod for a shipment rate
+        /// </summary>
+        /// <param name="shipment">The <see cref="IShipment"/> used to generate the rate quote</param>
+        /// <param name="gatewayShipMethod">The <see cref="IGatewayShipMethod"/> used to generate the rate quote</param>
+        /// <returns>The <see cref="IShipmentRateQuote"/></returns>
+        public virtual IShipmentRateQuote QuoteShipMethodForShipment(IShipment shipment, IGatewayShipMethod gatewayShipMethod)
+        {
+            var ctrValues = new object[] { shipment, new[] { gatewayShipMethod }, RuntimeCache };
+
+            var typeName = MerchelloConfiguration.Current.GetStrategyElement(Constants.StrategyTypeAlias.DefaultShipmentRateQuote).Type;
+
+            var attempt = ActivatorHelper.CreateInstance<ShipmentRateQuoteStrategyBase>(typeName, ctrValues);
+
+            if (!attempt.Success)
+            {
+                LogHelper.Error<ShippingGatewayProviderBase>("Failed to instantiate strategy " + typeName, attempt.Exception);
+                throw attempt.Exception;
+            }
+
+            return QuoteAvailableShipMethodsForShipment(attempt.Result).FirstOrDefault();
+        }
+
+        
 
         /// <summary>
         /// Returns a collection of all available <see cref="IShipmentRateQuote"/> for a given shipment

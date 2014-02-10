@@ -4,6 +4,9 @@ using Umbraco.Core.Cache;
 
 namespace Merchello.Core.Gateways.Shipping
 {
+    /// <summary>
+    /// Represents the default Shipment Rate Quoting Strategy
+    /// </summary>
     internal class DefaultShipmentRateQuoteStrategy : ShipmentRateQuoteStrategyBase
     {
         public DefaultShipmentRateQuoteStrategy(IShipment shipment, IGatewayShipMethod[] gatewayShipMethods, IRuntimeCacheProvider runtimeCache) 

@@ -10,8 +10,8 @@ namespace Merchello.Core.Chains.CheckOut
     /// </summary>
     internal class ConvertItemCacheItemsToInvoiceItemsTask : CheckoutAttemptChainTaskBase
     {
-        public ConvertItemCacheItemsToInvoiceItemsTask(CheckoutBase checkout) 
-            : base(checkout)
+        public ConvertItemCacheItemsToInvoiceItemsTask(CheckoutPreparationBase checkoutPreparation) 
+            : base(checkoutPreparation)
         {}
 
         /// <summary>
@@ -21,11 +21,11 @@ namespace Merchello.Core.Chains.CheckOut
         /// <returns>The <see cref="Attempt"/></returns>
         public override Attempt<IInvoice> PerformTask(IInvoice value)
         {
-            foreach (var lineItem in Checkout.ItemCache.Items)
+            foreach (var lineItem in CheckoutPreparation.ItemCache.Items)
             {
                 try
                 {
-                    value.Items.Add(lineItem.ConvertToNewLineItemOf<InvoiceLineItem>());
+                    value.Items.Add(lineItem.AsLineItemOf<InvoiceLineItem>());
                 }
                 catch (Exception ex)
                 {

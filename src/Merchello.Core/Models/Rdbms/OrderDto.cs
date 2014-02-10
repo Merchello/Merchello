@@ -30,7 +30,11 @@ namespace Merchello.Core.Models.Rdbms
         [Column("orderStatusKey")]
         [ForeignKey(typeof(OrderStatusDto), Name = "FK_merchOrder_merchOrderStatus", Column = "pk")]
         public Guid OrderStatusKey { get; set; }
-        
+
+        [Column("versionKey")]
+        [Constraint(Default = "newid()")]
+        public Guid VersionKey { get; set; }
+
         [Column("exported")]
         public bool Exported { get; set; }
       

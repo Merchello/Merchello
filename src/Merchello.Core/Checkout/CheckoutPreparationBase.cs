@@ -14,13 +14,13 @@ namespace Merchello.Core.Checkout
     /// Represents a CheckoutBase class resposible for temporarily persisting invoice and order information
     /// while it's being collected
     /// </summary>
-    public abstract class CheckoutBase : ICheckoutBase
+    public abstract class CheckoutPreparationBase : ICheckoutPreparationBase
     {
         private readonly IItemCache _itemCache;
         private readonly ICustomerBase _customer;
         private readonly IMerchelloContext _merchelloContext;
 
-        internal CheckoutBase(IMerchelloContext merchelloContext, IItemCache itemCache, ICustomerBase customer)
+        internal CheckoutPreparationBase(IMerchelloContext merchelloContext, IItemCache itemCache, ICustomerBase customer)
         {                       
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
             Mandate.ParameterNotNull(itemCache, "ItemCache");
@@ -37,36 +37,27 @@ namespace Merchello.Core.Checkout
         /// </summary>
         public virtual void RestartCheckout()
         {
-            RestartCheckout(_merchelloContext, _customer);
+            RestartCheckout(_merchelloContext, _customer, ItemCache.VersionKey);
         }
 
         /// <summary>
         /// Purges persisted checkout information
         /// </summary>
-        internal static void RestartCheckout(IMerchelloContext merchelloContext, Guid entityKey)
+        internal static void RestartCheckout(IMerchelloContext merchelloContext, Guid entityKey, Guid versionKey)
         {
             var customer = merchelloContext.Services.CustomerService.GetAnyByKey(entityKey);
             if(customer == null) return;
 
-            RestartCheckout(merchelloContext, customer);
+            RestartCheckout(merchelloContext, customer, versionKey);
         }
 
         /// <summary>
         /// Purges persisted checkout information
         /// </summary>
-        private static void RestartCheckout(IMerchelloContext merchelloContext, ICustomerBase customer)
+        private static void RestartCheckout(IMerchelloContext merchelloContext, ICustomerBase customer, Guid versionKey)
         {
             customer.ExtendedData.RemoveValue(Constants.ExtendedDataKeys.BillingAddress);
             SaveCustomer(merchelloContext, customer);
-
-            var cacheKey = MakeCacheKey(customer);
-
-            var itemCache = GetItemCache(merchelloContext, customer);
-            merchelloContext.Cache.RuntimeCache.ClearCacheItem(cacheKey);
-
-            if(itemCache == null) return;
-            
-            merchelloContext.Services.ItemCacheService.Delete(itemCache);
         }
 
         /// <summary>
@@ -167,19 +158,31 @@ namespace Merchello.Core.Checkout
         /// </summary>
         /// <param name="customer">The customer associated with the checkout</param>
         /// <param name="merchelloContext">The <see cref="IMerchelloContext"/></param>
+        /// <param name="versionKey">The version key for this <see cref="CheckoutPreparationBase"/></param>
         /// <returns>The <see cref="IItemCache"/> associated with the customer checkout</returns>
-        protected static IItemCache GetItemCache(IMerchelloContext merchelloContext, ICustomerBase customer)
+        protected static IItemCache GetItemCache(IMerchelloContext merchelloContext, ICustomerBase customer, Guid versionKey)
         {
             var runtimeCache = merchelloContext.Cache.RuntimeCache;
 
-            var cacheKey = MakeCacheKey(customer);
+            var cacheKey = MakeCacheKey(customer, versionKey);
             var itemCache = runtimeCache.GetCacheItem(cacheKey) as IItemCache;
             if (itemCache != null) return itemCache;
-
-            var itemCacheTfKey = EnumTypeFieldConverter.ItemItemCache.Checkout.TypeKey;
-            itemCache = new ItemCache(customer.EntityKey, itemCacheTfKey);
-            merchelloContext.Services.ItemCacheService.Save(itemCache);
             
+            
+            itemCache = merchelloContext.Services.ItemCacheService.GetItemCacheWithKey(customer, ItemCacheType.Checkout, versionKey);
+
+            // this is probably an invalid version of the checkout
+            if (!itemCache.VersionKey.Equals(versionKey))
+            {
+                var oldCacheKey = MakeCacheKey(customer, itemCache.VersionKey);
+                runtimeCache.ClearCacheItem(oldCacheKey);
+                RestartCheckout(merchelloContext, customer, versionKey);
+
+                // delete the old version
+                merchelloContext.Services.ItemCacheService.Delete(itemCache);
+                return GetItemCache(merchelloContext, customer, versionKey);
+            }
+
             runtimeCache.InsertCacheItem(cacheKey, () => itemCache);
             return itemCache;
         }
@@ -189,13 +192,14 @@ namespace Merchello.Core.Checkout
         /// </summary>
         protected string MakeCacheKey()
         {
-            return MakeCacheKey(_customer);
+            return MakeCacheKey(_customer, _itemCache.VersionKey);
         }
 
         /// <summary>
-        /// Generates a unique cache key for runtime caching of the <see cref="CheckoutBase"/>
+        /// Generates a unique cache key for runtime caching of the <see cref="CheckoutPreparationBase"/>
         /// </summary>
         /// <param name="customer"><see cref="ICustomerBase"/></param>
+        /// <param name="versionKey">The version key</param>
         /// <returns>The unique CacheKey string</returns>
         /// <remarks>
         /// 
@@ -203,10 +207,10 @@ namespace Merchello.Core.Checkout
         /// to different checkouts are happening for the same customer at the same time - we consider that an extreme edge case.
         /// 
         /// </remarks>
-        private static string MakeCacheKey(ICustomerBase customer)
+        private static string MakeCacheKey(ICustomerBase customer, Guid versionKey)
         {
             var itemCacheTfKey = EnumTypeFieldConverter.ItemItemCache.Checkout.TypeKey;
-            return Cache.CacheKeys.ItemCacheCacheKey(customer.EntityKey, itemCacheTfKey);
+            return Cache.CacheKeys.ItemCacheCacheKey(customer.EntityKey, itemCacheTfKey, versionKey);
         }
 
         /// <summary>

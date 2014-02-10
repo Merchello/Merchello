@@ -1,6 +1,7 @@
 ﻿using System;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Models.TypeFields;
+using Umbraco.Core.Logging;
 
 namespace Merchello.Core.Models
 {
@@ -61,7 +62,7 @@ namespace Merchello.Core.Models
         /// <typeparam name="T"></typeparam>
         /// <param name="lineItem"></param>
         /// <returns>A <see cref="LineItemBase"/> of type T</returns>
-        public static T ConvertToNewLineItemOf<T>(this ILineItem lineItem) where T : class, ILineItem
+        public static T AsLineItemOf<T>(this ILineItem lineItem) where T : class, ILineItem
         {    
             var ctrValues = new object[]
                 {                    
@@ -73,10 +74,16 @@ namespace Merchello.Core.Models
                     lineItem.ExtendedData
                 };
 
-            var converted = ActivatorHelper.CreateInstance<LineItemBase>(typeof(T), LineItemConstructorArgs, ctrValues);
-            converted.Exported = lineItem.Exported;
 
-            return converted as T;
+            var attempt = ActivatorHelper.CreateInstance<LineItemBase>(typeof(T).FullName, ctrValues);
+            if (!attempt.Success)
+            {
+                LogHelper.Error<ILineItem>("Failed to convertion ILineItem", attempt.Exception);
+                throw attempt.Exception;
+            }
+            attempt.Result.Exported = lineItem.Exported;
+
+            return attempt.Result as T;
         }
 
 
@@ -101,20 +108,17 @@ namespace Merchello.Core.Models
                     extendedData
                 };
 
-            return ActivatorHelper.CreateInstance<LineItemBase>(typeof (T), LineItemConstructorArgs, ctrValues) as T;
-        }
+            var attempt = ActivatorHelper.CreateInstance<LineItemBase>(typeof (T).FullName, ctrValues);
 
-
-        /// <summary>
-        /// LineItemBase constructor argument types
-        /// </summary>
-        private static Type[] LineItemConstructorArgs
-        {
-            get
+            if (!attempt.Success)
             {
-                return new[] { typeof(Guid), typeof(string), typeof(string), typeof(int), typeof(decimal), typeof(ExtendedDataCollection) };
+                LogHelper.Error<ILineItem>("Failed instiating a IShipmentRateQuote from ExtendedDataCollection", attempt.Exception);
+                throw attempt.Exception;
             }
+            return attempt.Result as T;
         }
+
+
     }
 }
 

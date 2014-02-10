@@ -46,7 +46,7 @@ namespace Merchello.Tests.UnitTests.LineItem
                                                           product.Sku, 2, 2*product.Price, extendedData);
 
             //// Act
-            var invoiceLineItem = itemCacheLineItem.ConvertToNewLineItemOf<InvoiceLineItem>();
+            var invoiceLineItem = itemCacheLineItem.AsLineItemOf<InvoiceLineItem>();
 
             //// Assert
             Assert.NotNull(invoiceLineItem);

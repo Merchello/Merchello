@@ -27,6 +27,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
             // Sets Umbraco SqlSytax and ensure database is setup
             DbPreTestDataWorker = new DbPreTestDataWorker();
             DbPreTestDataWorker.ValidateDatabaseSetup();
+            DbPreTestDataWorker.DeleteAllAnonymousCustomers();
 
             // Merchello CoreBootStrap
             var bootManager = new WebBootManager();
@@ -45,10 +46,8 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
             ProductVariantService.Saved += ProductVariantServiceSaved;
             ProductVariantService.Deleted += ProductVariantServiceDeleted;
 
-            // BasketCheckout 
-            ItemCacheService.Created += BasketItemCacheCreated;
-            ItemCacheService.Saved += BasketItemCacheSaved;
-            ItemCacheService.Deleted += BasketItemCacheDeleted;
+            // BasketCheckout             
+           // ItemCacheService.Saved += BasketItemCacheSaved;
 
 
         }
@@ -66,53 +65,25 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
             ProductVariantService.Deleted -= ProductVariantServiceDeleted;
 
             // BasketCheckout 
-            ItemCacheService.Created -= BasketItemCacheCreated;
-            ItemCacheService.Saved -= BasketItemCacheSaved;
-            ItemCacheService.Deleted -= BasketItemCacheDeleted;
-
+            //ItemCacheService.Saved -= BasketItemCacheSaved;
+            
         }
 
-        #region BasketCheckoutEvents
+        //#region BasketCheckoutEvents
 
+        ///// <summary>
+        ///// Purges customer <see cref="BasketCheckoutPreparation"/> information on customer <see cref="IBasket"/> saves.  The will
+        ///// also handle the Basket items saves & deletes
+        ///// </summary>
+        //static void BasketItemCacheSaved(IItemCacheService sender, SaveEventArgs<IItemCache> e)
+        //{
+        //    foreach (var item in e.SavedEntities.Where(item => item.ItemCacheType == ItemCacheType.Basket))
+        //    {
+        //        CheckoutPreparationBase.RestartCheckout(MerchelloContext.Current, item.EntityKey);
+        //    }
+        //}
 
-        /// <summary>
-        /// Purges customer <see cref="BasketCheckout"/> information on customer <see cref="IBasket"/> creation
-        /// </summary>
-        static void BasketItemCacheCreated(IItemCacheService sender, Core.Events.NewEventArgs<IItemCache> e)
-        {
-            if (e.Entity.ItemCacheType != ItemCacheType.Basket) return;
-            ClearCheckoutItemCache(e.Entity.EntityKey);
-        }
-
-        /// <summary>
-        /// Purges customer <see cref="BasketCheckout"/> information on customer <see cref="IBasket"/> saves.  The will
-        /// also handle the Basket items saves & deletes
-        /// </summary>
-        static void BasketItemCacheSaved(IItemCacheService sender, SaveEventArgs<IItemCache> e)
-        {
-            foreach (var item in e.SavedEntities.Where(item => item.ItemCacheType == ItemCacheType.Basket))
-            {
-                ClearCheckoutItemCache(item.EntityKey);
-            }
-        }
-
-        /// <summary>
-        /// Purges customer <see cref="BasketCheckout"/> information on customer <see cref="IBasket"/> deletions
-        /// </summary>
-        static void BasketItemCacheDeleted(IItemCacheService sender, DeleteEventArgs<IItemCache> e)
-        {
-            foreach (var item in e.DeletedEntities.Where(item => item.ItemCacheType == ItemCacheType.Basket))
-            {
-                ClearCheckoutItemCache(item.EntityKey);
-            }
-        }
-
-        private static void ClearCheckoutItemCache(Guid entityKey)
-        {
-            CheckoutBase.RestartCheckout(MerchelloContext.Current, entityKey);
-        }
-
-        #endregion
+        //#endregion
 
         #region ExamineEvents
 

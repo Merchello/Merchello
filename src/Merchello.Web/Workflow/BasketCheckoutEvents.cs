@@ -19,46 +19,19 @@ namespace Merchello.Web.Workflow
 
             LogHelper.Info<BasketCheckoutEvents>("Initializing Merchello ServerVariablesParsingEvents");
 
-            ItemCacheService.Created += BasketItemCacheCreated;
             ItemCacheService.Saved += BasketItemCacheSaved;
-            ItemCacheService.Deleted += BasketItemCacheDeleted;
         }
 
         /// <summary>
-        /// Purges customer <see cref="BasketCheckout"/> information on customer <see cref="IBasket"/> creation
-        /// </summary>
-        static void BasketItemCacheCreated(IItemCacheService sender, Core.Events.NewEventArgs<IItemCache> e)
-        {
-            if (e.Entity.ItemCacheType != ItemCacheType.Basket) return;
-            ClearCheckoutItemCache(e.Entity.EntityKey);
-        }
-
-        /// <summary>
-        /// Purges customer <see cref="BasketCheckout"/> information on customer <see cref="IBasket"/> saves.  The will
+        /// Purges customer <see cref="BasketCheckoutPreparation"/> information on customer <see cref="IBasket"/> saves.  The will
         /// also handle the Basket items saves & deletes
         /// </summary>
         static void BasketItemCacheSaved(IItemCacheService sender, SaveEventArgs<IItemCache> e)
         {
             foreach (var item in e.SavedEntities.Where(item => item.ItemCacheType == ItemCacheType.Basket))
             {
-                ClearCheckoutItemCache(item.EntityKey);
+                CheckoutPreparationBase.RestartCheckout(MerchelloContext.Current, item.EntityKey);  
             }
-        }
-
-        /// <summary>
-        /// Purges customer <see cref="BasketCheckout"/> information on customer <see cref="IBasket"/> deletions
-        /// </summary>
-        static void BasketItemCacheDeleted(IItemCacheService sender, DeleteEventArgs<IItemCache> e)
-        {
-            foreach (var item in e.DeletedEntities.Where(item => item.ItemCacheType == ItemCacheType.Basket))
-            {
-                ClearCheckoutItemCache(item.EntityKey);
-            }
-        }
-
-        private static void ClearCheckoutItemCache(Guid entityKey)
-        {
-            CheckoutBase.RestartCheckout(MerchelloContext.Current, entityKey);   
         }
     }
 }

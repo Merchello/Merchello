@@ -22,10 +22,11 @@ namespace Merchello.Core.Cache
         /// </summary>
         /// <param name="entityKey"></param>
         /// <param name="itemCacheTfKey">The type field key for the cache</param>
+        /// <param name="versionKey">The version key for the cache</param>
         /// <returns></returns>
-        internal static string ItemCacheCacheKey(Guid entityKey, Guid itemCacheTfKey)
+        internal static string ItemCacheCacheKey(Guid entityKey, Guid itemCacheTfKey, Guid versionKey)
         {
-            return string.Format("merchello.itemcache.{0}.{1}", itemCacheTfKey, entityKey);
+            return string.Format("merchello.itemcache.{0}.{1}.{2}", itemCacheTfKey, entityKey, versionKey);
         }
 
         /// <summary>
@@ -53,10 +54,11 @@ namespace Merchello.Core.Cache
         /// </summary>
         /// <param name="shipmentKey"></param>
         /// <param name="shipMethodKey"></param>
+        /// <param name="versionKey">The </param>
         /// <returns></returns>
-        internal static string ShippingGatewayProviderShippingRateQuoteCacheKey(Guid shipmentKey, Guid shipMethodKey)
+        internal static string ShippingGatewayProviderShippingRateQuoteCacheKey(Guid shipmentKey, Guid shipMethodKey, Guid versionKey)
         {
-            return string.Format("merchello.shippingratequote.{0}-{1}", shipmentKey, shipMethodKey);
+            return string.Format("merchello.shippingratequote.{0}.{1}.{2}", shipmentKey, shipMethodKey,versionKey);
         }
 
         /// <summary>

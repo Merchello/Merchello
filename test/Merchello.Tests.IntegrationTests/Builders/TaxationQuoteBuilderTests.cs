@@ -21,7 +21,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
         private IBasket _basket;
         private IAddress _billingAddress;
         private IAddress _originAddress;
-        private CheckoutBase _checkoutMock;
+        private CheckoutPreparationBase _checkoutPreparationMock;
         private const decimal ProductCount = 5;
         private const decimal WeightPerProduct = 3;
         private const decimal PricePerProduct = 5;
@@ -66,7 +66,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
 
 
             // setup the checkout
-            _checkoutMock = new CheckoutMock(MerchelloContext, _itemCache, _customer);
+            _checkoutPreparationMock = new CheckoutPreparationMock(MerchelloContext, _itemCache, _customer);
 
             // add the shipment rate quote
             var shipment = _basket.PackageBasket(MerchelloContext, _billingAddress).First();
@@ -79,7 +79,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
                 Rate = 5M
             };
 
-            _checkoutMock.ItemCache.Items.Add(shipRateQuote.AsLineItemOf<InvoiceLineItem>());
+            _checkoutPreparationMock.ItemCache.Items.Add(shipRateQuote.AsLineItemOf<InvoiceLineItem>());
         }
 
         ///// <summary>

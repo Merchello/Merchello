@@ -227,7 +227,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataMakers\AddressMock.cs" />
-    <Compile Include="DataMakers\CheckoutMock.cs" />
+    <Compile Include="DataMakers\CheckoutPreparationMock.cs" />
     <Compile Include="DataMakers\DataMakerMockSavedExtensions.cs" />
     <Compile Include="DataMakers\MockAnonymousCustomerDataMaker.cs" />
     <Compile Include="DataMakers\MockCustomerItemCacheDataMaker.cs" />

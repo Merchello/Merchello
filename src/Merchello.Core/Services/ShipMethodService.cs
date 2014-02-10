@@ -181,6 +181,19 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
+        /// Gets a <see cref="IShipMethod"/> given it's unique 'key' (Guid)
+        /// </summary>
+        /// <param name="key">The <see cref="IShipMethod"/>'s unique 'key' (Guid)</param>
+        /// <returns><see cref="IShipMethod"/></returns>
+        public IShipMethod GetByKey(Guid key)
+        {
+            using (var repository = _repositoryFactory.CreateShipMethodRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.Get(key);
+            }
+        }
+
+        /// <summary>
         /// Gets a list of <see cref="IShipMethod"/> objects given a <see cref="IGatewayProvider"/> key and a <see cref="IShipCountry"/> key
         /// </summary>
         /// <returns>A collection of <see cref="IShipMethod"/></returns>
