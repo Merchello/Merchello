@@ -79,11 +79,10 @@
     <Compile Include="Builders\TaxationQuoteBuilderChain.cs" />
     <Compile Include="Chains\AttemptChainTaskBase.cs" />
     <Compile Include="Chains\ChainTaskResolver.cs" />
-    <Compile Include="Chains\CheckOut\AddShipmentLineItemsToInvoiceTask.cs" />
-    <Compile Include="Chains\CheckOut\ApplyTaxesToInvoiceTax.cs" />
-    <Compile Include="Chains\CheckOut\AddBillingInfoToInvoiceTask.cs" />
-    <Compile Include="Chains\CheckOut\CheckoutAttemptChainTaskBase.cs" />
-    <Compile Include="Chains\CheckOut\ConvertItemCacheItemsToInvoiceItemsTask.cs" />
+    <Compile Include="Chains\InvoiceCreation\ApplyTaxesToInvoiceTax.cs" />
+    <Compile Include="Chains\InvoiceCreation\AddBillingInfoToInvoiceTask.cs" />
+    <Compile Include="Chains\InvoiceCreation\CheckoutPreparationAttemptChainTaskBase.cs" />
+    <Compile Include="Chains\InvoiceCreation\ConvertItemCacheItemsToInvoiceItemsTask.cs" />
     <Compile Include="Chains\InvoiceTaxRateQuote\IdentifyTaxableLineItems.cs" />
     <Compile Include="Chains\InvoiceTaxRateQuote\InvoiceTaxRateQuoteBase.cs" />
     <Compile Include="Checkout\CheckoutPreparationBase.cs" />
@@ -119,6 +118,7 @@
     <Compile Include="Gateways\IGatewayContext.cs" />
     <Compile Include="Gateways\IGatewayProviderFactory.cs" />
     <Compile Include="Gateways\Payment\IPaymentGatewayProvider.cs" />
+    <Compile Include="Gateways\Payment\PaymentGatewayProviderBase.cs" />
     <Compile Include="Gateways\Shipping\DefaultShipmentRateQuoteStrategy.cs" />
     <Compile Include="Gateways\Shipping\GatewayShipMethodBase.cs" />
     <Compile Include="Gateways\Shipping\IGatewayShipMethod.cs" />
@@ -141,6 +141,7 @@
     <Compile Include="Gateways\Taxation\InvoiceTaxationStrategyBase.cs" />
     <Compile Include="Gateways\Taxation\ITaxationGatewayProvider.cs" />
     <Compile Include="Gateways\Taxation\TaxationGatewayProviderBase.cs" />
+    <Compile Include="ISalesManager.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\AnonymousCustomerBase.cs">
       <SubType>Code</SubType>

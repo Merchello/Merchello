@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Merchello.Core.Models;
+﻿using Merchello.Core.Models;
 using Umbraco.Core;
 
 namespace Merchello.Core.Chains.InvoiceTaxRateQuote

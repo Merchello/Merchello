@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Merchello.Core.Builders;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Models;
 
@@ -47,12 +48,18 @@ namespace Merchello.Core.Checkout
 
         bool ApplyTaxesToInvoice { get; set; }
 
-        ///// <summary>
-        ///// Generates an <see cref="IInvoice"/> representing the bill for the current "checkout order"
-        ///// </summary>
-        ///// <param name="applyTax">True/false indicating whether or not to apply taxes to the invoice.  Defaults to true</param>
-        ///// <returns>An <see cref="IInvoice"/> that is not persisted to the database.</returns>
-        //IInvoice GenerateInvoice(bool applyTax = true);
+        /// <summary>
+        /// Generates an <see cref="IInvoice"/> representing the bill for the current "checkout order"
+        /// </summary>
+        /// <returns>An <see cref="IInvoice"/> that is not persisted to the database.</returns>
+        IInvoice GenerateInvoice();
+
+        /// <summary>
+        /// Generates an <see cref="IInvoice"/> representing the bill for the current "checkout order"
+        /// </summary>
+        /// <param name="invoiceBuilder">The invoice builder class</param>
+        /// <returns>An <see cref="IInvoice"/> that is not persisted to the database.</returns>
+        IInvoice GenerateInvoice(IBuilderChain<IInvoice> invoiceBuilder);
 
         ///// <summary>
         ///// Does preliminary validation of the checkout process and then executes the start of the order fulfillment pipeline

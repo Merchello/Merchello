@@ -25,9 +25,19 @@ namespace Merchello.Core.Gateways.Taxation.CountryTaxRate
         /// <returns>The <see cref="IInvoiceTaxResult"/></returns>
         public override Attempt<IInvoiceTaxResult> GetInvoiceTaxResult()
         {
-            // instantiate the task chain
-            
+            // 
+            var baseTaxRate = _countryTaxRate.PercentageTaxRate;
+
+
+
             throw new NotImplementedException();
         }
+
+        //private decimal GetCombinedTaxRax()
+        //{
+        //    if (!_countryTaxRate.HasProvinces) return _countryTaxRate.PercentageTaxRate;
+        //    //if(TaxAddress.CountryCode != _countryTaxRate.CountryCode) return 
+
+        //}
     }
 }

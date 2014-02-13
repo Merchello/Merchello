@@ -1,14 +1,13 @@
 ﻿using Merchello.Core.Checkout;
 using Merchello.Core.Models;
-using Umbraco.Core;
 
-namespace Merchello.Core.Chains.CheckOut
+namespace Merchello.Core.Chains.InvoiceCreation
 {
-    public abstract class CheckoutAttemptChainTaskBase : AttemptChainTaskBase<IInvoice>
+    public abstract class CheckoutPreparationAttemptChainTaskBase : AttemptChainTaskBase<IInvoice>
     {
         private readonly CheckoutPreparationBase _checkoutPreparation;
 
-        protected CheckoutAttemptChainTaskBase(CheckoutPreparationBase checkoutPreparation)
+        protected CheckoutPreparationAttemptChainTaskBase(CheckoutPreparationBase checkoutPreparation)
         {
             Mandate.ParameterNotNull(checkoutPreparation, "checkout");
 

@@ -3,13 +3,13 @@ using Merchello.Core.Checkout;
 using Merchello.Core.Models;
 using Umbraco.Core;
 
-namespace Merchello.Core.Chains.CheckOut
+namespace Merchello.Core.Chains.InvoiceCreation
 {
     /// <summary>
     /// Represents a task responsible for adding billing information collected a checkout process to the
     /// invoice.
     /// </summary>
-    internal class AddBillingInfoToInvoiceTask : CheckoutAttemptChainTaskBase
+    internal class AddBillingInfoToInvoiceTask : CheckoutPreparationAttemptChainTaskBase
     {
         public AddBillingInfoToInvoiceTask(CheckoutPreparationBase checkoutPreparation) 
             : base(checkoutPreparation)

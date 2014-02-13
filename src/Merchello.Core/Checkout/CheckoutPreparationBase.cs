@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Merchello.Core.Builders;
+using Merchello.Core.Configuration;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Models;
 using Merchello.Core.Models.TypeFields;
 using Merchello.Core.Services;
 using Umbraco.Core;
 using Umbraco.Core.Cache;
+using Umbraco.Core.Logging;
 
 namespace Merchello.Core.Checkout
 {
@@ -30,6 +33,7 @@ namespace Merchello.Core.Checkout
             _merchelloContext = merchelloContext;
             _customer = customer;
             _itemCache = itemCache;
+            ApplyTaxesToInvoice = true;
         }
 
         /// <summary>
@@ -110,26 +114,31 @@ namespace Merchello.Core.Checkout
 
 
 
-        ///// <summary>
-        ///// Generates an <see cref="IInvoice"/>
-        ///// </summary>
-        ///// <param name="applyTax">True/false indicating whether or not to apply taxes to the invoice</param>
-        ///// <returns>An <see cref="IInvoice"/></returns>
-        //public virtual IInvoice GenerateInvoice(bool applyTax = true)
-        //{
-        //    var invoiceStatusKey = Constants.DefaultKeys.UnpaidInvoiceStatusKey;
+        /// <summary>
+        /// Generates an <see cref="IInvoice"/>
+        /// </summary>
+        /// <returns>An <see cref="IInvoice"/></returns>
+        public virtual IInvoice GenerateInvoice()
+        {
+            return GenerateInvoice(new InvoiceBuilderChain(this));
+        }
 
-        //    var billToAddress = _customer.ExtendedData.GetAddress(Constants.ExtendedDataKeys.BillingAddress);
-        //    var lineItemCollection = _itemCache.Items;
+        /// <summary>
+        /// Generates an <see cref="IInvoice"/> representing the bill for the current "checkout order"
+        /// </summary>
+        /// <param name="invoiceBuilder">The invoice builder class</param>
+        /// <returns>An <see cref="IInvoice"/> that is not persisted to the database.</returns>
+        public IInvoice GenerateInvoice(IBuilderChain<IInvoice> invoiceBuilder)
+        {
+            var attempt = invoiceBuilder.Build();
+            if (!attempt.Success)
+            {
+                LogHelper.Error<CheckoutPreparationBase>("The invoice builder failed to generate an invoice.", attempt.Exception);
+                throw attempt.Exception;
+            }
 
-
-        //    return billToAddress != null ?
-        //        new Invoice(invoiceStatusKey, billToAddress, lineItemCollection) :
-        //        new Invoice(invoiceStatusKey)
-        //            {
-        //                Items = lineItemCollection
-        //            };
-        //}
+            return attempt.Result;
+        }
 
         ///// <summary>
         ///// Does preliminary validation of the checkout process and then executes the start of the order fulfillment pipeline

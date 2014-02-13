@@ -32,20 +32,14 @@ namespace Merchello.Core.Configuration
         public static string ApplicationName = "Merchello";
         public static string ConfigurationName = ApplicationName.ToLower();
 
+        /// <summary>
+        /// Returns the <see cref="MerchelloSection"/> Configuration Element
+        /// </summary>
         public MerchelloSection Section
         {
             get { return (MerchelloSection)ConfigurationManager.GetSection(ConfigurationName); }
         }
         
-
-        ///// <summary>
-        ///// The configuration setting for the DefaultBasketPackagingStrategy
-        ///// </summary>
-        //public string DefaultBasketPackagingStrategy
-        //{
-        //    get { return Section.Strategies["DefaultBasketPackagingStrategy"].Type; }
-        //}
-
         /// <summary>
         /// Gets the <see cref="StrategyElement"/> by it's configuration alias
         /// </summary>
@@ -116,7 +110,6 @@ namespace Merchello.Core.Configuration
 
             return _rootDir;
         }
-
 
         /// <summary>
         /// Gets the full path to root.

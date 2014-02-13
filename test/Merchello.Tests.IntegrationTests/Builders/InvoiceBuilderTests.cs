@@ -89,13 +89,13 @@ namespace Merchello.Tests.IntegrationTests.Builders
         }
 
         /// <summary>
-        /// Test verifies that the InvoiceBuilder can be instantiated with 4 tasks from the configuration file
+        /// Test verifies that the InvoiceBuilder can be instantiated with 3 tasks from the configuration file
         /// </summary>
         [Test]
-        public void Can_Create_The_Default_Invoice_Builder_With_4_Tasks()
+        public void Can_Create_The_Default_Invoice_Builder_With_3_Tasks()
         {
             //// Arrange
-            const int taskCount = 4;
+            const int taskCount = 3;
 
             //// Act
             var invoiceBuild = new InvoiceBuilderChain(_checkoutPreparationMock);
