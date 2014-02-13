@@ -8,7 +8,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         [TestFixtureSetUp]
         public virtual void FixtureSetup()
         {
-            AutoMapperMappings.Initialize();
+            AutoMapperMappings.BindMappings();
             //ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"].RebuildIndex();  
         }
 

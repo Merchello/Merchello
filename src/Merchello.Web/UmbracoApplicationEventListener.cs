@@ -1,13 +1,8 @@
-﻿using System.Net.Mime;
-using log4net;
+﻿using log4net;
 using Merchello.Core;
 using System;
-using System.IO;
 using System.Reflection;
-using Merchello.Core.Services;
-using umbraco.interfaces;
 using Umbraco.Core;
-using Umbraco.Web;
 
 namespace Merchello.Web
 {
@@ -35,10 +30,8 @@ namespace Merchello.Web
             }
             catch (Exception ex)
             {
-                Log.Error("Initialization of Merchello failed - no merchello.config file found", ex);
+                Log.Error("Initialization of Merchello failed", ex);
             }
-
-            // Register 
             
         }
         
