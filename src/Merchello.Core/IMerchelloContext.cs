@@ -25,10 +25,10 @@ namespace Merchello.Core
         /// </summary>
         IGatewayContext Gateways { get;  }
 
-        /// <summary>
-        /// True/false indicating whether or not <see cref="CoreBootManager"/> has successfully booted
-        /// </summary>
-        bool IsReady { get; }
+        ///// <summary>
+        ///// Gets the <see cref="ISalesManager"/>
+        ///// </summary>
+        //ISalesManager SalesManager { get; }
 
         /// <summary>
         /// Compares the binary version to that listed in the Merchello configuration to determine if the 

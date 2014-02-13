@@ -296,6 +296,9 @@ namespace Merchello.Tests.IntegrationTests.Checkout
 
             #endregion // end shipping info round 2
 
+            // generate an invoice to preview
+            var invoice = CurrentCustomer.Basket().CheckoutPreparation().GenerateInvoice();
+
             #endregion // completed checkout preparation
 
             #endregion

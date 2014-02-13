@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Merchello.Core.Chains;
-using Merchello.Core.Chains.CheckOut;
-using Merchello.Core.Checkout;
-using Merchello.Core.Models;
 using Umbraco.Core;
 
 namespace Merchello.Core.Builders
@@ -35,6 +31,7 @@ namespace Merchello.Core.Builders
                         ConstructorArgumentValues.ToArray()).Result
                     )));
 
+            // register the next task for each link (these are linear chains)
             foreach (var taskHandler in TaskHandlers.Where(task => TaskHandlers.IndexOf(task) != TaskHandlers.IndexOf(TaskHandlers.Last())))
             {
                 taskHandler.RegisterNext(TaskHandlers[TaskHandlers.IndexOf(taskHandler) + 1]);

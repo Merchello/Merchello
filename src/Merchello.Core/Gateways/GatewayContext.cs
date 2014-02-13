@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Gateways.Taxation;
 using Merchello.Core.Models;
@@ -15,7 +16,6 @@ namespace Merchello.Core.Gateways
         
         private readonly ConcurrentDictionary<Guid, IGatewayProvider> _gatewayProviderCache = new ConcurrentDictionary<Guid, IGatewayProvider>();
         private readonly IGatewayProviderFactory _gatewayProviderFactory;
-        private readonly IGatewayProviderService _gatewayProviderService;
 
         public GatewayContext(IGatewayProviderService gatewayProviderService, IRuntimeCacheProvider runtimeCache)
         {
@@ -23,7 +23,6 @@ namespace Merchello.Core.Gateways
             Mandate.ParameterNotNull(runtimeCache, "runtimeCache");
             
             _gatewayProviderFactory = new GatewayProviderFactory(gatewayProviderService, runtimeCache);
-            _gatewayProviderService = gatewayProviderService;
             BuildGatewayProviderCache(gatewayProviderService);
 
         }
@@ -59,6 +58,11 @@ namespace Merchello.Core.Gateways
             return quotes.OrderBy(x => x.Rate);
         }
 
+        //public IInvoiceTaxResult GetInvoiceTaxResultForInvoice(IInvoice invoice)
+        //{
+            
+        //}
+
         /// <summary>
         /// Gets a collection of instantiated gateway providers
         /// </summary>
@@ -71,8 +75,19 @@ namespace Merchello.Core.Gateways
             var gatewayProviders = new List<GatewayProviderBase>();
             foreach (var provider in providers)
             {
-                if(gatewayProviderType == GatewayProviderType.Shipping)
-                    gatewayProviders.Add(ResolveByGatewayProvider<ShippingGatewayProviderBase>(provider));
+                switch (gatewayProviderType)
+                {
+                    case GatewayProviderType.Shipping:
+                        gatewayProviders.Add(ResolveByGatewayProvider<ShippingGatewayProviderBase>(provider));
+                        break;
+                    case GatewayProviderType.Taxation:
+                        gatewayProviders.Add(ResolveByGatewayProvider<TaxationGatewayProviderBase>(provider));
+                        break;
+                    case GatewayProviderType.Payment:
+                        gatewayProviders.Add(ResolveByGatewayProvider<PaymentGatewayProviderBase>(provider));
+                        break;
+                }
+                    
             }
             return gatewayProviders;
         }
@@ -91,7 +106,10 @@ namespace Merchello.Core.Gateways
             if (typeof(TaxationGatewayProviderBase).IsAssignableFrom(typeof(T))) 
                 return _gatewayProviderFactory.GetInstance<TaxationGatewayProviderBase>(provider) as T;
 
-            return null;
+            if (typeof (PaymentGatewayProviderBase).IsAssignableFrom(typeof (T)))
+                return _gatewayProviderFactory.GetInstance<PaymentGatewayProviderBase>(provider) as T;
+
+            throw new InvalidOperationException("ResolveByGatewayProvider could not instantiant Type " + typeof(T).FullName);
         }
         
         /// <summary>

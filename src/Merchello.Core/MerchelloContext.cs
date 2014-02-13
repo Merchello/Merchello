@@ -22,7 +22,6 @@ namespace Merchello.Core
         {
             Mandate.ParameterNotNull(serviceContext, "serviceContext");
             Mandate.ParameterNotNull(cache, "cache");
-
             
             _services = serviceContext;
             if(!isUnitTest) _gateways = new GatewayContext(serviceContext.GatewayProviderService, cache.RuntimeCache);
@@ -54,36 +53,6 @@ namespace Merchello.Core
         /// This is generally a short cut to the ApplicationContext.Current.ApplicationCache
         /// </remarks>
         public CacheHelper Cache { get; private set; }
-
-        
-
-        // IsReady is set to true by the boot manager once it has successfully booted
-        // note - the original umbraco module checks on content.Instance in umbraco.dll
-        //   now, the boot task that setup the content store ensures that it is ready
-        bool _isReady = false;
-        readonly ManualResetEventSlim _isReadyEvent = new System.Threading.ManualResetEventSlim(false);
-        private IServiceContext _services;
-        private IGatewayContext _gateways;
-
-        public bool IsReady
-        {
-            get
-            {
-                return _isReady;
-            }
-            internal set
-            {
-                AssertIsNotReady();
-                _isReady = value;
-                _isReadyEvent.Set();
-            }
-        }
-
-        public bool WaitForReady(int timeout)
-        {
-            return _isReadyEvent.WaitHandle.WaitOne(timeout);
-        }
-
 
         /// <summary>
         /// Compares the binary version to that listed in the Merchello configuration to determine if the 
@@ -129,11 +98,10 @@ namespace Merchello.Core
             }
         }
 
-        private void AssertIsNotReady()
-        {
-            if (IsReady)
-                throw new Exception("MerchelloPluginContext has already been initialized.");
-        }
+        private IServiceContext _services;
+        private IGatewayContext _gateways;
+        //private ISalesManager _salesManager;
+
 
         /// <summary>
         /// Gets the current ServiceContext
@@ -166,6 +134,20 @@ namespace Merchello.Core
             internal set { _gateways = value; }
         }
        
+        ///// <summary>
+        ///// Gets the sales manager
+        ///// </summary>
+        //public ISalesManager SalesManager
+        //{
+        //    get
+        //    {
+        //        if(_salesManager == null)
+        //            throw new InvalidOperationException("The SalesManager has not been set of the MerchelloContext");
+        //        return _salesManager;
+        //    }
+        //    internal set { _salesManager = value; }
+        //}
+
         private volatile bool _disposed;
         private readonly ReaderWriterLockSlim _disposalLocker = new ReaderWriterLockSlim();
 

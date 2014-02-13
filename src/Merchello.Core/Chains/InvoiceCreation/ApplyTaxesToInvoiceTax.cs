@@ -2,9 +2,9 @@
 using Merchello.Core.Models;
 using Umbraco.Core;
 
-namespace Merchello.Core.Chains.CheckOut
+namespace Merchello.Core.Chains.InvoiceCreation
 {
-    internal class ApplyTaxesToInvoiceTax : CheckoutAttemptChainTaskBase
+    internal class ApplyTaxesToInvoiceTax : CheckoutPreparationAttemptChainTaskBase
     {
         public ApplyTaxesToInvoiceTax(CheckoutPreparationBase checkoutPreparation) 
             : base(checkoutPreparation)

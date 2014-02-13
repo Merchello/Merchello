@@ -109,8 +109,6 @@ namespace Merchello.Core
 
             _isComplete = true;
 
-            MerchelloContext.IsReady = true;
-
             return this;
         }
 
