@@ -20,10 +20,20 @@ namespace Merchello.Core.Models
         public static void AddItem(this ILineItemContainer container, IProductVariant productVariant, int quantity)
         {
             var extendedData = new ExtendedDataCollection();
-            extendedData.AddProductVariantValues(productVariant);
+            
+            container.AddItem(productVariant, quantity, extendedData);
+        }
 
+
+        /// <summary>
+        /// Adds a <see cref="IProductVariant"/> line item to the collection
+        /// </summary>
+        public static void AddItem(this ILineItemContainer container, IProductVariant productVariant, int quantity, ExtendedDataCollection extendedData)
+        {
+            extendedData.AddProductVariantValues(productVariant);
             container.AddItem(LineItemType.Product, productVariant.Name, productVariant.Sku, quantity, productVariant.Price, extendedData);
         }
+
 
         /// <summary>
         /// Adds a line item to the collection

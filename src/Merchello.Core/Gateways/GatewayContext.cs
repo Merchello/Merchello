@@ -13,7 +13,8 @@ namespace Merchello.Core.Gateways
 {
     internal class GatewayContext : IGatewayContext
     {
-        
+
+        private readonly IGatewayProviderService _gatewayProviderService;
         private readonly ConcurrentDictionary<Guid, IGatewayProvider> _gatewayProviderCache = new ConcurrentDictionary<Guid, IGatewayProvider>();
         private readonly IGatewayProviderFactory _gatewayProviderFactory;
 
@@ -21,7 +22,8 @@ namespace Merchello.Core.Gateways
         {
             Mandate.ParameterNotNull(gatewayProviderService, "gatewayProviderService");
             Mandate.ParameterNotNull(runtimeCache, "runtimeCache");
-            
+
+            _gatewayProviderService = gatewayProviderService;
             _gatewayProviderFactory = new GatewayProviderFactory(gatewayProviderService, runtimeCache);
             BuildGatewayProviderCache(gatewayProviderService);
 
@@ -47,6 +49,11 @@ namespace Merchello.Core.Gateways
             return providers;
         }
 
+        /// <summary>
+        /// Returns a collection of all <see cref="IShipmentRateQuote"/> that are available for the <see cref="IShipment"/>
+        /// </summary>
+        /// <param name="shipment">The <see cref="IShipment"/> to quote</param>
+        /// <returns>A collection of <see cref="IShipmentRateQuote"/></returns>
         public IEnumerable<IShipmentRateQuote> GetShipRateQuotesForShipment(IShipment shipment)
         {
             var providers = ResolveByGatewayProviderType(GatewayProviderType.Shipping);
@@ -56,6 +63,17 @@ namespace Merchello.Core.Gateways
                 quotes.AddRange(((ShippingGatewayProviderBase)provider).QuoteAvailableShipMethodsForShipment(shipment));
             }
             return quotes.OrderBy(x => x.Rate);
+        }
+
+        /// <summary>
+        /// Returns a list of all countries that can be assigned to a shipment
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<ICountry> GetAllowedShipmentDestinationCountries()
+        {
+            var countries = _gatewayProviderService.GetAllShipCountries().Select(x => new Country(x.CountryCode, x.Provinces));
+
+            return countries.Distinct();
         }
 
         //public IInvoiceTaxResult GetInvoiceTaxResultForInvoice(IInvoice invoice)

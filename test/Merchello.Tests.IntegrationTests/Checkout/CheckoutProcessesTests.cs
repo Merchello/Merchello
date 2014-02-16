@@ -38,6 +38,7 @@ namespace Merchello.Tests.IntegrationTests.Checkout
             _product4 = DbPreTestDataWorker.MakeExistingProduct(true, 1, 4);
             _product5 = DbPreTestDataWorker.MakeExistingProduct(true, 1, 5);
 
+
             #endregion
 
             #region WarehouseCatalog

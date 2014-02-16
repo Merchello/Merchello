@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Merchello.Core.Models;
+using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Models.TypeFields;
 using Merchello.Core.Persistence;
 using Merchello.Core.Persistence.Querying;
@@ -288,12 +289,21 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Gets a <see cref="IShipCountry"/> by CatalogKey and CountryCode
         /// </summary>
-        /// <param name="catalogKey"></param>
-        /// <param name="countryCode"></param>
-        /// <returns></returns>
+        /// <param name="catalogKey">The unique key of the <see cref="IWarehouseCatalog"/></param>
+        /// <param name="countryCode">The two character ISO country code</param>
+        /// <returns>An <see cref="IShipCountry"/></returns>
         public IShipCountry GetShipCountry(Guid catalogKey, string countryCode)
         {
             return _shipCountryService.GetShipCountryByCountryCode(catalogKey, countryCode);
+        }
+
+        /// <summary>
+        /// Returns a collection of all <see cref="IShipCountry"/>
+        /// </summary>
+        /// <returns>A collection of all <see cref="IShipCountry"/></returns>
+        public IEnumerable<IShipCountry> GetAllShipCountries()
+        {
+            return ((ShipCountryService) _shipCountryService).GetAllShipCountries();
         }
 
         /// <summary>
