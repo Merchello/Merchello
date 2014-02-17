@@ -59,22 +59,21 @@ namespace Merchello.Examine.Providers
             var nodes = new List<XElement>();
             foreach (var p in productsArray)
             {
-                if (p.ProductOptions.Any())
-                {
-                    var stop = true;
-                }
-                //nodes.AddRange(p.SerializeToXml().Descendants("productVariant"));
-                AddProductToIndex(p);
+                nodes.AddRange(p.SerializeToXml().Descendants("productVariant"));
             }
 
-            //AddNodesToIndex(nodes, IndexTypes.ProductVariant);
+            AddNodesToIndex(nodes, IndexTypes.ProductVariant);
         }
 
 
         public override void RebuildIndex()
         {
             DataService.LogService.AddVerboseLog(-1, "Rebuilding index");
-            base.RebuildIndex();
+
+            EnsureIndex(true);
+
+            PerformIndexAll(IndexTypes.ProductVariant);
+            //base.RebuildIndex();
         }
 
         /// <summary>

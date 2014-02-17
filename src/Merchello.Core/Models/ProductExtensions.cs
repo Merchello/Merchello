@@ -138,8 +138,11 @@ namespace Merchello.Core
             if (doc.Root == null) return XDocument.Parse("<product />");
                 
             doc.Root.Add(((Product)product).MasterVariant.SerializeToXml(product.ProductOptions).Root);
-            
-            foreach (var variant in product.ProductVariants)
+
+            // Need to filter out the Master variant so that it does not get overwritten in the cases where
+            // a product defines options.
+            // http://issues.merchello.com/youtrack/issue/M-152
+            foreach (var variant in product.ProductVariants.Where(x => ((ProductVariant)x).Master == false))
             {
                 doc.Root.Add(variant.SerializeToXml().Root);
             }
@@ -147,7 +150,7 @@ namespace Merchello.Core
         }
 
 
-        public static XDocument SerializeToXml(this IProductVariant productVariant, ProductOptionCollection productOptions = null)
+        public static XDocument SerializeToXml(this IProductVariant productVariant, ProductOptionCollection productOptionCollection = null)
         {
             string xml;
             using (var sw = new StringWriter())
@@ -185,7 +188,7 @@ namespace Merchello.Core
                     writer.WriteAttributeString("attributes", GetAttributesJson(productVariant));
                     writer.WriteAttributeString("catalogInventories", GetCatalogInventoriesJson(productVariant));
 
-                    writer.WriteAttributeString("productOptions", GetProductOptionsJson(productOptions));
+                    writer.WriteAttributeString("productOptions", GetProductOptionsJson(productOptionCollection));
 
                     writer.WriteAttributeString("createDate", productVariant.CreateDate.ToString("s"));
                     writer.WriteAttributeString("updateDate", productVariant.UpdateDate.ToString("s"));                    
@@ -199,6 +202,11 @@ namespace Merchello.Core
             }
 
             return XDocument.Parse(xml); 
+        }
+
+        internal static string ToJsonProductOptions(this ProductOptionCollection productOptionCollection)
+        {
+            return GetProductOptionsJson(productOptionCollection);
         }
 
         private static string GetProductOptionsJson(IEnumerable<IProductOption> productOptions)

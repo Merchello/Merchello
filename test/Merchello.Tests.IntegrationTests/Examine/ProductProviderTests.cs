@@ -109,6 +109,8 @@ namespace Merchello.Tests.IntegrationTests.Examine
             Assert.IsTrue(results.Count() == 1);
             var result = results.First();
             Assert.NotNull(result.Fields["productOptions"]);
+
+            provider.RebuildIndex();
             
         }
 

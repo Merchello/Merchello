@@ -30,7 +30,6 @@ namespace Merchello.Examine.DataServices
         public IEnumerable<IProduct> GetAll()
         {
             return new ProductService().GetAll();
-            //return ((ProductService) _merchelloContext.Services.ProductService).GetAll();
         }
 
         /// <summary>

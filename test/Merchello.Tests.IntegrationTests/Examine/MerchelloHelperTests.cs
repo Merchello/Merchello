@@ -34,21 +34,21 @@ namespace Merchello.Tests.IntegrationTests.Examine
             Assert.IsTrue(products.Any());
         }
 
-        [Test]
-        public void Can_GetGetIguanas_From_Index()
-        {
-            //// Arrange
-            var merchello = new MerchelloHelper();
+        //[Test]
+        //public void Can_GetGetIguanas_From_Index()
+        //{
+        //    //// Arrange
+        //    var merchello = new MerchelloHelper();
 
-            //// Act
-            var searched = merchello.SearchProducts("maple");
-            var result = searched.FirstOrDefault();
+        //    //// Act
+        //    var searched = merchello.SearchProducts("maple");
+        //    var result = searched.FirstOrDefault();
 
-            //// Assert
-            Assert.IsTrue(searched.Any());
-            Console.WriteLine(searched.Count());
+        //    //// Assert
+        //    Assert.IsTrue(searched.Any());
+        //    Console.WriteLine(searched.Count());
 
 
-        }
+        //}
     }
 }
