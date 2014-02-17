@@ -4,7 +4,7 @@ using Merchello.Core.Models;
 
 namespace Merchello.Web.Workflow
 {
-    public class BasketCheckoutPreparation : CheckoutPreparationBase, IBasketCheckoutPreparation 
+    public class BasketCheckoutPreparation : CheckoutPreparationBase, IBasketCheckoutPreparation
     {
         internal BasketCheckoutPreparation(IMerchelloContext merchelloContext, IItemCache itemCache, ICustomerBase customer) 
             : base(merchelloContext, itemCache, customer)
@@ -25,6 +25,26 @@ namespace Merchello.Web.Workflow
                 itemCache.AddItem(item.AsLineItemOf<ItemCacheLineItem>());
             }
             return new BasketCheckoutPreparation(merchelloContext, itemCache, customer);
+        }
+
+        public override void SaveBillToAddress(IAddress billToAddress)
+        {
+            base.SaveBillToAddress(billToAddress);
+        }
+
+        public override void SaveShipmentRateQuote(Core.Gateways.Shipping.IShipmentRateQuote approvedShipmentRateQuote)
+        {
+            base.SaveShipmentRateQuote(approvedShipmentRateQuote);
+        }
+
+        public override void SaveShipmentRateQuote(System.Collections.Generic.IEnumerable<Core.Gateways.Shipping.IShipmentRateQuote> approvedShipmentRateQuotes)
+        {
+            base.SaveShipmentRateQuote(approvedShipmentRateQuotes);
+        }
+
+        public override void SaveShipToAddress(IAddress shipToAddress)
+        {
+            base.SaveShipToAddress(shipToAddress);
         }
 
     }

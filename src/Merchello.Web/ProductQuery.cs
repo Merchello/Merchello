@@ -18,8 +18,6 @@ namespace Merchello.Web
 {
     internal class ProductQuery
     {
-        private readonly IMerchelloContext _merchelloContext;
-
         /// <summary>
         /// Retrieves a <see cref="ProductDisplay"/> given it's 'unique' Key
         /// </summary>
@@ -43,10 +41,37 @@ namespace Merchello.Web
                 .Search(criteria).Select(result => result.ToProductDisplay()).FirstOrDefault();
 
             if (product != null) return product;
-            var retrieved = MerchelloContext.Current.Services.ProductService.GetByKey(new Guid(key));
+            var merchelloContext = GetMerchelloContext();
+
+            var retrieved = merchelloContext.Services.ProductService.GetByKey(new Guid(key));
             if(retrieved != null) ReindexProduct(retrieved);
 
             return AutoMapper.Mapper.Map<ProductDisplay>(retrieved);
+        }
+
+        public static IEnumerable<ProductDisplay> GetAllProducts()
+        {
+            var criteria = ExamineManager.Instance.CreateSearchCriteria(IndexTypes.ProductVariant);
+            criteria.Field("master", "True");
+
+            var results = ExamineManager.Instance.SearchProviderCollection["MerchelloProductSearcher"]
+                .Search(criteria).Select(result => result.ToProductDisplay()).ToArray();
+
+            if (results.Any()) return results;
+
+
+            var reindexed = new List<ProductDisplay>();
+
+            var merchelloContext = GetMerchelloContext();
+
+            var retrieved = ((ProductService) merchelloContext.Services.ProductService).GetAll();
+            foreach (var product in retrieved)
+            {
+                ReindexProduct(product);
+                reindexed.Add(AutoMapper.Mapper.Map<ProductDisplay>(product));
+            }
+
+            return reindexed;
         }
 
         /// <summary>
@@ -82,9 +107,7 @@ namespace Merchello.Web
             }
             
             // Assists in unit testing
-            var merchelloContext = MerchelloContext.Current ?? 
-                new MerchelloContext(new ServiceContext(new PetaPocoUnitOfWorkProvider()),
-                                        new CacheHelper(new NullCacheProvider(), new NullCacheProvider(), new NullCacheProvider()));
+            var merchelloContext = GetMerchelloContext();
 
             var retrieved = merchelloContext.Services.ProductVariantService.GetByKey(new Guid(key));
             if (retrieved != null) ReindexProductVariant(retrieved, null);
@@ -101,7 +124,6 @@ namespace Merchello.Web
         public static IEnumerable<ProductDisplay> Search(string term)
         {
             var criteria = ExamineManager.Instance.CreateSearchCriteria();
-            //criteria.Field("name", term.Fuzzy(0.8f)).Or().Field("sku", term);
             criteria.Field("master", "True").And().GroupedOr(new[] { "name", "sku" }, term.Fuzzy(0.8f));
             return Search(criteria);
         }
@@ -137,6 +159,17 @@ namespace Merchello.Web
             ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"]
                 .ReIndexNode(productVariant.SerializeToXml(productOptions).Root, IndexTypes.ProductVariant);
         }
-     
+
+        /// <summary>
+        /// Assists in unit testing
+        /// </summary>
+        /// <returns></returns>
+        private static IMerchelloContext GetMerchelloContext()
+        {
+            return MerchelloContext.Current ??
+                new MerchelloContext(new ServiceContext(new PetaPocoUnitOfWorkProvider()),
+                                        new CacheHelper(new NullCacheProvider(), new NullCacheProvider(), new NullCacheProvider()));
+
+        }
     }
 }

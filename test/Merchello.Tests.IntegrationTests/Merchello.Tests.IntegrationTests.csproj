@@ -241,6 +241,7 @@
     <Compile Include="DisplayClasses\ProductDisplayTests.cs" />
     <Compile Include="DisplayClasses\ShippingDisplayTests.cs" />
     <Compile Include="DisplayClasses\WarehouseDisplayTests.cs" />
+    <Compile Include="Examine\MerchelloHelperTests.cs" />
     <Compile Include="Examine\StartupExamineEventTests.cs" />
     <Compile Include="Services\Invoicing\InvoiceServiceTests.cs" />
     <Compile Include="Services\Invoicing\InvoicingTestsBase.cs" />

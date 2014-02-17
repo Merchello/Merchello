@@ -90,15 +90,28 @@ namespace Merchello.Web.Workflow
         /// <param name="quantity"></param>
         public void AddItem(IProduct product, string name, int quantity)
         {
+            AddItem(product, name, quantity, new ExtendedDataCollection());
+        }
+
+        /// <summary>
+        /// Intended to be used by a <see cref="IProduct"/>s without options.  If the product does have options and a collection of <see cref="IProductVariant"/>s, the first
+        /// <see cref="IProductVariant"/> is added to the basket item collection
+        /// </summary>
+        /// <param name="product"><see cref="IProduct"/></param>
+        /// <param name="name">The name of the product to be used in the line item</param>
+        /// <param name="quantity">The quantity of the line item</param>
+        /// <param name="extendedData">A <see cref="ExtendedDataCollection"/></param>
+        public void AddItem(IProduct product, string name, int quantity, ExtendedDataCollection extendedData)
+        {
             var variant = product.GetProductVariantForPurchase();
             if (variant != null)
             {
-                AddItem(variant, name, quantity);
+                AddItem(variant, name, quantity, extendedData);
                 return;
             }
             if (!product.ProductVariants.Any()) return;
 
-            AddItem(product.ProductVariants.First(), name, quantity);
+            AddItem(product.ProductVariants.First(), name, quantity, extendedData);
         }
 
         /// <summary>
@@ -109,6 +122,13 @@ namespace Merchello.Web.Workflow
             AddItem(productVariant, productVariant.Name, 1);  
         }
 
+        /// <summary>
+        /// Adds a line item to the basket
+        /// </summary>
+        public void AddItem(IProductVariant productVariant, int quantity)
+        {
+            AddItem(productVariant, productVariant.Name, quantity);
+        }
 
         /// <summary>
         /// Adds a line item to the basket
@@ -158,6 +178,8 @@ namespace Merchello.Web.Workflow
         /// </summary>
         internal void AddItem(string name, string sku, int quantity, decimal price, ExtendedDataCollection extendedData)
         {
+            if (quantity <= 0) quantity = 1;
+            if (price < 0) price = 0;
             _itemCache.AddItem(LineItemType.Product, name, sku, quantity, price, extendedData);
         }
 

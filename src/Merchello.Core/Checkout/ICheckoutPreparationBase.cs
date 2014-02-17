@@ -18,14 +18,27 @@ namespace Merchello.Core.Checkout
         /// <summary>
         /// Saves the bill to address
         /// </summary>
-        /// <param name="billToAddress"></param>
+        /// <param name="billToAddress">The billing <see cref="IAddress"/></param>
         void SaveBillToAddress(IAddress billToAddress);
+
+        /// <summary>
+        /// Saves the ship to address
+        /// </summary>
+        /// <param name="shipToAddress">The shipping <see cref="IAddress"/></param>
+        void SaveShipToAddress(IAddress shipToAddress);
 
         /// <summary>
         /// Gets the bill to address
         /// </summary>
         /// <returns>Return the billing <see cref="IAddress"/></returns>
         IAddress GetBillToAddress();
+
+        /// <summary>
+        /// Gets the ship to address
+        /// </summary>
+        /// <remarks>Returns the shipping <see cref="IAddress"/></remarks>
+        /// <returns></returns>
+        IAddress GetShipToAddress();
 
         /// <summary>
         /// Saves a single <see cref="IShipmentRateQuote"/>

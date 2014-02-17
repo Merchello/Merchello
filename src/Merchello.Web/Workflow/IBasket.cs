@@ -11,7 +11,9 @@ namespace Merchello.Web.Workflow
         void AddItem(IProduct product);
         void AddItem(IProduct product, int quantity);
         void AddItem(IProduct product, string name, int quantity);
+        void AddItem(IProduct product, string name, int quantity, ExtendedDataCollection extendedData);
         void AddItem(IProductVariant productVariant);
+        void AddItem(IProductVariant productVariant, int quantity);
         void AddItem(IProductVariant productVariant, string name, int quantity);
         void AddItem(IProductVariant productVariant, string name, int quantity, ExtendedDataCollection extendedData);
         //void AddItem(string name, string sku, decimal price);

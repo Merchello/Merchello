@@ -138,8 +138,11 @@ namespace Merchello.Core
             if (doc.Root == null) return XDocument.Parse("<product />");
                 
             doc.Root.Add(((Product)product).MasterVariant.SerializeToXml(product.ProductOptions).Root);
-            
-            foreach (var variant in product.ProductVariants)
+
+            // Need to filter out the Master variant so that it does not get overwritten in the cases where
+            // a product defines options.
+            // http://issues.merchello.com/youtrack/issue/M-152
+            foreach (var variant in product.ProductVariants.Where(x => ((ProductVariant)x).Master == false))
             {
                 doc.Root.Add(variant.SerializeToXml().Root);
             }
@@ -147,7 +150,7 @@ namespace Merchello.Core
         }
 
 
-        public static XDocument SerializeToXml(this IProductVariant productVariant, ProductOptionCollection productOptions = null)
+        public static XDocument SerializeToXml(this IProductVariant productVariant, ProductOptionCollection productOptionCollection = null)
         {
             string xml;
             using (var sw = new StringWriter())
@@ -185,7 +188,7 @@ namespace Merchello.Core
                     writer.WriteAttributeString("attributes", GetAttributesJson(productVariant));
                     writer.WriteAttributeString("catalogInventories", GetCatalogInventoriesJson(productVariant));
 
-                    if(productOptions != null) writer.WriteAttributeString("options", GetProductOptionsJson(productOptions));
+                    writer.WriteAttributeString("productOptions", GetProductOptionsJson(productOptionCollection));
 
                     writer.WriteAttributeString("createDate", productVariant.CreateDate.ToString("s"));
                     writer.WriteAttributeString("updateDate", productVariant.UpdateDate.ToString("s"));                    
@@ -201,37 +204,45 @@ namespace Merchello.Core
             return XDocument.Parse(xml); 
         }
 
+        internal static string ToJsonProductOptions(this ProductOptionCollection productOptionCollection)
+        {
+            return GetProductOptionsJson(productOptionCollection);
+        }
+
         private static string GetProductOptionsJson(IEnumerable<IProductOption> productOptions)
         {
             var json = "[{0}]";
             var options = "";
 
-            foreach (var option in productOptions)
+            if(productOptions != null)
             {
-                var optionChoices = new List<object>();                
-                foreach (var choice in option.Choices)
+                foreach (var option in productOptions)
                 {
-                    optionChoices.Add(
+                    var optionChoices = new List<object>();                
+                    foreach (var choice in option.Choices)
+                    {
+                        optionChoices.Add(
+                                new
+                                {
+                                    attributeKey = choice.Key,
+                                    optionKey = choice.OptionKey,
+                                    name = choice.Name,
+                                    sortOrder = choice.SortOrder
+                                }
+                            );
+                    }
+                    if (options.Length > 0) options += ",";
+                    options += JsonConvert.SerializeObject(
                             new
                             {
-                                attributeKey = choice.Key,
-                                optionKey = choice.OptionKey,
-                                name = choice.Name,
-                                sortOrder = choice.SortOrder
+                                optionKey = option.Key,
+                                name = option.Name,
+                                required = option.Required,
+                                sortOrder = option.SortOrder,
+                                choices = optionChoices
                             }
                         );
                 }
-                if (options.Length > 0) options += ",";
-                options += JsonConvert.SerializeObject(
-                        new
-                        {
-                            optionKey = option.Key,
-                            name = option.Name,
-                            required = option.Required,
-                            sortOrder = option.SortOrder,
-                            choices = optionChoices
-                        }
-                    );
             }
             json = string.Format(json, options);
             return json;

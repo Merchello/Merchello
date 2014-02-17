@@ -15,13 +15,15 @@ namespace Merchello.Core.Gateways
 
         IEnumerable<IShipmentRateQuote> GetShipRateQuotesForShipment(IShipment shipment);
 
+        IEnumerable<ICountry> GetAllowedShipmentDestinationCountries();
+
         ///// <summary>
         ///// Gets a collection of instantiated gateway providers
         ///// </summary>
         ///// <param name="gatewayProviderType"></param>
         ///// <returns></returns>
         //IEnumerable<GatewayProviderBase> ResolveByGatewayProviderType(GatewayProviderType gatewayProviderType);
-            
+
         ///// <summary>
         ///// Returns an instantiation of a <see cref="T"/>
         ///// </summary>

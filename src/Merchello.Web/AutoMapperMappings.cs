@@ -5,9 +5,12 @@ using Merchello.Web.Models.ContentEditing;
 
 namespace Merchello.Web
 {
+    /// <summary>
+    /// Binds Merchello AutoMapper mappings during the Umbraco startup.
+    /// </summary>
     internal static class AutoMapperMappings
     {
-        public static void Initialize()
+        public static void BindMappings()
         {
             AutoMapper.Mapper.CreateMap<ICatalogInventory, CatalogInventoryDisplay>();
             
