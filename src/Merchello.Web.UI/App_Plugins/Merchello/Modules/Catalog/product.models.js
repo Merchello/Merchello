@@ -384,6 +384,16 @@
                     return new merchello.Models.CatalogInventory(catalogInventory);
                 });
             }
+            else
+            {
+                if (productFromServer.productOptions.length > 0) {
+                    self.hasOptions = true;
+                }
+
+                if (productFromServer.productVariants.length > 0) {
+                    self.hasVariants = true;
+                }
+            }
         }
 
         // Helper to copy from master variant
