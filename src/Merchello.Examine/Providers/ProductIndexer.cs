@@ -59,10 +59,15 @@ namespace Merchello.Examine.Providers
             var nodes = new List<XElement>();
             foreach (var p in productsArray)
             {
-                nodes.AddRange(p.SerializeToXml().Descendants("productVariant"));
+                if (p.ProductOptions.Any())
+                {
+                    var stop = true;
+                }
+                //nodes.AddRange(p.SerializeToXml().Descendants("productVariant"));
+                AddProductToIndex(p);
             }
 
-            AddNodesToIndex(nodes, type);
+            //AddNodesToIndex(nodes, IndexTypes.ProductVariant);
         }
 
 
@@ -137,7 +142,7 @@ namespace Merchello.Examine.Providers
                 new StaticField("totalInventoryCount", FieldIndexTypes.NOT_ANALYZED, false, "NUMBER"),
                 new StaticField("attributes", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
                 new StaticField("catalogInventories", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
-                new StaticField("options", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
+                new StaticField("productOptions", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
                 new StaticField("createDate", FieldIndexTypes.NOT_ANALYZED, false, "DATETIME"),
                 new StaticField("updateDate", FieldIndexTypes.NOT_ANALYZED, false, "DATETIME"),
                 new StaticField("allDocs", FieldIndexTypes.ANALYZED, false, string.Empty)

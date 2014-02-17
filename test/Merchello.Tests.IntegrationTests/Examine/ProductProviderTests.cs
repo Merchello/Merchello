@@ -16,7 +16,7 @@ namespace Merchello.Tests.IntegrationTests.Examine
     [TestFixture]
     public class ProductProviderTests : DatabaseIntegrationTestBase
     {
-        private const int ProductCount = 10;
+        private const int ProductCount = 2;
         private IProductService _productService;
         
         [SetUp]
@@ -60,8 +60,11 @@ namespace Merchello.Tests.IntegrationTests.Examine
         [Test]
         public void Can_Add_A_New_Product_To_The_Index()
         {
+            PreTestDataWorker.DeleteAllProducts();
+            
             //// Arrange            
             var provider = (ProductIndexer) ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"];
+            provider.RebuildIndex();
 
             var searcher = ExamineManager.Instance.SearchProviderCollection["MerchelloProductSearcher"];
 
@@ -104,6 +107,9 @@ namespace Merchello.Tests.IntegrationTests.Examine
             ISearchResults results = searcher.Search(criteria);
 
             Assert.IsTrue(results.Count() == 1);
+            var result = results.First();
+            Assert.NotNull(result.Fields["productOptions"]);
+            
         }
 
         /// <summary>

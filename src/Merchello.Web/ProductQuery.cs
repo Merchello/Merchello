@@ -43,10 +43,35 @@ namespace Merchello.Web
             if (product != null) return product;
             var merchelloContext = GetMerchelloContext();
 
-            var retrieved =merchelloContext.Services.ProductService.GetByKey(new Guid(key));
+            var retrieved = merchelloContext.Services.ProductService.GetByKey(new Guid(key));
             if(retrieved != null) ReindexProduct(retrieved);
 
             return AutoMapper.Mapper.Map<ProductDisplay>(retrieved);
+        }
+
+        public static IEnumerable<ProductDisplay> GetAllProducts()
+        {
+            var criteria = ExamineManager.Instance.CreateSearchCriteria(IndexTypes.ProductVariant);
+            criteria.Field("master", "True");
+
+            var results = ExamineManager.Instance.SearchProviderCollection["MerchelloProductSearcher"]
+                .Search(criteria).Select(result => result.ToProductDisplay()).ToArray();
+
+            if (results.Any()) return results;
+
+
+            var reindexed = new List<ProductDisplay>();
+
+            var merchelloContext = GetMerchelloContext();
+
+            var retrieved = ((ProductService) merchelloContext.Services.ProductService).GetAll();
+            foreach (var product in retrieved)
+            {
+                ReindexProduct(product);
+                reindexed.Add(AutoMapper.Mapper.Map<ProductDisplay>(product));
+            }
+
+            return reindexed;
         }
 
         /// <summary>

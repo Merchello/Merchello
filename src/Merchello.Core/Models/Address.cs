@@ -9,7 +9,7 @@ namespace Merchello.Core.Models
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    internal class Address : IAddress
+    public class Address : IAddress
     {
         public Address()
         {

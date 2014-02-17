@@ -405,6 +405,7 @@ namespace Merchello.Core.Models
         public static void AddAddress(this ExtendedDataCollection extendedData, IAddress address, string dictionaryKey)
         {
             var addressXml = SerializationHelper.SerializeToXml(address as Address);
+            
             extendedData.SetValue(dictionaryKey, addressXml);
         }
 

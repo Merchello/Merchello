@@ -65,12 +65,22 @@ namespace Merchello.Core.Checkout
         }
 
         /// <summary>
-        /// Saves a billing address to the customer extended data
+        /// Saves the bill to address
         /// </summary>
-        /// <param name="billToAddress"></param>
+        /// <param name="billToAddress">The billing <see cref="IAddress"/></param>
         public virtual void SaveBillToAddress(IAddress billToAddress)
         {
             _customer.ExtendedData.AddAddress(billToAddress, AddressType.Billing);
+            SaveCustomer(_merchelloContext, _customer);
+        }
+
+        /// <summary>
+        /// Saves the ship to address
+        /// </summary>
+        /// <param name="shipToAddress">The shipping <see cref="IAddress"/></param>
+        public virtual void SaveShipToAddress(IAddress shipToAddress)
+        {
+            _customer.ExtendedData.AddAddress(shipToAddress, AddressType.Shipping);
             SaveCustomer(_merchelloContext, _customer);
         }
 
@@ -81,6 +91,15 @@ namespace Merchello.Core.Checkout
         public IAddress GetBillToAddress()
         {
             return _customer.ExtendedData.GetAddress(AddressType.Billing);
+        }
+
+        /// <summary>
+        /// Gets the bill to address
+        /// </summary>
+        /// <returns>Return the billing <see cref="IAddress"/></returns>
+        public IAddress GetShipToAddress()
+        {
+            return _customer.ExtendedData.GetAddress(AddressType.Shipping);
         }
 
         /// <summary>
