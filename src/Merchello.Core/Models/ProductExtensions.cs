@@ -224,7 +224,7 @@ namespace Merchello.Core
                         optionChoices.Add(
                                 new
                                 {
-                                    attributeKey = choice.Key,
+                                    choice.Key,
                                     optionKey = choice.OptionKey,
                                     name = choice.Name,
                                     sortOrder = choice.SortOrder
@@ -235,7 +235,7 @@ namespace Merchello.Core
                     options += JsonConvert.SerializeObject(
                             new
                             {
-                                optionKey = option.Key,
+                                option.Key,
                                 name = option.Name,
                                 required = option.Required,
                                 sortOrder = option.SortOrder,
