@@ -324,7 +324,9 @@
 
         $scope.applyAllVariantInventories = function (allVariantInventories) {
 
-            console.log(allVariantInventories);
+            for (var i = 0; i < $scope.product.productVariants.length; i++) {
+                $scope.product.productVariants[i].globalInventoryChanged(allVariantInventories);
+            }
 
         };
 
