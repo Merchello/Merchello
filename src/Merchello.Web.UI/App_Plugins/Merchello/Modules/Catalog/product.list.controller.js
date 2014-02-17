@@ -91,7 +91,7 @@
                 promise.then(function (products) {
 
                     $scope.products = _.map(products, function (productFromServer) {
-                        return new merchello.Models.Product(productFromServer);
+                        return new merchello.Models.Product(productFromServer, true);
                     });
 
                     notificationsService.success("Filtered Products Loaded", "");
