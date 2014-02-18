@@ -180,7 +180,6 @@ namespace Merchello.Web.Editors
                 _productService.Save(newProduct);
 
                 newProduct.AddToCatalogInventory(_warehouseService.GetDefaultWarehouse().DefaultCatalog());
-                newProduct.CatalogInventories.First().Count = 10;
                 _productService.Save(newProduct);
             }
             catch (Exception ex)
@@ -207,12 +206,7 @@ namespace Merchello.Web.Editors
                 newProduct = _productService.CreateProduct(product.Name, product.Sku, product.Price);
                 _productService.Save(newProduct);
 
-                //if (product.TrackInventory)
-                //{
-                    newProduct.AddToCatalogInventory(_warehouseService.GetDefaultWarehouse().DefaultCatalog());
-                    newProduct.CatalogInventories.First().Count = 10;
-                    //_productService.Save(newProduct);
-                //}
+                newProduct.AddToCatalogInventory(_warehouseService.GetDefaultWarehouse().DefaultCatalog());
 
                 newProduct = product.ToProduct(newProduct);
                 _productService.Save(newProduct);
@@ -269,34 +263,5 @@ namespace Merchello.Web.Editors
 
             return Request.CreateResponse(HttpStatusCode.OK);
         }
-
-        /// <summary>
-        /// Creates a product variant from Sku, Name, Price
-        ///
-        /// GET /umbraco/Merchello/ProductApi/NewProductVariant?key={guid}&attributes=[]
-        /// </summary>
-        /// <param name="item"></param>
-        //[AcceptVerbs("GET", "POST")]
-        //public IProductVariant NewProductVariant(IProductVariant productVariant)
-        //{
-        //    IProductVariant newProductVariant = null;
-
-        //    try
-        //    {
-        //        var product = _productService.GetByKey(productVariant.ProductKey);
-        //        var productAttributes = new ProductAttributeCollection();
-        //        foreach (var attribute in productVariant.Attributes)
-        //        {
-        //            productAttributes.Add(attribute);
-        //        }
-        //        newProductVariant = _productVariantService.CreateProductVariantWithId(product, productAttributes, true);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new HttpResponseException(HttpStatusCode.InternalServerError);
-        //    }
-
-        //    return newProductVariant;
-        //}
     }
 }

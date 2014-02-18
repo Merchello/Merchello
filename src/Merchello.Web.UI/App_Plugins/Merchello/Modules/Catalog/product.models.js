@@ -461,18 +461,20 @@
             newVariant.copyFromProduct(self);
             newVariant.attributes = attributes.slice(0);
             newVariant.selected = true;
-            var skuPostfix = parseInt(self.productVariants.length) + 1;
-            newVariant.sku = _.uniqueId(newVariant.sku + '-' + skuPostfix);   // TODO: replace '-' with settings "skuSeparator"
-            newVariant.name = self.name + ' - ';
-            var attrsep = ' / ';
-            for (var i = 0; i < newVariant.attributes.length; i++)
-            {
-                newVariant.name = newVariant.name + newVariant.attributes[i].name;
-                if (i < newVariant.attributes.length - 1)
-                {
-                    newVariant.name = newVariant.name + attrsep;
-                }
-            }
+            //var skuPostfix = parseInt(self.productVariants.length) + 1;
+            newVariant.sku = "";
+            newVariant.name = "";
+            //newVariant.sku = _.uniqueId(newVariant.sku + '-' + skuPostfix);   // TODO: replace '-' with settings "skuSeparator"
+            //newVariant.name = self.name + ' - ';
+            //var attrsep = ' / ';
+            //for (var i = 0; i < newVariant.attributes.length; i++)
+            //{
+            //    newVariant.name = newVariant.name + newVariant.attributes[i].name;
+            //    if (i < newVariant.attributes.length - 1)
+            //    {
+            //        newVariant.name = newVariant.name + attrsep;
+            //    }
+            //}
 
             self.productVariants.push(newVariant);
             self.hasVariants = true;
