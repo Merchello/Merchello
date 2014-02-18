@@ -22,16 +22,16 @@ namespace Merchello.Core.Models
             : base(name, sku, quantity, amount)
         {}
 
-        public ItemCacheLineItem(LineItemType lineItemType, string name, string sku, int quantity, decimal amount) 
-            : base(lineItemType, name, sku, quantity, amount)
+        public ItemCacheLineItem(LineItemType lineItemType, string name, string sku, int quantity, decimal price) 
+            : base(lineItemType, name, sku, quantity, price)
         {}
 
-        public ItemCacheLineItem(LineItemType lineItemType, string name, string sku, int quantity, decimal amount, ExtendedDataCollection extendedData) 
-            : base(lineItemType, name, sku, quantity, amount, extendedData)
+        public ItemCacheLineItem(LineItemType lineItemType, string name, string sku, int quantity, decimal price, ExtendedDataCollection extendedData) 
+            : base(lineItemType, name, sku, quantity, price, extendedData)
         {}
 
-        public ItemCacheLineItem(Guid lineItemTfKey, string name, string sku, int quantity, decimal amount, ExtendedDataCollection extendedData) 
-            : base(lineItemTfKey, name, sku, quantity, amount, extendedData)
+        public ItemCacheLineItem(Guid lineItemTfKey, string name, string sku, int quantity, decimal price, ExtendedDataCollection extendedData) 
+            : base(lineItemTfKey, name, sku, quantity, price, extendedData)
         {}
     }
 }

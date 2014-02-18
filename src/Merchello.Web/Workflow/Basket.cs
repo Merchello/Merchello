@@ -342,7 +342,7 @@ namespace Merchello.Web.Workflow
         /// </summary>
         public decimal TotalBasketPrice
         {
-            get { return Items.Sum(x => (x.Amount * x.Quantity)); }
+            get { return Items.Sum(x => (x.Price * x.Quantity)); }
         }
 
         #endregion

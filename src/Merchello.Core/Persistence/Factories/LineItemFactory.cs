@@ -15,7 +15,7 @@ namespace Merchello.Core.Persistence.Factories
                 Sku = entity.Sku,
                 Name = entity.Name,
                 Quantity = entity.Quantity,
-                Amount = entity.Amount,
+                Price = entity.Price,
                 ExtendedData = entity.ExtendedData.SerializeToXml(),
                 Exported = entity.Exported,
                 UpdateDate = entity.UpdateDate,
@@ -35,7 +35,7 @@ namespace Merchello.Core.Persistence.Factories
                 Sku = entity.Sku,
                 Name = entity.Name,
                 Quantity = entity.Quantity,
-                Amount = entity.Amount,
+                Price = entity.Price,
                 ExtendedData = entity.ExtendedData.SerializeToXml(),
                 Exported = entity.Exported,
                 UpdateDate = entity.UpdateDate,
@@ -55,7 +55,7 @@ namespace Merchello.Core.Persistence.Factories
                 Sku = entity.Sku,
                 Name = entity.Name,
                 Quantity = entity.Quantity,
-                Amount = entity.Amount,
+                Price = entity.Price,
                 ExtendedData = entity.ExtendedData.SerializeToXml(),
                 Exported = entity.Exported,
                 UpdateDate = entity.UpdateDate,
@@ -67,7 +67,7 @@ namespace Merchello.Core.Persistence.Factories
 
         public ItemCacheLineItem BuildEntity(ItemCacheItemDto dto)
         {
-             var lineItem = new ItemCacheLineItem(dto.LineItemTfKey, dto.Name, dto.Sku, dto.Quantity, dto.Amount,
+             var lineItem = new ItemCacheLineItem(dto.LineItemTfKey, dto.Name, dto.Sku, dto.Quantity, dto.Price,
                  string.IsNullOrEmpty(dto.ExtendedData) ? new ExtendedDataCollection() : new ExtendedDataCollection(dto.ExtendedData))
             {
                 Key = dto.Key,
@@ -84,7 +84,7 @@ namespace Merchello.Core.Persistence.Factories
 
         public InvoiceLineItem BuildEntity(InvoiceItemDto dto)
         {
-          var lineItem = new InvoiceLineItem(dto.LineItemTfKey, dto.Name, dto.Sku, dto.Quantity, dto.Amount,
+          var lineItem = new InvoiceLineItem(dto.LineItemTfKey, dto.Name, dto.Sku, dto.Quantity, dto.Price,
               string.IsNullOrEmpty(dto.ExtendedData) ? new ExtendedDataCollection() : new ExtendedDataCollection(dto.ExtendedData))
             {
                 Key = dto.Key,
@@ -101,7 +101,7 @@ namespace Merchello.Core.Persistence.Factories
 
         public OrderLineItem BuildEntity(OrderItemDto dto)
         {
-            var lineItem = new OrderLineItem(dto.LineItemTfKey, dto.Name, dto.Sku, dto.Quantity, dto.Amount,
+            var lineItem = new OrderLineItem(dto.LineItemTfKey, dto.Name, dto.Sku, dto.Quantity, dto.Price,
                 string.IsNullOrEmpty(dto.ExtendedData) ? new ExtendedDataCollection() : new ExtendedDataCollection(dto.ExtendedData))
             {
                 Key = dto.Key,
