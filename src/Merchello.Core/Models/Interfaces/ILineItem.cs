@@ -39,10 +39,10 @@ namespace Merchello.Core.Models
         int Quantity { get; set; }
 
         /// <summary>
-        /// The amount for the line item
+        /// The price for the line item
         /// </summary>
         [DataMember]
-        decimal Amount { get; set; }
+        decimal Price { get; set; }
 
         /// <summary>
         /// True/false indicating whether or not this line item has been exported to an external system

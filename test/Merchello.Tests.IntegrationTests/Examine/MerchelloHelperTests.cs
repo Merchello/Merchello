@@ -96,7 +96,7 @@ namespace Merchello.Tests.IntegrationTests.Examine
         //    var merchello = new MerchelloHelper();
 
         //    //// Act
-        //    var searched = merchello.SearchProducts("maple");
+        //    var searched = merchello.SearchProducts("princess");
         //    var result = searched.FirstOrDefault();
 
         //    //// Assert

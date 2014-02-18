@@ -178,7 +178,7 @@ namespace Merchello.Tests.IntegrationTests.Services.Customer
             _itemCacheService.Save(basket1);
 
             //// Act
-            basket1.Items["KS"].Amount = 35M;
+            basket1.Items["KS"].Price = 35M;
             _itemCacheService.Save(basket1);
 
             //// Assert

@@ -26,7 +26,7 @@ namespace Merchello.Core.Models
         private string _sku;
         private string _name;
         private int _quantity;
-        private decimal _amount;
+        private decimal _price;
         private ExtendedDataCollection _extendedData;
         private bool _exported;
 
@@ -42,15 +42,15 @@ namespace Merchello.Core.Models
             : this(LineItemType.Product, name, sku, quantity, amount)
         { }
 
-        protected LineItemBase(LineItemType lineItemType, string name, string sku, int quantity, decimal amount)
-            : this(EnumTypeFieldConverter.LineItemType.GetTypeField(lineItemType).TypeKey, name, sku, quantity, amount, new ExtendedDataCollection())
+        protected LineItemBase(LineItemType lineItemType, string name, string sku, int quantity, decimal price)
+            : this(EnumTypeFieldConverter.LineItemType.GetTypeField(lineItemType).TypeKey, name, sku, quantity, price, new ExtendedDataCollection())
         { }
 
-        protected LineItemBase(LineItemType lineItemType, string name, string sku, int quantity, decimal amount, ExtendedDataCollection extendedData)
-            : this(EnumTypeFieldConverter.LineItemType.GetTypeField(lineItemType).TypeKey, name, sku, quantity, amount, extendedData)
+        protected LineItemBase(LineItemType lineItemType, string name, string sku, int quantity, decimal price, ExtendedDataCollection extendedData)
+            : this(EnumTypeFieldConverter.LineItemType.GetTypeField(lineItemType).TypeKey, name, sku, quantity, price, extendedData)
         { }
 
-        protected LineItemBase(Guid lineItemTfKey, string name, string sku, int quantity, decimal amount, ExtendedDataCollection extendedData)  
+        protected LineItemBase(Guid lineItemTfKey, string name, string sku, int quantity, decimal price, ExtendedDataCollection extendedData)  
         {
             
             Mandate.ParameterCondition(lineItemTfKey != Guid.Empty, "lineItemTfKey");
@@ -62,7 +62,7 @@ namespace Merchello.Core.Models
             _name = name;
             _sku = sku;
             _quantity = quantity;
-            _amount = amount;
+            _price = price;
             _extendedData = extendedData;
         }
 
@@ -71,7 +71,7 @@ namespace Merchello.Core.Models
         private static readonly PropertyInfo SkuSelector = ExpressionHelper.GetPropertyInfo<LineItemBase, string>(x => x.Sku);
         private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<LineItemBase, string>(x => x.Name);
         private static readonly PropertyInfo BaseQuantitySelector = ExpressionHelper.GetPropertyInfo<LineItemBase, int>(x => x.Quantity);
-        private static readonly PropertyInfo AmountSelector = ExpressionHelper.GetPropertyInfo<LineItemBase, decimal>(x => x.Amount);
+        private static readonly PropertyInfo AmountSelector = ExpressionHelper.GetPropertyInfo<LineItemBase, decimal>(x => x.Price);
         private static readonly PropertyInfo ExtendedDataChangedSelector = ExpressionHelper.GetPropertyInfo<LineItemBase, ExtendedDataCollection>(x => x.ExtendedData);
         private static readonly PropertyInfo ExportedSelector = ExpressionHelper.GetPropertyInfo<LineItemBase, bool>(x => x.Exported);
 
@@ -170,16 +170,16 @@ namespace Merchello.Core.Models
         /// The amount (cost) of the line item
         /// </summary>
         [DataMember]
-        public decimal Amount
+        public decimal Price
         {
-            get { return _amount; }
+            get { return _price; }
                 set 
                 { 
                     SetPropertyValueAndDetectChanges(o =>
                     {
-                        _amount = value;
-                        return _amount;
-                    }, _amount, AmountSelector); 
+                        _price = value;
+                        return _price;
+                    }, _price, AmountSelector); 
                 }
         }
 
@@ -259,7 +259,7 @@ namespace Merchello.Core.Models
                     writer.WriteElementString(Constants.ExtendedDataKeys.Sku, Sku);
                     writer.WriteElementString(Constants.ExtendedDataKeys.Name, Name);
                     writer.WriteElementString(Constants.ExtendedDataKeys.Quantity, Quantity.ToString(CultureInfo.InvariantCulture));
-                    writer.WriteElementString(Constants.ExtendedDataKeys.Amount, Amount.ToString(CultureInfo.InvariantCulture));
+                    writer.WriteElementString(Constants.ExtendedDataKeys.Amount, Price.ToString(CultureInfo.InvariantCulture));
                     writer.WriteStartElement(Constants.ExtendedDataKeys.ExtendedData);
                     writer.WriteRaw(ExtendedData.SerializeToXml());
                     writer.WriteEndElement();

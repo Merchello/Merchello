@@ -80,7 +80,7 @@ namespace Merchello.Core.Models
                     lineItem.Name,
                     lineItem.Sku,
                     lineItem.Quantity,
-                    lineItem.Amount,
+                    lineItem.Price,
                     lineItem.ExtendedData
                 };
 
