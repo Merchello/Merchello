@@ -39,6 +39,7 @@
         <add name="MerchelloProductSearcher" type="Examine.LuceneEngine.Providers.LuceneSearcher, Examine" />
       </MerchelloSearchProviders>
     </Action>
+    <!--Action runat="install" undo="true" alias="uLocate_GrantUserPermissionToMerchello" userLogin="$currentUser" appName="merchello"/-->
   </Actions>
   <control />
   <files />
