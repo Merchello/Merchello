@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Merchello.Core.Cache;
 using Merchello.Core.Models;
 using Merchello.Core.Models.EntityBase;
 using Merchello.Core.Models.Rdbms;
@@ -140,7 +141,8 @@ namespace Merchello.Core.Persistence.Repositories
 
             entity.ResetDirtyProperties();
 
-            RuntimeCache.ClearCacheItem(Core.Cache.CacheKeys.GetEntityCacheKey<IProduct>(entity.ProductKey));
+            CacheRefreshHelper.ClearProductFromCache(RuntimeCache,  entity.ProductKey);
+
         }
 
         protected override void PersistUpdatedItem(IProductVariant entity)
@@ -161,7 +163,7 @@ namespace Merchello.Core.Persistence.Repositories
 
             entity.ResetDirtyProperties();
 
-            RuntimeCache.ClearCacheItem(Core.Cache.CacheKeys.GetEntityCacheKey<IProduct>(entity.ProductKey));
+            CacheRefreshHelper.ClearProductFromCache(RuntimeCache, entity.ProductKey);
         }
 
         protected override void PersistDeletedItem(IProductVariant entity)
@@ -172,7 +174,7 @@ namespace Merchello.Core.Persistence.Repositories
                 Database.Execute(delete, new { entity.Key });
             }
 
-            RuntimeCache.ClearCacheItem(Core.Cache.CacheKeys.GetEntityCacheKey<IProduct>(entity.ProductKey));
+            CacheRefreshHelper.ClearProductFromCache(RuntimeCache, entity.ProductKey);
         }
 
         #endregion

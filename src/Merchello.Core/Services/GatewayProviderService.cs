@@ -282,9 +282,21 @@ namespace Merchello.Core.Services
             return _shipRateTierService.GetShipRateTiersByShipMethodKey(shipMethodKey);
         }
 
+
+
         #endregion
 
         #region ShipCountry
+
+        /// <summary>
+        /// Retrieves a <see cref="IShipCountry"/> by it's unique key 'Guid'
+        /// </summary>
+        /// <param name="key">The primary key of the <see cref="IShipCountry"/></param>
+        /// <returns>Returns a <see cref="IShipCountry"/></returns>
+        public IShipCountry GetShipCountryByKey(Guid key)
+        {
+            return _shipCountryService.GetByKey(key);
+        }
 
         /// <summary>
         /// Gets a <see cref="IShipCountry"/> by CatalogKey and CountryCode
