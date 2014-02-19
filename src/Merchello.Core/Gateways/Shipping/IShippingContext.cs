@@ -15,7 +15,6 @@ namespace Merchello.Core.Gateways.Shipping
         /// <returns>A collection of <see cref="IShipmentRateQuote"/></returns>
         IEnumerable<IShipmentRateQuote> GetShipRateQuotesForShipment(IShipment shipment);
 
-
         /// <summary>
         /// Returns a list of all countries that can be assigned to a shipment
         /// </summary>
