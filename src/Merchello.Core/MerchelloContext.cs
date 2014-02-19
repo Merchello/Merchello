@@ -2,7 +2,9 @@
 using System.Threading;
 using Merchello.Core.Configuration;
 using Merchello.Core.Gateways;
+using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Shipping;
+using Merchello.Core.Gateways.Taxation;
 using Merchello.Core.Services;
 using Umbraco.Core;
 using Umbraco.Core.Logging;
@@ -39,7 +41,9 @@ namespace Merchello.Core
             if (!isUnitTest)
             { 
                 _gateways = new GatewayContext(
-                    new ShippingGatewayContext(_services.GatewayProviderService, Cache.RuntimeCache)
+                    new ShippingContext(_services.GatewayProviderService, Cache.RuntimeCache),
+                    new TaxationContext(_services.GatewayProviderService, Cache.RuntimeCache),
+                    new PaymentContext(_services.GatewayProviderService, Cache.RuntimeCache)
                     );             
             }
         }

@@ -6,7 +6,7 @@ namespace Merchello.Core.Gateways.Shipping
     /// <summary>
     /// Defines a shipping context
     /// </summary>
-    public interface IShippingGatewayContext : IProviderTypedGatewayContextBase<ShippingGatewayProviderBase>
+    public interface IShippingContext : IGatewayProviderTypedContextBase<ShippingGatewayProviderBase>
     {
         /// <summary>
         /// Returns a collection of all <see cref="IShipmentRateQuote"/> that are available for the <see cref="IShipment"/>

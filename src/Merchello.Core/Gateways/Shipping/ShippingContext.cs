@@ -8,11 +8,11 @@ using Umbraco.Core.Cache;
 namespace Merchello.Core.Gateways.Shipping
 {
     /// <summary>
-    /// Represents the ShippingGatewayContext
+    /// Represents the ShippingContext
     /// </summary>
-    internal class ShippingGatewayContext : ProviderTypedGatewayContextBase<ShippingGatewayProviderBase>, IShippingGatewayContext
+    internal class ShippingContext : GatewayProviderTypedContextBase<ShippingGatewayProviderBase>, IShippingContext
     {
-        public ShippingGatewayContext(IGatewayProviderService gatewayProviderService, IRuntimeCacheProvider runtimeCache) 
+        public ShippingContext(IGatewayProviderService gatewayProviderService, IRuntimeCacheProvider runtimeCache) 
             : base(gatewayProviderService, runtimeCache)
         { }
 
@@ -44,9 +44,9 @@ namespace Merchello.Core.Gateways.Shipping
         }
 
         /// <summary>
-        /// Resolves all active <see cref="IGatewayProvider"/>s of T
+        /// Resolves all active shipping gateway providers for a given <see cref="IShipCountry"/>
         /// </summary>
-        /// <returns>A collection of all active TypedGatewayProviderinstances</returns>
+        /// <returns>A collection of all active shipping gateway providers</returns>
         public IEnumerable<IShippingGatewayProvider> GetGatewayProvidersByShipCountry(IShipCountry shipCountry)
         {
             var gatewayProviders = GatewayProviderService.GetGatewayProvidersByShipCountry(shipCountry);
@@ -57,6 +57,10 @@ namespace Merchello.Core.Gateways.Shipping
         }
 
 
+        /// <summary>
+        /// Resolves all active shipping gateway providers
+        /// </summary>
+        /// <returns>A collection of all active shipping gateway providers</returns>
         public override IEnumerable<ShippingGatewayProviderBase> ResolveAllActiveProviders()
         {
             return GatewayProviderResolver.ResolveByGatewayProviderType<ShippingGatewayProviderBase>(GatewayProviderType.Shipping);

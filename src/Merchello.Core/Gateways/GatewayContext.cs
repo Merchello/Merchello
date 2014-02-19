@@ -1,5 +1,7 @@
 ﻿using System;
+using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Shipping;
+using Merchello.Core.Gateways.Taxation;
 using Merchello.Core.Models;
 
 namespace Merchello.Core.Gateways
@@ -9,24 +11,60 @@ namespace Merchello.Core.Gateways
     /// </summary>
     internal class GatewayContext : IGatewayContext
     {
-        
-        internal GatewayContext(IShippingGatewayContext shippingGateways)
-        {
-            Mandate.ParameterNotNull(shippingGateways, "shippingGateways");
+        private readonly IShippingContext _shipping;
+        private readonly ITaxationContext _taxation;
+        private readonly IPaymentContext _payment;
 
-            _shippingGateway = shippingGateways;
+        internal GatewayContext(IShippingContext shipping, ITaxationContext taxation, IPaymentContext payment)
+        {
+            Mandate.ParameterNotNull(shipping, "shipping");
+            Mandate.ParameterNotNull(taxation, "taxation");
+            Mandate.ParameterNotNull(payment, "payment");
+
+            _shipping = shipping;
+            _taxation = taxation;
+            _payment = payment;
         }
 
-        private readonly IShippingGatewayContext _shippingGateway;
-        public IShippingGatewayContext Shipping
+        
+        /// <summary>
+        /// Exposes the <see cref="IShippingContext"/>
+        /// </summary>
+        public IShippingContext Shipping
         {
             get
             {
-                if(_shippingGateway == null) throw new InvalidOperationException("The ShippingGatewayContext is not set in the GatewayContext");
+                if(_shipping == null) throw new InvalidOperationException("The ShippingContext is not set in the GatewayContext");
 
-                return _shippingGateway;
+                return _shipping;
             }
 
+        }
+
+        /// <summary>
+        /// Exposes the <see cref="ITaxationContext"/>
+        /// </summary>
+        public ITaxationContext Taxation
+        {
+            get
+            {
+                if (_taxation == null) throw new InvalidOperationException("The TaxationContext is not set in the GatewayContext");
+
+                return _taxation;
+            } 
+        }
+
+        /// <summary>
+        /// Exposes teh <see cref="IPaymentContext"/>
+        /// </summary>
+        public IPaymentContext Payment
+        {
+            get
+            {
+                if (_payment == null) throw new InvalidOperationException("The PaymentContext is not set in the GatewayContext");
+
+                return _payment;
+            } 
         }
     }
 }

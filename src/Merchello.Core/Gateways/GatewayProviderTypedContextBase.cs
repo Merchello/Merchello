@@ -9,13 +9,13 @@ namespace Merchello.Core.Gateways
     /// <summary>
     /// Base class for GatewayContext objects
     /// </summary>
-    internal abstract class ProviderTypedGatewayContextBase<T> : IProviderTypedGatewayContextBase<T>
+    public abstract class GatewayProviderTypedContextBase<T> : IGatewayProviderTypedContextBase<T>
         where T : GatewayProviderBase
     {
         private readonly IGatewayProviderService _gatewayProviderService;
         private readonly IRuntimeCacheProvider _runtimeCache;
 
-        protected ProviderTypedGatewayContextBase(IGatewayProviderService gatewayProviderService, IRuntimeCacheProvider runtimeCache)
+        protected GatewayProviderTypedContextBase(IGatewayProviderService gatewayProviderService, IRuntimeCacheProvider runtimeCache)
         {
             Mandate.ParameterNotNull(gatewayProviderService, "gatewayProviderService");
             Mandate.ParameterNotNull(runtimeCache, "runtimeCache");
