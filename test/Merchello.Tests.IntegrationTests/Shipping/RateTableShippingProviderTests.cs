@@ -41,7 +41,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             _basket = Basket.GetBasket(MerchelloContext, _customer);
 
             for (var i = 0; i < ProductCount; i++) _basket.AddItem(PreTestDataWorker.MakeExistingProduct(true, WeightPerProduct, PricePerProduct));
-            
+
 
 
             Basket.Save(MerchelloContext, _basket);

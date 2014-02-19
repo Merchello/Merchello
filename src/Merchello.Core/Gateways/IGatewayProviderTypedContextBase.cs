@@ -12,6 +12,12 @@ namespace Merchello.Core.Gateways
     public interface IGatewayProviderTypedContextBase<out T> where T : GatewayProviderBase
     {
         /// <summary>
+        /// Lists all available <see cref="IGatewayProvider"/>
+        /// </summary>
+        /// <returns>A collection of all GatewayProvider of the particular type T</returns>
+        IEnumerable<IGatewayProvider> GetAllGatewayProviders(); 
+            
+        /// <summary>
         /// Resolves all active <see cref="IGatewayProvider"/>s of T
         /// </summary>
         /// <returns></returns>

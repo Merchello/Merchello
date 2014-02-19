@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
-using Umbraco.Core.Cache;
 
 namespace Merchello.Core.Gateways.Shipping
 {
@@ -12,8 +11,8 @@ namespace Merchello.Core.Gateways.Shipping
     /// </summary>
     internal class ShippingContext : GatewayProviderTypedContextBase<ShippingGatewayProviderBase>, IShippingContext
     {
-        public ShippingContext(IGatewayProviderService gatewayProviderService, IRuntimeCacheProvider runtimeCache) 
-            : base(gatewayProviderService, runtimeCache)
+        public ShippingContext(IGatewayProviderService gatewayProviderService, IGatewayProviderResolver resolver) 
+            : base(gatewayProviderService, resolver)
         { }
 
         /// <summary>
