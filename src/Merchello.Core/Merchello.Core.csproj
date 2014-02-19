@@ -114,13 +114,14 @@
     <Compile Include="Gateways\GatewayContext.cs" />
     <Compile Include="Gateways\GatewayProviderBase.cs" />
     <Compile Include="Gateways\IGatewayContext.cs" />
-    <Compile Include="Gateways\ProviderTypedGatewayContextBase.cs" />
+    <Compile Include="Gateways\GatewayProviderTypedContextBase.cs" />
     <Compile Include="Gateways\GatewayProviderFactory.cs" />
     <Compile Include="Gateways\GatewayProviderResolver.cs" />
     <Compile Include="Gateways\IGateway.cs" />
-    <Compile Include="Gateways\IProviderTypedGatewayContextBase.cs" />
+    <Compile Include="Gateways\IGatewayProviderTypedContextBase.cs" />
     <Compile Include="Gateways\IGatewayProviderFactory.cs" />
     <Compile Include="Gateways\IGatewayProviderResolver.cs" />
+    <Compile Include="Gateways\Payment\IPaymentContext.cs" />
     <Compile Include="Gateways\Payment\IPaymentGatewayProvider.cs" />
     <Compile Include="Gateways\Payment\PaymentGatewayProviderBase.cs" />
     <Compile Include="Gateways\Shipping\DefaultShipmentRateQuoteStrategy.cs" />
@@ -134,8 +135,8 @@
     <Compile Include="Gateways\Shipping\RateTable\RateTableShippingGatewayProvider.cs" />
     <Compile Include="Gateways\Shipping\RateTable\RateTableShipMethod.cs" />
     <Compile Include="Gateways\Shipping\ShipmentRateQuoteStrategyBase.cs" />
-    <Compile Include="Gateways\Shipping\IShippingGatewayContext.cs" />
-    <Compile Include="Gateways\Shipping\ShippingGatewayContext.cs" />
+    <Compile Include="Gateways\Shipping\IShippingContext.cs" />
+    <Compile Include="Gateways\Shipping\ShippingContext.cs" />
     <Compile Include="Gateways\Shipping\WarehouseCatalogValidationVisitor.cs" />
     <Compile Include="Gateways\Shipping\ShipmentRateQuote.cs" />
     <Compile Include="Gateways\Shipping\ShippingGatewayProviderBase.cs" />
@@ -145,7 +146,9 @@
     <Compile Include="Gateways\Taxation\CountryTaxRate\CountryTaxRateInvoiceQuoteStrategy.cs" />
     <Compile Include="Gateways\Taxation\IInvoiceTaxResult.cs" />
     <Compile Include="Gateways\Taxation\InvoiceTaxationStrategyBase.cs" />
+    <Compile Include="Gateways\Taxation\ITaxationContext.cs" />
     <Compile Include="Gateways\Taxation\ITaxationGatewayProvider.cs" />
+    <Compile Include="Gateways\Taxation\TaxationContext.cs" />
     <Compile Include="Gateways\Taxation\TaxationGatewayProviderBase.cs" />
     <Compile Include="ISalesManager.cs" />
     <Compile Include="Models\Address.cs" />

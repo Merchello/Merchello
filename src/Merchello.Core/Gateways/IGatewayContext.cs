@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using Merchello.Core.Gateways.Shipping;
-using Merchello.Core.Models;
+﻿using Merchello.Core.Gateways.Shipping;
+using Merchello.Core.Gateways.Taxation;
 
 namespace Merchello.Core.Gateways
 {
@@ -9,11 +8,14 @@ namespace Merchello.Core.Gateways
     /// </summary>
     public interface IGatewayContext
     {
-
+        /// <summary>
+        /// Gets the <see cref="IShippingContext"/>
+        /// </summary>
+        IShippingContext Shipping { get; }
 
         /// <summary>
-        /// Gets the <see cref="IShippingGatewayContext"/>
+        /// Gets the <see cref="ITaxationContext"/>
         /// </summary>
-        IShippingGatewayContext Shipping { get; }
+        ITaxationContext Taxation { get; }
     }
 }

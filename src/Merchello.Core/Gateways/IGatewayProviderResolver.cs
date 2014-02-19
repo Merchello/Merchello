@@ -4,7 +4,7 @@ using Merchello.Core.Models;
 
 namespace Merchello.Core.Gateways
 {
-    internal interface IGatewayProviderResolver
+    public interface IGatewayProviderResolver
     {
         /// <summary>
         /// Gets a collection of instantiated gateway providers

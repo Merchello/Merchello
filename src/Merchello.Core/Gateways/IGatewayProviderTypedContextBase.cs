@@ -9,7 +9,7 @@ namespace Merchello.Core.Gateways
     /// Defines a GatewayContext for a specific provider type
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IProviderTypedGatewayContextBase<out T> where T : GatewayProviderBase
+    public interface IGatewayProviderTypedContextBase<out T> where T : GatewayProviderBase
     {
         /// <summary>
         /// Resolves all active <see cref="IGatewayProvider"/>s of T
