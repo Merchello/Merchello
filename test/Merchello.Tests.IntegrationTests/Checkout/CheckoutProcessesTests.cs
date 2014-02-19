@@ -66,11 +66,11 @@ namespace Merchello.Tests.IntegrationTests.Checkout
             #region Add a GatewayProvider (RateTableShippingGatewayProvider)
 
             var key = Constants.ProviderKeys.Shipping.RateTableShippingProviderKey;
-            var rateTableProvider = ((GatewayContext)MerchelloContext.Current.Gateways).ResolveByKey<RateTableShippingGatewayProvider>(key);
+            var rateTableProvider = (RateTableShippingGatewayProvider)MerchelloContext.Current.Gateways.Shipping.ResolveByKey(key);
 
             #region Add and configure 3 rate table shipmethods
 
-            var gwshipMethod1 = (RateTableShipMethod)rateTableProvider.CreateShipMethod(RateTableShipMethod.QuoteType.PercentTotal, usCountry, "Ground (PercentTotal) 1");
+            var gwshipMethod1 = (RateTableShipMethod)rateTableProvider.CreateShipMethod(RateTableShipMethod.QuoteType.VaryByPrice, usCountry, "Ground (Vary by Price)");
             gwshipMethod1.RateTable.AddRow(0, 10, 25);
             gwshipMethod1.RateTable.AddRow(10, 15, 30);
             gwshipMethod1.RateTable.AddRow(15, 25, 35);
@@ -78,14 +78,14 @@ namespace Merchello.Tests.IntegrationTests.Checkout
             gwshipMethod1.RateTable.AddRow(25, 10000, 50);
             rateTableProvider.SaveShipMethod(gwshipMethod1);
 
-            var gwshipMethod2 = (RateTableShipMethod)rateTableProvider.CreateShipMethod(RateTableShipMethod.QuoteType.VaryByWeight, usCountry, "Ground (VBW)");
+            var gwshipMethod2 = (RateTableShipMethod)rateTableProvider.CreateShipMethod(RateTableShipMethod.QuoteType.VaryByWeight, usCountry, "Ground (Vary by Weight)");
             gwshipMethod2.RateTable.AddRow(0, 10, 5);
             gwshipMethod2.RateTable.AddRow(10, 15, 10); // total weight should be 10M so we should hit this tier
             gwshipMethod2.RateTable.AddRow(15, 25, 25);
             gwshipMethod2.RateTable.AddRow(25, 10000, 100);
             rateTableProvider.SaveShipMethod(gwshipMethod2);
 
-            var gwshipMethod3 = (RateTableShipMethod)rateTableProvider.CreateShipMethod(RateTableShipMethod.QuoteType.PercentTotal, dkCountry, "Ground (PercentTotal) 3");
+            var gwshipMethod3 = (RateTableShipMethod)rateTableProvider.CreateShipMethod(RateTableShipMethod.QuoteType.VaryByPrice, dkCountry, "Ground (Vary by Price)");
             gwshipMethod3.RateTable.AddRow(0, 10, 5);
             gwshipMethod3.RateTable.AddRow(10, 15, 10);
             gwshipMethod3.RateTable.AddRow(15, 25, 25);
@@ -108,6 +108,12 @@ namespace Merchello.Tests.IntegrationTests.Checkout
         {
             
         }
+
+        //[Test]
+        //public void SetupForExampleSite()
+        //{
+
+        //}
 
         /// <summary>
         /// Test verifies that a simple checkout scenario

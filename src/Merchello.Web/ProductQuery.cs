@@ -124,7 +124,7 @@ namespace Merchello.Web
         public static IEnumerable<ProductDisplay> Search(string term)
         {
             var criteria = ExamineManager.Instance.CreateSearchCriteria();
-            criteria.Field("master", "True").And().GroupedOr(new[] { "name", "sku" }, term.Fuzzy(0.8f));
+            criteria.Field("master", "True").And().GroupedOr(new[] { "name", "sku" }, term.Fuzzy());
             return Search(criteria);
         }
 

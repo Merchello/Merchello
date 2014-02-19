@@ -9,12 +9,12 @@ namespace Merchello.Core
         /// </summary>
         public static IEnumerable<string> ReservedExtendedDataKeys
         {
-            get { return new[]
+            get { 
+                return new[]
                 {
                     "merchExtendedData", 
                     "merchLineItemCollection",
                     "merchLineItem",
-
                     "merchName",
                     "merchSku",
                     "merchExported",
@@ -34,7 +34,7 @@ namespace Merchello.Core
                     "merchTrackInventory",
                     "merchOutOfStockPurchase",
                     "merchTaxable",
-                    "merchShippalbe",
+                    "merchShippable",
                     "merchDownload",
                     "merchDownloadMediaId",
                     "merchWarhouseCatalogKey",
@@ -47,7 +47,8 @@ namespace Merchello.Core
                     "merchShippingOriginAddress",
                     "merchShippingDestinationAddress",
                     "merchBillingAddress"
-                }; }
+                }; 
+            }
         }
 
         public static class ExtendedDataKeys

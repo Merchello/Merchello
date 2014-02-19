@@ -1,4 +1,5 @@
-﻿using Merchello.Core;
+﻿using System;
+using Merchello.Core;
 using Merchello.Core.Cache;
 using Merchello.Core.Models;
 using Merchello.Core.Persistence.UnitOfWork;
@@ -111,6 +112,9 @@ namespace Merchello.Tests.IntegrationTests.ItemCache
             _basket.RemoveItem(product2.Sku);
             Basket.Save(_merchelloContext, _basket);
             _basket = Basket.GetBasket(_merchelloContext, _customer);
+
+            var price = _basket.TotalBasketPrice;
+            Console.WriteLine(price);
 
             //// Assert
             Assert.IsTrue(2 == _basket.Items.Count);

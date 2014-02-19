@@ -1,5 +1,6 @@
 ﻿using System;
 using Merchello.Core.Gateways;
+using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Services;
 using Umbraco.Core;
 
@@ -19,11 +20,11 @@ namespace Merchello.Core
         /// The Merchello <see cref="IServiceContext"/>
         /// </summary>
         IServiceContext Services { get; }
-
+        
         /// <summary>
         /// Gets the <see cref="IGatewayContext"/>
         /// </summary>
-        IGatewayContext Gateways { get;  }
+        IGatewayContext Gateways { get; }
 
         ///// <summary>
         ///// Gets the <see cref="ISalesManager"/>

@@ -2,6 +2,7 @@
 using System.Threading;
 using Merchello.Core.Configuration;
 using Merchello.Core.Gateways;
+using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Services;
 using Umbraco.Core;
 using Umbraco.Core.Logging;
@@ -24,10 +25,25 @@ namespace Merchello.Core
             Mandate.ParameterNotNull(cache, "cache");
             
             _services = serviceContext;
-            if(!isUnitTest) _gateways = new GatewayContext(serviceContext.GatewayProviderService, cache.RuntimeCache);
             Cache = cache;
 
+            BuildMerchelloContext(isUnitTest);
         }
+
+        /// <summary>
+        /// Builds the MerchelloContext internals
+        /// </summary>
+        /// <param name="isUnitTest">True/false indicating whether or not is being called by certain unit tests</param>
+        private void BuildMerchelloContext(bool isUnitTest)
+        {
+            if (!isUnitTest)
+            { 
+                _gateways = new GatewayContext(
+                    new ShippingGatewayContext(_services.GatewayProviderService, Cache.RuntimeCache)
+                    );             
+            }
+        }
+
 
         /// <summary>
         /// Creates a basic basic context

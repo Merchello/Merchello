@@ -93,7 +93,7 @@ namespace Merchello.Core.Models
 
         internal static IEnumerable<IShipmentRateQuote> ShipmentRateQuotes(this IShipment shipment, IMerchelloContext merchelloContext)
         {
-            return merchelloContext.Gateways.GetShipRateQuotesForShipment(shipment);
+            return merchelloContext.Gateways.Shipping.GetShipRateQuotesForShipment(shipment);
         }
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace Merchello.Core.Models
             if (shipMethod == null) return null;
 
             // Get the gateway provider to generate the shipment rate quote
-            var provider = ((GatewayContext) merchelloContext.Gateways).ResolveByKey<ShippingGatewayProviderBase>(shipMethod.ProviderKey);
+            var provider = merchelloContext.Gateways.Shipping.ResolveByKey(shipMethod.ProviderKey);
 
             // get the GatewayShipMethod from the provider
             var gwShipMethod = provider.GetAvailableShipMethodsForShipment(shipment).FirstOrDefault(x => x.ShipMethod.Key == shipMethodKey);
