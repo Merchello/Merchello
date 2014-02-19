@@ -169,8 +169,14 @@ namespace Merchello.Web.Models.ContentEditing
             {
                 destination.Key = productVariantDisplay.Key;
             }
-            destination.Name = productVariantDisplay.Name;
-            destination.Sku = productVariantDisplay.Sku;
+            if( !String.IsNullOrEmpty(productVariantDisplay.Name) )
+            {
+                destination.Name = productVariantDisplay.Name;
+            }
+            if( !String.IsNullOrEmpty(productVariantDisplay.Sku) )
+            {
+                destination.Sku = productVariantDisplay.Sku;
+            }
             destination.Price = productVariantDisplay.Price;
             destination.CostOfGoods = productVariantDisplay.CostOfGoods;
             destination.SalePrice = productVariantDisplay.SalePrice;

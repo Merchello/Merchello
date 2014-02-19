@@ -6,21 +6,11 @@
 
         <umb-header>
 
-            <div class="span4" data-ng-show="!editingVariant">
+            <div class="span4">
                  <umb-content-name 
                     ng-model="productVariant.name" 
                     placeholder="Enter a product name">
                 </umb-content-name>
-            </div>
-            <div class="span4" data-ng-show="editingVariant">
-                <div class="umb-headline-editor-wrapper">
-                     <h1 class="umb-headline">{{productVariant.name}} - 
-                        <span data-ng-repeat="attribute in productVariant.attributes">
-                            <span>{{attribute.name}}</span>
-                            <span data-ng-show="!$last"> / </span>
-                        </span>     
-                     </h1>
-                </div>
             </div>
 
             <div class="col-xs-8 span8">
@@ -160,9 +150,9 @@
                                         <th>
                                             Price
                                         </th>
-                                        <th>
+                                        <!--<th>
                                             SKU <small>(optional)</small>
-                                        </th>
+                                        </th>-->
                                         <th>
                                             Barcode <small>(optional)</small>
                                         </th>
@@ -181,9 +171,9 @@
                                         <td>
                                             <input class="form-control input-mini" data-ng-model="variant.price" />
                                         </td>
-                                        <td>
+                                        <!--<td>
                                             <input class="form-control input-mini" data-ng-model="variant.sku" />
-                                        </td>
+                                        </td>-->
                                         <td>
                                             <input class="form-control input-mini" data-ng-model="variant.barcode" />
                                         </td>
@@ -224,7 +214,7 @@
 
                         <div class="merchello-controls row-fluid">
 
-                            <div class="well span10">
+                            <!--<div class="well span10">
                                 <p>How do you want to handle out of stock inventory?</p>
 
                                 <div class="radio-group">
@@ -242,7 +232,7 @@
                                         <div class="input-append col-xs-12 span12"><input id="stopSellingAmount" name="stopSellingAmount" class="col-xs-2 span2" type="text" /><span class="add-on">items</span></div>
                                     </div>
                                 </div>
-                            </div>
+                            </div>-->
 
                             <div class="span10">
                                 <table class="table">

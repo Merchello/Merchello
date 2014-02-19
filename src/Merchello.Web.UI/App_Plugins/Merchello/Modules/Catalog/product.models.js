@@ -240,7 +240,6 @@
             for (var i = 0; i < product.catalogInventories.length; i++) {
                 self.catalogInventories.push(new merchello.Models.CatalogInventory(product.catalogInventories[i]));
             }
-            //self.catalogInventories = product.catalogInventories.slice(0);
         };
 
         self.fixAttributeSortOrders = function (options) {
@@ -287,10 +286,14 @@
         self.globalInventoryChanged = function (newVal) {
             if (newVal)
             {
+                var newValInt = parseInt(newVal);
+                var totalAcrossCatalogs = 0;
                 for (var i = 0; i < self.catalogInventories.length; i++)
                 {
-                    self.catalogInventories[i].count = newVal;
+                    self.catalogInventories[i].count = newValInt;
+                    totalAcrossCatalogs = totalAcrossCatalogs + newValInt;
                 }
+                self.totalInventoryCount = totalAcrossCatalogs;
             }
         }
     };
@@ -458,8 +461,20 @@
             newVariant.copyFromProduct(self);
             newVariant.attributes = attributes.slice(0);
             newVariant.selected = true;
-            var skuPostfix = self.productVariants.length + 1;
-            newVariant.sku = _.uniqueId(newVariant.sku + '-' + skuPostfix);   // TODO: replace '-' with settings "skuSeparator"
+            //var skuPostfix = parseInt(self.productVariants.length) + 1;
+            newVariant.sku = "";
+            newVariant.name = "";
+            //newVariant.sku = _.uniqueId(newVariant.sku + '-' + skuPostfix);   // TODO: replace '-' with settings "skuSeparator"
+            //newVariant.name = self.name + ' - ';
+            //var attrsep = ' / ';
+            //for (var i = 0; i < newVariant.attributes.length; i++)
+            //{
+            //    newVariant.name = newVariant.name + newVariant.attributes[i].name;
+            //    if (i < newVariant.attributes.length - 1)
+            //    {
+            //        newVariant.name = newVariant.name + attrsep;
+            //    }
+            //}
 
             self.productVariants.push(newVariant);
             self.hasVariants = true;
