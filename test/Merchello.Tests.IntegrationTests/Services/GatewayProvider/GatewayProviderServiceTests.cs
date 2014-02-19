@@ -44,7 +44,7 @@ namespace Merchello.Tests.IntegrationTests.Services.GatewayProvider
            
        
             var shippingProvider =
-               ((GatewayContext) _merchelloContext.Gateways).ResolveByKey<RateTableShippingGatewayProvider>(Core.Constants.ProviderKeys.Shipping.RateTableShippingProviderKey);
+               (RateTableShippingGatewayProvider) _merchelloContext.Gateways.Shipping.ResolveByKey(Core.Constants.ProviderKeys.Shipping.RateTableShippingProviderKey);
             Assert.NotNull(shippingProvider);
 
             var resource = shippingProvider.ListResourcesOffered().FirstOrDefault();

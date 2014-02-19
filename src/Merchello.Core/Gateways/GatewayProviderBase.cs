@@ -26,8 +26,8 @@ namespace Merchello.Core.Gateways
         }
 
 
-        // TODO The properties Name and Key will be used by GatewayProvider plugin resolver to 
-        // enable devs to define each of these values. 
+        // The properties Name and Key will be likely become attribute defined properties
+        // TODO enable devs to define each of these values. 
         
         /// <summary>
         /// The name of the GatewayProvider
