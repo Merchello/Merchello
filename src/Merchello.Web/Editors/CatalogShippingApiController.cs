@@ -18,16 +18,16 @@ using System.Net.Http;
 namespace Merchello.Web.Editors
 {
     [PluginController("Merchello")]
-    public class ShippingMethodsApiController : MerchelloApiController
+    public class CatalogShippingApiController : MerchelloApiController
     {
-        private readonly IWarehouseService _warehouseService;
         private readonly IGatewayProviderService _gatewayProviderService;
         private readonly IStoreSettingService _storeSettingService;
+        private readonly IShipCountryService _shipCountryService;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingMethodsApiController()
+        public CatalogShippingApiController()
             : this(MerchelloContext.Current)
         {
         }
@@ -36,26 +36,26 @@ namespace Merchello.Web.Editors
         /// Constructor
         /// </summary>
         /// <param name="merchelloContext"></param>
-        public ShippingMethodsApiController(MerchelloContext merchelloContext)
+        public CatalogShippingApiController(MerchelloContext merchelloContext)
             : base(merchelloContext)
         {
-            _warehouseService = MerchelloContext.Services.WarehouseService;
             _gatewayProviderService = MerchelloContext.Services.GatewayProviderService;
             _storeSettingService = MerchelloContext.Services.StoreSettingService;
+            _shipCountryService = MerchelloContext.Services.ShipCountryService;
         }
 
         /// <summary>
         /// This is a helper contructor for unit testing
         /// </summary>
-        internal ShippingMethodsApiController(MerchelloContext merchelloContext, UmbracoContext umbracoContext)
+        internal CatalogShippingApiController(MerchelloContext merchelloContext, UmbracoContext umbracoContext)
             : base(merchelloContext, umbracoContext)
         {
-            _warehouseService = MerchelloContext.Services.WarehouseService;
             _gatewayProviderService = MerchelloContext.Services.GatewayProviderService;
             _storeSettingService = MerchelloContext.Services.StoreSettingService;
+            _shipCountryService = MerchelloContext.Services.ShipCountryService;
         }
 
-        /*
+
         /// <summary>
         /// Returns ShipCountry by id (key)
         /// 
@@ -76,26 +76,6 @@ namespace Merchello.Web.Editors
         }
 
         /// <summary>
-        /// Returns ShipCountry by id (key)
-        /// 
-        /// GET /umbraco/Merchello/ShippingMethodsApi/GetShipCountryByCode/?catalogKey={guid}&countryCode={string}
-        /// </summary>
-        /// <param name="catalogKey">CatalogKey Guid to get countries for</param>
-        /// <param name="countryCode">Country code to retrieve</param>
-        public ShipCountryDisplay GetShipCountryByCode(Guid catalogKey, string countryCode)
-        {
-
-            var shipCountry = _shipCountryService.GetShipCountryByCountryCode(catalogKey, countryCode);
-            if (shipCountry == null)
-            {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
-            }
-
-            return shipCountry.ToShipCountryDisplay();
-
-        }
-
-        /// <summary>
         /// Returns All ShipCountries with ShipMethods in them
         ///
         /// GET /umbraco/Merchello/ShippingMethodsApi/GetAllShipCountries/{guid}
@@ -103,7 +83,7 @@ namespace Merchello.Web.Editors
         /// <param name="id">CatalogKey Guid to get countries for</param>
         public IEnumerable<ShipCountryDisplay> GetAllShipCountries(Guid id)
         {
-            var countries = _gatewayProviderService.GetShipCountriesByCatalogKey(id);
+            var countries = _shipCountryService.GetShipCountriesByCatalogKey(id);
             if (countries == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);
@@ -154,10 +134,11 @@ namespace Merchello.Web.Editors
         /// <summary>
         /// Deletes an existing ship country
         ///
-        /// DELETE /umbraco/Merchello/ShippingMethodsApi/{guid}
+        /// GET /umbraco/Merchello/ShippingMethodsApi/DeleteShipCountry/{guid}
         /// </summary>
-        /// <param name="id"></param>
-        public HttpResponseMessage Delete(Guid id)
+        /// <param name="id">ShipCountry Key</param>
+        [AcceptVerbs("GET")]
+        public HttpResponseMessage DeleteShipCountry(Guid id)
         {
             var shipCountryToDelete = _shipCountryService.GetByKey(id);
             if (shipCountryToDelete == null)
@@ -170,25 +151,52 @@ namespace Merchello.Web.Editors
             return Request.CreateResponse(HttpStatusCode.OK);
         }
 
+
         /// <summary>
-        /// Deletes an existing ship country by catalog and country code
+        /// 
         ///
-        /// GET /umbraco/Merchello/ShippingMethodsApi/DeleteByCountryCode?catalogKey={guid}&countryCode={string}
+        /// GET /umbraco/Merchello/ShippingMethodsApi/GetAllShipGatewayProviders
         /// </summary>
-        /// <param name="catalogKey">CatalogKey Guid</param>
-        /// <param name="countryCode">Country code string</param>
-        public HttpResponseMessage DeleteByCountryCode(Guid catalogKey, string countryCode)
+        public IEnumerable<GatewayProviderDisplay> GetAllShipGatewayProviders()
         {
-            var shipCountryToDelete = _shipCountryService.GetShipCountryByCountryCode(catalogKey, countryCode);
-            if (shipCountryToDelete == null)
-            {
-                return Request.CreateResponse(HttpStatusCode.NotFound);
-            }
-
-            _shipCountryService.Delete(shipCountryToDelete);
-
-            return Request.CreateResponse(HttpStatusCode.OK);
+            return null;
         }
-          */
+
+        /// <summary>
+        /// 
+        ///
+        /// GET /umbraco/Merchello/ShippingMethodsApi/GetAllShipCountryProviders/{id}
+        /// </summary>
+        /// <param name="id">ShipCountry Key</param>
+        public IEnumerable<ShipGatewayProviderDisplay> GetAllShipCountryProviders(Guid id)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// Add an external ShipMethod to the ShipCountry
+        /// 
+        /// USPS, UPS, etc
+        ///
+        /// GET /umbraco/Merchello/ShippingMethodsApi/AddShipCountryMethod
+        /// </summary>
+        /// <param name="method">POSTed ShipMethodDisplay object</param>
+        [AcceptVerbs("POST", "PUT")]
+        public ShipMethodDisplay AddShipCountryMethod(ShipMethodDisplay method)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// Add a Fixed Rate Table ShipMethod to the ShipCountry
+        ///
+        /// GET /umbraco/Merchello/ShippingMethodsApi/AddShipCountryRateTableMethod
+        /// </summary>
+        /// <param name="method">POSTed RateTableShipMethodDisplay object</param>
+        [AcceptVerbs("POST", "PUT")]
+        public RateTableShipMethodDisplay AddShipCountryRateTableMethod(RateTableShipMethodDisplay method)
+        {
+            return null;
+        }
     }
 }

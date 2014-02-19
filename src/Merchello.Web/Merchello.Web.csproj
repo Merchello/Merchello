@@ -225,8 +225,10 @@
     <Compile Include="AutoMapperMappings.cs" />
     <Compile Include="CheckoutExtensions.cs" />
     <Compile Include="Editors\SettingsApiController.cs" />
-    <Compile Include="Editors\ShippingMethodsApiController.cs" />
+    <Compile Include="Editors\CatalogShippingApiController.cs" />
     <Compile Include="Editors\WarehouseApiController.cs" />
+    <Compile Include="Models\ContentEditing\GatewayProviderDisplay.cs" />
+    <Compile Include="Models\ContentEditing\RateTableShipMethodDisplay.cs" />
     <Compile Include="Models\ContentEditing\ShipRateTableDisplay.cs" />
     <Compile Include="Models\ContentEditing\ShipRateTierDisplay.cs" />
     <Compile Include="Models\ContentEditing\SettingDisplay.cs" />
