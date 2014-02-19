@@ -73,7 +73,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             const GatewayProviderType gatewayProviderType = GatewayProviderType.Shipping;
 
             //// Act
-            var providers = MerchelloContext.ShippingGateways.GetGatewayProviders(gatewayProviderType);
+            var providers = MerchelloContext.Gateways.Shipping.GetGatewayProviders(gatewayProviderType);
 
             //// Assert
             Assert.NotNull(providers);
