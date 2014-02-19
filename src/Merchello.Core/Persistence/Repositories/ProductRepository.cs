@@ -229,7 +229,7 @@ namespace Merchello.Core.Persistence.Repositories
         private ProductVariantCollection GetProductVariantCollection(Guid productKey)
         {
             var collection = new ProductVariantCollection();
-            var query = Querying.Query<IProductVariant>.Builder.Where(x => x.ProductKey == productKey);
+            var query = Querying.Query<IProductVariant>.Builder.Where(x => x.ProductKey == productKey && ((ProductVariant)x).Master == false);
             var variants = _productVariantRepository.GetByQuery(query);
             foreach (var variant in variants)
             {
