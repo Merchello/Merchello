@@ -28,6 +28,7 @@ namespace Merchello.Web
             // shipping            
             AutoMapper.Mapper.CreateMap<IShipCountry, ShipCountryDisplay>();
             AutoMapper.Mapper.CreateMap<IShipMethod, ShipMethodDisplay>();
+            AutoMapper.Mapper.CreateMap<IRateTableShipMethod, RateTableShipMethodDisplay>();
             AutoMapper.Mapper.CreateMap<IShipProvince, ShipProvinceDisplay>();
             AutoMapper.Mapper.CreateMap<IShipRateTable, ShipRateTableDisplay>();
             AutoMapper.Mapper.CreateMap<IShipRateTier, ShipRateTierDisplay>();
