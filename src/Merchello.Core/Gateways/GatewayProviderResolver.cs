@@ -53,36 +53,17 @@ namespace Merchello.Core.Gateways
             return providers;
         }
 
-        ///// <summary>
-        ///// Gets a collection of instantiated gateway providers
-        ///// </summary>
-        ///// <param name="gatewayProviderType"></param>
-        ///// <returns></returns>
-        //public IEnumerable<T> ResolveByGatewayProviderType<T>(GatewayProviderType gatewayProviderType)
-        //    where T : GatewayProviderBase;
-        //{
-        //    var providers = GetGatewayProviders(gatewayProviderType);
 
-        //    var gatewayProviders = new List<GatewayProviderBase>();
-        //    foreach (var provider in providers)
-        //    {
-        //        switch (gatewayProviderType)
-        //        {
-        //            case GatewayProviderType.Shipping:
-        //                gatewayProviders.Add(ResolveByGatewayProvider<ShippingGatewayProviderBase>(provider));
-        //                break;
-        //            case GatewayProviderType.Taxation:
-        //                gatewayProviders.Add(ResolveByGatewayProvider<TaxationGatewayProviderBase>(provider));
-        //                break;
-        //            case GatewayProviderType.Payment:
-        //                gatewayProviders.Add(ResolveByGatewayProvider<PaymentGatewayProviderBase>(provider));
-        //                break;
-        //        }
+        /// <summary>
+        /// Gets a collection of instantiated gateway providers
+        /// </summary>
+        /// <param name="gatewayProviderType"></param>
+        /// <returns></returns>
+        public IEnumerable<T> ResolveByGatewayProviderType<T>(GatewayProviderType gatewayProviderType) where T : GatewayProviderBase
+        {
+            return GetGatewayProviders(gatewayProviderType).Select(ResolveByGatewayProvider<T>);
 
-        //    }
-        //    return gatewayProviders;
-        //}
-
+        }
 
         /// <summary>
         /// Returns an instantiation of a <see cref="T"/>

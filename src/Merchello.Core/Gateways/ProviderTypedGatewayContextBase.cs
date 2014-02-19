@@ -33,7 +33,7 @@ namespace Merchello.Core.Gateways
         /// <summary>
         /// Resolves all active <see cref="IGatewayProvider"/>s of T
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A collection of all active TypedGatewayProviderinstances</returns>
         public abstract IEnumerable<T> ResolveAllActiveProviders();
     
         /// <summary>

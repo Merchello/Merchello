@@ -9,7 +9,6 @@ namespace Merchello.Core.Gateways
         /// <summary>
         /// Gets a collection of instantiated gateway providers
         /// </summary>
-        /// <param name="gatewayProviderType"></param>
         /// <returns></returns>
         IEnumerable<T> ResolveByGatewayProviderType<T>(GatewayProviderType gatewayProviderType) where T : GatewayProviderBase;
 

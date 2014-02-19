@@ -23,11 +23,11 @@ namespace Merchello.Core.Gateways.Shipping
         /// <returns>A collection of <see cref="IShipmentRateQuote"/></returns>
         public IEnumerable<IShipmentRateQuote> GetShipRateQuotesForShipment(IShipment shipment)
         {
-            var providers = GatewayProviderResolver.ResolveByGatewayProviderType(GatewayProviderType.Shipping);
+            var providers = ResolveAllActiveProviders();
             var quotes = new List<IShipmentRateQuote>();
             foreach (var provider in providers)
             {
-                quotes.AddRange(((ShippingGatewayProviderBase)provider).QuoteAvailableShipMethodsForShipment(shipment));
+                quotes.AddRange(provider.QuoteAvailableShipMethodsForShipment(shipment));
             }
             return quotes.OrderBy(x => x.Rate);
         }
@@ -43,13 +43,23 @@ namespace Merchello.Core.Gateways.Shipping
             return countries.Distinct();
         }
 
+        /// <summary>
+        /// Resolves all active <see cref="IGatewayProvider"/>s of T
+        /// </summary>
+        /// <returns>A collection of all active TypedGatewayProviderinstances</returns>
         public IEnumerable<IShippingGatewayProvider> GetGatewayProvidersByShipCountry(IShipCountry shipCountry)
         {
-            throw new NotImplementedException();
+            var gatewayProviders = GatewayProviderService.GetGatewayProvidersByShipCountry(shipCountry);
+
+            return
+                gatewayProviders.Select(
+                    provider => GatewayProviderResolver.ResolveByGatewayProvider<ShippingGatewayProviderBase>(provider));
         }
+
 
         public override IEnumerable<ShippingGatewayProviderBase> ResolveAllActiveProviders()
         {
+            return GatewayProviderResolver.ResolveByGatewayProviderType<ShippingGatewayProviderBase>(GatewayProviderType.Shipping);
         }
 
         /// <summary>

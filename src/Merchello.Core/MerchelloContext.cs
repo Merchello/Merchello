@@ -25,9 +25,9 @@ namespace Merchello.Core
             Mandate.ParameterNotNull(cache, "cache");
             
             _services = serviceContext;
-            BuildMerchelloContext(isUnitTest);
             Cache = cache;
 
+            BuildMerchelloContext(isUnitTest);
         }
 
         /// <summary>
