@@ -1,155 +1,32 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Shipping;
-using Merchello.Core.Gateways.Taxation;
 using Merchello.Core.Models;
-using Merchello.Core.Services;
-using Umbraco.Core.Cache;
 
 namespace Merchello.Core.Gateways
 {
+    /// <summary>
+    /// Represents the GatewayContext.  Provides access to <see cref="IGatewayProvider"/>s
+    /// </summary>
     internal class GatewayContext : IGatewayContext
     {
-
-        private readonly IGatewayProviderService _gatewayProviderService;
-        private readonly ConcurrentDictionary<Guid, IGatewayProvider> _gatewayProviderCache = new ConcurrentDictionary<Guid, IGatewayProvider>();
-        private readonly IGatewayProviderFactory _gatewayProviderFactory;
-
-        public GatewayContext(IGatewayProviderService gatewayProviderService, IRuntimeCacheProvider runtimeCache)
-        {
-            Mandate.ParameterNotNull(gatewayProviderService, "gatewayProviderService");
-            Mandate.ParameterNotNull(runtimeCache, "runtimeCache");
-
-            _gatewayProviderService = gatewayProviderService;
-            _gatewayProviderFactory = new GatewayProviderFactory(gatewayProviderService, runtimeCache);
-            BuildGatewayProviderCache(gatewayProviderService);
-
-        }
-
-        private void BuildGatewayProviderCache(IGatewayProviderService gatewayProviderService)
-        {
-            foreach (var provider in gatewayProviderService.GetAllGatewayProviders())
-            {
-                _gatewayProviderCache.AddOrUpdate(provider.Key, provider, (x, y) => provider);
-            }
-        }
-
-        /// <summary>
-        /// Gets a collection of <see cref="IGatewayProvider"/>s by type
-        /// </summary>
-        public IEnumerable<IGatewayProvider> GetGatewayProviders(GatewayProviderType gatewayProviderType)
-        {
-            var providers =
-                _gatewayProviderCache.Where(provider => provider.Value.GatewayProviderType == gatewayProviderType)
-                    .Select(provider => provider.Value)
-                    .ToList();
-            return providers;
-        }
-
-        /// <summary>
-        /// Returns a collection of all <see cref="IShipmentRateQuote"/> that are available for the <see cref="IShipment"/>
-        /// </summary>
-        /// <param name="shipment">The <see cref="IShipment"/> to quote</param>
-        /// <returns>A collection of <see cref="IShipmentRateQuote"/></returns>
-        public IEnumerable<IShipmentRateQuote> GetShipRateQuotesForShipment(IShipment shipment)
-        {
-            var providers = ResolveByGatewayProviderType(GatewayProviderType.Shipping);
-            var quotes = new List<IShipmentRateQuote>();
-            foreach (var provider in providers)
-            {
-                quotes.AddRange(((ShippingGatewayProviderBase)provider).QuoteAvailableShipMethodsForShipment(shipment));
-            }
-            return quotes.OrderBy(x => x.Rate);
-        }
-
-        /// <summary>
-        /// Returns a list of all countries that can be assigned to a shipment
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerable<ICountry> GetAllowedShipmentDestinationCountries()
-        {
-            var countries = _gatewayProviderService.GetAllShipCountries().Select(x => new Country(x.CountryCode, x.Provinces));
-
-            return countries.Distinct();
-        }
-
-        //public IInvoiceTaxResult GetInvoiceTaxResultForInvoice(IInvoice invoice)
-        //{
-            
-        //}
-
-        /// <summary>
-        /// Gets a collection of instantiated gateway providers
-        /// </summary>
-        /// <param name="gatewayProviderType"></param>
-        /// <returns></returns>
-        internal IEnumerable<GatewayProviderBase> ResolveByGatewayProviderType(GatewayProviderType gatewayProviderType)
-        {
-            var providers = GetGatewayProviders(gatewayProviderType);
-
-            var gatewayProviders = new List<GatewayProviderBase>();
-            foreach (var provider in providers)
-            {
-                switch (gatewayProviderType)
-                {
-                    case GatewayProviderType.Shipping:
-                        gatewayProviders.Add(ResolveByGatewayProvider<ShippingGatewayProviderBase>(provider));
-                        break;
-                    case GatewayProviderType.Taxation:
-                        gatewayProviders.Add(ResolveByGatewayProvider<TaxationGatewayProviderBase>(provider));
-                        break;
-                    case GatewayProviderType.Payment:
-                        gatewayProviders.Add(ResolveByGatewayProvider<PaymentGatewayProviderBase>(provider));
-                        break;
-                }
-                    
-            }
-            return gatewayProviders;
-        }
-
-        /// <summary>
-        /// Returns an instantiation of a <see cref="T"/>
-        /// </summary>
-        /// <param name="provider"><see cref="IGatewayProvider"/></param>
-        /// <returns></returns>
-        internal T ResolveByGatewayProvider<T>(IGatewayProvider provider) where T : GatewayProviderBase
-        {
-
-            if (typeof(ShippingGatewayProviderBase).IsAssignableFrom(typeof(T))) 
-                return _gatewayProviderFactory.GetInstance<ShippingGatewayProviderBase>(provider) as T;
-
-            if (typeof(TaxationGatewayProviderBase).IsAssignableFrom(typeof(T))) 
-                return _gatewayProviderFactory.GetInstance<TaxationGatewayProviderBase>(provider) as T;
-
-            if (typeof (PaymentGatewayProviderBase).IsAssignableFrom(typeof (T)))
-                return _gatewayProviderFactory.GetInstance<PaymentGatewayProviderBase>(provider) as T;
-
-            throw new InvalidOperationException("ResolveByGatewayProvider could not instantiant Type " + typeof(T).FullName);
-        }
         
-        /// <summary>
-        /// Instantiates a GatewayProvider given its registered Key
-        /// </summary>
-        /// <typeparam name="T">The Type of the GatewayProvider.  Must inherit from GatewayProviderBase</typeparam>
-        /// <param name="gatewayProviderKey"></param>
-        /// <returns>An instantiated GatewayProvider</returns>
-        internal T ResolveByKey<T>(Guid gatewayProviderKey) where T : GatewayProviderBase
+        internal GatewayContext(IShippingGatewayContext shippingGateways)
         {
-            var provider = _gatewayProviderCache.FirstOrDefault(x => x.Key == gatewayProviderKey).Value;
-            return provider == null ? null : ResolveByGatewayProvider<T>(provider);
+            Mandate.ParameterNotNull(shippingGateways, "shippingGateways");
+
+            _shippingGateway = shippingGateways;
         }
 
-        /// <summary>
-        /// Refreshes the <see cref="GatewayProviderBase"/> cache
-        /// </summary>
-        internal void RefreshCache()
+        private readonly IShippingGatewayContext _shippingGateway;
+        public IShippingGatewayContext Shipping
         {
-            BuildGatewayProviderCache(((GatewayProviderFactory)_gatewayProviderFactory).GatewayProviderService);
-        }
+            get
+            {
+                if(_shippingGateway == null) throw new InvalidOperationException("The ShippingGatewayContext is not set in the GatewayContext");
 
-        
+                return _shippingGateway;
+            }
+
+        }
     }
 }

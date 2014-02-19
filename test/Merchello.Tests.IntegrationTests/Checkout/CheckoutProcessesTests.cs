@@ -66,7 +66,7 @@ namespace Merchello.Tests.IntegrationTests.Checkout
             #region Add a GatewayProvider (RateTableShippingGatewayProvider)
 
             var key = Constants.ProviderKeys.Shipping.RateTableShippingProviderKey;
-            var rateTableProvider = ((GatewayContext)MerchelloContext.Current.Gateways).ResolveByKey<RateTableShippingGatewayProvider>(key);
+            var rateTableProvider = (RateTableShippingGatewayProvider)MerchelloContext.Current.Gateways.Shipping.ResolveByKey(key);
 
             #region Add and configure 3 rate table shipmethods
 

@@ -73,7 +73,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             const GatewayProviderType gatewayProviderType = GatewayProviderType.Shipping;
 
             //// Act
-            var providers = MerchelloContext.Gateways.GetGatewayProviders(gatewayProviderType);
+            var providers = MerchelloContext.Gateways.Shipping.GetGatewayProviders(gatewayProviderType);
 
             //// Assert
             Assert.NotNull(providers);
@@ -88,11 +88,11 @@ namespace Merchello.Tests.IntegrationTests.Shipping
         {
             //// Arrange
             const GatewayProviderType gatewayProviderType = GatewayProviderType.Shipping;
-            var provider = MerchelloContext.Gateways.GetGatewayProviders(gatewayProviderType).FirstOrDefault();
+            var provider = MerchelloContext.ShippingGateways.GetGatewayProviders(gatewayProviderType).FirstOrDefault();
             Assert.NotNull(provider);
 
             //// Act
-            var shippingProvider = ((GatewayContext)MerchelloContext.Gateways).ResolveByGatewayProvider<RateTableShippingGatewayProvider>(provider);
+            var shippingProvider = ((ProviderTypedGatewayContextBase<>)MerchelloContext.ShippingGateways).ResolveByGatewayProvider<RateTableShippingGatewayProvider>(provider);
 
             //// Assert
             Assert.NotNull(shippingProvider);
@@ -106,8 +106,8 @@ namespace Merchello.Tests.IntegrationTests.Shipping
         {
             //// Arrange
             var country = ShipCountryService.GetShipCountryByCountryCode(Catalog.Key, "US");
-            var provider = MerchelloContext.Gateways.GetGatewayProviders(GatewayProviderType.Shipping).FirstOrDefault();
-            var shippingProvider = ((GatewayContext)MerchelloContext.Gateways).ResolveByGatewayProvider<RateTableShippingGatewayProvider>(provider);
+            var provider = MerchelloContext.ShippingGateways.GetGatewayProviders(GatewayProviderType.Shipping).FirstOrDefault();
+            var shippingProvider = ((ProviderTypedGatewayContextBase<>)MerchelloContext.ShippingGateways).ResolveByGatewayProvider<RateTableShippingGatewayProvider>(provider);
             Assert.NotNull(shippingProvider);
             
             //// Act

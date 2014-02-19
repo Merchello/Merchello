@@ -36,7 +36,7 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
             _warehouseCatalog = _warehouse.DefaultCatalog();
 
             var key = Constants.ProviderKeys.Shipping.RateTableShippingProviderKey;
-            _rateTableProvider = ((GatewayContext)MerchelloContext.Gateways).ResolveByKey<RateTableShippingGatewayProvider>(key);
+            _rateTableProvider = (RateTableShippingGatewayProvider)MerchelloContext.Gateways.Shipping.ResolveByKey(key);
 
             var shipCountryService = PreTestDataWorker.ShipCountryService;
             _shipCountry = shipCountryService.GetShipCountryByCountryCode(_warehouseCatalog.Key, "US");           
