@@ -148,15 +148,17 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             gwshipMethod.RateTable.AddRow(0, 10, 5);
             gwshipMethod.RateTable.AddRow(10, 15, 10); 
             gwshipMethod.RateTable.AddRow(15, 25, 25);
-            gwshipMethod.RateTable.AddRow(25, 60, 30); // total price should be 50M so we should hit this tier
+            gwshipMethod.RateTable.AddRow(25, 60, 30); // total price should be 30M so we should hit this tier
             gwshipMethod.RateTable.AddRow(25, 10000, 50);
 
-            var expectedRate = 9M; // .3*30
+            var expectedRate = 30M; 
 
             //// Act
             var shipments = _basket.PackageBasket(MerchelloContext, _destination);
 
             var attempt = gwshipMethod.QuoteShipment(shipments.First());
+
+            Console.Write("Basket price {0}", _basket.TotalBasketPrice);
 
             //// Assert
             Assert.IsTrue(attempt.Success);
