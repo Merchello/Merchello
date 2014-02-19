@@ -14,7 +14,6 @@ namespace Merchello.Core.Gateways
     internal class GatewayProviderResolver : IGatewayProviderResolver
     {
         private readonly IGatewayProviderService _gatewayProviderService;
-        private readonly IRuntimeCacheProvider _runtimeCache;
         private readonly ConcurrentDictionary<Guid, IGatewayProvider> _gatewayProviderCache = new ConcurrentDictionary<Guid, IGatewayProvider>();
         private readonly Lazy<GatewayProviderFactory> _gatewayProviderFactory;
         
@@ -24,9 +23,8 @@ namespace Merchello.Core.Gateways
             Mandate.ParameterNotNull(runtimeCache, "runtimeCache");
 
             _gatewayProviderService = gatewayProviderService;
-            _runtimeCache = runtimeCache;
 
-            _gatewayProviderFactory = new Lazy<GatewayProviderFactory>(() => new GatewayProviderFactory(_gatewayProviderService, _runtimeCache));
+            _gatewayProviderFactory = new Lazy<GatewayProviderFactory>(() => new GatewayProviderFactory(_gatewayProviderService, runtimeCache));
 
             BuildGatewayProviderCache();
         }
@@ -44,8 +42,10 @@ namespace Merchello.Core.Gateways
         /// <summary>
         /// Gets a collection of <see cref="IGatewayProvider"/>s by type
         /// </summary>
-        public IEnumerable<IGatewayProvider> GetGatewayProviders(GatewayProviderType gatewayProviderType)
+        public IEnumerable<IGatewayProvider> GetGatewayProviders<T>() where T : GatewayProviderBase
         {
+            var gatewayProviderType = GetGatewayProviderType<T>();
+
             var providers =
                 _gatewayProviderCache.Where(provider => provider.Value.GatewayProviderType == gatewayProviderType)
                     .Select(provider => provider.Value)
@@ -61,7 +61,7 @@ namespace Merchello.Core.Gateways
         /// <returns></returns>
         public IEnumerable<T> ResolveByGatewayProviderType<T>(GatewayProviderType gatewayProviderType) where T : GatewayProviderBase
         {
-            return GetGatewayProviders(gatewayProviderType).Select(ResolveByGatewayProvider<T>);
+            return GetGatewayProviders<T>().Select(ResolveByGatewayProvider<T>);
 
         }
 
@@ -72,15 +72,20 @@ namespace Merchello.Core.Gateways
         /// <returns></returns>
         public T ResolveByGatewayProvider<T>(IGatewayProvider provider) where T : GatewayProviderBase
         {
+            switch (GetGatewayProviderType<T>())
+            {
+                    case GatewayProviderType.Shipping:
+                    return _gatewayProviderFactory.Value.GetInstance<ShippingGatewayProviderBase>(provider) as T;
+                    break;
 
-            if (typeof(ShippingGatewayProviderBase).IsAssignableFrom(typeof(T)))
-                return _gatewayProviderFactory.Value.GetInstance<ShippingGatewayProviderBase>(provider) as T;
+                    case GatewayProviderType.Taxation:
+                    return _gatewayProviderFactory.Value.GetInstance<TaxationGatewayProviderBase>(provider) as T;
+                    break;
 
-            if (typeof(TaxationGatewayProviderBase).IsAssignableFrom(typeof(T)))
-                return _gatewayProviderFactory.Value.GetInstance<TaxationGatewayProviderBase>(provider) as T;
-
-            if (typeof(PaymentGatewayProviderBase).IsAssignableFrom(typeof(T)))
-                return _gatewayProviderFactory.Value.GetInstance<PaymentGatewayProviderBase>(provider) as T;
+                    case GatewayProviderType.Payment:
+                    return _gatewayProviderFactory.Value.GetInstance<PaymentGatewayProviderBase>(provider) as T;
+                    break;                    
+            }
 
             throw new InvalidOperationException("ResolveByGatewayProvider could not instantiant Type " + typeof(T).FullName);
         }
@@ -103,6 +108,19 @@ namespace Merchello.Core.Gateways
         internal void RefreshCache()
         {
             BuildGatewayProviderCache();
+        }
+
+        /// <summary>
+        /// Maps the type of T to a <see cref="GatewayProviderType"/>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns>Returns a <see cref="GatewayProviderType"/></returns>
+        private GatewayProviderType GetGatewayProviderType<T>()
+        {
+            if (typeof(ShippingGatewayProviderBase).IsAssignableFrom(typeof(T))) return GatewayProviderType.Shipping;
+            if (typeof(TaxationGatewayProviderBase).IsAssignableFrom(typeof(T))) return GatewayProviderType.Taxation;
+            if (typeof(PaymentGatewayProviderBase).IsAssignableFrom(typeof(T))) return GatewayProviderType.Payment;
+            throw new InvalidOperationException("Could not map GatewayProviderType from " + typeof(T).Name);
         }
 
     }

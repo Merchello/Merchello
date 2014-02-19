@@ -26,6 +26,7 @@ namespace Merchello.Core.Gateways
             _payment = payment;
         }
 
+
         
         /// <summary>
         /// Exposes the <see cref="IShippingContext"/>

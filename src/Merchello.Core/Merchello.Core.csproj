@@ -123,6 +123,7 @@
     <Compile Include="Gateways\IGatewayProviderResolver.cs" />
     <Compile Include="Gateways\Payment\IPaymentContext.cs" />
     <Compile Include="Gateways\Payment\IPaymentGatewayProvider.cs" />
+    <Compile Include="Gateways\Payment\PaymentContext.cs" />
     <Compile Include="Gateways\Payment\PaymentGatewayProviderBase.cs" />
     <Compile Include="Gateways\Shipping\DefaultShipmentRateQuoteStrategy.cs" />
     <Compile Include="Gateways\Shipping\GatewayShipMethodBase.cs" />

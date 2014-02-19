@@ -13,21 +13,24 @@ namespace Merchello.Core.Gateways
         where T : GatewayProviderBase
     {
         private readonly IGatewayProviderService _gatewayProviderService;
-        private readonly IRuntimeCacheProvider _runtimeCache;
+        private readonly IGatewayProviderResolver _resolver;
 
-        protected GatewayProviderTypedContextBase(IGatewayProviderService gatewayProviderService, IRuntimeCacheProvider runtimeCache)
+        protected GatewayProviderTypedContextBase(IGatewayProviderService gatewayProviderService, IGatewayProviderResolver resolver)
         {
-            Mandate.ParameterNotNull(gatewayProviderService, "gatewayProviderService");
-            Mandate.ParameterNotNull(runtimeCache, "runtimeCache");
+            Mandate.ParameterNotNull(gatewayProviderService, "gatewayProviderService");            
+            Mandate.ParameterNotNull(resolver, "resolver");
 
-            _gatewayProviderService = gatewayProviderService;
-            _runtimeCache = runtimeCache;
-            BuildGatewayContext(gatewayProviderService, runtimeCache);           
+            _gatewayProviderService = gatewayProviderService;            
+            _resolver = resolver;
         }
 
-        private void BuildGatewayContext(IGatewayProviderService gatewayProviderService, IRuntimeCacheProvider runtimeCache)
+        /// <summary>
+        /// Lists all available <see cref="IGatewayProvider"/>
+        /// </summary>
+        /// <returns>A collection of all GatewayProvider of the particular type T</returns>
+        public IEnumerable<IGatewayProvider> GetAllGatewayProviders()
         {
-            _resolver = new GatewayProviderResolver(gatewayProviderService, runtimeCache);
+            return GatewayProviderResolver.GetGatewayProviders<T>();
         }
 
         /// <summary>
@@ -42,8 +45,10 @@ namespace Merchello.Core.Gateways
         /// <param name="key">The Guid 'key' of the provider</param>
         /// <returns>Returns a <see cref="IGatewayProvider"/> of type T</returns>
         public abstract T ResolveByKey(Guid key);
-
-        private IGatewayProviderResolver _resolver;
+        
+        /// <summary>
+        /// Gets the <see cref="IGatewayProviderResolver"/>
+        /// </summary>
         protected IGatewayProviderResolver GatewayProviderResolver
         {
             get{
@@ -60,15 +65,5 @@ namespace Merchello.Core.Gateways
             get { return _gatewayProviderService; }
         }
 
-        /// <summary>
-        /// Gets the Runtime Cache
-        /// </summary>
-        protected IRuntimeCacheProvider RuntimeCache
-        {
-            get
-            {
-                return _runtimeCache;
-            }
-        }
     }
 }

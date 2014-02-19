@@ -11,8 +11,8 @@ namespace Merchello.Core.Gateways.Taxation
     /// </summary>
     internal class TaxationContext : GatewayProviderTypedContextBase<TaxationGatewayProviderBase>, ITaxationContext
     {
-        public TaxationContext(IGatewayProviderService gatewayProviderService, IRuntimeCacheProvider runtimeCache) 
-            : base(gatewayProviderService, runtimeCache)
+        public TaxationContext(IGatewayProviderService gatewayProviderService, IGatewayProviderResolver resolver)
+            : base(gatewayProviderService, resolver)
         { }
 
         /// <summary>

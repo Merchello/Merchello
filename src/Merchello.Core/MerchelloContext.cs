@@ -38,14 +38,15 @@ namespace Merchello.Core
         /// <param name="isUnitTest">True/false indicating whether or not is being called by certain unit tests</param>
         private void BuildMerchelloContext(bool isUnitTest)
         {
-            if (!isUnitTest)
-            { 
-                _gateways = new GatewayContext(
-                    new ShippingContext(_services.GatewayProviderService, Cache.RuntimeCache),
-                    new TaxationContext(_services.GatewayProviderService, Cache.RuntimeCache),
-                    new PaymentContext(_services.GatewayProviderService, Cache.RuntimeCache)
-                    );             
-            }
+            if (isUnitTest) return;
+            
+            var gatewayResolver = new Lazy<GatewayProviderResolver>(() => new GatewayProviderResolver(_services.GatewayProviderService, Cache.RuntimeCache));
+
+            _gateways = new GatewayContext(
+                new ShippingContext(_services.GatewayProviderService, gatewayResolver.Value),
+                new TaxationContext(_services.GatewayProviderService, gatewayResolver.Value),
+                new PaymentContext(_services.GatewayProviderService, gatewayResolver.Value)
+                );
         }
 
 

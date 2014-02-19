@@ -7,6 +7,11 @@ namespace Merchello.Core.Gateways
     public interface IGatewayProviderResolver
     {
         /// <summary>
+        /// Gets a collection of <see cref="IGatewayProvider"/>s by type
+        /// </summary>
+        IEnumerable<IGatewayProvider> GetGatewayProviders<T>() where T : GatewayProviderBase;
+
+        /// <summary>
         /// Gets a collection of instantiated gateway providers
         /// </summary>
         /// <returns></returns>
