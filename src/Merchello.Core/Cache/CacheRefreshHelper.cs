@@ -11,7 +11,7 @@ namespace Merchello.Core.Cache
     {
         public static void ClearProductFromCache(IRuntimeCacheProvider cache, Guid key)
         {
-            cache.GetCacheItem(CacheKeys.GetEntityCacheKey<IProduct>(key));
+            cache.ClearCacheItem(CacheKeys.GetEntityCacheKey<IProduct>(key));
         }
     }
 }

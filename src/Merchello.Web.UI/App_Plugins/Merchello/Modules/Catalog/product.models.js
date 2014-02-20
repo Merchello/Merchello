@@ -203,6 +203,8 @@
 
             self.attributes = _.sortBy(self.attributes, function (attr) { return attr.sortOrder; });
 
+            self.attributeKeys = _.pluck(self.attributes, 'key');
+
             self.catalogInventories = _.map(productVariantFromServer.catalogInventories, function (catalogInventory) {
                 return new merchello.Models.CatalogInventory(catalogInventory);
             });
@@ -259,6 +261,18 @@
                 var option = attr.findMyOption(options);
                 self[option.name] = attr.name;
             }
+        };
+
+        self.isComposedFromAttribute = function (attribute) {
+            var composedOf = false;
+            for (var i = 0; i < self.attributes.length; i++) {
+                var attr = self.attributes[i];
+                if (attr.key == attribute.key) {
+                    composedOf = true;
+                    break;
+                }
+            }
+            return composedOf;
         };
 
         self.ensureCatalogInventory = function(defaultWarehouse)
@@ -460,6 +474,7 @@
             var newVariant = new merchello.Models.ProductVariant();
             newVariant.copyFromProduct(self);
             newVariant.attributes = attributes.slice(0);
+            newVariant.attributeKeys = _.pluck(newVariant.attributes, 'key');
             newVariant.selected = true;
             newVariant.sku = "";
             newVariant.name = "";
@@ -488,6 +503,41 @@
                 self.productVariants[i].addAttributesAsProperties(self.productOptions);
             }
         };
+
+        self.hasAvailableVariantPermutiations = function () {
+
+            var permutations = 1;
+
+            for (var o = 0; o < self.productOptions.length; o++) {
+                var thisOption = self.productOptions[o];
+                
+                permutations = permutations * thisOption.choices.length;
+            }
+
+            var availablePermutations = permutations - self.productVariants.length;
+
+            return availablePermutations;
+        }
+
+        self.getRemainingChoicesWithoutVariants = function () {
+
+            var allVariantAttributes = _.pluck(self.productVariants, 'attributeKeys');
+            var allVariantAttributes = _.flatten(allVariantAttributes);
+
+            var unusedChoices = [];
+
+            for (var o = 0; o < self.productOptions.length; o++) {
+                var thisOption = self.productOptions[o];
+                for (var a = 0; a < thisOption.choices.length; a++) {
+                    var thisChoice = thisOption.choices[a];
+                    if (!_.contains(allVariantAttributes, thisChoice.key)) {
+                        unusedChoices.push(thisChoice);
+                    }
+                }
+            }
+
+            return unusedChoices;
+        }
 
     };
 

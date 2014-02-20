@@ -264,6 +264,7 @@
                             var promiseLoadProduct = merchelloProductService.getByKey($scope.product.key);
                             promiseLoadProduct.then(function (dbproduct) {
                                 $scope.product = new merchello.Models.Product(dbproduct);
+
                                 notificationsService.success("Variants deleted");
                             }, function (reason) {
                                 notificationsService.error("Product Variant Delete Failed", reason.message);
@@ -382,28 +383,6 @@
                 notificationsService.error("Product Save Failed", reason.message);
             });
         }
-        
-        $scope.updateVariants = function (thisForm) {
-
-            var promise = merchelloProductService.updateProduct($scope.product);
-
-            promise.then(function (product) {
-                notificationsService.success("Product Saved", "H5YR!");
-
-                $scope.product = product;
-
-                if ($scope.rebuildVariants)
-                {
-                    $scope.rebuildAndSaveVariants();
-                    $scope.rebuildVariants = false;
-                    $scope.toggleAllVariants(false);
-                }
-
-            }, function (reason) {
-                notificationsService.error("Product Save Failed", reason.message);
-            });
-        }
-
 
         $scope.prettyJson = function () {
             var $jsonInfo = $(".jsonInfo");
