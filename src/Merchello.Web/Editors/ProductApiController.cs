@@ -63,7 +63,7 @@ namespace Merchello.Web.Editors
             var product = _productService.GetByKey(id) as Product;
             if (product == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
 
             return product.ToProductDisplay();
@@ -184,7 +184,7 @@ namespace Merchello.Web.Editors
             }
             catch (Exception ex)
             {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError);
+                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
 
             return newProduct.ToProductDisplay();
@@ -213,7 +213,7 @@ namespace Merchello.Web.Editors
             }
             catch (Exception ex)
             {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError);
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.InternalServerError));
             }
 
             return newProduct.ToProductDisplay();

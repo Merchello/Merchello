@@ -60,7 +60,7 @@ namespace Merchello.Web.Editors
             IWarehouse warehouse = _warehouseService.GetDefaultWarehouse();
             if (warehouse == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
 
             return warehouse.ToWarehouseDisplay();
@@ -77,7 +77,7 @@ namespace Merchello.Web.Editors
             IWarehouse warehouse = _warehouseService.GetByKey(id);
             if (warehouse == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
 
             return warehouse.ToWarehouseDisplay();
@@ -96,7 +96,7 @@ namespace Merchello.Web.Editors
                 var warehouses = _warehouseService.GetByKeys(keys);
                 if (warehouses == null)
                 {
-                    //throw new HttpResponseException(HttpStatusCode.NotFound);
+                    //throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
                 }
 
                 foreach (IWarehouse warehouse in warehouses)

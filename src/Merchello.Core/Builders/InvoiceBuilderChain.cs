@@ -12,12 +12,12 @@ namespace Merchello.Core.Builders
     /// </summary>
     internal sealed class InvoiceBuilderChain : BuildChainBase<IInvoice>
     {
-        private readonly CheckoutPreparationBase _checkoutPreparation;
+        private readonly OrderPreparationBase _orderPreparation;
 
-        internal InvoiceBuilderChain(CheckoutPreparationBase checkoutPreparation)
+        internal InvoiceBuilderChain(OrderPreparationBase orderPreparation)
         {
-            Mandate.ParameterNotNull(checkoutPreparation, "checkout");
-            _checkoutPreparation = checkoutPreparation;
+            Mandate.ParameterNotNull(orderPreparation, "checkout");
+            _orderPreparation = orderPreparation;
 
             ResolveChain(Constants.TaskChainAlias.CheckoutInvoiceCreate);
         }
@@ -39,7 +39,7 @@ namespace Merchello.Core.Builders
             get
             {
                 return _constructorParameters ?? 
-                    (_constructorParameters =  new List<object>(new object[] {_checkoutPreparation} ));
+                    (_constructorParameters =  new List<object>(new object[] {_orderPreparation} ));
             }
         }
 

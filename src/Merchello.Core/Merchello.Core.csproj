@@ -67,9 +67,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Umbraco.Core, Version=1.0.5133.26607, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Umbraco.Core, Version=1.0.5147.18550, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\UmbracoCms.Core.7.0.3\lib\Umbraco.Core.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.0.4\lib\Umbraco.Core.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -86,8 +86,8 @@
     <Compile Include="Chains\InvoiceCreation\ConvertItemCacheItemsToInvoiceItemsTask.cs" />
     <Compile Include="Chains\InvoiceTaxRateQuote\IdentifyTaxableLineItems.cs" />
     <Compile Include="Chains\InvoiceTaxRateQuote\InvoiceTaxRateQuoteBase.cs" />
-    <Compile Include="Checkout\CheckoutPreparationBase.cs" />
-    <Compile Include="Checkout\ICheckoutPreparationBase.cs" />
+    <Compile Include="Orders\OrderPreparationBase.cs" />
+    <Compile Include="Orders\IOrderPreparationBase.cs" />
     <Compile Include="Builders\IBuilderChain.cs" />
     <Compile Include="Cache\CacheKeys.cs" />
     <Compile Include="CloneHelper.cs" />

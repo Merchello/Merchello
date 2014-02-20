@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
-using Umbraco.Core.Cache;
 
 namespace Merchello.Core.Gateways
 {

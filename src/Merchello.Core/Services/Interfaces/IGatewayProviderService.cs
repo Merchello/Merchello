@@ -128,13 +128,6 @@ namespace Merchello.Core.Services
         #region ShipCountry
 
         /// <summary>
-        /// Retrieves a <see cref="IShipCountry"/> by it's unique key 'Guid'
-        /// </summary>
-        /// <param name="key">The primary key of the <see cref="IShipCountry"/></param>
-        /// <returns>Returns a <see cref="IShipCountry"/></returns>
-        IShipCountry GetShipCountryByKey(Guid key);
-
-        /// <summary>
         /// Gets a <see cref="IShipCountry"/> by CatalogKey and CountryCode
         /// </summary>
         /// <param name="catalogKey">The unique key of the <see cref="IWarehouseCatalog"/></param>
