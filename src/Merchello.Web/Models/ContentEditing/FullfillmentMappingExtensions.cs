@@ -4,6 +4,7 @@ using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using System.Collections.Generic;
 using Merchello.Core.Gateways.Shipping.RateTable;
+using Merchello.Core.Gateways.Shipping;
 
 namespace Merchello.Web.Models.ContentEditing
 {
@@ -125,14 +126,21 @@ namespace Merchello.Web.Models.ContentEditing
 
         #endregion
 
+        #region GatewayProviderDisplay
+
+        internal static GatewayProviderDisplay ToGatewayProviderDisplay(this IGatewayProvider gatewayProvider)
+        {
+            return AutoMapper.Mapper.Map<GatewayProviderDisplay>(gatewayProvider);
+        }
+
+        #endregion
+
         #region ShipGatewayProviderDisplay
 
-        //internal static ShipGatewayProviderDisplay ToShipGatewayProviderDisplay(this IShipGatewayProvider shipGatewayProvider)
-        //{
-        //    AutoMapper.Mapper.CreateMap<IShipGatewayProvider, ShipGatewayProviderDisplay>();
-
-        //    return AutoMapper.Mapper.Map<ShipGatewayProviderDisplay>(shipGatewayProvider);
-        //}
+        internal static ShippingGatewayProviderDisplay ToShipGatewayProviderDisplay(this IShippingGatewayProvider shipGatewayProvider)
+        {
+            return AutoMapper.Mapper.Map<ShippingGatewayProviderDisplay>(shipGatewayProvider);
+        }
 
         #endregion
 
@@ -196,6 +204,39 @@ namespace Merchello.Web.Models.ContentEditing
             destination.AllowShipping = shipProvinceDisplay.AllowShipping;
             destination.RateAdjustment = shipProvinceDisplay.RateAdjustment;
             destination.RateAdjustmentType = shipProvinceDisplay.RateAdjustmentType;
+
+            return destination;
+        }
+
+        #endregion
+        
+        #region RateTableShipMethodDisplay
+
+        internal static RateTableShipMethodDisplay ToRateTableShipMethodDisplay(this IRateTableShipMethod shipRateTableMethod)
+        {
+            return AutoMapper.Mapper.Map<RateTableShipMethodDisplay>(shipRateTableMethod);
+        }
+
+        #endregion
+
+        #region IRateTableShipMethod
+
+        /// <summary>
+        /// Maps changes made in the <see cref="RateTableShipMethodDisplay"/> to the <see cref="IRateTableShipMethod"/>
+        /// </summary>
+        /// <param name="rateTableShipMethodDisplay">The <see cref="RateTableShipMethodDisplay"/> to map</param>
+        /// <param name="destination">The <see cref="IRateTableShipMethod"/> to have changes mapped to</param>
+        /// <returns>The updated <see cref="IRateTableShipMethod"/></returns>
+        /// <remarks>
+        /// 
+        /// Note: after calling this mapping, the changes are still not persisted to the database as the .Save() method is not called.
+        /// 
+        /// * For testing you will have to use the static .Save(IGatewayProviderService ..., as MerchelloContext.Current will likely be null
+        /// 
+        /// </remarks>
+        internal static IRateTableShipMethod ToRateTableShipMethod(this RateTableShipMethodDisplay rateTableShipMethodDisplay, IRateTableShipMethod destination)
+        {
+
 
             return destination;
         }

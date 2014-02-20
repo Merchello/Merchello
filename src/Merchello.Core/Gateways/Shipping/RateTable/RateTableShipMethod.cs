@@ -91,6 +91,12 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
         /// Gets the rate table
         /// </summary>
         public IShipRateTable RateTable { get; private set; }
-  
+
+        /// <summary>
+        /// Gets the quote type
+        /// </summary>
+        public QuoteType RateTableType {
+            get { return _quoteType; }
+        }
     }
 }
