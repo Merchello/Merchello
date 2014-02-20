@@ -69,7 +69,7 @@ namespace Merchello.Web.Editors
             var shipCountry = _shipCountryService.GetByKey(id);
             if (shipCountry == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
 
             return shipCountry.ToShipCountryDisplay();
@@ -87,7 +87,7 @@ namespace Merchello.Web.Editors
             var countries = _shipCountryService.GetShipCountriesByCatalogKey(id);
             if (countries == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
 
             foreach (IShipCountry country in countries)
@@ -126,7 +126,7 @@ namespace Merchello.Web.Editors
             }
             catch (Exception ex)
             {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError);
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.InternalServerError));
             }
 
             return newShipCountry.ToShipCountryDisplay();
@@ -164,7 +164,7 @@ namespace Merchello.Web.Editors
             var rateTableProvider = MerchelloContext.Gateways.Shipping.ResolveByKey(providers.First().Key);
             if (providers == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
 
             foreach (IGatewayProvider provider in providers)
@@ -196,7 +196,7 @@ namespace Merchello.Web.Editors
             }
             else
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
         }
 

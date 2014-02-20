@@ -67,7 +67,7 @@ namespace Merchello.Web.Editors
             var productVariant = _productVariantService.GetByKey(id);
             if (productVariant == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
 
             return productVariant.ToProductVariantDisplay();
@@ -86,7 +86,7 @@ namespace Merchello.Web.Editors
                 var productVariants = _productVariantService.GetByProductKey(id);
                 if (productVariants == null)
                 {
-                    throw new HttpResponseException(HttpStatusCode.NotFound);
+                    throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
                 }
 
                 foreach (IProductVariant productVariant in productVariants)
@@ -176,12 +176,12 @@ namespace Merchello.Web.Editors
                 }
                 else
                 {
-                    throw new HttpResponseException(HttpStatusCode.InternalServerError);
+                    throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.InternalServerError));
                 }
             }
             catch (Exception e)
             {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError);
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.InternalServerError));
             }
 
             return newProductVariant.ToProductVariantDisplay();

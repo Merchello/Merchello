@@ -6,14 +6,14 @@ namespace Merchello.Core.Chains.InvoiceCreation
 {
     internal class ApplyTaxesToInvoiceTax : CheckoutPreparationAttemptChainTaskBase
     {
-        public ApplyTaxesToInvoiceTax(CheckoutPreparationBase checkoutPreparation) 
-            : base(checkoutPreparation)
+        public ApplyTaxesToInvoiceTax(OrderPreparationBase orderPreparation) 
+            : base(orderPreparation)
         { }
 
         public override Attempt<IInvoice> PerformTask(IInvoice value)
         {
             // if taxes are not to be applied, skip this step
-            if(!CheckoutPreparation.ApplyTaxesToInvoice) return Attempt<IInvoice>.Succeed(value);
+            if(!OrderPreparation.ApplyTaxesToInvoice) return Attempt<IInvoice>.Succeed(value);
 
             return Attempt<IInvoice>.Succeed(value);
         }

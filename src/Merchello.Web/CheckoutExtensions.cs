@@ -58,24 +58,24 @@ namespace Merchello.Web
 
 
         /// <summary>
-        /// Gets the <see cref="IBasketCheckoutPreparation"/>
+        /// Gets the <see cref="IBasketOrderPreparation"/>
         /// </summary>
         /// <param name="basket">The basket with items use in the checkout</param>
-        /// <returns>A <see cref="IBasketCheckoutPreparation"/></returns>
-        public static BasketCheckoutPreparation CheckoutPreparation(this IBasket basket)
+        /// <returns>A <see cref="IBasketOrderPreparation"/></returns>
+        public static BasketOrderPreparation OrderPreparation(this IBasket basket)
         {
-            return basket.CheckoutPreparation(MerchelloContext.Current);
+            return basket.OrderPreparation(MerchelloContext.Current);
         }
 
         /// <summary>
-        /// Gets the <see cref="IBasketCheckoutPreparation"/>
+        /// Gets the <see cref="IBasketOrderPreparation"/>
         /// </summary>
         /// <param name="basket">The basket with items use in the checkout</param>
         /// <param name="merchelloContext">The <see cref="IMerchelloContext"/></param>
-        /// <returns>A <see cref="IBasketCheckoutPreparation"/></returns>
-        internal static BasketCheckoutPreparation CheckoutPreparation(this IBasket basket, IMerchelloContext merchelloContext)
+        /// <returns>A <see cref="IBasketOrderPreparation"/></returns>
+        internal static BasketOrderPreparation OrderPreparation(this IBasket basket, IMerchelloContext merchelloContext)
         {
-            return BasketCheckoutPreparation.GetBasketCheckoutPreparation(merchelloContext, basket);
+            return BasketOrderPreparation.GetBasketCheckoutPreparation(merchelloContext, basket);
         }
     }
 }

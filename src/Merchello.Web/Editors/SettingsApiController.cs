@@ -60,7 +60,7 @@ namespace Merchello.Web.Editors
             ICountry country = _storeSettingService.GetCountryByCode(id);
             if (country == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
 
             return country.ToCountryDisplay();
@@ -76,7 +76,7 @@ namespace Merchello.Web.Editors
             var countries = _storeSettingService.GetAllCountries();
             if (countries == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
 
             foreach (ICountry country in countries)
@@ -96,7 +96,7 @@ namespace Merchello.Web.Editors
             var countries = _storeSettingService.GetAllCountries(codes);
             if (countries == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
 
             foreach (ICountry country in countries)
@@ -164,7 +164,7 @@ namespace Merchello.Web.Editors
 
 			if (settings == null)
 			{
-				throw new HttpResponseException(HttpStatusCode.NotFound);
+				throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
 			}
 
 			return settingDisplay.ToStoreSettingDisplay(settings);

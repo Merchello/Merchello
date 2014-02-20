@@ -11,8 +11,8 @@ namespace Merchello.Core.Chains.InvoiceCreation
     /// </summary>
     internal class AddBillingInfoToInvoiceTask : CheckoutPreparationAttemptChainTaskBase
     {
-        public AddBillingInfoToInvoiceTask(CheckoutPreparationBase checkoutPreparation) 
-            : base(checkoutPreparation)
+        public AddBillingInfoToInvoiceTask(OrderPreparationBase orderPreparation) 
+            : base(orderPreparation)
         { }
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace Merchello.Core.Chains.InvoiceCreation
         /// <returns></returns>
         public override Attempt<IInvoice> PerformTask(IInvoice value)
         {
-            var address = CheckoutPreparation.Customer.ExtendedData.GetAddress(Constants.ExtendedDataKeys.BillingAddress);
+            var address = OrderPreparation.Customer.ExtendedData.GetAddress(Constants.ExtendedDataKeys.BillingAddress);
             if (address == null) return Attempt<IInvoice>.Fail(new InvalidDataException("Billing information could not be retrieved from the Checkout"));
 
             value.SetBillingAddress(address);
