@@ -8,6 +8,7 @@ using Examine;
 using Examine.LuceneEngine;
 using Examine.LuceneEngine.Config;
 using Lucene.Net.Analysis;
+using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Examine.DataServices;
 
@@ -61,14 +62,18 @@ namespace Merchello.Examine.Providers
                 nodes.AddRange(p.SerializeToXml().Descendants("productVariant"));
             }
 
-            AddNodesToIndex(nodes, type);
+            AddNodesToIndex(nodes, IndexTypes.ProductVariant);
         }
 
 
         public override void RebuildIndex()
         {
             DataService.LogService.AddVerboseLog(-1, "Rebuilding index");
-            base.RebuildIndex();
+
+            EnsureIndex(true);
+
+            PerformIndexAll(IndexTypes.ProductVariant);
+            //base.RebuildIndex();
         }
 
         /// <summary>
@@ -136,7 +141,7 @@ namespace Merchello.Examine.Providers
                 new StaticField("totalInventoryCount", FieldIndexTypes.NOT_ANALYZED, false, "NUMBER"),
                 new StaticField("attributes", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
                 new StaticField("catalogInventories", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
-                new StaticField("options", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
+                new StaticField("productOptions", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
                 new StaticField("createDate", FieldIndexTypes.NOT_ANALYZED, false, "DATETIME"),
                 new StaticField("updateDate", FieldIndexTypes.NOT_ANALYZED, false, "DATETIME"),
                 new StaticField("allDocs", FieldIndexTypes.ANALYZED, false, string.Empty)

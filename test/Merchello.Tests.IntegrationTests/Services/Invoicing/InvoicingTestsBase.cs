@@ -1,10 +1,11 @@
 ﻿using System.Linq;
 using Merchello.Core.Models.Rdbms;
+using Merchello.Tests.IntegrationTests.TestHelpers;
 using NUnit.Framework;
 
 namespace Merchello.Tests.IntegrationTests.Services.Invoicing
 {
-    public class InvoicingTestsBase : ServiceIntegrationTestBase
+    public class InvoicingTestsBase : DatabaseIntegrationTestBase
     {
         public override void FixtureSetup()
         {

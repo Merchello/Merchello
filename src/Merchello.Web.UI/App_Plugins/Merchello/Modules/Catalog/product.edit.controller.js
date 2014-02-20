@@ -81,30 +81,6 @@
             }
         };
 
-        $scope.chooseMedia = function () {
-
-            dialogService.mediaPicker({
-                multipicker: true,
-                callback: function (data) {
-                    _.each(data.selection, function (media, i) {
-                        //shortcuts
-                        //TODO, do something better then this for searching
-
-                        var img = {};
-                        img.id = media.id;
-                        img.src = imageHelper.getImagePropertyValue({ imageModel: media });
-                        img.thumbnail = imageHelper.getThumbnailFromPath(img.src);
-                        $scope.images.push(img);
-                        $scope.ids.push(img.id);
-                    });
-
-                    $scope.sync();
-                }
-            });
-
-        };
-
-
         $scope.changeSortOrder = function (propertyToSort) {
 
             if ($scope.sortProperty == propertyToSort) {
@@ -250,7 +226,7 @@
                 confirm: function () {
                     var selected = $scope.selectedVariants();
                     for (var i = 0; i < selected.length; i++) {
-                        selected[i].totalInventoryCount = $scope.updateInventoryFlyout.newInventory;
+                        selected[i].globalInventoryChanged($scope.updateInventoryFlyout.newInventory);
                         var savepromise = merchelloProductVariantService.save(selected[i]);
                         savepromise.then(function () {
                             notificationsService.success("Product Variant Saved", "");

@@ -13,7 +13,7 @@ namespace Merchello.Core.Models.Rdbms
         string Sku { get; set; }
         string Name { get; set; }
         int Quantity { get; set; }
-        decimal Amount { get; set; }
+        decimal Price { get; set; }
         bool Exported { get; set; }
         string ExtendedData { get; set; }
         DateTime UpdateDate { get; set; }

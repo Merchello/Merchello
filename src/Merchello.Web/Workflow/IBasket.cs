@@ -5,11 +5,15 @@ namespace Merchello.Web.Workflow
 {
     public interface IBasket
     {
+        Guid VersionKey { get; }
+
         // Adds an item to the basket
         void AddItem(IProduct product);
         void AddItem(IProduct product, int quantity);
         void AddItem(IProduct product, string name, int quantity);
+        void AddItem(IProduct product, string name, int quantity, ExtendedDataCollection extendedData);
         void AddItem(IProductVariant productVariant);
+        void AddItem(IProductVariant productVariant, int quantity);
         void AddItem(IProductVariant productVariant, string name, int quantity);
         void AddItem(IProductVariant productVariant, string name, int quantity, ExtendedDataCollection extendedData);
         //void AddItem(string name, string sku, decimal price);
@@ -22,7 +26,7 @@ namespace Merchello.Web.Workflow
         void UpdateQuantity(IProductVariant productVariant, int quantity);
       
         /// Removes an item from the basket      
-        void RemoveItem(Guid key);     
+        void RemoveItem(Guid itemKey);     
         void RemoveItem(string sku);        
         void RemoveItem(IProductVariant productVariant);
 
@@ -61,6 +65,11 @@ namespace Merchello.Web.Workflow
         /// The basket line items
         /// </summary>
         LineItemCollection Items { get; }
+
+        /// <summary>
+        /// Returns the basket's item count
+        /// </summary>
+        int TotalItemCount { get; }
 
         /// <summary>
         /// Returns the sum of all basket item quantities

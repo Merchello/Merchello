@@ -199,10 +199,10 @@ namespace Merchello.Tests.UnitTests.Serialization
         {
             //// Arrange
             var extendedData = new ExtendedDataCollection();
-            extendedData.AddAddress(_address, AddressType.Billing);
+            extendedData.AddAddress(_address, AddressType.Shipping);
 
             //// Act
-            var address = extendedData.GetAddress(AddressType.Billing);
+            var address = extendedData.GetAddress(AddressType.Shipping);
 
             //// Assert
             Assert.NotNull(address);

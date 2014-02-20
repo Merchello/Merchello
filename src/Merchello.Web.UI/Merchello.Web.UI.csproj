@@ -143,11 +143,12 @@
     <Content Include="Umbraco\images\tray\Merchello-Icon.png" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\CustomerEdit.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\CustomerView.html" />
-    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\edit.html" />
     <Content Include="Umbraco\images\tray\Merchello-Icon.gif" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Plugins\Merchello\Config\merchello.config" />
+    <Content Include="App_Plugins\Merchello\Config\merchello.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\OrderEdit.html" />

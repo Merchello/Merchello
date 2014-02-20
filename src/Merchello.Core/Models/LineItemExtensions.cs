@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Data;
-using System.Globalization;
-using System.IO;
-using System.Xml;
+using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Models.TypeFields;
+using Umbraco.Core.Logging;
 
 namespace Merchello.Core.Models
 {
@@ -22,10 +20,20 @@ namespace Merchello.Core.Models
         public static void AddItem(this ILineItemContainer container, IProductVariant productVariant, int quantity)
         {
             var extendedData = new ExtendedDataCollection();
-            extendedData.AddProductVariantValues(productVariant);
+            
+            container.AddItem(productVariant, quantity, extendedData);
+        }
 
+
+        /// <summary>
+        /// Adds a <see cref="IProductVariant"/> line item to the collection
+        /// </summary>
+        public static void AddItem(this ILineItemContainer container, IProductVariant productVariant, int quantity, ExtendedDataCollection extendedData)
+        {
+            extendedData.AddProductVariantValues(productVariant);
             container.AddItem(LineItemType.Product, productVariant.Name, productVariant.Sku, quantity, productVariant.Price, extendedData);
         }
+
 
         /// <summary>
         /// Adds a line item to the collection
@@ -63,29 +71,64 @@ namespace Merchello.Core.Models
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="lineItem"></param>
-        /// <returns>Returns a line item of type T</returns>
-        public static T ConvertToNewLineItem<T>(this ILineItem lineItem) where T : LineItemBase
-        {
-            var ctrArgs = new[]
-                {
-                    typeof (Guid), typeof (string), typeof (string), typeof (int), typeof (decimal), typeof (ExtendedDataCollection)
-                };
-            
+        /// <returns>A <see cref="LineItemBase"/> of type T</returns>
+        public static T AsLineItemOf<T>(this ILineItem lineItem) where T : class, ILineItem
+        {    
             var ctrValues = new object[]
                 {                    
                     lineItem.LineItemTfKey,
-                    lineItem.Sku,
                     lineItem.Name,
+                    lineItem.Sku,
                     lineItem.Quantity,
-                    lineItem.Amount,
+                    lineItem.Price,
                     lineItem.ExtendedData
                 };
 
-            var converted = ActivatorHelper.CreateInstance<LineItemBase>(typeof(T), ctrArgs, ctrValues);
-            converted.Exported = lineItem.Exported;
 
-            return converted as T;
+            var attempt = ActivatorHelper.CreateInstance<LineItemBase>(typeof(T).FullName, ctrValues);
+            if (!attempt.Success)
+            {
+                LogHelper.Error<ILineItem>("Failed to convertion ILineItem", attempt.Exception);
+                throw attempt.Exception;
+            }
+            attempt.Result.Exported = lineItem.Exported;
+
+            return attempt.Result as T;
         }
+
+
+        /// <summary>
+        /// Creates a line item of a particular type for a shipment rate quote
+        /// </summary>
+        /// <typeparam name="T">The type of the line item to create</typeparam>
+        /// <param name="shipmentRateQuote">The <see cref="ShipmentRateQuote"/> to be translated to a line item</param>
+        /// <returns>A <see cref="LineItemBase"/> of type T</returns>
+        public static T AsLineItemOf<T>(this IShipmentRateQuote shipmentRateQuote) where T : LineItemBase
+        {
+            var extendedData = new ExtendedDataCollection();
+            extendedData.AddShipment(shipmentRateQuote.Shipment);
+            
+            var ctrValues = new object[]
+                {
+                    EnumTypeFieldConverter.LineItemType.Shipping.TypeKey,
+                    shipmentRateQuote.ShimpentLineItemName(),
+                    shipmentRateQuote.ShipMethod.ServiceCode, // TODO this may not be unique (SKU) once multiple shipments are exposed
+                    1,
+                    shipmentRateQuote.Rate,
+                    extendedData
+                };
+
+            var attempt = ActivatorHelper.CreateInstance<LineItemBase>(typeof (T).FullName, ctrValues);
+
+            if (!attempt.Success)
+            {
+                LogHelper.Error<ILineItem>("Failed instiating a IShipmentRateQuote from ExtendedDataCollection", attempt.Exception);
+                throw attempt.Exception;
+            }
+            return attempt.Result as T;
+        }
+
+
     }
 }
 

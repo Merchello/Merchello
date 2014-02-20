@@ -30,8 +30,8 @@ namespace Merchello.Core.Models.Rdbms
         [Column("quantity")]
         public int Quantity { get; set; }        
 
-        [Column("amount")]
-        public decimal Amount { get; set; }
+        [Column("price")]
+        public decimal Price { get; set; }
 
         [Column("extendedData")]
         [NullSetting(NullSetting = NullSettings.Null)]

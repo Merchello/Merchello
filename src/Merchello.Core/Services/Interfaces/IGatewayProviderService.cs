@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Merchello.Core.Models;
+using Merchello.Core.Models.Interfaces;
 using Umbraco.Core;
 using Umbraco.Core.Services;
 
@@ -126,9 +127,28 @@ namespace Merchello.Core.Services
 
         #region ShipCountry
 
+        /// <summary>
+        /// Retrieves a <see cref="IShipCountry"/> by it's unique key 'Guid'
+        /// </summary>
+        /// <param name="key">The primary key of the <see cref="IShipCountry"/></param>
+        /// <returns>Returns a <see cref="IShipCountry"/></returns>
+        IShipCountry GetShipCountryByKey(Guid key);
+
+        /// <summary>
+        /// Gets a <see cref="IShipCountry"/> by CatalogKey and CountryCode
+        /// </summary>
+        /// <param name="catalogKey">The unique key of the <see cref="IWarehouseCatalog"/></param>
+        /// <param name="countryCode">The two character ISO country code</param>
+        /// <returns>An <see cref="IShipCountry"/></returns>
         IShipCountry GetShipCountry(Guid catalogKey, string countryCode);
 
-        #endregion
+        /// <summary>
+        /// Returns a collection of all <see cref="IShipCountry"/>
+        /// </summary>
+        /// <returns>A collection of all <see cref="IShipCountry"/></returns>
+        IEnumerable<IShipCountry> GetAllShipCountries();
+
+            #endregion
 
         #region CountryTaxRate
 

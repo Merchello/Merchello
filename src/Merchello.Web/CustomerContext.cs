@@ -4,10 +4,7 @@ using Merchello.Core;
 using Merchello.Core.Cache;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
-using Merchello.Web.Models;
 using Umbraco.Core.Logging;
-using Umbraco.Core.Models.EntityBase;
-using umbraco.cms.businesslogic.member;
 using Umbraco.Core;
 using Umbraco.Web;
 
@@ -139,7 +136,7 @@ namespace Merchello.Web
         private void CacheCustomer(ICustomerBase customer)
         {
             // set/reset the cookie 
-            // TODO decide how we want to deal with cookie persistence options - session based to start
+            // TODO decide how we want to deal with cookie persistence options
             var cookie = new HttpCookie(ConsumerCookieKey)
             {
                 Value = EncryptionHelper.Encrypt(customer.EntityKey.ToString())

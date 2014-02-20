@@ -3,7 +3,7 @@ using System.Configuration;
 using System.IO;
 using System.Reflection;
 using Merchello.Core.Configuration.Outline;
-using Umbraco.Core.IO;
+using Umbraco.Core.Logging;
 
 namespace Merchello.Core.Configuration
 {
@@ -32,30 +32,56 @@ namespace Merchello.Core.Configuration
         public static string ApplicationName = "Merchello";
         public static string ConfigurationName = ApplicationName.ToLower();
 
+        /// <summary>
+        /// Returns the <see cref="MerchelloSection"/> Configuration Element
+        /// </summary>
         public MerchelloSection Section
         {
             get { return (MerchelloSection)ConfigurationManager.GetSection(ConfigurationName); }
         }
         
         /// <summary>
-        /// The configuration setting for DefaultApplyPaymentStrategy
+        /// Gets the <see cref="StrategyElement"/> by it's configuration alias
         /// </summary>
-        public string DefaultApplyPaymentStrategy
+        /// <param name="alias">The alias (configuration key) of the <see cref="StrategyElement"/></param>
+        /// <returns>
+        /// <see cref="StrategyElement"/>
+        /// </returns>
+        public StrategyElement GetStrategyElement(string alias)
         {
-            get { return Section.Settings["DefaultApplyPaymentStrategy"].Value; }
-        }
-
-        /// <summary>
-        /// The configuration setting for the DefaultBasketPackagingStrategy
-        /// </summary>
-        public string DefaultBasketPackagingStrategy
-        {
-            get { return Section.Settings["DefaultBasketPackagingStrategy"].Value; }
+            try
+            {
+                return Section.Strategies[alias];
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Info<MerchelloConfiguration>(ex.Message);
+                return null;
+            }
         }
 
         public string DefaultSkuSeparator
         {
             get { return Section.Settings["DefaultSkuSeparator"].Value; }
+        }
+
+        /// <summary>
+        /// Gets a <see cref="TaskChainElement"/> by its configuration alias
+        /// </summary>
+        /// <param name="alias">The alias (configuration key) of the <see cref="TaskChainElement"/></param>
+        /// <returns><see cref="TaskChainElement"/></returns>
+        public TaskChainElement GetTaskChainElement(string alias)
+        {
+            try
+            {
+                return Section.TaskChains[alias];
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Info<MerchelloConfiguration>(ex.Message);
+                return null;
+            }
+            
         }
 
         /// <summary>
@@ -84,7 +110,6 @@ namespace Merchello.Core.Configuration
 
             return _rootDir;
         }
-
 
         /// <summary>
         /// Gets the full path to root.

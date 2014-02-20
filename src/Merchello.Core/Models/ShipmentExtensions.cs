@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.IO;
+using System.Linq;
+using Merchello.Core.Gateways;
 using Merchello.Core.Gateways.Shipping;
-using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Services;
 using Umbraco.Core;
 using Umbraco.Core.Logging;
@@ -24,15 +24,15 @@ namespace Merchello.Core.Models
         public static Attempt<IShipCountry> GetValidatedShipCountry(this IShipment shipment, IGatewayProviderService gatewayProviderService)
          {
 
-             var visitor = new ShimpmentWarehouseCatalogValidationVisitor();
+             var visitor = new WarehouseCatalogValidationVisitor();
              shipment.Items.Accept(visitor);
 
              // quick validation of shipment
-             if (visitor.CatalogValidationStatus != ShimpmentWarehouseCatalogValidationVisitor.ShipmentCatalogValidationStatus.Ok)
+             if (visitor.CatalogCatalogValidationStatus != WarehouseCatalogValidationVisitor.CatalogValidationStatus.Ok)
              {
-                 LogHelper.Error<ShippingGatewayProviderBase>("ShipMethods could not be determined for Shipment passed to GetAvailableShipMethodsForDestination method. Validator returned: " + visitor.CatalogValidationStatus, new ArgumentException("merchWarehouseCatalogKey"));
-                 return visitor.CatalogValidationStatus ==
-                        ShimpmentWarehouseCatalogValidationVisitor.ShipmentCatalogValidationStatus.ErrorMultipleCatalogs
+                 LogHelper.Error<ShippingGatewayProviderBase>("ShipMethods could not be determined for Shipment passed to GetAvailableShipMethodsForDestination method. Validator returned: " + visitor.CatalogCatalogValidationStatus, new ArgumentException("merchWarehouseCatalogKey"));
+                 return visitor.CatalogCatalogValidationStatus ==
+                        WarehouseCatalogValidationVisitor.CatalogValidationStatus.ErrorMultipleCatalogs
                             ? Attempt<IShipCountry>.Fail(
                                 new InvalidDataException("Multiple CatalogKeys found in Shipment Items"))
                             : Attempt<IShipCountry>.Fail(new InvalidDataException("No CatalogKeys found in Shipment Items"));
@@ -46,7 +46,7 @@ namespace Merchello.Core.Models
         /// </summary>
         /// <param name="shipment">The <see cref="IShipment"/></param>
         /// <returns>Returns a <see cref="IAddress"/></returns>
-        public static IAddress OriginAddress(this IShipment shipment)
+        public static IAddress GetOriginAddress(this IShipment shipment)
         {
             return new Address()
                 {
@@ -65,8 +65,8 @@ namespace Merchello.Core.Models
         /// Gets an <see cref="IAddress"/> representing the destination address of the <see cref="IShipment"/>
         /// </summary>
         /// <param name="shipment">The <see cref="IShipment"/></param>
-        /// <returns>Returns a <see cref="IAddress"/></returns>
-        public static IAddress DestinationAddress(this IShipment shipment)
+        /// <returns>Returns a <see cref="IAddress"/></returns>        
+        public static IAddress GetDestinationAddress(this IShipment shipment)
         {
             return new Address()
             {
@@ -79,6 +79,75 @@ namespace Merchello.Core.Models
                 CountryCode = shipment.ToCountryCode,
                 IsCommercial = shipment.ToIsCommercial
             };
+        }
+
+        /// <summary>
+        /// Returns a collection of <see cref="IShipmentRateQuote"/> from the various configured shipping providers
+        /// </summary>
+        /// <param name="shipment"><see cref="IShipment"/></param>
+        /// <returns>A collection of <see cref="IShipmentRateQuote"/></returns>
+        public static IEnumerable<IShipmentRateQuote> ShipmentRateQuotes(this IShipment shipment)
+        {
+            return shipment.ShipmentRateQuotes(MerchelloContext.Current);
+        }
+
+        internal static IEnumerable<IShipmentRateQuote> ShipmentRateQuotes(this IShipment shipment, IMerchelloContext merchelloContext)
+        {
+            return merchelloContext.Gateways.Shipping.GetShipRateQuotesForShipment(shipment);
+        }
+
+        /// <summary>
+        /// Returns a <see cref="IShipmentRateQuote"/> for a <see cref="IShipment"/> given the 'unique' key of the <see cref="IShipMethod"/>
+        /// </summary>
+        /// <param name="shipment">The <see cref="IShipment"/></param>
+        /// <param name="shipMethodKey">The Guid key as a string of the <see cref="IShipMethod"/></param>
+        /// <returns>The <see cref="IShipmentRateQuote"/> for the shipment by the specific <see cref="IShipMethod"/> specified</returns>
+        public static IShipmentRateQuote ShipmentRateQuoteByShipMethod(this IShipment shipment, string shipMethodKey)
+        {
+            return shipment.ShipmentRateQuoteByShipMethod(new Guid(shipMethodKey));
+        }
+
+        /// <summary>
+        /// Returns a <see cref="IShipmentRateQuote"/> for a <see cref="IShipment"/> given the 'unique' key of the <see cref="IShipMethod"/>
+        /// </summary>
+        /// <param name="shipment">The <see cref="IShipment"/></param>
+        /// <param name="shipMethodKey">The Guid key of the <see cref="IShipMethod"/></param>
+        /// <returns>The <see cref="IShipmentRateQuote"/> for the shipment by the specific <see cref="IShipMethod"/> specified</returns>
+        public static IShipmentRateQuote ShipmentRateQuoteByShipMethod(this IShipment shipment, Guid shipMethodKey)
+        {
+            return shipment.ShipmentRateQuoteByShipMethod(MerchelloContext.Current, shipMethodKey);
+        }
+
+        /// <summary>
+        /// Returns a <see cref="IShipmentRateQuote"/> for a <see cref="IShipment"/> given the 'unique' key of the <see cref="IShipMethod"/>
+        /// </summary>
+        /// <param name="shipment">The <see cref="IShipment"/></param>
+        /// <param name="merchelloContext">The <see cref="IMerchelloContext"/></param>
+        /// <param name="shipMethodKey">The Guid key of the <see cref="IShipMethod"/></param>
+        /// <returns>The <see cref="IShipmentRateQuote"/> for the shipment by the specific <see cref="IShipMethod"/> specified</returns>
+        internal static IShipmentRateQuote ShipmentRateQuoteByShipMethod(this IShipment shipment, IMerchelloContext merchelloContext, Guid shipMethodKey)
+        {
+            var shipMethod = ((ServiceContext) merchelloContext.Services).ShipMethodService.GetByKey(shipMethodKey);
+            if (shipMethod == null) return null;
+
+            // Get the gateway provider to generate the shipment rate quote
+            var provider = merchelloContext.Gateways.Shipping.ResolveByKey(shipMethod.ProviderKey);
+
+            // get the GatewayShipMethod from the provider
+            var gwShipMethod = provider.GetAvailableShipMethodsForShipment(shipment).FirstOrDefault(x => x.ShipMethod.Key == shipMethodKey);
+
+            if (gwShipMethod == null) return null;
+
+            return provider.QuoteShipMethodForShipment(shipment, gwShipMethod);
+        }
+
+        /// <summary>
+        /// Returns a string intended to be used as a 'Shipment Line Item' title or name
+        /// </summary>
+        /// <param name="shipmentRateQuote">The <see cref="IShipmentRateQuote"/> used to quote the line item</param>
+        public static string ShimpentLineItemName(this IShipmentRateQuote shipmentRateQuote)
+        {
+            return string.Format("Shipment - {0} - {1} items", shipmentRateQuote.ShipMethod.Name, shipmentRateQuote.Shipment.Items.Count);
         }
     }
 }

@@ -239,6 +239,10 @@ namespace Merchello.Core.Persistence.Repositories
 
             foreach (var item in lineItems)
             {
+                // In the mapping between different line item types the container key is 
+                // invalidated so we need to set it to the current container.
+                if (!item.ContainerKey.Equals(containerKey)) item.ContainerKey = containerKey;
+
                 SaveLineItem(item);
             }
         }

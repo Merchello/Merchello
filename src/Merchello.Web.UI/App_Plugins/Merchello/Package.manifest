@@ -12,7 +12,6 @@
 	javascript: [
 		'~/App_Plugins/Merchello/lib/bootstrap/js/bootstrap.min.js',
 		'~/App_Plugins/Merchello/lib/JsonTree/jsontree.js',
-		'~/App_Plugins/Merchello/lib/ngTagsInput/ng-tags-input.min.js',
 		'~/App_Plugins/Merchello/Common/Js/merchello.namespaces.js',
 		'~/App_Plugins/Merchello/Common/Js/startfrom.filter.js',
 		'~/App_Plugins/Merchello/Common/Js/merchello.models.js',
@@ -62,6 +61,5 @@
 	],
 	css: [
 		'~/App_Plugins/Merchello/Common/Css/merchello.css',
-		'~/App_Plugins/Merchello/lib/ngTagsInput/ng-tags-input.min.css',
 	]
 }

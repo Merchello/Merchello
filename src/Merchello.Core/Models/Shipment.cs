@@ -10,7 +10,7 @@ namespace Merchello.Core.Models
     [Serializable]
     [DataContract(IsReference = true)]
     [KnownType(typeof(LineItemCollection))]
-    internal class Shipment : Entity, IShipment
+    internal class Shipment : VersionTaggedEntity, IShipment
     {
         private string _fromOrganization;
         private string _fromName;

@@ -37,6 +37,11 @@
         IProductVariantService ProductVariantService { get; }
 
         /// <summary>
+        /// Gets the <see cref="IShipCountryService"/>
+        /// </summary>
+        IShipCountryService ShipCountryService { get; }
+
+        /// <summary>
         /// Gets the <see cref="IStoreSettingService"/>
         /// </summary>
         IStoreSettingService StoreSettingService { get; }

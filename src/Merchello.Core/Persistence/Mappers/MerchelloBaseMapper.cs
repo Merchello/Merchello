@@ -4,8 +4,7 @@ namespace Merchello.Core.Persistence.Mappers
 {
     internal abstract class MerchelloBaseMapper : BaseMapper
     {
-        protected static readonly ConcurrentDictionary<string, DtoMapModel> PropertyInfoCacheInstance = new ConcurrentDictionary<string, DtoMapModel>();
-
+        protected readonly ConcurrentDictionary<string, DtoMapModel> PropertyInfoCacheInstance = new ConcurrentDictionary<string, DtoMapModel>();
 
         internal abstract void BuildMap();
         

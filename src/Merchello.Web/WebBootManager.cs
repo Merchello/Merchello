@@ -32,6 +32,9 @@ namespace Merchello.Web
         {
             base.Initialize();
 
+            // initialize the AutoMapperMappings
+            AutoMapperMappings.BindMappings();
+
             return this;
         }
 

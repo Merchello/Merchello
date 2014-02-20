@@ -177,15 +177,10 @@ namespace Merchello.Web.Editors
             try
             {
                 newProduct = _productService.CreateProductWithKey(name, sku, price) as Product;
+                _productService.Save(newProduct);
 
-                if (!newProduct.Download)
-                {
-                    newProduct.AddToCatalogInventory(_warehouseService.GetDefaultWarehouse().DefaultCatalog());
-                    newProduct.CatalogInventories.First().Count = 10;
-                    _productService.Save(newProduct);
-
-                    //newProduct = _productService.GetByKey(newProduct.Key) as Product;
-                }
+                newProduct.AddToCatalogInventory(_warehouseService.GetDefaultWarehouse().DefaultCatalog());
+                _productService.Save(newProduct);
             }
             catch (Exception ex)
             {
@@ -209,17 +204,12 @@ namespace Merchello.Web.Editors
             try
             {
                 newProduct = _productService.CreateProduct(product.Name, product.Sku, product.Price);
-                newProduct = product.ToProduct(newProduct);
                 _productService.Save(newProduct);
 
-                if (!newProduct.Download)
-                {
-                    newProduct.AddToCatalogInventory(_warehouseService.GetDefaultWarehouse().DefaultCatalog());
-                    newProduct.CatalogInventories.First().Count = 10;
-                    _productService.Save(newProduct);
+                newProduct.AddToCatalogInventory(_warehouseService.GetDefaultWarehouse().DefaultCatalog());
 
-                    //newProduct = _productService.GetByKey(newProduct.Key) as Product;
-                }
+                newProduct = product.ToProduct(newProduct);
+                _productService.Save(newProduct);
             }
             catch (Exception ex)
             {
@@ -273,34 +263,5 @@ namespace Merchello.Web.Editors
 
             return Request.CreateResponse(HttpStatusCode.OK);
         }
-
-        /// <summary>
-        /// Creates a product variant from Sku, Name, Price
-        ///
-        /// GET /umbraco/Merchello/ProductApi/NewProductVariant?key={guid}&attributes=[]
-        /// </summary>
-        /// <param name="item"></param>
-        //[AcceptVerbs("GET", "POST")]
-        //public IProductVariant NewProductVariant(IProductVariant productVariant)
-        //{
-        //    IProductVariant newProductVariant = null;
-
-        //    try
-        //    {
-        //        var product = _productService.GetByKey(productVariant.ProductKey);
-        //        var productAttributes = new ProductAttributeCollection();
-        //        foreach (var attribute in productVariant.Attributes)
-        //        {
-        //            productAttributes.Add(attribute);
-        //        }
-        //        newProductVariant = _productVariantService.CreateProductVariantWithId(product, productAttributes, true);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new HttpResponseException(HttpStatusCode.InternalServerError);
-        //    }
-
-        //    return newProductVariant;
-        //}
     }
 }

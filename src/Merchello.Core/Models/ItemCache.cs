@@ -11,10 +11,11 @@ namespace Merchello.Core.Models
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    public class ItemCache : Entity, IItemCache
+    public class ItemCache : VersionTaggedEntity, IItemCache
     {
         private Guid _entityKey;
         private Guid _itemCacheTfKey;
+        
         private LineItemCollection _items;
  
         public ItemCache(Guid entityKey, ItemCacheType itemCacheType)

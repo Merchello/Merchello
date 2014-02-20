@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Linq;
 using Examine;
+using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Merchello.Examine;
@@ -20,7 +21,7 @@ namespace Merchello.Web.Search
         {
             base.ApplicationStarted(umbracoApplication, applicationContext);
 
-            LogHelper.Info<ExamineEvents>("Initializing Examine and binding to Merchello business logic events");
+            LogHelper.Info<ExamineEvents>("Initializing Merchello ProductIndex binding events");
 
             // Merchello registered providers
             var registeredProviders =
@@ -91,29 +92,29 @@ namespace Merchello.Web.Search
 
         private static void IndexProduct(IProduct product)
         {
-            product.ProductVariants.ForEach(IndexProductVariant);
-            IndexProductVariant(((Product)product).MasterVariant, product.ProductOptions);
+            ProductIndexer.AddProductToIndex(product);
         }
 
+        
         private static void IndexProductVariant(IProductVariant productVariant)
         {
-            IndexProductVariant(productVariant, null);
-        }
-
-        private static void IndexProductVariant(IProductVariant productVariant, ProductOptionCollection productOptions)
-        {
-            ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"].ReIndexNode(productVariant.SerializeToXml(productOptions).Root, IndexTypes.ProductVariant);
+            ProductIndexer.ReIndexNode(productVariant.SerializeToXml().Root, IndexTypes.ProductVariant);
         }
 
         private static void DeleteProductFromIndex(IProduct product)
         {
-            product.ProductVariants.ForEach(DeleteProductVariantFromIndex);
-            DeleteProductVariantFromIndex(((Product)product).MasterVariant);
+            ProductIndexer.DeleteProductFromIndex(product);    
         }
 
         private static void DeleteProductVariantFromIndex(IProductVariant productVariant)
         {
-            ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"].DeleteFromIndex(((ProductVariant)productVariant).ExamineId.ToString(CultureInfo.InvariantCulture));
+            ProductIndexer.DeleteFromIndex(((ProductVariant)productVariant).ExamineId.ToString(CultureInfo.InvariantCulture));
         }
+
+        private static ProductIndexer ProductIndexer
+        {
+            get { return (ProductIndexer)ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"]; }
+        }
+
     }
 }

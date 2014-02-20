@@ -185,8 +185,8 @@
             self.catalogKey = "";
             self.warehouseKey = "";
             self.productVariantKey = "";
-            self.count = "";
-            self.lowCount = "";
+            self.count = 0;
+            self.lowCount = 0;
             self.catalogName = "";
         } else {
             self.catalogKey = catalogInventoryFromServer.catalogKey;
@@ -196,7 +196,6 @@
             self.lowCount = catalogInventoryFromServer.lowCount;
             self.catalogName = catalogInventoryFromServer.catalogName;
         }
-
     };
 
 }(window.merchello.Models = window.merchello.Models || {}));

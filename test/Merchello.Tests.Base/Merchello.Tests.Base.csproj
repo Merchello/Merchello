@@ -108,6 +108,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\src\packages\MiniProfiler.2.1.0\lib\net40\MiniProfiler.dll</HintPath>
     </Reference>
+    <Reference Include="Moq">
+      <HintPath>..\..\src\packages\Moq.4.1.1309.0919\lib\net40\Moq.dll</HintPath>
+    </Reference>
     <Reference Include="MySql.Data, Version=6.6.5.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\src\packages\MySql.Data.6.6.5\lib\net40\MySql.Data.dll</HintPath>
@@ -224,6 +227,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataMakers\AddressMock.cs" />
+    <Compile Include="DataMakers\CheckoutPreparationMock.cs" />
     <Compile Include="DataMakers\DataMakerMockSavedExtensions.cs" />
     <Compile Include="DataMakers\MockAnonymousCustomerDataMaker.cs" />
     <Compile Include="DataMakers\MockCustomerItemCacheDataMaker.cs" />

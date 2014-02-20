@@ -2,6 +2,7 @@
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Umbraco.Core.Cache;
+using Umbraco.Core.Logging;
 
 namespace Merchello.Core.Gateways
 {
@@ -31,7 +32,7 @@ namespace Merchello.Core.Gateways
         /// <returns></returns>
         public T GetInstance<T>(IGatewayProvider provider) where T : GatewayProviderBase
         {
-            return ActivateGateway(provider) as T;
+            return CreateGatewayProviderInstance(provider) as T;
         }
 
         /// <summary>
@@ -39,11 +40,18 @@ namespace Merchello.Core.Gateways
         /// </summary>
         /// <param name="gatewayProvider"></param>
         /// <returns></returns>
-        private GatewayProviderBase ActivateGateway(IGatewayProvider gatewayProvider)
+        private GatewayProviderBase CreateGatewayProviderInstance(IGatewayProvider gatewayProvider)
         {
-            var ctorArgs = new[] { typeof(IGatewayProviderService), typeof(IGatewayProvider), typeof(IRuntimeCacheProvider) };
             var ctoArgValues = new object[] { _gatewayProviderService, gatewayProvider, _runtimeCache };
-            return ActivatorHelper.CreateInstance<GatewayProviderBase>(Type.GetType(gatewayProvider.TypeFullName), ctorArgs, ctoArgValues);
+            var attempt = ActivatorHelper.CreateInstance<GatewayProviderBase>(gatewayProvider.TypeFullName, ctoArgValues);
+
+            if (!attempt.Success)
+            {
+                LogHelper.Error<GatewayProviderBase>("PackageBasket failed to instantiate the defaultStrategy.", attempt.Exception);
+                throw attempt.Exception;
+            }
+
+            return attempt.Result;
         }
 
         internal IGatewayProviderService GatewayProviderService

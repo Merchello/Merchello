@@ -5,12 +5,13 @@ using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Persistence.UnitOfWork;
 using Merchello.Core.Services;
 using Merchello.Tests.IntegrationTests.Services;
+using Merchello.Tests.IntegrationTests.TestHelpers;
 using NUnit.Framework;
 using Umbraco.Core;
 
 namespace Merchello.Tests.IntegrationTests.Taxation
 {
-    public class TaxationProviderTestBase : ServiceIntegrationTestBase
+    public class TaxationProviderTestBase : DatabaseIntegrationTestBase
     {
         protected IGatewayProviderService GatewayProviderService;
         protected IMerchelloContext MerchelloContext;

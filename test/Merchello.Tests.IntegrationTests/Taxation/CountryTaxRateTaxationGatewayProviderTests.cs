@@ -1,6 +1,5 @@
 ﻿using System.Data;
 using System.Linq;
-using Merchello.Core.Gateways;
 using Merchello.Core.Gateways.Taxation.CountryTaxRate;
 using Merchello.Core.Models;
 using NUnit.Framework;
@@ -16,7 +15,7 @@ namespace Merchello.Tests.IntegrationTests.Taxation
         [SetUp]
         public void Init()
         {
-            _taxProvider = ((GatewayContext)MerchelloContext.Gateways).ResolveByKey<CountryTaxRateTaxationGatewayProvider>(Core.Constants.ProviderKeys.Taxation.CountryTaxRateTaxationProviderKey);
+            _taxProvider = (ICountryTaxRateTaxationGatewayProvider)MerchelloContext.Gateways.Taxation.ResolveByKey(Core.Constants.ProviderKeys.Taxation.CountryTaxRateTaxationProviderKey);
 
             PreTestDataWorker.DeleteAllCountryTaxRates(Core.Constants.ProviderKeys.Taxation.CountryTaxRateTaxationProviderKey);
         }
@@ -49,7 +48,7 @@ namespace Merchello.Tests.IntegrationTests.Taxation
         {
             //// Arrange
             const string countryCode = "US";
-            var type = typeof (TaxProvince);
+            var type = typeof(TaxProvince);
 
             //// Act
             var countryTaxRate = _taxProvider.CreateCountryTaxRate(countryCode);

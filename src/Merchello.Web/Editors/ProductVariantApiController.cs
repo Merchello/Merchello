@@ -163,17 +163,16 @@ namespace Merchello.Web.Editors
                         productAttributes.Add(productOption.Choices[attribute.Key]);
                     }
 
-                    newProductVariant = _productVariantService.CreateProductVariantWithKey(product, productVariant.Name, productVariant.Sku, productVariant.Price, productAttributes, true);
+                    newProductVariant = _productVariantService.CreateProductVariantWithKey(product, productAttributes, true);
 
-                    if (!newProductVariant.Download)
+                    if (productVariant.TrackInventory)
                     {
                         newProductVariant.AddToCatalogInventory(_warehouseService.GetDefaultWarehouse().DefaultCatalog());
-                        newProductVariant.CatalogInventories.First().Count = 10;
-                        newProductVariant.CatalogInventories.First().LowCount = 3;
-                        //newProductVariant.Warehouses.First().Count = productVariant.WarehouseInventory.First().Count;
-                        //newProductVariant.Warehouses.First().LowCount = productVariant.WarehouseInventory.First().LowCount;
-                        _productVariantService.Save(newProductVariant);
                     }
+
+                    newProductVariant = productVariant.ToProductVariant(newProductVariant);
+
+                    _productVariantService.Save(newProductVariant);
                 }
                 else
                 {
@@ -202,6 +201,12 @@ namespace Merchello.Web.Editors
             try
             {
                 IProductVariant merchProductVariant = _productVariantService.GetByKey(productVariant.Key);
+
+                if (productVariant.TrackInventory && merchProductVariant.CatalogInventories.Count() == 0)
+                {
+                    merchProductVariant.AddToCatalogInventory(_warehouseService.GetDefaultWarehouse().DefaultCatalog());
+                }
+
                 merchProductVariant = productVariant.ToProductVariant(merchProductVariant);
 
                 _productVariantService.Save(merchProductVariant);
@@ -217,13 +222,13 @@ namespace Merchello.Web.Editors
         /// <summary>
         /// Deletes an existing product variant
         ///
-        /// DELETE /umbraco/Merchello/ProductVariantApi/DeleteVariant?key={key}
+        /// DELETE /umbraco/Merchello/ProductVariantApi/DeleteVariant?id={key}
         /// </summary>
         /// <param name="key">Product Variant key</param>
         [AcceptVerbs("GET", "DELETE")]
-        public HttpResponseMessage DeleteVariant(Guid key)
+        public HttpResponseMessage DeleteVariant(Guid id)
         {
-            var productVariantToDelete = _productVariantService.GetByKey(key);
+            var productVariantToDelete = _productVariantService.GetByKey(id);
             if (productVariantToDelete == null)
             {
                 return Request.CreateResponse(HttpStatusCode.NotFound);

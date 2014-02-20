@@ -236,6 +236,7 @@
   <ItemGroup>
     <Compile Include="Configuration\RegionalProvinceConfigurationCollectionTest.cs" />
     <Compile Include="ExtendedData\ExtendedDataExtensionTests.cs" />
+    <Compile Include="Mappers\AutoMapperTests.cs" />
     <Compile Include="Models\BasketTests.cs" />
     <Compile Include="Configuration\MerchelloSectionTests.cs" />
     <Compile Include="Configuration\Versioning.cs" />
@@ -245,6 +246,8 @@
     <Compile Include="Models\ExtendedDataCollectionTests.cs" />
     <Compile Include="Models\ProductTests.cs" />
     <Compile Include="Models\ProductVariantTests.cs" />
+    <Compile Include="Chains\ConceptPipelineTests.cs" />
+    <Compile Include="Chains\DemoAttemptChainTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Querying\AddressSqlClausesTests.cs" />
     <Compile Include="Querying\GatewayProviderSqlClausesTests.cs" />

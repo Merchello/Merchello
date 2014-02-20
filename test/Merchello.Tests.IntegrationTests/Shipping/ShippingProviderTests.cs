@@ -64,16 +64,15 @@ namespace Merchello.Tests.IntegrationTests.Shipping
         }
 
         /// <summary>
-        /// Test verifies that a list of all shipping providers can be retrieved from the GatewayContext
+        /// Test verifies that a list of all active shipping providers can be retrieved from the ShippingGatewayContext
         /// </summary>
         [Test]
-        public void Can_Retrieve_A_List_Of_All_ShippingProviders_From_The_GatewayContext()
+        public void Can_Instantiate_Active_ShippingProviders_From_The_ShippingGatewayContext()
         {
             //// Arrange
-            const GatewayProviderType gatewayProviderType = GatewayProviderType.Shipping;
-
+            
             //// Act
-            var providers = MerchelloContext.Gateways.GetGatewayProviders(gatewayProviderType);
+            var providers = MerchelloContext.Gateways.Shipping.ResolveAllActiveProviders();
 
             //// Assert
             Assert.NotNull(providers);
@@ -87,15 +86,15 @@ namespace Merchello.Tests.IntegrationTests.Shipping
         public void Can_Instantiate_A_ShippingProvider_From_The_GatewayContext()
         {
             //// Arrange
-            const GatewayProviderType gatewayProviderType = GatewayProviderType.Shipping;
-            var provider = MerchelloContext.Gateways.GetGatewayProviders(gatewayProviderType).FirstOrDefault();
-            Assert.NotNull(provider);
 
             //// Act
-            var shippingProvider = ((GatewayContext)MerchelloContext.Gateways).ResolveByGatewayProvider<RateTableShippingGatewayProvider>(provider);
+            var provider = MerchelloContext.Gateways.Shipping.ResolveAllActiveProviders().FirstOrDefault();
+            
+
 
             //// Assert
-            Assert.NotNull(shippingProvider);
+            Assert.NotNull(provider);
+            Assert.NotNull(provider);
         }
         
         /// <summary>
@@ -106,8 +105,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
         {
             //// Arrange
             var country = ShipCountryService.GetShipCountryByCountryCode(Catalog.Key, "US");
-            var provider = MerchelloContext.Gateways.GetGatewayProviders(GatewayProviderType.Shipping).FirstOrDefault();
-            var shippingProvider = ((GatewayContext)MerchelloContext.Gateways).ResolveByGatewayProvider<RateTableShippingGatewayProvider>(provider);
+            var shippingProvider = MerchelloContext.Gateways.Shipping.ResolveAllActiveProviders().FirstOrDefault();
             Assert.NotNull(shippingProvider);
             
             //// Act

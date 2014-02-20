@@ -1,9 +1,11 @@
-﻿using Merchello.Core;
+﻿using System;
+using Merchello.Core;
 using Merchello.Core.Cache;
 using Merchello.Core.Models;
 using Merchello.Core.Persistence.UnitOfWork;
 using Merchello.Core.Services;
 using Merchello.Tests.IntegrationTests.Services;
+using Merchello.Tests.IntegrationTests.TestHelpers;
 using Merchello.Web;
 using Merchello.Web.Models;
 using Merchello.Web.Workflow;
@@ -13,7 +15,7 @@ using Umbraco.Core;
 namespace Merchello.Tests.IntegrationTests.ItemCache
 {
     [TestFixture]
-    public class BasketTests : ServiceIntegrationTestBase
+    public class BasketTests : DatabaseIntegrationTestBase
     {
         private IMerchelloContext _merchelloContext;
         private ICustomerBase _customer;
@@ -110,6 +112,9 @@ namespace Merchello.Tests.IntegrationTests.ItemCache
             _basket.RemoveItem(product2.Sku);
             Basket.Save(_merchelloContext, _basket);
             _basket = Basket.GetBasket(_merchelloContext, _customer);
+
+            var price = _basket.TotalBasketPrice;
+            Console.WriteLine(price);
 
             //// Assert
             Assert.IsTrue(2 == _basket.Items.Count);

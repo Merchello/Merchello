@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Merchello.Core.Models.Interfaces;
 
 namespace Merchello.Core.Models

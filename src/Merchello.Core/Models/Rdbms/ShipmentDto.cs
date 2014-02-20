@@ -97,6 +97,10 @@ namespace Merchello.Core.Models.Rdbms
         [NullSetting(NullSetting = NullSettings.Null)]
         public Guid? ShipMethodKey { get; set; }
 
+        [Column("versionKey")]
+        [Constraint(Default = "newid()")]
+        public Guid VersionKey { get; set; }
+
         [Column("updateDate")]
         [Constraint(Default = "getdate()")]
         public DateTime UpdateDate { get; set; }

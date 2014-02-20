@@ -2,17 +2,18 @@
 using System.Linq;
 using Examine;
 using Examine.SearchCriteria;
+using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Examine.Providers;
 using Merchello.Tests.Base.DataMakers;
-using Merchello.Tests.IntegrationTests.Services;
+using Merchello.Tests.IntegrationTests.TestHelpers;
 using Merchello.Web.Models.ContentEditing;
 using NUnit.Framework;
 
 namespace Merchello.Tests.IntegrationTests.DisplayClasses
 {
     [TestFixture]
-    public class ProductDisplayTests : ServiceIntegrationTestBase
+    public class ProductDisplayTests : DatabaseIntegrationTestBase
     {
         private Guid _productKey;
         private Guid _productVariantKey;
@@ -47,6 +48,7 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
             product.SalePrice = 18M;
             product.Manufacturer = "Nike";
             product.ManufacturerModelNumber = "N01-012021-A";
+            product.TrackInventory = true;
             productService.Save(product);
 
             _productKey = product.Key;
@@ -130,6 +132,7 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
             Assert.AreEqual(product.Sku, productDisplay.Sku);
             Assert.AreEqual(product.Manufacturer, productDisplay.Manufacturer);
             Assert.AreEqual(product.ManufacturerModelNumber, productDisplay.ManufacturerModelNumber);
+            Assert.AreEqual(product.TrackInventory, productDisplay.TrackInventory);
             Assert.AreNotEqual(productDisplay.ManufacturerModelNumber, productDisplay.Manufacturer);
             Assert.AreEqual(product.ProductOptions.Count, productDisplay.ProductOptions.Count());
             Assert.AreEqual(product.ProductVariants.Count, productDisplay.ProductVariants.Count());
@@ -138,6 +141,7 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
             Assert.AreEqual(productVariant.Sku, productVariantDisplay.Sku);
             Assert.AreEqual(productVariant.Price, productVariantDisplay.Price);
             Assert.AreEqual(productVariant.ProductKey, productVariantDisplay.ProductKey);
+            Assert.AreEqual(productVariant.TrackInventory, productVariantDisplay.TrackInventory);
             Assert.AreEqual(productVariant.Attributes.Count(), productVariantDisplay.Attributes.Count());
             Assert.IsTrue(productVariantDisplay.CatalogInventories.Any());
 

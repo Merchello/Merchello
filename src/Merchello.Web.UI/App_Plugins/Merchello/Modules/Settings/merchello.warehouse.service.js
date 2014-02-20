@@ -6,18 +6,50 @@
         * @name umbraco.resources.MerchelloWarehouseService
         * @description Loads in data for data types
         **/
-    merchelloServices.MerchelloWarehouseService = function ($q, $http, umbDataFormatter, umbRequestHelper) {
+    merchelloServices.MerchelloWarehouseService = function ($q, $http, $cacheFactory, umbDataFormatter, umbRequestHelper) {
+
+        /* cacheFactory instance for cached items in the merchelloWarehouseService */
+        var _warehouseCache = $cacheFactory('merchelloWarehouse');
+
+        /* helper method to get from cache or fall back to an http api call */
+        function getCachedOrApi(cacheKey, apiMethod, entityName) {
+            var deferred = $q.defer();
+
+            var dataFromCache = _warehouseCache.get(cacheKey);
+
+            if (dataFromCache) {
+                deferred.resolve(dataFromCache);
+            }
+            else {
+                var promiseFromApi = umbRequestHelper.resourcePromise(
+                   $http.get(
+                        umbRequestHelper.getApiUrl('merchelloWarehouseApiBaseUrl', apiMethod)
+                    ),
+                    'Failed to get ' + entityName);
+
+                promiseFromApi.then(function (dataFromApi) {
+                    _warehouseCache.put(cacheKey, dataFromApi);
+                    deferred.resolve(dataFromApi);
+                }, function (reason) {
+                    deferred.reject(reason);
+                });
+            }
+
+            return deferred.promise;
+        }
 
         return {
 
             getDefaultWarehouse: function () {
 
-                return umbRequestHelper.resourcePromise(
-                   $http({
-                       url: umbRequestHelper.getApiUrl('merchelloWarehouseApiBaseUrl', 'GetDefaultWarehouse'),
-                       method: "GET"
-                   }),
-                   'Failed to retreive data for default warehouse');
+                return getCachedOrApi("DefaultWarehouse", "GetDefaultWarehouse", "default warehouse");
+
+                //return umbRequestHelper.resourcePromise(
+                //   $http({
+                //       url: umbRequestHelper.getApiUrl('merchelloWarehouseApiBaseUrl', 'GetDefaultWarehouse'),
+                //       method: "GET"
+                //   }),
+                //   'Failed to retreive data for default warehouse');
             },
 
             getById: function (id) {
@@ -33,6 +65,8 @@
 
             /** saves or updates a product variant object */
             save: function (warehouse) {
+
+                _warehouseCache.remove("DefaultWarehouse");
 
                 return umbRequestHelper.resourcePromise(
                     $http.post(

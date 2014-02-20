@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Merchello.Core.Configuration;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Umbraco.Core.Cache;
+using Umbraco.Core.Logging;
 
 namespace Merchello.Core.Gateways.Taxation.CountryTaxRate
 {
@@ -73,11 +75,31 @@ namespace Merchello.Core.Gateways.Taxation.CountryTaxRate
             return GatewayProviderService.GetCountryTaxRatesByProviderKey(GatewayProvider.Key);
         }
 
-        public override IInvoiceTaxResult CalculateTaxForInvoice(IInvoice invoice)
+        /// <summary>
+        /// Calculates the tax amount for an invoice
+        /// </summary>
+        /// <param name="invoice"><see cref="IInvoice"/></param>
+        /// <param name="taxAddress">The <see cref="IAddress"/> to base taxation rates.  Either origin or destination address.</param>
+        /// <returns><see cref="IInvoiceTaxResult"/></returns>
+        public override IInvoiceTaxResult CalculateTaxForInvoice(IInvoice invoice, IAddress taxAddress)
         {
-            throw new NotImplementedException();
-        }
+            var countryTaxRate = GetCountryTaxRateByCountryCode(taxAddress.CountryCode);
+            if (countryTaxRate == null) return null;
 
+            var ctrValues = new object[] { invoice, taxAddress, countryTaxRate };
+
+            var typeName = MerchelloConfiguration.Current.GetStrategyElement(Constants.StrategyTypeAlias.DefaultInvoiceTaxRateQuote).Type;
+
+            var attempt = ActivatorHelper.CreateInstance<InvoiceTaxationStrategyBase>(typeName, ctrValues);
+
+            if (!attempt.Success)
+            {
+                LogHelper.Error<CountryTaxRateTaxationGatewayProvider>("Failed to instantiate the tax rate quote strategy '" + typeName +"'", attempt.Exception);
+                throw attempt.Exception;
+            }
+
+            return CalculateTaxForInvoice(attempt.Result);
+        }
 
         public override string Name
         {

@@ -54,6 +54,15 @@ namespace Merchello.Web.Workflow
         #region Overrides IBasket
 
         /// <summary>
+        /// Gets/sets the version of the basket
+        /// </summary>
+        public Guid VersionKey
+        {
+            get { return _itemCache.VersionKey; }
+            internal set { _itemCache.VersionKey = value; }
+        }
+
+        /// <summary>
         /// Intended to be used by a <see cref="IProduct"/>s without options.  If the product does have options and a collection of <see cref="IProductVariant"/>s, the first
         /// <see cref="IProductVariant"/> is added to the basket item collection
         /// </summary>
@@ -81,15 +90,28 @@ namespace Merchello.Web.Workflow
         /// <param name="quantity"></param>
         public void AddItem(IProduct product, string name, int quantity)
         {
+            AddItem(product, name, quantity, new ExtendedDataCollection());
+        }
+
+        /// <summary>
+        /// Intended to be used by a <see cref="IProduct"/>s without options.  If the product does have options and a collection of <see cref="IProductVariant"/>s, the first
+        /// <see cref="IProductVariant"/> is added to the basket item collection
+        /// </summary>
+        /// <param name="product"><see cref="IProduct"/></param>
+        /// <param name="name">The name of the product to be used in the line item</param>
+        /// <param name="quantity">The quantity of the line item</param>
+        /// <param name="extendedData">A <see cref="ExtendedDataCollection"/></param>
+        public void AddItem(IProduct product, string name, int quantity, ExtendedDataCollection extendedData)
+        {
             var variant = product.GetProductVariantForPurchase();
             if (variant != null)
             {
-                AddItem(variant, name, quantity);
+                AddItem(variant, name, quantity, extendedData);
                 return;
             }
             if (!product.ProductVariants.Any()) return;
 
-            AddItem(product.ProductVariants.First(), name, quantity);
+            AddItem(product.ProductVariants.First(), name, quantity, extendedData);
         }
 
         /// <summary>
@@ -100,6 +122,13 @@ namespace Merchello.Web.Workflow
             AddItem(productVariant, productVariant.Name, 1);  
         }
 
+        /// <summary>
+        /// Adds a line item to the basket
+        /// </summary>
+        public void AddItem(IProductVariant productVariant, int quantity)
+        {
+            AddItem(productVariant, productVariant.Name, quantity);
+        }
 
         /// <summary>
         /// Adds a line item to the basket
@@ -121,8 +150,10 @@ namespace Merchello.Web.Workflow
                 productVariant.Sku,
                 quantity,
                 productVariant.OnSale ?
-                productVariant.SalePrice != null ? productVariant.SalePrice.Value : productVariant.Price
-                : productVariant.Price, extendedData);
+                extendedData.GetSalePriceValue()
+                : extendedData.GetPriceValue(), extendedData); // get the price information from extended data in case it has been overriden
+
+            //productVariant.SalePrice.Value : productVariant.Price 
         }
 
         /// <summary>
@@ -147,6 +178,8 @@ namespace Merchello.Web.Workflow
         /// </summary>
         internal void AddItem(string name, string sku, int quantity, decimal price, ExtendedDataCollection extendedData)
         {
+            if (quantity <= 0) quantity = 1;
+            if (price < 0) price = 0;
             _itemCache.AddItem(LineItemType.Product, name, sku, quantity, price, extendedData);
         }
 
@@ -186,9 +219,9 @@ namespace Merchello.Web.Workflow
         /// <summary>
         /// Removes a basket line item
         /// </summary>
-        public void RemoveItem(Guid key)
+        public void RemoveItem(Guid itemKey)
         {
-            var item = _itemCache.Items.FirstOrDefault(x => x.Key == key);
+            var item = _itemCache.Items.FirstOrDefault(x => x.Key == itemKey);
             if(item != null) RemoveItem(item.Sku);
         }        
 
@@ -255,6 +288,9 @@ namespace Merchello.Web.Workflow
 
         internal static void Save(IMerchelloContext merchelloContext, IBasket basket)
         {
+            // Update the basket item cache version so that it can be validated in the checkout
+            ((Basket)basket).VersionKey = Guid.NewGuid();
+
             merchelloContext.Services.ItemCacheService.Save(((Basket)basket).ItemCache);
             Refresh(merchelloContext, basket);
         }
@@ -286,6 +322,14 @@ namespace Merchello.Web.Workflow
         }
 
         /// <summary>
+        /// Returns the basket's item count
+        /// </summary>
+        public int TotalItemCount 
+        {
+            get { return Items.Count; }
+        }
+
+        /// <summary>
         /// Returns the sum of all basket item quantities
         /// </summary>
         public int TotalQuantityCount 
@@ -298,7 +342,7 @@ namespace Merchello.Web.Workflow
         /// </summary>
         public decimal TotalBasketPrice
         {
-            get { return Items.Sum(x => (x.Amount * x.Quantity)); }
+            get { return Items.Sum(x => (x.Quantity * x.Price)); }
         }
 
         #endregion
@@ -306,11 +350,12 @@ namespace Merchello.Web.Workflow
         /// <summary>
         /// Generates a unique cache key for runtime caching of the <see cref="Basket"/>
         /// </summary>
-        /// <param name="customer"><see cref="ICustomerBase"/></param>
+        /// <param name="customer"><see cref="ICustomerBase"/></param>        
         /// <returns></returns>
         private static string MakeCacheKey(ICustomerBase customer)
         {
-            return CacheKeys.ItemCacheCacheKey(customer.EntityKey, EnumTypeFieldConverter.ItemItemCache.Basket.TypeKey);
+            // the version key here is not important since there can only ever be one basket
+            return CacheKeys.ItemCacheCacheKey(customer.EntityKey, EnumTypeFieldConverter.ItemItemCache.Basket.TypeKey, Guid.Empty);
         }
 
         

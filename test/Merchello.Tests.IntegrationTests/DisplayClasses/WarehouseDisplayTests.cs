@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
+using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Tests.Base.DataMakers;
 using Merchello.Tests.IntegrationTests.Services;
+using Merchello.Tests.IntegrationTests.TestHelpers;
 using Merchello.Web.Models.ContentEditing;
 using NUnit.Framework;
 using System.Collections.Generic;
@@ -11,7 +13,7 @@ using System.Collections.Generic;
 namespace Merchello.Tests.IntegrationTests.DisplayClasses
 {
     [TestFixture]
-    public class WarehouseDisplayTests : ServiceIntegrationTestBase
+    public class WarehouseDisplayTests : DatabaseIntegrationTestBase
     {
         private IWarehouse _warehouse;
         private IWarehouseCatalog _warehouseCatalog;

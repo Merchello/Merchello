@@ -14,7 +14,12 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Creates an item cache (or retrieves an existing one) based on type and saves it to the database
         /// </summary>
-        IItemCache GetItemCacheWithKey(ICustomerBase customer, ItemCacheType itemCacheType);
+        IItemCache GetItemCacheWithKey(ICustomerBase customer, ItemCacheType itemCache);
+
+        /// <summary>
+        /// Creates an item cache (or retrieves an existing one) based on type and saves it to the database
+        /// </summary>
+        IItemCache GetItemCacheWithKey(ICustomerBase customer, ItemCacheType itemCacheType, Guid versionKey);
 
         /// <summary>
         /// Saves a single <see cref="IItemCache"/> object

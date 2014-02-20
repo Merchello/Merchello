@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Merchello.Core.Configuration;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Umbraco.Core.Cache;
@@ -16,9 +17,7 @@ namespace Merchello.Core.Gateways.Shipping
         
         protected ShippingGatewayProviderBase(IGatewayProviderService gatewayProviderService, IGatewayProvider gatewayProvider, IRuntimeCacheProvider runtimeCacheProvider)
             : base(gatewayProviderService, gatewayProvider, runtimeCacheProvider)
-        {
-
-        }
+        { }
 
         /// <summary>
         /// Creates an instance of a ship method (T) without persisting it to the database
@@ -50,6 +49,17 @@ namespace Merchello.Core.Gateways.Shipping
         public abstract IEnumerable<IGatewayShipMethod> GetActiveShipMethods(IShipCountry shipCountry);
 
         /// <summary>
+        /// Gets an <see cref="IGatewayShipMethod"/> by it's <see cref="IShipMethod"/>
+        /// </summary>
+        /// <param name="shipMethod">The <see cref="IShipMethod"/></param>
+        /// <returns>The <see cref="IGatewayShipMethod"/></returns>
+        public IGatewayShipMethod GetGatewayShipMethodByShipMethod(IShipMethod shipMethod)
+        {
+            var shipCountry = GatewayProviderService.GetShipCountryByKey(shipMethod.ShipCountryKey);
+            return shipCountry == null ? null : GetActiveShipMethods(shipCountry).FirstOrDefault(x => x.ShipMethod.Key.Equals(shipMethod.Key));
+        }
+
+        /// <summary>
         /// Deletes an Active ShipMethod
         /// </summary>
         /// <param name="gatewayShipMethod"></param>
@@ -71,6 +81,9 @@ namespace Merchello.Core.Gateways.Shipping
                 DeleteActiveShipMethod(gatewayShipMethod);
             }
         }
+
+
+        
 
         /// <summary>
         /// Returns a collection of available <see cref="IGatewayShipMethod"/> associated by this provider for a given shipment
@@ -125,45 +138,54 @@ namespace Merchello.Core.Gateways.Shipping
         {
             var gatewayShipMethods = GetAvailableShipMethodsForShipment(shipment);
 
-            var quotes = new List<IShipmentRateQuote>();
-            foreach (var gwShipMethod in gatewayShipMethods)
+            var ctrValues = new object[] {shipment, gatewayShipMethods.ToArray(), RuntimeCache};
+
+            var typeName = MerchelloConfiguration.Current.GetStrategyElement(Constants.StrategyTypeAlias.DefaultShipmentRateQuote).Type;
+            
+            var attempt = ActivatorHelper.CreateInstance<ShipmentRateQuoteStrategyBase>(typeName, ctrValues);
+
+            if (!attempt.Success)
             {
-                var rateQuote = TryGetCachedShipmentRateQuote(shipment, gwShipMethod);
-
-                if (rateQuote == null)
-                { 
-                    var attempt = gwShipMethod.QuoteShipment(shipment);
-                    if (attempt.Success)
-                    { 
-                        rateQuote = attempt.Result;
-
-                        RuntimeCache.GetCacheItem(GetShipmentRateQuoteCacheKey(shipment, gwShipMethod), () => rateQuote);
-                    }
-                    
-                }
-                if(rateQuote != null) quotes.Add(rateQuote);
+                LogHelper.Error<ShippingGatewayProviderBase>("Failed to instantiate strategy " + typeName, attempt.Exception);
+                throw attempt.Exception;
             }
 
-            return quotes;
+            return QuoteAvailableShipMethodsForShipment(attempt.Result);
         }
 
         /// <summary>
-        /// Returns the cached <see cref="IShipmentRateQuote"/> if it exists
+        /// Quotes a single GatewayShipMethod for a shipment rate
         /// </summary>
-        private IShipmentRateQuote TryGetCachedShipmentRateQuote(IShipment shipment, IGatewayShipMethod gatewayShipMethod)
-        {   
-            return RuntimeCache.GetCacheItem(GetShipmentRateQuoteCacheKey(shipment, gatewayShipMethod)) as ShipmentRateQuote;
-        }
-
-        /// <summary>
-        /// Creates a cache key for caching <see cref="IShipmentRateQuote"/>s
-        /// </summary>
-        /// <param name="shipment"></param>
-        /// <param name="gatewayShipMethod"></param>
-        /// <returns></returns>
-        private static string GetShipmentRateQuoteCacheKey(IShipment shipment, IGatewayShipMethod gatewayShipMethod)
+        /// <param name="shipment">The <see cref="IShipment"/> used to generate the rate quote</param>
+        /// <param name="gatewayShipMethod">The <see cref="IGatewayShipMethod"/> used to generate the rate quote</param>
+        /// <returns>The <see cref="IShipmentRateQuote"/></returns>
+        public virtual IShipmentRateQuote QuoteShipMethodForShipment(IShipment shipment, IGatewayShipMethod gatewayShipMethod)
         {
-            return Cache.CacheKeys.ShippingGatewayProviderShippingRateQuoteCacheKey(shipment.Key, gatewayShipMethod.ShipMethod.Key);
+            var ctrValues = new object[] { shipment, new[] { gatewayShipMethod }, RuntimeCache };
+
+            var typeName = MerchelloConfiguration.Current.GetStrategyElement(Constants.StrategyTypeAlias.DefaultShipmentRateQuote).Type;
+
+            var attempt = ActivatorHelper.CreateInstance<ShipmentRateQuoteStrategyBase>(typeName, ctrValues);
+
+            if (!attempt.Success)
+            {
+                LogHelper.Error<ShippingGatewayProviderBase>("Failed to instantiate strategy " + typeName, attempt.Exception);
+                throw attempt.Exception;
+            }
+
+            return QuoteAvailableShipMethodsForShipment(attempt.Result).FirstOrDefault();
+        }
+
+        
+
+        /// <summary>
+        /// Returns a collection of all available <see cref="IShipmentRateQuote"/> for a given shipment
+        /// </summary>
+        /// <param name="strategy">The quotation strategy</param>
+        /// <returns>A collection of <see cref="IShipmentRateQuote"/></returns>
+        public IEnumerable<IShipmentRateQuote> QuoteAvailableShipMethodsForShipment(ShipmentRateQuoteStrategyBase strategy)
+        {
+            return strategy.GetShipmentRateQuotes();
         }
     }
 

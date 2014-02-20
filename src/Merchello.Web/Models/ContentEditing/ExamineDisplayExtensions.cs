@@ -26,7 +26,7 @@ namespace Merchello.Web.Models.ContentEditing
             var variants = searcher.Search(criteria);
 
             productDisplay.ProductVariants =  variants.Select(variant => variant.ToProductVariantDisplay()).ToList();
-            productDisplay.ProductOptions = RawJsonFieldAsCollection<ProductOptionDisplay>(result, "options");
+            productDisplay.ProductOptions = RawJsonFieldAsCollection<ProductOptionDisplay>(result, "productOptions");
 
             return productDisplay;
         }

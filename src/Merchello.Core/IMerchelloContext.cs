@@ -1,5 +1,6 @@
 ﻿using System;
 using Merchello.Core.Gateways;
+using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Services;
 using Umbraco.Core;
 
@@ -19,16 +20,16 @@ namespace Merchello.Core
         /// The Merchello <see cref="IServiceContext"/>
         /// </summary>
         IServiceContext Services { get; }
-
+        
         /// <summary>
         /// Gets the <see cref="IGatewayContext"/>
         /// </summary>
-        IGatewayContext Gateways { get;  }
+        IGatewayContext Gateways { get; }
 
-        /// <summary>
-        /// True/false indicating whether or not <see cref="CoreBootManager"/> has successfully booted
-        /// </summary>
-        bool IsReady { get; }
+        ///// <summary>
+        ///// Gets the <see cref="ISalesManager"/>
+        ///// </summary>
+        //ISalesManager SalesManager { get; }
 
         /// <summary>
         /// Compares the binary version to that listed in the Merchello configuration to determine if the 

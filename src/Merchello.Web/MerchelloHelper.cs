@@ -29,6 +29,13 @@ namespace Merchello.Web
             return ProductQuery.GetByKey(key);
         }
 
+        /// <summary>
+        /// Returns a collection of all <see cref="ProductDisplay"/>
+        /// </summary>
+        public IEnumerable<ProductDisplay> AllProducts()
+        {
+            return ProductQuery.GetAllProducts();
+        }
 
         /// <summary>
         /// Retrieves a <see cref="ProductVariantDisplay"/> from the Merchello Product index.

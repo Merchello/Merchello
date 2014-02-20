@@ -74,9 +74,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActivatorHelper.cs" />
-    <Compile Include="Checkout\CheckoutBase.cs" />
-    <Compile Include="Checkout\ICheckoutBase.cs" />
-    <Compile Include="Builders\IBuilder.cs" />
+    <Compile Include="Builders\BuildChainBase.cs" />
+    <Compile Include="Builders\InvoiceBuilderChain.cs" />
+    <Compile Include="Builders\TaxationQuoteBuilderChain.cs" />
+    <Compile Include="Cache\CacheRefreshHelper.cs" />
+    <Compile Include="Chains\AttemptChainTaskBase.cs" />
+    <Compile Include="Chains\ChainTaskResolver.cs" />
+    <Compile Include="Chains\InvoiceCreation\ApplyTaxesToInvoiceTax.cs" />
+    <Compile Include="Chains\InvoiceCreation\AddBillingInfoToInvoiceTask.cs" />
+    <Compile Include="Chains\InvoiceCreation\CheckoutPreparationAttemptChainTaskBase.cs" />
+    <Compile Include="Chains\InvoiceCreation\ConvertItemCacheItemsToInvoiceItemsTask.cs" />
+    <Compile Include="Chains\InvoiceTaxRateQuote\IdentifyTaxableLineItems.cs" />
+    <Compile Include="Chains\InvoiceTaxRateQuote\InvoiceTaxRateQuoteBase.cs" />
+    <Compile Include="Checkout\CheckoutPreparationBase.cs" />
+    <Compile Include="Checkout\ICheckoutPreparationBase.cs" />
+    <Compile Include="Builders\IBuilderChain.cs" />
     <Compile Include="Cache\CacheKeys.cs" />
     <Compile Include="CloneHelper.cs" />
     <Compile Include="Configuration\Outline\ProvinceConfigurationCollection.cs" />
@@ -85,20 +97,36 @@
     <Compile Include="Configuration\Outline\RegionElement.cs" />
     <Compile Include="Configuration\Outline\SettingsCollection.cs" />
     <Compile Include="Configuration\Outline\SettingsElement.cs" />
+    <Compile Include="Configuration\Outline\StrategiesCollection.cs" />
+    <Compile Include="Configuration\Outline\TaskChainElement.cs" />
+    <Compile Include="Configuration\Outline\TaskChainsCollection.cs" />
+    <Compile Include="Configuration\Outline\TaskElement.cs" />
+    <Compile Include="Configuration\Outline\TasksConfigurationCollection.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Constants-ActivatorTypes.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
     <Compile Include="Constants-Keys.cs">
       <DependentUpon>Constants.cs</DependentUpon>
     </Compile>
     <Compile Include="Constants-ExtendedDataKeys.cs">
       <DependentUpon>Constants.cs</DependentUpon>
     </Compile>
-    <Compile Include="Gateways\GatewayProviderBase.cs" />
     <Compile Include="Gateways\GatewayContext.cs" />
-    <Compile Include="Gateways\GatewayProviderFactory.cs" />
-    <Compile Include="Gateways\IGateway.cs" />
+    <Compile Include="Gateways\GatewayProviderBase.cs" />
     <Compile Include="Gateways\IGatewayContext.cs" />
+    <Compile Include="Gateways\GatewayProviderTypedContextBase.cs" />
+    <Compile Include="Gateways\GatewayProviderFactory.cs" />
+    <Compile Include="Gateways\GatewayProviderResolver.cs" />
+    <Compile Include="Gateways\IGateway.cs" />
+    <Compile Include="Gateways\IGatewayProviderTypedContextBase.cs" />
     <Compile Include="Gateways\IGatewayProviderFactory.cs" />
+    <Compile Include="Gateways\IGatewayProviderResolver.cs" />
+    <Compile Include="Gateways\Payment\IPaymentContext.cs" />
     <Compile Include="Gateways\Payment\IPaymentGatewayProvider.cs" />
+    <Compile Include="Gateways\Payment\PaymentContext.cs" />
+    <Compile Include="Gateways\Payment\PaymentGatewayProviderBase.cs" />
+    <Compile Include="Gateways\Shipping\DefaultShipmentRateQuoteStrategy.cs" />
     <Compile Include="Gateways\Shipping\GatewayShipMethodBase.cs" />
     <Compile Include="Gateways\Shipping\IGatewayShipMethod.cs" />
     <Compile Include="Gateways\Shipping\IShipmentRateQuote.cs" />
@@ -108,15 +136,23 @@
     <Compile Include="Gateways\Shipping\RateTable\RateTableShipmentLineItemVisitor.cs" />
     <Compile Include="Gateways\Shipping\RateTable\RateTableShippingGatewayProvider.cs" />
     <Compile Include="Gateways\Shipping\RateTable\RateTableShipMethod.cs" />
-    <Compile Include="Gateways\Shipping\ShimpmentWarehouseCatalogValidationVisitor.cs" />
+    <Compile Include="Gateways\Shipping\ShipmentRateQuoteStrategyBase.cs" />
+    <Compile Include="Gateways\Shipping\IShippingContext.cs" />
+    <Compile Include="Gateways\Shipping\ShippingContext.cs" />
+    <Compile Include="Gateways\Shipping\WarehouseCatalogValidationVisitor.cs" />
     <Compile Include="Gateways\Shipping\ShipmentRateQuote.cs" />
     <Compile Include="Gateways\Shipping\ShippingGatewayProviderBase.cs" />
     <Compile Include="Gateways\Shipping\RateTable\ShipRateTable.cs" />
     <Compile Include="Gateways\Taxation\CountryTaxRate\CountryTaxRateTaxationGatewayProvider.cs" />
     <Compile Include="Gateways\Taxation\CountryTaxRate\ICountryTaxRateTaxationGatewayProvider.cs" />
+    <Compile Include="Gateways\Taxation\CountryTaxRate\CountryTaxRateInvoiceQuoteStrategy.cs" />
     <Compile Include="Gateways\Taxation\IInvoiceTaxResult.cs" />
+    <Compile Include="Gateways\Taxation\InvoiceTaxationStrategyBase.cs" />
+    <Compile Include="Gateways\Taxation\ITaxationContext.cs" />
     <Compile Include="Gateways\Taxation\ITaxationGatewayProvider.cs" />
+    <Compile Include="Gateways\Taxation\TaxationContext.cs" />
     <Compile Include="Gateways\Taxation\TaxationGatewayProviderBase.cs" />
+    <Compile Include="ISalesManager.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\AnonymousCustomerBase.cs">
       <SubType>Code</SubType>
@@ -134,6 +170,8 @@
     <Compile Include="Models\CustomerBase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\EntityBase\IVersionTaggedEntity.cs" />
+    <Compile Include="Models\EntityBase\VersionTaggedEntity.cs" />
     <Compile Include="Models\ExtendedDataCollection.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -230,6 +268,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\Invoice.cs" />
+    <Compile Include="InvoiceExtensions.cs" />
     <Compile Include="Models\InvoiceLineItem.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -505,10 +544,10 @@
     <Compile Include="Persistence\Querying\Query.cs" />
     <Compile Include="Persistence\UnitOfWork\PetaPocoUnitOfWork.cs" />
     <Compile Include="Persistence\UnitOfWork\PetaPocoUnitOfWorkProvider.cs" />
-    <Compile Include="Pipelines\IPipelineBase.cs" />
-    <Compile Include="Pipelines\IPipelineEndOfChain.cs" />
-    <Compile Include="Pipelines\IPipelineTask.cs" />
-    <Compile Include="Pipelines\PipeLineBase.cs" />
+    <Compile Include="Chains\IAttemptChainTask.cs" />
+    <Compile Include="Chains\IAttemptChainTaskHandler.cs" />
+    <Compile Include="Chains\AttemptChainEndOfChainHandler.cs" />
+    <Compile Include="Chains\AttemptChainTaskHandler.cs" />
     <Compile Include="RateAdjustmentType.cs" />
     <Compile Include="SerializationHelper.cs" />
     <Compile Include="Services\CountryTaxRateService.cs" />
@@ -539,9 +578,9 @@
     <Compile Include="Services\StoreSettingService.cs" />
     <Compile Include="Services\ShipmentService.cs" />
     <Compile Include="Services\WarehouseService.cs" />
-    <Compile Include="Strategies\IStrategy.cs" />
-    <Compile Include="Strategies\Shipping\IPackagingStrategy.cs" />
-    <Compile Include="Strategies\Taxation\ITaxationStrategy.cs" />
+    <Compile Include="IStrategy.cs" />
+    <Compile Include="Gateways\Shipping\IShipmentRateQuoteStrategy.cs" />
+    <Compile Include="Gateways\Taxation\IInvoiceTaxationStrategy.cs" />
     <Compile Include="TypeFieldMapperEnumerations.cs" />
     <Compile Include="Models\TypeFields\ProductTypeField.cs" />
     <Compile Include="Models\Rdbms\TypeFieldDto.cs" />

@@ -1,45 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Shipping;
-using Merchello.Core.Models;
+using Merchello.Core.Gateways.Taxation;
 
 namespace Merchello.Core.Gateways
 {
+    /// <summary>
+    /// Defines the GatewayContext
+    /// </summary>
     public interface IGatewayContext
     {
         /// <summary>
-        /// Gets a collection of <see cref="IGatewayProvider"/>s by type
+        /// Gets the <see cref="IShippingContext"/>
         /// </summary>
-        /// <returns></returns>
-        IEnumerable<IGatewayProvider> GetGatewayProviders(GatewayProviderType gatewayProviderType);
+        IShippingContext Shipping { get; }
 
-        IEnumerable<IShipmentRateQuote> GetShipRateQuotesForShipment(IShipment shipment);
+        /// <summary>
+        /// Gets the <see cref="ITaxationContext"/>
+        /// </summary>
+        ITaxationContext Taxation { get; }
 
-        ///// <summary>
-        ///// Gets a collection of instantiated gateway providers
-        ///// </summary>
-        ///// <param name="gatewayProviderType"></param>
-        ///// <returns></returns>
-        //IEnumerable<GatewayProviderBase> ResolveByGatewayProviderType(GatewayProviderType gatewayProviderType);
-            
-        ///// <summary>
-        ///// Returns an instantiation of a <see cref="T"/>
-        ///// </summary>
-        ///// <param name="provider"><see cref="IGatewayProvider"/></param>
-        ///// <returns></returns>
-        //T ResolveByGatewayProvider<T>(IGatewayProvider provider) where T : GatewayProviderBase;
-
-        ///// <summary>
-        ///// Instantiates a GatewayProvider given its registered Key
-        ///// </summary>
-        ///// <typeparam name="T">The Type of the GatewayProvider.  Must inherit from GatewayProviderBase</typeparam>
-        ///// <param name="gatewayProviderKey"></param>
-        ///// <returns>An instantiated GatewayProvider</returns>
-        //T ResolveByKey<T>(Guid gatewayProviderKey) where T : GatewayProviderBase;
-
-        ///// <summary>
-        ///// Refreshes the <see cref="GatewayProviderBase"/> cache
-        ///// </summary>
-        //void RefreshCache();
+        /// <summary>
+        /// Gets the <see cref="IPaymentContext"/>
+        /// </summary>
+        IPaymentContext Payment { get; }
     }
 }
