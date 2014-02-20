@@ -9,5 +9,10 @@
         /// Gets the <see cref="IShipRateTable"/> for this ship method
         /// </summary>
         IShipRateTable RateTable { get; }
+
+        /// <summary>
+        /// Gets the <see cref="QuoteType"/> for this ship method
+        /// </summary>
+        RateTableShipMethod.QuoteType RateTableType { get; }
     }
 }

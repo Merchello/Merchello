@@ -224,10 +224,12 @@
     <Compile Include="ApplicationContextExtensions.cs" />
     <Compile Include="AutoMapperMappings.cs" />
     <Compile Include="CheckoutExtensions.cs" />
+    <Compile Include="Editors\CatalogRateTableShippingApiController.cs" />
     <Compile Include="Editors\SettingsApiController.cs" />
     <Compile Include="Editors\CatalogShippingApiController.cs" />
     <Compile Include="Editors\WarehouseApiController.cs" />
     <Compile Include="Models\ContentEditing\GatewayProviderDisplay.cs" />
+    <Compile Include="Models\ContentEditing\GatewayResourceDisplay.cs" />
     <Compile Include="Models\ContentEditing\RateTableShipMethodDisplay.cs" />
     <Compile Include="Models\ContentEditing\ShipRateTableDisplay.cs" />
     <Compile Include="Models\ContentEditing\ShipRateTierDisplay.cs" />
@@ -240,7 +242,7 @@
     <Compile Include="Models\ContentEditing\ProvinceDisplay.cs" />
     <Compile Include="Models\ContentEditing\SettingsMappingExtensions.cs" />
     <Compile Include="Models\ContentEditing\ShipCountryDisplay.cs" />
-    <Compile Include="Models\ContentEditing\ShipGatewayProviderDisplay.cs" />
+    <Compile Include="Models\ContentEditing\ShippingGatewayProviderDisplay.cs" />
     <Compile Include="Models\ContentEditing\ShipMethodDisplay.cs" />
     <Compile Include="Models\ContentEditing\ShipProvinceDisplay.cs" />
     <Compile Include="Models\ContentEditing\TaxProvinceDisplay.cs" />

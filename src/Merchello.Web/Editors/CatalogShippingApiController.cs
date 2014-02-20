@@ -14,6 +14,7 @@ using Merchello.Web.WebApi;
 using Merchello.Web.Models.ContentEditing;
 using System.Net;
 using System.Net.Http;
+using Merchello.Core.Gateways.Shipping;
 
 namespace Merchello.Web.Editors
 {
@@ -159,7 +160,17 @@ namespace Merchello.Web.Editors
         /// </summary>
         public IEnumerable<GatewayProviderDisplay> GetAllShipGatewayProviders()
         {
-            return null;
+            var providers = MerchelloContext.Gateways.Shipping.GetAllGatewayProviders();
+            var rateTableProvider = MerchelloContext.Gateways.Shipping.ResolveByKey(providers.First().Key);
+            if (providers == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
+
+            foreach (IGatewayProvider provider in providers)
+            {
+                yield return provider.ToGatewayProviderDisplay();
+            }
         }
 
         /// <summary>
@@ -168,9 +179,25 @@ namespace Merchello.Web.Editors
         /// GET /umbraco/Merchello/ShippingMethodsApi/GetAllShipCountryProviders/{id}
         /// </summary>
         /// <param name="id">ShipCountry Key</param>
-        public IEnumerable<ShipGatewayProviderDisplay> GetAllShipCountryProviders(Guid id)
+        public IEnumerable<ShippingGatewayProviderDisplay> GetAllShipCountryProviders(Guid id)
         {
-            return null;
+            var shipCountry = _shipCountryService.GetByKey(id);
+            if (shipCountry != null)
+            {
+                var providers = MerchelloContext.Gateways.Shipping.GetGatewayProvidersByShipCountry(shipCountry);
+
+                foreach (IShippingGatewayProvider provider in providers)
+                {
+                    if (!Constants.ProviderKeys.Shipping.RateTableShippingProviderKey.Equals(provider.Key))
+                    {
+                        yield return provider.ToShipGatewayProviderDisplay();
+                    }
+                }
+            }
+            else
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
         }
 
         /// <summary>
@@ -178,25 +205,42 @@ namespace Merchello.Web.Editors
         /// 
         /// USPS, UPS, etc
         ///
-        /// GET /umbraco/Merchello/ShippingMethodsApi/AddShipCountryMethod
+        /// GET /umbraco/Merchello/ShippingMethodsApi/AddShipMethod
         /// </summary>
         /// <param name="method">POSTed ShipMethodDisplay object</param>
-        [AcceptVerbs("POST", "PUT")]
-        public ShipMethodDisplay AddShipCountryMethod(ShipMethodDisplay method)
+        [AcceptVerbs("POST")]
+        public ShipMethodDisplay AddShipMethod(ShipMethodDisplay method)
         {
             return null;
         }
 
         /// <summary>
-        /// Add a Fixed Rate Table ShipMethod to the ShipCountry
+        /// Save an external ShipMethod to the ShipCountry
+        /// 
+        /// USPS, UPS, etc
         ///
-        /// GET /umbraco/Merchello/ShippingMethodsApi/AddShipCountryRateTableMethod
+        /// GET /umbraco/Merchello/ShippingMethodsApi/PutShipMethod
         /// </summary>
-        /// <param name="method">POSTed RateTableShipMethodDisplay object</param>
+        /// <param name="method">POSTed ShipMethodDisplay object</param>
         [AcceptVerbs("POST", "PUT")]
-        public RateTableShipMethodDisplay AddShipCountryRateTableMethod(RateTableShipMethodDisplay method)
+        public ShipMethodDisplay PutShipMethod(ShipMethodDisplay method)
         {
             return null;
         }
+
+        /// <summary>
+        /// Save an external ShipMethod to the ShipCountry
+        /// 
+        /// USPS, UPS, etc
+        ///
+        /// GET /umbraco/Merchello/ShippingMethodsApi/DeleteShipMethod
+        /// </summary>
+        /// <param name="method">POSTed ShipMethodDisplay object</param>
+        [AcceptVerbs("POST", "PUT")]
+        public ShipMethodDisplay DeleteShipMethod(ShipMethodDisplay method)
+        {
+            return null;
+        }
+
     }
 }
