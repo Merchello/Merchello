@@ -63,9 +63,21 @@
 
                 $scope.product = new merchello.Models.Product(product);
 
+                $scope.remainingChoices = $scope.product.getRemainingChoicesWithoutVariants();
+
                 $scope.productVariant.copyFromProduct($scope.product);
-                $scope.productVariant.name = "";
                 $scope.productVariant.sku = "";
+                $scope.productVariant.attributes = _.map($scope.product.productOptions, function (option) {
+                    var availableChoices = $scope.availableChoices(option);
+                    if (availableChoices.length > 0)
+                    {
+                        return availableChoices[0];
+                    }
+                    else
+                    {
+                        return new merchello.Models.ProductAttribute();
+                    }
+                });
 
                 $scope.loaded = true;
                 $scope.preValuesLoaded = true;
@@ -84,6 +96,7 @@
         function isCreatingVariant() {
             return $routeParams.createvariant;
         }
+
 
         ////////////////////////////////////////////////
         // Initialize state
@@ -129,6 +142,7 @@
             $scope.loaded = true;
             $scope.preValuesLoaded = true;
             $scope.productVariant = new merchello.Models.ProductVariant();
+            $scope.attributesKeys = [ "" ];
             loadProductForVariantCreate($routeParams.id);
             $scope.editingVariant = false;
         }
@@ -194,6 +208,7 @@
                 }
                 else if (isCreatingVariant())  // Add a variant to product
                 {
+                    $scope.productVariant.name = "";    // Allow the core to create the initial name
                     var promise = merchelloProductVariantService.create($scope.productVariant);
 
                     promise.then(function (productVariant) {
@@ -368,6 +383,18 @@
         };
 
         ////////////////////////////////////////////////
+        /// HELPERS
+
+        $scope.isChoiceAvailable = function (choice) {
+            var foundChoice = _.find($scope.remainingChoices, function (c) { return c.key == choice.key; });
+            return foundChoice;
+        }
+
+        $scope.availableChoices = function (option) {
+            var remainingChoiceKeys = _.pluck($scope.remainingChoices, 'key');
+
+            return _.filter(option.choices, function (c) { return _.contains(remainingChoiceKeys, c.key); });
+        }
     }
 
     angular.module("umbraco").controller("Merchello.Editors.ProductVariant.EditController", merchello.Controllers.ProductVariantEditController);
