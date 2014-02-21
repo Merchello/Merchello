@@ -1,6 +1,6 @@
 ﻿using System.Data;
 using System.Linq;
-using Merchello.Core.Gateways.Taxation.CountryTaxRate;
+using Merchello.Core.Gateways.Taxation.FlatRate;
 using Merchello.Core.Models;
 using NUnit.Framework;
 
@@ -8,14 +8,14 @@ namespace Merchello.Tests.IntegrationTests.Taxation
 {
     [TestFixture]
     [Category("Taxation")]
-    public class CountryTaxRateTaxationGatewayProviderTests : TaxationProviderTestBase
+    public class TaxMethodTaxationGatewayProviderTests : TaxationProviderTestBase
     {
-        private ICountryTaxRateTaxationGatewayProvider _taxProvider;
+        private IFlatRateTaxationGatewayProvider _taxProvider;
 
         [SetUp]
         public void Init()
         {
-            _taxProvider = (ICountryTaxRateTaxationGatewayProvider)MerchelloContext.Gateways.Taxation.ResolveByKey(Core.Constants.ProviderKeys.Taxation.CountryTaxRateTaxationProviderKey);
+            _taxProvider = (IFlatRateTaxationGatewayProvider)MerchelloContext.Gateways.Taxation.ResolveByKey(Core.Constants.ProviderKeys.Taxation.CountryTaxRateTaxationProviderKey);
 
             PreTestDataWorker.DeleteAllCountryTaxRates(Core.Constants.ProviderKeys.Taxation.CountryTaxRateTaxationProviderKey);
         }
@@ -24,15 +24,15 @@ namespace Merchello.Tests.IntegrationTests.Taxation
         /// Test verifies that the tax provider can create a <see cref="ITaxMethod"/>
         /// </summary>
         [Test]
-        public void Can_Create_CountryTaxRate()
+        public void Can_Create_TaxMethod()
         {
             //// Arrange
             const string countryCode = "US";
             const int expected = 1;
 
             //// Act
-            _taxProvider.CreateCountryTaxRate(countryCode);
-            var countryTaxRates = GatewayProviderService.GetCountryTaxRatesByProviderKey(_taxProvider.Key);
+            _taxProvider.CreateTaxMethod(countryCode);
+            var countryTaxRates = GatewayProviderService.GetTaxMethodsByProviderKey(_taxProvider.Key);
 
             //// Assert
             Assert.NotNull(countryTaxRates);
@@ -44,14 +44,14 @@ namespace Merchello.Tests.IntegrationTests.Taxation
         /// Test verifies that the US CountryTaxRate created tax provider contains provinces 
         /// </summary>
         [Test]
-        public void CountryTaxRate_Created_Has_A_PopulatedTaxProvince_Collection()
+        public void TaxMethod_Created_Has_A_PopulatedTaxProvince_Collection()
         {
             //// Arrange
             const string countryCode = "US";
             var type = typeof(TaxProvince);
 
             //// Act
-            var countryTaxRate = _taxProvider.CreateCountryTaxRate(countryCode);
+            var countryTaxRate = _taxProvider.CreateTaxMethod(countryCode);
 
             //// Assert
             Assert.NotNull(countryTaxRate);
@@ -63,16 +63,16 @@ namespace Merchello.Tests.IntegrationTests.Taxation
         /// Test verifies that a provider cannot add mulitple CountryRateTypes for a given country
         /// </summary>
         [Test]
-        public void Provider_Cannot_Create_Multiple_CountryTaxRates_For_A_Country()
+        public void Provider_Cannot_Create_Multiple_TaxMethod_For_A_Country()
         {
             //// Arrange
             const string countryCode = "US";
 
             //// Act
-            _taxProvider.CreateCountryTaxRate(countryCode);
+            _taxProvider.CreateTaxMethod(countryCode);
 
             //// Assert
-            Assert.Throws<ConstraintException>(() => _taxProvider.CreateCountryTaxRate(countryCode));
+            Assert.Throws<ConstraintException>(() => _taxProvider.CreateTaxMethod(countryCode));
         }
 
         /// <summary>
@@ -83,14 +83,14 @@ namespace Merchello.Tests.IntegrationTests.Taxation
         {
             //// Arrange
             const string countryCode = "US";
-            var countryTaxRate = _taxProvider.CreateCountryTaxRate(countryCode, 5);
+            var countryTaxRate = _taxProvider.CreateTaxMethod(countryCode, 5);
             Assert.IsTrue(countryTaxRate.HasProvinces);
 
             //// Act
             countryTaxRate.Provinces["WA"].PercentRateAdjustment = 3;
-            _taxProvider.SaveCountryTaxRate(countryTaxRate);
+            _taxProvider.SaveTaxMethod(countryTaxRate);
 
-            var retrieved = _taxProvider.GetCountryTaxRateByCountryCode(countryCode);
+            var retrieved = _taxProvider.GetTaxMethodByCountryCode(countryCode);
             Assert.NotNull(retrieved);
 
             //// Assert

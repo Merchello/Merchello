@@ -176,6 +176,19 @@ namespace Merchello.Core.Gateways.Shipping
         {
             return strategy.GetShipmentRateQuotes();
         }
+
+        private IEnumerable<IShipMethod> _shipMethods;
+
+        /// <summary>
+        /// Gets the collection of all <see cref="IShipMethod"/> assoicated with this provider
+        /// </summary>
+        public IEnumerable<IShipMethod> ShipMethods
+        {
+            get {
+                return _shipMethods ??
+                       (_shipMethods = GatewayProviderService.GetGatewayProviderShipMethods(GatewayProvider.Key));
+            }
+        }
     }
 
 }

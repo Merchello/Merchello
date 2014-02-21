@@ -6,7 +6,7 @@ using Merchello.Core.Services;
 using Umbraco.Core.Cache;
 using Umbraco.Core.Logging;
 
-namespace Merchello.Core.Gateways.Taxation.CountryTaxRate
+namespace Merchello.Core.Gateways.Taxation.FlatRate
 {
     /// <summary>
     /// Represents the CountryTaxRateTaxationGatewayProvider.  
@@ -16,9 +16,9 @@ namespace Merchello.Core.Gateways.Taxation.CountryTaxRate
     /// This is Merchello's default TaxationGatewayProvider
     /// 
     /// </remarks>
-    public class CountryTaxRateTaxationGatewayProvider : TaxationGatewayProviderBase, ICountryTaxRateTaxationGatewayProvider
+    public class FlatRateTaxationGatewayProvider : TaxationGatewayProviderBase, IFlatRateTaxationGatewayProvider
     {
-        public CountryTaxRateTaxationGatewayProvider(IGatewayProviderService gatewayProviderService, IGatewayProvider gatewayProvider, IRuntimeCacheProvider runtimeCacheProvider) 
+        public FlatRateTaxationGatewayProvider(IGatewayProviderService gatewayProviderService, IGatewayProvider gatewayProvider, IRuntimeCacheProvider runtimeCacheProvider) 
             : base(gatewayProviderService, gatewayProvider, runtimeCacheProvider)
         { }
 
@@ -27,9 +27,9 @@ namespace Merchello.Core.Gateways.Taxation.CountryTaxRate
         /// defines a tax rate for the country, the creation fails.
         /// </summary>
         /// <param name="countryCode">The two character ISO country code</param>
-        public ITaxMethod CreateCountryTaxRate(string countryCode)
+        public ITaxMethod CreateTaxMethod(string countryCode)
         {
-            return CreateCountryTaxRate(countryCode, 0);
+            return CreateTaxMethod(countryCode, 0);
         }
 
         /// <summary>
@@ -38,9 +38,9 @@ namespace Merchello.Core.Gateways.Taxation.CountryTaxRate
         /// </summary>
         /// <param name="countryCode">The two character ISO country code</param>
         /// <param name="percentageTaxRate">The tax rate in percentage for the country</param>
-        public ITaxMethod CreateCountryTaxRate(string countryCode, decimal percentageTaxRate)
+        public ITaxMethod CreateTaxMethod(string countryCode, decimal percentageTaxRate)
         {
-            var attempt = GatewayProviderService.CreateCountryTaxRateWithKey(GatewayProvider.Key, countryCode, percentageTaxRate);
+            var attempt = GatewayProviderService.CreateTaxMethodWithKey(GatewayProvider.Key, countryCode, percentageTaxRate);
 
             if (!attempt.Success) throw attempt.Exception;
 
@@ -51,7 +51,7 @@ namespace Merchello.Core.Gateways.Taxation.CountryTaxRate
         /// Saves a single instance of a <see cref="ITaxMethod"/>
         /// </summary>
         /// <param name="taxMethod">The <see cref="ITaxMethod"/> to save</param>
-        public void SaveCountryTaxRate(ITaxMethod taxMethod)
+        public void SaveTaxMethod(ITaxMethod taxMethod)
         {
             GatewayProviderService.Save(taxMethod);
         }
@@ -61,18 +61,18 @@ namespace Merchello.Core.Gateways.Taxation.CountryTaxRate
         /// </summary>
         /// <param name="countryCode">The two char ISO country code</param>
         /// <returns><see cref="ITaxMethod"/></returns>
-        public ITaxMethod GetCountryTaxRateByCountryCode(string countryCode)
+        public ITaxMethod GetTaxMethodByCountryCode(string countryCode)
         {
-            return GatewayProviderService.GetCountryTaxRateByCountryCode(GatewayProvider.Key, countryCode);
+            return GatewayProviderService.GetTaxMethodByCountryCode(GatewayProvider.Key, countryCode);
         }
 
         /// <summary>
         /// Gets a collection of all <see cref="ITaxMethod"/> associated with this provider
         /// </summary>
         /// <returns>A collection of <see cref="ITaxMethod"/> </returns>
-        public IEnumerable<ITaxMethod> GetAllCountryTaxRates()
+        public IEnumerable<ITaxMethod> GetAllTaxMethods()
         {
-            return GatewayProviderService.GetCountryTaxRatesByProviderKey(GatewayProvider.Key);
+            return GatewayProviderService.GetTaxMethodsByProviderKey(GatewayProvider.Key);
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace Merchello.Core.Gateways.Taxation.CountryTaxRate
         /// <returns><see cref="IInvoiceTaxResult"/></returns>
         public override IInvoiceTaxResult CalculateTaxForInvoice(IInvoice invoice, IAddress taxAddress)
         {
-            var countryTaxRate = GetCountryTaxRateByCountryCode(taxAddress.CountryCode);
+            var countryTaxRate = GetTaxMethodByCountryCode(taxAddress.CountryCode);
             if (countryTaxRate == null) return null;
 
             var ctrValues = new object[] { invoice, taxAddress, countryTaxRate };
@@ -94,7 +94,7 @@ namespace Merchello.Core.Gateways.Taxation.CountryTaxRate
 
             if (!attempt.Success)
             {
-                LogHelper.Error<CountryTaxRateTaxationGatewayProvider>("Failed to instantiate the tax rate quote strategy '" + typeName +"'", attempt.Exception);
+                LogHelper.Error<FlatRateTaxationGatewayProvider>("Failed to instantiate the tax rate quote strategy '" + typeName +"'", attempt.Exception);
                 throw attempt.Exception;
             }
 

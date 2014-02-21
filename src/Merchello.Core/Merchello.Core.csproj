@@ -146,9 +146,9 @@
     <Compile Include="Gateways\Shipping\ShipmentRateQuote.cs" />
     <Compile Include="Gateways\Shipping\ShippingGatewayProviderBase.cs" />
     <Compile Include="Gateways\Shipping\RateTable\ShipRateTable.cs" />
-    <Compile Include="Gateways\Taxation\CountryTaxRate\CountryTaxRateTaxationGatewayProvider.cs" />
-    <Compile Include="Gateways\Taxation\CountryTaxRate\ICountryTaxRateTaxationGatewayProvider.cs" />
-    <Compile Include="Gateways\Taxation\CountryTaxRate\CountryTaxRateInvoiceQuoteStrategy.cs" />
+    <Compile Include="Gateways\Taxation\FlatRate\FlatRateTaxationGatewayProvider.cs" />
+    <Compile Include="Gateways\Taxation\FlatRate\IFlatRateTaxationGatewayProvider.cs" />
+    <Compile Include="Gateways\Taxation\FlatRate\FlatRateInvoiceTaxationStrategy.cs" />
     <Compile Include="Gateways\Taxation\IInvoiceTaxResult.cs" />
     <Compile Include="Gateways\Taxation\InvoiceTaxationStrategyBase.cs" />
     <Compile Include="Gateways\Taxation\ITaxationContext.cs" />

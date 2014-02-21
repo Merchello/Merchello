@@ -94,6 +94,12 @@ namespace Merchello.Core.Services
         /// <returns>A collection of <see cref="IShipMethod"/></returns>
         IEnumerable<IShipMethod> GetGatewayProviderShipMethods(Guid providerKey, Guid shipCountryKey);
 
+        /// <summary>
+        /// Gets a list of all <see cref="IShipMethod"/> objects given a <see cref="IGatewayProvider"/> key
+        /// </summary>
+        /// <returns>A collection of <see cref="IShipMethod"/></returns>
+        IEnumerable<IShipMethod> GetGatewayProviderShipMethods(Guid providerKey); 
+
         #endregion
 
         #region ShipRateTier
@@ -143,7 +149,7 @@ namespace Merchello.Core.Services
 
             #endregion
 
-        #region CountryTaxRate
+        #region Taxmethod
 
         /// <summary>
         /// Attempts to create a <see cref="ITaxMethod"/> for a given provider and country.  If the provider already 
@@ -153,7 +159,7 @@ namespace Merchello.Core.Services
         /// <param name="countryCode">The two character ISO country code</param>
         /// <param name="percentageTaxRate">The tax rate in percentage for the country</param>
         /// <returns><see cref="Attempt"/> indicating whether or not the creation of the <see cref="ITaxMethod"/> with respective success or fail</returns>
-        Attempt<ITaxMethod> CreateCountryTaxRateWithKey(Guid providerKey, string countryCode, decimal percentageTaxRate);
+        Attempt<ITaxMethod> CreateTaxMethodWithKey(Guid providerKey, string countryCode, decimal percentageTaxRate);
 
         /// <summary>
         /// Gets a <see cref="ITaxMethod"/> based on a provider and country code
@@ -161,14 +167,14 @@ namespace Merchello.Core.Services
         /// <param name="providerKey">The unique 'key' of the <see cref="IGatewayProvider"/></param>
         /// <param name="countryCode">The country code of the <see cref="ITaxMethod"/></param>
         /// <returns>A collection <see cref="ITaxMethod"/></returns>
-        ITaxMethod GetCountryTaxRateByCountryCode(Guid providerKey, string countryCode);
+        ITaxMethod GetTaxMethodByCountryCode(Guid providerKey, string countryCode);
 
         /// <summary>
         /// Gets a collection of <see cref="ITaxMethod"/> based on a provider and country code
         /// </summary>
         /// <param name="countryCode">The country code of the <see cref="ITaxMethod"/></param>
         /// <returns><see cref="ITaxMethod"/></returns>
-        IEnumerable<ITaxMethod> GetCountryTaxRateByCountryCode(string countryCode);
+        IEnumerable<ITaxMethod> GetTaxMethodsByCountryCode(string countryCode);
 
         /// <summary>
         /// Saves a single <see cref="ITaxMethod"/>
@@ -181,7 +187,7 @@ namespace Merchello.Core.Services
         /// </summary>
         /// <param name="providerKey">The unique 'key' of the TaxationGatewayProvider</param>
         /// <returns>A collection of <see cref="ITaxMethod"/></returns>
-        IEnumerable<ITaxMethod> GetCountryTaxRatesByProviderKey(Guid providerKey);
+        IEnumerable<ITaxMethod> GetTaxMethodsByProviderKey(Guid providerKey);
 
         #endregion
     }

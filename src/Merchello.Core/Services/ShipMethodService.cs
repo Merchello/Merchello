@@ -209,6 +209,22 @@ namespace Merchello.Core.Services
             }
         }
 
+        /// <summary>
+        /// Gets a list of all <see cref="IShipMethod"/> objects given a <see cref="IGatewayProvider"/> key
+        /// </summary>
+        /// <returns>A collection of <see cref="IShipMethod"/></returns>
+        public IEnumerable<IShipMethod> GetGatewayProviderShipMethods(Guid providerKey)
+        {
+            using (var repository = _repositoryFactory.CreateShipMethodRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query =
+                    Query<IShipMethod>.Builder.Where(
+                        x => x.ProviderKey == providerKey);
+
+                return repository.GetByQuery(query);
+            }
+        }
+
         #region Event Handlers
 
         /// <summary>
