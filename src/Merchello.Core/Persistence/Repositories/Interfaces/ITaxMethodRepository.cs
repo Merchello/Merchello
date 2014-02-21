@@ -6,9 +6,9 @@ using Umbraco.Core.Persistence.Repositories;
 namespace Merchello.Core.Persistence.Repositories
 {
     /// <summary>
-    /// Marker interface for the CountryTaxRateRepository
+    /// Marker interface for the TaxMethodRepository
     /// </summary>
-    public interface ICountryTaxRateRepository : IRepositoryQueryable<Guid, ICountryTaxRate>
+    public interface ITaxMethodRepository : IRepositoryQueryable<Guid, ITaxMethod>
     {
     }
 }

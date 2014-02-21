@@ -47,5 +47,10 @@ namespace Merchello.Core.Gateways.Shipping
         /// <param name="strategy">The quotation strategy</param>
         /// <returns>A collection of <see cref="IShipmentRateQuote"/></returns>
         IEnumerable<IShipmentRateQuote> QuoteAvailableShipMethodsForShipment(ShipmentRateQuoteStrategyBase strategy);
+
+        /// <summary>
+        /// Returns a collection of all available <see cref="IGatewayShipMethod"/>s assoicated with this provider
+        /// </summary>
+        IEnumerable<IShipMethod> ShipMethods { get; } 
     }
 }

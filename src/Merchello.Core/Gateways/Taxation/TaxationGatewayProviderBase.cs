@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Umbraco.Core.Cache;
@@ -10,6 +11,8 @@ namespace Merchello.Core.Gateways.Taxation
     /// </summary>
     public abstract class TaxationGatewayProviderBase : GatewayProviderBase, ITaxationGatewayProvider
     {
+        
+
         protected TaxationGatewayProviderBase(IGatewayProviderService gatewayProviderService, IGatewayProvider gatewayProvider, IRuntimeCacheProvider runtimeCacheProvider) 
             : base(gatewayProviderService, gatewayProvider, runtimeCacheProvider)
         { }
@@ -30,11 +33,24 @@ namespace Merchello.Core.Gateways.Taxation
         /// <returns><see cref="IInvoiceTaxResult"/></returns>
         public IInvoiceTaxResult CalculateTaxForInvoice(IInvoiceTaxationStrategy strategy)
         {
-            var attempt = strategy.GetInvoiceTaxResult();
+            var attempt = strategy.CalculateTaxesForInvoice();
 
             if (!attempt.Success) throw attempt.Exception;
 
             return attempt.Result;
+        }
+
+
+        private IEnumerable<ITaxMethod> _taxMethods;
+        /// <summary>
+        /// Gets a collection of <see cref="ITaxMethod"/> assoicated with this provider
+        /// </summary>
+        public IEnumerable<ITaxMethod> TaxMethods
+        {
+            get {
+                return _taxMethods ??
+                       (_taxMethods = GatewayProviderService.GetTaxMethodsByProviderKey(GatewayProvider.Key));
+            }
         }
     }
 }

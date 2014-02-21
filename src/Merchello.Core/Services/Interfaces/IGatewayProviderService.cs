@@ -94,6 +94,12 @@ namespace Merchello.Core.Services
         /// <returns>A collection of <see cref="IShipMethod"/></returns>
         IEnumerable<IShipMethod> GetGatewayProviderShipMethods(Guid providerKey, Guid shipCountryKey);
 
+        /// <summary>
+        /// Gets a list of all <see cref="IShipMethod"/> objects given a <see cref="IGatewayProvider"/> key
+        /// </summary>
+        /// <returns>A collection of <see cref="IShipMethod"/></returns>
+        IEnumerable<IShipMethod> GetGatewayProviderShipMethods(Guid providerKey); 
+
         #endregion
 
         #region ShipRateTier
@@ -143,45 +149,45 @@ namespace Merchello.Core.Services
 
             #endregion
 
-        #region CountryTaxRate
+        #region Taxmethod
 
         /// <summary>
-        /// Attempts to create a <see cref="ICountryTaxRate"/> for a given provider and country.  If the provider already 
+        /// Attempts to create a <see cref="ITaxMethod"/> for a given provider and country.  If the provider already 
         /// defines a tax rate for the country, the creation fails.
         /// </summary>
         /// <param name="providerKey">The unique 'key' (Guid) of the TaxationGatewayProvider</param>
         /// <param name="countryCode">The two character ISO country code</param>
         /// <param name="percentageTaxRate">The tax rate in percentage for the country</param>
-        /// <returns><see cref="Attempt"/> indicating whether or not the creation of the <see cref="ICountryTaxRate"/> with respective success or fail</returns>
-        Attempt<ICountryTaxRate> CreateCountryTaxRateWithKey(Guid providerKey, string countryCode, decimal percentageTaxRate);
+        /// <returns><see cref="Attempt"/> indicating whether or not the creation of the <see cref="ITaxMethod"/> with respective success or fail</returns>
+        Attempt<ITaxMethod> CreateTaxMethodWithKey(Guid providerKey, string countryCode, decimal percentageTaxRate);
 
         /// <summary>
-        /// Gets a <see cref="ICountryTaxRate"/> based on a provider and country code
+        /// Gets a <see cref="ITaxMethod"/> based on a provider and country code
         /// </summary>
         /// <param name="providerKey">The unique 'key' of the <see cref="IGatewayProvider"/></param>
-        /// <param name="countryCode">The country code of the <see cref="ICountryTaxRate"/></param>
-        /// <returns>A collection <see cref="ICountryTaxRate"/></returns>
-        ICountryTaxRate GetCountryTaxRateByCountryCode(Guid providerKey, string countryCode);
+        /// <param name="countryCode">The country code of the <see cref="ITaxMethod"/></param>
+        /// <returns>A collection <see cref="ITaxMethod"/></returns>
+        ITaxMethod GetTaxMethodByCountryCode(Guid providerKey, string countryCode);
 
         /// <summary>
-        /// Gets a collection of <see cref="ICountryTaxRate"/> based on a provider and country code
+        /// Gets a collection of <see cref="ITaxMethod"/> based on a provider and country code
         /// </summary>
-        /// <param name="countryCode">The country code of the <see cref="ICountryTaxRate"/></param>
-        /// <returns><see cref="ICountryTaxRate"/></returns>
-        IEnumerable<ICountryTaxRate> GetCountryTaxRateByCountryCode(string countryCode);
+        /// <param name="countryCode">The country code of the <see cref="ITaxMethod"/></param>
+        /// <returns><see cref="ITaxMethod"/></returns>
+        IEnumerable<ITaxMethod> GetTaxMethodsByCountryCode(string countryCode);
 
         /// <summary>
-        /// Saves a single <see cref="ICountryTaxRate"/>
+        /// Saves a single <see cref="ITaxMethod"/>
         /// </summary>
-        /// <param name="countryTaxRate">The <see cref="ICountryTaxRate"/> to be saved</param>        
-        void Save(ICountryTaxRate countryTaxRate);
+        /// <param name="taxMethod">The <see cref="ITaxMethod"/> to be saved</param>        
+        void Save(ITaxMethod taxMethod);
 
         /// <summary>
-        /// Gets a collection of <see cref="ICountryTaxRate"/> for a given TaxationGatewayProvider
+        /// Gets a collection of <see cref="ITaxMethod"/> for a given TaxationGatewayProvider
         /// </summary>
         /// <param name="providerKey">The unique 'key' of the TaxationGatewayProvider</param>
-        /// <returns>A collection of <see cref="ICountryTaxRate"/></returns>
-        IEnumerable<ICountryTaxRate> GetCountryTaxRatesByProviderKey(Guid providerKey);
+        /// <returns>A collection of <see cref="ITaxMethod"/></returns>
+        IEnumerable<ITaxMethod> GetTaxMethodsByProviderKey(Guid providerKey);
 
         #endregion
     }

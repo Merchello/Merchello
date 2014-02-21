@@ -34,7 +34,7 @@ namespace Merchello.Core.Persistence.Factories
                     BillToCompany = dto.BillToCompany,
                     Exported = dto.Exported,
                     Paid = dto.Paid,
-                    Amount = dto.Amount,
+                    Total = dto.Total,
                     CreateDate = dto.CreateDate,
                     UpdateDate = dto.UpdateDate,
                     Items = _lineItemCollection
@@ -67,7 +67,7 @@ namespace Merchello.Core.Persistence.Factories
                     BillToCompany = entity.BillToCompany,
                     Exported = entity.Exported,
                     Paid = entity.Paid,
-                    Amount = entity.Amount,
+                    Total = entity.Total,
                     CreateDate = entity.CreateDate,
                     UpdateDate = entity.UpdateDate
                 };

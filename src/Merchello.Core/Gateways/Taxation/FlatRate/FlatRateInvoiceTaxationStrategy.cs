@@ -4,18 +4,18 @@ using System.Linq;
 using Merchello.Core.Models;
 using Umbraco.Core;
 
-namespace Merchello.Core.Gateways.Taxation.CountryTaxRate
+namespace Merchello.Core.Gateways.Taxation.FlatRate
 {
-    internal class CountryTaxRateInvoiceQuoteStrategy : InvoiceTaxationStrategyBase
+    internal class FlatRateInvoiceTaxationStrategy : InvoiceTaxationStrategyBase
     {
-        private readonly ICountryTaxRate _countryTaxRate;
+        private readonly ITaxMethod _taxMethod;
 
-        public CountryTaxRateInvoiceQuoteStrategy(IInvoice invoice, IAddress taxAddress, ICountryTaxRate countryTaxRate)
+        public FlatRateInvoiceTaxationStrategy(IInvoice invoice, IAddress taxAddress, ITaxMethod taxMethod)
             : base(invoice, taxAddress)
         {
-            Mandate.ParameterNotNull(countryTaxRate, "countryTaxRate");
+            Mandate.ParameterNotNull(taxMethod, "countryTaxRate");
             
-            _countryTaxRate = countryTaxRate;
+            _taxMethod = taxMethod;
         }
 
 
@@ -23,19 +23,19 @@ namespace Merchello.Core.Gateways.Taxation.CountryTaxRate
         /// Computes the invoice tax result
         /// </summary>
         /// <returns>The <see cref="IInvoiceTaxResult"/></returns>
-        public override Attempt<IInvoiceTaxResult> GetInvoiceTaxResult()
+        public override Attempt<IInvoiceTaxResult> CalculateTaxesForInvoice()
         {
             var extendedData = new ExtendedDataCollection();
 
             try
             {                
-                var baseTaxRate = _countryTaxRate.PercentageTaxRate;
+                var baseTaxRate = _taxMethod.PercentageTaxRate;
 
                 extendedData.SetValue(Constants.ExtendedDataKeys.BaseTaxRate, baseTaxRate.ToString(CultureInfo.InvariantCulture));
 
-                if (_countryTaxRate.HasProvinces)
+                if (_taxMethod.HasProvinces)
                 {
-                    baseTaxRate = AdjustedRate(baseTaxRate, _countryTaxRate.Provinces.FirstOrDefault(x => x.Code == TaxAddress.Region), extendedData);
+                    baseTaxRate = AdjustedRate(baseTaxRate, _taxMethod.Provinces.FirstOrDefault(x => x.Code == TaxAddress.Region), extendedData);
                 }
                 
 
@@ -61,10 +61,10 @@ namespace Merchello.Core.Gateways.Taxation.CountryTaxRate
         /// Adjusts the rate of the quote based on the province 
         /// </summary>
         /// <param name="baseRate">The base (unadjusted) rate</param>
-        /// <param name="province">The <see cref="ITaxProvince"/> associated with the <see cref="ICountryTaxRate"/></param>
+        /// <param name="province">The <see cref="ITaxProvince"/> associated with the <see cref="ITaxMethod"/></param>
         /// <param name="extendedData"></param>
         /// <returns></returns>
-        private decimal AdjustedRate(decimal baseRate, ITaxProvince province, ExtendedDataCollection extendedData)
+        private static decimal AdjustedRate(decimal baseRate, ITaxProvince province, ExtendedDataCollection extendedData)
         {
             if (province == null) return baseRate;
             extendedData.SetValue(Constants.ExtendedDataKeys.ProviceTaxRate, province.PercentRateAdjustment.ToString(CultureInfo.InvariantCulture));

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Merchello.Core.Models;
 using Merchello.Core.Persistence;
 using Merchello.Core.Services;
@@ -17,12 +18,28 @@ namespace Merchello.Tests.UnitTests.Services
         {
             _storeSettingService = new StoreSettingService();
         }
-        
+
+        [Test]
+        public void Can_Retrieve_A_List_Of_Countries_Without_Duplicates()
+        {
+            //// Arrange
+            
+            //// Act
+            var countries = _storeSettingService.GetAllCountries();
+            foreach (var country in countries.OrderBy(x =>x.CountryCode))
+            {
+                Console.WriteLine("{0} {1}", country.CountryCode, country.Name);
+            }
+            var distinctCodes = countries.Select(x => x.CountryCode).Distinct();
+
+            //// Assert
+            Assert.AreEqual(countries.Count(), distinctCodes.Count());
+        }
+
         /// <summary>
         /// Test verifies that the service correctly removes countries passed an array of country codes
         /// </summary>
         [Test]
-
         public void Can_Retrieve_A_RegionList_That_Excludes_Countries()
         {
             //// Arrange

@@ -4,7 +4,6 @@ using Merchello.Core;
 using Merchello.Core.Gateways;
 using Merchello.Core.Gateways.Shipping.RateTable;
 using Merchello.Core.Gateways.Taxation;
-using Merchello.Core.Gateways.Taxation.CountryTaxRate;
 using NUnit.Framework;
 
 namespace Merchello.Tests.IntegrationTests.Taxation

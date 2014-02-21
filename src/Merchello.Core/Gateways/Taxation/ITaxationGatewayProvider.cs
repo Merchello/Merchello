@@ -1,4 +1,5 @@
-﻿using Merchello.Core.Models;
+﻿using System.Collections.Generic;
+using Merchello.Core.Models;
 
 namespace Merchello.Core.Gateways.Taxation
 {
@@ -21,5 +22,10 @@ namespace Merchello.Core.Gateways.Taxation
         /// <param name="strategy">The strategy to use when calculating the tax amount</param>
         /// <returns><see cref="IInvoiceTaxResult"/></returns>
         IInvoiceTaxResult CalculateTaxForInvoice(IInvoiceTaxationStrategy strategy);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        IEnumerable<ITaxMethod> TaxMethods { get; } 
     }
 }

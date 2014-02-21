@@ -280,7 +280,7 @@
     <Compile Include="TestHelpers\MerchelloAllInTestBase.cs" />
     <Compile Include="TestHelpers\DatabaseIntegrationTestBase.cs" />
     <Compile Include="Shipping\ShipCountryTests.cs" />
-    <Compile Include="Taxation\CountryTaxRateTaxationGatewayProviderTests.cs" />
+    <Compile Include="Taxation\TaxMethodTaxationGatewayProviderTests.cs" />
     <Compile Include="Taxation\TaxationProviderTestBase.cs" />
     <Compile Include="Taxation\TaxationProviderTests.cs" />
     <Compile Include="TestHelpers\DbPreTestDataWorker.cs" />
@@ -316,6 +316,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="bin\Debug\" />
+    <Folder Include="Localization\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">

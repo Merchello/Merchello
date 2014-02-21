@@ -58,7 +58,7 @@ namespace Merchello.Core.Gateways.Taxation
         public IInvoiceTaxResult CalculateTaxesForInvoice(IInvoice invoice, IAddress taxAddress)
         {
             var providersKey =
-                GatewayProviderService.GetCountryTaxRateByCountryCode(taxAddress.CountryCode)
+                GatewayProviderService.GetTaxMethodsByCountryCode(taxAddress.CountryCode)
                                       .Select(x => x.ProviderKey).FirstOrDefault();
 
             if(Guid.Empty.Equals(providersKey)) return new InvoiceTaxResult(0,0);

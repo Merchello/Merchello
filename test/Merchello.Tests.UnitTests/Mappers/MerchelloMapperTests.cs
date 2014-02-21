@@ -33,10 +33,10 @@ namespace Merchello.Tests.UnitTests.Mappers
         public void Mapper_Resolves_ICountryTaxRate_To_CountryTaxRateMapper()
         {
             //// Arrange
-            var expected = typeof(CountryTaxRateMapper);
+            var expected = typeof(TaxMethodMapper);
 
             //// Act
-            var resolved = MerchelloMapper.Current.ResolveByType(typeof(ICountryTaxRate));
+            var resolved = MerchelloMapper.Current.ResolveByType(typeof(ITaxMethod));
 
             //// Assert
             Assert.IsTrue(resolved.Success);

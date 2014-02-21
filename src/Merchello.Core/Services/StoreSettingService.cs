@@ -226,7 +226,7 @@ namespace Merchello.Core.Services
         {
             return CultureInfo.GetCultures(CultureTypes.SpecificCultures)
                 .Select(culture => new RegionInfo(culture.Name))
-                .Select(ri => GetCountryByCode(ri.TwoLetterISORegionName));
+                .Select(ri => GetCountryByCode(ri.TwoLetterISORegionName)).DistinctBy(x => x.CountryCode);
         }
 
         /// <summary>

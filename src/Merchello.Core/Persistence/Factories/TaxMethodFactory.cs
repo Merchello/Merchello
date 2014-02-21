@@ -5,9 +5,9 @@ using Newtonsoft.Json;
 
 namespace Merchello.Core.Persistence.Factories
 {
-    internal class CountryTaxRateFactory : IEntityFactory<ICountryTaxRate, CountryTaxRateDto>
+    internal class TaxMethodFactory : IEntityFactory<ITaxMethod, TaxMethodDto>
     {
-        public ICountryTaxRate BuildEntity(CountryTaxRateDto dto)
+        public ITaxMethod BuildEntity(TaxMethodDto dto)
         {
             var deserialized = JsonConvert.DeserializeObject<ProvinceCollection<TaxProvince>>(dto.ProvinceData);
             var provinces = new ProvinceCollection<ITaxProvince>();
@@ -16,7 +16,7 @@ namespace Merchello.Core.Persistence.Factories
                 provinces.Add(p);
             }
 
-            var countryTaxRate = new CountryTaxRate(dto.ProviderKey, dto.Code)
+            var countryTaxRate = new TaxMethod(dto.ProviderKey, dto.Code)
             {
                 Key = dto.Key,
                 PercentageTaxRate = dto.PercentageTaxRate,
@@ -30,10 +30,10 @@ namespace Merchello.Core.Persistence.Factories
             return countryTaxRate;
         }
 
-        public CountryTaxRateDto BuildDto(ICountryTaxRate entity)
+        public TaxMethodDto BuildDto(ITaxMethod entity)
         {
             var provinceData = JsonConvert.SerializeObject(entity.Provinces);
-            return new CountryTaxRateDto()
+            return new TaxMethodDto()
                 {
                     Key = entity.Key,
                     Code = entity.CountryCode,
