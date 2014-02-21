@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Merchello.Core
+﻿namespace Merchello.Core
 {
     /// <summary>
     /// Constants all the identifiers within the Merchello core.

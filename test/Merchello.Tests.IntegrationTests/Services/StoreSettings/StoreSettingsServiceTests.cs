@@ -41,7 +41,7 @@ namespace Merchello.Tests.IntegrationTests.Services.StoreSettings
         public void Can_Get_A_StoreSetting_By_Key()
         {
             //// Arrange
-            var key = Core.Constants.StoreSettingKeys.CurrencyCodeSettingKey;
+            var key = Core.Constants.StoreSettingKeys.CurrencyCodeKey;
             var expected = "currencyCode";
 
             //// Act
@@ -59,7 +59,7 @@ namespace Merchello.Tests.IntegrationTests.Services.StoreSettings
         public void Can_Update_A_StoreSetting()
         {
             //// Arrange
-            var key = Core.Constants.StoreSettingKeys.CurrencyCodeSettingKey;
+            var key = Core.Constants.StoreSettingKeys.CurrencyCodeKey;
             var region = new RegionInfo("DK");
             var expected = "DKK";
 
