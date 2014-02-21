@@ -333,6 +333,16 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
+        /// Gets a <see cref="ICountryTaxRate"/> based on a provider and country code
+        /// </summary>
+        /// <param name="countryCode">The country code of the <see cref="ICountryTaxRate"/></param>
+        /// <returns>A collection <see cref="ICountryTaxRate"/></returns>
+        public IEnumerable<ICountryTaxRate> GetCountryTaxRateByCountryCode(string countryCode)
+        {
+            return _countryTaxRateService.GetCountryTaxRateByCountryCode(countryCode);
+        }
+
+        /// <summary>
         /// Saves a single <see cref="ICountryTaxRate"/>
         /// </summary>
         /// <param name="countryTaxRate">The <see cref="ICountryTaxRate"/> to be saved</param>

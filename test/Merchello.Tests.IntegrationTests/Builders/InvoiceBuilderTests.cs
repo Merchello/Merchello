@@ -2,9 +2,9 @@
 using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Builders;
-using Merchello.Core.Checkout;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Models;
+using Merchello.Core.Orders;
 using Merchello.Tests.Base.DataMakers;
 using Merchello.Web;
 using Merchello.Web.Workflow;

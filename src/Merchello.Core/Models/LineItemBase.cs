@@ -259,7 +259,7 @@ namespace Merchello.Core.Models
                     writer.WriteElementString(Constants.ExtendedDataKeys.Sku, Sku);
                     writer.WriteElementString(Constants.ExtendedDataKeys.Name, Name);
                     writer.WriteElementString(Constants.ExtendedDataKeys.Quantity, Quantity.ToString(CultureInfo.InvariantCulture));
-                    writer.WriteElementString(Constants.ExtendedDataKeys.Amount, Price.ToString(CultureInfo.InvariantCulture));
+                    writer.WriteElementString(Constants.ExtendedDataKeys.Price, Price.ToString(CultureInfo.InvariantCulture));
                     writer.WriteStartElement(Constants.ExtendedDataKeys.ExtendedData);
                     writer.WriteRaw(ExtendedData.SerializeToXml());
                     writer.WriteEndElement();

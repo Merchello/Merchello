@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
-using Umbraco.Core.Cache;
 
 namespace Merchello.Core.Gateways.Taxation
 {
@@ -34,9 +34,38 @@ namespace Merchello.Core.Gateways.Taxation
             return GatewayProviderResolver.ResolveByKey<TaxationGatewayProviderBase>(key);
         }
 
+        /// <summary>
+        /// Calculates taxes for the <see cref="IInvoice"/>
+        /// </summary>
+        /// <param name="invoice">The <see cref="IInvoice"/> to tax</param>
+        /// <returns>The <see cref="IInvoiceTaxResult"/></returns>
+        /// <remarks>
+        /// 
+        /// This assumes that the tax rate is assoicated with the invoice's billing address
+        /// 
+        /// </remarks>
         public IInvoiceTaxResult CalculateTaxesForInvoice(IInvoice invoice)
         {
-            throw new NotImplementedException();
+            return CalculateTaxesForInvoice(invoice, invoice.GetBillingAddress());
+        }
+
+        /// <summary>
+        /// Calculates taxes for the <see cref="IInvoice"/>
+        /// </summary>
+        /// <param name="invoice">The <see cref="IInvoice"/> to tax</param>
+        /// <param name="taxAddress">The address to base the taxation calculation</param>
+        /// <returns>The <see cref="IInvoiceTaxResult"/></returns>
+        public IInvoiceTaxResult CalculateTaxesForInvoice(IInvoice invoice, IAddress taxAddress)
+        {
+            var providersKey =
+                GatewayProviderService.GetCountryTaxRateByCountryCode(taxAddress.CountryCode)
+                                      .Select(x => x.ProviderKey).FirstOrDefault();
+
+            if(Guid.Empty.Equals(providersKey)) return new InvoiceTaxResult(0,0);
+
+            var provider = GatewayProviderResolver.ResolveByKey<TaxationGatewayProviderBase>(providersKey);
+
+            return provider.CalculateTaxForInvoice(invoice, taxAddress);
         }
     }
 }

@@ -160,8 +160,15 @@ namespace Merchello.Core.Services
         /// </summary>
         /// <param name="providerKey">The unique 'key' of the <see cref="IGatewayProvider"/></param>
         /// <param name="countryCode">The country code of the <see cref="ICountryTaxRate"/></param>
-        /// <returns><see cref="ICountryTaxRate"/></returns>
+        /// <returns>A collection <see cref="ICountryTaxRate"/></returns>
         ICountryTaxRate GetCountryTaxRateByCountryCode(Guid providerKey, string countryCode);
+
+        /// <summary>
+        /// Gets a collection of <see cref="ICountryTaxRate"/> based on a provider and country code
+        /// </summary>
+        /// <param name="countryCode">The country code of the <see cref="ICountryTaxRate"/></param>
+        /// <returns><see cref="ICountryTaxRate"/></returns>
+        IEnumerable<ICountryTaxRate> GetCountryTaxRateByCountryCode(string countryCode);
 
         /// <summary>
         /// Saves a single <see cref="ICountryTaxRate"/>

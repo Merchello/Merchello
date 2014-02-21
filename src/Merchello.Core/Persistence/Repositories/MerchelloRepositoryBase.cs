@@ -134,7 +134,9 @@ namespace Merchello.Core.Persistence.Repositories
 			}
 			else
 			{
-			    var allEntities = _cache.GetCacheItemsByKeySearch(typeof (TEntity).Name); //_cache.GetAllByType(typeof(TEntity));
+                // fix http://issues.merchello.com/youtrack/issue/M-159
+                // Since IProduct and IProductVaraint both start with IProduct which was causing the cache conflict
+			    var allEntities = _cache.GetCacheItemsByKeySearch(typeof (TEntity).Name + "-"); //_cache.GetAllByType(typeof(TEntity));
 				
 				if (allEntities.Any())
 				{

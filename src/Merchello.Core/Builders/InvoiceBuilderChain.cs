@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Merchello.Core.Checkout;
 using Merchello.Core.Models;
+using Merchello.Core.Orders;
 using Umbraco.Core;
 
 namespace Merchello.Core.Builders
