@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Reflection;
 using System.Runtime.Serialization;
+using System.Security;
 using Merchello.Core.Models.EntityBase;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Models.TypeFields;
@@ -17,6 +18,7 @@ namespace Merchello.Core.Models
     public class GatewayProvider : Entity, IGatewayProvider
     {
         private string _name;
+        private string _description;
         private Guid _providerTfKey;
         private string _typeFullName;
         private ExtendedDataCollection _extendedData;
@@ -24,6 +26,7 @@ namespace Merchello.Core.Models
 
 
         private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<GatewayProvider, string>(x => x.Name);
+        private static readonly PropertyInfo DescriptionSelector = ExpressionHelper.GetPropertyInfo<GatewayProvider, string>(x => x.Description);
         private static readonly PropertyInfo ProviderTfKeySelector = ExpressionHelper.GetPropertyInfo<GatewayProvider, Guid>(x => x.ProviderTfKey);
         private static readonly PropertyInfo TypeFullNameSelector = ExpressionHelper.GetPropertyInfo<GatewayProvider, string>(x => x.TypeFullName);
         private static readonly PropertyInfo ExtendedDataChangedSelector = ExpressionHelper.GetPropertyInfo<GatewayProvider, ExtendedDataCollection>(x => x.ExtendedData);
@@ -51,6 +54,25 @@ namespace Merchello.Core.Models
                 }, _name, NameSelector);
             }
         }
+
+
+        /// <summary>
+        /// The description of the provider
+        /// </summary>
+        [DataMember]
+        public string Description
+        {
+            get { return _description; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _description = value;
+                    return _description;
+                }, _description, DescriptionSelector);
+            }
+        }
+
 
         /// <summary>
         /// The type field key for the provider
