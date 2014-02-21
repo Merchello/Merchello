@@ -1,5 +1,5 @@
 ﻿using System;
-using Merchello.Core.Configuration;
+using System.Linq;
 using Merchello.Core.Models;
 using Umbraco.Core;
 
@@ -18,26 +18,51 @@ namespace Merchello.Core.Gateways.Taxation.CountryTaxRate
         }
 
 
-
         /// <summary>
         /// Computes the invoice tax result
         /// </summary>
         /// <returns>The <see cref="IInvoiceTaxResult"/></returns>
         public override Attempt<IInvoiceTaxResult> GetInvoiceTaxResult()
-        {
-            // 
-            var baseTaxRate = _countryTaxRate.PercentageTaxRate;
+        {            
+            try
+            {                
+                var baseTaxRate = _countryTaxRate.PercentageTaxRate;
+                if (_countryTaxRate.HasProvinces)
+                {
+                    baseTaxRate = AdjustedRate(baseTaxRate, _countryTaxRate.Provinces.FirstOrDefault(x => x.Code == TaxAddress.Region));
+                }
+                
+
+                var visitor = new TaxableLineItemVisitor();
+                Invoice.Items.Accept(visitor);
+
+                var taxablePrice = visitor.TaxableLineItems.Sum(x => x.Price);
 
 
-
-            throw new NotImplementedException();
+                return Attempt<IInvoiceTaxResult>.Succeed(
+                    new InvoiceTaxResult(baseTaxRate, taxablePrice * (baseTaxRate / 100))
+                    );
+            }
+            catch (Exception ex)
+            {
+                return Attempt<IInvoiceTaxResult>.Fail(ex);
+            }
+                                   
         }
 
-        //private decimal GetCombinedTaxRax()
-        //{
-        //    if (!_countryTaxRate.HasProvinces) return _countryTaxRate.PercentageTaxRate;
-        //    //if(TaxAddress.CountryCode != _countryTaxRate.CountryCode) return 
 
-        //}
+
+        /// <summary>
+        /// Adjusts the rate of the quote based on the province 
+        /// </summary>
+        /// <param name="baseRate">The base (unadjusted) rate</param>
+        /// <param name="province">The <see cref="ITaxProvince"/> associated with the <see cref="ICountryTaxRate"/></param>
+        /// <returns></returns>
+        private decimal AdjustedRate(decimal baseRate, ITaxProvince province)
+        {
+            if (province == null) return baseRate;
+            return province.PercentRateAdjustment + baseRate;
+        }
+
     }
 }

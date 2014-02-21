@@ -1,9 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Cache;
 using Merchello.Core.Models;
 using Merchello.Core.Persistence.UnitOfWork;
 using Merchello.Core.Services;
+using Merchello.Core.Strategies.Packaging;
 using Merchello.Tests.IntegrationTests.Services;
 using Merchello.Tests.IntegrationTests.TestHelpers;
 using Merchello.Web;
@@ -75,7 +77,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             };
             
             //// Act
-            var strategy = new DefaultWarehousePackagingStrategy(_merchelloContext, _basket, destination);
+            var strategy = new DefaultWarehousePackagingStrategy(_merchelloContext, _basket.Items, destination, Guid.NewGuid());
             var shipments = strategy.PackageShipments();
 
             //// Assert

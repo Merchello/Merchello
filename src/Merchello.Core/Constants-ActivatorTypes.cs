@@ -4,7 +4,7 @@
     {
         public static class StrategyTypeAlias
         {
-            public static string DefaultBasketPackaging = "DefaultBasketPackaging";
+            public static string DefaultPackaging = "DefaultPackaging";
             public static string DefaultShipmentRateQuote = "DefaultShipmentRateQuote";
             public static string DefaultInvoiceTaxRateQuote = "DefaultInvoiceTaxRateQuote";
         }

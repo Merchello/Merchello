@@ -1,16 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Merchello.Core;
 using Merchello.Core.Models;
+using Merchello.Web.Workflow.Shipping;
 using Umbraco.Core.Logging;
 
-namespace Merchello.Web.Workflow.Shipping
+namespace Merchello.Core.Strategies.Packaging
 {
     /// <summary>
-    /// Represents the default basket packaging strategy.  
+    /// Represents the default warehouse packaging strategy.  
     /// 
-    /// The class is responsible for breaking the products in a basket into one or more shipments.
+    /// The class is responsible for breaking a collection of products into one or more shipments.
     /// </summary>
     /// <remarks>
     /// 
@@ -19,14 +20,14 @@ namespace Merchello.Web.Workflow.Shipping
     /// various inventory possibilities
     /// 
     /// </remarks>
-    public class DefaultWarehousePackagingStrategy : BasketPackagingStrategyBase
+    public class DefaultWarehousePackagingStrategy : PackagingStrategyBase
     {
-        public DefaultWarehousePackagingStrategy(IBasket basket, IAddress destination) 
-            : base(basket, destination)
+        public DefaultWarehousePackagingStrategy(LineItemCollection lineItemCollection, IAddress destination, Guid versionKey) 
+            : base(lineItemCollection, destination, versionKey)
         { }
 
-        public DefaultWarehousePackagingStrategy(IMerchelloContext merchelloContext, IBasket basket, IAddress destination) 
-            : base(merchelloContext, basket, destination)
+        public DefaultWarehousePackagingStrategy(IMerchelloContext merchelloContext, LineItemCollection lineItemCollection, IAddress destination, Guid versionKey) 
+            : base(merchelloContext, lineItemCollection, destination, versionKey)
         { }
 
         /// <summary>
@@ -36,7 +37,7 @@ namespace Merchello.Web.Workflow.Shipping
         {
             // filter basket items for shippable items
             var shippableVisitor = new ShippableProductVisitor();            
-            Basket.Accept(shippableVisitor);            
+            LineItemCollection.Accept(shippableVisitor);            
 
             if(!shippableVisitor.ShippableItems.Any()) return new List<IShipment>();
    
@@ -48,13 +49,21 @@ namespace Merchello.Web.Workflow.Shipping
             //For the initial version we are only exposing a single shipment
             var shipment = new Shipment(origin, Destination)
                 {
-                    VersionKey = Basket.VersionKey // this is used in cache keys
+                    VersionKey = VersionKey // this is used in cache keys
                 };
+
+            // get the variants for each of the shippable line items
+            var variants =
+                   MerchelloContext.Services.ProductVariantService.GetByKeys(
+                       shippableVisitor.ShippableItems.Select(x => x.ExtendedData.GetProductVariantKey()).Where(x => !Guid.Empty.Equals(x))
+                       ).ToArray();
 
             foreach (var lineItem in shippableVisitor.ShippableItems)
             {
                 // We need to know what Warehouse Catalog this product is associated with for shipping and inventory
-                var variant = ProductQuery.GetVariantDisplayByKey(lineItem.ExtendedData.GetProductVariantKey());
+                var variant = variants.FirstOrDefault(x => x.Key.Equals(lineItem.ExtendedData.GetProductVariantKey()));      
+                if(variant == null) throw new InvalidOperationException("This packaging strategy cannot handle null ProductVariants");
+
                 if (variant.CatalogInventories.FirstOrDefault() == null)
                 {
                     LogHelper.Error<ShippableProductVisitor>("ProductVariant marked as shippable was not assoicated with a WarehouseCatalog.  Product was: " + variant.Key.ToString() + " -  " + variant.Name, new InvalidDataException());

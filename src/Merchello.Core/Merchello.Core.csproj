@@ -86,6 +86,8 @@
     <Compile Include="Chains\InvoiceCreation\ConvertItemCacheItemsToInvoiceItemsTask.cs" />
     <Compile Include="Chains\InvoiceTaxRateQuote\IdentifyTaxableLineItems.cs" />
     <Compile Include="Chains\InvoiceTaxRateQuote\InvoiceTaxRateQuoteBase.cs" />
+    <Compile Include="Gateways\Taxation\InvoiceTaxResult.cs" />
+    <Compile Include="Gateways\Taxation\TaxableLineItemVisitor.cs" />
     <Compile Include="Orders\OrderPreparationBase.cs" />
     <Compile Include="Orders\IOrderPreparationBase.cs" />
     <Compile Include="Builders\IBuilderChain.cs" />
@@ -581,6 +583,10 @@
     <Compile Include="IStrategy.cs" />
     <Compile Include="Gateways\Shipping\IShipmentRateQuoteStrategy.cs" />
     <Compile Include="Gateways\Taxation\IInvoiceTaxationStrategy.cs" />
+    <Compile Include="Strategies\Packaging\DefaultWarehousePackagingStrategy.cs" />
+    <Compile Include="Strategies\Packaging\PackagingStrategyBase.cs" />
+    <Compile Include="Strategies\Packaging\IPackagingStrategy.cs" />
+    <Compile Include="Strategies\Packaging\ShippableProductVisitor.cs" />
     <Compile Include="TypeFieldMapperEnumerations.cs" />
     <Compile Include="Models\TypeFields\ProductTypeField.cs" />
     <Compile Include="Models\Rdbms\TypeFieldDto.cs" />
