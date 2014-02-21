@@ -5,31 +5,31 @@ using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Umbraco.Core;
 
-namespace Merchello.Core.Gateways.Shipping.RateTable
+namespace Merchello.Core.Gateways.Shipping.FixedRate
 {
     /// <summary>
     /// Defines the rate table ship method
     /// </summary>
-    public class RateTableShipMethod : GatewayShipMethodBase, IRateTableShipMethod
+    public class FixedRateShipMethod : GatewayShipMethodBase, IFixedRateShipMethod
     {
         private readonly QuoteType _quoteType;
 
-        public RateTableShipMethod(IGatewayResource gatewayResource, IShipMethod shipMethod, IShipCountry shipCountry)
-            :this(gatewayResource, shipMethod, shipCountry, new ShipRateTable(shipMethod.Key))
+        public FixedRateShipMethod(IGatewayResource gatewayResource, IShipMethod shipMethod, IShipCountry shipCountry)
+            :this(gatewayResource, shipMethod, shipCountry, new ShippingFixedRateTable(shipMethod.Key))
         {}
 
-        public RateTableShipMethod(IGatewayResource gatewayResource, IShipMethod shipMethod, IShipCountry shipCountry, IShipRateTable rateTable)
+        public FixedRateShipMethod(IGatewayResource gatewayResource, IShipMethod shipMethod, IShipCountry shipCountry, IShippingFixedRateTable rateTable)
             : base(gatewayResource, shipMethod, shipCountry)
         {
-            RateTable = new ShipRateTable(shipMethod.Key);
-            _quoteType = GatewayResource.ServiceCode == RateTableShippingGatewayProvider.VaryByWeightPrefix ? QuoteType.VaryByWeight : QuoteType.VaryByPrice;
+            RateTable = new ShippingFixedRateTable(shipMethod.Key);
+            _quoteType = GatewayResource.ServiceCode == FixedRateShippingGatewayProvider.VaryByWeightPrefix ? QuoteType.VaryByWeight : QuoteType.VaryByPrice;
             RateTable = rateTable;
         }
 
         public override Attempt<IShipmentRateQuote> QuoteShipment(IShipment shipment)
         {
             // TODO this should be made configurable
-            var visitor = new RateTableShipMethodShipmentLineItemVisitor { UseOnSalePriceIfOnSale = false };
+            var visitor = new FixedRateShipmentLineItemVisitor { UseOnSalePriceIfOnSale = false };
 
             shipment.Items.Accept(visitor);
 
@@ -90,7 +90,7 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
         /// <summary>
         /// Gets the rate table
         /// </summary>
-        public IShipRateTable RateTable { get; private set; }
+        public IShippingFixedRateTable RateTable { get; private set; }
 
         /// <summary>
         /// Gets the quote type

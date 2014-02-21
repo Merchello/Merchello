@@ -1,13 +1,13 @@
 ﻿using Merchello.Core.Models;
 
-namespace Merchello.Core.Gateways.Shipping.RateTable
+namespace Merchello.Core.Gateways.Shipping.FixedRate
 {
     /// <summary>
     /// Vistor class that calculates 
     /// </summary>
-    public class RateTableShipMethodShipmentLineItemVisitor : ILineItemVisitor
+    public class FixedRateShipmentLineItemVisitor : ILineItemVisitor
     {
-        public RateTableShipMethodShipmentLineItemVisitor()
+        public FixedRateShipmentLineItemVisitor()
         {
             TotalPrice = 0M;
             TotalWeight = 0M;

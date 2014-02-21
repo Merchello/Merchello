@@ -2,7 +2,7 @@
 using Merchello.Core;
 using Merchello.Core.Cache;
 using Merchello.Core.Gateways;
-using Merchello.Core.Gateways.Shipping.RateTable;
+using Merchello.Core.Gateways.Shipping.FixedRate;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Persistence.UnitOfWork;
@@ -44,7 +44,7 @@ namespace Merchello.Tests.IntegrationTests.Services.GatewayProvider
            
        
             var shippingProvider =
-               (RateTableShippingGatewayProvider) _merchelloContext.Gateways.Shipping.ResolveByKey(Core.Constants.ProviderKeys.Shipping.RateTableShippingProviderKey);
+               (FixedRateShippingGatewayProvider) _merchelloContext.Gateways.Shipping.ResolveByKey(Core.Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey);
             Assert.NotNull(shippingProvider);
 
             var resource = shippingProvider.ListResourcesOffered().FirstOrDefault();

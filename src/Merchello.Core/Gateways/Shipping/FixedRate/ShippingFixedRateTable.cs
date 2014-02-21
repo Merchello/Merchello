@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
@@ -8,18 +7,18 @@ using Umbraco.Core;
 using Umbraco.Core.Cache;
 using CacheKeys = Merchello.Core.Cache.CacheKeys;
 
-namespace Merchello.Core.Gateways.Shipping.RateTable
+namespace Merchello.Core.Gateways.Shipping.FixedRate
 {
-    public class ShipRateTable : IShipRateTable
+    public class ShippingFixedRateTable : IShippingFixedRateTable
     {
         private readonly List<IShipRateTier> _shipRateTiers;
         private readonly Guid _shipMethodKey;
 
-        public ShipRateTable(Guid shipMethodKey)
+        public ShippingFixedRateTable(Guid shipMethodKey)
             : this(shipMethodKey, new List<IShipRateTier>())
         { }
 
-        internal ShipRateTable(Guid shipMethodKey, IEnumerable<IShipRateTier> rows)
+        internal ShippingFixedRateTable(Guid shipMethodKey, IEnumerable<IShipRateTier> rows)
         {
             IsTest = false;
             var shipRateTiers = rows as IShipRateTier[] ?? rows.ToArray();
@@ -33,19 +32,19 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
 
         }
 
-        internal static ShipRateTable GetShipRateTable(IGatewayProviderService gatewayProviderService, IRuntimeCacheProvider runtimeCacheProvider, Guid shipMethodKey)
+        internal static ShippingFixedRateTable GetShipRateTable(IGatewayProviderService gatewayProviderService, IRuntimeCacheProvider runtimeCacheProvider, Guid shipMethodKey)
         {
-            return (ShipRateTable) runtimeCacheProvider.GetCacheItem(
+            return (ShippingFixedRateTable) runtimeCacheProvider.GetCacheItem(
                 CacheKeys.GatewayShipMethodCacheKey(shipMethodKey),
                 delegate
                     {
                         var rows = gatewayProviderService.GetShipRateTiersByShipMethodKey(shipMethodKey);
-                        return new ShipRateTable(shipMethodKey, rows);
+                        return new ShippingFixedRateTable(shipMethodKey, rows);
                     });
         }
 
         /// <summary>
-        /// The 'unique' ShipMethodKey of the ship method associated with the <see cref="IShipRateTable"/>
+        /// The 'unique' ShipMethodKey of the ship method associated with the <see cref="IShippingFixedRateTable"/>
         /// </summary>
         public Guid ShipMethodKey {
             get
@@ -213,7 +212,7 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
             Save(MerchelloContext.Current.Services.GatewayProviderService, MerchelloContext.Current.Cache.RuntimeCache, this);
         }
 
-        internal static void Save(IGatewayProviderService gatewayProviderService, IRuntimeCacheProvider cache, IShipRateTable rateTable)
+        internal static void Save(IGatewayProviderService gatewayProviderService, IRuntimeCacheProvider cache, IShippingFixedRateTable rateTable)
         {           
             // clear the current cached item
             // TODO : This should use the distributed cache referesher
@@ -237,7 +236,7 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
            cache.GetCacheItem(CacheKeys.GatewayShipMethodCacheKey(rateTable.ShipMethodKey), () => rateTable);   
         }
 
-        internal static void DeleteRow(IGatewayProviderService gatewayProviderService, IRuntimeCacheProvider cache, IShipRateTable rateTable, IShipRateTier shipRateTier)
+        internal static void DeleteRow(IGatewayProviderService gatewayProviderService, IRuntimeCacheProvider cache, IShippingFixedRateTable rateTable, IShipRateTier shipRateTier)
         {
             // clear the current cached item
             // TODO : This should use the distributed cache referesher

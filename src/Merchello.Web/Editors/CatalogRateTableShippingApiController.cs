@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.ModelBinding;
+using Merchello.Core.Gateways.Shipping.FixedRate;
 using Umbraco.Web;
 using Umbraco.Web.Mvc;
 using Merchello.Core;
@@ -15,7 +16,6 @@ using Merchello.Web.Models.ContentEditing;
 using System.Net;
 using System.Net.Http;
 using Merchello.Core.Gateways.Shipping;
-using Merchello.Core.Gateways.Shipping.RateTable;
 
 namespace Merchello.Web.Editors
 {
@@ -23,7 +23,7 @@ namespace Merchello.Web.Editors
     public class CatalogRateTableShippingApiController : MerchelloApiController
     {
         private readonly IShipCountryService _shipCountryService;
-        private readonly RateTableShippingGatewayProvider _rateTableShippingGatewayProvider;
+        private readonly FixedRateShippingGatewayProvider _fixedRateShippingGatewayProvider;
 
         /// <summary>
         /// Constructor
@@ -41,7 +41,7 @@ namespace Merchello.Web.Editors
             : base(merchelloContext)
         {
             _shipCountryService = MerchelloContext.Services.ShipCountryService;
-            _rateTableShippingGatewayProvider = (RateTableShippingGatewayProvider)MerchelloContext.Gateways.Shipping.ResolveByKey(Constants.ProviderKeys.Shipping.RateTableShippingProviderKey);
+            _fixedRateShippingGatewayProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Gateways.Shipping.ResolveByKey(Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey);
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace Merchello.Web.Editors
             : base(merchelloContext, umbracoContext)
         {
             _shipCountryService = MerchelloContext.Services.ShipCountryService;
-            _rateTableShippingGatewayProvider = (RateTableShippingGatewayProvider)MerchelloContext.Gateways.Shipping.ResolveByKey(Constants.ProviderKeys.Shipping.RateTableShippingProviderKey);
+            _fixedRateShippingGatewayProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Gateways.Shipping.ResolveByKey(Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey);
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace Merchello.Web.Editors
             {
                 var providers = MerchelloContext.Gateways.Shipping.GetGatewayProvidersByShipCountry(shipCountry);
 
-                var fixedProvider = providers.Where(x => x.Key == Constants.ProviderKeys.Shipping.RateTableShippingProviderKey).FirstOrDefault();
+                var fixedProvider = providers.Where(x => x.Key == Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey).FirstOrDefault();
 
                 if (fixedProvider != null)
                 {
@@ -98,9 +98,9 @@ namespace Merchello.Web.Editors
             try
             {
                 var shipCountry = _shipCountryService.GetByKey(method.ShipMethod.ShipCountryKey);
-                var provider = _rateTableShippingGatewayProvider;
+                var provider = _fixedRateShippingGatewayProvider;
 
-                var merchelloGwShipMethod = (IRateTableShipMethod)provider.CreateShipMethod(method.RateTableType, shipCountry, method.ShipMethod.Name);
+                var merchelloGwShipMethod = (IFixedRateShipMethod)provider.CreateShipMethod(method.RateTableType, shipCountry, method.ShipMethod.Name);
 
                 merchelloGwShipMethod = method.ToRateTableShipMethod(merchelloGwShipMethod);
 
@@ -128,9 +128,9 @@ namespace Merchello.Web.Editors
             try
             {
                 var shipCountry = _shipCountryService.GetByKey(method.ShipMethod.ShipCountryKey);
-                var provider = _rateTableShippingGatewayProvider;
+                var provider = _fixedRateShippingGatewayProvider;
 
-                var merchelloMethod = (IRateTableShipMethod)provider.GetActiveShipMethods(shipCountry).Where(m => m.ShipMethod.Key == method.ShipMethod.Key).FirstOrDefault();
+                var merchelloMethod = (IFixedRateShipMethod)provider.GetActiveShipMethods(shipCountry).Where(m => m.ShipMethod.Key == method.ShipMethod.Key).FirstOrDefault();
 
                 if (merchelloMethod != null)
                 {

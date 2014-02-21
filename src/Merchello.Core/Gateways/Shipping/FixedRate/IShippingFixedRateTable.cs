@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using Merchello.Core.Models;
 
-namespace Merchello.Core.Gateways.Shipping.RateTable
+namespace Merchello.Core.Gateways.Shipping.FixedRate
 {
-    public interface IShipRateTable
+    public interface IShippingFixedRateTable
     {
         /// <summary>
         /// The associated ShipMethodKey

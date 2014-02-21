@@ -5,7 +5,7 @@ using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Umbraco.Core.Cache;
 
-namespace Merchello.Core.Gateways.Shipping.RateTable
+namespace Merchello.Core.Gateways.Shipping.FixedRate
 {
     /// <summary>
     /// Defines the RateTableLookupGateway
@@ -15,7 +15,7 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
     /// This is Merchello's default ShippingGatewayProvider
     /// 
     /// </remarks>
-    public class RateTableShippingGatewayProvider : ShippingGatewayProviderBase
+    public class FixedRateShippingGatewayProvider : ShippingGatewayProviderBase
     {
         #region "Available Methods"
 
@@ -32,12 +32,12 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
         #endregion
 
 
-        public RateTableShippingGatewayProvider(IGatewayProviderService gatewayProviderService, IGatewayProvider gatewayProvider, IRuntimeCacheProvider runtimeCacheProvider)
+        public FixedRateShippingGatewayProvider(IGatewayProviderService gatewayProviderService, IGatewayProvider gatewayProvider, IRuntimeCacheProvider runtimeCacheProvider)
             : base(gatewayProviderService, gatewayProvider, runtimeCacheProvider)
         { }
 
         /// <summary>
-        /// Creates an instance of a <see cref="RateTableShipMethod"/>
+        /// Creates an instance of a <see cref="FixedRateShipMethod"/>
         /// </summary>     
         /// <remarks>
         /// 
@@ -45,9 +45,9 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
         /// rather than defined up front.  
         /// 
         /// </remarks>   
-        public IGatewayShipMethod CreateShipMethod(RateTableShipMethod.QuoteType quoteType, IShipCountry shipCountry, string name)
+        public IGatewayShipMethod CreateShipMethod(FixedRateShipMethod.QuoteType quoteType, IShipCountry shipCountry, string name)
         {
-            var resource = quoteType == RateTableShipMethod.QuoteType.VaryByWeight
+            var resource = quoteType == FixedRateShipMethod.QuoteType.VaryByWeight
                 ? AvailableResources.First(x => x.ServiceCode == "VBW")
                 : AvailableResources.First(x => x.ServiceCode == "VBP");
 
@@ -55,7 +55,7 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
         }
 
         /// <summary>
-        /// Creates an instance of a <see cref="RateTableShipMethod"/>
+        /// Creates an instance of a <see cref="FixedRateShipMethod"/>
         /// </summary>
         /// <returns></returns>
         /// <remarks>
@@ -76,17 +76,17 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
             
             if (!attempt.Success) throw attempt.Exception;
 
-            return new RateTableShipMethod(gatewayResource, attempt.Result, shipCountry);
+            return new FixedRateShipMethod(gatewayResource, attempt.Result, shipCountry);
         }
 
         /// <summary>
-        /// Saves a <see cref="RateTableShipMethod"/> 
+        /// Saves a <see cref="FixedRateShipMethod"/> 
         /// </summary>
         /// <param name="gatewayShipMethod"></param>
         public override void SaveShipMethod(IGatewayShipMethod gatewayShipMethod)
         {
             GatewayProviderService.Save(gatewayShipMethod.ShipMethod);
-            ShipRateTable.Save(GatewayProviderService, RuntimeCache, ((RateTableShipMethod) gatewayShipMethod).RateTable);
+            ShippingFixedRateTable.Save(GatewayProviderService, RuntimeCache, ((FixedRateShipMethod) gatewayShipMethod).RateTable);
         }
 
         /// <summary>
@@ -107,18 +107,18 @@ namespace Merchello.Core.Gateways.Shipping.RateTable
             var methods = GatewayProviderService.GetGatewayProviderShipMethods(GatewayProvider.Key, shipCountry.Key);
             return methods
                 .Select(
-                shipMethod => new RateTableShipMethod(AvailableResources.FirstOrDefault(x => shipMethod.ServiceCode.StartsWith(x.ServiceCode)), shipMethod, shipCountry, ShipRateTable.GetShipRateTable(GatewayProviderService, RuntimeCache, shipMethod.Key))
+                shipMethod => new FixedRateShipMethod(AvailableResources.FirstOrDefault(x => shipMethod.ServiceCode.StartsWith(x.ServiceCode)), shipMethod, shipCountry, ShippingFixedRateTable.GetShipRateTable(GatewayProviderService, RuntimeCache, shipMethod.Key))
                 ).OrderBy(x => x.ShipMethod.Name);
         }
 
         public override string Name
         {
-            get { return "Rate Table Shipping Provider"; }
+            get { return "Fixed RAte Shipping Provider"; }
         }
 
         public override Guid Key
         {
-            get { return Constants.ProviderKeys.Shipping.RateTableShippingProviderKey; }
+            get { return Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey; }
         }
     }
 }
