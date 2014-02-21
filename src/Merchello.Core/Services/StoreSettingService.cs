@@ -197,7 +197,7 @@ namespace Merchello.Core.Services
                 var uow = _uowProvider.GetUnitOfWork();
                 using (var repository = _repositoryFactory.CreateStoreSettingRepository(uow))
                 {
-                    invoiceNumber = repository.GetNextInvoiceNumber(Constants.StoreSettingKeys.NextInvoiceNumberSettingKey, invoicesCount);
+                    invoiceNumber = repository.GetNextInvoiceNumber(Constants.StoreSettingKeys.NextInvoiceNumberKey, invoicesCount);
                     uow.Commit();
                 }
             }

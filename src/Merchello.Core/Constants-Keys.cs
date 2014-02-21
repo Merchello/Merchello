@@ -38,14 +38,15 @@ namespace Merchello.Core
         /// </summary>
         public static class StoreSettingKeys
         {
-            public static Guid CurrencyCodeSettingKey = new Guid("7E62B7AB-E633-4CC1-9C3B-C3C54BF10BF6");
-            public static Guid NextOrderNumberSettingKey = new Guid("FFC51FA0-2AFF-4707-876D-79E6FD726022");
-            public static Guid NextInvoiceNumberSettingKey = new Guid("10BF357E-2E91-4888-9AE5-5B9D7E897052");
-            public static Guid DateFormatSettingKey = new Guid("4693279F-85DC-4EEF-AADF-D47DB0CDE974");
-            public static Guid TimeFormatSettingKey = new Guid("CBE0472F-3F72-439D-9C9D-FC8F840C1A9D");
-            public static Guid GlobalTaxableSettingKey = new Guid("02F008D4-6003-4E4A-9F82-B0027D6A6208");
-            public static Guid GlobalTrackInventorySettingKey = new Guid("11D2CBE6-1057-423B-A7C4-B0EF6D07D9A0");
-            public static Guid GlobalShippableSettingKey = new Guid("43116355-FC53-497F-965B-6227B57A38E6");
+            public static Guid CurrencyCodeKey = new Guid("7E62B7AB-E633-4CC1-9C3B-C3C54BF10BF6");
+            public static Guid NextOrderNumberKey = new Guid("FFC51FA0-2AFF-4707-876D-79E6FD726022");
+            public static Guid NextInvoiceNumberKey = new Guid("10BF357E-2E91-4888-9AE5-5B9D7E897052");
+            public static Guid DateFormatKey = new Guid("4693279F-85DC-4EEF-AADF-D47DB0CDE974");
+            public static Guid TimeFormatKey = new Guid("CBE0472F-3F72-439D-9C9D-FC8F840C1A9D");
+            public static Guid GlobalTaxableKey = new Guid("02F008D4-6003-4E4A-9F82-B0027D6A6208");
+            public static Guid GlobalTrackInventoryKey = new Guid("11D2CBE6-1057-423B-A7C4-B0EF6D07D9A0");
+            public static Guid GlobalShippableKey = new Guid("43116355-FC53-497F-965B-6227B57A38E6");
+            public static Guid GlobalShippingIsTaxableKey = new Guid("E322F6C7-9AD6-4338-ADAA-0C86353D8192");
         }
 
         /// <summary>
