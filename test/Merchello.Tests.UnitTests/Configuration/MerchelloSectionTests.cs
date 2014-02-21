@@ -73,10 +73,10 @@ namespace Merchello.Tests.UnitTests.Configuration
         public void Can_Retrieve_DefaultBasketPackagingStrategy_Setting()
         {
             //// Arrage
-            const string expected = "Merchello.Web.Workflow.Shipping.DefaultWarehousePackagingStrategy, Merchello.Web";
+            const string expected = "Merchello.Core.Strategies.Packaging.DefaultWarehousePackagingStrategy, Merchello.Core";
 
             //// Act
-            var actual = _config.Strategies[Core.Constants.StrategyTypeAlias.DefaultBasketPackaging].Type;
+            var actual = _config.Strategies[Core.Constants.StrategyTypeAlias.DefaultPackaging].Type;
 
             //// Assert
             Assert.AreEqual(expected, actual);

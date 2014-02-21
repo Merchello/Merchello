@@ -2,6 +2,7 @@
 using Merchello.Core.Checkout;
 using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Models;
+using Merchello.Core.Orders;
 
 namespace Merchello.Tests.Base.DataMakers
 {

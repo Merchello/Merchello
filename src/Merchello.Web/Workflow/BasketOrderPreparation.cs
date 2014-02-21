@@ -1,6 +1,7 @@
 ﻿using Merchello.Core;
 using Merchello.Core.Checkout;
 using Merchello.Core.Models;
+using Merchello.Core.Orders;
 
 namespace Merchello.Web.Workflow
 {

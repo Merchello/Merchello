@@ -1,13 +1,13 @@
-﻿using Merchello.Core.Checkout;
-using Merchello.Core.Models;
+﻿using Merchello.Core.Models;
+using Merchello.Core.Orders;
 
 namespace Merchello.Core.Chains.InvoiceCreation
 {
-    public abstract class CheckoutPreparationAttemptChainTaskBase : AttemptChainTaskBase<IInvoice>
+    public abstract class OrderPreparationAttemptChainTaskBase : AttemptChainTaskBase<IInvoice>
     {
         private readonly OrderPreparationBase _orderPreparation;
 
-        protected CheckoutPreparationAttemptChainTaskBase(OrderPreparationBase orderPreparation)
+        protected OrderPreparationAttemptChainTaskBase(OrderPreparationBase orderPreparation)
         {
             Mandate.ParameterNotNull(orderPreparation, "checkout");
 

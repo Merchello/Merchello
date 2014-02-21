@@ -67,7 +67,7 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Umbraco.Core, Version=1.0.5147.18550, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Umbraco.Core, Version=1.0.5161.21054, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\UmbracoCms.Core.7.0.4\lib\Umbraco.Core.dll</HintPath>
     </Reference>
@@ -82,10 +82,13 @@
     <Compile Include="Chains\ChainTaskResolver.cs" />
     <Compile Include="Chains\InvoiceCreation\ApplyTaxesToInvoiceTax.cs" />
     <Compile Include="Chains\InvoiceCreation\AddBillingInfoToInvoiceTask.cs" />
-    <Compile Include="Chains\InvoiceCreation\CheckoutPreparationAttemptChainTaskBase.cs" />
+    <Compile Include="Chains\InvoiceCreation\OrderPreparationAttemptChainTaskBase.cs" />
     <Compile Include="Chains\InvoiceCreation\ConvertItemCacheItemsToInvoiceItemsTask.cs" />
     <Compile Include="Chains\InvoiceTaxRateQuote\IdentifyTaxableLineItems.cs" />
     <Compile Include="Chains\InvoiceTaxRateQuote\InvoiceTaxRateQuoteBase.cs" />
+    <Compile Include="Gateways\Taxation\InvoiceTaxResult.cs" />
+    <Compile Include="Gateways\Taxation\TaxableLineItemVisitor.cs" />
+    <Compile Include="Models\InvoiceExtensions.cs" />
     <Compile Include="Orders\OrderPreparationBase.cs" />
     <Compile Include="Orders\IOrderPreparationBase.cs" />
     <Compile Include="Builders\IBuilderChain.cs" />
@@ -581,6 +584,10 @@
     <Compile Include="IStrategy.cs" />
     <Compile Include="Gateways\Shipping\IShipmentRateQuoteStrategy.cs" />
     <Compile Include="Gateways\Taxation\IInvoiceTaxationStrategy.cs" />
+    <Compile Include="Strategies\Packaging\DefaultWarehousePackagingStrategy.cs" />
+    <Compile Include="Strategies\Packaging\PackagingStrategyBase.cs" />
+    <Compile Include="Strategies\Packaging\IPackagingStrategy.cs" />
+    <Compile Include="Strategies\Packaging\ShippableProductVisitor.cs" />
     <Compile Include="TypeFieldMapperEnumerations.cs" />
     <Compile Include="Models\TypeFields\ProductTypeField.cs" />
     <Compile Include="Models\Rdbms\TypeFieldDto.cs" />

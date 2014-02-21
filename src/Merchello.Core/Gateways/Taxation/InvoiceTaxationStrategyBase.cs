@@ -26,6 +26,7 @@ namespace Merchello.Core.Gateways.Taxation
         /// <returns>The <see cref="IInvoiceTaxResult"/></returns>
         public abstract Attempt<IInvoiceTaxResult> GetInvoiceTaxResult();
 
+
         /// <summary>
         /// Gets the <see cref="IInvoice"/>
         /// </summary>

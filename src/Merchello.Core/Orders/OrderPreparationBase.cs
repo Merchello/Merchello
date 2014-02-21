@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Merchello.Core.Builders;
+using Merchello.Core.Checkout;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Models;
 using Merchello.Core.Models.TypeFields;
@@ -9,7 +10,7 @@ using Umbraco.Core;
 using Umbraco.Core.Cache;
 using Umbraco.Core.Logging;
 
-namespace Merchello.Core.Checkout
+namespace Merchello.Core.Orders
 {
     /// <summary>
     /// Represents a CheckoutBase class resposible for temporarily persisting invoice and order information
@@ -248,7 +249,7 @@ namespace Merchello.Core.Checkout
         /// <summary>
         /// The <see cref="IMerchelloContext"/>
         /// </summary>
-        protected IMerchelloContext MerchelloContext
+        public IMerchelloContext MerchelloContext
         {
             get { return _merchelloContext; }
         }
@@ -270,6 +271,7 @@ namespace Merchello.Core.Checkout
         }
 
         public bool ApplyTaxesToInvoice { get; set; }
+
 
     }
 }

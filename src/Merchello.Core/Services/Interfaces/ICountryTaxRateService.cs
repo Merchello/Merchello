@@ -60,6 +60,13 @@ namespace Merchello.Core.Services
         ICountryTaxRate GetCountryTaxRateByCountryCode(Guid providerKey, string countryCode);
 
         /// <summary>
+        /// Gets a <see cref="ICountryTaxRate"/> based on a provider and country code
+        /// </summary>
+        /// <param name="countryCode">The country code of the <see cref="ICountryTaxRate"/></param>
+        /// <returns><see cref="ICountryTaxRate"/></returns>
+        IEnumerable<ICountryTaxRate> GetCountryTaxRateByCountryCode(string countryCode);
+
+        /// <summary>
         /// Gets a collection of <see cref="ICountryTaxRate"/> for a given TaxationGatewayProvider
         /// </summary>
         /// <param name="providerKey">The unique 'key' of the TaxationGatewayProvider</param>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using Merchello.Core.Configuration;
 using Merchello.Core.Models;
@@ -61,7 +62,7 @@ namespace Merchello.Core.Services
             foreach (var att in optionIds.Select(key => attributes.FirstOrDefault(x => x.OptionKey == key)).Where(att => att != null))
             {
                 name += att.Name + " ";
-                sku += skuSeparator + att.Sku;
+                sku += skuSeparator + (string.IsNullOrEmpty(att.Sku) ? Regex.Replace(att.Name, "[^0-9a-zA-Z]+", "") : att.Sku);
             }
 
             return CreateProductVariantWithKey(product, name.Trim(), sku, product.Price, attributes, raiseEvents);

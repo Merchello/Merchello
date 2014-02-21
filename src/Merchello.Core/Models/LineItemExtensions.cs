@@ -1,5 +1,4 @@
-﻿using System;
-using Merchello.Core.Gateways.Shipping;
+﻿using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Models.TypeFields;
 using Umbraco.Core.Logging;
 

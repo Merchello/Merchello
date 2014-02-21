@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Merchello.Core.Models;
 using Umbraco.Core.Persistence.Repositories;
 
@@ -9,6 +10,5 @@ namespace Merchello.Core.Persistence.Repositories
     /// </summary>
     public interface ICountryTaxRateRepository : IRepositoryQueryable<Guid, ICountryTaxRate>
     {
-         
     }
 }

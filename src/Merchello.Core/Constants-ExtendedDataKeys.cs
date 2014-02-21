@@ -46,7 +46,9 @@ namespace Merchello.Core
                     "merchWarehouseCatalogKey",
                     "merchShippingOriginAddress",
                     "merchShippingDestinationAddress",
-                    "merchBillingAddress"
+                    "merchBillingAddress",
+                    "merchBaseTax",
+                    "merchProvinceTaxRate"
                 }; 
             }
         }
@@ -96,7 +98,8 @@ namespace Merchello.Core
             public static string ContainerKey = "merchContainerKey";
             public static string LineItemTfKey = "merchLineItemTfKey";
             public static string Quantity = "merchQuantity";
-            public static string Amount = "merchAmount";
+            public static string BaseTaxRate = "merchBaseTaxRate";
+            public static string ProviceTaxRate = "merchProvinceTaxRate";
         }
     }
 }

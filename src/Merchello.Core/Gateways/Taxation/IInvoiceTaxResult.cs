@@ -3,14 +3,14 @@
 namespace Merchello.Core.Gateways.Taxation
 {
     /// <summary>
-    /// Defines an invoice tax calculation.
+    /// Defines an invoice tax calculation result
     /// </summary>
     public interface IInvoiceTaxResult
     {
         /// <summary>
-        /// The <see cref="ICountryTaxRate"/> used to obtain the quote
+        /// The tax used in the tax calculation
         /// </summary>
-        ICountryTaxRate CountryTaxRate { get; }
+        decimal TaxRate { get; }
 
         /// <summary>
         /// The calculated tax amount

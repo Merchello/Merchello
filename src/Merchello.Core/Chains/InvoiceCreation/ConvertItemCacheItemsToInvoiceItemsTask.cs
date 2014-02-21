@@ -1,6 +1,6 @@
 ﻿using System;
-using Merchello.Core.Checkout;
 using Merchello.Core.Models;
+using Merchello.Core.Orders;
 using Umbraco.Core;
 
 namespace Merchello.Core.Chains.InvoiceCreation
@@ -8,7 +8,7 @@ namespace Merchello.Core.Chains.InvoiceCreation
     /// <summary>
     /// Converts ItemCacheLineItem(s) to InvoiceLineItems
     /// </summary>
-    internal class ConvertItemCacheItemsToInvoiceItemsTask : CheckoutPreparationAttemptChainTaskBase
+    internal class ConvertItemCacheItemsToInvoiceItemsTask : OrderPreparationAttemptChainTaskBase
     {
         public ConvertItemCacheItemsToInvoiceItemsTask(OrderPreparationBase orderPreparation) 
             : base(orderPreparation)

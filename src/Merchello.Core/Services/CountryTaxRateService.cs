@@ -206,6 +206,27 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
+        /// Gets a collection <see cref="ICountryTaxRate"/> based on a provider and country code
+        /// </summary>
+        /// <param name="countryCode">The country code of the <see cref="ICountryTaxRate"/></param>
+        /// <returns><see cref="ICountryTaxRate"/></returns>
+        /// <remarks>
+        /// 
+        /// There should only ever be one - but we've left this open
+        /// 
+        /// </remarks>
+        public IEnumerable<ICountryTaxRate> GetCountryTaxRateByCountryCode(string countryCode)
+        {
+            using (var repository = _repositoryFactory.CreateCountryTaxRateRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query =
+                    Query<ICountryTaxRate>.Builder.Where(x => x.CountryCode == countryCode);
+
+                return repository.GetByQuery(query);
+            }
+        }
+
+        /// <summary>
         /// Gets a collection of <see cref="ICountryTaxRate"/> for a given TaxationGatewayProvider
         /// </summary>
         /// <param name="providerKey">The unique 'key' of the TaxationGatewayProvider</param>
