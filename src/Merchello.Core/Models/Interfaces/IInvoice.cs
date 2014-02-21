@@ -110,11 +110,5 @@ namespace Merchello.Core.Models
         decimal Amount { get; }
 
 
-        /// <summary>
-        /// The <see cref="ILineItem"/>s in the invoice
-        /// </summary>
-        [DataMember]
-        LineItemCollection Items { get; }
-
     }
 }

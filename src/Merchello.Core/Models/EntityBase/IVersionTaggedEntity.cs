@@ -12,6 +12,6 @@ namespace Merchello.Core.Models.EntityBase
     /// </remarks>
     public interface IVersionTaggedEntity : IEntity
     {
-        Guid VersionKey { get; }
+        Guid VersionKey { get; set; }
     }
 }

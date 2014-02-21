@@ -24,14 +24,6 @@ namespace Merchello.Core.Models
         Guid ItemCacheTfKey { get; set; }
 
         /// <summary>
-        /// The version of the item cache
-        /// </summary>
-        /// <remarks>
-        /// Used to track changes in some ItemCacheCollections
-        /// </remarks>
-        Guid VersionKey { get; set; }
-
-        /// <summary>
         /// The <see cref="ItemCacheType"/> of the customer registry
         /// </summary>
         [DataMember]

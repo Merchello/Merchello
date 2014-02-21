@@ -76,15 +76,12 @@ namespace Merchello.Core.Gateways
             {
                     case GatewayProviderType.Shipping:
                     return _gatewayProviderFactory.Value.GetInstance<ShippingGatewayProviderBase>(provider) as T;
-                    break;
 
                     case GatewayProviderType.Taxation:
                     return _gatewayProviderFactory.Value.GetInstance<TaxationGatewayProviderBase>(provider) as T;
-                    break;
 
                     case GatewayProviderType.Payment:
                     return _gatewayProviderFactory.Value.GetInstance<PaymentGatewayProviderBase>(provider) as T;
-                    break;                    
             }
 
             throw new InvalidOperationException("ResolveByGatewayProvider could not instantiant Type " + typeof(T).FullName);
