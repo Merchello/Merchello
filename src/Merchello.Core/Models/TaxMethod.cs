@@ -13,7 +13,7 @@ namespace Merchello.Core.Models
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    internal class CountryTaxRate : Entity, ICountryTaxRate
+    internal class TaxMethod : Entity, ITaxMethod
     {
         private readonly Guid _providerKey;
         private readonly string _countryCode;
@@ -21,7 +21,7 @@ namespace Merchello.Core.Models
         private RegionInfo _regionInfo;
         private ProvinceCollection<ITaxProvince> _taxProvinces;
         
-        internal CountryTaxRate(Guid providerKey, string code)
+        internal TaxMethod(Guid providerKey, string code)
         {
             Mandate.ParameterCondition(providerKey != Guid.Empty, "providerKey");
             Mandate.ParameterNotNullOrEmpty(code, "code");
@@ -31,8 +31,8 @@ namespace Merchello.Core.Models
             PercentageTaxRate = 0;
         }
 
-        private static readonly PropertyInfo PercentageTaxRateSelector = ExpressionHelper.GetPropertyInfo<CountryTaxRate, decimal>(x => x.PercentageTaxRate);
-        private static readonly PropertyInfo ProvincesChangedSelector = ExpressionHelper.GetPropertyInfo<CountryTaxRate, ProvinceCollection<ITaxProvince>>(x => x.Provinces);
+        private static readonly PropertyInfo PercentageTaxRateSelector = ExpressionHelper.GetPropertyInfo<TaxMethod, decimal>(x => x.PercentageTaxRate);
+        private static readonly PropertyInfo ProvincesChangedSelector = ExpressionHelper.GetPropertyInfo<TaxMethod, ProvinceCollection<ITaxProvince>>(x => x.Provinces);
 
         private void TaxProvincesChanged(object sender, NotifyCollectionChangedEventArgs e)
         {

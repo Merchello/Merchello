@@ -113,7 +113,7 @@ namespace Merchello.Web.Editors
         public IEnumerable<TaxProvinceDisplay> GetAllTaxProvinces()
         {
             // TODO: replace with call to service
-            var taxProvinces = new List<CountryTaxRate>();
+            var taxProvinces = new List<TaxMethod>();
 
             //var oregon = new TaxCountry("OR", "Oregon");
             //oregon.Rate = 0.01M;
@@ -125,7 +125,7 @@ namespace Merchello.Web.Editors
 
             // END TEST DATA
 
-            foreach (CountryTaxRate taxProvince in taxProvinces)
+            foreach (TaxMethod taxProvince in taxProvinces)
             {
                 yield return taxProvince.ToTaxProvinceDisplay();
             }

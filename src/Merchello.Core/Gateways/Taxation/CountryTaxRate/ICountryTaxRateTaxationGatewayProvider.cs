@@ -10,37 +10,37 @@ namespace Merchello.Core.Gateways.Taxation.CountryTaxRate
     public interface ICountryTaxRateTaxationGatewayProvider : ITaxationGatewayProvider
     {
         /// <summary>
-        /// Attempts to create a <see cref="ICountryTaxRate"/> for a given provider and country.  If the provider already 
+        /// Attempts to create a <see cref="ITaxMethod"/> for a given provider and country.  If the provider already 
         /// defines a tax rate for the country, the creation fails.
         /// </summary>
         /// <param name="countryCode">The two character ISO country code</param>
-        ICountryTaxRate CreateCountryTaxRate(string countryCode);
+        ITaxMethod CreateCountryTaxRate(string countryCode);
 
         /// <summary>
-        /// Attempts to create a <see cref="ICountryTaxRate"/> for a given provider and country.  If the provider already 
+        /// Attempts to create a <see cref="ITaxMethod"/> for a given provider and country.  If the provider already 
         /// defines a tax rate for the country, the creation fails.
         /// </summary>
         /// <param name="countryCode">The two character ISO country code</param>
         /// <param name="percentageTaxRate">The tax rate in percentage for the country</param>
-        ICountryTaxRate CreateCountryTaxRate(string countryCode, decimal percentageTaxRate);
+        ITaxMethod CreateCountryTaxRate(string countryCode, decimal percentageTaxRate);
 
         /// <summary>
-        /// Saves a single instance of a <see cref="ICountryTaxRate"/>
+        /// Saves a single instance of a <see cref="ITaxMethod"/>
         /// </summary>
-        /// <param name="countryTaxRate">The <see cref="ICountryTaxRate"/> to save</param>
-        void SaveCountryTaxRate(ICountryTaxRate countryTaxRate);
+        /// <param name="taxMethod">The <see cref="ITaxMethod"/> to save</param>
+        void SaveCountryTaxRate(ITaxMethod taxMethod);
 
         /// <summary>
-        /// Gets a <see cref="ICountryTaxRate"/> by it's unique 'key' (Guid)
+        /// Gets a <see cref="ITaxMethod"/> by it's unique 'key' (Guid)
         /// </summary>
         /// <param name="countryCode">The two char ISO country code</param>
-        /// <returns><see cref="ICountryTaxRate"/></returns>
-        ICountryTaxRate GetCountryTaxRateByCountryCode(string countryCode);
+        /// <returns><see cref="ITaxMethod"/></returns>
+        ITaxMethod GetCountryTaxRateByCountryCode(string countryCode);
 
         /// <summary>
-        /// Gets a collection of all <see cref="ICountryTaxRate"/> associated with this provider
+        /// Gets a collection of all <see cref="ITaxMethod"/> associated with this provider
         /// </summary>
-        /// <returns>A collection of <see cref="ICountryTaxRate"/> </returns>
-        IEnumerable<ICountryTaxRate> GetAllCountryTaxRates();
+        /// <returns>A collection of <see cref="ITaxMethod"/> </returns>
+        IEnumerable<ITaxMethod> GetAllCountryTaxRates();
     }
 }

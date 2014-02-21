@@ -25,7 +25,7 @@ namespace Merchello.Core.Models
         private string _billToCompany;
         private bool _exported;
         private bool _paid;
-        private decimal _amount;
+        private decimal _total;
         private LineItemCollection _items;
 
         internal Invoice(Guid invoiceStatusKey)
@@ -73,7 +73,7 @@ namespace Merchello.Core.Models
         private static readonly PropertyInfo BillToCompanySelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.BillToCompany);
         private static readonly PropertyInfo ExportedSelector = ExpressionHelper.GetPropertyInfo<Invoice, bool>(x => x.Exported);
         private static readonly PropertyInfo PaidSelector = ExpressionHelper.GetPropertyInfo<Invoice, bool>(x => x.Paid);
-        private static readonly PropertyInfo AmountSelector = ExpressionHelper.GetPropertyInfo<Invoice, decimal>(x => x.Amount);
+        private static readonly PropertyInfo TotalSelector = ExpressionHelper.GetPropertyInfo<Invoice, decimal>(x => x.Total);
 
         /// <summary>
         /// The unique customer 'key' to associated with the invoice
@@ -352,16 +352,16 @@ namespace Merchello.Core.Models
         /// The total invoice amount
         /// </summary>
         [DataMember]
-        public decimal Amount
+        public decimal Total
         {
-            get { return _amount; }
+            get { return _total; }
             internal set
             {
                 SetPropertyValueAndDetectChanges(o =>
                 {
-                    _amount = value;
-                    return _amount;
-                }, _amount, AmountSelector);
+                    _total = value;
+                    return _total;
+                }, _total, TotalSelector);
             }
         }
 

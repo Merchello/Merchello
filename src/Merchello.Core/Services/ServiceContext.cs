@@ -13,7 +13,7 @@ namespace Merchello.Core.Services
     /// </summary>
     public class ServiceContext : IServiceContext
     {
-        private Lazy<CountryTaxRateService> _countryTaxRateService; 
+        private Lazy<TaxMethodService> _countryTaxRateService; 
         private Lazy<CustomerService> _customerService;
         private Lazy<InvoiceService> _invoiceService; 
         private Lazy<ItemCacheService> _itemCacheService;   
@@ -76,7 +76,7 @@ namespace Merchello.Core.Services
                 _invoiceService = new Lazy<InvoiceService>(() => new InvoiceService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _storeSettingsService.Value));
 
             if (_countryTaxRateService == null)
-                _countryTaxRateService = new Lazy<CountryTaxRateService>(() => new CountryTaxRateService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _storeSettingsService.Value));
+                _countryTaxRateService = new Lazy<TaxMethodService>(() => new TaxMethodService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _storeSettingsService.Value));
             
             if(_gatewayProviderService == null)
                 _gatewayProviderService = new Lazy<GatewayProviderService>(() => new GatewayProviderService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _shipMethodService.Value, _shipRateTierService.Value, _shipCountryService.Value, _countryTaxRateService.Value));
@@ -89,9 +89,9 @@ namespace Merchello.Core.Services
         #region IServiceContext Members
 
         /// <summary>
-        /// Gets the <see cref="ICountryTaxRateService"/>
+        /// Gets the <see cref="ITaxMethodService"/>
         /// </summary>
-        internal ICountryTaxRateService CountryTaxRateService
+        internal ITaxMethodService TaxMethodService
         {
             get { return _countryTaxRateService.Value; }
         }

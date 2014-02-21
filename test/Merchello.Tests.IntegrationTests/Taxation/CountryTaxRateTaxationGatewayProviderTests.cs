@@ -21,7 +21,7 @@ namespace Merchello.Tests.IntegrationTests.Taxation
         }
 
         /// <summary>
-        /// Test verifies that the tax provider can create a <see cref="ICountryTaxRate"/>
+        /// Test verifies that the tax provider can create a <see cref="ITaxMethod"/>
         /// </summary>
         [Test]
         public void Can_Create_CountryTaxRate()

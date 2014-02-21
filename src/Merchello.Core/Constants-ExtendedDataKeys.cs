@@ -15,6 +15,7 @@ namespace Merchello.Core
                     "merchExtendedData", 
                     "merchLineItemCollection",
                     "merchLineItem",
+                    "merchCurrencyCode",
                     "merchName",
                     "merchSku",
                     "merchExported",
@@ -60,6 +61,7 @@ namespace Merchello.Core
             public static string LineItemCollection = "merchLineItemCollection";
             public static string LineItem = "merchLineItem";
             public static string ProductVariant = "merchProductVariant";
+            public static string CurrencyCode = "merchCurrencyCode";
 
             // Common            
             public static string Name = "merchName";

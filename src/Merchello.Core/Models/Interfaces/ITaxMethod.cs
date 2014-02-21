@@ -5,7 +5,7 @@ using Merchello.Core.Models.EntityBase;
 
 namespace Merchello.Core.Models
 {
-    public interface ICountryTaxRate : IEntity
+    public interface ITaxMethod : IEntity
     {
         /// <summary>
         /// The key associated with the gateway provider for the tax rate data

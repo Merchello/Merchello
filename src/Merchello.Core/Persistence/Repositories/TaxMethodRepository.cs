@@ -14,26 +14,26 @@ using Umbraco.Core.Persistence.Querying;
 
 namespace Merchello.Core.Persistence.Repositories
 {
-    internal class CountryTaxRateRepository : MerchelloPetaPocoRepositoryBase<ICountryTaxRate>, ICountryTaxRateRepository
+    internal class TaxMethodRepository : MerchelloPetaPocoRepositoryBase<ITaxMethod>, ITaxMethodRepository
     {
-        public CountryTaxRateRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache) : base(work, cache)
+        public TaxMethodRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache) : base(work, cache)
         { }
 
-        protected override ICountryTaxRate PerformGet(Guid key)
+        protected override ITaxMethod PerformGet(Guid key)
         {
             var sql = GetBaseQuery(false)
               .Where(GetBaseWhereClause(), new { Key = key });
 
-            var dto = Database.Fetch<CountryTaxRateDto>(sql).FirstOrDefault();
+            var dto = Database.Fetch<TaxMethodDto>(sql).FirstOrDefault();
 
             if (dto == null)
                 return null;
 
-            var factory = new CountryTaxRateFactory();
+            var factory = new TaxMethodFactory();
             return factory.BuildEntity(dto);
         }
 
-        protected override IEnumerable<ICountryTaxRate> PerformGetAll(params Guid[] keys)
+        protected override IEnumerable<ITaxMethod> PerformGetAll(params Guid[] keys)
         {
             if (keys.Any())
             {
@@ -44,8 +44,8 @@ namespace Merchello.Core.Persistence.Repositories
             }
             else
             {
-                var factory = new CountryTaxRateFactory();
-                var dtos = Database.Fetch<CountryTaxRateDto>(GetBaseQuery(false));
+                var factory = new TaxMethodFactory();
+                var dtos = Database.Fetch<TaxMethodDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
                     yield return factory.BuildEntity(dto);
@@ -53,14 +53,14 @@ namespace Merchello.Core.Persistence.Repositories
             }
         }
 
-        protected override IEnumerable<ICountryTaxRate> PerformGetByQuery(IQuery<ICountryTaxRate> query)
+        protected override IEnumerable<ITaxMethod> PerformGetByQuery(IQuery<ITaxMethod> query)
         {
 
             var sqlClause = GetBaseQuery(false);
-            var translator = new SqlTranslator<ICountryTaxRate>(sqlClause, query);
+            var translator = new SqlTranslator<ITaxMethod>(sqlClause, query);
             var sql = translator.Translate();
 
-            var dtos = Database.Fetch<CountryTaxRateDto>(sql);
+            var dtos = Database.Fetch<TaxMethodDto>(sql);
 
             return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
         }
@@ -69,14 +69,14 @@ namespace Merchello.Core.Persistence.Repositories
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-                .From<CountryTaxRateDto>();
+                .From<TaxMethodDto>();
 
             return sql;
         }
 
         protected override string GetBaseWhereClause()
         {
-            return "merchCountryTaxRate.pk = @Key";
+            return "merchTaxMethod.pk = @Key";
         }
 
         protected override IEnumerable<string> GetDeleteClauses()
@@ -84,17 +84,17 @@ namespace Merchello.Core.Persistence.Repositories
 
             var list = new List<string>
             {
-                "DELETE FROM merchCountryTaxRate WHERE pk = @Key"
+                "DELETE FROM merchTaxMethod WHERE pk = @Key"
             };
 
             return list;
         }
 
-        protected override void PersistNewItem(ICountryTaxRate entity)
+        protected override void PersistNewItem(ITaxMethod entity)
         {
             ((Entity)entity).AddingEntity();
 
-            var factory = new CountryTaxRateFactory();
+            var factory = new TaxMethodFactory();
             var dto = factory.BuildDto(entity);
 
             Database.Insert(dto);
@@ -104,11 +104,11 @@ namespace Merchello.Core.Persistence.Repositories
             entity.ResetDirtyProperties();
         }
 
-        protected override void PersistUpdatedItem(ICountryTaxRate entity)
+        protected override void PersistUpdatedItem(ITaxMethod entity)
         {
             ((Entity)entity).UpdatingEntity();
 
-            var factory = new CountryTaxRateFactory();
+            var factory = new TaxMethodFactory();
             var dto = factory.BuildDto(entity);
 
             Database.Update(dto);

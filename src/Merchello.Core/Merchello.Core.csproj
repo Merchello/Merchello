@@ -88,6 +88,7 @@
     <Compile Include="Gateways\Taxation\InvoiceTaxResult.cs" />
     <Compile Include="Gateways\Taxation\TaxableLineItemVisitor.cs" />
     <Compile Include="Models\InvoiceExtensions.cs" />
+    <Compile Include="Models\LocalizationExtensions.cs" />
     <Compile Include="Orders\OrderPreparationBase.cs" />
     <Compile Include="Orders\IOrderPreparationBase.cs" />
     <Compile Include="Builders\IBuilderChain.cs" />
@@ -259,7 +260,7 @@
     <Compile Include="Models\Interfaces\IShipProvince.cs" />
     <Compile Include="Models\Interfaces\IShipRateTier.cs" />
     <Compile Include="Models\Interfaces\IStoreSetting.cs" />
-    <Compile Include="Models\Interfaces\ICountryTaxRate.cs" />
+    <Compile Include="Models\Interfaces\ITaxMethod.cs" />
     <Compile Include="Models\Interfaces\ITaxProvince.cs" />
     <Compile Include="Models\Interfaces\IWarehouse.cs">
       <SubType>Code</SubType>
@@ -338,7 +339,7 @@
     <Compile Include="Models\Rdbms\ShipRateTierDto.cs" />
     <Compile Include="Models\Rdbms\StoreSettingDto.cs" />
     <Compile Include="Models\Rdbms\WarehouseCatalogDto.cs" />
-    <Compile Include="Models\Rdbms\CountryTaxRateDto.cs" />
+    <Compile Include="Models\Rdbms\TaxMethodDto.cs" />
     <Compile Include="Models\CountryBase.cs" />
     <Compile Include="Models\Shipment.cs">
       <SubType>Code</SubType>
@@ -350,7 +351,7 @@
     <Compile Include="Models\ShipProvince.cs" />
     <Compile Include="Models\ShipRateTier.cs" />
     <Compile Include="Models\StoreSetting.cs" />
-    <Compile Include="Models\CountryTaxRate.cs" />
+    <Compile Include="Models\TaxMethod.cs" />
     <Compile Include="Models\TaxProvince.cs" />
     <Compile Include="Models\TypeFields\AppliedPaymentTypeField.cs">
       <SubType>Code</SubType>
@@ -372,7 +373,7 @@
     </Compile>
     <Compile Include="Persistence\DefaultDatabaseFactory.cs" />
     <Compile Include="Persistence\Factories\AppliedPaymentFactory.cs" />
-    <Compile Include="Persistence\Factories\CountryTaxRateFactory.cs" />
+    <Compile Include="Persistence\Factories\TaxMethodFactory.cs" />
     <Compile Include="Persistence\Factories\CustomerAddressFactory.cs" />
     <Compile Include="Persistence\Factories\CustomerFactory.cs" />
     <Compile Include="Persistence\Factories\GatewayProviderFactory.cs" />
@@ -401,7 +402,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Persistence\Mappers\CatalogInventoryMapper.cs" />
-    <Compile Include="Persistence\Mappers\CountryTaxRateMapper.cs" />
+    <Compile Include="Persistence\Mappers\TaxMethodMapper.cs" />
     <Compile Include="Persistence\Mappers\CustomerAddressMapper.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -458,11 +459,11 @@
     <Compile Include="Persistence\Mappers\WarehouseMapper.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Persistence\Repositories\CountryTaxRateRepository.cs" />
+    <Compile Include="Persistence\Repositories\TaxMethodRepository.cs" />
     <Compile Include="Persistence\Repositories\CustomerAddressRepository.cs" />
     <Compile Include="Persistence\Repositories\CustomerRepository.cs" />
     <Compile Include="Persistence\Repositories\GatewayProviderRepository.cs" />
-    <Compile Include="Persistence\Repositories\Interfaces\ICountryTaxRateRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\ITaxMethodRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\ICustomerAddressRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\ICustomerRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IGatewayProviderRepository.cs" />
@@ -552,9 +553,9 @@
     <Compile Include="Chains\AttemptChainTaskHandler.cs" />
     <Compile Include="RateAdjustmentType.cs" />
     <Compile Include="SerializationHelper.cs" />
-    <Compile Include="Services\CountryTaxRateService.cs" />
+    <Compile Include="Services\TaxMethodService.cs" />
     <Compile Include="Services\GatewayProviderService.cs" />
-    <Compile Include="Services\Interfaces\ICountryTaxRateService.cs" />
+    <Compile Include="Services\Interfaces\ITaxMethodService.cs" />
     <Compile Include="Services\Interfaces\IGatewayProviderService.cs" />
     <Compile Include="Services\Interfaces\IInvoiceService.cs" />
     <Compile Include="Services\Interfaces\IItemCacheService.cs" />

@@ -16,7 +16,7 @@ namespace Merchello.Web
             AutoMapper.Mapper.CreateMap<ICatalogInventory, CatalogInventoryDisplay>();
             
             AutoMapper.Mapper.CreateMap<ICountry, CountryDisplay>();
-            AutoMapper.Mapper.CreateMap<ICountryTaxRate, TaxProvinceDisplay>();
+            AutoMapper.Mapper.CreateMap<ITaxMethod, TaxProvinceDisplay>();
             
             // products
             AutoMapper.Mapper.CreateMap<IProduct, ProductDisplay>();

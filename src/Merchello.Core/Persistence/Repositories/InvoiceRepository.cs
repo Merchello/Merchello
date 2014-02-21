@@ -72,7 +72,7 @@ namespace Merchello.Core.Persistence.Repositories
             var translator = new SqlTranslator<IInvoice>(sqlClause, query);
             var sql = translator.Translate();
 
-            var dtos = Database.Fetch<CountryTaxRateDto>(sql);
+            var dtos = Database.Fetch<TaxMethodDto>(sql);
 
             return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
         }

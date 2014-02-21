@@ -128,19 +128,19 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         /// <param name="providerKey"></param>
         public void DeleteAllCountryTaxRates(Guid providerKey)
         {
-            var countryTaxRates = CountryTaxRateService.GetCountryTaxRatesByProviderKey(providerKey);
+            var countryTaxRates = TaxMethodService.GetTaxMethodsByProviderKey(providerKey);
             foreach (var countryTaxRate in countryTaxRates)
             {
-                CountryTaxRateService.Delete(countryTaxRate);
+                TaxMethodService.Delete(countryTaxRate);
             }
         }
 
         /// <summary>
-        /// Gets the <see cref="ICountryTaxRateService"/>
+        /// Gets the <see cref="ITaxMethodService"/>
         /// </summary>
-        public ICountryTaxRateService CountryTaxRateService
+        public ITaxMethodService TaxMethodService
         {
-            get { return _serviceContext.CountryTaxRateService; }
+            get { return _serviceContext.TaxMethodService; }
         }
 
         #endregion
