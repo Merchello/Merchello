@@ -4,13 +4,13 @@ using System.Linq;
 using Merchello.Core.Models;
 using Umbraco.Core;
 
-namespace Merchello.Core.Gateways.Taxation.FlatRate
+namespace Merchello.Core.Gateways.Taxation.FixedRate
 {
-    internal class FlatRateInvoiceTaxationStrategy : InvoiceTaxationStrategyBase
+    internal class FixedRateInvoiceTaxationStrategy : InvoiceTaxationStrategyBase
     {
         private readonly ITaxMethod _taxMethod;
 
-        public FlatRateInvoiceTaxationStrategy(IInvoice invoice, IAddress taxAddress, ITaxMethod taxMethod)
+        public FixedRateInvoiceTaxationStrategy(IInvoice invoice, IAddress taxAddress, ITaxMethod taxMethod)
             : base(invoice, taxAddress)
         {
             Mandate.ParameterNotNull(taxMethod, "countryTaxRate");

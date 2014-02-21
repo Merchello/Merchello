@@ -6,7 +6,7 @@ using Merchello.Core.Services;
 using Umbraco.Core.Cache;
 using Umbraco.Core.Logging;
 
-namespace Merchello.Core.Gateways.Taxation.FlatRate
+namespace Merchello.Core.Gateways.Taxation.FixedRate
 {
     /// <summary>
     /// Represents the CountryTaxRateTaxationGatewayProvider.  
@@ -16,9 +16,9 @@ namespace Merchello.Core.Gateways.Taxation.FlatRate
     /// This is Merchello's default TaxationGatewayProvider
     /// 
     /// </remarks>
-    public class FlatRateTaxationGatewayProvider : TaxationGatewayProviderBase, IFlatRateTaxationGatewayProvider
+    public class FixedRateTaxationGatewayProvider : TaxationGatewayProviderBase, IFixedRateTaxationGatewayProvider
     {
-        public FlatRateTaxationGatewayProvider(IGatewayProviderService gatewayProviderService, IGatewayProvider gatewayProvider, IRuntimeCacheProvider runtimeCacheProvider) 
+        public FixedRateTaxationGatewayProvider(IGatewayProviderService gatewayProviderService, IGatewayProvider gatewayProvider, IRuntimeCacheProvider runtimeCacheProvider) 
             : base(gatewayProviderService, gatewayProvider, runtimeCacheProvider)
         { }
 
@@ -94,7 +94,7 @@ namespace Merchello.Core.Gateways.Taxation.FlatRate
 
             if (!attempt.Success)
             {
-                LogHelper.Error<FlatRateTaxationGatewayProvider>("Failed to instantiate the tax rate quote strategy '" + typeName +"'", attempt.Exception);
+                LogHelper.Error<FixedRateTaxationGatewayProvider>("Failed to instantiate the tax rate quote strategy '" + typeName +"'", attempt.Exception);
                 throw attempt.Exception;
             }
 
@@ -108,7 +108,7 @@ namespace Merchello.Core.Gateways.Taxation.FlatRate
 
         public override Guid Key
         {
-            get { return Constants.ProviderKeys.Taxation.CountryTaxRateTaxationProviderKey; }
+            get { return Constants.ProviderKeys.Taxation.FlatRateTaxationProviderKey; }
         }
     }
 }

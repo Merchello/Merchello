@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using Merchello.Core.Models;
 
-namespace Merchello.Core.Gateways.Taxation.FlatRate
+namespace Merchello.Core.Gateways.Taxation.FixedRate
 {
     /// <summary>
-    /// Defines the CountryTaxRateTaxationGatewayProvider
+    /// Defines the FixedRateTaxationGatewayProvider
     /// </summary>
-    public interface IFlatRateTaxationGatewayProvider : ITaxationGatewayProvider
+    public interface IFixedRateTaxationGatewayProvider : ITaxationGatewayProvider
     {
         /// <summary>
         /// Attempts to create a <see cref="ITaxMethod"/> for a given provider and country.  If the provider already 

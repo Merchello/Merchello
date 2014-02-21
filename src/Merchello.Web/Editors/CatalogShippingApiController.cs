@@ -188,7 +188,7 @@ namespace Merchello.Web.Editors
 
                 foreach (IShippingGatewayProvider provider in providers)
                 {
-                    if (!Constants.ProviderKeys.Shipping.RateTableShippingProviderKey.Equals(provider.Key))
+                    if (!Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey.Equals(provider.Key))
                     {
                         yield return provider.ToShipGatewayProviderDisplay();
                     }

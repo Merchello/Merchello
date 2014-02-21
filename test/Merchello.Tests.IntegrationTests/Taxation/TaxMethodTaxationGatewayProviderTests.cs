@@ -1,6 +1,6 @@
 ﻿using System.Data;
 using System.Linq;
-using Merchello.Core.Gateways.Taxation.FlatRate;
+using Merchello.Core.Gateways.Taxation.FixedRate;
 using Merchello.Core.Models;
 using NUnit.Framework;
 
@@ -10,14 +10,14 @@ namespace Merchello.Tests.IntegrationTests.Taxation
     [Category("Taxation")]
     public class TaxMethodTaxationGatewayProviderTests : TaxationProviderTestBase
     {
-        private IFlatRateTaxationGatewayProvider _taxProvider;
+        private IFixedRateTaxationGatewayProvider _taxProvider;
 
         [SetUp]
         public void Init()
         {
-            _taxProvider = (IFlatRateTaxationGatewayProvider)MerchelloContext.Gateways.Taxation.ResolveByKey(Core.Constants.ProviderKeys.Taxation.CountryTaxRateTaxationProviderKey);
+            _taxProvider = (IFixedRateTaxationGatewayProvider)MerchelloContext.Gateways.Taxation.ResolveByKey(Core.Constants.ProviderKeys.Taxation.FlatRateTaxationProviderKey);
 
-            PreTestDataWorker.DeleteAllCountryTaxRates(Core.Constants.ProviderKeys.Taxation.CountryTaxRateTaxationProviderKey);
+            PreTestDataWorker.DeleteAllCountryTaxRates(Core.Constants.ProviderKeys.Taxation.FlatRateTaxationProviderKey);
         }
 
         /// <summary>

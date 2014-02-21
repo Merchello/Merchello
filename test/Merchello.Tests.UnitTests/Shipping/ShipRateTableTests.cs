@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Merchello.Core.Gateways.Shipping.RateTable;
+using Merchello.Core.Gateways.Shipping.FixedRate;
 using Merchello.Core.Models;
 using NUnit.Framework;
 
@@ -11,13 +11,13 @@ namespace Merchello.Tests.UnitTests.Shipping
     public class ShipRateTableTests
     {
 
-        private ShipRateTable _shipRateTable;
+        private ShippingFixedRateTable _shippingFixedRateTable;
 
         [SetUp]
         public void Init()
         {
-            _shipRateTable = new ShipRateTable(Guid.NewGuid(), new List<IShipRateTier>());
-            _shipRateTable.IsTest = true;
+            _shippingFixedRateTable = new ShippingFixedRateTable(Guid.NewGuid(), new List<IShipRateTier>());
+            _shippingFixedRateTable.IsTest = true;
         }
 
         /// <summary>
@@ -30,12 +30,12 @@ namespace Merchello.Tests.UnitTests.Shipping
             // handled via setup
 
             //// Act
-            _shipRateTable.AddRow(10, 20, 5);
+            _shippingFixedRateTable.AddRow(10, 20, 5);
 
             //// Assert
-            Assert.IsTrue(_shipRateTable.Rows.Any());
-            Console.WriteLine("Low: {0} to High: {1}", _shipRateTable.Rows.First().RangeLow, _shipRateTable.Rows.First().RangeHigh);
-            Assert.AreEqual(0, _shipRateTable.Rows.First().RangeLow);
+            Assert.IsTrue(_shippingFixedRateTable.Rows.Any());
+            Console.WriteLine("Low: {0} to High: {1}", _shippingFixedRateTable.Rows.First().RangeLow, _shippingFixedRateTable.Rows.First().RangeHigh);
+            Assert.AreEqual(0, _shippingFixedRateTable.Rows.First().RangeLow);
         }
 
         /// <summary>
@@ -48,27 +48,27 @@ namespace Merchello.Tests.UnitTests.Shipping
             // handled by setup
 
             //// Act
-            _shipRateTable.AddRow(1, 5, 0);
-            _shipRateTable.AddRow(6, 4, 1);
-            _shipRateTable.AddRow(3, 4, 1);
+            _shippingFixedRateTable.AddRow(1, 5, 0);
+            _shippingFixedRateTable.AddRow(6, 4, 1);
+            _shippingFixedRateTable.AddRow(3, 4, 1);
 
 
-            foreach (var row in _shipRateTable.Rows)
+            foreach (var row in _shippingFixedRateTable.Rows)
             {
                 Console.WriteLine("Low: {0} to High: {1}", row.RangeLow, row.RangeHigh);    
             }
 
             //// Assert
-            Assert.AreEqual(3, _shipRateTable.Rows.Count());
+            Assert.AreEqual(3, _shippingFixedRateTable.Rows.Count());
             
-            Assert.AreEqual(0, _shipRateTable.Rows.First().RangeLow);
-            Assert.AreEqual(3, _shipRateTable.Rows.First().RangeHigh);
+            Assert.AreEqual(0, _shippingFixedRateTable.Rows.First().RangeLow);
+            Assert.AreEqual(3, _shippingFixedRateTable.Rows.First().RangeHigh);
 
-            Assert.NotNull(_shipRateTable.Rows.First(x => x.RangeLow == 3));
-            Assert.NotNull(_shipRateTable.Rows.First(x => x.RangeHigh == 4));
+            Assert.NotNull(_shippingFixedRateTable.Rows.First(x => x.RangeLow == 3));
+            Assert.NotNull(_shippingFixedRateTable.Rows.First(x => x.RangeHigh == 4));
 
-            Assert.AreEqual(4, _shipRateTable.Rows.Last().RangeLow);
-            Assert.AreEqual(6, _shipRateTable.Rows.Last().RangeHigh);
+            Assert.AreEqual(4, _shippingFixedRateTable.Rows.Last().RangeLow);
+            Assert.AreEqual(6, _shippingFixedRateTable.Rows.Last().RangeHigh);
         }
 
         /// <summary>
@@ -78,19 +78,19 @@ namespace Merchello.Tests.UnitTests.Shipping
         public void Can_Verify_That_A_Rate_Tier_That_Spans_Multiple_Existing_Tiers_Is_Not_Inserted()
         {
             //// Arrange
-            _shipRateTable.AddRow(0,5, 1);
-            _shipRateTable.AddRow(5, 10, 1);
-            _shipRateTable.AddRow(10, 20, 1);
-            _shipRateTable.AddRow(20, 25, 1);
-            _shipRateTable.AddRow(25, 999, 1);
-            Assert.AreEqual(5, _shipRateTable.Rows.Count());
+            _shippingFixedRateTable.AddRow(0,5, 1);
+            _shippingFixedRateTable.AddRow(5, 10, 1);
+            _shippingFixedRateTable.AddRow(10, 20, 1);
+            _shippingFixedRateTable.AddRow(20, 25, 1);
+            _shippingFixedRateTable.AddRow(25, 999, 1);
+            Assert.AreEqual(5, _shippingFixedRateTable.Rows.Count());
 
             //// Act
-            _shipRateTable.AddRow(4, 11, 1);
+            _shippingFixedRateTable.AddRow(4, 11, 1);
 
             //// Assert
-            Assert.AreEqual(5, _shipRateTable.Rows.Count());
-            Assert.IsFalse(_shipRateTable.Rows.Any(x => x.RangeLow == 4));
+            Assert.AreEqual(5, _shippingFixedRateTable.Rows.Count());
+            Assert.IsFalse(_shippingFixedRateTable.Rows.Any(x => x.RangeLow == 4));
         }
 
         /// <summary>
@@ -100,16 +100,16 @@ namespace Merchello.Tests.UnitTests.Shipping
         public void Can_Verify_That_A_Rate_Tier_Can_Be_Deleted()
         {
             //// Arrange
-            _shipRateTable.AddRow(0, 5, 1);
-            _shipRateTable.AddRow(5, 10, 1);
-            _shipRateTable.AddRow(10, 20, 1);
-            _shipRateTable.AddRow(20, 25, 1);
+            _shippingFixedRateTable.AddRow(0, 5, 1);
+            _shippingFixedRateTable.AddRow(5, 10, 1);
+            _shippingFixedRateTable.AddRow(10, 20, 1);
+            _shippingFixedRateTable.AddRow(20, 25, 1);
 
             //// Act
-            _shipRateTable.DeleteRow(_shipRateTable.Rows.First(x => x.RangeLow == 5));
+            _shippingFixedRateTable.DeleteRow(_shippingFixedRateTable.Rows.First(x => x.RangeLow == 5));
     
             //// Assert
-            Assert.AreEqual(3, _shipRateTable.Rows.Count());
+            Assert.AreEqual(3, _shippingFixedRateTable.Rows.Count());
         }
 
     }
