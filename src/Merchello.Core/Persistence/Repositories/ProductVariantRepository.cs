@@ -141,7 +141,7 @@ namespace Merchello.Core.Persistence.Repositories
 
             entity.ResetDirtyProperties();
 
-            CacheRefreshHelper.ClearProductFromCache(RuntimeCache,  entity.ProductKey);
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProduct>(entity.ProductKey));
 
         }
 
@@ -163,7 +163,7 @@ namespace Merchello.Core.Persistence.Repositories
 
             entity.ResetDirtyProperties();
 
-            CacheRefreshHelper.ClearProductFromCache(RuntimeCache, entity.ProductKey);
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProduct>(entity.ProductKey));
         }
 
         protected override void PersistDeletedItem(IProductVariant entity)
@@ -174,7 +174,7 @@ namespace Merchello.Core.Persistence.Repositories
                 Database.Execute(delete, new { entity.Key });
             }
 
-            CacheRefreshHelper.ClearProductFromCache(RuntimeCache, entity.ProductKey);
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProduct>(entity.ProductKey));
         }
 
         #endregion
