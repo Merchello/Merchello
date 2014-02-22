@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Services;
@@ -16,7 +17,10 @@ namespace Merchello.Core.Persistence.Factories
 
         public IShipCountry BuildEntity(ShipCountryDto dto)
         {
-            var country = _storeSettingService.GetCountryByCode(dto.CountryCode);
+
+            var country = dto.CountryCode.Equals(Constants.CountryCodes.EverywhereElse) ?
+                new Country(Constants.CountryCodes.EverywhereElse, new List<IProvince>()) : 
+                _storeSettingService.GetCountryByCode(dto.CountryCode);
 
             var shipCountry = new ShipCountry(dto.CatalogKey, country)
             {

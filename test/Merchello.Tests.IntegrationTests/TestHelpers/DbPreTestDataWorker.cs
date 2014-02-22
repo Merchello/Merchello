@@ -352,7 +352,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         public void DeleteAllShipCountries()
         {
             var shipCountries = ((ShipCountryService)ShipCountryService).GetAllShipCountries();
-            foreach (var country in shipCountries)
+            foreach (var country in shipCountries.Where(x => !x.CountryCode.Equals(Constants.CountryCodes.EverywhereElse)))
             {
                 ShipCountryService.Delete(country);
             }

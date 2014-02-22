@@ -167,7 +167,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
                 new ShipCountry(_catalog.Key, _storeSettingService.GetCountryByCode("TR"))
             };
 
-            var expected = countries.Count();
+            var expected = countries.Count() + 1; // + 1 for everywhere else
 
             foreach (var country in countries)
             { 

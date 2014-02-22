@@ -14,7 +14,7 @@ namespace Merchello.Core.Gateways.Taxation
     {
         
 
-        protected TaxationGatewayProviderBase(IGatewayProviderService gatewayProviderService, IGatewayProvider gatewayProvider, IRuntimeCacheProvider runtimeCacheProvider) 
+        protected TaxationGatewayProviderBase(IGatewayProviderService gatewayProviderService, IGatewayProvider gatewayProvider, IRuntimeCacheProvider runtimeCacheProvider)
             : base(gatewayProviderService, gatewayProvider, runtimeCacheProvider)
         { }
 

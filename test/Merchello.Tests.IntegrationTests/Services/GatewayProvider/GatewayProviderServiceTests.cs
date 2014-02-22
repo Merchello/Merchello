@@ -59,7 +59,7 @@ namespace Merchello.Tests.IntegrationTests.Services.GatewayProvider
         public void Can_Query_A_List_Of_GatewayProviders_By_Country()
         {
             //// Arrange
-            var shipCountry = _shipCountryService.GetShipCountriesByCatalogKey(_catalog.Key).First();
+            var shipCountry = _shipCountryService.GetShipCountriesByCatalogKey(_catalog.Key).First(x => x.CountryCode == "US");
 
             
             //// Act

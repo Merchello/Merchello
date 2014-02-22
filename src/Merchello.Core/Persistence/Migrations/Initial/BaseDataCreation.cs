@@ -4,6 +4,7 @@ using Merchello.Core.Gateways.Taxation.FixedRate;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Models.TypeFields;
+using Newtonsoft.Json;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Persistence;
 
@@ -110,9 +111,38 @@ namespace Merchello.Core.Persistence.Migrations.Initial
         private void CreateGatewayProviderData()
         {
             var extended = new ExtendedDataCollection();
-
+            
             _database.Insert("merchGatewayProvider", "Key", new GatewayProviderDto() { Key = Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey, Name = "Fixed Rate Shipping Provider", ProviderTfKey = EnumTypeFieldConverter.GatewayProvider.GetTypeField(GatewayProviderType.Shipping).TypeKey, ExtendedData = new ExtendedDataCollection().SerializeToXml(), EncryptExtendedData = false, TypeFullName = typeof(FixedRateShippingGatewayProvider).FullName + ", Merchello.Core", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+
+            // add the everywhere else shipcountry
+            _database.Insert("merchShipCountry", "Key",
+                             new ShipCountryDto()
+                                 {
+                                     Key = Guid.NewGuid(),
+                                     CatalogKey = Constants.DefaultKeys.DefaultWarehouseCatalogKey,
+                                     CountryCode = Constants.CountryCodes.EverywhereElse,
+                                     Name = "Everywhere Else",
+                                     CreateDate = DateTime.Now,
+                                     UpdateDate = DateTime.Now
+                                 });
+
             _database.Insert("merchGatewayProvider", "Key", new GatewayProviderDto() { Key = Constants.ProviderKeys.Taxation.FixedRateTaxationProviderKey, Name = "Fixed Rate Tax Provider", ProviderTfKey = EnumTypeFieldConverter.GatewayProvider.GetTypeField(GatewayProviderType.Taxation).TypeKey, ExtendedData = new ExtendedDataCollection().SerializeToXml(), EncryptExtendedData = false, TypeFullName = typeof(FixedRateTaxationGatewayProvider).FullName + ", Merchello.Core", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+
+            var taxProvinces = new ProvinceCollection<ITaxProvince>();
+            var provinceData = JsonConvert.SerializeObject(taxProvinces);
+            _database.Insert("merchTaxMethod", "Key",
+                             new TaxMethodDto()
+                                 {
+                                     Key = Guid.NewGuid(),
+                                     Code = Constants.CountryCodes.EverywhereElse,
+                                     Name = "Everywhere Else",
+                                     PercentageTaxRate = 0,
+                                     ProviderKey = Constants.ProviderKeys.Taxation.FixedRateTaxationProviderKey,
+                                     ProvinceData = provinceData,
+                                     UpdateDate = DateTime.Now,
+                                     CreateDate = DateTime.Now
+                                 });
+
         }
 
         private void CreateStoreSettingData()
