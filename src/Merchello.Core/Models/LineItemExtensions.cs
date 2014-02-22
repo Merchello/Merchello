@@ -2,6 +2,7 @@
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Gateways.Taxation;
 using Merchello.Core.Models.TypeFields;
+using Umbraco.Core;
 using Umbraco.Core.Logging;
 
 namespace Merchello.Core.Models
@@ -130,11 +131,12 @@ namespace Merchello.Core.Models
         }
 
 
-        //public static T AsLineItemOf<T>(this InvoiceTaxResult invoiceTaxResult) where T : LineItemBase
+        //public static T AsLineItemOf<T>(this IInvoiceTaxResult invoiceTaxResult) where T : LineItemBase
         //{
         //    var ctrValues = new object[]
         //    {
         //        EnumTypeFieldConverter.LineItemType.Tax.TypeKey,
+        //        invoiceTaxResult.Name,
 
         //    };
         //}

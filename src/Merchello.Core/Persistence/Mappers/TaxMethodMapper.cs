@@ -16,6 +16,7 @@ namespace Merchello.Core.Persistence.Mappers
 
              CacheMap<TaxMethod, TaxMethodDto>(src => src.Key, dto => dto.Key);
              CacheMap<TaxMethod, TaxMethodDto>(src => src.ProviderKey, dto => dto.ProviderKey);
+             CacheMap<TaxMethod, TaxMethodDto>(src => src.Name, dto => dto.Name);
              CacheMap<TaxMethod, TaxMethodDto>(src => src.CountryCode, dto => dto.Code);
              CacheMap<TaxMethod, TaxMethodDto>(src => src.PercentageTaxRate, dto => dto.PercentageTaxRate);
              CacheMap<TaxMethod, TaxMethodDto>(src => src.UpdateDate, dto => dto.UpdateDate);

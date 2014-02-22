@@ -8,18 +8,24 @@ namespace Merchello.Core.Gateways.Taxation
     public class InvoiceTaxResult : IInvoiceTaxResult
     {
         public InvoiceTaxResult(decimal taxRate, decimal taxAmount)
-            : this(taxRate, taxAmount, new ExtendedDataCollection())
+            : this(string.Empty, taxRate, taxAmount)
+        {}
+
+        public InvoiceTaxResult(string name, decimal taxRate, decimal taxAmount)
+            : this(name, taxRate, taxAmount, new ExtendedDataCollection())
         { }
 
-        public InvoiceTaxResult(decimal taxRate, decimal taxAmount, ExtendedDataCollection extendedData)
+        public InvoiceTaxResult(string name, decimal taxRate, decimal taxAmount, ExtendedDataCollection extendedData)
         {
             Mandate.ParameterNotNull(extendedData, "extendedData");
-           
+
+            Name = string.IsNullOrEmpty(name) ? "Tax" : name;
             TaxRate = taxRate;
             TaxAmount = taxAmount;
             ExtendedData = extendedData;
         }
 
+        public string Name { get; private set; }
         public decimal TaxRate { get; private set; }
         public decimal TaxAmount { get; set; }
         public ExtendedDataCollection ExtendedData { get; private set; }

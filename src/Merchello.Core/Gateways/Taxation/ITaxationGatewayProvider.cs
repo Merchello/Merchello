@@ -8,6 +8,19 @@ namespace Merchello.Core.Gateways.Taxation
     /// </summary>
     public interface ITaxationGatewayProvider : IGateway
     {
+
+        /// <summary>
+        /// Calculates the tax amount for an invoice
+        /// </summary>
+        /// <param name="invoice"><see cref="IInvoice"/></param>
+        /// <returns><see cref="IInvoiceTaxResult"/></returns>
+        /// <remarks>
+        /// 
+        /// Assumes the billing address of the invoice will be used for the taxation address
+        /// 
+        /// </remarks>
+        IInvoiceTaxResult CalculateTaxForInvoice(IInvoice invoice);
+
         /// <summary>
         /// Calculates the tax amount for an invoice
         /// </summary>

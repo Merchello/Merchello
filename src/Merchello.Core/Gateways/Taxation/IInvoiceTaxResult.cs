@@ -8,6 +8,11 @@ namespace Merchello.Core.Gateways.Taxation
     public interface IInvoiceTaxResult
     {
         /// <summary>
+        /// The name of the Tax Method
+        /// </summary>
+        string Name { get; }
+
+        /// <summary>
         /// The tax used in the tax calculation
         /// </summary>
         decimal TaxRate { get; }

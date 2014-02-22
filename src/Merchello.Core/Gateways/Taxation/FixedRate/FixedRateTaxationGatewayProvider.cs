@@ -101,11 +101,17 @@ namespace Merchello.Core.Gateways.Taxation.FixedRate
             return CalculateTaxForInvoice(attempt.Result);
         }
 
+        /// <summary>
+        /// The name of the TaxationProvider
+        /// </summary>
         public override string Name
         {
             get { return "Fixed Rate Tax Provider"; }
         }
 
+        /// <summary>
+        /// The fixed pk associated with the TaxationProvider
+        /// </summary>
         public override Guid Key
         {
             get { return Constants.ProviderKeys.Taxation.FlatRateTaxationProviderKey; }
