@@ -25,15 +25,19 @@
             self.catalogKey = "";
             self.countryCode = "";
             self.name = "";
+            self.provinces = [];
             self.shipMethods = [];
         } else {
             self.key = shippingCountryFromServer.key;
             self.catalogKey = shippingCountryFromServer.catalogKey;
             self.countryCode = shippingCountryFromServer.countryCode;
             self.name = shippingCountryFromServer.name;
-            self.shipMethods = _.map(shippingCountryFromServer, function (attribute) {
-                return new merchello.Models
+            self.provinces = _.map(shippingCountryFromServer.provinces, function (province) {
+                return new merchello.Models.Province(province)
             });
+            //self.shipMethods = _.map(shippingCountryFromServer., function (method) {
+            //    return new merchello.Models.ShippingMethod(method);
+            //});
         };
 
         self.addMethod = function (shippingMethod) {
@@ -53,6 +57,9 @@
         {
             self.countryCode = country.countryCode;
             self.name = country.name;
+            self.provinces = _.map(country.provinces, function (province) {
+                return new merchello.Models.Province(province)
+            });
         };
     };
 
@@ -79,8 +86,8 @@
             self.surcharge = shippingMethodFromServer.surcharge;
             self.serviceCode = shippingMethodFromServer.serviceCode;
             self.taxable = shippingMethodFromServer.taxable;
-            self.provinceData = _.map(shippingMethodFromServer, function (attribute) {
-                return new merchello.Models.ProvinceData(attribute);
+            self.provinceData = _.map(shippingMethodFromServer.provinces, function (province) {
+                return new merchello.Models.ProvinceData(province);
             });
         }
         // Helper to add a shipping region adjustment to this shipping method.

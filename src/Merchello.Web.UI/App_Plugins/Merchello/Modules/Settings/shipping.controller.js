@@ -8,7 +8,7 @@
      * @description
      * The controller for the reports list page
      */
-    controllers.ShippingController = function ($scope, $routeParams, $location, notificationsService, angularHelper, serverValidationManager, merchelloWarehouseService, merchelloSettingsService) {
+    controllers.ShippingController = function ($scope, $routeParams, $location, notificationsService, angularHelper, serverValidationManager, merchelloWarehouseService, merchelloSettingsService, merchelloCatalogShippingService) {
 
         $scope.sortProperty = "name";
         $scope.availableCountries = [];
@@ -19,6 +19,7 @@
         $scope.primaryWarehouse = new merchello.Models.Warehouse();
         $scope.visible = {
             addCountryFlyout: false,
+            addProviderFlyout: false,
             addWarehouseFlyout: false,
             deleteWarehouseFlyout: false,
             shippingMethodPanel: true,
@@ -27,6 +28,7 @@
             warehouseListPanel: true
         };
         $scope.countryToAdd = new merchello.Models.Country();
+        $scope.providerToAdd = {};
 
 
 
@@ -52,10 +54,11 @@
             var promiseWarehouses = merchelloWarehouseService.getDefaultWarehouse();    // Only a default warehouse in v1
             promiseWarehouses.then(function (warehouseFromServer) {
 
-                //warehouseFromServer.isDefault = true;
                 $scope.warehouses.push(new merchello.Models.Warehouse(warehouseFromServer));
 
                 $scope.changePrimaryWarehouse();
+
+                $scope.loadCountries();
 
             }, function (reason) {
 
@@ -66,15 +69,24 @@
         };
 
         $scope.loadCountries = function () {
-            // Note From Kyle: This will have to change once the warehouse/catalog functionality is wired in.
-            var catalogKey = $scope.primaryWarehouse.key;
 
-            // Note From Kyle: Mocks from data returned from Shipping Country API call, where the countries have the catalogKey as the selected warehouse/catalog.
-            var mockCountries = [
-            ];
-            $scope.countries = _.map(mockCountries, function (shippingCountryFromServer) {
-                return new merchello.Models.ShippingCountry(shippingCountryFromServer);
-            });
+            if ($scope.primaryWarehouse.warehouseCatalogs.length > 0)
+            {
+                var catalogKey = $scope.primaryWarehouse.warehouseCatalogs[0].key;
+
+                var promiseShipCountries = merchelloCatalogShippingService.getWarehouseCatalogShippingCountries(catalogKey);
+                promiseShipCountries.then(function (shipCountriesFromServer) {
+
+                    $scope.countries = _.map(shipCountriesFromServer, function (shippingCountryFromServer) {
+                        return new merchello.Models.ShippingCountry(shippingCountryFromServer);
+                    });
+
+                }, function (reason) {
+
+                    notificationsService.error("Shipping Countries Load Failed", reason.message);
+
+                });
+            }
         };
 
         $scope.changePrimaryWarehouse = function (warehouse) {
@@ -104,11 +116,21 @@
                 confirm: function () {
                     var self = $scope.addCountryFlyout;
 
-                    if (!_.contains($scope.countries, $scope.countryToAdd)) {
-                        var newShipCountry = new merchello.Models.ShippingCountry();
-                        newShipCountry.catalogKey = $scope.primaryWarehouse.warehouseCatalogs[0].key;
-                        newShipCountry.fromCountry($scope.countryToAdd);
-                        $scope.countries.push(newShipCountry);
+                    var countryOnCatalog = _.find($scope.countries, function (shipCountry) { return shipCountry.countryCode == self.model.countryCode });
+                    if (!countryOnCatalog) {
+
+                        var catalogKey = $scope.primaryWarehouse.warehouseCatalogs[0].key;
+
+                        var promiseShipCountries = merchelloCatalogShippingService.newWarehouseCatalogShippingCountry(catalogKey, self.model.countryCode);
+                        promiseShipCountries.then(function (shippingCountryFromServer) {
+
+                            $scope.countries.push( new merchello.Models.ShippingCountry(shippingCountryFromServer));
+
+                        }, function (reason) {
+
+                            notificationsService.error("Shipping Countries Create Failed", reason.message);
+
+                        });
                     }
                     
                     self.clear();
@@ -189,6 +211,37 @@
             },
             toggle: function () {
                 $scope.visible.deleteWarehouseFlyout = !$scope.visible.deleteWarehouseFlyout;
+            }
+        };
+
+
+        // Functions to control the Add Provider flyout
+        $scope.addProviderFlyout = new merchello.Models.Flyout(
+            $scope.visible.addProviderFlyout,
+            function (isOpen) {
+                $scope.visible.addProviderFlyout = isOpen;
+            },
+            {
+                confirm: function () {
+                    var self = $scope.addProviderFlyout;
+
+
+
+                    self.clear();
+                    self.close();
+                }
+            });
+
+        // Functions to control the Shipping Methods panel
+        $scope.shippingMethodPanel = {
+            close: function () {
+                $scope.visible.shippingMethodPanel = false;
+            },
+            open: function (country) {
+                $scope.visible.shippingMethodPanel = true;
+            },
+            toggle: function () {
+                $scope.visible.shippingMethodPanel = !$scope.visible.shippingMethodPanel;
             }
         };
 

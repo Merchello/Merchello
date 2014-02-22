@@ -133,7 +133,7 @@
                     <label class="merchello-control-label">
                         Shipping Methods
                         <small>Add shipping methods to existing regions or create a new region</small>
-                        <a data-ng-click="addCountryFlyout.open()"><i class="icon-map"></i> Add a Country</a>
+                        <a data-ng-click="addCountryFlyout.open(countryToAdd)"><i class="icon-map"></i> Add a Country</a>
                     </label>
 
                     <div class="merchello-controls">
@@ -148,14 +148,31 @@
                                     <label for="country-name">Type your Country Name</label>
                                     <div class="input-append col-xs-12 span12">
                                         <!-- A country list should fly out beneath this input when the user starts typing or if they select the dropdown button -->
-                                        <dropdown-list selected="countryToAdd" placeholder="Type a country name" countries="availableCountries"></dropdown-list>
+                                        <dropdown-list selected="addCountryFlyout.model" placeholder="Type a country name" countries="availableCountries"></dropdown-list>
                                     </div>
-                                    <div>{{countryToAdd.name}}</div>
                                 </div>
 
                                 <div>
                                     <input type="submit" class="btn" value="Cancel" data-ng-click="addCountryFlyout.close()" />
-                                    <input type="submit" class="btn btn-primary" value="Save" data-ng-click="addCountryFlyout.confirm()" />
+                                    <input type="submit" class="btn btn-primary" value="Add Country" data-ng-click="addCountryFlyout.confirm()" />
+                                </div>
+                            </form>
+                            
+                            <!-- Add a Provider Flyout -->
+                            <form  name="addProviderForm" class="well col-xs-12 span12" data-ng-class="{ 'open': visible.addProviderFlyout, 'closed': !visible.addProviderFlyout }">
+                                <button class="btn close" data-ng-click="addProviderFlyout.close()"><i class="icon-delete"></i></button>
+                                <h4>Add a Provider</h4>
+                                <div class="form-group row-fluid provider-dropdown">
+                                    <label for="provider-name">Select Your Provider</label>
+                                    <div class="input-append col-xs-12 span12">
+                                        <select name="availableProviders" data-ng-model="addProviderFlyout.model" data-ng-options=""></select>
+                                    </div>
+                                    <div>{{addProviderFlyout.model.name}}</div>
+                                </div>
+
+                                <div>
+                                    <input type="submit" class="btn" value="Cancel" data-ng-click="addProviderFlyout.close()" />
+                                    <input type="submit" class="btn btn-primary" value="Add Provider" data-ng-click="addProviderFlyout.confirm()" />
                                 </div>
                             </form>
 
@@ -229,28 +246,21 @@
                                 <thead>
                                     <tr>
                                         <th colspan="4">{{country.name}}</th>
-                                        <th><a data-ng-click="addEditShippingMethodFlyout.open(country)" class="btn btn-primary">Add a Method</a></th>
+                                        <th><a data-ng-click="addProviderFlyout.open(providerToAdd)" class="btn btn-primary">Add a Provider</a></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>Standard Shipping</td>
-                                        <td>Bramble Berry, Mindfly</td>
-                                        <td>0lbs-5lbs</td>
-                                        <td>$10.00</td>
-                                        <td class="edit"><a href="#" class="btn btn-default btn-xs btn-mini">edit</a> <a class="btn btn-warning btn-xs btn-mini" href="#">x</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Heavy Goods Shipping</td>
-                                        <td>Bramble Berry</td>
-                                        <td>5lbs-20lbs</td>
-                                        <td>$20.00</td>
+                                    <tr data-ng-repeat="method in shipMethods">
+                                        <td>{{method.name}}</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
                                         <td class="edit"><a href="#" class="btn btn-default btn-xs btn-mini">edit</a> <a class="btn btn-warning btn-xs btn-mini" href="#">x</a></td>
                                     </tr>
                                 </tbody>
                             </table>
 
-                            <table class="table table-striped merchello-striped-table settings-table shipping-table">
+<!--                            <table class="table table-striped merchello-striped-table settings-table shipping-table">
                                 <thead>
                                     <tr>
                                         <th colspan="4">United Kingdom</th>
@@ -291,9 +301,9 @@
                                         <td class="edit"><a href="#" class="btn btn-default btn-xs btn-mini">edit</a> <a class="btn btn-warning btn-xs btn-mini" href="#">x</a></td>
                                     </tr>
                                 </tbody>
-                            </table>
+                            </table>-->
 
-                            <table class="table table-striped merchello-striped-table settings-table shipping-table">
+ <!--                           <table class="table table-striped merchello-striped-table settings-table shipping-table">
                                 <thead>
                                     <tr>
                                         <th colspan="4">Everywhere Else</th>
@@ -309,7 +319,7 @@
                                         <td class="edit"><a href="#" class="btn btn-default btn-xs btn-mini">edit</a> <a class="btn btn-warning btn-xs btn-mini" href="#">x</a></td>
                                     </tr>
                                 </tbody>
-                            </table>
+                            </table>-->
 
                         </div>
 
