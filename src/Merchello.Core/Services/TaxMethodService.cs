@@ -198,10 +198,16 @@ namespace Merchello.Core.Services
         {
             using (var repository = _repositoryFactory.CreateTaxMethodRepository(_uowProvider.GetUnitOfWork()))
             {
-                var query =
-                    Query<ITaxMethod>.Builder.Where(x => x.ProviderKey == providerKey && x.CountryCode == countryCode);
-                
-                return repository.GetByQuery(query).FirstOrDefault();
+                var allTaxMethods = repository.GetAll().ToArray();
+
+                if (!allTaxMethods.Any()) return null;
+                var specific = allTaxMethods.FirstOrDefault(x => x.ProviderKey.Equals(providerKey) && x.CountryCode.Equals(countryCode));
+
+                return specific ??
+                       allTaxMethods.FirstOrDefault(
+                           x =>
+                           x.ProviderKey.Equals(providerKey) &&
+                           x.CountryCode.Equals(Constants.CountryCodes.EverywhereElse));
             }
         }
 

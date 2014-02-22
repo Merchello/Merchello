@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Merchello.Core.Checkout;
 using Merchello.Core.Models;
 using Merchello.Core.Orders;
@@ -15,20 +16,27 @@ namespace Merchello.Core.Chains.InvoiceCreation
         public override Attempt<IInvoice> PerformTask(IInvoice value)
         {
             // if taxes are not to be applied, skip this step
-            if (!OrderPreparation.ApplyTaxesToInvoice)
+            if (OrderPreparation.ApplyTaxesToInvoice)
             {
-                // clear any current tax lines
-                var removers = value.Items.Where(x => x.LineItemType == LineItemType.Tax);
-                foreach (var remove in removers)
+                try
                 {
-                    value.Items.Remove(remove);
+                    // clear any current tax lines
+                    var removers = value.Items.Where(x => x.LineItemType == LineItemType.Tax);
+                    foreach (var remove in removers)
+                    {
+                        value.Items.Remove(remove);
+                    }
+
+                    var taxes = value.CalculateTaxes(OrderPreparation.MerchelloContext, value.GetBillingAddress());
+
+                    value.Items.Add(taxes.AsLineItemOf<InvoiceLineItem>());
+
+                    return Attempt<IInvoice>.Succeed(value);
                 }
-
-                var taxes = value.CalculateTaxes(OrderPreparation.MerchelloContext, value.GetBillingAddress());
-
-
-
-                return Attempt<IInvoice>.Succeed(value);
+                catch (Exception ex)
+                {
+                    return Attempt<IInvoice>.Fail(ex);
+                }
             }
 
             return Attempt<IInvoice>.Succeed(value);

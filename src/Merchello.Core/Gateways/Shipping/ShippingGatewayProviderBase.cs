@@ -52,7 +52,7 @@ namespace Merchello.Core.Gateways.Shipping
         /// Deletes an Active ShipMethod
         /// </summary>
         /// <param name="gatewayShipMethod"></param>
-        public virtual void DeleteActiveShipMethod(IGatewayShipMethod gatewayShipMethod)
+        public virtual void DeleteShipMethod(IGatewayShipMethod gatewayShipMethod)
         {
             GatewayProviderService.Delete(gatewayShipMethod.ShipMethod);
         }
@@ -67,13 +67,10 @@ namespace Merchello.Core.Gateways.Shipping
         {
             foreach (var gatewayShipMethod in GetActiveShipMethods(shipCountry))
             {
-                DeleteActiveShipMethod(gatewayShipMethod);
+                DeleteShipMethod(gatewayShipMethod);
             }
         }
-
-
         
-
         /// <summary>
         /// Returns a collection of available <see cref="IGatewayShipMethod"/> associated by this provider for a given shipment
         /// </summary>

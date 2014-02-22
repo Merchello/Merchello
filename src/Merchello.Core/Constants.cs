@@ -5,6 +5,9 @@
     /// </summary>
     public static partial class Constants
     {
-        
+        public static class CountryCodes
+        {
+            public static string EverywhereElse = "ELSE";
+        }
     }
 }

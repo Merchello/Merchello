@@ -16,6 +16,7 @@ namespace Merchello.Core
                     "merchLineItemCollection",
                     "merchLineItem",
                     "merchCurrencyCode",
+                    "merchLineItemTaxAmount",
                     "merchName",
                     "merchSku",
                     "merchExported",
@@ -102,6 +103,7 @@ namespace Merchello.Core
             public static string Quantity = "merchQuantity";
             public static string BaseTaxRate = "merchBaseTaxRate";
             public static string ProviceTaxRate = "merchProvinceTaxRate";
+            public static string LineItemTaxAmount = "merchLineItemTaxAmount";
         }
     }
 }

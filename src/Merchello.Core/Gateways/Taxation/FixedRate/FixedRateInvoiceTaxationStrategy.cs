@@ -38,15 +38,13 @@ namespace Merchello.Core.Gateways.Taxation.FixedRate
                     baseTaxRate = AdjustedRate(baseTaxRate, _taxMethod.Provinces.FirstOrDefault(x => x.Code == TaxAddress.Region), extendedData);
                 }
                 
-
-                var visitor = new TaxableLineItemVisitor();
+                var visitor = new TaxableLineItemVisitor(baseTaxRate/100);
                 Invoice.Items.Accept(visitor);
 
-                var taxablePrice = visitor.TaxableLineItems.Sum(x => x.Price);
-
+                var totalTax = visitor.TaxableLineItems.Sum(x => decimal.Parse(x.ExtendedData.GetValue(Constants.ExtendedDataKeys.LineItemTaxAmount)));
 
                 return Attempt<IInvoiceTaxResult>.Succeed(
-                    new InvoiceTaxResult(_taxMethod.Name, baseTaxRate, taxablePrice * (baseTaxRate / 100), extendedData)
+                    new InvoiceTaxResult(_taxMethod.Name, baseTaxRate, totalTax, extendedData)
                     );
             }
             catch (Exception ex)

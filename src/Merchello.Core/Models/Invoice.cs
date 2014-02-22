@@ -355,7 +355,7 @@ namespace Merchello.Core.Models
         public decimal Total
         {
             get { return _total; }
-            internal set
+            set
             {
                 SetPropertyValueAndDetectChanges(o =>
                 {

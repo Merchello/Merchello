@@ -83,8 +83,6 @@
     <Compile Include="Chains\InvoiceCreation\AddBillingInfoToInvoiceTask.cs" />
     <Compile Include="Chains\InvoiceCreation\OrderPreparationAttemptChainTaskBase.cs" />
     <Compile Include="Chains\InvoiceCreation\ConvertItemCacheItemsToInvoiceItemsTask.cs" />
-    <Compile Include="Chains\InvoiceTaxRateQuote\IdentifyTaxableLineItems.cs" />
-    <Compile Include="Chains\InvoiceTaxRateQuote\InvoiceTaxRateQuoteBase.cs" />
     <Compile Include="Gateways\Taxation\InvoiceTaxResult.cs" />
     <Compile Include="Gateways\Taxation\TaxableLineItemVisitor.cs" />
     <Compile Include="Models\InvoiceExtensions.cs" />

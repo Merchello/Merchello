@@ -22,39 +22,7 @@ namespace Merchello.Core.Gateways.Taxation.FixedRate
             : base(gatewayProviderService, gatewayProvider, runtimeCacheProvider)
         { }
 
-        /// <summary>
-        /// Attempts to create a <see cref="ITaxMethod"/> for a given provider and country.  If the provider already 
-        /// defines a tax rate for the country, the creation fails.
-        /// </summary>
-        /// <param name="countryCode">The two character ISO country code</param>
-        public ITaxMethod CreateTaxMethod(string countryCode)
-        {
-            return CreateTaxMethod(countryCode, 0);
-        }
-
-        /// <summary>
-        /// Attempts to create a <see cref="ITaxMethod"/> for a given provider and country.  If the provider already 
-        /// defines a tax rate for the country, the creation fails.
-        /// </summary>
-        /// <param name="countryCode">The two character ISO country code</param>
-        /// <param name="percentageTaxRate">The tax rate in percentage for the country</param>
-        public ITaxMethod CreateTaxMethod(string countryCode, decimal percentageTaxRate)
-        {
-            var attempt = GatewayProviderService.CreateTaxMethodWithKey(GatewayProvider.Key, countryCode, percentageTaxRate);
-
-            if (!attempt.Success) throw attempt.Exception;
-
-            return attempt.Result;
-        }
-
-        /// <summary>
-        /// Saves a single instance of a <see cref="ITaxMethod"/>
-        /// </summary>
-        /// <param name="taxMethod">The <see cref="ITaxMethod"/> to save</param>
-        public void SaveTaxMethod(ITaxMethod taxMethod)
-        {
-            GatewayProviderService.Save(taxMethod);
-        }
+        
 
         /// <summary>
         /// Gets a <see cref="ITaxMethod"/> by it's unique 'key' (Guid)
@@ -114,7 +82,7 @@ namespace Merchello.Core.Gateways.Taxation.FixedRate
         /// </summary>
         public override Guid Key
         {
-            get { return Constants.ProviderKeys.Taxation.FlatRateTaxationProviderKey; }
+            get { return Constants.ProviderKeys.Taxation.FixedRateTaxationProviderKey; }
         }
     }
 }

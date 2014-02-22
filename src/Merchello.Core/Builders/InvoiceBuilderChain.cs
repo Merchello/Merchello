@@ -23,11 +23,22 @@ namespace Merchello.Core.Builders
             ResolveChain(Constants.TaskChainAlias.CheckoutInvoiceCreate);
         }
 
+        /// <summary>
+        /// Builds the invoice
+        /// </summary>
+        /// <returns>Attempt{IInvoice}</returns>
         public override Attempt<IInvoice> Build()
         {
-            return (TaskHandlers.Any())
+            var attempt = (TaskHandlers.Any())
                        ? TaskHandlers.First().Execute(new Invoice(Constants.DefaultKeys.UnpaidInvoiceStatusKey))
                        : Attempt<IInvoice>.Fail(new InvalidOperationException("The configuration Chain Task List could not be instantiated"));
+
+            if (!attempt.Success) return attempt;
+
+            // total the invoice
+            attempt.Result.Total = attempt.Result.Items.Sum(x => x.TotalPrice);
+
+            return attempt;
         }
 
  

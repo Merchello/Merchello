@@ -11,10 +11,10 @@ namespace Merchello.Tests.Base.DataMakers
     public class MockProductDataMaker : MockDataMakerBase
     {
 
-        public static IProduct MockProductForInserting(bool shippable = true, decimal weight = 0, decimal price = 0)
+        public static IProduct MockProductForInserting(bool shippable = true, decimal weight = 0, decimal price = 0, bool taxable = true)
         {
             var mockPrice = price == 0 ? PriceCheck() : price;
-            var product = MockProductForInserting(ProductItemName(), MockSku(), mockPrice, weight);
+            var product = MockProductForInserting(ProductItemName(), MockSku(), mockPrice, weight, taxable);
             product.Shippable = shippable;
             return product;
         }
@@ -42,9 +42,9 @@ namespace Merchello.Tests.Base.DataMakers
             for (var i = 0; i < count; i++) yield return MockProductForInserting(ProductItemName(), Guid.NewGuid().ToString().Replace("-", string.Empty), PriceCheck());
         }
 
-        public static IProduct MockProductForInserting(string name, string sku, decimal price, decimal weight = 0)
+        public static IProduct MockProductForInserting(string name, string sku, decimal price, decimal weight = 0, bool taxable = true)
         {
-            return new Product(new ProductVariant(name, sku, price) { Weight = weight});
+            return new Product(new ProductVariant(name, sku, price) { Weight = weight, Taxable = taxable });
         }
     }
 }

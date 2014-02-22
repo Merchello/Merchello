@@ -15,9 +15,9 @@ namespace Merchello.Tests.IntegrationTests.Taxation
         [SetUp]
         public void Init()
         {
-            _taxProvider = (IFixedRateTaxationGatewayProvider)MerchelloContext.Gateways.Taxation.ResolveByKey(Core.Constants.ProviderKeys.Taxation.FlatRateTaxationProviderKey);
+            _taxProvider = (IFixedRateTaxationGatewayProvider)MerchelloContext.Gateways.Taxation.ResolveByKey(Core.Constants.ProviderKeys.Taxation.FixedRateTaxationProviderKey);
 
-            PreTestDataWorker.DeleteAllCountryTaxRates(Core.Constants.ProviderKeys.Taxation.FlatRateTaxationProviderKey);
+            PreTestDataWorker.DeleteAllCountryTaxRates(Core.Constants.ProviderKeys.Taxation.FixedRateTaxationProviderKey);
         }
 
         /// <summary>
@@ -32,12 +32,12 @@ namespace Merchello.Tests.IntegrationTests.Taxation
 
             //// Act
             _taxProvider.CreateTaxMethod(countryCode);
-            var countryTaxRates = GatewayProviderService.GetTaxMethodsByProviderKey(_taxProvider.Key);
+            var taxMethods = GatewayProviderService.GetTaxMethodsByProviderKey(_taxProvider.Key);
 
             //// Assert
-            Assert.NotNull(countryTaxRates);
-            Assert.IsTrue(countryTaxRates.Any());
-            Assert.AreEqual(expected, countryTaxRates.Count());
+            Assert.NotNull(taxMethods);
+            Assert.IsTrue(taxMethods.Any());
+            Assert.AreEqual(expected, taxMethods.Count());
         }
 
         /// <summary>
@@ -51,12 +51,12 @@ namespace Merchello.Tests.IntegrationTests.Taxation
             var type = typeof(TaxProvince);
 
             //// Act
-            var countryTaxRate = _taxProvider.CreateTaxMethod(countryCode);
+            var taxMethod = _taxProvider.CreateTaxMethod(countryCode);
 
             //// Assert
-            Assert.NotNull(countryTaxRate);
-            Assert.IsTrue(countryTaxRate.HasProvinces);
-            Assert.AreEqual(type.Name, countryTaxRate.Provinces.First().GetType().Name);
+            Assert.NotNull(taxMethod);
+            Assert.IsTrue(taxMethod.HasProvinces);
+            Assert.AreEqual(type.Name, taxMethod.Provinces.First().GetType().Name);
         }
 
         /// <summary>
@@ -83,12 +83,12 @@ namespace Merchello.Tests.IntegrationTests.Taxation
         {
             //// Arrange
             const string countryCode = "US";
-            var countryTaxRate = _taxProvider.CreateTaxMethod(countryCode, 5);
-            Assert.IsTrue(countryTaxRate.HasProvinces);
+            var taxMethod = _taxProvider.CreateTaxMethod(countryCode, 5);
+            Assert.IsTrue(taxMethod.HasProvinces);
 
             //// Act
-            countryTaxRate.Provinces["WA"].PercentRateAdjustment = 3;
-            _taxProvider.SaveTaxMethod(countryTaxRate);
+            taxMethod.Provinces["WA"].PercentRateAdjustment = 3;
+            _taxProvider.SaveTaxMethod(taxMethod);
 
             var retrieved = _taxProvider.GetTaxMethodByCountryCode(countryCode);
             Assert.NotNull(retrieved);
@@ -96,7 +96,7 @@ namespace Merchello.Tests.IntegrationTests.Taxation
             //// Assert
             Assert.IsTrue(retrieved.HasProvinces);
             Assert.AreEqual(3, retrieved.Provinces["WA"].PercentRateAdjustment);
-            Assert.AreEqual(5, countryTaxRate.PercentageTaxRate);
+            Assert.AreEqual(5, taxMethod.PercentageTaxRate);
         }
     }
 }

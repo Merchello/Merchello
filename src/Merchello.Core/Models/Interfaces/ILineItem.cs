@@ -63,10 +63,17 @@ namespace Merchello.Core.Models
         LineItemType LineItemType { get; }
 
         /// <summary>
+        /// The total price of the line item (quantity * price)
+        /// </summary>
+        [IgnoreDataMember]
+        decimal TotalPrice { get; }
+
+        /// <summary>
         /// Accept for visitor operations
         /// </summary>
         /// <param name="vistor"><see cref="ILineItemVisitor"/></param>
         void Accept(ILineItemVisitor vistor);
+
 
     }
 }
