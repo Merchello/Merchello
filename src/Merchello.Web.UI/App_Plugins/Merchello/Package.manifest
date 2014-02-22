@@ -45,6 +45,7 @@
 		'~/App_Plugins/Merchello/Modules/Settings/notifications.models.js',
 		'~/App_Plugins/Merchello/Modules/Settings/payment.models.js',
         '~/App_Plugins/Merchello/Modules/Settings/merchello.catalogshipping.service.js',
+        '~/App_Plugins/Merchello/Modules/Settings/merchello.catalogfixedrateshipping.service.js',
 		'~/App_Plugins/Merchello/Modules/Settings/shipping.models.js',
 		'~/App_plugins/Merchello/Modules/Settings/taxation.models.js',
 		'~/App_Plugins/Merchello/Modules/Settings/vendors.models.js',

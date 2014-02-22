@@ -6,7 +6,7 @@
         * @name umbraco.resources.MerchelloCatalogShippingService
         * @description Loads in data for shipping providers and store shipping settings
         **/
-    merchelloServices.MerchelloCatalogShippingService = function ($q, $http, umbDataFormatter, umbRequestHelper) {
+    merchelloServices.MerchelloCatalogShippingService = function ($http, umbRequestHelper) {
 
         return {
 
@@ -41,6 +41,16 @@
                         params: { catalogKey: catalogKey, countryCode: countryCode }
                     }),
                     'Failed to create ship country: ' + countryCode);
+            },
+
+            getAllShipGatewayProviders: function () {
+
+                return umbRequestHelper.resourcePromise(
+                   $http({
+                       url: umbRequestHelper.getApiUrl('merchelloCatalogShippingApiBaseUrl', 'GetAllShipGatewayProviders'),
+                       method: "GET"
+                   }),
+                   'Failed to retreive shipping gateway providers');
             },
 
         };
