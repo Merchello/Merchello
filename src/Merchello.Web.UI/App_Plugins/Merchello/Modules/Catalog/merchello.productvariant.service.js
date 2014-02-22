@@ -6,7 +6,7 @@
         * @name umbraco.resources.MerchelloProductVariantService
         * @description Loads in data for data types
         **/
-    merchelloServices.MerchelloProductVariantService = function ($q, $http, umbDataFormatter, umbRequestHelper) {
+    merchelloServices.MerchelloProductVariantService = function ($q, $http, umbRequestHelper) {
 
         return {
 

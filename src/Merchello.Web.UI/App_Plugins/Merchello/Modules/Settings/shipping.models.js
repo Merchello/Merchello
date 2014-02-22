@@ -63,6 +63,21 @@
         };
     };
 
+    models.GatewayProvider = function (gatewayProviderFromServer) {
+
+        var self = this;
+
+        if (gatewayProviderFromServer == undefined) {
+            self.key = "";
+            self.name = "";
+            self.description = "";
+        } else {
+            self.key = gatewayProviderFromServer.key;
+            self.name = gatewayProviderFromServer.name;
+            self.description = gatewayProviderFromServer.description;
+        }
+    };
+
     models.ShippingMethod = function (shippingMethodFromServer) {
 
         var self = this;

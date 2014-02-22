@@ -8,12 +8,13 @@
      * @description
      * The controller for the reports list page
      */
-    controllers.ShippingController = function ($scope, $routeParams, $location, notificationsService, angularHelper, serverValidationManager, merchelloWarehouseService, merchelloSettingsService, merchelloCatalogShippingService) {
+    controllers.ShippingController = function ($scope, $routeParams, $location, notificationsService, angularHelper, serverValidationManager, merchelloWarehouseService, merchelloSettingsService, merchelloCatalogShippingService, merchelloCatalogFixedRateShippingService) {
 
         $scope.sortProperty = "name";
         $scope.availableCountries = [];
         $scope.countries = [];
         $scope.warehouses = [];
+        $scope.providers = [];
         $scope.newWarehouse = new merchello.Models.Warehouse();
         $scope.deleteWarehouse = new merchello.Models.Warehouse();
         $scope.primaryWarehouse = new merchello.Models.Warehouse();
@@ -44,6 +45,23 @@
             }, function (reason) {
 
                 notificationsService.error("Available Countries Load Failed", reason.message);
+
+            });
+
+        };
+
+        $scope.loadAllShipProviders = function () {
+
+            var promiseAllProviders = merchelloCatalogShippingService.getAllShipGatewayProviders();
+            promiseAllProviders.then(function (allProviders) {
+
+                $scope.providers = _.map(allProviders, function (providerFromServer) {
+                    return new merchello.Models.GatewayProvider(providerFromServer)
+                });
+
+            }, function (reason) {
+
+                notificationsService.error("Available Ship Providers Load Failed", reason.message);
 
             });
 
@@ -274,6 +292,7 @@
 
         $scope.loadAllAvailableCountries();
         $scope.loadWarehouses();
+        $scope.loadAllShipProviders();
 
         $scope.loaded = true;
         $scope.preValuesLoaded = true;

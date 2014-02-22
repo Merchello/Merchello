@@ -59,7 +59,6 @@
                                         <div class="form-group col-xs-6 span6" data-ng-repeat="option in product.productOptions">
                                             <label for="{{option.key}}">{{option.name}}</label>
                                             <select id="{{option.key}}" name="{{option.key}}" data-ng-model="productVariant.attributes[$index]" data-ng-options="attr.name for attr in availableChoices(option) track by attr.key" class="form-control col-xs-8 span8">
-<!--                                                <option data-ng-repeat="attribute in availableChoices(option)" value="{{attribute.key}}">{{attribute.name}}</option>-->
                                             </select>
                                         </div>
                                     </div>

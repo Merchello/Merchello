@@ -165,7 +165,7 @@
                                 <div class="form-group row-fluid provider-dropdown">
                                     <label for="provider-name">Select Your Provider</label>
                                     <div class="input-append col-xs-12 span12">
-                                        <select name="availableProviders" data-ng-model="addProviderFlyout.model" data-ng-options=""></select>
+                                        <select name="availableProviders" data-ng-model="addProviderFlyout.model" data-ng-options="p.name for p in providers track by p.key"></select>
                                     </div>
                                     <div>{{addProviderFlyout.model.name}}</div>
                                 </div>
@@ -339,6 +339,12 @@
                         <div data-ng-show="debugging">
                             <h3>Warehouse</h3>
                             <div class="jsonInfo">{{warehouses | json}}</div>
+                                                
+                            <h3>providerToAdd</h3>
+                            <div class="jsonInfo">{{providerToAdd | json}}</div>
+                                                
+                            <h3>providers</h3>
+                            <div class="jsonInfo">{{providers | json}}</div>
                                                 
                             <h3>countryToAdd</h3>
                             <div class="jsonInfo">{{countryToAdd | json}}</div>

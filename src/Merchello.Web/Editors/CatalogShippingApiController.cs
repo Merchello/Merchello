@@ -161,10 +161,13 @@ namespace Merchello.Web.Editors
         public IEnumerable<GatewayProviderDisplay> GetAllShipGatewayProviders()
         {
             var providers = MerchelloContext.Gateways.Shipping.GetAllGatewayProviders();
-            var rateTableProvider = MerchelloContext.Gateways.Shipping.ResolveByKey(providers.First().Key);
-            if (providers == null)
+            if( providers.Count() > 0 )
             {
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+                var rateTableProvider = MerchelloContext.Gateways.Shipping.ResolveByKey(providers.First().Key);
+                if (rateTableProvider == null)
+                {
+                    throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+                }
             }
 
             foreach (IGatewayProvider provider in providers)
