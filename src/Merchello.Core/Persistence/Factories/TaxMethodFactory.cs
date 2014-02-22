@@ -19,6 +19,7 @@ namespace Merchello.Core.Persistence.Factories
             var countryTaxRate = new TaxMethod(dto.ProviderKey, dto.Code)
             {
                 Key = dto.Key,
+                Name = dto.Name,
                 PercentageTaxRate = dto.PercentageTaxRate,
                 Provinces = provinces,
                 UpdateDate = dto.UpdateDate,
@@ -36,6 +37,7 @@ namespace Merchello.Core.Persistence.Factories
             return new TaxMethodDto()
                 {
                     Key = entity.Key,
+                    Name = entity.Name,
                     Code = entity.CountryCode,
                     ProviderKey = entity.ProviderKey,
                     PercentageTaxRate = entity.PercentageTaxRate,

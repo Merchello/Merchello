@@ -46,7 +46,7 @@ namespace Merchello.Core.Gateways.Taxation.FixedRate
 
 
                 return Attempt<IInvoiceTaxResult>.Succeed(
-                    new InvoiceTaxResult(baseTaxRate, taxablePrice * (baseTaxRate / 100), extendedData)
+                    new InvoiceTaxResult(_taxMethod.Name, baseTaxRate, taxablePrice * (baseTaxRate / 100), extendedData)
                     );
             }
             catch (Exception ex)

@@ -18,6 +18,10 @@ namespace Merchello.Core.Models.Rdbms
         [ForeignKey(typeof(GatewayProviderDto), Name = "FK_merchTaxMethod_merchGatewayProvider", Column = "pk")]
         public Guid ProviderKey { get; set; }
 
+        [Column("name")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public string Name { get; set; }
+
         [Column("code")]
         public string Code { get; set; }
 

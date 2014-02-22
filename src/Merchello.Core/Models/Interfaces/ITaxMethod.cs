@@ -14,6 +14,12 @@ namespace Merchello.Core.Models
         Guid ProviderKey { get; }
 
         /// <summary>
+        /// The name assoicated with the tax method (eg. VAT)
+        /// </summary>
+        [DataMember]
+        string Name { get; set; }
+
+        /// <summary>
         /// The two digit ISO Country code
         /// </summary>
         [DataMember]

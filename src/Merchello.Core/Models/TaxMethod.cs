@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Runtime.Serialization;
 using Merchello.Core.Models.EntityBase;
 
@@ -15,6 +16,7 @@ namespace Merchello.Core.Models
     [DataContract(IsReference = true)]
     internal class TaxMethod : Entity, ITaxMethod
     {
+        private string _name;
         private readonly Guid _providerKey;
         private readonly string _countryCode;
         private decimal _percentageTaxRate;
@@ -31,6 +33,7 @@ namespace Merchello.Core.Models
             PercentageTaxRate = 0;
         }
 
+        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<TaxMethod, string>(x => x.Name);
         private static readonly PropertyInfo PercentageTaxRateSelector = ExpressionHelper.GetPropertyInfo<TaxMethod, decimal>(x => x.PercentageTaxRate);
         private static readonly PropertyInfo ProvincesChangedSelector = ExpressionHelper.GetPropertyInfo<TaxMethod, ProvinceCollection<ITaxProvince>>(x => x.Provinces);
 
@@ -45,6 +48,23 @@ namespace Merchello.Core.Models
         [DataMember]
         public Guid ProviderKey {
             get { return _providerKey; }
+        }
+
+        /// <summary>
+        /// The name assoicated with the tax method
+        /// </summary>
+        [DataMember]
+        public string Name
+        {
+            get { return _name; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _name = value;
+                    return _name;
+                }, _name, NameSelector);
+            }
         }
 
         /// <summary>
