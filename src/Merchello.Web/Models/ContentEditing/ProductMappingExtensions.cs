@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Text.RegularExpressions;
 using Merchello.Core;
 using Merchello.Core.Models;
 using System;
@@ -129,6 +130,11 @@ namespace Merchello.Web.Models.ContentEditing
 
             foreach (var choice in productOptionDisplay.Choices)
             {
+                if (string.IsNullOrEmpty(choice.Sku))
+                {
+                    choice.Sku = Regex.Replace(choice.Name, "[^0-9a-zA-Z]+", "");
+                }
+
                 IProductAttribute destinationProductAttribute;
                 if (destinationProductOption.Choices.Contains(choice.Sku))
                 {
