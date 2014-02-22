@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Xml;
-using System.Xml.Linq;
 using Merchello.Core.Models.EntityBase;
 using Merchello.Core.Models.TypeFields;
 
@@ -207,6 +203,16 @@ namespace Merchello.Core.Models
                 return EnumTypeFieldConverter.LineItemType.GetTypeField(_lineItemTfKey);
             }
         }
+
+        /// <summary>
+        /// The total price of the line item (quantity * price)
+        /// </summary>
+        [IgnoreDataMember]
+        public decimal TotalPrice 
+        { 
+            get { return _price *_quantity; }
+        }
+
 
         /// <summary>
         /// True/false indicating whether or not this line item has been exported to an external system

@@ -107,7 +107,7 @@ namespace Merchello.Core.Models
         /// The total invoice amount
         /// </summary>
         [DataMember]
-        decimal Total { get; }
+        decimal Total { get; set; }
 
 
     }

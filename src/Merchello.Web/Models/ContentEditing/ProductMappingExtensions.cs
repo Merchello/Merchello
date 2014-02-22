@@ -130,6 +130,8 @@ namespace Merchello.Web.Models.ContentEditing
 
             foreach (var choice in productOptionDisplay.Choices)
             {
+                // Sets the sku if it is empty - fixes M-170
+                // http://issues.merchello.com/youtrack/issue/M-170
                 if (string.IsNullOrEmpty(choice.Sku))
                 {
                     choice.Sku = Regex.Replace(choice.Name, "[^0-9a-zA-Z]+", "");

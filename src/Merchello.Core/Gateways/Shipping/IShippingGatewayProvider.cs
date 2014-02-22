@@ -8,6 +8,19 @@ namespace Merchello.Core.Gateways.Shipping
     /// </summary>
     public interface IShippingGatewayProvider : IGateway
     {
+
+
+        /// <summary>
+        /// Creates an instance of a ship method (T) without persisting it to the database
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>
+        /// 
+        /// ShipMethods should be unique with respect to <see cref="IShipCountry"/> and <see cref="IGatewayResource"/>
+        /// 
+        /// </remarks>
+        IGatewayShipMethod CreateShipMethod(IGatewayResource gatewayResource, IShipCountry shipCountry, string name);
+
         /// <summary>
         /// Saves a shipmethod
         /// </summary>
@@ -26,6 +39,11 @@ namespace Merchello.Core.Gateways.Shipping
         /// <returns></returns>
         IEnumerable<IGatewayShipMethod> GetActiveShipMethods(IShipCountry shipCountry);
 
+        /// <summary>
+        /// Deletes an Active ShipMethod
+        /// </summary>
+        /// <param name="gatewayShipMethod"></param>
+        void DeleteShipMethod(IGatewayShipMethod gatewayShipMethod);
 
         /// <summary>
         /// Returns a collection of available <see cref="IGatewayShipMethod"/> associated by this provider for a given shipment

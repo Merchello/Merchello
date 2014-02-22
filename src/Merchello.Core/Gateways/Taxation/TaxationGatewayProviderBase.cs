@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Umbraco.Core.Cache;
+using Umbraco.Core.Logging;
 
 namespace Merchello.Core.Gateways.Taxation
 {
@@ -16,6 +17,62 @@ namespace Merchello.Core.Gateways.Taxation
         protected TaxationGatewayProviderBase(IGatewayProviderService gatewayProviderService, IGatewayProvider gatewayProvider, IRuntimeCacheProvider runtimeCacheProvider) 
             : base(gatewayProviderService, gatewayProvider, runtimeCacheProvider)
         { }
+
+        /// <summary>
+        /// Attempts to create a <see cref="ITaxMethod"/> for a given provider and country.  If the provider already 
+        /// defines a tax rate for the country, the creation fails.
+        /// </summary>
+        /// <param name="countryCode">The two character ISO country code</param>
+        public virtual ITaxMethod CreateTaxMethod(string countryCode)
+        {
+            return CreateTaxMethod(countryCode, 0);
+        }
+
+
+        /// <summary>
+        /// Creates a <see cref="ITaxMethod"/>
+        /// </summary>
+        /// <param name="countryCode">The two letter ISO Country Code</param>
+        /// <param name="taxPercentageRate">The decimal percentage tax rate</param>
+        /// <returns>The <see cref="ITaxMethod"/></returns>
+        public ITaxMethod CreateTaxMethod(string countryCode, decimal taxPercentageRate)
+        {
+            var attempt = GatewayProviderService.CreateTaxMethodWithKey(GatewayProvider.Key, countryCode, taxPercentageRate);
+        
+            if (!attempt.Success)
+            {
+                LogHelper.Error<TaxationGatewayProviderBase>("CreateTaxMethod failed.", attempt.Exception);
+                throw attempt.Exception;
+            }
+
+            return attempt.Result;
+        }
+
+        /// <summary>
+        /// Saves a <see cref="ITaxMethod"/>
+        /// </summary>
+        /// <param name="taxMethod">The <see cref="ITaxMethod"/> to be saved</param>
+        public void SaveTaxMethod(ITaxMethod taxMethod)
+        {
+            GatewayProviderService.Save(taxMethod);
+        }
+
+        /// <summary>
+        /// Deletes a <see cref="ITaxMethod"/>
+        /// </summary>
+        /// <param name="taxMethod">The <see cref="ITaxMethod"/> to be deleted</param>
+        public void DeleteTaxMethod(ITaxMethod taxMethod)
+        {
+            GatewayProviderService.Delete(taxMethod);
+        }
+
+        /// <summary>
+        /// Deletes all <see cref="ITaxMethod"/>s associated with the provider
+        /// </summary>
+        internal void DeleteAllTaxMethods()
+        {
+            foreach(var taxMethod in TaxMethods) DeleteTaxMethod(taxMethod);
+        }
 
         /// <summary>
         /// Calculates the tax amount for an invoice

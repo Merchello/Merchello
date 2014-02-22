@@ -124,22 +124,40 @@ namespace Merchello.Core.Models
 
             if (!attempt.Success)
             {
-                LogHelper.Error<ILineItem>("Failed instiating a IShipmentRateQuote from ExtendedDataCollection", attempt.Exception);
+                LogHelper.Error<ILineItem>("Failed instiating a line item from shipmentRateQuote", attempt.Exception);
                 throw attempt.Exception;
             }
             return attempt.Result as T;
         }
 
+        /// <summary>
+        /// Creates a line item of a particular type for a invoiceTaxResult
+        /// </summary>
+        /// <typeparam name="T">The type of the line item to be created</typeparam>
+        /// <param name="invoiceTaxResult">The <see cref="IInvoiceTaxResult"/> to be converted to a line item</param>
+        /// <returns>A <see cref="ILineItem"/> representing the <see cref="IInvoiceTaxResult"/></returns>
+        public static T AsLineItemOf<T>(this IInvoiceTaxResult invoiceTaxResult) where T : LineItemBase
+        {
+            var ctrValues = new object[]
+            {
+                EnumTypeFieldConverter.LineItemType.Tax.TypeKey,
+                invoiceTaxResult.Name,
+                "Tax", // TODO this may not e unqiue (SKU),
+                1,
+                invoiceTaxResult.TaxAmount,
+                invoiceTaxResult.ExtendedData
+            };
 
-        //public static T AsLineItemOf<T>(this IInvoiceTaxResult invoiceTaxResult) where T : LineItemBase
-        //{
-        //    var ctrValues = new object[]
-        //    {
-        //        EnumTypeFieldConverter.LineItemType.Tax.TypeKey,
-        //        invoiceTaxResult.Name,
+            var attempt = ActivatorHelper.CreateInstance<LineItemBase>(typeof (T).FullName, ctrValues);
 
-        //    };
-        //}
+            if (!attempt.Success)
+            {
+                LogHelper.Error<ILineItem>("Failed instiating a line item from invoiceTaxResult", attempt.Exception);
+                throw attempt.Exception;
+            }
+
+            return attempt.Result as T;
+        }
 
 
     }

@@ -8,6 +8,32 @@ namespace Merchello.Core.Gateways.Taxation
     /// </summary>
     public interface ITaxationGatewayProvider : IGateway
     {
+        /// <summary>
+        /// Attempts to create a <see cref="ITaxMethod"/> for a given provider and country.  If the provider already 
+        /// defines a tax rate for the country, the creation fails.
+        /// </summary>
+        /// <param name="countryCode">The two character ISO country code</param>
+        ITaxMethod CreateTaxMethod(string countryCode);
+
+        /// <summary>
+        /// Creates a <see cref="ITaxMethod"/>
+        /// </summary>
+        /// <param name="countryCode">The two letter ISO Country Code</param>
+        /// <param name="taxPercentageRate">The decimal percentage tax rate</param>
+        /// <returns>The <see cref="ITaxMethod"/></returns>
+        ITaxMethod CreateTaxMethod(string countryCode, decimal taxPercentageRate);
+
+        /// <summary>
+        /// Saves a <see cref="ITaxMethod"/>
+        /// </summary>
+        /// <param name="taxMethod">The <see cref="ITaxMethod"/> to be saved</param>
+        void SaveTaxMethod(ITaxMethod taxMethod);
+
+        /// <summary>
+        /// Deletes a <see cref="ITaxMethod"/>
+        /// </summary>
+        /// <param name="taxMethod">The <see cref="ITaxMethod"/> to be deleted</param>
+        void DeleteTaxMethod(ITaxMethod taxMethod);
 
         /// <summary>
         /// Calculates the tax amount for an invoice

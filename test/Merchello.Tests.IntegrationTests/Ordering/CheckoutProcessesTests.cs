@@ -3,6 +3,7 @@ using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Gateways.Shipping.FixedRate;
+using Merchello.Core.Gateways.Taxation.FixedRate;
 using Merchello.Core.Models;
 using Merchello.Tests.IntegrationTests.TestHelpers;
 using Merchello.Web;
@@ -97,6 +98,21 @@ namespace Merchello.Tests.IntegrationTests.Ordering
             #endregion // GatewayProvider
 
             #endregion  // Shipping
+
+            #region Settings -> Taxation
+
+            var provider = MerchelloContext.Current.Gateways.Taxation.ResolveByKey(Constants.ProviderKeys.Taxation.FixedRateTaxationProviderKey);
+            
+            provider.DeleteAllTaxMethods();
+
+            var taxMethod = provider.CreateTaxMethod("US", 0);
+
+            taxMethod.Provinces["WA"].PercentRateAdjustment = 8.7M;
+
+            provider.SaveTaxMethod(taxMethod);
+    
+            
+            #endregion
 
             #endregion  // Back Office
 
@@ -304,6 +320,7 @@ namespace Merchello.Tests.IntegrationTests.Ordering
 
             // generate an invoice to preview
             var invoice = CurrentCustomer.Basket().OrderPreparation().GenerateInvoice();
+            WriteInvoiceInfoToConsole(invoice);
 
             #endregion // completed checkout preparation
 
@@ -319,6 +336,22 @@ namespace Merchello.Tests.IntegrationTests.Ordering
             Console.WriteLine("Total basket price: {0}", CurrentCustomer.Basket().TotalBasketPrice);
             Console.WriteLine("Total item count: {0}", CurrentCustomer.Basket().TotalItemCount);
             
+        }
+
+        private void WriteInvoiceInfoToConsole(IInvoice invoice)
+        {
+            Console.WriteLine("----------- Invoice Item Info ---------------------");
+            foreach (var lineItem in invoice.Items)
+            {
+                Console.WriteLine("{0} - Quantity: {1} - Price: {2} = Total : {3} (Tax: {4})", lineItem.Name, lineItem.Quantity, lineItem.Price, lineItem.TotalPrice, lineItem.ExtendedData.GetValue(Constants.ExtendedDataKeys.LineItemTaxAmount));
+            }
+            Console.WriteLine("");
+
+            Console.WriteLine("Total invoice price: {0}", invoice.Total);
+
+            Console.WriteLine("Tax break down");
+            Console.WriteLine("Base tax: {0}", invoice.Items.First(x => x.LineItemType == LineItemType.Tax).ExtendedData.GetValue(Constants.ExtendedDataKeys.BaseTaxRate));
+            Console.WriteLine("Province tax (WA): {0}", invoice.Items.First(x => x.LineItemType == LineItemType.Tax).ExtendedData.GetValue(Constants.ExtendedDataKeys.ProviceTaxRate));
         }
 
         private void WriteShipRateQuote(IShipmentRateQuote srq)

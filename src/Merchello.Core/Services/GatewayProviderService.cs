@@ -360,6 +360,15 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
+        /// Deletes a <see cref="ITaxMethod"/>
+        /// </summary>
+        /// <param name="taxMethod">The <see cref="ITaxMethod"/> to be deleted</param>
+        public void Delete(ITaxMethod taxMethod)
+        {
+            _taxMethodService.Delete(taxMethod);
+        }
+
+        /// <summary>
         /// Gets a collection of <see cref="ITaxMethod"/> for a given TaxationGatewayProvider
         /// </summary>
         /// <param name="providerKey">The unique 'key' of the TaxationGatewayProvider</param>

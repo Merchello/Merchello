@@ -259,9 +259,9 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         /// Saves a product record to the database and returns and instance of <see cref="IProduct"/> represents that record
         /// </summary>
         /// <returns><see cref="IProduct"/></returns>
-        public IProduct MakeExistingProduct(bool shippable = true, decimal weight = 0, decimal price = 0)
+        public IProduct MakeExistingProduct(bool shippable = true, decimal weight = 0, decimal price = 0, bool taxable = true)
         {
-            var product = MockProductDataMaker.MockProductForInserting(shippable, weight, price);            
+            var product = MockProductDataMaker.MockProductForInserting(shippable, weight, price, taxable);            
             ProductService.Save(product);
             product.AddToCatalogInventory(WarehouseCatalog);
             ProductService.Save(product);

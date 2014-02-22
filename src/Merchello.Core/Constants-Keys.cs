@@ -29,7 +29,7 @@ namespace Merchello.Core
 
             public static class Taxation
             {
-                public static Guid FlatRateTaxationProviderKey = new Guid("A4AD4331-C278-4231-8607-925E0839A6CD");
+                public static Guid FixedRateTaxationProviderKey = new Guid("A4AD4331-C278-4231-8607-925E0839A6CD");
             }
         }
 

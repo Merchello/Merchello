@@ -112,7 +112,7 @@ namespace Merchello.Core.Persistence.Migrations.Initial
             var extended = new ExtendedDataCollection();
 
             _database.Insert("merchGatewayProvider", "Key", new GatewayProviderDto() { Key = Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey, Name = "Fixed Rate Shipping Provider", ProviderTfKey = EnumTypeFieldConverter.GatewayProvider.GetTypeField(GatewayProviderType.Shipping).TypeKey, ExtendedData = new ExtendedDataCollection().SerializeToXml(), EncryptExtendedData = false, TypeFullName = typeof(FixedRateShippingGatewayProvider).FullName + ", Merchello.Core", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
-            _database.Insert("merchGatewayProvider", "Key", new GatewayProviderDto() { Key = Constants.ProviderKeys.Taxation.FlatRateTaxationProviderKey, Name = "Fixed Rate Tax Provider", ProviderTfKey = EnumTypeFieldConverter.GatewayProvider.GetTypeField(GatewayProviderType.Taxation).TypeKey, ExtendedData = new ExtendedDataCollection().SerializeToXml(), EncryptExtendedData = false, TypeFullName = typeof(FixedRateTaxationGatewayProvider).FullName + ", Merchello.Core", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchGatewayProvider", "Key", new GatewayProviderDto() { Key = Constants.ProviderKeys.Taxation.FixedRateTaxationProviderKey, Name = "Fixed Rate Tax Provider", ProviderTfKey = EnumTypeFieldConverter.GatewayProvider.GetTypeField(GatewayProviderType.Taxation).TypeKey, ExtendedData = new ExtendedDataCollection().SerializeToXml(), EncryptExtendedData = false, TypeFullName = typeof(FixedRateTaxationGatewayProvider).FullName + ", Merchello.Core", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
         }
 
         private void CreateStoreSettingData()
