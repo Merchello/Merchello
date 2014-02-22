@@ -69,17 +69,17 @@
             var newChoice = new merchello.Models.ProductAttribute();
             newChoice.name = name;
             newChoice.sortOrder = self.choices.length + 1;
-            newChoice.sku = newChoice.sortOrder;
+            //newChoice.sku = newChoice.sortOrder;
             newChoice.optionKey = self.key;
 
-            for (var i = 0; i < self.choices.length; i++)
-            {
-                if (newChoice.sku == self.choices[i].sku)
-                {
-                    newChoice.sku = newChoice.sku + 1;
-                    i = -1;
-                }
-            }
+            //for (var i = 0; i < self.choices.length; i++)
+            //{
+            //    if (newChoice.sku == self.choices[i].sku)
+            //    {
+            //        newChoice.sku = newChoice.sku + 1;
+            //        i = -1;
+            //    }
+            //}
 
             self.choices.push(newChoice);
         };
