@@ -10,11 +10,11 @@ namespace Merchello.Tests.Base.DataMakers
     /// </summary>
     public class MockPaymentDataMaker : MockDataMakerBase
     {
-        public static IPayment PaymentForInserting(ICustomer customer, Guid providerKey, PaymentMethodType paymentMethodType, decimal amount)
+        public static IPayment PaymentForInserting(Guid paymentMethodKey, PaymentMethodType paymentMethodType, decimal amount, Guid? customerKey = null)
         {
-            var payment = new Payment(customer, paymentMethodType, amount)
+            var payment = new Payment(paymentMethodType, amount, paymentMethodKey)
             {
-                ProviderKey = providerKey
+                CustomerKey = customerKey
             };
 
             return payment;

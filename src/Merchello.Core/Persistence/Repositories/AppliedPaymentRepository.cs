@@ -6,43 +6,39 @@ using Merchello.Core.Models.EntityBase;
 using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Persistence.Factories;
 using Merchello.Core.Persistence.Querying;
+using Merchello.Core.Persistence.UnitOfWork;
 using Umbraco.Core;
 using Umbraco.Core.Cache;
 using Umbraco.Core.Persistence;
 using Umbraco.Core.Persistence.Querying;
-using IDatabaseUnitOfWork = Merchello.Core.Persistence.UnitOfWork.IDatabaseUnitOfWork;
 
 namespace Merchello.Core.Persistence.Repositories
 {
-    internal class PaymentRepository : MerchelloPetaPocoRepositoryBase<IPayment>, IPaymentRepository
+    internal class AppliedPaymentRepository : MerchelloPetaPocoRepositoryBase<IAppliedPayment>
     {
-
-        public PaymentRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache)
+        public AppliedPaymentRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache) 
             : base(work, cache)
         {
         }
 
-        #region Overrides of RepositoryBase<IPayment>
-
-
-        protected override IPayment PerformGet(Guid key)
+        protected override IAppliedPayment PerformGet(Guid key)
         {
             var sql = GetBaseQuery(false)
                 .Where(GetBaseWhereClause(), new { Key = key });
 
-            var dto = Database.Fetch<PaymentDto>(sql).FirstOrDefault();
+            var dto = Database.Fetch<AppliedPaymentDto>(sql).FirstOrDefault();
 
             if (dto == null)
                 return null;
 
-            var factory = new PaymentFactory();
+            var factory = new AppliedPaymentFactory();
 
             var payment = factory.BuildEntity(dto);
 
             return payment;
         }
 
-        protected override IEnumerable<IPayment> PerformGetAll(params Guid[] keys)
+        protected override IEnumerable<IAppliedPayment> PerformGetAll(params Guid[] keys)
         {
             if (keys.Any())
             {
@@ -53,8 +49,8 @@ namespace Merchello.Core.Persistence.Repositories
             }
             else
             {
-                var factory = new PaymentFactory();
-                var dtos = Database.Fetch<PaymentDto>(GetBaseQuery(false));
+                var factory = new AppliedPaymentFactory();
+                var dtos = Database.Fetch<AppliedPaymentDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
                     yield return factory.BuildEntity(dto);
@@ -62,40 +58,46 @@ namespace Merchello.Core.Persistence.Repositories
             }
         }
 
-        #endregion
+        protected override IEnumerable<IAppliedPayment> PerformGetByQuery(IQuery<IAppliedPayment> query)
+        {
+            var sqlClause = GetBaseQuery(false);
+            var translator = new SqlTranslator<IAppliedPayment>(sqlClause, query);
+            var sql = translator.Translate();
 
-        #region Overrides of MerchelloPetaPocoRepositoryBase<IPayment>
+            var dtos = Database.Fetch<PaymentDto>(sql);
+
+            return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
+        }
 
         protected override Sql GetBaseQuery(bool isCount)
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-               .From<PaymentDto>();
+               .From<AppliedPaymentDto>();
 
             return sql;
         }
 
         protected override string GetBaseWhereClause()
         {
-            return "merchPayment.pk = @Key";
+            return "merchAppliedPayment.pk = @Key";
         }
 
         protected override IEnumerable<string> GetDeleteClauses()
         {
             var list = new List<string>
                 {
-                    "DELETE FROM merchAppliedPayment WHERE paymentKey = @Key",
-                    "DELETE FROM merchPayment WHERE pk = @Key"
+                    "DELETE FROM merchAppliedPayment WHERE paymentKey = @Key"
                 };
 
             return list;
         }
 
-        protected override void PersistNewItem(IPayment entity)
+        protected override void PersistNewItem(IAppliedPayment entity)
         {
             ((Entity)entity).AddingEntity();
 
-            var factory = new PaymentFactory();
+            var factory = new AppliedPaymentFactory();
             var dto = factory.BuildDto(entity);
 
             Database.Insert(dto);
@@ -103,11 +105,11 @@ namespace Merchello.Core.Persistence.Repositories
             entity.ResetDirtyProperties();
         }
 
-        protected override void PersistUpdatedItem(IPayment entity)
+        protected override void PersistUpdatedItem(IAppliedPayment entity)
         {
             ((Entity)entity).UpdatingEntity();
 
-            var factory = new PaymentFactory();
+            var factory = new AppliedPaymentFactory();
             var dto = factory.BuildDto(entity);
 
             Database.Update(dto);
@@ -115,7 +117,7 @@ namespace Merchello.Core.Persistence.Repositories
             entity.ResetDirtyProperties();
         }
 
-        protected override void PersistDeletedItem(IPayment entity)
+        protected override void PersistDeletedItem(IAppliedPayment entity)
         {
             var deletes = GetDeleteClauses();
             foreach (var delete in deletes)
@@ -123,23 +125,5 @@ namespace Merchello.Core.Persistence.Repositories
                 Database.Execute(delete, new { entity.Key });
             }
         }
-
-
-        protected override IEnumerable<IPayment> PerformGetByQuery(IQuery<IPayment> query)
-        {
-            var sqlClause = GetBaseQuery(false);
-            var translator = new SqlTranslator<IPayment>(sqlClause, query);
-            var sql = translator.Translate();
-
-            var dtos = Database.Fetch<PaymentDto>(sql);
-
-            return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
-
-        }
-
-
-        #endregion
-
-
     }
 }

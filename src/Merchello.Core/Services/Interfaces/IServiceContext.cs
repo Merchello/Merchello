@@ -27,6 +27,11 @@
         IItemCacheService ItemCacheService { get; }
 
         /// <summary>
+        /// Gets the <see cref="IPaymentService"/>
+        /// </summary>
+        IPaymentService PaymentService { get; }
+
+        /// <summary>
         /// Gets the <see cref="IProductService"/>
         /// </summary>
         IProductService ProductService { get; }

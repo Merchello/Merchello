@@ -20,8 +20,10 @@ namespace Merchello.Core.Models.Rdbms
         [NullSetting(NullSetting = NullSettings.Null)]
         public Guid? CustomerKey { get; set; }
         
-        [Column("providerKey")]
-        public Guid ProviderKey { get; set; }
+        [Column("paymentMethodKey")]
+        [ForeignKey(typeof(PaymentMethodDto), Name = "FK_merchPayment_merchPaymentMethod", Column = "pk")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public Guid? PaymentMethodKey { get; set; }
 
         [Column("paymentTfKey")]
         public Guid PaymentTfKey { get; set; }
@@ -59,9 +61,6 @@ namespace Merchello.Core.Models.Rdbms
         [Column("createDate")]
         [Constraint(Default = "getdate()")]
         public DateTime CreateDate { get; set; }
-
-        [ResultColumn]
-        public CustomerDto CustomerDto { get; set; }
 
     }
 }

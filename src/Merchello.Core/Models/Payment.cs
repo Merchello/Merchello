@@ -12,8 +12,8 @@ namespace Merchello.Core.Models
     public class Payment : Entity, IPayment
     {
         
-        private Guid _customerKey;
-        private Guid _providerKey;
+        private Guid? _customerKey;
+        private Guid? _paymentMethodKey;
         private Guid _paymentTypeFieldKey;
         private string _paymentMethodName;
         private string _referenceNumber;
@@ -22,22 +22,26 @@ namespace Merchello.Core.Models
         private bool _collected;
         private bool _exported;
 
-        internal Payment(ICustomer customer, PaymentMethodType paymentMethodType, decimal amount)
-            : this(customer, EnumTypeFieldConverter.PaymentMethod.GetTypeField(paymentMethodType).TypeKey, amount)
+        internal Payment(PaymentMethodType paymentMethodType, decimal amount)
+            : this(paymentMethodType, amount, null)
         { }
 
-        internal Payment (ICustomer customer, Guid paymentTypeFieldKey, decimal amount)  
-        {
-            // customer can make a payment without an invoice (credit) so invoice can be null
-            Mandate.ParameterNotNull(customer, "customer");
+        internal Payment(PaymentMethodType paymentMethodType, decimal amount, Guid? paymentMethodKey)
+            : this(EnumTypeFieldConverter.PaymentMethod.GetTypeField(paymentMethodType).TypeKey, amount, paymentMethodKey)
+        { }
 
-            _customerKey = customer.Key;            
+        internal Payment(Guid paymentTypeFieldKey, decimal amount, Guid? paymentMethodKey)  
+        {
+            Mandate.ParameterCondition(!Guid.Empty.Equals(paymentTypeFieldKey), "paymentTypeFieldKey");
+            
+
             _amount = amount;
+            _paymentMethodKey = paymentMethodKey;
             _paymentTypeFieldKey = paymentTypeFieldKey;
         }        
 
-        private static readonly PropertyInfo CustomerKeySelector = ExpressionHelper.GetPropertyInfo<Payment, Guid>(x => x.CustomerKey); 
-        private static readonly PropertyInfo ProviderKeySelector = ExpressionHelper.GetPropertyInfo<Payment, Guid>(x => x.ProviderKey);  
+        private static readonly PropertyInfo CustomerKeySelector = ExpressionHelper.GetPropertyInfo<Payment, Guid?>(x => x.CustomerKey); 
+        private static readonly PropertyInfo PaymentMethodKeySelector = ExpressionHelper.GetPropertyInfo<Payment, Guid?>(x => x.PaymentMethodKey);  
         private static readonly PropertyInfo PaymentTypeFieldKeySelector = ExpressionHelper.GetPropertyInfo<Payment, Guid>(x => x.PaymentTypeFieldKey);  
         private static readonly PropertyInfo PaymentMethodNameSelector = ExpressionHelper.GetPropertyInfo<Payment, string>(x => x.PaymentMethodName);  
         private static readonly PropertyInfo ReferenceNumberSelector = ExpressionHelper.GetPropertyInfo<Payment, string>(x => x.ReferenceNumber);  
@@ -50,7 +54,7 @@ namespace Merchello.Core.Models
         /// The customerKey associated with the Payment
         /// </summary>
         [IgnoreDataMember]
-        public Guid CustomerKey
+        public Guid? CustomerKey
         {
             get { return _customerKey; }
             internal set
@@ -65,19 +69,19 @@ namespace Merchello.Core.Models
    
 
         /// <summary>
-        /// The provider key associated with the fulfillment provider for this payment
+        /// The payment method key associated with the fulfillment provider for this payment
         /// </summary>
         [DataMember]
-        public Guid ProviderKey
+        public Guid? PaymentMethodKey
         {
-            get { return _providerKey; }
+            get { return _paymentMethodKey; }
             set 
             { 
                 SetPropertyValueAndDetectChanges(o =>
                 {
-                    _providerKey = value;
-                    return _providerKey;
-                }, _providerKey, ProviderKeySelector); 
+                    _paymentMethodKey = value;
+                    return _paymentMethodKey;
+                }, _paymentMethodKey, PaymentMethodKeySelector); 
             }
         }
     

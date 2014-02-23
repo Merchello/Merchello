@@ -1,0 +1,249 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using Merchello.Core.Models;
+using Merchello.Core.Models.TypeFields;
+using Merchello.Core.Persistence;
+using Merchello.Core.Persistence.Querying;
+using Merchello.Core.Persistence.UnitOfWork;
+using Umbraco.Core;
+using Umbraco.Core.Events;
+
+namespace Merchello.Core.Services
+{
+    /// <summary>
+    /// Represents the PaymentService
+    /// </summary>
+    public class PaymentService : IPaymentService
+    {
+        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
+        private readonly RepositoryFactory _repositoryFactory;
+
+        private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+
+         public PaymentService()
+            : this(new RepositoryFactory())
+        { }
+
+        public PaymentService(RepositoryFactory repositoryFactory)
+            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory)
+        { }
+
+        public PaymentService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
+        {
+            Mandate.ParameterNotNull(provider, "provider");
+            Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
+
+            _uowProvider = provider;
+            _repositoryFactory = repositoryFactory;
+        }
+
+        /// <summary>
+        /// Creates and saves a payment
+        /// </summary>
+        /// <param name="paymentMethodType">The type of the paymentmethod</param>
+        /// <param name="amount">The amount of the payment</param>
+        /// <param name="paymentMethodKey">The optional paymentMethodKey</param>
+        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        /// <returns>Returns <see cref="IPayment"/></returns>
+        public IPayment CreatePaymentWithKey(PaymentMethodType paymentMethodType, decimal amount, Guid? paymentMethodKey, bool raiseEvents = true)
+        {
+            return CreatePaymentWithKey(EnumTypeFieldConverter.PaymentMethod.GetTypeField(paymentMethodType).TypeKey, amount, paymentMethodKey);
+        }
+
+        /// <summary>
+        /// Creates and saves a payment
+        /// </summary>
+        /// <param name="paymentTfKey">The payment typefield key</param>
+        /// <param name="amount">The amount of the payment</param>
+        /// <param name="paymentMethodKey">The optional paymentMethodKey</param>
+        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        /// <returns>Returns <see cref="IPayment"/></returns>
+        internal IPayment CreatePaymentWithKey(Guid paymentTfKey, decimal amount, Guid? paymentMethodKey, bool raiseEvents = true)
+        {
+            Mandate.ParameterCondition(!Guid.Empty.Equals(paymentTfKey), "paymentTfKey");
+
+
+            var payment = new Payment(paymentTfKey, amount, paymentMethodKey);
+
+            if (raiseEvents)
+                if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<IPayment>(payment), this))
+                {
+                    payment.WasCancelled = true;
+                    return payment;
+                }
+
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreatePaymentRepository(uow))
+                {
+                    repository.AddOrUpdate(payment);
+                    uow.Commit();
+                }
+            }
+
+            if (raiseEvents) Created.RaiseEvent(new Events.NewEventArgs<IPayment>(payment), this);
+
+            return payment;
+        }
+
+        /// <summary>
+        /// Saves a single <see cref="IPaymentMethod"/>
+        /// </summary>
+        /// <param name="payment">The <see cref="IPayment"/> to be saved</param>
+        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        public void Save(IPayment payment, bool raiseEvents = true)
+        {
+            if (raiseEvents)
+                if (Saving.IsRaisedEventCancelled(new SaveEventArgs<IPayment>(payment), this))
+                {
+                    ((Payment)payment).WasCancelled = true;
+                    return;
+                }
+
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreatePaymentRepository(uow))
+                {
+                    repository.AddOrUpdate(payment);
+                    uow.Commit();
+                }
+            }
+
+            if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IPayment>(payment), this);
+        }
+
+        /// <summary>
+        /// Saves a collection of <see cref="IPayment"/>
+        /// </summary>
+        /// <param name="payments">A collection of <see cref="IPayment"/> to be saved</param>
+        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        public void Save(IEnumerable<IPayment> payments, bool raiseEvents = true)
+        {
+            var paymentsArray = payments as IPayment[] ?? payments.ToArray();
+            if (raiseEvents) Saving.RaiseEvent(new SaveEventArgs<IPayment>(paymentsArray), this);
+
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreatePaymentRepository(uow))
+                {
+                    foreach (var paymentMethod in paymentsArray)
+                    {
+                        repository.AddOrUpdate(paymentMethod);
+                    }
+                    uow.Commit();
+                }
+            }
+
+            if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IPayment>(paymentsArray), this);
+        }
+
+        /// <summary>
+        /// Deletes a single <see cref="IPayment"/>
+        /// </summary>
+        /// <param name="payment">The <see cref="IPayment"/> to be deleted</param>
+        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        public void Delete(IPayment payment, bool raiseEvents = true)
+        {
+            if (raiseEvents)
+                if (Deleting.IsRaisedEventCancelled(new DeleteEventArgs<IPayment>(payment), this))
+                {
+                    ((Payment)payment).WasCancelled = true;
+                    return;
+                }
+
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreatePaymentRepository(uow))
+                {
+                    repository.Delete(payment);
+                    uow.Commit();
+                }
+            }
+
+            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<IPayment>(payment), this);
+        }
+
+        /// <summary>
+        /// Gets a <see cref="IPayment"/>
+        /// </summary>
+        /// <param name="key">The unique 'key' (Guid) of the <see cref="IPayment"/></param>
+        /// <returns><see cref="IPaymentMethod"/></returns>
+        public IPayment GetByKey(Guid key)
+        {
+            using (var repository = _repositoryFactory.CreatePaymentRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.Get(key);
+            }
+        }
+
+        /// <summary>
+        /// Gets a collection of <see cref="IPayment"/> for a given PaymentGatewayProvider
+        /// </summary>
+        /// <param name="paymentMethodKey">The unique 'key' of the PaymentGatewayProvider</param>
+        /// <returns>A collection of <see cref="IPayment"/></returns>
+        public IEnumerable<IPayment> GetPaymentsByPaymentMethodKey(Guid? paymentMethodKey)
+        {
+            using (var repository = _repositoryFactory.CreatePaymentRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Query<IPayment>.Builder.Where(x => x.PaymentMethodKey == paymentMethodKey);
+
+                return repository.GetByQuery(query);
+            }
+        }
+
+        /// <summary>
+        /// Gets a collection of <see cref="IPayment"/> for a given invoice
+        /// </summary>
+        /// <param name="invoiceKey">The unique 'key' of the invoice</param>
+        /// <returns>A collection of <see cref="IPayment"/></returns>
+        public IEnumerable<IPayment> GetPaymentsForInvoice(Guid invoiceKey)
+        {
+            using (var repository = _repositoryFactory.CreatePaymentRepository(_uowProvider.GetUnitOfWork()))
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        #region Event Handlers
+
+        /// <summary>
+        /// Occurs after Create
+        /// </summary>
+        public static event TypedEventHandler<IPaymentService, Events.NewEventArgs<IPayment>> Creating;
+
+
+        /// <summary>
+        /// Occurs after Create
+        /// </summary>
+        public static event TypedEventHandler<IPaymentService, Events.NewEventArgs<IPayment>> Created;
+
+        /// <summary>
+        /// Occurs before Save
+        /// </summary>
+        public static event TypedEventHandler<IPaymentService, SaveEventArgs<IPayment>> Saving;
+
+        /// <summary>
+        /// Occurs after Save
+        /// </summary>
+        public static event TypedEventHandler<IPaymentService, SaveEventArgs<IPayment>> Saved;
+
+        /// <summary>
+        /// Occurs before Delete
+        /// </summary>		
+        public static event TypedEventHandler<IPaymentService, DeleteEventArgs<IPayment>> Deleting;
+
+        /// <summary>
+        /// Occurs after Delete
+        /// </summary>
+        public static event TypedEventHandler<IPaymentService, DeleteEventArgs<IPayment>> Deleted;
+
+        #endregion
+
+    }
+}
