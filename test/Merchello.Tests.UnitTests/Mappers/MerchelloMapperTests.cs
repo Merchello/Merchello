@@ -235,6 +235,24 @@ namespace Merchello.Tests.UnitTests.Mappers
         }
 
         /// <summary>
+        /// Test to verify <see cref="MerchelloMapper"/> correctly maps IPaymentMethod to PaymentMethodMapper
+        /// </summary>
+        [Test]
+        public void Mapper_Resolves_IPayment_To_PaymentMethodMapper()
+        {
+
+            //// Arrage
+            var expected = typeof(PaymentMethodMapper);
+
+            //// Act
+            var resolved = MerchelloMapper.Current.ResolveByType(typeof(IPaymentMethod));
+
+            //// Assert
+            Assert.IsTrue(resolved.Success);
+            Assert.AreSame(expected, resolved.Result.GetType());
+        }
+
+        /// <summary>
         /// Test to verify <see cref="MerchelloMapper"/> correctly maps IProduct to ProductMapper
         /// </summary>
         [Test]

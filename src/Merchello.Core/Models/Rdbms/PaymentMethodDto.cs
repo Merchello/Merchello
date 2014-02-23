@@ -4,10 +4,10 @@ using Umbraco.Core.Persistence.DatabaseAnnotations;
 
 namespace Merchello.Core.Models.Rdbms
 {
-    [TableName("merchTaxMethod")]
+    [TableName("merchPaymentMethod")]
     [PrimaryKey("pk", autoIncrement = false)]
     [ExplicitColumns]
-    internal class TaxMethodDto
+    internal class PaymentMethodDto
     {
         [Column("pk")]
         [PrimaryKeyColumn(AutoIncrement = false)]
@@ -15,24 +15,18 @@ namespace Merchello.Core.Models.Rdbms
         public Guid Key { get; set; }
 
         [Column("providerKey")]
-        [ForeignKey(typeof(GatewayProviderDto), Name = "FK_merchTaxMethod_merchGatewayProvider", Column = "pk")]
+        [ForeignKey(typeof(GatewayProviderDto), Name = "FK_merchPaymentMethod_merchGatewayProvider", Column = "pk")]
         public Guid ProviderKey { get; set; }
 
         [Column("name")]
-        [NullSetting(NullSetting = NullSettings.Null)]
         public string Name { get; set; }
 
-        [Column("countryCode")]
-        public string CountryCode { get; set; }
-
-        [Column("percentageTaxRate")]
-        [Constraint(Default = "0")]
-        public decimal PercentageTaxRate { get; set; }        
-
-        [Column("provinceData")]
+        [Column("description")]
         [NullSetting(NullSetting = NullSettings.Null)]
-        [SpecialDbType(SpecialDbTypes.NTEXT)]
-        public string ProvinceData { get; set; }
+        public string Description { get; set; }
+
+        [Column("paymentCode")]
+        public string PaymentCode { get; set; }
 
         [Column("updateDate")]
         [Constraint(Default = "getdate()")]

@@ -85,8 +85,11 @@
     <Compile Include="Chains\InvoiceCreation\ConvertItemCacheItemsToInvoiceItemsTask.cs" />
     <Compile Include="Gateways\Taxation\InvoiceTaxResult.cs" />
     <Compile Include="Gateways\Taxation\TaxableLineItemVisitor.cs" />
+    <Compile Include="Models\Interfaces\IPaymentMethod.cs" />
     <Compile Include="Models\InvoiceExtensions.cs" />
     <Compile Include="Models\LocalizationExtensions.cs" />
+    <Compile Include="Models\PaymentMethod.cs" />
+    <Compile Include="Models\Rdbms\PaymentMethodDto.cs" />
     <Compile Include="Orders\OrderPreparationBase.cs" />
     <Compile Include="Orders\IOrderPreparationBase.cs" />
     <Compile Include="Builders\IBuilderChain.cs" />
@@ -371,6 +374,7 @@
     </Compile>
     <Compile Include="Persistence\DefaultDatabaseFactory.cs" />
     <Compile Include="Persistence\Factories\AppliedPaymentFactory.cs" />
+    <Compile Include="Persistence\Factories\PaymentMethodFactory.cs" />
     <Compile Include="Persistence\Factories\TaxMethodFactory.cs" />
     <Compile Include="Persistence\Factories\CustomerAddressFactory.cs" />
     <Compile Include="Persistence\Factories\CustomerFactory.cs" />
@@ -400,6 +404,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Persistence\Mappers\CatalogInventoryMapper.cs" />
+    <Compile Include="Persistence\Mappers\PaymentMethodMapper.cs" />
     <Compile Include="Persistence\Mappers\TaxMethodMapper.cs" />
     <Compile Include="Persistence\Mappers\CustomerAddressMapper.cs">
       <SubType>Code</SubType>
@@ -457,6 +462,8 @@
     <Compile Include="Persistence\Mappers\WarehouseMapper.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Persistence\Repositories\Interfaces\IPaymentMethodRepository.cs" />
+    <Compile Include="Persistence\Repositories\PaymentMethodRepository.cs" />
     <Compile Include="Persistence\Repositories\TaxMethodRepository.cs" />
     <Compile Include="Persistence\Repositories\CustomerAddressRepository.cs" />
     <Compile Include="Persistence\Repositories\CustomerRepository.cs" />
@@ -551,6 +558,8 @@
     <Compile Include="Chains\AttemptChainTaskHandler.cs" />
     <Compile Include="RateAdjustmentType.cs" />
     <Compile Include="SerializationHelper.cs" />
+    <Compile Include="Services\Interfaces\IPaymentMethodService.cs" />
+    <Compile Include="Services\PaymentMethodService.cs" />
     <Compile Include="Services\TaxMethodService.cs" />
     <Compile Include="Services\GatewayProviderService.cs" />
     <Compile Include="Services\Interfaces\ITaxMethodService.cs" />

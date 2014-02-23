@@ -8,7 +8,7 @@ namespace Merchello.Core.Services
     /// <summary>
     /// Defines the TaxMethodService
     /// </summary>
-    public interface ITaxMethodService : IService
+    internal interface ITaxMethodService : IService
     {
        
         /// <summary>

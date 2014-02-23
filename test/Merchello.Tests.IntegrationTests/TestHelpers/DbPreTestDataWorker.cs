@@ -138,7 +138,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         /// <summary>
         /// Gets the <see cref="ITaxMethodService"/>
         /// </summary>
-        public ITaxMethodService TaxMethodService
+        internal ITaxMethodService TaxMethodService
         {
             get { return _serviceContext.TaxMethodService; }
         }

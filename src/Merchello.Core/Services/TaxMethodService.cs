@@ -59,7 +59,7 @@ namespace Merchello.Core.Services
 
         internal Attempt<ITaxMethod> CreateTaxMethodWithKey(Guid providerKey, ICountry country, decimal percentageTaxRate, bool raiseEvents = true)
         {
-            if(CountryTaxRateExists(providerKey, country.CountryCode)) return Attempt<ITaxMethod>.Fail(new ConstraintException("A CountryTaxRate already exists for the provider for the countryCode '" + country.CountryCode + "'"));
+            if(CountryTaxRateExists(providerKey, country.CountryCode)) return Attempt<ITaxMethod>.Fail(new ConstraintException("A TaxMethod already exists for the provider for the countryCode '" + country.CountryCode + "'"));
 
             var countryTaxRate = new TaxMethod(providerKey, country.CountryCode)
                 {
