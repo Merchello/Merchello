@@ -13,6 +13,7 @@ namespace Merchello.Core.Services
     /// </summary>
     public class ServiceContext : IServiceContext
     {
+        private Lazy<AppliedPaymentService> _appliedPaymentService;
         private Lazy<TaxMethodService> _countryTaxRateService; 
         private Lazy<CustomerService> _customerService;
         private Lazy<InvoiceService> _invoiceService; 
@@ -46,6 +47,8 @@ namespace Merchello.Core.Services
         private void BuildServiceContext(IDatabaseUnitOfWorkProvider dbDatabaseUnitOfWorkProvider,
             Lazy<RepositoryFactory> repositoryFactory)
         {
+            if(_appliedPaymentService == null)
+                _appliedPaymentService = new Lazy<AppliedPaymentService>(() => new AppliedPaymentService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
             if(_customerService == null)
                 _customerService = new Lazy<CustomerService>(() => new CustomerService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
@@ -54,7 +57,7 @@ namespace Merchello.Core.Services
                 _itemCacheService = new Lazy<ItemCacheService>(() => new ItemCacheService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
             
             if(_paymentService == null)
-                _paymentService = new Lazy<PaymentService>(() => new PaymentService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+                _paymentService = new Lazy<PaymentService>(() => new PaymentService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _appliedPaymentService.Value));
 
             if(_paymentMethodService == null)
                 _paymentMethodService = new Lazy<PaymentMethodService>(() => new PaymentMethodService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));

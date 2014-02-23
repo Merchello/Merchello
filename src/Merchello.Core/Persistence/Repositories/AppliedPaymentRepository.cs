@@ -14,7 +14,7 @@ using Umbraco.Core.Persistence.Querying;
 
 namespace Merchello.Core.Persistence.Repositories
 {
-    internal class AppliedPaymentRepository : MerchelloPetaPocoRepositoryBase<IAppliedPayment>
+    internal class AppliedPaymentRepository : MerchelloPetaPocoRepositoryBase<IAppliedPayment>, IAppliedPaymentRepository
     {
         public AppliedPaymentRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache) 
             : base(work, cache)

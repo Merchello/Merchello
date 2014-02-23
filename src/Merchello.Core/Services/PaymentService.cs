@@ -19,24 +19,31 @@ namespace Merchello.Core.Services
     {
         private readonly IDatabaseUnitOfWorkProvider _uowProvider;
         private readonly RepositoryFactory _repositoryFactory;
+        private readonly IAppliedPaymentService _appliedPaymentService;
 
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
          public PaymentService()
-            : this(new RepositoryFactory())
+            : this(new AppliedPaymentService())
         { }
 
-        public PaymentService(RepositoryFactory repositoryFactory)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory)
+        internal PaymentService(IAppliedPaymentService appliedPaymentService)
+             : this(new RepositoryFactory(), appliedPaymentService)
         { }
 
-        public PaymentService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
+        internal PaymentService(RepositoryFactory repositoryFactory, IAppliedPaymentService appliedPaymentService)
+            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, appliedPaymentService)
+        { }
+
+        internal PaymentService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, IAppliedPaymentService appliedPaymentService)
         {
             Mandate.ParameterNotNull(provider, "provider");
             Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
+            Mandate.ParameterNotNull(appliedPaymentService, "appliedPaymentService");
 
             _uowProvider = provider;
             _repositoryFactory = repositoryFactory;
+            _appliedPaymentService = appliedPaymentService;
         }
 
         /// <summary>
