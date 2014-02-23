@@ -120,6 +120,17 @@ namespace Merchello.Core.Persistence
         }
 
         /// <summary>
+        /// Returns an instance of the <see cref="IPaymentMethodRepository"/>
+        /// </summary>
+        /// <param name="uow"></param>
+        /// <returns></returns>
+        internal virtual IPaymentMethodRepository CreatePaymentMethodRepository(IDatabaseUnitOfWork uow)
+        {
+            return new PaymentMethodRepository(uow,
+                _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
+        }
+
+        /// <summary>
         /// Returns an instance of the <see cref="IProductRepository"/>
         /// </summary>
         /// <param name="uow"></param>

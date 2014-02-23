@@ -3,7 +3,6 @@ using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Runtime.Serialization;
 using Merchello.Core.Models.EntityBase;
 
@@ -23,13 +22,13 @@ namespace Merchello.Core.Models
         private RegionInfo _regionInfo;
         private ProvinceCollection<ITaxProvince> _taxProvinces;
         
-        internal TaxMethod(Guid providerKey, string code)
+        internal TaxMethod(Guid providerKey, string countryCode)
         {
             Mandate.ParameterCondition(providerKey != Guid.Empty, "providerKey");
-            Mandate.ParameterNotNullOrEmpty(code, "code");
+            Mandate.ParameterNotNullOrEmpty(countryCode, "countryCode");
 
             _providerKey = providerKey;
-            _countryCode = code;
+            _countryCode = countryCode;
             PercentageTaxRate = 0;
         }
 

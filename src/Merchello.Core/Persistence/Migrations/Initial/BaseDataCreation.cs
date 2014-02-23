@@ -134,7 +134,7 @@ namespace Merchello.Core.Persistence.Migrations.Initial
                              new TaxMethodDto()
                                  {
                                      Key = Guid.NewGuid(),
-                                     Code = Constants.CountryCodes.EverywhereElse,
+                                     CountryCode = Constants.CountryCodes.EverywhereElse,
                                      Name = "Everywhere Else",
                                      PercentageTaxRate = 0,
                                      ProviderKey = Constants.ProviderKeys.Taxation.FixedRateTaxationProviderKey,

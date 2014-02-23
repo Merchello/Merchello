@@ -17,7 +17,8 @@ namespace Merchello.Core.Services
         private Lazy<CustomerService> _customerService;
         private Lazy<InvoiceService> _invoiceService; 
         private Lazy<ItemCacheService> _itemCacheService;   
-        private Lazy<GatewayProviderService> _gatewayProviderService ;  
+        private Lazy<GatewayProviderService> _gatewayProviderService;
+        private Lazy<PaymentMethodService> _paymentMethodService; 
         private Lazy<ProductService> _productService;
         private Lazy<ProductVariantService> _productVariantService;
         private Lazy<StoreSettingService> _storeSettingsService;
@@ -51,6 +52,9 @@ namespace Merchello.Core.Services
             if(_itemCacheService == null)
                 _itemCacheService = new Lazy<ItemCacheService>(() => new ItemCacheService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
             
+            if(_paymentMethodService == null)
+                _paymentMethodService = new Lazy<PaymentMethodService>(() => new PaymentMethodService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+
             if(_productVariantService == null)
                 _productVariantService = new Lazy<ProductVariantService>(() => new ProductVariantService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
@@ -79,7 +83,7 @@ namespace Merchello.Core.Services
                 _countryTaxRateService = new Lazy<TaxMethodService>(() => new TaxMethodService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _storeSettingsService.Value));
             
             if(_gatewayProviderService == null)
-                _gatewayProviderService = new Lazy<GatewayProviderService>(() => new GatewayProviderService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _shipMethodService.Value, _shipRateTierService.Value, _shipCountryService.Value, _countryTaxRateService.Value));
+                _gatewayProviderService = new Lazy<GatewayProviderService>(() => new GatewayProviderService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _shipMethodService.Value, _shipRateTierService.Value, _shipCountryService.Value, _countryTaxRateService.Value, _paymentMethodService.Value));
 
             if(_warehouseService == null)
                 _warehouseService = new Lazy<WarehouseService>(() => new WarehouseService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
