@@ -18,6 +18,7 @@ namespace Merchello.Core.Services
         private Lazy<InvoiceService> _invoiceService; 
         private Lazy<ItemCacheService> _itemCacheService;   
         private Lazy<GatewayProviderService> _gatewayProviderService;
+        private Lazy<PaymentService> _paymentService; 
         private Lazy<PaymentMethodService> _paymentMethodService; 
         private Lazy<ProductService> _productService;
         private Lazy<ProductVariantService> _productVariantService;
@@ -52,6 +53,9 @@ namespace Merchello.Core.Services
             if(_itemCacheService == null)
                 _itemCacheService = new Lazy<ItemCacheService>(() => new ItemCacheService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
             
+            if(_paymentService == null)
+                _paymentService = new Lazy<PaymentService>(() => new PaymentService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+
             if(_paymentMethodService == null)
                 _paymentMethodService = new Lazy<PaymentMethodService>(() => new PaymentMethodService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
@@ -83,7 +87,7 @@ namespace Merchello.Core.Services
                 _countryTaxRateService = new Lazy<TaxMethodService>(() => new TaxMethodService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _storeSettingsService.Value));
             
             if(_gatewayProviderService == null)
-                _gatewayProviderService = new Lazy<GatewayProviderService>(() => new GatewayProviderService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _shipMethodService.Value, _shipRateTierService.Value, _shipCountryService.Value, _countryTaxRateService.Value, _paymentMethodService.Value));
+                _gatewayProviderService = new Lazy<GatewayProviderService>(() => new GatewayProviderService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _shipMethodService.Value, _shipRateTierService.Value, _shipCountryService.Value, _countryTaxRateService.Value, _paymentService.Value, _paymentMethodService.Value));
 
             if(_warehouseService == null)
                 _warehouseService = new Lazy<WarehouseService>(() => new WarehouseService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
@@ -130,6 +134,14 @@ namespace Merchello.Core.Services
         public IItemCacheService ItemCacheService
         {
             get { return _itemCacheService.Value;  }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IPaymentService"/>
+        /// </summary>
+        public IPaymentService PaymentService
+        {
+            get { return _paymentService.Value; }
         }
 
         /// <summary>

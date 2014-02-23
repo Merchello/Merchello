@@ -19,16 +19,17 @@ namespace Merchello.Core.Models
         private bool _exported;
 
 
-        public AppliedPayment(IPayment payment, IInvoice invoice, AppliedPaymentType appliedPaymentType)
-            : this(payment, invoice, EnumTypeFieldConverter.AppliedPayment.GetTypeField(appliedPaymentType).TypeKey)
+        public AppliedPayment(Guid paymentKey, Guid invoiceKey, AppliedPaymentType appliedPaymentType)
+            : this(paymentKey, invoiceKey, EnumTypeFieldConverter.AppliedPayment.GetTypeField(appliedPaymentType).TypeKey)
         { }
 
-        internal AppliedPayment (IPayment payment, IInvoice invoice, Guid appliedPaymentTfKey)
-            : this(payment.Key, invoice.Key, appliedPaymentTfKey)
-        { }
 
         internal AppliedPayment(Guid paymentKey, Guid invoiceKey, Guid appliedPaymentTfKey)
         {
+            Mandate.ParameterCondition(!Guid.Empty.Equals(paymentKey), "paymentKey");
+            Mandate.ParameterCondition(!Guid.Empty.Equals(invoiceKey), "invoiceKey");
+            Mandate.ParameterCondition(!Guid.Empty.Equals(appliedPaymentTfKey), "appliedPaymentTfKey");
+
             _paymentKey = paymentKey;
             _invoiceKey = invoiceKey;
             _appliedPaymentTfKey = appliedPaymentTfKey;

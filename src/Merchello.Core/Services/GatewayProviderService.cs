@@ -22,19 +22,27 @@ namespace Merchello.Core.Services
         private readonly IShipRateTierService _shipRateTierService;
         private readonly IShipCountryService _shipCountryService;
         private readonly ITaxMethodService _taxMethodService;
+        private readonly IPaymentService _paymentService;
         private readonly IPaymentMethodService _paymentMethodService;
 
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
          public GatewayProviderService()
-            : this(new RepositoryFactory(), new ShipMethodService(), new ShipRateTierService(), new ShipCountryService(), new TaxMethodService(), new PaymentMethodService())
+            : this(new RepositoryFactory(), new ShipMethodService(), new ShipRateTierService(), new ShipCountryService(), new TaxMethodService(), new PaymentService(),  new PaymentMethodService())
         { }
 
-         internal GatewayProviderService(RepositoryFactory repositoryFactory, IShipMethodService shipMethodService, IShipRateTierService shipRateTierService, IShipCountryService shipCountryService, ITaxMethodService taxMethodService, IPaymentMethodService paymentMethodService)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, shipMethodService, shipRateTierService, shipCountryService, taxMethodService, paymentMethodService)
+         internal GatewayProviderService(RepositoryFactory repositoryFactory, IShipMethodService shipMethodService, 
+             IShipRateTierService shipRateTierService, IShipCountryService shipCountryService, 
+             ITaxMethodService taxMethodService, IPaymentService paymentService, IPaymentMethodService paymentMethodService)
+            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, shipMethodService, 
+             shipRateTierService, shipCountryService, taxMethodService,
+             paymentService, paymentMethodService)
         { }
 
-        internal GatewayProviderService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, IShipMethodService shipMethodService, IShipRateTierService shipRateTierService, IShipCountryService shipCountryService, ITaxMethodService taxMethodService, IPaymentMethodService paymentMethodService)
+        internal GatewayProviderService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, 
+            IShipMethodService shipMethodService, IShipRateTierService shipRateTierService, 
+            IShipCountryService shipCountryService, ITaxMethodService taxMethodService, 
+            IPaymentService paymentService, IPaymentMethodService paymentMethodService)
         {
             Mandate.ParameterNotNull(provider, "provider");
             Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
@@ -42,6 +50,7 @@ namespace Merchello.Core.Services
             Mandate.ParameterNotNull(shipRateTierService, "shipRateTierService");
             Mandate.ParameterNotNull(shipCountryService, "shipCountryService");
             Mandate.ParameterNotNull(taxMethodService, "countryTaxRateService");
+            Mandate.ParameterNotNull(paymentService, "paymentService");
             Mandate.ParameterNotNull(paymentMethodService, "paymentMethodService");
 
             _uowProvider = provider;
@@ -50,6 +59,7 @@ namespace Merchello.Core.Services
             _shipRateTierService = shipRateTierService;
             _shipCountryService = shipCountryService;
             _taxMethodService = taxMethodService;
+            _paymentService = paymentService;
             _paymentMethodService = paymentMethodService;
         }
 

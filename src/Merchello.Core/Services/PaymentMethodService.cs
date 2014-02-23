@@ -20,7 +20,6 @@ namespace Merchello.Core.Services
 
         private readonly IDatabaseUnitOfWorkProvider _uowProvider;
         private readonly RepositoryFactory _repositoryFactory;
-        private readonly IStoreSettingService _storeSettingService;
 
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
@@ -69,7 +68,7 @@ namespace Merchello.Core.Services
             if (raiseEvents)
                 if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<IPaymentMethod>(paymentMethod), this))
                 {
-                    paymentMethod.WasCancelled = false;
+                    paymentMethod.WasCancelled = true;
                     return Attempt<IPaymentMethod>.Fail(paymentMethod);
                 }
 

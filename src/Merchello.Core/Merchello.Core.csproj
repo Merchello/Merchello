@@ -462,6 +462,8 @@
     <Compile Include="Persistence\Mappers\WarehouseMapper.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Persistence\Repositories\AppliedPaymentRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IAppliedPaymentRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IPaymentMethodRepository.cs" />
     <Compile Include="Persistence\Repositories\PaymentMethodRepository.cs" />
     <Compile Include="Persistence\Repositories\TaxMethodRepository.cs" />
@@ -559,7 +561,9 @@
     <Compile Include="RateAdjustmentType.cs" />
     <Compile Include="SerializationHelper.cs" />
     <Compile Include="Services\Interfaces\IPaymentMethodService.cs" />
+    <Compile Include="Services\Interfaces\IPaymentService.cs" />
     <Compile Include="Services\PaymentMethodService.cs" />
+    <Compile Include="Services\PaymentService.cs" />
     <Compile Include="Services\TaxMethodService.cs" />
     <Compile Include="Services\GatewayProviderService.cs" />
     <Compile Include="Services\Interfaces\ITaxMethodService.cs" />
