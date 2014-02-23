@@ -7,6 +7,6 @@ namespace Merchello.Core.Persistence.Repositories
     /// <summary>
     /// Marker interface for the AppliedPaymentRepository
     /// </summary>
-    internal interface IAppliedPaymentRepository : IRepository<Guid, IAppliedPayment>
+    internal interface IAppliedPaymentRepository : IRepositoryQueryable<Guid, IAppliedPayment>
     { }
 }

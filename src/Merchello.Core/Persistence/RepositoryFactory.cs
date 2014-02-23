@@ -29,6 +29,15 @@ namespace Merchello.Core.Persistence
         }
 
         /// <summary>
+        /// Returns an instance of the <see cref="IAppliedPaymentRepository"/>
+        /// </summary>
+        internal virtual IAppliedPaymentRepository CreateAppliedPaymentRepository(IDatabaseUnitOfWork uow)
+        {
+            return new AppliedPaymentRepository(uow,
+                _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
+        }
+
+        /// <summary>
         /// Returns an instance of the <see cref="ITaxMethodRepository"/>
         /// </summary>
         internal virtual ITaxMethodRepository CreateTaxMethodRepository(IDatabaseUnitOfWork uow)
