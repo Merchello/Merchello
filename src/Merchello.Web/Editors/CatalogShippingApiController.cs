@@ -42,7 +42,7 @@ namespace Merchello.Web.Editors
         {
             _gatewayProviderService = MerchelloContext.Services.GatewayProviderService;
             _storeSettingService = MerchelloContext.Services.StoreSettingService;
-            _shipCountryService = MerchelloContext.Services.ShipCountryService;
+            _shipCountryService = ((ServiceContext)MerchelloContext.Services).ShipCountryService;
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace Merchello.Web.Editors
         {
             _gatewayProviderService = MerchelloContext.Services.GatewayProviderService;
             _storeSettingService = MerchelloContext.Services.StoreSettingService;
-            _shipCountryService = MerchelloContext.Services.ShipCountryService;
+            _shipCountryService = ((ServiceContext)MerchelloContext.Services).ShipCountryService;
         }
 
 
