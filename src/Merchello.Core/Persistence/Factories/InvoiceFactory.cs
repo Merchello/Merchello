@@ -18,6 +18,7 @@ namespace Merchello.Core.Persistence.Factories
                 {
                     Key = dto.Key,
                     CustomerKey = dto.CustomerKey,
+                    InvoiceNumberPrefix = dto.InvoiceNumberPrefix,
                     InvoiceNumber = dto.InvoiceNumber,
                     InvoiceDate = dto.InvoiceDate,
                     InvoiceStatusKey = dto.InvoiceStatusKey,
@@ -51,6 +52,7 @@ namespace Merchello.Core.Persistence.Factories
                 {
                     Key = entity.Key,
                     CustomerKey = entity.CustomerKey,
+                    InvoiceNumberPrefix = entity.InvoiceNumberPrefix,
                     InvoiceNumber = entity.InvoiceNumber,
                     InvoiceDate = entity.InvoiceDate,
                     InvoiceStatusKey = entity.InvoiceStatusKey,

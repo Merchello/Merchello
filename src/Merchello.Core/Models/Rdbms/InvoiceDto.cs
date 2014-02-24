@@ -19,6 +19,10 @@ namespace Merchello.Core.Models.Rdbms
         [NullSetting(NullSetting = NullSettings.Null)]
         public Guid? CustomerKey { get; set; }
 
+        [Column("invoiceNumberPrefix")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public string InvoiceNumberPrefix { get; set; }
+
         [Column("invoiceNumber")]
         [IndexAttribute(IndexTypes.UniqueNonClustered, Name = "IX_merchInvoiceNumber")]
         public int InvoiceNumber { get; set; }
@@ -94,9 +98,6 @@ namespace Merchello.Core.Models.Rdbms
 
         [ResultColumn]
         public InvoiceStatusDto InvoiceStatusDto { get; set; }
-
-        [ResultColumn]
-        public CustomerDto CustomerDto { get; set; }
 
     }
 }

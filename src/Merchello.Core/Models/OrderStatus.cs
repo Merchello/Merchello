@@ -2,14 +2,12 @@
 using System.Reflection;
 using System.Runtime.Serialization;
 using Merchello.Core.Models.EntityBase;
-using Merchello.Core.Models.TypeFields;
 
 namespace Merchello.Core.Models
 {
-
     [Serializable]
     [DataContract(IsReference = true)]
-    public class InvoiceStatus : Entity, IInvoiceStatus
+    public class OrderStatus : Entity, IOrderStatus
     {
         private string _name;
         private string _alias;
@@ -24,7 +22,7 @@ namespace Merchello.Core.Models
         private static readonly PropertyInfo SortOrderSelector = ExpressionHelper.GetPropertyInfo<InvoiceStatus, int>(x => x.SortOrder);
 
         /// <summary>
-        /// The name of the invoice status
+        /// The name of the order status
         /// </summary>
         [DataMember]
         public string Name
@@ -41,7 +39,7 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
-        /// The alias of the invoice status
+        /// The alias of the order status
         /// </summary>
         [DataMember]
         public string Alias
@@ -58,7 +56,7 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
-        /// True/false indicating whether or not to report on this invoice status
+        /// True/false indicating whether or not to report on this order status
         /// </summary>
         [DataMember]
         public bool Reportable
@@ -75,7 +73,7 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
-        /// True/false indicating whether or not this invoice status is active
+        /// True/false indicating whether or not this order status is active
         /// </summary>
         [DataMember]
         public bool Active
@@ -92,7 +90,7 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
-        /// The sort order of the invoice status
+        /// The sort order of the order status
         /// </summary>
         [DataMember]
         public int SortOrder
@@ -107,6 +105,7 @@ namespace Merchello.Core.Models
                 }, _sortOrder, SortOrderSelector);
             }
         }
-    }
 
+  
+    }
 }

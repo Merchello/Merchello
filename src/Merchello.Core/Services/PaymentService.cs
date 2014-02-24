@@ -23,7 +23,7 @@ namespace Merchello.Core.Services
 
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
-         public PaymentService()
+        public PaymentService()
             : this(new AppliedPaymentService())
         { }
 
