@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Merchello.Core.Events;
 using Merchello.Core.Models;
 using Merchello.Core.Persistence;
+using Merchello.Core.Persistence.Querying;
 using Merchello.Core.Persistence.UnitOfWork;
 using Umbraco.Core;
 using Umbraco.Core.Events;
@@ -117,7 +119,41 @@ namespace Merchello.Core.Services
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         public void Save(IOrder order, bool raiseEvents = true)
         {
-            throw new NotImplementedException();
+            if (!((Order)order).HasIdentity && order.OrderNumber <= 0)
+            {
+                // We have to generate a new 'unique' order number off the configurable value
+                ((Order)order).OrderNumber = ((StoreSettingService)_storeSettingService).GetNextOrderNumber();
+            }
+
+            var includesStatusChange = ((Order)order).IsPropertyDirty("OrderStatusKey") &&
+                                       ((Order)order).HasIdentity == false;
+
+            if (raiseEvents)
+            {
+                if (Saving.IsRaisedEventCancelled(new SaveEventArgs<IOrder>(order), this))
+                {
+                    ((Order)order).WasCancelled = true;
+                    return;
+                }
+
+                if (includesStatusChange) StatusChanging.RaiseEvent(new StatusChangeEventArgs<IOrder>(order), this);
+
+            }
+
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreateOrderRepository(uow))
+                {
+                    repository.AddOrUpdate(order);
+                    uow.Commit();
+                }
+            }
+
+            if (!raiseEvents) return;
+
+            Saved.RaiseEvent(new SaveEventArgs<IOrder>(order), this);
+            if (includesStatusChange) StatusChanged.RaiseEvent(new StatusChangeEventArgs<IOrder>(order), this);
         }
 
         /// <summary>
@@ -127,7 +163,53 @@ namespace Merchello.Core.Services
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         public void Save(IEnumerable<IOrder> orders, bool raiseEvents = true)
         {
-            throw new NotImplementedException();
+            // Generate Order Number for new Orders in the collection
+            var ordersArray = orders as IOrder[] ?? orders.ToArray();
+            var newOrderCount = ordersArray.Count(x => x.OrderNumber <= 0 && !((Order)x).HasIdentity);
+            if (newOrderCount > 0)
+            {
+                var lastOrderNumber =
+                    ((StoreSettingService)_storeSettingService).GetNextOrderNumber(newOrderCount);
+                foreach (var newOrder in ordersArray.Where(x => x.OrderNumber <= 0 && !((Order)x).HasIdentity))
+                {
+                    ((Order)newOrder).OrderNumber = lastOrderNumber;
+                    lastOrderNumber = lastOrderNumber - 1;
+                }
+            }
+
+            var existingOrdersWithStatusChanges =
+                orders.Where(
+                    x => ((Order)x).HasIdentity == false && ((Order)x).IsPropertyDirty("OrderStatusKey"))
+                    .ToArray();
+
+            if (raiseEvents)
+            {
+                Saving.RaiseEvent(new SaveEventArgs<IOrder>(ordersArray), this);
+                if (existingOrdersWithStatusChanges.Any())
+                    StatusChanging.RaiseEvent(new StatusChangeEventArgs<IOrder>(existingOrdersWithStatusChanges),
+                        this);
+            }
+
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreateOrderRepository(uow))
+                {
+                    foreach (var order in ordersArray)
+                    {
+                        repository.AddOrUpdate(order);
+                    }
+                    uow.Commit();
+                }
+            }
+
+            if (raiseEvents)
+            {
+                Saved.RaiseEvent(new SaveEventArgs<IOrder>(ordersArray), this);
+                if (existingOrdersWithStatusChanges.Any())
+                    StatusChanged.RaiseEvent(new StatusChangeEventArgs<IOrder>(existingOrdersWithStatusChanges),
+                        this);
+            }
         }
 
         /// <summary>
@@ -137,7 +219,24 @@ namespace Merchello.Core.Services
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         public void Delete(IOrder order, bool raiseEvents = true)
         {
-            throw new NotImplementedException();
+            if (raiseEvents)
+                if (Deleting.IsRaisedEventCancelled(new DeleteEventArgs<IOrder>(order), this))
+                {
+                    ((Order)order).WasCancelled = true;
+                    return;
+                }
+
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreateOrderRepository(uow))
+                {
+                    repository.Delete(order);
+                    uow.Commit();
+                }
+            }
+
+            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<IOrder>(order), this);
         }
 
         /// <summary>
@@ -147,7 +246,22 @@ namespace Merchello.Core.Services
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         public void Delete(IEnumerable<IOrder> orders, bool raiseEvents = true)
         {
-            throw new NotImplementedException();
+            var ordersArray = orders as IOrder[] ?? orders.ToArray();
+            if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<IOrder>(ordersArray), this);
+
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreateOrderRepository(uow))
+                {
+                    foreach (var order in ordersArray)
+                    {
+                        repository.Delete(order);
+                    }
+                    uow.Commit();
+                }
+            }
+            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<IOrder>(ordersArray), this);
         }
 
         /// <summary>
@@ -157,7 +271,10 @@ namespace Merchello.Core.Services
         /// <returns><see cref="IOrder"/></returns>
         public IOrder GetByKey(Guid key)
         {
-            throw new NotImplementedException();
+            using (var repository = _repositoryFactory.CreateOrderRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.Get(key);
+            }
         }
 
         /// <summary>
@@ -167,7 +284,12 @@ namespace Merchello.Core.Services
         /// <returns><see cref="IOrder"/></returns>
         public IOrder GetByOrderNumber(int orderNumber)
         {
-            throw new NotImplementedException();
+            using (var repository = _repositoryFactory.CreateOrderRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Query<IOrder>.Builder.Where(x => x.OrderNumber == orderNumber);
+
+                return repository.GetByQuery(query).FirstOrDefault();
+            }
         }
 
         /// <summary>
@@ -177,7 +299,10 @@ namespace Merchello.Core.Services
         /// <returns>List of <see cref="IOrder"/></returns>
         public IEnumerable<IOrder> GetByKeys(IEnumerable<Guid> keys)
         {
-            throw new NotImplementedException();
+            using (var repository = _repositoryFactory.CreateOrderRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetAll(keys.ToArray());
+            }
         }
 
 
