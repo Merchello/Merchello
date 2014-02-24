@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Merchello.Core.Configuration;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
@@ -22,52 +23,46 @@ namespace Merchello.Core.Gateways.Taxation.FixedRate
             : base(gatewayProviderService, gatewayProvider, runtimeCacheProvider)
         { }
 
-        
+        /// <summary>
+        /// Creates a <see cref="IGatewayTaxMethod"/>
+        /// </summary>
+        /// <param name="countryCode">The two letter ISO Country Code</param>
+        /// <param name="taxPercentageRate">The decimal percentage tax rate</param>
+        /// <returns>The <see cref="IGatewayTaxMethod"/></returns>
+        public override IGatewayTaxMethod CreateTaxMethod(string countryCode, decimal taxPercentageRate)
+        {
+            var attempt = GatewayProviderService.CreateTaxMethodWithKey(GatewayProvider.Key, countryCode, taxPercentageRate);
+
+            if (!attempt.Success)
+            {
+                LogHelper.Error<TaxationGatewayProviderBase>("CreateTaxMethod failed.", attempt.Exception);
+                throw attempt.Exception;
+            }
+
+            return new FixRateTaxMethod(attempt.Result);
+        }
 
         /// <summary>
         /// Gets a <see cref="ITaxMethod"/> by it's unique 'key' (Guid)
         /// </summary>
         /// <param name="countryCode">The two char ISO country code</param>
         /// <returns><see cref="ITaxMethod"/></returns>
-        public ITaxMethod GetTaxMethodByCountryCode(string countryCode)
+        public override IGatewayTaxMethod GetGatewayTaxMethodByCountryCode(string countryCode)
         {
-            return GatewayProviderService.GetTaxMethodByCountryCode(GatewayProvider.Key, countryCode);
+            var taxMethod = TaxMethods.FirstOrDefault(x => x.CountryCode == countryCode);
+
+            return taxMethod != null ? new FixRateTaxMethod(taxMethod) : null;
         }
 
         /// <summary>
         /// Gets a collection of all <see cref="ITaxMethod"/> associated with this provider
         /// </summary>
         /// <returns>A collection of <see cref="ITaxMethod"/> </returns>
-        public IEnumerable<ITaxMethod> GetAllTaxMethods()
+        public override IEnumerable<IGatewayTaxMethod> GetAllGatewayTaxMethods()
         {
-            return GatewayProviderService.GetTaxMethodsByProviderKey(GatewayProvider.Key);
+            return TaxMethods.Select(taxMethod => new FixRateTaxMethod(taxMethod));
         }
 
-        /// <summary>
-        /// Calculates the tax amount for an invoice
-        /// </summary>
-        /// <param name="invoice"><see cref="IInvoice"/></param>
-        /// <param name="taxAddress">The <see cref="IAddress"/> to base taxation rates.  Either origin or destination address.</param>
-        /// <returns><see cref="IInvoiceTaxResult"/></returns>
-        public override IInvoiceTaxResult CalculateTaxForInvoice(IInvoice invoice, IAddress taxAddress)
-        {
-            var countryTaxRate = GetTaxMethodByCountryCode(taxAddress.CountryCode);
-            if (countryTaxRate == null) return null;
-
-            var ctrValues = new object[] { invoice, taxAddress, countryTaxRate };
-
-            var typeName = MerchelloConfiguration.Current.GetStrategyElement(Constants.StrategyTypeAlias.DefaultInvoiceTaxRateQuote).Type;
-
-            var attempt = ActivatorHelper.CreateInstance<InvoiceTaxationStrategyBase>(typeName, ctrValues);
-
-            if (!attempt.Success)
-            {
-                LogHelper.Error<FixedRateTaxationGatewayProvider>("Failed to instantiate the tax rate quote strategy '" + typeName +"'", attempt.Exception);
-                throw attempt.Exception;
-            }
-
-            return CalculateTaxForInvoice(attempt.Result);
-        }
 
         /// <summary>
         /// The name of the TaxationProvider

@@ -83,7 +83,12 @@
     <Compile Include="Chains\InvoiceCreation\AddBillingInfoToInvoiceTask.cs" />
     <Compile Include="Chains\InvoiceCreation\OrderPreparationAttemptChainTaskBase.cs" />
     <Compile Include="Chains\InvoiceCreation\ConvertItemCacheItemsToInvoiceItemsTask.cs" />
-    <Compile Include="Gateways\Taxation\InvoiceTaxResult.cs" />
+    <Compile Include="Gateways\Payment\IPaymentGatewayResponse.cs" />
+    <Compile Include="Gateways\Taxation\FixedRate\FixRateTaxMethod.cs" />
+    <Compile Include="Gateways\Taxation\FixedRate\IFixedRateTaxMethod.cs" />
+    <Compile Include="Gateways\Taxation\GatewayTaxMethodBase.cs" />
+    <Compile Include="Gateways\Taxation\IGatewayTaxMethod.cs" />
+    <Compile Include="Gateways\Taxation\TaxCalculationResult.cs" />
     <Compile Include="Gateways\Taxation\TaxableLineItemVisitor.cs" />
     <Compile Include="Models\Interfaces\IOrder.cs" />
     <Compile Include="Models\Interfaces\IOrderStatus.cs" />
@@ -153,9 +158,9 @@
     <Compile Include="Gateways\Shipping\FixedRate\ShippingFixedRateTable.cs" />
     <Compile Include="Gateways\Taxation\FixedRate\FixedRateTaxationGatewayProvider.cs" />
     <Compile Include="Gateways\Taxation\FixedRate\IFixedRateTaxationGatewayProvider.cs" />
-    <Compile Include="Gateways\Taxation\FixedRate\FixedRateInvoiceTaxationStrategy.cs" />
-    <Compile Include="Gateways\Taxation\IInvoiceTaxResult.cs" />
-    <Compile Include="Gateways\Taxation\InvoiceTaxationStrategyBase.cs" />
+    <Compile Include="Gateways\Taxation\FixedRate\FixedRateTaxCalculationStrategy.cs" />
+    <Compile Include="Gateways\Taxation\ITaxCalculationResult.cs" />
+    <Compile Include="Gateways\Taxation\TaxCalculationStrategyBase.cs" />
     <Compile Include="Gateways\Taxation\ITaxationContext.cs" />
     <Compile Include="Gateways\Taxation\ITaxationGatewayProvider.cs" />
     <Compile Include="Gateways\Taxation\TaxationContext.cs" />
@@ -606,7 +611,7 @@
     <Compile Include="Services\WarehouseService.cs" />
     <Compile Include="IStrategy.cs" />
     <Compile Include="Gateways\Shipping\IShipmentRateQuoteStrategy.cs" />
-    <Compile Include="Gateways\Taxation\IInvoiceTaxationStrategy.cs" />
+    <Compile Include="Gateways\Taxation\ITaxCalculationStrategy.cs" />
     <Compile Include="Strategies\Packaging\DefaultWarehousePackagingStrategy.cs" />
     <Compile Include="Strategies\Packaging\PackagingStrategyBase.cs" />
     <Compile Include="Strategies\Packaging\IPackagingStrategy.cs" />

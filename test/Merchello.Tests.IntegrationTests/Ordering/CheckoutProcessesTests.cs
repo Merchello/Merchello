@@ -106,11 +106,11 @@ namespace Merchello.Tests.IntegrationTests.Ordering
             
             provider.DeleteAllTaxMethods();
 
-            var taxMethod = provider.CreateTaxMethod("US", 0);
+            var gwTaxMethod = provider.CreateTaxMethod("US", 0);
 
-            taxMethod.Provinces["WA"].PercentRateAdjustment = 8.7M;
+            gwTaxMethod.TaxMethod.Provinces["WA"].PercentRateAdjustment = 8.7M;
 
-            provider.SaveTaxMethod(taxMethod);
+            provider.SaveTaxMethod(gwTaxMethod);
     
             
             #endregion

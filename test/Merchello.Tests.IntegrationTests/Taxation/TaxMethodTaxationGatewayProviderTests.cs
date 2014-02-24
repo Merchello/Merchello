@@ -51,12 +51,12 @@ namespace Merchello.Tests.IntegrationTests.Taxation
             var type = typeof(TaxProvince);
 
             //// Act
-            var taxMethod = _taxProvider.CreateTaxMethod(countryCode);
+            var gwTaxMethod = _taxProvider.CreateTaxMethod(countryCode);
 
             //// Assert
-            Assert.NotNull(taxMethod);
-            Assert.IsTrue(taxMethod.HasProvinces);
-            Assert.AreEqual(type.Name, taxMethod.Provinces.First().GetType().Name);
+            Assert.NotNull(gwTaxMethod);
+            Assert.IsTrue(gwTaxMethod.TaxMethod.HasProvinces);
+            Assert.AreEqual(type.Name, gwTaxMethod.TaxMethod.Provinces.First().GetType().Name);
         }
 
         /// <summary>
@@ -83,20 +83,20 @@ namespace Merchello.Tests.IntegrationTests.Taxation
         {
             //// Arrange
             const string countryCode = "US";
-            var taxMethod = _taxProvider.CreateTaxMethod(countryCode, 5);
-            Assert.IsTrue(taxMethod.HasProvinces);
+            var gwTaxMethod = _taxProvider.CreateTaxMethod(countryCode, 5);
+            Assert.IsTrue(gwTaxMethod.TaxMethod.HasProvinces);
 
             //// Act
-            taxMethod.Provinces["WA"].PercentRateAdjustment = 3;
-            _taxProvider.SaveTaxMethod(taxMethod);
+            gwTaxMethod.TaxMethod.Provinces["WA"].PercentRateAdjustment = 3;
+            _taxProvider.SaveTaxMethod(gwTaxMethod);
 
-            var retrieved = _taxProvider.GetTaxMethodByCountryCode(countryCode);
+            var retrieved = _taxProvider.GetGatewayTaxMethodByCountryCode(countryCode);
             Assert.NotNull(retrieved);
 
             //// Assert
-            Assert.IsTrue(retrieved.HasProvinces);
-            Assert.AreEqual(3, retrieved.Provinces["WA"].PercentRateAdjustment);
-            Assert.AreEqual(5, taxMethod.PercentageTaxRate);
+            Assert.IsTrue(retrieved.TaxMethod.HasProvinces);
+            Assert.AreEqual(3, retrieved.TaxMethod.Provinces["WA"].PercentRateAdjustment);
+            Assert.AreEqual(5, gwTaxMethod.TaxMethod.PercentageTaxRate);
         }
     }
 }

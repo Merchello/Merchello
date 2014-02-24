@@ -7,34 +7,34 @@ namespace Merchello.Core.Gateways.Taxation
     /// </summary>
     public abstract class GatewayTaxMethodBase : IGatewayTaxMethod
     {
-        private readonly Models.IGatewayTaxMethod _gatewayTaxMethod;
+        private readonly ITaxMethod _taxMethod;
 
-        protected GatewayTaxMethodBase(Models.IGatewayTaxMethod gatewayTaxMethod)
+        protected GatewayTaxMethodBase(ITaxMethod taxMethod)
         {
-            Mandate.ParameterNotNull(gatewayTaxMethod, "taxMethod");
+            Mandate.ParameterNotNull(taxMethod, "taxMethod");
 
-            _gatewayTaxMethod = gatewayTaxMethod;
+            _taxMethod = taxMethod;
         }
 
         /// <summary>
-        /// Gets the <see cref="Models.IGatewayTaxMethod"/>
+        /// Gets the <see cref="ITaxMethod"/>
         /// </summary>
-        public Models.IGatewayTaxMethod GatewayTaxMethod
+        public ITaxMethod TaxMethod
         {
-            get { return _gatewayTaxMethod; }
+            get { return _taxMethod; }
         }
 
         /// <summary>
         /// Calculates the tax amount for an invoice
         /// </summary>
         /// <param name="invoice"><see cref="IInvoice"/></param>
-        /// <returns><see cref="IInvoiceTaxResult"/></returns>
+        /// <returns><see cref="ITaxCalculationResult"/></returns>
         /// <remarks>
         /// 
         /// Assumes the billing address of the invoice will be used for the taxation address
         /// 
         /// </remarks>
-        public virtual IInvoiceTaxResult CalculateTaxForInvoice(IInvoice invoice)
+        public virtual ITaxCalculationResult CalculateTaxForInvoice(IInvoice invoice)
         {
             return CalculateTaxForInvoice(invoice, invoice.GetBillingAddress());
         }
@@ -44,15 +44,15 @@ namespace Merchello.Core.Gateways.Taxation
         /// </summary>
         /// <param name="invoice"><see cref="IInvoice"/></param>
         /// <param name="taxAddress">The <see cref="IAddress"/> to base taxation rates.  Either origin or destination address.</param>
-        /// <returns><see cref="IInvoiceTaxResult"/></returns>
-        public abstract IInvoiceTaxResult CalculateTaxForInvoice(IInvoice invoice, IAddress taxAddress);
+        /// <returns><see cref="ITaxCalculationResult"/></returns>
+        public abstract ITaxCalculationResult CalculateTaxForInvoice(IInvoice invoice, IAddress taxAddress);
 
         /// <summary>
         /// Calculates the tax amount for an invoice
         /// </summary>
         /// <param name="strategy">The strategy to use when calculating the tax amount</param>
-        /// <returns><see cref="IInvoiceTaxResult"/></returns>
-        public virtual IInvoiceTaxResult CalculateTaxForInvoice(IInvoiceTaxationStrategy strategy)
+        /// <returns><see cref="ITaxCalculationResult"/></returns>
+        public virtual ITaxCalculationResult CalculateTaxForInvoice(ITaxCalculationStrategy strategy)
         {
             var attempt = strategy.CalculateTaxesForInvoice();
 

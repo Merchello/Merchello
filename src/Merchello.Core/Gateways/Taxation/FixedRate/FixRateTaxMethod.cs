@@ -6,22 +6,22 @@ namespace Merchello.Core.Gateways.Taxation.FixedRate
 {
     public class FixRateTaxMethod : GatewayTaxMethodBase, IFixedRateTaxMethod
     {
-        public FixRateTaxMethod(Models.IGatewayTaxMethod gatewayTaxMethod) 
-            : base(gatewayTaxMethod)
+        public FixRateTaxMethod(ITaxMethod taxMethod) 
+            : base(taxMethod)
         { }
 
-        public override IInvoiceTaxResult CalculateTaxForInvoice(IInvoice invoice, IAddress taxAddress)
+        public override ITaxCalculationResult CalculateTaxForInvoice(IInvoice invoice, IAddress taxAddress)
         {
             
-            var ctrValues = new object[] { invoice, taxAddress, GatewayTaxMethod };
+            var ctrValues = new object[] { invoice, taxAddress, TaxMethod };
 
             var typeName = MerchelloConfiguration.Current.GetStrategyElement(Constants.StrategyTypeAlias.DefaultInvoiceTaxRateQuote).Type;
 
-            var attempt = ActivatorHelper.CreateInstance<InvoiceTaxationStrategyBase>(typeName, ctrValues);
+            var attempt = ActivatorHelper.CreateInstance<TaxCalculationStrategyBase>(typeName, ctrValues);
 
             if (!attempt.Success)
             {
-                LogHelper.Error<FixedRateTaxationGatewayProvider>("Failed to instantiate the tax rate quote strategy '" + typeName + "'", attempt.Exception);
+                LogHelper.Error<FixedRateTaxationGatewayProvider>("Failed to instantiate the tax calculation strategy '" + typeName + "'", attempt.Exception);
                 throw attempt.Exception;
             }
 
