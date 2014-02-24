@@ -49,13 +49,15 @@ namespace Merchello.Core.Services
         /// Creates a <see cref="IOrder"/> without saving it to the database
         /// </summary>
         /// <param name="orderStatusKey">The <see cref="IOrderStatus"/> key</param>
+        /// <param name="invoiceKey"></param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         /// <returns><see cref="IOrder"/></returns>
-        public IOrder CreateOrder(Guid orderStatusKey, bool raiseEvents = true)
+        public IOrder CreateOrder(Guid orderStatusKey, Guid invoiceKey, bool raiseEvents = true)
         {
             Mandate.ParameterCondition(!Guid.Empty.Equals(orderStatusKey), "orderStatusKey");
+            Mandate.ParameterCondition(!Guid.Empty.Equals(invoiceKey), "invoiceKey");
 
-            var order = new Order(orderStatusKey)
+            var order = new Order(orderStatusKey, invoiceKey)
                 {
                     VersionKey = Guid.NewGuid(),
                     OrderDate = DateTime.Now
@@ -77,13 +79,15 @@ namespace Merchello.Core.Services
         /// Creates a <see cref="IOrder"/> and saves it to the database
         /// </summary>
         /// <param name="orderStatusKey">The <see cref="IOrderStatus"/> key</param>
+        /// <param name="invoiceKey"></param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         /// <returns><see cref="IOrder"/></returns>
-        public IOrder CreateOrderWithKey(Guid orderStatusKey, bool raiseEvents = true)
+        public IOrder CreateOrderWithKey(Guid orderStatusKey, Guid invoiceKey, bool raiseEvents = true)
         {
             Mandate.ParameterCondition(!Guid.Empty.Equals(orderStatusKey), "orderStatusKey");
+            Mandate.ParameterCondition(!Guid.Empty.Equals(invoiceKey), "invoiceKey");
 
-            var order = new Order(orderStatusKey)
+            var order = new Order(orderStatusKey, invoiceKey)
             {
                 VersionKey = Guid.NewGuid(),
                 OrderDate = DateTime.Now

@@ -14,10 +14,9 @@ namespace Merchello.Core.Persistence.Factories
 
         public IOrder BuildEntity(OrderDto dto)
         {
-            var order = new Order(dto.OrderStatusKey, _lineItemCollection)
+            var order = new Order(dto.OrderStatusKey, dto.InvoiceKey, _lineItemCollection)
                 {
                     Key =  dto.Key,
-                    InvoiceKey = dto.InvoiceKey,
                     OrderNumberPrefix = dto.OrderNumberPrefix,
                     OrderNumber = dto.OrderNumber,
                     OrderDate = dto.OrderDate,

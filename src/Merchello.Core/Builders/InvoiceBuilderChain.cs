@@ -30,7 +30,7 @@ namespace Merchello.Core.Builders
         public override Attempt<IInvoice> Build()
         {
             var attempt = (TaskHandlers.Any())
-                       ? TaskHandlers.First().Execute(new Invoice(Constants.DefaultKeys.UnpaidInvoiceStatusKey))
+                       ? TaskHandlers.First().Execute(new Invoice(Constants.DefaultKeys.InvoiceStatus.Unpaid))
                        : Attempt<IInvoice>.Fail(new InvalidOperationException("The configuration Chain Task List could not be instantiated"));
 
             if (!attempt.Success) return attempt;

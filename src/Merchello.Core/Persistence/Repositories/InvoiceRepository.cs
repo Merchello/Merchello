@@ -40,7 +40,7 @@ namespace Merchello.Core.Persistence.Repositories
                 return null;
 
             
-            var lineItems = _lineItemRepository.GetByContainerKey(key) as LineItemCollection;
+            var lineItems = GetLineItemCollection(key);
            
             var factory = new InvoiceFactory(lineItems);
             return factory.BuildEntity(dto);
@@ -145,6 +145,25 @@ namespace Merchello.Core.Persistence.Repositories
             }
 
             entity.ResetDirtyProperties();
+        }
+
+        private LineItemCollection GetLineItemCollection(Guid invoiceKey)
+        {
+            var sql = new Sql();
+            sql.Select("*")
+                .From<InvoiceItemDto>()
+                .Where<InvoiceItemDto>(x => x.ContainerKey == invoiceKey);
+
+            var dtos = Database.Fetch<InvoiceItemDto>(sql);
+
+            var factory = new LineItemFactory();
+            var collection = new LineItemCollection();
+            foreach (var dto in dtos)
+            {
+                collection.Add(factory.BuildEntity(dto));
+            }
+
+            return collection;
         }
     }
 }
