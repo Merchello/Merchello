@@ -138,10 +138,7 @@ namespace Merchello.Core.Persistence.Repositories
 
         }
 
-
         #endregion
-
-
 
     }
 }
