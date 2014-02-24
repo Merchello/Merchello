@@ -40,7 +40,7 @@ namespace Merchello.Web.Editors
         public CatalogRateTableShippingApiController(MerchelloContext merchelloContext)
             : base(merchelloContext)
         {
-            _shipCountryService = MerchelloContext.Services.ShipCountryService;
+            _shipCountryService = ((ServiceContext) MerchelloContext.Services).ShipCountryService;
             _fixedRateShippingGatewayProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Gateways.Shipping.ResolveByKey(Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey);
         }
 
@@ -50,7 +50,7 @@ namespace Merchello.Web.Editors
         internal CatalogRateTableShippingApiController(MerchelloContext merchelloContext, UmbracoContext umbracoContext)
             : base(merchelloContext, umbracoContext)
         {
-            _shipCountryService = MerchelloContext.Services.ShipCountryService;
+            _shipCountryService = ((ServiceContext)MerchelloContext.Services).ShipCountryService;
             _fixedRateShippingGatewayProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Gateways.Shipping.ResolveByKey(Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey);
         }
 
@@ -67,7 +67,7 @@ namespace Merchello.Web.Editors
             {
                 var providers = MerchelloContext.Gateways.Shipping.GetGatewayProvidersByShipCountry(shipCountry);
 
-                var fixedProvider = providers.Where(x => x.Key == Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey).FirstOrDefault();
+                var fixedProvider = providers.FirstOrDefault(x => x.Key == Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey);
 
                 if (fixedProvider != null)
                 {
@@ -130,7 +130,7 @@ namespace Merchello.Web.Editors
                 var shipCountry = _shipCountryService.GetByKey(method.ShipMethod.ShipCountryKey);
                 var provider = _fixedRateShippingGatewayProvider;
 
-                var merchelloMethod = (IFixedRateShipMethod)provider.GetActiveShipMethods(shipCountry).Where(m => m.ShipMethod.Key == method.ShipMethod.Key).FirstOrDefault();
+                var merchelloMethod = (IFixedRateShipMethod)provider.GetActiveShipMethods(shipCountry).FirstOrDefault(m => m.ShipMethod.Key == method.ShipMethod.Key);
 
                 if (merchelloMethod != null)
                 {

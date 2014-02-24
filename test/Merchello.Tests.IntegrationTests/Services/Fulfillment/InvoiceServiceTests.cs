@@ -3,11 +3,11 @@ using Merchello.Core.Models;
 using Merchello.Core.Services;
 using NUnit.Framework;
 
-namespace Merchello.Tests.IntegrationTests.Services.Invoicing
+namespace Merchello.Tests.IntegrationTests.Services.Fulfillment
 {
     [TestFixture]
     [Category("Service Integration")]
-    public class InvoiceServiceTests : InvoicingTestsBase
+    public class InvoiceServiceTests : FulfillmentTestsBase
     {
         private IInvoiceService _invoiceService;
 

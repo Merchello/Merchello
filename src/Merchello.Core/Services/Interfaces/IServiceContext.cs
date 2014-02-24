@@ -27,6 +27,11 @@
         IItemCacheService ItemCacheService { get; }
 
         /// <summary>
+        /// Gets the <see cref="IOrderService"/>
+        /// </summary>
+        IOrderService OrderService { get; }
+
+        /// <summary>
         /// Gets the <see cref="IPaymentService"/>
         /// </summary>
         IPaymentService PaymentService { get; }
@@ -41,10 +46,10 @@
         /// </summary>
         IProductVariantService ProductVariantService { get; }
 
-        /// <summary>
-        /// Gets the <see cref="IShipCountryService"/>
-        /// </summary>
-        IShipCountryService ShipCountryService { get; }
+        ///// <summary>
+        ///// Gets the <see cref="IShipCountryService"/>
+        ///// </summary>
+        //IShipCountryService ShipCountryService { get; }
 
         /// <summary>
         /// Gets the <see cref="IStoreSettingService"/>

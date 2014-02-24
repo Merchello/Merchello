@@ -19,13 +19,14 @@ namespace Merchello.Core.Services
         private Lazy<InvoiceService> _invoiceService; 
         private Lazy<ItemCacheService> _itemCacheService;   
         private Lazy<GatewayProviderService> _gatewayProviderService;
+        private Lazy<OrderService> _orderService; 
         private Lazy<PaymentService> _paymentService; 
         private Lazy<PaymentMethodService> _paymentMethodService; 
         private Lazy<ProductService> _productService;
         private Lazy<ProductVariantService> _productVariantService;
         private Lazy<StoreSettingService> _storeSettingsService;
         private Lazy<ShipCountryService> _shipCountryService;
-        private Lazy<ShipMethodService> _shipMethodService;
+        private Lazy<ShipMethodService> _shipMethodService; 
         private Lazy<IShipRateTierService> _shipRateTierService; 
         private Lazy<ShipmentService> _shipmentService; 
         private Lazy<WarehouseService> _warehouseService;
@@ -56,6 +57,7 @@ namespace Merchello.Core.Services
             if(_itemCacheService == null)
                 _itemCacheService = new Lazy<ItemCacheService>(() => new ItemCacheService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
             
+            
             if(_paymentService == null)
                 _paymentService = new Lazy<PaymentService>(() => new PaymentService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _appliedPaymentService.Value));
 
@@ -82,6 +84,10 @@ namespace Merchello.Core.Services
 
             if(_shipmentService == null)
                 _shipmentService = new Lazy<ShipmentService>(() => new ShipmentService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+
+            if (_orderService == null)
+                _orderService = new Lazy<OrderService>(() => new OrderService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _storeSettingsService.Value));
+
 
             if (_invoiceService == null)
                 _invoiceService = new Lazy<InvoiceService>(() => new InvoiceService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _storeSettingsService.Value));
@@ -140,6 +146,14 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
+        /// Gets the <see cref="IOrderService"/>
+        /// </summary>
+        public IOrderService OrderService
+        {
+            get { return _orderService.Value; }
+        }
+
+        /// <summary>
         /// Gets the <see cref="IPaymentService"/>
         /// </summary>
         public IPaymentService PaymentService
@@ -174,7 +188,7 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Gets the <see cref="IShipCountryService"/>
         /// </summary>
-        public IShipCountryService ShipCountryService
+        internal IShipCountryService ShipCountryService
         {
             get { return _shipCountryService.Value; }
         }

@@ -5,6 +5,7 @@ using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Gateways.Shipping.FixedRate;
 using Merchello.Core.Gateways.Taxation.FixedRate;
 using Merchello.Core.Models;
+using Merchello.Core.Services;
 using Merchello.Tests.IntegrationTests.TestHelpers;
 using Merchello.Web;
 using NUnit.Framework;
@@ -55,11 +56,11 @@ namespace Merchello.Tests.IntegrationTests.Ordering
 
             var us = MerchelloContext.Current.Services.StoreSettingService.GetCountryByCode("US");
             var usCountry = new ShipCountry(defaultCatalog.Key, us);
-            MerchelloContext.Current.Services.ShipCountryService.Save(usCountry);
+            ((ServiceContext)MerchelloContext.Current.Services).ShipCountryService.Save(usCountry);
 
             var dk = MerchelloContext.Current.Services.StoreSettingService.GetCountryByCode("DK");
             var dkCountry = new ShipCountry(defaultCatalog.Key, dk);
-            MerchelloContext.Current.Services.ShipCountryService.Save(dkCountry);
+            ((ServiceContext)MerchelloContext.Current.Services).ShipCountryService.Save(dkCountry);
 
             #endregion // ShipCountry
 
