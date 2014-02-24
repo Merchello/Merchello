@@ -4,8 +4,8 @@ using System.Linq;
 using Merchello.Core.Models;
 using Merchello.Core.Models.EntityBase;
 using Merchello.Core.Models.Rdbms;
-using Merchello.Core.Persistence.Factories;
 using Merchello.Core.Persistence.Querying;
+using Merchello.Core.Persistence.Factories;
 using Merchello.Core.Persistence.UnitOfWork;
 using Umbraco.Core;
 using Umbraco.Core.Cache;
@@ -15,13 +15,13 @@ using Umbraco.Core.Persistence.Querying;
 namespace Merchello.Core.Persistence.Repositories
 {
     /// <summary>
-    /// Represents the Invoice Repository
+    /// Represents the OrderRepository
     /// </summary>
-    internal class InvoiceRepository : MerchelloPetaPocoRepositoryBase<IInvoice>, IInvoiceRepository
+    internal class OrderRepository : MerchelloPetaPocoRepositoryBase<IOrder>, IOrderRepository
     {
-        private readonly ILineItemRepository _lineItemRepository; 
-        
-        public InvoiceRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILineItemRepository lineItemRepository) 
+        private readonly ILineItemRepository _lineItemRepository;
+
+        public OrderRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILineItemRepository lineItemRepository)
             : base(work, cache)
         {
             Mandate.ParameterNotNull(lineItemRepository, "lineItemRepository");
@@ -29,24 +29,23 @@ namespace Merchello.Core.Persistence.Repositories
             _lineItemRepository = lineItemRepository;
         }
 
-        protected override IInvoice PerformGet(Guid key)
+        protected override IOrder PerformGet(Guid key)
         {
             var sql = GetBaseQuery(false)
               .Where(GetBaseWhereClause(), new { Key = key });
 
-            var dto = Database.Fetch<InvoiceDto>(sql).FirstOrDefault();
+            var dto = Database.Fetch<OrderDto>(sql).FirstOrDefault();
 
             if (dto == null)
                 return null;
 
-            
             var lineItems = _lineItemRepository.GetByContainerKey(key) as LineItemCollection;
-           
-            var factory = new InvoiceFactory(lineItems);
+
+            var factory = new OrderFactory(lineItems);
             return factory.BuildEntity(dto);
         }
 
-        protected override IEnumerable<IInvoice> PerformGetAll(params Guid[] keys)
+        protected override IEnumerable<IOrder> PerformGetAll(params Guid[] keys)
         {
             if (keys.Any())
             {
@@ -58,7 +57,7 @@ namespace Merchello.Core.Persistence.Repositories
             else
             {
                 ;
-                var dtos = Database.Fetch<InvoiceDto>(GetBaseQuery(false));
+                var dtos = Database.Fetch<OrderDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
                     yield return Get(dto.Key);
@@ -66,13 +65,13 @@ namespace Merchello.Core.Persistence.Repositories
             }
         }
 
-        protected override IEnumerable<IInvoice> PerformGetByQuery(IQuery<IInvoice> query)
+        protected override IEnumerable<IOrder> PerformGetByQuery(IQuery<IOrder> query)
         {
             var sqlClause = GetBaseQuery(false);
-            var translator = new SqlTranslator<IInvoice>(sqlClause, query);
+            var translator = new SqlTranslator<IOrder>(sqlClause, query);
             var sql = translator.Translate();
 
-            var dtos = Database.Fetch<InvoiceDto>(sql);
+            var dtos = Database.Fetch<OrderDto>(sql);
 
             return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
         }
@@ -81,36 +80,33 @@ namespace Merchello.Core.Persistence.Repositories
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-                .From<InvoiceDto>();
+                .From<OrderDto>();
 
             return sql;
         }
 
         protected override string GetBaseWhereClause()
         {
-            return "merchInvoice.pk = @Key";
+            return "merchOrder.pk = @Key";
         }
 
         protected override IEnumerable<string> GetDeleteClauses()
         {
-            // TODO deleting invoices is going to be a pretty involved process
-            // that will require much more than this repository can handle alone. 
-            // TODO come back to this
             var list = new List<string>
             {
-                "DELETE FROM merchAppliedPayment WHERE invoiceKey = @Key",
-                "DELETE FROM merchInvoiceItem WHERE invoiceKey = @Key",
-                "DELETE FROM merchInvoice WHERE pk = @Key"
+                "DELETE FROM FROM merchOrderItem WHERE orderKey = @Key",
+                "DELETE FROM merchOrder WHERE pk = @Key"
             };
 
             return list;
         }
 
-        protected override void PersistNewItem(IInvoice entity)
+        protected override void PersistNewItem(IOrder entity)
         {
+
             ((Entity)entity).AddingEntity();
 
-            var factory = new InvoiceFactory(entity.Items);
+            var factory = new OrderFactory(entity.Items);
             var dto = factory.BuildDto(entity);
 
             Database.Insert(dto);
@@ -125,11 +121,11 @@ namespace Merchello.Core.Persistence.Repositories
             entity.ResetDirtyProperties();
         }
 
-        protected override void PersistUpdatedItem(IInvoice entity)
+        protected override void PersistUpdatedItem(IOrder entity)
         {
             ((Entity)entity).UpdatingEntity();
 
-            var factory = new InvoiceFactory(entity.Items);
+            var factory = new OrderFactory(entity.Items);
             var dto = factory.BuildDto(entity);
 
             Database.Update(dto);
@@ -137,7 +133,7 @@ namespace Merchello.Core.Persistence.Repositories
             var existing = _lineItemRepository.GetByContainerKey(entity.Key);
             var removes = existing.Where(x => !entity.Items.Contains(x));
 
-            foreach(var remove in removes) _lineItemRepository.Delete(remove);
+            foreach (var remove in removes) _lineItemRepository.Delete(remove);
 
             foreach (var item in entity.Items)
             {

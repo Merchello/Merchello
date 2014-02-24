@@ -117,6 +117,13 @@ namespace Merchello.Core.Persistence
                 _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
         }
 
+
+        internal virtual IOrderRepository CreateOrderRepository(IDatabaseUnitOfWork uow)
+        {
+            return new OrderRepository(uow,
+                _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, CreateLineItemRepository<OrderItemDto>(uow));
+        }
+
         /// <summary>
         /// Returns an instance of the <see cref="IPaymentRepository"/>
         /// </summary>

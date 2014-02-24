@@ -14,6 +14,12 @@ namespace Merchello.Core.Models
         Guid? CustomerKey { get; }
 
         /// <summary>
+        /// The optional invoice number prefix
+        /// </summary>
+        [DataMember]
+        string InvoiceNumberPrefix { get; set; }
+
+        /// <summary>
         /// The invoice number
         /// </summary>
         [DataMember]

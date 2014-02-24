@@ -85,9 +85,13 @@
     <Compile Include="Chains\InvoiceCreation\ConvertItemCacheItemsToInvoiceItemsTask.cs" />
     <Compile Include="Gateways\Taxation\InvoiceTaxResult.cs" />
     <Compile Include="Gateways\Taxation\TaxableLineItemVisitor.cs" />
+    <Compile Include="Models\Interfaces\IOrder.cs" />
+    <Compile Include="Models\Interfaces\IOrderStatus.cs" />
     <Compile Include="Models\Interfaces\IPaymentMethod.cs" />
     <Compile Include="Models\InvoiceExtensions.cs" />
     <Compile Include="Models\LocalizationExtensions.cs" />
+    <Compile Include="Models\Order.cs" />
+    <Compile Include="Models\OrderStatus.cs" />
     <Compile Include="Models\PaymentMethod.cs" />
     <Compile Include="Models\Rdbms\PaymentMethodDto.cs" />
     <Compile Include="Orders\OrderPreparationBase.cs" />
@@ -374,6 +378,7 @@
     </Compile>
     <Compile Include="Persistence\DefaultDatabaseFactory.cs" />
     <Compile Include="Persistence\Factories\AppliedPaymentFactory.cs" />
+    <Compile Include="Persistence\Factories\OrderFactory.cs" />
     <Compile Include="Persistence\Factories\PaymentMethodFactory.cs" />
     <Compile Include="Persistence\Factories\TaxMethodFactory.cs" />
     <Compile Include="Persistence\Factories\CustomerAddressFactory.cs" />
@@ -404,6 +409,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Persistence\Mappers\CatalogInventoryMapper.cs" />
+    <Compile Include="Persistence\Mappers\OrderMapper.cs" />
     <Compile Include="Persistence\Mappers\PaymentMethodMapper.cs" />
     <Compile Include="Persistence\Mappers\TaxMethodMapper.cs" />
     <Compile Include="Persistence\Mappers\CustomerAddressMapper.cs">
@@ -464,7 +470,9 @@
     </Compile>
     <Compile Include="Persistence\Repositories\AppliedPaymentRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IAppliedPaymentRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IOrderRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IPaymentMethodRepository.cs" />
+    <Compile Include="Persistence\Repositories\OrderRepository.cs" />
     <Compile Include="Persistence\Repositories\PaymentMethodRepository.cs" />
     <Compile Include="Persistence\Repositories\TaxMethodRepository.cs" />
     <Compile Include="Persistence\Repositories\CustomerAddressRepository.cs" />
@@ -562,8 +570,10 @@
     <Compile Include="SerializationHelper.cs" />
     <Compile Include="Services\AppliedPaymentService.cs" />
     <Compile Include="Services\Interfaces\IAppliedPaymentService.cs" />
+    <Compile Include="Services\Interfaces\IOrderService.cs" />
     <Compile Include="Services\Interfaces\IPaymentMethodService.cs" />
     <Compile Include="Services\Interfaces\IPaymentService.cs" />
+    <Compile Include="Services\OrderService.cs" />
     <Compile Include="Services\PaymentMethodService.cs" />
     <Compile Include="Services\PaymentService.cs" />
     <Compile Include="Services\TaxMethodService.cs" />

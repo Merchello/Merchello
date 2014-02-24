@@ -11,6 +11,7 @@ namespace Merchello.Core.Models
     {
         private Guid? _customerKey;
         private int _invoiceNumber;
+        private string _invoiceNumberPrefix;
         private DateTime _invoiceDate;
         private Guid _invoiceStatusKey;
         private string _billToName;
@@ -58,6 +59,7 @@ namespace Merchello.Core.Models
         }
 
         private static readonly PropertyInfo CustomerKeySelector = ExpressionHelper.GetPropertyInfo<Invoice, Guid?>(x => x.CustomerKey);
+        private static readonly PropertyInfo InvoiceNumberPrefixSelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.InvoiceNumberPrefix);
         private static readonly PropertyInfo InvoiceNumberSelector = ExpressionHelper.GetPropertyInfo<Invoice, int>(x => x.InvoiceNumber);
         private static readonly PropertyInfo InvoiceDateSelector = ExpressionHelper.GetPropertyInfo<Invoice, DateTime>(x => x.InvoiceDate);
         private static readonly PropertyInfo InvoiceStatusKeySelector = ExpressionHelper.GetPropertyInfo<Invoice, Guid>(x => x.InvoiceStatusKey);
@@ -89,6 +91,23 @@ namespace Merchello.Core.Models
                     _customerKey = value;
                     return _customerKey;
                 }, _customerKey, CustomerKeySelector);
+            }
+        }
+
+        /// <summary>
+        /// The optional invoice number prefix
+        /// </summary>
+        [DataMember]
+        public string InvoiceNumberPrefix
+        {
+            get { return _invoiceNumberPrefix; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _invoiceNumberPrefix = value;
+                    return _invoiceNumberPrefix;
+                }, _invoiceNumberPrefix, InvoiceNumberPrefixSelector);
             }
         }
 
