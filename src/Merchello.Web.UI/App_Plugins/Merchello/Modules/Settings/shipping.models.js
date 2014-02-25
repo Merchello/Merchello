@@ -26,7 +26,7 @@
             self.countryCode = "";
             self.name = "";
             self.provinces = [];
-            self.shipMethods = [];
+            self.shippingGatewayProviders = [];
         } else {
             self.key = shippingCountryFromServer.key;
             self.catalogKey = shippingCountryFromServer.catalogKey;
@@ -35,22 +35,7 @@
             self.provinces = _.map(shippingCountryFromServer.provinces, function (province) {
                 return new merchello.Models.Province(province)
             });
-            //self.shipMethods = _.map(shippingCountryFromServer., function (method) {
-            //    return new merchello.Models.ShippingMethod(method);
-            //});
-        };
-
-        self.addMethod = function (shippingMethod) {
-            if (shippingMethod) {
-                var newShippingMethod = shippingMethod;
-            } else {
-                var newShippingMethod = new merchello.Models.ShippingMethod();
-            }
-            self.shipMethods.push(newShippingMethod);
-        };
-
-        self.removeMethod = function (idx) {
-            self.shipMethods.splice(idx, 1);
+            self.shippingGatewayProviders = [];
         };
 
         self.fromCountry = function (country)
@@ -76,6 +61,33 @@
             self.name = gatewayProviderFromServer.name;
             self.description = gatewayProviderFromServer.description;
         }
+    };
+
+    models.ShippingGatewayProvider = function (shippingGatewayProviderFromServer) {
+
+        var self = this;
+
+        if (shippingGatewayProviderFromServer == undefined) {
+            self.key = "";
+            self.name = "";
+            self.typeFullName = "";
+            self.shipMethods = [];
+        } else {
+            self.key = shippingGatewayProviderFromServer.key;
+            self.name = shippingGatewayProviderFromServer.name;
+            self.typeFullName = shippingGatewayProviderFromServer.typeFullName;
+            self.shipMethods = _.map(shippingGatewayProviderFromServer.shipMethods, function (method) {
+                return new merchello.Models.ShippingMethod(method);
+            });
+        }
+
+        self.addMethod = function (shippingMethod) {
+            var newShippingMethod = shippingMethod;
+            if (newShippingMethod == undefined) {
+                newShippingMethod = new merchello.Models.ShippingMethod();
+            }
+            self.shipMethods.push(newShippingMethod);
+        };
     };
 
     models.ShippingMethod = function (shippingMethodFromServer) {
@@ -120,6 +132,20 @@
         self.removeProvince = function (idx) {
             self.provinceData.splice(idx, 1);
         };
+
+    };
+
+    models.FixedRateShippingMethod = function (shippingMethodFromServer) {
+
+        var self = this;
+
+        if (shippingMethodFromServer == undefined) {
+            self.shipMethod = new merchello.Models.ShippingMethod();
+            self.rateTableType = "";
+        } else {
+            self.shipMethod = new merchello.Models.ShippingMethod(shippingMethodFromServer.shipMethod);
+            self.rateTableType = hippingMethodFromServer.rateTableType;
+        }
 
     };
 
