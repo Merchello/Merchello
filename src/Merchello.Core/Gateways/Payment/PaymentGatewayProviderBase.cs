@@ -1,33 +1,65 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Umbraco.Core.Cache;
 
 namespace Merchello.Core.Gateways.Payment
 {
+    /// <summary>
+    /// Represents an abstract PaymentGatewayProvider
+    /// </summary>
     public abstract class PaymentGatewayProviderBase  : GatewayProviderBase, IPaymentGatewayProvider
     {
         protected PaymentGatewayProviderBase(IGatewayProviderService gatewayProviderService, IGatewayProvider gatewayProvider, IRuntimeCacheProvider runtimeCacheProvider) 
             : base(gatewayProviderService, gatewayProvider, runtimeCacheProvider)
         { }
 
-
-        public IPaymentMethod CreatePaymentMethod(string name, string description, string paymentCode)
+        /// <summary>
+        /// Creates a <see cref="IPaymentGatewayMethod"/>
+        /// </summary>
+        /// <param name="name">The name of the payment method</param>
+        /// <param name="description">The description of the payment method</param>
+        /// <param name="paymentCode">The payment code of the payment method</param>
+        /// <returns>A <see cref="IPaymentGatewayMethod"/></returns>
+        public abstract IPaymentGatewayMethod CreatePaymentMethod(string name, string description, string paymentCode);
+        
+        /// <summary>
+        /// Saves a <see cref="IPaymentGatewayMethod"/>
+        /// </summary>
+        /// <param name="method">The <see cref="IPaymentGatewayMethod"/> to be saved</param>
+        public virtual void SavePaymentMethod(IPaymentGatewayMethod method)
         {
-            throw new NotImplementedException();
+            GatewayProviderService.Save(method.PaymentMethod);
         }
 
-        public void SavePaymentMethod(IPaymentMethod paymentMethod)
+        /// <summary>
+        /// Deletes a <see cref="IPaymentGatewayMethod"/>
+        /// </summary>
+        /// <param name="method">The <see cref="IPaymentGatewayMethod"/> to delete</param>
+        public virtual void DeletePaymentMethod(IPaymentGatewayMethod method)
         {
-            throw new NotImplementedException();
+            GatewayProviderService.Save(method.PaymentMethod);
         }
 
-        public void DeletePaymentMethod(IPaymentMethod paymentMethod)
+        /// <summary>
+        /// Gets a <see cref="IPaymentGatewayMethod"/> by it's unique 'key'
+        /// </summary>
+        /// <param name="paymentMethodKey">The key of the <see cref="IPaymentMethod"/></param>
+        /// <returns>A <see cref="IPaymentGatewayMethod"/></returns>
+        public abstract IPaymentGatewayMethod GetByKey(Guid paymentMethodKey);
+        
+        private IEnumerable<IPaymentMethod> _paymentMethods; 
+        /// <summary>
+        /// Gets a collection of all <see cref="IPaymentMethod"/>s associated with this provider
+        /// </summary>
+        public IEnumerable<IPaymentMethod> PaymentMethods
         {
-            throw new NotImplementedException();
+            get {
+                return _paymentMethods ??
+                       (_paymentMethods = GatewayProviderService.GetPaymentMethodsByProviderKey(GatewayProvider.Key));
+            }
         }
-
-        public IEnumerable<IPaymentMethod> PaymentMethods { get; private set; }
     }
 }

@@ -30,7 +30,7 @@ namespace Merchello.Core.Cache
         }
 
         /// <summary>
-        /// Returns a cache key intended for runtime caching of a <see cref="IGatewayShipMethod"/>
+        /// Returns a cache key intended for runtime caching of a <see cref="IShippingGatewayMethod"/>
         /// </summary>
         /// <param name="shipMethodKey">The unique key (Guid) of the <see cref="IShippingFixedRateTable"/> associated with the rate table</param>
         /// <returns></returns>

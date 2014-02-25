@@ -24,12 +24,12 @@ namespace Merchello.Core.Gateways.Taxation.FixedRate
         { }
 
         /// <summary>
-        /// Creates a <see cref="IGatewayTaxMethod"/>
+        /// Creates a <see cref="ITaxationGatewayMethod"/>
         /// </summary>
         /// <param name="countryCode">The two letter ISO Country Code</param>
         /// <param name="taxPercentageRate">The decimal percentage tax rate</param>
-        /// <returns>The <see cref="IGatewayTaxMethod"/></returns>
-        public override IGatewayTaxMethod CreateTaxMethod(string countryCode, decimal taxPercentageRate)
+        /// <returns>The <see cref="ITaxationGatewayMethod"/></returns>
+        public override ITaxationGatewayMethod CreateTaxMethod(string countryCode, decimal taxPercentageRate)
         {
             var attempt = GatewayProviderService.CreateTaxMethodWithKey(GatewayProvider.Key, countryCode, taxPercentageRate);
 
@@ -39,7 +39,7 @@ namespace Merchello.Core.Gateways.Taxation.FixedRate
                 throw attempt.Exception;
             }
 
-            return new FixRateTaxMethod(attempt.Result);
+            return new FixRateMethod(attempt.Result);
         }
 
         /// <summary>
@@ -47,20 +47,20 @@ namespace Merchello.Core.Gateways.Taxation.FixedRate
         /// </summary>
         /// <param name="countryCode">The two char ISO country code</param>
         /// <returns><see cref="ITaxMethod"/></returns>
-        public override IGatewayTaxMethod GetGatewayTaxMethodByCountryCode(string countryCode)
+        public override ITaxationGatewayMethod GetGatewayTaxMethodByCountryCode(string countryCode)
         {
             var taxMethod = TaxMethods.FirstOrDefault(x => x.CountryCode == countryCode);
 
-            return taxMethod != null ? new FixRateTaxMethod(taxMethod) : null;
+            return taxMethod != null ? new FixRateMethod(taxMethod) : null;
         }
 
         /// <summary>
         /// Gets a collection of all <see cref="ITaxMethod"/> associated with this provider
         /// </summary>
         /// <returns>A collection of <see cref="ITaxMethod"/> </returns>
-        public override IEnumerable<IGatewayTaxMethod> GetAllGatewayTaxMethods()
+        public override IEnumerable<ITaxationGatewayMethod> GetAllGatewayTaxMethods()
         {
-            return TaxMethods.Select(taxMethod => new FixRateTaxMethod(taxMethod));
+            return TaxMethods.Select(taxMethod => new FixRateMethod(taxMethod));
         }
 
 

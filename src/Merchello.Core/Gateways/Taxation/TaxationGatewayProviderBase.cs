@@ -18,39 +18,39 @@ namespace Merchello.Core.Gateways.Taxation
         { }
 
         /// <summary>
-        /// Attempts to create a <see cref="IGatewayTaxMethod"/> for a given provider and country.  If the provider already 
+        /// Attempts to create a <see cref="ITaxationGatewayMethod"/> for a given provider and country.  If the provider already 
         /// defines a tax rate for the country, the creation fails.
         /// </summary>
         /// <param name="countryCode">The two character ISO country code</param>
-        public virtual IGatewayTaxMethod CreateTaxMethod(string countryCode)
+        public virtual ITaxationGatewayMethod CreateTaxMethod(string countryCode)
         {
             return CreateTaxMethod(countryCode, 0);
         }
 
         /// <summary>
-        /// Creates a <see cref="IGatewayTaxMethod"/>
+        /// Creates a <see cref="ITaxationGatewayMethod"/>
         /// </summary>
         /// <param name="countryCode">The two letter ISO Country Code</param>
         /// <param name="taxPercentageRate">The decimal percentage tax rate</param>
-        /// <returns>The <see cref="IGatewayTaxMethod"/></returns>
-        public abstract IGatewayTaxMethod CreateTaxMethod(string countryCode, decimal taxPercentageRate);
+        /// <returns>The <see cref="ITaxationGatewayMethod"/></returns>
+        public abstract ITaxationGatewayMethod CreateTaxMethod(string countryCode, decimal taxPercentageRate);
 
         /// <summary>
-        /// Saves a <see cref="IGatewayTaxMethod"/>
+        /// Saves a <see cref="ITaxationGatewayMethod"/>
         /// </summary>
-        /// <param name="gatewayTaxMethod">The <see cref="IGatewayTaxMethod"/> to be saved</param>
-        public void SaveTaxMethod(IGatewayTaxMethod gatewayTaxMethod)
+        /// <param name="taxationGatewayMethod">The <see cref="ITaxationGatewayMethod"/> to be saved</param>
+        public void SaveTaxMethod(ITaxationGatewayMethod taxationGatewayMethod)
         {
-            GatewayProviderService.Save(gatewayTaxMethod.TaxMethod);
+            GatewayProviderService.Save(taxationGatewayMethod.TaxMethod);
         }
 
         /// <summary>
         /// Deletes a <see cref="ITaxMethod"/>
         /// </summary>
-        /// <param name="gatewayTaxMethod">The <see cref="IGatewayTaxMethod"/> to be deleted</param>
-        public void DeleteTaxMethod(IGatewayTaxMethod gatewayTaxMethod)
+        /// <param name="taxationGatewayMethod">The <see cref="ITaxationGatewayMethod"/> to be deleted</param>
+        public void DeleteTaxMethod(ITaxationGatewayMethod taxationGatewayMethod)
         {
-            GatewayProviderService.Delete(gatewayTaxMethod.TaxMethod);
+            GatewayProviderService.Delete(taxationGatewayMethod.TaxMethod);
         }
 
         /// <summary>
@@ -62,17 +62,17 @@ namespace Merchello.Core.Gateways.Taxation
         }
         
         /// <summary>
-        /// Gets a <see cref="IGatewayTaxMethod"/> by it's unique 'key' (Guid)
+        /// Gets a <see cref="ITaxationGatewayMethod"/> by it's unique 'key' (Guid)
         /// </summary>
         /// <param name="countryCode">The two char ISO country code</param>
-        /// <returns><see cref="IGatewayTaxMethod"/></returns>
-        public abstract IGatewayTaxMethod GetGatewayTaxMethodByCountryCode(string countryCode);
+        /// <returns><see cref="ITaxationGatewayMethod"/></returns>
+        public abstract ITaxationGatewayMethod GetGatewayTaxMethodByCountryCode(string countryCode);
 
         /// <summary>
-        /// Gets a collection of all <see cref="IGatewayTaxMethod"/> associated with this provider
+        /// Gets a collection of all <see cref="ITaxationGatewayMethod"/> associated with this provider
         /// </summary>
-        /// <returns>A collection of <see cref="IGatewayTaxMethod"/> </returns>
-        public abstract IEnumerable<IGatewayTaxMethod> GetAllGatewayTaxMethods();
+        /// <returns>A collection of <see cref="ITaxationGatewayMethod"/> </returns>
+        public abstract IEnumerable<ITaxationGatewayMethod> GetAllGatewayTaxMethods();
 
 
         private IEnumerable<ITaxMethod> _taxMethods;

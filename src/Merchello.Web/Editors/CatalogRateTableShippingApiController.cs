@@ -104,7 +104,7 @@ namespace Merchello.Web.Editors
 
                 merchelloGwShipMethod = method.ToRateTableShipMethod(merchelloGwShipMethod);
 
-                provider.SaveShipMethod(merchelloGwShipMethod);
+                provider.SaveShippingGatewayMethod(merchelloGwShipMethod);
             }
             catch (Exception ex)
             {
@@ -130,7 +130,7 @@ namespace Merchello.Web.Editors
                 var shipCountry = _shipCountryService.GetByKey(method.ShipMethod.ShipCountryKey);
                 var provider = _fixedRateShippingGatewayProvider;
 
-                var merchelloMethod = (IFixedRateShipMethod)provider.GetActiveShipMethods(shipCountry).FirstOrDefault(m => m.ShipMethod.Key == method.ShipMethod.Key);
+                var merchelloMethod = (IFixedRateShipMethod)provider.GetAllShippingGatewayMethods(shipCountry).FirstOrDefault(m => m.ShipMethod.Key == method.ShipMethod.Key);
 
                 if (merchelloMethod != null)
                 {
@@ -141,7 +141,7 @@ namespace Merchello.Web.Editors
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
 
-                provider.SaveShipMethod(merchelloMethod);
+                provider.SaveShippingGatewayMethod(merchelloMethod);
             }
             catch (Exception ex)
             {

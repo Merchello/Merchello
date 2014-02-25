@@ -5,10 +5,10 @@ namespace Merchello.Core.Gateways.Taxation
     /// <summary>
     /// Defines the abstract GatewayTaxMethod
     /// </summary>
-    public interface IGatewayTaxMethod
+    public interface ITaxationGatewayMethod : IGatewayMethod
     {
         /// <summary>
-        /// Gets the <see cref="IGatewayTaxMethod"/>
+        /// Gets the <see cref="ITaxationGatewayMethod"/>
         /// </summary>
         ITaxMethod TaxMethod { get; }
 

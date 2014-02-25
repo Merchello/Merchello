@@ -5,11 +5,11 @@ namespace Merchello.Core.Gateways.Taxation
     /// <summary>
     /// Represents the abstract GatewayTaxMethod
     /// </summary>
-    public abstract class GatewayTaxMethodBase : IGatewayTaxMethod
+    public abstract class TaxationGatewayMethodBase : ITaxationGatewayMethod
     {
         private readonly ITaxMethod _taxMethod;
 
-        protected GatewayTaxMethodBase(ITaxMethod taxMethod)
+        protected TaxationGatewayMethodBase(ITaxMethod taxMethod)
         {
             Mandate.ParameterNotNull(taxMethod, "taxMethod");
 

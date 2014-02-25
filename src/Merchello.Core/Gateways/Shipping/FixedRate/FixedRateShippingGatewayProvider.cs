@@ -45,13 +45,13 @@ namespace Merchello.Core.Gateways.Shipping.FixedRate
         /// rather than defined up front.  
         /// 
         /// </remarks>   
-        public IGatewayShipMethod CreateShipMethod(FixedRateShipMethod.QuoteType quoteType, IShipCountry shipCountry, string name)
+        public IShippingGatewayMethod CreateShipMethod(FixedRateShipMethod.QuoteType quoteType, IShipCountry shipCountry, string name)
         {
             var resource = quoteType == FixedRateShipMethod.QuoteType.VaryByWeight
                 ? AvailableResources.First(x => x.ServiceCode == "VBW")
                 : AvailableResources.First(x => x.ServiceCode == "VBP");
 
-            return CreateShipMethod(resource, shipCountry, name);
+            return CreateShippingGatewayMethod(resource, shipCountry, name);
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace Merchello.Core.Gateways.Shipping.FixedRate
         /// tiered rate tables for various ship methods without requiring a carrier based shipping provider.
         /// 
         /// </remarks>    
-        public override IGatewayShipMethod CreateShipMethod(IGatewayResource gatewayResource, IShipCountry shipCountry, string name)
+        public override IShippingGatewayMethod CreateShippingGatewayMethod(IGatewayResource gatewayResource, IShipCountry shipCountry, string name)
         {
 
             Mandate.ParameterNotNull(gatewayResource, "gatewayResource");
@@ -82,11 +82,11 @@ namespace Merchello.Core.Gateways.Shipping.FixedRate
         /// <summary>
         /// Saves a <see cref="FixedRateShipMethod"/> 
         /// </summary>
-        /// <param name="gatewayShipMethod"></param>
-        public override void SaveShipMethod(IGatewayShipMethod gatewayShipMethod)
+        /// <param name="shippingGatewayMethod"></param>
+        public override void SaveShippingGatewayMethod(IShippingGatewayMethod shippingGatewayMethod)
         {
-            GatewayProviderService.Save(gatewayShipMethod.ShipMethod);
-            ShippingFixedRateTable.Save(GatewayProviderService, RuntimeCache, ((FixedRateShipMethod) gatewayShipMethod).RateTable);
+            GatewayProviderService.Save(shippingGatewayMethod.ShipMethod);
+            ShippingFixedRateTable.Save(GatewayProviderService, RuntimeCache, ((FixedRateShipMethod) shippingGatewayMethod).RateTable);
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace Merchello.Core.Gateways.Shipping.FixedRate
         /// Returns a collection of ship methods assigned for this specific provider configuration (associated with the ShipCountry)
         /// </summary>
         /// <returns></returns>
-        public override IEnumerable<IGatewayShipMethod> GetActiveShipMethods(IShipCountry shipCountry)
+        public override IEnumerable<IShippingGatewayMethod> GetAllShippingGatewayMethods(IShipCountry shipCountry)
         {
             var methods = GatewayProviderService.GetGatewayProviderShipMethods(GatewayProvider.Key, shipCountry.Key);
             return methods
@@ -113,7 +113,7 @@ namespace Merchello.Core.Gateways.Shipping.FixedRate
 
         public override string Name
         {
-            get { return "Fixed RAte Shipping Provider"; }
+            get { return "Fixed Rate Shipping Provider"; }
         }
 
         public override Guid Key

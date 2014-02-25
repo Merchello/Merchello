@@ -3,9 +3,9 @@
 namespace Merchello.Core.Gateways
 {
     /// <summary>
-    /// Marker interface for Gateways 
+    /// Marker interface for Providers 
     /// </summary>
-    public interface IGateway
+    public interface IProvider
     {
         /// <summary>
         /// The unique Key (Guid) for the gateway.  
