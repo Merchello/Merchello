@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Configuration;
-using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Models;
 using Merchello.Core.Strategies.Packaging;
 using Merchello.Web.Workflow;
-using Merchello.Web.Workflow.Shipping;
 using Umbraco.Core.Logging;
 
 namespace Merchello.Web

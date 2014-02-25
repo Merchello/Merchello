@@ -6,11 +6,11 @@ using Umbraco.Core;
 
 namespace Merchello.Core.Gateways.Taxation.FixedRate
 {
-    internal class FixedRateInvoiceTaxationStrategy : InvoiceTaxationStrategyBase
+    internal class FixedRateTaxCalculationStrategy : TaxCalculationStrategyBase
     {
         private readonly ITaxMethod _taxMethod;
 
-        public FixedRateInvoiceTaxationStrategy(IInvoice invoice, IAddress taxAddress, ITaxMethod taxMethod)
+        public FixedRateTaxCalculationStrategy(IInvoice invoice, IAddress taxAddress, ITaxMethod taxMethod)
             : base(invoice, taxAddress)
         {
             Mandate.ParameterNotNull(taxMethod, "countryTaxRate");
@@ -22,8 +22,8 @@ namespace Merchello.Core.Gateways.Taxation.FixedRate
         /// <summary>
         /// Computes the invoice tax result
         /// </summary>
-        /// <returns>The <see cref="IInvoiceTaxResult"/></returns>
-        public override Attempt<IInvoiceTaxResult> CalculateTaxesForInvoice()
+        /// <returns>The <see cref="ITaxCalculationResult"/></returns>
+        public override Attempt<ITaxCalculationResult> CalculateTaxesForInvoice()
         {
             var extendedData = new ExtendedDataCollection();
 
@@ -43,13 +43,13 @@ namespace Merchello.Core.Gateways.Taxation.FixedRate
 
                 var totalTax = visitor.TaxableLineItems.Sum(x => decimal.Parse(x.ExtendedData.GetValue(Constants.ExtendedDataKeys.LineItemTaxAmount)));
 
-                return Attempt<IInvoiceTaxResult>.Succeed(
-                    new InvoiceTaxResult(_taxMethod.Name, baseTaxRate, totalTax, extendedData)
+                return Attempt<ITaxCalculationResult>.Succeed(
+                    new TaxCalculationResult(_taxMethod.Name, baseTaxRate, totalTax, extendedData)
                     );
             }
             catch (Exception ex)
             {
-                return Attempt<IInvoiceTaxResult>.Fail(ex);
+                return Attempt<ITaxCalculationResult>.Fail(ex);
             }
                                    
         }

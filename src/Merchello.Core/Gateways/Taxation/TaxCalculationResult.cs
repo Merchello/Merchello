@@ -5,17 +5,17 @@ namespace Merchello.Core.Gateways.Taxation
     /// <summary>
     /// Represents an invoice tax calculation result
     /// </summary>
-    public class InvoiceTaxResult : IInvoiceTaxResult
+    public class TaxCalculationResult : ITaxCalculationResult
     {
-        public InvoiceTaxResult(decimal taxRate, decimal taxAmount)
+        public TaxCalculationResult(decimal taxRate, decimal taxAmount)
             : this(string.Empty, taxRate, taxAmount)
         {}
 
-        public InvoiceTaxResult(string name, decimal taxRate, decimal taxAmount)
+        public TaxCalculationResult(string name, decimal taxRate, decimal taxAmount)
             : this(name, taxRate, taxAmount, new ExtendedDataCollection())
         { }
 
-        public InvoiceTaxResult(string name, decimal taxRate, decimal taxAmount, ExtendedDataCollection extendedData)
+        public TaxCalculationResult(string name, decimal taxRate, decimal taxAmount, ExtendedDataCollection extendedData)
         {
             Mandate.ParameterNotNull(extendedData, "extendedData");
 

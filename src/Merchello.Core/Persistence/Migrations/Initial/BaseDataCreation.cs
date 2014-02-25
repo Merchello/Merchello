@@ -86,26 +86,26 @@ namespace Merchello.Core.Persistence.Migrations.Initial
 
         private void CreateInvoiceStatusData()
         {
-            _database.Insert("merchInvoiceStatus", "Key", new InvoiceStatusDto() { Key = Constants.DefaultKeys.UnpaidInvoiceStatusKey, Alias = "unpaid", Name = "Unpaid", Active = true, Reportable = true, SortOrder = 1, CreateDate = DateTime.Now, UpdateDate = DateTime.Now});
-            _database.Insert("merchInvoiceStatus", "Key", new InvoiceStatusDto() { Key = Constants.DefaultKeys.PaidInvoiceStatusKey, Alias = "paid", Name = "Paid", Active = true, Reportable = true, SortOrder = 2, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
-            _database.Insert("merchInvoiceStatus", "Key", new InvoiceStatusDto() { Key = Constants.DefaultKeys.PartialInvoiceStatusKey, Alias = "partial", Name = "Partial", Active = true, Reportable = true, SortOrder = 3, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
-            _database.Insert("merchInvoiceStatus", "Key", new InvoiceStatusDto() { Key = Constants.DefaultKeys.CancelledInvoiceStatusKey, Alias = "cancelled", Name = "Cancelled", Active = true, Reportable = true, SortOrder = 4, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
-            _database.Insert("merchInvoiceStatus", "Key", new InvoiceStatusDto() { Key = Constants.DefaultKeys.FraudInvoiceStatusKey, Alias = "fraud", Name = "Fraud", Active = true, Reportable = true, SortOrder = 5, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchInvoiceStatus", "Key", new InvoiceStatusDto() { Key = Constants.DefaultKeys.InvoiceStatus.Unpaid, Alias = "unpaid", Name = "Unpaid", Active = true, Reportable = true, SortOrder = 1, CreateDate = DateTime.Now, UpdateDate = DateTime.Now});
+            _database.Insert("merchInvoiceStatus", "Key", new InvoiceStatusDto() { Key = Constants.DefaultKeys.InvoiceStatus.Paid, Alias = "paid", Name = "Paid", Active = true, Reportable = true, SortOrder = 2, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchInvoiceStatus", "Key", new InvoiceStatusDto() { Key = Constants.DefaultKeys.InvoiceStatus.Partial, Alias = "partial", Name = "Partial", Active = true, Reportable = true, SortOrder = 3, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchInvoiceStatus", "Key", new InvoiceStatusDto() { Key = Constants.DefaultKeys.InvoiceStatus.Cancelled, Alias = "cancelled", Name = "Cancelled", Active = true, Reportable = true, SortOrder = 4, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchInvoiceStatus", "Key", new InvoiceStatusDto() { Key = Constants.DefaultKeys.InvoiceStatus.Fraud, Alias = "fraud", Name = "Fraud", Active = true, Reportable = true, SortOrder = 5, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
         }
 
         private void CreateOrderStatusData()
         {
-            _database.Insert("merchOrderStatus", "Key", new InvoiceStatusDto() { Key = new Guid("C54D47E6-D1C9-40D5-9BAF-18C6ADFFE9D0"), Alias = "notfulfilled", Name = "Not Fulfilled", Active = true, Reportable = true, SortOrder = 1, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
-            _database.Insert("merchOrderStatus", "Key", new InvoiceStatusDto() { Key = new Guid("D5369B84-8CCA-4586-8FBA-F3020F5E06EC"), Alias = "fulfilled", Name = "Fulfilled", Active = true, Reportable = true, SortOrder = 2, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
-            _database.Insert("merchOrderStatus", "Key", new InvoiceStatusDto() { Key = new Guid("C47D475F-A075-4635-BBB9-4B9C49AA8EBE"), Alias = "partial", Name = "Partial", Active = true, Reportable = true, SortOrder = 3, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
-            _database.Insert("merchOrderStatus", "Key", new InvoiceStatusDto() { Key = new Guid("77DAF52E-C79C-4E1B-898C-5E977A9A6027"), Alias = "cancelled", Name = "Cancelled", Active = true, Reportable = true, SortOrder = 4, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });            
+            _database.Insert("merchOrderStatus", "Key", new OrderStatusDto() { Key = Constants.DefaultKeys.OrderStatus.NotFulfilled, Alias = "notfulfilled", Name = "Not Fulfilled", Active = true, Reportable = true, SortOrder = 1, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchOrderStatus", "Key", new OrderStatusDto() { Key = Constants.DefaultKeys.OrderStatus.Fulfilled, Alias = "fulfilled", Name = "Fulfilled", Active = true, Reportable = true, SortOrder = 2, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchOrderStatus", "Key", new OrderStatusDto() { Key = Constants.DefaultKeys.OrderStatus.Partial, Alias = "partial", Name = "Partial", Active = true, Reportable = true, SortOrder = 3, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchOrderStatus", "Key", new OrderStatusDto() { Key = Constants.DefaultKeys.OrderStatus.Cancelled, Alias = "cancelled", Name = "Cancelled", Active = true, Reportable = true, SortOrder = 4, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });            
         }
 
 
         private void CreateWarehouseData()
         {
-            _database.Insert("merchWarehouse", "Key", new WarehouseDto() { Key = Constants.DefaultKeys.DefaultWarehouseKey, Name = "Default Warehouse", CountryCode = "", IsDefault = true, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
-            _database.Insert("merchWarehouseCatalog", "Key", new WarehouseCatalogDto() { Key = Constants.DefaultKeys.DefaultWarehouseCatalogKey, WarehouseKey = Constants.DefaultKeys.DefaultWarehouseKey, Name = "Default Catalog", Description = null, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchWarehouse", "Key", new WarehouseDto() { Key = Constants.DefaultKeys.Warehouse.DefaultWarehouseKey, Name = "Default Warehouse", CountryCode = "", IsDefault = true, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchWarehouseCatalog", "Key", new WarehouseCatalogDto() { Key = Constants.DefaultKeys.Warehouse.DefaultWarehouseCatalogKey, WarehouseKey = Constants.DefaultKeys.Warehouse.DefaultWarehouseKey, Name = "Default Catalog", Description = null, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
         }
 
         private void CreateGatewayProviderData()
@@ -119,7 +119,7 @@ namespace Merchello.Core.Persistence.Migrations.Initial
                              new ShipCountryDto()
                                  {
                                      Key = Guid.NewGuid(),
-                                     CatalogKey = Constants.DefaultKeys.DefaultWarehouseCatalogKey,
+                                     CatalogKey = Constants.DefaultKeys.Warehouse.DefaultWarehouseCatalogKey,
                                      CountryCode = Constants.CountryCodes.EverywhereElse,
                                      Name = "Everywhere Else",
                                      CreateDate = DateTime.Now,

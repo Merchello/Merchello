@@ -58,6 +58,40 @@ namespace Merchello.Core.Services
 
         #endregion
 
+        #region PaymentMethod
+
+        /// <summary>
+        /// Attempts to create a <see cref="IPaymentMethod"/> for a given provider.  If the provider already 
+        /// defines a paymentCode, the creation fails.
+        /// </summary>
+        /// <param name="providerKey">The unique 'key' (Guid) of the TaxationGatewayProvider</param>
+        /// <param name="name">The name of the payment method</param>
+        /// <param name="description">The description of the payment method</param>
+        /// <param name="paymentCode">The unique 'payment code' associated with the payment method.  (Eg. visa, mc)</param>
+        /// <returns><see cref="Attempt"/> indicating whether or not the creation of the <see cref="IPaymentMethod"/> with respective success or fail</returns>
+        Attempt<IPaymentMethod> CreatePaymentMethodWithKey(Guid providerKey, string name, string description, string paymentCode);
+
+        /// <summary>
+        /// Saves a single <see cref="IPaymentMethod"/>
+        /// </summary>
+        /// <param name="paymentMethod">The <see cref="IPaymentMethod"/> to be saved</param>        
+        void Save(IPaymentMethod paymentMethod);
+
+        /// <summary>
+        /// Deletes a single <see cref="IPaymentMethod"/>
+        /// </summary>
+        /// <param name="paymentMethod">The <see cref="IPaymentMethod"/> to be deleted</param>        
+        void Delete(IPaymentMethod paymentMethod);
+
+        /// <summary>
+        /// Gets a collection of <see cref="IPaymentMethod"/> for a given PaymentGatewayProvider
+        /// </summary>
+        /// <param name="providerKey">The unique 'key' of the PaymentGatewayProvider</param>
+        /// <returns>A collection of <see cref="IPaymentMethod"/></returns>
+        IEnumerable<IPaymentMethod> GetPaymentMethodsByProviderKey(Guid providerKey);
+
+        #endregion
+
         #region ShipMethod
 
         /// <summary>
@@ -196,5 +230,6 @@ namespace Merchello.Core.Services
         IEnumerable<ITaxMethod> GetTaxMethodsByProviderKey(Guid providerKey);
 
         #endregion
+
     }
 }

@@ -48,8 +48,8 @@ namespace Merchello.Tests.IntegrationTests.Services.GatewayProvider
             Assert.NotNull(shippingProvider);
 
             var resource = shippingProvider.ListResourcesOffered().FirstOrDefault();
-            var gatewayShipMethod = shippingProvider.CreateShipMethod(resource, shipCountry, "Ground");
-            shippingProvider.SaveShipMethod(gatewayShipMethod);
+            var gatewayShipMethod = shippingProvider.CreateShippingGatewayMethod(resource, shipCountry, "Ground");
+            shippingProvider.SaveShippingGatewayMethod(gatewayShipMethod);
         }
 
         /// <summary>

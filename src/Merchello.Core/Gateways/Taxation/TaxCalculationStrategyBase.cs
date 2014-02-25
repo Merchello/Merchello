@@ -6,12 +6,12 @@ namespace Merchello.Core.Gateways.Taxation
     /// <summary>
     /// Defines an invoice taxation strategy base class
     /// </summary>
-    public abstract class InvoiceTaxationStrategyBase : IInvoiceTaxationStrategy
+    public abstract class TaxCalculationStrategyBase : ITaxCalculationStrategy
     {
         private readonly IInvoice _invoice;
         private readonly IAddress _taxAddress;
 
-        protected InvoiceTaxationStrategyBase(IInvoice invoice, IAddress taxAddress)
+        protected TaxCalculationStrategyBase(IInvoice invoice, IAddress taxAddress)
         {
             Mandate.ParameterNotNull(invoice, "invoice");
             Mandate.ParameterNotNull(taxAddress, "taxAddress");
@@ -23,8 +23,8 @@ namespace Merchello.Core.Gateways.Taxation
         /// <summary>
         /// Computes the invoice tax result
         /// </summary>
-        /// <returns>The <see cref="IInvoiceTaxResult"/></returns>
-        public abstract Attempt<IInvoiceTaxResult> CalculateTaxesForInvoice();
+        /// <returns>The <see cref="ITaxCalculationResult"/></returns>
+        public abstract Attempt<ITaxCalculationResult> CalculateTaxesForInvoice();
 
 
         /// <summary>

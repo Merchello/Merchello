@@ -3,7 +3,7 @@
     /// <summary>
     /// Defines the rate table ship method
     /// </summary>
-    public interface IFixedRateShipMethod : IGatewayShipMethod
+    public interface IFixedRateShipMethod : IShippingGatewayMethod
     {
         /// <summary>
         /// Gets the <see cref="IShippingFixedRateTable"/> for this ship method

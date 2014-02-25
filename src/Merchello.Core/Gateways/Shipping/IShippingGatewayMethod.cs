@@ -3,7 +3,7 @@ using Umbraco.Core;
 
 namespace Merchello.Core.Gateways.Shipping
 {
-    public interface IGatewayShipMethod
+    public interface IShippingGatewayMethod : IGatewayMethod
     {
         /// <summary>
         /// Gets the <see cref="IShipMethod"/>

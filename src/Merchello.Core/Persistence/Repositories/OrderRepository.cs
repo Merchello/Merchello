@@ -39,7 +39,7 @@ namespace Merchello.Core.Persistence.Repositories
             if (dto == null)
                 return null;
 
-            var lineItems = _lineItemRepository.GetByContainerKey(key) as LineItemCollection;
+            var lineItems =GetLineItemCollection(key);
 
             var factory = new OrderFactory(lineItems);
             return factory.BuildEntity(dto);
@@ -94,7 +94,7 @@ namespace Merchello.Core.Persistence.Repositories
         {
             var list = new List<string>
             {
-                "DELETE FROM FROM merchOrderItem WHERE orderKey = @Key",
+                "DELETE FROM merchOrderItem WHERE orderKey = @Key",
                 "DELETE FROM merchOrder WHERE pk = @Key"
             };
 
@@ -110,7 +110,7 @@ namespace Merchello.Core.Persistence.Repositories
             var dto = factory.BuildDto(entity);
 
             Database.Insert(dto);
-
+            
             entity.Key = dto.Key;
 
             foreach (var item in entity.Items)
@@ -141,6 +141,27 @@ namespace Merchello.Core.Persistence.Repositories
             }
 
             entity.ResetDirtyProperties();
+        }
+
+        private LineItemCollection GetLineItemCollection(Guid orderKey)
+        {
+            var sql = new Sql();
+            sql.Select("*")
+                .From<OrderItemDto>()
+                .Where<OrderItemDto>(x => x.ContainerKey == orderKey);
+
+            var dtos = Database.Fetch<OrderItemDto>(sql);
+
+            //var lineItems = _lineItemRepository.GetByContainerId(itemCacheId);
+
+            var factory = new LineItemFactory();
+            var collection = new LineItemCollection();
+            foreach (var dto in dtos)
+            {
+                collection.Add(factory.BuildEntity(dto));
+            }
+
+            return collection;
         }
     }
 }

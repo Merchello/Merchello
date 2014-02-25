@@ -8,7 +8,7 @@ namespace Merchello.Core.Gateways
     /// <summary>
     /// Defines the GatewayBase
     /// </summary>
-    public abstract class GatewayProviderBase : IGateway
+    public abstract class GatewayProviderBase : IProvider
     {        
         private readonly IGatewayProvider _gatewayProvider;
         private readonly IGatewayProviderService _gatewayProviderService;

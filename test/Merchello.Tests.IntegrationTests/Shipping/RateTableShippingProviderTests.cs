@@ -67,9 +67,9 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             var gwShipMethod = rateTableProvider.CreateShipMethod(FixedRateShipMethod.QuoteType.VaryByWeight, _shipCountry, "Vary By Weight - Ground");
             gwShipMethod.ShipMethod.Provinces["WA"].RateAdjustmentType = RateAdjustmentType.Numeric;
             gwShipMethod.ShipMethod.Provinces["WA"].RateAdjustment = expected;
-            rateTableProvider.SaveShipMethod(gwShipMethod);
+            rateTableProvider.SaveShippingGatewayMethod(gwShipMethod);
 
-            var retrieved = rateTableProvider.GetActiveShipMethods(_shipCountry).FirstOrDefault();
+            var retrieved = rateTableProvider.GetAllShippingGatewayMethods(_shipCountry).FirstOrDefault();
 
             //// Assert
             Assert.NotNull(retrieved);
@@ -98,7 +98,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             // have to call this via the static method due o the MerchelloContext.Current not present in the ShipRateTable object.
             ShippingFixedRateTable.Save(GatewayProviderService, MerchelloContext.Cache.RuntimeCache, gwshipMethod.RateTable);
 
-            var retrieved = (FixedRateShipMethod)rateTableProvider.GetActiveShipMethods(_shipCountry).First();
+            var retrieved = (FixedRateShipMethod)rateTableProvider.GetAllShippingGatewayMethods(_shipCountry).First();
 
             ////// Assert
             Assert.NotNull(retrieved);
@@ -183,7 +183,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             //// Act
             var shipments = _basket.PackageBasket(MerchelloContext, _destination);
             Assert.IsTrue(shipments.Any());
-            var retrievedMethods = rateTableProvider.GetAvailableShipMethodsForShipment(shipments.First());
+            var retrievedMethods = rateTableProvider.GetShippingGatewayMethodsForShipment(shipments.First());
 
             //// Assert
             Assert.IsTrue(retrievedMethods.Any());
@@ -213,14 +213,14 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             gwshipMethod1.RateTable.AddRow(15, 25, 25);
             gwshipMethod1.RateTable.AddRow(25, 60, 30); // total price should be 50M so we should hit this tier
             gwshipMethod1.RateTable.AddRow(25, 10000, 50);
-            rateTableProvider.SaveShipMethod(gwshipMethod1);    
+            rateTableProvider.SaveShippingGatewayMethod(gwshipMethod1);    
             
             var gwshipMethod2 = (FixedRateShipMethod)rateTableProvider.CreateShipMethod(FixedRateShipMethod.QuoteType.VaryByWeight, _shipCountry, "Ground (VBW)");
             gwshipMethod2.RateTable.AddRow(0, 10, 5);
             gwshipMethod2.RateTable.AddRow(10, 15, 10); // total weight should be 10M so we should hit this tier
             gwshipMethod2.RateTable.AddRow(15, 25, 25);
             gwshipMethod2.RateTable.AddRow(25, 10000, 100);
-            rateTableProvider.SaveShipMethod(gwshipMethod2);
+            rateTableProvider.SaveShippingGatewayMethod(gwshipMethod2);
 
             var gwshipMethod3 = (FixedRateShipMethod)rateTableProvider.CreateShipMethod(FixedRateShipMethod.QuoteType.VaryByPrice, dkCountry, "Ground (Vary By Price) 3");
             gwshipMethod3.RateTable.AddRow(0, 10, 5);
@@ -228,7 +228,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             gwshipMethod3.RateTable.AddRow(15, 25, 25);
             gwshipMethod3.RateTable.AddRow(25, 60, 30); // total price should be 50M so we should hit this tier
             gwshipMethod3.RateTable.AddRow(25, 10000, 50);
-            rateTableProvider.SaveShipMethod(gwshipMethod3);
+            rateTableProvider.SaveShippingGatewayMethod(gwshipMethod3);
 
             #endregion
 
@@ -238,7 +238,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             var shipments = _basket.PackageBasket(MerchelloContext, _destination);
             Assert.IsTrue(shipments.Any());
 
-            var quotes = rateTableProvider.QuoteAvailableShipMethodsForShipment(shipments.First()).OrderBy(x => x.Rate);
+            var quotes = rateTableProvider.QuoteShippingGatewayMethodsForShipment(shipments.First()).OrderBy(x => x.Rate);
 
             Console.Write("Basket total price: {0}", _basket.TotalBasketPrice);
 
@@ -267,7 +267,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             gwshipMethod1.RateTable.AddRow(25, 60, 30); // total price should be 50M so we should hit this tier
             gwshipMethod1.RateTable.AddRow(25, 10000, 50);
             gwshipMethod1.ShipMethod.Provinces["AK"].RateAdjustment = 5M;
-            rateTableProvider.SaveShipMethod(gwshipMethod1);
+            rateTableProvider.SaveShippingGatewayMethod(gwshipMethod1);
             _destination.Region = "AK";
 
             //// Act

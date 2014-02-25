@@ -7,14 +7,28 @@ namespace Merchello.Core
 
         public static class DefaultKeys
         {            
-            public static Guid DefaultWarehouseKey = new Guid("268D4007-8853-455A-89F7-A28398843E5F");
-            public static Guid DefaultWarehouseCatalogKey = new Guid("B25C2B00-578E-49B9-BEA2-BF3712053C63");
+            public static class Warehouse
+            {
+                public static Guid DefaultWarehouseKey = new Guid("268D4007-8853-455A-89F7-A28398843E5F");
+                public static Guid DefaultWarehouseCatalogKey = new Guid("B25C2B00-578E-49B9-BEA2-BF3712053C63");    
+            }
+            
+            public static class InvoiceStatus
+            {
+                public static Guid Unpaid = new Guid("17ADA9AC-C893-4C26-AA26-234ECEB2FA75");
+                public static Guid Paid = new Guid("1F872A1A-F0DD-4C3E-80AB-99799A28606E");
+                public static Guid Partial = new Guid("6606B0EA-15B6-44AA-8557-B2D9D049645C");
+                public static Guid Cancelled = new Guid("53077EFD-6BF0-460D-9565-0E00567B5176");
+                public static Guid Fraud = new Guid("75E1E5EB-33E8-4904-A8E5-4B64A37D6087");    
+            }
 
-            public static Guid UnpaidInvoiceStatusKey = new Guid("17ADA9AC-C893-4C26-AA26-234ECEB2FA75");
-            public static Guid PaidInvoiceStatusKey = new Guid("1F872A1A-F0DD-4C3E-80AB-99799A28606E");
-            public static Guid PartialInvoiceStatusKey = new Guid("6606B0EA-15B6-44AA-8557-B2D9D049645C");
-            public static Guid CancelledInvoiceStatusKey = new Guid("53077EFD-6BF0-460D-9565-0E00567B5176");
-            public static Guid FraudInvoiceStatusKey = new Guid("75E1E5EB-33E8-4904-A8E5-4B64A37D6087");
+            public static class OrderStatus
+            {
+                public static Guid NotFulfilled = new Guid("C54D47E6-D1C9-40D5-9BAF-18C6ADFFE9D0");
+                public static Guid Partial = new Guid("C47D475F-A075-4635-BBB9-4B9C49AA8EBE");
+                public static Guid Fulfilled = new Guid("D5369B84-8CCA-4586-8FBA-F3020F5E06EC");
+                public static Guid Cancelled = new Guid("77DAF52E-C79C-4E1B-898C-5E977A9A6027");
+            }
         }
 
         /// <summary>

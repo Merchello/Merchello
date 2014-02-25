@@ -44,9 +44,9 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
             _serviceContext = serviceContext;
 
-            WarehouseCatalog = new WarehouseCatalog(Constants.DefaultKeys.DefaultWarehouseKey)
+            WarehouseCatalog = new WarehouseCatalog(Constants.DefaultKeys.Warehouse.DefaultWarehouseKey)
             {
-                Key = Constants.DefaultKeys.DefaultWarehouseCatalogKey
+                Key = Constants.DefaultKeys.Warehouse.DefaultWarehouseCatalogKey
             };
         }
 

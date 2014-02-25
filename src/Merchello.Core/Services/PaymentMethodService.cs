@@ -49,7 +49,7 @@ namespace Merchello.Core.Services
         /// <param name="description">The description of the payment method</param>
         /// <param name="paymentCode">The unique 'payment code' associated with the payment method.  (Eg. visa, mc)</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        /// <returns><see cref="Attempt"/> indicating whether or not the creation of the <see cref="ITaxMethod"/> with respective success or fail</returns>
+        /// <returns><see cref="Attempt"/> indicating whether or not the creation of the <see cref="IPaymentMethod"/> with respective success or fail</returns>
         internal Attempt<IPaymentMethod> CreatePaymentMethodWithKey(Guid providerKey, string name, string description, string paymentCode, bool raiseEvents = true)
         {
             Mandate.ParameterCondition(!Guid.Empty.Equals(providerKey), "providerKey");

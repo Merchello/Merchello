@@ -8,13 +8,13 @@ namespace Merchello.Core.Gateways.Shipping
     /// <summary>
     /// Defines a an abstract gateway ship method
     /// </summary>
-    public abstract class GatewayShipMethodBase : IGatewayShipMethod
+    public abstract class ShippingGatewayMethodBase : IShippingGatewayMethod
     {
         private readonly IShipMethod _shipMethod;
         private readonly IGatewayResource _gatewayResource;
         private readonly IShipCountry _shipCountry;
 
-        protected GatewayShipMethodBase(IGatewayResource gatewayResource, IShipMethod shipMethod, IShipCountry shipCountry)
+        protected ShippingGatewayMethodBase(IGatewayResource gatewayResource, IShipMethod shipMethod, IShipCountry shipCountry)
         {
             Mandate.ParameterNotNull(gatewayResource, "gatewayResource");
             Mandate.ParameterNotNull(shipMethod, "shipMethod");

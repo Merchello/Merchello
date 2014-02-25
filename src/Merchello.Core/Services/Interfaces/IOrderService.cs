@@ -11,17 +11,19 @@ namespace Merchello.Core.Services
         /// Creates a <see cref="IOrder"/> without saving it to the database
         /// </summary>
         /// <param name="orderStatusKey">The <see cref="IOrderStatus"/> key</param>
+        /// <param name="invoiceKey">The invoice key</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         /// <returns><see cref="IOrder"/></returns>
-        IOrder CreateOrder(Guid orderStatusKey, bool raiseEvents = true);
+        IOrder CreateOrder(Guid orderStatusKey, Guid invoiceKey, bool raiseEvents = true);
 
         /// <summary>
         /// Creates a <see cref="IOrder"/> and saves it to the database
         /// </summary>
         /// <param name="orderStatusKey">The <see cref="IOrderStatus"/> key</param>
+        /// <param name="invoiceKey">The invoice key</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         /// <returns><see cref="IOrder"/></returns>
-        IOrder CreateOrderWithKey(Guid orderStatusKey, bool raiseEvents = true);
+        IOrder CreateOrderWithKey(Guid orderStatusKey, Guid invoiceKey, bool raiseEvents = true);
 
         /// <summary>
         /// Saves a single <see cref="IOrder"/>

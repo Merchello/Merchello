@@ -54,7 +54,7 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
             _gwshipMethod.RateTable.AddRow(15, 25, 25);
             _gwshipMethod.RateTable.AddRow(25, 10000, 100);
 
-            _fixedRateProvider.SaveShipMethod(_gwshipMethod);
+            _fixedRateProvider.SaveShippingGatewayMethod(_gwshipMethod);
     
             if (_gwshipMethod.ShipMethod.Provinces.Any(x => x.AllowShipping == false))
             {

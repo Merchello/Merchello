@@ -5,7 +5,7 @@ namespace Merchello.Core.Gateways.Taxation
     /// <summary>
     /// Defines an invoice tax calculation result
     /// </summary>
-    public interface IInvoiceTaxResult
+    public interface ITaxCalculationResult
     {
         /// <summary>
         /// The name of the Tax Method

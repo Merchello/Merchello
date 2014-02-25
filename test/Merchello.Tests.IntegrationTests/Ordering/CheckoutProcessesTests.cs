@@ -77,14 +77,14 @@ namespace Merchello.Tests.IntegrationTests.Ordering
             gwshipMethod1.RateTable.AddRow(15, 25, 35);
             gwshipMethod1.RateTable.AddRow(25, 60, 40); // total price should be 50M so we should hit this tier
             gwshipMethod1.RateTable.AddRow(25, 10000, 50);
-            rateTableProvider.SaveShipMethod(gwshipMethod1);
+            rateTableProvider.SaveShippingGatewayMethod(gwshipMethod1);
 
             var gwshipMethod2 = (FixedRateShipMethod)rateTableProvider.CreateShipMethod(FixedRateShipMethod.QuoteType.VaryByWeight, usCountry, "Ground (Vary by Weight)");
             gwshipMethod2.RateTable.AddRow(0, 10, 5);
             gwshipMethod2.RateTable.AddRow(10, 15, 10); // total weight should be 10M so we should hit this tier
             gwshipMethod2.RateTable.AddRow(15, 25, 25);
             gwshipMethod2.RateTable.AddRow(25, 10000, 100);
-            rateTableProvider.SaveShipMethod(gwshipMethod2);
+            rateTableProvider.SaveShippingGatewayMethod(gwshipMethod2);
 
             var gwshipMethod3 = (FixedRateShipMethod)rateTableProvider.CreateShipMethod(FixedRateShipMethod.QuoteType.VaryByPrice, dkCountry, "Ground (Vary by Price)");
             gwshipMethod3.RateTable.AddRow(0, 10, 5);
@@ -92,7 +92,7 @@ namespace Merchello.Tests.IntegrationTests.Ordering
             gwshipMethod3.RateTable.AddRow(15, 25, 25);
             gwshipMethod3.RateTable.AddRow(25, 60, 30); // total price should be 50M so we should hit this tier
             gwshipMethod3.RateTable.AddRow(25, 10000, 50);
-            rateTableProvider.SaveShipMethod(gwshipMethod3);
+            rateTableProvider.SaveShippingGatewayMethod(gwshipMethod3);
 
             #endregion // ShipMethods
 
@@ -106,11 +106,11 @@ namespace Merchello.Tests.IntegrationTests.Ordering
             
             provider.DeleteAllTaxMethods();
 
-            var taxMethod = provider.CreateTaxMethod("US", 0);
+            var gwTaxMethod = provider.CreateTaxMethod("US", 0);
 
-            taxMethod.Provinces["WA"].PercentRateAdjustment = 8.7M;
+            gwTaxMethod.TaxMethod.Provinces["WA"].PercentRateAdjustment = 8.7M;
 
-            provider.SaveTaxMethod(taxMethod);
+            provider.SaveTaxMethod(gwTaxMethod);
     
             
             #endregion

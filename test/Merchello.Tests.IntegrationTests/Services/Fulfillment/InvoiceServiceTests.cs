@@ -29,7 +29,7 @@ namespace Merchello.Tests.IntegrationTests.Services.Fulfillment
             
   
             //// Act
-            var invoice = _invoiceService.CreateInvoice(Core.Constants.DefaultKeys.UnpaidInvoiceStatusKey);
+            var invoice = _invoiceService.CreateInvoice(Core.Constants.DefaultKeys.InvoiceStatus.Unpaid);
 
             //// Assert
             Assert.NotNull(invoice);
@@ -44,7 +44,7 @@ namespace Merchello.Tests.IntegrationTests.Services.Fulfillment
         public void Can_Save_An_Invoice_With_InvoiceNumber()
         {
             //// Arrange
-            var invoice = _invoiceService.CreateInvoice(Core.Constants.DefaultKeys.UnpaidInvoiceStatusKey);
+            var invoice = _invoiceService.CreateInvoice(Core.Constants.DefaultKeys.InvoiceStatus.Unpaid);
             Console.Write(invoice.InvoiceStatusKey);
 
             //// Act

@@ -10,7 +10,7 @@ namespace Merchello.Core.Gateways.Shipping.FixedRate
     /// <summary>
     /// Defines the rate table ship method
     /// </summary>
-    public class FixedRateShipMethod : GatewayShipMethodBase, IFixedRateShipMethod
+    public class FixedRateShipMethod : ShippingGatewayMethodBase, IFixedRateShipMethod
     {
         private readonly QuoteType _quoteType;
 

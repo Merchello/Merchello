@@ -109,8 +109,8 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             
             //// Act
             var resource = shippingProvider.ListResourcesOffered().FirstOrDefault();
-            var gatewayShipMethod = shippingProvider.CreateShipMethod(resource, country, "Ground");
-            shippingProvider.SaveShipMethod(gatewayShipMethod);
+            var gatewayShipMethod = shippingProvider.CreateShippingGatewayMethod(resource, country, "Ground");
+            shippingProvider.SaveShippingGatewayMethod(gatewayShipMethod);
 
             //// Assert
             Assert.IsTrue(gatewayShipMethod.ShipMethod.HasIdentity);

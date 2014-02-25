@@ -20,15 +20,17 @@ namespace Merchello.Core.Models
         private bool _exported;
         private LineItemCollection _items;
 
-        internal Order(Guid orderStatusKey)
-            : this(orderStatusKey, new LineItemCollection())
+        internal Order(Guid orderStatusKey, Guid invoiceKey)
+            : this(orderStatusKey, invoiceKey, new LineItemCollection())
         { }
 
-        internal Order(Guid orderStatusKey, LineItemCollection lineItemCollection)
+        internal Order(Guid orderStatusKey, Guid invoiceKey, LineItemCollection lineItemCollection)
         {
             Mandate.ParameterCondition(!Guid.Empty.Equals(orderStatusKey), "orderStatusKey");
+            Mandate.ParameterCondition(!Guid.Empty.Equals(invoiceKey), "invoiceKey");
             Mandate.ParameterNotNull(lineItemCollection, "lineItemCollection");
 
+            _invoiceKey = invoiceKey;
             _orderStatusKey = orderStatusKey;
             _items = lineItemCollection;
         }
