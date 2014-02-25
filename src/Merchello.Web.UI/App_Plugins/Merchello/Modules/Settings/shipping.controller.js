@@ -30,6 +30,7 @@
         };
         $scope.countryToAdd = new merchello.Models.Country();
         $scope.providerToAdd = {};
+        $scope.currentShipCountry = {};
 
 
 
@@ -99,9 +100,36 @@
                         return new merchello.Models.ShippingCountry(shippingCountryFromServer);
                     });
 
+                    _.each($scope.countries, function (element, index, list) {
+                        $scope.loadCountryProviders(element)
+                    });
+
                 }, function (reason) {
 
                     notificationsService.error("Shipping Countries Load Failed", reason.message);
+
+                });
+            }
+        };
+
+        $scope.loadCountryProviders = function (country) {
+
+            if( country )
+            {
+                notificationsService.info("Loading providers for country: ", country.name);
+
+                var promiseShipCountryProviders = merchelloCatalogFixedRateShippingService.getAllShipCountryRateTableProviders(country.key);
+                promiseShipCountryProviders.then(function (providerFromServer) {
+
+                    notificationsService.info("Providers returned for country: ", providerFromServer);
+
+                    if (providerFromServer != "null") {
+                        country.shippingGatewayProviders.push(new merchello.Models.ShippingGatewayProvider(providerFromServer));
+                    }
+
+                }, function (reason) {
+
+                    notificationsService.error("Shipping Countries Providers Load Failed", reason.message);
 
                 });
             }
@@ -233,6 +261,13 @@
         };
 
 
+        // Helper to set the shippingCountry and setup the flyout model
+        $scope.openProviderFlyout = function (shippingCountry) {
+
+            $scope.currentShipCountry = shippingCountry;
+            $scope.addProviderFlyout.open($scope.providerToAdd);
+        };
+
         // Functions to control the Add Provider flyout
         $scope.addProviderFlyout = new merchello.Models.Flyout(
             $scope.visible.addProviderFlyout,
@@ -243,7 +278,23 @@
                 confirm: function () {
                     var self = $scope.addProviderFlyout;
 
+                    var selectedProvider = self.model;
 
+                    var newShippingMethod = new merchello.Models.FixedRateShippingMethod();
+                    newShippingMethod.shipMethod.name = $scope.currentShipCountry.name + " - " + selectedProvider.key;
+                    newShippingMethod.shipMethod.providerKey = selectedProvider.key;
+                    newShippingMethod.shipMethod.shipCountryKey = $scope.currentShipCountry.key;
+
+                    var promiseAddMethod = merchelloCatalogFixedRateShippingService.createRateTableShipMethod(newShippingMethod);
+                    promiseAddMethod.then(function (data) {
+
+                        $scope.loadCountryProviders($scope.currentShipCountry)
+
+                    }, function (reason) {
+
+                        notificationsService.error("Shipping Countries Create Failed", reason.message);
+
+                    });
 
                     self.clear();
                     self.close();

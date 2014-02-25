@@ -24,6 +24,7 @@ namespace Merchello.Web.Editors
     {
         private readonly IShipCountryService _shipCountryService;
         private readonly FixedRateShippingGatewayProvider _fixedRateShippingGatewayProvider;
+        private readonly IShippingContext _shippingContext;
 
         /// <summary>
         /// Constructor
@@ -31,6 +32,7 @@ namespace Merchello.Web.Editors
         public CatalogRateTableShippingApiController()
             : this(MerchelloContext.Current)
         {
+
         }
 
         /// <summary>
@@ -42,6 +44,7 @@ namespace Merchello.Web.Editors
         {
             _shipCountryService = ((ServiceContext) MerchelloContext.Services).ShipCountryService;
             _fixedRateShippingGatewayProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Gateways.Shipping.ResolveByKey(Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey);
+            _shippingContext = MerchelloContext.Gateways.Shipping;
         }
 
         /// <summary>
@@ -59,19 +62,29 @@ namespace Merchello.Web.Editors
         ///
         /// GET /umbraco/Merchello/ShippingMethodsApi/GetAllShipCountryRateTableProviders/{id}
         /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
         /// <param name="id">ShipCountry Key</param>
         public ShippingGatewayProviderDisplay GetAllShipCountryRateTableProviders(Guid id)
         {
             var shipCountry = _shipCountryService.GetByKey(id);
             if (shipCountry != null)
             {
-                var providers = MerchelloContext.Gateways.Shipping.GetGatewayProvidersByShipCountry(shipCountry);
+                var providers = _shippingContext.GetGatewayProvidersByShipCountry(shipCountry);
 
-                var fixedProvider = providers.FirstOrDefault(x => x.Key == Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey);
-
-                if (fixedProvider != null)
+                if (providers.Count() > 0)
                 {
-                    return fixedProvider.ToShipGatewayProviderDisplay();
+                    var fixedProvider = providers.FirstOrDefault(x => x.Key == Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey);
+
+                    if (fixedProvider != null)
+                    {
+                        return fixedProvider.ToShipGatewayProviderDisplay();
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
                 else
                 {

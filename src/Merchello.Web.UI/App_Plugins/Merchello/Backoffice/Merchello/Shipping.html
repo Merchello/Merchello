@@ -241,24 +241,30 @@
                                     <input type="submit" class="btn btn-primary" value="Save" data-ng-click="addEditShippingMethodFlyout.confirm()" />
                                 </div>
                             </div>
-
-                            <table data-ng-repeat="country in countries" class="table table-striped merchello-striped-table settings-table shipping-table">
-                                <thead>
-                                    <tr>
-                                        <th colspan="4">{{country.name}}</th>
-                                        <th><a data-ng-click="addProviderFlyout.open(providerToAdd)" class="btn btn-primary">Add a Provider</a></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr data-ng-repeat="method in shipMethods">
-                                        <td>{{method.name}}</td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td class="edit"><a href="#" class="btn btn-default btn-xs btn-mini">edit</a> <a class="btn btn-warning btn-xs btn-mini" href="#">x</a></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            
+                            <div data-ng-repeat="country in countries" class="merchello-shipping-country">
+                                <h3>{{country.name}}</h3>
+                                <a data-ng-click="openProviderFlyout(country)" class="btn btn-primary merchello-button-right">Add a Provider</a>
+                                <div data-ng-repeat="shippingGatewayProviders in country.shippingGatewayProviders" class="merchello-shipping-gateway-provider">
+                                    <h4>{{shippingGatewayProviders.name}} - {{shippingGatewayProviders.typeFullName}}</h4>
+                                    <table data-ng-repeat="fixedRateShipMethod in shippingGatewayProviders.shipMethods" class="table table-striped merchello-striped-table settings-table shipping-table">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="4">{{fixedRateShipMethod.shipMethod.name}}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!--<tr data-ng-repeat="method in shipMethods">
+                                                <td>{{method.name}}</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td class="edit"><a href="#" class="btn btn-default btn-xs btn-mini">edit</a> <a class="btn btn-warning btn-xs btn-mini" href="#">x</a></td>
+                                            </tr>-->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
 
 <!--                            <table class="table table-striped merchello-striped-table settings-table shipping-table">
                                 <thead>
@@ -339,6 +345,9 @@
                         <div data-ng-show="debugging">
                             <h3>Warehouse</h3>
                             <div class="jsonInfo">{{warehouses | json}}</div>
+                                                
+                            <h3>shipCountry</h3>
+                            <div class="jsonInfo">{{currentShipCountry | json}}</div>
                                                 
                             <h3>providerToAdd</h3>
                             <div class="jsonInfo">{{providerToAdd | json}}</div>
