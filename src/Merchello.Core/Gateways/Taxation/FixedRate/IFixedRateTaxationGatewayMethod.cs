@@ -3,6 +3,6 @@
     /// <summary>
     /// Marker interface for the FixRateTaxMethod
     /// </summary>
-    public interface IFixedRateTaxMethod
+    public interface IFixedRateTaxationGatewayMethod
     { }
 }

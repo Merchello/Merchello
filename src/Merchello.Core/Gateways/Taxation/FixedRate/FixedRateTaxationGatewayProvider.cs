@@ -44,7 +44,7 @@ namespace Merchello.Core.Gateways.Taxation.FixedRate
                 throw attempt.Exception;
             }
 
-            return new FixRateMethod(attempt.Result);
+            return new FixRateTaxationGatewayMethod(attempt.Result);
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace Merchello.Core.Gateways.Taxation.FixedRate
         {
             var taxMethod = TaxMethods.FirstOrDefault(x => x.CountryCode == countryCode);
 
-            return taxMethod != null ? new FixRateMethod(taxMethod) : null;
+            return taxMethod != null ? new FixRateTaxationGatewayMethod(taxMethod) : null;
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace Merchello.Core.Gateways.Taxation.FixedRate
         /// <returns>A collection of <see cref="ITaxMethod"/> </returns>
         public override IEnumerable<ITaxationGatewayMethod> GetAllGatewayTaxMethods()
         {
-            return TaxMethods.Select(taxMethod => new FixRateMethod(taxMethod));
+            return TaxMethods.Select(taxMethod => new FixRateTaxationGatewayMethod(taxMethod));
         }
 
         /// <summary>

@@ -3,7 +3,7 @@
     /// <summary>
     /// Defines the rate table ship method
     /// </summary>
-    public interface IFixedRateShipMethod : IShippingGatewayMethod
+    public interface IFixedRateShippingGatewayMethod : IShippingGatewayMethod
     {
         /// <summary>
         /// Gets the <see cref="IShippingFixedRateTable"/> for this ship method
@@ -11,8 +11,8 @@
         IShippingFixedRateTable RateTable { get; }
 
         /// <summary>
-        /// Gets the <see cref="FixedRateShipMethod.QuoteType"/> for this ship method
+        /// Gets the <see cref="FixedRateShippingGatewayMethod.QuoteType"/> for this ship method
         /// </summary>
-        FixedRateShipMethod.QuoteType RateTableType { get; }
+        FixedRateShippingGatewayMethod.QuoteType RateTableType { get; }
     }
 }

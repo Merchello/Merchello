@@ -93,8 +93,8 @@
     <Compile Include="Gateways\Payment\PaymentGatewayMethodBase.cs" />
     <Compile Include="Gateways\Payment\IPaymentGatewayMethod.cs" />
     <Compile Include="Gateways\Payment\IPaymentResult.cs" />
-    <Compile Include="Gateways\Taxation\FixedRate\FixRateMethod.cs" />
-    <Compile Include="Gateways\Taxation\FixedRate\IFixedRateTaxMethod.cs" />
+    <Compile Include="Gateways\Taxation\FixedRate\FixRateTaxationGatewayMethod.cs" />
+    <Compile Include="Gateways\Taxation\FixedRate\IFixedRateTaxationGatewayMethod.cs" />
     <Compile Include="Gateways\Taxation\TaxationGatewayMethodBase.cs" />
     <Compile Include="Gateways\Taxation\ITaxationGatewayMethod.cs" />
     <Compile Include="Gateways\Taxation\TaxCalculationResult.cs" />
@@ -154,11 +154,11 @@
     <Compile Include="Gateways\Shipping\IShippingGatewayMethod.cs" />
     <Compile Include="Gateways\Shipping\IShipmentRateQuote.cs" />
     <Compile Include="Gateways\Shipping\IShippingGatewayProvider.cs" />
-    <Compile Include="Gateways\Shipping\FixedRate\IFixedRateShipMethod.cs" />
+    <Compile Include="Gateways\Shipping\FixedRate\IFixedRateShippingGatewayMethod.cs" />
     <Compile Include="Gateways\Shipping\FixedRate\IShippingFixedRateTable.cs" />
     <Compile Include="Gateways\Shipping\FixedRate\FixedRateShipmentLineItemVisitor.cs" />
     <Compile Include="Gateways\Shipping\FixedRate\FixedRateShippingGatewayProvider.cs" />
-    <Compile Include="Gateways\Shipping\FixedRate\FixedRateShipMethod.cs" />
+    <Compile Include="Gateways\Shipping\FixedRate\FixedRateShippingGatewayMethod.cs" />
     <Compile Include="Gateways\Shipping\ShipmentRateQuoteStrategyBase.cs" />
     <Compile Include="Gateways\Shipping\IShippingContext.cs" />
     <Compile Include="Gateways\Shipping\ShippingContext.cs" />

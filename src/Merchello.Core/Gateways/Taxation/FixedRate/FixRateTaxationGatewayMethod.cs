@@ -4,9 +4,9 @@ using Umbraco.Core.Logging;
 
 namespace Merchello.Core.Gateways.Taxation.FixedRate
 {
-    public class FixRateMethod : TaxationGatewayMethodBase, IFixedRateTaxMethod
+    public class FixRateTaxationGatewayMethod : TaxationGatewayMethodBase, IFixedRateTaxationGatewayMethod
     {
-        public FixRateMethod(ITaxMethod taxMethod) 
+        public FixRateTaxationGatewayMethod(ITaxMethod taxMethod) 
             : base(taxMethod)
         { }
 

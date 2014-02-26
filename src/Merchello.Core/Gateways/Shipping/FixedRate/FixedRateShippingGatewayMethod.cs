@@ -10,15 +10,15 @@ namespace Merchello.Core.Gateways.Shipping.FixedRate
     /// <summary>
     /// Defines the rate table ship method
     /// </summary>
-    public class FixedRateShipMethod : ShippingGatewayMethodBase, IFixedRateShipMethod
+    public class FixedRateShippingGatewayMethod : ShippingGatewayMethodBase, IFixedRateShippingGatewayMethod
     {
         private readonly QuoteType _quoteType;
 
-        public FixedRateShipMethod(IGatewayResource gatewayResource, IShipMethod shipMethod, IShipCountry shipCountry)
+        public FixedRateShippingGatewayMethod(IGatewayResource gatewayResource, IShipMethod shipMethod, IShipCountry shipCountry)
             :this(gatewayResource, shipMethod, shipCountry, new ShippingFixedRateTable(shipMethod.Key))
         {}
 
-        public FixedRateShipMethod(IGatewayResource gatewayResource, IShipMethod shipMethod, IShipCountry shipCountry, IShippingFixedRateTable rateTable)
+        public FixedRateShippingGatewayMethod(IGatewayResource gatewayResource, IShipMethod shipMethod, IShipCountry shipCountry, IShippingFixedRateTable rateTable)
             : base(gatewayResource, shipMethod, shipCountry)
         {
             RateTable = new ShippingFixedRateTable(shipMethod.Key);
