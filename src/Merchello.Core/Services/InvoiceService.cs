@@ -20,32 +20,35 @@ namespace Merchello.Core.Services
         private readonly IDatabaseUnitOfWorkProvider _uowProvider;
         private readonly RepositoryFactory _repositoryFactory;
         private readonly IAppliedPaymentService _appliedPaymentService;
+        private readonly IOrderService _orderService;
         private readonly IStoreSettingService _storeSettingService;
 
         private static readonly ReaderWriterLockSlim Locker =
             new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
 
         public InvoiceService()
-            : this(new RepositoryFactory(), new AppliedPaymentService(),  new StoreSettingService())
+            : this(new RepositoryFactory(), new AppliedPaymentService(), new OrderService(),  new StoreSettingService())
         {
         }
 
-        internal InvoiceService(RepositoryFactory repositoryFactory, IAppliedPaymentService appliedPaymentService, IStoreSettingService storeSettingService)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, appliedPaymentService, storeSettingService)
+        internal InvoiceService(RepositoryFactory repositoryFactory, IAppliedPaymentService appliedPaymentService, IOrderService orderService, IStoreSettingService storeSettingService)
+            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, appliedPaymentService, orderService, storeSettingService)
         {
         }
 
-        internal InvoiceService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, IAppliedPaymentService appliedPaymentService,
+        internal InvoiceService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, IAppliedPaymentService appliedPaymentService, IOrderService orderService,
             IStoreSettingService storeSettingService)
         {
             Mandate.ParameterNotNull(provider, "provider");
             Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
             Mandate.ParameterNotNull(appliedPaymentService, "appliedPaymentService");
             Mandate.ParameterNotNull(storeSettingService, "storeSettingService");
+            Mandate.ParameterNotNull(orderService, "orderService");
 
             _uowProvider = provider;
             _repositoryFactory = repositoryFactory;
             _appliedPaymentService = appliedPaymentService;
+            _orderService = orderService;
             _storeSettingService = storeSettingService;
         }
 
@@ -194,6 +197,10 @@ namespace Merchello.Core.Services
                     return;
                 }
 
+            DeleteAppliedPayments(invoice);
+
+            DeleteOrders(invoice);
+
             using (new WriteLock(Locker))
             {
                 var uow = _uowProvider.GetUnitOfWork();
@@ -225,12 +232,34 @@ namespace Merchello.Core.Services
                 {
                     foreach (var invoice in invoicesArray)
                     {
+                        DeleteAppliedPayments(invoice);
+
+                        DeleteOrders(invoice);
+
                         repository.Delete(invoice);
                     }
                     uow.Commit();
                 }
             }
             if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<IInvoice>(invoicesArray), this);
+        }
+
+        /// <summary>
+        /// Deletes orders associated with the invoice
+        /// </summary>
+        /// <param name="invoice">The <see cref="IInvoice"/></param>
+        private void DeleteOrders(IInvoice invoice)
+        {
+            var orders = _orderService.GetOrdersByInvoiceKey(invoice.Key).ToArray();
+
+            if(orders.Any()) _orderService.Delete(orders);
+        }
+
+        private void DeleteAppliedPayments(IInvoice invoice)
+        {
+            var appliedPayments = _appliedPaymentService.GetAppliedPaymentsByInvoiceKey(invoice.Key).ToArray();
+
+            if(appliedPayments.Any()) _appliedPaymentService.Delete(appliedPayments);
         }
 
         /// <summary>

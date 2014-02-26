@@ -5,21 +5,21 @@ namespace Merchello.Core.Chains.InvoiceCreation
 {
     public abstract class OrderPreparationAttemptChainTaskBase : AttemptChainTaskBase<IInvoice>
     {
-        private readonly SalesManagerBase _salesManager;
+        private readonly SalePreparationBase _salePreparation;
 
-        protected OrderPreparationAttemptChainTaskBase(SalesManagerBase salesManager)
+        protected OrderPreparationAttemptChainTaskBase(SalePreparationBase salePreparation)
         {
-            Mandate.ParameterNotNull(salesManager, "checkout");
+            Mandate.ParameterNotNull(salePreparation, "checkout");
 
-            _salesManager = salesManager;
+            _salePreparation = salePreparation;
         }
 
         /// <summary>
-        /// Gets the <see cref="SalesManagerBase"/> object
+        /// Gets the <see cref="SalePreparationBase"/> object
         /// </summary>
-        protected SalesManagerBase SalesManager
+        protected SalePreparationBase SalePreparation
         {
-            get { return _salesManager; }
+            get { return _salePreparation; }
         }
     }
 }

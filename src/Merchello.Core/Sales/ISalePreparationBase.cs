@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Merchello.Core.Builders;
 using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Shipping;
@@ -7,9 +8,9 @@ using Merchello.Core.Models;
 namespace Merchello.Core.Sales
 {
     /// <summary>
-    /// Defines a Checkout base class
+    /// Defines a sales preparation base class
     /// </summary>
-    public interface ISalesManagerBase
+    public interface ISalePreparationBase
     {
         /// <summary>
         /// Restarts the checkout process, deleting all persisted data
@@ -46,7 +47,6 @@ namespace Merchello.Core.Sales
         /// </summary>
         /// <param name="approvedShipmentRateQuote">The selected <see cref="IShipmentRateQuote"/> to be used when invoicing the order</param>
         void SaveShipmentRateQuote(IShipmentRateQuote approvedShipmentRateQuote);
-
         
         /// <summary>
         /// Saves a collection <see cref="IShipmentRateQuote"/>
@@ -82,14 +82,35 @@ namespace Merchello.Core.Sales
         /// Attempts to process a payment
         /// </summary>
         /// <param name="paymentGatewayMethod">The <see cref="IPaymentGatewayMethod"/> to use in processing the payment</param>
-        /// <param name="args"></param>
+        /// <param name="args">Additional arguements required by the payment processor</param>
         /// <returns>The <see cref="IPaymentResult"/></returns>
         IPaymentResult ProcessPayment(IPaymentGatewayMethod paymentGatewayMethod, ProcessorArgumentCollection args);
 
-        ///// <summary>
-        ///// Does preliminary validation of the checkout process and then executes the start of the order fulfillment pipeline
-        ///// </summary>
-        ///// <param name="paymentGatewayProvider">The see <see cref="IPaymentGatewayProvider"/> to be used in payment processing and <see cref="IOrder"/> creation approval</param>
-        //void CompleteCheckout(IInvoice invoice, IPaymentGatewayProvider paymentGatewayProvider);
+        /// <summary>
+        /// Attempts to process a payment
+        /// </summary>
+        /// <param name="paymentGatewayMethod">The <see cref="IPaymentGatewayMethod"/> to use in processing the payment</param>
+        /// <returns>The <see cref="IPaymentResult"/></returns>
+        IPaymentResult ProcessPayment(IPaymentGatewayMethod paymentGatewayMethod);
+
+        /// <summary>
+        /// Attempts to process a payment
+        /// </summary>
+        /// <param name="paymentMethodKey">The <see cref="IPaymentMethod"/> key</param>
+        /// <param name="args">Additional arguements required by the payment processor</param>
+        /// <returns>The <see cref="IPaymentResult"/></returns>
+        IPaymentResult ProcessPayment(Guid paymentMethodKey, ProcessorArgumentCollection args);
+
+        /// <summary>
+        /// Attempts to process a payment
+        /// </summary>
+        /// <param name="paymentMethodKey">The <see cref="IPaymentMethod"/> key</param>
+        /// <returns>The <see cref="IPaymentResult"/></returns>
+        IPaymentResult ProcessPayment(Guid paymentMethodKey);
+
+        /// <summary>
+        /// True/false indicating whether or not the <see cref="ISalePreparationBase"/> is ready to prepare an <see cref="IInvoice"/>
+        /// </summary>
+        bool IsReadyToInvoice();
     }
 }

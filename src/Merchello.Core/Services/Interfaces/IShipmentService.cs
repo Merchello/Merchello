@@ -52,7 +52,8 @@ namespace Merchello.Core.Services
         /// <param name="shipMethodKey">The pk of the shipMethod</param>
         /// <returns>A collection of <see cref="IShipment"/></returns>
         IEnumerable<IShipment> GetShipmentsByShipMethodKey(Guid shipMethodKey);
-            
+
+
         /// <summary>
         /// Gets list of <see cref="IShipment"/> objects given a list of Unique keys
         /// </summary>

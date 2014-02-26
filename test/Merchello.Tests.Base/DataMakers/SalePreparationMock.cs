@@ -5,9 +5,9 @@ using Merchello.Core.Sales;
 
 namespace Merchello.Tests.Base.DataMakers
 {
-    internal class SalesManagerMock : SalesManagerBase
+    internal class SalePreparationMock : SalePreparationBase
     {
-        public SalesManagerMock(IMerchelloContext merchelloContext, IItemCache itemCache, ICustomerBase customer) 
+        public SalePreparationMock(IMerchelloContext merchelloContext, IItemCache itemCache, ICustomerBase customer) 
             : base(merchelloContext, itemCache, customer)
         {
 

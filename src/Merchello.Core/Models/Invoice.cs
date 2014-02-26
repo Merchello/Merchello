@@ -56,6 +56,8 @@ namespace Merchello.Core.Models
 
             _items = lineItemCollection;
 
+            _invoiceDate = DateTime.Now;
+
         }
 
         private static readonly PropertyInfo CustomerKeySelector = ExpressionHelper.GetPropertyInfo<Invoice, Guid?>(x => x.CustomerKey);

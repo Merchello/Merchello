@@ -227,7 +227,7 @@ namespace Merchello.Core.Persistence.Repositories
             var existing = GetByContainerKey(containerKey);
 
             // assert there are no existing items not in the new set of items.  If there are ... delete them
-            var toDelete = existing.Where(x => !items.Any(item => item.Key == x.Key));
+            var toDelete = existing.Where(x => !items.Any(item => item.Key == x.Key)).ToArray();
             if (toDelete.Any())
             {
                 foreach (var d in toDelete)

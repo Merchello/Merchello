@@ -20,29 +20,32 @@ namespace Merchello.Core.Services
         private readonly IDatabaseUnitOfWorkProvider _uowProvider;
         private readonly RepositoryFactory _repositoryFactory;
         private readonly IStoreSettingService _storeSettingService;
+        private readonly IShipmentService _shipmentService;
 
-        private static readonly ReaderWriterLockSlim Locker =
-            new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+        private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
 
         public OrderService()
-            : this(new RepositoryFactory(), new StoreSettingService())
+            : this(new RepositoryFactory(), new StoreSettingService(), new ShipmentService())
         {
         }
 
-        public OrderService(RepositoryFactory repositoryFactory, IStoreSettingService storeSettingService)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, storeSettingService)
+        public OrderService(RepositoryFactory repositoryFactory, IStoreSettingService storeSettingService, IShipmentService shipmentService)
+            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, storeSettingService, shipmentService)
         {
         }
 
-        public OrderService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, IStoreSettingService storeSettingService)
+        public OrderService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, IStoreSettingService storeSettingService, IShipmentService shipmentService)
         {
             Mandate.ParameterNotNull(provider, "provider");
             Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
             Mandate.ParameterNotNull(storeSettingService, "storeSettingService");
+            Mandate.ParameterNotNull(shipmentService, "shipmentService");
 
             _uowProvider = provider;
             _repositoryFactory = repositoryFactory;
             _storeSettingService = storeSettingService;
+            _shipmentService = shipmentService;
+
         }
 
         /// <summary>
@@ -230,6 +233,9 @@ namespace Merchello.Core.Services
                     return;
                 }
 
+            // Delete any shipment records associated with this order
+            DeleteShipments(order);
+
             using (new WriteLock(Locker))
             {
                 var uow = _uowProvider.GetUnitOfWork();
@@ -260,6 +266,9 @@ namespace Merchello.Core.Services
                 {
                     foreach (var order in ordersArray)
                     {
+                        // delete the shipments
+                        DeleteShipments(order);
+
                         repository.Delete(order);
                     }
                     uow.Commit();
@@ -267,6 +276,22 @@ namespace Merchello.Core.Services
             }
             if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<IOrder>(ordersArray), this);
         }
+
+        /// <summary>
+        /// Deletes <see cref="IShipment"/>s associated with the order
+        /// </summary>
+        /// <param name="order">The <see cref="IOrder"/></param>
+        private void DeleteShipments(IOrder order)
+        {
+            // Delete any shipment records associated with this order
+            var shipmentKeys = order.Items.Select(x => ((IOrderLineItem)x).ShipmentKey).Where(x => x != null).Distinct().Select(x => x.Value).ToArray();
+
+            if (!shipmentKeys.Any()) return;
+
+            var shipments = _shipmentService.GetByKeys(shipmentKeys).ToArray();
+            if(shipments.Any()) _shipmentService.Delete(shipments);
+        }
+
 
         /// <summary>
         /// Gets a <see cref="IOrder"/> given it's unique 'key' (Guid)
@@ -293,6 +318,21 @@ namespace Merchello.Core.Services
                 var query = Query<IOrder>.Builder.Where(x => x.OrderNumber == orderNumber);
 
                 return repository.GetByQuery(query).FirstOrDefault();
+            }
+        }
+
+        /// <summary>
+        /// Gets a collection of <see cref="IOrder"/> for a given <see cref="IInvoice"/> key
+        /// </summary>
+        /// <param name="invoiceKey">The <see cref="IInvoice"/> key</param>
+        /// <returns>A collection of <see cref="IOrder"/></returns>
+        public IEnumerable<IOrder> GetOrdersByInvoiceKey(Guid invoiceKey)
+        {
+            using (var repository = _repositoryFactory.CreateOrderRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Query<IOrder>.Builder.Where(x => x.InvoiceKey == invoiceKey);
+
+                return repository.GetByQuery(query);
             }
         }
 

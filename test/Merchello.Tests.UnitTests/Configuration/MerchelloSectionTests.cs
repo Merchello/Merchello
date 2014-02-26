@@ -89,7 +89,7 @@ namespace Merchello.Tests.UnitTests.Configuration
         public void Can_Retrieve_A_TaskChain_By_Alias()
         {
             //// Arrange
-            const string alias = "CheckoutInvoiceCreate";
+            const string alias = "SalesManagerInvoiceCreate";
 
             //// Act
             var taskChain = _config.TaskChains[alias];

@@ -275,9 +275,23 @@ namespace Merchello.Core.Services
             return _paymentMethodService.GetPaymentMethodsByProviderKey(providerKey);
         }
 
+
         #endregion
 
         #region Payment
+
+        /// <summary>
+        /// Creates a payment without saving it to the database
+        /// </summary>
+        /// <param name="paymentMethodType">The type of the paymentmethod</param>
+        /// <param name="amount">The amount of the payment</param>
+        /// <param name="paymentMethodKey">The optional paymentMethodKey</param>
+        /// <returns>Returns <see cref="IPayment"/></returns>
+        public IPayment CreatePayment(PaymentMethodType paymentMethodType, decimal amount, Guid? paymentMethodKey)
+        {
+            return _paymentService.CreatePayment(paymentMethodType, amount, paymentMethodKey);
+        }
+
 
         /// <summary>
         /// Creates and saves a payment
@@ -374,7 +388,7 @@ namespace Merchello.Core.Services
         /// Gets a list of <see cref="IShipMethod"/> objects given a <see cref="IGatewayProvider"/> key and a <see cref="IShipCountry"/> key
         /// </summary>
         /// <returns>A collection of <see cref="IShipMethod"/></returns>
-        public IEnumerable<IShipMethod> GetGatewayProviderShipMethods(Guid providerKey, Guid shipCountryKey)
+        public IEnumerable<IShipMethod> GetShipMethodsByShipCountryKey(Guid providerKey, Guid shipCountryKey)
         {
             return _shipMethodService.GetGatewayProviderShipMethods(providerKey, shipCountryKey);
         }
@@ -383,7 +397,7 @@ namespace Merchello.Core.Services
         /// Gets a list of all <see cref="IShipMethod"/> objects given a <see cref="IGatewayProvider"/> key
         /// </summary>
         /// <returns>A collection of <see cref="IShipMethod"/></returns>
-        public IEnumerable<IShipMethod> GetGatewayProviderShipMethods(Guid providerKey)
+        public IEnumerable<IShipMethod> GetShipMethodsByShipCountryKey(Guid providerKey)
         {
             return _shipMethodService.GetGatewayProviderShipMethods(providerKey);
         }

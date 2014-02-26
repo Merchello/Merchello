@@ -3,14 +3,13 @@ using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Gateways.Shipping.FixedRate;
-using Merchello.Core.Gateways.Taxation.FixedRate;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Merchello.Tests.IntegrationTests.TestHelpers;
 using Merchello.Web;
 using NUnit.Framework;
 
-namespace Merchello.Tests.IntegrationTests.Ordering
+namespace Merchello.Tests.IntegrationTests.Workflow
 {
     [TestFixture]
     public class CheckoutProcessesTests : MerchelloAllInTestBase
@@ -27,6 +26,7 @@ namespace Merchello.Tests.IntegrationTests.Ordering
         {
             base.FixtureSetup();
 
+            DbPreTestDataWorker.DeleteAllInvoices();
             DbPreTestDataWorker.DeleteAllShipCountries();
 
 
@@ -240,7 +240,7 @@ namespace Merchello.Tests.IntegrationTests.Ordering
                 };
 
             // Assume customer selects billing address is same as shipping address
-            CurrentCustomer.Basket().SalesManager().SaveBillToAddress(destination);
+            CurrentCustomer.Basket().SalePreparation().SaveBillToAddress(destination);
 
             // --------------- ShipMethod Selection ----------------------------------
 
@@ -270,9 +270,9 @@ namespace Merchello.Tests.IntegrationTests.Ordering
             var approvedShipRateQuote = shipRateQuotes.FirstOrDefault();
 
             // start the Checkout process
-            Assert.AreEqual(CurrentCustomer.Basket().TotalItemCount, CurrentCustomer.Basket().SalesManager().ItemCache.Items.Count);
+            Assert.AreEqual(CurrentCustomer.Basket().TotalItemCount, CurrentCustomer.Basket().SalePreparation().ItemCache.Items.Count);
 
-            CurrentCustomer.Basket().SalesManager().SaveShipmentRateQuote(approvedShipRateQuote);
+            CurrentCustomer.Basket().SalePreparation().SaveShipmentRateQuote(approvedShipRateQuote);
 
             // Customer changes their mind and adds Product 5 to the basket
             CurrentCustomer.Basket().AddItem(_product5);
@@ -284,7 +284,7 @@ namespace Merchello.Tests.IntegrationTests.Ordering
             Assert.AreEqual(4, CurrentCustomer.Basket().TotalItemCount);
 
             // This should have cleared the CheckoutPreparation and reconstructed so that it matches the basket again
-            Assert.AreEqual(CurrentCustomer.Basket().TotalItemCount, CurrentCustomer.Basket().SalesManager().ItemCache.Items.Count(x => x.LineItemType == LineItemType.Product));
+            Assert.AreEqual(CurrentCustomer.Basket().TotalItemCount, CurrentCustomer.Basket().SalePreparation().ItemCache.Items.Count(x => x.LineItemType == LineItemType.Product));
             Console.WriteLine("OrderPrepartion was cleared!");
 
             // Because the customer went back and added another item the checkout workflow needs to 
@@ -296,7 +296,7 @@ namespace Merchello.Tests.IntegrationTests.Ordering
             #region Shipping information
 
             // Save the billing information (again - the same as shipping information)
-            CurrentCustomer.Basket().SalesManager().SaveBillToAddress(destination);
+            CurrentCustomer.Basket().SalePreparation().SaveBillToAddress(destination);
 
             shipments = CurrentCustomer.Basket().PackageBasket(destination).ToArray();
             Assert.IsTrue(shipments.Any());
@@ -322,14 +322,24 @@ namespace Merchello.Tests.IntegrationTests.Ordering
             WriteShipRateQuote(approvedShipmentRateQuote);
             
             // save the rate quote 
-            CurrentCustomer.Basket().SalesManager().SaveShipmentRateQuote(approvedShipmentRateQuote);
+            CurrentCustomer.Basket().SalePreparation().SaveShipmentRateQuote(approvedShipmentRateQuote);
 
 
             #endregion // end shipping info round 2
 
             // generate an invoice to preview
-            var invoice = CurrentCustomer.Basket().SalesManager().PrepareInvoice();
+            var isReadytoInvoice = CurrentCustomer.Basket().SalePreparation().IsReadyToInvoice();
+
+            Assert.IsTrue(isReadytoInvoice);
+
+            var invoice = CurrentCustomer.Basket().SalePreparation().PrepareInvoice();
             WriteInvoiceInfoToConsole(invoice);
+
+            var paymentMethods = CurrentCustomer.Basket().SalePreparation().GetPaymentGatewayMethods();
+
+            var paymentResult = CurrentCustomer.Basket().SalePreparation().ProcessPayment(paymentMethods.FirstOrDefault());
+
+            Assert.IsTrue(paymentResult.Result.Success);
 
             #endregion // completed checkout preparation
 

@@ -56,24 +56,24 @@ namespace Merchello.Web
 
 
         /// <summary>
-        /// Gets the <see cref="IBasketSalesManager"/>
+        /// Gets the <see cref="IBasketSalePreparation"/>
         /// </summary>
         /// <param name="basket">The basket with items use in the checkout</param>
-        /// <returns>A <see cref="IBasketSalesManager"/></returns>
-        public static BasketSalesManager SalesManager(this IBasket basket)
+        /// <returns>A <see cref="IBasketSalePreparation"/></returns>
+        public static BasketSalePreparation SalePreparation(this IBasket basket)
         {
-            return basket.SalesManager(MerchelloContext.Current);
+            return basket.SalePreparation(MerchelloContext.Current);
         }
 
         /// <summary>
-        /// Gets the <see cref="IBasketSalesManager"/>
+        /// Gets the <see cref="IBasketSalePreparation"/>
         /// </summary>
         /// <param name="basket">The basket with items use in the checkout</param>
         /// <param name="merchelloContext">The <see cref="IMerchelloContext"/></param>
-        /// <returns>A <see cref="IBasketSalesManager"/></returns>
-        internal static BasketSalesManager SalesManager(this IBasket basket, IMerchelloContext merchelloContext)
+        /// <returns>A <see cref="IBasketSalePreparation"/></returns>
+        internal static BasketSalePreparation SalePreparation(this IBasket basket, IMerchelloContext merchelloContext)
         {
-            return BasketSalesManager.GetBasketCheckoutPreparation(merchelloContext, basket);
+            return BasketSalePreparation.GetBasketCheckoutPreparation(merchelloContext, basket);
         }
     }
 }

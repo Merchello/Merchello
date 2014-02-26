@@ -43,7 +43,7 @@ namespace Merchello.Core.Gateways.Payment.Cash
             {
                 PaymentMethods = null;
 
-                return new CashPaymentMethod(GatewayProviderService, attempt.Result);
+                return new CashPaymentGatewayMethod(GatewayProviderService, attempt.Result);
             }
             
             LogHelper.Error<CashPaymentGatewayProvider>(string.Format("Failed to create a payment method name: {0}, description {1}, paymentCode {2}", name, description, paymentCode), attempt.Exception);
@@ -62,7 +62,7 @@ namespace Merchello.Core.Gateways.Payment.Cash
 
             if(paymentMethod == null) throw new NullReferenceException("PaymentMethod not found");
 
-            return new CashPaymentMethod(GatewayProviderService, paymentMethod);
+            return new CashPaymentGatewayMethod(GatewayProviderService, paymentMethod);
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace Merchello.Core.Gateways.Payment.Cash
 
             if (paymentMethod == null) throw new NullReferenceException("PaymentMethod not found");
 
-            return new CashPaymentMethod(GatewayProviderService, paymentMethod);
+            return new CashPaymentGatewayMethod(GatewayProviderService, paymentMethod);
         }
 
         /// <summary>

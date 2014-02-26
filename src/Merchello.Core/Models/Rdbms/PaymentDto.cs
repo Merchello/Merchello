@@ -29,9 +29,11 @@ namespace Merchello.Core.Models.Rdbms
         public Guid PaymentTfKey { get; set; }
 
         [Column("paymentMethodName")]
+        [NullSetting(NullSetting = NullSettings.Null)]
         public string PaymentMethodName { get; set; }
 
         [Column("referenceNumber")]
+        [NullSetting(NullSetting = NullSettings.Null)]
         public string ReferenceNumber { get; set; }
 
         [Column("amount")]

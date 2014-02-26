@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Merchello.Core.Configuration;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 
@@ -25,9 +26,9 @@ namespace Merchello.Core.Gateways.Payment
         /// <summary>
         /// Does the actual work of creating and processing the payment
         /// </summary>
-        /// <param name="invoice"></param>
-        /// <param name="args"></param>
-        /// <returns></returns>
+        /// <param name="invoice">The <see cref="IInvoice"/></param>
+        /// <param name="args">Any arguments required to process the payment. (Maybe a username, password or some Api Key)</param>
+        /// <returns>The <see cref="IPaymentResult"/></returns>
         protected abstract IPaymentResult PerformProcessPayment(IInvoice invoice, ProcessorArgumentCollection args);
 
         /// <summary>
@@ -48,16 +49,18 @@ namespace Merchello.Core.Gateways.Payment
             // collect the payment authorization
             var response = PerformProcessPayment(invoice, args);
 
-            // apply the payment
-            if (response.Result.Success)
+            if (!response.Result.Success) return response;
+
+            // Apply the payment to the invoice if it was not done in the sub class           
+            var payment = response.Result.Result;
+            if (payment.AppliedPayments(GatewayProviderService).FirstOrDefault(x => x.InvoiceKey == invoice.Key) == null)
             {
-                var payment = response.Result.Result;
-                if (payment.AppliedPayments(GatewayProviderService).FirstOrDefault(x => x.InvoiceKey == invoice.Key) == null)
-                {
-                    GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, PaymentMethod.Name, payment.Amount);
-                }
+                GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, PaymentMethod.Name, payment.Amount);
             }
-           
+
+            // Check configuration for override on ApproveOrderCreation
+            if (!response.ApproveOrderCreation)
+                ((PaymentResult)response).ApproveOrderCreation = MerchelloConfiguration.Current.AlwaysApproveOrderCreation;
 
             // give response
             return response;

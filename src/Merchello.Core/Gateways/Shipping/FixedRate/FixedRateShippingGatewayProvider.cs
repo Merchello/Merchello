@@ -104,7 +104,7 @@ namespace Merchello.Core.Gateways.Shipping.FixedRate
         /// <returns></returns>
         public override IEnumerable<IShippingGatewayMethod> GetAllShippingGatewayMethods(IShipCountry shipCountry)
         {
-            var methods = GatewayProviderService.GetGatewayProviderShipMethods(GatewayProvider.Key, shipCountry.Key);
+            var methods = GatewayProviderService.GetShipMethodsByShipCountryKey(GatewayProvider.Key, shipCountry.Key);
             return methods
                 .Select(
                 shipMethod => new FixedRateShippingGatewayMethod(AvailableResources.FirstOrDefault(x => shipMethod.ServiceCode.StartsWith(x.ServiceCode)), shipMethod, shipCountry, ShippingFixedRateTable.GetShipRateTable(GatewayProviderService, RuntimeCache, shipMethod.Key))

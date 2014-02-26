@@ -76,7 +76,6 @@
     <Compile Include="ActivatorHelper.cs" />
     <Compile Include="Builders\BuildChainBase.cs" />
     <Compile Include="Builders\InvoiceBuilderChain.cs" />
-    <Compile Include="Builders\TaxationQuoteBuilderChain.cs" />
     <Compile Include="Chains\AttemptChainTaskBase.cs" />
     <Compile Include="Chains\ChainTaskResolver.cs" />
     <Compile Include="Chains\InvoiceCreation\ApplyTaxesToInvoiceTax.cs" />
@@ -84,8 +83,8 @@
     <Compile Include="Chains\InvoiceCreation\OrderPreparationAttemptChainTaskBase.cs" />
     <Compile Include="Chains\InvoiceCreation\ConvertItemCacheItemsToInvoiceItemsTask.cs" />
     <Compile Include="Gateways\Payment\Cash\CashPaymentGatewayProvider.cs" />
-    <Compile Include="Gateways\Payment\Cash\CashPaymentMethod.cs" />
-    <Compile Include="Gateways\Payment\Cash\ICashPaymentMethod.cs" />
+    <Compile Include="Gateways\Payment\Cash\CashPaymentGatewayMethod.cs" />
+    <Compile Include="Gateways\Payment\Cash\ICashPaymentGatewayMethod.cs" />
     <Compile Include="Gateways\Payment\Cash\ICashPaymentGatewayProvider.cs" />
     <Compile Include="Gateways\Payment\PaymentResult.cs" />
     <Compile Include="Gateways\Payment\ProcessorArgumentCollection.cs" />
@@ -109,8 +108,8 @@
     <Compile Include="Models\PaymentExtensions.cs" />
     <Compile Include="Models\PaymentMethod.cs" />
     <Compile Include="Models\Rdbms\PaymentMethodDto.cs" />
-    <Compile Include="Sales\SalesManagerBase.cs" />
-    <Compile Include="Sales\ISalesManagerBase.cs" />
+    <Compile Include="Sales\SalePreparationBase.cs" />
+    <Compile Include="Sales\ISalePreparationBase.cs" />
     <Compile Include="Builders\IBuilderChain.cs" />
     <Compile Include="Cache\CacheKeys.cs" />
     <Compile Include="CloneHelper.cs" />
