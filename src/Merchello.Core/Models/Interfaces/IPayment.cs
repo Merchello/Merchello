@@ -62,6 +62,12 @@ namespace Merchello.Core.Models
         /// </summary>
         [DataMember]
         bool Exported { get; set;}
+
+        /// <summary>
+        /// A collection to store custom/extended data for the payment
+        /// </summary>
+        [DataMember]
+        ExtendedDataCollection ExtendedData { get; }
     }
 }
 

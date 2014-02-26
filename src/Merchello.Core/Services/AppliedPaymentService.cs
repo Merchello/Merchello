@@ -43,7 +43,7 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Creates and saves an AppliedPayment
         /// </summary>
-        /// <param name="paymentKey">The PaymentGatewayProvider key</param>
+        /// <param name="paymentKey">The payment key</param>
         /// <param name="invoiceKey">The invoice 'key'</param>
         /// <param name="appliedPaymentType">The applied payment type</param>
         /// <param name="description">The description of the payment application</param>

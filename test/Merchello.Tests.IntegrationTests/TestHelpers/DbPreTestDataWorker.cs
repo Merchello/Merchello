@@ -317,22 +317,34 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
         #region IPayment
 
+        /// <summary>
+        /// Returns the Payment Service
+        /// </summary>
+        public IPaymentService PaymentService
+        {
+            get { return _serviceContext.PaymentService; }
+        }
+
+        #endregion
+
+        #region IPaymentMethod
 
 
-        ///// <summary>
-        ///// Returns the Payment Service
-        ///// </summary>
-        //public IPaymentService PaymentService
-        //{
-        //    get { return _serviceContext.PaymentService; }
-        //}
+
+        /// <summary>
+        /// Gets the payment method service
+        /// </summary>
+        internal IPaymentMethodService PaymentMethodService
+        {
+            get { return _serviceContext.PaymentMethodService; }
+        }
 
         #endregion
 
 
         #region Shipping (IShipment, IShipCounty)
 
-        
+
 
         /// <summary>
         /// Returns the Shipping Service

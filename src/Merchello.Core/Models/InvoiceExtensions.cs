@@ -1,4 +1,5 @@
-﻿using Merchello.Core.Gateways.Taxation;
+﻿using System.Globalization;
+using Merchello.Core.Gateways.Taxation;
 
 namespace Merchello.Core.Models
 {
@@ -38,6 +39,17 @@ namespace Merchello.Core.Models
             // remove any other tax lines
             return merchelloContext.Gateways.Taxation.CalculateTaxesForInvoice(invoice, taxAddress);
         }
-         
+
+        /// <summary>
+        /// Returns a constructed invoice number (including it's invoice number prefix - if any)
+        /// </summary>
+        /// <param name="invoice">The <see cref="IInvoice"/></param>
+        /// <returns>The prefixed invoice number</returns>
+        public static string PrefixedInvoiceNumber(this IInvoice invoice)
+        {
+            return string.IsNullOrEmpty(invoice.InvoiceNumberPrefix)
+                ? invoice.InvoiceNumber.ToString(CultureInfo.InvariantCulture)
+                : string.Format("{0}-{1}", invoice.InvoiceNumberPrefix, invoice.InvoiceNumber);
+        }
     }
 }

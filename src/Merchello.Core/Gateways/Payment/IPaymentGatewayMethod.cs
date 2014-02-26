@@ -21,8 +21,8 @@ namespace Merchello.Core.Gateways.Payment
         /// </summary>
         /// <param name="invoice">The invoice to be payed</param>
         /// <param name="args">Additional arguements required by the payment processor</param>
-        /// <returns>A <see cref="IPaymentGatewayResponse"/></returns>
-        IPaymentGatewayResponse ProcessPayment(IInvoice invoice, ProcessorArgumentCollection args);
+        /// <returns>A <see cref="IPaymentResult"/></returns>
+        IPaymentResult ProcessPayment(IInvoice invoice, ProcessorArgumentCollection args);
 
         /// <summary>
         /// Gets the <see cref="IPaymentMethod"/>

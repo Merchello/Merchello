@@ -1,4 +1,5 @@
 ﻿using System;
+using Merchello.Core.Gateways.Payment.Cash;
 using Merchello.Core.Gateways.Shipping.FixedRate;
 using Merchello.Core.Gateways.Taxation.FixedRate;
 using Merchello.Core.Models;
@@ -130,6 +131,7 @@ namespace Merchello.Core.Persistence.Migrations.Initial
 
             var taxProvinces = new ProvinceCollection<ITaxProvince>();
             var provinceData = JsonConvert.SerializeObject(taxProvinces);
+
             _database.Insert("merchTaxMethod", "Key",
                              new TaxMethodDto()
                                  {
@@ -143,6 +145,19 @@ namespace Merchello.Core.Persistence.Migrations.Initial
                                      CreateDate = DateTime.Now
                                  });
 
+            _database.Insert("merchGatewayProvider", "Key", new GatewayProviderDto() { Key = Constants.ProviderKeys.Payment.CashPaymentProviderKey, Name = "Cash Payment Provider", ProviderTfKey =  EnumTypeFieldConverter.GatewayProvider.GetTypeField(GatewayProviderType.Payment).TypeKey, ExtendedData = new ExtendedDataCollection().SerializeToXml(), EncryptExtendedData = false, TypeFullName = typeof(CashPaymentGatewayProvider).FullName + ", Merchello.Core", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+
+            _database.Insert("merchPaymentMethod", "Key",
+                new PaymentMethodDto()
+                {
+                    Key = Guid.NewGuid(),
+                    Name = "Cash",
+                    PaymentCode = "Cash",
+                    Description = "Cash Payment",
+                    ProviderKey = Constants.ProviderKeys.Payment.CashPaymentProviderKey,
+                    CreateDate = DateTime.Now,
+                    UpdateDate = DateTime.Now
+                });
         }
 
         private void CreateStoreSettingData()

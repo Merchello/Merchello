@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using Merchello.Core.Configuration;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
+using Umbraco.Core;
 using Umbraco.Core.Cache;
 using Umbraco.Core.Logging;
 
@@ -31,7 +33,10 @@ namespace Merchello.Core.Gateways.Taxation.FixedRate
         /// <returns>The <see cref="ITaxationGatewayMethod"/></returns>
         public override ITaxationGatewayMethod CreateTaxMethod(string countryCode, decimal taxPercentageRate)
         {
-            var attempt = GatewayProviderService.CreateTaxMethodWithKey(GatewayProvider.Key, countryCode, taxPercentageRate);
+            var attempt = ListResourcesOffered().FirstOrDefault(x => x.ServiceCode.Equals(countryCode)) != null
+                ? GatewayProviderService.CreateTaxMethodWithKey(GatewayProvider.Key, countryCode, taxPercentageRate)
+                : Attempt<ITaxMethod>.Fail(new InvalidOperationException("A fixed tax rate method has already been defined for " + countryCode));
+
 
             if (!attempt.Success)
             {
@@ -63,6 +68,19 @@ namespace Merchello.Core.Gateways.Taxation.FixedRate
             return TaxMethods.Select(taxMethod => new FixRateMethod(taxMethod));
         }
 
+        /// <summary>
+        /// Returns a collection of all possible gateway methods associated with this provider
+        /// </summary>
+        /// <returns>A collection of <see cref="IGatewayResource"/></returns>
+        public override IEnumerable<IGatewayResource> ListResourcesOffered()
+        {
+            var countryCodes = GatewayProviderService.GetAllShipCountries().Select(x => x.CountryCode).Distinct();
+
+            return
+                countryCodes.Select(x => new GatewayResource(x, x + "-FixedRate"))
+                    .Where(code => TaxMethods.FirstOrDefault(x => x.CountryCode.Equals(code.ServiceCode)) == null);
+
+        }
 
         /// <summary>
         /// The name of the TaxationProvider

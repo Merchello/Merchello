@@ -1,14 +1,12 @@
-﻿using System;
-using Merchello.Core.Gateways.Shipping;
+﻿using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Gateways.Taxation;
 using Merchello.Core.Models.TypeFields;
-using Umbraco.Core;
 using Umbraco.Core.Logging;
 
 namespace Merchello.Core.Models
 {
     /// <summary>
-    /// Extension methods for <see cref="IItemCache"/>
+    /// Extension methods for <see cref="ILineItem"/>
     /// </summary>
     public static class LineItemExtensions
     {

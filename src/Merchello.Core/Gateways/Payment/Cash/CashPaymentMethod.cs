@@ -1,26 +1,31 @@
 ﻿using System;
 using Merchello.Core.Models;
+using Merchello.Core.Services;
+using Umbraco.Core;
 
 namespace Merchello.Core.Gateways.Payment.Cash
 {
+    /// <summary>
+    /// Represents a CashPaymentMethod
+    /// </summary>
     public class CashPaymentMethod : PaymentGatewayMethodBase, ICashPaymentMethod
     {
-        public CashPaymentMethod(IPaymentMethod paymentMethod) 
-            : base(paymentMethod)
-        {
-        }
+        public CashPaymentMethod(IGatewayProviderService gatewayProviderService, IPaymentMethod paymentMethod) 
+            : base(gatewayProviderService, paymentMethod)
+        { }
 
-        /// <summary>
-        /// Processes a payment for the <see cref="IInvoice"/>
-        /// </summary>
-        /// <param name="invoice">The invoice to be payed</param>
-        /// <param name="args">Additional arguements required by the payment processor</param>
-        /// <returns>A <see cref="IPaymentGatewayResponse"/></returns>
-        public override IPaymentGatewayResponse ProcessPayment(IInvoice invoice, ProcessorArgumentCollection args)
+        protected override IPaymentResult PerformProcessPayment(IInvoice invoice, ProcessorArgumentCollection args)
         {
-            Mandate.ParameterNotNull(invoice, "invoice");
+            var payment = GatewayProviderService.CreatePaymentWithKey(PaymentMethodType.Cash, invoice.Total, PaymentMethod.Key);
 
-            throw new NotImplementedException();
+            payment.PaymentMethodName = PaymentMethod.Name + " " + PaymentMethod.PaymentCode;
+            payment.ReferenceNumber = PaymentMethod.PaymentCode + "-" + invoice.PrefixedInvoiceNumber();
+
+            // If this were using a service we might want to store some of the transaction data in the ExtendedData for record
+            //payment.ExtendData
+
+
+            return new PaymentResult(Attempt.Succeed(payment), false);
         }
     }
 }

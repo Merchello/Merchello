@@ -93,7 +93,7 @@ namespace Merchello.Tests.IntegrationTests.A.DbInstall
         public void Can_Populate_GatewayProviders()
         {
             //// Arrange
-            var expected = 2;
+            var expected = 3;
 
             //// Act
             _creation.InitializeBaseData("merchGatewayProvider");

@@ -19,30 +19,33 @@ namespace Merchello.Core.Services
     {
         private readonly IDatabaseUnitOfWorkProvider _uowProvider;
         private readonly RepositoryFactory _repositoryFactory;
+        private readonly IAppliedPaymentService _appliedPaymentService;
         private readonly IStoreSettingService _storeSettingService;
 
         private static readonly ReaderWriterLockSlim Locker =
             new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
 
         public InvoiceService()
-            : this(new RepositoryFactory(), new StoreSettingService())
+            : this(new RepositoryFactory(), new AppliedPaymentService(),  new StoreSettingService())
         {
         }
 
-        public InvoiceService(RepositoryFactory repositoryFactory, IStoreSettingService storeSettingService)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, storeSettingService)
+        internal InvoiceService(RepositoryFactory repositoryFactory, IAppliedPaymentService appliedPaymentService, IStoreSettingService storeSettingService)
+            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, appliedPaymentService, storeSettingService)
         {
         }
 
-        public InvoiceService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory,
+        internal InvoiceService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, IAppliedPaymentService appliedPaymentService,
             IStoreSettingService storeSettingService)
         {
             Mandate.ParameterNotNull(provider, "provider");
             Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
+            Mandate.ParameterNotNull(appliedPaymentService, "appliedPaymentService");
             Mandate.ParameterNotNull(storeSettingService, "storeSettingService");
 
             _uowProvider = provider;
             _repositoryFactory = repositoryFactory;
+            _appliedPaymentService = appliedPaymentService;
             _storeSettingService = storeSettingService;
         }
 
@@ -269,6 +272,18 @@ namespace Merchello.Core.Services
             {
                 return repository.GetAll(keys.ToArray());
             }
+        }
+
+        /// <summary>
+        /// Gets a collection of <see cref="IInvoice"/> objects that are associated with a <see cref="IPayment"/> by the payments 'key'
+        /// </summary>
+        /// <param name="paymentKey">The <see cref="IPayment"/> key (Guid)</param>
+        /// <returns>A collection of <see cref="IInvoice"/></returns>
+        public IEnumerable<IInvoice> GetInvoicesByPaymentKey(Guid paymentKey)
+        {
+            var invoiceKeys = _appliedPaymentService.GetAppliedPaymentsByPaymentKey(paymentKey).Select(x => x.InvoiceKey).ToArray();
+
+            return GetByKeys(invoiceKeys);
         }
 
         /// <summary>

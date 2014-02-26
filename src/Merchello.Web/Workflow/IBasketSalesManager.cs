@@ -1,12 +1,10 @@
-﻿using Merchello.Core.Checkout;
+﻿using Merchello.Core.Sales;
 
 namespace Merchello.Web.Workflow
 {
     /// <summary>
     /// Marker interface for <see cref="IBasket"/> based checkouts
     /// </summary>
-    public interface IBasketOrderPreparation : IOrderPreparationBase
-    {
-         
-    }
+    public interface IBasketSalesManager : ISalesManagerBase
+    { }
 }

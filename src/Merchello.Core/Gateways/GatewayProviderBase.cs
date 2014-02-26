@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Umbraco.Core.Cache;
@@ -25,6 +26,11 @@ namespace Merchello.Core.Gateways
             _runtimeCache = runtimeCacheProvider;
         }
 
+        /// <summary>
+        /// Returns a collection of all possible gateway methods associated with this provider
+        /// </summary>
+        /// <returns>A collection of <see cref="IGatewayResource"/></returns>
+        public abstract IEnumerable<IGatewayResource> ListResourcesOffered();
 
         // The properties Name and Key will be likely become attribute defined properties
         // TODO enable devs to define each of these values. 

@@ -1,25 +1,25 @@
 ﻿using Merchello.Core.Models;
-using Merchello.Core.Orders;
+using Merchello.Core.Sales;
 
 namespace Merchello.Core.Chains.InvoiceCreation
 {
     public abstract class OrderPreparationAttemptChainTaskBase : AttemptChainTaskBase<IInvoice>
     {
-        private readonly OrderPreparationBase _orderPreparation;
+        private readonly SalesManagerBase _salesManager;
 
-        protected OrderPreparationAttemptChainTaskBase(OrderPreparationBase orderPreparation)
+        protected OrderPreparationAttemptChainTaskBase(SalesManagerBase salesManager)
         {
-            Mandate.ParameterNotNull(orderPreparation, "checkout");
+            Mandate.ParameterNotNull(salesManager, "checkout");
 
-            _orderPreparation = orderPreparation;
+            _salesManager = salesManager;
         }
 
         /// <summary>
-        /// Gets the <see cref="OrderPreparationBase"/> object
+        /// Gets the <see cref="SalesManagerBase"/> object
         /// </summary>
-        protected OrderPreparationBase OrderPreparation
+        protected SalesManagerBase SalesManager
         {
-            get { return _orderPreparation; }
+            get { return _salesManager; }
         }
     }
 }
