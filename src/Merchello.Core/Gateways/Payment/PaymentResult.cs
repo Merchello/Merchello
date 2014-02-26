@@ -14,8 +14,15 @@ namespace Merchello.Core.Gateways.Payment
             ApproveOrderCreation = approveOrderCreation;
         }
 
+        /// <summary>
+        /// Gets the Result
+        /// </summary>
         public Attempt<IPayment> Result { get; private set; }
 
-        public bool ApproveOrderCreation { get; private set; }
+        /// <summary>
+        /// True/false indicating whether or not an order should be generated
+        /// as a result of this payment
+        /// </summary>
+        public bool ApproveOrderCreation { get; internal set; }
     }
 }

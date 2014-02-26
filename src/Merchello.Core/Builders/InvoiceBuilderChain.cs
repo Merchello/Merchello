@@ -16,10 +16,10 @@ namespace Merchello.Core.Builders
 
         internal InvoiceBuilderChain(SalesManagerBase salesManager)
         {
-            Mandate.ParameterNotNull(salesManager, "checkout");
+            Mandate.ParameterNotNull(salesManager, "salesManager");
             _salesManager = salesManager;
 
-            ResolveChain(Constants.TaskChainAlias.CheckoutInvoiceCreate);
+            ResolveChain(Constants.TaskChainAlias.SalesManagerInvoiceCreate);
         }
 
         /// <summary>
@@ -53,7 +53,6 @@ namespace Merchello.Core.Builders
                     (_constructorParameters =  new List<object>(new object[] {_salesManager} ));
             }
         }
-
         
         /// <summary>
         /// Used for testing
