@@ -145,22 +145,6 @@ namespace Merchello.Tests.UnitTests.Mappers
             Assert.AreSame(expected, resolved.Result.GetType());
         }
 
-        ///// <summary>
-        ///// Test to verify <see cref="MerchelloMapper"/> correctly maps IInvoice to InvoiceMapper
-        ///// </summary>
-        //[Test]
-        //public void Mapper_Resolves_IInvoice_To_InvoiceMapper()
-        //{
-        //    //// Arrage
-        //    var expected = typeof(InvoiceMapper);
-
-        //    //// Act
-        //    var resolved = MerchelloMapper.Current.ResolveByType(typeof(IInvoice));
-
-        //    //// Assert
-        //    Assert.IsTrue(resolved.Success);
-        //    Assert.AreSame(expected, resolved.Result.GetType());
-        //}
 
         /// <summary>
         /// Test to verify <see cref="MerchelloMapper"/> correctly maps IItemCache to ItemCacheMapper
@@ -215,6 +199,26 @@ namespace Merchello.Tests.UnitTests.Mappers
             Assert.IsTrue(resolved.Success);
             Assert.AreSame(expected, resolved.Result.GetType());
         }
+
+
+        /// <summary>
+        /// Test to verify <see cref="MerchelloMapper"/> correctly maps IOrder to OrdertMapper
+        /// </summary>
+        [Test]
+        public void Mapper_Resolves_IOrder_To_OrderMapper()
+        {
+
+            //// Arrage
+            var expected = typeof(OrderMapper);
+
+            //// Act
+            var resolved = MerchelloMapper.Current.ResolveByType(typeof(IOrder));
+
+            //// Assert
+            Assert.IsTrue(resolved.Success);
+            Assert.AreSame(expected, resolved.Result.GetType());
+        }
+
 
         /// <summary>
         /// Test to verify <see cref="MerchelloMapper"/> correctly maps IPayment to PaymentMapper
