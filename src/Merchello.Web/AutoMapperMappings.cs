@@ -33,7 +33,7 @@ namespace Merchello.Web
             AutoMapper.Mapper.CreateMap<IShippingGatewayProvider, ShippingGatewayProviderDisplay>();
             AutoMapper.Mapper.CreateMap<IShipCountry, ShipCountryDisplay>();
             AutoMapper.Mapper.CreateMap<IShipMethod, ShipMethodDisplay>();
-            AutoMapper.Mapper.CreateMap<IFixedRateShipMethod, RateTableShipMethodDisplay>();
+            AutoMapper.Mapper.CreateMap<IFixedRateShippingGatewayMethod, RateTableShipMethodDisplay>();
             AutoMapper.Mapper.CreateMap<IShipProvince, ShipProvinceDisplay>();
             AutoMapper.Mapper.CreateMap<IShippingFixedRateTable, ShipRateTableDisplay>();
             AutoMapper.Mapper.CreateMap<IShipRateTier, ShipRateTierDisplay>();

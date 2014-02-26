@@ -23,7 +23,7 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
         private IWarehouseCatalog _warehouseCatalog;
         private IShipCountry _shipCountry;
         private FixedRateShippingGatewayProvider _fixedRateProvider;
-        private FixedRateShipMethod _gwshipMethod;
+        private FixedRateShippingGatewayMethod _gwshipMethod;
 
         [TestFixtureSetUp]
         public override void FixtureSetup()
@@ -48,7 +48,7 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
             
             _fixedRateProvider.DeleteAllActiveShipMethods(_shipCountry);
 
-            _gwshipMethod = (FixedRateShipMethod)_fixedRateProvider.CreateShipMethod(FixedRateShipMethod.QuoteType.VaryByWeight, _shipCountry, "Ground (VBW)");
+            _gwshipMethod = (FixedRateShippingGatewayMethod)_fixedRateProvider.CreateShipMethod(FixedRateShippingGatewayMethod.QuoteType.VaryByWeight, _shipCountry, "Ground (VBW)");
             _gwshipMethod.RateTable.AddRow(0, 10, 5);
             _gwshipMethod.RateTable.AddRow(10, 15, 10);
             _gwshipMethod.RateTable.AddRow(15, 25, 25);

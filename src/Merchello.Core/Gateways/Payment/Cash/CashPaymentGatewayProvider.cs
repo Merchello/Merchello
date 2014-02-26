@@ -39,7 +39,12 @@ namespace Merchello.Core.Gateways.Payment.Cash
 
             var attempt = GatewayProviderService.CreatePaymentMethodWithKey(GatewayProvider.Key, name, description, paymentCode);
 
-            if (attempt.Success) return new CashPaymentMethod(GatewayProviderService, attempt.Result);
+            if (attempt.Success)
+            {
+                PaymentMethods = null;
+
+                return new CashPaymentMethod(GatewayProviderService, attempt.Result);
+            }
             
             LogHelper.Error<CashPaymentGatewayProvider>(string.Format("Failed to create a payment method name: {0}, description {1}, paymentCode {2}", name, description, paymentCode), attempt.Exception);
 

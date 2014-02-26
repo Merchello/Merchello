@@ -112,8 +112,8 @@ namespace Merchello.Web.Editors
                     {
                         foreach (IShippingGatewayMethod method in fixedProvider.GetAllShippingGatewayMethods(shipCountry))
                         {
-                            IFixedRateShipMethod fixedRateShipMethod = method as IFixedRateShipMethod;
-                            yield return fixedRateShipMethod.ToRateTableShipMethodDisplay();
+                            IFixedRateShippingGatewayMethod fixedRateShippingGatewayMethod = method as IFixedRateShippingGatewayMethod;
+                            yield return fixedRateShippingGatewayMethod.ToRateTableShipMethodDisplay();
                         }
                     }
                     else
@@ -148,7 +148,7 @@ namespace Merchello.Web.Editors
                 var shipCountry = _shipCountryService.GetByKey(method.ShipMethod.ShipCountryKey);
                 var provider = _fixedRateShippingGatewayProvider;
 
-                var merchelloGwShipMethod = (IFixedRateShipMethod)provider.CreateShipMethod(method.RateTableType, shipCountry, method.ShipMethod.Name);
+                var merchelloGwShipMethod = (IFixedRateShippingGatewayMethod)provider.CreateShipMethod(method.RateTableType, shipCountry, method.ShipMethod.Name);
 
                 merchelloGwShipMethod = method.ToRateTableShipMethod(merchelloGwShipMethod);
 
@@ -178,7 +178,7 @@ namespace Merchello.Web.Editors
                 var shipCountry = _shipCountryService.GetByKey(method.ShipMethod.ShipCountryKey);
                 var provider = _fixedRateShippingGatewayProvider;
 
-                var merchelloMethod = (IFixedRateShipMethod)provider.GetAllShippingGatewayMethods(shipCountry).FirstOrDefault(m => m.ShipMethod.Key == method.ShipMethod.Key);
+                var merchelloMethod = (IFixedRateShippingGatewayMethod)provider.GetAllShippingGatewayMethods(shipCountry).FirstOrDefault(m => m.ShipMethod.Key == method.ShipMethod.Key);
 
                 if (merchelloMethod != null)
                 {

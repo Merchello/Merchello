@@ -222,7 +222,7 @@ namespace Merchello.Web.Models.ContentEditing
         
         #region RateTableShipMethodDisplay
 
-        internal static RateTableShipMethodDisplay ToRateTableShipMethodDisplay(this IFixedRateShipMethod shipFixedRateMethod)
+        internal static RateTableShipMethodDisplay ToRateTableShipMethodDisplay(this IFixedRateShippingGatewayMethod shipFixedRateMethod)
         {
             return AutoMapper.Mapper.Map<RateTableShipMethodDisplay>(shipFixedRateMethod);
         }
@@ -232,11 +232,11 @@ namespace Merchello.Web.Models.ContentEditing
         #region IRateTableShipMethod
 
         /// <summary>
-        /// Maps changes made in the <see cref="RateTableShipMethodDisplay"/> to the <see cref="IFixedRateShipMethod"/>
+        /// Maps changes made in the <see cref="RateTableShipMethodDisplay"/> to the <see cref="IFixedRateShippingGatewayMethod"/>
         /// </summary>
         /// <param name="rateTableShipMethodDisplay">The <see cref="RateTableShipMethodDisplay"/> to map</param>
-        /// <param name="destination">The <see cref="IFixedRateShipMethod"/> to have changes mapped to</param>
-        /// <returns>The updated <see cref="IFixedRateShipMethod"/></returns>
+        /// <param name="destination">The <see cref="IFixedRateShippingGatewayMethod"/> to have changes mapped to</param>
+        /// <returns>The updated <see cref="IFixedRateShippingGatewayMethod"/></returns>
         /// <remarks>
         /// 
         /// Note: after calling this mapping, the changes are still not persisted to the database as the .Save() method is not called.
@@ -244,7 +244,7 @@ namespace Merchello.Web.Models.ContentEditing
         /// * For testing you will have to use the static .Save(IGatewayProviderService ..., as MerchelloContext.Current will likely be null
         /// 
         /// </remarks>
-        internal static IFixedRateShipMethod ToRateTableShipMethod(this RateTableShipMethodDisplay rateTableShipMethodDisplay, IFixedRateShipMethod destination)
+        internal static IFixedRateShippingGatewayMethod ToRateTableShipMethod(this RateTableShipMethodDisplay rateTableShipMethodDisplay, IFixedRateShippingGatewayMethod destination)
         {
 
 

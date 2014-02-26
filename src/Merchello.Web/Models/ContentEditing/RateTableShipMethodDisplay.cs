@@ -9,6 +9,6 @@ namespace Merchello.Web.Models.ContentEditing
         public ShipMethodDisplay ShipMethod { get; set; }
         public GatewayResourceDisplay GatewayResource { get; set; }
         public ShipRateTableDisplay RateTable { get; set; }
-        public FixedRateShipMethod.QuoteType RateTableType { get; set; }
+        public FixedRateShippingGatewayMethod.QuoteType RateTableType { get; set; }
     }
 }
