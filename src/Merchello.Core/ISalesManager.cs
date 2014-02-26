@@ -1,5 +1,4 @@
-﻿using Merchello.Core.Checkout;
-using Merchello.Core.Gateways.Payment;
+﻿using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Models;
 using Umbraco.Core;
 

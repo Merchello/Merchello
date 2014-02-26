@@ -58,6 +58,27 @@ namespace Merchello.Core.Services
 
         #endregion
 
+        #region AppliedPayments
+
+        /// <summary>
+        /// Gets a collection of <see cref="IAppliedPayment"/>s by the payment key
+        /// </summary>
+        /// <param name="paymentKey">The payment key</param>
+        /// <returns>A collection of <see cref="IAppliedPayment"/></returns>
+        IEnumerable<IAppliedPayment> GetAppliedPaymentsByPaymentKey(Guid paymentKey);
+
+        #endregion
+
+        #region Invoice
+
+        /// <summary>
+        /// Saves a single <see cref="IInvoice"/>
+        /// </summary>
+        /// <param name="invoice">The <see cref="IInvoice"/> to save</param>
+        void Save(IInvoice invoice);
+
+        #endregion
+
         #region PaymentMethod
 
         /// <summary>
@@ -89,6 +110,43 @@ namespace Merchello.Core.Services
         /// <param name="providerKey">The unique 'key' of the PaymentGatewayProvider</param>
         /// <returns>A collection of <see cref="IPaymentMethod"/></returns>
         IEnumerable<IPaymentMethod> GetPaymentMethodsByProviderKey(Guid providerKey);
+
+        #endregion
+
+        #region Payment
+
+        /// <summary>
+        /// Creates and saves a payment
+        /// </summary>
+        /// <param name="paymentMethodType">The type of the paymentmethod</param>
+        /// <param name="amount">The amount of the payment</param>
+        /// <param name="paymentMethodKey">The optional paymentMethodKey</param>
+        /// <returns>Returns <see cref="IPayment"/></returns>
+        IPayment CreatePaymentWithKey(PaymentMethodType paymentMethodType, decimal amount, Guid? paymentMethodKey);
+
+        /// <summary>
+        /// Saves a single <see cref="IPaymentMethod"/>
+        /// </summary>
+        /// <param name="payment">The <see cref="IPayment"/> to be saved</param>
+        void Save(IPayment payment);
+
+        /// <summary>
+        /// Creates and saves an AppliedPayment
+        /// </summary>
+        /// <param name="paymentKey">The payment key</param>
+        /// <param name="invoiceKey">The invoice 'key'</param>
+        /// <param name="appliedPaymentType">The applied payment type</param>
+        /// <param name="description">The description of the payment application</param>
+        /// <param name="amount">The amount of the payment to be applied</param>
+        /// <returns>An <see cref="IAppliedPayment"/></returns>
+        IAppliedPayment ApplyPaymentToInvoice(Guid paymentKey, Guid invoiceKey, AppliedPaymentType appliedPaymentType, string description, decimal amount);
+
+        /// <summary>
+        /// Gets a collection of <see cref="IPayment"/> for a given invoice
+        /// </summary>
+        /// <param name="invoiceKey">The unique 'key' of the invoice</param>
+        /// <returns>A collection of <see cref="IPayment"/></returns>
+        IEnumerable<IPayment> GetPaymentsForInvoice(Guid invoiceKey);
 
         #endregion
 

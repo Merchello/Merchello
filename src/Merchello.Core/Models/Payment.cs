@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Merchello.Core.Models.EntityBase;
@@ -21,23 +22,30 @@ namespace Merchello.Core.Models
         private bool _authorized;
         private bool _collected;
         private bool _exported;
+        private ExtendedDataCollection _extendedData;
 
         internal Payment(PaymentMethodType paymentMethodType, decimal amount)
-            : this(paymentMethodType, amount, null)
+            : this(paymentMethodType, amount, null, new ExtendedDataCollection())
         { }
 
         internal Payment(PaymentMethodType paymentMethodType, decimal amount, Guid? paymentMethodKey)
-            : this(EnumTypeFieldConverter.PaymentMethod.GetTypeField(paymentMethodType).TypeKey, amount, paymentMethodKey)
+            : this(paymentMethodType, amount, paymentMethodKey, new ExtendedDataCollection())
+        {}
+
+        internal Payment(PaymentMethodType paymentMethodType, decimal amount, Guid? paymentMethodKey, ExtendedDataCollection extendedData)
+            : this(EnumTypeFieldConverter.PaymentMethod.GetTypeField(paymentMethodType).TypeKey, amount, paymentMethodKey, extendedData)
         { }
 
-        internal Payment(Guid paymentTypeFieldKey, decimal amount, Guid? paymentMethodKey)  
+        internal Payment(Guid paymentTypeFieldKey, decimal amount, Guid? paymentMethodKey, ExtendedDataCollection extendedData)  
         {
             Mandate.ParameterCondition(!Guid.Empty.Equals(paymentTypeFieldKey), "paymentTypeFieldKey");
+            Mandate.ParameterNotNull(extendedData, "extendedData");
             
 
             _amount = amount;
             _paymentMethodKey = paymentMethodKey;
             _paymentTypeFieldKey = paymentTypeFieldKey;
+            _extendedData = extendedData;
         }        
 
         private static readonly PropertyInfo CustomerKeySelector = ExpressionHelper.GetPropertyInfo<Payment, Guid?>(x => x.CustomerKey); 
@@ -48,8 +56,15 @@ namespace Merchello.Core.Models
         private static readonly PropertyInfo AmountSelector = ExpressionHelper.GetPropertyInfo<Payment, decimal>(x => x.Amount);
         private static readonly PropertyInfo AuthorizedSelector = ExpressionHelper.GetPropertyInfo<Payment, bool>(x => x.Authorized);
         private static readonly PropertyInfo CollectedSelector = ExpressionHelper.GetPropertyInfo<Payment, bool>(x => x.Collected);
-        private static readonly PropertyInfo ExportedSelector = ExpressionHelper.GetPropertyInfo<Payment, bool>(x => x.Exported);        
-    
+        private static readonly PropertyInfo ExportedSelector = ExpressionHelper.GetPropertyInfo<Payment, bool>(x => x.Exported);
+        private static readonly PropertyInfo ExtendedDataChangedSelector = ExpressionHelper.GetPropertyInfo<LineItemBase, ExtendedDataCollection>(x => x.ExtendedData);
+
+        private void ExtendedDataChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            OnPropertyChanged(ExtendedDataChangedSelector);
+        }
+
+
         /// <summary>
         /// The customerKey associated with the Payment
         /// </summary>
@@ -203,7 +218,22 @@ namespace Merchello.Core.Models
                 }, _exported, ExportedSelector); 
             }
         }
-    
+
+        /// <summary>
+        /// A collection to store custom/extended data for the payment
+        /// </summary>
+        [DataMember]
+        public ExtendedDataCollection ExtendedData
+        {
+            get { return _extendedData; }
+            internal set
+            {
+                _extendedData = value;
+                _extendedData.CollectionChanged += ExtendedDataChanged;
+            }
+        }
+
+
         [DataMember]
         public PaymentMethodType PaymentMethodType
         {

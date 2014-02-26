@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Linq;
-using Merchello.Core.Checkout;
 using Merchello.Core.Models;
-using Merchello.Core.Orders;
+using Merchello.Core.Sales;
 using Umbraco.Core;
 
 namespace Merchello.Core.Chains.InvoiceCreation
 {
     internal class ApplyTaxesToInvoiceTax : OrderPreparationAttemptChainTaskBase
     {
-        public ApplyTaxesToInvoiceTax(OrderPreparationBase orderPreparation) 
-            : base(orderPreparation)
+        public ApplyTaxesToInvoiceTax(SalesManagerBase salesManager) 
+            : base(salesManager)
         { }
 
         public override Attempt<IInvoice> PerformTask(IInvoice value)
         {
             // if taxes are not to be applied, skip this step
-            if (OrderPreparation.ApplyTaxesToInvoice)
+            if (SalesManager.ApplyTaxesToInvoice)
             {
                 try
                 {
@@ -27,7 +26,7 @@ namespace Merchello.Core.Chains.InvoiceCreation
                         value.Items.Remove(remove);
                     }
 
-                    var taxes = value.CalculateTaxes(OrderPreparation.MerchelloContext, value.GetBillingAddress());
+                    var taxes = value.CalculateTaxes(SalesManager.MerchelloContext, value.GetBillingAddress());
 
                     value.Items.Add(taxes.AsLineItemOf<InvoiceLineItem>());
 

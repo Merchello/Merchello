@@ -1,4 +1,5 @@
 ﻿using System;
+using Merchello.Core.Models;
 using Merchello.Core.Persistence;
 using Merchello.Core.Persistence.UnitOfWork;
 
@@ -90,13 +91,13 @@ namespace Merchello.Core.Services
 
 
             if (_invoiceService == null)
-                _invoiceService = new Lazy<InvoiceService>(() => new InvoiceService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _storeSettingsService.Value));
+                _invoiceService = new Lazy<InvoiceService>(() => new InvoiceService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _appliedPaymentService.Value, _storeSettingsService.Value));
 
             if (_countryTaxRateService == null)
                 _countryTaxRateService = new Lazy<TaxMethodService>(() => new TaxMethodService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _storeSettingsService.Value));
             
             if(_gatewayProviderService == null)
-                _gatewayProviderService = new Lazy<GatewayProviderService>(() => new GatewayProviderService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _shipMethodService.Value, _shipRateTierService.Value, _shipCountryService.Value, _countryTaxRateService.Value, _paymentService.Value, _paymentMethodService.Value));
+                _gatewayProviderService = new Lazy<GatewayProviderService>(() => new GatewayProviderService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _shipMethodService.Value, _shipRateTierService.Value, _shipCountryService.Value, _invoiceService.Value, _countryTaxRateService.Value, _paymentService.Value, _paymentMethodService.Value));
 
             if(_warehouseService == null)
                 _warehouseService = new Lazy<WarehouseService>(() => new WarehouseService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
@@ -159,6 +160,14 @@ namespace Merchello.Core.Services
         public IPaymentService PaymentService
         {
             get { return _paymentService.Value; }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IPaymentMethodService"/>
+        /// </summary>
+        internal IPaymentMethodService PaymentMethodService
+        {
+            get { return _paymentMethodService.Value; }    
         }
 
         /// <summary>

@@ -18,6 +18,7 @@ namespace Merchello.Core.Services
 
         private readonly IDatabaseUnitOfWorkProvider _uowProvider;
         private readonly RepositoryFactory _repositoryFactory;
+        private readonly IInvoiceService _invoiceService;
         private readonly IShipMethodService _shipMethodService;
         private readonly IShipRateTierService _shipRateTierService;
         private readonly IShipCountryService _shipCountryService;
@@ -28,20 +29,21 @@ namespace Merchello.Core.Services
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
          public GatewayProviderService()
-            : this(new RepositoryFactory(), new ShipMethodService(), new ShipRateTierService(), new ShipCountryService(), new TaxMethodService(), new PaymentService(),  new PaymentMethodService())
+            : this(new RepositoryFactory(), new ShipMethodService(), new ShipRateTierService(), new ShipCountryService(), new InvoiceService(),  new TaxMethodService(), new PaymentService(),  new PaymentMethodService())
         { }
 
          internal GatewayProviderService(RepositoryFactory repositoryFactory, IShipMethodService shipMethodService, 
              IShipRateTierService shipRateTierService, IShipCountryService shipCountryService, 
+             IInvoiceService invoiceService,
              ITaxMethodService taxMethodService, IPaymentService paymentService, IPaymentMethodService paymentMethodService)
             : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, shipMethodService, 
-             shipRateTierService, shipCountryService, taxMethodService,
+             shipRateTierService, shipCountryService, invoiceService, taxMethodService,
              paymentService, paymentMethodService)
         { }
 
         internal GatewayProviderService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, 
             IShipMethodService shipMethodService, IShipRateTierService shipRateTierService, 
-            IShipCountryService shipCountryService, ITaxMethodService taxMethodService, 
+            IShipCountryService shipCountryService, IInvoiceService invoiceService, ITaxMethodService taxMethodService, 
             IPaymentService paymentService, IPaymentMethodService paymentMethodService)
         {
             Mandate.ParameterNotNull(provider, "provider");
@@ -52,12 +54,14 @@ namespace Merchello.Core.Services
             Mandate.ParameterNotNull(taxMethodService, "countryTaxRateService");
             Mandate.ParameterNotNull(paymentService, "paymentService");
             Mandate.ParameterNotNull(paymentMethodService, "paymentMethodService");
+            Mandate.ParameterNotNull(invoiceService, "invoiceService");
 
             _uowProvider = provider;
             _repositoryFactory = repositoryFactory;
             _shipMethodService = shipMethodService;
             _shipRateTierService = shipRateTierService;
             _shipCountryService = shipCountryService;
+            _invoiceService = invoiceService;
             _taxMethodService = taxMethodService;
             _paymentService = paymentService;
             _paymentMethodService = paymentMethodService;
@@ -198,6 +202,35 @@ namespace Merchello.Core.Services
 
         #endregion
 
+
+        #region AppliedPayments
+
+        /// <summary>
+        /// Gets a collection of <see cref="IAppliedPayment"/>s by the payment key
+        /// </summary>
+        /// <param name="paymentKey">The payment key</param>
+        /// <returns>A collection of <see cref="IAppliedPayment"/></returns>
+        public IEnumerable<IAppliedPayment> GetAppliedPaymentsByPaymentKey(Guid paymentKey)
+        {
+            return _paymentService.GetAppliedPaymentsByPaymentKey(paymentKey);
+        }
+
+        #endregion
+
+        #region Invoice
+
+        /// <summary>
+        /// Saves a single <see cref="IInvoice"/>
+        /// </summary>
+        /// <param name="invoice">The <see cref="IInvoice"/> to save</param>
+        public void Save(IInvoice invoice)
+        {
+            _invoiceService.Save(invoice);
+        }
+
+
+        #endregion
+
         #region PaymentMethod
 
         /// <summary>
@@ -242,6 +275,54 @@ namespace Merchello.Core.Services
             return _paymentMethodService.GetPaymentMethodsByProviderKey(providerKey);
         }
 
+        #endregion
+
+        #region Payment
+
+        /// <summary>
+        /// Creates and saves a payment
+        /// </summary>
+        /// <param name="paymentMethodType">The type of the paymentmethod</param>
+        /// <param name="amount">The amount of the payment</param>
+        /// <param name="paymentMethodKey">The optional paymentMethodKey</param>
+        /// <returns>Returns <see cref="IPayment"/></returns>
+        public IPayment CreatePaymentWithKey(PaymentMethodType paymentMethodType, decimal amount, Guid? paymentMethodKey)
+        {
+            return _paymentService.CreatePaymentWithKey(paymentMethodType, amount, paymentMethodKey);
+        }
+
+        /// <summary>
+        /// Saves a single <see cref="IPaymentMethod"/>
+        /// </summary>
+        /// <param name="payment">The <see cref="IPayment"/> to be saved</param>
+        public void Save(IPayment payment)
+        {
+            _paymentService.Save(payment);
+        }
+
+        /// <summary>
+        /// Creates and saves an AppliedPayment
+        /// </summary>
+        /// <param name="paymentKey">The payment key</param>
+        /// <param name="invoiceKey">The invoice 'key'</param>
+        /// <param name="appliedPaymentType">The applied payment type</param>
+        /// <param name="description">The description of the payment application</param>
+        /// <param name="amount">The amount of the payment to be applied</param>
+        /// <returns>An <see cref="IAppliedPayment"/></returns>
+        public IAppliedPayment ApplyPaymentToInvoice(Guid paymentKey, Guid invoiceKey, AppliedPaymentType appliedPaymentType, string description, decimal amount)
+        {
+            return _paymentService.ApplyPaymentToInvoice(paymentKey, invoiceKey, appliedPaymentType, description, amount);
+        }
+
+        /// <summary>
+        /// Gets a collection of <see cref="IPayment"/> for a given invoice
+        /// </summary>
+        /// <param name="invoiceKey">The unique 'key' of the invoice</param>
+        /// <returns>A collection of <see cref="IPayment"/></returns>
+        public IEnumerable<IPayment> GetPaymentsForInvoice(Guid invoiceKey)
+        {
+            return _paymentService.GetPaymentsForInvoice(invoiceKey);
+        }
 
         #endregion
 

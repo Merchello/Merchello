@@ -14,9 +14,8 @@ namespace Merchello.Core.Gateways.Payment
         /// </summary>
         /// <param name="name">The name of the payment method</param>
         /// <param name="description">The description of the payment method</param>
-        /// <param name="paymentCode">The payment code of the payment method</param>
         /// <returns>A <see cref="IPaymentGatewayMethod"/></returns>
-        IPaymentGatewayMethod CreatePaymentMethod(string name, string description, string paymentCode);
+        IPaymentGatewayMethod CreatePaymentMethod(string name, string description);
 
         /// <summary>
         /// Saves a <see cref="IPaymentGatewayMethod"/>
@@ -35,7 +34,14 @@ namespace Merchello.Core.Gateways.Payment
         /// </summary>
         /// <param name="paymentMethodKey">The key of the <see cref="IPaymentMethod"/></param>
         /// <returns>A <see cref="IPaymentGatewayMethod"/></returns>
-        IPaymentGatewayMethod GetByKey(Guid paymentMethodKey);
+        IPaymentGatewayMethod GetPaymentGatewayMethodByKey(Guid paymentMethodKey);
+
+        /// <summary>
+        /// Gets a <see cref="IPaymentGatewayMethod"/> by it's payment code
+        /// </summary>
+        /// <param name="paymentCode">The payment code of the <see cref="IPaymentGatewayMethod"/></param>
+        /// <returns>A <see cref="IPaymentGatewayMethod"/></returns>
+        IPaymentGatewayMethod GetPaymentGatewayMethodByPaymentCode(string paymentCode);
 
         /// <summary>
         /// Gets a collection of all <see cref="IPaymentMethod"/>s associated with this provider

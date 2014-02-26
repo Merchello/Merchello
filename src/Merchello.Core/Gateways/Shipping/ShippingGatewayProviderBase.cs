@@ -35,12 +35,7 @@ namespace Merchello.Core.Gateways.Shipping
         /// </summary>
         /// <param name="shippingGatewayMethod"></param>
         public abstract void SaveShippingGatewayMethod(IShippingGatewayMethod shippingGatewayMethod);
-
-        /// <summary>
-        /// Returns a collection of all possible gateway methods associated with this provider
-        /// </summary>
-        /// <returns></returns>
-        public abstract IEnumerable<IGatewayResource> ListResourcesOffered();
+       
 
         /// <summary>
         /// Returns a collection of ship methods assigned for this specific provider configuration (associated with the ShipCountry)

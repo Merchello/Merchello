@@ -87,11 +87,12 @@
     <Compile Include="Gateways\Payment\Cash\CashPaymentMethod.cs" />
     <Compile Include="Gateways\Payment\Cash\ICashPaymentMethod.cs" />
     <Compile Include="Gateways\Payment\Cash\ICashPaymentGatewayProvider.cs" />
+    <Compile Include="Gateways\Payment\PaymentResult.cs" />
     <Compile Include="Gateways\Payment\ProcessorArgumentCollection.cs" />
     <Compile Include="Gateways\IGatewayMethod.cs" />
     <Compile Include="Gateways\Payment\PaymentGatewayMethodBase.cs" />
     <Compile Include="Gateways\Payment\IPaymentGatewayMethod.cs" />
-    <Compile Include="Gateways\Payment\IPaymentGatewayResponse.cs" />
+    <Compile Include="Gateways\Payment\IPaymentResult.cs" />
     <Compile Include="Gateways\Taxation\FixedRate\FixRateMethod.cs" />
     <Compile Include="Gateways\Taxation\FixedRate\IFixedRateTaxMethod.cs" />
     <Compile Include="Gateways\Taxation\TaxationGatewayMethodBase.cs" />
@@ -105,10 +106,11 @@
     <Compile Include="Models\LocalizationExtensions.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\OrderStatus.cs" />
+    <Compile Include="Models\PaymentExtensions.cs" />
     <Compile Include="Models\PaymentMethod.cs" />
     <Compile Include="Models\Rdbms\PaymentMethodDto.cs" />
-    <Compile Include="Orders\OrderPreparationBase.cs" />
-    <Compile Include="Orders\IOrderPreparationBase.cs" />
+    <Compile Include="Sales\SalesManagerBase.cs" />
+    <Compile Include="Sales\ISalesManagerBase.cs" />
     <Compile Include="Builders\IBuilderChain.cs" />
     <Compile Include="Cache\CacheKeys.cs" />
     <Compile Include="CloneHelper.cs" />

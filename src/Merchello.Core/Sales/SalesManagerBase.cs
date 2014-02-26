@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Merchello.Core.Builders;
-using Merchello.Core.Checkout;
+using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Models;
 using Merchello.Core.Models.TypeFields;
@@ -10,19 +11,19 @@ using Umbraco.Core;
 using Umbraco.Core.Cache;
 using Umbraco.Core.Logging;
 
-namespace Merchello.Core.Orders
+namespace Merchello.Core.Sales
 {
     /// <summary>
-    /// Represents a CheckoutBase class resposible for temporarily persisting invoice and order information
+    /// Represents an abstract OrderPreparation class resposible for temporarily persisting invoice and order information
     /// while it's being collected
     /// </summary>
-    public abstract class OrderPreparationBase : IOrderPreparationBase
+    public abstract class SalesManagerBase : ISalesManagerBase
     {
         private readonly IItemCache _itemCache;
         private readonly ICustomerBase _customer;
         private readonly IMerchelloContext _merchelloContext;
 
-        internal OrderPreparationBase(IMerchelloContext merchelloContext, IItemCache itemCache, ICustomerBase customer)
+        internal SalesManagerBase(IMerchelloContext merchelloContext, IItemCache itemCache, ICustomerBase customer)
         {                       
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
             Mandate.ParameterNotNull(itemCache, "ItemCache");
@@ -36,28 +37,28 @@ namespace Merchello.Core.Orders
         }
 
         /// <summary>
-        /// Purges persisted checkout information
+        /// Purges sales manager information
         /// </summary>
-        public virtual void RestartCheckout()
+        public virtual void Reset()
         {
-            RestartCheckout(_merchelloContext, _customer, ItemCache.VersionKey);
+            Reset(_merchelloContext, _customer);
         }
 
         /// <summary>
-        /// Purges persisted checkout information
+        /// Purges sales manager information
         /// </summary>
-        internal static void RestartCheckout(IMerchelloContext merchelloContext, Guid entityKey, Guid versionKey)
+        internal static void Reset(IMerchelloContext merchelloContext, Guid entityKey)
         {
             var customer = merchelloContext.Services.CustomerService.GetAnyByKey(entityKey);
             if(customer == null) return;
 
-            RestartCheckout(merchelloContext, customer, versionKey);
+            Reset(merchelloContext, customer);
         }
 
         /// <summary>
         /// Purges persisted checkout information
         /// </summary>
-        private static void RestartCheckout(IMerchelloContext merchelloContext, ICustomerBase customer, Guid versionKey)
+        private static void Reset(IMerchelloContext merchelloContext, ICustomerBase customer)
         {
             customer.ExtendedData.RemoveValue(Constants.ExtendedDataKeys.BillingAddress);
             SaveCustomer(merchelloContext, customer);
@@ -68,7 +69,7 @@ namespace Merchello.Core.Orders
         /// </summary>
         /// <param name="billToAddress">The billing <see cref="IAddress"/></param>
         public virtual void SaveBillToAddress(IAddress billToAddress)
-        {
+        {           
             _customer.ExtendedData.AddAddress(billToAddress, AddressType.Billing);
             SaveCustomer(_merchelloContext, _customer);
         }
@@ -134,9 +135,9 @@ namespace Merchello.Core.Orders
         /// Generates an <see cref="IInvoice"/>
         /// </summary>
         /// <returns>An <see cref="IInvoice"/></returns>
-        public virtual IInvoice GenerateInvoice()
+        public virtual IInvoice PrepareInvoice()
         {
-            return GenerateInvoice(new InvoiceBuilderChain(this));
+            return PrepareInvoice(new InvoiceBuilderChain(this));
         }
 
         /// <summary>
@@ -144,16 +145,37 @@ namespace Merchello.Core.Orders
         /// </summary>
         /// <param name="invoiceBuilder">The invoice builder class</param>
         /// <returns>An <see cref="IInvoice"/> that is not persisted to the database.</returns>
-        public IInvoice GenerateInvoice(IBuilderChain<IInvoice> invoiceBuilder)
+        public IInvoice PrepareInvoice(IBuilderChain<IInvoice> invoiceBuilder)
         {
             var attempt = invoiceBuilder.Build();
             if (!attempt.Success)
             {
-                LogHelper.Error<OrderPreparationBase>("The invoice builder failed to generate an invoice.", attempt.Exception);
+                LogHelper.Error<SalesManagerBase>("The invoice builder failed to generate an invoice.", attempt.Exception);
                 throw attempt.Exception;
             }
 
             return attempt.Result;
+        }
+
+        /// <summary>
+        /// Gets a list of all possible Payment Methods
+        /// </summary>
+        /// <returns>A collection of <see cref="IPaymentGatewayMethod"/>s</returns>
+        public IEnumerable<IPaymentGatewayMethod> GetPaymentGatewayMethods()
+        {
+            var paymentProviders = MerchelloContext.Gateways.Payment.ResolveAllActiveProviders();
+            var methods = new List<IPaymentGatewayMethod>();
+            foreach (var provider in paymentProviders)
+            {
+                methods.AddRange(provider.PaymentMethods.Select(x => provider.GetPaymentGatewayMethodByKey(x.Key))); 
+            }
+
+            return methods;
+        }
+
+        public IPaymentResult ProcessPayment(IPaymentGatewayMethod paymentGatewayMethod, ProcessorArgumentCollection args)
+        {
+            throw new NotImplementedException();
         }
 
         ///// <summary>
@@ -161,6 +183,9 @@ namespace Merchello.Core.Orders
         ///// </summary>
         ///// <param name="paymentGatewayProvider">The see <see cref="IPaymentGatewayProvider"/> to be used in payment processing and <see cref="IOrder"/> creation approval</param>
         //public abstract void CompleteCheckout(IPaymentGatewayProvider paymentGatewayProvider);
+
+
+
 
 
         /// <summary>
@@ -183,7 +208,7 @@ namespace Merchello.Core.Orders
         /// </summary>
         /// <param name="customer">The customer associated with the checkout</param>
         /// <param name="merchelloContext">The <see cref="IMerchelloContext"/></param>
-        /// <param name="versionKey">The version key for this <see cref="OrderPreparationBase"/></param>
+        /// <param name="versionKey">The version key for this <see cref="SalesManagerBase"/></param>
         /// <returns>The <see cref="IItemCache"/> associated with the customer checkout</returns>
         protected static IItemCache GetItemCache(IMerchelloContext merchelloContext, ICustomerBase customer, Guid versionKey)
         {
@@ -201,7 +226,7 @@ namespace Merchello.Core.Orders
             {
                 var oldCacheKey = MakeCacheKey(customer, itemCache.VersionKey);
                 runtimeCache.ClearCacheItem(oldCacheKey);
-                RestartCheckout(merchelloContext, customer, versionKey);
+                Reset(merchelloContext, customer);
 
                 // delete the old version
                 merchelloContext.Services.ItemCacheService.Delete(itemCache);
@@ -221,7 +246,7 @@ namespace Merchello.Core.Orders
         }
 
         /// <summary>
-        /// Generates a unique cache key for runtime caching of the <see cref="OrderPreparationBase"/>
+        /// Generates a unique cache key for runtime caching of the <see cref="SalesManagerBase"/>
         /// </summary>
         /// <param name="customer"><see cref="ICustomerBase"/></param>
         /// <param name="versionKey">The version key</param>
@@ -270,7 +295,7 @@ namespace Merchello.Core.Orders
             get { return _itemCache; }
         }
 
-        public bool ApplyTaxesToInvoice { get; set; }
+        internal bool ApplyTaxesToInvoice { get; set; }
 
 
     }

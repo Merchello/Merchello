@@ -3,7 +3,7 @@ using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Models;
-using Merchello.Core.Orders;
+using Merchello.Core.Sales;
 using Merchello.Tests.Base.DataMakers;
 using Merchello.Web;
 using Merchello.Web.Workflow;
@@ -20,7 +20,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
         private IBasket _basket;
         private IAddress _billingAddress;
         private IAddress _originAddress;
-        private OrderPreparationBase _orderPreparationMock;
+        private SalesManagerBase _salesManagerMock;
         private const decimal ProductCount = 5;
         private const decimal WeightPerProduct = 3;
         private const decimal PricePerProduct = 5;
@@ -65,7 +65,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
 
 
             // setup the checkout
-            _orderPreparationMock = new OrderPreparationMock(MerchelloContext, _itemCache, _customer);
+            _salesManagerMock = new SalesManagerMock(MerchelloContext, _itemCache, _customer);
 
             // add the shipment rate quote
             var shipment = _basket.PackageBasket(MerchelloContext, _billingAddress).First();
@@ -78,7 +78,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
                 Rate = 5M
             };
 
-            _orderPreparationMock.ItemCache.Items.Add(shipRateQuote.AsLineItemOf<InvoiceLineItem>());
+            _salesManagerMock.ItemCache.Items.Add(shipRateQuote.AsLineItemOf<InvoiceLineItem>());
         }
 
         ///// <summary>

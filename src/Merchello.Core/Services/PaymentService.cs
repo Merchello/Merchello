@@ -47,6 +47,32 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
+        /// Creates a payment without saving it to the database
+        /// </summary>
+        /// <param name="paymentMethodType">The type of the paymentmethod</param>
+        /// <param name="amount">The amount of the payment</param>
+        /// <param name="paymentMethodKey">The optional paymentMethodKey</param>
+        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        /// <returns>Returns <see cref="IPayment"/></returns>
+        public IPayment CreatePayment(PaymentMethodType paymentMethodType, decimal amount, Guid? paymentMethodKey, bool raiseEvents = true)
+        {
+            var payment = new Payment(paymentMethodType, amount, paymentMethodKey);
+
+            if(raiseEvents)
+            if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<IPayment>(payment), this))
+            {
+                payment.WasCancelled = true;
+                return payment;
+            }
+
+            if (raiseEvents) 
+            Created.RaiseEvent(new Events.NewEventArgs<IPayment>(payment), this);
+
+            return payment;
+
+        }
+
+        /// <summary>
         /// Creates and saves a payment
         /// </summary>
         /// <param name="paymentMethodType">The type of the paymentmethod</param>
@@ -72,7 +98,7 @@ namespace Merchello.Core.Services
             Mandate.ParameterCondition(!Guid.Empty.Equals(paymentTfKey), "paymentTfKey");
 
 
-            var payment = new Payment(paymentTfKey, amount, paymentMethodKey);
+            var payment = new Payment(paymentTfKey, amount, paymentMethodKey, new ExtendedDataCollection());
 
             if (raiseEvents)
                 if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<IPayment>(payment), this))
@@ -190,6 +216,19 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
+        /// Gets list of <see cref="IProduct"/> objects given a list of Unique keys
+        /// </summary>
+        /// <param name="keys">List of Guid keys for Product objects to retrieve</param>
+        /// <returns>List of <see cref="IProduct"/></returns>
+        public IEnumerable<IPayment> GetByKeys(IEnumerable<Guid> keys)
+        {
+            using (var repository = _repositoryFactory.CreatePaymentRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetAll(keys.ToArray());
+            }
+        }
+
+        /// <summary>
         /// Gets a collection of <see cref="IPayment"/> for a given PaymentGatewayProvider
         /// </summary>
         /// <param name="paymentMethodKey">The unique 'key' of the PaymentGatewayProvider</param>
@@ -211,11 +250,70 @@ namespace Merchello.Core.Services
         /// <returns>A collection of <see cref="IPayment"/></returns>
         public IEnumerable<IPayment> GetPaymentsForInvoice(Guid invoiceKey)
         {
-            using (var repository = _repositoryFactory.CreatePaymentRepository(_uowProvider.GetUnitOfWork()))
-            {
-                throw new NotImplementedException();
-            }
+            var paymentKeys = _appliedPaymentService.GetAppliedPaymentsByInvoiceKey(invoiceKey).Select(x => x.InvoiceKey).ToArray();
+            
+            return !paymentKeys.Any() ? new List<IPayment>() : GetByKeys(paymentKeys);
         }
+
+        #region AppliedPayments
+        
+
+        /// <summary>
+        /// Creates and saves an AppliedPayment
+        /// </summary>
+        /// <param name="paymentKey">The payment key</param>
+        /// <param name="invoiceKey">The invoice 'key'</param>
+        /// <param name="appliedPaymentType">The applied payment type</param>
+        /// <param name="description">The description of the payment application</param>
+        /// <param name="amount">The amount of the payment to be applied</param>
+        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        /// <returns>An <see cref="IAppliedPayment"/></returns>
+        public IAppliedPayment ApplyPaymentToInvoice(Guid paymentKey, Guid invoiceKey, AppliedPaymentType appliedPaymentType, string description, decimal amount, bool raiseEvents = true)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Saves an <see cref="IAppliedPayment"/>
+        /// </summary>
+        /// <param name="appliedPayment">The <see cref="IAppliedPayment"/> to be saved</param>
+        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        public void Save(IAppliedPayment appliedPayment, bool raiseEvents = true)
+        {
+            _appliedPaymentService.Save(appliedPayment, raiseEvents);
+        }
+
+        /// <summary>
+        /// Deletes a <see cref="IAppliedPayment"/>
+        /// </summary>
+        /// <param name="appliedPayment">The <see cref="IAppliedPayment"/> to be deleted</param>
+        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        public void Delete(IAppliedPayment appliedPayment, bool raiseEvents = true)
+        {
+            _appliedPaymentService.Delete(appliedPayment, raiseEvents);
+        }
+
+        /// <summary>
+        /// Deletes a collection of <see cref="IAppliedPayment"/>
+        /// </summary>
+        /// <param name="appliedPayments">The collection of <see cref="IAppliedPayment"/>s to be deleted</param>
+        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        public void Delete(IEnumerable<IAppliedPayment> appliedPayments, bool raiseEvents = true)
+        {
+            _appliedPaymentService.Delete(appliedPayments, raiseEvents);
+        }
+
+        /// <summary>
+        /// Gets a collection of <see cref="IAppliedPayment"/>s by the payment key
+        /// </summary>
+        /// <param name="paymentKey">The payment key</param>
+        /// <returns>A collection of <see cref="IAppliedPayment"/></returns>
+        public IEnumerable<IAppliedPayment> GetAppliedPaymentsByPaymentKey(Guid paymentKey)
+        {
+            return _appliedPaymentService.GetAppliedPaymentsByPaymentKey(paymentKey);
+        }
+
+        #endregion
 
         #region Event Handlers
 

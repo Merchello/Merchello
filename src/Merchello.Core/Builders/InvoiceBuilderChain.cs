@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Merchello.Core.Checkout;
 using Merchello.Core.Models;
-using Merchello.Core.Orders;
+using Merchello.Core.Sales;
 using Umbraco.Core;
 
 namespace Merchello.Core.Builders
@@ -13,12 +12,12 @@ namespace Merchello.Core.Builders
     /// </summary>
     internal sealed class InvoiceBuilderChain : BuildChainBase<IInvoice>
     {
-        private readonly OrderPreparationBase _orderPreparation;
+        private readonly SalesManagerBase _salesManager;
 
-        internal InvoiceBuilderChain(OrderPreparationBase orderPreparation)
+        internal InvoiceBuilderChain(SalesManagerBase salesManager)
         {
-            Mandate.ParameterNotNull(orderPreparation, "checkout");
-            _orderPreparation = orderPreparation;
+            Mandate.ParameterNotNull(salesManager, "checkout");
+            _salesManager = salesManager;
 
             ResolveChain(Constants.TaskChainAlias.CheckoutInvoiceCreate);
         }
@@ -51,7 +50,7 @@ namespace Merchello.Core.Builders
             get
             {
                 return _constructorParameters ?? 
-                    (_constructorParameters =  new List<object>(new object[] {_orderPreparation} ));
+                    (_constructorParameters =  new List<object>(new object[] {_salesManager} ));
             }
         }
 

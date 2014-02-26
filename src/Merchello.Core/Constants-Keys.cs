@@ -45,6 +45,11 @@ namespace Merchello.Core
             {
                 public static Guid FixedRateTaxationProviderKey = new Guid("A4AD4331-C278-4231-8607-925E0839A6CD");
             }
+
+            public static class Payment
+            {
+                public static Guid CashPaymentProviderKey = new Guid("B2612C3D-8BF0-411C-8C56-32E7495AE79C");
+            }
         }
 
         /// <summary>
