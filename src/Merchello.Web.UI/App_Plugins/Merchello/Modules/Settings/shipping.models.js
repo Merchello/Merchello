@@ -135,16 +135,97 @@
 
     };
 
+    models.Range = function (low, high) {
+
+        var self = this;
+
+        self.low = 0;
+        self.high = 0;
+
+        if (low != undefined) {
+            self.low = low;
+        } 
+        if (high != undefined) {
+            self.high = high;
+        }
+    };
+
     models.FixedRateShippingMethod = function (shippingMethodFromServer) {
 
         var self = this;
 
         if (shippingMethodFromServer == undefined) {
             self.shipMethod = new merchello.Models.ShippingMethod();
+            self.gatewayResource = new merchello.Models.GatewayResource();
+            self.rateTable = new merchello.Models.ShipRateTable();
             self.rateTableType = "";
         } else {
             self.shipMethod = new merchello.Models.ShippingMethod(shippingMethodFromServer.shipMethod);
-            self.rateTableType = hippingMethodFromServer.rateTableType;
+            self.gatewayResource = new merchello.Models.GatewayResource(shippingMethodFromServer.gatewayResource);
+            self.rateTable = new merchello.Models.ShipRateTable(shippingMethodFromServer.rateTable);
+            self.rateTableType = shippingMethodFromServer.rateTableType;
+        }
+
+        // Helper to calculate the range of all rateTiers
+        self.tierRange = function () {
+            var range = new merchello.Models.Range();
+
+            var lowTier = _.min(self.rateTable.rows, function (tier) { return parseFloat(tier.rangeLow) });
+            var highTier = _.max(self.rateTable.rows, function (tier) { return parseFloat(tier.rangeHigh) });
+
+            if (lowTier) {
+                range.low = lowTier.rangeLow;
+            }
+            if (highTier) {
+                range.high = highTier.rangeHigh;
+            }
+
+            return range;
+        };
+
+        // Helper to calculate the range of all rateTier prices
+        self.tierPriceRange = function () {
+            var range = new merchello.Models.Range();
+
+            var lowTier = _.min(self.rateTable.rows, function (tier) { return parseFloat(tier.rate) });
+            var highTier = _.max(self.rateTable.rows, function (tier) { return parseFloat(tier.rate) });
+
+            if (lowTier) {
+                range.low = lowTier.rate;
+            }
+            if (highTier) {
+                range.high = highTier.rate;
+            }
+
+            return range;
+        };
+    };
+
+    models.GatewayResource = function (gatewayResourceFromServer) {
+
+        var self = this;
+
+        if (gatewayResourceFromServer == undefined) {
+            self.name = "";
+            self.serviceCode = "";
+        } else {
+            self.name = gatewayResourceFromServer.name;
+            self.serviceCode = gatewayResourceFromServer.serviceCode;
+        }
+    };
+
+    models.ShipRateTable = function (shipRateTableFromServer) {
+
+        var self = this;
+
+        if (shipRateTableFromServer == undefined) {
+            self.shipMethodKey = "";
+            self.rows = [];
+        } else {
+            self.shipMethodKey = shipRateTableFromServer.shipMethodKey;
+            self.rows = _.map(shipRateTableFromServer.rows, function (row) {
+                return new merchello.Models.ShippingRateTier(row);
+            });
         }
 
     };
@@ -156,8 +237,8 @@
         if (shippingRateTierFromServer == undefined) {
             self.key = "";
             self.shipMethodKey = "";
-            self.rangeLow = "";
-            self.rangeHigh = "";
+            self.rangeLow = 0;
+            self.rangeHigh = 0;
             self.rate = "";
         } else {
             self.key = shippingRateTierFromServer.key;

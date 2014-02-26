@@ -179,6 +179,27 @@ namespace Merchello.Web.Editors
         /// <summary>
         /// 
         ///
+        /// GET /umbraco/Merchello/ShippingMethodsApi/GetAllShipGatewayResourcesForProvider
+        /// </summary>
+        /// <param name="id">GatewayProvider Key</param>
+        public IEnumerable<GatewayResourceDisplay> GetAllShipGatewayResourcesForProvider(Guid id)
+        {
+            var provider = MerchelloContext.Gateways.Shipping.ResolveByKey(id);
+            if (provider != null)
+            {
+                var resources = provider.ListResourcesOffered();
+                foreach (IGatewayResource resource in resources)
+                {
+                    yield return resource.ToGatewayProviderDisplay();
+                } 
+            }
+
+
+        }
+
+        /// <summary>
+        /// 
+        ///
         /// GET /umbraco/Merchello/ShippingMethodsApi/GetAllShipCountryProviders/{id}
         /// </summary>
         /// <param name="id">ShipCountry Key</param>

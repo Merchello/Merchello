@@ -16,6 +16,8 @@ using Merchello.Web.Models.ContentEditing;
 using System.Net;
 using System.Net.Http;
 using Merchello.Core.Gateways.Shipping;
+using Newtonsoft.Json;
+using System.ComponentModel;
 
 namespace Merchello.Web.Editors
 {
@@ -60,13 +62,42 @@ namespace Merchello.Web.Editors
         /// <summary>
         /// 
         ///
-        /// GET /umbraco/Merchello/ShippingMethodsApi/GetAllShipCountryRateTableProviders/{id}
+        /// GET /umbraco/Merchello/ShippingMethodsApi/GetAllShipCountryFixedRateProviders/{id}
         /// </summary>
         /// <remarks>
         /// 
         /// </remarks>
         /// <param name="id">ShipCountry Key</param>
-        public ShippingGatewayProviderDisplay GetAllShipCountryRateTableProviders(Guid id)
+        public IEnumerable<ShippingGatewayProviderDisplay> GetAllShipCountryFixedRateProviders(Guid id)
+        {
+            var shipCountry = _shipCountryService.GetByKey(id);
+            if (shipCountry != null)
+            {
+                var providers = _shippingContext.GetGatewayProvidersByShipCountry(shipCountry);
+
+                var fixedProviders = providers.Where(x => x.Key == Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey);
+
+                foreach (IShippingGatewayProvider provider in fixedProviders)
+                {
+                    yield return provider.ToShipGatewayProviderDisplay();
+                }
+            }
+            else
+            {
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+            }
+        }
+
+        /// <summary>
+        /// 
+        ///
+        /// GET /umbraco/Merchello/ShippingMethodsApi/GetAllFixedRateProviderMethods/{id}
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <param name="id">ShipCountry Key</param>
+        public IEnumerable<RateTableShipMethodDisplay> GetAllFixedRateProviderMethods(Guid id)
         {
             var shipCountry = _shipCountryService.GetByKey(id);
             if (shipCountry != null)
@@ -79,16 +110,20 @@ namespace Merchello.Web.Editors
 
                     if (fixedProvider != null)
                     {
-                        return fixedProvider.ToShipGatewayProviderDisplay();
+                        foreach (IShippingGatewayMethod method in fixedProvider.GetAllShippingGatewayMethods(shipCountry))
+                        {
+                            IFixedRateShipMethod fixedRateShipMethod = method as IFixedRateShipMethod;
+                            yield return fixedRateShipMethod.ToRateTableShipMethodDisplay();
+                        }
                     }
                     else
                     {
-                        return null;
+                        throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
                     }
                 }
                 else
                 {
-                    return null;
+                    throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
                 }
             }
             else

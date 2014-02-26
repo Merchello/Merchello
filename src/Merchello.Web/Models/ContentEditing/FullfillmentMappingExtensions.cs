@@ -135,6 +135,15 @@ namespace Merchello.Web.Models.ContentEditing
 
         #endregion
 
+        #region GatewayResourceDisplay
+
+        internal static GatewayResourceDisplay ToGatewayProviderDisplay(this IGatewayResource gatewayResource)
+        {
+            return AutoMapper.Mapper.Map<GatewayResourceDisplay>(gatewayResource);
+        }
+
+        #endregion
+
         #region ShipGatewayProviderDisplay
 
         internal static ShippingGatewayProviderDisplay ToShipGatewayProviderDisplay(this IShippingGatewayProvider shipGatewayProvider)

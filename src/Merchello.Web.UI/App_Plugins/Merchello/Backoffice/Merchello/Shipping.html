@@ -246,43 +246,26 @@
                                 <h3>{{country.name}}</h3>
                                 <a data-ng-click="openProviderFlyout(country)" class="btn btn-primary merchello-button-right">Add a Provider</a>
                                 <div data-ng-repeat="shippingGatewayProviders in country.shippingGatewayProviders" class="merchello-shipping-gateway-provider">
-                                    <h4>{{shippingGatewayProviders.name}} - {{shippingGatewayProviders.typeFullName}}</h4>
-                                    <table data-ng-repeat="fixedRateShipMethod in shippingGatewayProviders.shipMethods" class="table table-striped merchello-striped-table settings-table shipping-table">
+                                    <h4>{{shippingGatewayProviders.name}}</h4>
+                                    <table class="table table-striped merchello-striped-table settings-table shipping-table">
                                         <thead>
                                             <tr>
-                                                <th colspan="4">{{fixedRateShipMethod.shipMethod.name}}</th>
+                                                <th colspan="3">{{fixedRateShipMethod[0].gatewayResource.name}}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <!--<tr data-ng-repeat="method in shipMethods">
-                                                <td>{{method.name}}</td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
+                                            <tr data-ng-repeat="fixedRateShipMethod in shippingGatewayProviders.shipMethods">
+                                                <td>{{fixedRateShipMethod.shipMethod.name}}</td>
+                                                <td>{{fixedRateShipMethod.tierRange().low}} - {{fixedRateShipMethod.tierRange().high}}</td>
+                                                <td>{{fixedRateShipMethod.tierPriceRange().low}} - {{fixedRateShipMethod.tierPriceRange().high}}</td>
                                                 <td class="edit"><a href="#" class="btn btn-default btn-xs btn-mini">edit</a> <a class="btn btn-warning btn-xs btn-mini" href="#">x</a></td>
-                                            </tr>-->
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
 
-<!--                            <table class="table table-striped merchello-striped-table settings-table shipping-table">
-                                <thead>
-                                    <tr>
-                                        <th colspan="4">United Kingdom</th>
-                                        <th><a href="#" class="btn btn-primary">Add a Method</a></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Standard Shipping</td>
-                                        <td>Bramble Berry, Mindfly</td>
-                                        <td>0lbs-5lbs</td>
-                                        <td>$50.00</td>
-                                        <td class="edit"><a href="#" class="btn btn-default btn-xs btn-mini">edit</a> <a class="btn btn-warning btn-xs btn-mini" href="#">x</a></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+<!--
 
                             <table class="table table-striped merchello-striped-table settings-table shipping-table">
                                 <thead>
@@ -309,23 +292,6 @@
                                 </tbody>
                             </table>-->
 
- <!--                           <table class="table table-striped merchello-striped-table settings-table shipping-table">
-                                <thead>
-                                    <tr>
-                                        <th colspan="4">Everywhere Else</th>
-                                        <th><a href="#" class="btn btn-primary">Add a Method</a></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Standard Shipping</td>
-                                        <td>Bramble Berry</td>
-                                        <td>0lbs-5lbs</td>
-                                        <td>$50.00</td>
-                                        <td class="edit"><a href="#" class="btn btn-default btn-xs btn-mini">edit</a> <a class="btn btn-warning btn-xs btn-mini" href="#">x</a></td>
-                                    </tr>
-                                </tbody>
-                            </table>-->
 
                         </div>
 
