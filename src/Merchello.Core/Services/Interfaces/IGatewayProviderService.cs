@@ -116,6 +116,15 @@ namespace Merchello.Core.Services
         #region Payment
 
         /// <summary>
+        /// Creates a payment without saving it to the database
+        /// </summary>
+        /// <param name="paymentMethodType">The type of the paymentmethod</param>
+        /// <param name="amount">The amount of the payment</param>
+        /// <param name="paymentMethodKey">The optional paymentMethodKey</param>
+        /// <returns>Returns <see cref="IPayment"/></returns>
+        IPayment CreatePayment(PaymentMethodType paymentMethodType, decimal amount, Guid? paymentMethodKey);
+
+        /// <summary>
         /// Creates and saves a payment
         /// </summary>
         /// <param name="paymentMethodType">The type of the paymentmethod</param>
@@ -184,13 +193,13 @@ namespace Merchello.Core.Services
         /// Gets a list of <see cref="IShipMethod"/> objects given a <see cref="IGatewayProvider"/> key and a <see cref="IShipCountry"/> key
         /// </summary>
         /// <returns>A collection of <see cref="IShipMethod"/></returns>
-        IEnumerable<IShipMethod> GetGatewayProviderShipMethods(Guid providerKey, Guid shipCountryKey);
+        IEnumerable<IShipMethod> GetShipMethodsByShipCountryKey(Guid providerKey, Guid shipCountryKey);
 
         /// <summary>
         /// Gets a list of all <see cref="IShipMethod"/> objects given a <see cref="IGatewayProvider"/> key
         /// </summary>
         /// <returns>A collection of <see cref="IShipMethod"/></returns>
-        IEnumerable<IShipMethod> GetGatewayProviderShipMethods(Guid providerKey); 
+        IEnumerable<IShipMethod> GetShipMethodsByShipCountryKey(Guid providerKey); 
 
         #endregion
 

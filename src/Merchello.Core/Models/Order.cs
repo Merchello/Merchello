@@ -33,6 +33,8 @@ namespace Merchello.Core.Models
             _invoiceKey = invoiceKey;
             _orderStatusKey = orderStatusKey;
             _items = lineItemCollection;
+
+            _orderDate = DateTime.Now;
         }
 
         private static readonly PropertyInfo InvoiceKeySelector = ExpressionHelper.GetPropertyInfo<Order, Guid>(x => x.InvoiceKey);

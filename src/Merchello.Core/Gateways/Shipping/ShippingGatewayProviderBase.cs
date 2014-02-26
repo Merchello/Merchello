@@ -178,7 +178,7 @@ namespace Merchello.Core.Gateways.Shipping
         {
             get {
                 return _shipMethods ??
-                       (_shipMethods = GatewayProviderService.GetGatewayProviderShipMethods(GatewayProvider.Key));
+                       (_shipMethods = GatewayProviderService.GetShipMethodsByShipCountryKey(GatewayProvider.Key));
             }
             protected set { _shipMethods = value; }
         }

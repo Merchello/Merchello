@@ -14,16 +14,16 @@ using Umbraco.Core.Logging;
 namespace Merchello.Core.Sales
 {
     /// <summary>
-    /// Represents an abstract OrderPreparation class resposible for temporarily persisting invoice and order information
+    /// Represents an abstract SalesPreparation class resposible for temporarily persisting invoice and order information
     /// while it's being collected
     /// </summary>
-    public abstract class SalesManagerBase : ISalesManagerBase
+    public abstract class SalePreparationBase : ISalePreparationBase
     {
         private readonly IItemCache _itemCache;
         private readonly ICustomerBase _customer;
         private readonly IMerchelloContext _merchelloContext;
 
-        internal SalesManagerBase(IMerchelloContext merchelloContext, IItemCache itemCache, ICustomerBase customer)
+        internal SalePreparationBase(IMerchelloContext merchelloContext, IItemCache itemCache, ICustomerBase customer)
         {                       
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
             Mandate.ParameterNotNull(itemCache, "ItemCache");
@@ -110,6 +110,9 @@ namespace Merchello.Core.Sales
         {
             AddShipmentRateQuoteLineItem(approvedShipmentRateQuote);         
             _merchelloContext.Services.ItemCacheService.Save(_itemCache);
+
+            _customer.ExtendedData.AddAddress(approvedShipmentRateQuote.Shipment.GetDestinationAddress(), AddressType.Shipping);
+            SaveCustomer(_merchelloContext, _customer);
         }
 
         /// <summary>
@@ -118,8 +121,15 @@ namespace Merchello.Core.Sales
         /// <param name="approvedShipmentRateQuotes"></param>
         public virtual void SaveShipmentRateQuote(IEnumerable<IShipmentRateQuote> approvedShipmentRateQuotes)
         {
-            approvedShipmentRateQuotes.ForEach(AddShipmentRateQuoteLineItem);
+            var shipmentRateQuotes = approvedShipmentRateQuotes as IShipmentRateQuote[] ?? approvedShipmentRateQuotes.ToArray();
+
+            if (!shipmentRateQuotes.Any()) return;
+            
+            shipmentRateQuotes.ForEach(AddShipmentRateQuoteLineItem);
             _merchelloContext.Services.ItemCacheService.Save(_itemCache);
+
+            _customer.ExtendedData.AddAddress(shipmentRateQuotes.First().Shipment.GetDestinationAddress(), AddressType.Shipping);
+            SaveCustomer(_merchelloContext, _customer);
         }
 
         /// <summary>
@@ -130,6 +140,23 @@ namespace Merchello.Core.Sales
         {
             _itemCache.AddItem(shipmentRateQuote.AsLineItemOf<ItemCacheLineItem>());
         }
+        
+        
+
+        /// <summary>
+        /// True/false indicating whether or not the <see cref="ISalePreparationBase"/> is ready to prepare an <see cref="IInvoice"/>
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// This ommits checking that 
+        /// 
+        /// </remarks>
+        public virtual bool IsReadyToInvoice()
+        {
+            return (_customer.ExtendedData.GetAddress(AddressType.Billing) != null) &&
+                   (_customer.ExtendedData.GetAddress(AddressType.Shipping) != null);
+        }
+
 
         /// <summary>
         /// Generates an <see cref="IInvoice"/>
@@ -137,7 +164,7 @@ namespace Merchello.Core.Sales
         /// <returns>An <see cref="IInvoice"/></returns>
         public virtual IInvoice PrepareInvoice()
         {
-            return PrepareInvoice(new InvoiceBuilderChain(this));
+            return !IsReadyToInvoice() ? null : PrepareInvoice(new InvoiceBuilderChain(this));
         }
 
         /// <summary>
@@ -147,10 +174,12 @@ namespace Merchello.Core.Sales
         /// <returns>An <see cref="IInvoice"/> that is not persisted to the database.</returns>
         public IInvoice PrepareInvoice(IBuilderChain<IInvoice> invoiceBuilder)
         {
+            if (!IsReadyToInvoice()) return null;
+
             var attempt = invoiceBuilder.Build();
             if (!attempt.Success)
             {
-                LogHelper.Error<SalesManagerBase>("The invoice builder failed to generate an invoice.", attempt.Exception);
+                LogHelper.Error<SalePreparationBase>("The invoice builder failed to generate an invoice.", attempt.Exception);
                 throw attempt.Exception;
             }
 
@@ -173,19 +202,58 @@ namespace Merchello.Core.Sales
             return methods;
         }
 
-        public IPaymentResult ProcessPayment(IPaymentGatewayMethod paymentGatewayMethod, ProcessorArgumentCollection args)
+        /// <summary>
+        /// Attempts to process a payment
+        /// </summary>
+        /// <param name="paymentGatewayMethod">The <see cref="IPaymentGatewayMethod"/> to use in processing the payment</param>
+        /// <param name="args">Additional arguements required by the payment processor</param>
+        /// <returns>The <see cref="IPaymentResult"/></returns>
+        public virtual IPaymentResult ProcessPayment(IPaymentGatewayMethod paymentGatewayMethod, ProcessorArgumentCollection args)
         {
-            throw new NotImplementedException();
+            Mandate.ParameterNotNull(paymentGatewayMethod, "paymentGatewayMethod");
+
+            if(!IsReadyToInvoice()) return new PaymentResult(Attempt<IPayment>.Fail(new InvalidOperationException("SalesManager is not ready to invoice")), false);
+
+            var invoice = PrepareInvoice(new InvoiceBuilderChain(this));
+            MerchelloContext.Services.InvoiceService.Save(invoice);
+
+            return paymentGatewayMethod.ProcessPayment(invoice, args);
         }
 
-        ///// <summary>
-        ///// Does preliminary validation of the checkout process and then executes the start of the order fulfillment pipeline
-        ///// </summary>
-        ///// <param name="paymentGatewayProvider">The see <see cref="IPaymentGatewayProvider"/> to be used in payment processing and <see cref="IOrder"/> creation approval</param>
-        //public abstract void CompleteCheckout(IPaymentGatewayProvider paymentGatewayProvider);
+        /// <summary>
+        /// Attempts to process a payment
+        /// </summary>
+        /// <param name="paymentGatewayMethod">The <see cref="IPaymentGatewayMethod"/> to use in processing the payment</param>
+        /// <returns>The <see cref="IPaymentResult"/></returns>
+        public virtual IPaymentResult ProcessPayment(IPaymentGatewayMethod paymentGatewayMethod)
+        {
+            return ProcessPayment(paymentGatewayMethod, new ProcessorArgumentCollection());
+        }
 
 
+        /// <summary>
+        /// Attempts to process a payment
+        /// </summary>
+        /// <param name="paymentMethodKey">The <see cref="IPaymentMethod"/> key</param>
+        /// <param name="args">Additional arguements required by the payment processor</param>
+        /// <returns>The <see cref="IPaymentResult"/></returns>
+        public IPaymentResult ProcessPayment(Guid paymentMethodKey, ProcessorArgumentCollection args)
+        {
+            var paymentMethod = GetPaymentGatewayMethods().FirstOrDefault(x => x.PaymentMethod.Key.Equals(paymentMethodKey));
 
+            return ProcessPayment(paymentMethod, args);
+
+        }
+
+        /// <summary>
+        /// Attempts to process a payment
+        /// </summary>
+        /// <param name="paymentMethodKey">The <see cref="IPaymentMethod"/> key</param>
+        /// <returns>The <see cref="IPaymentResult"/></returns>
+        public IPaymentResult ProcessPayment(Guid paymentMethodKey)
+        {
+            return ProcessPayment(paymentMethodKey, new ProcessorArgumentCollection());
+        }
 
 
         /// <summary>
@@ -208,7 +276,7 @@ namespace Merchello.Core.Sales
         /// </summary>
         /// <param name="customer">The customer associated with the checkout</param>
         /// <param name="merchelloContext">The <see cref="IMerchelloContext"/></param>
-        /// <param name="versionKey">The version key for this <see cref="SalesManagerBase"/></param>
+        /// <param name="versionKey">The version key for this <see cref="SalePreparationBase"/></param>
         /// <returns>The <see cref="IItemCache"/> associated with the customer checkout</returns>
         protected static IItemCache GetItemCache(IMerchelloContext merchelloContext, ICustomerBase customer, Guid versionKey)
         {
@@ -246,7 +314,7 @@ namespace Merchello.Core.Sales
         }
 
         /// <summary>
-        /// Generates a unique cache key for runtime caching of the <see cref="SalesManagerBase"/>
+        /// Generates a unique cache key for runtime caching of the <see cref="SalePreparationBase"/>
         /// </summary>
         /// <param name="customer"><see cref="ICustomerBase"/></param>
         /// <param name="versionKey">The version key</param>

@@ -10,8 +10,8 @@ namespace Merchello.Core.Chains.InvoiceCreation
     /// </summary>
     internal class ConvertItemCacheItemsToInvoiceItemsTask : OrderPreparationAttemptChainTaskBase
     {
-        public ConvertItemCacheItemsToInvoiceItemsTask(SalesManagerBase salesManager) 
-            : base(salesManager)
+        public ConvertItemCacheItemsToInvoiceItemsTask(SalePreparationBase salePreparation) 
+            : base(salePreparation)
         {}
 
         /// <summary>
@@ -21,7 +21,7 @@ namespace Merchello.Core.Chains.InvoiceCreation
         /// <returns>The <see cref="Attempt"/></returns>
         public override Attempt<IInvoice> PerformTask(IInvoice value)
         {
-            foreach (var lineItem in SalesManager.ItemCache.Items)
+            foreach (var lineItem in SalePreparation.ItemCache.Items)
             {
                 try
                 {

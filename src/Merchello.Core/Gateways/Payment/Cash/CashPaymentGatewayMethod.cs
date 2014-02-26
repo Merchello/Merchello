@@ -8,9 +8,9 @@ namespace Merchello.Core.Gateways.Payment.Cash
     /// <summary>
     /// Represents a CashPaymentMethod
     /// </summary>
-    public class CashPaymentMethod : PaymentGatewayMethodBase, ICashPaymentMethod
+    public class CashPaymentGatewayMethod : PaymentGatewayMethodBase, ICashPaymentGatewayMethod
     {
-        public CashPaymentMethod(IGatewayProviderService gatewayProviderService, IPaymentMethod paymentMethod) 
+        public CashPaymentGatewayMethod(IGatewayProviderService gatewayProviderService, IPaymentMethod paymentMethod) 
             : base(gatewayProviderService, paymentMethod)
         { }
 
@@ -22,7 +22,7 @@ namespace Merchello.Core.Gateways.Payment.Cash
         /// <returns>The <see cref="IPaymentResult"/></returns>
         protected override IPaymentResult PerformProcessPayment(IInvoice invoice, ProcessorArgumentCollection args)
         {
-            var payment = GatewayProviderService.CreatePaymentWithKey(PaymentMethodType.Cash, invoice.Total, PaymentMethod.Key);
+            var payment = GatewayProviderService.CreatePayment(PaymentMethodType.Cash, invoice.Total, PaymentMethod.Key);
             
             payment.PaymentMethodName = PaymentMethod.Name + " " + PaymentMethod.PaymentCode;
             payment.ReferenceNumber = PaymentMethod.PaymentCode + "-" + invoice.PrefixedInvoiceNumber();

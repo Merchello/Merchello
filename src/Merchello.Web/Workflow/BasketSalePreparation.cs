@@ -7,18 +7,18 @@ namespace Merchello.Web.Workflow
     /// <summary>
     /// Represents a BaskeOrderPreparation
     /// </summary>
-    public class BasketSalesManager : SalesManagerBase, IBasketSalesManager
+    public class BasketSalePreparation : SalePreparationBase, IBasketSalePreparation
     {
-        internal BasketSalesManager(IMerchelloContext merchelloContext, IItemCache itemCache, ICustomerBase customer) 
+        internal BasketSalePreparation(IMerchelloContext merchelloContext, IItemCache itemCache, ICustomerBase customer) 
             : base(merchelloContext, itemCache, customer)
         { }
 
-        internal static BasketSalesManager GetBasketCheckoutPreparation(IBasket basket)
+        internal static BasketSalePreparation GetBasketCheckoutPreparation(IBasket basket)
         {
             return GetBasketCheckoutPreparation(Core.MerchelloContext.Current, basket);
         }
 
-        internal static BasketSalesManager GetBasketCheckoutPreparation(IMerchelloContext merchelloContext, IBasket basket)
+        internal static BasketSalePreparation GetBasketCheckoutPreparation(IMerchelloContext merchelloContext, IBasket basket)
         {
             var customer = basket.Customer;
             var itemCache = GetItemCache(merchelloContext, customer, basket.VersionKey);
@@ -27,7 +27,7 @@ namespace Merchello.Web.Workflow
                 // convert to a LineItem of the same type for use in the CheckoutPrepartion collection
                 itemCache.AddItem(item.AsLineItemOf<ItemCacheLineItem>());
             }
-            return new BasketSalesManager(merchelloContext, itemCache, customer);
+            return new BasketSalePreparation(merchelloContext, itemCache, customer);
         }
 
     }

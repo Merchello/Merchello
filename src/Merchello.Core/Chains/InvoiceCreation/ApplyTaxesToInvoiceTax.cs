@@ -8,14 +8,14 @@ namespace Merchello.Core.Chains.InvoiceCreation
 {
     internal class ApplyTaxesToInvoiceTax : OrderPreparationAttemptChainTaskBase
     {
-        public ApplyTaxesToInvoiceTax(SalesManagerBase salesManager) 
-            : base(salesManager)
+        public ApplyTaxesToInvoiceTax(SalePreparationBase salePreparation) 
+            : base(salePreparation)
         { }
 
         public override Attempt<IInvoice> PerformTask(IInvoice value)
         {
             // if taxes are not to be applied, skip this step
-            if (SalesManager.ApplyTaxesToInvoice)
+            if (SalePreparation.ApplyTaxesToInvoice)
             {
                 try
                 {
@@ -26,7 +26,7 @@ namespace Merchello.Core.Chains.InvoiceCreation
                         value.Items.Remove(remove);
                     }
 
-                    var taxes = value.CalculateTaxes(SalesManager.MerchelloContext, value.GetBillingAddress());
+                    var taxes = value.CalculateTaxes(SalePreparation.MerchelloContext, value.GetBillingAddress());
 
                     value.Items.Add(taxes.AsLineItemOf<InvoiceLineItem>());
 

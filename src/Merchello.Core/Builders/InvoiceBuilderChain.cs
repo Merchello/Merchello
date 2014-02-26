@@ -12,12 +12,12 @@ namespace Merchello.Core.Builders
     /// </summary>
     internal sealed class InvoiceBuilderChain : BuildChainBase<IInvoice>
     {
-        private readonly SalesManagerBase _salesManager;
+        private readonly SalePreparationBase _salePreparation;
 
-        internal InvoiceBuilderChain(SalesManagerBase salesManager)
+        internal InvoiceBuilderChain(SalePreparationBase salePreparation)
         {
-            Mandate.ParameterNotNull(salesManager, "salesManager");
-            _salesManager = salesManager;
+            Mandate.ParameterNotNull(salePreparation, "salesManager");
+            _salePreparation = salePreparation;
 
             ResolveChain(Constants.TaskChainAlias.SalesManagerInvoiceCreate);
         }
@@ -29,7 +29,7 @@ namespace Merchello.Core.Builders
         public override Attempt<IInvoice> Build()
         {
             var attempt = (TaskHandlers.Any())
-                       ? TaskHandlers.First().Execute(new Invoice(Constants.DefaultKeys.InvoiceStatus.Unpaid))
+                       ? TaskHandlers.First().Execute(new Invoice(Constants.DefaultKeys.InvoiceStatus.Unpaid) { VersionKey = _salePreparation.ItemCache.VersionKey })
                        : Attempt<IInvoice>.Fail(new InvalidOperationException("The configuration Chain Task List could not be instantiated"));
 
             if (!attempt.Success) return attempt;
@@ -50,7 +50,7 @@ namespace Merchello.Core.Builders
             get
             {
                 return _constructorParameters ?? 
-                    (_constructorParameters =  new List<object>(new object[] {_salesManager} ));
+                    (_constructorParameters =  new List<object>(new object[] {_salePreparation} ));
             }
         }
         

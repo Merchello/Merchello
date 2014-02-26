@@ -3,14 +3,13 @@ using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Gateways.Shipping.FixedRate;
-using Merchello.Core.Gateways.Taxation.FixedRate;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Merchello.Tests.IntegrationTests.TestHelpers;
 using Merchello.Web;
 using NUnit.Framework;
 
-namespace Merchello.Tests.IntegrationTests.Ordering
+namespace Merchello.Tests.IntegrationTests.Workflow
 {
     [TestFixture]
     public class CheckoutProcessesTests : MerchelloAllInTestBase
@@ -328,8 +327,18 @@ namespace Merchello.Tests.IntegrationTests.Ordering
             #endregion // end shipping info round 2
 
             // generate an invoice to preview
+            var isReadytoInvoice = CurrentCustomer.Basket().SalesManager().IsReadyToInvoice();
+
+            Assert.IsTrue(isReadytoInvoice);
+
             var invoice = CurrentCustomer.Basket().SalesManager().PrepareInvoice();
             WriteInvoiceInfoToConsole(invoice);
+
+            var paymentMethods = CurrentCustomer.Basket().SalesManager().GetPaymentGatewayMethods();
+
+            var paymentResult = CurrentCustomer.Basket().SalesManager().ProcessPayment(paymentMethods.FirstOrDefault());
+
+            Assert.IsTrue(paymentResult.Result.Success);
 
             #endregion // completed checkout preparation
 

@@ -270,7 +270,7 @@ namespace Merchello.Core.Services
         /// <returns>An <see cref="IAppliedPayment"/></returns>
         public IAppliedPayment ApplyPaymentToInvoice(Guid paymentKey, Guid invoiceKey, AppliedPaymentType appliedPaymentType, string description, decimal amount, bool raiseEvents = true)
         {
-            throw new NotImplementedException();
+            return _appliedPaymentService.CreateAppliedPaymentWithKey(paymentKey, invoiceKey, appliedPaymentType, description, amount, raiseEvents);
         }
 
         /// <summary>
