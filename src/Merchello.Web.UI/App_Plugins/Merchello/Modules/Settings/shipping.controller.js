@@ -101,7 +101,7 @@
                     });
 
                     _.each($scope.countries, function (element, index, list) {
-                        $scope.loadCountryProviders(element)
+                        $scope.loadFixedRateCountryProviders(element)
                     });
 
                 }, function (reason) {
@@ -112,24 +112,52 @@
             }
         };
 
-        $scope.loadCountryProviders = function (country) {
+        $scope.loadFixedRateCountryProviders = function (country) {
 
             if( country )
             {
-                notificationsService.info("Loading providers for country: ", country.name);
+                var promiseProviders = merchelloCatalogFixedRateShippingService.getAllShipCountryFixedRateProviders(country.key);
+                promiseProviders.then(function (providerFromServer) {
 
-                var promiseShipCountryProviders = merchelloCatalogFixedRateShippingService.getAllShipCountryRateTableProviders(country.key);
-                promiseShipCountryProviders.then(function (providerFromServer) {
+                    if (providerFromServer.length > 0) {
 
-                    notificationsService.info("Providers returned for country: ", providerFromServer);
-
-                    if (providerFromServer != "null") {
-                        country.shippingGatewayProviders.push(new merchello.Models.ShippingGatewayProvider(providerFromServer));
+                        _.each(providerFromServer, function (element, index, list) {
+                            var newProvider = new merchello.Models.ShippingGatewayProvider(element);
+                            newProvider.shipMethods = [];
+                            country.shippingGatewayProviders.push(newProvider);
+                            $scope.loadFixedRateProviderMethods(country);
+                        });
                     }
 
                 }, function (reason) {
 
                     notificationsService.error("Shipping Countries Providers Load Failed", reason.message);
+
+                });
+            }
+        };
+        
+        $scope.loadFixedRateProviderMethods = function (country) {
+
+            if( country )
+            {
+                var promiseMethods = merchelloCatalogFixedRateShippingService.getAllFixedRateProviderMethods(country.key);
+                promiseMethods.then(function (methodsFromServer) {
+
+                    if (methodsFromServer.length > 0) {
+
+                        _.each(methodsFromServer, function (element, index, list) {
+                            var newMethod = new merchello.Models.FixedRateShippingMethod(element);
+
+                            var shippingGatewayProvider = _.find(country.shippingGatewayProviders, function (p) { return p.key == newMethod.shipMethod.providerKey })
+
+                            shippingGatewayProvider.shipMethods.push(newMethod);
+                        });
+                    }
+
+                }, function (reason) {
+
+                    notificationsService.error("Shipping Countries Methods Load Failed", reason.message);
 
                 });
             }

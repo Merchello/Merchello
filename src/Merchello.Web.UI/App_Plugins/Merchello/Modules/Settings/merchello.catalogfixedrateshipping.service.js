@@ -10,11 +10,33 @@
 
         return {
 
-            getAllShipCountryRateTableProviders: function (id) {
+            getAllFixedRateTypes: function (id) {
 
                 return umbRequestHelper.resourcePromise(
                    $http({
-                       url: umbRequestHelper.getApiUrl('merchelloCatalogRateTableShippingApiBaseUrl', 'GetAllShipCountryRateTableProviders'),
+                       url: umbRequestHelper.getApiUrl('merchelloCatalogRateTableShippingApiBaseUrl', 'GetAllShipCountryFixedRateProviders'),
+                       method: "GET",
+                       params: { id: id }
+                   }),
+                   'Failed to retreive shipping rate table providers');
+            },
+
+            getAllShipCountryFixedRateProviders: function (id) {
+
+                return umbRequestHelper.resourcePromise(
+                   $http({
+                       url: umbRequestHelper.getApiUrl('merchelloCatalogRateTableShippingApiBaseUrl', 'GetAllShipCountryFixedRateProviders'),
+                       method: "GET",
+                       params: { id: id }
+                   }),
+                   'Failed to retreive shipping rate table providers');
+            },
+
+            getAllFixedRateProviderMethods: function (id) {
+
+                return umbRequestHelper.resourcePromise(
+                   $http({
+                       url: umbRequestHelper.getApiUrl('merchelloCatalogRateTableShippingApiBaseUrl', 'GetAllFixedRateProviderMethods'),
                        method: "GET",
                        params: { id: id }
                    }),
