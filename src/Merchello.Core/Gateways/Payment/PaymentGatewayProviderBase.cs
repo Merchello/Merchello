@@ -31,6 +31,8 @@ namespace Merchello.Core.Gateways.Payment
         public virtual void SavePaymentMethod(IPaymentGatewayMethod method)
         {
             GatewayProviderService.Save(method.PaymentMethod);
+
+            PaymentMethods = null;
         }
 
         /// <summary>
@@ -68,6 +70,7 @@ namespace Merchello.Core.Gateways.Payment
                 return _paymentMethods ??
                        (_paymentMethods = GatewayProviderService.GetPaymentMethodsByProviderKey(GatewayProvider.Key));
             }
+            protected set { _paymentMethods = value; }
         }
     }
 }

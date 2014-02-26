@@ -2,6 +2,8 @@
 using System.Linq;
 using Merchello.Core.Gateways.Taxation.FixedRate;
 using Merchello.Core.Models;
+using Merchello.Core.Services;
+using Merchello.Tests.IntegrationTests.TestHelpers;
 using NUnit.Framework;
 
 namespace Merchello.Tests.IntegrationTests.Taxation
@@ -12,9 +14,27 @@ namespace Merchello.Tests.IntegrationTests.Taxation
     {
         private IFixedRateTaxationGatewayProvider _taxProvider;
 
+        [TestFixtureSetUp]
+        public override void FixtureSetup()
+        {
+            base.FixtureSetup();
+
+            var defaultCatalog = PreTestDataWorker.WarehouseService.GetDefaultWarehouse().WarehouseCatalogs.FirstOrDefault();
+            if (defaultCatalog == null) Assert.Ignore("Default WarehouseCatalog is null");
+
+            // we need a ShipCountry
+            PreTestDataWorker.DeleteAllShipCountries();
+
+            var us = PreTestDataWorker.StoreSettingService.GetCountryByCode("US");
+            var usCountry = new ShipCountry(defaultCatalog.Key, us);
+            PreTestDataWorker.ShipCountryService.Save(usCountry);
+
+        }
+
         [SetUp]
         public void Init()
         {
+            
             _taxProvider = (IFixedRateTaxationGatewayProvider)MerchelloContext.Gateways.Taxation.ResolveByKey(Core.Constants.ProviderKeys.Taxation.FixedRateTaxationProviderKey);
 
             PreTestDataWorker.DeleteAllCountryTaxRates(Core.Constants.ProviderKeys.Taxation.FixedRateTaxationProviderKey);

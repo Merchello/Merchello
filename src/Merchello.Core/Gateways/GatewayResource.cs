@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Merchello.Core.Models
+namespace Merchello.Core.Gateways
 {
     /// <summary>
     /// Defines a GatewayMethod 

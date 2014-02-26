@@ -76,10 +76,11 @@ namespace Merchello.Core.Gateways.Taxation.FixedRate
         {
             var countryCodes = GatewayProviderService.GetAllShipCountries().Select(x => x.CountryCode).Distinct();
 
-            return
+            var resources =
                 countryCodes.Select(x => new GatewayResource(x, x + "-FixedRate"))
                     .Where(code => TaxMethods.FirstOrDefault(x => x.CountryCode.Equals(code.ServiceCode)) == null);
 
+            return resources;
         }
 
         /// <summary>

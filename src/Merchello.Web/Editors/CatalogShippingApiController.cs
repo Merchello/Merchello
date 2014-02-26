@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.ModelBinding;
+using Merchello.Core.Gateways;
 using Umbraco.Web;
 using Umbraco.Web.Mvc;
 using Merchello.Core;
