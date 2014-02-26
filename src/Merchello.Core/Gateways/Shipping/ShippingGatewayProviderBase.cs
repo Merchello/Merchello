@@ -180,6 +180,7 @@ namespace Merchello.Core.Gateways.Shipping
                 return _shipMethods ??
                        (_shipMethods = GatewayProviderService.GetGatewayProviderShipMethods(GatewayProvider.Key));
             }
+            protected set { _shipMethods = value; }
         }
     }
 

@@ -42,6 +42,9 @@ namespace Merchello.Core.Gateways.Taxation
         public void SaveTaxMethod(ITaxationGatewayMethod taxationGatewayMethod)
         {
             GatewayProviderService.Save(taxationGatewayMethod.TaxMethod);
+
+            // reset the TaxMethods so that they need to be pulled on the next request
+            TaxMethods = null;
         }
 
         /// <summary>
@@ -59,6 +62,8 @@ namespace Merchello.Core.Gateways.Taxation
         internal void DeleteAllTaxMethods()
         {
             foreach(var taxMethod in TaxMethods) GatewayProviderService.Delete(taxMethod);
+
+            TaxMethods = null;
         }
         
         /// <summary>
@@ -85,6 +90,7 @@ namespace Merchello.Core.Gateways.Taxation
                 return _taxMethods ??
                        (_taxMethods = GatewayProviderService.GetTaxMethodsByProviderKey(GatewayProvider.Key));
             }
+            protected set { _taxMethods = value; }
         }
     }
 }
