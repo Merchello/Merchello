@@ -202,9 +202,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\GatewayProviderCollection.cs" />
-    <Compile Include="Models\GatewayResource.cs" />
+    <Compile Include="Gateways\GatewayResource.cs" />
     <Compile Include="Models\GatewayProvider.cs" />
-    <Compile Include="Models\Interfaces\IGatewayResource.cs" />
+    <Compile Include="Gateways\IGatewayResource.cs" />
     <Compile Include="Models\Interfaces\IAddress.cs" />
     <Compile Include="Models\Interfaces\IAppliedPayment.cs">
       <SubType>Code</SubType>

@@ -1,4 +1,4 @@
-﻿namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Gateways
 {
     public interface IGatewayResource
     {
