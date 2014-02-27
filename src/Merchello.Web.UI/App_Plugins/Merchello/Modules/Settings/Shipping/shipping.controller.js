@@ -329,18 +329,6 @@
                 }
             });
 
-        // Functions to control the Shipping Methods panel
-        $scope.shippingMethodPanel = {
-            close: function () {
-                $scope.visible.shippingMethodPanel = false;
-            },
-            open: function (country) {
-                $scope.visible.shippingMethodPanel = true;
-            },
-            toggle: function () {
-                $scope.visible.shippingMethodPanel = !$scope.visible.shippingMethodPanel;
-            }
-        };
 
         // Functions to control the Shipping Methods panel
         $scope.shippingMethodPanel = {
@@ -354,19 +342,36 @@
                 $scope.visible.shippingMethodPanel = !$scope.visible.shippingMethodPanel;
             }
         };
-
 
         // Functions to control the Shipping Methods flyout
-        $scope.addEditShippingMethodFlyout = {
-            close: function () {
-                $scope.visible.addEditShippingMethodFlyout = false;
+        $scope.addEditShippingMethodFlyout = new merchello.Models.Flyout(
+            $scope.visible.addEditShippingMethodFlyout,
+            function (isOpen) {
+                $scope.visible.addEditShippingMethodFlyout = isOpen;
             },
-            open: function (country) {
-                $scope.visible.addEditShippingMethodFlyout = true;
-            },
-            toggle: function () {
-                $scope.visible.addEditShippingMethodFlyout = !$scope.visible.addEditShippingMethodFlyout;
-            }
+            {
+                confirm: function () {
+                    var self = $scope.addEditShippingMethodFlyout;
+
+                    var selectedProvider = self.model;
+
+                    self.clear();
+                    self.close();
+                }
+            });
+
+
+        $scope.addEditShippingMethodFlyoutOpen = function (model) {
+            $scope.$broadcast('methodFlyoutOpen', model);
+        };
+
+        $scope.addEditShippingMethodFlyoutConfirm = function () {
+            var self = $scope.addEditShippingMethodFlyout;
+
+            var selectedProvider = self.model;
+
+            self.clear();
+            self.close();
         };
 
         $scope.loadAllAvailableCountries();
