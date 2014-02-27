@@ -122,9 +122,11 @@
     <Content Include="App_Plugins\Merchello\lib\ngTagsInput\ng-tags-input.min.css" />
     <Content Include="App_Plugins\Merchello\lib\ngTagsInput\ng-tags-input.min.js" />
     <Content Include="App_Plugins\Merchello\lib\select2\ui-select2.js" />
-    <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Directives\fixed-rate-method-flyout.html" />
-    <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Directives\fixedRateMethod.flyout.directive.js" />
-    <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Directives\shipping-country-directive.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Dialogs\shippingmethod.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Dialogs\shippingmethod.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Directives\shipping-warehouse.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Directives\shipping-helper-directives.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Directives\shipping-country.html" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\merchello.catalogfixedrateshipping.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\merchello.catalogshipping.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\merchello.settings.service.js" />

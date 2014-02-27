@@ -82,15 +82,8 @@
                                 </div>
                             </form>
 
-                            <div>
-                                <h3>{{primaryWarehouse.name}}</h3>
-                                <div class="adr">
-                                    <div class="street-address">{{primaryWarehouse.address1}}</div>
-                                    <div class="extended-address">{{primaryWarehouse.address2}}</div>
-                                    <span class="locality">{{primaryWarehouse.locality}}</span>, <span class="region">{{primaryWarehouse.region}}</span> <span class="postal-code">{{primary.postalCode}}</span>
-                                    <div class="country">{{primaryWarehouse.countryCode}}</div>
-                                </div>
-                            </div>
+
+                            <shipping-warehouse warehouse="primaryWarehouse"></shipping-warehouse>
 
 
                             <!--
@@ -179,30 +172,8 @@
                             
                             <div data-ng-repeat="country in countries" class="merchello-shipping-country">
 
-                                <shipping-country country="country">
-                                    <h3>{{country.name}}</h3>
-                                    <a data-ng-click="openProviderFlyout(country)" class="btn btn-primary merchello-button-right">Add a Provider</a>
-                                    <div data-ng-repeat="shippingGatewayProvider in country.shippingGatewayProviders" class="merchello-shipping-gateway-provider">
-                                        <h4>{{shippingGatewayProvider.name}}</h4>
-                                        <a data-ng-click="addEditShippingMethodFlyout.open()" class="btn btn-primary merchello-button-right">Add a Method</a>
-                                        <fixed-rate-method-flyout model="addEditShippingMethodFlyout" on-confirm="addEditShippingMethodFlyoutConfirm()" is-visible="visible.addEditShippingMethodFlyout" country="country" provider="shippingGatewayProvider"></fixed-rate-method-flyout>
-                                        <table class="table table-striped merchello-striped-table settings-table shipping-table">
-                                            <thead>
-                                                <tr>
-                                                    <th colspan="3">{{fixedRateShipMethod[0].gatewayResource.name}}</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr data-ng-repeat="fixedRateShipMethod in shippingGatewayProvider.shipMethods">
-                                                    <td>{{fixedRateShipMethod.shipMethod.name}}</td>
-                                                    <td>{{fixedRateShipMethod.tierRange().low}} - {{fixedRateShipMethod.tierRange().high}}</td>
-                                                    <td>{{fixedRateShipMethod.tierPriceRange().low}} - {{fixedRateShipMethod.tierPriceRange().high}}</td>
-                                                    <td class="edit"><a href data-flyout-button="" data-open-flyout="addEditShippingMethodFlyoutOpen(fixedRateShipMethod)" data-flyout-model="fixedRateShipMethod" class="btn btn-default btn-xs btn-mini">edit</a> <a class="btn btn-warning btn-xs btn-mini" href="#">x</a></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </shipping-country>
+                                <!-- simply inherits this scope, doesn't create an isolate scope -->
+                                <shipping-country></shipping-country>
 
                             </div>
 
