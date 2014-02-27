@@ -132,6 +132,7 @@ namespace Merchello.Web.Editors
             }
         }
 
+
         /// <summary>
         /// Add a Fixed Rate Table ShipMethod to the ShipCountry
         ///

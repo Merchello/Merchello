@@ -8,7 +8,7 @@
      * @description
      * The controller for the reports list page
      */
-    controllers.ShippingController = function ($scope, $routeParams, $location, notificationsService, angularHelper, serverValidationManager, merchelloWarehouseService, merchelloSettingsService, merchelloCatalogShippingService, merchelloCatalogFixedRateShippingService) {
+    controllers.ShippingController = function ($scope, $routeParams, $location, notificationsService, angularHelper, serverValidationManager, dialogService, merchelloWarehouseService, merchelloSettingsService, merchelloCatalogShippingService, merchelloCatalogFixedRateShippingService) {
 
         $scope.sortProperty = "name";
         $scope.availableCountries = [];
@@ -316,7 +316,7 @@
                     var promiseAddMethod = merchelloCatalogFixedRateShippingService.createRateTableShipMethod(newShippingMethod);
                     promiseAddMethod.then(function (data) {
 
-                        $scope.loadCountryProviders($scope.currentShipCountry)
+                        $scope.loadFixedRateCountryProviders($scope.currentShipCountry)
 
                     }, function (reason) {
 
@@ -361,8 +361,63 @@
             });
 
 
-        $scope.addEditShippingMethodFlyoutOpen = function (model) {
-            $scope.$broadcast('methodFlyoutOpen', model);
+        $scope.shippingMethodDialogConfirm = function (data) {
+
+            if (data.method.shipMethod.key.length > 0)
+            {
+                // Save existing method
+                var promiseSave = merchelloCatalogFixedRateShippingService.saveRateTableShipMethod(data.method);
+                promiseSave.then(function (responsedata) {
+
+                    data.provider.shipMethods = [];
+                    $scope.loadFixedRateProviderMethods(data.country);
+
+                }, function (reason) {
+
+                    notificationsService.error("Shipping Method Save Failed", reason.message);
+
+                });
+            }
+            else
+            {
+                // Create new method
+                // Save existing method
+                var promiseSave = merchelloCatalogFixedRateShippingService.createRateTableShipMethod(data.method);
+                promiseSave.then(function (responsedata) {
+
+                    data.provider.shipMethods = [];
+                    $scope.loadFixedRateProviderMethods(data.country);
+
+                }, function (reason) {
+
+                    notificationsService.error("Shipping Method Save Failed", reason.message);
+
+                });
+            }
+        };
+
+        $scope.addEditShippingMethodFlyoutOpen = function (country, provider, method) {
+
+            var dialogMethod = method;
+            if (!method)
+            {
+                dialogMethod = new merchello.Models.FixedRateShippingMethod();
+                dialogMethod.shipMethod.shipCountryKey = country.key;
+                dialogMethod.shipMethod.providerKey = provider.key;
+            }
+
+            var myDialogData = {
+                method: dialogMethod,
+                country: country,
+                provider: provider
+            };
+
+            dialogService.open({
+                template: '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shippingmethod.html',
+                show: true,
+                callback: $scope.shippingMethodDialogConfirm,
+                dialogData: myDialogData
+            });
         };
 
         $scope.addEditShippingMethodFlyoutConfirm = function () {
