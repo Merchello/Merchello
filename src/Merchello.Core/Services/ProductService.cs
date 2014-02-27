@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Merchello.Core.Persistence.Querying;
 using Merchello.Core.Persistence.UnitOfWork;
 using Umbraco.Core.Events;
 using Merchello.Core.Models;
@@ -246,6 +247,19 @@ namespace Merchello.Core.Services
             using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll(keys.ToArray());
+            }
+        }
+
+        /// <summary>
+        /// Returns the count of all products
+        /// </summary>
+        public int ProductsCount()
+        {
+            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Query<IProduct>.Builder.Where(x => x.Key != Guid.Empty);
+
+                return repository.Count(query);
             }
         }
 

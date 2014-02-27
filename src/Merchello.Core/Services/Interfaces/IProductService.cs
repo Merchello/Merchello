@@ -70,7 +70,12 @@ namespace Merchello.Core.Services
         /// <param name="keys">List of Guid keys for Product objects to retrieve</param>
         /// <returns>List of <see cref="IProduct"/></returns>
         IEnumerable<IProduct> GetByKeys(IEnumerable<Guid> keys);
-       
+
+        /// <summary>
+        /// Returns the count of all products
+        /// </summary>
+        int ProductsCount();
+
         /// <summary>
         /// True/false indicating whether or not a sku is already exists in the database
         /// </summary>
