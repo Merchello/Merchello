@@ -6,7 +6,7 @@
      * @function
      * 
      * @description
-     * directive for the product options to repeat in the header of a table
+     * directive for the shipping country dropdown
      */
 
     directives.DropdownListDirective = function () {
