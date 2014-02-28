@@ -14,7 +14,7 @@
 
                 return umbRequestHelper.resourcePromise(
                    $http({
-                       url: umbRequestHelper.getApiUrl('merchelloCatalogRateTableShippingApiBaseUrl', 'GetAllShipCountryFixedRateProviders'),
+                       url: umbRequestHelper.getApiUrl('merchelloCatalogFixedRateShippingApiBaseUrl', 'GetAllShipCountryFixedRateProviders'),
                        method: "GET",
                        params: { id: id }
                    }),
@@ -25,7 +25,7 @@
 
                 return umbRequestHelper.resourcePromise(
                    $http({
-                       url: umbRequestHelper.getApiUrl('merchelloCatalogRateTableShippingApiBaseUrl', 'GetAllFixedRateGatewayResources'),
+                       url: umbRequestHelper.getApiUrl('merchelloCatalogFixedRateShippingApiBaseUrl', 'GetAllFixedRateGatewayResources'),
                        method: "GET"
                    }),
                    'Failed to retreive shipping fixed rate gateway resources');
@@ -35,7 +35,7 @@
 
                 return umbRequestHelper.resourcePromise(
                    $http({
-                       url: umbRequestHelper.getApiUrl('merchelloCatalogRateTableShippingApiBaseUrl', 'GetAllShipCountryFixedRateProviders'),
+                       url: umbRequestHelper.getApiUrl('merchelloCatalogFixedRateShippingApiBaseUrl', 'GetAllShipCountryFixedRateProviders'),
                        method: "GET",
                        params: { id: id }
                    }),
@@ -46,7 +46,7 @@
 
                 return umbRequestHelper.resourcePromise(
                    $http({
-                       url: umbRequestHelper.getApiUrl('merchelloCatalogRateTableShippingApiBaseUrl', 'GetAllFixedRateProviderMethods'),
+                       url: umbRequestHelper.getApiUrl('merchelloCatalogFixedRateShippingApiBaseUrl', 'GetAllFixedRateProviderMethods'),
                        method: "GET",
                        params: { id: id }
                    }),
@@ -56,7 +56,7 @@
             createRateTableShipMethod: function (rateTableShipMethod) {
 
                 return umbRequestHelper.resourcePromise(
-                    $http.post(umbRequestHelper.getApiUrl('merchelloCatalogRateTableShippingApiBaseUrl', 'AddRateTableShipMethod'),
+                    $http.post(umbRequestHelper.getApiUrl('merchelloCatalogFixedRateShippingApiBaseUrl', 'AddFixedRateShipMethod'),
                         rateTableShipMethod
                     ),
                     'Failed to create rateTableShipMethod');
@@ -65,7 +65,7 @@
             saveRateTableShipMethod: function (rateTableShipMethod) {
 
                 return umbRequestHelper.resourcePromise(
-                    $http.post(umbRequestHelper.getApiUrl('merchelloCatalogRateTableShippingApiBaseUrl', 'PutRateTableShipMethod'),
+                    $http.post(umbRequestHelper.getApiUrl('merchelloCatalogFixedRateShippingApiBaseUrl', 'PutFixedRateShipMethod'),
                         rateTableShipMethod
                     ),
                     'Failed to savw rateTableShipMethod');
