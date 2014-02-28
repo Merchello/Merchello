@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Configuration;
 using Merchello.Core;
 using Merchello.Core.Cache;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Models;
+using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Persistence.UnitOfWork;
 using Merchello.Core.Sales;
 using Merchello.Core.Services;
@@ -25,10 +27,10 @@ namespace Merchello.Tests.IntegrationTests.Builders
         protected SalePreparationBase SalePreparationMock;
         protected IAddress BillingAddress;
         protected IBasket Basket;
-        protected const decimal ProductCount = 5;
+        protected const int ProductCount = 5;
         protected const decimal WeightPerProduct = 3;
         protected const decimal PricePerProduct = 5;
-
+        
         [TestFixtureSetUp]
         public override void FixtureSetup()
         {
@@ -38,7 +40,8 @@ namespace Merchello.Tests.IntegrationTests.Builders
                 new CacheHelper(new NullCacheProvider(),
                     new NullCacheProvider(),
                     new NullCacheProvider()));
-
+            
+            
         }
 
         [SetUp]
@@ -47,7 +50,19 @@ namespace Merchello.Tests.IntegrationTests.Builders
             Customer = PreTestDataWorker.MakeExistingAnonymousCustomer();
             Basket = Web.Workflow.Basket.GetBasket(MerchelloContext, Customer);
 
-            for (var i = 0; i < ProductCount; i++) Basket.AddItem(PreTestDataWorker.MakeExistingProduct(true, WeightPerProduct, PricePerProduct));
+            var odd = true;
+            for (var i = 0; i < ProductCount; i++)
+            {
+                
+                var product = PreTestDataWorker.MakeExistingProduct(true, WeightPerProduct, PricePerProduct);
+                product.AddToCatalogInventory(PreTestDataWorker.WarehouseCatalog);
+                product.CatalogInventories.First().Count = odd ? 1 : 0;
+                product.TrackInventory = true;
+                PreTestDataWorker.ProductService.Save(product);
+                Basket.AddItem(product, 2);
+
+                odd = !odd;
+            }
 
             BillingAddress = new Address()
             {

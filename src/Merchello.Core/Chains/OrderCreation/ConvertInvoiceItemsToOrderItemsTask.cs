@@ -7,8 +7,8 @@ namespace Merchello.Core.Chains.OrderCreation
 {
     internal class ConvertInvoiceItemsToOrderItemsTask : InvoiceAttemptChainTaskBase
     {
-        public ConvertInvoiceItemsToOrderItemsTask(IInvoice invoice) 
-            : base(invoice)
+        public ConvertInvoiceItemsToOrderItemsTask(IMerchelloContext merchelloContext, IInvoice invoice) 
+            : base(merchelloContext, invoice)
         {}
 
         /// <summary>

@@ -86,6 +86,7 @@
     <Compile Include="Chains\InvoiceCreation\ConvertItemCacheItemsToInvoiceItemsTask.cs" />
     <Compile Include="Chains\OrderCreation\ConvertInvoiceItemsToOrderItemsTask.cs" />
     <Compile Include="Chains\OrderCreation\InvoiceAttemptChainTaskBase.cs" />
+    <Compile Include="Chains\OrderCreation\UpdateInventoryAndBackOrderTask.cs" />
     <Compile Include="Chains\ShipmentCreation\OrderAttemptChainTaskBase.cs" />
     <Compile Include="Gateways\Payment\Cash\CashPaymentGatewayProvider.cs" />
     <Compile Include="Gateways\Payment\Cash\CashPaymentGatewayMethod.cs" />

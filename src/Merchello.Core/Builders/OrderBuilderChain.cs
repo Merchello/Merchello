@@ -11,13 +11,16 @@ namespace Merchello.Core.Builders
     /// </summary>
     internal sealed class OrderBuilderChain : BuildChainBase<IOrder>
     {
+        private readonly IMerchelloContext _merchelloContext;
         private readonly IInvoice _invoice;
 
-        public OrderBuilderChain(IInvoice invoice)
+        public OrderBuilderChain(IMerchelloContext merchelloContext, IInvoice invoice)
         {
+            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
             Mandate.ParameterNotNull(invoice, "invoice");
 
             _invoice = invoice;
+            _merchelloContext = merchelloContext;
 
             ResolveChain(Constants.TaskChainAlias.OrderPreparationOrderCreate);
         }
@@ -47,7 +50,7 @@ namespace Merchello.Core.Builders
         {
             get
             {
-                return _constructorParameters ?? (_constructorParameters = new List<object>(new object[] { _invoice }));
+                return _constructorParameters ?? (_constructorParameters = new List<object>(new object[] { _merchelloContext, _invoice }));
             }
         }
 
