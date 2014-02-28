@@ -138,7 +138,7 @@ namespace Merchello.Web.Models.ContentEditing
 
         #region GatewayResourceDisplay
 
-        internal static GatewayResourceDisplay ToGatewayProviderDisplay(this IGatewayResource gatewayResource)
+        internal static GatewayResourceDisplay ToGatewayResourceDisplay(this IGatewayResource gatewayResource)
         {
             return AutoMapper.Mapper.Map<GatewayResourceDisplay>(gatewayResource);
         }

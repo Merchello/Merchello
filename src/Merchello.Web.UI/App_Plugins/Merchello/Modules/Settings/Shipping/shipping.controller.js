@@ -12,6 +12,7 @@
 
         $scope.sortProperty = "name";
         $scope.availableCountries = [];
+        $scope.availableFixedRateGatewayResources = [];
         $scope.countries = [];
         $scope.warehouses = [];
         $scope.providers = [];
@@ -33,6 +34,22 @@
         $scope.currentShipCountry = {};
 
 
+        $scope.loadAllAvailableFixedRateGatewayResources = function () {
+
+            var promiseAllResources = merchelloCatalogFixedRateShippingService.getAllFixedRateGatewayResources();
+            promiseAllResources.then(function (allResources) {
+
+                $scope.availableFixedRateGatewayResources = _.map(allResources, function (resource) {
+                    return new merchello.Models.GatewayResource(resource)
+                });
+
+            }, function (reason) {
+
+                notificationsService.error("Available Gateway Resources esource Load Failed", reason.message);
+
+            });
+
+        };
 
         $scope.loadAllAvailableCountries = function () {
 
@@ -409,7 +426,8 @@
             var myDialogData = {
                 method: dialogMethod,
                 country: country,
-                provider: provider
+                provider: provider,
+                gatewayResources: $scope.availableFixedRateGatewayResources
             };
 
             dialogService.open({
@@ -432,6 +450,7 @@
         $scope.loadAllAvailableCountries();
         $scope.loadWarehouses();
         $scope.loadAllShipProviders();
+        $scope.loadAllAvailableFixedRateGatewayResources();
 
         $scope.loaded = true;
         $scope.preValuesLoaded = true;

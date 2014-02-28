@@ -10,7 +10,22 @@
      */
     controllers.ShippingMethodController = function ($scope) {
 
+        $scope.isAddNewTier = false;
+        $scope.newTier = {};
 
+        $scope.removeRateTier = function (tier) {
+            $scope.dialogData.method.rateTable.removeRow(tier);
+        };
+
+        $scope.addRateTier = function () {
+            $scope.dialogData.method.rateTable.addRow($scope.newTier);
+            $scope.isAddNewTier = false;
+        };
+
+        $scope.insertRateTier = function () {
+            $scope.isAddNewTier = true;
+            $scope.newTier = merchello.Models.ShippingRateTier();
+        };
 
     }
 

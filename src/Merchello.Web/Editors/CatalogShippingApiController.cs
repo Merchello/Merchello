@@ -191,11 +191,9 @@ namespace Merchello.Web.Editors
                 var resources = provider.ListResourcesOffered();
                 foreach (IGatewayResource resource in resources)
                 {
-                    yield return resource.ToGatewayProviderDisplay();
+                    yield return resource.ToGatewayResourceDisplay();
                 } 
             }
-
-
         }
 
         /// <summary>
