@@ -138,7 +138,7 @@ namespace Merchello.Web.Models.ContentEditing
 
         #region GatewayResourceDisplay
 
-        internal static GatewayResourceDisplay ToGatewayProviderDisplay(this IGatewayResource gatewayResource)
+        internal static GatewayResourceDisplay ToGatewayResourceDisplay(this IGatewayResource gatewayResource)
         {
             return AutoMapper.Mapper.Map<GatewayResourceDisplay>(gatewayResource);
         }
@@ -246,7 +246,14 @@ namespace Merchello.Web.Models.ContentEditing
         /// </remarks>
         internal static IFixedRateShippingGatewayMethod ToRateTableShipMethod(this RateTableShipMethodDisplay rateTableShipMethodDisplay, IFixedRateShippingGatewayMethod destination)
         {
+            // RUSTY HELP: Cannot assign to these properties.  How should I do this mapping?
 
+            //destination.ShipMethod = rateTableShipMethodDisplay.ShipMethod.ToShipMethod(destination.ShipMethod);
+            //destination.RateTable = rateTableShipMethodDisplay.RateTable.ToShipRateTable(destination.RateTable);
+            //destination.RateTableType = rateTableShipMethodDisplay.RateTableType;
+
+            //destination.GatewayResource.Name = rateTableShipMethodDisplay.GatewayResource.Name;
+            //destination.GatewayResource.ServiceCode = rateTableShipMethodDisplay.GatewayResource.ServiceCode;
 
             return destination;
         }

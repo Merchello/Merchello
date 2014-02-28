@@ -228,6 +228,13 @@
             });
         }
 
+        self.addRow = function (row) {
+            self.rows.push(row);
+        }
+
+        self.removeRow = function (rowToRemove) {
+            self.rows = _.reject(self.rows, function (row) { return row.key == rowToRemove.key; });
+        }
     };
 
     models.ShippingRateTier = function (shippingRateTierFromServer) {

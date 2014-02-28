@@ -8,10 +8,11 @@
      * @description
      * The controller for the reports list page
      */
-    controllers.ShippingController = function ($scope, $routeParams, $location, notificationsService, angularHelper, serverValidationManager, merchelloWarehouseService, merchelloSettingsService, merchelloCatalogShippingService, merchelloCatalogFixedRateShippingService) {
+    controllers.ShippingController = function ($scope, $routeParams, $location, notificationsService, angularHelper, serverValidationManager, dialogService, merchelloWarehouseService, merchelloSettingsService, merchelloCatalogShippingService, merchelloCatalogFixedRateShippingService) {
 
         $scope.sortProperty = "name";
         $scope.availableCountries = [];
+        $scope.availableFixedRateGatewayResources = [];
         $scope.countries = [];
         $scope.warehouses = [];
         $scope.providers = [];
@@ -33,6 +34,22 @@
         $scope.currentShipCountry = {};
 
 
+        $scope.loadAllAvailableFixedRateGatewayResources = function () {
+
+            var promiseAllResources = merchelloCatalogFixedRateShippingService.getAllFixedRateGatewayResources();
+            promiseAllResources.then(function (allResources) {
+
+                $scope.availableFixedRateGatewayResources = _.map(allResources, function (resource) {
+                    return new merchello.Models.GatewayResource(resource)
+                });
+
+            }, function (reason) {
+
+                notificationsService.error("Available Gateway Resources esource Load Failed", reason.message);
+
+            });
+
+        };
 
         $scope.loadAllAvailableCountries = function () {
 
@@ -316,7 +333,7 @@
                     var promiseAddMethod = merchelloCatalogFixedRateShippingService.createRateTableShipMethod(newShippingMethod);
                     promiseAddMethod.then(function (data) {
 
-                        $scope.loadCountryProviders($scope.currentShipCountry)
+                        $scope.loadFixedRateCountryProviders($scope.currentShipCountry)
 
                     }, function (reason) {
 
@@ -329,18 +346,6 @@
                 }
             });
 
-        // Functions to control the Shipping Methods panel
-        $scope.shippingMethodPanel = {
-            close: function () {
-                $scope.visible.shippingMethodPanel = false;
-            },
-            open: function (country) {
-                $scope.visible.shippingMethodPanel = true;
-            },
-            toggle: function () {
-                $scope.visible.shippingMethodPanel = !$scope.visible.shippingMethodPanel;
-            }
-        };
 
         // Functions to control the Shipping Methods panel
         $scope.shippingMethodPanel = {
@@ -354,24 +359,98 @@
                 $scope.visible.shippingMethodPanel = !$scope.visible.shippingMethodPanel;
             }
         };
-
 
         // Functions to control the Shipping Methods flyout
-        $scope.addEditShippingMethodFlyout = {
-            close: function () {
-                $scope.visible.addEditShippingMethodFlyout = false;
+        $scope.addEditShippingMethodFlyout = new merchello.Models.Flyout(
+            $scope.visible.addEditShippingMethodFlyout,
+            function (isOpen) {
+                $scope.visible.addEditShippingMethodFlyout = isOpen;
             },
-            open: function (country) {
-                $scope.visible.addEditShippingMethodFlyout = true;
-            },
-            toggle: function () {
-                $scope.visible.addEditShippingMethodFlyout = !$scope.visible.addEditShippingMethodFlyout;
+            {
+                confirm: function () {
+                    var self = $scope.addEditShippingMethodFlyout;
+
+                    var selectedProvider = self.model;
+
+                    self.clear();
+                    self.close();
+                }
+            });
+
+
+        $scope.shippingMethodDialogConfirm = function (data) {
+
+            if (data.method.shipMethod.key.length > 0)
+            {
+                // Save existing method
+                var promiseSave = merchelloCatalogFixedRateShippingService.saveRateTableShipMethod(data.method);
+                promiseSave.then(function (responsedata) {
+
+                    data.provider.shipMethods = [];
+                    $scope.loadFixedRateProviderMethods(data.country);
+
+                }, function (reason) {
+
+                    notificationsService.error("Shipping Method Save Failed", reason.message);
+
+                });
             }
+            else
+            {
+                // Create new method
+                // Save existing method
+                var promiseSave = merchelloCatalogFixedRateShippingService.createRateTableShipMethod(data.method);
+                promiseSave.then(function (responsedata) {
+
+                    data.provider.shipMethods = [];
+                    $scope.loadFixedRateProviderMethods(data.country);
+
+                }, function (reason) {
+
+                    notificationsService.error("Shipping Method Save Failed", reason.message);
+
+                });
+            }
+        };
+
+        $scope.addEditShippingMethodFlyoutOpen = function (country, provider, method) {
+
+            var dialogMethod = method;
+            if (!method)
+            {
+                dialogMethod = new merchello.Models.FixedRateShippingMethod();
+                dialogMethod.shipMethod.shipCountryKey = country.key;
+                dialogMethod.shipMethod.providerKey = provider.key;
+            }
+
+            var myDialogData = {
+                method: dialogMethod,
+                country: country,
+                provider: provider,
+                gatewayResources: $scope.availableFixedRateGatewayResources
+            };
+
+            dialogService.open({
+                template: '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shippingmethod.html',
+                show: true,
+                callback: $scope.shippingMethodDialogConfirm,
+                dialogData: myDialogData
+            });
+        };
+
+        $scope.addEditShippingMethodFlyoutConfirm = function () {
+            var self = $scope.addEditShippingMethodFlyout;
+
+            var selectedProvider = self.model;
+
+            self.clear();
+            self.close();
         };
 
         $scope.loadAllAvailableCountries();
         $scope.loadWarehouses();
         $scope.loadAllShipProviders();
+        $scope.loadAllAvailableFixedRateGatewayResources();
 
         $scope.loaded = true;
         $scope.preValuesLoaded = true;
