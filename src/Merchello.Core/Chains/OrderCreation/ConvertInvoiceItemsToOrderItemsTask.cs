@@ -1,12 +1,13 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Merchello.Core.Models;
 using Umbraco.Core;
 
 namespace Merchello.Core.Chains.OrderCreation
 {
-    internal class ConvertInvoiceItemsToOrderItems : InvoiceAttemptChainTaskBase
+    internal class ConvertInvoiceItemsToOrderItemsTask : InvoiceAttemptChainTaskBase
     {
-        public ConvertInvoiceItemsToOrderItems(IInvoice invoice) 
+        public ConvertInvoiceItemsToOrderItemsTask(IInvoice invoice) 
             : base(invoice)
         {}
 
@@ -22,10 +23,17 @@ namespace Merchello.Core.Chains.OrderCreation
                             x.LineItemType != LineItemType.Shipping && x.LineItemType != LineItemType.Tax &&
                             x.LineItemType != LineItemType.Discount);
             
-
             foreach (var item in items)                    
             {
-                value.Items.Add(item.AsLineItemOf<IOrderLineItem>());
+                try
+                {
+                    value.Items.Add(item.AsLineItemOf<OrderLineItem>());
+                }
+                catch (Exception ex)
+                {
+                    return Attempt<IOrder>.Fail(ex);
+                }
+                
             }
 
             return Attempt<IOrder>.Succeed(value);

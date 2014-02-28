@@ -29,8 +29,12 @@ namespace Merchello.Core.Builders
         public override Attempt<IOrder> Build()
         {
             var attempt = (TaskHandlers.Any()) 
-                ? TaskHandlers.First().Execute(new Order(Constants.DefaultKeys.OrderStatus.NotFulfilled, _invoice.Key) { VersionKey = _invoice.VersionKey }) :
-                Attempt<IOrder>.Fail(new InvalidOperationException("The configuration Chain Task List could not be instantiated"));
+                ? TaskHandlers.First().Execute(new Order(Constants.DefaultKeys.OrderStatus.NotFulfilled, _invoice.Key) 
+                { 
+                    OrderNumberPrefix = _invoice.InvoiceNumberPrefix,
+                    VersionKey = _invoice.VersionKey 
+                }) :
+                Attempt<IOrder>.Fail(new InvalidOperationException("The configuration Chain Task List could not be instantiated."));
 
             return attempt;
         }
@@ -45,6 +49,14 @@ namespace Merchello.Core.Builders
             {
                 return _constructorParameters ?? (_constructorParameters = new List<object>(new object[] { _invoice }));
             }
+        }
+
+        /// <summary>
+        /// Used for testing
+        /// </summary>
+        internal int TaskCount
+        {
+            get { return TaskHandlers.Count(); }
         }
     }
 }

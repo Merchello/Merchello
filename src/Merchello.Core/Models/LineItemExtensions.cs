@@ -13,7 +13,6 @@ namespace Merchello.Core.Models
 
         #region LineItemContainer
         
-
         /// <summary>
         /// Adds a <see cref="IProductVariant"/> line item to the collection
         /// </summary>
@@ -59,11 +58,11 @@ namespace Merchello.Core.Models
         /// <summary>
         /// Adds a line item to the collection
         /// </summary>
-        public static void AddItem(this ILineItemContainer container, IItemCacheLineItem lineItem)
+        public static void AddItem(this ILineItemContainer container, ILineItem lineItem)
         {
             container.Items.Add(lineItem);
         }
-
+       
         #endregion
 
         /// <summary>

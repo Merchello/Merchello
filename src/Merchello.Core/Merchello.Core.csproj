@@ -77,14 +77,16 @@
     <Compile Include="Builders\BuildChainBase.cs" />
     <Compile Include="Builders\InvoiceBuilderChain.cs" />
     <Compile Include="Builders\OrderBuilderChain.cs" />
+    <Compile Include="Builders\ShipmentBuilderChain.cs" />
     <Compile Include="Chains\AttemptChainTaskBase.cs" />
     <Compile Include="Chains\ChainTaskResolver.cs" />
     <Compile Include="Chains\InvoiceCreation\ApplyTaxesToInvoiceTax.cs" />
     <Compile Include="Chains\InvoiceCreation\AddBillingInfoToInvoiceTask.cs" />
     <Compile Include="Chains\InvoiceCreation\SalePreparationAttemptChainTaskBase.cs" />
     <Compile Include="Chains\InvoiceCreation\ConvertItemCacheItemsToInvoiceItemsTask.cs" />
-    <Compile Include="Chains\OrderCreation\ConvertInvoiceItemsToOrderItems.cs" />
+    <Compile Include="Chains\OrderCreation\ConvertInvoiceItemsToOrderItemsTask.cs" />
     <Compile Include="Chains\OrderCreation\InvoiceAttemptChainTaskBase.cs" />
+    <Compile Include="Chains\ShipmentCreation\OrderAttemptChainTaskBase.cs" />
     <Compile Include="Gateways\Payment\Cash\CashPaymentGatewayProvider.cs" />
     <Compile Include="Gateways\Payment\Cash\CashPaymentGatewayMethod.cs" />
     <Compile Include="Gateways\Payment\Cash\ICashPaymentGatewayMethod.cs" />

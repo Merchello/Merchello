@@ -106,6 +106,7 @@ namespace Merchello.Core
                 public static Guid CreditRecordKey = new Guid("020F6FF8-1F66-4D90-9FF4-C32A7A5AB32B");
                 public static Guid DebitRecordKey = new Guid("916929F0-96FB-430A-886D-F7A83E9A4B9A");
                 public static Guid VoidRecordKey = new Guid("F59C7DA6-8252-4891-A5A2-7F6C38766649");
+                public static Guid DeniedRecordKey = new Guid("2AE1F2E2-DF5F-4087-81C1-4E0EE809948F");
             }
 
             public static class GatewayProvider

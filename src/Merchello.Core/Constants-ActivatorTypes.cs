@@ -13,6 +13,7 @@
         {
             public static string SalesPreparationInvoiceCreate = "SalesPreparationInvoiceCreate";
             public static string OrderPreparationOrderCreate = "OrderPreparationOrderCreate";
+            public static string OrderPreparationShipmentCreate = "OrderPreparationShipmentCreate";
         }
     }
 }
