@@ -18,6 +18,7 @@ using System.Net.Http;
 using Merchello.Core.Gateways.Shipping;
 using Newtonsoft.Json;
 using System.ComponentModel;
+using Merchello.Core.Gateways;
 
 namespace Merchello.Web.Editors
 {
@@ -57,6 +58,26 @@ namespace Merchello.Web.Editors
         {
             _shipCountryService = ((ServiceContext)MerchelloContext.Services).ShipCountryService;
             _fixedRateShippingGatewayProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Gateways.Shipping.ResolveByKey(Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey);
+        }
+
+        /// <summary>
+        /// 
+        ///
+        /// GET /umbraco/Merchello/ShippingMethodsApi/GetAllFixedRateGatewayResources/
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        public IEnumerable<GatewayResourceDisplay> GetAllFixedRateGatewayResources()
+        {
+            var provider = (FixedRateShippingGatewayProvider)_shippingContext.ResolveByKey(Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey);
+
+            var resources = provider.ListResourcesOffered();
+
+            foreach (IGatewayResource resource in resources)
+            {
+                yield return resource.ToGatewayResourceDisplay();
+            }
         }
 
         /// <summary>

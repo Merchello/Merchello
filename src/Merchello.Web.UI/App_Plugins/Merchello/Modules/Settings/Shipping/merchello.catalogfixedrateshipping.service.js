@@ -21,6 +21,16 @@
                    'Failed to retreive shipping rate table providers');
             },
 
+            getAllFixedRateGatewayResources: function () {
+
+                return umbRequestHelper.resourcePromise(
+                   $http({
+                       url: umbRequestHelper.getApiUrl('merchelloCatalogRateTableShippingApiBaseUrl', 'GetAllFixedRateGatewayResources'),
+                       method: "GET"
+                   }),
+                   'Failed to retreive shipping fixed rate gateway resources');
+            },
+
             getAllShipCountryFixedRateProviders: function (id) {
 
                 return umbRequestHelper.resourcePromise(

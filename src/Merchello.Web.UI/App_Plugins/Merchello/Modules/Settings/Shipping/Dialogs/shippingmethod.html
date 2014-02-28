@@ -11,7 +11,7 @@
             <div class="form-group row-fluid">
                 <label for="method-type">Method</label>
                 <div class="col-xs-6 span6 row-fluid">
-                    <select name="method-type" class="col-xs-12 span12" data-ng-disabled="dialogData.method.shipMethod.key.length > 0">
+                    <select name="method-type" class="col-xs-12 span12" data-ng-model="dialogData.method.gatewayResource" data-ng-options="r.name for r in dialogData.gatewayResources track by r.serviceCode" data-ng-disabled="dialogData.method.shipMethod.key.length > 0">
                         <option>Vary by Weight</option>
                     </select>
                 </div>
@@ -35,12 +35,28 @@
                             </div>
                         </td>
                         <td>
-                            <a href="" class="btn btn-default btn-xs btn-mini btn-warning">X</a>
+                            <a data-ng-click="removeRateTier(tier)" class="btn btn-default btn-xs btn-mini btn-warning">X</a>
+                        </td>
+                    </tr>
+                    <tr data-ng-show="isAddNewTier">
+                        <td>
+                            <input type="number" data-ng-model="newTier.rangeLow" class="span1 col-xs-1" />
+                            -
+                            <input type="number" data-ng-model="newTier.rangeHigh" class="span1 col-xs-1" />
+                        </td>
+                        <td>
+                            <div class="input-prepend">
+                                <span class="add-on">$</span>
+                                <input type="number" data-ng-model="newTier.rate" class="span1 col-xs-1" />
+                            </div>
+                        </td>
+                        <td>
+                            <a data-ng-click="addRateTier()" class="btn btn-default btn-xs btn-mini btn-warning">Add</a>
                         </td>
                     </tr>
                 </tbody>
             </table>
-            <a href="" class="btn btn-default btn-xs btn-mini btn-primary">Add New Range</a>
+            <a data-ng-click="insertRateTier()" class="btn btn-default btn-xs btn-mini btn-primary">Add New Range</a>
 
             <div data-ng-hide="dialogData.method.shipMethod.provinceData.length == 0">
                 <h5>Adjust for Individual Regions</h5>
@@ -65,7 +81,7 @@
                             <td>
                                 <div class="input-prepend">
                                     <span class="add-on">$</span>
-                                    <input type="number" data-ng-model="province.adjustRate" class="span2 col-xs-2" />
+                                    <input type="number" data-ng-model="province.adjustRate" class="span1 col-xs-1" />
                                 </div>
                             </td>
                             <td>
