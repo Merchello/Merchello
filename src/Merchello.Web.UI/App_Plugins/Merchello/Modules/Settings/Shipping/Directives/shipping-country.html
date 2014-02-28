@@ -18,7 +18,7 @@
                     <td>{{fixedRateShipMethod.tierPriceRange().low}} - {{fixedRateShipMethod.tierPriceRange().high}}</td>
                     <td class="edit">
                         <a data-ng-click="addEditShippingMethodFlyoutOpen(country, shippingGatewayProvider, fixedRateShipMethod)" class="btn btn-default btn-xs btn-mini">edit</a>
-                        <a class="btn btn-warning btn-xs btn-mini" href="#">x</a></td>
+                        <a data-ng-click="removeFixedRateMethodFromProvider(shippingGatewayProvider, fixedRateShipMethod)" class="btn btn-warning btn-xs btn-mini">x</a></td>
                 </tr>
             </tbody>
         </table>

@@ -447,6 +447,12 @@
             self.close();
         };
 
+        $scope.removeFixedRateMethodFromProvider = function(provider, method) {
+            provider.removeFixedRateShippingMethod(method);
+
+            /// TODO: Call the service to delete from the DB
+        };
+
         $scope.loadAllAvailableCountries();
         $scope.loadWarehouses();
         $scope.loadAllShipProviders();
