@@ -40,7 +40,7 @@ namespace Merchello.Core.Gateways.Payment.Cash
             //payment.ExtendData
 
 
-            return new PaymentResult(Attempt.Succeed(payment), false);
+            return new PaymentResult(Attempt.Succeed(payment), invoice, false);
         }
     }
 }

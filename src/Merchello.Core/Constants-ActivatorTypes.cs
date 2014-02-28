@@ -11,8 +11,8 @@
 
         public static class TaskChainAlias
         {
-            public static string SalesManagerInvoiceCreate = "SalesManagerInvoiceCreate";
-            public static string InvoiceTaxRateQuote = "InvoiceTaxRateQuote";
+            public static string SalesPreparationInvoiceCreate = "SalesPreparationInvoiceCreate";
+            public static string OrderPreparationOrderCreate = "OrderPreparationOrderCreate";
         }
     }
 }

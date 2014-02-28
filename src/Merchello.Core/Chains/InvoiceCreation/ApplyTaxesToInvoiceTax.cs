@@ -6,7 +6,7 @@ using Umbraco.Core;
 
 namespace Merchello.Core.Chains.InvoiceCreation
 {
-    internal class ApplyTaxesToInvoiceTax : OrderPreparationAttemptChainTaskBase
+    internal class ApplyTaxesToInvoiceTax : SalePreparationAttemptChainTaskBase
     {
         public ApplyTaxesToInvoiceTax(SalePreparationBase salePreparation) 
             : base(salePreparation)
