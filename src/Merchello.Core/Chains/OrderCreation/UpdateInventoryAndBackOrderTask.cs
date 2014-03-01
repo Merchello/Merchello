@@ -64,6 +64,7 @@ namespace Merchello.Core.Chains.OrderCreation
                         var backOrder = lineItem.AsLineItemOf<OrderLineItem>();
                         backOrder.Quantity = backOrderCount;
                         backOrder.BackOrder = true;
+                        backOrder.Sku += "*";
                         lineItem.Quantity = lineItem.Quantity - backOrderCount;
                         _backOrderLineItems.Add(backOrder);
                     }

@@ -73,7 +73,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
 
             foreach (var item in order.Items)
             {
-                Console.WriteLine("Product: {0} - Quantity: {1} - Backorder: {2}", item.Name, item.Quantity, ((OrderLineItem)item).BackOrder);
+                Console.WriteLine("Product: {0} - Sku: {3} - Quantity: {1} - Backorder: {2}", item.Name, item.Quantity, ((OrderLineItem)item).BackOrder, item.Sku);
             }
 
             //// Assert
