@@ -451,7 +451,7 @@
             provider.removeFixedRateShippingMethod(method);
 
             /// TODO: Call the service to delete from the DB
-        };
+        };        
 
         $scope.loadAllAvailableCountries();
         $scope.loadWarehouses();

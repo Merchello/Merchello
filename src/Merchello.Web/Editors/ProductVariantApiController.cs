@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Formatting;
 using System.Web.Http;
-using System.Web.Http.ModelBinding;
 using Umbraco.Web;
 using Umbraco.Web.Mvc;
 using Merchello.Core;
@@ -116,14 +112,12 @@ namespace Merchello.Web.Editors
             if (ids != null)
             {
                 var productVariants = _productVariantService.GetByKeys(ids);
-                if (productVariants == null)
+                if (productVariants != null)
                 {
-                    //throw new HttpResponseException(HttpStatusCode.NotFound);
-                }
-
-                foreach (IProductVariant productVariant in productVariants)
-                {
-                    yield return productVariant.ToProductVariantDisplay();
+                    foreach (var productVariant in productVariants)
+                    {
+                        yield return productVariant.ToProductVariantDisplay();
+                    }
                 }
             }
             else
