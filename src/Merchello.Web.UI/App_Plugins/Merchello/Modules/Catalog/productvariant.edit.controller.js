@@ -188,7 +188,7 @@
                 notificationsService.info("Saving...", "");
 
 
-                if (isCreating()) // Save on initial create
+                if ($scope.creatingProduct) // Save on initial create
                 {
                     // Copy from master variant
                     $scope.product.copyFromVariant($scope.productVariant);
@@ -206,7 +206,7 @@
                         notificationsService.error("Product Create Failed", reason.message);
                     });
                 }
-                else if (isCreatingVariant())  // Add a variant to product
+                else if ($scope.creatingVariant)  // Add a variant to product
                 {
                     $scope.productVariant.name = "";    // Allow the core to create the initial name
                     var promise = merchelloProductVariantService.create($scope.productVariant);
