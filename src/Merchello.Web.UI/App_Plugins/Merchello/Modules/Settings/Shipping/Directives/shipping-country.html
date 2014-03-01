@@ -1,6 +1,6 @@
 ﻿<div>
     <h3>{{country.name}}</h3>
-    <a data-ng-click="openProviderFlyout(country)" class="btn btn-primary merchello-button-right">Add a Provider</a>
+    <a data-ng-click="addEditShippingProviderDialogOpen(country)" class="btn btn-primary merchello-button-right">Add a Provider</a>
     <div data-ng-repeat="shippingGatewayProvider in country.shippingGatewayProviders" class="merchello-shipping-gateway-provider">
         <h4>{{shippingGatewayProvider.name}}</h4>
         <a data-ng-click="addEditShippingMethodFlyoutOpen(country, shippingGatewayProvider)" class="btn btn-primary merchello-button-right">Add a Method</a>
