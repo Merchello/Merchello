@@ -88,10 +88,7 @@ namespace Merchello.Web.Editors
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
 
-            foreach (IShipCountry country in countries)
-            {
-                yield return country.ToShipCountryDisplay();
-            }
+            return countries.Select(country => country.ToShipCountryDisplay());
         }
 
         /// <summary>
@@ -159,7 +156,7 @@ namespace Merchello.Web.Editors
         public IEnumerable<GatewayProviderDisplay> GetAllShipGatewayProviders()
         {
             var providers = MerchelloContext.Gateways.Shipping.GetAllGatewayProviders();
-            if( providers.Count() > 0 )
+            if( providers != null && providers.Any() )
             {
                 var rateTableProvider = MerchelloContext.Gateways.Shipping.ResolveByKey(providers.First().Key);
                 if (rateTableProvider == null)
@@ -168,10 +165,7 @@ namespace Merchello.Web.Editors
                 }
             }
 
-            foreach (IGatewayProvider provider in providers)
-            {
-                yield return provider.ToGatewayProviderDisplay();
-            }
+            return providers.Select(provider => provider.ToGatewayProviderDisplay());
         }
 
         /// <summary>
@@ -206,7 +200,7 @@ namespace Merchello.Web.Editors
             {
                 var providers = MerchelloContext.Gateways.Shipping.GetGatewayProvidersByShipCountry(shipCountry);
 
-                foreach (IShippingGatewayProvider provider in providers)
+                foreach (var provider in providers)
                 {
                     if (!Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey.Equals(provider.Key))
                     {

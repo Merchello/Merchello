@@ -88,6 +88,10 @@
             }
             self.shipMethods.push(newShippingMethod);
         };
+
+        self.removeFixedRateShippingMethod = function (shippingMethod) {
+            self.shipMethods = _.reject(self.shipMethods, function (m) { return m.shipMethod.key == shippingMethod.shipMethod.key; });
+        };
     };
 
     models.ShippingMethod = function (shippingMethodFromServer) {
@@ -228,13 +232,13 @@
             });
         }
 
-        self.addRow = function (row) {
+        self.addRow = function(row) {
             self.rows.push(row);
-        }
+        };
 
-        self.removeRow = function (rowToRemove) {
-            self.rows = _.reject(self.rows, function (row) { return row.key == rowToRemove.key; });
-        }
+        self.removeRow = function(rowToRemove) {
+            self.rows = _.reject(self.rows, function(row) { return row.key == rowToRemove.key; });
+        };
     };
 
     models.ShippingRateTier = function (shippingRateTierFromServer) {

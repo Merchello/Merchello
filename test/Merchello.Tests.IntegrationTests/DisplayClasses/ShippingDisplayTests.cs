@@ -139,7 +139,7 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
             var shipRateTable = _gwshipMethod.RateTable;
             var shipRateTier = _gwshipMethod.RateTable.Rows.First();
 
-            var shipRateTableDisplay = shipRateTable.ToShipRateTableDisplay();
+            var shipRateTableDisplay = shipRateTable.ToShipFixedRateTableDisplay();
             var shipRateTierDisplay = shipRateTableDisplay.Rows.First();
 
             //// Assert
@@ -162,11 +162,11 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
             //// Arrange
 
             //// Act
-            var shipRateTableDisplay = _gwshipMethod.RateTable.ToShipRateTableDisplay();
+            var shipRateTableDisplay = _gwshipMethod.RateTable.ToShipFixedRateTableDisplay();
             var shipRateTierDisplay = shipRateTableDisplay.Rows.First();
 
             shipRateTierDisplay.Rate = 15M;
-            List<ShipRateTierDisplay> rows = shipRateTableDisplay.Rows as List<ShipRateTierDisplay>;
+            var rows = shipRateTableDisplay.Rows as List<ShipRateTierDisplay>;
             rows.Add(new ShipRateTierDisplay()
                     {
                         RangeLow = 100M,
