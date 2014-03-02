@@ -87,6 +87,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
 
 
             PreTestDataWorker.DeleteAllItemCaches();
+            PreTestDataWorker.DeleteAllInvoices();
 
             Customer.ExtendedData.AddAddress(BillingAddress, AddressType.Billing);
             ItemCache = new Core.Models.ItemCache(Customer.EntityKey, ItemCacheType.Checkout);

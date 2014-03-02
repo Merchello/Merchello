@@ -60,13 +60,13 @@ namespace Merchello.Core.Sales
         void SaveShipmentRateQuote(IEnumerable<IShipmentRateQuote> approvedShipmentRateQuotes);
 
         /// <summary>
-        /// Generates an <see cref="IInvoice"/> representing the bill for the current "checkout order"
+        /// Prepares an <see cref="IInvoice"/> representing the bill for the current "sale"
         /// </summary>
         /// <returns>An <see cref="IInvoice"/> that is not persisted to the database.</returns>
         IInvoice PrepareInvoice();
 
         /// <summary>
-        /// Generates an <see cref="IInvoice"/> representing the bill for the current "checkout order"
+        /// Generates an <see cref="IInvoice"/> representing the bill for the current "sale"
         /// </summary>
         /// <param name="invoiceBuilder">The invoice builder class</param>
         /// <returns>An <see cref="IInvoice"/> that is not persisted to the database.</returns>

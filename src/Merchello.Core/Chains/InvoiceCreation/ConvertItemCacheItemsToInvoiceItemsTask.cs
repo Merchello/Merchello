@@ -8,7 +8,7 @@ namespace Merchello.Core.Chains.InvoiceCreation
     /// <summary>
     /// Converts ItemCacheLineItem(s) to InvoiceLineItems
     /// </summary>
-    internal class ConvertItemCacheItemsToInvoiceItemsTask : SalePreparationAttemptChainTaskBase
+    internal class ConvertItemCacheItemsToInvoiceItemsTask : InvoiceCreationAttemptChainTaskBase
     {
         public ConvertItemCacheItemsToInvoiceItemsTask(SalePreparationBase salePreparation) 
             : base(salePreparation)

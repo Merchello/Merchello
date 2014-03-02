@@ -26,7 +26,7 @@ namespace Merchello.Core.Persistence.Repositories
         }
 
 
-        #region Overrides of RepositoryBase<ICustomerItemCache>
+        #region Overrides of RepositoryBase<IItemCache>
 
 
         protected override IItemCache PerformGet(Guid key)
@@ -93,7 +93,7 @@ namespace Merchello.Core.Persistence.Repositories
             return collection;
         }
 
-        #region Overrides of MerchelloPetaPocoRepositoryBase<ICustomerRegistry>
+        #region Overrides of MerchelloPetaPocoRepositoryBase<IItemCache>
 
         protected override Sql GetBaseQuery(bool isCount)
         {

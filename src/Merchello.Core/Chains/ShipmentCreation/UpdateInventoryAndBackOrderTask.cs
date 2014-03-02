@@ -74,6 +74,7 @@ namespace Merchello.Core.Chains.OrderCreation
                 }
                 else
                 {
+                    lineItem.BackOrder = false;
                     inventory.Count = inventory.Count - lineItem.Quantity;
                 }
                 
