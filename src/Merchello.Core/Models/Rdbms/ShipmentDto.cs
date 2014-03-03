@@ -101,6 +101,15 @@ namespace Merchello.Core.Models.Rdbms
         [Constraint(Default = "newid()")]
         public Guid VersionKey { get; set; }
 
+        [Column("carrier")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public string Carrier { get; set; }
+
+        [Column("trackingCode")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public string TrackingCode { get; set; }
+
+
         [Column("updateDate")]
         [Constraint(Default = "getdate()")]
         public DateTime UpdateDate { get; set; }

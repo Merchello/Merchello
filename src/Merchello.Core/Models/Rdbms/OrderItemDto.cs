@@ -39,6 +39,9 @@ namespace Merchello.Core.Models.Rdbms
         [Column("price")]
         public decimal Price { get; set; }
 
+        [Column("backOrder")]
+        public bool BackOrder { get; set; }
+
         [Column("exported")]
         public bool Exported { get; set; }
 
@@ -55,8 +58,7 @@ namespace Merchello.Core.Models.Rdbms
         [Constraint(Default = "getdate()")]
         public DateTime CreateDate { get; set; }
 
-        [ResultColumn]
-        public OrderDto OrderDto { get; set; }
+
     }
 
 }

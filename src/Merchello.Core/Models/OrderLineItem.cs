@@ -8,15 +8,13 @@ namespace Merchello.Core.Models
     /// <summary>
     /// Represents an order line item
     /// </summary>
-    /// <remarks>
-    /// Needed for typed query mapper
-    /// </remarks>
     [Serializable]
     [DataContract(IsReference = true)]
     public class OrderLineItem : LineItemBase, IOrderLineItem
     {
 
         private Guid? _shipmentKey;
+        private bool _backOrder;
 
         public OrderLineItem(string name, string sku, decimal amount) 
             : base(name, sku, amount)
@@ -39,6 +37,7 @@ namespace Merchello.Core.Models
         { }
 
         private static readonly PropertyInfo ShipmentKeySelector = ExpressionHelper.GetPropertyInfo<OrderLineItem, Guid?>(x => x.LineItemTfKey);
+        private static readonly PropertyInfo BackOrderSelector = ExpressionHelper.GetPropertyInfo<OrderLineItem, bool>(x => x.BackOrder);
 
         /// <summary>
         /// The unique key (guid) associated with the shipment record in which this item was shipped.
@@ -57,6 +56,21 @@ namespace Merchello.Core.Models
             }
         }
 
+        /// <summary>
+        /// True false indicating whether or not this line item represents a back order line item
+        /// </summary>
+        public bool BackOrder
+        {
+            get { return _backOrder; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _backOrder = value;
+                    return _backOrder;
+                }, _backOrder, BackOrderSelector);
+            }
+        }
     }
 
 }

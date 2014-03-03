@@ -3,11 +3,11 @@ using Merchello.Core.Sales;
 
 namespace Merchello.Core.Chains.InvoiceCreation
 {
-    public abstract class SalePreparationAttemptChainTaskBase : AttemptChainTaskBase<IInvoice>
+    public abstract class InvoiceCreationAttemptChainTaskBase : AttemptChainTaskBase<IInvoice>
     {
         private readonly SalePreparationBase _salePreparation;
 
-        protected SalePreparationAttemptChainTaskBase(SalePreparationBase salePreparation)
+        protected InvoiceCreationAttemptChainTaskBase(SalePreparationBase salePreparation)
         {
             Mandate.ParameterNotNull(salePreparation, "salePreparation");
 

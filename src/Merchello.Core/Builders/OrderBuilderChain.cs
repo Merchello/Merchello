@@ -18,7 +18,7 @@ namespace Merchello.Core.Builders
             Mandate.ParameterNotNull(invoice, "invoice");
 
             _invoice = invoice;
-
+            
             ResolveChain(Constants.TaskChainAlias.OrderPreparationOrderCreate);
         }
 

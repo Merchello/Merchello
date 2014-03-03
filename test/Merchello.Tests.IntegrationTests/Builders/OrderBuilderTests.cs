@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Merchello.Core.Builders;
+using Merchello.Core.Models;
 using NUnit.Framework;
 
 namespace Merchello.Tests.IntegrationTests.Builders
@@ -52,7 +53,101 @@ namespace Merchello.Tests.IntegrationTests.Builders
             {
                 Console.WriteLine("Product: {0} - Quantity: {1}", item.Name, item.Quantity);
             }
+        }
+
+        /// <summary>
+        /// Verifies that an order can be created and saved
+        /// </summary>
+        [Test]
+        public void Can_Save_An_Order()
+        {
+            //// Arrange
+            var invoice = SalePreparationMock.PrepareInvoice();
+            invoice.VersionKey = new Guid();
+            PreTestDataWorker.InvoiceService.Save(invoice);
+
+            //// Act
+            var orderBuilder = new OrderBuilderChain(invoice);
+            var attempt = orderBuilder.Build();
+            Assert.IsTrue(attempt.Success, "The order builder failed to create an order");
+            var order = attempt.Result;
+            MerchelloContext.Services.OrderService.Save(order);
+
+            //// Assert
+            Assert.IsTrue(order.HasIdentity);
 
         }
+
+        /// <summary>
+        /// Verifies an order can be retrieved with items
+        /// </summary>
+        [Test]
+        public void Can_Retrieve_An_Order()
+        {
+            //// Arrange
+            var invoice = SalePreparationMock.PrepareInvoice();
+            invoice.VersionKey = new Guid();
+            PreTestDataWorker.InvoiceService.Save(invoice);
+            var orderBuilder = new OrderBuilderChain(invoice);
+            var attempt = orderBuilder.Build();
+            Assert.IsTrue(attempt.Success, "The order builder failed to create an order");
+            MerchelloContext.Services.OrderService.Save(attempt.Result);
+            var key = attempt.Result.Key;
+
+            //// Act
+            var order = MerchelloContext.Services.OrderService.GetByKey(key);
+
+            //// Assert
+            Assert.NotNull(order);
+            Assert.AreEqual(key, order.Key);
+            Assert.IsTrue(order.Items.Any());
+
+        }
+
+        /// <summary>
+        /// Verifies an order can be prepared with the extension method
+        /// </summary>
+        [Test]
+        public void Can_Create_An_Order_With_By_The_Extension()
+        {
+            //// Arrange
+            var invoice = SalePreparationMock.PrepareInvoice();
+            invoice.VersionKey = new Guid();
+
+            //// Act
+            var order = invoice.PrepareOrder(MerchelloContext);
+
+            //// Assert
+            Assert.IsTrue(invoice.HasIdentity);
+            Assert.NotNull(order);
+
+        }
+
+        //[Test]
+        //public void Can_Identify_BackOrder_LineItems()
+        //{
+        //    //// Arrange
+
+        //    var invoice = SalePreparationMock.PrepareInvoice();
+        //    invoice.VersionKey = Guid.NewGuid();
+        //    PreTestDataWorker.InvoiceService.Save(invoice);
+
+        //    //// Act
+        //    var orderBuilder = new OrderBuilderChain(MerchelloContext, invoice);
+        //    var attempt = orderBuilder.Build();
+
+        //    Assert.IsTrue(attempt.Success, "The order builder failed to create an order");
+        //    var order = attempt.Result;
+
+        //    foreach (var item in order.Items)
+        //    {
+        //        Console.WriteLine("Product: {0} - Sku: {3} - Quantity: {1} - Backorder: {2}", item.Name, item.Quantity, ((OrderLineItem)item).BackOrder, item.Sku);
+        //    }
+
+        //    //// Assert
+        //    Assert.AreEqual(ProductCount, order.Items.Count(x => ((OrderLineItem)x).BackOrder));
+
+
+        //}
     }
 }

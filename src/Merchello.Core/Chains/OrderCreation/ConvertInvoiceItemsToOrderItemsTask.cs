@@ -5,7 +5,7 @@ using Umbraco.Core;
 
 namespace Merchello.Core.Chains.OrderCreation
 {
-    internal class ConvertInvoiceItemsToOrderItemsTask : InvoiceAttemptChainTaskBase
+    internal class ConvertInvoiceItemsToOrderItemsTask : OrderCreationAttemptChainTaskBase
     {
         public ConvertInvoiceItemsToOrderItemsTask(IInvoice invoice) 
             : base(invoice)

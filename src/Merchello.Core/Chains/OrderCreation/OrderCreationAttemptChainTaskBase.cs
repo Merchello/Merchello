@@ -2,11 +2,11 @@
 
 namespace Merchello.Core.Chains.OrderCreation
 {
-    public abstract class InvoiceAttemptChainTaskBase : AttemptChainTaskBase<IOrder>
+    public abstract class OrderCreationAttemptChainTaskBase : AttemptChainTaskBase<IOrder>
     {
         private readonly IInvoice _invoice;
 
-        protected InvoiceAttemptChainTaskBase(IInvoice invoice)
+        protected OrderCreationAttemptChainTaskBase(IInvoice invoice)
         {
             Mandate.ParameterNotNull(invoice, "invoice");
 
@@ -20,5 +20,6 @@ namespace Merchello.Core.Chains.OrderCreation
         {
             get { return _invoice; }
         }
+
     }
 }

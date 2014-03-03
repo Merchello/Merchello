@@ -117,10 +117,7 @@ namespace Merchello.Core.Persistence.Repositories
 
             entity.Key = dto.Key;
 
-            foreach (var item in entity.Items)
-            {
-                _lineItemRepository.AddOrUpdate(item);
-            }
+            _lineItemRepository.SaveLineItem(entity.Items, entity.Key);
 
             entity.ResetDirtyProperties();
         }
@@ -134,15 +131,7 @@ namespace Merchello.Core.Persistence.Repositories
 
             Database.Update(dto);
 
-            var existing = _lineItemRepository.GetByContainerKey(entity.Key);
-            var removes = existing.Where(x => !entity.Items.Contains(x));
-
-            foreach(var remove in removes) _lineItemRepository.Delete(remove);
-
-            foreach (var item in entity.Items)
-            {
-                _lineItemRepository.AddOrUpdate(item);
-            }
+            _lineItemRepository.SaveLineItem(entity.Items, entity.Key);
 
             entity.ResetDirtyProperties();
         }
