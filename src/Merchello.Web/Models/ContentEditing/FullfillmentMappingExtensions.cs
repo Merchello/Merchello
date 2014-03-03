@@ -220,11 +220,11 @@ namespace Merchello.Web.Models.ContentEditing
 
         #endregion
         
-        #region RateTableShipMethodDisplay
+        #region FixedRateShipMethodDisplay
 
-        internal static RateTableShipMethodDisplay ToRateTableShipMethodDisplay(this IFixedRateShippingGatewayMethod shipFixedRateMethod)
+        internal static FixedRateShipMethodDisplay ToFixedRateShipMethodDisplay(this IFixedRateShippingGatewayMethod shipFixedRateMethod)
         {
-            return AutoMapper.Mapper.Map<RateTableShipMethodDisplay>(shipFixedRateMethod);
+            return AutoMapper.Mapper.Map<FixedRateShipMethodDisplay>(shipFixedRateMethod);
         }
 
         #endregion
@@ -232,9 +232,9 @@ namespace Merchello.Web.Models.ContentEditing
         #region IRateTableShipMethod
 
         /// <summary>
-        /// Maps changes made in the <see cref="RateTableShipMethodDisplay"/> to the <see cref="IFixedRateShippingGatewayMethod"/>
+        /// Maps changes made in the <see cref="FixedRateShipMethodDisplay"/> to the <see cref="IFixedRateShippingGatewayMethod"/>
         /// </summary>
-        /// <param name="rateTableShipMethodDisplay">The <see cref="RateTableShipMethodDisplay"/> to map</param>
+        /// <param name="fixedRateShipMethodDisplay">The <see cref="FixedRateShipMethodDisplay"/> to map</param>
         /// <param name="destination">The <see cref="IFixedRateShippingGatewayMethod"/> to have changes mapped to</param>
         /// <returns>The updated <see cref="IFixedRateShippingGatewayMethod"/></returns>
         /// <remarks>
@@ -244,27 +244,27 @@ namespace Merchello.Web.Models.ContentEditing
         /// * For testing you will have to use the static .Save(IGatewayProviderService ..., as MerchelloContext.Current will likely be null
         /// 
         /// </remarks>
-        internal static IFixedRateShippingGatewayMethod ToRateTableShipMethod(this RateTableShipMethodDisplay rateTableShipMethodDisplay, IFixedRateShippingGatewayMethod destination)
+        internal static IFixedRateShippingGatewayMethod ToFixedRateShipMethod(this FixedRateShipMethodDisplay fixedRateShipMethodDisplay, IFixedRateShippingGatewayMethod destination)
         {
             // RUSTY HELP: Cannot assign to these properties.  How should I do this mapping?
 
-            //destination.ShipMethod = rateTableShipMethodDisplay.ShipMethod.ToShipMethod(destination.ShipMethod);
-            //destination.RateTable = rateTableShipMethodDisplay.RateTable.ToShipRateTable(destination.RateTable);
-            //destination.RateTableType = rateTableShipMethodDisplay.RateTableType;
+            //destination.ShipMethod = FixedRateShipMethodDisplay.ShipMethod.ToShipMethod(destination.ShipMethod);
+            //destination.FixedRateTable = FixedRateShipMethodDisplay.FixedRateTable.ToShipRateTable(destination.FixedRateTable);
+            //destination.RateTableType = FixedRateShipMethodDisplay.RateTableType;
 
-            //destination.GatewayResource.Name = rateTableShipMethodDisplay.GatewayResource.Name;
-            //destination.GatewayResource.ServiceCode = rateTableShipMethodDisplay.GatewayResource.ServiceCode;
+            //destination.GatewayResource.Name = FixedRateShipMethodDisplay.GatewayResource.Name;
+            //destination.GatewayResource.ServiceCode = FixedRateShipMethodDisplay.GatewayResource.ServiceCode;
 
             return destination;
         }
 
         #endregion
 
-        #region ShipRateTableDisplay
+        #region ShipFixedRateTableDisplay
 
-        internal static ShipRateTableDisplay ToShipRateTableDisplay(this IShippingFixedRateTable shippingFixedRateTable)
+        internal static ShipFixedRateTableDisplay ToShipFixedRateTableDisplay(this IShippingFixedRateTable shippingFixedRateTable)
         {            
-            return AutoMapper.Mapper.Map<ShipRateTableDisplay>(shippingFixedRateTable);
+            return AutoMapper.Mapper.Map<ShipFixedRateTableDisplay>(shippingFixedRateTable);
         }
 
         #endregion
@@ -272,9 +272,9 @@ namespace Merchello.Web.Models.ContentEditing
         #region IShipRateTable
 
         /// <summary>
-        /// Maps changes made in the <see cref="ShipRateTableDisplay"/> to the <see cref="IShippingFixedRateTable"/>
+        /// Maps changes made in the <see cref="ShipFixedRateTableDisplay"/> to the <see cref="IShippingFixedRateTable"/>
         /// </summary>
-        /// <param name="shipRateTableDisplay">The <see cref="ShipRateTableDisplay"/> to map</param>
+        /// <param name="shipFixedRateTableDisplay">The <see cref="ShipFixedRateTableDisplay"/> to map</param>
         /// <param name="destination">The <see cref="IShippingFixedRateTable"/> to have changes mapped to</param>
         /// <returns>The updated <see cref="IShippingFixedRateTable"/></returns>
         /// <remarks>
@@ -284,20 +284,20 @@ namespace Merchello.Web.Models.ContentEditing
         /// * For testing you will have to use the static .Save(IGatewayProviderService ..., as MerchelloContext.Current will likely be null
         /// 
         /// </remarks>
-        internal static IShippingFixedRateTable ToShipRateTable(this ShipRateTableDisplay shipRateTableDisplay, IShippingFixedRateTable destination)
+        internal static IShippingFixedRateTable ToShipRateTable(this ShipFixedRateTableDisplay shipFixedRateTableDisplay, IShippingFixedRateTable destination)
         {
 
             // determine if any rows were deleted
             var missingRows =
                 destination.Rows.Where(
-                    persisted => !shipRateTableDisplay.Rows.Select(display => display.Key).Where(x => x != Guid.Empty).Contains(persisted.Key));
+                    persisted => !shipFixedRateTableDisplay.Rows.Select(display => display.Key).Where(x => x != Guid.Empty).Contains(persisted.Key));
 
             foreach (var missing in missingRows)
             {
                 destination.DeleteRow(missing);
             }
 
-            foreach (var shipRateTierDisplay in shipRateTableDisplay.Rows)
+            foreach (var shipRateTierDisplay in shipFixedRateTableDisplay.Rows)
             {
 
                 // try to find the matching row
@@ -306,7 +306,7 @@ namespace Merchello.Web.Models.ContentEditing
                 if (destinationTier != null)
                 {
                     // update the tier information : note we can only update the Rate here!
-                    // We need to remove the text boxes for the RangeLow and RangeHigh on any existing RateTable
+                    // We need to remove the text boxes for the RangeLow and RangeHigh on any existing FixedRateTable
                     destinationTier.Rate = shipRateTierDisplay.Rate;                    
                 }
                 else

@@ -1,29 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.ModelBinding;
 using Merchello.Core.Gateways.Shipping.FixedRate;
 using Umbraco.Web;
 using Umbraco.Web.Mvc;
 using Merchello.Core;
-using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Merchello.Web.WebApi;
 using Merchello.Web.Models.ContentEditing;
 using System.Net;
 using System.Net.Http;
 using Merchello.Core.Gateways.Shipping;
-using Newtonsoft.Json;
-using System.ComponentModel;
-using Merchello.Core.Gateways;
 
 namespace Merchello.Web.Editors
 {
     [PluginController("Merchello")]
-    public class CatalogRateTableShippingApiController : MerchelloApiController
+    public class CatalogFixedRateShippingApiController : MerchelloApiController
     {
         private readonly IShipCountryService _shipCountryService;
         private readonly FixedRateShippingGatewayProvider _fixedRateShippingGatewayProvider;
@@ -32,7 +25,7 @@ namespace Merchello.Web.Editors
         /// <summary>
         /// Constructor
         /// </summary>
-        public CatalogRateTableShippingApiController()
+        public CatalogFixedRateShippingApiController()
             : this(MerchelloContext.Current)
         {
 
@@ -42,7 +35,7 @@ namespace Merchello.Web.Editors
         /// Constructor
         /// </summary>
         /// <param name="merchelloContext"></param>
-        public CatalogRateTableShippingApiController(MerchelloContext merchelloContext)
+        public CatalogFixedRateShippingApiController(MerchelloContext merchelloContext)
             : base(merchelloContext)
         {
             _shipCountryService = ((ServiceContext) MerchelloContext.Services).ShipCountryService;
@@ -53,7 +46,7 @@ namespace Merchello.Web.Editors
         /// <summary>
         /// This is a helper contructor for unit testing
         /// </summary>
-        internal CatalogRateTableShippingApiController(MerchelloContext merchelloContext, UmbracoContext umbracoContext)
+        internal CatalogFixedRateShippingApiController(MerchelloContext merchelloContext, UmbracoContext umbracoContext)
             : base(merchelloContext, umbracoContext)
         {
             _shipCountryService = ((ServiceContext)MerchelloContext.Services).ShipCountryService;
@@ -74,10 +67,7 @@ namespace Merchello.Web.Editors
 
             var resources = provider.ListResourcesOffered();
 
-            foreach (IGatewayResource resource in resources)
-            {
-                yield return resource.ToGatewayResourceDisplay();
-            }
+            return resources.Select(resource => resource.ToGatewayResourceDisplay());
         }
 
         /// <summary>
@@ -98,7 +88,7 @@ namespace Merchello.Web.Editors
 
                 var fixedProviders = providers.Where(x => x.Key == Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey);
 
-                foreach (IShippingGatewayProvider provider in fixedProviders)
+                foreach (var provider in fixedProviders)
                 {
                     yield return provider.ToShipGatewayProviderDisplay();
                 }
@@ -118,23 +108,23 @@ namespace Merchello.Web.Editors
         /// 
         /// </remarks>
         /// <param name="id">ShipCountry Key</param>
-        public IEnumerable<RateTableShipMethodDisplay> GetAllFixedRateProviderMethods(Guid id)
+        public IEnumerable<FixedRateShipMethodDisplay> GetAllFixedRateProviderMethods(Guid id)
         {
             var shipCountry = _shipCountryService.GetByKey(id);
             if (shipCountry != null)
             {
                 var providers = _shippingContext.GetGatewayProvidersByShipCountry(shipCountry);
 
-                if (providers.Count() > 0)
+                if (providers != null && providers.Any())
                 {
                     var fixedProvider = providers.FirstOrDefault(x => x.Key == Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey);
 
                     if (fixedProvider != null)
                     {
-                        foreach (IShippingGatewayMethod method in fixedProvider.GetAllShippingGatewayMethods(shipCountry))
+                        foreach (var method in fixedProvider.GetAllShippingGatewayMethods(shipCountry))
                         {
-                            IFixedRateShippingGatewayMethod fixedRateShippingGatewayMethod = method as IFixedRateShippingGatewayMethod;
-                            yield return fixedRateShippingGatewayMethod.ToRateTableShipMethodDisplay();
+                            var fixedRateShippingGatewayMethod = method as IFixedRateShippingGatewayMethod;
+                            yield return fixedRateShippingGatewayMethod.ToFixedRateShipMethodDisplay();
                         }
                     }
                     else
@@ -157,11 +147,11 @@ namespace Merchello.Web.Editors
         /// <summary>
         /// Add a Fixed Rate Table ShipMethod to the ShipCountry
         ///
-        /// GET /umbraco/Merchello/ShippingMethodsApi/AddRateTableShipMethod
+        /// GET /umbraco/Merchello/ShippingMethodsApi/AddFixedRateShipMethod
         /// </summary>
-        /// <param name="method">POSTed RateTableShipMethodDisplay object</param>
+        /// <param name="method">POSTed FixedRateShipMethodDisplay object</param>
         [AcceptVerbs("POST")]
-        public HttpResponseMessage AddRateTableShipMethod(RateTableShipMethodDisplay method)
+        public HttpResponseMessage AddFixedRateShipMethod(FixedRateShipMethodDisplay method)
         {
             var response = Request.CreateResponse(HttpStatusCode.OK);
 
@@ -172,7 +162,7 @@ namespace Merchello.Web.Editors
 
                 var merchelloGwShipMethod = (IFixedRateShippingGatewayMethod)provider.CreateShipMethod(method.RateTableType, shipCountry, method.ShipMethod.Name);
 
-                merchelloGwShipMethod = method.ToRateTableShipMethod(merchelloGwShipMethod);
+                merchelloGwShipMethod = method.ToFixedRateShipMethod(merchelloGwShipMethod);
 
                 provider.SaveShippingGatewayMethod(merchelloGwShipMethod);
             }
@@ -187,11 +177,11 @@ namespace Merchello.Web.Editors
         /// <summary>
         /// Save a Fixed Rate Table ShipMethod to the ShipCountry
         /// 
-        /// GET /umbraco/Merchello/ShippingMethodsApi/PutRateTableShipMethod
+        /// GET /umbraco/Merchello/ShippingMethodsApi/PutFixedRateShipMethod
         /// </summary>
         /// <param name="method">POSTed ShipMethodDisplay object</param>
         [AcceptVerbs("POST", "PUT")]
-        public HttpResponseMessage PutRateTableShipMethod(RateTableShipMethodDisplay method)
+        public HttpResponseMessage PutFixedRateShipMethod(FixedRateShipMethodDisplay method)
         {
             var response = Request.CreateResponse(HttpStatusCode.OK);
 
@@ -204,7 +194,7 @@ namespace Merchello.Web.Editors
 
                 if (merchelloMethod != null)
                 {
-                    merchelloMethod = method.ToRateTableShipMethod(merchelloMethod);
+                    merchelloMethod = method.ToFixedRateShipMethod(merchelloMethod);
                 }
                 else
                 {

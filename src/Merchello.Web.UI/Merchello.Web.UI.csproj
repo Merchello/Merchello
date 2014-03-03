@@ -122,6 +122,8 @@
     <Content Include="App_Plugins\Merchello\lib\ngTagsInput\ng-tags-input.min.css" />
     <Content Include="App_Plugins\Merchello\lib\ngTagsInput\ng-tags-input.min.js" />
     <Content Include="App_Plugins\Merchello\lib\select2\ui-select2.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Dialogs\shippingprovider.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Dialogs\shippingprovider.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Dialogs\shippingmethod.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Dialogs\shippingmethod.html" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Directives\shipping-warehouse.html" />

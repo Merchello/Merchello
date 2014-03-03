@@ -107,7 +107,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
         }
 
         /// <summary>
-        /// Can quote a shipment with a VaryByRate RateTable
+        /// Can quote a shipment with a VaryByRate FixedRateTable
         /// </summary>
         [Test]
         public void Can_Get_A_Quote_For_A_Shipment_VaryByWeight()
@@ -135,7 +135,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
         }
 
         /// <summary>
-        /// Can quote a shipment with a VaryByPrice RateTable
+        /// Can quote a shipment with a VaryByPrice FixedRateTable
         /// </summary>
         [Test]
         public void Can_Get_A_Quote_For_A_Shipment_VaryByPrice()

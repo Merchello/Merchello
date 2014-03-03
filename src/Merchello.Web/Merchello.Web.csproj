@@ -199,14 +199,14 @@
     <Compile Include="ApplicationContextExtensions.cs" />
     <Compile Include="AutoMapperMappings.cs" />
     <Compile Include="CheckoutExtensions.cs" />
-    <Compile Include="Editors\CatalogRateTableShippingApiController.cs" />
+    <Compile Include="Editors\CatalogFixedRateShippingApiController.cs" />
     <Compile Include="Editors\SettingsApiController.cs" />
     <Compile Include="Editors\CatalogShippingApiController.cs" />
     <Compile Include="Editors\WarehouseApiController.cs" />
     <Compile Include="Models\ContentEditing\GatewayProviderDisplay.cs" />
     <Compile Include="Models\ContentEditing\GatewayResourceDisplay.cs" />
-    <Compile Include="Models\ContentEditing\RateTableShipMethodDisplay.cs" />
-    <Compile Include="Models\ContentEditing\ShipRateTableDisplay.cs" />
+    <Compile Include="Models\ContentEditing\FixedRateShipMethodDisplay.cs" />
+    <Compile Include="Models\ContentEditing\ShipFixedRateTableDisplay.cs" />
     <Compile Include="Models\ContentEditing\ShipRateTierDisplay.cs" />
     <Compile Include="Models\ContentEditing\SettingDisplay.cs" />
     <Compile Include="Models\ContentEditing\WarehouseCatalogDisplay.cs" />
