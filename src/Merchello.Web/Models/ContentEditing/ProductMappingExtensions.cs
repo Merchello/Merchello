@@ -55,6 +55,7 @@ namespace Merchello.Web.Models.ContentEditing
             foreach (var option in productDisplay.ProductOptions)
             {
                 IProductOption destinationProductOption;
+                // TODO RUSTY: Please help with option deletion here #M-
                 if (destination.ProductOptions.Contains(option.Key))
                 {
                     destinationProductOption = destination.ProductOptions[option.Key];
@@ -138,6 +139,8 @@ namespace Merchello.Web.Models.ContentEditing
                 }
 
                 IProductAttribute destinationProductAttribute;
+
+                // TODO RUSTY: Please help with delete logic #M-150 & #M-161
                 if (destinationProductOption.Choices.Contains(choice.Sku))
                 {
                     destinationProductAttribute = destinationProductOption.Choices[choice.Key];
