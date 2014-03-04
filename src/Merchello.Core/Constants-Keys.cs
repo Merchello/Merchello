@@ -25,7 +25,7 @@ namespace Merchello.Core
             public static class OrderStatus
             {
                 public static Guid NotFulfilled = new Guid("C54D47E6-D1C9-40D5-9BAF-18C6ADFFE9D0");
-                public static Guid Partial = new Guid("C47D475F-A075-4635-BBB9-4B9C49AA8EBE");
+                public static Guid BackOrder = new Guid("C47D475F-A075-4635-BBB9-4B9C49AA8EBE");
                 public static Guid Fulfilled = new Guid("D5369B84-8CCA-4586-8FBA-F3020F5E06EC");
                 public static Guid Cancelled = new Guid("77DAF52E-C79C-4E1B-898C-5E977A9A6027");
             }
