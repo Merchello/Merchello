@@ -76,12 +76,18 @@
     <Compile Include="ActivatorHelper.cs" />
     <Compile Include="Builders\BuildChainBase.cs" />
     <Compile Include="Builders\InvoiceBuilderChain.cs" />
+    <Compile Include="Builders\OrderBuilderChain.cs" />
+    <Compile Include="Builders\ShipmentBuilderChain.cs" />
     <Compile Include="Chains\AttemptChainTaskBase.cs" />
     <Compile Include="Chains\ChainTaskResolver.cs" />
     <Compile Include="Chains\InvoiceCreation\ApplyTaxesToInvoiceTax.cs" />
     <Compile Include="Chains\InvoiceCreation\AddBillingInfoToInvoiceTask.cs" />
-    <Compile Include="Chains\InvoiceCreation\OrderPreparationAttemptChainTaskBase.cs" />
+    <Compile Include="Chains\InvoiceCreation\InvoiceCreationAttemptChainTaskBase.cs" />
     <Compile Include="Chains\InvoiceCreation\ConvertItemCacheItemsToInvoiceItemsTask.cs" />
+    <Compile Include="Chains\OrderCreation\ConvertInvoiceItemsToOrderItemsTask.cs" />
+    <Compile Include="Chains\OrderCreation\OrderCreationAttemptChainTaskBase.cs" />
+    <Compile Include="Chains\ShipmentCreation\OrderAttemptChainTaskBase.cs" />
+    <Compile Include="Fulfillment\IWarehouseManager.cs" />
     <Compile Include="Gateways\Payment\Cash\CashPaymentGatewayProvider.cs" />
     <Compile Include="Gateways\Payment\Cash\CashPaymentGatewayMethod.cs" />
     <Compile Include="Gateways\Payment\Cash\ICashPaymentGatewayMethod.cs" />
@@ -104,6 +110,7 @@
     <Compile Include="Models\InvoiceExtensions.cs" />
     <Compile Include="Models\LocalizationExtensions.cs" />
     <Compile Include="Models\Order.cs" />
+    <Compile Include="Models\OrderExtensions.cs" />
     <Compile Include="Models\OrderStatus.cs" />
     <Compile Include="Models\PaymentExtensions.cs" />
     <Compile Include="Models\PaymentMethod.cs" />

@@ -252,6 +252,7 @@
   <ItemGroup>
     <Compile Include="Builders\BuilderTestBase.cs" />
     <Compile Include="Builders\InvoiceBuilderTests.cs" />
+    <Compile Include="Builders\OrderBuilderTests.cs" />
     <Compile Include="Workflow\CheckoutProcessesTests.cs" />
     <Compile Include="DisplayClasses\ProductDisplayTests.cs" />
     <Compile Include="DisplayClasses\ShippingDisplayTests.cs" />

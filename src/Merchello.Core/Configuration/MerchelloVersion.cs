@@ -5,7 +5,7 @@ namespace Merchello.Core.Configuration
 {
     public class MerchelloVersion
     {
-        private static readonly Version Version = new Version("0.9.9.4");
+        private static readonly Version Version = new Version("0.9.9.5");
 
         /// <summary>
         /// Gets the current version of Merchello.

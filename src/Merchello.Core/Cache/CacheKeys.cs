@@ -58,7 +58,7 @@ namespace Merchello.Core.Cache
         /// <returns></returns>
         internal static string ShippingGatewayProviderShippingRateQuoteCacheKey(Guid shipmentKey, Guid shipMethodKey, Guid versionKey)
         {
-            return string.Format("merchello.shippingratequote.{0}.{1}.{2}", shipmentKey, shipMethodKey,versionKey);
+            return string.Format("merchello.shippingratequote.{0}.{1}.{2}", shipmentKey, shipMethodKey, versionKey);
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace Merchello.Core.Cache
         /// <returns></returns>
         internal static string GetEntityCacheKey<TEntity>(Guid key)
         {
-            return string.Format("{0}-{1}", typeof (TEntity).Name, key.ToString());
+            return string.Format("{0}.{1}", typeof (TEntity).Name, key);
         }
        
         

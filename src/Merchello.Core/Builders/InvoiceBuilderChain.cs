@@ -19,7 +19,7 @@ namespace Merchello.Core.Builders
             Mandate.ParameterNotNull(salePreparation, "salesManager");
             _salePreparation = salePreparation;
 
-            ResolveChain(Constants.TaskChainAlias.SalesManagerInvoiceCreate);
+            ResolveChain(Constants.TaskChainAlias.SalesPreparationInvoiceCreate);
         }
 
         /// <summary>

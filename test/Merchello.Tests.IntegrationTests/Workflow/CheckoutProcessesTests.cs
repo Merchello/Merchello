@@ -343,7 +343,14 @@ namespace Merchello.Tests.IntegrationTests.Workflow
 
             #endregion // completed checkout preparation
 
+            if (paymentResult.ApproveOrderCreation)
+            {
+                MerchelloContext.Current.Services.OrderService.Save(paymentResult.Invoice.PrepareOrder());
+            }
+
+
             #endregion
+
 
         }
 

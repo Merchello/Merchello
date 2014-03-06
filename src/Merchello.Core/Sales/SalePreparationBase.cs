@@ -212,7 +212,7 @@ namespace Merchello.Core.Sales
         {
             Mandate.ParameterNotNull(paymentGatewayMethod, "paymentGatewayMethod");
 
-            if(!IsReadyToInvoice()) return new PaymentResult(Attempt<IPayment>.Fail(new InvalidOperationException("SalesManager is not ready to invoice")), false);
+            if(!IsReadyToInvoice()) return new PaymentResult(Attempt<IPayment>.Fail(new InvalidOperationException("SalesManager is not ready to invoice")), null, false);
 
             var invoice = PrepareInvoice(new InvoiceBuilderChain(this));
             MerchelloContext.Services.InvoiceService.Save(invoice);

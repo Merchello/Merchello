@@ -31,7 +31,9 @@ namespace Merchello.Core.Persistence.Factories
                 ToIsCommercial = dto.ToIsCommercial,
                 Phone = dto.Phone,
                 Email = dto.Email,
-                ShipMethodKey = dto.ShipMethodKey, 
+                ShipMethodKey = dto.ShipMethodKey,
+                Carrier = dto.Carrier,
+                TrackingCode = dto.TrackingCode,
                 VersionKey = dto.VersionKey,
                 UpdateDate = dto.UpdateDate,
                 CreateDate = dto.CreateDate
@@ -69,6 +71,8 @@ namespace Merchello.Core.Persistence.Factories
                 VersionKey = entity.VersionKey,
                 Phone = entity.Phone,
                 Email = entity.Email,
+                Carrier = entity.Carrier,
+                TrackingCode = entity.TrackingCode,
                 UpdateDate = entity.UpdateDate,
                 CreateDate = entity.CreateDate                
             };

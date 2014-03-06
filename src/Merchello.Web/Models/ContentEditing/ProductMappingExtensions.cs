@@ -52,10 +52,20 @@ namespace Merchello.Web.Models.ContentEditing
                 }
             }
 
+            // Fix option deletion here #M-161
+            // remove any product options that exist in destination and do not exist in productDisplay
+            var removers = destination.ProductOptions.Where(x => !productDisplay.ProductOptions.Select(pd => pd.Key).Contains(x.Key)).Select(x => x.Key);
+            foreach (var remove in removers)
+            {
+                destination.ProductOptions.RemoveItem(remove);
+            }
+
+
             foreach (var option in productDisplay.ProductOptions)
             {
                 IProductOption destinationProductOption;
-                // TODO RUSTY: Please help with option deletion here #M-
+                
+
                 if (destination.ProductOptions.Contains(option.Key))
                 {
                     destinationProductOption = destination.ProductOptions[option.Key];
@@ -129,6 +139,15 @@ namespace Merchello.Web.Models.ContentEditing
             destinationProductOption.Required = productOptionDisplay.Required;
             destinationProductOption.SortOrder = productOptionDisplay.SortOrder;
 
+
+            // Fix with option deletion here #M-161 #M-150
+            // remove any product choices that exist in destination and do not exist in productDisplay
+            var removers = destinationProductOption.Choices.Where(x => !productOptionDisplay.Choices.Select(pd => pd.Key).Contains(x.Key)).Select(x => x.Key).ToArray();
+            foreach (var remove in removers)
+            {
+                destinationProductOption.Choices.RemoveItem(remove);
+            }
+
             foreach (var choice in productOptionDisplay.Choices)
             {
                 // Sets the sku if it is empty - fixes M-170
@@ -140,7 +159,7 @@ namespace Merchello.Web.Models.ContentEditing
 
                 IProductAttribute destinationProductAttribute;
 
-                // TODO RUSTY: Please help with delete logic #M-150 & #M-161
+                
                 if (destinationProductOption.Choices.Contains(choice.Sku))
                 {
                     destinationProductAttribute = destinationProductOption.Choices[choice.Key];

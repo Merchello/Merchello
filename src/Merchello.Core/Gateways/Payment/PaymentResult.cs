@@ -8,9 +8,10 @@ namespace Merchello.Core.Gateways.Payment
     /// </summary>
     public class PaymentResult : IPaymentResult
     {
-        public PaymentResult(Attempt<IPayment> result, bool approveOrderCreation)
+        public PaymentResult(Attempt<IPayment> result, IInvoice invoice, bool approveOrderCreation)
         {
             Result = result;
+            Invoice = invoice;
             ApproveOrderCreation = approveOrderCreation;
         }
 
@@ -18,6 +19,8 @@ namespace Merchello.Core.Gateways.Payment
         /// Gets the Result
         /// </summary>
         public Attempt<IPayment> Result { get; private set; }
+
+        public IInvoice Invoice { get; private set; }
 
         /// <summary>
         /// True/false indicating whether or not an order should be generated

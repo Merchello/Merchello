@@ -44,34 +44,37 @@ namespace Merchello.Web
             var merchelloContext = GetMerchelloContext();
 
             var retrieved = merchelloContext.Services.ProductService.GetByKey(new Guid(key));
-            if(retrieved != null) ReindexProduct(retrieved);
+
+            if (retrieved == null) return null;
+                
+            ReindexProduct(retrieved);
 
             return AutoMapper.Mapper.Map<ProductDisplay>(retrieved);
         }
 
         public static IEnumerable<ProductDisplay> GetAllProducts()
         {
+            var merchelloContext = GetMerchelloContext();
+
             var criteria = ExamineManager.Instance.CreateSearchCriteria(IndexTypes.ProductVariant);
             criteria.Field("master", "True");
 
             var results = ExamineManager.Instance.SearchProviderCollection["MerchelloProductSearcher"]
                 .Search(criteria).Select(result => result.ToProductDisplay()).ToArray();
 
-            if (results.Any()) return results;
 
+            var count = merchelloContext.Services.ProductService.ProductsCount();
 
-            var reindexed = new List<ProductDisplay>();
+            if (results.Any() && (count == results.Count())) return results;
 
-            var merchelloContext = GetMerchelloContext();
-
-            var retrieved = ((ProductService) merchelloContext.Services.ProductService).GetAll();
-            foreach (var product in retrieved)
+            if (count != results.Count())
             {
-                ReindexProduct(product);
-                reindexed.Add(AutoMapper.Mapper.Map<ProductDisplay>(product));
+                RebuildIndex();
             }
 
-            return reindexed;
+            var retrieved = ((ProductService) merchelloContext.Services.ProductService).GetAll();
+
+            return retrieved.Select(AutoMapper.Mapper.Map<ProductDisplay>).ToList();
         }
 
         /// <summary>
@@ -158,6 +161,11 @@ namespace Merchello.Web
         {
             ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"]
                 .ReIndexNode(productVariant.SerializeToXml(productOptions).Root, IndexTypes.ProductVariant);
+        }
+
+        private static void RebuildIndex()
+        {
+            ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"].RebuildIndex();
         }
 
         /// <summary>

@@ -138,6 +138,18 @@ namespace Merchello.Core.Models
         [DataMember]
         string Email { get; set; }
 
+        /// <summary>
+        /// The name of the freight carrier associated with this shipment
+        /// </summary>
+        [DataMember]
+        string Carrier { get; set; }
+
+        /// <summary>
+        /// The tracking code associated with this shipment
+        /// </summary>
+        [DataMember]
+        string TrackingCode { get; set; }
+
     }
 }
 

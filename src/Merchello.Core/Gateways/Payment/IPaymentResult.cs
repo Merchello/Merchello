@@ -12,6 +12,11 @@ namespace Merchello.Core.Gateways.Payment
         /// Gets the <see cref="IPayment"/>
         /// </summary>
         Attempt<IPayment> Result { get; }
+
+        /// <summary>
+        /// Gets the invoice
+        /// </summary>
+        IInvoice Invoice { get; }
         
         /// <summary>
         /// True/false indicating whether or not the <see cref="ISalesManager"/> should generate the <see cref="IOrder"/> and <see cref="IShipment"/>(s)

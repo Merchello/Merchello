@@ -6,10 +6,8 @@ using Merchello.Core.Models;
 using Merchello.Core.Persistence.UnitOfWork;
 using Merchello.Core.Services;
 using Merchello.Core.Strategies.Packaging;
-using Merchello.Tests.IntegrationTests.Services;
 using Merchello.Tests.IntegrationTests.TestHelpers;
 using Merchello.Web;
-using Merchello.Web.Models;
 using Merchello.Web.Workflow;
 using Merchello.Web.Workflow.Shipping;
 using NUnit.Framework;
@@ -29,10 +27,15 @@ namespace Merchello.Tests.IntegrationTests.Shipping
         {
             PreTestDataWorker.DeleteAllProducts();
             PreTestDataWorker.DeleteAllItemCaches();
-            _merchelloContext = new MerchelloContext(new ServiceContext(new PetaPocoUnitOfWorkProvider()),
-                new CacheHelper(new NullCacheProvider(),
-                                    new NullCacheProvider(),
-                                    new NullCacheProvider()));
+
+            _merchelloContext = new MerchelloContext(
+                new ServiceContext(new PetaPocoUnitOfWorkProvider()), 
+                new CacheHelper(
+                    new NullCacheProvider(), 
+                    new NullCacheProvider(), 
+                    new NullCacheProvider()
+                    ));
+
             _customer = PreTestDataWorker.MakeExistingAnonymousCustomer();
             _basket = Basket.GetBasket(_merchelloContext, _customer);
 
