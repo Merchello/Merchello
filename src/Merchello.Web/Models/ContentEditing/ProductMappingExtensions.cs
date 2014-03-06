@@ -140,7 +140,7 @@ namespace Merchello.Web.Models.ContentEditing
             destinationProductOption.SortOrder = productOptionDisplay.SortOrder;
 
 
-            // Fix with option deletion here #M-161 #M-150 & #M-161
+            // Fix with option deletion here #M-161 #M-150
             // remove any product choices that exist in destination and do not exist in productDisplay
             var removers = destinationProductOption.Choices.Where(x => !productOptionDisplay.Choices.Select(pd => pd.Key).Contains(x.Key)).Select(x => x.Key).ToArray();
             foreach (var remove in removers)
