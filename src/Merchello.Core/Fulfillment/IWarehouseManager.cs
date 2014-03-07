@@ -19,15 +19,10 @@ namespace Merchello.Core.Fulfillment
         void Save(IEnumerable<IOrder> orders);
         void Delete(IOrder order);
         void Delete(IEnumerable<IOrder> orders);
-
-        
-        
         IEnumerable<IShipment> GetUnshippedShipments();
         IEnumerable<IShipment> GetUnshippedShipments(Guid warehouseKey);
-
         IEnumerable<IShipment> GetShipmentsByOrderKey(Guid orderKey);
         IEnumerable<IShipment> GetShipmentsByTrackingCode(string trackingCode);
-
         void Save(IShipment shipment);
         void Save(IEnumerable<IShipment> shipments);
         void Delete(IShipment shipment);
