@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Threading;
 using Merchello.Core.Cache;
 using Merchello.Core.Configuration;
 using Merchello.Core.Services;
@@ -34,7 +35,7 @@ namespace Merchello.Core
 
             OnMerchelloInit();
 
-            _timer = DisposableTimer.DebugDuration<CoreBootManager>("Merchello plugin starting", "Merchello plugin startup complete");
+            _timer = DisposableTimer.DebugDuration<CoreBootManager>("Merchello starting", "Merchello startup complete");
 
  
             // create the service context for the MerchelloAppContext   
