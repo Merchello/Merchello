@@ -373,42 +373,46 @@ namespace Merchello.Core.Services
             }
         }
 
-        ///// <summary>
-        ///// Creates a collection of <see cref="IProductVariant"/> that can be created based on unmapped product options.
-        ///// </summary>
-        ///// <param name="product">The <see cref="IProduct"/></param>
-        ///// <returns>A collection of <see cref="IProductVariant"/></returns>
-        //public IEnumerable<IProductVariant> GetProductVariantsThatCanBeCreated(IProduct product)
-        //{
+        /// <summary>
+        /// Creates a collection of <see cref="IProductVariant"/> that can be created based on unmapped product options.
+        /// </summary>
+        /// <param name="product">The <see cref="IProduct"/></param>
+        /// <returns>A collection of <see cref="IProductVariant"/></returns>
+        /// <remarks>
+        /// 
+        /// This is an expensive method due to the potential number of database calls and should probably 
+        /// be refactored
+        /// 
+        /// </remarks>
+        public IEnumerable<IProductVariant> GetProductVariantsThatCanBeCreated(IProduct product)
+        {
+            var variants = new List<IProductVariant>();
 
-        //    //var totalNumberOfVariants = product.ProductOptions.Count()*
-        //    //    product.ProductOptions.Select(x => x.Choices).Count();
+            if (!product.ProductOptions.Any()) return variants;
 
-        //    //var attributeKey = new List<Guid>[totalNumberOfVariants];
-
+            var possibleCombinations = GetPossibleProductAttributeCombinations(product);
             
+            foreach (var combo in possibleCombinations)
+            {
+                var attributes = new ProductAttributeCollection();
+                
+                foreach(var att in combo) attributes.Add(att);
 
-        //    throw new NotImplementedException();
+                if(!ProductVariantWithAttributesExists(product, attributes)) variants.Add(CreateProductVariant(product, attributes));
+            }
 
-            
-            
-        //}
+            return variants;
 
-        //private List<List<Guid>> GetAttributeKeys(List<List<Guid>> built, IEnumerable<ProductOption> remainingOptions)
-        //{
-        //    if(built == null) built = new List<List<Guid>>();
+        }
 
-        //    var productOptions = remainingOptions as ProductOption[] ?? remainingOptions.ToArray();
-        //    if (!productOptions.Any()) return built;
+        internal IEnumerable<IEnumerable<IProductAttribute>> GetPossibleProductAttributeCombinations(IProduct product)
+        {
+            if (!product.ProductOptions.Any()) return new List<IEnumerable<IProductAttribute>>();
 
-        //    var newRemaining = productOptions.Where(x => x.Key != productOptions.First().Key);
+            var optionChoices = product.ProductOptions.Select(option => option.Choices.ToList()).ToList();
 
-        //    foreach (var choice in productOptions.First().Choices)
-        //    {
-                   
-        //    }
-        //}
-
+            return optionChoices.CartesianProduct();
+        }
 
         /// <summary>
         /// Returns <see cref="IProductVariant"/> given the product and the collection of attribute ids that defines the<see cref="IProductVariant"/>

@@ -49,6 +49,39 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
         }
 
         /// <summary>
+        /// Test confirms that a collection of all possible product attribute combinations can be created.
+        /// </summary>
+        [Test]
+        public void Can_Get_A_List_Of_All_Possible_Attribute_Combinations()
+        {
+            //// Arrange
+            
+            //// Act
+            var combinations = ((ProductVariantService)_productVariantService).GetPossibleProductAttributeCombinations(_product).ToArray();
+
+            //// Assert
+            Assert.IsTrue(combinations.Any());
+            Assert.AreEqual(16, combinations.Count());
+        }
+
+        /// <summary>
+        /// Test confirms that a collection of ProductVariants that HAVE YET to be created can be retrieved for a product
+        /// </summary>
+        [Test]
+        public void Can_Get_A_List_Of_All_Possible_Variants_That_Can_Be_Created()
+        {
+            //// Arrange
+            
+            //// Act
+            var variants = ((ProductVariantService) _productVariantService).GetProductVariantsThatCanBeCreated(_product);
+
+            //// Assert
+            Assert.IsTrue(variants.Any());
+            Assert.AreEqual(16, variants.Count());
+
+        }
+
+        /// <summary>
         /// Test verifies that a product variant can be created
         /// </summary>
         [Test]
