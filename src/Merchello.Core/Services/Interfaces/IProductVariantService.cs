@@ -102,6 +102,13 @@ namespace Merchello.Core.Services
         IEnumerable<IProductVariant> GetByWarehouseKey(Guid warehouseKey);
 
         /// <summary>
+        /// Creates a collection of <see cref="IProductVariant"/> that can be created based on unmapped product options.
+        /// </summary>
+        /// <param name="product">The <see cref="IProduct"/></param>
+        /// <returns>A collection of <see cref="IProductVariant"/></returns>
+        IEnumerable<IProductVariant> GetProductVariantsThatCanBeCreated(IProduct product);
+
+        /// <summary>
         /// Returns <see cref="IProductVariant"/> given the product and the collection of attribute ids that defines the<see cref="IProductVariant"/>
         /// </summary>
         IProductVariant GetProductVariantWithAttributes(IProduct product, Guid[] attributeKeys);

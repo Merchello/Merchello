@@ -337,7 +337,6 @@ namespace Merchello.Core.Persistence.Repositories
         #endregion
 
 
-
         /// <summary>
         /// Compares the <see cref="ProductAttributeCollection"/> with other <see cref="IProductVariant"/>s of the <see cref="IProduct"/> pass
         /// to determine if the a variant already exists with the attributes passed

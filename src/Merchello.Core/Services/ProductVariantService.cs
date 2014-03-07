@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -80,34 +81,12 @@ namespace Merchello.Core.Services
         /// <returns>Either a new <see cref="IProductVariant"/> or, if one already exists with associated attributes, the existing <see cref="IProductVariant"/></returns>
         public IProductVariant CreateProductVariantWithKey(IProduct product, string name, string sku, decimal price, ProductAttributeCollection attributes, bool raiseEvents = true)
         {
-            Mandate.ParameterNotNull(product, "product");
-            Mandate.ParameterNotNull(attributes, "attributes");
-            Mandate.ParameterCondition(attributes.Count >= product.ProductOptions.Count(x => x.Required), "An attribute must be assigned for every required option");            
-            // verify there is not already a variant with these attributes
-            Mandate.ParameterCondition(false == ProductVariantWithAttributesExists(product, attributes), "A ProductVariant already exists for the ProductAttributeCollection");
-
-            var productVariant = new ProductVariant(product.Key, attributes, name, sku, price)
-            {
-                CostOfGoods = product.CostOfGoods,
-                SalePrice = product.SalePrice,
-                OnSale = product.OnSale,
-                Weight = product.Weight,
-                Length = product.Length,
-                Width = product.Width,
-                Height = product.Height,
-                Barcode = product.Barcode,
-                Available = product.Available,
-                TrackInventory = product.TrackInventory,
-                OutOfStockPurchase = product.OutOfStockPurchase,
-                Taxable = product.Taxable,
-                Shippable = product.Shippable,
-                Download = product.Download
-            };
+            var productVariant = CreateProductVariant(product, name, sku, price, attributes);
 
             if(raiseEvents)
             if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<IProductVariant>(productVariant), this))
             {
-                productVariant.WasCancelled = true;
+                ((ProductVariant)productVariant).WasCancelled = true;
                 return productVariant;
             }
 
@@ -128,6 +107,72 @@ namespace Merchello.Core.Services
 
             return productVariant;
         }
+
+
+        /// <summary>
+        /// Creates a <see cref="IProductVariant"/> of the <see cref="IProduct"/> passed defined by the collection of <see cref="IProductAttribute"/>
+        /// without saving it to the database
+        /// </summary>
+        /// <param name="product"><see cref="IProduct"/></param>
+        /// <param name="attributes"><see cref="IProductVariant"/></param>
+        /// <returns>Either a new <see cref="IProductVariant"/> or, if one already exists with associated attributes, the existing <see cref="IProductVariant"/></returns>
+        internal IProductVariant CreateProductVariant(IProduct product, ProductAttributeCollection attributes)
+        {
+            var skuSeparator = MerchelloConfiguration.Current.DefaultSkuSeparator;
+
+            // verify the order of the attributes so that a sku can be constructed in the same order as the UI
+            var optionIds = product.ProductOptionsForAttributes(attributes).OrderBy(x => x.SortOrder).Select(x => x.Key).Distinct();
+
+            // the base sku
+            var sku = product.Sku;
+            var name = string.Format("{0} - ", product.Name);
+
+            foreach (var att in optionIds.Select(key => attributes.FirstOrDefault(x => x.OptionKey == key)).Where(att => att != null))
+            {
+                name += att.Name + " ";
+                sku += skuSeparator + (string.IsNullOrEmpty(att.Sku) ? Regex.Replace(att.Name, "[^0-9a-zA-Z]+", "") : att.Sku);
+            }
+
+            return CreateProductVariant(product, name, sku, product.Price, attributes);
+        }
+
+        /// <summary>
+        /// Creates a <see cref="IProductVariant"/> of the <see cref="IProduct"/> passed defined by the collection of <see cref="IProductAttribute"/>
+        /// without saving it to the database
+        /// </summary>
+        /// <param name="product"><see cref="IProduct"/></param>
+        /// <param name="name">The name of the product variant</param>
+        /// <param name="sku">The unique sku of the product variant</param>
+        /// <param name="price">The price of the product variant</param>
+        /// <param name="attributes"><see cref="IProductVariant"/></param>        
+        /// <returns>Either a new <see cref="IProductVariant"/> or, if one already exists with associated attributes, the existing <see cref="IProductVariant"/></returns>
+        internal IProductVariant CreateProductVariant(IProduct product, string name, string sku, decimal price, ProductAttributeCollection attributes)
+        {
+            Mandate.ParameterNotNull(product, "product");
+            Mandate.ParameterNotNull(attributes, "attributes");
+            Mandate.ParameterCondition(attributes.Count >= product.ProductOptions.Count(x => x.Required), "An attribute must be assigned for every required option");
+            // verify there is not already a variant with these attributes
+            Mandate.ParameterCondition(false == ProductVariantWithAttributesExists(product, attributes), "A ProductVariant already exists for the ProductAttributeCollection");
+
+            return new ProductVariant(product.Key, attributes, name, sku, price)
+            {
+                CostOfGoods = product.CostOfGoods,
+                SalePrice = product.SalePrice,
+                OnSale = product.OnSale,
+                Weight = product.Weight,
+                Length = product.Length,
+                Width = product.Width,
+                Height = product.Height,
+                Barcode = product.Barcode,
+                Available = product.Available,
+                TrackInventory = product.TrackInventory,
+                OutOfStockPurchase = product.OutOfStockPurchase,
+                Taxable = product.Taxable,
+                Shippable = product.Shippable,
+                Download = product.Download
+            };
+        }
+
 
         /// <summary>
         /// Saves a single instance of a <see cref="IProductVariant"/>
@@ -327,6 +372,43 @@ namespace Merchello.Core.Services
                 return repository.GetByWarehouseKey(warehouseKey);
             }
         }
+
+        ///// <summary>
+        ///// Creates a collection of <see cref="IProductVariant"/> that can be created based on unmapped product options.
+        ///// </summary>
+        ///// <param name="product">The <see cref="IProduct"/></param>
+        ///// <returns>A collection of <see cref="IProductVariant"/></returns>
+        //public IEnumerable<IProductVariant> GetProductVariantsThatCanBeCreated(IProduct product)
+        //{
+
+        //    //var totalNumberOfVariants = product.ProductOptions.Count()*
+        //    //    product.ProductOptions.Select(x => x.Choices).Count();
+
+        //    //var attributeKey = new List<Guid>[totalNumberOfVariants];
+
+            
+
+        //    throw new NotImplementedException();
+
+            
+            
+        //}
+
+        //private List<List<Guid>> GetAttributeKeys(List<List<Guid>> built, IEnumerable<ProductOption> remainingOptions)
+        //{
+        //    if(built == null) built = new List<List<Guid>>();
+
+        //    var productOptions = remainingOptions as ProductOption[] ?? remainingOptions.ToArray();
+        //    if (!productOptions.Any()) return built;
+
+        //    var newRemaining = productOptions.Where(x => x.Key != productOptions.First().Key);
+
+        //    foreach (var choice in productOptions.First().Choices)
+        //    {
+                   
+        //    }
+        //}
+
 
         /// <summary>
         /// Returns <see cref="IProductVariant"/> given the product and the collection of attribute ids that defines the<see cref="IProductVariant"/>
