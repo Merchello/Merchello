@@ -15,6 +15,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{07393251-2FF9-45FA-AAFA-81720405834F}"
 	ProjectSection(SolutionItems) = preProject
 		..\build\build.bat = ..\build\build.bat
+		..\build\install.md = ..\build\install.md
 		..\build\Merchello.build = ..\build\Merchello.build
 		..\tools\Merchello\Merchello.props = ..\tools\Merchello\Merchello.props
 		..\tools\Merchello\Merchello.targets = ..\tools\Merchello\Merchello.targets
