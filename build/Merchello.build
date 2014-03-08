@@ -44,7 +44,7 @@
 			WorkingDirectory="$(BuildPackageFolder2)"
 			MinimumRequiredUmbracoVersion="$(UmbracoVersion)"
 			PackageVersion="$(AssemblyInformationVersion)"
-			Readme="$([System.IO.File]::ReadAllText(readme.md))"
+			Readme="$([System.IO.File]::ReadAllText(install.md))"
 			Files="@(ManifestFiles)" />
 
 	</Target>
