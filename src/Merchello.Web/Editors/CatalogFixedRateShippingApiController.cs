@@ -228,8 +228,6 @@ namespace Merchello.Web.Editors
             shipmethodService.Delete(methodToDelete);
 
             return Request.CreateResponse(HttpStatusCode.OK);
-
-            return null;
         }
     }
 }
