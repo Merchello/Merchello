@@ -6,6 +6,7 @@ using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using System.Collections.Generic;
 using Merchello.Core.Gateways.Shipping;
+using Newtonsoft.Json;
 
 namespace Merchello.Web.Models.ContentEditing
 {
@@ -248,12 +249,51 @@ namespace Merchello.Web.Models.ContentEditing
         {
             // RUSTY HELP: Cannot assign to these properties.  How should I do this mapping?
 
-            //destination.ShipMethod = FixedRateShipMethodDisplay.ShipMethod.ToShipMethod(destination.ShipMethod);
-            //destination.FixedRateTable = FixedRateShipMethodDisplay.FixedRateTable.ToShipRateTable(destination.FixedRateTable);
-            //destination.RateTableType = FixedRateShipMethodDisplay.RateTableType;
+            // Shipmethod
+            destination.ShipMethod.Name = fixedRateShipMethodDisplay.ShipMethod.Name;
 
-            //destination.GatewayResource.Name = FixedRateShipMethodDisplay.GatewayResource.Name;
-            //destination.GatewayResource.ServiceCode = FixedRateShipMethodDisplay.GatewayResource.ServiceCode;
+            //var provinceCollection = new ProvinceCollection<IShipProvince>();
+            //foreach (var province in fixedRateShipMethodDisplay.ShipMethod.Provinces)
+            //{
+            //    provinceCollection.Add(
+            //        new ShipProvince(province.Code, province.Name)
+            //            {
+            //                AllowShipping = province.AllowShipping,
+            //                RateAdjustment = province.RateAdjustment,
+            //                RateAdjustmentType = province.RateAdjustmentType
+            //            }
+            //        );
+            //}
+            //destination.ShipMethod.Provinces = provinceCollection;
+
+            // Rate table
+            
+            var existingRows = fixedRateShipMethodDisplay.RateTable.Rows.Where(x => !x.Key.Equals(Guid.Empty)).ToArray();            
+            foreach (var mapRow in existingRows)
+            {
+                var row = destination.RateTable.Rows.FirstOrDefault(x => x.Key == mapRow.Key);
+                if (row != null)
+                {
+                    row.Rate = mapRow.Rate;
+                }
+            }
+
+            // remove existing rows that previously existed but were deleted in the UI
+            var removers =
+                destination.RateTable.Rows.Where(
+                    row => !row.Key.Equals(Guid.Empty) && existingRows.All(x => x.Key != row.Key && !x.Key.Equals(Guid.Empty)));
+
+            foreach (var remove in removers)
+            {
+                destination.RateTable.DeleteRow(remove);
+            }
+
+            // add any new rows
+            foreach (var newRow in fixedRateShipMethodDisplay.RateTable.Rows.Where(x => x.Key == Guid.Empty))
+            {
+                destination.RateTable.AddRow(newRow.RangeLow, newRow.RangeHigh, newRow.Rate);
+            }
+
 
             return destination;
         }
