@@ -106,6 +106,8 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             Assert.AreEqual(expected, retrieved.RateTable.Rows.Count());
         }
 
+
+
         /// <summary>
         /// Can quote a shipment with a VaryByRate FixedRateTable
         /// </summary>
@@ -284,5 +286,69 @@ namespace Merchello.Tests.IntegrationTests.Shipping
 
         }
 
+        /// <summary>
+        /// Test verifies that a gateway ship method rate table row can be deleted and the row range values are
+        /// adjusted correctly
+        /// </summary>
+        [Test]
+        public void Can_Delete_A_Row_From_An_Existing_RateTable()
+        {
+            //// Arrange
+            var key = Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey;
+            var rateTableProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Gateways.Shipping.ResolveByKey(key);
+            rateTableProvider.DeleteAllActiveShipMethods(_shipCountry);
+            var gwshipMethod = (FixedRateShippingGatewayMethod)rateTableProvider.CreateShipMethod(FixedRateShippingGatewayMethod.QuoteType.VaryByWeight, _shipCountry, "Ground (VBW)");
+            gwshipMethod.RateTable.AddRow(0, 10, 5);
+            gwshipMethod.RateTable.AddRow(10, 15, 10);
+            gwshipMethod.RateTable.AddRow(15, 25, 25);
+            gwshipMethod.RateTable.AddRow(25, 10000, 100);
+            ShippingFixedRateTable.Save(GatewayProviderService, MerchelloContext.Cache.RuntimeCache, gwshipMethod.RateTable);
+           
+
+            //// Act
+            
+            var row = gwshipMethod.RateTable.Rows.FirstOrDefault(x => x.RangeLow == 15);
+            ShippingFixedRateTable.DeleteRow(GatewayProviderService, MerchelloContext.Cache.RuntimeCache, gwshipMethod.RateTable, row);
+
+            var retrieved = (FixedRateShippingGatewayMethod)rateTableProvider.GetAllShippingGatewayMethods(_shipCountry).First();
+
+            ////// Assert
+            Assert.NotNull(retrieved);
+            Assert.NotNull(retrieved.RateTable.Rows.FirstOrDefault(x => x.RangeLow == 15));
+            Assert.AreEqual(3, retrieved.RateTable.Rows.Count());
+        }
+
+
+        /// <summary>
+        /// Test verifies that a gateway ship method rate table row can be inserted at the end of the rate table row range values are
+        /// adjusted correctly
+        /// </summary>
+        [Test]
+        public void Can_Insert_A_Row_At_The_End_Of_An_Existing_RateTable()
+        {
+            //// Arrange
+            var key = Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey;
+            var rateTableProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Gateways.Shipping.ResolveByKey(key);
+            rateTableProvider.DeleteAllActiveShipMethods(_shipCountry);
+            var gwshipMethod = (FixedRateShippingGatewayMethod)rateTableProvider.CreateShipMethod(FixedRateShippingGatewayMethod.QuoteType.VaryByWeight, _shipCountry, "Ground (VBW)");
+            gwshipMethod.RateTable.AddRow(0, 10, 5);
+            gwshipMethod.RateTable.AddRow(10, 15, 10);
+            gwshipMethod.RateTable.AddRow(15, 25, 25);
+            gwshipMethod.RateTable.AddRow(25, 35, 100);
+            ShippingFixedRateTable.Save(GatewayProviderService, MerchelloContext.Cache.RuntimeCache, gwshipMethod.RateTable);
+
+
+            //// Act
+
+            gwshipMethod.RateTable.AddRow(36, 38, 100);
+            ShippingFixedRateTable.Save(GatewayProviderService, MerchelloContext.Cache.RuntimeCache, gwshipMethod.RateTable);
+
+            var retrieved = (FixedRateShippingGatewayMethod)rateTableProvider.GetAllShippingGatewayMethods(_shipCountry).First();
+
+            ////// Assert
+            Assert.NotNull(retrieved);
+            Assert.NotNull(retrieved.RateTable.Rows.FirstOrDefault(x => x.RangeLow == 35));
+            Assert.AreEqual(5, retrieved.RateTable.Rows.Count());
+        }
     }
 }
