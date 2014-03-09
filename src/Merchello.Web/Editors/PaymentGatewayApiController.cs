@@ -69,17 +69,12 @@ namespace Merchello.Web.Editors
         public IEnumerable<GatewayProviderDisplay> GetAllGatewayProviders()
         {
             var providers = _paymentContext.GetAllGatewayProviders();
-            if (providers != null)
-            {
-                foreach (var provider in providers)
-                {
-                    yield return provider.ToGatewayProviderDisplay();
-                }
-            }
-            else
+            if (providers == null)
             {
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
+
+            return providers.Select(provider => provider.ToGatewayProviderDisplay());
         }
 
         /// <summary>
