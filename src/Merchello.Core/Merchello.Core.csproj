@@ -88,7 +88,7 @@
     <Compile Include="Chains\OrderCreation\OrderCreationAttemptChainTaskBase.cs" />
     <Compile Include="Chains\ShipmentCreation\OrderAttemptChainTaskBase.cs" />
     <Compile Include="EnumerableExtensions.cs" />
-    <Compile Include="Fulfillment\IWarehouseManager.cs" />
+    <Compile Include="Fulfillment\IFulfillmentManager.cs" />
     <Compile Include="Gateways\Payment\Cash\CashPaymentGatewayProvider.cs" />
     <Compile Include="Gateways\Payment\Cash\CashPaymentGatewayMethod.cs" />
     <Compile Include="Gateways\Payment\Cash\ICashPaymentGatewayMethod.cs" />

@@ -13,7 +13,7 @@ namespace Merchello.Core.Models
         /// Returns a collection of <see cref="IAppliedPayment"/> for this <see cref="IPayment"/>
         /// </summary>
         /// <param name="payment">The <see cref="IPayment"/></param>
-        /// <returns>A collection of <see cref="IInvoice"/></returns>
+        /// <returns>A collection of <see cref="IAppliedPayment"/></returns>
         public static IEnumerable<IAppliedPayment> AppliedPayments(this IPayment payment)
         {
             return payment.AppliedPayments(MerchelloContext.Current);
@@ -24,7 +24,7 @@ namespace Merchello.Core.Models
         /// </summary>
         /// <param name="payment">The <see cref="IPayment"/></param>
         /// <param name="merchelloContext">The <see cref="IMerchelloContext"/></param>
-        /// <returns>A collection of <see cref="IInvoice"/></returns>
+        /// <returns>A collection of <see cref="IAppliedPayment"/></returns>
         public static IEnumerable<IAppliedPayment> AppliedPayments(this IPayment payment, IMerchelloContext merchelloContext)
         {
             return payment.AppliedPayments(merchelloContext.Services.GatewayProviderService);
@@ -35,7 +35,7 @@ namespace Merchello.Core.Models
         /// </summary>
         /// <param name="payment">The <see cref="IPayment"/></param>
         /// <param name="gatewayProviderService">The <see cref="IGatewayProviderService"/></param>
-        /// <returns>A collection of <see cref="IInvoice"/></returns>
+        /// <returns>A collection of <see cref="IAppliedPayment"/></returns>
         public static IEnumerable<IAppliedPayment> AppliedPayments(this IPayment payment, IGatewayProviderService gatewayProviderService)
         {
             return gatewayProviderService.GetAppliedPaymentsByPaymentKey(payment.Key);

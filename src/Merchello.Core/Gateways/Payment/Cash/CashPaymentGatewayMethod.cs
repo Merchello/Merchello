@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Umbraco.Core;
@@ -20,9 +21,9 @@ namespace Merchello.Core.Gateways.Payment.Cash
         /// <param name="invoice">The <see cref="IInvoice"/></param>
         /// <param name="args">Any arguments required to process the payment. (Maybe a username, password or some Api Key)</param>
         /// <returns>The <see cref="IPaymentResult"/></returns>
-        protected override IPaymentResult PerformProcessPayment(IInvoice invoice, ProcessorArgumentCollection args)
+        protected override IPaymentResult PerformAuthorizePayment(IInvoice invoice, ProcessorArgumentCollection args)
         {
-            var payment = GatewayProviderService.CreatePayment(PaymentMethodType.Cash, invoice.Total, PaymentMethod.Key);
+            var payment = GatewayProviderService.CreatePayment(PaymentMethodType.Cash, 0, PaymentMethod.Key);
             
             payment.PaymentMethodName = PaymentMethod.Name + " " + PaymentMethod.PaymentCode;
             payment.ReferenceNumber = PaymentMethod.PaymentCode + "-" + invoice.PrefixedInvoiceNumber();
@@ -41,6 +42,69 @@ namespace Merchello.Core.Gateways.Payment.Cash
 
 
             return new PaymentResult(Attempt.Succeed(payment), invoice, false);
+        }
+
+        protected override IPaymentResult PerformAuthorizeCapturePayment(IInvoice invoice, decimal amount, ProcessorArgumentCollection args)
+        {
+            var payment = GatewayProviderService.CreatePayment(PaymentMethodType.Cash, amount, PaymentMethod.Key);
+
+            payment.PaymentMethodName = PaymentMethod.Name + " " + PaymentMethod.PaymentCode;
+            payment.ReferenceNumber = PaymentMethod.PaymentCode + "-" + invoice.PrefixedInvoiceNumber();
+            payment.Collected = true;
+            payment.Authorized = true;
+
+            GatewayProviderService.Save(payment);
+
+            var appliedPayment = GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, "Cash payment", amount);
+
+            return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, invoice.Total == amount);
+        }
+
+        /// <summary>
+        /// Does the actual work of capturing a payment
+        /// </summary>
+        /// <param name="invoice">The <see cref="IInvoice"/></param>
+        /// <param name="payment"></param>
+        /// <param name="amount"></param>
+        /// <param name="args">Any arguments required to process the payment. (Maybe a username, password or some Api Key)</param>
+        /// <returns>The <see cref="IPaymentResult"/></returns>
+        protected override IPaymentResult PerformCapturePayment(IInvoice invoice, IPayment payment, decimal amount, ProcessorArgumentCollection args)
+        {
+            payment.Amount += amount;
+
+            payment.Collected = true;
+            payment.Authorized = true;
+
+            GatewayProviderService.Save(payment);
+
+            var appliedPayment = GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, "Cash payment", amount);
+
+            return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, invoice.Total == amount);
+        }
+        
+        /// <summary>
+        /// Does the actual work of refunding the payment
+        /// </summary>
+        /// <param name="invoice">The invoice to be the payment was applied</param>
+        /// <param name="payment">The payment to be refunded</param>
+        /// <param name="args">Additional arguements required by the payment processor</param>
+        /// <returns>A <see cref="IPaymentResult"/></returns>
+        protected override IPaymentResult PerformRefundPayment(IInvoice invoice, IPayment payment, ProcessorArgumentCollection args)
+        {
+            foreach (var applied in payment.AppliedPayments())
+            {
+                applied.TransactionType = AppliedPaymentType.Void;
+                applied.Amount = 0;
+                applied.Description += " - Refunded";
+                GatewayProviderService.Save(applied);
+            }
+
+            payment.Amount = 0;
+
+            GatewayProviderService.Save(payment);
+
+            return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, false);
+
         }
     }
 }

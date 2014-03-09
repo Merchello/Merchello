@@ -215,6 +215,25 @@ namespace Merchello.Core.Services
             return _paymentService.GetAppliedPaymentsByPaymentKey(paymentKey);
         }
 
+        /// <summary>
+        /// Gets a collection of <see cref="IAppliedPayment"/>s by the invoice key
+        /// </summary>
+        /// <param name="invoiceKey">The invoice key</param>
+        /// <returns>A collection of <see cref="IAppliedPayment"/></returns>
+        public IEnumerable<IAppliedPayment> GetAppliedPaymentsByInvoiceKey(Guid invoiceKey)
+        {
+            return _paymentService.GetAppliedPaymentsByInvoiceKey(invoiceKey);
+        }
+
+        /// <summary>
+        /// Saves a single <see cref="IAppliedPayment"/>
+        /// </summary>
+        /// <param name="appliedPayment">The <see cref="IAppliedPayment"/> to be saved</param>
+        public void Save(IAppliedPayment appliedPayment)
+        {
+            _paymentService.Save(appliedPayment);
+        }
+
         #endregion
 
         #region Invoice

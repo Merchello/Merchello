@@ -140,8 +140,6 @@ namespace Merchello.Core.Sales
         {
             _itemCache.AddItem(shipmentRateQuote.AsLineItemOf<ItemCacheLineItem>());
         }
-        
-        
 
         /// <summary>
         /// True/false indicating whether or not the <see cref="ISalePreparationBase"/> is ready to prepare an <see cref="IInvoice"/>
@@ -208,16 +206,16 @@ namespace Merchello.Core.Sales
         /// <param name="paymentGatewayMethod">The <see cref="IPaymentGatewayMethod"/> to use in processing the payment</param>
         /// <param name="args">Additional arguements required by the payment processor</param>
         /// <returns>The <see cref="IPaymentResult"/></returns>
-        public virtual IPaymentResult ProcessPayment(IPaymentGatewayMethod paymentGatewayMethod, ProcessorArgumentCollection args)
+        public virtual IPaymentResult AuthorizePayment(IPaymentGatewayMethod paymentGatewayMethod, ProcessorArgumentCollection args)
         {
             Mandate.ParameterNotNull(paymentGatewayMethod, "paymentGatewayMethod");
 
-            if(!IsReadyToInvoice()) return new PaymentResult(Attempt<IPayment>.Fail(new InvalidOperationException("SalesManager is not ready to invoice")), null, false);
+            if(!IsReadyToInvoice()) return new PaymentResult(Attempt<IPayment>.Fail(new InvalidOperationException("SalesPreparation is not ready to invoice")), null, false);
 
             var invoice = PrepareInvoice(new InvoiceBuilderChain(this));
             MerchelloContext.Services.InvoiceService.Save(invoice);
 
-            return paymentGatewayMethod.ProcessPayment(invoice, args);
+            return paymentGatewayMethod.AuthorizePayment(invoice, args);
         }
 
         /// <summary>
@@ -225,9 +223,9 @@ namespace Merchello.Core.Sales
         /// </summary>
         /// <param name="paymentGatewayMethod">The <see cref="IPaymentGatewayMethod"/> to use in processing the payment</param>
         /// <returns>The <see cref="IPaymentResult"/></returns>
-        public virtual IPaymentResult ProcessPayment(IPaymentGatewayMethod paymentGatewayMethod)
+        public virtual IPaymentResult AuthorizePayment(IPaymentGatewayMethod paymentGatewayMethod)
         {
-            return ProcessPayment(paymentGatewayMethod, new ProcessorArgumentCollection());
+            return AuthorizePayment(paymentGatewayMethod, new ProcessorArgumentCollection());
         }
 
 
@@ -237,11 +235,11 @@ namespace Merchello.Core.Sales
         /// <param name="paymentMethodKey">The <see cref="IPaymentMethod"/> key</param>
         /// <param name="args">Additional arguements required by the payment processor</param>
         /// <returns>The <see cref="IPaymentResult"/></returns>
-        public IPaymentResult ProcessPayment(Guid paymentMethodKey, ProcessorArgumentCollection args)
+        public IPaymentResult AuthorizePayment(Guid paymentMethodKey, ProcessorArgumentCollection args)
         {
             var paymentMethod = GetPaymentGatewayMethods().FirstOrDefault(x => x.PaymentMethod.Key.Equals(paymentMethodKey));
 
-            return ProcessPayment(paymentMethod, args);
+            return AuthorizePayment(paymentMethod, args);
 
         }
 
@@ -250,10 +248,60 @@ namespace Merchello.Core.Sales
         /// </summary>
         /// <param name="paymentMethodKey">The <see cref="IPaymentMethod"/> key</param>
         /// <returns>The <see cref="IPaymentResult"/></returns>
-        public IPaymentResult ProcessPayment(Guid paymentMethodKey)
+        public IPaymentResult AuthorizePayment(Guid paymentMethodKey)
         {
-            return ProcessPayment(paymentMethodKey, new ProcessorArgumentCollection());
+            return AuthorizePayment(paymentMethodKey, new ProcessorArgumentCollection());
         }
+
+        /// <summary>
+        /// Authorizes and Captures a Payment
+        /// </summary>
+        /// <param name="paymentGatewayMethod">The <see cref="IPaymentMethod"/></param>
+        /// <param name="args">Additional arguements required by the payment processor</param>
+        /// <returns>A <see cref="IPaymentResult"/></returns>
+        public IPaymentResult AuthorizeCapturePayment(IPaymentGatewayMethod paymentGatewayMethod, ProcessorArgumentCollection args)
+        {
+            Mandate.ParameterNotNull(paymentGatewayMethod, "paymentGatewayMethod");
+
+            if (!IsReadyToInvoice()) return new PaymentResult(Attempt<IPayment>.Fail(new InvalidOperationException("SalesPreparation is not ready to invoice")), null, false);
+
+            var invoice = PrepareInvoice(new InvoiceBuilderChain(this));
+            MerchelloContext.Services.InvoiceService.Save(invoice);
+
+            return paymentGatewayMethod.AuthorizeCapturePayment(invoice, invoice.Total, args);
+        }
+
+        /// <summary>
+        /// Authorizes and Captures a Payment
+        /// </summary>
+        /// <param name="paymentGatewayMethod">The <see cref="IPaymentMethod"/></param>
+        /// <returns>A <see cref="IPaymentResult"/></returns>
+        public IPaymentResult AuthorizeCapturePayment(IPaymentGatewayMethod paymentGatewayMethod)
+        {
+            return AuthorizeCapturePayment(paymentGatewayMethod, new ProcessorArgumentCollection());
+        }
+
+        /// <summary>
+        /// Authorizes and Captures a Payment
+        /// </summary>
+        /// <param name="paymentMethodKey">The <see cref="IPaymentMethod"/> key</param>
+        /// <param name="args">Additional arguements required by the payment processor</param>
+        /// <returns>A <see cref="IPaymentResult"/></returns>
+        public IPaymentResult AuthorizeCapturePayment(Guid paymentMethodKey, ProcessorArgumentCollection args)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Authorizes and Captures a Payment
+        /// </summary>
+        /// <param name="paymentMethodKey">The <see cref="IPaymentMethod"/> key</param>
+        /// <returns>A <see cref="IPaymentResult"/></returns>
+        public IPaymentResult AuthorizeCapturePayment(Guid paymentMethodKey)
+        {
+            throw new NotImplementedException();
+        }
+
 
 
         /// <summary>

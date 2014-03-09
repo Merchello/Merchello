@@ -337,7 +337,7 @@ namespace Merchello.Tests.IntegrationTests.Workflow
 
             var paymentMethods = CurrentCustomer.Basket().SalePreparation().GetPaymentGatewayMethods();
 
-            var paymentResult = CurrentCustomer.Basket().SalePreparation().ProcessPayment(paymentMethods.FirstOrDefault());
+            var paymentResult = CurrentCustomer.Basket().SalePreparation().AuthorizePayment(paymentMethods.FirstOrDefault());
 
             Assert.IsTrue(paymentResult.Result.Success);
 

@@ -84,14 +84,14 @@ namespace Merchello.Core.Sales
         /// <param name="paymentGatewayMethod">The <see cref="IPaymentGatewayMethod"/> to use in processing the payment</param>
         /// <param name="args">Additional arguements required by the payment processor</param>
         /// <returns>The <see cref="IPaymentResult"/></returns>
-        IPaymentResult ProcessPayment(IPaymentGatewayMethod paymentGatewayMethod, ProcessorArgumentCollection args);
+        IPaymentResult AuthorizePayment(IPaymentGatewayMethod paymentGatewayMethod, ProcessorArgumentCollection args);
 
         /// <summary>
         /// Attempts to process a payment
         /// </summary>
         /// <param name="paymentGatewayMethod">The <see cref="IPaymentGatewayMethod"/> to use in processing the payment</param>
         /// <returns>The <see cref="IPaymentResult"/></returns>
-        IPaymentResult ProcessPayment(IPaymentGatewayMethod paymentGatewayMethod);
+        IPaymentResult AuthorizePayment(IPaymentGatewayMethod paymentGatewayMethod);
 
         /// <summary>
         /// Attempts to process a payment
@@ -99,14 +99,45 @@ namespace Merchello.Core.Sales
         /// <param name="paymentMethodKey">The <see cref="IPaymentMethod"/> key</param>
         /// <param name="args">Additional arguements required by the payment processor</param>
         /// <returns>The <see cref="IPaymentResult"/></returns>
-        IPaymentResult ProcessPayment(Guid paymentMethodKey, ProcessorArgumentCollection args);
+        IPaymentResult AuthorizePayment(Guid paymentMethodKey, ProcessorArgumentCollection args);
 
         /// <summary>
         /// Attempts to process a payment
         /// </summary>
         /// <param name="paymentMethodKey">The <see cref="IPaymentMethod"/> key</param>
         /// <returns>The <see cref="IPaymentResult"/></returns>
-        IPaymentResult ProcessPayment(Guid paymentMethodKey);
+        IPaymentResult AuthorizePayment(Guid paymentMethodKey);
+
+        /// <summary>
+        /// Authorizes and Captures a Payment
+        /// </summary>
+        /// <param name="paymentGatewayMethod">The <see cref="IPaymentMethod"/></param>
+        /// <param name="args">Additional arguements required by the payment processor</param>
+        /// <returns>A <see cref="IPaymentResult"/></returns>
+        IPaymentResult AuthorizeCapturePayment(IPaymentGatewayMethod paymentGatewayMethod, ProcessorArgumentCollection args);
+
+        /// <summary>
+        /// Authorizes and Captures a Payment
+        /// </summary>
+        /// <param name="paymentGatewayMethod">The <see cref="IPaymentMethod"/></param>
+        /// <returns>A <see cref="IPaymentResult"/></returns>
+        IPaymentResult AuthorizeCapturePayment(IPaymentGatewayMethod paymentGatewayMethod);
+
+        /// <summary>
+        /// Authorizes and Captures a Payment
+        /// </summary>
+        /// <param name="paymentMethodKey">The <see cref="IPaymentMethod"/> key</param>
+        /// <param name="args">Additional arguements required by the payment processor</param>
+        /// <returns>A <see cref="IPaymentResult"/></returns>
+        IPaymentResult AuthorizeCapturePayment(Guid paymentMethodKey, ProcessorArgumentCollection args);
+
+        /// <summary>
+        /// Authorizes and Captures a Payment
+        /// </summary>
+        /// <param name="paymentMethodKey">The <see cref="IPaymentMethod"/> key</param>
+        /// <returns>A <see cref="IPaymentResult"/></returns>
+        IPaymentResult AuthorizeCapturePayment(Guid paymentMethodKey);
+
 
         /// <summary>
         /// True/false indicating whether or not the <see cref="ISalePreparationBase"/> is ready to prepare an <see cref="IInvoice"/>

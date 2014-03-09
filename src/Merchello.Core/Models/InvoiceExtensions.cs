@@ -1,13 +1,15 @@
-﻿using System.Globalization;
+﻿using System.Collections.Generic;
+using System.Globalization;
 using Merchello.Core.Builders;
 using Merchello.Core.Gateways.Taxation;
+using Merchello.Core.Services;
 using Umbraco.Core.Logging;
 
 namespace Merchello.Core.Models
 {
 
     /// <summary>
-    /// Extension methods for <see cref="IInvoices"/>
+    /// Extension methods for <see cref="IInvoice"/>
     /// </summary>
     public static class InvoiceExtensions
     {
@@ -99,6 +101,39 @@ namespace Merchello.Core.Models
 
             LogHelper.Error<OrderBuilderChain>("Extension method PrepareOrder failed", attempt.Exception);
             throw attempt.Exception;
+        }
+
+
+        /// <summary>
+        /// Returns a collection of <see cref="IAppliedPayment"/> for the invoice
+        /// </summary>
+        /// <param name="invoice">The <see cref="IInvoice"/></param>
+        /// <returns>A collection of <see cref="IAppliedPayment"/></returns>
+        public static IEnumerable<IAppliedPayment> AppliedPayments(this IInvoice invoice)
+        {
+            return invoice.AppliedPayments(MerchelloContext.Current);
+        }
+
+        /// <summary>
+        /// Returns a collection of <see cref="IAppliedPayment"/> for this <see cref="IInvoice"/>
+        /// </summary>
+        /// <param name="invoice">The <see cref="IInvoice"/></param>
+        /// <param name="merchelloContext">The <see cref="IMerchelloContext"/></param>
+        /// <returns>A collection of <see cref="IAppliedPayment"/></returns>
+        public static IEnumerable<IAppliedPayment> AppliedPayments(this IInvoice invoice, IMerchelloContext merchelloContext)
+        {
+            return invoice.AppliedPayments(merchelloContext.Services.GatewayProviderService);
+        }
+
+        /// <summary>
+        /// Returns a collection of <see cref="IAppliedPayment"/> for this <see cref="IInvoice"/>
+        /// </summary>
+        /// <param name="invoice">The <see cref="IInvoice"/></param>
+        /// <param name="gatewayProviderService">The <see cref="IGatewayProviderService"/></param>
+        /// <returns>A collection of <see cref="IAppliedPayment"/></returns>
+        public static IEnumerable<IAppliedPayment> AppliedPayments(this IInvoice invoice, IGatewayProviderService gatewayProviderService)
+        {
+            return gatewayProviderService.GetAppliedPaymentsByInvoiceKey(invoice.Key);
         }
     }
 }
