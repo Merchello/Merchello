@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Merchello.Core;
+using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Taxation;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
@@ -14,16 +15,15 @@ using Umbraco.Web.Mvc;
 
 namespace Merchello.Web.Editors
 {
-
     [PluginController("Merchello")]
-    public class TaxationGatewayApiController : MerchelloApiController
+    public class PaymentGatewayApiController : MerchelloApiController 
     {
-        private readonly ITaxationContext _taxationContext;
+        private readonly IPaymentContext _paymentContext;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public TaxationGatewayApiController()
+        public PaymentGatewayApiController()
             :this(MerchelloContext.Current)
         {}
 
@@ -31,23 +31,23 @@ namespace Merchello.Web.Editors
         /// Constructor
         /// </summary>
         /// <param name="merchelloContext">The <see cref="IMerchelloContext"/></param>
-        public TaxationGatewayApiController(MerchelloContext merchelloContext)
+        public PaymentGatewayApiController(MerchelloContext merchelloContext)
             : base(merchelloContext)
         {
-            _taxationContext = MerchelloContext.Gateways.Taxation;
+            _paymentContext = MerchelloContext.Gateways.Payment;
         }
 
         /// <summary>
         /// 
         ///
-        /// GET /umbraco/Merchello/TaxationGatewayApi/GetGatewayResources/{id}
+        /// GET /umbraco/Merchello/PaymentGatewayApi/GetGatewayResources/{id}
         /// </summary>
-        /// <param name="id">The key of the TaxationGatewayProvider</param>
+        /// <param name="id">The key of the PaymentGatewayProvider</param>
         public IEnumerable<GatewayResourceDisplay> GetGatewayResources(Guid id)
         {
             try
             {
-                var provider = _taxationContext.ResolveByKey(id);
+                var provider = _paymentContext.ResolveByKey(id);
 
                 var resources = provider.ListResourcesOffered();
 
@@ -62,13 +62,13 @@ namespace Merchello.Web.Editors
         }
 
         /// <summary>
-        /// Returns a list of all of GatewayProviders of GatewayProviderType Taxation
+        /// Returns a list of all of GatewayProviders of GatewayProviderType Payment
         ///
-        /// GET /umbraco/Merchello/TaxationGatewayApi/GetAllGatewayProviders/
+        /// GET /umbraco/Merchello/PaymentGatewayApi/GetAllGatewayProviders/
         /// </summary>        
         public IEnumerable<GatewayProviderDisplay> GetAllGatewayProviders()
         {
-            var providers = _taxationContext.GetAllGatewayProviders();
+            var providers = _paymentContext.GetAllGatewayProviders();
             if (providers != null)
             {
                 foreach (var provider in providers)
@@ -85,20 +85,20 @@ namespace Merchello.Web.Editors
         /// <summary>
         /// 
         ///
-        /// GET /umbraco/Merchello/TaxationGatewayApi/GetTaxationProviderTaxMethods/{id}
+        /// GET /umbraco/Merchello/PaymentGatewayApi/GetPaymentProviderPaymentMethods/{id}
         /// </summary>
-        /// <param name="id">The key of the TaxationGatewayProvider</param>
+        /// <param name="id">The key of the PaymentGatewayProvider</param>
         /// <remarks>
         /// 
         /// </remarks>
-        public IEnumerable<TaxMethodDisplay> GetTaxationProviderTaxMethods(Guid id)
+        public IEnumerable<PaymentMethodDisplay> GetPaymentProviderPaymentMethods(Guid id)
         {
-            var provider = _taxationContext.ResolveByKey(id);
+            var provider = _paymentContext.ResolveByKey(id);
             if (provider != null)
             {
-                foreach (var method in provider.TaxMethods)
+                foreach (var method in provider.PaymentMethods)
                 {
-                    yield return method.ToTaxMethodDisplay();
+                    yield return method.ToPaymentMethodDisplay();
                 }
             }
 
@@ -106,25 +106,24 @@ namespace Merchello.Web.Editors
         }
 
         /// <summary>
-        /// Adds a TaxMethod
+        /// Adds a PaymentMethod
         ///
-        /// POST /umbraco/Merchello/TaxationGatewayApi/AddTaxMethod
+        /// POST /umbraco/Merchello/PaymentGatewayApi/AddPaymentMethod
         /// </summary>
-        /// <param name="method">POSTed <see cref="TaxMethodDisplay"/> object</param>
+        /// <param name="method">POSTed <see cref="PaymentMethodDisplay"/> object</param>
         [AcceptVerbs("POST")]
-        public HttpResponseMessage AddTaxMethod(TaxMethodDisplay method)
+        public HttpResponseMessage AddPaymentMethod(PaymentMethodDisplay method)
         {
             var response = Request.CreateResponse(HttpStatusCode.OK);
 
             try
             {
-                var provider = _taxationContext.ResolveByKey(method.ProviderKey);
+                var provider = _paymentContext.ResolveByKey(method.ProviderKey);
 
-                var taxationGatewayMethod = provider.CreateTaxMethod(method.CountryCode);
+                var paymentGatewayMethod = provider.CreatePaymentMethod(method.Name, method.Description);
 
-                method.ToTaxMethod(taxationGatewayMethod.TaxMethod);
+               provider.SavePaymentMethod(paymentGatewayMethod);
 
-                provider.SaveTaxMethod(taxationGatewayMethod);
             }
             catch (Exception ex)
             {
@@ -137,23 +136,23 @@ namespace Merchello.Web.Editors
         /// <summary>
         /// Save a TaxMethod
         /// 
-        /// PUT /umbraco/Merchello/TaxationGatewayApi/PutTaxMethod
+        /// PUT /umbraco/Merchello/PaymentGatewayApi/PutPaymentMethod
         /// </summary>
-        /// <param name="method">POSTed <see cref="TaxMethodDisplay"/> object</param>
+        /// <param name="method">POSTed <see cref="PaymentMethodDisplay"/> object</param>
         [AcceptVerbs("POST", "PUT")]
-        public HttpResponseMessage PutTaxMethod(TaxMethodDisplay method)
+        public HttpResponseMessage PutTaxMethod(PaymentMethodDisplay method)
         {
             var response = Request.CreateResponse(HttpStatusCode.OK);
 
             try
             {
-                var provider = _taxationContext.ResolveByKey(method.ProviderKey);
+                var provider = _paymentContext.ResolveByKey(method.ProviderKey);
 
-                var taxMethod = provider.TaxMethods.FirstOrDefault(x => x.Key == method.Key);
+                var paymentMethod = provider.PaymentMethods.FirstOrDefault(x => x.Key == method.Key);
 
-                taxMethod = method.ToTaxMethod(taxMethod);
+                paymentMethod = method.ToPaymentMethod(paymentMethod);
 
-                provider.GatewayProviderService.Save(taxMethod);
+                provider.GatewayProviderService.Save(paymentMethod);
             }
             catch (Exception ex)
             {
@@ -164,23 +163,23 @@ namespace Merchello.Web.Editors
         }
 
         /// <summary>
-        /// Delete a <see cref="ITaxMethod"/>
+        /// Delete a <see cref="IPaymentMethod"/>
         /// 
-        /// GET /umbraco/Merchello/TaxationGatewayApi/DeleteTaxMethod
+        /// GET /umbraco/Merchello/PaymentGatewayApi/DeletePaymentMethod
         /// </summary>
-        /// <param name="method">POSTed ShipMethodDisplay object</param>
+        /// <param name="method">POSTed PaymentMethodDisplay object</param>
         [AcceptVerbs("GET", "DELETE")]
-        public HttpResponseMessage DeleteTaxMethod(TaxMethodDisplay method)
+        public HttpResponseMessage DeletePaymentMethod(PaymentMethodDisplay method)
         {
-            var taxMethodService = ((ServiceContext)MerchelloContext.Services).TaxMethodService;
-            var methodToDelete = taxMethodService.GetByKey(method.Key);
+            var paymentMethodService = ((ServiceContext)MerchelloContext.Services).PaymentMethodService;
+            var methodToDelete = paymentMethodService.GetByKey(method.Key);
 
             if (methodToDelete == null) return Request.CreateResponse(HttpStatusCode.NotFound);
 
-            taxMethodService.Delete(methodToDelete);
+            paymentMethodService.Delete(methodToDelete);
 
             return Request.CreateResponse(HttpStatusCode.OK);
         }
+         
     }
-
 }
