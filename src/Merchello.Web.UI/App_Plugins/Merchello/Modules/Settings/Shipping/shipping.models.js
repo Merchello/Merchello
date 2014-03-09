@@ -27,15 +27,17 @@
             self.name = "";
             self.provinces = [];
             self.shippingGatewayProviders = [];
+            self.sortHelper = "0";
         } else {
             self.key = shippingCountryFromServer.key;
             self.catalogKey = shippingCountryFromServer.catalogKey;
             self.countryCode = shippingCountryFromServer.countryCode;
             self.name = shippingCountryFromServer.name;
             self.provinces = _.map(shippingCountryFromServer.provinces, function (province) {
-                return new merchello.Models.Province(province)
+                return new merchello.Models.Province(province);
             });
             self.shippingGatewayProviders = [];
+            self.sortHelper = _.isEqual(self.name, "Everywhere Else") ? "1" + self.name : "0" + self.name;
         };
 
         self.fromCountry = function (country)
@@ -43,7 +45,7 @@
             self.countryCode = country.countryCode;
             self.name = country.name;
             self.provinces = _.map(country.provinces, function (province) {
-                return new merchello.Models.Province(province)
+                return new merchello.Models.Province(province);
             });
         };
     };
@@ -123,10 +125,11 @@
         }
         // Helper to add a shipping region adjustment to this shipping method.
         self.addProvince = function (province) {
+            var newShippingRegion;
             if (province) {
-                var newShippingRegion = province;
+                newShippingRegion = province;
             } else {
-                var newShippingRegion = new merchello.Models.ShippingRegion();
+                newShippingRegion = new merchello.Models.ShippingRegion();
             }
             // Note From Kyle: Not sure what preferred method we have on this project to inject the properties (if any) into the newly created region.
             self.provinceData.push(newShippingRegion);
@@ -174,8 +177,8 @@
         self.tierRange = function () {
             var range = new merchello.Models.Range();
 
-            var lowTier = _.min(self.rateTable.rows, function (tier) { return parseFloat(tier.rangeLow) });
-            var highTier = _.max(self.rateTable.rows, function (tier) { return parseFloat(tier.rangeHigh) });
+            var lowTier = _.min(self.rateTable.rows, function (tier) { return parseFloat(tier.rangeLow); });
+            var highTier = _.max(self.rateTable.rows, function (tier) { return parseFloat(tier.rangeHigh); });
 
             if (lowTier) {
                 range.low = lowTier.rangeLow;
@@ -191,8 +194,8 @@
         self.tierPriceRange = function () {
             var range = new merchello.Models.Range();
 
-            var lowTier = _.min(self.rateTable.rows, function (tier) { return parseFloat(tier.rate) });
-            var highTier = _.max(self.rateTable.rows, function (tier) { return parseFloat(tier.rate) });
+            var lowTier = _.min(self.rateTable.rows, function (tier) { return parseFloat(tier.rate); });
+            var highTier = _.max(self.rateTable.rows, function (tier) { return parseFloat(tier.rate); });
 
             if (lowTier) {
                 range.low = lowTier.rate;
