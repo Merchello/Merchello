@@ -1,6 +1,7 @@
 ﻿using Merchello.Core.Gateways;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Gateways.Shipping.FixedRate;
+using Merchello.Core.Gateways.Taxation;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Web.Models.ContentEditing;
@@ -37,6 +38,10 @@ namespace Merchello.Web
             AutoMapper.Mapper.CreateMap<IShipProvince, ShipProvinceDisplay>();
             AutoMapper.Mapper.CreateMap<IShippingFixedRateTable, ShipFixedRateTableDisplay>();
             AutoMapper.Mapper.CreateMap<IShipRateTier, ShipRateTierDisplay>();
+            
+            // taxation
+            AutoMapper.Mapper.CreateMap<ITaxMethod, TaxMethodDisplay>();
+            AutoMapper.Mapper.CreateMap<ITaxProvince, TaxProvinceDisplay>();
             
             // warehouse
             AutoMapper.Mapper.CreateMap<IWarehouse, WarehouseDisplay>();

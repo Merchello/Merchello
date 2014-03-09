@@ -110,10 +110,10 @@ namespace Merchello.Web.Editors
         /// 
         /// GET /umbraco/Merchello/SettingsApi/GetAllTaxProvinces
         /// </summary>
-        public IEnumerable<TaxProvinceDisplay> GetAllTaxProvinces()
+        public IEnumerable<TaxMethodDisplay> GetAllTaxProvinces()
         {
             // TODO: replace with call to service
-            var taxProvinces = new List<TaxMethod>();
+            var taxMethods = new List<TaxMethod>();
 
             //var oregon = new TaxCountry("OR", "Oregon");
             //oregon.Rate = 0.01M;
@@ -125,9 +125,9 @@ namespace Merchello.Web.Editors
 
             // END TEST DATA
 
-            foreach (TaxMethod taxProvince in taxProvinces)
+            foreach (TaxMethod taxMethod in taxMethods)
             {
-                yield return taxProvince.ToTaxProvinceDisplay();
+                yield return taxMethod.ToTaxMethodDisplay();
             }
         }
 

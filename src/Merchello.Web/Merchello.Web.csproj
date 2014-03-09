@@ -202,6 +202,7 @@
     <Compile Include="Editors\CatalogFixedRateShippingApiController.cs" />
     <Compile Include="Editors\SettingsApiController.cs" />
     <Compile Include="Editors\CatalogShippingApiController.cs" />
+    <Compile Include="Editors\TaxationGatewayApiController.cs" />
     <Compile Include="Editors\WarehouseApiController.cs" />
     <Compile Include="Models\ContentEditing\GatewayProviderDisplay.cs" />
     <Compile Include="Models\ContentEditing\GatewayResourceDisplay.cs" />
@@ -209,6 +210,7 @@
     <Compile Include="Models\ContentEditing\ShipFixedRateTableDisplay.cs" />
     <Compile Include="Models\ContentEditing\ShipRateTierDisplay.cs" />
     <Compile Include="Models\ContentEditing\SettingDisplay.cs" />
+    <Compile Include="Models\ContentEditing\TaxMethodDisplay.cs" />
     <Compile Include="Models\ContentEditing\WarehouseCatalogDisplay.cs" />
     <Compile Include="Models\IGatewayMethod.cs" />
     <Compile Include="Models\ContentEditing\FullfillmentMappingExtensions.cs" />
