@@ -6,9 +6,9 @@
      * @function
      * 
      * @description
-     * The controller for the reports list page
+     * The controller for the shipping warehouse and providers management page
      */
-    controllers.ShippingController = function ($scope, $routeParams, $location, notificationsService, angularHelper, serverValidationManager, dialogService, merchelloWarehouseService, merchelloSettingsService, merchelloCatalogShippingService, merchelloCatalogFixedRateShippingService) {
+    controllers.ShippingController = function($scope, $routeParams, $location, notificationsService, angularHelper, serverValidationManager, dialogService, merchelloWarehouseService, merchelloSettingsService, merchelloCatalogShippingService, merchelloCatalogFixedRateShippingService) {
 
         $scope.sortProperty = "name";
         $scope.availableCountries = [];
@@ -21,11 +21,9 @@
         $scope.primaryWarehouse = new merchello.Models.Warehouse();
         $scope.visible = {
             addCountryFlyout: false,
-            addProviderFlyout: false,
             addWarehouseFlyout: false,
             deleteWarehouseFlyout: false,
             shippingMethodPanel: true,
-            addEditShippingMethodFlyout: false,
             warehouseInfoPanel: false,
             warehouseListPanel: true
         };
@@ -37,16 +35,16 @@
         // Initialization methods
         //--------------------------------------------------------------------------------------
 
-        $scope.loadAllAvailableFixedRateGatewayResources = function () {
+        $scope.loadAllAvailableFixedRateGatewayResources = function() {
 
             var promiseAllResources = merchelloCatalogFixedRateShippingService.getAllFixedRateGatewayResources();
-            promiseAllResources.then(function (allResources) {
+            promiseAllResources.then(function(allResources) {
 
-                $scope.availableFixedRateGatewayResources = _.map(allResources, function (resource) {
-                    return new merchello.Models.GatewayResource(resource)
+                $scope.availableFixedRateGatewayResources = _.map(allResources, function(resource) {
+                    return new merchello.Models.GatewayResource(resource);
                 });
 
-            }, function (reason) {
+            }, function(reason) {
 
                 notificationsService.error("Available Gateway Resources Load Failed", reason.message);
 
@@ -54,16 +52,16 @@
 
         };
 
-        $scope.loadAllAvailableCountries = function () {
+        $scope.loadAllAvailableCountries = function() {
 
             var promiseAllCountries = merchelloSettingsService.getAllCountries();
-            promiseAllCountries.then(function (allCountries) {
+            promiseAllCountries.then(function(allCountries) {
 
-                $scope.availableCountries = _.map(allCountries, function (country) {
-                    return new merchello.Models.Country(country)
+                $scope.availableCountries = _.map(allCountries, function(country) {
+                    return new merchello.Models.Country(country);
                 });
 
-            }, function (reason) {
+            }, function(reason) {
 
                 notificationsService.error("Available Countries Load Failed", reason.message);
 
@@ -71,16 +69,16 @@
 
         };
 
-        $scope.loadAllShipProviders = function () {
+        $scope.loadAllShipProviders = function() {
 
             var promiseAllProviders = merchelloCatalogShippingService.getAllShipGatewayProviders();
-            promiseAllProviders.then(function (allProviders) {
+            promiseAllProviders.then(function(allProviders) {
 
-                $scope.providers = _.map(allProviders, function (providerFromServer) {
-                    return new merchello.Models.GatewayProvider(providerFromServer)
+                $scope.providers = _.map(allProviders, function(providerFromServer) {
+                    return new merchello.Models.GatewayProvider(providerFromServer);
                 });
 
-            }, function (reason) {
+            }, function(reason) {
 
                 notificationsService.error("Available Ship Providers Load Failed", reason.message);
 
@@ -88,10 +86,10 @@
 
         };
 
-        $scope.loadWarehouses = function () {
+        $scope.loadWarehouses = function() {
 
-            var promiseWarehouses = merchelloWarehouseService.getDefaultWarehouse();    // Only a default warehouse in v1
-            promiseWarehouses.then(function (warehouseFromServer) {
+            var promiseWarehouses = merchelloWarehouseService.getDefaultWarehouse(); // Only a default warehouse in v1
+            promiseWarehouses.then(function(warehouseFromServer) {
 
                 $scope.warehouses.push(new merchello.Models.Warehouse(warehouseFromServer));
 
@@ -99,7 +97,7 @@
 
                 $scope.loadCountries();
 
-            }, function (reason) {
+            }, function(reason) {
 
                 notificationsService.error("Warehouses Load Failed", reason.message);
 
@@ -107,24 +105,23 @@
 
         };
 
-        $scope.loadCountries = function () {
+        $scope.loadCountries = function() {
 
-            if ($scope.primaryWarehouse.warehouseCatalogs.length > 0)
-            {
+            if ($scope.primaryWarehouse.warehouseCatalogs.length > 0) {
                 var catalogKey = $scope.primaryWarehouse.warehouseCatalogs[0].key;
 
                 var promiseShipCountries = merchelloCatalogShippingService.getWarehouseCatalogShippingCountries(catalogKey);
-                promiseShipCountries.then(function (shipCountriesFromServer) {
+                promiseShipCountries.then(function(shipCountriesFromServer) {
 
-                    $scope.countries = _.map(shipCountriesFromServer, function (shippingCountryFromServer) {
+                    $scope.countries = _.map(shipCountriesFromServer, function(shippingCountryFromServer) {
                         return new merchello.Models.ShippingCountry(shippingCountryFromServer);
                     });
 
-                    _.each($scope.countries, function (element, index, list) {
-                        $scope.loadFixedRateCountryProviders(element)
+                    _.each($scope.countries, function(element, index, list) {
+                        $scope.loadFixedRateCountryProviders(element);
                     });
 
-                }, function (reason) {
+                }, function(reason) {
 
                     notificationsService.error("Shipping Countries Load Failed", reason.message);
 
@@ -132,16 +129,15 @@
             }
         };
 
-        $scope.loadFixedRateCountryProviders = function (country) {
+        $scope.loadFixedRateCountryProviders = function(country) {
 
-            if( country )
-            {
+            if (country) {
                 var promiseProviders = merchelloCatalogFixedRateShippingService.getAllShipCountryFixedRateProviders(country.key);
-                promiseProviders.then(function (providerFromServer) {
+                promiseProviders.then(function(providerFromServer) {
 
                     if (providerFromServer.length > 0) {
 
-                        _.each(providerFromServer, function (element, index, list) {
+                        _.each(providerFromServer, function(element, index, list) {
                             var newProvider = new merchello.Models.ShippingGatewayProvider(element);
                             newProvider.shipMethods = [];
                             country.shippingGatewayProviders.push(newProvider);
@@ -149,33 +145,31 @@
                         });
                     }
 
-                }, function (reason) {
+                }, function(reason) {
 
                     notificationsService.error("Shipping Countries Providers Load Failed", reason.message);
 
                 });
             }
         };
-        
-        $scope.loadFixedRateProviderMethods = function (country) {
 
-            if( country )
-            {
+        $scope.loadFixedRateProviderMethods = function(country) {
+
+            if (country) {
                 var promiseMethods = merchelloCatalogFixedRateShippingService.getAllFixedRateProviderMethods(country.key);
-                promiseMethods.then(function (methodsFromServer) {
+                promiseMethods.then(function(methodsFromServer) {
 
                     if (methodsFromServer.length > 0) {
 
-                        _.each(methodsFromServer, function (element, index, list) {
+                        _.each(methodsFromServer, function(element, index, list) {
                             var newMethod = new merchello.Models.FixedRateShippingMethod(element);
 
-                            var shippingGatewayProvider = _.find(country.shippingGatewayProviders, function (p) { return p.key == newMethod.shipMethod.providerKey })
-
+                            var shippingGatewayProvider = _.find(country.shippingGatewayProviders, function(p) { return p.key == newMethod.shipMethod.providerKey; });
                             shippingGatewayProvider.shipMethods.push(newMethod);
                         });
                     }
 
-                }, function (reason) {
+                }, function(reason) {
 
                     notificationsService.error("Shipping Countries Methods Load Failed", reason.message);
 
@@ -187,8 +181,8 @@
         // Warehouse methods
         //--------------------------------------------------------------------------------------
 
-        $scope.changePrimaryWarehouse = function (warehouse) {
-            for (i = 0; i < $scope.warehouses.length; i++) {
+        $scope.changePrimaryWarehouse = function(warehouse) {
+            for (var i = 0; i < $scope.warehouses.length; i++) {
                 if (warehouse) {
                     if (warehouse.key == $scope.warehouses[i].key) {
                         $scope.warehouses[i].isDefault = true;
@@ -211,30 +205,30 @@
         // Functions to control the Add/Edit Country flyout
         $scope.addCountryFlyout = new merchello.Models.Flyout(
             $scope.visible.addCountryFlyout,
-            function (isOpen) {
+            function(isOpen) {
                 $scope.visible.addCountryFlyout = isOpen;
             },
             {
-                confirm: function () {
+                confirm: function() {
                     var self = $scope.addCountryFlyout;
 
-                    var countryOnCatalog = _.find($scope.countries, function (shipCountry) { return shipCountry.countryCode == self.model.countryCode });
+                    var countryOnCatalog = _.find($scope.countries, function(shipCountry) { return shipCountry.countryCode == self.model.countryCode; });
                     if (!countryOnCatalog) {
 
                         var catalogKey = $scope.primaryWarehouse.warehouseCatalogs[0].key;
 
                         var promiseShipCountries = merchelloCatalogShippingService.newWarehouseCatalogShippingCountry(catalogKey, self.model.countryCode);
-                        promiseShipCountries.then(function (shippingCountryFromServer) {
+                        promiseShipCountries.then(function(shippingCountryFromServer) {
 
-                            $scope.countries.push( new merchello.Models.ShippingCountry(shippingCountryFromServer));
+                            $scope.countries.push(new merchello.Models.ShippingCountry(shippingCountryFromServer));
 
-                        }, function (reason) {
+                        }, function(reason) {
 
                             notificationsService.error("Shipping Countries Create Failed", reason.message);
 
                         });
                     }
-                    
+
                     self.clear();
                     self.close();
                 }
@@ -246,10 +240,10 @@
                 $scope.newWarehouse = new merchello.Models.Warehouse();
                 $scope.newWarehouse.key = "no key created";
             },
-            close: function () {
+            close: function() {
                 $scope.visible.addWarehouseFlyout = false;
             },
-            open: function (warehouse) {
+            open: function(warehouse) {
                 if (warehouse) {
                     $scope.newWarehouse = warehouse;
                 } else {
@@ -258,10 +252,10 @@
                 $scope.deleteWarehouseFlyout.close();
                 $scope.visible.addWarehouseFlyout = true;
             },
-            save: function () {
+            save: function() {
 
-                var promiseWarehouseSave = merchelloWarehouseService.save($scope.newWarehouse);    // Only a default warehouse in v1
-                promiseWarehouseSave.then(function (result) {
+                var promiseWarehouseSave = merchelloWarehouseService.save($scope.newWarehouse); // Only a default warehouse in v1
+                promiseWarehouseSave.then(function() {
 
                     notificationsService.success("Warehouse Saved", "");
 
@@ -271,7 +265,7 @@
                     $scope.addWarehouseFlyout.clear();
                     $scope.addWarehouseFlyout.close();
 
-                }, function (reason) {
+                }, function(reason) {
 
                     notificationsService.error("Warehouses Save Failed", reason.message);
                     $scope.addWarehouseFlyout.clear();
@@ -279,19 +273,19 @@
 
                 });
             },
-            toggle: function () {
+            toggle: function() {
                 $scope.visible.addWarehouseFlyout = !$scope.visible.addWarehouseFlyout;
             }
         };
 
         // Functions to control the Delete Warehouse flyout
         $scope.deleteWarehouseFlyout = {
-            close: function () {
+            close: function() {
                 $scope.visible.deleteWarehouseFlyout = false;
             },
-            confirm: function () {
+            confirm: function() {
                 var idx = -1;
-                for (i = 0; i < $scope.warehouses.length; i++) {
+                for (var i = 0; i < $scope.warehouses.length; i++) {
                     if ($scope.warehouses[i].key == $scope.deleteWarehouse.key) {
                         idx = i;
                     }
@@ -303,7 +297,7 @@
                 $scope.deleteWarehouseFlyout.close();
                 // Note From Kyle: An API call will need to be wired in here to delete the Warehouse in the database.
             },
-            open: function (warehouse) {
+            open: function(warehouse) {
                 if (warehouse) {
                     $scope.deleteWarehouse = warehouse;
                     $scope.addWarehouseFlyout.clear();
@@ -311,53 +305,12 @@
                     $scope.visible.deleteWarehouseFlyout = true;
                 }
             },
-            toggle: function () {
+            toggle: function() {
                 $scope.visible.deleteWarehouseFlyout = !$scope.visible.deleteWarehouseFlyout;
             }
         };
 
-
-        // Helper to set the shippingCountry and setup the flyout model
-        $scope.openProviderFlyout = function (shippingCountry) {
-
-            $scope.currentShipCountry = shippingCountry;
-            $scope.addProviderFlyout.open($scope.providerToAdd);
-        };
-
-        // Functions to control the Add Provider flyout
-        $scope.addProviderFlyout = new merchello.Models.Flyout(
-            $scope.visible.addProviderFlyout,
-            function (isOpen) {
-                $scope.visible.addProviderFlyout = isOpen;
-            },
-            {
-                confirm: function () {
-                    var self = $scope.addProviderFlyout;
-
-                    var selectedProvider = self.model;
-
-                    var newShippingMethod = new merchello.Models.FixedRateShippingMethod();
-                    newShippingMethod.shipMethod.name = $scope.currentShipCountry.name + " - " + selectedProvider.key;
-                    newShippingMethod.shipMethod.providerKey = selectedProvider.key;
-                    newShippingMethod.shipMethod.shipCountryKey = $scope.currentShipCountry.key;
-
-                    var promiseAddMethod = merchelloCatalogFixedRateShippingService.createRateTableShipMethod(newShippingMethod);
-                    promiseAddMethod.then(function (data) {
-
-                        $scope.loadFixedRateCountryProviders($scope.currentShipCountry)
-
-                    }, function (reason) {
-
-                        notificationsService.error("Shipping Countries Create Failed", reason.message);
-
-                    });
-
-                    self.clear();
-                    self.close();
-                }
-            });
-
-        $scope.shippingProviderDialogConfirm = function (data) {
+        $scope.shippingProviderDialogConfirm = function(data) {
 
             var selectedProvider = data.provider;
 
@@ -367,11 +320,11 @@
             newShippingMethod.shipMethod.shipCountryKey = data.country.key;
 
             var promiseAddMethod = merchelloCatalogFixedRateShippingService.createRateTableShipMethod(newShippingMethod);
-            promiseAddMethod.then(function () {
+            promiseAddMethod.then(function() {
 
                 $scope.loadFixedRateCountryProviders(data.country);
 
-            }, function (reason) {
+            }, function(reason) {
 
                 notificationsService.error("Shipping Provider / Initial Method Create Failed", reason.message);
 
@@ -379,7 +332,7 @@
 
         };
 
-        $scope.addEditShippingProviderDialogOpen = function (country, provider) {
+        $scope.addEditShippingProviderDialogOpen = function(country, provider) {
 
             var dialogProvider = provider;
             if (!provider) {
@@ -402,44 +355,27 @@
 
         $scope.shippingMethodDialogConfirm = function (data) {
 
-            if (data.method.shipMethod.key.length > 0)
-            {
+            var promiseSave;
+            if (data.method.shipMethod.key.length > 0) {
                 // Save existing method
-                var promiseSave = merchelloCatalogFixedRateShippingService.saveRateTableShipMethod(data.method);
-                promiseSave.then(function (responsedata) {
-
-                    data.provider.shipMethods = [];
-                    $scope.loadFixedRateProviderMethods(data.country);
-
-                }, function (reason) {
-
-                    notificationsService.error("Shipping Method Save Failed", reason.message);
-
-                });
-            }
-            else
-            {
+                promiseSave = merchelloCatalogFixedRateShippingService.saveRateTableShipMethod(data.method);
+            } else {
                 // Create new method
-                // Save existing method
-                var promiseSave = merchelloCatalogFixedRateShippingService.createRateTableShipMethod(data.method);
-                promiseSave.then(function (responsedata) {
-
-                    data.provider.shipMethods = [];
-                    $scope.loadFixedRateProviderMethods(data.country);
-
-                }, function (reason) {
-
-                    notificationsService.error("Shipping Method Save Failed", reason.message);
-
-                });
+                promiseSave = merchelloCatalogFixedRateShippingService.createRateTableShipMethod(data.method);
             }
+
+            promiseSave.then(function() {
+                data.provider.shipMethods = [];
+                $scope.loadFixedRateProviderMethods(data.country);
+            }, function(reason) {
+                notificationsService.error("Shipping Method Save Failed", reason.message);
+            });
         };
 
-        $scope.addEditShippingMethodFlyoutOpen = function (country, provider, method) {
+        $scope.addEditShippingMethodDialogOpen = function(country, provider, method) {
 
             var dialogMethod = method;
-            if (!method)
-            {
+            if (!method) {
                 dialogMethod = new merchello.Models.FixedRateShippingMethod();
                 dialogMethod.shipMethod.shipCountryKey = country.key;
                 dialogMethod.shipMethod.providerKey = provider.key;
@@ -460,20 +396,20 @@
             });
         };
 
-        $scope.addEditShippingMethodFlyoutConfirm = function () {
-            var self = $scope.addEditShippingMethodFlyout;
-
-            var selectedProvider = self.model;
-
-            self.clear();
-            self.close();
-        };
-
         $scope.removeFixedRateMethodFromProvider = function(provider, method) {
             provider.removeFixedRateShippingMethod(method);
 
-            /// TODO: Call the service to delete from the DB
-        };        
+            var promiseDelete = merchelloCatalogFixedRateShippingService.deleteRateTableShipMethod(method);
+            promiseDelete.then(function() {
+
+                notificationsService.success("Shipping Method Deleted");
+
+            }, function(reason) {
+
+                notificationsService.error("Shipping Method Delete Failed", reason.message);
+
+            });
+        };
 
         $scope.loadAllAvailableCountries();
         $scope.loadWarehouses();
@@ -483,7 +419,7 @@
         $scope.loaded = true;
         $scope.preValuesLoaded = true;
 
-    }
+    };
 
     angular.module("umbraco").controller("Merchello.Dashboards.Settings.ShippingController", merchello.Controllers.ShippingController);
 

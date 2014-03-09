@@ -150,27 +150,8 @@
                                     <input type="submit" class="btn btn-primary" value="Add Country" data-ng-click="addCountryFlyout.confirm()" />
                                 </div>
                             </form>
-                            
-                            <!-- Add a Provider Flyout -->
-                            <form  name="addProviderForm" class="well col-xs-12 span12" data-ng-class="{ 'open': visible.addProviderFlyout, 'closed': !visible.addProviderFlyout }">
-                                <button class="btn close" data-ng-click="addProviderFlyout.close()"><i class="icon-delete"></i></button>
-                                <h4>Add a Provider</h4>
-                                <div class="form-group row-fluid provider-dropdown">
-                                    <label for="provider-name">Select Your Provider</label>
-                                    <div class="input-append col-xs-12 span12">
-                                        <select name="availableProviders" data-ng-model="addProviderFlyout.model" data-ng-options="p.name for p in providers track by p.key"></select>
-                                    </div>
-                                    <div>{{addProviderFlyout.model.name}}</div>
-                                </div>
-
-                                <div>
-                                    <input type="submit" class="btn" value="Cancel" data-ng-click="addProviderFlyout.close()" />
-                                    <input type="submit" class="btn btn-primary" value="Add Provider" data-ng-click="addProviderFlyout.confirm()" />
-                                </div>
-                            </form>
-
-                            
-                            <div data-ng-repeat="country in countries" class="merchello-shipping-country">
+                                                       
+                            <div data-ng-repeat="country in countries | orderBy: 'sortHelper'" class="merchello-shipping-country">
 
                                 <!-- simply inherits this scope, doesn't create an isolate scope -->
                                 <shipping-country></shipping-country>

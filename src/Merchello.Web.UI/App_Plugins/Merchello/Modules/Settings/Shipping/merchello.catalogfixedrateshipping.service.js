@@ -68,8 +68,17 @@
                     $http.post(umbRequestHelper.getApiUrl('merchelloCatalogFixedRateShippingApiBaseUrl', 'PutFixedRateShipMethod'),
                         rateTableShipMethod
                     ),
-                    'Failed to savw rateTableShipMethod');
+                    'Failed to save rateTableShipMethod');
             },
+
+            deleteRateTableShipMethod: function (rateTableShipMethod) {
+
+                return umbRequestHelper.resourcePromise(
+                    $http.post(umbRequestHelper.getApiUrl('merchelloCatalogFixedRateShippingApiBaseUrl', 'DeleteRateTableShipMethod'),
+                        rateTableShipMethod
+                    ),
+                    'Failed to delete rateTableShipMethod');
+            }
 
         };
     }

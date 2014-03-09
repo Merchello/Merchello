@@ -217,7 +217,7 @@ namespace Merchello.Web.Editors
         /// GET /umbraco/Merchello/ShippingMethodsApi/DeleteRateTableShipMethod
         /// </summary>
         /// <param name="method">POSTed ShipMethodDisplay object</param>
-        [AcceptVerbs("GET", "DELETE")]
+        [AcceptVerbs("POST", "DELETE")]
         public HttpResponseMessage DeleteRateTableShipMethod(FixedRateShipMethodDisplay method)
         {
             var shipmethodService = ((ServiceContext) MerchelloContext.Services).ShipMethodService;
