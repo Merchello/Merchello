@@ -1,0 +1,35 @@
+﻿<div class="umb-panel" data-ng-controller="Merchello.PropertyDialogs.MerchelloProductDialog">
+	<div class="umb-panel-body no-header with-footer">
+	    
+	    <div class="well col-xs-6 span6">
+	        
+	        <h4>Select Merchello Product</h4>
+	        <div class="form-group row-fluid">
+	            <label for="product-select">Select Your Product</label>
+	            <div class="input-append col-xs-12 span12">
+	                <select id="product-select" name="availableProducts" data-ng-model="selectedProduct" data-ng-options="p.name for p in products track by p.key"></select>
+	            </div>
+	        </div>
+           
+	    </div>
+
+	</div>
+
+	<div class="umb-panel-footer" >
+		<div class="umb-el-wrap umb-panel-buttons">
+	        <div class="btn-toolbar umb-btn-toolbar pull-right">
+
+	        	<a href data-ng-click="close()" class="btn btn-link">
+	        		<localize key="general_cancel">Cancel</localize>
+				</a>
+
+				<button
+					class="btn btn-primary"
+					data-ng-click="submit(selectedProduct)">
+					<localize key="buttons_save">Save</localize>
+				</button>
+
+	        </div>
+		</div>
+	</div>
+</div>
