@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Umbraco.Core.Cache;
-using Umbraco.Core.Logging;
 
 namespace Merchello.Core.Gateways.Taxation
 {

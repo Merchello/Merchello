@@ -2,6 +2,7 @@
 using System.Linq;
 using Merchello.Core.Gateways;
 using Merchello.Core.Gateways.Shipping.FixedRate;
+using Merchello.Core.Gateways.Taxation;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using System.Collections.Generic;
@@ -406,11 +407,43 @@ namespace Merchello.Web.Models.ContentEditing
 
         #endregion
 
+        #region TaxMethodDisplay
+
+        internal static ITaxMethod ToTaxMethod(this TaxMethodDisplay taxMethodDisplay, ITaxMethod destination)
+        {
+            if (taxMethodDisplay.Key != Guid.Empty) destination.Key = taxMethodDisplay.Key;
+
+            destination.Name = destination.Name;
+            destination.PercentageTaxRate = destination.PercentageTaxRate;
+
+            var provinceCollection = new ProvinceCollection<ITaxProvince>();
+            foreach (var province in taxMethodDisplay.Provinces)
+            {
+                provinceCollection.Add(
+                        new TaxProvince(province.Code, province.Name)
+                            {
+                                PercentRateAdjustment = province.PercentAdjustment
+                            }
+                    );
+            }
+            
+            destination.Provinces = provinceCollection;
+
+            return destination;
+        }
+
+        internal static TaxMethodDisplay ToTaxMethodDisplay(this ITaxMethod taxMethod)
+        {
+            return AutoMapper.Mapper.Map<TaxMethodDisplay>(taxMethod);
+        }
+
+        #endregion
+
         #region TaxProvinceDisplay
 
-        internal static TaxProvinceDisplay ToTaxProvinceDisplay(this TaxMethod taxMethod)
+        internal static TaxProvinceDisplay ToTaxProvinceDisplay(this ITaxProvince taxProvince)
         {            
-            return AutoMapper.Mapper.Map<TaxProvinceDisplay>(taxMethod);
+            return AutoMapper.Mapper.Map<TaxProvinceDisplay>(taxProvince);
         }
 
         #endregion

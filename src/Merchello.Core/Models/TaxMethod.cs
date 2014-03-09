@@ -19,7 +19,6 @@ namespace Merchello.Core.Models
         private readonly Guid _providerKey;
         private readonly string _countryCode;
         private decimal _percentageTaxRate;
-        private RegionInfo _regionInfo;
         private ProvinceCollection<ITaxProvince> _taxProvinces;
         
         internal TaxMethod(Guid providerKey, string countryCode)
@@ -105,15 +104,11 @@ namespace Merchello.Core.Models
             }
         }
 
-        [IgnoreDataMember]
-        public RegionInfo RegionInfo
-        {
-            get { return _regionInfo ?? (_regionInfo = new RegionInfo(_countryCode)); }
-        }
-
+        
         /// <summary>
         /// True/false indicating whether or not the CountryTaxRate has provinces
         /// </summary>
+        [IgnoreDataMember]
         public bool HasProvinces {
             get { return _taxProvinces.Any(); }
         }

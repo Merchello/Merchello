@@ -32,6 +32,7 @@ namespace Merchello.Core.Gateways
         /// <returns>A collection of <see cref="IGatewayResource"/></returns>
         public abstract IEnumerable<IGatewayResource> ListResourcesOffered();
 
+
         // The properties Name and Key will be likely become attribute defined properties
         // TODO enable devs to define each of these values. 
         
@@ -48,7 +49,7 @@ namespace Merchello.Core.Gateways
         /// <summary>
         /// Gets the <see cref="IGatewayProviderService"/>
         /// </summary>
-        protected IGatewayProviderService GatewayProviderService
+        public IGatewayProviderService GatewayProviderService
         {
             get { return _gatewayProviderService; }
         }

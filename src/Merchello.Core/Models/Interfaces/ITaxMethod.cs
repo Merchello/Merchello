@@ -38,14 +38,9 @@ namespace Merchello.Core.Models
         ProvinceCollection<ITaxProvince> Provinces { get; set; }
 
         /// <summary>
-        /// The <see cref="RegionInfo"/> for the country
-        /// </summary>
-        [IgnoreDataMember]
-        RegionInfo RegionInfo { get; }
-
-        /// <summary>
         /// True/false indicating whether or not the CountryTaxRate has provinces
         /// </summary>
+        [IgnoreDataMember]
         bool HasProvinces { get; }
     }
 }
