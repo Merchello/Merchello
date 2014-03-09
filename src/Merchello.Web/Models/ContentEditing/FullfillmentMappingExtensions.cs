@@ -13,81 +13,7 @@ namespace Merchello.Web.Models.ContentEditing
 {
     internal static class FullfillmentMappingExtensions
     {
-        #region WarehouseDisplay
-
-        internal static WarehouseDisplay ToWarehouseDisplay(this IWarehouse warehouse)
-        {           
-            return AutoMapper.Mapper.Map<WarehouseDisplay>(warehouse);
-        }
-
-        #endregion
-
-        #region IWarehouse
-
-        internal static IWarehouse ToWarehouse(this WarehouseDisplay warehouseDisplay, IWarehouse destination)
-        {
-            if (warehouseDisplay.Key != Guid.Empty)
-            {
-                destination.Key = warehouseDisplay.Key;
-            }
-            destination.Name = warehouseDisplay.Name;
-            destination.Address1 = warehouseDisplay.Address1;
-            destination.Address2 = warehouseDisplay.Address2;
-            destination.Locality = warehouseDisplay.Locality;
-            destination.Region = warehouseDisplay.Region;
-            destination.PostalCode = warehouseDisplay.PostalCode;
-            destination.CountryCode = warehouseDisplay.CountryCode;
-            destination.Phone = warehouseDisplay.Phone;
-            destination.Email = warehouseDisplay.Email;
-            destination.IsDefault = warehouseDisplay.IsDefault;
-
-            foreach (var warehouseCatalogDisplay in warehouseDisplay.WarehouseCatalogs)
-            {
-                IWarehouseCatalog destinationWarehouseCatalog;
-
-                var matchingItems = destination.WarehouseCatalogs.Where(x => x.Key == warehouseCatalogDisplay.Key);
-                if (matchingItems.Any())
-                {
-                    var existingWarehouseCatalog = matchingItems.First();
-                    if (existingWarehouseCatalog != null)
-                    {
-                        destinationWarehouseCatalog = existingWarehouseCatalog;
-
-                        destinationWarehouseCatalog = warehouseCatalogDisplay.ToWarehouseCatalog(destinationWarehouseCatalog);
-                    }
-                }
-            }
-
-            return destination;
-        }
-
-        #endregion
-
-        #region WarehouseCatalogDisplay
-
-        internal static WarehouseCatalogDisplay ToWarehouseCatalogDisplay(this IWarehouseCatalog warehouseCatalog)
-        {            
-            return AutoMapper.Mapper.Map<WarehouseCatalogDisplay>(warehouseCatalog);
-        }
-
-        #endregion
-
-        #region IWarehouseCatalog
-
-        internal static IWarehouseCatalog ToWarehouseCatalog(this WarehouseCatalogDisplay warehouseCatalogDisplay, IWarehouseCatalog destination)
-        {
-            if (warehouseCatalogDisplay.Key != Guid.Empty)
-            {
-                destination.Key = warehouseCatalogDisplay.Key;
-            }
-            destination.Name = warehouseCatalogDisplay.Name;
-            destination.Description = warehouseCatalogDisplay.Description;
-
-            return destination;
-        }
-
-        #endregion
-
+        
         #region CatalogInventoryDisplay
 
         internal static CatalogInventoryDisplay ToCatalogInventoryDisplay(this ICatalogInventory catalogInventory)
@@ -143,6 +69,26 @@ namespace Merchello.Web.Models.ContentEditing
         internal static GatewayResourceDisplay ToGatewayResourceDisplay(this IGatewayResource gatewayResource)
         {
             return AutoMapper.Mapper.Map<GatewayResourceDisplay>(gatewayResource);
+        }
+
+        #endregion
+
+        #region PaymentMethod
+
+        internal static PaymentMethodDisplay ToPaymentMethodDisplay(this IPaymentMethod paymentMethod)
+        {
+            return AutoMapper.Mapper.Map<PaymentMethodDisplay>(paymentMethod);
+        }
+
+        internal static IPaymentMethod ToPaymentMethod(this PaymentMethodDisplay paymentMethodDisplay, IPaymentMethod destination)
+        {
+            if (paymentMethodDisplay.Key != Guid.Empty) destination.Key = paymentMethodDisplay.Key;
+
+            destination.Name = paymentMethodDisplay.Name;
+            destination.PaymentCode = paymentMethodDisplay.PaymentCode;
+            destination.Description = paymentMethodDisplay.Description;
+
+            return destination;
         }
 
         #endregion
@@ -447,5 +393,81 @@ namespace Merchello.Web.Models.ContentEditing
         }
 
         #endregion
+
+        #region WarehouseDisplay
+
+        internal static WarehouseDisplay ToWarehouseDisplay(this IWarehouse warehouse)
+        {
+            return AutoMapper.Mapper.Map<WarehouseDisplay>(warehouse);
+        }
+
+        #endregion
+
+        #region IWarehouse
+
+        internal static IWarehouse ToWarehouse(this WarehouseDisplay warehouseDisplay, IWarehouse destination)
+        {
+            if (warehouseDisplay.Key != Guid.Empty)
+            {
+                destination.Key = warehouseDisplay.Key;
+            }
+            destination.Name = warehouseDisplay.Name;
+            destination.Address1 = warehouseDisplay.Address1;
+            destination.Address2 = warehouseDisplay.Address2;
+            destination.Locality = warehouseDisplay.Locality;
+            destination.Region = warehouseDisplay.Region;
+            destination.PostalCode = warehouseDisplay.PostalCode;
+            destination.CountryCode = warehouseDisplay.CountryCode;
+            destination.Phone = warehouseDisplay.Phone;
+            destination.Email = warehouseDisplay.Email;
+            destination.IsDefault = warehouseDisplay.IsDefault;
+
+            foreach (var warehouseCatalogDisplay in warehouseDisplay.WarehouseCatalogs)
+            {
+                IWarehouseCatalog destinationWarehouseCatalog;
+
+                var matchingItems = destination.WarehouseCatalogs.Where(x => x.Key == warehouseCatalogDisplay.Key);
+                if (matchingItems.Any())
+                {
+                    var existingWarehouseCatalog = matchingItems.First();
+                    if (existingWarehouseCatalog != null)
+                    {
+                        destinationWarehouseCatalog = existingWarehouseCatalog;
+
+                        destinationWarehouseCatalog = warehouseCatalogDisplay.ToWarehouseCatalog(destinationWarehouseCatalog);
+                    }
+                }
+            }
+
+            return destination;
+        }
+
+        #endregion
+
+        #region WarehouseCatalogDisplay
+
+        internal static WarehouseCatalogDisplay ToWarehouseCatalogDisplay(this IWarehouseCatalog warehouseCatalog)
+        {
+            return AutoMapper.Mapper.Map<WarehouseCatalogDisplay>(warehouseCatalog);
+        }
+
+        #endregion
+
+        #region IWarehouseCatalog
+
+        internal static IWarehouseCatalog ToWarehouseCatalog(this WarehouseCatalogDisplay warehouseCatalogDisplay, IWarehouseCatalog destination)
+        {
+            if (warehouseCatalogDisplay.Key != Guid.Empty)
+            {
+                destination.Key = warehouseCatalogDisplay.Key;
+            }
+            destination.Name = warehouseCatalogDisplay.Name;
+            destination.Description = warehouseCatalogDisplay.Description;
+
+            return destination;
+        }
+
+        #endregion
+
     }
 }
