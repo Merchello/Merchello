@@ -135,38 +135,6 @@ namespace Merchello.Core.Gateways.Shipping.FixedRate
  
         }
 
-
-        ///// <summary>
-        ///// Updates an existing <see cref="IShipRateTier"/> in the <see cref="IShipRateTable"/>
-        ///// </summary>
-        ///// <param name="cache"></param>
-        ///// <param name="shipRateTier">The <see cref="IShipRateTier"/> to update</param>
-        ///// <param name="rateTable"></param>
-        ///// <param name="gatewayProviderService"></param>
-        //internal static void UpdateRow(IGatewayProviderService gatewayProviderService, IRuntimeCacheProvider cache, IShipRateTier shipRateTier, IShipRateTable rateTable)
-        //{
-        //    // if it does not validate ... delete it
-        //    if (!ValidateRateTier(ref shipRateTier)) 
-        //        DeleteRow(gatewayProviderService,cache, rateTable, shipRateTier);
-
-        //    // work with an array
-        //    var rowsArray = rateTable.Rows.ToArray();
-            
-        //    // if the low value is 0, delete anything before
-        //    if (shipRateTier.RangeLow == 0)
-        //    {
-        //        for(var i = 0; i < rowsArray.IndexOf(shipRateTier); i++) DeleteRow(gatewayProviderService, cache, rateTable, rowsArray[i]);
-        //    }
-
-        //    // if the previous item in the array has a RangeHigh > the updated RangeLow 
-        //    if (rowsArray.IndexOf(shipRateTier) > 0 &&
-        //        rowsArray[rowsArray.IndexOf(shipRateTier) - 1].RangeHigh > shipRateTier.RangeLow)
-        //    {
-        //        // if previous range high is > the updated rangeHigh and the next rangeHigh
-        //    }
-            
-        //}
-
         /// <summary>
         /// Asserts the ranges in the rate tier are low to high, non zero and not equal.
         /// </summary>
@@ -192,15 +160,9 @@ namespace Merchello.Core.Gateways.Shipping.FixedRate
         {
             if (MerchelloContext.Current == null) throw new InvalidOperationException("MerchelloContext.Current is null");
 
-            var row = Rows.FirstOrDefault(x => x.Key == shipRateTier.Key);
-            if (!Rows.Any() || row == null) return;
-            if (Rows.IndexOf(Rows.Last()) != Rows.IndexOf(row))
-            { 
-                _shipRateTiers[Rows.IndexOf(row) + 1].RangeLow = row.RangeLow;
-            }
-            _shipRateTiers.Remove(row);
-
             if(!IsTest) DeleteRow(MerchelloContext.Current.Services.GatewayProviderService, MerchelloContext.Current.Cache.RuntimeCache, this, shipRateTier);
+
+            _shipRateTiers.Remove(shipRateTier);
         }
 
         /// <summary>
@@ -218,19 +180,6 @@ namespace Merchello.Core.Gateways.Shipping.FixedRate
             // TODO : This should use the distributed cache referesher
             cache.ClearCacheItem(CacheKeys.GatewayShipMethodCacheKey(rateTable.ShipMethodKey));
 
-            //// verify that any existing updated rows are validated prior to saving
-            //var updatedRows =
-            //    rateTable.Rows.Where(
-            //        row =>
-            //            row.Key != Guid.Empty &&
-            //            (((ShipRateTier) row).IsPropertyDirty("RangeHigh") ||
-            //             ((ShipRateTier) row).IsPropertyDirty("RangeLow")));
-
-            //foreach (var row in updatedRows)
-            //{
-            //    UpdateRow(row, rateTable);
-            //}
-
             // persist and enter into cache
            gatewayProviderService.Save(rateTable.Rows);
            cache.GetCacheItem(CacheKeys.GatewayShipMethodCacheKey(rateTable.ShipMethodKey), () => rateTable);   
@@ -238,11 +187,29 @@ namespace Merchello.Core.Gateways.Shipping.FixedRate
 
         internal static void DeleteRow(IGatewayProviderService gatewayProviderService, IRuntimeCacheProvider cache, IShippingFixedRateTable rateTable, IShipRateTier shipRateTier)
         {
+            //var row = Rows.FirstOrDefault(x => x.Key == shipRateTier.Key);
+            //if (!Rows.Any() || row == null) return;
+            //if (Rows.IndexOf(Rows.Last()) != Rows.IndexOf(row))
+            //{
+            //    _shipRateTiers[Rows.IndexOf(row) + 1].RangeLow = row.RangeLow;
+            //}
+            //_shipRateTiers.Remove(row);
+
+            var row = rateTable.Rows.FirstOrDefault(x => x.Key == shipRateTier.Key);
+            if (!rateTable.Rows.Any() || row == null) return;
+
+            if (rateTable.Rows.IndexOf(rateTable.Rows.Last()) != rateTable.Rows.IndexOf(row))
+            {
+                rateTable.Rows.First(x => x.RangeLow == row.RangeHigh).RangeLow = row.RangeLow;
+            }
+            
             // clear the current cached item
             // TODO : This should use the distributed cache referesher
             cache.ClearCacheItem(CacheKeys.GatewayShipMethodCacheKey(rateTable.ShipMethodKey));
 
+            gatewayProviderService.Save(rateTable.Rows);
             gatewayProviderService.Delete(shipRateTier);
+
             cache.GetCacheItem(CacheKeys.GatewayShipMethodCacheKey(rateTable.ShipMethodKey), () => rateTable);   
         }
 

@@ -306,7 +306,6 @@ namespace Merchello.Tests.IntegrationTests.Shipping
            
 
             //// Act
-            
             var row = gwshipMethod.RateTable.Rows.FirstOrDefault(x => x.RangeLow == 15);
             ShippingFixedRateTable.DeleteRow(GatewayProviderService, MerchelloContext.Cache.RuntimeCache, gwshipMethod.RateTable, row);
 
@@ -350,5 +349,76 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             Assert.NotNull(retrieved.RateTable.Rows.FirstOrDefault(x => x.RangeLow == 35));
             Assert.AreEqual(5, retrieved.RateTable.Rows.Count());
         }
+
+        /// <summary>
+        /// Test verifies that a gateway ship method rate table row can be inserted to split of the rate table row range values are
+        /// adjusted correctly
+        /// </summary>
+        [Test]
+        public void Can_Insert_A_Row_At_The_Middle_Of_An_Existing_RateTable_Row()
+        {
+            //// Arrange
+            var key = Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey;
+            var rateTableProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Gateways.Shipping.ResolveByKey(key);
+            rateTableProvider.DeleteAllActiveShipMethods(_shipCountry);
+            var gwshipMethod = (FixedRateShippingGatewayMethod)rateTableProvider.CreateShipMethod(FixedRateShippingGatewayMethod.QuoteType.VaryByWeight, _shipCountry, "Ground (VBW)");
+            gwshipMethod.RateTable.AddRow(0, 10, 5);
+            gwshipMethod.RateTable.AddRow(10, 15, 10);
+            gwshipMethod.RateTable.AddRow(15, 25, 25);
+            gwshipMethod.RateTable.AddRow(25, 35, 100);
+            ShippingFixedRateTable.Save(GatewayProviderService, MerchelloContext.Cache.RuntimeCache, gwshipMethod.RateTable);
+
+
+            //// Act
+
+            gwshipMethod.RateTable.AddRow(18, 22, 100);
+            ShippingFixedRateTable.Save(GatewayProviderService, MerchelloContext.Cache.RuntimeCache, gwshipMethod.RateTable);
+
+            var retrieved = (FixedRateShippingGatewayMethod)rateTableProvider.GetAllShippingGatewayMethods(_shipCountry).First();
+
+            ////// Assert
+            Assert.NotNull(retrieved);
+            Assert.NotNull(retrieved.RateTable.Rows.FirstOrDefault(x => x.RangeLow == 18));
+            Assert.AreEqual(5, retrieved.RateTable.Rows.Count());
+        }
+
+        /// <summary>
+        /// Test verifies that a gateway ship method rate table row can be inserted to split of the rate table row range values are
+        /// adjusted correctly
+        /// </summary>
+        [Test]
+        public void Can_Insert_A_Row_At_The_Middle_Of_An_Existing_RateTable_Row_After_A_Deletion()
+        {
+            //// Arrange
+            var key = Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey;
+            var rateTableProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Gateways.Shipping.ResolveByKey(key);
+            rateTableProvider.DeleteAllActiveShipMethods(_shipCountry);
+            var gwshipMethod = (FixedRateShippingGatewayMethod)rateTableProvider.CreateShipMethod(FixedRateShippingGatewayMethod.QuoteType.VaryByWeight, _shipCountry, "Ground (VBW)");
+            gwshipMethod.RateTable.AddRow(0, 10, 5);
+            gwshipMethod.RateTable.AddRow(10, 15, 10);
+            gwshipMethod.RateTable.AddRow(15, 25, 25);
+            gwshipMethod.RateTable.AddRow(25, 35, 100);
+            ShippingFixedRateTable.Save(GatewayProviderService, MerchelloContext.Cache.RuntimeCache, gwshipMethod.RateTable);
+
+
+            //// Act
+            var row = gwshipMethod.RateTable.Rows.FirstOrDefault(x => x.RangeLow == 15);
+            ShippingFixedRateTable.DeleteRow(GatewayProviderService, MerchelloContext.Cache.RuntimeCache, gwshipMethod.RateTable, row);
+            
+            
+            var retrieved = (FixedRateShippingGatewayMethod)rateTableProvider.GetAllShippingGatewayMethods(_shipCountry).First();
+            retrieved.RateTable.AddRow(17, 22, 100);
+
+            ShippingFixedRateTable.Save(GatewayProviderService, MerchelloContext.Cache.RuntimeCache, retrieved.RateTable);
+
+
+            ////// Assert
+            Assert.NotNull(retrieved);
+            Assert.NotNull(retrieved.RateTable.Rows.FirstOrDefault(x => x.RangeLow == 15));
+            Assert.NotNull(retrieved.RateTable.Rows.FirstOrDefault(x => x.RangeHigh == 22));
+            Assert.NotNull(retrieved.RateTable.Rows.FirstOrDefault(x => x.RangeLow == 22));
+            Assert.AreEqual(4, retrieved.RateTable.Rows.Count());
+        }
+
     }
 }
