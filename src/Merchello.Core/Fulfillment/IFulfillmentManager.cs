@@ -1,15 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Models;
 
 namespace Merchello.Core.Fulfillment
 {
-    public interface IWarehouseManager // should simply use the WarehouseService for all of this
+    internal interface IFulfillmentManager // should simply use the WarehouseService for all of this
     {
         // business logic
         IOrder PrepareOrderForShipping(IOrder order);
         IEnumerable<IShipment> ShipOrder(IOrder order);
-        
+
+        IPaymentResult ProcessPayment(IInvoice invoice, IPaymentGatewayMethod paymentGatewayMethod, decimal amount, ProcessorArgumentCollection args);
+        void CancelOrder(IOrder order);
+        void VoidInvoice(IInvoice invoice);
+        void ApplyPayment(IInvoice invoice);
+
         IEnumerable<IOrder> GetUnshippedOrders();
         IEnumerable<IOrder> GetUnshippedOrders(Guid warehouseKey);
         IEnumerable<IOrder> GetBackOrders();

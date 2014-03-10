@@ -315,6 +315,16 @@ namespace Merchello.Core.Services
             return _appliedPaymentService.GetAppliedPaymentsByPaymentKey(paymentKey);
         }
 
+        /// <summary>
+        /// Gets a collection of <see cref="IAppliedPayment"/>s by the invoice key
+        /// </summary>
+        /// <param name="invoiceKey">The invoice key</param>
+        /// <returns>A collection of <see cref="IAppliedPayment"/></returns>
+        public IEnumerable<IAppliedPayment> GetAppliedPaymentsByInvoiceKey(Guid invoiceKey)
+        {
+            return _appliedPaymentService.GetAppliedPaymentsByInvoiceKey(invoiceKey);
+        }
+
         #endregion
 
         #region Event Handlers
