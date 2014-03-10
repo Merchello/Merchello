@@ -190,14 +190,7 @@ namespace Merchello.Core.Sales
         /// <returns>A collection of <see cref="IPaymentGatewayMethod"/>s</returns>
         public IEnumerable<IPaymentGatewayMethod> GetPaymentGatewayMethods()
         {
-            var paymentProviders = MerchelloContext.Gateways.Payment.ResolveAllActiveProviders();
-            var methods = new List<IPaymentGatewayMethod>();
-            foreach (var provider in paymentProviders)
-            {
-                methods.AddRange(provider.PaymentMethods.Select(x => provider.GetPaymentGatewayMethodByKey(x.Key))); 
-            }
-
-            return methods;
+            return _merchelloContext.Gateways.Payment.GetPaymentGatewayMethods();
         }
 
         /// <summary>
@@ -215,7 +208,7 @@ namespace Merchello.Core.Sales
             var invoice = PrepareInvoice(new InvoiceBuilderChain(this));
             MerchelloContext.Services.InvoiceService.Save(invoice);
 
-            return paymentGatewayMethod.AuthorizePayment(invoice, args);
+            return invoice.AuthorizePayment(paymentGatewayMethod, args);
         }
 
         /// <summary>
@@ -237,7 +230,7 @@ namespace Merchello.Core.Sales
         /// <returns>The <see cref="IPaymentResult"/></returns>
         public IPaymentResult AuthorizePayment(Guid paymentMethodKey, ProcessorArgumentCollection args)
         {
-            var paymentMethod = GetPaymentGatewayMethods().FirstOrDefault(x => x.PaymentMethod.Key.Equals(paymentMethodKey));
+            var paymentMethod = _merchelloContext.Gateways.Payment.GetPaymentGatewayMethods().FirstOrDefault(x => x.PaymentMethod.Key.Equals(paymentMethodKey));
 
             return AuthorizePayment(paymentMethod, args);
 
@@ -268,7 +261,7 @@ namespace Merchello.Core.Sales
             var invoice = PrepareInvoice(new InvoiceBuilderChain(this));
             MerchelloContext.Services.InvoiceService.Save(invoice);
 
-            return paymentGatewayMethod.AuthorizeCapturePayment(invoice, invoice.Total, args);
+            return invoice.AuthorizeCapturePayment(paymentGatewayMethod, args);
         }
 
         /// <summary>
@@ -289,7 +282,9 @@ namespace Merchello.Core.Sales
         /// <returns>A <see cref="IPaymentResult"/></returns>
         public IPaymentResult AuthorizeCapturePayment(Guid paymentMethodKey, ProcessorArgumentCollection args)
         {
-            throw new NotImplementedException();
+            var paymentMethod = _merchelloContext.Gateways.Payment.GetPaymentGatewayMethods().FirstOrDefault(x => x.PaymentMethod.Key.Equals(paymentMethodKey));
+
+            return AuthorizeCapturePayment(paymentMethod, args);
         }
 
         /// <summary>
@@ -299,7 +294,7 @@ namespace Merchello.Core.Sales
         /// <returns>A <see cref="IPaymentResult"/></returns>
         public IPaymentResult AuthorizeCapturePayment(Guid paymentMethodKey)
         {
-            throw new NotImplementedException();
+            return AuthorizeCapturePayment(paymentMethodKey, new ProcessorArgumentCollection());
         }
 
 
