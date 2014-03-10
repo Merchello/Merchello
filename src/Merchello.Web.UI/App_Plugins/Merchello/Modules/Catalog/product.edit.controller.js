@@ -81,24 +81,35 @@
             }
         };
 
-        $scope.changeSortOrder = function (propertyToSort) {
+        $scope.delete = function() {
+            var promiseDel = merchelloProductService.deleteProduct($scope.product);
+
+            promiseDel.then(function() {
+                notificationsService.success("Product Deleted", "H5YR!");
+
+                $location.url("/merchello/merchello/ProductList/manage", true);
+
+            }, function(reason) {
+                notificationsService.error("Product Deletion Failed", reason.message);
+            });
+        };
+
+        $scope.changeSortOrder = function(propertyToSort) {
 
             if ($scope.sortProperty == propertyToSort) {
                 if ($scope.sortOrder == "asc") {
                     $scope.sortProperty = "-" + propertyToSort;
                     $scope.sortOrder = "desc";
-                }
-                else {
+                } else {
                     $scope.sortProperty = propertyToSort;
                     $scope.sortOrder = "asc";
                 }
-            }
-            else {
+            } else {
                 $scope.sortProperty = propertyToSort;
                 $scope.sortOrder = "asc";
             }
 
-        }
+        };
         
         $scope.sortableOptions = {
             stop: function (e, ui) {
@@ -117,53 +128,49 @@
                 $(e.target).data("ui-sortable").floating = true;    // fix for jQui horizontal sorting issue https://github.com/angular-ui/ui-sortable/issues/19
             },
             stop: function (e, ui) {
-                var attr = ui.item.scope().attribute
+                var attr = ui.item.scope().attribute;
                 var attrOption = attr.findMyOption($scope.product.productOptions);
                 attrOption.resetChoiceSortOrder();
             }, 
             update: function (e, ui) {
-                var attr = ui.item.scope().attribute
+                var attr = ui.item.scope().attribute;
                 var attrOption = attr.findMyOption($scope.product.productOptions);
                 attrOption.resetChoiceSortOrder();
             },
             cursor: "move"
         };
 
-        $scope.selectedVariants = function () {
-            if ($scope.product != undefined)
-            {
-                return _.filter($scope.product.productVariants, function (v) {
+        $scope.selectedVariants = function() {
+            if ($scope.product != undefined) {
+                return _.filter($scope.product.productVariants, function(v) {
                     return v.selected;
                 });
-            }
-            else
-            {
+            } else {
                 return [];
             }
-        }
+        };
 
         $scope.checkBulkVariantsSelected = function() {
             var v = $scope.selectedVariants();
             if (v.length >= 1) {
                 $scope.allVariants = true;
-            }
-            else {
+            } else {
                 $scope.allVariants = false;
             }
-        }
+        };
 
         $scope.toggleAVariant = function(variant) {
             variant.selected = !variant.selected;
             $scope.checkBulkVariantsSelected();
-        }
+        };
 
-        $scope.toggleAllVariants = function (newstate) {
+        $scope.toggleAllVariants = function(newstate) {
             for (var i = 0; i < $scope.product.productVariants.length; i++) {
                 $scope.product.productVariants[i].selected = newstate;
             }
-        }
+        };
 
-        $scope.selectVariants = function (attributeToSelect) {
+        $scope.selectVariants = function(attributeToSelect) {
 
             for (var i = 0; i < $scope.product.productVariants.length; i++) {
                 $scope.product.productVariants[i].selected = false;
@@ -171,26 +178,22 @@
 
             var filteredVariants = [];
 
-            if (attributeToSelect == "All")
-            {
+            if (attributeToSelect == "All") {
                 filteredVariants = $scope.product.productVariants;
-            }
-            else if (attributeToSelect == "None") {
-            }
-            else {
-                var filteredVariants = _.filter($scope.product.productVariants,
-                    function (variant) {
+            } else if (attributeToSelect == "None") {
+            } else {
+                filteredVariants = _.filter($scope.product.productVariants,
+                    function(variant) {
                         return _.where(variant.attributes, { name: attributeToSelect }).length > 0;
                     });
             }
 
-            for (var v = 0; v < filteredVariants.length; v++)
-            {
+            for (var v = 0; v < filteredVariants.length; v++) {
                 filteredVariants[v].selected = true;
             }
 
             $scope.checkBulkVariantsSelected();
-        }
+        };
 
         $scope.changePricesFlyout = new merchello.Models.Flyout(
             $scope.flyouts.changePrices,
@@ -360,36 +363,40 @@
             });
 
 
-        $scope.selectTab = function (tabname) {
+        $scope.selectTab = function(tabname) {
             $scope.currentTab = tabname;
-        }
+        };
 
         $scope.addOption = function () {
             $scope.rebuildVariants = true;
             $scope.product.addBlankOption();
         };
 
-        $scope.rebuildAndSaveVariants = function()
-        {
+        $scope.removeOption = function (option) {
+            $scope.rebuildVariants = true;
+            $scope.product.removeOption(option);
+        };
+
+        $scope.rebuildAndSaveVariants = function() {
             merchelloProductVariantService.deleteAllByProduct($scope.product.key);
 
             $scope.product = merchelloProductService.createVariantsFromOptions($scope.product);
 
             // Save immediately
             var savepromise = merchelloProductService.updateProductWithVariants($scope.product);
-            savepromise.then(function (product) {
+            savepromise.then(function(product) {
                 $scope.product = product;
-            }, function (reason) {
+            }, function(reason) {
                 notificationsService.error("Product Save Failed", reason.message);
             });
-        }
+        };
 
-        $scope.prettyJson = function () {
+        $scope.prettyJson = function() {
             var $jsonInfo = $(".jsonInfo");
-            $jsonInfo.jsontree($jsonInfo.html())
-        }
+            $jsonInfo.jsontree($jsonInfo.html());
+        };
 
-    }
+    };
 
     angular.module("umbraco").controller("Merchello.Editors.Product.EditController", merchello.Controllers.ProductEditController);
 

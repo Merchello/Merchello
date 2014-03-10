@@ -29,7 +29,12 @@
 
             /// Server http requests
 
-            create: function(productname, sku, price) {
+            /**
+            * @ngdoc method
+            * @name create
+            * @description Creates a new product with an API call to the server using the name, sku, and price
+            **/
+            create: function (productname, sku, price) {
 
                 return umbRequestHelper.resourcePromise(
                     $http({
@@ -40,7 +45,12 @@
                     'Failed to create product sku ' + sku);
             },
 
-            createFromProduct: function(product) {
+            /**
+            * @ngdoc method
+            * @name createFromProduct
+            * @description Creates a new product with an API call to the server
+            **/
+            createFromProduct: function (product) {
 
                 return umbRequestHelper.resourcePromise(
                     $http.post(umbRequestHelper.getApiUrl('merchelloProductApiBaseUrl', 'NewProductFromProduct'),
@@ -49,39 +59,71 @@
                     'Failed to create product sku ' + sku);
             },
 
-            getByKey: function(key) {
+            /**
+            * @ngdoc method
+            * @name getByKey
+            * @description Gets a product with an API call to the server
+            **/
+            getByKey: function (key) {
 
                 return umbRequestHelper.resourcePromise(
                     $http({
-                        url: umbRequestHelper.getApiUrl('merchelloProductApiBaseUrl', 'GetProduct', [{ id: key }]), //'/umbraco/Merchello/ProductApi/GetProduct/' + key,
+                        url: umbRequestHelper.getApiUrl('merchelloProductApiBaseUrl', 'GetProduct', [{ id: key }]),
                         method: "GET"
                     }),
                     'Failed to retreive data for product key ' + key);
             },
 
-            /** saves or updates a product object */
-            save: function(product) {
+            /**
+            * @ngdoc method
+            * @name save
+            * @description Saves / updates product with an api call back to the server
+            **/
+            save: function (product) {
 
                 return umbRequestHelper.resourcePromise(
                     $http.post(umbRequestHelper.getApiUrl('merchelloProductApiBaseUrl', 'PutProduct'),
-                        //'/umbraco/Merchello/ProductApi/PutProduct',
                         product
                     ),
                     'Failed to save data for product key ' + product.key);
             },
 
-            getAllProducts: function() {
+            /**
+            * @ngdoc method
+            * @name deleteProduct
+            * @description Deletes product with an api call back to the server
+            **/
+            deleteProduct: function (product) {
+
+                return umbRequestHelper.resourcePromise(
+                    $http.post(umbRequestHelper.getApiUrl('merchelloProductApiBaseUrl', 'DeleteProduct'),
+                        product.key,
+                        { params: { id: product.key }}
+                    ),
+                    'Failed to delete product with key: ' + product.key);
+            },
+
+            /**
+            * @ngdoc method
+            * @name getByKey
+            * @description Gets all products in the data store with an API call to the server
+            **/
+            getAllProducts: function () {
 
                 return umbRequestHelper.resourcePromise(
                     $http.get(
                         umbRequestHelper.getApiUrl('merchelloProductApiBaseUrl', 'GetAllProducts')
-                        //'/umbraco/Merchello/ProductApi/GetAllProducts'
                     ),
                     'Failed to get all products');
 
             },
 
-            filterProducts: function(term) {
+            /**
+            * @ngdoc method
+            * @name getByKey
+            * @description Gets all products matching teh 'term' in the data store with an API call to the server
+            **/
+            filterProducts: function (term) {
 
                 return umbRequestHelper.resourcePromise(
                     $http.get(
@@ -98,7 +140,7 @@
             /**
             * @ngdoc method
             * @name createProduct
-            * @description Creates product and delivers the new product in the promise data
+            * @description Creates product and delivers the new Product model in the promise data
             **/
             createProduct: function(product, notifyMethodCallback) {
 
@@ -117,7 +159,12 @@
                 return deferred.promise;
             },
 
-            updateProduct: function(product) {
+            /**
+            * @ngdoc method
+            * @name updateProduct
+            * @description Saves product changes and delivers the new Product model in the promise data
+            **/
+            updateProduct: function (product) {
 
                 var deferred = $q.defer();
 
