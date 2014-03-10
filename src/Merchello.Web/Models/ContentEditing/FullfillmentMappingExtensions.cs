@@ -2,12 +2,9 @@
 using System.Linq;
 using Merchello.Core.Gateways;
 using Merchello.Core.Gateways.Shipping.FixedRate;
-using Merchello.Core.Gateways.Taxation;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
-using System.Collections.Generic;
 using Merchello.Core.Gateways.Shipping;
-using Newtonsoft.Json;
 
 namespace Merchello.Web.Models.ContentEditing
 {
