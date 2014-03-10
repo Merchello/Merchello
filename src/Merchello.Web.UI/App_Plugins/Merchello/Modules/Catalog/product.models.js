@@ -249,9 +249,11 @@
             {
                 var attr = self.attributes[i];
                 var option = attr.findMyOption(options);
-                attr.optionOrder = option.sortOrder;
+                if (option) {
+                    attr.optionOrder = option.sortOrder;              
+                }
             }
-            self.attributes = _.sortBy(self.attributes, function (attr) { return attr.optionOrder; });
+            self.attributes = _.sortBy(self.attributes, function (attrInList) { return attrInList.optionOrder; });
         };
 
         // for sorting in a table
@@ -259,7 +261,9 @@
             for (var i = 0; i < self.attributes.length; i++) {
                 var attr = self.attributes[i];
                 var option = attr.findMyOption(options);
-                self[option.name] = attr.name;
+                if (option) {
+                    self[option.name] = attr.name;
+                }
             }
         };
 
@@ -275,13 +279,11 @@
             return composedOf;
         };
 
-        self.ensureCatalogInventory = function(defaultWarehouse)
-        {
-            if (self.catalogInventories.length == 0)
-            {
+        self.ensureCatalogInventory = function(defaultWarehouse) {
+            if (self.catalogInventories.length == 0) {
                 self.addCatalogInventory(defaultWarehouse);
             }
-        }
+        };
 
         // Helper to add a variant to this product
         self.addCatalogInventory = function (warehouse) {
@@ -297,19 +299,17 @@
             return newCatalogInventory;
         };
 
-        self.globalInventoryChanged = function (newVal) {
-            if (newVal)
-            {
+        self.globalInventoryChanged = function(newVal) {
+            if (newVal) {
                 var newValInt = parseInt(newVal);
                 var totalAcrossCatalogs = 0;
-                for (var i = 0; i < self.catalogInventories.length; i++)
-                {
+                for (var i = 0; i < self.catalogInventories.length; i++) {
                     self.catalogInventories[i].count = newValInt;
                     totalAcrossCatalogs = totalAcrossCatalogs + newValInt;
                 }
                 self.totalInventoryCount = totalAcrossCatalogs;
             }
-        }
+        };
     };
 
     models.Product = function (productFromServer, dontMapChildren) {
@@ -452,20 +452,25 @@
 
         };
 
+        // Helper to remove an option from this product
+        self.removeOption = function (option) {
+
+            self.productOptions = _.reject(self.productOptions, function (opt) { return _.isEqual(opt, option); });
+
+        };
+
         // Create an array of all the Choices in a list
-        self.flattened = function () {
+        self.flattened = function() {
             var flat = [];
-            for(var o = 0; o < self.productOptions.length; o++)
-            {
+            for (var o = 0; o < self.productOptions.length; o++) {
                 var thisOption = self.productOptions[o];
-                for(var a = 0; a < thisOption.choices.length; a++)
-                {
+                for (var a = 0; a < thisOption.choices.length; a++) {
                     flat.push(thisOption.choices[a]);
                 }
             }
 
             return flat;
-        }
+        };
 
 
         // Helper to add a variant to this product
@@ -504,25 +509,25 @@
             }
         };
 
-        self.hasAvailableVariantPermutiations = function () {
+        self.hasAvailableVariantPermutiations = function() {
 
             var permutations = 1;
 
             for (var o = 0; o < self.productOptions.length; o++) {
                 var thisOption = self.productOptions[o];
-                
+
                 permutations = permutations * thisOption.choices.length;
             }
 
             var availablePermutations = permutations - self.productVariants.length;
 
             return availablePermutations;
-        }
+        };
 
-        self.getRemainingChoicesWithoutVariants = function () {
+        self.getRemainingChoicesWithoutVariants = function() {
 
             var allVariantAttributes = _.pluck(self.productVariants, 'attributeKeys');
-            var allVariantAttributes = _.flatten(allVariantAttributes);
+            allVariantAttributes = _.flatten(allVariantAttributes);
 
             var unusedChoices = [];
 
@@ -537,7 +542,7 @@
             }
 
             return unusedChoices;
-        }
+        };
 
     };
 

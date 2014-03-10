@@ -21,6 +21,8 @@
             <div class="col-xs-8 span8">
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
                     <div class="btn-group">
+                        <a data-ng-click="deleteProduct()" data-ng-show="!creatingVariant && !editingVariant && !creatingProduct" class="btn">Delete Product</a>
+                        <a data-ng-click="deleteVariant()" data-ng-show="editingVariant" class="btn">Delete Variant</a>
                         <a data-ng-disabled="productVariantForm.$invalid" data-ng-click="save(productVariantForm)" class="btn btn-success">Save</a>
                     </div>
                 </div>
@@ -151,6 +153,7 @@
                                     </tr>
                                     <tr data-ng-repeat="option in product.productOptions | orderBy:'sortOrder'">
                                         <td>
+                                            <a data-ng-click="removeOption(option)" class="btn btn-small"><i class="icon-trash"></i></a>                                        
                                             <input class="form-control col-xs-12 span12" type="text" placeholder="Add a style..." data-ng-model="option.name" />
                                         </td>
                                         <td>

@@ -251,7 +251,8 @@ namespace Merchello.Web.Editors
         /// DELETE /umbraco/Merchello/ProductApi/{guid}
         /// </summary>
         /// <param name="id"></param>
-        public HttpResponseMessage Delete(Guid id)
+        [AcceptVerbs("POST", "DELETE")]
+        public HttpResponseMessage DeleteProduct(Guid id)
         {
             var productToDelete = _productService.GetByKey(id);
             if (productToDelete == null)
