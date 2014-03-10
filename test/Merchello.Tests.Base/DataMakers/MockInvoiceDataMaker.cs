@@ -1,47 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Merchello.Core;
 using Merchello.Core.Models;
 
 namespace Merchello.Tests.Base.DataMakers
 {
     public class MockInvoiceDataMaker : MockDataMakerBase
     {
-        public static IInvoice InvoiceForInserting(ICustomer customer, IInvoiceStatus invoiceStatus, ICustomerAddress customerAddress)
+        public static IInvoice InvoiceForInserting(IAddress billTo, decimal total)
         {
-            return new Invoice(customer, customerAddress, invoiceStatus, GetAmount())
-            {
-                InvoiceNumber = InvoiceNumber(),
-                InvoiceDate = DateTime.Now,
-                Exported = false,
-                Paid = false,
-                BillToName = customer.FullName,
-                BillToAddress1 = customerAddress.Address1,
-                BillToAddress2 = customerAddress.Address2,
-                BillToLocality = customerAddress.Locality,
-                BillToRegion = customerAddress.Region,
-                BillToPostalCode = customerAddress.PostalCode,
-                BillToPhone = customerAddress.Phone,
-                BillToCompany = customerAddress.Company,
-                                
-            };
+            var invoice = new Invoice(Core.Constants.DefaultKeys.InvoiceStatus.Unpaid);
+            invoice.SetBillingAddress(billTo);
+            invoice.Total = total;
+
+            return invoice;
         }
-        
-
-        public static IEnumerable<IInvoice> InvoiceCollectionForInserting(ICustomer customer, IInvoiceStatus invoiceStatus, ICustomerAddress customerAddress, int count)
-        {
-            for(var i = 0; i < count; i++) yield return InvoiceForInserting(customer, invoiceStatus, customerAddress);
-        }
-
-
-        private static string InvoiceNumber()
-        {
-            return NoWhammyStop.Next(500000).ToString(CultureInfo.InvariantCulture);
-        }
-
-
     }
 }

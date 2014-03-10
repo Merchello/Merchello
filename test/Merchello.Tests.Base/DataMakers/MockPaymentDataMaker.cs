@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Web.WebSockets;
 using Merchello.Core;
 using Merchello.Core.Models;
 

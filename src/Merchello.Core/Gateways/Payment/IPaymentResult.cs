@@ -11,7 +11,7 @@ namespace Merchello.Core.Gateways.Payment
         /// <summary>
         /// Gets the <see cref="IPayment"/>
         /// </summary>
-        Attempt<IPayment> Result { get; }
+        Attempt<IPayment> Payment { get; }
 
         /// <summary>
         /// Gets the invoice

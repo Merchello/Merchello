@@ -143,7 +143,7 @@ namespace Merchello.Core.Persistence
         internal virtual IPaymentMethodRepository CreatePaymentMethodRepository(IDatabaseUnitOfWork uow)
         {
             return new PaymentMethodRepository(uow,
-                _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
+                _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, CreatePaymentRepository(uow));
         }
 
         /// <summary>
