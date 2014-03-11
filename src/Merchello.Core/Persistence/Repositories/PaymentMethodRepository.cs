@@ -19,15 +19,10 @@ namespace Merchello.Core.Persistence.Repositories
     /// </summary>
     internal class PaymentMethodRepository : MerchelloPetaPocoRepositoryBase<IPaymentMethod>, IPaymentMethodRepository
     {
-        private readonly IPaymentRepository _paymentRepository;
 
-        public PaymentMethodRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache,
-            IPaymentRepository paymentRepository)
+        public PaymentMethodRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache)
             : base(work, cache)
-        {
-            Mandate.ParameterNotNull(paymentRepository, "paymentRepository");
-            _paymentRepository = paymentRepository;
-        }
+        { }
 
         protected override IPaymentMethod PerformGet(Guid key)
         {
@@ -127,6 +122,7 @@ namespace Merchello.Core.Persistence.Repositories
 
         protected override void PersistDeletedItem(IPaymentMethod entity)
         {
+            // TODO clear cache for Payment
             Database.Execute("UPDATE merchPayment SET paymentMethodKey = NULL WHERE paymentMethodKey = @Key", new {entity.Key});
 
             var deletes = GetDeleteClauses();
