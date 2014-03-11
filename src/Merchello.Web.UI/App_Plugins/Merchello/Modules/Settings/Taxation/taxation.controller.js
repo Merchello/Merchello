@@ -8,13 +8,31 @@
      * @description
      * The controller for the reports list page
      */
-    controllers.TaxationController = function ($scope, notificationsService, merchelloTaxationGatewayService) {
+    controllers.TaxationController = function ($scope, notificationsService, merchelloTaxationGatewayService, merchelloSettingsService) {
 
+        $scope.availableCountries = [];
         $scope.taxationGatewayProviders = [];
 
         //--------------------------------------------------------------------------------------
         // Initialization methods
         //--------------------------------------------------------------------------------------
+
+        $scope.loadAllAvailableCountries = function () {
+
+            var promiseAllCountries = merchelloSettingsService.getAllCountries();
+            promiseAllCountries.then(function (allCountries) {
+
+                $scope.availableCountries = _.map(allCountries, function (country) {
+                    return new merchello.Models.Country(country);
+                });
+
+            }, function (reason) {
+
+                notificationsService.error("Available Countries Load Failed", reason.message);
+
+            });
+
+        };
 
         $scope.loadAllTaxationGatewayProviders = function () {
 
@@ -43,6 +61,7 @@
          */
         $scope.init = function () {
 
+            $scope.loadAllAvailableCountries();
             $scope.loadAllTaxationGatewayProviders();
 
         };
