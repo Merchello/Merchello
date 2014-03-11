@@ -1,4 +1,10 @@
+a { cursor: pointer; }
+
 .active, .active td, .active:hover, .active td:hover { background-color: #f0f9ee; }
+
+.btn { line-height: 21px; }
+
+.clear { clear: both; }
 
 .well h3 { margin: 0; }
 .well h4 { margin-bottom: 5px; }
@@ -34,6 +40,7 @@ p.warning { color: #f57020; }
 
 .merchello-panel-body { position: absolute; top: 101px; bottom: 0; left: 0; right: 0; width: 100%; clear: both; overflow: auto; }
 .merchello-panel-body a { color: #049cdb; }
+.merchello-panel-body h3 { margin-top: 0; line-height: 1em; }
 .merchello-panel-body .btn { color: #000; }
 .merchello-panel-body .btn-primary { color: #fff; }
 .merchello-panel-body .label { font-size: 1em; line-height: 20px; text-shadow: none; }
@@ -63,7 +70,8 @@ p.warning { color: #f57020; }
 
 table.merchello-selectable-table tr td { cursor: pointer; }
 
-.merchello-striped-table i { font-size: 1.7em; }
+.merchello-striped-table i { font-size: 1em; }
+.merchello-striped-table td > i { font-size: 1.7em; }
 
 .active td { border-top: solid 1px #cfebc9; }
 
@@ -103,6 +111,10 @@ td.edit { text-align: center; }
 td.edit .btn { display: inline-block; margin: 0 auto; }
 
 td.adr, td.org { display: table-cell; }
+
+.table-striped tbody td > i { position: absolute; top: 10px; left: 6px; z-index: 6; display: block; width: 20px; height: 20px; padding: 0 0 0 4px; background: #fff; }
+.table-striped tbody td i { position: relative; display: inline-block; top: auto; left: auto; width: auto; height: auto; padding: 0; background: none; }
+.table-striped tbody td i:hover { display: inline-block !important; }
 
 input[type="radio"], input[type="checkbox"] { margin-top: -2px; }
 td input[type="radio"], td input[type="checkbox"] { margin-top: 2px; }
@@ -180,3 +192,6 @@ input[type="radio"][disabled="disabled"] + span, input[type="checkbox"][disabled
 @media screen and (max-width: 88em) { .day li { margin-right: .8%; }
   .month li { margin-right: .8%; }
   .ninety li { margin-right: .3%; } }
+.merchello-side-panel .umb-panel-body { top: 120px; }
+.merchello-side-panel h4 { white-space: normal; }
+.merchello-side-panel strong { display: block; }

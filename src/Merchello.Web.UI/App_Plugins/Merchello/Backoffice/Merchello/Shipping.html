@@ -29,8 +29,8 @@
         
         <div class="merchello-panel-body">
 
-            <div class="merchello-pane row-fluid" data-ng-class="{ 'open': visible.warehouseListPanel, 'closed': !visible.warehouseListPanel }">
-                <div class="control-group umb-control-group">
+            <div class="merchello-pane row-fluid">
+                <div class="control-group umb-control-group" data-ng-class="{ 'open': visible.warehouseListPanel, 'closed': !visible.warehouseListPanel }">
                     <label class="merchello-control-label">
                         Warehouse Info
                         <small>Edit your warehouse</small>
@@ -117,12 +117,9 @@
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="merchello-pane row-fluid" data-ng-class="{ 'open': visible.shippingMethodPanel, 'closed': !visible.shippingMethodPanel }">
                     
                 <!-- Property classes from Umbraco styles -->
-                <div class="control-group umb-control-group">
+                <div class="control-group umb-control-group" data-ng-class="{ 'open': visible.shippingMethodPanel, 'closed': !visible.shippingMethodPanel }">
                     <label class="merchello-control-label">
                         Shipping Methods
                         <small>Add shipping methods to existing regions or create a new region</small>
@@ -162,9 +159,7 @@
 
                     </div>
                 </div>
-            </div>
 
-            <div class="merchello-pane row-fluid debug-pane">
                 <div class="control-group umb-control-group">
                     <label class="merchello-control-label">
                         <label><input data-ng-model="debugging" type="checkbox" /> Debug</label>

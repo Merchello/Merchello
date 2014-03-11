@@ -10,7 +10,10 @@ $active: lighten($green, 50%);
 @mixin transition($timing: ease, $property: all, $duration: 0.5s) { -webkit-transition: $property $duration $timing; -moz-transition: $property $duration $timing; -ms-transition: $property $duration $timing; -o-transition: $property $duration $timing; transition: $property $duration $timing; }
 
 //Global
+a { cursor: pointer; }
 .active, .active:hover { background-color: $active; }
+.btn { line-height: 21px; }
+.clear { clear: both; }
 
 .well {
     h3 { margin: 0; }
@@ -52,6 +55,7 @@ p.warning { color: $orange; }
 //Main Sections
 .merchello-panel-body { position: absolute; top: 101px; bottom: 0; left: 0; right: 0; width: 100%; clear: both; overflow: auto; 
     a { color: $blue; }
+    h3 { margin-top: 0; line-height: 1em; }
     .btn { color: #000; }
     .btn-primary { color: #fff; }
 
@@ -98,7 +102,8 @@ table.merchello-selectable-table {
 }
 
 .merchello-striped-table {
-    i { font-size: 1.7em; }
+    i { font-size: 1em; }
+    td > i { font-size: 1.7em; }
 }
 
 .active td { @extend .active; border-top: solid 1px darken($active, 10%); } //add the .active style to child table cells
@@ -162,6 +167,13 @@ td.edit { text-align: center;
     .btn { display: inline-block; margin: 0 auto; }
 }
 td.adr, td.org { display: table-cell; }
+
+.table-striped tbody td{
+    > i { position: absolute; top: 10px; left: 6px; z-index: 6; display: block; width: 20px; height: 20px; padding: 0 0 0 4px; background: #fff; }
+    i { position: relative; display: inline-block; top: auto; left: auto; width: auto; height: auto; padding: 0; background: none; 
+        &:hover { display: inline-block !important; }
+    }
+}
 
 //Forms
 input[type="radio"], input[type="checkbox"] { margin-top: -2px; //line up checkboxes with label text
@@ -280,4 +292,11 @@ li {
         .month & { margin-right: .8%; }
         .ninety & { margin-right: .3%; }
     }
+}
+
+//Right sidebar panel
+.merchello-side-panel {
+    .umb-panel-body { top: 120px; }
+    h4 { white-space: normal; }
+    strong { display: block; }
 }
