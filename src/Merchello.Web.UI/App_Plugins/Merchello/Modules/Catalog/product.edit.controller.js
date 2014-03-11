@@ -380,15 +380,15 @@
         $scope.rebuildAndSaveVariants = function() {
             merchelloProductVariantService.deleteAllByProduct($scope.product.key);
 
-            $scope.product = merchelloProductService.createVariantsFromOptions($scope.product);
+            //$scope.product = merchelloProductService.createVariantsFromOptions($scope.product);
 
             // Save immediately
-            var savepromise = merchelloProductService.updateProductWithVariants($scope.product);
-            savepromise.then(function(product) {
-                $scope.product = product;
-            }, function(reason) {
-                notificationsService.error("Product Save Failed", reason.message);
-            });
+            //var savepromise = merchelloProductService.updateProductWithVariants($scope.product);
+            //savepromise.then(function(product) {
+            //    $scope.product = product;
+            //}, function(reason) {
+            //    notificationsService.error("Product Save Failed", reason.message);
+            //});
         };
 
         $scope.prettyJson = function() {
