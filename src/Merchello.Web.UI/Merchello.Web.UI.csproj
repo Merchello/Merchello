@@ -137,11 +137,12 @@
     <Content Include="App_Plugins\Merchello\Modules\Settings\settings.models.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\shipping.models.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\merchello.warehouse.service.js" />
-    <Content Include="App_Plugins\Merchello\Modules\Settings\taxation.models.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Taxation\merchello.taxationgateway.service.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Taxation\taxation.models.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\vendors.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\notifications.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\shipping.controller.js" />
-    <Content Include="App_Plugins\Merchello\Modules\Settings\taxation.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Taxation\taxation.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\debug.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Payment\payment.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\settings.controller.js" />
