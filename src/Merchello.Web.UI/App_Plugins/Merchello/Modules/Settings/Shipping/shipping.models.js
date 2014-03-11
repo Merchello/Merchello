@@ -6,12 +6,16 @@
 
         if (provinceDataFromServer == undefined) {
             self.name = "";
-            self.adjustRate = "";
-            self.isSupportedDestination = true;
+            self.code = "";
+            self.allowShipping = false;
+            self.rateAdjustment = "";
+            self.rateAdjustmentType = 1;
         } else {
             self.name = provinceDataFromServer.name;
-            self.adjustRate = provinceDataFromServer.adjustRate;
-            self.isSupportedDestination = provinceDataFromServer.isSupportedDestination;
+            self.code = provinceDataFromServer.code;
+            self.allowShipping = provinceDataFromServer.allowShipping;
+            self.rateAdjustment = provinceDataFromServer.rateAdjustment;
+            self.rateAdjustmentType = provinceDataFromServer.rateAdjustmentType;
         }
 
     };
@@ -109,7 +113,7 @@
             self.surcharge = "";
             self.serviceCode = "";
             self.taxable = false;
-            self.provinceData = [];
+            self.provinces = [];
         } else {
             self.key = shippingMethodFromServer.key;
             self.name = shippingMethodFromServer.name;
@@ -119,7 +123,7 @@
             self.surcharge = shippingMethodFromServer.surcharge;
             self.serviceCode = shippingMethodFromServer.serviceCode;
             self.taxable = shippingMethodFromServer.taxable;
-            self.provinceData = _.map(shippingMethodFromServer.provinces, function (province) {
+            self.provinces = _.map(shippingMethodFromServer.provinces, function (province) {
                 return new merchello.Models.ProvinceData(province);
             });
         }
@@ -132,12 +136,12 @@
                 newShippingRegion = new merchello.Models.ShippingRegion();
             }
             // Note From Kyle: Not sure what preferred method we have on this project to inject the properties (if any) into the newly created region.
-            self.provinceData.push(newShippingRegion);
+            self.provinces.push(newShippingRegion);
         };
 
         // Helper to remove a shipping region adjustment from this shipping method.
         self.removeProvince = function (idx) {
-            self.provinceData.splice(idx, 1);
+            self.provinces.splice(idx, 1);
         };
 
     };

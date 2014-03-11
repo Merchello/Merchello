@@ -12,7 +12,6 @@
                 <label for="method-type">Method</label>
                 <div class="col-xs-6 span6 row-fluid">
                     <select name="method-type" class="col-xs-12 span12" data-ng-model="dialogData.method.gatewayResource" data-ng-options="r.name for r in dialogData.gatewayResources track by r.serviceCode" data-ng-disabled="dialogData.method.shipMethod.key.length > 0">
-                        <option>Vary by Weight</option>
                     </select>
                 </div>
             </div>
@@ -58,35 +57,36 @@
             </table>
             <a data-ng-click="insertRateTier()" class="btn btn-default btn-xs btn-mini btn-primary">Add New Range</a>
 
-            <div data-ng-hide="dialogData.method.shipMethod.provinceData.length == 0">
+            <div data-ng-hide="dialogData.method.shipMethod.provinces.length == 0">
                 <h5>Adjust for Individual Regions</h5>
 
-                <table class="table table-striped merchello-striped-table settings-table adjustment-table col-xs-6 span6">
+                <table class="table merchello-striped-table settings-table adjustment-table col-xs-6 span6">
                     <thead>
                         <tr>
-                            <th><input type="checkbox"/></th>
+                            <th class="span1 col-xs-1"><input type="checkbox" data-ng-model="allProvinces" data-ng-change="toggleAllProvinces()" /></th>
                             <th>Region</th>
                             <th>Adjust Rate</th>
                             <th>Adjust By</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr data-ng-repeat="province in dialogData.method.shipMethod.provinceData">
-                            <td>
-                                <input type="checkbox" data-ng-model="province.isSupportedDestination"/>
+                        <tr data-ng-repeat="province in dialogData.method.shipMethod.provinces">
+                            <td class="span1 col-xs-1">
+                                <input type="checkbox" data-ng-model="province.allowShipping"/>
                             </td>
                             <td>
                                 {{province.name}}
                             </td>
                             <td>
                                 <div class="input-prepend">
-                                    <span class="add-on">$</span>
-                                    <input type="number" data-ng-model="province.adjustRate" class="span1 col-xs-1" />
+                                    <span class="add-on" data-ng-show="province.rateAdjustmentType == 1">$</span>
+                                    <input type="number" data-ng-model="province.rateAdjustment" class="span1 col-xs-1" />
+                                    <span class="add-on" data-ng-show="province.rateAdjustmentType == 2">%</span>
                                 </div>
                             </td>
                             <td>
-                                <label><input type="radio" /> dollars</label>
-                                <label><input type="radio" /> percent</label>
+                                <label><input type="radio" data-ng-model="province.rateAdjustmentType" value="1" /> $</label>
+                                <label><input type="radio" data-ng-model="province.rateAdjustmentType" value="2" /> %</label>
                             </td>
                         </tr>
                     </tbody>

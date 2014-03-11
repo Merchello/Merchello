@@ -6,7 +6,6 @@ using System.Net.Http;
 using System.Web.Http;
 using Merchello.Core;
 using Merchello.Core.Gateways.Payment;
-using Merchello.Core.Gateways.Taxation;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Merchello.Web.Models.ContentEditing;
@@ -78,7 +77,7 @@ namespace Merchello.Web.Editors
         }
 
         /// <summary>
-        /// 
+        /// Get all <see cref="IPaymentMethod"/> for a payment provider
         ///
         /// GET /umbraco/Merchello/PaymentGatewayApi/GetPaymentProviderPaymentMethods/{id}
         /// </summary>
@@ -101,7 +100,7 @@ namespace Merchello.Web.Editors
         }
 
         /// <summary>
-        /// Adds a PaymentMethod
+        /// Adds a <see cref="IPaymentMethod"/>
         ///
         /// POST /umbraco/Merchello/PaymentGatewayApi/AddPaymentMethod
         /// </summary>
@@ -129,13 +128,13 @@ namespace Merchello.Web.Editors
         }
 
         /// <summary>
-        /// Save a TaxMethod
+        /// Save a <see cref="IPaymentMethod"/>
         /// 
         /// PUT /umbraco/Merchello/PaymentGatewayApi/PutPaymentMethod
         /// </summary>
         /// <param name="method">POSTed <see cref="PaymentMethodDisplay"/> object</param>
         [AcceptVerbs("POST", "PUT")]
-        public HttpResponseMessage PutTaxMethod(PaymentMethodDisplay method)
+        public HttpResponseMessage PutPaymentMethod(PaymentMethodDisplay method)
         {
             var response = Request.CreateResponse(HttpStatusCode.OK);
 
@@ -162,12 +161,12 @@ namespace Merchello.Web.Editors
         /// 
         /// GET /umbraco/Merchello/PaymentGatewayApi/DeletePaymentMethod
         /// </summary>
-        /// <param name="method">POSTed PaymentMethodDisplay object</param>
+        /// <param name="id"><see cref="PaymentMethodDisplay"/> key to delete</param>
         [AcceptVerbs("GET", "DELETE")]
-        public HttpResponseMessage DeletePaymentMethod(PaymentMethodDisplay method)
+        public HttpResponseMessage DeletePaymentMethod(Guid id)
         {
             var paymentMethodService = ((ServiceContext)MerchelloContext.Services).PaymentMethodService;
-            var methodToDelete = paymentMethodService.GetByKey(method.Key);
+            var methodToDelete = paymentMethodService.GetByKey(id);
 
             if (methodToDelete == null) return Request.CreateResponse(HttpStatusCode.NotFound);
 

@@ -53,6 +53,17 @@
                    'Failed to retreive shipping gateway providers');
             },
 
+            deleteShipCountry: function (shipCountryKey) {
+
+                return umbRequestHelper.resourcePromise(
+                   $http({
+                       url: umbRequestHelper.getApiUrl('merchelloCatalogShippingApiBaseUrl', 'DeleteShipCountry'),
+                       method: "GET",
+                       params: { id: shipCountryKey }
+                   }),
+                   'Failed to delete ship country');
+            },
+
         };
     }
 

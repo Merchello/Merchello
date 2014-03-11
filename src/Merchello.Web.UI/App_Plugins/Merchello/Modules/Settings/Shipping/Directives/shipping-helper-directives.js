@@ -8,13 +8,13 @@
      * @description
      * directive to display country, provider, and method information and to provide a parent for the directives and flyouts
      */
-    directives.ShippingCountryDirective = function () {
+    directives.ShippingCountryDirective = function() {
         return {
             restrict: 'E',
             replace: true,
             templateUrl: '/App_Plugins/Merchello/Modules/Settings/Shipping/Directives/shipping-country.html'
         };
-    }
+    };
 
     angular.module("umbraco").directive('shippingCountry', merchello.Directives.ShippingCountryDirective);
 
@@ -26,7 +26,7 @@
      * @description
      * directive to display warehouse information
      */
-    directives.ShippingWarehouseDirective = function () {
+    directives.ShippingWarehouseDirective = function() {
         return {
             restrict: 'E',
             replace: true,
@@ -35,7 +35,7 @@
             },
             templateUrl: '/App_Plugins/Merchello/Modules/Settings/Shipping/Directives/shipping-warehouse.html'
         };
-    }
+    };
 
     angular.module("umbraco").directive('shippingWarehouse', merchello.Directives.ShippingWarehouseDirective);
 

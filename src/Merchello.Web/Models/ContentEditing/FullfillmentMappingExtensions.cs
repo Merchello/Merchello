@@ -196,19 +196,19 @@ namespace Merchello.Web.Models.ContentEditing
             // Shipmethod
             destination.ShipMethod.Name = fixedRateShipMethodDisplay.ShipMethod.Name;
 
-            //var provinceCollection = new ProvinceCollection<IShipProvince>();
-            //foreach (var province in fixedRateShipMethodDisplay.ShipMethod.Provinces)
-            //{
-            //    provinceCollection.Add(
-            //        new ShipProvince(province.Code, province.Name)
-            //            {
-            //                AllowShipping = province.AllowShipping,
-            //                RateAdjustment = province.RateAdjustment,
-            //                RateAdjustmentType = province.RateAdjustmentType
-            //            }
-            //        );
-            //}
-            //destination.ShipMethod.Provinces = provinceCollection;
+            var provinceCollection = new ProvinceCollection<IShipProvince>();
+            foreach (var province in fixedRateShipMethodDisplay.ShipMethod.Provinces)
+            {
+                provinceCollection.Add(
+                    new ShipProvince(province.Code, province.Name)
+                        {
+                            AllowShipping = province.AllowShipping,
+                            RateAdjustment = province.RateAdjustment,
+                            RateAdjustmentType = province.RateAdjustmentType
+                        }
+                    );
+            }
+            destination.ShipMethod.Provinces = provinceCollection;
 
             // Rate table
             
