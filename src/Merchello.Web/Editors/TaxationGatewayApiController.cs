@@ -163,12 +163,12 @@ namespace Merchello.Web.Editors
         /// 
         /// GET /umbraco/Merchello/TaxationGatewayApi/DeleteTaxMethod
         /// </summary>
-        /// <param name="method">POSTed ShipMethodDisplay object</param>
+        /// <param name="id">TaxMethod Key</param>
         [AcceptVerbs("GET", "DELETE")]
-        public HttpResponseMessage DeleteTaxMethod(TaxMethodDisplay method)
+        public HttpResponseMessage DeleteTaxMethod(Guid id)
         {
             var taxMethodService = ((ServiceContext)MerchelloContext.Services).TaxMethodService;
-            var methodToDelete = taxMethodService.GetByKey(method.Key);
+            var methodToDelete = taxMethodService.GetByKey(id);
 
             if (methodToDelete == null) return Request.CreateResponse(HttpStatusCode.NotFound);
 
