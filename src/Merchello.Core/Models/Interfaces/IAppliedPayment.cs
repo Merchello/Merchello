@@ -45,6 +45,13 @@ namespace Merchello.Core.Models
         /// </summary>
         [DataMember]
         bool Exported { get; set;}
+
+
+        /// <summary>
+        /// The transaction type associated with this transaction
+        /// </summary>
+        [DataMember]
+        AppliedPaymentType TransactionType { get; set; }
     }
 }
 

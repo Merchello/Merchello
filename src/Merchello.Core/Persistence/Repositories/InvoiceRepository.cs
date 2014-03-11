@@ -40,7 +40,7 @@ namespace Merchello.Core.Persistence.Repositories
                 return null;
 
             
-            var lineItems = _lineItemRepository.GetByContainerKey(key) as LineItemCollection;
+            var lineItems = GetLineItemCollection(key);
            
             var factory = new InvoiceFactory(lineItems);
             return factory.BuildEntity(dto);
@@ -72,7 +72,7 @@ namespace Merchello.Core.Persistence.Repositories
             var translator = new SqlTranslator<IInvoice>(sqlClause, query);
             var sql = translator.Translate();
 
-            var dtos = Database.Fetch<CountryTaxRateDto>(sql);
+            var dtos = Database.Fetch<InvoiceDto>(sql);
 
             return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
         }
@@ -98,7 +98,8 @@ namespace Merchello.Core.Persistence.Repositories
             // TODO come back to this
             var list = new List<string>
             {
-                "DELETE FROM FROM merchAppliedPayment WHERE invoiceKey = @Key",
+                "DELETE FROM merchAppliedPayment WHERE invoiceKey = @Key",
+                "DELETE FROM merchInvoiceItem WHERE invoiceKey = @Key",
                 "DELETE FROM merchInvoice WHERE pk = @Key"
             };
 
@@ -116,7 +117,7 @@ namespace Merchello.Core.Persistence.Repositories
 
             entity.Key = dto.Key;
 
-            // TODO save the line items
+            _lineItemRepository.SaveLineItem(entity.Items, entity.Key);
 
             entity.ResetDirtyProperties();
         }
@@ -130,9 +131,28 @@ namespace Merchello.Core.Persistence.Repositories
 
             Database.Update(dto);
 
-            // TODO save the line items
+            _lineItemRepository.SaveLineItem(entity.Items, entity.Key);
 
             entity.ResetDirtyProperties();
+        }
+
+        private LineItemCollection GetLineItemCollection(Guid invoiceKey)
+        {
+            var sql = new Sql();
+            sql.Select("*")
+                .From<InvoiceItemDto>()
+                .Where<InvoiceItemDto>(x => x.ContainerKey == invoiceKey);
+
+            var dtos = Database.Fetch<InvoiceItemDto>(sql);
+
+            var factory = new LineItemFactory();
+            var collection = new LineItemCollection();
+            foreach (var dto in dtos)
+            {
+                collection.Add(factory.BuildEntity(dto));
+            }
+
+            return collection;
         }
     }
 }

@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Formatting;
 using System.Web.Http;
-using System.Web.Http.ModelBinding;
 using Umbraco.Web;
 using Umbraco.Web.Mvc;
 using Merchello.Core;
@@ -67,7 +63,7 @@ namespace Merchello.Web.Editors
             var productVariant = _productVariantService.GetByKey(id);
             if (productVariant == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
 
             return productVariant.ToProductVariantDisplay();
@@ -86,7 +82,7 @@ namespace Merchello.Web.Editors
                 var productVariants = _productVariantService.GetByProductKey(id);
                 if (productVariants == null)
                 {
-                    throw new HttpResponseException(HttpStatusCode.NotFound);
+                    throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
                 }
 
                 foreach (IProductVariant productVariant in productVariants)
@@ -116,14 +112,12 @@ namespace Merchello.Web.Editors
             if (ids != null)
             {
                 var productVariants = _productVariantService.GetByKeys(ids);
-                if (productVariants == null)
+                if (productVariants != null)
                 {
-                    //throw new HttpResponseException(HttpStatusCode.NotFound);
-                }
-
-                foreach (IProductVariant productVariant in productVariants)
-                {
-                    yield return productVariant.ToProductVariantDisplay();
+                    foreach (var productVariant in productVariants)
+                    {
+                        yield return productVariant.ToProductVariantDisplay();
+                    }
                 }
             }
             else
@@ -176,12 +170,12 @@ namespace Merchello.Web.Editors
                 }
                 else
                 {
-                    throw new HttpResponseException(HttpStatusCode.InternalServerError);
+                    throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.InternalServerError));
                 }
             }
             catch (Exception e)
             {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError);
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.InternalServerError));
             }
 
             return newProductVariant.ToProductVariantDisplay();

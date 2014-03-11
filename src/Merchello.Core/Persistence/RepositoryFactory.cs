@@ -29,11 +29,20 @@ namespace Merchello.Core.Persistence
         }
 
         /// <summary>
-        /// Returns an instance of the <see cref="ICountryTaxRateRepository"/>
+        /// Returns an instance of the <see cref="IAppliedPaymentRepository"/>
         /// </summary>
-        internal virtual ICountryTaxRateRepository CreateCountryTaxRateRepository(IDatabaseUnitOfWork uow)
+        internal virtual IAppliedPaymentRepository CreateAppliedPaymentRepository(IDatabaseUnitOfWork uow)
         {
-            return new CountryTaxRateRepository(uow,
+            return new AppliedPaymentRepository(uow,
+                _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
+        }
+
+        /// <summary>
+        /// Returns an instance of the <see cref="ITaxMethodRepository"/>
+        /// </summary>
+        internal virtual ITaxMethodRepository CreateTaxMethodRepository(IDatabaseUnitOfWork uow)
+        {
+            return new TaxMethodRepository(uow,
                 _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
         }
 
@@ -108,6 +117,13 @@ namespace Merchello.Core.Persistence
                 _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
         }
 
+
+        internal virtual IOrderRepository CreateOrderRepository(IDatabaseUnitOfWork uow)
+        {
+            return new OrderRepository(uow,
+                _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, CreateLineItemRepository<OrderItemDto>(uow));
+        }
+
         /// <summary>
         /// Returns an instance of the <see cref="IPaymentRepository"/>
         /// </summary>
@@ -116,6 +132,17 @@ namespace Merchello.Core.Persistence
         internal virtual IPaymentRepository CreatePaymentRepository(IDatabaseUnitOfWork uow)
         {
             return new PaymentRepository(uow,
+                _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
+        }
+
+        /// <summary>
+        /// Returns an instance of the <see cref="IPaymentMethodRepository"/>
+        /// </summary>
+        /// <param name="uow"></param>
+        /// <returns></returns>
+        internal virtual IPaymentMethodRepository CreatePaymentMethodRepository(IDatabaseUnitOfWork uow)
+        {
+            return new PaymentMethodRepository(uow,
                 _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
         }
 

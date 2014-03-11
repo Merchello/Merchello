@@ -13,13 +13,13 @@ namespace Merchello.Core.Models
         /// The key of the customer associated with the Payment
         /// </summary>
         [DataMember]
-        Guid CustomerKey { get; }
+        Guid? CustomerKey { get; }
             
         /// <summary>
-        /// The provider key for the payment provider
+        /// The payment method key for the payment provider
         /// </summary>
         [DataMember]
-        Guid ProviderKey { get; set;}
+        Guid? PaymentMethodKey { get; set;}
             
         /// <summary>
         /// The paymentTypeFieldKey for the payment
@@ -62,6 +62,12 @@ namespace Merchello.Core.Models
         /// </summary>
         [DataMember]
         bool Exported { get; set;}
+
+        /// <summary>
+        /// A collection to store custom/extended data for the payment
+        /// </summary>
+        [DataMember]
+        ExtendedDataCollection ExtendedData { get; }
     }
 }
 

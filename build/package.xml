@@ -13,7 +13,7 @@
       </requirements>
     </package>
     <author>
-      <name>Rusty Swayne, Jason Prothero, Joe Payne</name>
+      <name>Rusty Swayne, Jason Prothero</name>
       <website>http://www.merchello.com/</website>
     </author>
     <readme><![CDATA[]]></readme>
@@ -26,7 +26,7 @@
   <Languages />
   <DataTypes />
   <Actions>
-    <Action runat="install" undo="true" alias="Merchello_AddConfigSection" />
+    <Action runat="install" undo="true" alias="Merchello_AddConfigSection" />                   
     <Action runat="install" undo="true" alias="Merchello_CreateDatabase" />
     <Action runat="install" undo="true" alias="Merchello_AddExamineConfigs">
       <MerchelloIndexSets>
@@ -39,7 +39,8 @@
         <add name="MerchelloProductSearcher" type="Examine.LuceneEngine.Providers.LuceneSearcher, Examine" />
       </MerchelloSearchProviders>
     </Action>
-    <!--Action runat="install" undo="true" alias="uLocate_GrantUserPermissionToMerchello" userLogin="$currentUser" appName="merchello"/-->
+    <Action runat="install" undo="true" alias="Merchello_AddLanguageFileKey" language="en" position="end" area="sections" key="merchello" value="Merchello" />
+    <Action runat="install" undo="true" alias="Merchello_GrantPermissionForApp" userLogin="$currentUser" appName="merchello"/>
   </Actions>
   <control />
   <files />

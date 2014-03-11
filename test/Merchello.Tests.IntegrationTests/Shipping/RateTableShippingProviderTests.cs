@@ -2,7 +2,7 @@
 using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Gateways;
-using Merchello.Core.Gateways.Shipping.RateTable;
+using Merchello.Core.Gateways.Shipping.FixedRate;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Web;
@@ -58,18 +58,18 @@ namespace Merchello.Tests.IntegrationTests.Shipping
         {
             //// Arrange            
             // Get the RateTableShippingProvider
-            var key = Constants.ProviderKeys.Shipping.RateTableShippingProviderKey;
-            var rateTableProvider = (RateTableShippingGatewayProvider)MerchelloContext.Gateways.Shipping.ResolveByKey(key);
+            var key = Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey;
+            var rateTableProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Gateways.Shipping.ResolveByKey(key);
             const decimal expected = 5M;
             rateTableProvider.DeleteAllActiveShipMethods(_shipCountry);
 
             //// Act
-            var gwShipMethod = rateTableProvider.CreateShipMethod(RateTableShipMethod.QuoteType.VaryByWeight, _shipCountry, "Vary By Weight - Ground");
+            var gwShipMethod = rateTableProvider.CreateShipMethod(FixedRateShippingGatewayMethod.QuoteType.VaryByWeight, _shipCountry, "Vary By Weight - Ground");
             gwShipMethod.ShipMethod.Provinces["WA"].RateAdjustmentType = RateAdjustmentType.Numeric;
             gwShipMethod.ShipMethod.Provinces["WA"].RateAdjustment = expected;
-            rateTableProvider.SaveShipMethod(gwShipMethod);
+            rateTableProvider.SaveShippingGatewayMethod(gwShipMethod);
 
-            var retrieved = rateTableProvider.GetActiveShipMethods(_shipCountry).FirstOrDefault();
+            var retrieved = rateTableProvider.GetAllShippingGatewayMethods(_shipCountry).FirstOrDefault();
 
             //// Assert
             Assert.NotNull(retrieved);
@@ -83,22 +83,22 @@ namespace Merchello.Tests.IntegrationTests.Shipping
         public void Can_Create_And_Persist_A_GatewayShipMethod_With_A_RateTable()
         {
             //// Arrange
-            var key = Constants.ProviderKeys.Shipping.RateTableShippingProviderKey;
-            var rateTableProvider = (RateTableShippingGatewayProvider)MerchelloContext.Gateways.Shipping.ResolveByKey(key);
+            var key = Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey;
+            var rateTableProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Gateways.Shipping.ResolveByKey(key);
             rateTableProvider.DeleteAllActiveShipMethods(_shipCountry);
             var expected = 4;
 
             //// Act
-            var gwshipMethod = (RateTableShipMethod)rateTableProvider.CreateShipMethod(RateTableShipMethod.QuoteType.VaryByWeight, _shipCountry, "Ground (VBW)");
+            var gwshipMethod = (FixedRateShippingGatewayMethod)rateTableProvider.CreateShipMethod(FixedRateShippingGatewayMethod.QuoteType.VaryByWeight, _shipCountry, "Ground (VBW)");
             gwshipMethod.RateTable.AddRow(0, 10, 5);
             gwshipMethod.RateTable.AddRow(10, 15, 10);
             gwshipMethod.RateTable.AddRow(15, 25, 25);
             gwshipMethod.RateTable.AddRow(25, 10000, 100);
 
             // have to call this via the static method due o the MerchelloContext.Current not present in the ShipRateTable object.
-            ShipRateTable.Save(GatewayProviderService, MerchelloContext.Cache.RuntimeCache, gwshipMethod.RateTable);
+            ShippingFixedRateTable.Save(GatewayProviderService, MerchelloContext.Cache.RuntimeCache, gwshipMethod.RateTable);
 
-            var retrieved = (RateTableShipMethod)rateTableProvider.GetActiveShipMethods(_shipCountry).First();
+            var retrieved = (FixedRateShippingGatewayMethod)rateTableProvider.GetAllShippingGatewayMethods(_shipCountry).First();
 
             ////// Assert
             Assert.NotNull(retrieved);
@@ -106,17 +106,19 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             Assert.AreEqual(expected, retrieved.RateTable.Rows.Count());
         }
 
+
+
         /// <summary>
-        /// Can quote a shipment with a VaryByRate RateTable
+        /// Can quote a shipment with a VaryByRate FixedRateTable
         /// </summary>
         [Test]
         public void Can_Get_A_Quote_For_A_Shipment_VaryByWeight()
         {
             //// Arrange
-            var key = Constants.ProviderKeys.Shipping.RateTableShippingProviderKey;
-            var rateTableProvider = (RateTableShippingGatewayProvider)MerchelloContext.Gateways.Shipping.ResolveByKey(key);
+            var key = Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey;
+            var rateTableProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Gateways.Shipping.ResolveByKey(key);
             rateTableProvider.DeleteAllActiveShipMethods(_shipCountry);
-            var gwshipMethod = (RateTableShipMethod)rateTableProvider.CreateShipMethod(RateTableShipMethod.QuoteType.VaryByWeight, _shipCountry, "Ground (VBW)");
+            var gwshipMethod = (FixedRateShippingGatewayMethod)rateTableProvider.CreateShipMethod(FixedRateShippingGatewayMethod.QuoteType.VaryByWeight, _shipCountry, "Ground (VBW)");
             gwshipMethod.RateTable.AddRow(0, 10, 5);
             gwshipMethod.RateTable.AddRow(10, 15, 10); // total weight should be 10M so we should hit this tier
             gwshipMethod.RateTable.AddRow(15, 25, 25);
@@ -135,16 +137,16 @@ namespace Merchello.Tests.IntegrationTests.Shipping
         }
 
         /// <summary>
-        /// Can quote a shipment with a VaryByPrice RateTable
+        /// Can quote a shipment with a VaryByPrice FixedRateTable
         /// </summary>
         [Test]
         public void Can_Get_A_Quote_For_A_Shipment_VaryByPrice()
         {
             //// Arrange
-            var key = Constants.ProviderKeys.Shipping.RateTableShippingProviderKey;
-            var rateTableProvider = (RateTableShippingGatewayProvider)MerchelloContext.Gateways.Shipping.ResolveByKey(key);
+            var key = Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey;
+            var rateTableProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Gateways.Shipping.ResolveByKey(key);
             rateTableProvider.DeleteAllActiveShipMethods(_shipCountry);
-            var gwshipMethod = (RateTableShipMethod)rateTableProvider.CreateShipMethod(RateTableShipMethod.QuoteType.VaryByPrice, _shipCountry, "Ground (Vary By Price)");
+            var gwshipMethod = (FixedRateShippingGatewayMethod)rateTableProvider.CreateShipMethod(FixedRateShippingGatewayMethod.QuoteType.VaryByPrice, _shipCountry, "Ground (Vary By Price)");
             gwshipMethod.RateTable.AddRow(0, 10, 5);
             gwshipMethod.RateTable.AddRow(10, 15, 10); 
             gwshipMethod.RateTable.AddRow(15, 25, 25);
@@ -173,17 +175,17 @@ namespace Merchello.Tests.IntegrationTests.Shipping
         {
             //// Arrange
             var dkCountry = ShipCountryService.GetShipCountryByCountryCode(Catalog.Key, "DK");
-            var key = Constants.ProviderKeys.Shipping.RateTableShippingProviderKey;
-            var rateTableProvider = (RateTableShippingGatewayProvider)MerchelloContext.Gateways.Shipping.ResolveByKey(key);
+            var key = Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey;
+            var rateTableProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Gateways.Shipping.ResolveByKey(key);
             rateTableProvider.DeleteAllActiveShipMethods(_shipCountry);
-            var gwshipMethod1 = (RateTableShipMethod)rateTableProvider.CreateShipMethod(RateTableShipMethod.QuoteType.VaryByPrice, _shipCountry, "Ground (PercentTotal) 1");
-            var gwshipMethod2 = (RateTableShipMethod)rateTableProvider.CreateShipMethod(RateTableShipMethod.QuoteType.VaryByPrice, _shipCountry, "Ground (PercentTotal) 2");
-            var gwshipMethod3 = (RateTableShipMethod)rateTableProvider.CreateShipMethod(RateTableShipMethod.QuoteType.VaryByPrice, dkCountry, "Ground (PercentTotal) 3");
+            var gwshipMethod1 = (FixedRateShippingGatewayMethod)rateTableProvider.CreateShipMethod(FixedRateShippingGatewayMethod.QuoteType.VaryByPrice, _shipCountry, "Ground (PercentTotal) 1");
+            var gwshipMethod2 = (FixedRateShippingGatewayMethod)rateTableProvider.CreateShipMethod(FixedRateShippingGatewayMethod.QuoteType.VaryByPrice, _shipCountry, "Ground (PercentTotal) 2");
+            var gwshipMethod3 = (FixedRateShippingGatewayMethod)rateTableProvider.CreateShipMethod(FixedRateShippingGatewayMethod.QuoteType.VaryByPrice, dkCountry, "Ground (PercentTotal) 3");
 
             //// Act
             var shipments = _basket.PackageBasket(MerchelloContext, _destination);
             Assert.IsTrue(shipments.Any());
-            var retrievedMethods = rateTableProvider.GetAvailableShipMethodsForShipment(shipments.First());
+            var retrievedMethods = rateTableProvider.GetShippingGatewayMethodsForShipment(shipments.First());
 
             //// Assert
             Assert.IsTrue(retrievedMethods.Any());
@@ -202,33 +204,33 @@ namespace Merchello.Tests.IntegrationTests.Shipping
 
             //// Arrange
             var dkCountry = ShipCountryService.GetShipCountryByCountryCode(Catalog.Key, "DK");
-            var key = Constants.ProviderKeys.Shipping.RateTableShippingProviderKey;
+            var key = Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey;
 
-            var rateTableProvider = (RateTableShippingGatewayProvider)MerchelloContext.Gateways.Shipping.ResolveByKey(key);
+            var rateTableProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Gateways.Shipping.ResolveByKey(key);
 
             rateTableProvider.DeleteAllActiveShipMethods(_shipCountry);
-            var gwshipMethod1 = (RateTableShipMethod)rateTableProvider.CreateShipMethod(RateTableShipMethod.QuoteType.VaryByPrice, _shipCountry, "Ground (Vary By Pricc) 1");
+            var gwshipMethod1 = (FixedRateShippingGatewayMethod)rateTableProvider.CreateShipMethod(FixedRateShippingGatewayMethod.QuoteType.VaryByPrice, _shipCountry, "Ground (Vary By Pricc) 1");
             gwshipMethod1.RateTable.AddRow(0, 10, 5);
             gwshipMethod1.RateTable.AddRow(10, 15, 10);
             gwshipMethod1.RateTable.AddRow(15, 25, 25);
             gwshipMethod1.RateTable.AddRow(25, 60, 30); // total price should be 50M so we should hit this tier
             gwshipMethod1.RateTable.AddRow(25, 10000, 50);
-            rateTableProvider.SaveShipMethod(gwshipMethod1);    
+            rateTableProvider.SaveShippingGatewayMethod(gwshipMethod1);    
             
-            var gwshipMethod2 = (RateTableShipMethod)rateTableProvider.CreateShipMethod(RateTableShipMethod.QuoteType.VaryByWeight, _shipCountry, "Ground (VBW)");
+            var gwshipMethod2 = (FixedRateShippingGatewayMethod)rateTableProvider.CreateShipMethod(FixedRateShippingGatewayMethod.QuoteType.VaryByWeight, _shipCountry, "Ground (VBW)");
             gwshipMethod2.RateTable.AddRow(0, 10, 5);
             gwshipMethod2.RateTable.AddRow(10, 15, 10); // total weight should be 10M so we should hit this tier
             gwshipMethod2.RateTable.AddRow(15, 25, 25);
             gwshipMethod2.RateTable.AddRow(25, 10000, 100);
-            rateTableProvider.SaveShipMethod(gwshipMethod2);
+            rateTableProvider.SaveShippingGatewayMethod(gwshipMethod2);
 
-            var gwshipMethod3 = (RateTableShipMethod)rateTableProvider.CreateShipMethod(RateTableShipMethod.QuoteType.VaryByPrice, dkCountry, "Ground (Vary By Price) 3");
+            var gwshipMethod3 = (FixedRateShippingGatewayMethod)rateTableProvider.CreateShipMethod(FixedRateShippingGatewayMethod.QuoteType.VaryByPrice, dkCountry, "Ground (Vary By Price) 3");
             gwshipMethod3.RateTable.AddRow(0, 10, 5);
             gwshipMethod3.RateTable.AddRow(10, 15, 10);
             gwshipMethod3.RateTable.AddRow(15, 25, 25);
             gwshipMethod3.RateTable.AddRow(25, 60, 30); // total price should be 50M so we should hit this tier
             gwshipMethod3.RateTable.AddRow(25, 10000, 50);
-            rateTableProvider.SaveShipMethod(gwshipMethod3);
+            rateTableProvider.SaveShippingGatewayMethod(gwshipMethod3);
 
             #endregion
 
@@ -238,7 +240,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             var shipments = _basket.PackageBasket(MerchelloContext, _destination);
             Assert.IsTrue(shipments.Any());
 
-            var quotes = rateTableProvider.QuoteAvailableShipMethodsForShipment(shipments.First()).OrderBy(x => x.Rate);
+            var quotes = rateTableProvider.QuoteShippingGatewayMethodsForShipment(shipments.First()).OrderBy(x => x.Rate);
 
             Console.Write("Basket total price: {0}", _basket.TotalBasketPrice);
 
@@ -256,18 +258,18 @@ namespace Merchello.Tests.IntegrationTests.Shipping
         public void Can_Get_A_Numerically_Adjusted_Quote_For_Alaska_Region()
         {
             //// Arrange
-            var key = Constants.ProviderKeys.Shipping.RateTableShippingProviderKey;
-            var rateTableProvider = (RateTableShippingGatewayProvider)MerchelloContext.Gateways.Shipping.ResolveByKey(key);
+            var key = Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey;
+            var rateTableProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Gateways.Shipping.ResolveByKey(key);
             rateTableProvider.DeleteAllActiveShipMethods(_shipCountry);
 
-            var gwshipMethod1 = (RateTableShipMethod)rateTableProvider.CreateShipMethod(RateTableShipMethod.QuoteType.VaryByPrice, _shipCountry, "Ground (PercentTotal) 1");
+            var gwshipMethod1 = (FixedRateShippingGatewayMethod)rateTableProvider.CreateShipMethod(FixedRateShippingGatewayMethod.QuoteType.VaryByPrice, _shipCountry, "Ground (PercentTotal) 1");
             gwshipMethod1.RateTable.AddRow(0, 10, 5);
             gwshipMethod1.RateTable.AddRow(10, 15, 10);
             gwshipMethod1.RateTable.AddRow(15, 25, 25);
             gwshipMethod1.RateTable.AddRow(25, 60, 30); // total price should be 50M so we should hit this tier
             gwshipMethod1.RateTable.AddRow(25, 10000, 50);
             gwshipMethod1.ShipMethod.Provinces["AK"].RateAdjustment = 5M;
-            rateTableProvider.SaveShipMethod(gwshipMethod1);
+            rateTableProvider.SaveShippingGatewayMethod(gwshipMethod1);
             _destination.Region = "AK";
 
             //// Act
@@ -282,6 +284,140 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             Assert.AreEqual(1, quotes.Count());
             Assert.AreEqual(35M, quotes.First().Rate);
 
+        }
+
+        /// <summary>
+        /// Test verifies that a gateway ship method rate table row can be deleted and the row range values are
+        /// adjusted correctly
+        /// </summary>
+        [Test]
+        public void Can_Delete_A_Row_From_An_Existing_RateTable()
+        {
+            //// Arrange
+            var key = Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey;
+            var rateTableProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Gateways.Shipping.ResolveByKey(key);
+            rateTableProvider.DeleteAllActiveShipMethods(_shipCountry);
+            var gwshipMethod = (FixedRateShippingGatewayMethod)rateTableProvider.CreateShipMethod(FixedRateShippingGatewayMethod.QuoteType.VaryByWeight, _shipCountry, "Ground (VBW)");
+            gwshipMethod.RateTable.AddRow(0, 10, 5);
+            gwshipMethod.RateTable.AddRow(10, 15, 10);
+            gwshipMethod.RateTable.AddRow(15, 25, 25);
+            gwshipMethod.RateTable.AddRow(25, 10000, 100);
+            ShippingFixedRateTable.Save(GatewayProviderService, MerchelloContext.Cache.RuntimeCache, gwshipMethod.RateTable);
+           
+
+            //// Act
+            var row = gwshipMethod.RateTable.Rows.FirstOrDefault(x => x.RangeLow == 15);
+            ShippingFixedRateTable.DeleteRow(GatewayProviderService, MerchelloContext.Cache.RuntimeCache, gwshipMethod.RateTable, row);
+
+            var retrieved = (FixedRateShippingGatewayMethod)rateTableProvider.GetAllShippingGatewayMethods(_shipCountry).First();
+
+            ////// Assert
+            Assert.NotNull(retrieved);
+            Assert.NotNull(retrieved.RateTable.Rows.FirstOrDefault(x => x.RangeLow == 15));
+            Assert.AreEqual(3, retrieved.RateTable.Rows.Count());
+        }
+
+
+        /// <summary>
+        /// Test verifies that a gateway ship method rate table row can be inserted at the end of the rate table row range values are
+        /// adjusted correctly
+        /// </summary>
+        [Test]
+        public void Can_Insert_A_Row_At_The_End_Of_An_Existing_RateTable()
+        {
+            //// Arrange
+            var key = Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey;
+            var rateTableProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Gateways.Shipping.ResolveByKey(key);
+            rateTableProvider.DeleteAllActiveShipMethods(_shipCountry);
+            var gwshipMethod = (FixedRateShippingGatewayMethod)rateTableProvider.CreateShipMethod(FixedRateShippingGatewayMethod.QuoteType.VaryByWeight, _shipCountry, "Ground (VBW)");
+            gwshipMethod.RateTable.AddRow(0, 10, 5);
+            gwshipMethod.RateTable.AddRow(10, 15, 10);
+            gwshipMethod.RateTable.AddRow(15, 25, 25);
+            gwshipMethod.RateTable.AddRow(25, 35, 100);
+            ShippingFixedRateTable.Save(GatewayProviderService, MerchelloContext.Cache.RuntimeCache, gwshipMethod.RateTable);
+
+
+            //// Act
+
+            gwshipMethod.RateTable.AddRow(36, 38, 100);
+            ShippingFixedRateTable.Save(GatewayProviderService, MerchelloContext.Cache.RuntimeCache, gwshipMethod.RateTable);
+
+            var retrieved = (FixedRateShippingGatewayMethod)rateTableProvider.GetAllShippingGatewayMethods(_shipCountry).First();
+
+            ////// Assert
+            Assert.NotNull(retrieved);
+            Assert.NotNull(retrieved.RateTable.Rows.FirstOrDefault(x => x.RangeLow == 35));
+            Assert.AreEqual(5, retrieved.RateTable.Rows.Count());
+        }
+
+        /// <summary>
+        /// Test verifies that a gateway ship method rate table row can be inserted to split of the rate table row range values are
+        /// adjusted correctly
+        /// </summary>
+        [Test]
+        public void Can_Insert_A_Row_At_The_Middle_Of_An_Existing_RateTable_Row()
+        {
+            //// Arrange
+            var key = Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey;
+            var rateTableProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Gateways.Shipping.ResolveByKey(key);
+            rateTableProvider.DeleteAllActiveShipMethods(_shipCountry);
+            var gwshipMethod = (FixedRateShippingGatewayMethod)rateTableProvider.CreateShipMethod(FixedRateShippingGatewayMethod.QuoteType.VaryByWeight, _shipCountry, "Ground (VBW)");
+            gwshipMethod.RateTable.AddRow(0, 10, 5);
+            gwshipMethod.RateTable.AddRow(10, 15, 10);
+            gwshipMethod.RateTable.AddRow(15, 25, 25);
+            gwshipMethod.RateTable.AddRow(25, 35, 100);
+            ShippingFixedRateTable.Save(GatewayProviderService, MerchelloContext.Cache.RuntimeCache, gwshipMethod.RateTable);
+
+
+            //// Act
+
+            gwshipMethod.RateTable.AddRow(18, 22, 100);
+            ShippingFixedRateTable.Save(GatewayProviderService, MerchelloContext.Cache.RuntimeCache, gwshipMethod.RateTable);
+
+            var retrieved = (FixedRateShippingGatewayMethod)rateTableProvider.GetAllShippingGatewayMethods(_shipCountry).First();
+
+            ////// Assert
+            Assert.NotNull(retrieved);
+            Assert.NotNull(retrieved.RateTable.Rows.FirstOrDefault(x => x.RangeLow == 18));
+            Assert.AreEqual(5, retrieved.RateTable.Rows.Count());
+        }
+
+        /// <summary>
+        /// Test verifies that a gateway ship method rate table row can be inserted to split of the rate table row range values are
+        /// adjusted correctly
+        /// </summary>
+        [Test]
+        public void Can_Insert_A_Row_At_The_Middle_Of_An_Existing_RateTable_Row_After_A_Deletion()
+        {
+            //// Arrange
+            var key = Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey;
+            var rateTableProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Gateways.Shipping.ResolveByKey(key);
+            rateTableProvider.DeleteAllActiveShipMethods(_shipCountry);
+            var gwshipMethod = (FixedRateShippingGatewayMethod)rateTableProvider.CreateShipMethod(FixedRateShippingGatewayMethod.QuoteType.VaryByWeight, _shipCountry, "Ground (VBW)");
+            gwshipMethod.RateTable.AddRow(0, 10, 5);
+            gwshipMethod.RateTable.AddRow(10, 15, 10);
+            gwshipMethod.RateTable.AddRow(15, 25, 25);
+            gwshipMethod.RateTable.AddRow(25, 35, 100);
+            ShippingFixedRateTable.Save(GatewayProviderService, MerchelloContext.Cache.RuntimeCache, gwshipMethod.RateTable);
+
+
+            //// Act
+            var row = gwshipMethod.RateTable.Rows.FirstOrDefault(x => x.RangeLow == 15);
+            ShippingFixedRateTable.DeleteRow(GatewayProviderService, MerchelloContext.Cache.RuntimeCache, gwshipMethod.RateTable, row);
+            
+            
+            var retrieved = (FixedRateShippingGatewayMethod)rateTableProvider.GetAllShippingGatewayMethods(_shipCountry).First();
+            retrieved.RateTable.AddRow(17, 22, 100);
+
+            ShippingFixedRateTable.Save(GatewayProviderService, MerchelloContext.Cache.RuntimeCache, retrieved.RateTable);
+
+
+            ////// Assert
+            Assert.NotNull(retrieved);
+            Assert.NotNull(retrieved.RateTable.Rows.FirstOrDefault(x => x.RangeLow == 15));
+            Assert.NotNull(retrieved.RateTable.Rows.FirstOrDefault(x => x.RangeHigh == 22));
+            Assert.NotNull(retrieved.RateTable.Rows.FirstOrDefault(x => x.RangeLow == 22));
+            Assert.AreEqual(4, retrieved.RateTable.Rows.Count());
         }
 
     }

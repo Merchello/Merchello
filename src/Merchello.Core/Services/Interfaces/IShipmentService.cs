@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Merchello.Core.Models;
-using Merchello.Core.Models.Interfaces;
-using Merchello.Core.Models.TypeFields;
 using Umbraco.Core.Services;
 
 namespace Merchello.Core.Services
@@ -56,8 +51,9 @@ namespace Merchello.Core.Services
         /// </summary>
         /// <param name="shipMethodKey">The pk of the shipMethod</param>
         /// <returns>A collection of <see cref="IShipment"/></returns>
-        IEnumerable<IShipment> GetShipmentsForShipMethod(Guid shipMethodKey);
-            
+        IEnumerable<IShipment> GetShipmentsByShipMethodKey(Guid shipMethodKey);
+
+
         /// <summary>
         /// Gets list of <see cref="IShipment"/> objects given a list of Unique keys
         /// </summary>

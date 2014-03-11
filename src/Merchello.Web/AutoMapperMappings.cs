@@ -1,5 +1,6 @@
-﻿using Merchello.Core.Gateways.Shipping;
-using Merchello.Core.Gateways.Shipping.RateTable;
+﻿using Merchello.Core.Gateways;
+using Merchello.Core.Gateways.Shipping;
+using Merchello.Core.Gateways.Shipping.FixedRate;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Web.Models.ContentEditing;
@@ -16,8 +17,11 @@ namespace Merchello.Web
             AutoMapper.Mapper.CreateMap<ICatalogInventory, CatalogInventoryDisplay>();
             
             AutoMapper.Mapper.CreateMap<ICountry, CountryDisplay>();
-            AutoMapper.Mapper.CreateMap<ICountryTaxRate, TaxProvinceDisplay>();
+            AutoMapper.Mapper.CreateMap<ITaxMethod, TaxProvinceDisplay>();
             
+            // payment
+            AutoMapper.Mapper.CreateMap<IPaymentMethod, PaymentMethodDisplay>();
+
             // products
             AutoMapper.Mapper.CreateMap<IProduct, ProductDisplay>();
             AutoMapper.Mapper.CreateMap<IProductAttribute, ProductAttributeDisplay>();
@@ -32,10 +36,14 @@ namespace Merchello.Web
             AutoMapper.Mapper.CreateMap<IShippingGatewayProvider, ShippingGatewayProviderDisplay>();
             AutoMapper.Mapper.CreateMap<IShipCountry, ShipCountryDisplay>();
             AutoMapper.Mapper.CreateMap<IShipMethod, ShipMethodDisplay>();
-            AutoMapper.Mapper.CreateMap<IRateTableShipMethod, RateTableShipMethodDisplay>();
+            AutoMapper.Mapper.CreateMap<IFixedRateShippingGatewayMethod, FixedRateShipMethodDisplay>();
             AutoMapper.Mapper.CreateMap<IShipProvince, ShipProvinceDisplay>();
-            AutoMapper.Mapper.CreateMap<IShipRateTable, ShipRateTableDisplay>();
+            AutoMapper.Mapper.CreateMap<IShippingFixedRateTable, ShipFixedRateTableDisplay>();
             AutoMapper.Mapper.CreateMap<IShipRateTier, ShipRateTierDisplay>();
+            
+            // taxation
+            AutoMapper.Mapper.CreateMap<ITaxMethod, TaxMethodDisplay>();
+            AutoMapper.Mapper.CreateMap<ITaxProvince, TaxProvinceDisplay>();
             
             // warehouse
             AutoMapper.Mapper.CreateMap<IWarehouse, WarehouseDisplay>();

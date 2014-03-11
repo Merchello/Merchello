@@ -15,20 +15,20 @@ namespace Merchello.Core.Models
     {
         private readonly string _countryCode;
         private readonly RegionInfo _regionInfo;
-        private readonly IEnumerable<IProvince> _provinces; 
-
+        private readonly IEnumerable<IProvince> _provinces;
+        
 
         protected CountryBase(string countryCode, IEnumerable<IProvince> provinces)
-            : this(countryCode, new RegionInfo(countryCode), provinces)
+            : this(countryCode, countryCode.Equals(Constants.CountryCodes.EverywhereElse) ? null : new RegionInfo(countryCode), provinces)
         { }
 
         protected CountryBase(string countryCode, RegionInfo regionInfo, IEnumerable<IProvince> provinces)
         {
-            Mandate.ParameterNotNull(regionInfo, "regionInfo");
+            if(!countryCode.Equals(Constants.CountryCodes.EverywhereElse)) Mandate.ParameterNotNull(regionInfo, "regionInfo");
             Mandate.ParameterNotNull(provinces, "provinces");
 
             _countryCode = countryCode;
-            _regionInfo = regionInfo;
+            if (!countryCode.Equals(Constants.CountryCodes.EverywhereElse))  _regionInfo = regionInfo;
             _provinces = provinces;
         }
 
@@ -46,7 +46,10 @@ namespace Merchello.Core.Models
         /// </summary>
         [DataMember]
         public string Name {
-            get { return _regionInfo.EnglishName; }
+            get
+            {
+                return _countryCode.Equals(Constants.CountryCodes.EverywhereElse) ? "Everywhere Else" : _regionInfo.EnglishName;
+            }
         }
 
         /// <summary>

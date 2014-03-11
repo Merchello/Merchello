@@ -16,5 +16,13 @@ namespace Merchello.Core.Persistence.Repositories
         /// <param name="invoicesCount">The number of invoices needing invoice numbers.  Useful when saving multiple new invoices.</param>
         /// <returns></returns>
         int GetNextInvoiceNumber(Guid storeSettingKey, int invoicesCount = 1);
+
+        /// <summary>
+        /// Gets the next order number (int)
+        /// </summary>
+        /// <param name="storeSettingKey">Constant Guid Key of the NextOrderNumber store setting</param>
+        /// <param name="ordersCount">The number of orders needing invoice orders.  Useful when saving multiple new orders.</param>
+        /// <returns></returns>
+        int GetNextOrderNumber(Guid storeSettingKey, int ordersCount = 1);
     }
 }

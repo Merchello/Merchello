@@ -19,13 +19,17 @@ namespace Merchello.Core.Models.Rdbms
         [NullSetting(NullSetting = NullSettings.Null)]
         public Guid InvoiceKey { get; set; }
 
+        [Column("orderNumberPrefix")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public string OrderNumberPrefix { get; set; }
+        
         [Column("orderNumber")]
         [IndexAttribute(IndexTypes.UniqueNonClustered, Name = "IX_merchOrderNumber")]
-        public string OrderNumber { get; set; }
+        public int OrderNumber { get; set; }
 
         [Column("orderDate")]
         [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchOrderDate")]
-        public DateTime OrdereDate { get; set; }
+        public DateTime OrderDate { get; set; }
 
         [Column("orderStatusKey")]
         [ForeignKey(typeof(OrderStatusDto), Name = "FK_merchOrder_merchOrderStatus", Column = "pk")]
@@ -38,9 +42,6 @@ namespace Merchello.Core.Models.Rdbms
         [Column("exported")]
         public bool Exported { get; set; }
       
-        [Column("amount")]
-        public decimal Amount { get; set; }
-
         [Column("updateDate")]
         [Constraint(Default = "getdate()")]
         public DateTime UpdateDate { get; set; }
@@ -51,9 +52,6 @@ namespace Merchello.Core.Models.Rdbms
 
         [ResultColumn]
         public OrderStatusDto OrderStatusDto { get; set; }
-
-        [ResultColumn]
-        public CustomerDto CustomerDto { get; set; }
 
     }
 }

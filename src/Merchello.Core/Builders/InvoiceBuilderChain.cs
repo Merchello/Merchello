@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Merchello.Core.Checkout;
 using Merchello.Core.Models;
+using Merchello.Core.Sales;
 using Umbraco.Core;
 
 namespace Merchello.Core.Builders
@@ -12,21 +12,32 @@ namespace Merchello.Core.Builders
     /// </summary>
     internal sealed class InvoiceBuilderChain : BuildChainBase<IInvoice>
     {
-        private readonly CheckoutPreparationBase _checkoutPreparation;
+        private readonly SalePreparationBase _salePreparation;
 
-        internal InvoiceBuilderChain(CheckoutPreparationBase checkoutPreparation)
+        internal InvoiceBuilderChain(SalePreparationBase salePreparation)
         {
-            Mandate.ParameterNotNull(checkoutPreparation, "checkout");
-            _checkoutPreparation = checkoutPreparation;
+            Mandate.ParameterNotNull(salePreparation, "salesManager");
+            _salePreparation = salePreparation;
 
-            ResolveChain(Constants.TaskChainAlias.CheckoutInvoiceCreate);
+            ResolveChain(Constants.TaskChainAlias.SalesPreparationInvoiceCreate);
         }
 
+        /// <summary>
+        /// Builds the invoice
+        /// </summary>
+        /// <returns>Attempt{IInvoice}</returns>
         public override Attempt<IInvoice> Build()
         {
-            return (TaskHandlers.Any())
-                       ? TaskHandlers.First().Execute(new Invoice(Constants.DefaultKeys.UnpaidInvoiceStatusKey))
+            var attempt = (TaskHandlers.Any())
+                       ? TaskHandlers.First().Execute(new Invoice(Constants.DefaultKeys.InvoiceStatus.Unpaid) { VersionKey = _salePreparation.ItemCache.VersionKey })
                        : Attempt<IInvoice>.Fail(new InvalidOperationException("The configuration Chain Task List could not be instantiated"));
+
+            if (!attempt.Success) return attempt;
+
+            // total the invoice
+            attempt.Result.Total = attempt.Result.Items.Sum(x => x.TotalPrice);
+
+            return attempt;
         }
 
  
@@ -39,10 +50,9 @@ namespace Merchello.Core.Builders
             get
             {
                 return _constructorParameters ?? 
-                    (_constructorParameters =  new List<object>(new object[] {_checkoutPreparation} ));
+                    (_constructorParameters =  new List<object>(new object[] {_salePreparation} ));
             }
         }
-
         
         /// <summary>
         /// Used for testing

@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Xml;
-using System.Xml.Linq;
 using Merchello.Core.Models.EntityBase;
 using Merchello.Core.Models.TypeFields;
 
@@ -209,6 +205,16 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
+        /// The total price of the line item (quantity * price)
+        /// </summary>
+        [IgnoreDataMember]
+        public decimal TotalPrice 
+        { 
+            get { return _price *_quantity; }
+        }
+
+
+        /// <summary>
         /// True/false indicating whether or not this line item has been exported to an external system
         /// </summary>
         [DataMember]
@@ -259,7 +265,7 @@ namespace Merchello.Core.Models
                     writer.WriteElementString(Constants.ExtendedDataKeys.Sku, Sku);
                     writer.WriteElementString(Constants.ExtendedDataKeys.Name, Name);
                     writer.WriteElementString(Constants.ExtendedDataKeys.Quantity, Quantity.ToString(CultureInfo.InvariantCulture));
-                    writer.WriteElementString(Constants.ExtendedDataKeys.Amount, Price.ToString(CultureInfo.InvariantCulture));
+                    writer.WriteElementString(Constants.ExtendedDataKeys.Price, Price.ToString(CultureInfo.InvariantCulture));
                     writer.WriteStartElement(Constants.ExtendedDataKeys.ExtendedData);
                     writer.WriteRaw(ExtendedData.SerializeToXml());
                     writer.WriteEndElement();

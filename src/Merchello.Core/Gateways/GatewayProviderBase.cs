@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Umbraco.Core.Cache;
@@ -8,7 +9,7 @@ namespace Merchello.Core.Gateways
     /// <summary>
     /// Defines the GatewayBase
     /// </summary>
-    public abstract class GatewayProviderBase : IGateway
+    public abstract class GatewayProviderBase : IProvider
     {        
         private readonly IGatewayProvider _gatewayProvider;
         private readonly IGatewayProviderService _gatewayProviderService;
@@ -24,6 +25,12 @@ namespace Merchello.Core.Gateways
             _gatewayProvider = gatewayProvider;
             _runtimeCache = runtimeCacheProvider;
         }
+
+        /// <summary>
+        /// Returns a collection of all possible gateway methods associated with this provider
+        /// </summary>
+        /// <returns>A collection of <see cref="IGatewayResource"/></returns>
+        public abstract IEnumerable<IGatewayResource> ListResourcesOffered();
 
 
         // The properties Name and Key will be likely become attribute defined properties
@@ -42,7 +49,7 @@ namespace Merchello.Core.Gateways
         /// <summary>
         /// Gets the <see cref="IGatewayProviderService"/>
         /// </summary>
-        protected IGatewayProviderService GatewayProviderService
+        public IGatewayProviderService GatewayProviderService
         {
             get { return _gatewayProviderService; }
         }

@@ -22,6 +22,12 @@ namespace Merchello.Core.Models
         string Name { get; set; }
 
         /// <summary>
+        /// The description of the provider
+        /// </summary>
+        [DataMember]
+        string Description { get; set; }
+
+        /// <summary>
         /// The full Type name 
         /// </summary>
         [DataMember]

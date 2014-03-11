@@ -134,7 +134,7 @@ namespace Merchello.Core.Models
             var provider = merchelloContext.Gateways.Shipping.ResolveByKey(shipMethod.ProviderKey);
 
             // get the GatewayShipMethod from the provider
-            var gwShipMethod = provider.GetAvailableShipMethodsForShipment(shipment).FirstOrDefault(x => x.ShipMethod.Key == shipMethodKey);
+            var gwShipMethod = provider.GetShippingGatewayMethodsForShipment(shipment).FirstOrDefault(x => x.ShipMethod.Key == shipMethodKey);
 
             if (gwShipMethod == null) return null;
 

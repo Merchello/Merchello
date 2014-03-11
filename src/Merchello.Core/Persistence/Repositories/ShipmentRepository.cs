@@ -100,7 +100,7 @@ namespace Merchello.Core.Persistence.Repositories
             var dto = factory.BuildDto(entity);
 
             Database.Insert(dto);
-
+            entity.Key = dto.Key;
             entity.ResetDirtyProperties();
         }
 
@@ -138,10 +138,7 @@ namespace Merchello.Core.Persistence.Repositories
 
         }
 
-
         #endregion
-
-
 
     }
 }

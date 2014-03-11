@@ -20,6 +20,10 @@ namespace Merchello.Core.Models.Rdbms
         [Column("name")]
         public string Name { get; set; }
 
+        [Column("description")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public string Description { get; set; }
+
         [Column("typeFullName")]
         [Length(255)]
         public string TypeFullName { get; set; }

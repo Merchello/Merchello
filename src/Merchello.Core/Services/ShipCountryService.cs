@@ -64,7 +64,8 @@ namespace Merchello.Core.Services
                 }
 
             // verify that a ShipCountry does not already exist for this pair
-            var sc = GetShipCountryByCountryCode(warehouseCatalogKey, country.CountryCode);
+
+            var sc = GetShipCountriesByCatalogKey(warehouseCatalogKey).FirstOrDefault(x => x.CountryCode.Equals(country.CountryCode));
             if (sc != null)
                 return
                     Attempt<IShipCountry>.Fail(
@@ -163,11 +164,12 @@ namespace Merchello.Core.Services
         /// <returns></returns>
         public IShipCountry GetShipCountryByCountryCode(Guid catalogKey, string countryCode)
         {
-            using (var repository = _repositoryFactory.CreateShipCountryRepository(_uowProvider.GetUnitOfWork(), _storeSettingService))
-            {
-                var query = Query<IShipCountry>.Builder.Where(x => x.CatalogKey == catalogKey && x.CountryCode == countryCode);
-                return repository.GetByQuery(query).FirstOrDefault();
-            }
+            var shipCountries = GetShipCountriesByCatalogKey(catalogKey).ToArray();
+
+            if (!shipCountries.Any()) return null;
+            var specific = shipCountries.FirstOrDefault(x => x.CountryCode.Equals(countryCode));
+
+            return specific ?? shipCountries.FirstOrDefault(x => x.CountryCode.Equals(Constants.CountryCodes.EverywhereElse));
         }
 
 

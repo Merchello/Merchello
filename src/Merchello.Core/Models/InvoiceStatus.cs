@@ -107,9 +107,6 @@ namespace Merchello.Core.Models
                 }, _sortOrder, SortOrderSelector);
             }
         }
-
-
-
     }
 
 }

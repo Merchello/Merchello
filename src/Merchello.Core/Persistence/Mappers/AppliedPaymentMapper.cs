@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Merchello.Core.Models;
+﻿using Merchello.Core.Models;
 using Merchello.Core.Models.Rdbms;
 
 namespace Merchello.Core.Persistence.Mappers
@@ -21,6 +16,7 @@ namespace Merchello.Core.Persistence.Mappers
 
             CacheMap<AppliedPayment, AppliedPaymentDto>(src => src.Key, dto => dto.Key);
             CacheMap<AppliedPayment, AppliedPaymentDto>(src => src.PaymentKey, dto => dto.PaymentKey);
+            CacheMap<AppliedPayment, AppliedPaymentDto>(src => src.InvoiceKey, dto => dto.InvoiceKey);
             CacheMap<AppliedPayment, AppliedPaymentDto>(src => src.AppliedPaymentTfKey, dto => dto.AppliedPaymentTfKey);
             CacheMap<AppliedPayment, AppliedPaymentDto>(src => src.Description, dto => dto.Description);
             CacheMap<AppliedPayment, AppliedPaymentDto>(src => src.Amount, dto => dto.Amount);

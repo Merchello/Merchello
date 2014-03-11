@@ -10,17 +10,17 @@ using Umbraco.Core.Persistence.Repositories;
 
 namespace Merchello.Core.Persistence.Repositories
 {
-    /// <summary>
-    /// Represent an abstract Repository, which is the base of the Repository implementations
-    /// </summary>
-    /// <typeparam name="TEntity">Type of <see cref="IEntity"/> entity for which the repository is used</typeparam>
-    internal abstract class MerchelloRepositoryBase<TEntity> : DisposableObject, IRepositoryQueryable<Guid, TEntity>, IUnitOfWorkRepository 
+	/// <summary>
+	/// Represent an abstract Repository, which is the base of the Repository implementations
+	/// </summary>
+	/// <typeparam name="TEntity">Type of <see cref="IEntity"/> entity for which the repository is used</typeparam>
+	internal abstract class MerchelloRepositoryBase<TEntity> : DisposableObject, IRepositoryQueryable<Guid, TEntity>, IUnitOfWorkRepository 
 		where TEntity : IEntity
 	{
 		private readonly IUnitOfWork _work;
-        private readonly IRuntimeCacheProvider _cache;
+		private readonly IRuntimeCacheProvider _cache;
 
-        protected MerchelloRepositoryBase(IUnitOfWork work, IRuntimeCacheProvider cache)
+		protected MerchelloRepositoryBase(IUnitOfWork work, IRuntimeCacheProvider cache)
 		{
 			_work = work;
 			_cache = cache;
@@ -89,12 +89,12 @@ namespace Merchello.Core.Persistence.Repositories
 			var entity = PerformGet(key);
 			if (entity != null)
 			{
-			    _cache.GetCacheItem(GetCacheKey(key), () => entity);
+				_cache.GetCacheItem(GetCacheKey(key), () => entity);
 			}
 
 			if (entity != null)
 			{
-			    entity.ResetDirtyProperties();
+				entity.ResetDirtyProperties();
 			}
 			
 			return entity;
@@ -102,48 +102,50 @@ namespace Merchello.Core.Persistence.Repositories
 
 		protected Attempt<TEntity> TryGetFromCache(Guid key)
 		{
-		    var cacheKey = GetCacheKey(key);
-		    var rEntity = _cache.GetCacheItem(cacheKey); 
+			var cacheKey = GetCacheKey(key);
+			var rEntity = _cache.GetCacheItem(cacheKey); 
 
 			return rEntity != null ? 
-                Attempt<TEntity>.Succeed((TEntity) rEntity) : 
-                Attempt<TEntity>.Fail();
+				Attempt<TEntity>.Succeed((TEntity) rEntity) : 
+				Attempt<TEntity>.Fail();
 		} 
 
 		protected abstract IEnumerable<TEntity> PerformGetAll(params Guid[] keys);
 
-        /// <summary>
-        /// Gets all entities of type TEntity or a list according to the passed in Ids
-        /// </summary>
-        /// <param name="keys"></param>
-        /// <returns></returns>
-        public IEnumerable<TEntity> GetAll(params Guid[] keys)
+		/// <summary>
+		/// Gets all entities of type TEntity or a list according to the passed in Ids
+		/// </summary>
+		/// <param name="keys"></param>
+		/// <returns></returns>
+		public IEnumerable<TEntity> GetAll(params Guid[] keys)
 		{
 			if (keys.Any())
 			{
-			    var entities = new List<TEntity>();
-			    foreach (var key in keys)
-			    {
-			        var entity = _cache.GetCacheItem(GetCacheKey(key));
-                    if(entity != null) entities.Add((TEntity)entity);
-			        
-			    }
+				var entities = new List<TEntity>();
+				foreach (var key in keys)
+				{
+					var entity = _cache.GetCacheItem(GetCacheKey(key));
+					if(entity != null) entities.Add((TEntity)entity);
+					
+				}
 
-                if (entities.Count().Equals(keys.Count()) && entities.Any(x => x == null) == false)
-                    return entities;
+				if (entities.Count().Equals(keys.Count()) && entities.Any(x => x == null) == false)
+					return entities;
 			}
 			else
 			{
-			    var allEntities = _cache.GetCacheItemsByKeySearch(typeof (TEntity).Name); //_cache.GetAllByType(typeof(TEntity));
+				// fix http://issues.merchello.com/youtrack/issue/M-159
+				// Since IProduct and IProductVaraint both start with IProduct which was causing the cache conflict
+				var allEntities = _cache.GetCacheItemsByKeySearch(typeof (TEntity).Name + "."); //_cache.GetAllByType(typeof(TEntity));
 				
 				if (allEntities.Any())
 				{
-                    
-				    var query = Querying.Query<TEntity>.Builder.Where(x => x.Key != Guid.Empty);
-                    var totalCount = PerformCount(query);
+					
+					var query = Querying.Query<TEntity>.Builder.Where(x => x.Key != Guid.Empty);
+					var totalCount = PerformCount(query);
 
-                    if (allEntities.Count() == totalCount)
-                        return allEntities.Select(x => (TEntity)x);
+					if (allEntities.Count() == totalCount)
+						return allEntities.Select(x => (TEntity)x);
 				}
 			}
 
@@ -153,7 +155,7 @@ namespace Merchello.Core.Persistence.Repositories
 			{
 				if (entity != null)
 				{
-				    _cache.GetCacheItem(GetCacheKey(entity.Key), () => entity);
+					_cache.GetCacheItem(GetCacheKey(entity.Key), () => entity);
 				}
 			}
 
@@ -173,12 +175,12 @@ namespace Merchello.Core.Persistence.Repositories
 
 		protected abstract bool PerformExists(Guid key);
 
-	    /// <summary>
-	    /// Returns a boolean indicating whether an entity with the passed Key exists
-	    /// </summary>
-	    /// <param name="key"></param>
-	    /// <returns></returns>
-	    public bool Exists(Guid key)
+		/// <summary>
+		/// Returns a boolean indicating whether an entity with the passed Key exists
+		/// </summary>
+		/// <param name="key"></param>
+		/// <returns></returns>
+		public bool Exists(Guid key)
 		{
 			var fromCache = TryGetFromCache(key);
 			if (fromCache.Success)
@@ -210,7 +212,7 @@ namespace Merchello.Core.Persistence.Repositories
 		public virtual void PersistNewItem(IEntity entity)
 		{
 			PersistNewItem((TEntity)entity);
-		    _cache.GetCacheItem(GetCacheKey(entity.Key), () => entity);
+			_cache.GetCacheItem(GetCacheKey(entity.Key), () => entity);
 		}
 
 		/// <summary>
@@ -219,9 +221,9 @@ namespace Merchello.Core.Persistence.Repositories
 		/// <param name="entity"></param>
 		public virtual void PersistUpdatedItem(IEntity entity)
 		{
-            _cache.ClearCacheItem(GetCacheKey(entity.Key));
+			_cache.ClearCacheItem(GetCacheKey(entity.Key));
 			PersistUpdatedItem((TEntity)entity);
-		    _cache.GetCacheItem(GetCacheKey(entity.Key), () => entity);
+			_cache.GetCacheItem(GetCacheKey(entity.Key), () => entity);
 		}
 
 		/// <summary>
@@ -231,7 +233,7 @@ namespace Merchello.Core.Persistence.Repositories
 		public virtual void PersistDeletedItem(IEntity entity)
 		{
 			PersistDeletedItem((TEntity)entity);
-            _cache.ClearCacheItem(GetCacheKey(entity.Key));
+			_cache.ClearCacheItem(GetCacheKey(entity.Key));
 		}
 
 		#endregion
@@ -256,15 +258,15 @@ namespace Merchello.Core.Persistence.Repositories
 			UnitOfWork.DisposeIfDisposable();
 		}
 
-        protected IRuntimeCacheProvider RuntimeCache
-        {
-            get { return _cache; }
-        }
+		protected IRuntimeCacheProvider RuntimeCache
+		{
+			get { return _cache; }
+		}
 
-        protected static string GetCacheKey(Guid key)
-        {
-            return Cache.CacheKeys.GetEntityCacheKey<TEntity>(key);
-        }
+		protected static string GetCacheKey(Guid key)
+		{
+			return Cache.CacheKeys.GetEntityCacheKey<TEntity>(key);
+		}
 
 	}
 }

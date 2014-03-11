@@ -65,6 +65,11 @@ namespace Merchello.Core.Configuration
             get { return Section.Settings["DefaultSkuSeparator"].Value; }
         }
 
+        public bool AlwaysApproveOrderCreation
+        {
+            get { return bool.Parse(Section.Settings["AlwaysApproveOrderCreation"].Value); }
+        }
+
         /// <summary>
         /// Gets a <see cref="TaskChainElement"/> by its configuration alias
         /// </summary>

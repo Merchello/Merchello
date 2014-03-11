@@ -60,7 +60,7 @@ namespace Merchello.Web.Editors
             ICountry country = _storeSettingService.GetCountryByCode(id);
             if (country == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
 
             return country.ToCountryDisplay();
@@ -76,7 +76,7 @@ namespace Merchello.Web.Editors
             var countries = _storeSettingService.GetAllCountries();
             if (countries == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
 
             foreach (ICountry country in countries)
@@ -96,7 +96,7 @@ namespace Merchello.Web.Editors
             var countries = _storeSettingService.GetAllCountries(codes);
             if (countries == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
 
             foreach (ICountry country in countries)
@@ -110,10 +110,10 @@ namespace Merchello.Web.Editors
         /// 
         /// GET /umbraco/Merchello/SettingsApi/GetAllTaxProvinces
         /// </summary>
-        public IEnumerable<TaxProvinceDisplay> GetAllTaxProvinces()
+        public IEnumerable<TaxMethodDisplay> GetAllTaxProvinces()
         {
             // TODO: replace with call to service
-            var taxProvinces = new List<CountryTaxRate>();
+            var taxMethods = new List<TaxMethod>();
 
             //var oregon = new TaxCountry("OR", "Oregon");
             //oregon.Rate = 0.01M;
@@ -125,9 +125,9 @@ namespace Merchello.Web.Editors
 
             // END TEST DATA
 
-            foreach (CountryTaxRate taxProvince in taxProvinces)
+            foreach (TaxMethod taxMethod in taxMethods)
             {
-                yield return taxProvince.ToTaxProvinceDisplay();
+                yield return taxMethod.ToTaxMethodDisplay();
             }
         }
 
@@ -164,7 +164,7 @@ namespace Merchello.Web.Editors
 
 			if (settings == null)
 			{
-				throw new HttpResponseException(HttpStatusCode.NotFound);
+				throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
 			}
 
 			return settingDisplay.ToStoreSettingDisplay(settings);

@@ -67,5 +67,12 @@ namespace Merchello.Core.Services
         /// <returns>List of <see cref="IInvoice"/></returns>
         IEnumerable<IInvoice> GetByKeys(IEnumerable<Guid> keys);
 
+        /// <summary>
+        /// Gets a collection of <see cref="IInvoice"/> objects that are associated with a <see cref="IPayment"/> by the payments 'key'
+        /// </summary>
+        /// <param name="paymentKey">The <see cref="IPayment"/> key (Guid)</param>
+        /// <returns>A collection of <see cref="IInvoice"/></returns>
+        IEnumerable<IInvoice> GetInvoicesByPaymentKey(Guid paymentKey);
+
     }
 }

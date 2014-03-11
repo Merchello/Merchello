@@ -7,11 +7,10 @@ namespace Merchello.Core.Persistence.Factories
     {
         public IPayment BuildEntity(PaymentDto dto)
         {
-            var payment = new Payment(
-               new CustomerFactory().BuildEntity(dto.CustomerDto), dto.PaymentTfKey, dto.Amount)
+            var payment = new Payment(dto.PaymentTfKey, dto.Amount, dto.PaymentMethodKey, new ExtendedDataCollection(dto.ExtendedData))
             {
                 Key = dto.Key,
-                ProviderKey = dto.ProviderKey,
+                CustomerKey = dto.CustomerKey,
                 PaymentMethodName = dto.PaymentMethodName,
                 ReferenceNumber = dto.ReferenceNumber,
                 Authorized = dto.Authorized,
@@ -32,7 +31,7 @@ namespace Merchello.Core.Persistence.Factories
             {
                 Key = entity.Key,                
                 CustomerKey = entity.CustomerKey,
-                ProviderKey = entity.ProviderKey,
+                PaymentMethodKey = entity.PaymentMethodKey,
                 PaymentTfKey = entity.PaymentTypeFieldKey,
                 PaymentMethodName = entity.PaymentMethodName,
                 ReferenceNumber = entity.ReferenceNumber,
@@ -40,6 +39,7 @@ namespace Merchello.Core.Persistence.Factories
                 Authorized = entity.Authorized,
                 Collected = entity.Collected,
                 Exported = entity.Exported,
+                ExtendedData = entity.ExtendedData.SerializeToXml(),
                 UpdateDate = entity.UpdateDate,
                 CreateDate = entity.CreateDate                
             };

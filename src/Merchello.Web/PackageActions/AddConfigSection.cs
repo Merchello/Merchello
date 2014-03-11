@@ -4,6 +4,7 @@ using System.IO;
 using System.Web.Configuration;
 using Merchello.Core.Configuration;
 using Merchello.Core.Configuration.Outline;
+using Umbraco.Core.IO;
 using umbraco.cms.businesslogic.packager.standardPackageActions;
 using Umbraco.Core.Logging;
 using umbraco.interfaces;
@@ -44,18 +45,26 @@ namespace Merchello.Web.PackageActions
                 {
                     webConfig.Sections.Add(MerchelloConfiguration.ConfigurationName, new MerchelloSection());
 
-                    var configPath = string.Concat("App_Plugins", Path.DirectorySeparatorChar, MerchelloConfiguration.ApplicationName, Path.DirectorySeparatorChar, "Config", Path.DirectorySeparatorChar, MerchelloConfiguration.ConfigurationName, ".config");
-                    //var xmlPath = IOHelper.MapPath(string.Concat("~/", configPath));
-                    //string xml;
+                    var configPath = string.Concat("App_Plugins", Path.DirectorySeparatorChar, MerchelloConfiguration.ApplicationName, 
+                        Path.DirectorySeparatorChar, "Config", Path.DirectorySeparatorChar, MerchelloConfiguration.ConfigurationName, ".config");
+                    var xmlPath = IOHelper.MapPath(string.Concat("~/", configPath));
 
-                    //using (var reader = new StreamReader(xmlPath))
-                    //{
-                    //    xml = reader.ReadToEnd();
-                    //}
+                    string xml;
 
+                    using (var reader = new StreamReader(xmlPath))
+                    {
+                        xml = reader.ReadToEnd();
+                    }
+                                        
                     webConfig.Sections[MerchelloConfiguration.ConfigurationName].SectionInformation.ConfigSource = configPath;
-
-                    webConfig.Save(ConfigurationSaveMode.Modified);
+                    webConfig.Save(ConfigurationSaveMode.Minimal);
+                    
+                    // TODO - this is a quick fix for M-149
+                    using (var writer = new StreamWriter(xmlPath))
+                    {
+                        writer.Write(xml);
+                    }
+                    
                 }
 
                 return true;

@@ -1,6 +1,6 @@
 ﻿using System;
-using Merchello.Core.Checkout;
 using Merchello.Core.Models;
+using Merchello.Core.Sales;
 using Umbraco.Core;
 
 namespace Merchello.Core.Chains.InvoiceCreation
@@ -8,10 +8,10 @@ namespace Merchello.Core.Chains.InvoiceCreation
     /// <summary>
     /// Converts ItemCacheLineItem(s) to InvoiceLineItems
     /// </summary>
-    internal class ConvertItemCacheItemsToInvoiceItemsTask : CheckoutPreparationAttemptChainTaskBase
+    internal class ConvertItemCacheItemsToInvoiceItemsTask : InvoiceCreationAttemptChainTaskBase
     {
-        public ConvertItemCacheItemsToInvoiceItemsTask(CheckoutPreparationBase checkoutPreparation) 
-            : base(checkoutPreparation)
+        public ConvertItemCacheItemsToInvoiceItemsTask(SalePreparationBase salePreparation) 
+            : base(salePreparation)
         {}
 
         /// <summary>
@@ -21,7 +21,7 @@ namespace Merchello.Core.Chains.InvoiceCreation
         /// <returns>The <see cref="Attempt"/></returns>
         public override Attempt<IInvoice> PerformTask(IInvoice value)
         {
-            foreach (var lineItem in CheckoutPreparation.ItemCache.Items)
+            foreach (var lineItem in SalePreparation.ItemCache.Items)
             {
                 try
                 {

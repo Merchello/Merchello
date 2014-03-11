@@ -69,17 +69,17 @@
             var newChoice = new merchello.Models.ProductAttribute();
             newChoice.name = name;
             newChoice.sortOrder = self.choices.length + 1;
-            newChoice.sku = newChoice.sortOrder;
+            //newChoice.sku = newChoice.sortOrder;
             newChoice.optionKey = self.key;
 
-            for (var i = 0; i < self.choices.length; i++)
-            {
-                if (newChoice.sku == self.choices[i].sku)
-                {
-                    newChoice.sku = newChoice.sku + 1;
-                    i = -1;
-                }
-            }
+            //for (var i = 0; i < self.choices.length; i++)
+            //{
+            //    if (newChoice.sku == self.choices[i].sku)
+            //    {
+            //        newChoice.sku = newChoice.sku + 1;
+            //        i = -1;
+            //    }
+            //}
 
             self.choices.push(newChoice);
         };
@@ -203,6 +203,8 @@
 
             self.attributes = _.sortBy(self.attributes, function (attr) { return attr.sortOrder; });
 
+            self.attributeKeys = _.pluck(self.attributes, 'key');
+
             self.catalogInventories = _.map(productVariantFromServer.catalogInventories, function (catalogInventory) {
                 return new merchello.Models.CatalogInventory(catalogInventory);
             });
@@ -247,9 +249,11 @@
             {
                 var attr = self.attributes[i];
                 var option = attr.findMyOption(options);
-                attr.optionOrder = option.sortOrder;
+                if (option) {
+                    attr.optionOrder = option.sortOrder;              
+                }
             }
-            self.attributes = _.sortBy(self.attributes, function (attr) { return attr.optionOrder; });
+            self.attributes = _.sortBy(self.attributes, function (attrInList) { return attrInList.optionOrder; });
         };
 
         // for sorting in a table
@@ -257,17 +261,29 @@
             for (var i = 0; i < self.attributes.length; i++) {
                 var attr = self.attributes[i];
                 var option = attr.findMyOption(options);
-                self[option.name] = attr.name;
+                if (option) {
+                    self[option.name] = attr.name;
+                }
             }
         };
 
-        self.ensureCatalogInventory = function(defaultWarehouse)
-        {
-            if (self.catalogInventories.length == 0)
-            {
+        self.isComposedFromAttribute = function (attribute) {
+            var composedOf = false;
+            for (var i = 0; i < self.attributes.length; i++) {
+                var attr = self.attributes[i];
+                if (attr.key == attribute.key) {
+                    composedOf = true;
+                    break;
+                }
+            }
+            return composedOf;
+        };
+
+        self.ensureCatalogInventory = function(defaultWarehouse) {
+            if (self.catalogInventories.length == 0) {
                 self.addCatalogInventory(defaultWarehouse);
             }
-        }
+        };
 
         // Helper to add a variant to this product
         self.addCatalogInventory = function (warehouse) {
@@ -283,19 +299,17 @@
             return newCatalogInventory;
         };
 
-        self.globalInventoryChanged = function (newVal) {
-            if (newVal)
-            {
+        self.globalInventoryChanged = function(newVal) {
+            if (newVal) {
                 var newValInt = parseInt(newVal);
                 var totalAcrossCatalogs = 0;
-                for (var i = 0; i < self.catalogInventories.length; i++)
-                {
+                for (var i = 0; i < self.catalogInventories.length; i++) {
                     self.catalogInventories[i].count = newValInt;
                     totalAcrossCatalogs = totalAcrossCatalogs + newValInt;
                 }
                 self.totalInventoryCount = totalAcrossCatalogs;
             }
-        }
+        };
     };
 
     models.Product = function (productFromServer, dontMapChildren) {
@@ -438,20 +452,25 @@
 
         };
 
+        // Helper to remove an option from this product
+        self.removeOption = function (option) {
+
+            self.productOptions = _.reject(self.productOptions, function (opt) { return _.isEqual(opt, option); });
+
+        };
+
         // Create an array of all the Choices in a list
-        self.flattened = function () {
+        self.flattened = function() {
             var flat = [];
-            for(var o = 0; o < self.productOptions.length; o++)
-            {
+            for (var o = 0; o < self.productOptions.length; o++) {
                 var thisOption = self.productOptions[o];
-                for(var a = 0; a < thisOption.choices.length; a++)
-                {
+                for (var a = 0; a < thisOption.choices.length; a++) {
                     flat.push(thisOption.choices[a]);
                 }
             }
 
             return flat;
-        }
+        };
 
 
         // Helper to add a variant to this product
@@ -460,6 +479,7 @@
             var newVariant = new merchello.Models.ProductVariant();
             newVariant.copyFromProduct(self);
             newVariant.attributes = attributes.slice(0);
+            newVariant.attributeKeys = _.pluck(newVariant.attributes, 'key');
             newVariant.selected = true;
             newVariant.sku = "";
             newVariant.name = "";
@@ -487,6 +507,41 @@
             for (var i = 0; i < self.productVariants.length; i++) {
                 self.productVariants[i].addAttributesAsProperties(self.productOptions);
             }
+        };
+
+        self.hasAvailableVariantPermutiations = function() {
+
+            var permutations = 1;
+
+            for (var o = 0; o < self.productOptions.length; o++) {
+                var thisOption = self.productOptions[o];
+
+                permutations = permutations * thisOption.choices.length;
+            }
+
+            var availablePermutations = permutations - self.productVariants.length;
+
+            return availablePermutations;
+        };
+
+        self.getRemainingChoicesWithoutVariants = function() {
+
+            var allVariantAttributes = _.pluck(self.productVariants, 'attributeKeys');
+            allVariantAttributes = _.flatten(allVariantAttributes);
+
+            var unusedChoices = [];
+
+            for (var o = 0; o < self.productOptions.length; o++) {
+                var thisOption = self.productOptions[o];
+                for (var a = 0; a < thisOption.choices.length; a++) {
+                    var thisChoice = thisOption.choices[a];
+                    if (!_.contains(allVariantAttributes, thisChoice.key)) {
+                        unusedChoices.push(thisChoice);
+                    }
+                }
+            }
+
+            return unusedChoices;
         };
 
     };

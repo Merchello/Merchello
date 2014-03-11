@@ -26,7 +26,7 @@ namespace Merchello.Core.Gateways.Shipping
             var quotes = new List<IShipmentRateQuote>();
             foreach (var provider in providers)
             {
-                quotes.AddRange(provider.QuoteAvailableShipMethodsForShipment(shipment));
+                quotes.AddRange(provider.QuoteShippingGatewayMethodsForShipment(shipment));
             }
             return quotes.OrderBy(x => x.Rate);
         }

@@ -33,6 +33,8 @@ namespace Merchello.Core.Models
         private Guid? _shipMethodKey;
         private string _email;
         private string _phone;
+        private string _carrier;
+        private string _trackingCode;
         private LineItemCollection _items;
 
         internal Shipment()
@@ -95,6 +97,8 @@ namespace Merchello.Core.Models
         private static readonly PropertyInfo ToIsCommercialSelector = ExpressionHelper.GetPropertyInfo<Shipment, bool>(x => x.ToIsCommercial);  
         private static readonly PropertyInfo PhoneSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.Phone);
         private static readonly PropertyInfo EmailSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.Email);
+        private static readonly PropertyInfo TrackingCodeSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.TrackingCode);
+        private static readonly PropertyInfo CarrierSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.Carrier);
 
         /// <summary>
         /// The organization or company name associated with the address
@@ -455,6 +459,41 @@ namespace Merchello.Core.Models
                     _email = value;
                     return _email;
                 }, _email, EmailSelector);
+            }
+        }
+
+
+        /// <summary>
+        /// The name of the freight carrier associated with this shipment
+        /// </summary>
+        [DataMember]
+        public string Carrier
+        {
+            get { return _carrier; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _carrier = value;
+                    return _carrier;
+                }, _carrier, CarrierSelector);
+            }
+        }
+
+        /// <summary>
+        /// The tracking code associated with this shipment
+        /// </summary>
+        [DataMember]
+        public string TrackingCode
+        {
+            get { return _trackingCode; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _trackingCode = value;
+                    return _trackingCode;
+                }, _trackingCode, TrackingCodeSelector);
             }
         }
 

@@ -44,9 +44,9 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
             _serviceContext = serviceContext;
 
-            WarehouseCatalog = new WarehouseCatalog(Constants.DefaultKeys.DefaultWarehouseKey)
+            WarehouseCatalog = new WarehouseCatalog(Constants.DefaultKeys.Warehouse.DefaultWarehouseKey)
             {
-                Key = Constants.DefaultKeys.DefaultWarehouseCatalogKey
+                Key = Constants.DefaultKeys.Warehouse.DefaultWarehouseCatalogKey
             };
         }
 
@@ -128,19 +128,19 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         /// <param name="providerKey"></param>
         public void DeleteAllCountryTaxRates(Guid providerKey)
         {
-            var countryTaxRates = CountryTaxRateService.GetCountryTaxRatesByProviderKey(providerKey);
+            var countryTaxRates = TaxMethodService.GetTaxMethodsByProviderKey(providerKey);
             foreach (var countryTaxRate in countryTaxRates)
             {
-                CountryTaxRateService.Delete(countryTaxRate);
+                TaxMethodService.Delete(countryTaxRate);
             }
         }
 
         /// <summary>
-        /// Gets the <see cref="ICountryTaxRateService"/>
+        /// Gets the <see cref="ITaxMethodService"/>
         /// </summary>
-        public ICountryTaxRateService CountryTaxRateService
+        internal ITaxMethodService TaxMethodService
         {
-            get { return _serviceContext.CountryTaxRateService; }
+            get { return _serviceContext.TaxMethodService; }
         }
 
         #endregion
@@ -259,9 +259,9 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         /// Saves a product record to the database and returns and instance of <see cref="IProduct"/> represents that record
         /// </summary>
         /// <returns><see cref="IProduct"/></returns>
-        public IProduct MakeExistingProduct(bool shippable = true, decimal weight = 0, decimal price = 0)
+        public IProduct MakeExistingProduct(bool shippable = true, decimal weight = 0, decimal price = 0, bool taxable = true)
         {
-            var product = MockProductDataMaker.MockProductForInserting(shippable, weight, price);            
+            var product = MockProductDataMaker.MockProductForInserting(shippable, weight, price, taxable);            
             ProductService.Save(product);
             product.AddToCatalogInventory(WarehouseCatalog);
             ProductService.Save(product);
@@ -317,22 +317,34 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
         #region IPayment
 
+        /// <summary>
+        /// Returns the Payment Service
+        /// </summary>
+        public IPaymentService PaymentService
+        {
+            get { return _serviceContext.PaymentService; }
+        }
+
+        #endregion
+
+        #region IPaymentMethod
 
 
-        ///// <summary>
-        ///// Returns the Payment Service
-        ///// </summary>
-        //public IPaymentService PaymentService
-        //{
-        //    get { return _serviceContext.PaymentService; }
-        //}
+
+        /// <summary>
+        /// Gets the payment method service
+        /// </summary>
+        internal IPaymentMethodService PaymentMethodService
+        {
+            get { return _serviceContext.PaymentMethodService; }
+        }
 
         #endregion
 
 
         #region Shipping (IShipment, IShipCounty)
 
-        
+
 
         /// <summary>
         /// Returns the Shipping Service
@@ -352,7 +364,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         public void DeleteAllShipCountries()
         {
             var shipCountries = ((ShipCountryService)ShipCountryService).GetAllShipCountries();
-            foreach (var country in shipCountries)
+            foreach (var country in shipCountries.Where(x => !x.CountryCode.Equals(Constants.CountryCodes.EverywhereElse)))
             {
                 ShipCountryService.Delete(country);
             }

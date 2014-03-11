@@ -38,24 +38,22 @@ namespace Merchello.Core.Persistence.Migrations.Initial
                 {7, typeof(WarehouseDto)},
                 {8, typeof(WarehouseCatalogDto)},
                 
-                //{8, typeof(WarehouseCountryDto)},
                 {9, typeof(ShipCountryDto)},
                 {10, typeof(ShipMethodDto)},
-               // {11, typeof(ShipCountry2GatewayProviderDto)},
+    
+                {11, typeof(ShipRateTierDto)},
                 
-                {12, typeof(ShipRateTierDto)},
-                
-                {13, typeof(InvoiceStatusDto)},  
-                {14, typeof(InvoiceDto)},                   
-                {15, typeof(InvoiceItemDto)},
+                {12, typeof(InvoiceStatusDto)},  
+                {13, typeof(InvoiceDto)},                   
+                {14, typeof(InvoiceItemDto)},
 
-                {16, typeof(OrderStatusDto)},
-                {17, typeof(OrderDto)}, 
+                {15, typeof(OrderStatusDto)},
+                {16, typeof(OrderDto)}, 
                               
                
-                {18, typeof(ShipmentDto)},                 
-                {19, typeof(OrderItemDto)},
-    
+                {17, typeof(ShipmentDto)},                 
+                {18, typeof(OrderItemDto)},
+                {19, typeof(PaymentMethodDto)}, 
                 {20, typeof(PaymentDto)},                
                 {21, typeof(ProductDto)},
                 {22, typeof(ProductVariantDto)},
@@ -64,7 +62,7 @@ namespace Merchello.Core.Persistence.Migrations.Initial
                 {25, typeof(Product2ProductOptionDto)},
                 //{26, typeof(WarehouseInventoryDto)},
                 {26, typeof(CatalogInventoryDto)},
-                {27, typeof(CountryTaxRateDto)},
+                {27, typeof(TaxMethodDto)},
                 {28, typeof(ProductVariant2ProductAttributeDto)},
            
                 {29, typeof(AppliedPaymentDto)},

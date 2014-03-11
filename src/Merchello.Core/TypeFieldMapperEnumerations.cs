@@ -24,16 +24,6 @@
         Custom
     }
 
-    //public enum InvoiceItemType
-    //{
-    //    Item,
-    //    Charge,
-    //    Shipping,
-    //    Tax,
-    //    Credit,
-    //    Custom
-    //}
-
     public enum PaymentMethodType
     {
         Cash,
@@ -49,6 +39,7 @@
         Credit,
         Debit,
         Void,
+        Denied,
         Custom
     }
 
@@ -59,13 +50,6 @@
         Custom
     }
 
-    //public enum ShipMethodType
-    //{
-    //    FlatRate,
-    //    PercentTotal,
-    //    Carrier,
-    //    Custom
-    //}
 
     public enum GatewayProviderType
     {

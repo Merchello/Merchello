@@ -100,7 +100,7 @@ namespace Merchello.Core.Models
                         dictionary[Constants.ExtendedDataKeys.Sku],
                         dictionary[Constants.ExtendedDataKeys.Name],
                         int.Parse(dictionary[Constants.ExtendedDataKeys.Quantity]),
-                        decimal.Parse(dictionary[Constants.ExtendedDataKeys.Amount]),
+                        decimal.Parse(dictionary[Constants.ExtendedDataKeys.Price]),
                         new ExtendedDataCollection(dictionary[Constants.ExtendedDataKeys.ExtendedData])
                     };
                
@@ -137,7 +137,7 @@ namespace Merchello.Core.Models
                 {Constants.ExtendedDataKeys.Sku, GetXmlValue(xdoc,Constants.ExtendedDataKeys.Sku)},
                 {Constants.ExtendedDataKeys.Name, GetXmlValue(xdoc,Constants.ExtendedDataKeys.Name)},
                 {Constants.ExtendedDataKeys.Quantity, GetXmlValue(xdoc,Constants.ExtendedDataKeys.Quantity)},
-                {Constants.ExtendedDataKeys.Amount, GetXmlValue(xdoc,Constants.ExtendedDataKeys.Amount)},
+                {Constants.ExtendedDataKeys.Price, GetXmlValue(xdoc,Constants.ExtendedDataKeys.Price)},
                 {Constants.ExtendedDataKeys.ExtendedData, GetXmlValue(xdoc,Constants.ExtendedDataKeys.ExtendedData)}
             };
             return dictionary;

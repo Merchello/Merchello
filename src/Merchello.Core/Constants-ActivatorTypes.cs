@@ -4,15 +4,16 @@
     {
         public static class StrategyTypeAlias
         {
-            public static string DefaultBasketPackaging = "DefaultBasketPackaging";
+            public static string DefaultPackaging = "DefaultPackaging";
             public static string DefaultShipmentRateQuote = "DefaultShipmentRateQuote";
             public static string DefaultInvoiceTaxRateQuote = "DefaultInvoiceTaxRateQuote";
         }
 
         public static class TaskChainAlias
         {
-            public static string CheckoutInvoiceCreate = "CheckoutInvoiceCreate";
-            public static string InvoiceTaxRateQuote = "InvoiceTaxRateQuote";
+            public static string SalesPreparationInvoiceCreate = "SalesPreparationInvoiceCreate";
+            public static string OrderPreparationOrderCreate = "OrderPreparationOrderCreate";
+            public static string OrderPreparationShipmentCreate = "OrderPreparationShipmentCreate";
         }
     }
 }

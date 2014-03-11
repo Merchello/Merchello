@@ -143,5 +143,25 @@ namespace Merchello.Core.Persistence.Repositories
 
             return invoiceNumber;
         }
+
+        /// <summary>
+        /// Gets the next order number (int)
+        /// </summary>
+        /// <param name="storeSettingKey">Constant Guid Key of the NextOrderNumber store setting</param>
+        /// <param name="ordersCount">The number of orders needing order numbers.  Useful when saving multiple new orders</param>
+        /// <returns></returns>
+        public int GetNextOrderNumber(Guid storeSettingKey, int ordersCount = 1)
+        {
+            Mandate.ParameterCondition(1 >= ordersCount, "ordersCount");
+
+            var nextOrderNumber = Get(storeSettingKey);
+            var orderNumber = (int.Parse(nextOrderNumber.Value) + ordersCount);
+
+            nextOrderNumber.Value = orderNumber.ToString(CultureInfo.InvariantCulture);
+
+            AddOrUpdate(nextOrderNumber);
+
+            return orderNumber;
+        }
     }
 }

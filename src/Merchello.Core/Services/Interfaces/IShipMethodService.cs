@@ -53,5 +53,11 @@ namespace Merchello.Core.Services
         /// <returns>A collection of <see cref="IShipMethod"/></returns>
         IEnumerable<IShipMethod> GetGatewayProviderShipMethods(Guid providerKey, Guid shipCountryKey);
 
+        /// <summary>
+        /// Gets a list of all <see cref="IShipMethod"/> objects given a <see cref="IGatewayProvider"/> key
+        /// </summary>
+        /// <returns>A collection of <see cref="IShipMethod"/></returns>
+        IEnumerable<IShipMethod> GetGatewayProviderShipMethods(Guid providerKey); 
+
     }
 }

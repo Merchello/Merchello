@@ -30,7 +30,7 @@ namespace Merchello.Core.Persistence.Repositories
             var sql = GetBaseQuery(false)
                 .Where(GetBaseWhereClause(), new { Key = key });
 
-            var dto = Database.Fetch<PaymentDto, CustomerDto>(sql).FirstOrDefault();
+            var dto = Database.Fetch<PaymentDto>(sql).FirstOrDefault();
 
             if (dto == null)
                 return null;
@@ -54,7 +54,7 @@ namespace Merchello.Core.Persistence.Repositories
             else
             {
                 var factory = new PaymentFactory();
-                var dtos = Database.Fetch<PaymentDto, CustomerDto>(GetBaseQuery(false));
+                var dtos = Database.Fetch<PaymentDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
                     yield return factory.BuildEntity(dto);
@@ -70,9 +70,7 @@ namespace Merchello.Core.Persistence.Repositories
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-               .From<PaymentDto>()
-               .InnerJoin<CustomerDto>()
-               .On<PaymentDto, CustomerDto>(left => left.CustomerKey, right => right.Key);              
+               .From<PaymentDto>();
 
             return sql;
         }
@@ -86,7 +84,7 @@ namespace Merchello.Core.Persistence.Repositories
         {
             var list = new List<string>
                 {
-                    "DELETE FROM merchTransaction WHERE paymentKey = @Key",
+                    "DELETE FROM merchAppliedPayment WHERE paymentKey = @Key",
                     "DELETE FROM merchPayment WHERE pk = @Key"
                 };
 
@@ -101,7 +99,7 @@ namespace Merchello.Core.Persistence.Repositories
             var dto = factory.BuildDto(entity);
 
             Database.Insert(dto);
-
+            entity.Key = dto.Key;
             entity.ResetDirtyProperties();
         }
 
@@ -122,7 +120,7 @@ namespace Merchello.Core.Persistence.Repositories
             var deletes = GetDeleteClauses();
             foreach (var delete in deletes)
             {
-                Database.Execute(delete, new { Key = entity.Key });
+                Database.Execute(delete, new { entity.Key });
             }
         }
 
@@ -133,7 +131,7 @@ namespace Merchello.Core.Persistence.Repositories
             var translator = new SqlTranslator<IPayment>(sqlClause, query);
             var sql = translator.Translate();
 
-            var dtos = Database.Fetch<PaymentDto, CustomerDto>(sql);
+            var dtos = Database.Fetch<PaymentDto>(sql);
 
             return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
 

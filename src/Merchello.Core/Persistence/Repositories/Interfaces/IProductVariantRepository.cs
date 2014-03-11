@@ -23,8 +23,7 @@ namespace Merchello.Core.Persistence.Repositories
         /// <param name="attributes"><see cref="ProductAttributeCollection"/> to compare</param>
         /// <returns>True/false indicating whether or not a <see cref="IProductVariant"/> already exists with the <see cref="ProductAttributeCollection"/> passed</returns>
         bool ProductVariantWithAttributesExists(IProduct product, ProductAttributeCollection attributes);
-
-
+            
         /// <summary>
         /// Gets a collection of <see cref="IProductVariant"/> object for a given Product Key
         /// </summary>

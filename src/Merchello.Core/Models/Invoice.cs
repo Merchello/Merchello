@@ -11,6 +11,7 @@ namespace Merchello.Core.Models
     {
         private Guid? _customerKey;
         private int _invoiceNumber;
+        private string _invoiceNumberPrefix;
         private DateTime _invoiceDate;
         private Guid _invoiceStatusKey;
         private string _billToName;
@@ -25,7 +26,7 @@ namespace Merchello.Core.Models
         private string _billToCompany;
         private bool _exported;
         private bool _paid;
-        private decimal _amount;
+        private decimal _total;
         private LineItemCollection _items;
 
         internal Invoice(Guid invoiceStatusKey)
@@ -55,9 +56,12 @@ namespace Merchello.Core.Models
 
             _items = lineItemCollection;
 
+            _invoiceDate = DateTime.Now;
+
         }
 
         private static readonly PropertyInfo CustomerKeySelector = ExpressionHelper.GetPropertyInfo<Invoice, Guid?>(x => x.CustomerKey);
+        private static readonly PropertyInfo InvoiceNumberPrefixSelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.InvoiceNumberPrefix);
         private static readonly PropertyInfo InvoiceNumberSelector = ExpressionHelper.GetPropertyInfo<Invoice, int>(x => x.InvoiceNumber);
         private static readonly PropertyInfo InvoiceDateSelector = ExpressionHelper.GetPropertyInfo<Invoice, DateTime>(x => x.InvoiceDate);
         private static readonly PropertyInfo InvoiceStatusKeySelector = ExpressionHelper.GetPropertyInfo<Invoice, Guid>(x => x.InvoiceStatusKey);
@@ -73,7 +77,7 @@ namespace Merchello.Core.Models
         private static readonly PropertyInfo BillToCompanySelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.BillToCompany);
         private static readonly PropertyInfo ExportedSelector = ExpressionHelper.GetPropertyInfo<Invoice, bool>(x => x.Exported);
         private static readonly PropertyInfo PaidSelector = ExpressionHelper.GetPropertyInfo<Invoice, bool>(x => x.Paid);
-        private static readonly PropertyInfo AmountSelector = ExpressionHelper.GetPropertyInfo<Invoice, decimal>(x => x.Amount);
+        private static readonly PropertyInfo TotalSelector = ExpressionHelper.GetPropertyInfo<Invoice, decimal>(x => x.Total);
 
         /// <summary>
         /// The unique customer 'key' to associated with the invoice
@@ -89,6 +93,23 @@ namespace Merchello.Core.Models
                     _customerKey = value;
                     return _customerKey;
                 }, _customerKey, CustomerKeySelector);
+            }
+        }
+
+        /// <summary>
+        /// The optional invoice number prefix
+        /// </summary>
+        [DataMember]
+        public string InvoiceNumberPrefix
+        {
+            get { return _invoiceNumberPrefix; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _invoiceNumberPrefix = value;
+                    return _invoiceNumberPrefix;
+                }, _invoiceNumberPrefix, InvoiceNumberPrefixSelector);
             }
         }
 
@@ -352,16 +373,16 @@ namespace Merchello.Core.Models
         /// The total invoice amount
         /// </summary>
         [DataMember]
-        public decimal Amount
+        public decimal Total
         {
-            get { return _amount; }
-            internal set
+            get { return _total; }
+            set
             {
                 SetPropertyValueAndDetectChanges(o =>
                 {
-                    _amount = value;
-                    return _amount;
-                }, _amount, AmountSelector);
+                    _total = value;
+                    return _total;
+                }, _total, TotalSelector);
             }
         }
 

@@ -14,6 +14,12 @@ namespace Merchello.Core.Models
         Guid? CustomerKey { get; }
 
         /// <summary>
+        /// The optional invoice number prefix
+        /// </summary>
+        [DataMember]
+        string InvoiceNumberPrefix { get; set; }
+
+        /// <summary>
         /// The invoice number
         /// </summary>
         [DataMember]
@@ -107,14 +113,8 @@ namespace Merchello.Core.Models
         /// The total invoice amount
         /// </summary>
         [DataMember]
-        decimal Amount { get; }
+        decimal Total { get; set; }
 
-
-        /// <summary>
-        /// The <see cref="ILineItem"/>s in the invoice
-        /// </summary>
-        [DataMember]
-        LineItemCollection Items { get; }
 
     }
 }

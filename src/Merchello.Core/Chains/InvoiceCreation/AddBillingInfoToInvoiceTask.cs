@@ -1,6 +1,6 @@
 ﻿using System.IO;
-using Merchello.Core.Checkout;
 using Merchello.Core.Models;
+using Merchello.Core.Sales;
 using Umbraco.Core;
 
 namespace Merchello.Core.Chains.InvoiceCreation
@@ -9,10 +9,10 @@ namespace Merchello.Core.Chains.InvoiceCreation
     /// Represents a task responsible for adding billing information collected a checkout process to the
     /// invoice.
     /// </summary>
-    internal class AddBillingInfoToInvoiceTask : CheckoutPreparationAttemptChainTaskBase
+    internal class AddBillingInfoToInvoiceTask : InvoiceCreationAttemptChainTaskBase
     {
-        public AddBillingInfoToInvoiceTask(CheckoutPreparationBase checkoutPreparation) 
-            : base(checkoutPreparation)
+        public AddBillingInfoToInvoiceTask(SalePreparationBase salePreparation) 
+            : base(salePreparation)
         { }
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace Merchello.Core.Chains.InvoiceCreation
         /// <returns></returns>
         public override Attempt<IInvoice> PerformTask(IInvoice value)
         {
-            var address = CheckoutPreparation.Customer.ExtendedData.GetAddress(Constants.ExtendedDataKeys.BillingAddress);
+            var address = SalePreparation.Customer.ExtendedData.GetAddress(Constants.ExtendedDataKeys.BillingAddress);
             if (address == null) return Attempt<IInvoice>.Fail(new InvalidDataException("Billing information could not be retrieved from the Checkout"));
 
             value.SetBillingAddress(address);

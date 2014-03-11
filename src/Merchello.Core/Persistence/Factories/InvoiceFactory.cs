@@ -18,6 +18,7 @@ namespace Merchello.Core.Persistence.Factories
                 {
                     Key = dto.Key,
                     CustomerKey = dto.CustomerKey,
+                    InvoiceNumberPrefix = dto.InvoiceNumberPrefix,
                     InvoiceNumber = dto.InvoiceNumber,
                     InvoiceDate = dto.InvoiceDate,
                     InvoiceStatusKey = dto.InvoiceStatusKey,
@@ -34,7 +35,7 @@ namespace Merchello.Core.Persistence.Factories
                     BillToCompany = dto.BillToCompany,
                     Exported = dto.Exported,
                     Paid = dto.Paid,
-                    Amount = dto.Amount,
+                    Total = dto.Total,
                     CreateDate = dto.CreateDate,
                     UpdateDate = dto.UpdateDate,
                     Items = _lineItemCollection
@@ -51,6 +52,7 @@ namespace Merchello.Core.Persistence.Factories
                 {
                     Key = entity.Key,
                     CustomerKey = entity.CustomerKey,
+                    InvoiceNumberPrefix = entity.InvoiceNumberPrefix,
                     InvoiceNumber = entity.InvoiceNumber,
                     InvoiceDate = entity.InvoiceDate,
                     InvoiceStatusKey = entity.InvoiceStatusKey,
@@ -67,7 +69,7 @@ namespace Merchello.Core.Persistence.Factories
                     BillToCompany = entity.BillToCompany,
                     Exported = entity.Exported,
                     Paid = entity.Paid,
-                    Amount = entity.Amount,
+                    Total = entity.Total,
                     CreateDate = entity.CreateDate,
                     UpdateDate = entity.UpdateDate
                 };

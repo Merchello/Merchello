@@ -1,13 +1,13 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Cache;
 using Merchello.Core.Models;
 using Merchello.Core.Persistence.UnitOfWork;
 using Merchello.Core.Services;
-using Merchello.Tests.IntegrationTests.Services;
+using Merchello.Core.Strategies.Packaging;
 using Merchello.Tests.IntegrationTests.TestHelpers;
 using Merchello.Web;
-using Merchello.Web.Models;
 using Merchello.Web.Workflow;
 using Merchello.Web.Workflow.Shipping;
 using NUnit.Framework;
@@ -27,10 +27,15 @@ namespace Merchello.Tests.IntegrationTests.Shipping
         {
             PreTestDataWorker.DeleteAllProducts();
             PreTestDataWorker.DeleteAllItemCaches();
-            _merchelloContext = new MerchelloContext(new ServiceContext(new PetaPocoUnitOfWorkProvider()),
-                new CacheHelper(new NullCacheProvider(),
-                                    new NullCacheProvider(),
-                                    new NullCacheProvider()));
+
+            _merchelloContext = new MerchelloContext(
+                new ServiceContext(new PetaPocoUnitOfWorkProvider()), 
+                new CacheHelper(
+                    new NullCacheProvider(), 
+                    new NullCacheProvider(), 
+                    new NullCacheProvider()
+                    ));
+
             _customer = PreTestDataWorker.MakeExistingAnonymousCustomer();
             _basket = Basket.GetBasket(_merchelloContext, _customer);
 
@@ -75,7 +80,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             };
             
             //// Act
-            var strategy = new DefaultWarehousePackagingStrategy(_merchelloContext, _basket, destination);
+            var strategy = new DefaultWarehousePackagingStrategy(_merchelloContext, _basket.Items, destination, Guid.NewGuid());
             var shipments = strategy.PackageShipments();
 
             //// Assert

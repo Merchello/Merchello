@@ -3,7 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Merchello.Core;
 using Merchello.Core.Gateways;
-using Merchello.Core.Gateways.Shipping.RateTable;
+using Merchello.Core.Gateways.Shipping.FixedRate;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Tests.Base.DataMakers;
@@ -22,8 +22,8 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
         private IWarehouse _warehouse;
         private IWarehouseCatalog _warehouseCatalog;
         private IShipCountry _shipCountry;
-        private RateTableShippingGatewayProvider _rateTableProvider;
-        private RateTableShipMethod _gwshipMethod;
+        private FixedRateShippingGatewayProvider _fixedRateProvider;
+        private FixedRateShippingGatewayMethod _gwshipMethod;
 
         [TestFixtureSetUp]
         public override void FixtureSetup()
@@ -35,8 +35,8 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
 
             _warehouseCatalog = _warehouse.DefaultCatalog();
 
-            var key = Constants.ProviderKeys.Shipping.RateTableShippingProviderKey;
-            _rateTableProvider = (RateTableShippingGatewayProvider)MerchelloContext.Gateways.Shipping.ResolveByKey(key);
+            var key = Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey;
+            _fixedRateProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Gateways.Shipping.ResolveByKey(key);
 
             var shipCountryService = PreTestDataWorker.ShipCountryService;
             _shipCountry = shipCountryService.GetShipCountryByCountryCode(_warehouseCatalog.Key, "US");           
@@ -46,15 +46,15 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
         public void Init()
         {
             
-            _rateTableProvider.DeleteAllActiveShipMethods(_shipCountry);
+            _fixedRateProvider.DeleteAllActiveShipMethods(_shipCountry);
 
-            _gwshipMethod = (RateTableShipMethod)_rateTableProvider.CreateShipMethod(RateTableShipMethod.QuoteType.VaryByWeight, _shipCountry, "Ground (VBW)");
+            _gwshipMethod = (FixedRateShippingGatewayMethod)_fixedRateProvider.CreateShipMethod(FixedRateShippingGatewayMethod.QuoteType.VaryByWeight, _shipCountry, "Ground (VBW)");
             _gwshipMethod.RateTable.AddRow(0, 10, 5);
             _gwshipMethod.RateTable.AddRow(10, 15, 10);
             _gwshipMethod.RateTable.AddRow(15, 25, 25);
             _gwshipMethod.RateTable.AddRow(25, 10000, 100);
 
-            _rateTableProvider.SaveShipMethod(_gwshipMethod);
+            _fixedRateProvider.SaveShippingGatewayMethod(_gwshipMethod);
     
             if (_gwshipMethod.ShipMethod.Provinces.Any(x => x.AllowShipping == false))
             {
@@ -139,7 +139,7 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
             var shipRateTable = _gwshipMethod.RateTable;
             var shipRateTier = _gwshipMethod.RateTable.Rows.First();
 
-            var shipRateTableDisplay = shipRateTable.ToShipRateTableDisplay();
+            var shipRateTableDisplay = shipRateTable.ToShipFixedRateTableDisplay();
             var shipRateTierDisplay = shipRateTableDisplay.Rows.First();
 
             //// Assert
@@ -162,11 +162,11 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
             //// Arrange
 
             //// Act
-            var shipRateTableDisplay = _gwshipMethod.RateTable.ToShipRateTableDisplay();
+            var shipRateTableDisplay = _gwshipMethod.RateTable.ToShipFixedRateTableDisplay();
             var shipRateTierDisplay = shipRateTableDisplay.Rows.First();
 
             shipRateTierDisplay.Rate = 15M;
-            List<ShipRateTierDisplay> rows = shipRateTableDisplay.Rows as List<ShipRateTierDisplay>;
+            var rows = shipRateTableDisplay.Rows as List<ShipRateTierDisplay>;
             rows.Add(new ShipRateTierDisplay()
                     {
                         RangeLow = 100M,

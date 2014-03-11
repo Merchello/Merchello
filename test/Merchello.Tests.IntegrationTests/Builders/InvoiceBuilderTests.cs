@@ -1,13 +1,7 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Builders;
-using Merchello.Core.Checkout;
-using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Models;
-using Merchello.Tests.Base.DataMakers;
-using Merchello.Web;
-using Merchello.Web.Workflow;
 using NUnit.Framework;
 
 namespace Merchello.Tests.IntegrationTests.Builders
@@ -17,76 +11,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
     [Category("Builders")]
     public class InvoiceBuilderTests : BuilderTestBase
     {
-        private IItemCache _itemCache;
-        private ICustomerBase _customer;
-        private CheckoutPreparationBase _checkoutPreparationMock;
-        private IAddress _billingAddress;
-        private IBasket _basket;
-        private const decimal ProductCount = 5;
-        private const decimal WeightPerProduct = 3;
-        private const decimal PricePerProduct = 5;
 
-
-        [SetUp]
-        public void Init()
-        {
-            _customer = PreTestDataWorker.MakeExistingAnonymousCustomer();
-            _basket = Basket.GetBasket(MerchelloContext, _customer);
-
-            for (var i = 0; i < ProductCount; i++) _basket.AddItem(PreTestDataWorker.MakeExistingProduct(true, WeightPerProduct, PricePerProduct));
-            
-            _billingAddress = new Address()
-                {
-                    Name = "Out there",
-                    Address1 = "some street",
-                    Locality = "some city",
-                    Region = "ST",
-                    PostalCode = "98225",
-                    CountryCode = "US"
-                };
-
-            var origin = new Address()
-                {
-                    Name = "Somewhere",
-                    Address1 = "origin street",
-                    Locality = "origin city",
-                    Region = "ST",
-                    PostalCode = "98225",
-                    CountryCode = "US"
-                };
-
-
-
-            PreTestDataWorker.DeleteAllItemCaches();
-
-            _customer.ExtendedData.AddAddress(_billingAddress, AddressType.Billing);
-            _itemCache = new Core.Models.ItemCache(_customer.EntityKey, ItemCacheType.Checkout);
-            
-            PreTestDataWorker.ItemCacheService.Save(_itemCache);
-
-            foreach (var item in _basket.Items)
-            {
-                _itemCache.AddItem(item.AsLineItemOf<ItemCacheLineItem>());
-            }
-
-
-            // setup the checkout
-            _checkoutPreparationMock = new CheckoutPreparationMock(MerchelloContext, _itemCache, _customer);
-
-            // add the shipment rate quote
-            var shipment = _basket.PackageBasket(MerchelloContext, _billingAddress).First();
-            var shipRateQuote = new ShipmentRateQuote(shipment, new ShipMethod(Guid.NewGuid(), Guid.NewGuid())
-            {
-                Name = "Unit test rate quote",
-                ServiceCode = "Test1"
-            })
-            {
-                Rate = 5M
-            };
-
-            //_checkoutMock.ItemCache.Items.Add(shipRateQuote.AsLineItemOf<InvoiceLineItem>());
-            _checkoutPreparationMock.SaveShipmentRateQuote(shipRateQuote);
-        }
 
         /// <summary>
         /// Test verifies that the InvoiceBuilder can be instantiated with 3 tasks from the configuration file
@@ -98,7 +23,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
             const int taskCount = 3;
 
             //// Act
-            var invoiceBuild = new InvoiceBuilderChain(_checkoutPreparationMock);
+            var invoiceBuild = new InvoiceBuilderChain(SalePreparationMock);
 
             //// Assert
             Assert.NotNull(invoiceBuild);
@@ -112,8 +37,8 @@ namespace Merchello.Tests.IntegrationTests.Builders
         public void Can_Add_An_Address_To_An_Invoice()
         {
             //// Arrange
-            var expected = _billingAddress;
-            var invoiceBuilder = new InvoiceBuilderChain(_checkoutPreparationMock);
+            var expected = BillingAddress;
+            var invoiceBuilder = new InvoiceBuilderChain(SalePreparationMock);
 
             //// Arrange
             var attempt = invoiceBuilder.Build();
@@ -134,7 +59,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
             //// Arrange
             const decimal expectedProducts = ProductCount;
             const int expectedShipments = 1;
-            var invoiceBuilder = new InvoiceBuilderChain(_checkoutPreparationMock);
+            var invoiceBuilder = new InvoiceBuilderChain(SalePreparationMock);
 
             //// Act
             var attempt = invoiceBuilder.Build();

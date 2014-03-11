@@ -1,6 +1,6 @@
 ﻿using System;
 using Merchello.Core.Gateways.Shipping;
-using Merchello.Core.Gateways.Shipping.RateTable;
+using Merchello.Core.Gateways.Shipping.FixedRate;
 using Merchello.Core.Models;
 
 namespace Merchello.Core.Cache
@@ -30,9 +30,9 @@ namespace Merchello.Core.Cache
         }
 
         /// <summary>
-        /// Returns a cache key intended for runtime caching of a <see cref="IGatewayShipMethod"/>
+        /// Returns a cache key intended for runtime caching of a <see cref="IShippingGatewayMethod"/>
         /// </summary>
-        /// <param name="shipMethodKey">The unique key (Guid) of the <see cref="IShipRateTable"/> associated with the rate table</param>
+        /// <param name="shipMethodKey">The unique key (Guid) of the <see cref="IShippingFixedRateTable"/> associated with the rate table</param>
         /// <returns></returns>
         internal static string GatewayShipMethodCacheKey(Guid shipMethodKey)
         {
@@ -58,7 +58,7 @@ namespace Merchello.Core.Cache
         /// <returns></returns>
         internal static string ShippingGatewayProviderShippingRateQuoteCacheKey(Guid shipmentKey, Guid shipMethodKey, Guid versionKey)
         {
-            return string.Format("merchello.shippingratequote.{0}.{1}.{2}", shipmentKey, shipMethodKey,versionKey);
+            return string.Format("merchello.shippingratequote.{0}.{1}.{2}", shipmentKey, shipMethodKey, versionKey);
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace Merchello.Core.Cache
         /// <returns></returns>
         internal static string GetEntityCacheKey<TEntity>(Guid key)
         {
-            return string.Format("{0}-{1}", typeof (TEntity).Name, key.ToString());
+            return string.Format("{0}.{1}", typeof (TEntity).Name, key);
         }
        
         

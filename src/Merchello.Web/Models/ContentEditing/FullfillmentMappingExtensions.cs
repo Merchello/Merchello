@@ -1,90 +1,16 @@
 ﻿using System;
 using System.Linq;
+using Merchello.Core.Gateways;
+using Merchello.Core.Gateways.Shipping.FixedRate;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
-using System.Collections.Generic;
-using Merchello.Core.Gateways.Shipping.RateTable;
 using Merchello.Core.Gateways.Shipping;
 
 namespace Merchello.Web.Models.ContentEditing
 {
     internal static class FullfillmentMappingExtensions
     {
-        #region WarehouseDisplay
-
-        internal static WarehouseDisplay ToWarehouseDisplay(this IWarehouse warehouse)
-        {           
-            return AutoMapper.Mapper.Map<WarehouseDisplay>(warehouse);
-        }
-
-        #endregion
-
-        #region IWarehouse
-
-        internal static IWarehouse ToWarehouse(this WarehouseDisplay warehouseDisplay, IWarehouse destination)
-        {
-            if (warehouseDisplay.Key != Guid.Empty)
-            {
-                destination.Key = warehouseDisplay.Key;
-            }
-            destination.Name = warehouseDisplay.Name;
-            destination.Address1 = warehouseDisplay.Address1;
-            destination.Address2 = warehouseDisplay.Address2;
-            destination.Locality = warehouseDisplay.Locality;
-            destination.Region = warehouseDisplay.Region;
-            destination.PostalCode = warehouseDisplay.PostalCode;
-            destination.CountryCode = warehouseDisplay.CountryCode;
-            destination.Phone = warehouseDisplay.Phone;
-            destination.Email = warehouseDisplay.Email;
-            destination.IsDefault = warehouseDisplay.IsDefault;
-
-            foreach (var warehouseCatalogDisplay in warehouseDisplay.WarehouseCatalogs)
-            {
-                IWarehouseCatalog destinationWarehouseCatalog;
-
-                var matchingItems = destination.WarehouseCatalogs.Where(x => x.Key == warehouseCatalogDisplay.Key);
-                if (matchingItems.Any())
-                {
-                    var existingWarehouseCatalog = matchingItems.First();
-                    if (existingWarehouseCatalog != null)
-                    {
-                        destinationWarehouseCatalog = existingWarehouseCatalog;
-
-                        destinationWarehouseCatalog = warehouseCatalogDisplay.ToWarehouseCatalog(destinationWarehouseCatalog);
-                    }
-                }
-            }
-
-            return destination;
-        }
-
-        #endregion
-
-        #region WarehouseCatalogDisplay
-
-        internal static WarehouseCatalogDisplay ToWarehouseCatalogDisplay(this IWarehouseCatalog warehouseCatalog)
-        {            
-            return AutoMapper.Mapper.Map<WarehouseCatalogDisplay>(warehouseCatalog);
-        }
-
-        #endregion
-
-        #region IWarehouseCatalog
-
-        internal static IWarehouseCatalog ToWarehouseCatalog(this WarehouseCatalogDisplay warehouseCatalogDisplay, IWarehouseCatalog destination)
-        {
-            if (warehouseCatalogDisplay.Key != Guid.Empty)
-            {
-                destination.Key = warehouseCatalogDisplay.Key;
-            }
-            destination.Name = warehouseCatalogDisplay.Name;
-            destination.Description = warehouseCatalogDisplay.Description;
-
-            return destination;
-        }
-
-        #endregion
-
+        
         #region CatalogInventoryDisplay
 
         internal static CatalogInventoryDisplay ToCatalogInventoryDisplay(this ICatalogInventory catalogInventory)
@@ -131,6 +57,35 @@ namespace Merchello.Web.Models.ContentEditing
         internal static GatewayProviderDisplay ToGatewayProviderDisplay(this IGatewayProvider gatewayProvider)
         {
             return AutoMapper.Mapper.Map<GatewayProviderDisplay>(gatewayProvider);
+        }
+
+        #endregion
+
+        #region GatewayResourceDisplay
+
+        internal static GatewayResourceDisplay ToGatewayResourceDisplay(this IGatewayResource gatewayResource)
+        {
+            return AutoMapper.Mapper.Map<GatewayResourceDisplay>(gatewayResource);
+        }
+
+        #endregion
+
+        #region PaymentMethod
+
+        internal static PaymentMethodDisplay ToPaymentMethodDisplay(this IPaymentMethod paymentMethod)
+        {
+            return AutoMapper.Mapper.Map<PaymentMethodDisplay>(paymentMethod);
+        }
+
+        internal static IPaymentMethod ToPaymentMethod(this PaymentMethodDisplay paymentMethodDisplay, IPaymentMethod destination)
+        {
+            if (paymentMethodDisplay.Key != Guid.Empty) destination.Key = paymentMethodDisplay.Key;
+
+            destination.Name = paymentMethodDisplay.Name;
+            destination.PaymentCode = paymentMethodDisplay.PaymentCode;
+            destination.Description = paymentMethodDisplay.Description;
+
+            return destination;
         }
 
         #endregion
@@ -210,11 +165,11 @@ namespace Merchello.Web.Models.ContentEditing
 
         #endregion
         
-        #region RateTableShipMethodDisplay
+        #region FixedRateShipMethodDisplay
 
-        internal static RateTableShipMethodDisplay ToRateTableShipMethodDisplay(this IRateTableShipMethod shipRateTableMethod)
+        internal static FixedRateShipMethodDisplay ToFixedRateShipMethodDisplay(this IFixedRateShippingGatewayMethod shipFixedRateMethod)
         {
-            return AutoMapper.Mapper.Map<RateTableShipMethodDisplay>(shipRateTableMethod);
+            return AutoMapper.Mapper.Map<FixedRateShipMethodDisplay>(shipFixedRateMethod);
         }
 
         #endregion
@@ -222,11 +177,11 @@ namespace Merchello.Web.Models.ContentEditing
         #region IRateTableShipMethod
 
         /// <summary>
-        /// Maps changes made in the <see cref="RateTableShipMethodDisplay"/> to the <see cref="IRateTableShipMethod"/>
+        /// Maps changes made in the <see cref="FixedRateShipMethodDisplay"/> to the <see cref="IFixedRateShippingGatewayMethod"/>
         /// </summary>
-        /// <param name="rateTableShipMethodDisplay">The <see cref="RateTableShipMethodDisplay"/> to map</param>
-        /// <param name="destination">The <see cref="IRateTableShipMethod"/> to have changes mapped to</param>
-        /// <returns>The updated <see cref="IRateTableShipMethod"/></returns>
+        /// <param name="fixedRateShipMethodDisplay">The <see cref="FixedRateShipMethodDisplay"/> to map</param>
+        /// <param name="destination">The <see cref="IFixedRateShippingGatewayMethod"/> to have changes mapped to</param>
+        /// <returns>The updated <see cref="IFixedRateShippingGatewayMethod"/></returns>
         /// <remarks>
         /// 
         /// Note: after calling this mapping, the changes are still not persisted to the database as the .Save() method is not called.
@@ -234,8 +189,54 @@ namespace Merchello.Web.Models.ContentEditing
         /// * For testing you will have to use the static .Save(IGatewayProviderService ..., as MerchelloContext.Current will likely be null
         /// 
         /// </remarks>
-        internal static IRateTableShipMethod ToRateTableShipMethod(this RateTableShipMethodDisplay rateTableShipMethodDisplay, IRateTableShipMethod destination)
+        internal static IFixedRateShippingGatewayMethod ToFixedRateShipMethod(this FixedRateShipMethodDisplay fixedRateShipMethodDisplay, IFixedRateShippingGatewayMethod destination)
         {
+            // RUSTY HELP: Cannot assign to these properties.  How should I do this mapping?
+
+            // Shipmethod
+            destination.ShipMethod.Name = fixedRateShipMethodDisplay.ShipMethod.Name;
+
+            var provinceCollection = new ProvinceCollection<IShipProvince>();
+            foreach (var province in fixedRateShipMethodDisplay.ShipMethod.Provinces)
+            {
+                provinceCollection.Add(
+                    new ShipProvince(province.Code, province.Name)
+                        {
+                            AllowShipping = province.AllowShipping,
+                            RateAdjustment = province.RateAdjustment,
+                            RateAdjustmentType = province.RateAdjustmentType
+                        }
+                    );
+            }
+            destination.ShipMethod.Provinces = provinceCollection;
+
+            // Rate table
+            
+            var existingRows = fixedRateShipMethodDisplay.RateTable.Rows.Where(x => !x.Key.Equals(Guid.Empty)).ToArray();            
+            foreach (var mapRow in existingRows)
+            {
+                var row = destination.RateTable.Rows.FirstOrDefault(x => x.Key == mapRow.Key);
+                if (row != null)
+                {
+                    row.Rate = mapRow.Rate;
+                }
+            }
+
+            // remove existing rows that previously existed but were deleted in the UI
+            var removers =
+                destination.RateTable.Rows.Where(
+                    row => !row.Key.Equals(Guid.Empty) && existingRows.All(x => x.Key != row.Key && !x.Key.Equals(Guid.Empty)));
+
+            foreach (var remove in removers)
+            {
+                destination.RateTable.DeleteRow(remove);
+            }
+
+            // add any new rows
+            foreach (var newRow in fixedRateShipMethodDisplay.RateTable.Rows.Where(x => x.Key == Guid.Empty))
+            {
+                destination.RateTable.AddRow(newRow.RangeLow, newRow.RangeHigh, newRow.Rate);
+            }
 
 
             return destination;
@@ -243,11 +244,11 @@ namespace Merchello.Web.Models.ContentEditing
 
         #endregion
 
-        #region ShipRateTableDisplay
+        #region ShipFixedRateTableDisplay
 
-        internal static ShipRateTableDisplay ToShipRateTableDisplay(this IShipRateTable shipRateTable)
+        internal static ShipFixedRateTableDisplay ToShipFixedRateTableDisplay(this IShippingFixedRateTable shippingFixedRateTable)
         {            
-            return AutoMapper.Mapper.Map<ShipRateTableDisplay>(shipRateTable);
+            return AutoMapper.Mapper.Map<ShipFixedRateTableDisplay>(shippingFixedRateTable);
         }
 
         #endregion
@@ -255,11 +256,11 @@ namespace Merchello.Web.Models.ContentEditing
         #region IShipRateTable
 
         /// <summary>
-        /// Maps changes made in the <see cref="ShipRateTableDisplay"/> to the <see cref="IShipRateTable"/>
+        /// Maps changes made in the <see cref="ShipFixedRateTableDisplay"/> to the <see cref="IShippingFixedRateTable"/>
         /// </summary>
-        /// <param name="shipRateTableDisplay">The <see cref="ShipRateTableDisplay"/> to map</param>
-        /// <param name="destination">The <see cref="IShipRateTable"/> to have changes mapped to</param>
-        /// <returns>The updated <see cref="IShipRateTable"/></returns>
+        /// <param name="shipFixedRateTableDisplay">The <see cref="ShipFixedRateTableDisplay"/> to map</param>
+        /// <param name="destination">The <see cref="IShippingFixedRateTable"/> to have changes mapped to</param>
+        /// <returns>The updated <see cref="IShippingFixedRateTable"/></returns>
         /// <remarks>
         /// 
         /// Note: after calling this mapping, the changes are still not persisted to the database as the .Save() method is not called.
@@ -267,20 +268,20 @@ namespace Merchello.Web.Models.ContentEditing
         /// * For testing you will have to use the static .Save(IGatewayProviderService ..., as MerchelloContext.Current will likely be null
         /// 
         /// </remarks>
-        internal static IShipRateTable ToShipRateTable(this ShipRateTableDisplay shipRateTableDisplay, IShipRateTable destination)
+        internal static IShippingFixedRateTable ToShipRateTable(this ShipFixedRateTableDisplay shipFixedRateTableDisplay, IShippingFixedRateTable destination)
         {
 
             // determine if any rows were deleted
             var missingRows =
                 destination.Rows.Where(
-                    persisted => !shipRateTableDisplay.Rows.Select(display => display.Key).Where(x => x != Guid.Empty).Contains(persisted.Key));
+                    persisted => !shipFixedRateTableDisplay.Rows.Select(display => display.Key).Where(x => x != Guid.Empty).Contains(persisted.Key));
 
             foreach (var missing in missingRows)
             {
                 destination.DeleteRow(missing);
             }
 
-            foreach (var shipRateTierDisplay in shipRateTableDisplay.Rows)
+            foreach (var shipRateTierDisplay in shipFixedRateTableDisplay.Rows)
             {
 
                 // try to find the matching row
@@ -289,7 +290,7 @@ namespace Merchello.Web.Models.ContentEditing
                 if (destinationTier != null)
                 {
                     // update the tier information : note we can only update the Rate here!
-                    // We need to remove the text boxes for the RangeLow and RangeHigh on any existing RateTable
+                    // We need to remove the text boxes for the RangeLow and RangeHigh on any existing FixedRateTable
                     destinationTier.Rate = shipRateTierDisplay.Rate;                    
                 }
                 else
@@ -349,13 +350,121 @@ namespace Merchello.Web.Models.ContentEditing
 
         #endregion
 
-        #region TaxProvinceDisplay
+        #region TaxMethodDisplay
 
-        internal static TaxProvinceDisplay ToTaxProvinceDisplay(this CountryTaxRate countryTaxRate)
-        {            
-            return AutoMapper.Mapper.Map<TaxProvinceDisplay>(countryTaxRate);
+        internal static ITaxMethod ToTaxMethod(this TaxMethodDisplay taxMethodDisplay, ITaxMethod destination)
+        {
+            if (taxMethodDisplay.Key != Guid.Empty) destination.Key = taxMethodDisplay.Key;
+
+            destination.Name = destination.Name;
+            destination.PercentageTaxRate = destination.PercentageTaxRate;
+
+            var provinceCollection = new ProvinceCollection<ITaxProvince>();
+            foreach (var province in taxMethodDisplay.Provinces)
+            {
+                provinceCollection.Add(
+                        new TaxProvince(province.Code, province.Name)
+                            {
+                                PercentRateAdjustment = province.PercentAdjustment
+                            }
+                    );
+            }
+            
+            destination.Provinces = provinceCollection;
+
+            return destination;
+        }
+
+        internal static TaxMethodDisplay ToTaxMethodDisplay(this ITaxMethod taxMethod)
+        {
+            return AutoMapper.Mapper.Map<TaxMethodDisplay>(taxMethod);
         }
 
         #endregion
+
+        #region TaxProvinceDisplay
+
+        internal static TaxProvinceDisplay ToTaxProvinceDisplay(this ITaxProvince taxProvince)
+        {            
+            return AutoMapper.Mapper.Map<TaxProvinceDisplay>(taxProvince);
+        }
+
+        #endregion
+
+        #region WarehouseDisplay
+
+        internal static WarehouseDisplay ToWarehouseDisplay(this IWarehouse warehouse)
+        {
+            return AutoMapper.Mapper.Map<WarehouseDisplay>(warehouse);
+        }
+
+        #endregion
+
+        #region IWarehouse
+
+        internal static IWarehouse ToWarehouse(this WarehouseDisplay warehouseDisplay, IWarehouse destination)
+        {
+            if (warehouseDisplay.Key != Guid.Empty)
+            {
+                destination.Key = warehouseDisplay.Key;
+            }
+            destination.Name = warehouseDisplay.Name;
+            destination.Address1 = warehouseDisplay.Address1;
+            destination.Address2 = warehouseDisplay.Address2;
+            destination.Locality = warehouseDisplay.Locality;
+            destination.Region = warehouseDisplay.Region;
+            destination.PostalCode = warehouseDisplay.PostalCode;
+            destination.CountryCode = warehouseDisplay.CountryCode;
+            destination.Phone = warehouseDisplay.Phone;
+            destination.Email = warehouseDisplay.Email;
+            destination.IsDefault = warehouseDisplay.IsDefault;
+
+            foreach (var warehouseCatalogDisplay in warehouseDisplay.WarehouseCatalogs)
+            {
+                IWarehouseCatalog destinationWarehouseCatalog;
+
+                var matchingItems = destination.WarehouseCatalogs.Where(x => x.Key == warehouseCatalogDisplay.Key);
+                if (matchingItems.Any())
+                {
+                    var existingWarehouseCatalog = matchingItems.First();
+                    if (existingWarehouseCatalog != null)
+                    {
+                        destinationWarehouseCatalog = existingWarehouseCatalog;
+
+                        destinationWarehouseCatalog = warehouseCatalogDisplay.ToWarehouseCatalog(destinationWarehouseCatalog);
+                    }
+                }
+            }
+
+            return destination;
+        }
+
+        #endregion
+
+        #region WarehouseCatalogDisplay
+
+        internal static WarehouseCatalogDisplay ToWarehouseCatalogDisplay(this IWarehouseCatalog warehouseCatalog)
+        {
+            return AutoMapper.Mapper.Map<WarehouseCatalogDisplay>(warehouseCatalog);
+        }
+
+        #endregion
+
+        #region IWarehouseCatalog
+
+        internal static IWarehouseCatalog ToWarehouseCatalog(this WarehouseCatalogDisplay warehouseCatalogDisplay, IWarehouseCatalog destination)
+        {
+            if (warehouseCatalogDisplay.Key != Guid.Empty)
+            {
+                destination.Key = warehouseCatalogDisplay.Key;
+            }
+            destination.Name = warehouseCatalogDisplay.Name;
+            destination.Description = warehouseCatalogDisplay.Description;
+
+            return destination;
+        }
+
+        #endregion
+
     }
 }

@@ -1,0 +1,34 @@
+﻿<div class="umb-panel" ng-controller="Merchello.Dashboards.Settings.Shipping.Dialogs.ShippingProviderController">
+	<div class="umb-panel-body no-header with-footer">
+        <!-- Add a Shipping Method Flyout -->
+	    <div class="well col-xs-6 span6">
+	        
+            <h4>Add a Provider</h4>
+	        <div class="form-group row-fluid provider-dropdown">
+	            <label for="provider-name">Select Your Provider</label>
+	            <div class="input-append col-xs-12 span12">
+	                <select name="availableProviders" data-ng-model="dialogData.provider" data-ng-options="p.name for p in dialogData.availableProviders track by p.key"></select>
+	            </div>
+	        </div>
+           
+	    </div>
+	</div>
+
+	<div class="umb-panel-footer" >
+		<div class="umb-el-wrap umb-panel-buttons">
+	        <div class="btn-toolbar umb-btn-toolbar pull-right">
+
+	        	<a href data-ng-click="close()" class="btn btn-link">
+	        		<localize key="general_cancel">Cancel</localize>
+				</a>
+
+				<button
+					class="btn btn-primary"
+					data-ng-click="submit(dialogData)">
+					<localize key="buttons_save">Save</localize>
+				</button>
+
+	        </div>
+		</div>
+	</div>
+</div>
