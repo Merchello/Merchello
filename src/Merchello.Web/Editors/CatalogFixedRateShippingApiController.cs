@@ -160,7 +160,12 @@ namespace Merchello.Web.Editors
                 var shipCountry = _shipCountryService.GetByKey(method.ShipMethod.ShipCountryKey);
                 var provider = _fixedRateShippingGatewayProvider;
 
-                var merchelloGwShipMethod = (IFixedRateShippingGatewayMethod)provider.CreateShipMethod(method.RateTableType, shipCountry, method.ShipMethod.Name);
+                var rateTableType = FixedRateShippingGatewayMethod.QuoteType.VaryByWeight;
+                if (method.GatewayResource.ServiceCode == "VBP")
+                {
+                    rateTableType = FixedRateShippingGatewayMethod.QuoteType.VaryByPrice;
+                }
+                var merchelloGwShipMethod = (IFixedRateShippingGatewayMethod)provider.CreateShipMethod(rateTableType, shipCountry, method.ShipMethod.Name);
 
                 merchelloGwShipMethod = method.ToFixedRateShipMethod(merchelloGwShipMethod);
 

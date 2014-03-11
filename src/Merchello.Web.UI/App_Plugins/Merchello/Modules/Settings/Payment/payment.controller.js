@@ -6,9 +6,50 @@
      * @function
      * 
      * @description
-     * The controller for the reports list page
+     * The controller for the payment settings page
      */
-    controllers.PaymentController = function ($scope, $routeParams, $location, notificationsService, angularHelper, serverValidationManager, merchelloProductService) {
+    controllers.PaymentController = function ($scope, notificationsService, merchelloPaymentGatewayService) {
+
+        $scope.paymentGatewayProviders = [];
+
+        //--------------------------------------------------------------------------------------
+        // Initialization methods
+        //--------------------------------------------------------------------------------------
+
+        $scope.loadAllPaymentGatewayProviders = function () {
+
+            var promiseAllProviders = merchelloPaymentGatewayService.getAllGatewayProviders();
+            promiseAllProviders.then(function (allProviders) {
+
+                $scope.providers = _.map(allProviders, function (providerFromServer) {
+                    return new merchello.Models.GatewayProvider(providerFromServer);
+                });
+
+            }, function (reason) {
+
+                notificationsService.error("Available Payment Providers Load Failed", reason.message);
+
+            });
+
+        };
+
+        /**
+         * @ngdoc method
+         * @name init
+         * @function
+         * 
+         * @description
+         * Method called on intial page load.  Loads in data from server and sets up scope.
+         */
+        $scope.init = function () {
+
+            $scope.loadAllPaymentGatewayProviders();
+
+        };
+
+        $scope.init();
+
+
 
         $scope.manualPaymentMethods = [];
         $scope.flyouts = {
