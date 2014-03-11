@@ -6,12 +6,16 @@
 
         if (provinceDataFromServer == undefined) {
             self.name = "";
-            self.adjustRate = "";
-            self.isSupportedDestination = true;
+            self.code = "";
+            self.allowShipping = false;
+            self.rateAdjustment = "";
+            self.rateAdjustmentType = 1;
         } else {
             self.name = provinceDataFromServer.name;
-            self.adjustRate = provinceDataFromServer.adjustRate;
-            self.isSupportedDestination = provinceDataFromServer.isSupportedDestination;
+            self.code = provinceDataFromServer.code;
+            self.allowShipping = provinceDataFromServer.allowShipping;
+            self.rateAdjustment = provinceDataFromServer.rateAdjustment;
+            self.rateAdjustmentType = provinceDataFromServer.rateAdjustmentType;
         }
 
     };

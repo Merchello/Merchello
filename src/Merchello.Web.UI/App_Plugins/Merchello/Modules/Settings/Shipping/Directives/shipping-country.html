@@ -1,5 +1,7 @@
 ﻿<div>
-    <h3>{{country.name}}</h3>
+    <h3>{{country.name}} 
+        <a data-ng-click="deleteCountry(country)" class="btn">X</a>
+    </h3>
     <a data-ng-click="addEditShippingProviderDialogOpen(country)" class="btn btn-primary merchello-button-right">Add a Provider</a>
     <div data-ng-repeat="shippingGatewayProvider in country.shippingGatewayProviders" class="merchello-shipping-gateway-provider">
         <h4>{{shippingGatewayProvider.name}}</h4>

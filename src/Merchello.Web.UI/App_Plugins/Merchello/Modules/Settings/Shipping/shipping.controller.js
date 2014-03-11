@@ -234,6 +234,22 @@
                 }
             });
 
+        $scope.deleteCountry = function(country) {
+
+            var promiseDelete = merchelloCatalogShippingService.deleteShipCountry(country.key);
+            promiseDelete.then(function () {
+
+                notificationsService.success("Shipping Country Deleted");
+
+                $scope.loadCountries();
+
+            }, function (reason) {
+
+                notificationsService.error("Shipping Country Delete Failed", reason.message);
+
+            });
+        };
+
         // Functions to control the Add/Edit Warehouse flyout
         $scope.addWarehouseFlyout = {
             clear: function() {
