@@ -29,7 +29,7 @@
 
         $scope.allProvinces = false;
         $scope.toggleAllProvinces = function() {
-            _.each($scope.dialogData.method.shipMethod.provinceData, function (province) { province.allowShipping = $scope.allProvinces; });
+            _.each($scope.dialogData.method.shipMethod.provinces, function (province) { province.allowShipping = $scope.allProvinces; });
         };
     };
 
