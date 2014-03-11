@@ -6,7 +6,7 @@
         * @description 
         * Loads in store settings and constants
         **/
-    merchelloServices.MerchelloSettingsService = function ($q, $http, $cacheFactory, umbDataFormatter, umbRequestHelper, notificationsService) {
+    merchelloServices.MerchelloSettingsService = function ($q, $http, $cacheFactory, umbDataFormatter, umbRequestHelper) {
 
         /* cacheFactory instance for cached items in the merchelloSettingsService */
         var _settingsCache = $cacheFactory('merchelloSettings');

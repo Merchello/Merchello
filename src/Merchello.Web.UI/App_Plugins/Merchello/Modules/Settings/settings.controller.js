@@ -6,7 +6,7 @@
      * @function
      * 
      * @description
-     * The controller for the reports list page
+     * The controller for the settings management page
      */
     controllers.SettingsPageController = function ($scope, $routeParams, $location, notificationsService, angularHelper, serverValidationManager, merchelloSettingsService) {
 
@@ -41,7 +41,7 @@
 
         $scope.loadSettings();
 
-        $scope.save = function (thisForm) {
+        $scope.save = function(thisForm) {
 
             if (thisForm.$valid) {
 
@@ -50,20 +50,19 @@
                 $scope.savingStoreSettings = true;
                 var promise = merchelloSettingsService.save($scope.settingsDisplay);
 
-                promise.then(function (settingDisplay) {
+                promise.then(function(settingDisplay) {
                     notificationsService.success("Store Settings Saved", "H5YR!");
                     $scope.savingStoreSettings = false;
                     $scope.settingDisplay = new merchello.Models.StoreSettings(settingDisplay);
 
-                }, function (reason) {
+                }, function(reason) {
                     notificationsService.error("Store Settings Save Failed", reason.message);
                 });
-            }
-            else {     
+            } else {
                 notificationsService.info("Store Settings Save Failed...The Form Was Not Valid", "");
             }
-            }
         };
+    };
 
     angular.module("umbraco").controller("Merchello.Dashboards.Settings.PageController", merchello.Controllers.SettingsPageController);
 

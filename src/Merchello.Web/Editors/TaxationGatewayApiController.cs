@@ -97,7 +97,7 @@ namespace Merchello.Web.Editors
                 }
             }
 
-            throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+            //throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
         }
 
         /// <summary>
