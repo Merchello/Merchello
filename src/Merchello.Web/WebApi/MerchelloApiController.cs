@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Web.Http.Controllers;
 using Merchello.Core;
 using Newtonsoft.Json.Serialization;
 using Umbraco.Web;
@@ -33,23 +32,6 @@ namespace Merchello.Web.WebApi
 
             MerchelloContext = merchelloContext;
             InstanceId = Guid.NewGuid();
-        }
-
-        /// <summary>
-        /// Removes the xml formatter and configure the camel casing
-        /// </summary>
-        /// <param name="controllerContext"></param>
-        protected override void Initialize(HttpControllerContext controllerContext)
-        {
-            base.Initialize(controllerContext);
-
-            // remove the XmlFormatter 
-            // TODO : this becomes redundant when we inherit from UmbracoAuthorizedJsonController
-            //controllerContext.Configuration.Formatters.Remove(controllerContext.Configuration.Formatters.XmlFormatter);
-            
-            // camel casing
-            //controllerContext.Configuration.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-            
         }
 
         /// <summary>
