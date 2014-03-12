@@ -340,16 +340,24 @@ namespace Merchello.Tests.IntegrationTests.Workflow
             var paymentResult = CurrentCustomer.Basket().SalePreparation().AuthorizePayment(paymentMethods.FirstOrDefault());
 
             Assert.IsTrue(paymentResult.Payment.Success);
+            Assert.IsTrue(CurrentCustomer.Basket().IsEmpty);
 
             #endregion // completed checkout preparation
 
+            // capture the payment
+            invoice.CapturePayment(paymentResult.Payment.Result, paymentMethods.FirstOrDefault(), invoice.Total);
+
+            Assert.AreEqual(Constants.DefaultKeys.InvoiceStatus.Paid, invoice.InvoiceStatusKey);
+
             if (paymentResult.ApproveOrderCreation)
             {
-                MerchelloContext.Current.Services.OrderService.Save(paymentResult.Invoice.PrepareOrder());
+                MerchelloContext.Current.Services.OrderService.Save(invoice.PrepareOrder());
             }
 
 
             #endregion
+
+
 
 
         }
