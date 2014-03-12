@@ -16,7 +16,7 @@ $active: lighten($green, 50%);
     .active, .active:hover { background-color: $active; }
     .btn { line-height: 21px; color: #000; }
     .btn-primary { color: #fff; }
-
+ 
     .label { font-size: 1em; line-height: 20px; text-shadow: none; }
     .label-success { background: lighten($green, 20%); }
     .label-warning { background: lighten($orange, 20%); }
