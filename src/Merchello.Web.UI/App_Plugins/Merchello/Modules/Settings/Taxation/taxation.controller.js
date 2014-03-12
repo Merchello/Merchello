@@ -10,6 +10,7 @@
      */
     controllers.TaxationController = function ($scope, notificationsService, merchelloTaxationGatewayService, merchelloSettingsService) {
 
+        $scope.allCountries = [];
         $scope.availableCountries = [];
         $scope.taxationGatewayProviders = [];
 
@@ -22,7 +23,7 @@
             var promiseAllCountries = merchelloSettingsService.getAllCountries();
             promiseAllCountries.then(function (allCountries) {
 
-                $scope.availableCountries = _.map(allCountries, function (country) {
+                $scope.allCountries = _.map(allCountries, function (country) {
                     return new merchello.Models.Country(country);
                 });
 
@@ -43,9 +44,72 @@
                     return new merchello.Models.GatewayProvider(providerFromServer);
                 });
 
+                var noTaxProvider = new merchello.Models.GatewayProvider();
+                noTaxProvider.name = "Not Taxed";
+                $scope.taxationGatewayProviders.push(noTaxProvider);
+
+                if ($scope.taxationGatewayProviders.length > 0) {
+                    $scope.loadAvailableCountriesWithoutMethod($scope.taxationGatewayProviders[0]);
+                    $scope.loadTaxMethods($scope.taxationGatewayProviders[0]);
+                }
+
             }, function (reason) {
 
                 notificationsService.error("Available Taxation Providers Load Failed", reason.message);
+
+            });
+
+        };
+
+        $scope.loadAvailableCountriesWithoutMethod = function (taxationGatewayProvider) {
+
+            var promiseGwResources = merchelloTaxationGatewayService.getGatewayResources(taxationGatewayProvider.key);
+            promiseGwResources.then(function (resources) {
+
+                $scope.availableCountries = _.map(resources, function (resourceFromServer) {
+                    var taxCountry = new merchello.Models.TaxCountry(resourceFromServer);
+
+                    taxCountry.country = _.find($scope.allCountries, function (c) { return c.countryCode == taxCountry.serviceCode; });
+
+                    taxCountry.countryName = taxCountry.country.name;
+
+                    return taxCountry;
+                });
+
+            }, function (reason) {
+
+                notificationsService.error("Available Gateway Resources Load Failed", reason.message);
+
+            });
+
+        };
+
+        $scope.loadTaxMethods = function (taxationGatewayProvider) {
+
+            var promiseGwResources = merchelloTaxationGatewayService.getTaxationProviderTaxMethods(taxationGatewayProvider.key);
+            promiseGwResources.then(function (methods) {
+
+                var newCountries = _.map(methods, function(methodFromServer) {
+                    var taxMethod = new merchello.Models.TaxMethod(methodFromServer);
+                    taxMethod.provider = taxationGatewayProvider;
+
+                    var taxCountry = new merchello.Models.TaxCountry();
+
+                    taxCountry.method = taxMethod;
+                    taxCountry.country = _.find($scope.allCountries, function(c) { return c.countryCode == taxMethod.countryCode; });
+
+                    taxCountry.countryName = taxMethod.name;
+
+                    return taxCountry;
+                });
+
+                _.each(newCountries, function(country) {
+                    $scope.availableCountries.push(country);
+                });
+
+            }, function (reason) {
+
+                notificationsService.error("Available Gateway Resources Load Failed", reason.message);
 
             });
 
@@ -64,56 +128,21 @@
             $scope.loadAllAvailableCountries();
             $scope.loadAllTaxationGatewayProviders();
 
+            $scope.loaded = true;
+            $scope.preValuesLoaded = true;
+
+
         };
 
         $scope.init();
 
+        //--------------------------------------------------------------------------------------
+        // Events methods
+        //--------------------------------------------------------------------------------------
 
-
-
-
-
-        $scope.taxRates = [];
-        $scope.sortProperty = "name";
-        $scope.sortOrder = "asc";
-        $scope.deleteTaxRate = {};
-        $scope.newTaxRate = {};
-
-        $scope.loadTaxRates = function() {
-
-            // Note From Kyle: Mocks for data returned from Tax Rates API call.
-            var mockTaxRates = [
-                {
-                    pk: 0,
-                    country: "Canada",
-                    rate: 11.5
-                },
-                {
-                    pk: 1,
-                    country: "United Kingdom",
-                    rate: 4
-                },
-                {
-                    pk: 2,
-                    country: "United States",
-                    rate: 7.8
-                },
-                {
-                    pk: 3,
-                    country: "Everywhere Else",
-                    rate: 0
-                }
-            ];
-            $scope.taxRates = _.map(mockTaxRates, function(taxRateFromServer) {
-                return taxRateFromServer;
-            });
-            // End of Tax Rates API mocks.
-            $scope.loaded = true;
-            $scope.preValuesLoaded = true;
-
+        $scope.providerChange = function(method, providerSelected) {
+            method.providerKey = providerSelected.key;
         };
-
-        $scope.loadTaxRates();
 
     };
 
