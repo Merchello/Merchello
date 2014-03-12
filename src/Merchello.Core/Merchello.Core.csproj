@@ -84,6 +84,7 @@
     <Compile Include="Chains\InvoiceCreation\AddBillingInfoToInvoiceTask.cs" />
     <Compile Include="Chains\InvoiceCreation\InvoiceCreationAttemptChainTaskBase.cs" />
     <Compile Include="Chains\InvoiceCreation\ConvertItemCacheItemsToInvoiceItemsTask.cs" />
+    <Compile Include="Chains\InvoiceCreation\ValidateCommonCurrency.cs" />
     <Compile Include="Chains\OrderCreation\ConvertInvoiceItemsToOrderItemsTask.cs" />
     <Compile Include="Chains\OrderCreation\OrderCreationAttemptChainTaskBase.cs" />
     <Compile Include="Chains\ShipmentCreation\OrderAttemptChainTaskBase.cs" />

@@ -64,7 +64,14 @@ namespace Merchello.Core.Services
         /// Gets a collection of all <see cref="ICurrency"/>
         /// </summary>
         IEnumerable<ICurrency> GetAllCurrencies();
-            
+
+        /// <summary>
+        /// Gets a <see cref="ICurrency"/> for the currency code passed
+        /// </summary>
+        /// <param name="currencyCode">The ISO Currency Code (eg. USD)</param>
+        /// <returns>The <see cref="ICurrency"/></returns>
+        ICurrency GetCurrencyByCode(string currencyCode);
+
         /// <summary>
         /// Returns a <see cref="ICountry"/> collection for all countries excluding codes passed
         /// </summary>

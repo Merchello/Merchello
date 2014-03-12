@@ -259,6 +259,16 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
+        /// Gets a <see cref="ICurrency"/> for the currency code passed
+        /// </summary>
+        /// <param name="currencyCode">The ISO Currency Code (eg. USD)</param>
+        /// <returns>The <see cref="ICurrency"/></returns>
+        public ICurrency GetCurrencyByCode(string currencyCode)
+        {
+            return GetAllCurrencies().FirstOrDefault(x => x.CurrencyCode == currencyCode);
+        }
+
+        /// <summary>
         /// Returns a Region collection for all countries excluding codes passed
         /// </summary>
         /// <param name="excludeCountryCodes">A collection of country codes to exclude from the result set</param>
