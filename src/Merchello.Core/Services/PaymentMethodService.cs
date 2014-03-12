@@ -212,6 +212,17 @@ namespace Merchello.Core.Services
             }
         }
 
+        /// <summary>
+        /// Gets a collection of all <see cref="IPaymentMethod"/>
+        /// </summary>
+        public IEnumerable<IPaymentMethod> GetAll()
+        {
+            using (var repository = _repositoryFactory.CreatePaymentMethodRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetAll();
+            }
+        }
+
         #region Event Handlers
 
         /// <summary>

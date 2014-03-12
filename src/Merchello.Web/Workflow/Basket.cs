@@ -177,7 +177,7 @@ namespace Merchello.Web.Workflow
         /// Adds a line item to the basket
         /// </summary>
         internal void AddItem(string name, string sku, int quantity, decimal price, ExtendedDataCollection extendedData)
-        {
+        {            
             if (quantity <= 0) quantity = 1;
             if (price < 0) price = 0;
             _itemCache.AddItem(LineItemType.Product, name, sku, quantity, price, extendedData);

@@ -84,6 +84,7 @@
     <Compile Include="Chains\InvoiceCreation\AddBillingInfoToInvoiceTask.cs" />
     <Compile Include="Chains\InvoiceCreation\InvoiceCreationAttemptChainTaskBase.cs" />
     <Compile Include="Chains\InvoiceCreation\ConvertItemCacheItemsToInvoiceItemsTask.cs" />
+    <Compile Include="Chains\InvoiceCreation\ValidateCommonCurrency.cs" />
     <Compile Include="Chains\OrderCreation\ConvertInvoiceItemsToOrderItemsTask.cs" />
     <Compile Include="Chains\OrderCreation\OrderCreationAttemptChainTaskBase.cs" />
     <Compile Include="Chains\ShipmentCreation\OrderAttemptChainTaskBase.cs" />
@@ -99,12 +100,15 @@
     <Compile Include="Gateways\Payment\PaymentGatewayMethodBase.cs" />
     <Compile Include="Gateways\Payment\IPaymentGatewayMethod.cs" />
     <Compile Include="Gateways\Payment\IPaymentResult.cs" />
+    <Compile Include="Gateways\Shipping\FixedRate\IFixedRateShippingGatewayProvider.cs" />
     <Compile Include="Gateways\Taxation\FixedRate\FixRateTaxationGatewayMethod.cs" />
     <Compile Include="Gateways\Taxation\FixedRate\IFixedRateTaxationGatewayMethod.cs" />
     <Compile Include="Gateways\Taxation\TaxationGatewayMethodBase.cs" />
     <Compile Include="Gateways\Taxation\ITaxationGatewayMethod.cs" />
     <Compile Include="Gateways\Taxation\TaxCalculationResult.cs" />
     <Compile Include="Gateways\Taxation\TaxableLineItemVisitor.cs" />
+    <Compile Include="Models\Currency.cs" />
+    <Compile Include="Models\Interfaces\ICurrency.cs" />
     <Compile Include="Models\Interfaces\IOrder.cs" />
     <Compile Include="Models\Interfaces\IOrderStatus.cs" />
     <Compile Include="Models\Interfaces\IPaymentMethod.cs" />

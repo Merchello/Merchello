@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Examine.SearchCriteria;
 using Merchello.Web.Models.ContentEditing;
 
@@ -51,6 +52,37 @@ namespace Merchello.Web
         public ProductVariantDisplay ProductVariant(Guid key)
         {
             return ProductVariant(key.ToString());
+        }
+
+
+        /// <summary>
+        /// Get a product variant from a product by it's collection of attributes
+        /// </summary>
+        /// <param name="productKey">The product key</param>
+        /// <param name="attributeKeys">The option choices (attributeKeys)</param>
+        /// <returns></returns>
+        public ProductVariantDisplay GetProductVariantWithAttributes(Guid productKey, Guid[] attributeKeys)
+        {
+            var product = Product(productKey);
+            return product.ProductVariants.FirstOrDefault(x => x.Attributes.Count() == attributeKeys.Count() && attributeKeys.All(key => x.Attributes.FirstOrDefault(att => att.Key == key) != null));
+        }
+
+        /// <summary>
+        /// Gets a list of valid variants based on partial attribute selection
+        /// </summary>
+        /// <param name="productKey">The product key</param>
+        /// <param name="attributeKeys">The selected option choices</param>
+        /// <returns>A collection of <see cref="ProductVariantDisplay"/></returns>
+        /// <remarks>
+        /// Intended to assist in product variant selection 
+        /// </remarks>
+        public IEnumerable<ProductVariantDisplay> GetValidProductVaraints(Guid productKey, Guid[] attributeKeys)
+        {
+            var product = Product(productKey);
+            if(product == null) throw new InvalidOperationException("Product is null");
+            if (!attributeKeys.Any()) return product.ProductVariants;
+
+            return product.ProductVariants.Where(x => attributeKeys.All(key => x.Attributes.FirstOrDefault(att => att.Key == key) != null));
         }
 
         /// <summary>

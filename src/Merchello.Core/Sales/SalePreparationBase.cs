@@ -228,7 +228,7 @@ namespace Merchello.Core.Sales
         /// <param name="paymentMethodKey">The <see cref="IPaymentMethod"/> key</param>
         /// <param name="args">Additional arguements required by the payment processor</param>
         /// <returns>The <see cref="IPaymentResult"/></returns>
-        public IPaymentResult AuthorizePayment(Guid paymentMethodKey, ProcessorArgumentCollection args)
+        public virtual IPaymentResult AuthorizePayment(Guid paymentMethodKey, ProcessorArgumentCollection args)
         {
             var paymentMethod = _merchelloContext.Gateways.Payment.GetPaymentGatewayMethods().FirstOrDefault(x => x.PaymentMethod.Key.Equals(paymentMethodKey));
 
@@ -241,7 +241,7 @@ namespace Merchello.Core.Sales
         /// </summary>
         /// <param name="paymentMethodKey">The <see cref="IPaymentMethod"/> key</param>
         /// <returns>The <see cref="IPaymentResult"/></returns>
-        public IPaymentResult AuthorizePayment(Guid paymentMethodKey)
+        public virtual IPaymentResult AuthorizePayment(Guid paymentMethodKey)
         {
             return AuthorizePayment(paymentMethodKey, new ProcessorArgumentCollection());
         }
@@ -252,7 +252,7 @@ namespace Merchello.Core.Sales
         /// <param name="paymentGatewayMethod">The <see cref="IPaymentMethod"/></param>
         /// <param name="args">Additional arguements required by the payment processor</param>
         /// <returns>A <see cref="IPaymentResult"/></returns>
-        public IPaymentResult AuthorizeCapturePayment(IPaymentGatewayMethod paymentGatewayMethod, ProcessorArgumentCollection args)
+        public virtual IPaymentResult AuthorizeCapturePayment(IPaymentGatewayMethod paymentGatewayMethod, ProcessorArgumentCollection args)
         {
             Mandate.ParameterNotNull(paymentGatewayMethod, "paymentGatewayMethod");
 
@@ -269,7 +269,7 @@ namespace Merchello.Core.Sales
         /// </summary>
         /// <param name="paymentGatewayMethod">The <see cref="IPaymentMethod"/></param>
         /// <returns>A <see cref="IPaymentResult"/></returns>
-        public IPaymentResult AuthorizeCapturePayment(IPaymentGatewayMethod paymentGatewayMethod)
+        public virtual IPaymentResult AuthorizeCapturePayment(IPaymentGatewayMethod paymentGatewayMethod)
         {
             return AuthorizeCapturePayment(paymentGatewayMethod, new ProcessorArgumentCollection());
         }
@@ -280,7 +280,7 @@ namespace Merchello.Core.Sales
         /// <param name="paymentMethodKey">The <see cref="IPaymentMethod"/> key</param>
         /// <param name="args">Additional arguements required by the payment processor</param>
         /// <returns>A <see cref="IPaymentResult"/></returns>
-        public IPaymentResult AuthorizeCapturePayment(Guid paymentMethodKey, ProcessorArgumentCollection args)
+        public virtual IPaymentResult AuthorizeCapturePayment(Guid paymentMethodKey, ProcessorArgumentCollection args)
         {
             var paymentMethod = _merchelloContext.Gateways.Payment.GetPaymentGatewayMethods().FirstOrDefault(x => x.PaymentMethod.Key.Equals(paymentMethodKey));
 
@@ -292,7 +292,7 @@ namespace Merchello.Core.Sales
         /// </summary>
         /// <param name="paymentMethodKey">The <see cref="IPaymentMethod"/> key</param>
         /// <returns>A <see cref="IPaymentResult"/></returns>
-        public IPaymentResult AuthorizeCapturePayment(Guid paymentMethodKey)
+        public virtual IPaymentResult AuthorizeCapturePayment(Guid paymentMethodKey)
         {
             return AuthorizeCapturePayment(paymentMethodKey, new ProcessorArgumentCollection());
         }

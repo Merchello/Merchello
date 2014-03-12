@@ -24,7 +24,7 @@ namespace Merchello.Core.Chains.InvoiceCreation
             foreach (var lineItem in SalePreparation.ItemCache.Items)
             {
                 try
-                {
+                {                       
                     value.Items.Add(lineItem.AsLineItemOf<InvoiceLineItem>());
                 }
                 catch (Exception ex)

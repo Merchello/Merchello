@@ -15,7 +15,7 @@ namespace Merchello.Core.Gateways.Shipping.FixedRate
     /// This is Merchello's default ShippingGatewayProvider
     /// 
     /// </remarks>
-    public class FixedRateShippingGatewayProvider : ShippingGatewayProviderBase
+    public class FixedRateShippingGatewayProvider : ShippingGatewayProviderBase, IFixedRateShippingGatewayProvider
     {
         #region "Available Methods"
 

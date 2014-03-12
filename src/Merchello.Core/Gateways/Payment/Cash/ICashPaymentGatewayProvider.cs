@@ -3,6 +3,6 @@
     /// <summary>
     /// Marker interface for a CashPaymentGatewayProvider
     /// </summary>
-    public interface ICashPaymentGatewayProvider : IPaymentGatewayProvider
+    public interface ICashPaymentGatewayProvider
     { }
 }

@@ -329,7 +329,15 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
         #region IPaymentMethod
 
+        public void DeleteAllPaymentMethods()
+        {
+            var methods = PaymentMethodService.GetAll();
 
+            foreach (var method in methods)
+            {
+                PaymentMethodService.Delete(method);    
+            }            
+        }
 
         /// <summary>
         /// Gets the payment method service

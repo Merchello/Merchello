@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.Linq;
+using Merchello.Core.Gateways.Taxation;
 using Merchello.Core.Gateways.Taxation.FixedRate;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
@@ -12,7 +13,7 @@ namespace Merchello.Tests.IntegrationTests.Taxation
     [Category("Taxation")]
     public class TaxMethodTaxationGatewayProviderTests : TaxationProviderTestBase
     {
-        private IFixedRateTaxationGatewayProvider _taxProvider;
+        private ITaxationGatewayProvider _taxProvider;
 
         [TestFixtureSetUp]
         public override void FixtureSetup()
@@ -35,7 +36,7 @@ namespace Merchello.Tests.IntegrationTests.Taxation
         public void Init()
         {
             
-            _taxProvider = (IFixedRateTaxationGatewayProvider)MerchelloContext.Gateways.Taxation.ResolveByKey(Core.Constants.ProviderKeys.Taxation.FixedRateTaxationProviderKey);
+            _taxProvider = MerchelloContext.Gateways.Taxation.ResolveByKey(Core.Constants.ProviderKeys.Taxation.FixedRateTaxationProviderKey);
 
             PreTestDataWorker.DeleteAllCountryTaxRates(Core.Constants.ProviderKeys.Taxation.FixedRateTaxationProviderKey);
         }

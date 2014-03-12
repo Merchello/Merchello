@@ -28,7 +28,15 @@ namespace Merchello.Core.Chains.InvoiceCreation
 
                     var taxes = value.CalculateTaxes(SalePreparation.MerchelloContext, value.GetBillingAddress());
 
-                    value.Items.Add(taxes.AsLineItemOf<InvoiceLineItem>());
+                    var taxLineItem = taxes.AsLineItemOf<InvoiceLineItem>();
+
+                    var currencyCode =
+                        SalePreparation.MerchelloContext.Services.StoreSettingService.GetByKey(
+                            Constants.StoreSettingKeys.CurrencyCodeKey).Value;
+
+                    taxLineItem.ExtendedData.SetValue(Constants.ExtendedDataKeys.CurrencyCode, currencyCode);
+
+                    value.Items.Add(taxLineItem);
 
                     return Attempt<IInvoice>.Succeed(value);
                 }

@@ -79,7 +79,7 @@ namespace Merchello.Core.Gateways.Payment
             // collect the payment authorization
             var response = PerformAuthorizePayment(invoice, args);
 
-            if (!response.Result.Success) return response;
+            if (!response.Payment.Success) return response;
 
             AssertPaymentApplied(response, invoice);
             
@@ -110,9 +110,11 @@ namespace Merchello.Core.Gateways.Payment
             // authorize and capture the payment
             var response = PerformAuthorizeCapturePayment(invoice, amount, args);
 
-            if (!response.Result.Success) return response;
+            if (!response.Payment.Success) return response;
 
             AssertPaymentApplied(response, invoice);
+
+            AssertInvoiceStatus(invoice);
 
             // Check configuration for override on ApproveOrderCreation
             if (!response.ApproveOrderCreation)
@@ -140,9 +142,11 @@ namespace Merchello.Core.Gateways.Payment
 
             var response = PerformCapturePayment(invoice, payment, amount, args);
 
-            if (!response.Result.Success) return response;
+            if (!response.Payment.Success) return response;
 
             AssertPaymentApplied(response, invoice);
+
+            AssertInvoiceStatus(invoice);
 
             // Check configuration for override on ApproveOrderCreation
             if (!response.ApproveOrderCreation)
@@ -167,7 +171,7 @@ namespace Merchello.Core.Gateways.Payment
 
             var response = PerformRefundPayment(invoice, payment, args);
 
-            if (!response.Result.Success) return response;
+            if (!response.Payment.Success) return response;
 
             var appliedPayments = payment.AppliedPayments().Where(x => x.TransactionType != AppliedPaymentType.Void);
             foreach (var appliedPayment in appliedPayments)
@@ -178,17 +182,7 @@ namespace Merchello.Core.Gateways.Payment
                 GatewayProviderService.Save(appliedPayment);
             }
 
-            if (invoice.InvoiceStatusKey != Constants.DefaultKeys.InvoiceStatus.Cancelled &&
-                invoice.InvoiceStatusKey != Constants.DefaultKeys.InvoiceStatus.Fraud)
-            {
-                invoice.InvoiceStatusKey =
-                    invoice.AppliedPayments().Where(x => x.PaymentKey != payment.Key).Sum(x => x.Amount) > 0
-                        ? Constants.DefaultKeys.InvoiceStatus.Paid
-                        : Constants.DefaultKeys.InvoiceStatus.Unpaid;
-
-                GatewayProviderService.Save(invoice);
-
-            }
+            AssertInvoiceStatus(invoice);
             
             // Force the ApproveOrderCreation to false
             if (response.ApproveOrderCreation) ((PaymentResult)response).ApproveOrderCreation = false;
@@ -201,12 +195,31 @@ namespace Merchello.Core.Gateways.Payment
         private void AssertPaymentApplied(IPaymentResult response, IInvoice invoice)
         {
             // Apply the payment to the invoice if it was not done in the sub class           
-            var payment = response.Result.Result;
+            var payment = response.Payment.Result;
             if (payment.AppliedPayments(GatewayProviderService).FirstOrDefault(x => x.InvoiceKey == invoice.Key) == null)
             {
                 GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, PaymentMethod.Name, payment.Amount);
             }
 
+        }
+
+        private void AssertInvoiceStatus(IInvoice invoice)
+        {
+            var appliedPayments = _gatewayProviderService.GetAppliedPaymentsByInvoiceKey(invoice.Key).ToArray();
+            
+            var appliedTotal = 
+                appliedPayments.Where(x => x.TransactionType == AppliedPaymentType.Debit).Sum(x => x.Amount) - 
+                appliedPayments.Where(x => x.TransactionType == AppliedPaymentType.Credit).Sum(x => x.Amount);
+
+            if (appliedTotal == 0 && invoice.InvoiceStatusKey != Constants.DefaultKeys.InvoiceStatus.Unpaid) 
+                invoice.InvoiceStatusKey = Constants.DefaultKeys.InvoiceStatus.Unpaid;
+            if (invoice.Total <= appliedTotal && invoice.InvoiceStatusKey != Constants.DefaultKeys.InvoiceStatus.Paid)
+                invoice.InvoiceStatusKey = Constants.DefaultKeys.InvoiceStatus.Paid;
+            if (invoice.Total > appliedTotal && invoice.InvoiceStatusKey != Constants.DefaultKeys.InvoiceStatus.Partial)
+                invoice.InvoiceStatusKey = Constants.DefaultKeys.InvoiceStatus.Partial;
+
+            if(invoice.IsDirty()) GatewayProviderService.Save(invoice);
+                
         }
 
         /// <summary>

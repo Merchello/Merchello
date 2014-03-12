@@ -15,6 +15,9 @@ using Umbraco.Core.Events;
 
 namespace Merchello.Core.Services
 {
+    /// <summary>
+    /// Represents the Store Settings Service
+    /// </summary>
     public class StoreSettingService : IStoreSettingService
     {
         private readonly IDatabaseUnitOfWorkProvider _uowProvider;
@@ -234,14 +237,35 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
-        /// Returns a Region collection for all countries
+        /// Gets a collection of all  <see cref="ICountry"/>
         /// </summary>
-        /// <returns>A collection of <see cref="RegionInfo"/></returns>
         public IEnumerable<ICountry> GetAllCountries()
         {
             return CultureInfo.GetCultures(CultureTypes.SpecificCultures)
                 .Select(culture => new RegionInfo(culture.Name))
                 .Select(ri => GetCountryByCode(ri.TwoLetterISORegionName)).DistinctBy(x => x.CountryCode);
+        }
+
+        /// <summary>
+        /// Gets a collection of all <see cref="ICurrency"/>
+        /// </summary>
+        public IEnumerable<ICurrency> GetAllCurrencies()
+        {
+            return CultureInfo.GetCultures(CultureTypes.SpecificCultures)
+                              .Select(culture => new RegionInfo(culture.Name))
+                              .Select(
+                                  ri => new Currency(ri.ISOCurrencySymbol, ri.CurrencySymbol, ri.CurrencyEnglishName))
+                              .DistinctBy(x => x.CurrencyCode);
+        }
+
+        /// <summary>
+        /// Gets a <see cref="ICurrency"/> for the currency code passed
+        /// </summary>
+        /// <param name="currencyCode">The ISO Currency Code (eg. USD)</param>
+        /// <returns>The <see cref="ICurrency"/></returns>
+        public ICurrency GetCurrencyByCode(string currencyCode)
+        {
+            return GetAllCurrencies().FirstOrDefault(x => x.CurrencyCode == currencyCode);
         }
 
         /// <summary>
