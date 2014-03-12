@@ -114,6 +114,8 @@ namespace Merchello.Core.Gateways.Payment
 
             AssertPaymentApplied(response, invoice);
 
+            AssertInvoiceStatus(invoice);
+
             // Check configuration for override on ApproveOrderCreation
             if (!response.ApproveOrderCreation)
                 ((PaymentResult)response).ApproveOrderCreation = MerchelloConfiguration.Current.AlwaysApproveOrderCreation;
@@ -143,6 +145,8 @@ namespace Merchello.Core.Gateways.Payment
             if (!response.Payment.Success) return response;
 
             AssertPaymentApplied(response, invoice);
+
+            AssertInvoiceStatus(invoice);
 
             // Check configuration for override on ApproveOrderCreation
             if (!response.ApproveOrderCreation)
@@ -178,17 +182,7 @@ namespace Merchello.Core.Gateways.Payment
                 GatewayProviderService.Save(appliedPayment);
             }
 
-            if (invoice.InvoiceStatusKey != Constants.DefaultKeys.InvoiceStatus.Cancelled &&
-                invoice.InvoiceStatusKey != Constants.DefaultKeys.InvoiceStatus.Fraud)
-            {
-                invoice.InvoiceStatusKey =
-                    invoice.AppliedPayments().Where(x => x.PaymentKey != payment.Key).Sum(x => x.Amount) > 0
-                        ? Constants.DefaultKeys.InvoiceStatus.Paid
-                        : Constants.DefaultKeys.InvoiceStatus.Unpaid;
-
-                GatewayProviderService.Save(invoice);
-
-            }
+            AssertInvoiceStatus(invoice);
             
             // Force the ApproveOrderCreation to false
             if (response.ApproveOrderCreation) ((PaymentResult)response).ApproveOrderCreation = false;
@@ -207,6 +201,25 @@ namespace Merchello.Core.Gateways.Payment
                 GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, PaymentMethod.Name, payment.Amount);
             }
 
+        }
+
+        private void AssertInvoiceStatus(IInvoice invoice)
+        {
+            var appliedPayments = _gatewayProviderService.GetAppliedPaymentsByInvoiceKey(invoice.Key).ToArray();
+            
+            var appliedTotal = 
+                appliedPayments.Where(x => x.TransactionType == AppliedPaymentType.Debit).Sum(x => x.Amount) - 
+                appliedPayments.Where(x => x.TransactionType == AppliedPaymentType.Credit).Sum(x => x.Amount);
+
+            if (appliedTotal == 0 && invoice.InvoiceStatusKey != Constants.DefaultKeys.InvoiceStatus.Unpaid) 
+                invoice.InvoiceStatusKey = Constants.DefaultKeys.InvoiceStatus.Unpaid;
+            if (invoice.Total <= appliedTotal && invoice.InvoiceStatusKey != Constants.DefaultKeys.InvoiceStatus.Paid)
+                invoice.InvoiceStatusKey = Constants.DefaultKeys.InvoiceStatus.Paid;
+            if (invoice.Total > appliedTotal && invoice.InvoiceStatusKey != Constants.DefaultKeys.InvoiceStatus.Partial)
+                invoice.InvoiceStatusKey = Constants.DefaultKeys.InvoiceStatus.Partial;
+
+            if(invoice.IsDirty()) GatewayProviderService.Save(invoice);
+                
         }
 
         /// <summary>

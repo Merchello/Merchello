@@ -28,11 +28,19 @@ namespace Merchello.Tests.IntegrationTests.Payments
             base.FixtureSetup();
           
             PreTestDataWorker.DeleteAllPaymentMethods();
+            PreTestDataWorker.DeleteAllShipCountries();
 
             _merchelloContext = new MerchelloContext(new ServiceContext(new PetaPocoUnitOfWorkProvider()),
                 new CacheHelper(new NullCacheProvider(),
                     new NullCacheProvider(),
                     new NullCacheProvider()));
+
+            var defaultCatalog = PreTestDataWorker.WarehouseService.GetDefaultWarehouse().WarehouseCatalogs.FirstOrDefault();
+            if (defaultCatalog == null) Assert.Ignore("Default WarehouseCatalog is null");
+
+            var us = _merchelloContext.Services.StoreSettingService.GetCountryByCode("US");
+            var usCountry = new ShipCountry(defaultCatalog.Key, us);
+            ((ServiceContext)_merchelloContext.Services).ShipCountryService.Save(usCountry);
 
             #region Settings -> Taxation
 
@@ -77,7 +85,7 @@ namespace Merchello.Tests.IntegrationTests.Payments
         }
 
         /// <summary>
-        /// Test confirms that 
+        /// Test confirms that a payment can be authorized
         /// </summary>
         [Test]
         public void Can_Authorize_Payment_On_Invoice()
@@ -90,9 +98,58 @@ namespace Merchello.Tests.IntegrationTests.Payments
             //// Assert
             Assert.IsTrue(authorized.Payment.Success);
             Assert.IsTrue(authorized.Payment.Result.HasIdentity);
-            
+            Assert.IsTrue(authorized.Payment.Result.AppliedPayments(_merchelloContext).Any());
+            Assert.AreEqual(Constants.DefaultKeys.InvoiceStatus.Unpaid, _invoice.InvoiceStatusKey);
         }
         
+        /// <summary>
+        /// Test confirms that a payment can be captured
+        /// </summary>
+        [Test]
+        public void Can_Capture_A_Payment_For_An_Invoice()
+        {
+            //// Arrange
+            var payment = _invoice.AuthorizePayment(_merchelloContext, _paymentMethodKey,new ProcessorArgumentCollection()).Payment.Result;
+
+            //// Act
+            var capture = _invoice.CapturePayment(_merchelloContext, payment, _paymentMethodKey, _invoice.Total, new ProcessorArgumentCollection());
+
+            //// Assert
+            Assert.IsTrue(capture.Payment.Success);
+            Assert.AreEqual(Constants.DefaultKeys.InvoiceStatus.Paid, _invoice.InvoiceStatusKey);
+        }
         
+        /// <summary>
+        /// Test confirms that a partial payment can be captured for the invoice
+        /// </summary>
+        [Test]
+        public void Can_Capture_A_Partial_Payment_For_An_Invoice()
+        {
+            //// Arrange
+            var payment = _invoice.AuthorizePayment(_merchelloContext, _paymentMethodKey, new ProcessorArgumentCollection()).Payment.Result;
+
+            //// Act
+            var capture = _invoice.CapturePayment(_merchelloContext, payment, _paymentMethodKey, _invoice.Total / 2, new ProcessorArgumentCollection());
+
+            //// Assert
+            Assert.IsTrue(capture.Payment.Success);
+            Assert.AreEqual(Constants.DefaultKeys.InvoiceStatus.Partial, _invoice.InvoiceStatusKey);
+        }
+
+        /// <summary>
+        /// Test confirms that a payment can be authorized and captured
+        /// </summary>
+        [Test]
+        public void Can_Authorize_And_Capture_A_Payment_For_An_Invoice()
+        {
+            //// Arrange
+            
+            //// Act   
+            var authCapture = _invoice.AuthorizeCapturePayment(_merchelloContext, _paymentMethodKey, new ProcessorArgumentCollection());
+
+            //// Assert
+            Assert.IsTrue(authCapture.Payment.Success);
+            Assert.AreEqual(Constants.DefaultKeys.InvoiceStatus.Paid, _invoice.InvoiceStatusKey);
+        }
     }
 }
