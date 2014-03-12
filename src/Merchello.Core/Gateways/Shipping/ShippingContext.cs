@@ -11,9 +11,16 @@ namespace Merchello.Core.Gateways.Shipping
     /// </summary>
     internal class ShippingContext : GatewayProviderTypedContextBase<ShippingGatewayProviderBase>, IShippingContext
     {
-        public ShippingContext(IGatewayProviderService gatewayProviderService, IGatewayProviderResolver resolver) 
+        private readonly IStoreSettingService _storeSettingService;
+
+        public ShippingContext(IGatewayProviderService gatewayProviderService, IStoreSettingService storeSettingService,
+            IGatewayProviderResolver resolver)
             : base(gatewayProviderService, resolver)
-        { }
+        {
+            Mandate.ParameterNotNull(storeSettingService, "storeSettingService");
+
+            _storeSettingService = storeSettingService;
+        }
 
         /// <summary>
         /// Returns a collection of all <see cref="IShipmentRateQuote"/> that are available for the <see cref="IShipment"/>
@@ -37,7 +44,16 @@ namespace Merchello.Core.Gateways.Shipping
         /// <returns></returns>
         public IEnumerable<ICountry> GetAllowedShipmentDestinationCountries()
         {
-            var countries = GatewayProviderService.GetAllShipCountries().Select(x => new Country(x.CountryCode, x.Provinces));
+            var shipCountries = GatewayProviderService.GetAllShipCountries().ToArray();
+            if (shipCountries.Any(x => x.CountryCode == "ELSE"))
+            {
+                var shipMethods =
+                    GatewayProviderService.GetShipMethodsByShipCountryKey(
+                        shipCountries.First(x => x.CountryCode == "ELSE").Key);
+
+                if (shipMethods.Any()) return _storeSettingService.GetAllCountries();
+            }
+            var countries = GatewayProviderService.GetAllShipCountries().Where(x => x.CountryCode != "ELSE").Select(x => new Country(x.CountryCode, x.Provinces));
 
             return countries.Distinct();
         }

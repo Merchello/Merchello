@@ -42,13 +42,13 @@
                             <table class="table table-striped merchello-striped-table settings-table tax-table form-horizontal">
                                 <tbody>
                                     <tr data-ng-repeat="country in availableCountries | orderBy: 'countryName'">
-                                        <td><h4 data-ng-bind="country.countryName"></h4></td>
-                                        <td>
-                                            <select name="method-type" data-ng-change="providerChange(country.method, country.method.provider)" data-ng-model="country.method.provider" data-ng-options="p.name for p in taxationGatewayProviders track by p.key"></select>
+                                        <td class="col-xs-4 span4"><h4 data-ng-bind="country.countryName"></h4></td>
+                                        <td class="col-xs-5 span5">
+                                            <select name="method-type" class="col-xs-12 span12" data-ng-change="providerChange(country.method, country.method.provider)" data-ng-model="country.method.provider" data-ng-options="p.name for p in taxationGatewayProviders track by p.key"></select>
                                         </td>
-                                        <td>
-                                            <div class="input-append span3 pull-right">
-                                                <input type="text" class="form-control col-xs-8 span8" data-ng-model="country.method.percentageTaxRate" />
+                                        <td class="col-xs-3 span3">
+                                            <div class="input-append">
+                                                <input type="text" class="col-xs-6 span6" data-ng-model="country.method.percentageTaxRate" />
                                                 <span class="add-on">%</span>
                                             </div>
                                         </td>
