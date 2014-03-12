@@ -112,6 +112,8 @@ td.edit .btn { display: inline-block; margin: 0 auto; }
 
 td.adr, td.org { display: table-cell; }
 
+.table-striped tbody > tr:nth-child(even) > td > i { background: #f8f8f8; }
+.table-striped tbody > tr:nth-child(even) > td i { background: none; }
 .table-striped tbody td > i { position: absolute; top: 10px; left: 6px; z-index: 6; display: block; width: 20px; height: 20px; padding: 0 0 0 4px; background: #fff; }
 .table-striped tbody td i { position: relative; display: inline-block; top: auto; left: auto; width: auto; height: auto; padding: 0; background: none; }
 .table-striped tbody td i:hover { display: inline-block !important; }

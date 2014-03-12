@@ -168,10 +168,16 @@ td.edit { text-align: center;
 }
 td.adr, td.org { display: table-cell; }
 
-.table-striped tbody td{
-    > i { position: absolute; top: 10px; left: 6px; z-index: 6; display: block; width: 20px; height: 20px; padding: 0 0 0 4px; background: #fff; }
-    i { position: relative; display: inline-block; top: auto; left: auto; width: auto; height: auto; padding: 0; background: none; 
-        &:hover { display: inline-block !important; }
+.table-striped tbody {
+    > tr:nth-child(even) > td {
+        > i { background: #f8f8f8; }
+        i { background: none; }
+    }
+    td {
+        > i { position: absolute; top: 10px; left: 6px; z-index: 6; display: block; width: 20px; height: 20px; padding: 0 0 0 4px; background: #fff; }
+        i { position: relative; display: inline-block; top: auto; left: auto; width: auto; height: auto; padding: 0; background: none;
+            &:hover { display: inline-block !important; }
+        }
     }
 }
 
