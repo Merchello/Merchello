@@ -1,4 +1,5 @@
 ﻿using Merchello.Core;
+using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Models;
 using Merchello.Core.Sales;
 
@@ -30,5 +31,34 @@ namespace Merchello.Web.Workflow
             return new BasketSalePreparation(merchelloContext, itemCache, customer);
         }
 
+        /// <summary>
+        /// Attempts to authorize a payment
+        /// </summary>
+        /// <param name="paymentGatewayMethod">The <see cref="IPaymentGatewayMethod"/> to use in processing the payment</param>
+        /// <param name="args">Additional arguements required by the payment processor</param>
+        /// <returns>The <see cref="IPaymentResult"/></returns>
+        public override IPaymentResult AuthorizePayment(IPaymentGatewayMethod paymentGatewayMethod, ProcessorArgumentCollection args)
+        {
+            var result = base.AuthorizePayment(paymentGatewayMethod, args);
+
+            Customer.Basket().Empty();
+            
+            return result;
+        }
+
+        /// <summary>
+        /// Authorizes and Captures a Payment
+        /// </summary>
+        /// <param name="paymentGatewayMethod">The <see cref="IPaymentMethod"/></param>
+        /// <param name="args">Additional arguements required by the payment processor</param>
+        /// <returns>A <see cref="IPaymentResult"/></returns>
+        public override IPaymentResult AuthorizeCapturePayment(IPaymentGatewayMethod paymentGatewayMethod, ProcessorArgumentCollection args)
+        {
+            var result = base.AuthorizeCapturePayment(paymentGatewayMethod, args);
+
+            Customer.Basket().Empty();
+
+            return result;
+        }
     }
 }

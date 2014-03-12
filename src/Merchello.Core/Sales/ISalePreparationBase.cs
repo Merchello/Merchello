@@ -79,7 +79,7 @@ namespace Merchello.Core.Sales
         IEnumerable<IPaymentGatewayMethod> GetPaymentGatewayMethods();
 
         /// <summary>
-        /// Attempts to process a payment
+        /// Attempts to authorize a payment
         /// </summary>
         /// <param name="paymentGatewayMethod">The <see cref="IPaymentGatewayMethod"/> to use in processing the payment</param>
         /// <param name="args">Additional arguements required by the payment processor</param>
