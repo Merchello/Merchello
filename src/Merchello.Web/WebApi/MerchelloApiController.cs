@@ -5,14 +5,13 @@ using Newtonsoft.Json.Serialization;
 using Umbraco.Web;
 using Umbraco.Web.Editors;
 using Umbraco.Web.Mvc;
-using Umbraco.Web.WebApi;
-using Umbraco.Web.WebApi.Binders;
-using Umbraco.Web.WebApi.Filters;
+
 
 namespace Merchello.Web.WebApi
 {
     [PluginController("Merchello")]
-    public abstract class MerchelloApiController : UmbracoAuthorizedApiController
+    [JsonCamelCaseFormatter]
+    public abstract class MerchelloApiController : UmbracoAuthorizedJsonController
     {
         protected MerchelloApiController()
             : this(MerchelloContext.Current)
@@ -46,10 +45,10 @@ namespace Merchello.Web.WebApi
 
             // remove the XmlFormatter 
             // TODO : this becomes redundant when we inherit from UmbracoAuthorizedJsonController
-            controllerContext.Configuration.Formatters.Remove(controllerContext.Configuration.Formatters.XmlFormatter);
+            //controllerContext.Configuration.Formatters.Remove(controllerContext.Configuration.Formatters.XmlFormatter);
             
             // camel casing
-            controllerContext.Configuration.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            //controllerContext.Configuration.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             
         }
 
