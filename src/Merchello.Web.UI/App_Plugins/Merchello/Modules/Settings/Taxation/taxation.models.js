@@ -1,5 +1,22 @@
 ﻿(function (models, undefined) {
 
+    models.TaxCountry = function (data) {
+
+        var self = this;
+
+        self.method = new merchello.Models.TaxMethod();    // Only used for binding, other data from a gateway resource
+        if (data == undefined) {
+            self.name = "";
+            self.serviceCode = "";
+        } else {
+            self.name = data.name;
+            self.serviceCode = data.serviceCode;
+            self.method.countryCode = data.serviceCode;
+        }
+        self.countryName = "";
+        self.country = {};
+    };
+
     models.TaxProvince = function (provinceDataFromServer) {
 
         var self = this;
@@ -20,6 +37,7 @@
 
         var self = this;
 
+        self.provider = new merchello.Models.GatewayProvider({key: "", name: "Not Taxed", description:""});
         if (taxMethodFromServer == undefined) {
             self.key = "";
             self.providerKey = "";

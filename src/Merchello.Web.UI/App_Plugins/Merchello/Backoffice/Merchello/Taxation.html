@@ -5,12 +5,12 @@
     data-ng-show="loaded">
 
     <umb-panel>
-
+            
         <umb-header>
 
             <div class="span4">
                 <div class="umb-headline-editor-wrapper">
-                     <h1 class="umb-headline">Taxation</h1>
+                    <h1 class="umb-headline">Taxation</h1>
                 </div>
             </div>
 
@@ -24,9 +24,9 @@
             </div>
 
         </umb-header>
+
+        <merchello-panel>
         
-        <div class="merchello-panel-body">
-            
             <div class="merchello-pane row-fluid">
 
                 <div class="control-group umb-control-group">
@@ -37,26 +37,54 @@
 
                     <div class="merchello-controls row-fluid">
 
-                        <div class="row-fluid col-xs-4 span4">
+                        <div class="row-fluid col-xs-8 span8">                                                          
+
                             <table class="table table-striped merchello-striped-table settings-table tax-table form-horizontal">
                                 <tbody>
-                                    <tr data-ng-repeat="taxRate in taxRates | orderBy:sortProperty">
-                                        <td class="control-group">
-                                            <label class="control-label">{{taxRate.country}}</label>
+                                    <tr data-ng-repeat="country in availableCountries | orderBy: 'countryName'">
+                                        <td><h4 data-ng-bind="country.countryName"></h4></td>
+                                        <td>
+                                            <select name="method-type" data-ng-model="country.method.provider" data-ng-options="p.name for p in taxationGatewayProviders track by p.key"></select>
+                                        </td>
+                                        <td>
                                             <div class="input-append span3 pull-right">
-                                                <input type="text" class="form-control col-xs-8 span8" data-ng-model="taxRate.rate" />
+                                                <input type="text" class="form-control col-xs-8 span8" data-ng-model="country.method.percentageTaxRate" />
                                                 <span class="add-on">%</span>
                                             </div>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
+
                         </div>
 
                     </div>
                 </div>
             </div>
-        </div>
             
+            <div class="merchello-pane row-fluid debug-pane">
+                <div class="control-group umb-control-group">
+                    <label class="merchello-control-label">
+                        <label><input data-ng-model="debugging" type="checkbox" /> Debug</label>
+                        <small>Check to show debugging info</small>
+                    </label>
+
+                    <div class="merchello-controls">
+
+                        <div data-ng-show="debugging">
+                            <h3>taxationGatewayProviders</h3>
+                            <div class="jsonInfo">{{taxationGatewayProviders | json}}</div>
+                                                
+                            <h3>availableCountries</h3>
+                            <div class="jsonInfo">{{availableCountries | json}}</div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            
+        </merchello-panel>
     </umb-panel>
 </div>
