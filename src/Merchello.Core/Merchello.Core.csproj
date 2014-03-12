@@ -100,6 +100,7 @@
     <Compile Include="Gateways\Payment\PaymentGatewayMethodBase.cs" />
     <Compile Include="Gateways\Payment\IPaymentGatewayMethod.cs" />
     <Compile Include="Gateways\Payment\IPaymentResult.cs" />
+    <Compile Include="Gateways\Shipping\FixedRate\IFixedRateShippingGatewayProvider.cs" />
     <Compile Include="Gateways\Taxation\FixedRate\FixRateTaxationGatewayMethod.cs" />
     <Compile Include="Gateways\Taxation\FixedRate\IFixedRateTaxationGatewayMethod.cs" />
     <Compile Include="Gateways\Taxation\TaxationGatewayMethodBase.cs" />
