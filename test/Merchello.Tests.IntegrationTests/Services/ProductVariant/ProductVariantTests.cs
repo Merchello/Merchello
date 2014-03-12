@@ -6,6 +6,7 @@ using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Merchello.Tests.Base.DataMakers;
 using Merchello.Tests.IntegrationTests.TestHelpers;
+using Merchello.Web;
 using NUnit.Framework;
 
 namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
@@ -80,6 +81,72 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
             Assert.AreEqual(16, variants.Count());
 
         }
+
+
+        /// <summary>
+        /// Can filter options variants by partial choice selection
+        /// </summary>
+        [Test]
+        public void Can_Filter_Options_Based_On_Partial_Selection1()
+        {
+            //// Arrange
+            var attributes1 = new ProductAttributeCollection
+            {
+                _product.ProductOptions.First(x => x.Name == "Color").Choices.First(x => x.Sku == "Blk"),
+                _product.ProductOptions.First(x => x.Name == "Size").Choices.First(x => x.Sku == "Lg" )
+            };
+            var variant1 = _productVariantService.CreateProductVariantWithKey(_product, attributes1);
+            var attributes2 = new ProductAttributeCollection
+            {
+                _product.ProductOptions.First(x => x.Name == "Color").Choices.First(x => x.Sku == "Blk"),
+                _product.ProductOptions.First(x => x.Name == "Size").Choices.First(x => x.Sku == "Sm" )
+            };
+            var variant2 = _productVariantService.CreateProductVariantWithKey(_product, attributes2);
+
+            var blkGuid = _product.ProductOptions.First(x => x.Name == "Color").Choices.First(x => x.Sku == "Blk").Key;
+
+            var merchello = new MerchelloHelper();
+
+            //// Act
+            var variants = merchello.GetValidProductVaraints(_product.Key, new[] {blkGuid});
+
+            //// Assert
+            Assert.AreEqual(2, variants.Count());
+
+        }
+
+        /// <summary>
+        /// Can filter options variants by partial choice selection
+        /// </summary>
+        [Test]
+        public void Can_Filter_Options_Based_On_Partial_Selection2()
+        {
+            //// Arrange
+            var attributes1 = new ProductAttributeCollection
+            {
+                _product.ProductOptions.First(x => x.Name == "Color").Choices.First(x => x.Sku == "Blk"),
+                _product.ProductOptions.First(x => x.Name == "Size").Choices.First(x => x.Sku == "Lg" )
+            };
+            var variant1 = _productVariantService.CreateProductVariantWithKey(_product, attributes1);
+            var attributes2 = new ProductAttributeCollection
+            {
+                _product.ProductOptions.First(x => x.Name == "Color").Choices.First(x => x.Sku == "Blk"),
+                _product.ProductOptions.First(x => x.Name == "Size").Choices.First(x => x.Sku == "Sm" )
+            };
+            var variant2 = _productVariantService.CreateProductVariantWithKey(_product, attributes2);
+
+            var blkGuid = _product.ProductOptions.First(x => x.Name == "Size").Choices.First(x => x.Sku == "Sm").Key;
+
+            var merchello = new MerchelloHelper();
+
+            //// Act
+            var variants = merchello.GetValidProductVaraints(_product.Key, new[] { blkGuid });
+
+            //// Assert
+            Assert.AreEqual(1, variants.Count());
+
+        }
+
 
         /// <summary>
         /// Test verifies that a product variant can be created

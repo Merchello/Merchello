@@ -35,7 +35,7 @@ namespace Merchello.Core.Gateways.Payment.Cash
         /// <returns>A <see cref="IPaymentGatewayMethod"/></returns>
         public override IPaymentGatewayMethod CreatePaymentMethod(string name, string description)
         {
-            var paymentCode = AvailableResources + "-" + Guid.NewGuid();
+            var paymentCode = AvailableResources.First().ServiceCode + "-" + Guid.NewGuid();
 
             var attempt = GatewayProviderService.CreatePaymentMethodWithKey(GatewayProvider.Key, name, description, paymentCode);
 

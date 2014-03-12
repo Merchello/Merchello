@@ -52,5 +52,11 @@ namespace Merchello.Core.Services
         /// <param name="paymentCode">The paymentCode</param>
         IPaymentMethod GetPaymentMethodByPaymentCode(Guid providerKey, string paymentCode);
 
+        /// <summary>
+        /// Gets a collection of all <see cref="IPaymentMethod"/>
+        /// </summary>
+        IEnumerable<IPaymentMethod> GetAll();
+
+
     }
 }

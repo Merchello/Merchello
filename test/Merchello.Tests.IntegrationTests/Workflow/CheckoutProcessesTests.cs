@@ -339,7 +339,7 @@ namespace Merchello.Tests.IntegrationTests.Workflow
 
             var paymentResult = CurrentCustomer.Basket().SalePreparation().AuthorizePayment(paymentMethods.FirstOrDefault());
 
-            Assert.IsTrue(paymentResult.Result.Success);
+            Assert.IsTrue(paymentResult.Payment.Success);
 
             #endregion // completed checkout preparation
 
