@@ -30,8 +30,8 @@
 
         </umb-header>
         
-        <div class="merchello-panel-body row-fluid">
-            <div class="tab-content">
+        <merchello-panel>
+            <div class="tab-content row-fluid">
                 <div class="merchello-pane">
                     
                     <!-- Property classes from Umbraco styles -->
@@ -153,8 +153,8 @@
                                     </tr>
                                     <tr data-ng-repeat="option in product.productOptions | orderBy:'sortOrder'">
                                         <td>
-                                            <a data-ng-click="removeOption(option)" class="btn btn-small"><i class="icon-trash"></i></a>                                        
-                                            <input class="form-control col-xs-12 span12" type="text" placeholder="Add a style..." data-ng-model="option.name" />
+                                            <a data-ng-click="removeOption(option)" class="btn btn-small btn-warning"><i class="icon-trash"></i></a>                                        
+                                            <input class="form-control col-xs-10 span10" type="text" placeholder="Add a style..." data-ng-model="option.name" />
                                         </td>
                                         <td>
                                             <tag-manager option="option"></tag-manager>
@@ -335,7 +335,7 @@
                 <!-- /merchello-pane -->
 
             </div>
-        </div>
+        </merchello-panel>
 
     </umb-panel>
 </form>

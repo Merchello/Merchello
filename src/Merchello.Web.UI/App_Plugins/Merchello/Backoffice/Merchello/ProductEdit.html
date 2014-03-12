@@ -37,7 +37,7 @@
 
         </umb-header>
         
-        <div class="merchello-panel-body">
+        <merchello-panel>
             <div class="merchello-pane">
                 <!-- Variants Tab -->
                 <div class="control-group umb-control-group" data-ng-show="currentTab == 'Variants'">
@@ -253,8 +253,8 @@
                                 </tr>
                                 <tr data-ng-repeat="option in product.productOptions | orderBy:'sortOrder'">
                                     <td>
-                                        <a data-ng-click="removeOption(option)" class="btn btn-small"><i class="icon-trash"></i></a>                                        
-                                        <input class="form-control col-xs-12 span12" type="text" placeholder="Add a style..." data-ng-model="option.name" />
+                                        <a data-ng-click="removeOption(option)" class="btn btn-small btn-warning"><i class="icon-trash"></i></a>                                        
+                                        <input class="form-control col-xs-10 span10" type="text" placeholder="Add a style..." data-ng-model="option.name" />
                                     </td>
                                     <td>
                                         <tag-manager option="option"></tag-manager>
@@ -290,7 +290,7 @@
                 </div>
 
             </div>
-        </div>
+        </merchello-panel>
 
     </umb-panel>
 </form>
