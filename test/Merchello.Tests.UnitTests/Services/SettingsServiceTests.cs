@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Merchello.Core.Models;
 using Merchello.Core.Persistence;
@@ -72,23 +73,25 @@ namespace Merchello.Tests.UnitTests.Services
             Assert.AreEqual(countryCode, denmark.CountryCode);
         }
 
-       
+        /// <summary>
+        /// Test verifies that a collection of currency codes can be created
+        /// </summary>
+        [Test]
+        public void Can_Create_A_Collection_Of_Currency_Codes()
+        {
+            //// Arrange
+            
+            //// Act
+            var currencies = _storeSettingService.GetAllCurrencies().OrderBy(x => x.Name);
+            foreach (var currency in currencies)
+            {
+                Console.WriteLine("{0} {1} {2}", currency.CurrencyCode, currency.Symbol, currency.Name);
+            }
 
+            //// Assert
+            Assert.IsTrue(currencies.Any());
+        }
 
-        //[Test]
-        //public void Can_Serialize_ProvinceCodes()
-        //{
-        //    var states = _warehouseService.GetRegionByCode("US").Provinces;
-
-        //    var json = JsonConvert.SerializeObject(states.ToArray());
-
-        //    Console.Write(json);
-
-        //    var reversed = JsonConvert.DeserializeObject<IEnumerable<Province>>(json);
-
-
-        //    Console.Write(json);
-        //}
     }
 
   

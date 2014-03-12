@@ -56,11 +56,15 @@ namespace Merchello.Core.Services
         ICountry GetCountryByCode(string countryCode);
 
         /// <summary>
-        /// Returns a Region collection for all countries
+        /// Gets a collection of all <see cref="ICountry"/>
         /// </summary>
-        /// <returns>A collection of <see cref="ICountry"/></returns>
         IEnumerable<ICountry> GetAllCountries();
 
+        /// <summary>
+        /// Gets a collection of all <see cref="ICurrency"/>
+        /// </summary>
+        IEnumerable<ICurrency> GetAllCurrencies();
+            
         /// <summary>
         /// Returns a <see cref="ICountry"/> collection for all countries excluding codes passed
         /// </summary>
