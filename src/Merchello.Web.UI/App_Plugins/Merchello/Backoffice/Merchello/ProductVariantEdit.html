@@ -55,13 +55,11 @@
 
                                 <div class="well row-fluid col-xs-10 span10">
                                     <h3>Variant Options</h3>
-                                    <p>Fill in the options specific to your variants for this project.</p>
+                                    <p>Select the variant/options that you would like to create.</p>
 
                                     <div class="row-fluid">
-                                        <div class="form-group col-xs-6 span6" data-ng-repeat="option in product.productOptions">
-                                            <label for="{{option.key}}">{{option.name}}</label>
-                                            <select id="{{option.key}}" name="{{option.key}}" data-ng-model="productVariant.attributes[$index]" data-ng-options="attr.name for attr in availableChoices(option) track by attr.key" class="form-control col-xs-8 span8">
-                                            </select>
+                                        <div class="form-group col-xs-6 span6">
+                                            <select data-ng-model="productVariant" data-ng-options="pv.name for pv in possibleVariants track by pv.sku" class="form-control col-xs-8 span8"></select>
                                         </div>
                                     </div>
                                 </div>
@@ -154,7 +152,7 @@
                                     <tr data-ng-repeat="option in product.productOptions | orderBy:'sortOrder'">
                                         <td>
                                             <a data-ng-click="removeOption(option)" class="btn btn-small btn-warning"><i class="icon-trash"></i></a>                                        
-                                            <input class="form-control col-xs-10 span10" type="text" placeholder="Add a style..." data-ng-model="option.name" />
+                                            <input class="form-control col-xs-8 span8" type="text" placeholder="Add a style..." data-ng-model="option.name" />
                                         </td>
                                         <td>
                                             <tag-manager option="option"></tag-manager>

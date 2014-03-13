@@ -42,6 +42,17 @@
                    'Failed to retreive data for product key ' + productkey);
             },
 
+            getVariantsByProductThatCanBeCreated: function (productkey) {
+
+                return umbRequestHelper.resourcePromise(
+                   $http({
+                       url: umbRequestHelper.getApiUrl('merchelloProductVariantsApiBaseUrl', 'GetVariantsByProductThatCanBeCreated'),
+                       method: "GET",
+                       params: { id: productkey }
+                   }),
+                   'Failed to retreive data for product key ' + productkey);
+            },
+
             deleteVariant: function (key) {
 
                 return umbRequestHelper.resourcePromise(
