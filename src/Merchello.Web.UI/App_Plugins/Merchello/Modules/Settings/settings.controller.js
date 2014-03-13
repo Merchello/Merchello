@@ -23,24 +23,24 @@
         $scope.loadCurrency = function() {
             var promise = merchelloSettingsService.GetAllCurrencies();
 
-            promise.then(function (currencyFromServer) {
-                _.each(currencyFromServer, function (element, index, list) {
+            promise.then(function(currencyFromServer) {
+                _.each(currencyFromServer, function(element, index, list) {
                     var newCurrency = new merchello.Models.Currency(element);
                     $scope.currencies.push(newCurrency);
                 });
 
                 $scope.loadSettings();
 
-            }, function (reason) {
+            }, function(reason) {
 
                 alert('Failed: ' + reason.message);
 
             });
-        }
+        };
 
         $scope.loadSettings = function () {
 
-            var promise = merchelloSettingsService.getAllSettings();
+            var promise = merchelloSettingsService.getCurrentSettings();
 
             promise.then(function (settingsFromServer) {
 
@@ -56,6 +56,8 @@
                     
                 });
 
+                $scope.loadInvoiceAndOrderNumberSetting();
+
                 $scope.loaded = true;
                 $scope.preValuesLoaded = true;
 
@@ -65,7 +67,6 @@
 
             });
         };
-
 
         $scope.loadCurrency();
 
