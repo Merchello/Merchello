@@ -15,6 +15,7 @@ namespace Merchello.Web.Models.ContentEditing
 		public string timeFormat { get; set; }
 		public bool globalShippable { get; set; }
 		public bool globalTaxable { get; set; }
-		public bool globalTrackInventory { get; set; }
+        public bool globalTrackInventory { get; set; }
+        public bool globalShippingIsTaxable { get; set; }
 	}
 }
