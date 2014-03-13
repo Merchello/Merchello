@@ -88,15 +88,12 @@ namespace Merchello.Web.Editors
         public IEnumerable<PaymentMethodDisplay> GetPaymentProviderPaymentMethods(Guid id)
         {
             var provider = _paymentContext.ResolveByKey(id);
-            if (provider != null)
-            {
-                foreach (var method in provider.PaymentMethods)
-                {
-                    yield return method.ToPaymentMethodDisplay();
-                }
-            }
+            if (provider == null) throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
 
-            throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+            foreach (var method in provider.PaymentMethods)
+            {
+                yield return method.ToPaymentMethodDisplay();
+            }
         }
 
         /// <summary>
