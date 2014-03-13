@@ -43,7 +43,7 @@ namespace Merchello.Core
             var gatewayResolver = new Lazy<GatewayProviderResolver>(() => new GatewayProviderResolver(_services.GatewayProviderService, Cache.RuntimeCache));
 
             _gateways = new GatewayContext(
-                new ShippingContext(_services.GatewayProviderService, gatewayResolver.Value),
+                new ShippingContext(_services.GatewayProviderService, _services.StoreSettingService, gatewayResolver.Value),
                 new TaxationContext(_services.GatewayProviderService, gatewayResolver.Value),
                 new PaymentContext(_services.GatewayProviderService, gatewayResolver.Value)
                 );

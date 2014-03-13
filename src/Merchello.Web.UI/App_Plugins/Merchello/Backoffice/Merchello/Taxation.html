@@ -18,7 +18,7 @@
             <div class="span8">
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
                     <div class="btn-group">
-                        <a class="btn btn-primary">Save</a>
+                        <a class="btn btn-primary" data-ng-click="save()">Save</a>
                     </div>
                 </div>
             </div>
@@ -44,7 +44,7 @@
                                     <tr data-ng-repeat="country in availableCountries | orderBy: 'countryName'">
                                         <td class="col-xs-4 span4"><h4 data-ng-bind="country.countryName"></h4></td>
                                         <td class="col-xs-5 span5">
-                                            <select name="method-type" class="col-xs-12 span12" data-ng-model="country.method.provider" data-ng-options="p.name for p in taxationGatewayProviders track by p.key"></select>
+                                            <select name="method-type" class="col-xs-12 span12" data-ng-change="providerChange(country.method, country.method.provider)" data-ng-model="country.method.provider" data-ng-options="p.name for p in taxationGatewayProviders track by p.key"></select>
                                         </td>
                                         <td class="col-xs-3 span3">
                                             <div class="input-append">

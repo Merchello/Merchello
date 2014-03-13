@@ -136,12 +136,44 @@
 
         $scope.init();
 
+
         //--------------------------------------------------------------------------------------
         // Events methods
         //--------------------------------------------------------------------------------------
 
-        $scope.providerChange = function(method, providerSelected) {
+        $scope.providerChange = function (method, providerSelected) {
             method.providerKey = providerSelected.key;
+        };
+
+        $scope.save = function () {
+
+            _.each($scope.availableCountries, function(taxCountry) {
+
+                if (taxCountry.method.providerKey.length > 0) {
+
+                    if (taxCountry.method.key.length > 0) {
+
+                        var promiseTaxMethodSave = merchelloTaxationGatewayService.saveTaxMethod(taxCountry.method);
+                        promiseTaxMethodSave.then(function() {
+                            notificationsService.success("TaxMethod Saved", "");
+                        }, function(reason) {
+                            notificationsService.error("TaxMethod Save Failed", reason.message);
+                        });
+
+                    } else {
+
+                        var promiseTaxMethodCreate = merchelloTaxationGatewayService.addTaxMethod(taxCountry.method);
+                        promiseTaxMethodCreate.then(function() {
+                            notificationsService.success("TaxMethod Created", "");
+                        }, function(reason) {
+                            notificationsService.error("TaxMethod Created Failed", reason.message);
+                        });
+
+                    }
+                }
+
+            });
+
         };
 
     };
