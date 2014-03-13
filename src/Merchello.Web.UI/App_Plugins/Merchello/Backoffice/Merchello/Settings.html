@@ -40,10 +40,7 @@
 
                             <div class="form-group col-xs-6 span6">
                                 <label for="currency">Currency</label>
-                                <select class="form-control col-xs-8 span8" name="currency" data-ng-model="settingsDisplay.currencyCode">
-                                    <option value="USD">US Dollars</option>                                    
-                                    <option value="CAD">Canadian Dollars</option>
-                                </select>
+                                <select class="form-control col-xs-8 span8" name="currency" data-ng-change="currencyChanged(selectedCurrency)" data-ng-model="selectedCurrency" data-ng-options="c.name for c in currencies track by c.currencyCode"></select>
                             </div>
 
                             <div class="form-group col-xs-6 span6">
@@ -108,6 +105,7 @@
                                 </div>
                                 <div class="form-group col-xs-6 span6">
                                     <label class="label-checkbox"><input name="trackinventory" type="checkbox" data-ng-model="settingsDisplay.globalTrackInventory"> <span>Track inventory for all items & variants</span></label>
+                                    <label class="label-checkbox"><input name="taxableshipping" type="checkbox" data-ng-model="settingsDisplay.globalShippingIsTaxable"> <span>Shipping charges are taxable</span></label>
                                 </div>
                             </div>
 

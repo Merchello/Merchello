@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -136,19 +137,17 @@ namespace Merchello.Web.Editors
 		/// 
 		/// GET /umbraco/Merchello/SettingsApi/GetAllTaxProvinces
 		/// </summary>
-		public IEnumerable<KeyValuePair<string, string>> GetAllCurrency()
+        public IEnumerable<ICurrency> GetAllCurrencies()
 		{
 			// TODO: replace with call to service
-			List<KeyValuePair<string, string>> currencyList = new List<KeyValuePair<string, string>>();
+            var currencyList = _storeSettingService.GetAllCurrencies();
 
-			KeyValuePair<string, string> usd = new KeyValuePair<string,string>("USD", "US Dollars");
-			KeyValuePair<string, string> cad = new KeyValuePair<string,string>("CAD", "Canadian Dollars");
-			currencyList.Add(usd);
-			currencyList.Add(cad);
+		    if (currencyList == null)
+            {
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+		    }
 
-			// END TEST DATA
-			IEnumerable<KeyValuePair<string, string>> currency = currencyList;
-			return currency;
+            return currencyList;
 		}
 
 		/// <summary>

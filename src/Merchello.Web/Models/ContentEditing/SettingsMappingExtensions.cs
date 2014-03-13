@@ -75,7 +75,14 @@ namespace Merchello.Web.Models.ContentEditing
 							boolValue = false;
 						}
 						settingDisplay.globalTrackInventory = boolValue;
-						break;
+                        break;
+                    case "globalShippingIsTaxable":
+                        if (!bool.TryParse(setting.Value, out boolValue))
+                        {
+                            boolValue = false;
+                        }
+                        settingDisplay.globalShippingIsTaxable = boolValue;
+                        break;
 					default:
 						setting.Value = string.Empty;
 						break;
@@ -113,6 +120,9 @@ namespace Merchello.Web.Models.ContentEditing
 						break;
 					case "globalTrackInventory":
 						setting.Value = settingDisplay.globalTrackInventory.ToString();	
+						break;
+                    case "globalShippingIsTaxable":
+						setting.Value = settingDisplay.globalShippingIsTaxable.ToString();	
 						break;
 					default:
 						setting.Value = string.Empty;		 

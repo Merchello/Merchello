@@ -8,7 +8,7 @@
      * @description
      * The controller for the product editor
      */
-    controllers.ProductListController = function ($scope, $routeParams, $location, assetsService, notificationsService, angularHelper, serverValidationManager, merchelloProductService) {
+    controllers.ProductListController = function($scope, $routeParams, $location, assetsService, notificationsService, angularHelper, serverValidationManager, merchelloProductService) {
 
         $scope.filtertext = "";
         $scope.products = [];
@@ -21,21 +21,21 @@
 
         assetsService.loadCss("/App_Plugins/Merchello/Common/Css/merchello.css");
 
-        $scope.numberOfPages = function () {
+        $scope.numberOfPages = function() {
             return Math.ceil($scope.products.length / $scope.limitAmount);
-        }
+        };
 
-        $scope.limitChanged = function (newVal) {
+        $scope.limitChanged = function(newVal) {
             $scope.limitAmount = newVal;
-        }
+        };
 
-        $scope.loadProducts = function () {
+        $scope.loadProducts = function() {
 
             var promise = merchelloProductService.getAllProducts();
 
-            promise.then(function (products) {
+            promise.then(function(products) {
 
-                $scope.products = _.map(products, function (productFromServer) {
+                $scope.products = _.map(products, function(productFromServer) {
                     return new merchello.Models.Product(productFromServer, true);
                 });
 
@@ -44,7 +44,7 @@
                 $scope.preValuesLoaded = true;
                 //$(".content-column-body").css('background-image', 'none');
 
-            }, function (reason) {
+            }, function(reason) {
 
                 notificationsService.success("Products Load Failed:", reason.message);
 
@@ -54,57 +54,49 @@
 
         $scope.loadProducts();
 
-        $scope.changeSortOrder = function (propertyToSort) {
+        $scope.changeSortOrder = function(propertyToSort) {
 
-            if ($scope.sortProperty == propertyToSort)
-            {
-                if ($scope.sortOrder == "asc")
-                {
+            if ($scope.sortProperty == propertyToSort) {
+                if ($scope.sortOrder == "asc") {
                     $scope.sortProperty = "-" + propertyToSort;
                     $scope.sortOrder = "desc";
-                }
-                else
-                {
+                } else {
                     $scope.sortProperty = propertyToSort;
                     $scope.sortOrder = "asc";
                 }
-            }
-            else
-            {
+            } else {
                 $scope.sortProperty = propertyToSort;
                 $scope.sortOrder = "asc";
             }
 
-        }
+        };
 
-        $scope.getFilteredProducts = function (filter)
-        {
+        $scope.getFilteredProducts = function(filter) {
             notificationsService.info("Filtering...", "");
 
             if (merchello.Helpers.Strings.isNullOrEmpty(filter)) {
                 $scope.loadProducts();
                 notificationsService.success("Filtered Products Loaded", "");
-            }
-            else {
+            } else {
                 var promise = merchelloProductService.filterProducts(filter);
 
-                promise.then(function (products) {
+                promise.then(function(products) {
 
-                    $scope.products = _.map(products, function (productFromServer) {
+                    $scope.products = _.map(products, function(productFromServer) {
                         return new merchello.Models.Product(productFromServer, true);
                     });
 
                     notificationsService.success("Filtered Products Loaded", "");
 
-                }, function (reason) {
+                }, function(reason) {
 
                     notificationsService.success("Filtered Products Load Failed:", reason.message);
 
                 });
             }
-        }
+        };
 
-    }
+    };
 
     angular.module("umbraco").controller("Merchello.Dashboards.Product.ListController", merchello.Controllers.ProductListController);
 

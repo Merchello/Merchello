@@ -103,6 +103,23 @@
 
             },
 
+            /**
+             * @ngdoc method
+             * @name merchello.services.merchelloSettingsService#getAllCurrencies
+             * @methodOf merchello.services.merchelloSettingsService
+             * @function
+             *
+             * @description
+             * Gets all the currencies
+             * 
+             * @returns {object} an angularjs promise object
+             */
+            GetAllCurrencies: function () {
+
+                return getCachedOrApi("AllCurrency", "GetAllCurrencies", "settings");
+
+            },
+
         };
     };
 

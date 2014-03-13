@@ -524,25 +524,25 @@
             return availablePermutations;
         };
 
-        self.getRemainingChoicesWithoutVariants = function() {
+        //self.getRemainingChoicesWithoutVariants = function() {
 
-            var allVariantAttributes = _.pluck(self.productVariants, 'attributeKeys');
-            allVariantAttributes = _.flatten(allVariantAttributes);
+        //    var allVariantAttributes = _.pluck(self.productVariants, 'attributeKeys');
+        //    allVariantAttributes = _.flatten(allVariantAttributes);
 
-            var unusedChoices = [];
+        //    var unusedChoices = [];
 
-            for (var o = 0; o < self.productOptions.length; o++) {
-                var thisOption = self.productOptions[o];
-                for (var a = 0; a < thisOption.choices.length; a++) {
-                    var thisChoice = thisOption.choices[a];
-                    if (!_.contains(allVariantAttributes, thisChoice.key)) {
-                        unusedChoices.push(thisChoice);
-                    }
-                }
-            }
+        //    for (var o = 0; o < self.productOptions.length; o++) {
+        //        var thisOption = self.productOptions[o];
+        //        for (var a = 0; a < thisOption.choices.length; a++) {
+        //            var thisChoice = thisOption.choices[a];
+        //            if (!_.contains(allVariantAttributes, thisChoice.key)) {
+        //                unusedChoices.push(thisChoice);
+        //            }
+        //        }
+        //    }
 
-            return unusedChoices;
-        };
+        //    return unusedChoices;
+        //};
 
     };
 

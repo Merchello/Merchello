@@ -99,6 +99,26 @@
         // Event Handlers
         //--------------------------------------------------------------------------------------
 
+        $scope.removeMethod = function (method) {
+
+            var promiseDelete = merchelloPaymentGatewayService.deletePaymentMethod(method.key);
+            promiseDelete.then(function () {
+
+                $scope.loadPaymentMethods(method.providerKey);
+                notificationsService.success("Payment Method Deleted");
+
+            }, function (reason) {
+
+                notificationsService.error("Payment Method Delete Failed", reason.message);
+
+            });
+        };
+
+
+        //--------------------------------------------------------------------------------------
+        // Dialogs
+        //--------------------------------------------------------------------------------------
+
         $scope.paymentMethodDialogConfirm = function (method) {
             var promiseSave;
             if (method.key.length > 0) {
@@ -133,59 +153,14 @@
             });
         };
 
-        $scope.removeMethod = function (method) {
 
-            var promiseDelete = merchelloPaymentGatewayService.deletePaymentMethod(method.key);
-            promiseDelete.then(function () {
-
-                $scope.loadPaymentMethods(method.providerKey);
-                notificationsService.success("Payment Method Deleted");
-
-            }, function (reason) {
-
-                notificationsService.error("Payment Method Delete Failed", reason.message);
-
-            });
-        };
-
-
-        ////
+        ///////////////////////////////////////////////
+        ////    TODO: Change to directive / service?
 
         $scope.flyouts = {
             deleteManualPaymentMethod: false
         };
 
-
-        //$scope.addManualPaymentMethodFlyout = new merchello.Models.Flyout(
-        //    $scope.flyouts.addManualPaymentMethod,
-        //    function(isOpen) {
-        //        $scope.flyouts.addManualPaymentMethod = isOpen;
-        //    },
-        //    {
-        //        clear: function() {
-        //            var self = $scope.addManualPaymentMethodFlyout;
-        //            self.model = new merchello.Models.ManualPaymentMethod();
-        //        },
-        //        confirm: function() {
-        //            var self = $scope.addManualPaymentMethodFlyout;
-        //            if ((typeof self.model.pk) == "undefined") {
-        //                var newKey = $scope.manualPaymentMethods.length;
-        //                // Note From Kyle: This key-creation logic will need to be modified to fit whatever works for the database.
-        //                self.model.pk = newKey;
-        //                $scope.manualPaymentMethods.push(self.model);
-        //                // Note From Kyle: An API call will need to be wired in here to add the new Manual Payment Method to the database.
-        //            } else {
-        //                // Note From Kyle: An API call will need to be wired in here to edit the existing Payment Method in the database.
-        //            }
-        //            self.clear();
-        //            self.close();
-        //        },
-        //        open: function(model) {
-        //            if (!model) {
-        //                $scope.addManualPaymentMethodFlyout.clear();
-        //            }
-        //        }
-        //    });
 
         $scope.deleteManualPaymentMethodFlyout = new merchello.Models.Flyout(
             $scope.flyouts.deleteManualPaymentMethod,

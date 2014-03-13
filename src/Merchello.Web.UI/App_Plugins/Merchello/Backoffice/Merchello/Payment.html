@@ -82,7 +82,12 @@
                                     <tr data-ng-repeat="method in paymentMethods">
                                         <td>{{method.name}}</td>
                                         <td>{{method.description}}</td>
-                                        <td class="edit"><a class="btn btn-default btn-xs btn-mini" data-ng-click="addEditPaymentMethod(method)">edit</a> <a class="btn btn-warning btn-xs btn-mini" data-ng-click="deleteManualPaymentMethodFlyout.open(method)">x</a></td>
+                                        <td class="edit">
+                                            <div class="btn-group">
+                                                <a class="btn btn-default btn-xs btn-mini" data-ng-click="addEditPaymentMethod(method)">edit</a>
+                                                <a class="btn btn-warning btn-xs btn-mini" data-ng-click="deleteManualPaymentMethodFlyout.open(method)"><i class="icon-trash"></i></a>
+                                            </div>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
