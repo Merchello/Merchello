@@ -8,7 +8,7 @@
      * @description
      * The controller for the reports list page
      */
-    controllers.TaxationController = function ($scope, notificationsService, merchelloTaxationGatewayService, merchelloSettingsService) {
+    controllers.TaxationController = function ($scope, notificationsService, dialogService, merchelloTaxationGatewayService, merchelloSettingsService) {
 
         $scope.allCountries = [];
         $scope.availableCountries = [];
@@ -44,8 +44,7 @@
                     return new merchello.Models.GatewayProvider(providerFromServer);
                 });
 
-                var noTaxProvider = new merchello.Models.GatewayProvider();
-                noTaxProvider.name = "Not Taxed";
+                var noTaxProvider = new merchello.Models.GatewayProvider({ key: "-1", name: "Not Taxed", description: "" });
                 $scope.taxationGatewayProviders.push(noTaxProvider);
 
                 if ($scope.taxationGatewayProviders.length > 0) {
@@ -66,7 +65,7 @@
             var promiseGwResources = merchelloTaxationGatewayService.getGatewayResources(taxationGatewayProvider.key);
             promiseGwResources.then(function (resources) {
 
-                $scope.availableCountries = _.map(resources, function (resourceFromServer) {
+                var newAvailableCountries = _.map(resources, function (resourceFromServer) {
                     var taxCountry = new merchello.Models.TaxCountry(resourceFromServer);
 
                     taxCountry.country = _.find($scope.allCountries, function (c) { return c.countryCode == taxCountry.serviceCode; });
@@ -74,6 +73,11 @@
                     taxCountry.countryName = taxCountry.country.name;
 
                     return taxCountry;
+                });
+
+
+                _.each(newAvailableCountries, function (country) {
+                    $scope.availableCountries.push(country);
                 });
 
             }, function (reason) {
@@ -142,16 +146,20 @@
         //--------------------------------------------------------------------------------------
 
         $scope.providerChange = function (method, providerSelected) {
-            method.providerKey = providerSelected.key;
+            if (providerSelected.key.length > 0 && providerSelected.key != '-1') {
+                method.providerKey = providerSelected.key;                
+            } else {
+                method.providerKey = "";
+            }
         };
 
         $scope.save = function () {
 
             _.each($scope.availableCountries, function(taxCountry) {
 
-                if (taxCountry.method.providerKey.length > 0) {
+                if (taxCountry.method.key.length > 0) {
 
-                    if (taxCountry.method.key.length > 0) {
+                    if (taxCountry.method.providerKey.length > 0) {     // Already exists, just save it
 
                         var promiseTaxMethodSave = merchelloTaxationGatewayService.saveTaxMethod(taxCountry.method);
                         promiseTaxMethodSave.then(function() {
@@ -160,21 +168,61 @@
                             notificationsService.error("TaxMethod Save Failed", reason.message);
                         });
 
-                    } else {
+                    } else { // Existed, but set to Not Taxed, so delete it
 
-                        var promiseTaxMethodCreate = merchelloTaxationGatewayService.addTaxMethod(taxCountry.method);
-                        promiseTaxMethodCreate.then(function() {
-                            notificationsService.success("TaxMethod Created", "");
+                        var promiseTaxMethodDelete = merchelloTaxationGatewayService.deleteTaxMethod(taxCountry.method.key);
+                        promiseTaxMethodDelete.then(function() {
+                            notificationsService.success("TaxMethod Removed", "");
                         }, function(reason) {
-                            notificationsService.error("TaxMethod Created Failed", reason.message);
+                            notificationsService.error("TaxMethod Removal Failed", reason.message);
                         });
 
                     }
+
+                } else {     // Didn't exist before, create it
+
+                    var promiseTaxMethodCreate = merchelloTaxationGatewayService.addTaxMethod(taxCountry.method);
+                    promiseTaxMethodCreate.then(function() {
+                        notificationsService.success("TaxMethod Created", "");
+                    }, function(reason) {
+                        notificationsService.error("TaxMethod Created Failed", reason.message);
+                    });
+
                 }
 
             });
 
         };
+
+
+        //--------------------------------------------------------------------------------------
+        // Dialogs
+        //--------------------------------------------------------------------------------------
+
+        $scope.taxMethodDialogConfirm = function (country) {
+            var promiseSave;
+
+            // Save existing method
+            promiseSave = merchelloTaxationGatewayService.savePaymentMethod(country.method);
+
+            promiseSave.then(function () {
+                notificationsService.success("Taxation Method Saved");
+            }, function (reason) {
+                notificationsService.error("Taxation Method Save Failed", reason.message);
+            });
+        };
+
+        $scope.editTaxMethodProvinces = function (country) {
+            if (country) {
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Modules/Settings/Taxation/Dialogs/taxationmethod.html',
+                    show: true,
+                    callback: $scope.taxMethodDialogConfirm,
+                    dialogData: country
+                });
+            }
+        };
+
 
     };
 
