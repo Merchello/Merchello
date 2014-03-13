@@ -109,6 +109,12 @@ namespace Merchello.Core.Sales
         /// <param name="approvedShipmentRateQuote"></param>
         public virtual void SaveShipmentRateQuote(IShipmentRateQuote approvedShipmentRateQuote)
         {
+            // first clear any previously save shipment rate quotes
+            foreach (var previousQuote in _itemCache.Items.Where(x => x.LineItemType == LineItemType.Shipping))
+            {
+                _itemCache.Items.Remove(previousQuote);
+            }
+
             AddShipmentRateQuoteLineItem(approvedShipmentRateQuote);         
             _merchelloContext.Services.ItemCacheService.Save(_itemCache);
 
