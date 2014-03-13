@@ -60,6 +60,7 @@ namespace Merchello.Core.Sales
         /// </summary>
         private static void Reset(IMerchelloContext merchelloContext, ICustomerBase customer)
         {
+            customer.ExtendedData.RemoveValue(Constants.ExtendedDataKeys.ShippingDestinationAddress);
             customer.ExtendedData.RemoveValue(Constants.ExtendedDataKeys.BillingAddress);
             SaveCustomer(merchelloContext, customer);
         }
@@ -122,6 +123,12 @@ namespace Merchello.Core.Sales
         public virtual void SaveShipmentRateQuote(IEnumerable<IShipmentRateQuote> approvedShipmentRateQuotes)
         {
             var shipmentRateQuotes = approvedShipmentRateQuotes as IShipmentRateQuote[] ?? approvedShipmentRateQuotes.ToArray();
+
+            // first clear any previously save shipment rate quotes
+            foreach (var previousQuote in _itemCache.Items.Where(x => x.LineItemType == LineItemType.Shipping))
+            {
+                _itemCache.Items.Remove(previousQuote);
+            }
 
             if (!shipmentRateQuotes.Any()) return;
             
