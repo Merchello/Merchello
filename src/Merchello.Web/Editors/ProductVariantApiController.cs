@@ -104,7 +104,7 @@ namespace Merchello.Web.Editors
         /// <summary>
         /// Returns Product by keys separated by a comma
         /// 
-        /// GET /umbraco/Merchello/ProductVariantApi/GetProductVariants?ids={int}&ids={int}
+        /// GET /umbraco/Merchello/ProductVariantApi/GetProductVariants?ids={int}&amp;ids={int}
         /// </summary>
         /// <param name="ids">Product Variant Keys</param>
         public IEnumerable<ProductVariantDisplay> GetProductVariants([FromUri]IEnumerable<Guid> ids)
@@ -131,6 +131,36 @@ namespace Merchello.Web.Editors
             }
         }
 
+        /// <summary>
+        /// Returns ProductVariant combinations by Product key that can be created
+        /// 
+        /// GET /umbraco/Merchello/ProductVariantApi/GetVariantsByProductThatCanBeCreated?id={guid}
+        /// </summary>
+        /// <param name="id">Product Key</param>
+        public IEnumerable<ProductVariantDisplay> GetVariantsByProductThatCanBeCreated(Guid id)
+        {
+            if (id != Guid.Empty)
+            {
+                var merchProduct = _productService.GetByKey(id);
+                var productVariants = _productVariantService.GetProductVariantsThatCanBeCreated(merchProduct);
+
+                foreach (var productVariant in productVariants)
+                {
+                    yield return productVariant.ToProductVariantDisplay();
+                }
+            }
+            else
+            {
+                var resp = new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    Content = new StringContent(string.Format("Parameter key is null")),
+                    ReasonPhrase = "Invalid Parameter"
+                };
+                throw new HttpResponseException(resp);
+            }
+        }
+
+
         ///  <summary>
         ///  Creates a product variant from Product & Attributes
         /// 
@@ -140,24 +170,24 @@ namespace Merchello.Web.Editors
         [AcceptVerbs("GET", "POST")]
         public ProductVariantDisplay NewProductVariant(ProductVariantDisplay productVariant)
         {
-            IProductVariant newProductVariant = null;
+            IProductVariant newProductVariant;
 
             try
             {
-                Product product = _productService.GetByKey(productVariant.ProductKey) as Product;
+                var product = _productService.GetByKey(productVariant.ProductKey) as Product;
 
                 if (product != null)
                 {
-                    ProductAttributeCollection productAttributes = new ProductAttributeCollection();
+                    var productAttributes = new ProductAttributeCollection();
                     foreach (var attribute in productVariant.Attributes)
                     {
                         // TODO: This should be refactored into an extension method
-                        ProductOption productOption = product.ProductOptions.FirstOrDefault(x => x.Key == attribute.OptionKey) as ProductOption;
+                        var productOption = product.ProductOptions.FirstOrDefault(x => x.Key == attribute.OptionKey) as ProductOption;
 
-                        productAttributes.Add(productOption.Choices[attribute.Key]);
+                        if (productOption != null) productAttributes.Add(productOption.Choices[attribute.Key]);
                     }
 
-                    newProductVariant = _productVariantService.CreateProductVariantWithKey(product, productAttributes, true);
+                    newProductVariant = _productVariantService.CreateProductVariantWithKey(product, productAttributes);
 
                     if (productVariant.TrackInventory)
                     {
@@ -196,7 +226,7 @@ namespace Merchello.Web.Editors
             {
                 IProductVariant merchProductVariant = _productVariantService.GetByKey(productVariant.Key);
 
-                if (productVariant.TrackInventory && merchProductVariant.CatalogInventories.Count() == 0)
+                if (productVariant.TrackInventory && !merchProductVariant.CatalogInventories.Any())
                 {
                     merchProductVariant.AddToCatalogInventory(_warehouseService.GetDefaultWarehouse().DefaultCatalog());
                 }
@@ -218,7 +248,7 @@ namespace Merchello.Web.Editors
         ///
         /// DELETE /umbraco/Merchello/ProductVariantApi/DeleteVariant?id={key}
         /// </summary>
-        /// <param name="key">Product Variant key</param>
+        /// <param name="id">Product Variant key</param>
         [AcceptVerbs("GET", "DELETE")]
         public HttpResponseMessage DeleteVariant(Guid id)
         {
@@ -238,7 +268,7 @@ namespace Merchello.Web.Editors
         ///
         /// GET /umbraco/Merchello/ProductVariantApi/DeleteAllVariants?productkey={key}
         /// </summary>
-        /// <param name="key">Product Variant key</param>
+        /// <param name="productkey">Product Variant key</param>
         [AcceptVerbs("GET","DELETE")]
         public HttpResponseMessage DeleteAllVariants(Guid productkey)
         {
