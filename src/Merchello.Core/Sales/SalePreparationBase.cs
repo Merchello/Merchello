@@ -124,6 +124,12 @@ namespace Merchello.Core.Sales
         {
             var shipmentRateQuotes = approvedShipmentRateQuotes as IShipmentRateQuote[] ?? approvedShipmentRateQuotes.ToArray();
 
+            // first clear any previously save shipment rate quotes
+            foreach (var previousQuote in _itemCache.Items.Where(x => x.LineItemType == LineItemType.Shipping))
+            {
+                _itemCache.Items.Remove(previousQuote);
+            }
+
             if (!shipmentRateQuotes.Any()) return;
             
             shipmentRateQuotes.ForEach(AddShipmentRateQuoteLineItem);

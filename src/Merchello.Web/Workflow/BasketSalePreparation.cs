@@ -1,4 +1,5 @@
-﻿using Merchello.Core;
+﻿using System.Linq;
+using Merchello.Core;
 using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Models;
 using Merchello.Core.Sales;
@@ -24,7 +25,7 @@ namespace Merchello.Web.Workflow
             var customer = basket.Customer;
             var itemCache = GetItemCache(merchelloContext, customer, basket.VersionKey);
             
-            if(itemCache.Items.Count != basket.Items.Count)
+            if(!itemCache.Items.Any())
             {
                 // this is either a new preparation or a reset due to version
                 foreach (var item in basket.Items)
