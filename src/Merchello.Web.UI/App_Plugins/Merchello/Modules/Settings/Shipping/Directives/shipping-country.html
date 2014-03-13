@@ -1,13 +1,13 @@
 ﻿<div>
-    <h3 class="row-fluid col-xs-5 span5">{{country.name}}</h3>
+    <h3 class="row-fluid col-xs-5 span5 clear">{{country.name}}</h3>
     <div class="btn-group pull-right">
         <a data-ng-click="deleteCountry(country)" class="btn btn-warning"><i class="icon-trash"></i> Delete Country</a>
         <a data-ng-click="addEditShippingProviderDialogOpen(country)" class="btn btn-primary merchello-button-right">Add a Provider</a>
     </div>
     <div data-ng-repeat="shippingGatewayProvider in country.shippingGatewayProviders" class="merchello-shipping-gateway-provider clear">
-        <h4 class="row-fluid col-xs-5 span5">{{shippingGatewayProvider.name}}</h4>
+        <h4 class="row-fluid col-xs-5 span5 clear">{{shippingGatewayProvider.name}}</h4>
         <a data-ng-click="addEditShippingMethodDialogOpen(country, shippingGatewayProvider)" class="btn btn-primary pull-right merchello-button-right">Add a Method</a>
-        <table class="table table-striped merchello-striped-table settings-table shipping-table">
+        <table class="table table-striped merchello-striped-table settings-table shipping-table clear">
             <tbody>
                 <tr data-ng-repeat="fixedRateShipMethod in shippingGatewayProvider.shipMethods">
                     <td>{{fixedRateShipMethod.shipMethod.name}}</td>
