@@ -23,6 +23,9 @@ namespace Merchello.Web.Workflow
         {
             var customer = basket.Customer;
             var itemCache = GetItemCache(merchelloContext, customer, basket.VersionKey);
+            
+            // TODO - if items already in exist in the item cache && itemcache versionkey == basket.versionkey ... DON'T add the items again
+            // TODO - otherwise clear the items
             foreach (var item in basket.Items)
             {
                 // convert to a LineItem of the same type for use in the CheckoutPrepartion collection
