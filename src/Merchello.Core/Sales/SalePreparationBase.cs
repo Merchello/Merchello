@@ -60,6 +60,7 @@ namespace Merchello.Core.Sales
         /// </summary>
         private static void Reset(IMerchelloContext merchelloContext, ICustomerBase customer)
         {
+            customer.ExtendedData.RemoveValue(Constants.ExtendedDataKeys.ShippingDestinationAddress);
             customer.ExtendedData.RemoveValue(Constants.ExtendedDataKeys.BillingAddress);
             SaveCustomer(merchelloContext, customer);
         }
