@@ -1,5 +1,4 @@
 ﻿using Merchello.Core.Models;
-using Merchello.Web.Models;
 using Merchello.Web.Workflow;
 
 namespace Merchello.Web

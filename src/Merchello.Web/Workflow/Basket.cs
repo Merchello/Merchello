@@ -257,7 +257,13 @@ namespace Merchello.Web.Workflow
         /// </summary>
         public void Empty()
         {
-            _itemCache.Items.Clear();
+            Empty(MerchelloContext.Current, this);
+        }
+
+        internal static void Empty(IMerchelloContext merchelloContext, IBasket basket)
+        {
+            basket.Items.Clear();
+            Save(merchelloContext, basket);
         }
 
         /// <summary>

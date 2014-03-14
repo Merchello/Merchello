@@ -60,6 +60,7 @@ namespace Merchello.Core.Sales
         /// </summary>
         private static void Reset(IMerchelloContext merchelloContext, ICustomerBase customer)
         {
+            customer.ExtendedData.RemoveValue(Constants.ExtendedDataKeys.ShippingDestinationAddress);
             customer.ExtendedData.RemoveValue(Constants.ExtendedDataKeys.BillingAddress);
             SaveCustomer(merchelloContext, customer);
         }
@@ -108,6 +109,7 @@ namespace Merchello.Core.Sales
         /// <param name="approvedShipmentRateQuote"></param>
         public virtual void SaveShipmentRateQuote(IShipmentRateQuote approvedShipmentRateQuote)
         {
+
             AddShipmentRateQuoteLineItem(approvedShipmentRateQuote);         
             _merchelloContext.Services.ItemCacheService.Save(_itemCache);
 
