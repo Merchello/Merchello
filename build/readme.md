@@ -11,7 +11,7 @@ Execute the \Build\Build.bat file - this should create a couple of new directori
 The Build.bat file should generate the following files in the \Build\TEMP\Artifacts\ folder.
 
 * Merchello.AllBinaries.[VERSION].zip - Merchello binaries
-* Merchello.Core.[VERSION].nupkg - Merchello Core NuGet package
+* Merchello.Core.[VERSION].nupkg - Merchello Core NuGet package 
 * Merchello_[VERSION].zip - The Merchello Umbraco Package 
 
 

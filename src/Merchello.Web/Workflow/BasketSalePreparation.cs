@@ -53,7 +53,7 @@ namespace Merchello.Web.Workflow
         }
 
         /// <summary>
-        /// Authorizes and Captures a Payment
+        /// Authorizes and Captures a Payment 
         /// </summary>
         /// <param name="paymentGatewayMethod">The <see cref="IPaymentMethod"/></param>
         /// <param name="args">Additional arguements required by the payment processor</param>
