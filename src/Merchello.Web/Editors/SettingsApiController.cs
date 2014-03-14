@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.ModelBinding;
+using umbraco.cms.businesslogic.datatype;
 using Umbraco.Web;
 using Umbraco.Web.Mvc;
 using Merchello.Core;
@@ -21,7 +22,7 @@ namespace Merchello.Web.Editors
     [PluginController("Merchello")]
     public class SettingsApiController : MerchelloApiController
     {
-        private readonly IStoreSettingService _storeSettingService;
+        private readonly StoreSettingService _storeSettingService;
 
         /// <summary>
         /// Constructor
@@ -38,7 +39,7 @@ namespace Merchello.Web.Editors
         public SettingsApiController(MerchelloContext merchelloContext)
             : base(merchelloContext)
         {
-            _storeSettingService = MerchelloContext.Services.StoreSettingService;
+            _storeSettingService = MerchelloContext.Services.StoreSettingService as StoreSettingService;
         }
 
         /// <summary>
@@ -47,7 +48,7 @@ namespace Merchello.Web.Editors
         internal SettingsApiController(MerchelloContext merchelloContext, UmbracoContext umbracoContext)
             : base(merchelloContext, umbracoContext)
         {
-            _storeSettingService = MerchelloContext.Services.StoreSettingService;
+            _storeSettingService = MerchelloContext.Services.StoreSettingService as StoreSettingService;
         }
 
         /// <summary>
@@ -151,15 +152,14 @@ namespace Merchello.Web.Editors
 		}
 
 		/// <summary>
-		/// Returns Product by id (key)
-		/// 
+		/// Returns Product by id (key) 
 		/// GET /umbraco/Merchello/ProductApi/GetProduct/{guid}
 		/// </summary>
 		/// <param name="id"></param>
 		public SettingDisplay GetAllSettings()
 		{																								   
-			IEnumerable<IStoreSetting> settings = _storeSettingService.GetAll();
-			SettingDisplay settingDisplay = new SettingDisplay();
+			var settings = _storeSettingService.GetAll();
+			var settingDisplay = new SettingDisplay();
 
 			if (settings == null)
 			{
@@ -168,6 +168,21 @@ namespace Merchello.Web.Editors
 
 			return settingDisplay.ToStoreSettingDisplay(settings);
 		}
+
+        /// <summary>
+        /// Gets the nextInvoiceNumber and nextOrderNumber
+        /// </summary>
+        /// <returns>Next Invoice Number and Next Order Number</returns>
+        public SettingDisplay GetInvoiceAndOrderNumbers()
+        {
+            var settingDisplay = new SettingDisplay
+            {
+                nextInvoiceNumber = _storeSettingService.GetNextInvoiceNumber(),
+                nextOrderNumber = _storeSettingService.GetNextOrderNumber()
+            };
+            
+            return settingDisplay;
+        }
 
 		/// <summary>
 		/// Updates existing global settings
