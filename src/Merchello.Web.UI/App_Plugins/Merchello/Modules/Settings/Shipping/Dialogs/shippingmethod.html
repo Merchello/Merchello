@@ -75,19 +75,19 @@
                         <td class="span1 col-xs-1">
                             <input type="checkbox" data-ng-model="province.allowShipping"/>
                         </td>
-                        <td>
+                        <td class="col-xs-5 span5">
                             {{province.name}}
                         </td>
-                        <td>
-                            <div class="input-prepend">
+                        <td class="col-xs-4 span4 row-fluid">
+                            <div data-ng-class="{'input-prepend': province.rateAdjustmentType == 1, 'input-append': province.rateAdjustmentType == 2 }">
                                 <span class="add-on" data-ng-show="province.rateAdjustmentType == 1">$</span>
-                                <input type="number" data-ng-model="province.rateAdjustment" class="span1 col-xs-1" />
+                                <input type="number" data-ng-model="province.rateAdjustment" class="span8 col-xs-8" />
                                 <span class="add-on" data-ng-show="province.rateAdjustmentType == 2">%</span>
                             </div>
                         </td>
-                        <td>
-                            <label><input type="radio" data-ng-model="province.rateAdjustmentType" value="1" /> $</label>
-                            <label><input type="radio" data-ng-model="province.rateAdjustmentType" value="2" /> %</label>
+                        <td class="col-xs-2 span2 row-fluid">
+                            <label class="col-xs-6 span6"><input type="radio" data-ng-model="province.rateAdjustmentType" value="1" /> $</label>
+                            <label class="col-xs-6 span6"><input type="radio" data-ng-model="province.rateAdjustmentType" value="2" /> %</label>
                         </td>
                     </tr>
                 </tbody>

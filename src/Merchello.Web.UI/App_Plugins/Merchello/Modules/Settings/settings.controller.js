@@ -16,8 +16,27 @@
             $(".content-column-body").css('background-image', 'none');                
             $scope.savingStoreSettings = false;
             $scope.settingsDisplay = new merchello.Models.StoreSettings();
+            $scope.currencies = [];
+            $scope.selectedCurrency = {};
         ////////////////////////////////////////////////
 
+        $scope.loadCurrency = function() {
+            var promise = merchelloSettingsService.GetAllCurrencies();
+
+            promise.then(function (currencyFromServer) {
+                _.each(currencyFromServer, function (element, index, list) {
+                    var newCurrency = new merchello.Models.Currency(element);
+                    $scope.currencies.push(newCurrency);
+                });
+
+                $scope.loadSettings();
+
+            }, function (reason) {
+
+                alert('Failed: ' + reason.message);
+
+            });
+        }
 
         $scope.loadSettings = function () {
 
@@ -27,9 +46,18 @@
 
                 $scope.settingsDisplay = new merchello.Models.StoreSettings(settingsFromServer);
 
+                $scope.selectedCurrency = _.find($scope.currencies, function (element) {
+                    if (_.isEmpty($scope.settingsDisplay.currencyCode)) {
+                        return element.currencyCode == "USD";
+                    } 
+                    else {
+                        return element.currencyCode == $scope.settingsDisplay.currencyCode;
+                    }
+                    
+                });
+
                 $scope.loaded = true;
                 $scope.preValuesLoaded = true;
-                $(".content-column-body").css('background-image', 'none');
 
             }, function (reason) {
 
@@ -39,7 +67,7 @@
         };
 
 
-        $scope.loadSettings();
+        $scope.loadCurrency();
 
         $scope.save = function(thisForm) {
 
@@ -61,6 +89,10 @@
             } else {
                 notificationsService.info("Store Settings Save Failed...The Form Was Not Valid", "");
             }
+        };
+
+        $scope.currencyChanged = function(currency) {
+            $scope.settingsDisplay.currencyCode = currency.currencyCode;
         };
     };
 

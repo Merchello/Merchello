@@ -36,10 +36,26 @@
 
     };
 
+    models.Currency = function(currencyFromServer) {
+
+        var self = this;
+
+        if (currencyFromServer == undefined) {
+            self.name = "";
+            self.currencyCode = "";
+            self.symbol = "";
+        }
+        else {
+            self.name = currencyFromServer.name;
+            self.currencyCode = currencyFromServer.currencyCode;
+            self.symbol = currencyFromServer.symbol;
+        }
+    }
 
     models.StoreSettings = function (settingsFromServer) {
 
         var self = this;
+
         if (settingsFromServer == undefined) {
             self.currencyCode = "";
             self.nextOrderNumber = 0;
@@ -49,6 +65,7 @@
             self.globalShippable = false;
             self.globalTaxable = false;
             self.globalTrackInventory = false;
+            self.globalShippingIsTaxable = false;
         }
         else {
             self.currencyCode = settingsFromServer.currencyCode;
@@ -59,6 +76,7 @@
             self.globalShippable = settingsFromServer.globalShippable;
             self.globalTaxable = settingsFromServer.globalTaxable;
             self.globalTrackInventory = settingsFromServer.globalTrackInventory;
+            self.globalShippingIsTaxable = settingsFromServer.globalShippingIsTaxable;
         }
     };
 

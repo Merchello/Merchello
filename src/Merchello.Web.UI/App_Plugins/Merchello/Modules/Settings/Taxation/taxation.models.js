@@ -37,7 +37,8 @@
 
         var self = this;
 
-        self.provider = new merchello.Models.GatewayProvider({key: "", name: "Not Taxed", description:""});
+        self.hasProvinces = false;
+        self.provider = new merchello.Models.GatewayProvider({ key: "-1", name: "Not Taxed", description: "" });
         if (taxMethodFromServer == undefined) {
             self.key = "";
             self.providerKey = "";
@@ -54,6 +55,10 @@
             self.provinces = _.map(taxMethodFromServer.provinces, function (province) {
                 return new merchello.Models.TaxProvince(province);
             });
+
+            if (!_.isEmpty(self.provinces)) {
+                self.hasProvinces = true;
+            }
         };
 
     };

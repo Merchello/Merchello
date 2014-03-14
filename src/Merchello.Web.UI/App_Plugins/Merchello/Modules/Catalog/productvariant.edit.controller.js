@@ -60,21 +60,24 @@
 
                 $scope.product = new merchello.Models.Product(product);
 
-                $scope.remainingChoices = $scope.product.getRemainingChoicesWithoutVariants();
+                var promiseCreatable = merchelloProductVariantService.getVariantsByProductThatCanBeCreated(key);
+                promiseCreatable.then(function (variants) {
+                    $scope.possibleVariants = _.map(variants, function (v) {
+                        var newVariant = new merchello.Models.ProductVariant(v);
+                        newVariant.key = "";
+                        return newVariant;
+                    });
 
-                $scope.productVariant.copyFromProduct($scope.product);
-                $scope.productVariant.sku = "";
-                $scope.productVariant.attributes = _.map($scope.product.productOptions, function(option) {
-                    var availableChoices = $scope.availableChoices(option);
-                    if (availableChoices.length > 0) {
-                        return availableChoices[0];
-                    } else {
-                        return new merchello.Models.ProductAttribute();
+                    if (!_.isEmpty($scope.possibleVariants)) {
+                        $scope.productVariant = $scope.possibleVariants[0];                        
                     }
-                });
 
-                $scope.loaded = true;
-                $scope.preValuesLoaded = true;
+                    $scope.loaded = true;
+                    $scope.preValuesLoaded = true;
+
+                }, function (reason) {
+                    notificationsService.error("Product Variants Remaining Load Failed", reason.message);
+                });
 
             }, function(reason) {
 
@@ -135,6 +138,7 @@
             $scope.preValuesLoaded = true;
             $scope.productVariant = new merchello.Models.ProductVariant();
             $scope.attributesKeys = [""];
+            $scope.possibleVariants = [];
             loadProductForVariantCreate($routeParams.id);
             $scope.editingVariant = false;
         } else {
@@ -197,7 +201,6 @@
                     });
                 } else if ($scope.creatingVariant) // Add a variant to product
                 {
-                    $scope.productVariant.name = ""; // Allow the core to create the initial name
                     var promise = merchelloProductVariantService.create($scope.productVariant);
 
                     promise.then(function(productVariant) {
@@ -399,23 +402,23 @@
         ////////////////////////////////////////////////
         /// HELPERS
 
-        $scope.isChoiceAvailable = function(choice) {
-            if ($scope.remainingChoices) {
-                var foundChoice = _.find($scope.remainingChoices, function(c) { return c.key == choice.key; });
-                return foundChoice;
-            } else {
-                return {};
-            }
-        };
+        //$scope.isChoiceAvailable = function(choice) {
+        //    if ($scope.remainingChoices) {
+        //        var foundChoice = _.find($scope.remainingChoices, function(c) { return c.key == choice.key; });
+        //        return foundChoice;
+        //    } else {
+        //        return {};
+        //    }
+        //};
 
-        $scope.availableChoices = function (option) {
-            if ($scope.remainingChoices) {
-                var remainingChoiceKeys = _.pluck($scope.remainingChoices, 'key');              
-                return _.filter(option.choices, function(c) { return _.contains(remainingChoiceKeys, c.key); });
-            } else {
-                return [];
-            }
-        };
+        //$scope.availableChoices = function (option) {
+        //    if ($scope.remainingChoices) {
+        //        var remainingChoiceKeys = _.pluck($scope.remainingChoices, 'key');              
+        //        return _.filter(option.choices, function(c) { return _.contains(remainingChoiceKeys, c.key); });
+        //    } else {
+        //        return [];
+        //    }
+        //};
     };
 
     angular.module("umbraco").controller("Merchello.Editors.ProductVariant.EditController", merchello.Controllers.ProductVariantEditController);
