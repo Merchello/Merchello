@@ -91,7 +91,11 @@ namespace Merchello.Core.Services
 
         private bool CountryTaxRateExists(Guid providerKey, string countryCode)
         {
-            return GetTaxMethodByCountryCode(providerKey, countryCode) != null;
+            var taxMethod = GetTaxMethodByCountryCode(providerKey, countryCode);
+
+            return countryCode == "ELSE"
+                ? GetTaxMethodByCountryCode(providerKey, countryCode) != null && taxMethod.CountryCode != "ELSE"
+                : GetTaxMethodByCountryCode(providerKey, countryCode) != null;
         }
 
         /// <summary>
