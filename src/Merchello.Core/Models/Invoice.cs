@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Merchello.Core.Models.EntityBase;
@@ -28,20 +29,22 @@ namespace Merchello.Core.Models
         private bool _paid;
         private decimal _total;
         private LineItemCollection _items;
+        private OrderCollection _orders;
 
         internal Invoice(Guid invoiceStatusKey)
             : this(invoiceStatusKey, new Address())
         { }
 
         internal Invoice(Guid invoiceStatusKey, IAddress billToAddress)
-            : this(invoiceStatusKey, billToAddress, new LineItemCollection())
+            : this(invoiceStatusKey, billToAddress, new LineItemCollection(), new OrderCollection())
         { }
 
-        internal Invoice(Guid invoiceStatusKey, IAddress billToAddress, LineItemCollection lineItemCollection)
+        internal Invoice(Guid invoiceStatusKey, IAddress billToAddress, LineItemCollection lineItemCollection, OrderCollection orders)
         {
             Mandate.ParameterCondition(Guid.Empty != invoiceStatusKey, "invoiceStatusKey");
             Mandate.ParameterNotNull(billToAddress, "billToAddress");
             Mandate.ParameterNotNull(lineItemCollection, "lineItemCollection");
+            Mandate.ParameterNotNull(orders, "orders");
 
             _invoiceStatusKey = invoiceStatusKey;
 
@@ -78,6 +81,12 @@ namespace Merchello.Core.Models
         private static readonly PropertyInfo ExportedSelector = ExpressionHelper.GetPropertyInfo<Invoice, bool>(x => x.Exported);
         private static readonly PropertyInfo PaidSelector = ExpressionHelper.GetPropertyInfo<Invoice, bool>(x => x.Paid);
         private static readonly PropertyInfo TotalSelector = ExpressionHelper.GetPropertyInfo<Invoice, decimal>(x => x.Total);
+        private static readonly PropertyInfo OrdersChangedSelector = ExpressionHelper.GetPropertyInfo<Invoice, OrderCollection>(x => x.Orders);
+
+        private void OrdersChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            OnPropertyChanged(OrdersChangedSelector);
+        }
 
         /// <summary>
         /// The unique customer 'key' to associated with the invoice
@@ -383,6 +392,20 @@ namespace Merchello.Core.Models
                     _total = value;
                     return _total;
                 }, _total, TotalSelector);
+            }
+        }
+
+        /// <summary>
+        /// The collection of orders associated with the invoice
+        /// </summary>
+        [DataMember]
+        public OrderCollection Orders
+        {
+            get { return _orders; }
+            set
+            {
+                _orders = value;
+                _orders.CollectionChanged += OrdersChanged;
             }
         }
 

@@ -116,6 +116,8 @@ namespace Merchello.Core.Persistence.Repositories
             _lineItemRepository.SaveLineItem(entity.Items, entity.Key);
 
             entity.ResetDirtyProperties();
+
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IInvoice>(entity.InvoiceKey));
         }
 
         protected override void PersistUpdatedItem(IOrder entity)
@@ -130,6 +132,15 @@ namespace Merchello.Core.Persistence.Repositories
             _lineItemRepository.SaveLineItem(entity.Items, entity.Key);
 
             entity.ResetDirtyProperties();
+
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IInvoice>(entity.InvoiceKey));
+        }
+
+        protected override void PersistDeletedItem(IOrder entity)
+        {
+            base.PersistDeletedItem(entity);
+
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IInvoice>(entity.InvoiceKey));
         }
 
         private LineItemCollection GetLineItemCollection(Guid orderKey)

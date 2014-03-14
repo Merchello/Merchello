@@ -115,6 +115,10 @@ namespace Merchello.Core.Models
         [DataMember]
         decimal Total { get; set; }
 
-
+        /// <summary>
+        /// The collection of Orders associated with the Invoice
+        /// </summary>
+        [DataMember]
+        OrderCollection Orders { get; set; }
     }
 }

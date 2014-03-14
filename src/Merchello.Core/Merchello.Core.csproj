@@ -114,6 +114,7 @@
     <Compile Include="Models\InvoiceExtensions.cs" />
     <Compile Include="Models\LocalizationExtensions.cs" />
     <Compile Include="Models\Order.cs" />
+    <Compile Include="Models\OrderCollection.cs" />
     <Compile Include="Models\OrderExtensions.cs" />
     <Compile Include="Models\OrderStatus.cs" />
     <Compile Include="Models\PaymentExtensions.cs" />

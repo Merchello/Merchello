@@ -19,14 +19,17 @@ namespace Merchello.Core.Persistence.Repositories
     /// </summary>
     internal class InvoiceRepository : MerchelloPetaPocoRepositoryBase<IInvoice>, IInvoiceRepository
     {
-        private readonly ILineItemRepository _lineItemRepository; 
+        private readonly ILineItemRepository _lineItemRepository;
+        private readonly IOrderRepository _orderRepository;
         
-        public InvoiceRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILineItemRepository lineItemRepository) 
+        public InvoiceRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILineItemRepository lineItemRepository, IOrderRepository orderRepository) 
             : base(work, cache)
         {
             Mandate.ParameterNotNull(lineItemRepository, "lineItemRepository");
+            Mandate.ParameterNotNull(orderRepository, "orderRepository");
 
             _lineItemRepository = lineItemRepository;
+            _orderRepository = orderRepository;
         }
 
         protected override IInvoice PerformGet(Guid key)
@@ -41,8 +44,8 @@ namespace Merchello.Core.Persistence.Repositories
 
             
             var lineItems = GetLineItemCollection(key);
-           
-            var factory = new InvoiceFactory(lineItems);
+            var orders = GetOrderCollection(key);
+            var factory = new InvoiceFactory(lineItems, orders);
             return factory.BuildEntity(dto);
         }
 
@@ -110,7 +113,7 @@ namespace Merchello.Core.Persistence.Repositories
         {
             ((Entity)entity).AddingEntity();
 
-            var factory = new InvoiceFactory(entity.Items);
+            var factory = new InvoiceFactory(entity.Items, entity.Orders);
             var dto = factory.BuildDto(entity);
 
             Database.Insert(dto);
@@ -126,7 +129,7 @@ namespace Merchello.Core.Persistence.Repositories
         {
             ((Entity)entity).UpdatingEntity();
 
-            var factory = new InvoiceFactory(entity.Items);
+            var factory = new InvoiceFactory(entity.Items, entity.Orders);
             var dto = factory.BuildDto(entity);
 
             Database.Update(dto);
@@ -153,6 +156,21 @@ namespace Merchello.Core.Persistence.Repositories
             }
 
             return collection;
+        }
+
+
+        private OrderCollection GetOrderCollection(Guid invoiceKey)
+        {
+            var query = Querying.Query<IOrder>.Builder.Where(x => x.InvoiceKey == invoiceKey);
+            var orders = _orderRepository.GetByQuery(query);
+            var collection = new OrderCollection();
+
+            foreach (var order in orders)
+            {
+                collection.Add(order);
+            }
+
+            return collection;            
         }
     }
 }

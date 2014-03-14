@@ -94,7 +94,8 @@ namespace Merchello.Core.Persistence
         {
             return new InvoiceRepository(uow,
                 _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider,
-                CreateLineItemRepository<InvoiceItemDto>(uow)
+                CreateLineItemRepository<InvoiceItemDto>(uow),
+                CreateOrderRepository(uow)
                 );
         }
 
