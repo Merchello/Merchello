@@ -79,18 +79,5 @@ namespace Merchello.Core.Services
         /// <returns>A collection of <see cref="ICountry"/></returns>
         IEnumerable<ICountry> GetAllCountries(string[] excludeCountryCodes);
 
-        /// <summary>
-        /// Gets the next usable InvoiceNumber
-        /// </summary>
-        /// <returns>The Next Invoice Number</returns>
-        int GetNextInvoiceNumber(int invoicesCount = 1);
-
-        /// <summary>
-        /// Gets the next usable OrderNumber
-        /// </summary>
-        /// <param name="ordersCount"></param>
-        /// <returns>The Next Order Number</returns>
-        int GetNextOrderNumber(int ordersCount = 1);
-
     }
 }

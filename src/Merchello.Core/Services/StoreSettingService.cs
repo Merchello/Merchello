@@ -186,7 +186,7 @@ namespace Merchello.Core.Services
         /// Gets the next usable InvoiceNumber
         /// </summary>
         /// <returns></returns>
-        public int GetNextInvoiceNumber(int invoicesCount = 1)
+        internal int GetNextInvoiceNumber(int invoicesCount = 1)
         {
             var invoiceNumber = 0;
             using (new WriteLock(Locker))
@@ -207,7 +207,7 @@ namespace Merchello.Core.Services
         /// </summary>
         /// <param name="ordersCount"></param>
         /// <returns></returns>
-        public int GetNextOrderNumber(int ordersCount = 1)
+        internal int GetNextOrderNumber(int ordersCount = 1)
         {
             var orderNumber = 0;
             using (new WriteLock(Locker))

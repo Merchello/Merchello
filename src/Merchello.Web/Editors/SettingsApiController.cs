@@ -22,7 +22,7 @@ namespace Merchello.Web.Editors
     [PluginController("Merchello")]
     public class SettingsApiController : MerchelloApiController
     {
-        private readonly IStoreSettingService _storeSettingService;
+        private readonly StoreSettingService _storeSettingService;
 
         /// <summary>
         /// Constructor
@@ -39,7 +39,7 @@ namespace Merchello.Web.Editors
         public SettingsApiController(MerchelloContext merchelloContext)
             : base(merchelloContext)
         {
-            _storeSettingService = MerchelloContext.Services.StoreSettingService;
+            _storeSettingService = MerchelloContext.Services.StoreSettingService as StoreSettingService;
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace Merchello.Web.Editors
         internal SettingsApiController(MerchelloContext merchelloContext, UmbracoContext umbracoContext)
             : base(merchelloContext, umbracoContext)
         {
-            _storeSettingService = MerchelloContext.Services.StoreSettingService;
+            _storeSettingService = MerchelloContext.Services.StoreSettingService as StoreSettingService;
         }
 
         /// <summary>
