@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Merchello.Core.Builders;
+using Merchello.Core.Events;
 using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Models;
@@ -9,6 +10,7 @@ using Merchello.Core.Models.TypeFields;
 using Merchello.Core.Services;
 using Umbraco.Core;
 using Umbraco.Core.Cache;
+using Umbraco.Core.Events;
 using Umbraco.Core.Logging;
 
 namespace Merchello.Core.Sales
@@ -207,13 +209,28 @@ namespace Merchello.Core.Sales
 
             if(!IsReadyToInvoice()) return new PaymentResult(Attempt<IPayment>.Fail(new InvalidOperationException("SalesPreparation is not ready to invoice")), null, false);
 
+            // invoice
             var invoice = PrepareInvoice(new InvoiceBuilderChain(this));
+
+            Invoicing.RaiseEvent(new Events.NewEventArgs<IInvoice>(invoice), this);
+
             MerchelloContext.Services.InvoiceService.Save(invoice);
 
-            var result =  invoice.AuthorizePayment(paymentGatewayMethod, args);
+            Invoiced.RaiseEvent(new Events.NewEventArgs<IInvoice>(invoice), this);
 
-            if (result.ApproveOrderCreation)
-                MerchelloContext.Services.OrderService.Save(result.Invoice.PrepareOrder(MerchelloContext)); 
+            var result = invoice.AuthorizePayment(paymentGatewayMethod, args);
+
+
+            if (!result.ApproveOrderCreation) return result;
+
+            // order
+            var order = result.Invoice.PrepareOrder(MerchelloContext);
+
+            Ordering.RaiseEvent(new Events.NewEventArgs<IOrder>(order), this);
+
+            MerchelloContext.Services.OrderService.Save(order);
+
+            Ordered.RaiseEvent(new Events.NewEventArgs<IOrder>(order), this);
 
             return result;
         }
@@ -265,13 +282,28 @@ namespace Merchello.Core.Sales
 
             if (!IsReadyToInvoice()) return new PaymentResult(Attempt<IPayment>.Fail(new InvalidOperationException("SalesPreparation is not ready to invoice")), null, false);
 
+            // invoice
             var invoice = PrepareInvoice(new InvoiceBuilderChain(this));
+
+            Invoicing.RaiseEvent(new Events.NewEventArgs<IInvoice>(invoice), this);
+
             MerchelloContext.Services.InvoiceService.Save(invoice);
+
+            Invoiced.RaiseEvent(new Events.NewEventArgs<IInvoice>(invoice), this);
 
             var result = invoice.AuthorizeCapturePayment(paymentGatewayMethod, args);
 
-            if (result.ApproveOrderCreation) 
-                MerchelloContext.Services.OrderService.Save(result.Invoice.PrepareOrder(MerchelloContext)); 
+            
+            if (!result.ApproveOrderCreation) return result;
+
+            // order
+            var order = result.Invoice.PrepareOrder(MerchelloContext);
+
+            Ordering.RaiseEvent(new Events.NewEventArgs<IOrder>(order), this);
+
+            MerchelloContext.Services.OrderService.Save(order);
+
+            Ordered.RaiseEvent(new Events.NewEventArgs<IOrder>(order), this);
 
             return result;
         }
@@ -421,5 +453,31 @@ namespace Merchello.Core.Sales
         internal bool ApplyTaxesToInvoice { get; set; }
 
 
+
+        #region Event Handlers
+
+        /// <summary>
+        /// Occurs before Invoicing
+        /// </summary>
+        public static event TypedEventHandler<SalePreparationBase, Events.NewEventArgs<IInvoice>> Invoicing;
+
+        /// <summary>
+        /// Occurs after Invoiced
+        /// </summary>
+        public static event TypedEventHandler<SalePreparationBase, Events.NewEventArgs<IInvoice>> Invoiced;
+
+        /// <summary>
+        /// Occurs before Ordering
+        /// </summary>
+        public static event TypedEventHandler<SalePreparationBase, Events.NewEventArgs<IOrder>> Ordering;
+
+        /// <summary>
+        /// Occurs after Ordered
+        /// </summary>
+        public static event TypedEventHandler<SalePreparationBase, Events.NewEventArgs<IOrder>> Ordered;
+
+        
+
+        #endregion
     }
 }
