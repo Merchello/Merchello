@@ -31,7 +31,7 @@
 
                 $scope.loadSettings();
 
-            }, function(reason) {
+            }, function (reason) {
 
                 alert('Failed: ' + reason.message);
 
@@ -55,9 +55,7 @@
                     }
                     
                 });
-
-                $scope.loadInvoiceAndOrderNumberSetting();
-
+                
                 $scope.loaded = true;
                 $scope.preValuesLoaded = true;
 
