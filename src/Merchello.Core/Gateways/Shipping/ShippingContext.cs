@@ -45,13 +45,22 @@ namespace Merchello.Core.Gateways.Shipping
         public IEnumerable<ICountry> GetAllowedShipmentDestinationCountries()
         {
             var shipCountries = GatewayProviderService.GetAllShipCountries().ToArray();
-            if (shipCountries.Any(x => x.CountryCode == "ELSE"))
-            {
-                var shipMethods =
-                    GatewayProviderService.GetShipMethodsByShipCountryKey(
-                        shipCountries.First(x => x.CountryCode == "ELSE").Key);
 
-                if (shipMethods.Any()) return _storeSettingService.GetAllCountries();
+            var elseCountries = shipCountries.Where(x => x.CountryCode == "ELSE").ToArray();
+            if (elseCountries.Any())
+            {
+                // get a list of all providers associated with the else countries
+                var providers = new List<IShippingGatewayProvider>();
+                foreach (var ec in elseCountries)
+                {
+                    providers.AddRange(GetGatewayProvidersByShipCountry(ec));
+                }
+
+                if (providers.Any(x => x.ShipMethods.Any()))
+                {
+                    return _storeSettingService.GetAllCountries();
+                }
+                
             }
             var countries = GatewayProviderService.GetAllShipCountries().Where(x => x.CountryCode != "ELSE").Select(x => new Country(x.CountryCode, x.Provinces));
 
