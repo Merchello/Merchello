@@ -109,6 +109,7 @@ namespace Merchello.Core.Sales
         /// <param name="approvedShipmentRateQuote"></param>
         public virtual void SaveShipmentRateQuote(IShipmentRateQuote approvedShipmentRateQuote)
         {
+
             AddShipmentRateQuoteLineItem(approvedShipmentRateQuote);         
             _merchelloContext.Services.ItemCacheService.Save(_itemCache);
 
@@ -123,12 +124,6 @@ namespace Merchello.Core.Sales
         public virtual void SaveShipmentRateQuote(IEnumerable<IShipmentRateQuote> approvedShipmentRateQuotes)
         {
             var shipmentRateQuotes = approvedShipmentRateQuotes as IShipmentRateQuote[] ?? approvedShipmentRateQuotes.ToArray();
-
-            // first clear any previously save shipment rate quotes
-            foreach (var previousQuote in _itemCache.Items.Where(x => x.LineItemType == LineItemType.Shipping))
-            {
-                _itemCache.Items.Remove(previousQuote);
-            }
 
             if (!shipmentRateQuotes.Any()) return;
             
