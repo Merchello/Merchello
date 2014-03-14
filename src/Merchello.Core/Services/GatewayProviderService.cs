@@ -503,6 +503,11 @@ namespace Merchello.Core.Services
             return ((TaxMethodService)_taxMethodService).CreateTaxMethodWithKey(providerKey, countryCode, percentageTaxRate);
         }
 
+
+#endregion
+
+        #region TaxMethod
+        
         /// <summary>
         /// Gets a <see cref="ITaxMethod"/> based on a provider and country code
         /// </summary>
