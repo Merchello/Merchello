@@ -210,7 +210,12 @@ namespace Merchello.Core.Sales
             var invoice = PrepareInvoice(new InvoiceBuilderChain(this));
             MerchelloContext.Services.InvoiceService.Save(invoice);
 
-            return invoice.AuthorizePayment(paymentGatewayMethod, args);
+            var result =  invoice.AuthorizePayment(paymentGatewayMethod, args);
+
+            if (result.ApproveOrderCreation)
+                MerchelloContext.Services.OrderService.Save(result.Invoice.PrepareOrder(MerchelloContext)); 
+
+            return result;
         }
 
         /// <summary>
@@ -263,7 +268,12 @@ namespace Merchello.Core.Sales
             var invoice = PrepareInvoice(new InvoiceBuilderChain(this));
             MerchelloContext.Services.InvoiceService.Save(invoice);
 
-            return invoice.AuthorizeCapturePayment(paymentGatewayMethod, args);
+            var result = invoice.AuthorizeCapturePayment(paymentGatewayMethod, args);
+
+            if (result.ApproveOrderCreation) 
+                MerchelloContext.Services.OrderService.Save(result.Invoice.PrepareOrder(MerchelloContext)); 
+
+            return result;
         }
 
         /// <summary>
