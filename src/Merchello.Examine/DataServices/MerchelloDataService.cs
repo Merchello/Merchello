@@ -12,10 +12,13 @@ namespace Merchello.Examine.DataServices
         public MerchelloDataService(IMerchelloContext merchelloContext)
         {
             ProductDataService = new ProductDataService(merchelloContext);
+            InvoiceDataService = new InvoiceDataService(merchelloContext);
             LogService = new MerchelloLogService();
         }
 
         public IProductDataService ProductDataService { get; private set; }
+        public IInvoiceDataService InvoiceDataService { get; private set; }
+
         public ILogService LogService { get; private set; }
 
         public string MapPath(string virtualPath)

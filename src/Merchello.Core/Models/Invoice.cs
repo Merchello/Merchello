@@ -26,7 +26,7 @@ namespace Merchello.Core.Models
         private string _billToPhone;
         private string _billToCompany;
         private bool _exported;
-        private bool _paid;
+        private bool _archived;
         private decimal _total;
         private LineItemCollection _items;
         private OrderCollection _orders;
@@ -79,7 +79,7 @@ namespace Merchello.Core.Models
         private static readonly PropertyInfo BillToPhoneSelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.BillToPhone);
         private static readonly PropertyInfo BillToCompanySelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.BillToCompany);
         private static readonly PropertyInfo ExportedSelector = ExpressionHelper.GetPropertyInfo<Invoice, bool>(x => x.Exported);
-        private static readonly PropertyInfo PaidSelector = ExpressionHelper.GetPropertyInfo<Invoice, bool>(x => x.Paid);
+        private static readonly PropertyInfo ArchivedSelector = ExpressionHelper.GetPropertyInfo<Invoice, bool>(x => x.Archived);
         private static readonly PropertyInfo TotalSelector = ExpressionHelper.GetPropertyInfo<Invoice, decimal>(x => x.Total);
         private static readonly PropertyInfo OrdersChangedSelector = ExpressionHelper.GetPropertyInfo<Invoice, OrderCollection>(x => x.Orders);
 
@@ -365,16 +365,16 @@ namespace Merchello.Core.Models
         /// Indicates whether or not this invoice has been paid in full
         /// </summary>
         [DataMember]
-        public bool Paid
+        public bool Archived
         {
-            get { return _paid; }
+            get { return _archived; }
             set
             {
                 SetPropertyValueAndDetectChanges(o =>
                 {
-                    _paid = value;
-                    return _paid;
-                }, _paid, PaidSelector);
+                    _archived = value;
+                    return _archived;
+                }, _archived, ArchivedSelector);
             }
         }
 

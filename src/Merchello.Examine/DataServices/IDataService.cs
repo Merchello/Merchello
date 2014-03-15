@@ -5,6 +5,7 @@ namespace Merchello.Examine.DataServices
     public interface IDataService
     {
         IProductDataService ProductDataService { get; }
+        IInvoiceDataService InvoiceDataService { get; }
         ILogService LogService { get; }
 
 
