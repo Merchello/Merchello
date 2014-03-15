@@ -70,7 +70,11 @@
 
                     taxCountry.country = _.find($scope.allCountries, function (c) { return c.countryCode == taxCountry.serviceCode; });
 
-                    taxCountry.countryName = taxCountry.country.name;
+                    if (taxCountry.country) {
+                        taxCountry.countryName = taxCountry.country.name;
+                    } else {
+                        taxCountry.countryName = taxCountry.name;
+                    }
 
                     return taxCountry;
                 });
@@ -179,14 +183,18 @@
 
                     }
 
-                } else {     // Didn't exist before, create it
+                } else {
 
-                    var promiseTaxMethodCreate = merchelloTaxationGatewayService.addTaxMethod(taxCountry.method);
-                    promiseTaxMethodCreate.then(function() {
-                        notificationsService.success("TaxMethod Created", "");
-                    }, function(reason) {
-                        notificationsService.error("TaxMethod Created Failed", reason.message);
-                    });
+                    if (taxCountry.method.providerKey.length > 0) { // Didn't exist before, create it
+
+                        var promiseTaxMethodCreate = merchelloTaxationGatewayService.addTaxMethod(taxCountry.method);
+                        promiseTaxMethodCreate.then(function() {
+                            notificationsService.success("TaxMethod Created", "");
+                        }, function(reason) {
+                            notificationsService.error("TaxMethod Created Failed", reason.message);
+                        });
+
+                    }
 
                 }
 
