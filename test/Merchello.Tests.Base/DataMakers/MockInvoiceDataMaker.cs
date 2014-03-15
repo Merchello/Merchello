@@ -7,7 +7,15 @@ namespace Merchello.Tests.Base.DataMakers
     {
         public static IInvoice InvoiceForInserting(IAddress billTo, decimal total)
         {
-            var invoice = new Invoice(Core.Constants.DefaultKeys.InvoiceStatus.Unpaid);
+            var status = new InvoiceStatus()
+                {
+                    Key = Constants.DefaultKeys.InvoiceStatus.Unpaid,
+                    Active = true,
+                    Alias = "unpaid",
+                    Name = "Unpaid",
+                    SortOrder = 0
+                };
+            var invoice = new Invoice(status);
             invoice.SetBillingAddress(billTo);
             invoice.Total = total;
 

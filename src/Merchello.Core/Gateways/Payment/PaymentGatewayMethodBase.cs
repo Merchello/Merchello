@@ -211,12 +211,14 @@ namespace Merchello.Core.Gateways.Payment
                 appliedPayments.Where(x => x.TransactionType == AppliedPaymentType.Debit).Sum(x => x.Amount) - 
                 appliedPayments.Where(x => x.TransactionType == AppliedPaymentType.Credit).Sum(x => x.Amount);
 
+            var statuses = GatewayProviderService.GetAllInvoiceStatuses().ToArray();
+
             if (appliedTotal == 0 && invoice.InvoiceStatusKey != Constants.DefaultKeys.InvoiceStatus.Unpaid) 
-                invoice.InvoiceStatusKey = Constants.DefaultKeys.InvoiceStatus.Unpaid;
+                invoice.InvoiceStatus = statuses.First(x => x.Key == Constants.DefaultKeys.InvoiceStatus.Unpaid);
             if (invoice.Total <= appliedTotal && invoice.InvoiceStatusKey != Constants.DefaultKeys.InvoiceStatus.Paid)
-                invoice.InvoiceStatusKey = Constants.DefaultKeys.InvoiceStatus.Paid;
+                invoice.InvoiceStatus = statuses.First(x => x.Key == Constants.DefaultKeys.InvoiceStatus.Paid);
             if (invoice.Total > appliedTotal && invoice.InvoiceStatusKey != Constants.DefaultKeys.InvoiceStatus.Partial)
-                invoice.InvoiceStatusKey = Constants.DefaultKeys.InvoiceStatus.Partial;
+                invoice.InvoiceStatus = statuses.First(x => x.Key == Constants.DefaultKeys.InvoiceStatus.Partial);
 
             if(invoice.IsDirty()) GatewayProviderService.Save(invoice);
                 

@@ -16,14 +16,14 @@ namespace Merchello.Core.Persistence.Factories
 
         public IInvoice BuildEntity(InvoiceDto dto)
         {
-            var invoice = new Invoice(dto.InvoiceStatusKey)
+            var factory = new InvoiceStatusFactory();
+            var invoice = new Invoice(factory.BuildEntity(dto.InvoiceStatusDto))
                 {
                     Key = dto.Key,
                     CustomerKey = dto.CustomerKey,
                     InvoiceNumberPrefix = dto.InvoiceNumberPrefix,
                     InvoiceNumber = dto.InvoiceNumber,
                     InvoiceDate = dto.InvoiceDate,
-                    InvoiceStatusKey = dto.InvoiceStatusKey,
                     VersionKey = dto.VersionKey,
                     BillToName = dto.BillToName,
                     BillToAddress1 = dto.BillToAddress1,
@@ -35,6 +35,7 @@ namespace Merchello.Core.Persistence.Factories
                     BillToEmail = dto.BillToEmail,
                     BillToPhone = dto.BillToPhone,
                     BillToCompany = dto.BillToCompany,
+                    ExamineId = dto.InvoiceIndexDto.Id,
                     Exported = dto.Exported,
                     Archived = dto.Archived,
                     Total = dto.Total,
@@ -73,6 +74,13 @@ namespace Merchello.Core.Persistence.Factories
                     Exported = entity.Exported,
                     Archived = entity.Archived,
                     Total = entity.Total,
+                    InvoiceIndexDto = new InvoiceIndexDto()
+                    {
+                        Id = ((Invoice)entity).ExamineId,
+                        InvoiceKey = entity.Key,
+                        UpdateDate = entity.UpdateDate,
+                        CreateDate = entity.CreateDate
+                    },
                     CreateDate = entity.CreateDate,
                     UpdateDate = entity.UpdateDate
                 };

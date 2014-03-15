@@ -1,4 +1,5 @@
 ﻿using System;
+using Merchello.Core;
 using Merchello.Core.Models;
 
 namespace Merchello.Tests.Base.DataMakers
@@ -9,7 +10,7 @@ namespace Merchello.Tests.Base.DataMakers
         {
             return new InvoiceStatus()
             {
-                Key = Guid.NewGuid(),
+                Key = Constants.DefaultKeys.InvoiceStatus.Unpaid,
                 Alias = "unpaid",
                 Name = "Unpaid",
                 Active = true,
@@ -21,11 +22,11 @@ namespace Merchello.Tests.Base.DataMakers
             };
         }
 
-        public static IInvoiceStatus InvoiceStatusCompletedMock()
+        public static IInvoiceStatus InvoiceStatusPaidMock()
         {
             return new InvoiceStatus()
             {
-                Key = Guid.NewGuid(),
+                Key = Constants.DefaultKeys.InvoiceStatus.Paid,
                 Alias = "completed",
                 Name = "Completed",
                 Active = true,

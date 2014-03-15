@@ -2,6 +2,7 @@
 using System.Linq;
 using Merchello.Core.Builders;
 using Merchello.Core.Models;
+using Merchello.Tests.Base.DataMakers;
 using NUnit.Framework;
 
 namespace Merchello.Tests.IntegrationTests.Builders
@@ -22,7 +23,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
             PreTestDataWorker.InvoiceService.Save(invoice);
 
             //// Act
-            var orderBuilder = new OrderBuilderChain(invoice);
+            var orderBuilder = new OrderBuilderChain(MockOrderStatusMaker.OrderStatusNotFulfilledMock(), invoice);
 
             //// Assert
             Assert.NotNull(orderBuilder);
@@ -41,7 +42,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
             PreTestDataWorker.InvoiceService.Save(invoice);
 
             //// Act
-            var orderBuilder = new OrderBuilderChain(invoice);
+            var orderBuilder = new OrderBuilderChain(MockOrderStatusMaker.OrderStatusNotFulfilledMock(), invoice);
             var attempt = orderBuilder.Build();
             Assert.IsTrue(attempt.Success, "The order builder failed to create an order");
             var order = attempt.Result;
@@ -67,7 +68,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
             PreTestDataWorker.InvoiceService.Save(invoice);
 
             //// Act
-            var orderBuilder = new OrderBuilderChain(invoice);
+            var orderBuilder = new OrderBuilderChain(MockOrderStatusMaker.OrderStatusNotFulfilledMock(), invoice);
             var attempt = orderBuilder.Build();
             Assert.IsTrue(attempt.Success, "The order builder failed to create an order");
             var order = attempt.Result;
@@ -88,7 +89,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
             var invoice = SalePreparationMock.PrepareInvoice();
             invoice.VersionKey = new Guid();
             PreTestDataWorker.InvoiceService.Save(invoice);
-            var orderBuilder = new OrderBuilderChain(invoice);
+            var orderBuilder = new OrderBuilderChain(MockOrderStatusMaker.OrderStatusNotFulfilledMock(), invoice);
             var attempt = orderBuilder.Build();
             Assert.IsTrue(attempt.Success, "The order builder failed to create an order");
             MerchelloContext.Services.OrderService.Save(attempt.Result);

@@ -60,7 +60,9 @@ namespace Merchello.Core.Services
             Mandate.ParameterCondition(!Guid.Empty.Equals(orderStatusKey), "orderStatusKey");
             Mandate.ParameterCondition(!Guid.Empty.Equals(invoiceKey), "invoiceKey");
 
-            var order = new Order(orderStatusKey, invoiceKey)
+            var status = GetOrderStatusByKey(orderStatusKey);
+
+            var order = new Order(status, invoiceKey)
                 {
                     VersionKey = Guid.NewGuid(),
                     OrderDate = DateTime.Now
@@ -90,7 +92,9 @@ namespace Merchello.Core.Services
             Mandate.ParameterCondition(!Guid.Empty.Equals(orderStatusKey), "orderStatusKey");
             Mandate.ParameterCondition(!Guid.Empty.Equals(invoiceKey), "invoiceKey");
 
-            var order = new Order(orderStatusKey, invoiceKey)
+            var status = GetOrderStatusByKey(orderStatusKey);
+
+            var order = new Order(status, invoiceKey)
             {
                 VersionKey = Guid.NewGuid(),
                 OrderDate = DateTime.Now
@@ -349,6 +353,29 @@ namespace Merchello.Core.Services
             }
         }
 
+        /// <summary>
+        /// Gets an <see cref="IOrderStatus"/> by it's key
+        /// </summary>
+        /// <param name="key">The <see cref="IInvoiceStatus"/> key</param>
+        /// <returns><see cref="IInvoiceStatus"/></returns>
+        public IOrderStatus GetOrderStatusByKey(Guid key)
+        {
+            using (var repository = _repositoryFactory.CreateOrderStatusRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.Get(key);
+            }
+        }
+
+        /// <summary>
+        /// Returns a collection of all <see cref="IOrderStatus"/>
+        /// </summary>
+        public IEnumerable<IOrderStatus> GetAllOrderStatuses()
+        {
+            using (var repository = _repositoryFactory.CreateOrderStatusRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetAll();
+            }
+        }
 
         #region Event Handlers
 
