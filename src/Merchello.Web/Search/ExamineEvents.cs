@@ -4,6 +4,7 @@ using System.Linq;
 using Examine;
 using Merchello.Core;
 using Merchello.Core.Models;
+using Merchello.Core.Sales;
 using Merchello.Core.Services;
 using Merchello.Examine;
 using Merchello.Examine.Providers;
@@ -39,17 +40,10 @@ namespace Merchello.Web.Search
             ProductVariantService.Created += ProductVariantServiceCreated;
             ProductVariantService.Saved += ProductVariantServiceSaved;
             ProductVariantService.Deleted += ProductVariantServiceDeleted;
+          }
 
-            InvoiceService.Created += InvoiceServiceCreated;
-            InvoiceService.Saved += InvoiceServiceSaved;
-            InvoiceService.Deleted += InvoiceServiceDeleted;
+        
 
-            OrderService.Created += OrderServiceCreated;
-            OrderService.Saved += OrderServiceSaved;
-            OrderService.Deleted += OrderServiceDeleted;
-        }
-
-    
         #region Product
 
         /// <summary>
@@ -124,59 +118,7 @@ namespace Merchello.Web.Search
 
 #endregion
 
-
-        private void InvoiceServiceCreated(IInvoiceService sender, Core.Events.NewEventArgs<IInvoice> e)
-        {
-            if (e.Entity.HasIdentity) IndexInvoice(e.Entity);
-        }
-
-        private void InvoiceServiceSaved(IInvoiceService sender, SaveEventArgs<IInvoice> e)
-        {
-            e.SavedEntities.ForEach(IndexInvoice);
-        }
-
-        private void InvoiceServiceDeleted(IInvoiceService sender, DeleteEventArgs<IInvoice> e)
-        {
-            e.DeletedEntities.ForEach(DeleteInvoiceFromIndex);
-        }
-
-        private void IndexInvoice(IInvoice entity)
-        {
-            if(entity != null) InvoiceIndexer.AddInvoiceToIndex(entity);
-        }
-
-        private static void DeleteInvoiceFromIndex(IInvoice invoice)
-        {
-            InvoiceIndexer.DeleteFromIndex(((Invoice)invoice).ExamineId.ToString());
-        }
-
-        private void OrderServiceCreated(IOrderService sender, Core.Events.NewEventArgs<IOrder> e)
-        {
-            if (e.Entity.HasIdentity) IndexInvoice(InvoiceToReIndex(e.Entity.InvoiceKey));
-        }
-
-        private void OrderServiceDeleted(IOrderService sender, DeleteEventArgs<IOrder> e)
-        {
-            foreach (var order in e.DeletedEntities)
-            {
-                IndexInvoice(InvoiceToReIndex(order.InvoiceKey));
-            }
-        }
-
-        private void OrderServiceSaved(IOrderService sender, SaveEventArgs<IOrder> e)
-        {
-            foreach (var order in e.SavedEntities)
-            {
-                IndexInvoice(InvoiceToReIndex(order.InvoiceKey));
-            }
-        }
-
-
-        private static IInvoice InvoiceToReIndex(Guid key)
-        {
-            return MerchelloContext.Current.Services.InvoiceService.GetByKey(key);
-        }
-
+        
 
 
         #region Indexers

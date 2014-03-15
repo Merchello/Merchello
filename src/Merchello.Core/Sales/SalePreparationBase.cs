@@ -212,25 +212,16 @@ namespace Merchello.Core.Sales
             // invoice
             var invoice = PrepareInvoice(new InvoiceBuilderChain(this));
 
-            Invoicing.RaiseEvent(new Events.NewEventArgs<IInvoice>(invoice), this);
-
             MerchelloContext.Services.InvoiceService.Save(invoice);
 
-            Invoiced.RaiseEvent(new Events.NewEventArgs<IInvoice>(invoice), this);
-
             var result = invoice.AuthorizePayment(paymentGatewayMethod, args);
-
 
             if (!result.ApproveOrderCreation) return result;
 
             // order
             var order = result.Invoice.PrepareOrder(MerchelloContext);
 
-            Ordering.RaiseEvent(new Events.NewEventArgs<IOrder>(order), this);
-
             MerchelloContext.Services.OrderService.Save(order);
-
-            Ordered.RaiseEvent(new Events.NewEventArgs<IOrder>(order), this);
 
             return result;
         }
@@ -285,11 +276,7 @@ namespace Merchello.Core.Sales
             // invoice
             var invoice = PrepareInvoice(new InvoiceBuilderChain(this));
 
-            Invoicing.RaiseEvent(new Events.NewEventArgs<IInvoice>(invoice), this);
-
             MerchelloContext.Services.InvoiceService.Save(invoice);
-
-            Invoiced.RaiseEvent(new Events.NewEventArgs<IInvoice>(invoice), this);
 
             var result = invoice.AuthorizeCapturePayment(paymentGatewayMethod, args);
 
@@ -299,11 +286,7 @@ namespace Merchello.Core.Sales
             // order
             var order = result.Invoice.PrepareOrder(MerchelloContext);
 
-            Ordering.RaiseEvent(new Events.NewEventArgs<IOrder>(order), this);
-
             MerchelloContext.Services.OrderService.Save(order);
-
-            Ordered.RaiseEvent(new Events.NewEventArgs<IOrder>(order), this);
 
             return result;
         }
@@ -452,32 +435,5 @@ namespace Merchello.Core.Sales
 
         internal bool ApplyTaxesToInvoice { get; set; }
 
-
-
-        #region Event Handlers
-
-        /// <summary>
-        /// Occurs before Invoicing
-        /// </summary>
-        public static event TypedEventHandler<SalePreparationBase, Events.NewEventArgs<IInvoice>> Invoicing;
-
-        /// <summary>
-        /// Occurs after Invoiced
-        /// </summary>
-        public static event TypedEventHandler<SalePreparationBase, Events.NewEventArgs<IInvoice>> Invoiced;
-
-        /// <summary>
-        /// Occurs before Ordering
-        /// </summary>
-        public static event TypedEventHandler<SalePreparationBase, Events.NewEventArgs<IOrder>> Ordering;
-
-        /// <summary>
-        /// Occurs after Ordered
-        /// </summary>
-        public static event TypedEventHandler<SalePreparationBase, Events.NewEventArgs<IOrder>> Ordered;
-
-        
-
-        #endregion
     }
 }
