@@ -34,7 +34,12 @@ namespace Merchello.Core.Models
         /// <summary>
         /// The order status key
         /// </summary>
-        Guid OrderStatusKey { get; set; }
+        Guid OrderStatusKey { get; }
+
+        /// <summary>
+        /// Gets or sets the <see cref="IOrderStatus"/>
+        /// </summary>
+        IOrderStatus OrderStatus { get; set; }
 
         /// <summary>
         /// Indicates whether or not this order has been exported to an external system

@@ -99,6 +99,18 @@ namespace Merchello.Core.Persistence
                 );
         }
 
+
+        /// <summary>
+        /// Returns an instance of the <see cref="IInvoiceStatusRepository"/>
+        /// </summary>
+        /// <param name="uow"></param>
+        /// <returns></returns>
+        internal virtual IInvoiceStatusRepository CreateInvoiceStatusRepository(IDatabaseUnitOfWork uow)
+        {
+            return new InvoiceStatusRepository(uow,
+                _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
+        }
+
         internal virtual IGatewayProviderRepository CreateGatewayProviderRepository(IDatabaseUnitOfWork uow)
         {
             return new GatewayProviderRepository(uow,
@@ -118,11 +130,26 @@ namespace Merchello.Core.Persistence
                 _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
         }
 
-
+        /// <summary>
+        /// Returns an instance of the <see cref="IOrderRepository"/>
+        /// </summary>
+        /// <param name="uow"></param>
+        /// <returns></returns>
         internal virtual IOrderRepository CreateOrderRepository(IDatabaseUnitOfWork uow)
         {
             return new OrderRepository(uow,
                 _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, CreateLineItemRepository<OrderItemDto>(uow));
+        }
+
+        /// <summary>
+        /// Returns an instance of the <see cref="IOrderStatusRepository"/>
+        /// </summary>
+        /// <param name="uow"></param>
+        /// <returns></returns>
+        internal virtual IOrderStatusRepository CreateOrderStatusRepository(IDatabaseUnitOfWork uow)
+        {
+            return new OrderStatusRepository(uow,
+                _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
         }
 
         /// <summary>

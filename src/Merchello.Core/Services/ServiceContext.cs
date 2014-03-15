@@ -97,7 +97,7 @@ namespace Merchello.Core.Services
                 _countryTaxRateService = new Lazy<TaxMethodService>(() => new TaxMethodService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _storeSettingsService.Value));
             
             if(_gatewayProviderService == null)
-                _gatewayProviderService = new Lazy<GatewayProviderService>(() => new GatewayProviderService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _shipMethodService.Value, _shipRateTierService.Value, _shipCountryService.Value, _invoiceService.Value, _countryTaxRateService.Value, _paymentService.Value, _paymentMethodService.Value));
+                _gatewayProviderService = new Lazy<GatewayProviderService>(() => new GatewayProviderService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _shipMethodService.Value, _shipRateTierService.Value, _shipCountryService.Value, _invoiceService.Value, _orderService.Value, _countryTaxRateService.Value, _paymentService.Value, _paymentMethodService.Value));
 
             if(_warehouseService == null)
                 _warehouseService = new Lazy<WarehouseService>(() => new WarehouseService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));

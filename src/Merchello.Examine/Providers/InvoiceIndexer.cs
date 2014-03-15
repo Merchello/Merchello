@@ -40,8 +40,8 @@ namespace Merchello.Examine.Providers
                 new StaticField("billtoPhone", FieldIndexTypes.ANALYZED, false, string.Empty),
                 new StaticField("billtoCompany", FieldIndexTypes.ANALYZED, true, string.Empty),
                 new StaticField("exported", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
-                //new StaticField("paid", fi)
-
+                new StaticField("archived", FieldIndexTypes.ANALYZED, false, string.Empty),
+                new StaticField("total", FieldIndexTypes.ANALYZED, false, string.Empty),
                 new StaticField("invoiceStatus", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
                 new StaticField("orders", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
                 new StaticField("createDate", FieldIndexTypes.NOT_ANALYZED, false, "DATETIME"),

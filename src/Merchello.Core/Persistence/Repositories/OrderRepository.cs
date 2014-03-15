@@ -34,7 +34,7 @@ namespace Merchello.Core.Persistence.Repositories
             var sql = GetBaseQuery(false)
               .Where(GetBaseWhereClause(), new { Key = key });
 
-            var dto = Database.Fetch<OrderDto>(sql).FirstOrDefault();
+            var dto = Database.Fetch<OrderDto, OrderStatusDto>(sql).FirstOrDefault();
 
             if (dto == null)
                 return null;
@@ -57,7 +57,7 @@ namespace Merchello.Core.Persistence.Repositories
             else
             {
                 ;
-                var dtos = Database.Fetch<OrderDto>(GetBaseQuery(false));
+                var dtos = Database.Fetch<OrderDto, OrderStatusDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
                     yield return Get(dto.Key);
@@ -71,7 +71,7 @@ namespace Merchello.Core.Persistence.Repositories
             var translator = new SqlTranslator<IOrder>(sqlClause, query);
             var sql = translator.Translate();
 
-            var dtos = Database.Fetch<OrderDto>(sql);
+            var dtos = Database.Fetch<OrderDto, OrderStatusDto>(sql);
 
             return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
         }
@@ -80,7 +80,9 @@ namespace Merchello.Core.Persistence.Repositories
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-                .From<OrderDto>();
+               .From<OrderDto>()
+               .InnerJoin<OrderStatusDto>()
+               .On<OrderDto, OrderStatusDto>(left => left.OrderStatusKey, right => right.Key);
 
             return sql;
         }

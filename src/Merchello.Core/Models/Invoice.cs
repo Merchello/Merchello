@@ -14,7 +14,7 @@ namespace Merchello.Core.Models
         private int _invoiceNumber;
         private string _invoiceNumberPrefix;
         private DateTime _invoiceDate;
-        private Guid _invoiceStatusKey;
+        private IInvoiceStatus _invoiceStatus;
         private string _billToName;
         private string _billToAddress1;
         private string _billToAddress2;
@@ -28,25 +28,26 @@ namespace Merchello.Core.Models
         private bool _exported;
         private bool _archived;
         private decimal _total;
+        private int _examineId = 1;
         private LineItemCollection _items;
         private OrderCollection _orders;
 
-        internal Invoice(Guid invoiceStatusKey)
-            : this(invoiceStatusKey, new Address())
+        internal Invoice(IInvoiceStatus invoiceStatus)
+            : this(invoiceStatus, new Address())
         { }
 
-        internal Invoice(Guid invoiceStatusKey, IAddress billToAddress)
-            : this(invoiceStatusKey, billToAddress, new LineItemCollection(), new OrderCollection())
+        internal Invoice(IInvoiceStatus invoiceStatus, IAddress billToAddress)
+            : this(invoiceStatus, billToAddress, new LineItemCollection(), new OrderCollection())
         { }
 
-        internal Invoice(Guid invoiceStatusKey, IAddress billToAddress, LineItemCollection lineItemCollection, OrderCollection orders)
+        internal Invoice(IInvoiceStatus invoiceStatus, IAddress billToAddress, LineItemCollection lineItemCollection, OrderCollection orders)
         {
-            Mandate.ParameterCondition(Guid.Empty != invoiceStatusKey, "invoiceStatusKey");
+            Mandate.ParameterNotNull(invoiceStatus, "invoiceStatus");
             Mandate.ParameterNotNull(billToAddress, "billToAddress");
             Mandate.ParameterNotNull(lineItemCollection, "lineItemCollection");
             Mandate.ParameterNotNull(orders, "orders");
 
-            _invoiceStatusKey = invoiceStatusKey;
+            _invoiceStatus = invoiceStatus;
 
             _billToName = billToAddress.Name;
             _billToAddress1 = billToAddress.Address1;
@@ -67,7 +68,7 @@ namespace Merchello.Core.Models
         private static readonly PropertyInfo InvoiceNumberPrefixSelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.InvoiceNumberPrefix);
         private static readonly PropertyInfo InvoiceNumberSelector = ExpressionHelper.GetPropertyInfo<Invoice, int>(x => x.InvoiceNumber);
         private static readonly PropertyInfo InvoiceDateSelector = ExpressionHelper.GetPropertyInfo<Invoice, DateTime>(x => x.InvoiceDate);
-        private static readonly PropertyInfo InvoiceStatusKeySelector = ExpressionHelper.GetPropertyInfo<Invoice, Guid>(x => x.InvoiceStatusKey);
+        private static readonly PropertyInfo InvoiceStatusSelector = ExpressionHelper.GetPropertyInfo<Invoice, IInvoiceStatus>(x => x.InvoiceStatus);
         private static readonly PropertyInfo BillToNameSelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.BillToName);
         private static readonly PropertyInfo BillToAddress1Selector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.BillToAddress1);
         private static readonly PropertyInfo BillToAddress2Selector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.BillToAddress2);
@@ -103,6 +104,13 @@ namespace Merchello.Core.Models
                     return _customerKey;
                 }, _customerKey, CustomerKeySelector);
             }
+        }
+
+        [IgnoreDataMember]
+        internal int ExamineId
+        {
+            get { return _examineId; }
+            set { _examineId = value; }
         }
 
         /// <summary>
@@ -162,17 +170,21 @@ namespace Merchello.Core.Models
         [DataMember]
         public Guid InvoiceStatusKey
         {
-            get { return _invoiceStatusKey; }
+            get { return _invoiceStatus.Key; }            
+        }
+
+        public IInvoiceStatus InvoiceStatus
+        {
+            get { return _invoiceStatus; }
             set
             {
                 SetPropertyValueAndDetectChanges(o =>
                 {
-                    _invoiceStatusKey = value;
-                    return _invoiceStatusKey;
-                }, _invoiceStatusKey, InvoiceStatusKeySelector);
+                    _invoiceStatus = value;
+                    return _invoiceStatus;
+                }, _invoiceStatus, InvoiceStatusSelector);
             }
         }
-
 
         /// <summary>
         /// The full name to use for billing.  Generally copied from customer address.

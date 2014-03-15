@@ -14,7 +14,8 @@ namespace Merchello.Core.Persistence.Factories
 
         public IOrder BuildEntity(OrderDto dto)
         {
-            var order = new Order(dto.OrderStatusKey, dto.InvoiceKey, _lineItemCollection)
+            var factory = new OrderStatusFactory();
+            var order = new Order(factory.BuildEntity(dto.OrderStatusDto), dto.InvoiceKey, _lineItemCollection)
                 {
                     Key =  dto.Key,
                     OrderNumberPrefix = dto.OrderNumberPrefix,

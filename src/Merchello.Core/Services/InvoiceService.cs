@@ -62,7 +62,9 @@ namespace Merchello.Core.Services
         {
             Mandate.ParameterCondition(Guid.Empty != invoiceStatusKey, "invoiceStatusKey");
 
-            var invoice = new Invoice(invoiceStatusKey)
+            var status = GetInvoiceStatusByKey(invoiceStatusKey);
+
+            var invoice = new Invoice(status)
                 {
                     VersionKey = Guid.NewGuid(),
                     InvoiceDate = DateTime.Now
@@ -313,6 +315,31 @@ namespace Merchello.Core.Services
             var invoiceKeys = _appliedPaymentService.GetAppliedPaymentsByPaymentKey(paymentKey).Select(x => x.InvoiceKey).ToArray();
 
             return GetByKeys(invoiceKeys);
+        }
+
+
+        /// <summary>
+        /// Gets an <see cref="IInvoiceStatus"/> by it's key
+        /// </summary>
+        /// <param name="key">The <see cref="IInvoiceStatus"/> key</param>
+        /// <returns><see cref="IInvoiceStatus"/></returns>
+        public IInvoiceStatus GetInvoiceStatusByKey(Guid key)
+        {
+            using (var repository = _repositoryFactory.CreateInvoiceStatusRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.Get(key);
+            }
+        }
+
+        /// <summary>
+        /// Returns a collection of all <see cref="IInvoiceStatus"/>
+        /// </summary>
+        public IEnumerable<IInvoiceStatus> GetAllInvoiceStatuses()
+        {
+            using (var repository = _repositoryFactory.CreateInvoiceStatusRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetAll();
+            }
         }
 
         /// <summary>

@@ -97,6 +97,9 @@ namespace Merchello.Core.Models.Rdbms
         public DateTime CreateDate { get; set; }
 
         [ResultColumn]
+        public InvoiceIndexDto InvoiceIndexDto { get; set; }
+
+        [ResultColumn]
         public InvoiceStatusDto InvoiceStatusDto { get; set; }
 
     }

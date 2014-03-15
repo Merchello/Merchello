@@ -37,7 +37,7 @@ namespace Merchello.Core.Persistence.Repositories
             var sql = GetBaseQuery(false)
               .Where(GetBaseWhereClause(), new { Key = key });
 
-            var dto = Database.Fetch<InvoiceDto>(sql).FirstOrDefault();
+            var dto = Database.Fetch<InvoiceDto, InvoiceIndexDto, InvoiceStatusDto>(sql).FirstOrDefault();
 
             if (dto == null)
                 return null;
@@ -61,7 +61,7 @@ namespace Merchello.Core.Persistence.Repositories
             else
             {
                 ;
-                var dtos = Database.Fetch<InvoiceDto>(GetBaseQuery(false));
+                var dtos = Database.Fetch<InvoiceDto, InvoiceIndexDto, InvoiceStatusDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
                     yield return Get(dto.Key);
@@ -75,7 +75,7 @@ namespace Merchello.Core.Persistence.Repositories
             var translator = new SqlTranslator<IInvoice>(sqlClause, query);
             var sql = translator.Translate();
 
-            var dtos = Database.Fetch<InvoiceDto>(sql);
+            var dtos = Database.Fetch<InvoiceDto, InvoiceIndexDto, InvoiceStatusDto>(sql);
 
             return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
         }
@@ -84,7 +84,11 @@ namespace Merchello.Core.Persistence.Repositories
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-                .From<InvoiceDto>();
+               .From<InvoiceDto>()
+               .InnerJoin<InvoiceIndexDto>()
+               .On<InvoiceDto, InvoiceIndexDto>(left => left.Key, right => right.InvoiceKey)
+               .InnerJoin<InvoiceStatusDto>()
+               .On<InvoiceDto, InvoiceStatusDto>(left => left.InvoiceStatusKey, right => right.Key);
 
             return sql;
         }
@@ -96,13 +100,11 @@ namespace Merchello.Core.Persistence.Repositories
 
         protected override IEnumerable<string> GetDeleteClauses()
         {
-            // TODO deleting invoices is going to be a pretty involved process
-            // that will require much more than this repository can handle alone. 
-            // TODO come back to this
             var list = new List<string>
             {
                 "DELETE FROM merchAppliedPayment WHERE invoiceKey = @Key",
                 "DELETE FROM merchInvoiceItem WHERE invoiceKey = @Key",
+                "DELETE FROM merchInvoiceIndex WHERE invoiceKey = @Key",
                 "DELETE FROM merchInvoice WHERE pk = @Key"
             };
 
@@ -117,8 +119,10 @@ namespace Merchello.Core.Persistence.Repositories
             var dto = factory.BuildDto(entity);
 
             Database.Insert(dto);
-
             entity.Key = dto.Key;
+
+            Database.Insert(dto.InvoiceIndexDto);
+            ((Invoice)entity).ExamineId = dto.InvoiceIndexDto.Id;
 
             _lineItemRepository.SaveLineItem(entity.Items, entity.Key);
 

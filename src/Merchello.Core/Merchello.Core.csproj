@@ -119,7 +119,13 @@
     <Compile Include="Models\OrderStatus.cs" />
     <Compile Include="Models\PaymentExtensions.cs" />
     <Compile Include="Models\PaymentMethod.cs" />
+    <Compile Include="Models\Rdbms\InvoiceIndexDto.cs" />
     <Compile Include="Models\Rdbms\PaymentMethodDto.cs" />
+    <Compile Include="Persistence\Factories\OrderStatusFactory.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IInvoiceStatusRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IOrderStatusRepository.cs" />
+    <Compile Include="Persistence\Repositories\InvoiceStatusRepository.cs" />
+    <Compile Include="Persistence\Repositories\OrderStatusRepository.cs" />
     <Compile Include="Sales\SalePreparationBase.cs" />
     <Compile Include="Sales\ISalePreparationBase.cs" />
     <Compile Include="Builders\IBuilderChain.cs" />

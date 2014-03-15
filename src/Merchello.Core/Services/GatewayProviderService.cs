@@ -15,10 +15,10 @@ namespace Merchello.Core.Services
 {
     public class GatewayProviderService : IGatewayProviderService
     {
-
         private readonly IDatabaseUnitOfWorkProvider _uowProvider;
         private readonly RepositoryFactory _repositoryFactory;
         private readonly IInvoiceService _invoiceService;
+        private readonly IOrderService _orderService;
         private readonly IShipMethodService _shipMethodService;
         private readonly IShipRateTierService _shipRateTierService;
         private readonly IShipCountryService _shipCountryService;
@@ -29,21 +29,21 @@ namespace Merchello.Core.Services
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
          public GatewayProviderService()
-            : this(new RepositoryFactory(), new ShipMethodService(), new ShipRateTierService(), new ShipCountryService(), new InvoiceService(),  new TaxMethodService(), new PaymentService(),  new PaymentMethodService())
+            : this(new RepositoryFactory(), new ShipMethodService(), new ShipRateTierService(), new ShipCountryService(), new InvoiceService(), new OrderService(), new TaxMethodService(), new PaymentService(),  new PaymentMethodService())
         { }
 
          internal GatewayProviderService(RepositoryFactory repositoryFactory, IShipMethodService shipMethodService, 
              IShipRateTierService shipRateTierService, IShipCountryService shipCountryService, 
-             IInvoiceService invoiceService,
+             IInvoiceService invoiceService, IOrderService orderService,
              ITaxMethodService taxMethodService, IPaymentService paymentService, IPaymentMethodService paymentMethodService)
             : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, shipMethodService, 
-             shipRateTierService, shipCountryService, invoiceService, taxMethodService,
+             shipRateTierService, shipCountryService, invoiceService, orderService, taxMethodService,
              paymentService, paymentMethodService)
         { }
 
         internal GatewayProviderService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, 
             IShipMethodService shipMethodService, IShipRateTierService shipRateTierService, 
-            IShipCountryService shipCountryService, IInvoiceService invoiceService, ITaxMethodService taxMethodService, 
+            IShipCountryService shipCountryService, IInvoiceService invoiceService, IOrderService orderService, ITaxMethodService taxMethodService, 
             IPaymentService paymentService, IPaymentMethodService paymentMethodService)
         {
             Mandate.ParameterNotNull(provider, "provider");
@@ -55,6 +55,7 @@ namespace Merchello.Core.Services
             Mandate.ParameterNotNull(paymentService, "paymentService");
             Mandate.ParameterNotNull(paymentMethodService, "paymentMethodService");
             Mandate.ParameterNotNull(invoiceService, "invoiceService");
+            Mandate.ParameterNotNull(orderService, "orderService");
 
             _uowProvider = provider;
             _repositoryFactory = repositoryFactory;
@@ -62,6 +63,7 @@ namespace Merchello.Core.Services
             _shipRateTierService = shipRateTierService;
             _shipCountryService = shipCountryService;
             _invoiceService = invoiceService;
+            _orderService = orderService;
             _taxMethodService = taxMethodService;
             _paymentService = paymentService;
             _paymentMethodService = paymentMethodService;
@@ -488,6 +490,23 @@ namespace Merchello.Core.Services
         public IEnumerable<IShipCountry> GetAllShipCountries()
         {
             return ((ShipCountryService) _shipCountryService).GetAllShipCountries();
+        }
+
+
+        /// <summary>
+        /// Returns a collection of all <see cref="IInvoiceStatus"/>
+        /// </summary>
+        public IEnumerable<IInvoiceStatus> GetAllInvoiceStatuses()
+        {
+            return _invoiceService.GetAllInvoiceStatuses();
+        }
+
+        /// <summary>
+        /// Returns a collection of all <see cref="IOrderStatus"/>
+        /// </summary>
+        public IEnumerable<IOrderStatus> GetAllOrderStatuses()
+        {
+            return _orderService.GetAllOrderStatuses();
         }
 
         /// <summary>

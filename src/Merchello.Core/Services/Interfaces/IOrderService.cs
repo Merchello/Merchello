@@ -80,6 +80,23 @@ namespace Merchello.Core.Services
         /// <param name="keys">List of guid 'key' for the invoices to retrieve</param>
         /// <returns>List of <see cref="IOrder"/></returns>
         IEnumerable<IOrder> GetByKeys(IEnumerable<Guid> keys);
+
+        #region OrderStatus
+
+        /// <summary>
+        /// Gets an <see cref="IOrderStatus"/> by it's key
+        /// </summary>
+        /// <param name="key">The <see cref="IInvoiceStatus"/> key</param>
+        /// <returns><see cref="IInvoiceStatus"/></returns>
+        IOrderStatus GetOrderStatusByKey(Guid key);
+
+        /// <summary>
+        /// Returns a collection of all <see cref="IOrderStatus"/>
+        /// </summary>
+        IEnumerable<IOrderStatus> GetAllOrderStatuses();
+
+
+        #endregion
          
     }
 }

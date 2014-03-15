@@ -263,6 +263,21 @@ namespace Merchello.Core.Services
 
             #endregion
 
+        #region Statuses
+
+
+        /// <summary>
+        /// Returns a collection of all <see cref="IInvoiceStatus"/>
+        /// </summary>
+        IEnumerable<IInvoiceStatus> GetAllInvoiceStatuses();
+
+        /// <summary>
+        /// Returns a collection of all <see cref="IOrderStatus"/>
+        /// </summary>
+        IEnumerable<IOrderStatus> GetAllOrderStatuses();
+
+        #endregion
+
         #region Taxmethod
 
         /// <summary>

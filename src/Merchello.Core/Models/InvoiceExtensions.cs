@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Xml;
+using System.Xml.Linq;
 using Merchello.Core.Builders;
 using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Taxation;
@@ -48,7 +51,11 @@ namespace Merchello.Core.Models
         /// <returns>The <see cref="IOrder"/></returns>
         public static IOrder PrepareOrder(this IInvoice invoice, IMerchelloContext merchelloContext)
         {
-            return invoice.PrepareOrder(merchelloContext, new OrderBuilderChain(invoice));
+            var orderStatus =
+                merchelloContext.Services.OrderService.GetOrderStatusByKey(
+                    Constants.DefaultKeys.OrderStatus.NotFulfilled);
+
+            return invoice.PrepareOrder(merchelloContext, new OrderBuilderChain(orderStatus, invoice));
         }
 
         /// <summary>
@@ -460,5 +467,38 @@ namespace Merchello.Core.Models
 
     #endregion
 
+
+        #region Examine Serialization
+
+        /// <summary>
+        /// Serializes <see cref="IInvoice"/> object
+        /// </summary>
+        /// <remarks>
+        /// Intended to be used by the Merchello.Examine.Providers.MerchelloInvoiceIndexer
+        /// </remarks>
+        public static XDocument SerializeToXml(this IInvoice invoice)
+        {
+            string xml;
+            using (var sw = new StringWriter())
+            {
+                using (var writer = new XmlTextWriter(sw))
+                {
+                    writer.WriteStartDocument();
+                    writer.WriteStartElement("invoice");
+                    writer.WriteAttributeString("key", invoice.Key.ToString());
+                    writer.WriteEndElement(); // invoice
+                    writer.WriteEndDocument();
+                    xml = sw.ToString();
+                }
+            }
+
+            var doc = XDocument.Parse(xml);
+            if (doc.Root == null) return XDocument.Parse("<invoice />");
+
+            return doc;
+        }
+
+
+        #endregion
     }
 }

@@ -12,11 +12,14 @@ namespace Merchello.Core.Builders
     internal sealed class OrderBuilderChain : BuildChainBase<IOrder>
     {
         private readonly IInvoice _invoice;
+        private readonly IOrderStatus _orderStatus;
 
-        public OrderBuilderChain(IInvoice invoice)
+        public OrderBuilderChain(IOrderStatus orderStatus, IInvoice invoice)
         {
+            Mandate.ParameterNotNull(orderStatus, "orderStatus");
             Mandate.ParameterNotNull(invoice, "invoice");
 
+            _orderStatus = orderStatus;
             _invoice = invoice;
             
             ResolveChain(Constants.TaskChainAlias.OrderPreparationOrderCreate);
@@ -28,8 +31,9 @@ namespace Merchello.Core.Builders
         /// <returns>Attempt{IOrder}</returns>
         public override Attempt<IOrder> Build()
         {
+
             var attempt = (TaskHandlers.Any()) 
-                ? TaskHandlers.First().Execute(new Order(Constants.DefaultKeys.OrderStatus.NotFulfilled, _invoice.Key) 
+                ? TaskHandlers.First().Execute(new Order(_orderStatus, _invoice.Key) 
                 { 
                     OrderNumberPrefix = _invoice.InvoiceNumberPrefix,
                     VersionKey = _invoice.VersionKey 

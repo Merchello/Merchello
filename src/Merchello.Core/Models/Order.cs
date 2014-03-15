@@ -16,22 +16,22 @@ namespace Merchello.Core.Models
         private string _orderNumberPrefix;
         private int _orderNumber;
         private DateTime _orderDate;
-        private Guid _orderStatusKey;
+        private IOrderStatus _orderStatus;
         private bool _exported;
         private LineItemCollection _items;
 
-        internal Order(Guid orderStatusKey, Guid invoiceKey)
-            : this(orderStatusKey, invoiceKey, new LineItemCollection())
+        internal Order(IOrderStatus orderStatus, Guid invoiceKey)
+            : this(orderStatus, invoiceKey, new LineItemCollection())
         { }
 
-        internal Order(Guid orderStatusKey, Guid invoiceKey, LineItemCollection lineItemCollection)
+        internal Order(IOrderStatus orderStatus, Guid invoiceKey, LineItemCollection lineItemCollection)
         {
-            Mandate.ParameterCondition(!Guid.Empty.Equals(orderStatusKey), "orderStatusKey");
+            Mandate.ParameterNotNull(orderStatus, "orderStatus");
             Mandate.ParameterCondition(!Guid.Empty.Equals(invoiceKey), "invoiceKey");
             Mandate.ParameterNotNull(lineItemCollection, "lineItemCollection");
 
             _invoiceKey = invoiceKey;
-            _orderStatusKey = orderStatusKey;
+            _orderStatus = orderStatus;
             _items = lineItemCollection;
 
             _orderDate = DateTime.Now;
@@ -41,7 +41,7 @@ namespace Merchello.Core.Models
         private static readonly PropertyInfo OrderNumberPrefixSelector = ExpressionHelper.GetPropertyInfo<Order, string>(x => x.OrderNumberPrefix);
         private static readonly PropertyInfo OrderNumberSelector = ExpressionHelper.GetPropertyInfo<Order, int>(x => x.OrderNumber);
         private static readonly PropertyInfo OrderDateSelector = ExpressionHelper.GetPropertyInfo<Order, DateTime>(x => x.OrderDate);
-        private static readonly PropertyInfo OrderStatusKeySelector = ExpressionHelper.GetPropertyInfo<Order, Guid>(x => x.OrderStatusKey);
+        private static readonly PropertyInfo OrderStatusSelector = ExpressionHelper.GetPropertyInfo<Order, IOrderStatus>(x => x.OrderStatus);
         private static readonly PropertyInfo ExportedSelector = ExpressionHelper.GetPropertyInfo<Order, bool>(x => x.Exported);
 
         /// <summary>
@@ -118,14 +118,24 @@ namespace Merchello.Core.Models
         [DataMember]
         public Guid OrderStatusKey 
         {
-            get { return _orderStatusKey; }
+            get { return _orderStatus.Key; }
+            
+        }
+
+        /// <summary>
+        /// Gets or sets the 
+        /// </summary>
+        [DataMember]
+        public IOrderStatus OrderStatus
+        {
+            get { return _orderStatus; }
             set
             {
                 SetPropertyValueAndDetectChanges(o =>
                 {
-                    _orderStatusKey = value;
-                    return _orderStatusKey;
-                }, _orderStatusKey, OrderStatusKeySelector);
+                    _orderStatus = value;
+                    return _orderStatus;
+                }, _orderStatus, OrderStatusSelector);
             }
         }
 

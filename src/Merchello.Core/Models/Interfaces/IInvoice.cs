@@ -35,7 +35,13 @@ namespace Merchello.Core.Models
         /// The id for the invoice status associated with this invoice
         /// </summary>
         [DataMember]
-        Guid InvoiceStatusKey { get; set; }
+        Guid InvoiceStatusKey { get; }
+
+        /// <summary>
+        /// The Invoice Status
+        /// </summary>
+        [DataMember]
+        IInvoiceStatus InvoiceStatus { get; set; }
 
         /// <summary>
         /// The full name to use for billing.  Generally copied from customer address.
