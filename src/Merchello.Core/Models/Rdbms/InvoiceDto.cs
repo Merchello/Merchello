@@ -82,8 +82,8 @@ namespace Merchello.Core.Models.Rdbms
         [Column("exported")]
         public bool Exported { get; set; }
 
-        [Column("paid")]
-        public bool Paid { get; set; }
+        [Column("archived")]
+        public bool Archived { get; set; }
 
         [Column("total")]
         public decimal Total { get; set; }

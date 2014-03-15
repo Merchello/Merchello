@@ -104,10 +104,10 @@ namespace Merchello.Core.Models
         bool Exported { get; set; }
 
         /// <summary>
-        /// Indicates whether or not this invoice has been paid in full
+        /// Indicates whether or not this invoice has been archived
         /// </summary>
         [DataMember]
-        bool Paid { get; set; }
+        bool Archived { get; set; }
 
         /// <summary>
         /// The total invoice amount
@@ -115,6 +115,10 @@ namespace Merchello.Core.Models
         [DataMember]
         decimal Total { get; set; }
 
-
+        /// <summary>
+        /// The collection of Orders associated with the Invoice
+        /// </summary>
+        [DataMember]
+        OrderCollection Orders { get; set; }
     }
 }

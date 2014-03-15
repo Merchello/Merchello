@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using Merchello.Core.Models;
+﻿using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Umbraco.Core;
 
@@ -8,7 +6,7 @@ namespace Merchello.Core.Gateways.Payment.Cash
 {
     /// <summary>
     /// Represents a CashPaymentMethod
-    /// </summary>
+    /// </summary>    
     public class CashPaymentGatewayMethod : PaymentGatewayMethodBase, ICashPaymentGatewayMethod
     {
         public CashPaymentGatewayMethod(IGatewayProviderService gatewayProviderService, IPaymentMethod paymentMethod) 

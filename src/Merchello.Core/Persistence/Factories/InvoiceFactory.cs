@@ -6,10 +6,12 @@ namespace Merchello.Core.Persistence.Factories
     internal class InvoiceFactory : IEntityFactory<IInvoice, InvoiceDto>
     {
         private readonly LineItemCollection _lineItemCollection;
+        private readonly OrderCollection _orderCollection;
 
-        public InvoiceFactory(LineItemCollection lineItemCollection)
+        public InvoiceFactory(LineItemCollection lineItemCollection, OrderCollection orderCollection)
         {
             _lineItemCollection = lineItemCollection;
+            _orderCollection = orderCollection;
         }
 
         public IInvoice BuildEntity(InvoiceDto dto)
@@ -34,11 +36,12 @@ namespace Merchello.Core.Persistence.Factories
                     BillToPhone = dto.BillToPhone,
                     BillToCompany = dto.BillToCompany,
                     Exported = dto.Exported,
-                    Paid = dto.Paid,
+                    Archived = dto.Archived,
                     Total = dto.Total,
                     CreateDate = dto.CreateDate,
                     UpdateDate = dto.UpdateDate,
-                    Items = _lineItemCollection
+                    Items = _lineItemCollection,
+                    Orders = _orderCollection
                 };
 
             invoice.ResetDirtyProperties();
@@ -68,7 +71,7 @@ namespace Merchello.Core.Persistence.Factories
                     BillToPhone = entity.BillToPhone,
                     BillToCompany = entity.BillToCompany,
                     Exported = entity.Exported,
-                    Paid = entity.Paid,
+                    Archived = entity.Archived,
                     Total = entity.Total,
                     CreateDate = entity.CreateDate,
                     UpdateDate = entity.UpdateDate
