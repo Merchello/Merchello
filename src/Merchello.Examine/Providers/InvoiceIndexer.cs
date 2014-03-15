@@ -1,8 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Xml.Linq;
 using Examine;
 using Examine.LuceneEngine;
 using Examine.LuceneEngine.Config;
+using Merchello.Core;
+using Merchello.Core.Models;
 
 namespace Merchello.Examine.Providers
 {
@@ -10,8 +14,49 @@ namespace Merchello.Examine.Providers
     {
         protected override void PerformIndexAll(string type)
         {
-            throw new System.NotImplementedException();
+            if (!SupportedTypes.Contains(type)) return;
+
+            var invoices = DataService.InvoiceDataService.GetAll();
+            var invoicesArray = invoices as IInvoice[] ?? invoices.ToArray();
+
+            if (!invoicesArray.Any()) return;
+            var nodes = invoicesArray.Select(i => i.SerializeToXml().Root).ToList();
+
+            AddNodesToIndex(nodes, IndexTypes.Invoice);
         }
+
+        public override void RebuildIndex()
+        {
+            DataService.LogService.AddVerboseLog(-1, "Rebuilding index");
+
+            EnsureIndex(true);
+
+            PerformIndexAll(IndexTypes.Invoice);
+            //base.RebuildIndex();
+        }
+
+        /// <summary>
+        /// Adds all variants for a given invoice to the index
+        /// </summary>
+        /// <param name="invoice"></param>
+        /// <remarks>For testing</remarks>
+        internal void AddInvoiceToIndex(IInvoice invoice)
+        {
+            var nodes = new List<XElement> {invoice.SerializeToXml().Root};
+            AddNodesToIndex(nodes, IndexTypes.Invoice);
+        }
+
+        /// <summary>
+        /// Removes all variants for a given invoice from the index
+        /// </summary>
+        /// <param name="invoice"></param>
+        /// <remarks>For testing</remarks>
+        internal void DeleteInvoiceFromIndex(IInvoice invoice)
+        {            
+            DeleteFromIndex(((Invoice)invoice).ExamineId.ToString(CultureInfo.InvariantCulture));
+        }
+
+
 
         protected override IEnumerable<string> SupportedTypes
         {
@@ -41,8 +86,9 @@ namespace Merchello.Examine.Providers
                 new StaticField("billtoCompany", FieldIndexTypes.ANALYZED, true, string.Empty),
                 new StaticField("exported", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
                 new StaticField("archived", FieldIndexTypes.ANALYZED, false, string.Empty),
-                new StaticField("total", FieldIndexTypes.ANALYZED, false, string.Empty),
+                new StaticField("total", FieldIndexTypes.ANALYZED, true, "DOUBLE"),
                 new StaticField("invoiceStatus", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
+                new StaticField("invoiceItems", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
                 new StaticField("orders", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
                 new StaticField("createDate", FieldIndexTypes.NOT_ANALYZED, false, "DATETIME"),
                 new StaticField("updateDate", FieldIndexTypes.NOT_ANALYZED, false, "DATETIME"),
@@ -60,7 +106,7 @@ namespace Merchello.Examine.Providers
         /// </remarks>
         protected override IIndexCriteria GetIndexerData(IndexSet indexSet)
         {
-            return indexSet.ToIndexCriteria(DataService.ProductDataService.GetIndexFieldNames(), IndexFieldPolicies);
+            return indexSet.ToIndexCriteria(DataService.InvoiceDataService.GetIndexFieldNames(), IndexFieldPolicies);
         }
 
         /// <summary>
