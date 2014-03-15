@@ -9,7 +9,10 @@ using Merchello.Core.Builders;
 using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Taxation;
 using Merchello.Core.Services;
+using Newtonsoft.Json;
 using Umbraco.Core.Logging;
+using Formatting = Newtonsoft.Json.Formatting;
+
 
 namespace Merchello.Core.Models
 {
@@ -485,19 +488,126 @@ namespace Merchello.Core.Models
                 {
                     writer.WriteStartDocument();
                     writer.WriteStartElement("invoice");
-                    writer.WriteAttributeString("key", invoice.Key.ToString());
-                    writer.WriteEndElement(); // invoice
+                    writer.WriteAttributeString("id", ((Invoice)invoice).ExamineId.ToString(CultureInfo.InvariantCulture));
+                    writer.WriteAttributeString("invoiceKey", invoice.Key.ToString());
+                    writer.WriteAttributeString("customerKey", invoice.CustomerKey.ToString());
+                    writer.WriteAttributeString("invoiceNumberPrefix", invoice.InvoiceNumberPrefix);
+                    writer.WriteAttributeString("invoiceNumber", invoice.InvoiceNumber.ToString(CultureInfo.InvariantCulture));
+                    writer.WriteAttributeString("prefixedInvoiceNumber", invoice.PrefixedInvoiceNumber());
+                    writer.WriteAttributeString("invoiceDate", invoice.InvoiceDate.ToString("s"));
+                    writer.WriteAttributeString("invoiceStatusKey", invoice.InvoiceStatusKey.ToString());
+                    writer.WriteAttributeString("versionKey", invoice.VersionKey.ToString());
+                    writer.WriteAttributeString("billToName", invoice.BillToName);
+                    writer.WriteAttributeString("billToAddress1", invoice.BillToAddress1);
+                    writer.WriteAttributeString("billToAddress2", invoice.BillToAddress2);
+                    writer.WriteAttributeString("billToLocality", invoice.BillToLocality);
+                    writer.WriteAttributeString("billToRegion", invoice.BillToRegion);
+                    writer.WriteAttributeString("billToPostalCode", invoice.BillToPostalCode);
+                    writer.WriteAttributeString("billToCountryCode", invoice.BillToCountryCode);
+                    writer.WriteAttributeString("billToEmail", invoice.BillToEmail);
+                    writer.WriteAttributeString("billtoPhone", invoice.BillToPhone);
+                    writer.WriteAttributeString("billtoCompany", invoice.BillToCompany);
+                    writer.WriteAttributeString("exported", invoice.Exported.ToString());
+                    writer.WriteAttributeString("archived", invoice.Archived.ToString());
+                    writer.WriteAttributeString("total", invoice.Total.ToString(CultureInfo.InvariantCulture));
+                    writer.WriteAttributeString("invoiceStatus", GetInvoiceStatusJson(invoice.InvoiceStatus));
+                    writer.WriteAttributeString("invoiceItems", GetGenericItemsCollection(invoice.Items));
+                    writer.WriteAttributeString("orders", GetOrdersJason(invoice.Orders));
+                    writer.WriteAttributeString("createDate", invoice.CreateDate.ToString("s"));
+                    writer.WriteAttributeString("updateDate", invoice.UpdateDate.ToString("s"));
+                    writer.WriteAttributeString("allDocs", "1");
+
+                    writer.WriteEndElement(); 
                     writer.WriteEndDocument();
                     xml = sw.ToString();
                 }
             }
 
-            var doc = XDocument.Parse(xml);
-            if (doc.Root == null) return XDocument.Parse("<invoice />");
-
-            return doc;
+            return XDocument.Parse(xml);
+            
         }
 
+        private static string GetInvoiceStatusJson(IInvoiceStatus invoiceStatus)
+        {
+            return JsonConvert.SerializeObject(
+                    new
+                        {
+                            key = invoiceStatus.Key,
+                            name = invoiceStatus.Name,
+                            alias = invoiceStatus.Alias,
+                            reportable = invoiceStatus.Reportable,
+                            active = invoiceStatus.Active,
+                            sortOrder = invoiceStatus.SortOrder
+                        }, Formatting.None);
+        }
+
+        private static string GetOrdersJason(IEnumerable<IOrder> orders)
+        {
+            var json = "[{0}]";
+            var ojson = "";
+
+            foreach (var order in orders)
+            {
+                if (ojson.Length > 0) ojson += ",";
+                ojson += JsonConvert.SerializeObject(
+                new {
+                    key = order.Key,
+                    invoiceKey = order.InvoiceKey,
+                    orderNumberPrefix = order.OrderNumberPrefix,
+                    orderNumber = order.OrderNumber,
+                    prefixedOrderNumber = order.PrefixedOrderNumber(),
+                    orderDate = order.OrderDate.ToString("s"),
+                    orderStatusKey = order.OrderStatusKey,
+                    orderStatus = new
+                        {
+                            key = order.OrderStatus.Key,
+                            name = order.OrderStatus.Name,
+                            alias = order.OrderStatus.Alias,
+                            reportable = order.OrderStatus.Reportable,
+                            active = order.OrderStatus.Active,
+                            sortOrder = order.OrderStatus.SortOrder
+                        },
+                   versionKey = order.VersionKey,
+                   exported = order.Exported,
+                   Items = order.Items.Select(x => 
+                    new
+                        {
+                            key = x.Key,
+                            name = x.Name,
+                            lineItemTfKey = x.LineItemTfKey,
+                            shipmentKey = ((IOrderLineItem)x).ShipmentKey,
+                            lineItemType = x.LineItemType.ToString(),
+                            sku = x.Sku,
+                            price = x.Price,
+                            quantity = x.Quantity,
+                            backOrder = ((IOrderLineItem)x).BackOrder,
+                            exported = x.Exported                            
+                        }
+                  )
+
+                }, Formatting.None);
+            }
+            json = string.Format(json, ojson);
+            return json;
+        }
+
+        private static string GetGenericItemsCollection(IEnumerable<ILineItem> items)
+        {
+            return JsonConvert.SerializeObject(
+                items.Select(x => 
+                    new
+                        {
+                            key = x.Key,
+                            name = x.Name,
+                            lineItemTfKey = x.LineItemTfKey,
+                            lineItemType = x.LineItemType.ToString(),
+                            sku = x.Sku,
+                            price = x.Price,
+                            quantity = x.Quantity,
+                            exported = x.Exported
+                        }
+                ), Formatting.None);
+        }
 
         #endregion
     }
