@@ -31,12 +31,15 @@
     <Action runat="install" undo="true" alias="Merchello_AddExamineConfigs">
       <MerchelloIndexSets>
         <IndexSet SetName="MerchelloProductIndexSet" IndexPath="~/App_Data/TEMP/ExamineIndexes/Merchello/Product/" />
+        <IndexSet SetName="MerchelloInvoiceIndexSet" IndexPath="~/App_Data/TEMP/ExamineIndexes/Merchello/Invoice/" />
       </MerchelloIndexSets>
       <MerchelloIndexProviders>
-        <add name="MerchelloProductIndexer" type="Merchello.Examine.Providers.ProductIndexer, Merchello.Examine" />
+          <add name="MerchelloProductIndexer" type="Merchello.Examine.Providers.ProductIndexer, Merchello.Examine" />
+          <add name="MerchelloInvoiceIndexer" type="Merchello.Examine.Providers.InvoiceIndexer, Merchello.Examine" />
       </MerchelloIndexProviders>
       <MerchelloSearchProviders>
         <add name="MerchelloProductSearcher" type="Examine.LuceneEngine.Providers.LuceneSearcher, Examine" />
+        <add name="MerchelloInvoiceSearcher" type="Examine.LuceneEngine.Providers.LuceneSearcher, Examine" />
       </MerchelloSearchProviders>
     </Action>
     <Action runat="install" undo="true" alias="Merchello_AddLanguageFileKey" language="en" position="end" area="sections" key="merchello" value="Merchello" />
