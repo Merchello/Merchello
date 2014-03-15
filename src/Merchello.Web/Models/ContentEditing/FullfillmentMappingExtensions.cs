@@ -359,8 +359,8 @@ namespace Merchello.Web.Models.ContentEditing
         {
             if (taxMethodDisplay.Key != Guid.Empty) destination.Key = taxMethodDisplay.Key;
 
-            destination.Name = destination.Name;
-            destination.PercentageTaxRate = destination.PercentageTaxRate;
+            destination.Name = taxMethodDisplay.Name;
+            destination.PercentageTaxRate = taxMethodDisplay.PercentageTaxRate;
 
             var provinceCollection = new ProvinceCollection<ITaxProvince>();
             foreach (var province in taxMethodDisplay.Provinces)
