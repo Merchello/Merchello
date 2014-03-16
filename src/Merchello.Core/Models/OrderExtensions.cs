@@ -43,9 +43,10 @@ namespace Merchello.Core.Models
                 using (var writer = new XmlTextWriter(sw))
                 {
                     writer.WriteStartDocument();
-                    writer.WriteStartElement("invoice");
+                    writer.WriteStartElement("order");
                     writer.WriteAttributeString("id", ((Order)order).ExamineId.ToString(CultureInfo.InvariantCulture));
                     writer.WriteAttributeString("orderKey", order.Key.ToString());
+                    writer.WriteAttributeString("invoiceKey", order.InvoiceKey.ToString());
                     writer.WriteAttributeString("orderNumberPrefix", order.OrderNumberPrefix);
                     writer.WriteAttributeString("orderNumber", order.OrderNumber.ToString(CultureInfo.InvariantCulture));
                     writer.WriteAttributeString("prefixedOrderNumber", order.PrefixedOrderNumber());

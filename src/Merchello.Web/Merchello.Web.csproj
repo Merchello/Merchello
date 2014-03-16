@@ -203,6 +203,7 @@
     <Compile Include="Editors\CatalogShippingApiController.cs" />
     <Compile Include="Editors\TaxationGatewayApiController.cs" />
     <Compile Include="Editors\WarehouseApiController.cs" />
+    <Compile Include="InvoiceQuery.cs" />
     <Compile Include="Models\ContentEditing\GatewayProviderDisplay.cs" />
     <Compile Include="Models\ContentEditing\GatewayResourceDisplay.cs" />
     <Compile Include="Models\ContentEditing\FixedRateShipMethodDisplay.cs" />
@@ -233,6 +234,7 @@
     <Compile Include="Models\ContentEditing\WarehouseDisplay.cs" />
     <Compile Include="Models\ContentEditing\CatalogInventoryDisplay.cs" />
     <Compile Include="Mvc\MerchelloViewPage.cs" />
+    <Compile Include="OrderQuery.cs" />
     <Compile Include="PackageActions\AddConfigSection.cs" />
     <Compile Include="PackageActions\AddExamineConfigs.cs" />
     <Compile Include="PackageActions\AddLanguageFileKey.cs" />
@@ -245,6 +247,7 @@
     <Compile Include="EncryptionHelper.cs" />
     <Compile Include="MerchelloHelper.cs" />
     <Compile Include="CustomerContext.cs" />
+    <Compile Include="QueryBase.cs" />
     <Compile Include="WebApi\JsonCamelCaseFormatter.cs" />
     <Compile Include="Workflow\Basket.cs" />
     <Compile Include="Models\ContentEditing\ExamineDisplayExtensions.cs" />

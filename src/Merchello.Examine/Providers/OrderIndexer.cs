@@ -16,13 +16,13 @@ namespace Merchello.Examine.Providers
         {
             if (!SupportedTypes.Contains(type)) return;
 
-            var invoices = DataService.InvoiceDataService.GetAll();
-            var invoicesArray = invoices as IInvoice[] ?? invoices.ToArray();
+            var orders = DataService.OrderDataService.GetAll();
+            var ordersArray = orders as IOrder[] ?? orders.ToArray();
 
-            if (!invoicesArray.Any()) return;
-            var nodes = invoicesArray.Select(i => i.SerializeToXml().Root).ToList();
+            if (!ordersArray.Any()) return;
+            var nodes = ordersArray.Select(o => o.SerializeToXml().Root).ToList();
 
-            AddNodesToIndex(nodes, IndexTypes.Invoice);
+            AddNodesToIndex(nodes, IndexTypes.Order);
         }
 
         public override void RebuildIndex()
@@ -75,7 +75,6 @@ namespace Merchello.Examine.Providers
                 new StaticField("orderStatusKey", FieldIndexTypes.ANALYZED, false, string.Empty),
                 new StaticField("versionKey", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
                 new StaticField("exported", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
-                new StaticField("total", FieldIndexTypes.ANALYZED, true, "DOUBLE"),
                 new StaticField("orderStatus", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
                 new StaticField("orderItems", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
                 new StaticField("createDate", FieldIndexTypes.NOT_ANALYZED, false, "DATETIME"),

@@ -16,8 +16,11 @@ using Umbraco.Core.Logging;
 
 namespace Merchello.Web
 {
-    internal class ProductQuery
+    internal class ProductQuery : QueryBase
     {
+        private const string IndexName = "MerchelloProductIndexer";
+        private const string SearcherName = "MerchelloProductSearcher";
+
         /// <summary>
         /// Retrieves a <see cref="ProductDisplay"/> given it's 'unique' Key
         /// </summary>
@@ -37,7 +40,7 @@ namespace Merchello.Web
         {
             var criteria = ExamineManager.Instance.CreateSearchCriteria(BooleanOperation.And);
             criteria.Field("productKey", key).And().Field("master", "True");
-            var product = ExamineManager.Instance.SearchProviderCollection["MerchelloProductSearcher"]
+            var product = ExamineManager.Instance.SearchProviderCollection[SearcherName]
                 .Search(criteria).Select(result => result.ToProductDisplay()).FirstOrDefault();
 
             if (product != null) return product;
@@ -59,7 +62,7 @@ namespace Merchello.Web
             var criteria = ExamineManager.Instance.CreateSearchCriteria(IndexTypes.ProductVariant);
             criteria.Field("master", "True");
 
-            var results = ExamineManager.Instance.SearchProviderCollection["MerchelloProductSearcher"]
+            var results = ExamineManager.Instance.SearchProviderCollection[SearcherName]
                 .Search(criteria).Select(result => result.ToProductDisplay()).ToArray();
 
 
@@ -69,7 +72,7 @@ namespace Merchello.Web
 
             if (count != results.Count())
             {
-                RebuildIndex();
+                RebuildIndex(IndexName);
             }
 
             var retrieved = ((ProductService) merchelloContext.Services.ProductService).GetAll();
@@ -98,7 +101,7 @@ namespace Merchello.Web
             criteria.Field("productVariantKey", key);
             try
             {
-                var variant = ExamineManager.Instance.SearchProviderCollection["MerchelloProductSearcher"]
+                var variant = ExamineManager.Instance.SearchProviderCollection[SearcherName]
                 .Search(criteria).Select(result => result.ToProductVariantDisplay()).FirstOrDefault();
 
                 if (variant != null) return variant;
@@ -137,7 +140,7 @@ namespace Merchello.Web
         /// <returns>A collection of <see cref="ProductDisplay"/></returns>
         public static IEnumerable<ProductDisplay> Search(ISearchCriteria criteria)
         {
-            return ExamineManager.Instance.SearchProviderCollection["MerchelloProductSearcher"]
+            return ExamineManager.Instance.SearchProviderCollection[SearcherName]
                 .Search(criteria).OrderByDescending(x => x.Score)
                 .Select(result => result.ToProductDisplay());
         }
@@ -159,25 +162,10 @@ namespace Merchello.Web
 
         private static void ReindexProductVariant(IProductVariant productVariant, ProductOptionCollection productOptions)
         {
-            ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"]
+            ExamineManager.Instance.IndexProviderCollection[IndexName]
                 .ReIndexNode(productVariant.SerializeToXml(productOptions).Root, IndexTypes.ProductVariant);
         }
 
-        private static void RebuildIndex()
-        {
-            ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"].RebuildIndex();
-        }
-
-        /// <summary>
-        /// Assists in unit testing
-        /// </summary>
-        /// <returns></returns>
-        private static IMerchelloContext GetMerchelloContext()
-        {
-            return MerchelloContext.Current ??
-                new MerchelloContext(new ServiceContext(new PetaPocoUnitOfWorkProvider()),
-                                        new CacheHelper(new NullCacheProvider(), new NullCacheProvider(), new NullCacheProvider()));
-
-        }
+        
     }
 }

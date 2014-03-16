@@ -32,7 +32,7 @@ namespace Merchello.Examine.DataServices
 
         public IEnumerable<string> GetIndexFieldNames()
         {
-            return InvoiceIndexer.IndexFieldPolicies.Select(x => x.Name);
+            return OrderIndexer.IndexFieldPolicies.Select(x => x.Name);
         } 
     }
 }
