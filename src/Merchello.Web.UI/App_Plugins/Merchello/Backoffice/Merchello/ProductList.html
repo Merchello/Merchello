@@ -18,8 +18,8 @@
                     
                     <div class="btn-group">
                         <a href="#/merchello/merchello/ProductVariantEdit/do?create" class="btn btn-primary">New Product</a>
-
                     </div>
+
                 </div>
             </div>
 
@@ -36,7 +36,7 @@
                             <button id="productFilterGo" class="btn" data-ng-click="getFilteredProducts(filtertext)">Filter</button>
                         </div>
 
-                        <div class="col-xs-2 span2">
+                        <div class="col-xs-2 span2" data-ng-show="products.length > 0">
                             <label for="limitSelect">Number of products to display</label>
                             <select name="limitSelect" class="col-xs-12 span12" data-ng-model="limitAmount" data-ng-change="limitChanged(limitAmount)">
                                 <option value="3">3</option>
@@ -51,7 +51,7 @@
             </div>
             <div class="merchello-pane">
 
-                <div class="pager">
+                <div class="pager" data-ng-show="products.length > 0">
                     <button class="btn" data-ng-disabled="currentPage == 0" data-ng-click="currentPage=currentPage-1">
                         Previous
                     </button>
@@ -92,7 +92,7 @@
                     </tbody>
                 </table>
    
-                <div class="pager">
+                <div class="pager" data-ng-show="products.length > 0">
                     <button class="btn" data-ng-disabled="currentPage == 0" data-ng-click="currentPage=currentPage-1">
                         Previous
                     </button>
@@ -101,6 +101,13 @@
                         Next
                     </button>
                 </div>
+                                
+                <div class="pager well" data-ng-show="products.length == 0">
+                    You have no products.  
+                    How about creating one now?  Simply press the New Product button.
+                    <a href="#/merchello/merchello/ProductVariantEdit/do?create" class="btn btn-primary">New Product</a>
+                </div>
+
                                  
             </div>
         </merchello-panel>

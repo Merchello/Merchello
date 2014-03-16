@@ -30,7 +30,7 @@
             self.name = countryFromServer.name;
             self.provinceLabel = countryFromServer.provinceLabel;
             self.provinces = _.map(countryFromServer.provinces, function (province) {
-                return new merchello.Models.Province(province)
+                return new merchello.Models.Province(province);
             });
         };
 
@@ -44,13 +44,12 @@
             self.name = "";
             self.currencyCode = "";
             self.symbol = "";
-        }
-        else {
+        } else {
             self.name = currencyFromServer.name;
             self.currencyCode = currencyFromServer.currencyCode;
             self.symbol = currencyFromServer.symbol;
         }
-    }
+    };
 
     models.StoreSettings = function (settingsFromServer) {
 
