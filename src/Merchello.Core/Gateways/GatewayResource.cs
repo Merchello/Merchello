@@ -29,6 +29,6 @@ namespace Merchello.Core.Gateways
         /// The descriptive name of the Gateway Method
         /// </summary>
         [DataMember]
-        public string Name { get; private set; }
+        public string Name { get; internal set; }
     }
 }
