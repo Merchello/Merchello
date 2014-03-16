@@ -16,13 +16,13 @@ namespace Merchello.Examine.Providers
         {
             if (!SupportedTypes.Contains(type)) return;
 
-            var invoices = DataService.InvoiceDataService.GetAll();
-            var invoicesArray = invoices as IInvoice[] ?? invoices.ToArray();
+            var orders = DataService.OrderDataService.GetAll();
+            var ordersArray = orders as IOrder[] ?? orders.ToArray();
 
-            if (!invoicesArray.Any()) return;
-            var nodes = invoicesArray.Select(i => i.SerializeToXml().Root).ToList();
+            if (!ordersArray.Any()) return;
+            var nodes = ordersArray.Select(o => o.SerializeToXml().Root).ToList();
 
-            AddNodesToIndex(nodes, IndexTypes.Invoice);
+            AddNodesToIndex(nodes, IndexTypes.Order);
         }
 
         public override void RebuildIndex()
