@@ -39,7 +39,7 @@ namespace Merchello.Tests.IntegrationTests.Examine
         public void Can_Identify_Registered_Providers()
         {
             //// Arrange
-            var expected = 2;
+            var expected = 3;
 
             //// Act
             var registeredProviders =
