@@ -105,7 +105,49 @@ namespace Merchello.Web
 
         #endregion
 
+        #region Invoice
 
+        /// <summary>
+        /// Retrieves a <see cref="InvoiceDisplay"/> from the Merchello Invoice index.
+        /// </summary>
+        public InvoiceDisplay Invoice(Guid key)
+        {
+            return InvoiceQuery.GetByKey(key);
+        }
+
+        /// <summary>
+        /// Retrieves a <see cref="InvoiceDisplay"/> from the Merchello Invoice index.
+        /// </summary>
+        public InvoiceDisplay Invoice(string key)
+        {
+            return InvoiceQuery.GetByKey(key);
+        }
+
+        /// <summary>
+        /// Gets a collection of all invoices
+        /// </summary>
+        public IEnumerable<InvoiceDisplay> AllInvoices()
+        {
+            return InvoiceQuery.GetAllInvoices();
+        }
+
+        /// <summary>
+        /// Searches the Merchello Invoice index. 
+        /// </summary>
+        public IEnumerable<InvoiceDisplay> SearchInvoices(string term)
+        {
+            return InvoiceQuery.Search(term);
+        }
+
+        /// <summary>
+        /// Searches the Merchello Invoice index. 
+        /// </summary>
+        public IEnumerable<InvoiceDisplay> SearchInvoices(ISearchCriteria criteria)
+        {
+            return InvoiceQuery.Search(criteria);
+        }
+
+        #endregion
     }
 
 }

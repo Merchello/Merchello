@@ -75,6 +75,11 @@ namespace Merchello.Core.Services
         IEnumerable<IInvoice> GetInvoicesByPaymentKey(Guid paymentKey);
 
 
+        /// <summary>
+        /// Gets the total count of all invoices
+        /// </summary>
+        int InvoiceCount();
+
         #region InvoiceStatus
 
         /// <summary>
