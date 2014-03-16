@@ -479,7 +479,7 @@ namespace Merchello.Core.Models
         /// <remarks>
         /// Intended to be used by the Merchello.Examine.Providers.MerchelloInvoiceIndexer
         /// </remarks>
-        public static XDocument SerializeToXml(this IInvoice invoice)
+        internal static XDocument SerializeToXml(this IInvoice invoice)
         {
             string xml;
             using (var sw = new StringWriter())
@@ -512,11 +512,9 @@ namespace Merchello.Core.Models
                     writer.WriteAttributeString("total", invoice.Total.ToString(CultureInfo.InvariantCulture));
                     writer.WriteAttributeString("invoiceStatus", GetInvoiceStatusJson(invoice.InvoiceStatus));
                     writer.WriteAttributeString("invoiceItems", GetGenericItemsCollection(invoice.Items));
-                    writer.WriteAttributeString("orders", GetOrdersJason(invoice.Orders));
                     writer.WriteAttributeString("createDate", invoice.CreateDate.ToString("s"));
                     writer.WriteAttributeString("updateDate", invoice.UpdateDate.ToString("s"));
                     writer.WriteAttributeString("allDocs", "1");
-
                     writer.WriteEndElement(); 
                     writer.WriteEndDocument();
                     xml = sw.ToString();
@@ -540,6 +538,8 @@ namespace Merchello.Core.Models
                             sortOrder = invoiceStatus.SortOrder
                         }, Formatting.None);
         }
+
+
 
         private static string GetOrdersJason(IEnumerable<IOrder> orders)
         {

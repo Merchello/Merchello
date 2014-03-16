@@ -354,6 +354,17 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
+        /// Gets all of the orders
+        /// </summary>
+        internal IEnumerable<IOrder> GetAll()
+        {
+            using (var repository = _repositoryFactory.CreateOrderRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetAll();
+            }
+        }
+
+        /// <summary>
         /// Gets an <see cref="IOrderStatus"/> by it's key
         /// </summary>
         /// <param name="key">The <see cref="IInvoiceStatus"/> key</param>

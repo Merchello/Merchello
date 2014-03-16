@@ -18,6 +18,7 @@ namespace Merchello.Core.Models
         private DateTime _orderDate;
         private IOrderStatus _orderStatus;
         private bool _exported;
+        private int _examineId = 1;
         private LineItemCollection _items;
 
         internal Order(IOrderStatus orderStatus, Guid invoiceKey)
@@ -60,6 +61,14 @@ namespace Merchello.Core.Models
                 }, _invoiceKey, InvoiceKeySelector);
             }
         }
+
+        [IgnoreDataMember]
+        internal int ExamineId
+        {
+            get { return _examineId; }
+            set { _examineId = value; }
+        }
+
 
         /// <summary>
         /// The order number prefix

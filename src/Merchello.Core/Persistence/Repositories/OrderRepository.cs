@@ -34,7 +34,7 @@ namespace Merchello.Core.Persistence.Repositories
             var sql = GetBaseQuery(false)
               .Where(GetBaseWhereClause(), new { Key = key });
 
-            var dto = Database.Fetch<OrderDto, OrderStatusDto>(sql).FirstOrDefault();
+            var dto = Database.Fetch<OrderDto, OrderIndexDto, OrderStatusDto>(sql).FirstOrDefault();
 
             if (dto == null)
                 return null;
@@ -57,7 +57,7 @@ namespace Merchello.Core.Persistence.Repositories
             else
             {
                 ;
-                var dtos = Database.Fetch<OrderDto, OrderStatusDto>(GetBaseQuery(false));
+                var dtos = Database.Fetch<OrderDto, OrderIndexDto, OrderStatusDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
                     yield return Get(dto.Key);
@@ -71,7 +71,7 @@ namespace Merchello.Core.Persistence.Repositories
             var translator = new SqlTranslator<IOrder>(sqlClause, query);
             var sql = translator.Translate();
 
-            var dtos = Database.Fetch<OrderDto, OrderStatusDto>(sql);
+            var dtos = Database.Fetch<OrderDto, OrderIndexDto, OrderStatusDto>(sql);
 
             return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
         }
@@ -81,6 +81,8 @@ namespace Merchello.Core.Persistence.Repositories
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
                .From<OrderDto>()
+               .InnerJoin<OrderIndexDto>()
+               .On<OrderDto, OrderIndexDto>(left => left.Key, right => right.OrderKey)
                .InnerJoin<OrderStatusDto>()
                .On<OrderDto, OrderStatusDto>(left => left.OrderStatusKey, right => right.Key);
 
@@ -95,8 +97,9 @@ namespace Merchello.Core.Persistence.Repositories
         protected override IEnumerable<string> GetDeleteClauses()
         {
             var list = new List<string>
-            {
+            {                
                 "DELETE FROM merchOrderItem WHERE orderKey = @Key",
+                "DELETE FROM merchOrderIndex WHERE orderKey = @Key",
                 "DELETE FROM merchOrder WHERE pk = @Key"
             };
 
@@ -111,9 +114,12 @@ namespace Merchello.Core.Persistence.Repositories
             var factory = new OrderFactory(entity.Items);
             var dto = factory.BuildDto(entity);
 
-            Database.Insert(dto);
-            
+            Database.Insert(dto);            
             entity.Key = dto.Key;
+
+            Database.Insert(dto.OrderIndexDto);
+            ((Order)entity).ExamineId = dto.OrderIndexDto.Id;
+
 
             _lineItemRepository.SaveLineItem(entity.Items, entity.Key);
 

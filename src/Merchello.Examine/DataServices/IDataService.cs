@@ -6,6 +6,7 @@ namespace Merchello.Examine.DataServices
     {
         IProductDataService ProductDataService { get; }
         IInvoiceDataService InvoiceDataService { get; }
+        IOrderDataService OrderDataService { get; }
         ILogService LogService { get; }
 
 

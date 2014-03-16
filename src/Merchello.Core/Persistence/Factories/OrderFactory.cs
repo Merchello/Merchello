@@ -23,6 +23,7 @@ namespace Merchello.Core.Persistence.Factories
                     OrderDate = dto.OrderDate,
                     VersionKey = dto.VersionKey,
                     Exported = dto.Exported,
+                    ExamineId = dto.OrderIndexDto.Id,
                     UpdateDate = dto.UpdateDate,
                     CreateDate = dto.CreateDate
                 };
@@ -44,6 +45,13 @@ namespace Merchello.Core.Persistence.Factories
                     OrderDate = entity.OrderDate,
                     VersionKey = entity.VersionKey,
                     Exported = entity.Exported,
+                    OrderIndexDto = new OrderIndexDto()
+                    {
+                        Id = ((Order)entity).ExamineId,
+                        OrderKey = entity.Key,
+                        UpdateDate = entity.UpdateDate,
+                        CreateDate = entity.CreateDate
+                    },
                     UpdateDate = entity.UpdateDate,
                     CreateDate = entity.CreateDate
                 };

@@ -59,7 +59,7 @@ namespace Merchello.Core.Models
             _billToPhone = billToAddress.Phone;
 
             _items = lineItemCollection;
-
+            _orders = orders;
             _invoiceDate = DateTime.Now;
 
         }

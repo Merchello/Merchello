@@ -10,10 +10,10 @@
         /// </summary>
         public const string ProductVariant = "productvariant";
 
-        ///// <summary>
-        ///// The order index type
-        ///// </summary>
-        //public const string Order = "order";
+        /// <summary>
+        /// The order index type
+        /// </summary>
+        public const string Order = "order";
 
         /// <summary>
         /// The invoice index type

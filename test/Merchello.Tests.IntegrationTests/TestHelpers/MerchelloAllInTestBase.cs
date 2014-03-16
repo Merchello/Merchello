@@ -63,8 +63,6 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
             ProductVariantService.Saved -= ProductVariantServiceSaved;
             ProductVariantService.Deleted -= ProductVariantServiceDeleted;
 
-            // BasketCheckout 
-            //ItemCacheService.Saved -= BasketItemCacheSaved;
             
         }
 
