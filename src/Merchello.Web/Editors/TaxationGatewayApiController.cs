@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Merchello.Core;
+using Merchello.Core.Gateways;
 using Merchello.Core.Gateways.Taxation;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
@@ -115,7 +116,7 @@ namespace Merchello.Web.Editors
             {
                 var provider = _taxationContext.ResolveByKey(method.ProviderKey);
 
-                var taxationGatewayMethod = provider.CreateTaxMethod(method.CountryCode);
+                var taxationGatewayMethod = provider.CreateTaxMethod(method.CountryCode, method.PercentageTaxRate);
 
                 method.ToTaxMethod(taxationGatewayMethod.TaxMethod);
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
 using Merchello.Core.Gateways;
 using Merchello.Core.Gateways.Shipping.FixedRate;
@@ -494,6 +495,7 @@ namespace Merchello.Web.Models.ContentEditing
         {
             if (taxMethodDisplay.Key != Guid.Empty) destination.Key = taxMethodDisplay.Key;
 
+           
             destination.Name = taxMethodDisplay.Name;
             destination.PercentageTaxRate = taxMethodDisplay.PercentageTaxRate;
 

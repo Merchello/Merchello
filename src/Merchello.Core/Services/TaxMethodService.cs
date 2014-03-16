@@ -63,6 +63,7 @@ namespace Merchello.Core.Services
 
             var countryTaxRate = new TaxMethod(providerKey, country.CountryCode)
                 {
+                    Name = country.CountryCode == "ELSE" ? "Everywhere Else" : country.Name,
                     PercentageTaxRate = percentageTaxRate,
                     Provinces = country.Provinces.ToTaxProvinceCollection()
                 };
@@ -91,11 +92,14 @@ namespace Merchello.Core.Services
 
         private bool CountryTaxRateExists(Guid providerKey, string countryCode)
         {
-            var taxMethod = GetTaxMethodByCountryCode(providerKey, countryCode);
 
-            return countryCode == "ELSE"
-                ? GetTaxMethodByCountryCode(providerKey, countryCode) != null && taxMethod.CountryCode != "ELSE"
-                : GetTaxMethodByCountryCode(providerKey, countryCode) != null;
+            using(var repository = _repositoryFactory.CreateTaxMethodRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var allTaxMethods = repository.GetAll().ToArray();
+
+                if (!allTaxMethods.Any()) return false;
+                return allTaxMethods.FirstOrDefault(x => x.ProviderKey.Equals(providerKey) && x.CountryCode.Equals(countryCode)) != null;
+            }
         }
 
         /// <summary>
@@ -112,6 +116,11 @@ namespace Merchello.Core.Services
                 return;
             }
 
+            //TODO refactor this
+            taxMethod.Name = string.IsNullOrEmpty(taxMethod.Name)
+                                 ? GetTaxMethodName(taxMethod)
+                                 : taxMethod.Name;
+
             using (new WriteLock(Locker))
             {
                 var uow = _uowProvider.GetUnitOfWork();
@@ -124,6 +133,13 @@ namespace Merchello.Core.Services
 
             if(raiseEvents) Saved.RaiseEvent(new SaveEventArgs<ITaxMethod>(taxMethod), this);
 
+        }
+
+        private string GetTaxMethodName(ITaxMethod taxMethod)
+        {
+            if (taxMethod.CountryCode == "ELSE") return "Everywhere Else";
+            var country = _storeSettingService.GetCountryByCode(taxMethod.CountryCode);
+            return country.Name;
         }
 
         /// <summary>
