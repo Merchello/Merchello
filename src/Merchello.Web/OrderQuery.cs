@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Examine;
 using Examine.SearchCriteria;
@@ -46,6 +47,21 @@ namespace Merchello.Web
             ReindexOrder(retrieved);
 
             return AutoMapper.Mapper.Map<OrderDisplay>(retrieved);
+        }
+
+        /// <summary>
+        /// Gets a collection of orders for a given invoice
+        /// </summary>
+        /// <param name="invoiceKey"></param>
+        /// <returns>A collection of <see cref="OrderDisplay"/></returns>
+        public static IEnumerable<OrderDisplay> GetByInvoiceKey(Guid invoiceKey)
+        {
+            var criteria = ExamineManager.Instance.CreateSearchCriteria();
+            criteria.Field("invoiceKey", invoiceKey.ToString());
+
+            return ExamineManager.Instance.SearchProviderCollection[SearcherName]
+                .Search(criteria).Select(result => result.ToOrderDisplay());
+
         }
 
 

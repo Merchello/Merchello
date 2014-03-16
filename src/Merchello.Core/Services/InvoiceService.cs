@@ -317,6 +317,19 @@ namespace Merchello.Core.Services
             return GetByKeys(invoiceKeys);
         }
 
+        /// <summary>
+        /// Gets the total count of all <see cref="IInvoice"/>
+        /// </summary>
+        /// <returns></returns>
+        public int InvoiceCount()
+        {
+            using(var repository = _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Query<IInvoice>.Builder.Where(x => x.Key != Guid.Empty);
+                return repository.Count(query);
+            }
+        }
+
 
         /// <summary>
         /// Gets an <see cref="IInvoiceStatus"/> by it's key

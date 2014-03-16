@@ -70,7 +70,7 @@ namespace Merchello.Web.Models.ContentEditing
         /// </summary>
         internal static InvoiceDisplay ToInvoiceDisplay(this SearchResult result)
         {
-            return new InvoiceDisplay()
+            var invoice = new InvoiceDisplay()
                 {
                     Key = FieldAsGuid(result, "invoiceKey"),
                     InvoiceNumberPrefix = FieldAsString(result, "invoiceNumberPrefix"),
@@ -92,8 +92,13 @@ namespace Merchello.Web.Models.ContentEditing
                     Archived = FieldAsBoolean(result.Fields["archived"]),
                     Total = FieldAsDecimal(result, "total"),
                     InvoiceStatus = JsonFieldAs<InvoiceStatusDisplay>(result, "invoiceStatus"),
-                    Items = RawJsonFieldAsCollection<InvoiceLineItemDisplay>(result, "invoiceItems")
+                    Items = RawJsonFieldAsCollection<InvoiceLineItemDisplay>(result, "invoiceItems"),
+                    
                 };
+
+            invoice.Orders = OrderQuery.GetByInvoiceKey(invoice.Key);
+
+            return invoice;
         }
 
         /// <summary>
