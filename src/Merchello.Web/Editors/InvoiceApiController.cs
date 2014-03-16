@@ -1,222 +1,158 @@
-﻿using Merchello.Core;
-using Merchello.Core.Models;
-using Merchello.Core.Services;
-using Merchello.Web.WebApi;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Http;
+using Examine;
+using Merchello.Core;
+using Merchello.Core.Models;
+using Merchello.Core.Services;
+using Merchello.Web.Models.ContentEditing;
+using Merchello.Web.WebApi;
 using Umbraco.Web;
 using Umbraco.Web.Mvc;
 
 namespace Merchello.Web.Editors
 {
-	[PluginController("Merchello")]
-	public class InvoiceApiController : MerchelloApiController
-	{
-		private IInvoiceService _invoiceService;
+    [PluginController("Merchello")]
+    public class InvoiceApiController : MerchelloApiController
+    {
+        private readonly IInvoiceService _invoiceService;
+        private readonly IOrderService _orderService;
 
-		/// <summary>
-		/// Constructor
-		/// </summary>
-		public InvoiceApiController()
-			: this(MerchelloContext.Current)
-		{
-		}
+        public InvoiceApiController()
+            : this(MerchelloContext.Current)
+        { }
 
-		/// <summary>
-		/// Constructor
-		/// </summary>
-		/// <param name="merchelloContext"></param>
-		public InvoiceApiController(MerchelloContext merchelloContext)
-			: base(merchelloContext)
-		{
-
-			_invoiceService = MerchelloContext.Services.InvoiceService;
-		}
-
-		/// <summary>
-		/// This is a helper contructor for unit testing
-		/// </summary>
-		internal InvoiceApiController(MerchelloContext merchelloContext, UmbracoContext umbracoContext)
-			: base(merchelloContext, umbracoContext)
-		{
-
-			_invoiceService = MerchelloContext.Services.InvoiceService;
-		}
-
-		/// <summary>
-		/// Returns customer by the key
-		/// </summary>
-		/// <param name="key"></param>
-		public Invoice GetInvoiceById(int id)
-		{
-			if (id != null)
-			{
-				var invoice = MerchelloContext.Services.InvoiceService.GetById(id) as Invoice;
-				if (invoice == null)
-				{
-					throw new HttpResponseException(HttpStatusCode.NotFound);
-				}
-
-				return invoice;
-			}
-			else
-			{
-				var resp = new HttpResponseMessage(HttpStatusCode.NotFound)
-				{
-					Content = new StringContent(String.Format("Parameter id is null")),
-					ReasonPhrase = "Invalid Parameter"
-				};
-				throw new HttpResponseException(resp);
-			}
-		}
-
-		public IEnumerable<Invoice> GetInvoicesByIds(List<int> ids)
-		{
-			if (ids != null)
-			{
-				var invoices = MerchelloContext.Services.InvoiceService.GetByIds(ids) as IEnumerable<Invoice>;
-				if (invoices == null)
-				{
-					throw new HttpResponseException(HttpStatusCode.NotFound);
-				}
-
-				return invoices;
-			}
-			else
-			{
-				var resp = new HttpResponseMessage(HttpStatusCode.NotFound)
-				{
-					Content = new StringContent(String.Format("Parameter id is null")),
-					ReasonPhrase = "Invalid Parameter"
-				};
-				throw new HttpResponseException(resp);
-			}
-
-		}
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="merchelloContext"></param>
+        public InvoiceApiController(IMerchelloContext merchelloContext)
+            : base((MerchelloContext) merchelloContext)
+        {
+            _invoiceService = merchelloContext.Services.InvoiceService;
+            _orderService = merchelloContext.Services.OrderService;
+        }
 
 
-		public IEnumerable<Invoice> GetInvoicesByCustomer(int id)
-		{
-			if (id != 0)
-			{
-				var invoices = MerchelloContext.Services.InvoiceService.GetInvoicesByCustomer(id) as IEnumerable<Invoice>;
-				if (invoices == null)
-				{
-					throw new HttpResponseException(HttpStatusCode.NotFound);
-				}
+        /// <summary>
+        /// This is a helper contructor for unit testing
+        /// </summary>
+        internal InvoiceApiController(IMerchelloContext merchelloContext, UmbracoContext umbracoContext)
+            : base((MerchelloContext) merchelloContext, umbracoContext)
+        {
+            _invoiceService = merchelloContext.Services.InvoiceService;
+            _orderService = merchelloContext.Services.OrderService;
+        }
 
-				return invoices;
-			}
-			else
-			{
-				var resp = new HttpResponseMessage(HttpStatusCode.NotFound)
-				{
-					Content = new StringContent(String.Format("Parameter id is null")),
-					ReasonPhrase = "Invalid Parameter"
-				};
-				throw new HttpResponseException(resp);
-			}
+        /// <summary>
+        /// Returns an Invoice by id (key)
+        /// 
+        /// GET /umbraco/Merchello/InvoiceApi/GetInvoice/{guid}
+        /// </summary>
+        /// <param name="id"></param>
+        public InvoiceDisplay GetInvoice(Guid id)
+        {
+            var invoice = _invoiceService.GetByKey(id) as Invoice;
+            if (invoice == null)
+            {
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+            }
 
-		}
+            return invoice.ToInvoiceDisplay();
+        }
 
+        /// <summary>
+        /// Returns All Invoices
+        /// 
+        /// GET /umbraco/Merchello/InvoiceApi/GetInvoices
+        /// </summary>
+        public IEnumerable<InvoiceDisplay> GetAllInvoices()
+        {
+            var merchello = new MerchelloHelper();
+            return merchello.AllInvoices();
+        }
 
-		public IEnumerable<Invoice> GetInvoicesByInvoiceStatus(int invoiceStatusId)
-		{
-			if (invoiceStatusId != null)
-			{
-				var invoices = MerchelloContext.Services.InvoiceService.GetInvoicesByInvoiceStatus(invoiceStatusId) as IEnumerable<Invoice>;
-				if (invoices == null)
-				{
-					throw new HttpResponseException(HttpStatusCode.NotFound);
-				}
+        /// <summary>
+        /// Returns All Products
+        /// 
+        /// GET /umbraco/Merchello/ProductApi/GetProducts
+        /// </summary>
+        public IEnumerable<InvoiceDisplay> GetAllInvoices(int page, int perPage)
+        {
+            var merchello = new MerchelloHelper();
+            return merchello.AllInvoices().Skip((page - 1) * perPage).Take(perPage);
+        }
 
-				return invoices;
-			}
-			else
-			{
-				var resp = new HttpResponseMessage(HttpStatusCode.NotFound)
-				{
-					Content = new StringContent(String.Format("Parameter id is null")),
-					ReasonPhrase = "Invalid Parameter"
-				};
-				throw new HttpResponseException(resp);
-			}
+        /// <summary>
+        /// Returns All Invoices
+        /// 
+        /// GET /umbraco/Merchello/InvoiceApi/GetFilteredInvoices
+        /// </summary>
+        /// <param name="term"></param>
+        public IEnumerable<InvoiceDisplay> GetFilteredInvoices(string term)
+        {
+            var merchello = new MerchelloHelper();
+            return merchello.SearchInvoices(term);
+        }
 
-		}
-		/// <summary>
-		///  Creates a customer from FirstName, LastName, Email and MemberId
-		///  
-		/// GET /umbraco/Merchello/CustomerApi/NewCustomer?firstName=FIRSTNAME&lastName=LASTNAME&email=EMAIL&memberId=0
-		/// </summary>
-		/// <param name="firstName">Customers First Name</param>
-		/// <param name="lastName">Customers Last Name</param>
-		/// <param name="email">Customers Email Address</param>
-		/// <param name="memberId">Optional: MemberId</param>
-		/// <returns>New Customer</returns>		
-		[AcceptVerbs("GET", "POST")]
-		public Invoice NewInvoice(Customer customer, CustomerAddress customerAddress, InvoiceStatus invoiceStatus, string invoiceNumber)
-		{
-			Invoice newInvoice = null;
+        /// <summary>
+        /// Returns All Products
+        /// 
+        /// GET /umbraco/Merchello/InvoicesApi/GetFilteredInvoices
+        /// </summary>
+        public IEnumerable<InvoiceDisplay> GetFilteredInvoices(string term, int page, int perPage)
+        {
+            var merchello = new MerchelloHelper();
+            return merchello.SearchInvoices(term).Skip((page - 1) * perPage).Take(perPage);
+        }
 
-			try
-			{
-				newInvoice = _invoiceService.CreateInvoice(customer, customerAddress, invoiceStatus, invoiceNumber) as Invoice;
-			}
-			catch
-			{
-				throw new HttpResponseException(HttpStatusCode.InternalServerError);
-			}
-			return newInvoice;
-		}
-		/// <summary>
-		/// Updates an existing Customer
-		/// 
-		/// PUT /umbraco/Merchello/CustomerApi/PutCustomer
-		/// </summary>
-		/// <param name="customer">Customer To Update</param>
-		/// <returns>Http Response</returns>
-		public HttpResponseMessage PutInvoice(Invoice invoice)
-		{
-			var response = Request.CreateResponse(HttpStatusCode.OK);
+        /// <summary>
+        /// Updates an existing invoice
+        ///
+        /// PUT /umbraco/Merchello/InvoiceApi/PutInvoice
+        /// </summary>
+        /// <param name="invoice">InvoiceDisplay object serialized from WebApi</param>
+        [AcceptVerbs("POST", "PUT")]
+        public HttpResponseMessage PutInvoice(InvoiceDisplay invoice)
+        {
+            var response = Request.CreateResponse(HttpStatusCode.OK);
 
-			try
-			{
-				_invoiceService.Save(invoice);
-			}
-			catch (Exception ex)
-			{
-				response = Request.CreateResponse(HttpStatusCode.InternalServerError, String.Format("{0}", ex.Message));
-			}
-			return response;
-		}
+            try
+            {
+                var merchInvoice = _invoiceService.GetByKey(invoice.Key);
+                merchInvoice = invoice.ToInvoice(merchInvoice);
 
-		/// <summary>
-		/// Deletes an existing customer
-		/// 
-		/// DELETE /umbraco/Merchello/CustomerApi/{guid}
-		/// </summary>
-		/// <param name="key">Guid of Customer</param>
-		/// <returns>Http Response</returns>
-		public HttpResponseMessage Delete(int id)
-		{
-			var invoiceToDelete = _invoiceService.GetById(id);
-			var response = Request.CreateResponse(HttpStatusCode.OK);
+                _invoiceService.Save(merchInvoice);
+            }
+            catch (Exception ex)
+            {
+                response = Request.CreateResponse(HttpStatusCode.NotFound, String.Format("{0}", ex.Message));
+            }
 
-			if (invoiceToDelete == null)
-			{
-				response = Request.CreateResponse(HttpStatusCode.NotFound);
-				return response;
-			}
+            return response;
+        }
 
-			_invoiceService.Delete(invoiceToDelete);
+        /// <summary>
+        /// Deletes an existing invoice
+        ///
+        /// DELETE /umbraco/Merchello/InvoiceApi/{guid}
+        /// </summary>
+        /// <param name="id"></param>
+        [AcceptVerbs("POST", "DELETE")]
+        public HttpResponseMessage DeleteInvoice(Guid id)
+        {
+            var invoiceToDelete = _invoiceService.GetByKey(id);
+            if (invoiceToDelete == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
 
-			return response;
-		}
-	}
+            _invoiceService.Delete(invoiceToDelete);
+
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
+    }
 }

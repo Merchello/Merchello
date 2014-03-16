@@ -18,28 +18,26 @@ namespace Merchello.Core.Chains.InvoiceCreation
 
         public override Attempt<IInvoice> PerformTask(IInvoice value)
         {
-            return Attempt<IInvoice>.Succeed(value);
+            var unTagged = value.Items.Where(x => !x.ExtendedData.ContainsKey(Constants.ExtendedDataKeys.CurrencyCode)).ToArray();
 
-            //var unTagged = value.Items.Where(x => !x.ExtendedData.ContainsKey(Constants.ExtendedDataKeys.CurrencyCode)).ToArray();
+            if (unTagged.Any())
+            {
+                var defaultCurrency =
+                    SalePreparation.MerchelloContext.Services.StoreSettingService.GetByKey(
+                        Constants.StoreSettingKeys.CurrencyCodeKey);
 
-            //if (unTagged.Any())
-            //{
-            //    var defaultCurrency =
-            //        SalePreparation.MerchelloContext.Services.StoreSettingService.GetByKey(
-            //            Constants.StoreSettingKeys.CurrencyCodeKey);
+                foreach (var item in unTagged)
+                {
+                    item.ExtendedData.SetValue(Constants.ExtendedDataKeys.CurrencyCode, defaultCurrency.Value);
+                }
+            }
 
-            //    foreach (var item in unTagged)
-            //    {
-            //        item.ExtendedData.SetValue(Constants.ExtendedDataKeys.CurrencyCode, defaultCurrency.Value);
-            //    }    
-            //}
+            var allCurrencyCodes =
+                value.Items.Select(x => x.ExtendedData.GetValue(Constants.ExtendedDataKeys.CurrencyCode)).Distinct();
 
-            //var allCurrencyCodes =
-            //    value.Items.Select(x => x.ExtendedData.GetValue(Constants.ExtendedDataKeys.CurrencyCode)).Distinct();
-
-            //return 1 == allCurrencyCodes.Count()
-            //           ? Attempt<IInvoice>.Succeed(value)
-            //           : Attempt<IInvoice>.Fail(new InvalidDataException("Invoice is being created with line items costed in different currencies."));
+            return 1 == allCurrencyCodes.Count()
+                       ? Attempt<IInvoice>.Succeed(value)
+                       : Attempt<IInvoice>.Fail(new InvalidDataException("Invoice is being created with line items costed in different currencies."));
 
         }
     }
