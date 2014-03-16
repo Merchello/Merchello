@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.SqlClient;
 using System.Linq;
 using Merchello.Core.Gateways;
 using Merchello.Core.Gateways.Shipping.FixedRate;
@@ -164,7 +165,141 @@ namespace Merchello.Web.Models.ContentEditing
         }
 
         #endregion
-        
+
+        #region Invoice
+
+        internal static InvoiceDisplay ToInvoiceDisplay(this IInvoice invoice)
+        {
+            return AutoMapper.Mapper.Map<InvoiceDisplay>(invoice);
+        }
+
+        internal static IInvoice ToInvoice(this InvoiceDisplay invoiceDisplay, IInvoice destination)
+        {
+            if (invoiceDisplay.Key != Guid.Empty) destination.Key = invoiceDisplay.Key;
+            destination.InvoiceNumberPrefix = invoiceDisplay.InvoiceNumberPrefix;
+            destination.InvoiceDate = invoiceDisplay.InvoiceDate;
+            destination.InvoiceStatus = invoiceDisplay.InvoiceStatus.ToInvoiceStatus();
+            destination.VersionKey = invoiceDisplay.VersionKey;
+            destination.BillToName = invoiceDisplay.BillToName;
+            destination.BillToAddress1 = invoiceDisplay.BillToAddress1;
+            destination.BillToAddress2 = invoiceDisplay.BillToAddress2;
+            destination.BillToLocality = invoiceDisplay.BillToLocality;
+            destination.BillToRegion = invoiceDisplay.BillToRegion;
+            destination.BillToPostalCode = invoiceDisplay.BillToPostalCode;
+            destination.BillToCountryCode = invoiceDisplay.BillToCountryCode;
+            destination.BillToEmail = invoiceDisplay.BillToEmail;
+            destination.BillToPhone = invoiceDisplay.BillToPhone;
+            destination.BillToCompany = invoiceDisplay.BillToCompany;
+            destination.Exported = invoiceDisplay.Exported;
+            destination.Archived = invoiceDisplay.Archived;
+            return destination;
+        }
+
+        internal static IInvoiceStatus ToInvoiceStatus(this InvoiceStatusDisplay invoiceStatusDisplay)
+        {
+            return new InvoiceStatus()
+            {
+                Key = invoiceStatusDisplay.Key,
+                Alias = invoiceStatusDisplay.Alias,
+                Name = invoiceStatusDisplay.Name,
+                Active = invoiceStatusDisplay.Active,
+                SortOrder = invoiceStatusDisplay.SortOrder,
+                Reportable = invoiceStatusDisplay.Reportable
+            };
+        }
+
+        #endregion
+
+        #region Order
+
+        internal static OrderDisplay ToOrderDisplay(this IOrder order)
+        {
+            return AutoMapper.Mapper.Map<OrderDisplay>(order);
+        }
+
+
+        internal static IOrder ToOrder(this OrderDisplay orderDisplay, IOrder destination)
+        {
+            if (orderDisplay.Key != Guid.Empty) destination.Key = orderDisplay.Key;
+            destination.OrderNumberPrefix = orderDisplay.OrderNumberPrefix;
+            destination.OrderDate = orderDisplay.OrderDate;
+            destination.OrderStatus = orderDisplay.OrderStatus.ToOrderStatus();
+            destination.VersionKey = orderDisplay.VersionKey;
+            destination.Exported = orderDisplay.Exported;
+
+            // we don't have any functionality to change order items at this point so 
+            // they should already match those in the destination
+
+            return destination;
+        }
+
+        internal static IOrderStatus ToOrderStatus(this OrderStatusDisplay orderStatusDisplay)
+        {
+            return new OrderStatus()
+                {
+                    Key = orderStatusDisplay.Key,
+                    Alias = orderStatusDisplay.Alias,
+                    Name = orderStatusDisplay.Name,
+                    Active = orderStatusDisplay.Active,
+                    SortOrder = orderStatusDisplay.SortOrder,
+                    Reportable = orderStatusDisplay.Reportable
+                };
+        }
+
+        #endregion
+
+        #region Shipment
+
+        internal static ShipmentDisplay ToShipmentDisplay(this IShipment shipment)
+        {
+            return AutoMapper.Mapper.Map<ShipmentDisplay>(shipment);
+        }
+
+        internal static IShipment ToShipment(this ShipmentDisplay shipmentDisplay, IShipment destination)
+        {
+            if (shipmentDisplay.Key != Guid.Empty) destination.Key = shipmentDisplay.Key;
+            destination.FromOrganization = destination.FromOrganization;
+            destination.FromName = shipmentDisplay.FromName;
+            destination.FromAddress1 = shipmentDisplay.FromAddress1;
+            destination.FromAddress2 = shipmentDisplay.FromAddress2;
+            destination.FromLocality = shipmentDisplay.FromLocality;
+            destination.FromRegion = shipmentDisplay.FromRegion;
+            destination.FromPostalCode = shipmentDisplay.FromPostalCode;
+            destination.FromCountryCode = shipmentDisplay.FromCountryCode;
+            destination.FromIsCommercial = shipmentDisplay.FromIsCommercial;
+            destination.ToOrganization = shipmentDisplay.ToOrganization;
+            destination.ToName = shipmentDisplay.ToName;
+            destination.ToAddress1 = shipmentDisplay.ToAddress1;
+            destination.ToAddress2 = shipmentDisplay.ToAddress2;
+            destination.ToLocality = shipmentDisplay.ToLocality;
+            destination.ToRegion = shipmentDisplay.ToRegion;
+            destination.ToPostalCode = shipmentDisplay.ToPostalCode;
+            destination.ToCountryCode = shipmentDisplay.ToCountryCode;
+            destination.ToIsCommercial = shipmentDisplay.ToIsCommercial;
+            destination.Phone = shipmentDisplay.Phone;
+            destination.Email = shipmentDisplay.Email;
+            destination.ShipMethodKey = shipmentDisplay.ShipMethodKey;
+            destination.VersionKey = shipmentDisplay.VersionKey;
+            destination.Carrier = shipmentDisplay.Carrier;
+            destination.TrackingCode = shipmentDisplay.TrackingCode;
+
+            var existing = shipmentDisplay.Items.Where(x => x.Key != Guid.Empty);
+            var removed = destination.Items.Where(x => x.Key != Guid.Empty && existing.All(y => y.Key != x.Key)).ToArray();
+            if (removed.Any())
+            {
+                foreach (var remover in removed)
+                {
+                    destination.Items.Remove(remover);
+                }
+            }
+
+            return destination;
+        }
+
+        #endregion
+
+
+
         #region FixedRateShipMethodDisplay
 
         internal static FixedRateShipMethodDisplay ToFixedRateShipMethodDisplay(this IFixedRateShippingGatewayMethod shipFixedRateMethod)

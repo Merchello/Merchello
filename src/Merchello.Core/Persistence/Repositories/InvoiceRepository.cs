@@ -115,7 +115,7 @@ namespace Merchello.Core.Persistence.Repositories
         {
             ((Entity)entity).AddingEntity();
 
-            var factory = new InvoiceFactory(entity.Items, entity.Orders);
+            var factory = new InvoiceFactory(entity.Items, new OrderCollection());
             var dto = factory.BuildDto(entity);
 
             Database.Insert(dto);

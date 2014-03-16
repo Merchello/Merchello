@@ -206,8 +206,15 @@
     <Compile Include="Models\ContentEditing\GatewayProviderDisplay.cs" />
     <Compile Include="Models\ContentEditing\GatewayResourceDisplay.cs" />
     <Compile Include="Models\ContentEditing\FixedRateShipMethodDisplay.cs" />
+    <Compile Include="Models\ContentEditing\InvoiceDisplay.cs" />
+    <Compile Include="Models\ContentEditing\InvoiceLineItemDisplay.cs" />
+    <Compile Include="Models\ContentEditing\InvoiceStatusDisplay.cs" />
+    <Compile Include="Models\ContentEditing\OrderDisplay.cs" />
+    <Compile Include="Models\ContentEditing\OrderLineItemDisplay.cs" />
+    <Compile Include="Models\ContentEditing\OrderStatusDisplay.cs" />
     <Compile Include="Models\ContentEditing\PaymentMethodDisplay.cs" />
     <Compile Include="Models\ContentEditing\ShipFixedRateTableDisplay.cs" />
+    <Compile Include="Models\ContentEditing\ShipmentDisplay.cs" />
     <Compile Include="Models\ContentEditing\ShipRateTierDisplay.cs" />
     <Compile Include="Models\ContentEditing\SettingDisplay.cs" />
     <Compile Include="Models\ContentEditing\TaxMethodDisplay.cs" />
