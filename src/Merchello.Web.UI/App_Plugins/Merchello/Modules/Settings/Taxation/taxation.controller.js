@@ -106,7 +106,11 @@
                     taxCountry.method = taxMethod;
                     taxCountry.country = _.find($scope.allCountries, function(c) { return c.countryCode == taxMethod.countryCode; });
 
-                    taxCountry.countryName = taxCountry.country.name;
+                    if (taxCountry.country) {
+                        taxCountry.countryName = taxCountry.country.name;
+                    } else {
+                        taxCountry.countryName = taxMethod.name;
+                    }
 
                     return taxCountry;
                 });
