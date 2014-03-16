@@ -19,6 +19,15 @@ namespace Merchello.Web
             AutoMapper.Mapper.CreateMap<ICountry, CountryDisplay>();
             AutoMapper.Mapper.CreateMap<ITaxMethod, TaxProvinceDisplay>();
             
+            // Invoice
+            AutoMapper.Mapper.CreateMap<IInvoiceStatus, InvoiceStatusDisplay>();
+            AutoMapper.Mapper.CreateMap<IInvoiceLineItem, InvoiceLineItemDisplay>();
+            AutoMapper.Mapper.CreateMap<IInvoice, InvoiceDisplay>();
+
+            // Order
+            AutoMapper.Mapper.CreateMap<IOrderStatus, OrderStatusDisplay>();
+            AutoMapper.Mapper.CreateMap<IOrder, OrderDisplay>();
+
             // payment
             AutoMapper.Mapper.CreateMap<IPaymentMethod, PaymentMethodDisplay>();
 
@@ -41,6 +50,9 @@ namespace Merchello.Web
             AutoMapper.Mapper.CreateMap<IShippingFixedRateTable, ShipFixedRateTableDisplay>();
             AutoMapper.Mapper.CreateMap<IShipRateTier, ShipRateTierDisplay>();
             
+            // shipment
+            AutoMapper.Mapper.CreateMap<IShipment, Shipment>();
+
             // taxation
             AutoMapper.Mapper.CreateMap<ITaxMethod, TaxMethodDisplay>();
             AutoMapper.Mapper.CreateMap<ITaxProvince, TaxProvinceDisplay>();
