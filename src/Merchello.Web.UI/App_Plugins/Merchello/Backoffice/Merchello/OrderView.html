@@ -2,22 +2,21 @@
 
 <form novalidate name="orderForm" 
       data-ng-controller="Merchello.Editors.Order.ViewController" 
-      data-ng-show="loaded" 
-      data-ng-submit="save()">
+      data-ng-show="loaded">
     <umb-panel val-show-validation>
 
         <umb-header>
 
             <div class="span4">
                 <div class="umb-headline-editor-wrapper">
-                    <h1 class="umb-headline">{{order.name}}</h1>
+                    <h1 class="umb-headline">Invoice #{{invoice.invoiceNumber}}</h1>
                 </div>
             </div>
 
 
             <div class="span8">
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
-                    <a href="#/merchello/merchello/OrderEdit/keygoeshere" type="submit" class="btn btn-success">Edit</a>
+                    <a data-ng-href="#/merchello/merchello/OrderEdit/{{invoice.key}}" type="submit" class="btn btn-success">Edit</a>
                     <a href="#" type="submit" class="btn btn-success">Print</a>
                 </div>
             </div>
@@ -28,9 +27,6 @@
 
             <!-- Main content area -->
             <div class="merchello-pane row-fluid">
-                <div class="row warning">
-                    <span><i class="icon-notepad"></i> <a href="#">You have a note from the customer</a>.</span> <!-- This should link down the page to the new note -->
-                </div>
 
                 <div class="control-group umb-control-group">
 
@@ -83,17 +79,17 @@
                                 <a href="#" class="pull-right"><i class="icon-edit"></i> Edit</a>
                                 <h3>Billing Address</h3>
 
-                                <img class="photo pull-right" src="/media/1001/heather.jpg" />
-                                <h4 class="fn">Heather Alvis</h4>
-                                <span class="org">Mindfly</span>
+                                <!--<img class="photo pull-right" src="/media/1001/heather.jpg" />-->
+                                <h4 class="fn">{{invoice.billToName}}</h4>
+                                <span class="org">{{invoice.billToCompany}}</span>
                                 <span class="adr">
-                                    <span class="street-address">114 W Magnolia St.</span>
-                                    <span class="extended-address">Suite 504</span>
-                                    <span class="locality">Bellingham</span>, <span class="region">WA</span>, <span class="postal-code">98225</span>
-                                    <span class="country-name">USA</span>
+                                    <span class="street-address">{{invoice.billToAddress1}}</span>
+                                    <span class="extended-address">{{invoice.billToAddress2}}</span>
+                                    <span class="locality">{{invoice.billToLocality}}</span>, <span class="region">{{invoice.billToRegion}}</span>, <span class="postal-code">{{invoice.billToPostalCode}}</span>
+                                    <span class="country-name">{{invoice.billToCountryCode}}</span>
                                 </span>
-                                <span class="tel">360-990-0090</span>
-                                <a href="mailto:heather@mindfly.com" class="email">heather@mindfly.com</a>
+                                <span class="tel">{{invoice.billToPhone}}</span>
+                                <a data-ng-href="mailto:{{invoice.billToEmail}}" class="email">{{invoice.billToEmail}}</a>
                             </div>
 
                             <!-- This section swaps out with the billing info when Edit is clicked -->
@@ -134,7 +130,7 @@
                         <div class="row-fluid span10 col-xs-10">
                             <div class="row-fluid">
                                 <div class="btn-toolbar pull-right umb-btn-toolbar">
-                                    <a class="btn btn-primary" href="#">Fulfill 4 Line Items</a>
+                                    <a class="btn btn-primary" href="#">Fulfill {{invoice.items.length}} Line Items</a>
                                     <a class="btn btn-primary" href="#">Capture Up To $105.00</a>
                                     <a class="btn btn-warning" href="#">Cancel Order</a>
                                 </div>
@@ -173,62 +169,16 @@
 
                             <table class="table table-striped merchello-striped-table order-items">
                                 <tbody>
-                                    <tr>
-                                        <td><input type="checkbox" /></td>
+                                    <tr data-ng-repeat="lineitem in invoice.items">
+                                        <td><input type="checkbox" data-ng-model="lineitem.selected" /></td>
                                         <td>
-                                            <a href="#" class="item-name">T-Shirt</a>
-                                            <ul>
-                                                <li>Men's</li>
-                                                <li>Large</li>
-                                                <li>Red</li>
-                                            </ul>
-                                            <span>SKU: shirt125-ml</span>
+                                            {{lineitem.name}}
+                                            <span>SKU: {{lineitem.sku}}</span>
                                         </td>
-                                        <td class="text-right">1 x <strong>$25.00</strong></td>
-                                        <td class="text-right">$25.00</td>
+                                        <td class="text-right">{{lineitem.quantity}} x <strong>{{lineitem.price | currency}}</strong></td>
+                                        <td class="text-right">{{lineitem.quantity * lineitem.price | currency}}</td>
                                     </tr>
-                                    <tr>
-                                        <td><input type="checkbox" /></td>
-                                        <td>
-                                            <a href="#" class="item-name">T-Shirt</a>
-                                            <ul>
-                                                <li>Men's</li>
-                                                <li>Large</li>
-                                                <li>Red</li>
-                                            </ul>
-                                            <span>SKU: shirt125-ml</span>
-                                        </td>
-                                        <td class="text-right">1 x <strong>$25.00</strong></td>
-                                        <td class="text-right">$25.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="checkbox" /></td>
-                                        <td>
-                                            <a href="#" class="item-name">T-Shirt</a>
-                                            <ul>
-                                                <li>Men's</li>
-                                                <li>Large</li>
-                                                <li>Red</li>
-                                            </ul>
-                                            <span>SKU: shirt125-ml</span>
-                                        </td>
-                                        <td class="text-right">1 x <strong>$25.00</strong></td>
-                                        <td class="text-right">$25.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="checkbox" /></td>
-                                        <td>
-                                            <a href="#" class="item-name">T-Shirt</a>
-                                            <ul>
-                                                <li>Men's</li>
-                                                <li>Large</li>
-                                                <li>Red</li>
-                                            </ul>
-                                            <span>SKU: shirt125-ml</span>
-                                        </td>
-                                        <td class="text-right">1 x <strong>$25.00</strong></td>
-                                        <td class="text-right">$25.00</td>
-                                    </tr>
+
                                     <tr>
                                         <td colspan="3" class="text-right">Sales Tax</td>
                                         <td class="text-right">$8.50</td>
