@@ -46,6 +46,7 @@ namespace Merchello.Core.Models
                     writer.WriteStartElement("order");
                     writer.WriteAttributeString("id", ((Order)order).ExamineId.ToString(CultureInfo.InvariantCulture));
                     writer.WriteAttributeString("orderKey", order.Key.ToString());
+                    writer.WriteAttributeString("invoiceKey", order.InvoiceKey.ToString());
                     writer.WriteAttributeString("orderNumberPrefix", order.OrderNumberPrefix);
                     writer.WriteAttributeString("orderNumber", order.OrderNumber.ToString(CultureInfo.InvariantCulture));
                     writer.WriteAttributeString("prefixedOrderNumber", order.PrefixedOrderNumber());

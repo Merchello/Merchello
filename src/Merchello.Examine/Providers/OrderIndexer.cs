@@ -75,7 +75,6 @@ namespace Merchello.Examine.Providers
                 new StaticField("orderStatusKey", FieldIndexTypes.ANALYZED, false, string.Empty),
                 new StaticField("versionKey", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
                 new StaticField("exported", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
-                new StaticField("total", FieldIndexTypes.ANALYZED, true, "DOUBLE"),
                 new StaticField("orderStatus", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
                 new StaticField("orderItems", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
                 new StaticField("createDate", FieldIndexTypes.NOT_ANALYZED, false, "DATETIME"),

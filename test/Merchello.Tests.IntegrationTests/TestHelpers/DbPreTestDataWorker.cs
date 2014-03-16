@@ -251,7 +251,26 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
         #endregion
 
-        
+        #region IOrder
+
+        /// <summary>
+        /// Deletes all orders
+        /// </summary>
+        public void DeleteAllOrders()
+        {
+            var all = ((OrderService) OrderService).GetAll();
+            OrderService.Delete(all);
+        }
+
+        /// <summary>
+        /// Gets the OrderService
+        /// </summary>
+        public IOrderService OrderService
+        {
+            get { return _serviceContext.OrderService; }
+        }
+
+        #endregion
 
         #region IProduct
 

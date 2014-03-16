@@ -25,6 +25,7 @@ namespace Merchello.Web.Models.ContentEditing
         public string BillToCompany { get; set; }
         public bool Exported { get; set; }
         public bool Archived { get; set; }
+        public decimal Total { get; set; }
         public IEnumerable<OrderDisplay> Orders { get; set; }
         public IEnumerable<InvoiceLineItemDisplay> Items { get; set; }
     }
