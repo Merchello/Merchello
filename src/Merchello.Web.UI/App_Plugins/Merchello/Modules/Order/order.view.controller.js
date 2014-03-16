@@ -10,6 +10,8 @@
      */
     controllers.OrderViewController = function($scope, $routeParams, $location, notificationsService, angularHelper, serverValidationManager, merchelloProductService) {
 
+        $scope.invoice = {};
+
         $scope.loaded = true;
         $scope.preValuesLoaded = true;
 
