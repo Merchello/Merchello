@@ -40,9 +40,76 @@ namespace Merchello.Web.Search
             ProductVariantService.Created += ProductVariantServiceCreated;
             ProductVariantService.Saved += ProductVariantServiceSaved;
             ProductVariantService.Deleted += ProductVariantServiceDeleted;
-          }
 
-        
+            InvoiceService.Saved += InvoiceServiceSaved;
+            InvoiceService.Deleted += InvoiceServiceDeleted;
+
+            OrderService.Saved += OrderServiceSaved;
+            OrderService.Deleted += OrderServiceDeleted;
+
+        }
+
+        #region Invoice
+
+        /// <summary>
+        /// Adds saved invoices to the index
+        /// </summary>
+        static void InvoiceServiceSaved(IInvoiceService sender, SaveEventArgs<IInvoice> e)
+        {
+            e.SavedEntities.ForEach(IndexInvoice);
+        }
+
+        /// <summary>
+        /// Removes deleted invoices from the index 
+        /// </summary>
+        static void InvoiceServiceDeleted(IInvoiceService sender, DeleteEventArgs<IInvoice> e)
+        {
+            e.DeletedEntities.ForEach(DeleteInvoiceFromIndex);
+        }
+
+        /// <summary>
+        /// Reindexes an invoice based on order saved
+        /// </summary>
+        static void OrderServiceSaved(IOrderService sender, SaveEventArgs<IOrder> e)
+        {
+            e.SavedEntities.ForEach(ReIndexOrder);
+        }
+
+        /// <summary>
+        /// Reindexes an invoice based on order deletion 
+        /// </summary>
+        static void OrderServiceDeleted(IOrderService sender, DeleteEventArgs<IOrder> e)
+        {
+            e.DeletedEntities.ForEach(ReIndexOrder);
+        }
+
+        /// <summary>
+        /// ReIndexes an invoice based on an order change
+        /// </summary>
+        private static void ReIndexOrder(IOrder order)
+        {
+            IndexInvoice(MerchelloContext.Current.Services.InvoiceService.GetByKey(order.Key)); 
+        }
+
+        /// <summary>
+        /// ReIndexes an Invoice
+        /// </summary>
+        /// <param name="invoice">The <see cref="IInvoice"/> to be reindexed</param>
+        private static void IndexInvoice(IInvoice invoice)
+        {
+            if(invoice != null && invoice.HasIdentity) InvoiceIndexer.AddInvoiceToIndex(invoice);
+        }
+
+        /// <summary>
+        /// Deletes an <see cref="IInvoice"/> from the index
+        /// </summary>
+        /// <param name="invoice">The <see cref="IInvoice"/> to be removed from the index</param>
+        private static void DeleteInvoiceFromIndex(IInvoice invoice)
+        {
+            InvoiceIndexer.DeleteFromIndex(((Invoice)invoice).ExamineId.ToString(CultureInfo.InvariantCulture));
+        }
+
+        #endregion
 
         #region Product
 

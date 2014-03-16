@@ -120,6 +120,7 @@
     <Compile Include="Models\PaymentExtensions.cs" />
     <Compile Include="Models\PaymentMethod.cs" />
     <Compile Include="Models\Rdbms\InvoiceIndexDto.cs" />
+    <Compile Include="Models\Rdbms\OrderIndexDto.cs" />
     <Compile Include="Models\Rdbms\PaymentMethodDto.cs" />
     <Compile Include="Persistence\Factories\OrderStatusFactory.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IInvoiceStatusRepository.cs" />

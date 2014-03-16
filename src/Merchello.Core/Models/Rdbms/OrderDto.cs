@@ -51,6 +51,9 @@ namespace Merchello.Core.Models.Rdbms
         public DateTime CreateDate { get; set; }
 
         [ResultColumn]
+        public OrderIndexDto OrderIndexDto { get; set; }
+
+        [ResultColumn]
         public OrderStatusDto OrderStatusDto { get; set; }
 
     }

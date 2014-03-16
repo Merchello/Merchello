@@ -202,6 +202,8 @@
   <ItemGroup>
     <Compile Include="DataServices\IInvoiceDataService.cs" />
     <Compile Include="DataServices\InvoiceDataService.cs" />
+    <Compile Include="DataServices\IOrderDataService.cs" />
+    <Compile Include="DataServices\OrderDataService.cs" />
     <Compile Include="Providers\BaseMerchelloIndexer.cs" />
     <Compile Include="DataServices\IDataService.cs" />
     <Compile Include="DataServices\IIndexDataService.cs" />
@@ -212,6 +214,7 @@
     <Compile Include="DataServices\ProductDataService.cs" />
     <Compile Include="IndexSetExtensions.cs" />
     <Compile Include="IndexTypes.cs" />
+    <Compile Include="Providers\OrderIndexer.cs" />
     <Compile Include="Providers\InvoiceIndexer.cs" />
     <Compile Include="Providers\ProductIndexer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

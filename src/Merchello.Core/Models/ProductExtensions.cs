@@ -150,7 +150,7 @@ namespace Merchello.Core
         }
 
 
-        public static XDocument SerializeToXml(this IProductVariant productVariant, ProductOptionCollection productOptionCollection = null)
+        internal static XDocument SerializeToXml(this IProductVariant productVariant, ProductOptionCollection productOptionCollection = null)
         {
             string xml;
             using (var sw = new StringWriter())

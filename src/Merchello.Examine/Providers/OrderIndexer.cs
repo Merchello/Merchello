@@ -10,7 +10,7 @@ using Merchello.Core.Models;
 
 namespace Merchello.Examine.Providers
 {
-    public class InvoiceIndexer : BaseMerchelloIndexer
+    public class OrderIndexer : BaseMerchelloIndexer
     {
         protected override void PerformIndexAll(string type)
         {
@@ -31,64 +31,53 @@ namespace Merchello.Examine.Providers
 
             EnsureIndex(true);
 
-            PerformIndexAll(IndexTypes.Invoice);
+            PerformIndexAll(IndexTypes.Order);
             //base.RebuildIndex();
         }
 
         /// <summary>
-        /// Adds the invoice to the index
+        /// Adds the order to the index
         /// </summary>
-        /// <param name="invoice"></param>
+        /// <param name="order"></param>
         /// <remarks>For testing</remarks>
-        internal void AddInvoiceToIndex(IInvoice invoice)
+        internal void AddOrderToIndex(IOrder order)
         {
-            var nodes = new List<XElement> {invoice.SerializeToXml().Root};
-            AddNodesToIndex(nodes, IndexTypes.Invoice);
+            var nodes = new List<XElement> {order.SerializeToXml().Root};
+            AddNodesToIndex(nodes, IndexTypes.Order);
         }
 
         /// <summary>
-        /// Removes the invoice from the index
+        /// Removes the order from the index
         /// </summary>
-        /// <param name="invoice"></param>
+        /// <param name="order"></param>
         /// <remarks>For testing</remarks>
-        internal void DeleteInvoiceFromIndex(IInvoice invoice)
+        internal void DeleteOrderFromIndex(IOrder order)
         {            
-            DeleteFromIndex(((Invoice)invoice).ExamineId.ToString(CultureInfo.InvariantCulture));
+            DeleteFromIndex(((Order)order).ExamineId.ToString(CultureInfo.InvariantCulture));
         }
 
 
 
         protected override IEnumerable<string> SupportedTypes
         {
-            get { return new[] { IndexTypes.Invoice }; }
+            get { return new[] { IndexTypes.Order }; }
         }
 
         internal static readonly List<StaticField> IndexFieldPolicies
             = new List<StaticField>()
             {
+                new StaticField("orderKey", FieldIndexTypes.ANALYZED, false, string.Empty),
                 new StaticField("invoiceKey", FieldIndexTypes.ANALYZED, false, string.Empty),
-                new StaticField("customerKey", FieldIndexTypes.ANALYZED, false, string.Empty),
-                new StaticField("invoiceNumberPrefix", FieldIndexTypes.NOT_ANALYZED, true, string.Empty),
-                new StaticField("invoiceNumber", FieldIndexTypes.ANALYZED, true, string.Empty),
-                new StaticField("prefixedInvoiceNumber", FieldIndexTypes.ANALYZED, false, string.Empty),
-                new StaticField("invoiceDate", FieldIndexTypes.ANALYZED, true, "DATETIME"),
-                new StaticField("invoiceStatusKey", FieldIndexTypes.ANALYZED, false, string.Empty),
+                new StaticField("orderNumberPrefix", FieldIndexTypes.NOT_ANALYZED, true, string.Empty),
+                new StaticField("orderNumber", FieldIndexTypes.ANALYZED, true, string.Empty),
+                new StaticField("prefixedOrderNumber", FieldIndexTypes.ANALYZED, false, string.Empty),
+                new StaticField("orderDate", FieldIndexTypes.ANALYZED, true, "DATETIME"),
+                new StaticField("orderStatusKey", FieldIndexTypes.ANALYZED, false, string.Empty),
                 new StaticField("versionKey", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
-                new StaticField("billToName", FieldIndexTypes.ANALYZED, true, string.Empty),
-                new StaticField("billToAddress1", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
-                new StaticField("billToAddress2", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
-                new StaticField("billToLocality", FieldIndexTypes.ANALYZED, false, string.Empty),
-                new StaticField("billToRegion", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
-                new StaticField("billToPostalCode", FieldIndexTypes.ANALYZED, true, string.Empty),
-                new StaticField("billToCountryCode", FieldIndexTypes.ANALYZED, true, string.Empty),
-                new StaticField("billToEmail", FieldIndexTypes.ANALYZED, false, string.Empty),
-                new StaticField("billtoPhone", FieldIndexTypes.ANALYZED, false, string.Empty),
-                new StaticField("billtoCompany", FieldIndexTypes.ANALYZED, true, string.Empty),
                 new StaticField("exported", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
-                new StaticField("archived", FieldIndexTypes.ANALYZED, false, string.Empty),
                 new StaticField("total", FieldIndexTypes.ANALYZED, true, "DOUBLE"),
-                new StaticField("invoiceStatus", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
-                new StaticField("invoiceItems", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
+                new StaticField("orderStatus", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
+                new StaticField("orderItems", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
                 new StaticField("createDate", FieldIndexTypes.NOT_ANALYZED, false, "DATETIME"),
                 new StaticField("updateDate", FieldIndexTypes.NOT_ANALYZED, false, "DATETIME"),
                 new StaticField("allDocs", FieldIndexTypes.ANALYZED, false, string.Empty)
@@ -105,7 +94,7 @@ namespace Merchello.Examine.Providers
         /// </remarks>
         protected override IIndexCriteria GetIndexerData(IndexSet indexSet)
         {
-            return indexSet.ToIndexCriteria(DataService.InvoiceDataService.GetIndexFieldNames(), IndexFieldPolicies);
+            return indexSet.ToIndexCriteria(DataService.OrderDataService.GetIndexFieldNames(), IndexFieldPolicies);
         }
 
         /// <summary>

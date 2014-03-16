@@ -4,11 +4,13 @@ using System.Linq;
 using Examine;
 using Merchello.Core;
 using Merchello.Core.Models;
+using Merchello.Core.Services;
 using Merchello.Examine.Providers;
 using Merchello.Tests.Base.DataMakers;
 using Merchello.Tests.IntegrationTests.TestHelpers;
 using Merchello.Web;
 using NUnit.Framework;
+using Umbraco.Core.Events;
 
 namespace Merchello.Tests.IntegrationTests.Examine
 {
@@ -18,6 +20,7 @@ namespace Merchello.Tests.IntegrationTests.Examine
         private const int InvoiceCount = 2;
         private IAddress _address;
 
+        [TestFixtureSetUp]
         public override void FixtureSetup()
         {
             base.FixtureSetup();
@@ -36,8 +39,26 @@ namespace Merchello.Tests.IntegrationTests.Examine
                     CountryCode = "US",
                     Email = "test@test.com"
                 };
+
+            InvoiceService.Saved += InvoiceServiceSaved; 
         }
-        
+
+        [TestFixtureTearDown]
+        public void TestFixtureTearDown()
+        {
+            InvoiceService.Saved -= InvoiceServiceSaved;
+        }
+
+        private void InvoiceServiceSaved(IInvoiceService sender, SaveEventArgs<IInvoice> e)
+        {
+            
+            var provider = (InvoiceIndexer)ExamineManager.Instance.IndexProviderCollection["MerchelloInvoiceIndexer"];
+            foreach (var invoice in e.SavedEntities)
+            {
+                provider.AddInvoiceToIndex(invoice);
+            }
+            
+        }
 
         /// <summary>
         /// Test to verify that the invoice index can be rebuilt
@@ -99,6 +120,28 @@ namespace Merchello.Tests.IntegrationTests.Examine
             //// Assert
             Assert.AreEqual(1, results.Count());
 
+
+        }
+
+        [Test]
+        public void Can_Updates_Index_With_InvoiceService_SaveEvent()
+        {
+            //// Arrange
+            
+            //// Act
+            var invoice3 = MockInvoiceDataMaker.InvoiceForInserting(_address, 300);
+            invoice3.Items.Add(new InvoiceLineItem(LineItemType.Product, "test", "test", 1, 100));
+            invoice3.Items.Add(new InvoiceLineItem(LineItemType.Product, "test2", "test2", 2, 100));
+            PreTestDataWorker.InvoiceService.Save(invoice3);
+
+            var searcher = ExamineManager.Instance.SearchProviderCollection["MerchelloInvoiceSearcher"];
+
+            var criteria = searcher.CreateSearchCriteria(Merchello.Examine.IndexTypes.Invoice);
+            criteria.Field("invoiceKey", invoice3.Key.ToString());
+            var results = searcher.Search(criteria);
+
+            //// Assert
+            Assert.AreEqual(1, results.Count());
 
         }
     }
