@@ -106,7 +106,7 @@
                     taxCountry.method = taxMethod;
                     taxCountry.country = _.find($scope.allCountries, function(c) { return c.countryCode == taxMethod.countryCode; });
 
-                    taxCountry.countryName = taxMethod.name;
+                    taxCountry.countryName = taxCountry.country.name;
 
                     return taxCountry;
                 });
@@ -211,7 +211,7 @@
             var promiseSave;
 
             // Save existing method
-            promiseSave = merchelloTaxationGatewayService.savePaymentMethod(country.method);
+            promiseSave = merchelloTaxationGatewayService.saveTaxMethod(country.method);
 
             promiseSave.then(function () {
                 notificationsService.success("Taxation Method Saved");
