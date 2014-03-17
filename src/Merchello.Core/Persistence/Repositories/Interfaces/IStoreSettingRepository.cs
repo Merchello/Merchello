@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using Merchello.Core.Models;
+using Merchello.Core.Models.TypeFields;
 using Umbraco.Core.Persistence.Repositories;
 
 namespace Merchello.Core.Persistence.Repositories
@@ -24,5 +26,12 @@ namespace Merchello.Core.Persistence.Repositories
         /// <param name="ordersCount">The number of orders needing invoice orders.  Useful when saving multiple new orders.</param>
         /// <returns></returns>
         int GetNextOrderNumber(Guid storeSettingKey, int ordersCount = 1);
+
+
+        /// <summary>
+        /// Gets the complete collection of registered typefields
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<ITypeField> GetTypeFields();
     }
 }

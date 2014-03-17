@@ -5,6 +5,7 @@ using System.Linq;
 using Merchello.Core.Models;
 using Merchello.Core.Models.EntityBase;
 using Merchello.Core.Models.Rdbms;
+using Merchello.Core.Models.TypeFields;
 using Merchello.Core.Persistence.Factories;
 using Merchello.Core.Persistence.Querying;
 using Merchello.Core.Persistence.UnitOfWork;
@@ -162,6 +163,12 @@ namespace Merchello.Core.Persistence.Repositories
             AddOrUpdate(nextOrderNumber);
 
             return orderNumber;
+        }
+
+        public IEnumerable<ITypeField> GetTypeFields()
+        {
+            var dtos = Database.Fetch<TypeFieldDto>("SELECT * FROM merchTypeField");
+            return dtos.Select(dto => new TypeField(dto.Alias, dto.Name, dto.Key));
         }
     }
 }

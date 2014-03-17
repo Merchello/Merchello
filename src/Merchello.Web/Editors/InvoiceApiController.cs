@@ -71,8 +71,7 @@ namespace Merchello.Web.Editors
         /// </summary>
         public IEnumerable<InvoiceDisplay> GetAllInvoices()
         {
-            var merchello = new MerchelloHelper();
-            return merchello.AllInvoices();
+            return InvoiceQuery.GetAllInvoices();
         }
 
         /// <summary>
@@ -82,8 +81,7 @@ namespace Merchello.Web.Editors
         /// </summary>
         public IEnumerable<InvoiceDisplay> GetAllInvoices(int page, int perPage)
         {
-            var merchello = new MerchelloHelper();
-            return merchello.AllInvoices().Skip((page - 1) * perPage).Take(perPage);
+            return InvoiceQuery.GetAllInvoices().Skip((page - 1) * perPage).Take(perPage);
         }
 
         /// <summary>
@@ -94,8 +92,7 @@ namespace Merchello.Web.Editors
         /// <param name="term"></param>
         public IEnumerable<InvoiceDisplay> GetFilteredInvoices(string term)
         {
-            var merchello = new MerchelloHelper();
-            return merchello.SearchInvoices(term);
+            return InvoiceQuery.Search(term);
         }
 
         /// <summary>
@@ -105,8 +102,7 @@ namespace Merchello.Web.Editors
         /// </summary>
         public IEnumerable<InvoiceDisplay> GetFilteredInvoices(string term, int page, int perPage)
         {
-            var merchello = new MerchelloHelper();
-            return merchello.SearchInvoices(term).Skip((page - 1) * perPage).Take(perPage);
+            return InvoiceQuery.Search(term).Skip((page - 1) * perPage).Take(perPage);
         }
 
         /// <summary>
