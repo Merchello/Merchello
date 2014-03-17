@@ -250,7 +250,7 @@ namespace Merchello.Core.Services
         /// </summary>
         /// <param name="invoiceKey">The unique 'key' of the invoice</param>
         /// <returns>A collection of <see cref="IPayment"/></returns>
-        public IEnumerable<IPayment> GetPaymentsForInvoice(Guid invoiceKey)
+        public IEnumerable<IPayment> GetPaymentsByInvoiceKey(Guid invoiceKey)
         {
             var paymentKeys = _appliedPaymentService.GetAppliedPaymentsByInvoiceKey(invoiceKey).Select(x => x.InvoiceKey).ToArray();
             

@@ -356,7 +356,7 @@ namespace Merchello.Core.Services
         /// <returns>A collection of <see cref="IPayment"/></returns>
         public IEnumerable<IPayment> GetPaymentsForInvoice(Guid invoiceKey)
         {
-            return _paymentService.GetPaymentsForInvoice(invoiceKey);
+            return _paymentService.GetPaymentsByInvoiceKey(invoiceKey);
         }
 
         #endregion

@@ -84,7 +84,7 @@ namespace Merchello.Core.Services
         /// </summary>
         /// <param name="invoiceKey">The unique 'key' of the invoice</param>
         /// <returns>A collection of <see cref="IPayment"/></returns>
-        IEnumerable<IPayment> GetPaymentsForInvoice(Guid invoiceKey);
+        IEnumerable<IPayment> GetPaymentsByInvoiceKey(Guid invoiceKey);
 
 
         /// <summary>

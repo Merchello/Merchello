@@ -1,15 +1,13 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Merchello.Core.Gateways.Payment
 {
     /// <summary>
     /// 
     /// </summary>
-    public class ProcessorArgumentCollection : KeyedCollection<string, string>
+    public class ProcessorArgumentCollection : Dictionary<string, string>
     {
-        protected override string GetKeyForItem(string item)
-        {
-            return item;
-        }
+        
     }
 }

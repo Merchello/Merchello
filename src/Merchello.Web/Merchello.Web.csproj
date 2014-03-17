@@ -200,7 +200,9 @@
     <Compile Include="Editors\CatalogFixedRateShippingApiController.cs" />
     <Compile Include="Editors\InvoiceApiController.cs" />
     <Compile Include="Editors\OrderApiController.cs" />
+    <Compile Include="Editors\PaymentApiController.cs" />
     <Compile Include="Editors\PaymentGatewayApiController.cs" />
+    <Compile Include="Editors\PaymentProcessor.cs" />
     <Compile Include="Editors\SettingsApiController.cs" />
     <Compile Include="Editors\CatalogShippingApiController.cs" />
     <Compile Include="Editors\ShipmentApiController.cs" />
@@ -208,6 +210,7 @@
     <Compile Include="Editors\WarehouseApiController.cs" />
     <Compile Include="InvoiceQuery.cs" />
     <Compile Include="Models\ContentEditing\AddressDisplay.cs" />
+    <Compile Include="Models\ContentEditing\AppliedPaymentDisplay.cs" />
     <Compile Include="Models\ContentEditing\GatewayProviderDisplay.cs" />
     <Compile Include="Models\ContentEditing\GatewayResourceDisplay.cs" />
     <Compile Include="Models\ContentEditing\FixedRateShipMethodDisplay.cs" />
@@ -217,6 +220,7 @@
     <Compile Include="Models\ContentEditing\OrderDisplay.cs" />
     <Compile Include="Models\ContentEditing\OrderLineItemDisplay.cs" />
     <Compile Include="Models\ContentEditing\OrderStatusDisplay.cs" />
+    <Compile Include="Models\ContentEditing\PaymentDisplay.cs" />
     <Compile Include="Models\ContentEditing\PaymentMethodDisplay.cs" />
     <Compile Include="Models\ContentEditing\ShipFixedRateTableDisplay.cs" />
     <Compile Include="Models\ContentEditing\ShipmentDisplay.cs" />
@@ -224,7 +228,6 @@
     <Compile Include="Models\ContentEditing\SettingDisplay.cs" />
     <Compile Include="Models\ContentEditing\TaxMethodDisplay.cs" />
     <Compile Include="Models\ContentEditing\WarehouseCatalogDisplay.cs" />
-    <Compile Include="Models\IGatewayMethod.cs" />
     <Compile Include="Models\ContentEditing\FullfillmentMappingExtensions.cs" />
     <Compile Include="Models\ContentEditing\ProductMappingExtensions.cs" />
     <Compile Include="Models\ContentEditing\CountryDisplay.cs" />
@@ -237,6 +240,7 @@
     <Compile Include="Models\ContentEditing\TaxProvinceDisplay.cs" />
     <Compile Include="Models\ContentEditing\WarehouseDisplay.cs" />
     <Compile Include="Models\ContentEditing\CatalogInventoryDisplay.cs" />
+    <Compile Include="Models\PaymentRequest.cs" />
     <Compile Include="Mvc\MerchelloViewPage.cs" />
     <Compile Include="OrderQuery.cs" />
     <Compile Include="PackageActions\AddConfigSection.cs" />

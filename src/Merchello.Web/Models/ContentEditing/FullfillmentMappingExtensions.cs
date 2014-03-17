@@ -2,11 +2,13 @@
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
+using System.Security.Cryptography;
 using Merchello.Core.Gateways;
 using Merchello.Core.Gateways.Shipping.FixedRate;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Gateways.Shipping;
+using Umbraco.Core;
 
 namespace Merchello.Web.Models.ContentEditing
 {
@@ -23,6 +25,26 @@ namespace Merchello.Web.Models.ContentEditing
         internal static IAddress ToAddress(this AddressDisplay addressDisplay)
         {
             return AutoMapper.Mapper.Map<Address>(addressDisplay);
+        }
+
+        #endregion
+
+        #region AppliedPayment
+
+        internal static AppliedPaymentDisplay ToAppliedPaymentDisplay(this IAppliedPayment appliedPayment)
+        {
+            return AutoMapper.Mapper.Map<AppliedPaymentDisplay>(appliedPayment);
+        }
+
+        internal static IAppliedPayment ToAppliedPayment(this AppliedPaymentDisplay appliedPaymentDisplay, IAppliedPayment destination)
+        {
+            if (appliedPaymentDisplay.Key != Guid.Empty) destination.Key = appliedPaymentDisplay.Key;
+
+            // the only things we can change here are the amount and the description
+            destination.Description = appliedPaymentDisplay.Description;
+            destination.Amount = appliedPaymentDisplay.Amount;
+
+            return destination;
         }
 
         #endregion
@@ -82,6 +104,27 @@ namespace Merchello.Web.Models.ContentEditing
         internal static GatewayResourceDisplay ToGatewayResourceDisplay(this IGatewayResource gatewayResource)
         {
             return AutoMapper.Mapper.Map<GatewayResourceDisplay>(gatewayResource);
+        }
+
+        #endregion
+
+        #region Payment
+
+        internal static PaymentDisplay ToPaymentDisplay(this IPayment payment)
+        {
+            return AutoMapper.Mapper.Map<PaymentDisplay>(payment);
+        }
+
+        internal static IPayment ToPayment(this PaymentDisplay paymentDisplay, IPayment destination)
+        {
+            if (paymentDisplay.Key != Guid.Empty) destination.Key = paymentDisplay.Key;
+            destination.PaymentMethodName = paymentDisplay.PaymentMethodName;
+            destination.ReferenceNumber = paymentDisplay.ReferenceNumber;
+            destination.Amount = paymentDisplay.Amount;
+            //destination.Authorized = paymentDisplay.Authorized;
+            //destination.Collected = paymentDisplay.Collected;
+
+            return destination;
         }
 
         #endregion
