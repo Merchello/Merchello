@@ -4,17 +4,17 @@ using System.Linq;
 using Merchello.Core.Models;
 using Umbraco.Core;
 
-namespace Merchello.Core.Chains.OrderCreation
+namespace Merchello.Core.Chains.ShipmentCreation
 {
-    internal class UpdateInventoryAndBackOrderTask : InvoiceAttemptChainTaskBase
+    internal class UpdateInventoryAndBackOrderTask : OrderAttemptChainTaskBase
     {
-        private List<IOrderLineItem> _backOrderLineItems = new List<IOrderLineItem>();
+        private readonly List<IOrderLineItem> _backOrderLineItems = new List<IOrderLineItem>();
 
-        public UpdateInventoryAndBackOrderTask(IMerchelloContext merchelloContext, IInvoice invoice) 
-            : base(merchelloContext, invoice)
+        public UpdateInventoryAndBackOrderTask(IMerchelloContext merchelloContext, IOrder order) 
+            : base(merchelloContext, order)
         { }
 
-        public override Attempt<IOrder> PerformTask(IOrder value)
+        public override Attempt<IShipment> PerformTask(IShipment value)
         {
             var productLineItems = value.Items.Where(
                 x => x.LineItemType == LineItemType.Product && 
@@ -31,7 +31,7 @@ namespace Merchello.Core.Chains.OrderCreation
                 if (!lineItem.ExtendedData.ContainsWarehouseCatalogKey())
                 {
                     return
-                        Attempt<IOrder>.Fail(
+                        Attempt<IShipment>.Fail(
                             new InvalidOperationException(
                                 "The order product line item does not contain a WarehouseCatalogKey which is required to update inventory."));
                 }
@@ -43,13 +43,13 @@ namespace Merchello.Core.Chains.OrderCreation
                 // assert the variant has not been deleted since it was invoiced.  eg. cash payment finally collected
                 if (variant == null)
                 {
-                    return Attempt<IOrder>.Fail(new NullReferenceException("A product variant does not exist with the key found"));
+                    return Attempt<IShipment>.Fail(new NullReferenceException("A product variant does not exist with the key found"));
                 }
 
                 var inventory = variant.CatalogInventories.FirstOrDefault(x => x.CatalogKey == catalogKey);
 
                 // assert there is an inventory record
-                if (inventory == null) return Attempt<IOrder>.Fail(new NullReferenceException("CatalogInventory not found for product"));
+                if (inventory == null) return Attempt<IShipment>.Fail(new NullReferenceException("CatalogInventory not found for product"));
 
                 if (inventory.Count < lineItem.Quantity)
                 {
@@ -74,7 +74,7 @@ namespace Merchello.Core.Chains.OrderCreation
                 }
                 else
                 {
-                    lineItem.BackOrder = false;
+                    ((OrderLineItem)lineItem).BackOrder = false;
                     inventory.Count = inventory.Count - lineItem.Quantity;
                 }
                 
@@ -83,11 +83,16 @@ namespace Merchello.Core.Chains.OrderCreation
             // save the variants with the updated inventories
             MerchelloContext.Services.ProductVariantService.Save(variants);
 
-            // add the backorder lineitems to the order
-            foreach (var backOrder in _backOrderLineItems)
-            {
-                value.Items.Add(backOrder);
-            }
+            //// add the backorder lineitems to the order
+            
+            
+            //foreach (var backOrder in _backOrderLineItems)
+            //{
+            //    value.Items.Add(backOrder);
+            //}
+
+
+
 
             return Attempt<IOrder>.Succeed(value);
         }

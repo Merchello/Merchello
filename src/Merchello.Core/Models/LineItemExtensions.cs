@@ -1,4 +1,6 @@
-﻿using Merchello.Core.Gateways.Shipping;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Gateways.Taxation;
 using Merchello.Core.Models.TypeFields;
 using Umbraco.Core.Logging;
@@ -157,6 +159,27 @@ namespace Merchello.Core.Models
         }
 
 
+        /// <summary>
+        /// Returns a collection of shippable line items
+        /// </summary>
+        /// <param name="container">The <see cref="ILineItemContainer"/></param>
+        /// <returns>A collection of line items that can be shipped</returns>
+        public static IEnumerable<ILineItem> ShippableItems(this ILineItemContainer container)
+        {
+            return container.Items.Where(x => x.IsShippable());
+        }
+
+        /// <summary>
+        /// True/false indicating whether or not this lineItem represents a line item that can be shipped (eg. a product)
+        /// </summary>
+        /// <param name="lineItem">The <see cref="ILineItem"/></param>
+        public static bool IsShippable(this ILineItem lineItem)
+        {
+            return lineItem.LineItemType == LineItemType.Product &&
+                   lineItem.ExtendedData.ContainsProductVariantKey() &&
+                   lineItem.ExtendedData.GetShippableValue() &&
+                   lineItem.ExtendedData.ContainsWarehouseCatalogKey();
+        }
     }
 }
 

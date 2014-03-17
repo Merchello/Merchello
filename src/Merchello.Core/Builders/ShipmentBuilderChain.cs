@@ -7,12 +7,17 @@ namespace Merchello.Core.Builders
     internal sealed class ShipmentBuilderChain : BuildChainBase<IShipment>
     {
         private readonly IOrder _order;
+        private readonly IMerchelloContext _merchelloContext;
 
-        public ShipmentBuilderChain(IOrder order)
+        public ShipmentBuilderChain(IMerchelloContext merchelloContext, IOrder order)
         {
+            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
             Mandate.ParameterNotNull(order, "order");
 
+            _merchelloContext = merchelloContext;
             _order = order;
+
+            ResolveChain(Constants.TaskChainAlias.OrderPreparationShipmentCreate);
         }
 
         /// <summary>
@@ -33,7 +38,7 @@ namespace Merchello.Core.Builders
         {
             get
             {
-                return _constructorParameters ?? (_constructorParameters = new List<object>(new object[] { _order }));
+                return _constructorParameters ?? (_constructorParameters = new List<object>(new object[] { _merchelloContext, _order }));
             }
         }
     }

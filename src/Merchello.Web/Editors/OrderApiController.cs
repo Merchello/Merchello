@@ -64,6 +64,28 @@ namespace Merchello.Web.Editors
         }
 
         /// <summary>
+        /// Returns an Orderby id (key) with line items flagged as Back Order if quantity not available in stock
+        /// 
+        /// GET /umbraco/Merchello/OrderApi/GetOrder/{guid}
+        /// </summary>
+        /// <param name="id"></param>
+        /// <remarks>
+        /// 
+        /// At this point we are not allowing for splitting of line items into mulitple shipments, but thats coming
+        /// 
+        /// </remarks>
+        public IEnumerable<OrderLineItemDisplay> GetUnFulfilledItems(Guid id)
+        {
+            var order = _orderService.GetByKey(id);
+            if (order == null)
+            {
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+            }
+
+            return order.UnfulfilledItems().Select(x => x.ToOrderLineItemDisplay());
+        }
+
+        /// <summary>
         /// Returns an collection of orders for an invoice id (key)
         /// 
         /// GET /umbraco/Merchello/OrderApi/GetOrdersByInvoiceKey/{guid}
@@ -73,6 +95,7 @@ namespace Merchello.Web.Editors
         {
             return OrderQuery.GetByInvoiceKey(id);
         }
+
 
         /// <summary>
         /// Returns the shipping Address by an invoice id (key)  - All orders for the invoice are assumed to be shipped to the same 

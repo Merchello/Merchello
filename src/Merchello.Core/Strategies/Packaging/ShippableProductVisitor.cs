@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
-using Merchello.Core;
 using Merchello.Core.Models;
 
-namespace Merchello.Web.Workflow.Shipping
+namespace Merchello.Core.Strategies.Packaging
 {
     /// <summary>
     /// Line item visitor intended to filter "Basket" items for shippable products

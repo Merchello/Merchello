@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Merchello.Core;
 using Merchello.Core.Models;
+using umbraco.presentation.umbraco.dialogs;
 
 namespace Merchello.Tests.Base.DataMakers
 {

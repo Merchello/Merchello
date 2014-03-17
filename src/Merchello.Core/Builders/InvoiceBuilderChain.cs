@@ -16,7 +16,7 @@ namespace Merchello.Core.Builders
 
         internal InvoiceBuilderChain(SalePreparationBase salePreparation)
         {
-            Mandate.ParameterNotNull(salePreparation, "salesManager");
+            Mandate.ParameterNotNull(salePreparation, "salesPreparation");
             _salePreparation = salePreparation;
 
             ResolveChain(Constants.TaskChainAlias.SalesPreparationInvoiceCreate);

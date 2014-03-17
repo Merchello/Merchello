@@ -304,6 +304,11 @@ namespace Merchello.Web.Models.ContentEditing
                 };
         }
 
+        internal static OrderLineItemDisplay ToOrderLineItemDisplay(this IOrderLineItem orderLineItem)
+        {
+            return AutoMapper.Mapper.Map<OrderLineItemDisplay>(orderLineItem);
+        }
+
         #endregion
 
         #region Shipment

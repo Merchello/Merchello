@@ -27,6 +27,75 @@ namespace Merchello.Core.Models
                 : string.Format("{0}-{1}", order.OrderNumberPrefix, order.OrderNumber);
         }
 
+#region Back Order
+
+
+        /// <summary>
+        /// Gets a collection of unfulfilled (unshipped) line items
+        /// </summary>
+        /// <param name="order">The <see cref="IOrder"/></param>        
+        /// <returns>A collection of <see cref="IOrderLineItem"/></returns>
+        public static IEnumerable<IOrderLineItem> UnfulfilledItems(this IOrder order)
+        {
+            return order.UnfulfilledItems(MerchelloContext.Current);
+        }
+
+        /// <summary>
+        /// Gets a collection of unfulfilled (unshipped) line items
+        /// </summary>
+        /// <param name="order">The <see cref="IOrder"/></param>
+        /// <param name="merchelloContext">The <see cref="IMerchelloContext"/></param>
+        /// <returns>A collection of <see cref="IOrderLineItem"/></returns>
+        public static IEnumerable<IOrderLineItem> UnfulfilledItems(this IOrder order, IMerchelloContext merchelloContext)
+        {
+            return order.UnfulfilledItems(merchelloContext, order.Items.Select(x => x as OrderLineItem));
+        }
+
+        /// <summary>
+        /// Gets a collection of unfulfilled (unshipped) line items
+        /// </summary>
+        /// <param name="order">The <see cref="IOrder"/></param>
+        /// <param name="items">A collection of <see cref="IOrderLineItem"/></param>
+        /// <returns>A collection of <see cref="IOrderLineItem"/></returns>
+        public static IEnumerable<IOrderLineItem> UnfulfilledItems(this IOrder order, IEnumerable<IOrderLineItem> items)
+        {
+            return order.UnfulfilledItems(MerchelloContext.Current, items);
+        }
+
+        /// <summary>
+        /// Gets a collection of unfulfilled (unshipped) line items
+        /// </summary>
+        /// <param name="order">The <see cref="IOrder"/></param>
+        /// <param name="merchelloContext">The <see cref="IMerchelloContext"/></param>
+        /// <param name="items">A collection of <see cref="IOrderLineItem"/></param>
+        /// <returns>A collection of <see cref="IOrderLineItem"/></returns>
+        public static IEnumerable<IOrderLineItem> UnfulfilledItems(this IOrder order, IMerchelloContext merchelloContext, IEnumerable<IOrderLineItem> items)
+        {
+
+            if (Constants.DefaultKeys.OrderStatus.Fulfilled == order.OrderStatus.Key) return new List<IOrderLineItem>();
+
+            var shippableItems = items.Where(x => x.IsShippable()).ToArray();
+
+            var inventoryItems = shippableItems.Where(x => x.ExtendedData.GetTrackInventoryValue()).ToArray();
+
+            // get the variants to check the inventory
+            var variants = merchelloContext.Services.ProductVariantService.GetByKeys(inventoryItems.Select(x => x.ExtendedData.GetProductVariantKey())).ToArray();
+
+            foreach (var item in inventoryItems)
+            {
+                var variant = variants.FirstOrDefault(x => x.Key == item.ExtendedData.GetProductVariantKey());
+                if (variant == null) continue;
+                // check inventory
+                var inventory = variant.CatalogInventories.FirstOrDefault(x => x.CatalogKey == item.ExtendedData.GetWarehouseCatalogKey());
+                if (inventory != null)
+                    item.BackOrder = inventory.Count < item.Quantity;
+            }
+
+            return shippableItems;
+        }
+
+#endregion
+
         #region Examine
 
         /// <summary>
