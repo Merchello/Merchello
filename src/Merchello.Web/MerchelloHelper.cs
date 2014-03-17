@@ -76,7 +76,7 @@ namespace Merchello.Web
         /// <remarks>
         /// Intended to assist in product variant selection 
         /// </remarks>
-        public IEnumerable<ProductVariantDisplay> GetValidProductVaraints(Guid productKey, Guid[] attributeKeys)
+        public IEnumerable<ProductVariantDisplay> GetValidProductVariants(Guid productKey, Guid[] attributeKeys)
         {
             var product = Product(productKey);
             if(product == null) throw new InvalidOperationException("Product is null");

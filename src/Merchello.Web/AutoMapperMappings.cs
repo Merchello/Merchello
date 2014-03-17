@@ -34,6 +34,8 @@ namespace Merchello.Web
             AutoMapper.Mapper.CreateMap<IOrder, OrderDisplay>();
 
             // payment
+            AutoMapper.Mapper.CreateMap<IAppliedPayment, AppliedPaymentDisplay>();
+            AutoMapper.Mapper.CreateMap<IPayment, PaymentDisplay>();
             AutoMapper.Mapper.CreateMap<IPaymentMethod, PaymentMethodDisplay>();
 
             // products
