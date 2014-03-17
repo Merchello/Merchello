@@ -8,7 +8,7 @@
      * @description
      * The controller for the order view page
      */
-    controllers.OrderViewController = function ($scope, $routeParams, notificationsService, merchelloInvoiceService) {
+    controllers.OrderViewController = function ($scope, $routeParams, dialogService, notificationsService, merchelloInvoiceService) {
 
         $scope.invoice = {};
 
@@ -53,6 +53,47 @@
         // Events methods
         //--------------------------------------------------------------------------------------
 
+
+
+
+        //--------------------------------------------------------------------------------------
+        // Dialogs
+        //--------------------------------------------------------------------------------------
+
+        $scope.capturePaymentDialogConfirm = function (data) {
+
+            notificationsService.success("Capture Payment Confirm Called");
+
+        };
+
+        $scope.capturePayment = function () {
+
+            dialogService.open({
+                template: '/App_Plugins/Merchello/Modules/Order/Dialogs/capture.payment.html',
+                show: true,
+                callback: $scope.capturePaymentDialogConfirm,
+                dialogData: $scope.invoice
+            });
+
+        };
+
+
+        $scope.fulfillShipmentDialogConfirm = function (data) {
+
+            notificationsService.success("Fulfill Shipment Confirm Called");
+
+        };
+
+        $scope.fulfillShipment = function () {
+
+            dialogService.open({
+                template: '/App_Plugins/Merchello/Modules/Order/Dialogs/fulfill.shipment.html',
+                show: true,
+                callback: $scope.fulfillShipmentDialogConfirm,
+                dialogData: $scope.invoice
+            });
+
+        };
 
     };
 

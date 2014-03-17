@@ -1,0 +1,40 @@
+﻿<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Dashboards.Order.Dialogs.CapturePaymentController">
+    <div class="umb-modalcolumn-header">
+        <h4>Capture Payment</h4>
+    </div>
+    <div class="umb-panel-body with-header with-footer">
+        
+        <div class="well">
+            <div class="control-group row-fluid">
+                <p>
+                    Processed by <strong>Authorize.NET</strong><br />
+                    <i class="icon-credit-card"></i> Credit Card: <span>XXXX-XXXX-XXXX-1234</span>
+                </p>
+                <div class="input-prepend col-xs-12 span12">
+                    <span class="add-on">$</span>
+                    <input class="col-xs-2 span2" type="text" placeholder="00.00">
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+	<div class="umb-panel-footer" >
+		<div class="umb-el-wrap umb-panel-buttons">
+	        <div class="btn-toolbar umb-btn-toolbar pull-right">
+
+	        	<a href data-ng-click="close()" class="btn btn-link">
+	        		<localize key="general_cancel">Cancel</localize>
+				</a>
+
+				<button
+					class="btn btn-primary"
+					data-ng-click="submit(dialogData)">
+					<localize key="merchello_process_payment">Process Payment</localize>
+				</button>
+
+	        </div>
+		</div>
+	</div>
+</div>
+
