@@ -42,7 +42,7 @@
                                 <a href="#" class="pull-right"><i class="icon-edit"></i> Edit</a>
                                 <h3>Shipping Address</h3>
 
-                                <h4 class="fn">Heather Alvis</h4>
+                                <!--<h4 class="fn">Heather Alvis</h4>
                                 <span class="org">Mindfly</span>
                                 <span class="adr">
                                     <span class="street-address">114 W Magnolia St.</span>
@@ -50,7 +50,7 @@
                                     <span class="locality">Bellingham</span>, <span class="region">WA</span>, <span class="postal-code">98225</span>
                                     <span class="country-name">USA</span>
                                 </span>
-                                <span class="tel">360-990-0090</span>
+                                <span class="tel">360-990-0090</span>-->
                             </div>
 
                             <!-- This section swaps out with shipping info when Edit is clicked -->
@@ -131,7 +131,7 @@
                             <div class="row-fluid">
                                 <div class="btn-toolbar pull-right umb-btn-toolbar">
                                     <a class="btn btn-primary" href="#">Fulfill {{invoice.items.length}} Line Items</a>
-                                    <a class="btn btn-primary" href="#">Capture Up To $105.00</a>
+                                    <a class="btn btn-primary" href="#">Capture Up To {{invoice.total | currency}}</a>
                                     <a class="btn btn-warning" href="#">Cancel Order</a>
                                 </div>
                             </div>
@@ -172,7 +172,7 @@
                                     <tr data-ng-repeat="lineitem in invoice.items">
                                         <td><input type="checkbox" data-ng-model="lineitem.selected" /></td>
                                         <td>
-                                            {{lineitem.name}}
+                                            <h4>{{lineitem.name}}</h4>
                                             <span>SKU: {{lineitem.sku}}</span>
                                         </td>
                                         <td class="text-right">{{lineitem.quantity}} x <strong>{{lineitem.price | currency}}</strong></td>
@@ -180,21 +180,13 @@
                                     </tr>
 
                                     <tr>
-                                        <td colspan="3" class="text-right">Sales Tax</td>
-                                        <td class="text-right">$8.50</td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="3" class="text-right">Shipping</td>
-                                        <td class="text-right">$8.50</td>
-                                    </tr>
-                                    <tr>
                                         <td><i class="icon-credit-card"></i></td>
                                         <td>
                                             <span class="card-no">xxxx-xxxx-xxxx-xxxx</span>
                                             <span class="payment-method">Payment processed by: Stripe</span>
                                         </td>
                                         <td class="text-right">Authorized:</td>
-                                        <td class="text-right">$105.00</td>
+                                        <td class="text-right">{{invoice.total | currency}}</td>
                                     </tr>
                                 </tbody>
                             </table>

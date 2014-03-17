@@ -10,13 +10,36 @@
 
         return {
 
-            addInvoice: function (invoice) {
+            getByKey: function (id) {
 
                 return umbRequestHelper.resourcePromise(
-                    $http.post(umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'AddInvoice'),
-                        invoice
-                    ),
-                    'Failed to create invoice');
+                   $http({
+                       url: umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'GetInvoice'),
+                       method: "GET",
+                       params: { id: id }
+                   }),
+                   'Failed to retreive data for invoice id: ' + id);
+            },
+
+            getAll: function () {
+
+                return umbRequestHelper.resourcePromise(
+                   $http({
+                       url: umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'GetAllInvoices'),
+                       method: "GET"
+                   }),
+                   'Failed to retreive invoices');
+            },
+
+            getFiltered: function (term) {
+
+                return umbRequestHelper.resourcePromise(
+                   $http({
+                       url: umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'GetFilteredInvoices'),
+                       method: "GET",
+                       params: { term: term }
+                   }),
+                   'Failed to retreive filtered invoices');
             },
 
             saveInvoice: function (invoice) {

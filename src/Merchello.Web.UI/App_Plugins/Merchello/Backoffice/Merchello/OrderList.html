@@ -37,6 +37,7 @@
                         <label for="orderFilter" class="col-xs-2 control-label">Filter Orders:</label>
                         <div class="col-xs-10 controls">
                             <input id="orderFilter" class="form-control span6" name="orderFilter" data-ng-model="filtertext" placeholder="Start typing an order number or name..." />
+                            <button id="orderFilterGo" class="btn" data-ng-click="getFilteredInvoices(filtertext)">Filter</button>
                         </div>
                     </div>
                 </form>
@@ -78,7 +79,7 @@
                 <table class="table table-hover merchello-selectable-table">
                     <thead>
                         <tr>
-                            <th><input type="checkbox" /></th> <!-- Toggles the bulk action dropdown -->
+                            <!--<th><input type="checkbox" /></th>--> <!-- Toggles the bulk action dropdown -->
                             <th>Order #</th>
                             <th>Date</th>
                             <th>Customer</th>
@@ -108,8 +109,8 @@
                             <td>#<a data-ng-href="#/merchello/merchello/OrderView/{{invoice.key}}">{{invoice.invoiceNumber}}</a></td>
                             <td>{{invoice.invoiceDate | date}}</td>
                             <td>{{invoice.billToName}}</td>
-                            <td><span class="label label-success"><i class="icon-check"></i> {{invoice.getPaymentStatus()}}</span></td>
-                            <td><span class="label label-success"><i class="icon-check"></i> {{invoice.getFulfillmentStatus()}}</span></td>
+                            <td><span class="label" data-ng-class="{ 'label-success': invoice.getPaymentStatus()=='Paid', 'label-info': invoice.getPaymentStatus()=='Unpaid' }"><i data-ng-class="{ 'icon-check': invoice.getPaymentStatus()=='Paid', 'icon-loading': invoice.getPaymentStatus()=='Unpaid' }"></i> {{invoice.getPaymentStatus()}}</span></td>
+                            <td><span class="label" data-ng-class="{ 'label-success': invoice.getFulfillmentStatus()=='Fulfilled', 'label-warning': invoice.getFulfillmentStatus()=='Not Fulfilled', 'label-info': invoice.getFulfillmentStatus()=='Partial' }"><i data-ng-class="{ 'icon-check': invoice.getFulfillmentStatus()=='Fulfilled', 'icon-alert': invoice.getFulfillmentStatus()=='Not Fulfilled', 'icon-loading': invoice.getFulfillmentStatus()=='Partial' }"></i> {{invoice.getFulfillmentStatus()}}</span></td>
                             <td>{{invoice.total | currency}}</td>
                         </tr>
                         <!--

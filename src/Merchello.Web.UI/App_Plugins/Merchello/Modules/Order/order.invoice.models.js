@@ -62,7 +62,7 @@
             self.orderNumber = "";
             self.orderDate = "";
             self.orderStatusKey = "";
-            self.orderStatus = merchello.Models.OrderStatus();
+            self.orderStatus = new merchello.Models.OrderStatus();
             self.exported = "";
             self.items = [];
         } else {
@@ -73,7 +73,7 @@
             self.orderNumber = data.orderNumber;
             self.orderDate = data.orderDate;
             self.orderStatusKey = data.orderStatusKey;
-            self.orderStatus = merchello.Models.OrderStatus(data.orderStatus);
+            self.orderStatus = new merchello.Models.OrderStatus(data.orderStatus);
             self.exported = data.exported;
             self.items = _.map(data.items, function (lineitem) {
                 return new merchello.Models.OrderLineItem(lineitem);
@@ -139,7 +139,7 @@
             self.invoiceNumber = "";
             self.invoiceDate = "";
             self.invoiceStatusKey = "";
-            self.invoiceStatus = merchello.Models.InvoiceStatus();
+            self.invoiceStatus = new merchello.Models.InvoiceStatus();
             self.billToName = "";
             self.billToAddress1 = "";
             self.billToAddress2 = "";
@@ -152,6 +152,7 @@
             self.billToCompany = "";
             self.exported = "";
             self.archived = "";
+            self.total = 0.0;
             self.items = [];
             self.orders = [];
         } else {
@@ -162,7 +163,7 @@
             self.invoiceNumber = data.invoiceNumber;
             self.invoiceDate = data.invoiceDate;
             self.invoiceStatusKey = data.invoiceStatusKey;
-            self.invoiceStatus = merchello.Models.InvoiceStatus(data.invoiceStatus);
+            self.invoiceStatus = new merchello.Models.InvoiceStatus(data.invoiceStatus);
             self.billToName = data.billToName;
             self.billToAddress1 = data.billToAddress1;
             self.billToAddress2 = data.billToAddress2;
@@ -175,6 +176,7 @@
             self.billToCompany = data.billToCompany;
             self.exported = data.exported;
             self.archived = data.archived;
+            self.total = data.total;
             self.items = _.map(data.items, function (lineitem) {
                 return new merchello.Models.InvoiceLineItem(lineitem);
             });
@@ -184,28 +186,16 @@
         }
 
         self.getPaymentStatus = function () {
-            switch (self.invoiceStatusKey) {
-                case 1:
-                    return "Authorized";
-
-                default:
-                    return "Paid";
-            }
+            return self.invoiceStatus.name;
         };
 
         self.getFulfillmentStatus = function () {
 
             if(!_.isEmpty(self.orders)) {
-                switch (self.orders[0].orderStatusKey) {
-                    case 1:
-                        return "Not Fulfilled";
-                    case 2:
-                        return "Partial";
-                    default:
-                        return "Fulfilled";
-                }                
+                return self.orders[0].orderStatus.name;
             }
 
+            return "";
         };
 
     };

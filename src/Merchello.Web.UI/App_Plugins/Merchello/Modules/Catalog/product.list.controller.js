@@ -21,13 +21,9 @@
 
         assetsService.loadCss("/App_Plugins/Merchello/Common/Css/merchello.css");
 
-        $scope.numberOfPages = function() {
-            return Math.ceil($scope.products.length / $scope.limitAmount);
-        };
-
-        $scope.limitChanged = function(newVal) {
-            $scope.limitAmount = newVal;
-        };
+        //--------------------------------------------------------------------------------------
+        // Initialization methods
+        //--------------------------------------------------------------------------------------
 
         $scope.loadProducts = function() {
 
@@ -39,10 +35,8 @@
                     return new merchello.Models.Product(productFromServer, true);
                 });
 
-                //$scope.filteredproducts = $scope.products;
                 $scope.loaded = true;
                 $scope.preValuesLoaded = true;
-                //$(".content-column-body").css('background-image', 'none');
 
             }, function(reason) {
 
@@ -53,6 +47,16 @@
         };
 
         $scope.loadProducts();
+
+
+        //--------------------------------------------------------------------------------------
+        // Events methods
+        //--------------------------------------------------------------------------------------
+
+        $scope.limitChanged = function (newVal) {
+            $scope.limitAmount = newVal;
+        };
+
 
         $scope.changeSortOrder = function(propertyToSort) {
 
@@ -95,6 +99,16 @@
                 });
             }
         };
+
+
+        //--------------------------------------------------------------------------------------
+        // Calculations
+        //--------------------------------------------------------------------------------------
+
+        $scope.numberOfPages = function () {
+            return Math.ceil($scope.products.length / $scope.limitAmount);
+        };
+
 
     };
 
