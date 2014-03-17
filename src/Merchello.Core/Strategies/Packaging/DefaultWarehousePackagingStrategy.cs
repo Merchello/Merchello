@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Merchello.Core.Models;
-using Merchello.Web.Workflow.Shipping;
 using Umbraco.Core.Logging;
 
 namespace Merchello.Core.Strategies.Packaging

@@ -202,7 +202,7 @@
     <Compile Include="Editors\OrderApiController.cs" />
     <Compile Include="Editors\PaymentApiController.cs" />
     <Compile Include="Editors\PaymentGatewayApiController.cs" />
-    <Compile Include="Editors\PaymentProcessor.cs" />
+    <Compile Include="Workflow\PaymentProcessor.cs" />
     <Compile Include="Editors\SettingsApiController.cs" />
     <Compile Include="Editors\CatalogShippingApiController.cs" />
     <Compile Include="Editors\ShipmentApiController.cs" />

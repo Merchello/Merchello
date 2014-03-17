@@ -18,6 +18,7 @@ namespace Merchello.Web.Editors
     {
         private readonly IShipmentService _shipmentService;
         private readonly IInvoiceService _invoiceService;
+        private readonly IOrderService _orderService;
 
         public ShipmentApiController()
             : this(MerchelloContext.Current)
@@ -28,6 +29,7 @@ namespace Merchello.Web.Editors
         {
             _shipmentService = merchelloContext.Services.ShipmentService;
             _invoiceService = merchelloContext.Services.InvoiceService;
+            _orderService = merchelloContext.Services.OrderService;
         }
 
         /// <summary>
@@ -38,6 +40,7 @@ namespace Merchello.Web.Editors
         {
             _shipmentService = merchelloContext.Services.ShipmentService;
             _invoiceService = merchelloContext.Services.InvoiceService;
+            _orderService = merchelloContext.Services.OrderService;
         }
 
         /// <summary>
@@ -89,5 +92,66 @@ namespace Merchello.Web.Editors
             return shipment.ToShipmentDisplay();
         }
 
+
+        /// <summary>
+        /// Adds a shipment
+        ///
+        /// POST /umbraco/Merchello/ShipmentApi/AddShipment
+        /// </summary>
+        /// <param name="shipment">POSTed <see cref="ShipmentDisplay"/> object</param>
+        [AcceptVerbs("POST", "GET")]
+        public HttpResponseMessage AddShipment(ShipmentDisplay shipment)
+        {
+            var response = Request.CreateResponse(HttpStatusCode.OK);
+
+            try
+            {
+                if(!shipment.Items.Any()) throw new InvalidOperationException("The shipment did not include any line items");
+
+
+
+            }
+            catch (Exception ex)
+            {
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError, String.Format("{0}", ex.Message));
+            }
+
+            return response;
+        }
+
+        /// <summary>
+        /// Updates and existing shipment
+        ///
+        /// PUT /umbraco/Merchello/ShipmentApi/PutShipment
+        /// </summary>
+        /// <param name="shipment">ShipmentDisplay object serialized from WebApi</param>
+        [AcceptVerbs("POST", "PUT")]
+        public HttpResponseMessage PutShipment(ShipmentDisplay shipment)
+        {
+            var response = Request.CreateResponse(HttpStatusCode.OK);
+
+            try
+            {
+                var merchShipment = _shipmentService.GetByKey(shipment.Key);
+
+                if (merchShipment == null)
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+
+                merchShipment = shipment.ToShipment(merchShipment);
+
+                _shipmentService.Save(merchShipment);
+
+            }
+            catch (Exception ex)
+            {
+                response = Request.CreateResponse(HttpStatusCode.NotFound, String.Format("{0}", ex.Message));
+            }
+
+            return response;
+        }
+
+        
     }
 }

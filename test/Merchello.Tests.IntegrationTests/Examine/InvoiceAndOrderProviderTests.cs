@@ -25,7 +25,6 @@ namespace Merchello.Tests.IntegrationTests.Examine
         {
             base.FixtureSetup();
 
-
             var bootManager = new WebBootManager();
             bootManager.Initialize();
 
@@ -43,6 +42,9 @@ namespace Merchello.Tests.IntegrationTests.Examine
             InvoiceService.Saved += InvoiceServiceSaved;
 
             OrderService.Saved += OrderServiceSaved;
+
+            var provider = (InvoiceIndexer)ExamineManager.Instance.IndexProviderCollection["MerchelloInvoiceIndexer"];
+            provider.RebuildIndex();
         }
 
         [TestFixtureTearDown]
