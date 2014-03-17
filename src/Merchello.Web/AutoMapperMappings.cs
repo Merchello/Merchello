@@ -14,6 +14,10 @@ namespace Merchello.Web
     {
         public static void BindMappings()
         {
+            // Address
+            AutoMapper.Mapper.CreateMap<IAddress, AddressDisplay>();
+            AutoMapper.Mapper.CreateMap<AddressDisplay, Address>();
+
             AutoMapper.Mapper.CreateMap<ICatalogInventory, CatalogInventoryDisplay>();
             
             AutoMapper.Mapper.CreateMap<ICountry, CountryDisplay>();

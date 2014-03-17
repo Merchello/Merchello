@@ -19,7 +19,7 @@ namespace Merchello.Web.Editors
     public class InvoiceApiController : MerchelloApiController
     {
         private readonly IInvoiceService _invoiceService;
-        private readonly IOrderService _orderService;
+       
 
         public InvoiceApiController()
             : this(MerchelloContext.Current)
@@ -33,7 +33,6 @@ namespace Merchello.Web.Editors
             : base((MerchelloContext) merchelloContext)
         {
             _invoiceService = merchelloContext.Services.InvoiceService;
-            _orderService = merchelloContext.Services.OrderService;
         }
 
 
@@ -44,7 +43,6 @@ namespace Merchello.Web.Editors
             : base((MerchelloContext) merchelloContext, umbracoContext)
         {
             _invoiceService = merchelloContext.Services.InvoiceService;
-            _orderService = merchelloContext.Services.OrderService;
         }
 
         /// <summary>
@@ -83,6 +81,8 @@ namespace Merchello.Web.Editors
         {
             return InvoiceQuery.GetAllInvoices().Skip((page - 1) * perPage).Take(perPage);
         }
+
+
 
         /// <summary>
         /// Returns All Invoices
