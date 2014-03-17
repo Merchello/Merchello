@@ -26,6 +26,7 @@ namespace Merchello.Web
 
             // Order
             AutoMapper.Mapper.CreateMap<IOrderStatus, OrderStatusDisplay>();
+            AutoMapper.Mapper.CreateMap<IOrderLineItem, OrderLineItemDisplay>();
             AutoMapper.Mapper.CreateMap<IOrder, OrderDisplay>();
 
             // payment

@@ -8,7 +8,7 @@
      * @description
      * The controller for the orders list page
      */
-    controllers.OrderListController = function ($scope, assetsService, merchelloOrderService, merchelloInvoiceService) {
+    controllers.OrderListController = function ($scope, assetsService, notificationsService, merchelloInvoiceService) {
 
         $scope.orderIssues = [];
         $scope.invoices = [];
@@ -19,9 +19,50 @@
 
         assetsService.loadCss("/App_Plugins/Merchello/Common/Css/merchello.css");
 
-        $scope.numberOfPages = function () {
-            return Math.ceil($scope.invoices.length / $scope.limitAmount);
+        //--------------------------------------------------------------------------------------
+        // Initialization methods
+        //--------------------------------------------------------------------------------------
+
+        $scope.loadAllInvoices = function () {
+
+            var promiseAll = merchelloInvoiceService.getAll();
+            promiseAll.then(function (allInvoices) {
+
+                $scope.invoices = _.map(allInvoices, function (invoice) {
+                    return new merchello.Models.Invoice(invoice);
+                });
+
+                $scope.loaded = true;
+                $scope.preValuesLoaded = true;
+
+            }, function (reason) {
+
+                notificationsService.error("All Invoices Load Failed", reason.message);
+
+            });
+
         };
+
+        /**
+         * @ngdoc method
+         * @name init
+         * @function
+         * 
+         * @description
+         * Method called on intial page load.  Loads in data from server and sets up scope.
+         */
+        $scope.init = function () {
+
+            $scope.loadAllInvoices();
+
+        };
+
+        $scope.init();
+
+
+        //--------------------------------------------------------------------------------------
+        // Events methods
+        //--------------------------------------------------------------------------------------
 
         $scope.limitChanged = function (newVal) {
             $scope.limitAmount = newVal;
@@ -44,9 +85,40 @@
 
         };
 
+        $scope.getFilteredInvoices = function (filter) {
+            notificationsService.info("Filtering...", "");
 
-        $scope.loaded = true;
-        $scope.preValuesLoaded = true;
+            if (merchello.Helpers.Strings.isNullOrEmpty(filter)) {
+                $scope.loadAllInvoices();
+                notificationsService.success("Filtered Invoices Loaded", "");
+            } else {
+                var promise = merchelloInvoiceService.getFiltered(filter);
+
+                promise.then(function (invoices) {
+
+                    $scope.invoices = _.map(invoices, function (invoice) {
+                        return new merchello.Models.Invoice(invoice);
+                    });
+
+                    notificationsService.success("Filtered Invoices Loaded", "");
+
+                }, function (reason) {
+
+                    notificationsService.success("Filtered Invoices Load Failed:", reason.message);
+
+                });
+            }
+        };
+
+        //--------------------------------------------------------------------------------------
+        // Calculations
+        //--------------------------------------------------------------------------------------
+
+        $scope.numberOfPages = function () {
+            return Math.ceil($scope.invoices.length / $scope.limitAmount);
+        };
+
+
 
     };
 
