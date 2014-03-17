@@ -1,0 +1,39 @@
+﻿<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Dashboards.Order.Dialogs.FulfillShipmentController">
+    <div class="umb-modalcolumn-header">
+        <h4>Fulfill Shipment</h4>
+    </div>
+    <div class="umb-panel-body with-header with-footer">
+        
+        <div class="well">
+            <button class="btn close"><i class="icon-delete"></i></button>
+            <h3>Fulfill Manually</h3>
+            <div class="control-group row-fluid">
+                <label for="trackingNo">Tracking Number:</label>
+                <input name="trackingNo" type="text" class="col-xs-6 span6" />
+                <label for="provider">Via</label>
+                <select name="provider" class="col-xs-6 span6"><option>FedEx</option></select>
+                <label><input type="checkbox" checked="checked" /> Email shipment notification to the customer</label>
+            </div>
+        </div>
+
+    </div>
+
+	<div class="umb-panel-footer" >
+		<div class="umb-el-wrap umb-panel-buttons">
+	        <div class="btn-toolbar umb-btn-toolbar pull-right">
+
+	        	<a href data-ng-click="close()" class="btn btn-link">
+	        		<localize key="general_cancel">Cancel</localize>
+				</a>
+
+				<button
+					class="btn btn-primary"
+					data-ng-click="submit(dialogData)">
+					<localize key="merchello_fulfill_shipment">Fulfill Shipment</localize>
+				</button>
+
+	        </div>
+		</div>
+	</div>
+</div>
+
