@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.ModelBinding;
-using umbraco.cms.businesslogic.datatype;
+using Merchello.Core.Models.TypeFields;
 using Umbraco.Web;
 using Umbraco.Web.Mvc;
 using Merchello.Core;
@@ -81,10 +77,20 @@ namespace Merchello.Web.Editors
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
 
-            foreach (ICountry country in countries)
+            return countries.Select(x => x.ToCountryDisplay());
+
+        }
+
+
+        public IEnumerable<TypeField> GetTypeFields()
+        {
+            var typeFields = _storeSettingService.GetTypeFields();
+            if (typeFields == null)
             {
-                yield return country.ToCountryDisplay();
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
+
+            return typeFields.Select(x => x as TypeField);
         }
 
         /// <summary>
@@ -101,10 +107,7 @@ namespace Merchello.Web.Editors
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
 
-            foreach (ICountry country in countries)
-            {
-                yield return country.ToCountryDisplay();
-            }
+            return countries.Select(x => x.ToCountryDisplay());           
         }
 
         /// <summary>
@@ -127,10 +130,7 @@ namespace Merchello.Web.Editors
 
             // END TEST DATA
 
-            foreach (TaxMethod taxMethod in taxMethods)
-            {
-                yield return taxMethod.ToTaxMethodDisplay();
-            }
+            return taxMethods.Select(x => x.ToTaxMethodDisplay());            
         }
 
 		/// <summary>

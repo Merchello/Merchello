@@ -8,6 +8,7 @@ using System.Threading;
 using Merchello.Core.Configuration;
 using Merchello.Core.Configuration.Outline;
 using Merchello.Core.Models;
+using Merchello.Core.Models.TypeFields;
 using Merchello.Core.Persistence;
 using Merchello.Core.Persistence.UnitOfWork;
 using Umbraco.Core;
@@ -221,6 +222,18 @@ namespace Merchello.Core.Services
             }
 
             return orderNumber;
+        }
+
+        /// <summary>
+        /// Gets the complete collection of registered typefields
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<ITypeField> GetTypeFields()
+        {
+            using (var repository = _repositoryFactory.CreateStoreSettingRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetTypeFields();
+            }
         }
 
         /// <summary>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using Merchello.Core.Models;
+using Merchello.Core.Models.TypeFields;
 using Umbraco.Core.Services;
 
 namespace Merchello.Core.Services
@@ -78,6 +79,12 @@ namespace Merchello.Core.Services
         /// <param name="excludeCountryCodes">A collection of country codes to exclude from the result set</param>
         /// <returns>A collection of <see cref="ICountry"/></returns>
         IEnumerable<ICountry> GetAllCountries(string[] excludeCountryCodes);
+
+        /// <summary>
+        /// Gets the complete collection of registered typefields
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<ITypeField> GetTypeFields();
 
     }
 }
