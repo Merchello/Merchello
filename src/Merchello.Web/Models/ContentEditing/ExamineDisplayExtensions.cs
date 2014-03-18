@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Examine;
 using Merchello.Core.Models;
@@ -188,9 +189,13 @@ namespace Merchello.Web.Models.ContentEditing
         {
             if (!result.Fields.ContainsKey(alias)) return DateTime.MinValue;
             var value = result.Fields[alias];
-
+            
             DateTime converted;
-            return DateTime.TryParse(value, out converted) ? converted : DateTime.MinValue;
+            if (value.Length > 8) value = value.Substring(0, 8);
+
+            // http://our.umbraco.org/forum/core/general/12331-Examine-date-fields-in-wrong-culture
+            return DateTime.TryParseExact(value, "yyyyMMdd", CultureInfo.CurrentCulture, DateTimeStyles.None, out converted) 
+                ? converted : DateTime.MinValue;
         }
 
         /// <summary>

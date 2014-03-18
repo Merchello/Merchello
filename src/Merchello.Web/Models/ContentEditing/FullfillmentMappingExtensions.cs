@@ -566,19 +566,20 @@ namespace Merchello.Web.Models.ContentEditing
             destination.Name = taxMethodDisplay.Name;
             destination.PercentageTaxRate = taxMethodDisplay.PercentageTaxRate;
 
-            var provinceCollection = new ProvinceCollection<ITaxProvince>();
+            // this may occur when creating a new tax method since the UI does not 
+            // query for provinces 
+            // TODO fix
+            if (destination.HasProvinces && !taxMethodDisplay.Provinces.Any())
+            {
+                taxMethodDisplay.Provinces = destination.Provinces.Select(x => x.ToTaxProvinceDisplay()).ToArray();
+            }
+
             foreach (var province in taxMethodDisplay.Provinces)
             {
-                provinceCollection.Add(
-                        new TaxProvince(province.Code, province.Name)
-                            {
-                                PercentRateAdjustment = province.PercentAdjustment
-                            }
-                    );
+                var p = destination.Provinces.FirstOrDefault(x => x.Code == province.Code);
+                if (p != null) p.PercentAdjustment = province.PercentAdjustment;
             }
-            
-            destination.Provinces = provinceCollection;
-
+        
             return destination;
         }
 

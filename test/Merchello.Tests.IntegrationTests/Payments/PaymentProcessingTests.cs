@@ -50,7 +50,7 @@ namespace Merchello.Tests.IntegrationTests.Payments
 
             var gwTaxMethod = taxProvider.CreateTaxMethod("US", 0);
 
-            gwTaxMethod.TaxMethod.Provinces["WA"].PercentRateAdjustment = 8.7M;
+            gwTaxMethod.TaxMethod.Provinces["WA"].PercentAdjustment = 8.7M;
 
             taxProvider.SaveTaxMethod(gwTaxMethod);
 
@@ -112,10 +112,29 @@ namespace Merchello.Tests.IntegrationTests.Payments
             var authorized = _invoice.AuthorizePayment(_merchelloContext, _paymentMethodKey, new ProcessorArgumentCollection());
 
             //// Act
-            var payment = _invoice.Payments(_merchelloContext).FirstOrDefault();
+            var payments = _invoice.Payments(_merchelloContext);
 
             //// Assert
-            Assert.NotNull(payment);
+            Assert.NotNull(payments);
+            Assert.AreEqual(1, payments.Count());
+        }
+
+        /// <summary>
+        /// Test verifies that unique payments are retrieved when more than one "applied payment" exists
+        /// </summary>
+        [Test]
+        public void Retrieving_A_Collection_Of_Payments_For_An_Invoice_After_Capture_Returns_Unique_Payments()
+        {
+            //// Arrange
+            var authorized = _invoice.AuthorizePayment(_merchelloContext, _paymentMethodKey, new ProcessorArgumentCollection());
+            var caputered = _invoice.CapturePayment(_merchelloContext, authorized.Payment.Result, _paymentMethodKey, _invoice.Total, new ProcessorArgumentCollection());
+
+            //// Act
+            var payments = _invoice.Payments(_merchelloContext);
+
+            //// Assert
+            Assert.NotNull(payments);
+            Assert.AreEqual(1, payments.Count());
         }
         
         /// <summary>

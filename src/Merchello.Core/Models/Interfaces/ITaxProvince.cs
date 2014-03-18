@@ -11,6 +11,6 @@ namespace Merchello.Core.Models
         /// The percentage rate adjustment to the tax rate
         /// </summary>
         [DataMember]
-        decimal PercentRateAdjustment { get; set; }
+        decimal PercentAdjustment { get; set; }
     }
 }

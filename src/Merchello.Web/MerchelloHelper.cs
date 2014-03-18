@@ -82,7 +82,9 @@ namespace Merchello.Web
             if(product == null) throw new InvalidOperationException("Product is null");
             if (!attributeKeys.Any()) return product.ProductVariants;
 
-            return product.ProductVariants.Where(x => attributeKeys.All(key => x.Attributes.FirstOrDefault(att => att.Key == key) != null));
+            var variants = product.ProductVariants.Where(x => attributeKeys.All(key => x.Attributes.FirstOrDefault(att => att.Key == key) != null));
+
+            return variants;
         }
 
         /// <summary>
