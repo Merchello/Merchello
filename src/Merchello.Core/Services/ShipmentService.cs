@@ -193,6 +193,18 @@ namespace Merchello.Core.Services
             }
         }
 
+        /// <summary>
+        /// Gets all <see cref="IShipment"/>
+        /// </summary>
+        /// <returns>A collection of <see cref="IShipment"/></returns>
+        internal IEnumerable<IShipment> GetAll()
+        {
+            using (var repository = _repositoryFactory.CreateShipmentRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetAll();
+            }
+        }
+
         #endregion
 
 

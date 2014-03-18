@@ -20,6 +20,7 @@ namespace Merchello.Web.Editors
         private readonly IShipmentService _shipmentService;
         private readonly IInvoiceService _invoiceService;
         private readonly IOrderService _orderService;
+        private readonly IShipMethodService _shipMethodService;
 
         public ShipmentApiController()
             : this(MerchelloContext.Current)
@@ -31,6 +32,7 @@ namespace Merchello.Web.Editors
             _shipmentService = merchelloContext.Services.ShipmentService;
             _invoiceService = merchelloContext.Services.InvoiceService;
             _orderService = merchelloContext.Services.OrderService;
+            _shipMethodService = ((ServiceContext) merchelloContext.Services).ShipMethodService;
         }
 
         /// <summary>
@@ -42,6 +44,7 @@ namespace Merchello.Web.Editors
             _shipmentService = merchelloContext.Services.ShipmentService;
             _invoiceService = merchelloContext.Services.InvoiceService;
             _orderService = merchelloContext.Services.OrderService;
+            _shipMethodService = ((ServiceContext)merchelloContext.Services).ShipMethodService;
         }
 
         /// <summary>
@@ -61,7 +64,45 @@ namespace Merchello.Web.Editors
             return shipment.ToShipmentDisplay();
         }
 
-        
+        /// <summary>
+        /// Gets the Shipmethod that was quoted for an order
+        /// </summary>
+        /// <param name="order"></param>
+        /// <returns></returns>
+        public ShipMethodDisplay GetShipMethod(OrderDisplay order)
+        {
+            var invoice = _invoiceService.GetByKey(order.InvoiceKey);
+            
+            if (invoice == null)
+            {
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+            }
+
+            var shipmentLineItem = invoice.Items.FirstOrDefault(x => x.LineItemType == LineItemType.Shipping);
+            if (shipmentLineItem == null)
+            {
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+            }
+
+            var shipment = shipmentLineItem.ExtendedData.GetShipment<InvoiceLineItem>();
+            if (shipment == null)
+            {
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+            }
+
+            if(shipment.ShipMethodKey != null)
+            {
+                var shipMethod = _shipMethodService.GetByKey(shipment.ShipMethodKey.Value);
+
+                if (shipMethod == null) return new ShipMethodDisplay() {Name = "Not Found"};
+
+                return shipMethod.ToShipMethodDisplay();
+            }
+
+            return new ShipMethodDisplay() { Name = "Not Found" };
+        }
+
+
         /// <summary>
         /// Adds a shipment
         ///
@@ -101,6 +142,7 @@ namespace Merchello.Web.Editors
             }
         }
 
+        
         /// <summary>
         /// Updates and existing shipment
         ///

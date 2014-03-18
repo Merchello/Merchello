@@ -18,6 +18,8 @@ namespace Merchello.Core.Gateways.Shipping
             Mandate.ParameterNotNull(shipMethod, "shipMethod");
             Mandate.ParameterNotNull(extendedData, "extendedData");
 
+            shipment.ShipMethodKey = shipMethod.Key;
+
             Shipment = shipment;
             ShipMethod = shipMethod;
             ExtendedData = extendedData;
