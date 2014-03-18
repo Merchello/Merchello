@@ -1,7 +1,6 @@
-﻿using System;
-using Merchello.Core;
+﻿using Merchello.Core;
 using Merchello.Core.Cache;
-using Merchello.Core.Gateways.Shipping;
+using Merchello.Core.Gateways.Shipping.FixedRate;
 using Merchello.Core.Models;
 using Merchello.Core.Persistence.UnitOfWork;
 using Merchello.Core.Sales;
@@ -37,8 +36,31 @@ namespace Merchello.Tests.IntegrationTests.Builders
                 new CacheHelper(new NullCacheProvider(),
                     new NullCacheProvider(),
                     new NullCacheProvider()));
-            
-            
+
+            PreTestDataWorker.DeleteAllShipCountries();
+
+            var defaultCatalog = PreTestDataWorker.WarehouseService.GetDefaultWarehouse().WarehouseCatalogs.FirstOrDefault();
+            if (defaultCatalog == null) Assert.Ignore("Default WarehouseCatalog is null");
+
+            var us = MerchelloContext.Services.StoreSettingService.GetCountryByCode("US");
+            var usCountry = new ShipCountry(defaultCatalog.Key, us);
+            ((ServiceContext)MerchelloContext.Services).ShipCountryService.Save(usCountry);
+
+            var key = Core.Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey;
+            var rateTableProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Gateways.Shipping.ResolveByKey(key);
+            rateTableProvider.DeleteAllActiveShipMethods(usCountry);
+
+            #region Add and configure 3 rate table shipmethods
+
+            var gwshipMethod1 = (FixedRateShippingGatewayMethod)rateTableProvider.CreateShipMethod(FixedRateShippingGatewayMethod.QuoteType.VaryByPrice, usCountry, "Ground (Vary by Price)");
+            gwshipMethod1.RateTable.AddRow(0, 10, 25);
+            gwshipMethod1.RateTable.AddRow(10, 15, 30);
+            gwshipMethod1.RateTable.AddRow(15, 25, 35);
+            gwshipMethod1.RateTable.AddRow(25, 60, 40); // total price should be 50M so we should hit this tier
+            gwshipMethod1.RateTable.AddRow(25, 10000, 50);
+            rateTableProvider.SaveShippingGatewayMethod(gwshipMethod1);
+
+            #endregion
         }
 
         [SetUp]
@@ -86,6 +108,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
             PreTestDataWorker.DeleteAllItemCaches();
             PreTestDataWorker.DeleteAllInvoices();
 
+
             Customer.ExtendedData.AddAddress(BillingAddress, AddressType.Billing);
             ItemCache = new Core.Models.ItemCache(Customer.EntityKey, ItemCacheType.Checkout);
 
@@ -102,15 +125,8 @@ namespace Merchello.Tests.IntegrationTests.Builders
 
             // add the shipment rate quote
             var shipment = Basket.PackageBasket(MerchelloContext, BillingAddress).First();
-            var shipRateQuote = new ShipmentRateQuote(shipment, new ShipMethod(Guid.NewGuid(), Guid.NewGuid())
-            {
-                Name = "Unit test rate quote",
-                ServiceCode = "Test1"
-            })
-            {
-                Rate = 5M
-            };
-
+            var shipRateQuote = shipment.ShipmentRateQuotes(MerchelloContext).FirstOrDefault();
+            
             //_checkoutMock.ItemCache.Items.Add(shipRateQuote.AsLineItemOf<InvoiceLineItem>());
             SalePreparationMock.SaveShipmentRateQuote(shipRateQuote);
         }

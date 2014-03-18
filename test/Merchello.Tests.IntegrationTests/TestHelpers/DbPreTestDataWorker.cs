@@ -372,6 +372,11 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         #region Shipping (IShipment, IShipCounty)
 
 
+        public void DeleteAllShipments()
+        {
+            var all = ((ShipmentService) ShipmentService).GetAll();
+            ShipmentService.Delete(all);
+        }
 
         /// <summary>
         /// Returns the Shipping Service
@@ -487,5 +492,6 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
             baseDataCreation.InitializeBaseData("merchGatewayProvider");
             baseDataCreation.InitializeBaseData("merchStoreSetting");
         }
+
     }
 }

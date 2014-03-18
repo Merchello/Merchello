@@ -452,7 +452,7 @@ namespace Merchello.Core.Models
         {
             extendedData.AddAddress(shipment.GetOriginAddress(), Constants.ExtendedDataKeys.ShippingOriginAddress);
             extendedData.AddAddress(shipment.GetDestinationAddress(), Constants.ExtendedDataKeys.ShippingDestinationAddress);
-            extendedData.SetValue(Constants.ExtendedDataKeys.ShipmentKey, shipment.ShipMethodKey.ToString());
+            extendedData.SetValue(Constants.ExtendedDataKeys.ShipMethodKey, shipment.ShipMethodKey.ToString());
             extendedData.AddLineItemCollection(shipment.Items);
         }
 
@@ -472,7 +472,7 @@ namespace Merchello.Core.Models
 
             return new Shipment(origin, destination, lineItemCollection)
                 {
-                    ShipMethodKey = extendedData.ContainsKey(Constants.ExtendedDataKeys.ShipmentKey) ?
+                    ShipMethodKey = extendedData.ContainsKey(Constants.ExtendedDataKeys.ShipMethodKey) ?
                         extendedData.GetShipMethodKey() :
                         Guid.Empty
                 };

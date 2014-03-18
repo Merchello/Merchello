@@ -1,7 +1,6 @@
 ﻿using System;
 using Merchello.Core.Builders;
 using Merchello.Core.Models;
-using Merchello.Tests.Base.DataMakers;
 using NUnit.Framework;
 
 namespace Merchello.Tests.IntegrationTests.Builders
@@ -19,6 +18,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
             base.Init();
 
             PreTestDataWorker.DeleteAllOrders();
+            PreTestDataWorker.DeleteAllShipments();
             var invoice = SalePreparationMock.PrepareInvoice();
             PreTestDataWorker.InvoiceService.Save(invoice);
             _order = invoice.PrepareOrder(MerchelloContext);
