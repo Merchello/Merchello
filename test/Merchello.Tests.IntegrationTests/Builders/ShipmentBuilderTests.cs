@@ -33,7 +33,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
         public void Can_Create_The_Default_Shipment_Builder_With_Tasks()
         {
             //// Arrange
-            const int taskCount = 2;
+            const int taskCount = 3;
             
             //// Act
             var builder = new ShipmentBuilderChain(MerchelloContext, _order);
