@@ -99,8 +99,6 @@ namespace Merchello.Web.Editors
             {
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, String.Format("{0}", ex.Message)));
             }
-
-            
         }
 
         /// <summary>

@@ -452,6 +452,7 @@ namespace Merchello.Core.Models
         {
             extendedData.AddAddress(shipment.GetOriginAddress(), Constants.ExtendedDataKeys.ShippingOriginAddress);
             extendedData.AddAddress(shipment.GetDestinationAddress(), Constants.ExtendedDataKeys.ShippingDestinationAddress);
+            extendedData.SetValue(Constants.ExtendedDataKeys.ShipmentKey, shipment.ShipMethodKey.ToString());
             extendedData.AddLineItemCollection(shipment.Items);
         }
 
@@ -469,7 +470,12 @@ namespace Merchello.Core.Models
             if(destination == null) throw new NullReferenceException("ExtendedDataCollection does not container a 'destination shipping address'");
             if (lineItemCollection == null) throw new NullReferenceException("ExtendedDataCollection does not contain a 'line item collection'");
 
-            return new Shipment(origin, destination, lineItemCollection);
+            return new Shipment(origin, destination, lineItemCollection)
+                {
+                    ShipMethodKey = extendedData.ContainsKey(Constants.ExtendedDataKeys.ShipmentKey) ?
+                        extendedData.GetShipMethodKey() :
+                        Guid.Empty
+                };
         }
 
         /// <summary>
@@ -490,6 +496,16 @@ namespace Merchello.Core.Models
         public static Guid GetShipmentKey(this ExtendedDataCollection extendedData)
         {
             return GetGuidValue(extendedData.GetValue(Constants.ExtendedDataKeys.ShipmentKey));
+        }
+
+        /// <summary>
+        /// Returns the merchShipMethodKey value as a Guid
+        /// </summary>
+        /// <param name="extendedData"></param>
+        /// <returns>The Guid based 'Key' of the <see cref="IShipMethod"/></returns>
+        public static Guid GetShipMethodKey(this ExtendedDataCollection extendedData)
+        {
+            return GetGuidValue(extendedData.GetValue(Constants.ExtendedDataKeys.ShipMethodKey));
         }
 
         /// <summary>

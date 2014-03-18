@@ -45,6 +45,7 @@ namespace Merchello.Core
                     "merchQuantity",
                     "merchAmount",
                     "merchShipmentKey",
+                    "merchShipMethodKey",
                     "merchWarehouseCatalogKey",
                     "merchShippingOriginAddress",
                     "merchShippingDestinationAddress",
@@ -92,6 +93,7 @@ namespace Merchello.Core
 
             // Shipment
             public static string ShipmentKey = "merchShipmentKey";
+            public static string ShipMethodKey = "merchShipMethodKey";
             public static string WarehouseCatalogKey = "merchWarehouseCatalogKey";
             public static string ShippingOriginAddress = "merchShippingOriginAddress";
             public static string ShippingDestinationAddress = "merchShippingDestinationAddress";
