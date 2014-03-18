@@ -32,6 +32,17 @@
                     'Failed to get orders by invoice: ' + invoiceKey);
             },
 
+            getUnFulfilledItems: function (invoiceKey) {
+
+                return umbRequestHelper.resourcePromise(
+                    $http({
+                        url: umbRequestHelper.getApiUrl('merchelloOrderApiBaseUrl', 'GetUnFulfilledItems'),
+                        method: "GET",
+                        params: { id: invoiceKey }
+                    }),
+                    'Failed to get unfulfilled items by invoice: ' + invoiceKey);
+            },
+
             getShippingAddress: function (invoiceKey) {
 
                 return umbRequestHelper.resourcePromise(

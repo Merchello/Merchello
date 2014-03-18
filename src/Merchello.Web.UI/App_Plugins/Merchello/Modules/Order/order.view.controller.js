@@ -163,7 +163,7 @@
                 template: '/App_Plugins/Merchello/Modules/Order/Dialogs/fulfill.shipment.html',
                 show: true,
                 callback: $scope.fulfillShipmentDialogConfirm,
-                dialogData: $scope.invoice
+                dialogData: $scope.invoice.orders[0]
             });
 
         };
