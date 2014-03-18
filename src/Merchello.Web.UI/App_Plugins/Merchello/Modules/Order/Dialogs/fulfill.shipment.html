@@ -9,11 +9,26 @@
             <h3>Fulfill Manually</h3>
             <div class="control-group row-fluid">
                 <label for="trackingNo">Tracking Number:</label>
-                <input name="trackingNo" type="text" class="col-xs-6 span6" />
+                <input name="trackingNo" data-ng-model="dialogData.trackingNumber" type="text" class="col-xs-6 span6" />
                 <label for="provider">Via</label>
-                <select name="provider" class="col-xs-6 span6"><option>FedEx</option></select>
-                <label><input type="checkbox" checked="checked" /> Email shipment notification to the customer</label>
+                <select name="provider" disabled="disabled" class="col-xs-6 span6"><option>???</option></select>
+                <!--<label><input type="checkbox" checked="checked" /> Email shipment notification to the customer</label>-->
             </div>
+            
+            <table class="">
+                <tbody>
+                    <tr data-ng-repeat="lineitem in dialogData.items">
+                        <td><input type="checkbox" data-ng-model="lineitem.selected" /></td>
+                        <td>
+                            <h4>{{lineitem.name}}</h4>
+                            <span>SKU: {{lineitem.sku}}</span>
+                        </td>
+                        <td class="text-right">{{lineitem.quantity}} x <strong>{{lineitem.price | currency}}</strong></td>
+                        <td class="text-right">{{lineitem.quantity * lineitem.price | currency}}</td>
+                    </tr>
+                </tbody>
+            </table>
+
         </div>
 
     </div>
