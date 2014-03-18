@@ -114,6 +114,7 @@ namespace Merchello.Core.Services
                 var uow = _uowProvider.GetUnitOfWork();
                 using (var repository = _repositoryFactory.CreateShipmentRepository(uow))
                 {
+                    UpdateOrderLineItemShipmentKeys(shipment);
                     repository.Delete(shipment);
                     uow.Commit();
                 }
@@ -141,6 +142,7 @@ namespace Merchello.Core.Services
                 {
                     foreach (var shipment in shipmentsArray)
                     {
+                        UpdateOrderLineItemShipmentKeys(shipment);
                         repository.Delete(shipment);    
                     }                    
                 }
@@ -148,6 +150,30 @@ namespace Merchello.Core.Services
             }
 
             if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<IShipment>(shipmentsArray), this);
+        }
+
+        // TODO this will leave lucene indexed orders with shipment keys
+        private void UpdateOrderLineItemShipmentKeys(IShipment shipment)
+        {
+            using (var repository = _repositoryFactory.CreateOrderRepository(_uowProvider.GetUnitOfWork()))
+            {
+                // there really should only ever be one of these
+                var orderKeys = shipment.Items.Select(x => ((OrderLineItem) x).ContainerKey).Distinct();
+
+                foreach(var orderKey in orderKeys)
+                {
+                    var order = repository.Get(orderKey);
+
+                    var items = order.Items.Where(x => ((OrderLineItem) x).ShipmentKey == shipment.Key);
+
+                    foreach (var item in items)
+                    {
+                        ((OrderLineItem) item).ShipmentKey = null;
+                    }
+
+                    repository.AddOrUpdate(order);
+                }
+            }
         }
 
         /// <summary>

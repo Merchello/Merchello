@@ -128,6 +128,28 @@ namespace Merchello.Core.Models
         #region Payments
 
         /// <summary>
+        /// Gets a collection of <see cref="IPayment"/> applied to the invoice
+        /// </summary>
+        /// <param name="invoice">The <see cref="IInvoice"/></param>
+        /// <returns>A collection of <see cref="IPayment"/></returns>
+        public static IEnumerable<IPayment> Payments(this IInvoice invoice)
+        {
+            return invoice.Payments(MerchelloContext.Current);
+        }
+
+        /// <summary>
+        /// Gets a collection of <see cref="IPayment"/> applied to the invoice
+        /// </summary>
+        /// <param name="invoice">The <see cref="IInvoice"/></param>
+        /// <param name="merchelloContext">The <see cref="IMerchelloContext"/></param>
+        /// <returns>A collection of <see cref="IPayment"/></returns>
+        internal static IEnumerable<IPayment> Payments(this IInvoice invoice, IMerchelloContext merchelloContext)
+        {
+            return merchelloContext.Services.PaymentService.GetPaymentsByInvoiceKey(invoice.Key);
+        }
+
+
+        /// <summary>
         /// Attempts to process a payment
         /// </summary>
         /// <param name="invoice">The <see cref="IInvoice"/></param>
