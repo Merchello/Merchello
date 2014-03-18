@@ -14,6 +14,8 @@
         $scope.typeFields = [];
         $scope.shippingAddress = {};
 
+        assetsService.loadCss("/App_Plugins/Merchello/Common/Css/merchello.css");
+
         //--------------------------------------------------------------------------------------
         // Initialization methods
         //--------------------------------------------------------------------------------------
