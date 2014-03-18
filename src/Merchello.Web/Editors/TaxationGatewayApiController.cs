@@ -116,7 +116,7 @@ namespace Merchello.Web.Editors
             {
                 var provider = _taxationContext.ResolveByKey(method.ProviderKey);
 
-                var taxationGatewayMethod = provider.CreateTaxMethod(method.CountryCode, method.PercentageTaxRate);
+                var taxationGatewayMethod = provider.CreateTaxMethod(method.CountryCode, method.PercentRateAdjustment);
 
                 method.ToTaxMethod(taxationGatewayMethod.TaxMethod);
 
