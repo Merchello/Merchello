@@ -9,7 +9,7 @@ namespace Merchello.Web.Models.ContentEditing
         public Guid ProviderKey { get; set; }
         public string Name { get; set; }
         public string CountryCode { get; set; }
-        public decimal PercentageTaxRate { get; set; }
+        public decimal PercentRateAdjustment { get; set; }
         public IEnumerable<TaxProvinceDisplay> Provinces { get; set; }
     }
 }
