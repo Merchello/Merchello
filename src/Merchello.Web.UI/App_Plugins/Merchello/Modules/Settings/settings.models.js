@@ -14,6 +14,38 @@
 
     };
 
+    models.Address = function (addressFromServer) {
+
+        var self = this;
+
+        if (addressFromServer == undefined) {
+            self.name = "";
+            self.address1 = "";
+            self.address2 = "";
+            self.locality = "";
+            self.region = "";
+            self.postalCode = "";
+            self.countryCode = "";
+            self.email = "";
+            self.phone = "";
+            self.organization = "";
+            self.isCommercial = false;
+        } else {
+            self.name = addressFromServer.name;
+            self.address1 = addressFromServer.address1;
+            self.address2 = addressFromServer.address2;
+            self.locality = addressFromServer.locality;
+            self.region = addressFromServer.region;
+            self.postalCode = addressFromServer.postalCode;
+            self.countryCode = addressFromServer.countryCode;
+            self.email = addressFromServer.email;
+            self.phone = addressFromServer.phone;
+            self.organization = addressFromServer.organization;
+            self.isCommercial = addressFromServer.isCommercial;
+        };
+
+    };
+
     models.Country = function (countryFromServer) {
 
         var self = this;
@@ -48,6 +80,21 @@
             self.name = currencyFromServer.name;
             self.currencyCode = currencyFromServer.currencyCode;
             self.symbol = currencyFromServer.symbol;
+        }
+    };
+
+    models.TypeField = function (typeFromServer) {
+
+        var self = this;
+
+        if (typeFromServer == undefined) {
+            self.alias = "";
+            self.name = "";
+            self.typeKey = "";
+        } else {
+            self.alias = typeFromServer.alias;
+            self.name = typeFromServer.name;
+            self.typeKey = typeFromServer.typeKey;
         }
     };
 

@@ -10,34 +10,38 @@
 
         return {
 
-            addOrder: function (order) {
-
-                return umbRequestHelper.resourcePromise(
-                    $http.post(umbRequestHelper.getApiUrl('merchelloOrderApiBaseUrl', 'AddOrder'),
-                        order
-                    ),
-                    'Failed to create order');
-            },
-
-            saveOrder: function (order) {
-
-                return umbRequestHelper.resourcePromise(
-                    $http.post(umbRequestHelper.getApiUrl('merchelloOrderApiBaseUrl', 'PutOrder'),
-                        order
-                    ),
-                    'Failed to save order');
-            },
-
-            deleteOrder: function (orderKey) {
+            getOrder: function (orderKey) {
 
                 return umbRequestHelper.resourcePromise(
                     $http({
-                        url: umbRequestHelper.getApiUrl('merchelloOrderApiBaseUrl', 'DeleteOrder'),
+                        url: umbRequestHelper.getApiUrl('merchelloOrderApiBaseUrl', 'GetOrder'),
                         method: "GET",
                         params: { id: orderKey }
                     }),
-                    'Failed to delete order');
+                    'Failed to get order: ' + orderKey);
             },
+
+            getOrdersByInvoice: function (invoiceKey) {
+
+                return umbRequestHelper.resourcePromise(
+                    $http({
+                        url: umbRequestHelper.getApiUrl('merchelloOrderApiBaseUrl', 'GetOrdersByInvoiceKey'),
+                        method: "GET",
+                        params: { id: invoiceKey }
+                    }),
+                    'Failed to get orders by invoice: ' + invoiceKey);
+            },
+
+            getShippingAddress: function (invoiceKey) {
+
+                return umbRequestHelper.resourcePromise(
+                    $http({
+                        url: umbRequestHelper.getApiUrl('merchelloOrderApiBaseUrl', 'GetShippingAddress'),
+                        method: "GET",
+                        params: { id: invoiceKey }
+                    }),
+                    'Failed to get orders by invoice: ' + invoiceKey);
+            }
 
         };
     };

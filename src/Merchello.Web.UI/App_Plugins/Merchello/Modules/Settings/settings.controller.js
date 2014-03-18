@@ -21,7 +21,7 @@
         ////////////////////////////////////////////////
 
         $scope.loadCurrency = function() {
-            var promise = merchelloSettingsService.GetAllCurrencies();
+            var promise = merchelloSettingsService.getAllCurrencies();
 
             promise.then(function(currencyFromServer) {
                 _.each(currencyFromServer, function(element, index, list) {

@@ -104,6 +104,7 @@
             self.price = data.price;
             self.exported = data.exported;
         }
+        self.lineItemType = new merchello.Models.TypeField();
     };
 
     models.InvoiceStatus = function (data) {
@@ -196,6 +197,18 @@
             }
 
             return "";
+        };
+
+        self.getProductLineItems = function () {
+            return _.filter(self.items, function (item) { return item.lineItemType.alias == "Product"; });
+        };
+
+        self.getTaxLineItem = function () {
+            return _.find(self.items, function (item) { return item.lineItemType.alias == "Tax"; });
+        };
+
+        self.getShippingLineItem = function () {
+            return _.find(self.items, function (item) { return item.lineItemType.alias == "Shipping"; });
         };
 
     };

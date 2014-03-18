@@ -110,29 +110,6 @@ namespace Merchello.Web.Editors
             return countries.Select(x => x.ToCountryDisplay());           
         }
 
-        /// <summary>
-        /// Returns All Tax Provinces
-        /// 
-        /// GET /umbraco/Merchello/SettingsApi/GetAllTaxProvinces
-        /// </summary>
-        public IEnumerable<TaxMethodDisplay> GetAllTaxProvinces()
-        {
-            // TODO: replace with call to service
-            var taxMethods = new List<TaxMethod>();
-
-            //var oregon = new TaxCountry("OR", "Oregon");
-            //oregon.Rate = 0.01M;
-            //taxProvinces.Add(oregon);
-
-            //var washington = new TaxCountry("WA", "Washington");
-            //washington.Rate = 0.09M;
-            //taxProvinces.Add(washington);
-
-            // END TEST DATA
-
-            return taxMethods.Select(x => x.ToTaxMethodDisplay());            
-        }
-
 		/// <summary>
 		/// Returns All Tax Provinces
 		/// 

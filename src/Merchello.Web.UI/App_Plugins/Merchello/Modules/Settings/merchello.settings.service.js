@@ -143,11 +143,29 @@
              * 
              * @returns {object} an angularjs promise object
              */
-            GetAllCurrencies: function () {
+            getAllCurrencies: function () {
 
                 return getCachedOrApi("AllCurrency", "GetAllCurrencies", "settings");
 
             },
+
+
+            /**
+             * @ngdoc method
+             * @name merchello.services.merchelloSettingsService#getTypeFields
+             * @methodOf merchello.services.merchelloSettingsService
+             * @function
+             *
+             * @description
+             * Gets all the type fields
+             * 
+             * @returns {object} an angularjs promise object
+             */
+            getTypeFields: function () {
+
+                return getCachedOrApi("AllTypeFields", "GetTypeFields", "settings");
+
+            }
 
         };
 
