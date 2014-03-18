@@ -27,7 +27,7 @@ namespace Merchello.Core.Models
                 : string.Format("{0}-{1}", order.OrderNumberPrefix, order.OrderNumber);
         }
 
-#region Back Order
+#region Fulfillment
 
 
         /// <summary>
@@ -93,6 +93,18 @@ namespace Merchello.Core.Models
 
             return shippableItems;
         }
+
+        /// <summary>
+        /// Gets a collection of items that have inventory requirements
+        /// </summary>
+        /// <param name="order">The <see cref="IOrder"/></param>
+        /// <returns>A collection of <see cref="IOrderLineItem"/></returns>
+        public static IEnumerable<IOrderLineItem> InventoryTrackedItems(this IOrder order)
+        {
+            return order.Items.Where(x => x.ExtendedData.GetTrackInventoryValue()).Select(x => (OrderLineItem)x);
+        }
+
+
 
 #endregion
 

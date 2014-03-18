@@ -96,7 +96,6 @@ namespace Merchello.Web.Editors
             return OrderQuery.GetByInvoiceKey(id);
         }
 
-
         /// <summary>
         /// Returns the shipping Address by an invoice id (key)  - All orders for the invoice are assumed to be shipped to the same 
         /// </summary>
