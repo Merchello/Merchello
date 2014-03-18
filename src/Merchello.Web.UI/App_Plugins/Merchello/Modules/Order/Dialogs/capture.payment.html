@@ -7,12 +7,12 @@
         <div class="well">
             <div class="control-group row-fluid">
                 <p>
-                    Processed by <strong>Authorize.NET</strong><br />
-                    <i class="icon-credit-card"></i> Credit Card: <span>XXXX-XXXX-XXXX-1234</span>
+                    Processed by <strong>{{payments.paymentMethodName}}</strong><br />
+                    <!--<i class="icon-credit-card"></i> Credit Card: <span>XXXX-XXXX-XXXX-1234</span>-->
                 </p>
                 <div class="input-prepend col-xs-12 span12">
                     <span class="add-on">$</span>
-                    <input class="col-xs-2 span2" type="text" placeholder="00.00">
+                    <input class="col-xs-2 span2" type="text" data-ng-model="paymentRequest.amount">
                 </div>
             </div>
         </div>
@@ -29,7 +29,7 @@
 
 				<button
 					class="btn btn-primary"
-					data-ng-click="submit(dialogData)">
+					data-ng-click="submit(paymentRequest)">
 					<localize key="merchello_process_payment">Process Payment</localize>
 				</button>
 

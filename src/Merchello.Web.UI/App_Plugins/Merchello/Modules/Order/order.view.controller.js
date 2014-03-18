@@ -133,9 +133,18 @@
         // Dialogs
         //--------------------------------------------------------------------------------------
 
-        $scope.capturePaymentDialogConfirm = function (data) {
+        $scope.capturePaymentDialogConfirm = function (paymentRequest) {
 
-            notificationsService.success("Capture Payment Confirm Called");
+            var promiseSave = merchelloPaymentService.capturePayment(paymentRequest);
+
+            promiseSave.then(function (payment) {
+
+                notificationsService.success("Payment Captured");
+                $scope.loadInvoice(paymentRequest.invoiceKey);
+
+            }, function (reason) {
+                notificationsService.error("Payment Capture Failed", reason.message);
+            });
 
         };
 
@@ -162,6 +171,7 @@
 
                 promiseSave.then(function () {
 
+                    notificationsService.success("Shipment Created");
                     $scope.loadInvoice(data.invoiceKey);
 
                 }, function (reason) {

@@ -55,7 +55,6 @@
                             <div class="vcard span5 pull-right">
                                 <h3>Billing Address</h3>
 
-                                <!--<img class="photo pull-right" src="/media/1001/heather.jpg" />-->
                                 <h4 class="fn">{{invoice.billToName}}</h4>
                                 <span class="org">{{invoice.billToCompany}}</span>
                                 <span class="adr">
@@ -84,8 +83,7 @@
                             <div class="row-fluid">
                                 <div class="btn-toolbar pull-right umb-btn-toolbar">
                                     <a class="btn btn-primary" data-ng-hide="invoice.getFulfillmentStatus()=='Fulfilled'" data-ng-click="fulfillShipment()">Fulfill {{invoice.getProductLineItems().length}} Line Items</a>
-                                    <a class="btn btn-primary" data-ng-click="capturePayment()">Capture Up To {{invoice.total | currency}}</a>
-                                    <a class="btn btn-warning" href="#">Cancel Order</a>
+                                    <a class="btn btn-primary" data-ng-hide="invoice.getPaymentStatus()=='Paid'" data-ng-click="capturePayment()">Capture Up To {{invoice.total | currency}}</a>
                                 </div>
                             </div>
 
