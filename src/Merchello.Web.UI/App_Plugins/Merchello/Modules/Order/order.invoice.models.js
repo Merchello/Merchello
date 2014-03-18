@@ -213,5 +213,54 @@
 
     };
 
+    models.Payment = function (data) {
+
+        var self = this;
+
+        if (data == undefined) {
+            self.key = "";
+            self.customerKey = "";
+            self.paymentMethodKey = "";
+            self.paymentTypeFieldKey = "";
+            self.paymentMethodName = "";
+            self.referenceNumber = "";
+            self.amount = 0.0;
+            self.authorized = false;
+            self.collected = false;
+            self.exported = false;
+        } else {
+            self.key = data.key;
+            self.customerKey = data.customerKey;
+            self.paymentMethodKey = data.paymentMethodKey;
+            self.paymentTypeFieldKey = data.paymentTypeFieldKey;
+            self.paymentMethodName = data.paymentMethodName;
+            self.referenceNumber = data.referenceNumber;
+            self.amount = data.amount;
+            self.authorized = data.authorized;
+            self.collected = data.collected;
+            self.exported = data.exported;
+        }
+        self.paymentType = new merchello.Models.TypeField();
+    };
+
+    models.PaymentRequest = function (data) {
+
+        var self = this;
+
+        if (data == undefined) {
+            self.invoiceKey = "";
+            self.paymentKey = "";
+            self.paymentMethodKey = "";
+            self.amount = 0.0;
+            self.processorArgs = [];
+        } else {
+            self.invoiceKey = data.invoiceKey;
+            self.paymentKey = data.paymentKey;
+            self.paymentMethodKey = data.paymentMethodKey;
+            self.amount = data.amount;
+            self.processorArgs = data.processorArgs;
+        }
+    };
+
 
 }(window.merchello.Models = window.merchello.Models || {}));
