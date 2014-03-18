@@ -8,7 +8,7 @@
      * @description
      * The controller for the order view page
      */
-    controllers.OrderViewController = function ($scope, $routeParams, dialogService, notificationsService, merchelloInvoiceService, merchelloOrderService, merchelloSettingsService) {
+    controllers.OrderViewController = function ($scope, $routeParams, dialogService, notificationsService, merchelloInvoiceService, merchelloOrderService, merchelloPaymentService, merchelloSettingsService) {
 
         $scope.invoice = {};
         $scope.typeFields = [];
@@ -55,6 +55,7 @@
                 });
 
                 $scope.loadShippingAddress($scope.invoice);
+                $scope.loadPayments($scope.invoice);
 
             }, function (reason) {
                 notificationsService.error("Invoice Load Failed", reason.message);
@@ -74,6 +75,33 @@
 
             }, function (reason) {
                 notificationsService.error("Address Load Failed", reason.message);
+            });
+        };
+
+        $scope.loadPayments = function (invoice) {
+
+            var promise = merchelloPaymentService.getPaymentsByInvoice(invoice.key);
+
+            promise.then(function (payments) {
+
+                invoice.payments = _.map(payments, function (payment) {
+                    return new merchello.Models.Payment(payment);
+                });
+
+                _.each(invoice.payments, function (payment) {
+                    if (payment.paymentTypeFieldKey) {
+                        var matchedTypeField = _.find($scope.typeFields, function (type) {
+                            return type.typeKey == payment.paymentTypeFieldKey;
+                        });
+                        payment.paymentType = matchedTypeField;
+                    }
+                });
+
+                $scope.loaded = true;
+                $scope.preValuesLoaded = true;
+
+            }, function (reason) {
+                notificationsService.error("Payments Load Failed", reason.message);
             });
         };
 

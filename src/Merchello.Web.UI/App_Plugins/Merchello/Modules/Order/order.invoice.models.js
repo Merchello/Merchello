@@ -156,6 +156,7 @@
             self.total = 0.0;
             self.items = [];
             self.orders = [];
+            self.payments = [];
         } else {
             self.key = data.key;
             self.versionKey = data.versionKey;
@@ -184,6 +185,7 @@
             self.orders = _.map(data.orders, function (order) {
                 return new merchello.Models.Order(order);
             });
+            self.payments = [];
         }
 
         self.getPaymentStatus = function () {
