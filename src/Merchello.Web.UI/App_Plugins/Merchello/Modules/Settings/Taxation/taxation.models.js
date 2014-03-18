@@ -8,13 +8,20 @@
         if (data == undefined) {
             self.name = "";
             self.serviceCode = "";
+            self.sortHelper = "0";
         } else {
             self.name = data.name;
             self.serviceCode = data.serviceCode;
             self.method.countryCode = data.serviceCode;
+            self.sortHelper = _.isEqual(self.name, "Everywhere Else") ? "1" + self.name : "0" + self.name;
         }
         self.countryName = "";
         self.country = {};
+
+        self.setCountryName = function(name) {
+            self.countryName = name;
+            self.sortHelper = _.isEqual(self.countryName, "Everywhere Else") ? "1" + self.countryName : "0" + self.countryName;
+        };
     };
 
     models.TaxProvince = function (provinceDataFromServer) {
