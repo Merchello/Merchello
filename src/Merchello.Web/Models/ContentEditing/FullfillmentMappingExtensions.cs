@@ -564,7 +564,7 @@ namespace Merchello.Web.Models.ContentEditing
 
            
             destination.Name = taxMethodDisplay.Name;
-            destination.PercentageTaxRate = taxMethodDisplay.PercentRateAdjustment;
+            destination.PercentageTaxRate = taxMethodDisplay.PercentageTaxRate;
 
             // this may occur when creating a new tax method since the UI does not 
             // query for provinces 
@@ -577,7 +577,7 @@ namespace Merchello.Web.Models.ContentEditing
             foreach (var province in taxMethodDisplay.Provinces)
             {
                 var p = destination.Provinces.FirstOrDefault(x => x.Code == province.Code);
-                if (p != null) p.PercentRateAdjustment = province.PercentAdjustment;
+                if (p != null) p.PercentAdjustment = province.PercentAdjustment;
             }
         
             return destination;

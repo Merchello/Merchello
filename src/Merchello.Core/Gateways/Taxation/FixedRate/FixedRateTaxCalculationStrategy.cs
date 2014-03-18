@@ -65,8 +65,8 @@ namespace Merchello.Core.Gateways.Taxation.FixedRate
         private static decimal AdjustedRate(decimal baseRate, ITaxProvince province, ExtendedDataCollection extendedData)
         {
             if (province == null) return baseRate;
-            extendedData.SetValue(Constants.ExtendedDataKeys.ProviceTaxRate, province.PercentRateAdjustment.ToString(CultureInfo.InvariantCulture));
-            return province.PercentRateAdjustment + baseRate;
+            extendedData.SetValue(Constants.ExtendedDataKeys.ProviceTaxRate, province.PercentAdjustment.ToString(CultureInfo.InvariantCulture));
+            return province.PercentAdjustment + baseRate;
         }
 
     }
