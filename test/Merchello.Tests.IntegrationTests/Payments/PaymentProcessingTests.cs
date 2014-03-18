@@ -101,6 +101,22 @@ namespace Merchello.Tests.IntegrationTests.Payments
             Assert.IsTrue(authorized.Payment.Result.AppliedPayments(_merchelloContext).Any());
             Assert.AreEqual(Constants.DefaultKeys.InvoiceStatus.Unpaid, _invoice.InvoiceStatusKey);
         }
+
+        /// <summary>
+        /// Test verifies that a collection of payments can be retrieved for an invoice
+        /// </summary>
+        [Test]
+        public void Can_Retrieve_A_Collection_Of_Payments_For_An_Invoice()
+        {
+            //// Arrange
+            var authorized = _invoice.AuthorizePayment(_merchelloContext, _paymentMethodKey, new ProcessorArgumentCollection());
+
+            //// Act
+            var payment = _invoice.Payments(_merchelloContext).FirstOrDefault();
+
+            //// Assert
+            Assert.NotNull(payment);
+        }
         
         /// <summary>
         /// Test confirms that a payment can be captured
