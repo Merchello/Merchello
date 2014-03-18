@@ -58,7 +58,7 @@ namespace Merchello.Web
             AutoMapper.Mapper.CreateMap<IShipRateTier, ShipRateTierDisplay>();
             
             // shipment
-            AutoMapper.Mapper.CreateMap<IShipment, Shipment>();
+            AutoMapper.Mapper.CreateMap<IShipment, ShipmentDisplay>();
 
             // taxation
             AutoMapper.Mapper.CreateMap<ITaxMethod, TaxMethodDisplay>();

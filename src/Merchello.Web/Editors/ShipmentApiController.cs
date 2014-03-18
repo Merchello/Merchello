@@ -69,6 +69,7 @@ namespace Merchello.Web.Editors
         /// </summary>
         /// <param name="order"></param>
         /// <returns></returns>
+        [AcceptVerbs("POST", "GET")]
         public ShipMethodDisplay GetShipMethod(OrderDisplay order)
         {
             var invoice = _invoiceService.GetByKey(order.InvoiceKey);

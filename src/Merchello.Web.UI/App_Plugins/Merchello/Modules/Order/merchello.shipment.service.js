@@ -21,6 +21,15 @@
                     'Failed to get shipment: ' + key);
             },
 
+            getShipMethod: function (order) {
+
+                return umbRequestHelper.resourcePromise(
+                    $http.post(umbRequestHelper.getApiUrl('merchelloShipmentApiBaseUrl', 'GetShipMethod'),
+                        order
+                    ),
+                    'Failed to get shipment method');
+            },
+
             newShipment: function (order) {
 
                 return umbRequestHelper.resourcePromise(

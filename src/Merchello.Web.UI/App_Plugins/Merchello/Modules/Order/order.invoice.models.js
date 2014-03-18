@@ -11,10 +11,10 @@
             self.lineItemTfKey = "";
             self.sku = "";
             self.name = "";
-            self.quantity = "";
-            self.price = "";
-            self.exported = "";
-            self.backOrder = "";
+            self.quantity = 0;
+            self.price = 0.0;
+            self.exported = false;
+            self.backOrder = false;
         } else {
             self.key = data.key;
             self.containerKey = data.containerKey;
