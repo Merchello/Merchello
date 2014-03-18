@@ -108,7 +108,7 @@ namespace Merchello.Tests.IntegrationTests.Taxation
             Assert.IsTrue(gwTaxMethod.TaxMethod.HasProvinces);
 
             //// Act
-            gwTaxMethod.TaxMethod.Provinces["WA"].PercentRateAdjustment = 3;
+            gwTaxMethod.TaxMethod.Provinces["WA"].PercentAdjustment = 3;
             _taxProvider.SaveTaxMethod(gwTaxMethod);
 
             var retrieved = _taxProvider.GetGatewayTaxMethodByCountryCode(countryCode);
@@ -116,7 +116,7 @@ namespace Merchello.Tests.IntegrationTests.Taxation
 
             //// Assert
             Assert.IsTrue(retrieved.TaxMethod.HasProvinces);
-            Assert.AreEqual(3, retrieved.TaxMethod.Provinces["WA"].PercentRateAdjustment);
+            Assert.AreEqual(3, retrieved.TaxMethod.Provinces["WA"].PercentAdjustment);
             Assert.AreEqual(5, gwTaxMethod.TaxMethod.PercentageTaxRate);
         }
     }

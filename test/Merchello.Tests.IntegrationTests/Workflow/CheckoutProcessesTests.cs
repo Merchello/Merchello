@@ -109,7 +109,7 @@ namespace Merchello.Tests.IntegrationTests.Workflow
 
             var gwTaxMethod = taxProvider.CreateTaxMethod("US", 0);
 
-            gwTaxMethod.TaxMethod.Provinces["WA"].PercentRateAdjustment = 8.7M;
+            gwTaxMethod.TaxMethod.Provinces["WA"].PercentAdjustment = 8.7M;
 
             taxProvider.SaveTaxMethod(gwTaxMethod);
     

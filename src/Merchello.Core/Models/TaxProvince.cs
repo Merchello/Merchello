@@ -13,13 +13,13 @@ namespace Merchello.Core.Models
         public TaxProvince(string code, string name) 
             : base(code, name)
         {
-            PercentRateAdjustment = 0M;
+            PercentAdjustment = 0M;
         }
 
         /// <summary>
         /// The percentage rate adjustment to the tax rate
         /// </summary>
         [DataMember]
-        public decimal PercentRateAdjustment { get; set; }
+        public decimal PercentAdjustment { get; set; }
     }
 }

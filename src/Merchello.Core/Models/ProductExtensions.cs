@@ -280,7 +280,8 @@ namespace Merchello.Core
                 atts += JsonConvert.SerializeObject(
                 new 
                 { 
-                    optionId = attribute.OptionKey,
+                    key = attribute.Key,
+                    optionKey = attribute.OptionKey,
                     name = attribute.Name,
                     sku = attribute.Sku,
                     sortOrder = attribute.SortOrder                    
