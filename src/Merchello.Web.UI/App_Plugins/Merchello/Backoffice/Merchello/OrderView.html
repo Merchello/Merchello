@@ -16,8 +16,6 @@
 
             <div class="span8">
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
-                    <a data-ng-href="#/merchello/merchello/OrderEdit/{{invoice.key}}" type="submit" class="btn btn-success">Edit</a>
-                    <a href="#" type="submit" class="btn btn-success">Print</a>
                 </div>
             </div>
 
@@ -90,8 +88,7 @@
                             <table class="table table-striped merchello-striped-table order-items">
                                 <tbody>
                                     <tr data-ng-repeat="lineitem in invoice.getProductLineItems()">
-                                        <td><input type="checkbox" data-ng-model="lineitem.selected" /></td>
-                                        <td>
+                                        <td colspan="2">
                                             <h4>{{lineitem.name}}</h4>
                                             <span>SKU: {{lineitem.sku}}</span>
                                         </td>
