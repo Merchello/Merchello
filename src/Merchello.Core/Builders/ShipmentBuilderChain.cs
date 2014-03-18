@@ -6,6 +6,9 @@ using Umbraco.Core;
 
 namespace Merchello.Core.Builders
 {
+    /// <summary>
+    /// Builds a shipment
+    /// </summary>
     internal sealed class ShipmentBuilderChain : BuildChainBase<IShipment>
     {
         private readonly IOrder _order;

@@ -74,7 +74,7 @@ namespace Merchello.Core.Models
 
             if (Constants.DefaultKeys.OrderStatus.Fulfilled == order.OrderStatus.Key) return new List<IOrderLineItem>();
 
-            var shippableItems = items.Where(x => x.IsShippable()).ToArray();
+            var shippableItems = items.Where(x => x.IsShippable() && x.ShipmentKey == null).ToArray();
 
             var inventoryItems = shippableItems.Where(x => x.ExtendedData.GetTrackInventoryValue()).ToArray();
 
@@ -101,7 +101,7 @@ namespace Merchello.Core.Models
         /// <returns>A collection of <see cref="IOrderLineItem"/></returns>
         public static IEnumerable<IOrderLineItem> InventoryTrackedItems(this IOrder order)
         {
-            return order.Items.Where(x => x.ExtendedData.GetTrackInventoryValue()).Select(x => (OrderLineItem)x);
+            return order.Items.Where(x => x.ExtendedData.GetTrackInventoryValue() && x.ExtendedData.ContainsWarehouseCatalogKey()).Select(x => (OrderLineItem)x);
         }
 
 
