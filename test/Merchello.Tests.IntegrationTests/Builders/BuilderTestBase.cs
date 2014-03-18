@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Web.Configuration;
 using Merchello.Core;
 using Merchello.Core.Cache;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Models;
-using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Persistence.UnitOfWork;
 using Merchello.Core.Sales;
 using Merchello.Core.Services;
@@ -45,7 +42,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
         }
 
         [SetUp]
-        public void Init()
+        public virtual void Init()
         {
             Customer = PreTestDataWorker.MakeExistingAnonymousCustomer();
             Basket = Web.Workflow.Basket.GetBasket(MerchelloContext, Customer);
@@ -56,7 +53,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
                 
                 var product = PreTestDataWorker.MakeExistingProduct(true, WeightPerProduct, PricePerProduct);
                 product.AddToCatalogInventory(PreTestDataWorker.WarehouseCatalog);
-                product.CatalogInventories.First().Count = odd ? 1 : 0;
+                product.CatalogInventories.First().Count = 10;
                 product.TrackInventory = true;
                 PreTestDataWorker.ProductService.Save(product);
                 Basket.AddItem(product, 2);

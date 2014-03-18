@@ -45,7 +45,13 @@ namespace Merchello.Core.Builders
 
             // execute the change
             var attempt = (TaskHandlers.Any())
-                ? TaskHandlers.First().Execute(new Shipment(quoted.GetOriginAddress(), quoted.GetDestinationAddress()))
+                ? TaskHandlers.First().Execute(
+                        new Shipment(quoted.GetOriginAddress(), quoted.GetDestinationAddress())
+                            {
+                                ShipMethodKey = quoted.ShipMethodKey,
+                                VersionKey = quoted.VersionKey
+                            }
+                    )
                 : Attempt<IShipment>.Fail(new InvalidOperationException("The configuration Chain Task List could not be instantiated."));
 
             return attempt;
@@ -62,6 +68,14 @@ namespace Merchello.Core.Builders
             {
                 return _constructorParameters ?? (_constructorParameters = new List<object>(new object[] { _merchelloContext, _order }));
             }
+        }
+
+        /// <summary>
+        /// Used for testing
+        /// </summary>
+        internal int TaskCount
+        {
+            get { return TaskHandlers.Count(); }
         }
     }
 }

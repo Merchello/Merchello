@@ -33,7 +33,7 @@ namespace Merchello.Core.Chains.ShipmentCreation
         {
             var trackableItems = Order.InventoryTrackedItems().ToArray();
 
-            var variants = _productVariantService.GetByKeys(trackableItems.Select(x => x.Key)).ToArray();
+            var variants = _productVariantService.GetByKeys(trackableItems.Select(x => x.ExtendedData.GetProductVariantKey())).ToArray();
 
             if (variants.Any())
             {
@@ -53,6 +53,7 @@ namespace Merchello.Core.Chains.ShipmentCreation
             }
 
             // persist the shipment and update the line items
+            if (value.ShipMethodKey == Guid.Empty) value.ShipMethodKey = null;
             _shipmentService.Save(value);
 
             foreach (var shipItem in value.Items)

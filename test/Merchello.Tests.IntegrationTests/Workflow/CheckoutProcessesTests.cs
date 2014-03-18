@@ -119,7 +119,7 @@ namespace Merchello.Tests.IntegrationTests.Workflow
 
             #region Settings -> Payments
 
-            
+                        
 
             #endregion
 
