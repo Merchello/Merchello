@@ -80,8 +80,8 @@
                         <div class="row-fluid span10 col-xs-10">
                             <div class="row-fluid">
                                 <div class="btn-toolbar pull-right umb-btn-toolbar">
-                                    <a class="btn btn-primary" data-ng-hide="invoice.getFulfillmentStatus()=='Fulfilled'" data-ng-click="fulfillShipment()">Fulfill {{invoice.getProductLineItems().length}} Line Items</a>
                                     <a class="btn btn-primary" data-ng-hide="invoice.getPaymentStatus()=='Paid'" data-ng-click="capturePayment()">Capture Up To {{invoice.total | currency}}</a>
+                                    <a class="btn btn-primary" data-ng-hide="invoice.getFulfillmentStatus()=='Fulfilled'" data-ng-click="fulfillShipment()">Fulfill {{invoice.getProductLineItems().length}} Line Items</a>                                  
                                 </div>
                             </div>
 

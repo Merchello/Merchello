@@ -23,7 +23,7 @@ namespace Merchello.Core.Gateways.Payment.Cash
         {
             var payment = GatewayProviderService.CreatePayment(PaymentMethodType.Cash, 0, PaymentMethod.Key);
             
-            payment.PaymentMethodName = PaymentMethod.Name + " " + PaymentMethod.PaymentCode;
+            payment.PaymentMethodName = PaymentMethod.Name;
             payment.ReferenceNumber = PaymentMethod.PaymentCode + "-" + invoice.PrefixedInvoiceNumber();
             payment.Collected = false;
             payment.Authorized = true;
