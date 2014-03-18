@@ -285,8 +285,13 @@ namespace Merchello.Web.Models.ContentEditing
             destination.VersionKey = orderDisplay.VersionKey;
             destination.Exported = orderDisplay.Exported;
 
-            // we don't have any functionality to change order items at this point so 
-            // they should already match those in the destination
+            var existingItems = orderDisplay.Items.Where(x => x.Key != Guid.Empty);
+
+            var removers = destination.Items.Where(x => existingItems.Any(y => y.Key != x.Key));
+            foreach (var remover in removers)
+            {
+                destination.Items.Remove(remover);
+            }
 
             return destination;
         }

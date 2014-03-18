@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Merchello.Core;
+using Merchello.Core.Builders;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Merchello.Web.Models.ContentEditing;
@@ -60,63 +61,46 @@ namespace Merchello.Web.Editors
             return shipment.ToShipmentDisplay();
         }
 
-        /// <summary>
-        /// Returns an shipment based on a shipment rate quote stored in a shipping line item
-        /// 
-        /// GET /umbraco/Merchello/ShipmentApi/GetShipmentByInvoiceLineItem/?invoiceKey={guid}&lineItemKey={guid}
-        /// </summary>
-        [AcceptVerbs("GET", "POST")]
-        public ShipmentDisplay GetShipmentByInvoiceLineItem(Guid invoiceKey, Guid lineItemKey)
-        {
-            // Get the invoice
-            var invoice = _invoiceService.GetByKey(invoiceKey);
-            if (invoice == null)
-            {
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
-            }
-
-            // Get the line item from the invoice
-            var shippingLineItem = invoice.Items.FirstOrDefault(x => x.LineItemType == LineItemType.Shipping && x.Key == lineItemKey);
-            if (shippingLineItem == null)
-            {
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
-            }
-
-            // Construct the shipment from values stored in ExtendedData
-            var shipment = shippingLineItem.ExtendedData.GetShipment<InvoiceLineItem>();
-            if (shipment == null)
-            {
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
-            }
-
-            return shipment.ToShipmentDisplay();
-        }
-
-
+        
         /// <summary>
         /// Adds a shipment
         ///
-        /// POST /umbraco/Merchello/ShipmentApi/AddShipment
+        /// POST /umbraco/Merchello/ShipmentApi/CreateShipment
         /// </summary>
-        /// <param name="shipment">POSTed <see cref="ShipmentDisplay"/> object</param>
+        /// <param name="order">POSTed <see cref="OrderDisplay"/> object</param>
+        /// <remarks>
+        /// 
+        /// Note:  This is a modified order that very likely has not been persisted.  The UI 
+        /// is responsible for removing line items that either have already shipped or are marked as back ordered.
+        /// This "order" object should only contain line items intended to be included in the shipment to be created although
+        /// other order data, such as the invoiceKey are important for this process.
+        /// 
+        /// </remarks>
         [AcceptVerbs("POST", "GET")]
-        public HttpResponseMessage AddShipment(ShipmentDisplay shipment)
+        public ShipmentDisplay NewShipment(OrderDisplay order)
         {
-            var response = Request.CreateResponse(HttpStatusCode.OK);
-
             try
             {
-                if(!shipment.Items.Any()) throw new InvalidOperationException("The shipment did not include any line items");
+                if(!order.Items.Any()) throw new InvalidOperationException("The shipment did not include any line items");
+                
+                var merchOrder = _orderService.GetByKey(order.Key);
 
+                var builder = new ShipmentBuilderChain(MerchelloContext, order.ToOrder(merchOrder));
 
+                var attempt = builder.Build();
+
+                if(!attempt.Success)
+                    throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, attempt.Exception));
+
+                return attempt.Result.ToShipmentDisplay();
 
             }
             catch (Exception ex)
             {
-                response = Request.CreateResponse(HttpStatusCode.InternalServerError, String.Format("{0}", ex.Message));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, String.Format("{0}", ex.Message)));
             }
 
-            return response;
+            
         }
 
         /// <summary>
