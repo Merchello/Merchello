@@ -11,14 +11,15 @@
                 <label for="trackingNo">Tracking Number:</label>
                 <input name="trackingNo" data-ng-model="dialogData.trackingNumber" type="text" class="col-xs-6 span6" />
                 <label for="provider">Via</label>
-                <select name="provider" disabled="disabled" class="col-xs-6 span6"><option>???</option></select>
+                <label>{{shipMethod.name}}</label>
+                <!--<select name="provider" disabled="disabled" class="col-xs-6 span6"><option>{{shipMethod}}</option></select>-->
                 <!--<label><input type="checkbox" checked="checked" /> Email shipment notification to the customer</label>-->
             </div>
             
             <table class="">
                 <tbody>
                     <tr data-ng-repeat="lineitem in dialogData.items">
-                        <td><input type="checkbox" data-ng-model="lineitem.selected" /></td>
+                        <td><input type="checkbox" data-ng-disabled="lineitem.backOrder" data-ng-model="lineitem.selected" /></td>
                         <td>
                             <h4>{{lineitem.name}}</h4>
                             <span>SKU: {{lineitem.sku}}</span>

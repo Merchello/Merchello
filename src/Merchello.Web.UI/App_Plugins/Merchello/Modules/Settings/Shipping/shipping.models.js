@@ -123,9 +123,13 @@
             self.surcharge = shippingMethodFromServer.surcharge;
             self.serviceCode = shippingMethodFromServer.serviceCode;
             self.taxable = shippingMethodFromServer.taxable;
-            self.provinces = _.map(shippingMethodFromServer.provinces, function (province) {
-                return new merchello.Models.ProvinceData(province);
-            });
+            if (shippingMethodFromServer.provinces) {
+                self.provinces = _.map(shippingMethodFromServer.provinces, function(province) {
+                    return new merchello.Models.ProvinceData(province);
+                });
+            } else {
+                self.provinces = [];
+            }
         }
         // Helper to add a shipping region adjustment to this shipping method.
         self.addProvince = function (province) {
