@@ -49,6 +49,10 @@ namespace Merchello.Web.Trees
                 controller => controller.GetAllGatewayProviders()));
             umbracoUrls.Add("merchelloInvoiceApiBaseUrl", url.GetUmbracoApiServiceBaseUrl<InvoiceApiController>(
                 controller => controller.GetAllInvoices()));
+            umbracoUrls.Add("merchelloOrderApiBaseUrl", url.GetUmbracoApiServiceBaseUrl<OrderApiController>(
+                controller => controller.GetOrder(Guid.NewGuid())));
+            umbracoUrls.Add("merchelloShipmentApiBaseUrl", url.GetUmbracoApiServiceBaseUrl<ShipmentApiController>(
+                controller => controller.GetShipment(Guid.NewGuid())));
         }
     }
 }

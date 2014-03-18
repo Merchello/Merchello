@@ -8,13 +8,34 @@
      * @description
      * The controller for the order view page
      */
-    controllers.OrderViewController = function ($scope, $routeParams, dialogService, notificationsService, merchelloInvoiceService) {
+    controllers.OrderViewController = function ($scope, $routeParams, dialogService, notificationsService, merchelloInvoiceService, merchelloOrderService, merchelloSettingsService) {
 
         $scope.invoice = {};
+        $scope.typeFields = [];
+        $scope.shippingAddress = {};
 
         //--------------------------------------------------------------------------------------
         // Initialization methods
         //--------------------------------------------------------------------------------------
+
+        $scope.loadTypeFields = function (nextMethodCall) {
+
+            var promise = merchelloSettingsService.getTypeFields();
+
+            promise.then(function (typeFields) {
+
+                $scope.typeFields = _.map(typeFields, function(type) {
+                    return new merchello.Models.TypeField(type);
+                });
+
+                if (nextMethodCall != undefined) {
+                    nextMethodCall();
+                }
+
+            }, function (reason) {
+                notificationsService.error("TypeFields Load Failed", reason.message);
+            });
+        };
 
         $scope.loadInvoice = function (id) {
 
@@ -24,11 +45,35 @@
 
                 $scope.invoice = new merchello.Models.Invoice(invoice);
 
+                _.each($scope.invoice.items, function (lineItem) {
+                    if (lineItem.lineItemTfKey) {
+                        var matchedTypeField = _.find($scope.typeFields, function(type) {
+                             return type.typeKey == lineItem.lineItemTfKey;
+                        });
+                        lineItem.lineItemType = matchedTypeField;
+                    }
+                });
+
+                $scope.loadShippingAddress($scope.invoice);
+
+            }, function (reason) {
+                notificationsService.error("Invoice Load Failed", reason.message);
+            });
+        };
+
+        $scope.loadShippingAddress = function (invoice) {
+
+            var promise = merchelloOrderService.getShippingAddress(invoice.key);
+
+            promise.then(function (address) {
+
+                $scope.shippingAddress = new merchello.Models.Address(address);
+
                 $scope.loaded = true;
                 $scope.preValuesLoaded = true;
 
             }, function (reason) {
-                notificationsService.error("Invoice Load Failed", reason.message);
+                notificationsService.error("Address Load Failed", reason.message);
             });
         };
 
@@ -42,8 +87,8 @@
          */
         $scope.init = function () {
 
-            $scope.loadInvoice($routeParams.id);
-
+            $scope.loadTypeFields(function () { $scope.loadInvoice($routeParams.id); });
+           
         };
 
         $scope.init();

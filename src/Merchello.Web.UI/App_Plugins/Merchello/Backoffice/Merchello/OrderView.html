@@ -41,15 +41,15 @@
                             <div class="vcard span5">
                                 <h3>Shipping Address</h3>
 
-                                <!--<h4 class="fn">Heather Alvis</h4>
-                                <span class="org">Mindfly</span>
+                                <h4 class="fn">{{shippingAddress.name}}</h4>
+                                <span class="org">{{shippingAddress.organization}}</span>
                                 <span class="adr">
-                                    <span class="street-address">114 W Magnolia St.</span>
-                                    <span class="extended-address">Suite 504</span>
-                                    <span class="locality">Bellingham</span>, <span class="region">WA</span>, <span class="postal-code">98225</span>
-                                    <span class="country-name">USA</span>
+                                    <span class="street-address">{{shippingAddress.address1}}</span>
+                                    <span class="extended-address">{{shippingAddress.address2}}</span>
+                                    <span class="locality">{{shippingAddress.locality}}</span>, <span class="region">{{shippingAddress.region}}</span>, <span class="postal-code">{{shippingAddress.postalCode}}</span>
+                                    <span class="country-name">{{shippingAddress.countryCode}}</span>
                                 </span>
-                                <span class="tel">360-990-0090</span>-->
+                                <span class="tel">{{shippingAddress.phone}}</span>
                             </div>
 
                             <div class="vcard span5 pull-right">
@@ -91,7 +91,7 @@
 
                             <table class="table table-striped merchello-striped-table order-items">
                                 <tbody>
-                                    <tr data-ng-repeat="lineitem in invoice.items">
+                                    <tr data-ng-repeat="lineitem in invoice.getProductLineItems()">
                                         <td><input type="checkbox" data-ng-model="lineitem.selected" /></td>
                                         <td>
                                             <h4>{{lineitem.name}}</h4>
@@ -100,7 +100,14 @@
                                         <td class="text-right">{{lineitem.quantity}} x <strong>{{lineitem.price | currency}}</strong></td>
                                         <td class="text-right">{{lineitem.quantity * lineitem.price | currency}}</td>
                                     </tr>
-
+                                    <tr>
+                                        <td colspan="3" class="text-right">Sales Tax</td>
+                                        <td class="text-right">{{invoice.getTaxLineItem().price | currency}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3" class="text-right">Shipping</td>
+                                        <td class="text-right">{{invoice.getShippingLineItem().price | currency}}</td>
+                                    </tr>
                                     <tr>
                                         <td><i class="icon-credit-card"></i></td>
                                         <td>
