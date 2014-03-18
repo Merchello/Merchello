@@ -41,7 +41,7 @@
 
                             <table class="table table-striped merchello-striped-table settings-table tax-table form-horizontal">
                                 <tbody>
-                                    <tr data-ng-repeat="country in availableCountries | orderBy: 'countryName'">
+                                    <tr data-ng-repeat="country in availableCountries | orderBy: 'sortHelper'">
                                         <td class="col-xs-4 span4"><h4 data-ng-bind="country.countryName"></h4></td>
                                         <td class="col-xs-5 span5">
                                             <select name="method-type" class="col-xs-12 span12" data-ng-change="providerChange(country.method, country.method.provider)" data-ng-model="country.method.provider" data-ng-options="p.name for p in taxationGatewayProviders track by p.key"></select>
@@ -68,7 +68,7 @@
                 </div>
             </div>
             
-            <div class="merchello-pane row-fluid debug-pane">
+            <!--<div class="merchello-pane row-fluid debug-pane">
                 <div class="control-group umb-control-group">
                     <label class="merchello-control-label">
                         <label><input data-ng-model="debugging" type="checkbox" /> Debug</label>
@@ -88,7 +88,7 @@
 
                     </div>
                 </div>
-            </div>
+            </div>-->
 
             
         </merchello-panel>

@@ -71,18 +71,24 @@
                     taxCountry.country = _.find($scope.allCountries, function (c) { return c.countryCode == taxCountry.serviceCode; });
 
                     if (taxCountry.country) {
-                        taxCountry.countryName = taxCountry.country.name;
+                        taxCountry.setCountryName(taxCountry.country.name);
                     } else {
-                        taxCountry.countryName = taxCountry.name;
+                        if (taxCountry.name == 'ELSE-FixedRate') {
+                            taxCountry.setCountryName('Everywhere Else');
+                        } else {
+                            taxCountry.setCountryName(taxCountry.name);
+                        }
                     }
 
                     return taxCountry;
                 });
 
-
                 _.each(newAvailableCountries, function (country) {
                     $scope.availableCountries.push(country);
                 });
+
+                $scope.loaded = true;
+                $scope.preValuesLoaded = true;
 
             }, function (reason) {
 
@@ -107,9 +113,9 @@
                     taxCountry.country = _.find($scope.allCountries, function(c) { return c.countryCode == taxMethod.countryCode; });
 
                     if (taxCountry.country) {
-                        taxCountry.countryName = taxCountry.country.name;
+                        taxCountry.setCountryName(taxCountry.country.name);
                     } else {
-                        taxCountry.countryName = taxMethod.name;
+                        taxCountry.setCountryName(taxMethod.name);
                     }
 
                     return taxCountry;
@@ -118,6 +124,9 @@
                 _.each(newCountries, function(country) {
                     $scope.availableCountries.push(country);
                 });
+
+                $scope.loaded = true;
+                $scope.preValuesLoaded = true;
 
             }, function (reason) {
 
@@ -139,10 +148,6 @@
 
             $scope.loadAllAvailableCountries();
             $scope.loadAllTaxationGatewayProviders();
-
-            $scope.loaded = true;
-            $scope.preValuesLoaded = true;
-
 
         };
 
