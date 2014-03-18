@@ -11,10 +11,10 @@
             self.lineItemTfKey = "";
             self.sku = "";
             self.name = "";
-            self.quantity = "";
-            self.price = "";
-            self.exported = "";
-            self.backOrder = "";
+            self.quantity = 0;
+            self.price = 0.0;
+            self.exported = false;
+            self.backOrder = false;
         } else {
             self.key = data.key;
             self.containerKey = data.containerKey;
@@ -264,5 +264,67 @@
         }
     };
 
+    models.Shipment = function (data) {
+
+        var self = this;
+
+        if (data == undefined) {
+            self.key = "";
+            self.versionKey = "";
+            self.fromOrganization = "";
+            self.fromName = "";
+            self.fromAddress1 = "";
+            self.fromAddress2 = "";
+            self.fromLocality = "";
+            self.fromRegion = "";
+            self.fromPostalCode = "";
+            self.fromCountryCode = "";
+            self.fromIsCommercial = "";
+            self.toOrganization = "";
+            self.toName = "";
+            self.toAddress1 = "";
+            self.toAddress2 = "";
+            self.toLocality = "";
+            self.toRegion = "";
+            self.toPostalCode = "";
+            self.toCountryCode = "";
+            self.toIsCommercial = "";
+            self.shipMethodKey = "";
+            self.phone = "";
+            self.email = "";
+            self.carrier = "";
+            self.trackingCode = "";
+            self.items = [];
+        } else {
+            self.key = data.key;
+            self.versionKey = data.versionKey;
+            self.fromOrganization = data.fromOrganization;
+            self.fromName = data.fromName;
+            self.fromAddress1 = data.fromAddress1;
+            self.fromAddress2 = data.fromAddress2;
+            self.fromLocality = data.fromLocality;
+            self.fromRegion = data.fromRegion;
+            self.fromPostalCode = data.fromPostalCode;
+            self.fromCountryCode = data.fromCountryCode;
+            self.fromIsCommercial = data.fromIsCommercial;
+            self.toOrganization = data.toOrganization;
+            self.toName = data.toName;
+            self.toAddress1 = data.toAddress1;
+            self.toAddress2 = data.toAddress2;
+            self.toLocality = data.toLocality;
+            self.toRegion = data.toRegion;
+            self.toPostalCode = data.toPostalCode;
+            self.toCountryCode = data.toCountryCode;
+            self.toIsCommercial = data.toIsCommercial;
+            self.shipMethodKey = data.shipMethodKey;
+            self.phone = data.phone;
+            self.email = data.email;
+            self.carrier = data.carrier;
+            self.trackingCode = data.trackingCode;
+            self.items = _.map(data.items, function(lineitem) {
+                return new merchello.Models.OrderLineItem(lineitem);
+            });
+        }
+    };
 
 }(window.merchello.Models = window.merchello.Models || {}));

@@ -8,7 +8,7 @@
      * @description
      * The controller for the order view page
      */
-    controllers.OrderViewController = function ($scope, $routeParams, dialogService, notificationsService, merchelloInvoiceService, merchelloOrderService, merchelloPaymentService, merchelloSettingsService) {
+    controllers.OrderViewController = function ($scope, $routeParams, dialogService, notificationsService, merchelloInvoiceService, merchelloOrderService, merchelloPaymentService, merchelloShipmentService, merchelloSettingsService) {
 
         $scope.invoice = {};
         $scope.typeFields = [];
@@ -133,9 +133,18 @@
         // Dialogs
         //--------------------------------------------------------------------------------------
 
-        $scope.capturePaymentDialogConfirm = function (data) {
+        $scope.capturePaymentDialogConfirm = function (paymentRequest) {
 
-            notificationsService.success("Capture Payment Confirm Called");
+            var promiseSave = merchelloPaymentService.capturePayment(paymentRequest);
+
+            promiseSave.then(function (payment) {
+
+                notificationsService.success("Payment Captured");
+                $scope.loadInvoice(paymentRequest.invoiceKey);
+
+            }, function (reason) {
+                notificationsService.error("Payment Capture Failed", reason.message);
+            });
 
         };
 
@@ -153,7 +162,25 @@
 
         $scope.fulfillShipmentDialogConfirm = function (data) {
 
-            notificationsService.success("Fulfill Shipment Confirm Called");
+            var promiseNew = merchelloShipmentService.newShipment(data);
+            
+            promiseNew.then(function (shipment) {
+                shipment.trackingCode = data.trackingNumber;
+
+                var promiseSave = merchelloShipmentService.putShipment(shipment);
+
+                promiseSave.then(function () {
+
+                    notificationsService.success("Shipment Created");
+                    $scope.loadInvoice(data.invoiceKey);
+
+                }, function (reason) {
+                    notificationsService.error("Save Shipment Failed", reason.message);
+                });
+
+            }, function (reason) {
+                notificationsService.error("New Shipment Failed", reason.message);
+            });
 
         };
 
@@ -163,7 +190,7 @@
                 template: '/App_Plugins/Merchello/Modules/Order/Dialogs/fulfill.shipment.html',
                 show: true,
                 callback: $scope.fulfillShipmentDialogConfirm,
-                dialogData: $scope.invoice
+                dialogData: $scope.invoice.orders[0]    // todo: pull from current order when multiple orders is avavilable
             });
 
         };
