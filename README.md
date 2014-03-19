@@ -21,6 +21,10 @@ Merchello comes with the following core features, but it's also built so you can
 
 You can download releases of Merchello via our package on [our.umbraco.org](http://our.umbraco.org/projects/collaboration/merchello)
 
+## Documentation
+
+Merchello's documentation is started and an active work in progress [merchello.github.io](http://merchello.github.io)
+
 ## Forums
 
 Merchello's forum is an extension of it's project package on [our.umbraco.org](http://our.umbraco.org/projects/collaboration/merchello), and if you have questions about use, implementation, or have ideas you want to share with us to make it better, then this is the best way to contact us! However, we also have a discussion group on [Google Groups](https://groups.google.com/forum/#!forum/merchello-development) and if something isn't working like it should, we'd love if you'd [submit an issue report](http://issues.merchello.com).
