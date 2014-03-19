@@ -285,13 +285,7 @@ namespace Merchello.Web.Models.ContentEditing
             destination.VersionKey = orderDisplay.VersionKey;
             destination.Exported = orderDisplay.Exported;
 
-            var existingItems = orderDisplay.Items.Where(x => x.Key != Guid.Empty);
-
-            var removers = destination.Items.Where(x => existingItems.Any(y => y.Key != x.Key));
-            foreach (var remover in removers)
-            {
-                destination.Items.Remove(remover);
-            }
+            // TODO remove existing line items from destination not present in orderDisplay
 
             return destination;
         }
