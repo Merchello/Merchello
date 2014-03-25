@@ -29,7 +29,7 @@ namespace Merchello.Core.Gateways
         /// <returns>A collection of all GatewayProvider of the particular type T</returns>
         public IEnumerable<IGatewayProvider> GetAllGatewayProviders()
         {
-            return GatewayProviderResolver.GetGatewayProviders<T>();
+            return GatewayProviderResolver.GetActiveProviders<T>();
         }
 
         /// <summary>

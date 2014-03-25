@@ -44,7 +44,7 @@ namespace Merchello.Core.Gateways
         /// <summary>
         /// Gets a collection of <see cref="IGatewayProvider"/>s by type
         /// </summary>
-        public IEnumerable<IGatewayProvider> GetGatewayProviders<T>() where T : GatewayProviderBase
+        public IEnumerable<IGatewayProvider> GetActiveProviders<T>() where T : GatewayProviderBase
         {
             var gatewayProviderType = GetGatewayProviderType<T>();
 
@@ -61,9 +61,9 @@ namespace Merchello.Core.Gateways
         /// </summary>
         /// <param name="gatewayProviderType"></param>
         /// <returns></returns>
-        public IEnumerable<T> CreateInstanceByGatewayProviderType<T>(GatewayProviderType gatewayProviderType) where T : GatewayProviderBase
+        public IEnumerable<T> CreateInstances<T>(GatewayProviderType gatewayProviderType) where T : GatewayProviderBase
         {
-            return GetGatewayProviders<T>().Select(CreateInstanceByGatewayProvider<T>);
+            return GetActiveProviders<T>().Select(CreateInstance<T>);
 
         }
 
@@ -72,7 +72,7 @@ namespace Merchello.Core.Gateways
         /// </summary>
         /// <param name="provider"><see cref="IGatewayProvider"/></param>
         /// <returns></returns>
-        public T CreateInstanceByGatewayProvider<T>(IGatewayProvider provider) where T : GatewayProviderBase
+        public T CreateInstance<T>(IGatewayProvider provider) where T : GatewayProviderBase
         {
             switch (GetGatewayProviderType<T>())
             {
@@ -95,10 +95,10 @@ namespace Merchello.Core.Gateways
         /// <typeparam name="T">The Type of the GatewayProvider.  Must inherit from GatewayProviderBase</typeparam>
         /// <param name="gatewayProviderKey"></param>
         /// <returns>An instantiated GatewayProvider</returns>
-        public T CreateInstanceByKey<T>(Guid gatewayProviderKey) where T : GatewayProviderBase
+        public T CreateInstance<T>(Guid gatewayProviderKey) where T : GatewayProviderBase
         {
             var provider = _gatewayProviderCache.FirstOrDefault(x => x.Key == gatewayProviderKey).Value;
-            return provider == null ? null : CreateInstanceByGatewayProvider<T>(provider);
+            return provider == null ? null : CreateInstance<T>(provider);
         }
 
         /// <summary>

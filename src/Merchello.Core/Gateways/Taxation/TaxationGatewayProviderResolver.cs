@@ -10,15 +10,25 @@ namespace Merchello.Core.Gateways.Taxation
     internal sealed class TaxationGatewayProviderResolver : ManyObjectsResolverBase<TaxationGatewayProviderResolver, ITaxationGatewayProvider>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="TaxationGatewayProviderResolver"/>
+        /// Initializes a new instance of the <see cref="TaxationGatewayProviderResolver"/> with an intial list of TaxationGatewayProvider types
         /// </summary>
-        /// <param name="providers"></param>
+        /// <param name="providers">The list of TaxationGatewayProviders</param>
         internal TaxationGatewayProviderResolver(IEnumerable<Type> providers)
             : base(providers)
         { }
 
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TaxationGatewayProviderResolver"/> with an intial list of TaxationGatewayProvider types
+        /// </summary>
+        /// <param name="providers">The list of TaxationGatewayProviders</param>
         internal TaxationGatewayProviderResolver(params Type[] providers)
+            :base (providers)
         { }
+
+        public IEnumerable<ITaxationGatewayProvider> Providers
+        {
+            get { return Values; }
+        }
     }
 }

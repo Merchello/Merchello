@@ -54,5 +54,8 @@ namespace Merchello.Tests.UnitTests.ObjectResolution
             //// Assert
             Assert.IsTrue(providers.Any());
         }
+
+
+        
     }
 }

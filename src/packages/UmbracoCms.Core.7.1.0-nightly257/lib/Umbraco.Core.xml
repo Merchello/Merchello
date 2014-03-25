@@ -7253,6 +7253,11 @@
             The database id for the pre-value field value
             </summary>
         </member>
+        <member name="P:Umbraco.Core.Models.PreValue.SortOrder">
+            <summary>
+            The sort order stored for the pre-value field value
+            </summary>
+        </member>
         <member name="T:Umbraco.Core.Models.MemberType">
             <summary>
             Represents the content type that a <see cref="T:Umbraco.Core.Models.Member"/> object is based on
