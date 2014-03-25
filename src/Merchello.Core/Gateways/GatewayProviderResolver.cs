@@ -8,6 +8,7 @@ using Merchello.Core.Gateways.Taxation;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Umbraco.Core.Cache;
+using Umbraco.Core.ObjectResolution;
 
 namespace Merchello.Core.Gateways
 {
@@ -32,6 +33,7 @@ namespace Merchello.Core.Gateways
 
         private void BuildGatewayProviderCache()
         {            
+            // this will cache the list of all providers that have been "Activated"
             foreach (var provider in _gatewayProviderService.GetAllGatewayProviders())
             {
                 _gatewayProviderCache.AddOrUpdate(provider.Key, provider, (x, y) => provider);
@@ -112,7 +114,7 @@ namespace Merchello.Core.Gateways
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns>Returns a <see cref="GatewayProviderType"/></returns>
-        private GatewayProviderType GetGatewayProviderType<T>()
+        internal static GatewayProviderType GetGatewayProviderType<T>()
         {
             if (typeof(ShippingGatewayProviderBase).IsAssignableFrom(typeof(T))) return GatewayProviderType.Shipping;
             if (typeof(TaxationGatewayProviderBase).IsAssignableFrom(typeof(T))) return GatewayProviderType.Taxation;

@@ -39,8 +39,8 @@ namespace Merchello.Core
         private void BuildMerchelloContext(bool isUnitTest)
         {
             if (isUnitTest) return;
-            
-            var gatewayResolver = new Lazy<GatewayProviderResolver>(() => new GatewayProviderResolver(_services.GatewayProviderService, Cache.RuntimeCache));
+
+            var gatewayResolver = new Lazy<GatewayProviderResolver>(() => new GatewayProviderResolver(PluginManager.Current.ResolveTypes<GatewayProviderBase>(), _services.GatewayProviderService, Cache.RuntimeCache));
 
             _gateways = new GatewayContext(
                 new ShippingContext(_services.GatewayProviderService, _services.StoreSettingService, gatewayResolver.Value),

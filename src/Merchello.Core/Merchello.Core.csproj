@@ -106,6 +106,7 @@
     <Compile Include="Gateways\Taxation\FixedRate\IFixedRateTaxationGatewayMethod.cs" />
     <Compile Include="Gateways\Taxation\TaxationGatewayMethodBase.cs" />
     <Compile Include="Gateways\Taxation\ITaxationGatewayMethod.cs" />
+    <Compile Include="Gateways\Taxation\TaxationGatewayProviderResolver.cs" />
     <Compile Include="Gateways\Taxation\TaxCalculationResult.cs" />
     <Compile Include="Gateways\Taxation\TaxableLineItemVisitor.cs" />
     <Compile Include="Models\Currency.cs" />
