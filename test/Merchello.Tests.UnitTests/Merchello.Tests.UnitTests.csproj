@@ -254,6 +254,7 @@
     <Compile Include="Models\ProductVariantTests.cs" />
     <Compile Include="Chains\ConceptPipelineTests.cs" />
     <Compile Include="Chains\DemoAttemptChainTask.cs" />
+    <Compile Include="ObjectResolution\GatewayProviderResolution.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Querying\AddressSqlClausesTests.cs" />
     <Compile Include="Querying\GatewayProviderSqlClausesTests.cs" />
