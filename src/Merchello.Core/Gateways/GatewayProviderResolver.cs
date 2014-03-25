@@ -86,7 +86,7 @@ namespace Merchello.Core.Gateways
                     return _gatewayProviderFactory.Value.GetInstance<PaymentGatewayProviderBase>(provider) as T;
             }
 
-            throw new InvalidOperationException("ResolveByGatewayProvider could not instantiant Type " + typeof(T).FullName);
+            throw new InvalidOperationException("CreateInstance could not instantiant Type " + typeof(T).FullName);
         }
 
         /// <summary>
