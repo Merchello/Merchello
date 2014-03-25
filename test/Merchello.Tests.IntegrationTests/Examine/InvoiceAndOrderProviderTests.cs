@@ -160,10 +160,7 @@ namespace Merchello.Tests.IntegrationTests.Examine
             var key = invoice3.Key;
 
             //// Act
-            var retrieved = MerchelloContext.Current.Services.InvoiceService.GetByKey(key);
-
-            var provider = (InvoiceIndexer)ExamineManager.Instance.IndexProviderCollection["MerchelloInvoiceIndexer"];
-            provider.AddInvoiceToIndex(retrieved);
+            MerchelloContext.Current.Services.InvoiceService.GetByKey(key);         
             var searcher = ExamineManager.Instance.SearchProviderCollection["MerchelloInvoiceSearcher"];
 
             var criteria = searcher.CreateSearchCriteria(Merchello.Examine.IndexTypes.Invoice);
