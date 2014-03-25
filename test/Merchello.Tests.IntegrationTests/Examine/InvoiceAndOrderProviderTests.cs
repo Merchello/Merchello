@@ -43,8 +43,8 @@ namespace Merchello.Tests.IntegrationTests.Examine
 
             OrderService.Saved += OrderServiceSaved;
 
-            var provider = (InvoiceIndexer)ExamineManager.Instance.IndexProviderCollection["MerchelloInvoiceIndexer"];
-            provider.RebuildIndex();
+            //var invoiceProvider = (InvoiceIndexer)ExamineManager.Instance.IndexProviderCollection["MerchelloInvoiceIndexer"];
+            //invoiceProvider.RebuildIndex();
         }
 
         [TestFixtureTearDown]
