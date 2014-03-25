@@ -59,9 +59,9 @@ namespace Merchello.Core.Gateways
         /// </summary>
         /// <param name="gatewayProviderType"></param>
         /// <returns></returns>
-        public IEnumerable<T> ResolveByGatewayProviderType<T>(GatewayProviderType gatewayProviderType) where T : GatewayProviderBase
+        public IEnumerable<T> CreateInstanceByGatewayProviderType<T>(GatewayProviderType gatewayProviderType) where T : GatewayProviderBase
         {
-            return GetGatewayProviders<T>().Select(ResolveByGatewayProvider<T>);
+            return GetGatewayProviders<T>().Select(CreateInstanceByGatewayProvider<T>);
 
         }
 
@@ -70,7 +70,7 @@ namespace Merchello.Core.Gateways
         /// </summary>
         /// <param name="provider"><see cref="IGatewayProvider"/></param>
         /// <returns></returns>
-        public T ResolveByGatewayProvider<T>(IGatewayProvider provider) where T : GatewayProviderBase
+        public T CreateInstanceByGatewayProvider<T>(IGatewayProvider provider) where T : GatewayProviderBase
         {
             switch (GetGatewayProviderType<T>())
             {
@@ -93,10 +93,10 @@ namespace Merchello.Core.Gateways
         /// <typeparam name="T">The Type of the GatewayProvider.  Must inherit from GatewayProviderBase</typeparam>
         /// <param name="gatewayProviderKey"></param>
         /// <returns>An instantiated GatewayProvider</returns>
-        public T ResolveByKey<T>(Guid gatewayProviderKey) where T : GatewayProviderBase
+        public T CreateInstanceByKey<T>(Guid gatewayProviderKey) where T : GatewayProviderBase
         {
             var provider = _gatewayProviderCache.FirstOrDefault(x => x.Key == gatewayProviderKey).Value;
-            return provider == null ? null : ResolveByGatewayProvider<T>(provider);
+            return provider == null ? null : CreateInstanceByGatewayProvider<T>(provider);
         }
 
         /// <summary>

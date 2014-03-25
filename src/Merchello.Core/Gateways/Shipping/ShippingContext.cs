@@ -77,7 +77,7 @@ namespace Merchello.Core.Gateways.Shipping
 
             return
                 gatewayProviders.Select(
-                    provider => GatewayProviderResolver.ResolveByGatewayProvider<ShippingGatewayProviderBase>(provider));
+                    provider => GatewayProviderResolver.CreateInstanceByGatewayProvider<ShippingGatewayProviderBase>(provider));
         }
 
 
@@ -87,7 +87,7 @@ namespace Merchello.Core.Gateways.Shipping
         /// <returns>A collection of all active shipping gateway providers</returns>
         public override IEnumerable<ShippingGatewayProviderBase> ResolveAllActiveProviders()
         {
-            return GatewayProviderResolver.ResolveByGatewayProviderType<ShippingGatewayProviderBase>(GatewayProviderType.Shipping);
+            return GatewayProviderResolver.CreateInstanceByGatewayProviderType<ShippingGatewayProviderBase>(GatewayProviderType.Shipping);
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace Merchello.Core.Gateways.Shipping
         /// <returns>A shipping gateway provider</returns>
         public override ShippingGatewayProviderBase ResolveByKey(Guid key)
         {
-            return GatewayProviderResolver.ResolveByKey<ShippingGatewayProviderBase>(key);
+            return GatewayProviderResolver.CreateInstanceByKey<ShippingGatewayProviderBase>(key);
         }
     }
 }

@@ -21,7 +21,7 @@ namespace Merchello.Core.Gateways.Taxation
         /// <returns>A collection of all active TypedGatewayProviderinstances</returns>
         public override IEnumerable<TaxationGatewayProviderBase> ResolveAllActiveProviders()
         {
-            return GatewayProviderResolver.ResolveByGatewayProviderType<TaxationGatewayProviderBase>(GatewayProviderType.Taxation);
+            return GatewayProviderResolver.CreateInstanceByGatewayProviderType<TaxationGatewayProviderBase>(GatewayProviderType.Taxation);
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace Merchello.Core.Gateways.Taxation
         /// <returns>A taxation gateway provider</returns>
         public override TaxationGatewayProviderBase ResolveByKey(Guid key)
         {
-            return GatewayProviderResolver.ResolveByKey<TaxationGatewayProviderBase>(key);
+            return GatewayProviderResolver.CreateInstanceByKey<TaxationGatewayProviderBase>(key);
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace Merchello.Core.Gateways.Taxation
 
             if(Guid.Empty.Equals(providersKey)) return new TaxCalculationResult(0,0);
 
-            var provider = GatewayProviderResolver.ResolveByKey<TaxationGatewayProviderBase>(providersKey);
+            var provider = GatewayProviderResolver.CreateInstanceByKey<TaxationGatewayProviderBase>(providersKey);
 
             var gatewayTaxMethod = provider.GetGatewayTaxMethodByCountryCode(taxAddress.CountryCode);
 
