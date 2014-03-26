@@ -95,6 +95,7 @@
     <Compile Include="Gateways\Payment\Cash\CashPaymentGatewayMethod.cs" />
     <Compile Include="Gateways\Payment\Cash\ICashPaymentGatewayMethod.cs" />
     <Compile Include="Gateways\Payment\Cash\ICashPaymentGatewayProvider.cs" />
+    <Compile Include="Gateways\Payment\PaymentGatewayProviderResolver.cs" />
     <Compile Include="Gateways\Payment\PaymentResult.cs" />
     <Compile Include="Gateways\Payment\ProcessorArgumentCollection.cs" />
     <Compile Include="Gateways\IGatewayMethod.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="Gateways\Payment\IPaymentGatewayMethod.cs" />
     <Compile Include="Gateways\Payment\IPaymentResult.cs" />
     <Compile Include="Gateways\Shipping\FixedRate\IFixedRateShippingGatewayProvider.cs" />
+    <Compile Include="Gateways\Shipping\ShippingGatewayProviderResolver.cs" />
     <Compile Include="Gateways\Taxation\FixedRate\FixRateTaxationGatewayMethod.cs" />
     <Compile Include="Gateways\Taxation\FixedRate\IFixedRateTaxationGatewayMethod.cs" />
     <Compile Include="Gateways\Taxation\TaxationGatewayMethodBase.cs" />

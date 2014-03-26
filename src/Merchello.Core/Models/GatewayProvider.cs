@@ -151,6 +151,7 @@ namespace Merchello.Core.Models
                 return EnumTypeFieldConverter.GatewayProvider.GetTypeField(ProviderTfKey);
             }
         }
+
  
     }
 }

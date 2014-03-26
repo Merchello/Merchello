@@ -5,9 +5,9 @@ using Umbraco.Core.ObjectResolution;
 namespace Merchello.Core.Gateways.Taxation
 {
     /// <summary>
-    /// Manages a list of ITaxationGatewayProvider's
+    /// Manages a list of TaxationGatewayProviderBase's
     /// </summary> 
-    internal sealed class TaxationGatewayProviderResolver : ManyObjectsResolverBase<TaxationGatewayProviderResolver, ITaxationGatewayProvider>
+    internal sealed class TaxationGatewayProviderResolver : ManyObjectsResolverBase<TaxationGatewayProviderResolver, TaxationGatewayProviderBase>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="TaxationGatewayProviderResolver"/> with an intial list of TaxationGatewayProvider types
@@ -26,7 +26,7 @@ namespace Merchello.Core.Gateways.Taxation
             :base (providers)
         { }
 
-        public IEnumerable<ITaxationGatewayProvider> Providers
+        public IEnumerable<TaxationGatewayProviderBase> Providers
         {
             get { return Values; }
         }

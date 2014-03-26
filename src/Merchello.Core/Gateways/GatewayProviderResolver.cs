@@ -17,7 +17,8 @@ namespace Merchello.Core.Gateways
         private readonly IGatewayProviderService _gatewayProviderService;
         private readonly ConcurrentDictionary<Guid, IGatewayProvider> _gatewayProviderCache = new ConcurrentDictionary<Guid, IGatewayProvider>();
         private readonly Lazy<GatewayProviderFactory> _gatewayProviderFactory;
-        
+         
+                                         
         internal GatewayProviderResolver(IGatewayProviderService gatewayProviderService, IRuntimeCacheProvider runtimeCache)
         {
             Mandate.ParameterNotNull(gatewayProviderService, "gatewayProviderService");
