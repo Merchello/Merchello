@@ -3,6 +3,9 @@ using System.Configuration;
 using System.Threading;
 using Merchello.Core.Cache;
 using Merchello.Core.Configuration;
+using Merchello.Core.Gateways.Payment;
+using Merchello.Core.Gateways.Shipping;
+using Merchello.Core.Gateways.Taxation;
 using Merchello.Core.Services;
 using Umbraco.Core;
 using Merchello.Core.Persistence.UnitOfWork;
@@ -43,6 +46,8 @@ namespace Merchello.Core
             var providerName = ConfigurationManager.ConnectionStrings[MerchelloConfiguration.Current.Section.DefaultConnectionStringName].ProviderName;                
             var serviceContext = new ServiceContext(new PetaPocoUnitOfWorkProvider(connString, providerName));
 
+            InitializeResolvers();
+
             CreateMerchelloContext(serviceContext);
             
             _isInitialized = true;
@@ -50,6 +55,15 @@ namespace Merchello.Core
             return this;
         }
 
+        /// <summary>
+        /// Create the resolvers
+        /// </summary>
+        protected void InitializeResolvers()
+        {
+            PaymentGatewayProviderResolver.Current = new PaymentGatewayProviderResolver(() => PluginManager.Current.ResolveTypes<PaymentGatewayProviderBase>());
+            TaxationGatewayProviderResolver.Current = new TaxationGatewayProviderResolver(() => PluginManager.Current.ResolveTypes<TaxationGatewayProviderBase>());
+            ShippingGatewayProviderResolver.Current = new ShippingGatewayProviderResolver(() => PluginManager.Current.ResolveTypes<ShippingGatewayProviderBase>());
+        }
                 
         /// <summary>
         /// Creates the MerchelloPluginContext (singleton)
