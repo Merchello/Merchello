@@ -2,13 +2,13 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Gateways.Taxation;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Umbraco.Core.Cache;
-using Umbraco.Core.ObjectResolution;
 
 namespace Merchello.Core.Gateways
 {
@@ -45,6 +45,7 @@ namespace Merchello.Core.Gateways
         /// <summary>
         /// Gets a collection of <see cref="IGatewayProvider"/>s by type
         /// </summary>
+        /// TODO this could be refactored to not have to instantiate the object each time (ObjectLifeTimeScope.Application)
         public IEnumerable<IGatewayProvider> GetActiveProviders<T>() where T : GatewayProviderBase
         {
             var gatewayProviderType = GetGatewayProviderType<T>();
@@ -54,6 +55,31 @@ namespace Merchello.Core.Gateways
                     .Select(provider => provider.Value)
                     .ToList();
             return providers;
+        }
+
+        /// <summary>
+        /// Gets a collection of inactive (not saved) <see cref="IGatewayProvider"/> by type
+        /// </summary>
+        public IEnumerable<IGatewayProvider> GetInactiveProviders<T>() where T : GatewayProviderBase
+        {
+            var gatewayProviderType = GetGatewayProviderType<T>();
+
+            var existing = GetActiveProviders<T>().Select(x => x.TypeFullName);
+
+            var providers = new List<GatewayProviderBase>();
+
+            IEnumerable<string> typeNames;
+
+            switch (gatewayProviderType)
+            {
+                case GatewayProviderType.Payment:
+
+                    typeNames = PaymentGatewayProviderResolver.Current.ProviderTypes.Where(x => !existing.Any(y => x.FullName.StartsWith(y))).Select(x => x.FullName);
+
+                    break;
+            }
+
+            throw new NotImplementedException();
         }
 
 

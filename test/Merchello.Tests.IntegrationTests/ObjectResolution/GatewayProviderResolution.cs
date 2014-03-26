@@ -1,32 +1,38 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Merchello.Core.Cache;
-using Merchello.Core.Gateways;
-using Merchello.Core.Gateways.Taxation;
+using Merchello.Core.Gateways.Payment;
 using Merchello.Tests.IntegrationTests.TestHelpers;
 using NUnit.Framework;
 
 namespace Merchello.Tests.IntegrationTests.ObjectResolution
 {
     [TestFixture]
-    public class GatewayProviderResolution : DatabaseIntegrationTestBase
+    public class GatewayProviderResolution : MerchelloAllInTestBase
     {
 
         [Test]
-        public void Can_Resolve_GatewayProvidersByType()
+        public void Can_Retreive_PaymentGatewayProviders_From_Resolver()
         {
             //// Arrange
-            var resolver = new GatewayProviderResolver(PreTestDataWorker.GatewayProviderService, new NullCacheProvider());
+            // should be handled by the CoreBootManager in MerchelloAllInTestBase
 
             //// Act
-            var types = resolver.GetActiveProviders<TaxationGatewayProviderBase>();
+            var providers = PaymentGatewayProviderResolver.Current.ProviderTypes;
 
             //// Assert
-            Assert.IsTrue(types.Any());
+            Assert.IsTrue(providers.Any());
         }
 
+        [Test]
+        public void Can_Retrieve_A_List_Of_Unresolved_Providers()
+        {
+            var typeNames = PaymentGatewayProviderResolver.Current.ProviderTypes.Select(x => x.AssemblyQualifiedName);
+
+            foreach (var type in typeNames)
+            {
+                var parts = type.Split(',');
+                Console.WriteLine(parts[0].Trim() + ", " + parts[1].Trim());
+            }
+        }
     }
 }

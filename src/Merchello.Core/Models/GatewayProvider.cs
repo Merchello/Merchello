@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Reflection;
 using System.Runtime.Serialization;
-using System.Security;
 using Merchello.Core.Models.EntityBase;
-using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Models.TypeFields;
+using Merchello.Core.Services;
 
 namespace Merchello.Core.Models
 {
@@ -22,8 +20,7 @@ namespace Merchello.Core.Models
         private Guid _providerTfKey;
         private string _typeFullName;
         private ExtendedDataCollection _extendedData;
-        private bool _encryptExtendedData;
-
+        private bool _encryptExtendedData;       
 
         private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<GatewayProvider, string>(x => x.Name);
         private static readonly PropertyInfo DescriptionSelector = ExpressionHelper.GetPropertyInfo<GatewayProvider, string>(x => x.Description);
@@ -138,6 +135,17 @@ namespace Merchello.Core.Models
                     return _encryptExtendedData;
                 }, _encryptExtendedData, EncryptExtendedDataSelector); 
             }
+        }
+
+        /// <summary>
+        /// True/false indicating whether or not this provider is a "registered" and active provider.
+        /// </summary>
+        /// <remarks>
+        /// Any persisted provider is an activated provider
+        /// </remarks>
+        public bool Activated 
+        {
+            get { return HasIdentity; }
         }
 
         /// <summary>

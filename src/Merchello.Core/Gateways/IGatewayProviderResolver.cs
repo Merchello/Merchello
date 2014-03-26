@@ -12,6 +12,11 @@ namespace Merchello.Core.Gateways
         IEnumerable<IGatewayProvider> GetActiveProviders<T>() where T : GatewayProviderBase;
 
         /// <summary>
+        /// Gets a collection of inactive (not saved) <see cref="IGatewayProvider"/> by type
+        /// </summary>
+        IEnumerable<IGatewayProvider> GetInactiveProviders<T>() where T : GatewayProviderBase; 
+            
+        /// <summary>
         /// Gets a collection of instantiated gateway providers
         /// </summary>
         /// <returns></returns>
