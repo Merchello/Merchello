@@ -103,5 +103,28 @@ namespace Merchello.Core.Gateways.Payment.Cash
             return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, false);
 
         }
+
+        /// <summary>
+        /// Does the actual work of voiding a payment
+        /// </summary>
+        /// <param name="invoice">The invoice to which the payment is associated</param>
+        /// <param name="payment">The payment to be voided</param>
+        /// <param name="args">Additional arguements required by the payment processor</param>
+        /// <returns>A <see cref="IPaymentResult"/></returns>
+        protected override IPaymentResult PerformVoidPayment(IInvoice invoice, IPayment payment, ProcessorArgumentCollection args)
+        {
+            foreach (var applied in payment.AppliedPayments())
+            {
+                applied.TransactionType = AppliedPaymentType.Void;
+                applied.Amount = 0;
+                applied.Description += " - **Void**";
+                GatewayProviderService.Save(applied);
+            }
+
+            payment.Voided = true;
+            GatewayProviderService.Save(payment);
+
+            return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, false);
+        }
     }
 }
