@@ -47,6 +47,10 @@ namespace Merchello.Core.Models.Rdbms
         [Constraint(Default = "1")]
         public bool Collected { get; set; }
 
+        [Column("voided")]
+        [Constraint(Default = "0")]
+        public bool Voided { get; set; }
+
         [Column("extendedData")]
         [NullSetting(NullSetting = NullSettings.Null)]
         [SpecialDbType(SpecialDbTypes.NTEXT)]

@@ -22,6 +22,7 @@ namespace Merchello.Core.Models
         private bool _authorized;
         private bool _collected;
         private bool _exported;
+        private bool _voided;
         private ExtendedDataCollection _extendedData;
 
         internal Payment(PaymentMethodType paymentMethodType, decimal amount)
@@ -56,6 +57,7 @@ namespace Merchello.Core.Models
         private static readonly PropertyInfo AmountSelector = ExpressionHelper.GetPropertyInfo<Payment, decimal>(x => x.Amount);
         private static readonly PropertyInfo AuthorizedSelector = ExpressionHelper.GetPropertyInfo<Payment, bool>(x => x.Authorized);
         private static readonly PropertyInfo CollectedSelector = ExpressionHelper.GetPropertyInfo<Payment, bool>(x => x.Collected);
+        private static readonly PropertyInfo VoidedSelector = ExpressionHelper.GetPropertyInfo<Payment, bool>(x => x.Voided);
         private static readonly PropertyInfo ExportedSelector = ExpressionHelper.GetPropertyInfo<Payment, bool>(x => x.Exported);
         private static readonly PropertyInfo ExtendedDataChangedSelector = ExpressionHelper.GetPropertyInfo<LineItemBase, ExtendedDataCollection>(x => x.ExtendedData);
 
@@ -199,6 +201,23 @@ namespace Merchello.Core.Models
                     _collected = value;
                     return _collected;
                 }, _collected, CollectedSelector);
+            }
+        }
+
+        /// <summary>
+        /// True/false indicating whether or not the payment has been voided
+        /// </summary>
+        [DataMember]
+        public bool Voided
+        {
+            get { return _voided; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _voided = value;
+                    return _voided;
+                }, _voided, VoidedSelector);
             }
         }
 

@@ -8,6 +8,7 @@ using Merchello.Core.Gateways.Taxation;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Umbraco.Core.Cache;
+using Umbraco.Core.ObjectResolution;
 
 namespace Merchello.Core.Gateways
 {
@@ -16,7 +17,8 @@ namespace Merchello.Core.Gateways
         private readonly IGatewayProviderService _gatewayProviderService;
         private readonly ConcurrentDictionary<Guid, IGatewayProvider> _gatewayProviderCache = new ConcurrentDictionary<Guid, IGatewayProvider>();
         private readonly Lazy<GatewayProviderFactory> _gatewayProviderFactory;
-        
+         
+                                         
         internal GatewayProviderResolver(IGatewayProviderService gatewayProviderService, IRuntimeCacheProvider runtimeCache)
         {
             Mandate.ParameterNotNull(gatewayProviderService, "gatewayProviderService");
@@ -32,6 +34,7 @@ namespace Merchello.Core.Gateways
 
         private void BuildGatewayProviderCache()
         {            
+            // this will cache the list of all providers that have been "Activated"
             foreach (var provider in _gatewayProviderService.GetAllGatewayProviders())
             {
                 _gatewayProviderCache.AddOrUpdate(provider.Key, provider, (x, y) => provider);
@@ -42,7 +45,7 @@ namespace Merchello.Core.Gateways
         /// <summary>
         /// Gets a collection of <see cref="IGatewayProvider"/>s by type
         /// </summary>
-        public IEnumerable<IGatewayProvider> GetGatewayProviders<T>() where T : GatewayProviderBase
+        public IEnumerable<IGatewayProvider> GetActiveProviders<T>() where T : GatewayProviderBase
         {
             var gatewayProviderType = GetGatewayProviderType<T>();
 
@@ -59,9 +62,9 @@ namespace Merchello.Core.Gateways
         /// </summary>
         /// <param name="gatewayProviderType"></param>
         /// <returns></returns>
-        public IEnumerable<T> CreateInstanceByGatewayProviderType<T>(GatewayProviderType gatewayProviderType) where T : GatewayProviderBase
+        public IEnumerable<T> CreateInstances<T>(GatewayProviderType gatewayProviderType) where T : GatewayProviderBase
         {
-            return GetGatewayProviders<T>().Select(CreateInstanceByGatewayProvider<T>);
+            return GetActiveProviders<T>().Select(CreateInstance<T>);
 
         }
 
@@ -70,7 +73,7 @@ namespace Merchello.Core.Gateways
         /// </summary>
         /// <param name="provider"><see cref="IGatewayProvider"/></param>
         /// <returns></returns>
-        public T CreateInstanceByGatewayProvider<T>(IGatewayProvider provider) where T : GatewayProviderBase
+        public T CreateInstance<T>(IGatewayProvider provider) where T : GatewayProviderBase
         {
             switch (GetGatewayProviderType<T>())
             {
@@ -84,7 +87,7 @@ namespace Merchello.Core.Gateways
                     return _gatewayProviderFactory.Value.GetInstance<PaymentGatewayProviderBase>(provider) as T;
             }
 
-            throw new InvalidOperationException("ResolveByGatewayProvider could not instantiant Type " + typeof(T).FullName);
+            throw new InvalidOperationException("CreateInstance could not instantiant Type " + typeof(T).FullName);
         }
 
         /// <summary>
@@ -93,10 +96,10 @@ namespace Merchello.Core.Gateways
         /// <typeparam name="T">The Type of the GatewayProvider.  Must inherit from GatewayProviderBase</typeparam>
         /// <param name="gatewayProviderKey"></param>
         /// <returns>An instantiated GatewayProvider</returns>
-        public T CreateInstanceByKey<T>(Guid gatewayProviderKey) where T : GatewayProviderBase
+        public T CreateInstance<T>(Guid gatewayProviderKey) where T : GatewayProviderBase
         {
             var provider = _gatewayProviderCache.FirstOrDefault(x => x.Key == gatewayProviderKey).Value;
-            return provider == null ? null : CreateInstanceByGatewayProvider<T>(provider);
+            return provider == null ? null : CreateInstance<T>(provider);
         }
 
         /// <summary>
@@ -112,7 +115,7 @@ namespace Merchello.Core.Gateways
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns>Returns a <see cref="GatewayProviderType"/></returns>
-        private GatewayProviderType GetGatewayProviderType<T>()
+        internal static GatewayProviderType GetGatewayProviderType<T>()
         {
             if (typeof(ShippingGatewayProviderBase).IsAssignableFrom(typeof(T))) return GatewayProviderType.Shipping;
             if (typeof(TaxationGatewayProviderBase).IsAssignableFrom(typeof(T))) return GatewayProviderType.Taxation;

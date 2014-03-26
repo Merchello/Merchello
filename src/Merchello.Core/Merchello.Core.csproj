@@ -68,7 +68,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Umbraco.Core">
-      <HintPath>..\packages\UmbracoCms.Core.7.1.0-nightly255\lib\Umbraco.Core.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.1.0-nightly257\lib\Umbraco.Core.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -95,6 +95,7 @@
     <Compile Include="Gateways\Payment\Cash\CashPaymentGatewayMethod.cs" />
     <Compile Include="Gateways\Payment\Cash\ICashPaymentGatewayMethod.cs" />
     <Compile Include="Gateways\Payment\Cash\ICashPaymentGatewayProvider.cs" />
+    <Compile Include="Gateways\Payment\PaymentGatewayProviderResolver.cs" />
     <Compile Include="Gateways\Payment\PaymentResult.cs" />
     <Compile Include="Gateways\Payment\ProcessorArgumentCollection.cs" />
     <Compile Include="Gateways\IGatewayMethod.cs" />
@@ -102,10 +103,12 @@
     <Compile Include="Gateways\Payment\IPaymentGatewayMethod.cs" />
     <Compile Include="Gateways\Payment\IPaymentResult.cs" />
     <Compile Include="Gateways\Shipping\FixedRate\IFixedRateShippingGatewayProvider.cs" />
+    <Compile Include="Gateways\Shipping\ShippingGatewayProviderResolver.cs" />
     <Compile Include="Gateways\Taxation\FixedRate\FixRateTaxationGatewayMethod.cs" />
     <Compile Include="Gateways\Taxation\FixedRate\IFixedRateTaxationGatewayMethod.cs" />
     <Compile Include="Gateways\Taxation\TaxationGatewayMethodBase.cs" />
     <Compile Include="Gateways\Taxation\ITaxationGatewayMethod.cs" />
+    <Compile Include="Gateways\Taxation\TaxationGatewayProviderResolver.cs" />
     <Compile Include="Gateways\Taxation\TaxCalculationResult.cs" />
     <Compile Include="Gateways\Taxation\TaxableLineItemVisitor.cs" />
     <Compile Include="Models\Currency.cs" />
