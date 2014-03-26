@@ -58,6 +58,12 @@ namespace Merchello.Core.Models
         bool Collected { get; set; }
 
         /// <summary>
+        /// True/false indicating whether or not this payment has been voided
+        /// </summary>
+        [DataMember]
+        bool Voided { get; set; }
+
+        /// <summary>
         /// True/false indicating whether or not this payment has be exported to another system
         /// </summary>
         [DataMember]
