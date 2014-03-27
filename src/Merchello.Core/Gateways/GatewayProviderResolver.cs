@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
+using System.Runtime.InteropServices;
 using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Gateways.Taxation;
@@ -15,6 +16,7 @@ namespace Merchello.Core.Gateways
     internal class GatewayProviderResolver : IGatewayProviderResolver
     {
         private readonly IGatewayProviderService _gatewayProviderService;
+        private readonly IRuntimeCacheProvider _runtimeCache;
         private readonly ConcurrentDictionary<Guid, IGatewayProvider> _gatewayProviderCache = new ConcurrentDictionary<Guid, IGatewayProvider>();
         private readonly Lazy<GatewayProviderFactory> _gatewayProviderFactory;
          
@@ -25,8 +27,9 @@ namespace Merchello.Core.Gateways
             Mandate.ParameterNotNull(runtimeCache, "runtimeCache");
 
             _gatewayProviderService = gatewayProviderService;
+            _runtimeCache = runtimeCache;
 
-            _gatewayProviderFactory = new Lazy<GatewayProviderFactory>(() => new GatewayProviderFactory(_gatewayProviderService, runtimeCache));
+            _gatewayProviderFactory = new Lazy<GatewayProviderFactory>(() => new GatewayProviderFactory(_gatewayProviderService, _runtimeCache));
 
             BuildGatewayProviderCache();
         }
@@ -46,7 +49,7 @@ namespace Merchello.Core.Gateways
         /// Gets a collection of <see cref="IGatewayProvider"/>s by type
         /// </summary>
         /// TODO this could be refactored to not have to instantiate the object each time (ObjectLifeTimeScope.Application)
-        public IEnumerable<IGatewayProvider> GetActiveProviders<T>() where T : GatewayProviderBase
+        public IEnumerable<IGatewayProvider> GetActivatedProviders<T>() where T : GatewayProviderBase
         {
             var gatewayProviderType = GetGatewayProviderType<T>();
 
@@ -60,28 +63,55 @@ namespace Merchello.Core.Gateways
         /// <summary>
         /// Gets a collection of inactive (not saved) <see cref="IGatewayProvider"/> by type
         /// </summary>
-        public IEnumerable<IGatewayProvider> GetInactiveProviders<T>() where T : GatewayProviderBase
+        public IEnumerable<IGatewayProvider> GetAllProviders<T>() where T : GatewayProviderBase
         {
             var gatewayProviderType = GetGatewayProviderType<T>();
-
-            var existing = GetActiveProviders<T>().Select(x => x.TypeFullName);
-
-            var providers = new List<GatewayProviderBase>();
-
-            IEnumerable<string> typeNames;
-
+            
             switch (gatewayProviderType)
             {
                 case GatewayProviderType.Payment:
-
-                    typeNames = PaymentGatewayProviderResolver.Current.ProviderTypes.Where(x => !existing.Any(y => x.FullName.StartsWith(y))).Select(x => x.FullName);
-
-                    break;
+                    return BuildGatewayProvidersFromResolved<T>(PaymentGatewayProviderResolver.Current.ProviderTypes, gatewayProviderType);
+                case GatewayProviderType.Shipping:
+                    return BuildGatewayProvidersFromResolved<T>(ShippingGatewayProviderResolver.Current.ProviderTypes, gatewayProviderType);
+                case GatewayProviderType.Taxation:
+                    return BuildGatewayProvidersFromResolved<T>(TaxationGatewayProviderResolver.Current.ProviderTypes, gatewayProviderType);                        
             }
 
-            throw new NotImplementedException();
+            throw new InvalidOperationException("GetAllProviders could resolve a Type " + typeof(T));
         }
 
+        private IEnumerable<IGatewayProvider> BuildGatewayProvidersFromResolved<T>(IEnumerable<Type> types, GatewayProviderType gatewayProviderType) where T : GatewayProviderBase
+        {
+            var existing = GetActivatedProviders<T>().ToArray();
+            
+            
+            var providers = new List<IGatewayProvider>();
+
+            var factory = new Persistence.Factories.GatewayProviderFactory();
+            
+            foreach (var t in types)
+            {
+                var att = GetActiationAttribute(t);
+                if (att != null)
+                {
+
+                    providers.Add(
+                        existing.Any(x => x.Key == att.Key)
+                            ? existing.First(x => x.Key == att.Key)
+                            : factory.BuildEntity(t, gatewayProviderType)
+                        );
+                }
+            }
+
+            return providers;
+        }
+
+        private static GatewayProviderActivationAttribute GetActiationAttribute(Type t)
+        {
+            return
+                (GatewayProviderActivationAttribute)
+                    Attribute.GetCustomAttribute(t, typeof (GatewayProviderActivationAttribute));
+        }
 
         /// <summary>
         /// Gets a collection of instantiated gateway providers
@@ -90,7 +120,7 @@ namespace Merchello.Core.Gateways
         /// <returns></returns>
         public IEnumerable<T> CreateInstances<T>(GatewayProviderType gatewayProviderType) where T : GatewayProviderBase
         {
-            return GetActiveProviders<T>().Select(CreateInstance<T>);
+            return GetActivatedProviders<T>().Select(CreateInstance<T>);
 
         }
 

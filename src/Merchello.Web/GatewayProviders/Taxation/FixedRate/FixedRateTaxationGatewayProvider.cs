@@ -21,7 +21,7 @@ namespace Merchello.Web.GatewayProviders.Taxation.FixedRate
     /// 
     /// </remarks> 
     [GatewayProviderActivation("A4AD4331-C278-4231-8607-925E0839A6CD", "Fixed Rate Tax Provider", "Fixed Rate Tax Provider")]
-    [PropertyEditor("Example", "Example Editor", "/App_Plugins/Example/Resource/editor.html", ValueType = "TEXT")]
+    //[PropertyEditor("Example", "Example Editor", "/App_Plugins/Example/Resource/editor.html", ValueType = "TEXT")]
     //[PropertyEditorAsset(ClientDependencyType.Javascript, "/App_Plugins/Example/Resource/controller.js")]
     public class FixedRateTaxationGatewayProvider : TaxationGatewayProviderBase, IFixedRateTaxationGatewayProvider
     {

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using Merchello.Core;
+using Merchello.Core.Gateways;
 using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Gateways.Taxation;
@@ -59,16 +61,58 @@ namespace Merchello.Tests.IntegrationTests.ObjectResolution
             Assert.IsTrue(providers.Any());
         }
 
+        /// <summary>
+        /// Test verifies that both "Actived" and "Inactive"  Taxation GatewayProviders can be resolved and returned
+        /// </summary>
         [Test]
-        public void Can_Retrieve_A_List_Of_Unresolved_Providers()
+        public void Can_Retrieve_A_List_Of_AllTaxationProviders()
         {
-            var typeNames = PaymentGatewayProviderResolver.Current.ProviderTypes.Select(x => x.AssemblyQualifiedName);
+            //// Arrange
+            var resolver = new GatewayProviderResolver(MerchelloContext.Current.Services.GatewayProviderService, MerchelloContext.Current.Cache.RuntimeCache);
 
-            foreach (var type in typeNames)
-            {
-                var parts = type.Split(',');
-                Console.WriteLine(parts[0].Trim() + ", " + parts[1].Trim());
-            }
+            //// Act
+            var providers = resolver.GetAllProviders<TaxationGatewayProviderBase>().ToArray();
+
+            //// Assert
+            Assert.IsTrue(providers.Any());
+            Assert.IsTrue(providers.Any(x => x.Activated));
+            Assert.IsTrue(providers.Any(x => !x.Activated));
+        }
+
+        /// <summary>
+        /// Test verifies that both "Actived" and "Inactive" Shipping GatewayProviders can be resolved and returned
+        /// </summary>
+        [Test]
+        public void Can_Retrieve_A_List_Of_AllShippingProviders()
+        {
+            //// Arrange
+            var resolver = new GatewayProviderResolver(MerchelloContext.Current.Services.GatewayProviderService, MerchelloContext.Current.Cache.RuntimeCache);
+
+            //// Act
+            var providers = resolver.GetAllProviders<ShippingGatewayProviderBase>().ToArray();
+
+            //// Assert
+            Assert.IsTrue(providers.Any());
+            Assert.IsTrue(providers.Any(x => x.Activated));
+            Assert.IsTrue(providers.Any(x => !x.Activated));
+        }
+
+        /// <summary>
+        /// Test verifies that both "Actived" and "Inactive" Payment GatewayProviders can be resolved and returned
+        /// </summary>
+        [Test]
+        public void Can_Retrieve_A_List_Of_AllPaymentProviders()
+        {
+            //// Arrange
+            var resolver = new GatewayProviderResolver(MerchelloContext.Current.Services.GatewayProviderService, MerchelloContext.Current.Cache.RuntimeCache);
+
+            //// Act
+            var providers = resolver.GetAllProviders<PaymentGatewayProviderBase>().ToArray();
+
+            //// Assert
+            Assert.IsTrue(providers.Any());
+            Assert.IsTrue(providers.Any(x => x.Activated));
+            Assert.IsTrue(providers.Any(x => !x.Activated));
         }
     }
 }
