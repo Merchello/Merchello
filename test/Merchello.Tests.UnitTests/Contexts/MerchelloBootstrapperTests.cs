@@ -1,4 +1,7 @@
 ﻿using Merchello.Core;
+using Merchello.Core.Gateways.Payment;
+using Merchello.Core.Gateways.Shipping;
+using Merchello.Core.Gateways.Taxation;
 using Merchello.Web;
 using NUnit.Framework;
 using CoreBootManager = Merchello.Core.CoreBootManager;

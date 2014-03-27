@@ -1,12 +1,12 @@
 ﻿using Merchello.Core;
 using Merchello.Core.Cache;
-using Merchello.Core.Gateways.Shipping.FixedRate;
 using Merchello.Core.Models;
 using Merchello.Core.Persistence.UnitOfWork;
 using Merchello.Core.Sales;
 using Merchello.Core.Services;
 using Merchello.Tests.Base.DataMakers;
 using Merchello.Tests.IntegrationTests.TestHelpers;
+using Merchello.Web.GatewayProviders.Shipping.FixedRate;
 using Merchello.Web.Workflow;
 using NUnit.Framework;
 using Umbraco.Core;

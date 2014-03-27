@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using Merchello.Core.Gateways.Payment;
+using Merchello.Core.Gateways.Shipping;
+using Merchello.Core.Gateways.Taxation;
 using Merchello.Tests.IntegrationTests.TestHelpers;
 using NUnit.Framework;
 
@@ -9,15 +11,49 @@ namespace Merchello.Tests.IntegrationTests.ObjectResolution
     [TestFixture]
     public class GatewayProviderResolution : MerchelloAllInTestBase
     {
-
+        /// <summary>
+        /// Test verifies that PaymentGatewayProviders can be resolved
+        /// </summary>
         [Test]
         public void Can_Retreive_PaymentGatewayProviders_From_Resolver()
         {
             //// Arrange
-            // should be handled by the CoreBootManager in MerchelloAllInTestBase
+            // Handled in base class instantiation
 
             //// Act
             var providers = PaymentGatewayProviderResolver.Current.ProviderTypes;
+
+            //// Assert
+            Assert.IsTrue(providers.Any());
+        }
+
+        /// <summary>
+        /// Test verifies that ShippingGatewayProviders can be resolved
+        /// </summary>
+        [Test]
+        public void Can_Retreive_ShippingGatewayProviders_From_Resolver()
+        {
+            //// Arrange
+            // Handled in base class instantiation
+
+            //// Act
+            var providers = ShippingGatewayProviderResolver.Current.ProviderTypes;
+
+            //// Assert
+            Assert.IsTrue(providers.Any());
+        }
+
+        /// <summary>
+        /// Test verifies that TaxationGatewayProviders can be resolved
+        /// </summary>
+        [Test]
+        public void Can_Retreive_TaxationGatewayProviders_From_Resolver()
+        {
+            //// Arrange
+            // Handled in base class instantiation
+
+            //// Act
+            var providers = TaxationGatewayProviderResolver.Current.ProviderTypes;
 
             //// Assert
             Assert.IsTrue(providers.Any());

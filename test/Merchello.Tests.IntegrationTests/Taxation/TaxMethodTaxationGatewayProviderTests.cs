@@ -1,7 +1,6 @@
 ﻿using System.Data;
 using System.Linq;
 using Merchello.Core.Gateways.Taxation;
-using Merchello.Core.Gateways.Taxation.FixedRate;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Merchello.Tests.IntegrationTests.TestHelpers;

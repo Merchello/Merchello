@@ -4,10 +4,10 @@ using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography;
 using Merchello.Core.Gateways;
-using Merchello.Core.Gateways.Shipping.FixedRate;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Gateways.Shipping;
+using Merchello.Web.GatewayProviders.Shipping.FixedRate;
 using Umbraco.Core;
 
 namespace Merchello.Web.Models.ContentEditing

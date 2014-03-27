@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Merchello.Core.Gateways.Shipping.FixedRate;
 using Merchello.Core.Models;
+using Merchello.Web.GatewayProviders.Shipping.FixedRate;
 using NUnit.Framework;
 
 namespace Merchello.Tests.UnitTests.Shipping
