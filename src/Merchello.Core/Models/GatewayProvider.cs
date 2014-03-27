@@ -160,6 +160,20 @@ namespace Merchello.Core.Models
             }
         }
 
+        /// <summary>
+        /// Method to call on entity saved when first added
+        /// </summary>
+        internal override void AddingEntity()
+        {
+            if (Key == Guid.Empty)
+            {
+                base.AddingEntity();
+                return;
+            }
+            
+            CreateDate = DateTime.Now;
+            UpdateDate = DateTime.Now;
+        }
  
     }
 }

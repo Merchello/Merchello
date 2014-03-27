@@ -13,7 +13,7 @@ namespace Merchello.Web.GatewayProviders.Payment.Cash
     /// <summary>
     /// Represents a CashPaymentGatewayProvider
     /// </summary>
-    [GatewayProviderActivation("395D4A61-3A2A-4B4F-AC65-949C33D8611F", "Cash Payment Provider", "Cash Payment Provider")]
+    [GatewayProviderActivation("B2612C3D-8BF0-411C-8C56-32E7495AE79C", "Cash Payment Provider", "Cash Payment Provider")]
     public class CashPaymentGatewayProvider : PaymentGatewayProviderBase, ICashPaymentGatewayProvider
     {
         #region AvailableResources

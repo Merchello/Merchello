@@ -47,6 +47,20 @@ namespace Merchello.Core.Models.EntityBase
             }
         }
 
+        /// <summary>
+        /// Special case override of default HasIdentity behavior when we want developers to be able to define their own "Keys" rather than
+        /// allow the system to generate them.
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// GatewayProvider users this
+        /// 
+        /// </remarks>
+        internal void ResetHasIdentity(bool value = false)
+        {
+            HasIdentity = value;
+        }
+
 #endregion
 
 

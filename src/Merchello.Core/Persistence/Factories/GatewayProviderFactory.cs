@@ -1,6 +1,12 @@
-﻿using Merchello.Core.Models;
+﻿using System;
+using Lucene.Net.Search.Function;
+using Merchello.Core.Gateways;
+using Merchello.Core.Models;
 using Merchello.Core.Models.Rdbms;
+using Merchello.Core.Models.TypeFields;
 using Umbraco.Core;
+using umbraco.editorControls.SettingControls.Pickers;
+
 namespace Merchello.Core.Persistence.Factories
 {
     internal class GatewayProviderFactory : IEntityFactory<IGatewayProvider, GatewayProviderDto>
@@ -52,6 +58,36 @@ namespace Merchello.Core.Persistence.Factories
                 CreateDate = entity.CreateDate
             };
 
+        }
+
+        /// <summary>
+        /// Builds an entity based on a resolved type
+        /// </summary>
+        /// <param name="t">The resolved Type t</param>
+        /// <param name="gatewayProviderType">The gateway provider type</param>
+        /// <returns></returns>
+        internal IGatewayProvider BuildEntity(Type t, GatewayProviderType gatewayProviderType)
+        {
+            Mandate.ParameterNotNull(t, "Type t cannot be null");
+            Mandate.ParameterCondition(Attribute.GetCustomAttribute(t, typeof(GatewayProviderActivationAttribute)) != null, "Type t must have a GatewayProviderActivationAttribute");
+            
+            var att = (GatewayProviderActivationAttribute) Attribute.GetCustomAttribute(t, typeof(GatewayProviderActivationAttribute));
+            
+            var provider = new GatewayProvider()
+            {
+                Key = att.Key,
+                ProviderTfKey = EnumTypeFieldConverter.GatewayProvider.GetTypeField(gatewayProviderType).TypeKey,
+                Name = att.Name,
+                Description = att.Description,
+                ExtendedData = new ExtendedDataCollection(),
+                EncryptExtendedData  = false,
+                UpdateDate = DateTime.Now,
+                CreateDate = DateTime.Now
+            };
+            
+            provider.ResetHasIdentity();
+
+            return provider;
         }
     }
 }
