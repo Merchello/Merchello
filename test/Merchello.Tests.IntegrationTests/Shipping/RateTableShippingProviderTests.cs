@@ -2,10 +2,10 @@
 using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Gateways;
-using Merchello.Core.Gateways.Shipping.FixedRate;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Web;
+using Merchello.Web.GatewayProviders.Shipping.FixedRate;
 using Merchello.Web.Workflow;
 using NUnit.Framework;
 

@@ -45,25 +45,25 @@ namespace Merchello.Core
             var connString = ConfigurationManager.ConnectionStrings[MerchelloConfiguration.Current.Section.DefaultConnectionStringName].ConnectionString;
             var providerName = ConfigurationManager.ConnectionStrings[MerchelloConfiguration.Current.Section.DefaultConnectionStringName].ProviderName;                
             var serviceContext = new ServiceContext(new PetaPocoUnitOfWorkProvider(connString, providerName));
-
-            InitializeResolvers();
-
+            
             CreateMerchelloContext(serviceContext);
             
-            _isInitialized = true;
+            _isInitialized = true;            
 
             return this;
         }
 
-        /// <summary>
-        /// Create the resolvers
-        /// </summary>
-        protected void InitializeResolvers()
-        {
-            PaymentGatewayProviderResolver.Current = new PaymentGatewayProviderResolver(() => PluginManager.Current.ResolveTypes<PaymentGatewayProviderBase>());
-            TaxationGatewayProviderResolver.Current = new TaxationGatewayProviderResolver(() => PluginManager.Current.ResolveTypes<TaxationGatewayProviderBase>());
-            ShippingGatewayProviderResolver.Current = new ShippingGatewayProviderResolver(() => PluginManager.Current.ResolveTypes<ShippingGatewayProviderBase>());
-        }
+        ///// <summary>
+        ///// Create the resolvers
+        ///// </summary>
+        //protected void InitializeResolvers()
+        //{
+        //    if (_isTest) return;
+            
+        //    PaymentGatewayProviderResolver.Current = new PaymentGatewayProviderResolver(() => PluginManager.Current.ResolveTypes<PaymentGatewayProviderBase>());            
+        //    TaxationGatewayProviderResolver.Current = new TaxationGatewayProviderResolver(() => PluginManager.Current.ResolveTypes<TaxationGatewayProviderBase>());            
+        //    ShippingGatewayProviderResolver.Current = new ShippingGatewayProviderResolver(() => PluginManager.Current.ResolveTypes<ShippingGatewayProviderBase>());
+        //}
                 
         /// <summary>
         /// Creates the MerchelloPluginContext (singleton)
@@ -125,6 +125,17 @@ namespace Merchello.Core
             _isComplete = true;
 
             return this;
+        }
+
+        internal bool IsStarted
+        {
+            get { return _isStarted; }
+        }
+
+
+        internal bool IsInitialized
+        {
+            get { return _isInitialized; }
         }
 
         /// <summary>
