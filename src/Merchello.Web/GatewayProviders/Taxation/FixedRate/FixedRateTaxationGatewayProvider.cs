@@ -87,20 +87,5 @@ namespace Merchello.Web.GatewayProviders.Taxation.FixedRate
             return resources;
         }
 
-        ///// <summary>
-        ///// The name of the TaxationProvider
-        ///// </summary>
-        //public override string Name
-        //{
-        //    get { return "Fixed Rate Tax Provider"; }
-        //}
-
-        ///// <summary>
-        ///// The fixed pk associated with the TaxationProvider
-        ///// </summary>
-        //public override Guid Key
-        //{
-        //    get { return Constants.ProviderKeys.Taxation.FixedRateTaxationProviderKey; }
-        //}
     }
 }

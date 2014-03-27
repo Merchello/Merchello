@@ -27,7 +27,7 @@ namespace Merchello.Tests.IntegrationTests.Gateways
             _else = DbPreTestDataWorker.ShipCountryService.GetShipCountryByCountryCode(defaultCatalog.Key, "ELSE");
 
             var key = Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey;
-            var rateTableProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Current.Gateways.Shipping.ResolveByKey(key);
+            var rateTableProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Current.Gateways.Shipping.CreateInstance(key);
             var gwshipMethod1 = (FixedRateShippingGatewayMethod)rateTableProvider.CreateShipMethod(FixedRateShippingGatewayMethod.QuoteType.VaryByPrice, _else, "Ground (Vary by Price)");
             gwshipMethod1.RateTable.AddRow(0, 10, 25);
             gwshipMethod1.RateTable.AddRow(10, 15, 30);

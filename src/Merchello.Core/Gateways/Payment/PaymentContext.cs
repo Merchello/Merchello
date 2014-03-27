@@ -20,9 +20,9 @@ namespace Merchello.Core.Gateways.Payment
         /// Resolves all active payment gateway providers
         /// </summary>
         /// <returns>A collection of all active payment gateway providers</returns>
-        public override IEnumerable<PaymentGatewayProviderBase> ResolveAllActiveProviders()
+        public override IEnumerable<PaymentGatewayProviderBase> CreateInstances()
         {
-            return GatewayProviderResolver.CreateInstances<PaymentGatewayProviderBase>(GatewayProviderType.Shipping);
+            return GatewayProviderResolver.CreateInstances<PaymentGatewayProviderBase>(GatewayProviderType.Payment);
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace Merchello.Core.Gateways.Payment
         /// </summary>
         /// <param name="key"></param>
         /// <returns>A payment gateway provider</returns>
-        public override PaymentGatewayProviderBase ResolveByKey(Guid key)
+        public override PaymentGatewayProviderBase CreateInstance(Guid key)
         {
             return GatewayProviderResolver.CreateInstance<PaymentGatewayProviderBase>(key);
         }
@@ -41,7 +41,7 @@ namespace Merchello.Core.Gateways.Payment
         /// <returns>A collection of <see cref="IPaymentGatewayMethod"/>s</returns>
         public IEnumerable<IPaymentGatewayMethod> GetPaymentGatewayMethods()
         {
-            var paymentProviders = ResolveAllActiveProviders();
+            var paymentProviders = CreateInstances();
             var methods = new List<IPaymentGatewayMethod>();
             foreach (var provider in paymentProviders)
             {

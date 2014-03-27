@@ -15,19 +15,19 @@ namespace Merchello.Core.Gateways
         /// Lists all available <see cref="IGatewayProvider"/>
         /// </summary>
         /// <returns>A collection of all GatewayProvider of the particular type T</returns>
-        IEnumerable<IGatewayProvider> GetAllGatewayProviders(); 
+        IEnumerable<IGatewayProvider> GetAllActivatedProviders(); 
             
         /// <summary>
         /// Resolves all active <see cref="IGatewayProvider"/>s of T
         /// </summary>
         /// <returns></returns>
-        IEnumerable<T> ResolveAllActiveProviders();
+        IEnumerable<T> CreateInstances();
 
         /// <summary>
         /// Resolves a <see cref="IGatewayProvider"/> by it's unique key
         /// </summary>
         /// <param name="key">The Guid 'key' of the provider</param>
         /// <returns>Returns a <see cref="IGatewayProvider"/> of type T</returns>
-        T ResolveByKey(Guid key);
+        T CreateInstance(Guid key);
     }
 }

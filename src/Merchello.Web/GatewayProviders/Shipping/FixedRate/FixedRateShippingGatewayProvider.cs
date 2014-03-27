@@ -115,14 +115,5 @@ namespace Merchello.Web.GatewayProviders.Shipping.FixedRate
                 ).OrderBy(x => x.ShipMethod.Name);
         }
 
-        //public override string Name
-        //{
-        //    get { return "Fixed Rate Shipping Provider"; }
-        //}
-
-        //public override Guid Key
-        //{
-        //    get { return Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey; }
-        //}
     }
 }

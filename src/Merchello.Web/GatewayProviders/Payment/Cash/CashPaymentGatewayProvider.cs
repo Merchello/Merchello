@@ -90,21 +90,5 @@ namespace Merchello.Web.GatewayProviders.Payment.Cash
             return AvailableResources;
         }
 
-        ///// <summary>
-        ///// Gets the name of the provider
-        ///// </summary>
-        //public override string Name
-        //{
-        //    get { return "Cash Payment Provider"; }
-        //}
-
-        ///// <summary>
-        ///// Gets the unique 'key' of the provider
-        ///// </summary>
-        //public override Guid Key
-        //{
-        //    get { return new Guid("395D4A61-3A2A-4B4F-AC65-949C33D8611F"); }
-        //}
-
     }
 }

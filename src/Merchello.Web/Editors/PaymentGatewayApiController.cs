@@ -46,7 +46,7 @@ namespace Merchello.Web.Editors
         {
             try
             {
-                var provider = _paymentContext.ResolveByKey(id);
+                var provider = _paymentContext.CreateInstance(id);
 
                 var resources = provider.ListResourcesOffered();
 
@@ -67,7 +67,7 @@ namespace Merchello.Web.Editors
         /// </summary>        
         public IEnumerable<GatewayProviderDisplay> GetAllGatewayProviders()
         {
-            var providers = _paymentContext.GetAllGatewayProviders();
+            var providers = _paymentContext.GetAllActivatedProviders();
             if (providers == null)
             {
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
@@ -87,7 +87,7 @@ namespace Merchello.Web.Editors
         /// </remarks>
         public IEnumerable<PaymentMethodDisplay> GetPaymentProviderPaymentMethods(Guid id)
         {
-            var provider = _paymentContext.ResolveByKey(id);
+            var provider = _paymentContext.CreateInstance(id);
             if (provider == null) throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
 
             foreach (var method in provider.PaymentMethods)
@@ -109,7 +109,7 @@ namespace Merchello.Web.Editors
 
             try
             {
-                var provider = _paymentContext.ResolveByKey(method.ProviderKey);
+                var provider = _paymentContext.CreateInstance(method.ProviderKey);
 
                 var paymentGatewayMethod = provider.CreatePaymentMethod(method.Name, method.Description);
 
@@ -137,7 +137,7 @@ namespace Merchello.Web.Editors
 
             try
             {
-                var provider = _paymentContext.ResolveByKey(method.ProviderKey);
+                var provider = _paymentContext.CreateInstance(method.ProviderKey);
 
                 var paymentMethod = provider.PaymentMethods.FirstOrDefault(x => x.Key == method.Key);
 
