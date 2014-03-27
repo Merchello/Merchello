@@ -48,7 +48,7 @@ namespace Merchello.Web.Editors
         {
             try
             {
-                var provider = _taxationContext.ResolveByKey(id);
+                var provider = _taxationContext.CreateInstance(id);
 
                 var resources = provider.ListResourcesOffered();
 
@@ -69,7 +69,7 @@ namespace Merchello.Web.Editors
         /// </summary>        
         public IEnumerable<GatewayProviderDisplay> GetAllGatewayProviders()
         {
-            var providers = _taxationContext.GetAllGatewayProviders();
+            var providers = _taxationContext.GetAllActivatedProviders();
             if (providers == null)
             {
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
@@ -89,7 +89,7 @@ namespace Merchello.Web.Editors
         /// </remarks>
         public IEnumerable<TaxMethodDisplay> GetTaxationProviderTaxMethods(Guid id)
         {
-            var provider = _taxationContext.ResolveByKey(id);
+            var provider = _taxationContext.CreateInstance(id);
             if (provider != null)
             {
                 foreach (var method in provider.TaxMethods)
@@ -114,7 +114,7 @@ namespace Merchello.Web.Editors
 
             try
             {
-                var provider = _taxationContext.ResolveByKey(method.ProviderKey);
+                var provider = _taxationContext.CreateInstance(method.ProviderKey);
 
                 var taxationGatewayMethod = provider.CreateTaxMethod(method.CountryCode, method.PercentageTaxRate);
 
@@ -143,7 +143,7 @@ namespace Merchello.Web.Editors
 
             try
             {
-                var provider = _taxationContext.ResolveByKey(method.ProviderKey);
+                var provider = _taxationContext.CreateInstance(method.ProviderKey);
 
                 var taxMethod = provider.TaxMethods.FirstOrDefault(x => x.Key == method.Key);
 

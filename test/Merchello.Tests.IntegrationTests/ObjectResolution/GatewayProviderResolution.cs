@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Gateways;
 using Merchello.Core.Gateways.Payment;

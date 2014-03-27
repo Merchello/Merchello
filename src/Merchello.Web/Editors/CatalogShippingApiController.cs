@@ -155,10 +155,10 @@ namespace Merchello.Web.Editors
         /// </summary>
         public IEnumerable<GatewayProviderDisplay> GetAllShipGatewayProviders()
         {
-            var providers = MerchelloContext.Gateways.Shipping.GetAllGatewayProviders();
+            var providers = MerchelloContext.Gateways.Shipping.GetAllActivatedProviders();
             if( providers != null && providers.Any() )
             {
-                var rateTableProvider = MerchelloContext.Gateways.Shipping.ResolveByKey(providers.First().Key);
+                var rateTableProvider = MerchelloContext.Gateways.Shipping.CreateInstance(providers.First().Key);
                 if (rateTableProvider == null)
                 {
                     throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
@@ -176,7 +176,7 @@ namespace Merchello.Web.Editors
         /// <param name="id">GatewayProvider Key</param>
         public IEnumerable<GatewayResourceDisplay> GetAllShipGatewayResourcesForProvider(Guid id)
         {
-            var provider = MerchelloContext.Gateways.Shipping.ResolveByKey(id);
+            var provider = MerchelloContext.Gateways.Shipping.CreateInstance(id);
             if (provider != null)
             {
                 var resources = provider.ListResourcesOffered();

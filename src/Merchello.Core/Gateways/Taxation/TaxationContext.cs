@@ -19,7 +19,7 @@ namespace Merchello.Core.Gateways.Taxation
         /// Resolves all active Taxation Gateway Providers
         /// </summary>
         /// <returns>A collection of all active TypedGatewayProviderinstances</returns>
-        public override IEnumerable<TaxationGatewayProviderBase> ResolveAllActiveProviders()
+        public override IEnumerable<TaxationGatewayProviderBase> CreateInstances()
         {
             return GatewayProviderResolver.CreateInstances<TaxationGatewayProviderBase>(GatewayProviderType.Taxation);
         }
@@ -29,7 +29,7 @@ namespace Merchello.Core.Gateways.Taxation
         /// </summary>
         /// <param name="key"></param>
         /// <returns>A taxation gateway provider</returns>
-        public override TaxationGatewayProviderBase ResolveByKey(Guid key)
+        public override TaxationGatewayProviderBase CreateInstance(Guid key)
         {
             return GatewayProviderResolver.CreateInstance<TaxationGatewayProviderBase>(key);
         }

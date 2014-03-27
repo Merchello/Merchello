@@ -27,7 +27,7 @@ namespace Merchello.Core.Gateways
         /// Lists all available <see cref="IGatewayProvider"/>
         /// </summary>
         /// <returns>A collection of all GatewayProvider of the particular type T</returns>
-        public IEnumerable<IGatewayProvider> GetAllGatewayProviders()
+        public IEnumerable<IGatewayProvider> GetAllActivatedProviders()
         {
             return GatewayProviderResolver.GetActivatedProviders<T>();
         }
@@ -36,14 +36,14 @@ namespace Merchello.Core.Gateways
         /// Resolves all active <see cref="IGatewayProvider"/>s of T
         /// </summary>
         /// <returns>A collection of all active TypedGatewayProviderinstances</returns>
-        public abstract IEnumerable<T> ResolveAllActiveProviders();
+        public abstract IEnumerable<T> CreateInstances();
     
         /// <summary>
         /// Resolves a <see cref="IGatewayProvider"/> by it's unique key
         /// </summary>
         /// <param name="key">The Guid 'key' of the provider</param>
         /// <returns>Returns a <see cref="IGatewayProvider"/> of type T</returns>
-        public abstract T ResolveByKey(Guid key);
+        public abstract T CreateInstance(Guid key);
         
         /// <summary>
         /// Gets the <see cref="IGatewayProviderResolver"/>

@@ -47,7 +47,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
             ((ServiceContext)MerchelloContext.Services).ShipCountryService.Save(usCountry);
 
             var key = Core.Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey;
-            var rateTableProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Gateways.Shipping.ResolveByKey(key);
+            var rateTableProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Gateways.Shipping.CreateInstance(key);
             rateTableProvider.DeleteAllActiveShipMethods(usCountry);
 
             #region Add and configure 3 rate table shipmethods
