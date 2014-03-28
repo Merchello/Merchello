@@ -15,6 +15,7 @@ namespace Merchello.Core.Services
 
         #region GatewayProvider
 
+      
         /// <summary>
         /// Saves a single instance of a <see cref="IGatewayProvider"/>
         /// </summary>
@@ -28,6 +29,7 @@ namespace Merchello.Core.Services
         /// <param name="gatewayProvider"></param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         void Delete(IGatewayProvider gatewayProvider, bool raiseEvents = true);
+
 
         /// <summary>
         /// Gets a <see cref="IGatewayProvider"/> by it's unique 'Key' (Guid)
