@@ -398,7 +398,7 @@
 
     };
 
-    angular.module("umbraco").controller("Merchello.Editors.Product.EditController", merchello.Controllers.ProductEditController);
+    angular.module("umbraco").controller("Merchello.Editors.Product.EditController", ['$scope', '$routeParams', '$location', '$q', 'assetsService', 'notificationsService', 'dialogService', 'angularHelper', 'serverValidationManager', 'merchelloProductService', 'merchelloProductVariantService', merchello.Controllers.ProductEditController]);
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));
 

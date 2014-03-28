@@ -93,8 +93,6 @@
     <Content Include="App_Plugins\Merchello\Directives\dropdownlist.directive.js" />
     <Content Include="App_Plugins\Merchello\Directives\merchello-panel.html" />
     <Content Include="App_Plugins\Merchello\Directives\merchello.panel.directive.js" />
-    <Content Include="App_Plugins\Merchello\Directives\productvariant.filter.directive.js" />
-    <Content Include="App_Plugins\Merchello\Directives\productoptions.repeat.directive.js" />
     <Content Include="App_Plugins\Merchello\Common\Js\startfrom.filter.js" />
     <Content Include="App_Plugins\Merchello\lib\JsonTree\jsontree.css" />
     <Content Include="App_Plugins\Merchello\lib\JsonTree\jsontree.js" />

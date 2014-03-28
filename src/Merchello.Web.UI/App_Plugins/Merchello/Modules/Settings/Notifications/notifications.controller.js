@@ -8,7 +8,7 @@
      * @description
      * The controller for the Notifications page
      */
-    controllers.NotificationsController = function ($scope, $routeParams, $location, notificationsService, angularHelper, serverValidationManager, merchelloProductService) {
+    controllers.NotificationsController = function($scope) {
 
         $scope.emailTemplates = [];
         $scope.subscribers = [];
@@ -18,7 +18,7 @@
             deleteAddress: false
         };
 
-        $scope.loadEmailTemplates = function () {
+        $scope.loadEmailTemplates = function() {
 
             // Note From Kyle: A mock of getting the Email Template objects.
             var mockTemplates = [
@@ -58,14 +58,14 @@
                     footer: ""
                 }
             ];
-            $scope.emailTemplates = _.map(mockTemplates, function (emailTemplateFromServer) {
+            $scope.emailTemplates = _.map(mockTemplates, function(emailTemplateFromServer) {
                 return new merchello.Models.EmailTemplate(emailTemplateFromServer);
             });
             // End of Mocks
 
         };
 
-        $scope.loadNotificationSubscribers = function () {
+        $scope.loadNotificationSubscribers = function() {
 
             // Note From Kyle: A mock of getting the email subscribers objects.
             var mockSubscribers = [
@@ -82,7 +82,7 @@
                     email: "rusty@mindfly.com"
                 }
             ];
-            $scope.subscribers = _.map(mockSubscribers, function (notificationSubscriberFromServer) {
+            $scope.subscribers = _.map(mockSubscribers, function(notificationSubscriberFromServer) {
                 return new merchello.Models.NotificationSubscriber(notificationSubscriberFromServer);
             });
             // End of Mocks
@@ -91,15 +91,15 @@
 
         $scope.editTemplateFlyout = new merchello.Models.Flyout(
             $scope.flyouts.editTemplate,
-            function (isOpen) {
+            function(isOpen) {
                 $scope.flyouts.editTemplate = isOpen;
             },
             {
-                clear: function () {
+                clear: function() {
                     var self = $scope.editTemplateFlyout;
                     self.model = new merchello.Models.EmailTemplate();
                 },
-                confirm: function () {
+                confirm: function() {
                     var self = $scope.editTemplateFlyout;
                     // Note From Kyle: An API call will need to be wired in here to edit the existing Email Template in the database.
                     self.clear();
@@ -109,15 +109,15 @@
 
         $scope.addAddressFlyout = new merchello.Models.Flyout(
             $scope.flyouts.addAddress,
-            function (isOpen) {
+            function(isOpen) {
                 $scope.flyouts.addAddress = isOpen;
             },
             {
-                clear: function () {
+                clear: function() {
                     var self = $scope.addAddressFlyout;
                     self.model = new merchello.Models.NotificationSubscriber();
                 },
-                confirm: function () {
+                confirm: function() {
                     var self = $scope.addAddressFlyout;
                     var newKey = $scope.subscribers.length;
                     // Note From Kyle: This key-creation logic will need to be modified to fit whatever works for the database.
@@ -131,15 +131,15 @@
 
         $scope.deleteAddressFlyout = new merchello.Models.Flyout(
             $scope.flyouts.deleteAddress,
-            function (isOpen) {
+            function(isOpen) {
                 $scope.flyouts.deleteAddress = isOpen;
             },
             {
-                clear: function () {
+                clear: function() {
                     var self = $scope.deleteAddressFlyout;
                     self.model = new merchello.Models.NotificationSubscriber();
                 },
-                confirm: function () {
+                confirm: function() {
                     var self = $scope.deleteAddressFlyout;
                     var idx = -1;
                     for (i = 0; i < $scope.subscribers.length; i++) {
@@ -162,10 +162,10 @@
         $scope.loaded = true;
         $scope.preValuesLoaded = true;
 
-    }
+    };
 
 
-    angular.module("umbraco").controller("Merchello.Dashboards.Settings.NotificationsController", merchello.Controllers.NotificationsController);
+    angular.module("umbraco").controller("Merchello.Dashboards.Settings.NotificationsController", ['$scope', merchello.Controllers.NotificationsController]);
 
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));

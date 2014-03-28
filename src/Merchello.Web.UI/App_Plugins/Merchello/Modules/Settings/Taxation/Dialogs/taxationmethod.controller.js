@@ -13,7 +13,7 @@
 
     };
 
-    angular.module("umbraco").controller("Merchello.Dashboards.Settings.Taxation.Dialogs.TaxationMethodController", merchello.Controllers.TaxationMethodController);
+    angular.module("umbraco").controller("Merchello.Dashboards.Settings.Taxation.Dialogs.TaxationMethodController", ['$scope', merchello.Controllers.TaxationMethodController]);
 
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));

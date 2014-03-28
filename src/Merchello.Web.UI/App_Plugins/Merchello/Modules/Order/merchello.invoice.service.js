@@ -65,6 +65,6 @@
         };
     };
 
-    angular.module('umbraco.resources').factory('merchelloInvoiceService', merchello.Services.MerchelloInvoiceService);
+    angular.module('umbraco.resources').factory('merchelloInvoiceService', ['$http', 'umbRequestHelper', merchello.Services.MerchelloInvoiceService]);
 
 }(window.merchello.Services = window.merchello.Services || {}));

@@ -25,8 +25,6 @@
 		'~/App_Plugins/Merchello/Modules/Settings/Vendors/vendors.models.js',
 		'~/App_Plugins/Merchello/Directives/dropdownlist.directive.js',
 		'~/App_Plugins/Merchello/Directives/tag.manager.directive.js',
-		'~/App_Plugins/Merchello/Directives/productoptions.repeat.directive.js',
-		'~/App_Plugins/Merchello/Directives/productvariant.filter.directive.js',
 		'~/App_Plugins/Merchello/Directives/merchello.panel.directive.js',
 		'~/App_Plugins/Merchello/Modules/Catalog/merchello.product.service.js?v=3',
 		'~/App_Plugins/Merchello/Modules/Catalog/merchello.productvariant.service.js',

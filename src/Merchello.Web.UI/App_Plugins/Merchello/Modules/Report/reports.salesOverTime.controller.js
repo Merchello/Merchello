@@ -8,7 +8,7 @@
      * @description
      * The controller for the reports SalesOverTime  page
      */
-    controllers.SalesOverTimeController = function ($scope, $routeParams, $location, notificationsService, angularHelper, serverValidationManager, merchelloProductService) {
+    controllers.SalesOverTimeController = function ($scope) {
 
         $scope.loaded = true;
         $scope.preValuesLoaded = true;
@@ -16,7 +16,7 @@
     }
 
 
-    angular.module("umbraco").controller("Merchello.Dashboards.Report.SalesOverTimeController", merchello.Controllers.SalesOverTimeController);
+    angular.module("umbraco").controller("Merchello.Dashboards.Report.SalesOverTimeController", ['$scope', merchello.Controllers.SalesOverTimeController]);
 
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));

@@ -72,6 +72,6 @@
         };
     };
 
-    angular.module('umbraco.resources').factory('merchelloPaymentService', merchello.Services.MerchelloPaymentService);
+    angular.module('umbraco.resources').factory('merchelloPaymentService', ['$http', 'umbRequestHelper', merchello.Services.MerchelloPaymentService]);
 
 }(window.merchello.Services = window.merchello.Services || {}));

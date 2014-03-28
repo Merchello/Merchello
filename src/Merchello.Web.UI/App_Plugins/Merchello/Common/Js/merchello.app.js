@@ -1,7 +1,6 @@
 ﻿angular.module("umbraco")
 	.controller("Merchello.MerchelloController",
 		function ($scope, assetsService) {
-            assetsService.
 			assetsService.load([
 				'/App_Plugins/Merchello/lib/bootstrap/js/bootstrap.min.js',
 				'/App_Plugins/Merchello/lib/select2/ui-select2.js',

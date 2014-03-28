@@ -187,7 +187,7 @@
 
     };
 
-    angular.module("umbraco").controller("Merchello.Dashboards.Settings.PaymentController", merchello.Controllers.PaymentController);
+    angular.module("umbraco").controller("Merchello.Dashboards.Settings.PaymentController", ['$scope', 'notificationsService', 'dialogService', 'merchelloPaymentGatewayService', merchello.Controllers.PaymentController]);
 
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));
