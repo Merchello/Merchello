@@ -39,6 +39,12 @@ namespace Merchello.Core.Services
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         void Delete(IShipMethod shipMethod, bool raiseEvents = true);
 
+        /// <summary>
+        /// Deletes a collection of <see cref="IShipMethod"/>
+        /// </summary>
+        /// <param name="shipMethods">The collection of <see cref="IShipMethod"/> to be deleted</param>
+        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        void Delete(IEnumerable<IShipMethod> shipMethods, bool raiseEvents = true);
 
         /// <summary>
         /// Gets a <see cref="IShipMethod"/> given it's unique 'key' (Guid)
@@ -51,13 +57,13 @@ namespace Merchello.Core.Services
         /// Gets a list of <see cref="IShipMethod"/> objects given a <see cref="IGatewayProvider"/> key and a <see cref="IShipCountry"/> key
         /// </summary>
         /// <returns>A collection of <see cref="IShipMethod"/></returns>
-        IEnumerable<IShipMethod> GetGatewayProviderShipMethods(Guid providerKey, Guid shipCountryKey);
+        IEnumerable<IShipMethod> GetShipMethodsByProviderKey(Guid providerKey, Guid shipCountryKey);
 
         /// <summary>
         /// Gets a list of all <see cref="IShipMethod"/> objects given a <see cref="IGatewayProvider"/> key
         /// </summary>
         /// <returns>A collection of <see cref="IShipMethod"/></returns>
-        IEnumerable<IShipMethod> GetGatewayProviderShipMethods(Guid providerKey); 
+        IEnumerable<IShipMethod> GetShipMethodsByProviderKey(Guid providerKey); 
 
     }
 }
