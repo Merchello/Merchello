@@ -231,6 +231,7 @@
     <Compile Include="AutoMapperMappings.cs" />
     <Compile Include="CheckoutExtensions.cs" />
     <Compile Include="Editors\CatalogFixedRateShippingApiController.cs" />
+    <Compile Include="Editors\GatewayProviderApiController.cs" />
     <Compile Include="Editors\InvoiceApiController.cs" />
     <Compile Include="Editors\OrderApiController.cs" />
     <Compile Include="Editors\PaymentApiController.cs" />
