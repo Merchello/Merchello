@@ -14,10 +14,11 @@
                     <td>{{fixedRateShipMethod.tierRange().low}} - {{fixedRateShipMethod.tierRange().high}}</td>
                     <td>{{fixedRateShipMethod.tierPriceRange().low}} - {{fixedRateShipMethod.tierPriceRange().high}}</td>
                     <td class="edit">
-                        <div class="btn-group">
+                    <div class="btn-group">
                         <a data-ng-click="addEditShippingMethodDialogOpen(country, shippingGatewayProvider, fixedRateShipMethod)" class="btn btn-default btn-xs btn-mini">edit</a>
-                        <a data-ng-click="removeFixedRateMethodFromProvider(shippingGatewayProvider, fixedRateShipMethod)" class="btn btn-warning btn-xs btn-mini"><i class="icon-trash"></i></a></td>
+                        <a data-ng-click="removeFixedRateMethodFromProvider(shippingGatewayProvider, fixedRateShipMethod)" class="btn btn-warning btn-xs btn-mini"><i class="icon-trash"></i></a>
                     </div>
+                    </td>
                 </tr>
             </tbody>
         </table>
