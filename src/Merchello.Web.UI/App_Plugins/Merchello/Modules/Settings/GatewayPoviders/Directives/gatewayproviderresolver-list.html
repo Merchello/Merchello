@@ -1,0 +1,22 @@
+﻿<div>
+    <h3 class="row-fluid col-xs-5 span5 clear">{{gatewayProviderResolver.gatewayProviderType}}</h3>
+    
+
+        
+        <table class="table table-striped merchello-striped-table settings-table shipping-table clear">
+            <tbody>
+                <tr data-ng-repeat="gatewayProvider in gatewayProviderResolver.gatewayProviders">
+                    <td>{{gatewayProvider.name}}</td>
+                    <td>{{gatewayProvider.description}}</td>
+                    <td class="edit">
+                        <div class="btn-group">
+                        <a data-ng-click="addEditShippingMethodDialogOpen(country, shippingGatewayProvider, fixedRateShipMethod)" class="btn btn-default btn-xs btn-mini">edit</a>
+                        <a data-ng-click="removeFixedRateMethodFromProvider(shippingGatewayProvider, fixedRateShipMethod)" class="btn btn-warning btn-xs btn-mini"><i class="icon-trash"></i></a>
+                    </div>
+                    </td>
+                    
+                </tr>
+            </tbody>
+        </table>
+
+</div>
