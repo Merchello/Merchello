@@ -79,6 +79,7 @@ namespace Merchello.Core.Persistence.Factories
                 ProviderTfKey = EnumTypeFieldConverter.GatewayProvider.GetTypeField(gatewayProviderType).TypeKey,
                 Name = att.Name,
                 Description = att.Description,
+                TypeFullName = t.AssemblyQualifiedName,
                 ExtendedData = new ExtendedDataCollection(),
                 EncryptExtendedData  = false,
                 UpdateDate = DateTime.Now,

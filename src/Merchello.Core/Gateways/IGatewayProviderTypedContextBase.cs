@@ -15,8 +15,26 @@ namespace Merchello.Core.Gateways
         /// Lists all available <see cref="IGatewayProvider"/>
         /// </summary>
         /// <returns>A collection of all GatewayProvider of the particular type T</returns>
-        IEnumerable<IGatewayProvider> GetAllActivatedProviders(); 
-            
+        IEnumerable<IGatewayProvider> GetAllActivatedProviders();
+
+        /// <summary>
+        /// Lists all available providers.  This list includes providers that are just resolved and not configured
+        /// </summary>
+        /// <returns>A collection of all Gatewayprovider</returns>
+        IEnumerable<IGatewayProvider> GetAllProviders();
+
+        /// <summary>
+        /// Activates a <see cref="IGatewayProvider"/>
+        /// </summary>
+        /// <param name="gatewayProvider">The <see cref="IGatewayProvider"/> to be activated</param>
+        void ActivateProvider(IGatewayProvider gatewayProvider);
+
+        /// <summary>
+        /// Deactivates a <see cref="IGatewayProvider"/>
+        /// </summary>
+        /// <param name="gatewayProvider">The <see cref="IGatewayProvider"/> to be deactivated</param>
+        void DeactivateProvider(IGatewayProvider gatewayProvider);
+
         /// <summary>
         /// Resolves all active <see cref="IGatewayProvider"/>s of T
         /// </summary>

@@ -33,6 +33,13 @@ namespace Merchello.Core.Services
         void Delete(ITaxMethod taxMethod, bool raiseEvents = true);
 
         /// <summary>
+        /// Deletes a collection <see cref="ITaxMethod"/>
+        /// </summary>
+        /// <param name="taxMethods">The collection of <see cref="ITaxMethod"/> to be deleted</param>
+        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        void Delete(IEnumerable<ITaxMethod> taxMethods, bool raiseEvents = true);
+
+        /// <summary>
         /// Gets a <see cref="ITaxMethod"/>
         /// </summary>
         /// <param name="key">The unique 'key' (Guid) of the <see cref="ITaxMethod"/></param>
