@@ -8,7 +8,7 @@
      * @description
      * The controller for the customers edit page
      */
-     controllers.CustomerEditController = function($scope, $routeParams, $location, notificationsService, angularHelper, serverValidationManager, merchelloProductService) {
+     controllers.CustomerEditController = function($scope, $routeParams, $location, notificationsService) {
 
         if ($routeParams.create) {
             $scope.loaded = true;
@@ -60,7 +60,7 @@
     }
 
 
-     angular.module("umbraco").controller("Merchello.Editors.Customer.EditController", merchello.Controllers.CustomerEditController);
+     angular.module("umbraco").controller("Merchello.Editors.Customer.EditController", ['$scope', '$routeParams', '$location', 'notificationsService', merchello.Controllers.CustomerEditController]);
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));
 

@@ -73,6 +73,6 @@
         };
     };
 
-    angular.module('umbraco.resources').factory('merchelloTaxationGatewayService', merchello.Services.MerchelloTaxationGatewayService);
+    angular.module('umbraco.resources').factory('merchelloTaxationGatewayService', ['$http', 'umbRequestHelper', merchello.Services.MerchelloTaxationGatewayService]);
 
 }(window.merchello.Services = window.merchello.Services || {}));

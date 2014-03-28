@@ -13,7 +13,6 @@
         ////////////////////////////////////////////////
             $scope.loaded = true;
             $scope.preValuesLoaded = true;            
-            $(".content-column-body").css('background-image', 'none');                
             $scope.savingStoreSettings = false;
             $scope.settingsDisplay = new merchello.Models.StoreSettings();
             $scope.currencies = [];
@@ -95,7 +94,7 @@
         };
     };
 
-    angular.module("umbraco").controller("Merchello.Dashboards.Settings.PageController", merchello.Controllers.SettingsPageController);
+    angular.module("umbraco").controller("Merchello.Dashboards.Settings.PageController", ['$scope', '$routeParams', '$location', 'notificationsService', 'angularHelper', 'serverValidationManager', 'merchelloSettingsService', merchello.Controllers.SettingsPageController]);
 
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));

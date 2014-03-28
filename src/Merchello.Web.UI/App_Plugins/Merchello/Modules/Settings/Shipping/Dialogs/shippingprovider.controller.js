@@ -12,7 +12,7 @@
 
     };
 
-    angular.module("umbraco").controller("Merchello.Dashboards.Settings.Shipping.Dialogs.ShippingProviderController", merchello.Controllers.ShippingProviderController);
+    angular.module("umbraco").controller("Merchello.Dashboards.Settings.Shipping.Dialogs.ShippingProviderController", ['$scope', merchello.Controllers.ShippingProviderController]);
 
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));

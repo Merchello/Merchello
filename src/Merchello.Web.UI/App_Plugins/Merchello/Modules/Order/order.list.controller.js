@@ -123,6 +123,6 @@
     };
 
 
-    angular.module("umbraco").controller("Merchello.Dashboards.Order.ListController", merchello.Controllers.OrderListController);
+    angular.module("umbraco").controller("Merchello.Dashboards.Order.ListController", ['$scope', 'assetsService', 'notificationsService', 'merchelloInvoiceService', merchello.Controllers.OrderListController]);
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));
