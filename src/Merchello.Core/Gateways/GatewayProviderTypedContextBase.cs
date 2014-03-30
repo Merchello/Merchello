@@ -49,6 +49,7 @@ namespace Merchello.Core.Gateways
         {
             if(gatewayProvider.Activated) return;
             GatewayProviderService.Save(gatewayProvider);
+            GatewayProviderResolver.RefreshCache();
         }
 
         /// <summary>
@@ -59,6 +60,7 @@ namespace Merchello.Core.Gateways
         {
             if (!gatewayProvider.Activated) return;
             GatewayProviderService.Delete(gatewayProvider);
+            GatewayProviderResolver.RefreshCache();
         }
 
         /// <summary>

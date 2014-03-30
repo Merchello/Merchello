@@ -7,7 +7,7 @@ using Umbraco.Core.Cache;
 
 namespace Merchello.Tests.IntegrationTests.ObjectResolution
 {
-    [GatewayProviderActivation("518B5FDF-C414-4309-99D5-E61028311A2F", "Taxation Provider For Testing", "Taxation Provider For Testing")]
+    [GatewayProviderActivation("518B5FDF-C414-4309-99D5-E61028311A2F", "Taxation Provider For Testing", "Taxation Provider  for Object Resolution Testing")]
     public class TestingTaxationGatewayProvider : TaxationGatewayProviderBase
     {
         public TestingTaxationGatewayProvider(IGatewayProviderService gatewayProviderService, IGatewayProvider gatewayProvider, IRuntimeCacheProvider runtimeCacheProvider) 

@@ -7,7 +7,7 @@ using Umbraco.Core.Cache;
 
 namespace Merchello.Tests.IntegrationTests.ObjectResolution
 {
-    [GatewayProviderActivation("61D8BC55-5D72-4244-A63B-E942C1D4AB47", "Shipping Provider For Testing", "Shipping Provider For Testing")]
+    [GatewayProviderActivation("61D8BC55-5D72-4244-A63B-E942C1D4AB47", "Shipping Provider For Testing", "Shipping Provider for Object Resolution Testing")]
     public class TestingShippingGatewayProvider : ShippingGatewayProviderBase
     {
         public TestingShippingGatewayProvider(IGatewayProviderService gatewayProviderService, IGatewayProvider gatewayProvider, IRuntimeCacheProvider runtimeCacheProvider) 
