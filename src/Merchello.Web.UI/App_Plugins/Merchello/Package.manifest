@@ -64,6 +64,7 @@
 		'~/App_Plugins/Merchello/Modules/Settings/Payment/payment.controller.js',
 		'~/App_Plugins/Merchello/Modules/Settings/Shipping/shipping.controller.js',
 		'~/App_Plugins/Merchello/Modules/Settings/Taxation/taxation.controller.js',
+		'~/App_Plugins/Merchello/Modules/Settings/GatewayProviders/merchello.gatewayprovider.service.js',
 		'~/App_Plugins/Merchello/Modules/Settings/GatewayProviders/Directives/gatewayproviders-helper-directives.js',
 		'~/App_Plugins/Merchello/Modules/Settings/GatewayProviders/gatewayproviders.controller.js',
 		'~/App_Plugins/Merchello/Modules/Settings/Notifications/notifications.controller.js',

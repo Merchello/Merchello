@@ -66,7 +66,7 @@ namespace Merchello.Web.Editors
         }
 
         /// <summary>
-        /// Returns All Products
+        /// Returns all resolved payment gateway providers
         /// 
         /// GET /umbraco/Merchello/GatewayProviderApi/GetResolvedPaymentGatewayProviders
         /// </summary>
@@ -76,7 +76,7 @@ namespace Merchello.Web.Editors
         }
 
         /// <summary>
-        /// Returns All Products
+        /// Returns all resolved shipping gateway providers
         /// 
         /// GET /umbraco/Merchello/GatewayProviderApi/GetResolvedShippingGatewayProviders
         /// </summary>
@@ -87,7 +87,7 @@ namespace Merchello.Web.Editors
 
 
         /// <summary>
-        /// Returns All Products
+        /// Returns all resolved taxation gateway providers
         /// 
         /// GET /umbraco/Merchello/GatewayProviderApi/GetResolvedTaxationGatewayProviders
         /// </summary>
@@ -100,11 +100,11 @@ namespace Merchello.Web.Editors
         /// <summary>
         /// Adds (Activates) a GatewayProvider
         ///
-        /// POST /umbraco/Merchello/GatewayProviderApi/ActiveGatewayProvider
+        /// POST /umbraco/Merchello/GatewayProviderApi/ActivateGatewayProvider
         /// </summary>
         /// <param name="gatewayProvider">POSTed <see cref="GatewayProviderDisplay"/> object</param>
         [AcceptVerbs("POST")]
-        public HttpResponseMessage ActiveGatewayProvider(GatewayProviderDisplay gatewayProvider)
+        public HttpResponseMessage ActivateGatewayProvider(GatewayProviderDisplay gatewayProvider)
         {
             var response = Request.CreateResponse(HttpStatusCode.OK);
 
@@ -131,7 +131,7 @@ namespace Merchello.Web.Editors
         }
 
         /// <summary>
-        /// Adds (Activates) a GatewayProvider
+        /// Removes (Deactivates) a GatewayProvider
         ///
         /// POST /umbraco/Merchello/GatewayProviderApi/DeactiveGatewayProvider
         /// </summary>

@@ -131,9 +131,10 @@
     <Content Include="App_Plugins\Merchello\lib\ngTagsInput\ng-tags-input.min.css" />
     <Content Include="App_Plugins\Merchello\lib\ngTagsInput\ng-tags-input.min.js" />
     <Content Include="App_Plugins\Merchello\lib\select2\ui-select2.js" />
-    <Content Include="App_Plugins\Merchello\Modules\Settings\GatewayPoviders\Directives\gatewayproviderresolver-list.html" />
-    <Content Include="App_Plugins\Merchello\Modules\Settings\GatewayPoviders\Directives\gatewayproviders-helper-directives.js" />
-    <Content Include="App_Plugins\Merchello\Modules\Settings\GatewayPoviders\gatewayproviders.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\GatewayProviders\Directives\gatewayproviderresolver-list.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\GatewayProviders\Directives\gatewayproviders-helper-directives.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\GatewayProviders\gatewayproviders.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\GatewayProviders\merchello.gatewayprovider.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Payment\Dialogs\paymentmethod.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Payment\Dialogs\paymentmethod.html" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Payment\merchello.paymentgateway.service.js" />

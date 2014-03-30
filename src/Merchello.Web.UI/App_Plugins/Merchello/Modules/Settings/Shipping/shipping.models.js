@@ -54,21 +54,6 @@
         };
     };
 
-    models.GatewayProvider = function (gatewayProviderFromServer) {
-
-        var self = this;
-
-        if (gatewayProviderFromServer == undefined) {
-            self.key = "";
-            self.name = "";
-            self.description = "";
-        } else {
-            self.key = gatewayProviderFromServer.key;
-            self.name = gatewayProviderFromServer.name;
-            self.description = gatewayProviderFromServer.description;
-        }
-    };
-
     models.ShippingGatewayProvider = function (shippingGatewayProviderFromServer) {
 
         var self = this;
@@ -214,19 +199,6 @@
 
             return range;
         };
-    };
-
-    models.GatewayResource = function (gatewayResourceFromServer) {
-
-        var self = this;
-
-        if (gatewayResourceFromServer == undefined) {
-            self.name = "";
-            self.serviceCode = "";
-        } else {
-            self.name = gatewayResourceFromServer.name;
-            self.serviceCode = gatewayResourceFromServer.serviceCode;
-        }
     };
 
     models.ShipRateTable = function (shipRateTableFromServer) {
