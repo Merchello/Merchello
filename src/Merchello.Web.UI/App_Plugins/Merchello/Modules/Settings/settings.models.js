@@ -126,4 +126,38 @@
         }
     };
 
+    models.GatewayResource = function (gatewayResourceFromServer) {
+
+        var self = this;
+
+        if (gatewayResourceFromServer == undefined) {
+            self.name = "";
+            self.serviceCode = "";
+        } else {
+            self.name = gatewayResourceFromServer.name;
+            self.serviceCode = gatewayResourceFromServer.serviceCode;
+        }
+    };
+
+    models.GatewayProvider = function (gatewayProviderFromServer) {
+
+        var self = this;
+
+        if (gatewayProviderFromServer == undefined) {
+            self.key = "";
+            self.name = "";
+            self.providerTfKey = "";
+            self.description = "";
+            self.encryptExtendedData = false;
+            self.activated = false;
+        } else {
+            self.key = gatewayProviderFromServer.key;
+            self.name = gatewayProviderFromServer.name;
+            self.providerTfKey = gatewayProviderFromServer.providerTfKey;
+            self.description = gatewayProviderFromServer.description;
+            self.encryptExtendedData = gatewayProviderFromServer.encryptExtendedData;
+            self.activated = gatewayProviderFromServer.activated;
+        }
+    };
+
 }(window.merchello.Models = window.merchello.Models || {}));

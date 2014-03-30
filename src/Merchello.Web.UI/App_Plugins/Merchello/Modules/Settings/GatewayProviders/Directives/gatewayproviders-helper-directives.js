@@ -2,7 +2,7 @@
 
     /**
      * @ngdoc directive
-     * @name GatewayProviderResolverListDirective
+     * @name GatewayProviderListDirective
      * @function
      * 
      * @description
@@ -13,10 +13,15 @@
         return {
             restrict: 'E',
             replace: true,
+            scope: {
+                providerList: '=',
+                'activate': '&onActivate',
+                'deactivate': '&onDeactivate'
+        },
             templateUrl: '/App_Plugins/Merchello/Modules/Settings/GatewayProviders/Directives/gatewayproviderresolver-list.html'
         };
     };
 
-    angular.module("umbraco").directive('shippingCountry', merchello.Directives.GatewayProviderResolverListDirective);
+    angular.module("umbraco").directive('resolvedGatewayProviders', merchello.Directives.GatewayProviderResolverListDirective);
 
 }(window.merchello.Directives = window.merchello.Directives || {}));
