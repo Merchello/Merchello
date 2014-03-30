@@ -215,7 +215,7 @@ namespace Merchello.Web.Editors
                     break;
 
                 case GatewayProviderType.Shipping:
-                    provider = _gatewayContext.Payment.GetAllProviders().FirstOrDefault(x => x.Key == gatewayProvider.Key);
+                    provider = _gatewayContext.Shipping.GetAllProviders().FirstOrDefault(x => x.Key == gatewayProvider.Key);
                     break;
 
                 case GatewayProviderType.Taxation:

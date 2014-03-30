@@ -161,8 +161,9 @@ namespace Merchello.Core.Gateways
         /// <summary>
         /// Refreshes the <see cref="GatewayProviderBase"/> cache
         /// </summary>
-        internal void RefreshCache()
+        public void RefreshCache()
         {
+            _gatewayProviderCache.Clear();
             BuildGatewayProviderCache();
         }
 

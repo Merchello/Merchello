@@ -36,5 +36,10 @@ namespace Merchello.Core.Gateways
         /// <param name="gatewayProviderKey"></param>
         /// <returns>An instantiated GatewayProvider</returns>
         T CreateInstance<T>(Guid gatewayProviderKey) where T : GatewayProviderBase;
+
+        /// <summary>
+        /// Refreshes the <see cref="GatewayProviderBase"/> cache
+        /// </summary>
+        void RefreshCache();
     }
 }
