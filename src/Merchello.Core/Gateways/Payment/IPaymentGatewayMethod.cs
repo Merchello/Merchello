@@ -53,6 +53,14 @@ namespace Merchello.Core.Gateways.Payment
         /// <returns>A <see cref="IPaymentResult"/></returns>
         IPaymentResult RefundPayment(IInvoice invoice, IPayment payment, ProcessorArgumentCollection args);
 
+        /// <summary>
+        /// Voids a payment
+        /// </summary>
+        /// <param name="invoice">The invoice assoicated with the payment to be voided</param>
+        /// <param name="payment">The payment to be voided</param>
+        /// <param name="args">Additional arguements required by the payment processor</param>
+        /// <returns>A <see cref="IPaymentResult"/></returns>
+        IPaymentResult VoidPayment(IInvoice invoice, IPayment payment, ProcessorArgumentCollection args);
 
         /// <summary>
         /// Gets the <see cref="IPaymentMethod"/>

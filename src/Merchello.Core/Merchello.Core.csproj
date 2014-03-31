@@ -445,7 +445,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\Invoice.cs" />
-    <Compile Include="InvoiceExtensions.cs" />
     <Compile Include="Models\InvoiceLineItem.cs">
       <SubType>Code</SubType>
     </Compile>
