@@ -52,18 +52,6 @@ namespace Merchello.Core
 
             return this;
         }
-
-        ///// <summary>
-        ///// Create the resolvers
-        ///// </summary>
-        //protected void InitializeResolvers()
-        //{
-        //    if (_isTest) return;
-            
-        //    PaymentGatewayProviderResolver.Current = new PaymentGatewayProviderResolver(() => PluginManager.Current.ResolveTypes<PaymentGatewayProviderBase>());            
-        //    TaxationGatewayProviderResolver.Current = new TaxationGatewayProviderResolver(() => PluginManager.Current.ResolveTypes<TaxationGatewayProviderBase>());            
-        //    ShippingGatewayProviderResolver.Current = new ShippingGatewayProviderResolver(() => PluginManager.Current.ResolveTypes<ShippingGatewayProviderBase>());
-        //}
                 
         /// <summary>
         /// Creates the MerchelloPluginContext (singleton)
