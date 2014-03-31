@@ -34,6 +34,51 @@ namespace Merchello.Core.Models
                 : string.Format("{0}-{1}", invoice.InvoiceNumberPrefix, invoice.InvoiceNumber);
         }
 
+        #region Address
+
+        /// <summary>
+        /// Utility extension method to add an <see cref="IAddress"/> to an <see cref="IInvoice"/>
+        /// </summary>
+        /// <param name="invoice">The <see cref="IInvoice"/> to which to set the address information</param>
+        /// <param name="address">The billing address <see cref="IAddress"/></param>
+        public static void SetBillingAddress(this IInvoice invoice, IAddress address)
+        {
+            invoice.BillToName = address.Name;
+            invoice.BillToCompany = address.Organization;
+            invoice.BillToAddress1 = address.Address1;
+            invoice.BillToAddress2 = address.Address2;
+            invoice.BillToLocality = address.Locality;
+            invoice.BillToRegion = address.Region;
+            invoice.BillToPostalCode = address.PostalCode;
+            invoice.BillToCountryCode = address.CountryCode;
+            invoice.BillToPhone = address.Phone;
+            invoice.BillToEmail = address.Email;
+        }
+
+        /// <summary>
+        /// Utility extension to extract the billing <see cref="IAddress"/> from an <see cref="IInvoice"/>
+        /// </summary>
+        /// <param name="invoice"></param>
+        /// <returns></returns>
+        public static IAddress GetBillingAddress(this IInvoice invoice)
+        {
+            return new Address()
+            {
+                Name = invoice.BillToName,
+                Organization = invoice.BillToCompany,
+                Address1 = invoice.BillToAddress1,
+                Address2 = invoice.BillToAddress2,
+                Locality = invoice.BillToLocality,
+                Region = invoice.BillToRegion,
+                PostalCode = invoice.BillToPostalCode,
+                CountryCode = invoice.BillToCountryCode,
+                Phone = invoice.BillToPhone,
+                Email = invoice.BillToEmail
+            };
+        }         
+
+        #endregion
+
         #region Order
 
         /// <summary>
@@ -417,6 +462,62 @@ namespace Merchello.Core.Models
             var paymentGatewayMethod = merchelloContext.Gateways.Payment.GetPaymentGatewayMethodByKey(paymentMethodKey);
             return invoice.RefundPayment(payment, paymentGatewayMethod, args);
         }
+
+        /// <summary>
+        /// Voids a payment
+        /// </summary>
+        /// <param name="invoice">The invoice to be the payment was applied</param>
+        /// <param name="payment">The payment to be voided</param>
+        /// <param name="paymentGatewayMethod">The <see cref="IPaymentGatewayMethod"/></param>
+        /// <param name="args">Additional arguements required by the payment processor</param>
+        /// <returns>A <see cref="IPaymentResult"/></returns>
+        internal static IPaymentResult VoidPayment(this IInvoice invoice, IPayment payment,
+            IPaymentGatewayMethod paymentGatewayMethod, ProcessorArgumentCollection args)
+        {
+            return paymentGatewayMethod.VoidPayment(invoice, payment, args);
+        }
+
+        /// <summary>
+        /// Voids a payment
+        /// </summary>
+        /// <param name="invoice">The invoice to be the payment was applied</param>
+        /// <param name="payment">The payment to be voided</param>
+        /// <param name="paymentMethodKey">The <see cref="IPaymentGatewayMethod"/> key</param>
+        /// <returns>A <see cref="IPaymentResult"/></returns>
+        internal static IPaymentResult VoidPayment(this IInvoice invoice, IPayment payment, Guid paymentMethodKey)
+        {
+            return invoice.VoidPayment(payment, paymentMethodKey, new ProcessorArgumentCollection());
+        }
+
+        /// <summary>
+        /// Voids a payment
+        /// </summary>
+        /// <param name="invoice">The invoice to be the payment was applied</param>
+        /// <param name="payment">The payment to be voided</param>
+        /// <param name="paymentMethodKey">The <see cref="IPaymentGatewayMethod"/> key</param>
+        /// <param name="args">Additional arguements required by the payment processor</param>
+        /// <returns>A <see cref="IPaymentResult"/></returns>
+        internal static IPaymentResult VoidPayment(this IInvoice invoice, IPayment payment, Guid paymentMethodKey, ProcessorArgumentCollection args)
+        {
+            return invoice.VoidPayment(MerchelloContext.Current, payment, paymentMethodKey, args);
+        }
+
+        /// <summary>
+        /// Voids a payment
+        /// </summary>
+        /// <param name="invoice">The invoice to be the payment was applied</param>
+        /// <param name="merchelloContext">The <see cref="IMerchelloContext"/></param>
+        /// <param name="payment">The payment to be voided</param>
+        /// <param name="paymentMethodKey">The <see cref="IPaymentGatewayMethod"/> key</param>
+        /// <param name="args">Additional arguements required by the payment processor</param>
+        /// <returns>A <see cref="IPaymentResult"/></returns>
+        internal static IPaymentResult VoidPayment(this IInvoice invoice, IMerchelloContext merchelloContext, IPayment payment, Guid paymentMethodKey, ProcessorArgumentCollection args)
+        {
+            var paymentGatewayMethod = merchelloContext.Gateways.Payment.GetPaymentGatewayMethodByKey(paymentMethodKey);
+            return paymentGatewayMethod.VoidPayment(invoice, payment, args);
+        }
+
+
 
         #endregion
 

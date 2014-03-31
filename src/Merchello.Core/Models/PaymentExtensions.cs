@@ -153,7 +153,6 @@ namespace Merchello.Core.Models
         /// <param name="invoice">The invoice to be the payment was applied</param>
         /// <param name="payment">The payment to be refunded</param>
         /// <param name="paymentGatewayMethod">The <see cref="IPaymentGatewayMethod"/></param>
-        /// <param name="args">Additional arguements required by the payment processor</param>
         /// <returns>A <see cref="IPaymentResult"/></returns>
         internal static IPaymentResult RefundPayment(this IPayment payment, IInvoice invoice, IPaymentGatewayMethod paymentGatewayMethod)
         {
@@ -198,6 +197,60 @@ namespace Merchello.Core.Models
         {
             var paymentGatewayMethod = merchelloContext.Gateways.Payment.GetPaymentGatewayMethodByKey(paymentMethodKey);
             return payment.RefundPayment(invoice, paymentGatewayMethod, args);
+        }
+
+        /// <summary>
+        /// Voids a payment
+        /// </summary>
+        /// <param name="invoice">The invoice to be the payment was applied</param>
+        /// <param name="payment">The payment to be voided</param>
+        /// <param name="paymentGatewayMethod">The <see cref="IPaymentGatewayMethod"/></param>
+        /// <param name="args">Additional arguements required by the payment processor</param>
+        /// <returns>A <see cref="IPaymentResult"/></returns>
+        internal static IPaymentResult VoidPayment(this IPayment payment, IInvoice invoice,
+            IPaymentGatewayMethod paymentGatewayMethod, ProcessorArgumentCollection args)
+        {
+            return paymentGatewayMethod.VoidPayment(invoice, payment, args);
+        }
+
+        /// <summary>
+        /// Voids a payment
+        /// </summary>
+        /// <param name="invoice">The invoice to be the payment was applied</param>
+        /// <param name="payment">The payment to be voided</param>
+        /// <param name="paymentMethodKey">The <see cref="IPaymentGatewayMethod"/> key</param>
+        /// <returns>A <see cref="IPaymentResult"/></returns>
+        internal static IPaymentResult VoidPayment(this IPayment payment, IInvoice invoice,  Guid paymentMethodKey)
+        {
+            return payment.VoidPayment(invoice, paymentMethodKey, new ProcessorArgumentCollection());
+        }
+
+        /// <summary>
+        /// Voids a payment
+        /// </summary>
+        /// <param name="invoice">The invoice to be the payment was applied</param>
+        /// <param name="payment">The payment to be voided</param>
+        /// <param name="paymentMethodKey">The <see cref="IPaymentGatewayMethod"/> key</param>
+        /// <param name="args">Additional arguements required by the payment processor</param>
+        /// <returns>A <see cref="IPaymentResult"/></returns>
+        internal static IPaymentResult VoidPayment(this IPayment payment, IInvoice invoice, Guid paymentMethodKey, ProcessorArgumentCollection args)
+        {
+            return payment.VoidPayment(MerchelloContext.Current, invoice, paymentMethodKey, args);
+        }
+
+        /// <summary>
+        /// Voids a payment
+        /// </summary>
+        /// <param name="invoice">The invoice to be the payment was applied</param>
+        /// <param name="merchelloContext">The <see cref="IMerchelloContext"/></param>
+        /// <param name="payment">The payment to be voided</param>
+        /// <param name="paymentMethodKey">The <see cref="IPaymentGatewayMethod"/> key</param>
+        /// <param name="args">Additional arguements required by the payment processor</param>
+        /// <returns>A <see cref="IPaymentResult"/></returns>
+        internal static IPaymentResult VoidPayment(this IPayment payment, IMerchelloContext merchelloContext, IInvoice invoice, Guid paymentMethodKey, ProcessorArgumentCollection args)
+        {
+            var paymentGatewayMethod = merchelloContext.Gateways.Payment.GetPaymentGatewayMethodByKey(paymentMethodKey);
+            return paymentGatewayMethod.VoidPayment(invoice, payment, args);
         }
 
     }
