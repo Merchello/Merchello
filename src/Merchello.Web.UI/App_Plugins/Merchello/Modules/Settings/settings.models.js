@@ -151,6 +151,8 @@
             self.extendedData = [];
             self.encryptExtendedData = false;
             self.activated = false;
+            self.dialogEditorView = "";
+
         } else {
             self.key = gatewayProviderFromServer.key;
             self.name = gatewayProviderFromServer.name;
@@ -159,6 +161,7 @@
             self.extendedData = gatewayProviderFromServer.extendedData;
             self.encryptExtendedData = gatewayProviderFromServer.encryptExtendedData;
             self.activated = gatewayProviderFromServer.activated;
+            self.dialogEditorView = new merchello.Models.DialogEditorView(gatewayProviderFromServer.dialogEditorView);
         }
     };
 
@@ -170,12 +173,12 @@
 
             self.title = "";
             self.description = "";
-            self.dialogEditorView = "";
+            self.editorView = "";
 
         } else {
             self.title = dialogEditorFromServer.title;
             self.description = dialogEditorFromServer.description;
-            self.dialogEditorView = dialogEditorFromServer.dialogEditorView;
+            self.editorView = dialogEditorFromServer.editorView;
         }
             
     };
