@@ -94,7 +94,23 @@ namespace Merchello.Web.Models.ContentEditing
 
         internal static GatewayProviderDisplay ToGatewayProviderDisplay(this IGatewayProvider gatewayProvider)
         {
-            return AutoMapper.Mapper.Map<GatewayProviderDisplay>(gatewayProvider);
+            var display = AutoMapper.Mapper.Map<GatewayProviderDisplay>(gatewayProvider);
+
+            // Check for custom attribute
+            var editorAtt = Type.GetType(gatewayProvider.TypeFullName)
+                                .GetCustomAttributes<GatewayProviderEditorAttribute>(false).FirstOrDefault();
+
+            if (editorAtt != null)
+                display.DialogEditorView = new DialogEditorViewDisplay()
+                {
+                    Title = editorAtt.Title,
+                    Description = editorAtt.Description,
+                    EditorView = editorAtt.EditorView
+                };
+
+
+
+            return display;
         }
 
         #endregion

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 
@@ -21,6 +22,30 @@ namespace Merchello.Core.Gateways
 
             _gatewayProviderService = gatewayProviderService;            
             _resolver = resolver;
+
+            AssertProviderVersions();
+        }
+
+        /// <summary>
+        /// Asserts the assembly versions get updated (if applicable) when the context is instantiated.
+        /// </summary>
+        /// TODO revist this.  Probably better to do something like this in the bootstrapper
+        private void AssertProviderVersions()
+        {
+            var all = GetAllActivatedProviders().ToArray();
+            var activated = GetAllActivatedProviders();
+
+            foreach (var provider in activated)
+            {
+                var key = provider.Key;
+                var resolved = all.FirstOrDefault(x => x.Key == key);
+
+                if (resolved == null) continue;
+                if (provider.TypeFullName.Equals(resolved.TypeFullName)) continue;
+                
+                provider.TypeFullName = resolved.TypeFullName;
+                GatewayProviderService.Save(provider);
+            }
         }
 
         /// <summary>

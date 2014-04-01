@@ -25,9 +25,23 @@ namespace Merchello.Core.Gateways
 
         public GatewayProviderActivationAttribute(string key, string name, string description)
         {            
+            Mandate.ParameterNotNullOrEmpty(key, "key");
+            Mandate.ParameterNotNullOrEmpty(name, "name");
+            Mandate.ParameterNotNullOrEmpty(description, "description");
+
             Key = new Guid(key);
             Name = name;
             Description = description;
+        }
+
+        public GatewayProviderActivationAttribute(string key, string name)
+        {
+            Mandate.ParameterNotNullOrEmpty(key, "key");
+            Mandate.ParameterNotNullOrEmpty(name, "name");
+
+            Key = new Guid(key);
+            Name = name;
+            Description = string.Empty;
         }
          
     }
