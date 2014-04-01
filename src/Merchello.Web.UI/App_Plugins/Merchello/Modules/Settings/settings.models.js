@@ -148,6 +148,7 @@
             self.name = "";
             self.providerTfKey = "";
             self.description = "";
+            self.extendedData = [];
             self.encryptExtendedData = false;
             self.activated = false;
         } else {
@@ -155,9 +156,28 @@
             self.name = gatewayProviderFromServer.name;
             self.providerTfKey = gatewayProviderFromServer.providerTfKey;
             self.description = gatewayProviderFromServer.description;
+            self.extendedData = gatewayProviderFromServer.extendedData;
             self.encryptExtendedData = gatewayProviderFromServer.encryptExtendedData;
             self.activated = gatewayProviderFromServer.activated;
         }
+    };
+
+    models.DialogEditorView = function(dialogEditorFromServer) {
+
+        var self = this;
+        
+        if (dialogEditorFromServer == undefined) {
+
+            self.title = "";
+            self.description = "";
+            self.dialogEditorView = "";
+
+        } else {
+            self.title = dialogEditorFromServer.title;
+            self.description = dialogEditorFromServer.description;
+            self.dialogEditorView = dialogEditorFromServer.dialogEditorView;
+        }
+            
     };
 
 }(window.merchello.Models = window.merchello.Models || {}));

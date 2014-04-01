@@ -69,10 +69,10 @@ namespace Merchello.Core.Persistence.Factories
         internal IGatewayProvider BuildEntity(Type t, GatewayProviderType gatewayProviderType)
         {
             Mandate.ParameterNotNull(t, "Type t cannot be null");
-            Mandate.ParameterCondition(Attribute.GetCustomAttribute(t, typeof(GatewayProviderActivationAttribute)) != null, "Type t must have a GatewayProviderActivationAttribute");
-            
-            var att = (GatewayProviderActivationAttribute) Attribute.GetCustomAttribute(t, typeof(GatewayProviderActivationAttribute));
-            
+            Mandate.ParameterCondition(t.GetCustomAttribute<GatewayProviderActivationAttribute>(false) != null, "Type t must have a GatewayProviderActivationAttribute");
+
+            var att = t.GetCustomAttribute<GatewayProviderActivationAttribute>(false);
+                           
             var provider = new GatewayProvider()
             {
                 Key = att.Key,

@@ -252,6 +252,7 @@
     <Compile Include="GatewayProviders\Taxation\FixedRate\FixRateTaxationGatewayMethod.cs" />
     <Compile Include="GatewayProviders\Taxation\FixedRate\IFixedRateTaxationGatewayMethod.cs" />
     <Compile Include="GatewayProviders\Taxation\FixedRate\IFixedRateTaxationGatewayProvider.cs" />
+    <Compile Include="Models\ContentEditing\DialogEditorViewDisplay.cs" />
     <Compile Include="Workflow\PaymentProcessor.cs" />
     <Compile Include="Editors\SettingsApiController.cs" />
     <Compile Include="Editors\CatalogShippingApiController.cs" />

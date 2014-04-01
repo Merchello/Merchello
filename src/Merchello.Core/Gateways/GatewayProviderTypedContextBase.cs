@@ -27,9 +27,9 @@ namespace Merchello.Core.Gateways
         }
 
         /// <summary>
-        /// 
+        /// Asserts the assembly versions get updated (if applicable) when the context is instantiated.
         /// </summary>
-        /// TODO revist this.  Probably better to do something like this in the bootstraper
+        /// TODO revist this.  Probably better to do something like this in the bootstrapper
         private void AssertProviderVersions()
         {
             var all = GetAllActivatedProviders().ToArray();

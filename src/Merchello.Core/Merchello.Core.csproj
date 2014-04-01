@@ -237,6 +237,7 @@
     <Compile Include="Chains\ShipmentCreation\SetOrderStatusTask.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="Gateways\GatewayProviderActivationAttribute.cs" />
+    <Compile Include="Gateways\GatewayProviderEditorAttribute.cs" />
     <Compile Include="Gateways\Payment\PaymentGatewayProviderResolver.cs" />
     <Compile Include="Gateways\Payment\PaymentResult.cs" />
     <Compile Include="Gateways\Payment\ProcessorArgumentCollection.cs" />

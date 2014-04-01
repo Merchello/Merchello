@@ -243,6 +243,7 @@
     <Compile Include="Builders\InvoiceBuilderTests.cs" />
     <Compile Include="Builders\OrderBuilderTests.cs" />
     <Compile Include="Builders\ShipmentBuilderTests.cs" />
+    <Compile Include="DisplayClasses\GatewayProviderDisplayTests.cs" />
     <Compile Include="Examine\InvoiceAndOrderProviderTests.cs" />
     <Compile Include="Gateways\ShippingContextTests.cs" />
     <Compile Include="ObjectResolution\GatewayProviderResolution.cs" />
