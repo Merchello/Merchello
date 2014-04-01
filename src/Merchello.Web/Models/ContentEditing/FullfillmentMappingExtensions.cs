@@ -9,6 +9,7 @@ using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Web.GatewayProviders.Shipping.FixedRate;
 using Umbraco.Core;
+using Umbraco.Core.IO;
 
 namespace Merchello.Web.Models.ContentEditing
 {
@@ -105,7 +106,7 @@ namespace Merchello.Web.Models.ContentEditing
                 {
                     Title = editorAtt.Title,
                     Description = editorAtt.Description,
-                    EditorView = editorAtt.EditorView
+                    EditorView = editorAtt.EditorView.StartsWith("~/") ? IOHelper.ResolveUrl(editorAtt.EditorView) : editorAtt.EditorView
                 };
 
 

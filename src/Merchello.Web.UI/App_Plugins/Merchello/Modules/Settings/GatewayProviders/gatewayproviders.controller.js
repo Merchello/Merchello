@@ -142,6 +142,8 @@
             var promiseActivate = merchelloGatewayProviderService.activateGatewayProvider(provider);
             promiseActivate.then(function () {
 
+                provider.activated = true;
+                
                 notificationsService.success("Payment Method Activated");
 
             }, function (reason) {
@@ -165,6 +167,8 @@
             var promiseDeactivate = merchelloGatewayProviderService.deactivateGatewayProvider(provider);
             promiseDeactivate.then(function () {
 
+                provider.activated = false;
+                
                 notificationsService.success("Payment Method Deactivated");
 
             }, function (reason) {
@@ -172,6 +176,41 @@
                 notificationsService.error("Payment Method Deactivate Failed", reason.message);
 
             });
+        };
+
+        /**
+         * @ngdoc method
+         * @name editProviderConfigDialogOpen
+         * @param {GatewayProvider} provider The GatewayProvider to configure
+         * @function
+         * 
+         * @description
+         * Opens the dialog to allow user to add provider configurations
+         */
+        $scope.editProviderConfigDialogOpen = function (provider) {
+
+           
+            var dialogProvider = provider;
+            if (!provider) {      
+                return;                
+            }
+
+            var myDialogData = {
+                provider: dialogProvider
+            };
+            
+            dialogService.open({
+                template: provider.dialogEditorView.editorView,
+                show: true,
+                callback: $scope.providerConfigDialogConfirm,
+                dialogData: myDialogData
+            });
+        };
+
+        $scope.providerConfigDialogConfirm = function(data) {
+
+            var promiseSave;
+            alert('Confirmed');
         };
 
     };
