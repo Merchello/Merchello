@@ -12,10 +12,11 @@ namespace Merchello.Core.Gateways.Payment
         /// <summary>
         /// Creates a <see cref="IPaymentGatewayMethod"/>
         /// </summary>
+        /// <param name="gatewayResource">The <see cref="IGatewayResource"/> implemented by this method</param>
         /// <param name="name">The name of the payment method</param>
         /// <param name="description">The description of the payment method</param>
         /// <returns>A <see cref="IPaymentGatewayMethod"/></returns>
-        IPaymentGatewayMethod CreatePaymentMethod(string name, string description);
+        IPaymentGatewayMethod CreatePaymentMethod(IGatewayResource gatewayResource, string name, string description);
 
         /// <summary>
         /// Saves a <see cref="IPaymentGatewayMethod"/>

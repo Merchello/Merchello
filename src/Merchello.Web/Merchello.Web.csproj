@@ -236,22 +236,6 @@
     <Compile Include="Editors\OrderApiController.cs" />
     <Compile Include="Editors\PaymentApiController.cs" />
     <Compile Include="Editors\PaymentGatewayApiController.cs" />
-    <Compile Include="GatewayProviders\Payment\Cash\CashPaymentGatewayMethod.cs" />
-    <Compile Include="GatewayProviders\Payment\Cash\CashPaymentGatewayProvider.cs" />
-    <Compile Include="GatewayProviders\Payment\Cash\ICashPaymentGatewayMethod.cs" />
-    <Compile Include="GatewayProviders\Payment\Cash\ICashPaymentGatewayProvider.cs" />
-    <Compile Include="GatewayProviders\Shipping\FixedRate\FixedRateShipmentLineItemVisitor.cs" />
-    <Compile Include="GatewayProviders\Shipping\FixedRate\FixedRateShippingGatewayMethod.cs" />
-    <Compile Include="GatewayProviders\Shipping\FixedRate\FixedRateShippingGatewayProvider.cs" />
-    <Compile Include="GatewayProviders\Shipping\FixedRate\IFixedRateShippingGatewayMethod.cs" />
-    <Compile Include="GatewayProviders\Shipping\FixedRate\IFixedRateShippingGatewayProvider.cs" />
-    <Compile Include="GatewayProviders\Shipping\FixedRate\IShippingFixedRateTable.cs" />
-    <Compile Include="GatewayProviders\Shipping\FixedRate\ShippingFixedRateTable.cs" />
-    <Compile Include="GatewayProviders\Taxation\FixedRate\FixedRateTaxationGatewayProvider.cs" />
-    <Compile Include="GatewayProviders\Taxation\FixedRate\FixedRateTaxCalculationStrategy.cs" />
-    <Compile Include="GatewayProviders\Taxation\FixedRate\FixRateTaxationGatewayMethod.cs" />
-    <Compile Include="GatewayProviders\Taxation\FixedRate\IFixedRateTaxationGatewayMethod.cs" />
-    <Compile Include="GatewayProviders\Taxation\FixedRate\IFixedRateTaxationGatewayProvider.cs" />
     <Compile Include="Models\ContentEditing\DialogEditorViewDisplay.cs" />
     <Compile Include="Workflow\PaymentProcessor.cs" />
     <Compile Include="Editors\SettingsApiController.cs" />
@@ -330,7 +314,10 @@
     <Compile Include="WebApi\MerchelloApiController.cs" />
     <Compile Include="WebBootManager.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="GatewayProviders\Payment\" />
+    <Folder Include="GatewayProviders\Shipping\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Merchello.Core\Merchello.Core.csproj">
       <Project>{2a83a229-c24b-4d8d-b806-7c9999eb9461}</Project>

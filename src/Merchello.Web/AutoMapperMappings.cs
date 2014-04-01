@@ -1,8 +1,8 @@
 ﻿using Merchello.Core.Gateways;
 using Merchello.Core.Gateways.Shipping;
+using Merchello.Core.Gateways.Shipping.FixedRate;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
-using Merchello.Web.GatewayProviders.Shipping.FixedRate;
 using Merchello.Web.Models.ContentEditing;
 
 namespace Merchello.Web

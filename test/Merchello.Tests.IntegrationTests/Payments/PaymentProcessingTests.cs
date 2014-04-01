@@ -69,7 +69,8 @@ namespace Merchello.Tests.IntegrationTests.Payments
 
             var gateway = _merchelloContext.Gateways.Payment.GetAllActivatedProviders().FirstOrDefault();
             var provider = _merchelloContext.Gateways.Payment.CreateInstance(gateway.Key);
-            var method = provider.CreatePaymentMethod("Cash", "Cash Payments");
+            var resource = provider.ListResourcesOffered().FirstOrDefault(x => x.ServiceCode == "Cash");
+            var method = provider.CreatePaymentMethod(resource, "Cash", "Cash Payments");
             provider.SavePaymentMethod(method);
 
             _paymentMethodKey = method.PaymentMethod.Key;

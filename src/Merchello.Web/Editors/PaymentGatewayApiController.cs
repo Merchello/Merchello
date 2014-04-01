@@ -111,7 +111,10 @@ namespace Merchello.Web.Editors
             {
                 var provider = _paymentContext.CreateInstance(method.ProviderKey);
 
-                var paymentGatewayMethod = provider.CreatePaymentMethod(method.Name, method.Description);
+                var gatewayResource =
+                    provider.ListResourcesOffered().FirstOrDefault(x => x.ServiceCode == method.PaymentCode);
+
+                var paymentGatewayMethod = provider.CreatePaymentMethod(gatewayResource, method.Name, method.Description);
 
                provider.SavePaymentMethod(paymentGatewayMethod);
 

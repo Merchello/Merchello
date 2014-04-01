@@ -112,7 +112,7 @@ namespace Merchello.Core.Persistence.Migrations.Initial
             var extended = new ExtendedDataCollection();
 
             // TODO - move this to a package action
-            _database.Insert("merchGatewayProvider", "Key", new GatewayProviderDto() { Key = Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey, Name = "Fixed Rate Shipping Provider", ProviderTfKey = EnumTypeFieldConverter.GatewayProvider.GetTypeField(GatewayProviderType.Shipping).TypeKey, ExtendedData = new ExtendedDataCollection().SerializeToXml(), EncryptExtendedData = false, TypeFullName = "Merchello.Web.GatewayProviders.Shipping.FixedRate.FixedRateShippingGatewayProvider, Merchello.Web, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchGatewayProvider", "Key", new GatewayProviderDto() { Key = Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey, Name = "Fixed Rate Shipping Provider", ProviderTfKey = EnumTypeFieldConverter.GatewayProvider.GetTypeField(GatewayProviderType.Shipping).TypeKey, ExtendedData = new ExtendedDataCollection().SerializeToXml(), EncryptExtendedData = false, TypeFullName = "Merchello.Core.Gateways.Shipping.FixedRate.FixedRateShippingGatewayProvider, Merchello.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
 
             // add the everywhere else shipcountry
             _database.Insert("merchShipCountry", "Key",
@@ -127,7 +127,7 @@ namespace Merchello.Core.Persistence.Migrations.Initial
                                  });
 
             // TODO - move this to a package action
-            _database.Insert("merchGatewayProvider", "Key", new GatewayProviderDto() { Key = Constants.ProviderKeys.Taxation.FixedRateTaxationProviderKey, Name = "Fixed Rate Tax Provider", ProviderTfKey = EnumTypeFieldConverter.GatewayProvider.GetTypeField(GatewayProviderType.Taxation).TypeKey, ExtendedData = new ExtendedDataCollection().SerializeToXml(), EncryptExtendedData = false, TypeFullName = "Merchello.Web.GatewayProviders.Taxation.FixedRate.FixedRateTaxationGatewayProvider, Merchello.Web, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchGatewayProvider", "Key", new GatewayProviderDto() { Key = Constants.ProviderKeys.Taxation.FixedRateTaxationProviderKey, Name = "Fixed Rate Tax Provider", ProviderTfKey = EnumTypeFieldConverter.GatewayProvider.GetTypeField(GatewayProviderType.Taxation).TypeKey, ExtendedData = new ExtendedDataCollection().SerializeToXml(), EncryptExtendedData = false, TypeFullName = "Merchello.Core.Gateways.Taxation.FixedRate.FixedRateTaxationGatewayProvider, Merchello.Core, Version=1.0.1.0, Culture=neutral, PublicKeyToken=null", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
 
             var taxProvinces = new ProvinceCollection<ITaxProvince>();
             var provinceData = JsonConvert.SerializeObject(taxProvinces);
@@ -146,7 +146,7 @@ namespace Merchello.Core.Persistence.Migrations.Initial
                                  });
 
             // TODO - move this to a package action
-            _database.Insert("merchGatewayProvider", "Key", new GatewayProviderDto() { Key = Constants.ProviderKeys.Payment.CashPaymentProviderKey, Name = "Cash Payment Provider", ProviderTfKey = EnumTypeFieldConverter.GatewayProvider.GetTypeField(GatewayProviderType.Payment).TypeKey, ExtendedData = new ExtendedDataCollection().SerializeToXml(), EncryptExtendedData = false, TypeFullName = "Merchello.Web.GatewayProviders.Payment.Cash.CashPaymentGatewayProvider, Merchello.Web, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchGatewayProvider", "Key", new GatewayProviderDto() { Key = Constants.ProviderKeys.Payment.CashPaymentProviderKey, Name = "Cash Payment Provider", ProviderTfKey = EnumTypeFieldConverter.GatewayProvider.GetTypeField(GatewayProviderType.Payment).TypeKey, ExtendedData = new ExtendedDataCollection().SerializeToXml(), EncryptExtendedData = false, TypeFullName = "Merchello.Core.Gateways.Payment.Cash.CashPaymentGatewayProvider, Merchello.Core, Version=1.0.1.0, Culture=neutral, PublicKeyToken=null", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
 
             _database.Insert("merchPaymentMethod", "Key",
                 new PaymentMethodDto()

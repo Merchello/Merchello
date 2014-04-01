@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
-using Merchello.Web.GatewayProviders.Shipping.FixedRate;
+using Merchello.Core.Gateways.Shipping.FixedRate;
 using Umbraco.Web;
 using Umbraco.Web.Mvc;
 using Merchello.Core;

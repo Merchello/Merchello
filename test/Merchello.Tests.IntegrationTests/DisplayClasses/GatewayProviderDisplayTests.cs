@@ -38,7 +38,7 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
         {
             //// Arrange
             var key = new Guid("5A5B38F4-0E74-4057-BCFF-F903CF449AD8");
-            const string editorView = "~/App_Data/Plugins/Merchello/Testing/test.paymentprovider.view.html";
+            const string editorView = "/App_Plugins/Merchello/Testing/test.paymentprovider.view.html";
             var provider = MerchelloContext.Current.Gateways.Payment.GetAllProviders().FirstOrDefault(x => x.Key == key);
             Assert.NotNull(provider);
 
