@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using Merchello.Core;
+using Merchello.Core.Gateways.Shipping.FixedRate;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Merchello.Tests.IntegrationTests.TestHelpers;
-using Merchello.Web.GatewayProviders.Shipping.FixedRate;
 using NUnit.Framework;
 
 namespace Merchello.Tests.IntegrationTests.Gateways

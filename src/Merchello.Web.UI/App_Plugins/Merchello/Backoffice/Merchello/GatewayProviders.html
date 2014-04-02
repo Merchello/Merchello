@@ -33,7 +33,7 @@
                         <small>Activate/Deactivate your Payment Providers</small>
                     </label>
                     
-                    <resolved-gateway-providers provider-list="paymentGatewayProviders" on-activate="activateProvider(provider)" on-deactivate="deactivateProvider(provider)"></resolved-gateway-providers>
+                    <resolved-gateway-providers provider-list="paymentGatewayProviders" on-activate="activateProvider(provider)" on-deactivate="deactivateProvider(provider)" on-configure="editProviderConfigDialogOpen(provider)"></resolved-gateway-providers>
                 </div>
                 
                 <div class="control-group umb-control-group">
@@ -42,7 +42,7 @@
                         <small>Activate/Deactivate your Shipping Providers</small>
                     </label>
 
-                    <resolved-gateway-providers provider-list="shippingGatewayProviders" on-activate="activateProvider(provider)" on-deactivate="deactivateProvider(provider)"></resolved-gateway-providers>
+                    <resolved-gateway-providers provider-list="shippingGatewayProviders" on-activate="activateProvider(provider)" on-deactivate="deactivateProvider(provider)" on-configure="editProviderConfigDialogOpen(provider)"></resolved-gateway-providers>
                 </div>
                 
                 <div class="control-group umb-control-group">
@@ -51,7 +51,7 @@
                         <small>Activate/Deactivate your Taxation Providers</small>
                     </label>
 
-                    <resolved-gateway-providers provider-list="taxationGatewayProviders" on-activate="activateProvider(provider)" on-deactivate="deactivateProvider(provider)"></resolved-gateway-providers>
+                    <resolved-gateway-providers provider-list="taxationGatewayProviders" on-activate="activateProvider(provider)" on-deactivate="deactivateProvider(provider)" on-configure="editProviderConfigDialogOpen(provider)"></resolved-gateway-providers>
                 </div>
 
             </div>

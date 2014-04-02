@@ -1,7 +1,7 @@
 ﻿(function (models, undefined) {
 
     models.TaxCountry = function (data) {
-
+        
         var self = this;
 
         self.method = new merchello.Models.TaxMethod();    // Only used for binding, other data from a gateway resource

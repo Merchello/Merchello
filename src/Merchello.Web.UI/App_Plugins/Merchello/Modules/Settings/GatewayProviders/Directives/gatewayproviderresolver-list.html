@@ -1,7 +1,4 @@
 ﻿<div>
-    <!--<h3 class="row-fluid col-xs-5 span5 clear">{{gatewayProviderResolver.gatewayProviderType}}</h3>-->
-    
-
         
         <table class="table table-striped merchello-striped-table settings-table shipping-table clear">
             <tbody>
@@ -10,10 +7,10 @@
                     <td>{{gatewayProvider.description}}</td>
                     <td class="edit">
                         <div class="btn-group">
-                        <a data-ng-click="activate({provider: gatewayProvider})" class="btn btn-default btn-xs btn-mini">activate</a>
-                        <a data-ng-click="deactivate({provider: gatewayProvider})" class="btn btn-warning btn-xs btn-mini">deactivate</a>
-                        
-                    </div>
+                        <a data-ng-click="activate({provider: gatewayProvider})" data-ng-hide="gatewayProvider.activated" class="btn btn-default btn-xs btn-mini">activate</a>
+                        <a data-ng-click="deactivate({provider: gatewayProvider})" data-ng-show="gatewayProvider.activated" class="btn btn-warning btn-xs btn-mini">deactivate</a>
+                        <a data-ng-click="configure({provider: gatewayProvider})" data-ng-show="gatewayProvider.dialogEditorView.editorView" class="btn btn-default btn-xs btn-mini">edit</a>
+                        </div>
                     </td>
                     
                 </tr>

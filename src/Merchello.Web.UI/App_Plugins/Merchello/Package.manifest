@@ -21,7 +21,7 @@
 		'~/App_Plugins/Merchello/Modules/Settings/Notifications/notifications.models.js',
 		'~/App_Plugins/Merchello/Modules/Settings/Payment/payment.models.js',
 		'~/App_Plugins/Merchello/Modules/Settings/Shipping/shipping.models.js',
-		'~/App_plugins/Merchello/Modules/Settings/Taxation/taxation.models.js',
+		'~/App_Plugins/Merchello/Modules/Settings/Taxation/taxation.models.js',
 		'~/App_Plugins/Merchello/Modules/Settings/Vendors/vendors.models.js',
 		'~/App_Plugins/Merchello/Directives/dropdownlist.directive.js',
 		'~/App_Plugins/Merchello/Directives/tag.manager.directive.js',

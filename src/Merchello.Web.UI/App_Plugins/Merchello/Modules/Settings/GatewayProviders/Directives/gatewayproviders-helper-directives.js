@@ -16,7 +16,8 @@
             scope: {
                 providerList: '=',
                 'activate': '&onActivate',
-                'deactivate': '&onDeactivate'
+                'deactivate': '&onDeactivate',
+                'configure': '&onConfigure'
         },
             templateUrl: '/App_Plugins/Merchello/Modules/Settings/GatewayProviders/Directives/gatewayproviderresolver-list.html'
         };
