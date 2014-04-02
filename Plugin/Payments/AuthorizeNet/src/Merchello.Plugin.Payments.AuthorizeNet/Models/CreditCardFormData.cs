@@ -4,26 +4,12 @@ using Merchello.Plugin.Payments.AuthorizeNet.Provider;
 
 namespace Merchello.Plugin.Payments.AuthorizeNet.Models
 {
-    public class CreditCardnfo
-    {
-        private string _creditCardType;
-
+    public class CreditCardFormData
+    {        
         /// <summary>
         /// The type of the credit card.  
         /// </summary>
-        public string CreditCardType
-        {
-            get
-            {
-                return _creditCardType;
-            }
-            set
-            {
-                _creditCardType = AuthorizeNetPaymentGatewayProvider.AvailableResources.Any(x => x.ServiceCode == value)
-                    ? value
-                    : string.Empty;
-            }
-        } 
+        public string CreditCardType { get; set; }
 
         /// <summary>
         /// The card holders name
@@ -49,5 +35,10 @@ namespace Merchello.Plugin.Payments.AuthorizeNet.Models
         /// The credit card code or CVV
         /// </summary>
         public string CardCode { get; set; }
+
+        /// <summary>
+        /// The customer's IP Address
+        /// </summary>
+        public string CustomerIp { get; set; }
     }
 }

@@ -50,13 +50,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\AuthorizeNetConfiguration.cs" />
-    <Compile Include="Models\CreditCardnfo.cs" />
+    <Compile Include="AuthorizeNetPaymentProcessor.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="Models\AuthorizeNetProcessorSettings.cs" />
+    <Compile Include="Models\CreditCardInfoExtensions.cs" />
+    <Compile Include="Models\CreditCardFormData.cs" />
     <Compile Include="Provider\AuthorizeNetPaymentGatewayMethod.cs" />
     <Compile Include="Provider\AuthorizeNetPaymentGatewayProvider.cs" />
     <Compile Include="Provider\IAuthorizeNetPaymentGatewayMethod.cs" />
     <Compile Include="Provider\IAuthorizeNetPaymentGatewayProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TransactionMode.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

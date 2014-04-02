@@ -121,6 +121,7 @@
       <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\UmbracoCms.Core.7.1.0-nightly264\lib\SQLCE4Umbraco.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -208,8 +209,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Authorization\AuthorizationTests.cs" />
+    <Compile Include="ExtendedDataExtensions.cs" />
+    <Compile Include="GatewayProvider\ProviderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestHelpers\DbSyntax.cs" />
+    <Compile Include="TestHelpers\GatewayProviderDto.cs" />
+    <Compile Include="TestHelpers\ProviderTestsBase.cs" />
     <Compile Include="TestHelpers\Resolution.cs" />
     <Compile Include="TestHelpers\SqlSyntaxProviderTestHelper.cs" />
   </ItemGroup>

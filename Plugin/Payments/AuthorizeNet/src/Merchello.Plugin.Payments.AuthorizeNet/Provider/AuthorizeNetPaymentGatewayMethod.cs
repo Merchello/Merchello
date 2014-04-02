@@ -9,9 +9,12 @@ namespace Merchello.Plugin.Payments.AuthorizeNet.Provider
     /// </summary>
     public class AuthorizeNetPaymentGatewayMethod : PaymentGatewayMethodBase, IAuthorizeNetPaymentGatewayMethod
     {
-        public AuthorizeNetPaymentGatewayMethod(IGatewayProviderService gatewayProviderService, IPaymentMethod paymentMethod) 
+        private readonly ExtendedDataCollection _providerExtendedData;
+
+        public AuthorizeNetPaymentGatewayMethod(IGatewayProviderService gatewayProviderService, IPaymentMethod paymentMethod, ExtendedDataCollection providerExtendedData) 
             : base(gatewayProviderService, paymentMethod)
         {
+            _providerExtendedData = providerExtendedData;
         }
 
         protected override IPaymentResult PerformAuthorizePayment(IInvoice invoice, ProcessorArgumentCollection args)

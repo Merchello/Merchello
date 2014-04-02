@@ -18,10 +18,7 @@ namespace Merchello.Plugin.Payments.AuthorizeNet.Provider
 
         internal static readonly IEnumerable<IGatewayResource> AvailableResources = new List<IGatewayResource>()
         {
-            new GatewayResource("Visa", "Visa"),
-            new GatewayResource("MasterCard", "Master card"),
-            new GatewayResource("Discover", "Discover"),
-            new GatewayResource("Amex", "Amex")
+            new GatewayResource("CreditCard", "Credit Card")            
         };
 
         #endregion
@@ -60,7 +57,7 @@ namespace Merchello.Plugin.Payments.AuthorizeNet.Provider
             {
                 PaymentMethods = null;
 
-                return new AuthorizeNetPaymentGatewayMethod(GatewayProviderService, attempt.Result);
+                return new AuthorizeNetPaymentGatewayMethod(GatewayProviderService, attempt.Result, GatewayProvider.ExtendedData);
             }
 
             LogHelper.Error<AuthorizeNetPaymentGatewayProvider>(string.Format("Failed to create a payment method name: {0}, description {1}, paymentCode {2}", name, description, available.ServiceCode), attempt.Exception);
@@ -79,7 +76,7 @@ namespace Merchello.Plugin.Payments.AuthorizeNet.Provider
 
             if (paymentMethod == null) throw new NullReferenceException("PaymentMethod not found");
 
-            return new AuthorizeNetPaymentGatewayMethod(GatewayProviderService, paymentMethod);
+            return new AuthorizeNetPaymentGatewayMethod(GatewayProviderService, paymentMethod, GatewayProvider.ExtendedData);
 
         }
 
@@ -94,7 +91,7 @@ namespace Merchello.Plugin.Payments.AuthorizeNet.Provider
 
             if (paymentMethod == null) throw new NullReferenceException("PaymentMethod not found");
 
-            return new AuthorizeNetPaymentGatewayMethod(GatewayProviderService, paymentMethod);
+            return new AuthorizeNetPaymentGatewayMethod(GatewayProviderService, paymentMethod, GatewayProvider.ExtendedData);
         }
     }
 }
