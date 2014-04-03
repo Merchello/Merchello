@@ -1,7 +1,10 @@
-﻿using ClientDependency.Core;
+﻿using System;
+using System.Configuration;
+using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
+using Merchello.Plugin.Payments.AuthorizeNet.Models;
 using Merchello.Tests.AuthorizeNet.Integration.TestHelpers;
 using NUnit.Framework;
 
@@ -52,6 +55,18 @@ namespace Merchello.Tests.AuthorizeNet.Integration.Authorization
             _invoice.Items.Add(l3);
             _invoice.Items.Add(l4);
 
+            var processorSettings = new AuthorizeNetProcessorSettings
+            {
+                LoginId = ConfigurationManager.AppSettings["xlogin"],
+                TransactionKey = ConfigurationManager.AppSettings["xtrankey"],
+                UseSandbox = true
+            };
+
+            Provider.GatewayProvider.ExtendedData.SaveProcessorSettings(processorSettings);
+
+            if (Provider.PaymentMethods.Any()) return;
+            var resource = Provider.ListResourcesOffered().ToArray();
+            Provider.CreatePaymentMethod(resource.First(), "Credit Card", "Credit Card");
         }
 
         /// <summary>
@@ -60,7 +75,64 @@ namespace Merchello.Tests.AuthorizeNet.Integration.Authorization
         [Test]
         public void Can_Authorize_A_Payment()
         {
-           
+            //// Arrange
+            var creditCardMethod = Provider.GetPaymentGatewayMethodByPaymentCode("CreditCard");
+            Assert.NotNull(creditCardMethod);
+
+            var ccEntry = new CreditCardFormData()
+            {
+                CreditCardType = "VISA",
+                CardholderName = "Rusty Swayne",
+                CardNumber = "4111111111111111",
+                CardCode = "111",
+                ExpireMonth = "09",
+                ExpireYear = "15",
+                CustomerIp = "10.0.0.15"
+            };
+
+            //// Act
+            var result = creditCardMethod.AuthorizePayment(_invoice, ccEntry.AsProcessorArgumentCollection());
+
+            //// Assert
+            Assert.NotNull(result);
+            Assert.IsTrue(result.Payment.Success);
+            var payment = result.Payment.Result;
+            Console.WriteLine(payment.ExtendedData.GetValue(Plugin.Payments.AuthorizeNet.Constants.ExtendedDataKeys.AuthorizationTransactionCode));
+            Console.WriteLine(payment.ExtendedData.GetValue(Plugin.Payments.AuthorizeNet.Constants.ExtendedDataKeys.AuthorizationTransactionResult));
+            Console.WriteLine(payment.ExtendedData.GetValue(Plugin.Payments.AuthorizeNet.Constants.ExtendedDataKeys.AvsResult));
+        }
+
+        /// <summary>
+        /// Testing Sandbox and Authorize and Capture a Payment
+        /// </summary>
+        [Test]
+        public void Can_AuthorizeAndCapture_A_Payment()
+        {
+            //// Arrange
+            var creditCardMethod = Provider.GetPaymentGatewayMethodByPaymentCode("CreditCard");
+            Assert.NotNull(creditCardMethod);
+
+            var ccEntry = new CreditCardFormData()
+            {
+                CreditCardType = "VISA",
+                CardholderName = "Rusty Swayne",
+                CardNumber = "4111111111111111",
+                CardCode = "111",
+                ExpireMonth = "09",
+                ExpireYear = "15",
+                CustomerIp = "10.0.0.15"
+            };
+
+            //// Act
+            var result = creditCardMethod.AuthorizeCapturePayment(_invoice, _invoice.Total, ccEntry.AsProcessorArgumentCollection());
+
+            //// Assert
+            Assert.NotNull(result);
+            Assert.IsTrue(result.Payment.Success);
+            var payment = result.Payment.Result;
+            Console.WriteLine(payment.ExtendedData.GetValue(Plugin.Payments.AuthorizeNet.Constants.ExtendedDataKeys.AuthorizationTransactionCode));
+            Console.WriteLine(payment.ExtendedData.GetValue(Plugin.Payments.AuthorizeNet.Constants.ExtendedDataKeys.AuthorizationTransactionResult));
+            Console.WriteLine(payment.ExtendedData.GetValue(Plugin.Payments.AuthorizeNet.Constants.ExtendedDataKeys.AvsResult));
         }
     }
 }

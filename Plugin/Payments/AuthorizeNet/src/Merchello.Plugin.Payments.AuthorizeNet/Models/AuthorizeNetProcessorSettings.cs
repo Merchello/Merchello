@@ -17,6 +17,7 @@
         public string Method { get; set; }
         public bool DelimitedData { get; set; }
         public string DelimitedChar { get; set; }
+        public string EncapChar { get; set; }
         public bool RelayResponse { get; set; }
 
         public string ApiVersion

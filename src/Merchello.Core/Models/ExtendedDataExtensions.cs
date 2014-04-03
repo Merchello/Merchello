@@ -535,7 +535,6 @@ namespace Merchello.Core.Models
 
 
         private static Guid GetGuidValue(string value)
-
         {
             Guid converted;
             return Guid.TryParse(value, out converted) ? converted : Guid.Empty;
