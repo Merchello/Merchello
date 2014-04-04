@@ -18,7 +18,7 @@ namespace Merchello.Plugin.Payments.AuthorizeNet.Provider
 
         internal static readonly IEnumerable<IGatewayResource> AvailableResources = new List<IGatewayResource>()
         {
-            new GatewayResource("CreditCard", "Credit Card")            
+            new GatewayResource("CreditCard", "Credit Card")
         };
 
         #endregion

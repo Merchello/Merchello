@@ -1,6 +1,5 @@
 ﻿using System;
 using Merchello.Core;
-using Newtonsoft.Json.Serialization;
 using Umbraco.Web;
 using Umbraco.Web.Editors;
 using Umbraco.Web.Mvc;
@@ -8,15 +7,12 @@ using Umbraco.Web.Mvc;
 
 namespace Merchello.Web.WebApi
 {
-    [PluginController("Merchello")]
     [JsonCamelCaseFormatter]
     public abstract class MerchelloApiController : UmbracoAuthorizedJsonController
     {
         protected MerchelloApiController()
             : this(MerchelloContext.Current)
-        {
-
-        }
+        { }
 
         protected MerchelloApiController(MerchelloContext merchelloContext) : this(merchelloContext, UmbracoContext.Current)
         {
