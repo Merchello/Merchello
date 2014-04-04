@@ -20,6 +20,16 @@
         /// The Void Type
         /// </summary>
         ITypeField Void { get; }
+
+        /// <summary>
+        /// The Denied Type
+        /// </summary>
+        ITypeField Denied { get; }
+
+        /// <summary>
+        /// The Refund Type
+        /// </summary>
+        ITypeField Refund { get; }
     }
 
 

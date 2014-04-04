@@ -313,8 +313,7 @@
     <Compile Include="WebBootManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="GatewayProviders\Payment\" />
-    <Folder Include="GatewayProviders\Shipping\" />
+    <Folder Include="GatewayProviders\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Merchello.Core\Merchello.Core.csproj">
