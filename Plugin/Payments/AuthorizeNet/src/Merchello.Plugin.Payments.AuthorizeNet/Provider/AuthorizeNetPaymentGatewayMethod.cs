@@ -3,6 +3,7 @@ using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Merchello.Plugin.Payments.AuthorizeNet.Models;
+using Umbraco.Core;
 
 namespace Merchello.Plugin.Payments.AuthorizeNet.Provider
 {
@@ -45,13 +46,18 @@ namespace Merchello.Plugin.Payments.AuthorizeNet.Provider
 
         private IPaymentResult ProcessPayment(IInvoice invoice, TransactionMode transactionMode, decimal amount, ProcessorArgumentCollection args)
         {
+            var cc = args.AsCreditCardFormData();
+
             var payment = GatewayProviderService.CreatePayment(PaymentMethodType.CreditCard, invoice.Total, PaymentMethod.Key);
+            payment.CustomerKey = invoice.CustomerKey;
             payment.Authorized = false;
             payment.Collected = false;
+            payment.PaymentMethodName = string.Format("{0} Authorize.Net Credit Card", cc.CreditCardType);
+            payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.CcLastFour, cc.CardNumber.Substring(cc.CardNumber.Length - 4, 4).EncryptWithMachineKey());
 
             var processor = new AuthorizeNetPaymentProcessor(_processorSettings);
-
-            var result = processor.ProcessPayment(invoice, payment, transactionMode, amount, args.AsCreditCardFormData());
+            
+            var result = processor.ProcessPayment(invoice, payment, transactionMode, amount, cc);
 
             GatewayProviderService.Save(payment);
 

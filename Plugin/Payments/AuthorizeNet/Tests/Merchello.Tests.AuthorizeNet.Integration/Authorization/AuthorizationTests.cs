@@ -133,6 +133,10 @@ namespace Merchello.Tests.AuthorizeNet.Integration.Authorization
             Console.WriteLine(payment.ExtendedData.GetValue(Plugin.Payments.AuthorizeNet.Constants.ExtendedDataKeys.AuthorizationTransactionCode));
             Console.WriteLine(payment.ExtendedData.GetValue(Plugin.Payments.AuthorizeNet.Constants.ExtendedDataKeys.AuthorizationTransactionResult));
             Console.WriteLine(payment.ExtendedData.GetValue(Plugin.Payments.AuthorizeNet.Constants.ExtendedDataKeys.AvsResult));
+
+            Assert.IsFalse(_invoice.IsDirty());
+            Assert.AreEqual(Constants.DefaultKeys.InvoiceStatus.Paid, _invoice.InvoiceStatusKey);
+
         }
     }
 }

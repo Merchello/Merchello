@@ -25,12 +25,19 @@ namespace Merchello.Plugin.Payments.AuthorizeNet
             _settings = settings;
         }
 
-
+        /// <summary>
+        /// Processes the Authorize and AuthorizeAndCapture transactions
+        /// </summary>
+        /// <param name="invoice">The <see cref="IInvoice"/> to be paid</param>
+        /// <param name="payment">The <see cref="IPayment"/> record</param>
+        /// <param name="transactionMode">Authorize or AuthorizeAndCapture</param>
+        /// <param name="amount">The money amount to be processed</param>
+        /// <param name="creditCard">The <see cref="CreditCardFormData"/></param>
+        /// <returns>The <see cref="IPaymentResult"/></returns>
         public IPaymentResult ProcessPayment(IInvoice invoice, IPayment payment, TransactionMode transactionMode, decimal amount, CreditCardFormData creditCard)
         {
             var address = invoice.GetBillingAddress();
-            var customerKey = invoice.CustomerKey;
-
+            
             var form = GetInitialRequestForm(invoice.CurrencyCode());
 
             var names = creditCard.CardholderName.Split(' ');
@@ -59,7 +66,9 @@ namespace Merchello.Plugin.Payments.AuthorizeNet
 
             // Invoice information
             form.Add("x_amount", amount.ToString("0.00", CultureInfo.InstalledUICulture));
-            form.Add("x_invoice_num", invoice.PrefixedInvoiceNumber());
+
+            // maximum length 20 chars
+            form.Add("x_invoice_num", invoice.PrefixedInvoiceNumber().Substring(0, 20));
             form.Add("x_description", string.Format("Full invoice #{0}", invoice.PrefixedInvoiceNumber()));
 
             var reply = GetAuthorizeNetReply(form);
@@ -72,10 +81,10 @@ namespace Merchello.Plugin.Payments.AuthorizeNet
             switch (fields[0])
             {
                 case "3" :
-                    return new PaymentResult(Attempt<IPayment>.Fail(payment, new Exception(reply)), invoice, false);
+                    return new PaymentResult(Attempt<IPayment>.Fail(payment, new Exception(string.Format("Error {0}", reply))), invoice, false);
                 case "2" :                    
-                    payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.DeclinedResult, string.Format("Payment Declined ({0} : {1})", fields[2], fields[3]));
-                    return new PaymentResult(Attempt<IPayment>.Fail(payment, new Exception(string.Format("Payment Declined ({0} : {1})", fields[2], fields[3]))), invoice, false);
+                    payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AuthorizeDeclinedResult, string.Format("Declined ({0} : {1})", fields[2], fields[3]));
+                    return new PaymentResult(Attempt<IPayment>.Fail(payment, new Exception(string.Format("Declined ({0} : {1})", fields[2], fields[3]))), invoice, false);
                 case "1" :
                     payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AuthorizationTransactionCode, string.Format("{0},{1}", fields[6], fields[4]));
                     payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AuthorizationTransactionResult, string.Format("Approved ({0}: {1})", fields[2], fields[3]));
@@ -85,46 +94,169 @@ namespace Merchello.Plugin.Payments.AuthorizeNet
                     return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, true);
             }
 
-            return new PaymentResult(Attempt<IPayment>.Fail(payment, new Exception("Authorize.NET unknown error")), invoice, false);
+            return new PaymentResult(Attempt<IPayment>.Fail(payment, new Exception(string.Format("Error {0}", reply))), invoice, false);
         }
 
-        public IPaymentResult PriorAuthorizeCapturePayment(IPayment payment, ProcessorArgumentCollection args)
+        /// <summary>
+        /// Captures a previously authorized payment
+        /// </summary>
+        /// <param name="invoice">The invoice associated with the <see cref="IPayment"/></param>
+        /// <param name="payment">The <see cref="IPayment"/> to capture</param>
+        /// <param name="args"></param>
+        /// <returns>The <see cref="IPaymentResult"/></returns>
+        public IPaymentResult PriorAuthorizeCapturePayment(IInvoice invoice, IPayment payment)
         {
-            throw new NotImplementedException();
+            var codes = payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.AuthorizationTransactionCode);
+            if(!payment.Authorized || string.IsNullOrEmpty(codes)) return new PaymentResult(Attempt<IPayment>.Fail(payment, new InvalidOperationException("Payment is not Authorized or TransactionCodes not present")), invoice, false);
+
+            var form = GetInitialRequestForm(invoice.CurrencyCode());
+            form.Add("x_type", "PRIOR_AUTH_CAPTURE");
+            form.Add("x_trans_id", codes.Split(',').First());
+
+            var reply = GetAuthorizeNetReply(form);
+
+            // API Error
+            if (string.IsNullOrEmpty(reply)) return new PaymentResult(Attempt<IPayment>.Fail(payment, new Exception("Authorize.NET unknown error")), invoice, false);
+
+            var fields = reply.Split('|');
+
+            switch (fields[0])
+            {
+                case "3":
+                    return new PaymentResult(Attempt<IPayment>.Fail(payment, new Exception(string.Format("Error {0}", reply))), invoice, false);
+                case "2":
+                    payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.CaptureDeclinedResult, string.Format("Declined ({0} : {1})", fields[2], fields[3]));
+                    return new PaymentResult(Attempt<IPayment>.Fail(payment, new Exception(string.Format("Declined ({0} : {1})", fields[2], fields[3]))), invoice, false);
+                case "1":
+                    payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.CaputureTransactionCode, string.Format("{0},{1}", fields[6], fields[4]));
+                    payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.CaptureTransactionResult, string.Format("Approved ({0}: {1})", fields[2], fields[3]));
+                    payment.Collected = true;
+                    return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, true);
+            }
+
+            return new PaymentResult(Attempt<IPayment>.Fail(payment, new Exception(string.Format("Error {0}", reply))), invoice, false);
         }
 
-
-        public IPaymentResult RefundPayment(IPayment payment, decimal amount, ProcessorArgumentCollection args)
+        /// <summary>
+        /// Refunds a payment amount
+        /// </summary>
+        /// <param name="invoice">The <see cref="IInvoice"/> associated with the payment</param>
+        /// <param name="payment">The <see cref="IPayment"/> to be refunded</param>
+        /// <param name="amount">The amount of the <see cref="IPayment"/> to be refunded</param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public IPaymentResult RefundPayment(IInvoice invoice, IPayment payment, decimal amount)
         {
-            throw new NotImplementedException();
+
+            // assert last 4 digits of cc is present
+            var cc4 = payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.CcLastFour);
+            if(string.IsNullOrEmpty(cc4)) return new PaymentResult(Attempt<IPayment>.Fail(payment, new InvalidOperationException("The last four digits of the credit card are not available")), invoice, false);
+
+            // assert the transaction code is present
+            var codes = payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.AuthorizationTransactionCode);
+            if (!payment.Authorized || string.IsNullOrEmpty(codes)) return new PaymentResult(Attempt<IPayment>.Fail(payment, new InvalidOperationException("Payment is not Authorized or TransactionCodes not present")), invoice, false);
+
+            var form = GetInitialRequestForm(invoice.CurrencyCode());
+            form.Add("x_type", "CREDIT");
+            form.Add("x_trans_id", codes.Split(',').First());
+
+            form.Add("x_card_num", cc4.DecryptWithMachineKey());
+            form.Add("x_amount", amount.ToString("0.00", CultureInfo.InvariantCulture)));
+            
+            //x_invoice_num is 20 chars maximum. hence we also pass x_description
+            form.Add("x_invoice_num", invoice.PrefixedInvoiceNumber().Substring(0, 20));
+            form.Add("x_description", string.Format("Full order #{0}", invoice.PrefixedInvoiceNumber()));
+            form.Add("x_type", "CREDIT");
+            
+
+            var reply = GetAuthorizeNetReply(form);
+
+            // API Error
+            if (string.IsNullOrEmpty(reply)) return new PaymentResult(Attempt<IPayment>.Fail(payment, new Exception("Authorize.NET unknown error")), invoice, false);
+
+            var fields = reply.Split('|');
+
+            switch (fields[0])
+            {
+                case "3":
+                    return new PaymentResult(Attempt<IPayment>.Fail(payment, new Exception(string.Format("Error {0}", reply))), invoice, false);
+                case "2":
+                    payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.RefundDeclinedResult, string.Format("Declined ({0} : {1})", fields[2], fields[3]));
+                    return new PaymentResult(Attempt<IPayment>.Fail(payment, new Exception(string.Format("Declined ({0} : {1})", fields[2], fields[3]))), invoice, false);
+                case "1":
+                    return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, true);
+            }
+
+            return new PaymentResult(Attempt<IPayment>.Fail(payment, new Exception(string.Format("Error {0}", reply))), invoice, false);
         }
 
-        public IPaymentResult VoidPayment(IPayment payment)
+        public IPaymentResult VoidPayment(IInvoice invoice, IPayment payment)
         {
-            throw new NotImplementedException();
+            // assert last 4 digits of cc is present
+            var cc4 = payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.CcLastFour);
+            if(string.IsNullOrEmpty(cc4)) return new PaymentResult(Attempt<IPayment>.Fail(payment, new InvalidOperationException("The last four digits of the credit card are not available")), invoice, false);
+
+            // assert the transaction code is present
+            var codes = payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.AuthorizationTransactionCode);
+            if (!payment.Authorized || string.IsNullOrEmpty(codes)) return new PaymentResult(Attempt<IPayment>.Fail(payment, new InvalidOperationException("Payment is not Authorized or TransactionCodes not present")), invoice, false);
+
+            var form = GetInitialRequestForm(invoice.CurrencyCode());
+            form.Add("x_type", "CREDIT");
+            form.Add("x_trans_id", codes.Split(',').First());
+
+            form.Add("x_card_num", cc4.DecryptWithMachineKey());
+            
+            form.Add("x_type", "VOID");
+            
+
+            var reply = GetAuthorizeNetReply(form);
+
+            // API Error
+            if (string.IsNullOrEmpty(reply)) return new PaymentResult(Attempt<IPayment>.Fail(payment, new Exception("Authorize.NET unknown error")), invoice, false);
+
+            var fields = reply.Split('|');
+
+            switch (fields[0])
+            {
+                case "3":
+                    return new PaymentResult(Attempt<IPayment>.Fail(payment, new Exception(string.Format("Error {0}", reply))), invoice, false);
+                case "2":
+                    payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.VoidDeclinedResult, string.Format("Declined ({0} : {1})", fields[2], fields[3]));
+                    return new PaymentResult(Attempt<IPayment>.Fail(payment, new Exception(string.Format("Declined ({0} : {1})", fields[2], fields[3]))), invoice, false);
+                case "1":
+                    return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, true);
+            }
+
+            return new PaymentResult(Attempt<IPayment>.Fail(payment, new Exception(string.Format("Error {0}", reply))), invoice, false);
         }
 
         private string GetAuthorizeNetReply(NameValueCollection form)
         {
-            
-            var postData = form.AllKeys.Aggregate("", (current, key) => current + (key + "=" + HttpUtility.UrlEncode(form[key]) + "&")).TrimEnd('&');
-
-            var request = (HttpWebRequest) WebRequest.Create(GetAuthorizeNetUrl());
-            request.Method = "POST";
-            request.ContentLength = postData.Length;
-            request.ContentType = "application/x-www-form-urlencoded";
-
-            using (var writer = new StreamWriter(request.GetRequestStream()))
+            try
             {
-                writer.Write(postData);   
+                var postData = form.AllKeys.Aggregate("", (current, key) => current + (key + "=" + HttpUtility.UrlEncode(form[key]) + "&")).TrimEnd('&');
+
+                var request = (HttpWebRequest)WebRequest.Create(GetAuthorizeNetUrl());
+                request.Method = "POST";
+                request.ContentLength = postData.Length;
+                request.ContentType = "application/x-www-form-urlencoded";
+
+                using (var writer = new StreamWriter(request.GetRequestStream()))
+                {
+                    writer.Write(postData);
+                }
+
+                var response = (HttpWebResponse)request.GetResponse();
+
+                if (response == null) throw new NullReferenceException("Gateway response was null");
+                using (var reader = new StreamReader(response.GetResponseStream()))
+                {
+                    return reader.ReadToEnd();
+                }
             }
-
-            var response = (HttpWebResponse) request.GetResponse();
-           
-            if(response == null) throw  new NullReferenceException("Gateway response was null");
-            using (var reader = new StreamReader(response.GetResponseStream()))
+            catch (Exception ex)
             {
-                return reader.ReadToEnd();
+                return ex.Message;
             }
         }
 
