@@ -139,6 +139,8 @@
         }
     };
 
+
+
     models.GatewayProvider = function (gatewayProviderFromServer) {
 
         var self = this;

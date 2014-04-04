@@ -20,4 +20,8 @@
 
     };
 
+    //models.PaymentGatewayProvider = function() {
+
+    //};
+
 }(window.merchello.Models = window.merchello.Models || {}));

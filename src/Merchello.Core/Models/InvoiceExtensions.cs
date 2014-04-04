@@ -34,6 +34,19 @@ namespace Merchello.Core.Models
                 : string.Format("{0}-{1}", invoice.InvoiceNumberPrefix, invoice.InvoiceNumber);
         }
 
+        /// <summary>
+        /// Returns the currency code associated with the invoice
+        /// </summary>
+        /// <param name="invoice"></param>
+        /// <returns></returns>
+        public static string CurrencyCode(this IInvoice invoice)
+        {
+            var allCurrencyCodes =
+                invoice.Items.Select(x => x.ExtendedData.GetValue(Constants.ExtendedDataKeys.CurrencyCode)).Distinct().ToArray();
+
+            return allCurrencyCodes.Any() ? allCurrencyCodes.First() : string.Empty;
+        }
+
         #region Address
 
         /// <summary>

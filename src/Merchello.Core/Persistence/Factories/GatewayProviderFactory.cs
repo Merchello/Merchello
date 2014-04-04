@@ -1,11 +1,9 @@
 ﻿using System;
-using Lucene.Net.Search.Function;
 using Merchello.Core.Gateways;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Models.TypeFields;
 using Umbraco.Core;
-using umbraco.editorControls.SettingControls.Pickers;
 
 namespace Merchello.Core.Persistence.Factories
 {

@@ -22,7 +22,7 @@ namespace Merchello.Core.Gateways.Payment.Cash
         protected override IPaymentResult PerformAuthorizePayment(IInvoice invoice, ProcessorArgumentCollection args)
         {
             var payment = GatewayProviderService.CreatePayment(PaymentMethodType.Cash, 0, PaymentMethod.Key);
-            
+            payment.CustomerKey = invoice.CustomerKey;
             payment.PaymentMethodName = PaymentMethod.Name;
             payment.ReferenceNumber = PaymentMethod.PaymentCode + "-" + invoice.PrefixedInvoiceNumber();
             payment.Collected = false;
@@ -44,7 +44,7 @@ namespace Merchello.Core.Gateways.Payment.Cash
         protected override IPaymentResult PerformAuthorizeCapturePayment(IInvoice invoice, decimal amount, ProcessorArgumentCollection args)
         {
             var payment = GatewayProviderService.CreatePayment(PaymentMethodType.Cash, amount, PaymentMethod.Key);
-
+            payment.CustomerKey = invoice.CustomerKey;
             payment.PaymentMethodName = PaymentMethod.Name + " " + PaymentMethod.PaymentCode;
             payment.ReferenceNumber = PaymentMethod.PaymentCode + "-" + invoice.PrefixedInvoiceNumber();
             payment.Collected = true;

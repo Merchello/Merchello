@@ -74,7 +74,7 @@ namespace Merchello.Core.Models
         public Guid? CustomerKey
         {
             get { return _customerKey; }
-            internal set
+            set
             {
                 SetPropertyValueAndDetectChanges(o =>
                 {

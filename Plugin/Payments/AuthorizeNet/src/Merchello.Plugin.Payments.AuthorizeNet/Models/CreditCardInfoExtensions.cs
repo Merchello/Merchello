@@ -17,5 +17,25 @@ namespace Merchello.Plugin.Payments.AuthorizeNet.Models
                 { "customerIp", creditCard.CustomerIp }
             };
         }
+
+        public static CreditCardFormData AsCreditCardFormData(this ProcessorArgumentCollection args)
+        {
+            return new CreditCardFormData()
+            {
+                CreditCardType = args.ArgValue("creditCardType"),
+                CardholderName = args.ArgValue("cardholderName"),
+                CardNumber = args.ArgValue("cardNumber"),
+                ExpireMonth = args.ArgValue("expireMonth"),
+                ExpireYear = args.ArgValue("expireYear"),
+                CardCode = args.ArgValue("cardCode"),
+                CustomerIp = args.ArgValue("customerIp")
+            };
+        }
+
+        private static string ArgValue(this ProcessorArgumentCollection args, string key)
+        {
+            return args.ContainsKey(key) ? args[key] : string.Empty;
+        }
+
     }
 }
