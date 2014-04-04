@@ -12,12 +12,12 @@ namespace Merchello.Plugin.Payments.AuthorizeNet.Provider
     /// </summary>
     public class AuthorizeNetPaymentGatewayMethod : PaymentGatewayMethodBase, IAuthorizeNetPaymentGatewayMethod
     {
-        private readonly AuthorizeNetProcessorSettings _processorSettings;
+        private readonly AuthorizeNetPaymentProcessor _processor;
 
         public AuthorizeNetPaymentGatewayMethod(IGatewayProviderService gatewayProviderService, IPaymentMethod paymentMethod, ExtendedDataCollection providerExtendedData) 
             : base(gatewayProviderService, paymentMethod)
         {
-            _processorSettings = providerExtendedData.GetProcessorSettings();
+            _processor = new AuthorizeNetPaymentProcessor(providerExtendedData.GetProcessorSettings());
         }
 
         /// <summary>
@@ -55,41 +55,128 @@ namespace Merchello.Plugin.Payments.AuthorizeNet.Provider
             payment.PaymentMethodName = string.Format("{0} Authorize.Net Credit Card", cc.CreditCardType);
             payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.CcLastFour, cc.CardNumber.Substring(cc.CardNumber.Length - 4, 4).EncryptWithMachineKey());
 
-            var processor = new AuthorizeNetPaymentProcessor(_processorSettings);
             
-            var result = processor.ProcessPayment(invoice, payment, transactionMode, amount, cc);
+            var result = _processor.ProcessPayment(invoice, payment, transactionMode, amount, cc);
 
             GatewayProviderService.Save(payment);
 
             if (!result.Payment.Success)
             {
-                GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Denied, result.Payment.Exception.Message, invoice.Total);
+                GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Denied, result.Payment.Exception.Message, 0);
             }
             else
             {
                 GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit,
-                    payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.AuthorizationTransactionResult),
-                    invoice.Total);
+                    payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.AuthorizationTransactionResult) +
+                    (transactionMode == TransactionMode.AuthorizeAndCapture ? string.Empty : " to show record of Authorization"),
+                    transactionMode == TransactionMode.AuthorizeAndCapture ? invoice.Total : 0);
             }
 
             return result;
         }
 
+        /// <summary>
+        /// Does the actual work capturing a payment
+        /// </summary>
+        /// <param name="invoice">The <see cref="IInvoice"/></param>
+        /// <param name="payment">The previously Authorize payment to be captured</param>
+        /// <param name="amount">The amount to capture</param>
+        /// <param name="args">Any arguments required to process the payment.</param>
+        /// <returns>The <see cref="IPaymentResult"/></returns>
         protected override IPaymentResult PerformCapturePayment(IInvoice invoice, IPayment payment, decimal amount, ProcessorArgumentCollection args)
         {
-            var processor = new AuthorizeNetPaymentProcessor(_processorSettings);
+            var result = _processor.PriorAuthorizeCapturePayment(invoice, payment);
 
-            throw new System.NotImplementedException();
+            GatewayProviderService.Save(payment);
+
+            if (!result.Payment.Success)
+            {
+                GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Denied,
+                    result.Payment.Exception.Message, 0);
+            }
+            else
+            {
+                GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit,
+                    payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.CaptureTransactionResult), amount);
+            }
+
+            return result;
         }
 
-        protected override IPaymentResult PerformRefundPayment(IInvoice invoice, IPayment payment, ProcessorArgumentCollection args)
+        /// <summary>
+        /// Does the actual work of refunding a payment
+        /// </summary>
+        /// <param name="invoice">The <see cref="IInvoice"/></param>
+        /// <param name="payment">The previously Authorize payment to be captured</param>
+        /// <param name="amount">The amount to be refunded</param>
+        /// <param name="args">Any arguments required to process the payment.</param>
+        /// <returns>The <see cref="IPaymentResult"/></returns>
+        protected override IPaymentResult PerformRefundPayment(IInvoice invoice, IPayment payment, decimal amount, ProcessorArgumentCollection args)
         {
-            throw new System.NotImplementedException();
+            var result = _processor.RefundPayment(invoice, payment, amount);
+
+            if (!result.Payment.Success)
+            {
+                GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Denied,
+                   result.Payment.Exception.Message, 0);
+                return result;
+            }
+
+            // use the overloaded AppliedPayments method here for testing if we don't have
+            // a MerchelloContext
+            foreach (var applied in payment.AppliedPayments(GatewayProviderService))
+            {
+                applied.TransactionType = AppliedPaymentType.Refund;
+                applied.Amount = 0;
+                applied.Description += " - Refunded";
+                GatewayProviderService.Save(applied);
+            }
+
+            payment.Amount = payment.Amount - amount;
+
+            if (payment.Amount != 0)
+            {
+                GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit,
+                    "To show partial payment remaining after refund", payment.Amount);
+            }
+
+            GatewayProviderService.Save(payment);
+
+            return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, false);
         }
 
+        /// <summary>
+        /// Does the actual work of voiding a payment
+        /// </summary>
+        /// <param name="invoice">The invoice to which the payment is associated</param>
+        /// <param name="payment">The payment to be voided</param>
+        /// <param name="args">Additional arguements required by the payment processor</param>
+        /// <returns>A <see cref="IPaymentResult"/></returns>
         protected override IPaymentResult PerformVoidPayment(IInvoice invoice, IPayment payment, ProcessorArgumentCollection args)
         {
-            throw new System.NotImplementedException();
+            var result = _processor.VoidPayment(invoice, payment);
+
+            if (!result.Payment.Success)
+            {
+                GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Denied,
+                   result.Payment.Exception.Message, 0);
+                return result;
+            }
+
+            // use the overloaded AppliedPayments method here for testing if we don't have
+            // a MerchelloContext
+            foreach (var applied in payment.AppliedPayments(GatewayProviderService))
+            {
+                applied.TransactionType = AppliedPaymentType.Refund;
+                applied.Amount = 0;
+                applied.Description += " - **Void**";
+                GatewayProviderService.Save(applied);
+            }
+
+            payment.Voided = true;
+            GatewayProviderService.Save(payment);
+
+            return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, false);
         }
     }
 }

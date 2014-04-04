@@ -7,6 +7,7 @@ using Merchello.Core.Services;
 using Merchello.Plugin.Payments.AuthorizeNet.Models;
 using Merchello.Tests.AuthorizeNet.Integration.TestHelpers;
 using NUnit.Framework;
+using Constants  = Merchello.Plugin.Payments.AuthorizeNet.Constants;
 
 namespace Merchello.Tests.AuthorizeNet.Integration.Authorization
 {
@@ -97,9 +98,9 @@ namespace Merchello.Tests.AuthorizeNet.Integration.Authorization
             Assert.NotNull(result);
             Assert.IsTrue(result.Payment.Success);
             var payment = result.Payment.Result;
-            Console.WriteLine(payment.ExtendedData.GetValue(Plugin.Payments.AuthorizeNet.Constants.ExtendedDataKeys.AuthorizationTransactionCode));
-            Console.WriteLine(payment.ExtendedData.GetValue(Plugin.Payments.AuthorizeNet.Constants.ExtendedDataKeys.AuthorizationTransactionResult));
-            Console.WriteLine(payment.ExtendedData.GetValue(Plugin.Payments.AuthorizeNet.Constants.ExtendedDataKeys.AvsResult));
+            Console.WriteLine(payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.AuthorizationTransactionCode));
+            Console.WriteLine(payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.AuthorizationTransactionResult));
+            Console.WriteLine(payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.AvsResult));
         }
 
         /// <summary>
@@ -130,13 +131,67 @@ namespace Merchello.Tests.AuthorizeNet.Integration.Authorization
             Assert.NotNull(result);
             Assert.IsTrue(result.Payment.Success);
             var payment = result.Payment.Result;
-            Console.WriteLine(payment.ExtendedData.GetValue(Plugin.Payments.AuthorizeNet.Constants.ExtendedDataKeys.AuthorizationTransactionCode));
-            Console.WriteLine(payment.ExtendedData.GetValue(Plugin.Payments.AuthorizeNet.Constants.ExtendedDataKeys.AuthorizationTransactionResult));
-            Console.WriteLine(payment.ExtendedData.GetValue(Plugin.Payments.AuthorizeNet.Constants.ExtendedDataKeys.AvsResult));
+            Console.WriteLine(payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.AuthorizationTransactionCode));
+            Console.WriteLine(payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.AuthorizationTransactionResult));
+            Console.WriteLine(payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.AvsResult));
 
             Assert.IsFalse(_invoice.IsDirty());
-            Assert.AreEqual(Constants.DefaultKeys.InvoiceStatus.Paid, _invoice.InvoiceStatusKey);
+            Assert.AreEqual(Core.Constants.DefaultKeys.InvoiceStatus.Paid, _invoice.InvoiceStatusKey);
 
         }
+
+        ///// <summary>
+        ///// Test verifies the prior auth then capture
+        ///// </summary>
+        ///// <remarks>
+        ///// 
+        ///// This test will always fail as the transaction id is 0 in test mode.  In order to test
+        ///// the capture you need to take the Authorize.Net account out of test mode and add the paramter x_test_request in the processor
+        ///// http://community.developer.authorize.net/t5/Integration-and-Testing/Testing-Prior-Authorization-Capture-Transaction/td-p/17
+        ///// 
+        /////  This goes for voids and refunds as well 
+        ///// </remarks>
+        //[Test]
+        //public void Can_Authorize_And_Then_Later_Capture_A_Payment()
+        //{
+
+        //    //// Arrange
+        //    var creditCardMethod = Provider.GetPaymentGatewayMethodByPaymentCode("CreditCard");
+        //    Assert.NotNull(creditCardMethod);
+
+        //    var ccEntry = new CreditCardFormData()
+        //    {
+        //        CreditCardType = "VISA",
+        //        CardholderName = "Rusty Swayne",
+        //        CardNumber = "4111111111111111",
+        //        CardCode = "111",
+        //        ExpireMonth = "09",
+        //        ExpireYear = "15",
+        //        CustomerIp = "10.0.0.15"
+        //    };
+
+        //    var authorizes = creditCardMethod.AuthorizePayment(_invoice, ccEntry.AsProcessorArgumentCollection());
+        //    Assert.IsTrue(authorizes.Payment.Success, "authorize call failed");
+        //    Assert.AreNotEqual(Core.Constants.DefaultKeys.InvoiceStatus.Paid, _invoice.InvoiceStatusKey, "invoice is marked as paid and is only authorized");
+
+        //    //// Act
+        //    var authorizedPayment = authorizes.Payment.Result;
+
+        //    var result = creditCardMethod.CapturePayment(_invoice, authorizedPayment, _invoice.Total, new ProcessorArgumentCollection());
+
+
+        //    //// Assert
+        //    Assert.NotNull(result);
+        //    Assert.IsTrue(result.Payment.Success);
+        //    var payment = result.Payment.Result;
+        //    Console.WriteLine(payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.AuthorizationTransactionCode));
+        //    Console.WriteLine(payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.AuthorizationTransactionResult));
+        //    Console.WriteLine(payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.AvsResult));
+        //    Console.WriteLine(payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.CaputureTransactionCode));
+        //    Console.WriteLine(payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.CaptureTransactionResult));
+
+        //    Assert.IsFalse(_invoice.IsDirty());
+        //    Assert.AreEqual(Core.Constants.DefaultKeys.InvoiceStatus.Paid, _invoice.InvoiceStatusKey);
+        //}
     }
 }

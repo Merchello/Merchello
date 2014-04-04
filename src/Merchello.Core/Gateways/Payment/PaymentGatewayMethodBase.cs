@@ -57,9 +57,10 @@ namespace Merchello.Core.Gateways.Payment
         /// </summary>
         /// <param name="invoice">The invoice to be the payment was applied</param>
         /// <param name="payment">The payment to be refunded</param>
+        /// <param name="amount">The amount of the payment to be refunded</param>
         /// <param name="args">Additional arguements required by the payment processor</param>
         /// <returns>A <see cref="IPaymentResult"/></returns>
-        protected abstract IPaymentResult PerformRefundPayment(IInvoice invoice, IPayment payment, ProcessorArgumentCollection args);
+        protected abstract IPaymentResult PerformRefundPayment(IInvoice invoice, IPayment payment, decimal amount, ProcessorArgumentCollection args);
 
         /// <summary>
         /// Does the actual work of voiding a payment
@@ -171,14 +172,15 @@ namespace Merchello.Core.Gateways.Payment
         /// </summary>
         /// <param name="invoice">The invoice to be the payment was applied</param>
         /// <param name="payment">The payment to be refunded</param>
+        /// <param name="amount">The amount to be refunded</param>
         /// <param name="args">Additional arguements required by the payment processor</param>
         /// <returns>A <see cref="IPaymentResult"/></returns>
-        public virtual IPaymentResult RefundPayment(IInvoice invoice, IPayment payment, ProcessorArgumentCollection args)
+        public virtual IPaymentResult RefundPayment(IInvoice invoice, IPayment payment, decimal amount, ProcessorArgumentCollection args)
         {
             Mandate.ParameterNotNull(invoice, "invoice");
             if(!invoice.HasIdentity) return new PaymentResult(Attempt<IPayment>.Fail(new InvalidOperationException("Cannot refund a payment on an invoice that cannot have payments")), invoice, false);
 
-            var response = PerformRefundPayment(invoice, payment, args);
+            var response = PerformRefundPayment(invoice, payment, amount, args);
 
             if (!response.Payment.Success) return response;
 

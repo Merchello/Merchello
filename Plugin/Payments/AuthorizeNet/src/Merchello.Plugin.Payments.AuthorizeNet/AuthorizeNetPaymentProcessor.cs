@@ -68,7 +68,7 @@ namespace Merchello.Plugin.Payments.AuthorizeNet
             form.Add("x_amount", amount.ToString("0.00", CultureInfo.InstalledUICulture));
 
             // maximum length 20 chars
-            form.Add("x_invoice_num", invoice.PrefixedInvoiceNumber().Substring(0, 20));
+            form.Add("x_invoice_num", invoice.PrefixedInvoiceNumber());
             form.Add("x_description", string.Format("Full invoice #{0}", invoice.PrefixedInvoiceNumber()));
 
             var reply = GetAuthorizeNetReply(form);
@@ -102,7 +102,6 @@ namespace Merchello.Plugin.Payments.AuthorizeNet
         /// </summary>
         /// <param name="invoice">The invoice associated with the <see cref="IPayment"/></param>
         /// <param name="payment">The <see cref="IPayment"/> to capture</param>
-        /// <param name="args"></param>
         /// <returns>The <see cref="IPaymentResult"/></returns>
         public IPaymentResult PriorAuthorizeCapturePayment(IInvoice invoice, IPayment payment)
         {
@@ -143,7 +142,6 @@ namespace Merchello.Plugin.Payments.AuthorizeNet
         /// <param name="invoice">The <see cref="IInvoice"/> associated with the payment</param>
         /// <param name="payment">The <see cref="IPayment"/> to be refunded</param>
         /// <param name="amount">The amount of the <see cref="IPayment"/> to be refunded</param>
-        /// <param name="args"></param>
         /// <returns></returns>
         public IPaymentResult RefundPayment(IInvoice invoice, IPayment payment, decimal amount)
         {
@@ -161,7 +159,7 @@ namespace Merchello.Plugin.Payments.AuthorizeNet
             form.Add("x_trans_id", codes.Split(',').First());
 
             form.Add("x_card_num", cc4.DecryptWithMachineKey());
-            form.Add("x_amount", amount.ToString("0.00", CultureInfo.InvariantCulture)));
+            form.Add("x_amount", amount.ToString("0.00", CultureInfo.InvariantCulture));
             
             //x_invoice_num is 20 chars maximum. hence we also pass x_description
             form.Add("x_invoice_num", invoice.PrefixedInvoiceNumber().Substring(0, 20));
