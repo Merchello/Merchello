@@ -10,7 +10,25 @@
      */
     controllers.AuthorizeNetGatewayProviderController = function ($scope) {
 
-        
+        /**
+        * @ngdoc method
+        * @name init
+        * @function
+        * 
+        * @description
+        * Method called on intial page load.  Loads in data from server and sets up scope.
+        */
+        $scope.init = function () {
+            
+            //$scope.dialogData.provider.extendedData
+
+            // on initial load extendedData will be empty but we need to populate with key values
+            // 
+            alert($scope.dialogData.provider.extendedData);
+        };
+        $scope.init();
+
+
     };
 
     angular.module("umbraco").controller("Merchello.Dashboards.Settings.GatewayProviders.Dialogs.AuthorizeNetGatewayProviderController", ['$scope', merchello.Controllers.AuthorizeNetGatewayProviderController]);

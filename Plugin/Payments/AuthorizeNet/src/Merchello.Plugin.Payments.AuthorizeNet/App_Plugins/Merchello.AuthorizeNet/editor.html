@@ -1,9 +1,47 @@
-﻿<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Dashboards.Settings.Shipping.Dialogs.ShippingMethodController">
+﻿<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Dashboards.Settings.GatewayProviders.Dialogs.AuthorizeNetGatewayProviderController">
 	
-	<div class="umb-modalcolumn-header">
-		<h4><strong>{{dialogData.gatewayProvider.name}}</strong></h4>
-	</div>
-	<div class="umb-panel-body with-header with-footer">
-	</div>
+    <div class="umb-modalcolumn-header">
+        <h4><strong>Authorize.NET Provider Configuration</strong></h4>
+    </div>
+
+    <div class="umb-panel-body with-header with-footer">
+        
+        <div class="well">
+            <div class="control-group row-fluid">
+                <p>API Login Id<br /></p>
+                <div class="input-prepend col-xs-12 span12">
+                    <input class="col-xs-8 span8" type="text" data-ng-model="extendedData">
+                </div>
+            </div>
+            <div class="control-group row-fluid">
+                <p>Transaction Key<br /></p>
+                <div class="input-prepend col-xs-12 span12">
+                    <input class="col-xs-8 span8" type="text" data-ng-model="extendedData">
+                </div>
+            </div>
+        </div>
+        
+
+    </div>
 	
+</div>
+
+
+<div class="umb-panel-footer" >
+		<div class="umb-el-wrap umb-panel-buttons">
+	        <div class="btn-toolbar umb-btn-toolbar pull-right">
+
+	        	<a href data-ng-click="close()" class="btn btn-link">
+	        		<localize key="general_cancel">Cancel</localize>
+				</a>
+
+				<button
+					class="btn btn-primary"
+					data-ng-click="submit(dialogData)">
+					<localize key="buttons_save">Save</localize>
+				</button>
+
+	        </div>
+		</div>
+	</div>
 </div>
