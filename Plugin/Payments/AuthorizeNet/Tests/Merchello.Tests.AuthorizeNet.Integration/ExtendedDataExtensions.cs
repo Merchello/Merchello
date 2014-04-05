@@ -29,7 +29,7 @@ namespace Merchello.Tests.AuthorizeNet.Integration
         /// <returns>The deserialized <see cref="AuthorizeNetProcessorSettings"/></returns>
         public static AuthorizeNetProcessorSettings GetProcessorSettings(this ExtendedDataCollection extendedData)
         {
-            if (!extendedData.ContainsKey(Constants.ExtendedDataKeys.ProcessorSettings)) return null;
+            if (!extendedData.ContainsKey(Constants.ExtendedDataKeys.ProcessorSettings)) return new AuthorizeNetProcessorSettings();
 
             var attempt = SerializationHelper.DeserializeXml<AuthorizeNetProcessorSettings>(extendedData.GetValue(Constants.ExtendedDataKeys.ProcessorSettings));
 

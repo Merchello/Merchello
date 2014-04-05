@@ -9,7 +9,7 @@
                         <div class="btn-group">
                         <a data-ng-click="activate({provider: gatewayProvider})" data-ng-hide="gatewayProvider.activated" class="btn btn-default btn-xs btn-mini">activate</a>
                         <a data-ng-click="deactivate({provider: gatewayProvider})" data-ng-show="gatewayProvider.activated" class="btn btn-warning btn-xs btn-mini">deactivate</a>
-                        <a data-ng-click="configure({provider: gatewayProvider})" data-ng-show="gatewayProvider.dialogEditorView.editorView" class="btn btn-default btn-xs btn-mini">edit</a>
+                        <a data-ng-click="configure({provider: gatewayProvider})" data-ng-show="gatewayProvider.displayEditor()" class="btn btn-default btn-xs btn-mini">edit</a>
                         </div>
                     </td>
                     
