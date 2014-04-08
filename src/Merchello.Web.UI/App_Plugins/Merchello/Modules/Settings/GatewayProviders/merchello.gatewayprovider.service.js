@@ -66,6 +66,15 @@
                         gatewayProvider
                     ),
                     'Failed to deactivate gateway provider');
+            },
+
+            saveGatewayProvider: function(gatewayProvider) {
+                
+                return umbRequestHelper.resourcePromise(
+                    $http.post(umbRequestHelper.getApiUrl('merchelloGatewayProviderApiBaseUrl', 'PutGatewayProvider'),
+                        gatewayProvider
+                    ),
+                    'Failed to save gateway provider');
             }
 
         };

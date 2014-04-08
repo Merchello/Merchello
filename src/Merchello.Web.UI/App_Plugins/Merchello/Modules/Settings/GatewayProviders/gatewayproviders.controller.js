@@ -209,8 +209,20 @@
 
         $scope.providerConfigDialogConfirm = function(data) {
 
-            var promiseSave;
-            alert('Confirmed');
+           
+
+            notificationsService.info("Saving...", "");
+
+            var promise = merchelloGatewayProviderService.saveGatewayProvider(data.provider);
+
+            promise.then(function (provider) {
+                notificationsService.success("Gateway provider Saved", "H5YR!");
+            },
+            function (reason)
+                {
+                notificationsService.error("Gateway provider Save Failed", reason.message);
+                }
+            );
         };
 
     };

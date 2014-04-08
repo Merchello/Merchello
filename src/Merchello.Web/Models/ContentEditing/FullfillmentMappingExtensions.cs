@@ -109,10 +109,21 @@ namespace Merchello.Web.Models.ContentEditing
                     EditorView = editorAtt.EditorView.StartsWith("~/") ? IOHelper.ResolveUrl(editorAtt.EditorView) : editorAtt.EditorView
                 };
 
-
-
             return display;
         }
+
+        internal static IGatewayProvider ToGatewayProvider(this GatewayProviderDisplay gatewayProvider, IGatewayProvider destination)
+        {
+            if (gatewayProvider.Key != Guid.Empty) destination.Key = gatewayProvider.Key;
+            // type key and typeFullName should be handled by the resolver 
+            destination.Name = gatewayProvider.Name;
+            destination.Description = gatewayProvider.Description;
+            destination.EncryptExtendedData = gatewayProvider.EncryptExtendedData;
+            ((GatewayProvider)destination).ExtendedData = gatewayProvider.ExtendedData;
+
+            return destination;
+        }
+
 
         #endregion
 
