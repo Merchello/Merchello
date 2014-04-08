@@ -1,6 +1,5 @@
 ﻿{
 	javascript : [
-		'~/App_Plugins/Merchello.AuthorizeNet/merchello.authorizenet.models.js',
 		'~/App_Plugins/Merchello.AuthorizeNet/merchello.authorizenet.controller.js'
 	]
 }

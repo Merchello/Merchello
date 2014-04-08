@@ -24,14 +24,21 @@
 
             // on initial load extendedData will be empty but we need to populate with key values
             // 
-            alert($scope.dialogData.provider.extendedData);
+            var settingsString = $scope.dialogData.provider.extendedData.authorizeNetProcessorSettings;
+            $scope.authorizeNetSettings = JSON.parse(settingsString);
+
+            // Watch with object equality to convert back to a string for the submit() call on the Save button
+            $scope.$watch(function () {
+                return $scope.authorizeNetSettings;
+            }, function (newValue, oldValue) {
+                $scope.dialogData.provider.extendedData.authorizeNetProcessorSettings = angular.toJson(newValue);
+            },true);
         };
         $scope.init();
 
-
     };
 
-    angular.module("umbraco").controller("Merchello.Dashboards.Settings.GatewayProviders.Dialogs.AuthorizeNetGatewayProviderController", ['$scope', merchello.Controllers.AuthorizeNetGatewayProviderController]);
+    angular.module("umbraco").controller("Merchello.Plugin.GatewayProviders.Payments.Dialogs.AuthorizeNetGatewayProviderController", ['$scope', merchello.Controllers.AuthorizeNetGatewayProviderController]);
 
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));
