@@ -163,6 +163,34 @@ namespace Merchello.Web.Editors
             return response;
         }
 
+        /// <summary>
+        /// Saves a GatewayProvider
+        /// 
+        /// 
+        /// POST /umbraco/Merchello/GatewayProviderApi/PutGatewayProvider
+        /// </summary>
+        /// <param name="gatewayProviderDisplay">POSTed <see cref="GatewayProviderDisplay"/> object</param>
+        /// <returns></returns>
+        [AcceptVerbs("POST", "PUT")]
+        public HttpResponseMessage PutGatewayProvider(GatewayProviderDisplay gatewayProviderDisplay)
+        {
+            var response = Request.CreateResponse(HttpStatusCode.OK);
+
+            try
+            {
+                var provider = _gatewayProviderService.GetGatewayProviderByKey(gatewayProviderDisplay.Key);
+                _gatewayProviderService.Save(gatewayProviderDisplay.ToGatewayProvider(provider));
+
+            }
+            catch (Exception ex)
+            {
+                response = Request.CreateResponse(HttpStatusCode.NotFound, String.Format("{0}", ex.Message));
+            }
+
+            return response;
+
+        }
+
 
         #region Utility methods        
 

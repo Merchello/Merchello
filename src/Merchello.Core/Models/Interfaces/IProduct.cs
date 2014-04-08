@@ -10,7 +10,7 @@ namespace Merchello.Core.Models
         /// True/false indicating whether or not this product group defines product options.
         /// e.g. The product has no required options
         /// </summary>
-         bool DefinesOptions { get; }
+        bool DefinesOptions { get; }
 
         /// <summary>
         /// The product's collection of options (Attribute selection)

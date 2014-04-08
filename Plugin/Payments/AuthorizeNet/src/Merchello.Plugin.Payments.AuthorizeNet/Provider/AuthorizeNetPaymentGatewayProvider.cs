@@ -53,6 +53,7 @@ namespace Merchello.Plugin.Payments.AuthorizeNet.Provider
 
             var attempt = GatewayProviderService.CreatePaymentMethodWithKey(GatewayProvider.Key, name, description, available.ServiceCode);
 
+           
             if (attempt.Success)
             {
                 PaymentMethods = null;

@@ -11,7 +11,7 @@
     controllers.AuthorizeNetGatewayProviderController = function ($scope) {
 
         /**
-        * @ngdoc method
+        * @ngdoc method 
         * @name init
         * @function
         * 
