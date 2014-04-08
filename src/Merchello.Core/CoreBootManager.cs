@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Configuration;
-using System.Threading;
 using Merchello.Core.Cache;
 using Merchello.Core.Configuration;
-using Merchello.Core.Gateways.Payment;
-using Merchello.Core.Gateways.Shipping;
-using Merchello.Core.Gateways.Taxation;
 using Merchello.Core.Services;
 using Umbraco.Core;
 using Merchello.Core.Persistence.UnitOfWork;
