@@ -27890,85 +27890,85 @@
             Based on http://stackoverflow.com/questions/3681052/get-absolute-url-from-relative-path-refactored-method
             </remarks>
         </member>
-        <member name="T:umbraco.presentation.org.umbraco.update.CheckForUpgrade">
+        <member name="T:Umbraco.Web.org.umbraco.update.CheckForUpgrade">
             <remarks/>
         </member>
-        <member name="M:umbraco.presentation.org.umbraco.update.CheckForUpgrade.#ctor">
+        <member name="M:Umbraco.Web.org.umbraco.update.CheckForUpgrade.#ctor">
             <remarks/>
         </member>
-        <member name="M:umbraco.presentation.org.umbraco.update.CheckForUpgrade.Install(System.Guid,System.Boolean,System.Boolean,System.DateTime,System.Int32,System.Int32,System.Int32,System.String,System.String,System.String,System.String)">
+        <member name="M:Umbraco.Web.org.umbraco.update.CheckForUpgrade.Install(System.Guid,System.Boolean,System.Boolean,System.DateTime,System.Int32,System.Int32,System.Int32,System.String,System.String,System.String,System.String)">
             <remarks/>
         </member>
-        <member name="M:umbraco.presentation.org.umbraco.update.CheckForUpgrade.InstallAsync(System.Guid,System.Boolean,System.Boolean,System.DateTime,System.Int32,System.Int32,System.Int32,System.String,System.String,System.String,System.String)">
+        <member name="M:Umbraco.Web.org.umbraco.update.CheckForUpgrade.InstallAsync(System.Guid,System.Boolean,System.Boolean,System.DateTime,System.Int32,System.Int32,System.Int32,System.String,System.String,System.String,System.String)">
             <remarks/>
         </member>
-        <member name="M:umbraco.presentation.org.umbraco.update.CheckForUpgrade.InstallAsync(System.Guid,System.Boolean,System.Boolean,System.DateTime,System.Int32,System.Int32,System.Int32,System.String,System.String,System.String,System.String,System.Object)">
+        <member name="M:Umbraco.Web.org.umbraco.update.CheckForUpgrade.InstallAsync(System.Guid,System.Boolean,System.Boolean,System.DateTime,System.Int32,System.Int32,System.Int32,System.String,System.String,System.String,System.String,System.Object)">
             <remarks/>
         </member>
-        <member name="M:umbraco.presentation.org.umbraco.update.CheckForUpgrade.CheckUpgrade(System.Int32,System.Int32,System.Int32,System.String)">
+        <member name="M:Umbraco.Web.org.umbraco.update.CheckForUpgrade.CheckUpgrade(System.Int32,System.Int32,System.Int32,System.String)">
             <remarks/>
         </member>
-        <member name="M:umbraco.presentation.org.umbraco.update.CheckForUpgrade.CheckUpgradeAsync(System.Int32,System.Int32,System.Int32,System.String)">
+        <member name="M:Umbraco.Web.org.umbraco.update.CheckForUpgrade.CheckUpgradeAsync(System.Int32,System.Int32,System.Int32,System.String)">
             <remarks/>
         </member>
-        <member name="M:umbraco.presentation.org.umbraco.update.CheckForUpgrade.CheckUpgradeAsync(System.Int32,System.Int32,System.Int32,System.String,System.Object)">
+        <member name="M:Umbraco.Web.org.umbraco.update.CheckForUpgrade.CheckUpgradeAsync(System.Int32,System.Int32,System.Int32,System.String,System.Object)">
             <remarks/>
         </member>
-        <member name="M:umbraco.presentation.org.umbraco.update.CheckForUpgrade.CancelAsync(System.Object)">
+        <member name="M:Umbraco.Web.org.umbraco.update.CheckForUpgrade.CancelAsync(System.Object)">
             <remarks/>
         </member>
-        <member name="E:umbraco.presentation.org.umbraco.update.CheckForUpgrade.InstallCompleted">
+        <member name="E:Umbraco.Web.org.umbraco.update.CheckForUpgrade.InstallCompleted">
             <remarks/>
         </member>
-        <member name="E:umbraco.presentation.org.umbraco.update.CheckForUpgrade.CheckUpgradeCompleted">
+        <member name="E:Umbraco.Web.org.umbraco.update.CheckForUpgrade.CheckUpgradeCompleted">
             <remarks/>
         </member>
-        <member name="T:umbraco.presentation.org.umbraco.update.UpgradeResult">
+        <member name="T:Umbraco.Web.org.umbraco.update.UpgradeResult">
             <remarks/>
         </member>
-        <member name="P:umbraco.presentation.org.umbraco.update.UpgradeResult.Comment">
+        <member name="P:Umbraco.Web.org.umbraco.update.UpgradeResult.Comment">
             <remarks/>
         </member>
-        <member name="P:umbraco.presentation.org.umbraco.update.UpgradeResult.UpgradeType">
+        <member name="P:Umbraco.Web.org.umbraco.update.UpgradeResult.UpgradeType">
             <remarks/>
         </member>
-        <member name="P:umbraco.presentation.org.umbraco.update.UpgradeResult.UpgradeUrl">
+        <member name="P:Umbraco.Web.org.umbraco.update.UpgradeResult.UpgradeUrl">
             <remarks/>
         </member>
-        <member name="T:umbraco.presentation.org.umbraco.update.UpgradeType">
+        <member name="T:Umbraco.Web.org.umbraco.update.UpgradeType">
             <remarks/>
         </member>
-        <member name="F:umbraco.presentation.org.umbraco.update.UpgradeType.None">
+        <member name="F:Umbraco.Web.org.umbraco.update.UpgradeType.None">
             <remarks/>
         </member>
-        <member name="F:umbraco.presentation.org.umbraco.update.UpgradeType.Patch">
+        <member name="F:Umbraco.Web.org.umbraco.update.UpgradeType.Patch">
             <remarks/>
         </member>
-        <member name="F:umbraco.presentation.org.umbraco.update.UpgradeType.Minor">
+        <member name="F:Umbraco.Web.org.umbraco.update.UpgradeType.Minor">
             <remarks/>
         </member>
-        <member name="F:umbraco.presentation.org.umbraco.update.UpgradeType.Major">
+        <member name="F:Umbraco.Web.org.umbraco.update.UpgradeType.Major">
             <remarks/>
         </member>
-        <member name="F:umbraco.presentation.org.umbraco.update.UpgradeType.Critical">
+        <member name="F:Umbraco.Web.org.umbraco.update.UpgradeType.Critical">
             <remarks/>
         </member>
-        <member name="F:umbraco.presentation.org.umbraco.update.UpgradeType.Error">
+        <member name="F:Umbraco.Web.org.umbraco.update.UpgradeType.Error">
             <remarks/>
         </member>
-        <member name="F:umbraco.presentation.org.umbraco.update.UpgradeType.OutOfSync">
+        <member name="F:Umbraco.Web.org.umbraco.update.UpgradeType.OutOfSync">
             <remarks/>
         </member>
-        <member name="T:umbraco.presentation.org.umbraco.update.InstallCompletedEventHandler">
+        <member name="T:Umbraco.Web.org.umbraco.update.InstallCompletedEventHandler">
             <remarks/>
         </member>
-        <member name="T:umbraco.presentation.org.umbraco.update.CheckUpgradeCompletedEventHandler">
+        <member name="T:Umbraco.Web.org.umbraco.update.CheckUpgradeCompletedEventHandler">
             <remarks/>
         </member>
-        <member name="T:umbraco.presentation.org.umbraco.update.CheckUpgradeCompletedEventArgs">
+        <member name="T:Umbraco.Web.org.umbraco.update.CheckUpgradeCompletedEventArgs">
             <remarks/>
         </member>
-        <member name="P:umbraco.presentation.org.umbraco.update.CheckUpgradeCompletedEventArgs.Result">
+        <member name="P:Umbraco.Web.org.umbraco.update.CheckUpgradeCompletedEventArgs.Result">
             <remarks/>
         </member>
         <member name="T:Umbraco.Web.WebServices.BulkPublishController">
