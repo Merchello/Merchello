@@ -1,5 +1,4 @@
-﻿using Merchello.Core;
-using Merchello.Core.Models;
+﻿using Merchello.Core.Models;
 using Merchello.Plugin.Payments.AuthorizeNet.Models;
 using Newtonsoft.Json;
 

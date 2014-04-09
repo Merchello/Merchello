@@ -4,6 +4,7 @@ using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
+using Merchello.Plugin.Payments.AuthorizeNet;
 using Merchello.Plugin.Payments.AuthorizeNet.Models;
 using Merchello.Tests.AuthorizeNet.Integration.TestHelpers;
 using NUnit.Framework;

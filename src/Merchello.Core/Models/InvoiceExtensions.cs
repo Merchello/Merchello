@@ -152,7 +152,7 @@ namespace Merchello.Core.Models
         /// </summary>
         /// <param name="invoice">The <see cref="IInvoice"/></param>
         /// <returns>A collection of <see cref="IAppliedPayment"/></returns>
-        internal static IEnumerable<IAppliedPayment> AppliedPayments(this IInvoice invoice)
+        public static IEnumerable<IAppliedPayment> AppliedPayments(this IInvoice invoice)
         {
             return invoice.AppliedPayments(MerchelloContext.Current);
         }
@@ -175,7 +175,7 @@ namespace Merchello.Core.Models
         /// <param name="invoice">The <see cref="IInvoice"/></param>
         /// <param name="gatewayProviderService">The <see cref="IGatewayProviderService"/></param>
         /// <returns>A collection of <see cref="IAppliedPayment"/></returns>
-        internal static IEnumerable<IAppliedPayment> AppliedPayments(this IInvoice invoice,
+        public static IEnumerable<IAppliedPayment> AppliedPayments(this IInvoice invoice,
             IGatewayProviderService gatewayProviderService)
         {
             return gatewayProviderService.GetAppliedPaymentsByInvoiceKey(invoice.Key);
@@ -214,7 +214,7 @@ namespace Merchello.Core.Models
         /// <param name="paymentGatewayMethod">The <see cref="IPaymentGatewayMethod"/> to use in processing the payment</param>
         /// <param name="args">Additional arguements required by the payment processor</param>
         /// <returns>The <see cref="IPaymentResult"/></returns>
-        internal static IPaymentResult AuthorizePayment(this IInvoice invoice,
+        public static IPaymentResult AuthorizePayment(this IInvoice invoice,
             IPaymentGatewayMethod paymentGatewayMethod, ProcessorArgumentCollection args)
         {
             Mandate.ParameterNotNull(paymentGatewayMethod, "paymentGatewayMethod");
@@ -228,7 +228,7 @@ namespace Merchello.Core.Models
         /// <param name="invoice">The <see cref="IInvoice"/></param>
         /// <param name="paymentGatewayMethod">The <see cref="IPaymentGatewayMethod"/> to use in processing the payment</param>
         /// <returns>The <see cref="IPaymentResult"/></returns>
-        internal static IPaymentResult AuthorizePayment(this IInvoice invoice,
+        public static IPaymentResult AuthorizePayment(this IInvoice invoice,
             IPaymentGatewayMethod paymentGatewayMethod)
         {
             Mandate.ParameterCondition(invoice.HasIdentity,
@@ -246,7 +246,7 @@ namespace Merchello.Core.Models
         /// <param name="paymentMethodKey">The <see cref="IPaymentMethod"/> key</param>
         /// <param name="args">Additional arguements required by the payment processor</param>
         /// <returns>The <see cref="IPaymentResult"/></returns>
-        internal static IPaymentResult AuthorizePayment(this IInvoice invoice, Guid paymentMethodKey,
+        public static IPaymentResult AuthorizePayment(this IInvoice invoice, Guid paymentMethodKey,
             ProcessorArgumentCollection args)
         {
             return invoice.AuthorizePayment(MerchelloContext.Current, paymentMethodKey, args);
@@ -275,7 +275,7 @@ namespace Merchello.Core.Models
         /// <param name="invoice">The <see cref="IInvoice"/></param>
         /// <param name="paymentMethodKey">The <see cref="IPaymentMethod"/> key</param>
         /// <returns>The <see cref="IPaymentResult"/></returns>
-        internal static IPaymentResult AuthorizePayment(this IInvoice invoice, Guid paymentMethodKey)
+        public static IPaymentResult AuthorizePayment(this IInvoice invoice, Guid paymentMethodKey)
         {
             return invoice.AuthorizePayment(paymentMethodKey, new ProcessorArgumentCollection());
         }
@@ -287,7 +287,7 @@ namespace Merchello.Core.Models
         /// <param name="paymentGatewayMethod">The <see cref="IPaymentMethod"/></param>
         /// <param name="args">Additional arguements required by the payment processor</param>
         /// <returns>A <see cref="IPaymentResult"/></returns>
-        internal static IPaymentResult AuthorizeCapturePayment(this IInvoice invoice,
+        public static IPaymentResult AuthorizeCapturePayment(this IInvoice invoice,
             IPaymentGatewayMethod paymentGatewayMethod, ProcessorArgumentCollection args)
         {
             Mandate.ParameterNotNull(paymentGatewayMethod, "paymentGatewayMethod");
@@ -301,7 +301,7 @@ namespace Merchello.Core.Models
         /// <param name="invoice">The <see cref="IInvoice"/></param>
         /// <param name="paymentGatewayMethod">The <see cref="IPaymentMethod"/></param>
         /// <returns>A <see cref="IPaymentResult"/></returns>
-        internal static IPaymentResult AuthorizeCapturePayment(this IInvoice invoice,
+        public static IPaymentResult AuthorizeCapturePayment(this IInvoice invoice,
             IPaymentGatewayMethod paymentGatewayMethod)
         {
             return invoice.AuthorizeCapturePayment(paymentGatewayMethod, new ProcessorArgumentCollection());
@@ -314,7 +314,7 @@ namespace Merchello.Core.Models
         /// <param name="paymentMethodKey">The <see cref="IPaymentMethod"/> key</param>
         /// <param name="args">Additional arguements required by the payment processor</param>
         /// <returns>A <see cref="IPaymentResult"/></returns>
-        internal static IPaymentResult AuthorizeCapturePayment(this IInvoice invoice, Guid paymentMethodKey,
+        public static IPaymentResult AuthorizeCapturePayment(this IInvoice invoice, Guid paymentMethodKey,
             ProcessorArgumentCollection args)
         {
             return invoice.AuthorizeCapturePayment(MerchelloContext.Current, paymentMethodKey, args);
@@ -341,7 +341,7 @@ namespace Merchello.Core.Models
         /// <param name="invoice">The <see cref="IInvoice"/></param>
         /// <param name="paymentMethodKey">The <see cref="IPaymentMethod"/> key</param>
         /// <returns>A <see cref="IPaymentResult"/></returns>
-        internal static IPaymentResult AuthorizeCapturePayment(this IInvoice invoice, Guid paymentMethodKey)
+        public static IPaymentResult AuthorizeCapturePayment(this IInvoice invoice, Guid paymentMethodKey)
         {
             return invoice.AuthorizeCapturePayment(paymentMethodKey, new ProcessorArgumentCollection());
         }
@@ -355,7 +355,7 @@ namespace Merchello.Core.Models
         /// <param name="paymentGatewayMethod"></param>
         /// <param name="args">Additional arguements required by the payment processor</param>
         /// <returns>A <see cref="IPaymentResult"/></returns>
-        internal static IPaymentResult CapturePayment(this IInvoice invoice, IPayment payment,
+        public static IPaymentResult CapturePayment(this IInvoice invoice, IPayment payment,
             IPaymentGatewayMethod paymentGatewayMethod, decimal amount, ProcessorArgumentCollection args)
         {
             return paymentGatewayMethod.CapturePayment(invoice, payment, amount, args);
@@ -369,7 +369,7 @@ namespace Merchello.Core.Models
         /// <param name="amount">The amount to the payment to be captured</param>
         /// <param name="paymentGatewayMethod"></param>
         /// <returns>A <see cref="IPaymentResult"/></returns>
-        internal static IPaymentResult CapturePayment(this IInvoice invoice, IPayment payment,
+        public static IPaymentResult CapturePayment(this IInvoice invoice, IPayment payment,
             IPaymentGatewayMethod paymentGatewayMethod, decimal amount)
         {
             return invoice.CapturePayment(payment, paymentGatewayMethod, amount, new ProcessorArgumentCollection());
@@ -384,7 +384,7 @@ namespace Merchello.Core.Models
         /// <param name="amount">The amount to the payment to be captured</param>
         /// <param name="args">Additional arguements required by the payment processor</param>
         /// <returns>A <see cref="IPaymentResult"/></returns>
-        internal static IPaymentResult CapturePayment(this IInvoice invoice, IPayment payment, Guid paymentMethodKey,
+        public static IPaymentResult CapturePayment(this IInvoice invoice, IPayment payment, Guid paymentMethodKey,
             decimal amount, ProcessorArgumentCollection args)
         {
             return invoice.CapturePayment(MerchelloContext.Current, payment, paymentMethodKey, amount, args);
@@ -416,7 +416,7 @@ namespace Merchello.Core.Models
         /// <param name="amount">The amount to be refunded</param>
         /// <param name="args">Additional arguements required by the payment processor</param>
         /// <returns>A <see cref="IPaymentResult"/></returns>
-        internal static IPaymentResult RefundPayment(this IInvoice invoice, IPayment payment,
+        public static IPaymentResult RefundPayment(this IInvoice invoice, IPayment payment,
             IPaymentGatewayMethod paymentGatewayMethod, decimal amount, ProcessorArgumentCollection args)
         {
             return paymentGatewayMethod.RefundPayment(invoice, payment, amount, args);
@@ -430,7 +430,7 @@ namespace Merchello.Core.Models
         /// <param name="paymentGatewayMethod">The <see cref="IPaymentGatewayMethod"/></param>
         /// <param name="amount">The amount to be refunded</param>
         /// <returns>A <see cref="IPaymentResult"/></returns>
-        internal static IPaymentResult RefundPayment(this IInvoice invoice, IPayment payment,
+        public static IPaymentResult RefundPayment(this IInvoice invoice, IPayment payment,
             IPaymentGatewayMethod paymentGatewayMethod, decimal amount)
         {
             return invoice.RefundPayment(payment, paymentGatewayMethod, amount, new ProcessorArgumentCollection());
@@ -444,7 +444,7 @@ namespace Merchello.Core.Models
         /// <param name="paymentMethodKey">The key of the <see cref="IPaymentGatewayMethod"/></param>
         /// <param name="amount">The amount to be refunded</param>
         /// <returns>A <see cref="IPaymentResult"/></returns>
-        internal static IPaymentResult RefundPayment(this IInvoice invoice, IPayment payment, Guid paymentMethodKey, decimal amount)
+        public static IPaymentResult RefundPayment(this IInvoice invoice, IPayment payment, Guid paymentMethodKey, decimal amount)
         {
             return invoice.RefundPayment(payment, paymentMethodKey, amount, new ProcessorArgumentCollection());
         }
@@ -458,7 +458,7 @@ namespace Merchello.Core.Models
         /// <param name="amount">The amount to be refunded</param>
         /// <param name="args">Additional arguements required by the payment processor</param>
         /// <returns>A <see cref="IPaymentResult"/></returns>
-        internal static IPaymentResult RefundPayment(this IInvoice invoice, IPayment payment, Guid paymentMethodKey, decimal amount,
+        public static IPaymentResult RefundPayment(this IInvoice invoice, IPayment payment, Guid paymentMethodKey, decimal amount,
             ProcessorArgumentCollection args)
         {
             return invoice.RefundPayment(MerchelloContext.Current, payment, paymentMethodKey, amount, args);
@@ -489,7 +489,7 @@ namespace Merchello.Core.Models
         /// <param name="paymentGatewayMethod">The <see cref="IPaymentGatewayMethod"/></param>
         /// <param name="args">Additional arguements required by the payment processor</param>
         /// <returns>A <see cref="IPaymentResult"/></returns>
-        internal static IPaymentResult VoidPayment(this IInvoice invoice, IPayment payment,
+        public static IPaymentResult VoidPayment(this IInvoice invoice, IPayment payment,
             IPaymentGatewayMethod paymentGatewayMethod, ProcessorArgumentCollection args)
         {
             return paymentGatewayMethod.VoidPayment(invoice, payment, args);
@@ -502,7 +502,7 @@ namespace Merchello.Core.Models
         /// <param name="payment">The payment to be voided</param>
         /// <param name="paymentMethodKey">The <see cref="IPaymentGatewayMethod"/> key</param>
         /// <returns>A <see cref="IPaymentResult"/></returns>
-        internal static IPaymentResult VoidPayment(this IInvoice invoice, IPayment payment, Guid paymentMethodKey)
+        public static IPaymentResult VoidPayment(this IInvoice invoice, IPayment payment, Guid paymentMethodKey)
         {
             return invoice.VoidPayment(payment, paymentMethodKey, new ProcessorArgumentCollection());
         }
@@ -515,7 +515,7 @@ namespace Merchello.Core.Models
         /// <param name="paymentMethodKey">The <see cref="IPaymentGatewayMethod"/> key</param>
         /// <param name="args">Additional arguements required by the payment processor</param>
         /// <returns>A <see cref="IPaymentResult"/></returns>
-        internal static IPaymentResult VoidPayment(this IInvoice invoice, IPayment payment, Guid paymentMethodKey, ProcessorArgumentCollection args)
+        public static IPaymentResult VoidPayment(this IInvoice invoice, IPayment payment, Guid paymentMethodKey, ProcessorArgumentCollection args)
         {
             return invoice.VoidPayment(MerchelloContext.Current, payment, paymentMethodKey, args);
         }
@@ -547,7 +547,7 @@ namespace Merchello.Core.Models
         /// </summary>
         /// <param name="invoice">The <see cref="IInvoice"/></param>
         /// <returns>The <see cref="ITaxCalculationResult"/> from the calculation</returns>
-        internal static ITaxCalculationResult CalculateTaxes(this IInvoice invoice)
+        public static ITaxCalculationResult CalculateTaxes(this IInvoice invoice)
         {
             return invoice.CalculateTaxes(invoice.GetBillingAddress());
         }
@@ -558,7 +558,7 @@ namespace Merchello.Core.Models
         /// <param name="invoice">The <see cref="IInvoice"/></param>
         /// <param name="taxAddress">The address (generally country code and region) to be used to determine the taxation rates</param>
         /// <returns>The <see cref="ITaxCalculationResult"/> from the calculation</returns>
-        internal static ITaxCalculationResult CalculateTaxes(this IInvoice invoice, IAddress taxAddress)
+        public static ITaxCalculationResult CalculateTaxes(this IInvoice invoice, IAddress taxAddress)
         {
             return invoice.CalculateTaxes(MerchelloContext.Current, taxAddress);
         }

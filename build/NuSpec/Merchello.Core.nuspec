@@ -8,14 +8,14 @@
     <owners>Mindfly, Inc.</owners>
     <licenseUrl>https://github.com/meritage/Merchello/blob/master/License.md</licenseUrl>
     <projectUrl>http://merchello.com</projectUrl>
-    <!--iconUrl> http://merchello.com/media/*.png</iconUrl-->
+    <iconUrl>http://merchello.com/icon40x40-transparent.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Contains the core assemblies needed to run the Merchello ecommerce extension package for the Umbraco Cms. This package only contains assemblies and can be used for package development.</description>
     <summary>Contains the core assemblies needed to extend the Merchello eCommerece package for the Umbraco CMS</summary>
     <language>en-US</language>
     <tags>umbraco, merchello</tags>
     <dependencies>
-      <dependency id="UmbracoCms.Core" version="7.1.0" />
+      <dependency id="UmbracoCms.Core" version="7.1.1" />
     </dependencies>
   </metadata>
   <files>

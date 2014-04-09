@@ -4,6 +4,7 @@ using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
+using Merchello.Plugin.Payments.AuthorizeNet;
 using Merchello.Plugin.Payments.AuthorizeNet.Models;
 using Merchello.Plugin.Payments.AuthorizeNet.Provider;
 using Moq;
@@ -11,6 +12,7 @@ using NUnit.Framework;
 using Umbraco.Core.Cache;
 using Umbraco.Core.Persistence;
 using Umbraco.Core.Persistence.UnitOfWork;
+using Constants = Merchello.Core.Constants;
 
 namespace Merchello.Tests.AuthorizeNet.Integration.TestHelpers
 {

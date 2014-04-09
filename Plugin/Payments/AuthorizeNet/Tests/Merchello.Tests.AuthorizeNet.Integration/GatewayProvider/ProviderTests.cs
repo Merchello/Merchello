@@ -1,6 +1,7 @@
 ﻿using System.Configuration;
 using System.Linq;
 using System.Threading;
+using Merchello.Plugin.Payments.AuthorizeNet;
 using Merchello.Tests.AuthorizeNet.Integration.TestHelpers;
 using NUnit.Framework;
 
