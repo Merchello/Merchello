@@ -154,7 +154,6 @@
             self.encryptExtendedData = false;
             self.activated = false;
             self.dialogEditorView = "";
-
         } else {
             self.key = gatewayProviderFromServer.key;
             self.name = gatewayProviderFromServer.name;
@@ -165,6 +164,8 @@
             self.activated = gatewayProviderFromServer.activated;
             self.dialogEditorView = new merchello.Models.DialogEditorView(gatewayProviderFromServer.dialogEditorView);
         }
+        self.resources = [];
+        self.methods = [];
 
         self.displayEditor = function() {
             return self.activated && self.dialogEditorView.editorView;
