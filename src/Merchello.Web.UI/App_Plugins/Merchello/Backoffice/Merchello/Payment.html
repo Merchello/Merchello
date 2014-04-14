@@ -30,46 +30,26 @@
         <merchello-panel>
 
             <div class="merchello-pane row-fluid">
+                
+                <!-- Flyout when Delete Method is clicked -->
+                <form name="deleteManualPaymentMethodForm" class="well" data-ng-class="{ 'open': flyouts.deleteManualPaymentMethod, 'closed': !flyouts.deleteManualPaymentMethod }">
+                    <h4>Are you sure you want to remove the method '{{deleteManualPaymentMethodFlyout.model.name}}'?</h4>
+                    <div>
+                        <input type="submit" class="btn" value="No" data-ng-click="deleteManualPaymentMethodFlyout.close()" />
+                        <input type="submit" class="btn btn-primary" value="Yes" data-ng-click="deleteManualPaymentMethodFlyout.confirm()" />
+                    </div>
+                </form>
 
-                <div class="control-group umb-control-group">
+                <div class="control-group umb-control-group" data-ng-repeat="provider in paymentGatewayProviders">
                     <label class="merchello-control-label">
-                        Manual Methods
-                        <small>Set manual payment providers</small>
-                        <a data-ng-click="addEditPaymentMethod()"><i class="icon-bill-dollar"></i> Add a Method</a>
+                        {{provider.name}}
+                        <small data-ng-bind="provider.description"></small>
+                        <a data-ng-click="addEditPaymentMethod(provider)"><i class="icon-bill-dollar"></i> Add a Method</a>
                     </label>
 
                     <div class="merchello-controls row-fluid">
 
                         <div class="row-fluid col-xs-10 span10">
-
-                            <!-- Flyout when edit or Add a Method is clicked -->
-                            <!--<form name="addManualPaymentMethodForm" class="well" data-ng-class="{ 'open': flyouts.addManualPaymentMethod, 'closed': !flyouts.addManualPaymentMethod }">
-                                <button class="btn close" data-ng-click="addManualPaymentMethodFlyout.close()"><i class="icon-delete"></i></button>
-                                <h4>Add/Edit a Payment Method</h4>
-
-                                <div class="form-group">
-                                    <label>Name</label>
-                                    <input type="text" class="col-xs-6 span6" data-ng-model="addManualPaymentMethodFlyout.model.name" />
-                                </div>
-                                <div class="form-group">
-                                    <label>Description</label>
-                                    <textarea class="col-xs-12 span12" rows="4" data-ng-model="addManualPaymentMethodFlyout.model.description"></textarea>
-                                </div>
-
-                                <div>
-                                    <input type="submit" class="btn" value="Cancel" data-ng-click="addManualPaymentMethodFlyout.close()"/>
-                                    <input type="submit" class="btn btn-primary" value="Save" data-ng-click="addManualPaymentMethodFlyout.confirm()"/>
-                                </div>
-                            </form>-->
-
-                            <!-- Flyout when Delete Method is clicked -->
-                            <form name="deleteManualPaymentMethodForm" class="well" data-ng-class="{ 'open': flyouts.deleteManualPaymentMethod, 'closed': !flyouts.deleteManualPaymentMethod }">
-                                <h4>Are you sure you want to remove the method '{{deleteManualPaymentMethodFlyout.model.name}}'?</h4>
-                                <div>
-                                    <input type="submit" class="btn" value="No" data-ng-click="deleteManualPaymentMethodFlyout.close()" />
-                                    <input type="submit" class="btn btn-primary" value="Yes" data-ng-click="deleteManualPaymentMethodFlyout.confirm()" />
-                                </div>
-                            </form>
 
                             <table class="table table-striped merchello-striped-table settings-table notifications-table form-horizontal">
                                 <thead>
@@ -79,12 +59,12 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr data-ng-repeat="method in paymentMethods">
+                                    <tr data-ng-repeat="method in provider.methods">
                                         <td>{{method.name}}</td>
                                         <td>{{method.description}}</td>
                                         <td class="edit">
                                             <div class="btn-group">
-                                                <a class="btn btn-default btn-xs btn-mini" data-ng-click="addEditPaymentMethod(method)">edit</a>
+                                                <a class="btn btn-default btn-xs btn-mini" data-ng-click="addEditPaymentMethod(provider, method)">edit</a>
                                                 <a class="btn btn-warning btn-xs btn-mini" data-ng-click="deleteManualPaymentMethodFlyout.open(method)"><i class="icon-trash"></i></a>
                                             </div>
                                         </td>
@@ -97,7 +77,6 @@
                 </div>
 
             </div>
-
         </merchello-panel>
             
     </umb-panel>
