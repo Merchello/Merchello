@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Merchello.Web.Models.ContentEditing
 {
-    public class ShipMethodDisplay
+    public class ShipMethodDisplay : DialogEditorDisplayBase
     {
         public Guid Key { get; set; }
         public string Name { get; set; }

@@ -1,8 +1,10 @@
 ﻿using System;
-using System.Data;
 using System.Linq;
 using System.Reflection;
+using Umbraco.Core;
+using Umbraco.Core.Persistence;
 using Umbraco.Core.Persistence.DatabaseAnnotations;
+using Umbraco.Core.Persistence.DatabaseModelDefinitions;
 using Umbraco.Core.Persistence.SqlSyntax;
 
 namespace Merchello.Core.Persistence.DatabaseModelDefinitions

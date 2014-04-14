@@ -97,6 +97,7 @@
     <Compile Include="Chains\ShipmentCreation\RemoveShipmentOrderItemsFromInventoryAndPersistShipmentTask.cs" />
     <Compile Include="Chains\ShipmentCreation\SetOrderStatusTask.cs" />
     <Compile Include="EnumerableExtensions.cs" />
+    <Compile Include="Gateways\GatewayMethodEditorAttribute.cs" />
     <Compile Include="Gateways\GatewayProviderActivationAttribute.cs" />
     <Compile Include="Gateways\GatewayProviderEditorAttribute.cs" />
     <Compile Include="Gateways\Payment\Cash\CashPaymentGatewayMethod.cs" />

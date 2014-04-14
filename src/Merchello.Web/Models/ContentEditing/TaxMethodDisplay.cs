@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Merchello.Web.Models.ContentEditing
 {
-    public class TaxMethodDisplay
+    public class TaxMethodDisplay : DialogEditorDisplayBase
     {
         public Guid Key { get; set; }
         public Guid ProviderKey { get; set; }
