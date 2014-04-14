@@ -10,13 +10,19 @@
             self.providerKey = "";
             self.description = "";
             self.paymentCode = "";
+            self.dialogEditorView = "";
         } else {
             self.key = paymentMethodFromServer.key;
             self.name = paymentMethodFromServer.name;
             self.providerKey = paymentMethodFromServer.providerKey;
             self.description = paymentMethodFromServer.description;
             self.paymentCode = paymentMethodFromServer.paymentCode;
+            self.dialogEditorView = new merchello.Models.DialogEditorView(paymentMethodFromServer.dialogEditorView);
         }
+
+        self.displayEditor = function () {
+            return self.dialogEditorView.editorView;
+        };
 
     };
 
