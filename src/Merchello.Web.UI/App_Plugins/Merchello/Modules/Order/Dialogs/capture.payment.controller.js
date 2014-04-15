@@ -23,7 +23,7 @@
 
     };
 
-    angular.module("umbraco").controller("Merchello.Dashboards.Order.Dialogs.CapturePaymentController", merchello.Controllers.CapturePaymentController);
+    angular.module("umbraco").controller("Merchello.Dashboards.Order.Dialogs.CapturePaymentController", ['$scope', merchello.Controllers.CapturePaymentController]);
 
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));

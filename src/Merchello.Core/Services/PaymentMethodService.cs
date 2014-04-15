@@ -168,6 +168,34 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
+        /// Deletes a collection of <see cref="IPaymentMethod"/>
+        /// </summary>
+        /// <param name="paymentMethods">The collection of <see cref="IPaymentMethod"/> to be deleted</param>
+        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        public void Delete(IEnumerable<IPaymentMethod> paymentMethods, bool raiseEvents = true)
+        {
+            var methods = paymentMethods as IPaymentMethod[] ?? paymentMethods.ToArray();
+            if(raiseEvents)
+            Deleting.RaiseEvent(new DeleteEventArgs<IPaymentMethod>(methods), this);
+
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreatePaymentMethodRepository(uow))
+                {
+                    foreach (var method in methods)
+                    {
+                        repository.Delete(method);
+                    }
+                    uow.Commit();
+                }
+            }
+
+            if(raiseEvents)
+            Deleted.RaiseEvent(new DeleteEventArgs<IPaymentMethod>(methods), this);
+        }
+
+        /// <summary>
         /// Gets a <see cref="IPaymentMethod"/>
         /// </summary>
         /// <param name="key">The unique 'key' (Guid) of the <see cref="IPaymentMethod"/></param>

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Merchello.Core.Cache;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Umbraco.Core.Cache;
@@ -12,6 +11,7 @@ namespace Merchello.Core.Gateways.Payment.Cash
     /// <summary>
     /// Represents a CashPaymentGatewayProvider
     /// </summary>
+    [GatewayProviderActivation("B2612C3D-8BF0-411C-8C56-32E7495AE79C", "Cash Payment Provider", "Cash Payment Provider")]
     public class CashPaymentGatewayProvider : PaymentGatewayProviderBase, ICashPaymentGatewayProvider
     {
         #region AvailableResources
@@ -33,9 +33,21 @@ namespace Merchello.Core.Gateways.Payment.Cash
         /// <param name="name">The name of the payment method</param>
         /// <param name="description">The description of the payment method</param>
         /// <returns>A <see cref="IPaymentGatewayMethod"/></returns>
-        public override IPaymentGatewayMethod CreatePaymentMethod(string name, string description)
+        public IPaymentGatewayMethod CreatePaymentMethod(string name, string description)
+        {            
+            return CreatePaymentMethod(AvailableResources.First(), name, description);
+        }
+
+        /// <summary>
+        /// Creates a <see cref="IPaymentGatewayMethod"/>
+        /// </summary>
+        /// <param name="gatewayResource">The <see cref="IGatewayResource"/> implemented by this method</param>
+        /// <param name="name">The name of the payment method</param>
+        /// <param name="description">The description of the payment method</param>
+        /// <returns>A <see cref="IPaymentGatewayMethod"/></returns>
+        public override IPaymentGatewayMethod CreatePaymentMethod(IGatewayResource gatewayResource, string name, string description)
         {
-            var paymentCode = AvailableResources.First().ServiceCode + "-" + Guid.NewGuid();
+            var paymentCode = gatewayResource.ServiceCode + "-" + Guid.NewGuid();
 
             var attempt = GatewayProviderService.CreatePaymentMethodWithKey(GatewayProvider.Key, name, description, paymentCode);
 
@@ -45,7 +57,7 @@ namespace Merchello.Core.Gateways.Payment.Cash
 
                 return new CashPaymentGatewayMethod(GatewayProviderService, attempt.Result);
             }
-            
+
             LogHelper.Error<CashPaymentGatewayProvider>(string.Format("Failed to create a payment method name: {0}, description {1}, paymentCode {2}", name, description, paymentCode), attempt.Exception);
 
             throw attempt.Exception;
@@ -86,22 +98,6 @@ namespace Merchello.Core.Gateways.Payment.Cash
         public override IEnumerable<IGatewayResource> ListResourcesOffered()
         {
             return AvailableResources;
-        }
-
-        /// <summary>
-        /// Gets the name of the provider
-        /// </summary>
-        public override string Name
-        {
-            get { return "Cash Payment Provider"; }
-        }
-
-        /// <summary>
-        /// Gets the unique 'key' of the provider
-        /// </summary>
-        public override Guid Key
-        {
-            get { return new Guid("395D4A61-3A2A-4B4F-AC65-949C33D8611F"); }
         }
 
     }

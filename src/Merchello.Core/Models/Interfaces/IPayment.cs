@@ -13,7 +13,7 @@ namespace Merchello.Core.Models
         /// The key of the customer associated with the Payment
         /// </summary>
         [DataMember]
-        Guid? CustomerKey { get; }
+        Guid? CustomerKey { get; set; }
             
         /// <summary>
         /// The payment method key for the payment provider
@@ -56,6 +56,12 @@ namespace Merchello.Core.Models
         /// </summary>
         [DataMember]
         bool Collected { get; set; }
+
+        /// <summary>
+        /// True/false indicating whether or not this payment has been voided
+        /// </summary>
+        [DataMember]
+        bool Voided { get; set; }
 
         /// <summary>
         /// True/false indicating whether or not this payment has be exported to another system

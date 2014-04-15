@@ -11,8 +11,12 @@
     controllers.PaymentController = function ($scope, notificationsService, dialogService, merchelloPaymentGatewayService) {
 
         $scope.paymentGatewayProviders = [];
-        $scope.paymentMethods = [];
-        $scope.paymentResources = [];
+
+        $scope.getProviderByKey = function(providerkey) {
+            return _.find($scope.paymentGatewayProviders, function (gatewayprovider) { return gatewayprovider.key == providerkey; });
+        }
+        //$scope.paymentMethods = [];
+        //$scope.paymentResources = [];
 
         //--------------------------------------------------------------------------------------
         // Initialization methods
@@ -24,7 +28,7 @@
             promiseAllProviders.then(function(allProviders) {
 
                 $scope.paymentGatewayProviders = _.map(allProviders, function(providerFromServer) {
-                    return new merchello.Models.GatewayProvider(providerFromServer);
+                    return new merchello.Models.PaymentGatewayProvider(providerFromServer);
                 });
 
                 _.each($scope.paymentGatewayProviders, function(provider) {
@@ -48,7 +52,7 @@
             var promiseAllResources = merchelloPaymentGatewayService.getGatewayResources(provider.key);
             promiseAllResources.then(function (allResources) {
 
-                $scope.paymentResources = _.map(allResources, function (resourceFromServer) {
+                provider.resources = _.map(allResources, function (resourceFromServer) {
                     return new merchello.Models.GatewayResource(resourceFromServer);
                 });
 
@@ -62,10 +66,12 @@
 
         $scope.loadPaymentMethods = function (providerKey) {
 
+            var provider = $scope.getProviderByKey(providerKey);
+
             var promiseAllResources = merchelloPaymentGatewayService.getPaymentProviderPaymentMethods(providerKey);
             promiseAllResources.then(function (allMethods) {
 
-                $scope.paymentMethods = _.map(allMethods, function (methodFromServer) {
+                provider.methods = _.map(allMethods, function (methodFromServer) {
                     return new merchello.Models.PaymentMethod(methodFromServer);
                 });
 
@@ -130,7 +136,6 @@
             }
 
             promiseSave.then(function () {
-                $scope.paymentMethods = [];
                 $scope.loadPaymentMethods(method.providerKey);
                 notificationsService.success("Payment Method Saved");
             }, function (reason) {
@@ -138,11 +143,11 @@
             });
         };
 
-        $scope.addEditPaymentMethod = function(method) {
+        $scope.addEditPaymentMethod = function (provider, method) {
             if (method == undefined) {
                 method = new merchello.Models.PaymentMethod();
-                method.providerKey = $scope.paymentGatewayProviders[0].key; //Todo: When able to add external providers, make this select the correct provider
-                method.paymentCode = $scope.paymentResources[0].serviceCode;
+                method.providerKey = provider.key; //Todo: When able to add external providers, make this select the correct provider
+                method.paymentCode = provider.resources[0].serviceCode;
             }
 
             dialogService.open({
@@ -187,7 +192,7 @@
 
     };
 
-    angular.module("umbraco").controller("Merchello.Dashboards.Settings.PaymentController", merchello.Controllers.PaymentController);
+    angular.module("umbraco").controller("Merchello.Dashboards.Settings.PaymentController", ['$scope', 'notificationsService', 'dialogService', 'merchelloPaymentGatewayService', merchello.Controllers.PaymentController]);
 
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));

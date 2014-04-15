@@ -40,6 +40,7 @@
         Debit,
         Void,
         Denied,
+        Refund,
         Custom
     }
 

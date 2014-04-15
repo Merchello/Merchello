@@ -8,7 +8,7 @@
      * @description
      * The controller for the customers list page
      */
-    controllers.OrderEditController = function ($scope, $routeParams, $location, notificationsService, angularHelper, serverValidationManager, merchelloProductService) {
+    controllers.OrderEditController = function ($scope, $routeParams, $location, notificationsService) {
 
         if ($routeParams.create) {
             $scope.loaded = true;
@@ -60,6 +60,6 @@
     }
 
 
-    angular.module("umbraco").controller("Merchello.Editors.Order.EditController", merchello.Controllers.OrderEditController);
+    angular.module("umbraco").controller("Merchello.Editors.Order.EditController", ['$scope', '$routeParams', '$location', 'notificationsService', merchello.Controllers.OrderEditController]);
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using Merchello.Core.Configuration;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Umbraco.Core;
@@ -18,7 +16,8 @@ namespace Merchello.Core.Gateways.Taxation.FixedRate
     /// 
     /// This is Merchello's default TaxationGatewayProvider
     /// 
-    /// </remarks>
+    /// </remarks> 
+    [GatewayProviderActivation("A4AD4331-C278-4231-8607-925E0839A6CD", "Fixed Rate Tax Provider", "Fixed Rate Tax Provider")]
     public class FixedRateTaxationGatewayProvider : TaxationGatewayProviderBase, IFixedRateTaxationGatewayProvider
     {
         public FixedRateTaxationGatewayProvider(IGatewayProviderService gatewayProviderService, IGatewayProvider gatewayProvider, IRuntimeCacheProvider runtimeCacheProvider) 
@@ -83,20 +82,5 @@ namespace Merchello.Core.Gateways.Taxation.FixedRate
             return resources;
         }
 
-        /// <summary>
-        /// The name of the TaxationProvider
-        /// </summary>
-        public override string Name
-        {
-            get { return "Fixed Rate Tax Provider"; }
-        }
-
-        /// <summary>
-        /// The fixed pk associated with the TaxationProvider
-        /// </summary>
-        public override Guid Key
-        {
-            get { return Constants.ProviderKeys.Taxation.FixedRateTaxationProviderKey; }
-        }
     }
 }

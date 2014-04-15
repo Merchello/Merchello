@@ -85,14 +85,9 @@ namespace Merchello.Core.Persistence.Repositories
         }
 
         protected override IEnumerable<string> GetDeleteClauses()
-        {
-            // TODO : RSS - The update in the middle of these delete clauses needs to be refactored - just a quick fix for now
+        {            
             var list = new List<string>
-            {
-                "DELETE FROM merchShipRateTier WHERE shipMethodKey IN (SELECT pk FROM merchShipMethod WHERE providerKey IN (SELECT pk FROM merchGatewayProvider WHERE pk = @Key))",                
-                "UPDATE merchShipment SET shipMethodKey = NULL WHERE shipMethodKey IN (SELECT pk FROM merchShipMethod WHERE providerKey IN (SELECT pk FROM merchGatewayProvider WHERE pk  = @Key))",
-                "DELETE FROM merchShipMethod WHERE providerKey IN (SELECT pk FROM merchGatewayProvider WHERE pk = @Key)",
-                "DELETE FROM merchCountryTaxRate WHERE providerKey IN (SELECT pk FROM merchGatewayProvider WHERE pk = @Key)",
+            {                
                 "DELETE FROM merchGatewayProvider WHERE pk = @Key"
             };
 

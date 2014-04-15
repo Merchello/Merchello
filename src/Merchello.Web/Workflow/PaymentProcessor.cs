@@ -88,7 +88,7 @@ namespace Merchello.Web.Workflow
         {
             return !IsReady() || _payment == null 
                 ? GetFailedResult() 
-                : _paymentGatewayMethod.RefundPayment(_invoice, _payment, _args);
+                : _paymentGatewayMethod.RefundPayment(_invoice, _payment, _amount, _args);
         }
 
         /// <summary>

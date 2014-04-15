@@ -2,12 +2,11 @@
 using System.IO;
 using System.Runtime.Serialization;
 using System.Xml;
-using System.Xml.Serialization;
 using Umbraco.Core;
 
 namespace Merchello.Core
 {
-    internal class SerializationHelper
+    public class SerializationHelper
     {
         /// <summary>
         /// Helper method to Serialize Xml using the DataContractSerializer

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using Merchello.Core.Models.EntityBase;
+using Merchello.Core.Services;
 
 namespace Merchello.Core.Models
 {
@@ -44,6 +45,14 @@ namespace Merchello.Core.Models
         /// </summary>
         [DataMember]
         bool EncryptExtendedData { get; set; }
+
+        /// <summary>
+        /// True/false indicating whether or not this provider is a "registered" and active provider.
+        /// </summary>
+        /// <remarks>
+        /// Any provider returned from the <see cref="GatewayProviderService"/> would be an active provider
+        /// </remarks>
+        bool Activated { get; }
 
         /// <summary>
         /// Enum type of the Gateway Provider

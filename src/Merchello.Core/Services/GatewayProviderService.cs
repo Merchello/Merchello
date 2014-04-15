@@ -103,6 +103,25 @@ namespace Merchello.Core.Services
         {
             if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<IGatewayProvider>(gatewayProvider), this);
 
+            // delete associated methods
+            switch (gatewayProvider.GatewayProviderType)
+            {
+                case GatewayProviderType.Payment:
+                    var paymentMethods = _paymentMethodService.GetPaymentMethodsByProviderKey(gatewayProvider.Key).ToArray();
+                    if(paymentMethods.Any()) _paymentMethodService.Delete(paymentMethods);
+                    break;
+                    
+                case GatewayProviderType.Shipping:
+                    var shippingMethods = _shipMethodService.GetShipMethodsByProviderKey(gatewayProvider.Key).ToArray();
+                    if(shippingMethods.Any()) _shipMethodService.Delete(shippingMethods);
+                    break;
+
+                case GatewayProviderType.Taxation:
+                    var taxMethods = _taxMethodService.GetTaxMethodsByProviderKey(gatewayProvider.Key).ToArray();
+                    if(taxMethods.Any()) _taxMethodService.Delete(taxMethods);
+                    break;
+            }
+
             using (new WriteLock(Locker))
             {
                 var uow = _uowProvider.GetUnitOfWork();
@@ -411,7 +430,7 @@ namespace Merchello.Core.Services
         /// <returns>A collection of <see cref="IShipMethod"/></returns>
         public IEnumerable<IShipMethod> GetShipMethodsByShipCountryKey(Guid providerKey, Guid shipCountryKey)
         {
-            return _shipMethodService.GetGatewayProviderShipMethods(providerKey, shipCountryKey);
+            return _shipMethodService.GetShipMethodsByProviderKey(providerKey, shipCountryKey);
         }
 
         /// <summary>
@@ -420,7 +439,7 @@ namespace Merchello.Core.Services
         /// <returns>A collection of <see cref="IShipMethod"/></returns>
         public IEnumerable<IShipMethod> GetShipMethodsByShipCountryKey(Guid providerKey)
         {
-            return _shipMethodService.GetGatewayProviderShipMethods(providerKey);
+            return _shipMethodService.GetShipMethodsByProviderKey(providerKey);
         }
 
         #endregion

@@ -71,7 +71,7 @@
         $scope.init();
     };
 
-    angular.module("umbraco").controller("Merchello.Dashboards.Order.Dialogs.FulfillShipmentController", merchello.Controllers.FulfillShipmentController);
+    angular.module("umbraco").controller("Merchello.Dashboards.Order.Dialogs.FulfillShipmentController", ['$scope', 'merchelloOrderService', 'merchelloShipmentService', 'notificationsService', merchello.Controllers.FulfillShipmentController]);
 
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));

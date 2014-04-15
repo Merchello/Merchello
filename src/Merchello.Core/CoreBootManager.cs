@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Configuration;
-using System.Threading;
 using Merchello.Core.Cache;
 using Merchello.Core.Configuration;
 using Merchello.Core.Services;
@@ -42,14 +41,13 @@ namespace Merchello.Core
             var connString = ConfigurationManager.ConnectionStrings[MerchelloConfiguration.Current.Section.DefaultConnectionStringName].ConnectionString;
             var providerName = ConfigurationManager.ConnectionStrings[MerchelloConfiguration.Current.Section.DefaultConnectionStringName].ProviderName;                
             var serviceContext = new ServiceContext(new PetaPocoUnitOfWorkProvider(connString, providerName));
-
+            
             CreateMerchelloContext(serviceContext);
             
-            _isInitialized = true;
+            _isInitialized = true;            
 
             return this;
         }
-
                 
         /// <summary>
         /// Creates the MerchelloPluginContext (singleton)
@@ -111,6 +109,17 @@ namespace Merchello.Core
             _isComplete = true;
 
             return this;
+        }
+
+        internal bool IsStarted
+        {
+            get { return _isStarted; }
+        }
+
+
+        internal bool IsInitialized
+        {
+            get { return _isInitialized; }
         }
 
         /// <summary>

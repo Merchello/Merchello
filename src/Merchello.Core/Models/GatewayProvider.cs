@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Reflection;
 using System.Runtime.Serialization;
-using System.Security;
 using Merchello.Core.Models.EntityBase;
-using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Models.TypeFields;
+using Merchello.Core.Services;
 
 namespace Merchello.Core.Models
 {
@@ -22,8 +20,7 @@ namespace Merchello.Core.Models
         private Guid _providerTfKey;
         private string _typeFullName;
         private ExtendedDataCollection _extendedData;
-        private bool _encryptExtendedData;
-
+        private bool _encryptExtendedData;       
 
         private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<GatewayProvider, string>(x => x.Name);
         private static readonly PropertyInfo DescriptionSelector = ExpressionHelper.GetPropertyInfo<GatewayProvider, string>(x => x.Description);
@@ -141,6 +138,17 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
+        /// True/false indicating whether or not this provider is a "registered" and active provider.
+        /// </summary>
+        /// <remarks>
+        /// Any persisted provider is an activated provider
+        /// </remarks>
+        public bool Activated 
+        {
+            get { return HasIdentity; }
+        }
+
+        /// <summary>
         /// Enum type of the Gateway Provider
         /// </summary>
         [DataMember]
@@ -150,6 +158,21 @@ namespace Merchello.Core.Models
             {
                 return EnumTypeFieldConverter.GatewayProvider.GetTypeField(ProviderTfKey);
             }
+        }
+
+        /// <summary>
+        /// Method to call on entity saved when first added
+        /// </summary>
+        internal override void AddingEntity()
+        {
+            if (Key == Guid.Empty)
+            {
+                base.AddingEntity();
+                return;
+            }
+            
+            CreateDate = DateTime.Now;
+            UpdateDate = DateTime.Now;
         }
  
     }

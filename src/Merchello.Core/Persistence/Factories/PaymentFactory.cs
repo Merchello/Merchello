@@ -15,6 +15,7 @@ namespace Merchello.Core.Persistence.Factories
                 ReferenceNumber = dto.ReferenceNumber,
                 Authorized = dto.Authorized,
                 Collected = dto.Collected,
+                Voided = dto.Voided,
                 Exported = dto.Exported,
                 UpdateDate = dto.UpdateDate,
                 CreateDate = dto.CreateDate
@@ -38,6 +39,7 @@ namespace Merchello.Core.Persistence.Factories
                 Amount = entity.Amount,
                 Authorized = entity.Authorized,
                 Collected = entity.Collected,
+                Voided = entity.Voided,
                 Exported = entity.Exported,
                 ExtendedData = entity.ExtendedData.SerializeToXml(),
                 UpdateDate = entity.UpdateDate,

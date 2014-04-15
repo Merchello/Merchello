@@ -9,6 +9,7 @@ using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Gateways.Shipping;
 using Umbraco.Core;
+using Umbraco.Core.IO;
 
 namespace Merchello.Web.Models.ContentEditing
 {
@@ -94,8 +95,35 @@ namespace Merchello.Web.Models.ContentEditing
 
         internal static GatewayProviderDisplay ToGatewayProviderDisplay(this IGatewayProvider gatewayProvider)
         {
-            return AutoMapper.Mapper.Map<GatewayProviderDisplay>(gatewayProvider);
+            var display = AutoMapper.Mapper.Map<GatewayProviderDisplay>(gatewayProvider);
+
+            // Check for custom attribute
+            var editorAtt = Type.GetType(gatewayProvider.TypeFullName)
+                                .GetCustomAttributes<GatewayProviderEditorAttribute>(false).FirstOrDefault();
+
+            if (editorAtt != null)
+                display.DialogEditorView = new DialogEditorViewDisplay()
+                {
+                    Title = editorAtt.Title,
+                    Description = editorAtt.Description,
+                    EditorView = editorAtt.EditorView.StartsWith("~/") ? IOHelper.ResolveUrl(editorAtt.EditorView) : editorAtt.EditorView
+                };
+
+            return display;
         }
+
+        internal static IGatewayProvider ToGatewayProvider(this GatewayProviderDisplay gatewayProvider, IGatewayProvider destination)
+        {
+            if (gatewayProvider.Key != Guid.Empty) destination.Key = gatewayProvider.Key;
+            // type key and typeFullName should be handled by the resolver 
+            destination.Name = gatewayProvider.Name;
+            destination.Description = gatewayProvider.Description;
+            destination.EncryptExtendedData = gatewayProvider.EncryptExtendedData;
+            ((GatewayProvider)destination).ExtendedData = gatewayProvider.ExtendedData;
+
+            return destination;
+        }
+
 
         #endregion
 

@@ -57,9 +57,19 @@ namespace Merchello.Core.Gateways.Payment
         /// </summary>
         /// <param name="invoice">The invoice to be the payment was applied</param>
         /// <param name="payment">The payment to be refunded</param>
+        /// <param name="amount">The amount of the payment to be refunded</param>
         /// <param name="args">Additional arguements required by the payment processor</param>
         /// <returns>A <see cref="IPaymentResult"/></returns>
-        protected abstract IPaymentResult PerformRefundPayment(IInvoice invoice, IPayment payment, ProcessorArgumentCollection args);
+        protected abstract IPaymentResult PerformRefundPayment(IInvoice invoice, IPayment payment, decimal amount, ProcessorArgumentCollection args);
+
+        /// <summary>
+        /// Does the actual work of voiding a payment
+        /// </summary>
+        /// <param name="invoice">The invoice to which the payment is associated</param>
+        /// <param name="payment">The payment to be voided</param>
+        /// <param name="args">Additional arguements required by the payment processor</param>
+        /// <returns>A <see cref="IPaymentResult"/></returns>
+        protected abstract IPaymentResult PerformVoidPayment(IInvoice invoice, IPayment payment, ProcessorArgumentCollection args);
 
         /// <summary>
         /// Processes a payment for the <see cref="IInvoice"/>
@@ -98,7 +108,7 @@ namespace Merchello.Core.Gateways.Payment
         /// <param name="amount">The amount of the payment to the invoice</param>
         /// <param name="args">Additional arguements required by the payment processor</param>
         /// <returns>A <see cref="IPaymentResult"/></returns>
-        public IPaymentResult AuthorizeCapturePayment(IInvoice invoice, decimal amount, ProcessorArgumentCollection args)
+        public virtual IPaymentResult AuthorizeCapturePayment(IInvoice invoice, decimal amount, ProcessorArgumentCollection args)
         {
             Mandate.ParameterNotNull(invoice, "invoice");
 
@@ -132,7 +142,7 @@ namespace Merchello.Core.Gateways.Payment
         /// <param name="amount">The amount of the payment to be captured</param>
         /// <param name="args">Additional arguements required by the payment processor</param>
         /// <returns>A <see cref="IPaymentResult"/></returns>
-        public IPaymentResult CapturePayment(IInvoice invoice, IPayment payment, decimal amount, ProcessorArgumentCollection args)
+        public virtual IPaymentResult CapturePayment(IInvoice invoice, IPayment payment, decimal amount, ProcessorArgumentCollection args)
         {
             Mandate.ParameterNotNull(invoice, "invoice");
 
@@ -162,14 +172,15 @@ namespace Merchello.Core.Gateways.Payment
         /// </summary>
         /// <param name="invoice">The invoice to be the payment was applied</param>
         /// <param name="payment">The payment to be refunded</param>
+        /// <param name="amount">The amount to be refunded</param>
         /// <param name="args">Additional arguements required by the payment processor</param>
         /// <returns>A <see cref="IPaymentResult"/></returns>
-        public IPaymentResult RefundPayment(IInvoice invoice, IPayment payment, ProcessorArgumentCollection args)
+        public virtual IPaymentResult RefundPayment(IInvoice invoice, IPayment payment, decimal amount, ProcessorArgumentCollection args)
         {
             Mandate.ParameterNotNull(invoice, "invoice");
             if(!invoice.HasIdentity) return new PaymentResult(Attempt<IPayment>.Fail(new InvalidOperationException("Cannot refund a payment on an invoice that cannot have payments")), invoice, false);
 
-            var response = PerformRefundPayment(invoice, payment, args);
+            var response = PerformRefundPayment(invoice, payment, amount, args);
 
             if (!response.Payment.Success) return response;
 
@@ -191,6 +202,48 @@ namespace Merchello.Core.Gateways.Payment
             return response;
         }
 
+        /// <summary>
+        /// Voids a payment
+        /// </summary>
+        /// <param name="invoice">The invoice assoicated with the payment to be voided</param>
+        /// <param name="payment">The payment to be voided</param>
+        /// <param name="args">Additional arguements required by the payment processor</param>
+        /// <returns>A <see cref="IPaymentResult"/></returns>
+        public virtual IPaymentResult VoidPayment(IInvoice invoice, IPayment payment, ProcessorArgumentCollection args)
+        {
+            Mandate.ParameterNotNull(invoice, "invoice");
+            if (!invoice.HasIdentity) return new PaymentResult(Attempt<IPayment>.Fail(new InvalidOperationException("Cannot void a payment on an invoice that cannot have payments")), invoice, false);
+
+            var response = PerformVoidPayment(invoice, payment, args);
+
+            if (!response.Payment.Success) return response;
+
+
+            var appliedPayments = payment.AppliedPayments().Where(x => x.TransactionType != AppliedPaymentType.Void);
+            foreach (var appliedPayment in appliedPayments)
+            {
+                appliedPayment.TransactionType = AppliedPaymentType.Void;
+                appliedPayment.Amount = 0;
+
+                GatewayProviderService.Save(appliedPayment);
+            }
+
+            AssertInvoiceStatus(invoice);
+
+            // Assert the payment has been voided
+            if (!payment.Voided)
+            {
+                payment.Voided = true;
+                GatewayProviderService.Save(payment);
+            }
+
+            // Force the ApproveOrderCreation to false
+            if (response.ApproveOrderCreation) ((PaymentResult)response).ApproveOrderCreation = false;
+
+            // give response
+            return response;
+        }
+        
 
         private void AssertPaymentApplied(IPaymentResult response, IInvoice invoice)
         {

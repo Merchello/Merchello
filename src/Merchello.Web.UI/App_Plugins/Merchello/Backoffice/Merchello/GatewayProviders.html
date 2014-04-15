@@ -1,0 +1,63 @@
+﻿<div data-ng-controller="Merchello.Dashboards.Settings.GatewayProvidersController" data-ng-show="loaded">
+    
+     <umb-panel>
+
+        <umb-header>
+
+            <div class="span4">
+                <div class="umb-headline-editor-wrapper">
+                     <h1 class="umb-headline">Gateway Providers</h1>
+                </div>
+            </div>
+
+
+            <div class="span8">
+                <div class="btn-toolbar pull-right umb-btn-toolbar">
+                    
+                    <div class="btn-group">
+                        
+
+                    </div>
+                </div>
+            </div>
+
+        </umb-header>
+        
+        <merchello-panel>
+
+            <div class="merchello-pane row-fluid">
+                
+                <div class="control-group umb-control-group">
+                    <label class="merchello-control-label">
+                        Payment Providers
+                        <small>Activate/Deactivate your Payment Providers</small>
+                    </label>
+                    
+                    <resolved-gateway-providers provider-list="paymentGatewayProviders" on-activate="activateProvider(provider)" on-deactivate="deactivateProvider(provider)" on-configure="editProviderConfigDialogOpen(provider)"></resolved-gateway-providers>
+                </div>
+                
+                <div class="control-group umb-control-group">
+                    <label class="merchello-control-label">
+                        Shipping Providers
+                        <small>Activate/Deactivate your Shipping Providers</small>
+                    </label>
+
+                    <resolved-gateway-providers provider-list="shippingGatewayProviders" on-activate="activateProvider(provider)" on-deactivate="deactivateProvider(provider)" on-configure="editProviderConfigDialogOpen(provider)"></resolved-gateway-providers>
+                </div>
+                
+                <div class="control-group umb-control-group">
+                    <label class="merchello-control-label">
+                        Taxation Providers
+                        <small>Activate/Deactivate your Taxation Providers</small>
+                    </label>
+
+                    <resolved-gateway-providers provider-list="taxationGatewayProviders" on-activate="activateProvider(provider)" on-deactivate="deactivateProvider(provider)" on-configure="editProviderConfigDialogOpen(provider)"></resolved-gateway-providers>
+                </div>
+
+            </div>
+
+        </merchello-panel>
+            
+    </umb-panel>
+
+</div>

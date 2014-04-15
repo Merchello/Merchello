@@ -295,6 +295,6 @@
         return prodservice;
     };
 
-    angular.module('umbraco.resources').factory('merchelloProductService', merchello.Services.MerchelloProductService);
+    angular.module('umbraco.resources').factory('merchelloProductService', ['$q', '$http', 'umbRequestHelper', 'notificationsService', 'merchelloProductVariantService', merchello.Services.MerchelloProductService]);
 
 }(window.merchello.Services = window.merchello.Services || {}));

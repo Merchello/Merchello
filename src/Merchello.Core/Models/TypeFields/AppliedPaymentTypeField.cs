@@ -20,6 +20,7 @@ namespace Merchello.Core.Models.TypeFields
             AddUpdateCache(AppliedPaymentType.Credit, new TypeField("Credit", "Credit", Constants.TypeFieldKeys.AppliedPayment.CreditRecordKey));
             AddUpdateCache(AppliedPaymentType.Debit, new TypeField("Debit", "Debit", Constants.TypeFieldKeys.AppliedPayment.DebitRecordKey));
             AddUpdateCache(AppliedPaymentType.Void, new TypeField("Void", "Void", Constants.TypeFieldKeys.AppliedPayment.VoidRecordKey));
+            AddUpdateCache(AppliedPaymentType.Refund, new TypeField("Refund", "Refund", Constants.TypeFieldKeys.AppliedPayment.RefundRecordKey));
             AddUpdateCache(AppliedPaymentType.Denied, new TypeField("Denied", "Denied", Constants.TypeFieldKeys.AppliedPayment.DeniedRecordKey));
         }
 
@@ -56,6 +57,11 @@ namespace Merchello.Core.Models.TypeFields
         public ITypeField Void
         {
             get { return GetTypeField(AppliedPaymentType.Void); }
+        }
+
+        public ITypeField Refund
+        {
+            get { return GetTypeField(AppliedPaymentType.Refund); }
         }
 
         /// <summary>

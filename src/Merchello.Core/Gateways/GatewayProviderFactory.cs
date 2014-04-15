@@ -47,7 +47,7 @@ namespace Merchello.Core.Gateways
 
             if (!attempt.Success)
             {
-                LogHelper.Error<GatewayProviderBase>("PackageBasket failed to instantiate the defaultStrategy.", attempt.Exception);
+                LogHelper.Error<GatewayProviderBase>("Could not instantiate an instance of a GatewayProvider of this type " + gatewayProvider.TypeFullName, attempt.Exception);
                 throw attempt.Exception;
             }
 

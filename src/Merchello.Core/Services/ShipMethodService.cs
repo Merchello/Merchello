@@ -181,6 +181,36 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
+        /// Deletes a collection of <see cref="IShipMethod"/>
+        /// </summary>
+        /// <param name="shipMethods">The collection of <see cref="IShipMethod"/> to be deleted</param>
+        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        public void Delete(IEnumerable<IShipMethod> shipMethods, bool raiseEvents = true)
+        {
+            var methods = shipMethods as IShipMethod[] ?? shipMethods.ToArray();
+
+            if(raiseEvents)
+            Deleting.RaiseEvent(new DeleteEventArgs<IShipMethod>(methods), this);
+
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreateShipMethodRepository(uow))
+                {
+                    foreach (var method in methods)
+                    {
+                        repository.Delete(method);
+                    }
+                    uow.Commit();
+                }
+            }
+
+            if(raiseEvents)
+            Deleted.RaiseEvent(new DeleteEventArgs<IShipMethod>(methods), this);
+
+        }
+
+        /// <summary>
         /// Gets a <see cref="IShipMethod"/> given it's unique 'key' (Guid)
         /// </summary>
         /// <param name="key">The <see cref="IShipMethod"/>'s unique 'key' (Guid)</param>
@@ -197,7 +227,7 @@ namespace Merchello.Core.Services
         /// Gets a list of <see cref="IShipMethod"/> objects given a <see cref="IGatewayProvider"/> key and a <see cref="IShipCountry"/> key
         /// </summary>
         /// <returns>A collection of <see cref="IShipMethod"/></returns>
-        public IEnumerable<IShipMethod> GetGatewayProviderShipMethods(Guid providerKey, Guid shipCountryKey)
+        public IEnumerable<IShipMethod> GetShipMethodsByProviderKey(Guid providerKey, Guid shipCountryKey)
         {
             using (var repository = _repositoryFactory.CreateShipMethodRepository(_uowProvider.GetUnitOfWork()))
             {
@@ -213,7 +243,7 @@ namespace Merchello.Core.Services
         /// Gets a list of all <see cref="IShipMethod"/> objects given a <see cref="IGatewayProvider"/> key
         /// </summary>
         /// <returns>A collection of <see cref="IShipMethod"/></returns>
-        public IEnumerable<IShipMethod> GetGatewayProviderShipMethods(Guid providerKey)
+        public IEnumerable<IShipMethod> GetShipMethodsByProviderKey(Guid providerKey)
         {
             using (var repository = _repositoryFactory.CreateShipMethodRepository(_uowProvider.GetUnitOfWork()))
             {
