@@ -28,7 +28,7 @@
             promiseAllProviders.then(function(allProviders) {
 
                 $scope.paymentGatewayProviders = _.map(allProviders, function(providerFromServer) {
-                    return new merchello.Models.GatewayProvider(providerFromServer);
+                    return new merchello.Models.PaymentGatewayProvider(providerFromServer);
                 });
 
                 _.each($scope.paymentGatewayProviders, function(provider) {
