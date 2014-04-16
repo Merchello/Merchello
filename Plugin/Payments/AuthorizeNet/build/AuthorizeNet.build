@@ -62,10 +62,14 @@
     <!-- PREPARE FILES -->
     <Target Name="PrepairFiles" DependsOnTargets="Compile">
         <ItemGroup>
-            <BinFiles Include="$(ProjectDir)\bin\Release\Merchello.Plugin.Payments.AuthorizeNet.dll" />
+            <AppPluginFiles Include="$(ProjectDir)\App_Plugins\**\*.*" />
+            <BinFiles Include="$(ProjectDir)\bin\Release\Merchello.Plugin.Payments.AuthorizeNet.*" />
             <PackageFile Include="$(PackageDir)\package.xml" />
         </ItemGroup>
-        <Copy SourceFiles="@(AppPluginFiles)" DestinationFiles="@(AppPluginFiles->'$(BuildPackageFolder)App_Plugins\Merchello.AuthorizeNet\%(RecursiveDir)%(Filename)%(Extension)')" />
+      
+
+        <Copy SourceFiles="@(BinFiles)" DestinationFolder="$(BuildDir)\bin" />
+        <Copy SourceFiles="@(AppPluginFiles)" DestinationFiles="@(AppPluginFiles->'$(BuildDir)\App_Plugins\%(RecursiveDir)%(Filename)%(Extension)')" />
         <Copy SourceFiles="@(PackageFile)" DestinationFolder="$(BuildDir)" />
     </Target>
 
