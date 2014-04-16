@@ -4,7 +4,7 @@
     <package>
       <name>Merchello</name>
       <version>0.0.0</version>
-      <license url="http://www.opensource.org/licenses/mit-license.php">MIT license</license>
+      <license url="https://github.com/Merchello/Merchello/blob/master/License.md">MIT license</license>
       <url>http://our.umbraco.org/projects/website-utilities/merchello</url>
       <requirements>
         <major>0</major>
