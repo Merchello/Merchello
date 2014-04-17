@@ -6,7 +6,10 @@ using Merchello.Core.Models.TypeFields;
 
 namespace Merchello.Core.Models
 {
-    public interface ILineItem : IEntity
+    /// <summary>
+    /// Defines a Line Item
+    /// </summary>
+    public interface ILineItem : IHasExtendedData, IEntity
     {
         /// <summary>
         /// The key of the container collection
@@ -50,11 +53,6 @@ namespace Merchello.Core.Models
         [DataMember]
         bool Exported { get; set; }
 
-        /// <summary>
-        /// A collection to store custom/extended data for the line item
-        /// </summary>
-        [DataMember]
-        ExtendedDataCollection ExtendedData { get; }
 
         /// <summary>
         /// The line item type

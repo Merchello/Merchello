@@ -240,7 +240,7 @@
     <Compile Include="Models\ContentEditing\DialogEditorDisplayBase.cs" />
     <Compile Include="Models\ContentEditing\DialogEditorViewDisplay.cs" />
     <Compile Include="Models\MapperResolvers\GatewayProviderDialogEditorViewResolver.cs" />
-    <Compile Include="Models\MapperResolvers\GatewayProviderExtendedDataResolver.cs" />
+    <Compile Include="Models\MapperResolvers\ExtendedDataResolver.cs" />
     <Compile Include="Models\MapperResolvers\GatewayMethodDialogEditorViewResolver.cs" />
     <Compile Include="Workflow\PaymentProcessor.cs" />
     <Compile Include="Editors\SettingsApiController.cs" />

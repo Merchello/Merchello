@@ -53,7 +53,7 @@ namespace Merchello.Web
             // Gateway Provider       
             AutoMapper.Mapper.CreateMap<IGatewayProvider, GatewayProviderDisplay>()                
                 .ForMember(dest => dest.ExtendedData,
-                    opt => opt.ResolveUsing<GatewayProviderExtendedDataResolver>().ConstructedBy(() => new GatewayProviderExtendedDataResolver())                    
+                    opt => opt.ResolveUsing<ExtendedDataResolver>().ConstructedBy(() => new ExtendedDataResolver())                    
                 )
                 .ForMember(dest => dest.DialogEditorView,
                     opt => opt.ResolveUsing<GatewayProviderDialogEditorViewResolver>().ConstructedBy(() => new GatewayProviderDialogEditorViewResolver())

@@ -7,8 +7,11 @@ namespace Merchello.Core.Models
     /// <summary>
     /// Defines the customer base class 
     /// </summary>
-    public interface ICustomerBase : IEntity
+    public interface ICustomerBase : IHasExtendedData, IEntity
     {
+        /// <summary>
+        /// A unique key for the Entity (used for ItemCaching)
+        /// </summary>
         [DataMember]
         Guid EntityKey { get; }
 
@@ -24,10 +27,5 @@ namespace Merchello.Core.Models
         [DataMember]
         bool IsAnonymous { get; }
 
-        /// <summary>
-        /// A collection to store custom/extended data for the customer
-        /// </summary>
-        [DataMember]
-        ExtendedDataCollection ExtendedData { get; }
     }
 }

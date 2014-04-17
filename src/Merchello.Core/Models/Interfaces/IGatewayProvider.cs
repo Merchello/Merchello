@@ -8,7 +8,7 @@ namespace Merchello.Core.Models
     /// <summary>
     /// Defines a Gateway Provider
     /// </summary>
-    public interface IGatewayProvider : IEntity
+    public interface IGatewayProvider : IHasExtendedData, IEntity
     {
         /// <summary>
         /// The type field key for the provider
@@ -34,11 +34,6 @@ namespace Merchello.Core.Models
         [DataMember]
         string TypeFullName { get; set; }
 
-        /// <summary>
-        /// Extended data for the provider
-        /// </summary>
-        [DataMember]
-        ExtendedDataCollection ExtendedData { get; }
 
         /// <summary>
         /// True/false indicating whether or the ExtendedData collection should be encrypted before persisted.

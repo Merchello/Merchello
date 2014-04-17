@@ -11,9 +11,9 @@ namespace Merchello.Web.Models.MapperResolvers
     /// <summary>
     /// Resolves the custom DialogEditorView property from the <see cref="GatewayProviderEditorAttribute"/> for AutoMapper mappings
     /// </summary>
-    public class GatewayMethodDialogEditorViewResolver : ValueResolver<IGatewayMethod, DialogEditorViewDisplay>
+    public class GatewayMethodDialogEditorViewResolver : ValueResolver<IGatewayProviderMethod, DialogEditorViewDisplay>
     {
-        protected override DialogEditorViewDisplay ResolveCore(IGatewayMethod source)
+        protected override DialogEditorViewDisplay ResolveCore(IGatewayProviderMethod source)
         {
             // Check for custom attribute
             var editorAtt = source.GetType()
