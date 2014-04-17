@@ -24,14 +24,15 @@
 
             // on initial load extendedData will be empty but we need to populate with key values
             // 
-            var settingsString = $scope.dialogData.provider.extendedData.authorizeNetProcessorSettings;
+            var settingsString = $scope.dialogData.provider.extendedData[0].value;
             $scope.authorizeNetSettings = JSON.parse(settingsString);
+
 
             // Watch with object equality to convert back to a string for the submit() call on the Save button
             $scope.$watch(function () {
                 return $scope.authorizeNetSettings;
             }, function (newValue, oldValue) {
-                $scope.dialogData.provider.extendedData.authorizeNetProcessorSettings = angular.toJson(newValue);
+                $scope.dialogData.provider.extendedData[0].value = angular.toJson(newValue);
             },true);
         };
         $scope.init();

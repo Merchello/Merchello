@@ -13,6 +13,9 @@ using Umbraco.Core.Events;
 
 namespace Merchello.Core.Services
 {
+    /// <summary>
+    /// Represents the GatewayProviderService
+    /// </summary>
     public class GatewayProviderService : IGatewayProviderService
     {
         private readonly IDatabaseUnitOfWorkProvider _uowProvider;
@@ -28,6 +31,9 @@ namespace Merchello.Core.Services
 
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
+         /// <summary>
+         /// Constructor
+         /// </summary>
          public GatewayProviderService()
             : this(new RepositoryFactory(), new ShipMethodService(), new ShipRateTierService(), new ShipCountryService(), new InvoiceService(), new OrderService(), new TaxMethodService(), new PaymentService(),  new PaymentMethodService())
         { }
