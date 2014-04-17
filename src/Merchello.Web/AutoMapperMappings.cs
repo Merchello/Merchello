@@ -37,7 +37,10 @@ namespace Merchello.Web
             // payment
             AutoMapper.Mapper.CreateMap<IAppliedPayment, AppliedPaymentDisplay>();
             AutoMapper.Mapper.CreateMap<IPayment, PaymentDisplay>();
-            AutoMapper.Mapper.CreateMap<IPaymentMethod, PaymentMethodDisplay>();
+            AutoMapper.Mapper.CreateMap<IPaymentMethod, PaymentMethodDisplay>()
+                .ForMember(dest => dest.DialogEditorView,
+                    opt => opt.ResolveUsing<GatewayMethodDialogEditorViewResolver>().ConstructedBy(() => new GatewayMethodDialogEditorViewResolver())
+                );
 
             // products
             AutoMapper.Mapper.CreateMap<IProduct, ProductDisplay>();
@@ -62,7 +65,11 @@ namespace Merchello.Web
             // shipping     
             AutoMapper.Mapper.CreateMap<IShippingGatewayProvider, ShippingGatewayProviderDisplay>();
             AutoMapper.Mapper.CreateMap<IShipCountry, ShipCountryDisplay>();
-            AutoMapper.Mapper.CreateMap<IShipMethod, ShipMethodDisplay>();
+            AutoMapper.Mapper.CreateMap<IShipMethod, ShipMethodDisplay>()
+                .ForMember(dest => dest.DialogEditorView,
+                    opt => opt.ResolveUsing<GatewayMethodDialogEditorViewResolver>().ConstructedBy(() => new GatewayMethodDialogEditorViewResolver())
+                );
+
             AutoMapper.Mapper.CreateMap<IFixedRateShippingGatewayMethod, FixedRateShipMethodDisplay>();
             AutoMapper.Mapper.CreateMap<IShipProvince, ShipProvinceDisplay>();
             AutoMapper.Mapper.CreateMap<IShippingFixedRateTable, ShipFixedRateTableDisplay>();
@@ -72,7 +79,11 @@ namespace Merchello.Web
             AutoMapper.Mapper.CreateMap<IShipment, ShipmentDisplay>();
 
             // taxation
-            AutoMapper.Mapper.CreateMap<ITaxMethod, TaxMethodDisplay>();
+            AutoMapper.Mapper.CreateMap<ITaxMethod, TaxMethodDisplay>()
+                .ForMember(dest => dest.DialogEditorView,
+                    opt => opt.ResolveUsing<GatewayMethodDialogEditorViewResolver>().ConstructedBy(() => new GatewayMethodDialogEditorViewResolver())
+                );
+
             AutoMapper.Mapper.CreateMap<ITaxProvince, TaxProvinceDisplay>();
             
             // warehouse
