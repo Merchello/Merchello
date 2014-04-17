@@ -1,9 +1,11 @@
-﻿using Merchello.Core.Gateways;
+﻿using System.Diagnostics;
+using Merchello.Core.Gateways;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Gateways.Shipping.FixedRate;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Web.Models.ContentEditing;
+using Merchello.Web.Models.DisplayResolvers;
 
 namespace Merchello.Web
 {
@@ -46,9 +48,19 @@ namespace Merchello.Web
 
             AutoMapper.Mapper.CreateMap<IProvince, ProvinceDisplay>();
 
-            // shipping            
-            AutoMapper.Mapper.CreateMap<IGatewayProvider, GatewayProviderDisplay>();
+            // Gateway Provider       
+            AutoMapper.Mapper.CreateMap<IGatewayProvider, GatewayProviderDisplay>()                
+                .ForMember(dest => dest.ExtendedData,
+                    opt => opt.ResolveUsing<ExtendedDataResolver>().ConstructedBy(() => new ExtendedDataResolver())                    
+                )
+                .ForMember(dest => dest.DialogEditorView,
+                    opt => opt.ResolveUsing<DialogEditorViewResolver>().ConstructedBy(() => new DialogEditorViewResolver())
+                );
+
+
             AutoMapper.Mapper.CreateMap<IGatewayResource, GatewayResourceDisplay>();
+
+            // shipping     
             AutoMapper.Mapper.CreateMap<IShippingGatewayProvider, ShippingGatewayProviderDisplay>();
             AutoMapper.Mapper.CreateMap<IShipCountry, ShipCountryDisplay>();
             AutoMapper.Mapper.CreateMap<IShipMethod, ShipMethodDisplay>();

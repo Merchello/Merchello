@@ -37,5 +37,6 @@ namespace Merchello.Tests.UnitTests.Mappers
             //// Assert
             Assert.NotNull(productOptionDisplay);
         }
+
     }
 }

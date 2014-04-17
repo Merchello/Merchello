@@ -95,21 +95,7 @@ namespace Merchello.Web.Models.ContentEditing
 
         internal static GatewayProviderDisplay ToGatewayProviderDisplay(this IGatewayProvider gatewayProvider)
         {
-            var display = AutoMapper.Mapper.Map<GatewayProviderDisplay>(gatewayProvider);
-
-            // Check for custom attribute
-            var editorAtt = Type.GetType(gatewayProvider.TypeFullName)
-                                .GetCustomAttributes<GatewayProviderEditorAttribute>(false).FirstOrDefault();
-
-            if (editorAtt != null)
-                display.DialogEditorView = new DialogEditorViewDisplay()
-                {
-                    Title = editorAtt.Title,
-                    Description = editorAtt.Description,
-                    EditorView = editorAtt.EditorView.StartsWith("~/") ? IOHelper.ResolveUrl(editorAtt.EditorView) : editorAtt.EditorView
-                };
-
-            return display;
+            return AutoMapper.Mapper.Map<GatewayProviderDisplay>(gatewayProvider);
         }
 
         internal static IGatewayProvider ToGatewayProvider(this GatewayProviderDisplay gatewayProvider, IGatewayProvider destination)
@@ -119,7 +105,8 @@ namespace Merchello.Web.Models.ContentEditing
             destination.Name = gatewayProvider.Name;
             destination.Description = gatewayProvider.Description;
             destination.EncryptExtendedData = gatewayProvider.EncryptExtendedData;
-            ((GatewayProvider)destination).ExtendedData = gatewayProvider.ExtendedData;
+            
+            ((GatewayProvider)destination).ExtendedData = gatewayProvider.ExtendedData.AsExtendedDataCollection();
 
             return destination;
         }

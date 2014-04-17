@@ -4,6 +4,7 @@ using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Merchello.Examine;
+using Merchello.Web;
 using Moq;
 using NUnit.Framework;
 using Umbraco.Core;
@@ -21,6 +22,8 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         [TestFixtureSetUp]
         public virtual void FixtureSetup()
         {
+            AutoMapperMappings.BindMappings();  
+
             // Umbraco Application
             var applicationMock = new Mock<UmbracoApplication>();
 
