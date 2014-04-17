@@ -4,7 +4,6 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using Merchello.Core.Models.EntityBase;
 using Merchello.Core.Models.TypeFields;
-using Merchello.Core.Services;
 
 namespace Merchello.Core.Models
 {
