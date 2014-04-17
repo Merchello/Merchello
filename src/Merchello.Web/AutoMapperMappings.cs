@@ -1,11 +1,10 @@
-﻿using System.Diagnostics;
-using Merchello.Core.Gateways;
+﻿using Merchello.Core.Gateways;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Gateways.Shipping.FixedRate;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Web.Models.ContentEditing;
-using Merchello.Web.Models.DisplayResolvers;
+using Merchello.Web.Models.MapperResolvers;
 
 namespace Merchello.Web
 {
@@ -51,10 +50,10 @@ namespace Merchello.Web
             // Gateway Provider       
             AutoMapper.Mapper.CreateMap<IGatewayProvider, GatewayProviderDisplay>()                
                 .ForMember(dest => dest.ExtendedData,
-                    opt => opt.ResolveUsing<ExtendedDataResolver>().ConstructedBy(() => new ExtendedDataResolver())                    
+                    opt => opt.ResolveUsing<GatewayProviderExtendedDataResolver>().ConstructedBy(() => new GatewayProviderExtendedDataResolver())                    
                 )
                 .ForMember(dest => dest.DialogEditorView,
-                    opt => opt.ResolveUsing<DialogEditorViewResolver>().ConstructedBy(() => new DialogEditorViewResolver())
+                    opt => opt.ResolveUsing<GatewayProviderDialogEditorViewResolver>().ConstructedBy(() => new GatewayProviderDialogEditorViewResolver())
                 );
 
 

@@ -7,12 +7,12 @@ using Merchello.Web.Models.ContentEditing;
 using Umbraco.Core;
 using Umbraco.Core.IO;
 
-namespace Merchello.Web.Models.DisplayResolvers
+namespace Merchello.Web.Models.MapperResolvers
 {
     /// <summary>
     /// Resolves the custom DialogEditorView property from the <see cref="GatewayProviderEditorAttribute"/> for AutoMapper mappings
     /// </summary>
-    public class DialogEditorViewResolver : ValueResolver<IGatewayProvider, DialogEditorViewDisplay>
+    public class GatewayProviderDialogEditorViewResolver : ValueResolver<IGatewayProvider, DialogEditorViewDisplay>
     {
         protected override DialogEditorViewDisplay ResolveCore(IGatewayProvider source)
         {

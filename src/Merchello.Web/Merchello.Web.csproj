@@ -239,8 +239,8 @@
     <Compile Include="Editors\PaymentGatewayApiController.cs" />
     <Compile Include="Models\ContentEditing\DialogEditorDisplayBase.cs" />
     <Compile Include="Models\ContentEditing\DialogEditorViewDisplay.cs" />
-    <Compile Include="Models\DisplayResolvers\DialogEditorViewResolver.cs" />
-    <Compile Include="Models\DisplayResolvers\ExtendedDataResolver.cs" />
+    <Compile Include="Models\MapperResolvers\GatewayProviderDialogEditorViewResolver.cs" />
+    <Compile Include="Models\MapperResolvers\GatewayProviderExtendedDataResolver.cs" />
     <Compile Include="Workflow\PaymentProcessor.cs" />
     <Compile Include="Editors\SettingsApiController.cs" />
     <Compile Include="Editors\CatalogShippingApiController.cs" />

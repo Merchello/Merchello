@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using AutoMapper;
 using Merchello.Core.Models;
 
-namespace Merchello.Web.Models.DisplayResolvers
+namespace Merchello.Web.Models.MapperResolvers
 {
     /// <summary>
     /// Custom AutoMapper Resolver - Maps <see cref="ExtendedDataCollection"/> to an Enumerable
     /// </summary>
-    public class ExtendedDataResolver : ValueResolver<IGatewayProvider, IEnumerable<KeyValuePair<string, string>>>
+    public class GatewayProviderExtendedDataResolver : ValueResolver<IGatewayProvider, IEnumerable<KeyValuePair<string, string>>>
     {
         protected override IEnumerable<KeyValuePair<string, string>> ResolveCore(IGatewayProvider source)
         {
