@@ -46,8 +46,8 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
             var mapped = provider.ToGatewayProviderDisplay();
 
             //// Assert
-            Assert.NotNull(mapped);
-            Assert.NotNull(mapped.DialogEditorView);
+            Assert.NotNull(mapped, "mapped was null");
+            Assert.NotNull(mapped.DialogEditorView, "mapped did not have a DialogEditorView");
             Assert.AreEqual(editorView, mapped.DialogEditorView.EditorView);
         }
 
