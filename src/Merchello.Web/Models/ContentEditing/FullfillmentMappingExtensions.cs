@@ -148,21 +148,7 @@ namespace Merchello.Web.Models.ContentEditing
 
         internal static PaymentMethodDisplay ToPaymentMethodDisplay(this IPaymentMethod paymentMethod)
         {
-            var display = AutoMapper.Mapper.Map<PaymentMethodDisplay>(paymentMethod);
-
-            // Check for custom attribute
-            var editorAtt = paymentMethod.GetType()
-                                .GetCustomAttributes<GatewayMethodEditorAttribute>(false).FirstOrDefault();
-
-            if (editorAtt != null)
-                display.DialogEditorView = new DialogEditorViewDisplay()
-                {
-                    Title = editorAtt.Title,
-                    Description = editorAtt.Description,
-                    EditorView = editorAtt.EditorView.StartsWith("~/") ? IOHelper.ResolveUrl(editorAtt.EditorView) : editorAtt.EditorView
-                };
-
-            return display;
+            return AutoMapper.Mapper.Map<PaymentMethodDisplay>(paymentMethod);
         }
 
         internal static IPaymentMethod ToPaymentMethod(this PaymentMethodDisplay paymentMethodDisplay, IPaymentMethod destination)
@@ -191,21 +177,7 @@ namespace Merchello.Web.Models.ContentEditing
 
         internal static ShipMethodDisplay ToShipMethodDisplay(this IShipMethod shipMethod)
         {            
-            var display = AutoMapper.Mapper.Map<ShipMethodDisplay>(shipMethod);
-
-            // Check for custom attribute
-            var editorAtt = shipMethod.GetType()
-                                .GetCustomAttributes<GatewayMethodEditorAttribute>(false).FirstOrDefault();
-
-            if (editorAtt != null)
-                display.DialogEditorView = new DialogEditorViewDisplay()
-                {
-                    Title = editorAtt.Title,
-                    Description = editorAtt.Description,
-                    EditorView = editorAtt.EditorView.StartsWith("~/") ? IOHelper.ResolveUrl(editorAtt.EditorView) : editorAtt.EditorView
-                };
-
-            return display;
+            return AutoMapper.Mapper.Map<ShipMethodDisplay>(shipMethod);      
         }
 
         #endregion
@@ -622,21 +594,7 @@ namespace Merchello.Web.Models.ContentEditing
 
         internal static TaxMethodDisplay ToTaxMethodDisplay(this ITaxMethod taxMethod)
         {
-            var display = AutoMapper.Mapper.Map<TaxMethodDisplay>(taxMethod);
-
-            // Check for custom attribute
-            var editorAtt = taxMethod.GetType()
-                                .GetCustomAttributes<GatewayMethodEditorAttribute>(false).FirstOrDefault();
-
-            if (editorAtt != null)
-                display.DialogEditorView = new DialogEditorViewDisplay()
-                {
-                    Title = editorAtt.Title,
-                    Description = editorAtt.Description,
-                    EditorView = editorAtt.EditorView.StartsWith("~/") ? IOHelper.ResolveUrl(editorAtt.EditorView) : editorAtt.EditorView
-                };
-
-            return display;
+           return AutoMapper.Mapper.Map<TaxMethodDisplay>(taxMethod);     
         }
 
         #endregion

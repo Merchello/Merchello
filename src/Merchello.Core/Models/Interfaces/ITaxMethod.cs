@@ -5,7 +5,10 @@ using Merchello.Core.Models.EntityBase;
 
 namespace Merchello.Core.Models
 {
-    public interface ITaxMethod : IEntity
+    /// <summary>
+    /// Defines a Tax Method
+    /// </summary>
+    public interface ITaxMethod : IGatewayProviderMethod
     {
         /// <summary>
         /// The key associated with the gateway provider for the tax rate data

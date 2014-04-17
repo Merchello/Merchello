@@ -4,7 +4,10 @@ using Merchello.Core.Models.EntityBase;
 
 namespace Merchello.Core.Models
 {
-    public interface IPaymentMethod : IEntity 
+    /// <summary>
+    /// Defines a payment method
+    /// </summary>
+    public interface IPaymentMethod : IGatewayProviderMethod
     {
         /// <summary>
         /// The key associated with the gateway provider for the payment
