@@ -11,6 +11,12 @@ namespace Merchello.Core.Gateways.Payment
     /// </summary>
     public abstract class PaymentGatewayProviderBase  : GatewayProviderBase, IPaymentGatewayProvider
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="gatewayProviderService">The <see cref="IGatewayProviderService"/></param>
+        /// <param name="gatewayProvider">The <see cref="IGatewayProvider"/></param>
+        /// <param name="runtimeCacheProvider">Umbraco's <see cref="IRuntimeCacheProvider"/></param>
         protected PaymentGatewayProviderBase(IGatewayProviderService gatewayProviderService, IGatewayProvider gatewayProvider, IRuntimeCacheProvider runtimeCacheProvider) 
             : base(gatewayProviderService, gatewayProvider, runtimeCacheProvider)
         { }
