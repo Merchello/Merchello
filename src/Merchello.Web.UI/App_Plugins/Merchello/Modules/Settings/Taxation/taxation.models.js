@@ -1,7 +1,7 @@
 ﻿(function (models, undefined) {
 
     models.TaxCountry = function (data) {
-
+        
         var self = this;
 
         self.method = new merchello.Models.TaxMethod();    // Only used for binding, other data from a gateway resource
@@ -53,6 +53,7 @@
             self.countryCode = "";
             self.percentageTaxRate = 0.0;
             self.provinces = [];
+            self.displayEditor = "";
         } else {
             self.key = taxMethodFromServer.key;
             self.providerKey = taxMethodFromServer.providerKey;
@@ -66,6 +67,11 @@
             if (!_.isEmpty(self.provinces)) {
                 self.hasProvinces = true;
             }
+            self.dialogEditorView = new merchello.Models.DialogEditorView(taxMethodFromServer.dialogEditorView);
+        };
+
+        self.displayEditor = function () {
+            return self.dialogEditorView.editorView;
         };
 
     };

@@ -8,15 +8,15 @@
      * @description
      * The controller for the reports list page
      */
-    controllers.ReportListController = function ($scope, $routeParams, $location, notificationsService, angularHelper, serverValidationManager, merchelloProductService) {
+    controllers.ReportListController = function($scope) {
 
         $scope.loaded = true;
         $scope.preValuesLoaded = true;
 
-    }
+    };
 
 
-    angular.module("umbraco").controller("Merchello.Dashboards.Report.ListController", merchello.Controllers.ReportListController);
+    angular.module("umbraco").controller("Merchello.Dashboards.Report.ListController", ['$scope', merchello.Controllers.ReportListController]);
 
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));

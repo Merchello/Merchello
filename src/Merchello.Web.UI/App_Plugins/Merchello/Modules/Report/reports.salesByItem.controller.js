@@ -8,15 +8,15 @@
      * @description
      * The controller for the reports SalesByItem page
      */
-    controllers.SalesByItemController = function ($scope, $routeParams, $location, notificationsService, angularHelper, serverValidationManager, merchelloProductService) {
+    controllers.SalesByItemController = function($scope) {
 
         $scope.loaded = true;
         $scope.preValuesLoaded = true;
 
-    }
+    };
 
 
-    angular.module("umbraco").controller("Merchello.Dashboards.Report.SalesByItemController", merchello.Controllers.SalesByItemController);
+    angular.module("umbraco").controller("Merchello.Dashboards.Report.SalesByItemController", ['$scope', merchello.Controllers.SalesByItemController]);
 
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));

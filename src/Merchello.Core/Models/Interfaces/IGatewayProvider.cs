@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using Merchello.Core.Models.EntityBase;
+using Merchello.Core.Services;
 
 namespace Merchello.Core.Models
 {
     /// <summary>
     /// Defines a Gateway Provider
     /// </summary>
-    public interface IGatewayProvider : IEntity
+    public interface IGatewayProvider : IHasExtendedData, IEntity
     {
         /// <summary>
         /// The type field key for the provider
@@ -33,17 +34,20 @@ namespace Merchello.Core.Models
         [DataMember]
         string TypeFullName { get; set; }
 
-        /// <summary>
-        /// Extended data for the provider
-        /// </summary>
-        [DataMember]
-        ExtendedDataCollection ExtendedData { get; }
 
         /// <summary>
         /// True/false indicating whether or the ExtendedData collection should be encrypted before persisted.
         /// </summary>
         [DataMember]
         bool EncryptExtendedData { get; set; }
+
+        /// <summary>
+        /// True/false indicating whether or not this provider is a "registered" and active provider.
+        /// </summary>
+        /// <remarks>
+        /// Any provider returned from the <see cref="GatewayProviderService"/> would be an active provider
+        /// </remarks>
+        bool Activated { get; }
 
         /// <summary>
         /// Enum type of the Gateway Provider

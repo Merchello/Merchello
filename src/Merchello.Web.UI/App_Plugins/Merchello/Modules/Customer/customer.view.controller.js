@@ -8,7 +8,7 @@
      * @description
      * The controller for the Customer view page
      */
-    controllers.CustomerViewController = function ($scope, $routeParams, $location, notificationsService, angularHelper, serverValidationManager, merchelloProductService) {
+    controllers.CustomerViewController = function($scope) {
 
         $scope.loaded = true;
         $scope.preValuesLoaded = true;
@@ -31,9 +31,9 @@
 
         //});
 
-    }
+    };
 
 
-    angular.module("umbraco").controller("Merchello.Editors.Customer.ViewController", merchello.Controllers.CustomerViewController);
+    angular.module("umbraco").controller("Merchello.Editors.Customer.ViewController", ['$scope', merchello.Controllers.CustomerViewController]);
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));

@@ -79,6 +79,6 @@
         };
     }
 
-    angular.module('umbraco.resources').factory('merchelloWarehouseService', merchello.Services.MerchelloWarehouseService);
+    angular.module('umbraco.resources').factory('merchelloWarehouseService', ['$q', '$http', '$cacheFactory', 'umbDataFormatter', 'umbRequestHelper', merchello.Services.MerchelloWarehouseService]);
 
 }(window.merchello.Services = window.merchello.Services || {}));

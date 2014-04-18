@@ -172,6 +172,6 @@
         return settingsServices;
     };
 
-    angular.module('umbraco.resources').service('merchelloSettingsService', merchello.Services.MerchelloSettingsService);
+    angular.module('umbraco.resources').service('merchelloSettingsService', ['$q', '$http', '$cacheFactory', 'umbDataFormatter', 'umbRequestHelper', merchello.Services.MerchelloSettingsService]);
 
 }(window.merchello.Services = window.merchello.Services || {}));

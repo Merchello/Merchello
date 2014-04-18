@@ -54,21 +54,6 @@
         };
     };
 
-    models.GatewayProvider = function (gatewayProviderFromServer) {
-
-        var self = this;
-
-        if (gatewayProviderFromServer == undefined) {
-            self.key = "";
-            self.name = "";
-            self.description = "";
-        } else {
-            self.key = gatewayProviderFromServer.key;
-            self.name = gatewayProviderFromServer.name;
-            self.description = gatewayProviderFromServer.description;
-        }
-    };
-
     models.ShippingGatewayProvider = function (shippingGatewayProviderFromServer) {
 
         var self = this;
@@ -114,6 +99,8 @@
             self.serviceCode = "";
             self.taxable = false;
             self.provinces = [];
+            self.dialogEditorView = "";
+            
         } else {
             self.key = shippingMethodFromServer.key;
             self.name = shippingMethodFromServer.name;
@@ -130,6 +117,7 @@
             } else {
                 self.provinces = [];
             }
+            self.dialogEditorView = new merchello.Models.DialogEditorView(shippingMethodFromServer.dialogEditorView);
         }
         // Helper to add a shipping region adjustment to this shipping method.
         self.addProvince = function (province) {
@@ -146,6 +134,10 @@
         // Helper to remove a shipping region adjustment from this shipping method.
         self.removeProvince = function (idx) {
             self.provinces.splice(idx, 1);
+        };
+
+        self.displayEditor = function () {
+            return self.dialogEditorView.editorView;
         };
 
     };
@@ -214,19 +206,6 @@
 
             return range;
         };
-    };
-
-    models.GatewayResource = function (gatewayResourceFromServer) {
-
-        var self = this;
-
-        if (gatewayResourceFromServer == undefined) {
-            self.name = "";
-            self.serviceCode = "";
-        } else {
-            self.name = gatewayResourceFromServer.name;
-            self.serviceCode = gatewayResourceFromServer.serviceCode;
-        }
     };
 
     models.ShipRateTable = function (shipRateTableFromServer) {

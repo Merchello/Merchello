@@ -8,7 +8,7 @@ namespace Merchello.Core.Models
     /// <summary>
     /// Defines a Merchello ShipMethod object interface
     /// </summary>
-    public interface IShipMethod : IEntity
+    public interface IShipMethod : IGatewayProviderMethod
     {            
         /// <summary>
         /// The name for the ShipMethod

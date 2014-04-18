@@ -68,7 +68,7 @@ namespace Merchello.Tests.IntegrationTests.Workflow
             #region Add a GatewayProvider (RateTableShippingGatewayProvider)
 
             var key = Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey;
-            var rateTableProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Current.Gateways.Shipping.ResolveByKey(key);
+            var rateTableProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Current.Gateways.Shipping.CreateInstance(key);
 
             #region Add and configure 3 rate table shipmethods
 
@@ -103,7 +103,7 @@ namespace Merchello.Tests.IntegrationTests.Workflow
 
             #region Settings -> Taxation
 
-            var taxProvider = MerchelloContext.Current.Gateways.Taxation.ResolveByKey(Constants.ProviderKeys.Taxation.FixedRateTaxationProviderKey);
+            var taxProvider = MerchelloContext.Current.Gateways.Taxation.CreateInstance(Constants.ProviderKeys.Taxation.FixedRateTaxationProviderKey);
             
             taxProvider.DeleteAllTaxMethods();
 

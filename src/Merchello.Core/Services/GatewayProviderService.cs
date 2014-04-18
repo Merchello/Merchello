@@ -13,6 +13,9 @@ using Umbraco.Core.Events;
 
 namespace Merchello.Core.Services
 {
+    /// <summary>
+    /// Represents the GatewayProviderService
+    /// </summary>
     public class GatewayProviderService : IGatewayProviderService
     {
         private readonly IDatabaseUnitOfWorkProvider _uowProvider;
@@ -28,6 +31,9 @@ namespace Merchello.Core.Services
 
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
+         /// <summary>
+         /// Constructor
+         /// </summary>
          public GatewayProviderService()
             : this(new RepositoryFactory(), new ShipMethodService(), new ShipRateTierService(), new ShipCountryService(), new InvoiceService(), new OrderService(), new TaxMethodService(), new PaymentService(),  new PaymentMethodService())
         { }
@@ -102,6 +108,25 @@ namespace Merchello.Core.Services
         public void Delete(IGatewayProvider gatewayProvider, bool raiseEvents = true)
         {
             if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<IGatewayProvider>(gatewayProvider), this);
+
+            // delete associated methods
+            switch (gatewayProvider.GatewayProviderType)
+            {
+                case GatewayProviderType.Payment:
+                    var paymentMethods = _paymentMethodService.GetPaymentMethodsByProviderKey(gatewayProvider.Key).ToArray();
+                    if(paymentMethods.Any()) _paymentMethodService.Delete(paymentMethods);
+                    break;
+                    
+                case GatewayProviderType.Shipping:
+                    var shippingMethods = _shipMethodService.GetShipMethodsByProviderKey(gatewayProvider.Key).ToArray();
+                    if(shippingMethods.Any()) _shipMethodService.Delete(shippingMethods);
+                    break;
+
+                case GatewayProviderType.Taxation:
+                    var taxMethods = _taxMethodService.GetTaxMethodsByProviderKey(gatewayProvider.Key).ToArray();
+                    if(taxMethods.Any()) _taxMethodService.Delete(taxMethods);
+                    break;
+            }
 
             using (new WriteLock(Locker))
             {
@@ -411,7 +436,7 @@ namespace Merchello.Core.Services
         /// <returns>A collection of <see cref="IShipMethod"/></returns>
         public IEnumerable<IShipMethod> GetShipMethodsByShipCountryKey(Guid providerKey, Guid shipCountryKey)
         {
-            return _shipMethodService.GetGatewayProviderShipMethods(providerKey, shipCountryKey);
+            return _shipMethodService.GetShipMethodsByProviderKey(providerKey, shipCountryKey);
         }
 
         /// <summary>
@@ -420,7 +445,7 @@ namespace Merchello.Core.Services
         /// <returns>A collection of <see cref="IShipMethod"/></returns>
         public IEnumerable<IShipMethod> GetShipMethodsByShipCountryKey(Guid providerKey)
         {
-            return _shipMethodService.GetGatewayProviderShipMethods(providerKey);
+            return _shipMethodService.GetShipMethodsByProviderKey(providerKey);
         }
 
         #endregion

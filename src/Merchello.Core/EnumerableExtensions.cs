@@ -3,6 +3,9 @@ using System.Linq;
 
 namespace Merchello.Core
 {
+    /// <summary>
+    /// Extension methods for IEnumerable types
+    /// </summary>
     public static class EnumerableExtensions
     {
         /// <summary>
@@ -25,5 +28,7 @@ namespace Merchello.Core
                     select accseq.Concat(new[] { item })
                 );
         }
+
+        
     }
 }

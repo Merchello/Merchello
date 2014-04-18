@@ -43,8 +43,8 @@ namespace Merchello.Tests.IntegrationTests.Examine
 
             OrderService.Saved += OrderServiceSaved;
 
-            var provider = (InvoiceIndexer)ExamineManager.Instance.IndexProviderCollection["MerchelloInvoiceIndexer"];
-            provider.RebuildIndex();
+            //var invoiceProvider = (InvoiceIndexer)ExamineManager.Instance.IndexProviderCollection["MerchelloInvoiceIndexer"];
+            //invoiceProvider.RebuildIndex();
         }
 
         [TestFixtureTearDown]
@@ -160,10 +160,7 @@ namespace Merchello.Tests.IntegrationTests.Examine
             var key = invoice3.Key;
 
             //// Act
-            var retrieved = MerchelloContext.Current.Services.InvoiceService.GetByKey(key);
-
-            var provider = (InvoiceIndexer)ExamineManager.Instance.IndexProviderCollection["MerchelloInvoiceIndexer"];
-            provider.AddInvoiceToIndex(retrieved);
+            MerchelloContext.Current.Services.InvoiceService.GetByKey(key);         
             var searcher = ExamineManager.Instance.SearchProviderCollection["MerchelloInvoiceSearcher"];
 
             var criteria = searcher.CreateSearchCriteria(Merchello.Examine.IndexTypes.Invoice);

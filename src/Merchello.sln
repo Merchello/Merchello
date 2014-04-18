@@ -17,6 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{07393251
 		..\build\build.bat = ..\build\build.bat
 		..\build\install.md = ..\build\install.md
 		..\build\Merchello.build = ..\build\Merchello.build
+		..\build\NuSpec\Merchello.Core.nuspec = ..\build\NuSpec\Merchello.Core.nuspec
 		..\tools\Merchello\Merchello.props = ..\tools\Merchello\Merchello.props
 		..\tools\Merchello\Merchello.targets = ..\tools\Merchello\Merchello.targets
 		..\build\Merchello.Version.props = ..\build\Merchello.Version.props
@@ -115,6 +116,7 @@ Global
 		{E3A9764B-E9CE-496B-88B1-38103909F4A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E3A9764B-E9CE-496B-88B1-38103909F4A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E3A9764B-E9CE-496B-88B1-38103909F4A6}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E3A9764B-E9CE-496B-88B1-38103909F4A6}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{E3A9764B-E9CE-496B-88B1-38103909F4A6}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{E3A9764B-E9CE-496B-88B1-38103909F4A6}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{E3A9764B-E9CE-496B-88B1-38103909F4A6}.Release|Any CPU.ActiveCfg = Release|Any CPU

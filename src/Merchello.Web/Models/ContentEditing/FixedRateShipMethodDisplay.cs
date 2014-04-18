@@ -1,6 +1,6 @@
-﻿using Merchello.Core.Gateways.Shipping.FixedRate;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Merchello.Core.Gateways.Shipping.FixedRate;
 
 namespace Merchello.Web.Models.ContentEditing
 {

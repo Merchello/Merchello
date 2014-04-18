@@ -8,7 +8,7 @@
      * @description
      * The controller for the Vendors page
      */
-    controllers.VendorsController = function ($scope, $routeParams, $location, notificationsService, angularHelper, serverValidationManager, merchelloProductService) {
+    controllers.VendorsController = function ($scope) {
 
         $scope.vendors = [];
         $scope.sortProperty = "name";
@@ -124,7 +124,7 @@
     }
 
 
-    angular.module("umbraco").controller("Merchello.Dashboards.Settings.VendorsController", merchello.Controllers.VendorsController);
+    angular.module("umbraco").controller("Merchello.Dashboards.Settings.VendorsController", ['$scope', merchello.Controllers.VendorsController]);
 
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));

@@ -36,15 +36,18 @@ namespace Merchello.Core.Gateways
         // The properties Name and Key will be likely become attribute defined properties
         // TODO enable devs to define each of these values. 
         
-        /// <summary>
-        /// The name of the GatewayProvider
-        /// </summary>
-        public abstract string Name { get; }
+        ///// <summary>
+        ///// The name of the GatewayProvider
+        ///// </summary>
+        //public abstract string Name { get; }
 
         /// <summary>
         /// The unique Key that will be used
         /// </summary>
-        public abstract Guid Key { get;  }
+        public Guid Key 
+        {
+            get { return _gatewayProvider.Key; }
+        }
 
         /// <summary>
         /// Gets the <see cref="IGatewayProviderService"/>

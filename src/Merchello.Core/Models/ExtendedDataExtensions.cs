@@ -530,12 +530,37 @@ namespace Merchello.Core.Models
 
         #endregion
 
+        #region AutoMapper
+
+        /// <summary>
+        /// Converts extended data into a more easily serializable collection for display classes (back office UI)
+        /// </summary>
+        /// <param name="extendedData">The <see cref="ExtendedDataCollection"/></param>
+        /// <returns>An <c>IEnumerable{object}</c></returns>
+        internal static IEnumerable<KeyValuePair<string, string>> AsEnumerable(this ExtendedDataCollection extendedData)
+        {
+            return extendedData.Select(item =>
+                    new KeyValuePair<string, string>(item.Key, item.Value)
+                );
+        }
+
+        internal static ExtendedDataCollection AsExtendedDataCollection(this IEnumerable<KeyValuePair<string, string>> source)
+        {
+            var ed = new ExtendedDataCollection();
+            foreach (var item in source.ToArray())
+            {                
+                ed.SetValue(item.Key, item.Value);
+            }
+
+            return ed;
+        }
+
+        #endregion
 
         #region Utility
 
 
         private static Guid GetGuidValue(string value)
-
         {
             Guid converted;
             return Guid.TryParse(value, out converted) ? converted : Guid.Empty;

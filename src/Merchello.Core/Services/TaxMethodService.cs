@@ -196,6 +196,35 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
+        /// Deletes a collection <see cref="ITaxMethod"/>
+        /// </summary>
+        /// <param name="taxMethods">The collection of <see cref="ITaxMethod"/> to be deleted</param>
+        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        public void Delete(IEnumerable<ITaxMethod> taxMethods, bool raiseEvents = true)
+        {
+            var methods = taxMethods as ITaxMethod[] ?? taxMethods.ToArray();
+
+            if(raiseEvents)
+            Deleting.RaiseEvent(new DeleteEventArgs<ITaxMethod>(methods), this);
+
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreateTaxMethodRepository(uow))
+                {
+                    foreach (var method in methods)
+                    {
+                        repository.Delete(method);
+                    }
+                    uow.Commit();
+                }
+            }
+
+            if(raiseEvents)
+            Deleted.RaiseEvent(new DeleteEventArgs<ITaxMethod>(methods), this);
+        }
+
+        /// <summary>
         /// Gets a <see cref="ITaxMethod"/>
         /// </summary>
         /// <param name="key">The unique 'key' (Guid) of the <see cref="ITaxMethod"/></param>

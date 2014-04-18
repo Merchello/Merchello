@@ -1,17 +1,16 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
+﻿using System.Globalization;
 using Examine;
 using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Merchello.Examine;
 using Merchello.Web;
-using Merchello.Web.Workflow;
+using Moq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Umbraco.Core;
 using Umbraco.Core.Events;
+using Umbraco.Web;
+using WebBootManager = Merchello.Web.WebBootManager;
 
 namespace Merchello.Tests.IntegrationTests.TestHelpers
 {
@@ -23,6 +22,11 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         [TestFixtureSetUp]
         public virtual void FixtureSetup()
         {
+            AutoMapperMappings.BindMappings();  
+
+            // Umbraco Application
+            var applicationMock = new Mock<UmbracoApplication>();
+
             // Sets Umbraco SqlSytax and ensure database is setup
             DbPreTestDataWorker = new DbPreTestDataWorker();
             DbPreTestDataWorker.ValidateDatabaseSetup();
@@ -30,7 +34,8 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
             // Merchello CoreBootStrap
             var bootManager = new WebBootManager();
-            bootManager.Initialize();
+            bootManager.Initialize();    
+            
 
             if(MerchelloContext.Current == null) Assert.Ignore("MerchelloContext.Current is null");
 

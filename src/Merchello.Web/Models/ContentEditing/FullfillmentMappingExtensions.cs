@@ -9,6 +9,7 @@ using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Gateways.Shipping;
 using Umbraco.Core;
+using Umbraco.Core.IO;
 
 namespace Merchello.Web.Models.ContentEditing
 {
@@ -97,6 +98,20 @@ namespace Merchello.Web.Models.ContentEditing
             return AutoMapper.Mapper.Map<GatewayProviderDisplay>(gatewayProvider);
         }
 
+        internal static IGatewayProvider ToGatewayProvider(this GatewayProviderDisplay gatewayProvider, IGatewayProvider destination)
+        {
+            if (gatewayProvider.Key != Guid.Empty) destination.Key = gatewayProvider.Key;
+            // type key and typeFullName should be handled by the resolver 
+            destination.Name = gatewayProvider.Name;
+            destination.Description = gatewayProvider.Description;
+            destination.EncryptExtendedData = gatewayProvider.EncryptExtendedData;
+            
+            ((GatewayProvider)destination).ExtendedData = gatewayProvider.ExtendedData.AsExtendedDataCollection();
+
+            return destination;
+        }
+
+
         #endregion
 
         #region GatewayResourceDisplay
@@ -162,7 +177,7 @@ namespace Merchello.Web.Models.ContentEditing
 
         internal static ShipMethodDisplay ToShipMethodDisplay(this IShipMethod shipMethod)
         {            
-            return AutoMapper.Mapper.Map<ShipMethodDisplay>(shipMethod);
+            return AutoMapper.Mapper.Map<ShipMethodDisplay>(shipMethod);      
         }
 
         #endregion
@@ -579,7 +594,7 @@ namespace Merchello.Web.Models.ContentEditing
 
         internal static TaxMethodDisplay ToTaxMethodDisplay(this ITaxMethod taxMethod)
         {
-            return AutoMapper.Mapper.Map<TaxMethodDisplay>(taxMethod);
+           return AutoMapper.Mapper.Map<TaxMethodDisplay>(taxMethod);     
         }
 
         #endregion

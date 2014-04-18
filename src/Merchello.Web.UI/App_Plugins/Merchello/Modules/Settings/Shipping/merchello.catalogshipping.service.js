@@ -6,33 +6,32 @@
         * @name umbraco.resources.MerchelloCatalogShippingService
         * @description Loads in data for shipping providers and store shipping settings
         **/
-    merchelloServices.MerchelloCatalogShippingService = function ($http, umbRequestHelper) {
+    merchelloServices.MerchelloCatalogShippingService = function($http, umbRequestHelper) {
 
         return {
-
-            getWarehouseCatalogShippingCountries: function (id) {
+            getWarehouseCatalogShippingCountries: function(id) {
 
                 return umbRequestHelper.resourcePromise(
-                   $http({
-                       url: umbRequestHelper.getApiUrl('merchelloCatalogShippingApiBaseUrl', 'GetAllShipCountries'),
-                       method: "GET",
-                       params: { id: id }
+                    $http({
+                        url: umbRequestHelper.getApiUrl('merchelloCatalogShippingApiBaseUrl', 'GetAllShipCountries'),
+                        method: "GET",
+                        params: { id: id }
                     }),
-                   'Failed to retreive shipping country data for warehouse catalog');
+                    'Failed to retreive shipping country data for warehouse catalog');
             },
 
-            getShippingCountry: function (id) {
+            getShippingCountry: function(id) {
 
                 return umbRequestHelper.resourcePromise(
-                   $http({
-                       url: umbRequestHelper.getApiUrl('merchelloCatalogShippingApiBaseUrl', 'GetShipCountry'),
-                       method: "GET",
-                       params: { id: id }
-                   }),
-                   'Failed to retreive data for shipping country: ' + id);
+                    $http({
+                        url: umbRequestHelper.getApiUrl('merchelloCatalogShippingApiBaseUrl', 'GetShipCountry'),
+                        method: "GET",
+                        params: { id: id }
+                    }),
+                    'Failed to retreive data for shipping country: ' + id);
             },
 
-            newWarehouseCatalogShippingCountry: function (catalogKey, countryCode) {
+            newWarehouseCatalogShippingCountry: function(catalogKey, countryCode) {
 
                 return umbRequestHelper.resourcePromise(
                     $http({
@@ -43,30 +42,30 @@
                     'Failed to create ship country: ' + countryCode);
             },
 
-            getAllShipGatewayProviders: function () {
+            getAllShipGatewayProviders: function() {
 
                 return umbRequestHelper.resourcePromise(
-                   $http({
-                       url: umbRequestHelper.getApiUrl('merchelloCatalogShippingApiBaseUrl', 'GetAllShipGatewayProviders'),
-                       method: "GET"
-                   }),
-                   'Failed to retreive shipping gateway providers');
+                    $http({
+                        url: umbRequestHelper.getApiUrl('merchelloCatalogShippingApiBaseUrl', 'GetAllShipGatewayProviders'),
+                        method: "GET"
+                    }),
+                    'Failed to retreive shipping gateway providers');
             },
 
-            deleteShipCountry: function (shipCountryKey) {
+            deleteShipCountry: function(shipCountryKey) {
 
                 return umbRequestHelper.resourcePromise(
-                   $http({
-                       url: umbRequestHelper.getApiUrl('merchelloCatalogShippingApiBaseUrl', 'DeleteShipCountry'),
-                       method: "GET",
-                       params: { id: shipCountryKey }
-                   }),
-                   'Failed to delete ship country');
+                    $http({
+                        url: umbRequestHelper.getApiUrl('merchelloCatalogShippingApiBaseUrl', 'DeleteShipCountry'),
+                        method: "GET",
+                        params: { id: shipCountryKey }
+                    }),
+                    'Failed to delete ship country');
             },
 
         };
-    }
+    };
 
-    angular.module('umbraco.resources').factory('merchelloCatalogShippingService', merchello.Services.MerchelloCatalogShippingService);
+    angular.module('umbraco.resources').factory('merchelloCatalogShippingService', ['$http', 'umbRequestHelper', merchello.Services.MerchelloCatalogShippingService]);
 
 }(window.merchello.Services = window.merchello.Services || {}));

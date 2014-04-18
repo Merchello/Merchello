@@ -29,7 +29,7 @@ namespace Merchello.Core.Gateways.Shipping
         /// <returns>A collection of <see cref="IShipmentRateQuote"/></returns>
         public IEnumerable<IShipmentRateQuote> GetShipRateQuotesForShipment(IShipment shipment)
         {
-            var providers = ResolveAllActiveProviders();
+            var providers = CreateInstances();
             var quotes = new List<IShipmentRateQuote>();
             foreach (var provider in providers)
             {
@@ -77,7 +77,7 @@ namespace Merchello.Core.Gateways.Shipping
 
             return
                 gatewayProviders.Select(
-                    provider => GatewayProviderResolver.ResolveByGatewayProvider<ShippingGatewayProviderBase>(provider));
+                    provider => GatewayProviderResolver.CreateInstance<ShippingGatewayProviderBase>(provider));
         }
 
 
@@ -85,9 +85,9 @@ namespace Merchello.Core.Gateways.Shipping
         /// Resolves all active shipping gateway providers
         /// </summary>
         /// <returns>A collection of all active shipping gateway providers</returns>
-        public override IEnumerable<ShippingGatewayProviderBase> ResolveAllActiveProviders()
+        public override IEnumerable<ShippingGatewayProviderBase> CreateInstances()
         {
-            return GatewayProviderResolver.ResolveByGatewayProviderType<ShippingGatewayProviderBase>(GatewayProviderType.Shipping);
+            return GatewayProviderResolver.CreateInstances<ShippingGatewayProviderBase>(GatewayProviderType.Shipping);
         }
 
         /// <summary>
@@ -95,9 +95,9 @@ namespace Merchello.Core.Gateways.Shipping
         /// </summary>
         /// <param name="key"></param>
         /// <returns>A shipping gateway provider</returns>
-        public override ShippingGatewayProviderBase ResolveByKey(Guid key)
+        public override ShippingGatewayProviderBase CreateInstance(Guid key)
         {
-            return GatewayProviderResolver.ResolveByKey<ShippingGatewayProviderBase>(key);
+            return GatewayProviderResolver.CreateInstance<ShippingGatewayProviderBase>(key);
         }
     }
 }

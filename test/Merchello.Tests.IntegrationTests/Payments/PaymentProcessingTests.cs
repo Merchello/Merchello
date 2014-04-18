@@ -44,7 +44,7 @@ namespace Merchello.Tests.IntegrationTests.Payments
 
             #region Settings -> Taxation
 
-            var taxProvider = _merchelloContext.Gateways.Taxation.ResolveByKey(Constants.ProviderKeys.Taxation.FixedRateTaxationProviderKey);
+            var taxProvider = _merchelloContext.Gateways.Taxation.CreateInstance(Constants.ProviderKeys.Taxation.FixedRateTaxationProviderKey);
 
             taxProvider.DeleteAllTaxMethods();
 
@@ -67,9 +67,10 @@ namespace Merchello.Tests.IntegrationTests.Payments
 
             };
 
-            var gateway = _merchelloContext.Gateways.Payment.GetAllGatewayProviders().FirstOrDefault();
-            var provider = _merchelloContext.Gateways.Payment.ResolveByKey(gateway.Key);
-            var method = provider.CreatePaymentMethod("Cash", "Cash Payments");
+            var gateway = _merchelloContext.Gateways.Payment.GetAllActivatedProviders().FirstOrDefault();
+            var provider = _merchelloContext.Gateways.Payment.CreateInstance(gateway.Key);
+            var resource = provider.ListResourcesOffered().FirstOrDefault(x => x.ServiceCode == "Cash");
+            var method = provider.CreatePaymentMethod(resource, "Cash", "Cash Payments");
             provider.SavePaymentMethod(method);
 
             _paymentMethodKey = method.PaymentMethod.Key;

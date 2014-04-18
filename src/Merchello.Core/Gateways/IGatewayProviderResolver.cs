@@ -9,20 +9,25 @@ namespace Merchello.Core.Gateways
         /// <summary>
         /// Gets a collection of <see cref="IGatewayProvider"/>s by type
         /// </summary>
-        IEnumerable<IGatewayProvider> GetGatewayProviders<T>() where T : GatewayProviderBase;
+        IEnumerable<IGatewayProvider> GetActivatedProviders<T>() where T : GatewayProviderBase;
 
+        /// <summary>
+        /// Gets a collection of inactive (not saved) <see cref="IGatewayProvider"/> by type
+        /// </summary>
+        IEnumerable<IGatewayProvider> GetAllProviders<T>() where T : GatewayProviderBase; 
+            
         /// <summary>
         /// Gets a collection of instantiated gateway providers
         /// </summary>
         /// <returns></returns>
-        IEnumerable<T> ResolveByGatewayProviderType<T>(GatewayProviderType gatewayProviderType) where T : GatewayProviderBase;
+        IEnumerable<T> CreateInstances<T>(GatewayProviderType gatewayProviderType) where T : GatewayProviderBase;
 
         /// <summary>
         /// Returns an instantiation of a <see cref="T"/>
         /// </summary>
         /// <param name="provider"><see cref="IGatewayProvider"/></param>
         /// <returns></returns>
-        T ResolveByGatewayProvider<T>(IGatewayProvider provider) where T : GatewayProviderBase;
+        T CreateInstance<T>(IGatewayProvider provider) where T : GatewayProviderBase;
 
         /// <summary>
         /// Instantiates a GatewayProvider given its registered Key
@@ -30,6 +35,11 @@ namespace Merchello.Core.Gateways
         /// <typeparam name="T">The Type of the GatewayProvider.  Must inherit from GatewayProviderBase</typeparam>
         /// <param name="gatewayProviderKey"></param>
         /// <returns>An instantiated GatewayProvider</returns>
-        T ResolveByKey<T>(Guid gatewayProviderKey) where T : GatewayProviderBase;
+        T CreateInstance<T>(Guid gatewayProviderKey) where T : GatewayProviderBase;
+
+        /// <summary>
+        /// Refreshes the <see cref="GatewayProviderBase"/> cache
+        /// </summary>
+        void RefreshCache();
     }
 }

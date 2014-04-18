@@ -30,6 +30,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Merchello.Web.UI.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -70,6 +71,7 @@
     <Folder Include="App_Plugins\Merchello\Views\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\GatewayProviders.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\TaxesByDestination.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\SalesByItem.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\SalesOverTime.html" />
@@ -93,8 +95,6 @@
     <Content Include="App_Plugins\Merchello\Directives\dropdownlist.directive.js" />
     <Content Include="App_Plugins\Merchello\Directives\merchello-panel.html" />
     <Content Include="App_Plugins\Merchello\Directives\merchello.panel.directive.js" />
-    <Content Include="App_Plugins\Merchello\Directives\productvariant.filter.directive.js" />
-    <Content Include="App_Plugins\Merchello\Directives\productoptions.repeat.directive.js" />
     <Content Include="App_Plugins\Merchello\Common\Js\startfrom.filter.js" />
     <Content Include="App_Plugins\Merchello\lib\JsonTree\jsontree.css" />
     <Content Include="App_Plugins\Merchello\lib\JsonTree\jsontree.js" />
@@ -132,6 +132,10 @@
     <Content Include="App_Plugins\Merchello\lib\ngTagsInput\ng-tags-input.min.css" />
     <Content Include="App_Plugins\Merchello\lib\ngTagsInput\ng-tags-input.min.js" />
     <Content Include="App_Plugins\Merchello\lib\select2\ui-select2.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\GatewayProviders\Directives\gatewayproviderresolver-list.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\GatewayProviders\Directives\gatewayproviders-helper-directives.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\GatewayProviders\gatewayproviders.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\GatewayProviders\merchello.gatewayprovider.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Payment\Dialogs\paymentmethod.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Payment\Dialogs\paymentmethod.html" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Payment\merchello.paymentgateway.service.js" />

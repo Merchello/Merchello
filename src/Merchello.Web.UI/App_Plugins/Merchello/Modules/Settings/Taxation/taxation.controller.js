@@ -244,7 +244,7 @@
     };
 
 
-    angular.module("umbraco").controller("Merchello.Dashboards.Settings.TaxationController", merchello.Controllers.TaxationController);
+    angular.module("umbraco").controller("Merchello.Dashboards.Settings.TaxationController", ['$scope', 'notificationsService', 'dialogService', 'merchelloTaxationGatewayService', 'merchelloSettingsService', merchello.Controllers.TaxationController]);
 
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));

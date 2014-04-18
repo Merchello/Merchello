@@ -33,7 +33,7 @@
         };
     };
 
-    angular.module("umbraco").controller("Merchello.Dashboards.Settings.Shipping.Dialogs.ShippingMethodController", merchello.Controllers.ShippingMethodController);
+    angular.module("umbraco").controller("Merchello.Dashboards.Settings.Shipping.Dialogs.ShippingMethodController", ['$scope', merchello.Controllers.ShippingMethodController]);
 
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));

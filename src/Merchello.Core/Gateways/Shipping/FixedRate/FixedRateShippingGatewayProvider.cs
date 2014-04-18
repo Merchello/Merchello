@@ -15,6 +15,7 @@ namespace Merchello.Core.Gateways.Shipping.FixedRate
     /// This is Merchello's default ShippingGatewayProvider
     /// 
     /// </remarks>
+    [GatewayProviderActivation("AEC7A923-9F64-41D0-B17B-0EF64725F576", "Fixed Rate Shipping Provider", "Fixed Rate Shipping Provider")]
     public class FixedRateShippingGatewayProvider : ShippingGatewayProviderBase, IFixedRateShippingGatewayProvider
     {
         #region "Available Methods"
@@ -111,14 +112,5 @@ namespace Merchello.Core.Gateways.Shipping.FixedRate
                 ).OrderBy(x => x.ShipMethod.Name);
         }
 
-        public override string Name
-        {
-            get { return "Fixed Rate Shipping Provider"; }
-        }
-
-        public override Guid Key
-        {
-            get { return Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey; }
-        }
     }
 }

@@ -126,4 +126,66 @@
         }
     };
 
+    models.GatewayResource = function (gatewayResourceFromServer) {
+
+        var self = this;
+
+        if (gatewayResourceFromServer == undefined) {
+            self.name = "";
+            self.serviceCode = "";
+        } else {
+            self.name = gatewayResourceFromServer.name;
+            self.serviceCode = gatewayResourceFromServer.serviceCode;
+        }
+    };
+
+
+
+    models.GatewayProvider = function (gatewayProviderFromServer) {
+
+        var self = this;
+
+        if (gatewayProviderFromServer == undefined) {
+            self.key = "";
+            self.name = "";
+            self.providerTfKey = "";
+            self.description = "";
+            self.extendedData = [];
+            self.encryptExtendedData = false;
+            self.activated = false;
+            self.dialogEditorView = "";
+        } else {
+            self.key = gatewayProviderFromServer.key;
+            self.name = gatewayProviderFromServer.name;
+            self.providerTfKey = gatewayProviderFromServer.providerTfKey;
+            self.description = gatewayProviderFromServer.description;
+            self.extendedData = gatewayProviderFromServer.extendedData;
+            self.encryptExtendedData = gatewayProviderFromServer.encryptExtendedData;
+            self.activated = gatewayProviderFromServer.activated;
+            self.dialogEditorView = new merchello.Models.DialogEditorView(gatewayProviderFromServer.dialogEditorView);
+        }
+
+        self.displayEditor = function() {
+            return self.activated && self.dialogEditorView.editorView;
+        };
+    };
+
+    models.DialogEditorView = function(dialogEditorFromServer) {
+
+        var self = this;
+        
+        if (dialogEditorFromServer == undefined) {
+
+            self.title = "";
+            self.description = "";
+            self.editorView = "";
+
+        } else {
+            self.title = dialogEditorFromServer.title;
+            self.description = dialogEditorFromServer.description;
+            self.editorView = dialogEditorFromServer.editorView;
+        }
+            
+    };
+
 }(window.merchello.Models = window.merchello.Models || {}));

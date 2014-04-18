@@ -7,13 +7,13 @@ namespace Merchello.Core.Models
     /// <summary>
     /// Defines a Merchello Payment 
     /// </summary>
-    public interface IPayment : IEntity
+    public interface IPayment : IHasExtendedData, IEntity
     {                                               
         /// <summary>
         /// The key of the customer associated with the Payment
         /// </summary>
         [DataMember]
-        Guid? CustomerKey { get; }
+        Guid? CustomerKey { get; set; }
             
         /// <summary>
         /// The payment method key for the payment provider
@@ -58,16 +58,17 @@ namespace Merchello.Core.Models
         bool Collected { get; set; }
 
         /// <summary>
+        /// True/false indicating whether or not this payment has been voided
+        /// </summary>
+        [DataMember]
+        bool Voided { get; set; }
+
+        /// <summary>
         /// True/false indicating whether or not this payment has be exported to another system
         /// </summary>
         [DataMember]
         bool Exported { get; set;}
 
-        /// <summary>
-        /// A collection to store custom/extended data for the payment
-        /// </summary>
-        [DataMember]
-        ExtendedDataCollection ExtendedData { get; }
     }
 }
 
