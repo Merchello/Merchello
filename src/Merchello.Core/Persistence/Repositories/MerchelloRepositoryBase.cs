@@ -20,8 +20,11 @@ namespace Merchello.Core.Persistence.Repositories
 		private readonly IUnitOfWork _work;
 		private readonly IRuntimeCacheProvider _cache;
 
+
 		protected MerchelloRepositoryBase(IUnitOfWork work, IRuntimeCacheProvider cache)
 		{
+		    if (work == null) throw new ArgumentNullException("work");
+		    if (cache == null) throw new ArgumentNullException("cache");
 			_work = work;
 			_cache = cache;
 		}
@@ -51,7 +54,7 @@ namespace Merchello.Core.Persistence.Repositories
 		/// <param name="entity"></param>
 		public void AddOrUpdate(TEntity entity)
 		{
-			if (!entity.HasIdentity)
+            if (entity.HasIdentity == false)
 			{
 				_work.RegisterAdded(entity, this);
 			}
@@ -65,7 +68,7 @@ namespace Merchello.Core.Persistence.Repositories
 		/// Deletes the passed in entity
 		/// </summary>
 		/// <param name="entity"></param>
-		public void Delete(TEntity entity)
+        public virtual void Delete(TEntity entity)
 		{
 			if(_work != null)
 			{
@@ -125,8 +128,7 @@ namespace Merchello.Core.Persistence.Repositories
 				foreach (var key in keys)
 				{
 					var entity = _cache.GetCacheItem(GetCacheKey(key));
-					if(entity != null) entities.Add((TEntity)entity);
-					
+					if(entity != null) entities.Add((TEntity)entity);					
 				}
 
 				if (entities.Count().Equals(keys.Count()) && entities.Any(x => x == null) == false)
@@ -136,7 +138,7 @@ namespace Merchello.Core.Persistence.Repositories
 			{
 				// fix http://issues.merchello.com/youtrack/issue/M-159
 				// Since IProduct and IProductVaraint both start with IProduct which was causing the cache conflict
-				var allEntities = _cache.GetCacheItemsByKeySearch(typeof (TEntity).Name + "."); //_cache.GetAllByType(typeof(TEntity));
+				var allEntities = _cache.GetCacheItemsByKeySearch(typeof (TEntity).Name + ".").ToArray(); //_cache.GetAllByType(typeof(TEntity));
 				
 				if (allEntities.Any())
 				{
@@ -149,7 +151,7 @@ namespace Merchello.Core.Persistence.Repositories
 				}
 			}
 
-			var entityCollection = PerformGetAll(keys);
+			var entityCollection = PerformGetAll(keys).ToArray();
 
 			foreach (var entity in entityCollection)
 			{
@@ -211,8 +213,19 @@ namespace Merchello.Core.Persistence.Repositories
 		/// <param name="entity"></param>
 		public virtual void PersistNewItem(IEntity entity)
 		{
-			PersistNewItem((TEntity)entity);
-			_cache.GetCacheItem(GetCacheKey(entity.Key), () => entity);
+		    try
+		    {
+                PersistNewItem((TEntity)entity);
+                _cache.GetCacheItem(GetCacheKey(entity.Key), () => entity);
+		    }
+		    catch (Exception)
+		    {
+                //if an exception is thrown we need to remove the entry from cache, this is ONLY a work around because of the way
+                // that we cache entities: http://issues.umbraco.org/issue/U4-4259
+                _cache.ClearCacheItem(GetCacheKey(entity.Key));
+		        throw;
+		    }
+			
 		}
 
 		/// <summary>
@@ -221,9 +234,19 @@ namespace Merchello.Core.Persistence.Repositories
 		/// <param name="entity"></param>
 		public virtual void PersistUpdatedItem(IEntity entity)
 		{
-			_cache.ClearCacheItem(GetCacheKey(entity.Key));
-			PersistUpdatedItem((TEntity)entity);
-			_cache.GetCacheItem(GetCacheKey(entity.Key), () => entity);
+		    try
+		    {
+                PersistUpdatedItem((TEntity)entity);
+                _cache.GetCacheItem(GetCacheKey(entity.Key), () => entity);
+		    }
+		    catch (Exception)
+		    {
+                //if an exception is thrown we need to remove the entry from cache, this is ONLY a work around because of the way
+                // that we cache entities: http://issues.umbraco.org/issue/U4-4259
+                _cache.ClearCacheItem(GetCacheKey(entity.Key));
+                throw;
+		    }
+			
 		}
 
 		/// <summary>
