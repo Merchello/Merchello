@@ -15,7 +15,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyVersion("1.0.0")]
-[assembly: AssemblyFileVersion("1.0.17.40338")]
+[assembly: AssemblyFileVersion("1.0.20.25092")]
 [assembly: AssemblyInformationalVersion("1.0.0.0")]
 
 
