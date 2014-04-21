@@ -258,6 +258,8 @@
   <ItemGroup>
     <Content Include="App_Plugins\Merchello.AuthorizeNet\editor.html" />
     <Content Include="App_Plugins\Merchello.AuthorizeNet\merchello.authorizenet.controller.js" />
+    <Content Include="App_Plugins\Merchello.AuthorizeNet\merchello.authorizenet.paymentmethod.controller.js" />
+    <Content Include="App_Plugins\Merchello.AuthorizeNet\paymentmethod.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
