@@ -1,0 +1,34 @@
+﻿<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Dashboards.Catalog.Dialogs.ProductUpdateInventoryController">
+	<div class="umb-modalcolumn-header">
+		<h4>Update Inventory For All Selected Items</h4>
+	</div>
+	<div class="umb-panel-body with-header with-footer">
+
+		<!-- Flyout when Update Inventory is clicked -->
+		<form class="form-group row-fluid">
+			<label for="update-inventory">New quantity</label>
+			<input name="update-inventory" data-ng-model="dialogData.newInventory" class="col-xs-3 span3" type="text" />
+		</form>
+
+		<p class="text-warning">Note: This will update the inventory for <strong>all warehouses</strong> on <strong>all selected variants</strong></p>
+
+	</div>
+
+	<div class="umb-panel-footer">
+		<div class="umb-el-wrap umb-panel-buttons">
+			<div class="btn-toolbar umb-btn-toolbar pull-right">
+
+				<a href data-ng-click="close()" class="btn btn-link">
+					<localize key="general_cancel">Cancel</localize>
+				</a>
+
+				<button class="btn btn-primary"
+						data-ng-click="submit(dialogData)">
+					<localize key="buttons_save">Save</localize>
+				</button>
+
+			</div>
+		</div>
+	</div>
+</div>
+
