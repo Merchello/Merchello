@@ -1,0 +1,38 @@
+﻿<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Dashboards.Settings.Shipping.Dialogs.ShippingAddCountryController">
+	<div class="umb-modalcolumn-header">
+		<h4>Add a Country</h4>
+	</div>
+	<div class="umb-panel-body with-header with-footer">
+
+		<!-- Flyout when add a country is clicked -->
+
+		<form class="form-group row-fluid">
+			<div class="form-group row-fluid country-dropdown">
+				<label for="country-name">Type your Country Name</label>
+				<div class="input-append col-xs-12 span12">
+					<!-- A country list should fly out beneath this input when the user starts typing or if they select the dropdown button -->
+					<dropdown-list selected="dialogData.selectedCountry" placeholder="Type a country name" countries="dialogData.availableCountries"></dropdown-list>
+				</div>
+			</div>
+		</form>
+
+	</div>
+
+	<div class="umb-panel-footer">
+		<div class="umb-el-wrap umb-panel-buttons">
+			<div class="btn-toolbar umb-btn-toolbar pull-right">
+
+				<a href data-ng-click="close()" class="btn btn-link">
+					<localize key="general_cancel">Cancel</localize>
+				</a>
+
+				<button class="btn btn-primary"
+						data-ng-click="submit(dialogData)">
+					<localize key="buttons_save">Save</localize>
+				</button>
+
+			</div>
+		</div>
+	</div>
+</div>
+

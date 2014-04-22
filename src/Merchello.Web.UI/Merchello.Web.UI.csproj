@@ -146,9 +146,17 @@
     <Content Include="App_Plugins\Merchello\Modules\Settings\GatewayProviders\Directives\gatewayproviders-helper-directives.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\GatewayProviders\gatewayproviders.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\GatewayProviders\merchello.gatewayprovider.service.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Dialogs\notifications.edittemplate.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Dialogs\notifications.edittemplate.html" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Payment\Dialogs\paymentmethod.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Payment\Dialogs\paymentmethod.html" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Payment\merchello.paymentgateway.service.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Dialogs\shipping.deletewarehouse.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Dialogs\shipping.deletewarehouse.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Dialogs\shipping.addcountry.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Dialogs\shipping.addcountry.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Dialogs\shipping.editwarehouse.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Dialogs\shipping.editwarehouse.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Dialogs\shippingprovider.html" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Dialogs\shippingprovider.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Dialogs\shippingmethod.controller.js" />
