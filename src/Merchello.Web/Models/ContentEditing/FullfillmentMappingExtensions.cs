@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography;
 using Merchello.Core.Gateways;
+using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Shipping.FixedRate;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
@@ -149,6 +150,11 @@ namespace Merchello.Web.Models.ContentEditing
         internal static PaymentMethodDisplay ToPaymentMethodDisplay(this IPaymentMethod paymentMethod)
         {
             return AutoMapper.Mapper.Map<PaymentMethodDisplay>(paymentMethod);
+        }
+
+        internal static PaymentMethodDisplay ToPaymentMethodDisplay(this IPaymentGatewayMethod paymentGatewayMethod)
+        {
+            return AutoMapper.Mapper.Map<PaymentMethodDisplay>(paymentGatewayMethod);
         }
 
         internal static IPaymentMethod ToPaymentMethod(this PaymentMethodDisplay paymentMethodDisplay, IPaymentMethod destination)
@@ -596,6 +602,8 @@ namespace Merchello.Web.Models.ContentEditing
         {
            return AutoMapper.Mapper.Map<TaxMethodDisplay>(taxMethod);     
         }
+
+
 
         #endregion
 

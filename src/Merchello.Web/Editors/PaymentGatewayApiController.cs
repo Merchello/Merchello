@@ -92,7 +92,8 @@ namespace Merchello.Web.Editors
 
             foreach (var method in provider.PaymentMethods)
             {
-                yield return method.ToPaymentMethodDisplay();
+                // we need the actual PaymentGatewayProvider so we can grab the if present
+                yield return provider.GetPaymentGatewayMethodByKey(method.Key).ToPaymentMethodDisplay();
             }
         }
 

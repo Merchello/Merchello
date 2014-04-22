@@ -187,5 +187,7 @@ namespace Merchello.Tests.IntegrationTests.Payments
             Assert.IsTrue(authCapture.Payment.Success);
             Assert.AreEqual(Constants.DefaultKeys.InvoiceStatus.Paid, _invoice.InvoiceStatusKey);
         }
+
+        
     }
 }

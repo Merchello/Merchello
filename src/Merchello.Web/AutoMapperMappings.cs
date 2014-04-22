@@ -1,4 +1,5 @@
 ﻿using Merchello.Core.Gateways;
+using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Gateways.Shipping.FixedRate;
 using Merchello.Core.Models;
@@ -37,9 +38,28 @@ namespace Merchello.Web
             // payment
             AutoMapper.Mapper.CreateMap<IAppliedPayment, AppliedPaymentDisplay>();
             AutoMapper.Mapper.CreateMap<IPayment, PaymentDisplay>();
-            AutoMapper.Mapper.CreateMap<IPaymentMethod, PaymentMethodDisplay>()
+
+            AutoMapper.Mapper.CreateMap<IPaymentMethod, PaymentMethodDisplay>();
+
+            AutoMapper.Mapper.CreateMap<IPaymentGatewayMethod, PaymentMethodDisplay>()
+                .ForMember(dest => dest.Key,
+                    opt => opt.MapFrom(src => src.PaymentMethod.Key)
+                )
+                .ForMember(dest => dest.ProviderKey,
+                    opt => opt.MapFrom(src => src.PaymentMethod.ProviderKey)
+                )
+                .ForMember(dest => dest.Name,
+                    opt => opt.MapFrom(src => src.PaymentMethod.Name)
+                )
+                .ForMember(dest => dest.Description,
+                    opt => opt.MapFrom(src => src.PaymentMethod.Description)
+                )
+                .ForMember(dest => dest.PaymentCode,
+                    opt => opt.MapFrom(src => src.PaymentMethod.PaymentCode)
+                )
                 .ForMember(dest => dest.DialogEditorView,
-                    opt => opt.ResolveUsing<GatewayMethodDialogEditorViewResolver>().ConstructedBy(() => new GatewayMethodDialogEditorViewResolver())
+                    opt => opt.ResolveUsing<GatewayMethodDialogEditorViewResolver>()
+                        .ConstructedBy(() => new GatewayMethodDialogEditorViewResolver())
                 );
 
             // products
@@ -58,7 +78,7 @@ namespace Merchello.Web
                 .ForMember(dest => dest.DialogEditorView,
                     opt => opt.ResolveUsing<GatewayProviderDialogEditorViewResolver>().ConstructedBy(() => new GatewayProviderDialogEditorViewResolver())
                 );
-
+            
 
             AutoMapper.Mapper.CreateMap<IGatewayResource, GatewayResourceDisplay>();
 
