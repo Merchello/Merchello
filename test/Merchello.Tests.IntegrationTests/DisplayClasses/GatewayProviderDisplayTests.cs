@@ -51,7 +51,9 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
             Assert.AreEqual(editorView, mapped.DialogEditorView.EditorView);
         }
 
-
+        /// <summary>
+        /// Test confirms a PaymentProvider can be mapped to a GatewayProviderDisplay with ExtendedData
+        /// </summary>
         [Test]
         public void Can_Map_Test_PaymentProvider_To_GatewayProviderDisplay_With_ExtendedData()
         {
@@ -71,6 +73,33 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
             //// Assert
             Assert.NotNull(mapped);
             Assert.IsTrue(mapped.ExtendedData.Any());
+        }
+
+        /// <summary>
+        /// Test confirms that a CashPaymentGatewayMethod can be mapped directly to a PaymentMethodDisplay
+        /// </summary>
+        [Test]
+        public void Can_Map_CashPaymentGatewayMethod_To_PaymentMethodDisplay()
+        {
+            //// Arrange
+            const string editor = "/App_Plugins/Merchello/Modules/Settings/Payment/Dialogs/paymentmethod.html";
+            var provider =
+                MerchelloContext.Current.Gateways.Payment.CreateInstance(
+                    Constants.ProviderKeys.Payment.CashPaymentProviderKey);
+            Assert.NotNull(provider, "Cash payment provider was null");
+
+            var method = provider.GetPaymentGatewayMethodByKey(provider.PaymentMethods.First().Key);
+            Assert.NotNull(method, "Payment method was null");
+
+            //// Act
+            var display = method.ToPaymentMethodDisplay();
+
+            //// Assert
+            Assert.NotNull(display);
+            Assert.AreEqual(method.PaymentMethod.Name, display.Name);
+            Assert.AreEqual(method.PaymentMethod.Key, display.Key);
+            Assert.AreEqual(method.PaymentMethod.Description, display.Description);
+            Assert.AreEqual(editor, display.DialogEditorView.EditorView);
 
         }
     }
