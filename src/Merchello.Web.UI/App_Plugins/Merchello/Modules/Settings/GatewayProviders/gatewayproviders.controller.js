@@ -143,6 +143,8 @@
             promiseActivate.then(function () {
 
                 provider.activated = true;
+
+                $scope.init();
                 
                 notificationsService.success("Payment Method Activated");
 
@@ -189,7 +191,6 @@
          */
         $scope.editProviderConfigDialogOpen = function (provider) {
 
-           
             var dialogProvider = provider;
             if (!provider) {      
                 return;                
@@ -207,20 +208,25 @@
             });
         };
 
+        /**
+         * @ngdoc method
+         * @name providerConfigDialogConfirm
+         * @param {dialogData} model returned from the dialog view
+         * @function
+         * 
+         * @description
+         * Handles the data passed back from the provider editor dialog and saves it to the database
+         */
         $scope.providerConfigDialogConfirm = function(data) {
-
-           
-
-            notificationsService.info("Saving...", "");
 
             var promise = merchelloGatewayProviderService.saveGatewayProvider(data.provider);
 
             promise.then(function (provider) {
-                notificationsService.success("Gateway provider Saved", "H5YR!");
+                notificationsService.success("Gateway Provider Saved", "");
             },
             function (reason)
                 {
-                notificationsService.error("Gateway provider Save Failed", reason.message);
+                notificationsService.error("Gateway Provider Save Failed", reason.message);
                 }
             );
         };
