@@ -1,6 +1,5 @@
 ﻿using System;
-using Merchello.Core;
-using Merchello.Core.Models;
+using System.Collections.Generic;
 
 namespace Merchello.Web.Models.ContentEditing
 {
@@ -14,5 +13,6 @@ namespace Merchello.Web.Models.ContentEditing
         public int Quantity { get; set; }
         public decimal Price { get; set; }
         public bool Exported { get; set; }
+        public IEnumerable<KeyValuePair<string, string>> ExtendedData { get; set; }
     }
 }

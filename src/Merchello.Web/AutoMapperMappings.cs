@@ -37,12 +37,20 @@ namespace Merchello.Web
             
             // Invoice
             AutoMapper.Mapper.CreateMap<IInvoiceStatus, InvoiceStatusDisplay>();
-            AutoMapper.Mapper.CreateMap<IInvoiceLineItem, InvoiceLineItemDisplay>();
+            AutoMapper.Mapper.CreateMap<IInvoiceLineItem, InvoiceLineItemDisplay>()
+                .ForMember(dest => dest.ExtendedData,
+                    opt => opt.ResolveUsing<ExtendedDataResolver>().ConstructedBy(() => new ExtendedDataResolver())
+                );
+
             AutoMapper.Mapper.CreateMap<IInvoice, InvoiceDisplay>();
 
             // Order
             AutoMapper.Mapper.CreateMap<IOrderStatus, OrderStatusDisplay>();
-            AutoMapper.Mapper.CreateMap<IOrderLineItem, OrderLineItemDisplay>();
+            AutoMapper.Mapper.CreateMap<IOrderLineItem, OrderLineItemDisplay>()
+                .ForMember(dest => dest.ExtendedData,
+                    opt => opt.ResolveUsing<ExtendedDataResolver>().ConstructedBy(() => new ExtendedDataResolver())
+                );
+
             AutoMapper.Mapper.CreateMap<IOrder, OrderDisplay>();
             
             //  setup the other mappings

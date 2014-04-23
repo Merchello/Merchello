@@ -15,7 +15,10 @@ namespace Merchello.Web
             // payment
             AutoMapper.Mapper.CreateMap<IAppliedPayment, AppliedPaymentDisplay>();
 
-            AutoMapper.Mapper.CreateMap<IPayment, PaymentDisplay>();
+            AutoMapper.Mapper.CreateMap<IPayment, PaymentDisplay>()
+                .ForMember(dest => dest.ExtendedData,
+                    opt => opt.ResolveUsing<ExtendedDataResolver>().ConstructedBy(() => new ExtendedDataResolver())
+                );
 
             AutoMapper.Mapper.CreateMap<IPaymentMethod, PaymentMethodDisplay>();
 
