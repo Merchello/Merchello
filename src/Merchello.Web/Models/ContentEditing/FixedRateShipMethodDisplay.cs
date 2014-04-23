@@ -4,7 +4,7 @@ using Merchello.Core.Gateways.Shipping.FixedRate;
 
 namespace Merchello.Web.Models.ContentEditing
 {
-    public class FixedRateShipMethodDisplay
+    public class FixedRateShipMethodDisplay : DialogEditorDisplayBase
     {
         public ShipMethodDisplay ShipMethod { get; set; }
         public GatewayResourceDisplay GatewayResource { get; set; }

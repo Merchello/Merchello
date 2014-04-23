@@ -113,9 +113,9 @@ namespace Merchello.Web.Editors
             var shipCountry = _shipCountryService.GetByKey(id);
             if (shipCountry != null)
             {
-                var providers = _shippingContext.GetGatewayProvidersByShipCountry(shipCountry);
+                var providers = _shippingContext.GetGatewayProvidersByShipCountry(shipCountry).ToArray();
 
-                if (providers != null && providers.Any())
+                if (providers.Any())
                 {
                     var fixedProvider = providers.FirstOrDefault(x => x.Key == Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey);
 
