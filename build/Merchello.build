@@ -98,7 +98,7 @@
 	<Target Name="AllBinaries" DependsOnTargets="CopyXmlDocumentation;CopyTestFiles">
 		
 		<ItemGroup>
-			<PackageBinariesFiles Include="$(SolutionBinFolder)*Merchello.*" Exclude="$(SolutionBinFolder)*Tests.*;$(SolutionBinFolder)*nunit.*;$(SolutionBinFolder)*Moq.*" />
+			<PackageBinariesFiles Include="$(SolutionBinFolder)*Merchello.*" Exclude="$(SolutionBinFolder)*Tests.*;$(SolutionBinFolder)*nunit.*;$(SolutionBinFolder)*Moq.*;$(SolutionBinFolder)*UI.*;$(SolutionBinFolder)*.sdf;" />
 		</ItemGroup>
 		
 		<Copy SourceFiles="@(PackageBinariesFiles)"
