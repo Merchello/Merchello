@@ -30,15 +30,6 @@
         <merchello-panel>
 
             <div class="merchello-pane row-fluid">
-                
-                <!-- Flyout when Delete Method is clicked -->
-<!--                <form name="deleteManualPaymentMethodForm" class="well" data-ng-class="{ 'open': flyouts.deleteManualPaymentMethod, 'closed': !flyouts.deleteManualPaymentMethod }">
-                    <h4>Are you sure you want to remove the method '{{deleteManualPaymentMethodFlyout.model.name}}'?</h4>
-                    <div>
-                        <input type="submit" class="btn" value="No" data-ng-click="deleteManualPaymentMethodFlyout.close()" />
-                        <input type="submit" class="btn btn-primary" value="Yes" data-ng-click="deleteManualPaymentMethodFlyout.confirm()" />
-                    </div>
-                </form>-->
 
                 <div class="control-group umb-control-group" data-ng-repeat="provider in paymentGatewayProviders">
                     <label class="merchello-control-label">

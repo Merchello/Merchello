@@ -83,7 +83,8 @@
                             <!--<td><input type="checkbox" data-ng-model="product.selected"/></td>-->
                             <td>{{product.name}}</td>
                             <td>{{product.sku}}</td>
-                            <td>{{product.price | currency}}</td>
+                            <td data-ng-hide="product.hasVariants">{{product.price | currency}}</td>
+                            <td data-ng-show="product.hasVariants">{{product.variantsMinimumPrice() | currency}} - {{product.variantsMaximumPrice() | currency}}</td>
                             <td>
                                 <a data-ng-hide="product.hasVariants" class="btn btn-default btn-xs btn-mini" data-ng-href="#/merchello/merchello/ProductVariantEdit/{{product.key}}">edit</a>
                                 <a data-ng-show="product.hasVariants" class="btn btn-default btn-xs btn-mini" data-ng-href="#/merchello/merchello/ProductEdit/{{product.key}}">edit</a>
