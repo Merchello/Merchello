@@ -92,13 +92,10 @@ namespace Merchello.Web.Editors
             var provider = _taxationContext.CreateInstance(id);
             if (provider != null)
             {
-                foreach (var method in provider.TaxMethods)
-                {
-                    yield return method.ToTaxMethodDisplay();
-                }
+                return provider.GetAllGatewayTaxMethods().Select(x => x.ToTaxMethodDisplay());
             }
 
-            //throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+            throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
         }
 
         /// <summary>
