@@ -409,6 +409,8 @@
 
                 if (productFromServer.productVariants.length > 0) {
                     self.hasVariants = true;
+                    self.minPrice = _.min(productFromServer.productVariants, function (v) { return v.price; }).price;
+                    self.maxPrice = _.max(productFromServer.productVariants, function (v) { return v.price; }).price;
                 }
             }
         }
@@ -524,25 +526,21 @@
             return availablePermutations;
         };
 
-        //self.getRemainingChoicesWithoutVariants = function() {
+        self.variantsMinimumPrice = function () {
+            if (self.productVariants) {
+                return _.min(self.productVariants, function(v) { return v.price; });
+            } else {
+                return self.minPrice;
+            }
+        };
 
-        //    var allVariantAttributes = _.pluck(self.productVariants, 'attributeKeys');
-        //    allVariantAttributes = _.flatten(allVariantAttributes);
-
-        //    var unusedChoices = [];
-
-        //    for (var o = 0; o < self.productOptions.length; o++) {
-        //        var thisOption = self.productOptions[o];
-        //        for (var a = 0; a < thisOption.choices.length; a++) {
-        //            var thisChoice = thisOption.choices[a];
-        //            if (!_.contains(allVariantAttributes, thisChoice.key)) {
-        //                unusedChoices.push(thisChoice);
-        //            }
-        //        }
-        //    }
-
-        //    return unusedChoices;
-        //};
+        self.variantsMaximumPrice = function () {
+            if (self.productVariants) {
+                return _.max(self.productVariants, function(v) { return v.price; });
+            } else {
+                return self.maxPrice;
+            }
+        };
 
     };
 

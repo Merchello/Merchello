@@ -12,7 +12,15 @@
 
         $scope.paymentGatewayProviders = [];
 
-        $scope.getProviderByKey = function(providerkey) {
+        /**
+         * @ngdoc method
+         * @name getProviderByKey
+         * @function
+         * 
+         * @description
+         * Helper method to get a provider from the paymentGatewayProviders array using the provider key passed in.
+         */
+        $scope.getProviderByKey = function (providerkey) {
             return _.find($scope.paymentGatewayProviders, function (gatewayprovider) { return gatewayprovider.key == providerkey; });
         }
 
@@ -251,37 +259,6 @@
                 dialogData: method
             });
         };
-
-        ///////////////////////////////////////////////
-        ////    TODO: Change to directive / service?
-
-        //$scope.flyouts = {
-        //    deleteManualPaymentMethod: false
-        //};
-
-
-        //$scope.deleteManualPaymentMethodFlyout = new merchello.Models.Flyout(
-        //    $scope.flyouts.deleteManualPaymentMethod,
-        //    function(isOpen) {
-        //        $scope.flyouts.deleteManualPaymentMethod = isOpen;
-        //    }, {
-        //        clear: function() {
-        //            self.model = {};
-        //        },
-        //        confirm: function() {
-        //            var self = $scope.deleteManualPaymentMethodFlyout;
-
-        //            $scope.removeMethod(self.model);
-
-        //            self.clear();
-        //            self.close();
-        //        },
-        //        open: function(model) {
-        //            if (!model) {
-        //                $scope.deleteManualPaymentMethodFlyout.clear();
-        //            }
-        //        }
-        //    });
 
     };
 
