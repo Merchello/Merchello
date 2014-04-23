@@ -27,7 +27,7 @@ namespace Merchello.Tests.IntegrationTests.ObjectResolution
                     new GatewayResource("Test1", "Test 1"),
                     new GatewayResource("Test2", "Test 2"),
                     new GatewayResource("Test3", "Test 3"),
-                    new GatewayResource("Test4", "Test 4"),
+                    new GatewayResource("Test4", "Test 4")
                 };
             }
         }

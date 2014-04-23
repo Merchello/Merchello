@@ -225,6 +225,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationContextExtensions.cs" />
+    <Compile Include="AutoMapperMappings-Payment.cs">
+		<DependentUpon>AutoMapperMappings.cs</DependentUpon>
+	</Compile>
+    <Compile Include="AutoMapperMappings-WarehouseProducts.cs">
+		<DependentUpon>AutoMapperMappings.cs</DependentUpon>
+	</Compile>
+    <Compile Include="AutoMapperMappings-Shipping.cs">
+		<DependentUpon>AutoMapperMappings.cs</DependentUpon>
+	</Compile>
+    <Compile Include="AutoMapperMappings-Taxation.cs">
+		<DependentUpon>AutoMapperMappings.cs</DependentUpon>
+	</Compile>
     <Compile Include="AutoMapperMappings.cs" />
     <Compile Include="CheckoutExtensions.cs" />
     <Compile Include="Editors\CatalogFixedRateShippingApiController.cs" />
