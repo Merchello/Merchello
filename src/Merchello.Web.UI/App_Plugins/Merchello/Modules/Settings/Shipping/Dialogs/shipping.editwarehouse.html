@@ -1,0 +1,52 @@
+﻿<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Dashboards.Settings.Shipping.Dialogs.ShippingEditWarehouseController">
+	<div class="umb-modalcolumn-header">
+		<h4 data-ng-switch="dialogData.key">
+			<span data-ng-switch-when="no key created">Add a Warehouse</span>
+			<span data-ng-switch-default="">Edit Warehouse</span>
+		</h4>
+	</div>
+	<div class="umb-panel-body with-header with-footer">
+
+		<!-- Flyout when edit is clicked -->
+
+		<form class="form-group row-fluid">
+			<div class="form-group row-fluid">
+				<label for="name">Name</label>
+				<input class="span6" name="name" type="text" data-ng-model="dialogData.name" />
+			</div>
+			<div class="form-group row-fluid">
+				<label for="address">Address</label>
+				<input class="span6" name="address" type="text" placeholder="Street Address" data-ng-model="dialogData.address1" />
+				<input class="span6" name="extended-address" type="text" placeholder="Extended Address" data-ng-model="dialogData.address2" />
+				<input class="span6" name="city" type="text" placeholder="City" data-ng-model="dialogData.locality" />
+			</div>
+			<div class="form-group row-fluid">
+				<input class="span3" name="state-province" type="text" placeholder="State/Province" data-ng-model="dialogData.region" />
+				<input class="span3" name="postal-code" type="text" placeholder="Zip/Postal Code" data-ng-model="dialogData.postalCode" />
+			</div>
+			<div class="form-group row-fluid">
+				<input class="span6" name="country" type="text" placeholder="Country" data-ng-model="dialogData.countryCode" />
+				<label class="label-checkbox"><input name="primary" type="checkbox" data-ng-model="dialogData.isDefault"> <span>Make this my primary warehouse</span></label>
+			</div>
+		</form>
+
+	</div>
+
+	<div class="umb-panel-footer">
+		<div class="umb-el-wrap umb-panel-buttons">
+			<div class="btn-toolbar umb-btn-toolbar pull-right">
+
+				<a href data-ng-click="close()" class="btn btn-link">
+					<localize key="general_cancel">Cancel</localize>
+				</a>
+
+				<button class="btn btn-primary"
+						data-ng-click="submit(dialogData)">
+					<localize key="buttons_save">Save</localize>
+				</button>
+
+			</div>
+		</div>
+	</div>
+</div>
+
