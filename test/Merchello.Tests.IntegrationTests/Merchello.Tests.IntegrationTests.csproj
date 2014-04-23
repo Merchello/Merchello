@@ -255,6 +255,7 @@
     <Compile Include="Examine\InvoiceAndOrderProviderTests.cs" />
     <Compile Include="Gateways\ShippingContextTests.cs" />
     <Compile Include="ObjectResolution\GatewayProviderResolution.cs" />
+    <Compile Include="ObjectResolution\TestingPaymentGatewayMethod.cs" />
     <Compile Include="ObjectResolution\TestingPaymentGatewayProvider.cs" />
     <Compile Include="ObjectResolution\TestingShippingGatewayProvider.cs" />
     <Compile Include="ObjectResolution\TestingTaxationGatewayProvider.cs" />
