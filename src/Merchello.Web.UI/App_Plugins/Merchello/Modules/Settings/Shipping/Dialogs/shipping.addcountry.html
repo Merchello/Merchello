@@ -12,6 +12,7 @@
 				<div class="input-append col-xs-12 span12">
 					<select data-ng-model="dialogData.selectedCountry"
 							data-ng-options="country.name for country in dialogData.availableCountries">
+						<option style="display:none" value="">-- none selected --</option>
 					</select>
 				</div>
 			</div>
