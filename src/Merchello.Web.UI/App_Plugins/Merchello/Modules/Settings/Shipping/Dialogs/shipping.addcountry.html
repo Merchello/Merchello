@@ -10,8 +10,9 @@
 			<div class="form-group row-fluid country-dropdown">
 				<label for="country-name">Type your Country Name</label>
 				<div class="input-append col-xs-12 span12">
-					<!-- A country list should fly out beneath this input when the user starts typing or if they select the dropdown button -->
-					<dropdown-list selected="dialogData.selectedCountry" placeholder="Type a country name" countries="dialogData.availableCountries"></dropdown-list>
+					<select data-ng-model="dialogData.selectedCountry"
+							data-ng-options="country.name for country in dialogData.availableCountries">
+					</select>
 				</div>
 			</div>
 		</form>
