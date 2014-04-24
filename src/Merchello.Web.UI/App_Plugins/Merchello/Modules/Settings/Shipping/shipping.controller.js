@@ -217,10 +217,9 @@
 			}
 		};
 
-		$scope.addCountry = function (countryToAdd, availableCountries) {
+		$scope.addCountry = function () {
 			var dialogData = {};
-			dialogData.selectedCountry = countryToAdd;
-			dialogData.availableCountries = availableCountries;
+			dialogData.availableCountries = $scope.availableCountries;
 			dialogService.open({
 				template: '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shipping.addcountry.html',
 				show: true,
@@ -245,7 +244,8 @@
 			});
 		};
 
-		$scope.addWarehouseDialogConfirm = function (warehouse) {
+		$scope.addWarehouseDialogConfirm = function (dialogData) {
+			var warehouse = dialogData.warehouse;
 			var promiseWarehouseSave = merchelloWarehouseService.save(warehouse); // Only a default warehouse in v1
 			promiseWarehouseSave.then(function () {
 
@@ -268,11 +268,15 @@
 				warehouse.key = "no key created";
 			}
 
+			var dialogData = {}
+			dialogData.warehouse = warehouse;
+			dialogData.availableCountries = $scope.availableCountries;
+
 			dialogService.open({
 				template: '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shipping.editwarehouse.html',
 				show: true,
 				callback: $scope.addWarehouseDialogConfirm,
-				dialogData: warehouse
+				dialogData: dialogData
 			});
 		};
 
