@@ -189,7 +189,7 @@ namespace Merchello.Core.Services
             }
 
             var existingOrdersWithStatusChanges =
-                orders.Where(
+                ordersArray.Where(
                     x => ((Order)x).HasIdentity == false && ((Order)x).IsPropertyDirty("OrderStatusKey"))
                     .ToArray();
 
