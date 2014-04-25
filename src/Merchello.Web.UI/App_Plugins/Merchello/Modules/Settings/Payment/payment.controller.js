@@ -83,6 +83,10 @@
                     return new merchello.Models.GatewayResource(resourceFromServer);
                 });
 
+                if (provider.resources.length > 0) {
+                    provider.selectedResource = provider.resources[0];                    
+                }
+
             }, function (reason) {
 
                 notificationsService.error("Available Payment Provider Resources Load Failed", reason.message);
@@ -189,6 +193,9 @@
                 promiseSave = merchelloPaymentGatewayService.addPaymentMethod(method);
             }
 
+            var provider = $scope.getProviderByKey(method.providerKey);
+            provider.showSelectResource = false;
+
             promiseSave.then(function () {
                 $scope.loadPaymentMethods(method.providerKey);
                 $scope.loadPaymentGatewayResources(method.providerKey);
@@ -212,8 +219,8 @@
             if (method == undefined) {
                 method = new merchello.Models.PaymentMethod();
                 method.providerKey = provider.key; //Todo: When able to add external providers, make this select the correct provider
-                method.paymentCode = provider.resources[0].serviceCode;
-                method.name = provider.resources[0].name;
+                method.paymentCode = provider.selectedResource.serviceCode;
+                method.name = provider.selectedResource.name;
             }
 
             var editorTemplate = '/App_Plugins/Merchello/Modules/Settings/Payment/Dialogs/paymentmethod.html';
