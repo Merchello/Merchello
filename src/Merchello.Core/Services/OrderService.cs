@@ -133,11 +133,11 @@ namespace Merchello.Core.Services
             if (!((Order)order).HasIdentity && order.OrderNumber <= 0)
             {
                 // We have to generate a new 'unique' order number off the configurable value
-                ((Order)order).OrderNumber = ((StoreSettingService)_storeSettingService).GetNextOrderNumber();
+                ((Order)order).OrderNumber = _storeSettingService.GetNextOrderNumber();
             }
 
-            var includesStatusChange = ((Order)order).IsPropertyDirty("OrderStatusKey") &&
-                                       ((Order)order).HasIdentity == false;
+            var includesStatusChange = ((Order)order).IsPropertyDirty("OrderStatus") &&
+                                       ((Order)order).HasIdentity;
 
             if (raiseEvents)
             {
@@ -180,7 +180,7 @@ namespace Merchello.Core.Services
             if (newOrderCount > 0)
             {
                 var lastOrderNumber =
-                    ((StoreSettingService)_storeSettingService).GetNextOrderNumber(newOrderCount);
+                    _storeSettingService.GetNextOrderNumber(newOrderCount);
                 foreach (var newOrder in ordersArray.Where(x => x.OrderNumber <= 0 && !((Order)x).HasIdentity))
                 {
                     ((Order)newOrder).OrderNumber = lastOrderNumber;
@@ -190,7 +190,7 @@ namespace Merchello.Core.Services
 
             var existingOrdersWithStatusChanges =
                 ordersArray.Where(
-                    x => ((Order)x).HasIdentity == false && ((Order)x).IsPropertyDirty("OrderStatusKey"))
+                    x => ((Order)x).HasIdentity == false && ((Order)x).IsPropertyDirty("OrderStatus"))
                     .ToArray();
 
             if (raiseEvents)
