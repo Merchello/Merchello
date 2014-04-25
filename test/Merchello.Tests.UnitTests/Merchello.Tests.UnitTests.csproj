@@ -272,6 +272,7 @@
     <Compile Include="Serialization\EntitySerializationTests.cs" />
     <Compile Include="Services\CustomerRegistryServiceTests.cs" />
     <Compile Include="Services\CustomerServiceTests.cs" />
+    <Compile Include="Services\OrderServiceEventTests.cs" />
     <Compile Include="Services\ProductServiceTests.cs" />
     <Compile Include="Services\SettingsServiceTests.cs">
       <SubType>Code</SubType>

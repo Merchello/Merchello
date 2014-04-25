@@ -14,10 +14,8 @@ namespace Merchello.Tests.Base.Services
 
 
 
-        protected abstract void Initialize();
-
         [SetUp]
-        public void Setup()
+        public virtual void Setup()
         {
 
             // General trigger setup
@@ -33,7 +31,6 @@ namespace Merchello.Tests.Base.Services
                 CommitCalled = true;
             };
 
-            Initialize();
         }
 
        
