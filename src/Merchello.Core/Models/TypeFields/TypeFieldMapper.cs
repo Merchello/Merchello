@@ -7,7 +7,7 @@ using Merchello.Core.Configuration.Outline;
 
 namespace Merchello.Core.Models.TypeFields
 {
-    internal abstract class TypeFieldMapper<T> : TypeFieldMapperBase, ITypeFieldMapper<T>
+    public abstract class TypeFieldMapper<T> : TypeFieldMapperBase, ITypeFieldMapper<T>
     {
 
         protected static readonly ConcurrentDictionary<T,ITypeField> CachedTypeFields = new ConcurrentDictionary<T, ITypeField>();

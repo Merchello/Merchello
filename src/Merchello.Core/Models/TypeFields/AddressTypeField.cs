@@ -5,7 +5,7 @@ using Merchello.Core.Configuration.Outline;
 namespace Merchello.Core.Models.TypeFields
 {
     /// <summary>
-    /// Identifies an address as either residential or commercial for shipping estimations 
+    /// Identifies an address as either shipping or billing
     /// </summary>
     internal sealed class AddressTypeField : TypeFieldMapper<AddressType>, IAddressTypeField
     {
@@ -34,7 +34,7 @@ namespace Merchello.Core.Models.TypeFields
         }
 
         /// <summary>
-        /// Indicates the address is a commercial address
+        /// Indicates the address is a billing address
         /// </summary>
         public ITypeField Billing
         {

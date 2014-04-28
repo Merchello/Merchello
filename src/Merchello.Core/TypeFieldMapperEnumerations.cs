@@ -44,7 +44,19 @@
         Custom
     }
 
-
+    public enum EntityType
+    {
+        Customer,
+        GatewayProvider,
+        Invoice,
+        ItemCache,
+        Order,
+        Payment,
+        Product,
+        Shipment,
+        Warehouse,
+        WarehouseCatalog
+    }
 
     internal enum ProductType
     {

@@ -145,11 +145,17 @@
     <Compile Include="Models\OrderStatus.cs" />
     <Compile Include="Models\PaymentExtensions.cs" />
     <Compile Include="Models\PaymentMethod.cs" />
+    <Compile Include="Models\Rdbms\AuditDto.cs" />
     <Compile Include="Models\Rdbms\InvoiceIndexDto.cs" />
     <Compile Include="Models\Rdbms\OrderIndexDto.cs" />
     <Compile Include="Models\Rdbms\PaymentMethodDto.cs" />
     <Compile Include="Models\Rdbms\User2AppDto.cs" />
     <Compile Include="Models\Rdbms\UserDto.cs" />
+    <Compile Include="Models\TypeFields\EntityTypeField.cs" />
+    <Compile Include="Models\TypeFields\IEntityTypeField.cs" />
+    <Compile Include="Notifications\IMessenger.cs" />
+    <Compile Include="Notifications\SmtpClientExtensions.cs" />
+    <Compile Include="Persistence\DatabaseModelDefinitions\DbIndexDefinition.cs" />
     <Compile Include="Persistence\Factories\OrderStatusFactory.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IInvoiceStatusRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IOrderStatusRepository.cs" />

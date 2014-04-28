@@ -8,12 +8,12 @@ namespace Merchello.Core.Gateways
 {
     public class GatewayResolutionApplicationEventHandler : ApplicationEventHandler
     {
-        protected override void ApplicationStarting(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
+        protected override void ApplicationInitialized(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
-            base.ApplicationStarting(umbracoApplication, applicationContext);
-            
+            base.ApplicationInitialized(umbracoApplication, applicationContext);
+
             LogHelper.Info<GatewayResolutionApplicationEventHandler>("Starting Merchello GatewayProvider Resolution");
-            
+
             PaymentGatewayProviderResolver.Current = new PaymentGatewayProviderResolver(() => PluginManager.Current.ResolveTypes<PaymentGatewayProviderBase>());
             TaxationGatewayProviderResolver.Current = new TaxationGatewayProviderResolver(() => PluginManager.Current.ResolveTypes<TaxationGatewayProviderBase>());
             ShippingGatewayProviderResolver.Current = new ShippingGatewayProviderResolver(() => PluginManager.Current.ResolveTypes<ShippingGatewayProviderBase>());
