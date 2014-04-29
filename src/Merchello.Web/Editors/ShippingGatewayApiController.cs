@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using AutoMapper;
 using Merchello.Core.Gateways;
 using Umbraco.Web;
 using Umbraco.Web.Mvc;
@@ -13,6 +14,7 @@ using Merchello.Web.Models.ContentEditing;
 using System.Net;
 using System.Net.Http;
 using Merchello.Core.Gateways.Shipping;
+using EnumerableExtensions = Umbraco.Core.EnumerableExtensions;
 
 namespace Merchello.Web.Editors
 {
@@ -210,22 +212,23 @@ namespace Merchello.Web.Editors
         /// <summary>
         /// Get all <see cref="IShipMethod"/> for a shipping provider
         ///
-        /// GET /umbraco/Merchello/PaymentGatewayApi/GetPaymentProviderPaymentMethods/{id}
+        /// GET /umbraco/Merchello/ShippingGatewayApi/GetShippingProviderShipMethod/{id}
         /// </summary>
-        /// <param name="id">The key of the PaymentGatewayProvider</param>
+        /// <param name="id">The key of the ShippingGatewayProvider</param>
         /// <remarks>
         /// 
         /// </remarks>
-        public IEnumerable<PaymentMethodDisplay> GetPaymentProviderPaymentMethods(Guid id)
+        public IEnumerable<ShipMethodDisplay> GetShippingProviderShipMethods(Guid id)
         {
             var provider = _shippingContext.CreateInstance(id);
             if (provider == null) throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
 
-            foreach (var method in provider.ShipMethods)
-            {
-                // TODO: we need the actual ShippingGatewayProvider so we can grab the if present
-                //yield return provider.GetShippingGatewayMethodByKey(method.Key).ToShipMethodDisplay();
-            }
+            return
+                provider.ShipMethods.Select(
+                    method => 
+                        provider.GetShippingGatewayMethod(method.Key, method.ShipCountryKey).ToShipMethodDisplay()
+                    );
+                  
         }
 
         /// <summary>

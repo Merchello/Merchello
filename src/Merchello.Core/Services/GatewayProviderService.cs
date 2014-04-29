@@ -448,6 +448,17 @@ namespace Merchello.Core.Services
             return _shipMethodService.GetShipMethodsByProviderKey(providerKey);
         }
 
+        /// <summary>
+        /// Gets a <see cref="IShipMethod"/> by it's unique key
+        /// </summary>
+        /// <param name="shipMethodKey">The <see cref="IShipMethod"/> key</param>
+        /// <returns>A <see cref="IShipMethod"/></returns>
+        public IShipMethod GetShipMethodByKey(Guid shipMethodKey)
+        {
+            return _shipMethodService.GetByKey(shipMethodKey);
+        }
+
+
         #endregion
 
         #region ShipRateTier
@@ -492,10 +503,19 @@ namespace Merchello.Core.Services
         }
 
 
-
         #endregion
 
         #region ShipCountry
+
+        /// <summary>
+        /// Gets a <see cref="IShipCountry"/> by it's unique key (Guid)
+        /// </summary>
+        /// <param name="shipCountryKey">The unique key of the <see cref="IShipCountry"/></param>
+        /// <returns>The <see cref="IShipCountry"/></returns>
+        public IShipCountry GetShipCountryByKey(Guid shipCountryKey)
+        {
+            return _shipCountryService.GetByKey(shipCountryKey);
+        }
 
         /// <summary>
         /// Gets a <see cref="IShipCountry"/> by CatalogKey and CountryCode
