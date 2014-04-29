@@ -226,17 +226,17 @@
   <ItemGroup>
     <Compile Include="ApplicationContextExtensions.cs" />
     <Compile Include="AutoMapperMappings-Payment.cs">
-		<DependentUpon>AutoMapperMappings.cs</DependentUpon>
-	</Compile>
+      <DependentUpon>AutoMapperMappings.cs</DependentUpon>
+    </Compile>
     <Compile Include="AutoMapperMappings-WarehouseProducts.cs">
-		<DependentUpon>AutoMapperMappings.cs</DependentUpon>
-	</Compile>
+      <DependentUpon>AutoMapperMappings.cs</DependentUpon>
+    </Compile>
     <Compile Include="AutoMapperMappings-Shipping.cs">
-		<DependentUpon>AutoMapperMappings.cs</DependentUpon>
-	</Compile>
+      <DependentUpon>AutoMapperMappings.cs</DependentUpon>
+    </Compile>
     <Compile Include="AutoMapperMappings-Taxation.cs">
-		<DependentUpon>AutoMapperMappings.cs</DependentUpon>
-	</Compile>
+      <DependentUpon>AutoMapperMappings.cs</DependentUpon>
+    </Compile>
     <Compile Include="AutoMapperMappings.cs" />
     <Compile Include="CheckoutExtensions.cs" />
     <Compile Include="Editors\CatalogFixedRateShippingApiController.cs" />
@@ -252,7 +252,7 @@
     <Compile Include="Models\MapperResolvers\GatewayMethodDialogEditorViewResolver.cs" />
     <Compile Include="Workflow\PaymentProcessor.cs" />
     <Compile Include="Editors\SettingsApiController.cs" />
-    <Compile Include="Editors\CatalogShippingApiController.cs" />
+    <Compile Include="Editors\ShippingGatewayApiController.cs" />
     <Compile Include="Editors\ShipmentApiController.cs" />
     <Compile Include="Editors\TaxationGatewayApiController.cs" />
     <Compile Include="Editors\WarehouseApiController.cs" />
