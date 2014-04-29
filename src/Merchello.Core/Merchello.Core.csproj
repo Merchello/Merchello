@@ -157,6 +157,7 @@
     <Compile Include="Notifications\SmtpClientExtensions.cs" />
     <Compile Include="Persistence\DatabaseModelDefinitions\DbIndexDefinition.cs" />
     <Compile Include="Persistence\Factories\OrderStatusFactory.cs" />
+    <Compile Include="Persistence\Migrations\Upgrades\v110\DataCreationV110.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IInvoiceStatusRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IOrderStatusRepository.cs" />
     <Compile Include="Persistence\Repositories\InvoiceStatusRepository.cs" />
