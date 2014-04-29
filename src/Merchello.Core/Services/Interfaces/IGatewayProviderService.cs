@@ -214,7 +214,14 @@ namespace Merchello.Core.Services
         /// Gets a list of all <see cref="IShipMethod"/> objects given a <see cref="IGatewayProvider"/> key
         /// </summary>
         /// <returns>A collection of <see cref="IShipMethod"/></returns>
-        IEnumerable<IShipMethod> GetShipMethodsByShipCountryKey(Guid providerKey); 
+        IEnumerable<IShipMethod> GetShipMethodsByShipCountryKey(Guid providerKey);
+
+        /// <summary>
+        /// Gets a <see cref="IShipMethod"/> by it's unique key
+        /// </summary>
+        /// <param name="shipMethodKey">The <see cref="IShipMethod"/> key</param>
+        /// <returns>A <see cref="IShipMethod"/></returns>
+        IShipMethod GetShipMethodByKey(Guid shipMethodKey);
 
         #endregion
 
@@ -248,6 +255,13 @@ namespace Merchello.Core.Services
         #endregion
 
         #region ShipCountry
+
+        /// <summary>
+        /// Gets a <see cref="IShipCountry"/> by it's unique key (Guid)
+        /// </summary>
+        /// <param name="shipCountryKey">The unique key of the <see cref="IShipCountry"/></param>
+        /// <returns>The <see cref="IShipCountry"/></returns>
+        IShipCountry GetShipCountryByKey(Guid shipCountryKey);
 
         /// <summary>
         /// Gets a <see cref="IShipCountry"/> by CatalogKey and CountryCode

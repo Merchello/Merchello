@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Merchello.Core.Models;
 
 namespace Merchello.Core.Gateways.Shipping
@@ -37,6 +38,13 @@ namespace Merchello.Core.Gateways.Shipping
         /// </summary>
         /// <returns></returns>
         IEnumerable<IShippingGatewayMethod> GetAllShippingGatewayMethods(IShipCountry shipCountry);
+
+        /// <summary>
+        /// Gets a <see cref="IShippingGatewayMethod"/> by it's <see cref="IShipMethod"/> key
+        /// </summary>
+        /// <param name="shipMethodKey">The <see cref="IShipMethod"/> key</param>
+        /// <returns>The <see cref="IShippingGatewayMethod"/></returns>
+        IShippingGatewayMethod GetShippingGatewayMethod(Guid shipMethodKey);
 
         /// <summary>
         /// Deletes an Active ShipMethod
