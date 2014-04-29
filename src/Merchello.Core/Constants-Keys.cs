@@ -79,6 +79,20 @@ namespace Merchello.Core
                 public static Guid BillingAddressKey = new Guid("5C2A8638-EA32-49AD-8167-EDDFB45A7360");
             }
 
+            public static class Entity
+            {
+                public static Guid CustomerKey = new Guid("1607D643-E5E8-4A93-9393-651F83B5F1A9");
+                public static Guid GatewayProviderKey = new Guid("05BD6E6E-37A0-4954-AA34-BB73678543B2");
+                public static Guid InvoiceKey = new Guid("454539B9-D753-4C16-8ED5-5EB659E56665");
+                public static Guid ItemCacheKey = new Guid("9FEFEEF2-7ECE-439C-90E2-02D2F95D9E37");
+                public static Guid OrderKey = new Guid("CC5B1372-2EFA-49D5-B9F7-6EACD1182C5B");
+                public static Guid PaymentKey = new Guid("6263D568-DEE1-41BB-8100-2333ECB4CF08");
+                public static Guid ProductKey = new Guid("9F923716-A022-4089-A110-1E9B4E1F2AD1");
+                public static Guid ShipmentKey = new Guid("5F26DF00-BD45-4E83-8095-D17AD8D7D3CE");
+                public static Guid WarehouseKey = new Guid("2367D705-4BEA-4B3E-8329-664823D28316");
+                public static Guid WarehouseCatalogKey = new Guid("ED7D69B2-7434-40F4-88A7-EDDA9FB50995");
+            }
+
             public static class ItemCache
             {
                 public static Guid BasketKey = new Guid("C53E3100-2DFD-408A-872E-4380383FAD35");
