@@ -149,6 +149,35 @@
 
             },
 
+            getCurrencySymbol: function () {
+            	var deferred = $q.defer();
+
+            	var promiseArray = [];
+
+            	promiseArray.push(settingsServices.getAllSettings());
+            	promiseArray.push(settingsServices.getAllCurrencies());
+
+            	var promise = $q.all(promiseArray);
+            	promise.then(function (data) {
+            		var settingsFromServer = new merchello.Models.StoreSettings(data[0]);
+            		var currenciesFromServer = data[1];
+            		
+            		var currencyList = _.map(currenciesFromServer, function (currencyAttrs) {
+            			return new merchello.Models.Currency(currencyAttrs);
+            		});
+
+            		var selectedCurrency = _.find(currencyList, function (currency) {
+            			return currency.currencyCode == settingsFromServer.currencyCode;
+            		});
+
+            		deferred.resolve(selectedCurrency.symbol);
+            	}, function (reason) {
+            		deferred.reject(reason);
+            	});
+
+	            return deferred.promise;
+            },
+
 
             /**
              * @ngdoc method
