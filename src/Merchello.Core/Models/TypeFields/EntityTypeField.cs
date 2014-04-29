@@ -76,7 +76,9 @@ namespace Merchello.Core.Models.TypeFields
         /// <summary>
         /// The product entity type field
         /// </summary>
-        public ITypeField Product { get; private set; }
+        public ITypeField Product {
+            get { return GetTypeField(EntityType.Product); }
+        }
 
         /// <summary>
         /// The shipment entity type field
