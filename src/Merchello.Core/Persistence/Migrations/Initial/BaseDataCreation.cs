@@ -2,7 +2,7 @@
 using Merchello.Core.Models;
 using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Models.TypeFields;
-using Merchello.Core.Persistence.Migrations.Upgrades.v110;
+using Merchello.Core.Persistence.Migrations.Upgrades.TargetVersionOneOneZero;
 using Newtonsoft.Json;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Persistence;
@@ -15,13 +15,13 @@ namespace Merchello.Core.Persistence.Migrations.Initial
     internal class BaseDataCreation
     {
         private readonly Database _database;
-        private readonly DataCreationV110 _dataCreationV110;
+        private readonly UpdateOneOneZeroData _updateOneOneZeroData;
 
         
         public BaseDataCreation(Database database)
         {
             _database = database;
-            _dataCreationV110 = new DataCreationV110(database);
+            _updateOneOneZeroData = new UpdateOneOneZeroData(database);
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace Merchello.Core.Persistence.Migrations.Initial
                 CreateDbTypeFieldData();
 
                 // version 1.1.0
-                _dataCreationV110.InitializeVersionData("merchTypeField");
+                _updateOneOneZeroData.InitializeVersionData("merchTypeField");
             }
 
             if(tableName.Equals("merchInvoiceStatus")) CreateInvoiceStatusData();

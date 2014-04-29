@@ -3,16 +3,16 @@ using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Models.TypeFields;
 using Umbraco.Core.Persistence;
 
-namespace Merchello.Core.Persistence.Migrations.Upgrades.v110
+namespace Merchello.Core.Persistence.Migrations.Upgrades.TargetVersionOneOneZero
 {
     /// <summary>
     /// Represents the initial data creation by running Insert for the version 1.1.0 default data.
     /// </summary>
-    internal class DataCreationV110
+    internal class UpdateOneOneZeroData
     {
         private readonly Database _database;
 
-        public DataCreationV110(Database database)
+        public UpdateOneOneZeroData(Database database)
         {
             _database = database;
         }
