@@ -117,7 +117,7 @@ namespace Merchello.Web.Editors
 
                 var paymentGatewayMethod = provider.CreatePaymentMethod(gatewayResource, method.Name, method.Description);
 
-               provider.SavePaymentMethod(paymentGatewayMethod);
+                provider.SavePaymentMethod(paymentGatewayMethod);
 
             }
             catch (Exception ex)

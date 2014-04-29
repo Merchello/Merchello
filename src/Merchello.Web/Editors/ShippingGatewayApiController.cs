@@ -17,8 +17,9 @@ using Merchello.Core.Gateways.Shipping;
 namespace Merchello.Web.Editors
 {
     [PluginController("Merchello")]
-    public class CatalogShippingApiController : MerchelloApiController
+    public class ShippingGatewayApiController : MerchelloApiController
     {
+        private readonly IShippingContext _shippingContext;
         private readonly IGatewayProviderService _gatewayProviderService;
         private readonly IStoreSettingService _storeSettingService;
         private readonly IShipCountryService _shipCountryService;
@@ -26,7 +27,7 @@ namespace Merchello.Web.Editors
         /// <summary>
         /// Constructor
         /// </summary>
-        public CatalogShippingApiController()
+        public ShippingGatewayApiController()
             : this(MerchelloContext.Current)
         {
         }
@@ -35,20 +36,12 @@ namespace Merchello.Web.Editors
         /// Constructor
         /// </summary>
         /// <param name="merchelloContext"></param>
-        public CatalogShippingApiController(MerchelloContext merchelloContext)
+        public ShippingGatewayApiController(MerchelloContext merchelloContext)
             : base(merchelloContext)
         {
-            _gatewayProviderService = MerchelloContext.Services.GatewayProviderService;
-            _storeSettingService = MerchelloContext.Services.StoreSettingService;
-            _shipCountryService = ((ServiceContext)MerchelloContext.Services).ShipCountryService;
-        }
+            _shippingContext = MerchelloContext.Gateways.Shipping;
 
-        /// <summary>
-        /// This is a helper contructor for unit testing
-        /// </summary>
-        internal CatalogShippingApiController(MerchelloContext merchelloContext, UmbracoContext umbracoContext)
-            : base(merchelloContext, umbracoContext)
-        {
+
             _gatewayProviderService = MerchelloContext.Services.GatewayProviderService;
             _storeSettingService = MerchelloContext.Services.StoreSettingService;
             _shipCountryService = ((ServiceContext)MerchelloContext.Services).ShipCountryService;
@@ -215,6 +208,27 @@ namespace Merchello.Web.Editors
         }
 
         /// <summary>
+        /// Get all <see cref="IShipMethod"/> for a shipping provider
+        ///
+        /// GET /umbraco/Merchello/PaymentGatewayApi/GetPaymentProviderPaymentMethods/{id}
+        /// </summary>
+        /// <param name="id">The key of the PaymentGatewayProvider</param>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        public IEnumerable<PaymentMethodDisplay> GetPaymentProviderPaymentMethods(Guid id)
+        {
+            var provider = _shippingContext.CreateInstance(id);
+            if (provider == null) throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+
+            foreach (var method in provider.ShipMethods)
+            {
+                // TODO: we need the actual ShippingGatewayProvider so we can grab the if present
+                //yield return provider.GetShippingGatewayMethodByKey(method.Key).ToShipMethodDisplay();
+            }
+        }
+
+        /// <summary>
         /// Add an external ShipMethod to the ShipCountry
         /// 
         /// USPS, UPS, etc
@@ -223,9 +237,30 @@ namespace Merchello.Web.Editors
         /// </summary>
         /// <param name="method">POSTed ShipMethodDisplay object</param>
         [AcceptVerbs("POST")]
-        public ShipMethodDisplay AddShipMethod(ShipMethodDisplay method)
+        public HttpResponseMessage AddShipMethod(ShipMethodDisplay method)
         {
-            return null;
+            var response = Request.CreateResponse(HttpStatusCode.OK);
+
+            try
+            {
+                var provider = _shippingContext.CreateInstance(method.ProviderKey);
+
+                var gatewayResource =
+                    provider.ListResourcesOffered().FirstOrDefault(x => x.ServiceCode == method.ServiceCode);
+
+                var shipCountry = _shipCountryService.GetByKey(method.ShipCountryKey);
+
+                var shippingGatewayMethod = provider.CreateShippingGatewayMethod(gatewayResource, shipCountry, method.Name);
+
+                provider.SaveShippingGatewayMethod(shippingGatewayMethod);
+
+            }
+            catch (Exception ex)
+            {
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError, String.Format("{0}", ex.Message));
+            }
+
+            return response;
         }
 
         /// <summary>
@@ -237,9 +272,26 @@ namespace Merchello.Web.Editors
         /// </summary>
         /// <param name="method">POSTed ShipMethodDisplay object</param>
         [AcceptVerbs("POST", "PUT")]
-        public ShipMethodDisplay PutShipMethod(ShipMethodDisplay method)
+        public HttpResponseMessage PutShipMethod(ShipMethodDisplay method)
         {
-            return null;
+            var response = Request.CreateResponse(HttpStatusCode.OK);
+
+            try
+            {
+                var provider = _shippingContext.CreateInstance(method.ProviderKey);
+
+                var shippingMethod = provider.ShipMethods.FirstOrDefault(x => x.Key == method.Key);
+
+                shippingMethod = method.ToShipMethod(shippingMethod);
+
+                provider.GatewayProviderService.Save(shippingMethod);
+            }
+            catch (Exception ex)
+            {
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError, String.Format("{0}", ex.Message));
+            }
+
+            return response;
         }
 
         /// <summary>
@@ -249,11 +301,18 @@ namespace Merchello.Web.Editors
         ///
         /// GET /umbraco/Merchello/ShippingMethodsApi/DeleteShipMethod
         /// </summary>
-        /// <param name="method">POSTed ShipMethodDisplay object</param>
+        /// <param name="id"><see cref="ShipMethodDisplay"/> key to delete</param>
         [AcceptVerbs("POST", "PUT")]
-        public ShipMethodDisplay DeleteShipMethod(ShipMethodDisplay method)
+        public HttpResponseMessage DeleteShipMethod(Guid id)
         {
-            return null;
+            var shippingMethodService = ((ServiceContext)MerchelloContext.Services).ShipMethodService;
+            var methodToDelete = shippingMethodService.GetByKey(id);
+
+            if (methodToDelete == null) return Request.CreateResponse(HttpStatusCode.NotFound);
+
+            shippingMethodService.Delete(methodToDelete);
+
+            return Request.CreateResponse(HttpStatusCode.OK);
         }
 
     }
