@@ -78,7 +78,7 @@
                         <div class="row-fluid span10 col-xs-10">
                             <div class="row-fluid">
                                 <div class="btn-toolbar pull-right umb-btn-toolbar">
-                                    <a class="btn btn-primary" data-ng-hide="invoice.getPaymentStatus()=='Paid'" data-ng-click="capturePayment()">Capture Up To {{invoice.total | currency}}</a>
+                                    <a class="btn btn-primary" data-ng-hide="invoice.getPaymentStatus()=='Paid'" data-ng-click="capturePayment()">Capture Up To {{invoice.total | currency : currencySymbol}}</a>
                                     <a class="btn btn-primary" data-ng-hide="invoice.getFulfillmentStatus()=='Fulfilled'" data-ng-click="fulfillShipment()">Fulfill {{invoice.getProductLineItems().length}} Line Items</a>
                                 </div>
                             </div>
@@ -90,16 +90,16 @@
                                             <h4>{{lineitem.name}}</h4>
                                             <span>SKU: {{lineitem.sku}}</span>
                                         </td>
-                                        <td class="text-right">{{lineitem.quantity}} x <strong>{{lineitem.price | currency}}</strong></td>
-                                        <td class="text-right">{{lineitem.quantity * lineitem.price | currency}}</td>
+                                        <td class="text-right">{{lineitem.quantity}} x <strong>{{lineitem.price | currency : currencySymbol}}</strong></td>
+                                        <td class="text-right">{{lineitem.quantity * lineitem.price | currency : currencySymbol}}</td>
                                     </tr>
                                     <tr>
                                         <td colspan="3" class="text-right">Sales Tax</td>
-                                        <td class="text-right">{{invoice.getTaxLineItem().price | currency}}</td>
+                                        <td class="text-right">{{invoice.getTaxLineItem().price | currency : currencySymbol}}</td>
                                     </tr>
                                     <tr>
                                         <td colspan="3" class="text-right">Shipping</td>
-                                        <td class="text-right">{{invoice.getShippingLineItem().price | currency}}</td>
+                                        <td class="text-right">{{invoice.getShippingLineItem().price | currency : currencySymbol}}</td>
                                     </tr>
                                     <tr data-ng-repeat="payment in invoice.payments" data-ng-hide="invoice.payments.length == 0">
                                         <td><i class="icon-credit-card" data-ng-class="{ 'icon-credit-card': payment.paymentType.alias == 'CreditCard', 'icon-credit-card': payment.paymentType.alias == 'Cash' }"></i></td>
@@ -108,7 +108,7 @@
                                             <span class="payment-method">Payment processed by: {{payment.paymentMethodName}}</span>
                                         </td>
                                         <td class="text-right">Authorized:</td>
-                                        <td class="text-right">{{payment.amount | currency}}</td>
+                                        <td class="text-right">{{payment.amount | currency : currencySymbol}}</td>
                                     </tr>
                                 </tbody>
                             </table>

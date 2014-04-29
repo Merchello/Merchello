@@ -107,6 +107,17 @@
             });
         };
 
+        $scope.loadSettings = function () {
+
+        	var currencySymbolPromise = merchelloSettingsService.getCurrencySymbol();
+        	currencySymbolPromise.then(function (currencySymbol) {
+        		$scope.currencySymbol = currencySymbol;
+
+        	}, function (reason) {
+        		alert('Failed: ' + reason.message);
+        	});
+        };
+
         /**
          * @ngdoc method
          * @name init
@@ -117,8 +128,9 @@
          */
         $scope.init = function () {
 
-            $scope.loadTypeFields(function () { $scope.loadInvoice($routeParams.id); });
-           
+        	$scope.loadTypeFields(function () { $scope.loadInvoice($routeParams.id); });
+	        $scope.loadSettings();
+
         };
 
         $scope.init();
