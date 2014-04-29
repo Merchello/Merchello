@@ -130,9 +130,8 @@ namespace Merchello.Web.Editors
 
 		/// <summary>
 		/// Returns Product by id (key) 
-		/// GET /umbraco/Merchello/ProductApi/GetProduct/{guid}
+		/// GET /umbraco/Merchello/SettingsApi/GetAllSettings
 		/// </summary>
-		/// <param name="id"></param>
 		public SettingDisplay GetAllSettings()
 		{																								   
 			var settings = _storeSettingService.GetAll();
@@ -164,7 +163,7 @@ namespace Merchello.Web.Editors
 		/// <summary>
 		/// Updates existing global settings
 		///
-		/// PUT /umbraco/Merchello/ProductApi/PutSettings
+		/// PUT /umbraco/Merchello/SettingsApi/PutSettings
 		/// </summary>
 		/// <param name="setting">SettingDisplay object serialized from WebApi</param>
 		[AcceptVerbs("POST", "PUT")]

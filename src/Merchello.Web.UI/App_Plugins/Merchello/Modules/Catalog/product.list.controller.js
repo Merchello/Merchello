@@ -8,7 +8,7 @@
      * @description
      * The controller for the product editor
      */
-    controllers.ProductListController = function($scope, $routeParams, $location, assetsService, notificationsService, angularHelper, serverValidationManager, merchelloProductService) {
+	controllers.ProductListController = function ($scope, $routeParams, $location, assetsService, notificationsService, angularHelper, serverValidationManager, merchelloProductService, merchelloSettingsService) {
 
         $scope.filtertext = "";
         $scope.products = [];
@@ -55,6 +55,18 @@
 
         };
 
+		$scope.loadSettings = function () {
+
+
+			var currencySymbolPromise = merchelloSettingsService.getCurrencySymbol();
+			currencySymbolPromise.then(function(currencySymbol) {
+				$scope.currencySymbol = currencySymbol;
+
+			}, function (reason) {
+				alert('Failed: ' + reason.message);
+			});
+		};
+
         /**
          * @ngdoc method
          * @name init
@@ -65,7 +77,8 @@
          */
         $scope.init = function () {
 
-            $scope.loadProducts();
+        	$scope.loadProducts();
+        	$scope.loadSettings();
 
         };
 
@@ -169,7 +182,7 @@
 
     };
 
-    angular.module("umbraco").controller("Merchello.Dashboards.Product.ListController", ['$scope', '$routeParams', '$location', 'assetsService', 'notificationsService', 'angularHelper', 'serverValidationManager', 'merchelloProductService', merchello.Controllers.ProductListController]);
+	angular.module("umbraco").controller("Merchello.Dashboards.Product.ListController", ['$scope', '$routeParams', '$location', 'assetsService', 'notificationsService', 'angularHelper', 'serverValidationManager', 'merchelloProductService', 'merchelloSettingsService', merchello.Controllers.ProductListController]);
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));
 
