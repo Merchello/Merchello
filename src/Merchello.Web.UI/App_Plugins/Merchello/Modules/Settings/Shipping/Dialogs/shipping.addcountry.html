@@ -11,7 +11,7 @@
 				<label for="country-name">Type your Country Name</label>
 				<div class="input-append col-xs-12 span12">
 					<select data-ng-model="dialogData.selectedCountry"
-							data-ng-options="country.name for country in dialogData.availableCountries">
+							data-ng-options="country.name for country in dialogData.availableCountries | orderBy:'name'">
 						<option style="display:none" value="">-- none selected --</option>
 					</select>
 				</div>

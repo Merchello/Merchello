@@ -150,7 +150,7 @@
          * @function
          * 
          * @description
-         * Calls the payment gateway server to delete the method passed in via the method parameter
+         * Calls the payment gateway service to delete the method passed in via the method parameter
          */
         $scope.removeMethod = function (method) {
 
