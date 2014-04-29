@@ -40,13 +40,6 @@ namespace Merchello.Core.Gateways.Shipping
         IEnumerable<IShippingGatewayMethod> GetAllShippingGatewayMethods(IShipCountry shipCountry);
 
         /// <summary>
-        /// Gets a <see cref="IShippingGatewayMethod"/> by it's <see cref="IShipMethod"/> key
-        /// </summary>
-        /// <param name="shipMethodKey">The <see cref="IShipMethod"/> key</param>
-        /// <returns>The <see cref="IShippingGatewayMethod"/></returns>
-        IShippingGatewayMethod GetShippingGatewayMethod(Guid shipMethodKey);
-
-        /// <summary>
         /// Deletes an Active ShipMethod
         /// </summary>
         /// <param name="shippingGatewayMethod"></param>

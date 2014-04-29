@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
-using AutoMapper;
 using Merchello.Core.Gateways;
-using Umbraco.Web;
 using Umbraco.Web.Mvc;
 using Merchello.Core;
 using Merchello.Core.Models;
@@ -14,7 +12,6 @@ using Merchello.Web.Models.ContentEditing;
 using System.Net;
 using System.Net.Http;
 using Merchello.Core.Gateways.Shipping;
-using EnumerableExtensions = Umbraco.Core.EnumerableExtensions;
 
 namespace Merchello.Web.Editors
 {
@@ -150,8 +147,8 @@ namespace Merchello.Web.Editors
         /// </summary>
         public IEnumerable<GatewayProviderDisplay> GetAllShipGatewayProviders()
         {
-            var providers = MerchelloContext.Gateways.Shipping.GetAllActivatedProviders();
-            if( providers != null && providers.Any() )
+            var providers = MerchelloContext.Gateways.Shipping.GetAllActivatedProviders().ToArray();
+            if( providers.Any() )
             {
                 var rateTableProvider = MerchelloContext.Gateways.Shipping.CreateInstance(providers.First().Key);
                 if (rateTableProvider == null)
