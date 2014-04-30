@@ -1,8 +1,7 @@
 ﻿using System;
 
 namespace Merchello.Web.Models.ContentEditing
-{
-    
+{    
     public class AppliedPaymentDisplay
     {
         public Guid Key { get; set; }
