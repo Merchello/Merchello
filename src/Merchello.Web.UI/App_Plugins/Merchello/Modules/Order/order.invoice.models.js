@@ -243,6 +243,21 @@
             self.exported = data.exported;
         }
         self.paymentType = new merchello.Models.TypeField();
+
+	    self.getStatus = function() {
+	    	var statusArr = [];
+			if (self.authorized) {
+				statusArr.push("Authorized");
+			}
+			if (self.collected) {
+				statusArr.push("Captured");
+			}
+			if (self.exported) {
+				statusArr.push("Exported");
+			}
+
+		    return statusArr.join("/");
+	    };
     };
 
     models.PaymentRequest = function (data) {

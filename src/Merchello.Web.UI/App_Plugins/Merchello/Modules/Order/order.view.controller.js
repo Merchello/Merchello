@@ -99,6 +99,11 @@
                     }
                 });
 
+				// used for rendering the payment history
+                invoice.groupedPayments = _.groupBy(invoice.payments, function(payment) {
+                	return payment.paymentMethodName;
+                });
+
                 $scope.loaded = true;
                 $scope.preValuesLoaded = true;
 
