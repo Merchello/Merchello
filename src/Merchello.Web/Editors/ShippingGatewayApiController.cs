@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using Merchello.Core.Gateways;
-using Umbraco.Web;
 using Umbraco.Web.Mvc;
 using Merchello.Core;
 using Merchello.Core.Models;
@@ -148,8 +147,8 @@ namespace Merchello.Web.Editors
         /// </summary>
         public IEnumerable<GatewayProviderDisplay> GetAllShipGatewayProviders()
         {
-            var providers = MerchelloContext.Gateways.Shipping.GetAllActivatedProviders();
-            if( providers != null && providers.Any() )
+            var providers = MerchelloContext.Gateways.Shipping.GetAllActivatedProviders().ToArray();
+            if( providers.Any() )
             {
                 var rateTableProvider = MerchelloContext.Gateways.Shipping.CreateInstance(providers.First().Key);
                 if (rateTableProvider == null)
@@ -216,17 +215,18 @@ namespace Merchello.Web.Editors
         /// <remarks>
         /// 
         /// </remarks>
-        //public IEnumerable<ShipMethodDisplay> GetShippingProviderShipMethods(Guid id)
-        //{
-        //    var provider = _shippingContext.CreateInstance(id);
-        //    if (provider == null) throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+        public IEnumerable<ShipMethodDisplay> GetShippingProviderShipMethods(Guid id)
+        {
+            var provider = _shippingContext.CreateInstance(id);
+            if (provider == null) throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
 
-        //    foreach (var method in provider.ShipMethods)
-        //    {
-        //        // TODO: we need the actual ShippingGatewayProvider so we can grab the if present
-        //        //yield return provider.GetShippingGatewayMethodByKey(method.Key).ToShipMethodDisplay();
-        //    }
-        //}
+            return
+                provider.ShipMethods.Select(
+                    method => 
+                        provider.GetShippingGatewayMethod(method.Key, method.ShipCountryKey).ToShipMethodDisplay()
+                    );
+                  
+        }
 
         /// <summary>
         /// Add an external ShipMethod to the ShipCountry

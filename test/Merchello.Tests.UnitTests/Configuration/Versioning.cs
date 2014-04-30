@@ -15,5 +15,7 @@ namespace Merchello.Tests.UnitTests.Configuration
             StringAssert.AreEqualIgnoringCase(current, version);
         }
 
+
+
     }
 }

@@ -43,6 +43,32 @@ namespace Merchello.Core.Gateways.Shipping
         /// <returns></returns>
         public abstract IEnumerable<IShippingGatewayMethod> GetAllShippingGatewayMethods(IShipCountry shipCountry);
 
+
+        /// <summary>
+        /// Gets a <see cref="IShippingGatewayMethod"/> by it's <see cref="IShipMethod"/> key
+        /// </summary>
+        /// <param name="shipMethodKey">The <see cref="IShipMethod"/> key</param>
+        /// <param name="shipCountrKey">The <see cref="IShipCountry"/> ky</param>
+        /// <returns>The <see cref="IShippingGatewayMethod"/></returns>
+        public IShippingGatewayMethod GetShippingGatewayMethod(Guid shipMethodKey, Guid shipCountrKey)
+        {
+            return
+                GetAllShippingGatewayMethodsForShipCountry(shipMethodKey)
+                    .FirstOrDefault(x => x.ShipMethod.Key == shipMethodKey);
+        }
+
+        /// <summary>
+        /// Returns a collection of ship methods assigned for this specific provider configuration (associated with the ShipCountry)
+        /// </summary>
+        /// <param name="shipCountryKey">The key for the <see cref="IShipCountry"/></param>
+        /// <returns></returns>
+        public IEnumerable<IShippingGatewayMethod> GetAllShippingGatewayMethodsForShipCountry(Guid shipCountryKey)
+        {
+            var shipCountry = GatewayProviderService.GetShipCountryByKey(shipCountryKey);
+
+            return GetAllShippingGatewayMethods(shipCountry);
+        }
+
         /// <summary>
         /// Deletes an Active ShipMethod
         /// </summary>
