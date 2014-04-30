@@ -134,6 +134,7 @@
     <Compile Include="Models\Interfaces\IExtendedDataEntity.cs" />
     <Compile Include="Models\Interfaces\IGatewayProviderMethod.cs" />
     <Compile Include="Models\Interfaces\ICurrency.cs" />
+    <Compile Include="Models\Interfaces\INotifyStatus.cs" />
     <Compile Include="Models\Interfaces\IOrder.cs" />
     <Compile Include="Models\Interfaces\IOrderStatus.cs" />
     <Compile Include="Models\Interfaces\IPaymentMethod.cs" />
@@ -147,6 +148,7 @@
     <Compile Include="Models\PaymentMethod.cs" />
     <Compile Include="Models\Rdbms\AuditDto.cs" />
     <Compile Include="Models\Rdbms\InvoiceIndexDto.cs" />
+    <Compile Include="Models\Rdbms\NotificationDto.cs" />
     <Compile Include="Models\Rdbms\OrderIndexDto.cs" />
     <Compile Include="Models\Rdbms\PaymentMethodDto.cs" />
     <Compile Include="Models\Rdbms\User2AppDto.cs" />
