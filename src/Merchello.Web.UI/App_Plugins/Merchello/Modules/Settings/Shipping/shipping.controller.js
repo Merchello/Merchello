@@ -70,7 +70,7 @@
          * @function
          * 
          * @description
-         * Load the shipping gateway providers from the catalog shipping gateway service, then wrap the results
+         * Load the shipping gateway providers from the shipping gateway service, then wrap the results
          * in Merchello models and add to the scope via the providers collection.
          */
 		$scope.loadAllShipProviders = function () {
@@ -107,7 +107,7 @@
          * @function
          * 
          * @description
-         * Load the shipping gateway resources from the catalog shipping gateway service, then wrap the results
+         * Load the shipping gateway resources from the shipping gateway service, then wrap the results
          * in Merchello models and add to the scope via the providers collection in the resources collection.
          */
 		$scope.loadAllAvailableGatewayResources = function (shipProvider) {
@@ -122,6 +122,32 @@
 		    }, function (reason) {
 
 		        notificationsService.error("Available Gateway Resources Load Failed", reason.message);
+
+		    });
+
+		};
+
+	    /**
+         * @ngdoc method
+         * @name loadShipMethods
+         * @function
+         * 
+         * @description
+         * Load the shipping methods from the shipping gateway service, then wrap the results
+         * in Merchello models and add to the scope via the provider in the shipMethods collection.
+         */
+		$scope.loadShipMethods = function (shipProvider) {
+
+		    var promiseShipMethods = merchelloCatalogShippingService.getShippingProviderShipMethods(shipProvider);
+		    promiseShipMethods.then(function (shipMethods) {
+
+		        shipProvider.shipMethods = _.map(shipMethods, function (method) {
+		            return new merchello.Models.ShippingMethod(method);
+		        });
+
+		    }, function (reason) {
+
+		        notificationsService.error("Available Shipping Methods Load Failed", reason.message);
 
 		    });
 

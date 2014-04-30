@@ -74,6 +74,17 @@
                     'Failed to retreive shipping gateway provider resources');
             },
 
+            getShippingProviderShipMethods: function (shipProvider) {
+
+                return umbRequestHelper.resourcePromise(
+                    $http({
+                        url: umbRequestHelper.getApiUrl('merchelloCatalogShippingApiBaseUrl', 'GetShippingProviderShipMethods'),
+                        method: "GET",
+                        params: { id: shipProvider.key }
+                    }),
+                    'Failed to retreive shipping methods');
+            },
+
         };
     };
 
