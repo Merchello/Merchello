@@ -22,16 +22,16 @@ namespace Merchello.Core.Models
         string Description { get; set; }
 
         /// <summary>
-        /// The path to the src
+        /// The path or text src
         /// </summary>
         [DataMember]
         string Src { get; set; }
 
         /// <summary>
-        /// The notifiy status key
+        /// Optional key for Notification Trigger Rule
         /// </summary>
         [DataMember]
-        Guid StatusKey { get; set; }
+        Guid? RuleKey { get; set; }
 
         /// <summary>
         /// The recipients of the notification
