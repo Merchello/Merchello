@@ -164,6 +164,7 @@
     <Compile Include="Persistence\DatabaseModelDefinitions\DbIndexDefinition.cs" />
     <Compile Include="Persistence\Factories\NotificationFactory.cs" />
     <Compile Include="Persistence\Factories\OrderStatusFactory.cs" />
+    <Compile Include="Persistence\Mappers\NotificationMapper.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneOneZero\CreateOneOneZeroTables.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneOneZero\UpdateOneOneZeroData.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IInvoiceStatusRepository.cs" />

@@ -1,4 +1,5 @@
-﻿using Merchello.Core.Models;
+﻿using System;
+using Merchello.Core.Models;
 using Merchello.Core.Models.Rdbms;
 
 namespace Merchello.Core.Persistence.Factories
@@ -31,7 +32,19 @@ namespace Merchello.Core.Persistence.Factories
 
         public NotificationDto BuildDto(INotification entity)
         {
-            throw new System.NotImplementedException();
+            return new NotificationDto()
+            {
+                Key = entity.Key,
+                Name = entity.Name,
+                Description = entity.Description,
+                Src = entity.Src,
+                RuleKey = entity.RuleKey,
+                Recipients = entity.Recipients,
+                SendToCustomer = entity.SendToCustomer,
+                Disabled = entity.Disabled,
+                UpdateDate = entity.UpdateDate,
+                CreateDate = entity.CreateDate
+            };
         }
     }
 }
