@@ -209,7 +209,7 @@ namespace Merchello.Web.Editors
         /// <summary>
         /// Get all <see cref="IShipMethod"/> for a shipping provider
         ///
-        /// GET /umbraco/Merchello/ShippingGatewayApi/GetShippingProviderShipMethod/{id}
+        /// GET /umbraco/Merchello/ShippingMethodsApi/GetShippingProviderShipMethods/{id}
         /// </summary>
         /// <param name="id">The key of the ShippingGatewayProvider</param>
         /// <remarks>
