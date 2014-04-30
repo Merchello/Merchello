@@ -134,12 +134,14 @@
     <Compile Include="Models\Interfaces\IExtendedDataEntity.cs" />
     <Compile Include="Models\Interfaces\IGatewayProviderMethod.cs" />
     <Compile Include="Models\Interfaces\ICurrency.cs" />
+    <Compile Include="Models\Interfaces\INotification.cs" />
     <Compile Include="Models\Interfaces\INotifyStatus.cs" />
     <Compile Include="Models\Interfaces\IOrder.cs" />
     <Compile Include="Models\Interfaces\IOrderStatus.cs" />
     <Compile Include="Models\Interfaces\IPaymentMethod.cs" />
     <Compile Include="Models\InvoiceExtensions.cs" />
     <Compile Include="Models\LocalizationExtensions.cs" />
+    <Compile Include="Models\Notification.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\OrderCollection.cs" />
     <Compile Include="Models\OrderExtensions.cs" />
@@ -156,6 +158,7 @@
     <Compile Include="Models\TypeFields\EntityTypeField.cs" />
     <Compile Include="Models\TypeFields\IEntityTypeField.cs" />
     <Compile Include="Notifications\IMessenger.cs" />
+    <Compile Include="Notifications\INotificationManager.cs" />
     <Compile Include="Notifications\SmtpClientExtensions.cs" />
     <Compile Include="Persistence\DatabaseModelDefinitions\DbIndexDefinition.cs" />
     <Compile Include="Persistence\Factories\OrderStatusFactory.cs" />

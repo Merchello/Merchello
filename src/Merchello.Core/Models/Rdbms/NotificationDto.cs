@@ -20,11 +20,11 @@ namespace Merchello.Core.Models.Rdbms
         [Column("description")]
         public string Description { get; set; }
 
-        [Column("partialView")]
-        public string PartialView { get; set; }
+        [Column("src")]
+        public string Src { get; set; }
 
-        [Column("binding")]
-        public string Binding { get; set; }
+        [Column("statusKey")]
+        public Guid StatusKey { get; set; }
 
         [Column("recipients")]
         public string Recipients { get; set; }
