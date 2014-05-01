@@ -36,7 +36,8 @@ namespace Merchello.Core.Gateways.Notification
         /// <summary>
         /// The <see cref="INotificationMessage"/>
         /// </summary>
-        public INotificationMessage NotificationMessage {
+        public INotificationMessage NotificationMessage 
+        {
             get { return _notificationMessage; }
         }
 
@@ -46,7 +47,8 @@ namespace Merchello.Core.Gateways.Notification
         /// <remarks>
         /// This could be email addresses, mailing addresses, mobile numbers
         /// </remarks>
-        public IEnumerable<string> Recipients {
+        public IEnumerable<string> Recipients 
+        {
             get
             {
                 var recipients = _notificationMessage.Recipients.Replace(',', ';');
@@ -57,7 +59,8 @@ namespace Merchello.Core.Gateways.Notification
         /// <summary>
         /// True/false indicating if the notification should also be sent to the customer
         /// </summary>
-        public bool SendToCustomer {
+        public bool SendToCustomer 
+        {
             get { return _notificationMessage.SendToCustomer; }
         }
 
@@ -78,7 +81,8 @@ namespace Merchello.Core.Gateways.Notification
         /// <summary>
         /// The status of the formatted message
         /// </summary>
-        public virtual FormatStatus FormatStatus {
+        public virtual FormatStatus FormatStatus 
+        {
             get
             {
                 return _formattedMessage.Value.Length > _notificationMessage.MaxLength

@@ -14,11 +14,21 @@ namespace Merchello.Core.Models.Rdbms
         [Constraint(Default = "newid()")]
         public Guid Key { get; set; }
 
+        [Column("ruleKey")]
+        [ForeignKey(typeof(NotificationTriggerDto), Name = "FK_merchNotificationMessage_merchNotificationTriggerRule", Column = "pk")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public Guid? RuleKey { get; set; }
+
+        [Column("methodKey")]
+        [ForeignKey(typeof(NotificationMethodDto), Name = "FK_merchNotificationMessage_merchNotificationMethod", Column = "pk")]
+        public Guid MethodKey { get; set; }
+
         [Column("name")]
         public string Name { get; set; }
 
         [Column("description")]
         public string Description { get; set; }
+
 
         [Column("message")]
         public string Message { get; set; }
@@ -27,12 +37,7 @@ namespace Merchello.Core.Models.Rdbms
         public int MaxLength { get; set; }
 
         [Column("messageIsFilePath")]
-        public bool MessageIsFilePath { get; set; } 
-
-        [Column("ruleKey")]
-        [ForeignKey(typeof(NotificationTriggerRuleDto), Name = "FK_merchNotificationMessage_merchNotificationTriggerRule", Column = "pk")]
-        [NullSetting(NullSetting = NullSettings.Null)]
-        public Guid? RuleKey { get; set; }
+        public bool MessageIsFilePath { get; set; }
 
         [Column("recipients")]
         public string Recipients { get; set; }

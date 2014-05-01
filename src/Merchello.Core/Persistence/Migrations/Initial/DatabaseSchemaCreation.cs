@@ -60,8 +60,9 @@ namespace Merchello.Core.Persistence.Migrations.Initial
             {31, typeof(ProductVariantIndexDto)},
             {32, typeof(StoreSettingDto)},
             {33, typeof(OrderIndexDto)},
-            {34, typeof(NotificationTriggerRuleDto)},
-            {35, typeof(NotificationMessageDto)}
+            {34, typeof(NotificationMethodDto)},
+            {35, typeof(NotificationTriggerDto)},
+            {36, typeof(NotificationMessageDto)}
         };
 
         #endregion
@@ -71,7 +72,7 @@ namespace Merchello.Core.Persistence.Migrations.Initial
         /// </summary>
         internal void UninstallDatabaseSchema()
         {
-            DatabaseSchemaHelper.UninstallDatabaseSchema(_database, OrderedTables, MerchelloVersion.AssemblyVersion);
+            DatabaseSchemaHelper.UninstallDatabaseSchema(_database, OrderedTables, MerchelloVersion.Current.ToString());
         }
 
         public DatabaseSchemaCreation(Database database)
@@ -89,7 +90,7 @@ namespace Merchello.Core.Persistence.Migrations.Initial
 
             if (!e.Cancel)
             {
-                DatabaseSchemaHelper.InitializeDatabaseSchema(_database, OrderedTables, MerchelloVersion.AssemblyVersion);
+                DatabaseSchemaHelper.InitializeDatabaseSchema(_database, OrderedTables, MerchelloVersion.Current.ToString());
             }
 
             FireAfterCreation(e);

@@ -101,6 +101,9 @@
     <Compile Include="Gateways\GatewayProviderActivationAttribute.cs" />
     <Compile Include="Gateways\GatewayProviderEditorAttribute.cs" />
     <Compile Include="Gateways\Notification\NotificationGatewayProviderBase.cs" />
+    <Compile Include="Gateways\Notification\Smtp\ISmtpNotificationGatewayProvider.cs" />
+    <Compile Include="Gateways\Notification\Smtp\ISmtpNotificationGatewayMessage.cs" />
+    <Compile Include="Gateways\Notification\Smtp\SmtpNotificationGatewayProvider.cs" />
     <Compile Include="Gateways\Payment\Cash\CashPaymentGatewayMethod.cs" />
     <Compile Include="Gateways\Payment\Cash\CashPaymentGatewayProvider.cs" />
     <Compile Include="Gateways\Payment\Cash\ICashPaymentGatewayMethod.cs" />
@@ -135,6 +138,8 @@
     <Compile Include="Models\Interfaces\IExtendedDataEntity.cs" />
     <Compile Include="Models\Interfaces\IGatewayProviderMethod.cs" />
     <Compile Include="Models\Interfaces\ICurrency.cs" />
+    <Compile Include="Models\Interfaces\INotficationTrigger.cs" />
+    <Compile Include="Models\Interfaces\INotificationMethod.cs" />
     <Compile Include="Models\Interfaces\INotificationMessage.cs" />
     <Compile Include="Models\Interfaces\INotifyStatus.cs" />
     <Compile Include="Models\Interfaces\IOrder.cs" />
@@ -143,6 +148,7 @@
     <Compile Include="Models\InvoiceExtensions.cs" />
     <Compile Include="Models\LocalizationExtensions.cs" />
     <Compile Include="Models\NotificationMessage.cs" />
+    <Compile Include="Models\NotificationMethod.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\OrderCollection.cs" />
     <Compile Include="Models\OrderExtensions.cs" />
@@ -152,7 +158,8 @@
     <Compile Include="Models\Rdbms\AuditDto.cs" />
     <Compile Include="Models\Rdbms\InvoiceIndexDto.cs" />
     <Compile Include="Models\Rdbms\NotificationMessageDto.cs" />
-    <Compile Include="Models\Rdbms\NotificationTriggerRuleDto.cs" />
+    <Compile Include="Models\Rdbms\NotificationMethodDto.cs" />
+    <Compile Include="Models\Rdbms\NotificationTriggerDto.cs" />
     <Compile Include="Models\Rdbms\OrderIndexDto.cs" />
     <Compile Include="Models\Rdbms\PaymentMethodDto.cs" />
     <Compile Include="Models\Rdbms\User2AppDto.cs" />
@@ -165,7 +172,7 @@
     <Compile Include="Gateways\Notification\INotificationFormatter.cs" />
     <Compile Include="Gateways\Notification\NotificationGatewayMessageBase.cs" />
     <Compile Include="Gateways\Notification\NotificationFormatterResolver.cs" />
-    <Compile Include="Gateways\Notification\SmtpClientExtensions.cs" />
+    <Compile Include="Gateways\Notification\Smtp\SmtpClientExtensions.cs" />
     <Compile Include="Persistence\DatabaseModelDefinitions\DbIndexDefinition.cs" />
     <Compile Include="Persistence\Factories\NotificationMessageFactory.cs" />
     <Compile Include="Persistence\Factories\OrderStatusFactory.cs" />
