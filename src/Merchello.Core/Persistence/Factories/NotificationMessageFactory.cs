@@ -7,18 +7,20 @@ namespace Merchello.Core.Persistence.Factories
     /// <summary>
     /// Defines the notification factory
     /// </summary>
-    internal class NotificationFactory : IEntityFactory<INotification, NotificationDto>
+    internal class NotificationMessageFactory : IEntityFactory<INotificationMessage, NotificationMessageDto>
     {
-        public INotification BuildEntity(NotificationDto dto)
+        public INotificationMessage BuildEntity(NotificationMessageDto dto)
         {
-            var notification = new Notification()
+            var notification = new NotificationMessage()
             {
                 Key = dto.Key,
                 Name = dto.Name,
                 Description = dto.Description,
-                Src = dto.Src,
+                Message = dto.Message,
+                MaxLength = dto.MaxLength,
                 RuleKey = dto.RuleKey,
                 Recipients = dto.Recipients,
+                MessageIsFilePath = dto.MessageIsFilePath,
                 SendToCustomer = dto.SendToCustomer,
                 Disabled = dto.Disabled,
                 UpdateDate = dto.UpdateDate,
@@ -30,14 +32,16 @@ namespace Merchello.Core.Persistence.Factories
             return notification;
         }
 
-        public NotificationDto BuildDto(INotification entity)
+        public NotificationMessageDto BuildDto(INotificationMessage entity)
         {
-            return new NotificationDto()
+            return new NotificationMessageDto()
             {
                 Key = entity.Key,
                 Name = entity.Name,
                 Description = entity.Description,
-                Src = entity.Src,
+                Message = entity.Message,
+                MessageIsFilePath = entity.MessageIsFilePath,
+                MaxLength = entity.MaxLength,
                 RuleKey = entity.RuleKey,
                 Recipients = entity.Recipients,
                 SendToCustomer = entity.SendToCustomer,

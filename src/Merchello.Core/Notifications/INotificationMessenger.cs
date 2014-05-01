@@ -1,11 +1,9 @@
-﻿using System.Runtime.Remoting.Messaging;
-
-namespace Merchello.Core.Notifications
+﻿namespace Merchello.Core.Notifications
 {
     /// <summary>
-    /// Defines a message
+    /// Defines a notification messenger - a class responsible for sending notifications
     /// </summary>
-    public interface IMessenger
+    public interface INotificationMessenger
     {
         /// <summary>
         /// Sends the message
@@ -13,6 +11,5 @@ namespace Merchello.Core.Notifications
         /// <returns></returns>
         bool Send();
 
-        //
     }
 }

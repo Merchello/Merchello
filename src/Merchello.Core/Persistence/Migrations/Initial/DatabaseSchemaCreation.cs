@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Merchello.Core.Configuration;
 using Merchello.Core.Events;
 using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Persistence.DatabaseModelDefinitions;
 using Umbraco.Core;
-using Umbraco.Core.Logging;
 using Umbraco.Core.Persistence;
 using Umbraco.Core.Persistence.SqlSyntax;
 
@@ -59,7 +59,9 @@ namespace Merchello.Core.Persistence.Migrations.Initial
             {30, typeof(AppliedPaymentDto)},
             {31, typeof(ProductVariantIndexDto)},
             {32, typeof(StoreSettingDto)},
-            {33, typeof(OrderIndexDto)}
+            {33, typeof(OrderIndexDto)},
+            {34, typeof(NotificationTriggerRuleDto)},
+            {35, typeof(NotificationMessageDto)}
         };
 
         #endregion
@@ -69,30 +71,7 @@ namespace Merchello.Core.Persistence.Migrations.Initial
         /// </summary>
         internal void UninstallDatabaseSchema()
         {
-            LogHelper.Info<DatabaseSchemaCreation>("Start UninstallDataSchema");
-
-            foreach (var item in OrderedTables.OrderByDescending(x => x.Key))
-            {
-                var tableNameAttribute = item.Value.FirstAttribute<TableNameAttribute>();
-
-                string tableName = tableNameAttribute == null ? item.Value.Name : tableNameAttribute.Value;
-
-                LogHelper.Info<DatabaseSchemaCreation>("Uninstall" + tableName);
-
-                try
-                {
-                    if (_database.TableExist(tableName))
-                    {
-                        _database.DropTable(tableName);    
-                    }
-                }
-                catch (Exception ex)
-                {
-                    //swallow this for now, not sure how best to handle this with diff databases... though this is internal
-                    // and only used for unit tests. If this fails its because the table doesn't exist... generally!
-                    LogHelper.Error<DatabaseSchemaCreation>("Could not drop table " + tableName, ex);
-                }
-            }
+            DatabaseSchemaHelper.UninstallDatabaseSchema(_database, OrderedTables, MerchelloVersion.AssemblyVersion);
         }
 
         public DatabaseSchemaCreation(Database database)
@@ -110,10 +89,7 @@ namespace Merchello.Core.Persistence.Migrations.Initial
 
             if (!e.Cancel)
             {
-                foreach (var item in OrderedTables.OrderBy(x => x.Key))
-                {
-                    _database.CreateTable(false, item.Value);
-                }
+                DatabaseSchemaHelper.InitializeDatabaseSchema(_database, OrderedTables, MerchelloVersion.AssemblyVersion);
             }
 
             FireAfterCreation(e);

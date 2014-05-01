@@ -4,10 +4,10 @@ using Umbraco.Core.Persistence.DatabaseAnnotations;
 
 namespace Merchello.Core.Models.Rdbms
 {
-    [TableName("merchNotification")]
+    [TableName("merchNotificationMessage")]
     [PrimaryKey("pk", autoIncrement = false)]
     [ExplicitColumns]
-    internal class NotificationDto
+    internal class NotificationMessageDto
     {
         [Column("pk")]
         [PrimaryKeyColumn(AutoIncrement = false)]
@@ -20,11 +20,17 @@ namespace Merchello.Core.Models.Rdbms
         [Column("description")]
         public string Description { get; set; }
 
-        [Column("src")]
-        public string Src { get; set; }
+        [Column("message")]
+        public string Message { get; set; }
+
+        [Column("maxLength")]
+        public int MaxLength { get; set; }
+
+        [Column("messageIsFilePath")]
+        public bool MessageIsFilePath { get; set; } 
 
         [Column("ruleKey")]
-        [ForeignKey(typeof(NotificationTriggerRuleDto), Name = "FK_merchNotification_merchNotificationTriggerRule", Column = "pk")]
+        [ForeignKey(typeof(NotificationTriggerRuleDto), Name = "FK_merchNotificationMessage_merchNotificationTriggerRule", Column = "pk")]
         [NullSetting(NullSetting = NullSettings.Null)]
         public Guid? RuleKey { get; set; }
 
