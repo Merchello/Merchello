@@ -21,7 +21,7 @@ namespace Merchello.Core.Models.Rdbms
         public string Binding { get; set; }
 
         [Column("entityKey")]
-        public Guid EntityKey { get; set; }
+        public Guid? EntityKey { get; set; }
 
         [Column("updateDate")]
         [Constraint(Default = "getdate()")]
