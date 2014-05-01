@@ -1,4 +1,4 @@
-﻿namespace Merchello.Core.Notifications
+﻿namespace Merchello.Core.Gateways.Notification
 {
     public enum FormatStatus
     {

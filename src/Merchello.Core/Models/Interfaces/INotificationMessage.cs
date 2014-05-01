@@ -10,6 +10,12 @@ namespace Merchello.Core.Models
     public interface INotificationMessage : IEntity
     {
         /// <summary>
+        /// Optional key for Notification Trigger Rule
+        /// </summary>
+        [DataMember]
+        Guid? RuleKey { get; set; }
+
+        /// <summary>
         /// The name of the notification
         /// </summary>
         [DataMember]
@@ -20,6 +26,7 @@ namespace Merchello.Core.Models
         /// </summary>
         [DataMember]
         string Description { get; set; }
+
 
         /// <summary>
         /// The path or text src
@@ -40,12 +47,6 @@ namespace Merchello.Core.Models
         bool MessageIsFilePath { get; set; }
 
         /// <summary>
-        /// Optional key for Notification Trigger Rule
-        /// </summary>
-        [DataMember]
-        Guid? RuleKey { get; set; }
-
-        /// <summary>
         /// The recipients of the notification
         /// </summary>
         string Recipients { get; set; }
@@ -59,7 +60,6 @@ namespace Merchello.Core.Models
         /// True/false indicating whether or not this notification is disabled
         /// </summary>
         bool Disabled { get; set; }
-
 
     }
 }

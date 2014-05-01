@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Umbraco.Core.ObjectResolution;
 
-namespace Merchello.Core.Notifications
+namespace Merchello.Core.Gateways.Notification
 {
     /// <summary>
     /// Resolves Notification Formatters

@@ -1,20 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Merchello.Core.Models;
 using System.Linq;
+using Umbraco.Core.IO;
+using Umbraco.Core.Logging;
 
-namespace Merchello.Core.Notifications
+namespace Merchello.Core.Gateways.Notification
 {
     /// <summary>
     /// Defines the base notification
     /// </summary>
-    public abstract class NotificationBase : INotificationBase
+    public abstract class NotificationGatewayMessageBase : INotificationGatewayMessage
     {
         private readonly INotificationMessage _notificationMessage;
         private readonly INotificationFormatter _formatter;
         private Lazy<string> _formattedMessage;
 
-        protected NotificationBase(INotificationMessage notificationMessage, INotificationFormatter formatter)
+        protected NotificationGatewayMessageBase(INotificationMessage notificationMessage, INotificationFormatter formatter)
         {
             Mandate.ParameterNotNull(formatter, "formatter");
             Mandate.ParameterNotNull(notificationMessage, "message");
@@ -27,7 +30,15 @@ namespace Merchello.Core.Notifications
 
         private void Initialize()
         {
-            _formattedMessage = new Lazy<string>(() => _formatter.Format(_notificationMessage.Message));
+            _formattedMessage = new Lazy<string>(() => _formatter.Format(GetMessage()));
+        }
+
+        /// <summary>
+        /// The <see cref="INotificationMessage"/>
+        /// </summary>
+        public INotificationMessage NotificationMessage 
+        {
+            get { return _notificationMessage; }
         }
 
         /// <summary>
@@ -36,7 +47,8 @@ namespace Merchello.Core.Notifications
         /// <remarks>
         /// This could be email addresses, mailing addresses, mobile numbers
         /// </remarks>
-        public IEnumerable<string> Recipients {
+        public IEnumerable<string> Recipients 
+        {
             get
             {
                 var recipients = _notificationMessage.Recipients.Replace(',', ';');
@@ -47,7 +59,8 @@ namespace Merchello.Core.Notifications
         /// <summary>
         /// True/false indicating if the notification should also be sent to the customer
         /// </summary>
-        public bool SendToCustomer {
+        public bool SendToCustomer 
+        {
             get { return _notificationMessage.SendToCustomer; }
         }
 
@@ -68,13 +81,30 @@ namespace Merchello.Core.Notifications
         /// <summary>
         /// The status of the formatted message
         /// </summary>
-        public virtual FormatStatus FormatStatus {
+        public virtual FormatStatus FormatStatus 
+        {
             get
             {
                 return _formattedMessage.Value.Length > _notificationMessage.MaxLength
                            ? FormatStatus.Truncated
                            : FormatStatus.Ok;
             }
+        }
+
+
+        private string GetMessage()
+        {
+            if (!_notificationMessage.MessageIsFilePath) return _notificationMessage.Message;
+
+            try
+            {
+                return File.ReadAllText(IOHelper.FindFile(_notificationMessage.Message));
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error<NotificationGatewayMessageBase>("Failed to parse message from file", ex);
+            }
+            return string.Empty;
         }
 
     }

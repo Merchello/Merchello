@@ -2,12 +2,12 @@
 using System.Net.Mail;
 using System.Threading.Tasks;
 
-namespace Merchello.Core.Notifications
+namespace Merchello.Core.Gateways.Notification.Smtp
 {
     /// <summary>
     /// SmtpClient extension methods
     /// </summary>
-    public static class SmtpClientExtensions
+    internal static class SmtpClientExtensions
     {
         /// <summary>
         /// Return the Task for sending a <see cref="MailMessage"/> asyncronously
