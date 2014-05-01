@@ -2,7 +2,7 @@
 using System.Net.Mail;
 using System.Threading.Tasks;
 
-namespace Merchello.Core.Notifications
+namespace Merchello.Core.Gateways.Notification
 {
     /// <summary>
     /// SmtpClient extension methods

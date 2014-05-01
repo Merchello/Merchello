@@ -1,12 +1,18 @@
 ﻿using System.Collections.Generic;
+using Merchello.Core.Models;
 
-namespace Merchello.Core.Notifications
+namespace Merchello.Core.Gateways.Notification
 {
     /// <summary>
     /// Defines a base notification
     /// </summary>
-    public interface INotificationBase
+    public interface INotificationGatewayMessage : IGatewayMethod
     {
+        /// <summary>
+        /// The <see cref="INotificationMessage"/>
+        /// </summary>
+        INotificationMessage NotificationMessage { get;  }
+
         /// <summary>
         /// A list of recipients for the notification.
         /// </summary>

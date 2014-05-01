@@ -1,7 +1,7 @@
-﻿using Merchello.Core.Gateways.Payment;
+﻿using Merchello.Core.Gateways.Notification;
+using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Gateways.Taxation;
-using Merchello.Core.Notifications;
 using Umbraco.Core;
 using Umbraco.Core.Logging;
 
