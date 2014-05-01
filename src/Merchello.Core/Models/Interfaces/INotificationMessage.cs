@@ -5,9 +5,9 @@ using Merchello.Core.Models.EntityBase;
 namespace Merchello.Core.Models
 {
     /// <summary>
-    /// Defines a notification
+    /// Defines a notification message
     /// </summary>
-    internal interface INotification : IEntity
+    public interface INotificationMessage : IEntity
     {
         /// <summary>
         /// The name of the notification
@@ -25,7 +25,19 @@ namespace Merchello.Core.Models
         /// The path or text src
         /// </summary>
         [DataMember]
-        string Src { get; set; }
+        string Message { get; set; }
+
+        /// <summary>
+        /// The maximum length of the message to be sent
+        /// </summary>
+        [DataMember]
+        int MaxLength { get; set; }
+
+        /// <summary>
+        /// True/false indicating whether or not the string value of Message is actually a path to a file to read
+        /// </summary>
+        [DataMember]
+        bool MessageIsFilePath { get; set; }
 
         /// <summary>
         /// Optional key for Notification Trigger Rule

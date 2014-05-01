@@ -1,28 +1,36 @@
 ﻿using System;
 using System.Reflection;
 using System.Runtime.Serialization;
-using System.Security.Cryptography;
 using Merchello.Core.Models.EntityBase;
 
 namespace Merchello.Core.Models
 {
-    internal class Notification : Entity, INotification
+    /// <summary>
+    /// Defines a notification message
+    /// </summary>
+    [Serializable]
+    [DataContract(IsReference = true)]
+    internal class NotificationMessage : Entity, INotificationMessage
     {
         private string _name;
         private string _description;
-        private string _src;
+        private string _message;
+        private int _maxLength;
+        private bool _messageIsFilePath;
         private Guid? _ruleKey;
         private string _recipients;
         private bool _sendToCustomer;
         private bool _disabled;
 
-        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<Notification, string>(x => x.Name);
-        private static readonly PropertyInfo DescriptionSelector = ExpressionHelper.GetPropertyInfo<Notification, string>(x => x.Description);
-        private static readonly PropertyInfo SrcSelector = ExpressionHelper.GetPropertyInfo<Notification, string>(x => x.Src);
-        private static readonly PropertyInfo RuleKeySelector = ExpressionHelper.GetPropertyInfo<Notification, Guid?>(x => x.RuleKey);
-        private static readonly PropertyInfo RecipientsSelector = ExpressionHelper.GetPropertyInfo<Notification, string>(x => x.Recipients);
-        private static readonly PropertyInfo SendToCustomerSelector = ExpressionHelper.GetPropertyInfo<Notification, bool>(x => x.SendToCustomer);
-        private static readonly PropertyInfo DisabledSelector = ExpressionHelper.GetPropertyInfo<Notification, bool>(x => x.Disabled);
+        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.Name);
+        private static readonly PropertyInfo DescriptionSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.Description);
+        private static readonly PropertyInfo MaxLengthSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, int>(x => x.MaxLength);
+        private static readonly PropertyInfo MessageSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.Message);
+        private static readonly PropertyInfo MessageIsFilePathSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, bool>(x => x.MessageIsFilePath);
+        private static readonly PropertyInfo RuleKeySelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, Guid?>(x => x.RuleKey);
+        private static readonly PropertyInfo RecipientsSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.Recipients);
+        private static readonly PropertyInfo SendToCustomerSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, bool>(x => x.SendToCustomer);
+        private static readonly PropertyInfo DisabledSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, bool>(x => x.Disabled);
 
         /// <summary>
         /// Gets or sets the name of the notification.
@@ -62,16 +70,49 @@ namespace Merchello.Core.Models
         /// The path or text src
         /// </summary>
         [DataMember]
-        public string Src
+        public string Message
         {
-            get { return _src; }
+            get { return _message; }
             set
             {
                 SetPropertyValueAndDetectChanges(o =>
                 {
-                    _src = value;
-                    return _src;
-                }, _src, SrcSelector);
+                    _message = value;
+                    return _message;
+                }, _message, MessageSelector);
+            }
+        }
+
+        /// <summary>
+        /// The maximum length of the message
+        /// </summary>
+        [DataMember]
+        public int MaxLength
+        {
+            get { return _maxLength; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _maxLength = value;
+                    return _maxLength;
+                }, _maxLength, MaxLengthSelector);
+            }
+        }
+
+        /// <summary>
+        /// True/false indicating whether or not the string value of Message is actually a path to a file to read
+        /// </summary>
+        public bool MessageIsFilePath
+        {
+            get { return _messageIsFilePath; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _messageIsFilePath = value;
+                    return _messageIsFilePath;
+                }, _messageIsFilePath, MessageIsFilePathSelector);
             }
         }
 

@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Merchello.Core.Models.Rdbms;
-using Merchello.Core.Persistence.Migrations.Initial;
-using Umbraco.Core.Logging;
+using Umbraco.Core.Persistence;
 
 namespace Merchello.Core.Persistence.Migrations.Upgrades.TargetVersionOneOneZero
 {
@@ -11,15 +10,22 @@ namespace Merchello.Core.Persistence.Migrations.Upgrades.TargetVersionOneOneZero
     /// </summary>
     internal class CreateOneOneZeroTables
     {
+        private readonly Database _database;
+
         private static readonly Dictionary<int, Type> OrderedTables = new Dictionary<int, Type>
         {
             {0, typeof(NotificationTriggerRuleDto)},
-            {1, typeof(NotificationDto)}
+            {1, typeof(NotificationMessageDto)}
         };
 
-        internal void UninstallDatabaseSchema()
+        public CreateOneOneZeroTables(Database database)
         {
-            LogHelper.Info<CreateOneOneZeroTables>("Start 1.1.0 UninstallDataSchema");
+            _database = database;
+        }
+
+        internal void InitializeDatabaseSchema()
+        {
+            DatabaseSchemaHelper.InitializeDatabaseSchema(_database, OrderedTables, "1.1.0 upgrade");
         }
     }
 }

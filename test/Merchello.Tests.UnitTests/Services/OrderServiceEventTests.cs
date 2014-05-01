@@ -43,9 +43,12 @@ namespace Merchello.Tests.UnitTests.Services
             OrderService.StatusChanged -= OrderStatusChanged;
         }
 
-        private void OrderStatusChanging(IOrderService sender, StatusChangeEventArgs<IOrder> args)
+        private void OrderStatusChanging(Object sender, EventArgs args)
         {
-            Before = args.StatusChangedEntities.First();
+            Console.Write(sender.GetType().Name + " " + typeof(StatusChangeEventArgs<>).Name);
+            var beforeArgs = args as StatusChangeEventArgs<IOrder>;
+
+            Before = beforeArgs.StatusChangedEntities.First();
         }
 
         private void OrderStatusChanged(IOrderService sender, StatusChangeEventArgs<IOrder> args)
