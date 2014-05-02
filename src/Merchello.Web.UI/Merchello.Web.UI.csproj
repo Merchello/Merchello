@@ -303,6 +303,7 @@
     <Content Include="App_Plugins\Merchello\Modules\Settings\GatewayProviders\merchello.gatewayprovider.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Dialogs\notifications.edittemplate.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Dialogs\notifications.edittemplate.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\merchello.notifications.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\notifications.edit.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Payment\Dialogs\paymentdelete.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Payment\Dialogs\paymentdelete.html" />
