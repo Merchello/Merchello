@@ -12,6 +12,7 @@ namespace Merchello.Core.Models
     [KnownType(typeof(LineItemCollection))]
     internal class Shipment : VersionTaggedEntity, IShipment
     {
+        private DateTime _shippedDate;
         private string _fromOrganization;
         private string _fromName;
         private string _fromAddress1;
@@ -51,6 +52,7 @@ namespace Merchello.Core.Models
             Mandate.ParameterNotNull(destination, "destination");
             Mandate.ParameterNotNull(items, "items");
 
+            _shippedDate = DateTime.Now;
             _fromOrganization = origin.Organization;
             _fromName = origin.Name;
             _fromAddress1 = origin.Address1;
@@ -76,6 +78,7 @@ namespace Merchello.Core.Models
             _items = items;
         }
 
+        private static readonly PropertyInfo ShippedDateSelector = ExpressionHelper.GetPropertyInfo<Shipment, DateTime>(x => x.ShippedDate);
         private static readonly PropertyInfo ShipMethodKeySelector = ExpressionHelper.GetPropertyInfo<Shipment, Guid?>(x => x.ShipMethodKey);
         private static readonly PropertyInfo FromOrganizationSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.FromOrganization); 
         private static readonly PropertyInfo FromNameSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.FromName); 
@@ -99,6 +102,23 @@ namespace Merchello.Core.Models
         private static readonly PropertyInfo EmailSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.Email);
         private static readonly PropertyInfo TrackingCodeSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.TrackingCode);
         private static readonly PropertyInfo CarrierSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.Carrier);
+
+        /// <summary>
+        /// The date the shipment was shipped
+        /// </summary>
+        [DataMember]
+        public DateTime ShippedDate
+        {
+            get { return _shippedDate; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _shippedDate = value;
+                    return _shippedDate;
+                }, _shippedDate, ShippedDateSelector);
+            }
+        }
 
         /// <summary>
         /// The organization or company name associated with the address
