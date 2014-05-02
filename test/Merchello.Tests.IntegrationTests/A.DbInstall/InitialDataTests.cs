@@ -108,11 +108,27 @@ namespace Merchello.Tests.IntegrationTests.A.DbInstall
         public void Can_Populate_StoreSettings()
         {
             //// Arrange
-            var expected = 9;
+            const int expected = 9;
 
             //// Act
             _creation.InitializeBaseData("merchStoreSetting");
             var dtos = _database.Query<StoreSettingDto>("SELECT * FROM merchStoreSetting");
+
+            //// Assert
+            Assert.IsTrue(dtos.Any());
+            Assert.AreEqual(expected, dtos.Count());
+
+        }
+
+        [Test]
+        public void Can_Populate_NotificationTriggers()
+        {
+            //// Arrage
+            const int expected = 8;
+
+            //// Act
+            _creation.InitializeBaseData("merchNotificationTrigger");
+            var dtos = _database.Query<NotificationTriggerDto>("SELECT * FROM merchNotificationTrigger");
 
             //// Assert
             Assert.IsTrue(dtos.Any());

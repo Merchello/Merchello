@@ -31,6 +31,38 @@ namespace Merchello.Core
             }
         }
 
+        public static class NotificationTriggerKeys
+        {
+            public static class InvoiceService
+            {
+                public static class  StatusChanged 
+                {
+                    public static Guid ToPaid = new Guid("645E7E24-3F97-467D-9923-0CC4DD96468C");
+                    public static Guid ToPartial = new Guid("5AF5E106-697E-438E-B768-876666C4E333");
+                    public static Guid ToCancelled = new Guid("BB2AC8F1-B813-41BE-BFEE-F5A95CBB541A");
+                }
+            }
+
+            public static class OrderService
+            {
+                public static class StatusChanged
+                {
+                    public static Guid ToBackOrder = new Guid("7E2858CB-B41C-456F-9D25-EED36FCD4FBC");
+                    public static Guid ToFulfilled = new Guid("39D15CDF-32B6-41CC-95F0-483A676F90C0");
+                    public static Guid ToCancelled = new Guid("6B495772-D1E2-4515-955C-1E65C86C23D4");
+                }
+            }
+
+            public static class ShipmentService
+            {
+                public static Guid Created = new Guid("F1413BB5-4A53-4BCE-8FC2-CD1A04ED3D47");
+                public static Guid Deleted = new Guid("E726A03F-E9CF-43AC-84D6-8F41454B47A9");
+            }
+            
+
+        }
+        
+
         /// <summary>
         /// GatewayProviders
         /// </summary>

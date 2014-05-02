@@ -72,7 +72,7 @@
                                     <tr data-ng-repeat="template in emailTemplates">
                                         <td>{{template.name}}</td>
                                         <td>{{template.description}}</td>
-                                        <td class="edit"><a class="btn btn-default btn-xs btn-mini" data-ng-click="editTemplateFlyout.open(template)">edit</a></td>
+                                        <td class="edit"><a class="btn btn-default btn-xs btn-mini" data-ng-href="#/merchello/merchello/NotificationsEdit/{{template.pk}}">edit</a></td>
                                     </tr>
                                 </tbody>
                             </table>

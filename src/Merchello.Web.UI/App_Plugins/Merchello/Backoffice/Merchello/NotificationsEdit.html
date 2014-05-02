@@ -1,0 +1,37 @@
+﻿<div 
+    data-ng-controller="Merchello.Dashboards.Settings.NotificationsEditController"
+    data-ng-show="loaded"
+	data-ng-init="init()">
+	
+	<!-- This is the umb-panel directive. We removed it because the ui-codemirror directive doesn't work nested under another directive.-->
+	<div>
+
+		<umb-header>
+			
+			<div class="span4">
+				<div class="umb-headline-editor-wrapper">
+					<h1 class="umb-headline">{{emailTemplate.name}} Notification</h1>
+				</div>
+			</div>
+			<div class="span8">
+				<div class="btn-toolbar pull-right umb-btn-toolbar">
+					<div class="btn-group">
+						<a href="#/merchello/merchello/Notifications/manage" class="btn">Cancel</a>
+						<a data-ng-disabled="emailTemplate.$invalid" data-ng-click="save(emailTemplate)" class="btn btn-success">Save</a>
+					</div>
+				</div>
+			</div>
+
+		</umb-header>
+
+		<!-- This is the merchello-panel directive. We removed it because the ui-codemirror directive doesn't work nested under another directive.-->
+		<div class="merchello merchello-panel-body">
+			<div class="umb-panel-body umb-scrollable row-fluid" style="height: 100%;">
+				<textarea ui-codemirror="cmOptions" ng-model="emailTemplate.description"></textarea>
+			</div>
+		</div>
+
+	</div>
+
+
+</div>

@@ -12,12 +12,15 @@
 	javascript: [
 		'~/App_Plugins/Merchello/lib/bootstrap/js/bootstrap.min.js',
 		'~/App_Plugins/Merchello/lib/JsonTree/jsontree.js',
+		'~/App_Plugins/Merchello/lib/codemirror/Js/Lib/codemirror.js',
+		'~/App_Plugins/Merchello/lib/codemirror/Js/Mode/Razor/razor.js',
 		'~/App_Plugins/Merchello/Common/Js/merchello.namespaces.js',
 		'~/App_Plugins/Merchello/Common/Js/startfrom.filter.js',
 		'~/App_Plugins/Merchello/Common/Js/merchello.models.js',
 		'~/App_Plugins/Merchello/Common/Js/merchello.helpers.js',
 		'~/App_Plugins/Merchello/lib/ngJsonExplorer/gd-ui-jsonexplorer.js',
 		'~/App_Plugins/Merchello/Common/Js/Dialogs/debug.dialog.controller.js',
+		'~/App_Plugins/Merchello/lib/codemirror/ui-codemirror.js',
 		'~/App_Plugins/Merchello/Modules/Catalog/product.models.js',
 		'~/App_Plugins/Merchello/Modules/Order/order.invoice.models.js',
 		'~/App_Plugins/Merchello/Modules/Settings/Notifications/notifications.models.js',
@@ -78,7 +81,9 @@
 		'~/App_Plugins/Merchello/Modules/Settings/GatewayProviders/merchello.gatewayprovider.service.js',
 		'~/App_Plugins/Merchello/Modules/Settings/GatewayProviders/Directives/gatewayproviders-helper-directives.js',
 		'~/App_Plugins/Merchello/Modules/Settings/GatewayProviders/gatewayproviders.controller.js',
+		'~/App_Plugins/Merchello/Modules/Settings/Notifications/merchello.notifications.service.js',
 		'~/App_Plugins/Merchello/Modules/Settings/Notifications/notifications.controller.js',
+		'~/App_Plugins/Merchello/Modules/Settings/Notifications/notifications.edit.controller.js',
 		'~/App_Plugins/Merchello/Modules/Settings/Notifications/Dialogs/notifications.edittemplate.controller.js',
 		'~/App_Plugins/Merchello/Modules/Settings/Vendors/vendors.controller.js',
 		'~/App_Plugins/Merchello/PropertyEditors/ProductPicker/Js/merchelloproductdialog.controller.js',
@@ -87,5 +92,6 @@
 	],
 	css: [
 		'~/App_Plugins/Merchello/Common/Css/merchello.css',
+		'~/App_Plugins/Merchello/lib/codemirror/Js/Lib/codemirror.css'
 	]
 }

@@ -7,6 +7,7 @@ namespace Merchello.Web.Models.ContentEditing
     public class ShipmentDisplay
     {
         public Guid Key { get; set; }
+        public DateTime ShippedDate { get; set; }
         public Guid VersionKey { get; set; }
         public string FromOrganization { get; set; }
         public string FromName { get; set; }

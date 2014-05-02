@@ -200,7 +200,7 @@ namespace Merchello.Web.Models.ContentEditing
             destination.Name = shipMethodDisplay.Name;
             destination.ServiceCode = shipMethodDisplay.ServiceCode;
             destination.Surcharge = shipMethodDisplay.Surcharge;
-            destination.Taxable = shipMethodDisplay.Taxable;
+            destination.Taxable = shipMethodDisplay.Taxable;           
 
             foreach (var shipProvinceDisplay in shipMethodDisplay.Provinces)
             {
@@ -343,6 +343,7 @@ namespace Merchello.Web.Models.ContentEditing
         internal static IShipment ToShipment(this ShipmentDisplay shipmentDisplay, IShipment destination)
         {
             if (shipmentDisplay.Key != Guid.Empty) destination.Key = shipmentDisplay.Key;
+            destination.ShippedDate = shipmentDisplay.ShippedDate;
             destination.FromOrganization = destination.FromOrganization;
             destination.FromName = shipmentDisplay.FromName;
             destination.FromAddress1 = shipmentDisplay.FromAddress1;

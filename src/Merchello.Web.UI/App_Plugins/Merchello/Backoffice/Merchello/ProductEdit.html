@@ -18,7 +18,7 @@
             <div class="col-xs-8 span8">
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
                     <div class="btn-group">
-                        <a href="#/merchello/merchello/ProductVariantEdit/{{product.key}}?createvariant" data-ng-hide="product.hasAvailableVariantPermutiations() == 0" class="btn">Add a Variant</a>
+                        <a data-ng-href="#/merchello/merchello/ProductVariantEdit/{{product.key}}?createvariant" data-ng-hide="product.hasAvailableVariantPermutiations() == 0" class="btn">Add a Variant</a>
                         <a data-ng-click="delete()" class="btn">Delete Product</a>
                         <a data-ng-disabled="productForm.$invalid" data-ng-click="save(productForm)" class="btn btn-success">Save</a>
                     </div>
