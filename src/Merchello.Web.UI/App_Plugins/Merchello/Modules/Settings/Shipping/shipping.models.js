@@ -80,8 +80,17 @@
             self.shipMethods.push(newShippingMethod);
         };
 
-        self.removeFixedRateShippingMethod = function (shippingMethod) {
+        self.removeMethod = function (shippingMethod) {
             self.shipMethods = _.reject(self.shipMethods, function (m) { return m.shipMethod.key == shippingMethod.shipMethod.key; });
+        };
+
+        // TODO: get this from API or somehow better
+        self.isFixedRate = function () {
+            if (self.key == "aec7a923-9f64-41d0-b17b-0ef64725f576") {
+                return true;
+            } else {
+                return false;
+            }
         };
     };
 

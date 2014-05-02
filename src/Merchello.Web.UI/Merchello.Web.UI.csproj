@@ -88,6 +88,8 @@
     <Content Include="App_Plugins\Merchello\Common\Css\merchello.min.css">
       <DependentUpon>merchello.scss</DependentUpon>
     </Content>
+    <Content Include="App_Plugins\Merchello\Common\Js\Dialogs\debug.dialog.controller.js" />
+    <Content Include="App_Plugins\Merchello\Common\Js\Dialogs\debug.dialog.html" />
     <Content Include="App_Plugins\Merchello\Common\Js\merchello.helpers.js" />
     <Content Include="App_Plugins\Merchello\Common\Js\merchello.app.js" />
     <Content Include="App_Plugins\Merchello\Common\Js\merchello.models.js" />
@@ -98,6 +100,8 @@
     <Content Include="App_Plugins\Merchello\Common\Js\startfrom.filter.js" />
     <Content Include="App_Plugins\Merchello\lib\JsonTree\jsontree.css" />
     <Content Include="App_Plugins\Merchello\lib\JsonTree\jsontree.js" />
+    <Content Include="App_Plugins\Merchello\lib\ngJsonExplorer\gd-ui-jsonexplorer.css" />
+    <Content Include="App_Plugins\Merchello\lib\ngJsonExplorer\gd-ui-jsonexplorer.js" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\Dialogs\product.duplicatevariants.html" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\Dialogs\product.duplicatevariants.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\Dialogs\product.deletevariants.html" />

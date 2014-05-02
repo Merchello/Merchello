@@ -16,6 +16,8 @@
 		'~/App_Plugins/Merchello/Common/Js/startfrom.filter.js',
 		'~/App_Plugins/Merchello/Common/Js/merchello.models.js',
 		'~/App_Plugins/Merchello/Common/Js/merchello.helpers.js',
+		'~/App_Plugins/Merchello/lib/ngJsonExplorer/gd-ui-jsonexplorer.js',
+		'~/App_Plugins/Merchello/Common/Js/Dialogs/debug.dialog.controller.js',
 		'~/App_Plugins/Merchello/Modules/Catalog/product.models.js',
 		'~/App_Plugins/Merchello/Modules/Order/order.invoice.models.js',
 		'~/App_Plugins/Merchello/Modules/Settings/Notifications/notifications.models.js',

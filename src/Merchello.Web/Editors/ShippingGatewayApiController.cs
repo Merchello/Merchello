@@ -212,10 +212,11 @@ namespace Merchello.Web.Editors
         /// GET /umbraco/Merchello/ShippingMethodsApi/GetShippingProviderShipMethods/{id}
         /// </summary>
         /// <param name="id">The key of the ShippingGatewayProvider</param>
+        /// <param name="shipCountryId">ShipCountry Key</param>
         /// <remarks>
         /// 
         /// </remarks>
-        public IEnumerable<ShipMethodDisplay> GetShippingProviderShipMethods(Guid id)
+        public IEnumerable<ShipMethodDisplay> GetShippingProviderShipMethods(Guid id, Guid shipCountryId)
         {
             var provider = _shippingContext.CreateInstance(id);
             if (provider == null) throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
@@ -226,6 +227,28 @@ namespace Merchello.Web.Editors
                         provider.GetShippingGatewayMethod(method.Key, method.ShipCountryKey).ToShipMethodDisplay()
                     );
                   
+        }
+
+        /// <summary>
+        /// Get <see cref="IShipMethod"/> for a shipping provider by country
+        ///
+        /// GET /umbraco/Merchello/ShippingMethodsApi/GetShippingProviderShipMethodsByCountry/{id}
+        /// </summary>
+        /// <param name="id">The key of the ShippingGatewayProvider</param>
+        /// <param name="shipCountryId">ShipCountry Key</param>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        public IEnumerable<ShipMethodDisplay> GetShippingProviderShipMethodsByCountry(Guid id, Guid shipCountryId)
+        {
+            var provider = _shippingContext.CreateInstance(id);
+            var shipCountry = _shipCountryService.GetByKey(shipCountryId);
+            if (provider == null) throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+            if (shipCountry == null) throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+
+            var methods = provider.GetAllShippingGatewayMethodsForShipCountry(shipCountryId);
+
+            return methods.Select(method => method.ToShipMethodDisplay());
         }
 
         /// <summary>
