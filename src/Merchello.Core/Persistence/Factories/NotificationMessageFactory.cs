@@ -11,14 +11,13 @@ namespace Merchello.Core.Persistence.Factories
     {
         public INotificationMessage BuildEntity(NotificationMessageDto dto)
         {
-            var notification = new NotificationMessage()
+            var notification = new NotificationMessage(dto.MethodKey, dto.Name)
             {
                 Key = dto.Key,
-                Name = dto.Name,
+                TriggerKey = dto.TriggerKey,
                 Description = dto.Description,
                 Message = dto.Message,
-                MaxLength = dto.MaxLength,
-                RuleKey = dto.RuleKey,
+                MaxLength = dto.MaxLength,                
                 Recipients = dto.Recipients,
                 MessageIsFilePath = dto.MessageIsFilePath,
                 SendToCustomer = dto.SendToCustomer,
@@ -37,12 +36,13 @@ namespace Merchello.Core.Persistence.Factories
             return new NotificationMessageDto()
             {
                 Key = entity.Key,
+                TriggerKey = entity.TriggerKey,
+                MethodKey = entity.MethodKey,
                 Name = entity.Name,
                 Description = entity.Description,
                 Message = entity.Message,
                 MessageIsFilePath = entity.MessageIsFilePath,
-                MaxLength = entity.MaxLength,
-                RuleKey = entity.RuleKey,
+                MaxLength = entity.MaxLength,                
                 Recipients = entity.Recipients,
                 SendToCustomer = entity.SendToCustomer,
                 Disabled = entity.Disabled,

@@ -1,12 +1,12 @@
 ﻿using System;
 using Merchello.Core.Models.EntityBase;
 
-namespace Merchello.Core.Models.Interfaces
+namespace Merchello.Core.Models
 {
     /// <summary>
     /// Defines a notification trigger
     /// </summary>
-    internal interface INotficationTrigger : IEntity
+    internal interface INotificationTrigger : IEntity
     {
         /// <summary>
         /// The name of the trigger

@@ -14,10 +14,10 @@ namespace Merchello.Core.Models.Rdbms
         [Constraint(Default = "newid()")]
         public Guid Key { get; set; }
 
-        [Column("ruleKey")]
-        [ForeignKey(typeof(NotificationTriggerDto), Name = "FK_merchNotificationMessage_merchNotificationTriggerRule", Column = "pk")]
+        [Column("triggerKey")]
+        [ForeignKey(typeof(NotificationTriggerDto), Name = "FK_merchNotificationMessage_merchNotificationTrigger", Column = "pk")]
         [NullSetting(NullSetting = NullSettings.Null)]
-        public Guid? RuleKey { get; set; }
+        public Guid? TriggerKey { get; set; }
 
         [Column("methodKey")]
         [ForeignKey(typeof(NotificationMethodDto), Name = "FK_merchNotificationMessage_merchNotificationMethod", Column = "pk")]
