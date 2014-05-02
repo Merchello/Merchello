@@ -14,6 +14,7 @@ using Umbraco.Core.Persistence.Querying;
 
 namespace Merchello.Core.Persistence.Repositories
 {
+    [Obsolete("Use respective sub class of LineItemRepositoryBase", true)]
     internal class LineItemRepository<TDto> : MerchelloPetaPocoRepositoryBase<ILineItem>, ILineItemRepository
         where TDto : ILineItemDto
     {
@@ -65,6 +66,9 @@ namespace Merchello.Core.Persistence.Repositories
         {
            // convert the IQuery
             var q = query as Querying.Query<ILineItem>;
+
+            if (!q.WhereClauses().Any()) return new List<ILineItem>();
+
             if (typeof (TDto) == typeof (InvoiceItemDto))
             {
                 var converted = new Querying.Query<IInvoiceLineItem>();

@@ -19,16 +19,16 @@ namespace Merchello.Core.Persistence.Repositories
     /// </summary>
     internal class InvoiceRepository : MerchelloPetaPocoRepositoryBase<IInvoice>, IInvoiceRepository
     {
-        private readonly ILineItemRepository _lineItemRepository;
+        private readonly IInvoiceLineItemRepository _invoiceLineItemRepository;
         private readonly IOrderRepository _orderRepository;
-        
-        public InvoiceRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILineItemRepository lineItemRepository, IOrderRepository orderRepository) 
+
+        public InvoiceRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, IInvoiceLineItemRepository invoiceLineItemRepository, IOrderRepository orderRepository) 
             : base(work, cache)
         {
-            Mandate.ParameterNotNull(lineItemRepository, "lineItemRepository");
+            Mandate.ParameterNotNull(invoiceLineItemRepository, "lineItemRepository");
             Mandate.ParameterNotNull(orderRepository, "orderRepository");
 
-            _lineItemRepository = lineItemRepository;
+            _invoiceLineItemRepository = invoiceLineItemRepository;
             _orderRepository = orderRepository;
         }
 
@@ -124,7 +124,7 @@ namespace Merchello.Core.Persistence.Repositories
             Database.Insert(dto.InvoiceIndexDto);
             ((Invoice)entity).ExamineId = dto.InvoiceIndexDto.Id;
 
-            _lineItemRepository.SaveLineItem(entity.Items, entity.Key);
+            _invoiceLineItemRepository.SaveLineItem(entity.Items, entity.Key);
 
             entity.ResetDirtyProperties();
         }
@@ -138,7 +138,7 @@ namespace Merchello.Core.Persistence.Repositories
 
             Database.Update(dto);
 
-            _lineItemRepository.SaveLineItem(entity.Items, entity.Key);
+            _invoiceLineItemRepository.SaveLineItem(entity.Items, entity.Key);
 
             entity.ResetDirtyProperties();
         }

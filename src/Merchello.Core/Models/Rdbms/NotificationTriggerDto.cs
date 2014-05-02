@@ -21,6 +21,7 @@ namespace Merchello.Core.Models.Rdbms
         public string Binding { get; set; }
 
         [Column("entityKey")]
+        [NullSetting(NullSetting = NullSettings.Null)]
         public Guid? EntityKey { get; set; }
 
         [Column("updateDate")]

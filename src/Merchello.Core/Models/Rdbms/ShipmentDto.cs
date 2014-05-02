@@ -14,6 +14,9 @@ namespace Merchello.Core.Models.Rdbms
         [Constraint(Default = "newid()")]
         public Guid Key { get; set; }
 
+        [Column("shippedDate")]
+        public DateTime ShippedDate { get; set; }
+
         [Column("fromOrganization")]
         [NullSetting(NullSetting = NullSettings.Null)]
         public string FromOrganization { get; set; }

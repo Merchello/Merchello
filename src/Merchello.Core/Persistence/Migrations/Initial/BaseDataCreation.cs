@@ -50,6 +50,11 @@ namespace Merchello.Core.Persistence.Migrations.Initial
             if(tableName.EndsWith("merchGatewayProvider")) CreateGatewayProviderData();
 
             if(tableName.EndsWith("merchStoreSetting")) CreateStoreSettingData();
+
+            if (tableName.EndsWith("merchNotificationTrigger"))
+            {
+                _updateOneOneZeroData.InitializeVersionData("merchNotificationTrigger");
+            }
             
         }
 
