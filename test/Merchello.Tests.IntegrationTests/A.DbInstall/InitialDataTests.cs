@@ -124,7 +124,7 @@ namespace Merchello.Tests.IntegrationTests.A.DbInstall
         public void Can_Populate_NotificationTriggers()
         {
             //// Arrage
-            var expected = 5;
+            var expected = 6;
 
             //// Act
             _creation.InitializeBaseData("merchNotificationTrigger");
