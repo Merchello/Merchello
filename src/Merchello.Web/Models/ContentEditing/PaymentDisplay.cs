@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Merchello.Core;
 
 namespace Merchello.Web.Models.ContentEditing
 {

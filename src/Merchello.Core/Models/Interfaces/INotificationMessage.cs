@@ -5,15 +5,27 @@ using Merchello.Core.Models.EntityBase;
 namespace Merchello.Core.Models
 {
     /// <summary>
-    /// Defines a notification
+    /// Defines a notification message
     /// </summary>
-    internal interface INotification : IEntity
+    public interface INotificationMessage : IEntity
     {
+        /// <summary>
+        /// Optional key for Notification Trigger Rule
+        /// </summary>
+        [DataMember]
+        Guid? TriggerKey { get; set; }
+
+        /// <summary>
+        /// The <see cref="INotificationMethod"/> key
+        /// </summary>
+        [DataMember]
+        Guid MethodKey { get; }
+
         /// <summary>
         /// The name of the notification
         /// </summary>
         [DataMember]
-        string Name { get; set; }
+        string Name { get; }
 
         /// <summary>
         /// A brief description of the notification
@@ -21,17 +33,24 @@ namespace Merchello.Core.Models
         [DataMember]
         string Description { get; set; }
 
-        /// <summary>
-        /// The path to the src
-        /// </summary>
-        [DataMember]
-        string Src { get; set; }
 
         /// <summary>
-        /// The notifiy status key
+        /// The path or text src
         /// </summary>
         [DataMember]
-        Guid StatusKey { get; set; }
+        string Message { get; set; }
+
+        /// <summary>
+        /// The maximum length of the message to be sent
+        /// </summary>
+        [DataMember]
+        int MaxLength { get; set; }
+
+        /// <summary>
+        /// True/false indicating whether or not the string value of Message is actually a path to a file to read
+        /// </summary>
+        [DataMember]
+        bool MessageIsFilePath { get; set; }
 
         /// <summary>
         /// The recipients of the notification
@@ -47,7 +66,6 @@ namespace Merchello.Core.Models
         /// True/false indicating whether or not this notification is disabled
         /// </summary>
         bool Disabled { get; set; }
-
 
     }
 }
