@@ -8,7 +8,7 @@
      * @description
      * The controller for the Notifications page
      */
-	controllers.NotificationsEditController = function ($scope, $routeParams, assetsService, merchelloNotificationsService) {
+	controllers.NotificationsEditController = function ($scope, $routeParams, assetsService, notificationsService, merchelloNotificationsService) {
 		$scope.loaded = true;
 		$scope.preValuesLoaded = true;
 
@@ -33,7 +33,7 @@
 					lineNumbers: true,
 					matchBrackets: true,
 					mode: "razor",
-					value: $scope.emailTemplate.header
+					value: $scope.emailTemplate.description
 				};
 
 				$scope.loaded = true;
@@ -57,8 +57,12 @@
 		//--------------------------------------------------------------------------------------
 
 		$scope.save = function(emailTemplate) {
-			// Note From Kyle: An API call will need to be wired in here to edit the existing Email Template in the database.
-			var stuff = $scope.cmModel;
+			var promise = merchelloNotificationsService.saveNotification($scope.emailTemplate);
+			promise.then(function (notification) {
+				notificationsService.success("Notification Saved", "H5YR!");
+			}, function (reason) {
+				notificationsService.error("Notification Save Failed", reason.message);
+			});
 		};
 
 		//--------------------------------------------------------------------------------------
@@ -68,7 +72,7 @@
 	};
 
 
-	angular.module("umbraco").controller("Merchello.Dashboards.Settings.NotificationsEditController", ['$scope', '$routeParams', 'assetsService', 'merchelloNotificationsService', merchello.Controllers.NotificationsEditController]);
+	angular.module("umbraco").controller("Merchello.Dashboards.Settings.NotificationsEditController", ['$scope', '$routeParams', 'assetsService', 'notificationsService', 'merchelloNotificationsService', merchello.Controllers.NotificationsEditController]);
 
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));

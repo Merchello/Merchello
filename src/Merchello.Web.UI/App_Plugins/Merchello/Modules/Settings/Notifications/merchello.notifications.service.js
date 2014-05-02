@@ -8,6 +8,8 @@
         **/
 	merchelloServices.MerchelloNotificationsService = function ($q, $http, umbRequestHelper) {
 
+
+		// This is mock data for the notifications. ~Mark Bowser
 		var mockTemplates = [
 		{
 			pk: 0,
@@ -48,6 +50,7 @@
 		var notificationsService =  {
 
 			getNotifications: function () {
+				// This needs to make an api call to get real data ~Mark Bowser
 				var deferred = $q.defer();
 				deferred.resolve(mockTemplates);
 
@@ -61,6 +64,7 @@
 			},
 
 			getNotification: function (id) {
+				// This needs to make an api call to get data from api instead of from getNotifications probably ~Mark Bowser
 				var deferred = $q.defer();
 
 				var promise = notificationsService.getNotifications();
@@ -89,8 +93,8 @@
 
 				return umbRequestHelper.resourcePromise(
 				   $http.post(
-						umbRequestHelper.getApiUrl('merchelloNotificationsApiBaseUrl', 'PutNotification'),
-						notification
+						umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'PutNotification'),
+						angular.toJson(notification)
 					),
 					'Failed to save data for Notification');
 			}
