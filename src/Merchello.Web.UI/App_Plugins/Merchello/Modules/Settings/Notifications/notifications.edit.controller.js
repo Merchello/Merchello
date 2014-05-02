@@ -20,18 +20,26 @@
 			assetsService.loadCss("/App_Plugins/Merchello/lib/codemirror/Js/Lib/codemirror.css");
 			assetsService.loadCss("/App_Plugins/Merchello/lib/codemirror/Css/umbracoCustom.css");
 
-			$scope.loadEmailTemplates();
+			// declare empty options at startup, so ui-codemirror can watch it
+			$scope.cmOptions = {};
 
-			$scope.cmOptions = {
-				autofocus: true,
-				indentUnit: 4,
-				indentWithTabs: true,
-				lineNumbers: true,
-				matchBrackets: true,
-				mode: "razor",
-				value: $scope.cmModel
-			}
+			var promise = $scope.loadEmailTemplates();
+			promise.then(function(data) {
 
+				$scope.cmOptions = {
+					autofocus: true,
+					indentUnit: 4,
+					indentWithTabs: true,
+					lineNumbers: true,
+					matchBrackets: true,
+					mode: "razor",
+					value: $scope.emailTemplate.header
+				};
+
+				$scope.loaded = true;
+				$scope.preValuesLoaded = true;
+			});
+			
 		};
 
         $scope.loadEmailTemplates = function() {
@@ -41,13 +49,7 @@
         		$scope.emailTemplate = new merchello.Models.EmailTemplate(notification);
         	});
 
-	        $scope.cmModel = ';; Scheme code in here.\n' +
-				'(define (double x)\n\t(* x x))\n\n\n' +
-				'<!-- XML code in here. -->\n' +
-				'<root>\n\t<foo>\n\t</foo>\n\t<bar/>\n</root>\n\n\n' +
-				'// Javascript code in here.\n' +
-				'function foo(msg) {\n\tvar r = Math.random();\n\treturn "" + r + " : " + msg;\n}';
-
+	        return promise;
         };
 
 		//--------------------------------------------------------------------------------------
