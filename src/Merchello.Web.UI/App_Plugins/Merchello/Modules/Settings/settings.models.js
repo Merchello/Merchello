@@ -169,6 +169,16 @@
         self.displayEditor = function() {
             return self.activated && self.dialogEditorView.editorView;
         };
+
+        // TODO: get this from API or somehow better
+        self.isFixedRate = function () {
+            if (self.key == "aec7a923-9f64-41d0-b17b-0ef64725f576") {
+                return true;
+            } else {
+                return false;
+            }
+        };
+
     };
 
     models.DialogEditorView = function(dialogEditorFromServer) {
