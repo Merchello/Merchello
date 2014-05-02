@@ -52,6 +52,12 @@ namespace Merchello.Core
                     public static Guid ToCancelled = new Guid("6B495772-D1E2-4515-955C-1E65C86C23D4");
                 }
             }
+
+            public static class ShipmentService
+            {
+                public static Guid Created = new Guid("F1413BB5-4A53-4BCE-8FC2-CD1A04ED3D47");
+                public static Guid Deleted = new Guid("E726A03F-E9CF-43AC-84D6-8F41454B47A9");
+            }
             
 
         }

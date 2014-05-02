@@ -587,7 +587,6 @@
     <Compile Include="Persistence\Repositories\Interfaces\IGatewayProviderRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IInvoiceRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IItemCacheRepository.cs" />
-    <Compile Include="Persistence\Repositories\Interfaces\ILineItemRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IPaymentRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IProductRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IProductVariantRepository.cs" />
@@ -599,7 +598,6 @@
     <Compile Include="Persistence\Repositories\Interfaces\IWarehouseRepository.cs" />
     <Compile Include="Persistence\Repositories\InvoiceRepository.cs" />
     <Compile Include="Persistence\Repositories\ItemCacheRepository.cs" />
-    <Compile Include="Persistence\Repositories\LineItemRepository.cs" />
     <Compile Include="Persistence\Repositories\PaymentRepository.cs" />
     <Compile Include="Persistence\Repositories\ProductRepository.cs" />
     <Compile Include="Persistence\Repositories\ProductVariantRepository.cs" />
