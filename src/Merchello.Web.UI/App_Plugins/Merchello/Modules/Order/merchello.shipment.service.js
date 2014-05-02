@@ -6,7 +6,7 @@
         * @name merchello.Services.MerchelloShipmentService
         * @description Loads in data and allows modification for shipments
         **/
-    merchelloServices.MerchelloShipmentService = function ($http, umbRequestHelper) {
+    merchelloServices.MerchelloShipmentService = function ($q, $http, umbRequestHelper) {
 
         return {
 
@@ -19,6 +19,32 @@
                         params: { id: key }
                     }),
                     'Failed to get shipment: ' + key);
+            },
+
+            getShipmentsByInvoice: function (invoice) {
+            	//var deferred = $q.defer();
+	            var shipments = [];
+	            //var orders = _.map(invoice.orders, function(order) {
+		        //    return new merchello.Models.Order(order);
+	            //});
+
+	            //angular.forEach(orders, function(order) {
+		        //    var orderlineitems = _.map(order.items, function(orderlineitem) {
+			    //        return new merchello.Models.OrderLineItem(orderlineitem);
+		        //    });
+
+				//	var shipment = _.map(orderlineitems)
+	            //});
+
+	            //deferred.resolve(selectedCurrency.symbol);
+
+	            //return umbRequestHelper.resourcePromise(
+	            //    $http({
+	            //    	url: umbRequestHelper.getApiUrl('merchelloShipmentApiBaseUrl', 'GetShipmentsByInvoice'),
+	            //    	method: "GET",
+	            //    	params: { id: invoiceKey }
+	            //    }),
+	            //    'Failed to get shipments by invoice: ' + invoiceKey);
             },
 
             getShipMethod: function (order) {
