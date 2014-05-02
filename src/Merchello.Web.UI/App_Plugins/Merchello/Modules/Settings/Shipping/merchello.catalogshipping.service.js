@@ -52,7 +52,7 @@
                     'Failed to retreive shipping gateway providers');
             },
 
-            deleteShipCountry: function(shipCountryKey) {
+            deleteShipCountry: function (shipCountryKey) {
 
                 return umbRequestHelper.resourcePromise(
                     $http({
@@ -61,6 +61,28 @@
                         params: { id: shipCountryKey }
                     }),
                     'Failed to delete ship country');
+            },
+
+            getAllShipGatewayResourcesForProvider: function (shipProvider) {
+
+                return umbRequestHelper.resourcePromise(
+                    $http({
+                        url: umbRequestHelper.getApiUrl('merchelloCatalogShippingApiBaseUrl', 'GetAllShipGatewayResourcesForProvider'),
+                        method: "GET",
+                        params: { id: shipProvider.key }
+                    }),
+                    'Failed to retreive shipping gateway provider resources');
+            },
+
+            getShippingProviderShipMethods: function (shipProvider) {
+
+                return umbRequestHelper.resourcePromise(
+                    $http({
+                        url: umbRequestHelper.getApiUrl('merchelloCatalogShippingApiBaseUrl', 'GetShippingProviderShipMethods'),
+                        method: "GET",
+                        params: { id: shipProvider.key }
+                    }),
+                    'Failed to retreive shipping methods');
             },
 
         };

@@ -164,6 +164,7 @@
             self.activated = gatewayProviderFromServer.activated;
             self.dialogEditorView = new merchello.Models.DialogEditorView(gatewayProviderFromServer.dialogEditorView);
         }
+        self.resources = [];
 
         self.displayEditor = function() {
             return self.activated && self.dialogEditorView.editorView;

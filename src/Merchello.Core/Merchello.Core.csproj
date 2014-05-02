@@ -100,6 +100,10 @@
     <Compile Include="Gateways\GatewayMethodEditorAttribute.cs" />
     <Compile Include="Gateways\GatewayProviderActivationAttribute.cs" />
     <Compile Include="Gateways\GatewayProviderEditorAttribute.cs" />
+    <Compile Include="Gateways\Notification\NotificationGatewayProviderBase.cs" />
+    <Compile Include="Gateways\Notification\Smtp\ISmtpNotificationGatewayProvider.cs" />
+    <Compile Include="Gateways\Notification\Smtp\ISmtpNotificationGatewayMessage.cs" />
+    <Compile Include="Gateways\Notification\Smtp\SmtpNotificationGatewayProvider.cs" />
     <Compile Include="Gateways\Payment\Cash\CashPaymentGatewayMethod.cs" />
     <Compile Include="Gateways\Payment\Cash\CashPaymentGatewayProvider.cs" />
     <Compile Include="Gateways\Payment\Cash\ICashPaymentGatewayMethod.cs" />
@@ -129,16 +133,23 @@
     <Compile Include="Gateways\Taxation\TaxationGatewayProviderResolver.cs" />
     <Compile Include="Gateways\Taxation\TaxCalculationResult.cs" />
     <Compile Include="Gateways\Taxation\TaxableLineItemVisitor.cs" />
-    <Compile Include="Gateways\GatewayResolutionApplicationEventHandler.cs" />
+    <Compile Include="MerchelloResolverApplicationEventHandler.cs" />
     <Compile Include="Models\Currency.cs" />
     <Compile Include="Models\Interfaces\IExtendedDataEntity.cs" />
     <Compile Include="Models\Interfaces\IGatewayProviderMethod.cs" />
     <Compile Include="Models\Interfaces\ICurrency.cs" />
+    <Compile Include="Models\Interfaces\INotificationTrigger.cs" />
+    <Compile Include="Models\Interfaces\INotificationMethod.cs" />
+    <Compile Include="Models\Interfaces\INotificationMessage.cs" />
+    <Compile Include="Models\Interfaces\INotifyStatus.cs" />
     <Compile Include="Models\Interfaces\IOrder.cs" />
     <Compile Include="Models\Interfaces\IOrderStatus.cs" />
     <Compile Include="Models\Interfaces\IPaymentMethod.cs" />
     <Compile Include="Models\InvoiceExtensions.cs" />
     <Compile Include="Models\LocalizationExtensions.cs" />
+    <Compile Include="Models\NotificationMessage.cs" />
+    <Compile Include="Models\NotificationMethod.cs" />
+    <Compile Include="Models\NotificationTrigger.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\OrderCollection.cs" />
     <Compile Include="Models\OrderExtensions.cs" />
@@ -147,19 +158,54 @@
     <Compile Include="Models\PaymentMethod.cs" />
     <Compile Include="Models\Rdbms\AuditDto.cs" />
     <Compile Include="Models\Rdbms\InvoiceIndexDto.cs" />
+    <Compile Include="Models\Rdbms\NotificationMessageDto.cs" />
+    <Compile Include="Models\Rdbms\NotificationMethodDto.cs" />
+    <Compile Include="Models\Rdbms\NotificationTriggerDto.cs" />
     <Compile Include="Models\Rdbms\OrderIndexDto.cs" />
     <Compile Include="Models\Rdbms\PaymentMethodDto.cs" />
     <Compile Include="Models\Rdbms\User2AppDto.cs" />
     <Compile Include="Models\Rdbms\UserDto.cs" />
     <Compile Include="Models\TypeFields\EntityTypeField.cs" />
     <Compile Include="Models\TypeFields\IEntityTypeField.cs" />
-    <Compile Include="Notifications\IMessenger.cs" />
-    <Compile Include="Notifications\SmtpClientExtensions.cs" />
+    <Compile Include="Gateways\Notification\FormatStatus.cs" />
+    <Compile Include="Gateways\Notification\INotificationGatewayMessage.cs" />
+    <Compile Include="Gateways\Notification\INotificationGatewayProvider.cs" />
+    <Compile Include="Gateways\Notification\INotificationFormatter.cs" />
+    <Compile Include="Gateways\Notification\NotificationGatewayMessageBase.cs" />
+    <Compile Include="Gateways\Notification\NotificationFormatterResolver.cs" />
+    <Compile Include="Gateways\Notification\Smtp\SmtpClientExtensions.cs" />
     <Compile Include="Persistence\DatabaseModelDefinitions\DbIndexDefinition.cs" />
+    <Compile Include="Persistence\Factories\InvoiceLineItemFactory.cs" />
+    <Compile Include="Persistence\Factories\ItemCacheLineItemFactory.cs" />
+    <Compile Include="Persistence\Factories\NotificationMessageFactory.cs" />
+    <Compile Include="Persistence\Factories\NotificationMethodFactory.cs" />
+    <Compile Include="Persistence\Factories\NotificationTriggerFactory.cs" />
+    <Compile Include="Persistence\Factories\OrderLineItemFactory.cs" />
     <Compile Include="Persistence\Factories\OrderStatusFactory.cs" />
+    <Compile Include="Persistence\Mappers\NotificationMessageMapper.cs" />
+    <Compile Include="Persistence\Mappers\NotificationMethodMapper.cs" />
+    <Compile Include="Persistence\Mappers\NotificationTriggerMapper.cs" />
+    <Compile Include="Persistence\Migrations\DatabaseSchemaHelper.cs" />
+    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneOneZero\AddShippedDateColumn.cs" />
+    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneOneZero\CreateOneOneZeroTables.cs" />
+    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneOneZero\UpdateOneOneZeroData.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IInvoiceLineItemRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IInvoiceStatusRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IItemCacheLineItemRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\ILineItemRepositoryBase.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\INotificationMessageRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\INotificationMethodRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\INotificationTriggerRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IOrderLineItemRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IOrderStatusRepository.cs" />
+    <Compile Include="Persistence\Repositories\InvoiceLineItemRepository.cs" />
     <Compile Include="Persistence\Repositories\InvoiceStatusRepository.cs" />
+    <Compile Include="Persistence\Repositories\ItemCacheLineItemRepository.cs" />
+    <Compile Include="Persistence\Repositories\LineItemRepositoryBase.cs" />
+    <Compile Include="Persistence\Repositories\NotificationMessageRepository.cs" />
+    <Compile Include="Persistence\Repositories\NotificationMethodRepository.cs" />
+    <Compile Include="Persistence\Repositories\NotificationTriggerRepository.cs" />
+    <Compile Include="Persistence\Repositories\OrderLineItemRepository.cs" />
     <Compile Include="Persistence\Repositories\OrderStatusRepository.cs" />
     <Compile Include="Sales\SalePreparationBase.cs" />
     <Compile Include="Sales\ISalePreparationBase.cs" />
@@ -627,9 +673,12 @@
     <Compile Include="SerializationHelper.cs" />
     <Compile Include="Services\AppliedPaymentService.cs" />
     <Compile Include="Services\Interfaces\IAppliedPaymentService.cs" />
+    <Compile Include="Services\Interfaces\INotificationMethodService.cs" />
+    <Compile Include="Services\Interfaces\INotificationTriggerService.cs" />
     <Compile Include="Services\Interfaces\IOrderService.cs" />
     <Compile Include="Services\Interfaces\IPaymentMethodService.cs" />
     <Compile Include="Services\Interfaces\IPaymentService.cs" />
+    <Compile Include="Services\NotificationTriggerService.cs" />
     <Compile Include="Services\OrderService.cs" />
     <Compile Include="Services\PaymentMethodService.cs" />
     <Compile Include="Services\PaymentService.cs" />
@@ -720,9 +769,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

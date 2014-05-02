@@ -1,4 +1,5 @@
 ﻿using Merchello.Core.Cache;
+using Merchello.Core.Models;
 using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Persistence.Repositories;
 using Merchello.Core.Persistence.UnitOfWork;
@@ -82,7 +83,18 @@ namespace Merchello.Core.Persistence
         {
             return new ItemCacheRepository(uow,
                 _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider,
-                CreateLineItemRepository<ItemCacheItemDto>(uow));
+                CreateCacheLineItemRespository(uow));
+        }
+
+        /// <summary>
+        /// Gets an instance of the <see cref="IItemCacheLineItemRepository"/>
+        /// </summary>
+        /// <param name="uow"></param>
+        /// <returns></returns>
+        internal virtual IItemCacheLineItemRepository CreateCacheLineItemRespository(IDatabaseUnitOfWork uow)
+        {
+            return new ItemCacheLineItemRepository(uow,
+                _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
         }
 
         /// <summary>
@@ -94,11 +106,21 @@ namespace Merchello.Core.Persistence
         {
             return new InvoiceRepository(uow,
                 _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider,
-                CreateLineItemRepository<InvoiceItemDto>(uow),
+                CreateInvoiceLineItemRepository(uow),
                 CreateOrderRepository(uow)
                 );
         }
 
+        /// <summary>
+        /// Gets an instance of the <see cref="IInvoiceLineItemRepository"/>
+        /// </summary>
+        /// <param name="uow"></param>
+        /// <returns></returns>
+        internal virtual IInvoiceLineItemRepository CreateInvoiceLineItemRepository(IDatabaseUnitOfWork uow)
+        {
+            return new InvoiceLineItemRepository(uow,
+                _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
+        }
 
         /// <summary>
         /// Returns an instance of the <see cref="IInvoiceStatusRepository"/>
@@ -117,19 +139,40 @@ namespace Merchello.Core.Persistence
                 _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
         }
 
+
         /// <summary>
-        /// Returns an instance of the <see cref="ILineItemRepository"/>
+        /// Returns and instance of the <see cref="INotificationMessageRepository"/>
         /// </summary>
-        /// <typeparam name="TDto"></typeparam>
         /// <param name="uow"></param>
         /// <returns></returns>
-        internal virtual ILineItemRepository CreateLineItemRepository<TDto>(IDatabaseUnitOfWork uow)
-            where TDto : ILineItemDto
+        internal virtual INotificationMessageRepository CreateNotificationMessageRepository(IDatabaseUnitOfWork uow)
         {
-            return new LineItemRepository<TDto>(uow,
+            return new NotificationMessageRepository(uow,
                 _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
         }
 
+        /// <summary>
+        /// Returns an instance of the <see cref="INotificationMethodRepository"/>
+        /// </summary>
+        /// <param name="uow"></param>
+        /// <returns></returns>
+        internal virtual INotificationMethodRepository CreateNotificationMethodRepository(IDatabaseUnitOfWork uow)
+        {
+            return new NotificationMethodRepository(uow,
+                _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
+        }
+
+        /// <summary>
+        /// Returns an instance of the <see cref="INotificationTriggerRepository"/>
+        /// </summary>
+        /// <param name="uow"></param>
+        /// <returns></returns>
+        internal virtual INotificationTriggerRepository CreateNotificationTriggerRepository(IDatabaseUnitOfWork uow)
+        {
+            return new NotificationTriggerRepository(uow,
+                _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
+        }
+        
         /// <summary>
         /// Returns an instance of the <see cref="IOrderRepository"/>
         /// </summary>
@@ -138,7 +181,18 @@ namespace Merchello.Core.Persistence
         internal virtual IOrderRepository CreateOrderRepository(IDatabaseUnitOfWork uow)
         {
             return new OrderRepository(uow,
-                _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, CreateLineItemRepository<OrderItemDto>(uow));
+                _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, CreateOrderLineItemRepository(uow));
+        }
+
+        /// <summary>
+        /// Gets an instance of teh <see cref="IOrderLineItemRepository"/>
+        /// </summary>
+        /// <param name="uow"></param>
+        /// <returns></returns>
+        internal virtual IOrderLineItemRepository CreateOrderLineItemRepository(IDatabaseUnitOfWork uow)
+        {
+            return new OrderLineItemRepository(uow,
+                _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
         }
 
         /// <summary>

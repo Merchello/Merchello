@@ -13,8 +13,7 @@ namespace Merchello.Core
     /// A bootstrapper for the Merchello Plugin which initializes all objects to be used in the Merchello Core
     /// </summary>
     /// <remarks>
-    /// We needed our own bootstrapper to resolve third party Plugins such as Payment, Taxation, and Shipping Providers and provision the MerchelloPluginContext.ServiceContext
-    /// This does not provide any startup functionality relating to web objects
+    /// We needed our own bootstrapper to setup Merchello specific singletons
     /// </remarks>
     internal class CoreBootManager : BootManagerBase, IBootManager
     {
@@ -35,7 +34,6 @@ namespace Merchello.Core
             OnMerchelloInit();
 
             _timer = DisposableTimer.DebugDuration<CoreBootManager>("Merchello starting", "Merchello startup complete");
-
  
             // create the service context for the MerchelloAppContext   
             var connString = ConfigurationManager.ConnectionStrings[MerchelloConfiguration.Current.Section.DefaultConnectionStringName].ConnectionString;
@@ -60,8 +58,7 @@ namespace Merchello.Core
         /// </remarks>
         protected void CreateMerchelloContext(ServiceContext serviceContext)
         {
-           
-            // TODO: Mock the ApplicationContext.  ApplicationContext should never be null but we need this for unit testing at this point              
+                      
             var cache = ApplicationContext.Current == null
                             ? new CacheHelper(
                                     new ObjectCacheRuntimeCacheProvider(),

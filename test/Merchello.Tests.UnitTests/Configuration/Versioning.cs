@@ -12,7 +12,7 @@ namespace Merchello.Tests.UnitTests.Configuration
             var current = MerchelloVersion.Current.ToString();
             var version = MerchelloVersion.AssemblyVersion;
             
-            StringAssert.AreEqualIgnoringCase(current, version);
+            StringAssert.Contains(current, version);
         }
 
     }

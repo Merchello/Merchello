@@ -2,6 +2,7 @@
 using Merchello.Core.Models;
 using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Models.TypeFields;
+using Merchello.Core.Persistence.Migrations.Upgrades.TargetVersionOneOneZero;
 using Newtonsoft.Json;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Persistence;
@@ -14,11 +15,13 @@ namespace Merchello.Core.Persistence.Migrations.Initial
     internal class BaseDataCreation
     {
         private readonly Database _database;
+        private readonly UpdateOneOneZeroData _updateOneOneZeroData;
 
         
         public BaseDataCreation(Database database)
         {
             _database = database;
+            _updateOneOneZeroData = new UpdateOneOneZeroData(database);
         }
 
         /// <summary>
@@ -30,7 +33,13 @@ namespace Merchello.Core.Persistence.Migrations.Initial
         {
             LogHelper.Info<BaseDataCreation>(string.Format("Creating data in table {0}", tableName));
 
-            if (tableName.Equals("merchTypeField")) CreateDbTypeFieldData();
+            if (tableName.Equals("merchTypeField"))
+            {                
+                CreateDbTypeFieldData();
+
+                // version 1.1.0
+                _updateOneOneZeroData.InitializeVersionData("merchTypeField");
+            }
 
             if(tableName.Equals("merchInvoiceStatus")) CreateInvoiceStatusData();
 
@@ -41,6 +50,11 @@ namespace Merchello.Core.Persistence.Migrations.Initial
             if(tableName.EndsWith("merchGatewayProvider")) CreateGatewayProviderData();
 
             if(tableName.EndsWith("merchStoreSetting")) CreateStoreSettingData();
+
+            if (tableName.EndsWith("merchNotificationTrigger"))
+            {
+                _updateOneOneZeroData.InitializeVersionData("merchNotificationTrigger");
+            }
             
         }
 
@@ -82,6 +96,7 @@ namespace Merchello.Core.Persistence.Migrations.Initial
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = gwp.Payment.TypeKey, Alias = gwp.Payment.Alias, Name = gwp.Payment.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = gwp.Shipping.TypeKey, Alias = gwp.Shipping.Alias, Name = gwp.Shipping.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = gwp.Taxation.TypeKey, Alias = gwp.Taxation.Alias, Name = gwp.Taxation.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
+            
         }
 
         private void CreateInvoiceStatusData()

@@ -6,6 +6,7 @@ using Umbraco.Core.Persistence.Repositories;
 
 namespace Merchello.Core.Persistence.Repositories
 {
+    [Obsolete]
     internal interface ILineItemRepository : IRepositoryQueryable<Guid, ILineItem>
     {
         IEnumerable<ILineItem> GetByContainerKey(Guid containerKey);

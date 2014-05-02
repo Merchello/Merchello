@@ -31,23 +31,15 @@
 		// Initialization methods
 		//--------------------------------------------------------------------------------------
 
-		$scope.loadAllAvailableFixedRateGatewayResources = function () {
-
-			var promiseAllResources = merchelloCatalogFixedRateShippingService.getAllFixedRateGatewayResources();
-			promiseAllResources.then(function (allResources) {
-
-				$scope.availableFixedRateGatewayResources = _.map(allResources, function (resource) {
-					return new merchello.Models.GatewayResource(resource);
-				});
-
-			}, function (reason) {
-
-				notificationsService.error("Available Gateway Resources Load Failed", reason.message);
-
-			});
-
-		};
-
+	    /**
+         * @ngdoc method
+         * @name loadAllAvailableCountries
+         * @function
+         * 
+         * @description
+         * Load the countries from the settings service, then wrap the results
+         * in Merchello models and add to the scope via the availableCountries collection.
+         */
 		$scope.loadAllAvailableCountries = function () {
 
 			var promiseAllCountries = merchelloSettingsService.getAllCountries();
@@ -57,6 +49,13 @@
 					return new merchello.Models.Country(country);
 				});
 
+			    // Add Everywhere Else as an option
+				var everywhereElseCountry = new merchello.Models.Country();
+				everywhereElseCountry.key = "7501029f-5ab3-4733-935d-1dd37b37bf8";
+				everywhereElseCountry.countryCode = "ELSE";
+				everywhereElseCountry.name = "Everywhere Else";
+				$scope.availableCountries.push(everywhereElseCountry);
+
 			}, function (reason) {
 
 				notificationsService.error("Available Countries Load Failed", reason.message);
@@ -65,6 +64,15 @@
 
 		};
 
+	    /**
+         * @ngdoc method
+         * @name loadAllShipProviders
+         * @function
+         * 
+         * @description
+         * Load the shipping gateway providers from the shipping gateway service, then wrap the results
+         * in Merchello models and add to the scope via the providers collection.
+         */
 		$scope.loadAllShipProviders = function () {
 
 			var promiseAllProviders = merchelloCatalogShippingService.getAllShipGatewayProviders();
@@ -74,6 +82,17 @@
 					return new merchello.Models.GatewayProvider(providerFromServer);
 				});
 
+				_.each($scope.providers, function (element, index, list) {
+                    // Don't get resources for fixed rate provider
+				    if (element.key != "aec7a923-9f64-41d0-b17b-0ef64725f576") {
+				        $scope.loadAllAvailableGatewayResources(element);
+				    }
+				});
+
+				$scope.loaded = true;
+				$scope.preValuesLoaded = true;
+
+
 			}, function (reason) {
 
 				notificationsService.error("Available Ship Providers Load Failed", reason.message);
@@ -82,6 +101,68 @@
 
 		};
 
+	    /**
+         * @ngdoc method
+         * @name loadAllAvailableGatewayResources
+         * @function
+         * 
+         * @description
+         * Load the shipping gateway resources from the shipping gateway service, then wrap the results
+         * in Merchello models and add to the scope via the providers collection in the resources collection.
+         */
+		$scope.loadAllAvailableGatewayResources = function (shipProvider) {
+
+		    var promiseAllResources = merchelloCatalogShippingService.getAllShipGatewayResourcesForProvider(shipProvider);
+		    promiseAllResources.then(function (allResources) {
+
+		        shipProvider.resources = _.map(allResources, function (resource) {
+		            return new merchello.Models.GatewayResource(resource);
+		        });
+
+		    }, function (reason) {
+
+		        notificationsService.error("Available Gateway Resources Load Failed", reason.message);
+
+		    });
+
+		};
+
+	    /**
+         * @ngdoc method
+         * @name loadShipMethods
+         * @function
+         * 
+         * @description
+         * Load the shipping methods from the shipping gateway service, then wrap the results
+         * in Merchello models and add to the scope via the provider in the shipMethods collection.
+         */
+		$scope.loadShipMethods = function (shipProvider) {
+
+		    var promiseShipMethods = merchelloCatalogShippingService.getShippingProviderShipMethods(shipProvider);
+		    promiseShipMethods.then(function (shipMethods) {
+
+		        shipProvider.shipMethods = _.map(shipMethods, function (method) {
+		            return new merchello.Models.ShippingMethod(method);
+		        });
+
+		    }, function (reason) {
+
+		        notificationsService.error("Available Shipping Methods Load Failed", reason.message);
+
+		    });
+
+		};
+
+	    /**
+         * @ngdoc method
+         * @name loadWarehouses
+         * @function
+         * 
+         * @description
+         * Load the warehouses from the warehouse service, then wrap the results
+         * in Merchello models and add to the scope via the warehouses collection.
+         * Once loaded, it calls the loadCountries method.
+         */
 		$scope.loadWarehouses = function () {
 
 			var promiseWarehouses = merchelloWarehouseService.getDefaultWarehouse(); // Only a default warehouse in v1
@@ -93,6 +174,10 @@
 
 				$scope.loadCountries();
 
+				$scope.loaded = true;
+				$scope.preValuesLoaded = true;
+
+
 			}, function (reason) {
 
 				notificationsService.error("Warehouses Load Failed", reason.message);
@@ -101,6 +186,17 @@
 
 		};
 
+	    /**
+         * @ngdoc method
+         * @name loadCountries
+         * @function
+         * 
+         * @description
+         * Load the countries from the shipping service, then wrap the results
+         * in Merchello models and add to the scope via the countries collection.
+         * Once loaded, it calls the loadFixedRateCountryProviders method for each 
+         * country.
+         */
 		$scope.loadCountries = function () {
 
 			if ($scope.primaryWarehouse.warehouseCatalogs.length > 0) {
@@ -125,6 +221,42 @@
 			}
 		};
 
+	    /**
+         * @ngdoc method
+         * @name loadAllAvailableFixedRateGatewayResources
+         * @function
+         * 
+         * @description
+         * Load the fixed rate shipping gateway resources from the fixed rate shipping gateway service, then wrap the results
+         * in Merchello models and add to the scope via the availableFixedRateGatewayResources collection.
+         */
+		$scope.loadAllAvailableFixedRateGatewayResources = function () {
+
+		    var promiseAllResources = merchelloCatalogFixedRateShippingService.getAllFixedRateGatewayResources();
+		    promiseAllResources.then(function (allResources) {
+
+		        $scope.availableFixedRateGatewayResources = _.map(allResources, function (resource) {
+		            return new merchello.Models.GatewayResource(resource);
+		        });
+
+		    }, function (reason) {
+
+		        notificationsService.error("Available Fixed Rate Gateway Resources Load Failed", reason.message);
+
+		    });
+
+		};
+
+	    /**
+         * @ngdoc method
+         * @name loadFixedRateCountryProviders
+         * @function
+         * 
+         * @description
+         * Load the fixed rate shipping gateway providers from the fixed rate shipping gateway service, then wrap the results
+         * in Merchello models and add to the scope via the shippingGatewayProviders collection on the country model.  After
+         * load is complete, it calls the loadFixedRateProviderMethods to load in the methods.
+         */
 		$scope.loadFixedRateCountryProviders = function (country) {
 
 			if (country) {
@@ -143,12 +275,21 @@
 
 				}, function (reason) {
 
-					notificationsService.error("Shipping Countries Providers Load Failed", reason.message);
+					notificationsService.error("Fixed Rate Shipping Countries Providers Load Failed", reason.message);
 
 				});
 			}
 		};
 
+	    /**
+         * @ngdoc method
+         * @name loadFixedRateProviderMethods
+         * @function
+         * 
+         * @description
+         * Load the fixed rate shipping gateway methods from the fixed rate shipping gateway service, then wrap the results
+         * in Merchello models and add to the scope via the shipMethods collection on the gateway provider model.
+         */
 		$scope.loadFixedRateProviderMethods = function (country) {
 
 			if (country) {
@@ -167,16 +308,47 @@
 
 				}, function (reason) {
 
-					notificationsService.error("Shipping Countries Methods Load Failed", reason.message);
+					notificationsService.error("Fixed Rate Shipping Countries Methods Load Failed", reason.message);
 
 				});
 			}
 		};
 
+	    /**
+         * @ngdoc method
+         * @name init
+         * @function
+         * 
+         * @description
+         * Method called on intial page load.  Loads in data from server and sets up scope.
+         */
+		$scope.init = function () {
+
+		    $scope.loadAllAvailableCountries();
+		    $scope.loadWarehouses();
+		    $scope.loadAllShipProviders();
+		    $scope.loadAllAvailableFixedRateGatewayResources();
+
+		};
+
+		$scope.init();
+
 		//--------------------------------------------------------------------------------------
-		// Warehouse methods
+		// Helper methods
 		//--------------------------------------------------------------------------------------
 
+	    /**
+         * @ngdoc method
+         * @name changePrimaryWarehouse
+         * @function
+         * 
+         * @description
+         * Helper method to set the primary warehouse on the scope and to make sure the idDefault flag on 
+         * all warehouses is set properly.  If a warehouse is passed in, then it will find that warehouse
+         * and set it as the primary and set isDefault to true.  All other warehouses will have their 
+         * isDefault flag reset to false.  If no warehouse is passed in (usually on loading data) then the 
+         * warehouse that has the isDefault == true will be set as the primary warehouse on the scope.
+         */
 		$scope.changePrimaryWarehouse = function (warehouse) {
 			for (var i = 0; i < $scope.warehouses.length; i++) {
 				if (warehouse) {
@@ -194,10 +366,77 @@
 			}
 		};
 
-		//--------------------------------------------------------------------------------------
-		// Flyout methods
-		//--------------------------------------------------------------------------------------
+	    //--------------------------------------------------------------------------------------
+	    // Event Handlers
+	    //--------------------------------------------------------------------------------------
 
+	    /**
+         * @ngdoc method
+         * @name deleteCountry
+         * @function
+         * 
+         * @description
+         * Calls the shipping service to delete the country passed in via the country parameter.
+         * When complete, the countries are reloaded from the api to get the latest from the database.
+         *
+         * TODO: make a dialog to confirm delete.  Can a country with methods be deleted?
+         */
+		$scope.deleteCountry = function (country) {
+
+		    var promiseDelete = merchelloCatalogShippingService.deleteShipCountry(country.key);
+		    promiseDelete.then(function () {
+
+		        notificationsService.success("Shipping Country Deleted");
+
+		        $scope.loadCountries();
+
+		    }, function (reason) {
+
+		        notificationsService.error("Shipping Country Delete Failed", reason.message);
+
+		    });
+		};
+
+	    /**
+         * @ngdoc method
+         * @name removeFixedRateMethodFromProvider
+         * @function
+         * 
+         * @description
+         * Calls the fixed rate shipping service to delete the method passed in via the method parameter.
+         *
+         * TODO: make a dialog to confirm delete?
+         */
+		$scope.removeFixedRateMethodFromProvider = function (provider, method) {
+		    provider.removeFixedRateShippingMethod(method);
+
+		    var promiseDelete = merchelloCatalogFixedRateShippingService.deleteRateTableShipMethod(method);
+		    promiseDelete.then(function () {
+
+		        notificationsService.success("Shipping Method Deleted");
+
+		    }, function (reason) {
+
+		        notificationsService.error("Shipping Method Delete Failed", reason.message);
+
+		    });
+		};
+
+		//--------------------------------------------------------------------------------------
+	    // Dialog methods
+	    //--------------------------------------------------------------------------------------
+
+	    //---------------------------
+	    // Add Country Dialog >>>
+
+	    /**
+         * @ngdoc method
+         * @name addCountryDialogConfirm
+         * @function
+         * 
+         * @description
+         * Handles the save after recieving the country to add from the dialog view/controller
+         */
 		$scope.addCountryDialogConfirm = function (dialogData) {
 			var countryOnCatalog = _.find($scope.countries, function (shipCountry) { return shipCountry.countryCode == dialogData.selectedCountry.countryCode; });
 			if (!countryOnCatalog) {
@@ -217,6 +456,14 @@
 			}
 		};
 
+	    /**
+         * @ngdoc method
+         * @name addCountry
+         * @function
+         * 
+         * @description
+         * Opens the add country dialog via the Umbraco dialogService.
+         */
 		$scope.addCountry = function () {
 			var dialogData = {};
 			dialogData.availableCountries = $scope.availableCountries;
@@ -228,191 +475,235 @@
 			});
 		};
 
-		$scope.deleteCountry = function (country) {
+	    // <<<
+	    //---------------------------
 
-			var promiseDelete = merchelloCatalogShippingService.deleteShipCountry(country.key);
-			promiseDelete.then(function () {
+	    //---------------------------
+	    // Delete Warehouse Dialog >>>
 
-				notificationsService.success("Shipping Country Deleted");
-
-				$scope.loadCountries();
-
-			}, function (reason) {
-
-				notificationsService.error("Shipping Country Delete Failed", reason.message);
-
-			});
-		};
-
-		$scope.addWarehouseDialogConfirm = function (dialogData) {
-			var warehouse = dialogData.warehouse;
-			var promiseWarehouseSave = merchelloWarehouseService.save(warehouse); // Only a default warehouse in v1
-			promiseWarehouseSave.then(function () {
-
-				notificationsService.success("Warehouse Saved", "");
-
-				if ($scope.newWarehouse.isDefault) {
-					$scope.changePrimaryWarehouse(warehouse);
-				}
-
-			}, function (reason) {
-
-				notificationsService.error("Warehouses Save Failed", reason.message);
-
-			});
-		};
-
-		$scope.addWarehouse = function (warehouse) {
-			if (warehouse == undefined) {
-				warehouse = new merchello.Models.Warehouse();
-				warehouse.key = "no key created";
-			}
-
-			var dialogData = {}
-			dialogData.warehouse = warehouse;
-			dialogData.availableCountries = $scope.availableCountries;
-
-			dialogService.open({
-				template: '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shipping.editwarehouse.html',
-				show: true,
-				callback: $scope.addWarehouseDialogConfirm,
-				dialogData: dialogData
-			});
-		};
-
+	    /**
+         * @ngdoc method
+         * @name deleteWarehouseDialogConfirm
+         * @function
+         * 
+         * @description
+         * Handles the delete after recieving the warehouse to delete from the dialog view/controller
+         */
 		$scope.deleteWarehouseDialogConfirm = function (warehouse) {
-			var idx = -1;
-			for (var i = 0; i < $scope.warehouses.length; i++) {
-				if ($scope.warehouses[i].key == warehouse.key) {
-					idx = i;
-				}
-			}
-			if (idx > -1) {
-				$scope.warehouses.splice(idx, 1);
-			}
-			// Note From Kyle: Some sort of logic to confirm this Warehouse isn't the primary, and is ok to delete is needed.
-			// Note From Kyle: An API call will need to be wired in here to delete the Warehouse in the database.
+
+		    // Todo: call API method to delete warehouse and then reload warehouses from API
+                
 		};
 
+	    /**
+         * @ngdoc method
+         * @name deleteWarehouse
+         * @function
+         * 
+         * @description
+         * Opens the delete warehouse dialog via the Umbraco dialogService.
+         */
 		$scope.deleteWarehouse = function (warehouse) {
-			if (warehouse != undefined) {
-				dialogService.open({
-					template: '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shipping.deletewarehouse.html',
-					show: true,
-					callback: $scope.deleteWarehouseDialogConfirm,
-					dialogData: warehouse
-				});
-			}
+		    if (warehouse != undefined) {
+		        dialogService.open({
+		            template: '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shipping.deletewarehouse.html',
+		            show: true,
+		            callback: $scope.deleteWarehouseDialogConfirm,
+		            dialogData: warehouse
+		        });
+		    }
 		};
 
+	    // <<<
+	    //---------------------------
+
+	    //---------------------------
+	    // Add Warehouse Dialog >>>
+
+	    /**
+         * @ngdoc method
+         * @name addWarehouseDialogConfirm
+         * @function
+         * 
+         * @description
+         * Handles the add/edit after recieving the dialogData from the dialog view/controller
+         */
+		$scope.addWarehouseDialogConfirm = function (dialogData) {
+		    var warehouse = dialogData.warehouse;
+		    var promiseWarehouseSave = merchelloWarehouseService.save(warehouse); // Only a default warehouse in v1
+		    promiseWarehouseSave.then(function () {
+
+		        notificationsService.success("Warehouse Saved", "");
+
+		        if ($scope.newWarehouse.isDefault) {
+		            $scope.changePrimaryWarehouse(warehouse);
+		        }
+
+		    }, function (reason) {
+
+		        notificationsService.error("Warehouses Save Failed", reason.message);
+
+		    });
+		};
+
+	    /**
+         * @ngdoc method
+         * @name addWarehouse
+         * @function
+         * 
+         * @description
+         * Opens the edit warehouse dialog via the Umbraco dialogService.
+         */
+		$scope.addWarehouse = function (warehouse) {
+		    if (warehouse == undefined) {
+		        warehouse = new merchello.Models.Warehouse();
+		        warehouse.key = "no key created";
+		    }
+
+		    var dialogData = {}
+		    dialogData.warehouse = warehouse;
+		    dialogData.availableCountries = $scope.availableCountries;
+
+		    dialogService.open({
+		        template: '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shipping.editwarehouse.html',
+		        show: true,
+		        callback: $scope.addWarehouseDialogConfirm,
+		        dialogData: dialogData
+		    });
+		};
+
+	    // <<<
+	    //---------------------------
+
+	    //---------------------------
+	    // Add Shipping Provider Dialog >>>
+
+	    /**
+         * @ngdoc method
+         * @name shippingProviderDialogConfirm
+         * @function
+         * 
+         * @description
+         * Handles the edit after recieving the dialogData from the dialog view/controller
+         */
 		$scope.shippingProviderDialogConfirm = function (data) {
 
-			var selectedProvider = data.provider;
+		    var selectedProvider = data.provider;
 
-			var newShippingMethod = new merchello.Models.FixedRateShippingMethod();
-			newShippingMethod.shipMethod.name = data.country.name + " Fixed Rate";
-			newShippingMethod.shipMethod.providerKey = selectedProvider.key;
-			newShippingMethod.shipMethod.shipCountryKey = data.country.key;
+		    var newShippingMethod = new merchello.Models.FixedRateShippingMethod();
+		    newShippingMethod.shipMethod.name = data.country.name + " Fixed Rate";
+		    newShippingMethod.shipMethod.providerKey = selectedProvider.key;
+		    newShippingMethod.shipMethod.shipCountryKey = data.country.key;
 
-			var promiseAddMethod = merchelloCatalogFixedRateShippingService.createRateTableShipMethod(newShippingMethod);
-			promiseAddMethod.then(function () {
+		    var promiseAddMethod = merchelloCatalogFixedRateShippingService.createRateTableShipMethod(newShippingMethod);
+		    promiseAddMethod.then(function () {
 
-				$scope.loadFixedRateCountryProviders(data.country);
+		        $scope.loadFixedRateCountryProviders(data.country);
 
-			}, function (reason) {
+		    }, function (reason) {
 
-				notificationsService.error("Shipping Provider / Initial Method Create Failed", reason.message);
+		        notificationsService.error("Shipping Provider / Initial Method Create Failed", reason.message);
 
-			});
-
+		    });
 		};
 
+	    /**
+        * @ngdoc method
+        * @name addEditShippingProviderDialogOpen
+        * @function
+        * 
+        * @description
+        * Opens the shipping provider dialog via the Umbraco dialogService.
+        */
 		$scope.addEditShippingProviderDialogOpen = function (country, provider) {
 
-			var dialogProvider = provider;
-			if (!provider) {
-				dialogProvider = new merchello.Models.ShippingGatewayProvider();
-			}
+		    var dialogProvider = provider;
+		    if (!provider) {
+		        dialogProvider = new merchello.Models.ShippingGatewayProvider();
+		    }
 
-			var myDialogData = {
-				country: country,
-				provider: dialogProvider,
-				availableProviders: $scope.providers
-			};
+		    var myDialogData = {
+		        country: country,
+		        provider: dialogProvider,
+		        availableProviders: $scope.providers
+		    };
 
-			dialogService.open({
-				template: '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shippingprovider.html',
-				show: true,
-				callback: $scope.shippingProviderDialogConfirm,
-				dialogData: myDialogData
-			});
+		    dialogService.open({
+		        template: '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shippingprovider.html',
+		        show: true,
+		        callback: $scope.shippingProviderDialogConfirm,
+		        dialogData: myDialogData
+		    });
 		};
 
+	    // <<<
+	    //---------------------------
+
+
+	    //---------------------------
+	    // Add/Edit Shipping Method Dialog >>>
+
+	    /**
+         * @ngdoc method
+         * @name shippingMethodDialogConfirm
+         * @function
+         * 
+         * @description
+         * Handles the edit after recieving the dialogData from the dialog view/controller
+         */
 		$scope.shippingMethodDialogConfirm = function (data) {
 
-			var promiseSave;
-			if (data.method.shipMethod.key.length > 0) {
-				// Save existing method
-				promiseSave = merchelloCatalogFixedRateShippingService.saveRateTableShipMethod(data.method);
-			} else {
-				// Create new method
-				promiseSave = merchelloCatalogFixedRateShippingService.createRateTableShipMethod(data.method);
-			}
+		    var promiseSave;
+		    if (data.method.shipMethod.key.length > 0) {
+		        // Save existing method
+		        promiseSave = merchelloCatalogFixedRateShippingService.saveRateTableShipMethod(data.method);
+		    } else {
+		        // Create new method
+		        promiseSave = merchelloCatalogFixedRateShippingService.createRateTableShipMethod(data.method);
+		    }
 
-			promiseSave.then(function () {
-				data.provider.shipMethods = [];
-				$scope.loadFixedRateProviderMethods(data.country);
-			}, function (reason) {
-				notificationsService.error("Shipping Method Save Failed", reason.message);
-			});
+		    promiseSave.then(function () {
+		        data.provider.shipMethods = [];
+		        $scope.loadFixedRateProviderMethods(data.country);
+		    }, function (reason) {
+		        notificationsService.error("Shipping Method Save Failed", reason.message);
+		    });
 		};
 
+	    /**
+        * @ngdoc method
+        * @name addEditShippingMethodDialogOpen
+        * @function
+        * 
+        * @description
+        * Opens the add/edit shipping method dialog via the Umbraco dialogService.
+        */
 		$scope.addEditShippingMethodDialogOpen = function (country, provider, method) {
 
-			var dialogMethod = method;
-			if (!method) {
-				dialogMethod = new merchello.Models.FixedRateShippingMethod();
-				dialogMethod.shipMethod.shipCountryKey = country.key;
-				dialogMethod.shipMethod.providerKey = provider.key;
-			}
+		    var dialogMethod = method;
+		    if (!method) {
+		        dialogMethod = new merchello.Models.FixedRateShippingMethod();
+		        dialogMethod.shipMethod.shipCountryKey = country.key;
+		        dialogMethod.shipMethod.providerKey = provider.key;
+		    }
 
-			var myDialogData = {
-				method: dialogMethod,
-				country: country,
-				provider: provider,
-				gatewayResources: $scope.availableFixedRateGatewayResources
-			};
+		    var myDialogData = {
+		        method: dialogMethod,
+		        country: country,
+		        provider: provider,
+		        gatewayResources: $scope.availableFixedRateGatewayResources
+		    };
 
-			dialogService.open({
-				template: '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shippingmethod.html',
-				show: true,
-				callback: $scope.shippingMethodDialogConfirm,
-				dialogData: myDialogData
-			});
+		    dialogService.open({
+		        template: '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shippingmethod.html',
+		        show: true,
+		        callback: $scope.shippingMethodDialogConfirm,
+		        dialogData: myDialogData
+		    });
 		};
 
-		$scope.removeFixedRateMethodFromProvider = function (provider, method) {
-			provider.removeFixedRateShippingMethod(method);
-
-			var promiseDelete = merchelloCatalogFixedRateShippingService.deleteRateTableShipMethod(method);
-			promiseDelete.then(function () {
-
-				notificationsService.success("Shipping Method Deleted");
-
-			}, function (reason) {
-
-				notificationsService.error("Shipping Method Delete Failed", reason.message);
-
-			});
-		};
-
-		$scope.loadAllAvailableCountries();
-		$scope.loadWarehouses();
-		$scope.loadAllShipProviders();
-		$scope.loadAllAvailableFixedRateGatewayResources();
-
-		$scope.loaded = true;
-		$scope.preValuesLoaded = true;
+	    // <<<
+	    //---------------------------
 
 	};
 

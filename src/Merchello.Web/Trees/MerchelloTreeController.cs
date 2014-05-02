@@ -26,7 +26,7 @@ namespace Merchello.Web.Trees
                 collection.Add(CreateTreeNode("payment", "settings", queryStrings, "Payment", "icon-bill-dollar", false, "merchello/merchello/Payment/manage"));
                 collection.Add(CreateTreeNode("gateways", "settings", queryStrings, "Gateway Providers", "icon-trafic", false, "merchello/merchello/GatewayProviders/manage"));
                 //collection.Add(CreateTreeNode("vendors", "settings", queryStrings, "Vendors", "icon-handshake", false, "merchello/merchello/Vendors/manage"));
-                //collection.Add(CreateTreeNode("notifications", "settings", queryStrings, "Notifications", "icon-chat", false, "merchello/merchello/Notifications/manage"));
+                collection.Add(CreateTreeNode("notifications", "settings", queryStrings, "Notifications", "icon-chat", false, "merchello/merchello/Notifications/manage"));
                 //collection.Add(CreateTreeNode("debuglog", "settings", queryStrings, "Debug Log", "icon-alert", false, "merchello/merchello/Debug/manage"));
             }
             else if (id == "reports")

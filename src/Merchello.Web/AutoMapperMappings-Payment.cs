@@ -1,4 +1,5 @@
-﻿using Merchello.Core.Gateways.Payment;
+﻿using System.Linq;
+using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Models;
 using Merchello.Web.Models.ContentEditing;
 using Merchello.Web.Models.MapperResolvers;
@@ -18,6 +19,9 @@ namespace Merchello.Web
             AutoMapper.Mapper.CreateMap<IPayment, PaymentDisplay>()
                 .ForMember(dest => dest.ExtendedData,
                     opt => opt.ResolveUsing<ExtendedDataResolver>().ConstructedBy(() => new ExtendedDataResolver())
+                )
+                .ForMember(dest => dest.AppliedPayments, 
+                    opt => opt.MapFrom(src => src.AppliedPayments().Select(x => x.ToAppliedPaymentDisplay()))
                 );
 
             AutoMapper.Mapper.CreateMap<IPaymentMethod, PaymentMethodDisplay>();

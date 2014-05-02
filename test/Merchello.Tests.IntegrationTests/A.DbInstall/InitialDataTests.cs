@@ -28,7 +28,7 @@ namespace Merchello.Tests.IntegrationTests.A.DbInstall
         public void Can_Populate_typeFieldData_Into_merchTypeField()
         {
             //// Arrange
-            const int expected = 20;
+            const int expected = 30;
 
             //// Act
             _creation.InitializeBaseData("merchTypeField");
@@ -113,6 +113,22 @@ namespace Merchello.Tests.IntegrationTests.A.DbInstall
             //// Act
             _creation.InitializeBaseData("merchStoreSetting");
             var dtos = _database.Query<StoreSettingDto>("SELECT * FROM merchStoreSetting");
+
+            //// Assert
+            Assert.IsTrue(dtos.Any());
+            Assert.AreEqual(expected, dtos.Count());
+
+        }
+
+        [Test]
+        public void Can_Populate_NotificationTriggers()
+        {
+            //// Arrage
+            var expected = 5;
+
+            //// Act
+            _creation.InitializeBaseData("merchNotificationTrigger");
+            var dtos = _database.Query<NotificationTriggerDto>("SELECT * FROM merchNotificationTrigger");
 
             //// Assert
             Assert.IsTrue(dtos.Any());

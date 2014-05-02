@@ -16,5 +16,6 @@ namespace Merchello.Web.Models.ContentEditing
         public bool Collected { get; set; }
         public bool Exported { get; set; }
         public IEnumerable<KeyValuePair<string, string>> ExtendedData { get; set; }
+        public IEnumerable<AppliedPaymentDisplay> AppliedPayments { get; set; }
     }
 }

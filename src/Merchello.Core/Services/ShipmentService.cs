@@ -220,6 +220,26 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
+        /// Gets a collection of <see cref="IShipment"/> give an order key
+        /// </summary>
+        /// <param name="orderKey"></param>
+        /// <returns></returns>
+        public IEnumerable<IShipment> GetShipmentsByOrderKey(Guid orderKey)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Gets a collection of <see cref="IOrderLineItem"/> by a shipment key
+        /// </summary>
+        /// <param name="key">The <see cref="IShipment"/> key</param>
+        /// <returns>A collection of <see cref="IOrderLineItem"/></returns>
+        public IEnumerable<IOrderLineItem> GetShipmentLineItems(Guid key)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         /// Gets all <see cref="IShipment"/>
         /// </summary>
         /// <returns>A collection of <see cref="IShipment"/></returns>
