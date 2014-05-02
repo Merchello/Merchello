@@ -1,6 +1,8 @@
 ﻿using System;
+using Merchello.Core.Events;
 using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Models.TypeFields;
+using Merchello.Core.Services;
 using Umbraco.Core.Persistence;
 
 namespace Merchello.Core.Persistence.Migrations.Upgrades.TargetVersionOneOneZero
@@ -20,7 +22,21 @@ namespace Merchello.Core.Persistence.Migrations.Upgrades.TargetVersionOneOneZero
 
         public void InitializeVersionData(string tableName)
         {
-            if (tableName.Equals("merchTypeField")) CreateDbTypeFieldData();                
+            if (tableName.Equals("merchTypeField")) CreateDbTypeFieldData();
+
+            if (tableName.Equals("merchNotificationTrigger")) CreateNotificationTriggerData();
+        }
+
+        private void CreateNotificationTriggerData()
+        {
+            // invoice status
+            
+            _database.Insert("merchNotificationTrigger", "Key", new NotificationTriggerDto() { Key = Constants.NotificationTriggerKeys.InvoiceService.StatusChanged.ToPaid, Name = "Invoice Status Changed To Paid", Binding = NotificationTriggerService.GetBindingValue(typeof(InvoiceService), typeof(StatusChangeEventArgs<>)), EntityKey = Constants.DefaultKeys.InvoiceStatus.Paid, UpdateDate = DateTime.Now, CreateDate = DateTime.Now});
+            _database.Insert("merchNotificationTrigger", "Key", new NotificationTriggerDto() { Key = Constants.NotificationTriggerKeys.InvoiceService.StatusChanged.ToPartial, Name = "Invoice Status Changed To Partial Paid", Binding = NotificationTriggerService.GetBindingValue(typeof(InvoiceService), typeof(StatusChangeEventArgs<>)), EntityKey = Constants.DefaultKeys.InvoiceStatus.Partial, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
+            _database.Insert("merchNotificationTrigger", "Key", new NotificationTriggerDto() { Key = Constants.NotificationTriggerKeys.InvoiceService.StatusChanged.ToCancelled, Name = "Invoice Status Changed To Cancelled", Binding = NotificationTriggerService.GetBindingValue(typeof(InvoiceService), typeof(StatusChangeEventArgs<>)), EntityKey = Constants.DefaultKeys.InvoiceStatus.Cancelled, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
+            _database.Insert("merchNotificationTrigger", "Key", new NotificationTriggerDto() { Key = Constants.NotificationTriggerKeys.OrderService.StatusChanged.ToFulfilled, Name = "Order Status Changed To Fulfilled", Binding = NotificationTriggerService.GetBindingValue(typeof(OrderService), typeof(StatusChangeEventArgs<>)), EntityKey = Constants.DefaultKeys.OrderStatus.Fulfilled, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
+            _database.Insert("merchNotificationTrigger", "Key", new NotificationTriggerDto() { Key = Constants.NotificationTriggerKeys.OrderService.StatusChanged.ToBackOrder, Name = "Order Status Changed To Back Order", Binding = NotificationTriggerService.GetBindingValue(typeof(OrderService), typeof(StatusChangeEventArgs<>)), EntityKey = Constants.DefaultKeys.OrderStatus.BackOrder, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
+            _database.Insert("merchNotificationTrigger", "Key", new NotificationTriggerDto() { Key = Constants.NotificationTriggerKeys.OrderService.StatusChanged.ToFulfilled, Name = "Order Status Changed To Cancelled", Binding = NotificationTriggerService.GetBindingValue(typeof(OrderService), typeof(StatusChangeEventArgs<>)), EntityKey = Constants.DefaultKeys.OrderStatus.Cancelled, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
         }
 
         private void CreateDbTypeFieldData()
