@@ -1,6 +1,5 @@
 ﻿using System;
 using Merchello.Core.Models;
-using Merchello.Core.Models.Rdbms;
 using Umbraco.Core.Persistence.Repositories;
 
 namespace Merchello.Core.Persistence.Repositories

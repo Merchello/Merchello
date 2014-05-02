@@ -13,13 +13,19 @@ namespace Merchello.Core.Models
         /// Optional key for Notification Trigger Rule
         /// </summary>
         [DataMember]
-        Guid? RuleKey { get; set; }
+        Guid? TriggerKey { get; set; }
+
+        /// <summary>
+        /// The <see cref="INotificationMethod"/> key
+        /// </summary>
+        [DataMember]
+        Guid MethodKey { get; }
 
         /// <summary>
         /// The name of the notification
         /// </summary>
         [DataMember]
-        string Name { get; set; }
+        string Name { get; }
 
         /// <summary>
         /// A brief description of the notification

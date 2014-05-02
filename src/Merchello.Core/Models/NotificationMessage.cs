@@ -17,20 +17,38 @@ namespace Merchello.Core.Models
         private string _message;
         private int _maxLength;
         private bool _messageIsFilePath;
-        private Guid? _ruleKey;
+        private Guid? _triggerKey;
+        private readonly Guid _methodKey;
         private string _recipients;
         private bool _sendToCustomer;
         private bool _disabled;
+
+        public NotificationMessage(Guid notificationMethodKey, string name)
+        {
+            Mandate.ParameterCondition(!Guid.Empty.Equals(notificationMethodKey), "notificationMethodKey");
+            Mandate.ParameterNotNullOrEmpty(name, "name");
+
+            _methodKey = notificationMethodKey;
+            _name = name;
+        }
 
         private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.Name);
         private static readonly PropertyInfo DescriptionSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.Description);
         private static readonly PropertyInfo MaxLengthSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, int>(x => x.MaxLength);
         private static readonly PropertyInfo MessageSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.Message);
         private static readonly PropertyInfo MessageIsFilePathSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, bool>(x => x.MessageIsFilePath);
-        private static readonly PropertyInfo RuleKeySelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, Guid?>(x => x.RuleKey);
+        private static readonly PropertyInfo TriggerKeySelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, Guid?>(x => x.TriggerKey);
         private static readonly PropertyInfo RecipientsSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.Recipients);
         private static readonly PropertyInfo SendToCustomerSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, bool>(x => x.SendToCustomer);
         private static readonly PropertyInfo DisabledSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, bool>(x => x.Disabled);
+
+        /// <summary>
+        /// The <see cref="INotificationMethod"/> key
+        /// </summary>
+        public Guid MethodKey
+        {
+            get { return _methodKey; }
+        }
 
         /// <summary>
         /// Gets or sets the name of the notification.
@@ -39,7 +57,7 @@ namespace Merchello.Core.Models
         public string Name
         {
             get { return _name; }
-            set
+            internal set
             {
                 SetPropertyValueAndDetectChanges(o =>
                 {
@@ -117,19 +135,19 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
-        /// Optional key for Notification Trigger Rule
+        /// Optional key for Notification Trigger
         /// </summary>
         [DataMember]
-        public Guid? RuleKey
+        public Guid? TriggerKey
         {
-            get { return _ruleKey; }
+            get { return _triggerKey; }
             set
             {
                 SetPropertyValueAndDetectChanges(o =>
                 {
-                    _ruleKey = value;
-                    return _ruleKey;
-                }, _ruleKey, RuleKeySelector);
+                    _triggerKey = value;
+                    return _triggerKey;
+                }, _triggerKey, TriggerKeySelector);
             }
         }
 
