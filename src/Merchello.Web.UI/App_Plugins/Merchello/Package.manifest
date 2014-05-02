@@ -79,6 +79,7 @@
 		'~/App_Plugins/Merchello/Modules/Settings/GatewayProviders/merchello.gatewayprovider.service.js',
 		'~/App_Plugins/Merchello/Modules/Settings/GatewayProviders/Directives/gatewayproviders-helper-directives.js',
 		'~/App_Plugins/Merchello/Modules/Settings/GatewayProviders/gatewayproviders.controller.js',
+		'~/App_Plugins/Merchello/Modules/Settings/Notifications/merchello.notifications.service.js',
 		'~/App_Plugins/Merchello/Modules/Settings/Notifications/notifications.controller.js',
 		'~/App_Plugins/Merchello/Modules/Settings/Notifications/notifications.edit.controller.js',
 		'~/App_Plugins/Merchello/Modules/Settings/Notifications/Dialogs/notifications.edittemplate.controller.js',
