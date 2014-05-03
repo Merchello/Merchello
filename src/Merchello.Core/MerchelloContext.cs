@@ -2,6 +2,7 @@
 using System.Threading;
 using Merchello.Core.Configuration;
 using Merchello.Core.Gateways;
+using Merchello.Core.Gateways.Notification;
 using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Gateways.Taxation;
@@ -43,10 +44,10 @@ namespace Merchello.Core
             var gatewayResolver = new Lazy<GatewayProviderResolver>(() => new GatewayProviderResolver(_services.GatewayProviderService, Cache.RuntimeCache));
 
             _gateways = new GatewayContext(
+                new PaymentContext(_services.GatewayProviderService, gatewayResolver.Value),
+                new NotificationContext(_services.GatewayProviderService, gatewayResolver.Value), 
                 new ShippingContext(_services.GatewayProviderService, _services.StoreSettingService, gatewayResolver.Value),
-                new TaxationContext(_services.GatewayProviderService, gatewayResolver.Value),
-                new PaymentContext(_services.GatewayProviderService, gatewayResolver.Value)
-                );
+                new TaxationContext(_services.GatewayProviderService, gatewayResolver.Value));
         }
 
 

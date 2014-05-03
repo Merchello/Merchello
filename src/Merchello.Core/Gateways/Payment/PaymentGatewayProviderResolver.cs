@@ -4,6 +4,9 @@ using Umbraco.Core.ObjectResolution;
 
 namespace Merchello.Core.Gateways.Payment
 {
+    /// <summary>
+    /// Resolves PaymentGatewayProviders
+    /// </summary>
     internal sealed class PaymentGatewayProviderResolver : LazyManyObjectsResolverBase<PaymentGatewayProviderResolver, PaymentGatewayProviderBase>
     {
         /// <summary>

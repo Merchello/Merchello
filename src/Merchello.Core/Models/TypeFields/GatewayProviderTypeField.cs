@@ -15,17 +15,9 @@ namespace Merchello.Core.Models.TypeFields
         internal override void BuildCache()
         {
             AddUpdateCache(GatewayProviderType.Payment, new TypeField("Payment", "Payment", Constants.TypeFieldKeys.GatewayProvider.PaymentProviderKey));
+            AddUpdateCache(GatewayProviderType.Notification, new TypeField("Notification", "Notification", Constants.TypeFieldKeys.GatewayProvider.NotificationProviderKey));
             AddUpdateCache(GatewayProviderType.Shipping, new TypeField("Shipping", "Shipping", Constants.TypeFieldKeys.GatewayProvider.ShippingProviderKey));
             AddUpdateCache(GatewayProviderType.Taxation, new TypeField("Taxation", "Taxation", Constants.TypeFieldKeys.GatewayProvider.TaxationProviderKey));
-        }
-
-
-        /// <summary>
-        /// Indicates the gateway provider is for shipping
-        /// </summary>
-        public ITypeField Shipping
-        {
-            get { return GetTypeField(GatewayProviderType.Shipping); }
         }
 
         /// <summary>
@@ -35,6 +27,24 @@ namespace Merchello.Core.Models.TypeFields
         {
             get { return GetTypeField(GatewayProviderType.Payment); }
         }
+
+        /// <summary>
+        /// Indicates the gateway provider is for Notifications
+        /// </summary>
+        public ITypeField Notification 
+        {
+            get { return GetTypeField(GatewayProviderType.Notification); }
+        }
+
+        /// <summary>
+        /// Indicates the gateway provider is for shipping
+        /// </summary>
+        public ITypeField Shipping
+        {
+            get { return GetTypeField(GatewayProviderType.Shipping); }
+        }
+
+
 
         /// <summary>
         /// Indicates the gateway provider is for taxation
