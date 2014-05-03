@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
+using Merchello.Core.Gateways.Notification;
 using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Gateways.Taxation;
@@ -71,6 +72,8 @@ namespace Merchello.Core.Gateways
             {
                 case GatewayProviderType.Payment:
                     return BuildGatewayProvidersFromResolved<T>(PaymentGatewayProviderResolver.Current.ProviderTypes, gatewayProviderType);
+                case GatewayProviderType.Notification:
+                    return BuildGatewayProvidersFromResolved<T>(NotificationGatewayProviderResolver.Current.ProviderTypes, gatewayProviderType);
                 case GatewayProviderType.Shipping:
                     return BuildGatewayProvidersFromResolved<T>(ShippingGatewayProviderResolver.Current.ProviderTypes, gatewayProviderType);
                 case GatewayProviderType.Taxation:
@@ -133,14 +136,17 @@ namespace Merchello.Core.Gateways
         {
             switch (GetGatewayProviderType<T>())
             {
-                    case GatewayProviderType.Shipping:
-                    return _gatewayProviderFactory.Value.GetInstance<ShippingGatewayProviderBase>(provider) as T;
+                case GatewayProviderType.Payment:
+                return _gatewayProviderFactory.Value.GetInstance<PaymentGatewayProviderBase>(provider) as T;
 
-                    case GatewayProviderType.Taxation:
-                    return _gatewayProviderFactory.Value.GetInstance<TaxationGatewayProviderBase>(provider) as T;
+                case GatewayProviderType.Notification:
+                return _gatewayProviderFactory.Value.GetInstance<NotificationGatewayProviderBase>(provider) as T;
 
-                    case GatewayProviderType.Payment:
-                    return _gatewayProviderFactory.Value.GetInstance<PaymentGatewayProviderBase>(provider) as T;
+                case GatewayProviderType.Shipping:
+                return _gatewayProviderFactory.Value.GetInstance<ShippingGatewayProviderBase>(provider) as T;
+
+                case GatewayProviderType.Taxation:
+                return _gatewayProviderFactory.Value.GetInstance<TaxationGatewayProviderBase>(provider) as T;
             }
 
             throw new InvalidOperationException("CreateInstance could not instantiant Type " + typeof(T).FullName);
@@ -174,9 +180,11 @@ namespace Merchello.Core.Gateways
         /// <returns>Returns a <see cref="GatewayProviderType"/></returns>
         internal static GatewayProviderType GetGatewayProviderType<T>()
         {
+            if (typeof(PaymentGatewayProviderBase).IsAssignableFrom(typeof(T))) return GatewayProviderType.Payment;
+            if (typeof(NotificationGatewayProviderBase).IsAssignableFrom(typeof(T))) return GatewayProviderType.Notification;
             if (typeof(ShippingGatewayProviderBase).IsAssignableFrom(typeof(T))) return GatewayProviderType.Shipping;
             if (typeof(TaxationGatewayProviderBase).IsAssignableFrom(typeof(T))) return GatewayProviderType.Taxation;
-            if (typeof(PaymentGatewayProviderBase).IsAssignableFrom(typeof(T))) return GatewayProviderType.Payment;
+            
             throw new InvalidOperationException("Could not map GatewayProviderType from " + typeof(T).Name);
         }
 

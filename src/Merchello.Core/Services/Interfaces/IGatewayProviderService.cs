@@ -174,6 +174,17 @@ namespace Merchello.Core.Services
 
         #endregion
 
+        #region Notification
+
+        /// <summary>
+        /// Gets a collection of <see cref="INotificationMethod"/> for a give NotificationGatewayProvider
+        /// </summary>
+        /// <param name="providerKey">The unique 'key' of the NotificationGatewayProvider</param>
+        /// <returns>A collection of <see cref="INotificationMethod"/></returns>
+        IEnumerable<INotificationMethod> GetNotificationMethodsByProviderKey(Guid providerKey);
+
+        #endregion
+
         #region ShipMethod
 
         /// <summary>

@@ -28,7 +28,7 @@ namespace Merchello.Tests.IntegrationTests.A.DbInstall
         public void Can_Populate_typeFieldData_Into_merchTypeField()
         {
             //// Arrange
-            const int expected = 30;
+            const int expected = 31;
 
             //// Act
             _creation.InitializeBaseData("merchTypeField");
@@ -124,7 +124,7 @@ namespace Merchello.Tests.IntegrationTests.A.DbInstall
         public void Can_Populate_NotificationTriggers()
         {
             //// Arrage
-            const int expected = 8;
+            const int expected = 9;
 
             //// Act
             _creation.InitializeBaseData("merchNotificationTrigger");

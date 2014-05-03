@@ -1,4 +1,5 @@
-﻿using Merchello.Core.Gateways.Payment;
+﻿using Merchello.Core.Gateways.Notification;
+using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Gateways.Taxation;
 
@@ -9,6 +10,17 @@ namespace Merchello.Core.Gateways
     /// </summary>
     public interface IGatewayContext
     {
+
+        /// <summary>
+        /// Gets the <see cref="IPaymentContext"/>
+        /// </summary>
+        IPaymentContext Payment { get; }
+
+        /// <summary>
+        /// Gets the <see cref="INotificationContext"/>
+        /// </summary>
+        INotificationContext Notification { get; }
+
         /// <summary>
         /// Gets the <see cref="IShippingContext"/>
         /// </summary>
@@ -19,9 +31,5 @@ namespace Merchello.Core.Gateways
         /// </summary>
         ITaxationContext Taxation { get; }
 
-        /// <summary>
-        /// Gets the <see cref="IPaymentContext"/>
-        /// </summary>
-        IPaymentContext Payment { get; }
     }
 }

@@ -100,7 +100,10 @@
     <Compile Include="Gateways\GatewayMethodEditorAttribute.cs" />
     <Compile Include="Gateways\GatewayProviderActivationAttribute.cs" />
     <Compile Include="Gateways\GatewayProviderEditorAttribute.cs" />
+    <Compile Include="Gateways\Notification\INotificationContext.cs" />
+    <Compile Include="Gateways\Notification\NotificationContext.cs" />
     <Compile Include="Gateways\Notification\NotificationGatewayProviderBase.cs" />
+    <Compile Include="Gateways\Notification\NotificationGatewayProviderResolver.cs" />
     <Compile Include="Gateways\Notification\Smtp\ISmtpNotificationGatewayProvider.cs" />
     <Compile Include="Gateways\Notification\Smtp\ISmtpNotificationGatewayMessage.cs" />
     <Compile Include="Gateways\Notification\Smtp\SmtpNotificationGatewayProvider.cs" />

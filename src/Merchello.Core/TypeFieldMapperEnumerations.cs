@@ -66,8 +66,9 @@
 
     public enum GatewayProviderType
     {
-        Shipping,
         Payment,
+        Notification,
+        Shipping,        
         Taxation,
         Custom
     }

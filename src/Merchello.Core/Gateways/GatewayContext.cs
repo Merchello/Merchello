@@ -1,4 +1,5 @@
 ﻿using System;
+using Merchello.Core.Gateways.Notification;
 using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Gateways.Taxation;
@@ -11,23 +12,53 @@ namespace Merchello.Core.Gateways
     /// </summary>
     internal class GatewayContext : IGatewayContext
     {
+        private readonly IPaymentContext _payment;
+        private readonly INotificationContext _notification;
         private readonly IShippingContext _shipping;
         private readonly ITaxationContext _taxation;
-        private readonly IPaymentContext _payment;
+        
 
-        internal GatewayContext(IShippingContext shipping, ITaxationContext taxation, IPaymentContext payment)
+        internal GatewayContext(IPaymentContext payment, INotificationContext notification, IShippingContext shipping, ITaxationContext taxation)
         {
+            Mandate.ParameterNotNull(payment, "payment");
+            Mandate.ParameterNotNull(notification, "notification");
             Mandate.ParameterNotNull(shipping, "shipping");
             Mandate.ParameterNotNull(taxation, "taxation");
-            Mandate.ParameterNotNull(payment, "payment");
 
+            _payment = payment;
+            _notification = notification;
             _shipping = shipping;
             _taxation = taxation;
-            _payment = payment;
+            
         }
 
 
-        
+        /// <summary>
+        /// Exposes the <see cref="IPaymentContext"/>
+        /// </summary>
+        public IPaymentContext Payment
+        {
+            get
+            {
+                if (_payment == null) throw new InvalidOperationException("The PaymentContext is not set in the GatewayContext");
+
+                return _payment;
+            }
+        }
+
+        /// <summary>
+        /// Exposes the <see cref="INotificationContext"/>
+        /// </summary>
+        public INotificationContext Notification
+        {
+            get
+            {
+                if(_notification == null) throw new InvalidOperationException("The NotificationContext is not set in the GatewayContext");
+
+                return _notification;
+            }
+        }
+
         /// <summary>
         /// Exposes the <see cref="IShippingContext"/>
         /// </summary>
@@ -55,18 +86,6 @@ namespace Merchello.Core.Gateways
             } 
         }
 
-        /// <summary>
-        /// Exposes teh <see cref="IPaymentContext"/>
-        /// </summary>
-        public IPaymentContext Payment
-        {
-            get
-            {
-                if (_payment == null) throw new InvalidOperationException("The PaymentContext is not set in the GatewayContext");
-
-                return _payment;
-            } 
-        }
 
     }
 }

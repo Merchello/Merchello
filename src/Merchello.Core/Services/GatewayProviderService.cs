@@ -384,6 +384,23 @@ namespace Merchello.Core.Services
             return _paymentService.GetPaymentsByInvoiceKey(invoiceKey);
         }
 
+
+        #endregion
+
+
+        #region Notification
+
+        /// <summary>
+        /// Gets a collection of <see cref="INotificationMethod"/> for a give NotificationGatewayProvider
+        /// </summary>
+        /// <param name="providerKey">The unique 'key' of the NotificationGatewayProvider</param>
+        /// <returns>A collection of <see cref="INotificationMethod"/></returns>
+        public IEnumerable<INotificationMethod> GetNotificationMethodsByProviderKey(Guid providerKey)
+        {
+            throw new NotImplementedException();
+        }
+
+
         #endregion
 
         #region ShipMethod
