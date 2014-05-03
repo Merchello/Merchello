@@ -136,6 +136,7 @@
     <Compile Include="Gateways\Taxation\TaxationGatewayProviderResolver.cs" />
     <Compile Include="Gateways\Taxation\TaxCalculationResult.cs" />
     <Compile Include="Gateways\Taxation\TaxableLineItemVisitor.cs" />
+    <Compile Include="ITriggerResolver.cs" />
     <Compile Include="MerchelloResolverApplicationEventHandler.cs" />
     <Compile Include="Models\Currency.cs" />
     <Compile Include="Models\Interfaces\IExtendedDataEntity.cs" />
@@ -718,6 +719,7 @@
     <Compile Include="Strategies\Packaging\PackagingStrategyBase.cs" />
     <Compile Include="Strategies\Packaging\IPackagingStrategy.cs" />
     <Compile Include="Strategies\Packaging\ShippableProductVisitor.cs" />
+    <Compile Include="Triggers\TriggerAttribute.cs" />
     <Compile Include="TypeFieldMapperEnumerations.cs" />
     <Compile Include="Models\TypeFields\ProductTypeField.cs" />
     <Compile Include="Models\Rdbms\TypeFieldDto.cs" />

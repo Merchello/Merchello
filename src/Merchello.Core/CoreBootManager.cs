@@ -23,7 +23,7 @@ namespace Merchello.Core
         private bool _isComplete = false;
         private bool _isTest = false;
 
-        private MerchelloContext MerchelloContext { get; set; }       
+        private MerchelloContext _merchelloContext;  
 
         
         public override IBootManager Initialize()
@@ -66,7 +66,7 @@ namespace Merchello.Core
                                     new NullCacheProvider())
                             : ApplicationContext.Current.ApplicationCache;
 
-            MerchelloContext = MerchelloContext.Current = new MerchelloContext(serviceContext, cache, _isTest);
+            _merchelloContext = MerchelloContext.Current = new MerchelloContext(serviceContext, cache, _isTest);
         }
 
         /// <summary>

@@ -122,8 +122,6 @@ namespace Merchello.Core
 
         private IServiceContext _services;
         private IGatewayContext _gateways;
-        //private ISalesManager _salesManager;
-
 
         /// <summary>
         /// Gets the current ServiceContext
@@ -156,20 +154,6 @@ namespace Merchello.Core
             internal set { _gateways = value; }
         }
        
-        ///// <summary>
-        ///// Gets the sales manager
-        ///// </summary>
-        //public ISalesManager SalesManager
-        //{
-        //    get
-        //    {
-        //        if(_salesManager == null)
-        //            throw new InvalidOperationException("The SalesManager has not been set of the MerchelloContext");
-        //        return _salesManager;
-        //    }
-        //    internal set { _salesManager = value; }
-        //}
-
         private volatile bool _disposed;
         private readonly ReaderWriterLockSlim _disposalLocker = new ReaderWriterLockSlim();
 

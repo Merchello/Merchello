@@ -13,7 +13,7 @@ using NUnit.Framework;
 namespace Merchello.Tests.UnitTests.Services
 {
     [TestFixture]
-    [Category("Services")]
+    [Category("Service Events")]
     public class OrderServiceEventTests : ServiceTestsBase<IOrder>
     {
         private IOrderService _orderService;
