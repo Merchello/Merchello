@@ -111,7 +111,7 @@ namespace Merchello.Core
             {
                 try
                 {
-                    return MerchelloConfiguration.Current.Section.Version;
+                    return MerchelloConfiguration.ConfigurationStatus;
                 }
                 catch
                 {
