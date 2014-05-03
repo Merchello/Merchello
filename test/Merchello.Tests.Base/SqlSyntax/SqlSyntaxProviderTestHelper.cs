@@ -1,6 +1,8 @@
-﻿using Merchello.Core.Gateways.Payment;
+﻿using Merchello.Core.Gateways.Notification;
+using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Gateways.Taxation;
+using Merchello.Core.Triggers;
 using Umbraco.Core;
 using Umbraco.Core.Persistence.SqlSyntax;
 
@@ -12,9 +14,14 @@ namespace Merchello.Tests.Base.SqlSyntax
         {
             if (Resolution.IsFrozen) return;
             SqlSyntaxContext.SqlSyntaxProvider = SqlSyntaxProvider(syntax);
+
             PaymentGatewayProviderResolver.Current = new PaymentGatewayProviderResolver(() => PluginManager.Current.ResolveTypes<PaymentGatewayProviderBase>());
+            NotificationGatewayProviderResolver.Current = new NotificationGatewayProviderResolver(() => PluginManager.Current.ResolveTypes<NotificationGatewayProviderBase>());
             TaxationGatewayProviderResolver.Current = new TaxationGatewayProviderResolver(() => PluginManager.Current.ResolveTypes<TaxationGatewayProviderBase>());
             ShippingGatewayProviderResolver.Current = new ShippingGatewayProviderResolver(() => PluginManager.Current.ResolveTypes<ShippingGatewayProviderBase>());
+
+            EventTriggerResolver.Current = new EventTriggerResolver(() => PluginManager.Current.ResolveTypes<IEventTrigger>());
+
             Resolution.Freeze();
         }
 

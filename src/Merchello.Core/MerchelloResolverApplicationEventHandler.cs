@@ -2,6 +2,7 @@
 using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Gateways.Taxation;
+using Merchello.Core.Triggers;
 using Umbraco.Core;
 using Umbraco.Core.Logging;
 
@@ -19,6 +20,8 @@ namespace Merchello.Core
             NotificationGatewayProviderResolver.Current = new NotificationGatewayProviderResolver(() => PluginManager.Current.ResolveTypes<NotificationGatewayProviderBase>());
             TaxationGatewayProviderResolver.Current = new TaxationGatewayProviderResolver(() => PluginManager.Current.ResolveTypes<TaxationGatewayProviderBase>());
             ShippingGatewayProviderResolver.Current = new ShippingGatewayProviderResolver(() => PluginManager.Current.ResolveTypes<ShippingGatewayProviderBase>());
+
+            EventTriggerResolver.Current = new EventTriggerResolver(() => PluginManager.Current.ResolveTypes<IEventTrigger>());
 
             NotificationFormatterResolver.Current = new NotificationFormatterResolver();
 

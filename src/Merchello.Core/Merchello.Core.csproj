@@ -719,7 +719,14 @@
     <Compile Include="Strategies\Packaging\PackagingStrategyBase.cs" />
     <Compile Include="Strategies\Packaging\IPackagingStrategy.cs" />
     <Compile Include="Strategies\Packaging\ShippableProductVisitor.cs" />
-    <Compile Include="Triggers\TriggerAttribute.cs" />
+    <Compile Include="Triggers\EventTriggerResolver.cs" />
+    <Compile Include="Triggers\IEventTrigger.cs" />
+    <Compile Include="Triggers\ITriggerRegistry.cs" />
+    <Compile Include="Triggers\Notification\NotificationActionAttribute.cs" />
+    <Compile Include="Triggers\Notification\NotificationTriggerBase.cs" />
+    <Compile Include="Triggers\TriggerBase.cs" />
+    <Compile Include="Triggers\Notification\OrderStatusChangedNotificationTrigger.cs" />
+    <Compile Include="Triggers\TriggerActionAttribute.cs" />
     <Compile Include="TypeFieldMapperEnumerations.cs" />
     <Compile Include="Models\TypeFields\ProductTypeField.cs" />
     <Compile Include="Models\Rdbms\TypeFieldDto.cs" />
