@@ -125,8 +125,6 @@ namespace Merchello.Core
             if(_isComplete)
                 throw new InvalidOperationException("The boot manager has already been completed");
 
-           // FreezeResolution();
-
             if (afterComplete != null)
             {
                 afterComplete(MerchelloContext.Current);                
