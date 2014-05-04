@@ -11,7 +11,9 @@ namespace Merchello.Tests.IntegrationTests.ObjectResolution
         [Test]
         public void Can_Resolve_EventTriggers()
         {
-            Assert.IsTrue(EventTriggerResolver.Current.Triggers.Any());
+            var triggers = EventTriggerRegistry.Current.EventTriggers;
+
+            Assert.IsTrue(triggers.Any());
         }
     }
 }

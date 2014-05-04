@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using AutoMapper;
 using Merchello.Core.Gateways;
-using Merchello.Core.Models;
 using Merchello.Web.Models.ContentEditing;
 using Umbraco.Core;
 using Umbraco.Core.IO;

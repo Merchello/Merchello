@@ -4,6 +4,7 @@ using System.Reflection;
 using Merchello.Core.Models;
 using Merchello.Core.Persistence;
 using Merchello.Core.Services;
+using Merchello.Core.Triggers;
 using Merchello.Tests.Base.DataMakers;
 using Merchello.Tests.Base.Respositories;
 using Merchello.Tests.Base.Services;
@@ -18,7 +19,7 @@ namespace Merchello.Tests.UnitTests.Services
     public class ServiceEventResolutionTests : ServiceTestsBase<IOrder>
     {
         private IOrderService _orderService;
-        
+        private OrderStatusInvokeTester _orderStatusInvokeTester;        
 
         [TestFixtureSetUp]
         public override void FixtureSetup()
@@ -30,24 +31,19 @@ namespace Merchello.Tests.UnitTests.Services
 
             _orderService = new OrderService(new MockUnitOfWorkProvider(), new RepositoryFactory(), mockSettingService.Object, new Mock<ShipmentService>().Object);
 
+            _orderStatusInvokeTester = new OrderStatusInvokeTester();
 
             var saved = typeof(OrderService).GetEvent("Saved");
             Assert.NotNull(saved, "Saved could not be found");
-            var mi = GetType().GetMethod("OrderServiceOnSaved", BindingFlags.Instance | BindingFlags.NonPublic);
-            saved.AddEventHandler(this, Delegate.CreateDelegate(saved.EventHandlerType, this, mi));
+            //var mi = GetType().GetMethod("Invoke", BindingFlags.Instance | BindingFlags.NonPublic);
+            var mi = _orderStatusInvokeTester.GetType().GetMethod("Invoke", BindingFlags.Instance | BindingFlags.Public);
+
+            //saved.AddEventHandler(this, Delegate.CreateDelegate(saved.EventHandlerType, this, mi));
+            saved.AddEventHandler(_orderStatusInvokeTester, Delegate.CreateDelegate(saved.EventHandlerType, _orderStatusInvokeTester, mi));
 
         }
 
-        private void OrderServiceOnSaved(IOrderService sender, SaveEventArgs<IOrder> saveEventArgs)
-        {
-            After = saveEventArgs.SavedEntities.First();
-        }
-
-        private void OrderServiceOnCreated(IOrderService sender, Core.Events.NewEventArgs<IOrder> newEventArgs)
-        {
-            After = newEventArgs.Entity;
-        }
-
+        
         [SetUp]
         public override void Setup()
         {
@@ -63,7 +59,7 @@ namespace Merchello.Tests.UnitTests.Services
         {
             base.FixtureTearDown();
 
-            OrderService.Saved -= OrderServiceOnSaved;
+            //OrderService.Saved -= OrderServiceOnSaved;
         }
 
         
@@ -78,9 +74,20 @@ namespace Merchello.Tests.UnitTests.Services
             _orderService.Save(order);
 
             //// Assert
-            Assert.NotNull(After);
-            Assert.AreEqual(After.Key, order.Key);
+            Assert.NotNull(_orderStatusInvokeTester.After);
+            Assert.AreEqual(_orderStatusInvokeTester.After.Key, order.Key);
         }
  
+    }
+
+
+    internal class OrderStatusInvokeTester : IEventTrigger
+    {
+
+        public IOrder After { get; set; }
+        public void Invoke(object sender, EventArgs e)
+        {
+            After = ((SaveEventArgs<IOrder>) e).SavedEntities.FirstOrDefault();
+        }
     }
 }

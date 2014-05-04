@@ -1,4 +1,5 @@
-﻿using Merchello.Core.Gateways.Notification;
+﻿using Merchello.Core.Gateways;
+using Merchello.Core.Gateways.Notification;
 using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Gateways.Taxation;
@@ -16,12 +17,15 @@ namespace Merchello.Core
 
             LogHelper.Info<MerchelloResolverApplicationEventHandler>("Starting Merchello GatewayProvider Resolution");
 
-            PaymentGatewayProviderResolver.Current = new PaymentGatewayProviderResolver(() => PluginManager.Current.ResolveTypes<PaymentGatewayProviderBase>());
-            NotificationGatewayProviderResolver.Current = new NotificationGatewayProviderResolver(() => PluginManager.Current.ResolveTypes<NotificationGatewayProviderBase>());
-            TaxationGatewayProviderResolver.Current = new TaxationGatewayProviderResolver(() => PluginManager.Current.ResolveTypes<TaxationGatewayProviderBase>());
-            ShippingGatewayProviderResolver.Current = new ShippingGatewayProviderResolver(() => PluginManager.Current.ResolveTypes<ShippingGatewayProviderBase>());
+            PaymentGatewayProviderResolver.Current = new PaymentGatewayProviderResolver(() => PluginManager.Current.ResolveTypesWithAttribute<PaymentGatewayProviderBase, GatewayProviderActivationAttribute>());
+            NotificationGatewayProviderResolver.Current = new NotificationGatewayProviderResolver(() => PluginManager.Current.ResolveTypesWithAttribute<NotificationGatewayProviderBase, GatewayProviderActivationAttribute>());
+            TaxationGatewayProviderResolver.Current = new TaxationGatewayProviderResolver(() => PluginManager.Current.ResolveTypesWithAttribute<TaxationGatewayProviderBase, GatewayProviderActivationAttribute>());
+            ShippingGatewayProviderResolver.Current = new ShippingGatewayProviderResolver(() => PluginManager.Current.ResolveTypesWithAttribute<ShippingGatewayProviderBase, GatewayProviderActivationAttribute>());
 
-            EventTriggerResolver.Current = new EventTriggerResolver(() => PluginManager.Current.ResolveTypes<IEventTrigger>());
+            EventTriggerRegistry.Current = 
+                new EventTriggerRegistry(() => PluginManager.Current.ResolveTypesWithAttribute<IEventTrigger, TriggerActionAttribute>());
+
+
 
             NotificationFormatterResolver.Current = new NotificationFormatterResolver();
 

@@ -57,6 +57,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\UmbracoCms.Core.7.1.1\lib\interfaces.dll</HintPath>
     </Reference>
+    <Reference Include="Lucene.Net">
+      <HintPath>..\packages\Lucene.Net.2.9.4.1\lib\net40\Lucene.Net.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
@@ -136,7 +139,7 @@
     <Compile Include="Gateways\Taxation\TaxationGatewayProviderResolver.cs" />
     <Compile Include="Gateways\Taxation\TaxCalculationResult.cs" />
     <Compile Include="Gateways\Taxation\TaxableLineItemVisitor.cs" />
-    <Compile Include="ITriggerResolver.cs" />
+    <Compile Include="IEventTriggerBase.cs" />
     <Compile Include="MerchelloResolverApplicationEventHandler.cs" />
     <Compile Include="Models\Currency.cs" />
     <Compile Include="Models\Interfaces\IExtendedDataEntity.cs" />
@@ -719,13 +722,13 @@
     <Compile Include="Strategies\Packaging\PackagingStrategyBase.cs" />
     <Compile Include="Strategies\Packaging\IPackagingStrategy.cs" />
     <Compile Include="Strategies\Packaging\ShippableProductVisitor.cs" />
-    <Compile Include="Triggers\EventTriggerResolver.cs" />
+    <Compile Include="Triggers\EventTriggerRegistry.cs" />
     <Compile Include="Triggers\IEventTrigger.cs" />
-    <Compile Include="Triggers\ITriggerRegistry.cs" />
+    <Compile Include="Triggers\IEnventTriggerRegistry.cs" />
     <Compile Include="Triggers\Notification\NotificationActionAttribute.cs" />
-    <Compile Include="Triggers\Notification\NotificationTriggerBase.cs" />
-    <Compile Include="Triggers\TriggerBase.cs" />
-    <Compile Include="Triggers\Notification\OrderStatusChangedNotificationTrigger.cs" />
+    <Compile Include="Triggers\Notification\NotificationEventTriggerBase.cs" />
+    <Compile Include="Triggers\EventTriggerBase.cs" />
+    <Compile Include="Triggers\Notification\OrderStatusChangedNotificationEventTrigger.cs" />
     <Compile Include="Triggers\TriggerActionAttribute.cs" />
     <Compile Include="TypeFieldMapperEnumerations.cs" />
     <Compile Include="Models\TypeFields\ProductTypeField.cs" />
