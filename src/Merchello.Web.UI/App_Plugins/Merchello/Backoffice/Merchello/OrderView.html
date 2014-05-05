@@ -163,10 +163,10 @@
 					</div>
 
 					<div class="merchello-controls">
-						<div class="row-fluid span10 col-xs-10" data-ng-repeat="shipment in shipments">
+						<div class="row-fluid span10 col-xs-10" data-ng-repeat="shipment in invoice.shipments">
 							<div class="row-fluid">
 								<div class="merchello-section-label">
-									Shipment - {{shipment.shipmentDate  | date : 'M/d/yyyy'}}
+									Shipment - {{shipment.shippedDate  | date : 'M/d/yyyy'}}
 									<small>Tracking #: <a href="javascript:;">{{shipment.trackingCode}}</a></small>
 								</div>
 							</div>

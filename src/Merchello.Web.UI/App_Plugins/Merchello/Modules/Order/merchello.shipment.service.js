@@ -22,29 +22,33 @@
             },
 
             getShipmentsByInvoice: function (invoice) {
-            	//var deferred = $q.defer();
-	            var shipments = [];
-	            //var orders = _.map(invoice.orders, function(order) {
-		        //    return new merchello.Models.Order(order);
+	            var shipmentKeys = [];
+	            var orders = _.map(invoice.orders, function(order) {
+		            return new merchello.Models.Order(order);
+	            });
+
+	            angular.forEach(orders, function(order) {
+		            var newShipmentKeys = _.map(order.items, function(orderlineitem) {
+		            	var oli = new merchello.Models.OrderLineItem(orderlineitem);
+			            return oli.shipmentKey;
+		            });
+
+
+		            shipmentKeys = _.union(shipmentKeys, newShipmentKeys);
+	            });
+
+	            //shipmentKeys = _.map(shipmentKeys, function(shipmentKey) {
+		        //    return "ids=" + shipmentKey;
 	            //});
+	            var shipmentKeysStr = shipmentKeys.join("&ids=");
 
-	            //angular.forEach(orders, function(order) {
-		        //    var orderlineitems = _.map(order.items, function(orderlineitem) {
-			    //        return new merchello.Models.OrderLineItem(orderlineitem);
-		        //    });
-
-				//	var shipment = _.map(orderlineitems)
-	            //});
-
-	            //deferred.resolve(selectedCurrency.symbol);
-
-	            //return umbRequestHelper.resourcePromise(
-	            //    $http({
-	            //    	url: umbRequestHelper.getApiUrl('merchelloShipmentApiBaseUrl', 'GetShipmentsByInvoice'),
-	            //    	method: "GET",
-	            //    	params: { id: invoiceKey }
-	            //    }),
-	            //    'Failed to get shipments by invoice: ' + invoiceKey);
+	            return umbRequestHelper.resourcePromise(
+	                $http({
+	                	url: umbRequestHelper.getApiUrl('merchelloShipmentApiBaseUrl', 'GetShipments', shipmentKeysStr),
+	                	method: "GET",
+	                	params: { ids: shipmentKeys }
+	                }),
+	                'Failed to get shipments: ' + shipmentKeys);
             },
 
             getShipMethod: function (order) {
@@ -77,6 +81,6 @@
         };
     };
 
-    angular.module('umbraco.resources').factory('merchelloShipmentService', ['$http', 'umbRequestHelper', merchello.Services.MerchelloShipmentService]);
+    angular.module('umbraco.resources').factory('merchelloShipmentService', ['$q', '$http', 'umbRequestHelper', merchello.Services.MerchelloShipmentService]);
 
 }(window.merchello.Services = window.merchello.Services || {}));

@@ -58,7 +58,7 @@
 
                 $scope.loadShippingAddress($scope.invoice);
                 $scope.loadPayments($scope.invoice);
-	            //$scope.loadShipments($scope.invoice);
+	            $scope.loadShipments($scope.invoice);
 
             }, function (reason) {
                 notificationsService.error("Invoice Load Failed", reason.message);
@@ -114,7 +114,7 @@
         };
 
 	    $scope.loadShipments = function(invoice) {
-	    	var promise = merchelloShipmentService.getShipmentsByInvoice(invoice.key);
+	    	var promise = merchelloShipmentService.getShipmentsByInvoice(invoice);
 
 	    	promise.then(function (shipments) {
 
