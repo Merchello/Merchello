@@ -6,7 +6,7 @@ using Umbraco.Core.Logging;
 
 namespace Merchello.Core.Triggers.Notification
 {
-    [TriggerAction("Notification", typeof(OrderService), "StatusChanged")]
+    [EventTrigger("Notification", typeof(OrderService), "StatusChanged")]
     internal class OrderStatusChangedNotificationEventTrigger : NotificationEventTriggerBase
     {
         public override void Invoke(Object sender, EventArgs e)

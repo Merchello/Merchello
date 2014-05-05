@@ -60,7 +60,7 @@ namespace Merchello.Core.Triggers
         {
             return
                 GetAllEventTriggers()
-                    .Where(x => x.GetType().GetCustomAttributes<TriggerActionAttribute>(false).FirstOrDefault().Area.Equals(area));            
+                    .Where(x => x.GetType().GetCustomAttributes<EventTriggerAttribute>(false).FirstOrDefault().Area.Equals(area));            
         }
 
         /// <summary>

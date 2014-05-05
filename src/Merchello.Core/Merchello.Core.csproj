@@ -729,7 +729,7 @@
     <Compile Include="Triggers\Notification\NotificationEventTriggerBase.cs" />
     <Compile Include="Triggers\EventTriggerBase.cs" />
     <Compile Include="Triggers\Notification\OrderStatusChangedNotificationEventTrigger.cs" />
-    <Compile Include="Triggers\TriggerActionAttribute.cs" />
+    <Compile Include="Triggers\EventTriggerAttribute.cs" />
     <Compile Include="TypeFieldMapperEnumerations.cs" />
     <Compile Include="Models\TypeFields\ProductTypeField.cs" />
     <Compile Include="Models\Rdbms\TypeFieldDto.cs" />

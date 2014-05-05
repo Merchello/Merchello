@@ -23,7 +23,7 @@ namespace Merchello.Tests.UnitTests.Contexts
         public void FixtureSetup()
         {
             EventTriggerRegistry.Current =
-                new EventTriggerRegistry(() => PluginManager.Current.ResolveTypesWithAttribute<IEventTrigger, TriggerActionAttribute>());
+                new EventTriggerRegistry(() => PluginManager.Current.ResolveTypesWithAttribute<IEventTrigger, EventTriggerAttribute>());
         }
 
         [SetUp]
