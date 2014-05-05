@@ -23,7 +23,7 @@ namespace Merchello.Tests.Base.SqlSyntax
 
             if(!EventTriggerRegistry.IsInitialized)
             EventTriggerRegistry.Current =
-                new EventTriggerRegistry(() => PluginManager.Current.ResolveTypesWithAttribute<IEventTrigger, EventTriggerAttribute>());
+                new EventTriggerRegistry(() => PluginManager.Current.ResolveTypesWithAttribute<IEventTriggeredAction, EventTriggeredActionForAttribute>());
 
             Resolution.Freeze();
         }

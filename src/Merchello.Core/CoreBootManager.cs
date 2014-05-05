@@ -83,7 +83,7 @@ namespace Merchello.Core
             LogHelper.Info<CoreBootManager>("Beginning Merchello Event Trigger Binding");
             foreach (var trigger in EventTriggerRegistry.Current.GetAllEventTriggers())
             {
-                var att = trigger.GetType().GetCustomAttributes<EventTriggerAttribute>(false).FirstOrDefault();
+                var att = trigger.GetType().GetCustomAttributes<EventTriggeredActionForAttribute>(false).FirstOrDefault();
                 
                 if (att == null) continue;
                 

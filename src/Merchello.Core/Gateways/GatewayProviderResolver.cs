@@ -50,7 +50,6 @@ namespace Merchello.Core.Gateways
         /// <summary>
         /// Gets a collection of <see cref="IGatewayProvider"/>s by type
         /// </summary>
-        /// TODO this could be refactored to not have to instantiate the object each time (ObjectLifeTimeScope.Application)
         public IEnumerable<IGatewayProvider> GetActivatedProviders<T>() where T : GatewayProviderBase
         {
             var gatewayProviderType = GetGatewayProviderType<T>();

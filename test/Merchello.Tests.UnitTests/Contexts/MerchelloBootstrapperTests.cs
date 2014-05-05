@@ -7,7 +7,6 @@ using Merchello.Web;
 using NUnit.Framework;
 using Umbraco.Core;
 using CoreBootManager = Merchello.Core.CoreBootManager;
-using IEventTrigger = Merchello.Core.Triggers.IEventTrigger;
 
 
 namespace Merchello.Tests.UnitTests.Contexts
@@ -23,7 +22,7 @@ namespace Merchello.Tests.UnitTests.Contexts
         public void FixtureSetup()
         {
             EventTriggerRegistry.Current =
-                new EventTriggerRegistry(() => PluginManager.Current.ResolveTypesWithAttribute<IEventTrigger, EventTriggerAttribute>());
+                new EventTriggerRegistry(() => PluginManager.Current.ResolveTypesWithAttribute<IEventTriggeredAction, EventTriggeredActionForAttribute>());
         }
 
         [SetUp]

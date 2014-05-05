@@ -121,6 +121,7 @@
     <Compile Include="Gateways\Payment\PaymentGatewayMethodBase.cs" />
     <Compile Include="Gateways\Payment\IPaymentGatewayMethod.cs" />
     <Compile Include="Gateways\Payment\IPaymentResult.cs" />
+    <Compile Include="PluginManagerExtensions.cs" />
     <Compile Include="Gateways\Shipping\FixedRate\FixedRateShipmentLineItemVisitor.cs" />
     <Compile Include="Gateways\Shipping\FixedRate\FixedRateShippingGatewayMethod.cs" />
     <Compile Include="Gateways\Shipping\FixedRate\FixedRateShippingGatewayProvider.cs" />
@@ -714,13 +715,12 @@
     <Compile Include="Strategies\Packaging\IPackagingStrategy.cs" />
     <Compile Include="Strategies\Packaging\ShippableProductVisitor.cs" />
     <Compile Include="Triggers\EventTriggerRegistry.cs" />
-    <Compile Include="Triggers\IEventTrigger.cs" />
+    <Compile Include="Triggers\IEventTriggeredAction.cs" />
     <Compile Include="Triggers\IEnventTriggerRegistry.cs" />
     <Compile Include="Triggers\Notification\NotificationMessageRuleAttribute.cs" />
-    <Compile Include="Triggers\Notification\NotificationEventTriggerBase.cs" />
-    <Compile Include="Triggers\EventTriggerBase.cs" />
-    <Compile Include="Triggers\Notification\OrderStatusChangedNotificationEventTrigger.cs" />
-    <Compile Include="Triggers\EventTriggerAttribute.cs" />
+    <Compile Include="Triggers\EventTriggeredActionBase.cs" />
+    <Compile Include="Triggers\OrderStatusChangedNotificationEventTriggeredAction.cs" />
+    <Compile Include="Triggers\EventTriggeredActionForAttribute.cs" />
     <Compile Include="TypeFieldMapperEnumerations.cs" />
     <Compile Include="Models\TypeFields\ProductTypeField.cs" />
     <Compile Include="Models\Rdbms\TypeFieldDto.cs" />
