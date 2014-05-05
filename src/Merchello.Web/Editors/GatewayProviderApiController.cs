@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using Merchello.Core;
 using Merchello.Core.Gateways;
+using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Models;
 using Merchello.Core.Models.TypeFields;
 using Merchello.Core.Services;
@@ -72,7 +73,7 @@ namespace Merchello.Web.Editors
         /// </summary>
         public IEnumerable<GatewayProviderDisplay> GetResolvedPaymentGatewayProviders()
         {
-            return _gatewayContext.Payment.GetAllProviders().Select(x => x.ToGatewayProviderDisplay());
+            return _gatewayContext.Payment.GetAllProviders().Select(x => x.GatewayProvider.ToGatewayProviderDisplay());
         }
 
         /// <summary>
@@ -82,7 +83,7 @@ namespace Merchello.Web.Editors
         /// </summary>
         public IEnumerable<GatewayProviderDisplay> GetResolvedShippingGatewayProviders()
         {
-            return _gatewayContext.Shipping.GetAllProviders().Select(x => x.ToGatewayProviderDisplay());
+            return _gatewayContext.Shipping.GetAllProviders().Select(x => x.GatewayProvider.ToGatewayProviderDisplay());
         }
 
 
@@ -93,7 +94,7 @@ namespace Merchello.Web.Editors
         /// </summary>
         public IEnumerable<GatewayProviderDisplay> GetResolvedTaxationGatewayProviders()
         {
-            return _gatewayContext.Taxation.GetAllProviders().Select(x => x.ToGatewayProviderDisplay());
+            return _gatewayContext.Taxation.GetAllProviders().Select(x => x.GatewayProvider.ToGatewayProviderDisplay());
         }
 
 

@@ -5,6 +5,11 @@ using System.Reflection;
 using Merchello.Core.Cache;
 using Merchello.Core.Configuration;
 using Merchello.Core.Gateways;
+using Merchello.Core.Gateways.Notification;
+using Merchello.Core.Gateways.Payment;
+using Merchello.Core.Gateways.Shipping;
+using Merchello.Core.Gateways.Taxation;
+using Merchello.Core.ObjectResolution;
 using Merchello.Core.Services;
 using Merchello.Core.Triggers;
 using Umbraco.Core;
@@ -44,10 +49,18 @@ namespace Merchello.Core
             var connString = ConfigurationManager.ConnectionStrings[MerchelloConfiguration.Current.Section.DefaultConnectionStringName].ConnectionString;
             var providerName = ConfigurationManager.ConnectionStrings[MerchelloConfiguration.Current.Section.DefaultConnectionStringName].ProviderName;                
             var serviceContext = new ServiceContext(new PetaPocoUnitOfWorkProvider(connString, providerName));
-            
+
+            InitializeGatewayResolver();
+
             CreateMerchelloContext(serviceContext);
+            
+            // TODO Difficult to Mock the singleton behavior for multiple tests
+           
+            InitializeResolvers();
 
             BindEventTriggers();
+        
+           
 
             _isInitialized = true;            
 
@@ -66,7 +79,13 @@ namespace Merchello.Core
         /// </remarks>
         protected void CreateMerchelloContext(ServiceContext serviceContext)
         {
-                      
+
+            var gateways = new GatewayContext(
+                new PaymentContext(serviceContext.GatewayProviderService, GatewayProviderResolver.Current),
+                new NotificationContext(serviceContext.GatewayProviderService, GatewayProviderResolver.Current),
+                new ShippingContext(serviceContext.GatewayProviderService, serviceContext.StoreSettingService, GatewayProviderResolver.Current),
+                new TaxationContext(serviceContext.GatewayProviderService, GatewayProviderResolver.Current));
+
             var cache = ApplicationContext.Current == null
                             ? new CacheHelper(
                                     new ObjectCacheRuntimeCacheProvider(),
@@ -74,9 +93,27 @@ namespace Merchello.Core
                                     new NullCacheProvider())
                             : ApplicationContext.Current.ApplicationCache;
 
-            _merchelloContext = MerchelloContext.Current = new MerchelloContext(serviceContext, cache, _isTest);
+            _merchelloContext = MerchelloContext.Current = new MerchelloContext(serviceContext, gateways, cache);
         }
 
+
+        private void InitializeGatewayResolver()
+        {
+            if (Resolution.IsFrozen || _isTest) return;
+
+            GatewayProviderResolver.Current = new GatewayProviderResolver(
+                PluginManager.Current.ResolveGatewayProviders(),
+                MerchelloContext.Current.Services.GatewayProviderService,
+                MerchelloContext.Current.Cache.RuntimeCache);
+        }
+
+
+
+        protected virtual void InitializeResolvers()
+        {
+            if(Resolution.IsFrozen) return;
+
+        }
 
         protected void BindEventTriggers()
         {
@@ -125,6 +162,8 @@ namespace Merchello.Core
             if(_isComplete)
                 throw new InvalidOperationException("The boot manager has already been completed");
 
+            FreezeResolution();
+            
             if (afterComplete != null)
             {
                 afterComplete(MerchelloContext.Current);                
@@ -155,5 +194,14 @@ namespace Merchello.Core
             set { _isTest = value; }
         }
 
+
+        /// <summary>
+        /// Freeze resolution to not allow Resolvers to be modified
+        /// </summary>
+        protected virtual void FreezeResolution()
+        {
+            Resolution.Freeze();
+        }
+        
     }
 }

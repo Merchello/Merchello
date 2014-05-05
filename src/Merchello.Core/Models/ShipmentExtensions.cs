@@ -131,7 +131,7 @@ namespace Merchello.Core.Models
             if (shipMethod == null) return null;
 
             // Get the gateway provider to generate the shipment rate quote
-            var provider = merchelloContext.Gateways.Shipping.CreateInstance(shipMethod.ProviderKey);
+            var provider = merchelloContext.Gateways.Shipping.GetProviderByKey(shipMethod.ProviderKey);
 
             // get the GatewayShipMethod from the provider
             var gwShipMethod = provider.GetShippingGatewayMethodsForShipment(shipment).FirstOrDefault(x => x.ShipMethod.Key == shipMethodKey);

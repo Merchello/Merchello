@@ -19,35 +19,11 @@ namespace Merchello.Core
         }
 
         /// <summary>
-        /// Return all available NotificationGatewayProvider
-        /// </summary>
-        internal static IEnumerable<Type> ResolveNotificationGatewayProviders(this PluginManager pluginManager)
-        {
-            return pluginManager.ResolveTypesWithAttribute<NotificationGatewayProviderBase, GatewayProviderActivationAttribute>();
-        }
-
-        /// <summary>
-        /// Return all available PaymentGatewayProvider
-        /// </summary>
-        internal static IEnumerable<Type> ResolvePaymentGatewayProviders(this PluginManager pluginManager)
-        {
-            return pluginManager.ResolveTypesWithAttribute<PaymentGatewayProviderBase, GatewayProviderActivationAttribute>();
-        }
-
-        /// <summary>
-        /// Returns all available ShippingGatewayProvider
-        /// </summary>
-        internal static IEnumerable<Type> ResolveShippingGatewayProviders(this PluginManager pluginManager)
-        {
-            return pluginManager.ResolveTypesWithAttribute<ShippingGatewayProviderBase, GatewayProviderActivationAttribute>();
-        }
-
-        /// <summary>
-        /// Returns all available TaxationGatewayProvider
+        /// Returns all available GatewayProvider
         /// </summary>        
-        internal static IEnumerable<Type> ResolveTaxationGatewayProviders(this PluginManager pluginManager)
+        internal static IEnumerable<Type> ResolveGatewayProviders(this PluginManager pluginManager)
         {
-            return pluginManager.ResolveTypesWithAttribute<TaxationGatewayProviderBase, GatewayProviderActivationAttribute>();
+            return pluginManager.ResolveTypesWithAttribute<GatewayProviderBase, GatewayProviderActivationAttribute>();
         }
     }
 }

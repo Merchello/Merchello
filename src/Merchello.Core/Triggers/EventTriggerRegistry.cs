@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using Merchello.Core.ObjectResolution;
 using Umbraco.Core;
 using Umbraco.Core.ObjectResolution;
 
@@ -79,7 +80,7 @@ namespace Merchello.Core.Triggers
         /// </summary>
         /// <remarks>
         /// Should be able to use the "Values" in the base class but it can't be tested
-        /// due to the Umbraco's <see cref="Resolution"/> 
+        /// due to the Umbraco's <see cref="ObjectResolution.Resolution"/> 
         /// </remarks>
         internal IEnumerable<IEventTriggeredAction> EventTriggers
         {
