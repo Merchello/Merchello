@@ -56,7 +56,7 @@ namespace Merchello.Core.Configuration
             }
         }
 
-
+        
         /// <summary>
         /// Returns the <see cref="MerchelloSection"/> Configuration Element
         /// </summary>

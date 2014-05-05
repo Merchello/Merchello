@@ -15,8 +15,7 @@ namespace Merchello.Core.Persistence.Migrations.Upgrades.TargetVersionOneOneZero
         private static readonly Dictionary<int, Type> OrderedTables = new Dictionary<int, Type>
         {
             {0, typeof(NotificationMethodDto)},
-            {1, typeof(NotificationTriggerDto)},
-            {2, typeof(NotificationMessageDto)}
+            {1, typeof(NotificationMessageDto)}
         };
 
         public CreateOneOneZeroTables(Database database)

@@ -13,7 +13,7 @@ using NUnit.Framework;
 namespace Merchello.Tests.UnitTests.Services
 {
     [TestFixture]
-    [Category("Services")]
+    [Category("Service Events")]
     public class InvoiceServiceEventTests : ServiceTestsBase<IInvoice>
     {
          

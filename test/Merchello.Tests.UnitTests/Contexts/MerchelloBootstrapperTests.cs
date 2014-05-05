@@ -2,9 +2,12 @@
 using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Gateways.Taxation;
+using Merchello.Core.Triggers;
 using Merchello.Web;
 using NUnit.Framework;
+using Umbraco.Core;
 using CoreBootManager = Merchello.Core.CoreBootManager;
+using IEventTrigger = Merchello.Core.Triggers.IEventTrigger;
 
 
 namespace Merchello.Tests.UnitTests.Contexts
@@ -15,6 +18,13 @@ namespace Merchello.Tests.UnitTests.Contexts
         private bool _initEventCalled;
         private bool _startingEventCalled;
         private bool _completedEventCalled;
+
+        [TestFixtureSetUp]
+        public void FixtureSetup()
+        {
+            EventTriggerRegistry.Current =
+                new EventTriggerRegistry(() => PluginManager.Current.ResolveTypesWithAttribute<IEventTrigger, EventTriggerAttribute>());
+        }
 
         [SetUp]
         public void Setup()

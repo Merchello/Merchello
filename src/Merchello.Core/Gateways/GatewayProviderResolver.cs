@@ -10,6 +10,7 @@ using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Gateways.Taxation;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
+using Umbraco.Core;
 using Umbraco.Core.Cache;
 
 namespace Merchello.Core.Gateways
@@ -94,10 +95,9 @@ namespace Merchello.Core.Gateways
             
             foreach (var t in types)
             {
-                var att = GetActiationAttribute(t);
+                var att = t.GetCustomAttributes<GatewayProviderActivationAttribute>(false).FirstOrDefault();
                 if (att != null)
                 {
-
                     providers.Add(
                         existing.Any(x => x.Key == att.Key)
                             ? existing.First(x => x.Key == att.Key)
@@ -109,13 +109,7 @@ namespace Merchello.Core.Gateways
             return providers;
         }
 
-        private static GatewayProviderActivationAttribute GetActiationAttribute(Type t)
-        {
-            return
-                (GatewayProviderActivationAttribute)
-                    Attribute.GetCustomAttribute(t, typeof (GatewayProviderActivationAttribute));
-        }
-
+        
         /// <summary>
         /// Gets a collection of instantiated gateway providers
         /// </summary>

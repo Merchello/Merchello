@@ -25,27 +25,8 @@ namespace Merchello.Core.Persistence.Migrations.Upgrades.TargetVersionOneOneZero
         {
             if (tableName.Equals("merchTypeField")) CreateDbTypeFieldData();
 
-            if (tableName.Equals("merchNotificationTrigger")) CreateNotificationTriggerData();
         }
 
-        private void CreateNotificationTriggerData()
-        {
-            // invoice status            
-            _database.Insert("merchNotificationTrigger", "Key", new NotificationTriggerDto() { Key = Constants.NotificationKeys.InvoiceTriggers.StatusChanged.ToPaid, Name = "Invoice Status Changed To Paid", Binding = NotificationTriggerService.GetBindingValue(typeof(InvoiceService), typeof(StatusChangeEventArgs<>)), EntityKey = Constants.DefaultKeys.InvoiceStatus.Paid, UpdateDate = DateTime.Now, CreateDate = DateTime.Now});
-            _database.Insert("merchNotificationTrigger", "Key", new NotificationTriggerDto() { Key = Constants.NotificationKeys.InvoiceTriggers.StatusChanged.ToPartial, Name = "Invoice Status Changed To Partial Paid", Binding = NotificationTriggerService.GetBindingValue(typeof(InvoiceService), typeof(StatusChangeEventArgs<>)), EntityKey = Constants.DefaultKeys.InvoiceStatus.Partial, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
-            _database.Insert("merchNotificationTrigger", "Key", new NotificationTriggerDto() { Key = Constants.NotificationKeys.InvoiceTriggers.StatusChanged.ToCancelled, Name = "Invoice Status Changed To Cancelled", Binding = NotificationTriggerService.GetBindingValue(typeof(InvoiceService), typeof(StatusChangeEventArgs<>)), EntityKey = Constants.DefaultKeys.InvoiceStatus.Cancelled, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
-            
-            _database.Insert("merchNotificationTrigger", "Key", new NotificationTriggerDto() { Key = Constants.NotificationKeys.OrderTriggers.StatusChanged.ToFulfilled, Name = "Order Status Changed To Fulfilled", Binding = NotificationTriggerService.GetBindingValue(typeof(OrderService), typeof(StatusChangeEventArgs<>)), EntityKey = Constants.DefaultKeys.OrderStatus.Fulfilled, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
-            _database.Insert("merchNotificationTrigger", "Key", new NotificationTriggerDto() { Key = Constants.NotificationKeys.OrderTriggers.StatusChanged.ToBackOrder, Name = "Order Status Changed To Back Order", Binding = NotificationTriggerService.GetBindingValue(typeof(OrderService), typeof(StatusChangeEventArgs<>)), EntityKey = Constants.DefaultKeys.OrderStatus.BackOrder, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
-            _database.Insert("merchNotificationTrigger", "Key", new NotificationTriggerDto() { Key = Constants.NotificationKeys.OrderTriggers.StatusChanged.ToCancelled, Name = "Order Status Changed To Cancelled", Binding = NotificationTriggerService.GetBindingValue(typeof(OrderService), typeof(StatusChangeEventArgs<>)), EntityKey = Constants.DefaultKeys.OrderStatus.Cancelled, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
-
-            // shipment 
-            _database.Insert("merchNotificationTrigger", "Key", new NotificationTriggerDto() { Key = Constants.NotificationKeys.ShipmentTriggers.Created, Name = "Shipment is shipped", Binding = NotificationTriggerService.GetBindingValue(typeof(ShipmentService), typeof(Events.NewEventArgs<>)), UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
-            _database.Insert("merchNotificationTrigger", "Key", new NotificationTriggerDto() { Key = Constants.NotificationKeys.ShipmentTriggers.Deleted, Name = "Shipment is deleted", Binding = NotificationTriggerService.GetBindingValue(typeof(ShipmentService), typeof(DeleteEventArgs<>)), UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
-            
-            // AppliedPayment
-            _database.Insert("merchNotificationTrigger", "Key", new NotificationTriggerDto() { Key = Constants.NotificationKeys.AppliedPaymentTriggers.CreatedAsDenied, Name = "Denied Payment", Binding = NotificationTriggerService.GetBindingValue(typeof(AppliedPaymentService), typeof(Events.NewEventArgs<>)), EntityKey = new AppliedPaymentTypeField().Denied.TypeKey ,UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
-        }
 
         private void CreateDbTypeFieldData()
         {

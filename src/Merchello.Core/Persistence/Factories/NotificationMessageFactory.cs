@@ -14,7 +14,6 @@ namespace Merchello.Core.Persistence.Factories
             var notification = new NotificationMessage(dto.MethodKey, dto.Name)
             {
                 Key = dto.Key,
-                TriggerKey = dto.TriggerKey,
                 Description = dto.Description,
                 Message = dto.Message,
                 MaxLength = dto.MaxLength,                
@@ -36,7 +35,6 @@ namespace Merchello.Core.Persistence.Factories
             return new NotificationMessageDto()
             {
                 Key = entity.Key,
-                TriggerKey = entity.TriggerKey,
                 MethodKey = entity.MethodKey,
                 Name = entity.Name,
                 Description = entity.Description,

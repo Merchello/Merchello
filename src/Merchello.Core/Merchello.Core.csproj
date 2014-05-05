@@ -57,6 +57,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\UmbracoCms.Core.7.1.1\lib\interfaces.dll</HintPath>
     </Reference>
+    <Reference Include="Lucene.Net">
+      <HintPath>..\packages\Lucene.Net.2.9.4.1\lib\net40\Lucene.Net.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
@@ -136,12 +139,12 @@
     <Compile Include="Gateways\Taxation\TaxationGatewayProviderResolver.cs" />
     <Compile Include="Gateways\Taxation\TaxCalculationResult.cs" />
     <Compile Include="Gateways\Taxation\TaxableLineItemVisitor.cs" />
+    <Compile Include="IEventTriggerBase.cs" />
     <Compile Include="MerchelloResolverApplicationEventHandler.cs" />
     <Compile Include="Models\Currency.cs" />
     <Compile Include="Models\Interfaces\IExtendedDataEntity.cs" />
     <Compile Include="Models\Interfaces\IGatewayProviderMethod.cs" />
     <Compile Include="Models\Interfaces\ICurrency.cs" />
-    <Compile Include="Models\Interfaces\INotificationTrigger.cs" />
     <Compile Include="Models\Interfaces\INotificationMethod.cs" />
     <Compile Include="Models\Interfaces\INotificationMessage.cs" />
     <Compile Include="Models\Interfaces\INotifyStatus.cs" />
@@ -152,7 +155,6 @@
     <Compile Include="Models\LocalizationExtensions.cs" />
     <Compile Include="Models\NotificationMessage.cs" />
     <Compile Include="Models\NotificationMethod.cs" />
-    <Compile Include="Models\NotificationTrigger.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\OrderCollection.cs" />
     <Compile Include="Models\OrderExtensions.cs" />
@@ -163,7 +165,6 @@
     <Compile Include="Models\Rdbms\InvoiceIndexDto.cs" />
     <Compile Include="Models\Rdbms\NotificationMessageDto.cs" />
     <Compile Include="Models\Rdbms\NotificationMethodDto.cs" />
-    <Compile Include="Models\Rdbms\NotificationTriggerDto.cs" />
     <Compile Include="Models\Rdbms\OrderIndexDto.cs" />
     <Compile Include="Models\Rdbms\PaymentMethodDto.cs" />
     <Compile Include="Models\Rdbms\User2AppDto.cs" />
@@ -182,12 +183,10 @@
     <Compile Include="Persistence\Factories\ItemCacheLineItemFactory.cs" />
     <Compile Include="Persistence\Factories\NotificationMessageFactory.cs" />
     <Compile Include="Persistence\Factories\NotificationMethodFactory.cs" />
-    <Compile Include="Persistence\Factories\NotificationTriggerFactory.cs" />
     <Compile Include="Persistence\Factories\OrderLineItemFactory.cs" />
     <Compile Include="Persistence\Factories\OrderStatusFactory.cs" />
     <Compile Include="Persistence\Mappers\NotificationMessageMapper.cs" />
     <Compile Include="Persistence\Mappers\NotificationMethodMapper.cs" />
-    <Compile Include="Persistence\Mappers\NotificationTriggerMapper.cs" />
     <Compile Include="Persistence\Migrations\DatabaseSchemaHelper.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneOneZero\AddShippedDateColumn.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneOneZero\CreateOneOneZeroTables.cs" />
@@ -198,7 +197,6 @@
     <Compile Include="Persistence\Repositories\Interfaces\ILineItemRepositoryBase.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\INotificationMessageRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\INotificationMethodRepository.cs" />
-    <Compile Include="Persistence\Repositories\Interfaces\INotificationTriggerRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IOrderLineItemRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IOrderStatusRepository.cs" />
     <Compile Include="Persistence\Repositories\InvoiceLineItemRepository.cs" />
@@ -207,7 +205,6 @@
     <Compile Include="Persistence\Repositories\LineItemRepositoryBase.cs" />
     <Compile Include="Persistence\Repositories\NotificationMessageRepository.cs" />
     <Compile Include="Persistence\Repositories\NotificationMethodRepository.cs" />
-    <Compile Include="Persistence\Repositories\NotificationTriggerRepository.cs" />
     <Compile Include="Persistence\Repositories\OrderLineItemRepository.cs" />
     <Compile Include="Persistence\Repositories\OrderStatusRepository.cs" />
     <Compile Include="Sales\SalePreparationBase.cs" />
@@ -675,11 +672,9 @@
     <Compile Include="Services\AppliedPaymentService.cs" />
     <Compile Include="Services\Interfaces\IAppliedPaymentService.cs" />
     <Compile Include="Services\Interfaces\INotificationMethodService.cs" />
-    <Compile Include="Services\Interfaces\INotificationTriggerService.cs" />
     <Compile Include="Services\Interfaces\IOrderService.cs" />
     <Compile Include="Services\Interfaces\IPaymentMethodService.cs" />
     <Compile Include="Services\Interfaces\IPaymentService.cs" />
-    <Compile Include="Services\NotificationTriggerService.cs" />
     <Compile Include="Services\OrderService.cs" />
     <Compile Include="Services\PaymentMethodService.cs" />
     <Compile Include="Services\PaymentService.cs" />
@@ -718,6 +713,14 @@
     <Compile Include="Strategies\Packaging\PackagingStrategyBase.cs" />
     <Compile Include="Strategies\Packaging\IPackagingStrategy.cs" />
     <Compile Include="Strategies\Packaging\ShippableProductVisitor.cs" />
+    <Compile Include="Triggers\EventTriggerRegistry.cs" />
+    <Compile Include="Triggers\IEventTrigger.cs" />
+    <Compile Include="Triggers\IEnventTriggerRegistry.cs" />
+    <Compile Include="Triggers\Notification\NotificationMessageRuleAttribute.cs" />
+    <Compile Include="Triggers\Notification\NotificationEventTriggerBase.cs" />
+    <Compile Include="Triggers\EventTriggerBase.cs" />
+    <Compile Include="Triggers\Notification\OrderStatusChangedNotificationEventTrigger.cs" />
+    <Compile Include="Triggers\EventTriggerAttribute.cs" />
     <Compile Include="TypeFieldMapperEnumerations.cs" />
     <Compile Include="Models\TypeFields\ProductTypeField.cs" />
     <Compile Include="Models\Rdbms\TypeFieldDto.cs" />

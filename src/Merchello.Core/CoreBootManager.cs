@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Configuration;
+using System.Linq;
+using System.Reflection;
 using Merchello.Core.Cache;
 using Merchello.Core.Configuration;
+using Merchello.Core.Gateways;
 using Merchello.Core.Services;
+using Merchello.Core.Triggers;
 using Umbraco.Core;
 using Merchello.Core.Persistence.UnitOfWork;
+using Umbraco.Core.Logging;
 
 
 namespace Merchello.Core
@@ -23,7 +28,7 @@ namespace Merchello.Core
         private bool _isComplete = false;
         private bool _isTest = false;
 
-        private MerchelloContext MerchelloContext { get; set; }       
+        private MerchelloContext _merchelloContext;  
 
         
         public override IBootManager Initialize()
@@ -41,12 +46,15 @@ namespace Merchello.Core
             var serviceContext = new ServiceContext(new PetaPocoUnitOfWorkProvider(connString, providerName));
             
             CreateMerchelloContext(serviceContext);
-            
+
+            BindEventTriggers();
+
             _isInitialized = true;            
 
             return this;
         }
-                
+        
+
         /// <summary>
         /// Creates the MerchelloPluginContext (singleton)
         /// </summary>
@@ -66,7 +74,29 @@ namespace Merchello.Core
                                     new NullCacheProvider())
                             : ApplicationContext.Current.ApplicationCache;
 
-            MerchelloContext = MerchelloContext.Current = new MerchelloContext(serviceContext, cache, _isTest);
+            _merchelloContext = MerchelloContext.Current = new MerchelloContext(serviceContext, cache, _isTest);
+        }
+
+
+        protected void BindEventTriggers()
+        {
+            LogHelper.Info<CoreBootManager>("Beginning Merchello Event Trigger Binding");
+            foreach (var trigger in EventTriggerRegistry.Current.GetAllEventTriggers())
+            {
+                var att = trigger.GetType().GetCustomAttributes<EventTriggerAttribute>(false).FirstOrDefault();
+                
+                if (att == null) continue;
+                
+                var bindTo = att.Service.GetEvent(att.EventName);
+                
+                if (bindTo == null) continue;
+
+                var mi = trigger.GetType().GetMethod("Invoke", BindingFlags.Instance | BindingFlags.Public);
+                
+                bindTo.AddEventHandler(trigger, Delegate.CreateDelegate(bindTo.EventHandlerType, trigger, mi));
+
+                LogHelper.Info<CoreBootManager>(string.Format("Binding {0} to {1} - {2} event", trigger.GetType().Name, att.Service.Name, att.EventName));
+            }
         }
 
         /// <summary>
@@ -95,12 +125,9 @@ namespace Merchello.Core
             if(_isComplete)
                 throw new InvalidOperationException("The boot manager has already been completed");
 
-           // FreezeResolution();
-
             if (afterComplete != null)
             {
-                afterComplete(MerchelloContext.Current);
-                
+                afterComplete(MerchelloContext.Current);                
             }
 
             _isComplete = true;

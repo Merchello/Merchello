@@ -275,6 +275,7 @@
     <Compile Include="Services\InvoiceServiceEventTests.cs" />
     <Compile Include="Services\OrderServiceEventTests.cs" />
     <Compile Include="Services\ProductServiceTests.cs" />
+    <Compile Include="Services\ServiceEventResolutionTests.cs" />
     <Compile Include="Services\SettingsServiceTests.cs">
       <SubType>Code</SubType>
     </Compile>
