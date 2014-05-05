@@ -1,0 +1,169 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{EFBD35AE-AC0D-4257-B37E-75298573B0E9}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Merchello.Plugin.Shipping.UPS</RootNamespace>
+    <AssemblyName>Merchello.Plugin.Shipping.UPS</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="interfaces, Version=1.0.5211.22376, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Merchello.Core, Version=1.0.1.4, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\src\Merchello.Web\bin\Debug\Merchello.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Merchello.Examine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\src\Merchello.Web\bin\Debug\Merchello.Examine.dll</HintPath>
+    </Reference>
+    <Reference Include="Merchello.Web, Version=1.0.1.4, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\src\Merchello.Web\bin\Debug\Merchello.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Umbraco.Core, Version=1.0.5211.22376, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Music4AllVSProj\Music4All\bin\Umbraco.Core.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Constants.cs" />
+    <Compile Include="DeliveryOption.cs" />
+    <Compile Include="ExtendedDataExtensions.cs" />
+    <Compile Include="Models\UPSProcessorSettings.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Provider\IUPSShippingGatewayMethod.cs" />
+    <Compile Include="Provider\IUPSShippingGatewayProvider.cs" />
+    <Compile Include="Provider\IUPSShippingRateTable.cs" />
+    <Compile Include="Provider\UPSShipmentLineItemVisitor.cs" />
+    <Compile Include="Provider\UPSShippingGatewayMethod.cs" />
+    <Compile Include="Provider\UPSShippingGatewayProvider.cs" />
+    <Compile Include="Provider\UPSShippingRateTable.cs" />
+    <Compile Include="UPSApplicationEventListener.cs" />
+    <Compile Include="UpsHttpRequestHandler.cs" />
+    <Compile Include="UPSShippingProcessor.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Plugins\Merchello.UPS\editor.html" />
+    <Content Include="App_Plugins\Merchello.UPS\merchello.ups.controller.js" />
+    <Content Include="bin\Debug\AutoMapper.dll" />
+    <Content Include="bin\Debug\AutoMapper.xml" />
+    <Content Include="bin\Debug\businesslogic.dll" />
+    <Content Include="bin\Debug\businesslogic.xml" />
+    <Content Include="bin\Debug\ClientDependency.Core.dll" />
+    <Content Include="bin\Debug\ClientDependency.Core.pdb" />
+    <Content Include="bin\Debug\cms.dll" />
+    <Content Include="bin\Debug\cms.xml" />
+    <Content Include="bin\Debug\controls.dll" />
+    <Content Include="bin\Debug\controls.xml" />
+    <Content Include="bin\Debug\CookComputing.XmlRpcV2.dll" />
+    <Content Include="bin\Debug\Examine.dll" />
+    <Content Include="bin\Debug\HtmlAgilityPack.dll" />
+    <Content Include="bin\Debug\HtmlAgilityPack.pdb" />
+    <Content Include="bin\Debug\HtmlAgilityPack.xml" />
+    <Content Include="bin\Debug\ICSharpCode.SharpZipLib.dll" />
+    <Content Include="bin\Debug\interfaces.dll" />
+    <Content Include="bin\Debug\interfaces.xml" />
+    <Content Include="bin\Debug\log4net.dll" />
+    <Content Include="bin\Debug\Lucene.Net.dll" />
+    <Content Include="bin\Debug\Lucene.Net.xml" />
+    <Content Include="bin\Debug\Merchello.Core.dll" />
+    <Content Include="bin\Debug\Merchello.Core.pdb" />
+    <Content Include="bin\Debug\Merchello.Core.xml" />
+    <Content Include="bin\Debug\Merchello.Examine.dll" />
+    <Content Include="bin\Debug\Merchello.Examine.pdb" />
+    <Content Include="bin\Debug\Merchello.Examine.xml" />
+    <Content Include="bin\Debug\Merchello.Plugin.Shipping.UPS.dll" />
+    <Content Include="bin\Debug\Merchello.Plugin.Shipping.UPS.pdb" />
+    <Content Include="bin\Debug\Merchello.Web.dll" />
+    <Content Include="bin\Debug\Merchello.Web.pdb" />
+    <Content Include="bin\Debug\Microsoft.ApplicationBlocks.Data.dll" />
+    <Content Include="bin\Debug\Microsoft.Web.Mvc.FixedDisplayModes.dll" />
+    <Content Include="bin\Debug\MiniProfiler.dll" />
+    <Content Include="bin\Debug\MiniProfiler.pdb" />
+    <Content Include="bin\Debug\MiniProfiler.xml" />
+    <Content Include="bin\Debug\MySql.Data.dll" />
+    <Content Include="bin\Debug\Newtonsoft.Json.dll" />
+    <Content Include="bin\Debug\Newtonsoft.Json.xml" />
+    <Content Include="bin\Debug\System.Net.Http.Formatting.dll" />
+    <Content Include="bin\Debug\System.Net.Http.Formatting.xml" />
+    <Content Include="bin\Debug\System.Web.Http.dll" />
+    <Content Include="bin\Debug\System.Web.Http.WebHost.dll" />
+    <Content Include="bin\Debug\System.Web.Http.WebHost.xml" />
+    <Content Include="bin\Debug\System.Web.Http.xml" />
+    <Content Include="bin\Debug\TidyNet.dll" />
+    <Content Include="bin\Debug\Umbraco.Core.dll" />
+    <Content Include="bin\Debug\Umbraco.Core.xml" />
+    <Content Include="bin\Debug\umbraco.DataLayer.dll" />
+    <Content Include="bin\Debug\umbraco.DataLayer.xml" />
+    <Content Include="bin\Debug\umbraco.dll" />
+    <Content Include="bin\Debug\umbraco.providers.dll" />
+    <Content Include="bin\Debug\umbraco.providers.xml" />
+    <Content Include="bin\Debug\umbraco.xml" />
+    <Content Include="bin\Debug\umbraco.XmlSerializers.dll" />
+    <Content Include="bin\Debug\UmbracoExamine.dll" />
+    <Content Include="obj\Debug\Merchello.Plugin.Shipping.UPS.csproj.FileListAbsolute.txt" />
+    <Content Include="obj\Debug\Merchello.Plugin.Shipping.UPS.dll" />
+    <Content Include="obj\Debug\Merchello.Plugin.Shipping.UPS.pdb" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App_Plugins\Merchello.UPS\package.manifest" />
+    <None Include="obj\Debug\DesignTimeResolveAssemblyReferences.cache" />
+    <None Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
+    <None Include="obj\Debug\Merchello.Plugin.Shipping.UPS.csprojResolveAssemblyReference.cache" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\Release\" />
+    <Folder Include="obj\Debug\TempPE\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
