@@ -309,6 +309,7 @@
             self.email = "";
             self.carrier = "";
             self.trackingCode = "";
+	        self.shippedDate = "";
             self.items = [];
         } else {
             self.key = data.key;
@@ -336,6 +337,7 @@
             self.email = data.email;
             self.carrier = data.carrier;
             self.trackingCode = data.trackingCode;
+	        self.shippedDate = data.shippedDate;
             self.items = _.map(data.items, function(lineitem) {
                 return new merchello.Models.OrderLineItem(lineitem);
             });

@@ -117,37 +117,76 @@
 
 	            </div>
 				
+	            <div class="control-group umb-control-group">
+
+		            <div class="merchello-section-label">
+			            Payment History
+			            <small>Status records for one or more payments</small>
+		            </div>
+
+		            <div class="merchello-controls">
+			            <div class="row-fluid span10 col-xs-10" data-ng-repeat="(paymentMethodName, paymentList) in invoice.groupedPayments">
+				            <div class="row-fluid">
+					            <div class="merchello-section-label">
+						            Payment - {{paymentMethodName}}
+					            </div>
+				            </div>
+
+				            <table class="table table-striped merchello-striped-table invoice-payments">
+					            <tbody>
+						            <thead>
+							            <tr>
+								            <th>Date</th>
+								            <th>Status</th>
+								            <th>Type</th>
+								            <th>Amount</th>
+							            </tr>
+						            </thead>
+						            <tr data-ng-repeat="payment in paymentList">
+							            <td class="text-left">{{invoice.invoiceDate | date : 'M/d/yyyy H:m a'}}</td>
+							            <td class="text-left">{{payment.getStatus()}}</td>
+							            <td class="text-left">{{payment.paymentType.alias}}</td>
+							            <td class="text-left">{{payment.amount | currency : currencySymbol}}</td>
+						            </tr>
+					            </tbody>
+				            </table>
+			            </div>
+		            </div>
+
+	            </div>
+				
 				<div class="control-group umb-control-group">
 
 					<div class="merchello-section-label">
-						Payment History
-						<small>Status records for one or more payments</small>
+						Shipment History
+						<small>Status records for one or more shipments</small>
 					</div>
 
 					<div class="merchello-controls">
-						<div class="row-fluid span10 col-xs-10" data-ng-repeat="(paymentMethodName, paymentList) in invoice.groupedPayments">
+						<div class="row-fluid span10 col-xs-10" data-ng-repeat="shipment in invoice.shipments">
 							<div class="row-fluid">
 								<div class="merchello-section-label">
-									Payment - {{paymentMethodName}}
+									Shipment - {{shipment.shippedDate  | date : 'M/d/yyyy'}}
+									<small>Tracking #: <a href="javascript:;">{{shipment.trackingCode}}</a></small>
 								</div>
 							</div>
 
 							<table class="table table-striped merchello-striped-table invoice-payments">
 								<tbody>
-									<thead>
-										<tr>
-											<th>Date</th>
-											<th>Status</th>
-											<th>Type</th>
-											<th>Amount</th>
-										</tr>
-									</thead>
-									<tr data-ng-repeat="payment in paymentList">
-										<td class="text-left">{{invoice.invoiceDate | date : 'M/d/yyyy H:m a'}}</td>
-										<td class="text-left">{{payment.getStatus()}}</td>
-										<td class="text-left">{{payment.paymentType.alias}}</td>
-										<td class="text-left">{{payment.amount | currency : currencySymbol}}</td>
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th>Variants</th>
+										<th>Sku</th>
+										<th>Qty</th>
 									</tr>
+								</thead>
+								<tr data-ng-repeat="lineitem in shipment.items">
+									<td class="text-left">{{lineitem.name}}</td>
+									<td class="text-left">{{lineitem.optionKey}}</td>
+									<td class="text-left">{{lineitem.sku}}</td>
+									<td class="text-left">{{lineitem.quantity}}</td>
+								</tr>
 								</tbody>
 							</table>
 						</div>

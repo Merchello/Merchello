@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -63,6 +65,23 @@ namespace Merchello.Web.Editors
 
             return shipment.ToShipmentDisplay();
         }
+
+		/// <summary>
+		/// Returns a list of shipments by their ids
+		/// GET /umbraco/Merchello/ShipmentApi/GetShipments?ids={guid}&ids={guid}
+		/// </summary>
+		/// <param name="ids"></param>
+		/// <returns></returns>
+		public IEnumerable<ShipmentDisplay> GetShipments([FromUri]IEnumerable<Guid> ids)
+		{
+			var shipments = _shipmentService.GetByKeys(ids);
+            if (shipments == null)
+            {
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+            }
+
+            return shipments.Select(s => s.ToShipmentDisplay());
+	    }
 
         /// <summary>
         /// Gets the Shipmethod that was quoted for an order

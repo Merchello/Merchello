@@ -6,7 +6,7 @@
         * @name merchello.Services.MerchelloShipmentService
         * @description Loads in data and allows modification for shipments
         **/
-    merchelloServices.MerchelloShipmentService = function ($http, umbRequestHelper) {
+    merchelloServices.MerchelloShipmentService = function ($q, $http, umbRequestHelper) {
 
         return {
 
@@ -19,6 +19,36 @@
                         params: { id: key }
                     }),
                     'Failed to get shipment: ' + key);
+            },
+
+            getShipmentsByInvoice: function (invoice) {
+	            var shipmentKeys = [];
+	            var orders = _.map(invoice.orders, function(order) {
+		            return new merchello.Models.Order(order);
+	            });
+
+	            angular.forEach(orders, function(order) {
+		            var newShipmentKeys = _.map(order.items, function(orderlineitem) {
+		            	var oli = new merchello.Models.OrderLineItem(orderlineitem);
+			            return oli.shipmentKey;
+		            });
+
+
+		            shipmentKeys = _.union(shipmentKeys, newShipmentKeys);
+	            });
+
+	            //shipmentKeys = _.map(shipmentKeys, function(shipmentKey) {
+		        //    return "ids=" + shipmentKey;
+	            //});
+	            var shipmentKeysStr = shipmentKeys.join("&ids=");
+
+	            return umbRequestHelper.resourcePromise(
+	                $http({
+	                	url: umbRequestHelper.getApiUrl('merchelloShipmentApiBaseUrl', 'GetShipments', shipmentKeysStr),
+	                	method: "GET",
+	                	params: { ids: shipmentKeys }
+	                }),
+	                'Failed to get shipments: ' + shipmentKeys);
             },
 
             getShipMethod: function (order) {
@@ -51,6 +81,6 @@
         };
     };
 
-    angular.module('umbraco.resources').factory('merchelloShipmentService', ['$http', 'umbRequestHelper', merchello.Services.MerchelloShipmentService]);
+    angular.module('umbraco.resources').factory('merchelloShipmentService', ['$q', '$http', 'umbRequestHelper', merchello.Services.MerchelloShipmentService]);
 
 }(window.merchello.Services = window.merchello.Services || {}));
