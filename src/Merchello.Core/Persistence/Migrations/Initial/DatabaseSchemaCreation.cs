@@ -61,8 +61,7 @@ namespace Merchello.Core.Persistence.Migrations.Initial
             {32, typeof(StoreSettingDto)},
             {33, typeof(OrderIndexDto)},
             {34, typeof(NotificationMethodDto)},
-            {35, typeof(NotificationTriggerDto)},
-            {36, typeof(NotificationMessageDto)}
+            {35, typeof(NotificationMessageDto)}
         };
 
         #endregion

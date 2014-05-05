@@ -15,7 +15,6 @@ namespace Merchello.Core.Persistence.Mappers
             if (!PropertyInfoCache.IsEmpty) return;
 
             CacheMap<NotificationMessage, NotificationMessageDto>(src => src.Key, dto => dto.Key);
-            CacheMap<NotificationMessage, NotificationMessageDto>(src => src.TriggerKey, dto => dto.TriggerKey);
             CacheMap<NotificationMessage, NotificationMessageDto>(src => src.MethodKey, dto => dto.MethodKey);
             CacheMap<NotificationMessage, NotificationMessageDto>(src => src.Name, dto => dto.Name);
             CacheMap<NotificationMessage, NotificationMessageDto>(src => src.Description, dto => dto.Description);

@@ -163,17 +163,6 @@ namespace Merchello.Core.Persistence
         }
 
         /// <summary>
-        /// Returns an instance of the <see cref="INotificationTriggerRepository"/>
-        /// </summary>
-        /// <param name="uow"></param>
-        /// <returns></returns>
-        internal virtual INotificationTriggerRepository CreateNotificationTriggerRepository(IDatabaseUnitOfWork uow)
-        {
-            return new NotificationTriggerRepository(uow,
-                _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
-        }
-        
-        /// <summary>
         /// Returns an instance of the <see cref="IOrderRepository"/>
         /// </summary>
         /// <param name="uow"></param>

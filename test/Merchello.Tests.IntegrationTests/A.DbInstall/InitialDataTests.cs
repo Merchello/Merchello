@@ -120,20 +120,5 @@ namespace Merchello.Tests.IntegrationTests.A.DbInstall
 
         }
 
-        [Test]
-        public void Can_Populate_NotificationTriggers()
-        {
-            //// Arrage
-            const int expected = 9;
-
-            //// Act
-            _creation.InitializeBaseData("merchNotificationTrigger");
-            var dtos = _database.Query<NotificationTriggerDto>("SELECT * FROM merchNotificationTrigger");
-
-            //// Assert
-            Assert.IsTrue(dtos.Any());
-            Assert.AreEqual(expected, dtos.Count());
-
-        }
     }
 }
