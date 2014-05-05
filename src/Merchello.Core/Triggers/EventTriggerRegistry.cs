@@ -12,8 +12,9 @@ namespace Merchello.Core.Triggers
     /// </summary>
     internal sealed class EventTriggerRegistry : LazyManyObjectsResolverBase<EventTriggerRegistry, IEventTrigger>, IEventTriggerRegistry
     {
-        
         private static readonly ConcurrentDictionary<string, IEventTrigger> TriggerCache = new ConcurrentDictionary<string, IEventTrigger>();
+
+        internal static bool IsInitialized { get; private set; }
 
         internal EventTriggerRegistry(Func<IEnumerable<Type>> triggers)
             : base(triggers)
@@ -27,6 +28,8 @@ namespace Merchello.Core.Triggers
             {
                 CacheMapper(trigger.GetType().Name, trigger);
             }
+
+            IsInitialized = true;
         }
 
         /// <summary>
@@ -82,7 +85,7 @@ namespace Merchello.Core.Triggers
         {
             get
             {
-                var ctrArgs = new object[] { };
+                var ctrArgs = new object[] {};
                 var triggers = new List<IEventTrigger>();
 
                 foreach (var et in InstanceTypes)

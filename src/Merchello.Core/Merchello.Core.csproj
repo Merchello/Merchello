@@ -725,7 +725,7 @@
     <Compile Include="Triggers\EventTriggerRegistry.cs" />
     <Compile Include="Triggers\IEventTrigger.cs" />
     <Compile Include="Triggers\IEnventTriggerRegistry.cs" />
-    <Compile Include="Triggers\Notification\NotificationActionAttribute.cs" />
+    <Compile Include="Triggers\Notification\NotificationMessageRuleAttribute.cs" />
     <Compile Include="Triggers\Notification\NotificationEventTriggerBase.cs" />
     <Compile Include="Triggers\EventTriggerBase.cs" />
     <Compile Include="Triggers\Notification\OrderStatusChangedNotificationEventTrigger.cs" />

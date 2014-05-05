@@ -13,5 +13,6 @@ namespace Merchello.Core.Triggers
         /// <param name="sender"></param>
         /// <param name="e"></param>
         void Invoke(Object sender, EventArgs e);
+        
     }
 }

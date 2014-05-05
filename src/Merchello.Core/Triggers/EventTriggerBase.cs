@@ -1,5 +1,4 @@
 ﻿using System;
-using Merchello.Core.Triggers.Notification;
 
 namespace Merchello.Core.Triggers
 {
@@ -7,5 +6,6 @@ namespace Merchello.Core.Triggers
     {
        
         public abstract void Invoke(Object sender, EventArgs e);
+
     }
 }
