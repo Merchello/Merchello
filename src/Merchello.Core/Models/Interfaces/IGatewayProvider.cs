@@ -32,6 +32,7 @@ namespace Merchello.Core.Models
         /// The full Type name 
         /// </summary>
         [DataMember]
+        [Obsolete("This field is no longer required")]
         string TypeFullName { get; set; }
 
 

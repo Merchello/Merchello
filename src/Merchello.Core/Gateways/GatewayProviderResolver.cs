@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.UI;
 using Merchello.Core.Gateways.Notification;
 using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Shipping;
@@ -12,6 +11,7 @@ using Merchello.Core.ObjectResolution;
 using Merchello.Core.Services;
 using Umbraco.Core;
 using Umbraco.Core.Cache;
+using Umbraco.Core.Logging;
 
 namespace Merchello.Core.Gateways
 {
@@ -40,7 +40,13 @@ namespace Merchello.Core.Gateways
             foreach (var provider in _gatewayProviderService.GetAllGatewayProviders())
             {
                 var attempt = CreateInstance(provider);
-                if(attempt.Success) AddOrUpdateCache(attempt.Result);
+                if(attempt.Success) 
+                    AddOrUpdateCache(attempt.Result);
+                else
+                {
+                    LogHelper.Error<GatewayProviderResolver>("Failed to create instance of type", attempt.Exception);
+                }
+
             }
         }
 
@@ -51,30 +57,14 @@ namespace Merchello.Core.Gateways
 
         private Attempt<GatewayProviderBase> CreateInstance(IGatewayProvider provider)
         {
-            return ActivatorHelper.CreateInstance<GatewayProviderBase>(provider.TypeFullName, new object[] { _gatewayProviderService, provider, _runtimeCache });
+            var providerType = InstanceTypes.FirstOrDefault(x => x.GetCustomAttribute<GatewayProviderActivationAttribute>(false).Key == provider.Key);
+
+            return provider == null ? 
+                Attempt<GatewayProviderBase>.Fail(new Exception(string.Format("Failed to find type for provider {0}", provider.Name))) : 
+                ActivatorHelper.CreateInstance<GatewayProviderBase>(providerType, new object[] { _gatewayProviderService, provider, _runtimeCache });
         }
 
-        ///// <summary>
-        ///// Asserts the assembly versions get updated (if applicable) when the context is instantiated.
-        ///// </summary>
-        ///// TODO revist this.  Probably better to do something like this in the bootstrapper
-        //private void AssertProviderVersions()
-        //{
-        //    var all = GetAllProviders().ToArray();
-        //    var activated = GetAllActivatedProviders();
-
-        //    foreach (var provider in activated)
-        //    {
-        //        var key = provider.Key;
-        //        var resolved = all.FirstOrDefault(x => x.Key == key);
-
-        //        if (resolved == null) continue;
-        //        if (provider.GatewayProvider.TypeFullName.Equals(resolved.GatewayProvider.TypeFullName)) continue;
-
-        //        provider.GatewayProvider.TypeFullName = resolved.GatewayProvider.TypeFullName;
-        //        GatewayProviderService.Save(provider.GatewayProvider);
-        //    }
-        //}
+       
 
 
         protected override IEnumerable<GatewayProviderBase> Values
@@ -131,6 +121,14 @@ namespace Merchello.Core.Gateways
         }
 
         /// <summary>
+        /// Gets a collection of all "activated" providers regardless of type
+        /// </summary>
+        public IEnumerable<GatewayProviderBase> GetActivatedProviders()
+        {
+            return _activatedGatewayProviderCache.Values;
+        }
+
+        /// <summary>
         /// Gets a collection of 
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -146,10 +144,7 @@ namespace Merchello.Core.Gateways
         /// </summary>
         public IEnumerable<GatewayProviderBase> GetActivatedProviders<T>() where T  : GatewayProviderBase
         {
-            var type = typeof (T);
-            return
-                _activatedGatewayProviderCache.Values.Where(
-                    x => x.GatewayProvider.GatewayProviderType == GetGatewayProviderType(type));
+            return (from value in _activatedGatewayProviderCache.Values let t = value.GetType() where typeof(T).IsAssignableFrom(t) select value as T).ToList();
         }
 
         public void RefreshCache()
@@ -173,5 +168,7 @@ namespace Merchello.Core.Gateways
 
             throw new InvalidOperationException("Could not map GatewayProviderType from " + type.Name);
         }
+
+        
     }
 }

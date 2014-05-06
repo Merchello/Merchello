@@ -1,15 +1,11 @@
-﻿using Examine;
+﻿using System;
+using Examine;
 using Merchello.Core;
 using Merchello.Core.Cache;
 using Merchello.Core.Gateways;
-using Merchello.Core.Gateways.Notification;
-using Merchello.Core.Gateways.Payment;
-using Merchello.Core.Gateways.Shipping;
-using Merchello.Core.Gateways.Taxation;
 using Merchello.Core.Persistence.UnitOfWork;
 using Merchello.Core.Services;
 using Merchello.Web;
-using Moq;
 using NUnit.Framework;
 using Umbraco.Core;
 
@@ -18,16 +14,32 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
     public abstract class DatabaseIntegrationTestBase
     {
         protected IMerchelloContext MerchelloContext { get; private set; }
-        
+        private DbPreTestDataWorker _dbPreTestDataWorker;
+
         [TestFixtureSetUp]
         public virtual void FixtureSetup()
         {
-            var mockGatewayProviderResolver = new Mock<IGatewayProviderResolver>(MockBehavior.Loose);
-            var gatewayContextMock = new Mock<IGatewayContext>(MockBehavior.Default);
-
             var serviceContext = new ServiceContext(new PetaPocoUnitOfWorkProvider());
+
+            _dbPreTestDataWorker = new DbPreTestDataWorker(serviceContext);
+
+            // TODO - replace this with HasCurrent when publicized
+        
+            try
+            {
+                var resolver = GatewayProviderResolver.Current;
+            }
+            catch (Exception)
+            {
+               GatewayProviderResolver.Current = new GatewayProviderResolver(
+               PluginManager.Current.ResolveGatewayProviders(),
+               serviceContext.GatewayProviderService,
+               new NullCacheProvider());
+            }
+            
+
             MerchelloContext = new MerchelloContext(serviceContext,
-                gatewayContextMock.Object,
+                new GatewayContext(serviceContext, GatewayProviderResolver.Current),
                 new CacheHelper(new NullCacheProvider(),
                                     new NullCacheProvider(),
                                     new NullCacheProvider()));
@@ -36,7 +48,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         }
 
         protected DbPreTestDataWorker PreTestDataWorker {
-            get { return new DbPreTestDataWorker(); }
+            get { return _dbPreTestDataWorker; }
         }
 
     }

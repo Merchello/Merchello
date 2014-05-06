@@ -1,22 +1,9 @@
 ﻿using System;
 using Merchello.Core;
-using Merchello.Core.Cache;
-using Merchello.Core.Gateways;
-using Merchello.Core.Gateways.Notification;
-using Merchello.Core.Gateways.Payment;
-using Merchello.Core.Gateways.Shipping;
-using Merchello.Core.Gateways.Taxation;
 using Merchello.Core.Models;
-using Merchello.Core.Persistence.UnitOfWork;
-using Merchello.Core.Services;
-using Merchello.Tests.IntegrationTests.Services;
 using Merchello.Tests.IntegrationTests.TestHelpers;
-using Merchello.Web;
-using Merchello.Web.Models;
 using Merchello.Web.Workflow;
-using Moq;
 using NUnit.Framework;
-using Umbraco.Core;
 
 namespace Merchello.Tests.IntegrationTests.ItemCache
 {
@@ -30,8 +17,6 @@ namespace Merchello.Tests.IntegrationTests.ItemCache
         [SetUp]
         public void Init()
         {
-
-            var mockGatewayProviderResolver = new Mock<IGatewayProviderResolver>(MockBehavior.Loose);
  
             PreTestDataWorker.DeleteAllItemCaches();
 

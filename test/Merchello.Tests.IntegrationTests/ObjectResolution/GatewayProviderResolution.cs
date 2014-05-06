@@ -7,6 +7,7 @@ using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Gateways.Taxation;
 using Merchello.Tests.IntegrationTests.TestHelpers;
 using NUnit.Framework;
+using Rhino.Mocks.Constraints;
 
 namespace Merchello.Tests.IntegrationTests.ObjectResolution
 {
@@ -31,7 +32,12 @@ namespace Merchello.Tests.IntegrationTests.ObjectResolution
                 DbPreTestDataWorker.GatewayProviderService.Delete(provider);
             }
 
-
+            // deactivate all test providers
+            var testProviders = GatewayProviderResolver.Current.GetActivatedProviders().Where(x => testKeys.Contains(x.GatewayProvider.Key) && x.Activated);
+            foreach (var provider in testProviders)
+            {
+                ((GatewayContext)MerchelloContext.Current.Gateways).DeactivateProvider(provider);
+            }
         }
 
         /// <summary>
@@ -160,7 +166,8 @@ namespace Merchello.Tests.IntegrationTests.ObjectResolution
         {
             //// Arrange
             
-            var provider = GatewayProviderResolver.Current.GetAllProviders<PaymentGatewayProviderBase>().FirstOrDefault(x => !x.Activated);
+            var providers = GatewayProviderResolver.Current.GetAllProviders<PaymentGatewayProviderBase>();
+            var provider = providers.FirstOrDefault(x => !x.Activated);
             Assert.NotNull(provider);
             MerchelloContext.Current.Gateways.Payment.ActivateProvider(provider);
             Assert.IsTrue(provider.Activated);
@@ -176,5 +183,25 @@ namespace Merchello.Tests.IntegrationTests.ObjectResolution
             Assert.IsFalse(retrieved.Activated);
         }
 
+        [Test]
+        public void Can_Deactivate_A_ShippingGatewayProvider()
+        {
+            //// Arrange
+
+            var provider = GatewayProviderResolver.Current.GetAllProviders<ShippingGatewayProviderBase>().FirstOrDefault(x => !x.Activated);
+            Assert.NotNull(provider);
+            MerchelloContext.Current.Gateways.Shipping.ActivateProvider(provider);
+            Assert.IsTrue(provider.Activated);
+
+            //// Act
+            var key = provider.Key;
+            MerchelloContext.Current.Gateways.Shipping.DeactivateProvider(provider);
+
+            var retrieved = GatewayProviderResolver.Current.GetProviderByKey<ShippingGatewayProviderBase>(key, false);
+
+
+            //// Assert
+            Assert.IsFalse(retrieved.Activated);
+        }
     }
 }

@@ -17,8 +17,10 @@ namespace Merchello.Tests.IntegrationTests.Taxation
         
 
         [TestFixtureSetUp]
-        public void FixtureInit()
+        public override void FixtureSetup()
         {
+            base.FixtureSetup();
+
             var dtos = PreTestDataWorker.Database.Query<GatewayProviderDto>("SELECT * FROM merchGatewayProvider");
 
             if (!dtos.Any())

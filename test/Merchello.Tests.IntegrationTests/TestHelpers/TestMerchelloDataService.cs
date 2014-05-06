@@ -30,12 +30,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
             var serviceContext = new ServiceContext(new PetaPocoUnitOfWorkProvider());
             return  new MerchelloContext(serviceContext,
-                new GatewayContext(
-                        new PaymentContext(serviceContext.GatewayProviderService, mockGatewayProviderResolver.Object),
-                        new NotificationContext(serviceContext.GatewayProviderService, mockGatewayProviderResolver.Object),
-                        new ShippingContext(serviceContext.GatewayProviderService, serviceContext.StoreSettingService, mockGatewayProviderResolver.Object),
-                        new TaxationContext(serviceContext.GatewayProviderService, mockGatewayProviderResolver.Object)
-                    ),
+                new GatewayContext(serviceContext, GatewayProviderResolver.Current),
                 new CacheHelper(new NullCacheProvider(),
                                     new NullCacheProvider(),
                                     new NullCacheProvider()));        

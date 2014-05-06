@@ -23,12 +23,8 @@ namespace Merchello.Web
             var serviceContext = new ServiceContext(new PetaPocoUnitOfWorkProvider());
             return MerchelloContext.Current ??
                 new MerchelloContext(serviceContext,
-                    new GatewayContext(
-                        new PaymentContext(serviceContext.GatewayProviderService, GatewayProviderResolver.Current), 
-                        new NotificationContext(serviceContext.GatewayProviderService, GatewayProviderResolver.Current), 
-                        new ShippingContext(serviceContext.GatewayProviderService, serviceContext.StoreSettingService, GatewayProviderResolver.Current),
-                        new TaxationContext(serviceContext.GatewayProviderService, GatewayProviderResolver.Current)),
-                                        new CacheHelper(new NullCacheProvider(), new NullCacheProvider(), new NullCacheProvider()));
+                    new GatewayContext(serviceContext, GatewayProviderResolver.Current),
+                        new CacheHelper(new NullCacheProvider(), new NullCacheProvider(), new NullCacheProvider()));
 
         }
 

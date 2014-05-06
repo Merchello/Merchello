@@ -117,7 +117,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
             invoice.VersionKey = new Guid();
 
             //// Act
-            var order = invoice.PrepareOrder();
+            var order = invoice.PrepareOrder(MerchelloContext);
 
             //// Assert
             Assert.IsTrue(invoice.HasIdentity);

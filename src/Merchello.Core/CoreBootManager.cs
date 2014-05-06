@@ -5,10 +5,6 @@ using System.Reflection;
 using Merchello.Core.Cache;
 using Merchello.Core.Configuration;
 using Merchello.Core.Gateways;
-using Merchello.Core.Gateways.Notification;
-using Merchello.Core.Gateways.Payment;
-using Merchello.Core.Gateways.Shipping;
-using Merchello.Core.Gateways.Taxation;
 using Merchello.Core.ObjectResolution;
 using Merchello.Core.Services;
 using Merchello.Core.Triggers;
@@ -58,28 +54,23 @@ namespace Merchello.Core
                                     new NullCacheProvider())
                             : ApplicationContext.Current.ApplicationCache;
 
+            
             InitializeGatewayResolver(serviceContext, cache);
 
             CreateMerchelloContext(serviceContext, cache);
-            
-            // TODO Difficult to Mock the singleton behavior for multiple tests
-           
+                       
             InitializeResolvers();
-
-            //BindEventTriggers();
-        
-           
-
+                  
             _isInitialized = true;            
 
             return this;
         }
-        
 
         /// <summary>
         /// Creates the MerchelloPluginContext (singleton)
         /// </summary>
         /// <param name="serviceContext"></param>
+        /// <param name="cache"></param>
         /// <remarks>
         /// Since we load fire our boot manager after Umbraco fires its "started" even, Merchello gets the benefit
         /// of allowing Umbraco to manage the various caching providers via the Umbraco CoreBootManager or WebBootManager
@@ -88,25 +79,31 @@ namespace Merchello.Core
         protected void CreateMerchelloContext(ServiceContext serviceContext, CacheHelper cache)
         {
 
-            var gateways = new GatewayContext(
-                new PaymentContext(serviceContext.GatewayProviderService, GatewayProviderResolver.Current),
-                new NotificationContext(serviceContext.GatewayProviderService, GatewayProviderResolver.Current),
-                new ShippingContext(serviceContext.GatewayProviderService, serviceContext.StoreSettingService, GatewayProviderResolver.Current),
-                new TaxationContext(serviceContext.GatewayProviderService, GatewayProviderResolver.Current));
-
-
+            var gateways = new GatewayContext(serviceContext, GatewayProviderResolver.Current);
             _merchelloContext = MerchelloContext.Current = new MerchelloContext(serviceContext, gateways, cache);
         }
 
 
         private void InitializeGatewayResolver(IServiceContext serviceContext, CacheHelper cache)
         {
-            if (Resolution.IsFrozen || _isTest) return;
+            //if (Resolution.IsFrozen || _isTest) return;
 
-            GatewayProviderResolver.Current = new GatewayProviderResolver(
+            // TODO this needs to be cleaned up - really hacky fix for unit testing since we 
+            // are locked out of checking whether or not Current is not null.  
+            // http://issues.umbraco.org/issue/U4-4829
+            try
+            {
+                GatewayProviderResolver.Current = new GatewayProviderResolver(
                 PluginManager.Current.ResolveGatewayProviders(),
                 serviceContext.GatewayProviderService,
                 cache.RuntimeCache);
+            }
+            catch (Exception)
+            {
+                
+                
+            }
+            
         }
 
 

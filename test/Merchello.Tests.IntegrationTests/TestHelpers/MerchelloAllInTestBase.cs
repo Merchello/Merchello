@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using Examine;
 using Merchello.Core;
+using Merchello.Core.Gateways;
 using Merchello.Core.Models;
 using Merchello.Core.ObjectResolution;
 using Merchello.Core.Services;
@@ -23,6 +24,8 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         [TestFixtureSetUp]
         public virtual void FixtureSetup()
         {
+            Resolution.Reset();
+
             AutoMapperMappings.BindMappings();  
 
             // Umbraco Application

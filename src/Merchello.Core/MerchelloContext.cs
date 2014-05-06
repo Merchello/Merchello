@@ -2,10 +2,6 @@
 using System.Threading;
 using Merchello.Core.Configuration;
 using Merchello.Core.Gateways;
-using Merchello.Core.Gateways.Notification;
-using Merchello.Core.Gateways.Payment;
-using Merchello.Core.Gateways.Shipping;
-using Merchello.Core.Gateways.Taxation;
 using Merchello.Core.Services;
 using Umbraco.Core;
 using Umbraco.Core.Logging;

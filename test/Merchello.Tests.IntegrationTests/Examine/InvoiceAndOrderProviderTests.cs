@@ -71,9 +71,6 @@ namespace Merchello.Tests.IntegrationTests.Examine
             {
                 provider.AddOrderToIndex(order);
             }
-            {
-                
-            }
         }
 
         /// <summary>
