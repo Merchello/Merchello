@@ -11,6 +11,7 @@
 
     controllers.GatewayProvidersController = function ($scope, assetsService, notificationsService, dialogService, merchelloGatewayProviderService) {
 
+        $scope.notifiationGatewayProviders = [];
         $scope.paymentGatewayProviders = [];
         $scope.shippingGatewayProviders = [];
         $scope.taxationGatewayProviders = [];
@@ -20,6 +21,34 @@
         //--------------------------------------------------------------------------------------
         // Initialization methods
         //--------------------------------------------------------------------------------------
+
+        /**
+         * @ngdoc method
+         * @name loadAllNotificationGatwayProviders
+         * @function
+         * 
+         * @description
+         * Loads in notification gateway providers from server into the scope.  Called in init().
+         */
+        $scope.loadAllNotificationGatwayProviders = function() {
+
+            var promiseAllProviders = merchelloGatewayProviderService.getResolvedNotificationGatewayProviders();
+            promiseAllProviders.then(function(allProviders) {
+
+                $scope.notifiationGatewayProviders = _.map(allProviders, function(providerFromServer) {
+                    return new merchello.Models.GatewayProvider(providerFromServer);
+                });
+
+                $scope.loaded = true;
+                $scope.preValuesLoaded = true;
+
+            }, function(reason) {
+                
+                notificationsService.error("Available Notification Gateway Providers Load Failed", reason.message);
+
+            });
+        }
+
 
         /**
          * @ngdoc method
@@ -115,6 +144,7 @@
          */
         $scope.init = function () {
 
+            $scope.loadAllNotificationGatwayProviders();
             $scope.loadAllPaymentGatewayProviders();
             $scope.loadAllShippingGatewayProviders();
             $scope.loadAllTaxationGatewayProviders();

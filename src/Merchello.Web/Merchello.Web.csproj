@@ -242,6 +242,7 @@
     <Compile Include="Editors\CatalogFixedRateShippingApiController.cs" />
     <Compile Include="Editors\GatewayProviderApiController.cs" />
     <Compile Include="Editors\InvoiceApiController.cs" />
+    <Compile Include="Editors\NotificationGatewayApiController.cs" />
     <Compile Include="Editors\OrderApiController.cs" />
     <Compile Include="Editors\PaymentApiController.cs" />
     <Compile Include="Editors\PaymentGatewayApiController.cs" />

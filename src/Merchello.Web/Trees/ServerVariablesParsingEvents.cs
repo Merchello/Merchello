@@ -11,6 +11,10 @@ using System;
 
 namespace Merchello.Web.Trees
 {
+    /// <summary>
+    /// Merchello Angular Services Routing
+    /// </summary>
+    // TODO Move this to the Merchello WebBootManager
     public class ServerVariablesParsingEvents : ApplicationEventHandler
     {
         protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
@@ -21,8 +25,7 @@ namespace Merchello.Web.Trees
 
             ServerVariablesParser.Parsing += ServerVariablesParserParsing;
         }
-        
-
+                
         private static void ServerVariablesParserParsing(object sender, Dictionary<string, object> items)
         {
             if (!items.ContainsKey("umbracoUrls")) return;
@@ -43,6 +46,8 @@ namespace Merchello.Web.Trees
                 controller => controller.GetShipCountry(Guid.NewGuid())));
             umbracoUrls.Add("merchelloCatalogFixedRateShippingApiBaseUrl", url.GetUmbracoApiServiceBaseUrl<CatalogFixedRateShippingApiController>(
                 controller => controller.GetAllShipCountryFixedRateProviders(Guid.NewGuid())));
+            umbracoUrls.Add("merchelloNotificationApiBaseUrl", url.GetUmbracoApiServiceBaseUrl<NotificationGatewayApiController>(
+                controller => controller.GetAllGatewayProviders()));
             umbracoUrls.Add("merchelloPaymentGatewayApiBaseUrl", url.GetUmbracoApiServiceBaseUrl<PaymentGatewayApiController>(
                 controller => controller.GetAllGatewayProviders()));
             umbracoUrls.Add("merchelloTaxationGatewayApiBaseUrl", url.GetUmbracoApiServiceBaseUrl<TaxationGatewayApiController>(
@@ -54,7 +59,7 @@ namespace Merchello.Web.Trees
             umbracoUrls.Add("merchelloShipmentApiBaseUrl", url.GetUmbracoApiServiceBaseUrl<ShipmentApiController>(
                 controller => controller.GetShipment(Guid.NewGuid())));
             umbracoUrls.Add("merchelloPaymentApiBaseUrl", url.GetUmbracoApiServiceBaseUrl<PaymentApiController>(
-                controller => controller.GetPayment(Guid.NewGuid())));
+                controller => controller.GetPayment(Guid.NewGuid())));            
             umbracoUrls.Add("merchelloGatewayProviderApiBaseUrl", url.GetUmbracoApiServiceBaseUrl<GatewayProviderApiController>(
                 controller => controller.GetGatewayProvider(Guid.NewGuid())));
         }

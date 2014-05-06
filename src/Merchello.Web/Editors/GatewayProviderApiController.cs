@@ -67,6 +67,17 @@ namespace Merchello.Web.Editors
         }
 
         /// <summary>
+        /// Returns all resolved notification gateway providers
+        /// 
+        /// 
+        /// GET /umbraco/Merchello/GatewayProviderApi/GetResolvedNotificationGatewayProviders
+        /// </summary>
+        public IEnumerable<GatewayProviderDisplay> GetResolvedNotificationGatewayProviders()
+        {
+            return _gatewayContext.Notification.GetAllProviders().Select(x => x.GatewayProvider.ToGatewayProviderDisplay());
+        }
+
+        /// <summary>
         /// Returns all resolved payment gateway providers
         /// 
         /// GET /umbraco/Merchello/GatewayProviderApi/GetResolvedPaymentGatewayProviders
