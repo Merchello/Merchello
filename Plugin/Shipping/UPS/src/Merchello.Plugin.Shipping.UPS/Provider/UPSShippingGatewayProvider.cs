@@ -32,19 +32,19 @@ namespace Merchello.Plugin.Shipping.UPS.Provider
         }
 
         // In this case, the GatewayResource can be used to create multiple shipmethods of the same resource type.
-        private static readonly IEnumerable<IGatewayResource> AvailableResources = new List<IGatewayResource>()
+        internal static readonly IEnumerable<IGatewayResource> AvailableResources = new List<IGatewayResource>()
         {
-            new GatewayResource(UPSNextDayAir, "01"),
-            new GatewayResource(UPS2ndDayAir, "02"),
-            new GatewayResource(UPSGround, "03"),
-            new GatewayResource(UPSWorldwideExpress, "07"),
-            new GatewayResource(UPSWorldwideExpidited, "08"),
-            new GatewayResource(UPSStandard, "11"),
-            new GatewayResource(UPS3DaySelect, "12"),
-            new GatewayResource(UPSNextDayAirSaver, "13"),
-            new GatewayResource(UPSNextDayAirEarlyAM, "14"),
-            new GatewayResource(UPSWorldwideExpressPlus, "54"),
-            new GatewayResource(UPS2ndDayAirAM, "59")
+            new GatewayResource(UPSNextDayAir, "UPS NextDay Air"),
+            new GatewayResource(UPS2ndDayAir, "UPS 2nd Day Air"),
+            new GatewayResource(UPSGround, "UPS Ground"),
+            new GatewayResource(UPSWorldwideExpress, "UPS Worldwide Express"),
+            new GatewayResource(UPSWorldwideExpidited, "UPS Worldwide Expidited"),
+            new GatewayResource(UPSStandard, "UPS Standard"),
+            new GatewayResource(UPS3DaySelect, "UPS 3 Day Select"),
+            new GatewayResource(UPSNextDayAirSaver, "UPS Next Day Air Saver"),
+            new GatewayResource(UPSNextDayAirEarlyAM, "UPS Next Day Air Early AM"),
+            new GatewayResource(UPSWorldwideExpressPlus, "UPS Worldwide Express Plus"),
+            new GatewayResource(UPS2ndDayAirAM, "UPS 2nd Day Air AM")
         };
 
         /// <summary>
@@ -56,11 +56,11 @@ namespace Merchello.Plugin.Shipping.UPS.Provider
         /// rather than defined up front.  
         /// 
         /// </remarks>   
-        public IShippingGatewayMethod CreateShipMethod(UPSShippingGatewayMethod.QuoteType quoteType,
+        public IShippingGatewayMethod CreateShipMethod(UPSShippingGatewayMethod.UPSType upsType,
             IShipCountry shipCountry, string name)
         {
             var resource = AvailableResources.First();
-            switch (quoteType.ToString())
+            switch (upsType.ToString())
             {
                 case UPSShippingGatewayProvider.UPSNextDayAir:
                     resource = AvailableResources.First(x => x.ServiceCode == "01");
@@ -134,8 +134,6 @@ namespace Merchello.Plugin.Shipping.UPS.Provider
         public override void SaveShippingGatewayMethod(IShippingGatewayMethod shippingGatewayMethod)
         {
             GatewayProviderService.Save(shippingGatewayMethod.ShipMethod);
-            UPSShippingRateTable.Save(GatewayProviderService, RuntimeCache,
-                ((UPSShippingGatewayMethod) shippingGatewayMethod).RateTable);
         }
 
         /// <summary>
@@ -144,6 +142,7 @@ namespace Merchello.Plugin.Shipping.UPS.Provider
         /// <returns></returns>
         public override IEnumerable<IGatewayResource> ListResourcesOffered()
         {
+            // PaymentMethods is created in PaymentGatewayProviderBase.  It is a list of all previously saved payment methods
             return AvailableResources;
         }
 

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
+using Merchello.Plugin.Shipping.UPS.Models;
 using Umbraco.Core;
 using Umbraco.Core.Events;
 using Umbraco.Core.Logging;
@@ -18,7 +19,7 @@ namespace Merchello.Plugin.Shipping.UPS
         {
             base.ApplicationStarted(umbracoApplication, applicationContext);
 
-            LogHelper.Info<UPSEvents>("Initializing AuthorizeNet provider registration binding events");
+            LogHelper.Info<UPSEvents>("Initializing UPS Shipping provider registration binding events");
 
 
             GatewayProviderService.Saving += delegate(IGatewayProviderService sender, SaveEventArgs<IGatewayProvider> args)
@@ -27,7 +28,7 @@ namespace Merchello.Plugin.Shipping.UPS
                 var provider = args.SavedEntities.FirstOrDefault(x => key == x.Key && !x.HasIdentity);
                 if (provider == null) return;
 
-                //provider.ExtendedData.SaveProcessorSettings(new AuthorizeNetProcessorSettings());
+                provider.ExtendedData.SaveProcessorSettings(new UPSProcessorSettings());
 
             };
         }

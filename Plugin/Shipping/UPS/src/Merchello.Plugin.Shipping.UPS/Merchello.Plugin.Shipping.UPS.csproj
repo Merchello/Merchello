@@ -214,11 +214,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Provider\IUPSShippingGatewayMethod.cs" />
     <Compile Include="Provider\IUPSShippingGatewayProvider.cs" />
-    <Compile Include="Provider\IUPSShippingRateTable.cs" />
     <Compile Include="Provider\UPSShipmentLineItemVisitor.cs" />
     <Compile Include="Provider\UPSShippingGatewayMethod.cs" />
     <Compile Include="Provider\UPSShippingGatewayProvider.cs" />
-    <Compile Include="Provider\UPSShippingRateTable.cs" />
     <Compile Include="UPSApplicationEventListener.cs" />
     <Compile Include="UpsHttpRequestHandler.cs" />
     <Compile Include="UPSShippingProcessor.cs" />

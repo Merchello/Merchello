@@ -1,19 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration.Provider;
-using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
 using Merchello.Core.Gateways;
 using Merchello.Core.Gateways.Shipping;
-using Merchello.Core.Gateways.Shipping.FixedRate;
 using Merchello.Core.Models;
-using Merchello.Core.Models.Interfaces;
-using Merchello.Core.Services;
 using Umbraco.Core;
 
 namespace Merchello.Plugin.Shipping.UPS.Provider
@@ -21,7 +10,7 @@ namespace Merchello.Plugin.Shipping.UPS.Provider
     public class UPSShippingGatewayMethod : ShippingGatewayMethodBase, IUPSShippingGatewayMethod
     {
         private UPSShippingProcessor _processor;
-        private QuoteType _quoteType;
+        private UPSType _upsType;
         private IShipMethod _shipMethod;
 
         public UPSShippingGatewayMethod(IGatewayResource gatewayResource, IShipMethod shipMethod, IShipCountry shipCountry, ExtendedDataCollection providerExtendedData)
@@ -55,7 +44,7 @@ namespace Merchello.Plugin.Shipping.UPS.Provider
             }
         }
 
-        public enum QuoteType
+        public enum UPSType
         {
             UPSNextDayAir,
             UPS2ndDayAir,
@@ -69,18 +58,5 @@ namespace Merchello.Plugin.Shipping.UPS.Provider
             UPSWorldwideExpressPlus,
             UPS2ndDayAirAM,
         }        
-        
-        /// <summary>
-        /// Gets the rate table
-        /// </summary>
-        public IUPSShippingRateTable RateTable { get; private set; }
-
-        /// <summary>
-        /// Gets the quote type
-        /// </summary>
-        public QuoteType RateTableType
-        {
-            get { return _quoteType; }
-        }
     }
 }

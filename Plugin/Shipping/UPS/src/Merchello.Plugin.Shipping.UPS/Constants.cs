@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Umbraco.Core.PropertyEditors;
 
 namespace Merchello.Plugin.Shipping.UPS
 {
@@ -11,7 +12,8 @@ namespace Merchello.Plugin.Shipping.UPS
         public static class ExtendedDataKeys
         {
             public static string ProcessorSettings = "upsProcessorSettings";
-            public static string UpsUserNameUserName = "upsUserName";
+            public static string UpsAccessKey = "upsAccessKey";
+            public static string UpsUserName = "upsUserName";
             public static string UpsPassword = "upsPassword";
         }
     }

@@ -16,7 +16,6 @@ namespace Merchello.Plugin.Shipping.UPS.Models
             UpsPickupTypeCode = "01";
             UpsCustomerClassification = "04";
             UpsPackagingTypeCode = "02";
-            UpsExcludeService = "07, 08, 54";
             UpsAdditionalHandlingCharge = "0.00";
         }
 
@@ -26,7 +25,6 @@ namespace Merchello.Plugin.Shipping.UPS.Models
         public string UpsPickupTypeCode  { get; set; }
         public string UpsCustomerClassification  { get; set; }
         public string UpsPackagingTypeCode { get; set; }
-        public string UpsExcludeService { get; set; }
         public string UpsAdditionalHandlingCharge { get; set; }
 
         public string ApiVersion

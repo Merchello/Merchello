@@ -25,12 +25,12 @@
             // on initial load extendedData will be empty but we need to populate with key values
             // 
             var settingsString = $scope.dialogData.provider.extendedData[0].value;
-            $scope.UPSSettings = JSON.parse(settingsString);
+            $scope.upsSettings = JSON.parse(settingsString);
 
 
             // Watch with object equality to convert back to a string for the submit() call on the Save button
             $scope.$watch(function () {
-                return $scope.UPSSettings;
+                return $scope.upsSettings;
             }, function (newValue, oldValue) {
                 $scope.dialogData.provider.extendedData[0].value = angular.toJson(newValue);
             }, true);
