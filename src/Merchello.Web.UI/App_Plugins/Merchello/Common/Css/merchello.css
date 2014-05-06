@@ -70,7 +70,7 @@
 .merchello-panel-body .shipping-table td:first-child { width: 30%; }
 .merchello-panel-body .shipping-table td:nth-child(3) { width: 20%; }
 .merchello-panel-body .shipping-table td:nth-child(4) { width: 10%; }
-.merchello-panel-body td.edit { text-align: center; }
+.merchello-panel-body td.edit { text-align: left; }
 .merchello-panel-body td.edit .btn { display: inline-block; margin: 0 auto; }
 .merchello-panel-body td.adr, .merchello-panel-body td.org { display: table-cell; }
 .merchello-panel-body .table-striped tbody > tr:nth-child(even) > td > i { background: #f8f8f8; }
