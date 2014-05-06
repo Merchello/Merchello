@@ -5,6 +5,7 @@ using System.Reflection;
 using Merchello.Core.Cache;
 using Merchello.Core.Configuration;
 using Merchello.Core.Gateways;
+using Merchello.Core.ObjectResolution;
 using Merchello.Core.Services;
 using Merchello.Core.Triggers;
 using Umbraco.Core;
@@ -44,29 +45,8 @@ namespace Merchello.Core
             var connString = ConfigurationManager.ConnectionStrings[MerchelloConfiguration.Current.Section.DefaultConnectionStringName].ConnectionString;
             var providerName = ConfigurationManager.ConnectionStrings[MerchelloConfiguration.Current.Section.DefaultConnectionStringName].ProviderName;                
             var serviceContext = new ServiceContext(new PetaPocoUnitOfWorkProvider(connString, providerName));
-            
-            CreateMerchelloContext(serviceContext);
 
-            BindEventTriggers();
 
-            _isInitialized = true;            
-
-            return this;
-        }
-        
-
-        /// <summary>
-        /// Creates the MerchelloPluginContext (singleton)
-        /// </summary>
-        /// <param name="serviceContext"></param>
-        /// <remarks>
-        /// Since we load fire our boot manager after Umbraco fires its "started" even, Merchello gets the benefit
-        /// of allowing Umbraco to manage the various caching providers via the Umbraco CoreBootManager or WebBootManager
-        /// depending on the context.
-        /// </remarks>
-        protected void CreateMerchelloContext(ServiceContext serviceContext)
-        {
-                      
             var cache = ApplicationContext.Current == null
                             ? new CacheHelper(
                                     new ObjectCacheRuntimeCacheProvider(),
@@ -74,16 +54,72 @@ namespace Merchello.Core
                                     new NullCacheProvider())
                             : ApplicationContext.Current.ApplicationCache;
 
-            _merchelloContext = MerchelloContext.Current = new MerchelloContext(serviceContext, cache, _isTest);
+            
+            InitializeGatewayResolver(serviceContext, cache);
+
+            CreateMerchelloContext(serviceContext, cache);
+                       
+            InitializeResolvers();
+                  
+            _isInitialized = true;            
+
+            return this;
         }
 
+        /// <summary>
+        /// Creates the MerchelloPluginContext (singleton)
+        /// </summary>
+        /// <param name="serviceContext"></param>
+        /// <param name="cache"></param>
+        /// <remarks>
+        /// Since we load fire our boot manager after Umbraco fires its "started" even, Merchello gets the benefit
+        /// of allowing Umbraco to manage the various caching providers via the Umbraco CoreBootManager or WebBootManager
+        /// depending on the context.
+        /// </remarks>
+        protected void CreateMerchelloContext(ServiceContext serviceContext, CacheHelper cache)
+        {
+
+            var gateways = new GatewayContext(serviceContext, GatewayProviderResolver.Current);
+            _merchelloContext = MerchelloContext.Current = new MerchelloContext(serviceContext, gateways, cache);
+        }
+
+
+        private void InitializeGatewayResolver(IServiceContext serviceContext, CacheHelper cache)
+        {
+            //if (Resolution.IsFrozen || _isTest) return;
+
+            // TODO this needs to be cleaned up - really hacky fix for unit testing since we 
+            // are locked out of checking whether or not Current is not null.  
+            // http://issues.umbraco.org/issue/U4-4829
+            try
+            {
+                GatewayProviderResolver.Current = new GatewayProviderResolver(
+                PluginManager.Current.ResolveGatewayProviders(),
+                serviceContext.GatewayProviderService,
+                cache.RuntimeCache);
+            }
+            catch (Exception)
+            {
+                
+                
+            }
+            
+        }
+
+
+
+        protected virtual void InitializeResolvers()
+        {
+            if(Resolution.IsFrozen) return;
+
+        }
 
         protected void BindEventTriggers()
         {
             LogHelper.Info<CoreBootManager>("Beginning Merchello Event Trigger Binding");
             foreach (var trigger in EventTriggerRegistry.Current.GetAllEventTriggers())
             {
-                var att = trigger.GetType().GetCustomAttributes<EventTriggerAttribute>(false).FirstOrDefault();
+                var att = trigger.GetType().GetCustomAttributes<EventTriggeredActionForAttribute>(false).FirstOrDefault();
                 
                 if (att == null) continue;
                 
@@ -125,6 +161,8 @@ namespace Merchello.Core
             if(_isComplete)
                 throw new InvalidOperationException("The boot manager has already been completed");
 
+            FreezeResolution();
+            
             if (afterComplete != null)
             {
                 afterComplete(MerchelloContext.Current);                
@@ -155,5 +193,14 @@ namespace Merchello.Core
             set { _isTest = value; }
         }
 
+
+        /// <summary>
+        /// Freeze resolution to not allow Resolvers to be modified
+        /// </summary>
+        protected virtual void FreezeResolution()
+        {
+            Resolution.Freeze();
+        }
+        
     }
 }

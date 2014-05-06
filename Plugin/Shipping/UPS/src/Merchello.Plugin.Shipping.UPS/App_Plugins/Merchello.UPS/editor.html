@@ -9,33 +9,29 @@
         <div class="well">
             <div class="control-group row-fluid">
                 <p>UPS Access Key<br /></p>
-                <div class="col-xs-12 span12">
-                    <input class="col-xs-12 span12" type="text" data-ng-model="UPSSettings.UpsAccessKey">
+                <div class="input-prepend col-xs-12 span12">
+                    <input class="col-xs-8 span8" type="text" data-ng-model="upsSettings.UpsAccessKey">
                 </div>
             </div>
             <div class="control-group row-fluid">
                 <p>UPS Username<br /></p>
-                <div class="col-xs-12 span12">
-                    <input class="col-xs-12 span12" type="text" data-ng-model="UPSSettings.UpsUserName">
+                <div class="input-prepend col-xs-12 span12">
+                    <input class="col-xs-8 span8" type="text" data-ng-model="upsSettings.UpsUserName">
                 </div>
             </div>
             <div class="control-group row-fluid">
                 <p>UPS password<br /></p>
-                <div class="col-xs-12 span12">
-                    <input class="col-xs-12 span12" type="text" data-ng-model="UPSSettings.UpsPassword">
+                <div class="input-prepend col-xs-12 span12">
+                    <input class="col-xs-8 span8" type="text" data-ng-model="upsSettings.UpsPassword">
                 </div>
             </div>
             <div class="control-group row-fluid">
-                <!--label class="checkbox col-xs-12 span12">
-                    <input type="checkbox" data-ng-model="authorizeNetSettings.UseSandbox"> Use Sandbox
-                </label-->
-                <label class="checkbox col-xs-12 span12">
-                    <input type="checkbox" data-ng-model="dialogData.provider.encryptExtendedData"> Encrypt Provider Configuration                </div>
-                </label>
+                <p>Use Sandbox?<br /></p>
+                <div class="input-prepend col-xs-12 span12">
+                    <input class="col-xs-8 span8" type="checkbox" data-ng-model="upsSettings.UseSandbox">
+                </div>
             </div>
         </div>
-
-
     </div>
 
 </div>

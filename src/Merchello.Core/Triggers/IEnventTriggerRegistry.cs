@@ -8,22 +8,22 @@ namespace Merchello.Core.Triggers
     internal interface IEventTriggerRegistry
     {
         /// <summary>
-        /// Gets a collection of <see cref="IEventTrigger"/> by the area defined in the attribute
+        /// Gets a collection of <see cref="IEventTriggeredAction"/> by the area defined in the attribute
         /// </summary>
         /// <param name="area">The "area"</param>
-        /// <returns>A <see cref="IEventTrigger"/></returns>
-        IEnumerable<IEventTrigger> GetTriggersByArea(string area);
+        /// <returns>A <see cref="IEventTriggeredAction"/></returns>
+        IEnumerable<IEventTriggeredAction> GetTriggersByArea(string area);
 
         /// <summary>
-        /// Gets the collection of all resovled <see cref="IEventTrigger"/>s
+        /// Gets the collection of all resovled <see cref="IEventTriggeredAction"/>s
         /// </summary>
-        IEnumerable<IEventTrigger> GetAllEventTriggers();
+        IEnumerable<IEventTriggeredAction> GetAllEventTriggers();
 
         /// <summary>
-        /// Gets a <see cref="IEventTrigger"/> from the registry
+        /// Gets a <see cref="IEventTriggeredAction"/> from the registry
         /// </summary>
         /// <param name="key"></param>
-        /// <returns>A <see cref="IEventTrigger"/></returns>
-        IEventTrigger TryGetTrigger(string key);
+        /// <returns>A <see cref="IEventTriggeredAction"/></returns>
+        IEventTriggeredAction TryGetTrigger(string key);
     }
 }

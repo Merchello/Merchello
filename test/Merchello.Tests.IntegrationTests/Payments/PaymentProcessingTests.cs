@@ -36,7 +36,7 @@ namespace Merchello.Tests.IntegrationTests.Payments
             var bootManager = new WebBootManager();
             bootManager.Initialize();
 
-            _merchelloContext = MerchelloContext.Current;
+            _merchelloContext = Core.MerchelloContext.Current;
 
             var defaultCatalog = PreTestDataWorker.WarehouseService.GetDefaultWarehouse().WarehouseCatalogs.FirstOrDefault();
             if (defaultCatalog == null) Assert.Ignore("Default WarehouseCatalog is null");

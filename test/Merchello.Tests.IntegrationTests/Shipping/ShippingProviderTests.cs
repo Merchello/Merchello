@@ -2,6 +2,7 @@
 using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Gateways;
+using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using NUnit.Framework;
@@ -71,7 +72,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             //// Arrange
             
             //// Act
-            var providers = MerchelloContext.Gateways.Shipping.CreateInstances();
+            var providers = MerchelloContext.Gateways.Shipping.GetAllActivatedProviders();
 
             //// Assert
             Assert.NotNull(providers);
@@ -87,7 +88,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             //// Arrange
 
             //// Act
-            var provider = MerchelloContext.Gateways.Shipping.CreateInstances().FirstOrDefault();
+            var provider = MerchelloContext.Gateways.Shipping.GetAllActivatedProviders().FirstOrDefault();
             
 
 
@@ -104,7 +105,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
         {
             //// Arrange
             var country = ShipCountryService.GetShipCountryByCountryCode(Catalog.Key, "US");
-            var shippingProvider = MerchelloContext.Gateways.Shipping.CreateInstances().FirstOrDefault();
+            var shippingProvider = MerchelloContext.Gateways.Shipping.GetAllActivatedProviders().FirstOrDefault() as ShippingGatewayProviderBase;
             Assert.NotNull(shippingProvider);
             
             //// Act

@@ -47,13 +47,25 @@ namespace Merchello.Core
         /// <param name="typeName">The TypeName information of the object to be instantiated</param>
         /// <param name="constructorArgumentValues">Object array containing constructor arguments</param>
         /// <returns>The result of the <see cref="Attempt{T}"/> to instantiate the object</returns>
+        [Obsolete("Use CreateInstance<T>(Type type, object[] constructoryArgumentValues)")]
         public static Attempt<T> CreateInstance<T>(string typeName, object[] constructorArgumentValues) where T : class
         {
             Mandate.ParameterNotNullOrEmpty(typeName, "typName");
             Mandate.ParameterNotNull(constructorArgumentValues, "constructorParameterValues");
 
-            var type = Type.GetType(typeName);
-            if (type == null) return Attempt<T>.Fail(new NullReferenceException("Could not get the Type of '" + typeName + "'"));
+            return CreateInstance<T>(Type.GetType(typeName), constructorArgumentValues);            
+        }
+
+        /// <summary>
+        /// Creates an instance of a type using a constructor with specific arguments
+        /// </summary>
+        /// <typeparam name="T">The <see cref="Type"/> or base class</typeparam>
+        /// <param name="type">The type of the object to be instantiated</param>
+        /// <param name="constructorArgumentValues">Object array containing constructor arguments</param>
+        /// <returns>The result of the <see cref="Attempt{T}"/> to instantiate the object</returns>
+        public static Attempt<T> CreateInstance<T>(Type type, object[] constructorArgumentValues) where T : class
+        {
+            if (type == null || constructorArgumentValues == null) return Attempt<T>.Fail(new NullReferenceException("Failed to create Type due to null Type or null constructor args"));
 
             var assembly = type.Assembly;
             const BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
