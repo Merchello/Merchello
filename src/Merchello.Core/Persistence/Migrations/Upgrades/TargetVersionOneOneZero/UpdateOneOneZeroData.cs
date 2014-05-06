@@ -1,9 +1,6 @@
 ﻿using System;
-using Merchello.Core.Events;
 using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Models.TypeFields;
-using Merchello.Core.Services;
-using Umbraco.Core.Events;
 using Umbraco.Core.Persistence;
 
 namespace Merchello.Core.Persistence.Migrations.Upgrades.TargetVersionOneOneZero

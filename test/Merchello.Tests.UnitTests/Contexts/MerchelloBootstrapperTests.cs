@@ -1,13 +1,15 @@
-﻿using Merchello.Core;
+﻿using Lucene.Net.Documents;
+using Merchello.Core;
 using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Gateways.Taxation;
+using Merchello.Core.ObjectResolution;
 using Merchello.Core.Triggers;
+using Merchello.Tests.Base.SqlSyntax;
 using Merchello.Web;
 using NUnit.Framework;
 using Umbraco.Core;
 using CoreBootManager = Merchello.Core.CoreBootManager;
-using IEventTrigger = Merchello.Core.Triggers.IEventTrigger;
 
 
 namespace Merchello.Tests.UnitTests.Contexts
@@ -22,14 +24,15 @@ namespace Merchello.Tests.UnitTests.Contexts
         [TestFixtureSetUp]
         public void FixtureSetup()
         {
-            EventTriggerRegistry.Current =
-                new EventTriggerRegistry(() => PluginManager.Current.ResolveTypesWithAttribute<IEventTrigger, EventTriggerAttribute>());
+
+            SqlSyntaxProviderTestHelper.EstablishSqlSyntax();
         }
 
         [SetUp]
         public void Setup()
         {
-
+             Resolution.Reset();
+            
             _initEventCalled = false;
             _startingEventCalled = false;
             _completedEventCalled = false;

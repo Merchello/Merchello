@@ -46,7 +46,7 @@ namespace Merchello.Web.Editors
         {
             try
             {
-                var provider = _paymentContext.CreateInstance(id);
+                var provider = _paymentContext.GetProviderByKey(id);
 
                 var resources = provider.ListResourcesOffered();
 
@@ -73,7 +73,7 @@ namespace Merchello.Web.Editors
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
 
-            return providers.Select(provider => provider.ToGatewayProviderDisplay());
+            return providers.Select(provider => provider.GatewayProvider.ToGatewayProviderDisplay());
         }
 
         /// <summary>

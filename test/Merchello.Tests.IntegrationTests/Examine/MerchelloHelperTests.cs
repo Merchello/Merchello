@@ -18,6 +18,8 @@ namespace Merchello.Tests.IntegrationTests.Examine
         [TestFixtureSetUp]
         public override void FixtureSetup()
         {
+            base.FixtureSetup();
+
             _provider = (ProductIndexer)ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"];
             _provider.RebuildIndex();
         }

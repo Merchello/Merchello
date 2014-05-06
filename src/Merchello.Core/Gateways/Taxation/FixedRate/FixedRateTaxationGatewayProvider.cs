@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
@@ -34,16 +35,17 @@ namespace Merchello.Core.Gateways.Taxation.FixedRate
         {
             var attempt = ListResourcesOffered().FirstOrDefault(x => x.ServiceCode.Equals(countryCode)) != null
                 ? GatewayProviderService.CreateTaxMethodWithKey(GatewayProvider.Key, countryCode, taxPercentageRate)
-                : Attempt<ITaxMethod>.Fail(new InvalidOperationException("A fixed tax rate method has already been defined for " + countryCode));
+                : Attempt<ITaxMethod>.Fail(new ConstraintException("A fixed tax rate method has already been defined for " + countryCode));
 
 
-            if (!attempt.Success)
+            if (attempt.Success)
             {
-                LogHelper.Error<TaxationGatewayProviderBase>("CreateTaxMethod failed.", attempt.Exception);
-                throw attempt.Exception;
+                return new FixRateTaxationGatewayMethod(attempt.Result);                   
             }
 
-            return new FixRateTaxationGatewayMethod(attempt.Result);
+            LogHelper.Error<TaxationGatewayProviderBase>("CreateTaxMethod failed.", attempt.Exception);
+
+            throw attempt.Exception;
         }
 
         /// <summary>

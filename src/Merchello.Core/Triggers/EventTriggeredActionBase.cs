@@ -2,7 +2,7 @@
 
 namespace Merchello.Core.Triggers
 {
-    public abstract class EventTriggerBase : IEventTrigger
+    public abstract class EventTriggeredActionBase : IEventTriggeredAction
     {
        
         public abstract void Invoke(Object sender, EventArgs e);

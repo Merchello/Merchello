@@ -66,6 +66,22 @@ namespace Merchello.Core.Gateways
         }
 
         /// <summary>
+        /// Gets the ExtendedData collection from the <see cref="IGatewayProvider"/>
+        /// </summary>
+        public virtual ExtendedDataCollection ExtendedData
+        {
+            get { return _gatewayProvider.ExtendedData; }
+        }
+
+        /// <summary>
+        /// Gets the "activated property" from the <see cref="IGatewayProvider"/>
+        /// </summary>
+        public virtual bool Activated
+        {
+            get { return _gatewayProvider.Activated; }
+        }
+
+        /// <summary>
         /// Gets the RuntimeCache
         /// </summary>
         /// <returns></returns>

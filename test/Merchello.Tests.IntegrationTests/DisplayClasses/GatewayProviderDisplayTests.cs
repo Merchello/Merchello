@@ -43,7 +43,7 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
             Assert.NotNull(provider);
 
             //// Act
-            var mapped = provider.ToGatewayProviderDisplay();
+            var mapped = provider.GatewayProvider.ToGatewayProviderDisplay();
 
             //// Assert
             Assert.NotNull(mapped, "mapped was null");
@@ -59,7 +59,7 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
         {
             //// Arrange
             var key = new Guid("5A5B38F4-0E74-4057-BCFF-F903CF449AD8");
-            var provider = MerchelloContext.Current.Gateways.Payment.GetAllProviders().FirstOrDefault(x => x.Key == key);
+            var provider = MerchelloContext.Current.Gateways.Payment.GetProviderByKey(key, false);
             Assert.NotNull(provider);
 
             // add stuff to extendedData
@@ -68,7 +68,7 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
             provider.ExtendedData.SetValue("test3", "test3");
 
             //// Act
-            var mapped = provider.ToGatewayProviderDisplay();
+            var mapped = provider.GatewayProvider.ToGatewayProviderDisplay();
 
             //// Assert
             Assert.NotNull(mapped);
