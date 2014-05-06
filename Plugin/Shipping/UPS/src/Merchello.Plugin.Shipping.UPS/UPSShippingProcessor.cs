@@ -300,10 +300,10 @@ namespace Merchello.Plugin.Shipping.UPS
 
         private bool IncludedService(string serviceCode)
         {
-            if (_settings.UpsExcludeService.IndexOf(serviceCode, 0, StringComparison.Ordinal) > 0)
-                return false;
-            else
-                return true;
+            //if (_settings.UpsExcludeService.IndexOf(serviceCode, 0, StringComparison.Ordinal) > 0)
+            //    return false;
+            //else
+            return true;
         }
     }
 }
