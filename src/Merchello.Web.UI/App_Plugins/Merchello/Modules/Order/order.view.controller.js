@@ -58,6 +58,7 @@
 
                 $scope.loadShippingAddress($scope.invoice);
                 $scope.loadPayments($scope.invoice);
+	            $scope.loadShipments($scope.invoice);
 
             }, function (reason) {
                 notificationsService.error("Invoice Load Failed", reason.message);
@@ -112,7 +113,24 @@
             });
         };
 
-        $scope.loadSettings = function () {
+	    $scope.loadShipments = function(invoice) {
+	    	var promise = merchelloShipmentService.getShipmentsByInvoice(invoice);
+
+	    	promise.then(function (shipments) {
+
+	    		invoice.shipments = _.map(shipments, function (shipment) {
+	    			return new merchello.Models.Shipment(shipment);
+	    		});
+
+	    		$scope.loaded = true;
+	    		$scope.preValuesLoaded = true;
+
+	    	}, function (reason) {
+	    		notificationsService.error("Shipments Load Failed", reason.message);
+	    	});
+	    };
+
+	    $scope.loadSettings = function () {
 
         	var currencySymbolPromise = merchelloSettingsService.getCurrencySymbol();
         	currencySymbolPromise.then(function (currencySymbol) {

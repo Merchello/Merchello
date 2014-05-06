@@ -179,6 +179,10 @@
 
             });
         };
+ 
+        //--------------------------------------------------------------------------------------
+        // Dialog methods
+        //--------------------------------------------------------------------------------------
 
         /**
          * @ngdoc method
@@ -192,14 +196,14 @@
         $scope.editProviderConfigDialogOpen = function (provider) {
 
             var dialogProvider = provider;
-            if (!provider) {      
-                return;                
+            if (!provider) {
+                return;
             }
 
             var myDialogData = {
                 provider: dialogProvider
             };
-            
+
             dialogService.open({
                 template: provider.dialogEditorView.editorView,
                 show: true,
@@ -217,17 +221,16 @@
          * @description
          * Handles the data passed back from the provider editor dialog and saves it to the database
          */
-        $scope.providerConfigDialogConfirm = function(data) {
+        $scope.providerConfigDialogConfirm = function (data) {
 
             var promise = merchelloGatewayProviderService.saveGatewayProvider(data.provider);
 
             promise.then(function (provider) {
                 notificationsService.success("Gateway Provider Saved", "");
             },
-            function (reason)
-                {
+            function (reason) {
                 notificationsService.error("Gateway Provider Save Failed", reason.message);
-                }
+            }
             );
         };
 

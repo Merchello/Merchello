@@ -31,6 +31,7 @@
 		'~/App_Plugins/Merchello/Directives/dropdownlist.directive.js',
 		'~/App_Plugins/Merchello/Directives/tag.manager.directive.js',
 		'~/App_Plugins/Merchello/Directives/merchello.panel.directive.js',
+		'~/App_Plugins/Merchello/Directives/merchello.debug.section.directive.js',
 		'~/App_Plugins/Merchello/Modules/Catalog/merchello.product.service.js?v=3',
 		'~/App_Plugins/Merchello/Modules/Catalog/merchello.productvariant.service.js',
 		'~/App_Plugins/Merchello/Modules/Settings/merchello.warehouse.service.js',

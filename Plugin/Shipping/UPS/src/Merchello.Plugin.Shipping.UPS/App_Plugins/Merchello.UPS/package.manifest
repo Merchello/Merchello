@@ -1,0 +1,5 @@
+﻿{
+	javascript : [
+		'~/App_Plugins/Merchello.UPS/merchello.ups.controller.js'
+	]
+}
