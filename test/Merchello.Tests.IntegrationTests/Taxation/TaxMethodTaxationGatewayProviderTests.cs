@@ -36,7 +36,7 @@ namespace Merchello.Tests.IntegrationTests.Taxation
         public void Init()
         {
             
-            _taxProvider = MerchelloContext.Current.Gateways.Taxation.CreateInstance(Core.Constants.ProviderKeys.Taxation.FixedRateTaxationProviderKey);
+            _taxProvider = MerchelloContext.Gateways.Taxation.CreateInstance(Core.Constants.ProviderKeys.Taxation.FixedRateTaxationProviderKey);
 
             PreTestDataWorker.DeleteAllCountryTaxRates(Core.Constants.ProviderKeys.Taxation.FixedRateTaxationProviderKey);
         }

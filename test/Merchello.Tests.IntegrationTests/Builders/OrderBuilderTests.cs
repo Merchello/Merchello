@@ -73,7 +73,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
             var attempt = orderBuilder.Build();
             Assert.IsTrue(attempt.Success, "The order builder failed to create an order");
             var order = attempt.Result;
-            MerchelloContext.Current.Services.OrderService.Save(order);
+            MerchelloContext.Services.OrderService.Save(order);
 
             //// Assert
             Assert.IsTrue(order.HasIdentity);
@@ -93,11 +93,11 @@ namespace Merchello.Tests.IntegrationTests.Builders
             var orderBuilder = new OrderBuilderChain(MockOrderStatusMaker.OrderStatusNotFulfilledMock(), invoice);
             var attempt = orderBuilder.Build();
             Assert.IsTrue(attempt.Success, "The order builder failed to create an order");
-            MerchelloContext.Current.Services.OrderService.Save(attempt.Result);
+            MerchelloContext.Services.OrderService.Save(attempt.Result);
             var key = attempt.Result.Key;
 
             //// Act
-            var order = MerchelloContext.Current.Services.OrderService.GetByKey(key);
+            var order = MerchelloContext.Services.OrderService.GetByKey(key);
 
             //// Assert
             Assert.NotNull(order);

@@ -22,7 +22,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
             PreTestDataWorker.DeleteAllShipments();
             var invoice = SalePreparationMock.PrepareInvoice();
             PreTestDataWorker.InvoiceService.Save(invoice);
-            _order = invoice.PrepareOrder(MerchelloContext.Current);
+            _order = invoice.PrepareOrder(MerchelloContext);
             PreTestDataWorker.OrderService.Save(_order);
 
         }
@@ -37,7 +37,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
             const int taskCount = 3;
             
             //// Act
-            var builder = new ShipmentBuilderChain(MerchelloContext.Current, _order);
+            var builder = new ShipmentBuilderChain(MerchelloContext, _order);
 
             //// Assert
             Assert.NotNull(builder);
@@ -51,7 +51,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
         public void ShipmentBuilder_Creates_And_Saves_A_Shipment_And_OrderLineItems_Are_Updated()
         {
             //// Arrage
-            var builder = new ShipmentBuilderChain(MerchelloContext.Current, _order);
+            var builder = new ShipmentBuilderChain(MerchelloContext, _order);
 
             //// Act
             var attempt = builder.Build();

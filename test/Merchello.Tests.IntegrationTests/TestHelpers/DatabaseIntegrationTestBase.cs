@@ -1,4 +1,5 @@
-﻿using Merchello.Core;
+﻿using Examine;
+using Merchello.Core;
 using Merchello.Core.Cache;
 using Merchello.Core.Gateways;
 using Merchello.Core.Gateways.Notification;
@@ -14,35 +15,28 @@ using Umbraco.Core;
 
 namespace Merchello.Tests.IntegrationTests.TestHelpers
 {
-    public abstract class DatabaseIntegrationTestBase : MerchelloAllInTestBase
+    public abstract class DatabaseIntegrationTestBase
     {
+        protected IMerchelloContext MerchelloContext { get; private set; }
         
         [TestFixtureSetUp]
-        public override void FixtureSetup()
+        public virtual void FixtureSetup()
         {
-            base.FixtureSetup();
+            var mockGatewayProviderResolver = new Mock<IGatewayProviderResolver>(MockBehavior.Loose);
+            var gatewayContextMock = new Mock<IGatewayContext>(MockBehavior.Default);
 
-            
-            //    var mockGatewayProviderResolver = new Mock<IGatewayProviderResolver>(MockBehavior.Loose);
-
-
-            //    var serviceContext = new ServiceContext(new PetaPocoUnitOfWorkProvider());
-            //    MerchelloContext = new MerchelloContext(serviceContext,
-            //        new GatewayContext(
-            //                new PaymentContext(serviceContext.GatewayProviderService, mockGatewayProviderResolver.Object),
-            //                new NotificationContext(serviceContext.GatewayProviderService, mockGatewayProviderResolver.Object),
-            //                new ShippingContext(serviceContext.GatewayProviderService, serviceContext.StoreSettingService, mockGatewayProviderResolver.Object),
-            //                new TaxationContext(serviceContext.GatewayProviderService, mockGatewayProviderResolver.Object)
-            //            ),
-            //        new CacheHelper(new NullCacheProvider(),
-            //                            new NullCacheProvider(),
-            //                            new NullCacheProvider()));
-            //    AutoMapperMappings.BindMappings();
-            //    //ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"].RebuildIndex();  
+            var serviceContext = new ServiceContext(new PetaPocoUnitOfWorkProvider());
+            MerchelloContext = new MerchelloContext(serviceContext,
+                gatewayContextMock.Object,
+                new CacheHelper(new NullCacheProvider(),
+                                    new NullCacheProvider(),
+                                    new NullCacheProvider()));
+            AutoMapperMappings.BindMappings();
+            ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"].RebuildIndex();  
         }
 
         protected DbPreTestDataWorker PreTestDataWorker {
-            get { return DbPreTestDataWorker; }
+            get { return new DbPreTestDataWorker(); }
         }
 
     }

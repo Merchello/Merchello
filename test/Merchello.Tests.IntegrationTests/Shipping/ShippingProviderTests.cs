@@ -55,7 +55,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
 
             //// Act
             var ctorArgs = new[] { typeof(IGatewayProviderService), typeof(IGatewayProvider), typeof(IRuntimeCacheProvider) };
-            var ctoArgValues = new object[] { GatewayProviderService, provider, MerchelloContext.Current.Cache.RuntimeCache };
+            var ctoArgValues = new object[] { GatewayProviderService, provider, MerchelloContext.Cache.RuntimeCache };
             var gateway = ActivatorHelper.CreateInstance<GatewayProviderBase>(Type.GetType(provider.TypeFullName), ctorArgs, ctoArgValues);
 
             //// Assert
@@ -72,7 +72,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             //// Arrange
             
             //// Act
-            var providers = MerchelloContext.Current.Gateways.Shipping.GetAllActivatedProviders();
+            var providers = MerchelloContext.Gateways.Shipping.GetAllActivatedProviders();
 
             //// Assert
             Assert.NotNull(providers);
@@ -88,7 +88,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             //// Arrange
 
             //// Act
-            var provider = MerchelloContext.Current.Gateways.Shipping.GetAllActivatedProviders().FirstOrDefault();
+            var provider = MerchelloContext.Gateways.Shipping.GetAllActivatedProviders().FirstOrDefault();
             
 
 
@@ -105,7 +105,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
         {
             //// Arrange
             var country = ShipCountryService.GetShipCountryByCountryCode(Catalog.Key, "US");
-            var shippingProvider = MerchelloContext.Current.Gateways.Shipping.GetAllActivatedProviders().FirstOrDefault() as ShippingGatewayProviderBase;
+            var shippingProvider = MerchelloContext.Gateways.Shipping.GetAllActivatedProviders().FirstOrDefault() as ShippingGatewayProviderBase;
             Assert.NotNull(shippingProvider);
             
             //// Act
