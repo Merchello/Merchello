@@ -2,6 +2,7 @@
 using Examine;
 using Merchello.Core;
 using Merchello.Core.Models;
+using Merchello.Core.ObjectResolution;
 using Merchello.Core.Services;
 using Merchello.Examine;
 using Merchello.Web;
@@ -68,7 +69,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
             ProductVariantService.Saved -= ProductVariantServiceSaved;
             ProductVariantService.Deleted -= ProductVariantServiceDeleted;
 
-            
+            Resolution.Reset();
         }
 
         //#region BasketCheckoutEvents

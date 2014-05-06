@@ -41,10 +41,23 @@ namespace Merchello.Core.Gateways
         T CreateInstance(Guid gatewayProviderKey);
 
         /// <summary>
+        /// Activates a GatewayProvider
+        /// </summary>
+        /// <param name="provider">The GatewayProvider</param>
+        void ActivateProvider(GatewayProviderBase provider);
+
+        /// <summary>
         /// Activates a <see cref="IGatewayProvider"/>
         /// </summary>
         /// <param name="gatewayProvider">The <see cref="IGatewayProvider"/> to be activated</param>
         void ActivateProvider(IGatewayProvider gatewayProvider);
+
+
+        /// <summary>
+        /// Activates a GatewayProvider
+        /// </summary>
+        /// <param name="provider">The GatewayProvider</param>
+        void DeactivateProvider(GatewayProviderBase provider);
 
         /// <summary>
         /// Deactivates a <see cref="IGatewayProvider"/>

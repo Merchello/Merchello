@@ -23,7 +23,7 @@ namespace Merchello.Core.Gateways.Payment
         /// <returns>A collection of <see cref="IPaymentGatewayMethod"/>s</returns>
         public IEnumerable<IPaymentGatewayMethod> GetPaymentGatewayMethods()
         {
-            var paymentProviders = GatewayProviderResolver.ActivatedProvidersOf<PaymentGatewayProviderBase>() as IEnumerable<PaymentGatewayProviderBase>;
+            var paymentProviders = GatewayProviderResolver.GetActivatedProviders<PaymentGatewayProviderBase>() as IEnumerable<PaymentGatewayProviderBase>;
             
             var methods = new List<IPaymentGatewayMethod>();
             if (paymentProviders == null) return methods;

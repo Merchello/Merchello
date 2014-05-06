@@ -14,7 +14,7 @@ namespace Merchello.Tests.IntegrationTests.Taxation
     public class TaxationProviderTestBase : DatabaseIntegrationTestBase
     {
         protected IGatewayProviderService GatewayProviderService;
-        protected IMerchelloContext MerchelloContext;
+        
 
         [TestFixtureSetUp]
         public void FixtureInit()
@@ -28,11 +28,7 @@ namespace Merchello.Tests.IntegrationTests.Taxation
 
             GatewayProviderService = PreTestDataWorker.GatewayProviderService;
 
-            MerchelloContext = new MerchelloContext(new ServiceContext(new PetaPocoUnitOfWorkProvider()),
-                new CacheHelper(new NullCacheProvider(),
-                    new NullCacheProvider(),
-                    new NullCacheProvider()));
-
+            
         }
     }
 }

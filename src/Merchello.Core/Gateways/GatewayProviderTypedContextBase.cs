@@ -23,29 +23,6 @@ namespace Merchello.Core.Gateways
             _gatewayProviderService = gatewayProviderService;            
             _resolver = resolver;
 
-            AssertProviderVersions();
-        }
-
-        /// <summary>
-        /// Asserts the assembly versions get updated (if applicable) when the context is instantiated.
-        /// </summary>
-        /// TODO revist this.  Probably better to do something like this in the bootstrapper
-        private void AssertProviderVersions()
-        {
-            var all = GetAllActivatedProviders().ToArray();
-            var activated = GetAllActivatedProviders();
-
-            foreach (var provider in activated)
-            {
-                var key = provider.Key;
-                var resolved = all.FirstOrDefault(x => x.Key == key);
-
-                //if (resolved == null) continue;
-                //if (provider.TypeFullName.Equals(resolved.TypeFullName)) continue;
-                
-                //provider.TypeFullName = resolved.TypeFullName;
-                //GatewayProviderService.Save(provider);
-            }
         }
 
         /// <summary>
@@ -54,7 +31,7 @@ namespace Merchello.Core.Gateways
         /// <returns>A collection of all "activated" GatewayProvider of the particular type T</returns>
         public IEnumerable<GatewayProviderBase> GetAllActivatedProviders()
         {
-            return GatewayProviderResolver.ActivatedProvidersOf<T>();
+            return GatewayProviderResolver.GetActivatedProviders<T>();
         }
 
         /// <summary>
@@ -63,7 +40,7 @@ namespace Merchello.Core.Gateways
         /// <returns>A collection of all Gatewayprovider</returns>
         public IEnumerable<GatewayProviderBase> GetAllProviders()
         {
-            return GatewayProviderResolver.AllProvidersOf<T>();
+            return GatewayProviderResolver.GetAllProviders<T>();
         }
 
         /// <summary>
@@ -90,12 +67,31 @@ namespace Merchello.Core.Gateways
         /// <summary>
         /// Activates a <see cref="IGatewayProvider"/>
         /// </summary>
+        /// <param name="provider">The GatewayProvider to be activated</param>
+        public void ActivateProvider(GatewayProviderBase provider)
+        {
+            ActivateProvider(provider.GatewayProvider);
+        }
+
+        /// <summary>
+        /// Activates a <see cref="IGatewayProvider"/>
+        /// </summary>
         /// <param name="gatewayProvider">The <see cref="IGatewayProvider"/> to be activated</param>
         public void ActivateProvider(IGatewayProvider gatewayProvider)
         {
-            if(gatewayProvider.Activated) return;
+
+            if (gatewayProvider.Activated) return;
             GatewayProviderService.Save(gatewayProvider);
             GatewayProviderResolver.RefreshCache();
+        }
+
+        /// <summary>
+        /// Deactivates a <see cref="IGatewayProvider"/>
+        /// </summary>
+        /// <param name="provider">The GatewayProvider to be deactivated</param>
+        public void DeactivateProvider(GatewayProviderBase provider)
+        {
+            DeactivateProvider(provider.GatewayProvider);
         }
 
         /// <summary>

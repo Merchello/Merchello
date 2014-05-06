@@ -39,9 +39,8 @@ namespace Merchello.Core.Gateways
             // this will cache the list of all providers that have been "Activated"
             foreach (var provider in _gatewayProviderService.GetAllGatewayProviders())
             {
-                var gwProvider = CreateInstances(new object[] {_gatewayProviderService, provider, _runtimeCache}).FirstOrDefault();
-
-                if(gwProvider != null) AddOrUpdateCache(gwProvider);
+                var attempt = CreateInstance(provider);
+                if(attempt.Success) AddOrUpdateCache(attempt.Result);
             }
         }
 
@@ -49,6 +48,34 @@ namespace Merchello.Core.Gateways
         {
             _activatedGatewayProviderCache.AddOrUpdate(provider.Key, provider, (x, y) => provider);
         }
+
+        private Attempt<GatewayProviderBase> CreateInstance(IGatewayProvider provider)
+        {
+            return ActivatorHelper.CreateInstance<GatewayProviderBase>(provider.TypeFullName, new object[] { _gatewayProviderService, provider, _runtimeCache });
+        }
+
+        ///// <summary>
+        ///// Asserts the assembly versions get updated (if applicable) when the context is instantiated.
+        ///// </summary>
+        ///// TODO revist this.  Probably better to do something like this in the bootstrapper
+        //private void AssertProviderVersions()
+        //{
+        //    var all = GetAllProviders().ToArray();
+        //    var activated = GetAllActivatedProviders();
+
+        //    foreach (var provider in activated)
+        //    {
+        //        var key = provider.Key;
+        //        var resolved = all.FirstOrDefault(x => x.Key == key);
+
+        //        if (resolved == null) continue;
+        //        if (provider.GatewayProvider.TypeFullName.Equals(resolved.GatewayProvider.TypeFullName)) continue;
+
+        //        provider.GatewayProvider.TypeFullName = resolved.GatewayProvider.TypeFullName;
+        //        GatewayProviderService.Save(provider.GatewayProvider);
+        //    }
+        //}
+
 
         protected override IEnumerable<GatewayProviderBase> Values
         {
@@ -65,18 +92,13 @@ namespace Merchello.Core.Gateways
                 {
                     allResolved.AddRange(_activatedGatewayProviderCache.Values);
 
-                    var inactive =
-                        InstanceTypes.Where(
-                            x =>
-                                _activatedGatewayProviderCache.Values.All(
-                                    y => x.GetCustomAttribute<GatewayProviderActivationAttribute>(false).Key != y.Key));
+                    var inactive = (from it in InstanceTypes let key = it.GetCustomAttribute<GatewayProviderActivationAttribute>(false).Key 
+                                    where !_activatedGatewayProviderCache.ContainsKey(key) select it).ToList();
 
                     allResolved.AddRange(
                         inactive.Select(
                             type => factory.BuildEntity(type, GetGatewayProviderType(type))
-                            ).Select(provider => 
-                                CreateInstances(new object[] {_gatewayProviderService, provider, _runtimeCache}).FirstOrDefault()
-                                ).Where(instance => instance != null));
+                            ).Select(CreateInstance).Where(attempt => attempt.Success).Select(x => x.Result));
                 }
 
                 return allResolved;
@@ -88,7 +110,7 @@ namespace Merchello.Core.Gateways
         /// </summary>
         internal IEnumerable<PaymentGatewayProviderBase> PaymentGatewayProviders
         {
-            get { return ActivatedProvidersOf<PaymentGatewayProviderBase>() as IEnumerable<PaymentGatewayProviderBase>; }
+            get { return GetActivatedProviders<PaymentGatewayProviderBase>() as IEnumerable<PaymentGatewayProviderBase>; }
         }
              
 
@@ -102,7 +124,7 @@ namespace Merchello.Core.Gateways
         public T GetProviderByKey<T>(Guid gatewayProviderKey, bool activatedOnly = true) where T : GatewayProviderBase
         {
             if (activatedOnly) 
-            return ActivatedProvidersOf<T>().FirstOrDefault(x => x.Key == gatewayProviderKey) as T;
+            return GetActivatedProviders<T>().FirstOrDefault(x => x.Key == gatewayProviderKey) as T;
 
             return Values.FirstOrDefault(x => x.Key == gatewayProviderKey) as T;
 
@@ -113,18 +135,21 @@ namespace Merchello.Core.Gateways
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public IEnumerable<GatewayProviderBase> AllProvidersOf<T>() where T : GatewayProviderBase
+        public IEnumerable<GatewayProviderBase> GetAllProviders<T>() where T : GatewayProviderBase
         {
-            return Values.Where(instance => instance.GetType().IsAssignableFrom(typeof (T)));
+            return (from value in Values let t = value.GetType() where typeof (T).IsAssignableFrom(t) select value as T).ToList();
         }
 
 
         /// <summary>
         /// Gets a collection of <see cref="IGatewayProvider"/>s by type
         /// </summary>
-        public IEnumerable<GatewayProviderBase> ActivatedProvidersOf<T>() where T  : GatewayProviderBase
+        public IEnumerable<GatewayProviderBase> GetActivatedProviders<T>() where T  : GatewayProviderBase
         {
-            return _activatedGatewayProviderCache.Values.Where(x => x.GetType().IsAssignableFrom(typeof (T)));
+            var type = typeof (T);
+            return
+                _activatedGatewayProviderCache.Values.Where(
+                    x => x.GatewayProvider.GatewayProviderType == GetGatewayProviderType(type));
         }
 
         public void RefreshCache()

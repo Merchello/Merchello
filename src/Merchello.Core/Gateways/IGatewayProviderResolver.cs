@@ -9,12 +9,12 @@ namespace Merchello.Core.Gateways
         /// <summary>
         /// Gets a collection of <see cref="IGatewayProvider"/>s by type
         /// </summary>
-        IEnumerable<GatewayProviderBase> ActivatedProvidersOf<T>() where T : GatewayProviderBase;
+        IEnumerable<GatewayProviderBase> GetActivatedProviders<T>() where T : GatewayProviderBase;
 
         /// <summary>
         /// Gets a collection of inactive (not saved) <see cref="IGatewayProvider"/> by type
         /// </summary>
-        IEnumerable<GatewayProviderBase> AllProvidersOf<T>() where T : GatewayProviderBase;
+        IEnumerable<GatewayProviderBase> GetAllProviders<T>() where T : GatewayProviderBase;
 
         /// <summary>
         /// Instantiates a GatewayProvider given its registered Key

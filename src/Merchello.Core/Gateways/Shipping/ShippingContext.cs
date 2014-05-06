@@ -29,7 +29,7 @@ namespace Merchello.Core.Gateways.Shipping
         /// <returns>A collection of <see cref="IShipmentRateQuote"/></returns>
         public IEnumerable<IShipmentRateQuote> GetShipRateQuotesForShipment(IShipment shipment)
         {
-            var providers = GatewayProviderResolver.ActivatedProvidersOf<ShippingGatewayProviderBase>() as IEnumerable<ShippingGatewayProviderBase>;
+            var providers = GatewayProviderResolver.GetActivatedProviders<ShippingGatewayProviderBase>() as IEnumerable<ShippingGatewayProviderBase>;
             var quotes = new List<IShipmentRateQuote>();
 
             if (providers == null) return quotes;

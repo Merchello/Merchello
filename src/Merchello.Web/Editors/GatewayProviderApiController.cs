@@ -229,30 +229,29 @@ namespace Merchello.Web.Editors
         /// <param name="gatewayProvider">The <see cref="GatewayProviderDisplay"/></param>
         /// <param name="gatewayProviderType"></param>
         /// <returns>A <see cref="IGatewayProvider"/> or null</returns>
-        // TODO refactor this
         private IGatewayProvider GetGatewayProviderFromResolver(GatewayProviderDisplay gatewayProvider, GatewayProviderType gatewayProviderType)
         {
             // get the type of the provider
             
 
-            IGatewayProvider provider = null;
+            GatewayProviderBase provider = null;
 
             switch (gatewayProviderType)
             {
                 case GatewayProviderType.Payment:
-                    provider = _gatewayContext.Payment.GetAllProviders().FirstOrDefault(x => x.Key == gatewayProvider.Key);
+                    provider = _gatewayContext.Payment.GetProviderByKey(gatewayProvider.Key, false);
                     break;
 
                 case GatewayProviderType.Shipping:
-                    provider = _gatewayContext.Shipping.GetAllProviders().FirstOrDefault(x => x.Key == gatewayProvider.Key);
+                    provider = _gatewayContext.Shipping.GetProviderByKey(gatewayProvider.Key, false);
                     break;
 
                 case GatewayProviderType.Taxation:
-                    provider = _gatewayContext.Taxation.GetAllProviders().FirstOrDefault(x => x.Key == gatewayProvider.Key);
+                    provider = _gatewayContext.Taxation.GetProviderByKey(gatewayProvider.Key, false);
                     break;
             }
 
-            return provider;
+            return provider != null ? provider.GatewayProvider : null;
         }
 
         #endregion

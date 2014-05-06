@@ -50,15 +50,23 @@ namespace Merchello.Core
             var providerName = ConfigurationManager.ConnectionStrings[MerchelloConfiguration.Current.Section.DefaultConnectionStringName].ProviderName;                
             var serviceContext = new ServiceContext(new PetaPocoUnitOfWorkProvider(connString, providerName));
 
-            InitializeGatewayResolver();
 
-            CreateMerchelloContext(serviceContext);
+            var cache = ApplicationContext.Current == null
+                            ? new CacheHelper(
+                                    new ObjectCacheRuntimeCacheProvider(),
+                                    new StaticCacheProvider(),
+                                    new NullCacheProvider())
+                            : ApplicationContext.Current.ApplicationCache;
+
+            InitializeGatewayResolver(serviceContext, cache);
+
+            CreateMerchelloContext(serviceContext, cache);
             
             // TODO Difficult to Mock the singleton behavior for multiple tests
            
             InitializeResolvers();
 
-            BindEventTriggers();
+            //BindEventTriggers();
         
            
 
@@ -77,7 +85,7 @@ namespace Merchello.Core
         /// of allowing Umbraco to manage the various caching providers via the Umbraco CoreBootManager or WebBootManager
         /// depending on the context.
         /// </remarks>
-        protected void CreateMerchelloContext(ServiceContext serviceContext)
+        protected void CreateMerchelloContext(ServiceContext serviceContext, CacheHelper cache)
         {
 
             var gateways = new GatewayContext(
@@ -86,25 +94,19 @@ namespace Merchello.Core
                 new ShippingContext(serviceContext.GatewayProviderService, serviceContext.StoreSettingService, GatewayProviderResolver.Current),
                 new TaxationContext(serviceContext.GatewayProviderService, GatewayProviderResolver.Current));
 
-            var cache = ApplicationContext.Current == null
-                            ? new CacheHelper(
-                                    new ObjectCacheRuntimeCacheProvider(),
-                                    new StaticCacheProvider(),
-                                    new NullCacheProvider())
-                            : ApplicationContext.Current.ApplicationCache;
 
             _merchelloContext = MerchelloContext.Current = new MerchelloContext(serviceContext, gateways, cache);
         }
 
 
-        private void InitializeGatewayResolver()
+        private void InitializeGatewayResolver(IServiceContext serviceContext, CacheHelper cache)
         {
             if (Resolution.IsFrozen || _isTest) return;
 
             GatewayProviderResolver.Current = new GatewayProviderResolver(
                 PluginManager.Current.ResolveGatewayProviders(),
-                MerchelloContext.Current.Services.GatewayProviderService,
-                MerchelloContext.Current.Cache.RuntimeCache);
+                serviceContext.GatewayProviderService,
+                cache.RuntimeCache);
         }
 
 
