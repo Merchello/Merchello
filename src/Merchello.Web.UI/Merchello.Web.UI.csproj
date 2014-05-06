@@ -95,7 +95,9 @@
     <Content Include="App_Plugins\Merchello\Common\Js\merchello.app.js" />
     <Content Include="App_Plugins\Merchello\Common\Js\merchello.models.js" />
     <Content Include="App_Plugins\Merchello\Common\Js\merchello.namespaces.js" />
+    <Content Include="App_Plugins\Merchello\Directives\merchello.debug.section.directive.js" />
     <Content Include="App_Plugins\Merchello\Directives\dropdownlist.directive.js" />
+    <Content Include="App_Plugins\Merchello\Directives\merchello-debug-section.html" />
     <Content Include="App_Plugins\Merchello\Directives\merchello-panel.html" />
     <Content Include="App_Plugins\Merchello\Directives\merchello.panel.directive.js" />
     <Content Include="App_Plugins\Merchello\Common\Js\startfrom.filter.js" />
