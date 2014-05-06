@@ -16,10 +16,9 @@ namespace Merchello.Web
                 MethodBase.GetCurrentMethod().DeclaringType
             );
 
-
-        protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
+        protected override void ApplicationInitialized(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
-            base.ApplicationStarted(umbracoApplication, applicationContext);
+            base.ApplicationInitialized(umbracoApplication, applicationContext);
 
             // Initialize Merchello
             Log.Info("Attempting to initialize Merchello");
@@ -32,8 +31,6 @@ namespace Merchello.Web
             {
                 Log.Error("Initialization of Merchello failed", ex);
             }
-            
         }
-        
     }
 }

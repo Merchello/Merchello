@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Threading;
 using Umbraco.Core;
+using Umbraco.Core.Logging;
 
-namespace Merchello.Tests.Base.SqlSyntax
+namespace Merchello.Core.ObjectResolution
 {
 	/// <summary>
 	/// Represents the status of objects resolution.
@@ -13,10 +14,10 @@ namespace Merchello.Tests.Base.SqlSyntax
 	/// </remarks>
 	internal static class Resolution
 	{
-		private static readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim();
-	    private volatile static bool _isFrozen;
+		private static readonly ReaderWriterLockSlim ConfigurationLock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+        private volatile static bool _isFrozen;
 
-		/// <summary>
+	    /// <summary>
 		/// Occurs when resolution is frozen.
 		/// </summary>
 		/// <remarks>Occurs only once, since resolution can be frozen only once.</remarks>
@@ -25,18 +26,26 @@ namespace Merchello.Tests.Base.SqlSyntax
 		/// <summary>
 		/// Gets or sets a value indicating whether resolution of objects is frozen.
 		/// </summary>
-		public static bool IsFrozen
+		// internal for unit tests, use ReadFrozen if you want to be sure
+		internal static bool IsFrozen
 		{
-		    get { return _isFrozen; }
-		    private set { _isFrozen = value; }
+		    get
+		    {
+		        using (new ReadLock(ConfigurationLock))
+		        {
+                    return _isFrozen;
+                }
+		    }
 		}
 
-	    public static void EnsureIsFrozen()
-		{
-            if (!_isFrozen)
-                throw new InvalidOperationException("Resolution is not frozen, it is not yet possible to get values from it.");
+	    public static IDisposable Reader(bool canReadUnfrozen = false)
+	    {
+            IDisposable l = new ReadLock(ConfigurationLock);
+            if (canReadUnfrozen || _isFrozen) return l;
 
-		}
+            l.Dispose();
+            throw new InvalidOperationException("Resolution is not frozen, it is not yet possible to get values from it.");
+	    }
 
 		/// <summary>
 		/// Returns a disposable object that represents safe access to unfrozen resolution configuration.
@@ -46,13 +55,11 @@ namespace Merchello.Tests.Base.SqlSyntax
 		{
 			get
 			{
-				IDisposable l = new WriteLock(_lock);
-                if (_isFrozen)
-				{
-					l.Dispose();
-					throw new InvalidOperationException("Resolution is frozen, it is not possible to configure it anymore.");
-				}
-				return l;
+				IDisposable l = new WriteLock(ConfigurationLock);
+			    if (_isFrozen == false) return l;
+
+			    l.Dispose();
+			    throw new InvalidOperationException("Resolution is frozen, it is not possible to configure it anymore.");
 			}
 		}
 
@@ -72,20 +79,23 @@ namespace Merchello.Tests.Base.SqlSyntax
         // keep the class here because it needs write-access to Resolution.IsFrozen
         private class DirtyBackdoor : IDisposable
         {
-            private static readonly System.Threading.ReaderWriterLockSlim _dirtyLock = new ReaderWriterLockSlim();
 
-            private IDisposable _lock;
-            private bool _frozen;
+            private readonly IDisposable _lock;
+            private readonly bool _frozen;
 
             public DirtyBackdoor()
             {
-                _lock = new WriteLock(_dirtyLock);
+                LogHelper.Debug(typeof(DirtyBackdoor), "Creating back door for resolution");
+
+                _lock = new WriteLock(ConfigurationLock);
                 _frozen = _isFrozen;
                 _isFrozen = false;
             }
 
             public void Dispose()
             {
+                LogHelper.Debug(typeof(DirtyBackdoor), "Disposing back door for resolution");
+
                 _isFrozen = _frozen;
                 _lock.Dispose();
             }
@@ -97,11 +107,17 @@ namespace Merchello.Tests.Base.SqlSyntax
 		/// <exception cref="InvalidOperationException">resolution is already frozen.</exception>
 		public static void Freeze()
 		{
-            if (_isFrozen)
-				throw new InvalidOperationException("Resolution is frozen. It is not possible to freeze it again.");
+            LogHelper.Debug(typeof(Resolution), "Freezing resolution");
 
-            _isFrozen = true;
-			if (Frozen != null)
+		    using (new WriteLock(ConfigurationLock))
+		    {
+                if (_isFrozen)
+                    throw new InvalidOperationException("Resolution is frozen. It is not possible to freeze it again.");
+
+                _isFrozen = true;
+            }
+			
+            if (Frozen != null)
 				Frozen(null, null);
 		}
         
@@ -111,7 +127,20 @@ namespace Merchello.Tests.Base.SqlSyntax
         /// <remarks>To be used in unit tests.</remarks>
         internal static void Reset()
         {
-            _isFrozen = false;
+            LogHelper.Debug(typeof(Resolution), "Resetting resolution");
+
+            /*
+            var trace = new System.Diagnostics.StackTrace();
+            var testing = trace.GetFrames().Any(frame =>
+                frame.GetMethod().DeclaringType.FullName.StartsWith("Umbraco.Tests"));
+            if (testing == false)
+                throw new InvalidOperationException("Only unit tests can reset configuration.");
+            */
+
+            using (new WriteLock(ConfigurationLock))
+            {
+                _isFrozen = false;
+            }
             Frozen = null;
         }
 	}

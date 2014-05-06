@@ -92,6 +92,7 @@ namespace Merchello.Core.Models
         /// The full Type name (used to instantiate the class)
         /// </summary>
         [DataMember]
+        [Obsolete("This field is no longer required")]
         public string TypeFullName
         {
             get { return _typeFullName; }

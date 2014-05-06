@@ -15,13 +15,36 @@ namespace Merchello.Core.Gateways
         /// Lists all available <see cref="IGatewayProvider"/>
         /// </summary>
         /// <returns>A collection of all GatewayProvider of the particular type T</returns>
-        IEnumerable<IGatewayProvider> GetAllActivatedProviders();
+        IEnumerable<GatewayProviderBase> GetAllActivatedProviders();
 
         /// <summary>
         /// Lists all available providers.  This list includes providers that are just resolved and not configured
         /// </summary>
         /// <returns>A collection of all Gatewayprovider</returns>
-        IEnumerable<IGatewayProvider> GetAllProviders();
+        IEnumerable<GatewayProviderBase> GetAllProviders();
+
+        /// <summary>
+        /// Instantiates a GatewayProvider given its registered Key
+        /// </summary>
+        /// <typeparam name="T">The Type of the GatewayProvider.  Must inherit from GatewayProviderBase</typeparam>
+        /// <param name="gatewayProviderKey"></param>
+        /// <param name="activatedOnly">Search only activated providers</param>
+        /// <returns>An instantiated GatewayProvider</returns>
+        T GetProviderByKey(Guid gatewayProviderKey, bool activatedOnly = true);
+
+        /// <summary>
+        /// Obsolete method
+        /// </summary>
+        /// <param name="gatewayProviderKey"></param>
+        /// <returns></returns>
+        [Obsolete("Use GetProviderByKey instead")]
+        T CreateInstance(Guid gatewayProviderKey);
+
+        /// <summary>
+        /// Activates a GatewayProvider
+        /// </summary>
+        /// <param name="provider">The GatewayProvider</param>
+        void ActivateProvider(GatewayProviderBase provider);
 
         /// <summary>
         /// Activates a <see cref="IGatewayProvider"/>
@@ -29,23 +52,18 @@ namespace Merchello.Core.Gateways
         /// <param name="gatewayProvider">The <see cref="IGatewayProvider"/> to be activated</param>
         void ActivateProvider(IGatewayProvider gatewayProvider);
 
+
+        /// <summary>
+        /// Activates a GatewayProvider
+        /// </summary>
+        /// <param name="provider">The GatewayProvider</param>
+        void DeactivateProvider(GatewayProviderBase provider);
+
         /// <summary>
         /// Deactivates a <see cref="IGatewayProvider"/>
         /// </summary>
         /// <param name="gatewayProvider">The <see cref="IGatewayProvider"/> to be deactivated</param>
         void DeactivateProvider(IGatewayProvider gatewayProvider);
 
-        /// <summary>
-        /// Resolves all active <see cref="IGatewayProvider"/>s of T
-        /// </summary>
-        /// <returns></returns>
-        IEnumerable<T> CreateInstances();
-
-        /// <summary>
-        /// Resolves a <see cref="IGatewayProvider"/> by it's unique key
-        /// </summary>
-        /// <param name="key">The Guid 'key' of the provider</param>
-        /// <returns>Returns a <see cref="IGatewayProvider"/> of type T</returns>
-        T CreateInstance(Guid key);
     }
 }

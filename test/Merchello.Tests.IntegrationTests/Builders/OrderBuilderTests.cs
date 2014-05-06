@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Merchello.Core;
 using Merchello.Core.Builders;
 using Merchello.Core.Models;
 using Merchello.Tests.Base.DataMakers;

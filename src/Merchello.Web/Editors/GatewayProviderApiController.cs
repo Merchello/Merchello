@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using Merchello.Core;
 using Merchello.Core.Gateways;
+using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Models;
 using Merchello.Core.Models.TypeFields;
 using Merchello.Core.Services;
@@ -72,7 +73,7 @@ namespace Merchello.Web.Editors
         /// </summary>
         public IEnumerable<GatewayProviderDisplay> GetResolvedPaymentGatewayProviders()
         {
-            return _gatewayContext.Payment.GetAllProviders().Select(x => x.ToGatewayProviderDisplay());
+            return _gatewayContext.Payment.GetAllProviders().Select(x => x.GatewayProvider.ToGatewayProviderDisplay());
         }
 
         /// <summary>
@@ -82,7 +83,7 @@ namespace Merchello.Web.Editors
         /// </summary>
         public IEnumerable<GatewayProviderDisplay> GetResolvedShippingGatewayProviders()
         {
-            return _gatewayContext.Shipping.GetAllProviders().Select(x => x.ToGatewayProviderDisplay());
+            return _gatewayContext.Shipping.GetAllProviders().Select(x => x.GatewayProvider.ToGatewayProviderDisplay());
         }
 
 
@@ -93,7 +94,7 @@ namespace Merchello.Web.Editors
         /// </summary>
         public IEnumerable<GatewayProviderDisplay> GetResolvedTaxationGatewayProviders()
         {
-            return _gatewayContext.Taxation.GetAllProviders().Select(x => x.ToGatewayProviderDisplay());
+            return _gatewayContext.Taxation.GetAllProviders().Select(x => x.GatewayProvider.ToGatewayProviderDisplay());
         }
 
 
@@ -228,30 +229,29 @@ namespace Merchello.Web.Editors
         /// <param name="gatewayProvider">The <see cref="GatewayProviderDisplay"/></param>
         /// <param name="gatewayProviderType"></param>
         /// <returns>A <see cref="IGatewayProvider"/> or null</returns>
-        // TODO refactor this
         private IGatewayProvider GetGatewayProviderFromResolver(GatewayProviderDisplay gatewayProvider, GatewayProviderType gatewayProviderType)
         {
             // get the type of the provider
             
 
-            IGatewayProvider provider = null;
+            GatewayProviderBase provider = null;
 
             switch (gatewayProviderType)
             {
                 case GatewayProviderType.Payment:
-                    provider = _gatewayContext.Payment.GetAllProviders().FirstOrDefault(x => x.Key == gatewayProvider.Key);
+                    provider = _gatewayContext.Payment.GetProviderByKey(gatewayProvider.Key, false);
                     break;
 
                 case GatewayProviderType.Shipping:
-                    provider = _gatewayContext.Shipping.GetAllProviders().FirstOrDefault(x => x.Key == gatewayProvider.Key);
+                    provider = _gatewayContext.Shipping.GetProviderByKey(gatewayProvider.Key, false);
                     break;
 
                 case GatewayProviderType.Taxation:
-                    provider = _gatewayContext.Taxation.GetAllProviders().FirstOrDefault(x => x.Key == gatewayProvider.Key);
+                    provider = _gatewayContext.Taxation.GetProviderByKey(gatewayProvider.Key, false);
                     break;
             }
 
-            return provider;
+            return provider != null ? provider.GatewayProvider : null;
         }
 
         #endregion

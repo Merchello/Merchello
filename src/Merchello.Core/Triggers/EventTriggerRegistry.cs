@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using Merchello.Core.ObjectResolution;
 using Umbraco.Core;
 using Umbraco.Core.ObjectResolution;
 
@@ -10,9 +11,9 @@ namespace Merchello.Core.Triggers
     /// <summary>
     /// Represents a EventTriggerRegistry
     /// </summary>
-    internal sealed class EventTriggerRegistry : LazyManyObjectsResolverBase<EventTriggerRegistry, IEventTrigger>, IEventTriggerRegistry
+    internal sealed class EventTriggerRegistry : LazyManyObjectsResolverBase<EventTriggerRegistry, IEventTriggeredAction>, IEventTriggerRegistry
     {
-        private static readonly ConcurrentDictionary<string, IEventTrigger> TriggerCache = new ConcurrentDictionary<string, IEventTrigger>();
+        private static readonly ConcurrentDictionary<string, IEventTriggeredAction> TriggerCache = new ConcurrentDictionary<string, IEventTriggeredAction>();
 
         internal static bool IsInitialized { get; private set; }
 
@@ -36,61 +37,61 @@ namespace Merchello.Core.Triggers
         /// Adds a key value pair to the dictionary
         /// </summary>
         /// <param name="key"></param>
-        /// <param name="trigger">The <see cref="IEventTrigger"/> to cache</param>
-        private static void CacheMapper(string key, IEventTrigger trigger)
+        /// <param name="triggeredAction">The <see cref="IEventTriggeredAction"/> to cache</param>
+        private static void CacheMapper(string key, IEventTriggeredAction triggeredAction)
         {
-            TriggerCache.AddOrUpdate(key, trigger, (x, y) => trigger);
+            TriggerCache.AddOrUpdate(key, triggeredAction, (x, y) => triggeredAction);
         }
 
 
         /// <summary>
-        /// Gets a <see cref="IEventTrigger"/> from the registry
+        /// Gets a <see cref="IEventTriggeredAction"/> from the registry
         /// </summary>
         /// <param name="key"></param>
-        /// <returns>A <see cref="IEventTrigger"/></returns>
-        public IEventTrigger TryGetTrigger(string key)
+        /// <returns>A <see cref="IEventTriggeredAction"/></returns>
+        public IEventTriggeredAction TryGetTrigger(string key)
         {
-            IEventTrigger value;
+            IEventTriggeredAction value;
             return TriggerCache.TryGetValue(key, out value) ? value : null;
         }
 
         /// <summary>
-        /// Gets a collection of <see cref="IEventTrigger"/> by the area defined in the attribute
+        /// Gets a collection of <see cref="IEventTriggeredAction"/> by the area defined in the attribute
         /// </summary>
         /// <param name="area">The "area"</param>
-        /// <returns>A <see cref="IEventTrigger"/></returns>
-        public IEnumerable<IEventTrigger> GetTriggersByArea(string area)
+        /// <returns>A <see cref="IEventTriggeredAction"/></returns>
+        public IEnumerable<IEventTriggeredAction> GetTriggersByArea(string area)
         {
             return
                 GetAllEventTriggers()
-                    .Where(x => x.GetType().GetCustomAttributes<EventTriggerAttribute>(false).FirstOrDefault().Area.Equals(area));            
+                    .Where(x => x.GetType().GetCustomAttributes<EventTriggeredActionForAttribute>(false).FirstOrDefault().Area.Equals(area));            
         }
 
         /// <summary>
-        /// Gets the collection of all resovled <see cref="IEventTrigger"/>s
+        /// Gets the collection of all resovled <see cref="IEventTriggeredAction"/>s
         /// </summary>
-        public IEnumerable<IEventTrigger> GetAllEventTriggers()
+        public IEnumerable<IEventTriggeredAction> GetAllEventTriggers()
         {
             return TriggerCache.Values;
         }
 
         /// <summary>
-        /// Gets the resolved collection of <see cref="IEventTrigger"/>
+        /// Gets the resolved collection of <see cref="IEventTriggeredAction"/>
         /// </summary>
         /// <remarks>
         /// Should be able to use the "Values" in the base class but it can't be tested
-        /// due to the Umbraco's <see cref="Resolution"/> 
+        /// due to the Umbraco's <see cref="ObjectResolution.Resolution"/> 
         /// </remarks>
-        internal IEnumerable<IEventTrigger> EventTriggers
+        internal IEnumerable<IEventTriggeredAction> EventTriggers
         {
             get
             {
                 var ctrArgs = new object[] {};
-                var triggers = new List<IEventTrigger>();
+                var triggers = new List<IEventTriggeredAction>();
 
                 foreach (var et in InstanceTypes)
                 {
-                    var attempt = ActivatorHelper.CreateInstance<IEventTrigger>(et.AssemblyQualifiedName, ctrArgs);
+                    var attempt = ActivatorHelper.CreateInstance<IEventTriggeredAction>(et.AssemblyQualifiedName, ctrArgs);
                     if (attempt.Success) triggers.Add(attempt.Result);
                 }
 

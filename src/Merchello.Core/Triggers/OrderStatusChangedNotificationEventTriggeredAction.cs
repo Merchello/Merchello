@@ -4,10 +4,10 @@ using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Umbraco.Core.Logging;
 
-namespace Merchello.Core.Triggers.Notification
+namespace Merchello.Core.Triggers
 {
-    [EventTrigger("Notification", typeof(OrderService), "StatusChanged")]
-    internal class OrderStatusChangedNotificationEventTrigger : NotificationEventTriggerBase
+    [EventTriggeredActionFor("Notification", typeof(OrderService), "StatusChanged")]
+    internal class OrderStatusChangedNotificationEventTriggeredAction : EventTriggeredActionBase
     {
         public override void Invoke(Object sender, EventArgs e)
         {
@@ -17,7 +17,7 @@ namespace Merchello.Core.Triggers.Notification
             }
             catch (Exception ex)
             {                
-                LogHelper.Error<OrderStatusChangedNotificationEventTrigger>("Invoke failed", ex);
+                LogHelper.Error<OrderStatusChangedNotificationEventTriggeredAction>("Invoke failed", ex);
             }            
         }
     }

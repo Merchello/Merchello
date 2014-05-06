@@ -260,6 +260,7 @@
     <Compile Include="ObjectResolution\TestingShippingGatewayProvider.cs" />
     <Compile Include="ObjectResolution\TestingTaxationGatewayProvider.cs" />
     <Compile Include="Payments\PaymentProcessingTests.cs" />
+    <Compile Include="TestHelpers\TestMerchelloDataService.cs" />
     <Compile Include="Workflow\CheckoutProcessesTests.cs" />
     <Compile Include="DisplayClasses\ProductDisplayTests.cs" />
     <Compile Include="DisplayClasses\ShippingDisplayTests.cs" />
@@ -291,7 +292,6 @@
     <Compile Include="Taxation\TaxationProviderTestBase.cs" />
     <Compile Include="Taxation\TaxationProviderTests.cs" />
     <Compile Include="TestHelpers\DbPreTestDataWorker.cs" />
-    <Compile Include="TestHelpers\TestMerchelloDataService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

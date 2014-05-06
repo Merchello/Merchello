@@ -29,8 +29,11 @@ namespace Merchello.Core.Gateways.Shipping
         /// <returns>A collection of <see cref="IShipmentRateQuote"/></returns>
         public IEnumerable<IShipmentRateQuote> GetShipRateQuotesForShipment(IShipment shipment)
         {
-            var providers = CreateInstances();
+            var providers = GatewayProviderResolver.GetActivatedProviders<ShippingGatewayProviderBase>() as IEnumerable<ShippingGatewayProviderBase>;
             var quotes = new List<IShipmentRateQuote>();
+
+            if (providers == null) return quotes;
+
             foreach (var provider in providers)
             {
                 quotes.AddRange(provider.QuoteShippingGatewayMethodsForShipment(shipment));
@@ -77,27 +80,9 @@ namespace Merchello.Core.Gateways.Shipping
 
             return
                 gatewayProviders.Select(
-                    provider => GatewayProviderResolver.CreateInstance<ShippingGatewayProviderBase>(provider));
+                    provider => GatewayProviderResolver.GetProviderByKey<ShippingGatewayProviderBase>(provider.Key));
         }
 
 
-        /// <summary>
-        /// Resolves all active shipping gateway providers
-        /// </summary>
-        /// <returns>A collection of all active shipping gateway providers</returns>
-        public override IEnumerable<ShippingGatewayProviderBase> CreateInstances()
-        {
-            return GatewayProviderResolver.CreateInstances<ShippingGatewayProviderBase>(GatewayProviderType.Shipping);
-        }
-
-        /// <summary>
-        /// Resolves a shipping gateway provider by it's unique key
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns>A shipping gateway provider</returns>
-        public override ShippingGatewayProviderBase CreateInstance(Guid key)
-        {
-            return GatewayProviderResolver.CreateInstance<ShippingGatewayProviderBase>(key);
-        }
     }
 }

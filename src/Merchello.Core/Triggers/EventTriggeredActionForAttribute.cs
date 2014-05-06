@@ -3,7 +3,7 @@
 namespace Merchello.Core.Triggers
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-    public class EventTriggerAttribute : Attribute
+    public class EventTriggeredActionForAttribute : Attribute
     {
         public string Area { get; private set; }
 
@@ -11,7 +11,7 @@ namespace Merchello.Core.Triggers
 
         public string EventName { get; private set; }
 
-        public EventTriggerAttribute(string area, Type service, string eventName)
+        public EventTriggeredActionForAttribute(string area, Type service, string eventName)
         {
             Area = area;
             Service = service;

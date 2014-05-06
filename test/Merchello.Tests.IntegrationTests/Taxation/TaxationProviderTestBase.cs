@@ -14,11 +14,13 @@ namespace Merchello.Tests.IntegrationTests.Taxation
     public class TaxationProviderTestBase : DatabaseIntegrationTestBase
     {
         protected IGatewayProviderService GatewayProviderService;
-        protected IMerchelloContext MerchelloContext;
+        
 
         [TestFixtureSetUp]
-        public void FixtureInit()
+        public override void FixtureSetup()
         {
+            base.FixtureSetup();
+
             var dtos = PreTestDataWorker.Database.Query<GatewayProviderDto>("SELECT * FROM merchGatewayProvider");
 
             if (!dtos.Any())
@@ -28,11 +30,7 @@ namespace Merchello.Tests.IntegrationTests.Taxation
 
             GatewayProviderService = PreTestDataWorker.GatewayProviderService;
 
-            MerchelloContext = new MerchelloContext(new ServiceContext(new PetaPocoUnitOfWorkProvider()),
-                new CacheHelper(new NullCacheProvider(),
-                    new NullCacheProvider(),
-                    new NullCacheProvider()));
-
+            
         }
     }
 }

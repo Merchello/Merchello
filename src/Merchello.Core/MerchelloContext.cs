@@ -2,10 +2,6 @@
 using System.Threading;
 using Merchello.Core.Configuration;
 using Merchello.Core.Gateways;
-using Merchello.Core.Gateways.Notification;
-using Merchello.Core.Gateways.Payment;
-using Merchello.Core.Gateways.Shipping;
-using Merchello.Core.Gateways.Taxation;
 using Merchello.Core.Services;
 using Umbraco.Core;
 using Umbraco.Core.Logging;
@@ -14,40 +10,19 @@ namespace Merchello.Core
 {
     public class MerchelloContext : IMerchelloContext
     {
-        internal MerchelloContext(IServiceContext serviceContext)
-            : this(serviceContext, ApplicationContext.Current.ApplicationCache)
+        internal MerchelloContext(IServiceContext serviceContext, IGatewayContext gatewayContext)
+            : this(serviceContext, gatewayContext, ApplicationContext.Current.ApplicationCache)
         {}
 
-        internal MerchelloContext(IServiceContext serviceContext, CacheHelper cache)
-            : this(serviceContext, cache, false)
-        { }
-
-        internal MerchelloContext(IServiceContext serviceContext, CacheHelper cache, bool isUnitTest)
+        internal MerchelloContext(IServiceContext serviceContext, IGatewayContext gatewayContext, CacheHelper cache)
         {
             Mandate.ParameterNotNull(serviceContext, "serviceContext");
+            Mandate.ParameterNotNull(gatewayContext, "gatewayContext");
             Mandate.ParameterNotNull(cache, "cache");
             
             _services = serviceContext;
+            _gateways = gatewayContext;
             Cache = cache;
-
-            BuildMerchelloContext(isUnitTest);
-        }
-
-        /// <summary>
-        /// Builds the MerchelloContext internals
-        /// </summary>
-        /// <param name="isUnitTest">True/false indicating whether or not is being called by certain unit tests</param>
-        private void BuildMerchelloContext(bool isUnitTest)
-        {
-            if (isUnitTest) return;
-
-            var gatewayResolver = new Lazy<GatewayProviderResolver>(() => new GatewayProviderResolver(_services.GatewayProviderService, Cache.RuntimeCache));
-
-            _gateways = new GatewayContext(
-                new PaymentContext(_services.GatewayProviderService, gatewayResolver.Value),
-                new NotificationContext(_services.GatewayProviderService, gatewayResolver.Value), 
-                new ShippingContext(_services.GatewayProviderService, _services.StoreSettingService, gatewayResolver.Value),
-                new TaxationContext(_services.GatewayProviderService, gatewayResolver.Value));
         }
 
 
