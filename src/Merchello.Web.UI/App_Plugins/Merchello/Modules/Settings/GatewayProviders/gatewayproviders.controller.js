@@ -15,6 +15,12 @@
         $scope.shippingGatewayProviders = [];
         $scope.taxationGatewayProviders = [];
 
+        $scope.dialogData = {
+            paymentProviders: $scope.paymentGatewayProviders,
+            shippingProviders: $scope.shippingGatewayProviders,
+            taxationProviders: $scope.taxationGatewayProviders
+        };
+
         assetsService.loadCss("/App_Plugins/Merchello/Common/Css/merchello.css");
 
         //--------------------------------------------------------------------------------------
@@ -179,6 +185,32 @@
 
             });
         };
+    
+        /**
+         * @ngdoc method
+         * @name showDebugInfo
+         * @function
+         * 
+         * @description
+         * Shows a dialog with debugging info
+         */
+        $scope.showDebugInfo = function () {
+            var dialogData = {};
+            dialogData.paymentGatewayProviders = $scope.paymentGatewayProviders;
+            dialogData.shippingGatewayProviders = $scope.shippingGatewayProviders;
+            dialogData.taxationGatewayProviders = $scope.taxationGatewayProviders;
+            dialogService.open({
+                template: '/App_Plugins/Merchello/Common/Js/Dialogs/debug.dialog.html',
+                show: true,
+                callback: function () { },
+                dialogData: dialogData
+            });
+        };
+
+
+        //--------------------------------------------------------------------------------------
+        // Dialog methods
+        //--------------------------------------------------------------------------------------
 
         /**
          * @ngdoc method
@@ -192,14 +224,14 @@
         $scope.editProviderConfigDialogOpen = function (provider) {
 
             var dialogProvider = provider;
-            if (!provider) {      
-                return;                
+            if (!provider) {
+                return;
             }
 
             var myDialogData = {
                 provider: dialogProvider
             };
-            
+
             dialogService.open({
                 template: provider.dialogEditorView.editorView,
                 show: true,
@@ -217,17 +249,16 @@
          * @description
          * Handles the data passed back from the provider editor dialog and saves it to the database
          */
-        $scope.providerConfigDialogConfirm = function(data) {
+        $scope.providerConfigDialogConfirm = function (data) {
 
             var promise = merchelloGatewayProviderService.saveGatewayProvider(data.provider);
 
             promise.then(function (provider) {
                 notificationsService.success("Gateway Provider Saved", "");
             },
-            function (reason)
-                {
+            function (reason) {
                 notificationsService.error("Gateway Provider Save Failed", reason.message);
-                }
+            }
             );
         };
 
