@@ -44,7 +44,7 @@ namespace Merchello.Core.ObjectResolution
 
             foreach (var et in InstanceTypes)
             {
-                var attempt = ActivatorHelper.CreateInstance<TResolved>(et.AssemblyQualifiedName, ctrArgs.ToArray());
+                var attempt = ActivatorHelper.CreateInstance<TResolved>(et, ctrArgs.ToArray());
                 if (attempt.Success) instances.Add(attempt.Result);
             }
 
