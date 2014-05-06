@@ -158,7 +158,7 @@ $active: lighten($green, 50%);
         }
     }
 
-    td.edit { text-align: center;
+    td.edit { text-align: left;
         .btn { display: inline-block; margin: 0 auto; }
     }
     td.adr, td.org { display: table-cell; }
