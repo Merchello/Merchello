@@ -12,9 +12,8 @@
         return {
             restrict: 'E',
             replace: true,
-            scope: { jsonData: '=' },
             templateUrl: '/App_Plugins/Merchello/Directives/merchello-debug-section.html',
-            link: function ($scope, $element) {
+            link: function ($scope, $element, attrs) {
                 /**
                  * @ngdoc method
                  * @name showDebugInfo
@@ -24,11 +23,14 @@
                  * Shows a dialog with debugging info
                  */
                 $scope.showDebugInfo = function () {
+
+                    var dialogData = _.pick($scope, attrs.propsToDebug.split(","));
+
                     dialogService.open({
                         template: '/App_Plugins/Merchello/Common/Js/Dialogs/debug.dialog.html',
                         show: true,
                         callback: function () { },
-                        dialogData: $scope.jsonData
+                        dialogData: dialogData
                     });
                 };
             }

@@ -464,27 +464,6 @@
 		    });
 		};
 
-	    /**
-         * @ngdoc method
-         * @name showDebugInfo
-         * @function
-         * 
-         * @description
-         * Shows a dialog with debugging info
-         */
-		$scope.showDebugInfo = function () {
-		    var dialogData = {};
-		    dialogData.warehouses = $scope.warehouses;
-		    dialogData.providers = $scope.providers;
-		    dialogData.countries = $scope.countries;
-		    dialogService.open({
-		        template: '/App_Plugins/Merchello/Common/Js/Dialogs/debug.dialog.html',
-		        show: true,
-		        callback: function() {},
-		        dialogData: dialogData
-		    });
-		};
-
 		//--------------------------------------------------------------------------------------
 	    // Dialog methods
 	    //--------------------------------------------------------------------------------------
