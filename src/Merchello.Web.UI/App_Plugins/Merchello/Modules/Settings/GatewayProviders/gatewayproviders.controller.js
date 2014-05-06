@@ -15,12 +15,6 @@
         $scope.shippingGatewayProviders = [];
         $scope.taxationGatewayProviders = [];
 
-        $scope.dialogData = {
-            paymentProviders: $scope.paymentGatewayProviders,
-            shippingProviders: $scope.shippingGatewayProviders,
-            taxationProviders: $scope.taxationGatewayProviders
-        };
-
         assetsService.loadCss("/App_Plugins/Merchello/Common/Css/merchello.css");
 
         //--------------------------------------------------------------------------------------
@@ -185,29 +179,7 @@
 
             });
         };
-    
-        /**
-         * @ngdoc method
-         * @name showDebugInfo
-         * @function
-         * 
-         * @description
-         * Shows a dialog with debugging info
-         */
-        $scope.showDebugInfo = function () {
-            var dialogData = {};
-            dialogData.paymentGatewayProviders = $scope.paymentGatewayProviders;
-            dialogData.shippingGatewayProviders = $scope.shippingGatewayProviders;
-            dialogData.taxationGatewayProviders = $scope.taxationGatewayProviders;
-            dialogService.open({
-                template: '/App_Plugins/Merchello/Common/Js/Dialogs/debug.dialog.html',
-                show: true,
-                callback: function () { },
-                dialogData: dialogData
-            });
-        };
-
-
+ 
         //--------------------------------------------------------------------------------------
         // Dialog methods
         //--------------------------------------------------------------------------------------
