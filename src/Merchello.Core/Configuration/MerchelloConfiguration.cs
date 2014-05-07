@@ -96,6 +96,15 @@ namespace Merchello.Core.Configuration
         }
 
         /// <summary>
+        /// If true, Merchello will automatically attempt to update the database schema (if required) 
+        /// when the bootstrapper detects a Merchello version update
+        /// </summary>
+        public bool AutoUpdateDbSchema
+        {
+            get { return bool.Parse(Section.Settings["AutoUpdateDbSchema"].Value); }
+        }
+
+        /// <summary>
         /// Gets a <see cref="TaskChainElement"/> by its configuration alias
         /// </summary>
         /// <param name="alias">The alias (configuration key) of the <see cref="TaskChainElement"/></param>

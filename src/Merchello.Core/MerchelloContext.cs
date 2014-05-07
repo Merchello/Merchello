@@ -62,12 +62,12 @@ namespace Merchello.Core
                 try
                 {
                     var configVersion = ConfigurationVersion;
-                    var currentVersion = MerchelloVersion.Current.ToString(3);
+                    var currentVersion = MerchelloVersion.Current.ToString();
 
 
                     if (currentVersion != configVersion)
                     {
-                        LogHelper.Info<ApplicationContext>("CurrentVersion different from configStatus: '" + currentVersion + "','" + configVersion + "'");
+                        LogHelper.Info<ApplicationContext>("CurrentVersion different from configurationStatus: '" + currentVersion + "','" + configVersion + "'");
                     }
 
                     return (configVersion == currentVersion);

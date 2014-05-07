@@ -15,13 +15,11 @@ namespace Merchello.Core.Persistence.Migrations.Initial
     internal class BaseDataCreation
     {
         private readonly Database _database;
-        private readonly UpdateOneOneZeroData _updateOneOneZeroData;
 
         
         public BaseDataCreation(Database database)
         {
             _database = database;
-            _updateOneOneZeroData = new UpdateOneOneZeroData(database);
         }
 
         /// <summary>
@@ -33,13 +31,7 @@ namespace Merchello.Core.Persistence.Migrations.Initial
         {
             LogHelper.Info<BaseDataCreation>(string.Format("Creating data in table {0}", tableName));
 
-            if (tableName.Equals("merchTypeField"))
-            {                
-                CreateDbTypeFieldData();
-
-                // version 1.1.0
-                _updateOneOneZeroData.InitializeVersionData("merchTypeField");
-            }
+            if (tableName.Equals("merchTypeField")) CreateDbTypeFieldData();   
 
             if(tableName.Equals("merchInvoiceStatus")) CreateInvoiceStatusData();
 

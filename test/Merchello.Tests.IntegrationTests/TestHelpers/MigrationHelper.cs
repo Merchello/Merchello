@@ -1,32 +1,67 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Remoting.Contexts;
+using System.Text;
+using System.Threading.Tasks;
+using Merchello.Core;
 using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Models.TypeFields;
+using Merchello.Core.Persistence.Migrations;
+using Merchello.Core.Persistence.Migrations.Initial;
+using Merchello.Core.Persistence.Migrations.Upgrades.TargetVersionOneOneZero;
 using Umbraco.Core.Persistence;
+using Umbraco.Core.Persistence.Migrations;
 
-namespace Merchello.Core.Persistence.Migrations.Upgrades.TargetVersionOneOneZero
+namespace Merchello.Tests.IntegrationTests.TestHelpers
 {
     /// <summary>
-    /// Represents the initial data creation by running Insert for the version 1.1.0 default data.
+    /// Exposes access to internal Migration (Database installation and Upgrade) classes
+    /// 
+    /// This is an iterum approach to Upgrading your Merchello Database to the current version
     /// </summary>
-    internal class UpdateOneOneZeroData
+    public class MigrationHelper
     {
         private readonly Database _database;
 
-        public UpdateOneOneZeroData(Database database)
+        public MigrationHelper(Database database)
         {
+            Mandate.ParameterNotNull(database, "database is null");
+
             _database = database;
         }
 
-
-        public void InitializeVersionData(string tableName)
+        /// <summary>
+        /// Creates a new version of Merchello's Database Schema
+        /// </summary>
+        public void InitializeDatabaseSchema()
         {
-            if (tableName.Equals("merchTypeField")) CreateDbTypeFieldData();
-
+            var creation = new DatabaseSchemaCreation(_database);
+            creation.InitializeDatabaseSchema();
         }
 
-
-        private void CreateDbTypeFieldData()
+        /// <summary>
+        /// Completely uninstalls Merchello's database schema
+        /// </summary>
+        public void UninstallDatabaseSchema()
         {
+            var uninstaller = new DatabaseSchemaCreation(_database);
+            uninstaller.UninstallDatabaseSchema();
+        }
+
+        /// <summary>
+        /// Upgrades a database schema from Merchello version 1.0.1.4 (second relase) to Merchello version 1.1.0
+        /// </summary>
+        public void UpgradeTargetVersionOneOneZero()
+        {
+            // add the notification tables
+            DatabaseSchemaHelper.InitializeDatabaseSchema(_database, CreateOneOneZeroTables.OrderedTables, "1.1.0 upgrade");
+
+
+            // Add the ShipDateColumn to the merchShipment table
+            _database.Execute("ALTER TABLE merchShipment ADD shippedDate datetime NOT NULL DEFAULT GETDATE()");
+
+            // Insert new TypeField Data
             var gwp = new GatewayProviderTypeField();
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = gwp.Notification.TypeKey, Alias = gwp.Notification.Alias, Name = gwp.Notification.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
 
@@ -41,6 +76,7 @@ namespace Merchello.Core.Persistence.Migrations.Upgrades.TargetVersionOneOneZero
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = entity.Shipment.TypeKey, Alias = entity.Shipment.Alias, Name = entity.Shipment.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = entity.Warehouse.TypeKey, Alias = entity.Warehouse.Alias, Name = entity.Warehouse.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = entity.WarehouseCatalog.TypeKey, Alias = entity.WarehouseCatalog.Alias, Name = entity.WarehouseCatalog.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
+
         }
     }
 }

@@ -31,7 +31,7 @@ namespace Merchello.Core.Services
         private Lazy<IShipRateTierService> _shipRateTierService; 
         private Lazy<IShipmentService> _shipmentService; 
         private Lazy<IWarehouseService> _warehouseService;
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
