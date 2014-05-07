@@ -65,14 +65,20 @@
                                 <thead>
                                     <tr>
                                         <th>Notification</th>
-                                        <th colspan="2">Description</th>
+                                        <th>Description</th>
+                                        <th>Event</th>
+                                        <th>Send To</th>
+                                        <th>Email Customer</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr data-ng-repeat="template in emailTemplates">
                                         <td>{{template.name}}</td>
                                         <td>{{template.description}}</td>
-                                        <td class="edit"><a class="btn btn-default btn-xs btn-mini" data-ng-href="#/merchello/merchello/NotificationsEdit/{{template.pk}}">edit</a></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><input type="checkbox" /></td>
+                                        <td class="edit"><a class="btn btn-default btn-xs btn-mini" data-ng-href="#/merchello/merchello/NotificationsEdit/{{template.pk}}"><i class="icon-edit"></i></a></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -81,7 +87,8 @@
                     </div>
                 </div>
 
-                <div class="control-group umb-control-group">
+                <div class="control-group umb-control-group warning">
+                    <h2>This whole section is merging into the notification edit page and emails will be specific to each notification. It goes away!</h2>
                     <label class="merchello-control-label">
                         Email Notifications
                         <small>Set who to send notifications to. Any e-mail added will receive all admin notifications</small>
@@ -122,7 +129,7 @@
                                     <tr data-ng-repeat="subscriber in subscribers">
                                         <td>{{subscriber.email}}</td>
                                         <td><a>send a test email</a></td>
-                                        <td class="edit"><a class="btn btn-warning btn-xs btn-mini" data-ng-click="deleteAddressFlyout.open(subscriber)">x</a></td>
+                                        <td class="edit"><a class="btn btn-warning btn-xs btn-mini" data-ng-click="deleteAddressFlyout.open(subscriber)"><i class="icon-trash"></i></a></td>
                                     </tr>
                                 </tbody>
                             </table>
