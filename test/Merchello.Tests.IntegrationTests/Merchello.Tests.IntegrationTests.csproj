@@ -253,6 +253,7 @@
     <Compile Include="DisplayClasses\GatewayProviderDisplayTests.cs" />
     <Compile Include="Examine\InvoiceAndOrderProviderTests.cs" />
     <Compile Include="Gateways\ShippingContextTests.cs" />
+    <Compile Include="MigrationTests.cs" />
     <Compile Include="ObjectResolution\EventTriggerResolution.cs" />
     <Compile Include="ObjectResolution\GatewayProviderResolution.cs" />
     <Compile Include="ObjectResolution\TestingPaymentGatewayMethod.cs" />
@@ -260,6 +261,7 @@
     <Compile Include="ObjectResolution\TestingShippingGatewayProvider.cs" />
     <Compile Include="ObjectResolution\TestingTaxationGatewayProvider.cs" />
     <Compile Include="Payments\PaymentProcessingTests.cs" />
+    <Compile Include="TestHelpers\MigrationHelper.cs" />
     <Compile Include="TestHelpers\TestMerchelloDataService.cs" />
     <Compile Include="Workflow\CheckoutProcessesTests.cs" />
     <Compile Include="DisplayClasses\ProductDisplayTests.cs" />

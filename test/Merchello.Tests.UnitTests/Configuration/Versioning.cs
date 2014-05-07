@@ -15,5 +15,11 @@ namespace Merchello.Tests.UnitTests.Configuration
             StringAssert.Contains(current, version);
         }
 
+
+        [Test]
+        public void ConfigurationStatus_Equals_MerchelloVersion()
+        {
+            Assert.AreEqual(MerchelloConfiguration.ConfigurationStatus, MerchelloVersion.Current.ToString());
+        }
     }
 }

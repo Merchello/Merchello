@@ -11,6 +11,7 @@ using Merchello.Core.Triggers;
 using Umbraco.Core;
 using Merchello.Core.Persistence.UnitOfWork;
 using Umbraco.Core.Logging;
+using Umbraco.Core.Persistence.Migrations;
 
 
 namespace Merchello.Core
@@ -24,13 +25,13 @@ namespace Merchello.Core
     internal class CoreBootManager : BootManagerBase, IBootManager
     {
         private DisposableTimer _timer;
-        private bool _isInitialized = false;
-        private bool _isStarted = false;
-        private bool _isComplete = false;
-        private bool _isTest = false;
+        private bool _isInitialized;
+        private bool _isStarted;
+        private bool _isComplete;
+        private bool _isTest;
 
-        private MerchelloContext _merchelloContext;  
-
+        private MerchelloContext _merchelloContext;
+        private PetaPocoUnitOfWorkProvider _unitOfWorkProvider;
         
         public override IBootManager Initialize()
         {
@@ -43,8 +44,11 @@ namespace Merchello.Core
  
             // create the service context for the MerchelloAppContext   
             var connString = ConfigurationManager.ConnectionStrings[MerchelloConfiguration.Current.Section.DefaultConnectionStringName].ConnectionString;
-            var providerName = ConfigurationManager.ConnectionStrings[MerchelloConfiguration.Current.Section.DefaultConnectionStringName].ProviderName;                
-            var serviceContext = new ServiceContext(new PetaPocoUnitOfWorkProvider(connString, providerName));
+            var providerName = ConfigurationManager.ConnectionStrings[MerchelloConfiguration.Current.Section.DefaultConnectionStringName].ProviderName;
+
+            _unitOfWorkProvider = new PetaPocoUnitOfWorkProvider(connString, providerName);
+
+            var serviceContext = new ServiceContext(_unitOfWorkProvider);
 
 
             var cache = ApplicationContext.Current == null
@@ -65,6 +69,7 @@ namespace Merchello.Core
 
             return this;
         }
+       
 
         /// <summary>
         /// Creates the MerchelloPluginContext (singleton)
@@ -201,6 +206,5 @@ namespace Merchello.Core
         {
             Resolution.Freeze();
         }
-        
     }
 }
