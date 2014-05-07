@@ -45,6 +45,7 @@
 .merchello-panel-body .reorder li { margin-bottom: 0; padding-top: 10px; border-top: solid 1px #e3e3e3; overflow: hidden; }
 .merchello-panel-body .reorder li:first-child { border-top: none; }
 .merchello-panel-body table.merchello-selectable-table tr td { cursor: pointer; }
+.merchello-panel-body td input[type="checkbox"] { margin: 0 auto; display: block; }
 .merchello-panel-body .merchello-striped-table i { font-size: 1em; }
 .merchello-panel-body .merchello-striped-table td > i { font-size: 1.7em; }
 .merchello-panel-body .active td { border-top: solid 1px #cfebc9; }
@@ -65,7 +66,7 @@
 .merchello-panel-body .product-options td:first-of-type, .merchello-panel-body .product-options th:first-of-type { width: 30%; }
 .merchello-panel-body .product-options input[type="text"] { margin-bottom: 0; }
 .merchello-panel-body .product-options small { display: block; color: #999; font-size: 11px; }
-.merchello-panel-body .settings-table th:last-of-type, .merchello-panel-body .settings-table td:last-of-type { width: 123px; padding-right: 0; }
+.merchello-panel-body .settings-table th:last-of-type, .merchello-panel-body .settings-table td:last-of-type { width: 50px; padding-right: 0; }
 .merchello-panel-body .adjustment-table td:first-child { width: 55%; }
 .merchello-panel-body .shipping-table td:first-child { width: 30%; }
 .merchello-panel-body .shipping-table td:nth-child(3) { width: 20%; }
