@@ -23,6 +23,7 @@ namespace Merchello.Core.Models.Rdbms
         public string Name { get; set; }
 
         [Column("description")]
+        [NullSetting(NullSetting = NullSettings.Null)]
         public string Description { get; set; }
 
 

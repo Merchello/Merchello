@@ -1,31 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
+using Merchello.Core.Configuration;
 using Merchello.Core.Models.Rdbms;
-using Umbraco.Core.Persistence;
+using Umbraco.Core.Persistence.Migrations;
 
 namespace Merchello.Core.Persistence.Migrations.Upgrades.TargetVersionOneOneZero
 {
     /// <summary>
     /// Represents the creation of new database table introduced in Merchello 1.1.0
     /// </summary>
-    internal class CreateOneOneZeroTables
+    //[Migration("1.1.0", 0, MerchelloConfiguration.MerchelloMigrationName)]
+    public class CreateOneOneZeroTables : MigrationBase
     {
-        private readonly Database _database;
-
-        private static readonly Dictionary<int, Type> OrderedTables = new Dictionary<int, Type>
+        public static readonly Dictionary<int, Type> OrderedTables = new Dictionary<int, Type>
         {
             {0, typeof(NotificationMethodDto)},
             {1, typeof(NotificationMessageDto)}
         };
-
-        public CreateOneOneZeroTables(Database database)
+  
+        public override void Up()
         {
-            _database = database;
+            //DatabaseSchemaHelper.InitializeDatabaseSchema(Context.Database, OrderedTables, "1.1.0 upgrade");
         }
 
-        internal void InitializeDatabaseSchema()
+        public override void Down()
         {
-            DatabaseSchemaHelper.InitializeDatabaseSchema(_database, OrderedTables, "1.1.0 upgrade");
+            throw new DataLossException("Cannot downgrade from a version 1.1.0 database to a prior version, the database schema has already been modified");
         }
     }
 }
