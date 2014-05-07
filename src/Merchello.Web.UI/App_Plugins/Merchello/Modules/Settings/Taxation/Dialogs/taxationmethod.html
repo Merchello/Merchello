@@ -1,36 +1,32 @@
-﻿<div class="umb-panel" ng-controller="Merchello.Dashboards.Settings.Taxation.Dialogs.TaxationMethodController">
-	<div class="umb-panel-body no-header with-footer">
-	    
-	    <div class="well col-xs-6 span6">
-	        <h4>{{dialogData.method.name}}</h4>
+﻿<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Dashboards.Settings.Taxation.Dialogs.TaxationMethodController">
+	
+    <div class="umb-modalcolumn-header">
+		<h4>{{dialogData.method.name}}</h4>
+        <h5>Adjust for Individual Regions</h5>
+	</div>
 
-	        <div>
-	            <h5>Adjust for Individual Regions</h5>
-
-	            <table class="table merchello-striped-table settings-table adjustment-table col-xs-6 span6">
-	                <thead>
-	                    <tr>
-	                        <th>Region</th>
-	                        <th>Adjust Rate</th>
-	                    </tr>
-	                </thead>
-	                <tbody>
-	                    <tr data-ng-repeat="province in dialogData.method.provinces">
-	                        <td>
-	                            {{province.name}}
-	                        </td>
-	                        <td>
-	                            <div class="input-prepend">
-	                                <input type="number" data-ng-model="province.percentAdjustment" class="span1 col-xs-1" />
-	                                <span class="add-on">%</span>
-	                            </div>
-	                        </td>
-	                    </tr>
-	                </tbody>
-	            </table>
-	        </div>
-
-	    </div>
+    <div class="umb-panel-body with-header with-footer">
+	    <table class="table merchello-striped-table settings-table adjustment-table col-xs-6 span6">
+	        <thead>
+	            <tr>
+	                <th>Region</th>
+	                <th>Adjust Rate</th>
+	            </tr>
+	        </thead>
+	        <tbody>
+	            <tr data-ng-repeat="province in dialogData.method.provinces">
+	                <td>
+	                    {{province.name}}
+	                </td>
+	                <td>
+	                    <div class="input-prepend">
+	                        <input type="number" data-ng-model="province.percentAdjustment" class="span1 col-xs-1" />
+	                        <span class="add-on">%</span>
+	                    </div>
+	                </td>
+	            </tr>
+	        </tbody>
+	    </table>
 	</div>
 
 	<div class="umb-panel-footer" >
