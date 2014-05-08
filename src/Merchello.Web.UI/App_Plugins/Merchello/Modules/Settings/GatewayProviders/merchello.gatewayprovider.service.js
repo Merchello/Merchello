@@ -20,14 +20,14 @@
                     'Failed to retreive gateway provider data');
             },
 
-            getResolvedNotificationGatewayProviders: function() {
+            getResolvedNotificationGatewayProviders: function () {
 
                 return umbRequestHelper.resourcePromise(
                     $http({
-                        url: umbRequestHelper.getApiUrl('merchelloGatewayProviderApiBaseUrl', 'GetResolvedNotificationGatewayProviders')
+                        url: umbRequestHelper.getApiUrl('merchelloGatewayProviderApiBaseUrl', 'GetResolvedNotificationGatewayProviders'),
+                        method: "GET"
                         }),
-                    'Failed to retrieve data for all resolved notification gateway providers'
-                );
+                    'Failed to retrieve data for all resolved notification gateway providers');
             },
 
             getResolvedPaymentGatewayProviders: function () {
