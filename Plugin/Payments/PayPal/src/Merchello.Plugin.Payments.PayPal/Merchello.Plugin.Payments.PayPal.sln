@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Plugin.Payments.PayPal", "Merchello.Plugin.Payments.PayPal.csproj", "{0D9823FD-3E03-48E0-8F22-6CF087E4AFA1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{176E43AC-1CE1-4A72-80CE-711576851CD3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Tests.PayPal.Prototype", "..\..\Tests\Merchello.Tests.PayPal.Prototype\Merchello.Tests.PayPal.Prototype.csproj", "{F009F050-BC07-423B-BD0B-0E7B288FF00D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0D9823FD-3E03-48E0-8F22-6CF087E4AFA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D9823FD-3E03-48E0-8F22-6CF087E4AFA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D9823FD-3E03-48E0-8F22-6CF087E4AFA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D9823FD-3E03-48E0-8F22-6CF087E4AFA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F009F050-BC07-423B-BD0B-0E7B288FF00D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F009F050-BC07-423B-BD0B-0E7B288FF00D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F009F050-BC07-423B-BD0B-0E7B288FF00D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F009F050-BC07-423B-BD0B-0E7B288FF00D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F009F050-BC07-423B-BD0B-0E7B288FF00D} = {176E43AC-1CE1-4A72-80CE-711576851CD3}
+	EndGlobalSection
+EndGlobal
