@@ -51,6 +51,8 @@
 
 		        $scope.changePrimaryWarehouse();
 
+		        $scope.loadAllShipProviders();
+
 		    }, function (reason) {
 
 		        notificationsService.error("Warehouses Load Failed", reason.message);
@@ -366,10 +368,9 @@
          */
 		$scope.init = function () {
 
-		    $scope.loadAllAvailableFixedRateGatewayResources();
-		    $scope.loadAllShipProviders();
-		    $scope.loadAllAvailableCountries();
 		    $scope.loadWarehouses();
+		    $scope.loadAllAvailableCountries();
+		    $scope.loadAllAvailableFixedRateGatewayResources();
 
 		};
 
