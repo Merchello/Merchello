@@ -59,6 +59,7 @@
     <Reference Include="controls, Version=1.0.5211.22379, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\UmbracoCms.Core.7.1.1\lib\controls.dll</HintPath>
+    </Reference>
     <Reference Include="controls">
       <HintPath>..\packages\UmbracoCms.Core.7.1.2\lib\controls.dll</HintPath>
     </Reference>
@@ -83,8 +84,6 @@
     <Reference Include="interfaces, Version=1.0.5211.22376, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\UmbracoCms.Core.7.1.1\lib\interfaces.dll</HintPath>
-    <Reference Include="interfaces">
-      <HintPath>..\packages\UmbracoCms.Core.7.1.2\lib\interfaces.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\packages\UmbracoCms.Core.7.1.2\lib\log4net.dll</HintPath>
