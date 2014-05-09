@@ -151,7 +151,7 @@
 		                    newProvider.resources = tempGlobalProvider.resources;
 		                    newProvider.shipMethods = [];
 		                    country.shippingGatewayProviders.push(newProvider);
-		                    $scope.loadProviderMethods(country);
+		                    $scope.loadProviderMethods(newProvider, country);
 		                });
 
 		                $scope.loaded = true;
