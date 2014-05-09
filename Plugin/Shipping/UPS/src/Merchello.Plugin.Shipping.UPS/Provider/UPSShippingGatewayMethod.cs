@@ -7,6 +7,7 @@ using Umbraco.Core;
 
 namespace Merchello.Plugin.Shipping.UPS.Provider
 {
+    [GatewayMethodEditor("UPS Shipping Method Editor", "~/App_Plugins/Merchello.UPS/shippingmethod.html")]
     public class UPSShippingGatewayMethod : ShippingGatewayMethodBase, IUPSShippingGatewayMethod
     {
         private UPSShippingProcessor _processor;
