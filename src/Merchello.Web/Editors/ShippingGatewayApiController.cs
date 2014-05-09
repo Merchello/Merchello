@@ -246,9 +246,13 @@ namespace Merchello.Web.Editors
             if (provider == null) throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             if (shipCountry == null) throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
 
-            var methods = provider.GetAllShippingGatewayMethodsForShipCountry(shipCountryId);
+            if (!Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey.Equals(provider.Key))
+            {
+                var methods = provider.GetAllShippingGatewayMethodsForShipCountry(shipCountryId);
+                return methods.Select(method => method.ToShipMethodDisplay());
+            }
 
-            return methods.Select(method => method.ToShipMethodDisplay());
+            return new List<ShipMethodDisplay>();
         }
 
         /// <summary>
