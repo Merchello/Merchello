@@ -114,6 +114,11 @@ namespace Merchello.Core.Cache
                     select c.Value).ToList();
         }
 
+        public IEnumerable<object> GetCacheItemsByKeyExpression(string regexString)
+        {
+            return Enumerable.Empty<object>();
+        }
+
         public virtual object GetCacheItem(string cacheKey)
         {
             var result = MemoryCache.Get(cacheKey);
