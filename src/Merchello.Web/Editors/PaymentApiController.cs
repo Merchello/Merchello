@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Merchello.Core;
+using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Merchello.Web.Models;
@@ -91,7 +92,6 @@ namespace Merchello.Web.Editors
         public PaymentDisplay AuthorizePayment(PaymentRequest request)
         {
             var processor = new PaymentProcessor(MerchelloContext, request);
-
             var authorize = processor.Authorize();
 
             if (!authorize.Payment.Success)
@@ -118,6 +118,15 @@ namespace Merchello.Web.Editors
 
             return capture.Payment.Result.ToPaymentDisplay();
         }
+
+		/// <summary>
+		/// PaymentProcessor.Capture()
+		/// </summary>
+		public IPaymentResult ComplitePayment(PaymentRequest request)
+		{
+			var processor = new PaymentProcessor(MerchelloContext, request);
+			return processor.Capture();
+		}
 
         /// <summary>
         /// Returns a payment for an AuthorizeCapturePayment PaymentRequest
