@@ -1,0 +1,50 @@
+﻿<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Dashboards.Settings.Notifications.Dialogs.SmtpNotificationsProviderSettingsController">
+	<div class="umb-modalcolumn-header">
+		<h4>Edit <b>{{dialogData.name}}</b></h4>
+	</div>
+	<div class="umb-panel-body with-header with-footer">
+        
+        <!--network host="127.0.0.1" userName="username" password="password" /-->
+	    <!-- Flyout when Edit is clicked -->
+		<form name="editTemplateForm" class="well" data-ng-class="{ 'open': flyouts.editTemplate, 'closed': !flyouts.editTemplate }">
+			<div class="form-group">
+				<label>Host</label>
+			    <input type="text" data-ng-model="dialogData.host" />
+			</div>
+		    <div class="form-group">
+		        <label>Username</label>
+		        <input type="text" data-ng-model="dialogData.username" />
+		    </div>
+		    <div class="form-group">
+		        <label>Password</label>
+		        <input type="text" data-ng-model="dialogData.password" />
+		    </div>
+            <label class="checkbox col-xs-12 span12">
+                <input type="checkbox" data-ng-model="dialogData.enableSsl"> Enable SSL
+            </label>
+            <label class="checkbox col-xs-12 span12">
+                <input type="checkbox" data-ng-model="dialogData.provider.encryptExtendedData"> Encrypt Provider Configuration
+            </label>
+		</form>
+
+		
+	</div>
+
+	<div class="umb-panel-footer">
+		<div class="umb-el-wrap umb-panel-buttons">
+			<div class="btn-toolbar umb-btn-toolbar pull-right">
+
+				<a href data-ng-click="close()" class="btn btn-link">
+					<localize key="general_cancel">Cancel</localize>
+				</a>
+
+				<button class="btn btn-primary"
+						data-ng-click="submit(dialogData)">
+					<localize key="buttons_save">Save</localize>
+				</button>
+
+			</div>
+		</div>
+	</div>
+</div>
+

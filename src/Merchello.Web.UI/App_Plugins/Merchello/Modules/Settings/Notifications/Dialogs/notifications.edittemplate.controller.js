@@ -2,7 +2,7 @@
 
     /**
      * @ngdoc controller
-     * @name Merchello.Dashboards.Catalog.Dialogs.NotificationsEditTemplateController
+     * @name Merchello.Dashboards.Settings.Notifications.Dialogs.NotificationsEditTemplateController
      * @function
      * 
      * @description

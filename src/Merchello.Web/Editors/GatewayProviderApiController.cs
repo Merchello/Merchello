@@ -6,7 +6,6 @@ using System.Net.Http;
 using System.Web.Http;
 using Merchello.Core;
 using Merchello.Core.Gateways;
-using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Models;
 using Merchello.Core.Models.TypeFields;
 using Merchello.Core.Services;
@@ -17,6 +16,9 @@ using Umbraco.Web.Mvc;
 
 namespace Merchello.Web.Editors
 {
+    /// <summary>
+    /// Represents a GatewayProviderApiController
+    /// </summary>
     [PluginController("Merchello")]
     public class GatewayProviderApiController : MerchelloApiController
     {

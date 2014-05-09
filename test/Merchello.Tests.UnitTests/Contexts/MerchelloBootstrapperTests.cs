@@ -31,8 +31,7 @@ namespace Merchello.Tests.UnitTests.Contexts
         [SetUp]
         public void Setup()
         {
-             Resolution.Reset();
-            
+             
             _initEventCalled = false;
             _startingEventCalled = false;
             _completedEventCalled = false;
