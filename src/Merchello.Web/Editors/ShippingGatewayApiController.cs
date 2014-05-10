@@ -328,12 +328,12 @@ namespace Merchello.Web.Editors
         ///
         /// GET /umbraco/Merchello/ShippingMethodsApi/DeleteShipMethod
         /// </summary>
-        /// <param name="id"><see cref="ShipMethodDisplay"/> key to delete</param>
-        [AcceptVerbs("POST", "PUT")]
-        public HttpResponseMessage DeleteShipMethod(Guid id)
+        /// <param name="method"><see cref="ShipMethodDisplay"/> key to delete</param>
+        [AcceptVerbs("POST", "DELETE")]
+        public HttpResponseMessage DeleteShipMethod(ShipMethodDisplay method)
         {
             var shippingMethodService = ((ServiceContext)MerchelloContext.Services).ShipMethodService;
-            var methodToDelete = shippingMethodService.GetByKey(id);
+            var methodToDelete = shippingMethodService.GetByKey(method.Key);
 
             if (methodToDelete == null) return Request.CreateResponse(HttpStatusCode.NotFound);
 

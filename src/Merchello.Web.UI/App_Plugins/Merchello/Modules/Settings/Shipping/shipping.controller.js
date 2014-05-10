@@ -450,11 +450,19 @@
          *
          * TODO: make a dialog to confirm delete?
          */
-		$scope.removeMethodFromProvider = function (provider, method) {
-		    provider.removeMethod(method);
+		$scope.removeMethodFromProvider = function (provider, method, country) {
 
-		    var promiseDelete = merchelloCatalogFixedRateShippingService.deleteRateTableShipMethod(method);
+		    var promiseDelete;
+		    if (provider.isFixedRate()) {
+		        promiseDelete = merchelloCatalogFixedRateShippingService.deleteRateTableShipMethod(method);
+		    } else {
+		        promiseDelete = merchelloCatalogShippingService.deleteShipMethod(method);
+		    }
 		    promiseDelete.then(function () {
+
+		        provider.shipMethods = [];
+		        $scope.loadProviderMethods(provider, country);
+		        $scope.loadFixedRateProviderMethods(country);
 
 		        notificationsService.success("Shipping Method Deleted");
 
@@ -759,7 +767,7 @@
 		            dialogMethod = new merchello.Models.ShippingMethod();
 		            dialogMethod.shipCountryKey = country.key;
 		            dialogMethod.providerKey = provider.key;
-		            dialogMethod.dialogEditorView.editorView = '';
+		            dialogMethod.dialogEditorView.editorView = '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shippingmethod.html';
                 }
 		    }
 
@@ -771,10 +779,11 @@
 		    }
             
 		    var templatePage = '';
-		    if (provider.isFixedRate()) {
-		        templatePage = '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shippingmethod.html';
-		    } else {
-		        templatePage = dialogMethod.dialogEditorView.editorView;
+		    templatePage = '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shippingmethod.html';
+		    if (!provider.isFixedRate()) {
+		        if (dialogMethod.dialogEditorView.editorView) {
+		            templatePage = dialogMethod.dialogEditorView.editorView;	            
+		        }
 		    }
 
 		    var myDialogData = {
