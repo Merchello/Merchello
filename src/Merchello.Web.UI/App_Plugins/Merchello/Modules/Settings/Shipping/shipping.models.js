@@ -108,8 +108,8 @@
             self.serviceCode = "";
             self.taxable = false;
             self.provinces = [];
-            self.dialogEditorView = "";
-            
+            self.dialogEditorView = new merchello.Models.DialogEditorView();
+
         } else {
             self.key = shippingMethodFromServer.key;
             self.name = shippingMethodFromServer.name;
