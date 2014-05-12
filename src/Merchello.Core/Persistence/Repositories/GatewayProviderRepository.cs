@@ -15,7 +15,7 @@ using Umbraco.Core.Persistence.Querying;
 
 namespace Merchello.Core.Persistence.Repositories
 {
-    internal class GatewayProviderRepository : MerchelloPetaPocoRepositoryBase<IGatewayProvider>, IGatewayProviderRepository
+    internal class GatewayProviderRepository : MerchelloPetaPocoRepositoryBase<IGatewayProviderSetting>, IGatewayProviderRepository
     {
 
         public GatewayProviderRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache) 
@@ -24,12 +24,12 @@ namespace Merchello.Core.Persistence.Repositories
             
         }
 
-        protected override IGatewayProvider PerformGet(Guid key)
+        protected override IGatewayProviderSetting PerformGet(Guid key)
         {
             var sql = GetBaseQuery(false)
                 .Where(GetBaseWhereClause(), new {Key = key});
 
-            var dto = Database.Fetch<GatewayProviderDto>(sql).FirstOrDefault();
+            var dto = Database.Fetch<GatewayProviderSettingDto>(sql).FirstOrDefault();
 
             if (dto == null)
                 return null;
@@ -38,7 +38,7 @@ namespace Merchello.Core.Persistence.Repositories
             return factory.BuildEntity(dto);
         }
 
-        protected override IEnumerable<IGatewayProvider> PerformGetAll(params Guid[] keys)
+        protected override IEnumerable<IGatewayProviderSetting> PerformGetAll(params Guid[] keys)
         {
             if (keys.Any())
             {
@@ -50,7 +50,7 @@ namespace Merchello.Core.Persistence.Repositories
             else
             {
                 var factory = new GatewayProviderFactory();
-                var dtos = Database.Fetch<GatewayProviderDto>(GetBaseQuery(false));
+                var dtos = Database.Fetch<GatewayProviderSettingDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
                     yield return factory.BuildEntity(dto);
@@ -58,14 +58,14 @@ namespace Merchello.Core.Persistence.Repositories
             }
         }
 
-        protected override IEnumerable<IGatewayProvider> PerformGetByQuery(IQuery<IGatewayProvider> query)
+        protected override IEnumerable<IGatewayProviderSetting> PerformGetByQuery(IQuery<IGatewayProviderSetting> query)
         {
             var sqlClause = GetBaseQuery(false);
-            var translator = new SqlTranslator<IGatewayProvider>(sqlClause, query);
+            var translator = new SqlTranslator<IGatewayProviderSetting>(sqlClause, query);
 
             var sql = translator.Translate();
 
-            var dtos = Database.Fetch<GatewayProviderDto>(sql);
+            var dtos = Database.Fetch<GatewayProviderSettingDto>(sql);
 
             return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
         }
@@ -74,7 +74,7 @@ namespace Merchello.Core.Persistence.Repositories
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-                .From<GatewayProviderDto>();
+                .From<GatewayProviderSettingDto>();
 
             return sql;
         }
@@ -94,7 +94,7 @@ namespace Merchello.Core.Persistence.Repositories
             return list;
         }
 
-        protected override void PersistNewItem(IGatewayProvider entity)
+        protected override void PersistNewItem(IGatewayProviderSetting entity)
         {
             ((Entity)entity).AddingEntity();
 
@@ -108,7 +108,7 @@ namespace Merchello.Core.Persistence.Repositories
             entity.ResetDirtyProperties();
         }
 
-        protected override void PersistUpdatedItem(IGatewayProvider entity)
+        protected override void PersistUpdatedItem(IGatewayProviderSetting entity)
         {
             ((Entity)entity).AddingEntity();
 
@@ -120,18 +120,18 @@ namespace Merchello.Core.Persistence.Repositories
             entity.ResetDirtyProperties();
         }
 
-        public IEnumerable<IGatewayProvider> GetGatewayProvidersByShipCountryKey(Guid shipCountryKey)
+        public IEnumerable<IGatewayProviderSetting> GetGatewayProvidersByShipCountryKey(Guid shipCountryKey)
         {
             var sql = new Sql();
             sql.Select("*")
                 .From<ShipMethodDto>()
-                .InnerJoin<GatewayProviderDto>()
-                .On<ShipMethodDto, GatewayProviderDto>(left => left.ProviderKey, right => right.Key)
+                .InnerJoin<GatewayProviderSettingDto>()
+                .On<ShipMethodDto, GatewayProviderSettingDto>(left => left.ProviderKey, right => right.Key)
                 .Where<ShipMethodDto>(x => x.ShipCountryKey == shipCountryKey);
 
-            var dtos = Database.Fetch<ShipMethodDto, GatewayProviderDto>(sql);
+            var dtos = Database.Fetch<ShipMethodDto, GatewayProviderSettingDto>(sql);
             var factory = new GatewayProviderFactory();
-            return dtos.DistinctBy(x => x.GatewayProviderDto.Key).Select(dto => factory.BuildEntity(dto.GatewayProviderDto));
+            return dtos.DistinctBy(x => x.GatewayProviderSettingDto.Key).Select(dto => factory.BuildEntity(dto.GatewayProviderSettingDto));
         }
     }
 }

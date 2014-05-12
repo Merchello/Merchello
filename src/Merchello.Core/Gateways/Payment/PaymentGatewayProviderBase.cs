@@ -15,10 +15,10 @@ namespace Merchello.Core.Gateways.Payment
         /// Constructor
         /// </summary>
         /// <param name="gatewayProviderService">The <see cref="IGatewayProviderService"/></param>
-        /// <param name="gatewayProvider">The <see cref="IGatewayProvider"/></param>
+        /// <param name="gatewayProviderSetting">The <see cref="IGatewayProviderSetting"/></param>
         /// <param name="runtimeCacheProvider">Umbraco's <see cref="IRuntimeCacheProvider"/></param>
-        protected PaymentGatewayProviderBase(IGatewayProviderService gatewayProviderService, IGatewayProvider gatewayProvider, IRuntimeCacheProvider runtimeCacheProvider) 
-            : base(gatewayProviderService, gatewayProvider, runtimeCacheProvider)
+        protected PaymentGatewayProviderBase(IGatewayProviderService gatewayProviderService, IGatewayProviderSetting gatewayProviderSetting, IRuntimeCacheProvider runtimeCacheProvider) 
+            : base(gatewayProviderService, gatewayProviderSetting, runtimeCacheProvider)
         { }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace Merchello.Core.Gateways.Payment
         {
             get {
                 return _paymentMethods ??
-                       (_paymentMethods = GatewayProviderService.GetPaymentMethodsByProviderKey(GatewayProvider.Key));
+                       (_paymentMethods = GatewayProviderService.GetPaymentMethodsByProviderKey(GatewayProviderSetting.Key));
             }
             protected set { _paymentMethods = value; }
         }

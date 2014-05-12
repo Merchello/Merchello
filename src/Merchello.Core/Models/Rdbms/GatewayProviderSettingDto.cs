@@ -7,7 +7,7 @@ namespace Merchello.Core.Models.Rdbms
     [TableName("merchGatewayProvider")]
     [PrimaryKey("pk", autoIncrement = false)]
     [ExplicitColumns]
-    internal class GatewayProviderDto
+    internal class GatewayProviderSettingDto
     {
         [Column("pk")]
         [PrimaryKeyColumn(AutoIncrement = false)]
@@ -23,10 +23,6 @@ namespace Merchello.Core.Models.Rdbms
         [Column("description")]
         [NullSetting(NullSetting = NullSettings.Null)]
         public string Description { get; set; }
-
-        [Column("typeFullName")]
-        [Length(255)]
-        public string TypeFullName { get; set; }
 
         [Column("extendedData")]
         [NullSetting(NullSetting = NullSettings.Null)]

@@ -77,7 +77,7 @@ namespace Merchello.Web.Editors
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
 
-            return providers.Select(provider => provider.GatewayProvider.ToGatewayProviderDisplay());
+            return providers.Select(provider => provider.GatewayProviderSetting.ToGatewayProviderDisplay());
         }
 
 

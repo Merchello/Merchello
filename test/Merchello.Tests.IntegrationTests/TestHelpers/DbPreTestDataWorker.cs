@@ -457,7 +457,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
             if (!Database.TableExist("merchGatewayProvider"))
                 RebuildDatabase();
     
-            var providerDtos =  Database.Query<GatewayProviderDto>("SELECT * FROM merchGatewayProvider");
+            var providerDtos =  Database.Query<GatewayProviderSettingDto>("SELECT * FROM merchGatewayProvider");
             var warehouseDtos = Database.Query<WarehouseDto>("SELECT * FROM merchWarehouse");
             var catalogDtos =   Database.Query<WarehouseCatalogDto>("SELECT * FROM merchWarehouseCatalog");
             var typeFieldDtos = Database.Query<TypeFieldDto>("SELECT * FROM merchTypeField");

@@ -8,7 +8,7 @@ namespace Merchello.Core.Gateways
     {
 
         /// <summary>
-        /// Gets a collection of <see cref="IGatewayProvider"/>s by type
+        /// Gets a collection of <see cref="IGatewayProviderSetting"/>s by type
         /// </summary>
         IEnumerable<GatewayProviderBase> GetActivatedProviders<T>() where T : GatewayProviderBase;
 
@@ -16,9 +16,14 @@ namespace Merchello.Core.Gateways
         /// Gets a collection of all "activated" providers regardless of type
         /// </summary>
         IEnumerable<GatewayProviderBase> GetActivatedProviders();
+
+        /// <summary>
+        /// Gets a collection of all providers regardless of type
+        /// </summary>
+        IEnumerable<GatewayProviderBase> GetAllProviders();
             
         /// <summary>
-        /// Gets a collection of inactive (not saved) <see cref="IGatewayProvider"/> by type
+        /// Gets a collection of inactive (not saved) <see cref="IGatewayProviderSetting"/> by type
         /// </summary>
         IEnumerable<GatewayProviderBase> GetAllProviders<T>() where T : GatewayProviderBase;
 

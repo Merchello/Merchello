@@ -24,7 +24,7 @@ namespace Merchello.Web
 
 
             // Gateway Provider       
-            AutoMapper.Mapper.CreateMap<IGatewayProvider, GatewayProviderDisplay>()
+            AutoMapper.Mapper.CreateMap<IGatewayProviderSetting, GatewayProviderDisplay>()
                 .ForMember(dest => dest.ExtendedData,
                     opt => opt.ResolveUsing<ExtendedDataResolver>().ConstructedBy(() => new ExtendedDataResolver())
                 )

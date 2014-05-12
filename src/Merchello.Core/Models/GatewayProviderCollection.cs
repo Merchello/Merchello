@@ -6,16 +6,16 @@ using Umbraco.Core;
 
 namespace Merchello.Core.Models
 {
-    public class GatewayProviderCollection : NotifiyCollectionBase<Guid, IGatewayProvider>
+    public class GatewayProviderCollection : NotifiyCollectionBase<Guid, IGatewayProviderSetting>
     {
         private readonly ReaderWriterLockSlim _addLocker = new ReaderWriterLockSlim();
 
-        protected override Guid GetKeyForItem(IGatewayProvider item)
+        protected override Guid GetKeyForItem(IGatewayProviderSetting item)
         {
             return item.Key;
         }
 
-        internal new void Add(IGatewayProvider item)
+        internal new void Add(IGatewayProviderSetting item)
         {
             using (new WriteLock(_addLocker))
             {

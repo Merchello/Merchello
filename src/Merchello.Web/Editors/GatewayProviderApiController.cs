@@ -57,7 +57,7 @@ namespace Merchello.Web.Editors
         /// <param name="id"></param>
         public GatewayProviderDisplay GetGatewayProvider(Guid id)
         {
-            var provider = _gatewayProviderService.GetGatewayProviderByKey(id) as Core.Models.GatewayProvider;
+            var provider = _gatewayProviderService.GetGatewayProviderByKey(id) as Core.Models.GatewayProviderSetting;
             if (provider == null)
             {
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
@@ -74,7 +74,7 @@ namespace Merchello.Web.Editors
         /// </summary>
         public IEnumerable<GatewayProviderDisplay> GetResolvedNotificationGatewayProviders()
         {
-            return ((GatewayContext)_gatewayContext).Notification.GetAllProviders().Select(x => x.GatewayProvider.ToGatewayProviderDisplay());
+            return ((GatewayContext)_gatewayContext).Notification.GetAllProviders().Select(x => x.GatewayProviderSetting.ToGatewayProviderDisplay());
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace Merchello.Web.Editors
         /// </summary>
         public IEnumerable<GatewayProviderDisplay> GetResolvedPaymentGatewayProviders()
         {
-            return _gatewayContext.Payment.GetAllProviders().Select(x => x.GatewayProvider.ToGatewayProviderDisplay());
+            return _gatewayContext.Payment.GetAllProviders().Select(x => x.GatewayProviderSetting.ToGatewayProviderDisplay());
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace Merchello.Web.Editors
         /// </summary>
         public IEnumerable<GatewayProviderDisplay> GetResolvedShippingGatewayProviders()
         {
-            return _gatewayContext.Shipping.GetAllProviders().Select(x => x.GatewayProvider.ToGatewayProviderDisplay());
+            return _gatewayContext.Shipping.GetAllProviders().Select(x => x.GatewayProviderSetting.ToGatewayProviderDisplay());
         }
 
 
@@ -105,7 +105,7 @@ namespace Merchello.Web.Editors
         /// </summary>
         public IEnumerable<GatewayProviderDisplay> GetResolvedTaxationGatewayProviders()
         {
-            return _gatewayContext.Taxation.GetAllProviders().Select(x => x.GatewayProvider.ToGatewayProviderDisplay());
+            return _gatewayContext.Taxation.GetAllProviders().Select(x => x.GatewayProviderSetting.ToGatewayProviderDisplay());
         }
 
 
@@ -207,40 +207,40 @@ namespace Merchello.Web.Editors
         #region Utility methods        
 
         // TODO refactor this
-        private void ToggleProviderActivation(IGatewayProvider gatewayProvider, GatewayProviderType gatewayProviderType)
+        private void ToggleProviderActivation(IGatewayProviderSetting gatewayProviderSetting, GatewayProviderType gatewayProviderType)
         {
             switch (gatewayProviderType)
             {
                 case GatewayProviderType.Payment:
-                    if (gatewayProvider.Activated)
-                        _gatewayContext.Payment.DeactivateProvider(gatewayProvider);
+                    if (gatewayProviderSetting.Activated)
+                        _gatewayContext.Payment.DeactivateProvider(gatewayProviderSetting);
                     else 
-                        _gatewayContext.Payment.ActivateProvider(gatewayProvider);
+                        _gatewayContext.Payment.ActivateProvider(gatewayProviderSetting);
                     break;
 
                 case GatewayProviderType.Shipping:
-                    if (gatewayProvider.Activated)
-                        _gatewayContext.Shipping.DeactivateProvider(gatewayProvider);
+                    if (gatewayProviderSetting.Activated)
+                        _gatewayContext.Shipping.DeactivateProvider(gatewayProviderSetting);
                     else 
-                        _gatewayContext.Shipping.ActivateProvider(gatewayProvider);                    
+                        _gatewayContext.Shipping.ActivateProvider(gatewayProviderSetting);                    
                     break;
 
                 case GatewayProviderType.Taxation:
-                    if (gatewayProvider.Activated)
-                        _gatewayContext.Taxation.DeactivateProvider(gatewayProvider);
+                    if (gatewayProviderSetting.Activated)
+                        _gatewayContext.Taxation.DeactivateProvider(gatewayProviderSetting);
                     else 
-                        _gatewayContext.Taxation.ActivateProvider(gatewayProvider);
+                        _gatewayContext.Taxation.ActivateProvider(gatewayProviderSetting);
                     break;
             }
         }
 
         /// <summary>
-        /// Helper method to get get the <see cref="IGatewayProvider"/> from the appropriate resolver
+        /// Helper method to get get the <see cref="IGatewayProviderSetting"/> from the appropriate resolver
         /// </summary>
         /// <param name="gatewayProvider">The <see cref="GatewayProviderDisplay"/></param>
         /// <param name="gatewayProviderType"></param>
-        /// <returns>A <see cref="IGatewayProvider"/> or null</returns>
-        private IGatewayProvider GetGatewayProviderFromResolver(GatewayProviderDisplay gatewayProvider, GatewayProviderType gatewayProviderType)
+        /// <returns>A <see cref="IGatewayProviderSetting"/> or null</returns>
+        private IGatewayProviderSetting GetGatewayProviderFromResolver(GatewayProviderDisplay gatewayProvider, GatewayProviderType gatewayProviderType)
         {
             // get the type of the provider
             
@@ -262,7 +262,7 @@ namespace Merchello.Web.Editors
                     break;
             }
 
-            return provider != null ? provider.GatewayProvider : null;
+            return provider != null ? provider.GatewayProviderSetting : null;
         }
 
         #endregion

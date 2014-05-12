@@ -55,13 +55,13 @@ namespace Merchello.Core.Gateways
             _activatedGatewayProviderCache.AddOrUpdate(provider.Key, provider, (x, y) => provider);
         }
 
-        private Attempt<GatewayProviderBase> CreateInstance(IGatewayProvider provider)
+        private Attempt<GatewayProviderBase> CreateInstance(IGatewayProviderSetting providerSetting)
         {
-            var providerType = InstanceTypes.FirstOrDefault(x => x.GetCustomAttribute<GatewayProviderActivationAttribute>(false).Key == provider.Key);
+            var providerType = InstanceTypes.FirstOrDefault(x => x.GetCustomAttribute<GatewayProviderActivationAttribute>(false).Key == providerSetting.Key);
 
-            return provider == null ? 
-                Attempt<GatewayProviderBase>.Fail(new Exception(string.Format("Failed to find type for provider {0}", provider.Name))) : 
-                ActivatorHelper.CreateInstance<GatewayProviderBase>(providerType, new object[] { _gatewayProviderService, provider, _runtimeCache });
+            return providerSetting == null ? 
+                Attempt<GatewayProviderBase>.Fail(new Exception(string.Format("Failed to find type for provider {0}", providerSetting.Name))) : 
+                ActivatorHelper.CreateInstance<GatewayProviderBase>(providerType, new object[] { _gatewayProviderService, providerSetting, _runtimeCache });
         }
 
        
@@ -129,6 +129,14 @@ namespace Merchello.Core.Gateways
         }
 
         /// <summary>
+        /// Gets a collection of all providers regardless of type
+        /// </summary>
+        public IEnumerable<GatewayProviderBase> GetAllProviders()
+        {
+            return Values;
+        }
+
+        /// <summary>
         /// Gets a collection of 
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -140,7 +148,7 @@ namespace Merchello.Core.Gateways
 
 
         /// <summary>
-        /// Gets a collection of <see cref="IGatewayProvider"/>s by type
+        /// Gets a collection of <see cref="IGatewayProviderSetting"/>s by type
         /// </summary>
         public IEnumerable<GatewayProviderBase> GetActivatedProviders<T>() where T  : GatewayProviderBase
         {

@@ -32,8 +32,8 @@ namespace Merchello.Tests.IntegrationTests.ObjectResolution
             }
         }
 
-        public TestingPaymentGatewayProvider(IGatewayProviderService gatewayProviderService, IGatewayProvider gatewayProvider, IRuntimeCacheProvider runtimeCacheProvider) 
-            : base(gatewayProviderService, gatewayProvider, runtimeCacheProvider)
+        public TestingPaymentGatewayProvider(IGatewayProviderService gatewayProviderService, IGatewayProviderSetting gatewayProviderSetting, IRuntimeCacheProvider runtimeCacheProvider) 
+            : base(gatewayProviderService, gatewayProviderSetting, runtimeCacheProvider)
         {
         }
 
@@ -48,7 +48,7 @@ namespace Merchello.Tests.IntegrationTests.ObjectResolution
             var available = ListResourcesOffered().FirstOrDefault(x => x.ServiceCode == gatewayResource.ServiceCode);
             if (available == null) throw new InvalidOperationException("GatewayResource has already been assigned");
 
-            var attempt = GatewayProviderService.CreatePaymentMethodWithKey(GatewayProvider.Key, name, description, available.ServiceCode);
+            var attempt = GatewayProviderService.CreatePaymentMethodWithKey(GatewayProviderSetting.Key, name, description, available.ServiceCode);
 
 
             if (attempt.Success)
