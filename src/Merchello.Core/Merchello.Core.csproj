@@ -120,7 +120,6 @@
     <Compile Include="Gateways\Payment\IPaymentGatewayMethod.cs" />
     <Compile Include="Gateways\Payment\IPaymentResult.cs" />
     <Compile Include="ObjectResolution\MerchelloManyObjectsResolverBase.cs" />
-    <Compile Include="ObjectResolution\Resolution.cs" />
     <Compile Include="Persistence\Migrations\DataLossException.cs" />
     <Compile Include="PluginManagerExtensions.cs" />
     <Compile Include="Gateways\Shipping\FixedRate\FixedRateShipmentLineItemVisitor.cs" />
@@ -711,6 +710,7 @@
     <Compile Include="Strategies\Packaging\IPackagingStrategy.cs" />
     <Compile Include="Strategies\Packaging\ShippableProductVisitor.cs" />
     <Compile Include="Triggers\EventTriggerRegistry.cs" />
+    <Compile Include="Triggers\IEventTriggerActionResolver.cs" />
     <Compile Include="Triggers\IEventTriggeredAction.cs" />
     <Compile Include="Triggers\IEnventTriggerRegistry.cs" />
     <Compile Include="Triggers\Notification\NotificationMessageRuleAttribute.cs" />

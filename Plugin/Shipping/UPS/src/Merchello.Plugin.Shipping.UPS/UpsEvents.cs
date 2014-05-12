@@ -12,14 +12,14 @@ using Umbraco.Core.Logging;
 
 namespace Merchello.Plugin.Shipping.UPS
 {
-    public class UPSEvents : ApplicationEventHandler
+    public class UpsEvents : ApplicationEventHandler
     {
         protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication,
                                               ApplicationContext applicationContext)
         {
             base.ApplicationStarted(umbracoApplication, applicationContext);
 
-            LogHelper.Info<UPSEvents>("Initializing UPS Shipping provider registration binding events");
+            LogHelper.Info<UpsEvents>("Initializing UPS Shipping provider registration binding events");
 
 
             GatewayProviderService.Saving += delegate(IGatewayProviderService sender, SaveEventArgs<IGatewayProvider> args)
