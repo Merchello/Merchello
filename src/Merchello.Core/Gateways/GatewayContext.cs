@@ -62,7 +62,7 @@ namespace Merchello.Core.Gateways
         /// <summary>
         /// Exposes the <see cref="INotificationContext"/>
         /// </summary>
-        public INotificationContext Notification
+        internal INotificationContext Notification
         {
             get
             {

@@ -19,7 +19,14 @@ namespace Merchello.Tests.UnitTests.Configuration
         [Test]
         public void ConfigurationStatus_Equals_MerchelloVersion()
         {
-            Assert.AreEqual(MerchelloConfiguration.ConfigurationStatus, MerchelloVersion.Current.ToString());
+            //// Arrage
+            
+            //// Act
+            var configStatus = MerchelloConfiguration.ConfigurationStatus;
+            var currentVersion = MerchelloVersion.Current.ToString();
+
+            //// Assert
+            Assert.AreEqual(configStatus, currentVersion);
         }
     }
 }

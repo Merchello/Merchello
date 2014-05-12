@@ -74,7 +74,7 @@ namespace Merchello.Web.Editors
         /// </summary>
         public IEnumerable<GatewayProviderDisplay> GetResolvedNotificationGatewayProviders()
         {
-            return _gatewayContext.Notification.GetAllProviders().Select(x => x.GatewayProvider.ToGatewayProviderDisplay());
+            return ((GatewayContext)_gatewayContext).Notification.GetAllProviders().Select(x => x.GatewayProvider.ToGatewayProviderDisplay());
         }
 
         /// <summary>
