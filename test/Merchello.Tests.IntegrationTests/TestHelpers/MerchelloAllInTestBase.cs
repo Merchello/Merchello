@@ -24,8 +24,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         [TestFixtureSetUp]
         public virtual void FixtureSetup()
         {
-            Resolution.Reset();
-
+            
             AutoMapperMappings.BindMappings();  
 
             // Umbraco Application
@@ -72,7 +71,6 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
             ProductVariantService.Saved -= ProductVariantServiceSaved;
             ProductVariantService.Deleted -= ProductVariantServiceDeleted;
 
-            Resolution.Reset();
         }
 
         //#region BasketCheckoutEvents

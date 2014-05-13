@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Merchello.Plugin.Shipping.UPS
 {
-    class UpsHttpRequestHandler
+    public class UpsHttpRequestHandler
     {
         #region Variables
 

@@ -16,6 +16,9 @@ using Umbraco.Web.Mvc;
 
 namespace Merchello.Web.Editors
 {
+    /// <summary>
+    /// Represents a GatewayProviderApiController
+    /// </summary>
     [PluginController("Merchello")]
     public class GatewayProviderApiController : MerchelloApiController
     {
