@@ -7,7 +7,7 @@ using Umbraco.Core;
 
 namespace Merchello.Core.Persistence.Factories
 {
-    internal class GatewayProviderFactory : IEntityFactory<IGatewayProviderSettings, GatewayProviderSettingsDto>
+    internal class GatewayProviderSettingsFactory : IEntityFactory<IGatewayProviderSettings, GatewayProviderSettingsDto>
     {
         public IGatewayProviderSettings BuildEntity(GatewayProviderSettingsDto dto)
         {
