@@ -480,7 +480,7 @@
     <Compile Include="Persistence\Factories\TaxMethodFactory.cs" />
     <Compile Include="Persistence\Factories\CustomerAddressFactory.cs" />
     <Compile Include="Persistence\Factories\CustomerFactory.cs" />
-    <Compile Include="Persistence\Factories\GatewayProviderFactory.cs" />
+    <Compile Include="Persistence\Factories\GatewayProviderSettingsFactory.cs" />
     <Compile Include="Persistence\Factories\IEntityFactory.cs" />
     <Compile Include="Persistence\Factories\CatalogInventoryFactory.cs" />
     <Compile Include="Persistence\Factories\InvoiceFactory.cs" />
@@ -665,10 +665,13 @@
     <Compile Include="SerializationHelper.cs" />
     <Compile Include="Services\AppliedPaymentService.cs" />
     <Compile Include="Services\Interfaces\IAppliedPaymentService.cs" />
+    <Compile Include="Services\Interfaces\INotificationMessageService.cs" />
     <Compile Include="Services\Interfaces\INotificationMethodService.cs" />
     <Compile Include="Services\Interfaces\IOrderService.cs" />
     <Compile Include="Services\Interfaces\IPaymentMethodService.cs" />
     <Compile Include="Services\Interfaces\IPaymentService.cs" />
+    <Compile Include="Services\NotificationMessageService.cs" />
+    <Compile Include="Services\NotificationMethodService.cs" />
     <Compile Include="Services\OrderService.cs" />
     <Compile Include="Services\PaymentMethodService.cs" />
     <Compile Include="Services\PaymentService.cs" />

@@ -76,7 +76,7 @@ namespace Merchello.Core.Gateways
 
                 var allResolved = new List<GatewayProviderBase>();
 
-                var factory = new Persistence.Factories.GatewayProviderFactory();
+                var factory = new Persistence.Factories.GatewayProviderSettingsFactory();
 
                 using (GetWriteLock())
                 {

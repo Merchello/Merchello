@@ -20,7 +20,8 @@ namespace Merchello.Core.Services
         private Lazy<IInvoiceService> _invoiceService; 
         private Lazy<IItemCacheService> _itemCacheService;   
         private Lazy<IGatewayProviderService> _gatewayProviderService;
-        private Lazy<IOrderService> _orderService; 
+        private Lazy<IOrderService> _orderService;
+        private Lazy<INotificationMethodService> _notificationMethodService; 
         private Lazy<IPaymentService> _paymentService; 
         private Lazy<IPaymentMethodService> _paymentMethodService; 
         private Lazy<IProductService> _productService;
@@ -58,6 +59,8 @@ namespace Merchello.Core.Services
             if(_itemCacheService == null)
                 _itemCacheService = new Lazy<IItemCacheService>(() => new ItemCacheService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
             
+            if(_notificationMethodService == null)
+                _notificationMethodService = new Lazy<INotificationMethodService>(() => new NotificationMethodService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
             
             if(_paymentService == null)
                 _paymentService = new Lazy<IPaymentService>(() => new PaymentService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _appliedPaymentService.Value));
