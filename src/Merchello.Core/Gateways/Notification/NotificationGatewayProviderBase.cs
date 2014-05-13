@@ -6,19 +6,15 @@ using Umbraco.Core.Cache;
 
 namespace Merchello.Core.Gateways.Notification
 {
-    public class NotificationGatewayProviderBase : GatewayProviderBase, INotificationGatewayProvider
+    public abstract class NotificationGatewayProviderBase : GatewayProviderBase, INotificationGatewayProvider
     {
-        public NotificationGatewayProviderBase(IGatewayProviderService gatewayProviderService, IGatewayProviderSettings gatewayProviderSettings, IRuntimeCacheProvider runtimeCacheProvider)
+        protected NotificationGatewayProviderBase(IGatewayProviderService gatewayProviderService, IGatewayProviderSettings gatewayProviderSettings, IRuntimeCacheProvider runtimeCacheProvider)
             : base(gatewayProviderService, gatewayProviderSettings, runtimeCacheProvider)
         {
         }
 
 
-        public override IEnumerable<IGatewayResource> ListResourcesOffered()
-        {
-            throw new NotImplementedException();
-        }
-
+        
         private IEnumerable<INotificationMethod> _notificationMethods;
 
         /// <summary>
