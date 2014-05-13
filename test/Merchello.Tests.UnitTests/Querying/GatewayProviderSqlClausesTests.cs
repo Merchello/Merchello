@@ -9,10 +9,10 @@ namespace Merchello.Tests.UnitTests.Querying
 {
     [TestFixture]
     [Category("SqlSyntax")]
-    public class GatewayProviderSqlClausesTests : BaseUsingSqlServerSyntax<IGatewayProvider>
+    public class GatewayProviderSqlClausesTests : BaseUsingSqlServerSyntax<IGatewayProviderSettings>
     {
         /// <summary>
-        /// Test to verify that the typed <see cref="GatewayProviderDto"/> query matches generic "select * ..." query 
+        /// Test to verify that the typed <see cref="GatewayProviderSettingsDto"/> query matches generic "select * ..." query 
         /// </summary>
         [Test]
         public void Can_Verify_GatewayProvider_Base_Clause()
@@ -22,14 +22,14 @@ namespace Merchello.Tests.UnitTests.Querying
 
             var expected = new Sql();
             expected.Select("*")
-                .From("[merchGatewayProvider]")
-                .Where("[merchGatewayProvider].[pk] = '" + key.ToString() + "'");
+                .From("[merchGatewayProviderSettings]")
+                .Where("[merchGatewayProviderSettings].[pk] = '" + key.ToString() + "'");
 
             //// Act
             var sql = new Sql();
             sql.Select("*")
-                .From<GatewayProviderDto>()
-                .Where<GatewayProviderDto>(x => x.Key == key);
+                .From<GatewayProviderSettingsDto>()
+                .Where<GatewayProviderSettingsDto>(x => x.Key == key);
 
             //// Assert
             Assert.That(sql.SQL, Is.EqualTo(expected.SQL));

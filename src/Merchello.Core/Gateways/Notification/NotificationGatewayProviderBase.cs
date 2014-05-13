@@ -8,8 +8,8 @@ namespace Merchello.Core.Gateways.Notification
 {
     public class NotificationGatewayProviderBase : GatewayProviderBase, INotificationGatewayProvider
     {
-        public NotificationGatewayProviderBase(IGatewayProviderService gatewayProviderService, IGatewayProvider gatewayProvider, IRuntimeCacheProvider runtimeCacheProvider)
-            : base(gatewayProviderService, gatewayProvider, runtimeCacheProvider)
+        public NotificationGatewayProviderBase(IGatewayProviderService gatewayProviderService, IGatewayProviderSettings gatewayProviderSettings, IRuntimeCacheProvider runtimeCacheProvider)
+            : base(gatewayProviderService, gatewayProviderSettings, runtimeCacheProvider)
         {
         }
 
@@ -29,7 +29,7 @@ namespace Merchello.Core.Gateways.Notification
             get
             {
                 return _notificationMethods ??
-                      (_notificationMethods = GatewayProviderService.GetNotificationMethodsByProviderKey(GatewayProvider.Key));
+                      (_notificationMethods = GatewayProviderService.GetNotificationMethodsByProviderKey(GatewayProviderSettings.Key));
             }
             protected set { _notificationMethods = value; }
         }

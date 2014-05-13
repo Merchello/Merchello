@@ -16,10 +16,10 @@ namespace Merchello.Core.Gateways
         /// </summary>
         IPaymentContext Payment { get; }
 
-        /// <summary>
-        /// Gets the <see cref="INotificationContext"/>
-        /// </summary>
-        INotificationContext Notification { get; }
+        ///// <summary>
+        ///// Gets the <see cref="INotificationContext"/>
+        ///// </summary>
+        //INotificationContext Notification { get; }
 
         /// <summary>
         /// Gets the <see cref="IShippingContext"/>

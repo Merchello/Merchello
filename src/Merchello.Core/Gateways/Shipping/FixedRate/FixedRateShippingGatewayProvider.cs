@@ -33,8 +33,8 @@ namespace Merchello.Core.Gateways.Shipping.FixedRate
         #endregion
 
 
-        public FixedRateShippingGatewayProvider(IGatewayProviderService gatewayProviderService, IGatewayProvider gatewayProvider, IRuntimeCacheProvider runtimeCacheProvider)
-            : base(gatewayProviderService, gatewayProvider, runtimeCacheProvider)
+        public FixedRateShippingGatewayProvider(IGatewayProviderService gatewayProviderService, IGatewayProviderSettings gatewayProviderSettings, IRuntimeCacheProvider runtimeCacheProvider)
+            : base(gatewayProviderService, gatewayProviderSettings, runtimeCacheProvider)
         { }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace Merchello.Core.Gateways.Shipping.FixedRate
             Mandate.ParameterNotNull(shipCountry, "shipCountry");
             Mandate.ParameterNotNullOrEmpty(name, "name");
 
-            var attempt = GatewayProviderService.CreateShipMethodWithKey(GatewayProvider.Key, shipCountry, name, gatewayResource.ServiceCode + string.Format("-{0}", Guid.NewGuid()));
+            var attempt = GatewayProviderService.CreateShipMethodWithKey(GatewayProviderSettings.Key, shipCountry, name, gatewayResource.ServiceCode + string.Format("-{0}", Guid.NewGuid()));
             
             if (!attempt.Success) throw attempt.Exception;
 
@@ -105,7 +105,7 @@ namespace Merchello.Core.Gateways.Shipping.FixedRate
         /// <returns></returns>
         public override IEnumerable<IShippingGatewayMethod> GetAllShippingGatewayMethods(IShipCountry shipCountry)
         {
-            var methods = GatewayProviderService.GetShipMethodsByShipCountryKey(GatewayProvider.Key, shipCountry.Key);
+            var methods = GatewayProviderService.GetShipMethodsByShipCountryKey(GatewayProviderSettings.Key, shipCountry.Key);
             return methods
                 .Select(
                 shipMethod => new FixedRateShippingGatewayMethod(AvailableResources.FirstOrDefault(x => shipMethod.ServiceCode.StartsWith(x.ServiceCode)), shipMethod, shipCountry, ShippingFixedRateTable.GetShipRateTable(GatewayProviderService, RuntimeCache, shipMethod.Key))

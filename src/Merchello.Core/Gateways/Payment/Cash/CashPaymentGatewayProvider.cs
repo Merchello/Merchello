@@ -23,8 +23,8 @@ namespace Merchello.Core.Gateways.Payment.Cash
 
         #endregion
 
-        public CashPaymentGatewayProvider(IGatewayProviderService gatewayProviderService, IGatewayProvider gatewayProvider, IRuntimeCacheProvider runtimeCacheProvider) 
-            : base(gatewayProviderService, gatewayProvider, runtimeCacheProvider)
+        public CashPaymentGatewayProvider(IGatewayProviderService gatewayProviderService, IGatewayProviderSettings gatewayProviderSettings, IRuntimeCacheProvider runtimeCacheProvider) 
+            : base(gatewayProviderService, gatewayProviderSettings, runtimeCacheProvider)
         { }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace Merchello.Core.Gateways.Payment.Cash
         {
             var paymentCode = gatewayResource.ServiceCode + "-" + Guid.NewGuid();
 
-            var attempt = GatewayProviderService.CreatePaymentMethodWithKey(GatewayProvider.Key, name, description, paymentCode);
+            var attempt = GatewayProviderService.CreatePaymentMethodWithKey(GatewayProviderSettings.Key, name, description, paymentCode);
 
             if (attempt.Success)
             {

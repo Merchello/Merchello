@@ -12,7 +12,7 @@ namespace Merchello.Core.Models
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    public class GatewayProvider : Entity, IGatewayProvider
+    public class GatewayProviderSettings : Entity, IGatewayProviderSettings
     {
         private string _name;
         private string _description;
@@ -21,12 +21,12 @@ namespace Merchello.Core.Models
         private ExtendedDataCollection _extendedData;
         private bool _encryptExtendedData;       
 
-        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<GatewayProvider, string>(x => x.Name);
-        private static readonly PropertyInfo DescriptionSelector = ExpressionHelper.GetPropertyInfo<GatewayProvider, string>(x => x.Description);
-        private static readonly PropertyInfo ProviderTfKeySelector = ExpressionHelper.GetPropertyInfo<GatewayProvider, Guid>(x => x.ProviderTfKey);
-        private static readonly PropertyInfo TypeFullNameSelector = ExpressionHelper.GetPropertyInfo<GatewayProvider, string>(x => x.TypeFullName);
-        private static readonly PropertyInfo ExtendedDataChangedSelector = ExpressionHelper.GetPropertyInfo<GatewayProvider, ExtendedDataCollection>(x => x.ExtendedData);
-        private static readonly PropertyInfo EncryptExtendedDataSelector = ExpressionHelper.GetPropertyInfo<GatewayProvider, bool>(x => x.EncryptExtendedData);
+        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<GatewayProviderSettings, string>(x => x.Name);
+        private static readonly PropertyInfo DescriptionSelector = ExpressionHelper.GetPropertyInfo<GatewayProviderSettings, string>(x => x.Description);
+        private static readonly PropertyInfo ProviderTfKeySelector = ExpressionHelper.GetPropertyInfo<GatewayProviderSettings, Guid>(x => x.ProviderTfKey);
+        private static readonly PropertyInfo TypeFullNameSelector = ExpressionHelper.GetPropertyInfo<GatewayProviderSettings, string>(x => x.TypeFullName);
+        private static readonly PropertyInfo ExtendedDataChangedSelector = ExpressionHelper.GetPropertyInfo<GatewayProviderSettings, ExtendedDataCollection>(x => x.ExtendedData);
+        private static readonly PropertyInfo EncryptExtendedDataSelector = ExpressionHelper.GetPropertyInfo<GatewayProviderSettings, bool>(x => x.EncryptExtendedData);
 
 
         private void ExtendedDataChanged(object sender, NotifyCollectionChangedEventArgs e)

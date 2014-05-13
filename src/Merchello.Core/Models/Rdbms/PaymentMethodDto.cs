@@ -15,7 +15,7 @@ namespace Merchello.Core.Models.Rdbms
         public Guid Key { get; set; }
 
         [Column("providerKey")]
-        [ForeignKey(typeof(GatewayProviderDto), Name = "FK_merchPaymentMethod_merchGatewayProvider", Column = "pk")]
+        [ForeignKey(typeof(GatewayProviderSettingsDto), Name = "FK_merchPaymentMethod_merchGatewayProviderSettings", Column = "pk")]
         public Guid ProviderKey { get; set; }
 
         [Column("name")]

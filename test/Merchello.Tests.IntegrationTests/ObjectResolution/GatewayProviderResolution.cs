@@ -33,7 +33,7 @@ namespace Merchello.Tests.IntegrationTests.ObjectResolution
             }
 
             // deactivate all test providers
-            var testProviders = GatewayProviderResolver.Current.GetActivatedProviders().Where(x => testKeys.Contains(x.GatewayProvider.Key) && x.Activated);
+            var testProviders = GatewayProviderResolver.Current.GetActivatedProviders().Where(x => testKeys.Contains(x.GatewayProviderSettings.Key) && x.Activated);
             foreach (var provider in testProviders)
             {
                 ((GatewayContext)MerchelloContext.Current.Gateways).DeactivateProvider(provider);

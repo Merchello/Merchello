@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Merchello.Core;
+using Merchello.Core.Gateways;
 using Merchello.Core.Gateways.Notification;
 using Merchello.Core.Models;
 using Merchello.Web.Models.ContentEditing;
@@ -36,7 +37,7 @@ namespace Merchello.Web.Editors
         public NotificationGatewayApiController(MerchelloContext merchelloContext)
             : base(merchelloContext)
         {
-            _notificationContext = MerchelloContext.Gateways.Notification;
+            _notificationContext = ((GatewayContext)MerchelloContext.Gateways).Notification;
         }
 
         /// <summary>
@@ -76,7 +77,7 @@ namespace Merchello.Web.Editors
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
 
-            return providers.Select(provider => provider.GatewayProvider.ToGatewayProviderDisplay());
+            return providers.Select(provider => provider.GatewayProviderSettings.ToGatewayProviderDisplay());
         }
 
 

@@ -247,7 +247,6 @@
     <Compile Include="Examine\InvoiceAndOrderProviderTests.cs" />
     <Compile Include="Gateways\ShippingContextTests.cs" />
     <Compile Include="MigrationTests.cs" />
-    <Compile Include="ObjectResolution\EventTriggerResolution.cs" />
     <Compile Include="ObjectResolution\GatewayProviderResolution.cs" />
     <Compile Include="ObjectResolution\TestingPaymentGatewayMethod.cs" />
     <Compile Include="ObjectResolution\TestingPaymentGatewayProvider.cs" />

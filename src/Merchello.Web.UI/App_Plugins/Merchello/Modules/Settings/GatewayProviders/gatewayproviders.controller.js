@@ -144,7 +144,7 @@
          */
         $scope.init = function () {
 
-            $scope.loadAllNotificationGatwayProviders();
+            //$scope.loadAllNotificationGatwayProviders();
             $scope.loadAllPaymentGatewayProviders();
             $scope.loadAllShippingGatewayProviders();
             $scope.loadAllTaxationGatewayProviders();

@@ -236,10 +236,8 @@
     <Compile Include="Gateways\GatewayProviderBase.cs" />
     <Compile Include="Gateways\IGatewayContext.cs" />
     <Compile Include="Gateways\GatewayProviderTypedContextBase.cs" />
-    <Compile Include="Gateways\GatewayProviderFactory.cs" />
     <Compile Include="Gateways\IProvider.cs" />
     <Compile Include="Gateways\IGatewayProviderTypedContextBase.cs" />
-    <Compile Include="Gateways\IGatewayProviderFactory.cs" />
     <Compile Include="Gateways\Payment\IPaymentContext.cs" />
     <Compile Include="Gateways\Payment\IPaymentGatewayProvider.cs" />
     <Compile Include="Gateways\Payment\PaymentContext.cs" />
@@ -289,7 +287,7 @@
     </Compile>
     <Compile Include="Models\GatewayProviderCollection.cs" />
     <Compile Include="Gateways\GatewayResource.cs" />
-    <Compile Include="Models\GatewayProvider.cs" />
+    <Compile Include="Models\GatewayProviderSettings.cs" />
     <Compile Include="Gateways\IGatewayResource.cs" />
     <Compile Include="Models\Interfaces\IAddress.cs" />
     <Compile Include="Models\Interfaces\IAppliedPayment.cs">
@@ -304,7 +302,7 @@
     <Compile Include="Models\Interfaces\ICustomerBase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\Interfaces\IGatewayProvider.cs" />
+    <Compile Include="Models\Interfaces\IGatewayProviderSettings.cs" />
     <Compile Include="Models\Interfaces\IInvoice.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -633,7 +631,7 @@
     <Compile Include="Models\Rdbms\OrderItemDto.cs" />
     <Compile Include="Models\Rdbms\OrderStatusDto.cs" />
     <Compile Include="Models\Rdbms\OrderDto.cs" />
-    <Compile Include="Models\Rdbms\GatewayProviderDto.cs" />
+    <Compile Include="Models\Rdbms\GatewayProviderSettingsDto.cs" />
     <Compile Include="Models\Rdbms\ProductAttributeDto.cs" />
     <Compile Include="Models\Rdbms\ProductOptionDto.cs" />
     <Compile Include="Models\Rdbms\Product2ProductOptionDto.cs" />
