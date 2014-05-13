@@ -80,7 +80,7 @@ namespace Merchello.Core.Configuration.Outline
         }
 
         /// <summary>
-        /// Gets the dbTypeFields configuration collection for <see cref="IGatewayProviderSetting"/>
+        /// Gets the dbTypeFields configuration collection for <see cref="IGatewayProviderSettings"/>
         /// </summary>
         [ConfigurationProperty("gatewayProvider", IsRequired = false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
         public TypeFieldCollection GatewayProvider

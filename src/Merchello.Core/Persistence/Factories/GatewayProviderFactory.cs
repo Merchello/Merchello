@@ -7,9 +7,9 @@ using Umbraco.Core;
 
 namespace Merchello.Core.Persistence.Factories
 {
-    internal class GatewayProviderFactory : IEntityFactory<IGatewayProviderSetting, GatewayProviderSettingDto>
+    internal class GatewayProviderFactory : IEntityFactory<IGatewayProviderSettings, GatewayProviderSettingsDto>
     {
-        public IGatewayProviderSetting BuildEntity(GatewayProviderSettingDto dto)
+        public IGatewayProviderSettings BuildEntity(GatewayProviderSettingsDto dto)
         {
             var extendedData = string.IsNullOrEmpty(dto.ExtendedData)
                                    ? new ExtendedDataCollection()
@@ -19,7 +19,7 @@ namespace Merchello.Core.Persistence.Factories
                                        dto.ExtendedData
                                        );
 
-            var entity = new GatewayProviderSetting()
+            var entity = new GatewayProviderSettings()
             {
                 Key = dto.Key,
                 ProviderTfKey = dto.ProviderTfKey,
@@ -36,13 +36,13 @@ namespace Merchello.Core.Persistence.Factories
             return entity;
         }
 
-        public GatewayProviderSettingDto BuildDto(IGatewayProviderSetting entity)
+        public GatewayProviderSettingsDto BuildDto(IGatewayProviderSettings entity)
         {
             var extendedDataXml = entity.EncryptExtendedData
                                    ? entity.ExtendedData.SerializeToXml().EncryptWithMachineKey()
                                    : entity.ExtendedData.SerializeToXml();
 
-            return new GatewayProviderSettingDto()
+            return new GatewayProviderSettingsDto()
             {
                 Key = entity.Key,
                 ProviderTfKey = entity.ProviderTfKey,
@@ -62,14 +62,14 @@ namespace Merchello.Core.Persistence.Factories
         /// <param name="t">The resolved Type t</param>
         /// <param name="gatewayProviderType">The gateway provider type</param>
         /// <returns></returns>
-        internal IGatewayProviderSetting BuildEntity(Type t, GatewayProviderType gatewayProviderType)
+        internal IGatewayProviderSettings BuildEntity(Type t, GatewayProviderType gatewayProviderType)
         {
             Mandate.ParameterNotNull(t, "Type t cannot be null");
             Mandate.ParameterCondition(t.GetCustomAttribute<GatewayProviderActivationAttribute>(false) != null, "Type t must have a GatewayProviderActivationAttribute");
 
             var att = t.GetCustomAttribute<GatewayProviderActivationAttribute>(false);
                            
-            var provider = new GatewayProviderSetting()
+            var provider = new GatewayProviderSettings()
             {
                 Key = att.Key,
                 ProviderTfKey = EnumTypeFieldConverter.GatewayProvider.GetTypeField(gatewayProviderType).TypeKey,

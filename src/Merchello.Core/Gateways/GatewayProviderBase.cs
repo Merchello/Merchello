@@ -11,18 +11,18 @@ namespace Merchello.Core.Gateways
     /// </summary>
     public abstract class GatewayProviderBase : IProvider
     {        
-        private readonly IGatewayProviderSetting _gatewayProviderSetting;
+        private readonly IGatewayProviderSettings _gatewayProviderSettings;
         private readonly IGatewayProviderService _gatewayProviderService;
         private readonly IRuntimeCacheProvider _runtimeCache;
 
-        protected GatewayProviderBase(IGatewayProviderService gatewayProviderService, IGatewayProviderSetting gatewayProviderSetting, IRuntimeCacheProvider runtimeCacheProvider)
+        protected GatewayProviderBase(IGatewayProviderService gatewayProviderService, IGatewayProviderSettings gatewayProviderSettings, IRuntimeCacheProvider runtimeCacheProvider)
         {
             Mandate.ParameterNotNull(gatewayProviderService, "gatewayProviderService");
-            Mandate.ParameterNotNull(gatewayProviderSetting, "gatewayProvider");
+            Mandate.ParameterNotNull(gatewayProviderSettings, "gatewayProvider");
             Mandate.ParameterNotNull(runtimeCacheProvider, "runtimeCacheProvider");
 
             _gatewayProviderService = gatewayProviderService;
-            _gatewayProviderSetting = gatewayProviderSetting;
+            _gatewayProviderSettings = gatewayProviderSettings;
             _runtimeCache = runtimeCacheProvider;
         }
 
@@ -46,7 +46,7 @@ namespace Merchello.Core.Gateways
         /// </summary>
         public Guid Key 
         {
-            get { return _gatewayProviderSetting.Key; }
+            get { return _gatewayProviderSettings.Key; }
         }
 
         /// <summary>
@@ -58,27 +58,27 @@ namespace Merchello.Core.Gateways
         }
 
         /// <summary>
-        /// Gets the <see cref="IGatewayProviderSetting"/>
+        /// Gets the <see cref="IGatewayProviderSettings"/>
         /// </summary>
-        public virtual IGatewayProviderSetting GatewayProviderSetting 
+        public virtual IGatewayProviderSettings GatewayProviderSettings 
         {
-            get { return _gatewayProviderSetting; }
+            get { return _gatewayProviderSettings; }
         }
 
         /// <summary>
-        /// Gets the ExtendedData collection from the <see cref="IGatewayProviderSetting"/>
+        /// Gets the ExtendedData collection from the <see cref="IGatewayProviderSettings"/>
         /// </summary>
         public virtual ExtendedDataCollection ExtendedData
         {
-            get { return _gatewayProviderSetting.ExtendedData; }
+            get { return _gatewayProviderSettings.ExtendedData; }
         }
 
         /// <summary>
-        /// Gets the "activated property" from the <see cref="IGatewayProviderSetting"/>
+        /// Gets the "activated property" from the <see cref="IGatewayProviderSettings"/>
         /// </summary>
         public virtual bool Activated
         {
-            get { return _gatewayProviderSetting.Activated; }
+            get { return _gatewayProviderSettings.Activated; }
         }
 
         /// <summary>

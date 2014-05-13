@@ -11,7 +11,7 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Creates a <see cref="INotificationMethod"/> and saves it to the database
         /// </summary>
-        /// <param name="providerKey">The <see cref="IGatewayProviderSetting"/> key</param>
+        /// <param name="providerKey">The <see cref="IGatewayProviderSettings"/> key</param>
         /// <param name="name">The name of the notification (used in back office)</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         /// <returns>An Attempt{<see cref="INotificationMethod"/>}</returns>
@@ -48,7 +48,7 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Gets a collection of all <see cref="INotificationMethod"/> assoicated with a provider
         /// </summary>
-        /// <param name="providerKey">The <see cref="IGatewayProviderSetting"/> key</param>
+        /// <param name="providerKey">The <see cref="IGatewayProviderSettings"/> key</param>
         /// <returns>A collection of all <see cref="INotificationMethod"/> associated with a provider</returns>
         IEnumerable<INotificationMethod> GetNotifcationMethodsByProviderKey(Guid providerKey);
     }

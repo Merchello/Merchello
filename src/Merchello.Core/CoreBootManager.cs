@@ -93,21 +93,12 @@ namespace Merchello.Core
         {
             //if (Resolution.IsFrozen || _isTest) return;
 
-            // TODO this needs to be cleaned up - really hacky fix for unit testing since we 
-            // are locked out of checking whether or not Current is not null.  
-            // http://issues.umbraco.org/issue/U4-4829
-            try
-            {
-                GatewayProviderResolver.Current = new GatewayProviderResolver(
-                PluginManager.Current.ResolveGatewayProviders(),
-                serviceContext.GatewayProviderService,
-                cache.RuntimeCache);
-            }
-            catch (Exception)
-            {
-                
-                
-            }
+            if(!GatewayProviderResolver.HasCurrent)
+            GatewayProviderResolver.Current = new GatewayProviderResolver(
+            PluginManager.Current.ResolveGatewayProviders(),
+            serviceContext.GatewayProviderService,
+            cache.RuntimeCache);
+           
             
         }
 

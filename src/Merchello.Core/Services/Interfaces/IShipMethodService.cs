@@ -54,13 +54,13 @@ namespace Merchello.Core.Services
         IShipMethod GetByKey(Guid key);
 
         /// <summary>
-        /// Gets a list of <see cref="IShipMethod"/> objects given a <see cref="IGatewayProviderSetting"/> key and a <see cref="IShipCountry"/> key
+        /// Gets a list of <see cref="IShipMethod"/> objects given a <see cref="IGatewayProviderSettings"/> key and a <see cref="IShipCountry"/> key
         /// </summary>
         /// <returns>A collection of <see cref="IShipMethod"/></returns>
         IEnumerable<IShipMethod> GetShipMethodsByProviderKey(Guid providerKey, Guid shipCountryKey);
 
         /// <summary>
-        /// Gets a list of all <see cref="IShipMethod"/> objects given a <see cref="IGatewayProviderSetting"/> key
+        /// Gets a list of all <see cref="IShipMethod"/> objects given a <see cref="IGatewayProviderSettings"/> key
         /// </summary>
         /// <returns>A collection of <see cref="IShipMethod"/></returns>
         IEnumerable<IShipMethod> GetShipMethodsByProviderKey(Guid providerKey); 

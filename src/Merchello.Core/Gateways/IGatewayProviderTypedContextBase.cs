@@ -12,7 +12,7 @@ namespace Merchello.Core.Gateways
     public interface IGatewayProviderTypedContextBase<out T> where T : GatewayProviderBase
     {
         /// <summary>
-        /// Lists all available <see cref="IGatewayProviderSetting"/>
+        /// Lists all available <see cref="IGatewayProviderSettings"/>
         /// </summary>
         /// <returns>A collection of all GatewayProvider of the particular type T</returns>
         IEnumerable<GatewayProviderBase> GetAllActivatedProviders();
@@ -47,10 +47,10 @@ namespace Merchello.Core.Gateways
         void ActivateProvider(GatewayProviderBase provider);
 
         /// <summary>
-        /// Activates a <see cref="IGatewayProviderSetting"/>
+        /// Activates a <see cref="IGatewayProviderSettings"/>
         /// </summary>
-        /// <param name="gatewayProviderSetting">The <see cref="IGatewayProviderSetting"/> to be activated</param>
-        void ActivateProvider(IGatewayProviderSetting gatewayProviderSetting);
+        /// <param name="gatewayProviderSettings">The <see cref="IGatewayProviderSettings"/> to be activated</param>
+        void ActivateProvider(IGatewayProviderSettings gatewayProviderSettings);
 
 
         /// <summary>
@@ -60,10 +60,10 @@ namespace Merchello.Core.Gateways
         void DeactivateProvider(GatewayProviderBase provider);
 
         /// <summary>
-        /// Deactivates a <see cref="IGatewayProviderSetting"/>
+        /// Deactivates a <see cref="IGatewayProviderSettings"/>
         /// </summary>
-        /// <param name="gatewayProviderSetting">The <see cref="IGatewayProviderSetting"/> to be deactivated</param>
-        void DeactivateProvider(IGatewayProviderSetting gatewayProviderSetting);
+        /// <param name="gatewayProviderSettings">The <see cref="IGatewayProviderSettings"/> to be deactivated</param>
+        void DeactivateProvider(IGatewayProviderSettings gatewayProviderSettings);
 
     }
 }

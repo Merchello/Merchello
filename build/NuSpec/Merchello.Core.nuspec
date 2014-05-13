@@ -14,9 +14,7 @@
     <summary>Contains the core assemblies needed to extend the Merchello eCommerece package for the Umbraco CMS</summary>
     <language>en-US</language>
     <tags>umbraco, merchello</tags>
-    <dependencies>
-      <dependency id="UmbracoCms.Core" version="7.1.1" />
-    </dependencies>
+    <dependencies />
   </metadata>
   <files>
     <file src="..\Temp\bin\Merchello.Core.dll" target="lib\net40\Merchello.Core.dll" />

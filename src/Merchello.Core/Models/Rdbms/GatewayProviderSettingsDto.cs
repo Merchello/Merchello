@@ -4,10 +4,10 @@ using Umbraco.Core.Persistence.DatabaseAnnotations;
 
 namespace Merchello.Core.Models.Rdbms
 {
-    [TableName("merchGatewayProvider")]
+    [TableName("merchGatewayProviderSettings")]
     [PrimaryKey("pk", autoIncrement = false)]
     [ExplicitColumns]
-    internal class GatewayProviderSettingDto
+    internal class GatewayProviderSettingsDto
     {
         [Column("pk")]
         [PrimaryKeyColumn(AutoIncrement = false)]

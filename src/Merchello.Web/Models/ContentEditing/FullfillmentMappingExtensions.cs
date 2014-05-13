@@ -90,12 +90,12 @@ namespace Merchello.Web.Models.ContentEditing
 
         #region GatewayProviderDisplay
 
-        internal static GatewayProviderDisplay ToGatewayProviderDisplay(this IGatewayProviderSetting gatewayProviderSetting)
+        internal static GatewayProviderDisplay ToGatewayProviderDisplay(this IGatewayProviderSettings gatewayProviderSettings)
         {
-            return AutoMapper.Mapper.Map<GatewayProviderDisplay>(gatewayProviderSetting);
+            return AutoMapper.Mapper.Map<GatewayProviderDisplay>(gatewayProviderSettings);
         }
 
-        internal static IGatewayProviderSetting ToGatewayProvider(this GatewayProviderDisplay gatewayProvider, IGatewayProviderSetting destination)
+        internal static IGatewayProviderSettings ToGatewayProvider(this GatewayProviderDisplay gatewayProvider, IGatewayProviderSettings destination)
         {
             if (gatewayProvider.Key != Guid.Empty) destination.Key = gatewayProvider.Key;
             // type key and typeFullName should be handled by the resolver 
@@ -103,7 +103,7 @@ namespace Merchello.Web.Models.ContentEditing
             destination.Description = gatewayProvider.Description;
             destination.EncryptExtendedData = gatewayProvider.EncryptExtendedData;
             
-            ((GatewayProviderSetting)destination).ExtendedData = gatewayProvider.ExtendedData.AsExtendedDataCollection();
+            ((GatewayProviderSettings)destination).ExtendedData = gatewayProvider.ExtendedData.AsExtendedDataCollection();
 
             return destination;
         }

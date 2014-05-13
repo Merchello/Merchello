@@ -240,7 +240,7 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Gets a <see cref="ITaxMethod"/> based on a provider and country code
         /// </summary>
-        /// <param name="providerKey">The unique 'key' of the <see cref="IGatewayProviderSetting"/></param>
+        /// <param name="providerKey">The unique 'key' of the <see cref="IGatewayProviderSettings"/></param>
         /// <param name="countryCode">The country code of the <see cref="ITaxMethod"/></param>
         /// <returns><see cref="ITaxMethod"/></returns>
         public ITaxMethod GetTaxMethodByCountryCode(Guid providerKey, string countryCode)

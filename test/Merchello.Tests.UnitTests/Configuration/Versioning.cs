@@ -1,4 +1,5 @@
-﻿using Merchello.Core.Configuration;
+﻿using System;
+using Merchello.Core.Configuration;
 using NUnit.Framework;
 
 namespace Merchello.Tests.UnitTests.Configuration
@@ -24,6 +25,9 @@ namespace Merchello.Tests.UnitTests.Configuration
             //// Act
             var configStatus = MerchelloConfiguration.ConfigurationStatus;
             var currentVersion = MerchelloVersion.Current.ToString();
+            
+            Console.Write("Config status {0} - ", configStatus);
+            Console.Write("Current Version {0} - ", currentVersion);
 
             //// Assert
             Assert.AreEqual(configStatus, currentVersion);

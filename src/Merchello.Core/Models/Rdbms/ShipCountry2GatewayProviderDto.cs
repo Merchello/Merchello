@@ -15,7 +15,7 @@ namespace Merchello.Core.Models.Rdbms
         public Guid ShipCountrytKey { get; set; }
 
         [Column("gatewayProviderKey")]
-        [ForeignKey(typeof(GatewayProviderSettingDto), Name = "FK_merchShipCountry2GatewayProvider_merchGatewayProvider", Column = "pk")]
+        [ForeignKey(typeof(GatewayProviderSettingsDto), Name = "FK_merchShipCountry2GatewayProvider_merchGatewayProvider", Column = "pk")]
         public Guid GatewayProvidertKey { get; set; }
 
         [Column("updateDate")]
@@ -27,6 +27,6 @@ namespace Merchello.Core.Models.Rdbms
         public DateTime CreateDate { get; set; }
 
         [ResultColumn]
-        public GatewayProviderSettingDto GatewayProviderSettingDto { get; set; }
+        public GatewayProviderSettingsDto GatewayProviderSettingsDto { get; set; }
     }
 }

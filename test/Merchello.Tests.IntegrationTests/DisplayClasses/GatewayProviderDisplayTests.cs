@@ -43,7 +43,7 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
             Assert.NotNull(provider);
 
             //// Act
-            var mapped = provider.GatewayProviderSetting.ToGatewayProviderDisplay();
+            var mapped = provider.GatewayProviderSettings.ToGatewayProviderDisplay();
 
             //// Assert
             Assert.NotNull(mapped, "mapped was null");
@@ -68,7 +68,7 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
             provider.ExtendedData.SetValue("test3", "test3");
 
             //// Act
-            var mapped = provider.GatewayProviderSetting.ToGatewayProviderDisplay();
+            var mapped = provider.GatewayProviderSettings.ToGatewayProviderDisplay();
 
             //// Assert
             Assert.NotNull(mapped);

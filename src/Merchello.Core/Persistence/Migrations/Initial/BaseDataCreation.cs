@@ -39,7 +39,7 @@ namespace Merchello.Core.Persistence.Migrations.Initial
 
             if(tableName.Equals("merchOrderStatus")) CreateOrderStatusData();   
          
-            if(tableName.EndsWith("merchGatewayProvider")) CreateGatewayProviderData();
+            if(tableName.EndsWith("merchGatewayProviderSettings")) CreateGatewayProviderSettingsData();
 
             if(tableName.EndsWith("merchStoreSetting")) CreateStoreSettingData();            
             
@@ -123,12 +123,12 @@ namespace Merchello.Core.Persistence.Migrations.Initial
             _database.Insert("merchWarehouseCatalog", "Key", new WarehouseCatalogDto() { Key = Constants.DefaultKeys.Warehouse.DefaultWarehouseCatalogKey, WarehouseKey = Constants.DefaultKeys.Warehouse.DefaultWarehouseKey, Name = "Default Catalog", Description = null, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
         }
 
-        private void CreateGatewayProviderData()
+        private void CreateGatewayProviderSettingsData()
         {
             var extended = new ExtendedDataCollection();
 
             // TODO - move this to a package action
-            _database.Insert("merchGatewayProvider", "Key", new GatewayProviderSettingDto() { Key = Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey, Name = "Fixed Rate Shipping Provider", ProviderTfKey = EnumTypeFieldConverter.GatewayProvider.GetTypeField(GatewayProviderType.Shipping).TypeKey, ExtendedData = new ExtendedDataCollection().SerializeToXml(), EncryptExtendedData = false, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchGatewayProviderSettings", "Key", new GatewayProviderSettingsDto() { Key = Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey, Name = "Fixed Rate Shipping Provider", ProviderTfKey = EnumTypeFieldConverter.GatewayProvider.GetTypeField(GatewayProviderType.Shipping).TypeKey, ExtendedData = new ExtendedDataCollection().SerializeToXml(), EncryptExtendedData = false, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
 
             // add the everywhere else shipcountry
             _database.Insert("merchShipCountry", "Key",
@@ -143,7 +143,7 @@ namespace Merchello.Core.Persistence.Migrations.Initial
                                  });
 
             // TODO - move this to a package action
-            _database.Insert("merchGatewayProvider", "Key", new GatewayProviderSettingDto() { Key = Constants.ProviderKeys.Taxation.FixedRateTaxationProviderKey, Name = "Fixed Rate Tax Provider", ProviderTfKey = EnumTypeFieldConverter.GatewayProvider.GetTypeField(GatewayProviderType.Taxation).TypeKey, ExtendedData = new ExtendedDataCollection().SerializeToXml(), EncryptExtendedData = false, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchGatewayProviderSettings", "Key", new GatewayProviderSettingsDto() { Key = Constants.ProviderKeys.Taxation.FixedRateTaxationProviderKey, Name = "Fixed Rate Tax Provider", ProviderTfKey = EnumTypeFieldConverter.GatewayProvider.GetTypeField(GatewayProviderType.Taxation).TypeKey, ExtendedData = new ExtendedDataCollection().SerializeToXml(), EncryptExtendedData = false, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
 
             var taxProvinces = new ProvinceCollection<ITaxProvince>();
             var provinceData = JsonConvert.SerializeObject(taxProvinces);
@@ -162,7 +162,7 @@ namespace Merchello.Core.Persistence.Migrations.Initial
                                  });
 
             // TODO - move this to a package action
-            _database.Insert("merchGatewayProvider", "Key", new GatewayProviderSettingDto() { Key = Constants.ProviderKeys.Payment.CashPaymentProviderKey, Name = "Cash Payment Provider", ProviderTfKey = EnumTypeFieldConverter.GatewayProvider.GetTypeField(GatewayProviderType.Payment).TypeKey, ExtendedData = new ExtendedDataCollection().SerializeToXml(), EncryptExtendedData = false, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchGatewayProviderSettings", "Key", new GatewayProviderSettingsDto() { Key = Constants.ProviderKeys.Payment.CashPaymentProviderKey, Name = "Cash Payment Provider", ProviderTfKey = EnumTypeFieldConverter.GatewayProvider.GetTypeField(GatewayProviderType.Payment).TypeKey, ExtendedData = new ExtendedDataCollection().SerializeToXml(), EncryptExtendedData = false, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
 
             _database.Insert("merchPaymentMethod", "Key",
                 new PaymentMethodDto()

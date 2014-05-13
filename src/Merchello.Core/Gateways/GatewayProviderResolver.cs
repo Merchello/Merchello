@@ -55,13 +55,13 @@ namespace Merchello.Core.Gateways
             _activatedGatewayProviderCache.AddOrUpdate(provider.Key, provider, (x, y) => provider);
         }
 
-        private Attempt<GatewayProviderBase> CreateInstance(IGatewayProviderSetting providerSetting)
+        private Attempt<GatewayProviderBase> CreateInstance(IGatewayProviderSettings providerSettings)
         {
-            var providerType = InstanceTypes.FirstOrDefault(x => x.GetCustomAttribute<GatewayProviderActivationAttribute>(false).Key == providerSetting.Key);
+            var providerType = InstanceTypes.FirstOrDefault(x => x.GetCustomAttribute<GatewayProviderActivationAttribute>(false).Key == providerSettings.Key);
 
-            return providerSetting == null ? 
-                Attempt<GatewayProviderBase>.Fail(new Exception(string.Format("Failed to find type for provider {0}", providerSetting.Name))) : 
-                ActivatorHelper.CreateInstance<GatewayProviderBase>(providerType, new object[] { _gatewayProviderService, providerSetting, _runtimeCache });
+            return providerSettings == null ? 
+                Attempt<GatewayProviderBase>.Fail(new Exception(string.Format("Failed to find type for provider {0}", providerSettings.Name))) : 
+                ActivatorHelper.CreateInstance<GatewayProviderBase>(providerType, new object[] { _gatewayProviderService, providerSettings, _runtimeCache });
         }
 
        
@@ -148,7 +148,7 @@ namespace Merchello.Core.Gateways
 
 
         /// <summary>
-        /// Gets a collection of <see cref="IGatewayProviderSetting"/>s by type
+        /// Gets a collection of <see cref="IGatewayProviderSettings"/>s by type
         /// </summary>
         public IEnumerable<GatewayProviderBase> GetActivatedProviders<T>() where T  : GatewayProviderBase
         {

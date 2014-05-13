@@ -11,8 +11,8 @@ namespace Merchello.Core.Gateways.Taxation
     public abstract class TaxationGatewayProviderBase : GatewayProviderBase, ITaxationGatewayProvider
     {
         
-        protected TaxationGatewayProviderBase(IGatewayProviderService gatewayProviderService, IGatewayProviderSetting gatewayProviderSetting, IRuntimeCacheProvider runtimeCacheProvider)
-            : base(gatewayProviderService, gatewayProviderSetting, runtimeCacheProvider)
+        protected TaxationGatewayProviderBase(IGatewayProviderService gatewayProviderService, IGatewayProviderSettings gatewayProviderSettings, IRuntimeCacheProvider runtimeCacheProvider)
+            : base(gatewayProviderService, gatewayProviderSettings, runtimeCacheProvider)
         { }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace Merchello.Core.Gateways.Taxation
         /// </summary>
         public IEnumerable<ITaxMethod> TaxMethods
         {
-            get { return GatewayProviderService.GetTaxMethodsByProviderKey(GatewayProviderSetting.Key); }
+            get { return GatewayProviderService.GetTaxMethodsByProviderKey(GatewayProviderSettings.Key); }
             
         }
     }

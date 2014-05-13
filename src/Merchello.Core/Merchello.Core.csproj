@@ -287,7 +287,7 @@
     </Compile>
     <Compile Include="Models\GatewayProviderCollection.cs" />
     <Compile Include="Gateways\GatewayResource.cs" />
-    <Compile Include="Models\GatewayProviderSetting.cs" />
+    <Compile Include="Models\GatewayProviderSettings.cs" />
     <Compile Include="Gateways\IGatewayResource.cs" />
     <Compile Include="Models\Interfaces\IAddress.cs" />
     <Compile Include="Models\Interfaces\IAppliedPayment.cs">
@@ -302,7 +302,7 @@
     <Compile Include="Models\Interfaces\ICustomerBase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\Interfaces\IGatewayProviderSetting.cs" />
+    <Compile Include="Models\Interfaces\IGatewayProviderSettings.cs" />
     <Compile Include="Models\Interfaces\IInvoice.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -631,7 +631,7 @@
     <Compile Include="Models\Rdbms\OrderItemDto.cs" />
     <Compile Include="Models\Rdbms\OrderStatusDto.cs" />
     <Compile Include="Models\Rdbms\OrderDto.cs" />
-    <Compile Include="Models\Rdbms\GatewayProviderSettingDto.cs" />
+    <Compile Include="Models\Rdbms\GatewayProviderSettingsDto.cs" />
     <Compile Include="Models\Rdbms\ProductAttributeDto.cs" />
     <Compile Include="Models\Rdbms\ProductOptionDto.cs" />
     <Compile Include="Models\Rdbms\Product2ProductOptionDto.cs" />

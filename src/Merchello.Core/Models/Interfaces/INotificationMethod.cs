@@ -19,7 +19,7 @@ namespace Merchello.Core.Models
         string Description { get; set; }
 
         /// <summary>
-        /// The <see cref="IGatewayProviderSetting"/> key
+        /// The <see cref="IGatewayProviderSettings"/> key
         /// </summary>
         [DataMember]
         Guid ProviderKey { get; }

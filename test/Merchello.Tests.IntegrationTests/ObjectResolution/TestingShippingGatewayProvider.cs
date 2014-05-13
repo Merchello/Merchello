@@ -24,8 +24,8 @@ namespace Merchello.Tests.IntegrationTests.ObjectResolution
             }
         }
 
-        public TestingShippingGatewayProvider(IGatewayProviderService gatewayProviderService, IGatewayProviderSetting gatewayProviderSetting, IRuntimeCacheProvider runtimeCacheProvider) 
-            : base(gatewayProviderService, gatewayProviderSetting, runtimeCacheProvider)
+        public TestingShippingGatewayProvider(IGatewayProviderService gatewayProviderService, IGatewayProviderSettings gatewayProviderSettings, IRuntimeCacheProvider runtimeCacheProvider) 
+            : base(gatewayProviderService, gatewayProviderSettings, runtimeCacheProvider)
         {
         }
 

@@ -21,8 +21,8 @@ namespace Merchello.Core.Gateways.Taxation.FixedRate
     [GatewayProviderActivation("A4AD4331-C278-4231-8607-925E0839A6CD", "Fixed Rate Tax Provider", "Fixed Rate Tax Provider")]
     public class FixedRateTaxationGatewayProvider : TaxationGatewayProviderBase, IFixedRateTaxationGatewayProvider
     {
-        public FixedRateTaxationGatewayProvider(IGatewayProviderService gatewayProviderService, IGatewayProviderSetting gatewayProviderSetting, IRuntimeCacheProvider runtimeCacheProvider) 
-            : base(gatewayProviderService, gatewayProviderSetting, runtimeCacheProvider)
+        public FixedRateTaxationGatewayProvider(IGatewayProviderService gatewayProviderService, IGatewayProviderSettings gatewayProviderSettings, IRuntimeCacheProvider runtimeCacheProvider) 
+            : base(gatewayProviderService, gatewayProviderSettings, runtimeCacheProvider)
         { }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace Merchello.Core.Gateways.Taxation.FixedRate
         public override ITaxationGatewayMethod CreateTaxMethod(string countryCode, decimal taxPercentageRate)
         {
             var attempt = ListResourcesOffered().FirstOrDefault(x => x.ServiceCode.Equals(countryCode)) != null
-                ? GatewayProviderService.CreateTaxMethodWithKey(GatewayProviderSetting.Key, countryCode, taxPercentageRate)
+                ? GatewayProviderService.CreateTaxMethodWithKey(GatewayProviderSettings.Key, countryCode, taxPercentageRate)
                 : Attempt<ITaxMethod>.Fail(new ConstraintException("A fixed tax rate method has already been defined for " + countryCode));
 
 

@@ -17,46 +17,46 @@ namespace Merchello.Core.Services
 
       
         /// <summary>
-        /// Saves a single instance of a <see cref="IGatewayProviderSetting"/>
+        /// Saves a single instance of a <see cref="IGatewayProviderSettings"/>
         /// </summary>
-        /// <param name="gatewayProviderSetting"></param>
+        /// <param name="gatewayProviderSettings"></param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        void Save(IGatewayProviderSetting gatewayProviderSetting, bool raiseEvents = true);
+        void Save(IGatewayProviderSettings gatewayProviderSettings, bool raiseEvents = true);
 
         /// <summary>
-        /// Deletes a <see cref="IGatewayProviderSetting"/>
+        /// Deletes a <see cref="IGatewayProviderSettings"/>
         /// </summary>
-        /// <param name="gatewayProviderSetting"></param>
+        /// <param name="gatewayProviderSettings"></param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        void Delete(IGatewayProviderSetting gatewayProviderSetting, bool raiseEvents = true);
+        void Delete(IGatewayProviderSettings gatewayProviderSettings, bool raiseEvents = true);
 
 
         /// <summary>
-        /// Gets a <see cref="IGatewayProviderSetting"/> by it's unique 'Key' (Guid)
+        /// Gets a <see cref="IGatewayProviderSettings"/> by it's unique 'Key' (Guid)
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        IGatewayProviderSetting GetGatewayProviderByKey(Guid key);
+        IGatewayProviderSettings GetGatewayProviderByKey(Guid key);
 
         /// <summary>
-        /// Gets a collection of <see cref="IGatewayProviderSetting"/> by its type (Shipping, Taxation, Payment)
+        /// Gets a collection of <see cref="IGatewayProviderSettings"/> by its type (Shipping, Taxation, Payment)
         /// </summary>
         /// <param name="gatewayProviderType"></param>
         /// <returns></returns>
-        IEnumerable<IGatewayProviderSetting> GetGatewayProvidersByType(GatewayProviderType gatewayProviderType);
+        IEnumerable<IGatewayProviderSettings> GetGatewayProvidersByType(GatewayProviderType gatewayProviderType);
 
         /// <summary>
-        /// Gets a collection of <see cref="IGatewayProviderSetting"/> by ship country
+        /// Gets a collection of <see cref="IGatewayProviderSettings"/> by ship country
         /// </summary>
         /// <param name="shipCountry"></param>
         /// <returns></returns>
-        IEnumerable<IGatewayProviderSetting> GetGatewayProvidersByShipCountry(IShipCountry shipCountry); 
+        IEnumerable<IGatewayProviderSettings> GetGatewayProvidersByShipCountry(IShipCountry shipCountry); 
 
         /// <summary>
-        /// Gets a collection containing all <see cref="IGatewayProviderSetting"/>
+        /// Gets a collection containing all <see cref="IGatewayProviderSettings"/>
         /// </summary>
         /// <returns></returns>
-        IEnumerable<IGatewayProviderSetting> GetAllGatewayProviders(); 
+        IEnumerable<IGatewayProviderSettings> GetAllGatewayProviders(); 
 
         #endregion
 
@@ -216,13 +216,13 @@ namespace Merchello.Core.Services
         void Delete(IShipMethod shipMethod);
 
         /// <summary>
-        /// Gets a list of <see cref="IShipMethod"/> objects given a <see cref="IGatewayProviderSetting"/> key and a <see cref="IShipCountry"/> key
+        /// Gets a list of <see cref="IShipMethod"/> objects given a <see cref="IGatewayProviderSettings"/> key and a <see cref="IShipCountry"/> key
         /// </summary>
         /// <returns>A collection of <see cref="IShipMethod"/></returns>
         IEnumerable<IShipMethod> GetShipMethodsByShipCountryKey(Guid providerKey, Guid shipCountryKey);
 
         /// <summary>
-        /// Gets a list of all <see cref="IShipMethod"/> objects given a <see cref="IGatewayProviderSetting"/> key
+        /// Gets a list of all <see cref="IShipMethod"/> objects given a <see cref="IGatewayProviderSettings"/> key
         /// </summary>
         /// <returns>A collection of <see cref="IShipMethod"/></returns>
         IEnumerable<IShipMethod> GetShipMethodsByShipCountryKey(Guid providerKey);
@@ -320,7 +320,7 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Gets a <see cref="ITaxMethod"/> based on a provider and country code
         /// </summary>
-        /// <param name="providerKey">The unique 'key' of the <see cref="IGatewayProviderSetting"/></param>
+        /// <param name="providerKey">The unique 'key' of the <see cref="IGatewayProviderSettings"/></param>
         /// <param name="countryCode">The country code of the <see cref="ITaxMethod"/></param>
         /// <returns>A collection <see cref="ITaxMethod"/></returns>
         ITaxMethod GetTaxMethodByCountryCode(Guid providerKey, string countryCode);

@@ -21,7 +21,7 @@ namespace Merchello.Tests.IntegrationTests.Taxation
         {
             base.FixtureSetup();
 
-            var dtos = PreTestDataWorker.Database.Query<GatewayProviderSettingDto>("SELECT * FROM merchGatewayProvider");
+            var dtos = PreTestDataWorker.Database.Query<GatewayProviderSettingsDto>("SELECT * FROM merchGatewayProviderSettings");
 
             if (!dtos.Any())
             {

@@ -8,7 +8,7 @@ namespace Merchello.Core.Models
     /// <summary>
     /// Defines a Gateway Provider
     /// </summary>
-    public interface IGatewayProviderSetting : IHasExtendedData, IEntity
+    public interface IGatewayProviderSettings : IHasExtendedData, IEntity
     {
         /// <summary>
         /// The type field key for the provider
