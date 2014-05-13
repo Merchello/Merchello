@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Web.Mvc;
+using Merchello.Core.Models;
 
 namespace Merchello.Tests.IntegrationTests.PartialView
 {
@@ -27,6 +28,13 @@ namespace Merchello.Tests.IntegrationTests.PartialView
         }
     }
 
+    public class NotificationFormatterController : Controller
+    {
+        public virtual ActionResult Index(INotificationMessage message)
+        {
+            
+        }
+    }
 
     public interface IFormatter
     {
