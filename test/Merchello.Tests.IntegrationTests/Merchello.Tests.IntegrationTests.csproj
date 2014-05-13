@@ -252,6 +252,7 @@
     <Compile Include="ObjectResolution\TestingPaymentGatewayProvider.cs" />
     <Compile Include="ObjectResolution\TestingShippingGatewayProvider.cs" />
     <Compile Include="ObjectResolution\TestingTaxationGatewayProvider.cs" />
+    <Compile Include="PartialView\PartialViewFormatterTests.cs" />
     <Compile Include="Payments\PaymentProcessingTests.cs" />
     <Compile Include="TestHelpers\MigrationHelper.cs" />
     <Compile Include="TestHelpers\TestMerchelloDataService.cs" />
@@ -294,6 +295,7 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="PartialView\partialView.cshtml" />
     <None Include="unit-test-log4net.config" />
   </ItemGroup>
   <ItemGroup>

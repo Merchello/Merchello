@@ -1,0 +1,36 @@
+﻿using System;
+using System.IO;
+using System.Web.Mvc;
+
+namespace Merchello.Tests.IntegrationTests.PartialView
+{
+    public class PartialViewFormatterTests
+    {
+        public static string RenderPartialViewToString(Controller controller, string viewName, object model)
+        {
+            controller.ViewData.Model = model;
+            try
+            {
+                using (var sw = new StringWriter())
+                {
+                    var viewResult = ViewEngines.Engines.FindPartialView(controller.ControllerContext, viewName);
+                    var viewContext = new ViewContext(controller.ControllerContext, viewResult.View, controller.ViewData, controller.TempData, sw);
+                    viewResult.View.Render(viewContext, sw);
+
+                    return sw.GetStringBuilder().ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.ToString();
+            }
+        }
+    }
+
+
+    public interface IFormatter
+    {
+        string Format(string message);
+    }
+
+}
