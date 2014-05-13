@@ -8,7 +8,7 @@ namespace Merchello.Core.Models
     /// <summary>
     /// Defines a Gateway Provider
     /// </summary>
-    public interface IGatewayProvider : IHasExtendedData, IEntity
+    public interface IGatewayProviderSettings : IHasExtendedData, IEntity
     {
         /// <summary>
         /// The type field key for the provider
@@ -27,14 +27,6 @@ namespace Merchello.Core.Models
         /// </summary>
         [DataMember]
         string Description { get; set; }
-
-        /// <summary>
-        /// The full Type name 
-        /// </summary>
-        [DataMember]
-        [Obsolete("This field is no longer required")]
-        string TypeFullName { get; set; }
-
 
         /// <summary>
         /// True/false indicating whether or the ExtendedData collection should be encrypted before persisted.

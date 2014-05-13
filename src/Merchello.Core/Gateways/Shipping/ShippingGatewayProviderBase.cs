@@ -15,8 +15,8 @@ namespace Merchello.Core.Gateways.Shipping
     public abstract class ShippingGatewayProviderBase : GatewayProviderBase, IShippingGatewayProvider        
     {
         
-        protected ShippingGatewayProviderBase(IGatewayProviderService gatewayProviderService, IGatewayProvider gatewayProvider, IRuntimeCacheProvider runtimeCacheProvider)
-            : base(gatewayProviderService, gatewayProvider, runtimeCacheProvider)
+        protected ShippingGatewayProviderBase(IGatewayProviderService gatewayProviderService, IGatewayProviderSettings gatewayProviderSettings, IRuntimeCacheProvider runtimeCacheProvider)
+            : base(gatewayProviderService, gatewayProviderSettings, runtimeCacheProvider)
         { }
 
         /// <summary>
@@ -204,7 +204,7 @@ namespace Merchello.Core.Gateways.Shipping
         {
             get {
                 return _shipMethods ??
-                       (_shipMethods = GatewayProviderService.GetShipMethodsByShipCountryKey(GatewayProvider.Key));
+                       (_shipMethods = GatewayProviderService.GetShipMethodsByShipCountryKey(GatewayProviderSettings.Key));
             }
             protected set { _shipMethods = value; }
         }

@@ -92,7 +92,6 @@
     <Content Include="App_Plugins\Merchello\Common\Js\Dialogs\debug.dialog.controller.js" />
     <Content Include="App_Plugins\Merchello\Common\Js\Dialogs\debug.dialog.html" />
     <Content Include="App_Plugins\Merchello\Common\Js\merchello.helpers.js" />
-    <Content Include="App_Plugins\Merchello\Common\Js\merchello.app.js" />
     <Content Include="App_Plugins\Merchello\Common\Js\merchello.models.js" />
     <Content Include="App_Plugins\Merchello\Common\Js\merchello.namespaces.js" />
     <Content Include="App_Plugins\Merchello\Directives\merchello.debug.section.directive.js" />
@@ -271,7 +270,6 @@
     <Content Include="App_Plugins\Merchello\Modules\Catalog\Dialogs\product.changeprices.html" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\merchello.productvariant.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\merchello.product.service.js" />
-    <Content Include="App_Plugins\Merchello\Common\Js\merchello.main.module.js" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\product.models.js" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\productvariant.edit.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Customer\customer.edit.controller.js" />
@@ -309,6 +307,7 @@
     <Content Include="App_Plugins\Merchello\Modules\Settings\GatewayProviders\merchello.gatewayprovider.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Dialogs\notifications.edittemplate.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Dialogs\notifications.edittemplate.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\GatewayProviders\Dialogs\smtp.notifications.providersettings.html" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\merchello.notifications.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\notifications.edit.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Payment\Dialogs\paymentdelete.controller.js" />
@@ -396,6 +395,7 @@
     <Content Include="packages.config" />
     <Content Include="App_Plugins\Merchello\lib\codemirror\Js\Mode\Razor\LICENSE" />
     <Content Include="App_Plugins\Merchello\lib\codemirror\Js\Mode\Sieve\LICENSE" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\GatewayProviders\Dialogs\smtp.notifications.providersettings.controller.js" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

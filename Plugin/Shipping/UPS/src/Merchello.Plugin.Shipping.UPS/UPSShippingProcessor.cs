@@ -15,11 +15,11 @@ using Umbraco.Core;
 
 namespace Merchello.Plugin.Shipping.UPS
 {
-    public class UPSShippingProcessor
+    public class UpsShippingProcessor
     {
         private readonly UPSProcessorSettings _settings;
 
-        public UPSShippingProcessor(UPSProcessorSettings settings)
+        public UpsShippingProcessor(UPSProcessorSettings settings)
         {
             _settings = settings;
         }
@@ -37,7 +37,7 @@ namespace Merchello.Plugin.Shipping.UPS
         /// <summary>
         /// Gets the Authorize.Net Url
         /// </summary>
-        private string GetUPSUrl()
+        private string GetUpsUrl()
         {
             return _settings.UseSandbox
                 ? "https://onlinetools.ups.com/ups.app/xml/Rate"

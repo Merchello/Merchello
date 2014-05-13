@@ -157,7 +157,7 @@ namespace Merchello.Web.Editors
                 }
             }
 
-            return providers.Select(provider => provider.GatewayProvider.ToGatewayProviderDisplay());
+            return providers.Select(provider => provider.GatewayProviderSettings.ToGatewayProviderDisplay());
         }
 
         /// <summary>

@@ -11,8 +11,8 @@
 
     controllers.GatewayProvidersController = function ($scope, assetsService, notificationsService, dialogService, merchelloGatewayProviderService) {
 
-        $scope.notifiationGatewayProviders = [];
-        $scope.paymentGatewayProviders = [];
+        $scope.notificationGatewayProviders = [];
+        $scope.paymentGatewayProviders  = [];
         $scope.shippingGatewayProviders = [];
         $scope.taxationGatewayProviders = [];
 
@@ -35,7 +35,7 @@
             var promiseAllProviders = merchelloGatewayProviderService.getResolvedNotificationGatewayProviders();
             promiseAllProviders.then(function(allProviders) {
 
-                $scope.notifiationGatewayProviders = _.map(allProviders, function(providerFromServer) {
+                $scope.notificationGatewayProviders = _.map(allProviders, function (providerFromServer) {
                     return new merchello.Models.GatewayProvider(providerFromServer);
                 });
 

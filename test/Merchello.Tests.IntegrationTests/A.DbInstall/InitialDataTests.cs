@@ -96,8 +96,8 @@ namespace Merchello.Tests.IntegrationTests.A.DbInstall
             var expected = 3;
 
             //// Act
-            _creation.InitializeBaseData("merchGatewayProvider");
-            var dtos = _database.Query<WarehouseDto>("SELECT * FROM merchGatewayProvider");
+            _creation.InitializeBaseData("merchGatewayProviderSettings");
+            var dtos = _database.Query<WarehouseDto>("SELECT * FROM merchGatewayProviderSettings");
 
             //// Assert
             Assert.IsTrue(dtos.Any());

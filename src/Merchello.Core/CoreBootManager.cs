@@ -11,7 +11,6 @@ using Merchello.Core.Triggers;
 using Umbraco.Core;
 using Merchello.Core.Persistence.UnitOfWork;
 using Umbraco.Core.Logging;
-using Umbraco.Core.Persistence.Migrations;
 
 
 namespace Merchello.Core
@@ -93,30 +92,18 @@ namespace Merchello.Core
         {
             //if (Resolution.IsFrozen || _isTest) return;
 
-            // TODO this needs to be cleaned up - really hacky fix for unit testing since we 
-            // are locked out of checking whether or not Current is not null.  
-            // http://issues.umbraco.org/issue/U4-4829
-            try
-            {
-                GatewayProviderResolver.Current = new GatewayProviderResolver(
-                PluginManager.Current.ResolveGatewayProviders(),
-                serviceContext.GatewayProviderService,
-                cache.RuntimeCache);
-            }
-            catch (Exception)
-            {
-                
-                
-            }
+            if(!GatewayProviderResolver.HasCurrent)
+            GatewayProviderResolver.Current = new GatewayProviderResolver(
+            PluginManager.Current.ResolveGatewayProviders(),
+            serviceContext.GatewayProviderService,
+            cache.RuntimeCache);
+           
             
         }
 
-
-
         protected virtual void InitializeResolvers()
         {
-            if(Resolution.IsFrozen) return;
-
+            
         }
 
         protected void BindEventTriggers()
@@ -165,8 +152,6 @@ namespace Merchello.Core
         {
             if(_isComplete)
                 throw new InvalidOperationException("The boot manager has already been completed");
-
-            FreezeResolution();
             
             if (afterComplete != null)
             {
@@ -198,13 +183,5 @@ namespace Merchello.Core
             set { _isTest = value; }
         }
 
-
-        /// <summary>
-        /// Freeze resolution to not allow Resolvers to be modified
-        /// </summary>
-        protected virtual void FreezeResolution()
-        {
-            Resolution.Freeze();
-        }
     }
 }
