@@ -1,4 +1,5 @@
-﻿using Merchello.Core.Gateways.Notification;
+﻿using System.Collections.Generic;
+using Merchello.Core.Gateways.Notification;
 using Merchello.Core.Gateways.Notification.Smtp;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
@@ -13,8 +14,13 @@ namespace Merchello.Core.Gateways.Notification.Smtp
     [GatewayProviderEditor("AuthorizeNet configuration", "~/App_Plugins/Merchello/Modules/Settings/Notifications/Dialog/smtp.notifications.providersettings.html")]
     public class SmtpNotificationGatewayProvider : NotificationGatewayProviderBase, ISmtpNotificationGatewayProvider
     {
-        public SmtpNotificationGatewayProvider(IGatewayProviderService gatewayProviderService, IGatewayProvider gatewayProvider, IRuntimeCacheProvider runtimeCacheProvider) 
-            : base(gatewayProviderService, gatewayProvider, runtimeCacheProvider)
+        public SmtpNotificationGatewayProvider(IGatewayProviderService gatewayProviderService, IGatewayProviderSettings gatewayProviderSettings, IRuntimeCacheProvider runtimeCacheProvider) 
+            : base(gatewayProviderService, gatewayProviderSettings, runtimeCacheProvider)
         { }
+
+         public override IEnumerable<IGatewayResource> ListResourcesOffered()
+         {
+             throw new System.NotImplementedException();
+         }
     }
 }
