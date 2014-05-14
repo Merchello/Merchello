@@ -109,7 +109,7 @@ namespace Merchello.Core
         protected void BindEventTriggers()
         {
             LogHelper.Info<CoreBootManager>("Beginning Merchello Event Trigger Binding");
-            foreach (var trigger in EventTriggerRegistry.Current.GetAllEventTriggers())
+            foreach (var trigger in EventTriggeredActionResolver.Current.GetAllEventTriggers())
             {
                 var att = trigger.GetType().GetCustomAttributes<EventTriggeredActionForAttribute>(false).FirstOrDefault();
                 

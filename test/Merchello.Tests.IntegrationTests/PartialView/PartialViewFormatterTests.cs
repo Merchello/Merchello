@@ -1,7 +1,10 @@
 ﻿using System;
 using System.IO;
+using System.Web;
 using System.Web.Mvc;
 using Merchello.Core.Models;
+using Umbraco.Core;
+using Umbraco.Web;
 
 namespace Merchello.Tests.IntegrationTests.PartialView
 {
@@ -32,13 +35,24 @@ namespace Merchello.Tests.IntegrationTests.PartialView
     {
         public virtual ActionResult Index(INotificationMessage message)
         {
-            
+            throw new NotImplementedException();
         }
     }
 
     public interface IFormatter
     {
+
         string Format(string message);
     }
 
+
+    public class NotificationFormatter
+    {
+        private HttpContextBase _httpContext;
+
+        public NotificationFormatter()
+        {
+            
+        }
+    }
 }

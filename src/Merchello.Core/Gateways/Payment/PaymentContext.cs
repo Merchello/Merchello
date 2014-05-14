@@ -16,6 +16,17 @@ namespace Merchello.Core.Gateways.Payment
             : base(gatewayProviderService, resolver)
         { }
 
+        /// <summary>
+        /// Returns an instance of an 'active' GatewayProvider associated with a GatewayMethod based given the unique Key (Guid) of the GatewayMethod
+        /// </summary>
+        /// <param name="gatewayMethodKey">The unique key (Guid) of the <see cref="IGatewayMethod"/></param>
+        /// <returns>An instantiated GatewayProvider</returns>
+        public override PaymentGatewayProviderBase GetProviderByMethodKey(Guid gatewayMethodKey)
+        {
+            return GetAllActivatedProviders()
+                .FirstOrDefault(x => ((PaymentGatewayProviderBase)x)
+                    .PaymentMethods.Any(y => y.Key == gatewayMethodKey)) as PaymentGatewayProviderBase;
+        }
 
         /// <summary>
         /// Gets a list of all possible Payment Methods
@@ -45,5 +56,7 @@ namespace Merchello.Core.Gateways.Payment
         {
             return GetPaymentGatewayMethods().FirstOrDefault(x => x.PaymentMethod.Key.Equals(paymentMethodKey));
         }
+
+
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Merchello.Core.Gateways.Notification.Formatters;
 using Merchello.Core.Models;
 using System.Linq;
 using Umbraco.Core.IO;

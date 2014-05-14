@@ -33,6 +33,13 @@ namespace Merchello.Core.Gateways
         T GetProviderByKey(Guid gatewayProviderKey, bool activatedOnly = true);
 
         /// <summary>
+        /// Returns an instance of an 'active' GatewayProvider associated with a GatewayMethod based given the unique Key (Guid) of the GatewayMethod
+        /// </summary>
+        /// <param name="gatewayMethodKey">The unique key (Guid) of the <see cref="IGatewayMethod"/></param>
+        /// <returns>An instantiated GatewayProvider</returns>
+        T GetProviderByMethodKey(Guid gatewayMethodKey);
+
+        /// <summary>
         /// Obsolete method
         /// </summary>
         /// <param name="gatewayProviderKey"></param>
