@@ -76,7 +76,7 @@ namespace Merchello.Core.Services
         }
 
 
-        #region GatewayProvider
+        #region GatewayProviderSettings
 
         /// <summary>
         /// Saves a single instance of a <see cref="IGatewayProviderSettings"/>

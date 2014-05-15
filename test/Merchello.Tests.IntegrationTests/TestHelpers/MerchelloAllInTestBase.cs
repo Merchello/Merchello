@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using Examine;
 using Merchello.Core;
 using Merchello.Core.Gateways;
@@ -43,9 +44,9 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
             if(MerchelloContext.Current == null) Assert.Ignore("MerchelloContext.Current is null");
 
             CurrentCustomer = DbPreTestDataWorker.MakeExistingAnonymousCustomer();
+            
 
-            // Product saves
-
+            // Product saves            
             ProductService.Created += ProductServiceCreated;
             ProductService.Saved += ProductServiceSaved;
             ProductService.Deleted += ProductServiceDeleted;
@@ -58,6 +59,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
 
         }
+
 
         [TestFixtureTearDown]
         public void TestFixtureTearDown()

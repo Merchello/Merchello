@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ClientDependency.Core;
 using Merchello.Core.Gateways;
 using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Models;
