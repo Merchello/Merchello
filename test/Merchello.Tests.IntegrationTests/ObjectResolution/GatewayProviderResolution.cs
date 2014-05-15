@@ -8,7 +8,6 @@ using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Gateways.Taxation;
 using Merchello.Tests.IntegrationTests.TestHelpers;
 using NUnit.Framework;
-using Rhino.Mocks.Constraints;
 using Umbraco.Core;
 
 namespace Merchello.Tests.IntegrationTests.ObjectResolution

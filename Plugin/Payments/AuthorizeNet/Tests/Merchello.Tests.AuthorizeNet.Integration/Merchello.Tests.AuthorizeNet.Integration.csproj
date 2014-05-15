@@ -211,7 +211,7 @@
     <Compile Include="GatewayProvider\ProviderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestHelpers\DbSyntax.cs" />
-    <Compile Include="TestHelpers\GatewayProviderDto.cs" />
+    <Compile Include="TestHelpers\GatewayProviderSettingsDto.cs" />
     <Compile Include="TestHelpers\ProviderTestsBase.cs" />
     <Compile Include="TestHelpers\Resolution.cs" />
     <Compile Include="TestHelpers\SqlSyntaxProviderTestHelper.cs" />
