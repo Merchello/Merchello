@@ -29,7 +29,7 @@ namespace Merchello.Plugin.Shipping.UPS.Models
 
         public string ApiVersion
         {
-            get { return UPSShippingProcessor.ApiVersion; }
+            get { return UpsShippingProcessor.ApiVersion; }
         }
     }
 }

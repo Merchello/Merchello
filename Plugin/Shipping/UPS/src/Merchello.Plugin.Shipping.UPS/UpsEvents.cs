@@ -22,7 +22,7 @@ namespace Merchello.Plugin.Shipping.UPS
             LogHelper.Info<UpsEvents>("Initializing UPS Shipping provider registration binding events");
 
 
-            GatewayProviderService.Saving += delegate(IGatewayProviderService sender, SaveEventArgs<IGatewayProvider> args)
+            GatewayProviderService.Saving += delegate(IGatewayProviderService sender, SaveEventArgs<IGatewayProviderSettings> args)
             {
                 var key = new Guid("AEB14625-B9DE-4DE8-9C92-99204D340342");
                 var provider = args.SavedEntities.FirstOrDefault(x => key == x.Key && !x.HasIdentity);
