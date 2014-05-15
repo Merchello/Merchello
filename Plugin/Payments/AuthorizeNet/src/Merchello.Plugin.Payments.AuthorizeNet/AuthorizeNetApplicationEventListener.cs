@@ -6,6 +6,7 @@ using Merchello.Plugin.Payments.AuthorizeNet.Models;
 using Umbraco.Core;
 using Umbraco.Core.Events;
 using Umbraco.Core.Logging;
+using Umbraco.Core.Services;
 
 namespace Merchello.Plugin.Payments.AuthorizeNet
 {
@@ -18,16 +19,16 @@ namespace Merchello.Plugin.Payments.AuthorizeNet
 
             LogHelper.Info<AuthorizeNetEvents>("Initializing AuthorizeNet provider registration binding events");
 
+        }
 
-            GatewayProviderService.Saving += delegate(IGatewayProviderService sender, SaveEventArgs<IGatewayProvider> args)
-            {
-                    var key = new Guid("C6BF6743-3565-401F-911A-33B68CACB11B");
-                    var provider =  args.SavedEntities.FirstOrDefault(x => key == x.Key && !x.HasIdentity);
-                    if(provider == null) return;
-                    
-                    provider.ExtendedData.SaveProcessorSettings(new AuthorizeNetProcessorSettings());
-                    
-            };
+
+        static void SaveDefaultSetting(IGatewayProviderService sender, SaveEventArgs<IGatewayProviderSettings> args)
+        {
+            var key = new Guid("C6BF6743-3565-401F-911A-33B68CACB11B");
+            var provider = args.SavedEntities.FirstOrDefault(x => key == x.Key && !x.HasIdentity);
+            if (provider == null) return;
+
+            provider.ExtendedData.SaveProcessorSettings(new AuthorizeNetProcessorSettings());
         }
     }
 }

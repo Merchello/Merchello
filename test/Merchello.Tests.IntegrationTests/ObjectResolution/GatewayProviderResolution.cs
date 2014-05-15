@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Gateways;
@@ -8,6 +9,7 @@ using Merchello.Core.Gateways.Taxation;
 using Merchello.Tests.IntegrationTests.TestHelpers;
 using NUnit.Framework;
 using Rhino.Mocks.Constraints;
+using Umbraco.Core;
 
 namespace Merchello.Tests.IntegrationTests.ObjectResolution
 {
@@ -202,6 +204,18 @@ namespace Merchello.Tests.IntegrationTests.ObjectResolution
 
             //// Assert
             Assert.IsFalse(retrieved.Activated);
+        }
+
+        [Test]
+        public void Can_Resolve_A_NotificationGatewayProvider()
+        {
+            //// Arrage
+            var types =
+                PluginManager.Current.ResolveTypesWithAttribute<GatewayProviderBase, GatewayProviderActivationAttribute>
+                    ();
+            //// Act 
+            var provider = new List<GatewayProviderBase>();
+
         }
     }
 }

@@ -90,15 +90,13 @@ namespace Merchello.Core
 
         private void InitializeGatewayResolver(IServiceContext serviceContext, CacheHelper cache)
         {
-            //if (Resolution.IsFrozen || _isTest) return;
-
+            
             if(!GatewayProviderResolver.HasCurrent)
             GatewayProviderResolver.Current = new GatewayProviderResolver(
             PluginManager.Current.ResolveGatewayProviders(),
             serviceContext.GatewayProviderService,
             cache.RuntimeCache);
-           
-            
+                       
         }
 
         protected virtual void InitializeResolvers()

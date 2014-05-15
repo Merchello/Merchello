@@ -6,6 +6,9 @@ using Umbraco.Core.Cache;
 
 namespace Merchello.Core.Gateways.Notification
 {
+    /// <summary>
+    /// Defines the base NotificationGatewayProvider
+    /// </summary>
     public abstract class NotificationGatewayProviderBase : GatewayProviderBase, INotificationGatewayProvider
     {
         protected NotificationGatewayProviderBase(IGatewayProviderService gatewayProviderService, IGatewayProviderSettings gatewayProviderSettings, IRuntimeCacheProvider runtimeCacheProvider)
