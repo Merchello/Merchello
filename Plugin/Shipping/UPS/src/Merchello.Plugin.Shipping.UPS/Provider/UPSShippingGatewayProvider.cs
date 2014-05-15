@@ -10,6 +10,7 @@ using Umbraco.Core.Cache;
 namespace Merchello.Plugin.Shipping.UPS.Provider
 {
     [GatewayProviderActivation("AEB14625-B9DE-4DE8-9C92-99204D340342", "UPS Shipping Provider", "UPS Shipping Provider")]
+    
     [GatewayProviderEditor("UPS configuration", "~/App_Plugins/Merchello.UPS/editor.html")]
     public class UPSShippingGatewayProvider : ShippingGatewayProviderBase, IUPSShippingGatewayProvider
     {
@@ -119,7 +120,7 @@ namespace Merchello.Plugin.Shipping.UPS.Provider
             //Mandate.ParameterNotNull(shipCountry, "shipCountry");
             //Mandate.ParameterNotNullOrEmpty(name, "name");
 
-            var attempt = GatewayProviderService.CreateShipMethodWithKey(Core.Constants.TypeFieldKeys.GatewayProvider.ShippingProviderKey, shipCountry, name,
+            var attempt = GatewayProviderService.CreateShipMethodWithKey(GatewayProviderSettings.Key, shipCountry, name,
                 gatewayResource.ServiceCode + string.Format("-{0}", Guid.NewGuid()));
 
             if (!attempt.Success) throw attempt.Exception;
