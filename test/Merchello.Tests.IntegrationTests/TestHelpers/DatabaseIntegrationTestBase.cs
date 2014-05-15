@@ -23,20 +23,14 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
             _dbPreTestDataWorker = new DbPreTestDataWorker(serviceContext);
 
-            // TODO - replace this with HasCurrent when publicized
-        
-            try
+
+            if (!GatewayProviderResolver.HasCurrent)
             {
-                var resolver = GatewayProviderResolver.Current;
-            }
-            catch (Exception)
-            {
-               GatewayProviderResolver.Current = new GatewayProviderResolver(
-               PluginManager.Current.ResolveGatewayProviders(),
-               serviceContext.GatewayProviderService,
-               new NullCacheProvider());
-            }
-            
+                GatewayProviderResolver.Current = new GatewayProviderResolver(
+                PluginManager.Current.ResolveGatewayProviders(),
+                serviceContext.GatewayProviderService,
+                new NullCacheProvider());                
+            }                        
 
             MerchelloContext = new MerchelloContext(serviceContext,
                 new GatewayContext(serviceContext, GatewayProviderResolver.Current),
