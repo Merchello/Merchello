@@ -26,7 +26,7 @@ namespace Merchello.Plugin.Shipping.UPS.Provider
         public const string UPS2ndDayAirAM = "59";
 
         public UPSShippingGatewayProvider(IGatewayProviderService gatewayProviderService,
-            IGatewayProvider gatewayProvider, IRuntimeCacheProvider runtimeCacheProvider)
+            IGatewayProviderSettings gatewayProvider, IRuntimeCacheProvider runtimeCacheProvider)
             : base(gatewayProviderService, gatewayProvider, runtimeCacheProvider)
         {
         }
@@ -119,12 +119,12 @@ namespace Merchello.Plugin.Shipping.UPS.Provider
             //Mandate.ParameterNotNull(shipCountry, "shipCountry");
             //Mandate.ParameterNotNullOrEmpty(name, "name");
 
-            var attempt = GatewayProviderService.CreateShipMethodWithKey(GatewayProvider.Key, shipCountry, name,
+            var attempt = GatewayProviderService.CreateShipMethodWithKey(Core.Constants.TypeFieldKeys.GatewayProvider.ShippingProviderKey, shipCountry, name,
                 gatewayResource.ServiceCode + string.Format("-{0}", Guid.NewGuid()));
 
             if (!attempt.Success) throw attempt.Exception;
 
-            return new UPSShippingGatewayMethod(gatewayResource, attempt.Result, shipCountry, GatewayProvider.ExtendedData);
+            return new UPSShippingGatewayMethod(gatewayResource, attempt.Result, shipCountry, new ExtendedDataCollection());
         }
 
         /// <summary>
@@ -152,14 +152,14 @@ namespace Merchello.Plugin.Shipping.UPS.Provider
         /// <returns></returns>
         public override IEnumerable<IShippingGatewayMethod> GetAllShippingGatewayMethods(IShipCountry shipCountry)
         {
-            var methods = GatewayProviderService.GetShipMethodsByShipCountryKey(GatewayProvider.Key, shipCountry.Key);
+            var methods = GatewayProviderService.GetShipMethodsByShipCountryKey(Core.Constants.TypeFieldKeys.GatewayProvider.ShippingProviderKey, shipCountry.Key);
             return methods
                 .Select(
                     shipMethod =>
                         new UPSShippingGatewayMethod(
                             AvailableResources.FirstOrDefault(x => shipMethod.ServiceCode.StartsWith(x.ServiceCode)),
                             shipMethod, shipCountry,
-                            GatewayProvider.ExtendedData)
+                            new ExtendedDataCollection())
                 ).OrderBy(x => x.ShipMethod.Name);
         }
     }
