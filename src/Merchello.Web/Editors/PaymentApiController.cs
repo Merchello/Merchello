@@ -83,6 +83,24 @@ namespace Merchello.Web.Editors
         }
 
 
+		/// <summary>
+		/// Returns a collection of applied payments given an Invoice id (key)
+		/// 
+		/// GET /umbraco/Merchello/PaymentApi/GetAppliedPaymentsByInvoice/{guid}
+		/// </summary>
+		public IEnumerable<AppliedPaymentDisplay> GetAppliedPaymentsByInvoice(Guid id)
+		{
+			var appliedPayments = _paymentService.GetAppliedPaymentsByInvoiceKey(id);
+
+			if (appliedPayments == null)
+			{
+				throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+			}
+
+			var stuff = appliedPayments.Select(x => x.ToAppliedPaymentDisplay());
+			return stuff;
+		}
+
         /// <summary>
         /// Returns a payment for an AuthorizePayment PaymentRequest
         /// 
