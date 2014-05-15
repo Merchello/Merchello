@@ -17,14 +17,12 @@ namespace Merchello.Core.Models
         private string _name;
         private string _description;
         private Guid _providerTfKey;
-        private string _typeFullName;
         private ExtendedDataCollection _extendedData;
         private bool _encryptExtendedData;       
 
         private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<GatewayProviderSettings, string>(x => x.Name);
         private static readonly PropertyInfo DescriptionSelector = ExpressionHelper.GetPropertyInfo<GatewayProviderSettings, string>(x => x.Description);
         private static readonly PropertyInfo ProviderTfKeySelector = ExpressionHelper.GetPropertyInfo<GatewayProviderSettings, Guid>(x => x.ProviderTfKey);
-        private static readonly PropertyInfo TypeFullNameSelector = ExpressionHelper.GetPropertyInfo<GatewayProviderSettings, string>(x => x.TypeFullName);
         private static readonly PropertyInfo ExtendedDataChangedSelector = ExpressionHelper.GetPropertyInfo<GatewayProviderSettings, ExtendedDataCollection>(x => x.ExtendedData);
         private static readonly PropertyInfo EncryptExtendedDataSelector = ExpressionHelper.GetPropertyInfo<GatewayProviderSettings, bool>(x => x.EncryptExtendedData);
 
@@ -85,24 +83,6 @@ namespace Merchello.Core.Models
                     return _providerTfKey;
                 }, _providerTfKey, ProviderTfKeySelector);
                 
-            }
-        }
-
-        /// <summary>
-        /// The full Type name (used to instantiate the class)
-        /// </summary>
-        [DataMember]
-        [Obsolete("This field is no longer required")]
-        public string TypeFullName
-        {
-            get { return _typeFullName; }
-            set
-            {
-                SetPropertyValueAndDetectChanges(o =>
-                {
-                    _typeFullName = value;
-                    return _typeFullName;
-                }, _typeFullName, TypeFullNameSelector); 
             }
         }
 
