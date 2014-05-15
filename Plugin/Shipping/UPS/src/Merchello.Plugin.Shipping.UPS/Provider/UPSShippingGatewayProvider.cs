@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Merchello.Core;
 using Merchello.Core.Gateways;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Models;
@@ -153,7 +154,7 @@ namespace Merchello.Plugin.Shipping.UPS.Provider
         /// <returns></returns>
         public override IEnumerable<IShippingGatewayMethod> GetAllShippingGatewayMethods(IShipCountry shipCountry)
         {
-            var methods = GatewayProviderService.GetShipMethodsByShipCountryKey(Core.Constants.TypeFieldKeys.GatewayProvider.ShippingProviderKey, shipCountry.Key);
+            var methods = GatewayProviderService.GetShipMethodsByShipCountryKey(GatewayProviderSettings.Key, shipCountry.Key);
             return methods
                 .Select(
                     shipMethod =>
