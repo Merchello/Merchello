@@ -83,26 +83,31 @@
 
         $scope.loadPayments = function (invoice) {
 
-            var promise = merchelloPaymentService.getPaymentsByInvoice(invoice.key);
+            var promise = merchelloPaymentService.getAppliedPaymentsByInvoice(invoice.key);
 
-            promise.then(function (payments) {
+            promise.then(function (appliedPayments) {
 
-                invoice.payments = _.map(payments, function (payment) {
-                    return new merchello.Models.Payment(payment);
-                });
+            	invoice.appliedPayments = appliedPayments;
+            	invoice.payments = [];
 
-                _.each(invoice.payments, function (payment) {
-                    if (payment.paymentTypeFieldKey) {
+            	if (invoice.appliedPayments.length > 0) {
+            		invoice.payments = _.uniq(_.map(invoice.appliedPayments, function (appliedPayment) {
+            			return appliedPayment.payment;
+            		}));
+            	}
+
+	            _.each(invoice.appliedPayments, function (appliedPayment) {
+	            	if (appliedPayment.appliedPaymentTfKey) {
                         var matchedTypeField = _.find($scope.typeFields, function (type) {
-                            return type.typeKey == payment.paymentTypeFieldKey;
+                        	return type.typeKey == appliedPayment.appliedPaymentTfKey;
                         });
-                        payment.paymentType = matchedTypeField;
+                        appliedPayment.appliedPaymentType = matchedTypeField;
                     }
                 });
 
 				// used for rendering the payment history
-                invoice.groupedPayments = _.groupBy(invoice.payments, function(payment) {
-                	return payment.paymentMethodName;
+                invoice.groupedAppliedPayments = _.groupBy(invoice.appliedPayments, function(appliedPayment) {
+                	return appliedPayment.payment.paymentMethodName;
                 });
 
                 $scope.loaded = true;
