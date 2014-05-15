@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using Merchello.Core.Gateways.Notification;
-using Merchello.Core.Gateways.Notification.Smtp;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Umbraco.Core.Cache;

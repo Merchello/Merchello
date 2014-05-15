@@ -34,7 +34,7 @@ namespace Merchello.Core.Persistence.Repositories
             if (dto == null)
                 return null;
 
-            var factory = new GatewayProviderFactory();
+            var factory = new GatewayProviderSettingsFactory();
             return factory.BuildEntity(dto);
         }
 
@@ -49,7 +49,7 @@ namespace Merchello.Core.Persistence.Repositories
             }
             else
             {
-                var factory = new GatewayProviderFactory();
+                var factory = new GatewayProviderSettingsFactory();
                 var dtos = Database.Fetch<GatewayProviderSettingsDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
@@ -98,7 +98,7 @@ namespace Merchello.Core.Persistence.Repositories
         {
             ((Entity)entity).AddingEntity();
 
-            var factory = new GatewayProviderFactory();
+            var factory = new GatewayProviderSettingsFactory();
             var dto = factory.BuildDto(entity);
 
             Database.Insert(dto);
@@ -112,7 +112,7 @@ namespace Merchello.Core.Persistence.Repositories
         {
             ((Entity)entity).AddingEntity();
 
-            var factory = new GatewayProviderFactory();
+            var factory = new GatewayProviderSettingsFactory();
             var dto = factory.BuildDto(entity);
 
             Database.Update(dto);
@@ -130,7 +130,7 @@ namespace Merchello.Core.Persistence.Repositories
                 .Where<ShipMethodDto>(x => x.ShipCountryKey == shipCountryKey);
 
             var dtos = Database.Fetch<ShipMethodDto, GatewayProviderSettingsDto>(sql);
-            var factory = new GatewayProviderFactory();
+            var factory = new GatewayProviderSettingsFactory();
             return dtos.DistinctBy(x => x.GatewayProviderSettingsDto.Key).Select(dto => factory.BuildEntity(dto.GatewayProviderSettingsDto));
         }
     }

@@ -1,5 +1,8 @@
-﻿namespace Merchello.Core.Gateways.Notification
+﻿namespace Merchello.Core.Gateways.Notification.Formatters
 {
+    /// <summary>
+    /// Defines the NotificationFormatter
+    /// </summary>
     public interface INotificationFormatter
     {
         /// <summary>
