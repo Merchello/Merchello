@@ -4,20 +4,19 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Merchello.Core.ObjectResolution;
 using Umbraco.Core;
-using Umbraco.Core.ObjectResolution;
 
 namespace Merchello.Core.Triggers
 {
     /// <summary>
     /// Represents a EventTriggerRegistry
     /// </summary>
-    internal sealed class EventTriggerRegistry : LazyManyObjectsResolverBase<EventTriggerRegistry, IEventTriggeredAction>, IEventTriggerRegistry
+    internal sealed class EventTriggeredActionResolver : MerchelloManyObjectsResolverBase<EventTriggeredActionResolver, IEventTriggeredAction>, IEventTriggeredActionResolver
     {
         private static readonly ConcurrentDictionary<string, IEventTriggeredAction> TriggerCache = new ConcurrentDictionary<string, IEventTriggeredAction>();
 
         internal static bool IsInitialized { get; private set; }
 
-        internal EventTriggerRegistry(Func<IEnumerable<Type>> triggers)
+        internal EventTriggeredActionResolver(IEnumerable<Type> triggers)
             : base(triggers)
         {
             BuildCache();
@@ -25,7 +24,7 @@ namespace Merchello.Core.Triggers
 
         private void BuildCache()
         {
-            foreach (var trigger in EventTriggers)
+            foreach (var trigger in Values)
             {
                 CacheMapper(trigger.GetType().Name, trigger);
             }
@@ -64,7 +63,8 @@ namespace Merchello.Core.Triggers
         {
             return
                 GetAllEventTriggers()
-                    .Where(x => x.GetType().GetCustomAttributes<EventTriggeredActionForAttribute>(false).FirstOrDefault().Area.Equals(area));            
+                    .Where(x => x.GetType()
+                        .GetCustomAttributes<EventTriggeredActionForAttribute>(false).FirstOrDefault(y => y.Area.Equals(area)) != null);            
         }
 
         /// <summary>
@@ -76,22 +76,18 @@ namespace Merchello.Core.Triggers
         }
 
         /// <summary>
-        /// Gets the resolved collection of <see cref="IEventTriggeredAction"/>
+        /// Gets the instantiated values of the resolved types
         /// </summary>
-        /// <remarks>
-        /// Should be able to use the "Values" in the base class but it can't be tested
-        /// due to the Umbraco's <see cref="ObjectResolution.Resolution"/> 
-        /// </remarks>
-        internal IEnumerable<IEventTriggeredAction> EventTriggers
+        protected override IEnumerable<IEventTriggeredAction> Values
         {
             get
             {
-                var ctrArgs = new object[] {};
+                var ctrArgs = new object[] { };
                 var triggers = new List<IEventTriggeredAction>();
 
                 foreach (var et in InstanceTypes)
                 {
-                    var attempt = ActivatorHelper.CreateInstance<IEventTriggeredAction>(et.AssemblyQualifiedName, ctrArgs);
+                    var attempt = ActivatorHelper.CreateInstance<IEventTriggeredAction>(et, ctrArgs);
                     if (attempt.Success) triggers.Add(attempt.Result);
                 }
 

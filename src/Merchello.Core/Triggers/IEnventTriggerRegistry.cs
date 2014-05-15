@@ -5,7 +5,7 @@ namespace Merchello.Core.Triggers
     /// <summary>
     /// Defines a TriggerRegistry
     /// </summary>
-    internal interface IEventTriggerRegistry
+    internal interface IEventTriggeredActionResolver
     {
         /// <summary>
         /// Gets a collection of <see cref="IEventTriggeredAction"/> by the area defined in the attribute

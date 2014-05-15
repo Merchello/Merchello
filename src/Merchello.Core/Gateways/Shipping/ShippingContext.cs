@@ -23,6 +23,18 @@ namespace Merchello.Core.Gateways.Shipping
         }
 
         /// <summary>
+        /// Returns an instance of an 'active' GatewayProvider associated with a GatewayMethod based given the unique Key (Guid) of the GatewayMethod
+        /// </summary>
+        /// <param name="gatewayMethodKey">The unique key (Guid) of the <see cref="IGatewayMethod"/></param>
+        /// <returns>An instantiated GatewayProvider</returns>
+        public override ShippingGatewayProviderBase GetProviderByMethodKey(Guid gatewayMethodKey)
+        {
+            return GetAllActivatedProviders()
+                .FirstOrDefault(x => ((ShippingGatewayProviderBase)x)
+                    .ShipMethods.Any(y => y.Key == gatewayMethodKey)) as ShippingGatewayProviderBase;
+        }
+
+        /// <summary>
         /// Returns a collection of all <see cref="IShipmentRateQuote"/> that are available for the <see cref="IShipment"/>
         /// </summary>
         /// <param name="shipment">The <see cref="IShipment"/> to quote</param>
@@ -83,6 +95,6 @@ namespace Merchello.Core.Gateways.Shipping
                     provider => GatewayProviderResolver.GetProviderByKey<ShippingGatewayProviderBase>(provider.Key));
         }
 
-
+ 
     }
 }

@@ -10,14 +10,14 @@ namespace Merchello.Plugin.Shipping.UPS.Provider
     [GatewayMethodEditor("UPS Shipping Method Editor", "~/App_Plugins/Merchello.UPS/shippingmethod.html")]
     public class UPSShippingGatewayMethod : ShippingGatewayMethodBase, IUPSShippingGatewayMethod
     {
-        private UPSShippingProcessor _processor;
+        private UpsShippingProcessor _processor;
         private UPSType _upsType;
         private IShipMethod _shipMethod;
 
         public UPSShippingGatewayMethod(IGatewayResource gatewayResource, IShipMethod shipMethod, IShipCountry shipCountry, ExtendedDataCollection providerExtendedData)
             : base(gatewayResource, shipMethod, shipCountry)
         {
-            _processor = new UPSShippingProcessor(providerExtendedData.GetProcessorSettings());
+            _processor = new UpsShippingProcessor(providerExtendedData.GetProcessorSettings());
             _shipMethod = shipMethod;
         }
 
