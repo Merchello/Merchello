@@ -274,6 +274,8 @@
     <Content Include="App_Plugins\Merchello\Modules\Catalog\productvariant.edit.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Customer\customer.edit.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Customer\customer.view.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Directives\shipping-history.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Directives\shipping-history-directives.js" />
     <Content Include="App_Plugins\Merchello\Modules\Order\merchello.shipment.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Order\merchello.payment.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Order\Dialogs\capture.payment.controller.js" />
