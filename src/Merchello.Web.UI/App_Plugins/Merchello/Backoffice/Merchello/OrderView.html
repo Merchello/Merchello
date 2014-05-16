@@ -142,7 +142,7 @@
 										<th>Amount</th>
 									</tr>
 								</thead>
-								<tr data-ng-repeat="appliedPayment in appliedPaymentList | filter: ({amount: '!'+0})">
+								<tr data-ng-repeat="appliedPayment in appliedPaymentList | greaterthan: 'amount': 0">
 									<td class="text-left">{{appliedPayment.createDate | date : 'M/d/yyyy H:m a'}}</td>
 									<td class="text-left">{{appliedPayment.payment.getStatus()}}</td>
 									<td class="text-left">{{appliedPayment.appliedPaymentType.alias}}</td>

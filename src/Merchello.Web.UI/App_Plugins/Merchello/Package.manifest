@@ -16,6 +16,7 @@
 		'~/App_Plugins/Merchello/lib/codemirror/Js/Mode/Razor/razor.js',
 		'~/App_Plugins/Merchello/Common/Js/merchello.namespaces.js',
 		'~/App_Plugins/Merchello/Common/Js/startfrom.filter.js',
+		'~/App_Plugins/Merchello/Common/Js/greaterthan.filter.js',
 		'~/App_Plugins/Merchello/Common/Js/merchello.models.js',
 		'~/App_Plugins/Merchello/Common/Js/merchello.helpers.js',
 		'~/App_Plugins/Merchello/lib/ngJsonExplorer/gd-ui-jsonexplorer.js',
