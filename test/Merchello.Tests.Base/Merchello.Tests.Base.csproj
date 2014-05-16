@@ -259,7 +259,6 @@
     <Compile Include="Services\MockProductService.cs" />
     <Compile Include="Services\ServiceTestsBase.cs" />
     <Compile Include="SqlSyntax\DbSyntax.cs" />
-    <Compile Include="SqlSyntax\Resolution.cs" />
     <Compile Include="SqlSyntax\SqlSyntaxProviderTestHelper.cs" />
     <Compile Include="TypeFields\TypeFieldMock.cs" />
     <Compile Include="SqlSyntax\BaseUsingSqlServerSyntax.cs" />

@@ -5,6 +5,7 @@ using Merchello.Core.Gateways;
 using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
+using Umbraco.Core;
 using Umbraco.Core.Cache;
 using Umbraco.Core.Logging;
 
@@ -23,8 +24,8 @@ namespace Merchello.Plugin.Payments.AuthorizeNet.Provider
 
         #endregion
 
-        public AuthorizeNetPaymentGatewayProvider(IGatewayProviderService gatewayProviderService, IGatewayProvider gatewayProvider, IRuntimeCacheProvider runtimeCacheProvider) 
-            : base(gatewayProviderService, gatewayProvider, runtimeCacheProvider)
+        public AuthorizeNetPaymentGatewayProvider(IGatewayProviderService gatewayProviderService, IGatewayProviderSettings gatewayProviderSettings, IRuntimeCacheProvider runtimeCacheProvider) 
+            : base(gatewayProviderService, gatewayProviderSettings, runtimeCacheProvider)
         {
         }
 
@@ -51,14 +52,13 @@ namespace Merchello.Plugin.Payments.AuthorizeNet.Provider
             var available = ListResourcesOffered().FirstOrDefault(x => x.ServiceCode == gatewayResource.ServiceCode);
             if(available == null) throw new InvalidOperationException("GatewayResource has already been assigned");
 
-            var attempt = GatewayProviderService.CreatePaymentMethodWithKey(GatewayProvider.Key, name, description, available.ServiceCode);
-
-           
+            var attempt = GatewayProviderService.CreatePaymentMethodWithKey(GatewayProviderSettings.Key, name, description, available.ServiceCode);            
+    
             if (attempt.Success)
             {
                 PaymentMethods = null;
 
-                return new AuthorizeNetPaymentGatewayMethod(GatewayProviderService, attempt.Result, GatewayProvider.ExtendedData);
+                return new AuthorizeNetPaymentGatewayMethod(GatewayProviderService, attempt.Result, GatewayProviderSettings.ExtendedData);
             }
 
             LogHelper.Error<AuthorizeNetPaymentGatewayProvider>(string.Format("Failed to create a payment method name: {0}, description {1}, paymentCode {2}", name, description, available.ServiceCode), attempt.Exception);
@@ -77,7 +77,7 @@ namespace Merchello.Plugin.Payments.AuthorizeNet.Provider
 
             if (paymentMethod == null) throw new NullReferenceException("PaymentMethod not found");
 
-            return new AuthorizeNetPaymentGatewayMethod(GatewayProviderService, paymentMethod, GatewayProvider.ExtendedData);
+            return new AuthorizeNetPaymentGatewayMethod(GatewayProviderService, paymentMethod, GatewayProviderSettings.ExtendedData);
 
         }
 
@@ -92,7 +92,7 @@ namespace Merchello.Plugin.Payments.AuthorizeNet.Provider
 
             if (paymentMethod == null) throw new NullReferenceException("PaymentMethod not found");
 
-            return new AuthorizeNetPaymentGatewayMethod(GatewayProviderService, paymentMethod, GatewayProvider.ExtendedData);
+            return new AuthorizeNetPaymentGatewayMethod(GatewayProviderService, paymentMethod, GatewayProviderSettings.ExtendedData);
         }
     }
 }

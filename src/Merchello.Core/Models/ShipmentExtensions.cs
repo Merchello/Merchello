@@ -131,7 +131,7 @@ namespace Merchello.Core.Models
             if (shipMethod == null) return null;
 
             // Get the gateway provider to generate the shipment rate quote
-            var provider = merchelloContext.Gateways.Shipping.CreateInstance(shipMethod.ProviderKey);
+            var provider = merchelloContext.Gateways.Shipping.GetProviderByKey(shipMethod.ProviderKey);
 
             // get the GatewayShipMethod from the provider
             var gwShipMethod = provider.GetShippingGatewayMethodsForShipment(shipment).FirstOrDefault(x => x.ShipMethod.Key == shipMethodKey);
@@ -149,5 +149,27 @@ namespace Merchello.Core.Models
         {
             return string.Format("Shipment - {0} - {1} items", shipmentRateQuote.ShipMethod.Name, shipmentRateQuote.Shipment.Items.Count);
         }
+
+
+        ///// <summary>
+        ///// Returns the collection of <see cref="IOrderLineItem"/> associated with the <see cref="IShipment"/>
+        ///// </summary>
+        ///// <param name="shipment">The <see cref="IShipment"/></param>
+        ///// <returns>The collection of <see cref="IOrderLineItem"/></returns>
+        //public static IEnumerable<IOrderLineItem> OrderLineItems(this IShipment shipment)
+        //{
+        //    return shipment.OrderLineItems(MerchelloContext.Current);
+        //}
+
+        ///// <summary>
+        ///// Returns the collection of <see cref="IOrderLineItem"/> associated with the <see cref="IShipment"/>
+        ///// </summary>
+        ///// <param name="shipment">The <see cref="IShipment"/></param>
+        ///// <param name="merchelloContext">The <see cref="IMerchelloContext"/></param>
+        ///// <returns>The collection of <see cref="IOrderLineItem"/></returns>
+        //public static IEnumerable<IOrderLineItem> OrderLineItems(this IShipment shipment, IMerchelloContext merchelloContext)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

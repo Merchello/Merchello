@@ -58,6 +58,7 @@
 
                 $scope.loadShippingAddress($scope.invoice);
                 $scope.loadPayments($scope.invoice);
+	            $scope.loadShipments($scope.invoice);
 
             }, function (reason) {
                 notificationsService.error("Invoice Load Failed", reason.message);
@@ -82,21 +83,31 @@
 
         $scope.loadPayments = function (invoice) {
 
-            var promise = merchelloPaymentService.getPaymentsByInvoice(invoice.key);
+            var promise = merchelloPaymentService.getAppliedPaymentsByInvoice(invoice.key);
 
-            promise.then(function (payments) {
+            promise.then(function (appliedPayments) {
 
-                invoice.payments = _.map(payments, function (payment) {
-                    return new merchello.Models.Payment(payment);
+            	invoice.appliedPayments = appliedPayments;
+            	invoice.payments = [];
+
+            	if (invoice.appliedPayments.length > 0) {
+            		invoice.payments = _.uniq(_.map(invoice.appliedPayments, function (appliedPayment) {
+            			return appliedPayment.payment;
+            		}));
+            	}
+
+	            _.each(invoice.appliedPayments, function (appliedPayment) {
+	            	if (appliedPayment.appliedPaymentTfKey) {
+                        var matchedTypeField = _.find($scope.typeFields, function (type) {
+                        	return type.typeKey == appliedPayment.appliedPaymentTfKey;
+                        });
+                        appliedPayment.appliedPaymentType = matchedTypeField;
+                    }
                 });
 
-                _.each(invoice.payments, function (payment) {
-                    if (payment.paymentTypeFieldKey) {
-                        var matchedTypeField = _.find($scope.typeFields, function (type) {
-                            return type.typeKey == payment.paymentTypeFieldKey;
-                        });
-                        payment.paymentType = matchedTypeField;
-                    }
+				// used for rendering the payment history
+                invoice.groupedAppliedPayments = _.groupBy(invoice.appliedPayments, function(appliedPayment) {
+                	return appliedPayment.payment.paymentMethodName;
                 });
 
                 $scope.loaded = true;
@@ -105,6 +116,34 @@
             }, function (reason) {
                 notificationsService.error("Payments Load Failed", reason.message);
             });
+        };
+
+	    $scope.loadShipments = function(invoice) {
+	    	var promise = merchelloShipmentService.getShipmentsByInvoice(invoice);
+
+	    	promise.then(function (shipments) {
+
+	    		invoice.shipments = _.map(shipments, function (shipment) {
+	    			return new merchello.Models.Shipment(shipment);
+	    		});
+
+	    		$scope.loaded = true;
+	    		$scope.preValuesLoaded = true;
+
+	    	}, function (reason) {
+	    		notificationsService.error("Shipments Load Failed", reason.message);
+	    	});
+	    };
+
+	    $scope.loadSettings = function () {
+
+        	var currencySymbolPromise = merchelloSettingsService.getCurrencySymbol();
+        	currencySymbolPromise.then(function (currencySymbol) {
+        		$scope.currencySymbol = currencySymbol;
+
+        	}, function (reason) {
+        		alert('Failed: ' + reason.message);
+        	});
         };
 
         /**
@@ -117,8 +156,9 @@
          */
         $scope.init = function () {
 
-            $scope.loadTypeFields(function () { $scope.loadInvoice($routeParams.id); });
-           
+        	$scope.loadTypeFields(function () { $scope.loadInvoice($routeParams.id); });
+	        $scope.loadSettings();
+
         };
 
         $scope.init();

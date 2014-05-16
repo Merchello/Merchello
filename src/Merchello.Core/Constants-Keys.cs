@@ -31,6 +31,43 @@ namespace Merchello.Core
             }
         }
 
+        internal static class NotificationKeys
+        {
+            internal static class InvoiceTriggers
+            {
+                public static class  StatusChanged 
+                {
+                    public static Guid ToPaid = new Guid("645E7E24-3F97-467D-9923-0CC4DD96468C");
+                    public static Guid ToPartial = new Guid("5AF5E106-697E-438E-B768-876666C4E333");
+                    public static Guid ToCancelled = new Guid("BB2AC8F1-B813-41BE-BFEE-F5A95CBB541A");
+                }
+            }
+
+            internal static class OrderTriggers
+            {
+                public static class StatusChanged
+                {
+                    public static Guid ToBackOrder = new Guid("7E2858CB-B41C-456F-9D25-EED36FCD4FBC");
+                    public static Guid ToFulfilled = new Guid("39D15CDF-32B6-41CC-95F0-483A676F90C0");
+                    public static Guid ToCancelled = new Guid("6B495772-D1E2-4515-955C-1E65C86C23D4");
+                }
+            }
+
+            internal static class ShipmentTriggers
+            {
+                public static Guid Created = new Guid("F1413BB5-4A53-4BCE-8FC2-CD1A04ED3D47");
+                public static Guid Deleted = new Guid("E726A03F-E9CF-43AC-84D6-8F41454B47A9");
+            }
+
+            internal static class AppliedPaymentTriggers
+            {
+
+                public static Guid CreatedAsDenied = new Guid("42608501-A33F-4B93-9D47-F613FF34BF3D");
+            }
+
+        }
+        
+
         /// <summary>
         /// GatewayProviders
         /// </summary>
@@ -79,6 +116,20 @@ namespace Merchello.Core
                 public static Guid BillingAddressKey = new Guid("5C2A8638-EA32-49AD-8167-EDDFB45A7360");
             }
 
+            public static class Entity
+            {
+                public static Guid CustomerKey = new Guid("1607D643-E5E8-4A93-9393-651F83B5F1A9");
+                public static Guid GatewayProviderKey = new Guid("05BD6E6E-37A0-4954-AA34-BB73678543B2");
+                public static Guid InvoiceKey = new Guid("454539B9-D753-4C16-8ED5-5EB659E56665");
+                public static Guid ItemCacheKey = new Guid("9FEFEEF2-7ECE-439C-90E2-02D2F95D9E37");
+                public static Guid OrderKey = new Guid("CC5B1372-2EFA-49D5-B9F7-6EACD1182C5B");
+                public static Guid PaymentKey = new Guid("6263D568-DEE1-41BB-8100-2333ECB4CF08");
+                public static Guid ProductKey = new Guid("9F923716-A022-4089-A110-1E9B4E1F2AD1");
+                public static Guid ShipmentKey = new Guid("5F26DF00-BD45-4E83-8095-D17AD8D7D3CE");
+                public static Guid WarehouseKey = new Guid("2367D705-4BEA-4B3E-8329-664823D28316");
+                public static Guid WarehouseCatalogKey = new Guid("ED7D69B2-7434-40F4-88A7-EDDA9FB50995");
+            }
+
             public static class ItemCache
             {
                 public static Guid BasketKey = new Guid("C53E3100-2DFD-408A-872E-4380383FAD35");
@@ -113,6 +164,7 @@ namespace Merchello.Core
             public static class GatewayProvider
             {
                 public static Guid PaymentProviderKey = new Guid("A0B4F835-D92E-4D17-8181-6C342C41606E");
+                public static Guid NotificationProviderKey = new Guid("C5F53682-4C49-4538-87B3-035D30EE3347");
                 public static Guid ShippingProviderKey = new Guid("646D3EA7-3B31-45C1-9488-7C0449A564A6");
                 public static Guid TaxationProviderKey = new Guid("360B47F9-A4FB-4B96-81B4-A4A497D2B44A");
             }

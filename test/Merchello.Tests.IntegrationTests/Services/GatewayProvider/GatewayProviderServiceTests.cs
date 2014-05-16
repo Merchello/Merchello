@@ -21,8 +21,7 @@ namespace Merchello.Tests.IntegrationTests.Services.GatewayProvider
         private IWarehouseCatalog _catalog;
         private IStoreSettingService _storeSettingService;
         private IShipCountryService _shipCountryService;
-        private IMerchelloContext _merchelloContext;
-
+        
         [SetUp]
         public void Init()
         {
@@ -30,11 +29,7 @@ namespace Merchello.Tests.IntegrationTests.Services.GatewayProvider
             _storeSettingService = PreTestDataWorker.StoreSettingService;
             _shipCountryService = PreTestDataWorker.ShipCountryService;
 
-            _merchelloContext = new MerchelloContext(new ServiceContext(new PetaPocoUnitOfWorkProvider()),
-                new CacheHelper(new NullCacheProvider(),
-                    new NullCacheProvider(),
-                    new NullCacheProvider()));            
-
+            
             _catalog = PreTestDataWorker.WarehouseService.GetDefaultWarehouse().WarehouseCatalogs.FirstOrDefault();
 
             PreTestDataWorker.DeleteAllShipCountries();
@@ -44,7 +39,7 @@ namespace Merchello.Tests.IntegrationTests.Services.GatewayProvider
            
        
             var shippingProvider =
-               (FixedRateShippingGatewayProvider) _merchelloContext.Gateways.Shipping.CreateInstance(Core.Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey);
+               (FixedRateShippingGatewayProvider) MerchelloContext.Gateways.Shipping.CreateInstance(Core.Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey);
             Assert.NotNull(shippingProvider);
 
             var resource = shippingProvider.ListResourcesOffered().FirstOrDefault();

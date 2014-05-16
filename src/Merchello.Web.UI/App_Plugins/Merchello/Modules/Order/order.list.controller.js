@@ -8,7 +8,7 @@
      * @description
      * The controller for the orders list page
      */
-    controllers.OrderListController = function ($scope, assetsService, notificationsService, merchelloInvoiceService) {
+    controllers.OrderListController = function ($scope, assetsService, notificationsService, merchelloInvoiceService, merchelloSettingsService) {
 
         $scope.orderIssues = [];
         $scope.invoices = [];
@@ -43,6 +43,18 @@
 
         };
 
+        $scope.loadSettings = function () {
+
+
+        	var currencySymbolPromise = merchelloSettingsService.getCurrencySymbol();
+        	currencySymbolPromise.then(function (currencySymbol) {
+        		$scope.currencySymbol = currencySymbol;
+
+        	}, function (reason) {
+        		alert('Failed: ' + reason.message);
+        	});
+        };
+
         /**
          * @ngdoc method
          * @name init
@@ -53,7 +65,8 @@
          */
         $scope.init = function () {
 
-            $scope.loadAllInvoices();
+        	$scope.loadAllInvoices();
+	        $scope.loadSettings();
 
         };
 
@@ -123,6 +136,6 @@
     };
 
 
-    angular.module("umbraco").controller("Merchello.Dashboards.Order.ListController", ['$scope', 'assetsService', 'notificationsService', 'merchelloInvoiceService', merchello.Controllers.OrderListController]);
+    angular.module("umbraco").controller("Merchello.Dashboards.Order.ListController", ['$scope', 'assetsService', 'notificationsService', 'merchelloInvoiceService', 'merchelloSettingsService', merchello.Controllers.OrderListController]);
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));

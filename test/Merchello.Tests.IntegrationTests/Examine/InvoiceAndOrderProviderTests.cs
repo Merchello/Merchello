@@ -71,9 +71,6 @@ namespace Merchello.Tests.IntegrationTests.Examine
             {
                 provider.AddOrderToIndex(order);
             }
-            {
-                
-            }
         }
 
         /// <summary>
@@ -155,12 +152,12 @@ namespace Merchello.Tests.IntegrationTests.Examine
             invoice3.Items.Add(new InvoiceLineItem(LineItemType.Product, "test", "test", 1, 100));
             invoice3.Items.Add(new InvoiceLineItem(LineItemType.Product, "test2", "test2", 2, 100));
             PreTestDataWorker.InvoiceService.Save(invoice3);
-            var order = invoice3.PrepareOrder(MerchelloContext.Current);
-            MerchelloContext.Current.Services.OrderService.Save(order);
+            var order = invoice3.PrepareOrder(Core.MerchelloContext.Current);
+            Core.MerchelloContext.Current.Services.OrderService.Save(order);
             var key = invoice3.Key;
 
             //// Act
-            MerchelloContext.Current.Services.InvoiceService.GetByKey(key);         
+            Core.MerchelloContext.Current.Services.InvoiceService.GetByKey(key);         
             var searcher = ExamineManager.Instance.SearchProviderCollection["MerchelloInvoiceSearcher"];
 
             var criteria = searcher.CreateSearchCriteria(Merchello.Examine.IndexTypes.Invoice);
@@ -210,10 +207,10 @@ namespace Merchello.Tests.IntegrationTests.Examine
             invoice3.Items.Add(new InvoiceLineItem(LineItemType.Product, "test", "test", 1, 100));
             invoice3.Items.Add(new InvoiceLineItem(LineItemType.Product, "test2", "test2", 2, 100));
             PreTestDataWorker.InvoiceService.Save(invoice3);
-            var order = invoice3.PrepareOrder(MerchelloContext.Current);
+            var order = invoice3.PrepareOrder(Core.MerchelloContext.Current);
             
             //// Act
-            MerchelloContext.Current.Services.OrderService.Save(order);
+            Core.MerchelloContext.Current.Services.OrderService.Save(order);
             var key = order.Key;
 
             var searcher = ExamineManager.Instance.SearchProviderCollection["MerchelloOrderSearcher"];
@@ -260,7 +257,7 @@ namespace Merchello.Tests.IntegrationTests.Examine
             PreTestDataWorker.InvoiceService.Save(invoice);
 
             var order = invoice.PrepareOrder();
-            MerchelloContext.Current.Services.OrderService.Save(order);
+            Core.MerchelloContext.Current.Services.OrderService.Save(order);
 
             //// Act
             var orderDisplay = OrderQuery.GetByKey(order.Key);

@@ -1,4 +1,5 @@
 ﻿using System;
+using Merchello.Core;
 using Merchello.Core.Builders;
 using Merchello.Core.Models;
 using NUnit.Framework;

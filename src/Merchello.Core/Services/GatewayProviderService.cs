@@ -76,54 +76,54 @@ namespace Merchello.Core.Services
         }
 
 
-        #region GatewayProvider
+        #region GatewayProviderSettings
 
         /// <summary>
-        /// Saves a single instance of a <see cref="IGatewayProvider"/>
+        /// Saves a single instance of a <see cref="IGatewayProviderSettings"/>
         /// </summary>
-        /// <param name="gatewayProvider"></param>
+        /// <param name="gatewayProviderSettings"></param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        public void Save(IGatewayProvider gatewayProvider, bool raiseEvents = true)
+        public void Save(IGatewayProviderSettings gatewayProviderSettings, bool raiseEvents = true)
         {
-            if (raiseEvents) Saving.RaiseEvent(new SaveEventArgs<IGatewayProvider>(gatewayProvider), this);
+            if (raiseEvents) Saving.RaiseEvent(new SaveEventArgs<IGatewayProviderSettings>(gatewayProviderSettings), this);
 
             using (new WriteLock(Locker))
             {
                 var uow = _uowProvider.GetUnitOfWork();
                 using (var repository = _repositoryFactory.CreateGatewayProviderRepository(uow))
                 {
-                    repository.AddOrUpdate(gatewayProvider);
+                    repository.AddOrUpdate(gatewayProviderSettings);
                     uow.Commit();
                 }
 
-                if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IGatewayProvider>(gatewayProvider), this);
+                if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IGatewayProviderSettings>(gatewayProviderSettings), this);
             }
         }
 
         /// <summary>
-        /// Deletes a <see cref="IGatewayProvider"/>
+        /// Deletes a <see cref="IGatewayProviderSettings"/>
         /// </summary>
-        /// <param name="gatewayProvider"></param>
+        /// <param name="gatewayProviderSettings"></param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        public void Delete(IGatewayProvider gatewayProvider, bool raiseEvents = true)
+        public void Delete(IGatewayProviderSettings gatewayProviderSettings, bool raiseEvents = true)
         {
-            if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<IGatewayProvider>(gatewayProvider), this);
+            if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<IGatewayProviderSettings>(gatewayProviderSettings), this);
 
             // delete associated methods
-            switch (gatewayProvider.GatewayProviderType)
+            switch (gatewayProviderSettings.GatewayProviderType)
             {
                 case GatewayProviderType.Payment:
-                    var paymentMethods = _paymentMethodService.GetPaymentMethodsByProviderKey(gatewayProvider.Key).ToArray();
+                    var paymentMethods = _paymentMethodService.GetPaymentMethodsByProviderKey(gatewayProviderSettings.Key).ToArray();
                     if(paymentMethods.Any()) _paymentMethodService.Delete(paymentMethods);
                     break;
                     
                 case GatewayProviderType.Shipping:
-                    var shippingMethods = _shipMethodService.GetShipMethodsByProviderKey(gatewayProvider.Key).ToArray();
+                    var shippingMethods = _shipMethodService.GetShipMethodsByProviderKey(gatewayProviderSettings.Key).ToArray();
                     if(shippingMethods.Any()) _shipMethodService.Delete(shippingMethods);
                     break;
 
                 case GatewayProviderType.Taxation:
-                    var taxMethods = _taxMethodService.GetTaxMethodsByProviderKey(gatewayProvider.Key).ToArray();
+                    var taxMethods = _taxMethodService.GetTaxMethodsByProviderKey(gatewayProviderSettings.Key).ToArray();
                     if(taxMethods.Any()) _taxMethodService.Delete(taxMethods);
                     break;
             }
@@ -133,26 +133,26 @@ namespace Merchello.Core.Services
                 var uow = _uowProvider.GetUnitOfWork();
                 using (var repository = _repositoryFactory.CreateGatewayProviderRepository(uow))
                 {
-                    repository.Delete(gatewayProvider);
+                    repository.Delete(gatewayProviderSettings);
                     uow.Commit();
                 }
             }
-            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<IGatewayProvider>(gatewayProvider), this);
+            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<IGatewayProviderSettings>(gatewayProviderSettings), this);
         }
 
         /// <summary>
-        /// Deletes a collection of <see cref="IGatewayProvider"/>
+        /// Deletes a collection of <see cref="IGatewayProviderSettings"/>
         /// </summary>
         /// <param name="gatewayProviderList"></param>
         /// <param name="raiseEvents"></param>
         /// <remarks>
         /// Used for testing
         /// </remarks>
-        internal void Delete(IEnumerable<IGatewayProvider> gatewayProviderList, bool raiseEvents = true)
+        internal void Delete(IEnumerable<IGatewayProviderSettings> gatewayProviderList, bool raiseEvents = true)
         {
-            var gatewayProviderArray = gatewayProviderList as IGatewayProvider[] ?? gatewayProviderList.ToArray();
+            var gatewayProviderArray = gatewayProviderList as IGatewayProviderSettings[] ?? gatewayProviderList.ToArray();
 
-            if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<IGatewayProvider>(gatewayProviderArray), this);
+            if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<IGatewayProviderSettings>(gatewayProviderArray), this);
 
             using (new WriteLock(Locker))
             {
@@ -167,15 +167,15 @@ namespace Merchello.Core.Services
                 }
             }
 
-            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<IGatewayProvider>(gatewayProviderArray), this);
+            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<IGatewayProviderSettings>(gatewayProviderArray), this);
         }
 
         /// <summary>
-        /// Gets a <see cref="IGatewayProvider"/> by it's unique 'Key' (Guid)
+        /// Gets a <see cref="IGatewayProviderSettings"/> by it's unique 'Key' (Guid)
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public IGatewayProvider GetGatewayProviderByKey(Guid key)
+        public IGatewayProviderSettings GetGatewayProviderByKey(Guid key)
         {
             using (var repository = _repositoryFactory.CreateGatewayProviderRepository(_uowProvider.GetUnitOfWork()))
             {
@@ -184,16 +184,16 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
-        /// Gets a collection of <see cref="IGatewayProvider"/> by its type (Shipping, Taxation, Payment)
+        /// Gets a collection of <see cref="IGatewayProviderSettings"/> by its type (Shipping, Taxation, Payment)
         /// </summary>
         /// <param name="gatewayProviderType"></param>
         /// <returns></returns>
-        public IEnumerable<IGatewayProvider> GetGatewayProvidersByType(GatewayProviderType gatewayProviderType)
+        public IEnumerable<IGatewayProviderSettings> GetGatewayProvidersByType(GatewayProviderType gatewayProviderType)
         {
             using (var repository = _repositoryFactory.CreateGatewayProviderRepository(_uowProvider.GetUnitOfWork()))
             {
                 var query =
-                    Query<IGatewayProvider>.Builder.Where(
+                    Query<IGatewayProviderSettings>.Builder.Where(
                         x =>
                             x.ProviderTfKey ==
                             EnumTypeFieldConverter.GatewayProvider.GetTypeField(gatewayProviderType).TypeKey);
@@ -203,11 +203,11 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
-        /// Gets a collection of <see cref="IGatewayProvider"/> by ship country
+        /// Gets a collection of <see cref="IGatewayProviderSettings"/> by ship country
         /// </summary>
         /// <param name="shipCountry"></param>
         /// <returns></returns>
-        public IEnumerable<IGatewayProvider> GetGatewayProvidersByShipCountry(IShipCountry shipCountry)
+        public IEnumerable<IGatewayProviderSettings> GetGatewayProvidersByShipCountry(IShipCountry shipCountry)
         {
             using (var repository = _repositoryFactory.CreateGatewayProviderRepository(_uowProvider.GetUnitOfWork()))
             {
@@ -216,10 +216,10 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
-        /// Gets a collection containing all <see cref="IGatewayProvider"/>
+        /// Gets a collection containing all <see cref="IGatewayProviderSettings"/>
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<IGatewayProvider> GetAllGatewayProviders()
+        public IEnumerable<IGatewayProviderSettings> GetAllGatewayProviders()
         {
             using (var repository = _repositoryFactory.CreateGatewayProviderRepository(_uowProvider.GetUnitOfWork()))
             {
@@ -384,6 +384,23 @@ namespace Merchello.Core.Services
             return _paymentService.GetPaymentsByInvoiceKey(invoiceKey);
         }
 
+
+        #endregion
+
+
+        #region Notification
+
+        /// <summary>
+        /// Gets a collection of <see cref="INotificationMethod"/> for a give NotificationGatewayProvider
+        /// </summary>
+        /// <param name="providerKey">The unique 'key' of the NotificationGatewayProvider</param>
+        /// <returns>A collection of <see cref="INotificationMethod"/></returns>
+        public IEnumerable<INotificationMethod> GetNotificationMethodsByProviderKey(Guid providerKey)
+        {
+            throw new NotImplementedException();
+        }
+
+
         #endregion
 
         #region ShipMethod
@@ -431,7 +448,7 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
-        /// Gets a list of <see cref="IShipMethod"/> objects given a <see cref="IGatewayProvider"/> key and a <see cref="IShipCountry"/> key
+        /// Gets a list of <see cref="IShipMethod"/> objects given a <see cref="IGatewayProviderSettings"/> key and a <see cref="IShipCountry"/> key
         /// </summary>
         /// <returns>A collection of <see cref="IShipMethod"/></returns>
         public IEnumerable<IShipMethod> GetShipMethodsByShipCountryKey(Guid providerKey, Guid shipCountryKey)
@@ -440,13 +457,24 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
-        /// Gets a list of all <see cref="IShipMethod"/> objects given a <see cref="IGatewayProvider"/> key
+        /// Gets a list of all <see cref="IShipMethod"/> objects given a <see cref="IGatewayProviderSettings"/> key
         /// </summary>
         /// <returns>A collection of <see cref="IShipMethod"/></returns>
         public IEnumerable<IShipMethod> GetShipMethodsByShipCountryKey(Guid providerKey)
         {
             return _shipMethodService.GetShipMethodsByProviderKey(providerKey);
         }
+
+        /// <summary>
+        /// Gets a <see cref="IShipMethod"/> by it's unique key
+        /// </summary>
+        /// <param name="shipMethodKey">The <see cref="IShipMethod"/> key</param>
+        /// <returns>A <see cref="IShipMethod"/></returns>
+        public IShipMethod GetShipMethodByKey(Guid shipMethodKey)
+        {
+            return _shipMethodService.GetByKey(shipMethodKey);
+        }
+
 
         #endregion
 
@@ -492,10 +520,19 @@ namespace Merchello.Core.Services
         }
 
 
-
         #endregion
 
         #region ShipCountry
+
+        /// <summary>
+        /// Gets a <see cref="IShipCountry"/> by it's unique key (Guid)
+        /// </summary>
+        /// <param name="shipCountryKey">The unique key of the <see cref="IShipCountry"/></param>
+        /// <returns>The <see cref="IShipCountry"/></returns>
+        public IShipCountry GetShipCountryByKey(Guid shipCountryKey)
+        {
+            return _shipCountryService.GetByKey(shipCountryKey);
+        }
 
         /// <summary>
         /// Gets a <see cref="IShipCountry"/> by CatalogKey and CountryCode
@@ -555,7 +592,7 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Gets a <see cref="ITaxMethod"/> based on a provider and country code
         /// </summary>
-        /// <param name="providerKey">The unique 'key' of the <see cref="IGatewayProvider"/></param>
+        /// <param name="providerKey">The unique 'key' of the <see cref="IGatewayProviderSettings"/></param>
         /// <param name="countryCode">The country code of the <see cref="ITaxMethod"/></param>
         /// <returns><see cref="ITaxMethod"/></returns>
         public ITaxMethod GetTaxMethodByCountryCode(Guid providerKey, string countryCode)
@@ -619,22 +656,22 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Occurs before Save
         /// </summary>
-        public static event TypedEventHandler<IGatewayProviderService, SaveEventArgs<IGatewayProvider>> Saving;
+        public static event TypedEventHandler<IGatewayProviderService, SaveEventArgs<IGatewayProviderSettings>> Saving;
 
         /// <summary>
         /// Occurs after Save
         /// </summary>
-        public static event TypedEventHandler<IGatewayProviderService, SaveEventArgs<IGatewayProvider>> Saved;
+        public static event TypedEventHandler<IGatewayProviderService, SaveEventArgs<IGatewayProviderSettings>> Saved;
 
         /// <summary>
         /// Occurs before Delete
         /// </summary>		
-        public static event TypedEventHandler<IGatewayProviderService, DeleteEventArgs<IGatewayProvider>> Deleting;
+        public static event TypedEventHandler<IGatewayProviderService, DeleteEventArgs<IGatewayProviderSettings>> Deleting;
 
         /// <summary>
         /// Occurs after Delete
         /// </summary>
-        public static event TypedEventHandler<IGatewayProviderService, DeleteEventArgs<IGatewayProvider>> Deleted;
+        public static event TypedEventHandler<IGatewayProviderService, DeleteEventArgs<IGatewayProviderSettings>> Deleted;
 
         #endregion
     }

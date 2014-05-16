@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Merchello.Core.Gateways
 {
@@ -13,10 +14,10 @@ namespace Merchello.Core.Gateways
         /// </summary>
         Guid Key { get; }
 
-        ///// <summary>
-        ///// The Name or title of the gateway
-        ///// Used by Merchello in the GatewayProvider's installation/configuration
-        ///// </summary>
-        //string Name { get; }
+        /// <summary>
+        /// Returns a collection of all possible gateway methods associated with this provider
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<IGatewayResource> ListResourcesOffered();
     }
 }

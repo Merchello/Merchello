@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Merchello.Core.Services;
 using Umbraco.Core.Cache;
+using Umbraco.Core.ObjectResolution;
 
 namespace Merchello.Core.Gateways.Payment
 {
@@ -15,24 +16,16 @@ namespace Merchello.Core.Gateways.Payment
             : base(gatewayProviderService, resolver)
         { }
 
-
         /// <summary>
-        /// Resolves all active payment gateway providers
+        /// Returns an instance of an 'active' GatewayProvider associated with a GatewayMethod based given the unique Key (Guid) of the GatewayMethod
         /// </summary>
-        /// <returns>A collection of all active payment gateway providers</returns>
-        public override IEnumerable<PaymentGatewayProviderBase> CreateInstances()
+        /// <param name="gatewayMethodKey">The unique key (Guid) of the <see cref="IGatewayMethod"/></param>
+        /// <returns>An instantiated GatewayProvider</returns>
+        public override PaymentGatewayProviderBase GetProviderByMethodKey(Guid gatewayMethodKey)
         {
-            return GatewayProviderResolver.CreateInstances<PaymentGatewayProviderBase>(GatewayProviderType.Payment);
-        }
-
-        /// <summary>
-        /// Resolves a payment gateway provider by it's unique key
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns>A payment gateway provider</returns>
-        public override PaymentGatewayProviderBase CreateInstance(Guid key)
-        {
-            return GatewayProviderResolver.CreateInstance<PaymentGatewayProviderBase>(key);
+            return GetAllActivatedProviders()
+                .FirstOrDefault(x => ((PaymentGatewayProviderBase)x)
+                    .PaymentMethods.Any(y => y.Key == gatewayMethodKey)) as PaymentGatewayProviderBase;
         }
 
         /// <summary>
@@ -41,8 +34,11 @@ namespace Merchello.Core.Gateways.Payment
         /// <returns>A collection of <see cref="IPaymentGatewayMethod"/>s</returns>
         public IEnumerable<IPaymentGatewayMethod> GetPaymentGatewayMethods()
         {
-            var paymentProviders = CreateInstances();
+            var paymentProviders = GatewayProviderResolver.GetActivatedProviders<PaymentGatewayProviderBase>() as IEnumerable<PaymentGatewayProviderBase>;
+            
             var methods = new List<IPaymentGatewayMethod>();
+            if (paymentProviders == null) return methods;
+
             foreach (var provider in paymentProviders)
             {
                 methods.AddRange(provider.PaymentMethods.Select(x => provider.GetPaymentGatewayMethodByKey(x.Key)));
@@ -60,5 +56,7 @@ namespace Merchello.Core.Gateways.Payment
         {
             return GetPaymentGatewayMethods().FirstOrDefault(x => x.PaymentMethod.Key.Equals(paymentMethodKey));
         }
+
+
     }
 }

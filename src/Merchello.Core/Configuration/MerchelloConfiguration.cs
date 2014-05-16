@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Configuration;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using System.Xml.Linq;
 using Merchello.Core.Configuration.Outline;
+using Umbraco.Core.IO;
 using Umbraco.Core.Logging;
 
 namespace Merchello.Core.Configuration
@@ -32,6 +35,28 @@ namespace Merchello.Core.Configuration
         public static string ApplicationName = "Merchello";
         public static string ConfigurationName = ApplicationName.ToLower();
 
+        // Configuration Status - (Upgrades)
+        public const string MerchelloMigrationName = "Merchello";
+
+        /// <summary>
+        /// Gets or sets the configuration status. This will return the version number of the currently installed merchello instance.
+        /// </summary>
+        /// <value>The configuration status.</value>
+        public static string ConfigurationStatus
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings.Cast<object>().Any(x => (string) x == "merchelloConfigurationStatus")
+                    ? ConfigurationManager.AppSettings["merchelloConfigurationStatus"]
+                    : string.Empty;
+            }
+            set
+            {
+                SaveSetting("merchelloConfigurationStatus", value);
+            }
+        }
+
+        
         /// <summary>
         /// Returns the <see cref="MerchelloSection"/> Configuration Element
         /// </summary>
@@ -68,6 +93,15 @@ namespace Merchello.Core.Configuration
         public bool AlwaysApproveOrderCreation
         {
             get { return bool.Parse(Section.Settings["AlwaysApproveOrderCreation"].Value); }
+        }
+
+        /// <summary>
+        /// If true, Merchello will automatically attempt to update the database schema (if required) 
+        /// when the bootstrapper detects a Merchello version update
+        /// </summary>
+        public bool AutoUpdateDbSchema
+        {
+            get { return bool.Parse(Section.Settings["AutoUpdateDbSchema"].Value); }
         }
 
         /// <summary>
@@ -114,6 +148,29 @@ namespace Merchello.Core.Configuration
                            : baseDirectory;
 
             return _rootDir;
+        }
+
+        /// <summary>
+        /// Saves a setting into the configuration file.
+        /// </summary>
+        /// <param name="key">Key of the setting to be saved.</param>
+        /// <param name="value">Value of the setting to be saved.</param>
+        internal static void SaveSetting(string key, string value)
+        {
+            var fileName = IOHelper.MapPath(string.Format("{0}/web.config", SystemDirectories.Root));
+            var xml = XDocument.Load(fileName, LoadOptions.PreserveWhitespace);
+
+            var appSettings = xml.Root.DescendantsAndSelf("appSettings").Single();
+
+            // Update appSetting if it exists, or else create a new appSetting for the given key and value
+            var setting = appSettings.Descendants("add").FirstOrDefault(s => s.Attribute("key").Value == key);
+            if (setting == null)
+                appSettings.Add(new XElement("add", new XAttribute("key", key), new XAttribute("value", value)));
+            else
+                setting.Attribute("value").Value = value;
+
+            xml.Save(fileName, SaveOptions.DisableFormatting);
+            ConfigurationManager.RefreshSection("appSettings");
         }
 
         /// <summary>

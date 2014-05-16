@@ -42,6 +42,17 @@
                     'Failed to create ship country: ' + countryCode);
             },
 
+            deleteShipCountry: function (shipCountryKey) {
+
+                return umbRequestHelper.resourcePromise(
+                    $http({
+                        url: umbRequestHelper.getApiUrl('merchelloCatalogShippingApiBaseUrl', 'DeleteShipCountry'),
+                        method: "GET",
+                        params: { id: shipCountryKey }
+                    }),
+                    'Failed to delete ship country');
+            },
+
             getAllShipGatewayProviders: function() {
 
                 return umbRequestHelper.resourcePromise(
@@ -52,16 +63,78 @@
                     'Failed to retreive shipping gateway providers');
             },
 
-            deleteShipCountry: function(shipCountryKey) {
+            getAllShipCountryProviders: function (shipCountry) {
 
                 return umbRequestHelper.resourcePromise(
                     $http({
-                        url: umbRequestHelper.getApiUrl('merchelloCatalogShippingApiBaseUrl', 'DeleteShipCountry'),
+                        url: umbRequestHelper.getApiUrl('merchelloCatalogShippingApiBaseUrl', 'GetAllShipCountryProviders'),
                         method: "GET",
-                        params: { id: shipCountryKey }
+                        params: { id: shipCountry.key }
                     }),
-                    'Failed to delete ship country');
+                    'Failed to retreive shipping gateway providers');
             },
+
+            getAllShipGatewayResourcesForProvider: function (shipProvider) {
+
+                return umbRequestHelper.resourcePromise(
+                    $http({
+                        url: umbRequestHelper.getApiUrl('merchelloCatalogShippingApiBaseUrl', 'GetAllShipGatewayResourcesForProvider'),
+                        method: "GET",
+                        params: { id: shipProvider.key }
+                    }),
+                    'Failed to retreive shipping gateway provider resources');
+            },
+
+            getShippingProviderShipMethods: function (shipProvider) {
+
+                return umbRequestHelper.resourcePromise(
+                    $http({
+                        url: umbRequestHelper.getApiUrl('merchelloCatalogShippingApiBaseUrl', 'GetShippingProviderShipMethods'),
+                        method: "GET",
+                        params: { id: shipProvider.key }
+                    }),
+                    'Failed to retreive shipping methods');
+            },
+
+            getShippingProviderShipMethodsByCountry: function (shipProvider, shipCountry) {
+
+                return umbRequestHelper.resourcePromise(
+                    $http({
+                        url: umbRequestHelper.getApiUrl('merchelloCatalogShippingApiBaseUrl', 'GetShippingProviderShipMethodsByCountry'),
+                        method: "GET",
+                        params: { id: shipProvider.key, shipCountryId: shipCountry.key }
+                    }),
+                    'Failed to retreive shipping methods');
+            },
+
+
+            addShipMethod: function (shipMethod) {
+
+                return umbRequestHelper.resourcePromise(
+                    $http.post(umbRequestHelper.getApiUrl('merchelloCatalogShippingApiBaseUrl', 'AddShipMethod'),
+                        shipMethod
+                    ),
+                    'Failed to create ship method');
+            },
+
+            saveShipMethod: function (shipMethod) {
+
+                return umbRequestHelper.resourcePromise(
+                    $http.post(umbRequestHelper.getApiUrl('merchelloCatalogShippingApiBaseUrl', 'PutShipMethod'),
+                        shipMethod
+                    ),
+                    'Failed to save ship method');
+            },
+
+            deleteShipMethod: function (shipMethod) {
+
+                return umbRequestHelper.resourcePromise(
+                    $http.post(umbRequestHelper.getApiUrl('merchelloCatalogShippingApiBaseUrl', 'DeleteShipMethod'),
+                        shipMethod
+                    ),
+                    'Failed to delete ship method');
+            },
+
 
         };
     };

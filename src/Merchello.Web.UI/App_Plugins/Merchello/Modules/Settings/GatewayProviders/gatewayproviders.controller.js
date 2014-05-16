@@ -11,7 +11,8 @@
 
     controllers.GatewayProvidersController = function ($scope, assetsService, notificationsService, dialogService, merchelloGatewayProviderService) {
 
-        $scope.paymentGatewayProviders = [];
+        $scope.notificationGatewayProviders = [];
+        $scope.paymentGatewayProviders  = [];
         $scope.shippingGatewayProviders = [];
         $scope.taxationGatewayProviders = [];
 
@@ -20,6 +21,34 @@
         //--------------------------------------------------------------------------------------
         // Initialization methods
         //--------------------------------------------------------------------------------------
+
+        /**
+         * @ngdoc method
+         * @name loadAllNotificationGatwayProviders
+         * @function
+         * 
+         * @description
+         * Loads in notification gateway providers from server into the scope.  Called in init().
+         */
+        $scope.loadAllNotificationGatwayProviders = function() {
+
+            var promiseAllProviders = merchelloGatewayProviderService.getResolvedNotificationGatewayProviders();
+            promiseAllProviders.then(function(allProviders) {
+
+                $scope.notificationGatewayProviders = _.map(allProviders, function (providerFromServer) {
+                    return new merchello.Models.GatewayProvider(providerFromServer);
+                });
+
+                $scope.loaded = true;
+                $scope.preValuesLoaded = true;
+
+            }, function(reason) {
+                
+                notificationsService.error("Available Notification Gateway Providers Load Failed", reason.message);
+
+            });
+        }
+
 
         /**
          * @ngdoc method
@@ -115,6 +144,7 @@
          */
         $scope.init = function () {
 
+            $scope.loadAllNotificationGatwayProviders();
             $scope.loadAllPaymentGatewayProviders();
             $scope.loadAllShippingGatewayProviders();
             $scope.loadAllTaxationGatewayProviders();
@@ -143,6 +173,8 @@
             promiseActivate.then(function () {
 
                 provider.activated = true;
+
+                $scope.init();
                 
                 notificationsService.success("Payment Method Activated");
 
@@ -177,6 +209,10 @@
 
             });
         };
+ 
+        //--------------------------------------------------------------------------------------
+        // Dialog methods
+        //--------------------------------------------------------------------------------------
 
         /**
          * @ngdoc method
@@ -189,16 +225,15 @@
          */
         $scope.editProviderConfigDialogOpen = function (provider) {
 
-           
             var dialogProvider = provider;
-            if (!provider) {      
-                return;                
+            if (!provider) {
+                return;
             }
 
             var myDialogData = {
                 provider: dialogProvider
             };
-            
+
             dialogService.open({
                 template: provider.dialogEditorView.editorView,
                 show: true,
@@ -207,21 +242,25 @@
             });
         };
 
-        $scope.providerConfigDialogConfirm = function(data) {
-
-           
-
-            notificationsService.info("Saving...", "");
+        /**
+         * @ngdoc method
+         * @name providerConfigDialogConfirm
+         * @param {dialogData} model returned from the dialog view
+         * @function
+         * 
+         * @description
+         * Handles the data passed back from the provider editor dialog and saves it to the database
+         */
+        $scope.providerConfigDialogConfirm = function (data) {
 
             var promise = merchelloGatewayProviderService.saveGatewayProvider(data.provider);
 
             promise.then(function (provider) {
-                notificationsService.success("Gateway provider Saved", "H5YR!");
+                notificationsService.success("Gateway Provider Saved", "");
             },
-            function (reason)
-                {
-                notificationsService.error("Gateway provider Save Failed", reason.message);
-                }
+            function (reason) {
+                notificationsService.error("Gateway Provider Save Failed", reason.message);
+            }
             );
         };
 

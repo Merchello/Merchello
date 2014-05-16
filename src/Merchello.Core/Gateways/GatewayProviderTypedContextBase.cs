@@ -23,36 +23,13 @@ namespace Merchello.Core.Gateways
             _gatewayProviderService = gatewayProviderService;            
             _resolver = resolver;
 
-            AssertProviderVersions();
         }
 
         /// <summary>
-        /// Asserts the assembly versions get updated (if applicable) when the context is instantiated.
-        /// </summary>
-        /// TODO revist this.  Probably better to do something like this in the bootstrapper
-        private void AssertProviderVersions()
-        {
-            var all = GetAllActivatedProviders().ToArray();
-            var activated = GetAllActivatedProviders();
-
-            foreach (var provider in activated)
-            {
-                var key = provider.Key;
-                var resolved = all.FirstOrDefault(x => x.Key == key);
-
-                if (resolved == null) continue;
-                if (provider.TypeFullName.Equals(resolved.TypeFullName)) continue;
-                
-                provider.TypeFullName = resolved.TypeFullName;
-                GatewayProviderService.Save(provider);
-            }
-        }
-
-        /// <summary>
-        /// Lists all actived <see cref="IGatewayProvider"/>
+        /// Lists all actived <see cref="IGatewayProviderSettings"/>
         /// </summary>
         /// <returns>A collection of all "activated" GatewayProvider of the particular type T</returns>
-        public IEnumerable<IGatewayProvider> GetAllActivatedProviders()
+        public IEnumerable<GatewayProviderBase> GetAllActivatedProviders()
         {
             return GatewayProviderResolver.GetActivatedProviders<T>();
         }
@@ -61,46 +38,81 @@ namespace Merchello.Core.Gateways
         /// Lists all available providers.  This list includes providers that are just resolved and not configured
         /// </summary>
         /// <returns>A collection of all Gatewayprovider</returns>
-        public IEnumerable<IGatewayProvider> GetAllProviders()
+        public IEnumerable<GatewayProviderBase> GetAllProviders()
         {
             return GatewayProviderResolver.GetAllProviders<T>();
         }
 
         /// <summary>
-        /// Activates a <see cref="IGatewayProvider"/>
+        /// Instantiates a GatewayProvider given its registered Key
         /// </summary>
-        /// <param name="gatewayProvider">The <see cref="IGatewayProvider"/> to be activated</param>
-        public void ActivateProvider(IGatewayProvider gatewayProvider)
+        /// <typeparam name="T">The Type of the GatewayProvider.  Must inherit from GatewayProviderBase</typeparam>
+        /// <param name="gatewayProviderKey"></param>
+        /// <param name="activatedOnly">Search only activated providers</param>
+        /// <returns>An instantiated GatewayProvider</returns>
+        public T GetProviderByKey(Guid gatewayProviderKey, bool activatedOnly = true)
         {
-            if(gatewayProvider.Activated) return;
-            GatewayProviderService.Save(gatewayProvider);
+            return GatewayProviderResolver.GetProviderByKey<T>(gatewayProviderKey, activatedOnly);
+        }
+
+        /// <summary>
+        /// Returns an instance of an 'active' GatewayProvider associated with a GatewayMethod based given the unique Key (Guid) of the GatewayMethod
+        /// </summary>
+        /// <param name="gatewayMethodKey">The unique key (Guid) of the <see cref="IGatewayMethod"/></param>
+        /// <returns>An instantiated GatewayProvider</returns>
+        public abstract T GetProviderByMethodKey(Guid gatewayMethodKey);
+
+        /// <summary>
+        /// Creates an instance GatewayProvider given its registered Key
+        /// </summary>        
+        [Obsolete("Use GetProviderByKey instead")]
+        public T CreateInstance(Guid gatewayProviderKey)
+        {
+            return GetProviderByKey(gatewayProviderKey);
+        }
+
+        /// <summary>
+        /// Activates a <see cref="IGatewayProviderSettings"/>
+        /// </summary>
+        /// <param name="provider">The GatewayProvider to be activated</param>
+        public void ActivateProvider(GatewayProviderBase provider)
+        {
+            ActivateProvider(provider.GatewayProviderSettings);
+        }
+
+        /// <summary>
+        /// Activates a <see cref="IGatewayProviderSettings"/>
+        /// </summary>
+        /// <param name="gatewayProviderSettings">The <see cref="IGatewayProviderSettings"/> to be activated</param>
+        public void ActivateProvider(IGatewayProviderSettings gatewayProviderSettings)
+        {
+
+            if (gatewayProviderSettings.Activated) return;
+            GatewayProviderService.Save(gatewayProviderSettings);
             GatewayProviderResolver.RefreshCache();
         }
 
         /// <summary>
-        /// Deactivates a <see cref="IGatewayProvider"/>
+        /// Deactivates a <see cref="IGatewayProviderSettings"/>
         /// </summary>
-        /// <param name="gatewayProvider">The <see cref="IGatewayProvider"/> to be deactivated</param>
-        public void DeactivateProvider(IGatewayProvider gatewayProvider)
+        /// <param name="provider">The GatewayProvider to be deactivated</param>
+        public void DeactivateProvider(GatewayProviderBase provider)
         {
-            if (!gatewayProvider.Activated) return;
-            GatewayProviderService.Delete(gatewayProvider);
-            GatewayProviderResolver.RefreshCache();
+            DeactivateProvider(provider.GatewayProviderSettings);
         }
 
         /// <summary>
-        /// Resolves all active <see cref="IGatewayProvider"/>s of T
+        /// Deactivates a <see cref="IGatewayProviderSettings"/>
         /// </summary>
-        /// <returns>A collection of all active TypedGatewayProviderinstances</returns>
-        public abstract IEnumerable<T> CreateInstances();
-    
-        /// <summary>
-        /// Resolves a <see cref="IGatewayProvider"/> by it's unique key
-        /// </summary>
-        /// <param name="key">The Guid 'key' of the provider</param>
-        /// <returns>Returns a <see cref="IGatewayProvider"/> of type T</returns>
-        public abstract T CreateInstance(Guid key);
-        
+        /// <param name="gatewayProviderSettings">The <see cref="IGatewayProviderSettings"/> to be deactivated</param>
+        public void DeactivateProvider(IGatewayProviderSettings gatewayProviderSettings)
+        {
+            if (!gatewayProviderSettings.Activated) return;
+            GatewayProviderService.Delete(gatewayProviderSettings);
+            GatewayProviderResolver.RefreshCache();
+        }
+
+
         /// <summary>
         /// Gets the <see cref="IGatewayProviderResolver"/>
         /// </summary>

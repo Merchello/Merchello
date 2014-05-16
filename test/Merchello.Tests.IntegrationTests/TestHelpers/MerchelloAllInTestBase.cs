@@ -1,7 +1,10 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using Examine;
 using Merchello.Core;
+using Merchello.Core.Gateways;
 using Merchello.Core.Models;
+using Merchello.Core.ObjectResolution;
 using Merchello.Core.Services;
 using Merchello.Examine;
 using Merchello.Web;
@@ -22,6 +25,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         [TestFixtureSetUp]
         public virtual void FixtureSetup()
         {
+            
             AutoMapperMappings.BindMappings();  
 
             // Umbraco Application
@@ -40,9 +44,9 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
             if(MerchelloContext.Current == null) Assert.Ignore("MerchelloContext.Current is null");
 
             CurrentCustomer = DbPreTestDataWorker.MakeExistingAnonymousCustomer();
+            
 
-            // Product saves
-
+            // Product saves            
             ProductService.Created += ProductServiceCreated;
             ProductService.Saved += ProductServiceSaved;
             ProductService.Deleted += ProductServiceDeleted;
@@ -56,6 +60,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
         }
 
+
         [TestFixtureTearDown]
         public void TestFixtureTearDown()
         {
@@ -68,7 +73,6 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
             ProductVariantService.Saved -= ProductVariantServiceSaved;
             ProductVariantService.Deleted -= ProductVariantServiceDeleted;
 
-            
         }
 
         //#region BasketCheckoutEvents

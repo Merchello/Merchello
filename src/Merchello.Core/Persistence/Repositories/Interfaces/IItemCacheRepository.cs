@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using Merchello.Core.Models;
-using Merchello.Core.Models.TypeFields;
 using Umbraco.Core.Persistence.Repositories;
 
 namespace Merchello.Core.Persistence.Repositories

@@ -39,7 +39,7 @@ namespace Merchello.Web.Editors
             : base(merchelloContext)
         {
             _shipCountryService = ((ServiceContext) MerchelloContext.Services).ShipCountryService;
-            _fixedRateShippingGatewayProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Gateways.Shipping.CreateInstance(Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey);
+            _fixedRateShippingGatewayProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Gateways.Shipping.GetProviderByKey(Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey);
             _shippingContext = MerchelloContext.Gateways.Shipping;
         }
 
@@ -50,7 +50,7 @@ namespace Merchello.Web.Editors
             : base(merchelloContext, umbracoContext)
         {
             _shipCountryService = ((ServiceContext)MerchelloContext.Services).ShipCountryService;
-            _fixedRateShippingGatewayProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Gateways.Shipping.CreateInstance(Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey);
+            _fixedRateShippingGatewayProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Gateways.Shipping.GetProviderByKey(Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey);
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace Merchello.Web.Editors
         /// </remarks>
         public IEnumerable<GatewayResourceDisplay> GetAllFixedRateGatewayResources()
         {
-            var provider = (FixedRateShippingGatewayProvider)_shippingContext.CreateInstance(Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey);
+            var provider = (FixedRateShippingGatewayProvider)_shippingContext.GetProviderByKey(Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey);
 
             var resources = provider.ListResourcesOffered();
 
@@ -113,9 +113,9 @@ namespace Merchello.Web.Editors
             var shipCountry = _shipCountryService.GetByKey(id);
             if (shipCountry != null)
             {
-                var providers = _shippingContext.GetGatewayProvidersByShipCountry(shipCountry);
+                var providers = _shippingContext.GetGatewayProvidersByShipCountry(shipCountry).ToArray();
 
-                if (providers != null && providers.Any())
+                if (providers.Any())
                 {
                     var fixedProvider = providers.FirstOrDefault(x => x.Key == Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey);
 

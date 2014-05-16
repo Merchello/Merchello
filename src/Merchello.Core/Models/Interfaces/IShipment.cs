@@ -10,6 +10,12 @@ namespace Merchello.Core.Models
     public interface IShipment : ILineItemContainer
     {
         /// <summary>
+        /// The date the shipment was shipped
+        /// </summary>
+        [DataMember]
+        DateTime ShippedDate { get; set; }
+
+        /// <summary>
         /// The organization or company name associated with the address
         /// </summary>
         [DataMember]

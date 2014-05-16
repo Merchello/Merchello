@@ -1,202 +1,109 @@
 ﻿<link href="/App_Plugins/Merchello/Common/Css/merchello.css" rel="stylesheet">
 
-<div 
-    data-ng-controller="Merchello.Dashboards.Settings.ShippingController"
-    data-ng-show="loaded">
+<div data-ng-controller="Merchello.Dashboards.Settings.ShippingController"
+	 data-ng-show="loaded">
 
-    <umb-panel>
+	<umb-panel>
 
-        <umb-header>
+		<umb-header>
 
-            <div class="span4">
-                <div class="umb-headline-editor-wrapper">
-                     <h1 class="umb-headline">Shipping</h1>
-                </div>
-            </div>
-
-
-            <div class="span8">
-                <div class="btn-toolbar pull-right umb-btn-toolbar">
-                    
-                    <div class="btn-group">
-
-                    </div>
-
-                </div>
-            </div>
-
-        </umb-header>
-        
-        <merchello-panel>
-
-            <div class="merchello-pane row-fluid">
-                <div class="control-group umb-control-group" data-ng-class="{ 'open': visible.warehouseListPanel, 'closed': !visible.warehouseListPanel }">
-                    <label class="merchello-control-label">
-                        Warehouse Info
-                        <small>Edit your warehouse</small>
-                        <a data-ng-click="addWarehouseFlyout.open(primaryWarehouse)"><i class="icon-door-open"></i> Edit Warehouse</a>
-                    </label>
-
-                    <div class="merchello-controls">
-
-                        <div class="row-fluid span10 col-xs-10">
-
-                            <!-- Add a Warehouse Flyout -->
-                            <form name="addWarehouseForm" class="well col-xs-12 span12" data-ng-class="{ 'open': visible.addWarehouseFlyout, 'closed': !flyouts.addWarehouseFlyout }">
-                                <button class="btn close" data-ng-click="addWarehouseFlyout.close()"><i class="icon-delete"></i></button>
-                                <h4 data-ng-switch="newWarehouse.key">
-                                    <span data-ng-switch-when="no key created">Add a Warehouse</span>
-                                    <span data-ng-switch-default="">Edit Warehouse</span>
-                                </h4>
-                                <div class="form-group row-fluid">
-                                    <label for="name">Name</label>
-                                    <input class="span6" name="name" type="text" data-ng-model="newWarehouse.name" />
-                                </div>
-                                <div class="form-group row-fluid">
-                                    <label for="address">Address</label>
-                                    <input class="span6" name="address" type="text" placeholder="Street Address" data-ng-model="newWarehouse.address1" />
-                                    <input class="span6" name="extended-address" type="text" placeholder="Extended Address" data-ng-model="newWarehouse.address2" />
-                                    <input class="span6" name="city" type="text" placeholder="City" data-ng-model="newWarehouse.locality" />
-                                </div>
-                                <div class="form-group row-fluid">
-                                    <input class="span3" name="state-province" type="text" placeholder="State/Province" data-ng-model="newWarehouse.region" />
-                                    <input class="span3" name="postal-code" type="text" placeholder="Zip/Postal Code" data-ng-model="newWarehouse.postalCode" />
-                                </div>
-                                <div class="form-group row-fluid">
-                                    <input class="span6" name="country" type="text" placeholder="Country" data-ng-model="newWarehouse.countryCode" />
-                                    <label class="label-checkbox"><input name="primary" type="checkbox" data-ng-model="newWarehouse.isDefault"> <span>Make this my primary warehouse</span></label>
-                                </div>
-
-                                <div>
-                                    <input type="submit" class="btn" value="Cancel" data-ng-click="addWarehouseFlyout.close()" />
-                                    <input type="submit" class="btn btn-primary" value="Save" data-ng-click="addWarehouseFlyout.save()" />
-                                </div>
-                            </form>
-
-                            <!-- Delete a Warehouse Flyout -->
-                            <form name="deleteWarehouseForm" class="well" data-ng-class="{ 'open': visible.deleteWarehouseFlyout, 'closed': !flyouts.deleteWarehouseFlyout }">
-                                <h4>Are you sure you want to remove the warehouse '{{deleteWarehouse.name}}'?</h4>
-                                <div>
-                                    <input type="submit" class="btn" value="No" data-ng-click="deleteWarehouseFlyout.close()" />
-                                    <input type="submit" class="btn btn-primary" value="Yes" data-ng-click="deleteWarehouseFlyout.confirm()" />
-                                </div>
-                            </form>
+			<div class="span4">
+				<div class="umb-headline-editor-wrapper">
+					<h1 class="umb-headline">Shipping</h1>
+				</div>
+			</div>
 
 
-                            <shipping-warehouse warehouse="primaryWarehouse"></shipping-warehouse>
+			<div class="span8">
+				<div class="btn-toolbar pull-right umb-btn-toolbar">
+
+					<div class="btn-group">
+
+					</div>
+
+				</div>
+			</div>
+
+		</umb-header>
+
+		<merchello-panel>
+
+			<div class="merchello-pane row-fluid">
+				<div class="control-group umb-control-group" data-ng-class="{ 'open': visible.warehouseListPanel, 'closed': !visible.warehouseListPanel }">
+					<label class="merchello-control-label">
+						Warehouse Info
+						<small>Edit your warehouse</small>
+						<a data-ng-click="addWarehouse(primaryWarehouse)"><i class="icon-door-open"></i> Edit Warehouse</a>
+					</label>
+
+					<div class="merchello-controls">
+
+						<div class="row-fluid span10 col-xs-10">
+
+							<shipping-warehouse warehouse="primaryWarehouse"></shipping-warehouse>
 
 
-                            <!--
-                            <table class="table table-striped merchello-striped-table settings-table warehouse-table">
-                                <thead>
-                                    <tr>
-                                        <th>Primary</th>
-                                        <th>Name</th>
-                                        <th>Address</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr class="vcard" data-ng-repeat="warehouse in warehouses | orderBy:sortProperty">
-                                        <td><input type="radio" name="primary" data-ng-click="changePrimaryWarehouse(warehouse)" data-ng-checked="warehouse.isDefault" /></td>
-                                        <td class="org">{{warehouse.name}}</td>
-                                        <td class="adr">
-                                            <span class="street-address">{{warehouse.address1}}</span>
-                                            <span class="extended-address">{{warehouse.address2}}</span>
-                                            <span class="locality">{{warehouse.locality}}</span>, <span class="region">{{warehouse.region}}</span> <span class="postal-code">{{warehouse.postalCode}}</span>
-                                        </td>
-                                        <td class="edit">
-                                            <div class="btn-toolbar umb-btn-toolbar">
-                                                <a class="btn btn-default btn-xs btn-mini" data-ng-click="addWarehouseFlyout.open(warehouse)">edit</a> <a class="btn btn-warning btn-xs btn-mini" data-ng-click="deleteWarehouseFlyout.open(warehouse)">x</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            -->
-                        </div>
-                    </div>
-                </div>
-                    
-                <!-- Property classes from Umbraco styles -->
-                <div class="control-group umb-control-group" data-ng-class="{ 'open': visible.shippingMethodPanel, 'closed': !visible.shippingMethodPanel }">
-                    <label class="merchello-control-label">
-                        Shipping Methods
-                        <small>Add shipping methods to existing regions or create a new region</small>
-                        <a data-ng-click="addCountryFlyout.open(countryToAdd)"><i class="icon-map"></i> Add a Country</a>
-                    </label>
+							<!--
+							<table class="table table-striped merchello-striped-table settings-table warehouse-table">
+								<thead>
+									<tr>
+										<th>Primary</th>
+										<th>Name</th>
+										<th>Address</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr class="vcard" data-ng-repeat="warehouse in warehouses | orderBy:sortProperty">
+										<td><input type="radio" name="primary" data-ng-click="changePrimaryWarehouse(warehouse)" data-ng-checked="warehouse.isDefault" /></td>
+										<td class="org">{{warehouse.name}}</td>
+										<td class="adr">
+											<span class="street-address">{{warehouse.address1}}</span>
+											<span class="extended-address">{{warehouse.address2}}</span>
+											<span class="locality">{{warehouse.locality}}</span>, <span class="region">{{warehouse.region}}</span> <span class="postal-code">{{warehouse.postalCode}}</span>
+										</td>
+										<td class="edit">
+											<div class="btn-toolbar umb-btn-toolbar">
+												<a class="btn btn-default btn-xs btn-mini" data-ng-click="addWarehouse(warehouse)"><i class="icon-edit"></i></a> <a class="btn btn-warning btn-xs btn-mini" data-ng-click="deleteWarehouse(warehouse)">x</a>
+											</div>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+							-->
+						</div>
+					</div>
+				</div>
 
-                    <div class="merchello-controls">
+				<!-- Property classes from Umbraco styles -->
+				<div class="control-group umb-control-group" data-ng-class="{ 'open': visible.shippingMethodPanel, 'closed': !visible.shippingMethodPanel }">
+					<label class="merchello-control-label">
+						Shipping Methods
+						<small>Add shipping methods to existing regions or create a new region</small>
+						<a data-ng-click="addCountry()"><i class="icon-map"></i> Add a Country</a>
+					</label>
 
-                        <div class="row-fluid span10 col-xs-10">
+					<div class="merchello-controls">
 
-                            <!-- Add a Country Flyout -->
-                            <form  name="addCountryForm" class="well col-xs-12 span12" data-ng-class="{ 'open': visible.addCountryFlyout, 'closed': !visible.addCountryFlyout }">
-                                <button class="btn close" data-ng-click="addCountryFlyout.close()"><i class="icon-delete"></i></button>
-                                <h4>Add a Country</h4>
-                                <div class="form-group row-fluid country-dropdown">
-                                    <label for="country-name">Type your Country Name</label>
-                                    <div class="input-append col-xs-12 span12">
-                                        <!-- A country list should fly out beneath this input when the user starts typing or if they select the dropdown button -->
-                                        <dropdown-list selected="addCountryFlyout.model" placeholder="Type a country name" countries="availableCountries"></dropdown-list>
-                                    </div>
-                                </div>
+						<div class="row-fluid span10 col-xs-10">
 
-                                <div>
-                                    <input type="submit" class="btn" value="Cancel" data-ng-click="addCountryFlyout.close()" />
-                                    <input type="submit" class="btn btn-primary" value="Add Country" data-ng-click="addCountryFlyout.confirm()" />
-                                </div>
-                            </form>
-                                                       
-                            <div data-ng-repeat="country in countries | orderBy: 'sortHelper'" class="merchello-shipping-country">
+							<div data-ng-repeat="country in countries | orderBy: 'sortHelper'" class="merchello-shipping-country">
 
-                                <!-- simply inherits this scope, doesn't create an isolate scope -->
-                                <shipping-country></shipping-country>
+								<!-- simply inherits this scope, doesn't create an isolate scope -->
+								<shipping-country></shipping-country>
 
-                            </div>
+							</div>
 
-                        </div>
+						</div>
 
-                    </div>
-                </div>
+					</div>
+				</div>
+                
+                <merchello-debug-section data-props-to-debug="warehouses,providers,countries"></merchello-debug-section>
 
-                <!--<div class="control-group umb-control-group">
-                    <label class="merchello-control-label">
-                        <label><input data-ng-model="debugging" type="checkbox" /> Debug</label>
-                        <small>Check to show debugging info</small>
-                    </label>
+			</div>
 
-                    <div class="merchello-controls">
+		</merchello-panel>
 
-                        <div data-ng-show="debugging">
-                            <h3>Warehouse</h3>
-                            <div class="jsonInfo">{{warehouses | json}}</div>
-                                                
-                            <h3>shipCountry</h3>
-                            <div class="jsonInfo">{{currentShipCountry | json}}</div>
-                                                
-                            <h3>providerToAdd</h3>
-                            <div class="jsonInfo">{{providerToAdd | json}}</div>
-                                                
-                            <h3>providers</h3>
-                            <div class="jsonInfo">{{providers | json}}</div>
-                                                
-                            <h3>countryToAdd</h3>
-                            <div class="jsonInfo">{{countryToAdd | json}}</div>
-                                                
-                            <h3>countries</h3>
-                            <div class="jsonInfo">{{countries | json}}</div>
-                                                
-                            <h3>Available Countries</h3>
-                            <div class="jsonInfo">{{availableCountries | json}}</div>
-
-                        </div>
-
-                    </div>
-                </div>-->
-            </div>
-
-        </merchello-panel>
-           
-    </umb-panel>
+	</umb-panel>
 </div>
