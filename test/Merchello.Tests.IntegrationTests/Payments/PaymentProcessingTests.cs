@@ -8,6 +8,8 @@ using Merchello.Core.Persistence.UnitOfWork;
 using Merchello.Core.Services;
 using Merchello.Tests.Base.DataMakers;
 using Merchello.Tests.IntegrationTests.TestHelpers;
+using Merchello.Web;
+using Merchello.Web.Models.ContentEditing;
 using NUnit.Framework;
 using Umbraco.Core;
 using Constants = Merchello.Core.Constants;
@@ -30,10 +32,11 @@ namespace Merchello.Tests.IntegrationTests.Payments
             PreTestDataWorker.DeleteAllPaymentMethods();
             PreTestDataWorker.DeleteAllShipCountries();
 
-            _merchelloContext = new MerchelloContext(new ServiceContext(new PetaPocoUnitOfWorkProvider()),
-                new CacheHelper(new NullCacheProvider(),
-                    new NullCacheProvider(),
-                    new NullCacheProvider()));
+            // Merchello CoreBootStrap
+            var bootManager = new WebBootManager();
+            bootManager.Initialize();
+
+            _merchelloContext = Core.MerchelloContext.Current;
 
             var defaultCatalog = PreTestDataWorker.WarehouseService.GetDefaultWarehouse().WarehouseCatalogs.FirstOrDefault();
             if (defaultCatalog == null) Assert.Ignore("Default WarehouseCatalog is null");
@@ -187,5 +190,28 @@ namespace Merchello.Tests.IntegrationTests.Payments
             Assert.IsTrue(authCapture.Payment.Success);
             Assert.AreEqual(Constants.DefaultKeys.InvoiceStatus.Paid, _invoice.InvoiceStatusKey);
         }
+
+        /// <summary>
+        /// Test confirms that a payment can be mapped to an paymentdisplay
+        /// </summary>
+        [Test]
+        public void Can_Map_Payment_To_PaymentDisplay_With_AppliedPayment_Collection()
+        {
+            //// Arrange
+            var auth = _invoice.AuthorizePayment(_merchelloContext, _paymentMethodKey, new ProcessorArgumentCollection());
+            var payment = auth.Payment.Result;
+            var capture = payment.CapturePayment(_merchelloContext, _invoice, _paymentMethodKey, _invoice.Total, new ProcessorArgumentCollection());
+
+            Assert.IsTrue(capture.Payment.Success);
+            var appliedPayments = capture.Payment.Result.AppliedPayments();
+
+            //// Act
+            var display = capture.Payment.Result.ToPaymentDisplay();
+
+            //// Assert
+            Assert.NotNull(display);
+            Assert.AreEqual(appliedPayments.Count(), display.AppliedPayments.Count());
+        }
+        
     }
 }

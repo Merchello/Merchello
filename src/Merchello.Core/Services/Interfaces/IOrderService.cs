@@ -72,7 +72,7 @@ namespace Merchello.Core.Services
         /// </summary>
         /// <param name="invoiceKey">The <see cref="IInvoice"/> key</param>
         /// <returns>A collection of <see cref="IOrder"/></returns>
-        IEnumerable<IOrder> GetOrdersByInvoiceKey(Guid invoiceKey);
+        IEnumerable<IOrder> GetOrdersByInvoiceKey(Guid invoiceKey);            
             
         /// <summary>
         /// Gets list of <see cref="IOrder"/> objects given a list of Keys

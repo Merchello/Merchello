@@ -1,5 +1,6 @@
 ﻿{
 	javascript : [
-		'~/App_Plugins/Merchello.AuthorizeNet/merchello.authorizenet.controller.js'
+		'~/App_Plugins/Merchello.AuthorizeNet/merchello.authorizenet.controller.js',
+		'~/App_Plugins/Merchello.AuthorizeNet/merchello.authorizenet.paymentmethod.controller.js'
 	]
 }

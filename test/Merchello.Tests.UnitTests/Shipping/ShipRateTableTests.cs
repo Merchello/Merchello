@@ -93,24 +93,24 @@ namespace Merchello.Tests.UnitTests.Shipping
             Assert.IsFalse(_shippingFixedRateTable.Rows.Any(x => x.RangeLow == 4));
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        [Test]
-        public void Can_Verify_That_A_Rate_Tier_Can_Be_Deleted()
-        {
-            //// Arrange
-            _shippingFixedRateTable.AddRow(0, 5, 1);
-            _shippingFixedRateTable.AddRow(5, 10, 1);
-            _shippingFixedRateTable.AddRow(10, 20, 1);
-            _shippingFixedRateTable.AddRow(20, 25, 1);
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        //[Test]
+        //public void Can_Verify_That_A_Rate_Tier_Can_Be_Deleted()
+        //{
+        //    //// Arrange
+        //    _shippingFixedRateTable.AddRow(0, 5, 1);
+        //    _shippingFixedRateTable.AddRow(5, 10, 1);
+        //    _shippingFixedRateTable.AddRow(10, 20, 1);
+        //    _shippingFixedRateTable.AddRow(20, 25, 1);
 
-            //// Act
-            _shippingFixedRateTable.DeleteRow(_shippingFixedRateTable.Rows.First(x => x.RangeLow == 5));
+        //    //// Act
+        //    _shippingFixedRateTable.DeleteRow(_shippingFixedRateTable.Rows.First(x => x.RangeLow == 5));
     
-            //// Assert
-            Assert.AreEqual(3, _shippingFixedRateTable.Rows.Count());
-        }
+        //    //// Assert
+        //    Assert.AreEqual(3, _shippingFixedRateTable.Rows.Count());
+        //}
 
     }
 }

@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Xml;
 using Merchello.Core.Configuration;
+using Merchello.Core.Models.Rdbms;
+using Umbraco.Core;
+using Umbraco.Core.Persistence;
 using Umbraco.Web;
 using umbraco.BusinessLogic;
 using umbraco.cms.businesslogic.packager.standardPackageActions;
@@ -19,6 +23,31 @@ namespace Merchello.Web.PackageActions
 	/// </remarks>
 	public class GrantPermissionForApp : IPackageAction
 	{
+		private readonly Database _database;
+		
+
+		public GrantPermissionForApp()
+		{
+			_database = ApplicationContext.Current.DatabaseContext.Database;
+		}
+
+
+		private UserDto GetUserDto(XmlNode xmlData)
+		{
+			var appName = this.GetAttributeValue(xmlData, "appName");
+			var userLogin = this.GetAttributeValue(xmlData, "userLogin");
+
+			if (string.Equals(userLogin, "$currentUser", StringComparison.OrdinalIgnoreCase))
+				userLogin = UmbracoContext.Current.UmbracoUser.LoginName;
+
+			var sql = new Sql();
+			sql.Select("*")
+				.From<UserDto>()
+				.Where<UserDto>(x => x.Login == userLogin);
+
+			return _database.Fetch<UserDto>(sql).FirstOrDefault();
+		}
+
 		public string Alias()
 		{
 			return string.Concat(MerchelloConfiguration.ApplicationName, "_GrantPermissionForApp");
@@ -27,13 +56,17 @@ namespace Merchello.Web.PackageActions
 		public bool Execute(string packageName, XmlNode xmlData)
 		{
 			// execute revoke first to clear any existing permissions app/user relationships
-			Revoke(packageName, xmlData);
-			return Grant(packageName, xmlData);
+
+			var user = GetUserDto(xmlData);
+
+			Revoke(packageName, xmlData, user);
+			return Grant(packageName, xmlData, user);
 		}
 
 		public bool Undo(string packageName, XmlNode xmlData)
 		{
-			return Revoke(packageName, xmlData);
+			var user = GetUserDto(xmlData);
+			return Revoke(packageName, xmlData, user);
 		}
 
 		public XmlNode SampleXml()
@@ -42,32 +75,28 @@ namespace Merchello.Web.PackageActions
 			return helper.parseStringToXmlNode(sample);
 		}
 
-		private bool Grant(string packageName, XmlNode xmlData)
+		private bool Grant(string packageName, XmlNode xmlData, UserDto user)
 		{
-			const string grantSql = "INSERT INTO umbracoUser2app ([user], app) SELECT id, @AppName FROM umbracoUser WHERE userLogin = @UserLogin";
-			return ExecutePermissionSql(packageName, xmlData, grantSql);
+			var dto = new User2AppDto()
+			{
+				UserId = user.Id,
+				AppAlias = packageName.ToLowerInvariant()
+			};
+
+			LogHelper.Info<GrantPermissionForApp>("Granting permission to " + packageName.ToLowerInvariant() + " for user Id " + user.Id);
+
+			_database.Insert(dto);
+
+			return true;
 		}
 
-		private bool Revoke(string packageName, XmlNode xmlData)
+		private bool Revoke(string packageName, XmlNode xmlData, UserDto user)
 		{
-			const string revokeSql = "DELETE umbracoUser2app FROM umbracoUser2app JOIN umbracoUser ON umbracoUser2App.[user] = umbracoUser.id WHERE umbracoUser.userLogin = @UserLogin AND umbracoUser2App.app = @AppName";
-			return ExecutePermissionSql(packageName, xmlData, revokeSql);
-		}
-
-		private bool ExecutePermissionSql(string packageName, XmlNode xmlData, string sql)
-		{
-			var appName = this.GetAttributeValue(xmlData, "appName");
-			var userLogin = this.GetAttributeValue(xmlData, "userLogin");
-
-		    if (string.Equals(userLogin, "$currentUser", StringComparison.OrdinalIgnoreCase))
-		        userLogin = UmbracoContext.Current.UmbracoUser.LoginName; //UmbracoEnsuredPage.CurrentUser.LoginName;
-
-			var userNameParam = Application.SqlHelper.CreateParameter("@UserLogin", userLogin);
-			var appNameParam = Application.SqlHelper.CreateParameter("@AppName", appName);
-
+			
 			try
 			{
-				Application.SqlHelper.ExecuteNonQuery(sql, userNameParam, appNameParam);
+                _database.Execute("DELETE FROM umbracoUser2app WHERE app = @package", new { package = packageName.ToLowerInvariant()});
+
 				return true;
 			}
 			catch (SqlHelperException ex)
@@ -75,8 +104,9 @@ namespace Merchello.Web.PackageActions
 				LogHelper.Error<GrantPermissionForApp>(string.Format("Error in Grant User Permission for App action for package {0}.", packageName), ex);
 			}
 
-			return false;
+			return false;		    
 		}
+
 
 		private string GetAttributeValue(XmlNode node, string attributeName)
 		{

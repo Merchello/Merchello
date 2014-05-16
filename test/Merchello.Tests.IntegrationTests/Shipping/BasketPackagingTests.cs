@@ -16,7 +16,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
 {
     public class BasketPackagingTests : DatabaseIntegrationTestBase
     {
-        private IMerchelloContext _merchelloContext;
+        
         private ICustomerBase _customer;
         private IBasket _basket;
         private const int ProductCount = 4;
@@ -27,21 +27,14 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             PreTestDataWorker.DeleteAllProducts();
             PreTestDataWorker.DeleteAllItemCaches();
 
-            _merchelloContext = new MerchelloContext(
-                new ServiceContext(new PetaPocoUnitOfWorkProvider()), 
-                new CacheHelper(
-                    new NullCacheProvider(), 
-                    new NullCacheProvider(), 
-                    new NullCacheProvider()
-                    ));
 
             _customer = PreTestDataWorker.MakeExistingAnonymousCustomer();
-            _basket = Basket.GetBasket(_merchelloContext, _customer);
+            _basket = Basket.GetBasket(MerchelloContext, _customer);
 
             for(var i = 0; i < ProductCount; i++) _basket.AddItem(PreTestDataWorker.MakeExistingProduct());
             _basket.AddItem(PreTestDataWorker.MakeExistingProduct(false));
 
-            Basket.Save(_merchelloContext, _basket);
+            Basket.Save(MerchelloContext, _basket);
         }
 
         /// <summary>
@@ -79,7 +72,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             };
             
             //// Act
-            var strategy = new DefaultWarehousePackagingStrategy(_merchelloContext, _basket.Items, destination, Guid.NewGuid());
+            var strategy = new DefaultWarehousePackagingStrategy(MerchelloContext, _basket.Items, destination, Guid.NewGuid());
             var shipments = strategy.PackageShipments();
 
             //// Assert
@@ -106,7 +99,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             };
             
             //// Act
-            var shipments = _basket.PackageBasket(_merchelloContext, destination);
+            var shipments = _basket.PackageBasket(MerchelloContext, destination);
 
             //// Assert
             Assert.NotNull(shipments);

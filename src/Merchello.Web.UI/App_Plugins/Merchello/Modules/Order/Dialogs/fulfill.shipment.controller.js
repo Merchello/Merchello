@@ -8,7 +8,7 @@
      * @description
      * The controller for the fulfillment of shipments on the Order View page
      */
-    controllers.FulfillShipmentController = function ($scope, merchelloOrderService, merchelloShipmentService, notificationsService) {
+	controllers.FulfillShipmentController = function ($scope, merchelloOrderService, merchelloShipmentService, notificationsService, merchelloSettingsService) {
 
         $scope.shipMethod = {};
 
@@ -52,6 +52,17 @@
             });
         };
 
+        $scope.loadSettings = function () {
+
+        	var currencySymbolPromise = merchelloSettingsService.getCurrencySymbol();
+        	currencySymbolPromise.then(function (currencySymbol) {
+        		$scope.currencySymbol = currencySymbol;
+
+        	}, function (reason) {
+        		alert('Failed: ' + reason.message);
+        	});
+        };
+
         /**
          * @ngdoc method
          * @name init
@@ -62,6 +73,7 @@
          */
         $scope.init = function () {
 
+        	$scope.loadSettings();
             $scope.getUnFulfilledItems($scope.dialogData.key);
             $scope.getShipMethodForOrder($scope.dialogData);
             $scope.dialogData.trackingNumber = "";
@@ -71,7 +83,7 @@
         $scope.init();
     };
 
-    angular.module("umbraco").controller("Merchello.Dashboards.Order.Dialogs.FulfillShipmentController", ['$scope', 'merchelloOrderService', 'merchelloShipmentService', 'notificationsService', merchello.Controllers.FulfillShipmentController]);
+	angular.module("umbraco").controller("Merchello.Dashboards.Order.Dialogs.FulfillShipmentController", ['$scope', 'merchelloOrderService', 'merchelloShipmentService', 'notificationsService', 'merchelloSettingsService', merchello.Controllers.FulfillShipmentController]);
 
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));

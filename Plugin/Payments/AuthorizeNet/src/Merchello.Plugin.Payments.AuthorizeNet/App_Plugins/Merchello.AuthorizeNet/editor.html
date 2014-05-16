@@ -6,39 +6,32 @@
 
     <div class="umb-panel-body with-header with-footer">
         
-        <div class="well">
-            <div class="control-group row-fluid">
-                <p>API Login Id<br /></p>
-                <div class="input-prepend col-xs-12 span12">
-                    <input class="col-xs-8 span8" type="text" data-ng-model="authorizeNetSettings.LoginId">
-                </div>
+        <div class="control-group row-fluid">
+            <p>API Login Id<br /></p>
+            <div class="col-xs-12 span12">
+                <input class="col-xs-12 span12" type="text" data-ng-model="authorizeNetSettings.LoginId">
             </div>
-            <div class="control-group row-fluid">
-                <p>Transaction Key<br /></p>
-                <div class="input-prepend col-xs-12 span12">
-                    <input class="col-xs-8 span8" type="text" data-ng-model="authorizeNetSettings.TransactionKey">
-                </div>
-            </div>
-            <div class="control-group row-fluid">
-                <p>Use Sandbox?<br /></p>
-                <div class="input-prepend col-xs-12 span12">
-                    <input class="col-xs-8 span8" type="checkbox" data-ng-model="authorizeNetSettings.UseSandbox">
-                </div>
-            </div>
-            <div class="control-group row-fluid">
-                <p>Encrypt Provider Configuration?<br /></p>
-                <div class="input-prepend col-xs-12 span12">
-                    <input class="col-xs-8 span8" type="checkbox" data-ng-model="dialogData.provider.encryptExtendedData">
-                </div>
-            </div> 
-            <div class="control-group row-fluid">
-                <p>Delimited Data : {{authorizeNetSettings.DelimitedData}}</p>
-                <p>Delimited Char : {{authorizeNetSettings.DelimitedChar}}</p>                
-                <p>Relay Response : {{authorizeNetSettings.RelayResponse}}</p>
-                <p>API Version : {{authorizeNetSettings.ApiVersion}}</p>
-            </div>   
         </div>
-        
+        <div class="control-group row-fluid">
+            <p>Transaction Key<br /></p>
+            <div class="col-xs-12 span12">
+                <input class="col-xs-12 span12" type="text" data-ng-model="authorizeNetSettings.TransactionKey">
+            </div>
+        </div>
+        <div class="control-group row-fluid">
+            <label class="checkbox col-xs-12 span12">
+                <input type="checkbox" data-ng-model="authorizeNetSettings.UseSandbox"> Use Sandbox
+            </label>
+            <label class="checkbox col-xs-12 span12">
+                <input type="checkbox" data-ng-model="dialogData.provider.encryptExtendedData"> Encrypt Provider Configuration
+            </label>
+        </div>
+        <ul>
+            <li>Delimited Data: {{authorizeNetSettings.DelimitedData}}</li>
+            <li>Delimited Char: {{authorizeNetSettings.DelimitedChar}}</li>                
+            <li>Relay Response: {{authorizeNetSettings.RelayResponse}}</li>
+            <li>API Version: {{authorizeNetSettings.ApiVersion}}</li>
+        </ul>
 
     </div>
 	
@@ -46,20 +39,19 @@
 
 
 <div class="umb-panel-footer" >
-		<div class="umb-el-wrap umb-panel-buttons">
-	        <div class="btn-toolbar umb-btn-toolbar pull-right">
+	<div class="umb-el-wrap umb-panel-buttons">
+	    <div class="btn-toolbar umb-btn-toolbar pull-right">
 
-	        	<a href data-ng-click="close()" class="btn btn-link">
-	        		<localize key="general_cancel">Cancel</localize>
-				</a>
+	        <a href data-ng-click="close()" class="btn btn-link">
+	        	<localize key="general_cancel">Cancel</localize>
+			</a>
 
-				<a href
-					class="btn btn-primary"
-					data-ng-click="submit(dialogData)">
-					<localize key="buttons_save">Save</localize>
-				</a>
+			<a href
+				class="btn btn-primary"
+				data-ng-click="submit(dialogData)">
+				<localize key="buttons_save">Save</localize>
+			</a>
 
-	        </div>
-		</div>
+	    </div>
 	</div>
 </div>

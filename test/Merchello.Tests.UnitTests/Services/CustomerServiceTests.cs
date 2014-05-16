@@ -19,9 +19,11 @@ namespace Merchello.Tests.UnitTests.Services
 
         private CustomerService _customerService;
 
-
-        protected override void Initialize()
+        [SetUp]
+        public override void Setup()
         {
+            base.Setup();
+
             _customerService = new CustomerService(new MockUnitOfWorkProvider(), new RepositoryFactory());
             Before = null;
             After = null;

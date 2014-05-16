@@ -81,6 +81,19 @@ namespace Merchello.Core.Services
         IEnumerable<ICountry> GetAllCountries(string[] excludeCountryCodes);
 
         /// <summary>
+        /// Gets the next usable InvoiceNumber
+        /// </summary>
+        /// <returns></returns>
+        int GetNextInvoiceNumber(int invoicesCount = 1);
+
+        /// <summary>
+        /// Gets the next usable OrderNumber
+        /// </summary>
+        /// <param name="ordersCount"></param>
+        /// <returns></returns>
+        int GetNextOrderNumber(int ordersCount = 1);
+
+        /// <summary>
         /// Gets the complete collection of registered typefields
         /// </summary>
         /// <returns></returns>

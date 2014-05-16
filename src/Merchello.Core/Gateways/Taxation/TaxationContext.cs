@@ -16,22 +16,16 @@ namespace Merchello.Core.Gateways.Taxation
         { }
 
         /// <summary>
-        /// Resolves all active Taxation Gateway Providers
+        /// Returns an instance of an 'active' GatewayProvider associated with a GatewayMethod based given the unique Key (Guid) of the GatewayMethod
         /// </summary>
-        /// <returns>A collection of all active TypedGatewayProviderinstances</returns>
-        public override IEnumerable<TaxationGatewayProviderBase> CreateInstances()
+        /// <param name="gatewayMethodKey">The unique key (Guid) of the <see cref="IGatewayMethod"/></param>
+        /// <returns>An instantiated GatewayProvider</returns>
+        public override TaxationGatewayProviderBase GetProviderByMethodKey(Guid gatewayMethodKey)
         {
-            return GatewayProviderResolver.CreateInstances<TaxationGatewayProviderBase>(GatewayProviderType.Taxation);
-        }
-
-        /// <summary>
-        /// Resolves a taxation gateway provider by it's unique key
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns>A taxation gateway provider</returns>
-        public override TaxationGatewayProviderBase CreateInstance(Guid key)
-        {
-            return GatewayProviderResolver.CreateInstance<TaxationGatewayProviderBase>(key);
+            return
+                GetAllActivatedProviders()
+                    .FirstOrDefault(x => ((TaxationGatewayProviderBase) x)
+                        .TaxMethods.Any(y => y.Key == gatewayMethodKey)) as TaxationGatewayProviderBase;
         }
 
         /// <summary>
@@ -63,11 +57,13 @@ namespace Merchello.Core.Gateways.Taxation
 
             if(Guid.Empty.Equals(providersKey)) return new TaxCalculationResult(0,0);
 
-            var provider = GatewayProviderResolver.CreateInstance<TaxationGatewayProviderBase>(providersKey);
+            var provider = GatewayProviderResolver.GetProviderByKey<TaxationGatewayProviderBase>(providersKey);
 
             var gatewayTaxMethod = provider.GetGatewayTaxMethodByCountryCode(taxAddress.CountryCode);
 
             return gatewayTaxMethod.CalculateTaxForInvoice(invoice, taxAddress);
         }
+
+
     }
 }

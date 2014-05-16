@@ -21,10 +21,6 @@
 
         $scope.flyouts = {
             reorderVariants: false,
-            changePrices: false,
-            updateInventory: false,
-            deleteVariants: false,
-            duplicateVariants: false
         };
 
         //load the seperat css for the editor to avoid it blocking our js loading
@@ -195,173 +191,161 @@
             $scope.checkBulkVariantsSelected();
         };
 
-        $scope.changePricesFlyout = new merchello.Models.Flyout(
-            $scope.flyouts.changePrices,
-            function (isOpen) {
-                $scope.flyouts.changePrices = isOpen;
-                $scope.reorderVariants = false;
-                $scope.bulkAction = false;
-            }, {
-                confirm: function () {
-                    var selected = $scope.selectedVariants();
-                    for (var i = 0; i < selected.length; i++) {
-                        selected[i].price = $scope.changePricesFlyout.newPrice;
-                        var savepromise = merchelloProductVariantService.save(selected[i]);
-                        savepromise.then(function () {
-                            notificationsService.success("Variant saved ", "");
-                        }, function (reason) {
-                            notificationsService.error("Product Variant Save Failed", reason.message);
-                        });
-                    }
-                    notificationsService.success("Confirmed prices update", "");
-                    $scope.changePricesFlyout.close();
-                    $scope.changePricesFlyout.confirmText = "";
-                }
-            });
+        $scope.changePricesDialogConfirm = function (dialogData) {
+        	var selected = $scope.selectedVariants();
+        	for (var i = 0; i < selected.length; i++) {
+        		selected[i].price = dialogData.newPrice;
+        		var savepromise = merchelloProductVariantService.save(selected[i]);
+        		savepromise.then(function () {
+        			notificationsService.success("Variant saved ", "");
+        		}, function (reason) {
+        			notificationsService.error("Product Variant Save Failed", reason.message);
+        		});
+        	}
+        	notificationsService.success("Confirmed prices update", "");
+        };
 
-        $scope.updateInventoryFlyout = new merchello.Models.Flyout(
-            $scope.flyouts.updateInventory,
-            function (isOpen) {
-                $scope.flyouts.updateInventory = isOpen;
-                $scope.reorderVariants = false;
-                $scope.bulkAction = false;
-            }, {
-                confirm: function () {
-                    var selected = $scope.selectedVariants();
-                    for (var i = 0; i < selected.length; i++) {
-                        selected[i].globalInventoryChanged($scope.updateInventoryFlyout.newInventory);
-                        var savepromise = merchelloProductVariantService.save(selected[i]);
-                        savepromise.then(function () {
-                            notificationsService.success("Product Variant Saved", "");
-                        }, function (reason) {
-                            notificationsService.error("Product Variant Save Failed", reason.message);
-                        });
-                    }
-                    notificationsService.success("Confirmed inventory update", "");
-                    $scope.updateInventoryFlyout.close();
-                    $scope.updateInventoryFlyout.newInventory = "";
-                }
-            });
+        $scope.changePrices = function () {
+        	dialogService.open({
+        		template: '/App_Plugins/Merchello/Modules/Catalog/Dialogs/product.changeprices.html',
+        		show: true,
+        		callback: $scope.changePricesDialogConfirm
+        	});
+        };
 
-        $scope.deleteVariantsFlyout = new merchello.Models.Flyout(
-            $scope.flyouts.deleteVariants,
-            function (isOpen) {
-                $scope.flyouts.deleteVariants = isOpen;
-                $scope.reorderVariants = false;
-                $scope.bulkAction = false;
-            }, {
-                confirm: function () {
-                    if ($scope.deleteVariantsFlyout.confirmText == "DELETE")
-                    {
-                        var selected = $scope.selectedVariants();
-                        var promisesArray = [];
+        $scope.updateInventoryDialogConfirm = function (dialogData) {
+        	var selected = $scope.selectedVariants();
+        	for (var i = 0; i < selected.length; i++) {
+        		selected[i].globalInventoryChanged(dialogData.newInventory);
+        		var savepromise = merchelloProductVariantService.save(selected[i]);
+        		savepromise.then(function () {
+        			notificationsService.success("Product Variant Saved", "");
+        		}, function (reason) {
+        			notificationsService.error("Product Variant Save Failed", reason.message);
+        		});
+        	}
+        	notificationsService.success("Confirmed inventory update", "");
+		};
 
-                        for (var i = 0; i < selected.length; i++) {
-                            promisesArray.push(merchelloProductVariantService.deleteVariant(selected[i].key));
-                        }
+        $scope.updateInventory = function () {
+        	dialogService.open({
+        		template: '/App_Plugins/Merchello/Modules/Catalog/Dialogs/product.updateinventory.html',
+        		show: true,
+        		callback: $scope.updateInventoryDialogConfirm
+        	});
+        };
 
-                        var promise = $q.all(promisesArray);
+        $scope.deleteVariantsDialogConfirm = function (dialogData) {
+        	if (dialogData.confirmText == "DELETE") {
+        		var selected = $scope.selectedVariants();
+        		var promisesArray = [];
 
-                        promise.then(function () {
+        		for (var i = 0; i < selected.length; i++) {
+        			promisesArray.push(merchelloProductVariantService.deleteVariant(selected[i].key));
+        		}
 
-                            var promiseLoadProduct = merchelloProductService.getByKey($scope.product.key);
-                            promiseLoadProduct.then(function (dbproduct) {
-                                $scope.product = new merchello.Models.Product(dbproduct);
+        		var promise = $q.all(promisesArray);
 
-                                notificationsService.success("Variants deleted");
-                            }, function (reason) {
-                                notificationsService.error("Product Variant Delete Failed", reason.message);
-                            });
-                        }, function (reason) {
-                            notificationsService.error("Product Variant Delete Failed", reason.message);
-                        });
-                        $scope.deleteVariantsFlyout.close();
-                        $scope.deleteVariantsFlyout.confirmText = "";
-                    }
-                    else
-                    {
-                        notificationsService.error("Type the word DELETE in the box to confirm deletion", "");
-                    }
-                }
-            });
+        		promise.then(function () {
 
-        $scope.duplicateVariantsFlyout = new merchello.Models.Flyout(
-            $scope.flyouts.duplicateVariants,
-            function (isOpen) {
-                $scope.flyouts.duplicateVariants = isOpen;
-                $scope.reorderVariants = false;
-                $scope.bulkAction = false;
-            }, {
-                confirm: function () {
-                    var submittedChoiceName = $scope.duplicateVariantsFlyout.newChoiceName;
-                    if (submittedChoiceName != undefined) {
-                        if (submittedChoiceName.length > 0) {
+        			var promiseLoadProduct = merchelloProductService.getByKey($scope.product.key);
+        			promiseLoadProduct.then(function (dbproduct) {
+        				$scope.product = new merchello.Models.Product(dbproduct);
 
-                            var options = [];
-                            for (var o = 0; o < $scope.product.productOptions.length; o++) {
+        				notificationsService.success("Variants deleted");
+        			}, function (reason) {
+        				notificationsService.error("Product Variant Delete Failed", reason.message);
+        			});
+        		}, function (reason) {
+        			notificationsService.error("Product Variant Delete Failed", reason.message);
+        		});
+        	}
+        	else {
+        		notificationsService.error("Type the word DELETE in the box to confirm deletion", "");
+        	}
+        };
 
-                                var currentOption = $scope.product.productOptions[o];
+        $scope.deleteVariants = function () {
+        	dialogService.open({
+        		template: '/App_Plugins/Merchello/Modules/Catalog/Dialogs/product.deletevariants.html',
+        		show: true,
+        		callback: $scope.deleteVariantsDialogConfirm
+        	});
+        };
 
-                                var tempOption = new merchello.Models.ProductOption();
-                                tempOption.name = currentOption.name;
-                                tempOption.key = currentOption.key;
-                                tempOption.sortOrder = currentOption.sortOrder;
+        $scope.duplicateVariantsDialogConfirm = function (option) {
+        	var submittedChoiceName = option.newChoiceName;
+        	if (submittedChoiceName != undefined) {
+        		if (submittedChoiceName.length > 0) {
 
-                                if (currentOption.key == $scope.duplicateVariantsFlyout.model.key) {
-                                    var foundChoice = currentOption.findChoiceByName(submittedChoiceName);
-                                    if (foundChoice != undefined)
-                                    {
-                                        tempOption.choices.push(foundChoice);
-                                    }
-                                    else
-                                    {
-                                        currentOption.addChoice(submittedChoiceName);
-                                        tempOption.addChoice(submittedChoiceName);
-                                    }
-                                }
+        			var options = [];
+        			for (var o = 0; o < $scope.product.productOptions.length; o++) {
 
-                                options.push(tempOption);
-                            }
+        				var currentOption = $scope.product.productOptions[o];
 
-                            var selected = $scope.selectedVariants();
-                            for (var i = 0; i < selected.length; i++) {
+        				var tempOption = new merchello.Models.ProductOption();
+        				tempOption.name = currentOption.name;
+        				tempOption.key = currentOption.key;
+        				tempOption.sortOrder = currentOption.sortOrder;
 
-                                var thisVariant = selected[i];
+        				if (currentOption.key == option.key) {
+        					var foundChoice = currentOption.findChoiceByName(submittedChoiceName);
+        					if (foundChoice != undefined) {
+        						tempOption.choices.push(foundChoice);
+        					}
+        					else {
+        						currentOption.addChoice(submittedChoiceName);
+        						tempOption.addChoice(submittedChoiceName);
+        					}
+        				}
 
-                                for (var a = 0; a < thisVariant.attributes.length; a++)
-                                {
-                                    var attr = thisVariant.attributes[a];
-                                    if (attr.optionKey != $scope.duplicateVariantsFlyout.model.key)
-                                    {
-                                        // add this attribute to the correct option
-                                        var myOption = attr.findMyOption(options);
+        				options.push(tempOption);
+        			}
 
-                                        if (!myOption.choiceExists(attr)) {
-                                            myOption.choices.push(attr);
-                                        }
-                                    }
-                                }
-                            }
+        			var selected = $scope.selectedVariants();
+        			for (var i = 0; i < selected.length; i++) {
 
-                            merchelloProductService.createVariantsFromDetachedOptionsList($scope.product, options);
+        				var thisVariant = selected[i];
 
-                            // Save immediately
-                            var savepromise = merchelloProductService.updateProductWithVariants($scope.product);
-                            savepromise.then(function (product) {
-                                $scope.product = product;
+        				for (var a = 0; a < thisVariant.attributes.length; a++) {
+        					var attr = thisVariant.attributes[a];
+        					if (attr.optionKey != option.key) {
+        						// add this attribute to the correct option
+        						var myOption = attr.findMyOption(options);
 
-                                notificationsService.success("Confirmed variants duplicated");
-                                $scope.duplicateVariantsFlyout.close();
-                                $scope.duplicateVariantsFlyout.newChoiceName = "";
+        						if (!myOption.choiceExists(attr)) {
+        							myOption.choices.push(attr);
+        						}
+        					}
+        				}
+        			}
 
-                            }, function (reason) {
-                                notificationsService.error("Product Save Failed", reason.message);
-                            });
-                        }
-                    }
-                }
-            });
+        			merchelloProductService.createVariantsFromDetachedOptionsList($scope.product, options);
 
+        			// Save immediately
+        			var savepromise = merchelloProductService.updateProductWithVariants($scope.product);
+        			savepromise.then(function (product) {
+        				$scope.product = product;
+        				notificationsService.success("Confirmed variants duplicated");
+        			}, function (reason) {
+        				notificationsService.error("Product Save Failed", reason.message);
+        			});
+        		}
+        	}
+        };
+
+        $scope.duplicateVariants = function (option) {
+        	if (option == undefined) {
+        		option = new merchello.Models.ProductOption();
+        	}
+
+        	dialogService.open({
+        		template: '/App_Plugins/Merchello/Modules/Catalog/Dialogs/product.duplicatevariants.html',
+        		show: true,
+        		callback: $scope.duplicateVariantsDialogConfirm,
+        		dialogData: option
+        	});
+        };
 
         $scope.selectTab = function(tabname) {
             $scope.currentTab = tabname;

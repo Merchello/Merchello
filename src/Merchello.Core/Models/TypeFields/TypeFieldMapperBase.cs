@@ -2,7 +2,7 @@
 
 namespace Merchello.Core.Models.TypeFields
 {
-    internal abstract class TypeFieldMapperBase
+    public abstract class TypeFieldMapperBase
     {
         /// <summary>
         /// An empty type field

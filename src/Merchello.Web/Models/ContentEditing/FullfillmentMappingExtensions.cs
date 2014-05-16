@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Data.SqlClient;
-using System.Globalization;
 using System.Linq;
-using System.Security.Cryptography;
 using Merchello.Core.Gateways;
+using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Shipping.FixedRate;
+using Merchello.Core.Gateways.Taxation;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Gateways.Shipping;
-using Umbraco.Core;
-using Umbraco.Core.IO;
 
 namespace Merchello.Web.Models.ContentEditing
 {
@@ -93,12 +90,12 @@ namespace Merchello.Web.Models.ContentEditing
 
         #region GatewayProviderDisplay
 
-        internal static GatewayProviderDisplay ToGatewayProviderDisplay(this IGatewayProvider gatewayProvider)
+        internal static GatewayProviderDisplay ToGatewayProviderDisplay(this IGatewayProviderSettings gatewayProviderSettings)
         {
-            return AutoMapper.Mapper.Map<GatewayProviderDisplay>(gatewayProvider);
+            return AutoMapper.Mapper.Map<GatewayProviderDisplay>(gatewayProviderSettings);
         }
 
-        internal static IGatewayProvider ToGatewayProvider(this GatewayProviderDisplay gatewayProvider, IGatewayProvider destination)
+        internal static IGatewayProviderSettings ToGatewayProvider(this GatewayProviderDisplay gatewayProvider, IGatewayProviderSettings destination)
         {
             if (gatewayProvider.Key != Guid.Empty) destination.Key = gatewayProvider.Key;
             // type key and typeFullName should be handled by the resolver 
@@ -106,7 +103,7 @@ namespace Merchello.Web.Models.ContentEditing
             destination.Description = gatewayProvider.Description;
             destination.EncryptExtendedData = gatewayProvider.EncryptExtendedData;
             
-            ((GatewayProvider)destination).ExtendedData = gatewayProvider.ExtendedData.AsExtendedDataCollection();
+            ((GatewayProviderSettings)destination).ExtendedData = gatewayProvider.ExtendedData.AsExtendedDataCollection();
 
             return destination;
         }
@@ -151,6 +148,11 @@ namespace Merchello.Web.Models.ContentEditing
             return AutoMapper.Mapper.Map<PaymentMethodDisplay>(paymentMethod);
         }
 
+        internal static PaymentMethodDisplay ToPaymentMethodDisplay(this IPaymentGatewayMethod paymentGatewayMethod)
+        {
+            return AutoMapper.Mapper.Map<PaymentMethodDisplay>(paymentGatewayMethod);
+        }
+
         internal static IPaymentMethod ToPaymentMethod(this PaymentMethodDisplay paymentMethodDisplay, IPaymentMethod destination)
         {
             if (paymentMethodDisplay.Key != Guid.Empty) destination.Key = paymentMethodDisplay.Key;
@@ -180,6 +182,11 @@ namespace Merchello.Web.Models.ContentEditing
             return AutoMapper.Mapper.Map<ShipMethodDisplay>(shipMethod);      
         }
 
+        internal static ShipMethodDisplay ToShipMethodDisplay(this IShippingGatewayMethod shippingGatewayMethod)
+        {
+            return AutoMapper.Mapper.Map<ShipMethodDisplay>(shippingGatewayMethod);
+        }
+
         #endregion
 
         #region IShipMethod
@@ -193,16 +200,17 @@ namespace Merchello.Web.Models.ContentEditing
             destination.Name = shipMethodDisplay.Name;
             destination.ServiceCode = shipMethodDisplay.ServiceCode;
             destination.Surcharge = shipMethodDisplay.Surcharge;
-            destination.Taxable = shipMethodDisplay.Taxable;
+            destination.Taxable = shipMethodDisplay.Taxable;           
 
             foreach (var shipProvinceDisplay in shipMethodDisplay.Provinces)
             {
                 IShipProvince destinationShipProvince;
 
                 var matchingItems = destination.Provinces.Where(x => x.Code == shipProvinceDisplay.Code);
-                if (matchingItems.Count() > 0)
+                var shipProvinces = matchingItems as IShipProvince[] ?? matchingItems.ToArray();
+                if (shipProvinces.Any())
                 {
-                    var existingShipProvince = matchingItems.First();
+                    var existingShipProvince = shipProvinces.First();
                     if (existingShipProvince != null)
                     {
                         destinationShipProvince = existingShipProvince;
@@ -335,6 +343,7 @@ namespace Merchello.Web.Models.ContentEditing
         internal static IShipment ToShipment(this ShipmentDisplay shipmentDisplay, IShipment destination)
         {
             if (shipmentDisplay.Key != Guid.Empty) destination.Key = shipmentDisplay.Key;
+            destination.ShippedDate = shipmentDisplay.ShippedDate;
             destination.FromOrganization = destination.FromOrganization;
             destination.FromName = shipmentDisplay.FromName;
             destination.FromAddress1 = shipmentDisplay.FromAddress1;
@@ -595,6 +604,11 @@ namespace Merchello.Web.Models.ContentEditing
         internal static TaxMethodDisplay ToTaxMethodDisplay(this ITaxMethod taxMethod)
         {
            return AutoMapper.Mapper.Map<TaxMethodDisplay>(taxMethod);     
+        }
+
+        internal static TaxMethodDisplay ToTaxMethodDisplay(this ITaxationGatewayMethod taxGatewayMethod)
+        {
+            return AutoMapper.Mapper.Map<TaxMethodDisplay>(taxGatewayMethod);
         }
 
         #endregion

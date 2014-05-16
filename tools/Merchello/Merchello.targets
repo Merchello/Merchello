@@ -66,7 +66,7 @@
 							 XmlFileName="$(MSBuildProjectDirectory)\nuspec\Merchello.Core.nuspec"
 							 XPath="nu:package/nu:metadata/nu:version"
 							 Value="$(AssemblyInformationVersion)" />
-				
+
 	</Target>
 
 </Project>

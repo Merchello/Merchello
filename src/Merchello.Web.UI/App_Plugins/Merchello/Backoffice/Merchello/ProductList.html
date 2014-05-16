@@ -83,10 +83,11 @@
                             <!--<td><input type="checkbox" data-ng-model="product.selected"/></td>-->
                             <td>{{product.name}}</td>
                             <td>{{product.sku}}</td>
-                            <td>{{product.price | currency}}</td>
+                            <td data-ng-hide="product.hasVariants">{{product.price | currency : currencySymbol}}</td>
+                            <td data-ng-show="product.hasVariants">{{product.variantsMinimumPrice() | currency : currencySymbol}} - {{product.variantsMaximumPrice() | currency : currencySymbol}}</td>
                             <td>
-                                <a data-ng-hide="product.hasVariants" class="btn btn-default btn-xs btn-mini" data-ng-href="#/merchello/merchello/ProductVariantEdit/{{product.key}}">edit</a>
-                                <a data-ng-show="product.hasVariants" class="btn btn-default btn-xs btn-mini" data-ng-href="#/merchello/merchello/ProductEdit/{{product.key}}">edit</a>
+                                <a data-ng-hide="product.hasVariants" class="btn btn-default btn-xs btn-mini" data-ng-href="#/merchello/merchello/ProductVariantEdit/{{product.key}}"><i class="icon-edit"></i></a>
+                                <a data-ng-show="product.hasVariants" class="btn btn-default btn-xs btn-mini" data-ng-href="#/merchello/merchello/ProductEdit/{{product.key}}"><i class="icon-edit"></i></a>
                             </td>
                         </tr>
                     </tbody>
@@ -103,8 +104,8 @@
                 </div>
                                 
                 <div class="pager well" data-ng-show="products.length == 0">
-                    You have no products.  
-                    How about creating one now?  Simply press the New Product button.
+                    <h5>You have no products.</h5>
+                    <p>How about creating one now?  Simply press the New Product button.</p>
                     <a href="#/merchello/merchello/ProductVariantEdit/do?create" class="btn btn-primary">New Product</a>
                 </div>
 

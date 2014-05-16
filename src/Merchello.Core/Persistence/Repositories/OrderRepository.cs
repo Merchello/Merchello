@@ -19,14 +19,14 @@ namespace Merchello.Core.Persistence.Repositories
     /// </summary>
     internal class OrderRepository : MerchelloPetaPocoRepositoryBase<IOrder>, IOrderRepository
     {
-        private readonly ILineItemRepository _lineItemRepository;
+        private readonly ILineItemRepositoryBase<IOrderLineItem> _orderLineItemRepository;
 
-        public OrderRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILineItemRepository lineItemRepository)
+        public OrderRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILineItemRepositoryBase<IOrderLineItem> orderLineItemRepository)
             : base(work, cache)
         {
-            Mandate.ParameterNotNull(lineItemRepository, "lineItemRepository");
+            Mandate.ParameterNotNull(orderLineItemRepository, "lineItemRepository");
 
-            _lineItemRepository = lineItemRepository;
+            _orderLineItemRepository = orderLineItemRepository;
         }
 
         protected override IOrder PerformGet(Guid key)
@@ -121,7 +121,7 @@ namespace Merchello.Core.Persistence.Repositories
             ((Order)entity).ExamineId = dto.OrderIndexDto.Id;
 
 
-            _lineItemRepository.SaveLineItem(entity.Items, entity.Key);
+            _orderLineItemRepository.SaveLineItem(entity.Items, entity.Key);
 
             entity.ResetDirtyProperties();
 
@@ -137,7 +137,7 @@ namespace Merchello.Core.Persistence.Repositories
 
             Database.Update(dto);
 
-            _lineItemRepository.SaveLineItem(entity.Items, entity.Key);
+            _orderLineItemRepository.SaveLineItem(entity.Items, entity.Key);
 
             entity.ResetDirtyProperties();
 
@@ -169,5 +169,6 @@ namespace Merchello.Core.Persistence.Repositories
 
             return collection;
         }
+
     }
 }

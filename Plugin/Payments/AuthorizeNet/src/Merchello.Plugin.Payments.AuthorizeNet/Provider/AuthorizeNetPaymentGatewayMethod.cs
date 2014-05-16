@@ -1,4 +1,5 @@
 ﻿using Merchello.Core;
+using Merchello.Core.Gateways;
 using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
@@ -10,6 +11,7 @@ namespace Merchello.Plugin.Payments.AuthorizeNet.Provider
     /// <summary>
     /// Represents an AuthorizeNet Payment Method
     /// </summary>
+    [GatewayMethodEditor("Authorize.Net Payment Method Editor", "~/App_Plugins/Merchello.AuthorizeNet/paymentmethod.html")]
     public class AuthorizeNetPaymentGatewayMethod : PaymentGatewayMethodBase, IAuthorizeNetPaymentGatewayMethod
     {
         private readonly AuthorizeNetPaymentProcessor _processor;

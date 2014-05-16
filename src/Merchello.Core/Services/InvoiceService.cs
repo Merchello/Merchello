@@ -94,7 +94,7 @@ namespace Merchello.Core.Services
             if (!((Invoice) invoice).HasIdentity && invoice.InvoiceNumber <= 0)
             {
                 // We have to generate a new 'unique' invoice number off the configurable value
-                ((Invoice) invoice).InvoiceNumber = ((StoreSettingService) _storeSettingService).GetNextInvoiceNumber();
+                ((Invoice) invoice).InvoiceNumber = _storeSettingService.GetNextInvoiceNumber();
             }
 
             var includesStatusChange = ((Invoice) invoice).IsPropertyDirty("InvoiceStatusKey") &&
@@ -141,7 +141,7 @@ namespace Merchello.Core.Services
             if (newInvoiceCount > 0)
             {
                 var lastInvoiceNumber =
-                    ((StoreSettingService) _storeSettingService).GetNextInvoiceNumber(newInvoiceCount);
+                    _storeSettingService.GetNextInvoiceNumber(newInvoiceCount);
                 foreach (var newInvoice in invoicesArray.Where(x => x.InvoiceNumber <= 0 && !((Invoice) x).HasIdentity))
                 {
                     ((Invoice) newInvoice).InvoiceNumber = lastInvoiceNumber;

@@ -1,12 +1,4 @@
-﻿using System.Collections.Generic;
-using Merchello.Core.Models;
-using Merchello.Core.Models.Rdbms;
-using Merchello.Core.Persistence.Querying;
-using NUnit.Framework;
-using Umbraco.Core;
-using Umbraco.Core.Persistence;
-using Umbraco.Core.Persistence.Querying;
-using Umbraco.Core.Persistence.SqlSyntax;
+﻿using NUnit.Framework;
 
 namespace Merchello.Tests.Base.SqlSyntax
 {

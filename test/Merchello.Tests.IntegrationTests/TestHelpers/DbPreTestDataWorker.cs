@@ -454,10 +454,10 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
         public void ValidateDatabaseSetup()
         {
-            if (!Database.TableExist("merchGatewayProvider"))
+            if (!Database.TableExist("merchGatewayProviderSettings"))
                 RebuildDatabase();
     
-            var providerDtos =  Database.Query<GatewayProviderDto>("SELECT * FROM merchGatewayProvider");
+            var providerDtos =  Database.Query<GatewayProviderSettingsDto>("SELECT * FROM merchGatewayProviderSettings");
             var warehouseDtos = Database.Query<WarehouseDto>("SELECT * FROM merchWarehouse");
             var catalogDtos =   Database.Query<WarehouseCatalogDto>("SELECT * FROM merchWarehouseCatalog");
             var typeFieldDtos = Database.Query<TypeFieldDto>("SELECT * FROM merchTypeField");
@@ -489,7 +489,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
             baseDataCreation.InitializeBaseData("merchInvoiceStatus");
             baseDataCreation.InitializeBaseData("merchOrderStatus");
             baseDataCreation.InitializeBaseData("merchWarehouse");
-            baseDataCreation.InitializeBaseData("merchGatewayProvider");
+            baseDataCreation.InitializeBaseData("merchGatewayProviderSettings");
             baseDataCreation.InitializeBaseData("merchStoreSetting");
         }
 

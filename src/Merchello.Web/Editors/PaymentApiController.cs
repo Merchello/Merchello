@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Merchello.Core;
+using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Merchello.Web.Models;
@@ -82,6 +83,24 @@ namespace Merchello.Web.Editors
         }
 
 
+		/// <summary>
+		/// Returns a collection of applied payments given an Invoice id (key)
+		/// 
+		/// GET /umbraco/Merchello/PaymentApi/GetAppliedPaymentsByInvoice/{guid}
+		/// </summary>
+		public IEnumerable<AppliedPaymentDisplay> GetAppliedPaymentsByInvoice(Guid id)
+		{
+			var appliedPayments = _paymentService.GetAppliedPaymentsByInvoiceKey(id);
+
+			if (appliedPayments == null)
+			{
+				throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+			}
+
+			var stuff = appliedPayments.Select(x => x.ToAppliedPaymentDisplay());
+			return stuff;
+		}
+
         /// <summary>
         /// Returns a payment for an AuthorizePayment PaymentRequest
         /// 
@@ -91,7 +110,6 @@ namespace Merchello.Web.Editors
         public PaymentDisplay AuthorizePayment(PaymentRequest request)
         {
             var processor = new PaymentProcessor(MerchelloContext, request);
-
             var authorize = processor.Authorize();
 
             if (!authorize.Payment.Success)
@@ -118,6 +136,15 @@ namespace Merchello.Web.Editors
 
             return capture.Payment.Result.ToPaymentDisplay();
         }
+
+		/// <summary>
+		/// PaymentProcessor.Capture()
+		/// </summary>
+		public IPaymentResult ComplitePayment(PaymentRequest request)
+		{
+			var processor = new PaymentProcessor(MerchelloContext, request);
+			return processor.Capture();
+		}
 
         /// <summary>
         /// Returns a payment for an AuthorizeCapturePayment PaymentRequest

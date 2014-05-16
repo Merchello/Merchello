@@ -1,6 +1,10 @@
-﻿<div>
+﻿<div class="merchello-controls">
         
-        <table class="table table-striped merchello-striped-table settings-table shipping-table clear">
+        <table class="table table-striped merchello-striped-table settings-table shipping-table">
+            <thead>
+                <th>Provider Name</th>
+                <th colspan="2">Description</th>
+            </thead>
             <tbody>
                 <tr data-ng-repeat="gatewayProvider in providerList">
                     <td>{{gatewayProvider.name}}</td>
@@ -9,7 +13,7 @@
                         <div class="btn-group">
                         <a data-ng-click="activate({provider: gatewayProvider})" data-ng-hide="gatewayProvider.activated" class="btn btn-default btn-xs btn-mini">activate</a>
                         <a data-ng-click="deactivate({provider: gatewayProvider})" data-ng-show="gatewayProvider.activated" class="btn btn-warning btn-xs btn-mini">deactivate</a>
-                        <a data-ng-click="configure({provider: gatewayProvider})" data-ng-show="gatewayProvider.displayEditor()" class="btn btn-default btn-xs btn-mini">edit</a>
+                        <a data-ng-click="configure({provider: gatewayProvider})" data-ng-show="gatewayProvider.displayEditor()" class="btn btn-default btn-xs btn-mini"><i class="icon-edit"></i></a>
                         </div>
                     </td>
                     

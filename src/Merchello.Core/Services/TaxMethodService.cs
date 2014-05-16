@@ -61,7 +61,7 @@ namespace Merchello.Core.Services
         {
             if(CountryTaxRateExists(providerKey, country.CountryCode)) return Attempt<ITaxMethod>.Fail(new ConstraintException("A TaxMethod already exists for the provider for the countryCode '" + country.CountryCode + "'"));
 
-            var countryTaxRate = new TaxMethod(providerKey, country.CountryCode)
+            var taxMethod = new TaxMethod(providerKey, country.CountryCode)
                 {
                     Name = country.CountryCode == "ELSE" ? "Everywhere Else" : country.Name,
                     PercentageTaxRate = percentageTaxRate,
@@ -69,10 +69,10 @@ namespace Merchello.Core.Services
                 };
 
             if(raiseEvents)
-            if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<ITaxMethod>(countryTaxRate), this))
+            if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<ITaxMethod>(taxMethod), this))
             {
-                countryTaxRate.WasCancelled = false;
-                return Attempt<ITaxMethod>.Fail(countryTaxRate);
+                taxMethod.WasCancelled = false;
+                return Attempt<ITaxMethod>.Fail(taxMethod);
             }
 
             using (new WriteLock(Locker))
@@ -80,14 +80,14 @@ namespace Merchello.Core.Services
                 var uow = _uowProvider.GetUnitOfWork();
                 using (var repository = _repositoryFactory.CreateTaxMethodRepository(uow))
                 {
-                    repository.AddOrUpdate(countryTaxRate);
+                    repository.AddOrUpdate(taxMethod);
                     uow.Commit();
                 }
             }
 
-            if(raiseEvents) Created.RaiseEvent(new Events.NewEventArgs<ITaxMethod>(countryTaxRate), this);
+            if(raiseEvents) Created.RaiseEvent(new Events.NewEventArgs<ITaxMethod>(taxMethod), this);
 
-            return Attempt<ITaxMethod>.Succeed(countryTaxRate);
+            return Attempt<ITaxMethod>.Succeed(taxMethod);
         }
 
         private bool CountryTaxRateExists(Guid providerKey, string countryCode)
@@ -240,7 +240,7 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Gets a <see cref="ITaxMethod"/> based on a provider and country code
         /// </summary>
-        /// <param name="providerKey">The unique 'key' of the <see cref="IGatewayProvider"/></param>
+        /// <param name="providerKey">The unique 'key' of the <see cref="IGatewayProviderSettings"/></param>
         /// <param name="countryCode">The country code of the <see cref="ITaxMethod"/></param>
         /// <returns><see cref="ITaxMethod"/></returns>
         public ITaxMethod GetTaxMethodByCountryCode(Guid providerKey, string countryCode)
