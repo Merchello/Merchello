@@ -32,6 +32,7 @@ namespace Merchello.Core.Services
         private Lazy<IShipRateTierService> _shipRateTierService; 
         private Lazy<IShipmentService> _shipmentService; 
         private Lazy<IWarehouseService> _warehouseService;
+	    private Lazy<INotificationMessageService> _notificationMessageService; 
 
         /// <summary>
         /// Constructor
@@ -104,6 +105,9 @@ namespace Merchello.Core.Services
 
             if(_warehouseService == null)
                 _warehouseService = new Lazy<IWarehouseService>(() => new WarehouseService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+
+			if (_notificationMessageService == null)
+				_notificationMessageService = new Lazy<INotificationMessageService>(() => new NotificationMessageService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
         }
 
 
@@ -227,9 +231,16 @@ namespace Merchello.Core.Services
         public IWarehouseService WarehouseService
         {
             get { return _warehouseService.Value; }
-
         }
-     
+
+		/// <summary>
+		/// Gets the <see cref="INotificationMessageService"/>
+		/// </summary>
+		public INotificationMessageService NotificationMessageService
+		{
+			get { return _notificationMessageService.Value; }
+		}
+
         #endregion
     }
 }

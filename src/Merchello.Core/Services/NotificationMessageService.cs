@@ -42,7 +42,7 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Saves a single instance of <see cref="INotificationMessage"/>
         /// </summary>
-        /// <param name="notificationMessage">The <see cref="NotificationMessage"/> to be saved</param>
+        /// <param name="notificationMessage">The <see cref="INotificationMessage"/> to be saved</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         public void Save(INotificationMessage notificationMessage, bool raiseEvents = true)
         {
@@ -130,7 +130,6 @@ namespace Merchello.Core.Services
         /// Gets a <see cref="INotificationMessage"/> by it's unique key (Guid)
         /// </summary>
         /// <param name="key">The key (Guid) for the <see cref="INotificationMessage"/> to be retrieved</param>
-        /// <returns>Optional boolean indicating whether or not to raise events</returns>
         public INotificationMessage GetByKey(Guid key)
         {
             using (var repository = _repositoryFactory.CreateNotificationMessageRepository(_uowProvider.GetUnitOfWork()))
@@ -138,6 +137,18 @@ namespace Merchello.Core.Services
                 return repository.Get(key);
             }
         }
+
+		/// <summary>
+		/// Gets a collection of <see cref="INotificationMessage"/> by list of unique key (Guid)
+		/// </summary>
+		/// <param name="keys">The keys (Guid) for the collection of <see cref="INotificationMessage"/> to be retrieved</param>
+		public IEnumerable<INotificationMessage> GetByKeys(IEnumerable<Guid> keys)
+		{
+			using (var repository = _repositoryFactory.CreateNotificationMessageRepository(_uowProvider.GetUnitOfWork()))
+			{
+				return repository.GetAll(keys.ToArray());
+			}
+		}
 
         /// <summary>
         /// Gets a collection of <see cref="INotificationMessage"/>s base on the notification method
