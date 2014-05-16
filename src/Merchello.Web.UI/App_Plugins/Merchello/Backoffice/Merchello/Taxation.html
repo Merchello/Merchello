@@ -43,12 +43,13 @@
                                 <tbody>
                                     <tr data-ng-repeat="country in availableCountries | orderBy: 'sortHelper'">
                                         <td class="col-xs-4 span4"><h4 data-ng-bind="country.countryName"></h4></td>
-                                        <td class="col-xs-5 span5">
+                                        <td class="col-xs-4 span4">
                                             <select name="method-type" class="col-xs-12 span12" data-ng-change="providerChange(country.method, country.method.provider)" data-ng-model="country.method.provider" data-ng-options="p.name for p in taxationGatewayProviders track by p.key"></select>
+                                        </td>
+                                        <td class="col-xs-3 span3">
                                             <div data-ng-show="country.method.hasProvinces">
-                                                <a data-ng-click="editTaxMethodProvinces(country)" class="btn">Edit Province Rates</a>
+                                                <a data-ng-click="editTaxMethodProvinces(country)" class="btn btn-xs btn-mini"><i class="icon-edit"></i></a>
                                             </div>
-
                                         </td>
                                         <td class="col-xs-3 span3">
                                             <div class="input-append" data-ng-show="country.method.provider.key == 'a4ad4331-c278-4231-8607-925e0839a6cd'">

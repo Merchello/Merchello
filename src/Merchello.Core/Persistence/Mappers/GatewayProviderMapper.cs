@@ -14,13 +14,13 @@ namespace Merchello.Core.Persistence.Mappers
         {
             if (!PropertyInfoCache.IsEmpty) return;
 
-            CacheMap<GatewayProvider, GatewayProviderDto>(src => src.Key, dto => dto.Key);
-            CacheMap<GatewayProvider, GatewayProviderDto>(src => src.ProviderTfKey, dto => dto.ProviderTfKey);
-            CacheMap<GatewayProvider, GatewayProviderDto>(src => src.Name, dto => dto.Name);
-            CacheMap<GatewayProvider, GatewayProviderDto>(src => src.Description, dto => dto.Description);
-            CacheMap<GatewayProvider, GatewayProviderDto>(src => src.EncryptExtendedData, dto => dto.EncryptExtendedData);
-            CacheMap<GatewayProvider, GatewayProviderDto>(src => src.UpdateDate, dto => dto.UpdateDate);
-            CacheMap<GatewayProvider, GatewayProviderDto>(src => src.CreateDate, dto => dto.CreateDate);
+            CacheMap<GatewayProviderSettings, GatewayProviderSettingsDto>(src => src.Key, dto => dto.Key);
+            CacheMap<GatewayProviderSettings, GatewayProviderSettingsDto>(src => src.ProviderTfKey, dto => dto.ProviderTfKey);
+            CacheMap<GatewayProviderSettings, GatewayProviderSettingsDto>(src => src.Name, dto => dto.Name);
+            CacheMap<GatewayProviderSettings, GatewayProviderSettingsDto>(src => src.Description, dto => dto.Description);
+            CacheMap<GatewayProviderSettings, GatewayProviderSettingsDto>(src => src.EncryptExtendedData, dto => dto.EncryptExtendedData);
+            CacheMap<GatewayProviderSettings, GatewayProviderSettingsDto>(src => src.UpdateDate, dto => dto.UpdateDate);
+            CacheMap<GatewayProviderSettings, GatewayProviderSettingsDto>(src => src.CreateDate, dto => dto.CreateDate);
         }
     }
 }

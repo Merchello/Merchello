@@ -46,7 +46,7 @@ namespace Merchello.Web.Editors
         {
             try
             {
-                var provider = _paymentContext.CreateInstance(id);
+                var provider = _paymentContext.GetProviderByKey(id);
 
                 var resources = provider.ListResourcesOffered();
 
@@ -73,7 +73,7 @@ namespace Merchello.Web.Editors
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
 
-            return providers.Select(provider => provider.ToGatewayProviderDisplay());
+            return providers.Select(provider => provider.GatewayProviderSettings.ToGatewayProviderDisplay());
         }
 
         /// <summary>
@@ -92,7 +92,8 @@ namespace Merchello.Web.Editors
 
             foreach (var method in provider.PaymentMethods)
             {
-                yield return method.ToPaymentMethodDisplay();
+                // we need the actual PaymentGatewayProvider so we can grab the if present
+                yield return provider.GetPaymentGatewayMethodByKey(method.Key).ToPaymentMethodDisplay();
             }
         }
 
@@ -116,7 +117,7 @@ namespace Merchello.Web.Editors
 
                 var paymentGatewayMethod = provider.CreatePaymentMethod(gatewayResource, method.Name, method.Description);
 
-               provider.SavePaymentMethod(paymentGatewayMethod);
+                provider.SavePaymentMethod(paymentGatewayMethod);
 
             }
             catch (Exception ex)

@@ -1,0 +1,6 @@
+﻿{
+	javascript : [
+		'~/App_Plugins/Merchello.UPS/merchello.ups.shippingmethod.controller.js',
+		'~/App_Plugins/Merchello.UPS/merchello.ups.controller.js'
+	]
+}

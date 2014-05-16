@@ -7,6 +7,7 @@ namespace Merchello.Core.Gateways.Payment.Cash
     /// <summary>
     /// Represents a CashPaymentMethod
     /// </summary>    
+    [GatewayMethodEditor("Cash Method Editor", "~/App_Plugins/Merchello/Modules/Settings/Payment/Dialogs/paymentmethod.html")]
     public class CashPaymentGatewayMethod : PaymentGatewayMethodBase, ICashPaymentGatewayMethod
     {
         public CashPaymentGatewayMethod(IGatewayProviderService gatewayProviderService, IPaymentMethod paymentMethod) 

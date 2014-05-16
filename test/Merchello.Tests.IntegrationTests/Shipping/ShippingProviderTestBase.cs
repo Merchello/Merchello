@@ -19,7 +19,6 @@ namespace Merchello.Tests.IntegrationTests.Shipping
         protected IWarehouseCatalog Catalog;
         protected IStoreSettingService StoreSettingService;
         internal IShipCountryService ShipCountryService;
-        protected IMerchelloContext MerchelloContext;
         
         [TestFixtureSetUp]
         public override void FixtureSetup()
@@ -58,10 +57,6 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             var dk = StoreSettingService.GetCountryByCode("DK");
             ShipCountryService.Save(new ShipCountry(Catalog.Key, dk));
             
-            MerchelloContext = new MerchelloContext(new ServiceContext(new PetaPocoUnitOfWorkProvider()),
-                new CacheHelper(new NullCacheProvider(),
-                    new NullCacheProvider(),
-                    new NullCacheProvider()));
         }
 
     }

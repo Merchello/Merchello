@@ -16,13 +16,13 @@ namespace Merchello.Core.Persistence.Repositories
 {
     internal class ItemCacheRepository : MerchelloPetaPocoRepositoryBase<IItemCache>, IItemCacheRepository
     {
-        private readonly ILineItemRepository _lineItemRepository;
+        private readonly IItemCacheLineItemRepository _itemCacheLineItemRepository;
 
 
-        public ItemCacheRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILineItemRepository lineItemRepository)
+        public ItemCacheRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, IItemCacheLineItemRepository itemCacheLineItemRepository)
             : base(work, cache)
         {
-            _lineItemRepository = lineItemRepository;
+            _itemCacheLineItemRepository = itemCacheLineItemRepository;
         }
 
 
@@ -129,7 +129,7 @@ namespace Merchello.Core.Persistence.Repositories
             Database.Insert(dto);
             entity.Key = dto.Key;
 
-            _lineItemRepository.SaveLineItem(entity.Items, entity.Key);
+            _itemCacheLineItemRepository.SaveLineItem(entity.Items, entity.Key);
 
             entity.ResetDirtyProperties();
         }
@@ -142,7 +142,7 @@ namespace Merchello.Core.Persistence.Repositories
             var dto = factory.BuildDto(entity);
             Database.Update(dto);
 
-            _lineItemRepository.SaveLineItem(entity.Items, entity.Key);
+            _itemCacheLineItemRepository.SaveLineItem(entity.Items, entity.Key);
 
             entity.ResetDirtyProperties();
         }

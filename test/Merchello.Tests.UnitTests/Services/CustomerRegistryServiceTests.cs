@@ -21,8 +21,11 @@ namespace Merchello.Tests.UnitTests.Services
         private ItemCacheService _itemCacheService;
         private IAnonymousCustomer _anonymous;
 
-        protected override void Initialize()
+        [TestFixtureSetUp]
+        public override void FixtureSetup()
         {
+            base.FixtureSetup();
+
             _itemCacheService = new ItemCacheService(new MockUnitOfWorkProvider(), new RepositoryFactory());
             Before = null;
             After = null;

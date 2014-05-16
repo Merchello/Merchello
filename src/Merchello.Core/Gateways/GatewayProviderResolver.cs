@@ -2,26 +2,27 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Sockets;
-using System.Runtime.InteropServices;
+using Merchello.Core.Gateways.Notification;
 using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Gateways.Taxation;
 using Merchello.Core.Models;
+using Merchello.Core.ObjectResolution;
 using Merchello.Core.Services;
+using Umbraco.Core;
 using Umbraco.Core.Cache;
+using Umbraco.Core.Logging;
 
 namespace Merchello.Core.Gateways
 {
-    internal class GatewayProviderResolver : IGatewayProviderResolver
-    {
+    internal class GatewayProviderResolver : MerchelloManyObjectsResolverBase<GatewayProviderResolver, GatewayProviderBase>,  IGatewayProviderResolver
+    {        
+        private readonly ConcurrentDictionary<Guid, GatewayProviderBase> _activatedGatewayProviderCache = new ConcurrentDictionary<Guid, GatewayProviderBase>();
         private readonly IGatewayProviderService _gatewayProviderService;
         private readonly IRuntimeCacheProvider _runtimeCache;
-        private readonly ConcurrentDictionary<Guid, IGatewayProvider> _gatewayProviderCache = new ConcurrentDictionary<Guid, IGatewayProvider>();
-        private readonly Lazy<GatewayProviderFactory> _gatewayProviderFactory;
-         
-                                         
-        internal GatewayProviderResolver(IGatewayProviderService gatewayProviderService, IRuntimeCacheProvider runtimeCache)
+
+        internal GatewayProviderResolver(IEnumerable<Type> values, IGatewayProviderService gatewayProviderService, IRuntimeCacheProvider runtimeCache)
+            : base(values)
         {
             Mandate.ParameterNotNull(gatewayProviderService, "gatewayProviderService");
             Mandate.ParameterNotNull(runtimeCache, "runtimeCache");
@@ -29,156 +30,153 @@ namespace Merchello.Core.Gateways
             _gatewayProviderService = gatewayProviderService;
             _runtimeCache = runtimeCache;
 
-            _gatewayProviderFactory = new Lazy<GatewayProviderFactory>(() => new GatewayProviderFactory(_gatewayProviderService, _runtimeCache));
-
-            BuildGatewayProviderCache();
+            BuildActivatedGatewayProviderCache();
         }
 
 
-        private void BuildGatewayProviderCache()
-        {            
+        private void BuildActivatedGatewayProviderCache()
+        {
             // this will cache the list of all providers that have been "Activated"
             foreach (var provider in _gatewayProviderService.GetAllGatewayProviders())
             {
-                _gatewayProviderCache.AddOrUpdate(provider.Key, provider, (x, y) => provider);
-            }
-        }
-
-
-        /// <summary>
-        /// Gets a collection of <see cref="IGatewayProvider"/>s by type
-        /// </summary>
-        /// TODO this could be refactored to not have to instantiate the object each time (ObjectLifeTimeScope.Application)
-        public IEnumerable<IGatewayProvider> GetActivatedProviders<T>() where T : GatewayProviderBase
-        {
-            var gatewayProviderType = GetGatewayProviderType<T>();
-
-            var providers =
-                _gatewayProviderCache.Where(provider => provider.Value.GatewayProviderType == gatewayProviderType)
-                    .Select(provider => provider.Value)
-                    .ToList();
-            return providers;
-        }
-
-        /// <summary>
-        /// Gets a collection of inactive (not saved) <see cref="IGatewayProvider"/> by type
-        /// </summary>
-        public IEnumerable<IGatewayProvider> GetAllProviders<T>() where T : GatewayProviderBase
-        {
-            var gatewayProviderType = GetGatewayProviderType<T>();
-            
-            switch (gatewayProviderType)
-            {
-                case GatewayProviderType.Payment:
-                    return BuildGatewayProvidersFromResolved<T>(PaymentGatewayProviderResolver.Current.ProviderTypes, gatewayProviderType);
-                case GatewayProviderType.Shipping:
-                    return BuildGatewayProvidersFromResolved<T>(ShippingGatewayProviderResolver.Current.ProviderTypes, gatewayProviderType);
-                case GatewayProviderType.Taxation:
-                    return BuildGatewayProvidersFromResolved<T>(TaxationGatewayProviderResolver.Current.ProviderTypes, gatewayProviderType);                        
-            }
-
-            throw new InvalidOperationException("GetAllProviders could resolve a Type " + typeof(T));
-        }
-
-        private IEnumerable<IGatewayProvider> BuildGatewayProvidersFromResolved<T>(IEnumerable<Type> types, GatewayProviderType gatewayProviderType) where T : GatewayProviderBase
-        {
-            var existing = GetActivatedProviders<T>().ToArray();
-            
-            
-            var providers = new List<IGatewayProvider>();
-
-            var factory = new Persistence.Factories.GatewayProviderFactory();
-            
-            foreach (var t in types)
-            {
-                var att = GetActiationAttribute(t);
-                if (att != null)
+                var attempt = CreateInstance(provider);
+                if(attempt.Success) 
+                    AddOrUpdateCache(attempt.Result);
+                else
                 {
-
-                    providers.Add(
-                        existing.Any(x => x.Key == att.Key)
-                            ? existing.First(x => x.Key == att.Key)
-                            : factory.BuildEntity(t, gatewayProviderType)
-                        );
+                    LogHelper.Error<GatewayProviderResolver>("Failed to create instance of type", attempt.Exception);
                 }
+
             }
-
-            return providers;
         }
 
-        private static GatewayProviderActivationAttribute GetActiationAttribute(Type t)
+        private void AddOrUpdateCache(GatewayProviderBase provider)
         {
-            return
-                (GatewayProviderActivationAttribute)
-                    Attribute.GetCustomAttribute(t, typeof (GatewayProviderActivationAttribute));
+            _activatedGatewayProviderCache.AddOrUpdate(provider.Key, provider, (x, y) => provider);
         }
 
-        /// <summary>
-        /// Gets a collection of instantiated gateway providers
-        /// </summary>
-        /// <param name="gatewayProviderType"></param>
-        /// <returns></returns>
-        public IEnumerable<T> CreateInstances<T>(GatewayProviderType gatewayProviderType) where T : GatewayProviderBase
+        private Attempt<GatewayProviderBase> CreateInstance(IGatewayProviderSettings providerSettings)
         {
-            return GetActivatedProviders<T>().Select(CreateInstance<T>);
+            var providerType = InstanceTypes.FirstOrDefault(x => x.GetCustomAttribute<GatewayProviderActivationAttribute>(false).Key == providerSettings.Key);
 
+            return providerSettings == null ? 
+                Attempt<GatewayProviderBase>.Fail(new Exception(string.Format("Failed to find type for provider {0}", providerSettings.Name))) : 
+                ActivatorHelper.CreateInstance<GatewayProviderBase>(providerType, new object[] { _gatewayProviderService, providerSettings, _runtimeCache });
         }
 
-        /// <summary>
-        /// Returns an instantiation of a <see cref="T"/>
-        /// </summary>
-        /// <param name="provider"><see cref="IGatewayProvider"/></param>
-        /// <returns></returns>
-        public T CreateInstance<T>(IGatewayProvider provider) where T : GatewayProviderBase
+       
+
+
+        protected override IEnumerable<GatewayProviderBase> Values
         {
-            switch (GetGatewayProviderType<T>())
+            get
             {
-                    case GatewayProviderType.Shipping:
-                    return _gatewayProviderFactory.Value.GetInstance<ShippingGatewayProviderBase>(provider) as T;
+                if (_activatedGatewayProviderCache.Count == InstanceTypes.Count())
+                    return _activatedGatewayProviderCache.Values;
 
-                    case GatewayProviderType.Taxation:
-                    return _gatewayProviderFactory.Value.GetInstance<TaxationGatewayProviderBase>(provider) as T;
+                var allResolved = new List<GatewayProviderBase>();
 
-                    case GatewayProviderType.Payment:
-                    return _gatewayProviderFactory.Value.GetInstance<PaymentGatewayProviderBase>(provider) as T;
+                var factory = new Persistence.Factories.GatewayProviderSettingsFactory();
+
+                using (GetWriteLock())
+                {
+                    allResolved.AddRange(_activatedGatewayProviderCache.Values);
+
+                    var inactive = (from it in InstanceTypes let key = it.GetCustomAttribute<GatewayProviderActivationAttribute>(false).Key 
+                                    where !_activatedGatewayProviderCache.ContainsKey(key) select it).ToList();
+
+                    allResolved.AddRange(
+                        inactive.Select(
+                            type => factory.BuildEntity(type, GetGatewayProviderType(type))
+                            ).Select(CreateInstance).Where(attempt => attempt.Success).Select(x => x.Result));
+                }
+
+                return allResolved;
             }
-
-            throw new InvalidOperationException("CreateInstance could not instantiant Type " + typeof(T).FullName);
         }
+
+        /// <summary>
+        /// Gets a collection of all activated PaymentGatewayProviders
+        /// </summary>
+        internal IEnumerable<PaymentGatewayProviderBase> PaymentGatewayProviders
+        {
+            get { return GetActivatedProviders<PaymentGatewayProviderBase>() as IEnumerable<PaymentGatewayProviderBase>; }
+        }
+             
 
         /// <summary>
         /// Instantiates a GatewayProvider given its registered Key
         /// </summary>
         /// <typeparam name="T">The Type of the GatewayProvider.  Must inherit from GatewayProviderBase</typeparam>
         /// <param name="gatewayProviderKey"></param>
+        /// <param name="activatedOnly">Search only activated providers</param>
         /// <returns>An instantiated GatewayProvider</returns>
-        public T CreateInstance<T>(Guid gatewayProviderKey) where T : GatewayProviderBase
+        public T GetProviderByKey<T>(Guid gatewayProviderKey, bool activatedOnly = true) where T : GatewayProviderBase
         {
-            var provider = _gatewayProviderCache.FirstOrDefault(x => x.Key == gatewayProviderKey).Value;
-            return provider == null ? null : CreateInstance<T>(provider);
+            if (activatedOnly) 
+            return GetActivatedProviders<T>().FirstOrDefault(x => x.Key == gatewayProviderKey) as T;
+
+            return Values.FirstOrDefault(x => x.Key == gatewayProviderKey) as T;
+
         }
 
         /// <summary>
-        /// Refreshes the <see cref="GatewayProviderBase"/> cache
+        /// Gets a collection of all "activated" providers regardless of type
         /// </summary>
+        public IEnumerable<GatewayProviderBase> GetActivatedProviders()
+        {
+            return _activatedGatewayProviderCache.Values;
+        }
+
+        /// <summary>
+        /// Gets a collection of all providers regardless of type
+        /// </summary>
+        public IEnumerable<GatewayProviderBase> GetAllProviders()
+        {
+            return Values;
+        }
+
+        /// <summary>
+        /// Gets a collection of 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public IEnumerable<GatewayProviderBase> GetAllProviders<T>() where T : GatewayProviderBase
+        {
+            return (from value in Values let t = value.GetType() where typeof (T).IsAssignableFrom(t) select value as T).ToList();
+        }
+
+
+        /// <summary>
+        /// Gets a collection of <see cref="IGatewayProviderSettings"/>s by type
+        /// </summary>
+        public IEnumerable<GatewayProviderBase> GetActivatedProviders<T>() where T  : GatewayProviderBase
+        {
+            return (from value in _activatedGatewayProviderCache.Values let t = value.GetType() where typeof(T).IsAssignableFrom(t) select value as T).ToList();
+        }
+
         public void RefreshCache()
         {
-            _gatewayProviderCache.Clear();
-            BuildGatewayProviderCache();
+            _activatedGatewayProviderCache.Clear();
+            BuildActivatedGatewayProviderCache();
         }
+
 
         /// <summary>
         /// Maps the type of T to a <see cref="GatewayProviderType"/>
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns>Returns a <see cref="GatewayProviderType"/></returns>
-        internal static GatewayProviderType GetGatewayProviderType<T>()
+        internal static GatewayProviderType GetGatewayProviderType(Type type)
         {
-            if (typeof(ShippingGatewayProviderBase).IsAssignableFrom(typeof(T))) return GatewayProviderType.Shipping;
-            if (typeof(TaxationGatewayProviderBase).IsAssignableFrom(typeof(T))) return GatewayProviderType.Taxation;
-            if (typeof(PaymentGatewayProviderBase).IsAssignableFrom(typeof(T))) return GatewayProviderType.Payment;
-            throw new InvalidOperationException("Could not map GatewayProviderType from " + typeof(T).Name);
+            if (typeof(PaymentGatewayProviderBase).IsAssignableFrom(type)) return GatewayProviderType.Payment;
+            if (typeof(NotificationGatewayProviderBase).IsAssignableFrom(type)) return GatewayProviderType.Notification;
+            if (typeof(ShippingGatewayProviderBase).IsAssignableFrom(type)) return GatewayProviderType.Shipping;
+            if (typeof(TaxationGatewayProviderBase).IsAssignableFrom(type)) return GatewayProviderType.Taxation;
+
+            throw new InvalidOperationException("Could not map GatewayProviderType from " + type.Name);
         }
 
+        
     }
 }

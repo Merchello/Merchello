@@ -12,12 +12,29 @@ namespace Merchello.Tests.Base.Services
         protected bool AfterTriggered;
         protected bool CommitCalled;
 
+        [TestFixtureSetUp]
+        public virtual void FixtureSetup()
+        {
+            SqlSyntaxProviderTestHelper.EstablishSqlSyntax();
 
+            // General tests
+            MockDatabaseUnitOfWork.Committed += Comitted;
+           
+        }
 
-        protected abstract void Initialize();
+        [TestFixtureTearDown]
+        public virtual void FixtureTearDown()
+        {
+            MockDatabaseUnitOfWork.Committed -= Comitted;
+        }
+
+        private void Comitted(object sender)
+        {
+            CommitCalled = true;
+        }
 
         [SetUp]
-        public void Setup()
+        public virtual void Setup()
         {
 
             // General trigger setup
@@ -25,15 +42,6 @@ namespace Merchello.Tests.Base.Services
             AfterTriggered = false;
             CommitCalled = false;
 
-            SqlSyntaxProviderTestHelper.EstablishSqlSyntax();
-
-            // General tests
-            MockDatabaseUnitOfWork.Committed += delegate(object sender)
-            {
-                CommitCalled = true;
-            };
-
-            Initialize();
         }
 
        

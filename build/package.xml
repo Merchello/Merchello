@@ -5,7 +5,7 @@
       <name>Merchello</name>
       <version>0.0.0</version>
       <license url="https://github.com/Merchello/Merchello/blob/master/License.md">MIT license</license>
-      <url>http://our.umbraco.org/projects/website-utilities/merchello</url>
+      <url>http://our.umbraco.org/projects/collaboration/merchello</url>
       <requirements>
         <major>0</major>
         <minor>0</minor>
@@ -26,6 +26,7 @@
   <Languages />
   <DataTypes />
   <Actions>
+    <Action runat="install" undo="true" alias="Merchello_AddAppConfigKey" />
     <Action runat="install" undo="true" alias="Merchello_AddConfigSection" />                   
     <Action runat="install" undo="true" alias="Merchello_CreateDatabase" />
     <Action runat="install" undo="true" alias="Merchello_AddExamineConfigs">

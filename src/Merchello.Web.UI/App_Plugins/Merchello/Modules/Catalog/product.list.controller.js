@@ -8,7 +8,7 @@
      * @description
      * The controller for the product editor
      */
-    controllers.ProductListController = function($scope, $routeParams, $location, assetsService, notificationsService, angularHelper, serverValidationManager, merchelloProductService) {
+	controllers.ProductListController = function ($scope, $routeParams, $location, assetsService, notificationsService, angularHelper, serverValidationManager, merchelloProductService, merchelloSettingsService) {
 
         $scope.filtertext = "";
         $scope.products = [];
@@ -25,7 +25,16 @@
         // Initialization methods
         //--------------------------------------------------------------------------------------
 
-        $scope.loadProducts = function() {
+        /**
+         * @ngdoc method
+         * @name loadProducts
+         * @function
+         * 
+         * @description
+         * Load the products from the product service, then wrap the results
+         * in Merchello models and add to the scope via the products collection.
+         */
+        $scope.loadProducts = function () {
 
             var promise = merchelloProductService.getAllProducts();
 
@@ -46,19 +55,63 @@
 
         };
 
-        $scope.loadProducts();
+		$scope.loadSettings = function () {
+
+
+			var currencySymbolPromise = merchelloSettingsService.getCurrencySymbol();
+			currencySymbolPromise.then(function(currencySymbol) {
+				$scope.currencySymbol = currencySymbol;
+
+			}, function (reason) {
+				alert('Failed: ' + reason.message);
+			});
+		};
+
+        /**
+         * @ngdoc method
+         * @name init
+         * @function
+         * 
+         * @description
+         * Method called on intial page load.  Loads in data from server and sets up scope.
+         */
+        $scope.init = function () {
+
+        	$scope.loadProducts();
+        	$scope.loadSettings();
+
+        };
+
+        $scope.init();
+
 
 
         //--------------------------------------------------------------------------------------
         // Events methods
         //--------------------------------------------------------------------------------------
 
+        /**
+         * @ngdoc method
+         * @name limitChanged
+         * @function
+         * 
+         * @description
+         * Helper function to set the amount of items to show per page for the paging filters and calculations
+         */
         $scope.limitChanged = function (newVal) {
             $scope.limitAmount = newVal;
         };
 
-
-        $scope.changeSortOrder = function(propertyToSort) {
+        /**
+         * @ngdoc method
+         * @name changeSortOrder
+         * @function
+         * 
+         * @description
+         * Helper function to set the current sort on the table and switch the 
+         * direction if the property is already the current sort column.
+         */
+        $scope.changeSortOrder = function (propertyToSort) {
 
             if ($scope.sortProperty == propertyToSort) {
                 if ($scope.sortOrder == "asc") {
@@ -75,7 +128,16 @@
 
         };
 
-        $scope.getFilteredProducts = function(filter) {
+        /**
+         * @ngdoc method
+         * @name getFilteredProducts
+         * @function
+         * 
+         * @description
+         * Calls the product service to search for products via a string search 
+         * param.  This searches the Examine index in the core.
+         */
+        $scope.getFilteredProducts = function (filter) {
             notificationsService.info("Filtering...", "");
 
             if (merchello.Helpers.Strings.isNullOrEmpty(filter)) {
@@ -105,6 +167,14 @@
         // Calculations
         //--------------------------------------------------------------------------------------
 
+        /**
+         * @ngdoc method
+         * @name numberOfPages
+         * @function
+         * 
+         * @description
+         * Helper function to get the amount of items to show per page for the paging
+         */
         $scope.numberOfPages = function () {
             return Math.ceil($scope.products.length / $scope.limitAmount);
         };
@@ -112,7 +182,7 @@
 
     };
 
-    angular.module("umbraco").controller("Merchello.Dashboards.Product.ListController", ['$scope', '$routeParams', '$location', 'assetsService', 'notificationsService', 'angularHelper', 'serverValidationManager', 'merchelloProductService', merchello.Controllers.ProductListController]);
+	angular.module("umbraco").controller("Merchello.Dashboards.Product.ListController", ['$scope', '$routeParams', '$location', 'assetsService', 'notificationsService', 'angularHelper', 'serverValidationManager', 'merchelloProductService', 'merchelloSettingsService', merchello.Controllers.ProductListController]);
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));
 

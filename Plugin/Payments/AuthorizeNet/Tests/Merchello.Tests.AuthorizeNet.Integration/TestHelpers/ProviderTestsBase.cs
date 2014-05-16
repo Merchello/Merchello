@@ -18,7 +18,7 @@ namespace Merchello.Tests.AuthorizeNet.Integration.TestHelpers
 {
     public abstract class ProviderTestsBase
     {
-        protected IGatewayProvider GatewayProvider;
+        protected IGatewayProviderSettings GatewayProviderSettings;
         protected IGatewayProviderService GatewayProviderService;
         protected AuthorizeNetPaymentGatewayProvider Provider;
 
@@ -35,11 +35,11 @@ namespace Merchello.Tests.AuthorizeNet.Integration.TestHelpers
                 GatewayProviderService.GetAllGatewayProviders()
                     .Where(x => x.GatewayProviderType == GatewayProviderType.Payment);
 
-            GatewayProvider = providers.FirstOrDefault(x => x.Key == new Guid("C6BF6743-3565-401F-911A-33B68CACB11B"));
+            GatewayProviderSettings = providers.FirstOrDefault(x => x.Key == new Guid("C6BF6743-3565-401F-911A-33B68CACB11B"));
 
-            if (GatewayProvider != null)
+            if (GatewayProviderSettings != null)
             {
-                GatewayProviderService.Delete(GatewayProvider);
+                GatewayProviderService.Delete(GatewayProviderSettings);
             }
 
             var petaPoco = new PetaPocoUnitOfWorkProvider();
@@ -49,13 +49,11 @@ namespace Merchello.Tests.AuthorizeNet.Integration.TestHelpers
 
             var sql = new Sql();
 
-            var dto = new GatewayProviderDto()
+            var dto = new GatewayProviderSettingsDto()
             {
                 Key = new Guid("C6BF6743-3565-401F-911A-33B68CACB11B"),
                 Name = "AuthorizeNet",
                 Description = "AuthorizeNet",
-                TypeFullName =
-                    "Merchello.Plugin.Payments.AuthorizeNet.AuthorizeNetPaymentGatewayProvider, Merchello.Plugin.Payments.AuthorizeNet, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
                 ExtendedData = "<extendedData />",
                 EncryptExtendedData = false,
                 ProviderTfKey = Constants.TypeFieldKeys.GatewayProvider.PaymentProviderKey,
@@ -66,7 +64,7 @@ namespace Merchello.Tests.AuthorizeNet.Integration.TestHelpers
 
             petaPoco.GetUnitOfWork().Database.Insert(dto);
 
-            GatewayProvider =
+            GatewayProviderSettings =
                 GatewayProviderService.GetGatewayProviderByKey(new Guid("C6BF6743-3565-401F-911A-33B68CACB11B"));
 
             var providerSettings = new AuthorizeNetProcessorSettings()
@@ -75,9 +73,9 @@ namespace Merchello.Tests.AuthorizeNet.Integration.TestHelpers
                 TransactionKey = xtrankey
             };
 
-            GatewayProvider.ExtendedData.SaveProcessorSettings(providerSettings);
+            GatewayProviderSettings.ExtendedData.SaveProcessorSettings(providerSettings);
 
-            Provider = new AuthorizeNetPaymentGatewayProvider(GatewayProviderService, GatewayProvider,
+            Provider = new AuthorizeNetPaymentGatewayProvider(GatewayProviderService, GatewayProviderSettings,
                 cacheProvider.Object);
         }
     }

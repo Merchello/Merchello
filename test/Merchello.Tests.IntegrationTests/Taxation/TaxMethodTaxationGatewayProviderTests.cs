@@ -1,9 +1,8 @@
 ﻿using System.Data;
 using System.Linq;
+using Merchello.Core;
 using Merchello.Core.Gateways.Taxation;
 using Merchello.Core.Models;
-using Merchello.Core.Services;
-using Merchello.Tests.IntegrationTests.TestHelpers;
 using NUnit.Framework;
 
 namespace Merchello.Tests.IntegrationTests.Taxation
@@ -35,9 +34,9 @@ namespace Merchello.Tests.IntegrationTests.Taxation
         public void Init()
         {
             
-            _taxProvider = MerchelloContext.Gateways.Taxation.CreateInstance(Core.Constants.ProviderKeys.Taxation.FixedRateTaxationProviderKey);
+            _taxProvider = MerchelloContext.Gateways.Taxation.GetProviderByKey(Constants.ProviderKeys.Taxation.FixedRateTaxationProviderKey);
 
-            PreTestDataWorker.DeleteAllCountryTaxRates(Core.Constants.ProviderKeys.Taxation.FixedRateTaxationProviderKey);
+            PreTestDataWorker.DeleteAllCountryTaxRates(Constants.ProviderKeys.Taxation.FixedRateTaxationProviderKey);
         }
 
         /// <summary>
@@ -52,7 +51,7 @@ namespace Merchello.Tests.IntegrationTests.Taxation
 
             //// Act
             _taxProvider.CreateTaxMethod(countryCode);
-            var taxMethods = GatewayProviderService.GetTaxMethodsByProviderKey(_taxProvider.Key);
+            var taxMethods = _taxProvider.GetAllGatewayTaxMethods();
 
             //// Assert
             Assert.NotNull(taxMethods);

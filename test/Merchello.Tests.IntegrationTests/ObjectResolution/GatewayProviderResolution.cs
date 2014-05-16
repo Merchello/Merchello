@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Gateways;
@@ -7,6 +8,7 @@ using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Gateways.Taxation;
 using Merchello.Tests.IntegrationTests.TestHelpers;
 using NUnit.Framework;
+using Umbraco.Core;
 
 namespace Merchello.Tests.IntegrationTests.ObjectResolution
 {
@@ -31,7 +33,12 @@ namespace Merchello.Tests.IntegrationTests.ObjectResolution
                 DbPreTestDataWorker.GatewayProviderService.Delete(provider);
             }
 
-
+            // deactivate all test providers
+            var testProviders = GatewayProviderResolver.Current.GetActivatedProviders().Where(x => testKeys.Contains(x.GatewayProviderSettings.Key) && x.Activated);
+            foreach (var provider in testProviders)
+            {
+                ((GatewayContext)MerchelloContext.Current.Gateways).DeactivateProvider(provider);
+            }
         }
 
         /// <summary>
@@ -44,7 +51,7 @@ namespace Merchello.Tests.IntegrationTests.ObjectResolution
             // Handled in base class instantiation
 
             //// Act
-            var providers = PaymentGatewayProviderResolver.Current.ProviderTypes;
+            var providers = GatewayProviderResolver.Current.GetAllProviders<PaymentGatewayProviderBase>();
 
             //// Assert
             Assert.IsTrue(providers.Any());
@@ -60,7 +67,7 @@ namespace Merchello.Tests.IntegrationTests.ObjectResolution
             // Handled in base class instantiation
 
             //// Act
-            var providers = ShippingGatewayProviderResolver.Current.ProviderTypes;
+            var providers = GatewayProviderResolver.Current.GetAllProviders<ShippingGatewayProviderBase>();
 
             //// Assert
             Assert.IsTrue(providers.Any());
@@ -76,7 +83,7 @@ namespace Merchello.Tests.IntegrationTests.ObjectResolution
             // Handled in base class instantiation
 
             //// Act
-            var providers = TaxationGatewayProviderResolver.Current.ProviderTypes;
+            var providers = GatewayProviderResolver.Current.GetAllProviders<TaxationGatewayProviderBase>();
 
             //// Assert
             Assert.IsTrue(providers.Any());
@@ -89,10 +96,10 @@ namespace Merchello.Tests.IntegrationTests.ObjectResolution
         public void Can_Retrieve_A_List_Of_AllTaxationProviders()
         {
             //// Arrange
-            var resolver = new GatewayProviderResolver(MerchelloContext.Current.Services.GatewayProviderService, MerchelloContext.Current.Cache.RuntimeCache);
+            
 
             //// Act
-            var providers = resolver.GetAllProviders<TaxationGatewayProviderBase>().ToArray();
+            var providers = GatewayProviderResolver.Current.GetAllProviders<TaxationGatewayProviderBase>().ToArray();
 
             //// Assert
             Assert.IsTrue(providers.Any());
@@ -107,10 +114,9 @@ namespace Merchello.Tests.IntegrationTests.ObjectResolution
         public void Can_Retrieve_A_List_Of_AllShippingProviders()
         {
             //// Arrange
-            var resolver = new GatewayProviderResolver(MerchelloContext.Current.Services.GatewayProviderService, MerchelloContext.Current.Cache.RuntimeCache);
-
+            
             //// Act
-            var providers = resolver.GetAllProviders<ShippingGatewayProviderBase>().ToArray();
+            var providers = GatewayProviderResolver.Current.GetAllProviders<ShippingGatewayProviderBase>().ToArray();
 
             //// Assert
             Assert.IsTrue(providers.Any());
@@ -125,10 +131,9 @@ namespace Merchello.Tests.IntegrationTests.ObjectResolution
         public void Can_Retrieve_A_List_Of_AllPaymentProviders()
         {
             //// Arrange
-            var resolver = new GatewayProviderResolver(MerchelloContext.Current.Services.GatewayProviderService, MerchelloContext.Current.Cache.RuntimeCache);
-
+            
             //// Act
-            var providers = resolver.GetAllProviders<PaymentGatewayProviderBase>().ToArray();
+            var providers = GatewayProviderResolver.Current.GetAllProviders<PaymentGatewayProviderBase>().ToArray();
 
             //// Assert
             Assert.IsTrue(providers.Any());
@@ -143,10 +148,9 @@ namespace Merchello.Tests.IntegrationTests.ObjectResolution
         public void Can_Activate_A_PaymentGatewayProvider()
         {
             //// Arrange
-            var resolver = new GatewayProviderResolver(MerchelloContext.Current.Services.GatewayProviderService, MerchelloContext.Current.Cache.RuntimeCache);
-
+            
             //// Act
-            var provider = resolver.GetAllProviders<PaymentGatewayProviderBase>().FirstOrDefault(x => !x.Activated);
+            var provider = GatewayProviderResolver.Current.GetAllProviders<PaymentGatewayProviderBase>().FirstOrDefault(x => !x.Activated);
             Assert.NotNull(provider);
 
             MerchelloContext.Current.Gateways.Payment.ActivateProvider(provider);
@@ -162,8 +166,9 @@ namespace Merchello.Tests.IntegrationTests.ObjectResolution
         public void Can_Deactivate_A_PaymentGatewayProvider()
         {
             //// Arrange
-            var resolver = new GatewayProviderResolver(MerchelloContext.Current.Services.GatewayProviderService, MerchelloContext.Current.Cache.RuntimeCache);
-            var provider = resolver.GetAllProviders<PaymentGatewayProviderBase>().FirstOrDefault(x => !x.Activated);
+            
+            var providers = GatewayProviderResolver.Current.GetAllProviders<PaymentGatewayProviderBase>();
+            var provider = providers.FirstOrDefault(x => !x.Activated);
             Assert.NotNull(provider);
             MerchelloContext.Current.Gateways.Payment.ActivateProvider(provider);
             Assert.IsTrue(provider.Activated);
@@ -172,12 +177,44 @@ namespace Merchello.Tests.IntegrationTests.ObjectResolution
             var key = provider.Key;
             MerchelloContext.Current.Gateways.Payment.DeactivateProvider(provider);
 
-            var retrieved = resolver.GetAllProviders<PaymentGatewayProviderBase>().FirstOrDefault(x => x.Key == key);
+            var retrieved = GatewayProviderResolver.Current.GetProviderByKey<PaymentGatewayProviderBase>(key,false);
 
 
             //// Assert
             Assert.IsFalse(retrieved.Activated);
         }
 
+        [Test]
+        public void Can_Deactivate_A_ShippingGatewayProvider()
+        {
+            //// Arrange
+
+            var provider = GatewayProviderResolver.Current.GetAllProviders<ShippingGatewayProviderBase>().FirstOrDefault(x => !x.Activated);
+            Assert.NotNull(provider);
+            MerchelloContext.Current.Gateways.Shipping.ActivateProvider(provider);
+            Assert.IsTrue(provider.Activated);
+
+            //// Act
+            var key = provider.Key;
+            MerchelloContext.Current.Gateways.Shipping.DeactivateProvider(provider);
+
+            var retrieved = GatewayProviderResolver.Current.GetProviderByKey<ShippingGatewayProviderBase>(key, false);
+
+
+            //// Assert
+            Assert.IsFalse(retrieved.Activated);
+        }
+
+        [Test]
+        public void Can_Resolve_A_NotificationGatewayProvider()
+        {
+            //// Arrage
+            var types =
+                PluginManager.Current.ResolveTypesWithAttribute<GatewayProviderBase, GatewayProviderActivationAttribute>
+                    ();
+            //// Act 
+            var provider = new List<GatewayProviderBase>();
+
+        }
     }
 }

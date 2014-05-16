@@ -1,0 +1,23 @@
+﻿<div class="umb-panel merchello-side-panel" data-ng-controller="Merchello.Common.Dialogs.DebugDialog">
+	<div class="umb-modalcolumn-header">
+		<h4>Debugging Info</h4>
+	</div>
+	<div class="umb-panel-body with-header with-footer">
+        
+	    <json-explorer json-data="{{dialogData}}"></json-explorer>
+
+	</div>
+
+	<div class="umb-panel-footer">
+		<div class="umb-el-wrap umb-panel-buttons">
+			<div class="btn-toolbar umb-btn-toolbar pull-right">
+
+				<a href data-ng-click="close()" class="btn btn-link">
+					<localize key="general_close">Close</localize>
+				</a>
+
+			</div>
+		</div>
+	</div>
+</div>
+

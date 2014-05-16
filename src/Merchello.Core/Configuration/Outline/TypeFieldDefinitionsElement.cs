@@ -25,6 +25,14 @@ namespace Merchello.Core.Configuration.Outline
             get { return (TypeFieldCollection)this["customerItemCache"]; }
         }
 
+        /// <summary>
+        /// Gets teh dbTypeFields configuration collection for Entities
+        /// </summary>
+        [ConfigurationProperty("entities", IsRequired =  false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
+        public TypeFieldCollection Entities
+        {
+            get { return (TypeFieldCollection) this["entities"]; }
+        }
 
         /// <summary>
         /// Gets the dbTypeFields configuration collection for <see cref="IShipMethod"/>
@@ -72,7 +80,7 @@ namespace Merchello.Core.Configuration.Outline
         }
 
         /// <summary>
-        /// Gets the dbTypeFields configuration collection for <see cref="IGatewayProviderBase"/>
+        /// Gets the dbTypeFields configuration collection for <see cref="IGatewayProviderSettings"/>
         /// </summary>
         [ConfigurationProperty("gatewayProvider", IsRequired = false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
         public TypeFieldCollection GatewayProvider

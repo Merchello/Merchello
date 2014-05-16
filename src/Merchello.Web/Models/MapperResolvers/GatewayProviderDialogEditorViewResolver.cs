@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using AutoMapper;
 using Merchello.Core.Gateways;
 using Merchello.Core.Models;
@@ -12,12 +11,16 @@ namespace Merchello.Web.Models.MapperResolvers
     /// <summary>
     /// Resolves the custom DialogEditorView property from the <see cref="GatewayProviderEditorAttribute"/> for AutoMapper mappings
     /// </summary>
-    public class GatewayProviderDialogEditorViewResolver : ValueResolver<IGatewayProvider, DialogEditorViewDisplay>
+    public class GatewayProviderDialogEditorViewResolver : ValueResolver<IGatewayProviderSettings, DialogEditorViewDisplay>
     {
-        protected override DialogEditorViewDisplay ResolveCore(IGatewayProvider source)
+        protected override DialogEditorViewDisplay ResolveCore(IGatewayProviderSettings source)
         {
             // Check for custom attribute
-            var editorAtt = Type.GetType(source.TypeFullName)
+            var provider = GatewayProviderResolver.Current.GetAllProviders().FirstOrDefault(x => x.Key == source.Key);
+
+            if (provider == null) return null;
+
+            var editorAtt = provider.GetType()
                 .GetCustomAttributes<GatewayProviderEditorAttribute>(false).FirstOrDefault();
 
             if (editorAtt != null)

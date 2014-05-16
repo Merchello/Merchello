@@ -1,0 +1,34 @@
+﻿<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Dashboards.Catalog.Dialogs.ProductDeleteVariantsController">
+	<div class="umb-modalcolumn-header">
+		<h4>Delete the Selected Variants</h4>
+	</div>
+	<div class="umb-panel-body with-header with-footer">
+
+		<!-- Flyout when Delete Variants is clicked -->
+		<form class="form-group row-fluid">
+			<input name="delete-variant" data-ng-model="dialogData.confirmText" class="col-xs-6 span6" type="text" placeholder="Type DELETE to confirm" />
+		</form>
+
+		<p class="text-warning">You cannot recover deleted product variants. Are you sure you want to continue?</p>
+	</div>
+
+	
+
+	<div class="umb-panel-footer">
+		<div class="umb-el-wrap umb-panel-buttons">
+			<div class="btn-toolbar umb-btn-toolbar pull-right">
+
+				<a href data-ng-click="close()" class="btn btn-link">
+					<localize key="general_cancel">Cancel</localize>
+				</a>
+
+				<button class="btn btn-primary"
+						data-ng-click="submit(dialogData)">
+					<localize key="general_delete">Delete</localize>
+				</button>
+
+			</div>
+		</div>
+	</div>
+</div>
+

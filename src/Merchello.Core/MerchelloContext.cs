@@ -2,9 +2,6 @@
 using System.Threading;
 using Merchello.Core.Configuration;
 using Merchello.Core.Gateways;
-using Merchello.Core.Gateways.Payment;
-using Merchello.Core.Gateways.Shipping;
-using Merchello.Core.Gateways.Taxation;
 using Merchello.Core.Services;
 using Umbraco.Core;
 using Umbraco.Core.Logging;
@@ -13,40 +10,19 @@ namespace Merchello.Core
 {
     public class MerchelloContext : IMerchelloContext
     {
-        internal MerchelloContext(IServiceContext serviceContext)
-            : this(serviceContext, ApplicationContext.Current.ApplicationCache)
+        internal MerchelloContext(IServiceContext serviceContext, IGatewayContext gatewayContext)
+            : this(serviceContext, gatewayContext, ApplicationContext.Current.ApplicationCache)
         {}
 
-        internal MerchelloContext(IServiceContext serviceContext, CacheHelper cache)
-            : this(serviceContext, cache, false)
-        { }
-
-        internal MerchelloContext(IServiceContext serviceContext, CacheHelper cache, bool isUnitTest)
+        internal MerchelloContext(IServiceContext serviceContext, IGatewayContext gatewayContext, CacheHelper cache)
         {
             Mandate.ParameterNotNull(serviceContext, "serviceContext");
+            Mandate.ParameterNotNull(gatewayContext, "gatewayContext");
             Mandate.ParameterNotNull(cache, "cache");
             
             _services = serviceContext;
+            _gateways = gatewayContext;
             Cache = cache;
-
-            BuildMerchelloContext(isUnitTest);
-        }
-
-        /// <summary>
-        /// Builds the MerchelloContext internals
-        /// </summary>
-        /// <param name="isUnitTest">True/false indicating whether or not is being called by certain unit tests</param>
-        private void BuildMerchelloContext(bool isUnitTest)
-        {
-            if (isUnitTest) return;
-
-            var gatewayResolver = new Lazy<GatewayProviderResolver>(() => new GatewayProviderResolver(_services.GatewayProviderService, Cache.RuntimeCache));
-
-            _gateways = new GatewayContext(
-                new ShippingContext(_services.GatewayProviderService, _services.StoreSettingService, gatewayResolver.Value),
-                new TaxationContext(_services.GatewayProviderService, gatewayResolver.Value),
-                new PaymentContext(_services.GatewayProviderService, gatewayResolver.Value)
-                );
         }
 
 
@@ -86,12 +62,12 @@ namespace Merchello.Core
                 try
                 {
                     var configVersion = ConfigurationVersion;
-                    var currentVersion = MerchelloVersion.Current.ToString(3);
+                    var currentVersion = MerchelloVersion.Current.ToString();
 
 
                     if (currentVersion != configVersion)
                     {
-                        LogHelper.Info<ApplicationContext>("CurrentVersion different from configStatus: '" + currentVersion + "','" + configVersion + "'");
+                        LogHelper.Info<ApplicationContext>("CurrentVersion different from configurationStatus: '" + currentVersion + "','" + configVersion + "'");
                     }
 
                     return (configVersion == currentVersion);
@@ -110,7 +86,7 @@ namespace Merchello.Core
             {
                 try
                 {
-                    return MerchelloConfiguration.Current.Section.Version;
+                    return MerchelloConfiguration.ConfigurationStatus;
                 }
                 catch
                 {
@@ -121,8 +97,6 @@ namespace Merchello.Core
 
         private IServiceContext _services;
         private IGatewayContext _gateways;
-        //private ISalesManager _salesManager;
-
 
         /// <summary>
         /// Gets the current ServiceContext
@@ -155,20 +129,6 @@ namespace Merchello.Core
             internal set { _gateways = value; }
         }
        
-        ///// <summary>
-        ///// Gets the sales manager
-        ///// </summary>
-        //public ISalesManager SalesManager
-        //{
-        //    get
-        //    {
-        //        if(_salesManager == null)
-        //            throw new InvalidOperationException("The SalesManager has not been set of the MerchelloContext");
-        //        return _salesManager;
-        //    }
-        //    internal set { _salesManager = value; }
-        //}
-
         private volatile bool _disposed;
         private readonly ReaderWriterLockSlim _disposalLocker = new ReaderWriterLockSlim();
 

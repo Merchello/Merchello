@@ -24,8 +24,8 @@
                             <h4>{{lineitem.name}}</h4>
                             <span>SKU: {{lineitem.sku}}</span>
                         </td>
-                        <td class="text-right">{{lineitem.quantity}} x <strong>{{lineitem.price | currency}}</strong></td>
-                        <td class="text-right">{{lineitem.quantity * lineitem.price | currency}}</td>
+                        <td class="text-right">{{lineitem.quantity}} x <strong>{{lineitem.price | currency : currencySymbol}}</strong></td>
+                        <td class="text-right">{{lineitem.quantity * lineitem.price | currency : currencySymbol}}</td>
                     </tr>
                 </tbody>
             </table>

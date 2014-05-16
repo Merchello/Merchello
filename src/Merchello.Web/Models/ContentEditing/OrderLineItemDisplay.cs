@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Merchello.Web.Models.ContentEditing
 {
@@ -14,5 +15,6 @@ namespace Merchello.Web.Models.ContentEditing
         public decimal Price { get; set; }
         public bool Exported { get; set; }
         public bool BackOrder { get; set; }
+        public IEnumerable<KeyValuePair<string, string>> ExtendedData { get; set; }
     }
 }
