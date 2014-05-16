@@ -37,9 +37,6 @@
 		            shipmentKeys = _.union(shipmentKeys, newShipmentKeys);
 	            });
 
-	            //shipmentKeys = _.map(shipmentKeys, function(shipmentKey) {
-		        //    return "ids=" + shipmentKey;
-	            //});
 	            var shipmentKeysStr = shipmentKeys.join("&ids=");
 
 	            return umbRequestHelper.resourcePromise(
