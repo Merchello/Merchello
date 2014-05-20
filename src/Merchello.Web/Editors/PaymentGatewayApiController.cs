@@ -110,7 +110,7 @@ namespace Merchello.Web.Editors
 
             try
             {
-                var provider = _paymentContext.CreateInstance(method.ProviderKey);
+                var provider = _paymentContext.GetProviderByKey(method.ProviderKey);
 
                 var gatewayResource =
                     provider.ListResourcesOffered().FirstOrDefault(x => x.ServiceCode == method.PaymentCode);

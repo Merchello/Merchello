@@ -293,9 +293,9 @@ namespace Merchello.Web.Models.ContentEditing
 
 		#region NotificationMessage
 
-		internal static NotificationMessageDisplay ToNotificationMessageDisplay(this INotificationMessage notification)
+		internal static NotificationMessageDisplay ToNotificationMessageDisplay(this INotificationMessage message)
 		{
-			return AutoMapper.Mapper.Map<NotificationMessageDisplay>(notification);
+			return AutoMapper.Mapper.Map<NotificationMessageDisplay>(message);
 		}
 
 		internal static INotificationMessage ToNotificationMessage(this NotificationMessageDisplay notificationMessageDisplay, INotificationMessage destination)
@@ -312,6 +312,22 @@ namespace Merchello.Web.Models.ContentEditing
 
 			return destination;
 		}
+
+        internal static INotificationMethod ToNotificationMethod(
+            this NotificationMethodDisplay notificationMethodDisplay, INotificationMethod destination)
+        {
+            if (notificationMethodDisplay.Key != Guid.Empty) destination.Key = notificationMethodDisplay.Key;
+            destination.Name = notificationMethodDisplay.Name;
+            destination.Description = notificationMethodDisplay.Description;
+            destination.ServiceCode = notificationMethodDisplay.ServiceCode;
+
+            return destination;
+        }
+
+        internal static NotificationMethodDisplay ToNotificationMethodDisplay(this INotificationMethod method)
+        {
+            return AutoMapper.Mapper.Map<NotificationMethodDisplay>(method);
+        }
 
 		#endregion
 
