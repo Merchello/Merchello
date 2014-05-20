@@ -291,9 +291,33 @@ namespace Merchello.Web.Models.ContentEditing
 
         #endregion
 
-        #region Order
+		#region NotificationMessage
 
-        internal static OrderDisplay ToOrderDisplay(this IOrder order)
+		internal static NotificationMessageDisplay ToNotificationMessageDisplay(this INotificationMessage notification)
+		{
+			return AutoMapper.Mapper.Map<NotificationMessageDisplay>(notification);
+		}
+
+		internal static INotificationMessage ToNotificationMessage(this NotificationMessageDisplay notificationMessageDisplay, INotificationMessage destination)
+		{
+			if (notificationMessageDisplay.Key != Guid.Empty) destination.Key = notificationMessageDisplay.Key;
+			destination.Description = notificationMessageDisplay.Description;
+			destination.Message = notificationMessageDisplay.Message;
+			destination.MaxLength = notificationMessageDisplay.MaxLength;
+			destination.MessageIsFilePath = notificationMessageDisplay.MessageIsFilePath;
+			destination.TriggerKey = notificationMessageDisplay.TriggerKey;
+			destination.Recipients = notificationMessageDisplay.Recipients;
+			destination.SendToCustomer = notificationMessageDisplay.SendToCustomer;
+			destination.Disabled = notificationMessageDisplay.Disabled;
+
+			return destination;
+		}
+
+		#endregion
+
+		#region Order
+
+		internal static OrderDisplay ToOrderDisplay(this IOrder order)
         {
             return AutoMapper.Mapper.Map<OrderDisplay>(order);
         }
