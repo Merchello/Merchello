@@ -8,6 +8,7 @@ using Merchello.Core;
 using Merchello.Core.Gateways;
 using Merchello.Core.Gateways.Notification;
 using Merchello.Core.Models;
+using Merchello.Core.Services;
 using Merchello.Web.Models.ContentEditing;
 using Merchello.Web.WebApi;
 using Umbraco.Web.Mvc;
@@ -93,26 +94,101 @@ namespace Merchello.Web.Editors
             };
         }
 
+        /// <summary>
+        /// Get all <see cref="NotificationMethodDisplay"/> for a notification provider
+        /// 
+        /// GET /umbraco/Merchello/NotificationGatewayApi/GetNotificationProviderNotificationMethods/{id}
+        /// </summary>
+        /// <param name="id">The key (guid) of teh NotificationGatewayProvider</param>
+        /// <returns></returns>
+        public IEnumerable<NotificationMethodDisplay> GetNotificationProviderNotificationMethods(Guid id)
+        {
+            // limit only to active providers
+            var provider = _notificationContext.GetProviderByKey(id);
 
-        ///// <summary>
-        ///// Get all <see cref="INotificationMethod"/> for a payment provider
-        /////
-        ///// GET /umbraco/Merchello/NotificationGatewayApi/GetPaymentProviderPaymentMethods/{id}
-        ///// </summary>
-        ///// <param name="id">The key of the PaymentGatewayProvider</param>
-        ///// <remarks>
-        ///// 
-        ///// </remarks>
-        //public IEnumerable<NotiMethodDisplay> GetPaymentProviderPaymentMethods(Guid id)
-        //{
-        //    var provider = _paymentContext.CreateInstance(id);
-        //    if (provider == null) throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+            if (provider == null) throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
 
-        //    foreach (var method in provider.PaymentMethods)
-        //    {
-        //        // we need the actual PaymentGatewayProvider so we can grab the if present
-        //        yield return provider.GetPaymentGatewayMethodByKey(method.Key).ToPaymentMethodDisplay();
-        //    }
-        //}
+            return provider.NotificationMethods.Select(x => x.ToNotificationMethodDisplay());
+        }
+
+
+        /// <summary>
+        /// Adds a <see cref="IPaymentMethod"/>
+        ///
+        /// POST /umbraco/Merchello/NotificationGatewayApi/AddNotificationMethod
+        /// </summary>
+        /// <param name="method">POSTed <see cref="NotificationMethodDisplay"/> object</param>
+        [AcceptVerbs("POST")]
+        public HttpResponseMessage AddNotificationMethod(NotificationMethodDisplay method)
+        {
+            var response = Request.CreateResponse(HttpStatusCode.OK);
+
+            try
+            {
+                var provider = _notificationContext.GetProviderByKey(method.ProviderKey);
+
+                var gatewayResource =
+                    provider.ListResourcesOffered().FirstOrDefault(x => x.ServiceCode == method.ServiceCode);
+
+                var notificationGatewayMethod = provider.CreateNotificationMethod(gatewayResource, method.Name, method.Description);
+
+                provider.SaveNotificationMethod(notificationGatewayMethod);
+
+            }
+            catch (Exception ex)
+            {
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError, String.Format("{0}", ex.Message));
+            }
+
+            return response;
+        }
+
+        /// <summary>
+        /// Save a <see cref="IPaymentMethod"/>
+        /// 
+        /// PUT /umbraco/Merchello/NotificationGatewayApi/PutNotificationMethod
+        /// </summary>
+        /// <param name="method">POSTed <see cref="NotificationMethodDisplay"/> object</param>
+        [AcceptVerbs("POST", "PUT")]
+        public HttpResponseMessage PutNotificationMethod(NotificationMethodDisplay method)
+        {
+            var response = Request.CreateResponse(HttpStatusCode.OK);
+
+            try
+            {
+                var provider = _notificationContext.GetProviderByKey(method.ProviderKey);
+
+                var paymentMethod = provider.NotificationMethods.FirstOrDefault(x => x.Key == method.Key);
+
+                paymentMethod = method.ToNotificationMethod(paymentMethod);
+
+                provider.GatewayProviderService.Save(paymentMethod);
+            }
+            catch (Exception ex)
+            {
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError, String.Format("{0}", ex.Message));
+            }
+
+            return response;
+        }
+
+        /// <summary>
+        /// Delete a <see cref="IPaymentMethod"/>
+        /// 
+        /// GET /umbraco/Merchello/NotificationGatewayApi/DeletNotificationMethod
+        /// </summary>
+        /// <param name="id"><see cref="NotificationMethodDisplay"/> key to delete</param>
+        [AcceptVerbs("GET", "DELETE")]
+        public HttpResponseMessage DeletePaymentMethod(Guid id)
+        {
+            var notificationMethodService = ((ServiceContext)MerchelloContext.Services).NotificationMethodService;
+            var methodToDelete = notificationMethodService.GetByKey(id);
+
+            if (methodToDelete == null) return Request.CreateResponse(HttpStatusCode.NotFound);
+
+            notificationMethodService.Delete(methodToDelete);
+
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
     }
 }
