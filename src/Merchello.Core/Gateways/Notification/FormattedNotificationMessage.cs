@@ -12,13 +12,14 @@ namespace Merchello.Core.Gateways.Notification
     /// <summary>
     /// Defines the base notification
     /// </summary>
-    public abstract class NotificationGatewayMessageBase : INotificationGatewayMessage
+    internal class FormattedNotificationMessage : IFormattedNotificationMessage
     {
         private readonly INotificationMessage _notificationMessage;
         private readonly INotificationFormatter _formatter;
         private Lazy<string> _formattedMessage;
+        private readonly List<string> _recipients = new List<string>(); 
 
-        protected NotificationGatewayMessageBase(INotificationMessage notificationMessage, INotificationFormatter formatter)
+        public FormattedNotificationMessage(INotificationMessage notificationMessage, INotificationFormatter formatter)
         {
             Mandate.ParameterNotNull(formatter, "formatter");
             Mandate.ParameterNotNull(notificationMessage, "message");
@@ -28,19 +29,44 @@ namespace Merchello.Core.Gateways.Notification
 
             Initialize();
         }
-
         private void Initialize()
         {
             _formattedMessage = new Lazy<string>(() => _formatter.Format(GetMessage()));
+
+            Name = _notificationMessage.Name;
+
+            if(!_notificationMessage.Recipients.Any()) return;
+            
+            var tos = _notificationMessage.Recipients.Replace(',', ';');
+            _recipients.AddRange(tos.Split(';').Select(x => x.Trim()));
         }
 
         /// <summary>
         /// The <see cref="INotificationMessage"/>
         /// </summary>
-        public INotificationMessage NotificationMessage 
+        internal INotificationMessage NotificationMessage 
         {
             get { return _notificationMessage; }
         }
+
+        /// <summary>
+        /// The sender's From address
+        /// </summary>
+        public string From 
+        {
+            get { return _notificationMessage.FromAddress; }
+        }
+
+        /// <summary>
+        /// The optional ReplyTo address
+        /// </summary>
+        public string ReplyTo 
+        {
+            get { return _notificationMessage.ReplyTo; }
+        }
+
+        public string Name { get; set; }
+
 
         /// <summary>
         /// A list of recipients for the notification.
@@ -50,11 +76,7 @@ namespace Merchello.Core.Gateways.Notification
         /// </remarks>
         public IEnumerable<string> Recipients 
         {
-            get
-            {
-                var recipients = _notificationMessage.Recipients.Replace(',', ';');
-                return recipients.Split(';').Select(x => x.Trim());
-            }
+            get { return _recipients; }
         }
 
         /// <summary>
@@ -67,9 +89,9 @@ namespace Merchello.Core.Gateways.Notification
 
 
         /// <summary>
-        /// The notification message
+        /// The notification message body text
         /// </summary>
-        public virtual string Message
+        public virtual string BodyText
         {
             get
             {
@@ -92,18 +114,37 @@ namespace Merchello.Core.Gateways.Notification
             }
         }
 
+        /// <summary>
+        /// Adds a recipient to the send to list
+        /// </summary>
+        /// <param name="value"></param>
+        public void AddRecipient(string value)
+        {
+            if(!_recipients.Contains(value)) _recipients.Add(value);
+        }
+
+        /// <summary>
+        /// Removes a recipient from the send to list
+        /// </summary>
+        public void RemoveRecipient(string value)
+        {
+            if (!_recipients.Contains(value)) return;
+            _recipients.Remove(value);
+        }
+
 
         private string GetMessage()
         {
-            if (!_notificationMessage.MessageIsFilePath) return _notificationMessage.Message;
+            if (string.IsNullOrEmpty(_notificationMessage.BodyText)) return string.Empty;
+            if (!_notificationMessage.BodyTextIsFilePath) return _notificationMessage.BodyText;
 
             try
             {
-                return File.ReadAllText(IOHelper.FindFile(_notificationMessage.Message));
+                return File.ReadAllText(IOHelper.FindFile(_notificationMessage.BodyText));
             }
             catch (Exception ex)
             {
-                LogHelper.Error<NotificationGatewayMessageBase>("Failed to parse message from file", ex);
+                LogHelper.Error<FormattedNotificationMessage>("Failed to parse message from file", ex);
             }
             return string.Empty;
         }

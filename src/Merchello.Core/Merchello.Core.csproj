@@ -113,8 +113,11 @@
     <Compile Include="Gateways\Notification\NotificationGatewayMethodBase.cs" />
     <Compile Include="Gateways\Notification\NotificationGatewayProviderBase.cs" />
     <Compile Include="Gateways\Notification\Smtp\ISmtpNotificationGatewayProvider.cs" />
-    <Compile Include="Gateways\Notification\Smtp\ISmtpNotificationGatewayMessage.cs" />
+    <Compile Include="Gateways\Notification\Smtp\SmtpNotificationGatewayMethod.cs" />
     <Compile Include="Gateways\Notification\Smtp\SmtpNotificationGatewayProvider.cs" />
+    <Compile Include="Gateways\Notification\Smtp\SmtpNotificationGatewayProviderSettings.cs" />
+    <Compile Include="Gateways\Notification\Smtp\SmtpProviderEvents.cs" />
+    <Compile Include="Gateways\Notification\Smtp\SmtpProviderExtendedDataExtensions.cs" />
     <Compile Include="Gateways\Payment\Cash\CashPaymentGatewayMethod.cs" />
     <Compile Include="Gateways\Payment\Cash\CashPaymentGatewayProvider.cs" />
     <Compile Include="Gateways\Payment\Cash\ICashPaymentGatewayMethod.cs" />
@@ -127,6 +130,7 @@
     <Compile Include="Gateways\Payment\IPaymentResult.cs" />
     <Compile Include="ObjectResolution\MerchelloManyObjectsResolverBase.cs" />
     <Compile Include="Persistence\Migrations\DataLossException.cs" />
+    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneOneOne\RecreateNotificaitonMessageTable.cs" />
     <Compile Include="PluginManagerExtensions.cs" />
     <Compile Include="Gateways\Shipping\FixedRate\FixedRateShipmentLineItemVisitor.cs" />
     <Compile Include="Gateways\Shipping\FixedRate\FixedRateShippingGatewayMethod.cs" />
@@ -176,10 +180,10 @@
     <Compile Include="Models\TypeFields\EntityTypeField.cs" />
     <Compile Include="Models\TypeFields\IEntityTypeField.cs" />
     <Compile Include="Gateways\Notification\FormatStatus.cs" />
-    <Compile Include="Gateways\Notification\INotificationGatewayMessage.cs" />
+    <Compile Include="Gateways\Notification\IFormattedNotificationMessage.cs" />
     <Compile Include="Gateways\Notification\INotificationGatewayProvider.cs" />
     <Compile Include="Gateways\Notification\Formatters\INotificationFormatter.cs" />
-    <Compile Include="Gateways\Notification\NotificationGatewayMessageBase.cs" />
+    <Compile Include="Gateways\Notification\FormattedNotificationMessage.cs" />
     <Compile Include="Gateways\Notification\Formatters\NotificationFormatterResolver.cs" />
     <Compile Include="Gateways\Notification\Smtp\SmtpClientExtensions.cs" />
     <Compile Include="Persistence\DatabaseModelDefinitions\DbIndexDefinition.cs" />

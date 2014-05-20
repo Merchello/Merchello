@@ -51,7 +51,8 @@ namespace Merchello.Core
                     "merchShippingDestinationAddress",
                     "merchBillingAddress",
                     "merchBaseTax",
-                    "merchProvinceTaxRate"
+                    "merchProvinceTaxRate",
+                    "merchSmtpProviderSettings"
                 }; 
             }
         }
@@ -106,6 +107,10 @@ namespace Merchello.Core
             public static string BaseTaxRate = "merchBaseTaxRate";
             public static string ProviceTaxRate = "merchProvinceTaxRate";
             public static string LineItemTaxAmount = "merchLineItemTaxAmount";
+
+            // SMTP
+            public static string SmtpProviderSettings = "merchSmtpProviderSettings";
+            
         }
     }
 }

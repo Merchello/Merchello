@@ -26,15 +26,24 @@ namespace Merchello.Core.Models.Rdbms
         [NullSetting(NullSetting = NullSettings.Null)]
         public string Description { get; set; }
 
+        [Column("fromAddress")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public string FromAddress { get; set; }
 
-        [Column("message")]
-        public string Message { get; set; }
+        [Column("replyTo")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public string ReplyTo { get; set; }
+
+        [Column("bodyText")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        [SpecialDbType(SpecialDbTypes.NTEXT)]
+        public string BodyText { get; set; }
 
         [Column("maxLength")]
         public int MaxLength { get; set; }
 
-        [Column("messageIsFilePath")]
-        public bool MessageIsFilePath { get; set; }
+        [Column("bodyTextIsFilePath")]
+        public bool BodyTextIsFilePath { get; set; }
 
         [Column("recipients")]
         public string Recipients { get; set; }

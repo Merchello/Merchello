@@ -251,6 +251,24 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
         #endregion
 
+        #region Notifications
+
+        /// <summary>
+        /// Deletes all notification methods
+        /// </summary>
+        public void DeleteAllNotificationMethods()
+        {
+            var methods = ((NotificationMethodService) NotificationMethodService).GetAll();
+            NotificationMethodService.Delete(methods);
+        }
+
+        internal INotificationMethodService NotificationMethodService
+        {
+            get { return _serviceContext.NotificationMethodService; }
+        }
+
+        #endregion
+
         #region IOrder
 
         /// <summary>
