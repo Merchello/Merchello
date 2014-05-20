@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Merchello.Core.Gateways;
+using Merchello.Core.Gateways.Notification;
 using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Shipping.FixedRate;
 using Merchello.Core.Gateways.Taxation;
@@ -324,7 +325,7 @@ namespace Merchello.Web.Models.ContentEditing
             return destination;
         }
 
-        internal static NotificationMethodDisplay ToNotificationMethodDisplay(this INotificationMethod method)
+        internal static NotificationMethodDisplay ToNotificationMethodDisplay(this INotificationGatewayMethod method)
         {
             return AutoMapper.Mapper.Map<NotificationMethodDisplay>(method);
         }

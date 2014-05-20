@@ -108,7 +108,8 @@ namespace Merchello.Web.Editors
 
             if (provider == null) throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
 
-            return provider.NotificationMethods.Select(x => x.ToNotificationMethodDisplay());
+            return provider.NotificationMethods.Select(method => provider.GetNotificationGatewayMethodByKey(method.Key).ToNotificationMethodDisplay());
+
         }
 
 
@@ -189,6 +190,39 @@ namespace Merchello.Web.Editors
             notificationMethodService.Delete(methodToDelete);
 
             return Request.CreateResponse(HttpStatusCode.OK);
+        }
+
+
+        /// <summary>
+        /// Adds a <see cref="IPaymentMethod"/>
+        ///
+        /// POST /umbraco/Merchello/NotificationGatewayApi/AddNotificationMethod
+        /// </summary>
+        /// <param name="method">POSTed <see cref="NotificationMethodDisplay"/> object</param>
+        [AcceptVerbs("POST")]
+        public HttpResponseMessage AddNotificationMessage(NotificationMessageDisplay message)
+        {
+            var response = Request.CreateResponse(HttpStatusCode.OK);
+
+            try
+            {
+                var provider = _notificationContext.GetProviderByMethodKey(message.MethodKey);
+
+                if (provider == null) return Request.CreateResponse(HttpStatusCode.NotFound);
+
+                var notificationGatewayMethod = provider.GetNotificationGatewayMethodByKey(message.MethodKey);
+
+                //notificationGatewayMethod.CreateNotificationMessage(message.Name, message.Description,
+                //    message.FromAddress, message.Recipients, message.BodyText);
+               
+                throw new NotImplementedException();
+            }
+            catch (Exception ex)
+            {
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError, String.Format("{0}", ex.Message));
+            }
+
+            return response;
         }
     }
 }

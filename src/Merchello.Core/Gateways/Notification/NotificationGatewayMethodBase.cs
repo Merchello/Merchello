@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Merchello.Core.Gateways.Notification.Formatters;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
+using Umbraco.Core.Logging;
 
 namespace Merchello.Core.Gateways.Notification
 {
@@ -23,9 +25,40 @@ namespace Merchello.Core.Gateways.Notification
             _gatewayProviderService = gatewayProviderService;
         }
 
+        /// <summary>
+        /// Creates a <see cref="INotificationMessage"/>
+        /// </summary>
+        /// <param name="name">A name for the message (used in Back Office UI)</param>
+        /// <param name="description">A description for the message (used in Back Office UI)</param>
+        /// <param name="fromAddress">The senders or "From Address"</param>
+        /// <param name="recipients">A collection of recipients</param>
+        /// <param name="bodyText">The body text for the message</param>
+        /// <returns>A <see cref="INotificationMessage"/></returns>
         public INotificationMessage CreateNotificationMessage(string name, string description, string fromAddress, IEnumerable<string> recipients, string bodyText)
         {
-            throw new NotImplementedException();
+            var attempt = GatewayProviderService.CreateNotificationMessageWithKey(_notificationMethod.Key, name,description, fromAddress, recipients, bodyText);
+
+            if (attempt.Success)
+            {
+                _notificationMessages = null;
+
+                return attempt.Result;
+            }
+            
+            LogHelper.Error<NotificationGatewayMethodBase>("Failed to create and save a notification message", attempt.Exception);
+
+            throw attempt.Exception;
+        }
+
+        /// <summary>
+        /// Deletes a <see cref="INotificationMessage"/>
+        /// </summary>
+        /// <param name="message">The <see cref="INotificationMessage"/> to be deleted</param>
+        public void DeleteNotificationMessage(INotificationMessage message)
+        {
+            GatewayProviderService.Delete(message);
+
+            _notificationMessages = null;
         }
 
         /// <summary>
@@ -81,6 +114,22 @@ namespace Merchello.Core.Gateways.Notification
         public INotificationMethod NotificationMethod 
         {
             get { return _notificationMethod; }
+        }
+
+
+
+        private IEnumerable<INotificationMessage> _notificationMessages;
+
+        /// <summary>
+        /// Gets a collection of <see cref="INotificationMessage"/>s associated with this NotificationMethod
+        /// </summary>
+        public IEnumerable<INotificationMessage> NotificationMessages
+        {
+            get {
+                return _notificationMessages ??
+                       (_notificationMessages =
+                           GatewayProviderService.GetNotificationMessagesByMethodKey(_notificationMethod.Key));
+            }
         }
 
         /// <summary>

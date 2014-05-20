@@ -211,8 +211,11 @@
     </Compile>
     <Compile Include="AutoMapperMappings-Taxation.cs">
       <DependentUpon>AutoMapperMappings.cs</DependentUpon>
-    </Compile>
-    <Compile Include="AutoMapperMappings.cs" />
+    </Compile>    
+	<Compile Include="AutomMapperMappings-Notification.cs" >
+		<DependentUpon>AutoMapperMappings.cs</DependentUpon>
+	</Compile>
+	<Compile Include="AutoMapperMappings.cs" />
     <Compile Include="CheckoutExtensions.cs" />
     <Compile Include="Editors\CatalogFixedRateShippingApiController.cs" />
     <Compile Include="Editors\GatewayProviderApiController.cs" />
