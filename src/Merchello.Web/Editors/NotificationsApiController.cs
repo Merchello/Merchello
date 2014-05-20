@@ -36,7 +36,7 @@ namespace Merchello.Web.Editors
         public NotificationsApiController(MerchelloContext merchelloContext)
             : base(merchelloContext)
         {
-            _notificationMessageService = MerchelloContext.Services.NotificationMessageService as NotificationMessageService;
+            _notificationMessageService = ((ServiceContext)MerchelloContext.Services).NotificationMessageService as NotificationMessageService;
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace Merchello.Web.Editors
 		internal NotificationsApiController(MerchelloContext merchelloContext, UmbracoContext umbracoContext)
             : base(merchelloContext, umbracoContext)
         {
-			_notificationMessageService = MerchelloContext.Services.NotificationMessageService as NotificationMessageService;
+            _notificationMessageService = ((ServiceContext)MerchelloContext.Services).NotificationMessageService as NotificationMessageService;
         }
 
 		/// <summary>

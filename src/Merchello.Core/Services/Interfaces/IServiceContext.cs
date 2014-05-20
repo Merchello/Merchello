@@ -66,10 +66,6 @@
         /// </summary>
         IWarehouseService WarehouseService { get; }
 
-		/// <summary>
-		/// Gets the <see cref="INotificationMessageService"/>
-		/// </summary>
-		INotificationMessageService NotificationMessageService { get; }
     }
     
 }

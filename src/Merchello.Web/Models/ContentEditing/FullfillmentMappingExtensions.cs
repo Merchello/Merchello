@@ -302,9 +302,9 @@ namespace Merchello.Web.Models.ContentEditing
 		{
 			if (notificationMessageDisplay.Key != Guid.Empty) destination.Key = notificationMessageDisplay.Key;
 			destination.Description = notificationMessageDisplay.Description;
-			destination.Message = notificationMessageDisplay.Message;
+			destination.BodyText = notificationMessageDisplay.BodyText;
 			destination.MaxLength = notificationMessageDisplay.MaxLength;
-			destination.MessageIsFilePath = notificationMessageDisplay.MessageIsFilePath;
+			destination.BodyTextIsFilePath = notificationMessageDisplay.BodyTextIsFilePath;
 			destination.TriggerKey = notificationMessageDisplay.TriggerKey;
 			destination.Recipients = notificationMessageDisplay.Recipients;
 			destination.SendToCustomer = notificationMessageDisplay.SendToCustomer;
