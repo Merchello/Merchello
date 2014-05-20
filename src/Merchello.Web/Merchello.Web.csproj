@@ -226,10 +226,10 @@
     <Compile Include="Models\ContentEditing\DialogEditorViewDisplay.cs" />
     <Compile Include="Models\ContentEditing\NotificationMessageDisplay.cs" />
     <Compile Include="Models\ContentEditing\NotificationMethodDisplay.cs" />
+    <Compile Include="Models\ContentEditing\NotificationTriggerDisplay.cs" />
     <Compile Include="Models\MapperResolvers\GatewayProviderDialogEditorViewResolver.cs" />
     <Compile Include="Models\MapperResolvers\ExtendedDataResolver.cs" />
     <Compile Include="Models\MapperResolvers\GatewayMethodDialogEditorViewResolver.cs" />
-    <Compile Include="Models\MapperResolvers\NotificationMessagesResolver.cs" />
     <Compile Include="PackageActions\AddAppConfigKey.cs" />
     <Compile Include="Workflow\PaymentProcessor.cs" />
     <Compile Include="Editors\SettingsApiController.cs" />
