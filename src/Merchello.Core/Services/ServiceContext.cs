@@ -33,7 +33,6 @@ namespace Merchello.Core.Services
         private Lazy<IShipRateTierService> _shipRateTierService; 
         private Lazy<IShipmentService> _shipmentService; 
         private Lazy<IWarehouseService> _warehouseService;
-	    private Lazy<INotificationMessageService> _notificationMessageService; 
 
         /// <summary>
         /// Constructor
@@ -252,13 +251,6 @@ namespace Merchello.Core.Services
             get { return _warehouseService.Value; }
         }
 
-		/// <summary>
-		/// Gets the <see cref="INotificationMessageService"/>
-		/// </summary>
-		public INotificationMessageService NotificationMessageService
-		{
-			get { return _notificationMessageService.Value; }
-		}
 
         #endregion
     }
