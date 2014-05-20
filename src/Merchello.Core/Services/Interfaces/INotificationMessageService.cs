@@ -8,7 +8,7 @@ namespace Merchello.Core.Services
     /// <summary>
     /// Defines a NotificationMessageService
     /// </summary>
-    public interface INotificationMessageService : IService
+    internal interface INotificationMessageService : IService
     {
         /// <summary>
         /// Saves a single instance of <see cref="INotificationMessage"/>
