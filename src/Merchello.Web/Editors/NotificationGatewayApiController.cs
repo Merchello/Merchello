@@ -81,6 +81,18 @@ namespace Merchello.Web.Editors
         }
 
 
+        public IEnumerable<NotificationTriggerDisplay> GetAllNotificationTriggers()
+        {
+            return new List<NotificationTriggerDisplay>()
+            {
+                new NotificationTriggerDisplay() { Key = new Guid("4B7FD17D-39C8-4D35-BE06-F3BDDE7F3EEB"), Name = "Order Confirmation", SortOrder = 0 },
+                new NotificationTriggerDisplay() { Key = new Guid("C02DC640-9A6C-4BBC-AF5A-2EB355BEE41E"), Name = "Order Shipped", SortOrder = 1 },
+                new NotificationTriggerDisplay() { Key = new Guid("BEEBD6BB-81DE-4799-BED3-C5DD43B295A0"), Name = "Problems with Payment Auth", SortOrder = 2 },
+                new NotificationTriggerDisplay() { Key = new Guid("4DF58706-F569-4A29-ADC2-9BDA0442306A"), Name = "Payment Received", SortOrder = 3 },
+                new NotificationTriggerDisplay() { Key = new Guid("15E7D98A-55B9-48D2-93C0-38857630BBCE"), Name = "Order Canceled", SortOrder = 4 }
+            };
+        }
+
 
         ///// <summary>
         ///// Get all <see cref="INotificationMethod"/> for a payment provider

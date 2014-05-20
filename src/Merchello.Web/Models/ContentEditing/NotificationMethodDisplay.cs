@@ -11,6 +11,9 @@ namespace Merchello.Web.Models.ContentEditing
         public Guid ProviderKey { get; set; }
         public string ServiceCode { get; set; }
 
+        // TODO - ATM, this field is manually setup in the ApiController 
+        // rather than through AutoMapper because presently we do not have an
+        // elegant way to query for the messages.
         public IEnumerable<NotificationMessageDisplay> Messages { get; set; } 
     }
 }
