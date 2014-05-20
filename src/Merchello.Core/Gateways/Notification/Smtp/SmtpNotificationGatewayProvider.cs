@@ -3,6 +3,7 @@ using System.Linq;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Umbraco.Core.Cache;
+using Umbraco.Core.Logging;
 
 namespace Merchello.Core.Gateways.Notification.Smtp
 {
@@ -26,10 +27,40 @@ namespace Merchello.Core.Gateways.Notification.Smtp
             : base(gatewayProviderService, gatewayProviderSettings, runtimeCacheProvider)
         { }
 
-         public override IEnumerable<IGatewayResource> ListResourcesOffered()
-         {
-             return AvailableResources.Where(x => NotificationMethods.Any(y => y.ServiceCode != x.ServiceCode));
-         }
+        /// <summary>
+        /// Returns a collection of all possible gateway methods associated with this provider
+        /// </summary>
+        /// <returns>A collection of <see cref="IGatewayResource"/></returns>
+        public override IEnumerable<IGatewayResource> ListResourcesOffered()
+        {
+            return AvailableResources.Where(x => NotificationMethods.All(y => y.ServiceCode != x.ServiceCode));
+        }
 
+        /// <summary>
+        /// Creates a <see cref="INotificationGatewayMethod"/>
+        /// </summary>
+        /// <param name="gatewayResource">The <see cref="IGatewayResource"/> implemented by this method</param>
+        /// <param name="name">The name of the notification method</param>
+        /// <param name="description">The description of the notification method</param>        
+        /// <returns></returns>
+        public override INotificationGatewayMethod CreateNotificationMethod(IGatewayResource gatewayResource, string name, string description)
+        {
+            var attempt = GatewayProviderService.CreateNotificationMethodWithKey(GatewayProviderSettings.Key, name, description);
+
+            if (attempt.Success) return new SmtpNotificationGatewayMethod(GatewayProviderService, attempt.Result, GatewayProviderSettings.ExtendedData);
+
+            LogHelper.Error<NotificationGatewayProviderBase>(string.Format("Failed to create NotificationGatewayMethod GatewayResource: {0} , {1}", gatewayResource.Name, gatewayResource.ServiceCode), attempt.Exception);
+
+            throw attempt.Exception;
+        }
+
+         /// <summary>
+         /// Gets a collection of all <see cref="INotificationGatewayMethod"/>s for this provider
+         /// </summary>
+         /// <returns>A collection of <see cref="INotificationGatewayMethod"/></returns>
+         public override IEnumerable<INotificationGatewayMethod> GetAllNotificationGatewayMethods()
+         {
+             return NotificationMethods.Select(method => new SmtpNotificationGatewayMethod(GatewayProviderService, method, ExtendedData));
+         }
     }
 }

@@ -47,7 +47,9 @@ namespace Merchello.Core.Gateways.Payment
         /// <param name="method">The <see cref="IPaymentGatewayMethod"/> to delete</param>
         public virtual void DeletePaymentMethod(IPaymentGatewayMethod method)
         {
-            GatewayProviderService.Save(method.PaymentMethod);
+            GatewayProviderService.Delete(method.PaymentMethod);
+
+            PaymentMethods = null;
         }
 
         /// <summary>

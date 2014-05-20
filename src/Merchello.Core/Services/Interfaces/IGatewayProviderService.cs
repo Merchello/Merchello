@@ -177,11 +177,40 @@ namespace Merchello.Core.Services
         #region Notification
 
         /// <summary>
+        /// Creates a <see cref="INotificationMethod"/> and saves it to the database
+        /// </summary>
+        /// <param name="providerKey">The <see cref="IGatewayProviderSettings"/> key</param>
+        /// <param name="name">The name of the notification (used in back office)</param>
+        /// <param name="serviceCode">The notification service code</param>        
+        /// <returns>An Attempt{<see cref="INotificationMethod"/>}</returns>
+        Attempt<INotificationMethod> CreateNotificationMethodWithKey(Guid providerKey, string name, string serviceCode);
+
+        /// <summary>
+        /// Saves a <see cref="INotificationMethod"/>
+        /// </summary>
+        /// <param name="method">The <see cref="INotificationMethod"/> to be saved</param>
+        void Save(INotificationMethod method);
+
+        /// <summary>
+        /// Deletes a <see cref="INotificationMethod"/>
+        /// </summary>
+        /// <param name="method">The <see cref="INotificationMethod"/> to be deleted</param>
+        void Delete(INotificationMethod method);
+
+        /// <summary>
         /// Gets a collection of <see cref="INotificationMethod"/> for a give NotificationGatewayProvider
         /// </summary>
         /// <param name="providerKey">The unique 'key' of the NotificationGatewayProvider</param>
         /// <returns>A collection of <see cref="INotificationMethod"/></returns>
         IEnumerable<INotificationMethod> GetNotificationMethodsByProviderKey(Guid providerKey);
+
+        /// <summary>
+        /// Gets a <see cref="INotificationMethod"/> by it's unique key(Guid)
+        /// </summary>
+        /// <param name="notificationMessageKey">The unique key (Guid) of the <see cref="INotificationMessage"/></param>
+        /// <returns>A <see cref="INotificationMessage"/></returns>
+        INotificationMessage GetNotificationMessageByKey(Guid notificationMessageKey);
+
 
         #endregion
 
