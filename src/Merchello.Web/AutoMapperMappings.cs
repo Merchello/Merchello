@@ -1,7 +1,10 @@
-﻿using Merchello.Core.Gateways;
+﻿using AutoMapper;
+using Merchello.Core.Gateways;
 using Merchello.Core.Models;
 using Merchello.Web.Models.ContentEditing;
 using Merchello.Web.Models.MapperResolvers;
+using Umbraco.Core.Models;
+using Umbraco.Web.Models.ContentEditing;
 
 namespace Merchello.Web
 {
@@ -61,6 +64,8 @@ namespace Merchello.Web
             BindPaymentMappings();
 
             BindWarehouseAndProductMappings();
+
+            ProductContentEditing.BindMappings();
         }
     }
 
