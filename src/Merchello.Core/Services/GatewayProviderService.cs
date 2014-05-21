@@ -437,6 +437,41 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
+        /// Creates a <see cref="INotificationMessage"/> and saves it to the database
+        /// </summary>
+        /// <param name="methodKey">The <see cref="INotificationMethod"/> key</param>
+        /// <param name="name">The name of the message (primarily used in the back office UI)</param>
+        /// <param name="description">The name of the message (primarily used in the back office UI)</param>
+        /// <param name="fromAddress">The senders or "from" address</param>
+        /// <param name="recipients">A collection of recipient address</param>
+        /// <param name="bodyText">The body text of the message</param>
+        /// <param name="triggerKey">An optional event trigger key reference</param>
+        /// <returns>Attempt{INotificationMessage}</returns>
+        public Attempt<INotificationMessage> CreateNotificationMessageWithKey(Guid methodKey, string name, string description, string fromAddress,
+            IEnumerable<string> recipients, string bodyText, Guid? triggerKey = null)
+        {
+            return _notificationMessageService.CreateNotificationMethodWithKey(methodKey, name, description, fromAddress, recipients, bodyText, triggerKey);
+        }
+
+        /// <summary>
+        /// Saves a <see cref="INotificationMessage"/>
+        /// </summary>
+        /// <param name="message">The <see cref="INotificationMessage"/> to save</param>
+        public void Save(INotificationMessage message)
+        {
+            _notificationMessageService.Save(message);
+        }
+
+        /// <summary>
+        /// Deletes a <see cref="INotificationMessage"/>
+        /// </summary>
+        /// <param name="message">The <see cref="INotificationMessage"/> to be deleted</param>
+        public void Delete(INotificationMessage message)
+        {
+            _notificationMessageService.Delete(message);
+        }
+
+        /// <summary>
         /// Gets a collection of <see cref="INotificationMethod"/> for a give NotificationGatewayProvider
         /// </summary>
         /// <param name="providerKey">The unique 'key' of the NotificationGatewayProvider</param>
@@ -444,6 +479,16 @@ namespace Merchello.Core.Services
         public IEnumerable<INotificationMethod> GetNotificationMethodsByProviderKey(Guid providerKey)
         {
             return _notificationMethodService.GetNotifcationMethodsByProviderKey(providerKey);
+        }
+
+        /// <summary>
+        /// Gets a collection of <see cref="INotificationMessage"/> associated with a <see cref="INotificationMethod"/>
+        /// </summary>
+        /// <param name="notificationMethodKey">The key (Guid) of the <see cref="INotificationMethod"/></param>
+        /// <returns>A collection of <see cref="INotificationMessage"/></returns>
+        public IEnumerable<INotificationMessage> GetNotificationMessagesByMethodKey(Guid notificationMethodKey)
+        {
+            return _notificationMessageService.GetNotificationMessagesByMethodKey(notificationMethodKey);
         }
 
         /// <summary>
