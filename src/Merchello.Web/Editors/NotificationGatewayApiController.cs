@@ -24,7 +24,7 @@ namespace Merchello.Web.Editors
 
         private readonly INotificationContext _notificationContext;
 
-                /// <summary>
+        /// <summary>
         /// Constructor
         /// </summary>
         public NotificationGatewayApiController()
@@ -114,7 +114,7 @@ namespace Merchello.Web.Editors
 
 
         /// <summary>
-        /// Adds a <see cref="IPaymentMethod"/>
+        /// Adds a <see cref="INotificationMethod"/>
         ///
         /// POST /umbraco/Merchello/NotificationGatewayApi/AddNotificationMethod
         /// </summary>
@@ -145,7 +145,7 @@ namespace Merchello.Web.Editors
         }
 
         /// <summary>
-        /// Save a <see cref="IPaymentMethod"/>
+        /// Save a <see cref="INotificationMethod"/>
         /// 
         /// PUT /umbraco/Merchello/NotificationGatewayApi/PutNotificationMethod
         /// </summary>
@@ -174,33 +174,39 @@ namespace Merchello.Web.Editors
         }
 
         /// <summary>
-        /// Delete a <see cref="IPaymentMethod"/>
+        /// Delete a <see cref="INotificationMethod"/>
         /// 
         /// GET /umbraco/Merchello/NotificationGatewayApi/DeletNotificationMethod
         /// </summary>
         /// <param name="id"><see cref="NotificationMethodDisplay"/> key to delete</param>
         [AcceptVerbs("GET", "DELETE")]
-        public HttpResponseMessage DeletePaymentMethod(Guid id)
+        public HttpResponseMessage DeleteNotificationMethod(Guid id)
         {
-            var notificationMethodService = ((ServiceContext)MerchelloContext.Services).NotificationMethodService;
-            var methodToDelete = notificationMethodService.GetByKey(id);
+            var response = Request.CreateResponse(HttpStatusCode.OK);
 
-            if (methodToDelete == null) return Request.CreateResponse(HttpStatusCode.NotFound);
+            try
+            {
+                var provider = _notificationContext.GetProviderByMethodKey(id);
+                var method = provider.GetNotificationGatewayMethodByKey(id);
+                provider.DeleteNotificationMethod(method);
+            }
+            catch (Exception ex)
+            {
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError, String.Format("{0}", ex.Message));
+            }
 
-            notificationMethodService.Delete(methodToDelete);
-
-            return Request.CreateResponse(HttpStatusCode.OK);
+            return response;
         }
 
 
         /// <summary>
-        /// Adds a <see cref="IPaymentMethod"/>
+        /// Adds a <see cref="INotificationMessage"/>
         ///
-        /// POST /umbraco/Merchello/NotificationGatewayApi/AddNotificationMethod
+        /// POST /umbraco/Merchello/NotificationGatewayApi/SaveNotificationMessage
         /// </summary>
-        /// <param name="method">POSTed <see cref="NotificationMethodDisplay"/> object</param>
+        /// <param name="message">POSTed <see cref="NotificationMethodDisplay"/> object</param>
         [AcceptVerbs("POST")]
-        public HttpResponseMessage AddNotificationMessage(NotificationMessageDisplay message)
+        public HttpResponseMessage SaveNotificationMessage(NotificationMessageDisplay message)
         {
             var response = Request.CreateResponse(HttpStatusCode.OK);
 
@@ -208,20 +214,50 @@ namespace Merchello.Web.Editors
             {
                 var provider = _notificationContext.GetProviderByMethodKey(message.MethodKey);
 
-                if (provider == null) return Request.CreateResponse(HttpStatusCode.NotFound);
+                var method = provider.GetNotificationGatewayMethodByKey(message.MethodKey);
+                             
+                var notificationMessage = new NotificationMessage(message.MethodKey, message.Name, message.FromAddress);
 
-                var notificationGatewayMethod = provider.GetNotificationGatewayMethodByKey(message.MethodKey);
-
-                //notificationGatewayMethod.CreateNotificationMessage(message.Name, message.Description,
-                //    message.FromAddress, message.Recipients, message.BodyText);
-               
-                throw new NotImplementedException();
+                method.SaveNotificationMessage(message.ToNotificationMessage(notificationMessage));
+             
+                return response;
             }
             catch (Exception ex)
             {
                 response = Request.CreateResponse(HttpStatusCode.InternalServerError, String.Format("{0}", ex.Message));
             }
 
+            return response;
+        }
+      
+
+        /// <summary>
+        /// Delete a <see cref="INotificationMethod"/>
+        /// 
+        /// GET /umbraco/Merchello/NotificationGatewayApi/DeleteNotificationMessage
+        /// </summary>
+        /// <param name="id"><see cref="NotificationMessageDisplay"/> key to delete</param>
+        [AcceptVerbs("GET", "DELETE")]
+        public HttpResponseMessage DeleteNotificationMessage(Guid id)
+        {
+            var response = Request.CreateResponse(HttpStatusCode.OK);
+
+            var notificationMessageService = ((ServiceContext)MerchelloContext.Services).NotificationMessageService;
+            var messageToDelete = notificationMessageService.GetByKey(id);
+
+            if (messageToDelete == null) return Request.CreateResponse(HttpStatusCode.NotFound);
+
+            try
+            {
+                var provider = _notificationContext.GetProviderByMethodKey(messageToDelete.MethodKey);
+                var method = provider.GetNotificationGatewayMethodByKey(messageToDelete.MethodKey);
+                method.DeleteNotificationMessage(messageToDelete);
+            }
+            catch (Exception ex)
+            {
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError, String.Format("{0}", ex.Message));
+            }           
+           
             return response;
         }
     }

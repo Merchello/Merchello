@@ -19,6 +19,12 @@ namespace Merchello.Core.Gateways.Notification
         INotificationMessage CreateNotificationMessage(string name, string description, string fromAddress, IEnumerable<string> recipients, string bodyText);
 
         /// <summary>
+        /// Saves a <see cref="INotificationMessage"/>
+        /// </summary>
+        /// <param name="message">The <see cref="INotificationMessage"/> to be saved</param>
+        void SaveNotificationMessage(INotificationMessage message);
+
+        /// <summary>
         /// Deletes a <see cref="INotificationMethod"/>
         /// </summary>
         /// <param name="message">The <see cref="INotificationMessage"/> to be deleted</param>        
