@@ -72,7 +72,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\GatewayProviders.html" />
-    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\NotificationsEdit.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\NotificationsEditSettings.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\NotificationsEditTemplate.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\TaxesByDestination.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\SalesByItem.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\SalesOverTime.html" />

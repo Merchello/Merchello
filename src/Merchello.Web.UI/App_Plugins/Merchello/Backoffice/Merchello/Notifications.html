@@ -34,7 +34,7 @@
                     <label class="merchello-control-label">
                         Email Templates
                         <small>Personalize your email templates</small>
-                        <a><i class="icon-chat"></i> Add a Notification</a>
+                        <a data-ng-href="#/merchello/merchello/NotificationsEdit/0"><i class=" icon-chat"></i> Add a Method</a>
                     </label>
 
                     <div class="merchello-controls row-fluid">
@@ -73,7 +73,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr data-ng-repeat="template in emailTemplates">
+                                    <tr data-ng-repeat="template in emailTemplates track by $key">
                                         <td>{{template.name}}</td>
                                         <td>{{template.description}}</td>
                                         <td></td>

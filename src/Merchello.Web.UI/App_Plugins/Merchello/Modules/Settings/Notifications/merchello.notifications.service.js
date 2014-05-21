@@ -6,53 +6,14 @@
         * @name umbraco.resources.MerchelloNotificationsService
         * @description Loads in data for notifications
         **/
-	merchelloServices.MerchelloNotificationsService = function ($q, $http, umbRequestHelper) {
-
-
-		// This is mock data for the notifications. ~Mark Bowser
-		var mockTemplates = [
-		{
-			pk: 0,
-			name: "Order Confirmation",
-			description: "Sent to the customers and users requesting notification (set below).",
-			header: "Thank you for ordering through Geeky Soap! We're so excited to share our geekiness with you. Enjoy your products and if you have any questions, call our customer service line at 1-888-531-1234!",
-			footer: "XOXO, <br/> The Geeky Soap Team"
-		},
-		{
-			pk: 1,
-			name: "Order Shipped",
-			description: "Sent to the customer upon order fulfillment.",
-			header: "",
-			footer: ""
-		},
-		{
-			pk: 2,
-			name: "Problems with Payment Auth",
-			description: "Sent with request to contact support when credit card is denied or there is an error such as wrong billing address.",
-			header: "",
-			footer: ""
-		},
-		{
-			pk: 3,
-			name: "Payment Received",
-			description: "Sent to customers and users requesting notification upon payment processing.",
-			header: "",
-			footer: ""
-		},
-		{
-			pk: 4,
-			name: "Order Canceled",
-			description: "Sent to the customer after an order is manually canceled.",
-			header: "",
-			footer: ""
-		}];
+    merchelloServices.MerchelloNotificationsService = function ($q, $http, umbRequestHelper) {
 
 		var notificationsService =  {
 
 			getNotifications: function () {
 				// This needs to make an api call to get real data ~Mark Bowser
 				var deferred = $q.defer();
-				deferred.resolve(mockTemplates);
+				//deferred.resolve(mockTemplates);
 
 				return deferred.promise;
 
@@ -62,6 +23,25 @@
 				//    ),
 				//    'Failed to get all Notifications');
 			},
+
+			getAllGatewayProviders: function () {
+
+			    return umbRequestHelper.resourcePromise(
+                    $http({
+                        url: umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'GetAllGatewayProviders'),
+                        method: "GET"
+                    }),
+                    'Failed to retreive data for all gateway providers');
+			},
+
+		    getAllNotificationTriggers: function() {
+		        return umbRequestHelper.resourcePromise(
+                    $http({
+                        url: umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'GetAllNotificationTriggers'),
+                        method: "GET"
+                    }),
+                    'Failed to retreive data for all gateway providers');
+		    },
 
 			getNotification: function (id) {
 				// This needs to make an api call to get data from api instead of from getNotifications probably ~Mark Bowser
@@ -93,12 +73,11 @@
 
 				return umbRequestHelper.resourcePromise(
 				   $http.post(
-						umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'PutNotification'),
+						umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'SaveNotificationMessage'),
 						angular.toJson(notification)
 					),
 					'Failed to save data for Notification');
 			}
-
 		};
 
 		return notificationsService;
