@@ -51,6 +51,17 @@ namespace Merchello.Core.Gateways.Notification
         }
 
         /// <summary>
+        /// Saves a <see cref="INotificationMessage"/>
+        /// </summary>
+        /// <param name="message">The <see cref="INotificationMessage"/> to be saved</param>
+        public void SaveNotificationMessage(INotificationMessage message)
+        {
+            GatewayProviderService.Save(message);
+
+            _notificationMessages = null;
+        }
+
+        /// <summary>
         /// Deletes a <see cref="INotificationMessage"/>
         /// </summary>
         /// <param name="message">The <see cref="INotificationMessage"/> to be deleted</param>
