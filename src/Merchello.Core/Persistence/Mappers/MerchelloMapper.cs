@@ -33,12 +33,14 @@ namespace Merchello.Core.Persistence.Mappers
             CacheMapper(typeof(IItemCacheLineItem), typeof(ItemCacheLineItemMapper));
             CacheMapper(typeof(ICustomer), typeof(CustomerMapper));
             CacheMapper(typeof(ICatalogInventory), typeof(CatalogInventoryMapper));
-            CacheMapper(typeof(IGatewayProvider), typeof(GatewayProviderMapper));
+            CacheMapper(typeof(IGatewayProviderSettings), typeof(GatewayProviderMapper));
             CacheMapper(typeof(IInvoice), typeof(InvoiceMapper));
             CacheMapper(typeof(IInvoiceLineItem), typeof(InvoiceLineItemMapper));
             CacheMapper(typeof(IInvoiceStatus), typeof(InvoiceStatusMapper));
             CacheMapper(typeof(IOrder), typeof(OrderMapper));
             CacheMapper(typeof(IOrderLineItem), typeof(OrderLineItemMapper));
+            CacheMapper(typeof(INotificationMessage), typeof(NotificationMessageMapper));
+            CacheMapper(typeof(INotificationMethod), typeof(NotificationMethodMapper));            
             CacheMapper(typeof(IPayment), typeof(PaymentMapper));
             CacheMapper(typeof(IPaymentMethod), typeof(PaymentMethodMapper));
             CacheMapper(typeof(IProduct), typeof(ProductMapper));

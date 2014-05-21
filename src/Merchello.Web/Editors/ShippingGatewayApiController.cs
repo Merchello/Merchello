@@ -157,7 +157,7 @@ namespace Merchello.Web.Editors
                 }
             }
 
-            return providers.Select(provider => provider.GatewayProvider.ToGatewayProviderDisplay());
+            return providers.Select(provider => provider.GatewayProviderSettings.ToGatewayProviderDisplay());
         }
 
         /// <summary>
@@ -246,9 +246,13 @@ namespace Merchello.Web.Editors
             if (provider == null) throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             if (shipCountry == null) throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
 
-            var methods = provider.GetAllShippingGatewayMethodsForShipCountry(shipCountryId);
+            if (!Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey.Equals(provider.Key))
+            {
+                var methods = provider.GetAllShippingGatewayMethodsForShipCountry(shipCountryId);
+                return methods.Select(method => method.ToShipMethodDisplay());
+            }
 
-            return methods.Select(method => method.ToShipMethodDisplay());
+            return new List<ShipMethodDisplay>();
         }
 
         /// <summary>
@@ -324,12 +328,12 @@ namespace Merchello.Web.Editors
         ///
         /// GET /umbraco/Merchello/ShippingMethodsApi/DeleteShipMethod
         /// </summary>
-        /// <param name="id"><see cref="ShipMethodDisplay"/> key to delete</param>
-        [AcceptVerbs("POST", "PUT")]
-        public HttpResponseMessage DeleteShipMethod(Guid id)
+        /// <param name="method"><see cref="ShipMethodDisplay"/> key to delete</param>
+        [AcceptVerbs("POST", "DELETE")]
+        public HttpResponseMessage DeleteShipMethod(ShipMethodDisplay method)
         {
             var shippingMethodService = ((ServiceContext)MerchelloContext.Services).ShipMethodService;
-            var methodToDelete = shippingMethodService.GetByKey(id);
+            var methodToDelete = shippingMethodService.GetByKey(method.Key);
 
             if (methodToDelete == null) return Request.CreateResponse(HttpStatusCode.NotFound);
 

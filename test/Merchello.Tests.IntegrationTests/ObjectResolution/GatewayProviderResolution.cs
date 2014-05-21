@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Gateways;
@@ -7,7 +8,7 @@ using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Gateways.Taxation;
 using Merchello.Tests.IntegrationTests.TestHelpers;
 using NUnit.Framework;
-using Rhino.Mocks.Constraints;
+using Umbraco.Core;
 
 namespace Merchello.Tests.IntegrationTests.ObjectResolution
 {
@@ -33,7 +34,7 @@ namespace Merchello.Tests.IntegrationTests.ObjectResolution
             }
 
             // deactivate all test providers
-            var testProviders = GatewayProviderResolver.Current.GetActivatedProviders().Where(x => testKeys.Contains(x.GatewayProvider.Key) && x.Activated);
+            var testProviders = GatewayProviderResolver.Current.GetActivatedProviders().Where(x => testKeys.Contains(x.GatewayProviderSettings.Key) && x.Activated);
             foreach (var provider in testProviders)
             {
                 ((GatewayContext)MerchelloContext.Current.Gateways).DeactivateProvider(provider);
@@ -202,6 +203,18 @@ namespace Merchello.Tests.IntegrationTests.ObjectResolution
 
             //// Assert
             Assert.IsFalse(retrieved.Activated);
+        }
+
+        [Test]
+        public void Can_Resolve_A_NotificationGatewayProvider()
+        {
+            //// Arrage
+            var types =
+                PluginManager.Current.ResolveTypesWithAttribute<GatewayProviderBase, GatewayProviderActivationAttribute>
+                    ();
+            //// Act 
+            var provider = new List<GatewayProviderBase>();
+
         }
     }
 }

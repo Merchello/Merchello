@@ -11,5 +11,6 @@ namespace Merchello.Web.Models.ContentEditing
         public string Description { get; set; }
         public decimal Amount { get; set; }
         public bool Exported { get; set; }
+		public DateTime CreateDate { get; set; }
     }
 }

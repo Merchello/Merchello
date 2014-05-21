@@ -32,7 +32,7 @@ namespace Merchello.Core.Persistence.Migrations.Initial
             {3, typeof(CustomerAddressDto)},             
             {4, typeof(ItemCacheDto)},
             {5, typeof(ItemCacheItemDto)},
-            {6, typeof(GatewayProviderDto)},
+            {6, typeof(GatewayProviderSettingsDto)},
             {7, typeof(WarehouseDto)},
             {8, typeof(WarehouseCatalogDto)},                
             {9, typeof(ShipCountryDto)},

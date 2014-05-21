@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ClientDependency.Core;
 using Merchello.Core.Gateways;
 using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Models;
@@ -32,8 +31,8 @@ namespace Merchello.Tests.IntegrationTests.ObjectResolution
             }
         }
 
-        public TestingPaymentGatewayProvider(IGatewayProviderService gatewayProviderService, IGatewayProvider gatewayProvider, IRuntimeCacheProvider runtimeCacheProvider) 
-            : base(gatewayProviderService, gatewayProvider, runtimeCacheProvider)
+        public TestingPaymentGatewayProvider(IGatewayProviderService gatewayProviderService, IGatewayProviderSettings gatewayProviderSettings, IRuntimeCacheProvider runtimeCacheProvider) 
+            : base(gatewayProviderService, gatewayProviderSettings, runtimeCacheProvider)
         {
         }
 
@@ -48,7 +47,7 @@ namespace Merchello.Tests.IntegrationTests.ObjectResolution
             var available = ListResourcesOffered().FirstOrDefault(x => x.ServiceCode == gatewayResource.ServiceCode);
             if (available == null) throw new InvalidOperationException("GatewayResource has already been assigned");
 
-            var attempt = GatewayProviderService.CreatePaymentMethodWithKey(GatewayProvider.Key, name, description, available.ServiceCode);
+            var attempt = GatewayProviderService.CreatePaymentMethodWithKey(GatewayProviderSettings.Key, name, description, available.ServiceCode);
 
 
             if (attempt.Success)

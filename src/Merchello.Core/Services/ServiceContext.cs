@@ -20,7 +20,9 @@ namespace Merchello.Core.Services
         private Lazy<IInvoiceService> _invoiceService; 
         private Lazy<IItemCacheService> _itemCacheService;   
         private Lazy<IGatewayProviderService> _gatewayProviderService;
-        private Lazy<IOrderService> _orderService; 
+        private Lazy<IOrderService> _orderService;
+        private Lazy<INotificationMethodService> _notificationMethodService;
+        private Lazy<INotificationMessageService> _notificationMessageService; 
         private Lazy<IPaymentService> _paymentService; 
         private Lazy<IPaymentMethodService> _paymentMethodService; 
         private Lazy<IProductService> _productService;
@@ -58,7 +60,12 @@ namespace Merchello.Core.Services
             if(_itemCacheService == null)
                 _itemCacheService = new Lazy<IItemCacheService>(() => new ItemCacheService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
             
+            if(_notificationMethodService == null)
+                _notificationMethodService = new Lazy<INotificationMethodService>(() => new NotificationMethodService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
             
+            if(_notificationMessageService == null)
+                _notificationMessageService = new Lazy<INotificationMessageService>(() => new NotificationMessageService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+
             if(_paymentService == null)
                 _paymentService = new Lazy<IPaymentService>(() => new PaymentService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _appliedPaymentService.Value));
 
@@ -89,7 +96,6 @@ namespace Merchello.Core.Services
             if (_orderService == null)
                 _orderService = new Lazy<IOrderService>(() => new OrderService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _storeSettingsService.Value, _shipmentService.Value));
 
-
             if (_invoiceService == null)
                 _invoiceService = new Lazy<IInvoiceService>(() => new InvoiceService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _appliedPaymentService.Value, _orderService.Value, _storeSettingsService.Value));
 
@@ -97,10 +103,13 @@ namespace Merchello.Core.Services
                 _countryTaxRateService = new Lazy<ITaxMethodService>(() => new TaxMethodService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _storeSettingsService.Value));
             
             if(_gatewayProviderService == null)
-                _gatewayProviderService = new Lazy<IGatewayProviderService>(() => new GatewayProviderService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _shipMethodService.Value, _shipRateTierService.Value, _shipCountryService.Value, _invoiceService.Value, _orderService.Value, _countryTaxRateService.Value, _paymentService.Value, _paymentMethodService.Value));
+                _gatewayProviderService = new Lazy<IGatewayProviderService>(() => new GatewayProviderService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _shipMethodService.Value, _shipRateTierService.Value, _shipCountryService.Value, _invoiceService.Value, _orderService.Value, _countryTaxRateService.Value, _paymentService.Value, _paymentMethodService.Value, _notificationMethodService.Value, _notificationMessageService.Value));
 
             if(_warehouseService == null)
                 _warehouseService = new Lazy<IWarehouseService>(() => new WarehouseService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+
+			if (_notificationMessageService == null)
+				_notificationMessageService = new Lazy<INotificationMessageService>(() => new NotificationMessageService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
         }
 
 
@@ -144,6 +153,22 @@ namespace Merchello.Core.Services
         public IItemCacheService ItemCacheService
         {
             get { return _itemCacheService.Value;  }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="INotificationMessageService"/>
+        /// </summary>
+        internal INotificationMessageService NotificationMessageService
+        {
+            get { return _notificationMessageService.Value; }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="INotificationMethodService"/>
+        /// </summary>
+        internal INotificationMethodService NotificationMethodService
+        {
+            get { return _notificationMethodService.Value; }
         }
 
         /// <summary>
@@ -224,9 +249,9 @@ namespace Merchello.Core.Services
         public IWarehouseService WarehouseService
         {
             get { return _warehouseService.Value; }
-
         }
-     
+
+
         #endregion
     }
 }

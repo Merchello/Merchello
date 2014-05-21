@@ -16,11 +16,14 @@ namespace Merchello.Core.Persistence.Mappers
 
             CacheMap<NotificationMessage, NotificationMessageDto>(src => src.Key, dto => dto.Key);
             CacheMap<NotificationMessage, NotificationMessageDto>(src => src.MethodKey, dto => dto.MethodKey);
+            CacheMap<NotificationMessage, NotificationMessageDto>(src => src.TriggerKey, dto => dto.TriggerKey);
             CacheMap<NotificationMessage, NotificationMessageDto>(src => src.Name, dto => dto.Name);
+            CacheMap<NotificationMessage, NotificationMessageDto>(src => src.FromAddress, dto => dto.FromAddress);
+            CacheMap<NotificationMessage, NotificationMessageDto>(src => src.ReplyTo, dto => dto.ReplyTo);
             CacheMap<NotificationMessage, NotificationMessageDto>(src => src.Description, dto => dto.Description);
-            CacheMap<NotificationMessage, NotificationMessageDto>(src => src.Message, dto => dto.Message);
+            CacheMap<NotificationMessage, NotificationMessageDto>(src => src.BodyText, dto => dto.BodyText);
             CacheMap<NotificationMessage, NotificationMessageDto>(src => src.MaxLength, dto => dto.MaxLength);
-            CacheMap<NotificationMessage, NotificationMessageDto>(src => src.MessageIsFilePath, dto => dto.MessageIsFilePath);
+            CacheMap<NotificationMessage, NotificationMessageDto>(src => src.BodyTextIsFilePath, dto => dto.BodyTextIsFilePath);
             CacheMap<NotificationMessage, NotificationMessageDto>(src => src.Recipients, dto => dto.Recipients);
             CacheMap<NotificationMessage, NotificationMessageDto>(src => src.SendToCustomer, dto => dto.SendToCustomer);
             CacheMap<NotificationMessage, NotificationMessageDto>(src => src.Disabled, dto => dto.Disabled);

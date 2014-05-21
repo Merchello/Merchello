@@ -211,8 +211,11 @@
     </Compile>
     <Compile Include="AutoMapperMappings-Taxation.cs">
       <DependentUpon>AutoMapperMappings.cs</DependentUpon>
-    </Compile>
-    <Compile Include="AutoMapperMappings.cs" />
+    </Compile>    
+	<Compile Include="AutomMapperMappings-Notification.cs" >
+		<DependentUpon>AutoMapperMappings.cs</DependentUpon>
+	</Compile>
+	<Compile Include="AutoMapperMappings.cs" />
     <Compile Include="CheckoutExtensions.cs" />
     <Compile Include="Editors\CatalogFixedRateShippingApiController.cs" />
     <Compile Include="Editors\GatewayProviderApiController.cs" />
@@ -221,8 +224,12 @@
     <Compile Include="Editors\OrderApiController.cs" />
     <Compile Include="Editors\PaymentApiController.cs" />
     <Compile Include="Editors\PaymentGatewayApiController.cs" />
+    <Compile Include="Editors\NotificationsApiController.cs" />
     <Compile Include="Models\ContentEditing\DialogEditorDisplayBase.cs" />
     <Compile Include="Models\ContentEditing\DialogEditorViewDisplay.cs" />
+    <Compile Include="Models\ContentEditing\NotificationMessageDisplay.cs" />
+    <Compile Include="Models\ContentEditing\NotificationMethodDisplay.cs" />
+    <Compile Include="Models\ContentEditing\NotificationTriggerDisplay.cs" />
     <Compile Include="Models\MapperResolvers\GatewayProviderDialogEditorViewResolver.cs" />
     <Compile Include="Models\MapperResolvers\ExtendedDataResolver.cs" />
     <Compile Include="Models\MapperResolvers\GatewayMethodDialogEditorViewResolver.cs" />

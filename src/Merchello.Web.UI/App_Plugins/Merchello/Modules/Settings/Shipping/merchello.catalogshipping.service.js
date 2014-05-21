@@ -129,11 +129,9 @@
             deleteShipMethod: function (shipMethod) {
 
                 return umbRequestHelper.resourcePromise(
-                    $http({
-                        url: umbRequestHelper.getApiUrl('merchelloCatalogShippingApiBaseUrl', 'DeleteShipMethod'),
-                        method: "GET",
-                        params: { id: shipMethod.key }
-                    }),
+                    $http.post(umbRequestHelper.getApiUrl('merchelloCatalogShippingApiBaseUrl', 'DeleteShipMethod'),
+                        shipMethod
+                    ),
                     'Failed to delete ship method');
             },
 

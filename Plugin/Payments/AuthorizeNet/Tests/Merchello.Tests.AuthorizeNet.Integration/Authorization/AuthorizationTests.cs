@@ -64,7 +64,7 @@ namespace Merchello.Tests.AuthorizeNet.Integration.Authorization
                 UseSandbox = true
             };
 
-            Provider.GatewayProvider.ExtendedData.SaveProcessorSettings(processorSettings);
+            Provider.GatewayProviderSettings.ExtendedData.SaveProcessorSettings(processorSettings);
 
             if (Provider.PaymentMethods.Any()) return;
             var resource = Provider.ListResourcesOffered().ToArray();

@@ -15,10 +15,10 @@ namespace Merchello.Core.Gateways.Payment
         /// Constructor
         /// </summary>
         /// <param name="gatewayProviderService">The <see cref="IGatewayProviderService"/></param>
-        /// <param name="gatewayProvider">The <see cref="IGatewayProvider"/></param>
+        /// <param name="gatewayProviderSettings">The <see cref="IGatewayProviderSettings"/></param>
         /// <param name="runtimeCacheProvider">Umbraco's <see cref="IRuntimeCacheProvider"/></param>
-        protected PaymentGatewayProviderBase(IGatewayProviderService gatewayProviderService, IGatewayProvider gatewayProvider, IRuntimeCacheProvider runtimeCacheProvider) 
-            : base(gatewayProviderService, gatewayProvider, runtimeCacheProvider)
+        protected PaymentGatewayProviderBase(IGatewayProviderService gatewayProviderService, IGatewayProviderSettings gatewayProviderSettings, IRuntimeCacheProvider runtimeCacheProvider) 
+            : base(gatewayProviderService, gatewayProviderSettings, runtimeCacheProvider)
         { }
 
         /// <summary>
@@ -47,7 +47,9 @@ namespace Merchello.Core.Gateways.Payment
         /// <param name="method">The <see cref="IPaymentGatewayMethod"/> to delete</param>
         public virtual void DeletePaymentMethod(IPaymentGatewayMethod method)
         {
-            GatewayProviderService.Save(method.PaymentMethod);
+            GatewayProviderService.Delete(method.PaymentMethod);
+
+            PaymentMethods = null;
         }
 
         /// <summary>
@@ -74,7 +76,7 @@ namespace Merchello.Core.Gateways.Payment
         {
             get {
                 return _paymentMethods ??
-                       (_paymentMethods = GatewayProviderService.GetPaymentMethodsByProviderKey(GatewayProvider.Key));
+                       (_paymentMethods = GatewayProviderService.GetPaymentMethodsByProviderKey(GatewayProviderSettings.Key));
             }
             protected set { _paymentMethods = value; }
         }

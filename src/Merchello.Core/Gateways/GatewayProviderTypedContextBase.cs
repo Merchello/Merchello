@@ -26,7 +26,7 @@ namespace Merchello.Core.Gateways
         }
 
         /// <summary>
-        /// Lists all actived <see cref="IGatewayProvider"/>
+        /// Lists all actived <see cref="IGatewayProviderSettings"/>
         /// </summary>
         /// <returns>A collection of all "activated" GatewayProvider of the particular type T</returns>
         public IEnumerable<GatewayProviderBase> GetAllActivatedProviders()
@@ -56,6 +56,13 @@ namespace Merchello.Core.Gateways
         }
 
         /// <summary>
+        /// Returns an instance of an 'active' GatewayProvider associated with a GatewayMethod based given the unique Key (Guid) of the GatewayMethod
+        /// </summary>
+        /// <param name="gatewayMethodKey">The unique key (Guid) of the <see cref="IGatewayMethod"/></param>
+        /// <returns>An instantiated GatewayProvider</returns>
+        public abstract T GetProviderByMethodKey(Guid gatewayMethodKey);
+
+        /// <summary>
         /// Creates an instance GatewayProvider given its registered Key
         /// </summary>        
         [Obsolete("Use GetProviderByKey instead")]
@@ -65,43 +72,43 @@ namespace Merchello.Core.Gateways
         }
 
         /// <summary>
-        /// Activates a <see cref="IGatewayProvider"/>
+        /// Activates a <see cref="IGatewayProviderSettings"/>
         /// </summary>
         /// <param name="provider">The GatewayProvider to be activated</param>
         public void ActivateProvider(GatewayProviderBase provider)
         {
-            ActivateProvider(provider.GatewayProvider);
+            ActivateProvider(provider.GatewayProviderSettings);
         }
 
         /// <summary>
-        /// Activates a <see cref="IGatewayProvider"/>
+        /// Activates a <see cref="IGatewayProviderSettings"/>
         /// </summary>
-        /// <param name="gatewayProvider">The <see cref="IGatewayProvider"/> to be activated</param>
-        public void ActivateProvider(IGatewayProvider gatewayProvider)
+        /// <param name="gatewayProviderSettings">The <see cref="IGatewayProviderSettings"/> to be activated</param>
+        public void ActivateProvider(IGatewayProviderSettings gatewayProviderSettings)
         {
 
-            if (gatewayProvider.Activated) return;
-            GatewayProviderService.Save(gatewayProvider);
+            if (gatewayProviderSettings.Activated) return;
+            GatewayProviderService.Save(gatewayProviderSettings);
             GatewayProviderResolver.RefreshCache();
         }
 
         /// <summary>
-        /// Deactivates a <see cref="IGatewayProvider"/>
+        /// Deactivates a <see cref="IGatewayProviderSettings"/>
         /// </summary>
         /// <param name="provider">The GatewayProvider to be deactivated</param>
         public void DeactivateProvider(GatewayProviderBase provider)
         {
-            DeactivateProvider(provider.GatewayProvider);
+            DeactivateProvider(provider.GatewayProviderSettings);
         }
 
         /// <summary>
-        /// Deactivates a <see cref="IGatewayProvider"/>
+        /// Deactivates a <see cref="IGatewayProviderSettings"/>
         /// </summary>
-        /// <param name="gatewayProvider">The <see cref="IGatewayProvider"/> to be deactivated</param>
-        public void DeactivateProvider(IGatewayProvider gatewayProvider)
+        /// <param name="gatewayProviderSettings">The <see cref="IGatewayProviderSettings"/> to be deactivated</param>
+        public void DeactivateProvider(IGatewayProviderSettings gatewayProviderSettings)
         {
-            if (!gatewayProvider.Activated) return;
-            GatewayProviderService.Delete(gatewayProvider);
+            if (!gatewayProviderSettings.Activated) return;
+            GatewayProviderService.Delete(gatewayProviderSettings);
             GatewayProviderResolver.RefreshCache();
         }
 

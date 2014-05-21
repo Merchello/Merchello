@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using AutoMapper;
 using Merchello.Core;
 using Umbraco.Core.Models;
@@ -25,17 +22,18 @@ namespace Merchello.Web
 
         private static void AddTab(ContentItemDisplay contentItem)
         {
-            var tab = new Tab<ContentPropertyDisplay>();
-            tab.Alias = Constants.ProductEditor.TabAlias;
-            tab.Label = Constants.ProductEditor.TabLabel;
-            tab.Id = Constants.ProductEditor.TabId;
-            tab.IsActive = true;
+            var tab = new Tab<ContentPropertyDisplay>
+            {
+                Alias = Constants.ProductEditor.TabAlias,
+                Label = Constants.ProductEditor.TabLabel,
+                Id = Constants.ProductEditor.TabId,
+                IsActive = true
+            };
 
             AddProperties(ref tab);
 
             //Is there a better way?
-            var tabs = new List<Tab<ContentPropertyDisplay>>();
-            tabs.Add(tab);
+            var tabs = new List<Tab<ContentPropertyDisplay>> {tab};
             tabs.AddRange(contentItem.Tabs);
             contentItem.Tabs = tabs;
         }
@@ -47,16 +45,21 @@ namespace Merchello.Web
 
         private static void AddProperties(ref Tab<ContentPropertyDisplay> tab)
         {
-            var listViewProperties = new List<ContentPropertyDisplay>();
-            listViewProperties.Add(new ContentPropertyDisplay
+            var listViewProperties = new List<ContentPropertyDisplay>
             {
-                Alias = string.Concat(Umbraco.Core.Constants.PropertyEditors.InternalGenericPropertiesPrefix, Constants.ProductEditor.PropertyAlias), // Must prefix with _umb_ so Umbraco knows not to save this property
-                Label = "",
-                Value = null,
-                View = "boolean",
-                HideLabel = true,
-                Config = new Dictionary<string, object>()
-            });
+                new ContentPropertyDisplay
+                {
+                    Alias =
+                        string.Concat(Umbraco.Core.Constants.PropertyEditors.InternalGenericPropertiesPrefix,
+                            Constants.ProductEditor.PropertyAlias),
+                    // Must prefix with _umb_ so Umbraco knows not to save this property
+                    Label = "",
+                    Value = null,
+                    View = "boolean",
+                    HideLabel = true,
+                    Config = new Dictionary<string, object>()
+                }
+            };
             tab.Properties = listViewProperties;
         }
     }

@@ -16,6 +16,19 @@ namespace Merchello.Core.Gateways.Taxation
         { }
 
         /// <summary>
+        /// Returns an instance of an 'active' GatewayProvider associated with a GatewayMethod based given the unique Key (Guid) of the GatewayMethod
+        /// </summary>
+        /// <param name="gatewayMethodKey">The unique key (Guid) of the <see cref="IGatewayMethod"/></param>
+        /// <returns>An instantiated GatewayProvider</returns>
+        public override TaxationGatewayProviderBase GetProviderByMethodKey(Guid gatewayMethodKey)
+        {
+            return
+                GetAllActivatedProviders()
+                    .FirstOrDefault(x => ((TaxationGatewayProviderBase) x)
+                        .TaxMethods.Any(y => y.Key == gatewayMethodKey)) as TaxationGatewayProviderBase;
+        }
+
+        /// <summary>
         /// Calculates taxes for the <see cref="IInvoice"/>
         /// </summary>
         /// <param name="invoice">The <see cref="IInvoice"/> to tax</param>
@@ -50,5 +63,7 @@ namespace Merchello.Core.Gateways.Taxation
 
             return gatewayTaxMethod.CalculateTaxForInvoice(invoice, taxAddress);
         }
+
+
     }
 }

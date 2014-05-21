@@ -9,7 +9,7 @@ using Merchello.Core.Services;
 namespace Merchello.Core.Gateways
 {
     /// <summary>
-    /// Represents the GatewayContext.  Provides access to <see cref="IGatewayProvider"/>s
+    /// Represents the GatewayContext.  Provides access to <see cref="IGatewayProviderSettings"/>s
     /// </summary>
     internal class GatewayContext : IGatewayContext
     {
@@ -106,7 +106,7 @@ namespace Merchello.Core.Gateways
         internal void DeactivateProvider(GatewayProviderBase provider)
         {
             if (!provider.Activated) return;
-            _gatewayProviderService.Delete(provider.GatewayProvider);
+            _gatewayProviderService.Delete(provider.GatewayProviderSettings);
             GatewayProviderResolver.Current.RefreshCache();
         }
     }

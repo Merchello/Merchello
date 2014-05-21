@@ -1,10 +1,7 @@
-﻿using AutoMapper;
-using Merchello.Core.Gateways;
+﻿using Merchello.Core.Gateways;
 using Merchello.Core.Models;
 using Merchello.Web.Models.ContentEditing;
 using Merchello.Web.Models.MapperResolvers;
-using Umbraco.Core.Models;
-using Umbraco.Web.Models.ContentEditing;
 
 namespace Merchello.Web
 {
@@ -27,7 +24,7 @@ namespace Merchello.Web
 
 
             // Gateway Provider       
-            AutoMapper.Mapper.CreateMap<IGatewayProvider, GatewayProviderDisplay>()
+            AutoMapper.Mapper.CreateMap<IGatewayProviderSettings, GatewayProviderDisplay>()
                 .ForMember(dest => dest.ExtendedData,
                     opt => opt.ResolveUsing<ExtendedDataResolver>().ConstructedBy(() => new ExtendedDataResolver())
                 )
@@ -55,6 +52,8 @@ namespace Merchello.Web
                 );
 
             AutoMapper.Mapper.CreateMap<IOrder, OrderDisplay>();
+
+
             
             //  setup the other mappings
             BindShippingMappings();
@@ -64,6 +63,8 @@ namespace Merchello.Web
             BindPaymentMappings();
 
             BindWarehouseAndProductMappings();
+
+            BindNotificationMappings();
 
             ProductContentEditing.BindMappings();
         }

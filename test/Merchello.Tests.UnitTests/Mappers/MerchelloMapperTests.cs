@@ -104,7 +104,7 @@ namespace Merchello.Tests.UnitTests.Mappers
             var expected = typeof(GatewayProviderMapper);
 
             //// Act
-            var resolved = MerchelloMapper.Current.ResolveByType(typeof(IGatewayProvider));
+            var resolved = MerchelloMapper.Current.ResolveByType(typeof(IGatewayProviderSettings));
 
             //// Assert
             Assert.IsTrue(resolved.Success);
