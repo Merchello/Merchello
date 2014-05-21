@@ -65,6 +65,8 @@ namespace Merchello.Web
             BindWarehouseAndProductMappings();
 
             BindNotificationMappings();
+
+            ProductContentEditing.BindMappings();
         }
     }
 
