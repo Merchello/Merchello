@@ -13,9 +13,11 @@ namespace Merchello.Web
     {
         private static void BindNotificationMappings()
         {
-            AutoMapper.Mapper.CreateMap<INotificationMethod, NotificationMethodDisplay>();
 
             AutoMapper.Mapper.CreateMap<INotificationMessage, NotificationMessageDisplay>();
+
+            // Notification Methods
+            AutoMapper.Mapper.CreateMap<INotificationMethod, NotificationMethodDisplay>();
 
             AutoMapper.Mapper.CreateMap<INotificationGatewayMethod, NotificationMethodDisplay>()
                 .ForMember(dest => dest.Key,
