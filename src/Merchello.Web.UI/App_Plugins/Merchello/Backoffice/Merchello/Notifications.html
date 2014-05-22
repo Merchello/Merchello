@@ -30,11 +30,11 @@
             
             <div class="merchello-pane row-fluid">
 
-                <div class="control-group umb-control-group">
+                <div class="control-group umb-control-group" data-ng-repeat="provider in notificationGatewayProviders">
                     <label class="merchello-control-label">
-                        Email Templates
-                        <small>Personalize your email templates</small>
-                        <a data-ng-href="#/merchello/merchello/NotificationsEdit/0"><i class=" icon-chat"></i> Add a Method</a>
+                        {{provider.name}}
+                        <small data-ng-bind="provider.description"></small>
+                        <a data-ng-href="#/merchello/merchello/NotificationsEdit/{{provider.key}}"><i class=" icon-chat"></i>Add a Notification</a>
                     </label>
 
                     <div class="merchello-controls row-fluid">
@@ -58,7 +58,7 @@
 
                                 <div>
                                     <input type="submit" class="btn" value="Cancel" data-ng-click="editTemplateFlyout.close()" />
-                                    <input type="submit" class="btn btn-primary" value="Save"  data-ng-click="editTemplateFlyout.confirm()" />
+                                    <input type="submit" class="btn btn-primary" value="Save" data-ng-click="editTemplateFlyout.confirm()" />
                                 </div>
                             </form>
 

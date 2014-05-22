@@ -23,7 +23,7 @@ namespace Merchello.Web.Editors
     {
 
         private readonly INotificationContext _notificationContext;
-
+        private readonly INotificationMessageService _notificationMessageContext;
         /// <summary>
         /// Constructor
         /// </summary>
@@ -39,6 +39,7 @@ namespace Merchello.Web.Editors
             : base(merchelloContext)
         {
             _notificationContext = ((GatewayContext)MerchelloContext.Gateways).Notification;
+            _notificationMessageContext = ((ServiceContext)MerchelloContext.Services).NotificationMessageService as NotificationMessageService;
         }
 
         /// <summary>
@@ -101,6 +102,7 @@ namespace Merchello.Web.Editors
         /// </summary>
         /// <param name="id">The key (guid) of teh NotificationGatewayProvider</param>
         /// <returns></returns>
+        [AcceptVerbs("GET")]
         public IEnumerable<NotificationMethodDisplay> GetNotificationProviderNotificationMethods(Guid id)
         {
             // limit only to active providers
@@ -111,6 +113,7 @@ namespace Merchello.Web.Editors
             return provider.NotificationMethods.Select(method => provider.GetNotificationGatewayMethodByKey(method.Key).ToNotificationMethodDisplay());
 
         }
+
 
 
         /// <summary>
@@ -198,6 +201,68 @@ namespace Merchello.Web.Editors
             return response;
         }
 
+        /// <summary>
+        /// Returns NotificationMessages by key
+        /// 
+        /// GET /umbraco/Merchello/NotificationsApi/GetNotification/{key}
+        /// </summary>
+        /// <param name="id">Key of the NotificationMessages</param>
+        public NotificationMessageDisplay GetNotification(Guid id)
+        {
+            var notifications = _notificationMessageContext.GetByKey(id);
+            if (notifications == null)
+            {
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+            }
+
+            return notifications.ToNotificationMessageDisplay();
+        }
+
+        /// <summary>
+        /// Returns a collection of NotificationMessages by unique keys (Guid)
+        /// 
+        /// GET /umbraco/Merchello/NotificationsApi/GetNotifications?ids={guid}&ids={guid}
+        /// </summary>
+        /// <param name="id">Keys of the NotificationMessages</param>
+        [AcceptVerbs("Get")]
+        public IEnumerable<NotificationMessageDisplay> GetNotificationMessages()
+        {
+            var response = Request.CreateResponse(HttpStatusCode.OK);
+
+            var messages = new List<NotificationMessageDisplay>();
+            try
+            {
+                var methodKey = new Guid("b4d81816-f1b6-4532-9000-edba70295809");
+                
+                var provider = _notificationContext.GetProviderByMethodKey(methodKey);
+
+                var method = provider.GetNotificationGatewayMethodByKey(methodKey);
+               // var m = method.GetNotificationMessagesByMethod(methodKey);
+               // messages.AddRange(m.Select(AutoMapper.Mapper.Map<INotificationMessage, NotificationMessageDisplay>));
+            }
+            catch (Exception ex)
+            {
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError, String.Format("{0}", ex.Message));
+            }
+            return messages;
+        }
+
+        /// <summary>
+        /// Returns NotificationMessages by method key
+        /// 
+        /// GET /umbraco/Merchello/NotificationsApi/GetNotificationsByMethod/{key}
+        /// </summary>
+        /// <param name="id">Key of the notification method</param>
+        public IEnumerable<NotificationMessageDisplay> GetNotificationsByMethod(Guid id)
+        {
+            var notifications = _notificationMessageContext.GetNotificationMessagesByMethodKey(id);
+            if (notifications == null)
+            {
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+            }
+
+            return notifications.Select(x => x.ToNotificationMessageDisplay());
+        }
 
         /// <summary>
         /// Adds a <see cref="INotificationMessage"/>
@@ -212,6 +277,10 @@ namespace Merchello.Web.Editors
 
             try
             {
+                message.Key = Guid.NewGuid();
+                message.MethodKey = new Guid("b4d81816-f1b6-4532-9000-edba70295809");
+                message.FromAddress = "wesley@proworks.com";
+
                 var provider = _notificationContext.GetProviderByMethodKey(message.MethodKey);
 
                 var method = provider.GetNotificationGatewayMethodByKey(message.MethodKey);
@@ -219,7 +288,7 @@ namespace Merchello.Web.Editors
                 var notificationMessage = new NotificationMessage(message.MethodKey, message.Name, message.FromAddress);
 
                 method.SaveNotificationMessage(message.ToNotificationMessage(notificationMessage));
-             
+                
                 return response;
             }
             catch (Exception ex)
@@ -230,7 +299,6 @@ namespace Merchello.Web.Editors
             return response;
         }
       
-
         /// <summary>
         /// Delete a <see cref="INotificationMethod"/>
         /// 

@@ -12,16 +12,28 @@
 
 			getNotifications: function () {
 				// This needs to make an api call to get real data ~Mark Bowser
-				var deferred = $q.defer();
+				//var deferred = $q.defer();
 				//deferred.resolve(mockTemplates);
 
-				return deferred.promise;
+				//return deferred.promise;
 
-				//return umbRequestHelper.resourcePromise(
-				//     $http.get(
-				//        umbRequestHelper.getApiUrl('merchelloNotificationsApiBaseUrl', 'GetNotifications')
-				//    ),
-				//    'Failed to get all Notifications');
+			    return umbRequestHelper.resourcePromise(
+                    $http({
+                        url: umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'GetNotifications'),
+			            method: "GET"
+			        }),
+                    'Failed to retreive data for notifications');
+			},
+
+			getGatewayResources: function(key) {
+
+		    return umbRequestHelper.resourcePromise(
+		            $http({
+		                url: umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'GetGatewayResources'),
+                        method: "GET",
+		                data: angular.toJson(key)
+		            }),
+                    'Failed to save data for Notification');
 			},
 
 			getAllGatewayProviders: function () {
@@ -43,30 +55,25 @@
                     'Failed to retreive data for all gateway providers');
 		    },
 
-			getNotification: function (id) {
-				// This needs to make an api call to get data from api instead of from getNotifications probably ~Mark Bowser
-				var deferred = $q.defer();
+		    GetNotificationProviderNotificationMethods: function (id) {
 
-				var promise = notificationsService.getNotifications();
-				promise.then(function (notifications) {
-					var notification = _.find(notifications, function (n) {
-						return n.pk == id;
-					});
+		        return umbRequestHelper.resourcePromise(
+                        $http({
+                            url: umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'GetNotificationProviderNotificationMethods') + "?id=" + id,
+                            method: "GET"
+                        }),
+                        'Failed to save data for Notification');
+		    },
 
-					deferred.resolve(notification);
-				}, function (reason) {
-					deferred.reject(reason);
-				});
+		    getNotificationMessages: function (id) {
 
-				return deferred.promise;
+		        return umbRequestHelper.resourcePromise(
+                        $http({
+                            url: umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'GetNotificationMessages'),
+                            method: "GET"
+                        }),
+                        'Failed to save data for Notification');
 
-				//return umbRequestHelper.resourcePromise(
-                //    $http({
-                //    	url: umbRequestHelper.getApiUrl('merchelloNotificationsApiBaseUrl', 'GetNotification'),
-                //    	method: "GET",
-                //    	params: { id: id }
-                //    }),
-                //    'Failed to retreive data for notification: ' + id);
 			},
 
 			saveNotification: function (notification) {

@@ -77,6 +77,7 @@
          */
 		$scope.saveNotificationMessage = function (message) {
 		    var promiseSave;
+		    message.name = message.triggerKey.name;
 		    message.triggerKey = message.triggerKey.key;
 		    promiseSave = merchelloNotificationsService.saveNotification(message);
 
