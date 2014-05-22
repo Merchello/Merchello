@@ -8,14 +8,50 @@
      * @description
      * The controller for the Notifications page
      */
-    controllers.NotificationsController = function($scope, merchelloNotificationsService) {
+    controllers.NotificationsController = function ($scope, notificationsService, dialogService, merchelloNotificationsService) {
+    
 
         $scope.emailTemplates = [];
+        $scope.notificationGatewayProviders = [];
         $scope.subscribers = [];
         $scope.flyouts = {
             editTemplate: false,
             addAddress: false,
             deleteAddress: false
+        };
+
+        /**
+         * @ngdoc method
+         * @name loadAllPaymentGatewayProviders
+         * @function
+         * 
+         * @description
+         * Load the payment gateway providers from the payment gateway service, then wrap the results
+         * in Merchello models and add to the scope via the paymentGatewayProviders collection.
+         */
+        $scope.loadAllNotificationGatewayProviders = function () {
+
+            var promiseAllProviders = merchelloNotificationGatewayService.getAllGatewayProviders();
+            promiseAllProviders.then(function (allProviders) {
+
+                $scope.notificationGatewayProviders = _.map(allProviders, function (providerFromServer) {
+                    return new merchello.Models.NotificationGatewayProvider(providerFromServer);
+                });
+
+                _.each($scope.paymentGatewayProviders, function (provider) {
+                    $scope.loadPaymentGatewayResources(provider.key);
+                    $scope.loadPaymentMethods(provider.key);
+                });
+
+                $scope.loaded = true;
+                $scope.preValuesLoaded = true;
+
+            }, function (reason) {
+
+                notificationsService.error("Available Payment Providers Load Failed", reason.message);
+
+            });
+
         };
 
         $scope.loadEmailTemplates = function() {
@@ -129,7 +165,7 @@
     };
 
 
-    angular.module("umbraco").controller("Merchello.Dashboards.Settings.NotificationsController", ['$scope', 'merchelloNotificationsService', merchello.Controllers.NotificationsController]);
+    angular.module("umbraco").controller("Merchello.Dashboards.Settings.NotificationsController", ['$scope', 'notificationsService', 'dialogService', 'merchelloNotificationsService', merchello.Controllers.NotificationsController]);
 
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));
