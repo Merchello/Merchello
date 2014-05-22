@@ -82,6 +82,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActivatorHelper.cs" />
+    <Compile Include="Events\AnnouncementEventArgs.cs" />
+    <Compile Include="Gateways\Notification\CustomerAnnouncement.cs" />
     <Compile Include="Builders\BuildChainBase.cs" />
     <Compile Include="Builders\InvoiceBuilderChain.cs" />
     <Compile Include="Builders\OrderBuilderChain.cs" />
@@ -100,6 +102,7 @@
     <Compile Include="Chains\ShipmentCreation\RemoveShipmentOrderItemsFromInventoryAndPersistShipmentTask.cs" />
     <Compile Include="Chains\ShipmentCreation\SetOrderStatusTask.cs" />
     <Compile Include="EnumerableExtensions.cs" />
+    <Compile Include="Events\CustomerAnnouncementEventArgs.cs" />
     <Compile Include="Gateways\Notification\Formatters\DefaultNotificationFormatter.cs" />
     <Compile Include="Gateways\Notification\Formatters\FormatNotificationUsingAttribute.cs" />
     <Compile Include="Gateways\GatewayMethodEditorAttribute.cs" />
@@ -112,6 +115,7 @@
     <Compile Include="Gateways\Notification\NotificationContext.cs" />
     <Compile Include="Gateways\Notification\NotificationGatewayMethodBase.cs" />
     <Compile Include="Gateways\Notification\NotificationGatewayProviderBase.cs" />
+    <Compile Include="Gateways\Notification\Notify.cs" />
     <Compile Include="Gateways\Notification\Smtp\ISmtpNotificationGatewayProvider.cs" />
     <Compile Include="Gateways\Notification\Smtp\SmtpNotificationGatewayMethod.cs" />
     <Compile Include="Gateways\Notification\Smtp\SmtpNotificationGatewayProvider.cs" />
@@ -782,9 +786,7 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Formatters\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

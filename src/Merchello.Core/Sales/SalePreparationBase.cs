@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Merchello.Core.Builders;
-using Merchello.Core.Events;
+using Merchello.Core.Gateways.Notification;
 using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Models;
@@ -10,7 +10,6 @@ using Merchello.Core.Models.TypeFields;
 using Merchello.Core.Services;
 using Umbraco.Core;
 using Umbraco.Core.Cache;
-using Umbraco.Core.Events;
 using Umbraco.Core.Logging;
 
 namespace Merchello.Core.Sales
@@ -214,7 +213,13 @@ namespace Merchello.Core.Sales
 
             MerchelloContext.Services.InvoiceService.Save(invoice);
 
+            // Raise the notification event
+            Notify.Customer.InvoicedCustomer(_customer, invoice);
+
             var result = invoice.AuthorizePayment(paymentGatewayMethod, args);
+
+            if(result.Payment.Success) 
+                Notify.Customer.PaymentWasAuthorized(_customer, result);
 
             if (!result.ApproveOrderCreation) return result;
 
@@ -278,8 +283,12 @@ namespace Merchello.Core.Sales
 
             MerchelloContext.Services.InvoiceService.Save(invoice);
 
+            Notify.Customer.InvoicedCustomer(_customer, invoice);
+
             var result = invoice.AuthorizeCapturePayment(paymentGatewayMethod, args);
 
+            if(result.Payment.Success)
+                Notify.Customer.PaymentWasCaptured(_customer, result);
             
             if (!result.ApproveOrderCreation) return result;
 

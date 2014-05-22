@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Mail;
+using System.Threading;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Umbraco.Core.Logging;
@@ -39,39 +40,27 @@ namespace Merchello.Core.Gateways.Notification.Smtp
             {
                 msg.To.Add(new MailAddress(to));
             }
-
-            var client = new SmtpClient(_settings.Host);
-            if (_settings.HasCredentials) client.Credentials = _settings.Credentials;
-            if (_settings.EnableSsl) client.EnableSsl = true;
-
-
-            //var send = client.SendAsync(msg);
-            //send.ContinueWith(task =>
-            //{
-            //    if (task.IsCanceled)
-            //    {
-            //        LogHelper.Warn<SmtpNotificationGatewayMethod>("Send canceled");
-            //    }
-
-            //    if (!task.IsFaulted && task.Exception != null)
-            //    {
-            //        var ex = task.Exception.InnerExceptions.First();
-            //        LogHelper.Error<SmtpNotificationGatewayMethod>("Failed sending email", ex);
-            //    }
-                                
-            //});
-
-            try
+            
+            ThreadPool.QueueUserWorkItem(state =>
             {
-                client.Send(msg);
-                msg.Dispose();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                LogHelper.Error<SmtpNotificationGatewayMethod>("Failed sending email", ex);
-                return false;
-            }                        
+                try
+                {
+
+                    var client = new SmtpClient(_settings.Host);
+                    if (_settings.HasCredentials) client.Credentials = _settings.Credentials;
+                    if (_settings.EnableSsl) client.EnableSsl = true;
+
+                    client.Send(msg);
+                    msg.Dispose();
+               
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.Error<SmtpNotificationGatewayMethod>("Failed sending email", ex);                
+                }
+            });
+
+            return true;
         }
 
 
