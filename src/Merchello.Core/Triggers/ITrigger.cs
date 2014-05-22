@@ -5,7 +5,7 @@ namespace Merchello.Core.Triggers
     /// <summary>
     /// Defines a 
     /// </summary>
-    internal interface IEventTriggeredAction
+    internal interface ITrigger
     {
         /// <summary>
         /// Invokes the trigger action

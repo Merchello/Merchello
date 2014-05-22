@@ -220,7 +220,6 @@ namespace Merchello.Web.Editors
 
                 method.SaveNotificationMessage(message.ToNotificationMessage(notificationMessage));
              
-                return response;
             }
             catch (Exception ex)
             {

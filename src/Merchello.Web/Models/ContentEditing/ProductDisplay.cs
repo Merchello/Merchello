@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Lucene.Net.Util;
 using Merchello.Core.Models;
 
 namespace Merchello.Web.Models.ContentEditing

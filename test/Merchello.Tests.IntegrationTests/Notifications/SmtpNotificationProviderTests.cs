@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Threading;
 using Merchello.Core.Gateways.Notification.Smtp;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
@@ -106,6 +108,34 @@ namespace Merchello.Tests.IntegrationTests.Notifications
             Assert.IsTrue(method.NotificationMethod.HasIdentity);
         }
 
+
+        /// <summary>
+        /// Test verifies that a NotificationMessage can be saved
+        /// </summary>
+        [Test]
+        public void Can_Save_A_NotificationMessage()
+        {
+            //// Arrange
+            var resource = _provider.ListResourcesOffered().FirstOrDefault();
+            Assert.NotNull(resource, "Smtp Provider returned null for GatewayResource");
+            var method = _provider.CreateNotificationMethod(resource, resource.Name, "SMTP Relayed Email");
+            Assert.NotNull(method, "method was null");
+
+            //// Act
+            var message = new NotificationMessage(method.NotificationMethod.Key, "Test email",
+                "Can_Send_A_Test_Email@merchello.com")
+            {
+                Recipients = "rusty@mindfly.com",
+                BodyText = "Successful test?"
+            };
+
+            method.SaveNotificationMessage(message);
+            
+            //// Assert
+            Assert.IsTrue(message.HasIdentity);
+
+        }
+
         /// <summary>
         /// Test verifies that a host value can be saved to Extended Data
         /// </summary>
@@ -129,6 +159,8 @@ namespace Merchello.Tests.IntegrationTests.Notifications
             Assert.AreEqual(host, smtpProviderSettings.ExtendedData.GetSmtpProviderSettings().Host);
 
         }
+
+
 
         /// <summary>
         /// Test verifies that an email can be sent using the SMTP provider
@@ -158,6 +190,7 @@ namespace Merchello.Tests.IntegrationTests.Notifications
 
             method.Send(message);
 
+            Thread.Sleep(2000);
         }
     }
 }
