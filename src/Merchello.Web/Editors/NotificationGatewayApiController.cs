@@ -162,11 +162,11 @@ namespace Merchello.Web.Editors
             {
                 var provider = _notificationContext.GetProviderByKey(method.ProviderKey);
 
-                var paymentMethod = provider.NotificationMethods.FirstOrDefault(x => x.Key == method.Key);
+                var notificationMethod = provider.NotificationMethods.FirstOrDefault(x => x.Key == method.Key);
 
-                paymentMethod = method.ToNotificationMethod(paymentMethod);
+                notificationMethod = method.ToNotificationMethod(notificationMethod);
 
-                provider.GatewayProviderService.Save(paymentMethod);
+                provider.GatewayProviderService.Save(notificationMethod);
             }
             catch (Exception ex)
             {

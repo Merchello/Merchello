@@ -15,6 +15,8 @@
         $scope.notificationGatewayProviders = [];
         $scope.notificationTriggers = [];
         $scope.notificationMessage = new merchello.Models.NotificationMessage();
+        $scope.notificationMethods = [];
+
         $scope.subscribers = [];
         $scope.flyouts = {
             editTemplate: false,
@@ -117,7 +119,7 @@
             promiseAllResources.then(function (allMethods) {
 
                 provider.methods = _.map(allMethods, function (methodFromServer) {
-                    return new merchello.Models.NotificationMethodMethod(methodFromServer);
+                    return new merchello.Models.NotificationMethod(methodFromServer);
                 });
 
             }, function (reason) {
@@ -236,6 +238,57 @@
                     self.close();
                 }
             });
+
+        //--------------------------------------------------------------------------------------
+        // Dialog methods
+        //--------------------------------------------------------------------------------------
+
+
+        /**
+         * @ngdoc method
+         * @name addCountryDialogConfirm
+         * @function
+         * 
+         * @description
+         * Handles the save after recieving the country to add from the dialog view/controller
+         */
+        $scope.addNotificationsDialogConfirm = function(dialogData) {
+            var promiseNotificationMethod = merchelloNotificationsService.saveNotificationMethod(dialogData);
+
+            promiseNotificationMethod.then(function(notificationFromServer) {
+
+                $scope.notificationMethods.push(new merchello.Models.NotificationMethod(notificationFromServer));
+
+            }, function(reason) {
+
+                notificationsService.error("Notification Method Create Failed", reason.message);
+
+            });
+        };
+
+        /**
+         * @ngdoc method
+         * @name addCountry
+         * @function
+         * 
+         * @description
+         * Opens the add country dialog via the Umbraco dialogService.
+         */
+        $scope.addNotificationMethod = function (provider, method) {
+            if (method == undefined) {
+                method = new merchello.Models.NotificationMethod();
+                method.providerKey = provider.key; //Todo: When able to add external providers, make this select the correct provider
+                method.serviceCode = "Email";
+                method.name = "Email";
+            }
+            
+            dialogService.open({
+                template: '/App_Plugins/Merchello/Modules/Settings/Notifications/Dialogs/notificationsmethod.html',
+                show: true,
+                callback: $scope.addNotificationsDialogConfirm,
+                dialogData: method
+            });
+        };
 
         $scope.loadAllNotificationGatewayProviders();
         $scope.loadEmailTemplates();

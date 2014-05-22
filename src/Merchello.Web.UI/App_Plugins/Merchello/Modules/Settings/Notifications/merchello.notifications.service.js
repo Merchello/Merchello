@@ -84,7 +84,17 @@
 						angular.toJson(notification)
 					),
 					'Failed to save data for Notification');
-			}
+			},
+
+		    saveNotificationMethod: function (method) {
+
+		    return umbRequestHelper.resourcePromise(
+               $http.post(
+                    umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'AddNotificationMethod'),
+                    angular.toJson(method)
+                ),
+                'Failed to save data for Notification');
+		}
 		};
 
 		return notificationsService;

@@ -34,7 +34,7 @@
                     <label class="merchello-control-label">
                         {{provider.name}}
                         <small data-ng-bind="provider.description"></small>
-                        <a data-ng-href="#/merchello/merchello/NotificationsEdit/{{provider.key}}"><i class=" icon-chat"></i>Add a Notification</a>
+                        <a data-ng-click="addNotificationMethod(provider)"><i class="icon-chat"></i>Add a Notification</a>
                     </label>
 
                     <div class="merchello-controls row-fluid">
