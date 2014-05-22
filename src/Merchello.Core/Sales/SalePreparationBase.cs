@@ -213,13 +213,14 @@ namespace Merchello.Core.Sales
 
             MerchelloContext.Services.InvoiceService.Save(invoice);
 
+            //TODO
             // Raise the notification event
-            Notify.Customer.InvoicedCustomer(_customer, invoice);
+           // Announce.Broadcast.InvoicedCustomer(_customer, invoice);
 
             var result = invoice.AuthorizePayment(paymentGatewayMethod, args);
 
-            if(result.Payment.Success) 
-                Notify.Customer.PaymentWasAuthorized(_customer, result);
+            //if(result.Payment.Success) 
+            //    Announce.Broadcast.PaymentWasAuthorized(_customer, result);
 
             if (!result.ApproveOrderCreation) return result;
 
@@ -283,12 +284,13 @@ namespace Merchello.Core.Sales
 
             MerchelloContext.Services.InvoiceService.Save(invoice);
 
-            Notify.Customer.InvoicedCustomer(_customer, invoice);
+            //TODO
+            //Announce.Broadcast.InvoicedCustomer(_customer, invoice);
 
             var result = invoice.AuthorizeCapturePayment(paymentGatewayMethod, args);
 
-            if(result.Payment.Success)
-                Notify.Customer.PaymentWasCaptured(_customer, result);
+            //if(result.Payment.Success)
+            //    Announce.Broadcast.PaymentWasCaptured(_customer, result);
             
             if (!result.ApproveOrderCreation) return result;
 

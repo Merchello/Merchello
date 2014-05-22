@@ -34,27 +34,27 @@ namespace Merchello.Core.Gateways.Notification
         /// Sends a <see cref="IFormattedNotificationMessage"/> given it's unique Key (Guid)
         /// </summary>
         /// <param name="messageKey">The unique key (Guid) of the <see cref="IFormattedNotificationMessage"/></param>
-        bool Send(Guid messageKey);
+        void Send(Guid messageKey);
 
         /// <summary>
         /// Sends a <see cref="IFormattedNotificationMessage"/> given it's unique Key (Guid)
         /// </summary>
         /// <param name="messageKey">The unique key (Guid) of the <see cref="IFormattedNotificationMessage"/></param>
         /// <param name="formatter">The <see cref="INotificationFormatter"/> to use to format the message</param>
-        bool Send(Guid messageKey, INotificationFormatter formatter);
+        void Send(Guid messageKey, INotificationFormatter formatter);
 
         /// <summary>
         /// Sends a <see cref="IFormattedNotificationMessage"/>
         /// </summary>
         /// <param name="notificationMessage">The <see cref="IFormattedNotificationMessage"/> to be sent</param>
-        bool Send(INotificationMessage notificationMessage);
+        void Send(INotificationMessage notificationMessage);
 
         /// <summary>
         /// Sends a <see cref="IFormattedNotificationMessage"/>
         /// </summary>
         /// <param name="notificationMessage">The <see cref="IFormattedNotificationMessage"/> to be sent</param>
         /// <param name="formatter">The <see cref="INotificationFormatter"/> to use to format the message</param>
-        bool Send(INotificationMessage notificationMessage, INotificationFormatter formatter);
+        void Send(INotificationMessage notificationMessage, INotificationFormatter formatter);
 
         /// <summary>
         /// Gets the <see cref="INotificationMethod"/>

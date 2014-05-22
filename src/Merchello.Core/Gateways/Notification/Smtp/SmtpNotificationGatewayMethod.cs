@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Net.Mail;
-using System.Threading;
+using System.Threading.Tasks;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Umbraco.Core.Logging;
@@ -26,7 +26,7 @@ namespace Merchello.Core.Gateways.Notification.Smtp
         /// Does the actual work of sending the <see cref="IFormattedNotificationMessage"/>
         /// </summary>
         /// <param name="message">The <see cref="IFormattedNotificationMessage"/> to be sent</param>
-        public override bool PerformSend(IFormattedNotificationMessage message)
+        public override void PerformSend(IFormattedNotificationMessage message)
         {
             var msg = new MailMessage
             {
@@ -41,26 +41,27 @@ namespace Merchello.Core.Gateways.Notification.Smtp
                 msg.To.Add(new MailAddress(to));
             }
             
-            ThreadPool.QueueUserWorkItem(state =>
+            //// We want to send the email async
+            Task.Factory.StartNew(() =>
             {
                 try
                 {
-
-                    var client = new SmtpClient(_settings.Host);
-                    if (_settings.HasCredentials) client.Credentials = _settings.Credentials;
-                    if (_settings.EnableSsl) client.EnableSsl = true;
-
-                    client.Send(msg);
-                    msg.Dispose();
-               
+                    using (msg)
+                    {
+                        using (var sender = new SmtpClient(_settings.Host))
+                        {
+                            if (_settings.HasCredentials) sender.Credentials = _settings.Credentials;
+                            if (_settings.EnableSsl) sender.EnableSsl = true;
+                            sender.Send(msg);
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
-                    LogHelper.Error<SmtpNotificationGatewayMethod>("Failed sending email", ex);                
+                    LogHelper.Error<SmtpNotificationGatewayMethod>("SMTP provider failed sending email", ex);
                 }
             });
 
-            return true;
         }
 
 

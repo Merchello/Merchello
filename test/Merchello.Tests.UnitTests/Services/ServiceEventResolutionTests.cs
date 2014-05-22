@@ -81,7 +81,7 @@ namespace Merchello.Tests.UnitTests.Services
     }
 
 
-    internal class OrderStatusInvokeTester : IEventTriggeredAction
+    internal class OrderStatusInvokeTester : ITrigger
     {
 
         public IOrder After { get; set; }

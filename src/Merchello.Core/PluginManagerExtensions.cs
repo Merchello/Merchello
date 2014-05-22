@@ -13,9 +13,9 @@ namespace Merchello.Core
     internal static class PluginManagerExtensions
     {
 
-        internal static IEnumerable<Type> ResolveEventTriggeredActions(this PluginManager pluginManager)
+        internal static IEnumerable<Type> ResolveTriggers(this PluginManager pluginManager)
         {
-            return pluginManager.ResolveTypesWithAttribute<IEventTriggeredAction, EventTriggeredActionForAttribute>();
+            return pluginManager.ResolveTypesWithAttribute<ITrigger, TriggerForAttribute>();
         }
 
         /// <summary>
