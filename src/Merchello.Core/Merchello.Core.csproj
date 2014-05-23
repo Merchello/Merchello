@@ -77,6 +77,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActivatorHelper.cs" />
+    <Compile Include="Broadcast\BroadcastObserverForAttribute.cs" />
+    <Compile Include="Broadcast\BroadcastType.cs" />
+    <Compile Include="Broadcast\IBroadcaster.cs" />
+    <Compile Include="Broadcast\IBroadcastSubscriber.cs" />
+    <Compile Include="Broadcast\IBroadcasterResolver.cs" />
+    <Compile Include="Broadcast\NotificationBroadcaster.cs" />
+    <Compile Include="Broadcast\BroadcasterResolver.cs" />
+    <Compile Include="Broadcast\Unsubscriber.cs" />
     <Compile Include="Events\BroadcastEventArgs.cs" />
     <Compile Include="Builders\BuildChainBase.cs" />
     <Compile Include="Builders\InvoiceBuilderChain.cs" />
@@ -109,7 +117,7 @@
     <Compile Include="Gateways\Notification\NotificationContext.cs" />
     <Compile Include="Gateways\Notification\NotificationGatewayMethodBase.cs" />
     <Compile Include="Gateways\Notification\NotificationGatewayProviderBase.cs" />
-    <Compile Include="Broadcast.cs" />
+    <Compile Include="Broadcast\BroadcasterBase.cs" />
     <Compile Include="Gateways\Notification\Smtp\ISmtpNotificationGatewayProvider.cs" />
     <Compile Include="Gateways\Notification\Smtp\SmtpNotificationGatewayMethod.cs" />
     <Compile Include="Gateways\Notification\Smtp\SmtpNotificationGatewayProvider.cs" />
@@ -721,8 +729,8 @@
     <Compile Include="Strategies\Packaging\PackagingStrategyBase.cs" />
     <Compile Include="Strategies\Packaging\IPackagingStrategy.cs" />
     <Compile Include="Strategies\Packaging\ShippableProductVisitor.cs" />
-    <Compile Include="Triggers\TriggerResolver.cs" />
     <Compile Include="Triggers\ITrigger.cs" />
+    <Compile Include="Triggers\TriggerResolver.cs" />
     <Compile Include="Triggers\ITriggerResolver.cs" />
     <Compile Include="Triggers\TriggerBase.cs" />
     <Compile Include="Triggers\TriggerForAttribute.cs" />

@@ -1,22 +1,23 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using Merchello.Core.ObjectResolution;
+using Merchello.Core.Triggers;
 using Umbraco.Core;
 
-namespace Merchello.Core.Triggers
+namespace Merchello.Core.Broadcast
 {
     /// <summary>
     /// Represents a EventTriggerRegistry
     /// </summary>
-    internal sealed class TriggerResolver : MerchelloManyObjectsResolverBase<TriggerResolver, ITrigger>, ITriggerResolver
+    internal sealed class BroadcasterResolver : MerchelloManyObjectsResolverBase<BroadcasterResolver, IBroadcaster>, IBroadcasterResolver
     {
-        private static readonly ConcurrentDictionary<Guid, ITrigger> TriggerCache = new ConcurrentDictionary<Guid, ITrigger>();
+        private static readonly ConcurrentDictionary<Guid, IBroadcaster> TriggerCache = new ConcurrentDictionary<Guid, IBroadcaster>();
 
         internal static bool IsInitialized { get; private set; }
 
-        internal TriggerResolver(IEnumerable<Type> triggers)
+        internal BroadcasterResolver(IEnumerable<Type> triggers)
             : base(triggers)
         {
             BuildCache();
@@ -38,10 +39,10 @@ namespace Merchello.Core.Triggers
         /// Adds a key value pair to the dictionary
         /// </summary>
         /// <param name="key"></param>
-        /// <param name="trigger">The <see cref="IBroadcaster"/> to cache</param>
-        private static void CacheMapper(Guid key, ITrigger trigger)
+        /// <param name="broadcaster">The <see cref="IBroadcaster"/> to cache</param>
+        private static void CacheMapper(Guid key, IBroadcaster broadcaster)
         {
-            TriggerCache.AddOrUpdate(key, trigger, (x, y) => trigger);
+            TriggerCache.AddOrUpdate(key, broadcaster, (x, y) => broadcaster);
         }
 
 
@@ -50,9 +51,9 @@ namespace Merchello.Core.Triggers
         /// </summary>
         /// <param name="key"></param>
         /// <returns>A <see cref="IBroadcaster"/></returns>
-        public ITrigger TryGetTrigger(Guid key)
+        public IBroadcaster TryGetBroadcaster(Guid key)
         {
-            ITrigger value;
+            IBroadcaster value;
             return TriggerCache.TryGetValue(key, out value) ? value : null;
         }
 
@@ -61,10 +62,10 @@ namespace Merchello.Core.Triggers
         /// </summary>
         /// <param name="area">The "area"</param>
         /// <returns>A <see cref="IBroadcaster"/></returns>
-        public IEnumerable<ITrigger> GetTriggersByArea(string area)
+        public IEnumerable<IBroadcaster> GetBroadcastersByArea(string area)
         {
             return
-                GetAllEventTriggers()
+                GetAllBroadcasters()
                     .Where(x => x.GetType()
                         .GetCustomAttributes<TriggerForAttribute>(false).FirstOrDefault(y => y.Area.Equals(area)) != null);            
         }
@@ -72,7 +73,7 @@ namespace Merchello.Core.Triggers
         /// <summary>
         /// Gets the collection of all resovled <see cref="IBroadcaster"/>s
         /// </summary>
-        public IEnumerable<ITrigger> GetAllEventTriggers()
+        public IEnumerable<IBroadcaster> GetAllBroadcasters()
         {
             return TriggerCache.Values;
         }
@@ -80,16 +81,16 @@ namespace Merchello.Core.Triggers
         /// <summary>
         /// Gets the instantiated values of the resolved types
         /// </summary>
-        protected override IEnumerable<ITrigger> Values
+        protected override IEnumerable<IBroadcaster> Values
         {
             get
             {
                 var ctrArgs = new object[] { };
-                var triggers = new List<ITrigger>();
+                var triggers = new List<IBroadcaster>();
 
                 foreach (var et in InstanceTypes)
                 {
-                    var attempt = ActivatorHelper.CreateInstance<ITrigger>(et, ctrArgs);
+                    var attempt = ActivatorHelper.CreateInstance<IBroadcaster>(et, ctrArgs);
                     if (attempt.Success) triggers.Add(attempt.Result);
                 }
 
