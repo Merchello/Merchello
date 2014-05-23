@@ -12,7 +12,8 @@ namespace Merchello.Web.Models.ContentEditing
 		public string BodyText { get; set; }
 		public int MaxLength { get; set; }
 		public bool BodyTextIsFilePath { get; set; }
-		public Guid? TriggerKey { get; set; }
+        public Guid? TriggerKey { get; set; }
+        public Guid? MonitorKey { get; set; }
 		public Guid MethodKey { get; set; }
 		public string Recipients { get; set; }
 		public bool SendToCustomer { get; set; }

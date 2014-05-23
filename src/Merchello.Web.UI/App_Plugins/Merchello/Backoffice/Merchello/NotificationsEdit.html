@@ -7,7 +7,7 @@
         <umb-header>
             <div class="span4">
                 <div class="umb-headline-editor-wrapper">
-                    <h1 class="umb-headline">{{emailTemplate.name}} Notification</h1>
+                    <h1 class="umb-headline">{{notificationMessage.name}} Notification</h1>
                 </div>
             </div>
             <div class="span8">
@@ -31,6 +31,7 @@
         <div class="merchello merchello-panel-body">
             <div class="merchello-pane row-fluid">
                 <!-- Template pane -->
+                <input type="hidden" data-ng-bind=""/>
                 <div class="control-group umb-control-group" data-ng-show="currentTab == 'Template'">
                     <label class="merchello-control-label">
                         Email Template

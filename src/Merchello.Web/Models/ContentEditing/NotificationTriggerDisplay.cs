@@ -4,8 +4,9 @@ namespace Merchello.Web.Models.ContentEditing
 {
     public class NotificationTriggerDisplay
     {
-        public Guid Key { get; set; }
+        public Guid TriggerKey { get; set; }
+        public Guid MonitorKey { get; set; }
         public string Name { get; set; }
-        public int SortOrder { get; set; }
+        public string Alias { get; set; }
     }
 }

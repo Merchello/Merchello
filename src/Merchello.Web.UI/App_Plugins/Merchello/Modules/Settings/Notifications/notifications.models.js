@@ -9,12 +9,14 @@
             self.providerKey = "";
             self.description = "";
             self.serviceCode = "";
+            self.notificationMessages = [];
         } else {
             self.key = notificationMethodFromServer.key;
             self.name = notificationMethodFromServer.name;
             self.providerKey = notificationMethodFromServer.providerKey;
             self.description = notificationMethodFromServer.description;
             self.serviceCode = notificationMethodFromServer.serviceCode;
+            self.notificationMessages = notificationMethodFromServer.notificationMessages;
         }
 
         self.displayEditor = function () {
@@ -28,35 +30,66 @@
         var self = this;
 
         if (emailTemplateFromServer == undefined) {
-            self.Key = "";
-            self.Name = "";
-            self.Description = "";
-            self.FromAddress = "";
-            self.ReplyTo = "";
-            self.BodyText = "";
-            self.MaxLength = "";
-            self.BodyTextIsFilePath = "";
-            self.TriggerKey = "";
-            self.MethodKey = "";
-            self.Recipients = "";
-            self.SendToCustomer = "";
-            self.Disabled = "";
+            self.key = "";
+            self.name = "";
+            self.description = "";
+            self.fromAddress = "";
+            self.replyTo = "";
+            self.bodyText = "";
+            self.maxLength = "";
+            self.bodyTextIsFilePath = "";
+            self.triggerKey = "";
+            self.methodKey = "";
+            self.recipients = "";
+            self.sendToCustomer = "";
+            self.disabled = "";
         } else {
-            self.Key = emailTemplateFromServer.key;
-            self.Name = emailTemplateFromServer.name;
-            self.Description = emailTemplateFromServer.description;
-            self.FromAddress = emailTemplateFromServer.fromAddress;
-            self.ReplyTo = emailTemplateFromServer.replyTo;
-            self.BodyText = emailTemplateFromServer.bodyText;
-            self.MaxLength = emailTemplateFromServer.maxLength;
-            self.BodyTextIsFilePath = emailTemplateFromServer.bodyTextIsFilePath;
-            self.TriggerKey = emailTemplateFromServer.triggerKey;
-            self.MethodKey = emailTemplateFromServer.methodKey;
-            self.Recipients = emailTemplateFromServer.recipients;
-            self.SendToCustomer = emailTemplateFromServer.sendToCustomer;
-            self.Disabled = emailTemplateFromServer.disabled;
+            self.key = emailTemplateFromServer.key;
+            self.name = emailTemplateFromServer.name;
+            self.description = emailTemplateFromServer.description;
+            self.fromAddress = emailTemplateFromServer.fromAddress;
+            self.replyTo = emailTemplateFromServer.replyTo;
+            self.bodyText = emailTemplateFromServer.bodyText;
+            self.maxLength = emailTemplateFromServer.maxLength;
+            self.bodyTextIsFilePath = emailTemplateFromServer.bodyTextIsFilePath;
+            self.triggerKey = emailTemplateFromServer.triggerKey;
+            self.methodKey = emailTemplateFromServer.methodKey;
+            self.recipients = emailTemplateFromServer.recipients;
+            self.sendToCustomer = emailTemplateFromServer.sendToCustomer;
+            self.disabled = emailTemplateFromServer.disabled;
         }
 
+    };
+
+    models.NotificationGatewayProvider = function (gatewayProviderFromServer) {
+
+        var self = this;
+
+        if (gatewayProviderFromServer == undefined) {
+            self.key = "";
+            self.name = "";
+            self.providerTfKey = "";
+            self.description = "";
+            self.extendedData = [];
+            self.encryptExtendedData = false;
+            self.activated = false;
+            self.dialogEditorView = "";
+        } else {
+            self.key = gatewayProviderFromServer.key;
+            self.name = gatewayProviderFromServer.name;
+            self.providerTfKey = gatewayProviderFromServer.providerTfKey;
+            self.description = gatewayProviderFromServer.description;
+            self.extendedData = gatewayProviderFromServer.extendedData;
+            self.encryptExtendedData = gatewayProviderFromServer.encryptExtendedData;
+            self.activated = gatewayProviderFromServer.activated;
+            self.dialogEditorView = new merchello.Models.DialogEditorView(gatewayProviderFromServer.dialogEditorView);
+        }
+        self.resources = [];
+        self.methods = [];
+
+        self.displayEditor = function () {
+            return self.activated && self.dialogEditorView.editorView;
+        };
     };
 
     models.NotificationSubscriber = function(notificationSubscriberFromServer) {
