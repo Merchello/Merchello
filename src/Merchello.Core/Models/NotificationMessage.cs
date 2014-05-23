@@ -20,6 +20,7 @@ namespace Merchello.Core.Models
         private int _maxLength;
         private bool _bodyTextIsFilePath;
         private Guid? _triggerKey;
+        private Guid? _monitorKey;
         private readonly Guid _methodKey;
         private string _recipients;
         private bool _sendToCustomer;
@@ -45,6 +46,7 @@ namespace Merchello.Core.Models
         private static readonly PropertyInfo MessageSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.BodyText);
         private static readonly PropertyInfo MessageIsFilePathSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, bool>(x => x.BodyTextIsFilePath);
         private static readonly PropertyInfo TriggerKeySelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, Guid?>(x => x.TriggerKey);
+        private static readonly PropertyInfo MonitorKeySelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, Guid?>(x => x.MonitorKey);
         private static readonly PropertyInfo RecipientsSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.Recipients);
         private static readonly PropertyInfo SendToCustomerSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, bool>(x => x.SendToCustomer);
         private static readonly PropertyInfo DisabledSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, bool>(x => x.Disabled);
@@ -189,6 +191,23 @@ namespace Merchello.Core.Models
                     _triggerKey = value;
                     return _triggerKey;
                 }, _triggerKey, TriggerKeySelector);
+            }
+        }
+
+        /// <summary>
+        /// Optional key for Notification Monitor
+        /// </summary>
+        [DataMember]
+        public Guid? MonitorKey
+        {
+            get { return _monitorKey; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _monitorKey = value;
+                    return _monitorKey;
+                }, _monitorKey, MonitorKeySelector);
             }
         }
 

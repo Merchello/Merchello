@@ -12,9 +12,11 @@
 
         $scope.currentTab = "Template";
         $scope.notificationTriggers = [];
-        $scope.notificationMessage = new merchello.Models.NotificationMessage();
+        if ($scope.notificationMessage == undefined) {
+            $scope.notificationMessage = new merchello.Models.NotificationMessage();
+        }
 
-		$scope.loaded = true;
+        $scope.loaded = true;
 		$scope.preValuesLoaded = true;
 
 		//--------------------------------------------------------------------------------------
@@ -28,22 +30,22 @@
 			// declare empty options at startup, so ui-codemirror can watch it
 			$scope.cmOptions = {};
 
-			var promise = $scope.loadEmailTemplates();
-			promise.then(function(data) {
+			//var promise = $scope.loadEmailTemplates();
+			//promise.then(function(data) {
 
-				$scope.cmOptions = {
-					autofocus: true,
-					indentUnit: 4,
-					indentWithTabs: true,
-					lineNumbers: true,
-					matchBrackets: true,
-					mode: "razor",
-					value: $scope.emailTemplate.description
-				};
+			//	$scope.cmOptions = {
+			//		autofocus: true,
+			//		indentUnit: 4,
+			//		indentWithTabs: true,
+			//		lineNumbers: true,
+			//		matchBrackets: true,
+			//		mode: "razor",
+			//		value: $scope.emailTemplate.description
+			//	};
 
-				$scope.loaded = true;
-				$scope.preValuesLoaded = true;
-			});
+			//	$scope.loaded = true;
+			//	$scope.preValuesLoaded = true;
+			//});
 			
 		};
 		$scope.loadAllNotificationTriggers = function () {
@@ -53,15 +55,15 @@
 		    });
 		};
 
-        $scope.loadEmailTemplates = function() {
+        //$scope.loadEmailTemplates = function() {
 
-        	var promise = merchelloNotificationsService.getNotification($routeParams.id);
-        	promise.then(function (notification) {
-        		$scope.emailTemplate = new merchello.Models.EmailTemplate(notification);
-        	});
+        //	var promise = merchelloNotificationsService.getNotification($routeParams.id);
+        //	promise.then(function (notification) {
+        //		$scope.emailTemplate = new merchello.Models.EmailTemplate(notification);
+        //	});
 
-	        return promise;
-        };
+	    //    return promise;
+        //};
 
 		//--------------------------------------------------------------------------------------
 		// Events methods

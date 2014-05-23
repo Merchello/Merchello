@@ -145,7 +145,6 @@
 	        		return new merchello.Models.EmailTemplate(emailTemplateFromServer);
 	        	});
 	        });
-
         };
 
         $scope.loadNotificationSubscribers = function() {
@@ -238,6 +237,19 @@
                     self.close();
                 }
             });
+
+        $scope.addNotificationMessageToMethodClick = function (methodKey, notificationMessage) {
+            var redirectKey = "create";
+            if (notificationMessage == undefined) {
+                notificationMessage = new merchello.Models.NotificationMessage();
+                notificationMessage.methodKey = methodKey;
+            }
+            else {
+                redirectKey = notificationMessage.key;
+            }
+            $scope.notificationMessage = notificationMessage;
+            window.location.hash = "#/merchello/merchello/NotificationsEdit/" + redirectKey;
+        }
 
         //--------------------------------------------------------------------------------------
         // Dialog methods

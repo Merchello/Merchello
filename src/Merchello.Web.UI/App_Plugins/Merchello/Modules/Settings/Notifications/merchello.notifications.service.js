@@ -65,11 +65,22 @@
                         'Failed to save data for Notification');
 		    },
 
+		    getNotificationMessage: function (id) {
+
+		        return umbRequestHelper.resourcePromise(
+                        $http({
+                            url: umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'GetNotification') + "?id=" + id,
+                            method: "GET"
+                        }),
+                        'Failed to save data for Notification');
+
+		    },
+
 		    getNotificationMessages: function (id) {
 
 		        return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'GetNotificationMessages'),
+                            url: umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'GetNotificationMessages') + "?id=" + id,
                             method: "GET"
                         }),
                         'Failed to save data for Notification');

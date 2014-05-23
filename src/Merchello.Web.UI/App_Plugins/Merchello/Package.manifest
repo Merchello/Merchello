@@ -88,6 +88,7 @@
 		'~/App_Plugins/Merchello/Modules/Settings/Notifications/notifications.controller.js',
 		'~/App_Plugins/Merchello/Modules/Settings/Notifications/notifications.edit.controller.js',
 		'~/App_Plugins/Merchello/Modules/Settings/Notifications/Dialogs/notifications.edittemplate.controller.js',
+        '~/App_Plugins/Merchello/Modules/Settings/Notifications/Directives/notifications-helper-directives.js',
         '~/App_Plugins/Merchello/Modules/Settings/Notifications/Dialogs/notificationsmethod.controller.js',
 		'~/App_Plugins/Merchello/Modules/Settings/GatewayProviders/Dialogs/smtp.notifications.providersettings.controller.js',
 		'~/App_Plugins/Merchello/Modules/Settings/Vendors/vendors.controller.js',

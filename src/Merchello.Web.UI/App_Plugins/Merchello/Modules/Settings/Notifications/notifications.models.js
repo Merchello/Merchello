@@ -9,12 +9,14 @@
             self.providerKey = "";
             self.description = "";
             self.serviceCode = "";
+            self.notificationMessages = [];
         } else {
             self.key = notificationMethodFromServer.key;
             self.name = notificationMethodFromServer.name;
             self.providerKey = notificationMethodFromServer.providerKey;
             self.description = notificationMethodFromServer.description;
             self.serviceCode = notificationMethodFromServer.serviceCode;
+            self.notificationMessages = notificationMethodFromServer.notificationMessages;
         }
 
         self.displayEditor = function () {
