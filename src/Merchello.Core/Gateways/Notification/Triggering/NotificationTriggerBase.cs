@@ -1,45 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Merchello.Core.Observation;
 
 namespace Merchello.Core.Gateways.Notification.Triggering
 {
-    public class NotificationTriggerBase<T> : IObservable<T>
+    /// <summary>
+    /// Defines the <see cref="NotificationTriggerBase{T}"/>
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public abstract class NotificationTriggerBase<T> : ObservableTriggerBase<T>
     {
-        private readonly List<IObserver<T>> _observers = new List<IObserver<T>>(); 
-
-        public IDisposable Subscribe(IObserver<T> observer)
+        /// <summary>
+        /// Value to pass to the notification monitors
+        /// </summary>
+        public virtual void Notify(T value)
         {
-            if(!_observers.Contains(observer))
-                _observers.Add(observer);
-            return new Unsubscriber<T>(_observers, observer);
+            Notify(value, new string[]{});
         }
-
-        public virtual void Notify(object model)
-        {
-            if (!WillWork(model)) return;            
-            foreach (var o in _observers)
-            {
-                try
-                {
-                    o.OnNext((T)model);
-                }
-                catch (Exception ex)
-                {                    
-                    o.OnError(ex);
-                }               
-            }
-        }
-
 
         /// <summary>
-        /// Returns true/false if the value passed matches the type of model that can
-        /// be passed as an EventArgs of T
+        /// Value to pass to the notification monitors
         /// </summary>
-        /// <param name="model">The object type to compair</param>
-        private static bool WillWork(object model)
-        {
-            return typeof(T) == model.GetType();
-        }
+        public abstract void Notify(T value, IEnumerable<string> contacts);
     }
+
 }

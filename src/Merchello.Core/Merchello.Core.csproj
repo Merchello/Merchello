@@ -81,6 +81,7 @@
     <Compile Include="Gateways\Notification\Monitors\OrderConfirmationMonitor.cs" />
     <Compile Include="Gateways\Notification\Monitors\NotificationMonitorBase.cs" />
     <Compile Include="Gateways\Notification\Triggering\NotificationTriggerBase.cs" />
+    <Compile Include="Gateways\Notification\Triggering\NotificationTriggerOld.cs" />
     <Compile Include="Gateways\Notification\Triggering\OrderConfirmationNotificationTrigger.cs" />
     <Compile Include="Notification.cs" />
     <Compile Include="Observation\ITrigger.cs" />
@@ -787,9 +788,7 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\Broadcast\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

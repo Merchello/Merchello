@@ -42,20 +42,31 @@ namespace Merchello.Core.Observation
             TriggerCache.AddOrUpdate(type, observableTrigger, (x, y) => observableTrigger);
         }
 
-
-        public IEnumerable<T> GetTriggersByArea<T>(ObservableTopic area) where T : ITrigger
+        /// <summary>
+        /// Gets a collection of <see cref="ITrigger"/> by the area defined in the attribute
+        /// </summary>
+        /// <param name="area">The "area"</param>
+        /// <returns>A <see cref="ITrigger"/></returns>
+        public IEnumerable<T> GetTriggersByArea<T>(ObservableTopic area)
         {
             return  GetAllTriggers<T>()
                 .Where(x => x.GetType()
                         .GetCustomAttributes<ObservableTriggerForAttribute>(false).FirstOrDefault(y => y.Area == area) != null);   
         }
 
-        public IEnumerable<T> GetAllTriggers<T>() where T : ITrigger
+        /// <summary>
+        /// Gets the collection of all resovled <see cref="ITrigger"/>s
+        /// </summary>
+        public IEnumerable<T> GetAllTriggers<T>()
         {
             return TriggerCache.Values.Where(x => x.GetType().IsAssignableFrom(typeof(T))).Select(x => (T)x);
         }
 
-        public T TryGetTrigger<T>(Type type) where T : ITrigger
+        /// <summary>
+        /// Gets a <see cref="ITrigger"/> from the resolver
+        /// </summary>
+        /// <returns>A <see cref="ITrigger"/></returns>
+        public T TryGetTrigger<T>(Type type)
         {
             return (T)TriggerCache[type];
         }
