@@ -9,22 +9,21 @@ namespace Merchello.Core.Observation
     internal interface IObservableTriggerResolver
     {
         /// <summary>
-        /// Gets a collection of <see cref="IObservableTrigger"/> by the area defined in the attribute
+        /// Gets a collection of <see cref="ITrigger"/> by the area defined in the attribute
         /// </summary>
         /// <param name="area">The "area"</param>
-        /// <returns>A <see cref="IObservableTrigger"/></returns>
-        IEnumerable<IObservableTrigger> GetTriggersByArea(string area);
+        /// <returns>A <see cref="ITrigger"/></returns>
+        IEnumerable<T> GetTriggersByArea<T>(ObservableTopic area) where T : ITrigger;
 
         /// <summary>
-        /// Gets the collection of all resovled <see cref="IObservableTrigger"/>s
+        /// Gets the collection of all resovled <see cref="ITrigger"/>s
         /// </summary>
-        IEnumerable<IObservableTrigger> GetAllTriggers();
+        IEnumerable<T> GetAllTriggers<T>() where T : ITrigger;
 
         /// <summary>
-        /// Gets a <see cref="IObservableTrigger"/> from the resolver
+        /// Gets a <see cref="ITrigger"/> from the resolver
         /// </summary>
-        /// <param name="key"></param>
-        /// <returns>A <see cref="IObservableTrigger"/></returns>
-        IObservableTrigger TryGetTrigger(Guid key);
+        /// <returns>A <see cref="ITrigger"/></returns>
+        T TryGetTrigger<T>(Type type) where T : ITrigger;
     }
 }

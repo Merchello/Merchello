@@ -83,6 +83,7 @@
     <Compile Include="Gateways\Notification\Triggering\NotificationTriggerBase.cs" />
     <Compile Include="Gateways\Notification\Triggering\OrderConfirmationNotificationTrigger.cs" />
     <Compile Include="Notification.cs" />
+    <Compile Include="Observation\ITrigger.cs" />
     <Compile Include="Observation\MonitorBase.cs" />
     <Compile Include="Observation\ObservableTriggerForAttribute.cs" />
     <Compile Include="Observation\ObservableTopic.cs" />

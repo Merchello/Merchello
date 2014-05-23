@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Merchello.Core.Gateways;
-using Merchello.Core.Gateways.Notification;
-using Merchello.Core.Gateways.Payment;
-using Merchello.Core.Gateways.Shipping;
-using Merchello.Core.Gateways.Taxation;
 using Merchello.Core.Observation;
-using Merchello.Core.Triggers;
 using Umbraco.Core;
 
 namespace Merchello.Core
@@ -14,9 +9,9 @@ namespace Merchello.Core
     internal static class PluginManagerExtensions
     {
 
-        internal static IEnumerable<Type> ResolveTriggers(this PluginManager pluginManager)
+        internal static IEnumerable<Type> ResolveObservableTriggers(this PluginManager pluginManager)
         {
-            return pluginManager.ResolveTypesWithAttribute<IObservableTrigger, TriggerForAttribute>();
+            return pluginManager.ResolveTypesWithAttribute<ITrigger, ObservableTriggerForAttribute>();
         }
 
         /// <summary>

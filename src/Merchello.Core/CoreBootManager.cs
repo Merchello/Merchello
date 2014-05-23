@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Configuration;
-using System.Linq;
-using System.Reflection;
 using Merchello.Core.Cache;
 using Merchello.Core.Configuration;
 using Merchello.Core.Gateways;
-using Merchello.Core.ObjectResolution;
+using Merchello.Core.Observation;
 using Merchello.Core.Services;
-using Merchello.Core.Triggers;
 using Umbraco.Core;
 using Merchello.Core.Persistence.UnitOfWork;
 using Umbraco.Core.Logging;
@@ -104,7 +101,7 @@ namespace Merchello.Core
         protected virtual void InitializeResolvers()
         {
             if(!ObservableTriggerResolver.HasCurrent)
-            ObservableTriggerResolver.Current = new ObservableTriggerResolver(PluginManager.Current.ResolveTriggers());
+            ObservableTriggerResolver.Current = new ObservableTriggerResolver(PluginManager.Current.ResolveObservableTriggers());
         }
 
         protected void BindEventTriggers()

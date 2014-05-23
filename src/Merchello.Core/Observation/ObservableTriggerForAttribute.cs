@@ -4,13 +4,7 @@ namespace Merchello.Core.Observation
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
     public class ObservableTriggerForAttribute : Attribute
-    {
-        /// <summary>
-        /// Gets the mandatory key for the trigger
-        /// </summary>        
-        public Guid Key { get; private set; }
-       
-
+    {       
         /// <summary>
         /// The name of the trigger
         /// </summary>
@@ -22,13 +16,10 @@ namespace Merchello.Core.Observation
         public ObservableTopic Area { get; private set; }
 
         // ctor
-        public ObservableTriggerForAttribute(string key, string alias, ObservableTopic area)
+        public ObservableTriggerForAttribute(string alias, ObservableTopic area)
         {
-            Mandate.ParameterNotNullOrEmpty(key, "key");
-            
+                        
             Mandate.ParameterNotNullOrEmpty(alias, "alias");
-
-            Key = new Guid(key);
             Alias = alias;
             Area = area;            
         }
