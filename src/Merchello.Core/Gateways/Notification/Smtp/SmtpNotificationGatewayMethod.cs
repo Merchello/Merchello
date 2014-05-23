@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Mail;
+using System.Threading.Tasks;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Umbraco.Core.Logging;
@@ -25,7 +26,7 @@ namespace Merchello.Core.Gateways.Notification.Smtp
         /// Does the actual work of sending the <see cref="IFormattedNotificationMessage"/>
         /// </summary>
         /// <param name="message">The <see cref="IFormattedNotificationMessage"/> to be sent</param>
-        public override bool PerformSend(IFormattedNotificationMessage message)
+        public override void PerformSend(IFormattedNotificationMessage message)
         {
             var msg = new MailMessage
             {
@@ -39,39 +40,28 @@ namespace Merchello.Core.Gateways.Notification.Smtp
             {
                 msg.To.Add(new MailAddress(to));
             }
-
-            var client = new SmtpClient(_settings.Host);
-            if (_settings.HasCredentials) client.Credentials = _settings.Credentials;
-            if (_settings.EnableSsl) client.EnableSsl = true;
-
-
-            //var send = client.SendAsync(msg);
-            //send.ContinueWith(task =>
-            //{
-            //    if (task.IsCanceled)
-            //    {
-            //        LogHelper.Warn<SmtpNotificationGatewayMethod>("Send canceled");
-            //    }
-
-            //    if (!task.IsFaulted && task.Exception != null)
-            //    {
-            //        var ex = task.Exception.InnerExceptions.First();
-            //        LogHelper.Error<SmtpNotificationGatewayMethod>("Failed sending email", ex);
-            //    }
-                                
-            //});
-
-            try
+            
+            //// We want to send the email async
+            Task.Factory.StartNew(() =>
             {
-                client.Send(msg);
-                msg.Dispose();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                LogHelper.Error<SmtpNotificationGatewayMethod>("Failed sending email", ex);
-                return false;
-            }                        
+                try
+                {
+                    using (msg)
+                    {
+                        using (var sender = new SmtpClient(_settings.Host))
+                        {
+                            if (_settings.HasCredentials) sender.Credentials = _settings.Credentials;
+                            if (_settings.EnableSsl) sender.EnableSsl = true;
+                            sender.Send(msg);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.Error<SmtpNotificationGatewayMethod>("SMTP provider failed sending email", ex);
+                }
+            });
+
         }
 
 

@@ -63,7 +63,9 @@ namespace Merchello.Core
             CreateMerchelloContext(serviceContext, cache);
                        
             InitializeResolvers();
-                  
+
+            BindEventTriggers();
+
             _isInitialized = true;            
 
             return this;
@@ -101,19 +103,20 @@ namespace Merchello.Core
 
         protected virtual void InitializeResolvers()
         {
-            
+            if(!TriggerResolver.HasCurrent)
+            TriggerResolver.Current = new TriggerResolver(PluginManager.Current.ResolveTriggers());
         }
 
         protected void BindEventTriggers()
         {
-            LogHelper.Info<CoreBootManager>("Beginning Merchello Event Trigger Binding");
-            foreach (var trigger in EventTriggeredActionResolver.Current.GetAllEventTriggers())
+            LogHelper.Info<CoreBootManager>("Beginning Merchello Trigger Binding");
+            foreach (var trigger in TriggerResolver.Current.GetAllEventTriggers())
             {
-                var att = trigger.GetType().GetCustomAttributes<EventTriggeredActionForAttribute>(false).FirstOrDefault();
+                var att = trigger.GetType().GetCustomAttributes<TriggerForAttribute>(false).FirstOrDefault();
                 
                 if (att == null) continue;
                 
-                var bindTo = att.Service.GetEvent(att.EventName);
+                var bindTo = att.Type.GetEvent(att.HandleEvent);
                 
                 if (bindTo == null) continue;
 
@@ -121,7 +124,7 @@ namespace Merchello.Core
                 
                 bindTo.AddEventHandler(trigger, Delegate.CreateDelegate(bindTo.EventHandlerType, trigger, mi));
 
-                LogHelper.Info<CoreBootManager>(string.Format("Binding {0} to {1} - {2} event", trigger.GetType().Name, att.Service.Name, att.EventName));
+                LogHelper.Info<CoreBootManager>(string.Format("Binding {0} to {1} - {2} event", trigger.GetType().Name, att.Type.Name, att.HandleEvent));
             }
         }
 

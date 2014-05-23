@@ -76,9 +76,9 @@ namespace Merchello.Core.Gateways.Notification
         /// Sends a <see cref="IFormattedNotificationMessage"/> given it's unique Key (Guid)
         /// </summary>
         /// <param name="messageKey">The unique key (Guid) of the <see cref="IFormattedNotificationMessage"/></param>
-        public virtual bool Send(Guid messageKey)
+        public virtual void Send(Guid messageKey)
         {
-            return Send(messageKey, new DefaultNotificationFormatter());
+            Send(messageKey, new DefaultNotificationFormatter());
         }
 
         /// <summary>
@@ -86,20 +86,20 @@ namespace Merchello.Core.Gateways.Notification
         /// </summary>
         /// <param name="messageKey">The unique key (Guid) of the <see cref="IFormattedNotificationMessage"/></param>
         /// <param name="formatter">The <see cref="INotificationFormatter"/> to use to format the message</param>
-        public virtual bool Send(Guid messageKey, INotificationFormatter formatter)
+        public virtual void Send(Guid messageKey, INotificationFormatter formatter)
         {
             var message = _gatewayProviderService.GetNotificationMessageByKey(messageKey);
 
-            return Send(message, formatter);
+            Send(message, formatter);
         }
 
         /// <summary>
         /// Sends a <see cref="IFormattedNotificationMessage"/>
         /// </summary>
         /// <param name="notificationMessage">The <see cref="IFormattedNotificationMessage"/> to be sent</param>
-        public virtual bool Send(INotificationMessage notificationMessage)
+        public virtual void Send(INotificationMessage notificationMessage)
         {
-            return Send(notificationMessage, new DefaultNotificationFormatter());
+            Send(notificationMessage, new DefaultNotificationFormatter());
         }
 
         /// <summary>
@@ -107,16 +107,16 @@ namespace Merchello.Core.Gateways.Notification
         /// </summary>
         /// <param name="notificationMessage">The <see cref="IFormattedNotificationMessage"/> to be sent</param>
         /// <param name="formatter">The <see cref="INotificationFormatter"/> to use to format the message</param>
-        public virtual bool Send(INotificationMessage notificationMessage, INotificationFormatter formatter)
+        public virtual void Send(INotificationMessage notificationMessage, INotificationFormatter formatter)
         {
-            return PerformSend(new FormattedNotificationMessage(notificationMessage, formatter)); 
+            PerformSend(new FormattedNotificationMessage(notificationMessage, formatter)); 
         }
 
         /// <summary>
         /// Does the actual work of sending the <see cref="IFormattedNotificationMessage"/>
         /// </summary>
         /// <param name="message">The <see cref="IFormattedNotificationMessage"/> to be sent</param>
-        public abstract bool PerformSend(IFormattedNotificationMessage message);
+        public abstract void PerformSend(IFormattedNotificationMessage message);
         
 
         /// <summary>
