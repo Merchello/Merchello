@@ -9,22 +9,22 @@ namespace Merchello.Core.Triggers
     internal interface ITriggerResolver
     {
         /// <summary>
-        /// Gets a collection of <see cref="ITrigger"/> by the area defined in the attribute
+        /// Gets a collection of <see cref="IBroadcaster"/> by the area defined in the attribute
         /// </summary>
         /// <param name="area">The "area"</param>
-        /// <returns>A <see cref="ITrigger"/></returns>
+        /// <returns>A <see cref="IBroadcaster"/></returns>
         IEnumerable<ITrigger> GetTriggersByArea(string area);
 
         /// <summary>
-        /// Gets the collection of all resovled <see cref="ITrigger"/>s
+        /// Gets the collection of all resovled <see cref="IBroadcaster"/>s
         /// </summary>
         IEnumerable<ITrigger> GetAllEventTriggers();
 
         /// <summary>
-        /// Gets a <see cref="ITrigger"/> from the resolver
+        /// Gets a <see cref="IBroadcaster"/> from the resolver
         /// </summary>
         /// <param name="key"></param>
-        /// <returns>A <see cref="ITrigger"/></returns>
+        /// <returns>A <see cref="IBroadcaster"/></returns>
         ITrigger TryGetTrigger(Guid key);
     }
 }
