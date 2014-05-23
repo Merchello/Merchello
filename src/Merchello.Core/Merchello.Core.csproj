@@ -77,12 +77,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActivatorHelper.cs" />
-    <Compile Include="Observation\ObservationChannelForAttribute.cs" />
-    <Compile Include="Observation\ObservationChannelType.cs" />
-    <Compile Include="Observation\IObservationChannel.cs" />
-    <Compile Include="Observation\IObservationChannelResolver.cs" />
-    <Compile Include="Observation\IObservationChannelMonitor.cs" />
-    <Compile Include="Observation\ObservationChannelResolver.cs" />
+    <Compile Include="Gateways\Notification\Formatters\PatternReplaceNotificationFormatter.cs" />
+    <Compile Include="Gateways\Notification\Monitors\OrderConfirmationMonitor.cs" />
+    <Compile Include="Gateways\Notification\Monitors\NotificationMonitorBase.cs" />
+    <Compile Include="Gateways\Notification\Triggering\NotificationTriggerBase.cs" />
+    <Compile Include="Gateways\Notification\Triggering\OrderConfirmationNotificationTrigger.cs" />
+    <Compile Include="Notification.cs" />
+    <Compile Include="Observation\MonitorBase.cs" />
+    <Compile Include="Observation\ObservableTriggerForAttribute.cs" />
+    <Compile Include="Observation\ObservableTopic.cs" />
     <Compile Include="Events\ObservationChannelEventArgs.cs" />
     <Compile Include="Builders\BuildChainBase.cs" />
     <Compile Include="Builders\InvoiceBuilderChain.cs" />
@@ -115,16 +118,12 @@
     <Compile Include="Gateways\Notification\NotificationContext.cs" />
     <Compile Include="Gateways\Notification\NotificationGatewayMethodBase.cs" />
     <Compile Include="Gateways\Notification\NotificationGatewayProviderBase.cs" />
-    <Compile Include="Observation\ObservationChannelBase.cs" />
     <Compile Include="Gateways\Notification\Smtp\ISmtpNotificationGatewayProvider.cs" />
     <Compile Include="Gateways\Notification\Smtp\SmtpNotificationGatewayMethod.cs" />
     <Compile Include="Gateways\Notification\Smtp\SmtpNotificationGatewayProvider.cs" />
     <Compile Include="Gateways\Notification\Smtp\SmtpNotificationGatewayProviderSettings.cs" />
     <Compile Include="Gateways\Notification\Smtp\SmtpProviderEvents.cs" />
     <Compile Include="Gateways\Notification\Smtp\SmtpProviderExtendedDataExtensions.cs" />
-    <Compile Include="Gateways\Notification\Triggering\INotificationObservationChannel.cs" />
-    <Compile Include="Gateways\Notification\Triggering\NotificationObservationChannelBase.cs" />
-    <Compile Include="Gateways\Notification\Triggering\OrderConfirmationChannel.cs" />
     <Compile Include="Gateways\Payment\Cash\CashPaymentGatewayMethod.cs" />
     <Compile Include="Gateways\Payment\Cash\CashPaymentGatewayProvider.cs" />
     <Compile Include="Gateways\Payment\Cash\ICashPaymentGatewayMethod.cs" />
@@ -136,6 +135,8 @@
     <Compile Include="Gateways\Payment\IPaymentGatewayMethod.cs" />
     <Compile Include="Gateways\Payment\IPaymentResult.cs" />
     <Compile Include="ObjectResolution\MerchelloManyObjectsResolverBase.cs" />
+    <Compile Include="Observation\ObserverMonitorForAttribute.cs" />
+    <Compile Include="Observation\Unsubscriber.cs" />
     <Compile Include="Persistence\Migrations\DataLossException.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneOneOne\RecreateNotificaitonMessageTable.cs" />
     <Compile Include="PluginManagerExtensions.cs" />
@@ -185,13 +186,12 @@
     <Compile Include="Models\Rdbms\User2AppDto.cs" />
     <Compile Include="Models\Rdbms\UserDto.cs" />
     <Compile Include="Models\TypeFields\EntityTypeField.cs" />
-    <Compile Include="Models\TypeFields\IEntityTypeField.cs" />
+    <Compile Include="Models\TypeFields\Interfaces\IEntityTypeField.cs" />
     <Compile Include="Gateways\Notification\FormatStatus.cs" />
     <Compile Include="Gateways\Notification\IFormattedNotificationMessage.cs" />
     <Compile Include="Gateways\Notification\INotificationGatewayProvider.cs" />
     <Compile Include="Gateways\Notification\Formatters\INotificationFormatter.cs" />
     <Compile Include="Gateways\Notification\FormattedNotificationMessage.cs" />
-    <Compile Include="Gateways\Notification\Formatters\NotificationFormatterResolver.cs" />
     <Compile Include="Gateways\Notification\Smtp\SmtpClientExtensions.cs" />
     <Compile Include="Persistence\DatabaseModelDefinitions\DbIndexDefinition.cs" />
     <Compile Include="Persistence\Factories\InvoiceLineItemFactory.cs" />
@@ -478,7 +478,7 @@
     <Compile Include="Models\TypeFields\AppliedPaymentTypeField.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\TypeFields\IAppliedPaymentTypeField.cs">
+    <Compile Include="Models\TypeFields\Interfaces\IAppliedPaymentTypeField.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\Warehouse.cs">
@@ -657,15 +657,15 @@
     <Compile Include="Models\Rdbms\ProductVariantDto.cs" />
     <Compile Include="Models\Rdbms\ProductVariant2ProductAttributeDto.cs" />
     <Compile Include="Models\Rdbms\ProductDto.cs" />
-    <Compile Include="Models\TypeFields\IGatewayProviderTypeField.cs" />
+    <Compile Include="Models\TypeFields\Interfaces\IGatewayProviderTypeField.cs" />
     <Compile Include="Models\TypeFields\GatewayProviderTypeField.cs" />
-    <Compile Include="Models\TypeFields\IAddressTypeField.cs" />
-    <Compile Include="Models\TypeFields\IItemCacheTypeField.cs" />
-    <Compile Include="Models\TypeFields\ICustomTypeField.cs" />
-    <Compile Include="Models\TypeFields\ILineItemTypeField.cs" />
-    <Compile Include="Models\TypeFields\IPaymentMethodTypeField.cs" />
-    <Compile Include="Models\TypeFields\IProductTypeField.cs" />
-    <Compile Include="Models\TypeFields\ITypeFieldMapper.cs" />
+    <Compile Include="Models\TypeFields\Interfaces\IAddressTypeField.cs" />
+    <Compile Include="Models\TypeFields\Interfaces\IItemCacheTypeField.cs" />
+    <Compile Include="Models\TypeFields\Interfaces\ICustomTypeField.cs" />
+    <Compile Include="Models\TypeFields\Interfaces\ILineItemTypeField.cs" />
+    <Compile Include="Models\TypeFields\Interfaces\IPaymentMethodTypeField.cs" />
+    <Compile Include="Models\TypeFields\Interfaces\IProductTypeField.cs" />
+    <Compile Include="Models\TypeFields\Interfaces\ITypeFieldMapper.cs" />
     <Compile Include="Models\TypeFields\EnumTypeFieldConverter.cs" />
     <Compile Include="Cache\ObjectCacheRuntimeCacheProvider.cs" />
     <Compile Include="Cache\StaticCacheProvider.cs" />
@@ -730,11 +730,11 @@
     <Compile Include="Strategies\Packaging\PackagingStrategyBase.cs" />
     <Compile Include="Strategies\Packaging\IPackagingStrategy.cs" />
     <Compile Include="Strategies\Packaging\ShippableProductVisitor.cs" />
-    <Compile Include="Triggers\ITrigger.cs" />
-    <Compile Include="Triggers\TriggerResolver.cs" />
-    <Compile Include="Triggers\ITriggerResolver.cs" />
-    <Compile Include="Triggers\TriggerBase.cs" />
-    <Compile Include="Triggers\TriggerForAttribute.cs" />
+    <Compile Include="Observation\IObservableTrigger.cs" />
+    <Compile Include="Observation\ObservableTriggerResolver.cs" />
+    <Compile Include="Observation\IObservableTriggerResolver.cs" />
+    <Compile Include="Observation\ObservableTriggerBase.cs" />
+    <Compile Include="Observation\TriggerForAttribute.cs" />
     <Compile Include="TypeFieldMapperEnumerations.cs" />
     <Compile Include="Models\TypeFields\ProductTypeField.cs" />
     <Compile Include="Models\Rdbms\TypeFieldDto.cs" />
@@ -748,7 +748,7 @@
     <Compile Include="Models\TypeFields\AddressTypeField.cs" />
     <Compile Include="Models\TypeFields\ItemCacheTypeField.cs" />
     <Compile Include="Configuration\Outline\TypeFieldDefinitionsElement.cs" />
-    <Compile Include="Models\TypeFields\ITypeField.cs" />
+    <Compile Include="Models\TypeFields\Interfaces\ITypeField.cs" />
     <Compile Include="Configuration\Outline\TypeFieldCollection.cs" />
     <Compile Include="Configuration\Outline\TypeFieldElement.cs" />
     <Compile Include="Configuration\Outline\MerchelloSection.cs" />
@@ -787,9 +787,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Gateways\Notification\Models\" />
     <Folder Include="Models\Broadcast\" />
-    <Folder Include="Monitors\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

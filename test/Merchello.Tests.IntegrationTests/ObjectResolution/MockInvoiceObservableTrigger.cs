@@ -1,13 +1,14 @@
 ﻿using System;
 using Merchello.Core.Events;
 using Merchello.Core.Models;
+using Merchello.Core.Observation;
 using Merchello.Core.Services;
 using Merchello.Core.Triggers;
 
 namespace Merchello.Tests.IntegrationTests.ObjectResolution
 {
     [TriggerFor("2DA5CE92-E388-4788-A647-CDEA82EE6C9F", "Mock Trigger", "Testing", typeof(InvoiceService), "Creating")]
-    internal class MockInvoiceTrigger : TriggerBase
+    internal class MockInvoiceObservableTrigger : ObservableTriggerBase
     {
         public static bool EventInvoked = false;
 

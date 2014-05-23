@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using Merchello.Core.Models;
+using Merchello.Core.Observation;
 using Merchello.Core.Persistence;
 using Merchello.Core.Services;
 using Merchello.Core.Triggers;
@@ -81,7 +82,7 @@ namespace Merchello.Tests.UnitTests.Services
     }
 
 
-    internal class OrderStatusInvokeTester : ITrigger
+    internal class OrderStatusInvokeTester : IObservableTrigger
     {
 
         public IOrder After { get; set; }

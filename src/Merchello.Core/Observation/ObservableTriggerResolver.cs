@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Merchello.Core.ObjectResolution;
+using Merchello.Core.Observation;
 using Umbraco.Core;
 
 namespace Merchello.Core.Triggers
@@ -10,13 +11,13 @@ namespace Merchello.Core.Triggers
     /// <summary>
     /// Represents a EventTriggerRegistry
     /// </summary>
-    internal sealed class TriggerResolver : MerchelloManyObjectsResolverBase<TriggerResolver, ITrigger>, ITriggerResolver
+    internal sealed class ObservableTriggerResolver : MerchelloManyObjectsResolverBase<ObservableTriggerResolver, IObservableTrigger>, IObservableTriggerResolver
     {
-        private static readonly ConcurrentDictionary<Guid, ITrigger> TriggerCache = new ConcurrentDictionary<Guid, ITrigger>();
+        private static readonly ConcurrentDictionary<Guid, IObservableTrigger> TriggerCache = new ConcurrentDictionary<Guid, IObservableTrigger>();
 
         internal static bool IsInitialized { get; private set; }
 
-        internal TriggerResolver(IEnumerable<Type> triggers)
+        internal ObservableTriggerResolver(IEnumerable<Type> triggers)
             : base(triggers)
         {
             BuildCache();
@@ -38,41 +39,41 @@ namespace Merchello.Core.Triggers
         /// Adds a key value pair to the dictionary
         /// </summary>
         /// <param name="key"></param>
-        /// <param name="trigger">The <see cref="IBroadcaster"/> to cache</param>
-        private static void CacheMapper(Guid key, ITrigger trigger)
+        /// <param name="observableTrigger">The <see cref="IObservableTrigger"/> to cache</param>
+        private static void CacheMapper(Guid key, IObservableTrigger observableTrigger)
         {
-            TriggerCache.AddOrUpdate(key, trigger, (x, y) => trigger);
+            TriggerCache.AddOrUpdate(key, observableTrigger, (x, y) => observableTrigger);
         }
 
 
         /// <summary>
-        /// Gets a <see cref="IBroadcaster"/> from the registry
+        /// Gets a <see cref="IObservableTrigger"/> from the registry
         /// </summary>
         /// <param name="key"></param>
-        /// <returns>A <see cref="IBroadcaster"/></returns>
-        public ITrigger TryGetTrigger(Guid key)
+        /// <returns>A <see cref="IObservableTrigger"/></returns>
+        public IObservableTrigger TryGetTrigger(Guid key)
         {
-            ITrigger value;
+            IObservableTrigger value;
             return TriggerCache.TryGetValue(key, out value) ? value : null;
         }
 
         /// <summary>
-        /// Gets a collection of <see cref="IBroadcaster"/> by the area defined in the attribute
+        /// Gets a collection of <see cref="IObservableTrigger"/> by the area defined in the attribute
         /// </summary>
         /// <param name="area">The "area"</param>
-        /// <returns>A <see cref="IBroadcaster"/></returns>
-        public IEnumerable<ITrigger> GetTriggersByArea(string area)
+        /// <returns>A <see cref="IObservableTrigger"/></returns>
+        public IEnumerable<IObservableTrigger> GetTriggersByArea(string area)
         {
             return
-                GetAllEventTriggers()
+                GetAllTriggers()
                     .Where(x => x.GetType()
                         .GetCustomAttributes<TriggerForAttribute>(false).FirstOrDefault(y => y.Area.Equals(area)) != null);            
         }
 
         /// <summary>
-        /// Gets the collection of all resovled <see cref="IBroadcaster"/>s
+        /// Gets the collection of all resovled <see cref="IObservableTrigger"/>s
         /// </summary>
-        public IEnumerable<ITrigger> GetAllEventTriggers()
+        public IEnumerable<IObservableTrigger> GetAllTriggers()
         {
             return TriggerCache.Values;
         }
@@ -80,16 +81,16 @@ namespace Merchello.Core.Triggers
         /// <summary>
         /// Gets the instantiated values of the resolved types
         /// </summary>
-        protected override IEnumerable<ITrigger> Values
+        protected override IEnumerable<IObservableTrigger> Values
         {
             get
             {
                 var ctrArgs = new object[] { };
-                var triggers = new List<ITrigger>();
+                var triggers = new List<IObservableTrigger>();
 
                 foreach (var et in InstanceTypes)
                 {
-                    var attempt = ActivatorHelper.CreateInstance<ITrigger>(et, ctrArgs);
+                    var attempt = ActivatorHelper.CreateInstance<IObservableTrigger>(et, ctrArgs);
                     if (attempt.Success) triggers.Add(attempt.Result);
                 }
 
