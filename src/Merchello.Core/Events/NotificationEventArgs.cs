@@ -7,7 +7,7 @@ namespace Merchello.Core.Events
     /// <summary>
     /// Generic notifiy event args
     /// </summary>
-    public class NotificationEventArgs : BroadcastEventArgs<object>
+    public class NotificationEventArgs : ObservationChannelEventArgs<object>
     {
         private readonly Guid _triggerKey;
         private readonly IEnumerable<string> _contacts; 

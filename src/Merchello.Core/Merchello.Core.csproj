@@ -77,15 +77,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActivatorHelper.cs" />
-    <Compile Include="Broadcast\BroadcastObserverForAttribute.cs" />
-    <Compile Include="Broadcast\BroadcastType.cs" />
-    <Compile Include="Broadcast\IBroadcaster.cs" />
-    <Compile Include="Broadcast\IBroadcastSubscriber.cs" />
-    <Compile Include="Broadcast\IBroadcasterResolver.cs" />
-    <Compile Include="Broadcast\NotificationBroadcaster.cs" />
-    <Compile Include="Broadcast\BroadcasterResolver.cs" />
-    <Compile Include="Broadcast\Unsubscriber.cs" />
-    <Compile Include="Events\BroadcastEventArgs.cs" />
+    <Compile Include="Observation\ObservationChannelForAttribute.cs" />
+    <Compile Include="Observation\ObservationChannelType.cs" />
+    <Compile Include="Observation\IObservationChannel.cs" />
+    <Compile Include="Observation\IObservationChannelResolver.cs" />
+    <Compile Include="Observation\IObservationChannelMonitor.cs" />
+    <Compile Include="Observation\ObservationChannelResolver.cs" />
+    <Compile Include="Events\ObservationChannelEventArgs.cs" />
     <Compile Include="Builders\BuildChainBase.cs" />
     <Compile Include="Builders\InvoiceBuilderChain.cs" />
     <Compile Include="Builders\OrderBuilderChain.cs" />
@@ -117,13 +115,16 @@
     <Compile Include="Gateways\Notification\NotificationContext.cs" />
     <Compile Include="Gateways\Notification\NotificationGatewayMethodBase.cs" />
     <Compile Include="Gateways\Notification\NotificationGatewayProviderBase.cs" />
-    <Compile Include="Broadcast\BroadcasterBase.cs" />
+    <Compile Include="Observation\ObservationChannelBase.cs" />
     <Compile Include="Gateways\Notification\Smtp\ISmtpNotificationGatewayProvider.cs" />
     <Compile Include="Gateways\Notification\Smtp\SmtpNotificationGatewayMethod.cs" />
     <Compile Include="Gateways\Notification\Smtp\SmtpNotificationGatewayProvider.cs" />
     <Compile Include="Gateways\Notification\Smtp\SmtpNotificationGatewayProviderSettings.cs" />
     <Compile Include="Gateways\Notification\Smtp\SmtpProviderEvents.cs" />
     <Compile Include="Gateways\Notification\Smtp\SmtpProviderExtendedDataExtensions.cs" />
+    <Compile Include="Gateways\Notification\Triggering\INotificationObservationChannel.cs" />
+    <Compile Include="Gateways\Notification\Triggering\NotificationObservationChannelBase.cs" />
+    <Compile Include="Gateways\Notification\Triggering\OrderConfirmationChannel.cs" />
     <Compile Include="Gateways\Payment\Cash\CashPaymentGatewayMethod.cs" />
     <Compile Include="Gateways\Payment\Cash\CashPaymentGatewayProvider.cs" />
     <Compile Include="Gateways\Payment\Cash\ICashPaymentGatewayMethod.cs" />
@@ -786,6 +787,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Gateways\Notification\Models\" />
+    <Folder Include="Models\Broadcast\" />
     <Folder Include="Monitors\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

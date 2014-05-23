@@ -1,9 +1,9 @@
 using System;
 
-namespace Merchello.Core.Broadcast
+namespace Merchello.Core.Observation
 {
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-    public class BroadcastObserverForAttribute : Attribute
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+    public class ObservationChannelForAttribute : Attribute
     {
         /// <summary>
         /// Gets the mandatory key for the trigger
@@ -13,7 +13,7 @@ namespace Merchello.Core.Broadcast
         /// <summary>
         /// The "area" or category of the trigger
         /// </summary>
-        public BroadcastType Area { get; private set; }
+        public ObservationChannelType Area { get; private set; }
 
         /// <summary>
         /// The name of the trigger
@@ -26,7 +26,7 @@ namespace Merchello.Core.Broadcast
         public string Alias { get; private set; }
 
         // ctor
-        public BroadcastObserverForAttribute(string key, string name, string alias, BroadcastType area = BroadcastType.Notification)
+        public ObservationChannelForAttribute(string key, string name, string alias, ObservationChannelType area)
         {
             Mandate.ParameterNotNullOrEmpty(key, "key");
             Mandate.ParameterNotNullOrEmpty(name, "name");
