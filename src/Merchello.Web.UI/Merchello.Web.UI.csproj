@@ -72,8 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\GatewayProviders.html" />
-    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\NotificationsEditSettings.html" />
-    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\NotificationsEditTemplate.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\NotificationsEdit.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\TaxesByDestination.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\SalesByItem.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\SalesOverTime.html" />
@@ -276,6 +275,10 @@
     <Content Include="App_Plugins\Merchello\Modules\Catalog\productvariant.edit.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Customer\customer.edit.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Customer\customer.view.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Dialogs\notificationsmethod.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Dialogs\notificationsmethod.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Directives\notification-methods.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Directives\notifications-helper-directives.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Directives\shipping-history.html" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Directives\shipping-history-directives.js" />
     <Content Include="App_Plugins\Merchello\Modules\Order\merchello.shipment.service.js" />
