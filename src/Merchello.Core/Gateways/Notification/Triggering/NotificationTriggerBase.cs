@@ -4,23 +4,24 @@ using Merchello.Core.Observation;
 namespace Merchello.Core.Gateways.Notification.Triggering
 {
     /// <summary>
-    /// Defines the <see cref="NotificationTriggerBase{T}"/>
+    /// Defines the <see cref="NotificationTriggerBase{TTrigger, TMonitor}"/>
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public abstract class NotificationTriggerBase<T> : ObservableTriggerBase<T>
+    /// <typeparam name="TTrigger">The type passed to the trigger</typeparam>
+    /// <typeparam name="TMonitor">The type of the monitor</typeparam>
+    public abstract class NotificationTriggerBase<TTrigger, TMonitor> : ObservableTriggerBase<TMonitor>
     {
         /// <summary>
         /// Value to pass to the notification monitors
         /// </summary>
-        public virtual void Notify(T value)
+        public virtual void Notify(TTrigger model)
         {
-            Notify(value, new string[]{});
+            Notify(model, new string[]{});
         }
 
         /// <summary>
         /// Value to pass to the notification monitors
         /// </summary>
-        public abstract void Notify(T value, IEnumerable<string> contacts);
+        public abstract void Notify(TTrigger model, IEnumerable<string> contacts);
     }
 
 }
