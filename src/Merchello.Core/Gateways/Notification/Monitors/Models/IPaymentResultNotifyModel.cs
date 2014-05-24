@@ -2,7 +2,7 @@
 
 namespace Merchello.Core.Gateways.Notification.Monitors.Models
 {
-    public interface IOrderConfirmationModel
+    public interface IPaymentResultNotificationModel
     {
         /// <summary>
         /// Gets/sets the <see cref="IPayment"/>
@@ -14,6 +14,8 @@ namespace Merchello.Core.Gateways.Notification.Monitors.Models
         /// </summary>
         IInvoice Invoice { get; set; }
 
+        bool PaymentSuccess { get; set; }
 
+        bool ApproveOrderCreation { get; set; }
     }
 }
