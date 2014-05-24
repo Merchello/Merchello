@@ -79,10 +79,10 @@
     <Compile Include="ActivatorHelper.cs" />
     <Compile Include="Gateways\Notification\Formatters\PatternReplaceNotificationFormatter.cs" />
     <Compile Include="Gateways\Notification\Monitors\Models\MonitorModelExtensions.cs" />
-    <Compile Include="Gateways\Notification\Monitors\Models\OrderConfirmationModel.cs" />
+    <Compile Include="Gateways\Notification\Monitors\Models\PaymentResultNotifyModel.cs" />
     <Compile Include="Gateways\Notification\Monitors\OrderConfirmationMonitor.cs" />
     <Compile Include="Gateways\Notification\Monitors\NotificationMonitorBase.cs" />
-    <Compile Include="Gateways\Notification\Monitors\Models\IOrderConfirmationModel.cs" />
+    <Compile Include="Gateways\Notification\Monitors\Models\IPaymentResultNotifyModel.cs" />
     <Compile Include="Gateways\Notification\Triggering\NotificationTriggerBase.cs" />
     <Compile Include="Gateways\Notification\Triggering\NotificationTriggerOld.cs" />
     <Compile Include="Gateways\Notification\Triggering\OrderConfirmationNotificationTrigger.cs" />

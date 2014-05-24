@@ -10,7 +10,7 @@ namespace Merchello.Core.Gateways.Notification.Triggering
     /// Represents and OrderConfirmationNotificationTrigger
     /// </summary>
     [ObservableTriggerFor("OrderConfirmation", ObservableTopic.Notifications)]
-    public sealed class OrderConfirmationNotificationTrigger : NotificationTriggerBase<IPaymentResult, IOrderConfirmationModel>
+    public sealed class OrderConfirmationNotificationTrigger : NotificationTriggerBase<IPaymentResult, IPaymentResultNotifyModel>
     {
         public override void Notify(IPaymentResult model, IEnumerable<string> contacts)
         {

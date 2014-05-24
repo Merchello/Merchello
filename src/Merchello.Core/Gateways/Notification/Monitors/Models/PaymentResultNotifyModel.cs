@@ -2,10 +2,11 @@
 
 namespace Merchello.Core.Gateways.Notification.Monitors.Models
 {
-    internal class OrderConfirmationModel : IOrderConfirmationModel
+    internal class PaymentResultNotifyModel : IPaymentResultNotifyModel
     {
         public IPayment Payment { get; set; }
         public IInvoice Invoice { get; set; }
         public bool PaymentSuccess { get; set; }
+        public bool ApproveOrderCreation { get; set; }
     }
 }
