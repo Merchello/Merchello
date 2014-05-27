@@ -43,9 +43,9 @@ namespace Merchello.Core.Gateways.Notification.Smtp
         /// <param name="name">The name of the notification method</param>
         /// <param name="description">The description of the notification method</param>        
         /// <returns></returns>
-        public override INotificationGatewayMethod CreateNotificationMethod(IGatewayResource gatewayResource, string name, string description)
+        public override INotificationGatewayMethod CreateNotificationMethod(IGatewayResource gatewayResource, string name, string serviceCode)
         {
-            var attempt = GatewayProviderService.CreateNotificationMethodWithKey(GatewayProviderSettings.Key, name, description);
+            var attempt = GatewayProviderService.CreateNotificationMethodWithKey(GatewayProviderSettings.Key, name, serviceCode);
 
             if (attempt.Success) return new SmtpNotificationGatewayMethod(GatewayProviderService, attempt.Result, GatewayProviderSettings.ExtendedData);
 

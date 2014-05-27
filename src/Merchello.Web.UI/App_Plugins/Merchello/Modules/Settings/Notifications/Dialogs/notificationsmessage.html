@@ -1,15 +1,15 @@
-﻿<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Dashboards.Settings.Notifications.Dialogs.NotificationsMethodController">
+﻿<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Dashboards.Settings.Notifications.Dialogs.NotificationsMessageController">
     <div class="umb-modalcolumn-header">
         <h4>Add/Edit a Notification Method</h4>
     </div>
     <div class="umb-panel-body with-header with-footer">
-
+        
         <!-- Flyout when edit or Add a Method is clicked -->
-        <form name="addManualNotificationMethodForm">
-            <div class="form-group row-fluid" data-ng-show="dialogData.resources.length > 0">
+        <form name="addManualNotificationMessageForm">
+            <div class="row-fluid">
                 <div class="col-xs-8 span8">
                     <label for="event">Attached Event</label>
-                    <select name="event" class="col-xs-8 span8" data-ng-model="dialogData.serviceCode" data-ng-options="n.name for n in dialogData.resources track by n.ServiceCode"></select>
+                    <select name="event" class="col-xs-8 span8" data-ng-model="dialogData.monitorKey" data-ng-options="n.name for n in dialogData.notificationTriggers track by n.monitorKey"></select>
                 </div>
             </div>
             <div class="form-group row-fluid">
