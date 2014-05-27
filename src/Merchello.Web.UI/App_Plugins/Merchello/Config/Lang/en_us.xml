@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<language alias="en_us" intName="English (US)" localName="English (US)" lcid="" culture="en-US">
+	<area alias="merchelloHeadline">
+		<key alias="catalog">Catalog</key>
+  </area>
+  <area alias="merchelloVariant">
+		<!-- things -->
+		<key alias="product">Product</key>
+		<key alias="variant">Variant</key>
+		<key alias="sku">SKU</key>
+		<key alias="baseSku">Base Sku</key>
+		<key alias="barcode">Barcode</key>
+		<key alias="manufacturer">Manufacturer</key>
+		<key alias="manufacturerModel">Manufacturer's Model No.</key>
+		<key alias="variantInfo">Variant Information</key>
+		<key alias="variantOptions">Variant Options</key>
+		<key alias="downloads">Digital Downloads</key>
+		<key alias="optionName">Option Name</key>
+		<key alias="optionValues">Option Values</key>
+		<!-- actions -->
+		<key alias="newProduct">New Product</key>
+		<key alias="createProduct">Create a Product</key>
+		<key alias="createProductSub">The Name field (above), Price, and SKU are required.  Everything else is optional.</key>
+		<key alias="newVariant">New Variant</key>
+		<key alias="newVariantFor">New Variant for</key>
+		<key alias="newVariantOn">This will be a new variant on the</key>
+		<key alias="addVariant">Add a Variant</key>
+		<key alias="addVariantSub">This will be a new variant on the %0% product.</key>
+		<key alias="addOption">Add Another Option</key>
+		<key alias="addOptions">Add options to this variant and auto-populate additional variants for each option</key>
+		<key alias="deleteProduct">Delete Product</key>
+		<key alias="deleteVariant">Delete Variant</key>
+		<key alias="configVariant">Configure this variant</key>
+		<key alias="selectVariantOptions">Select the variant/options that you would like to create.</key>
+		<key alias="addFile">Add a file to your product variant</key>
+		<key alias="trackInventory">Track inventory for this variant</key>
+		<key alias="setInventoryPreferences">Set preferences for handling out of stock and adjust inventory for this variant</key>
+		<!-- phrases -->
+		<key alias="barcodeExamples">e.g. UPC, ISBN</key>
+		<key alias="optionNameExamples">(e.g. Size, Style, Color)</key>
+		<key alias="optionValueExamples">(e.g. red, green, blue)</key>
+		<key alias="hasDigitalDownload">This variant has digital goods</key>
+		<key alias="hasOptions">This variant has options (like size or color)</key>
+		<key alias="isTaxable">This variant is taxable</key>
+		<key alias="isShippable">This variant is shippable</key>
+		<key alias="noProduct">You have no products.</key>
+		<key alias="newProductPrompt">How about creating one now? Simply press the New Product button.</key>
+		<key alias="limitSelect">Number of products to display</key>
+		<key alias="mustUniqueSku">Must have a unique SKU</key>
+		<key alias="inventoryWarning"><![CDATA[<p>Important: If you choose to track inventory, it must be set manually for each variant (listed below) once this product has been saved.  However, you can set a base default inventory, applied to <strong>all variants</strong> here.</p>]]></key>
+		<key alias="startingInventoryWarning"><![CDATA[(Will set starting inventory for <strong>all variants</strong> and <strong>all warehouses</strong>)]]></key>
+  </area>
+	<area alias="merchelloOrder">
+		<!-- things -->
+		<key alias="order">Order</key>
+		<key alias="orders">Orders</key>
+		<key alias="orderNumber">Order #</key>
+		<key alias="paymentStatus">Payment Status</key>
+		<key alias="fulfillmentStatus">Fulfillment Status</key>
+		<!-- actions -->
+		<key alias="filter">Filter Orders</key>
+		<!-- phrases -->
+		<key alias="invoicesPerPage">Invoices / Page</key>
+		<key alias="noOrders">You have no orders.</key>
+		<key alias="attentionRequired">You Have Orders That Require Attention</key>
+		<key alias="paymentExpirationWarning">You may not receive payment for expired authorization.</key>
+	</area>
+	<area alias="merchelloWarehouse">
+		<!-- things -->
+		<key alias="warehouse">Warehouse</key>
+		<key alias="warehouses">Warehouses</key>
+		<key alias="stock">Stock</key>
+		<key alias="lowCount">Low Count</key>
+		<!-- actions -->
+		<!-- phrases -->
+  </area>
+	<area alias="merchelloShipping">
+		<!-- things -->
+		<key alias="shipping">Shipping</key>
+		<key alias="info">Shipping Information</key>
+		<key alias="weight"><![CDATA[Weight <small>(in pounds)</small>]]></key>
+		<key alias="dimensions"><![CDATA[Dimensions <small>(inches)</small>]]></key>
+		<!-- actions -->
+		<key alias="setVars">Set shipping variables: Weight, and dimensions</key>
+		<!-- phrases -->
+  </area>
+	<area alias="merchelloInventory">
+		<!-- things -->
+		<key alias="base">Base Inventory</key>
+		<key alias="inventory">Inventory</key>
+		<key alias="tracking">Inventory Tracking</key>
+		<!-- actions -->
+		<!-- phrases -->
+  </area>
+  <area alias="merchelloPlaceholders">
+		<key alias="enterProduct">Enter a product name</key>
+		<key alias="enterOrder">Start typing an order number or name...</key>
+		<key alias="addStyle">Add a style...</key>
+  </area>
+  <area alias="merchelloGeneral">
+		<key alias="apply">Apply</key>
+		<key alias="price">Price</key>
+		<key alias="customer">Customer</key>
+		<key alias="total">Total</key>
+		<key alias="salePrice">Sale Price</key>
+		<key alias="filter">Filter</key>
+		<key alias="filterBy">Filter By</key>
+		<key alias="chooseMedia">Choose Media</key>
+		<key alias="multipleOptions">Multiple Options</key>
+		<key alias="optional">(optional)</key>
+  </area>
+</language>

@@ -8,7 +8,7 @@
 
             <div class="span4">
                 <div class="umb-headline-editor-wrapper">
-                     <h1 class="umb-headline">Orders</h1>
+	                <h1 class="umb-headline"><localize key="merchelloOrder_order"/></h1>
                 </div>
             </div>
 
@@ -32,17 +32,22 @@
             <div class="merchello-pane">
                 <form class="form-horizontal">
                     <div class="form-group control-group row-fluid">
-                        <label for="orderFilter" class="col-xs-2 control-label">Filter Orders:</label>
+	                    <label for="orderFilter" class="col-xs-2 control-label"><localize key="merchelloOrder_filter"/>:</label>
                         <div class="col-xs-10 controls">
-                            <input id="orderFilter" class="form-control span6" name="orderFilter" data-ng-model="filtertext" placeholder="Start typing an order number or name..." />
-                            <button id="orderFilterGo" class="btn" data-ng-click="getFilteredInvoices(filtertext)">Filter</button>
+	                        <input id="orderFilter"
+								   class="form-control span6"
+	                               name="orderFilter"
+	                               data-ng-model="filtertext"
+								   localize="placeholder"
+								   placeholder="@merchelloPlaceholders_enterOrder" />
+                            <button id="orderFilterGo" class="btn" data-ng-click="getFilteredInvoices(filtertext)"><localize key="merchelloGeneral_filter" /></button>
                         </div>
                     </div>
                 </form>
                 
                 <form class="form-horizontal" data-ng-show="invoices.length > 0">
                     <div class="form-group control-group row-fluid">
-                        <label for="limitSelect" class="col-xs-2 control-label">Invoices / Page:</label>
+	                    <label for="limitSelect" class="col-xs-2 control-label"><localize key="merchelloOrder_invoicesPerPage"/>:</label>
                         <div class="col-xs-10 controls">
                             <select name="limitSelect" class="form-control span3 col-xs-3" data-ng-model="limitAmount" data-ng-change="limitChanged(limitAmount)">
                                 <option value="3">3</option>
@@ -56,8 +61,8 @@
                 </form>
 
                 <div class="row warning" data-ng-show="orderIssues.length > 0">
-                    <h2><i class="icon-alert"></i> You Have Orders That Require Attention</h2>
-                    <p><a href="#">There is 1 payment authorization expiring</a>. You may not receive payment for expired authorization. </p>
+	                <h2><i class="icon-alert"></i> <localize key="merchelloOrder_attentionRequired"/></h2>
+	                <p><a href="#">There is 1 payment authorization expiring</a>. <localize key="merchelloOrder_paymentExpirationWarning"/> </p>
                 </div>
             </div>
 
@@ -66,11 +71,11 @@
                 
                 <div class="pager" data-ng-show="invoices.length > 0">
                     <button class="btn" data-ng-disabled="currentPage == 0" data-ng-click="currentPage=currentPage-1">
-                        Previous
+	                    <localize key="general_previous"/>
                     </button>
                     {{currentPage+1}}/{{numberOfPages()}}
                     <button class="btn" data-ng-disabled="currentPage >= numberOfPages() - 1" data-ng-click="currentPage=currentPage+1">
-                        Next
+						<localize key="general_next" />
                     </button>
                 </div>
 
@@ -78,12 +83,12 @@
                     <thead>
                         <tr>
                             <!--<th><input type="checkbox" /></th>--> <!-- Toggles the bulk action dropdown -->
-                            <th>Order #</th>
-                            <th>Date</th>
-                            <th>Customer</th>
-                            <th>Payment Status</th>
-                            <th>Fulfillment Status</th>
-                            <th>Total</th>
+	                        <th><localize key="merchelloOrder_orderNumber"/></th>
+	                        <th><localize key="general_date"/></th>
+                            <th><localize key="merchelloGeneral_customer" /></th>
+                            <th><localize key="merchelloOrder_paymentStatus" /></th>
+                            <th><localize key="merchelloOrder_fulfillmentStatus" /></th>
+                            <th><localize key="merchelloGeneral_total" /></th>
                         </tr>
                         <!-- Displays the bulk action button & dropdown menu when the checkbox is selected, which replaces normal heading TR -->
                         <!--<tr>
@@ -115,7 +120,7 @@
                 </table>
                 
                 <div class="pager well" data-ng-show="invoices.length == 0">
-                    You have no orders.
+	                <localize key="merchelloOrder_noOrders"/>
                 </div>
                     
             </div>
