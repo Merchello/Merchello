@@ -21,6 +21,7 @@ namespace Merchello.Core.Observation
         /// </summary>
         protected List<IObserver<T>> Observers = new List<IObserver<T>>();
 
+
         protected IDisposable GetUnsubscriber(IObserver<T> observer)
         {
             return new Unsubscriber<T>(Observers, observer);

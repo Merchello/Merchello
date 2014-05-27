@@ -87,8 +87,11 @@
     <Compile Include="Gateways\Notification\Triggering\NotificationTriggerOld.cs" />
     <Compile Include="Gateways\Notification\Triggering\OrderConfirmationNotificationTrigger.cs" />
     <Compile Include="Notification.cs" />
+    <Compile Include="Observation\IMonitor.cs" />
+    <Compile Include="Observation\IMonitorResolver.cs" />
     <Compile Include="Observation\ITrigger.cs" />
     <Compile Include="Observation\MonitorBase.cs" />
+    <Compile Include="Observation\MonitorResolver.cs" />
     <Compile Include="Observation\ObservableTriggerForAttribute.cs" />
     <Compile Include="Observation\ObservableTopic.cs" />
     <Compile Include="Events\ObservationChannelEventArgs.cs" />
@@ -736,8 +739,8 @@
     <Compile Include="Strategies\Packaging\IPackagingStrategy.cs" />
     <Compile Include="Strategies\Packaging\ShippableProductVisitor.cs" />
     <Compile Include="Observation\IObservableTrigger.cs" />
-    <Compile Include="Observation\ObservableTriggerResolver.cs" />
-    <Compile Include="Observation\IObservableTriggerResolver.cs" />
+    <Compile Include="Observation\TriggerResolver.cs" />
+    <Compile Include="Observation\ITriggerResolver.cs" />
     <Compile Include="Observation\ObservableTriggerBase.cs" />
     <Compile Include="Observation\TriggerForAttribute.cs" />
     <Compile Include="TypeFieldMapperEnumerations.cs" />

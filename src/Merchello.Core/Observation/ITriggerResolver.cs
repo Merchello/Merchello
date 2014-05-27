@@ -4,9 +4,9 @@ using System.Collections.Generic;
 namespace Merchello.Core.Observation
 {
     /// <summary>
-    /// Defines a TriggerRegistry
+    /// Defines a Trigger Resolver
     /// </summary>
-    internal interface IObservableTriggerResolver
+    internal interface ITriggerResolver
     {
         /// <summary>
         /// Gets a collection of <see cref="ITrigger"/> by the area defined in the attribute

@@ -10,13 +10,13 @@ namespace Merchello.Core.Observation
     /// <summary>
     /// Represents a EventTriggerRegistry
     /// </summary>
-    internal sealed class ObservableTriggerResolver : MerchelloManyObjectsResolverBase<ObservableTriggerResolver, ITrigger>, IObservableTriggerResolver
+    internal sealed class TriggerResolver : MerchelloManyObjectsResolverBase<TriggerResolver, ITrigger>, ITriggerResolver
     {
         private static readonly ConcurrentDictionary<Type, ITrigger> TriggerCache = new ConcurrentDictionary<Type, ITrigger>();
 
         internal static bool IsInitialized { get; private set; }
 
-        internal ObservableTriggerResolver(IEnumerable<Type> triggers)
+        internal TriggerResolver(IEnumerable<Type> triggers)
             : base(triggers)
         {
             BuildCache();

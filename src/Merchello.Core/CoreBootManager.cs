@@ -100,8 +100,8 @@ namespace Merchello.Core
 
         protected virtual void InitializeResolvers()
         {
-            if(!ObservableTriggerResolver.HasCurrent)
-            ObservableTriggerResolver.Current = new ObservableTriggerResolver(PluginManager.Current.ResolveObservableTriggers());
+            if(!TriggerResolver.HasCurrent)
+            TriggerResolver.Current = new TriggerResolver(PluginManager.Current.ResolveObservableNotificationTriggers());
         }
 
         protected void BindEventTriggers()
