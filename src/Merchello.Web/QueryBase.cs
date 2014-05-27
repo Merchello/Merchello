@@ -6,6 +6,7 @@ using Merchello.Core.Gateways.Notification;
 using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Gateways.Taxation;
+using Merchello.Core.Observation;
 using Merchello.Core.Persistence.UnitOfWork;
 using Merchello.Core.Services;
 using Umbraco.Core;
@@ -23,7 +24,7 @@ namespace Merchello.Web
             var serviceContext = new ServiceContext(new PetaPocoUnitOfWorkProvider());
             return MerchelloContext.Current ??
                 new MerchelloContext(serviceContext,
-                    new GatewayContext(serviceContext, GatewayProviderResolver.Current),
+                    new GatewayContext(serviceContext, GatewayProviderResolver.Current, TriggerResolver.Current, MonitorResolver.Current),
                         new CacheHelper(new NullCacheProvider(), new NullCacheProvider(), new NullCacheProvider()));
 
         }

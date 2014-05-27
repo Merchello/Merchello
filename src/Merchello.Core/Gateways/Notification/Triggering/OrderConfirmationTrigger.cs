@@ -7,19 +7,23 @@ using Merchello.Core.Observation;
 namespace Merchello.Core.Gateways.Notification.Triggering
 {
     /// <summary>
-    /// Represents and OrderConfirmationNotificationTrigger
+    /// Represents and OrderConfirmationTrigger
     /// </summary>
-    [ObservableTriggerFor("OrderConfirmation", ObservableTopic.Notifications)]
-    public sealed class OrderConfirmationNotificationTrigger : NotificationTriggerBase<IPaymentResult, IPaymentResultNotifyModel>
+    [TriggerFor("OrderConfirmation", Topic.Notifications)]
+    public sealed class OrderConfirmationTrigger : NotificationTriggerBase<IPaymentResult, IPaymentResultNotifyModel>
     {
+        /// <summary>
+        /// Value to pass to the notification monitors
+        /// </summary>
         public override void Update(IPaymentResult model, IEnumerable<string> contacts)
         {
+            var confirmation = model.ToOrderConfirmationNotification(contacts);
+
             foreach (var o in Observers)
             {
                 try
-                {
-
-                    o.OnNext(model.ToOrderConfirmationNotification());
+                {                  
+                    o.OnNext(confirmation);
                 }
                 catch (Exception ex)
                 {
@@ -27,5 +31,6 @@ namespace Merchello.Core.Gateways.Notification.Triggering
                 }
             }
         }
+
     }
 }

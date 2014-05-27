@@ -78,22 +78,22 @@
   <ItemGroup>
     <Compile Include="ActivatorHelper.cs" />
     <Compile Include="Gateways\Notification\Formatters\PatternReplaceNotificationFormatter.cs" />
+    <Compile Include="Gateways\Notification\Monitors\INotificationMonitor.cs" />
     <Compile Include="Gateways\Notification\Monitors\Models\MonitorModelExtensions.cs" />
     <Compile Include="Gateways\Notification\Monitors\Models\PaymentResultNotifyModel.cs" />
     <Compile Include="Gateways\Notification\Monitors\OrderConfirmationMonitor.cs" />
     <Compile Include="Gateways\Notification\Monitors\NotificationMonitorBase.cs" />
     <Compile Include="Gateways\Notification\Monitors\Models\IPaymentResultNotifyModel.cs" />
     <Compile Include="Gateways\Notification\Triggering\NotificationTriggerBase.cs" />
-    <Compile Include="Gateways\Notification\Triggering\NotificationTriggerOld.cs" />
-    <Compile Include="Gateways\Notification\Triggering\OrderConfirmationNotificationTrigger.cs" />
+    <Compile Include="Gateways\Notification\Triggering\OrderConfirmationTrigger.cs" />
     <Compile Include="Notification.cs" />
     <Compile Include="Observation\IMonitor.cs" />
     <Compile Include="Observation\IMonitorResolver.cs" />
     <Compile Include="Observation\ITrigger.cs" />
     <Compile Include="Observation\MonitorBase.cs" />
     <Compile Include="Observation\MonitorResolver.cs" />
-    <Compile Include="Observation\ObservableTriggerForAttribute.cs" />
-    <Compile Include="Observation\ObservableTopic.cs" />
+    <Compile Include="Observation\Topic.cs" />
+    <Compile Include="Observation\TriggerForAttribute.cs" />
     <Compile Include="Events\ObservationChannelEventArgs.cs" />
     <Compile Include="Builders\BuildChainBase.cs" />
     <Compile Include="Builders\InvoiceBuilderChain.cs" />
@@ -115,7 +115,6 @@
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="Events\NotificationEventArgs.cs" />
     <Compile Include="Gateways\Notification\Formatters\DefaultNotificationFormatter.cs" />
-    <Compile Include="Gateways\Notification\Formatters\FormatNotificationUsingAttribute.cs" />
     <Compile Include="Gateways\GatewayMethodEditorAttribute.cs" />
     <Compile Include="Gateways\GatewayProviderActivationAttribute.cs" />
     <Compile Include="Gateways\GatewayProviderEditorAttribute.cs" />
@@ -143,7 +142,7 @@
     <Compile Include="Gateways\Payment\IPaymentGatewayMethod.cs" />
     <Compile Include="Gateways\Payment\IPaymentResult.cs" />
     <Compile Include="ObjectResolution\MerchelloManyObjectsResolverBase.cs" />
-    <Compile Include="Observation\ObserverMonitorForAttribute.cs" />
+    <Compile Include="Observation\MonitorForAttribute.cs" />
     <Compile Include="Observation\Unsubscriber.cs" />
     <Compile Include="Persistence\Migrations\DataLossException.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneOneOne\RecreateNotificaitonMessageTable.cs" />
@@ -741,8 +740,7 @@
     <Compile Include="Observation\IObservableTrigger.cs" />
     <Compile Include="Observation\TriggerResolver.cs" />
     <Compile Include="Observation\ITriggerResolver.cs" />
-    <Compile Include="Observation\ObservableTriggerBase.cs" />
-    <Compile Include="Observation\TriggerForAttribute.cs" />
+    <Compile Include="Observation\TriggerBase.cs" />
     <Compile Include="TypeFieldMapperEnumerations.cs" />
     <Compile Include="Models\TypeFields\ProductTypeField.cs" />
     <Compile Include="Models\Rdbms\TypeFieldDto.cs" />

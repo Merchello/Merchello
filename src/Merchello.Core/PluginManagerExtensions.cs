@@ -9,16 +9,19 @@ namespace Merchello.Core
     internal static class PluginManagerExtensions
     {
         /// <summary>
-        /// Returns a collection of all Trigger types decorated with the <see cref="ObservableTriggerForAttribute"/>
+        /// Returns a collection of all <see cref="ITrigger"/> types decorated with the <see cref="TriggerForAttribute"/>
         /// </summary>        
-        internal static IEnumerable<Type> ResolveObservableNotificationTriggers(this PluginManager pluginManager)
+        internal static IEnumerable<Type> ResolveObservableTriggers(this PluginManager pluginManager)
         {
-            return pluginManager.ResolveTypesWithAttribute<ITrigger, ObservableTriggerForAttribute>();
+            return pluginManager.ResolveTypesWithAttribute<ITrigger, TriggerForAttribute>();
         }
 
-        internal static IEnumerable<Type> ResolveObserverNotificationMonitors(this PluginManager pluginManager)
+        /// <summary>
+        /// Returns a collection of all <see cref="IMonitor"/> types decorated with the <see cref="MonitorForAttribute"/>
+        /// </summary> 
+        internal static IEnumerable<Type> ResolveObserverMonitors(this PluginManager pluginManager)
         {
-            return pluginManager.ResolveTypesWithAttribute<Monito>()
+            return pluginManager.ResolveTypesWithAttribute<IMonitor, MonitorForAttribute>();
         }
 
         /// <summary>

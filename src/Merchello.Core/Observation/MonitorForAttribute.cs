@@ -2,7 +2,7 @@
 
 namespace Merchello.Core.Observation
 {
-    public class ObserverMonitorForAttribute : Attribute 
+    public class MonitorForAttribute : Attribute 
     {
         public Type ObservableTrigger { get; private set; }
 
@@ -16,7 +16,7 @@ namespace Merchello.Core.Observation
         /// </summary>
         public string Name { get; private set; }
 
-        public ObserverMonitorForAttribute(string key, Type observableTrigger, string name)
+        public MonitorForAttribute(string key, Type observableTrigger, string name)
         {
             Mandate.ParameterNotNullOrEmpty(key, "key");
             Mandate.ParameterNotNull(observableTrigger, "observableTrigger");

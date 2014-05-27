@@ -13,7 +13,13 @@ namespace Merchello.Core.Observation
         /// </summary>
         /// <param name="area">The "area"</param>
         /// <returns>A <see cref="ITrigger"/></returns>
-        IEnumerable<T> GetTriggersByArea<T>(ObservableTopic area);
+        IEnumerable<ITrigger> GetTriggersByArea(Topic area);
+
+        /// <summary>
+        /// Gets a collection <see cref="ITrigger"/> from the resolver
+        /// </summary>
+        /// <returns>A <see cref="ITrigger"/></returns>
+        IEnumerable<ITrigger> GetTriggersByAlias(string alias);
 
         /// <summary>
         /// Gets the collection of all resovled <see cref="ITrigger"/>s
@@ -21,9 +27,20 @@ namespace Merchello.Core.Observation
         IEnumerable<T> GetAllTriggers<T>();
 
         /// <summary>
+        /// Gets the collection of all resovled <see cref="ITrigger"/>s
+        /// </summary>
+        IEnumerable<ITrigger> GetAllTriggers();
+
+        /// <summary>
         /// Gets a <see cref="ITrigger"/> from the resolver
         /// </summary>
         /// <returns>A <see cref="ITrigger"/></returns>
-        T TryGetTrigger<T>(Type type);
+        T TryGetTrigger<T>();
+
+        /// <summary>
+        /// Gets a <see cref="ITrigger"/> from the resolver
+        /// </summary>
+        /// <returns>A <see cref="ITrigger"/></returns>
+        ITrigger TryGetTrigger(Type type);
     }
 }

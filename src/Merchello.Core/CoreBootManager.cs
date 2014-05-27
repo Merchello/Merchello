@@ -57,9 +57,9 @@ namespace Merchello.Core
             
             InitializeGatewayResolver(serviceContext, cache);
 
-            CreateMerchelloContext(serviceContext, cache);
-                       
             InitializeResolvers();
+
+            CreateMerchelloContext(serviceContext, cache);
 
             BindEventTriggers();
 
@@ -81,27 +81,27 @@ namespace Merchello.Core
         /// </remarks>
         protected void CreateMerchelloContext(ServiceContext serviceContext, CacheHelper cache)
         {
-
-            var gateways = new GatewayContext(serviceContext, GatewayProviderResolver.Current);
+            var gateways = new GatewayContext(serviceContext, GatewayProviderResolver.Current, TriggerResolver.Current, MonitorResolver.Current);
             _merchelloContext = MerchelloContext.Current = new MerchelloContext(serviceContext, gateways, cache);
         }
 
 
         private void InitializeGatewayResolver(IServiceContext serviceContext, CacheHelper cache)
-        {
-            
+        {            
             if(!GatewayProviderResolver.HasCurrent)
             GatewayProviderResolver.Current = new GatewayProviderResolver(
             PluginManager.Current.ResolveGatewayProviders(),
             serviceContext.GatewayProviderService,
-            cache.RuntimeCache);
-                       
+            cache.RuntimeCache);                       
         }
 
         protected virtual void InitializeResolvers()
         {
             if(!TriggerResolver.HasCurrent)
-            TriggerResolver.Current = new TriggerResolver(PluginManager.Current.ResolveObservableNotificationTriggers());
+            TriggerResolver.Current = new TriggerResolver(PluginManager.Current.ResolveObservableTriggers());
+
+            if(!MonitorResolver.HasCurrent)
+            MonitorResolver.Current = new MonitorResolver(PluginManager.Current.ResolveObserverMonitors());
         }
 
         protected void BindEventTriggers()
