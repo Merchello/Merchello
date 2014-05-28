@@ -13,15 +13,15 @@ namespace Merchello.Core.Gateways.Notification.Triggering
         /// <summary>
         /// Value to pass to the notification monitors
         /// </summary>
-        public virtual void Update(TInput model)
+        public virtual void Notify(TInput model)
         {
-            Update(model, new string[]{});
+            Notify(model, new string[]{});
         }
 
         /// <summary>
         /// Value to pass to the notification monitors
         /// </summary>
-        public abstract void Update(TInput model, IEnumerable<string> contacts);
+        public abstract void Notify(TInput model, IEnumerable<string> contacts);
     }
 
 }
