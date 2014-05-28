@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Configuration;
-using System.Linq;
-using System.Reflection;
 using Merchello.Core.Cache;
 using Merchello.Core.Configuration;
 using Merchello.Core.Gateways;
-using Merchello.Core.ObjectResolution;
+using Merchello.Core.Observation;
 using Merchello.Core.Services;
-using Merchello.Core.Triggers;
 using Umbraco.Core;
 using Merchello.Core.Persistence.UnitOfWork;
 using Umbraco.Core.Logging;
@@ -63,7 +60,9 @@ namespace Merchello.Core
             CreateMerchelloContext(serviceContext, cache);
                        
             InitializeResolvers();
-                  
+
+            BindEventTriggers();
+
             _isInitialized = true;            
 
             return this;
@@ -101,28 +100,29 @@ namespace Merchello.Core
 
         protected virtual void InitializeResolvers()
         {
-            
+            if(!ObservableTriggerResolver.HasCurrent)
+            ObservableTriggerResolver.Current = new ObservableTriggerResolver(PluginManager.Current.ResolveObservableTriggers());
         }
 
         protected void BindEventTriggers()
         {
-            LogHelper.Info<CoreBootManager>("Beginning Merchello Event Trigger Binding");
-            foreach (var trigger in EventTriggeredActionResolver.Current.GetAllEventTriggers())
-            {
-                var att = trigger.GetType().GetCustomAttributes<EventTriggeredActionForAttribute>(false).FirstOrDefault();
+            LogHelper.Info<CoreBootManager>("Beginning Merchello Trigger Binding");
+            //foreach (var trigger in TriggerResolver.Current.GetAllTriggers())
+            //{
+            //    var att = trigger.GetType().GetCustomAttributes<TriggerForAttribute>(false).FirstOrDefault();
                 
-                if (att == null) continue;
+            //    if (att == null) continue;
                 
-                var bindTo = att.Service.GetEvent(att.EventName);
+            //    var bindTo = att.Type.GetEvent(att.HandleEvent);
                 
-                if (bindTo == null) continue;
+            //    if (bindTo == null) continue;
 
-                var mi = trigger.GetType().GetMethod("Invoke", BindingFlags.Instance | BindingFlags.Public);
+            //    var mi = trigger.GetType().GetMethod("Invoke", BindingFlags.Instance | BindingFlags.Public);
                 
-                bindTo.AddEventHandler(trigger, Delegate.CreateDelegate(bindTo.EventHandlerType, trigger, mi));
+            //    bindTo.AddEventHandler(trigger, Delegate.CreateDelegate(bindTo.EventHandlerType, trigger, mi));
 
-                LogHelper.Info<CoreBootManager>(string.Format("Binding {0} to {1} - {2} event", trigger.GetType().Name, att.Service.Name, att.EventName));
-            }
+            //    LogHelper.Info<CoreBootManager>(string.Format("Binding {0} to {1} - {2} event", trigger.GetType().Name, att.Type.Name, att.HandleEvent));
+            //}
         }
 
         /// <summary>

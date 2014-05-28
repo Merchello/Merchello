@@ -32,8 +32,6 @@
         Custom
     }
 
-
-
     public enum AppliedPaymentType
     {
         Credit,
@@ -55,7 +53,8 @@
         Product,
         Shipment,
         Warehouse,
-        WarehouseCatalog
+        WarehouseCatalog,
+        Custom
     }
 
     internal enum ProductType

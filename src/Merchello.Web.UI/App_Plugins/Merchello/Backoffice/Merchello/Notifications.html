@@ -30,11 +30,11 @@
             
             <div class="merchello-pane row-fluid">
 
-                <div class="control-group umb-control-group">
+                <div class="control-group umb-control-group" data-ng-repeat="provider in notificationGatewayProviders">
                     <label class="merchello-control-label">
-                        Email Templates
-                        <small>Personalize your email templates</small>
-                        <a><i class="icon-chat"></i> Add a Notification</a>
+                        {{provider.name}}
+                        <small data-ng-bind="provider.description"></small>
+                        <a data-ng-click="addNotificationMethod(provider)"><i class="icon-chat"></i>Add a Notification</a>
                     </label>
 
                     <div class="merchello-controls row-fluid">
@@ -42,11 +42,12 @@
                         <div class="row-fluid col-xs-10 span10">
 
                             <!-- Flyout when edit is clicked -->
-                            <form name="editTemplateForm" class="well" data-ng-class="{ 'open': flyouts.editTemplate, 'closed': !flyouts.editTemplate }">
+                            <notification-methods></notification-methods>
+                            <!--<form name="editTemplateForm" class="well" data-ng-class="{ 'open': flyouts.editTemplate, 'closed': !flyouts.editTemplate }">
                                 <button class="btn close" data-ng-click="editTemplateFlyout.close()"><i class="icon-delete"></i></button>
                                 <h4>Edit <b>{{editTemplateFlyout.model.name}}</b> Notification</h4>
                                 <p>You may add basic HTML tags to your email header and footer templates such as &lt;br /&gt; to create a new line of text.</p>
-
+                            
                                 <div class="form-group">
                                     <label>Header</label>
                                     <textarea class="col-xs-12 span12" rows="4" data-ng-model="editTemplateFlyout.model.header"></textarea>
@@ -55,13 +56,13 @@
                                     <label>Footer</label>
                                     <textarea class="col-xs-12 span12" rows="4" data-ng-model="editTemplateFlyout.model.footer"></textarea>
                                 </div>
-
+                            
                                 <div>
                                     <input type="submit" class="btn" value="Cancel" data-ng-click="editTemplateFlyout.close()" />
-                                    <input type="submit" class="btn btn-primary" value="Save"  data-ng-click="editTemplateFlyout.confirm()" />
+                                    <input type="submit" class="btn btn-primary" value="Save" data-ng-click="editTemplateFlyout.confirm()" />
                                 </div>
                             </form>
-
+                            
                             <table class="table table-striped merchello-striped-table settings-table notifications-table form-horizontal">
                                 <thead>
                                     <tr>
@@ -73,7 +74,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr data-ng-repeat="template in emailTemplates">
+                                    <tr data-ng-repeat="template in emailTemplates track by $key">
                                         <td>{{template.name}}</td>
                                         <td>{{template.description}}</td>
                                         <td></td>
@@ -82,7 +83,7 @@
                                         <td class="edit"><a class="btn btn-default btn-xs btn-mini" data-ng-href="#/merchello/merchello/NotificationsEdit/{{template.pk}}"><i class="icon-edit"></i></a></td>
                                     </tr>
                                 </tbody>
-                            </table>
+                            </table>-->
                         </div>
 
                     </div>
