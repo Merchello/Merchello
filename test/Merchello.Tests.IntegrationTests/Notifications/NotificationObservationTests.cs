@@ -115,7 +115,7 @@ namespace Merchello.Tests.IntegrationTests.Notifications
             // handled in setup
 
             //// Act
-            var trigger = TriggerResolver.Current.TryGetTrigger<OrderConfirmationTrigger>();
+            var trigger = TriggerResolver.Current.GetTrigger<OrderConfirmationTrigger>();
 
             //// Assert
             Assert.NotNull(trigger);

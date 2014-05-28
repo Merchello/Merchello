@@ -19,6 +19,12 @@ namespace Merchello.Core.Observation
         /// Gets a collection <see cref="ITrigger"/> from the resolver
         /// </summary>
         /// <returns>A <see cref="ITrigger"/></returns>
+        /// <remarks>
+        /// 
+        /// By design there should only ever be one of these per alias, but someone might think
+        /// of something we have'nt
+        /// 
+        /// </remarks>
         IEnumerable<ITrigger> GetTriggersByAlias(string alias);
 
         /// <summary>
@@ -35,12 +41,12 @@ namespace Merchello.Core.Observation
         /// Gets a <see cref="ITrigger"/> from the resolver
         /// </summary>
         /// <returns>A <see cref="ITrigger"/></returns>
-        T TryGetTrigger<T>();
+        T GetTrigger<T>();
 
         /// <summary>
         /// Gets a <see cref="ITrigger"/> from the resolver
         /// </summary>
         /// <returns>A <see cref="ITrigger"/></returns>
-        ITrigger TryGetTrigger(Type type);
+        ITrigger GetTrigger(Type type);
     }
 }

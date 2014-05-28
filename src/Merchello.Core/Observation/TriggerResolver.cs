@@ -87,16 +87,16 @@ namespace Merchello.Core.Observation
         /// Gets a <see cref="ITrigger"/> from the resolver
         /// </summary>
         /// <returns>A <see cref="ITrigger"/></returns>
-        public T TryGetTrigger<T>()
+        public T GetTrigger<T>()
         {
-            return (T)TryGetTrigger(typeof (T));
+            return (T)GetTrigger(typeof (T));
         }
 
         /// <summary>
         /// Gets a <see cref="ITrigger"/> from the resolver
         /// </summary>
         /// <returns>A <see cref="ITrigger"/></returns>
-        public ITrigger TryGetTrigger(Type type)
+        public ITrigger GetTrigger(Type type)
         {
             if (!TriggerCache.ContainsKey(type))
             {
