@@ -1,7 +1,6 @@
 ﻿using System;
 using Merchello.Core.Observation;
 using Merchello.Core.Services;
-using Merchello.Core.Triggers;
 
 namespace Merchello.Tests.IntegrationTests.ObjectResolution
 {

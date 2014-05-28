@@ -233,6 +233,7 @@
     <Compile Include="DisplayClasses\GatewayProviderDisplayTests.cs" />
     <Compile Include="Examine\InvoiceAndOrderProviderTests.cs" />
     <Compile Include="Gateways\ShippingContextTests.cs" />
+    <Compile Include="Notifications\NotificationObservationTests.cs" />
     <Compile Include="Notifications\SmtpNotificationProviderTests.cs" />
     <Compile Include="MigrationTests.cs" />
     <Compile Include="ObjectResolution\GatewayProviderResolution.cs" />

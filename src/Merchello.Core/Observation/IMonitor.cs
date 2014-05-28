@@ -1,8 +1,8 @@
 ﻿namespace Merchello.Core.Observation
 {
     /// <summary>
-    /// Marker interface for Observable triggers
+    /// Marker interface for Monitor observers
     /// </summary>
-    public interface ITrigger
+    public interface IMonitor
     { }
 }
