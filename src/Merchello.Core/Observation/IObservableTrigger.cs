@@ -5,6 +5,6 @@ namespace Merchello.Core.Observation
     /// <summary>
     /// Marker interface for observable triggers
     /// </summary>
-    public interface IObservableTrigger<T> : IObservable<T>, ITrigger
+    public interface IObservableTrigger<out T> : IObservable<T>, ITrigger
     { }
 }

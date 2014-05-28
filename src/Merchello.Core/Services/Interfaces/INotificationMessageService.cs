@@ -60,5 +60,12 @@ namespace Merchello.Core.Services
         /// <param name="notificationMethodKey">The <see cref="INotificationMethod"/> key</param>
         /// <returns>Optional boolean indicating whether or not to raise events</returns>
         IEnumerable<INotificationMessage> GetNotificationMessagesByMethodKey(Guid notificationMethodKey);
+
+        /// <summary>
+        /// Gets a collection of <see cref="INotificationMessage"/>s based on a monitor key
+        /// </summary>
+        /// <param name="monitorKey">The Notification Monitor Key (Guid)</param>
+        /// <returns>A collection of <see cref="INotificationMessage"/></returns>
+        IEnumerable<INotificationMessage> GetNotificationMessagesByMonitorKey(Guid monitorKey);
     }
 }

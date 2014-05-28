@@ -243,6 +243,13 @@ namespace Merchello.Core.Services
         /// <returns>A <see cref="INotificationMessage"/></returns>
         INotificationMessage GetNotificationMessageByKey(Guid notificationMessageKey);
 
+        /// <summary>
+        /// Gets a collection of <see cref="INotificationMessage"/>s based on a monitor key
+        /// </summary>
+        /// <param name="monitorKey">The Notification Monitor Key (Guid)</param>
+        /// <returns>A collection of <see cref="INotificationMessage"/></returns>
+        IEnumerable<INotificationMessage> GetNotificationMessagesByMonitorKey(Guid monitorKey);
+
 
         #endregion
 

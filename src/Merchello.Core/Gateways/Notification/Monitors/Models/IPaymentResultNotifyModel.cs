@@ -2,7 +2,7 @@
 
 namespace Merchello.Core.Gateways.Notification.Monitors.Models
 {
-    public interface IPaymentResultNotificationModel
+    public interface IPaymentResultNotifyModel
     {
         /// <summary>
         /// Gets/sets the <see cref="IPayment"/>
