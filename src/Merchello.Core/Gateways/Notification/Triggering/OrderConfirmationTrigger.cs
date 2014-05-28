@@ -15,7 +15,7 @@ namespace Merchello.Core.Gateways.Notification.Triggering
         /// <summary>
         /// Value to pass to the notification monitors
         /// </summary>
-        public override void Update(IPaymentResult model, IEnumerable<string> contacts)
+        public override void Notify(IPaymentResult model, IEnumerable<string> contacts)
         {
             var confirmation = model.ToOrderConfirmationNotification(contacts);
 
