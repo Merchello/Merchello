@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using Merchello.Core.ObjectResolution;
 
 namespace Merchello.Core.Observation
@@ -9,6 +11,8 @@ namespace Merchello.Core.Observation
     /// </summary>
     internal sealed class MonitorResolver : MerchelloManyObjectsResolverBase<MonitorResolver, IMonitor>, IMonitorResolver
     {
+        private static readonly ConcurrentDictionary<Type, IMonitor> MonitorCache = new ConcurrentDictionary<Type, IMonitor>();
+
         public MonitorResolver(IEnumerable<Type> value) 
             : base(value)
         { }
@@ -18,13 +22,37 @@ namespace Merchello.Core.Observation
         /// </summary>
         public IEnumerable<T> GetAllMonitors<T>()
         {
-            throw new NotImplementedException();
+            return GetAllMonitors()
+                .Where(x => x.GetType().IsAssignableFrom(typeof (T))).Select(x => (T) x);
+        }
+
+        /// <summary>
+        /// Gets the collection of all resovled <see cref="IMonitor"/>s
+        /// </summary>
+        public IEnumerable<IMonitor> GetAllMonitors()
+        {
+            return Values;
         }
 
         /// <summary>
         /// Gets a <see cref="IMonitor"/> from the resolver
         /// </summary>
-        public T TryGetMonitor<T>(Type type)
+        public T GetMonitor<T>(Type type)
+        {
+            throw new NotImplementedException();
+        }
+
+        public T GetMonitorByKey<T>(Guid key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IMonitor GetMonitorByKey(Guid key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<IMonitor> GetMonitorsForTrigger<T>()
         {
             throw new NotImplementedException();
         }
