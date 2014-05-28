@@ -5,12 +5,12 @@
     <!-- This is the umb-panel directive. We removed it because the ui-codemirror directive doesn't work nested under another directive.-->
     <div>
         <umb-header>
-            <div class="span4">
+            <div class="span8">
                 <div class="umb-headline-editor-wrapper">
                     <h1 class="umb-headline">{{notificationMessage.name}} Notification</h1>
                 </div>
             </div>
-            <div class="span8">
+            <div class="span4">
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
                     <div class="btn-group">
                         <a href="#/merchello/merchello/Notifications/manage" class="btn">Cancel</a>
@@ -41,7 +41,7 @@
                         <div class="row-fluid">
                             <label for="template">Edit the Body Text</label>
                             <div class="umb-editor umb-codeeditor" style="height: 720px;">
-                                <textarea name="template" ui-codemirror="cmOptions" ng-model="notificationMessage.bodyText"></textarea>
+                                <textarea name="template" ui-codemirror="cmOptions" data-ng-model="notificationMessage.bodyText"></textarea>
                             </div>
                         </div>
                     </div>
@@ -66,14 +66,17 @@
                         <div class="row-fluid">
                             <div class="col-xs-8 span8">
                                 <label for="event">Attached Event</label>
-                                <select name="event" class="col-xs-8 span8" data-ng-model="notificationMessage.triggerKey" data-ng-options="n.name for n in notificationTriggers track by n.key"></select>
+                                <select name="event" class="col-xs-8 span8" data-ng-model="notificationMessage.monitorKey" data-ng-options="n.monitorKey as n.name for n in notificationTriggers"></select>
+                                <label for="eventTriggerAlias" data-ng-repeat="trigger in notificationTriggers | filter: {monitorKey: notificationMessage.monitorKey}">
+                                    <small data-ng-show="notificationMessage.monitorKey.Length > 0">Event Alias: {{trigger.alias}}</small>
+                                </label>
                             </div>
                         </div>
 
                         <div class="row-fluid">
                             <div class="col-xs-8 span8">
                                 <label for="send">Send To <small>(i.e. orders@yourdomain.com)</small></label>
-                                <input name="send" type="text" class="col-xs-8 span8" data-ng-model="notificationMessage.replyTo" />
+                                <input name="send" type="text" class="col-xs-8 span8" data-ng-model="notificationMessage.recipients" />
                             </div>
                         </div>
 

@@ -275,6 +275,10 @@
     <Content Include="App_Plugins\Merchello\Modules\Catalog\productvariant.edit.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Customer\customer.edit.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Customer\customer.view.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Dialogs\notificationsmessage.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Dialogs\notificationsmessage.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Dialogs\notificationsdelete.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Dialogs\notificationsdelete.html" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Dialogs\notificationsmethod.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Dialogs\notificationsmethod.html" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Directives\notification-methods.html" />

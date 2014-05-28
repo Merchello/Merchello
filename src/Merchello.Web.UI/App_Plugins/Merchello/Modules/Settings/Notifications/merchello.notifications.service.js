@@ -10,28 +10,12 @@
 
 		var notificationsService =  {
 
-			getNotifications: function () {
-				// This needs to make an api call to get real data ~Mark Bowser
-				//var deferred = $q.defer();
-				//deferred.resolve(mockTemplates);
-
-				//return deferred.promise;
-
-			    return umbRequestHelper.resourcePromise(
-                    $http({
-                        url: umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'GetNotifications'),
-			            method: "GET"
-			        }),
-                    'Failed to retreive data for notifications');
-			},
-
 			getGatewayResources: function(key) {
 
 		    return umbRequestHelper.resourcePromise(
 		            $http({
-		                url: umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'GetGatewayResources'),
-                        method: "GET",
-		                data: angular.toJson(key)
+		                url: umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'GetGatewayResources') + "?id=" + key,
+                        method: "GET"
 		            }),
                     'Failed to save data for Notification');
 			},
@@ -55,7 +39,7 @@
                     'Failed to retreive data for all gateway providers');
 		    },
 
-		    GetNotificationProviderNotificationMethods: function (id) {
+		    getNotificationProviderNotificationMethods: function (id) {
 
 		        return umbRequestHelper.resourcePromise(
                         $http({
@@ -65,47 +49,67 @@
                         'Failed to save data for Notification');
 		    },
 
-		    getNotificationMessage: function (id) {
+		    saveNotificationMethod: function (method) {
+
+		        return umbRequestHelper.resourcePromise(
+                   $http.post(
+                        umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'AddNotificationMethod'),
+                        angular.toJson(method)
+                    ),
+                    'Failed to save data for Notification');
+		    },
+
+		    deleteNotificationMethod: function (methodKey) {
+
+		        return umbRequestHelper.resourcePromise(
+                   $http({
+                       url: umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'DeleteNotificationMethod') + "?id=" + methodKey,
+                       method: "DELETE"
+                   }),
+                    'Failed to delete data for Notification');
+		    },
+
+		    getNotificationMessagesByKey: function (id) {
 
 		        return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'GetNotification') + "?id=" + id,
+                            url: umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'GetNotificationMessagesByKey') + "?id=" + id,
                             method: "GET"
                         }),
                         'Failed to save data for Notification');
 
 		    },
 
-		    getNotificationMessages: function (id) {
+		    saveNotificationMessage: function (notification) {
 
 		        return umbRequestHelper.resourcePromise(
-                        $http({
-                            url: umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'GetNotificationMessages') + "?id=" + id,
-                            method: "GET"
-                        }),
-                        'Failed to save data for Notification');
-
-			},
-
-			saveNotification: function (notification) {
-
-				return umbRequestHelper.resourcePromise(
 				   $http.post(
-						umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'SaveNotificationMessage'),
+						umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'PutNotificationMessage'),
 						angular.toJson(notification)
 					),
 					'Failed to save data for Notification');
-			},
+		    },
 
-		    saveNotificationMethod: function (method) {
+		    deleteNotificationMessage: function (methodKey) {
 
-		    return umbRequestHelper.resourcePromise(
-               $http.post(
-                    umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'AddNotificationMethod'),
-                    angular.toJson(method)
-                ),
-                'Failed to save data for Notification');
-		}
+		        return umbRequestHelper.resourcePromise(
+                   $http({
+                       url: umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'DeleteNotificationMessage') + "?id=" + methodKey,
+                       method: "DELETE"
+                   }),
+                    'Failed to delete data for Notification');
+		    },
+
+			updateNotificationMessage: function (notification) {
+
+			    return umbRequestHelper.resourcePromise(
+				   $http.post(
+						umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'UpdateNotificationMessage'),
+						angular.toJson(notification)
+					),
+					'Failed to save data for Notification');
+			}
+
 		};
 
 		return notificationsService;
