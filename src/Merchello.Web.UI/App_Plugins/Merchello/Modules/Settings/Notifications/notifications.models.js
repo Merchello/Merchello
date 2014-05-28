@@ -38,7 +38,7 @@
             self.bodyText = "";
             self.maxLength = "";
             self.bodyTextIsFilePath = "";
-            self.triggerKey = "";
+            self.monitorKey = "";
             self.methodKey = "";
             self.recipients = "";
             self.sendToCustomer = "";
@@ -52,7 +52,7 @@
             self.bodyText = emailTemplateFromServer.bodyText;
             self.maxLength = emailTemplateFromServer.maxLength;
             self.bodyTextIsFilePath = emailTemplateFromServer.bodyTextIsFilePath;
-            self.triggerKey = emailTemplateFromServer.triggerKey;
+            self.monitorKey = emailTemplateFromServer.monitorKey;
             self.methodKey = emailTemplateFromServer.methodKey;
             self.recipients = emailTemplateFromServer.recipients;
             self.sendToCustomer = emailTemplateFromServer.sendToCustomer;
