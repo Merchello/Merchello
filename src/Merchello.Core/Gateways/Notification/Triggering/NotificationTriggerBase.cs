@@ -1,27 +1,46 @@
 ﻿using System.Collections.Generic;
+using Merchello.Core.Models.MonitorModels;
 using Merchello.Core.Observation;
+using Umbraco.Core.Logging;
 
 namespace Merchello.Core.Gateways.Notification.Triggering
 {
     /// <summary>
-    /// Defines the <see cref="NotificationTriggerBase{TInput, TMonitor}"/>
+    /// Defines the <see cref="NotificationTriggerBase{TInputModel, TMonitorMode}"/>
     /// </summary>
-    /// <typeparam name="TInput">The type passed to the trigger</typeparam>
-    /// <typeparam name="TMonitor">The type of the monitor</typeparam>
-    public abstract class NotificationTriggerBase<TInput, TMonitor> : TriggerBase<TMonitor>
+    /// <typeparam name="TInputModel">The type passed to the trigger</typeparam>
+    /// <typeparam name="TMonitorModel">The type of the monitor</typeparam>
+    public abstract class NotificationTriggerBase<TInputModel, TMonitorModel> : TriggerBase<TMonitorModel>, INotificationTrigger
+        where TMonitorModel : IMonitorModel
     {       
         /// <summary>
         /// Value to pass to the notification monitors
         /// </summary>
-        public virtual void Notify(TInput model)
+        public virtual void Notify(object model)
         {
             Notify(model, new string[]{});
         }
 
         /// <summary>
-        /// Value to pass to the notification monitors
+        /// Value to pass to the notification monitors with addtional contacts not defined in notification message (ex. an instance specific customer or vender)
         /// </summary>
-        public abstract void Notify(TInput model, IEnumerable<string> contacts);
+        public virtual void Notify(object model, IEnumerable<string> contacts)
+        {
+            // check to see if the model passed is the correct type or null
+            if (WillWork(model))
+            {
+                Notify((TInputModel)model, contacts);
+                return;
+            }
+
+            LogHelper.Debug<NotificationTriggerBase<TInputModel, TMonitorModel>>(string.Format("Model passed to NotificationTriggerBase {0} does not match expected model {1}.  Notification trigger was skipped.", model.GetType(), typeof(TInputModel)));
+
+        }
+
+        /// <summary>
+        /// Value to pass to the notification monitors with addtional contacts not defined in notification message (ex. an instance specific customer or vender)
+        /// </summary>
+        protected abstract void Notify(TInputModel model, IEnumerable<string> contacts);
     }
 
 }

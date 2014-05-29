@@ -12,17 +12,11 @@ namespace Merchello.Core.Gateways.Notification
     /// </summary>
     internal class NotificationContext : GatewayProviderTypedContextBase<NotificationGatewayProviderBase>, INotificationContext
     {
-        private readonly ITriggerResolver _triggerResolver;
-        private readonly IMonitorResolver _monitorResolver;
 
-        public NotificationContext(IGatewayProviderService gatewayProviderService, IGatewayProviderResolver resolver, ITriggerResolver triggerResolver, IMonitorResolver monitorResolver)
+
+        public NotificationContext(IGatewayProviderService gatewayProviderService, IGatewayProviderResolver resolver)
             : base(gatewayProviderService, resolver)
         {
-            Mandate.ParameterNotNull(triggerResolver, "triggerResolver");
-            Mandate.ParameterNotNull(monitorResolver, "monitorResolver");
-
-            _triggerResolver = triggerResolver;
-            _monitorResolver = monitorResolver;
         }
 
         /// <summary>

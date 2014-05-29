@@ -32,6 +32,11 @@ namespace Merchello.Core.Observation
         internal string HandleEvent { get; private set; }
 
         // ctor
+        public TriggerForAttribute(string alias)
+            : this(alias, Topic.Notifications, null, null)
+        { }
+
+        // ctor
         public TriggerForAttribute(string alias, Topic topic)
             : this(alias, topic, null, null)
         { }

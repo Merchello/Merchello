@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Configuration;
+using System.Linq;
+using System.Threading;
 using Merchello.Core.Cache;
 using Merchello.Core.Configuration;
 using Merchello.Core.Gateways;
+using Merchello.Core.Models.MonitorModels;
 using Merchello.Core.Observation;
 using Merchello.Core.Services;
 using Umbraco.Core;
@@ -81,7 +84,7 @@ namespace Merchello.Core
         /// </remarks>
         protected void CreateMerchelloContext(ServiceContext serviceContext, CacheHelper cache)
         {
-            var gateways = new GatewayContext(serviceContext, GatewayProviderResolver.Current, TriggerResolver.Current, MonitorResolver.Current);
+            var gateways = new GatewayContext(serviceContext, GatewayProviderResolver.Current);
             _merchelloContext = MerchelloContext.Current = new MerchelloContext(serviceContext, gateways, cache);
         }
 
@@ -102,6 +105,18 @@ namespace Merchello.Core
 
             if(!MonitorResolver.HasCurrent)
             MonitorResolver.Current = new MonitorResolver(PluginManager.Current.ResolveObserverMonitors());
+        }
+
+        protected virtual void InitializeObserverSubscriptions()
+        {
+            if (!TriggerResolver.HasCurrent || !MonitorResolver.HasCurrent) return;
+
+            var monitors = MonitorResolver.Current.GetAllMonitors();
+            foreach (var monitor in monitors.Select(m => (MonitorBase<IMonitorModel>)m))
+            {
+                monitor.Subscribe(TriggerResolver.Current);
+            }
+            
         }
 
         protected void BindEventTriggers()

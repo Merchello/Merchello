@@ -20,20 +20,15 @@ namespace Merchello.Core.Gateways
         private Lazy<ITaxationContext> _taxation;
         private readonly IGatewayProviderService _gatewayProviderService;
         private readonly IGatewayProviderResolver _resolver;
-        private readonly ITriggerResolver _triggerResolver;
-        private readonly IMonitorResolver _monitorResolver;
 
-        internal GatewayContext(IServiceContext serviceContext, IGatewayProviderResolver resolver, ITriggerResolver triggerResolver, IMonitorResolver monitorResolver)
+        internal GatewayContext(IServiceContext serviceContext, IGatewayProviderResolver resolver)
         {
             Mandate.ParameterNotNull(serviceContext, "serviceContext");
             Mandate.ParameterNotNull(resolver, "resolver");
-            Mandate.ParameterNotNull(triggerResolver, "triggerResolver");
-            Mandate.ParameterNotNull(monitorResolver, "monitorResolver");
 
             _gatewayProviderService = serviceContext.GatewayProviderService;
             _resolver = resolver;
-            _triggerResolver = triggerResolver;
-            _monitorResolver = monitorResolver;
+
 
             BuildGatewayContext(serviceContext.GatewayProviderService, serviceContext.StoreSettingService);
         }
@@ -41,7 +36,7 @@ namespace Merchello.Core.Gateways
         private void BuildGatewayContext(IGatewayProviderService gatewayProviderService, IStoreSettingService storeSettingService)
         {
             if(_notification == null)
-                _notification = new Lazy<INotificationContext>(() => new NotificationContext(gatewayProviderService, _resolver, _triggerResolver, _monitorResolver));
+                _notification = new Lazy<INotificationContext>(() => new NotificationContext(gatewayProviderService, _resolver));
 
             if (_payment == null)
                 _payment = new Lazy<IPaymentContext>(() => new PaymentContext(gatewayProviderService, _resolver));

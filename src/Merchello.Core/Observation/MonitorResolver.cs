@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using Merchello.Core.Models.MonitorModels;
 using Merchello.Core.ObjectResolution;
 using Umbraco.Core;
 
@@ -21,7 +22,7 @@ namespace Merchello.Core.Observation
         /// <summary>
         /// Gets the collection of all resovled <see cref="IMonitor"/>s
         /// </summary>
-        public IEnumerable<T> GetAllMonitors<T>()
+        public IEnumerable<T> GetAllMonitors<T>() where T : IMonitorModel
         {
             return GetAllMonitors()
                 .Where(x => x.GetType().IsAssignableFrom(typeof (T))).Select(x => (T) x);
@@ -38,7 +39,7 @@ namespace Merchello.Core.Observation
         /// <summary>
         /// Gets a <see cref="IMonitor"/> from the resolver
         /// </summary>
-        public IEnumerable<T> GetMonitors<T>()
+        public IEnumerable<T> GetMonitors<T>() where T : IMonitorModel
         {
             return GetAllMonitors().Where(x => x.GetType().IsAssignableFrom(typeof (T))).Select(x => (T) x);
         }
@@ -49,7 +50,7 @@ namespace Merchello.Core.Observation
         /// <typeparam name="T">The type of the <see cref="IMonitor"/></typeparam>
         /// <param name="key">The key from the <see cref="MonitorForAttribute"/> (Guid)</param>
         /// <returns>A <see cref="IMonitor"/> of T</returns>
-        public T GetMonitorByKey<T>(Guid key)
+        public T GetMonitorByKey<T>(Guid key) where T : IMonitorModel
         {
             return (T)GetMonitorByKey(key);
         }
@@ -79,7 +80,7 @@ namespace Merchello.Core.Observation
         /// Gets a collection of all monitors for a particular observable trigger
         /// </summary>
         /// <typeparam name="T">The Type of the Trigger</typeparam>
-        public IEnumerable<IMonitor> GetMonitorsForTrigger<T>()
+        public IEnumerable<IMonitor> GetMonitorsForTrigger<T>() where T : IMonitorModel
         {
             return GetMonitorsForTrigger(typeof (T));
         }
