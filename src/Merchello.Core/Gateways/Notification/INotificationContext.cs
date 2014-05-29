@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Merchello.Core.Models;
-
-namespace Merchello.Core.Gateways.Notification
+﻿namespace Merchello.Core.Gateways.Notification
 {
     /// <summary>
     /// Defines the NotificationContext
@@ -15,5 +11,8 @@ namespace Merchello.Core.Gateways.Notification
         ///// <param name="monitorKey"></param>
         ///// <returns>A collection of NotificationMessage</returns>
         //IEnumerable<INotificationMessage> GetNotificationMessagesByMonitorKey(Guid monitorKey);
+
+
+        
     }
 }

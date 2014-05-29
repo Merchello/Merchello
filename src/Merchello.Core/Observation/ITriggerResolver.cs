@@ -11,9 +11,9 @@ namespace Merchello.Core.Observation
         /// <summary>
         /// Gets a collection of <see cref="ITrigger"/> by the area defined in the attribute
         /// </summary>
-        /// <param name="area">The "area"</param>
+        /// <param name="topic">The "area"</param>
         /// <returns>A <see cref="ITrigger"/></returns>
-        IEnumerable<ITrigger> GetTriggersByArea(Topic area);
+        IEnumerable<ITrigger> GetTriggersByArea(Topic topic);
 
         /// <summary>
         /// Gets a collection <see cref="ITrigger"/> from the resolver
@@ -25,7 +25,7 @@ namespace Merchello.Core.Observation
         /// of something we have'nt
         /// 
         /// </remarks>
-        IEnumerable<ITrigger> GetTriggersByAlias(string alias);
+        IEnumerable<ITrigger> GetTriggersByAlias(string alias, Topic topic = Topic.Notifications);
 
         /// <summary>
         /// Gets the collection of all resovled <see cref="ITrigger"/>s

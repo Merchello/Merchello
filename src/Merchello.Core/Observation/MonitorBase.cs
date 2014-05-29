@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using Umbraco.Core.Logging;
 
 namespace Merchello.Core.Observation
@@ -6,7 +7,7 @@ namespace Merchello.Core.Observation
     /// <summary>
     /// Defines a Base Monitor
     /// </summary>
-    public abstract class MonitorBase<T> : IObserver<T>
+    public abstract class MonitorBase<T> : IObserver<T>, IMonitor
     {
         #region IObserver<T> implementation
 
@@ -27,5 +28,30 @@ namespace Merchello.Core.Observation
         }
 
         #endregion
+
+        /// <summary>
+        /// Subscribes itself to a <see cref="ITrigger"/>
+        /// </summary>
+        /// <param name="resolver"></param>
+        internal IDisposable Subscribe(ITriggerResolver resolver)
+        {
+            var att = GetType().GetCustomAttribute<MonitorForAttribute>(false);
+            if (att != null)
+            {
+                var trigger = (IObservable<T>)resolver.GetTrigger(att.ObservableTrigger);
+                if (trigger != null)
+                {
+                    return trigger.Subscribe(this);                    
+                }
+            }
+
+            LogHelper.Debug<MonitorBase<T>>("Subscribe failed for type" + GetType());
+            return null;
+        }
+
+        public Type ObservesType 
+        {
+            get { return typeof (T); }
+        }
     }
 }

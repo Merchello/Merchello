@@ -46,24 +46,26 @@ namespace Merchello.Core.Observation
         /// <summary>
         /// Gets a collection of <see cref="ITrigger"/> by the area defined in the attribute
         /// </summary>
-        /// <param name="area">The "area"</param>
+        /// <param name="topic">The "area"</param>
         /// <returns>A <see cref="ITrigger"/></returns>
-        public IEnumerable<ITrigger> GetTriggersByArea(Topic area)
+        public IEnumerable<ITrigger> GetTriggersByArea(Topic topic)
         {
             return  TriggerCache.Values
                 .Where(x => x.GetType()
-                        .GetCustomAttributes<TriggerForAttribute>(false).FirstOrDefault(y => y.Topic == area) != null);   
+                        .GetCustomAttributes<TriggerForAttribute>(false).FirstOrDefault(y => y.Topic == topic) != null);   
         }
 
         /// <summary>
         /// Gets a collection <see cref="ITrigger"/> from the resolver
         /// </summary>
         /// <returns>A <see cref="ITrigger"/></returns>
-        public IEnumerable<ITrigger> GetTriggersByAlias(string alias)
+        public IEnumerable<ITrigger> GetTriggersByAlias(string alias, Topic topic = Topic.Notifications)
         {
 
             return TriggerCache.Values.Where(x => (x.GetType().GetCustomAttribute<TriggerForAttribute>(false) != null &&
-                                      x.GetType().GetCustomAttribute<TriggerForAttribute>(false).Alias.ToLowerInvariant() == alias.ToLowerInvariant()))
+                                      String.Equals(x.GetType().GetCustomAttribute<TriggerForAttribute>(false).Alias, alias, StringComparison.InvariantCultureIgnoreCase) &&
+                                      x.GetType().GetCustomAttribute<TriggerForAttribute>(false).Topic == topic
+                                      ))
                          .Select(trigger => trigger);
         }
 
