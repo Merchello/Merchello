@@ -16,6 +16,9 @@ namespace Merchello.Core.Observation
         /// </summary>
         public string Name { get; private set; }
 
+
+        //public bool IncludeInBac { get; private set; }
+
         public MonitorForAttribute(string key, Type observableTrigger, string name)
         {
             Mandate.ParameterNotNullOrEmpty(key, "key");
