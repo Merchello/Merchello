@@ -10,12 +10,12 @@ namespace Merchello.Core.Formatters
         /// <summary>
         /// Adds a replaceable pattern to the formatter
         /// </summary>
-        void AddReplaceablePattern(IReplaceablePattern pattern);
+        void AddOrUpdateReplaceablePattern(IReplaceablePattern pattern);
 
         /// <summary>
         /// Adds collection a replaceable pattern to the formatter
         /// </summary>
-        void AddReplaceablePattern(IEnumerable<IReplaceablePattern> patterns);
+        void AddOrUpdateReplaceablePattern(IEnumerable<IReplaceablePattern> patterns);
 
         /// <summary>
         /// Sets (or resets) and existing patterns replacement value
