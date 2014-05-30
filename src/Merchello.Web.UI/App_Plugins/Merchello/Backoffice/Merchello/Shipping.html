@@ -9,7 +9,7 @@
 
 			<div class="span4">
 				<div class="umb-headline-editor-wrapper">
-					<h1 class="umb-headline">Shipping</h1>
+					<h1 class="umb-headline"><localize key="merchelloShipping_Shipping" /></h1>
 				</div>
 			</div>
 
@@ -31,9 +31,9 @@
 			<div class="merchello-pane row-fluid">
 				<div class="control-group umb-control-group" data-ng-class="{ 'open': visible.warehouseListPanel, 'closed': !visible.warehouseListPanel }">
 					<label class="merchello-control-label">
-						Warehouse Info
-						<small>Edit your warehouse</small>
-						<a data-ng-click="addWarehouse(primaryWarehouse)"><i class="icon-door-open"></i> Edit Warehouse</a>
+                        <localize key="merchelloShipping_editWarehouse" />
+                        <localize key="merchelloShipping_editWarehouseHelper" />
+					    <a data-ng-click="addWarehouse(primaryWarehouse)"><i class="icon-door-open"></i> <localize key="merchelloShipping_editWarehouse" /> </a>
 					</label>
 
 					<div class="merchello-controls">
@@ -78,9 +78,9 @@
 				<!-- Property classes from Umbraco styles -->
 				<div class="control-group umb-control-group" data-ng-class="{ 'open': visible.shippingMethodPanel, 'closed': !visible.shippingMethodPanel }">
 					<label class="merchello-control-label">
-						Shipping Methods
-						<small>Add shipping methods to existing regions or create a new region</small>
-						<a data-ng-click="addCountry()"><i class="icon-map"></i> Add a Country</a>
+                        <localize key="merchelloShipping_shippingMethods" />
+					    <localize key="merchelloShipping_shippingMethodsHelper" />
+					    <a data-ng-click="addCountry()"><i class="icon-map"></i><localize key="merchelloShipping_addCountry" /></a>
 					</label>
 
 					<div class="merchello-controls">

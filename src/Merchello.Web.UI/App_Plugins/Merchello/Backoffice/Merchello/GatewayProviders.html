@@ -6,7 +6,7 @@
 
             <div class="span4">
                 <div class="umb-headline-editor-wrapper">
-                     <h1 class="umb-headline">Gateway Providers</h1>
+                    <h1 class="umb-headline"><localize key="merchelloGatewayProvider_gatewayProvider" /></h1>
                 </div>
             </div>
 
@@ -29,16 +29,16 @@
                 
                 <div class="control-group umb-control-group">
                     <label class="merchello-control-label">
-                        Notification Providers
-                        <small>Activate/Deactivate your Notification Providers</small>
+                        <localize key="merchelloGatewayProvider_notificationProvider" />
+                        <localize key="merchelloGatewayProvider_notificationProviderHelper" />
                     </label>
                     
                     <resolved-gateway-providers provider-list="notificationGatewayProviders" on-activate="activateProvider(provider)" on-deactivate="deactivateProvider(provider)" on-configure="editProviderConfigDialogOpen(provider)"></resolved-gateway-providers>
                 </div>
                 <div class="control-group umb-control-group">
                     <label class="merchello-control-label">
-                        Payment Providers
-                        <small>Activate/Deactivate your Payment Providers</small>
+                        <localize key="merchelloGatewayProvider_paymentProvider" />
+                        <localize key="merchelloGatewayProvider_paymentProviderHelper" />
                     </label>
                     
                     <resolved-gateway-providers provider-list="paymentGatewayProviders" on-activate="activateProvider(provider)" on-deactivate="deactivateProvider(provider)" on-configure="editProviderConfigDialogOpen(provider)"></resolved-gateway-providers>
@@ -46,8 +46,8 @@
                 
                 <div class="control-group umb-control-group">
                     <label class="merchello-control-label">
-                        Shipping Providers
-                        <small>Activate/Deactivate your Shipping Providers</small>
+                        <localize key="merchelloGatewayProvider_shippingProvider" />  
+                        <localize key="merchelloGatewayProvider_shippingProviderHelper" />
                     </label>
 
                     <resolved-gateway-providers provider-list="shippingGatewayProviders" on-activate="activateProvider(provider)" on-deactivate="deactivateProvider(provider)" on-configure="editProviderConfigDialogOpen(provider)"></resolved-gateway-providers>
@@ -55,8 +55,8 @@
                 
                 <div class="control-group umb-control-group">
                     <label class="merchello-control-label">
-                        Taxation Providers
-                        <small>Activate/Deactivate your Taxation Providers</small>
+                        <localize key="merchelloGatewayProvider_shippingProvider" />
+                        <localize key="merchelloGatewayProvider_shippingProviderHelper" />
                     </label>
 
                     <resolved-gateway-providers provider-list="taxationGatewayProviders" on-activate="activateProvider(provider)" on-deactivate="deactivateProvider(provider)" on-configure="editProviderConfigDialogOpen(provider)"></resolved-gateway-providers>
