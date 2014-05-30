@@ -35,7 +35,7 @@ namespace Merchello.Core.Configuration.Outline
             set { this["replacement"] = value; }
         }
 
-        [ConfigurationProperty("replacementInMonitor", IsRequired = true)]
+        [ConfigurationProperty("replacementInMonitor", IsRequired = false, DefaultValue = true)]
         public bool ReplacementInMonitor
         {
             get { return (bool)this["replacementInMonitor"]; }

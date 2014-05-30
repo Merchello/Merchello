@@ -93,9 +93,13 @@ namespace Merchello.Core.Models
             };
         }
 
+        /// <summary>
+        /// Gets a collection of <see cref="IReplaceablePattern"/> for the invoice
+        /// </summary>
         internal static IEnumerable<IReplaceablePattern> ReplaceablePatterns(this IInvoice invoice)
         {
-            return new List<IReplaceablePattern>
+            // TODO localization needed on pricing and datetime
+            var patterns = new List<IReplaceablePattern>
             {
                 ReplaceablePattern.GetConfigurationReplaceablePattern("InvoiceNumber", invoice.PrefixedInvoiceNumber()),
                 ReplaceablePattern.GetConfigurationReplaceablePattern("InvoiceDate", invoice.InvoiceDate.ToShortDateString()),
@@ -109,9 +113,14 @@ namespace Merchello.Core.Models
                 ReplaceablePattern.GetConfigurationReplaceablePattern("BillToEmail", invoice.BillToEmail),
                 ReplaceablePattern.GetConfigurationReplaceablePattern("BillToPhone", invoice.BillToPhone),
                 ReplaceablePattern.GetConfigurationReplaceablePattern("BillToCompany", invoice.BillToCompany),
-                ReplaceablePattern.GetConfigurationReplaceablePattern("TotalPrice", invoice.Total.ToString()),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("TotalPrice", invoice.Total.ToString("C")),
                 ReplaceablePattern.GetConfigurationReplaceablePattern("InvoiceStatus", invoice.InvoiceStatus.Name)
+                
             };
+
+            patterns.AddRange(invoice.LineItemReplaceablePatterns());
+           
+            return patterns;
         }
 
        
