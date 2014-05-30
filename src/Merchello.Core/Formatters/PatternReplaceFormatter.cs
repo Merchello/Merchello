@@ -112,7 +112,13 @@ namespace Merchello.Core.Formatters
         private const string IterationStart = "{{IterationStart[";
         private const string IterationEnd = "{{IterationEnd[";
         private const string IterationCap = "]}}";
+        
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         internal static string ExplodeIterations(string value)
         {
             var token = GetIterationToken(value);
@@ -127,14 +133,21 @@ namespace Merchello.Core.Formatters
                 value.IndexOf(IterationMarker(token, false), StringComparison.InvariantCulture) +
                 IterationMarker(token, false).Length;
 
+            // this is the "block" to ultimately be replaced in the value
             var valueBlock = value.Substring(startBlockIndex, endBlockIndex - startBlockIndex);
 
+            // this is what we are going to build the replacements with
             var repeatBlock = valueBlock.Replace(startMarker, string.Empty).Replace(endMarker, string.Empty);
+
+
 
             return repeatBlock;
         }
 
-
+        /// <summary>
+        /// Utility method to get the "iteration token" eg.  IternationStart[Invoice.Items] - where "Invoice.Items" is considered
+        /// the token
+        /// </summary>        
         private static string GetIterationToken(string value)
         {
             var startIndex = value.IndexOf(IterationStart, StringComparison.InvariantCulture);
@@ -146,6 +159,9 @@ namespace Merchello.Core.Formatters
             return value.Substring(start, end - start);
         }
 
+        /// <summary>
+        /// Helper method to construct the starting and ending patterns for replacing iteration markers
+        /// </summary>        
         private static string IterationMarker(string token, bool isStart = true)
         {
             return isStart
