@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Merchello.Core.Gateways.Notification.Formatters;
+using Merchello.Core.Formatters;
 using Merchello.Core.Models;
 using System.Linq;
 using Umbraco.Core.IO;
@@ -15,11 +15,11 @@ namespace Merchello.Core.Gateways.Notification
     internal class FormattedNotificationMessage : IFormattedNotificationMessage
     {
         private readonly INotificationMessage _notificationMessage;
-        private readonly INotificationFormatter _formatter;
+        private readonly IFormatter _formatter;
         private Lazy<string> _formattedMessage;
         private readonly List<string> _recipients = new List<string>(); 
 
-        public FormattedNotificationMessage(INotificationMessage notificationMessage, INotificationFormatter formatter)
+        public FormattedNotificationMessage(INotificationMessage notificationMessage, IFormatter formatter)
         {
             Mandate.ParameterNotNull(formatter, "formatter");
             Mandate.ParameterNotNull(notificationMessage, "message");

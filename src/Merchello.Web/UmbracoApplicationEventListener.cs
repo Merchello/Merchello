@@ -2,9 +2,7 @@
 using Merchello.Core;
 using System;
 using System.Reflection;
-using Merchello.Core.Persistence.Migrations;
 using Umbraco.Core;
-using Umbraco.Core.Persistence.UnitOfWork;
 
 namespace Merchello.Web
 {
@@ -35,23 +33,24 @@ namespace Merchello.Web
             }
         }
 
-        protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
-        {
-            base.ApplicationStarted(umbracoApplication, applicationContext);
+        //protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
+        //{
+        //    base.ApplicationStarted(umbracoApplication, applicationContext);
 
-            // TODO why doesn't this fire
-            var unitOfWorkProvider = new PetaPocoUnitOfWorkProvider();
-            Log.Info("Checking Merchello DB Schema");
+        //    // TODO why doesn't this fire
+        //    var unitOfWorkProvider = new PetaPocoUnitOfWorkProvider();
+        //    Log.Info("Checking Merchello DB Schema");
 
-            try
-            {
-               // var success = DatabaseSchemaHelper.VerifyDatabaseSchema(unitOfWorkProvider.GetUnitOfWork().Database);
-            }
-            catch (Exception ex)
-            {                
-                Log.Error("Merchello Database Schema Verification Failed", ex);
-            }
+        //    try
+        //    {
+        //       // var success = DatabaseSchemaHelper.VerifyDatabaseSchema(unitOfWorkProvider.GetUnitOfWork().Database);
+        //    }
+        //    catch (Exception ex)
+        //    {                
+        //        Log.Error("Merchello Database Schema Verification Failed", ex);
+        //    }
             
-        }
+        //}
+        
     }
 }

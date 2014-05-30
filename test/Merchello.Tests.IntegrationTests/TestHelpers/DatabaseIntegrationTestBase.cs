@@ -31,17 +31,20 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
             serviceContext.GatewayProviderService,
             new NullCacheProvider());                
         
-            if(!TriggerResolver.HasCurrent)
-            TriggerResolver.Current = new TriggerResolver(PluginManager.Current.ResolveObservableTriggers());
 
-            if(!MonitorResolver.HasCurrent)
-            MonitorResolver.Current = new MonitorResolver(PluginManager.Current.ResolveObserverMonitors());
 
             MerchelloContext = new MerchelloContext(serviceContext,
                 new GatewayContext(serviceContext, GatewayProviderResolver.Current),
                 new CacheHelper(new NullCacheProvider(),
                                     new NullCacheProvider(),
                                     new NullCacheProvider()));
+
+            if (!TriggerResolver.HasCurrent)
+                TriggerResolver.Current = new TriggerResolver(PluginManager.Current.ResolveObservableTriggers());
+
+            if (!MonitorResolver.HasCurrent)
+                MonitorResolver.Current = new MonitorResolver(MerchelloContext.Gateways.Notification, PluginManager.Current.ResolveObserverMonitors());
+
             AutoMapperMappings.BindMappings();
             ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"].RebuildIndex();  
         }

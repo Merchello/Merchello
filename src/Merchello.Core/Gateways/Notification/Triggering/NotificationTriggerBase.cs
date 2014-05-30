@@ -11,7 +11,6 @@ namespace Merchello.Core.Gateways.Notification.Triggering
     /// <typeparam name="TInputModel">The type passed to the trigger</typeparam>
     /// <typeparam name="TMonitorModel">The type of the monitor</typeparam>
     public abstract class NotificationTriggerBase<TInputModel, TMonitorModel> : TriggerBase<TMonitorModel>, INotificationTrigger
-        where TMonitorModel : IMonitorModel
     {       
         /// <summary>
         /// Value to pass to the notification monitors

@@ -84,5 +84,14 @@ namespace Merchello.Core.Configuration.Outline
             get { return (TaskChainsCollection)this["taskChains"]; }
         }
 
+
+        /// <summary>
+        /// Gets the tasks collection
+        /// </summary>
+        [ConfigurationProperty("patternFormatter", IsRequired = false), ConfigurationCollection(typeof(ReplaceElement), AddItemName = "replace")]
+        public ReplacementCollection PatternFormatter
+        {
+            get { return (ReplacementCollection)this["patternFormatter"]; }
+        }
     }
 }

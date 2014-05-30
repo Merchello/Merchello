@@ -192,5 +192,30 @@ namespace Merchello.Tests.IntegrationTests.Notifications
 
             Thread.Sleep(2000);
         }
+
+        [Test]
+        public void Can_Trigger_An_Email_Through_Notifications()
+        {
+            // check configuration to see if we want to do this
+            if (!bool.Parse(ConfigurationManager.AppSettings["sendTestEmail"])) Assert.Ignore("Skipping test");
+
+            //// Arrange
+            var settings = _provider.ExtendedData.GetSmtpProviderSettings();
+            settings.Host = "moria";
+            _provider.ExtendedData.SaveSmtpProviderSettings(settings);
+
+            var resource = _provider.ListResourcesOffered().FirstOrDefault();
+            Assert.NotNull(resource, "Smtp Provider returned null for GatewayResource");
+
+            var method = _provider.CreateNotificationMethod(resource, resource.Name, "Test email method");
+            var message = new NotificationMessage(method.NotificationMethod.Key, "Test email", "Can_Send_A_Test_Email@merchello.com")
+            {
+                Recipients = "rusty@mindfly.com",
+                BodyText = "Successful test?",
+                MonitorKey = new Guid("5DB575B5-0728-4B31-9B37-E9CF6C12E0AA") // OrderConfirmationMonitor
+            };
+
+
+        }
     }
 }

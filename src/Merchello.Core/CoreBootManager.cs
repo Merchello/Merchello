@@ -59,12 +59,12 @@ namespace Merchello.Core
 
             
             InitializeGatewayResolver(serviceContext, cache);
+            
+            CreateMerchelloContext(serviceContext, cache);
 
             InitializeResolvers();
 
-            CreateMerchelloContext(serviceContext, cache);
-
-            BindEventTriggers();
+            InitializeObserverSubscriptions();
 
             _isInitialized = true;            
 
@@ -104,7 +104,7 @@ namespace Merchello.Core
             TriggerResolver.Current = new TriggerResolver(PluginManager.Current.ResolveObservableTriggers());
 
             if(!MonitorResolver.HasCurrent)
-            MonitorResolver.Current = new MonitorResolver(PluginManager.Current.ResolveObserverMonitors());
+            MonitorResolver.Current = new MonitorResolver(MerchelloContext.Current.Gateways.Notification, PluginManager.Current.ResolveObserverMonitors());
         }
 
         protected virtual void InitializeObserverSubscriptions()
@@ -112,33 +112,34 @@ namespace Merchello.Core
             if (!TriggerResolver.HasCurrent || !MonitorResolver.HasCurrent) return;
 
             var monitors = MonitorResolver.Current.GetAllMonitors();
-            foreach (var monitor in monitors.Select(m => (MonitorBase<IMonitorModel>)m))
+
+            foreach (var monitor in monitors)
             {
                 monitor.Subscribe(TriggerResolver.Current);
             }
             
         }
 
-        protected void BindEventTriggers()
-        {
-            LogHelper.Info<CoreBootManager>("Beginning Merchello Trigger Binding");
-            //foreach (var trigger in TriggerResolver.Current.GetAllTriggers())
-            //{
-            //    var att = trigger.GetType().GetCustomAttributes<TriggerForAttribute>(false).FirstOrDefault();
-                
-            //    if (att == null) continue;
-                
-            //    var bindTo = att.Type.GetEvent(att.HandleEvent);
-                
-            //    if (bindTo == null) continue;
+        //protected void BindEventTriggers()
+        //{
+        //    LogHelper.Info<CoreBootManager>("Beginning Merchello Trigger Binding");
+        //    foreach (var trigger in TriggerResolver.Current.GetAllTriggers())
+        //    {
+        //        var att = trigger.GetType().GetCustomAttributes<TriggerForAttribute>(false).FirstOrDefault();
 
-            //    var mi = trigger.GetType().GetMethod("Invoke", BindingFlags.Instance | BindingFlags.Public);
-                
-            //    bindTo.AddEventHandler(trigger, Delegate.CreateDelegate(bindTo.EventHandlerType, trigger, mi));
+        //        if (att == null) continue;
 
-            //    LogHelper.Info<CoreBootManager>(string.Format("Binding {0} to {1} - {2} event", trigger.GetType().Name, att.Type.Name, att.HandleEvent));
-            //}
-        }
+        //        var bindTo = att.Type.GetEvent(att.HandleEvent);
+
+        //        if (bindTo == null) continue;
+
+        //        var mi = trigger.GetType().GetMethod("Invoke", BindingFlags.Instance | BindingFlags.Public);
+
+        //        bindTo.AddEventHandler(trigger, Delegate.CreateDelegate(bindTo.EventHandlerType, trigger, mi));
+
+        //        LogHelper.Info<CoreBootManager>(string.Format("Binding {0} to {1} - {2} event", trigger.GetType().Name, att.Type.Name, att.HandleEvent));
+        //    }
+        //}
 
         /// <summary>
         /// Fires after initialization and calls the callback to allow for customizations to occur

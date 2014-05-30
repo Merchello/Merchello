@@ -14,6 +14,7 @@ namespace Merchello.Core.Gateways.Notification.Monitors
         public override void OnNext(IPaymentResultMonitorModel value)
         {
             throw new System.NotImplementedException();
+
         }
     }
 }

@@ -3,7 +3,7 @@
     /// <summary>
     /// Defines the base MonitorModel
     /// </summary>
-    public abstract class MonitorModelBase : IMonitorModel
+    public abstract class MonitorModelBase
     {
         /// <summary>
         /// An array of additional recipients (ex. email addresses, phone numbers, twitter handles ...)
