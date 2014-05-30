@@ -13,18 +13,18 @@ namespace Merchello.Core.Observation
         /// Gets the collection of all resovled <see cref="IMonitor"/>s
         /// </summary>
         /// <typeparam name="T">The type of the <see cref="IMonitor"/></typeparam>
-        IEnumerable<T> GetAllMonitors<T>() where T : IMonitorModel;
+        IEnumerable<T> GetAllMonitors<T>();
 
         /// <summary>
         /// Gets the collection of all resovled <see cref="IMonitor"/>s
         /// </summary>
-        IEnumerable<IMonitor> GetAllMonitors(); 
-            
+        IEnumerable<IMonitor> GetAllMonitors();
+
         /// <summary>
         /// Gets a <see cref="IMonitor"/> from the resolver
         /// </summary>
         /// <returns>A <see cref="IMonitor"/></returns>
-        IEnumerable<T> GetMonitors<T>() where T : IMonitorModel;
+        IEnumerable<T> GetMonitors<T>();
 
         /// <summary>
         /// Get's a <see cref="IMonitor"/> by it's attribute Key
@@ -32,7 +32,7 @@ namespace Merchello.Core.Observation
         /// <typeparam name="T">The type of the <see cref="IMonitor"/></typeparam>
         /// <param name="key">The key from the <see cref="MonitorForAttribute"/> (Guid)</param>
         /// <returns>A <see cref="IMonitor"/> of T</returns>
-        T GetMonitorByKey<T>(Guid key) where T : IMonitorModel;
+        T GetMonitorByKey<T>(Guid key);
 
         /// <summary>
         /// Get's a <see cref="IMonitor"/> by it's attribute Key
@@ -51,6 +51,6 @@ namespace Merchello.Core.Observation
         /// Gets a collection of all monitors for a particular observable trigger
         /// </summary>
         /// <typeparam name="T">The Type of the Trigger</typeparam>
-        IEnumerable<IMonitor> GetMonitorsForTrigger<T>() where T : IMonitorModel;
+        IEnumerable<IMonitor> GetMonitorsForTrigger<T>();
     }
 }

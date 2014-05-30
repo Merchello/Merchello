@@ -77,9 +77,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActivatorHelper.cs" />
-    <Compile Include="Gateways\Notification\Formatters\PatternReplaceNotificationFormatter.cs" />
+    <Compile Include="Configuration\Outline\ReplacementCollection.cs" />
+    <Compile Include="Configuration\Outline\ReplaceElement.cs" />
+    <Compile Include="Formatters\IPatternReplaceFormatter.cs" />
+    <Compile Include="Formatters\IReplaceablePattern.cs" />
+    <Compile Include="Formatters\PatternReplaceFormatter.cs" />
+    <Compile Include="Formatters\ReplaceablePattern.cs" />
     <Compile Include="Gateways\Notification\Monitors\INotificationMonitor.cs" />
-    <Compile Include="Models\MonitorModels\IMonitorModel.cs" />
     <Compile Include="Models\MonitorModels\MonitorModelExtensions.cs" />
     <Compile Include="Models\MonitorModels\MonitorModelBase.cs" />
     <Compile Include="Models\MonitorModels\PaymentResultMonitorModel.cs" />
@@ -96,6 +100,7 @@
     <Compile Include="Observation\ITrigger.cs" />
     <Compile Include="Observation\MonitorBase.cs" />
     <Compile Include="Observation\MonitorResolver.cs" />
+    <Compile Include="Observation\ObservationExtensions.cs" />
     <Compile Include="Observation\Topic.cs" />
     <Compile Include="Observation\TriggerForAttribute.cs" />
     <Compile Include="Events\ObservationChannelEventArgs.cs" />
@@ -118,7 +123,7 @@
     <Compile Include="Chains\ShipmentCreation\SetOrderStatusTask.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="Events\NotificationEventArgs.cs" />
-    <Compile Include="Gateways\Notification\Formatters\DefaultNotificationFormatter.cs" />
+    <Compile Include="Formatters\DefaultFormatter.cs" />
     <Compile Include="Gateways\GatewayMethodEditorAttribute.cs" />
     <Compile Include="Gateways\GatewayProviderActivationAttribute.cs" />
     <Compile Include="Gateways\GatewayProviderEditorAttribute.cs" />
@@ -201,7 +206,7 @@
     <Compile Include="Gateways\Notification\FormatStatus.cs" />
     <Compile Include="Gateways\Notification\IFormattedNotificationMessage.cs" />
     <Compile Include="Gateways\Notification\INotificationGatewayProvider.cs" />
-    <Compile Include="Gateways\Notification\Formatters\INotificationFormatter.cs" />
+    <Compile Include="Formatters\IFormatter.cs" />
     <Compile Include="Gateways\Notification\FormattedNotificationMessage.cs" />
     <Compile Include="Gateways\Notification\Smtp\SmtpClientExtensions.cs" />
     <Compile Include="Persistence\DatabaseModelDefinitions\DbIndexDefinition.cs" />

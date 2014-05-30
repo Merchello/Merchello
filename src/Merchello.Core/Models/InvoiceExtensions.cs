@@ -6,6 +6,9 @@ using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using Merchello.Core.Builders;
+using Merchello.Core.Configuration;
+using Merchello.Core.Configuration.Outline;
+using Merchello.Core.Formatters;
 using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Taxation;
 using Merchello.Core.Services;
@@ -88,8 +91,30 @@ namespace Merchello.Core.Models
                 Phone = invoice.BillToPhone,
                 Email = invoice.BillToEmail
             };
-        }         
+        }
 
+        internal static IEnumerable<IReplaceablePattern> ReplaceablePatterns(this IInvoice invoice)
+        {
+            return new List<IReplaceablePattern>
+            {
+                ReplaceablePattern.GetConfigurationReplaceablePattern("InvoiceNumber", invoice.PrefixedInvoiceNumber()),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("InvoiceDate", invoice.InvoiceDate.ToShortDateString()),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("BillToName", invoice.BillToName),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("BillToAddress1", invoice.BillToAddress1),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("BillToAddress2", invoice.BillToAddress2),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("BillToLocality", invoice.BillToLocality),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("BillToRegion", invoice.BillToRegion),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("BillToPostalCode", invoice.BillToPostalCode),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("BillToCountryCode", invoice.BillToCountryCode),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("BillToEmail", invoice.BillToEmail),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("BillToPhone", invoice.BillToPhone),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("BillToCompany", invoice.BillToCompany),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("TotalPrice", invoice.Total.ToString()),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("InvoiceStatus", invoice.InvoiceStatus.Name)
+            };
+        }
+
+       
         #endregion
 
         #region Order

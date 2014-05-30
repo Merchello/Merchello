@@ -89,5 +89,12 @@ namespace Merchello.Tests.UnitTests.Services
         {
             After = ((SaveEventArgs<IOrder>) e).SavedEntities.FirstOrDefault();
         }
+
+        public bool HasMonitors {
+            get { return true; }
+        }
+        public int MonitorCount {
+            get { return 1;  }
+        }
     }
 }
