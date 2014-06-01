@@ -53,9 +53,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="interfaces, Version=1.0.5242.22737, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="interfaces, Version=1.0.5261.28126, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\UmbracoCms.Core.7.1.3\lib\interfaces.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.1.4\lib\interfaces.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.6.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -70,9 +70,9 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Umbraco.Core, Version=1.0.5250.13487, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Umbraco.Core, Version=1.0.5261.28127, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\UmbracoCms.Core.7.1.3\lib\Umbraco.Core.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.1.4\lib\Umbraco.Core.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -84,6 +84,7 @@
     <Compile Include="Formatters\PatternReplaceFormatter.cs" />
     <Compile Include="Formatters\ReplaceablePattern.cs" />
     <Compile Include="Gateways\Notification\Monitors\INotificationMonitor.cs" />
+    <Compile Include="Models\AddressExtensions.cs" />
     <Compile Include="Models\MonitorModels\MonitorModelExtensions.cs" />
     <Compile Include="Models\MonitorModels\MonitorModelBase.cs" />
     <Compile Include="Models\MonitorModels\PaymentResultMonitorModel.cs" />
