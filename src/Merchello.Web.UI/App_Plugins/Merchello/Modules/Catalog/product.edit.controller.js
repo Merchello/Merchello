@@ -71,6 +71,10 @@
                         $scope.toggleAllVariants(false);
                     }
 
+                    if (!$scope.product.hasVariants && !$scope.product.hasOptions) {
+                        $location.url("/merchello/merchello/ProductVariantEdit/" + $scope.product.key, true);
+                    }
+
                 }, function (reason) {
                     notificationsService.error("Product Save Failed", reason.message);
                 });
@@ -362,7 +366,7 @@
         };
 
         $scope.rebuildAndSaveVariants = function() {
-            merchelloProductVariantService.deleteAllByProduct($scope.product.key);
+            //merchelloProductVariantService.deleteAllByProduct($scope.product.key);
 
             //$scope.product = merchelloProductService.createVariantsFromOptions($scope.product);
 
