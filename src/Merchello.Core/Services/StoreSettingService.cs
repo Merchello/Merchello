@@ -296,7 +296,7 @@ namespace Merchello.Core.Services
         /// </summary>
         /// <param name="countryCode">The two letter ISO Region code (country code)</param>
         /// <returns></returns>
-        private bool CountryHasProvinces(string countryCode)
+        public static bool CountryHasProvinces(string countryCode)
         {
             return RegionProvinceCache.ContainsKey(countryCode);
         }
@@ -306,7 +306,7 @@ namespace Merchello.Core.Services
         /// </summary>
         /// <param name="countryCode">The two letter ISO Region code</param>
         /// <returns></returns>
-        private string GetProvinceLabelForCountry(string countryCode)
+        public static string GetProvinceLabelForCountry(string countryCode)
         {
             return CountryHasProvinces(countryCode)
                 ? MerchelloConfiguration.Current.Section.RegionalProvinces[countryCode].ProvinceLabel
@@ -318,7 +318,7 @@ namespace Merchello.Core.Services
         /// </summary>
         /// <param name="countryCode">The two letter ISO Region code (country code)</param>
         /// <returns>A collection of <see cref="IProvince"/></returns>
-        private IEnumerable<IProvince> GetProvincesByCountryCode(string countryCode)
+        public static IEnumerable<IProvince> GetProvincesByCountryCode(string countryCode)
         {
             return CountryHasProvinces(countryCode) ?
                 RegionProvinceCache[countryCode] :

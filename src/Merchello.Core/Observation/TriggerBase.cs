@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Merchello.Core.Observation
 {
@@ -52,6 +53,22 @@ namespace Merchello.Core.Observation
         internal virtual bool WillWork(object model)
         {
             return model == null || model.GetType().IsAssignableFrom(typeof (T));
+        }
+
+        /// <summary>
+        /// True or false indicating whether or not this trigger is being monitored
+        /// </summary>
+        public bool HasMonitors 
+        {
+            get { return Observers.Any(); }
+        }
+
+        /// <summary>
+        /// Returns the number of monitor observing this trigger
+        /// </summary>
+        public int MonitorCount
+        {
+            get { return Observers.Count; }
         }
     }
 }
