@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Merchello.Core.Builders;
-using Merchello.Core.Gateways.Notification;
 using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Models;
@@ -154,8 +153,7 @@ namespace Merchello.Core.Sales
         /// </remarks>
         public virtual bool IsReadyToInvoice()
         {
-            return (_customer.ExtendedData.GetAddress(AddressType.Billing) != null) &&
-                   (_customer.ExtendedData.GetAddress(AddressType.Shipping) != null);
+            return (_customer.ExtendedData.GetAddress(AddressType.Billing) != null);
         }
 
 
