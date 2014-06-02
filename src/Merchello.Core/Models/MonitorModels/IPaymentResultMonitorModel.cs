@@ -3,7 +3,7 @@
     /// <summary>
     /// Defines a PaymentResultMonitorModel
     /// </summary>
-    public interface IPaymentResultMonitorModel : IMonitorModel
+    public interface IPaymentResultMonitorModel
     {
         /// <summary>
         /// Gets/Sets the <see cref="IPayment"/>
