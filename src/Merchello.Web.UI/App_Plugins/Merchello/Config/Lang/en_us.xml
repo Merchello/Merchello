@@ -9,7 +9,7 @@
 		<key alias="variant">Variant</key>
 		<key alias="sku">SKU</key>
 		<key alias="baseSku">Base Sku</key>
-		<key alias="barcode">Barcode</key>
+		<key alias="barcode">Barcode</key>sel
 		<key alias="manufacturer">Manufacturer</key>
 		<key alias="manufacturerModel">Manufacturer's Model No.</key>
 		<key alias="variantInfo">Variant Information</key>
@@ -57,14 +57,37 @@
 		<key alias="orderNumber">Order #</key>
 		<key alias="paymentStatus">Payment Status</key>
 		<key alias="fulfillmentStatus">Fulfillment Status</key>
-		<!-- actions -->
+        <key alias="lineItems"> Line Items</key>
+        <key alias="orderName">[Order Name]</key>
+        <!-- actions -->
 		<key alias="filter">Filter Orders</key>
-		<!-- phrases -->
-		<key alias="invoicesPerPage">Invoices / Page</key>
-		<key alias="noOrders">You have no orders.</key>
-		<key alias="attentionRequired">You Have Orders That Require Attention</key>
-		<key alias="paymentExpirationWarning">You may not receive payment for expired authorization.</key>
-	</area>
+        <key alias="capturePayment">Capture Payment</key>
+        <key alias="processPayment">Process Payment</key>
+      
+      <!-- phrases -->
+      <key alias="invoicesPerPage">Invoices / Page</key>
+      <key alias="noOrders">You have no orders.</key>
+      <key alias="attentionRequired">You Have Orders That Require Attention</key>
+      <key alias="paymentExpirationWarning">You may not receive payment for expired authorization.</key>
+      <key alias="processedBy">Processed by</key>
+  </area>
+  <area alias="merchelloOrderView">
+    <!-- things -->
+    <key alias="invoiceNumber">Invoice #</key>
+    <key alias="customerInformation">Customer Information</key>
+    <key alias="shippingAddress">Shipping Address</key>
+    <key alias="billingAddress">Billing Address</key>
+    <key alias="orderInformation">Order Information</key>
+    <!-- actions -->
+    <!-- phrases -->
+    <key alias="billingAndShippingAddressHelper"> <![CDATA[<small>Billing and Shipping addresses</small>]]></key>
+    <key alias="orderInformationHelper"><![CDATA[<small>Line items & costs</small>]]></key>
+    <key alias="captureUpTo">Capture Up To</key>
+    <key alias="salesTax">Sales Tax</key>
+    <key alias="authorized"> Authorized</key>
+    <key alias="paymentHistory"> Payment History</key>
+    <key alias="paymentHistoryHelper"> <![CDATA[<small>Status records for one or more payments</small>]]></key>
+  </area>
 	<area alias="merchelloWarehouse">
 		<!-- things -->
 		<key alias="warehouse">Warehouse</key>
@@ -108,6 +131,19 @@
 		<key alias="chooseMedia">Choose Media</key>
 		<key alias="multipleOptions">Multiple Options</key>
 		<key alias="optional">(optional)</key>
+        <key alias="percentSymbol" >%</key>
+        <key alias="moneySymbol" >$</key>
+        <key alias="trackingNumber" >Tracking # </key>
+        <key alias="shipment" >Shipment</key>
+        <key alias="sku" >SKU</key>
+        <key alias="quantity" >Qty</key>
+        <key alias="fulfill"> Fulfill</key>
+        <key alias="shipment"> Shipment</key>
+        <key alias="status"> Status</key>
+        <key alias="type"> Type</key>
+        <key alias="amount"> Amount</key>
+        <key alias="via"> Via</key>
+
   </area>
   <area alias="merchelloSettings">
     <key alias="storeDefaults">Store Defaults</key>
@@ -158,13 +194,11 @@
     <key alias="addEditShippingMethod" ><![CDATA[Add/Edit a Shipping Method & Rate for]]></key>
     <key alias="method" >Method</key>
     <key alias="setRange" >Set Range</key>
-    <key alias="moneySign" >$</key>
     <key alias="addNewRange" >Add New Range</key>
     <key alias="adjustIndividualRegions" >Adjust for Individual Regions</key>
     <key alias="region" >Region</key>
     <key alias="adjustRate" >Adjust Rate</key>
     <key alias="adjustBy" >Adjust By</key>
-    <key alias="percentSign" >%</key>
   </area>
   <area alias="merchelloShippingProvider">
     <key alias="provider" >Provider</key>
@@ -175,10 +209,6 @@
   <area alias="merchelloShippingHistory">
     <key alias="shipmentHistory" >Shipment History</key>
     <key alias="shipmentHistoryHelper" ><![CDATA[<small>Status records for one or more shipments</small>]]></key>
-    <key alias="shipment" >Shipment</key>
-    <key alias="trackingNumber" >Tracking #:</key>
-    <key alias="sku" >Sku</key>
-    <key alias="quantity" >Qty</key>
   </area>
     <area alias="merchelloTaxation">
       <key alias="taxation" >Taxation</key>
@@ -191,13 +221,10 @@
   </area>
   <area alias="merchelloGatewayProvider">
       <key alias="host" >Host</key>
-      <key alias="username" >Username</key>
-      <key alias="password" >Password</key>
       <key alias="enableSSL" >Enable SSL</key>
       <key alias="encryptProviderConfiguration" > Encrypt Provider Configuration</key>
     </area>
   <area alias="merchelloNotificationsEdit">
-      <key alias="notifications" >Notifications</key>
       <key alias="emailTemplate" >Email Template</key>
       <key alias="emailTemplateHelper" ><![CDATA[<small>Edit your notification template</small>]]></key>
       <key alias="emailTemplateEditBody" >Edit the Body Text</key>
