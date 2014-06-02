@@ -46,8 +46,8 @@ namespace Merchello.Web.Trees
                 controller => controller.GetShipCountry(Guid.NewGuid())));
             umbracoUrls.Add("merchelloCatalogFixedRateShippingApiBaseUrl", url.GetUmbracoApiServiceBaseUrl<CatalogFixedRateShippingApiController>(
                 controller => controller.GetAllShipCountryFixedRateProviders(Guid.NewGuid())));
-            //umbracoUrls.Add("merchelloNotificationApiBaseUrl", url.GetUmbracoApiServiceBaseUrl<NotificationGatewayApiController>(
-            //    controller => controller.GetAllGatewayProviders()));
+            umbracoUrls.Add("merchelloNotificationApiBaseUrl", url.GetUmbracoApiServiceBaseUrl<NotificationGatewayApiController>(
+                controller => controller.GetAllGatewayProviders()));
             umbracoUrls.Add("merchelloPaymentGatewayApiBaseUrl", url.GetUmbracoApiServiceBaseUrl<PaymentGatewayApiController>(
                 controller => controller.GetAllGatewayProviders()));
             umbracoUrls.Add("merchelloTaxationGatewayApiBaseUrl", url.GetUmbracoApiServiceBaseUrl<TaxationGatewayApiController>(

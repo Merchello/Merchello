@@ -23,9 +23,9 @@ namespace Merchello.Core.Gateways.Notification
         /// </summary>
         /// <param name="gatewayResource">The <see cref="IGatewayResource"/> implemented by this method</param>
         /// <param name="name">The name of the notification method</param>
-        /// <param name="description">The description of the notification method</param>        
+        /// <param name="serviceCode">The description of the notification method</param>        
         /// <returns></returns>
-        public abstract INotificationGatewayMethod CreateNotificationMethod(IGatewayResource gatewayResource, string name, string description);
+        public abstract INotificationGatewayMethod CreateNotificationMethod(IGatewayResource gatewayResource, string name, string serviceCode);
     
         /// <summary>
         /// Saves a <see cref="INotificationGatewayMethod"/>

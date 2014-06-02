@@ -3,6 +3,10 @@ using Umbraco.Core.Events;
 
 namespace Merchello.Core.Events
 {
+    /// <summary>
+    /// EventArgs for Customer conversion
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class ConvertEventArgs<T> : CancellableObjectEventArgs<IEnumerable<T>>
     {
         /// <summary>

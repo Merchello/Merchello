@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Reflection;
 using Merchello.Core.Models;
+using Merchello.Core.Observation;
 using Merchello.Core.Persistence;
 using Merchello.Core.Services;
-using Merchello.Core.Triggers;
 using Merchello.Tests.Base.DataMakers;
 using Merchello.Tests.Base.Respositories;
 using Merchello.Tests.Base.Services;
@@ -81,7 +81,7 @@ namespace Merchello.Tests.UnitTests.Services
     }
 
 
-    internal class OrderStatusInvokeTester : IEventTriggeredAction
+    internal class OrderStatusInvokeTester : ITrigger
     {
 
         public IOrder After { get; set; }

@@ -18,8 +18,9 @@
 		<key alias="optionName">Option Name</key>
 		<key alias="optionValues">Option Values</key>
 		<!-- actions -->
-		<key alias="newProduct">New Product</key>
-		<key alias="createProduct">Create a Product</key>
+    <key alias="newProduct">New Product</key>
+    <key alias="selectProduct">Select Product</key>
+    <key alias="createProduct">Create a Product</key>
 		<key alias="createProductSub">The Name field (above), Price, and SKU are required.  Everything else is optional.</key>
 		<key alias="newVariant">New Variant</key>
 		<key alias="newVariantFor">New Variant for</key>

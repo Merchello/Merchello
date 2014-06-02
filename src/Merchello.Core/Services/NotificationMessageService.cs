@@ -216,6 +216,20 @@ namespace Merchello.Core.Services
             }
         }
 
+        /// <summary>
+        /// Gets a collection of <see cref="INotificationMessage"/>s based on a monitor key
+        /// </summary>
+        /// <param name="monitorKey">The Notification Monitor Key (Guid)</param>
+        /// <returns>A collection of <see cref="INotificationMessage"/></returns>        
+        public IEnumerable<INotificationMessage> GetNotificationMessagesByMonitorKey(Guid monitorKey)
+        {
+            using (var repository = _repositoryFactory.CreateNotificationMessageRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Query<INotificationMessage>.Builder.Where(x => x.MonitorKey == monitorKey);
+
+                return repository.GetByQuery(query);
+            }
+        }
 
         #region Event Handlers
 

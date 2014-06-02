@@ -22,6 +22,10 @@ namespace Merchello.Core.Models.Rdbms
         [NullSetting(NullSetting = NullSettings.Null)]
         public Guid? TriggerKey { get; set; }
 
+        [Column("monitorKey")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public Guid? MonitorKey { get; set; }
+
         [Column("name")]
         public string Name { get; set; }
 
