@@ -55,7 +55,8 @@ namespace Merchello.Web
                     // Must prefix with _umb_ so Umbraco knows not to save this property
                     Label = "",
                     Value = null,
-                    View = "boolean",
+                    //View = "../App_Plugins/Merchello/PropertyEditors/ProductPicker/Views/merchelloproductselector.html",
+                    View = "../App_Plugins/Merchello/Backoffice/Merchello/ProductVariantEdit.html",
                     HideLabel = true,
                     Config = new Dictionary<string, object>()
                 }
