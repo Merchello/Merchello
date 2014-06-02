@@ -1,18 +1,18 @@
 ﻿<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Dashboards.Settings.Shipping.Dialogs.ShippingProviderController">
     <div class="umb-modalcolumn-header">
-        <h4>Add a Provider</h4>
+        <h4><localize key="merchelloShippingProvider_addProvider" /></h4>
     </div>
     <div class="umb-panel-body with-header with-footer">
         
         <div class="form-group row-fluid provider-dropdown">
-            <label for="provider-name">Select Your Provider</label>
+            <label for="provider-name"><localize key="merchelloShippingProvider_selectProvider" /></label>
             <div class="input-append col-xs-12 span12">
                 <select name="availableProviders" data-ng-model="dialogData.provider" data-ng-options="p.name for p in dialogData.availableProviders track by p.key"></select>
             </div>
         </div>
 
         <div class="form-group row-fluid provider-dropdown" data-ng-show="dialogData.provider">
-            <label for="provider-name">Select Your Resource</label>
+            <label for="provider-name"><localize key="merchelloShippingProvider_selectResource" /></label>
             <div class="input-append col-xs-12 span12">
                 <select name="availableResources" data-ng-model="dialogData.resource" data-ng-options="p.name for p in dialogData.provider.resources track by p.serviceCode"></select>
             </div>
@@ -25,13 +25,13 @@
 	        <div class="btn-toolbar umb-btn-toolbar pull-right">
 
 	        	<a href data-ng-click="close()" class="btn btn-link">
-	        		<localize key="general_cancel">Cancel</localize>
+	        		<localize key="general_cancel"></localize>
 				</a>
 
 				<button
 					class="btn btn-primary"
 					data-ng-click="submit(dialogData)">
-					<localize key="buttons_save">Save</localize>
+					<localize key="buttons_save"></localize>
 				</button>
 
 	        </div>

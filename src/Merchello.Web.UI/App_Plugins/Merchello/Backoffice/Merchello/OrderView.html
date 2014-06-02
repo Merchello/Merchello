@@ -7,7 +7,7 @@
 
 			<div class="span4">
 				<div class="umb-headline-editor-wrapper">
-					<h1 class="umb-headline">Invoice #{{invoice.invoiceNumber}}</h1>
+				    <h1 class="umb-headline"><localize key="merchelloOrderView_invoiceNumber" />{{invoice.invoiceNumber}}</h1>
 				</div>
 			</div>
 
@@ -27,15 +27,15 @@
 				<div class="control-group umb-control-group">
 
 					<div class="merchello-section-label">
-						Customer Information
-						<small>Billing and Shipping addresses</small>
+                        <localize key="merchelloOrderView_customerInformation" />Customer Information
+						<localize key="merchelloOrderView_billingAndShippingAddressHelper" />
 					</div>
 
 					<div class="merchello-controls">
 
 						<div class="row-fluid span10 col-xs-10">
 							<div class="vcard span5">
-								<h3>Shipping Address</h3>
+								<h3><localize key="merchelloOrderView_shippingAddress" /></h3>
 
 								<h4 class="fn">{{shippingAddress.name}}</h4>
 								<span class="org">{{shippingAddress.organization}}</span>
@@ -49,7 +49,7 @@
 							</div>
 
 							<div class="vcard span5 pull-right">
-								<h3>Billing Address</h3>
+								<h3><localize key="merchelloOrderView_billingAddress" /></h3>
 
 								<h4 class="fn">{{invoice.billToName}}</h4>
 								<span class="org">{{invoice.billToCompany}}</span>
@@ -70,16 +70,16 @@
 				<div class="control-group umb-control-group">
 
 					<div class="merchello-section-label">
-						Order Information
-						<small>Line items & costs</small>
+                        <localize key="merchelloOrderView_orderInformation" />
+                        <localize key="merchelloOrderView_orderInformationHelper" />
 					</div>
 
 					<div class="merchello-controls">
 						<div class="row-fluid span10 col-xs-10">
 							<div class="row-fluid">
 								<div class="btn-toolbar pull-right umb-btn-toolbar">
-									<a class="btn btn-primary" data-ng-hide="invoice.getPaymentStatus()=='Paid'" data-ng-click="capturePayment()">Capture Up To {{invoice.total | currency : currencySymbol}}</a>
-									<a class="btn btn-primary" data-ng-hide="invoice.getFulfillmentStatus()=='Fulfilled'" data-ng-click="fulfillShipment()">Fulfill {{invoice.getProductLineItems().length}} Line Items</a>
+									<a class="btn btn-primary" data-ng-hide="invoice.getPaymentStatus()=='Paid'" data-ng-click="capturePayment()"><localize key="merchelloOrderView_captureUpTo" />{{invoice.total | currency : currencySymbol}}</a>
+								    <a class="btn btn-primary" data-ng-hide="invoice.getFulfillmentStatus()=='Fulfilled'" data-ng-click="fulfillShipment()"><localize key="merchelloGeneral_fulfill"/> {{invoice.getProductLineItems().length}} <localize key="merchelloOrder_lineItems" /></a>
 								</div>
 							</div>
 
@@ -88,17 +88,17 @@
 									<tr data-ng-repeat="lineitem in invoice.getProductLineItems()">
 										<td colspan="2">
 											<h4>{{lineitem.name}}</h4>
-											<span>SKU: {{lineitem.sku}}</span>
+											<span><localize key="merchelloGeneral_sku" />: {{lineitem.sku}}</span>
 										</td>
 										<td class="text-right">{{lineitem.quantity}} x <strong>{{lineitem.price | currency : currencySymbol}}</strong></td>
 										<td class="text-right">{{lineitem.quantity * lineitem.price | currency : currencySymbol}}</td>
 									</tr>
 									<tr>
-										<td colspan="3" class="text-right">Sales Tax</td>
+									    <td colspan="3" class="text-right"><localize key="merchelloOrderView_salesTax" /></td>
 										<td class="text-right">{{invoice.getTaxLineItem().price | currency : currencySymbol}}</td>
 									</tr>
 									<tr>
-										<td colspan="3" class="text-right">Shipping</td>
+									    <td colspan="3" class="text-right"><localize key="merchelloShipping_shipping" /></td>
 										<td class="text-right">{{invoice.getShippingLineItem().price | currency : currencySymbol}}</td>
 									</tr>
 									<tr data-ng-repeat="payment in invoice.payments" data-ng-hide="invoice.payments.length == 0">
@@ -107,7 +107,7 @@
 											<span data-ng-show="payment.paymentType.alias == 'CreditCard'" class="card-no">xxxx-xxxx-xxxx-xxxx</span>
 											<span class="payment-method">Payment processed by: {{payment.paymentMethodName}}</span>
 										</td>
-										<td class="text-right">Authorized:</td>
+										<td class="text-right"><localize key="merchelloOrderView_authorized" />:</td>
 										<td class="text-right">{{payment.amount | currency : currencySymbol}}</td>
 									</tr>
 								</tbody>
@@ -120,15 +120,15 @@
 				<div class="control-group umb-control-group">
 
 					<div class="merchello-section-label">
-						Payment History
-						<small>Status records for one or more payments</small>
+                        <localize key="merchelloOrderView_paymentHistory" />
+                        <localize key="merchelloOrderView_paymentHistoryHelper" />
 					</div>
 
 					<div class="merchello-controls">
 						<div class="row-fluid span10 col-xs-10" data-ng-repeat="(paymentMethodName, appliedPaymentList) in invoice.groupedAppliedPayments">
 							<div class="row-fluid">
 								<div class="merchello-section-label">
-									Payment - {{paymentMethodName}}
+								    <localize key="merchelloShipping_payment" /> - {{paymentMethodName}}
 								</div>
 							</div>
 
@@ -136,10 +136,10 @@
 								<tbody>
 								<thead>
 									<tr>
-										<th>Date</th>
-										<th>Status</th>
-										<th>Type</th>
-										<th>Amount</th>
+										<th><localize key="general_date" /></th>
+										<th><localize key="general_status" /></th>
+										<th><localize key="general_type" /></th>
+										<th><localize key="general_amount" /></th>
 									</tr>
 								</thead>
 								<tr data-ng-repeat="appliedPayment in appliedPaymentList | greaterthan: 'amount': 0">
