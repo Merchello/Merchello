@@ -2,7 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using Merchello.Core.Models.MonitorModels;
+using Merchello.Core.Gateways.Notification;
 using Merchello.Core.ObjectResolution;
 using Umbraco.Core;
 
@@ -14,15 +14,29 @@ namespace Merchello.Core.Observation
     internal sealed class MonitorResolver : MerchelloManyObjectsResolverBase<MonitorResolver, IMonitor>, IMonitorResolver
     {
         private static readonly ConcurrentDictionary<Guid, IMonitor> MonitorCache = new ConcurrentDictionary<Guid, IMonitor>();
+        private readonly INotificationContext _notificationContext;
 
-        public MonitorResolver(IEnumerable<Type> value) 
+        public MonitorResolver(INotificationContext notificationContext, IEnumerable<Type> value)
             : base(value)
-        { }
+        {
+            Mandate.ParameterNotNull(notificationContext, "notificationContext");
+            _notificationContext = notificationContext;
+
+            BuildCache();
+        }
+
+        private void BuildCache()
+        {
+            foreach (var monitor in Values)
+            {
+                MonitorCache.AddOrUpdate(monitor.MonitorFor().Key, monitor, (x, y) => monitor);
+            }
+        }
 
         /// <summary>
         /// Gets the collection of all resovled <see cref="IMonitor"/>s
         /// </summary>
-        public IEnumerable<T> GetAllMonitors<T>() where T : IMonitorModel
+        public IEnumerable<T> GetAllMonitors<T>()
         {
             return GetAllMonitors()
                 .Where(x => x.GetType().IsAssignableFrom(typeof (T))).Select(x => (T) x);
@@ -39,7 +53,7 @@ namespace Merchello.Core.Observation
         /// <summary>
         /// Gets a <see cref="IMonitor"/> from the resolver
         /// </summary>
-        public IEnumerable<T> GetMonitors<T>() where T : IMonitorModel
+        public IEnumerable<T> GetMonitors<T>()
         {
             return GetAllMonitors().Where(x => x.GetType().IsAssignableFrom(typeof (T))).Select(x => (T) x);
         }
@@ -50,7 +64,7 @@ namespace Merchello.Core.Observation
         /// <typeparam name="T">The type of the <see cref="IMonitor"/></typeparam>
         /// <param name="key">The key from the <see cref="MonitorForAttribute"/> (Guid)</param>
         /// <returns>A <see cref="IMonitor"/> of T</returns>
-        public T GetMonitorByKey<T>(Guid key) where T : IMonitorModel
+        public T GetMonitorByKey<T>(Guid key)
         {
             return (T)GetMonitorByKey(key);
         }
@@ -80,7 +94,7 @@ namespace Merchello.Core.Observation
         /// Gets a collection of all monitors for a particular observable trigger
         /// </summary>
         /// <typeparam name="T">The Type of the Trigger</typeparam>
-        public IEnumerable<IMonitor> GetMonitorsForTrigger<T>() where T : IMonitorModel
+        public IEnumerable<IMonitor> GetMonitorsForTrigger<T>()
         {
             return GetMonitorsForTrigger(typeof (T));
         }
@@ -92,7 +106,8 @@ namespace Merchello.Core.Observation
         {
             get
             {
-                var ctrArgs = new object[] { };
+                var ctrArgs =  new object[] { _notificationContext };
+
                 var monitors = new List<IMonitor>();
 
                 foreach (var et in InstanceTypes)

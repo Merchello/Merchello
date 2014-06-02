@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Merchello.Core.Gateways.Notification.Formatters;
+using Merchello.Core.Formatters;
 using Merchello.Core.Models;
 
 namespace Merchello.Core.Gateways.Notification
@@ -40,8 +40,8 @@ namespace Merchello.Core.Gateways.Notification
         /// Sends a <see cref="IFormattedNotificationMessage"/> given it's unique Key (Guid)
         /// </summary>
         /// <param name="messageKey">The unique key (Guid) of the <see cref="IFormattedNotificationMessage"/></param>
-        /// <param name="formatter">The <see cref="INotificationFormatter"/> to use to format the message</param>
-        void Send(Guid messageKey, INotificationFormatter formatter);
+        /// <param name="formatter">The <see cref="IFormatter"/> to use to format the message</param>
+        void Send(Guid messageKey, IFormatter formatter);
 
         /// <summary>
         /// Sends a <see cref="IFormattedNotificationMessage"/>
@@ -53,8 +53,8 @@ namespace Merchello.Core.Gateways.Notification
         /// Sends a <see cref="IFormattedNotificationMessage"/>
         /// </summary>
         /// <param name="notificationMessage">The <see cref="IFormattedNotificationMessage"/> to be sent</param>
-        /// <param name="formatter">The <see cref="INotificationFormatter"/> to use to format the message</param>
-        void Send(INotificationMessage notificationMessage, INotificationFormatter formatter);
+        /// <param name="formatter">The <see cref="IFormatter"/> to use to format the message</param>
+        void Send(INotificationMessage notificationMessage, IFormatter formatter);
 
         /// <summary>
         /// Gets the <see cref="INotificationMethod"/>

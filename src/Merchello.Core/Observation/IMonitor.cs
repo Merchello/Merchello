@@ -8,6 +8,7 @@ namespace Merchello.Core.Observation
     public interface IMonitor
     {
 
+        IDisposable Subscribe(ITriggerResolver resolver);
 
         /// <summary>
         /// The type being observed {T}

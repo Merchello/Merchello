@@ -120,5 +120,21 @@ namespace Merchello.Tests.IntegrationTests.Notifications
             //// Assert
             Assert.NotNull(trigger);
         }
+
+        /// <summary>
+        /// Test confirms that a collection of all monitors can be resolved
+        /// </summary>
+        [Test]
+        public void Can_Resolve_A_Collection_Of_All_Monitors()
+        {
+            //// Arrange
+            // handled in setup
+
+            //// Act
+            var monitor = MonitorResolver.Current.GetAllMonitors();
+
+            //// Assert
+            Assert.IsTrue(monitor.Any());
+        }
     }
 }

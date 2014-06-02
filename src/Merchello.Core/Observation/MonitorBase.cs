@@ -33,7 +33,7 @@ namespace Merchello.Core.Observation
         /// Subscribes itself to a <see cref="ITrigger"/>
         /// </summary>
         /// <param name="resolver"></param>
-        internal IDisposable Subscribe(ITriggerResolver resolver)
+        public IDisposable Subscribe(ITriggerResolver resolver)
         {
             var att = GetType().GetCustomAttribute<MonitorForAttribute>(false);
             if (att != null)
@@ -41,6 +41,7 @@ namespace Merchello.Core.Observation
                 var trigger = (IObservable<T>)resolver.GetTrigger(att.ObservableTrigger);
                 if (trigger != null)
                 {
+                    LogHelper.Info<MonitorBase<T>>(string.Format("{0} subscribing to {1}", GetType(), trigger.GetType()));
                     return trigger.Subscribe(this);                    
                 }
             }
