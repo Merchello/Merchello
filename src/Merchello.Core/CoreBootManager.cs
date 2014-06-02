@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Configuration;
+using System.Linq;
+using System.Threading;
 using Merchello.Core.Cache;
 using Merchello.Core.Configuration;
 using Merchello.Core.Gateways;
+using Merchello.Core.Models.MonitorModels;
 using Merchello.Core.Observation;
 using Merchello.Core.Services;
 using Umbraco.Core;
@@ -57,9 +60,9 @@ namespace Merchello.Core
             
             InitializeGatewayResolver(serviceContext, cache);
 
-            CreateMerchelloContext(serviceContext, cache);
-                       
             InitializeResolvers();
+
+            CreateMerchelloContext(serviceContext, cache);
 
             BindEventTriggers();
 
@@ -81,27 +84,39 @@ namespace Merchello.Core
         /// </remarks>
         protected void CreateMerchelloContext(ServiceContext serviceContext, CacheHelper cache)
         {
-
             var gateways = new GatewayContext(serviceContext, GatewayProviderResolver.Current);
             _merchelloContext = MerchelloContext.Current = new MerchelloContext(serviceContext, gateways, cache);
         }
 
 
         private void InitializeGatewayResolver(IServiceContext serviceContext, CacheHelper cache)
-        {
-            
+        {            
             if(!GatewayProviderResolver.HasCurrent)
             GatewayProviderResolver.Current = new GatewayProviderResolver(
             PluginManager.Current.ResolveGatewayProviders(),
             serviceContext.GatewayProviderService,
-            cache.RuntimeCache);
-                       
+            cache.RuntimeCache);                       
         }
 
         protected virtual void InitializeResolvers()
         {
-            if(!ObservableTriggerResolver.HasCurrent)
-            ObservableTriggerResolver.Current = new ObservableTriggerResolver(PluginManager.Current.ResolveObservableTriggers());
+            if(!TriggerResolver.HasCurrent)
+            TriggerResolver.Current = new TriggerResolver(PluginManager.Current.ResolveObservableTriggers());
+
+            if(!MonitorResolver.HasCurrent)
+            MonitorResolver.Current = new MonitorResolver(PluginManager.Current.ResolveObserverMonitors());
+        }
+
+        protected virtual void InitializeObserverSubscriptions()
+        {
+            if (!TriggerResolver.HasCurrent || !MonitorResolver.HasCurrent) return;
+
+            var monitors = MonitorResolver.Current.GetAllMonitors();
+            foreach (var monitor in monitors.Select(m => (MonitorBase<IMonitorModel>)m))
+            {
+                monitor.Subscribe(TriggerResolver.Current);
+            }
+            
         }
 
         protected void BindEventTriggers()

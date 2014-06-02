@@ -2,9 +2,10 @@
 
 (function () {
 
-    function productSelector($scope, merchelloProductService, notificationsService, dialogService, assetsService) {
+    function productEditor($scope, $routeParams, merchelloProductService, notificationsService, dialogService) {
 
-        $scope.product = {};
+        $scope.product = new merchello.Models.Product();
+        $scope.productVariant = new merchello.Models.ProductVariant();
         $scope.loaded = false;
 
         $scope.loadProduct = function (key) {
@@ -14,6 +15,7 @@
             promise.then(function (product) {
 
                 $scope.product = new merchello.Models.Product(product);
+                $scope.productVariant.copyFromProduct($scope.product);
 
                 $scope.loaded = true;
 
@@ -26,7 +28,7 @@
         $scope.selectedProductFromDialog = function (selectedProduct) {
 
             $scope.model.value = selectedProduct.key;
-            $scope.product = selectedProduct;
+            $scope.loadProduct($scope.model.value);
 
         };
 
@@ -45,11 +47,22 @@
         if (_.isString($scope.model.value)) {
             if ($scope.model.value.length > 0) {
                 $scope.loadProduct($scope.model.value);
+                $scope.creatingProduct = false;
+                $scope.creatingVariant = false;
+                $scope.editingVariant = false;
+            } else {
+                $scope.creatingProduct = true;
+                $scope.creatingVariant = false;
+                $scope.editingVariant = false;
             }
         }
 
+
+        function isCreating() {
+            return $routeParams.create;
+        }
     };
 
-    angular.module("umbraco").controller('Merchello.PropertyEditors.MerchelloProductSelector', productSelector);
+    angular.module("umbraco").controller('Merchello.PropertyEditors.MerchelloProductEditor', ['$scope', '$routeParams', 'merchelloProductService', 'notificationsService', 'dialogService', productEditor]);
 
 })();

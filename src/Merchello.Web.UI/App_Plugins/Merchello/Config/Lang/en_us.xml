@@ -114,10 +114,10 @@
 		<key alias="tracking">Inventory Tracking</key>
 		<!-- actions -->
 		<!-- phrases -->
-  </area>
+  </area>price
   <area alias="merchelloPlaceholders">
 		<key alias="enterProduct">Enter a product name</key>
-		<key alias="enterOrder">Start typing an order number or name...</key>
+		<key alias="enterOrder">Start typing an order number or name...</key>to
 		<key alias="addStyle">Add a style...</key>
   </area>
   <area alias="merchelloGeneral">
@@ -143,7 +143,10 @@
         <key alias="type"> Type</key>
         <key alias="amount"> Amount</key>
         <key alias="via"> Via</key>
-
+        <key alias="options">Options</key>
+        <key alias="select">Select</key>
+        <key alias="all">All</key>
+        <key alias="none">None</key>
   </area>
   <area alias="merchelloSettings">
     <key alias="storeDefaults">Store Defaults</key>
@@ -288,4 +291,28 @@
     <area alias="merchelloMethodDelete">
       <key alias="deleteConfirmation">Are you sure you want to remove the method</key>
     </area>
+  <area alias="merchelloProductEdit">
+    <key alias="enterProductName">Enter a product name</key>
+    <key alias="dragAndReorder">Drag to Reorder Options and Variants</key>
+    <key alias="reorderVariants">Reorder variants</key>
+    <key alias="dragAndReorderHelper">If you reorder your options and variants, it will change the order in which they appear on your storefront. Drag your options (ie size, style) vertically and variants (ie women's, small) horizontally.</key>
+    <key alias="changePrices">Change prices</key>
+    <key alias="changePrices">Change prices</key>
+    <key alias="updateInventory">Update inventory</key>
+    <key alias="duplicateVariant"> Duplicate Variant</key>
+    <key alias="inAnother">In another</key>
+    <key alias="editOptions">Edit Options</key>
+    <key alias="editOptionsHelper"><![CDATA[<small>Edit or add options, which will auto-update your variants</small>]]></key>
+    <key alias="optionName">Option Name</key>
+    <key alias="optionNameHelper"><![CDATA[<small>(e.g. Size, Style, Color)</small>]]></key>
+    <key alias="optionValue">Option Values</key>
+    <key alias="optionValueHelper"><![CDATA[<small>(e.g. red, green, blue)</small>]]></key>
+    <key alias="addStyle">Add a style...</key>
+    <key alias="addAnotherOption">Add Another Option</key>
+    <key alias="variantInformation">Variant Information</key>
+    <key alias="variantInformationHelper"><![CDATA[<small>Edit the variants for this product.</small>]]></key>
+    <key alias="selectProduct">Select Product...</key>
+    <key alias="selectMerchelloProduct">Select Merchello Product</key>
+    <key alias="selectYourProduct">Select Your Product</key>
+  </area>
 </language>

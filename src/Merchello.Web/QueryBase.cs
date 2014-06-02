@@ -6,6 +6,7 @@ using Merchello.Core.Gateways.Notification;
 using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Gateways.Taxation;
+using Merchello.Core.Observation;
 using Merchello.Core.Persistence.UnitOfWork;
 using Merchello.Core.Services;
 using Umbraco.Core;

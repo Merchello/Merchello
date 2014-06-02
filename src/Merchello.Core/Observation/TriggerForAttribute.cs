@@ -1,50 +1,55 @@
-﻿using System;
+using System;
 
-namespace Merchello.Core.Triggers
+namespace Merchello.Core.Observation
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-    internal class TriggerForAttribute : Attribute
-    {
-        /// <summary>
-        /// Gets the mandatory key for the trigger
-        /// </summary>        
-        public Guid Key { get; private set; }
-
+    public class TriggerForAttribute : Attribute
+    {       
         /// <summary>
         /// The name of the trigger
         /// </summary>
-        public string Name { get; private set; }
+        public string Alias { get; private set; }
 
         /// <summary>
         /// The "area" or category of the trigger
         /// </summary>
-        public string Area { get; private set; }
+        public Topic Topic { get; private set; }
 
         /// <summary>
         /// The type to defines the event to be handled
         /// </summary>
-        public Type Type { get; private set; }
+        /// <remarks>
+        /// Placeholder for "auto triggers" 
+        /// </remarks>
+        internal Type Type { get; private set; }
 
         /// <summary>
         /// The name of the event to be handled
         /// </summary>
-        public string HandleEvent { get; private set; }
+        /// <remarks>
+        /// Placeholder for "auto triggers" 
+        /// </remarks>
+        internal string HandleEvent { get; private set; }
 
         // ctor
-        public TriggerForAttribute(string key, string name, string area, Type type, string handleEvent)
-        {
-            Mandate.ParameterNotNullOrEmpty(key, "key");
-            Mandate.ParameterNotNullOrEmpty(name, "name");
-            Mandate.ParameterNotNullOrEmpty(area, "area");
-            Mandate.ParameterNotNull(type, "type");
-            Mandate.ParameterNotNullOrEmpty(handleEvent, "handleEvent");
+        public TriggerForAttribute(string alias)
+            : this(alias, Topic.Notifications, null, null)
+        { }
 
-            Key = new Guid(key);
-            Name = name;
-            Area = area;
+        // ctor
+        public TriggerForAttribute(string alias, Topic topic)
+            : this(alias, topic, null, null)
+        { }
+
+        // ctor
+        internal TriggerForAttribute(string alias, Topic topic, Type type, string handleEvent)
+        {
+            Mandate.ParameterNotNullOrEmpty(alias, "alias");
+           
+            Alias = alias;
+            Topic = topic;
             Type = type;
             HandleEvent = handleEvent;
         }
-
     }
 }

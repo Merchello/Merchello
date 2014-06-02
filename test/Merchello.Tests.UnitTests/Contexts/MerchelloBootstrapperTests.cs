@@ -4,7 +4,6 @@ using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Gateways.Taxation;
 using Merchello.Core.ObjectResolution;
-using Merchello.Core.Triggers;
 using Merchello.Tests.Base.SqlSyntax;
 using Merchello.Web;
 using NUnit.Framework;
