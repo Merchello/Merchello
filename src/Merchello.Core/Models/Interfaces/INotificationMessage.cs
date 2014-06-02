@@ -16,6 +16,12 @@ namespace Merchello.Core.Models
         Guid? TriggerKey { get; set; }
 
         /// <summary>
+        /// Optional key for Notification Monitor Rule
+        /// </summary>
+        [DataMember]
+        Guid? MonitorKey { get; set; }
+
+        /// <summary>
         /// The <see cref="INotificationMethod"/> key
         /// </summary>
         [DataMember]
@@ -33,12 +39,23 @@ namespace Merchello.Core.Models
         [DataMember]
         string Description { get; set; }
 
+        /// <summary>
+        /// The sender's "from" address
+        /// </summary>
+        [DataMember]
+        string FromAddress { get; }
+
+        /// <summary>
+        /// The Reply To address
+        /// </summary>
+        [DataMember]
+        string ReplyTo { get; set; }
 
         /// <summary>
         /// The path or text src
         /// </summary>
         [DataMember]
-        string Message { get; set; }
+        string BodyText { get; set; }
 
         /// <summary>
         /// The maximum length of the message to be sent
@@ -50,7 +67,7 @@ namespace Merchello.Core.Models
         /// True/false indicating whether or not the string value of Message is actually a path to a file to read
         /// </summary>
         [DataMember]
-        bool MessageIsFilePath { get; set; }
+        bool BodyTextIsFilePath { get; set; }
 
         /// <summary>
         /// The recipients of the notification

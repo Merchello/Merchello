@@ -7,7 +7,7 @@ namespace Merchello.Core.Events
     public class StatusChangeEventArgs<T> : CancellableObjectEventArgs<IEnumerable<T>>
     {
         /// <summary>
-        /// Constructor for accepting multiple entities that are used in the saving operation
+        /// Constructor for accepting multiple entities that are used in the status changing operation
         /// </summary>
         /// <param name="eventObject"></param>
         public StatusChangeEventArgs(IEnumerable<T> eventObject)

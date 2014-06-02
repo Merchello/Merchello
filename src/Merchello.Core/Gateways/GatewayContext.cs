@@ -4,6 +4,7 @@ using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Gateways.Taxation;
 using Merchello.Core.Models;
+using Merchello.Core.Observation;
 using Merchello.Core.Services;
 
 namespace Merchello.Core.Gateways
@@ -24,8 +25,10 @@ namespace Merchello.Core.Gateways
         {
             Mandate.ParameterNotNull(serviceContext, "serviceContext");
             Mandate.ParameterNotNull(resolver, "resolver");
+
             _gatewayProviderService = serviceContext.GatewayProviderService;
             _resolver = resolver;
+
 
             BuildGatewayContext(serviceContext.GatewayProviderService, serviceContext.StoreSettingService);
         }

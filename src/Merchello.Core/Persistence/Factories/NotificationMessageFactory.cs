@@ -11,14 +11,17 @@ namespace Merchello.Core.Persistence.Factories
     {
         public INotificationMessage BuildEntity(NotificationMessageDto dto)
         {
-            var notification = new NotificationMessage(dto.MethodKey, dto.Name)
+            var notification = new NotificationMessage(dto.MethodKey, dto.Name, dto.FromAddress)
             {
                 Key = dto.Key,
                 Description = dto.Description,
-                Message = dto.Message,
-                MaxLength = dto.MaxLength,                
+                BodyText = dto.BodyText,
+                ReplyTo =  dto.ReplyTo,
+                TriggerKey = dto.TriggerKey,
+                MonitorKey = dto.MonitorKey,
+                MaxLength = dto.MaxLength == 0 ? int.MaxValue : dto.MaxLength,                
                 Recipients = dto.Recipients,
-                MessageIsFilePath = dto.MessageIsFilePath,
+                BodyTextIsFilePath = dto.BodyTextIsFilePath,
                 SendToCustomer = dto.SendToCustomer,
                 Disabled = dto.Disabled,
                 UpdateDate = dto.UpdateDate,
@@ -37,10 +40,14 @@ namespace Merchello.Core.Persistence.Factories
                 Key = entity.Key,
                 MethodKey = entity.MethodKey,
                 Name = entity.Name,
+                FromAddress = entity.FromAddress,
+                ReplyTo = entity.ReplyTo,
+                TriggerKey = entity.TriggerKey,
+                MonitorKey = entity.MonitorKey,
                 Description = entity.Description,
-                Message = entity.Message,
-                MessageIsFilePath = entity.MessageIsFilePath,
-                MaxLength = entity.MaxLength,                
+                BodyText = entity.BodyText,
+                BodyTextIsFilePath = entity.BodyTextIsFilePath,
+                MaxLength = entity.MaxLength == int.MaxValue ? 0 : entity.MaxLength,                
                 Recipients = entity.Recipients,
                 SendToCustomer = entity.SendToCustomer,
                 Disabled = entity.Disabled,

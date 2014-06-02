@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Permissions;
 using System.Threading;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
@@ -15,9 +16,11 @@ namespace Merchello.Core.Services
 {
     /// <summary>
     /// Represents the GatewayProviderService
-    /// </summary>
+    /// </summary>    
     public class GatewayProviderService : IGatewayProviderService
     {
+        //TODO - we are adding so many services here, we should consider refactoring GatewayProviderBase to 
+        // TODO simply accept the ServiceContext
         private readonly IDatabaseUnitOfWorkProvider _uowProvider;
         private readonly RepositoryFactory _repositoryFactory;
         private readonly IInvoiceService _invoiceService;
@@ -28,6 +31,8 @@ namespace Merchello.Core.Services
         private readonly ITaxMethodService _taxMethodService;
         private readonly IPaymentService _paymentService;
         private readonly IPaymentMethodService _paymentMethodService;
+        private readonly INotificationMethodService _notificationMethodService;
+        private readonly INotificationMessageService _notificationMessageService;
 
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
@@ -35,22 +40,30 @@ namespace Merchello.Core.Services
          /// Constructor
          /// </summary>
          public GatewayProviderService()
-            : this(new RepositoryFactory(), new ShipMethodService(), new ShipRateTierService(), new ShipCountryService(), new InvoiceService(), new OrderService(), new TaxMethodService(), new PaymentService(),  new PaymentMethodService())
+            : this(new RepositoryFactory(), new ShipMethodService(), new ShipRateTierService(), new ShipCountryService(), new InvoiceService(), new OrderService(), new TaxMethodService(), new PaymentService(),  new PaymentMethodService(), new NotificationMethodService(), new NotificationMessageService())
         { }
 
          internal GatewayProviderService(RepositoryFactory repositoryFactory, IShipMethodService shipMethodService, 
              IShipRateTierService shipRateTierService, IShipCountryService shipCountryService, 
              IInvoiceService invoiceService, IOrderService orderService,
-             ITaxMethodService taxMethodService, IPaymentService paymentService, IPaymentMethodService paymentMethodService)
+             ITaxMethodService taxMethodService, IPaymentService paymentService, IPaymentMethodService paymentMethodService,
+             INotificationMethodService notificationMethodService, INotificationMessageService notificationMessageService)
             : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, shipMethodService, 
              shipRateTierService, shipCountryService, invoiceService, orderService, taxMethodService,
-             paymentService, paymentMethodService)
+             paymentService, paymentMethodService,
+             notificationMethodService, notificationMessageService)
         { }
 
         internal GatewayProviderService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, 
             IShipMethodService shipMethodService, IShipRateTierService shipRateTierService, 
-            IShipCountryService shipCountryService, IInvoiceService invoiceService, IOrderService orderService, ITaxMethodService taxMethodService, 
-            IPaymentService paymentService, IPaymentMethodService paymentMethodService)
+            IShipCountryService shipCountryService, 
+            IInvoiceService invoiceService, 
+            IOrderService orderService, 
+            ITaxMethodService taxMethodService, 
+            IPaymentService paymentService, 
+            IPaymentMethodService paymentMethodService, 
+            INotificationMethodService notificationMethodService, 
+            INotificationMessageService notificationMessageService)
         {
             Mandate.ParameterNotNull(provider, "provider");
             Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
@@ -62,6 +75,8 @@ namespace Merchello.Core.Services
             Mandate.ParameterNotNull(paymentMethodService, "paymentMethodService");
             Mandate.ParameterNotNull(invoiceService, "invoiceService");
             Mandate.ParameterNotNull(orderService, "orderService");
+            Mandate.ParameterNotNull(notificationMethodService, "notificationMethodService");
+            Mandate.ParameterNotNull(notificationMessageService, "notificationMessageService");
 
             _uowProvider = provider;
             _repositoryFactory = repositoryFactory;
@@ -73,6 +88,8 @@ namespace Merchello.Core.Services
             _taxMethodService = taxMethodService;
             _paymentService = paymentService;
             _paymentMethodService = paymentMethodService;
+            _notificationMethodService = notificationMethodService;
+            _notificationMessageService = notificationMessageService;
         }
 
 
@@ -228,7 +245,6 @@ namespace Merchello.Core.Services
         }
 
         #endregion
-
 
         #region AppliedPayments
 
@@ -391,15 +407,109 @@ namespace Merchello.Core.Services
         #region Notification
 
         /// <summary>
+        /// Creates a <see cref="INotificationMethod"/> and saves it to the database
+        /// </summary>
+        /// <param name="providerKey">The <see cref="IGatewayProviderSettings"/> key</param>
+        /// <param name="name">The name of the notification (used in back office)</param>
+        /// <param name="serviceCode">The notification service code</param>
+        /// <returns>An Attempt{<see cref="INotificationMethod"/>}</returns>
+        public Attempt<INotificationMethod> CreateNotificationMethodWithKey(Guid providerKey, string name, string serviceCode)
+        {
+            return _notificationMethodService.CreateNotificationMethodWithKey(providerKey, name, serviceCode);
+        }
+
+        /// <summary>
+        /// Saves a <see cref="INotificationMethod"/>
+        /// </summary>
+        /// <param name="method">The <see cref="INotificationMethod"/> to be saved</param>
+        public void Save(INotificationMethod method)
+        {
+            _notificationMethodService.Save(method);
+        }
+
+        /// <summary>
+        /// Deletes a <see cref="INotificationMethod"/>
+        /// </summary>
+        /// <param name="method">The <see cref="INotificationMethod"/> to be deleted</param>
+        public void Delete(INotificationMethod method)
+        {
+            _notificationMethodService.Delete(method);
+        }
+
+        /// <summary>
+        /// Creates a <see cref="INotificationMessage"/> and saves it to the database
+        /// </summary>
+        /// <param name="methodKey">The <see cref="INotificationMethod"/> key</param>
+        /// <param name="name">The name of the message (primarily used in the back office UI)</param>
+        /// <param name="description">The name of the message (primarily used in the back office UI)</param>
+        /// <param name="fromAddress">The senders or "from" address</param>
+        /// <param name="recipients">A collection of recipient address</param>
+        /// <param name="bodyText">The body text of the message</param>
+        /// <param name="triggerKey">An optional event trigger key reference</param>
+        /// <returns>Attempt{INotificationMessage}</returns>
+        public Attempt<INotificationMessage> CreateNotificationMessageWithKey(Guid methodKey, string name, string description, string fromAddress,
+            IEnumerable<string> recipients, string bodyText, Guid? triggerKey = null)
+        {
+            return _notificationMessageService.CreateNotificationMethodWithKey(methodKey, name, description, fromAddress, recipients, bodyText, triggerKey);
+        }
+
+        /// <summary>
+        /// Saves a <see cref="INotificationMessage"/>
+        /// </summary>
+        /// <param name="message">The <see cref="INotificationMessage"/> to save</param>
+        public void Save(INotificationMessage message)
+        {
+            _notificationMessageService.Save(message);
+        }
+
+        /// <summary>
+        /// Deletes a <see cref="INotificationMessage"/>
+        /// </summary>
+        /// <param name="message">The <see cref="INotificationMessage"/> to be deleted</param>
+        public void Delete(INotificationMessage message)
+        {
+            _notificationMessageService.Delete(message);
+        }
+
+        /// <summary>
         /// Gets a collection of <see cref="INotificationMethod"/> for a give NotificationGatewayProvider
         /// </summary>
         /// <param name="providerKey">The unique 'key' of the NotificationGatewayProvider</param>
         /// <returns>A collection of <see cref="INotificationMethod"/></returns>
         public IEnumerable<INotificationMethod> GetNotificationMethodsByProviderKey(Guid providerKey)
         {
-            throw new NotImplementedException();
+            return _notificationMethodService.GetNotifcationMethodsByProviderKey(providerKey);
         }
 
+        /// <summary>
+        /// Gets a collection of <see cref="INotificationMessage"/> associated with a <see cref="INotificationMethod"/>
+        /// </summary>
+        /// <param name="notificationMethodKey">The key (Guid) of the <see cref="INotificationMethod"/></param>
+        /// <returns>A collection of <see cref="INotificationMessage"/></returns>
+        public IEnumerable<INotificationMessage> GetNotificationMessagesByMethodKey(Guid notificationMethodKey)
+        {
+            return _notificationMessageService.GetNotificationMessagesByMethodKey(notificationMethodKey);
+        }
+
+        /// <summary>
+        /// Gets a <see cref="INotificationMethod"/> by it's unique key(Guid)
+        /// </summary>
+        /// <param name="notificationMessageKey">The unique key (Guid) of the <see cref="INotificationMessage"/></param>
+        /// <returns>A <see cref="INotificationMessage"/></returns>
+        public INotificationMessage GetNotificationMessageByKey(Guid notificationMessageKey)
+        {
+            return _notificationMessageService.GetByKey(notificationMessageKey);
+        }
+
+        /// <summary>
+        /// Gets a collection of <see cref="INotificationMessage"/>s based on a monitor key
+        /// </summary>
+        /// <param name="monitorKey">The Notification Monitor Key (Guid)</param>
+        /// <returns>A collection of <see cref="INotificationMessage"/></returns>
+        public IEnumerable<INotificationMessage> GetNotificationMessagesByMonitorKey(Guid monitorKey)
+        {
+            return _notificationMessageService.GetNotificationMessagesByMonitorKey(monitorKey);
+        }
 
         #endregion
 

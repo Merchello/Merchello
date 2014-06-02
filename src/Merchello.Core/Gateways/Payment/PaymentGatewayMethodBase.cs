@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Merchello.Core.Configuration;
+using Merchello.Core.Gateways.Notification;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Umbraco.Core;

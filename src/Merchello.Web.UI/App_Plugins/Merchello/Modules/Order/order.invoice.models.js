@@ -15,6 +15,8 @@
 			self.price = 0.0;
 			self.exported = false;
 			self.backOrder = false;
+			self.extendedData = [];
+			self.productVariant = {};
 		} else {
 			self.key = data.key;
 			self.containerKey = data.containerKey;
@@ -26,6 +28,25 @@
 			self.price = data.price;
 			self.exported = data.exported;
 			self.backOrder = data.backOrder;
+			self.extendedData = data.extendedData;
+			self.productVariant = {};
+		}
+
+		self.getProductVariantKey = function () {
+			var variantKey = '';
+			if (self.extendedData.length > 0) {
+				variantKey = _.find(self.extendedData, function(extDataItem) {
+					return extDataItem['key'] == "merchProductVariantKey";
+				});
+			}
+			if (variantKey === "undefined") {
+				variantKey = '';
+			}
+			return variantKey;
+		};
+
+		self.setProductVariant = function(variant) {
+			self.productVariant = variant;
 		}
 	};
 

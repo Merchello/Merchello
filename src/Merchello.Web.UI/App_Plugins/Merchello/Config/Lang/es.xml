@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<language alias="es" intName="Spanish" localName="español" lcid="10" culture="es-ES">
+	<area alias="merchelloHeadline">
+		<key alias="catalog">Catálogo</key>
+	</area>
+	<area alias="merchelloCatalog">
+		<key alias="product">Producto</key>
+		<key alias="sku">SKU</key>
+		<key alias="price">Precio</key>
+		<key alias="newProduct">Nuevo Producto</key>
+		<key alias="noProduct">Usted no tiene productos.</key>
+		<key alias="newProductPrompt">¿Qué tal crear una ahora? Basta con pulsar el botón Nuevo Producto.</key>
+		<key alias="limitSelect">Número de productos para mostrar</key>
+	</area>
+	<area alias="merchelloPlaceholders">
+	</area>
+	<area alias="merchelloGeneral">
+		<key alias="filter">Filtro</key>
+		<key alias="filterBy">Filtrar por tipo de</key>
+	</area>
+</language>

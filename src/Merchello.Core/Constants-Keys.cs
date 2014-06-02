@@ -87,6 +87,11 @@ namespace Merchello.Core
             {
                 public static Guid CashPaymentProviderKey = new Guid("B2612C3D-8BF0-411C-8C56-32E7495AE79C");
             }
+
+            public static class Notification
+            {
+                public static Guid SmtpNotificationProviderKey = new Guid("5F2E88D1-6D07-4809-B9AB-D4D6036473E9");
+            }
         }
 
         /// <summary>

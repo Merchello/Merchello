@@ -13,11 +13,18 @@ namespace Merchello.Core.Models.Rdbms
         [PrimaryKeyColumn(AutoIncrement = false)]
         [Constraint(Default = "newid()")]
         public Guid Key { get; set; }
-
        
         [Column("methodKey")]
         [ForeignKey(typeof(NotificationMethodDto), Name = "FK_merchNotificationMessage_merchNotificationMethod", Column = "pk")]
         public Guid MethodKey { get; set; }
+
+        [Column("triggerKey")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public Guid? TriggerKey { get; set; }
+
+        [Column("monitorKey")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public Guid? MonitorKey { get; set; }
 
         [Column("name")]
         public string Name { get; set; }
@@ -26,15 +33,24 @@ namespace Merchello.Core.Models.Rdbms
         [NullSetting(NullSetting = NullSettings.Null)]
         public string Description { get; set; }
 
+        [Column("fromAddress")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public string FromAddress { get; set; }
 
-        [Column("message")]
-        public string Message { get; set; }
+        [Column("replyTo")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public string ReplyTo { get; set; }
+
+        [Column("bodyText")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        [SpecialDbType(SpecialDbTypes.NTEXT)]
+        public string BodyText { get; set; }
 
         [Column("maxLength")]
         public int MaxLength { get; set; }
 
-        [Column("messageIsFilePath")]
-        public bool MessageIsFilePath { get; set; }
+        [Column("bodyTextIsFilePath")]
+        public bool BodyTextIsFilePath { get; set; }
 
         [Column("recipients")]
         public string Recipients { get; set; }

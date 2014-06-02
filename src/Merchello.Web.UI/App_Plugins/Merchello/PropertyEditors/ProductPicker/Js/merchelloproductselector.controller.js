@@ -4,17 +4,6 @@
 
     function productSelector($scope, merchelloProductService, notificationsService, dialogService, assetsService) {
 
-        // TODO: this doesn't seem to hook up the angular correctly.  Check with Per if this is possible.
-        // load the dialog controller javascript on demand, then load the product if it worked.
-        //assetsService.loadJs("/App_Plugins/Merchello/PropertyEditors/ProductPicker/Js/merchelloproductdialog.controller.js").then(
-        //    function () {
-        //        if (_.isString($scope.model.value)) {
-        //            if ($scope.model.value.length > 0) {
-        //                $scope.loadProduct($scope.model.value);
-        //            }
-        //        }
-        //    });
-
         $scope.product = {};
         $scope.loaded = false;
 

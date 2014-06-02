@@ -7,6 +7,7 @@ using Merchello.Core.Gateways.Notification;
 using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Gateways.Taxation;
+using Merchello.Core.Observation;
 using Merchello.Core.Persistence.UnitOfWork;
 using Merchello.Core.Services;
 using Merchello.Examine.DataServices;
@@ -25,8 +26,6 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
             // sets up the Umbraco SqlSyntaxProvider Singleton
             SqlSyntaxProviderTestHelper.EstablishSqlSyntax(syntax);
 
-            
-            var mockGatewayProviderResolver = new Mock<IGatewayProviderResolver>(MockBehavior.Loose);
 
             var serviceContext = new ServiceContext(new PetaPocoUnitOfWorkProvider());
             return  new MerchelloContext(serviceContext,
