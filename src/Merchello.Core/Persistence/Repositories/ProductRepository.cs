@@ -256,10 +256,10 @@ namespace Merchello.Core.Persistence.Repositories
         }
 
         private void SaveProductOptions(IProduct product)
-        {
-            if (!product.DefinesOptions) return;
-
+        {            
             var existing = GetProductOptionCollection(product.Key);
+            if (!product.DefinesOptions && !existing.Any()) return;
+
             //ensure all ids are in the new list
             var resetSorts = false;
             foreach (var ex in existing)

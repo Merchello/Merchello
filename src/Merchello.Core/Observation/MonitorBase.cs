@@ -41,7 +41,7 @@ namespace Merchello.Core.Observation
                 var trigger = (IObservable<T>)resolver.GetTrigger(att.ObservableTrigger);
                 if (trigger != null)
                 {
-                    LogHelper.Info<MonitorBase<T>>(string.Format("{0} subscribing to {1}", GetType(), trigger.GetType()));
+                    LogHelper.Info<MonitorBase<T>>(string.Format("{0} subscribing to {1}", GetType().Name, trigger.GetType().Name));
                     return trigger.Subscribe(this);                    
                 }
             }
