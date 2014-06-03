@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Principal;
+using System.Text;
 using Merchello.Core.Configuration;
+using Merchello.Core.Models;
 using Umbraco.Core;
 
 namespace Merchello.Core.Formatters
@@ -112,14 +113,15 @@ namespace Merchello.Core.Formatters
         private const string IterationStart = "{{IterationStart[";
         private const string IterationEnd = "{{IterationEnd[";
         private const string IterationCap = "]}}";
-        
+
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="value"></param>
+        /// <param name="count"></param>
         /// <returns></returns>
-        internal static string ExplodeIterations(string value)
+        internal static string ExplodeLineItemIterations(string value, int count)
         {
             var token = GetIterationToken(value);
             if (string.IsNullOrEmpty(token)) return token;
@@ -139,9 +141,15 @@ namespace Merchello.Core.Formatters
             // this is what we are going to build the replacements with
             var repeatBlock = valueBlock.Replace(startMarker, string.Empty).Replace(endMarker, string.Empty);
 
+            var sb = new StringBuilder();
 
 
-            return value;
+            for(int i = 0; i < count; i++)
+            {
+                sb.AppendFormat(repeatBlock);
+            }
+
+            return sb.ToString();
         }
 
         /// <summary>
