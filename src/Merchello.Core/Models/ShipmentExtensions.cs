@@ -77,7 +77,8 @@ namespace Merchello.Core.Models
                 Region = shipment.ToRegion,
                 PostalCode = shipment.ToPostalCode,
                 CountryCode = shipment.ToCountryCode,
-                IsCommercial = shipment.ToIsCommercial
+                IsCommercial = shipment.ToIsCommercial,
+                Email = shipment.Email
             };
         }
 

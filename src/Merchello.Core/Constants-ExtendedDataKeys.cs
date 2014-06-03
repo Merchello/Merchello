@@ -20,6 +20,7 @@ namespace Merchello.Core
                     "merchName",
                     "merchSku",
                     "merchExported",
+                    "merchPaymentMethod",
                     "merchProductKey",
                     "merchProductVariantKey",
                     "merchCostOfGoods",
@@ -70,6 +71,9 @@ namespace Merchello.Core
             public static string Name = "merchName";
             public static string Sku = "merchSku";
             public static string Exported = "merchExported";
+
+            // Payment
+            public static string PaymentMethod = "merchPaymentMethod";
 
             // ProductVariant
             public static string ProductKey = "merchProductKey";

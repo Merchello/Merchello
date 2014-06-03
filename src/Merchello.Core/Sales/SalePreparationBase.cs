@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Merchello.Core.Builders;
-using Merchello.Core.Gateways.Notification;
 using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Models;
@@ -136,6 +135,36 @@ namespace Merchello.Core.Sales
         }
 
         /// <summary>
+        /// Clears all <see cref="IShipmentRateQuote"/>s previously saved
+        /// </summary>
+        public void ClearShipmentRateQuotes()
+        {
+            var items = _itemCache.Items.Where(x => x.LineItemType == LineItemType.Shipping).ToArray();
+            foreach (var item in items)
+            {
+                _itemCache.Items.RemoveItem(item.Sku);
+            }
+            _merchelloContext.Services.ItemCacheService.Save(_itemCache);
+        }
+
+        /// <summary>
+        /// Saves a <see cref="IPaymentMethod"/> to <see cref="ICustomerBase"/> extended data
+        /// </summary>
+        public void SavePaymentMethod(IPaymentMethod paymentMethod)
+        {
+            _customer.ExtendedData.AddPaymentMethod(paymentMethod);
+        }
+
+        /// <summary>
+        /// Gets a <see cref="IPaymentMethod"/> from <see cref="ICustomerBase"/> extended data
+        /// </summary>
+        public IPaymentMethod GetPaymentMethod()
+        {
+            var paymentMethodKey = _customer.ExtendedData.GetPaymentMethodKey();
+            return paymentMethodKey.Equals(Guid.Empty) ? null : _merchelloContext.Gateways.Payment.GetPaymentGatewayMethodByKey(paymentMethodKey).PaymentMethod;
+        }
+
+        /// <summary>
         /// Maps the <see cref="IShipmentRateQuote"/> to a <see cref="ILineItem"/> 
         /// </summary>
         /// <param name="shipmentRateQuote">The <see cref="IShipmentRateQuote"/> to be added as a <see cref="ILineItem"/></param>
@@ -154,8 +183,7 @@ namespace Merchello.Core.Sales
         /// </remarks>
         public virtual bool IsReadyToInvoice()
         {
-            return (_customer.ExtendedData.GetAddress(AddressType.Billing) != null) &&
-                   (_customer.ExtendedData.GetAddress(AddressType.Shipping) != null);
+            return (_customer.ExtendedData.GetAddress(AddressType.Billing) != null);
         }
 
 
