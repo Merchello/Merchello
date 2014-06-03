@@ -445,12 +445,11 @@ namespace Merchello.Core.Services
         /// <param name="fromAddress">The senders or "from" address</param>
         /// <param name="recipients">A collection of recipient address</param>
         /// <param name="bodyText">The body text of the message</param>
-        /// <param name="triggerKey">An optional event trigger key reference</param>
         /// <returns>Attempt{INotificationMessage}</returns>
         public Attempt<INotificationMessage> CreateNotificationMessageWithKey(Guid methodKey, string name, string description, string fromAddress,
-            IEnumerable<string> recipients, string bodyText, Guid? triggerKey = null)
+            IEnumerable<string> recipients, string bodyText)
         {
-            return _notificationMessageService.CreateNotificationMethodWithKey(methodKey, name, description, fromAddress, recipients, bodyText, triggerKey);
+            return _notificationMessageService.CreateNotificationMethodWithKey(methodKey, name, description, fromAddress, recipients, bodyText);
         }
 
         /// <summary>

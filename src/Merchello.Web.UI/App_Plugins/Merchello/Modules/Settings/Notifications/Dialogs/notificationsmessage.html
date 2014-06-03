@@ -9,12 +9,16 @@
             <div class="row-fluid">
                 <div class="col-xs-8 span8">
                     <label for="event"><localize key="merchelloNotificationsMessage_attachedEvent" /></label>
-                    <select name="event" class="col-xs-8 span8" data-ng-model="dialogData.monitorKey" data-ng-options="n.name for n in dialogData.notificationTriggers track by n.monitorKey"></select>
+                    <select name="event" class="col-xs-8 span8" data-ng-model="dialogData.monitorKey" data-ng-options="n.name for n in dialogData.notificationTriggers track by n.monitorKey" required></select>
                 </div>
             </div>
             <div class="form-group row-fluid">
                 <label><localize key="general_name" /></label>
-                <input type="text" class="col-xs-12 span12" data-ng-model="dialogData.name" />
+                <input type="text" class="col-xs-12 span12" data-ng-model="dialogData.name" required />
+            </div>
+            <div class="form-group row-fluid">
+                <label><localize key="merchelloNotificationsMessage_fromEmail" /></label>
+                <input type="text" class="col-xs-12 span12" data-ng-model="dialogData.fromAddress" required/>
             </div>
             <div class="form-group row-fluid">
                 <label><localize key="merchelloNotificationsEdit_description " /></label>
@@ -34,6 +38,7 @@
                 </a>
 
                 <button class="btn btn-primary"
+                        data-ng-disabled="addManualNotificationMessageForm.$invalid"
                         data-ng-click="submit(dialogData)">
                     <localize key="buttons_save"></localize>
                 </button>

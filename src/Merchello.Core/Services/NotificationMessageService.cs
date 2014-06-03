@@ -48,11 +48,10 @@ namespace Merchello.Core.Services
         /// <param name="fromAddress">The senders or "from" address</param>
         /// <param name="recipients">A collection of recipient address</param>
         /// <param name="bodyText">The body text of the message</param>
-        /// <param name="triggerKey">An optional event trigger key reference</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         /// <returns>Attempt{INotificationMessage}</returns>
         public Attempt<INotificationMessage> CreateNotificationMethodWithKey(Guid methodKey, string name, string description, string fromAddress,
-            IEnumerable<string> recipients, string bodyText, Guid? triggerKey = null, bool raiseEvents = true)
+            IEnumerable<string> recipients, string bodyText, bool raiseEvents = true)
         {
             var recipientArray = recipients as string[] ?? recipients.ToArray();
 
@@ -64,8 +63,7 @@ namespace Merchello.Core.Services
             {
                 Description = description,
                 BodyText = bodyText,
-                Recipients = string.Join(",", recipientArray),
-                TriggerKey = triggerKey
+                Recipients = string.Join(",", recipientArray)
             };
 
             if(raiseEvents)

@@ -282,8 +282,6 @@ namespace Merchello.Web.Editors
         {
             try
             {
-                message.FromAddress = "wesley@proworks.com";
-                message.TriggerKey = Guid.NewGuid();
                 var provider = _notificationContext.GetProviderByMethodKey(message.MethodKey);
 
                 var method = provider.GetNotificationGatewayMethodByKey(message.MethodKey);

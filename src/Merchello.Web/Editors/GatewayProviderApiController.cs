@@ -34,7 +34,7 @@ namespace Merchello.Web.Editors
         /// </summary>
         /// <param name="merchelloContext"></param>
         public GatewayProviderApiController(IMerchelloContext merchelloContext)
-            : base((MerchelloContext) merchelloContext)
+            : base((MerchelloContext) merchelloContext) 
         {
             _gatewayContext = merchelloContext.Gateways;
             _gatewayProviderService = merchelloContext.Services.GatewayProviderService;
