@@ -141,7 +141,7 @@ namespace Merchello.Core.Formatters
 
 
 
-            return repeatBlock;
+            return value;
         }
 
         /// <summary>

@@ -95,8 +95,7 @@
 		'~/App_Plugins/Merchello/Modules/Settings/GatewayProviders/Dialogs/smtp.notifications.providersettings.controller.js',
 		'~/App_Plugins/Merchello/Modules/Settings/Vendors/vendors.controller.js',
 		'~/App_Plugins/Merchello/PropertyEditors/ProductPicker/Js/merchelloproductdialog.controller.js',
-		'~/App_Plugins/Merchello/PropertyEditors/ProductPicker/Js/merchelloproductselector.controller.js',		
-		'~/App_Plugins/Merchello/Common/Js/merchello.main.module.js'
+		'~/App_Plugins/Merchello/PropertyEditors/ProductPicker/Js/merchelloproductselector.controller.js'
 	],
 	css: [
 		'~/App_Plugins/Merchello/Common/Css/merchello.css',

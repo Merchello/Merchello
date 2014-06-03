@@ -113,10 +113,14 @@ namespace Merchello.Core
 
             var monitors = MonitorResolver.Current.GetAllMonitors();
 
+            LogHelper.Info<CoreBootManager>("Starting subscribing Monitors to Triggers");
+
             foreach (var monitor in monitors)
             {
                 monitor.Subscribe(TriggerResolver.Current);
             }
+
+            LogHelper.Info<Umbraco.Core.CoreBootManager>("Finished subscribing Monitors to Triggers");
             
         }
 
