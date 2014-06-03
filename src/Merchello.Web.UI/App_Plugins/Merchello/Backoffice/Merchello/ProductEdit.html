@@ -11,16 +11,17 @@
             <div class="span4">
                 <umb-content-name 
                     ng-model="product.name" 
-                    placeholder="Enter a product name">
+                                  localize="placeholder"
+                    placeholder="@merchelloProductEdit_enterProductName">
                 </umb-content-name>
             </div>
 
             <div class="col-xs-8 span8">
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
                     <div class="btn-group">
-                        <a data-ng-href="#/merchello/merchello/ProductVariantEdit/{{product.key}}?createvariant" data-ng-hide="product.hasAvailableVariantPermutiations() == 0" class="btn">Add a Variant</a>
-                        <a data-ng-click="delete()" class="btn">Delete Product</a>
-                        <a data-ng-disabled="productForm.$invalid" data-ng-click="save(productForm)" class="btn btn-success">Save</a>
+                        <a data-ng-href="#/merchello/merchello/ProductVariantEdit/{{product.key}}?createvariant" data-ng-hide="product.hasAvailableVariantPermutiations() == 0" class="btn"><localize key="merchelloVariant_addVariant" /></a>
+                        <a data-ng-click="delete()" class="btn"><localize key="merchelloVariant_deleteProduct" /></a>
+                        <a data-ng-disabled="productForm.$invalid" data-ng-click="save(productForm)" class="btn btn-success"><localize key="buttons_save" /></a>
                     </div>
                 </div>
             </div>
@@ -28,10 +29,10 @@
             <!-- Tabs for Variants & Options -->
             <ul class="nav nav-tabs umb-nav-tabs span12">
                 <li class="ng-scope" data-ng-class="{active: currentTab == 'Variants'}" >
-    	            <a data-ng-click="selectTab('Variants')"  data-toggle="tab" class="ng-binding">Variants</a>
+                    <a data-ng-click="selectTab('Variants')"  data-toggle="tab" class="ng-binding"><localize key="merchelloVariant_variant"/></a>
                 </li>
                 <li class="ng-scope" data-ng-class="{active: currentTab == 'Options'}">
-                    <a data-ng-click="selectTab('Options')" data-toggle="tab" class="ng-binding">Options</a>
+                    <a data-ng-click="selectTab('Options')" data-toggle="tab" class="ng-binding"><localize key="merchelloGeneral_options" /></a>
                 </li>
     	    </ul>
 
@@ -42,9 +43,9 @@
                 <!-- Variants Tab -->
                 <div class="control-group umb-control-group" data-ng-show="currentTab == 'Variants'">
                     <label class="merchello-control-label">
-                        Variant Information
-                        <small>Edit the variants for this product.</small>
-                        <a data-ng-click="reorderVariants=!reorderVariants"><i class="icon-ordered-list"></i> Reorder variants</a>
+                        <localize key="merchelloProductEdit_variantInformation" />
+                        <localize key="merchelloProductEdit_variantInformationHelper" />
+                        <a data-ng-click="reorderVariants=!reorderVariants"><i class="icon-ordered-list"></i> <localize key="merchelloProductEdit_reorderVariants" /></a>
                     </label>
                     
 
@@ -58,8 +59,8 @@
                         <!-- Appears when Reorder Variants is clicked -->
                         <div class="well row-fluid col-xs-10 span10"  data-ng-class="{ 'open': reorderVariants, 'closed': (!reorderVariants) }">
                             <button class="btn close" data-ng-click="reorderVariants=false"><i class="icon-delete"></i></button>
-                            <h3>Drag to Reorder Options and Variants</h3>
-                            <p>If you reorder your options and variants, it will change the order in which they appear on your storefront. Drag your options (ie size, style) vertically and variants (ie women's, small) horizontally.</p>
+                            <h3><localize key="merchelloProductEdit_dragAndReorder"/></h3>
+                            <p><localize key="merchelloProductEdit_dragAndReorderHelper" /></p>
 
                             <ul class="reorder" ui-sortable="sortableOptions" ng-model="product.productOptions">
                                 <li data-ng-repeat="option in product.productOptions">
@@ -79,7 +80,7 @@
                         ----------------------------------------------------------------------------------------->
 
                         <div class="well col-xs-10 span10">                           
-                            Select: <span><a data-ng-click="selectVariants('All')">All</a></span><span>, <a data-ng-click="selectVariants('None')">None</a></span><span data-ng-repeat="attribute in product.flattened()">, <a data-ng-click="selectVariants(attribute.name)">{{attribute.name}}</a></span>
+                            <localize key="merchelloGeneral_select" />: <span><a data-ng-click="selectVariants('All')"><localize key="merchelloGeneral_all"/></a></span><span>, <a data-ng-click="selectVariants('None')"><localize key="merchelloGeneral_none" /></a></span><span data-ng-repeat="attribute in product.flattened()">, <a data-ng-click="selectVariants(attribute.name)">{{attribute.name}}</a></span>
                         </div>
 
                         <div class="col-xs-10 span10">
@@ -95,17 +96,17 @@
                                         </th>
                                         <th data-ng-click="changeSortOrder('sku')" data-ng-class="{'sorted': sortProperty == 'sku'}">
                                             <i data-ng-class="{'icon-navigation-up': sortProperty == 'sku', 'icon-navigation-down': sortProperty == '-sku'}"></i>
-                                            SKU
+                                            <localize key="merchelloGeneral_sku" />
                                         </th>
                                         <th data-ng-click="changeSortOrder('price')" data-ng-class="{'sorted': sortProperty == 'price'}">
                                             <i data-ng-class="{'icon-navigation-up': sortProperty == 'price', 'icon-navigation-down': sortProperty == '-price'}"></i>
-                                            Price
+                                            <localize key="merchelloGeneral_price" />
                                         </th>
                                         <th data-ng-click="changeSortOrder('totalInventoryCount')" data-ng-class="{'sorted': sortProperty == 'totalInventoryCount'}">
                                             <i data-ng-class="{'icon-navigation-up': sortProperty == 'totalInventoryCount', 'icon-navigation-down': sortProperty == '-totalInventoryCount'}"></i> 
-                                            Total Qty
+                                            <localize key="merchelloGeneral_total" /> <localize key="merchelloGeneral_quantity" />
                                         </th>
-                                        <th>Edit</th>
+                                        <th><localize key="general_edit" /></th>
                                     </tr>
                                     <!-- Displays the bulk action button & dropdown menu when the checkbox is selected. Replaces the normal header TR -->
                                     <tr data-ng-show="allVariants">
@@ -113,12 +114,12 @@
                                             <div class="btn-group" data-ng-class="{ 'open': bulkAction }">
                                                 <a data-ng-click="bulkAction = !bulkAction" class="btn dropdown-toggle" data-toggle="dropdown">Bulk Action ({{selectedVariants().length}} Variants) <i class="icon-navigation-down"></i></a>
                                                 <ul class="dropdown-menu">
-                                                    <li><a data-ng-click="changePrices()">Change prices</a></li>
-                                                    <li><a data-ng-click="updateInventory()">Update inventory</a></li>
-                                                    <li><a data-ng-click="deleteVariants()">Delete variants</a></li>
+                                                    <li><a data-ng-click="changePrices()"><localize key="merchelloProductEdit_changePrices" /></a></li>
+                                                    <li><a data-ng-click="updateInventory()"><localize key="merchelloProductEdit_updateInventory" /></a></li>
+                                                    <li><a data-ng-click="deleteVariants()"><localize key="merchelloVariant_deleteVariant" /></a></li>
                                                     <li class="divider"></li>
-                                                    <li class="header">Duplicate Variants</li>
-                                                    <li data-ng-repeat="option in product.productOptions"><a data-ng-click="duplicateVariants(option)">In another {{option.name}}</a></li>
+                                                    <li class="header"><localize key="merchelloProductEdit_duplicateVariant" /></li>
+                                                    <li data-ng-repeat="option in product.productOptions"><a data-ng-click="duplicateVariants(option)"><localize key="merchelloProductEdit_inAnother" /> {{option.name}}</a></li>
                                                 </ul>
                                             </div>
                                         </th>
@@ -134,28 +135,14 @@
                                         <td>{{variant.sku}}</td>
                                         <td>{{variant.price}}</td>
                                         <td>{{variant.totalInventoryCount}}</td>
-                                        <td><a data-ng-href="#/merchello/merchello/ProductVariantEdit/{{variant.productKey}}?variantid={{variant.key}}">edit</a></td>
+                                        <td><a data-ng-href="#/merchello/merchello/ProductVariantEdit/{{variant.productKey}}?variantid={{variant.key}}"><localize key="general_edit" /></a></td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
 
-                    <div class="control-group umb-control-group">
-                        <label class="merchello-control-label">
-                            <label><input data-ng-model="debugging" type="checkbox" /> Debug</label>
-                            <small>Check to show debugging info</small>
-                        </label>
-
-                        <div class="merchello-controls">
-
-                            <div data-ng-show="debugging">
-                                <h3>Product</h3>
-                                <div>{{product | json}}</div>
-                           </div>
-
-                        </div>
-                    </div>
+                    <merchello-debug-section data-props-to-debug="product"></merchello-debug-section>
                     
                 </div>
 
@@ -164,8 +151,8 @@
                 ----------------------------------------------------------------------------------------->
                 <div class="control-group umb-control-group" data-ng-show="currentTab == 'Options'">
                     <label class="merchello-control-label">
-                        Edit Options
-                        <small>Edit or add options, which will auto-update your variants</small>
+                        <localize key="merchelloProductEdit_editOptions" />
+                        <localize key="merchelloProductEdit_editOptionsHelper" />
                     </label>
 
                     <div class="merchello-controls row-fluid">
@@ -174,18 +161,18 @@
                             <table class="table product-options">
                                 <tr>
                                     <th>
-                                        Option Name
-                                        <small>(e.g. Size, Style, Color)</small>
+                                        <localize key="merchelloProductEdit_optionName" />
+                                        <localize key="merchelloProductEdit_optionNameHelper" />
                                     </th>
                                     <th>
-                                        Option Values
-                                        <small>(e.g. red, green, blue)</small>
+                                        <localize key="merchelloProductEdit_optionValue" />
+                                        <localize key="merchelloProductEdit_optionValueHelper" />
                                     </th>
                                 </tr>
                                 <tr data-ng-repeat="option in product.productOptions | orderBy:'sortOrder'">
                                     <td>
                                         <a data-ng-click="removeOption(option)" class="btn btn-small btn-warning"><i class="icon-trash"></i></a>                                        
-                                        <input class="form-control col-xs-8 span8" type="text" placeholder="Add a style..." data-ng-model="option.name" />
+                                        <input class="form-control col-xs-8 span8" type="text" localize="placeholder" placeholder="@merchelloProductEdit_addStyle" data-ng-model="option.name" />
                                     </td>
                                     <td>
                                         <tag-manager option="option"></tag-manager>
@@ -194,30 +181,15 @@
                             </table>
 
                             <div>
-                                <a data-ng-click="addOption()" class="btn add">Add Another Option</a>
-                                <a data-ng-click="save(productForm)" class="btn btn-primary add">Update</a>
+                                <a data-ng-click="addOption()" class="btn add"><localize key="merchelloProductEdit_addAnotherOption" /></a>
+                                <a data-ng-click="save(productForm)" class="btn btn-primary add"><localize key="general_update"/></a>
                             </div>
 
                         </div>
                     </div>
 
-                    
-                    <!--<div class="control-group umb-control-group">
-                        <label class="merchello-control-label">
-                            <label><input data-ng-model="debugging" type="checkbox" /> Debug</label>
-                            <small>Check to show debugging info</small>
-                            <a class="btn" data-ng-click="prettyJson()">Make Pretty</a>
-                        </label>
+                    <merchello-debug-section data-props-to-debug="product"></merchello-debug-section>
 
-                        <div class="merchello-controls">
-
-                            <div data-ng-show="debugging">
-                                <h3>Product</h3>
-                                <div class="jsonInfo">{{product | json}}</div>
-                           </div>
-
-                        </div>
-                    </div>-->
                 </div>
 
             </div>

@@ -19,7 +19,6 @@ namespace Merchello.Core.Models
         private string _replyTo;
         private int _maxLength;
         private bool _bodyTextIsFilePath;
-        private Guid? _triggerKey;
         private Guid? _monitorKey;
         private readonly Guid _methodKey;
         private string _recipients;
@@ -45,7 +44,6 @@ namespace Merchello.Core.Models
         private static readonly PropertyInfo MaxLengthSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, int>(x => x.MaxLength);
         private static readonly PropertyInfo MessageSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.BodyText);
         private static readonly PropertyInfo MessageIsFilePathSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, bool>(x => x.BodyTextIsFilePath);
-        private static readonly PropertyInfo TriggerKeySelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, Guid?>(x => x.TriggerKey);
         private static readonly PropertyInfo MonitorKeySelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, Guid?>(x => x.MonitorKey);
         private static readonly PropertyInfo RecipientsSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.Recipients);
         private static readonly PropertyInfo SendToCustomerSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, bool>(x => x.SendToCustomer);
@@ -174,23 +172,6 @@ namespace Merchello.Core.Models
                     _bodyTextIsFilePath = value;
                     return _bodyTextIsFilePath;
                 }, _bodyTextIsFilePath, MessageIsFilePathSelector);
-            }
-        }
-
-        /// <summary>
-        /// Optional key for Notification Trigger
-        /// </summary>
-        [DataMember]
-        public Guid? TriggerKey
-        {
-            get { return _triggerKey; }
-            set
-            {
-                SetPropertyValueAndDetectChanges(o =>
-                {
-                    _triggerKey = value;
-                    return _triggerKey;
-                }, _triggerKey, TriggerKeySelector);
             }
         }
 

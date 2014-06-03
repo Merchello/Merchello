@@ -10,12 +10,6 @@ namespace Merchello.Core.Models
     public interface INotificationMessage : IEntity
     {
         /// <summary>
-        /// Optional key for Notification Trigger Rule
-        /// </summary>
-        [DataMember]
-        Guid? TriggerKey { get; set; }
-
-        /// <summary>
         /// Optional key for Notification Monitor Rule
         /// </summary>
         [DataMember]

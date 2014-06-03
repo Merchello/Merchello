@@ -1,16 +1,16 @@
 ﻿<div class="control-group umb-control-group">
 
 	<div class="merchello-section-label">
-		Shipment History
-		<small>Status records for one or more shipments</small>
+	    <localize key="merchelloShippingHistory_shipmentHistory" />
+        <localize key="merchelloShippingHistory_shipmentHistoryHelper" />
 	</div>
 
 	<div class="merchello-controls">
 		<div class="row-fluid span10 col-xs-10" data-ng-repeat="shipment in shipments">
 			<div class="row-fluid">
 				<div class="merchello-section-label">
-					Shipment - {{shipment.shippedDate  | date : 'M/d/yyyy'}}
-					<small>Tracking #: <a href="javascript:;">{{shipment.trackingCode}}</a></small>
+                    <localize key="merchelloShippingHistory_shipment" /> - {{shipment.shippedDate  | date : 'M/d/yyyy'}}
+					<small><localize key="merchelloShippingHistory_trackingNumber " /><a href="javascript:;">{{shipment.trackingCode}}</a></small>
 				</div>
 			</div>
 
@@ -18,9 +18,9 @@
 				<tbody>
 				<thead>
 					<tr>
-						<th>Name</th>
-						<th>Sku</th>
-						<th>Qty</th>
+						<th><localize key="general_name" /></th>
+						<th><localize key="merchelloGeneral_sku" /></th>
+						<th><localize key="merchelloGeneral_quantity" /></th>
 					</tr>
 				</thead>
 				<tr data-ng-repeat="lineitem in shipment.items">

@@ -8,16 +8,16 @@
         <form name="addManualNotificationMethodForm">
             <div class="form-group row-fluid" data-ng-show="dialogData.resources.length > 0">
                 <div class="col-xs-8 span8">
-                    <label for="event">Attached Event</label>
+                    <label for="event">Notification Method</label>
                     <select name="event" class="col-xs-8 span8" data-ng-model="dialogData.serviceCode" data-ng-options="n.name for n in dialogData.resources track by n.ServiceCode"></select>
                 </div>
             </div>
             <div class="form-group row-fluid">
-                <label>Name</label>
-                <input type="text" class="col-xs-12 span12" data-ng-model="dialogData.name" />
+                <label><localize key="general_name" /></label>
+                <input type="text" class="col-xs-12 span12" data-ng-model="dialogData.name" required/>
             </div>
             <div class="form-group row-fluid">
-                <label>Description</label>
+                <label><localize key="merchelloNotificationsEdit_description " /></label>
                 <textarea class="col-xs-12 span12" rows="4" data-ng-model="dialogData.description"></textarea>
             </div>
 
@@ -30,12 +30,13 @@
             <div class="btn-toolbar umb-btn-toolbar pull-right">
 
                 <a href data-ng-click="close()" class="btn btn-link">
-                    <localize key="general_cancel">Cancel</localize>
+                    <localize key="general_cancel"></localize>
                 </a>
 
                 <button class="btn btn-primary"
+                        data-ng-disabled="addManualNotificationMethodForm.$invalid"
                         data-ng-click="submit(dialogData)">
-                    <localize key="buttons_save">Save</localize>
+                    <localize key="buttons_save"></localize>
                 </button>
 
             </div>
