@@ -530,6 +530,28 @@ namespace Merchello.Core.Models
 
         #endregion
 
+        #region IPaymentMethod
+
+        /// <summary>
+        /// Saves a <see cref="IPaymentMethod"/> to an extended data collection
+        /// </summary>
+        internal static void AddPaymentMethod(this ExtendedDataCollection extendedData, IPaymentMethod paymentMethod)
+        {
+         
+            extendedData.SetValue(Constants.ExtendedDataKeys.PaymentMethod, paymentMethod.Key.ToString());
+        }
+
+        /// <summary>
+        /// Gets a <see cref="IPaymentMethod"/> from the <see cref="ExtendedDataCollection"/>
+        /// </summary>
+        internal static Guid GetPaymentMethodKey(this ExtendedDataCollection extendedData)
+        {
+            return !extendedData.ContainsKey(Constants.ExtendedDataKeys.PaymentMethod) ? Guid.Empty : 
+                new Guid(extendedData.GetValue(Constants.ExtendedDataKeys.PaymentMethod));
+        }
+
+        #endregion
+
         #region AutoMapper
 
         /// <summary>

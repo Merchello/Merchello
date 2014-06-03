@@ -44,7 +44,7 @@ namespace Merchello.Core.Gateways
                     AddOrUpdateCache(attempt.Result);
                 else
                 {
-                    LogHelper.Error<GatewayProviderResolver>("Failed to create instance of type", attempt.Exception);
+                    LogHelper.Error<GatewayProviderResolver>(string.Format("Failed to create instance of type {0}", provider.Name), attempt.Exception);
                 }
 
             }
