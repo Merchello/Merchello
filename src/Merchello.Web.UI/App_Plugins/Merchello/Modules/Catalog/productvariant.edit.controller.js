@@ -176,7 +176,7 @@
 
             if (thisForm.$valid) {
 
-                notificationsService.info("Saving...", "");
+                //notificationsService.info("Saving...", "");
 
 
                 if ($scope.creatingProduct) // Save on initial create
@@ -186,7 +186,7 @@
 
                     var promiseCreate = merchelloProductService.createProduct($scope.product, function() {
                         $scope.creatingProduct = false;
-                        notificationsService.success("*** Product ", status);
+                        //notificationsService.success("*** Product ", status);
                     });
                     promiseCreate.then(function(product) {
 
@@ -194,7 +194,7 @@
                         $scope.productVariant.copyFromProduct($scope.product);
 
                         $scope.creatingProduct = false; // For the variant edit/create view.
-                        notificationsService.success("Product Created and Saved", "H5YR!");
+                        notificationsService.success("Product Created and Saved", "");
 
                     }, function(reason) {
                         notificationsService.error("Product Create Failed", reason.message);
@@ -204,7 +204,7 @@
                     var promise = merchelloProductVariantService.create($scope.productVariant);
 
                     promise.then(function(productVariant) {
-                        notificationsService.success("Product Variant Created and Saved", "H5YR!");
+                        notificationsService.success("Product Variant Created and Saved", "");
 
                         $location.url("/merchello/merchello/ProductEdit/" + $scope.productVariant.productKey, true);
 
@@ -216,7 +216,7 @@
                     var promise = merchelloProductVariantService.save($scope.productVariant);
 
                     promise.then(function(product) {
-                        notificationsService.success("Product Variant Saved", "H5YR!");
+                        notificationsService.success("Product Variant Saved", "");
 
                         $location.url("/merchello/merchello/ProductEdit/" + $scope.productVariant.productKey, true);
 

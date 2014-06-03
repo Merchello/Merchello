@@ -240,7 +240,10 @@
             self.attributes = [];
 
             for (var i = 0; i < product.catalogInventories.length; i++) {
-                self.catalogInventories.push(new merchello.Models.CatalogInventory(product.catalogInventories[i]));
+                var foundInventory = _.where(self.catalogInventories, { "catalogKey": product.catalogInventories[i].catalogKey });
+                if (foundInventory.length == 0) {
+                    self.catalogInventories.push(new merchello.Models.CatalogInventory(product.catalogInventories[i]));                  
+                }
             }
         };
 
