@@ -60,6 +60,22 @@ namespace Merchello.Core.Sales
         void SaveShipmentRateQuote(IEnumerable<IShipmentRateQuote> approvedShipmentRateQuotes);
 
         /// <summary>
+        /// Clears all <see cref="IShipmentRateQuote"/>s previously saved
+        /// </summary>
+        void ClearShipmentRateQuotes();
+
+        /// <summary>
+        /// Saves a <see cref="IPaymentMethod"/>
+        /// </summary>
+        /// <param name="paymentMethod">The <see cref="IPaymentMethod"/> to be saved</param>
+        void SavePaymentMethod(IPaymentMethod paymentMethod);
+
+        /// <summary>
+        /// Gets the previously saved <see cref="IPaymentMethod"/>
+        /// </summary>
+        IPaymentMethod GetPaymentMethod();
+
+        /// <summary>
         /// Prepares an <see cref="IInvoice"/> representing the bill for the current "sale"
         /// </summary>
         /// <returns>An <see cref="IInvoice"/> that is not persisted to the database.</returns>

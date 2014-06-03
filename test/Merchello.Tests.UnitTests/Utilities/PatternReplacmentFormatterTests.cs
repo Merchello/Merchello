@@ -33,6 +33,7 @@ namespace Merchello.Tests.UnitTests.Utilities
             ((Invoice) _invoice).InvoiceNumber = 123;
             _invoice.Items.Add(new InvoiceLineItem(LineItemType.Product, "Xbox One", "Xbox1", 1, 486M));
             _invoice.Items.Add(new InvoiceLineItem(LineItemType.Product, "Xbox One TitanFall", "XB1-TitanFall", 2, 49.99M));
+            _invoice.Items.Add(new InvoiceLineItem(LineItemType.Shipping, "Shipping", "Shipping", 1, 30.00M));
             _invoice.Items.Add(new InvoiceLineItem(LineItemType.Tax, "Sales Tax", "Tax", 1, 14.01M));
 
 
@@ -121,7 +122,7 @@ Thanks for the order.
         public void debug()
         {
 
-            var token = PatternReplaceFormatter.ExplodeIterations(_message);
+            var token = PatternReplaceFormatter.ExplodeLineItemIterations(_message, _invoice.Items.Count);
 
             Console.Write(token);
         }
