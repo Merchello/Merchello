@@ -21,10 +21,9 @@ namespace Merchello.Core.Services
         /// <param name="fromAddress">The senders or "from" address</param>
         /// <param name="recipients">A collection of recipient address</param>
         /// <param name="bodyText">The body text of the message</param>
-        /// <param name="triggerKey">An optional event trigger key reference</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         /// <returns>Attempt{INotificationMessage}</returns>
-        Attempt<INotificationMessage> CreateNotificationMethodWithKey(Guid methodKey, string name, string description, string fromAddress, IEnumerable<string> recipients, string bodyText, Guid? triggerKey = null, bool raiseEvents = true);
+        Attempt<INotificationMessage> CreateNotificationMethodWithKey(Guid methodKey, string name, string description, string fromAddress, IEnumerable<string> recipients, string bodyText, bool raiseEvents = true);
 
         /// <summary>
         /// Saves a single instance of <see cref="INotificationMessage"/>
