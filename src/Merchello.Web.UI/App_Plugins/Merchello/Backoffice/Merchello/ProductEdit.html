@@ -152,7 +152,7 @@
                 <div class="control-group umb-control-group" data-ng-show="currentTab == 'Options'">
                     <label class="merchello-control-label">
                         <localize key="merchelloProductEdit_editOptions" />
-                        <localize key="merchelloProductEdit_editOptionsHelper" />
+                        <small><localize key="merchelloProductEdit_editOptionsHelper" /></small>
                     </label>
 
                     <div class="merchello-controls row-fluid">
@@ -162,11 +162,11 @@
                                 <tr>
                                     <th>
                                         <localize key="merchelloProductEdit_optionName" />
-                                        <localize key="merchelloProductEdit_optionNameHelper" />
+                                        <small><localize key="merchelloProductEdit_optionNameHelper" /></small>
                                     </th>
                                     <th>
                                         <localize key="merchelloProductEdit_optionValue" />
-                                        <localize key="merchelloProductEdit_optionValueHelper" />
+                                        <small>localize key="merchelloProductEdit_optionValueHelper" /></small>
                                     </th>
                                 </tr>
                                 <tr data-ng-repeat="option in product.productOptions | orderBy:'sortOrder'">
