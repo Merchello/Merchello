@@ -214,11 +214,11 @@ namespace Merchello.Core.Models
             for (var i = 0; i < container.Items.Count; i++)
             {
 
-                var sku = new ReplaceablePattern(string.Format("{0}.{1}.{2}", token, "Sku", i), string.Format("{{Item.Sku.{0}}}", i), container.Items[i].Sku);
-                var unitPrice = new ReplaceablePattern(string.Format("{0}.{1}.{2}", token, "UnitPrice", i), string.Format("{{Item.UnitPrice.{0}}}", i), container.Items[i].Price.ToString("C"));
-                var name = new ReplaceablePattern(string.Format("{0}.{1}.{2}", token, "Name", i), string.Format("{{Item.Name.{0}}}", i), container.Items[i].Name);
-                var qty = new ReplaceablePattern(string.Format("{0}.{1}.{2}", token, "Quantity", i), string.Format("{{Item.Quantity.{0}}}", i), container.Items[i].Quantity.ToString(CultureInfo.InvariantCulture));
-                var totalPrice = new ReplaceablePattern(string.Format("{0}.{1}.{2}", token, "TotalPrice", i), string.Format("{{Item.TotalPrice.{0}}}", i), container.Items[i].TotalPrice.ToString("C"));
+                var sku = new ReplaceablePattern(string.Format("{0}.{1}.{2}", token, "Sku", i), string.Format("{0}Item.Sku.{1}{2}", "{{", i, "}}"), container.Items[i].Sku);
+                var unitPrice = new ReplaceablePattern(string.Format("{0}.{1}.{2}", token, "UnitPrice", i), string.Format("{0}Item.UnitPrice.{1}{2}", "{{", i, "}}"), container.Items[i].Price.ToString("C"));
+                var name = new ReplaceablePattern(string.Format("{0}.{1}.{2}", token, "Name", i), string.Format("{0}Item.Name.{1}{2}", "{{", i, "}}"), container.Items[i].Name);
+                var qty = new ReplaceablePattern(string.Format("{0}.{1}.{2}", token, "Quantity", i), string.Format("{0}Item.Quantity.{1}{2}", "{{", i, "}}"), container.Items[i].Quantity.ToString(CultureInfo.InvariantCulture));
+                var totalPrice = new ReplaceablePattern(string.Format("{0}.{1}.{2}", token, "TotalPrice", i), string.Format("{0}Item.TotalPrice.{1}{2}", "{{", i, "}}"), container.Items[i].TotalPrice.ToString("C"));
 
                 patterns.Add(sku);
                 patterns.Add(name);

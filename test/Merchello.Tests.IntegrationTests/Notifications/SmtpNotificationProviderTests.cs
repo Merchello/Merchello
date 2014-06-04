@@ -211,7 +211,25 @@ namespace Merchello.Tests.IntegrationTests.Notifications
             var message = new NotificationMessage(method.NotificationMethod.Key, "Test email", "Can_Send_A_Test_Email@merchello.com")
             {
                 Recipients = "rusty@mindfly.com",
-                BodyText = "Successful test?",
+                BodyText =  @"{{BillToName}}
+Your address
+{{BillToAddress1}}
+{{BillToAddress2}}
+{{BillToLocality}}, {{BillToRegion}} {{BillToPostalCode}}
+
+Email : {{BillToEmail}}
+Phone : {{BillToPhone}}
+
+Invoice Number : {{InvoiceNumber}}
+
+Items Purchased:
+
+{{IterationStart[Invoice.Items]}}
++ {{Item.Name}} -> {{Item.Sku}} -> {{Item.UnitPrice}} -> {{Item.Quantity}} -> {{Item.TotalPrice}}
+{{IterationEnd[Invoice.Items]}}
+
+Thanks for the order.
+",
                 MonitorKey = new Guid("5DB575B5-0728-4B31-9B37-E9CF6C12E0AA") // OrderConfirmationMonitor
             };
 

@@ -1,4 +1,5 @@
-﻿using Merchello.Core.Gateways.Notification.Triggering;
+﻿using System.Linq;
+using Merchello.Core.Gateways.Notification.Triggering;
 using Merchello.Core.Models.MonitorModels;
 using Merchello.Core.Observation;
 
@@ -13,8 +14,14 @@ namespace Merchello.Core.Gateways.Notification.Monitors
 
         public override void OnNext(IPaymentResultMonitorModel value)
         {
-            throw new System.NotImplementedException();
+            if (!value.PaymentSuccess) return;
+            if (!Messages.Any()) return;
 
+            foreach (var message in Messages)
+            {
+                //TODO SEND THE MESSAGE
+                //NotificationContext.
+            }
         }
     }
 }

@@ -36,7 +36,7 @@ namespace Merchello.Core.Gateways.Notification
         /// </summary>
         /// <param name="monitorKey"></param>
         /// <returns>A collection of NotificationMessage</returns>
-        internal IEnumerable<INotificationMessage> GetNotificationMessagesByMonitorKey(Guid monitorKey)
+        public IEnumerable<INotificationMessage> GetNotificationMessagesByMonitorKey(Guid monitorKey)
         {
             return GatewayProviderService.GetNotificationMessagesByMonitorKey(monitorKey);
         }
