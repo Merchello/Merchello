@@ -1,15 +1,15 @@
-﻿<div class="control-group umb-control-group">
+﻿<div class="control-group umb-control-group" data-ng-show="shipments.length">
 
 	<div class="merchello-section-label">
-	    <localize key="merchelloShippingHistory_shipmentHistory" />
-        <localize key="merchelloShippingHistory_shipmentHistoryHelper" />
+		<localize key="merchelloShippingHistory_shipmentHistory" />
+		<localize key="merchelloShippingHistory_shipmentHistoryHelper" />
 	</div>
 
 	<div class="merchello-controls">
 		<div class="row-fluid span10 col-xs-10" data-ng-repeat="shipment in shipments">
 			<div class="row-fluid">
 				<div class="merchello-section-label">
-                    <localize key="merchelloShippingHistory_shipment" /> - {{shipment.shippedDate  | date : 'M/d/yyyy'}}
+					<localize key="merchelloShippingHistory_shipment" /> - {{shipment.shippedDate  | date : 'M/d/yyyy'}}
 					<small><localize key="merchelloShippingHistory_trackingNumber " /><a href="javascript:;">{{shipment.trackingCode}}</a></small>
 				</div>
 			</div>
