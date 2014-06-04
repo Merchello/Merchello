@@ -80,13 +80,13 @@
     <key alias="orderInformation">Información del pedido</key>
     <!-- actions -->
     <!-- phrases -->
-    <key alias="billingAndShippingAddressHelper"> <![CDATA[<small>Direcciones de facturación y envío</small>]]></key>
-    <key alias="orderInformationHelper"><![CDATA[<small>Líneas de pedido y costes</small>]]></key>
+    <key alias="billingAndShippingAddressHelper">Direcciones de facturación y envío</key>
+    <key alias="orderInformationHelper">Líneas de pedido y costes</key>
     <key alias="captureUpTo">Capture Up To</key>
     <key alias="salesTax">Impuesto de venta</key>
     <key alias="authorized"> Autorizado</key>
     <key alias="paymentHistory"> Histórico de pagos</key>
-    <key alias="paymentHistoryHelper"> <![CDATA[<small>Registros de estado para uno o más pagos</small>]]></key>
+    <key alias="paymentHistoryHelper">Registros de estado para uno o más pagos</key>
   </area>
 	<area alias="merchelloWarehouse">
 		<!-- things -->
@@ -150,27 +150,26 @@
   </area>
   <area alias="merchelloSettings">
     <key alias="storeDefaults">Configuración de la tienda</key>
-    <key alias="setDefaultSettingsHelper"><![CDATA[<small>Configuración inicial de la tienda</small>]]></key>
+    <key alias="setDefaultSettingsHelper">Configuración inicial de la tienda</key>
     <key alias="currency">Moneda</key>
     <key alias="dateFormat">Formato de la fecha</key>
     <key alias="startingOrderNumber">Número de pedido desde</key>
     <key alias="timeFormat">Formato horario</key>
     <key alias="startingInvoiceNumber">Número de factura desde</key>
     <key alias="catalogDefaults">Configuración del catálogo</key>
-    <key alias="catalogDefaultsHelper"><![CDATA[<small>Configura las opciones por defecto del producto. Puedes cambiarlo después en cada producto. </small>]]></key>
+    <key alias="catalogDefaultsHelper">Configura las opciones por defecto del producto. Puedes cambiarlo después en cada producto.</key>
     <key alias="globalTaxable">Todos los productos están sujetos a impuestos</key>
     <key alias="globalShippable">Todos los productos son enviados</key>
-    <key alias="globalTrackInventory"><![CDATA[Gestionar inventario para todos los productos y variantes]]></key>
+    <key alias="globalTrackInventory">Gestionar inventario para todos los productos y variantes</key>
     <key alias="globalShippingIsTaxable">Los gastos de envío están sujetos a impuestos</key>
   </area>
   <area alias="merchelloShipping">
     <key alias="shipping" >Envío</key>
     <key alias="editWarehouse" >Información del almacén</key>
-    <key alias="editWarehouseHelper" ><![CDATA[<small>Edita la configuración de tu almacén</small>]]>
-    </key>
+    <key alias="editWarehouseHelper">Edita la configuración de tu almacén</key>
     <key alias="editWarehouse" >Edita el almacén</key>
     <key alias="shippingMethods" >Métodos de envío</key>
-    <key alias="shippingMethodsHelper" ><![CDATA[<small>Añade métodos de envío a regiones existentes o crea una nueva región<small>]]></key>
+    <key alias="shippingMethodsHelper" >Añade métodos de envío a regiones existentes o crea una nueva región</key>
     <key alias="addCountry" >Añade un País</key>
   </area>
   <area alias="merchelloShippingCountry">
@@ -194,7 +193,7 @@
     <key alias="editWarehouse" >Editar almacén</key>
   </area>
   <area alias="merchelloShippingMethod">
-    <key alias="addEditShippingMethod" ><![CDATA[Añade/Edita un método de envío]]></key>
+    <key alias="addEditShippingMethod">Añade/Edita un método de envío</key>
     <key alias="method" >Método</key>
     <key alias="setRange" >Configurar rango</key>
     <key alias="addNewRange" >Añadir un nuevo rango</key>
@@ -211,12 +210,12 @@
   </area>
   <area alias="merchelloShippingHistory">
     <key alias="shipmentHistory" >Histórico de envíos</key>
-    <key alias="shipmentHistoryHelper" ><![CDATA[<small>Registros de estado para uno o más envíos</small>]]></key>
+    <key alias="shipmentHistoryHelper" >Registros de estado para uno o más envíos</key>
   </area>
     <area alias="merchelloTaxation">
       <key alias="taxation" >Impuestos</key>
       <key alias="taxMethods" >Métodos de gestión de impuestos</key>
-      <key alias="taxMethodsHelper" ><![CDATA[<small>Configura un impuesto para cada región</small>]]></key>
+      <key alias="taxMethodsHelper" >Configura un impuesto para cada región</key>
     </area>
   <area alias="merchelloNotifications">
     <key alias="notifications" >Notificaciones</key>
@@ -229,10 +228,10 @@
     </area>
   <area alias="merchelloNotificationsEdit">
       <key alias="emailTemplate" >Plantilla de email</key>
-      <key alias="emailTemplateHelper" ><![CDATA[<small>Edita la plantilla de tu notificación</small>]]></key>
+      <key alias="emailTemplateHelper" >Edita la plantilla de tu notificación</key>
       <key alias="emailTemplateEditBody" >Edita el cuerpo del mensaje</key>
       <key alias="notificationSettings" >Configuración de la notificación</key>
-      <key alias="notificationSettingsHelper" ><![CDATA[<small>Configura a quien envíar la notificación y cuándo</small>]]></key>
+      <key alias="notificationSettingsHelper" >Configura a quien envíar la notificación y cuándo</key>
       <key alias="description" >Descripción</key>
       <key alias="attachedEvent" >Evento asociado</key>
       <key alias="eventAlias" >Alias del evento:</key>
@@ -243,8 +242,7 @@
     <area alias="merchelloNotificationsEditTemplate">
       <key alias="header" >Cabecera</key>
       <key alias="footer" >Pie</key>
-      <key alias="templateHelper" ><![CDATA[<p>Puedes añadir etiquetas HTML a la cabecera y pie de tu email como por ejemplo &lt;br /&gt; para crear una nueva línea de texto.</p>]]>
-      </key>
+      <key alias="templateHelper" >Puedes añadir etiquetas HTML a la cabecera y pie de tu email como por ejemplo &lt;br /&gt; para crear una nueva línea de texto.</key>
     </area>
   <area alias="merchelloNotificationsDelete">
     <key alias="merchelloNotificationsDelete_deleteNotification">Borrar un método de notificación</key>
@@ -266,13 +264,13 @@
     <area alias="merchelloGatewayProvider">
       <key alias="gatewayProvider" >Conexión proveedores</key>
       <key alias="notificationProvider" >Proveedores de notificaciones</key>
-      <key alias="notificationProviderHelper" ><![CDATA[<small>Activate/Deactivate your Notification Providers</small>]]></key>
+      <key alias="notificationProviderHelper" >Activate/Deactivate your Notification Providers</key>
       <key alias="paymentProvider" >Proveedores de pagos</key>
-      <key alias="paymentProviderHelper" ><![CDATA[<small>Activate/Deactivate your Payment Providers</small>]]></key>
+      <key alias="paymentProviderHelper" >Activate/Deactivate your Payment Providers</key>
       <key alias="shippingProvider" >Proveedores de envíos</key>
-      <key alias="shippingProviderHelper" ><![CDATA[<small>Activate/Deactivate your Shipping Providers</small>]]></key>
+      <key alias="shippingProviderHelper" >Activate/Deactivate your Shipping Providers</key>
       <key alias="shippingProvider" >Proveedores de impuestos</key>
-      <key alias="shippingProviderHelper" ><![CDATA[<small>Activate/Deactivate your Taxation Providers</small>]]></key>
+      <key alias="shippingProviderHelper" >Activate/Deactivate your Taxation Providers</key>
       <key alias="host" >Servidor</key>
       <key alias="username" >Usuario</key>
       <key alias="password" >Contraseña</key>
@@ -304,15 +302,15 @@
     <key alias="duplicateVariant">Duplicar variante</key>
     <key alias="inAnother">En otro</key>
     <key alias="editOptions">Editar opciones</key>
-    <key alias="editOptionsHelper"><![CDATA[<small>Edita o añade opciones, que actualizarán automáticamente tus variantes</small>]]></key>
+    <key alias="editOptionsHelper">Edita o añade opciones, que actualizarán automáticamente tus variantes</key>
     <key alias="optionName">Nombre de la opción</key>
-    <key alias="optionNameHelper"><![CDATA[<small>(ej. Tamaño, Estilo, Color)</small>]]></key>
+    <key alias="optionNameHelper">(ej. Tamaño, Estilo, Color)</key>
     <key alias="optionValue">Valores de la opción</key>
-    <key alias="optionValueHelper"><![CDATA[<small>(ej. rojo, verde, azul)</small>]]></key>
+    <key alias="optionValueHelper">(ej. rojo, verde, azul)</key>
     <key alias="addStyle">Añade un estilo...</key>
     <key alias="addAnotherOption">Añade otra opción</key>
     <key alias="variantInformation">Información de variante</key>
-    <key alias="variantInformationHelper"><![CDATA[<small>Edita las variantes de este producto.</small>]]></key>
+    <key alias="variantInformationHelper">Edita las variantes de este producto.</key>
     <key alias="selectProduct">Selecciona un producto...</key>
     <key alias="selectMerchelloProduct">Selecciona un producto de Merchello</key>
     <key alias="selectYourProduct">Selecciona tu producto</key>
