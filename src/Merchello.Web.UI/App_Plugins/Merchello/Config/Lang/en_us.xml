@@ -193,7 +193,7 @@
     <key alias="editWarehouse" >Edit Warehouse</key>
   </area>
   <area alias="merchelloShippingMethod">
-    <key alias="addEditShippingMethod" ><![CDATA[Add/Edit a Shipping Method  Rate for]]></key>
+    <key alias="addEditShippingMethod">Add/Edit a Shipping Method Rate for</key>
     <key alias="method" >Method</key>
     <key alias="setRange" >Set Range</key>
     <key alias="addNewRange" >Add New Range</key>
