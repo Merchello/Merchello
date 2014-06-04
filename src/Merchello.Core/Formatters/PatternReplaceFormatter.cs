@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Merchello.Core.Configuration;
-using Merchello.Core.Models;
 using Umbraco.Core;
 
 namespace Merchello.Core.Formatters
@@ -27,7 +26,7 @@ namespace Merchello.Core.Formatters
         /// <returns>A formatted string</returns>
         public string Format(string value)
         {
-
+            value = ExplodeLineItemIterations(value);
             return _patterns.Aggregate(value, (current, search) => current.Replace(search.Value.Pattern, search.Value.Replacement));
         }
 
@@ -121,7 +120,7 @@ namespace Merchello.Core.Formatters
         /// <param name="value"></param>
         /// <param name="count"></param>
         /// <returns></returns>
-        internal static string ExplodeLineItemIterations(string value, int count)
+        internal string ExplodeLineItemIterations(string value)
         {
             var token = GetIterationToken(value);
             if (string.IsNullOrEmpty(token)) return token;
@@ -144,14 +143,21 @@ namespace Merchello.Core.Formatters
             var sb = new StringBuilder();
 
 
-            for(int i = 0; i < count; i++)
+            for (var i = 0; i < GetLineItemCount(token); i++)
             {
-                sb.AppendFormat(repeatBlock);
+                sb.Append(repeatBlock.Replace("}}", "." + i + "}}"));
             }
 
-            return sb.ToString();
+            return value.Replace(valueBlock, sb.ToString());
         }
 
+
+        private int GetLineItemCount(string token)
+        {
+            var keyStart = string.Format("{0}.Sku", token);
+            return _patterns.Keys.Count(x => x.StartsWith(keyStart));
+        }
+     
         /// <summary>
         /// Utility method to get the "iteration token" eg.  IternationStart[Invoice.Items] - where "Invoice.Items" is considered
         /// the token
@@ -176,6 +182,8 @@ namespace Merchello.Core.Formatters
                 ? string.Format("{0}{1}{2}", IterationStart, token, IterationCap)
                 : string.Format("{0}{1}{2}", IterationEnd, token, IterationCap);
         }
+
+        
 
         /// <summary>
         /// Used for testing

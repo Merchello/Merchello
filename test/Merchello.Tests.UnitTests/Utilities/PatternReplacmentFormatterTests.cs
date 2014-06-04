@@ -52,9 +52,7 @@ Invoice Number : {{InvoiceNumber}}
 Items Purchased:
 
 {{IterationStart[Invoice.Items]}}
-
-+ {{Item.Name}} -> {{Item.Sku}} -> {{Item.Quantity}} -> {{Item.Price}}
-
++ {{Item.Name}} -> {{Item.Sku}} -> {{Item.UnitPrice}} -> {{Item.Quantity}} -> {{Item.TotalPrice}}
 {{IterationEnd[Invoice.Items]}}
 
 Thanks for the order.
@@ -109,6 +107,7 @@ Thanks for the order.
             formatter.AddOrUpdateReplaceablePattern(_invoice.ReplaceablePatterns());
 
             //// Act
+
             var text = formatter.Format(_message);
 
             Console.Write(text);
@@ -118,13 +117,5 @@ Thanks for the order.
             Assert.IsTrue(text.Contains("Mindfly"));
         }
 
-        [Test]
-        public void debug()
-        {
-
-            var token = PatternReplaceFormatter.ExplodeLineItemIterations(_message, _invoice.Items.Count);
-
-            Console.Write(token);
-        }
     }
 }
