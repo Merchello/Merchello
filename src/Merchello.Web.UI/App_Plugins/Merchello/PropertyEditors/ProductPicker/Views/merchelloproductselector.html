@@ -3,11 +3,11 @@
     <div>
         <div>
             <h4 data-ng-bind="product.name"></h4>
-            <div>$<span data-ng-bind="product.price"></span></div>
-            <div>SKU: <span data-ng-bind="product.sku"></span></div>
+            <div><localize key="merchelloGeneral_moneySymbol"/><span data-ng-bind="product.price"></span></div>
+            <div><localize key="merchelloGeneral_sku"/>: <span data-ng-bind="product.sku"></span></div>
         </div>
         <div>
-            <a data-ng-click="selectProduct()" class="btn btn-primary">Select Product...</a>
+            <a data-ng-click="selectProduct()" class="btn btn-primary"><localize key="merchelloProductEdit_selectProduct" /></a>
         </div>
     </div>
 

@@ -30,6 +30,19 @@
                     'Failed to retreive data for product variant id ' + id);
             },
 
+            getByIds: function (ids) {
+ 
+            	var variantKeysStr = ids.join("&ids=");
+
+            	return umbRequestHelper.resourcePromise(
+	                $http({
+	                	url: umbRequestHelper.getApiUrl('merchelloProductVariantsApiBaseUrl', 'GetProductVariants', variantKeysStr),
+	                	method: "GET",
+	                	params: { ids: variantKeysStr }
+	                }),
+	                'Failed to retrieve data for product variant ids: ' + variantKeysStr);
+            },
+
             getByProduct: function(productkey) {
 
                 return umbRequestHelper.resourcePromise(

@@ -34,7 +34,7 @@ namespace Merchello.Core.Models
         [DataMember]
         public Guid ProviderKey
         {
-            get { return _providerKey; }
+            get { return _providerKey; }         
         }
 
         /// <summary>

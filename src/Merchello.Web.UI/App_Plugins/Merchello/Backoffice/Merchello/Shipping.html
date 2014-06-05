@@ -9,7 +9,7 @@
 
 			<div class="span4">
 				<div class="umb-headline-editor-wrapper">
-					<h1 class="umb-headline">Shipping</h1>
+					<h1 class="umb-headline"><localize key="merchelloShipping_shipping" /></h1>
 				</div>
 			</div>
 
@@ -31,9 +31,9 @@
 			<div class="merchello-pane row-fluid">
 				<div class="control-group umb-control-group" data-ng-class="{ 'open': visible.warehouseListPanel, 'closed': !visible.warehouseListPanel }">
 					<label class="merchello-control-label">
-						Warehouse Info
-						<small>Edit your warehouse</small>
-						<a data-ng-click="addWarehouse(primaryWarehouse)"><i class="icon-door-open"></i> Edit Warehouse</a>
+                        <localize key="merchelloShipping_editWarehouse" />
+                        <small><localize key="merchelloShipping_editWarehouseHelper" /></small>
+					    <a data-ng-click="addWarehouse(primaryWarehouse)"><i class="icon-door-open"></i> <localize key="merchelloShipping_editWarehouse" /> </a>
 					</label>
 
 					<div class="merchello-controls">
@@ -42,35 +42,6 @@
 
 							<shipping-warehouse warehouse="primaryWarehouse"></shipping-warehouse>
 
-
-							<!--
-							<table class="table table-striped merchello-striped-table settings-table warehouse-table">
-								<thead>
-									<tr>
-										<th>Primary</th>
-										<th>Name</th>
-										<th>Address</th>
-										<th></th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr class="vcard" data-ng-repeat="warehouse in warehouses | orderBy:sortProperty">
-										<td><input type="radio" name="primary" data-ng-click="changePrimaryWarehouse(warehouse)" data-ng-checked="warehouse.isDefault" /></td>
-										<td class="org">{{warehouse.name}}</td>
-										<td class="adr">
-											<span class="street-address">{{warehouse.address1}}</span>
-											<span class="extended-address">{{warehouse.address2}}</span>
-											<span class="locality">{{warehouse.locality}}</span>, <span class="region">{{warehouse.region}}</span> <span class="postal-code">{{warehouse.postalCode}}</span>
-										</td>
-										<td class="edit">
-											<div class="btn-toolbar umb-btn-toolbar">
-												<a class="btn btn-default btn-xs btn-mini" data-ng-click="addWarehouse(warehouse)"><i class="icon-edit"></i></a> <a class="btn btn-warning btn-xs btn-mini" data-ng-click="deleteWarehouse(warehouse)">x</a>
-											</div>
-										</td>
-									</tr>
-								</tbody>
-							</table>
-							-->
 						</div>
 					</div>
 				</div>
@@ -78,9 +49,9 @@
 				<!-- Property classes from Umbraco styles -->
 				<div class="control-group umb-control-group" data-ng-class="{ 'open': visible.shippingMethodPanel, 'closed': !visible.shippingMethodPanel }">
 					<label class="merchello-control-label">
-						Shipping Methods
-						<small>Add shipping methods to existing regions or create a new region</small>
-						<a data-ng-click="addCountry()"><i class="icon-map"></i> Add a Country</a>
+                        <localize key="merchelloShipping_shippingMethods" />
+					    <small><localize key="merchelloShipping_shippingMethodsHelper" /></small>
+					    <a data-ng-click="addCountry()"><i class="icon-map"></i><localize key="merchelloShipping_addCountry" /></a>
 					</label>
 
 					<div class="merchello-controls">

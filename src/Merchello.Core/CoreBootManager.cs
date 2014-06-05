@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Configuration;
 using System.Linq;
-using System.Reflection;
+using System.Threading;
 using Merchello.Core.Cache;
 using Merchello.Core.Configuration;
 using Merchello.Core.Gateways;
-using Merchello.Core.ObjectResolution;
+using Merchello.Core.Models.MonitorModels;
+using Merchello.Core.Observation;
 using Merchello.Core.Services;
-using Merchello.Core.Triggers;
 using Umbraco.Core;
 using Merchello.Core.Persistence.UnitOfWork;
 using Umbraco.Core.Logging;
@@ -59,11 +59,13 @@ namespace Merchello.Core
 
             
             InitializeGatewayResolver(serviceContext, cache);
-
+            
             CreateMerchelloContext(serviceContext, cache);
-                       
+
             InitializeResolvers();
-                  
+
+            InitializeObserverSubscriptions();
+
             _isInitialized = true;            
 
             return this;
@@ -82,48 +84,66 @@ namespace Merchello.Core
         /// </remarks>
         protected void CreateMerchelloContext(ServiceContext serviceContext, CacheHelper cache)
         {
-
             var gateways = new GatewayContext(serviceContext, GatewayProviderResolver.Current);
             _merchelloContext = MerchelloContext.Current = new MerchelloContext(serviceContext, gateways, cache);
         }
 
 
         private void InitializeGatewayResolver(IServiceContext serviceContext, CacheHelper cache)
-        {
-            
+        {            
             if(!GatewayProviderResolver.HasCurrent)
             GatewayProviderResolver.Current = new GatewayProviderResolver(
             PluginManager.Current.ResolveGatewayProviders(),
             serviceContext.GatewayProviderService,
-            cache.RuntimeCache);
-                       
+            cache.RuntimeCache);                       
         }
 
         protected virtual void InitializeResolvers()
         {
+            if(!TriggerResolver.HasCurrent)
+            TriggerResolver.Current = new TriggerResolver(PluginManager.Current.ResolveObservableTriggers());
+
+            if(!MonitorResolver.HasCurrent)
+            MonitorResolver.Current = new MonitorResolver(MerchelloContext.Current.Gateways.Notification, PluginManager.Current.ResolveObserverMonitors());
+        }
+
+        protected virtual void InitializeObserverSubscriptions()
+        {
+            if (!TriggerResolver.HasCurrent || !MonitorResolver.HasCurrent) return;
+
+            var monitors = MonitorResolver.Current.GetAllMonitors();
+
+            LogHelper.Info<CoreBootManager>("Starting subscribing Monitors to Triggers");
+
+            foreach (var monitor in monitors)
+            {
+                monitor.Subscribe(TriggerResolver.Current);
+            }
+
+            LogHelper.Info<Umbraco.Core.CoreBootManager>("Finished subscribing Monitors to Triggers");
             
         }
 
-        protected void BindEventTriggers()
-        {
-            LogHelper.Info<CoreBootManager>("Beginning Merchello Event Trigger Binding");
-            foreach (var trigger in EventTriggeredActionResolver.Current.GetAllEventTriggers())
-            {
-                var att = trigger.GetType().GetCustomAttributes<EventTriggeredActionForAttribute>(false).FirstOrDefault();
-                
-                if (att == null) continue;
-                
-                var bindTo = att.Service.GetEvent(att.EventName);
-                
-                if (bindTo == null) continue;
+        //protected void BindEventTriggers()
+        //{
+        //    LogHelper.Info<CoreBootManager>("Beginning Merchello Trigger Binding");
+        //    foreach (var trigger in TriggerResolver.Current.GetAllTriggers())
+        //    {
+        //        var att = trigger.GetType().GetCustomAttributes<TriggerForAttribute>(false).FirstOrDefault();
 
-                var mi = trigger.GetType().GetMethod("Invoke", BindingFlags.Instance | BindingFlags.Public);
-                
-                bindTo.AddEventHandler(trigger, Delegate.CreateDelegate(bindTo.EventHandlerType, trigger, mi));
+        //        if (att == null) continue;
 
-                LogHelper.Info<CoreBootManager>(string.Format("Binding {0} to {1} - {2} event", trigger.GetType().Name, att.Service.Name, att.EventName));
-            }
-        }
+        //        var bindTo = att.Type.GetEvent(att.HandleEvent);
+
+        //        if (bindTo == null) continue;
+
+        //        var mi = trigger.GetType().GetMethod("Invoke", BindingFlags.Instance | BindingFlags.Public);
+
+        //        bindTo.AddEventHandler(trigger, Delegate.CreateDelegate(bindTo.EventHandlerType, trigger, mi));
+
+        //        LogHelper.Info<CoreBootManager>(string.Format("Binding {0} to {1} - {2} event", trigger.GetType().Name, att.Type.Name, att.HandleEvent));
+        //    }
+        //}
 
         /// <summary>
         /// Fires after initialization and calls the callback to allow for customizations to occur

@@ -10,8 +10,9 @@
 
             <div class="span4">
                  <umb-content-name 
-                    ng-model="order.name" 
-                    placeholder="[Order Name]">
+                     ng-model="order.name" 
+                     localize="placeholder"
+                     placeholder="@merchelloOrder_orderName">
                 </umb-content-name>
             </div>
 
@@ -21,7 +22,7 @@
                     
                     <div class="btn-group">
                         
-                        <button type="submit" class="btn btn-success">Save</button>
+                        <button type="submit" class="btn btn-success"><localize key="buttons_save" /></button>
 
                     </div>
                 </div>

@@ -1,12 +1,12 @@
 ﻿<div>
     <h3 class="row-fluid col-xs-5 span5 clear">{{country.name}}</h3>
     <div class="btn-group pull-right">
-        <a data-ng-click="addEditShippingProviderDialogOpen(country)" class="btn btn-primary merchello-button-right"><i class="icon-add"></i> Provider</a>
+        <a data-ng-click="addEditShippingProviderDialogOpen(country)" class="btn btn-primary merchello-button-right"><i class="icon-add"></i> <localize key="merchelloShippingProvider_provider" /></a>
         <a data-ng-click="deleteCountry(country)" class="btn btn-warning"><i class="icon-trash"></i></a>
     </div>
     <div data-ng-repeat="shippingGatewayProvider in country.shippingGatewayProviders" class="merchello-shipping-gateway-provider clear">
         <h4 class="row-fluid col-xs-5 span5 clear" data-ng-bind="shippingGatewayProvider.name"></h4>
-        <a data-ng-click="addEditShippingMethodDialogOpen(country, shippingGatewayProvider)" class="btn btn-primary pull-right merchello-button-right"><i class="icon-add"></i> Method</a>
+        <a data-ng-click="addEditShippingMethodDialogOpen(country, shippingGatewayProvider)" class="btn btn-primary pull-right merchello-button-right"><i class="icon-add"></i> <localize key="merchelloShippingMethod_method" /></a>
         <table class="table table-striped merchello-striped-table settings-table shipping-table clear">
             <tbody>
                 <tr data-ng-show="shippingGatewayProvider.isFixedRate()" data-ng-repeat="fixedRateShipMethod in shippingGatewayProvider.shipMethods">

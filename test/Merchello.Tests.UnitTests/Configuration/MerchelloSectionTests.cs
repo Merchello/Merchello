@@ -99,6 +99,21 @@ namespace Merchello.Tests.UnitTests.Configuration
             Assert.AreEqual(typeof(TaskChainElement), taskChain.GetType());
 
         }
+
+        /// <summary>
+        /// Test confirms that teh pattern replacements can be retrieved from the configuration file
+        /// </summary>
+        [Test]
+        public void Can_Retrieve_A_Collection_Of_PatternReplacements()
+        {
+            //// Arrange
+            
+            //// Act
+            var replacementCollection = _config.PatternFormatter;
+
+            //// Assert
+            Assert.NotNull(replacementCollection);
+        }
     }
 
 

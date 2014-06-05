@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Net.Sockets;
+using Merchello.Core.Formatters;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Gateways.Taxation;
 using Merchello.Core.Models.TypeFields;
@@ -86,7 +90,7 @@ namespace Merchello.Core.Models
                 };
 
 
-            var attempt = ActivatorHelper.CreateInstance<LineItemBase>(typeof(T).FullName, ctrValues);
+            var attempt = ActivatorHelper.CreateInstance<LineItemBase>(typeof(T), ctrValues);
             if (!attempt.Success)
             {
                 LogHelper.Error<ILineItem>("Failed to convertion ILineItem", attempt.Exception);
@@ -119,7 +123,7 @@ namespace Merchello.Core.Models
                     extendedData
                 };
 
-            var attempt = ActivatorHelper.CreateInstance<LineItemBase>(typeof (T).FullName, ctrValues);
+            var attempt = ActivatorHelper.CreateInstance<LineItemBase>(typeof (T), ctrValues);
 
             if (!attempt.Success)
             {
@@ -147,7 +151,7 @@ namespace Merchello.Core.Models
                 taxCalculationResult.ExtendedData
             };
 
-            var attempt = ActivatorHelper.CreateInstance<LineItemBase>(typeof (T).FullName, ctrValues);
+            var attempt = ActivatorHelper.CreateInstance<LineItemBase>(typeof (T), ctrValues);
 
             if (!attempt.Success)
             {
@@ -180,6 +184,53 @@ namespace Merchello.Core.Models
                    lineItem.ExtendedData.GetShippableValue() &&
                    lineItem.ExtendedData.ContainsWarehouseCatalogKey();
         }
+
+
+        #region Formatter
+
+        /// <summary>
+        /// Gets the 'Iteration token' used by the PatternReplaceFormatter to identify line item iterations
+        /// </summary>
+        internal static string GetFormatterIterationToken(this ILineItemContainer container)
+        {
+            if (container is IInvoice) return "Invoice.Items";
+            if (container is IOrder) return "Order.Items";
+            if (container is IItemCache) return "ItemCache.Items";
+            if (container is IShipment) return "Shipment.Items";
+
+            throw new InvalidOperationException("ILineItemContainer passed does not have a FormatterIterationToken");
+        }
+
+        /// <summary>
+        /// Gets a collection of <see cref="IReplaceablePattern"/> for each line item in the <see cref="LineItemCollection"/>
+        /// </summary>
+        internal static IEnumerable<IReplaceablePattern> LineItemReplaceablePatterns(this ILineItemContainer container)
+        {
+            var patterns = new List<IReplaceablePattern>();
+
+            var token = container.GetFormatterIterationToken();
+
+            // TODO localization needed on pricing and datetime
+            for (var i = 0; i < container.Items.Count; i++)
+            {
+
+                var sku = new ReplaceablePattern(string.Format("{0}.{1}.{2}", token, "Sku", i), string.Format("{0}Item.Sku.{1}{2}", "{{", i, "}}"), container.Items[i].Sku);
+                var unitPrice = new ReplaceablePattern(string.Format("{0}.{1}.{2}", token, "UnitPrice", i), string.Format("{0}Item.UnitPrice.{1}{2}", "{{", i, "}}"), container.Items[i].Price.ToString("C"));
+                var name = new ReplaceablePattern(string.Format("{0}.{1}.{2}", token, "Name", i), string.Format("{0}Item.Name.{1}{2}", "{{", i, "}}"), container.Items[i].Name);
+                var qty = new ReplaceablePattern(string.Format("{0}.{1}.{2}", token, "Quantity", i), string.Format("{0}Item.Quantity.{1}{2}", "{{", i, "}}"), container.Items[i].Quantity.ToString(CultureInfo.InvariantCulture));
+                var totalPrice = new ReplaceablePattern(string.Format("{0}.{1}.{2}", token, "TotalPrice", i), string.Format("{0}Item.TotalPrice.{1}{2}", "{{", i, "}}"), container.Items[i].TotalPrice.ToString("C"));
+
+                patterns.Add(sku);
+                patterns.Add(name);
+                patterns.Add(unitPrice);
+                patterns.Add(qty);
+                patterns.Add(totalPrice);
+            }
+
+            return patterns;
+        }
+
+        #endregion
     }
 }
 
