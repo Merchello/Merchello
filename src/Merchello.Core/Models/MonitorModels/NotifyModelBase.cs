@@ -3,7 +3,7 @@
     /// <summary>
     /// Defines the base MonitorModel
     /// </summary>
-    public abstract class MonitorModelBase
+    public abstract class NotifyModelBase : INotifyModel
     {
         /// <summary>
         /// An array of additional recipients (ex. email addresses, phone numbers, twitter handles ...)

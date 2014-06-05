@@ -72,26 +72,26 @@ namespace Merchello.Core.Gateways.Notification
             _notificationMessages = null;
         }
 
-        /// <summary>
-        /// Sends a <see cref="IFormattedNotificationMessage"/> given it's unique Key (Guid)
-        /// </summary>
-        /// <param name="messageKey">The unique key (Guid) of the <see cref="IFormattedNotificationMessage"/></param>
-        public virtual void Send(Guid messageKey)
-        {
-            Send(messageKey, new DefaultFormatter());
-        }
+        ///// <summary>
+        ///// Sends a <see cref="IFormattedNotificationMessage"/> given it's unique Key (Guid)
+        ///// </summary>
+        ///// <param name="messageKey">The unique key (Guid) of the <see cref="IFormattedNotificationMessage"/></param>
+        //public virtual void Send(Guid messageKey)
+        //{
+        //    Send(messageKey, new DefaultFormatter());
+        //}
 
-        /// <summary>
-        /// Sends a <see cref="IFormattedNotificationMessage"/> given it's unique Key (Guid)
-        /// </summary>
-        /// <param name="messageKey">The unique key (Guid) of the <see cref="IFormattedNotificationMessage"/></param>
-        /// <param name="formatter">The <see cref="IFormatter"/> to use to format the message</param>
-        public virtual void Send(Guid messageKey, IFormatter formatter)
-        {
-            var message = _gatewayProviderService.GetNotificationMessageByKey(messageKey);
+        ///// <summary>
+        ///// Sends a <see cref="IFormattedNotificationMessage"/> given it's unique Key (Guid)
+        ///// </summary>
+        ///// <param name="messageKey">The unique key (Guid) of the <see cref="IFormattedNotificationMessage"/></param>
+        ///// <param name="formatter">The <see cref="IFormatter"/> to use to format the message</param>
+        //public virtual void Send(Guid messageKey, IFormatter formatter)
+        //{
+        //    var message = _gatewayProviderService.GetNotificationMessageByKey(messageKey);
 
-            Send(message, formatter);
-        }
+        //    Send(message, formatter);
+        //}
 
         /// <summary>
         /// Sends a <see cref="IFormattedNotificationMessage"/>

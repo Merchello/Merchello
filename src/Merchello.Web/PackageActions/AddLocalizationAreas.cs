@@ -51,6 +51,8 @@ namespace Merchello.Web.PackageActions
                             var import = umb.ImportNode((XmlNode)area, true);
                             umb.DocumentElement.AppendChild(import);
                         }
+
+                        
                     }
                 }
                 catch (Exception ex)
@@ -97,6 +99,7 @@ namespace Merchello.Web.PackageActions
                             if(child != null)
                             umb.DocumentElement.RemoveChild(child);
                         }
+                        umb.Save(lang.FullName);
                     }
                 }
                 catch (Exception ex)
