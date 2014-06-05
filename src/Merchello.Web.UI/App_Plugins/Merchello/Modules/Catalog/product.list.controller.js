@@ -55,15 +55,24 @@
 
         };
 
-		$scope.loadSettings = function () {
 
+
+	    /**
+         * @ngdoc method
+         * @name loadSettings
+         * @function
+         * 
+         * @description
+         * Load the settings from the settings service to get the currency symbol
+         */
+		$scope.loadSettings = function () {
 
 			var currencySymbolPromise = merchelloSettingsService.getCurrencySymbol();
 			currencySymbolPromise.then(function(currencySymbol) {
 				$scope.currencySymbol = currencySymbol;
 
 			}, function (reason) {
-				alert('Failed: ' + reason.message);
+			    notificationsService.error("Settings Load Failed", reason.message);
 			});
 		};
 
@@ -138,11 +147,11 @@
          * param.  This searches the Examine index in the core.
          */
         $scope.getFilteredProducts = function (filter) {
-            notificationsService.info("Filtering...", "");
+            //notificationsService.info("Filtering...", "");
 
             if (merchello.Helpers.Strings.isNullOrEmpty(filter)) {
                 $scope.loadProducts();
-                notificationsService.success("Filtered Products Loaded", "");
+                //notificationsService.success("Filtered Products Loaded", "");
             } else {
                 var promise = merchelloProductService.filterProducts(filter);
 
@@ -152,7 +161,7 @@
                         return new merchello.Models.Product(productFromServer, true);
                     });
 
-                    notificationsService.success("Filtered Products Loaded", "");
+                   // notificationsService.success("Filtered Products Loaded", "");
 
                 }, function(reason) {
 

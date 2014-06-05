@@ -23,6 +23,15 @@
         // Initialization methods
         //--------------------------------------------------------------------------------------
 
+        /**
+        * @ngdoc method
+        * @name loadAllInvoices
+        * @function
+        * 
+        * @description
+        * Load the invoices from the invoice service, then wrap the results
+        * in Merchello models and add to the scope via the invoices collection.
+        */
         $scope.loadAllInvoices = function () {
 
             var promiseAll = merchelloInvoiceService.getAll();
@@ -43,6 +52,14 @@
 
         };
 
+        /**
+         * @ngdoc method
+         * @name loadSettings
+         * @function
+         * 
+         * @description
+         * Load the settings from the settings service to get the currency symbol
+         */
         $scope.loadSettings = function () {
 
 
@@ -51,7 +68,7 @@
         		$scope.currencySymbol = currencySymbol;
 
         	}, function (reason) {
-        		alert('Failed: ' + reason.message);
+        	    notificationsService.error("Settings Load Failed", reason.message);
         	});
         };
 
@@ -77,10 +94,27 @@
         // Events methods
         //--------------------------------------------------------------------------------------
 
+        /**
+         * @ngdoc method
+         * @name limitChanged
+         * @function
+         * 
+         * @description
+         * Helper function to set the amount of items to show per page for the paging filters and calculations
+         */
         $scope.limitChanged = function (newVal) {
             $scope.limitAmount = newVal;
         };
 
+        /**
+         * @ngdoc method
+         * @name changeSortOrder
+         * @function
+         * 
+         * @description
+         * Helper function to set the current sort on the table and switch the 
+         * direction if the property is already the current sort column.
+         */
         $scope.changeSortOrder = function (propertyToSort) {
 
             if ($scope.sortProperty == propertyToSort) {
@@ -98,12 +132,21 @@
 
         };
 
+        /**
+         * @ngdoc method
+         * @name getFilteredInvoices
+         * @function
+         * 
+         * @description
+         * Calls the invoice service to search for invoices via a string search 
+         * param.  This searches the Examine index in the core.
+         */
         $scope.getFilteredInvoices = function (filter) {
-            notificationsService.info("Filtering...", "");
+            //notificationsService.info("Filtering...", "");
 
             if (merchello.Helpers.Strings.isNullOrEmpty(filter)) {
                 $scope.loadAllInvoices();
-                notificationsService.success("Filtered Invoices Loaded", "");
+                //notificationsService.success("Filtered Invoices Loaded", "");
             } else {
                 var promise = merchelloInvoiceService.getFiltered(filter);
 
@@ -113,7 +156,7 @@
                         return new merchello.Models.Invoice(invoice);
                     });
 
-                    notificationsService.success("Filtered Invoices Loaded", "");
+                    //notificationsService.success("Filtered Invoices Loaded", "");
 
                 }, function (reason) {
 
@@ -127,6 +170,14 @@
         // Calculations
         //--------------------------------------------------------------------------------------
 
+        /**
+         * @ngdoc method
+         * @name numberOfPages
+         * @function
+         * 
+         * @description
+         * Helper function to get the amount of items to show per page for the paging
+         */
         $scope.numberOfPages = function () {
             return Math.ceil($scope.invoices.length / $scope.limitAmount);
         };
