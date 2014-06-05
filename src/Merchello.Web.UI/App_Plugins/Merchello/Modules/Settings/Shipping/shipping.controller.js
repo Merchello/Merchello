@@ -727,6 +727,13 @@
 		            promiseSave = merchelloCatalogFixedRateShippingService.createRateTableShipMethod(data.method);
 		        }
 		    } else {
+		        data.method.serviceCode = data.method.gatewayResource.serviceCode;
+		        if (data.method.shipMethod != undefined) {
+		            data.method.name = data.method.shipMethod.name;
+		        }
+		        if (data.method.shipCountryKey == "00000000-0000-0000-0000-000000000000") {
+		            data.method.shipCountryKey = data.country.key;
+		        }
 		        if (data.method.key.length > 0) {
 		            // Save existing method
 		            promiseSave = merchelloCatalogShippingService.saveShipMethod(data.method);
