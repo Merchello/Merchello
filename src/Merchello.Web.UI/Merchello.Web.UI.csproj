@@ -65,6 +65,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App_Plugins\Merchello\Modules\Catalog\Directives\" />
     <Folder Include="App_Plugins\Merchello\PropertyEditors\ProductEditor\Css\" />
     <Folder Include="App_Plugins\Merchello\PropertyEditors\ProductPicker\Css\" />
     <Folder Include="App_Plugins\Merchello\System\" />
@@ -103,10 +104,12 @@
     <Content Include="App_Plugins\Merchello\Config\Lang\en_us.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="App_Plugins\Merchello\Directives\merchello-pager.html" />
     <Content Include="App_Plugins\Merchello\Directives\merchello.debug.section.directive.js" />
     <Content Include="App_Plugins\Merchello\Directives\dropdownlist.directive.js" />
     <Content Include="App_Plugins\Merchello\Directives\merchello-debug-section.html" />
     <Content Include="App_Plugins\Merchello\Directives\merchello-panel.html" />
+    <Content Include="App_Plugins\Merchello\Directives\merchello.pager.directive.js" />
     <Content Include="App_Plugins\Merchello\Directives\merchello.panel.directive.js" />
     <Content Include="App_Plugins\Merchello\Common\Js\startfrom.filter.js" />
     <Content Include="App_Plugins\Merchello\lib\codemirror\Css\umbracoCustom.css" />

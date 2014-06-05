@@ -39,7 +39,6 @@
                         <div class="col-xs-2 span2" data-ng-show="products.length > 0">
 	                        <label for="limitSelect"><localize key="merchelloVariant_limitSelect"/></label>
                             <select name="limitSelect" class="col-xs-12 span12" data-ng-model="limitAmount" data-ng-change="limitChanged(limitAmount)">
-                                <option value="3">3</option>
                                 <option selected value="10">10</option>
                                 <option value="25">25</option>
                                 <option value="50">50</option>
@@ -50,29 +49,21 @@
                 </form>
             </div>
             <div class="merchello-pane">
-
-                <div class="pager" data-ng-show="products.length > 0">
-                    <button class="btn" data-ng-disabled="currentPage == 0" data-ng-click="currentPage=currentPage-1">
-	                    <localize key="general_previous"/>
-                    </button>
-                    {{currentPage+1}}/{{numberOfPages()}}
-                    <button class="btn" data-ng-disabled="currentPage >= numberOfPages() - 1" data-ng-click="currentPage=currentPage+1">
-	                    <localize key="general_next"/>
-                    </button>
-                </div>
+                
+                <merchello-pager></merchello-pager>
                     
                 <table class="table table-hover merchello-selectable-table sortable">
                     <thead>
                         <tr>
                             <!--<th></th>-->
-                            <th data-ng-click="changeSortOrder('name')" data-ng-class="{'sorted': sortProperty == 'name'}">
-	                            <i data-ng-class="{'icon-navigation-up': sortProperty == 'name', 'icon-navigation-down': sortProperty != 'name'}"></i> <localize key="merchelloVariant_product"/>
+                            <th data-ng-click="changeSortOrder('name')" data-ng-class="{'sorted': sortProperty == 'name' ||  sortProperty == '-name'}">
+	                            <i data-ng-class="{'icon-navigation-up': sortProperty == 'name', 'icon-navigation-down': sortProperty == '-name'}"></i> <localize key="merchelloVariant_product"/>
                             </th>
-                            <th data-ng-click="changeSortOrder('sku')" data-ng-class="{'sorted': sortProperty == 'sku'}">
-	                            <i data-ng-class="{'icon-navigation-up': sortProperty == 'sku', 'icon-navigation-down': sortProperty != 'sku'}"></i> <localize key="merchelloVariant_sku"/>
+                            <th data-ng-click="changeSortOrder('sku')" data-ng-class="{'sorted': sortProperty == 'sku' ||  sortProperty == '-sku'}">
+	                            <i data-ng-class="{'icon-navigation-up': sortProperty == 'sku', 'icon-navigation-down': sortProperty == '-sku'}"></i> <localize key="merchelloVariant_sku"/>
                             </th>
-                            <th data-ng-click="changeSortOrder('price')" data-ng-class="{'sorted': sortProperty == 'price'}">
-	                            <i data-ng-class="{'icon-navigation-down': sortProperty == 'price', 'icon-navigation-up': sortProperty != 'price'}"></i> <localize key="merchelloGeneral_price"/>
+                            <th data-ng-click="changeSortOrder('price')" data-ng-class="{'sorted': sortProperty == 'price' ||  sortProperty == '-price'}">
+	                            <i data-ng-class="{'icon-navigation-down': sortProperty == 'price', 'icon-navigation-up': sortProperty == '-price'}"></i> <localize key="merchelloGeneral_price"/>
                             </th>
                             <th>&nbsp;</th>
                         </tr>
@@ -93,16 +84,9 @@
                     </tbody>
                 </table>
    
-                <div class="pager" data-ng-show="products.length > 0">
-                    <button class="btn" data-ng-disabled="currentPage == 0" data-ng-click="currentPage=currentPage-1">
-	                    <localize key="general_previous"/>
-                    </button>
-                    {{currentPage+1}}/{{numberOfPages()}}
-                    <button class="btn" data-ng-disabled="currentPage >= numberOfPages() - 1" data-ng-click="currentPage=currentPage+1">
-	                    <localize key="general_next"/>
-                    </button>
-                </div>
+                <merchello-pager></merchello-pager>
                                 
+                <!-- Prompt to create products if no products in the catalog -->
                 <div class="pager well" data-ng-show="products.length == 0">
 	                <h5><localize key="merchelloVariant_noProduct"/></h5>
 	                <p><localize key="merchelloVariant_newProductPrompt"/></p>
