@@ -15,7 +15,7 @@
                 <select name="method-type" class="col-xs-12 span12" data-ng-model="dialogData.method.gatewayResource" data-ng-options="r.name for r in dialogData.gatewayResources track by r.serviceCode" data-ng-disabled="dialogData.method.shipMethod.key.length > 0"></select>
             </div>
         </div>
-        <div data-ng-hide="dialogData.method.shipMethod.provinces.length == 0">
+        <!--<div data-ng-hide="dialogData.method.shipMethod.provinces.length == 0">
             <h5>Adjust for Individual Regions</h5>
 
             <table class="table merchello-striped-table settings-table adjustment-table col-xs-6 span6">
@@ -49,7 +49,7 @@
                     </tr>
                 </tbody>
             </table>
-        </div>
+        </div>-->
     </div>
 
     <div class="umb-panel-footer">
