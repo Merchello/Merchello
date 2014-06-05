@@ -16,7 +16,7 @@ namespace Merchello.Core.Models.MonitorModels
 
         internal static IPaymentResultMonitorModel ToOrderConfirmationNotification(this IPaymentResult paymentResult, IEnumerable<string> contacts)
         {
-            return new PaymentResultMonitorModel()
+            return new PaymentResultNotifyModel()
                 {
                     PaymentSuccess = paymentResult.Payment.Success,
                     Payment = paymentResult.Payment.Success ? paymentResult.Payment.Result : null,

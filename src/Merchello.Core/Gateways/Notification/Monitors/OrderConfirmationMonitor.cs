@@ -19,8 +19,14 @@ namespace Merchello.Core.Gateways.Notification.Monitors
 
             foreach (var message in Messages)
             {
-                //TODO SEND THE MESSAGE
-                //NotificationContext.
+                if (value.Contacts.Any())
+                {
+                    // add the additional contacts to the recipients list
+                    if (!message.Recipients.EndsWith(";")) message.Recipients += ";";
+                    message.Recipients = string.Format("{0}{1}", message.Recipients, string.Join(";", value.Contacts));
+
+                }
+                
             }
         }
     }
