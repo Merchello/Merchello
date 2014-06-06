@@ -50,7 +50,6 @@
 	                    <label for="limitSelect" class="col-xs-2 control-label"><localize key="merchelloOrder_invoicesPerPage"/>:</label>
                         <div class="col-xs-10 controls">
                             <select name="limitSelect" class="form-control span3 col-xs-3" data-ng-model="limitAmount" data-ng-change="limitChanged(limitAmount)">
-                                <option value="3">3</option>
                                 <option selected value="10">10</option>
                                 <option value="25">25</option>
                                 <option value="50">50</option>
@@ -69,22 +68,14 @@
             <!-- Tabular Order List -->
             <div class="merchello-pane">
                 
-                <div class="pager" data-ng-show="invoices.length > 0">
-                    <button class="btn" data-ng-disabled="currentPage == 0" data-ng-click="currentPage=currentPage-1">
-	                    <localize key="general_previous"/>
-                    </button>
-                    {{currentPage+1}}/{{numberOfPages()}}
-                    <button class="btn" data-ng-disabled="currentPage >= numberOfPages() - 1" data-ng-click="currentPage=currentPage+1">
-						<localize key="general_next" />
-                    </button>
-                </div>
+                <merchello-pager></merchello-pager>
 
                 <table class="table table-hover merchello-selectable-table">
                     <thead>
                         <tr>
                             <!--<th><input type="checkbox" /></th>--> <!-- Toggles the bulk action dropdown -->
-	                        <th><localize key="merchelloOrder_orderNumber"/></th>
-	                        <th><localize key="general_date"/></th>
+                            <th><localize key="merchelloOrder_orderNumber"/></th>
+                            <th><localize key="general_date"/></th>
                             <th><localize key="merchelloGeneral_customer" /></th>
                             <th><localize key="merchelloOrder_paymentStatus" /></th>
                             <th><localize key="merchelloOrder_fulfillmentStatus" /></th>
@@ -118,7 +109,9 @@
                         </tr>
                     </tbody>
                 </table>
-                
+
+                <merchello-pager></merchello-pager>
+
                 <div class="pager well" data-ng-show="invoices.length == 0">
 	                <localize key="merchelloOrder_noOrders"/>
                 </div>

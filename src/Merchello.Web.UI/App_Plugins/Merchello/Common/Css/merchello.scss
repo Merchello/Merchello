@@ -304,4 +304,30 @@ $active: lighten($green, 50%);
     h4 { white-space: normal; }
     strong { display: block; }
     input[type="radio"] { margin-top: 0; }
+    .active, .active:hover { background-color: $active; }
+	.active td { @extend .active; border-top: solid 1px darken($active, 10%); } //add the .active style to child table cells
+}
+
+.merchello-product-picker {
+	.selector {
+		margin-bottom: 5px;
+	}
+
+	table {
+		margin: 15px;
+		tr.sku {
+			th {
+				border-top: 1px solid #E3E3E3;
+			}
+		}
+
+		th {
+			border-right: 1px solid #E3E3E3;
+			padding: 8px;
+			text-align: right;
+		}
+		td {
+			padding: 5px;
+		}
+	}
 }

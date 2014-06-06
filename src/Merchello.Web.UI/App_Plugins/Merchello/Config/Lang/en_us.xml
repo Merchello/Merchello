@@ -114,7 +114,7 @@
 		<key alias="tracking">Inventory Tracking</key>
 		<!-- actions -->
 		<!-- phrases -->
-  </area>price
+  </area>
   <area alias="merchelloPlaceholders">
 		<key alias="enterProduct">Enter a product name</key>
 		<key alias="enterOrder">Start typing an order number or name...</key>to
