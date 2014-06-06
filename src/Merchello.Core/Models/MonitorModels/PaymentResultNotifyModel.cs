@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents a PaymentResultMonitorModel
     /// </summary>
-    internal class PaymentResultMonitorModel : MonitorModelBase, IPaymentResultMonitorModel
+    internal class PaymentResultNotifyModel : NotifyModelBase, IPaymentResultMonitorModel
     {
         /// <summary>
         /// Gets/Sets the <see cref="IPayment"/>

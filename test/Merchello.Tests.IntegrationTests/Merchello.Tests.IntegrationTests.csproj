@@ -298,6 +298,7 @@
     <Compile Include="Taxation\TaxationProviderTestBase.cs" />
     <Compile Include="Taxation\TaxationProviderTests.cs" />
     <Compile Include="TestHelpers\DbPreTestDataWorker.cs" />
+    <Compile Include="Workflow\Setup.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

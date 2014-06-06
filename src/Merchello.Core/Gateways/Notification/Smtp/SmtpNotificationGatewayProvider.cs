@@ -36,14 +36,14 @@ namespace Merchello.Core.Gateways.Notification.Smtp
             return AvailableResources.Where(x => NotificationMethods.All(y => y.ServiceCode != x.ServiceCode));
         }
 
-        /// <summary>
-        /// Creates a <see cref="INotificationGatewayMethod"/>
-        /// </summary>
-        /// <param name="gatewayResource">The <see cref="IGatewayResource"/> implemented by this method</param>
-        /// <param name="name">The name of the notification method</param>
-        /// <param name="description">The description of the notification method</param>        
-        /// <returns></returns>
-        public override INotificationGatewayMethod CreateNotificationMethod(IGatewayResource gatewayResource, string name, string serviceCode)
+         /// <summary>
+         /// Creates a <see cref="INotificationGatewayMethod"/>
+         /// </summary>
+         /// <param name="gatewayResource">The <see cref="IGatewayResource"/> implemented by this method</param>
+         /// <param name="name">The name of the notification method</param>
+         /// <param name="serviceCode"></param>
+         /// <returns></returns>
+         public override INotificationGatewayMethod CreateNotificationMethod(IGatewayResource gatewayResource, string name, string serviceCode)
         {
             var attempt = GatewayProviderService.CreateNotificationMethodWithKey(GatewayProviderSettings.Key, name, serviceCode);
 

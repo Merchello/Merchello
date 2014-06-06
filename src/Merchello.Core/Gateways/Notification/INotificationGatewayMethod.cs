@@ -30,18 +30,18 @@ namespace Merchello.Core.Gateways.Notification
         /// <param name="message">The <see cref="INotificationMessage"/> to be deleted</param>        
         void DeleteNotificationMessage(INotificationMessage message);
 
-        /// <summary>
-        /// Sends a <see cref="IFormattedNotificationMessage"/> given it's unique Key (Guid)
-        /// </summary>
-        /// <param name="messageKey">The unique key (Guid) of the <see cref="IFormattedNotificationMessage"/></param>
-        void Send(Guid messageKey);
+        ///// <summary>
+        ///// Sends a <see cref="IFormattedNotificationMessage"/> given it's unique Key (Guid)
+        ///// </summary>
+        ///// <param name="messageKey">The unique key (Guid) of the <see cref="IFormattedNotificationMessage"/></param>
+        //void Send(Guid messageKey);
 
-        /// <summary>
-        /// Sends a <see cref="IFormattedNotificationMessage"/> given it's unique Key (Guid)
-        /// </summary>
-        /// <param name="messageKey">The unique key (Guid) of the <see cref="IFormattedNotificationMessage"/></param>
-        /// <param name="formatter">The <see cref="IFormatter"/> to use to format the message</param>
-        void Send(Guid messageKey, IFormatter formatter);
+        ///// <summary>
+        ///// Sends a <see cref="IFormattedNotificationMessage"/> given it's unique Key (Guid)
+        ///// </summary>
+        ///// <param name="messageKey">The unique key (Guid) of the <see cref="IFormattedNotificationMessage"/></param>
+        ///// <param name="formatter">The <see cref="IFormatter"/> to use to format the message</param>
+        //void Send(Guid messageKey, IFormatter formatter);
 
         /// <summary>
         /// Sends a <see cref="IFormattedNotificationMessage"/>

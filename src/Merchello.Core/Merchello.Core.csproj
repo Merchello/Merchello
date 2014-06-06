@@ -85,9 +85,10 @@
     <Compile Include="Formatters\ReplaceablePattern.cs" />
     <Compile Include="Gateways\Notification\Monitors\INotificationMonitor.cs" />
     <Compile Include="Models\AddressExtensions.cs" />
+    <Compile Include="Models\MonitorModels\INotifyModel.cs" />
     <Compile Include="Models\MonitorModels\MonitorModelExtensions.cs" />
-    <Compile Include="Models\MonitorModels\MonitorModelBase.cs" />
-    <Compile Include="Models\MonitorModels\PaymentResultMonitorModel.cs" />
+    <Compile Include="Models\MonitorModels\NotifyModelBase.cs" />
+    <Compile Include="Models\MonitorModels\PaymentResultNotifyModel.cs" />
     <Compile Include="Gateways\Notification\Monitors\OrderConfirmationMonitor.cs" />
     <Compile Include="Gateways\Notification\Monitors\NotificationMonitorBase.cs" />
     <Compile Include="Models\MonitorModels\IPaymentResultMonitorModel.cs" />

@@ -131,6 +131,7 @@
     <Compile Include="Models\MapperResolvers\ExtendedDataResolver.cs" />
     <Compile Include="Models\MapperResolvers\GatewayMethodDialogEditorViewResolver.cs" />
     <Compile Include="PackageActions\AddAppConfigKey.cs" />
+    <Compile Include="PackageActions\AddLocalizationAreas.cs" />
     <Compile Include="ProductContentEditing.cs" />
     <Compile Include="Workflow\PaymentProcessor.cs" />
     <Compile Include="Editors\SettingsApiController.cs" />
