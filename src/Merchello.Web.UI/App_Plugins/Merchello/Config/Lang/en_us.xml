@@ -57,19 +57,19 @@
 		<key alias="orderNumber">Order #</key>
 		<key alias="paymentStatus">Payment Status</key>
 		<key alias="fulfillmentStatus">Fulfillment Status</key>
-        <key alias="lineItems"> Line Items</key>
-        <key alias="orderName">[Order Name]</key>
-        <!-- actions -->
+    <key alias="lineItems"> Line Items</key>
+    <key alias="orderName">[Order Name]</key>
+    <!-- actions -->
 		<key alias="filter">Filter Orders</key>
-        <key alias="capturePayment">Capture Payment</key>
-        <key alias="processPayment">Process Payment</key>
+    <key alias="capturePayment">Capture Payment</key>
+    <key alias="processPayment">Process Payment</key>
       
-      <!-- phrases -->
-      <key alias="invoicesPerPage">Invoices / Page</key>
-      <key alias="noOrders">You have no orders.</key>
-      <key alias="attentionRequired">You Have Orders That Require Attention</key>
-      <key alias="paymentExpirationWarning">You may not receive payment for expired authorization.</key>
-      <key alias="processedBy">Processed by</key>
+    <!-- phrases -->
+    <key alias="invoicesPerPage">Invoices / Page</key>
+    <key alias="noOrders">You have no orders.</key>
+    <key alias="attentionRequired">You Have Orders That Require Attention</key>
+    <key alias="paymentExpirationWarning">You may not receive payment for expired authorization.</key>
+    <key alias="processedBy">Processed by</key>
   </area>
   <area alias="merchelloOrderView">
     <!-- things -->
@@ -87,17 +87,22 @@
     <key alias="authorized"> Authorized</key>
     <key alias="paymentHistory"> Payment History</key>
     <key alias="paymentHistoryHelper">Status records for one or more payments</key>
+    <key alias="paymentProcessedBy">Payment processed by:</key>
   </area>
-	<area alias="merchelloWarehouse">
-		<!-- things -->
-		<key alias="warehouse">Warehouse</key>
-		<key alias="warehouses">Warehouses</key>
-		<key alias="stock">Stock</key>
-		<key alias="lowCount">Low Count</key>
-		<!-- actions -->
-		<!-- phrases -->
+  <area alias="merchelloFulfillShipment">
+    <!-- phrases -->
+    <key alias="fulfillManually">Fulfill Manually</key>
+  </area>  
+  <area alias="merchelloWarehouse">
+    <!-- things -->
+    <key alias="warehouse">Warehouse</key>
+    <key alias="warehouses">Warehouses</key>
+    <key alias="stock">Stock</key>
+    <key alias="lowCount">Low Count</key>
+    <!-- actions -->
+    <!-- phrases -->
   </area>
-	<area alias="merchelloShipping">
+  <area alias="merchelloShipping">
 		<!-- things -->
 		<key alias="shipping">Shipping</key>
 		<key alias="info">Shipping Information</key>
@@ -138,11 +143,10 @@
         <key alias="sku" >SKU</key>
         <key alias="quantity" >Qty</key>
         <key alias="fulfill"> Fulfill</key>
-        <key alias="shipment"> Shipment</key>
         <key alias="status"> Status</key>
         <key alias="type"> Type</key>
         <key alias="amount"> Amount</key>
-        <key alias="via"> Via</key>
+        <key alias="via">Via</key>
         <key alias="options">Options</key>
         <key alias="select">Select</key>
         <key alias="all">All</key>
@@ -211,6 +215,8 @@
   <area alias="merchelloShippingHistory">
     <key alias="shipmentHistory" >Shipment History</key>
     <key alias="shipmentHistoryHelper" >Status records for one or more shipments</key>
+    <key alias="shipment" >Shipment</key>
+    <key alias="trackingNumber" >Tracking #</key>
   </area>
     <area alias="merchelloTaxation">
       <key alias="taxation" >Taxation</key>

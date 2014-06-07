@@ -10,11 +10,15 @@
      */
     controllers.CapturePaymentController = function ($scope) {
 
+        function round(num, places) {
+            return +(Math.round(num + "e+" + places) + "e-" + places);
+        }
+
         $scope.payments = {};
 
         $scope.paymentRequest = new merchello.Models.PaymentRequest();
         $scope.paymentRequest.invoiceKey = $scope.dialogData.key;
-        $scope.paymentRequest.amount = $scope.dialogData.total;
+        $scope.paymentRequest.amount = round($scope.dialogData.total, 2);
 
 	    var payments = _.map($scope.dialogData.appliedPayments, function(appliedPayment) {
 		    return appliedPayment.payment;

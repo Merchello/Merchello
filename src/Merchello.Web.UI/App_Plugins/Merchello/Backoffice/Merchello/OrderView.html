@@ -27,7 +27,7 @@
 				<div class="control-group umb-control-group">
 
 					<div class="merchello-section-label">
-                        <localize key="merchelloOrderView_customerInformation" />Customer Information
+                        <localize key="merchelloOrderView_customerInformation" />
                         <small><localize key="merchelloOrderView_billingAndShippingAddressHelper" /></small>
 					</div>
 
@@ -78,7 +78,7 @@
 						<div class="row-fluid span10 col-xs-10">
 							<div class="row-fluid">
 								<div class="btn-toolbar pull-right umb-btn-toolbar">
-									<a class="btn btn-primary" data-ng-hide="invoice.getPaymentStatus()=='Paid'" data-ng-click="capturePayment()"><localize key="merchelloOrderView_captureUpTo" />{{invoice.total | currency : currencySymbol}}</a>
+									<a class="btn btn-primary" data-ng-hide="invoice.getPaymentStatus()=='Paid'" data-ng-click="capturePayment()"><localize key="merchelloOrderView_captureUpTo" /> {{invoice.total | currency : currencySymbol}}</a>
 								    <a class="btn btn-primary" data-ng-hide="invoice.getFulfillmentStatus()=='Fulfilled'" data-ng-click="fulfillShipment()"><localize key="merchelloGeneral_fulfill"/> {{invoice.getProductLineItems().length}} <localize key="merchelloOrder_lineItems" /></a>
 								</div>
 							</div>
@@ -105,7 +105,7 @@
 										<td><i class="icon-credit-card" data-ng-class="{ 'icon-credit-card': payment.paymentType.alias == 'CreditCard', 'icon-credit-card': payment.paymentType.alias == 'Cash' }"></i></td>
 										<td>
 											<span data-ng-show="payment.paymentType.alias == 'CreditCard'" class="card-no">xxxx-xxxx-xxxx-xxxx</span>
-											<span class="payment-method">Payment processed by: {{payment.paymentMethodName}}</span>
+											<span class="payment-method"><localize key="merchelloOrderView_paymentProcessedBy" /> {{payment.paymentMethodName}}</span>
 										</td>
 										<td class="text-right"><localize key="merchelloOrderView_authorized" />:</td>
 										<td class="text-right">{{payment.amount | currency : currencySymbol}}</td>
