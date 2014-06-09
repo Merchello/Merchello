@@ -85,6 +85,7 @@
 
 
                 $scope.editingVariant = true;
+                $scope.parentProductId = $routeParams.id;
             }
 
         }
@@ -328,7 +329,7 @@
                         var promise = merchelloProductService.updateProduct($scope.product);
 
                         promise.then(function(product) {
-                            notificationsService.success("Product Saved", "H5YR!");
+                            notificationsService.success("Product Saved", "");
 
                             $scope.product = product;
                             $scope.productVariant.copyFromProduct($scope.product);
@@ -355,7 +356,7 @@
             var promiseDel = merchelloProductService.deleteProduct($scope.product);
 
             promiseDel.then(function () {
-                notificationsService.success("Product Deleted", "H5YR!");
+                notificationsService.success("Product Deleted", "");
 
                 $location.url("/merchello/merchello/ProductList/manage", true);
 
@@ -378,7 +379,7 @@
             var promiseDel = merchelloProductVariantService.deleteVariant($scope.productVariant.key);
 
             promiseDel.then(function () {
-                notificationsService.success("Product Variant Deleted", "H5YR!");
+                notificationsService.success("Product Variant Deleted", "");
 
                 $location.url("/merchello/merchello/ProductEdit/" + $scope.productVariant.productKey, true);
 
@@ -494,26 +495,26 @@
             // Create the product if not created
             if ($scope.creatingProduct) {
                 if (thisForm.$valid) {
-                    notificationsService.info("Creating and saving new product", "");
+                    //notificationsService.info("Creating and saving new product", "");
 
                     // Copy from master variant
                     $scope.product.copyFromVariant($scope.productVariant);
 
                     var promiseCreate = merchelloProductService.createProduct($scope.product, function() {
                         $scope.creatingProduct = false;
-                        notificationsService.success("*** Product ", status);
+                        //notificationsService.success("*** Product ", status);
                     });
                     promiseCreate.then(function(product) {
 
                         $scope.product = product;
                         $scope.productVariant.copyFromProduct($scope.product);
 
-                        notificationsService.success("Product Created and Saved", "H5YR!");
+                        //notificationsService.success("Product Created and Saved", "");
 
                         $scope.product = merchelloProductService.createVariantsFromOptions($scope.product);
 
                         $scope.creatingProduct = false; // For the variant edit/create view.
-                        notificationsService.success("Product Variants Created", "");
+                        notificationsService.success("Product and Product Variants Created", "");
 
                     }, function(reason) {
                         notificationsService.error("Product Create Failed", reason.message);
@@ -528,7 +529,7 @@
                 var promise = merchelloProductService.updateProduct($scope.product);
 
                 promise.then(function(product) {
-                    notificationsService.success("Product Saved", "H5YR!");
+                    notificationsService.success("Product Saved", "");
 
                     $scope.product = product;
                     $scope.productVariant.copyFromProduct($scope.product);
