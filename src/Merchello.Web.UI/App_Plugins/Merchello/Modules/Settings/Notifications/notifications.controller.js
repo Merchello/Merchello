@@ -258,7 +258,7 @@
             promiseNotificationMethod.then(function(notificationFromServer) {
                 $scope.notificationMethods.push(new merchello.Models.NotificationMethod(notificationFromServer));
                 location.reload();
-                notificationsService.success("Notification Method Created!", "H5YR!");
+                notificationsService.success("Notification Method Created!", "");
             }, function(reason) {
 
                 notificationsService.error("Notification Method Create Failed", reason.message);
@@ -377,7 +377,7 @@
             var promiseNotificationMethod = merchelloNotificationsService.saveNotificationMessage(message);
 
             promiseNotificationMethod.then(function (keyFromServer) {
-                notificationsService.success("Notification Saved", "H5YR!");
+                notificationsService.success("Notification Saved", "");
                 location.reload();
             }, function (reason) {
 

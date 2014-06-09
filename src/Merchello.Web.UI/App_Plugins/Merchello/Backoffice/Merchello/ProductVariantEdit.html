@@ -318,6 +318,16 @@
 
 		    </div>
 	    </merchello-panel>
+        
+        <ul class="umb-panel-footer-nav nav nav-pills">
+            <li>
+                <a href="#/merchello/merchello/ProductList/manage"><localize key="merchelloHeadline_catalog" /></a>
+            </li>
+            <li data-ng-show="creatingVariant || editingVariant">
+                <a href="#/merchello/merchello/ProductEdit/{{parentProductId}}"><localize key="merchelloVariant_product" /></a>
+            </li>
+            <li></li>
+        </ul>
 
     </umb-panel>
 </form>

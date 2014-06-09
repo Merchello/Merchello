@@ -77,7 +77,7 @@
                 var promise = merchelloSettingsService.save($scope.settingsDisplay);
 
                 promise.then(function(settingDisplay) {
-                    notificationsService.success("Store Settings Saved", "H5YR!");
+                    notificationsService.success("Store Settings Saved", "");
                     $scope.savingStoreSettings = false;
                     $scope.settingDisplay = new merchello.Models.StoreSettings(settingDisplay);
 

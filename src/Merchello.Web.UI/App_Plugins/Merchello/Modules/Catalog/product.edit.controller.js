@@ -85,7 +85,7 @@
             var promiseDel = merchelloProductService.deleteProduct($scope.product);
 
             promiseDel.then(function() {
-                notificationsService.success("Product Deleted", "H5YR!");
+                notificationsService.success("Product Deleted", "");
 
                 $location.url("/merchello/merchello/ProductList/manage", true);
 
