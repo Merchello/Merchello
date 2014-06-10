@@ -16,7 +16,11 @@ namespace Merchello.Web
         private static void BindShippingMappings()
         {
             // shipping     
-            AutoMapper.Mapper.CreateMap<IShippingGatewayProvider, ShippingGatewayProviderDisplay>();
+            AutoMapper.Mapper.CreateMap<IShippingGatewayProvider, ShippingGatewayProviderDisplay>()
+                .ForMember(dest => dest.ExtendedData,
+                opt => opt.ResolveUsing<ExtendedDataResolver>().ConstructedBy(() => new ExtendedDataResolver())
+                );
+
             AutoMapper.Mapper.CreateMap<IShipCountry, ShipCountryDisplay>();
 
             AutoMapper.Mapper.CreateMap<IShipMethod, ShipMethodDisplay>();
