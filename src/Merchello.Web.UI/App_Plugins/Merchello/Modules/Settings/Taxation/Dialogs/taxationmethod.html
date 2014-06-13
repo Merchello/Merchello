@@ -2,15 +2,15 @@
 	
     <div class="umb-modalcolumn-header">
 		<h4>{{dialogData.method.name}}</h4>
-        <h5>Adjust for Individual Regions</h5>
+        <h5><localize key="merchelloShippingMethod_adjustIndividualRegions" /></h5>
 	</div>
 
     <div class="umb-panel-body with-header with-footer">
 	    <table class="table merchello-striped-table settings-table adjustment-table col-xs-6 span6">
 	        <thead>
 	            <tr>
-	                <th>Region</th>
-	                <th>Adjust Rate</th>
+	                <th><localize key="merchelloShippingMethod_region" /></th>
+	                <th><localize key="merchelloShippingMethod_adjustRate" /></th>
 	            </tr>
 	        </thead>
 	        <tbody>
@@ -21,7 +21,7 @@
 	                <td>
 	                    <div class="input-prepend">
 	                        <input type="number" data-ng-model="province.percentAdjustment" class="span1 col-xs-1" />
-	                        <span class="add-on">%</span>
+	                        <span class="add-on"><localize key="merchelloGeneral_percentSymbol" /></span>
 	                    </div>
 	                </td>
 	            </tr>

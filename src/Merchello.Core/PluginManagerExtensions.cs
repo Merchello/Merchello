@@ -1,21 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using Merchello.Core.Gateways;
-using Merchello.Core.Gateways.Notification;
-using Merchello.Core.Gateways.Payment;
-using Merchello.Core.Gateways.Shipping;
-using Merchello.Core.Gateways.Taxation;
-using Merchello.Core.Triggers;
+using Merchello.Core.Observation;
 using Umbraco.Core;
 
 namespace Merchello.Core
 {
     internal static class PluginManagerExtensions
     {
-
-        internal static IEnumerable<Type> ResolveEventTriggeredActions(this PluginManager pluginManager)
+        /// <summary>
+        /// Returns a collection of all <see cref="ITrigger"/> types decorated with the <see cref="TriggerForAttribute"/>
+        /// </summary>        
+        internal static IEnumerable<Type> ResolveObservableTriggers(this PluginManager pluginManager)
         {
-            return pluginManager.ResolveTypesWithAttribute<IEventTriggeredAction, EventTriggeredActionForAttribute>();
+            return pluginManager.ResolveTypesWithAttribute<ITrigger, TriggerForAttribute>();
+        }
+
+        /// <summary>
+        /// Returns a collection of all <see cref="IMonitor"/> types decorated with the <see cref="MonitorForAttribute"/>
+        /// </summary> 
+        internal static IEnumerable<Type> ResolveObserverMonitors(this PluginManager pluginManager)
+        {
+            return pluginManager.ResolveTypesWithAttribute<IMonitor, MonitorForAttribute>();
         }
 
         /// <summary>

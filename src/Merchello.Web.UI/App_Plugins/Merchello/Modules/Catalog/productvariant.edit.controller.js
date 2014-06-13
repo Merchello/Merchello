@@ -12,93 +12,10 @@
 
         assetsService.loadCss("/App_Plugins/Merchello/Common/Css/merchello.css");
 
-        function loadProductVariant(id) {
-
-            var promiseVariant = merchelloProductVariantService.getById(id);
-            promiseVariant.then(function(productVariant) {
-
-                $scope.productVariant = new merchello.Models.ProductVariant(productVariant);
-
-                $scope.loaded = true;
-                $scope.preValuesLoaded = true;
-
-            }, function(reason) {
-
-                notificationsService.error("Product Variant Load Failed", reason.message);
-
-            });
-        }
-
-        function loadProduct(key, isVariant) {
-
-            var promiseProduct = merchelloProductService.getByKey(key);
-            promiseProduct.then(function(product) {
-
-                $scope.product = new merchello.Models.Product(product);
-
-                if (!isVariant) {
-                    // create the master variant (since most form items are bound to the productVariant model)
-                    $scope.productVariant.copyFromProduct($scope.product);
-                } else {
-                    // Let the variant load from the loadProductVariant() call
-                }
-
-                $scope.loaded = true;
-                $scope.preValuesLoaded = true;
-
-            }, function(reason) {
-
-                notificationsService.error("Product Load Failed", reason.message);
-
-            });
-        }
-
-        function loadProductForVariantCreate(key) {
-
-            var promiseProduct = merchelloProductService.getByKey(key);
-            promiseProduct.then(function(product) {
-
-                $scope.product = new merchello.Models.Product(product);
-
-                var promiseCreatable = merchelloProductVariantService.getVariantsByProductThatCanBeCreated(key);
-                promiseCreatable.then(function (variants) {
-                    $scope.possibleVariants = _.map(variants, function (v) {
-                        var newVariant = new merchello.Models.ProductVariant(v);
-                        newVariant.key = "";
-                        return newVariant;
-                    });
-
-                    if (!_.isEmpty($scope.possibleVariants)) {
-                        $scope.productVariant = $scope.possibleVariants[0];                        
-                    }
-
-                    $scope.loaded = true;
-                    $scope.preValuesLoaded = true;
-
-                }, function (reason) {
-                    notificationsService.error("Product Variants Remaining Load Failed", reason.message);
-                });
-
-            }, function(reason) {
-
-                notificationsService.error("Parent Product Load Failed", reason.message);
-
-            });
-        }
-
-        function isCreating() {
-            return $routeParams.create;
-        }
-
-        function isCreatingVariant() {
-            return $routeParams.createvariant;
-        }
-
-
         ////////////////////////////////////////////////
         // Initialize state
 
-        // Get warehouses
+        // Get warehouses - Need this to link the possible warehouses to the inventory section
         $scope.warehouses = [];
         var promiseWarehouse = merchelloWarehouseService.getDefaultWarehouse();
         promiseWarehouse.then(function (warehouse) {
@@ -109,10 +26,10 @@
             }
         });
 
-        // Get settings
+        // Get settings - contains defaults for the checkboxes
         $scope.settings = {};
         var promiseSettings = merchelloSettingsService.getAllSettings();
-        promiseSettings.then(function(settings) {
+        promiseSettings.then(function (settings) {
             $scope.settings = new merchello.Models.StoreSettings(settings);
             if (isCreating() || isCreatingVariant()) {
                 $scope.productVariant.shippable = $scope.settings.globalShippable;
@@ -123,6 +40,11 @@
 
         $scope.allVariantInventories = 0;
 
+        // This is to help manage state for the four possible states this page can be in:
+        //   * Creating a Product
+        //   * Editing a Product
+        //   * Creating a Product Variant
+        //   * Editing a Product Variant
         if (isCreating()) {
             $scope.creatingProduct = true;
             $scope.creatingVariant = false;
@@ -163,30 +85,179 @@
 
 
                 $scope.editingVariant = true;
+                $scope.parentProductId = $routeParams.id;
             }
 
         }
         ////////////////////////////////////////////////
 
 
-        ////////////////////////////////////////////////
-        // EVENTS
 
-        $scope.save = function(thisForm) {
+        //--------------------------------------------------------------------------------------
+        // Initialization methods
+        //--------------------------------------------------------------------------------------
+
+        /**
+         * @ngdoc method
+         * @name loadProductVariant
+         * @function
+         * 
+         * @description
+         * Load a product variant by the variant key.
+         */
+        function loadProductVariant(id) {
+
+            var promiseVariant = merchelloProductVariantService.getById(id);
+            promiseVariant.then(function(productVariant) {
+
+                $scope.productVariant = new merchello.Models.ProductVariant(productVariant);
+
+                $scope.loaded = true;
+                $scope.preValuesLoaded = true;
+
+            }, function(reason) {
+
+                notificationsService.error("Product Variant Load Failed", reason.message);
+
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @name loadProduct
+         * @function
+         * 
+         * @description
+         * Load a product by the product key.  The isVariant flag lets us know if we are trying to edit a variant or edit a product.
+         */
+        function loadProduct(key, isVariant) {
+
+            var promiseProduct = merchelloProductService.getByKey(key);
+            promiseProduct.then(function(product) {
+
+                $scope.product = new merchello.Models.Product(product);
+
+                if (!isVariant) {
+                    // create the master variant (since most form items are bound to the productVariant model)
+                    $scope.productVariant.copyFromProduct($scope.product);
+                } else {
+                    // Let the variant load from the loadProductVariant() call
+                }
+
+                $scope.loaded = true;
+                $scope.preValuesLoaded = true;
+
+            }, function(reason) {
+
+                notificationsService.error("Product Load Failed", reason.message);
+
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @name loadProductForVariantCreate
+         * @function
+         * 
+         * @description
+         * Load a product by the product key.  This is used only for creating variants on an existing product.
+         */
+        function loadProductForVariantCreate(key) {
+
+            var promiseProduct = merchelloProductService.getByKey(key);
+            promiseProduct.then(function(product) {
+
+                $scope.product = new merchello.Models.Product(product);
+
+                var promiseCreatable = merchelloProductVariantService.getVariantsByProductThatCanBeCreated(key);
+                promiseCreatable.then(function (variants) {
+                    $scope.possibleVariants = _.map(variants, function (v) {
+                        var newVariant = new merchello.Models.ProductVariant(v);
+                        newVariant.key = "";
+                        return newVariant;
+                    });
+
+                    if (!_.isEmpty($scope.possibleVariants)) {
+                        $scope.productVariant = $scope.possibleVariants[0];                        
+                    }
+
+                    $scope.loaded = true;
+                    $scope.preValuesLoaded = true;
+
+                }, function (reason) {
+                    notificationsService.error("Product Variants Remaining Load Failed", reason.message);
+                });
+
+            }, function(reason) {
+
+                notificationsService.error("Parent Product Load Failed", reason.message);
+
+            });
+        }
+
+
+        //--------------------------------------------------------------------------------------
+        // Helper methods
+        //--------------------------------------------------------------------------------------
+
+        /**
+         * @ngdoc method
+         * @name isCreating
+         * @function
+         * 
+         * @description
+         * Helper to get whether a product is being created.  This is indicated by a param in the url.
+         */
+        function isCreating() {
+            return $routeParams.create;
+        }
+
+        /**
+         * @ngdoc method
+         * @name isCreatingVariant
+         * @function
+         * 
+         * @description
+         * Helper to get whether a variant is being created.  This is indicated by a param in the url.
+         */
+        function isCreatingVariant() {
+            return $routeParams.createvariant;
+        }
+
+
+
+        //--------------------------------------------------------------------------------------
+        // Event Handlers
+        //--------------------------------------------------------------------------------------
+
+        /**
+         * @ngdoc method
+         * @name save
+         * @function
+         * 
+         * @description
+         * Called when the Save button is pressed.  See comments below.
+         */
+        $scope.save = function (thisForm) {
 
             if (thisForm.$valid) {
 
-                notificationsService.info("Saving...", "");
+                //notificationsService.info("Saving...", "");
 
 
                 if ($scope.creatingProduct) // Save on initial create
                 {
+                    if (!$scope.product.hasVariants && $scope.product.productOptions.length > 0) // The options checkbox was checked, a blank option was added, then the has options was unchecked
+                    {
+                        $scope.product.productOptions = [];
+                    }
+
                     // Copy from master variant
                     $scope.product.copyFromVariant($scope.productVariant);
 
                     var promiseCreate = merchelloProductService.createProduct($scope.product, function() {
                         $scope.creatingProduct = false;
-                        notificationsService.success("*** Product ", status);
+                        //notificationsService.success("*** Product ", status);
                     });
                     promiseCreate.then(function(product) {
 
@@ -194,7 +265,7 @@
                         $scope.productVariant.copyFromProduct($scope.product);
 
                         $scope.creatingProduct = false; // For the variant edit/create view.
-                        notificationsService.success("Product Created and Saved", "H5YR!");
+                        notificationsService.success("Product Created and Saved", "");
 
                     }, function(reason) {
                         notificationsService.error("Product Create Failed", reason.message);
@@ -204,7 +275,7 @@
                     var promise = merchelloProductVariantService.create($scope.productVariant);
 
                     promise.then(function(productVariant) {
-                        notificationsService.success("Product Variant Created and Saved", "H5YR!");
+                        notificationsService.success("Product Variant Created and Saved", "");
 
                         $location.url("/merchello/merchello/ProductEdit/" + $scope.productVariant.productKey, true);
 
@@ -216,7 +287,7 @@
                     var promise = merchelloProductVariantService.save($scope.productVariant);
 
                     promise.then(function(product) {
-                        notificationsService.success("Product Variant Saved", "H5YR!");
+                        notificationsService.success("Product Variant Saved", "");
 
                         $location.url("/merchello/merchello/ProductEdit/" + $scope.productVariant.productKey, true);
 
@@ -247,13 +318,18 @@
                         });
                     } else // Simple product save with no options or variants
                     {
+                        if ($scope.product.productOptions.length > 0) // The options checkbox was checked, a blank option was added, then the has options was unchecked
+                        {
+                            $scope.product.productOptions = [];
+                        }
+
                         // Copy from master variant
                         $scope.product.copyFromVariant($scope.productVariant);
 
                         var promise = merchelloProductService.updateProduct($scope.product);
 
                         promise.then(function(product) {
-                            notificationsService.success("Product Saved", "H5YR!");
+                            notificationsService.success("Product Saved", "");
 
                             $scope.product = product;
                             $scope.productVariant.copyFromProduct($scope.product);
@@ -266,11 +342,21 @@
             }
         };
 
+        /**
+         * @ngdoc method
+         * @name deleteProduct
+         * @function
+         * 
+         * @description
+         * Called when the Delete Product button is pressed.
+         *
+         * TODO: Need to call a confirmation dialog for this.
+         */
         $scope.deleteProduct = function () {
             var promiseDel = merchelloProductService.deleteProduct($scope.product);
 
             promiseDel.then(function () {
-                notificationsService.success("Product Deleted", "H5YR!");
+                notificationsService.success("Product Deleted", "");
 
                 $location.url("/merchello/merchello/ProductList/manage", true);
 
@@ -279,11 +365,21 @@
             });
         };
 
+        /**
+         * @ngdoc method
+         * @name deleteVariant
+         * @function
+         * 
+         * @description
+         * Called when the Delete Variant button is pressed.
+         *
+         * TODO: Need to call a confirmation dialog for this.
+         */
         $scope.deleteVariant = function () {
             var promiseDel = merchelloProductVariantService.deleteVariant($scope.productVariant.key);
 
             promiseDel.then(function () {
-                notificationsService.success("Product Variant Deleted", "H5YR!");
+                notificationsService.success("Product Variant Deleted", "");
 
                 $location.url("/merchello/merchello/ProductEdit/" + $scope.productVariant.productKey, true);
 
@@ -292,7 +388,17 @@
             });
         };
 
-        $scope.chooseMedia = function() {
+        /**
+         * @ngdoc method
+         * @name chooseMedia
+         * @function
+         * 
+         * @description
+         * Called when the select media button is pressed for the digital download section.
+         *
+         * TODO: make a media selection dialog that works with PDFs, etc
+         */
+        $scope.chooseMedia = function () {
 
             dialogService.mediaPicker({
                 multipicker: true,
@@ -315,55 +421,100 @@
 
         };
 
-        $scope.ensureInitialOption = function() {
+        /**
+         * @ngdoc method
+         * @name ensureInitialOption
+         * @function
+         * 
+         * @description
+         * This is called when the "This variant has options" checkbox is checked.  It creates an initial blank option ready to 
+         * fill out.  If the checkbox is unchecked, then the option will be deleted before saving the product.
+         */
+        $scope.ensureInitialOption = function () {
 
             if ($scope.product.productOptions.length == 0) {
                 $scope.product.addBlankOption();
             }
         };
 
-        $scope.ensureCatalogInventory = function() {
+        /**
+         * @ngdoc method
+         * @name ensureCatalogInventory
+         * @function
+         * 
+         * @description
+         * This is called when the "Track inventory for this variant" checkbox is checked.  It creates an initial catalog inventory object ready to 
+         * fill out.
+         */
+        $scope.ensureCatalogInventory = function () {
 
             $scope.productVariant.ensureCatalogInventory($scope.defaultWarehouse);
         };
 
-        $scope.addOption = function() {
+        /**
+         * @ngdoc method
+         * @name addOption
+         * @function
+         * 
+         * @description
+         * Called when the Add Option button is pressed.  Creates a new option ready to fill out.
+         */
+        $scope.addOption = function () {
 
             $scope.product.addBlankOption();
 
         };
 
+        /**
+         * @ngdoc method
+         * @name removeOption
+         * @function
+         * 
+         * @description
+         * Called when the Trash can icon button is pressed next to an option. Removes the option from the product.
+         */
         $scope.removeOption = function (option) {
 
             $scope.product.removeOption(option);
 
         };
 
-        $scope.updateVariants = function(thisForm) {
+        /**
+        * @ngdoc method
+        * @name updateVariants
+        * @function
+        * 
+        * @description
+        * Called when the Update button is pressed below the options.  This will create a new product if necessary 
+        * and save the product.  Then the product variants are generated.
+        * 
+        * We have to create the product because the API cannot create the variants with a product with options.
+        */
+        $scope.updateVariants = function (thisForm) {
 
             // Create the product if not created
             if ($scope.creatingProduct) {
                 if (thisForm.$valid) {
-                    notificationsService.info("Creating and saving new product", "");
+                    //notificationsService.info("Creating and saving new product", "");
 
                     // Copy from master variant
                     $scope.product.copyFromVariant($scope.productVariant);
 
                     var promiseCreate = merchelloProductService.createProduct($scope.product, function() {
                         $scope.creatingProduct = false;
-                        notificationsService.success("*** Product ", status);
+                        //notificationsService.success("*** Product ", status);
                     });
                     promiseCreate.then(function(product) {
 
                         $scope.product = product;
                         $scope.productVariant.copyFromProduct($scope.product);
 
-                        notificationsService.success("Product Created and Saved", "H5YR!");
+                        //notificationsService.success("Product Created and Saved", "");
 
                         $scope.product = merchelloProductService.createVariantsFromOptions($scope.product);
 
                         $scope.creatingProduct = false; // For the variant edit/create view.
-                        notificationsService.success("Product Variants Created", "");
+                        notificationsService.success("Product and Product Variants Created", "");
 
                     }, function(reason) {
                         notificationsService.error("Product Create Failed", reason.message);
@@ -378,7 +529,7 @@
                 var promise = merchelloProductService.updateProduct($scope.product);
 
                 promise.then(function(product) {
-                    notificationsService.success("Product Saved", "H5YR!");
+                    notificationsService.success("Product Saved", "");
 
                     $scope.product = product;
                     $scope.productVariant.copyFromProduct($scope.product);
@@ -391,7 +542,16 @@
             }
         };
 
-        $scope.applyAllVariantInventories = function(allVariantInventories) {
+        /**
+        * @ngdoc method
+        * @name updateVariants
+        * @function
+        * 
+        * @description
+        * Called when the Apply button is pressed in the Base Inventory section.  This simply sets the inventory
+        * amounts for each variant to the number in the box next to the apply button.
+        */
+        $scope.applyAllVariantInventories = function (allVariantInventories) {
 
             for (var i = 0; i < $scope.product.productVariants.length; i++) {
                 $scope.product.productVariants[i].globalInventoryChanged(allVariantInventories);
@@ -399,26 +559,6 @@
 
         };
 
-        ////////////////////////////////////////////////
-        /// HELPERS
-
-        //$scope.isChoiceAvailable = function(choice) {
-        //    if ($scope.remainingChoices) {
-        //        var foundChoice = _.find($scope.remainingChoices, function(c) { return c.key == choice.key; });
-        //        return foundChoice;
-        //    } else {
-        //        return {};
-        //    }
-        //};
-
-        //$scope.availableChoices = function (option) {
-        //    if ($scope.remainingChoices) {
-        //        var remainingChoiceKeys = _.pluck($scope.remainingChoices, 'key');              
-        //        return _.filter(option.choices, function(c) { return _.contains(remainingChoiceKeys, c.key); });
-        //    } else {
-        //        return [];
-        //    }
-        //};
     };
 
     angular.module("umbraco").controller("Merchello.Editors.ProductVariant.EditController", ['$scope', '$routeParams', '$location', '$q', 'assetsService', 'notificationsService', 'dialogService', 'angularHelper', 'serverValidationManager', 'merchelloProductService', 'merchelloProductVariantService', 'merchelloWarehouseService', 'merchelloSettingsService', merchello.Controllers.ProductVariantEditController]);

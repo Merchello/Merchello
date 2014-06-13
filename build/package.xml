@@ -47,7 +47,8 @@
       </MerchelloSearchProviders>
     </Action>
     <Action runat="install" undo="true" alias="Merchello_AddLanguageFileKey" language="en" position="end" area="sections" key="merchello" value="Merchello" />
-    <Action runat="install" undo="true" alias="Merchello_GrantPermissionForApp" userLogin="$currentUser" appName="merchello"/>
+    <Action runat="install" undo="true" alias="Merchello_AddLocalizationAreas" />
+    <Action runat="install" undo="true" alias="Merchello_GrantPermissionForApp" userLogin="$currentUser" appName="merchello"/>    
   </Actions>
   <control />
   <files />

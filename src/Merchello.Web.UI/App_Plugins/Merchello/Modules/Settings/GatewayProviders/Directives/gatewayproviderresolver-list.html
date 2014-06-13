@@ -2,8 +2,8 @@
         
         <table class="table table-striped merchello-striped-table settings-table shipping-table">
             <thead>
-                <th>Provider Name</th>
-                <th colspan="2">Description</th>
+                <th><localize key="merchelloGatewayProvider_providerName" /></th>
+                <th colspan="2"><localize key="merchelloNotificationsEdit_description" /></th>
             </thead>
             <tbody>
                 <tr data-ng-repeat="gatewayProvider in providerList">
@@ -11,8 +11,8 @@
                     <td>{{gatewayProvider.description}}</td>
                     <td class="edit">
                         <div class="btn-group">
-                        <a data-ng-click="activate({provider: gatewayProvider})" data-ng-hide="gatewayProvider.activated" class="btn btn-default btn-xs btn-mini">activate</a>
-                        <a data-ng-click="deactivate({provider: gatewayProvider})" data-ng-show="gatewayProvider.activated" class="btn btn-warning btn-xs btn-mini">deactivate</a>
+                            <a data-ng-click="activate({provider: gatewayProvider})" data-ng-hide="gatewayProvider.activated" class="btn btn-default btn-xs btn-mini"><localize key="merchelloGatewayProvider_activate"/></a>
+                        <a data-ng-click="deactivate({provider: gatewayProvider})" data-ng-show="gatewayProvider.activated" class="btn btn-warning btn-xs btn-mini"><localize key="merchelloGatewayProvider_deactivate" /></a>
                         <a data-ng-click="configure({provider: gatewayProvider})" data-ng-show="gatewayProvider.displayEditor()" class="btn btn-default btn-xs btn-mini"><i class="icon-edit"></i></a>
                         </div>
                     </td>

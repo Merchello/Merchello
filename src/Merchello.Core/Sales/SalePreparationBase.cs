@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Merchello.Core.Builders;
-using Merchello.Core.Events;
 using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Models;
@@ -10,7 +9,6 @@ using Merchello.Core.Models.TypeFields;
 using Merchello.Core.Services;
 using Umbraco.Core;
 using Umbraco.Core.Cache;
-using Umbraco.Core.Events;
 using Umbraco.Core.Logging;
 
 namespace Merchello.Core.Sales
@@ -137,6 +135,36 @@ namespace Merchello.Core.Sales
         }
 
         /// <summary>
+        /// Clears all <see cref="IShipmentRateQuote"/>s previously saved
+        /// </summary>
+        public void ClearShipmentRateQuotes()
+        {
+            var items = _itemCache.Items.Where(x => x.LineItemType == LineItemType.Shipping).ToArray();
+            foreach (var item in items)
+            {
+                _itemCache.Items.RemoveItem(item.Sku);
+            }
+            _merchelloContext.Services.ItemCacheService.Save(_itemCache);
+        }
+
+        /// <summary>
+        /// Saves a <see cref="IPaymentMethod"/> to <see cref="ICustomerBase"/> extended data
+        /// </summary>
+        public void SavePaymentMethod(IPaymentMethod paymentMethod)
+        {
+            _customer.ExtendedData.AddPaymentMethod(paymentMethod);
+        }
+
+        /// <summary>
+        /// Gets a <see cref="IPaymentMethod"/> from <see cref="ICustomerBase"/> extended data
+        /// </summary>
+        public IPaymentMethod GetPaymentMethod()
+        {
+            var paymentMethodKey = _customer.ExtendedData.GetPaymentMethodKey();
+            return paymentMethodKey.Equals(Guid.Empty) ? null : _merchelloContext.Gateways.Payment.GetPaymentGatewayMethodByKey(paymentMethodKey).PaymentMethod;
+        }
+
+        /// <summary>
         /// Maps the <see cref="IShipmentRateQuote"/> to a <see cref="ILineItem"/> 
         /// </summary>
         /// <param name="shipmentRateQuote">The <see cref="IShipmentRateQuote"/> to be added as a <see cref="ILineItem"/></param>
@@ -155,8 +183,7 @@ namespace Merchello.Core.Sales
         /// </remarks>
         public virtual bool IsReadyToInvoice()
         {
-            return (_customer.ExtendedData.GetAddress(AddressType.Billing) != null) &&
-                   (_customer.ExtendedData.GetAddress(AddressType.Shipping) != null);
+            return (_customer.ExtendedData.GetAddress(AddressType.Billing) != null);
         }
 
 
@@ -214,7 +241,14 @@ namespace Merchello.Core.Sales
 
             MerchelloContext.Services.InvoiceService.Save(invoice);
 
+            //TODO
+            // Raise the notification event
+           // Announce.Broadcast.InvoicedCustomer(_customer, invoice);
+
             var result = invoice.AuthorizePayment(paymentGatewayMethod, args);
+
+            //if(result.Payment.Success) 
+            //    Announce.Broadcast.PaymentWasAuthorized(_customer, result);
 
             if (!result.ApproveOrderCreation) return result;
 
@@ -278,8 +312,13 @@ namespace Merchello.Core.Sales
 
             MerchelloContext.Services.InvoiceService.Save(invoice);
 
+            //TODO
+            //Announce.Broadcast.InvoicedCustomer(_customer, invoice);
+
             var result = invoice.AuthorizeCapturePayment(paymentGatewayMethod, args);
 
+            //if(result.Payment.Success)
+            //    Announce.Broadcast.PaymentWasCaptured(_customer, result);
             
             if (!result.ApproveOrderCreation) return result;
 

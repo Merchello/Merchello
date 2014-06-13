@@ -34,7 +34,7 @@ namespace Merchello.Web.Editors
         /// </summary>
         /// <param name="merchelloContext"></param>
         public GatewayProviderApiController(IMerchelloContext merchelloContext)
-            : base((MerchelloContext) merchelloContext)
+            : base((MerchelloContext) merchelloContext) 
         {
             _gatewayContext = merchelloContext.Gateways;
             _gatewayProviderService = merchelloContext.Services.GatewayProviderService;
@@ -213,6 +213,13 @@ namespace Merchello.Web.Editors
         {
             switch (gatewayProviderType)
             {
+               case GatewayProviderType.Notification:
+                    if(gatewayProviderSettings.Activated)
+                        _gatewayContext.Notification.DeactivateProvider(gatewayProviderSettings);
+                    else
+                        _gatewayContext.Notification.ActivateProvider(gatewayProviderSettings);
+                    break;
+
                 case GatewayProviderType.Payment:
                     if (gatewayProviderSettings.Activated)
                         _gatewayContext.Payment.DeactivateProvider(gatewayProviderSettings);
@@ -251,6 +258,11 @@ namespace Merchello.Web.Editors
 
             switch (gatewayProviderType)
             {
+
+                case GatewayProviderType.Notification:
+                    provider = _gatewayContext.Notification.GetProviderByKey(gatewayProvider.Key, false);
+                    break;
+
                 case GatewayProviderType.Payment:
                     provider = _gatewayContext.Payment.GetProviderByKey(gatewayProvider.Key, false);
                     break;

@@ -43,11 +43,12 @@
 					});
 
 					angular.forEach(payments, function (payment) {
-						angular.forEach(payment.appliedPayments, function(appliedPayment) {
-							appliedPayment.payment = payment;
+						angular.forEach(payment.appliedPayments, function (appliedPayment) {
+							var tempAppliedPayment = appliedPayment;
+							payment.appliedPayments = [];
+							tempAppliedPayment.payment = payment;
+							appliedPayments.push(tempAppliedPayment);
 						});
-
-						appliedPayments = _.union(appliedPayments, payment.appliedPayments);
 					});
 
 						

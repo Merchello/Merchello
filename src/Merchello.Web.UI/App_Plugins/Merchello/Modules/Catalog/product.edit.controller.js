@@ -71,6 +71,10 @@
                         $scope.toggleAllVariants(false);
                     }
 
+                    if (!$scope.product.hasVariants && !$scope.product.hasOptions) {
+                        $location.url("/merchello/merchello/ProductVariantEdit/" + $scope.product.key, true);
+                    }
+
                 }, function (reason) {
                     notificationsService.error("Product Save Failed", reason.message);
                 });
@@ -81,7 +85,7 @@
             var promiseDel = merchelloProductService.deleteProduct($scope.product);
 
             promiseDel.then(function() {
-                notificationsService.success("Product Deleted", "H5YR!");
+                notificationsService.success("Product Deleted", "");
 
                 $location.url("/merchello/merchello/ProductList/manage", true);
 
@@ -364,7 +368,7 @@
         $scope.rebuildAndSaveVariants = function() {
             merchelloProductVariantService.deleteAllByProduct($scope.product.key);
 
-            //$scope.product = merchelloProductService.createVariantsFromOptions($scope.product);
+            $scope.product = merchelloProductService.createVariantsFromOptions($scope.product);
 
             // Save immediately
             //var savepromise = merchelloProductService.updateProductWithVariants($scope.product);

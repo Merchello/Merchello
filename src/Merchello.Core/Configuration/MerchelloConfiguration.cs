@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.Configuration;
 using System.IO;
 using System.Linq;
@@ -121,6 +122,24 @@ namespace Merchello.Core.Configuration
                 return null;
             }
             
+        }
+
+        /// <summary>
+        /// Returns the pattern formatter for a given group
+        /// </summary>
+        public ReplacementCollection PatternFormatter
+        {
+            get {
+                try
+                {
+                    return Section.PatternFormatter;
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.Info<MerchelloConfiguration>(ex.Message);
+                    return null;
+                }
+            }
         }
 
         /// <summary>

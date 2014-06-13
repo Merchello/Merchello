@@ -3,6 +3,7 @@ using Examine;
 using Merchello.Core;
 using Merchello.Core.Cache;
 using Merchello.Core.Gateways;
+using Merchello.Core.Observation;
 using Merchello.Core.Persistence.UnitOfWork;
 using Merchello.Core.Services;
 using Merchello.Web;
@@ -24,19 +25,26 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
             _dbPreTestDataWorker = new DbPreTestDataWorker(serviceContext);
 
 
-            if (!GatewayProviderResolver.HasCurrent)
-            {
-                GatewayProviderResolver.Current = new GatewayProviderResolver(
-                PluginManager.Current.ResolveGatewayProviders(),
-                serviceContext.GatewayProviderService,
-                new NullCacheProvider());                
-            }                        
+            if (!GatewayProviderResolver.HasCurrent)    
+            GatewayProviderResolver.Current = new GatewayProviderResolver(
+            PluginManager.Current.ResolveGatewayProviders(),
+            serviceContext.GatewayProviderService,
+            new NullCacheProvider());                
+        
+
 
             MerchelloContext = new MerchelloContext(serviceContext,
                 new GatewayContext(serviceContext, GatewayProviderResolver.Current),
                 new CacheHelper(new NullCacheProvider(),
                                     new NullCacheProvider(),
                                     new NullCacheProvider()));
+
+            if (!TriggerResolver.HasCurrent)
+                TriggerResolver.Current = new TriggerResolver(PluginManager.Current.ResolveObservableTriggers());
+
+            if (!MonitorResolver.HasCurrent)
+                MonitorResolver.Current = new MonitorResolver(MerchelloContext.Gateways.Notification, PluginManager.Current.ResolveObserverMonitors());
+
             AutoMapperMappings.BindMappings();
             ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"].RebuildIndex();  
         }

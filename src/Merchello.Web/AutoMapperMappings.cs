@@ -52,6 +52,8 @@ namespace Merchello.Web
                 );
 
             AutoMapper.Mapper.CreateMap<IOrder, OrderDisplay>();
+
+
             
             //  setup the other mappings
             BindShippingMappings();
@@ -61,6 +63,10 @@ namespace Merchello.Web
             BindPaymentMappings();
 
             BindWarehouseAndProductMappings();
+
+            BindNotificationMappings();
+
+            //ProductContentEditing.BindMappings();
         }
     }
 

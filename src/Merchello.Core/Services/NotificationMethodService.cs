@@ -216,6 +216,18 @@ namespace Merchello.Core.Services
             }
         }
 
+        /// <summary>
+        /// Gets a collection of all notification methods.  
+        /// </summary>
+        /// <remarks>Primarily used for testing</remarks>
+        internal IEnumerable<INotificationMethod> GetAll()
+        {
+            using (var repository = _repositoryFactory.CreateNotificationMethodRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetAll();
+            }
+        }
+
 
         #region Event Handlers
 

@@ -63,7 +63,7 @@ namespace Merchello.Tests.IntegrationTests.Payments
             _address = new Address()
             {
                 Address1 = "114 W. Magnolia St.",
-                Address2 = "Suite 504",
+                Address2 = "Suite 300",
                 Locality = "Bellingham",
                 Region = "WA",
                 CountryCode = "US"
