@@ -89,7 +89,7 @@ namespace Merchello.Core.Persistence.Repositories
                 "DELETE FROM merchItemCacheItem WHERE pk = @Key"
             };
 
-            return list; ;
+            return list;
         }
 
         protected override void PersistNewItem(IItemCacheLineItem entity)
