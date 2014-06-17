@@ -231,10 +231,11 @@
         /// The identifier.
         /// </param>
         /// <param name="isStart">
-        /// The is Start.
+        /// True or false indicatng whether or not the identifier is the start or end of the iteration to 
+        /// be found.
         /// </param>
         /// <returns>
-        /// The <see cref="string"/>.
+        /// The iteration marker
         /// </returns>
         private static string IterationMarker(string identifier, bool isStart = true)
         {
