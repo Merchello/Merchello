@@ -70,7 +70,7 @@ namespace Merchello.Core.Persistence.Repositories
 		/// <param name="entity"></param>
         public virtual void Delete(TEntity entity)
 		{
-			if(_work != null)
+			if (_work != null)
 			{
 				_work.RegisterRemoved(entity, this);
 			}

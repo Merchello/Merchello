@@ -1,17 +1,14 @@
-﻿using Merchello.Core.Cache;
-using Merchello.Core.Models;
-using Merchello.Core.Models.Rdbms;
-using Merchello.Core.Persistence.Repositories;
-using Merchello.Core.Persistence.UnitOfWork;
-using Merchello.Core.Services;
-using Umbraco.Core.Cache;
-
-
-namespace Merchello.Core.Persistence
+﻿namespace Merchello.Core.Persistence
 {
+    using Cache;
+    using Repositories;
+    using UnitOfWork;
+    using Services;
+    using Umbraco.Core.Cache;
+
     /// <summary>
     /// Used to instantiate each repository type
-    /// </summary>
+    /// </summary>    
     public class RepositoryFactory
     {
         private readonly bool _disableAllCache;
@@ -77,11 +74,11 @@ namespace Merchello.Core.Persistence
         /// <summary>
         /// Returns an instance of the <see cref="IItemCacheRepository"/>
         /// </summary>
-        /// <param name="uow"></param>
-        /// <returns></returns>
+        /// <param name="uow">The <see cref="IDatabaseUnitOfWork"/></param>
+        /// <returns>The <see cref="IItemCacheRepository"/></returns>        
         internal virtual IItemCacheRepository CreateItemCacheRepository(IDatabaseUnitOfWork uow)
         {
-            return new ItemCacheRepository(uow,
+            return new ItemCacheRepository(uow, 
                 _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider,
                 CreateCacheLineItemRespository(uow));
         }
@@ -308,6 +305,5 @@ namespace Merchello.Core.Persistence
             return new WarehouseRepository(uow,
                _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
         }
-
     }
 }

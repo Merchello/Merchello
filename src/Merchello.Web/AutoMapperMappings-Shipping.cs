@@ -19,7 +19,7 @@
         {
             // shipping     
             AutoMapper.Mapper.CreateMap<IShippingGatewayProvider, ShippingGatewayProviderDisplay>();
-                //.ForMember(dest => dest.ExtendedData, opt => opt.ResolveUsing<ExtendedDataResolver>().ConstructedBy(() => new ExtendedDataResolver()));
+                ////.ForMember(dest => dest.ExtendedData, opt => opt.ResolveUsing<ExtendedDataResolver>().ConstructedBy(() => new ExtendedDataResolver()));
 
             AutoMapper.Mapper.CreateMap<IShipCountry, ShipCountryDisplay>();
 
