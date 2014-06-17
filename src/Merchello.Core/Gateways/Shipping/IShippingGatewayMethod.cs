@@ -1,8 +1,8 @@
-﻿using Merchello.Core.Models;
-using Umbraco.Core;
-
-namespace Merchello.Core.Gateways.Shipping
+﻿namespace Merchello.Core.Gateways.Shipping
 {
+    using Models;
+    using Umbraco.Core;
+
     public interface IShippingGatewayMethod : IGatewayMethod
     {
         /// <summary>

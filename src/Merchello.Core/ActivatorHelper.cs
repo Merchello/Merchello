@@ -1,10 +1,10 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
-using Umbraco.Core;
-
-namespace Merchello.Core
+﻿namespace Merchello.Core
 {
+    using System;
+    using System.Linq;
+    using System.Reflection;
+    using Umbraco.Core;
+
     /// <summary>
     /// Helper methods for Activation
     /// </summary>
@@ -38,7 +38,6 @@ namespace Merchello.Core
             if (constructor == null) return default(T);
             return (T)constructor.Invoke(ctrValues);
         }
-
 
         /// <summary>
         /// Creates an instance of a type using a constructor with specific arguments

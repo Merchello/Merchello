@@ -168,8 +168,8 @@
         /// The value to be worked on
         /// </param>
         /// <returns>
-        /// Returns a string based on the value passed with line item tokens repeated and suffixed with indexes matching
-        /// their respective index in the enumeration (eg. 0,1,2,3)
+        /// Returns a string based on the value passed with line item identifiers repeated and suffixed with indexes matching
+        /// their respective index in the enumeration (ex. 0,1,2,3)
         /// </returns>
         internal string ExplodeLineItemIterations(string value)
         {
@@ -204,8 +204,8 @@
 
 
         /// <summary>
-        /// Utility method to get the "iteration identifier" eg.  IternationStart[Invoice.Items] - where "Invoice.Items" is considered
-        /// the token
+        /// Utility method to get the "iteration identifier" ex.  IternationStart[Invoice.Items] - where "Invoice.Items" is considered
+        /// the identifier
         /// </summary>
         /// <param name="value">
         /// The value inspect for the token

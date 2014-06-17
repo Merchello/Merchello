@@ -11,7 +11,7 @@ namespace Merchello.Tests.UnitTests.Mappers
         [TestFixtureSetUp]
         public void FixtureSetup()
         {
-            AutoMapperMappings.BindMappings();  
+            AutoMapperMappings.CreateMappings();  
         }
 
         /// <summary>

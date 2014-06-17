@@ -171,7 +171,7 @@ namespace Merchello.Web.Models.ContentEditing
 
 		internal static ShippingGatewayProviderDisplay ToShipGatewayProviderDisplay(this IShippingGatewayProvider shipGatewayProvider)
 		{
-			return AutoMapper.Mapper.Map<ShippingGatewayProviderDisplay>(shipGatewayProvider);
+			return AutoMapper.Mapper.Map<ShippingGatewayProviderDisplay>(shipGatewayProvider); // this is where the error is happening
 		}
 
 		#endregion
