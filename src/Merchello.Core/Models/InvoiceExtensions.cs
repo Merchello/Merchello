@@ -1,24 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Xml;
-using System.Xml.Linq;
-using Merchello.Core.Builders;
-using Merchello.Core.Configuration;
-using Merchello.Core.Configuration.Outline;
-using Merchello.Core.Formatters;
-using Merchello.Core.Gateways.Payment;
-using Merchello.Core.Gateways.Taxation;
-using Merchello.Core.Services;
-using Newtonsoft.Json;
-using Umbraco.Core.Logging;
-using Formatting = Newtonsoft.Json.Formatting;
-
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.IO;
+    using System.Linq;
+    using System.Xml;
+    using System.Xml.Linq;
+    using Builders;
+    using Formatters;
+    using Gateways.Payment;
+    using Gateways.Taxation;    
+    using Newtonsoft.Json;
+    using Services;
+    using Umbraco.Core.Logging;
+    using Formatting = Newtonsoft.Json.Formatting;    
 
     /// <summary>
     /// Extension methods for <see cref="IInvoice"/>
@@ -40,8 +36,8 @@ namespace Merchello.Core.Models
         /// <summary>
         /// Returns the currency code associated with the invoice
         /// </summary>
-        /// <param name="invoice"></param>
-        /// <returns></returns>
+        /// <param name="invoice">The invoice</param>
+        /// <returns>The currency code associated with the invoice</returns>
         public static string CurrencyCode(this IInvoice invoice)
         {
             var allCurrencyCodes =
@@ -74,8 +70,10 @@ namespace Merchello.Core.Models
         /// <summary>
         /// Utility extension to extract the billing <see cref="IAddress"/> from an <see cref="IInvoice"/>
         /// </summary>
-        /// <param name="invoice"></param>
-        /// <returns></returns>
+        /// <param name="invoice">The invoice</param>
+        /// <returns>
+        /// The billing address saved in the invoice
+        /// </returns>
         public static IAddress GetBillingAddress(this IInvoice invoice)
         {
             return new Address()
@@ -96,6 +94,12 @@ namespace Merchello.Core.Models
         /// <summary>
         /// Gets a collection of <see cref="IReplaceablePattern"/> for the invoice
         /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <returns>
+        /// The collection of replaceable patterns
+        /// </returns>
         internal static IEnumerable<IReplaceablePattern> ReplaceablePatterns(this IInvoice invoice)
         {
             // TODO localization needed on pricing and datetime
@@ -114,15 +118,13 @@ namespace Merchello.Core.Models
                 ReplaceablePattern.GetConfigurationReplaceablePattern("BillToPhone", invoice.BillToPhone),
                 ReplaceablePattern.GetConfigurationReplaceablePattern("BillToCompany", invoice.BillToCompany),
                 ReplaceablePattern.GetConfigurationReplaceablePattern("TotalPrice", invoice.Total.ToString("C")),
-                ReplaceablePattern.GetConfigurationReplaceablePattern("InvoiceStatus", invoice.InvoiceStatus.Name)
-                
+                ReplaceablePattern.GetConfigurationReplaceablePattern("InvoiceStatus", invoice.InvoiceStatus.Name)                
             };
 
             patterns.AddRange(invoice.LineItemReplaceablePatterns());
            
             return patterns;
         }
-
        
         #endregion
 

@@ -1,15 +1,18 @@
-﻿using System.Net;
-
-namespace Merchello.Core.Gateways.Notification.Smtp
+﻿namespace Merchello.Core.Gateways.Notification.Smtp
 {
+    using System.Net;
+
     /// <summary>
     /// Represents SMTP Notification Gateway Provider Settings
     /// </summary>
     public class SmtpNotificationGatewayProviderSettings
     {
+        private NetworkCredential _credentials;
+
         public SmtpNotificationGatewayProviderSettings()
             : this("127.0.0.1")
-        { }
+        {            
+        }
 
         public SmtpNotificationGatewayProviderSettings(string host)
         {
@@ -19,7 +22,7 @@ namespace Merchello.Core.Gateways.Notification.Smtp
         }
 
         /// <summary>
-        /// Gets the SMTP Host
+        /// Gets or sets the SMTP Host
         /// </summary>
         public string Host { get; set; }
 
@@ -39,19 +42,18 @@ namespace Merchello.Core.Gateways.Notification.Smtp
         public bool EnableSsl { get; set; }
         
         /// <summary>
-        /// Gets / sets the port
+        /// Gets or sets the port
         /// </summary>
         public int Port { get; set; }
 
         /// <summary>
-        /// True/false indicating whether or not credentials are present
+        /// Gets a bool indicating whether or not credentials are present
         /// </summary>
         public virtual bool HasCredentials
         {
             get { return !string.IsNullOrEmpty(UserName) && !string.IsNullOrEmpty(Password); }
         }
-
-        private NetworkCredential _credentials;
+        
         public virtual NetworkCredential Credentials
         {
             get
@@ -60,6 +62,5 @@ namespace Merchello.Core.Gateways.Notification.Smtp
                 return _credentials ?? (_credentials = new NetworkCredential(UserName, Password));
             }
         }
-
     }
 }

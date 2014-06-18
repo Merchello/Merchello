@@ -1,14 +1,14 @@
-﻿using System;
-using System.Net.Mail;
-using System.Threading.Tasks;
-using Merchello.Core.Models;
-using Merchello.Core.Services;
-using Umbraco.Core.Logging;
-
-namespace Merchello.Core.Gateways.Notification.Smtp
+﻿namespace Merchello.Core.Gateways.Notification.Smtp
 {
+    using System;
+    using System.Net.Mail;
+    using System.Threading.Tasks;
+    using Models;
+    using Services;
+    using Umbraco.Core.Logging;
+
     /// <summary>
-    /// Representsa SmtpNotificationGatewayMethod
+    /// Represents a SmtpNotificationGatewayMethod
     /// </summary>
     public class SmtpNotificationGatewayMethod : NotificationGatewayMethodBase
     {
@@ -61,9 +61,6 @@ namespace Merchello.Core.Gateways.Notification.Smtp
                     LogHelper.Error<SmtpNotificationGatewayMethod>("SMTP provider failed sending email", ex);
                 }
             });
-
         }
-
-
     }
 }

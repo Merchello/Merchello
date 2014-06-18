@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using Merchello.Core.Gateways.Payment;
-using Merchello.Core.Models.MonitorModels;
-using Merchello.Core.Observation;
-
-namespace Merchello.Core.Gateways.Notification.Triggering
+﻿namespace Merchello.Core.Gateways.Notification.Triggering
 {
+    using System.Collections.Generic;
+    using Models.MonitorModels;
+    using Observation;
+    using Payment;
+
     /// <summary>
     /// Represents and OrderConfirmationTrigger
     /// </summary>
@@ -15,10 +14,15 @@ namespace Merchello.Core.Gateways.Notification.Triggering
         /// <summary>
         /// Value to pass to the notification monitors
         /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <param name="contacts">
+        /// An additional list of contacts
+        /// </param>
         protected override void Notify(IPaymentResult model, IEnumerable<string> contacts)
         {            
            NotifyMonitors(model.ToOrderConfirmationNotification(contacts));           
         }
-
     }
 }

@@ -1,21 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Merchello.Core.Formatters;
-using Merchello.Core.Models;
-using Merchello.Core.Services;
-using Umbraco.Core.Logging;
-
-namespace Merchello.Core.Gateways.Notification
+﻿namespace Merchello.Core.Gateways.Notification
 {
+    using System.Collections.Generic;
+    using Formatters;
+    using Models;
+    using Services;
+    using Umbraco.Core.Logging;
+
     /// <summary>
     /// Represents a NotificationGatewayMethodBase object
     /// </summary>
     public abstract class NotificationGatewayMethodBase : INotificationGatewayMethod
     {
         private readonly IGatewayProviderService _gatewayProviderService;
+
         private readonly INotificationMethod _notificationMethod;
-        
+
+        private IEnumerable<INotificationMessage> _notificationMessages;
+
         protected NotificationGatewayMethodBase(IGatewayProviderService gatewayProviderService, INotificationMethod notificationMethod)
         {
             Mandate.ParameterNotNull(gatewayProviderService, "gatewayProviderService");
@@ -23,6 +24,35 @@ namespace Merchello.Core.Gateways.Notification
 
             _notificationMethod = notificationMethod;
             _gatewayProviderService = gatewayProviderService;
+        }
+
+        /// <summary>
+        /// Gets the <see cref="INotificationMethod"/>
+        /// </summary>
+        public INotificationMethod NotificationMethod
+        {
+            get { return _notificationMethod; }
+        }
+       
+        /// <summary>
+        /// Gets a collection of <see cref="INotificationMessage"/>s associated with this NotificationMethod
+        /// </summary>
+        public IEnumerable<INotificationMessage> NotificationMessages
+        {
+            get
+            {
+                return _notificationMessages ??
+                       (_notificationMessages =
+                           GatewayProviderService.GetNotificationMessagesByMethodKey(_notificationMethod.Key));
+            }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IGatewayProviderService"/>
+        /// </summary>
+        protected IGatewayProviderService GatewayProviderService
+        {
+            get { return _gatewayProviderService; }
         }
 
         /// <summary>
@@ -72,27 +102,6 @@ namespace Merchello.Core.Gateways.Notification
             _notificationMessages = null;
         }
 
-        ///// <summary>
-        ///// Sends a <see cref="IFormattedNotificationMessage"/> given it's unique Key (Guid)
-        ///// </summary>
-        ///// <param name="messageKey">The unique key (Guid) of the <see cref="IFormattedNotificationMessage"/></param>
-        //public virtual void Send(Guid messageKey)
-        //{
-        //    Send(messageKey, new DefaultFormatter());
-        //}
-
-        ///// <summary>
-        ///// Sends a <see cref="IFormattedNotificationMessage"/> given it's unique Key (Guid)
-        ///// </summary>
-        ///// <param name="messageKey">The unique key (Guid) of the <see cref="IFormattedNotificationMessage"/></param>
-        ///// <param name="formatter">The <see cref="IFormatter"/> to use to format the message</param>
-        //public virtual void Send(Guid messageKey, IFormatter formatter)
-        //{
-        //    var message = _gatewayProviderService.GetNotificationMessageByKey(messageKey);
-
-        //    Send(message, formatter);
-        //}
-
         /// <summary>
         /// Sends a <see cref="IFormattedNotificationMessage"/>
         /// </summary>
@@ -116,39 +125,6 @@ namespace Merchello.Core.Gateways.Notification
         /// Does the actual work of sending the <see cref="IFormattedNotificationMessage"/>
         /// </summary>
         /// <param name="message">The <see cref="IFormattedNotificationMessage"/> to be sent</param>
-        public abstract void PerformSend(IFormattedNotificationMessage message);
-        
-
-        /// <summary>
-        /// Gets the <see cref="INotificationMethod"/>
-        /// </summary>
-        public INotificationMethod NotificationMethod 
-        {
-            get { return _notificationMethod; }
-        }
-
-
-
-        private IEnumerable<INotificationMessage> _notificationMessages;
-
-        /// <summary>
-        /// Gets a collection of <see cref="INotificationMessage"/>s associated with this NotificationMethod
-        /// </summary>
-        public IEnumerable<INotificationMessage> NotificationMessages
-        {
-            get {
-                return _notificationMessages ??
-                       (_notificationMessages =
-                           GatewayProviderService.GetNotificationMessagesByMethodKey(_notificationMethod.Key));
-            }
-        }
-
-        /// <summary>
-        /// Gets the <see cref="IGatewayProviderService"/>
-        /// </summary>
-        protected IGatewayProviderService GatewayProviderService
-        {
-            get { return _gatewayProviderService; }
-        }
+        public abstract void PerformSend(IFormattedNotificationMessage message);        
     }
 }
