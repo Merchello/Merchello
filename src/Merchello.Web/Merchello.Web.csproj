@@ -114,7 +114,9 @@
     </Compile>
     <Compile Include="AutoMapperMappings.cs" />
     <Compile Include="CheckoutExtensions.cs" />
-    <Compile Include="Editors\CatalogFixedRateShippingApiController.cs" />
+    <Compile Include="Editors\CatalogFixedRateShippingApiController.cs">
+      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
+    </Compile>
     <Compile Include="Editors\GatewayProviderApiController.cs" />
     <Compile Include="Editors\InvoiceApiController.cs" />
     <Compile Include="Editors\NotificationGatewayApiController.cs" />
@@ -144,7 +146,9 @@
     <Compile Include="Models\ContentEditing\AppliedPaymentDisplay.cs" />
     <Compile Include="Models\ContentEditing\GatewayProviderDisplay.cs" />
     <Compile Include="Models\ContentEditing\GatewayResourceDisplay.cs" />
-    <Compile Include="Models\ContentEditing\FixedRateShipMethodDisplay.cs" />
+    <Compile Include="Models\ContentEditing\FixedRateShipMethodDisplay.cs">
+      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
+    </Compile>
     <Compile Include="Models\ContentEditing\InvoiceDisplay.cs" />
     <Compile Include="Models\ContentEditing\InvoiceLineItemDisplay.cs" />
     <Compile Include="Models\ContentEditing\InvoiceStatusDisplay.cs" />

@@ -1,20 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Http;
-using Merchello.Core.Gateways.Shipping.FixedRate;
-using Umbraco.Web;
-using Umbraco.Web.Mvc;
-using Merchello.Core;
-using Merchello.Core.Services;
-using Merchello.Web.WebApi;
-using Merchello.Web.Models.ContentEditing;
-using System.Net;
-using System.Net.Http;
-using Merchello.Core.Gateways.Shipping;
-
-namespace Merchello.Web.Editors
+﻿namespace Merchello.Web.Editors
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Web.Http;
+    using Core;
+    using Core.Gateways.Shipping;
+    using Core.Gateways.Shipping.FixedRate;
+    using Core.Services;
+    using Models.ContentEditing;    
+    using Umbraco.Web;
+    using Umbraco.Web.Mvc;
+    using WebApi;
+
+    /// <summary>
+    /// The catalog fixed rate shipping api controller.
+    /// </summary>
     [PluginController("Merchello")]
     public class CatalogFixedRateShippingApiController : MerchelloApiController
     {
@@ -28,7 +31,6 @@ namespace Merchello.Web.Editors
         public CatalogFixedRateShippingApiController()
             : this(MerchelloContext.Current)
         {
-
         }
 
         /// <summary>
@@ -71,9 +73,9 @@ namespace Merchello.Web.Editors
         }
 
         /// <summary>
-        /// 
         ///
         /// GET /umbraco/Merchello/ShippingMethodsApi/GetAllShipCountryFixedRateProviders/{id}
+        /// 
         /// </summary>
         /// <remarks>
         /// 

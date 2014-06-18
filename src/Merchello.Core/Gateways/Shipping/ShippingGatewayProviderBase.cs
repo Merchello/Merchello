@@ -1,28 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Merchello.Core.Configuration;
-using Merchello.Core.Models;
-using Merchello.Core.Services;
-using Umbraco.Core.Cache;
-using Umbraco.Core.Logging;
-
-namespace Merchello.Core.Gateways.Shipping
+﻿namespace Merchello.Core.Gateways.Shipping
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Configuration;
+    using Models;
+    using Services;
+    using Umbraco.Core.Cache;
+    using Umbraco.Core.Logging;
+
     /// <summary>
     /// Defines the Shipping Gateway abstract class
     /// </summary>
     public abstract class ShippingGatewayProviderBase : GatewayProviderBase, IShippingGatewayProvider        
     {
-        
+
         protected ShippingGatewayProviderBase(IGatewayProviderService gatewayProviderService, IGatewayProviderSettings gatewayProviderSettings, IRuntimeCacheProvider runtimeCacheProvider)
             : base(gatewayProviderService, gatewayProviderSettings, runtimeCacheProvider)
-        { }
+        {            
+        }
 
         /// <summary>
         /// Creates an instance of a ship method (T) without persisting it to the database
         /// </summary>
-        /// <returns></returns>
+        /// <param name="gatewayResource">
+        /// The gateway Resource.
+        /// </param>
+        /// <param name="shipCountry">
+        /// The ship Country.
+        /// </param>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <returns>
+        /// The newly created <see cref="IShippingGatewayMethod"/>
+        /// </returns>
         /// <remarks>
         /// 
         /// ShipMethods should be unique with respect to <see cref="IShipCountry"/> and <see cref="IGatewayResource"/>
@@ -33,14 +45,19 @@ namespace Merchello.Core.Gateways.Shipping
         /// <summary>
         /// Saves a shipmethod
         /// </summary>
-        /// <param name="shippingGatewayMethod"></param>
+        /// <param name="shippingGatewayMethod">The <see cref="IShippingGatewayMethod"/> to be saved</param>
         public abstract void SaveShippingGatewayMethod(IShippingGatewayMethod shippingGatewayMethod);
        
 
         /// <summary>
         /// Returns a collection of ship methods assigned for this specific provider configuration (associated with the ShipCountry)
         /// </summary>
-        /// <returns></returns>
+        /// <param name="shipCountry">
+        /// The ship Country.
+        /// </param>
+        /// <returns>
+        /// A collection of all <see cref="IShippingGatewayMethod"/> for shipCountry
+        /// </returns>
         public abstract IEnumerable<IShippingGatewayMethod> GetAllShippingGatewayMethods(IShipCountry shipCountry);
 
 

@@ -1,27 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Merchello.Core.Models;
-using Merchello.Core.Models.EntityBase;
-using Merchello.Core.Models.Rdbms;
-using Merchello.Core.Persistence.Factories;
-using Merchello.Core.Persistence.UnitOfWork;
-using Merchello.Core.Persistence.Querying;
-using Umbraco.Core;
-using Umbraco.Core.Cache;
-using Umbraco.Core.Persistence;
-using Umbraco.Core.Persistence.Querying;
-
-namespace Merchello.Core.Persistence.Repositories
+﻿namespace Merchello.Core.Persistence.Repositories
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Factories;
+    using Models;
+    using Models.EntityBase;
+    using Models.Rdbms;    
+    using Querying;    
+    using Umbraco.Core;
+    using Umbraco.Core.Cache;
+    using Umbraco.Core.Persistence;
+    using Umbraco.Core.Persistence.Querying;
+    using UnitOfWork;
+
     /// <summary>
     /// Represents a ItemCacheLineItemRepository
     /// </summary>
     internal class ItemCacheLineItemRepository : LineItemRepositoryBase<IItemCacheLineItem>, IItemCacheLineItemRepository
     {
-        public ItemCacheLineItemRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache) 
+        public ItemCacheLineItemRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache)
             : base(work, cache)
-        { }
+        {            
+        }
+
+        public override void Delete(IItemCacheLineItem entity)
+        {
+            var deletes = GetDeleteClauses();
+            foreach (var delete in deletes)
+            {
+                Database.Execute(delete, new { Key = entity.Key });
+            }
+        }
 
         protected override IItemCacheLineItem PerformGet(Guid key)
         {
@@ -89,7 +99,7 @@ namespace Merchello.Core.Persistence.Repositories
                 "DELETE FROM merchItemCacheItem WHERE pk = @Key"
             };
 
-            return list; ;
+            return list;
         }
 
         protected override void PersistNewItem(IItemCacheLineItem entity)
@@ -117,5 +127,7 @@ namespace Merchello.Core.Persistence.Repositories
 
             entity.ResetDirtyProperties();
         }
+
+
     }
 }

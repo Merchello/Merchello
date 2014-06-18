@@ -149,7 +149,6 @@ namespace Merchello.Core
         /// Fires after initialization and calls the callback to allow for customizations to occur
         /// </summary>
         /// <param name="afterStartup"></param>
-        /// <returns></returns>
         public override IBootManager Startup(Action<MerchelloContext> afterStartup)
         {
             if (_isStarted)

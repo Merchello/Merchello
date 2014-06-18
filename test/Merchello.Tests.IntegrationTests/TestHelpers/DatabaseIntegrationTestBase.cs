@@ -45,7 +45,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
             if (!MonitorResolver.HasCurrent)
                 MonitorResolver.Current = new MonitorResolver(MerchelloContext.Gateways.Notification, PluginManager.Current.ResolveObserverMonitors());
 
-            AutoMapperMappings.BindMappings();
+            AutoMapperMappings.CreateMappings();
             ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"].RebuildIndex();  
         }
 

@@ -1,20 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Merchello.Core.Formatters;
-using Merchello.Core.Models;
-using Merchello.Core.Observation;
-using Merchello.Core.Services;
-
-namespace Merchello.Core.Gateways.Notification
+﻿namespace Merchello.Core.Gateways.Notification
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Formatters;
+    using Models;
+    using Observation;
+    using Services;
+
     /// <summary>
     /// Represents a NotificationContext
     /// </summary>
     internal class NotificationContext : GatewayProviderTypedContextBase<NotificationGatewayProviderBase>, INotificationContext
     {
-
-
         public NotificationContext(IGatewayProviderService gatewayProviderService, IGatewayProviderResolver resolver)
             : base(gatewayProviderService, resolver)
         {
@@ -35,7 +33,7 @@ namespace Merchello.Core.Gateways.Notification
         /// <summary>
         /// Gets a collection of <see cref="INotificationMessage"/>s by a Monitor Key (Guid)
         /// </summary>
-        /// <param name="monitorKey"></param>
+        /// <param name="monitorKey">The Guid identifier of the the <see cref="IMonitor"/></param>
         /// <returns>A collection of NotificationMessage</returns>
         public IEnumerable<INotificationMessage> GetNotificationMessagesByMonitorKey(Guid monitorKey)
         {
@@ -48,7 +46,7 @@ namespace Merchello.Core.Gateways.Notification
         /// <param name="message">The <see cref="INotificationMessage"/> to be sent</param>
         public void Send(INotificationMessage message)
         {
-            Send(message, new DefaultFormatter());
+            this.Send(message, new DefaultFormatter());
         }
 
         /// <summary>
@@ -58,8 +56,7 @@ namespace Merchello.Core.Gateways.Notification
         /// <param name="formatter">The <see cref="IFormatter"/> to use when formatting the message</param>
         public void Send(INotificationMessage message, IFormatter formatter)
         {
-
-            var method = GetAllActivatedProviders().FirstOrDefault(x => ((NotificationGatewayProviderBase)x).NotificationMethods.Any(y => y.Key == message.MethodKey));
+            GetAllActivatedProviders().FirstOrDefault(x => ((NotificationGatewayProviderBase)x).NotificationMethods.Any(y => y.Key == message.MethodKey));
         }
     }
 }
