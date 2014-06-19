@@ -1,20 +1,20 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Merchello.Core.Gateways.Payment;
-
-namespace Merchello.Core.Models.MonitorModels
+﻿namespace Merchello.Core.Models.MonitorModels
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using Gateways.Payment;
+
     /// <summary>
     /// Extension methods for Notification Monitor Models
     /// </summary>
-    internal static class MonitorModelExtensions
+    public static class MonitorModelExtensions
     {
-        internal static IPaymentResultMonitorModel ToOrderConfirmationNotification(this IPaymentResult paymentResult)
+        public static IPaymentResultMonitorModel ToOrderConfirmationNotification(this IPaymentResult paymentResult)
         {
-            return paymentResult.ToOrderConfirmationNotification(new string[] {});
+            return paymentResult.ToOrderConfirmationNotification(new string[] { });
         }
 
-        internal static IPaymentResultMonitorModel ToOrderConfirmationNotification(this IPaymentResult paymentResult, IEnumerable<string> contacts)
+        public static IPaymentResultMonitorModel ToOrderConfirmationNotification(this IPaymentResult paymentResult, IEnumerable<string> contacts)
         {
             return new PaymentResultNotifyModel()
                 {

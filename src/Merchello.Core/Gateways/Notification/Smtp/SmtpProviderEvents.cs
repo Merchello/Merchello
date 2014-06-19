@@ -1,13 +1,14 @@
-﻿using System;
-using System.Linq;
-using Merchello.Core.Models;
-using Merchello.Core.Services;
-using Umbraco.Core;
-using Umbraco.Core.Events;
-using Umbraco.Core.Logging;
-
-namespace Merchello.Core.Gateways.Notification.Smtp
+﻿namespace Merchello.Core.Gateways.Notification.Smtp
 {
+    using System;
+    using System.Linq;
+    using Models;
+    using Services;
+    using Umbraco.Core;
+    using Umbraco.Core.Events;
+    using Umbraco.Core.Logging;
+
+
     public class SmtpProviderEvents : ApplicationEventHandler
     {
         protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)

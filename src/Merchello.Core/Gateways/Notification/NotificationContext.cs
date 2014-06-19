@@ -56,7 +56,15 @@
         /// <param name="formatter">The <see cref="IFormatter"/> to use when formatting the message</param>
         public void Send(INotificationMessage message, IFormatter formatter)
         {
-            GetAllActivatedProviders().FirstOrDefault(x => ((NotificationGatewayProviderBase)x).NotificationMethods.Any(y => y.Key == message.MethodKey));
+            var activeProviders = GetAllActivatedProviders();
+
+            var provider = activeProviders.FirstOrDefault(x => ((NotificationGatewayProviderBase)x).NotificationMethods.Any(y => y.Key == message.MethodKey)) as NotificationGatewayProviderBase;
+
+            if (provider == null) return;
+
+            var method = provider.GetNotificationGatewayMethodByKey(message.MethodKey);
+            
+            method.Send(message, formatter);
         }
     }
 }

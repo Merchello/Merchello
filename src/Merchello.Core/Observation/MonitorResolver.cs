@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using Merchello.Core.Gateways.Notification;
-using Merchello.Core.ObjectResolution;
-using Umbraco.Core;
-
-namespace Merchello.Core.Observation
+﻿namespace Merchello.Core.Observation
 {
+    using System;
+    using System.Collections.Concurrent;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Gateways.Notification;
+    using ObjectResolution;
+    using Umbraco.Core;
+
     /// <summary>
     /// Represents a MonitorResolver
     /// </summary>
@@ -25,26 +25,49 @@ namespace Merchello.Core.Observation
             BuildCache();
         }
 
-        private void BuildCache()
+        /// <summary>
+        /// Gets the instantiated values of the resolved types
+        /// </summary>
+        protected override IEnumerable<IMonitor> Values
         {
-            foreach (var monitor in Values)
+            get
             {
-                MonitorCache.AddOrUpdate(monitor.MonitorFor().Key, monitor, (x, y) => monitor);
+                var ctrArgs = new object[] { _notificationContext };
+
+                var monitors = new List<IMonitor>();
+
+// ReSharper disable once LoopCanBeConvertedToQuery
+                foreach (var et in InstanceTypes)
+                {
+                    var attempt = ActivatorHelper.CreateInstance<IMonitor>(et, ctrArgs);
+                    if (attempt.Success) monitors.Add(attempt.Result);
+                }
+
+                return monitors;
             }
         }
 
         /// <summary>
         /// Gets the collection of all resovled <see cref="IMonitor"/>s
         /// </summary>
+        /// <typeparam name="T">
+        /// The type of monitor to resolve
+        /// </typeparam>
+        /// <returns>
+        /// The collection of monitors.
+        /// </returns>
         public IEnumerable<T> GetAllMonitors<T>()
         {
             return GetAllMonitors()
-                .Where(x => x.GetType().IsAssignableFrom(typeof (T))).Select(x => (T) x);
+                .Where(x => x.GetType().IsAssignableFrom(typeof(T))).Select(x => (T)x);
         }
 
         /// <summary>
         /// Gets the collection of all resovled <see cref="IMonitor"/>s
         /// </summary>
+        /// <returns>
+        /// A collection of <see cref="IMonitor"/>
+        /// </returns>
         public IEnumerable<IMonitor> GetAllMonitors()
         {
             return MonitorCache.Values;
@@ -53,9 +76,15 @@ namespace Merchello.Core.Observation
         /// <summary>
         /// Gets a <see cref="IMonitor"/> from the resolver
         /// </summary>
+        /// <typeparam name="T">
+        /// The type of monitor to resolve
+        /// </typeparam>
+        /// <returns>
+        /// The collection of monitors resolved
+        /// </returns>
         public IEnumerable<T> GetMonitors<T>()
         {
-            return GetAllMonitors().Where(x => x.GetType().IsAssignableFrom(typeof (T))).Select(x => (T) x);
+            return GetAllMonitors().Where(x => x.GetType().IsAssignableFrom(typeof(T))).Select(x => (T)x);
         }
 
         /// <summary>
@@ -82,7 +111,12 @@ namespace Merchello.Core.Observation
         /// <summary>
         /// Gets a collection of all monitors for a particular observable trigger
         /// </summary>
-        /// <param name="triggerType">The Type of the Trigger</param>
+        /// <param name="triggerType">
+        /// The Type of the Trigger
+        /// </param>
+        /// <returns>
+        /// The collection of monitors resolved
+        /// </returns>
         public IEnumerable<IMonitor> GetMonitorsForTrigger(Type triggerType)
         {
             return MonitorCache.Values.Where(
@@ -93,30 +127,22 @@ namespace Merchello.Core.Observation
         /// <summary>
         /// Gets a collection of all monitors for a particular observable trigger
         /// </summary>
-        /// <typeparam name="T">The Type of the Trigger</typeparam>
+        /// <typeparam name="T">
+        /// The Type of the Trigger
+        /// </typeparam>
+        /// <returns>
+        /// The collection of monitors resolved
+        /// </returns>
         public IEnumerable<IMonitor> GetMonitorsForTrigger<T>()
         {
-            return GetMonitorsForTrigger(typeof (T));
+            return GetMonitorsForTrigger(typeof(T));
         }
 
-        /// <summary>
-        /// Gets the instantiated values of the resolved types
-        /// </summary>
-        protected override IEnumerable<IMonitor> Values
+        private void BuildCache()
         {
-            get
+            foreach (var monitor in Values)
             {
-                var ctrArgs =  new object[] { _notificationContext };
-
-                var monitors = new List<IMonitor>();
-
-                foreach (var et in InstanceTypes)
-                {
-                    var attempt = ActivatorHelper.CreateInstance<IMonitor>(et, ctrArgs);
-                    if (attempt.Success) monitors.Add(attempt.Result);
-                }
-
-                return monitors;
+                MonitorCache.AddOrUpdate(monitor.MonitorFor().Key, monitor, (x, y) => monitor);
             }
         }
     }

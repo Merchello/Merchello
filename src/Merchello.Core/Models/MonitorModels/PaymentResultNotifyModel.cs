@@ -6,22 +6,22 @@
     internal class PaymentResultNotifyModel : NotifyModelBase, IPaymentResultMonitorModel
     {
         /// <summary>
-        /// Gets/Sets the <see cref="IPayment"/>
+        /// Gets or sets the <see cref="IPayment"/>
         /// </summary>
         public IPayment Payment { get; set; }
         
         /// <summary>
-        /// Gets/sets the <see cref="IInvoice"/>
+        /// Gets or sets the <see cref="IInvoice"/>
         /// </summary>
         public IInvoice Invoice { get; set; }
         
         /// <summary>
-        /// True/false indicating whether or not the payment was successful
+        /// Gets or sets a value indicating whether or not the payment was successful
         /// </summary>
         public bool PaymentSuccess { get; set; }
         
         /// <summary>
-        /// True/false indicating whether or not the payment result approved the order creation
+        /// Gets or sets a value indicating whether or not the payment result approved the order creation
         /// </summary>
         public bool ApproveOrderCreation { get; set; }
     }

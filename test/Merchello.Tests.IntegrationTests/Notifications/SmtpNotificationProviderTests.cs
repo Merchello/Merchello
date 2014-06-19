@@ -1,10 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Threading;
+using Merchello.Core;
+using Merchello.Core.Gateways.Notification.Monitors;
 using Merchello.Core.Gateways.Notification.Smtp;
 using Merchello.Core.Models;
+using Merchello.Core.Observation;
 using Merchello.Core.Services;
 using Merchello.Tests.IntegrationTests.TestHelpers;
 using NUnit.Framework;
@@ -233,7 +235,14 @@ Thanks for the order.
                 MonitorKey = new Guid("5DB575B5-0728-4B31-9B37-E9CF6C12E0AA") // OrderConfirmationMonitor
             };
 
+            method.SaveNotificationMessage(message);
 
+            var monitor = MonitorResolver.Current.GetMonitorByKey<INotificationMonitorBase>(message.MethodKey);
+
+            monitor.CacheMessage(message);
+
+            // Assert
+            Notification.Trigger("OrderConfirmation");
         }
     }
 }

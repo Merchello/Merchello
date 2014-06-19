@@ -1,20 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
-using Merchello.Core;
-using Merchello.Core.Gateways;
-using Merchello.Core.Gateways.Notification;
-using Merchello.Core.Models;
-using Merchello.Core.Services;
-using Merchello.Web.Models.ContentEditing;
-using Merchello.Web.WebApi;
-using Umbraco.Web.Mvc;
+﻿using Merchello.Core.Gateways.Notification.Monitors;
+using Merchello.Core.Observation;
 
 namespace Merchello.Web.Editors
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Web.Http;
+    using Core;
+    using Core.Gateways;
+    using Core.Gateways.Notification;
+    using Core.Models;
+    using Core.Services;
+    using Models.ContentEditing;
+    using Umbraco.Web.Mvc;
+    using WebApi;
+
     /// <summary>
     /// Merchello Back Office Controller Responsible for NotificationGatewayProvider Configurations and Settings
     /// </summary>
@@ -24,15 +27,17 @@ namespace Merchello.Web.Editors
 
         private readonly INotificationContext _notificationContext;
         private readonly INotificationMessageService _notificationMessageService;
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public NotificationGatewayApiController()
-            :this(MerchelloContext.Current)
-        {}
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="NotificationGatewayApiController"/> class. 
+        /// </summary>
+        public NotificationGatewayApiController()
+            : this(MerchelloContext.Current)
+        {            
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NotificationGatewayApiController"/> class. 
         /// </summary>
         /// <param name="merchelloContext">The <see cref="IMerchelloContext"/></param>
         public NotificationGatewayApiController(MerchelloContext merchelloContext)
@@ -44,10 +49,15 @@ namespace Merchello.Web.Editors
 
         /// <summary>
         /// 
-        ///
         /// GET /umbraco/Merchello/NotificationGatewayApi/GetGatewayResources/{id}
+        /// 
         /// </summary>
-        /// <param name="id">The key of the PaymentGatewayProvider</param>
+        /// <param name="id">
+        /// The key of the PaymentGatewayProvider
+        /// </param>
+        /// <returns>
+        /// A collection for <see cref="GatewayResourceDisplay"/>
+        /// </returns>
         [AcceptVerbs("GET")]
         public IEnumerable<GatewayResourceDisplay> GetGatewayResources(Guid id)
         {
@@ -61,17 +71,18 @@ namespace Merchello.Web.Editors
             }
             catch (Exception)
             {
-
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
-
         }
 
         /// <summary>
         /// Returns a list of all of GatewayProviders of GatewayProviderType Payment
-        ///
+        /// 
         /// GET /umbraco/Merchello/NotificationGatewayApi/GetAllGatewayProviders/
-        /// </summary>        
+        /// </summary>
+        /// <returns>
+        /// A collection for <see cref="GatewayResourceDisplay"/>
+        /// </returns>
         public IEnumerable<GatewayProviderDisplay> GetAllGatewayProviders()
         {
             var providers = _notificationContext.GetAllActivatedProviders();
@@ -84,22 +95,23 @@ namespace Merchello.Web.Editors
         }
 
         /// <summary>
-        /// Returns a list of all of Notification Triggers of NotificationTriggerDisplay
-        ///
-        /// GET /umbraco/Merchello/NotificationGatewayApi/GetAllNotificationTriggers/
-        /// </summary>    
-        public IEnumerable<NotificationTriggerDisplay> GetAllNotificationTriggers()
+        /// Returns a list of all of Notification monitors of NotificationMonitorDisplay
+        /// 
+        /// GET /umbraco/Merchello/NotificationGatewayApi/GetAllNotificationMonitors/
+        /// </summary>
+        /// <returns>
+        /// A collection of <see cref="NotificationMonitorDisplay"/>
+        /// </returns>
+        public IEnumerable<NotificationMonitorDisplay> GetAllNotificationMonitors()
         {
-            return new List<NotificationTriggerDisplay>()
+            var monitors = MonitorResolver.Current.GetAllMonitors();
+
+            return monitors.Select(x => new NotificationMonitorDisplay()
             {
-                new NotificationTriggerDisplay() { MonitorKey = new Guid("AD7CBFE9-6E6A-4A3D-94AD-2340982B5B37"), Name = "Order Confirmation (Pattern Replace)", Alias = "orderConfirmationPatternReplace" },
-                new NotificationTriggerDisplay() { MonitorKey = new Guid("E9D4699B-D78A-4ADE-8491-13C03D34D2DF"), Name = "Order Confirmation (Twitter Formatter)", Alias = "orderConfirmation TwitterFormatter" },
-                new NotificationTriggerDisplay() { MonitorKey = new Guid("CBB7A5DB-0A12-4A5C-9D23-47C28C2BFE2C"), Name = "Order Confirmation (No Replacement)", Alias = "orderConfirmationNoReplacement" },
-                new NotificationTriggerDisplay() { MonitorKey = new Guid("D9D5D22C-4321-4C12-8314-FBBCB480B7E5"), Name = "Order Shipped", Alias = "orderShipped" },
-                new NotificationTriggerDisplay() { MonitorKey = new Guid("0C1AB386-1ACE-4E3C-AB4A-BB3C115BF69C"), Name = "Problems with Payment Auth", Alias = "problemsWithPaymentAuth" },
-                new NotificationTriggerDisplay() { MonitorKey = new Guid("38A0346A-515F-4D87-A4A0-0F3CA77DF126"), Name = "Payment Received", Alias = "paymentReceived" },
-                new NotificationTriggerDisplay() { MonitorKey = new Guid("06EF7EB3-8287-4698-8630-B901FA9418F5"), Name = "Order Canceled", Alias = "orderCanceled" }
-            };
+                MonitorKey = x.MonitorFor().Key,
+                Name = x.MonitorFor().Name,
+                Alias = x.MonitorFor().ObservableTrigger.ToString()
+            });
         }
 
         /// <summary>
@@ -108,7 +120,7 @@ namespace Merchello.Web.Editors
         /// GET /umbraco/Merchello/NotificationGatewayApi/GetNotificationProviderNotificationMethods/{id}
         /// </summary>
         /// <param name="id">The key (guid) of the NotificationGatewayProvider</param>
-        /// <returns></returns>
+        /// <returns>A collection of <see cref="NotificationMethodDisplay"/></returns>
         [AcceptVerbs("GET")]
         public IEnumerable<NotificationMethodDisplay> GetNotificationProviderNotificationMethods(Guid id)
         {
@@ -123,10 +135,15 @@ namespace Merchello.Web.Editors
 
         /// <summary>
         /// Adds a <see cref="INotificationMethod"/>
-        ///
+        /// 
         /// POST /umbraco/Merchello/NotificationGatewayApi/AddNotificationMethod
         /// </summary>
-        /// <param name="method">POSTed <see cref="NotificationMethodDisplay"/> object</param>
+        /// <param name="method">
+        /// POSTed <see cref="NotificationMethodDisplay"/> object
+        /// </param>
+        /// <returns>
+        /// The <see cref="HttpResponseMessage"/>.
+        /// </returns>
         [AcceptVerbs("POST")]
         public HttpResponseMessage AddNotificationMethod(NotificationMethodDisplay method)
         {
@@ -140,24 +157,23 @@ namespace Merchello.Web.Editors
                     provider.ListResourcesOffered().FirstOrDefault(x => x.ServiceCode == method.ServiceCode);
 
                 var newMethod = true;
+                
                 foreach (var nm in provider.NotificationMethods.Where(nm => nm.ServiceCode == gatewayResource.ServiceCode))
                 {
                     newMethod = false;
                     response = Request.CreateResponse(HttpStatusCode.InternalServerError, "Method for this resource already exists.");
                 }
+
                 if (newMethod)
                 {
-                    var notificationGatewayMethod = provider.CreateNotificationMethod(gatewayResource, method.Name,
-                        method.ServiceCode);
+                    var notificationGatewayMethod = provider.CreateNotificationMethod(gatewayResource, method.Name, method.ServiceCode);
 
                     provider.SaveNotificationMethod(notificationGatewayMethod);
                 }
-
-
             }
             catch (Exception ex)
             {
-                response = Request.CreateResponse(HttpStatusCode.InternalServerError, String.Format("{0}", ex.Message));
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError, string.Format("{0}", ex.Message));
             }
 
             return response;
@@ -168,7 +184,12 @@ namespace Merchello.Web.Editors
         /// 
         /// PUT /umbraco/Merchello/NotificationGatewayApi/PutNotificationMethod
         /// </summary>
-        /// <param name="method">POSTed <see cref="NotificationMethodDisplay"/> object</param>
+        /// <param name="method">
+        /// POSTed <see cref="NotificationMethodDisplay"/> object
+        /// </param>
+        /// <returns>
+        /// The <see cref="HttpResponseMessage"/>.
+        /// </returns>
         [AcceptVerbs("POST", "PUT")]
         public HttpResponseMessage PutNotificationMethod(NotificationMethodDisplay method)
         {
@@ -186,7 +207,7 @@ namespace Merchello.Web.Editors
             }
             catch (Exception ex)
             {
-                response = Request.CreateResponse(HttpStatusCode.InternalServerError, String.Format("{0}", ex.Message));
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError, string.Format("{0}", ex.Message));
             }
 
             return response;
@@ -197,7 +218,12 @@ namespace Merchello.Web.Editors
         /// 
         /// GET /umbraco/Merchello/NotificationGatewayApi/DeletNotificationMethod
         /// </summary>
-        /// <param name="id"><see cref="NotificationMethodDisplay"/> key to delete</param>
+        /// <param name="id">
+        /// <see cref="NotificationMethodDisplay"/> key to delete
+        /// </param>
+        /// <returns>
+        /// The <see cref="HttpResponseMessage"/>.
+        /// </returns>
         [AcceptVerbs("GET", "DELETE")]
         public HttpResponseMessage DeleteNotificationMethod(Guid id)
         {
@@ -211,7 +237,7 @@ namespace Merchello.Web.Editors
             }
             catch (Exception ex)
             {
-                response = Request.CreateResponse(HttpStatusCode.InternalServerError, String.Format("{0}", ex.Message));
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError, string.Format("{0}", ex.Message));
             }
 
             return response;
@@ -222,7 +248,12 @@ namespace Merchello.Web.Editors
         /// 
         /// GET /umbraco/Merchello/NotificationsApi/GetNotificationsByMethod/{key}
         /// </summary>
-        /// <param name="id">Key of the notification method</param>
+        /// <param name="id">
+        /// Key of the notification method
+        /// </param>
+        /// <returns>
+        /// The <see cref="NotificationMessageDisplay"/>.
+        /// </returns>
         public NotificationMessageDisplay GetNotificationMessagesByKey(Guid id)
         {
             var message = _notificationMessageService.GetByKey(id);
@@ -237,10 +268,15 @@ namespace Merchello.Web.Editors
 
         /// <summary>
         /// Updates a <see cref="INotificationMessage"/>
-        ///
+        /// 
         /// POST /umbraco/Merchello/NotificationGatewayApi/SaveNotificationMessage
         /// </summary>
-        /// <param name="message">POSTed <see cref="NotificationMethodDisplay"/> object</param>
+        /// <param name="message">
+        /// POSTed <see cref="NotificationMethodDisplay"/> object
+        /// </param>
+        /// <returns>
+        /// The <see cref="HttpResponseMessage"/>.
+        /// </returns>
         [AcceptVerbs("POST")]
         public HttpResponseMessage UpdateNotificationMessage(NotificationMessageDisplay message)
         {
@@ -255,17 +291,19 @@ namespace Merchello.Web.Editors
                 var method = provider.GetNotificationGatewayMethodByKey(message.MethodKey);
 
                 var notificationMessage = method.NotificationMessages.FirstOrDefault(x => x.Key == message.Key);
+                
                 if (notificationMessage == null)
                 {
                     response = Request.CreateResponse(HttpStatusCode.InternalServerError, "Notification Message Not Found");
                 }
+
                 method.SaveNotificationMessage(message.ToNotificationMessage(notificationMessage));
                 
                 return response;
             }
             catch (Exception ex)
             {
-                response = Request.CreateResponse(HttpStatusCode.InternalServerError, String.Format("{0}", ex.Message));
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError, string.Format("{0}", ex.Message));
             }
 
             return response;
@@ -273,10 +311,15 @@ namespace Merchello.Web.Editors
 
         /// <summary>
         /// Adds a <see cref="INotificationMessage"/>
-        ///
+        /// 
         /// POST /umbraco/Merchello/NotificationGatewayApi/SaveNotificationMessage
         /// </summary>
-        /// <param name="message">POSTed <see cref="NotificationMethodDisplay"/> object</param>
+        /// <param name="message">
+        /// POSTed <see cref="NotificationMethodDisplay"/> object
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
         [AcceptVerbs("POST")]
         public string PutNotificationMessage(NotificationMessageDisplay message)
         {
@@ -294,16 +337,21 @@ namespace Merchello.Web.Editors
             }
             catch (Exception ex)
             {
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.InternalServerError, String.Format("{0}", ex.Message)));
-            }
-            
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.InternalServerError, string.Format("{0}", ex.Message)));
+            }            
         }
+
         /// <summary>
         /// Delete a <see cref="INotificationMessage"/>
         /// 
         /// GET /umbraco/Merchello/NotificationGatewayApi/DeleteNotificationMessage
         /// </summary>
-        /// <param name="id"><see cref="NotificationMessageDisplay"/> key to delete</param>
+        /// <param name="id">
+        /// <see cref="NotificationMessageDisplay"/> key to delete
+        /// </param>
+        /// <returns>
+        /// The <see cref="HttpResponseMessage"/>.
+        /// </returns>
         [AcceptVerbs("GET", "DELETE")]
         public HttpResponseMessage DeleteNotificationMessage(Guid id)
         {
@@ -322,7 +370,7 @@ namespace Merchello.Web.Editors
             }
             catch (Exception ex)
             {
-                response = Request.CreateResponse(HttpStatusCode.InternalServerError, String.Format("{0}", ex.Message));
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError, string.Format("{0}", ex.Message));
             }           
            
             return response;

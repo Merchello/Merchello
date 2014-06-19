@@ -1,27 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Net.Sockets;
-using Merchello.Core.Formatters;
-using Merchello.Core.Gateways.Shipping;
-using Merchello.Core.Gateways.Taxation;
-using Merchello.Core.Models.TypeFields;
-using Umbraco.Core.Logging;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
+    using Formatters;
+    using Gateways.Shipping;
+    using Gateways.Taxation;
+    using TypeFields;
+    using Umbraco.Core.Logging;
+
     /// <summary>
     /// Extension methods for <see cref="ILineItem"/>
     /// </summary>
     public static class LineItemExtensions
     {
-
         #region LineItemContainer
         
         /// <summary>
         /// Adds a <see cref="IProductVariant"/> line item to the collection
         /// </summary>
+        /// <param name="container">
+        /// The container.
+        /// </param>
+        /// <param name="productVariant">
+        /// The product Variant.
+        /// </param>
+        /// <param name="quantity">
+        /// The quantity.
+        /// </param>
         public static void AddItem(this ILineItemContainer container, IProductVariant productVariant, int quantity)
         {
             var extendedData = new ExtendedDataCollection();
@@ -33,6 +40,18 @@ namespace Merchello.Core.Models
         /// <summary>
         /// Adds a <see cref="IProductVariant"/> line item to the collection
         /// </summary>
+        /// <param name="container">
+        /// The container.
+        /// </param>
+        /// <param name="productVariant">
+        /// The product Variant.
+        /// </param>
+        /// <param name="quantity">
+        /// The quantity.
+        /// </param>
+        /// <param name="extendedData">
+        /// The extended Data.
+        /// </param>
         public static void AddItem(this ILineItemContainer container, IProductVariant productVariant, int quantity, ExtendedDataCollection extendedData)
         {
             extendedData.AddProductVariantValues(productVariant);
@@ -43,6 +62,24 @@ namespace Merchello.Core.Models
         /// <summary>
         /// Adds a line item to the collection
         /// </summary>
+        /// <param name="container">
+        /// The container.
+        /// </param>
+        /// <param name="lineItemType">
+        /// The line Item Type.
+        /// </param>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="sku">
+        /// The sku.
+        /// </param>
+        /// <param name="quantity">
+        /// The quantity.
+        /// </param>
+        /// <param name="amount">
+        /// The amount.
+        /// </param>
         public static void AddItem(this ILineItemContainer container, LineItemType lineItemType, string name, string sku, int quantity, decimal amount)
         {
             container.AddItem(lineItemType, name, sku, quantity, amount, new ExtendedDataCollection());
@@ -51,6 +88,27 @@ namespace Merchello.Core.Models
         /// <summary>
         /// Adds a line item to the collection
         /// </summary>
+        /// <param name="container">
+        /// The container.
+        /// </param>
+        /// <param name="lineItemType">
+        /// The line Item Type.
+        /// </param>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="sku">
+        /// The sku.
+        /// </param>
+        /// <param name="quantity">
+        /// The quantity.
+        /// </param>
+        /// <param name="amount">
+        /// The amount.
+        /// </param>
+        /// <param name="extendedData">
+        /// The extended Data.
+        /// </param>
         public static void AddItem(this ILineItemContainer container, LineItemType lineItemType, string name, string sku, int quantity, decimal amount, ExtendedDataCollection extendedData)
         {
             var lineItem = new ItemCacheLineItem(lineItemType, name, sku, quantity, amount, extendedData)
@@ -64,6 +122,12 @@ namespace Merchello.Core.Models
         /// <summary>
         /// Adds a line item to the collection
         /// </summary>
+        /// <param name="container">
+        /// The container.
+        /// </param>
+        /// <param name="lineItem">
+        /// The line Item.
+        /// </param>
         public static void AddItem(this ILineItemContainer container, ILineItem lineItem)
         {
             container.Items.Add(lineItem);
@@ -74,8 +138,8 @@ namespace Merchello.Core.Models
         /// <summary>
         /// Converts a line item of one type to a line item of another type
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="lineItem"></param>
+        /// <typeparam name="T">The specific type of <see cref="ILineItem"/></typeparam>
+        /// <param name="lineItem">The lineitem</param>
         /// <returns>A <see cref="LineItemBase"/> of type T</returns>
         public static T AsLineItemOf<T>(this ILineItem lineItem) where T : class, ILineItem
         {    
@@ -91,11 +155,13 @@ namespace Merchello.Core.Models
 
 
             var attempt = ActivatorHelper.CreateInstance<LineItemBase>(typeof(T), ctrValues);
+
             if (!attempt.Success)
             {
                 LogHelper.Error<ILineItem>("Failed to convertion ILineItem", attempt.Exception);
                 throw attempt.Exception;
             }
+
             attempt.Result.Exported = lineItem.Exported;
 
             return attempt.Result as T;
@@ -123,14 +189,13 @@ namespace Merchello.Core.Models
                     extendedData
                 };
 
-            var attempt = ActivatorHelper.CreateInstance<LineItemBase>(typeof (T), ctrValues);
+            var attempt = ActivatorHelper.CreateInstance<LineItemBase>(typeof(T), ctrValues);
 
-            if (!attempt.Success)
-            {
-                LogHelper.Error<ILineItem>("Failed instiating a line item from shipmentRateQuote", attempt.Exception);
-                throw attempt.Exception;
-            }
-            return attempt.Result as T;
+            if (attempt.Success) return attempt.Result as T;
+
+            LogHelper.Error<ILineItem>("Failed instiating a line item from shipmentRateQuote", attempt.Exception);
+            
+            throw attempt.Exception;
         }
 
         /// <summary>
@@ -151,15 +216,13 @@ namespace Merchello.Core.Models
                 taxCalculationResult.ExtendedData
             };
 
-            var attempt = ActivatorHelper.CreateInstance<LineItemBase>(typeof (T), ctrValues);
+            var attempt = ActivatorHelper.CreateInstance<LineItemBase>(typeof(T), ctrValues);
 
-            if (!attempt.Success)
-            {
-                LogHelper.Error<ILineItem>("Failed instiating a line item from invoiceTaxResult", attempt.Exception);
-                throw attempt.Exception;
-            }
-
-            return attempt.Result as T;
+            if (attempt.Success) return attempt.Result as T;
+            
+            LogHelper.Error<ILineItem>("Failed instiating a line item from invoiceTaxResult", attempt.Exception);
+            
+            throw attempt.Exception;
         }
 
 
@@ -176,7 +239,12 @@ namespace Merchello.Core.Models
         /// <summary>
         /// True/false indicating whether or not this lineItem represents a line item that can be shipped (eg. a product)
         /// </summary>
-        /// <param name="lineItem">The <see cref="ILineItem"/></param>
+        /// <param name="lineItem">
+        /// The <see cref="ILineItem"/>
+        /// </param>
+        /// <returns>
+        /// True or false indicating whether or not this line item represents a shippable line item
+        /// </returns>
         public static bool IsShippable(this ILineItem lineItem)
         {
             return lineItem.LineItemType == LineItemType.Product &&
@@ -191,7 +259,13 @@ namespace Merchello.Core.Models
         /// <summary>
         /// Gets the 'Iteration token' used by the PatternReplaceFormatter to identify line item iterations
         /// </summary>
-        internal static string GetFormatterIterationToken(this ILineItemContainer container)
+        /// <param name="container">
+        /// The container.
+        /// </param>
+        /// <returns>
+        /// The iteration identifier
+        /// </returns>
+        internal static string GetFormatterIterationIdentifier(this ILineItemContainer container)
         {
             if (container is IInvoice) return "Invoice.Items";
             if (container is IOrder) return "Order.Items";
@@ -204,17 +278,22 @@ namespace Merchello.Core.Models
         /// <summary>
         /// Gets a collection of <see cref="IReplaceablePattern"/> for each line item in the <see cref="LineItemCollection"/>
         /// </summary>
+        /// <param name="container">
+        /// The container.
+        /// </param>
+        /// <returns>
+        /// A collection of replaceable patterns
+        /// </returns>
         internal static IEnumerable<IReplaceablePattern> LineItemReplaceablePatterns(this ILineItemContainer container)
         {
             var patterns = new List<IReplaceablePattern>();
 
-            var token = container.GetFormatterIterationToken();
+            var token = container.GetFormatterIterationIdentifier();
 
             // TODO localization needed on pricing and datetime
             for (var i = 0; i < container.Items.Count; i++)
             {
-
-                var sku = new ReplaceablePattern(string.Format("{0}.{1}.{2}", token, "Sku", i), string.Format("{0}Item.Sku.{1}{2}", "{{", i, "}}"), container.Items[i].Sku);
+                var sku = new ReplaceablePattern(string.Format("{0}.{1}.{2}", token, "Sku", i), string.Format("{0}Item.Sku.{1}{2}", "{{", i, "}}"), container.Items[i].LineItemType == LineItemType.Shipping ? string.Empty : container.Items[i].Sku);
                 var unitPrice = new ReplaceablePattern(string.Format("{0}.{1}.{2}", token, "UnitPrice", i), string.Format("{0}Item.UnitPrice.{1}{2}", "{{", i, "}}"), container.Items[i].Price.ToString("C"));
                 var name = new ReplaceablePattern(string.Format("{0}.{1}.{2}", token, "Name", i), string.Format("{0}Item.Name.{1}{2}", "{{", i, "}}"), container.Items[i].Name);
                 var qty = new ReplaceablePattern(string.Format("{0}.{1}.{2}", token, "Quantity", i), string.Format("{0}Item.Quantity.{1}{2}", "{{", i, "}}"), container.Items[i].Quantity.ToString(CultureInfo.InvariantCulture));

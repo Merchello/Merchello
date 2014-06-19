@@ -33,7 +33,7 @@
 		    getAllNotificationTriggers: function() {
 		        return umbRequestHelper.resourcePromise(
                     $http({
-                        url: umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'GetAllNotificationTriggers'),
+                        url: umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'GetAllNotificationMonitors'),
                         method: "GET"
                     }),
                     'Failed to retreive data for all gateway providers');

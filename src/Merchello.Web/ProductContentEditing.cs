@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using AutoMapper;
-using Merchello.Core;
-using Umbraco.Core.Models;
-using Umbraco.Web.Models.ContentEditing;
-
-namespace Merchello.Web
+﻿namespace Merchello.Web
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using AutoMapper;
+    using Core;
+    using Umbraco.Core.Models;
+    using Umbraco.Web.Models.ContentEditing;
+
     internal class ProductContentEditing
     {
         internal static void BindMappings()
