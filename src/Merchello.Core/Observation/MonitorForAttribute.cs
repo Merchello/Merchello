@@ -1,24 +1,9 @@
-﻿using System;
-
-namespace Merchello.Core.Observation
+﻿namespace Merchello.Core.Observation
 {
+    using System;
+
     public class MonitorForAttribute : Attribute 
     {
-        public Type ObservableTrigger { get; private set; }
-
-        /// <summary>
-        /// Gets the mandatory key for the monitor
-        /// </summary>        
-        public Guid Key { get; private set; }
-
-        /// <summary>
-        /// The name of the trigger
-        /// </summary>
-        public string Name { get; private set; }
-
-
-        //public bool IncludeInBac { get; private set; }
-
         public MonitorForAttribute(string key, Type observableTrigger, string name)
         {
             Mandate.ParameterNotNullOrEmpty(key, "key");
@@ -29,5 +14,20 @@ namespace Merchello.Core.Observation
             ObservableTrigger = observableTrigger;
             Name = name;            
         }
+
+        /// <summary>
+        /// Gets the observable trigger
+        /// </summary>
+        public Type ObservableTrigger { get; private set; }
+
+        /// <summary>
+        /// Gets the mandatory key for the monitor
+        /// </summary>        
+        public Guid Key { get; private set; }
+
+        /// <summary>
+        /// Gets the name of the monitor
+        /// </summary>
+        public string Name { get; private set; }
     }
 }

@@ -2,11 +2,12 @@
 {
     using System.Collections.Generic;
     using Models;
+    using Observation;
 
     /// <summary>
     /// Defines the base NotificationMonitor
     /// </summary>
-    public interface INotificationMonitorBase
+    public interface INotificationMonitorBase : IMonitor
     {
         /// <summary>
         /// Caches a collection of <see cref="INotificationMessage"/>

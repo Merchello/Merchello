@@ -34,7 +34,7 @@
         public virtual void Notify(object model, IEnumerable<string> contacts)
         {
             // check to see if the model passed is the correct type or null
-            if (WillWork(model))
+            if (WillWork<TInputModel>(model))
             {
                 Notify((TInputModel)model, contacts);
                 return;

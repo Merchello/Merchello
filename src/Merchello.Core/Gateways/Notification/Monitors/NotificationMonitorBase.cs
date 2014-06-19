@@ -14,7 +14,7 @@
     /// <typeparam name="T">
     /// The Type of the model passed to the monitor
     /// </typeparam>
-    public abstract class NotificationMonitorBase<T> : MonitorBase<T>
+    public abstract class NotificationMonitorBase<T> : MonitorBase<T>, INotificationMonitorBase
     {
         private readonly INotificationContext _notificationContext;
 

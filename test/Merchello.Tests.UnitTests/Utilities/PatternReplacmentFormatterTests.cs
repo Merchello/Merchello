@@ -96,7 +96,6 @@ Thanks for the order.
             Assert.AreEqual(formatter.Patterns["BillToPostalCode"].Replacement, "98225", "BillToPostalCode does not match");
             Assert.AreEqual(formatter.Patterns["BillToEmail"].Replacement, "debug@mindfly.com", "BillToEmail does not match");
             Assert.AreEqual(formatter.Patterns["BillToPhone"].Replacement, "555-555-5555", "BillToPhone does not match");
-
         }
 
         [Test]
@@ -111,7 +110,6 @@ Thanks for the order.
             var text = formatter.Format(_message);
 
             Console.Write(text);
-
 
             //// Assert
             Assert.IsTrue(text.Contains("Mindfly"));

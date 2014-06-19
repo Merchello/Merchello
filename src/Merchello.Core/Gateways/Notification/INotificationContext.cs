@@ -13,7 +13,7 @@ namespace Merchello.Core.Gateways.Notification
         /// <summary>
         /// Gets a collection of <see cref="INotificationMessage"/>s by a Monitor Key (Guid)
         /// </summary>
-        /// <param name="monitorKey"></param>
+        /// <param name="monitorKey">The monitor key</param>
         /// <returns>A collection of NotificationMessage</returns>
         IEnumerable<INotificationMessage> GetNotificationMessagesByMonitorKey(Guid monitorKey);
 

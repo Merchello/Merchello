@@ -37,7 +37,7 @@
 
             foreach (var message in Messages)
             {
-                if (value.Contacts.Any())
+                if (value.Contacts.Any() && message.SendToCustomer)
                 {
                     // add the additional contacts to the recipients list
                     if (!message.Recipients.EndsWith(";")) message.Recipients += ";";

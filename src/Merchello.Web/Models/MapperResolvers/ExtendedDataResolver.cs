@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using AutoMapper;
-using Merchello.Core.Models;
-
-namespace Merchello.Web.Models.MapperResolvers
+﻿namespace Merchello.Web.Models.MapperResolvers
 {
+    using System.Collections.Generic;
+    using AutoMapper;
+    using Core.Models;
+
     /// <summary>
     /// Custom AutoMapper Resolver - Maps <see cref="ExtendedDataCollection"/> to an Enumerable
     /// </summary>

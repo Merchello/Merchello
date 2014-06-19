@@ -1,4 +1,6 @@
-﻿namespace Merchello.Core.Gateways.Notification.Smtp
+﻿using System.Linq;
+
+namespace Merchello.Core.Gateways.Notification.Smtp
 {
     using System;
     using System.Net.Mail;
@@ -28,11 +30,13 @@
         /// <param name="message">The <see cref="IFormattedNotificationMessage"/> to be sent</param>
         public override void PerformSend(IFormattedNotificationMessage message)
         {
+            if (!message.Recipients.Any()) return;
+
             var msg = new MailMessage
             {
                 From = new MailAddress(message.From),
                 Subject = message.Name,
-                Body =  message.BodyText,
+                Body = message.BodyText,
                 IsBodyHtml = true
             };
 
