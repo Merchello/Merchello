@@ -2,11 +2,8 @@
 using System.Configuration;
 using System.Linq;
 using System.Threading;
-using Merchello.Core;
-using Merchello.Core.Gateways.Notification.Monitors;
 using Merchello.Core.Gateways.Notification.Smtp;
 using Merchello.Core.Models;
-using Merchello.Core.Observation;
 using Merchello.Core.Services;
 using Merchello.Tests.IntegrationTests.TestHelpers;
 using NUnit.Framework;
