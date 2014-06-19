@@ -10,7 +10,7 @@
 
             <div class="span4">
                 <div class="umb-headline-editor-wrapper">
-                     <h1 class="umb-headline">Payment</h1>
+                    <h1 class="umb-headline"><localize key="merchelloPayment_payment" /></h1>
                 </div>
             </div>
 
@@ -36,11 +36,11 @@
                         {{provider.name}}
                         <small data-ng-bind="provider.description"></small>
                         <div data-ng-show="provider.resources.length > 0">
-                            <a data-ng-click="provider.showSelectResource = !provider.showSelectResource"><i class="icon-bill-dollar"></i> Add a Method</a> 
+                            <a data-ng-click="provider.showSelectResource = !provider.showSelectResource"><i class="icon-bill-dollar"></i><localize key="merchelloPayment_addPaymentMethod" /> </a> 
                             <div class="well" data-ng-class="{ 'open': provider.showSelectResource, 'closed': (!provider.showSelectResource) }">
-                                <label>Resource Type:</label>      
+                                <label><localize key="merchelloPayment_resourceType" /> </label>      
                                 <select class="form-control col-xs-12 span12" data-ng-model="provider.selectedResource" data-ng-options="r.name for r in provider.resources track by r.serviceCode"></select>
-                                <a data-ng-click="addEditPaymentMethod(provider)">Add</a>
+                                <a data-ng-click="addEditPaymentMethod(provider)"><localize key="general_add" /></a>
                             </div>
                         </div>
                     </label>
@@ -53,7 +53,7 @@
                                 <thead>
                                     <tr>
                                         <th>Name</th>
-                                        <th colspan="2">Description</th>
+                                        <th colspan="2"><localize key="merchelloNotificationsEdit_description" /></th>
                                     </tr>
                                 </thead>
                                 <tbody>

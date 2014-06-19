@@ -1,35 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using Merchello.Core.Models;
-using Merchello.Core.Models.TypeFields;
-using Merchello.Core.Persistence;
-using Merchello.Core.Persistence.Querying;
-using Merchello.Core.Persistence.UnitOfWork;
-using Umbraco.Core;
-using Umbraco.Core.Events;
-
-
-namespace Merchello.Core.Services
+﻿namespace Merchello.Core.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
+    using Models;
+    using Models.TypeFields;
+    using Persistence;
+    using Persistence.Querying;
+    using Persistence.UnitOfWork;
+    using Umbraco.Core;
+    using Umbraco.Core.Events;
+
     /// <summary>
     /// Represents the Customer Registry Service 
     /// </summary>
     public class ItemCacheService : IItemCacheService
     {
+        private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+
         private readonly IDatabaseUnitOfWorkProvider _uowProvider;
         private readonly RepositoryFactory _repositoryFactory;
 
-        private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
-
         public ItemCacheService()
             : this(new RepositoryFactory())
-        { }
+        {            
+        }
 
         public ItemCacheService(RepositoryFactory repositoryFactory)
             : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory)
-        { }
+        {            
+        }
 
         public ItemCacheService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
         {
@@ -45,6 +46,15 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Creates a basket for a consumer with a given type
         /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <param name="itemCacheType">
+        /// The item Cache Type.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IItemCache"/>.
+        /// </returns>
         public IItemCache GetItemCacheWithKey(ICustomerBase customer, ItemCacheType itemCacheType)
         {
             return GetItemCacheWithKey(customer, itemCacheType, Guid.NewGuid());
@@ -53,6 +63,18 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Creates a basket for a consumer with a given type
         /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <param name="itemCacheType">
+        /// The item Cache Type.
+        /// </param>
+        /// <param name="versionKey">
+        /// The version Key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IItemCache"/>.
+        /// </returns>
         public IItemCache GetItemCacheWithKey(ICustomerBase customer, ItemCacheType itemCacheType, Guid versionKey)
         {
             Mandate.ParameterCondition(Guid.Empty != versionKey, "versionKey");
@@ -68,7 +90,7 @@ namespace Merchello.Core.Services
 
             if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<IItemCache>(itemCache), this))
             {
-                //registry.WasCancelled = true;
+                // registry.WasCancelled = true;
                 return itemCache;
             }
 
@@ -131,6 +153,7 @@ namespace Merchello.Core.Services
                     {
                         repository.AddOrUpdate(basket);
                     }
+
                     uow.Commit();
                 }
             }

@@ -48,7 +48,7 @@
 
             //promise.then(function (product) {
 
-            //    notificationsService.success("Order Saved", "H5YR!");
+            //    notificationsService.success("Order Saved", "");
 
             //}, function (reason) {
 

@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Merchello.Core.Gateways.Shipping.FixedRate;
-
-namespace Merchello.Web.Models.ContentEditing
+﻿namespace Merchello.Web.Models.ContentEditing
 {
+    using Core.Gateways.Shipping.FixedRate;
+
     public class FixedRateShipMethodDisplay : DialogEditorDisplayBase
     {
         public ShipMethodDisplay ShipMethod { get; set; }

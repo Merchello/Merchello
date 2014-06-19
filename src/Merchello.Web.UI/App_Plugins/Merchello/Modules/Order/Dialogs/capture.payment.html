@@ -1,21 +1,19 @@
 ﻿<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Dashboards.Order.Dialogs.CapturePaymentController">
     <div class="umb-modalcolumn-header">
-        <h4>Capture Payment</h4>
+        <h4><localize key="merchelloOrder_capturePayment" /></h4>
     </div>
     <div class="umb-panel-body with-header with-footer">
         
-        <div class="well">
             <div class="control-group row-fluid">
                 <p>
-                    Processed by <strong>{{payments.paymentMethodName}}</strong><br />
+                    <localize key="merchelloOrder_processedBy" /> <strong>{{payments.paymentMethodName}}</strong><br />
                     <!--<i class="icon-credit-card"></i> Credit Card: <span>XXXX-XXXX-XXXX-1234</span>-->
                 </p>
                 <div class="input-prepend col-xs-12 span12">
-                    <span class="add-on">$</span>
-                    <input class="col-xs-2 span2" type="text" data-ng-model="paymentRequest.amount">
+                    <span class="add-on"><localize key="merchelloGeneral_moneySymbol" /></span>
+                    <input class="col-xs-4 span4" type="text" data-ng-model="paymentRequest.amount">
                 </div>
             </div>
-        </div>
 
     </div>
 
@@ -30,7 +28,7 @@
 				<button
 					class="btn btn-primary"
 					data-ng-click="submit(paymentRequest)">
-					Process Payment
+                    <localize key="merchelloOrder_processPayment" />
 				</button>
 
 	        </div>

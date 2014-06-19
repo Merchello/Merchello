@@ -1,24 +1,24 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
-using Examine;
-using Merchello.Core;
-using Merchello.Core.Models;
-using Merchello.Core.Sales;
-using Merchello.Core.Services;
-using Merchello.Examine;
-using Merchello.Examine.Providers;
-using Umbraco.Core;
-using Umbraco.Core.Events;
-using Umbraco.Core.Logging;
-
-namespace Merchello.Web.Search
+﻿namespace Merchello.Web.Search
 {
+    using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
+    using System.Linq;    
+    using Core;
+    using Core.Models;
+    using Core.Services;
+    using global::Examine;
+    using Examine;
+    using Examine.Providers;
+    using Umbraco.Core;
+    using Umbraco.Core.Events;
+    using Umbraco.Core.Logging;
+
     /// <summary>
     /// Used to wire up events for Examine
     /// </summary>
     public class ExamineEvents : ApplicationEventHandler
     {
+        [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:ElementsMustBeOrderedByAccess", Justification = "Reviewed. Suppression is OK here.")]
         protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
             base.ApplicationStarted(umbracoApplication, applicationContext);
@@ -30,7 +30,7 @@ namespace Merchello.Web.Search
                 ExamineManager.Instance.IndexProviderCollection.OfType<BaseMerchelloIndexer>()
                     .Count(x => x.EnableDefaultEventHandler);
 
-            if(registeredProviders == 0)
+            if (registeredProviders == 0)
                 return;
 
             ProductService.Created += ProductServiceCreated;
@@ -46,7 +46,6 @@ namespace Merchello.Web.Search
 
             OrderService.Saved += OrderServiceSaved;
             OrderService.Deleted += OrderServiceDeleted;
-
         }
 
         #region Invoice
@@ -54,7 +53,13 @@ namespace Merchello.Web.Search
         /// <summary>
         /// Adds saved invoices to the index
         /// </summary>
-        static void InvoiceServiceSaved(IInvoiceService sender, SaveEventArgs<IInvoice> e)
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        public static void InvoiceServiceSaved(IInvoiceService sender, SaveEventArgs<IInvoice> e)
         {
             e.SavedEntities.ForEach(IndexInvoice);
         }
@@ -62,12 +67,16 @@ namespace Merchello.Web.Search
         /// <summary>
         /// Removes deleted invoices from the index 
         /// </summary>
-        static void InvoiceServiceDeleted(IInvoiceService sender, DeleteEventArgs<IInvoice> e)
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        public static void InvoiceServiceDeleted(IInvoiceService sender, DeleteEventArgs<IInvoice> e)
         {
             e.DeletedEntities.ForEach(DeleteInvoiceFromIndex);
         }
-
-        
 
         /// <summary>
         /// ReIndexes an Invoice
@@ -75,7 +84,7 @@ namespace Merchello.Web.Search
         /// <param name="invoice">The <see cref="IInvoice"/> to be reindexed</param>
         private static void IndexInvoice(IInvoice invoice)
         {
-            if(invoice != null && invoice.HasIdentity) InvoiceIndexer.AddInvoiceToIndex(invoice);
+            if (invoice != null && invoice.HasIdentity) InvoiceIndexer.AddInvoiceToIndex(invoice);
         }
 
 
@@ -200,9 +209,6 @@ namespace Merchello.Web.Search
         }
 
 #endregion
-
-        
-
 
         #region Indexers
 

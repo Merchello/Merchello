@@ -20,6 +20,7 @@ namespace Merchello.Core
                     "merchName",
                     "merchSku",
                     "merchExported",
+                    "merchPaymentMethod",
                     "merchProductKey",
                     "merchProductVariantKey",
                     "merchCostOfGoods",
@@ -51,7 +52,8 @@ namespace Merchello.Core
                     "merchShippingDestinationAddress",
                     "merchBillingAddress",
                     "merchBaseTax",
-                    "merchProvinceTaxRate"
+                    "merchProvinceTaxRate",
+                    "merchSmtpProviderSettings"
                 }; 
             }
         }
@@ -69,6 +71,9 @@ namespace Merchello.Core
             public static string Name = "merchName";
             public static string Sku = "merchSku";
             public static string Exported = "merchExported";
+
+            // Payment
+            public static string PaymentMethod = "merchPaymentMethod";
 
             // ProductVariant
             public static string ProductKey = "merchProductKey";
@@ -106,6 +111,10 @@ namespace Merchello.Core
             public static string BaseTaxRate = "merchBaseTaxRate";
             public static string ProviceTaxRate = "merchProvinceTaxRate";
             public static string LineItemTaxAmount = "merchLineItemTaxAmount";
+
+            // SMTP
+            public static string SmtpProviderSettings = "merchSmtpProviderSettings";
+            
         }
     }
 }

@@ -54,7 +54,7 @@ namespace Merchello.Web.Models.ContentEditing
 
             // Fix option deletion here #M-161
             // remove any product options that exist in destination and do not exist in productDisplay
-            var removers = destination.ProductOptions.Where(x => !productDisplay.ProductOptions.Select(pd => pd.Key).Contains(x.Key)).Select(x => x.Key);
+            var removers = destination.ProductOptions.Where(x => !productDisplay.ProductOptions.Select(pd => pd.Key).Contains(x.Key)).Select(x => x.Key).ToList();
             foreach (var remove in removers)
             {
                 destination.ProductOptions.RemoveItem(remove);

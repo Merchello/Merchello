@@ -65,6 +65,7 @@
         /// Gets the <see cref="IWarehouseService"/>
         /// </summary>
         IWarehouseService WarehouseService { get; }
+
     }
     
 }

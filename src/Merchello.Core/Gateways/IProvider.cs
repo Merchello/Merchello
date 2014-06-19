@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Merchello.Core.Gateways
+﻿namespace Merchello.Core.Gateways
 {
+    using System;
+    using System.Collections.Generic;
+
     /// <summary>
     /// Marker interface for Providers 
     /// </summary>
     public interface IProvider
     {
         /// <summary>
-        /// The unique Key (Guid) for the gateway.  
+        /// Gets the unique key for the gateway.  
         /// Used by Merchello in the GatewayProvider's installation/configuration
         /// </summary>
         Guid Key { get; }
@@ -17,7 +17,9 @@ namespace Merchello.Core.Gateways
         /// <summary>
         /// Returns a collection of all possible gateway methods associated with this provider
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// A collection of <see cref="IGatewayResource"/>
+        /// </returns>
         IEnumerable<IGatewayResource> ListResourcesOffered();
     }
 }

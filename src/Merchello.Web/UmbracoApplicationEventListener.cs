@@ -1,26 +1,22 @@
-﻿using log4net;
-using Merchello.Core;
-using System;
-using System.Reflection;
-using Merchello.Core.Persistence.Migrations;
-using Umbraco.Core;
-using Umbraco.Core.Persistence.UnitOfWork;
-
-namespace Merchello.Web
+﻿namespace Merchello.Web
 {
+    using System;
+    using System.Reflection;
+    using Core;
+    using log4net;
+    using Umbraco.Core;
+
     /// <summary>
     /// Listens for the Umbraco Application "Started" event and initiates the Merchello startup
     /// </summary>
     public class UmbracoApplicationEventListener : ApplicationEventHandler
     {
         private static readonly ILog Log =
-            LogManager.GetLogger(
-                MethodBase.GetCurrentMethod().DeclaringType
-            );
-
-        protected override void ApplicationInitialized(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
+            LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        
+        protected override void ApplicationStarting(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
-            base.ApplicationInitialized(umbracoApplication, applicationContext);
+            base.ApplicationStarting(umbracoApplication, applicationContext);
 
             // Initialize Merchello
             Log.Info("Attempting to initialize Merchello");
@@ -33,25 +29,6 @@ namespace Merchello.Web
             {
                 Log.Error("Initialization of Merchello failed", ex);
             }
-        }
-
-        protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
-        {
-            base.ApplicationStarted(umbracoApplication, applicationContext);
-
-            // TODO why doesn't this fire
-            var unitOfWorkProvider = new PetaPocoUnitOfWorkProvider();
-            Log.Info("Checking Merchello DB Schema");
-
-            try
-            {
-               // var success = DatabaseSchemaHelper.VerifyDatabaseSchema(unitOfWorkProvider.GetUnitOfWork().Database);
-            }
-            catch (Exception ex)
-            {                
-                Log.Error("Merchello Database Schema Verification Failed", ex);
-            }
-            
-        }
+        }        
     }
 }

@@ -1,9 +1,9 @@
-﻿using System;
-using System.Net.Mail;
-using System.Threading.Tasks;
-
-namespace Merchello.Core.Gateways.Notification.Smtp
+﻿namespace Merchello.Core.Gateways.Notification.Smtp
 {
+    using System;
+    using System.Net.Mail;
+    using System.Threading.Tasks;
+
     /// <summary>
     /// SmtpClient extension methods
     /// </summary>
