@@ -195,54 +195,54 @@ namespace Merchello.Tests.IntegrationTests.Notifications
             Thread.Sleep(2000);
         }
 
-        [Test]
-        public void Can_Trigger_An_Email_Through_Notifications()
-        {
-            // check configuration to see if we want to do this
-            if (!bool.Parse(ConfigurationManager.AppSettings["sendTestEmail"])) Assert.Ignore("Skipping test");
+//        [Test]
+//        public void Can_Trigger_An_Email_Through_Notifications()
+//        {
+//            // check configuration to see if we want to do this
+//            if (!bool.Parse(ConfigurationManager.AppSettings["sendTestEmail"])) Assert.Ignore("Skipping test");
 
-            //// Arrange
-            var settings = _provider.ExtendedData.GetSmtpProviderSettings();
-            settings.Host = "moria";
-            _provider.ExtendedData.SaveSmtpProviderSettings(settings);
+//            //// Arrange
+//            var settings = _provider.ExtendedData.GetSmtpProviderSettings();
+//            settings.Host = "moria";
+//            _provider.ExtendedData.SaveSmtpProviderSettings(settings);
 
-            var resource = _provider.ListResourcesOffered().FirstOrDefault();
-            Assert.NotNull(resource, "Smtp Provider returned null for GatewayResource");
+//            var resource = _provider.ListResourcesOffered().FirstOrDefault();
+//            Assert.NotNull(resource, "Smtp Provider returned null for GatewayResource");
 
-            var method = _provider.CreateNotificationMethod(resource, resource.Name, "Test email method");
-            var message = new NotificationMessage(method.NotificationMethod.Key, "Test email", "Can_Send_A_Test_Email@merchello.com")
-            {
-                Recipients = "rusty@mindfly.com",
-                BodyText =  @"{{BillToName}}
-Your address
-{{BillToAddress1}}
-{{BillToAddress2}}
-{{BillToLocality}}, {{BillToRegion}} {{BillToPostalCode}}
+//            var method = _provider.CreateNotificationMethod(resource, resource.Name, "Test email method");
+//            var message = new NotificationMessage(method.NotificationMethod.Key, "Test email", "Can_Send_A_Test_Email@merchello.com")
+//            {
+//                Recipients = "rusty@mindfly.com",
+//                BodyText =  @"{{BillToName}}
+//Your address
+//{{BillToAddress1}}
+//{{BillToAddress2}}
+//{{BillToLocality}}, {{BillToRegion}} {{BillToPostalCode}}
+//
+//Email : {{BillToEmail}}
+//Phone : {{BillToPhone}}
+//
+//Invoice Number : {{InvoiceNumber}}
+//
+//Items Purchased:
+//
+//{{IterationStart[Invoice.Items]}}
+//+ {{Item.Name}} -> {{Item.Sku}} -> {{Item.UnitPrice}} -> {{Item.Quantity}} -> {{Item.TotalPrice}}
+//{{IterationEnd[Invoice.Items]}}
+//
+//Thanks for the order.
+//",
+//                MonitorKey = new Guid("5DB575B5-0728-4B31-9B37-E9CF6C12E0AA") // OrderConfirmationMonitor
+//            };
 
-Email : {{BillToEmail}}
-Phone : {{BillToPhone}}
+//            method.SaveNotificationMessage(message);
 
-Invoice Number : {{InvoiceNumber}}
+//            var monitor = MonitorResolver.Current.GetMonitorByKey<INotificationMonitorBase>(message.MethodKey);
 
-Items Purchased:
+//            monitor.CacheMessage(message);
 
-{{IterationStart[Invoice.Items]}}
-+ {{Item.Name}} -> {{Item.Sku}} -> {{Item.UnitPrice}} -> {{Item.Quantity}} -> {{Item.TotalPrice}}
-{{IterationEnd[Invoice.Items]}}
-
-Thanks for the order.
-",
-                MonitorKey = new Guid("5DB575B5-0728-4B31-9B37-E9CF6C12E0AA") // OrderConfirmationMonitor
-            };
-
-            method.SaveNotificationMessage(message);
-
-            var monitor = MonitorResolver.Current.GetMonitorByKey<INotificationMonitorBase>(message.MethodKey);
-
-            monitor.CacheMessage(message);
-
-            // Assert
-            Notification.Trigger("OrderConfirmation");
-        }
+//            // Assert
+//            Notification.Trigger("OrderConfirmation");
+//        }
     }
 }
