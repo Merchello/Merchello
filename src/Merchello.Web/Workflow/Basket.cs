@@ -90,11 +90,21 @@
             get { return _itemCache; }
         }
   
+        /// <summary>
+        /// Static method to instantiate a customer's basket
+        /// </summary>
+        /// <param name="customer">The customer associated with the basket</param>
+        /// <returns>The customer's <see cref="IBasket"/></returns>
         public static IBasket GetBasket(ICustomerBase customer)
         {
             return GetBasket(MerchelloContext.Current, customer);
         }
 
+        /// <summary>
+        /// Refreshes the runtime cache
+        /// </summary>
+        /// <param name="merchelloContext">The merchello context</param>
+        /// <param name="basket">The <see cref="IBasket"/></param>
         public static void Refresh(IMerchelloContext merchelloContext, IBasket basket)
         {
             var cacheKey = MakeCacheKey(basket.Customer);
@@ -228,7 +238,70 @@
 
             AddItem(string.IsNullOrEmpty(name) ? productVariant.Name : name, productVariant.Sku, quantity, onSale, extendedData); 
         }
-        
+
+        /// <summary>
+        /// Adds a line item to the basket
+        /// </summary>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="sku">
+        /// The sku.
+        /// </param>
+        /// <param name="price">
+        /// The price.
+        /// </param>
+        public void AddItem(string name, string sku, decimal price)
+        {
+            AddItem(name, sku, 1, price, new ExtendedDataCollection());
+        }
+
+        /// <summary>
+        /// Adds a line item to the basket
+        /// </summary>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="sku">
+        /// The sku.
+        /// </param>
+        /// <param name="quantity">
+        /// The quantity.
+        /// </param>
+        /// <param name="price">
+        /// The price.
+        /// </param>
+        public void AddItem(string name, string sku, int quantity, decimal price)
+        {
+            AddItem(name, sku, quantity, price, new ExtendedDataCollection());
+        }
+
+        /// <summary>
+        /// Adds a line item to the basket
+        /// </summary>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="sku">
+        /// The sku.
+        /// </param>
+        /// <param name="quantity">
+        /// The quantity.
+        /// </param>
+        /// <param name="price">
+        /// The price.
+        /// </param>
+        /// <param name="extendedData">
+        /// The extended Data.
+        /// </param>
+        public void AddItem(string name, string sku, int quantity, decimal price, ExtendedDataCollection extendedData)
+        {
+            if (quantity <= 0) quantity = 1;
+            if (price < 0) price = 0;
+            _itemCache.AddItem(LineItemType.Product, name, sku, quantity, price, extendedData);
+        }
+
+
         /// <summary>
         /// Updates a basket item's quantity
         /// </summary>
@@ -402,74 +475,12 @@
 
             Refresh(merchelloContext, basket);
         }
-
-        /// <summary>
-        /// Adds a line item to the basket
-        /// </summary>
-        /// <param name="name">
-        /// The name.
-        /// </param>
-        /// <param name="sku">
-        /// The sku.
-        /// </param>
-        /// <param name="price">
-        /// The price.
-        /// </param>
-        internal void AddItem(string name, string sku, decimal price)
-        {
-            AddItem(name, sku, 1, price, new ExtendedDataCollection());
-        }
-
-        /// <summary>
-        /// Adds a line item to the basket
-        /// </summary>
-        /// <param name="name">
-        /// The name.
-        /// </param>
-        /// <param name="sku">
-        /// The sku.
-        /// </param>
-        /// <param name="quantity">
-        /// The quantity.
-        /// </param>
-        /// <param name="price">
-        /// The price.
-        /// </param>
-        internal void AddItem(string name, string sku, int quantity, decimal price)
-        {
-            AddItem(name, sku, quantity, price, new ExtendedDataCollection());
-        }
-
-        /// <summary>
-        /// Adds a line item to the basket
-        /// </summary>
-        /// <param name="name">
-        /// The name.
-        /// </param>
-        /// <param name="sku">
-        /// The sku.
-        /// </param>
-        /// <param name="quantity">
-        /// The quantity.
-        /// </param>
-        /// <param name="price">
-        /// The price.
-        /// </param>
-        /// <param name="extendedData">
-        /// The extended Data.
-        /// </param>
-        internal void AddItem(string name, string sku, int quantity, decimal price, ExtendedDataCollection extendedData)
-        {
-            if (quantity <= 0) quantity = 1;
-            if (price < 0) price = 0;
-            _itemCache.AddItem(LineItemType.Product, name, sku, quantity, price, extendedData);
-        }
-
+     
         /// <summary>
         /// Generates a unique cache key for runtime caching of the <see cref="Basket"/>
         /// </summary>
-        /// <param name="customer"><see cref="ICustomerBase"/></param>        
-        /// <returns></returns>
+        /// <param name="customer">The <see cref="ICustomerBase"/></param>        
+        /// <returns>The cache key for the customer's basket</returns>
         private static string MakeCacheKey(ICustomerBase customer)
         {
             // the version key here is not important since there can only ever be one basket
