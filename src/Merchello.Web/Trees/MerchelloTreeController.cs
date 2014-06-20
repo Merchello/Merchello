@@ -1,19 +1,18 @@
-﻿using System.Net.Http.Formatting;
-using umbraco;
-using umbraco.BusinessLogic.Actions;
-using Umbraco.Web.Models.Trees;
-using Umbraco.Web.Mvc;
-using Umbraco.Web.Trees;
-
-namespace Merchello.Web.Trees
+﻿namespace Merchello.Web.Trees
 {
+    using System.Net.Http.Formatting;
+    using umbraco;
+    using umbraco.BusinessLogic.Actions;
+    using Umbraco.Web.Models.Trees;
+    using Umbraco.Web.Mvc;
+    using Umbraco.Web.Trees;
+
     [Tree("merchello", "merchello", "Merchello")]
     [PluginController("Merchello")]
     public class MerchelloTreeController : TreeController
     {
         protected override TreeNodeCollection GetTreeNodes(string id, FormDataCollection queryStrings)
         {
-
             var collection = new TreeNodeCollection();
             switch (id)
             {
@@ -35,7 +34,6 @@ namespace Merchello.Web.Trees
                     collection.Add(CreateTreeNode("settings", "", queryStrings, "Settings", "icon-settings", true, "merchello/merchello/Settings/manage"));
                     break;
             }
-
 
             return collection;
         }

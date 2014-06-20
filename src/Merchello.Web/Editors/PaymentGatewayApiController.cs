@@ -1,33 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
-using Merchello.Core;
-using Merchello.Core.Gateways.Payment;
-using Merchello.Core.Models;
-using Merchello.Core.Services;
-using Merchello.Web.Models.ContentEditing;
-using Merchello.Web.WebApi;
-using Umbraco.Web.Mvc;
-
-namespace Merchello.Web.Editors
+﻿namespace Merchello.Web.Editors
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Web.Http;
+    using Core;
+    using Core.Gateways.Payment;
+    using Core.Models;
+    using Core.Services;
+    using Models.ContentEditing;
+    using Umbraco.Web.Mvc;
+    using WebApi;
+
+    /// <summary>
+    /// Represents the PaymentGatewayApiController
+    /// </summary>
     [PluginController("Merchello")]
     public class PaymentGatewayApiController : MerchelloApiController 
     {
         private readonly IPaymentContext _paymentContext;
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="PaymentGatewayApiController"/> class.
         /// </summary>
         public PaymentGatewayApiController()
-            :this(MerchelloContext.Current)
-        {}
+            : this(MerchelloContext.Current)
+        {            
+        }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="PaymentGatewayApiController"/> class.
         /// </summary>
         /// <param name="merchelloContext">The <see cref="IMerchelloContext"/></param>
         public PaymentGatewayApiController(MerchelloContext merchelloContext)
@@ -38,10 +42,15 @@ namespace Merchello.Web.Editors
 
         /// <summary>
         /// 
-        ///
+        /// 
         /// GET /umbraco/Merchello/PaymentGatewayApi/GetGatewayResources/{id}
         /// </summary>
-        /// <param name="id">The key of the PaymentGatewayProvider</param>
+        /// <param name="id">
+        /// The key of the PaymentGatewayProvider
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="GatewayResourceDisplay"/>.
+        /// </returns>
         public IEnumerable<GatewayResourceDisplay> GetGatewayResources(Guid id)
         {
             try
@@ -56,18 +65,21 @@ namespace Merchello.Web.Editors
             {
 
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
-            }
-            
+            }            
         }
 
         /// <summary>
         /// Returns a list of all of GatewayProviders of GatewayProviderType Payment
-        ///
+        /// 
         /// GET /umbraco/Merchello/PaymentGatewayApi/GetAllGatewayProviders/
-        /// </summary>        
+        /// </summary>
+        /// <returns>
+        /// A collection of all payment <see cref="GatewayProviderDisplay"/>
+        /// </returns>
         public IEnumerable<GatewayProviderDisplay> GetAllGatewayProviders()
         {
             var providers = _paymentContext.GetAllActivatedProviders();
+
             if (providers == null)
             {
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
@@ -78,13 +90,15 @@ namespace Merchello.Web.Editors
 
         /// <summary>
         /// Get all <see cref="IPaymentMethod"/> for a payment provider
-        ///
+        /// 
         /// GET /umbraco/Merchello/PaymentGatewayApi/GetPaymentProviderPaymentMethods/{id}
         /// </summary>
-        /// <param name="id">The key of the PaymentGatewayProvider</param>
-        /// <remarks>
-        /// 
-        /// </remarks>
+        /// <param name="id">
+        /// The key of the PaymentGatewayProvider
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="PaymentMethodDisplay"/>
+        /// </returns>
         public IEnumerable<PaymentMethodDisplay> GetPaymentProviderPaymentMethods(Guid id)
         {
             var provider = _paymentContext.GetProviderByKey(id);
@@ -99,10 +113,15 @@ namespace Merchello.Web.Editors
 
         /// <summary>
         /// Adds a <see cref="IPaymentMethod"/>
-        ///
+        /// 
         /// POST /umbraco/Merchello/PaymentGatewayApi/AddPaymentMethod
         /// </summary>
-        /// <param name="method">POSTed <see cref="PaymentMethodDisplay"/> object</param>
+        /// <param name="method">
+        /// POSTed <see cref="PaymentMethodDisplay"/> object
+        /// </param>
+        /// <returns>
+        /// The <see cref="HttpResponseMessage"/>.
+        /// </returns>
         [AcceptVerbs("POST")]
         public HttpResponseMessage AddPaymentMethod(PaymentMethodDisplay method)
         {
@@ -122,7 +141,7 @@ namespace Merchello.Web.Editors
             }
             catch (Exception ex)
             {
-                response = Request.CreateResponse(HttpStatusCode.InternalServerError, String.Format("{0}", ex.Message));
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError, string.Format("{0}", ex.Message));
             }
 
             return response;
@@ -133,7 +152,12 @@ namespace Merchello.Web.Editors
         /// 
         /// PUT /umbraco/Merchello/PaymentGatewayApi/PutPaymentMethod
         /// </summary>
-        /// <param name="method">POSTed <see cref="PaymentMethodDisplay"/> object</param>
+        /// <param name="method">
+        /// POSTed <see cref="PaymentMethodDisplay"/> object
+        /// </param>
+        /// <returns>
+        /// The <see cref="HttpResponseMessage"/>.
+        /// </returns>
         [AcceptVerbs("POST", "PUT")]
         public HttpResponseMessage PutPaymentMethod(PaymentMethodDisplay method)
         {
@@ -141,7 +165,7 @@ namespace Merchello.Web.Editors
 
             try
             {
-                var provider = _paymentContext.CreateInstance(method.ProviderKey);
+                var provider = _paymentContext.GetProviderByKey(method.ProviderKey);
 
                 var paymentMethod = provider.PaymentMethods.FirstOrDefault(x => x.Key == method.Key);
 
@@ -151,7 +175,7 @@ namespace Merchello.Web.Editors
             }
             catch (Exception ex)
             {
-                response = Request.CreateResponse(HttpStatusCode.InternalServerError, String.Format("{0}", ex.Message));
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError, string.Format("{0}", ex.Message));
             }
 
             return response;
@@ -162,7 +186,12 @@ namespace Merchello.Web.Editors
         /// 
         /// GET /umbraco/Merchello/PaymentGatewayApi/DeletePaymentMethod
         /// </summary>
-        /// <param name="id"><see cref="PaymentMethodDisplay"/> key to delete</param>
+        /// <param name="id">
+        /// <see cref="PaymentMethodDisplay"/> key to delete
+        /// </param>
+        /// <returns>
+        /// The <see cref="HttpResponseMessage"/>.
+        /// </returns>
         [AcceptVerbs("GET", "DELETE")]
         public HttpResponseMessage DeletePaymentMethod(Guid id)
         {

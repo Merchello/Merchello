@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Xml;
-using Merchello.Core.Configuration;
-using umbraco.cms.businesslogic.packager.standardPackageActions;
-using Umbraco.Core.Logging;
-using umbraco.interfaces;
-
-namespace Merchello.Web.PackageActions
+﻿namespace Merchello.Web.PackageActions
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Xml;
+    using Core.Configuration;
+    using umbraco.cms.businesslogic.packager.standardPackageActions;    
+    using umbraco.interfaces;
+    using Umbraco.Core.Logging;
+
     public class AddLocalizationAreas : IPackageAction
     {
-
         // Set the path of the language files directory
         private const string UmbracoLangPath = "~/umbraco/config/lang/";
         private const string MerchelloLangPath = "~/App_Plugins/Merchello/Config/Lang/";
@@ -26,9 +25,12 @@ namespace Merchello.Web.PackageActions
         public bool Execute(string packageName, XmlNode xmlData)
         {
             var merchelloFiles = GetMerchelloLanguageFiles();
+            LogHelper.Info<AddLocalizationAreas>(string.Format("Merchello Package Acction - {0} Merchello Plugin language files to be merged", merchelloFiles.Count()));
+
             var merchFileArray = merchelloFiles as FileInfo[] ?? merchelloFiles.ToArray();
 
             var existingLangs = GetUmbracoLanguageFilesToInsertLocalizationData();
+            LogHelper.Info<AddLocalizationAreas>(string.Format("Merchello Package Acction - {0} Umbraco language files to that match", existingLangs.Count()));
 
             foreach (var lang in existingLangs)
             {
@@ -51,8 +53,7 @@ namespace Merchello.Web.PackageActions
                             var import = umb.ImportNode((XmlNode)area, true);
                             umb.DocumentElement.AppendChild(import);
                         }
-
-                        
+                        umb.Save(lang.FullName);
                     }
                 }
                 catch (Exception ex)
@@ -119,10 +120,6 @@ namespace Merchello.Web.PackageActions
             var xml = string.Concat("<Action runat=\"install\" undo=\"true\" alias=\"", Alias(), "\" />");
             return helper.parseStringToXmlNode(xml);
         }
-
-
-        
-
 
         internal static IEnumerable<FileInfo> GetUmbracoLanguageFiles()
         {

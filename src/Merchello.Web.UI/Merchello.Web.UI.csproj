@@ -97,6 +97,7 @@
     <Content Include="App_Plugins\Merchello\Common\Js\merchello.models.js" />
     <Content Include="App_Plugins\Merchello\Common\Js\merchello.namespaces.js" />
     <Content Include="App_Plugins\Merchello\Common\Js\greaterthan.filter.js" />
+    <Content Include="App_Plugins\Merchello\Config\Lang\da.xml" />
     <Content Include="App_Plugins\Merchello\Config\Lang\en.xml">
       <SubType>Designer</SubType>
     </Content>
