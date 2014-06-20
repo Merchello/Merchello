@@ -74,12 +74,27 @@
                     <thead>
                         <tr>
                             <!--<th><input type="checkbox" /></th>--> <!-- Toggles the bulk action dropdown -->
-                            <th><localize key="merchelloOrder_orderNumber"/></th>
-                            <th><localize key="general_date"/></th>
-                            <th><localize key="merchelloGeneral_customer" /></th>
-                            <th><localize key="merchelloOrder_paymentStatus" /></th>
-                            <th><localize key="merchelloOrder_fulfillmentStatus" /></th>
-                            <th><localize key="merchelloGeneral_total" /></th>
+                            <th data-ng-click="changeSortOrder('invoiceNumber')" data-ng-class="{'sorted': sortProperty == 'invoiceNumber' ||  sortProperty == '-invoiceNumber'}">
+                                <i data-ng-class="{'icon-navigation-up': sortProperty == 'invoiceNumber', 'icon-navigation-down': sortProperty == '-invoiceNumber'}"></i> 
+                                <localize key="merchelloOrder_orderNumber"/>
+                            </th>
+                            <th data-ng-click="changeSortOrder('invoiceDate')" data-ng-class="{'sorted': sortProperty == 'invoiceDate' ||  sortProperty == '-invoiceDate'}">
+                                <i data-ng-class="{'icon-navigation-up': sortProperty == 'invoiceDate', 'icon-navigation-down': sortProperty == '-invoiceDate'}"></i> 
+                                <localize key="general_date"/>
+                            </th>
+                            <th data-ng-click="changeSortOrder('billToName')" data-ng-class="{'sorted': sortProperty == 'billToName' ||  sortProperty == '-billToName'}">
+                                <i data-ng-class="{'icon-navigation-up': sortProperty == 'billToName', 'icon-navigation-down': sortProperty == '-billToName'}"></i> 
+                                <localize key="merchelloGeneral_customer" />
+                            </th>
+                            <th>
+                                <localize key="merchelloOrder_paymentStatus" />
+                            </th>
+                            <th>
+                                <localize key="merchelloOrder_fulfillmentStatus" />
+                            </th>
+                            <th>
+                                <localize key="merchelloGeneral_total" />
+                            </th>
                         </tr>
                         <!-- Displays the bulk action button & dropdown menu when the checkbox is selected, which replaces normal heading TR -->
                         <!--<tr>
