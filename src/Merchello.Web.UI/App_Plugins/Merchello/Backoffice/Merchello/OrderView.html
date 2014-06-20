@@ -128,7 +128,7 @@
 						<div class="row-fluid span10 col-xs-10" data-ng-repeat="(paymentMethodName, appliedPaymentList) in invoice.groupedAppliedPayments">
 							<div class="row-fluid">
 								<div class="merchello-section-label">
-									<localize key="merchelloShipping_payment" /> - {{paymentMethodName}}
+									<localize key="merchelloPayment_payment" /> - {{paymentMethodName}}
 								</div>
 							</div>
 
@@ -137,9 +137,9 @@
 								<thead>
 									<tr>
 										<th><localize key="general_date" /></th>
-										<th><localize key="general_status" /></th>
+										<th><localize key="merchelloOrder_paymentStatus" /></th>
 										<th><localize key="general_type" /></th>
-										<th><localize key="general_amount" /></th>
+										<th><localize key="merchelloGeneral_amount" /></th>
 									</tr>
 								</thead>
 								<tr data-ng-repeat="appliedPayment in appliedPaymentList | greaterthan: 'amount': 0">

@@ -12,8 +12,8 @@
 
         $scope.orderIssues = [];
         $scope.invoices = [];
-        $scope.sortProperty = "name";
-        $scope.sortOrder = "asc";
+        $scope.sortProperty = "-invoiceNumber";
+        $scope.sortOrder = "desc";
         $scope.limitAmount = 10;
         $scope.currentPage = 0;
 
