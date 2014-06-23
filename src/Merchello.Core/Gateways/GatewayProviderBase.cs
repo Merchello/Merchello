@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using Merchello.Core.Models;
-using Merchello.Core.Services;
-using Umbraco.Core.Cache;
-
-namespace Merchello.Core.Gateways
+﻿namespace Merchello.Core.Gateways
 {
+    using System;
+    using System.Collections.Generic;
+    using Models;
+    using Services;
+    using Umbraco.Core.Cache;
+
     /// <summary>
     /// Defines the GatewayBase
     /// </summary>
@@ -27,13 +27,7 @@ namespace Merchello.Core.Gateways
         }
 
         /// <summary>
-        /// Returns a collection of all possible gateway methods associated with this provider
-        /// </summary>
-        /// <returns>A collection of <see cref="IGatewayResource"/></returns>
-        public abstract IEnumerable<IGatewayResource> ListResourcesOffered();
-
-        /// <summary>
-        /// The unique Key that will be used
+        /// Gets unique Key that will be used
         /// </summary>
         public Guid Key 
         {
@@ -65,7 +59,8 @@ namespace Merchello.Core.Gateways
         }
 
         /// <summary>
-        /// Gets the "activated property" from the <see cref="IGatewayProviderSettings"/>
+        /// Gets a value indicating whether or not this is an "activated provider" and the <see cref="IGatewayProviderSettings"/> have
+        /// been persisted to the Merchello database
         /// </summary>
         public virtual bool Activated
         {
@@ -80,5 +75,12 @@ namespace Merchello.Core.Gateways
         {
             get { return _runtimeCache; }
         }
+
+        /// <summary>
+        /// Returns a collection of all possible gateway methods associated with this provider
+        /// </summary>
+        /// <returns>A collection of <see cref="IGatewayResource"/></returns>
+        public abstract IEnumerable<IGatewayResource> ListResourcesOffered();
+
     }
 }
