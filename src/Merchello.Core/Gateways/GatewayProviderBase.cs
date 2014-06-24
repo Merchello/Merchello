@@ -15,6 +15,12 @@
         private readonly IGatewayProviderService _gatewayProviderService;
         private readonly IRuntimeCacheProvider _runtimeCache;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GatewayProviderBase"/> class.
+        /// </summary>
+        /// <param name="gatewayProviderService">The <see cref="IGatewayProviderService"/></param>
+        /// <param name="gatewayProviderSettings">The <see cref="IGatewayProviderSettings"/></param>
+        /// <param name="runtimeCacheProvider">Umbraco's <see cref="IRuntimeCacheProvider"/></param>
         protected GatewayProviderBase(IGatewayProviderService gatewayProviderService, IGatewayProviderSettings gatewayProviderSettings, IRuntimeCacheProvider runtimeCacheProvider)
         {
             Mandate.ParameterNotNull(gatewayProviderService, "gatewayProviderService");
@@ -27,7 +33,7 @@
         }
 
         /// <summary>
-        /// Gets unique Key that will be used
+        /// Gets the unique Key that will be used
         /// </summary>
         public Guid Key 
         {
@@ -59,8 +65,7 @@
         }
 
         /// <summary>
-        /// Gets a value indicating whether or not this is an "activated provider" and the <see cref="IGatewayProviderSettings"/> have
-        /// been persisted to the Merchello database
+        /// Gets a value indicating whether or not this provider is "activated"
         /// </summary>
         public virtual bool Activated
         {
@@ -81,6 +86,5 @@
         /// </summary>
         /// <returns>A collection of <see cref="IGatewayResource"/></returns>
         public abstract IEnumerable<IGatewayResource> ListResourcesOffered();
-
     }
 }
