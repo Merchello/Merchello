@@ -811,6 +811,61 @@
 	    // <<<
 	    //---------------------------
 
+	    /**
+        * @ngdoc method
+        * @name editRegionalShippingRatesDialogOpen
+        * @function
+        * 
+        * @description
+        * Opens the edit regional shipping rates dialog via the Umbraco dialogService.
+        */
+	    $scope.editRegionalShippingRatesDialogOpen = function(country, provider, method) {
+	        var dialogMethod = method;
+
+	        if (!method) {
+	            if (provider.isFixedRate()) {
+	                dialogMethod = new merchello.Models.FixedRateShippingMethod();
+	                dialogMethod.shipMethod.shipCountryKey = country.key;
+	                dialogMethod.shipMethod.providerKey = provider.key;
+	                dialogMethod.shipMethod.dialogEditorView.editorView = '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shippingregions.html';
+	            } else {
+	                dialogMethod = new merchello.Models.ShippingMethod();
+	                dialogMethod.shipCountryKey = country.key;
+	                dialogMethod.providerKey = provider.key;
+	                dialogMethod.dialogEditorView.editorView = '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shippingregions.html';
+	            }
+	        }
+
+	        var availableResources = [];
+	        if (provider.isFixedRate()) {
+	            availableResources = $scope.availableFixedRateGatewayResources;
+	        } else {
+	            availableResources = provider.resources;
+	        }
+
+	        var templatePage = '';
+	        templatePage = '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shippingregions.html';
+	        if (!provider.isFixedRate()) {
+	            if (dialogMethod.dialogEditorView.editorView) {
+	                templatePage = dialogMethod.dialogEditorView.editorView;
+	            }
+	        }
+
+	        var myDialogData = {
+	            method: dialogMethod,
+	            country: country,
+	            provider: provider,
+	            gatewayResources: availableResources
+	        };
+
+	        dialogService.open({
+	            template: templatePage,
+	            show: true,
+	            callback: $scope.shippingMethodDialogConfirm,
+	            dialogData: myDialogData
+	        });
+	    };
+
 	};
 
 	angular.module("umbraco").controller("Merchello.Dashboards.Settings.ShippingController", ['$scope', '$routeParams', '$location', 'notificationsService', 'angularHelper', 'serverValidationManager', 'dialogService', 'merchelloWarehouseService', 'merchelloSettingsService', 'merchelloCatalogShippingService', 'merchelloCatalogFixedRateShippingService', merchello.Controllers.ShippingController]);
