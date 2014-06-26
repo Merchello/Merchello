@@ -31,6 +31,7 @@
                 default:
                     collection.Add(CreateTreeNode("catalog", "", queryStrings, "Catalog", "icon-barcode", false, "merchello/merchello/ProductList/manage"));
                     collection.Add(CreateTreeNode("orders", "", queryStrings, "Orders", "icon-receipt-dollar", false, "merchello/merchello/OrderList/manage"));
+                    collection.Add(CreateTreeNode("customers", "", queryStrings, "Customers", "icon-settings", false, "merchello/merchello/CustomerList/manage"));
                     collection.Add(CreateTreeNode("settings", "", queryStrings, "Settings", "icon-settings", true, "merchello/merchello/Settings/manage"));
                     break;
             }
