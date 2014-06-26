@@ -67,6 +67,7 @@
 		'~/App_Plugins/Merchello/Modules/Settings/Shipping/Directives/shipping-history-directives.js',
 		'~/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shippingprovider.controller.js',
 		'~/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shippingmethod.controller.js',
+		'~/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shippingregions.controller.js',
 		'~/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shipping.editwarehouse.controller.js',
 		'~/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shipping.deletewarehouse.controller.js',
 		'~/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shipping.addcountry.controller.js',
