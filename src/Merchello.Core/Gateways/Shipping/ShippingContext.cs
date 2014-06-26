@@ -12,9 +12,8 @@ namespace Merchello.Core.Gateways.Shipping
     internal class ShippingContext : GatewayProviderTypedContextBase<ShippingGatewayProviderBase>, IShippingContext
     {
         private readonly IStoreSettingService _storeSettingService;
-
-        public ShippingContext(IGatewayProviderService gatewayProviderService, IStoreSettingService storeSettingService,
-            IGatewayProviderResolver resolver)
+        
+        public ShippingContext(IGatewayProviderService gatewayProviderService, IStoreSettingService storeSettingService, IGatewayProviderResolver resolver)
             : base(gatewayProviderService, resolver)
         {
             Mandate.ParameterNotNull(storeSettingService, "storeSettingService");
@@ -56,7 +55,7 @@ namespace Merchello.Core.Gateways.Shipping
         /// <summary>
         /// Returns a list of all countries that can be assigned to a shipment
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A collection of <see cref="ICountry"/></returns>
         public IEnumerable<ICountry> GetAllowedShipmentDestinationCountries()
         {
             var shipCountries = GatewayProviderService.GetAllShipCountries().ToArray();
