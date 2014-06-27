@@ -13,25 +13,45 @@ namespace Merchello.Plugin.Shipping.FedEx
 {
     public class FedExShippingProcessor
     {
-        public const string FedEx2Day = "FEDEX_2_DAY";
-        public const string FedEx2DayAm = "FEDEX_2_DAY_AM";
-        public const string FedExExpressSaver = "FEDEX_EXPRESS_SAVER";
-        public const string FedExFirstOvernight = "FIRST_OVERNIGHT";
-        public const string FedExPriorityOvernight = "PRIORITY_OVERNIGHT";
-        public const string FedExStandardOvernight = "STANDARD_OVERNIGHT";
-        public const string FedEx1DayFreight = "FEDEX_1_DAY_FREIGHT";
-        public const string FedEx2DayFreight = "FEDEX_2_DAY_FREIGHT";
-        public const string FedEx3DayFreight = "FEDEX_3_DAY_FREIGHT";
-        public const string FedExFirstFreight = "FEDEX_FIRST_DAY_FREIGHT";
-        public const string FedExInternationalDistributionFreight = "INTERNATIONAL_DISTRIBUTION_FREIGHT";
-        public const string FedExEconomyFreight = "INTERNATIONAL_ECONOMY_FREIGHT";
-        public const string FedExInternationalEconomy = "INTERNATIONAL_ECONOMY";
-        public const string FedExInternationalEconomyDistribution = "INTERNATIONAL_ECONOMY_DISTRIBUTION";
-        public const string FedExInternationalFirst = "INTERNATIONAL_FIRST";
-        public const string FedExInternationalPriority = "INTERNATIONAL_PRIORITY";
-        public const string FedExInternationalPriorityDistribution = "INTERNATIONAL_PRIORITY_DISTRIBUTION";
-        public const string FedExInternationalPriorityFreight = "INTERNATIONAL_PRIORITY_FREIGHT";
-        public const string FedExEuropeFirstInternationalPriority = "EUROPE_FIRST_INTERNATIONAL_PRIORITY";
+        public const string FedEx2DayServiceType = "FEDEX_2_DAY";
+        public const string FedEx2DayServiceCode = "1";
+        public const string FedEx2DayAmServiceType = "FEDEX_2_DAY_AM";
+        public const string FedEx2DayAmServiceCode = "2";
+        public const string FedExExpressSaverServiceType = "FEDEX_EXPRESS_SAVER";
+        public const string FedExExpressSaverServiceCode = "3";
+        public const string FedExFirstOvernightServiceType = "FIRST_OVERNIGHT";
+        public const string FedExFirstOvernightServiceCode = "4";
+        public const string FedExPriorityOvernightServiceType = "PRIORITY_OVERNIGHT";
+        public const string FedExPriorityOvernightServiceCode = "5";
+        public const string FedExStandardOvernightServiceType = "STANDARD_OVERNIGHT";
+        public const string FedExStandardOvernightServiceCode = "6";
+        public const string FedEx1DayFreightServiceType = "FEDEX_1_DAY_FREIGHT";
+        public const string FedEx1DayFreightServiceCode = "7";
+        public const string FedEx2DayFreightServiceType = "FEDEX_2_DAY_FREIGHT";
+        public const string FedEx2DayFreightServiceCode = "8";
+        public const string FedEx3DayFreightServiceType = "FEDEX_3_DAY_FREIGHT";
+        public const string FedEx3DayFreightServiceCode = "9";
+        public const string FedExFirstFreightServiceType = "FEDEX_FIRST_DAY_FREIGHT";
+        public const string FedExFirstFreightServiceCode = "10";
+        public const string FedExInternationalDistributionFreightServiceType = "INTERNATIONAL_DISTRIBUTION_FREIGHT";
+        public const string FedExInternationalDistributionFreightServiceCode = "11";
+        public const string FedExEconomyFreightServiceType = "INTERNATIONAL_ECONOMY_FREIGHT";
+        public const string FedExEconomyFreightServiceCode = "12";
+        public const string FedExInternationalEconomyServiceType = "INTERNATIONAL_ECONOMY";
+        public const string FedExInternationalEconomyServiceCode = "13";
+        public const string FedExInternationalEconomyDistributionServiceType = "INTERNATIONAL_ECONOMY_DISTRIBUTION";
+        public const string FedExInternationalEconomyDistributionServiceCode = "14";
+        public const string FedExInternationalFirstServiceType = "INTERNATIONAL_FIRST";
+        public const string FedExInternationalFirstServiceCode = "15";
+        public const string FedExInternationalPriorityServiceType = "INTERNATIONAL_PRIORITY";
+        public const string FedExInternationalPriorityServiceCode = "16";
+        public const string FedExInternationalPriorityDistributionServiceType = "INTERNATIONAL_PRIORITY_DISTRIBUTION";
+        public const string FedExInternationalPriorityDistributionServiceCode = "17";
+        public const string FedExInternationalPriorityFreightServiceType = "INTERNATIONAL_PRIORITY_FREIGHT";
+        public const string FedExInternationalPriorityFreightServiceCode = "18";
+        public const string FedExEuropeFirstInternationalPriorityServiceType = "EUROPE_FIRST_INTERNATIONAL_PRIORITY";
+        public const string FedExEuropeFirstInternationalPriorityServiceCode = "19";
+
 
         private readonly FedExProcessorSettings _settings;
 
@@ -107,62 +127,62 @@ namespace Merchello.Plugin.Shipping.FedEx
         {
             switch (service)
             {
-                case FedEx2Day:
-                    return "1";
+                case FedEx2DayServiceType:
+                    return FedEx2DayServiceCode;
                     break;
-                case FedEx2DayAm:
-                    return "2";
+                case FedEx2DayAmServiceType:
+                    return FedEx2DayAmServiceCode;
                     break;
-                case FedExExpressSaver:
-                     return "3";        
+                case FedExExpressSaverServiceType:
+                    return FedExExpressSaverServiceCode;        
                     break;
-                case FedExFirstOvernight:
-                     return "4";     
+                case FedExFirstOvernightServiceType:
+                    return FedExFirstOvernightServiceCode;     
                     break;
-                case FedExPriorityOvernight:
-                    return "5";     
+                case FedExPriorityOvernightServiceType:
+                    return FedExPriorityOvernightServiceCode;
                     break;
-                case FedExStandardOvernight:
-                    return "6";     
-                    break;  
-                case FedEx1DayFreight:
-                    return "7";           
+                case FedExStandardOvernightServiceType:
+                    return FedExStandardOvernightServiceCode;     
                     break;
-                case FedEx2DayFreight:
-                    return "8";           
+                case FedEx1DayFreightServiceType:
+                    return FedEx1DayFreightServiceCode;           
                     break;
-                case FedEx3DayFreight:
-                    return "9";           
+                case FedEx2DayFreightServiceType:
+                    return FedEx2DayFreightServiceCode;           
                     break;
-                case FedExFirstFreight:
-                    return "10";          
+                case FedEx3DayFreightServiceType:
+                    return FedEx3DayFreightServiceCode;           
                     break;
-                case FedExInternationalDistributionFreight:
-                    return "11";    
+                case FedExFirstFreightServiceType:
+                    return FedExFirstFreightServiceCode;          
                     break;
-                case FedExEconomyFreight:
-                    return "12";                             
+                case FedExInternationalDistributionFreightServiceType:
+                    return FedExInternationalDistributionFreightServiceCode;    
                     break;
-                case FedExInternationalEconomy:
-                    return "13";                       
+                case FedExEconomyFreightServiceType:
+                    return FedExEconomyFreightServiceCode;                             
                     break;
-                case FedExInternationalEconomyDistribution:
-                    return "14";               
+                case FedExInternationalEconomyServiceType:
+                    return FedExInternationalEconomyServiceCode;                       
                     break;
-                case FedExInternationalFirst:
-                    return "15";                   
+                case FedExInternationalEconomyDistributionServiceType:
+                    return FedExInternationalEconomyDistributionServiceCode;               
                     break;
-                case FedExInternationalPriority:
-                    return "16";                
+                case FedExInternationalFirstServiceType:
+                    return FedExInternationalFirstServiceCode;                   
                     break;
-                case FedExInternationalPriorityDistribution:
-                    return "17";     
+                case FedExInternationalPriorityServiceType:
+                    return FedExInternationalPriorityServiceCode;                
                     break;
-                case FedExInternationalPriorityFreight:
-                    return "18";       
+                case FedExInternationalPriorityDistributionServiceType:
+                    return FedExInternationalPriorityDistributionServiceCode;     
                     break;
-                case FedExEuropeFirstInternationalPriority:
-                    return "19";   
+                case FedExInternationalPriorityFreightServiceType:
+                    return FedExInternationalPriorityFreightServiceCode;       
+                    break;
+                case FedExEuropeFirstInternationalPriorityServiceType:
+                    return FedExEuropeFirstInternationalPriorityServiceCode;   
                     break;
                 default:
                     return "0";
