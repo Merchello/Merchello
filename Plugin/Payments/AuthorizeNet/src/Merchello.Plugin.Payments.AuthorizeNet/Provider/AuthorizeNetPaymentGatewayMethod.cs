@@ -1,13 +1,13 @@
-﻿using Merchello.Core;
-using Merchello.Core.Gateways;
-using Merchello.Core.Gateways.Payment;
-using Merchello.Core.Models;
-using Merchello.Core.Services;
-using Merchello.Plugin.Payments.AuthorizeNet.Models;
-using Umbraco.Core;
-
-namespace Merchello.Plugin.Payments.AuthorizeNet.Provider
+﻿namespace Merchello.Plugin.Payments.AuthorizeNet.Provider
 {
+    using Core;
+    using Core.Gateways;
+    using Core.Gateways.Payment;
+    using Core.Models;
+    using Core.Services;
+    using Models;
+    using Umbraco.Core;
+
     /// <summary>
     /// Represents an AuthorizeNet Payment Method
     /// </summary>
