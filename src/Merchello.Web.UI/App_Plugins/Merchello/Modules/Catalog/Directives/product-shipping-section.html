@@ -1,0 +1,32 @@
+﻿<div>   
+	<label class="merchello-control-label">
+		<localize key="merchelloShipping_info" />
+		<small><localize key="merchelloShipping_setVars"/></small>
+	</label>
+
+	<div class="merchello-controls">
+
+		<div class="row-fluid">
+			<div class="form-group span6 col-xs-6">
+				<label for="weight"><localize key="merchelloShipping_weight"/></label>
+				<input type="text" id="weight" name="weight" class="form-control col-xs-8 span8" data-ng-model="productVariant.weight" />
+			</div>
+			<!--<div class="form-group span6 col-xs-6">
+					<label for="vendor">Vendor<small>(ie Microsoft, American Apparel)</small></label>
+					<select id="vendor" name="vendor" disabled="disabled" class="form-control col-xs-8 span8">
+						<option>Your Vendor</option>
+					</select>
+				</div>-->
+			<div class="form-group span6 col-xs-6">
+				<label for="length"><localize key="merchelloShipping_dimensions" /></label>
+				<div class="form-inline">
+					<div class="input-append col-xs-3 span3"><input type="text" id="length" name="length" class="form-control col-xs-8 span8" data-ng-model="productVariant.length" /><span class="add-on">L</span></div>
+					<div class="input-append  col-xs-3 span3"><input type="text" id="width" name="width" class="form-control col-xs-8 span8" data-ng-model="productVariant.width" /><span class="add-on">W</span></div>
+					<div class="input-append  col-xs-3 span3"><input type="text" id="height" name="height" class="form-control col-xs-8 span8" data-ng-model="productVariant.height" /><span class="add-on">H</span></div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
+

@@ -120,4 +120,58 @@
 
     angular.module("umbraco").directive('productDigitalDownloadSection', ['dialogService', merchello.Directives.ProductDigitalDownloadSection] );
 
+
+
+
+    /**
+     * @ngdoc directive
+     * @name ProductShippingSection
+     * @function
+     * 
+     * @description
+     * directive to set the shipping information on a product or product variant
+     */
+
+    directives.ProductShippingSection = function () {
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {
+                product: '=',
+                productVariant: '='
+            },
+            templateUrl: '/App_Plugins/Merchello/Modules/Catalog/Directives/product-shipping-section.html'
+        };
+    };
+
+    angular.module("umbraco").directive('productShippingSection', merchello.Directives.ProductShippingSection);
+
+
+
+
+    /**
+     * @ngdoc directive
+     * @name ProductInventorySection
+     * @function
+     * 
+     * @description
+     * directive to set the inventory information on a product or product variant
+     */
+
+    directives.ProductInventorySection = function () {
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {
+                product: '=',
+                productVariant: '=',
+                defaultWarehouse: '=',
+                warehouses: '='
+        },
+            templateUrl: '/App_Plugins/Merchello/Modules/Catalog/Directives/product-inventory-section.html'
+        };
+    };
+
+    angular.module("umbraco").directive('productInventorySection', merchello.Directives.ProductInventorySection);
+
 }(window.merchello.Directives = window.merchello.Directives || {}));
