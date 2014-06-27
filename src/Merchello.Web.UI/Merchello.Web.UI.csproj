@@ -74,6 +74,7 @@
   <ItemGroup>
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\GatewayProviders.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\NotificationsEdit.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ProductCreate.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\TaxesByDestination.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\SalesByItem.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\SalesOverTime.html" />
@@ -105,6 +106,7 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="App_Plugins\Merchello\Directives\merchello-pager.html" />
+    <Content Include="App_Plugins\Merchello\Directives\merchello-slide-open-panel.html" />
     <Content Include="App_Plugins\Merchello\Directives\merchello.debug.section.directive.js" />
     <Content Include="App_Plugins\Merchello\Directives\dropdownlist.directive.js" />
     <Content Include="App_Plugins\Merchello\Directives\merchello-debug-section.html" />
@@ -112,6 +114,7 @@
     <Content Include="App_Plugins\Merchello\Directives\merchello.pager.directive.js" />
     <Content Include="App_Plugins\Merchello\Directives\merchello.panel.directive.js" />
     <Content Include="App_Plugins\Merchello\Common\Js\startfrom.filter.js" />
+    <Content Include="App_Plugins\Merchello\Directives\merchello.slide.open.panel.directive.js" />
     <Content Include="App_Plugins\Merchello\lib\codemirror\Css\umbracoCustom.css" />
     <Content Include="App_Plugins\Merchello\lib\codemirror\Js\Lib\codemirror.css" />
     <Content Include="App_Plugins\Merchello\lib\codemirror\Js\Lib\codemirror.js" />
@@ -270,6 +273,8 @@
     <Content Include="App_Plugins\Merchello\lib\JsonTree\jsontree.js" />
     <Content Include="App_Plugins\Merchello\lib\ngJsonExplorer\gd-ui-jsonexplorer.css" />
     <Content Include="App_Plugins\Merchello\lib\ngJsonExplorer\gd-ui-jsonexplorer.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\product-digital-download-section.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Catalog\product.create.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\Dialogs\product.duplicatevariants.html" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\Dialogs\product.duplicatevariants.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\Dialogs\product.deletevariants.html" />
