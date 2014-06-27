@@ -40,15 +40,18 @@
 							    <p><localize key="merchelloVariant_createProductSub"/></p>
 						    </div>
 
+                            <!-- Form for checkboxes that manage below sections, key fields like SKU, Price, etc -->
 					        <product-variant-main-properties product="product" product-variant="productVariant" creating-variant="creatingVariant" editing-variant="editingVariant"></product-variant-main-properties>                            
 
 					    </div>
 				    </div>
 
+                    <!-- Digital Downloads Picker -->
 			        <merchello-slide-open-panel is-open="productVariant.hasDigitalDownload">
 			            <product-digital-download-section product="product" product-variant="productVariant" ></product-digital-download-section>
 			        </merchello-slide-open-panel>
               
+                    <!-- Product Options and Variants -->
 			        <merchello-slide-open-panel is-open="product.hasOptions">
 					    <label class="merchello-control-label">
 						    <localize key="merchelloGeneral_multipleOptions"/>
@@ -150,85 +153,14 @@
 					    </div>
 			        </merchello-slide-open-panel>
 
-
+                    <!-- Inventory for a single product without options -->
 			        <merchello-slide-open-panel is-open="(productVariant.trackInventory && !productVariant.hasOptions)">
-					    <label class="merchello-control-label">
-						    <localize key="merchelloInventory_tracking"/>
-						    <small><localize key="merchelloVariant_setInventoryPreferences"/></small>
-					    </label>
-
-					    <div class="merchello-controls row-fluid">
-
-						    <!--<div class="well span10">
-							        <p>How do you want to handle out of stock inventory?</p>
-
-							        <div class="radio-group">
-								        <label class="label-radio"><input name="onsale" type="radio" value="" data-ng-model="productVariant.outOfStockPurchase" checked="checked"> <span>Stop selling</span></label>
-								        <label class="label-radio"><input name="onsale" type="radio" value="true" data-ng-model="productVariant.outOfStockPurchase"> <span>Continue selling and...</span></label>
-							        </div>
-
-							        <div class="form-group row-fluid" data-ng-class="{ 'open': productVariant.outOfStockPurchase, 'closed': (!productVariant.outOfStockPurchase) }">
-								        <div class="span12 col-xs-12">
-									        <label for="outOfStockMessage">Post the following message:</label>
-									        <textarea id="outOfStockMessage" rows="3" name="outOfStockMessage" class="col-xs-5 span5" ></textarea>
-								        </div>
-								        <div class="span12 col-xs-12">
-									        <label for="stopSellingAmount">Stop selling at negative...</label>
-									        <div class="input-append col-xs-12 span12"><input id="stopSellingAmount" name="stopSellingAmount" class="col-xs-2 span2" type="text" /><span class="add-on">items</span></div>
-								        </div>
-							        </div>
-						        </div>-->
-
-						    <div class="span10">
-							    <table class="table">
-								    <tr>
-									    <th></th>
-									    <th class="name"><localize key="merchelloWarehouse_warehouse"/></th>
-									    <th><localize key="merchelloWarehouse_stock" /></th>
-									    <th><localize key="merchelloWarehouse_lowCount" /></th>
-								    </tr>
-								    <tr data-ng-repeat="catalogInv in productVariant.catalogInventories">
-									    <td class="span1"><input name="incatalog" type="checkbox" disabled="disabled" checked="checked"></td>
-									    <td class="name">{{defaultWarehouse.name}} - {{defaultWarehouse.warehouseCatalogs[0].name}}</td>
-									    <td><input type="text" class="col-xs-8 span8" data-ng-model="catalogInv.count" /></td>
-									    <td><input type="text" class="col-xs-8 span8" data-ng-model="catalogInv.lowCount" /></td>
-								    </tr>
-							    </table>
-						    </div>
-
-					    </div>
+			            <product-inventory-section product="product" product-variant="productVariant" default-warehouse="defaultWarehouse" warehouses="warehouses" ></product-inventory-section>
 			        </merchello-slide-open-panel>
 
+                    <!-- Shipping settings for a product. -->
 			        <merchello-slide-open-panel is-open="productVariant.shippable">
-					    <label class="merchello-control-label">
-							<localize key="merchelloShipping_info" />
-						    <small><localize key="merchelloShipping_setVars"/></small>
-					    </label>
-
-					    <div class="merchello-controls">
-
-						    <div class="row-fluid">
-							    <div class="form-group span6 col-xs-6">
-								    <label for="weight"><localize key="merchelloShipping_weight"/></label>
-								    <input type="text" id="weight" name="weight" class="form-control col-xs-8 span8" data-ng-model="productVariant.weight" />
-							    </div>
-							    <!--<div class="form-group span6 col-xs-6">
-								        <label for="vendor">Vendor<small>(ie Microsoft, American Apparel)</small></label>
-								        <select id="vendor" name="vendor" disabled="disabled" class="form-control col-xs-8 span8">
-									        <option>Your Vendor</option>
-								        </select>
-							        </div>-->
-							    <div class="form-group span6 col-xs-6">
-								    <label for="length"><localize key="merchelloShipping_dimensions" /></label>
-								    <div class="form-inline">
-									    <div class="input-append col-xs-3 span3"><input type="text" id="length" name="length" class="form-control col-xs-8 span8" data-ng-model="productVariant.length" /><span class="add-on">L</span></div>
-									    <div class="input-append  col-xs-3 span3"><input type="text" id="width" name="width" class="form-control col-xs-8 span8" data-ng-model="productVariant.width" /><span class="add-on">W</span></div>
-									    <div class="input-append  col-xs-3 span3"><input type="text" id="height" name="height" class="form-control col-xs-8 span8" data-ng-model="productVariant.height" /><span class="add-on">H</span></div>
-								    </div>
-							    </div>
-						    </div>
-
-					    </div>
+			            <product-shipping-section product="product" product-variant="productVariant" ></product-shipping-section>
 			        </merchello-slide-open-panel>
 
                     <merchello-debug-section data-props-to-debug="product,productVariant"></merchello-debug-section>
@@ -239,16 +171,7 @@
 
 		    </div>
 	    </merchello-panel>
-        
-        <ul class="umb-panel-footer-nav nav nav-pills">
-            <li>
-                <a href="#/merchello/merchello/ProductList/manage"><localize key="merchelloHeadline_catalog" /></a>
-            </li>
-            <li data-ng-show="creatingVariant || editingVariant">
-                <a href="#/merchello/merchello/ProductEdit/{{parentProductId}}"><localize key="merchelloVariant_product" /></a>
-            </li>
-            <li></li>
-        </ul>
+
 
     </umb-panel>
 </form>
