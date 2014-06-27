@@ -2,8 +2,11 @@
 using umbraco.interfaces;
 using umbraco.BasePages;
 
-namespace Merchello.Web.UI.Trees
+namespace Merchello.Web.Trees
 {
+    /// <summary>
+    /// Fly out menu for the Catalog tree item to allow quick creation of a new product
+    /// </summary>
     public class MerchelloActionNewProduct : IAction
 	{
 		//create singleton
@@ -12,6 +15,9 @@ namespace Merchello.Web.UI.Trees
 
         private MerchelloActionNewProduct() { }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static MerchelloActionNewProduct Instance
 		{
 			get { return InnerInstance; }
@@ -19,6 +25,9 @@ namespace Merchello.Web.UI.Trees
 
 		#region IAction Members
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public char Letter
 		{
 			get
@@ -27,6 +36,9 @@ namespace Merchello.Web.UI.Trees
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public string JsFunctionName
 		{
 			get
@@ -35,6 +47,9 @@ namespace Merchello.Web.UI.Trees
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public string JsSource
 		{
 			get
@@ -43,14 +58,20 @@ namespace Merchello.Web.UI.Trees
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public string Alias
 		{
 			get
 			{
-				return "CreateProduct";
+                return "ProductCreateActionMenu";
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public string Icon
 		{
 			get
@@ -59,6 +80,9 @@ namespace Merchello.Web.UI.Trees
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public bool ShowInNotifier
 		{
 			get
@@ -66,6 +90,10 @@ namespace Merchello.Web.UI.Trees
 				return true;
 			}
 		}
+
+        /// <summary>
+        /// 
+        /// </summary>
 		public bool CanBePermissionAssigned
 		{
 			get
