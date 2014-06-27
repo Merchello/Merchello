@@ -1,0 +1,6 @@
+﻿{
+	javascript : [
+		'~/App_Plugins/Merchello.FedEx/merchello.fedex.shippingmethod.controller.js',
+		'~/App_Plugins/Merchello.FedEx/merchello.fedex.controller.js'
+	]
+}
