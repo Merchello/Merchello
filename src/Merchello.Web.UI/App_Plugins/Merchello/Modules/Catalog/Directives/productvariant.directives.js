@@ -265,4 +265,63 @@
 
     angular.module("umbraco").directive('productVariantCreateTable', merchello.Directives.ProductVariantCreateTable);
 
+
+
+
+    /**
+     * @ngdoc directive
+     * @name ProductOptionsManage
+     * @function
+     * 
+     * @description
+     * directive to add/edit/delete variants from a product during create or edit of a product
+     */
+
+    directives.ProductOptionsManage = function () {
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {
+                product: '=',
+                parentForm: '=',
+                'update': '&onUpdate'
+            },
+            templateUrl: '/App_Plugins/Merchello/Modules/Catalog/Directives/product-options-manage.html',
+
+            link: function ($scope, $element) {
+
+                /**
+                 * @ngdoc method
+                 * @name addOption
+                 * @function
+                 * 
+                 * @description
+                 * Called when the Add Option button is pressed.  Creates a new option ready to fill out.
+                 */
+                $scope.addOption = function () {
+
+                    $scope.product.addBlankOption();
+
+                };
+
+                /**
+                 * @ngdoc method
+                 * @name removeOption
+                 * @function
+                 * 
+                 * @description
+                 * Called when the Trash can icon button is pressed next to an option. Removes the option from the product.
+                 */
+                $scope.removeOption = function (option) {
+
+                    $scope.product.removeOption(option);
+
+                };
+            }
+
+        };
+    };
+
+    angular.module("umbraco").directive('productOptionsManage', merchello.Directives.ProductOptionsManage);
+
 }(window.merchello.Directives = window.merchello.Directives || {}));
