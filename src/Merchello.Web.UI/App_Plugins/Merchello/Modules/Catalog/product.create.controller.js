@@ -198,33 +198,6 @@
         };
 
 
-        /**
-         * @ngdoc method
-         * @name addOption
-         * @function
-         * 
-         * @description
-         * Called when the Add Option button is pressed.  Creates a new option ready to fill out.
-         */
-        $scope.addOption = function () {
-
-            $scope.product.addBlankOption();
-
-        };
-
-        /**
-         * @ngdoc method
-         * @name removeOption
-         * @function
-         * 
-         * @description
-         * Called when the Trash can icon button is pressed next to an option. Removes the option from the product.
-         */
-        $scope.removeOption = function (option) {
-
-            $scope.product.removeOption(option);
-
-        };
 
         /**
         * @ngdoc method
