@@ -235,8 +235,9 @@
          */
 		$scope.loadCountries = function () {
 
-			if ($scope.primaryWarehouse.warehouseCatalogs.length > 0) {
-				var catalogKey = $scope.primaryWarehouse.warehouseCatalogs[0].key;
+		    if ($scope.primaryWarehouse.warehouseCatalogs.length > 0) {
+
+				var catalogKey = $scope.selectedCatalog.key;
 
 				var promiseShipCountries = merchelloCatalogShippingService.getWarehouseCatalogShippingCountries(catalogKey);
 				promiseShipCountries.then(function (shipCountriesFromServer) {
@@ -435,6 +436,14 @@
 		    }
 		};
 
+        $scope.countryHasProvinces = function(country) {
+            var result = false;
+            if (country.provinces.length > 0) {
+                result = true;
+            }
+            return result;
+        }
+
 	    //--------------------------------------------------------------------------------------
 	    // Event Handlers
 	    //--------------------------------------------------------------------------------------
@@ -518,7 +527,7 @@
 			var countryOnCatalog = _.find($scope.countries, function (shipCountry) { return shipCountry.countryCode == dialogData.selectedCountry.countryCode; });
 			if (!countryOnCatalog) {
 
-				var catalogKey = $scope.primaryWarehouse.warehouseCatalogs[0].key;
+			    var catalogKey = $scope.selectedCatalog.key;
 
 				var promiseShipCountries = merchelloCatalogShippingService.newWarehouseCatalogShippingCountry(catalogKey, dialogData.selectedCountry.countryCode);
 				promiseShipCountries.then(function (shippingCountryFromServer) {
@@ -742,7 +751,7 @@
             /* TODO: Add API call functionality to either save an edited catalog or create a new one */
 
             if (selectedCatalog.key === "") {
-                // TODO: Remove the following line. It's just there for mocking a key */
+                // TODO: Remove the following line. It's just there for mocking an unique key */
                 selectedCatalog.key = Math.floor(Math.random() * 1000);
                 selectedCatalog.warehouseKey = $scope.primaryWarehouse.key;
                 $scope.primaryWarehouse.warehouseCatalogs.push(selectedCatalog);
@@ -791,7 +800,9 @@
 
 	        var index = data.filter.id;
 	        $scope.selectedCatalog = $scope.primaryWarehouse.warehouseCatalogs[index];
-
+	        $scope.countries = [];
+            // Load the countries associated with this catalog.
+	        $scope.loadCountries();
 	    };
 
 	    /**
