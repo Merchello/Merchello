@@ -49,6 +49,23 @@
 
                     $scope.productVariant.ensureCatalogInventory($scope.defaultWarehouse);
                 };
+
+                /**
+                 * @ngdoc method
+                 * @name ensureInitialOption
+                 * @function
+                 * 
+                 * @description
+                 * This is called when the "This variant has options" checkbox is checked.  It creates an initial blank option ready to 
+                 * fill out.  If the checkbox is unchecked, then the option will be deleted before saving the product.
+                 */
+                $scope.ensureInitialOption = function () {
+
+                    if ($scope.product.productOptions.length == 0) {
+                        $scope.product.addBlankOption();
+                    }
+                };
+
             }
 
         };
@@ -167,11 +184,144 @@
                 productVariant: '=',
                 defaultWarehouse: '=',
                 warehouses: '='
-        },
+            },
             templateUrl: '/App_Plugins/Merchello/Modules/Catalog/Directives/product-inventory-section.html'
         };
     };
 
     angular.module("umbraco").directive('productInventorySection', merchello.Directives.ProductInventorySection);
+
+
+
+
+    /**
+     * @ngdoc directive
+     * @name ProductVariantBulkInventory
+     * @function
+     * 
+     * @description
+     * directive to set the inventory information on all variants to a specific value
+     */
+
+    directives.ProductVariantBulkInventory = function () {
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {
+                product: '='
+            },
+            templateUrl: '/App_Plugins/Merchello/Modules/Catalog/Directives/product-variant-bulk-inventory.html',
+        
+            link: function ($scope, $element) {
+
+                // helper to bulk set the inventories for the product variants
+                $scope.allVariantInventories = 0;
+
+                /**
+                * @ngdoc method
+                * @name updateVariants
+                * @function
+                * 
+                * @description
+                * Called when the Apply button is pressed in the Base Inventory section.  This simply sets the inventory
+                * amounts for each variant to the number in the box next to the apply button.
+                */
+                $scope.applyAllVariantInventories = function (allVariantInventories) {
+
+                    for (var i = 0; i < $scope.product.productVariants.length; i++) {
+                        $scope.product.productVariants[i].globalInventoryChanged(allVariantInventories);
+                    }
+
+                };
+
+            }
+        };
+    };
+
+    angular.module("umbraco").directive('productVariantBulkInventory', merchello.Directives.ProductVariantBulkInventory);
+
+
+
+
+    /**
+     * @ngdoc directive
+     * @name ProductVariantCreateTable
+     * @function
+     * 
+     * @description
+     * directive to set the show the variants allowed by the options during the create process and allow editing before saving
+     */
+
+    directives.ProductVariantCreateTable = function () {
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {
+                product: '='
+            },
+            templateUrl: '/App_Plugins/Merchello/Modules/Catalog/Directives/product-variants-create-table.html'
+        };
+    };
+
+    angular.module("umbraco").directive('productVariantCreateTable', merchello.Directives.ProductVariantCreateTable);
+
+
+
+
+    /**
+     * @ngdoc directive
+     * @name ProductOptionsManage
+     * @function
+     * 
+     * @description
+     * directive to add/edit/delete variants from a product during create or edit of a product
+     */
+
+    directives.ProductOptionsManage = function () {
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {
+                product: '=',
+                parentForm: '=',
+                'update': '&onUpdate'
+            },
+            templateUrl: '/App_Plugins/Merchello/Modules/Catalog/Directives/product-options-manage.html',
+
+            link: function ($scope, $element) {
+
+                /**
+                 * @ngdoc method
+                 * @name addOption
+                 * @function
+                 * 
+                 * @description
+                 * Called when the Add Option button is pressed.  Creates a new option ready to fill out.
+                 */
+                $scope.addOption = function () {
+
+                    $scope.product.addBlankOption();
+
+                };
+
+                /**
+                 * @ngdoc method
+                 * @name removeOption
+                 * @function
+                 * 
+                 * @description
+                 * Called when the Trash can icon button is pressed next to an option. Removes the option from the product.
+                 */
+                $scope.removeOption = function (option) {
+
+                    $scope.product.removeOption(option);
+
+                };
+            }
+
+        };
+    };
+
+    angular.module("umbraco").directive('productOptionsManage', merchello.Directives.ProductOptionsManage);
 
 }(window.merchello.Directives = window.merchello.Directives || {}));
