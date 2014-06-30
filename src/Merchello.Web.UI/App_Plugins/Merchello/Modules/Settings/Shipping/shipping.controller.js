@@ -19,6 +19,7 @@
 		$scope.newWarehouse = new merchello.Models.Warehouse();
 		$scope.primaryWarehouse = new merchello.Models.Warehouse();
 		$scope.visible = {
+            catalogPanel: true,
 			shippingMethodPanel: true,
 			warehouseInfoPanel: false,
 			warehouseListPanel: true
@@ -26,6 +27,7 @@
 		$scope.countryToAdd = new merchello.Models.Country();
 		$scope.providerToAdd = {};
 		$scope.currentShipCountry = {};
+	    $scope.selectedCatalog = new merchello.Models.WarehouseCatalog();
 
 		//--------------------------------------------------------------------------------------
 		// Initialization methods
@@ -233,8 +235,9 @@
          */
 		$scope.loadCountries = function () {
 
-			if ($scope.primaryWarehouse.warehouseCatalogs.length > 0) {
-				var catalogKey = $scope.primaryWarehouse.warehouseCatalogs[0].key;
+		    if ($scope.primaryWarehouse.warehouseCatalogs.length > 0) {
+
+				var catalogKey = $scope.selectedCatalog.key;
 
 				var promiseShipCountries = merchelloCatalogShippingService.getWarehouseCatalogShippingCountries(catalogKey);
 				promiseShipCountries.then(function (shipCountriesFromServer) {
@@ -407,7 +410,39 @@
 					}
 				}
 			}
+		    $scope.changeSelectedCatalog();
 		};
+
+
+	    /**
+         * @ngdoc method
+         * @name changeSelectedCatalog
+         * @function
+         * 
+         * @description
+         * Helper method to change between the selected catalog on the screen. If catalogIndex is passed
+         * in, then the function will select the catalog at that index if it exists. If it doesn't, then
+         * choose the first warehouse.
+         */
+		$scope.changeSelectedCatalog = function (catalogIndex) {
+		    if ((typeof catalogIndex) != 'undefined') {
+		        if ($scope.primaryWarehouse.warehouseCatalogs.length > catalogIndex) {
+		            $scope.selectedCatalog = $scope.primaryWarehouse.warehouseCatalogs[catalogIndex];
+		        } else {
+		            $scope.selectedCatalog = new merchello.Models.WarehouseCatalog();
+		        }
+		    } else {
+		        $scope.selectedCatalog = $scope.primaryWarehouse.warehouseCatalogs[0];
+		    }
+		};
+
+        $scope.countryHasProvinces = function(country) {
+            var result = false;
+            if (country.provinces.length > 0) {
+                result = true;
+            }
+            return result;
+        }
 
 	    //--------------------------------------------------------------------------------------
 	    // Event Handlers
@@ -492,7 +527,7 @@
 			var countryOnCatalog = _.find($scope.countries, function (shipCountry) { return shipCountry.countryCode == dialogData.selectedCountry.countryCode; });
 			if (!countryOnCatalog) {
 
-				var catalogKey = $scope.primaryWarehouse.warehouseCatalogs[0].key;
+			    var catalogKey = $scope.selectedCatalog.key;
 
 				var promiseShipCountries = merchelloCatalogShippingService.newWarehouseCatalogShippingCountry(catalogKey, dialogData.selectedCountry.countryCode);
 				promiseShipCountries.then(function (shippingCountryFromServer) {
@@ -699,6 +734,108 @@
 		        dialogData: myDialogData
 		    });
 		};
+
+
+	    /**
+         * @ngdoc method
+         * @name warehouseCatalogDialogConfirm
+         * @function
+         * 
+         * @description
+         * Handles the add/edit after recieving the dialogData from the dialog view/controller
+         */
+		$scope.warehouseCatalogDialogConfirm = function (data) {
+
+		    var selectedCatalog = data.catalog;
+            
+            /* TODO: Add API call functionality to either save an edited catalog or create a new one */
+
+            if (selectedCatalog.key === "") {
+                // TODO: Remove the following line. It's just there for mocking an unique key */
+                selectedCatalog.key = Math.floor(Math.random() * 1000);
+                selectedCatalog.warehouseKey = $scope.primaryWarehouse.key;
+                $scope.primaryWarehouse.warehouseCatalogs.push(selectedCatalog);
+            }
+
+		};
+
+	    /**
+        * @ngdoc method
+        * @name addEditWarehouseCatalogDialogOpen
+        * @function
+        * 
+        * @description
+        * Opens the warehouse catalog dialog via the Umbraco dialogService.
+        */
+		$scope.addEditWarehouseCatalogDialogOpen = function (warehouse, catalog) {
+
+		    var dialogCatalog = catalog;
+		    if (!catalog) {
+		        dialogCatalog = new merchello.Models.WarehouseCatalog();
+		    }
+
+		    var myDialogData = {
+		        warehouseKey: warehouse.key,
+		        catalog: dialogCatalog
+		    };
+
+		    dialogService.open({
+		        template: '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shipping.addeditcatalog.html',
+		        show: true,
+		        callback: $scope.warehouseCatalogDialogConfirm,
+		        dialogData: myDialogData
+		    });
+
+		};
+
+	    /**
+         * @ngdoc method
+         * @name selectCatalogDialogConfirm
+         * @function
+         * 
+         * @description
+         * Handles the catalog selection after recieving the dialogData from the dialog view/controller
+         */
+	    $scope.selectCatalogDialogConfirm = function(data) {
+
+	        var index = data.filter.id;
+	        $scope.selectedCatalog = $scope.primaryWarehouse.warehouseCatalogs[index];
+	        $scope.countries = [];
+            // Load the countries associated with this catalog.
+	        $scope.loadCountries();
+	    };
+
+	    /**
+        * @ngdoc method
+        * @name selectCatalogDialogOpen
+        * @function
+        * 
+        * @description
+        * Opens the catalog selection dialog via the Umbraco dialogService.
+        */
+	    $scope.selectCatalogDialogOpen = function() {
+
+	        var availableCatalogs = [];
+            for (var i = 0; i < $scope.primaryWarehouse.warehouseCatalogs.length; i++) {
+                var catalog = {
+                    id: i,
+                    name: $scope.primaryWarehouse.warehouseCatalogs[i].name
+                };
+                availableCatalogs.push(catalog);
+            }
+
+	        var myDialogData = {
+	            availableCatalogs: availableCatalogs,
+                filter: availableCatalogs[0]
+	        };
+	        dialogService.open({
+	            template: '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shipping.selectcatalog.html',
+	            show: true,
+	            callback: $scope.selectCatalogDialogConfirm,
+                dialogData: myDialogData
+	        });
+
+	    };
 
 	    // <<<
 	    //---------------------------
