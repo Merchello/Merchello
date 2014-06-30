@@ -1,4 +1,5 @@
-﻿using Umbraco.Core;
+﻿using Merchello.Core.Strategies;
+using Umbraco.Core;
 
 namespace Merchello.Core.Gateways.Taxation
 {
