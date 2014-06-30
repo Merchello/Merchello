@@ -5,11 +5,26 @@
     /// </summary>
     public static partial class Constants
     {
-        public static string DefaultConnectionStringName = "umbracoDbDSN";
+        /// <summary>
+        /// Gets the default connection string name.
+        /// </summary>
+        public static string DefaultConnectionStringName
+        {
+            get { return "umbracoDbDSN"; }
+        }
 
+        /// <summary>
+        /// Constant Merchello specific country codes
+        /// </summary>
         public static class CountryCodes
         {
-            public static string EverywhereElse = "ELSE";
+            /// <summary>
+            /// Gets the everywhere else country code.
+            /// </summary>
+            public static string EverywhereElse
+            {
+                get { return "ELSE"; }
+            }
         }
     }
 }
