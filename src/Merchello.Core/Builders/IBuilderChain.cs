@@ -1,11 +1,13 @@
-﻿using Merchello.Core.Models;
-using Umbraco.Core;
-
-namespace Merchello.Core.Builders
+﻿namespace Merchello.Core.Builders
 {
+    using Umbraco.Core;
+
     /// <summary>
     /// Defines builder objects
     /// </summary>
+    /// <typeparam name="T">
+    /// The type of object to build
+    /// </typeparam>
     public interface IBuilderChain<T>
     {
         /// <summary>

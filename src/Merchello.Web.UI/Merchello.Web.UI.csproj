@@ -307,6 +307,7 @@
     <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Directives\notification-methods.html" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Directives\notifications-helper-directives.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Dialogs\shipping.addeditcatalog.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Dialogs\shipping.fixedratemethod.html" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Dialogs\shipping.selectcatalog.html" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Dialogs\shippingregions.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Dialogs\shippingregions.html" />

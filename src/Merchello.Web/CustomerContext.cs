@@ -75,7 +75,7 @@ namespace Merchello.Web
         #endregion
 
         /// <summary>
-        /// Returns the current customer
+        /// Gets the current customer
         /// </summary>
         public ICustomerBase CurrentCustomer { get; private set; }
 
