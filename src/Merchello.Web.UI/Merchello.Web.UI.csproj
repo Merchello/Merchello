@@ -273,6 +273,11 @@
     <Content Include="App_Plugins\Merchello\lib\JsonTree\jsontree.js" />
     <Content Include="App_Plugins\Merchello\lib\ngJsonExplorer\gd-ui-jsonexplorer.css" />
     <Content Include="App_Plugins\Merchello\lib\ngJsonExplorer\gd-ui-jsonexplorer.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\product-options-manage.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\product-variants-create-table.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\product-variant-bulk-inventory.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\product-inventory-section.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\product-shipping-section.html" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\product-digital-download-section.html" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\product.create.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\Dialogs\product.duplicatevariants.html" />

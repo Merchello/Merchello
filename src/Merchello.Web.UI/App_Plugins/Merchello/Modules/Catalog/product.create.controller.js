@@ -22,9 +22,6 @@
         // settings - contains defaults for the checkboxes
         $scope.settings = {};
 
-        // helper to bulk set the inventories for the product variants
-        $scope.allVariantInventories = 0;
-
         // These help manage state for the four possible states this page can be in:
         //   * Creating a Product
         // TODO: clean up?
@@ -97,10 +94,8 @@
          */
         $scope.init = function () {
 
-            $scope.loadAllNotificationGatwayProviders();
-            $scope.loadAllPaymentGatewayProviders();
-            $scope.loadAllShippingGatewayProviders();
-            $scope.loadAllTaxationGatewayProviders();
+            $scope.loadAllWarehouses();
+            $scope.loadSettings();
 
         };
 
@@ -203,50 +198,6 @@
         };
 
 
-        /**
-         * @ngdoc method
-         * @name ensureInitialOption
-         * @function
-         * 
-         * @description
-         * This is called when the "This variant has options" checkbox is checked.  It creates an initial blank option ready to 
-         * fill out.  If the checkbox is unchecked, then the option will be deleted before saving the product.
-         */
-        $scope.ensureInitialOption = function () {
-
-            if ($scope.product.productOptions.length == 0) {
-                $scope.product.addBlankOption();
-            }
-        };
-
-
-        /**
-         * @ngdoc method
-         * @name addOption
-         * @function
-         * 
-         * @description
-         * Called when the Add Option button is pressed.  Creates a new option ready to fill out.
-         */
-        $scope.addOption = function () {
-
-            $scope.product.addBlankOption();
-
-        };
-
-        /**
-         * @ngdoc method
-         * @name removeOption
-         * @function
-         * 
-         * @description
-         * Called when the Trash can icon button is pressed next to an option. Removes the option from the product.
-         */
-        $scope.removeOption = function (option) {
-
-            $scope.product.removeOption(option);
-
-        };
 
         /**
         * @ngdoc method
@@ -309,23 +260,6 @@
                     notificationsService.error("Product Save Failed", reason.message);
                 });
             }
-        };
-
-        /**
-        * @ngdoc method
-        * @name updateVariants
-        * @function
-        * 
-        * @description
-        * Called when the Apply button is pressed in the Base Inventory section.  This simply sets the inventory
-        * amounts for each variant to the number in the box next to the apply button.
-        */
-        $scope.applyAllVariantInventories = function (allVariantInventories) {
-
-            for (var i = 0; i < $scope.product.productVariants.length; i++) {
-                $scope.product.productVariants[i].globalInventoryChanged(allVariantInventories);
-            }
-
         };
 
     };
