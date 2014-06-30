@@ -1,80 +1,103 @@
 ﻿<link href="/App_Plugins/Merchello/Common/Css/merchello.css" rel="stylesheet">
 
 <div data-ng-controller="Merchello.Dashboards.Settings.ShippingController"
-	 data-ng-show="loaded">
+     data-ng-show="loaded">
 
-	<umb-panel>
+    <umb-panel>
 
-		<umb-header>
+        <umb-header>
 
-			<div class="span4">
-				<div class="umb-headline-editor-wrapper">
-					<h1 class="umb-headline"><localize key="merchelloShipping_shipping" /></h1>
-				</div>
-			</div>
+            <div class="span4">
+                <div class="umb-headline-editor-wrapper">
+                    <h1 class="umb-headline"><localize key="merchelloShipping_shipping" /></h1>
+                </div>
+            </div>
 
 
-			<div class="span8">
-				<div class="btn-toolbar pull-right umb-btn-toolbar">
+            <div class="span8">
+                <div class="btn-toolbar pull-right umb-btn-toolbar">
 
-					<div class="btn-group">
+                    <div class="btn-group">
 
-					</div>
+                    </div>
 
-				</div>
-			</div>
+                </div>
+            </div>
 
-		</umb-header>
+        </umb-header>
 
-		<merchello-panel>
+        <merchello-panel>
 
-			<div class="merchello-pane row-fluid">
-				<div class="control-group umb-control-group" data-ng-class="{ 'open': visible.warehouseListPanel, 'closed': !visible.warehouseListPanel }">
-					<label class="merchello-control-label">
+            <div class="merchello-pane row-fluid">
+                <div class="control-group umb-control-group" data-ng-class="{ 'open': visible.warehouseListPanel, 'closed': !visible.warehouseListPanel }">
+                    <label class="merchello-control-label">
                         <localize key="merchelloShipping_editWarehouse" />
                         <small><localize key="merchelloShipping_editWarehouseHelper" /></small>
-					    <a data-ng-click="addWarehouse(primaryWarehouse)"><i class="icon-door-open"></i> <localize key="merchelloShipping_editWarehouse" /> </a>
-					</label>
+                        <a data-ng-click="addWarehouse(primaryWarehouse)"><i class="icon-door-open"></i> <localize key="merchelloShipping_editWarehouse" /> </a>
+                    </label>
 
-					<div class="merchello-controls">
+                    <div class="merchello-controls">
 
-						<div class="row-fluid span10 col-xs-10">
+                        <div class="row-fluid span10 col-xs-10">
 
-							<shipping-warehouse warehouse="primaryWarehouse"></shipping-warehouse>
+                            <shipping-warehouse warehouse="primaryWarehouse"></shipping-warehouse>
 
-						</div>
-					</div>
-				</div>
+                        </div>
+                    </div>
+                </div>
 
-				<!-- Property classes from Umbraco styles -->
-				<div class="control-group umb-control-group" data-ng-class="{ 'open': visible.shippingMethodPanel, 'closed': !visible.shippingMethodPanel }">
-					<label class="merchello-control-label">
-                        <localize key="merchelloShipping_shippingMethods" />
-					    <small><localize key="merchelloShipping_shippingMethodsHelper" /></small>
-					    <a data-ng-click="addCountry()"><i class="icon-map"></i><localize key="merchelloShipping_addCountry" /></a>
-					</label>
+                <!-- Catalogs -->
+                <div class="control-group umb-control-group" data-ng-class="{ 'orbit': visible.catalogPanel, 'closed': !visible.catalogPanel }">
+                    <label class="merchello-control-label">
+                        Warehouse Catalogs
+                        <small>Add or edit catalogs to the warehouse</small>
+                        <a data-ng-click="addEditWarehouseCatalogDialogOpen(primaryWarehouse)"><i class="icon-door-open"></i> Add Catalog</a><br /><br/>
+                    </label>
 
-					<div class="merchello-controls">
+                    <div class="merchello-controls">
 
-						<div class="row-fluid span10 col-xs-10">
+                        <div class="row-fluid span10 col-xs-10">
 
-							<div data-ng-repeat="country in countries | orderBy: 'sortHelper'" class="merchello-shipping-country">
+                            <shipping-catalog></shipping-catalog>
 
-								<!-- simply inherits this scope, doesn't create an isolate scope -->
-								<shipping-country></shipping-country>
+                        </div>
 
-							</div>
+                    </div>
 
-						</div>
 
-					</div>
-				</div>
-                
+                    <!-- Shipping Countries & Methods -->
+                    <div class="clear" data-ng-class="{ 'open': visible.shippingMethodPanel, 'closed': !visible.shippingMethodPanel }">
+                        
+                        <label class="merchello-control-label">
+                            <localize key="merchelloShipping_shippingMethods" />
+                            <small><localize key="merchelloShipping_shippingMethodsHelper" /></small>
+                            <a data-ng-click="addCountry()"><i class="icon-map"></i><localize key="merchelloShipping_addCountry" /></a>                            
+                        </label>
+
+                        <div class="merchello-controls">
+
+                            <div class="row-fluid span10 col-xs-10">
+
+                                <div data-ng-repeat="country in countries | orderBy: 'sortHelper'" class="merchello-shipping-country">
+
+                                    <!-- simply inherits this scope, doesn't create an isolate scope -->
+                                    <shipping-country></shipping-country>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+
                 <merchello-debug-section data-props-to-debug="warehouses,providers,countries"></merchello-debug-section>
 
-			</div>
+            </div>
 
-		</merchello-panel>
+        </merchello-panel>
 
-	</umb-panel>
+    </umb-panel>
 </div>
