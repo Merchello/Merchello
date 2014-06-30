@@ -7,12 +7,32 @@
     /// </summary>
     public class ShipmentRateQuote : IShipmentRateQuote
     {
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShipmentRateQuote"/> class.
+        /// </summary>
+        /// <param name="shipment">
+        /// The shipment.
+        /// </param>
+        /// <param name="shipMethod">
+        /// The ship method.
+        /// </param>
         public ShipmentRateQuote(IShipment shipment, IShipMethod shipMethod)
             : this(shipment, shipMethod, new ExtendedDataCollection())
         {            
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShipmentRateQuote"/> class.
+        /// </summary>
+        /// <param name="shipment">
+        /// The shipment.
+        /// </param>
+        /// <param name="shipMethod">
+        /// The ship method.
+        /// </param>
+        /// <param name="extendedData">
+        /// The extended data.
+        /// </param>
         public ShipmentRateQuote(IShipment shipment, IShipMethod shipMethod, ExtendedDataCollection extendedData)
         {
             Mandate.ParameterNotNull(shipment, "shipment");
