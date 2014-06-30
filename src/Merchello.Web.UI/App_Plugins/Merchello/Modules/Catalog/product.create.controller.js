@@ -142,7 +142,7 @@
 
                         $scope.creatingProduct = false; // For the variant edit/create view.
 
-                        $location.url("/merchello/merchello/ProductVariantEdit/" + $scope.product.key, true);
+                        $location.url("/merchello/merchello/ProductEdit/" + $scope.product.key, true);
 
                         notificationsService.success("Product Created and Saved", "");
 
@@ -165,7 +165,7 @@
                             $scope.productVariant.copyFromProduct($scope.product);
 
                             if ($scope.product.hasVariants) {
-                                $location.url("/merchello/merchello/ProductEdit/" + $scope.product.key, true);
+                                $location.url("/merchello/merchello/ProductEditWithOptions/" + $scope.product.key, true);
                             }
 
                         }, function (reason) {
