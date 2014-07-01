@@ -1,17 +1,63 @@
 ﻿namespace Merchello.Web.Models.ContentEditing
 {
+    /// <summary>
+    /// The address display.
+    /// </summary>
     public class AddressDisplay
     {
+        /// <summary>
+        /// Gets or sets the name.
+        /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the address 1.
+        /// </summary>
         public string Address1 { get; set; }
+
+        /// <summary>
+        /// Gets or sets the address 2.
+        /// </summary>
         public string Address2 { get; set; }
+
+        /// <summary>
+        /// Gets or sets the locality.
+        /// </summary>
         public string Locality { get; set; }
+
+        /// <summary>
+        /// Gets or sets the region.
+        /// </summary>
         public string Region { get; set; }
+
+        /// <summary>
+        /// Gets or sets the postal code.
+        /// </summary>
         public string PostalCode { get; set; }
+
+        /// <summary>
+        /// Gets or sets the country code.
+        /// </summary>
         public string CountryCode { get; set; }
+
+        /// <summary>
+        /// Gets or sets the phone.
+        /// </summary>
         public string Phone { get; set; }
+
+        /// <summary>
+        /// Gets or sets the email.
+        /// </summary>
         public string Email { get; set; }
+
+        /// <summary>
+        /// Gets or sets the organization.
+        /// </summary>
         public string Organization { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the address is a commercial address.
+        /// </summary>
         public bool IsCommercial { get; set; }
     }
 }

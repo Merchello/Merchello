@@ -389,7 +389,7 @@ namespace Merchello.Tests.IntegrationTests.Workflow
         private void WriteShipRateQuote(IShipmentRateQuote srq)
         {
             Console.WriteLine("---------- Shipment Rate Quote ---------------------");
-            Console.WriteLine("Name: {0}", srq.ShimpentLineItemName());
+            Console.WriteLine("Name: {0}", srq.ShipmentLineItemName());
             Console.WriteLine("Rate Quote: {0}", srq.Rate);            
         }
     }

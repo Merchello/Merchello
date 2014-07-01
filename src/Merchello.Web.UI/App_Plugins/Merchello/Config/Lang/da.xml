@@ -276,8 +276,8 @@
     <key alias="paymentProviderHelper">Aktivér/Deaktivér betalings udbydere</key>
     <key alias="shippingProvider"> Forsendelses udbydere</key>
     <key alias="shippingProviderHelper">Aktivér/Deaktivér forsendelses udbydere</key>
-    <key alias="shippingProvider"> Afgifts udbydere</key>
-    <key alias="shippingProviderHelper">Aktivér/Deaktivér afgifts udbydere</key>
+    <key alias="taxationProvider"> Afgifts udbydere</key>
+    <key alias="taxationProviderHelper">Aktivér/Deaktivér afgifts udbydere</key>
     <key alias="host">Host</key>
     <key alias="username">Brugernavn</key>
     <key alias="password">Kodeord</key>
