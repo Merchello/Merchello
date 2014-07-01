@@ -2,13 +2,13 @@
 
     /**
      * @ngdoc controller
-     * @name Merchello.Editors.ProductVariant.EditController
+     * @name Merchello.Editors.ProductVariant.CreateController
      * @function
      * 
      * @description
-     * The controller for the product editor
+     * The controller for the product variant create view
      */
-    controllers.ProductVariantEditController = function($scope, $routeParams, $location, $q, assetsService, notificationsService, dialogService, angularHelper, serverValidationManager, merchelloProductService, merchelloProductVariantService, merchelloWarehouseService, merchelloSettingsService) {
+    controllers.ProductVariantCreateController = function ($scope, $routeParams, $location, $q, assetsService, notificationsService, dialogService, angularHelper, serverValidationManager, merchelloProductService, merchelloProductVariantService, merchelloWarehouseService, merchelloSettingsService) {
 
         assetsService.loadCss("/App_Plugins/Merchello/Common/Css/merchello.css");
 
@@ -26,11 +26,11 @@
         //   * Creating a Product
         // TODO: clean up?
         $scope.creatingProduct = false;
-        $scope.creatingVariant = false;
-        $scope.editingVariant = true;
-        $scope.product = {};
-        $scope.product.hasOptions = false;
-        $scope.product.hasVariants = true;
+        $scope.creatingVariant = true;
+        $scope.editingVariant = false;
+        $scope.productVariant = new merchello.Models.ProductVariant();
+        $scope.attributesKeys = [""];
+        $scope.possibleVariants = [];
 
         // To help umbraco directives show our page
         $scope.loaded = false;
@@ -49,10 +49,10 @@
          * @description
          * Loads in default warehouse and all other warehouses from server into the scope.  Called in init().
          */
-        $scope.loadAllWarehouses = function () {
+        $scope.loadAllWarehouses = function() {
 
             var promiseWarehouse = merchelloWarehouseService.getDefaultWarehouse();
-            promiseWarehouse.then(function (warehouse) {
+            promiseWarehouse.then(function(warehouse) {
                 $scope.defaultWarehouse = new merchello.Models.Warehouse(warehouse);
                 $scope.warehouses.push($scope.defaultWarehouse);
                 $scope.productVariant.ensureCatalogInventory($scope.defaultWarehouse);
@@ -72,10 +72,10 @@
          * Loads in store settings from server into the scope and applies the 
          * defaults to the product variant.  Called in init().
          */
-        $scope.loadSettings = function () {
+        $scope.loadSettings = function() {
 
             var promiseSettings = merchelloSettingsService.getAllSettings();
-            promiseSettings.then(function (settings) {
+            promiseSettings.then(function(settings) {
                 $scope.settings = new merchello.Models.StoreSettings(settings);
                 $scope.productVariant.shippable = $scope.settings.globalShippable;
                 $scope.productVariant.taxable = $scope.settings.globalTaxable;
@@ -87,25 +87,41 @@
 
         /**
          * @ngdoc method
-         * @name loadProductVariant
+         * @name loadProductForVariantCreate
          * @function
          * 
          * @description
-         * Load a product variant by the variant key.
+         * Load a product by the product key.  This is used only for creating variants on an existing product.
          */
-        function loadProductVariant(id) {
+        function loadProductForVariantCreate(key) {
 
-            var promiseVariant = merchelloProductVariantService.getById(id);
-            promiseVariant.then(function (productVariant) {
+            var promiseProduct = merchelloProductService.getByKey(key);
+            promiseProduct.then(function (product) {
 
-                $scope.productVariant = new merchello.Models.ProductVariant(productVariant);
+                $scope.product = new merchello.Models.Product(product);
 
-                $scope.loaded = true;
-                $scope.preValuesLoaded = true;
+                var promiseCreatable = merchelloProductVariantService.getVariantsByProductThatCanBeCreated(key);
+                promiseCreatable.then(function (variants) {
+                    $scope.possibleVariants = _.map(variants, function (v) {
+                        var newVariant = new merchello.Models.ProductVariant(v);
+                        newVariant.key = "";
+                        return newVariant;
+                    });
+
+                    if (!_.isEmpty($scope.possibleVariants)) {
+                        $scope.productVariant = $scope.possibleVariants[0];
+                    }
+
+                    $scope.loaded = true;
+                    $scope.preValuesLoaded = true;
+
+                }, function (reason) {
+                    notificationsService.error("Product Variants Remaining Load Failed", reason.message);
+                });
 
             }, function (reason) {
 
-                notificationsService.error("Product Variant Load Failed", reason.message);
+                notificationsService.error("Parent Product Load Failed", reason.message);
 
             });
         }
@@ -122,8 +138,7 @@
 
             $scope.loadAllWarehouses();
             $scope.loadSettings();
-            //we are editing a variant so get the product variant and product from the server
-            loadProductVariant($routeParams.variantid);
+            loadProductForVariantCreate($routeParams.id);
 
         };
 
@@ -146,45 +161,25 @@
 
             if (thisForm.$valid) {
 
-                var promise = merchelloProductVariantService.save($scope.productVariant);
+                if ($scope.creatingVariant) // Add a variant to product
+                {
+                    var promise = merchelloProductVariantService.create($scope.productVariant);
 
-                promise.then(function (product) {
-                    notificationsService.success("Product Variant Saved", "");
+                    promise.then(function (productVariant) {
+                        notificationsService.success("Product Variant Created and Saved", "");
 
-                    $location.url("/merchello/merchello/ProductEditWithOptions/" + $scope.productVariant.productKey, true);
+                        $location.url("/merchello/merchello/ProductEditWithOptions/" + $scope.productVariant.productKey, true);
 
-                }, function (reason) {
-                    notificationsService.error("Product Variant Save Failed", reason.message);
-                });
+                    }, function (reason) {
+                        notificationsService.error("Product Variant Create Failed", reason.message);
+                    });
+                }
             }
-        };
-
-        /**
-         * @ngdoc method
-         * @name deleteVariant
-         * @function
-         * 
-         * @description
-         * Called when the Delete Variant button is pressed.
-         *
-         * TODO: Need to call a confirmation dialog for this.
-         */
-        $scope.deleteVariant = function () {
-            var promiseDel = merchelloProductVariantService.deleteVariant($scope.productVariant.key);
-
-            promiseDel.then(function () {
-                notificationsService.success("Product Variant Deleted", "");
-
-                $location.url("/merchello/merchello/ProductEditWithOptions/" + $scope.productVariant.productKey, true);
-
-            }, function (reason) {
-                notificationsService.error("Product Variant Deletion Failed", reason.message);
-            });
         };
 
     };
 
-    angular.module("umbraco").controller("Merchello.Editors.ProductVariant.EditController", ['$scope', '$routeParams', '$location', '$q', 'assetsService', 'notificationsService', 'dialogService', 'angularHelper', 'serverValidationManager', 'merchelloProductService', 'merchelloProductVariantService', 'merchelloWarehouseService', 'merchelloSettingsService', merchello.Controllers.ProductVariantEditController]);
+    angular.module("umbraco").controller("Merchello.Editors.ProductVariant.CreateController", ['$scope', '$routeParams', '$location', '$q', 'assetsService', 'notificationsService', 'dialogService', 'angularHelper', 'serverValidationManager', 'merchelloProductService', 'merchelloProductVariantService', 'merchelloWarehouseService', 'merchelloSettingsService', merchello.Controllers.ProductVariantCreateController]);
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));
 
