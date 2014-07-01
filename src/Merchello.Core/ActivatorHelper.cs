@@ -46,7 +46,6 @@
         /// <param name="typeName">The TypeName information of the object to be instantiated</param>
         /// <param name="constructorArgumentValues">Object array containing constructor arguments</param>
         /// <returns>The result of the <see cref="Attempt{T}"/> to instantiate the object</returns>
-        [Obsolete("Use CreateInstance<T>(Type type, object[] constructoryArgumentValues)")]
         public static Attempt<T> CreateInstance<T>(string typeName, object[] constructorArgumentValues) where T : class
         {
             Mandate.ParameterNotNullOrEmpty(typeName, "typName");

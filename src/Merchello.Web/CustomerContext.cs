@@ -1,32 +1,74 @@
-﻿using System;
-using System.Web;
-using Merchello.Core;
-using Merchello.Core.Cache;
-using Merchello.Core.Models;
-using Merchello.Core.Services;
-using Umbraco.Core.Logging;
-using Umbraco.Core;
-using Umbraco.Web;
-
-namespace Merchello.Web
+﻿namespace Merchello.Web
 {
+    using System;
+    using System.Web;
+    using Merchello.Core;
+    using Merchello.Core.Cache;
+    using Merchello.Core.Models;
+    using Merchello.Core.Services;
+    using Umbraco.Core;
+    using Umbraco.Core.Logging;
+    using Umbraco.Web;
+
+    /// <summary>
+    /// Represents the customer context.
+    /// </summary>
     public class CustomerContext
     {
+        #region Fields
+
+        /// <summary>
+        /// The consumer cookie key.
+        /// </summary>
         private const string ConsumerCookieKey = "merchello";
+
+        /// <summary>
+        /// The _customer service.
+        /// </summary>
         private readonly ICustomerService _customerService;
+
+        /// <summary>
+        /// The <see cref="UmbracoContext"/>.
+        /// </summary>
         private readonly UmbracoContext _umbracoContext;
+
+        /// <summary>
+        /// The <see cref="CacheHelper"/>.
+        /// </summary>
         private readonly CacheHelper _cache;
+
+        #endregion
 
         #region Constructors
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CustomerContext"/> class.
+        /// </summary>
         public CustomerContext()
             : this(UmbracoContext.Current)
-        {}
+        {
+        }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CustomerContext"/> class.
+        /// </summary>
+        /// <param name="umbracoContext">
+        /// The umbraco context.
+        /// </param>
         public CustomerContext(UmbracoContext umbracoContext)
             : this(MerchelloContext.Current, umbracoContext)
-        {}
+        {
+        }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CustomerContext"/> class.
+        /// </summary>
+        /// <param name="merchelloContext">
+        /// The merchello context.
+        /// </param>
+        /// <param name="umbracoContext">
+        /// The umbraco context.
+        /// </param>
         internal CustomerContext(IMerchelloContext merchelloContext, UmbracoContext umbracoContext)
         {
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
@@ -39,6 +81,16 @@ namespace Merchello.Web
             Initialize();
         }
 
+        #endregion
+
+        /// <summary>
+        /// Gets the current customer
+        /// </summary>
+        public ICustomerBase CurrentCustomer { get; private set; }
+
+        /// <summary>
+        /// Initializes this class with default values
+        /// </summary>
         private void Initialize()
         {
             // see if the key is already in the request cache
@@ -46,16 +98,16 @@ namespace Merchello.Web
 
             if (cachedKey != null)
             {
-                var key = (Guid) cachedKey;              
+                var key = (Guid)cachedKey;
                 TryGetCustomer(key);
                 return;
             }
 
             // retrieve the merchello consumer cookie
             var cookie = _umbracoContext.HttpContext.Request.Cookies[ConsumerCookieKey];
-   
+
             if (cookie != null)
-            {                
+            {
                 Guid key;
                 if (Guid.TryParse(EncryptionHelper.Decrypt(cookie.Value), out key))
                 {
@@ -68,16 +120,7 @@ namespace Merchello.Web
                 } // consumer key parsing failed ... start over
             }
             else { CreateAnonymousCustomer(); } // a cookie was not found
-
-
         }
-
-        #endregion
-
-        /// <summary>
-        /// Gets the current customer
-        /// </summary>
-        public ICustomerBase CurrentCustomer { get; private set; }
 
         /// <summary>
         /// Attempts to either retrieve an anonymous customer or an existing customer
@@ -94,20 +137,22 @@ namespace Merchello.Web
                 return;
             }
 
-            // If the member has been authenticated there is no need to create an anonymous record.
-            // Either return an existing customer or create a new one for the member.
-            //if (_umbracoContext.Security.IsMemberAuthorized())
-            //{
-            //    var member = Member.GetCurrentMember();
+            //// TODO persisted customers
 
-            //    customer = _customerService.GetByMemberId(member.Id) ??
-            //                   _customerService.CreateCustomerWithId(member.Id);
+            //// If the member has been authenticated there is no need to create an anonymous record.
+            //// Either return an existing customer or create a new one for the member.
+            ////if (_umbracoContext.Security.IsMemberAuthorized())
+            ////{
+            ////    var member = Member.GetCurrentMember();
 
-            //    CacheCustomer(customer);
-            //    CurrentCustomer = customer;
+            ////    customer = _customerService.GetByMemberId(member.Id) ??
+            ////                   _customerService.CreateCustomerWithId(member.Id);
+
+            ////    CacheCustomer(customer);
+            ////    CurrentCustomer = customer;
                 
-            //    return;                
-            //}
+            ////    return;                
+            ////}
            
             // try to get the customer
             customer = _customerService.GetAnyByKey(key);
@@ -117,8 +162,9 @@ namespace Merchello.Web
                 CurrentCustomer = customer;
                 CacheCustomer(customer);
             }
-            else // create a new anonymous customer
+            else 
             {
+                // create a new anonymous customer
                 CreateAnonymousCustomer();
             }
         }
@@ -133,6 +179,12 @@ namespace Merchello.Web
             CacheCustomer(customer);
         }
 
+        /// <summary>
+        /// The caches the customer.
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
         private void CacheCustomer(ICustomerBase customer)
         {
             // set/reset the cookie 

@@ -1,26 +1,62 @@
-﻿using System;
-using Merchello.Core;
-using Merchello.Core.Gateways.Payment;
-using Merchello.Core.Models;
-using Merchello.Web.Models;
-using Umbraco.Core;
-
-namespace Merchello.Web.Workflow
+﻿namespace Merchello.Web.Workflow
 {
+    using System;
+    using Merchello.Core;
+    using Merchello.Core.Gateways.Payment;
+    using Merchello.Core.Models;
+    using Merchello.Web.Models;
+    using Umbraco.Core;
+
+    //// TODO RSS - review this class
+
     /// <summary>
     /// Processes a payment
     /// </summary>
     internal class PaymentProcessor
     {
-        private readonly IMerchelloContext _merchelloContext;
-        private IInvoice _invoice;
-        private IPayment _payment;
-        private decimal _amount;
-        private IPaymentGatewayMethod _paymentGatewayMethod;
+        #region Fields
+
+        /// <summary>
+        /// The processor argument collection.
+        /// </summary>
         private readonly ProcessorArgumentCollection _args = new ProcessorArgumentCollection();
-
         
+        /// <summary>
+        /// The <see cref="IMerchelloContext"/>.
+        /// </summary>
+        private readonly IMerchelloContext _merchelloContext;
 
+        /// <summary>
+        /// The <see cref="IInvoice"/>.
+        /// </summary>
+        private IInvoice _invoice;
+
+        /// <summary>
+        /// The <see cref="IPayment"/>.
+        /// </summary>
+        private IPayment _payment;
+
+        /// <summary>
+        /// The payment amount.
+        /// </summary>
+        private decimal _amount;
+
+        /// <summary>
+        /// The payment gateway method.
+        /// </summary>
+        private IPaymentGatewayMethod _paymentGatewayMethod;
+
+        #endregion
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PaymentProcessor"/> class.
+        /// </summary>
+        /// <param name="merchelloContext">
+        /// The merchello context.
+        /// </param>
+        /// <param name="request">
+        /// The request.
+        /// </param>
         public PaymentProcessor(IMerchelloContext merchelloContext, PaymentRequest request)
         {
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
@@ -30,24 +66,10 @@ namespace Merchello.Web.Workflow
             Build(request);
         }
 
-        private void Build(PaymentRequest request)
-        {
-            _invoice = _merchelloContext.Services.InvoiceService.GetByKey(request.InvoiceKey);
-
-            if (request.PaymentKey != null)
-                _payment = _merchelloContext.Services.PaymentService.GetByKey(request.PaymentKey.Value);
-
-            _paymentGatewayMethod =
-                _merchelloContext.Gateways.Payment.GetPaymentGatewayMethodByKey(request.PaymentMethodKey);
-
-            _amount = request.Amount;
-
-            foreach (var arg in request.ProcessorArgs)
-            {
-                _args.Add(arg.Key, arg.Value);
-            }
-
-        }
+        /// <summary>
+        /// Gets or sets the <see cref="IInvoice"/>
+        /// </summary>
+        private IInvoice Invoice { get; set; }
 
         /// <summary>
         /// Performs an Authorize payment 
@@ -104,10 +126,24 @@ namespace Merchello.Web.Workflow
             return new PaymentResult(Attempt<IPayment>.Fail(new InvalidOperationException("PaymentProcessor is not ready")), Invoice, false);
         }
 
-        /// <summary>
-        /// Gets the <see cref="IInvoice"/>
-        /// </summary>
-        private IInvoice Invoice { get; set; }
+        private void Build(PaymentRequest request)
+        {
+            _invoice = _merchelloContext.Services.InvoiceService.GetByKey(request.InvoiceKey);
+
+            if (request.PaymentKey != null)
+                _payment = _merchelloContext.Services.PaymentService.GetByKey(request.PaymentKey.Value);
+
+            _paymentGatewayMethod =
+                _merchelloContext.Gateways.Payment.GetPaymentGatewayMethodByKey(request.PaymentMethodKey);
+
+            _amount = request.Amount;
+
+            foreach (var arg in request.ProcessorArgs)
+            {
+                _args.Add(arg.Key, arg.Value);
+            }
+
+        }
 
     }
 }
