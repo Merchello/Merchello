@@ -1,20 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Xml;
-using System.Xml.Linq;
-using Umbraco.Core.Logging;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.IO;
+    using System.Linq;
+    using System.Xml;
+    using System.Xml.Linq;
+    using Umbraco.Core.Logging;
+
     /// <summary>
     /// Extension methods for <see cref="ExtendedDataCollection"/>
     /// </summary>
     public static class ExtendedDataCollectionExtensions
     {
-
         #region ExtendedDataCollection
 
         public static void AddExtendedDataCollection(this ExtendedDataCollection extendedData, ExtendedDataCollection extendedDataToSerialize)

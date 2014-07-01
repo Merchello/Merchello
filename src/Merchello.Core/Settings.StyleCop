@@ -12,11 +12,6 @@
             <BooleanProperty Name="Enabled">False</BooleanProperty>
           </RuleSettings>
         </Rule>
-        <Rule Name="ElementsMustBeDocumented">
-          <RuleSettings>
-            <BooleanProperty Name="Enabled">False</BooleanProperty>
-          </RuleSettings>
-        </Rule>
         <Rule Name="DocumentationHeadersMustNotContainBlankLines">
           <RuleSettings>
             <BooleanProperty Name="Enabled">False</BooleanProperty>

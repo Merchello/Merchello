@@ -3,6 +3,9 @@
     using System;
     using Core.Models;
 
+    /// <summary>
+    /// The Basket interface.
+    /// </summary>
     public interface IBasket
     {
         /// <summary>

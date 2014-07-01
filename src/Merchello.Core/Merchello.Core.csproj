@@ -174,7 +174,6 @@
     <Compile Include="Gateways\Taxation\ITaxationGatewayMethod.cs" />
     <Compile Include="Gateways\Taxation\TaxCalculationResult.cs" />
     <Compile Include="Gateways\Taxation\TaxableLineItemVisitor.cs" />
-    <Compile Include="IEventTriggerBase.cs" />
     <Compile Include="Models\Currency.cs" />
     <Compile Include="Models\Interfaces\IExtendedDataEntity.cs" />
     <Compile Include="Models\Interfaces\IGatewayProviderMethod.cs" />
@@ -296,7 +295,6 @@
     <Compile Include="Gateways\Taxation\ITaxationGatewayProvider.cs" />
     <Compile Include="Gateways\Taxation\TaxationContext.cs" />
     <Compile Include="Gateways\Taxation\TaxationGatewayProviderBase.cs" />
-    <Compile Include="ISalesManager.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\AnonymousCustomerBase.cs">
       <SubType>Code</SubType>
@@ -741,7 +739,7 @@
     <Compile Include="Services\StoreSettingService.cs" />
     <Compile Include="Services\ShipmentService.cs" />
     <Compile Include="Services\WarehouseService.cs" />
-    <Compile Include="IStrategy.cs" />
+    <Compile Include="Strategies\IStrategy.cs" />
     <Compile Include="Gateways\Shipping\IShipmentRateQuoteStrategy.cs" />
     <Compile Include="Gateways\Taxation\ITaxCalculationStrategy.cs" />
     <Compile Include="Strategies\Packaging\DefaultWarehousePackagingStrategy.cs" />

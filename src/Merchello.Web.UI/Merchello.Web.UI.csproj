@@ -72,9 +72,12 @@
     <Folder Include="App_Plugins\Merchello\Views\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ProductVariantEdit.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ProductEdit.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\GatewayProviders.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\NotificationsEdit.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ProductCreate.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ProductVariantCreate.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\TaxesByDestination.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\SalesByItem.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\SalesOverTime.html" />
@@ -273,6 +276,8 @@
     <Content Include="App_Plugins\Merchello\lib\JsonTree\jsontree.js" />
     <Content Include="App_Plugins\Merchello\lib\ngJsonExplorer\gd-ui-jsonexplorer.css" />
     <Content Include="App_Plugins\Merchello\lib\ngJsonExplorer\gd-ui-jsonexplorer.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Catalog\product.edit.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Catalog\productvariant.create.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\product-options-manage.html" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\product-variants-create-table.html" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\product-variant-bulk-inventory.html" />
@@ -307,6 +312,7 @@
     <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Directives\notification-methods.html" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Directives\notifications-helper-directives.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Dialogs\shipping.addeditcatalog.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Dialogs\shipping.fixedratemethod.html" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Dialogs\shipping.selectcatalog.html" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Dialogs\shippingregions.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Dialogs\shippingregions.html" />
@@ -325,7 +331,7 @@
     <Content Include="App_Plugins\Merchello\Modules\Order\order.edit.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Customer\customer.list.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Order\order.list.controller.js" />
-    <Content Include="App_Plugins\Merchello\Modules\Catalog\product.edit.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Catalog\product.editwithoptions.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\product.list.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Order\order.invoice.models.js" />
     <Content Include="App_Plugins\Merchello\Modules\Report\reports.salesByItem.controller.js" />
@@ -423,9 +429,8 @@
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\OrderEdit.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\CustomerList.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\OrderList.html" />
-    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ProductEdit.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ProductEditWithOptions.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ProductList.html" />
-    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ProductVariantEdit.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\Reports.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\OrderView.html" />
     <Content Include="web.config" />

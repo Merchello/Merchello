@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using Merchello.Core.Models;
-
-namespace Merchello.Core.Gateways.Shipping
+﻿namespace Merchello.Core.Gateways.Shipping
 {
+    using System.Collections.Generic;
+    using Merchello.Core.Models;
+
     /// <summary>
     /// Defines a shipping context
     /// </summary>
@@ -18,16 +18,14 @@ namespace Merchello.Core.Gateways.Shipping
         /// <summary>
         /// Returns a list of all countries that can be assigned to a shipment
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A collection of all <see cref="ICountry"/> that have been identified as allowable shipping destinations</returns>
         IEnumerable<ICountry> GetAllowedShipmentDestinationCountries();
 
         /// <summary>
         /// Gets a collection of <see cref="ShippingGatewayProviderBase"/> by ship country
         /// </summary>
-        /// <param name="shipCountry"></param>
-        /// <returns></returns>
+        /// <param name="shipCountry">The <see cref="IShipCountry"/></param>
+        /// <returns>A collection of <see cref="IShippingGatewayProvider"/>s associated with the ship country</returns>
         IEnumerable<IShippingGatewayProvider> GetGatewayProvidersByShipCountry(IShipCountry shipCountry);
-
-
     }
 }

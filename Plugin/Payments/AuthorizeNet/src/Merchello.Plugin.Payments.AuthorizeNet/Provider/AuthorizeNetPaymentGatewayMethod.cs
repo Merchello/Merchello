@@ -8,6 +8,8 @@
     using Models;
     using Umbraco.Core;
 
+    using Constants = Merchello.Core.Constants;
+
     /// <summary>
     /// Represents an AuthorizeNet Payment Method
     /// </summary>

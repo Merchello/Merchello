@@ -1,5 +1,5 @@
 ﻿<form novalidate name="productVariantForm" 
-      data-ng-controller="Merchello.Editors.Product.EditController" 
+      data-ng-controller="Merchello.Editors.ProductVariant.CreateController" 
       data-ng-show="loaded" 
       data-ng-submit="save()">
     <umb-panel val-show-validation>
@@ -7,15 +7,14 @@
 	    <umb-header>
 
 		    <div class="span4">
-			    <umb-content-name ng-model="productVariant.name"
-			                      localize="placeholder" placeholder="@merchelloPlaceholders_enterProduct">
-			    </umb-content-name>
+			    <div class="umb-headline-editor-wrapper">
+				    <h1 class="umb-headline"><localize key="merchelloVariant_newVariantFor"/> {{product.name}}</h1>
+			    </div>
 		    </div>
 
 		    <div class="col-xs-8 span8">
 			    <div class="btn-toolbar pull-right umb-btn-toolbar">
 				    <div class="btn-group">
-					    <a data-ng-click="deleteProduct()" class="btn"><localize key="merchelloVariant_deleteProduct"/></a>
 					    <a data-ng-disabled="productVariantForm.$invalid" data-ng-click="save(productVariantForm)" class="btn btn-success"><localize key="buttons_save" /></a>
 				    </div>
 			    </div>
@@ -36,6 +35,22 @@
 
 				        <div class="merchello-controls">
 
+						    <div>	                            
+							    <h3><localize key="merchelloVariant_addVariant" /></h3>
+							    <!--<p>This will be a new variant on the {{product.name}} product.</p>-->
+							    <p><localize key="merchelloVariant_newVariantOn"/> {{product.name}} <localize key="merchelloVariant_product"/>.</p>
+							    <div class="well row-fluid col-xs-10 span10">
+								    <h3><localize key="merchelloVariant_variantOptions"/></h3>
+								    <p><localize key="merchelloVariant_selectVariantOptions"/></p>
+
+								    <div class="row-fluid">
+									    <div class="form-group col-xs-6 span6">
+										    <select data-ng-model="productVariant" data-ng-options="pv.name for pv in possibleVariants track by pv.sku" class="form-control col-xs-8 span8"></select>
+									    </div>
+								    </div>
+							    </div>
+						    </div> 
+
                             <!-- Form for checkboxes that manage below sections, key fields like SKU, Price, etc -->
 					        <product-variant-main-properties product="product" product-variant="productVariant" creating-variant="creatingVariant" editing-variant="editingVariant"></product-variant-main-properties>                            
 
@@ -45,27 +60,6 @@
                     <!-- Digital Downloads Picker -->
 			        <merchello-slide-open-panel is-open="productVariant.hasDigitalDownload">
 			            <product-digital-download-section product="product" product-variant="productVariant" ></product-digital-download-section>
-			        </merchello-slide-open-panel>
-              
-                    <!-- Product Options and Variants -->
-			        <merchello-slide-open-panel is-open="product.hasOptions">
-					    <label class="merchello-control-label">
-						    <localize key="merchelloGeneral_multipleOptions"/>
-						    <small><localize key="merchelloVariant_addOptions"/></small>
-					    </label>
-
-					    <div class="merchello-controls row-fluid">
-
-                            <!-- Allows adding/removing/editing of options / attributes -->
-					        <product-options-manage product="product" parent-form="productVariantForm" on-update="updateVariants(form)"></product-options-manage>
-
-                            <!-- Table of variants that the options create for editing -->
-					        <product-variant-create-table product="product" ></product-variant-create-table>
-
-                            <!-- Allows bulk set of inventory for variants -->
-			                <product-variant-bulk-inventory product="product" ></product-variant-bulk-inventory>
-					    
-                        </div>
 			        </merchello-slide-open-panel>
 
                     <!-- Inventory for a single product without options -->
@@ -86,7 +80,16 @@
 
 		    </div>
 	    </merchello-panel>
-
+                
+        <ul class="umb-panel-footer-nav nav nav-pills">
+            <li>
+                <a href="#/merchello/merchello/ProductList/manage"><localize key="merchelloHeadline_catalog" /></a>
+            </li>
+            <li>
+                <a href="#/merchello/merchello/ProductEditWithOptions/{{productVariant.productKey}}"><localize key="merchelloVariant_product" /></a>
+            </li>
+            <li></li>
+        </ul>
 
     </umb-panel>
 </form>

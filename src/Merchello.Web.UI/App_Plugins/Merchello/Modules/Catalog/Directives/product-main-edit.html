@@ -42,7 +42,7 @@
             <label class="label-checkbox"><input name="taxable" type="checkbox" data-ng-model="productVariant.taxable"> <span><localize key="merchelloVariant_isTaxable"/></span></label>
         </div>
         <div class="form-group col-xs-6 span6">
-            <label class="label-checkbox"><input name="trackinventory" type="checkbox" data-ng-model="productVariant.trackInventory" data-ng-disabled="product.hasOptions || productVariant.hasDigitalDownload" data-ng-click="ensureCatalogInventory()"> <span><localize key="merchelloVariant_trackInventory"/></span></label>
+            <label class="label-checkbox"><input name="trackinventory" type="checkbox" data-ng-model="productVariant.trackInventory" data-ng-disabled="!creatingVariant && !editingVariant && (product.hasOptions || productVariant.hasDigitalDownload)" data-ng-click="ensureCatalogInventory()"> <span><localize key="merchelloVariant_trackInventory"/></span></label>
             <label class="label-checkbox"><input name="shippable" type="checkbox" data-ng-model="productVariant.shippable"> <span><localize key="merchelloVariant_isShippable" /></span></label>
         </div>
     </div>

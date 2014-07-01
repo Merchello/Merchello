@@ -18,6 +18,15 @@
     /// </summary>
     public class ExamineEvents : ApplicationEventHandler
     {
+        /// <summary>
+        /// The application started.
+        /// </summary>
+        /// <param name="umbracoApplication">
+        /// The umbraco application.
+        /// </param>
+        /// <param name="applicationContext">
+        /// The application context.
+        /// </param>
         [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:ElementsMustBeOrderedByAccess", Justification = "Reviewed. Suppression is OK here.")]
         protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
@@ -81,7 +90,7 @@
         /// <summary>
         /// ReIndexes an Invoice
         /// </summary>
-        /// <param name="invoice">The <see cref="IInvoice"/> to be reindexed</param>
+        /// <param name="invoice">The <see cref="IInvoice"/> to be re-indexed</param>
         private static void IndexInvoice(IInvoice invoice)
         {
             if (invoice != null && invoice.HasIdentity) InvoiceIndexer.AddInvoiceToIndex(invoice);

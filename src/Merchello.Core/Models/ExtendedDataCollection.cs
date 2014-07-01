@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Specialized;
-using System.IO;
-using System.Runtime.Serialization;
-using System.Xml;
-using System.Xml.Linq;
+﻿namespace Merchello.Core.Models
+{
+    using System;
+    using System.Collections.Concurrent;
+    using System.Collections.Specialized;
+    using System.IO;
+    using System.Runtime.Serialization;
+    using System.Xml;
+    using System.Xml.Linq;
 
-namespace Merchello.Core.Models
-{    
     /// <summary>
     /// Represents an ExtendedDataCollection
     /// </summary>
@@ -17,7 +17,8 @@ namespace Merchello.Core.Models
     {
 
         public ExtendedDataCollection()
-        { }
+        {            
+        }
 
         internal ExtendedDataCollection(string persistedXml)
         {
