@@ -156,6 +156,7 @@
             $scope.model.value = selectedProduct.key;
             $scope.product = selectedProduct;
             $scope.productVariant.copyFromProduct($scope.product);
+            $scope.creatingProduct = false;
         };
 
         /**
@@ -209,6 +210,8 @@
                     $scope.productVariant.copyFromProduct($scope.product);
 
                     $scope.creatingProduct = false; // For the variant edit/create view.
+
+                    $scope.model.value = $scope.product.key;
 
                    // $location.url("/merchello/merchello/ProductEdit/" + $scope.product.key, true);
 
