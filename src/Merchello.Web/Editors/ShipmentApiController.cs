@@ -188,7 +188,7 @@ namespace Merchello.Web.Editors
                 }
 
                 merchShipment = shipment.ToShipment(merchShipment);
-                if (order.Items.Count() != shipment.Items.Count())
+                if (order.Items.Count() == shipment.Items.Count())
                 {
                     Notification.Trigger("OrderShipped", merchShipment, new[] {merchShipment.Email});
                 }
