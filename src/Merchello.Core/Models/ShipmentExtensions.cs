@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Merchello.Core.Formatters;
 using Merchello.Core.Gateways;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Services;
@@ -151,6 +152,39 @@ namespace Merchello.Core.Models
             return string.Format("Shipment - {0} - {1} items", shipmentRateQuote.ShipMethod.Name, shipmentRateQuote.Shipment.Items.Count);
         }
 
+        /// <summary>
+        /// Gets a collection of <see cref="IReplaceablePattern"/> for the invoice
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <returns>
+        /// The collection of replaceable patterns
+        /// </returns>
+        internal static IEnumerable<IReplaceablePattern> ReplaceablePatterns(this IShipment shipment)
+        {
+            // TODO localization needed on pricing and datetime
+            var patterns = new List<IReplaceablePattern>
+            {
+                ReplaceablePattern.GetConfigurationReplaceablePattern("ShippedDate", shipment.ShippedDate.ToShortDateString()),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("ShipToOrganization", shipment.ToOrganization),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("ShipToName", shipment.ToName),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("ShipToAddress1", shipment.ToAddress1),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("ShipToAddress2", shipment.ToAddress2),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("ShipToLocality", shipment.ToLocality),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("ShipToRegion", shipment.ToRegion),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("ShipToPostalCode", shipment.ToPostalCode),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("ShipToCountryCode", shipment.ToCountryCode),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("ShipToEmail", shipment.Email),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("ShipToPhone", shipment.Phone),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("ShipToOrganization", shipment.ToOrganization),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("TrackingCode", shipment.TrackingCode)
+            };
+                                  
+            patterns.AddRange(shipment.LineItemReplaceablePatterns());
+
+            return patterns;
+        }
 
         ///// <summary>
         ///// Returns the collection of <see cref="IOrderLineItem"/> associated with the <see cref="IShipment"/>

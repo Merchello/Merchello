@@ -1,25 +1,21 @@
 ﻿namespace Merchello.Core.Gateways.Notification.Monitors
 {
     using System.Linq;
-    using Formatters;    
+    using Formatters;
     using Models;
     using Models.MonitorModels;
     using Observation;
     using Triggering;
 
     /// <summary>
-    /// Represents and order confirmation monitor
+    /// Represents and order shipped monitor
     /// </summary>
-    [MonitorFor("5DB575B5-0728-4B31-9B37-E9CF6C12E0AA", typeof(OrderConfirmationTrigger), "Order Confirmation Message (Pattern Replace)")]
-    public class OrderConfirmationMonitor : NotificationMonitorBase<IPaymentResultMonitorModel>
+    [MonitorFor("45016334-AB36-4496-BFC4-CD860F2A7EFF", typeof(PartialOrderShippedTrigger), "Partial Order Shipped Message (Pattern Replace)")]
+    public class PartialOrderShippedMonitor : NotificationMonitorBase<IShipment>
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="notificationContext"></param>
-        public OrderConfirmationMonitor(INotificationContext notificationContext)
+        public PartialOrderShippedMonitor(INotificationContext notificationContext)
             : base(notificationContext)
-        {            
+        {
         }
 
         /// <summary>
@@ -28,30 +24,28 @@
         /// <param name="value">
         /// The model to be used by the monitor
         /// </param>
-        public override void OnNext(IPaymentResultMonitorModel value)
+        public override void OnNext(IShipment value)
         {
-            if (!value.PaymentSuccess) return;
-
             if (!Messages.Any()) return;
 
             var formatter = PatternReplaceFormatter.GetPatternReplaceFormatter();
 
             // Add the replaceable patterns from the invoice
-            formatter.AddOrUpdateReplaceablePattern(value.Invoice.ReplaceablePatterns());
+            formatter.AddOrUpdateReplaceablePattern(value.ReplaceablePatterns());
 
             foreach (var message in Messages)
             {
-                if (value.Contacts.Any() && message.SendToCustomer)
+                if (message.SendToCustomer)
                 {
                     // add the additional contacts to the recipients list
-                    if (!message.Recipients.EndsWith(";")) 
+                    if (!message.Recipients.EndsWith(";"))
                         message.Recipients += ";";
-                                                                               
+
                     if (message.Recipients[0] == ';')
                         message.Recipients = message.Recipients.TrimStart(';');
 
-                    message.Recipients = string.Format("{0}{1}", message.Recipients, string.Join(";", value.Contacts));
-                }            
+                    message.Recipients = string.Format("{0}{1}", message.Recipients, string.Join(";", value.Email));
+                }
 
                 // send the message
                 NotificationContext.Send(message, formatter);
