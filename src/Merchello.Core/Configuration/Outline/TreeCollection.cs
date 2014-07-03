@@ -2,33 +2,38 @@
 {
     using System.Collections.Generic;
     using System.Configuration;
+    using System.Linq;
 
     /// <summary>
-    /// The tasks configuration collection.
+    /// The back office collection
     /// </summary>
-    public class TasksConfigurationCollection : ConfigurationElementCollection
+    public class TreeCollection : ConfigurationElementCollection
     {
         /// <summary>
-        /// Default. Returns the ProvinceElement with the index of index from the collection
+        /// The this.
         /// </summary>
-        public TaskElement this[object index]
+        /// <param name="index">
+        /// The index.
+        /// </param>
+        /// <returns>
+        /// The <see cref="TreeElement"/>.
+        /// </returns>
+        public TreeElement this[object index]
         {
-            get { return (TaskElement)this.BaseGet(index); }
+            get { return (TreeElement)this.BaseGet(index); }
         }
 
         /// <summary>
-        /// The get all types.
+        /// The get trees.
         /// </summary>
         /// <returns>
-        /// The collection of all <see cref="TaskElement"/>.
+        /// The collection of <see cref="TreeElement"/>.
         /// </returns>
-        public IEnumerable<TaskElement> GetAllTypes()
+        public IEnumerable<TreeElement> GetTrees()
         {
-            foreach (ConfigurationElement type in this)
-            {
-                yield return type as TaskElement;
-            }
+            return this.Cast<TreeElement>();
         }
+
 
         /// <summary>
         /// The create new element.
@@ -38,7 +43,7 @@
         /// </returns>
         protected override ConfigurationElement CreateNewElement()
         {
-            return new TaskElement();
+            return new TreeElement();
         }
 
         /// <summary>
@@ -52,7 +57,7 @@
         /// </returns>
         protected override object GetElementKey(ConfigurationElement element)
         {
-            return ((TaskElement) element).Type;
+            return ((TreeElement)element).Id;
         }
     }
 }
