@@ -1,6 +1,8 @@
 ﻿namespace Merchello.Core.Configuration.Outline
 {
+    using System.Collections.Generic;
     using System.Configuration;
+    using System.Linq;
 
     /// <summary>
     /// The back office collection
@@ -19,7 +21,19 @@
         public TreeElement this[object index]
         {
             get { return (TreeElement)this.BaseGet(index); }
-        } 
+        }
+
+        /// <summary>
+        /// The get trees.
+        /// </summary>
+        /// <returns>
+        /// The collection of <see cref="TreeElement"/>.
+        /// </returns>
+        public IEnumerable<TreeElement> GetTrees()
+        {
+            return this.Cast<TreeElement>();
+        }
+
 
         /// <summary>
         /// The create new element.

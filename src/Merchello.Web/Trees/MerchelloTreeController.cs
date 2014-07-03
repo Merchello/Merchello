@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Web.Trees
 {
+    using System.Linq;
     using System.Net.Http.Formatting;
 
     using Merchello.Core.Configuration;
@@ -36,27 +37,16 @@
 
             var backoffice = MerchelloConfiguration.Current.BackOffice;
 
-            switch (id)
-            {
-                case "settings":
-                    collection.Add(CreateTreeNode("shipping", "settings", queryStrings, "Shipping", "icon-truck", false, "merchello/merchello/Shipping/manage"));
-                    collection.Add(CreateTreeNode("taxation", "settings", queryStrings, "Taxation", "icon-piggy-bank", false, "merchello/merchello/Taxation/manage"));
-                    collection.Add(CreateTreeNode("payment", "settings", queryStrings, "Payment", "icon-bill-dollar", false, "merchello/merchello/Payment/manage"));
-                    collection.Add(CreateTreeNode("notifications", "settings", queryStrings, "Notifications", "icon-chat", false, "merchello/merchello/Notifications/manage"));
-                    collection.Add(CreateTreeNode("gateways", "settings", queryStrings, "Gateway Providers", "icon-trafic", false, "merchello/merchello/GatewayProviders/manage"));
-                    break;
-                case "reports":
-                    collection.Add(CreateTreeNode("salesOverTime", "reports", queryStrings, "Sales Over Time", "icon-loading", false, "merchello/merchello/SalesOverTime/manage"));
-                    collection.Add(CreateTreeNode("salesByItem", "reports", queryStrings, "Sales By Item", "icon-barcode", false, "merchello/merchello/SalesByItem/manage"));
-                    collection.Add(CreateTreeNode("taxesByDestination", "reports", queryStrings, "Taxes By Destination", "icon-piggy-bank", false, "merchello/merchello/TaxesByDestination/manage"));
-                    break;
-                default:
-                    collection.Add(CreateTreeNode("catalog", "", queryStrings, "Catalog", "icon-barcode", false, "merchello/merchello/ProductList/manage"));
-                    collection.Add(CreateTreeNode("orders", "", queryStrings, "Orders", "icon-receipt-dollar", false, "merchello/merchello/OrderList/manage"));
-                    collection.Add(CreateTreeNode("customers", "", queryStrings, "Customers", "icon-settings", false, "merchello/merchello/CustomerList/manage"));
-                    collection.Add(CreateTreeNode("settings", "", queryStrings, "Settings", "icon-settings", true, "merchello/merchello/Settings/manage"));
-                    break;
-            }
+            var rootTrees = backoffice.GetTrees().Where(x => x.Visible);
+
+            var currentTree = rootTrees.FirstOrDefault(x => x.Id == id && x.Visible);
+
+            collection.AddRange(
+                currentTree != null
+                    ? currentTree.SubTree.GetTrees().Where(x => x.Visible)
+                            .Select(tree => GetTreeNodeFromConfigurationElement(tree, queryStrings, currentTree))
+                    : backoffice.GetTrees().Where(x => x.Visible)
+                            .Select(tree => GetTreeNodeFromConfigurationElement(tree, queryStrings)));
 
             return collection;
         }
@@ -91,15 +81,33 @@
             return menu;
         }
 
+        /// <summary>
+        /// The get tree node from configuration element.
+        /// </summary>
+        /// <param name="tree">
+        /// The tree.
+        /// </param>
+        /// <param name="queryStrings">
+        /// The query strings.
+        /// </param>
+        /// <param name="parentTree">
+        /// The parent tree.
+        /// </param>
+        /// <returns>
+        /// The <see cref="TreeNode"/>.
+        /// </returns>
         private TreeNode GetTreeNodeFromConfigurationElement(TreeElement tree, FormDataCollection queryStrings, TreeElement parentTree = null)
         {
+
+            var hasSubs = tree.SubTree != null && tree.SubTree.GetTrees().Any();
+
             return CreateTreeNode(
                 tree.Id,
                 parentTree == null ? string.Empty : parentTree.Id,
                 queryStrings,
                 tree.Title,
                 tree.Icon,
-                parentTree != null,
+                hasSubs,
                 tree.RoutePath);
         }
     }
