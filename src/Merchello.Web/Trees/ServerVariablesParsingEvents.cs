@@ -5,7 +5,7 @@
     using System.Web;
     using System.Web.Mvc;
     using System.Web.Routing;
-    using Merchello.Web.Editors;
+    using Editors;
     using Umbraco.Core;
     using Umbraco.Core.Logging;
     using Umbraco.Web;
@@ -110,9 +110,9 @@
                 controller => controller.GetOrder(Guid.NewGuid())));
 
             umbracoUrls.Add(
-                "merchelloShipmentApiBaseUrl", 
+                "merchelloShipmentApiBaseUrl",
                 url.GetUmbracoApiServiceBaseUrl<ShipmentApiController>(
-                controller => controller.GetShipment(Guid.NewGuid())))
+                    controller => controller.GetShipment(Guid.NewGuid())));
 
             umbracoUrls.Add(
                 "merchelloPaymentApiBaseUrl", 
