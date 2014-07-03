@@ -3,10 +3,24 @@
     using System.Configuration;
 
     /// <summary>
-    /// The province configuration collection.
+    /// The back office collection
     /// </summary>
-    public class ProvinceConfigurationCollection : ConfigurationElementCollection
+    public class TreeCollection : ConfigurationElementCollection
     {
+        /// <summary>
+        /// The this.
+        /// </summary>
+        /// <param name="index">
+        /// The index.
+        /// </param>
+        /// <returns>
+        /// The <see cref="TreeElement"/>.
+        /// </returns>
+        public TreeElement this[object index]
+        {
+            get { return (TreeElement)this.BaseGet(index); }
+        } 
+
         /// <summary>
         /// The create new element.
         /// </summary>
@@ -15,29 +29,21 @@
         /// </returns>
         protected override ConfigurationElement CreateNewElement()
         {
-            return new ProvinceElement();
+            return new TreeElement();
         }
 
         /// <summary>
-        /// Gets the code 'key' for a specified configuration element when overridden in a derived class.
+        /// The get element key.
         /// </summary>
         /// <param name="element">
-        /// The <see cref="TypeFieldElement"/>
+        /// The element.
         /// </param>
         /// <returns>
         /// The <see cref="object"/>.
         /// </returns>
         protected override object GetElementKey(ConfigurationElement element)
         {
-            return ((ProvinceElement)element).Code;
+            return ((TreeElement)element).Id;
         }
-
-        /// <summary>
-        /// Gets the <see cref="ProvinceElement"/> with the index of index from the collection
-        /// </summary>
-        public ProvinceElement this[object index]
-        {
-            get { return (ProvinceElement)this.BaseGet(index); }
-        } 
     }
 }

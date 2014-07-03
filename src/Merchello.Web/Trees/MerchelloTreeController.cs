@@ -1,19 +1,41 @@
 ﻿namespace Merchello.Web.Trees
 {
     using System.Net.Http.Formatting;
+
+    using Merchello.Core.Configuration;
+    using Merchello.Core.Configuration.Outline;
+
     using umbraco;
     using umbraco.BusinessLogic.Actions;
     using Umbraco.Web.Models.Trees;
     using Umbraco.Web.Mvc;
     using Umbraco.Web.Trees;
 
+    /// <summary>
+    /// The merchello tree controller.
+    /// </summary>
     [Tree("merchello", "merchello", "Merchello")]
     [PluginController("Merchello")]
     public class MerchelloTreeController : TreeController
     {
+        /// <summary>
+        /// The get tree nodes.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <param name="queryStrings">
+        /// The query strings.
+        /// </param>
+        /// <returns>
+        /// The <see cref="TreeNodeCollection"/>.
+        /// </returns>
         protected override TreeNodeCollection GetTreeNodes(string id, FormDataCollection queryStrings)
         {
             var collection = new TreeNodeCollection();
+
+            var backoffice = MerchelloConfiguration.Current.BackOffice;
+
             switch (id)
             {
                 case "settings":
@@ -39,6 +61,18 @@
             return collection;
         }
 
+        /// <summary>
+        /// The get menu for node.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <param name="queryStrings">
+        /// The query strings.
+        /// </param>
+        /// <returns>
+        /// The <see cref="MenuItemCollection"/>.
+        /// </returns>
         protected override MenuItemCollection GetMenuForNode(string id, FormDataCollection queryStrings)
         {
             var menu = new MenuItemCollection();
@@ -48,14 +82,25 @@
                 menu.Items.Add<RefreshNode, ActionRefresh>(ui.Text("actions", ActionRefresh.Instance.Alias), true);
             }
 
-            //if (id == "catalog")
-            //{
-                //create product
-            //    menu.Items.Add<MerchelloActionNewProduct>(ui.Text("actions", MerchelloActionNewProduct.Instance.Alias));
-            //}
+            ////if (id == "catalog")
+            ////{
+            //    //create product
+            ////    menu.Items.Add<MerchelloActionNewProduct>(ui.Text("actions", MerchelloActionNewProduct.Instance.Alias));
+            ////}
 
             return menu;
         }
 
+        private TreeNode GetTreeNodeFromConfigurationElement(TreeElement tree, FormDataCollection queryStrings, TreeElement parentTree = null)
+        {
+            return CreateTreeNode(
+                tree.Id,
+                parentTree == null ? string.Empty : parentTree.Id,
+                queryStrings,
+                tree.Title,
+                tree.Icon,
+                parentTree != null,
+                tree.RoutePath);
+        }
     }
 }
