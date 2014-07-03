@@ -1,42 +1,58 @@
-﻿using System;
-using System.Collections.Specialized;
-using System.Configuration;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Xml.Linq;
-using Merchello.Core.Configuration.Outline;
-using Umbraco.Core.IO;
-using Umbraco.Core.Logging;
-
-namespace Merchello.Core.Configuration
+﻿namespace Merchello.Core.Configuration
 {
+    using System;
+    using System.Configuration;
+    using System.Dynamic;
+    using System.IO;
+    using System.Linq;
+    using System.Reflection;
+    using System.Xml.Linq;
+    using Merchello.Core.Configuration.Outline;
+    using Umbraco.Core.IO;
+    using Umbraco.Core.Logging;
+
     /// <summary>
     /// Provides quick access to the Merchello configuration section.
     /// </summary>
     public sealed class MerchelloConfiguration
     {
-        #region SingleTon
-
+        /// <summary>
+        /// The lazy loaded configuration section
+        /// </summary>
         private static readonly Lazy<MerchelloConfiguration> Lazy = new Lazy<MerchelloConfiguration>(() => new MerchelloConfiguration());
 
+        /// <summary>
+        /// The root directory.
+        /// </summary>
+        private string _rootDir = "";
+
+        /// <summary>
+        /// Gets the current instance
+        /// </summary>
         public static MerchelloConfiguration Current
         {
             get { return Lazy.Value; }
         }
 
-        #endregion
-
-
-        private string _rootDir = "";
+        /// <summary>
+        /// Gets the application name.
+        /// </summary>
+        public const string ApplicationName = "Merchello";
 
         /// <summary>
-        /// Name of the application.
+        /// Gets the configuration name.
         /// </summary>
-        public static string ApplicationName = "Merchello";
-        public static string ConfigurationName = ApplicationName.ToLower();
-
-        // Configuration Status - (Upgrades)
+        public static string ConfigurationName
+        {
+            get { return ApplicationName.ToLower(); }   
+        } 
+       
+        /// <summary>
+        /// Gets the merchello migration name.
+        /// </summary>
+        /// <remarks>
+        /// Configuration Status - (Upgrades) 
+        /// </remarks>
         public const string MerchelloMigrationName = "Merchello";
 
         /// <summary>
@@ -51,21 +67,99 @@ namespace Merchello.Core.Configuration
                     ? ConfigurationManager.AppSettings["merchelloConfigurationStatus"]
                     : string.Empty;
             }
+
             set
             {
                 SaveSetting("merchelloConfigurationStatus", value);
             }
         }
-
         
         /// <summary>
-        /// Returns the <see cref="MerchelloSection"/> Configuration Element
+        /// Gets the <see cref="MerchelloSection"/> Configuration Element
         /// </summary>
         public MerchelloSection Section
         {
             get { return (MerchelloSection)ConfigurationManager.GetSection(ConfigurationName); }
         }
-        
+
+        /// <summary>
+        /// Gets the default SKU separator.
+        /// </summary>
+        public string DefaultSkuSeparator
+        {
+            get { return Section.Settings["DefaultSkuSeparator"].Value; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether to always approve order creation.
+        /// </summary>
+        public bool AlwaysApproveOrderCreation
+        {
+            get { return bool.Parse(Section.Settings["AlwaysApproveOrderCreation"].Value); }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether auto update database schema.
+        /// </summary>
+        /// <remarks>
+        /// If true, Merchello will automatically attempt to update the database schema (if required) 
+        /// when the boot strapping detects a Merchello version update
+        /// </remarks>
+        public bool AutoUpdateDbSchema
+        {
+            get { return bool.Parse(Section.Settings["AutoUpdateDbSchema"].Value); }
+        }
+
+        /// <summary>
+        /// Gets the pattern formatter.
+        /// </summary>
+        /// <remarks>
+        /// Returns the pattern formatter for a given group
+        /// </remarks>
+        public ReplacementCollection PatternFormatter
+        {
+            get
+            {
+                try
+                {
+                    return Section.PatternFormatter;
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.Info<MerchelloConfiguration>(ex.Message);
+                    return null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the back office.
+        /// </summary>
+        public TreeCollection BackOffice
+        {
+            get
+            {
+                try
+                {
+                    return Section.BackOffice;
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.Info<MerchelloConfiguration>(ex.Message);
+                    return null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the full path to root.
+        /// </summary>
+        /// <value>The fullpath to root.</value>
+        public string FullpathToRoot
+        {
+            get { return GetRootDirectorySafe(); }
+        }
+
         /// <summary>
         /// Gets the <see cref="StrategyElement"/> by it's configuration alias
         /// </summary>
@@ -86,25 +180,6 @@ namespace Merchello.Core.Configuration
             }
         }
 
-        public string DefaultSkuSeparator
-        {
-            get { return Section.Settings["DefaultSkuSeparator"].Value; }
-        }
-
-        public bool AlwaysApproveOrderCreation
-        {
-            get { return bool.Parse(Section.Settings["AlwaysApproveOrderCreation"].Value); }
-        }
-
-        /// <summary>
-        /// If true, Merchello will automatically attempt to update the database schema (if required) 
-        /// when the bootstrapper detects a Merchello version update
-        /// </summary>
-        public bool AutoUpdateDbSchema
-        {
-            get { return bool.Parse(Section.Settings["AutoUpdateDbSchema"].Value); }
-        }
-
         /// <summary>
         /// Gets a <see cref="TaskChainElement"/> by its configuration alias
         /// </summary>
@@ -121,52 +196,6 @@ namespace Merchello.Core.Configuration
                 LogHelper.Info<MerchelloConfiguration>(ex.Message);
                 return null;
             }
-            
-        }
-
-        /// <summary>
-        /// Returns the pattern formatter for a given group
-        /// </summary>
-        public ReplacementCollection PatternFormatter
-        {
-            get {
-                try
-                {
-                    return Section.PatternFormatter;
-                }
-                catch (Exception ex)
-                {
-                    LogHelper.Info<MerchelloConfiguration>(ex.Message);
-                    return null;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Returns the path to the root of the application, by getting the path to where the assembly where this
-        /// method is included is present, then traversing until it's past the /bin directory. Ie. this makes it work
-        /// even if the assembly is in a /bin/debug or /bin/release folder
-        /// </summary>
-        /// <returns></returns>
-        internal string GetRootDirectorySafe()
-        {
-            if (string.IsNullOrEmpty(_rootDir) == false)
-            {
-                return _rootDir;
-            }
-
-            var codeBase = Assembly.GetExecutingAssembly().CodeBase;
-            var uri = new Uri(codeBase);
-            var path = uri.LocalPath;
-            var baseDirectory = Path.GetDirectoryName(path);
-            if (string.IsNullOrEmpty(baseDirectory))
-                throw new Exception("No root directory could be resolved. Please ensure that your Umbraco solution is correctly configured.");
-
-            _rootDir = baseDirectory.Contains("bin")
-                           ? baseDirectory.Substring(0, baseDirectory.LastIndexOf("bin", StringComparison.OrdinalIgnoreCase) - 1)
-                           : baseDirectory;
-
-            return _rootDir;
         }
 
         /// <summary>
@@ -193,12 +222,32 @@ namespace Merchello.Core.Configuration
         }
 
         /// <summary>
-        /// Gets the full path to root.
+        /// Returns the path to the root of the application, by getting the path to where the assembly where this
+        /// method is included is present, then traversing until it's past the /bin directory. This makes it work
+        /// even if the assembly is in a /bin/debug or /bin/release folder
         /// </summary>
-        /// <value>The fullpath to root.</value>
-        public string FullpathToRoot
+        /// <returns>
+        /// The root directory path
+        /// </returns>
+        internal string GetRootDirectorySafe()
         {
-            get { return GetRootDirectorySafe(); }
+            if (string.IsNullOrEmpty(_rootDir) == false)
+            {
+                return _rootDir;
+            }
+
+            var codeBase = Assembly.GetExecutingAssembly().CodeBase;
+            var uri = new Uri(codeBase);
+            var path = uri.LocalPath;
+            var baseDirectory = Path.GetDirectoryName(path);
+            if (string.IsNullOrEmpty(baseDirectory))
+                throw new Exception("No root directory could be resolved. Please ensure that your Umbraco solution is correctly configured.");
+
+            _rootDir = baseDirectory.Contains("bin")
+                           ? baseDirectory.Substring(0, baseDirectory.LastIndexOf("bin", StringComparison.OrdinalIgnoreCase) - 1)
+                           : baseDirectory;
+
+            return _rootDir;
         }
     }
 }

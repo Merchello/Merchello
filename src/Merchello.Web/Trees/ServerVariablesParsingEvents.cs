@@ -110,9 +110,9 @@
                 controller => controller.GetOrder(Guid.NewGuid())));
 
             umbracoUrls.Add(
-                "merchelloShipmentApiBaseUrl", 
+                "merchelloShipmentApiBaseUrl",
                 url.GetUmbracoApiServiceBaseUrl<ShipmentApiController>(
-                controller => controller.GetShipment(Guid.NewGuid())))
+                controller => controller.GetShipment(Guid.NewGuid())));
 
             umbracoUrls.Add(
                 "merchelloPaymentApiBaseUrl", 
