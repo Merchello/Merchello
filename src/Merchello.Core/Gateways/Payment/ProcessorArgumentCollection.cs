@@ -1,13 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-
-namespace Merchello.Core.Gateways.Payment
+﻿namespace Merchello.Core.Gateways.Payment
 {
-    /// <summary>
-    /// 
-    /// </summary>
+    using System.Collections.Generic;
+
+
     public class ProcessorArgumentCollection : Dictionary<string, string>
-    {
-        
+    {        
     }
 }
