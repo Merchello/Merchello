@@ -46,7 +46,7 @@
         /// <summary>
         /// Returns a cache key intended for runtime caching of a <see cref="IShippingGatewayMethod"/>
         /// </summary>
-        /// <param name="shipMethodKey">The unique key (Guid) of the <see cref="IShipMethod"/></param>
+        /// <param name="shipMethodKey">The unique key (GUID) of the <see cref="IShipMethod"/></param>
         /// <returns>
         /// The <see cref="IShipMethod"/> cache key
         /// </returns>
@@ -85,7 +85,7 @@
         }
 
         /// <summary>
-        /// Returns a cache key intened for use in repository caching
+        /// Returns a cache key intended for use in repository caching
         /// </summary>
         /// <typeparam name="TEntity">Type of the entity</typeparam>
         /// <param name="key">
