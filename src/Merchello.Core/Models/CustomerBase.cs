@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Specialized;
-using System.Reflection;
-using System.Runtime.Serialization;
-using Merchello.Core.Models.EntityBase;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System;
+    using System.Collections.Specialized;
+    using System.Reflection;
+    using System.Runtime.Serialization;
+
+    using Merchello.Core.Models.EntityBase;
+
     /// <summary>
     /// Represents a customer base class
     /// </summary>
@@ -13,6 +14,9 @@ namespace Merchello.Core.Models
     [DataContract(IsReference = true)]
     public abstract class CustomerBase : Entity, ICustomerBase
     {
+        /// <summary>
+        /// The _last activity date.
+        /// </summary>
         private DateTime _lastActivityDate;
         private Guid _entityKey;
         private ExtendedDataCollection _extendedData;

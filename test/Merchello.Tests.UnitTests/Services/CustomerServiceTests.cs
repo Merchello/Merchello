@@ -24,7 +24,7 @@ namespace Merchello.Tests.UnitTests.Services
         {
             base.Setup();
 
-            _customerService = new CustomerService(new MockUnitOfWorkProvider(), new RepositoryFactory());
+            _customerService = new CustomerService(new MockUnitOfWorkProvider(), new RepositoryFactory(), new AnonymousCustomerService());
             Before = null;
             After = null;
 
@@ -72,7 +72,7 @@ namespace Merchello.Tests.UnitTests.Services
         [Test]
         public void Create_Triggers_Event_Assert_And_Customer_Is_Passed()
         {
-            var customer = _customerService.CreateCustomer("Jo", "Jo", "jo@test.com");
+            var customer = _customerService.CreateCustomer("rusty", "Rusty", "Swayne", "test@test.com");
 
             Assert.IsTrue(AfterTriggered);
         }

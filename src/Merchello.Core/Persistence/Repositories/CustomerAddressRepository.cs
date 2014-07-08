@@ -1,31 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Merchello.Core.Models;
-using Merchello.Core.Models.EntityBase;
-using Merchello.Core.Models.Rdbms;
-using Merchello.Core.Persistence.Factories;
-using Merchello.Core.Persistence.Querying;
-using Umbraco.Core;
-using Umbraco.Core.Cache;
-using Umbraco.Core.Persistence;
-using Umbraco.Core.Persistence.Querying;
-using IDatabaseUnitOfWork = Merchello.Core.Persistence.UnitOfWork.IDatabaseUnitOfWork;
-
-namespace Merchello.Core.Persistence.Repositories
+﻿namespace Merchello.Core.Persistence.Repositories
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Merchello.Core.Models;
+    using Merchello.Core.Models.EntityBase;
+    using Merchello.Core.Models.Rdbms;
+    using Merchello.Core.Persistence.Factories;
+    using Merchello.Core.Persistence.Querying;
+
+    using Umbraco.Core;
+    using Umbraco.Core.Cache;
+    using Umbraco.Core.Persistence;
+    using Umbraco.Core.Persistence.Querying;
+
+    using IDatabaseUnitOfWork = Merchello.Core.Persistence.UnitOfWork.IDatabaseUnitOfWork;
+
+    /// <summary>
+    /// The customer address repository.
+    /// </summary>
     internal class CustomerAddressRepository : MerchelloPetaPocoRepositoryBase<ICustomerAddress>, ICustomerAddressRepository
     {
-
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CustomerAddressRepository"/> class.
+        /// </summary>
+        /// <param name="work">
+        /// The work.
+        /// </param>
+        /// <param name="cache">
+        /// The cache.
+        /// </param>
         public CustomerAddressRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache)
             : base(work, cache)
         {
         }
 
-        #region Overrides of RepositoryBase<IAddress>
-
-
+        /// <summary>
+        /// The perform get.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ICustomerAddress"/>.
+        /// </returns>
         protected override ICustomerAddress PerformGet(Guid key)
         {
             var sql = GetBaseQuery(false)
@@ -43,6 +62,15 @@ namespace Merchello.Core.Persistence.Repositories
             return address;
         }
 
+        /// <summary>
+        /// The perform get all.
+        /// </summary>
+        /// <param name="keys">
+        /// The keys.
+        /// </param>
+        /// <returns>
+        /// The a collection of all customer addresses
+        /// </returns>
         protected override IEnumerable<ICustomerAddress> PerformGetAll(params Guid[] keys)
         {
             if (keys.Any())
@@ -63,10 +91,15 @@ namespace Merchello.Core.Persistence.Repositories
             }
         }
 
-        #endregion
-
-        #region Overrides of MerchelloPetaPocoRepositoryBase<IAddress>
-
+        /// <summary>
+        /// The get base query.
+        /// </summary>
+        /// <param name="isCount">
+        /// The is count.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Sql"/>.
+        /// </returns>
         protected override Sql GetBaseQuery(bool isCount)
         {
             var sql = new Sql();
@@ -76,11 +109,23 @@ namespace Merchello.Core.Persistence.Repositories
             return sql;
         }
 
+        /// <summary>
+        /// The get base where clause.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
         protected override string GetBaseWhereClause()
         {
             return "merchAddress.pk = @Key";
         }
 
+        /// <summary>
+        /// The get delete clauses.
+        /// </summary>
+        /// <returns>
+        /// The collection of delete clauses.
+        /// </returns>
         protected override IEnumerable<string> GetDeleteClauses()
         {
             var list = new List<string>
@@ -91,6 +136,12 @@ namespace Merchello.Core.Persistence.Repositories
             return list;
         }
 
+        /// <summary>
+        /// The persist new item.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity to be created
+        /// </param>
         protected override void PersistNewItem(ICustomerAddress entity)
         {
             ((Entity)entity).AddingEntity();
@@ -102,6 +153,12 @@ namespace Merchello.Core.Persistence.Repositories
             entity.ResetDirtyProperties();
         }
 
+        /// <summary>
+        /// The persist updated item.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity to be updated
+        /// </param>
         protected override void PersistUpdatedItem(ICustomerAddress entity)
         {
             ((Entity)entity).UpdatingEntity();
@@ -114,6 +171,12 @@ namespace Merchello.Core.Persistence.Repositories
             entity.ResetDirtyProperties();
         }
 
+        /// <summary>
+        /// The persist deleted item.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity to be deleted
+        /// </param>
         protected override void PersistDeletedItem(ICustomerAddress entity)
         {
             var deletes = GetDeleteClauses();
@@ -123,7 +186,15 @@ namespace Merchello.Core.Persistence.Repositories
             }
         }
 
-
+        /// <summary>
+        /// The perform get by query.
+        /// </summary>
+        /// <param name="query">
+        /// The query.
+        /// </param>
+        /// <returns>
+        /// The collection of <see cref="ICustomerAddress"/>.
+        /// </returns>
         protected override IEnumerable<ICustomerAddress> PerformGetByQuery(IQuery<ICustomerAddress> query)
         {
             var sqlClause = GetBaseQuery(false);
@@ -135,11 +206,5 @@ namespace Merchello.Core.Persistence.Repositories
             return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
 
         }
-
-
-        #endregion
-
-
-
     }
 }

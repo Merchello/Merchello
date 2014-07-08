@@ -1,17 +1,28 @@
-﻿using System;
-using Merchello.Core.Models;
-using Merchello.Core.Models.Rdbms;
-
-namespace Merchello.Core.Persistence.Factories
+﻿namespace Merchello.Core.Persistence.Factories
 {
+    using Merchello.Core.Models;
+    using Merchello.Core.Models.Rdbms;
+
+    /// <summary>
+    /// The customer address factory.
+    /// </summary>
     internal class CustomerAddressFactory : IEntityFactory<ICustomerAddress, CustomerAddressDto>
     {
-
+        /// <summary>
+        /// The build entity.
+        /// </summary>
+        /// <param name="dto">
+        /// The dto.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ICustomerAddress"/>.
+        /// </returns>
         public ICustomerAddress BuildEntity(CustomerAddressDto dto)
         {
-            var address = new CustomerAddress(dto.CustomerKey, dto.Label)
+            var address = new CustomerAddress(dto.CustomerKey)
             {
-                Key = dto.Key, 
+                Key = dto.Key,
+                Label = dto.Label,
                 FullName = dto.FullName,
                 Company =  dto.Company,
                 AddressTypeFieldKey = dto.AddressTfKey,
@@ -31,6 +42,15 @@ namespace Merchello.Core.Persistence.Factories
             return address;
         }
 
+        /// <summary>
+        /// The build dto.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CustomerAddressDto"/>.
+        /// </returns>
         public CustomerAddressDto BuildDto(ICustomerAddress entity)
         {
             var dto = new CustomerAddressDto()

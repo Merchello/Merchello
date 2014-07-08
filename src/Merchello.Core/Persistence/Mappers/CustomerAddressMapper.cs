@@ -1,23 +1,20 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Merchello.Core.Models;
-using Merchello.Core.Models.Rdbms;
-
-namespace Merchello.Core.Persistence.Mappers
+﻿namespace Merchello.Core.Persistence.Mappers
 {
+    using Merchello.Core.Models;
+    using Merchello.Core.Models.Rdbms;
+
     /// <summary>
-    /// Represents a <see cref="CustomerAddress"/> to DTO mapper used to translate the properties of the public api 
-    /// implementation to that of the database's DTO as sql: [tableName].[columnName].
+    /// Represents a <see cref="CustomerAddress"/> to DTO mapper used to translate the properties of the public API 
+    /// implementation to that of the database's DTO as SQL: [tableName].[columnName].
     /// </summary>
     internal sealed class CustomerAddressMapper : MerchelloBaseMapper
-    {
-        
-        //NOTE: its an internal class but the ctor must be public since we're using Activator.CreateInstance to create it
-        // otherwise that would fail because there is no public constructor.
+    {   
+        ////NOTE: its an internal class but the ctor must be public since we're using Activator.CreateInstance to create it
+        //// otherwise that would fail because there is no public constructor.
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CustomerAddressMapper"/> class.
+        /// </summary>
         public CustomerAddressMapper()
         {
             BuildMap();
@@ -25,7 +22,9 @@ namespace Merchello.Core.Persistence.Mappers
 
         #region Overrides of MerchelloBaseMapper
 
-
+        /// <summary>
+        /// The build map.
+        /// </summary>
         internal override void BuildMap()
         {
             if (!PropertyInfoCache.IsEmpty) return;
@@ -43,10 +42,10 @@ namespace Merchello.Core.Persistence.Mappers
             CacheMap<CustomerAddress, CustomerAddressDto>(src => src.PostalCode, dto => dto.PostalCode);
             CacheMap<CustomerAddress, CustomerAddressDto>(src => src.CountryCode, dto => dto.CountryCode);
             CacheMap<CustomerAddress, CustomerAddressDto>(src => src.Phone, dto => dto.Phone);
+            CacheMap<CustomerAddress, CustomerAddressDto>(src => src.IsDefault, dto => dto.IsDefault);
             CacheMap<CustomerAddress, CustomerAddressDto>(src => src.CreateDate, dto => dto.CreateDate);
             CacheMap<CustomerAddress, CustomerAddressDto>(src => src.UpdateDate, dto => dto.UpdateDate);
         }
         #endregion
-
     }
 }
