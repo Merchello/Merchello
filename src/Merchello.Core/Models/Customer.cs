@@ -1,51 +1,76 @@
-﻿using System;
-using System.Reflection;
-using System.Runtime.Serialization;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System;
+    using System.Reflection;
+    using System.Runtime.Serialization;
+
+    /// <summary>
+    /// The customer.
+    /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
     internal class Customer : CustomerBase, ICustomer
     {
-        private int? _memberId;
-        private string _firstName;
-        private string _lastName;
-        private string _email;
-        private decimal _totalInvoiced;
-        private readonly decimal _totalPayments;
-        private readonly DateTime? _lastPaymentDate;
+        #region fields
 
-        internal Customer(decimal totalInvoice, decimal totalPayments, DateTime? lastPaymentDate)
-            :base(false)
-        {
-            _totalInvoiced = totalInvoice;
-            _totalPayments = totalPayments;
-            _lastPaymentDate = lastPaymentDate;
-        }
+        /// <summary>
+        /// The login name selector.
+        /// </summary>
+        private static readonly PropertyInfo LoginNameSelector = ExpressionHelper.GetPropertyInfo<Customer, string>(x => x.LoginName);
 
-        private static readonly PropertyInfo MemberIdSelector = ExpressionHelper.GetPropertyInfo<Customer, int?>(x => x.MemberId);
+        /// <summary>
+        /// The first name selector.
+        /// </summary>
         private static readonly PropertyInfo FirstNameSelector = ExpressionHelper.GetPropertyInfo<Customer, string>(x => x.FirstName);
+
+        /// <summary>
+        /// The last name selector.
+        /// </summary>
         private static readonly PropertyInfo LastNameSelector = ExpressionHelper.GetPropertyInfo<Customer, string>(x => x.LastName);
+
+        /// <summary>
+        /// The email selector.
+        /// </summary>
         private static readonly PropertyInfo EmailSelector = ExpressionHelper.GetPropertyInfo<Customer, string>(x => x.Email);
 
         /// <summary>
-        /// Gets or sets the memberId
+        /// The first name.
         /// </summary>
-        [DataMember]
-        public int? MemberId
+        private string _firstName;
+
+        /// <summary>
+        /// The last name.
+        /// </summary>
+        private string _lastName;
+
+        /// <summary>
+        /// The email.
+        /// </summary>
+        private string _email;
+
+        /// <summary>
+        /// The login name.
+        /// </summary>
+        private string _loginName;
+
+        #endregion
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Customer"/> class.
+        /// </summary>
+        /// <param name="loginName">
+        /// The login Name associated with the membership provider users
+        /// </param>
+        internal Customer(string loginName) : base(false)
         {
-            get { return _memberId; }
-            set
-            {                
-                SetPropertyValueAndDetectChanges(o => 
-                    {
-                        _memberId = value;
-                        return _memberId;
-                    }, _memberId, MemberIdSelector);
-            }
+            Mandate.ParameterNotNullOrEmpty(loginName, "loginName");
+
+            _loginName = loginName;
         }
 
+        /// <summary>
+        /// Gets the full name.
+        /// </summary>
         [IgnoreDataMember]
         public string FullName
         {
@@ -58,14 +83,21 @@ namespace Merchello.Core.Models
         [DataMember]
         public string FirstName
         {
-            get { return _firstName;  }
+            get
+            {
+                return _firstName;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                     {
                         _firstName = value;
                         return _firstName;
-                    }, _firstName, FirstNameSelector);
+                    }, 
+                    _firstName, 
+                    FirstNameSelector);
             }
         }
 
@@ -75,14 +107,21 @@ namespace Merchello.Core.Models
         [DataMember]
         public string LastName
         {
-            get { return _lastName; }
+            get
+            {
+                return _lastName;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                     {
                         _lastName = value;
                         return _lastName;
-                    }, _lastName, LastNameSelector);
+                    }, 
+                    _lastName, 
+                    LastNameSelector);
             }
         }
 
@@ -92,47 +131,46 @@ namespace Merchello.Core.Models
         [DataMember]
         public string Email
         {
-            get { return _email; }
+            get
+            {
+                return _email;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o => 
+                SetPropertyValueAndDetectChanges(
+                    o => 
                     {
                         _email = value;
                         return _email;
-                    }, _email, EmailSelector);                    
+                    }, 
+                    _email, 
+                    EmailSelector);                    
             }
         }
 
         /// <summary>
-        /// Gets the total amount invoiced
+        /// Gets or sets the login name.
         /// </summary>
         [DataMember]
-        public decimal TotalInvoiced
+        public string LoginName
         {
-            get { return _totalInvoiced; }
+            get
+            {
+                return _loginName;
+            }
+
             internal set
             {
-                _totalInvoiced = value;
+                SetPropertyValueAndDetectChanges(
+                    o =>
+                    {
+                        _loginName = value;
+                        return _loginName;
+                    },
+                    _loginName,
+                    LoginNameSelector);
             }
         }
-
-        /// <summary>
-        /// Gets the total payments
-        /// </summary>
-        [DataMember]
-        public decimal TotalPayments
-        {
-            get { return _totalPayments; }
-        }
-
-        /// <summary>
-        /// Gets the last payment date
-        /// </summary>
-        [DataMember]
-        public DateTime? LastPaymentDate
-        {
-            get { return _lastPaymentDate; }
-        }
-        
     }
 }
