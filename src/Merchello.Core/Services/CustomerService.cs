@@ -138,7 +138,6 @@
         public ICustomer CreateCustomer(string loginName, string firstName, string lastName, string email)
         {
             Mandate.ParameterNotNullOrEmpty(loginName, "loginName");
-
             var customer = new Customer(loginName)
                 {
                     FirstName = firstName,
@@ -146,8 +145,13 @@
                     Email = email
                 };
 
-            Created.RaiseEvent(new Events.NewEventArgs<ICustomer>(customer), this);
+            if (!Creating.IsRaisedEventCancelled(new Events.NewEventArgs<ICustomer>(customer), this))
+            {
+                return customer;
+            }
 
+            customer.WasCancelled = true;
+            
             return customer;
         }
 

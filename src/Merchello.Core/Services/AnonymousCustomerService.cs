@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Core.Services
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading;
 
     using Merchello.Core.Models;
@@ -118,6 +119,12 @@
         {
             var anonymous = new AnonymousCustomer();
 
+            if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<IAnonymousCustomer>(anonymous), this))
+            {
+                anonymous.WasCancelled = true;
+                return anonymous;
+            }
+
             using (new WriteLock(Locker))
             {
                 var uow = _uowProvider.GetUnitOfWork();
@@ -127,6 +134,8 @@
                     uow.Commit();
                 }
             }
+
+            Created.RaiseEvent(new Events.NewEventArgs<IAnonymousCustomer>(anonymous), this);
 
             return anonymous;
         }
@@ -139,6 +148,11 @@
         /// </param>
         public void Save(IAnonymousCustomer anonymous)
         {
+            if (Saving.IsRaisedEventCancelled(new SaveEventArgs<IAnonymousCustomer>(anonymous), this))
+            {
+                return;
+            }
+
             using (new WriteLock(Locker))
             {
                 var uow = _uowProvider.GetUnitOfWork();
@@ -148,6 +162,8 @@
                     uow.Commit();
                 }
             }
+
+            Saved.RaiseEvent(new SaveEventArgs<IAnonymousCustomer>(anonymous), this);
         }
 
         /// <summary>
@@ -158,6 +174,8 @@
         /// </param>
         public void Delete(IAnonymousCustomer anonymous)
         {
+            if (Deleting.IsRaisedEventCancelled(new DeleteEventArgs<IAnonymousCustomer>(anonymous), this)) return;
+
             using (new WriteLock(Locker))
             {
                 var uow = _uowProvider.GetUnitOfWork();
@@ -167,6 +185,8 @@
                     uow.Commit();
                 }
             }
+
+            Deleted.RaiseEvent(new DeleteEventArgs<IAnonymousCustomer>(anonymous), this);
         }
 
         /// <summary>
@@ -177,13 +197,17 @@
         /// </param>
         public void Delete(IEnumerable<IAnonymousCustomer> anonymouses)
         {
+            var anonymousArray = anonymouses as IAnonymousCustomer[] ?? anonymouses.ToArray();
+
+            Deleting.RaiseEvent(new DeleteEventArgs<IAnonymousCustomer>(anonymousArray), this);
+
             using (new WriteLock(Locker))
             {
                 var uow = _uowProvider.GetUnitOfWork();
 
                 using (var repository = _repositoryFactory.CreateAnonymousCustomerRepository(uow))
                 {
-                    foreach (var anonymous in anonymouses)
+                    foreach (var anonymous in anonymousArray)
                     {
                         repository.Delete(anonymous);
                     }
@@ -191,6 +215,8 @@
                     uow.Commit();
                 }
             }
+
+            Deleted.RaiseEvent(new DeleteEventArgs<IAnonymousCustomer>(anonymousArray), this);
         }
     }
 }
