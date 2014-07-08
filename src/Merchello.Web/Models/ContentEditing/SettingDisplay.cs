@@ -31,6 +31,11 @@
         public string TimeFormat { get; set; }
 
         /// <summary>
+        /// Gets or sets the unit format.
+        /// </summary>
+        public string UnitSystem { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether global shippable.
         /// </summary>
         public bool GlobalShippable { get; set; }

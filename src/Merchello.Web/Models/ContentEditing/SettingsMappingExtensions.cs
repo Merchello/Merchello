@@ -55,6 +55,9 @@ namespace Merchello.Web.Models.ContentEditing
 					case "timeFormat":
 						settingDisplay.TimeFormat = setting.Value;
 						break;
+                    case "unitSystem":
+                        settingDisplay.UnitSystem = setting.Value;
+                        break;
 					case "globalShippable":
 						if (!bool.TryParse(setting.Value, out boolValue))
 						{
@@ -111,7 +114,10 @@ namespace Merchello.Web.Models.ContentEditing
 						break;
 					case "timeFormat":
 						setting.Value = settingDisplay.TimeFormat;
-						break;
+                        break;
+                    case "unitSystem":
+                        setting.Value = settingDisplay.UnitSystem;
+                        break;
 					case "globalShippable":
 						setting.Value = settingDisplay.GlobalShippable.ToString();
 						break;
