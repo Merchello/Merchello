@@ -227,6 +227,14 @@
             }
 
             /// <summary>
+            /// Gets the Unit System settings key.
+            /// </summary>
+            public static Guid UnitSystemKey
+            {
+                get { return new Guid("03069B06-27CB-494B-B153-9C295AF2DE85"); }
+            }
+
+            /// <summary>
             /// Gets the global taxable settings key.
             /// </summary>
             public static Guid GlobalTaxableKey
