@@ -108,6 +108,7 @@
             self.nextInvoiceNumber = 0;
             self.dateFormat = "";
             self.timeFormat = "";
+            self.unitSystem = "";
             self.globalShippable = false;
             self.globalTaxable = false;
             self.globalTrackInventory = false;
@@ -119,6 +120,7 @@
             self.nextInvoiceNumber = parseInt(settingsFromServer.nextInvoiceNumber);
             self.dateFormat = settingsFromServer.dateFormat;
             self.timeFormat = settingsFromServer.timeFormat;
+            self.unitSystem = settingsFromServer.unitSystem;
             self.globalShippable = settingsFromServer.globalShippable;
             self.globalTaxable = settingsFromServer.globalTaxable;
             self.globalTrackInventory = settingsFromServer.globalTrackInventory;

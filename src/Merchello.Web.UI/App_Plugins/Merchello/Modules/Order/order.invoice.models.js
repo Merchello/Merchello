@@ -184,8 +184,8 @@
 			self.versionKey = data.versionKey;
 			self.customerKey = data.customerKey;
 			self.invoiceNumberPrefix = data.invoiceNumberPrefix;
-			self.invoiceNumber = data.invoiceNumber;
-			self.invoiceDate = data.invoiceDate;
+			self.invoiceNumber = data.invoiceNumber;               
+			self.invoiceDate = data.invoiceDate;               
 			self.invoiceStatusKey = data.invoiceStatusKey;
 			self.invoiceStatus = new merchello.Models.InvoiceStatus(data.invoiceStatus);
 			self.billToName = data.billToName;
