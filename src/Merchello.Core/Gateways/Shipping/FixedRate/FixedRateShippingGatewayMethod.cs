@@ -1,23 +1,55 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
-using Merchello.Core.Models;
-using Merchello.Core.Models.Interfaces;
-using Umbraco.Core;
-
-namespace Merchello.Core.Gateways.Shipping.FixedRate
+﻿namespace Merchello.Core.Gateways.Shipping.FixedRate
 {
+    using System;
+    using System.Globalization;
+    using System.Linq;
+    using Models;
+    using Models.Interfaces;
+    using Umbraco.Core;
+
     /// <summary>
     /// Defines the rate table ship method
     /// </summary>
+    [GatewayMethodEditor("Fixed rate ship method editor", "Fixed rate ship method editor", "~/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shipping.fixedratemethod.html")]
     public class FixedRateShippingGatewayMethod : ShippingGatewayMethodBase, IFixedRateShippingGatewayMethod
     {
+        /// <summary>
+        /// The quote type.
+        /// </summary>
         private readonly QuoteType _quoteType;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FixedRateShippingGatewayMethod"/> class.
+        /// </summary>
+        /// <param name="gatewayResource">
+        /// The gateway resource.
+        /// </param>
+        /// <param name="shipMethod">
+        /// The ship method.
+        /// </param>
+        /// <param name="shipCountry">
+        /// The ship country.
+        /// </param>
         public FixedRateShippingGatewayMethod(IGatewayResource gatewayResource, IShipMethod shipMethod, IShipCountry shipCountry)
-            :this(gatewayResource, shipMethod, shipCountry, new ShippingFixedRateTable(shipMethod.Key))
-        {}
+            : this(gatewayResource, shipMethod, shipCountry, new ShippingFixedRateTable(shipMethod.Key))
+        {            
+        }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FixedRateShippingGatewayMethod"/> class.
+        /// </summary>
+        /// <param name="gatewayResource">
+        /// The gateway resource.
+        /// </param>
+        /// <param name="shipMethod">
+        /// The ship method.
+        /// </param>
+        /// <param name="shipCountry">
+        /// The ship country.
+        /// </param>
+        /// <param name="rateTable">
+        /// The rate table.
+        /// </param>
         public FixedRateShippingGatewayMethod(IGatewayResource gatewayResource, IShipMethod shipMethod, IShipCountry shipCountry, IShippingFixedRateTable rateTable)
             : base(gatewayResource, shipMethod, shipCountry)
         {
@@ -26,6 +58,44 @@ namespace Merchello.Core.Gateways.Shipping.FixedRate
             RateTable = rateTable;
         }
 
+        /// <summary>
+        /// The quote type
+        /// </summary>
+        public enum QuoteType
+        {
+            /// <summary>
+            /// Indicates the quote is based shipment weight
+            /// </summary>
+            VaryByWeight,
+
+            /// <summary>
+            /// Indicates the quote is based on total shipment price
+            /// </summary>
+            VaryByPrice
+        }
+
+        /// <summary>
+        /// Gets the rate table
+        /// </summary>
+        public IShippingFixedRateTable RateTable { get; private set; }
+
+        /// <summary>
+        /// Gets the quote type
+        /// </summary>
+        public QuoteType RateTableType
+        {
+            get { return _quoteType; }
+        }
+
+        /// <summary>
+        /// The quote shipment.
+        /// </summary>
+        /// <param name="shipment">
+        /// The shipment.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Attempt"/>.
+        /// </returns>
         public override Attempt<IShipmentRateQuote> QuoteShipment(IShipment shipment)
         {
             // TODO this should be made configurable
@@ -79,24 +149,6 @@ namespace Merchello.Core.Gateways.Shipping.FixedRate
 
 
             return Attempt<IShipmentRateQuote>.Succeed(new ShipmentRateQuote(shipment, ShipMethod) { Rate = AdjustedRate(tier.Rate, province) });
-        }
-
-        public enum QuoteType
-        {
-            VaryByWeight,
-            VaryByPrice
-        }
-
-        /// <summary>
-        /// Gets the rate table
-        /// </summary>
-        public IShippingFixedRateTable RateTable { get; private set; }
-
-        /// <summary>
-        /// Gets the quote type
-        /// </summary>
-        public QuoteType RateTableType {
-            get { return _quoteType; }
         }
     }
 }

@@ -7,8 +7,6 @@ using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Umbraco.Core.Cache;
 using Umbraco.Core.Logging;
-using Umbraco.Core.PropertyEditors;
-using Umbraco.Web.PropertyEditors;
 
 namespace Merchello.Tests.IntegrationTests.ObjectResolution
 {

@@ -13,6 +13,12 @@
     [MonitorFor("5DB575B5-0728-4B31-9B37-E9CF6C12E0AA", typeof(OrderConfirmationTrigger), "Order Confirmation Message (Pattern Replace)")]
     public class OrderConfirmationMonitor : NotificationMonitorBase<IPaymentResultMonitorModel>
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OrderConfirmationMonitor"/> class.
+        /// </summary>
+        /// <param name="notificationContext">
+        /// The notification context.
+        /// </param>
         public OrderConfirmationMonitor(INotificationContext notificationContext)
             : base(notificationContext)
         {            

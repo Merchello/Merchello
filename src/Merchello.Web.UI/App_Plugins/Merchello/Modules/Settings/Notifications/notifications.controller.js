@@ -416,7 +416,7 @@
     };
 
 
-    angular.module("umbraco").controller("Merchello.Dashboards.Settings.NotificationsController", ['$scope', 'notificationsService', 'dialogService', 'merchelloNotificationsService', merchello.Controllers.NotificationsController]);
+    angular.module("umbraco").controller("Merchello.Dashboards.Settings.NotificationsController", ['$scope', 'notificationsService', 'dialogService', 'merchelloNotificationsService', 'ui.tinymce', merchello.Controllers.NotificationsController]);
 
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));

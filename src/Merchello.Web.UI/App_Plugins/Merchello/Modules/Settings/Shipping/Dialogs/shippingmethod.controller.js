@@ -27,10 +27,6 @@
             $scope.newTier = merchello.Models.ShippingRateTier();
         };
 
-        $scope.allProvinces = false;
-        $scope.toggleAllProvinces = function() {
-            _.each($scope.dialogData.method.shipMethod.provinces, function (province) { province.allowShipping = $scope.allProvinces; });
-        };
     };
 
     angular.module("umbraco").controller("Merchello.Dashboards.Settings.Shipping.Dialogs.ShippingMethodController", ['$scope', merchello.Controllers.ShippingMethodController]);

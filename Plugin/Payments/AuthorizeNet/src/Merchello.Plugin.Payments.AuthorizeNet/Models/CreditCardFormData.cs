@@ -1,8 +1,4 @@
-﻿using System;
-using System.Linq;
-using Merchello.Plugin.Payments.AuthorizeNet.Provider;
-
-namespace Merchello.Plugin.Payments.AuthorizeNet.Models
+﻿namespace Merchello.Plugin.Payments.AuthorizeNet.Models
 {
     public class CreditCardFormData
     {        

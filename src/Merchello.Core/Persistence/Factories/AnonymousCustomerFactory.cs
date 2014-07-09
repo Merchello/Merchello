@@ -1,10 +1,22 @@
-﻿using Merchello.Core.Models;
-using Merchello.Core.Models.Rdbms;
-
-namespace Merchello.Core.Persistence.Factories
+﻿namespace Merchello.Core.Persistence.Factories
 {
+    using Models;
+    using Models.Rdbms;
+
+    /// <summary>
+    /// The anonymous customer factory.
+    /// </summary>
     internal class AnonymousCustomerFactory : IEntityFactory<IAnonymousCustomer, AnonymousCustomerDto>
     {
+        /// <summary>
+        /// The build entity.
+        /// </summary>
+        /// <param name="dto">
+        /// The dto.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IAnonymousCustomer"/>.
+        /// </returns>
         public IAnonymousCustomer BuildEntity(AnonymousCustomerDto dto)
         {
             return new AnonymousCustomer()
@@ -17,6 +29,15 @@ namespace Merchello.Core.Persistence.Factories
             };
         }
 
+        /// <summary>
+        /// The build dto.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
+        /// <returns>
+        /// The <see cref="AnonymousCustomerDto"/>.
+        /// </returns>
         public AnonymousCustomerDto BuildDto(IAnonymousCustomer entity)
         {
             return new AnonymousCustomerDto()

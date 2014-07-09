@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.Serialization;
-using Merchello.Core.Models.EntityBase;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.Specialized;
+    using System.Linq;
+    using System.Reflection;
+    using System.Runtime.Serialization;
+    using EntityBase;
+
     /// <summary>
     /// Defines a product variant
     /// </summary>
@@ -15,15 +15,54 @@ namespace Merchello.Core.Models
     [DataContract(IsReference = true)]
     internal class Product : Entity, IProduct
     {
-        
+        /// <summary>
+        /// The product options changed selector.
+        /// </summary>
+        private static readonly PropertyInfo ProductOptionsChangedSelector = ExpressionHelper.GetPropertyInfo<Product, ProductOptionCollection>(x => x.ProductOptions);
+
+        /// <summary>
+        /// The product variants changed selector.
+        /// </summary>
+        private static readonly PropertyInfo ProductVariantsChangedSelector = ExpressionHelper.GetPropertyInfo<Product, ProductVariantCollection>(x => x.ProductVariants);
+
+        /// <summary>
+        /// The master product variant.
+        /// </summary>
         private readonly IProductVariant _variant;
+
+        /// <summary>
+        /// A collection of product options associated with the product.
+        /// </summary>
         private ProductOptionCollection _productOptions;
+
+        /// <summary>
+        /// A collection of product variants associated with the product.
+        /// </summary>
         private ProductVariantCollection _productVariants;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Product"/> class.
+        /// </summary>
+        /// <param name="variant">
+        /// The variant.
+        /// </param>
         public Product(IProductVariant variant)
             : this(variant, new ProductOptionCollection(), new ProductVariantCollection())
-        {}
+        {            
+        }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Product"/> class.
+        /// </summary>
+        /// <param name="variant">
+        /// The variant.
+        /// </param>
+        /// <param name="productOptions">
+        /// The product options.
+        /// </param>
+        /// <param name="productVariants">
+        /// The product variants.
+        /// </param>
         public Product(IProductVariant variant, ProductOptionCollection productOptions, ProductVariantCollection productVariants)
         {
             Mandate.ParameterNotNull(variant, "variantMaster");
@@ -35,19 +74,6 @@ namespace Merchello.Core.Models
             _productVariants = productVariants;
         }
 
-        private static readonly PropertyInfo ProductOptionsChangedSelector = ExpressionHelper.GetPropertyInfo<Product, ProductOptionCollection>(x => x.ProductOptions);
-        private static readonly PropertyInfo ProductVariantsChangedSelector = ExpressionHelper.GetPropertyInfo<Product, ProductVariantCollection>(x => x.ProductVariants);
-
-        private void ProductOptionsChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            OnPropertyChanged(ProductOptionsChangedSelector);
-        }
-
-        private void ProductVariantsChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            OnPropertyChanged(ProductVariantsChangedSelector);
-        }
-
         #region Overrides IProduct
         
 
@@ -57,8 +83,7 @@ namespace Merchello.Core.Models
         [IgnoreDataMember]
         public bool DefinesOptions
         {
-            get { return _productOptions.Any(); }
-            
+            get { return _productOptions.Any(); }            
         }
 
         /// <summary>
@@ -344,6 +369,15 @@ namespace Merchello.Core.Models
             ((ProductVariant)_variant).UpdatingEntity();
         }
 
+        private void ProductOptionsChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            OnPropertyChanged(ProductOptionsChangedSelector);
+        }
+
+        private void ProductVariantsChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            OnPropertyChanged(ProductVariantsChangedSelector);
+        }
 
     }
 }

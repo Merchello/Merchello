@@ -23,8 +23,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <DocumentationFile>
-    </DocumentationFile>
+    <DocumentationFile>bin\Debug\Merchello.Core.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -77,12 +76,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActivatorHelper.cs" />
+    <Compile Include="Configuration\Outline\TreeCollection.cs" />
     <Compile Include="Configuration\Outline\ReplacementCollection.cs" />
     <Compile Include="Configuration\Outline\ReplaceElement.cs" />
+    <Compile Include="Configuration\Outline\TreeElement.cs" />
     <Compile Include="Formatters\IPatternReplaceFormatter.cs" />
     <Compile Include="Formatters\IReplaceablePattern.cs" />
     <Compile Include="Formatters\PatternReplaceFormatter.cs" />
     <Compile Include="Formatters\ReplaceablePattern.cs" />
+    <Compile Include="Gateways\GatewayMethodUiAttribute.cs" />
     <Compile Include="Gateways\Notification\Monitors\INotificationMonitorBase.cs" />
     <Compile Include="Gateways\Notification\Monitors\NotificationMonitorEvents.cs" />
     <Compile Include="Models\AddressExtensions.cs" />
@@ -175,7 +177,6 @@
     <Compile Include="Gateways\Taxation\ITaxationGatewayMethod.cs" />
     <Compile Include="Gateways\Taxation\TaxCalculationResult.cs" />
     <Compile Include="Gateways\Taxation\TaxableLineItemVisitor.cs" />
-    <Compile Include="IEventTriggerBase.cs" />
     <Compile Include="Models\Currency.cs" />
     <Compile Include="Models\Interfaces\IExtendedDataEntity.cs" />
     <Compile Include="Models\Interfaces\IGatewayProviderMethod.cs" />
@@ -297,7 +298,6 @@
     <Compile Include="Gateways\Taxation\ITaxationGatewayProvider.cs" />
     <Compile Include="Gateways\Taxation\TaxationContext.cs" />
     <Compile Include="Gateways\Taxation\TaxationGatewayProviderBase.cs" />
-    <Compile Include="ISalesManager.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\AnonymousCustomerBase.cs">
       <SubType>Code</SubType>
@@ -742,7 +742,7 @@
     <Compile Include="Services\StoreSettingService.cs" />
     <Compile Include="Services\ShipmentService.cs" />
     <Compile Include="Services\WarehouseService.cs" />
-    <Compile Include="IStrategy.cs" />
+    <Compile Include="Strategies\IStrategy.cs" />
     <Compile Include="Gateways\Shipping\IShipmentRateQuoteStrategy.cs" />
     <Compile Include="Gateways\Taxation\ITaxCalculationStrategy.cs" />
     <Compile Include="Strategies\Packaging\DefaultWarehousePackagingStrategy.cs" />

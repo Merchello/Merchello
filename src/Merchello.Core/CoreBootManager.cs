@@ -19,15 +19,36 @@
     /// </remarks>
     internal class CoreBootManager : BootManagerBase, IBootManager
     {
+        #region Fields
+
+        /// <summary>
+        /// The timer.
+        /// </summary>
         private DisposableTimer _timer;
+
+        /// <summary>
+        /// The is complete.
+        /// </summary>
         private bool _isComplete;
 
+        /// <summary>
+        /// The merchello context.
+        /// </summary>
         private MerchelloContext _merchelloContext;
 
+        /// <summary>
+        /// The peta poco unit of work provider.
+        /// </summary>
         private PetaPocoUnitOfWorkProvider _unitOfWorkProvider;
 
+        /// <summary>
+        /// Gets a value indicating whether Merchello is started.
+        /// </summary>
         internal bool IsStarted { get; private set; }
 
+        /// <summary>
+        /// Gets a value indicating whether Merchello is initialized.
+        /// </summary>
         internal bool IsInitialized { get; private set; }
 
         /// <summary>
@@ -35,6 +56,17 @@
         /// </summary>
         internal bool IsUnitTest { get; set; }
 
+        #endregion
+
+        /// <summary>
+        /// The initialize.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IBootManager"/>.
+        /// </returns>
+        /// <exception cref="InvalidOperationException">
+        /// Throws an exception if Merchello is already initialized
+        /// </exception>
         public override IBootManager Initialize()
         {
             if (IsInitialized)
@@ -133,8 +165,11 @@
         {
             var gateways = new GatewayContext(serviceContext, GatewayProviderResolver.Current);
             _merchelloContext = MerchelloContext.Current = new MerchelloContext(serviceContext, gateways, cache);
-        }       
+        }
 
+        /// <summary>
+        /// Responsible for initializing resolvers.
+        /// </summary>
         protected virtual void InitializeResolvers()
         {
             if (!TriggerResolver.HasCurrent)
@@ -144,6 +179,9 @@
             MonitorResolver.Current = new MonitorResolver(MerchelloContext.Current.Gateways.Notification, PluginManager.Current.ResolveObserverMonitors());
         }
 
+        /// <summary>
+        /// Responsible initializing observer subscriptions.
+        /// </summary>
         protected virtual void InitializeObserverSubscriptions()
         {
             if (!TriggerResolver.HasCurrent || !MonitorResolver.HasCurrent) return;
@@ -160,6 +198,19 @@
             LogHelper.Info<Umbraco.Core.CoreBootManager>("Finished subscribing Monitors to Triggers");            
         }
 
+        /// <summary>
+        /// Responsible for the special case initialization of the gateway resolver.
+        /// </summary>
+        /// <param name="serviceContext">
+        /// The service context.
+        /// </param>
+        /// <param name="cache">
+        /// The cache.
+        /// </param>
+        /// <remarks>
+        /// This is a special case due to the fact we need this singleton instantiated prior to 
+        /// building the <see cref="MerchelloContext"/>
+        /// </remarks>
         private void InitializeGatewayResolver(IServiceContext serviceContext, CacheHelper cache)
         {
             if (!GatewayProviderResolver.HasCurrent)
@@ -169,25 +220,25 @@
                 cache.RuntimeCache);
         }
 
-        //protected void BindEventTriggers()
-        //{
-        //    LogHelper.Info<CoreBootManager>("Beginning Merchello Trigger Binding");
-        //    foreach (var trigger in TriggerResolver.Current.GetAllTriggers())
-        //    {
-        //        var att = trigger.GetType().GetCustomAttributes<TriggerForAttribute>(false).FirstOrDefault();
+        ////protected void BindEventTriggers()
+        ////{
+        ////    LogHelper.Info<CoreBootManager>("Beginning Merchello Trigger Binding");
+        ////    foreach (var trigger in TriggerResolver.Current.GetAllTriggers())
+        ////    {
+        ////        var att = trigger.GetType().GetCustomAttributes<TriggerForAttribute>(false).FirstOrDefault();
 
-        //        if (att == null) continue;
+        ////        if (att == null) continue;
 
-        //        var bindTo = att.Type.GetEvent(att.HandleEvent);
+        ////        var bindTo = att.Type.GetEvent(att.HandleEvent);
 
-        //        if (bindTo == null) continue;
+        ////        if (bindTo == null) continue;
 
-        //        var mi = trigger.GetType().GetMethod("Invoke", BindingFlags.Instance | BindingFlags.Public);
+        ////        var mi = trigger.GetType().GetMethod("Invoke", BindingFlags.Instance | BindingFlags.Public);
 
-        //        bindTo.AddEventHandler(trigger, Delegate.CreateDelegate(bindTo.EventHandlerType, trigger, mi));
+        ////        bindTo.AddEventHandler(trigger, Delegate.CreateDelegate(bindTo.EventHandlerType, trigger, mi));
 
-        //        LogHelper.Info<CoreBootManager>(string.Format("Binding {0} to {1} - {2} event", trigger.GetType().Name, att.Type.Name, att.HandleEvent));
-        //    }
-        //}      
+        ////        LogHelper.Info<CoreBootManager>(string.Format("Binding {0} to {1} - {2} event", trigger.GetType().Name, att.Type.Name, att.HandleEvent));
+        ////    }
+        ////}      
     }
 }

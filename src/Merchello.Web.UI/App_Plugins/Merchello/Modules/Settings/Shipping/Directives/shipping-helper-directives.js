@@ -2,6 +2,24 @@
 
     /**
      * @ngdoc directive
+     * @name shippingCatalogDirective
+     * @function
+     * 
+     * @description
+     * directive to display the shipping catalog information and to provide a parent for the directives and flyouts
+     */
+    directives.ShippingCatalogDirective = function() {
+        return {
+            restrict: 'E',
+            replace: true,
+            templateUrl: '/App_Plugins/Merchello/Modules/Settings/Shipping/Directives/shipping-catalog.html'
+        };
+    };
+
+    angular.module("umbraco").directive('shippingCatalog', merchello.Directives.ShippingCatalogDirective);
+
+    /**
+     * @ngdoc directive
      * @name ShippingCountryDirective
      * @function
      * 
