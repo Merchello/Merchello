@@ -342,7 +342,7 @@
 				var promiseMethods = merchelloCatalogFixedRateShippingService.getAllFixedRateProviderMethods(country.key);
 				promiseMethods.then(function (methodsFromServer) {
 
-					if (methodsFromServer.length > 0) {
+				    if (methodsFromServer.length > 0) {
 
 						_.each(methodsFromServer, function (element, index, list) {
 							var newMethod = new merchello.Models.FixedRateShippingMethod(element);
@@ -855,8 +855,11 @@
 		$scope.shippingMethodDialogConfirm = function (data) {
 
 		    data.provider.shipMethods = [];
+		    alert('data.provider.shipMethods = [];');
 		    $scope.loadProviderMethods(data.provider, data.country);
+		    alert('$scope.loadProviderMethods(data.provider, data.country);');
 		    $scope.loadFixedRateProviderMethods(data.country);
+		    alert('$scope.loadFixedRateProviderMethods(data.country);');
 
 		};
 
