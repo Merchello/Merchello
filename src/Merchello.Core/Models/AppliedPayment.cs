@@ -1,29 +1,102 @@
-﻿using System;
-using System.Reflection;
-using System.Runtime.Serialization;
-using Merchello.Core.Models.EntityBase;
-using Merchello.Core.Models.TypeFields;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System;
+    using System.Reflection;
+    using System.Runtime.Serialization;
 
+    using Merchello.Core.Models.EntityBase;
+    using Merchello.Core.Models.TypeFields;
+
+    /// <summary>
+    /// The applied payment.
+    /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
     internal class AppliedPayment : Entity, IAppliedPayment
     {
+        /// <summary>
+        /// The applied payment type field selector.
+        /// </summary>
+        private static readonly PropertyInfo AppliedPaymentTypeFieldSelector = ExpressionHelper.GetPropertyInfo<AppliedPayment, Guid>(x => x.AppliedPaymentTfKey);
+
+        /// <summary>
+        /// The description selector.
+        /// </summary>
+        private static readonly PropertyInfo DescriptionSelector = ExpressionHelper.GetPropertyInfo<AppliedPayment, string>(x => x.Description);
+
+        /// <summary>
+        /// The amount selector.
+        /// </summary>
+        private static readonly PropertyInfo AmountSelector = ExpressionHelper.GetPropertyInfo<AppliedPayment, decimal>(x => x.Amount);
+
+        /// <summary>
+        /// The exported selector.
+        /// </summary>
+        private static readonly PropertyInfo ExportedSelector = ExpressionHelper.GetPropertyInfo<AppliedPayment, bool>(x => x.Exported);
+
+        /// <summary>
+        /// The invoice key.
+        /// </summary>
         private readonly Guid _invoiceKey;
+
+        /// <summary>
+        /// The payment key.
+        /// </summary>
         private readonly Guid _paymentKey;
+
+        /// <summary>
+        /// The applied payment type field key.
+        /// </summary>
         private Guid _appliedPaymentTfKey;
+
+        /// <summary>
+        /// The description.
+        /// </summary>
         private string _description;
+
+        /// <summary>
+        /// The amount.
+        /// </summary>
         private decimal _amount;
+
+        /// <summary>
+        /// The exported
+        /// </summary>
         private bool _exported;
 
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AppliedPayment"/> class.
+        /// </summary>
+        /// <param name="paymentKey">
+        /// The payment key.
+        /// </param>
+        /// <param name="invoiceKey">
+        /// The invoice key.
+        /// </param>
+        /// <param name="appliedPaymentType">
+        /// The applied payment type.
+        /// </param>
         public AppliedPayment(Guid paymentKey, Guid invoiceKey, AppliedPaymentType appliedPaymentType)
-            : this(paymentKey, invoiceKey, EnumTypeFieldConverter.AppliedPayment.GetTypeField(appliedPaymentType).TypeKey)
-        { }
+            : this(
+                paymentKey,
+                invoiceKey,
+                EnumTypeFieldConverter.AppliedPayment.GetTypeField(appliedPaymentType).TypeKey)
+        {
+            
+        }
 
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AppliedPayment"/> class.
+        /// </summary>
+        /// <param name="paymentKey">
+        /// The payment key.
+        /// </param>
+        /// <param name="invoiceKey">
+        /// The invoice key.
+        /// </param>
+        /// <param name="appliedPaymentTfKey">
+        /// The applied payment type field key.
+        /// </param>
         internal AppliedPayment(Guid paymentKey, Guid invoiceKey, Guid appliedPaymentTfKey)
         {
             Mandate.ParameterCondition(!Guid.Empty.Equals(paymentKey), "paymentKey");
@@ -34,11 +107,6 @@ namespace Merchello.Core.Models
             _invoiceKey = invoiceKey;
             _appliedPaymentTfKey = appliedPaymentTfKey;
         }
-        
-        private static readonly PropertyInfo AppliedPaymentTypeFieldSelector = ExpressionHelper.GetPropertyInfo<AppliedPayment, Guid>(x => x.AppliedPaymentTfKey);  
-        private static readonly PropertyInfo DescriptionSelector = ExpressionHelper.GetPropertyInfo<AppliedPayment, string>(x => x.Description);  
-        private static readonly PropertyInfo AmountSelector = ExpressionHelper.GetPropertyInfo<AppliedPayment, decimal>(x => x.Amount);  
-        private static readonly PropertyInfo ExportedSelector = ExpressionHelper.GetPropertyInfo<AppliedPayment, bool>(x => x.Exported);  
         
         /// <summary>
         /// The payment key associated with the Transaction

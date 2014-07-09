@@ -11,7 +11,7 @@ namespace Merchello.Core.Models.TypeFields
     {
         internal AddressTypeField()
         {
-            if(CachedTypeFields.IsEmpty) BuildCache();
+            if (CachedTypeFields.IsEmpty) BuildCache();
         }
 
 #region Overrides TypeFieldMapper<AddressType>

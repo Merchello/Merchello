@@ -17,10 +17,10 @@
 	]
 	,
 	javascript: [
-		'~/App_Plugins/Merchello/lib/bootstrap/js/bootstrap.min.js',
-		'~/App_Plugins/Merchello/lib/JsonTree/jsontree.js',
-		'~/App_Plugins/Merchello/lib/codemirror/Js/Lib/codemirror.js',
-		'~/App_Plugins/Merchello/lib/codemirror/Js/Mode/Razor/razor.js',
+		'~/App_Plugins/Merchello/lib/bootstrap/js/bootstrap.min.js',                  
+		'~/App_Plugins/Merchello/lib/JsonTree/jsontree.js',    
+        '~/App_Plugins/Merchello/lib/tinymce/bower_components/tinymce/tinymce.min.js',
+        '~/App_Plugins/Merchello/lib/tinymce/bower_components/angular-ui-tinymce/src/tinymce.js',
 		'~/App_Plugins/Merchello/Common/Js/merchello.namespaces.js',
 		'~/App_Plugins/Merchello/Common/Js/startfrom.filter.js',
 		'~/App_Plugins/Merchello/Common/Js/greaterthan.filter.js',
@@ -28,7 +28,6 @@
 		'~/App_Plugins/Merchello/Common/Js/merchello.helpers.js',
 		'~/App_Plugins/Merchello/lib/ngJsonExplorer/gd-ui-jsonexplorer.js',
 		'~/App_Plugins/Merchello/Common/Js/Dialogs/debug.dialog.controller.js',
-		'~/App_Plugins/Merchello/lib/codemirror/ui-codemirror.js',
 		'~/App_Plugins/Merchello/Modules/Catalog/product.models.js',
 		'~/App_Plugins/Merchello/Modules/Order/order.invoice.models.js',
 		'~/App_Plugins/Merchello/Modules/Settings/Notifications/notifications.models.js',
