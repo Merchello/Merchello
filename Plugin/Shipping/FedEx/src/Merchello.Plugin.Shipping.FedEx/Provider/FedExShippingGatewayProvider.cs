@@ -47,8 +47,7 @@ namespace Merchello.Plugin.Shipping.FedEx.Provider
 
         // In this case, the GatewayResource can be used to create multiple shipmethods of the same resource type.
         internal static readonly IEnumerable<IGatewayResource> AvailableResources = new List<IGatewayResource>()
-        {
-            
+        {                  
             new GatewayResource(FedEx2Day, "FedEx 2Day®"),     
             new GatewayResource(FedEx2DayAm, "FedEx 2Day®A.M."),     
             new GatewayResource(FedExExpressSaver, "FedEx Express Saver®"),        
@@ -67,7 +66,7 @@ namespace Merchello.Plugin.Shipping.FedEx.Provider
             new GatewayResource(FedExFirstFreight, "FedEx First Freight"),        
             new GatewayResource(FedExInternationalDistributionFreight, "FedEx International Distribution Freight"),
             new GatewayResource(FedExEconomyFreight, "FedEx Economy Freight"),                                       
-            new GatewayResource(FedExInternationalPriorityFreight, "FedEx International Priority Freight"),
+            new GatewayResource(FedExInternationalPriorityFreight, "FedEx International Priority Freight")
         };
 
         /// <summary>
