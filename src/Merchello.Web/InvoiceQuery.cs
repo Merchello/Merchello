@@ -1,26 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Examine;
-using Examine.LuceneEngine.SearchCriteria;
-using Examine.SearchCriteria;
-using Merchello.Core;
-using Merchello.Core.Models;
-using Merchello.Core.Services;
-using Merchello.Examine;
-using Merchello.Web.Models.ContentEditing;
-
-namespace Merchello.Web
+﻿namespace Merchello.Web
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using global::Examine;
+    using global::Examine.LuceneEngine.SearchCriteria;
+    using global::Examine.SearchCriteria;
+    using Merchello.Core.Models;
+    using Merchello.Core.Services;
+    using Merchello.Examine;
+    using Merchello.Web.Models.ContentEditing;
+
+    /// <summary>
+    /// The invoice query.
+    /// </summary>
     internal class InvoiceQuery : QueryBase
     {
+        /// <summary>
+        /// The Examine index name.
+        /// </summary>
         private const string IndexName = "MerchelloInvoiceIndexer";
+
+        /// <summary>
+        /// The Examine searcher name.
+        /// </summary>
         private const string SearcherName = "MerchelloInvoiceSearcher";
 
         /// <summary>
         /// Gets an <see cref="InvoiceDisplay"/> by it's unique key
         /// </summary>
-        /// <param name="key"></param>
+        /// <param name="key">The invoice key</param>
         /// <returns>A <see cref="InvoiceDisplay"/></returns>
         public static InvoiceDisplay GetByKey(Guid key)
         {
@@ -30,8 +39,8 @@ namespace Merchello.Web
         /// <summary>
         /// Retrieves a <see cref="InvoiceDisplay"/> given it's 'unique' Key (string representation of the Guid)
         /// </summary>
-        /// <param name="key"></param>
-        /// <returns><see cref="InvoiceDisplay"/></returns>
+        /// <param name="key">The invoice key</param>
+        /// <returns>The <see cref="InvoiceDisplay"/></returns>
         public static InvoiceDisplay GetByKey(string key)
         {
             var criteria = ExamineManager.Instance.CreateSearchCriteria(BooleanOperation.And);
@@ -55,6 +64,9 @@ namespace Merchello.Web
         /// <summary>
         /// Gets a collection of all invoices
         /// </summary>
+        /// <returns>
+        /// A collection of all <see cref="InvoiceDisplay"/>.
+        /// </returns>
         public static IEnumerable<InvoiceDisplay> GetAllInvoices()
         {
             var merchelloContext = GetMerchelloContext();
@@ -84,7 +96,7 @@ namespace Merchello.Web
         /// <summary>
         /// Searches InvoiceIndex by name and number for the 'term' passed
         /// </summary>
-        /// <param name="term"></param>
+        /// <param name="term">Searches the invoice index for a term</param>
         /// <returns>A collection of <see cref="InvoiceDisplay"/></returns>
         public static IEnumerable<InvoiceDisplay> Search(string term)
         {
@@ -96,7 +108,12 @@ namespace Merchello.Web
         /// <summary>
         /// Searches InvoiceIndex using <see cref="ISearchCriteria"/> passed
         /// </summary>
-        /// <returns>A collection of <see cref="ProductDisplay"/></returns>
+        /// <param name="criteria">
+        /// The criteria.
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="ProductDisplay"/>
+        /// </returns>
         public static IEnumerable<InvoiceDisplay> Search(ISearchCriteria criteria)
         {
             return ExamineManager.Instance.SearchProviderCollection[SearcherName]
@@ -104,7 +121,12 @@ namespace Merchello.Web
                 .Select(result => result.ToInvoiceDisplay());
         }
 
-
+        /// <summary>
+        /// ReIndexes an invoice.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
         private static void ReindexInvoice(IInvoice invoice)
         {
             ExamineManager.Instance.IndexProviderCollection[IndexName]

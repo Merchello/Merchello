@@ -5,12 +5,12 @@
     using System.Threading.Tasks;
 
     /// <summary>
-    /// SmtpClient extension methods
+    /// SMTP Client extension methods
     /// </summary>
     internal static class SmtpClientExtensions
     {
         /// <summary>
-        /// Return the Task for sending a <see cref="MailMessage"/> asyncronously
+        /// Return the Task for sending a <see cref="MailMessage"/> asynchronously
         /// </summary>
         /// <param name="client">The <see cref="SmtpClient"/> object to extend</param>
         /// <param name="message">The <see cref="MailMessage"/> to send</param>

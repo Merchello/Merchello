@@ -1,18 +1,29 @@
-﻿using Merchello.Core.Models;
-using Merchello.Core.Services;
-using Umbraco.Core;
-
-namespace Merchello.Core.Gateways.Payment.Cash
+﻿namespace Merchello.Core.Gateways.Payment.Cash
 {
+    using Models;
+    using Services;
+    using Umbraco.Core;
+
     /// <summary>
     /// Represents a CashPaymentMethod
     /// </summary>    
+    [GatewayMethodUi("CashPaymentMethod")]
     [GatewayMethodEditor("Cash Method Editor", "~/App_Plugins/Merchello/Modules/Settings/Payment/Dialogs/paymentmethod.html")]
     public class CashPaymentGatewayMethod : PaymentGatewayMethodBase, ICashPaymentGatewayMethod
     {
-        public CashPaymentGatewayMethod(IGatewayProviderService gatewayProviderService, IPaymentMethod paymentMethod) 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CashPaymentGatewayMethod"/> class.
+        /// </summary>
+        /// <param name="gatewayProviderService">
+        /// The gateway provider service.
+        /// </param>
+        /// <param name="paymentMethod">
+        /// The payment method.
+        /// </param>
+        public CashPaymentGatewayMethod(IGatewayProviderService gatewayProviderService, IPaymentMethod paymentMethod)
             : base(gatewayProviderService, paymentMethod)
-        { }
+        {            
+        }
 
         /// <summary>
         /// Does the actual work of creating and processing the payment
@@ -36,12 +47,27 @@ namespace Merchello.Core.Gateways.Payment.Cash
             // be created showing the full amount and the invoice status will be set to Paid.
             GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, string.Format("To show promise of a {0} payment", PaymentMethod.Name), 0);
 
-            // If this were using a service we might want to store some of the transaction data in the ExtendedData for record
-            //payment.ExtendData
+            //// If this were using a service we might want to store some of the transaction data in the ExtendedData for record
+            ////payment.ExtendData
 
             return new PaymentResult(Attempt.Succeed(payment), invoice, false);
         }
 
+        /// <summary>
+        /// The perform authorize capture payment.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <param name="amount">
+        /// The amount.
+        /// </param>
+        /// <param name="args">
+        /// The args.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IPaymentResult"/>.
+        /// </returns>
         protected override IPaymentResult PerformAuthorizeCapturePayment(IInvoice invoice, decimal amount, ProcessorArgumentCollection args)
         {
             var payment = GatewayProviderService.CreatePayment(PaymentMethodType.Cash, amount, PaymentMethod.Key);
@@ -62,8 +88,8 @@ namespace Merchello.Core.Gateways.Payment.Cash
         /// Does the actual work of capturing a payment
         /// </summary>
         /// <param name="invoice">The <see cref="IInvoice"/></param>
-        /// <param name="payment"></param>
-        /// <param name="amount"></param>
+        /// <param name="payment">the <see cref="IPayment"/></param>
+        /// <param name="amount">The amount</param>
         /// <param name="args">Any arguments required to process the payment. (Maybe a username, password or some Api Key)</param>
         /// <returns>The <see cref="IPaymentResult"/></returns>
         protected override IPaymentResult PerformCapturePayment(IInvoice invoice, IPayment payment, decimal amount, ProcessorArgumentCollection args)
@@ -103,8 +129,7 @@ namespace Merchello.Core.Gateways.Payment.Cash
 
             if (payment.Amount != 0)
             {
-                GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit,
-                    "To show partial payment remaining after refund", payment.Amount);
+                GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, "To show partial payment remaining after refund", payment.Amount);
             }
 
             GatewayProviderService.Save(payment);

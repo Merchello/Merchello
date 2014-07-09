@@ -71,7 +71,5 @@ namespace Merchello.Core.Models
         /// </summary>
         /// <param name="vistor"><see cref="ILineItemVisitor"/></param>
         void Accept(ILineItemVisitor vistor);
-
-
     }
 }

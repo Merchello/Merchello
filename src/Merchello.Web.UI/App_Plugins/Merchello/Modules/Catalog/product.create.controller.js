@@ -12,50 +12,94 @@
 
         assetsService.loadCss("/App_Plugins/Merchello/Common/Css/merchello.css");
 
-        ////////////////////////////////////////////////
-        // Initialize state
+        //--------------------------------------------------------------------------------------
+        // Declare and initialize key scope properties
+        //--------------------------------------------------------------------------------------
+        // 
 
-        // Get warehouses - Need this to link the possible warehouses to the inventory section
+        // warehouses - Need this to link the possible warehouses to the inventory section
         $scope.warehouses = [];
-        var promiseWarehouse = merchelloWarehouseService.getDefaultWarehouse();
-        promiseWarehouse.then(function (warehouse) {
-            $scope.defaultWarehouse = new merchello.Models.Warehouse(warehouse);
-            $scope.warehouses.push($scope.defaultWarehouse);
-            $scope.productVariant.ensureCatalogInventory($scope.defaultWarehouse);
-        });
-
-        // Get settings - contains defaults for the checkboxes
+        // settings - contains defaults for the checkboxes
         $scope.settings = {};
-        var promiseSettings = merchelloSettingsService.getAllSettings();
-        promiseSettings.then(function (settings) {
-            $scope.settings = new merchello.Models.StoreSettings(settings);
-            $scope.productVariant.shippable = $scope.settings.globalShippable;
-            $scope.productVariant.taxable = $scope.settings.globalTaxable;
-            $scope.productVariant.trackInventory = $scope.settings.globalTrackInventory;
-        });
 
-        $scope.allVariantInventories = 0;
-
-        // This is to help manage state for the four possible states this page can be in:
+        // These help manage state for the four possible states this page can be in:
         //   * Creating a Product
+        // TODO: clean up?
+        $scope.creatingProduct = true;
+        $scope.creatingVariant = false;
+        $scope.editingVariant = false;
+        $scope.productVariant = new merchello.Models.ProductVariant();
+        $scope.product = new merchello.Models.Product();
 
-            $scope.creatingProduct = true;
-            $scope.creatingVariant = false;
-            $scope.loaded = true;
-            $scope.preValuesLoaded = true;
-            $scope.productVariant = new merchello.Models.ProductVariant();
-            $scope.product = new merchello.Models.Product();
-            $scope.editingVariant = false;
-
-        ////////////////////////////////////////////////
-
+        // To help umbraco directives show our page
+        $scope.loaded = true;
+        $scope.preValuesLoaded = true;
 
 
         //--------------------------------------------------------------------------------------
         // Initialization methods
         //--------------------------------------------------------------------------------------
 
+        /**
+         * @ngdoc method
+         * @name loadAllWarehouses
+         * @function
+         * 
+         * @description
+         * Loads in default warehouse and all other warehouses from server into the scope.  Called in init().
+         */
+        $scope.loadAllWarehouses = function() {
 
+            var promiseWarehouse = merchelloWarehouseService.getDefaultWarehouse();
+            promiseWarehouse.then(function(warehouse) {
+                $scope.defaultWarehouse = new merchello.Models.Warehouse(warehouse);
+                $scope.warehouses.push($scope.defaultWarehouse);
+                $scope.productVariant.ensureCatalogInventory($scope.defaultWarehouse);
+            }, function (reason) {
+                notificationsService.error("Default Warehouse Load Failed", reason.message);
+            });
+
+            // TODO: load other warehouses when implemented
+        }
+
+        /**
+         * @ngdoc method
+         * @name loadSettings
+         * @function
+         * 
+         * @description
+         * Loads in store settings from server into the scope and applies the 
+         * defaults to the product variant.  Called in init().
+         */
+        $scope.loadSettings = function() {
+
+            var promiseSettings = merchelloSettingsService.getAllSettings();
+            promiseSettings.then(function(settings) {
+                $scope.settings = new merchello.Models.StoreSettings(settings);
+                $scope.productVariant.shippable = $scope.settings.globalShippable;
+                $scope.productVariant.taxable = $scope.settings.globalTaxable;
+                $scope.productVariant.trackInventory = $scope.settings.globalTrackInventory;
+            }, function (reason) {
+                notificationsService.error("Settings Load Failed", reason.message);
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @name init
+         * @function
+         * 
+         * @description
+         * Method called on intial page load.  Loads in data from server and sets up scope.
+         */
+        $scope.init = function () {
+
+            $scope.loadAllWarehouses();
+            $scope.loadSettings();
+
+        };
+
+        $scope.init();
 
 
         //--------------------------------------------------------------------------------------
@@ -98,7 +142,7 @@
 
                         $scope.creatingProduct = false; // For the variant edit/create view.
 
-                        $location.url("/merchello/merchello/ProductVariantEdit/" + $scope.product.key, true);
+                        $location.url("/merchello/merchello/ProductEdit/" + $scope.product.key, true);
 
                         notificationsService.success("Product Created and Saved", "");
 
@@ -121,7 +165,7 @@
                             $scope.productVariant.copyFromProduct($scope.product);
 
                             if ($scope.product.hasVariants) {
-                                $location.url("/merchello/merchello/ProductEdit/" + $scope.product.key, true);
+                                $location.url("/merchello/merchello/ProductEditWithOptions/" + $scope.product.key, true);
                             }
 
                         }, function (reason) {
@@ -154,50 +198,6 @@
         };
 
 
-        /**
-         * @ngdoc method
-         * @name ensureInitialOption
-         * @function
-         * 
-         * @description
-         * This is called when the "This variant has options" checkbox is checked.  It creates an initial blank option ready to 
-         * fill out.  If the checkbox is unchecked, then the option will be deleted before saving the product.
-         */
-        $scope.ensureInitialOption = function () {
-
-            if ($scope.product.productOptions.length == 0) {
-                $scope.product.addBlankOption();
-            }
-        };
-
-
-        /**
-         * @ngdoc method
-         * @name addOption
-         * @function
-         * 
-         * @description
-         * Called when the Add Option button is pressed.  Creates a new option ready to fill out.
-         */
-        $scope.addOption = function () {
-
-            $scope.product.addBlankOption();
-
-        };
-
-        /**
-         * @ngdoc method
-         * @name removeOption
-         * @function
-         * 
-         * @description
-         * Called when the Trash can icon button is pressed next to an option. Removes the option from the product.
-         */
-        $scope.removeOption = function (option) {
-
-            $scope.product.removeOption(option);
-
-        };
 
         /**
         * @ngdoc method
@@ -260,23 +260,6 @@
                     notificationsService.error("Product Save Failed", reason.message);
                 });
             }
-        };
-
-        /**
-        * @ngdoc method
-        * @name updateVariants
-        * @function
-        * 
-        * @description
-        * Called when the Apply button is pressed in the Base Inventory section.  This simply sets the inventory
-        * amounts for each variant to the number in the box next to the apply button.
-        */
-        $scope.applyAllVariantInventories = function (allVariantInventories) {
-
-            for (var i = 0; i < $scope.product.productVariants.length; i++) {
-                $scope.product.productVariants[i].globalInventoryChanged(allVariantInventories);
-            }
-
         };
 
     };

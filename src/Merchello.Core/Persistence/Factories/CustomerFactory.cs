@@ -1,17 +1,28 @@
-﻿using Merchello.Core.Models;
-using Merchello.Core.Models.Rdbms;
-
-namespace Merchello.Core.Persistence.Factories
+﻿namespace Merchello.Core.Persistence.Factories
 {
+    using Merchello.Core.Models;
+    using Merchello.Core.Models.Rdbms;
+
+    /// <summary>
+    /// The customer factory.
+    /// </summary>
     internal class CustomerFactory : IEntityFactory<ICustomer, CustomerDto>
     {
+        /// <summary>
+        /// Builds the entity.
+        /// </summary>
+        /// <param name="dto">
+        /// The dto.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ICustomer"/>.
+        /// </returns>
         public ICustomer BuildEntity(CustomerDto dto)
         {
-            var customer = new Customer(dto.TotalInvoiced, dto.TotalPayments, dto.LastPaymentDate)
+            var customer = new Customer(dto.LoginName)
                 {
                     Key = dto.Key,
                     EntityKey = dto.EntityKey,
-                    MemberId = dto.MemberId,
                     FirstName = dto.FirstName,
                     LastName = dto.LastName,
                     Email = dto.Email,
@@ -25,18 +36,24 @@ namespace Merchello.Core.Persistence.Factories
             return customer;
         }
 
+        /// <summary>
+        /// Build the dto.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CustomerDto"/>.
+        /// </returns>
         public CustomerDto BuildDto(ICustomer entity)
         {
             var dto = new CustomerDto()
                 {
                     Key = entity.Key,
-                    MemberId = entity.MemberId == 0 || entity.MemberId == null ? null : entity.MemberId,
+                    LoginName = entity.LoginName,
                     FirstName = entity.FirstName,
                     LastName = entity.LastName,
                     Email = entity.Email,
-                    TotalInvoiced = entity.TotalInvoiced,
-                    TotalPayments = entity.TotalPayments,
-                    LastPaymentDate = entity.LastPaymentDate,
                     EntityKey = entity.EntityKey,
                     ExtendedData = entity.ExtendedData.SerializeToXml(),
                     UpdateDate = entity.UpdateDate,
