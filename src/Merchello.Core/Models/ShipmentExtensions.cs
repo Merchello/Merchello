@@ -1,19 +1,6 @@
-<<<<<<< HEAD
-﻿namespace Merchello.Core.Models
-=======
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using Merchello.Core.Formatters;
-using Merchello.Core.Gateways;
-using Merchello.Core.Gateways.Shipping;
-using Merchello.Core.Services;
-using Umbraco.Core;
-using Umbraco.Core.Logging;
 
 namespace Merchello.Core.Models
->>>>>>> ShippingNotifications-1.3.0
 {
     using System;
     using System.Collections.Generic;
@@ -182,8 +169,6 @@ namespace Merchello.Core.Models
 
             return gatewayShipMethod == null ? null : provider.QuoteShipMethodForShipment(shipment, gatewayShipMethod);
         }
-<<<<<<< HEAD
-=======
 
         /// <summary>
         /// Gets a collection of <see cref="IReplaceablePattern"/> for the invoice
@@ -218,27 +203,5 @@ namespace Merchello.Core.Models
 
             return patterns;
         }
-
-        ///// <summary>
-        ///// Returns the collection of <see cref="IOrderLineItem"/> associated with the <see cref="IShipment"/>
-        ///// </summary>
-        ///// <param name="shipment">The <see cref="IShipment"/></param>
-        ///// <returns>The collection of <see cref="IOrderLineItem"/></returns>
-        //public static IEnumerable<IOrderLineItem> OrderLineItems(this IShipment shipment)
-        //{
-        //    return shipment.OrderLineItems(MerchelloContext.Current);
-        //}
-
-        ///// <summary>
-        ///// Returns the collection of <see cref="IOrderLineItem"/> associated with the <see cref="IShipment"/>
-        ///// </summary>
-        ///// <param name="shipment">The <see cref="IShipment"/></param>
-        ///// <param name="merchelloContext">The <see cref="IMerchelloContext"/></param>
-        ///// <returns>The collection of <see cref="IOrderLineItem"/></returns>
-        //public static IEnumerable<IOrderLineItem> OrderLineItems(this IShipment shipment, IMerchelloContext merchelloContext)
-        //{
-        //    throw new NotImplementedException();
-        //}
->>>>>>> ShippingNotifications-1.3.0
     }
 }

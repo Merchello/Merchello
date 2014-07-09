@@ -24,7 +24,6 @@ namespace Merchello.Core.Models.MonitorModels
         {
             return paymentResult.ToOrderConfirmationNotification(new string[] { });
         }
-<<<<<<< HEAD
 
         /// <summary>
         /// The to order confirmation notification.
@@ -38,9 +37,6 @@ namespace Merchello.Core.Models.MonitorModels
         /// <returns>
         /// The <see cref="IPaymentResultMonitorModel"/>.
         /// </returns>
-=======
-            
->>>>>>> ShippingNotifications-1.3.0
         public static IPaymentResultMonitorModel ToOrderConfirmationNotification(this IPaymentResult paymentResult, IEnumerable<string> contacts)
         {
             return new PaymentResultNotifyModel()

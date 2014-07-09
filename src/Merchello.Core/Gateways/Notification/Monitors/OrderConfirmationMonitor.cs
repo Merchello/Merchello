@@ -14,17 +14,11 @@
     public class OrderConfirmationMonitor : NotificationMonitorBase<IPaymentResultMonitorModel>
     {
         /// <summary>
-<<<<<<< HEAD
         /// Initializes a new instance of the <see cref="OrderConfirmationMonitor"/> class.
         /// </summary>
         /// <param name="notificationContext">
         /// The notification context.
         /// </param>
-=======
-        /// 
-        /// </summary>
-        /// <param name="notificationContext"></param>
->>>>>>> ShippingNotifications-1.3.0
         public OrderConfirmationMonitor(INotificationContext notificationContext)
             : base(notificationContext)
         {            
