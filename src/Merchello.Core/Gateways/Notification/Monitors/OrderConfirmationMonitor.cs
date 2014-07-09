@@ -14,11 +14,17 @@
     public class OrderConfirmationMonitor : NotificationMonitorBase<IPaymentResultMonitorModel>
     {
         /// <summary>
+<<<<<<< HEAD
         /// Initializes a new instance of the <see cref="OrderConfirmationMonitor"/> class.
         /// </summary>
         /// <param name="notificationContext">
         /// The notification context.
         /// </param>
+=======
+        /// 
+        /// </summary>
+        /// <param name="notificationContext"></param>
+>>>>>>> ShippingNotifications-1.3.0
         public OrderConfirmationMonitor(INotificationContext notificationContext)
             : base(notificationContext)
         {            
@@ -46,7 +52,12 @@
                 if (value.Contacts.Any() && message.SendToCustomer)
                 {
                     // add the additional contacts to the recipients list
-                    if (!message.Recipients.EndsWith(";")) message.Recipients += ";";
+                    if (!message.Recipients.EndsWith(";")) 
+                        message.Recipients += ";";
+                                                                               
+                    if (message.Recipients[0] == ';')
+                        message.Recipients = message.Recipients.TrimStart(';');
+
                     message.Recipients = string.Format("{0}{1}", message.Recipients, string.Join(";", value.Contacts));
                 }            
 

@@ -1,4 +1,19 @@
+<<<<<<< HEAD
 ﻿namespace Merchello.Core.Models
+=======
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using Merchello.Core.Formatters;
+using Merchello.Core.Gateways;
+using Merchello.Core.Gateways.Shipping;
+using Merchello.Core.Services;
+using Umbraco.Core;
+using Umbraco.Core.Logging;
+
+namespace Merchello.Core.Models
+>>>>>>> ShippingNotifications-1.3.0
 {
     using System;
     using System.Collections.Generic;
@@ -167,5 +182,63 @@
 
             return gatewayShipMethod == null ? null : provider.QuoteShipMethodForShipment(shipment, gatewayShipMethod);
         }
+<<<<<<< HEAD
+=======
+
+        /// <summary>
+        /// Gets a collection of <see cref="IReplaceablePattern"/> for the invoice
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <returns>
+        /// The collection of replaceable patterns
+        /// </returns>
+        internal static IEnumerable<IReplaceablePattern> ReplaceablePatterns(this IShipment shipment)
+        {
+            // TODO localization needed on pricing and datetime
+            var patterns = new List<IReplaceablePattern>
+            {
+                ReplaceablePattern.GetConfigurationReplaceablePattern("ShippedDate", shipment.ShippedDate.ToShortDateString()),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("ShipToOrganization", shipment.ToOrganization),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("ShipToName", shipment.ToName),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("ShipToAddress1", shipment.ToAddress1),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("ShipToAddress2", shipment.ToAddress2),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("ShipToLocality", shipment.ToLocality),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("ShipToRegion", shipment.ToRegion),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("ShipToPostalCode", shipment.ToPostalCode),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("ShipToCountryCode", shipment.ToCountryCode),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("ShipToEmail", shipment.Email),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("ShipToPhone", shipment.Phone),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("ShipToOrganization", shipment.ToOrganization),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("TrackingCode", shipment.TrackingCode)
+            };
+                                  
+            patterns.AddRange(shipment.LineItemReplaceablePatterns());
+
+            return patterns;
+        }
+
+        ///// <summary>
+        ///// Returns the collection of <see cref="IOrderLineItem"/> associated with the <see cref="IShipment"/>
+        ///// </summary>
+        ///// <param name="shipment">The <see cref="IShipment"/></param>
+        ///// <returns>The collection of <see cref="IOrderLineItem"/></returns>
+        //public static IEnumerable<IOrderLineItem> OrderLineItems(this IShipment shipment)
+        //{
+        //    return shipment.OrderLineItems(MerchelloContext.Current);
+        //}
+
+        ///// <summary>
+        ///// Returns the collection of <see cref="IOrderLineItem"/> associated with the <see cref="IShipment"/>
+        ///// </summary>
+        ///// <param name="shipment">The <see cref="IShipment"/></param>
+        ///// <param name="merchelloContext">The <see cref="IMerchelloContext"/></param>
+        ///// <returns>The collection of <see cref="IOrderLineItem"/></returns>
+        //public static IEnumerable<IOrderLineItem> OrderLineItems(this IShipment shipment, IMerchelloContext merchelloContext)
+        //{
+        //    throw new NotImplementedException();
+        //}
+>>>>>>> ShippingNotifications-1.3.0
     }
 }

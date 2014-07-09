@@ -87,6 +87,11 @@
     <Compile Include="Gateways\GatewayMethodUiAttribute.cs" />
     <Compile Include="Gateways\Notification\Monitors\INotificationMonitorBase.cs" />
     <Compile Include="Gateways\Notification\Monitors\NotificationMonitorEvents.cs" />
+    <Compile Include="Gateways\Notification\Monitors\OrderShippedMonitor.cs" />
+    <Compile Include="Gateways\Notification\Monitors\PartialOrderShippedMonitor.cs" />
+    <Compile Include="Gateways\Notification\Triggering\IShipmentResult.cs" />
+    <Compile Include="Gateways\Notification\Triggering\OrderShippedTrigger.cs" />
+    <Compile Include="Gateways\Notification\Triggering\PartialOrderShippedTrigger.cs" />
     <Compile Include="Models\AddressExtensions.cs" />
     <Compile Include="Models\MonitorModels\INotifyModel.cs" />
     <Compile Include="Models\MonitorModels\MonitorModelExtensions.cs" />
@@ -98,6 +103,7 @@
     <Compile Include="Gateways\Notification\Triggering\INotificationTrigger.cs" />
     <Compile Include="Gateways\Notification\Triggering\NotificationTriggerBase.cs" />
     <Compile Include="Gateways\Notification\Triggering\OrderConfirmationTrigger.cs" />
+    <Compile Include="Models\MonitorModels\ShippingResultNotifyModel.cs" />
     <Compile Include="Notification.cs" />
     <Compile Include="NotificationExtensions.cs" />
     <Compile Include="Observation\IMonitor.cs" />

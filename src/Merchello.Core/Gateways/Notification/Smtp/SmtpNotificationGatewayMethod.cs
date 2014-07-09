@@ -42,7 +42,10 @@ namespace Merchello.Core.Gateways.Notification.Smtp
 
             foreach (var to in message.Recipients)
             {
-                msg.To.Add(new MailAddress(to));
+                if (!string.IsNullOrEmpty(to))
+                {
+                    msg.To.Add(new MailAddress(to));
+                }
             }
             
             //// We want to send the email async

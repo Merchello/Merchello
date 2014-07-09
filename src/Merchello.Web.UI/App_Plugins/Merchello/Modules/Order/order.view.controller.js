@@ -209,7 +209,7 @@
             promiseNew.then(function (shipment) {
                 shipment.trackingCode = data.trackingNumber;
 
-                var promiseSave = merchelloShipmentService.putShipment(shipment);
+                var promiseSave = merchelloShipmentService.putShipment(shipment, data);
 
                 promiseSave.then(function () {
 
