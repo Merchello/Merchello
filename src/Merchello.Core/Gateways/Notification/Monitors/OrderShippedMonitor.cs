@@ -8,18 +8,12 @@
     using Triggering;
 
     /// <summary>
-    /// Represents and order confirmation monitor
+    /// Represents and order shipped monitor
     /// </summary>
-    [MonitorFor("5DB575B5-0728-4B31-9B37-E9CF6C12E0AA", typeof(OrderConfirmationTrigger), "Order Confirmation Message (Pattern Replace)")]
-    public class OrderConfirmationMonitor : NotificationMonitorBase<IPaymentResultMonitorModel>
+    [MonitorFor("1078FE96-6C73-4CC7-A92D-496AFB2FC3CB", typeof(OrderShippedTrigger), "Order Shipped Message (Pattern Replace)")]
+    public class OrderShippedMonitor : NotificationMonitorBase<IShipment>
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="OrderConfirmationMonitor"/> class.
-        /// </summary>
-        /// <param name="notificationContext">
-        /// The notification context.
-        /// </param>
-        public OrderConfirmationMonitor(INotificationContext notificationContext)
+        public OrderShippedMonitor(INotificationContext notificationContext)
             : base(notificationContext)
         {            
         }
@@ -30,29 +24,27 @@
         /// <param name="value">
         /// The model to be used by the monitor
         /// </param>
-        public override void OnNext(IPaymentResultMonitorModel value)
+        public override void OnNext(IShipment value)
         {
-            if (!value.PaymentSuccess) return;
-
             if (!Messages.Any()) return;
 
             var formatter = PatternReplaceFormatter.GetPatternReplaceFormatter();
-
+                                                                                        
             // Add the replaceable patterns from the invoice
-            formatter.AddOrUpdateReplaceablePattern(value.Invoice.ReplaceablePatterns());
-
+            formatter.AddOrUpdateReplaceablePattern(value.ReplaceablePatterns());
+                                                                                
             foreach (var message in Messages)
             {
-                if (value.Contacts.Any() && message.SendToCustomer)
+                if (message.SendToCustomer)
                 {
                     // add the additional contacts to the recipients list
                     if (!message.Recipients.EndsWith(";")) 
-                        message.Recipients += ";";
-                                                                               
+                        message.Recipients += ";";      
+
                     if (message.Recipients[0] == ';')
                         message.Recipients = message.Recipients.TrimStart(';');
 
-                    message.Recipients = string.Format("{0}{1}", message.Recipients, string.Join(";", value.Contacts));
+                    message.Recipients = string.Format("{0}{1}", message.Recipients, string.Join(";", value.Email));
                 }            
 
                 // send the message
@@ -61,3 +53,4 @@
         }
     }
 }
+                                                                                  
