@@ -15,6 +15,7 @@
 
         public string FedExKey { get; set; }
         public string FedExPassword { get; set; }
+
         public string FedExPickupTypeCode { get; set; }
         public string FedExCustomerClassification  { get; set; }
         public string FedExPackagingTypeCode { get; set; }

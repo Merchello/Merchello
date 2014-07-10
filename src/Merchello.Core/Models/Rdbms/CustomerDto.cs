@@ -25,6 +25,7 @@
         /// Gets or sets the login name.
         /// </summary>
         [Column("loginName")]
+        [IndexAttribute(IndexTypes.UniqueNonClustered, Name = "IX_merchCustomerLoginName")]
         public string LoginName { get; set; }
 
         /// <summary>

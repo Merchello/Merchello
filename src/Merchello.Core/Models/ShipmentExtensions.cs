@@ -1,4 +1,6 @@
-﻿namespace Merchello.Core.Models
+using Merchello.Core.Formatters;
+
+namespace Merchello.Core.Models
 {
     using System;
     using System.Collections.Generic;
@@ -166,6 +168,40 @@
             var gatewayShipMethod = provider.GetShippingGatewayMethodsForShipment(shipment).FirstOrDefault(x => x.ShipMethod.Key == shipMethodKey);
 
             return gatewayShipMethod == null ? null : provider.QuoteShipMethodForShipment(shipment, gatewayShipMethod);
+        }
+
+        /// <summary>
+        /// Gets a collection of <see cref="IReplaceablePattern"/> for the invoice
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <returns>
+        /// The collection of replaceable patterns
+        /// </returns>
+        internal static IEnumerable<IReplaceablePattern> ReplaceablePatterns(this IShipment shipment)
+        {
+            // TODO localization needed on pricing and datetime
+            var patterns = new List<IReplaceablePattern>
+            {
+                ReplaceablePattern.GetConfigurationReplaceablePattern("ShippedDate", shipment.ShippedDate.ToShortDateString()),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("ShipToOrganization", shipment.ToOrganization),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("ShipToName", shipment.ToName),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("ShipToAddress1", shipment.ToAddress1),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("ShipToAddress2", shipment.ToAddress2),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("ShipToLocality", shipment.ToLocality),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("ShipToRegion", shipment.ToRegion),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("ShipToPostalCode", shipment.ToPostalCode),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("ShipToCountryCode", shipment.ToCountryCode),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("ShipToEmail", shipment.Email),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("ShipToPhone", shipment.Phone),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("ShipToOrganization", shipment.ToOrganization),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("TrackingCode", shipment.TrackingCode)
+            };
+                                  
+            patterns.AddRange(shipment.LineItemReplaceablePatterns());
+
+            return patterns;
         }
     }
 }

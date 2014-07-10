@@ -70,7 +70,7 @@ namespace Merchello.Plugin.Shipping.FedEx
         }
 
         /// <summary>
-        /// Gets the Authorize.Net Url
+        /// Gets the FedEx Url
         /// </summary>
         private string GetFedExUrl()
         {
@@ -82,7 +82,7 @@ namespace Merchello.Plugin.Shipping.FedEx
 
 
         /// <summary>
-        /// The Authorize.Net API version
+        /// The FedEx API version
         /// </summary>
         public static string ApiVersion
         {

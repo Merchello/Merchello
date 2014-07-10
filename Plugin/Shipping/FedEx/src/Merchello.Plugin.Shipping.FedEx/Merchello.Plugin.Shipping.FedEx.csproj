@@ -141,11 +141,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Provider\IFedExShippingGatewayMethod.cs" />
     <Compile Include="Provider\IFedExShippingGatewayProvider.cs" />
-    <Compile Include="Provider\IFedExShippingRateTable.cs" />
     <Compile Include="Provider\FedExShipmentLineItemVisitor.cs" />
     <Compile Include="Provider\FedExShippingGatewayMethod.cs" />
     <Compile Include="Provider\FedExShippingGatewayProvider.cs" />
-    <Compile Include="Provider\FedExShippingRateTable.cs" />
     <Compile Include="FedExEvents.cs" />
     <Compile Include="FedExShippingProcessor.cs" />
     <Compile Include="RateServiceWebReference\Reference.cs" />
