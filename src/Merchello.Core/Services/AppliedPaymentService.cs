@@ -1,35 +1,66 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using Merchello.Core.Models;
-using Merchello.Core.Models.TypeFields;
-using Merchello.Core.Persistence;
-using Merchello.Core.Persistence.Querying;
-using Merchello.Core.Persistence.UnitOfWork;
-using Umbraco.Core;
-using Umbraco.Core.Events;
-
-namespace Merchello.Core.Services
+﻿namespace Merchello.Core.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
+    using Models;
+    using Models.TypeFields;
+    using Persistence;
+    using Persistence.Querying;
+    using Persistence.UnitOfWork;
+    using Umbraco.Core;
+    using Umbraco.Core.Events;
+
     /// <summary>
     /// Represents the AppliedPaymentService
     /// </summary>
     internal class AppliedPaymentService : IAppliedPaymentService
     {
-        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
-        private readonly RepositoryFactory _repositoryFactory;
-
+        /// <summary>
+        /// The locker.
+        /// </summary>
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
-         public AppliedPaymentService()
-            : this(new RepositoryFactory())
-        { }
+        /// <summary>
+        /// The uow provider.
+        /// </summary>
+        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
 
+        /// <summary>
+        /// The repository factory.
+        /// </summary>
+        private readonly RepositoryFactory _repositoryFactory;
+
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AppliedPaymentService"/> class.
+        /// </summary>
+        public AppliedPaymentService()
+            : this(new RepositoryFactory())
+        {            
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AppliedPaymentService"/> class.
+        /// </summary>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
         public AppliedPaymentService(RepositoryFactory repositoryFactory)
             : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory)
-        { }
+        {            
+        }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AppliedPaymentService"/> class.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
         public AppliedPaymentService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
         {
             Mandate.ParameterNotNull(provider, "provider");
@@ -39,6 +70,39 @@ namespace Merchello.Core.Services
             _repositoryFactory = repositoryFactory;
         }
 
+        #region Event Handlers
+
+        /// <summary>
+        /// Occurs after Create
+        /// </summary>
+        public static event TypedEventHandler<IAppliedPaymentService, Events.NewEventArgs<IAppliedPayment>> Creating;
+
+        /// <summary>
+        /// Occurs after Create
+        /// </summary>
+        public static event TypedEventHandler<IAppliedPaymentService, Events.NewEventArgs<IAppliedPayment>> Created;
+
+        /// <summary>
+        /// Occurs before Save
+        /// </summary>
+        public static event TypedEventHandler<IAppliedPaymentService, SaveEventArgs<IAppliedPayment>> Saving;
+
+        /// <summary>
+        /// Occurs after Save
+        /// </summary>
+        public static event TypedEventHandler<IAppliedPaymentService, SaveEventArgs<IAppliedPayment>> Saved;
+
+        /// <summary>
+        /// Occurs before Delete
+        /// </summary>		
+        public static event TypedEventHandler<IAppliedPaymentService, DeleteEventArgs<IAppliedPayment>> Deleting;
+
+        /// <summary>
+        /// Occurs after Delete
+        /// </summary>
+        public static event TypedEventHandler<IAppliedPaymentService, DeleteEventArgs<IAppliedPayment>> Deleted;
+
+        #endregion
 
         /// <summary>
         /// Creates and saves an AppliedPayment
@@ -244,39 +308,5 @@ namespace Merchello.Core.Services
                 return repository.GetByQuery(query);
             }
         }
-
-        #region Event Handlers
-
-        /// <summary>
-        /// Occurs after Create
-        /// </summary>
-        public static event TypedEventHandler<IAppliedPaymentService, Events.NewEventArgs<IAppliedPayment>> Creating;
-
-        /// <summary>
-        /// Occurs after Create
-        /// </summary>
-        public static event TypedEventHandler<IAppliedPaymentService, Events.NewEventArgs<IAppliedPayment>> Created;
-
-        /// <summary>
-        /// Occurs before Save
-        /// </summary>
-        public static event TypedEventHandler<IAppliedPaymentService, SaveEventArgs<IAppliedPayment>> Saving;
-
-        /// <summary>
-        /// Occurs after Save
-        /// </summary>
-        public static event TypedEventHandler<IAppliedPaymentService, SaveEventArgs<IAppliedPayment>> Saved;
-
-        /// <summary>
-        /// Occurs before Delete
-        /// </summary>		
-        public static event TypedEventHandler<IAppliedPaymentService, DeleteEventArgs<IAppliedPayment>> Deleting;
-
-        /// <summary>
-        /// Occurs after Delete
-        /// </summary>
-        public static event TypedEventHandler<IAppliedPaymentService, DeleteEventArgs<IAppliedPayment>> Deleted;
-
-        #endregion
     }
 }
