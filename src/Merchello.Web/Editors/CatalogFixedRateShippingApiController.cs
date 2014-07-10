@@ -19,6 +19,7 @@
     /// The catalog fixed rate shipping api controller.
     /// </summary>
     [PluginController("Merchello")]
+    [Obsolete("This controller will be removed in 1.3.0. - use FixedRateShippingApiController instead")]
     public class CatalogFixedRateShippingApiController : MerchelloApiController
     {
         /// <summary>

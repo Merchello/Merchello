@@ -1,10 +1,13 @@
-﻿namespace Merchello.Web.Models.ContentEditing
+﻿using System;
+
+namespace Merchello.Web.Models.ContentEditing
 {
     using Core.Gateways.Shipping.FixedRate;
 
     /// <summary>
     /// The fixed rate ship method display.
     /// </summary>
+    [Obsolete]
     public class FixedRateShipMethodDisplay : DialogEditorDisplayBase
     {
         /// <summary>
