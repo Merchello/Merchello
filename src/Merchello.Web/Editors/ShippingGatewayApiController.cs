@@ -191,13 +191,9 @@ namespace Merchello.Web.Editors
             if (shipCountry != null)
             {
                 var providers = MerchelloContext.Gateways.Shipping.GetGatewayProvidersByShipCountry(shipCountry);
-
                 foreach (var provider in providers)
                 {
-                    if (!Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey.Equals(provider.Key))
-                    {
                         yield return provider.ToShipGatewayProviderDisplay();
-                    }
                 }
             }
             else
@@ -245,14 +241,8 @@ namespace Merchello.Web.Editors
             var shipCountry = _shipCountryService.GetByKey(shipCountryId);
             if (provider == null) throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             if (shipCountry == null) throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
-
-            if (!Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey.Equals(provider.Key))
-            {
-                var methods = provider.GetAllShippingGatewayMethodsForShipCountry(shipCountryId);
-                return methods.Select(method => method.ToShipMethodDisplay());
-            }
-
-            return new List<ShipMethodDisplay>();
+            var methods = provider.GetAllShippingGatewayMethodsForShipCountry(shipCountryId);
+            return methods.Select(method => method.ToShipMethodDisplay());
         }
 
         /// <summary>
