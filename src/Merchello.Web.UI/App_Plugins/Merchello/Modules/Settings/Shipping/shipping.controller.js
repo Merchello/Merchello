@@ -342,7 +342,7 @@
 				var promiseMethods = merchelloCatalogFixedRateShippingService.getAllFixedRateProviderMethods(country.key);
 				promiseMethods.then(function (methodsFromServer) {
 
-					if (methodsFromServer.length > 0) {
+				    if (methodsFromServer.length > 0) {
 
 						_.each(methodsFromServer, function (element, index, list) {
 							var newMethod = new merchello.Models.FixedRateShippingMethod(element);
@@ -854,39 +854,13 @@
          */
 		$scope.shippingMethodDialogConfirm = function (data) {
 
-		    var promiseSave;
-		    if (data.provider.isFixedRate()) {
-		        if (data.method.shipMethod.key.length > 0) {
-		            // Save existing method
-		            promiseSave = merchelloCatalogFixedRateShippingService.saveRateTableShipMethod(data.method);
-		        } else {
-		            // Create new method
-		            promiseSave = merchelloCatalogFixedRateShippingService.createRateTableShipMethod(data.method);
-		        }
-		    } else {
-		        data.method.serviceCode = data.method.gatewayResource.serviceCode;
-		        if (data.method.shipMethod != undefined) {
-		            data.method.name = data.method.shipMethod.name;
-		        }
-		        if (data.method.shipCountryKey == "00000000-0000-0000-0000-000000000000") {
-		            data.method.shipCountryKey = data.country.key;
-		        }
-		        if (data.method.key.length > 0) {
-		            // Save existing method
-		            promiseSave = merchelloCatalogShippingService.saveShipMethod(data.method);
-		        } else {
-		            // Create new method
-		            promiseSave = merchelloCatalogShippingService.addShipMethod(data.method);
-		        }
-		    }
+		    data.provider.shipMethods = [];
+		    alert('data.provider.shipMethods = [];');
+		    $scope.loadProviderMethods(data.provider, data.country);
+		    alert('$scope.loadProviderMethods(data.provider, data.country);');
+		    $scope.loadFixedRateProviderMethods(data.country);
+		    alert('$scope.loadFixedRateProviderMethods(data.country);');
 
-		    promiseSave.then(function () {
-		        data.provider.shipMethods = [];
-		        $scope.loadProviderMethods(data.provider, data.country);
-		        $scope.loadFixedRateProviderMethods(data.country);
-		    }, function (reason) {
-		        notificationsService.error("Shipping Method Save Failed", reason.message);
-		    });
 		};
 
 	    /**
