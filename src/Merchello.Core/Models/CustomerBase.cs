@@ -20,11 +20,6 @@
         private static readonly PropertyInfo LastActivityDateSelector = ExpressionHelper.GetPropertyInfo<CustomerBase, DateTime>(x => x.LastActivityDate);
 
         /// <summary>
-        /// The entity key selector.
-        /// </summary>
-        private static readonly PropertyInfo EntityKeySelector = ExpressionHelper.GetPropertyInfo<CustomerBase, Guid>(x => x.EntityKey);
-
-        /// <summary>
         /// The extended data changed selector.
         /// </summary>
         private static readonly PropertyInfo ExtendedDataChangedSelector = ExpressionHelper.GetPropertyInfo<LineItemBase, ExtendedDataCollection>(x => x.ExtendedData);
@@ -33,11 +28,6 @@
         /// The last activity date.
         /// </summary>
         private DateTime _lastActivityDate;
-
-        /// <summary>
-        /// The _entity key.
-        /// </summary>
-        private Guid _entityKey;
 
         /// <summary>
         /// The _extended data.
@@ -91,30 +81,6 @@
                 }, 
                 _lastActivityDate, 
                 LastActivityDateSelector);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets Entity key
-        /// </summary>
-        [DataMember]
-        public Guid EntityKey
-        {
-            get
-            {
-                return _entityKey;
-            }
-
-            set
-            {
-                SetPropertyValueAndDetectChanges(
-                    o =>
-                {
-                    _entityKey = value;
-                    return _entityKey;
-                }, 
-                _entityKey, 
-                EntityKeySelector);
             }
         }
 

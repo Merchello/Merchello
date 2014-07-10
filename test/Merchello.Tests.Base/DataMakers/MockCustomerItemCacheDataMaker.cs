@@ -27,10 +27,7 @@ namespace Merchello.Tests.Base.DataMakers
 
         public static IItemCache ConsumerItemCacheForInserting(ICustomerBase customer, ItemCacheType itemCacheType)
         {
-            return new ItemCache(customer.EntityKey, itemCacheType)
-            {
-                EntityKey = customer.EntityKey
-            };
+            return new ItemCache(customer.Key, itemCacheType);
         }
 
     }

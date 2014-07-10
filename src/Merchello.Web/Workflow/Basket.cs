@@ -529,7 +529,7 @@
         private static string MakeCacheKey(ICustomerBase customer)
         {
             // the version key here is not important since there can only ever be one basket
-            return CacheKeys.ItemCacheCacheKey(customer.EntityKey, EnumTypeFieldConverter.ItemItemCache.Basket.TypeKey, Guid.Empty);
+            return CacheKeys.ItemCacheCacheKey(customer.Key, EnumTypeFieldConverter.ItemItemCache.Basket.TypeKey, Guid.Empty);
         }
     }
 }
