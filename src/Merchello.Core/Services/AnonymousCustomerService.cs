@@ -222,23 +222,23 @@ namespace Merchello.Core.Services
             Deleted.RaiseEvent(new DeleteEventArgs<IAnonymousCustomer>(anonymousArray), this);
         }
 
-        /// <summary>
-        /// The get anonymous customers created before a certain date.
-        /// </summary>
-        /// <param name="createdDate">
-        /// The created Date.
-        /// </param>
-        /// <returns>
-        /// The collection of <see cref="IAnonymousCustomer"/> older than a certain number of days.
-        /// </returns>
-        public IEnumerable<IAnonymousCustomer> GetAnonymousCustomersCreatedBefore(DateTime createdDate)
-        {
-            using (var repository = _repositoryFactory.CreateAnonymousCustomerRepository(_uowProvider.GetUnitOfWork()))
-            {
-                var query = Query<IAnonymousCustomer>.Builder.Where(x => x.CreateDate <= createdDate);
+        ///// <summary>
+        ///// The get anonymous customers created before a certain date.
+        ///// </summary>
+        ///// <param name="createdDate">
+        ///// The created Date.
+        ///// </param>
+        ///// <returns>
+        ///// The collection of <see cref="IAnonymousCustomer"/> older than a certain number of days.
+        ///// </returns>
+        //public IEnumerable<IAnonymousCustomer> GetAnonymousCustomersCreatedBefore(DateTime createdDate)
+        //{
+        //    using (var repository = _repositoryFactory.CreateAnonymousCustomerRepository(_uowProvider.GetUnitOfWork()))
+        //    {
+        //        var query = Query<IAnonymousCustomer>.Builder.Where(x => x.CreateDate <= createdDate);
 
-                return repository.get
-            }
-        }
+                
+        //    }
+        //}
     }
 }
