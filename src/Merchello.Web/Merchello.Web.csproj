@@ -116,6 +116,7 @@
     <Compile Include="Editors\CatalogFixedRateShippingApiController.cs">
       <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
     </Compile>
+    <Compile Include="Editors\FixedRateShippingApiController.cs" />
     <Compile Include="Editors\GatewayProviderApiController.cs" />
     <Compile Include="Editors\InvoiceApiController.cs" />
     <Compile Include="Editors\NotificationGatewayApiController.cs" />
@@ -127,6 +128,7 @@
     <Compile Include="Models\ContentEditing\NotificationMessageDisplay.cs" />
     <Compile Include="Models\ContentEditing\NotificationMethodDisplay.cs" />
     <Compile Include="Models\ContentEditing\NotificationMonitorDisplay.cs" />
+    <Compile Include="Models\ContentEditing\RateTableShipMethodDisplay.cs" />
     <Compile Include="Models\ContentEditing\ShipmentOrderDisplay.cs" />
     <Compile Include="Models\MapperResolvers\GatewayProviderDialogEditorViewResolver.cs" />
     <Compile Include="Models\MapperResolvers\ExtendedDataResolver.cs" />

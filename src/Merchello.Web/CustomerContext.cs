@@ -191,12 +191,12 @@
             // TODO decide how we want to deal with cookie persistence options
             var cookie = new HttpCookie(ConsumerCookieKey)
             {
-                Value = EncryptionHelper.Encrypt(customer.EntityKey.ToString())
+                Value = EncryptionHelper.Encrypt(customer.Key.ToString())
             };
             _umbracoContext.HttpContext.Response.Cookies.Add(cookie);
 
-            _cache.RequestCache.GetCacheItem(ConsumerCookieKey, () => customer.EntityKey);
-            _cache.RuntimeCache.GetCacheItem(CacheKeys.CostumerCacheKey(customer.EntityKey), () => customer, TimeSpan.FromMinutes(5), true);
+            _cache.RequestCache.GetCacheItem(ConsumerCookieKey, () => customer.Key);
+            _cache.RuntimeCache.GetCacheItem(CacheKeys.CostumerCacheKey(customer.Key), () => customer, TimeSpan.FromMinutes(5), true);
         }
     }
 }

@@ -40,6 +40,11 @@ namespace Merchello.Tests.UnitTests.Services
                 After = args.SavedEntities.FirstOrDefault();
             };
 
+            CustomerService.Creating += delegate(ICustomerService sender, Core.Events.NewEventArgs<ICustomer> args)
+            {
+                BeforeTriggered = true;
+                Before = args.Entity;
+            };
 
             CustomerService.Created += delegate(ICustomerService sender, Core.Events.NewEventArgs<ICustomer> args)
             {
@@ -74,7 +79,7 @@ namespace Merchello.Tests.UnitTests.Services
         {
             var customer = _customerService.CreateCustomer("rusty", "Rusty", "Swayne", "test@test.com");
 
-            Assert.IsTrue(AfterTriggered);
+            Assert.IsTrue(BeforeTriggered);
         }
 
         [Test]

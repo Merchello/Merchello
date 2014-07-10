@@ -35,27 +35,6 @@
         {
         }
 
-        #region Overrides of ICustomerRepository
-
-
-        /// <summary>
-        /// Return a customer based on its entity Key
-        /// </summary>
-        /// <param name="entityKey">The GUID entity key</param>
-        /// <returns>The <see cref="ICustomer"/></returns>
-        public ICustomer GetByEntityKey(Guid entityKey)
-        {
-            Mandate.ParameterCondition(entityKey != Guid.Empty, "entityKey");
-
-            var q = Querying.Query<ICustomer>.Builder.Where(c => c.EntityKey == entityKey);
-
-            return PerformGetByQuery(q).FirstOrDefault();
-        }
-
-        #endregion
-
-        #region Overrides of RepositoryBase<ICustomer>
-
         /// <summary>
         /// Performs the Get by key operation.
         /// </summary>
@@ -112,10 +91,6 @@
             }
         }
 
-        #endregion
-
-        #region Overrides of MerchelloPetaPocoRepositoryBase<ICustomer>
-
         /// <summary>
         /// The get base query.
         /// </summary>
@@ -155,8 +130,8 @@
         {
             var list = new List<string>
                 {
-                   // "DELETE FROM merchItemCacheItem WHERE ItemCacheKey IN (SELECT pk FROM merchItemCache WHERE entityKey = (SELECT entityKey FROM merchCustomer WHERE pk = @Key))",
-                   // "DELETE FROM merchItemCache WHERE entityKey = (SELECT entityKey FROM merchCustomer WHERE pk = @Key)",
+                    "DELETE FROM merchItemCacheItem WHERE ItemCacheKey IN (SELECT pk FROM merchItemCache WHERE entityKey = @Key)",
+                    "DELETE FROM merchItemCache WHERE entityKey = @Key",
                     "DELETE FROM merchCustomerAddress WHERE customerKey = @Key",
                     "DELETE FROM merchCustomer WHERE pk = @Key"
                 };
@@ -178,7 +153,7 @@
             var dto = factory.BuildDto(entity);
             
             Database.Insert(dto);
-            
+            entity.Key = dto.Key;
             entity.ResetDirtyProperties();
         }
 
@@ -234,7 +209,5 @@
 
             return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
         }
-
-        #endregion
     }
 }

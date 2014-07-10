@@ -500,7 +500,7 @@
         private static string MakeCacheKey(ICustomerBase customer, Guid versionKey)
         {
             var itemCacheTfKey = EnumTypeFieldConverter.ItemItemCache.Checkout.TypeKey;
-            return Cache.CacheKeys.ItemCacheCacheKey(customer.EntityKey, itemCacheTfKey, versionKey);
+            return Cache.CacheKeys.ItemCacheCacheKey(customer.Key, itemCacheTfKey, versionKey);
         }
 
         /// <summary>

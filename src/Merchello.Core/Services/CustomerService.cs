@@ -351,7 +351,7 @@
             // try retrieving an existing customer
             using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
             {
-                return repository.GetByEntityKey(entityKey);
+                return repository.Get(entityKey);
             }
         }
 
@@ -423,7 +423,6 @@
                 return repository.GetAll(keys.ToArray());
             }
         }
-
         
         #endregion
 
