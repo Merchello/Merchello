@@ -36,5 +36,11 @@
         /// </summary>
         [DataMember]
         string LoginName { get; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether tax exempt.
+        /// </summary>
+        [DataMember]
+        bool TaxExempt { get; set; }
     }
 }

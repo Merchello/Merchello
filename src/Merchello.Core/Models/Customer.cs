@@ -34,6 +34,11 @@
         private static readonly PropertyInfo EmailSelector = ExpressionHelper.GetPropertyInfo<Customer, string>(x => x.Email);
 
         /// <summary>
+        /// The tax exempt selector.
+        /// </summary>
+        private static readonly PropertyInfo TaxExemptSelector = ExpressionHelper.GetPropertyInfo<Customer, bool>(x => x.TaxExempt);
+
+        /// <summary>
         /// The first name.
         /// </summary>
         private string _firstName;
@@ -52,6 +57,11 @@
         /// The login name.
         /// </summary>
         private string _loginName;
+
+        /// <summary>
+        /// The tax exempt.
+        /// </summary>
+        private bool _taxExempt;
 
         #endregion
 
@@ -170,6 +180,30 @@
                     },
                     _loginName,
                     LoginNameSelector);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the customer is tax exempt.
+        /// </summary>
+        [DataMember]
+        public bool TaxExempt
+        {
+            get
+            {
+                return _taxExempt;
+            }
+
+            set
+            {
+                SetPropertyValueAndDetectChanges(
+                    o =>
+                    {
+                        _taxExempt = value;
+                        return _taxExempt;
+                    },
+                    _taxExempt,
+                    TaxExemptSelector);
             }
         }
     }

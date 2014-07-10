@@ -134,7 +134,6 @@ namespace Merchello.Tests.IntegrationTests.Services.Customer
             Assert.AreEqual(firstName, customer.FirstName);
             Assert.AreEqual(lastName, customer.LastName);
             Assert.AreEqual(email, customer.Email);
-
         }
     }
 }
