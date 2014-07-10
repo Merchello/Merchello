@@ -47,6 +47,12 @@
         public string Email { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether tax exempt.
+        /// </summary>
+        [Column("taxExempt")]
+        public bool TaxExempt { get; set; }
+
+        /// <summary>
         /// Gets or sets the last activity date.
         /// </summary>
         [Column("lastActivityDate")]
