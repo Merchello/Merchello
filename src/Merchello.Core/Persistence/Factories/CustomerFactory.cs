@@ -54,6 +54,7 @@
                     FirstName = entity.FirstName,
                     LastName = entity.LastName,
                     Email = entity.Email,
+                    LastActivityDate = entity.LastActivityDate,
                     EntityKey = entity.EntityKey,
                     ExtendedData = entity.ExtendedData.SerializeToXml(),
                     UpdateDate = entity.UpdateDate,

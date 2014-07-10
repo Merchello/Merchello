@@ -155,8 +155,8 @@
         {
             var list = new List<string>
                 {
-                    "DELETE FROM merchItemCacheItem WHERE ItemCacheKey IN (SELECT pk FROM merchItemCache WHERE entityKey = (SELECT entityKey FROM merchCustomer WHERE pk = @Key))",
-                    "DELETE FROM merchItemCache WHERE entityKey = (SELECT entityKey FROM merchCustomer WHERE pk = @Key)",
+                   // "DELETE FROM merchItemCacheItem WHERE ItemCacheKey IN (SELECT pk FROM merchItemCache WHERE entityKey = (SELECT entityKey FROM merchCustomer WHERE pk = @Key))",
+                   // "DELETE FROM merchItemCache WHERE entityKey = (SELECT entityKey FROM merchCustomer WHERE pk = @Key)",
                     "DELETE FROM merchCustomerAddress WHERE customerKey = @Key",
                     "DELETE FROM merchCustomer WHERE pk = @Key"
                 };
@@ -172,7 +172,7 @@
         /// </param>
         protected override void PersistNewItem(ICustomer entity)
         {
-            ((Entity)entity).AddingEntity();
+            ((Customer)entity).AddingEntity();
 
             var factory = new CustomerFactory();
             var dto = factory.BuildDto(entity);

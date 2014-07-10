@@ -1,14 +1,13 @@
-﻿using System;
-using Merchello.Core.Persistence.Querying;
-
-namespace Merchello.Core.Services
+﻿namespace Merchello.Core.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
 
     using Merchello.Core.Models;
     using Merchello.Core.Persistence;
+    using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Persistence.UnitOfWork;
 
     using Umbraco.Core;
@@ -222,23 +221,26 @@ namespace Merchello.Core.Services
             Deleted.RaiseEvent(new DeleteEventArgs<IAnonymousCustomer>(anonymousArray), this);
         }
 
-        ///// <summary>
-        ///// The get anonymous customers created before a certain date.
-        ///// </summary>
-        ///// <param name="createdDate">
-        ///// The created Date.
-        ///// </param>
-        ///// <returns>
-        ///// The collection of <see cref="IAnonymousCustomer"/> older than a certain number of days.
-        ///// </returns>
-        //public IEnumerable<IAnonymousCustomer> GetAnonymousCustomersCreatedBefore(DateTime createdDate)
-        //{
-        //    using (var repository = _repositoryFactory.CreateAnonymousCustomerRepository(_uowProvider.GetUnitOfWork()))
-        //    {
-        //        var query = Query<IAnonymousCustomer>.Builder.Where(x => x.CreateDate <= createdDate);
+        /// <summary>
+        /// The get anonymous customers created before a certain date.
+        /// </summary>
+        /// <param name="createdDate">
+        /// The created Date.
+        /// </param>
+        /// <returns>
+        /// The collection of <see cref="IAnonymousCustomer"/> older than a certain number of days.
+        /// </returns>
+        /// <remarks>
+        /// For maintenance routines
+        /// </remarks>
+        public IEnumerable<IAnonymousCustomer> GetAnonymousCustomersCreatedBefore(DateTime createdDate)
+        {
+            using (var repository = _repositoryFactory.CreateAnonymousCustomerRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Query<IAnonymousCustomer>.Builder.Where(x => x.CreateDate <= createdDate);
 
-                
-        //    }
-        //}
+                return repository.GetByQuery(query);
+            }
+        }
     }
 }
