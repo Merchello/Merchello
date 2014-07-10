@@ -66,23 +66,29 @@
 
             if (fixedMethod == null) throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
 
-            return fixedMethod.RateTable.ToShipFixedRateTableDisplay();
+            var rateTable = fixedMethod.RateTable.ToShipFixedRateTableDisplay();
+
+            // TODO RSS - this is pretty hacky
+            rateTable.ShipCountryKey = fixedMethod.ShipMethod.ShipCountryKey;
+
+            return rateTable;
         }
+
 
         /// <summary>
         /// The put ship fixed rate table.
         /// </summary>
-        /// <param name="method">
-        /// The method.
+        /// <param name="rateTable">
+        /// The rate table.
         /// </param>
         /// <returns>
         /// The <see cref="ShipFixedRateTableDisplay"/>.
         /// </returns>
-        public ShipFixedRateTableDisplay PutShipFixedRateTable(RateTableShipMethodDisplay method)
+        public ShipFixedRateTableDisplay PutShipFixedRateTable(ShipFixedRateTableDisplay rateTable)
         {
-            var fixedMethod = (IFixedRateShippingGatewayMethod)_fixedRateShippingGatewayProvider.GetShippingGatewayMethod(method.Key, method.ShipCountryKey);
+            var fixedMethod = (IFixedRateShippingGatewayMethod)_fixedRateShippingGatewayProvider.GetShippingGatewayMethod(rateTable.ShipMethodKey, rateTable.ShipCountryKey);
 
-            fixedMethod = method.ToFixedRateShipMethod(fixedMethod);
+            fixedMethod = rateTable.ToFixedRateShipMethod(fixedMethod);
 
             _fixedRateShippingGatewayProvider.SaveShippingGatewayMethod(fixedMethod);
 
