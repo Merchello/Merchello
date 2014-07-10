@@ -8,7 +8,7 @@
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    internal class AnonymousCustomer : AnonymousCustomerBase, IAnonymousCustomer
+    internal class AnonymousCustomer : CustomerBase, IAnonymousCustomer
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="AnonymousCustomer"/> class.

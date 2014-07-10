@@ -54,13 +54,6 @@
         public DateTime LastActivityDate { get; set; }
 
         /// <summary>
-        /// Gets or sets the entity key.
-        /// </summary>
-        [Column("entityKey")]
-        [Constraint(Default = "newid()")]
-        public Guid EntityKey { get; set; }
-
-        /// <summary>
         /// Gets or sets the extended data.
         /// </summary>
         [Column("extendedData")]

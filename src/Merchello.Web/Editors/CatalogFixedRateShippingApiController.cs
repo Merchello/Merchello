@@ -21,8 +21,19 @@
     [PluginController("Merchello")]
     public class CatalogFixedRateShippingApiController : MerchelloApiController
     {
+        /// <summary>
+        /// The ship country service.
+        /// </summary>
         private readonly IShipCountryService _shipCountryService;
+
+        /// <summary>
+        /// The fixed rate shipping gateway provider.
+        /// </summary>
         private readonly FixedRateShippingGatewayProvider _fixedRateShippingGatewayProvider;
+
+        /// <summary>
+        /// The _shipping context.
+        /// </summary>
         private readonly IShippingContext _shippingContext;
 
         /// <summary>

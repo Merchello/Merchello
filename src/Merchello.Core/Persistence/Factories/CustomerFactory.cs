@@ -22,7 +22,6 @@
             var customer = new Customer(dto.LoginName)
                 {
                     Key = dto.Key,
-                    EntityKey = dto.EntityKey,
                     FirstName = dto.FirstName,
                     LastName = dto.LastName,
                     Email = dto.Email,
@@ -55,7 +54,6 @@
                     LastName = entity.LastName,
                     Email = entity.Email,
                     LastActivityDate = entity.LastActivityDate,
-                    EntityKey = entity.EntityKey,
                     ExtendedData = entity.ExtendedData.SerializeToXml(),
                     UpdateDate = entity.UpdateDate,
                     CreateDate = entity.CreateDate
