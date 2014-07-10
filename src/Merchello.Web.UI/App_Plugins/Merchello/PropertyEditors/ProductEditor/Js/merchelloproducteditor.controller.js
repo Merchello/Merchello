@@ -130,8 +130,12 @@
 
             // Handle the form submitting event to save the product information to Merchello tables
             $scope.$on("formSubmitting", function (e, args) {
-                notificationsService.success("Saving merchello product", "");
-                $scope.save();
+                //e.preventDefault();
+                //e.stopPropagation();
+                if (args.scope.contentForm.$valid) {
+                    notificationsService.success("Saving merchello product", "");
+                    $scope.save();
+                }
             });
 
         };
