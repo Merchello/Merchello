@@ -128,7 +128,6 @@
     <Compile Include="Models\ContentEditing\NotificationMessageDisplay.cs" />
     <Compile Include="Models\ContentEditing\NotificationMethodDisplay.cs" />
     <Compile Include="Models\ContentEditing\NotificationMonitorDisplay.cs" />
-    <Compile Include="Models\ContentEditing\RateTableShipMethodDisplay.cs" />
     <Compile Include="Models\ContentEditing\ShipmentOrderDisplay.cs" />
     <Compile Include="Models\MapperResolvers\GatewayProviderDialogEditorViewResolver.cs" />
     <Compile Include="Models\MapperResolvers\ExtendedDataResolver.cs" />
