@@ -93,6 +93,7 @@
     <Compile Include="Gateways\Notification\Triggering\OrderShippedTrigger.cs" />
     <Compile Include="Gateways\Notification\Triggering\PartialOrderShippedTrigger.cs" />
     <Compile Include="Models\AddressExtensions.cs" />
+    <Compile Include="Models\CustomerExtensions.cs" />
     <Compile Include="Models\MonitorModels\INotifyModel.cs" />
     <Compile Include="Models\MonitorModels\MonitorModelExtensions.cs" />
     <Compile Include="Models\MonitorModels\NotifyModelBase.cs" />

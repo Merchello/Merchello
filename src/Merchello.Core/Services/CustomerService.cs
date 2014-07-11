@@ -438,17 +438,6 @@
         }
 
         /// <summary>
-        /// Saves a collection of <see cref="ICustomerAddress"/>
-        /// </summary>
-        /// <param name="addresses">
-        /// The addresses to be saved
-        /// </param>
-        public void Save(IEnumerable<ICustomerAddress> addresses)
-        {
-            _customerAddressService.Save(addresses);
-        }
-
-        /// <summary>
         /// Deletes a single instance of the <see cref="ICustomerAddress"/>
         /// </summary>
         /// <param name="address">
@@ -457,17 +446,6 @@
         public void Delete(ICustomerAddress address)
         {
             _customerAddressService.Delete(address);
-        }
-
-        /// <summary>
-        /// Deletes a collection of <see cref="ICustomerAddress"/>
-        /// </summary>
-        /// <param name="addresses">
-        /// The addresses to be deleted
-        /// </param>
-        public void Delete(IEnumerable<ICustomerAddress> addresses)
-        {
-            _customerAddressService.Delete(addresses);
         }
 
         /// <summary>
@@ -513,6 +491,23 @@
         public IEnumerable<ICustomerAddress> GetByCustomerKey(Guid customerKey, AddressType addressType)
         {
             return _customerAddressService.GetByCustomerKey(customerKey, addressType);
+        }
+
+        /// <summary>
+        /// Gets the default customer address of a certain type
+        /// </summary>
+        /// <param name="customerKey">
+        /// The customer key.
+        /// </param>
+        /// <param name="addressType">
+        /// The address type.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ICustomerAddress"/>.
+        /// </returns>
+        public ICustomerAddress GetDefaultCustomerAddress(Guid customerKey, AddressType addressType)
+        {
+            return _customerAddressService.GetDefaultCustomerAddress(customerKey, addressType);
         }
 
         #endregion

@@ -122,6 +122,14 @@
                     return;
                 }
 
+            var count = GetCustomerAddressCount(address.CustomerKey, address.AddressType);
+            if (count == 0 || address.IsDefault)
+            {
+               ClearDefaultCustomerAddress(address.CustomerKey, address.AddressType);
+               address.IsDefault = true;
+            }
+           
+
             using (new WriteLock(Locker))
             {
                 var uow = _uowProvider.GetUnitOfWork();
@@ -136,37 +144,6 @@
         }
 
         /// <summary>
-        /// Saves a collection of <see cref="ICustomerAddress"/>
-        /// </summary>
-        /// <param name="addresses">
-        /// The addresses.
-        /// </param>
-        /// <param name="raiseEvents">
-        /// The raise events.
-        /// </param>
-        public void Save(IEnumerable<ICustomerAddress> addresses, bool raiseEvents = true)
-        {
-            var addressArray = addresses as ICustomerAddress[] ?? addresses.ToArray();
-            if (raiseEvents) Saving.RaiseEvent(new SaveEventArgs<ICustomerAddress>(addressArray), this);
-
-            using (new WriteLock(Locker))
-            {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateCustomerAddressRepository(uow))
-                {
-                    foreach (var address in addressArray)
-                    {
-                        repository.AddOrUpdate(address);    
-                    } 
-                   
-                    uow.Commit();
-                }
-            }
-
-            if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<ICustomerAddress>(addressArray), this);
-        }
-
-        /// <summary>
         /// Deletes a single <see cref="ICustomerAddress"/>
         /// </summary>
         /// <param name="address">
@@ -178,7 +155,7 @@
         public void Delete(ICustomerAddress address, bool raiseEvents = true)
         {
             if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<ICustomerAddress>(address), this);
-
+           
             using (new WriteLock(Locker))
             {
                 var uow = _uowProvider.GetUnitOfWork();
@@ -190,38 +167,17 @@
             }
 
             if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<ICustomerAddress>(address), this);
-        }
 
-        /// <summary>
-        /// Deletes a collection of <see cref="ICustomerAddress"/>
-        /// </summary>
-        /// <param name="addresses">
-        /// The addresses.
-        /// </param>
-        /// <param name="raiseEvents">
-        /// The raise events.
-        /// </param>
-        public void Delete(IEnumerable<ICustomerAddress> addresses, bool raiseEvents = true)
-        {
-            var addressArray = addresses as ICustomerAddress[] ?? addresses.ToArray();
-            if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<ICustomerAddress>(addressArray), this);
+            // If we deleted the default address and there are other addresses of this type - pick one
+            if (!address.IsDefault) return;
+            
+            var newDefault = GetByCustomerKey(address.CustomerKey, address.AddressType).FirstOrDefault();
 
-            using (new WriteLock(Locker))
-            {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateCustomerAddressRepository(uow))
-                {
-                    foreach (var address in addressArray)
-                    {
-                        repository.Delete(address);
-                    }
-
-                    uow.Commit();
-                }
-            }
-
-            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<ICustomerAddress>(addressArray), this);
-        }
+            if (newDefault == null) return;
+            
+            newDefault.IsDefault = true;
+            Save(newDefault);
+        }       
 
         /// <summary>
         /// Gets a <see cref="ICustomerAddress"/> by it's key
@@ -237,6 +193,30 @@
             using (var repostitory = _repositoryFactory.CreateCustomerAddressRepository(_uowProvider.GetUnitOfWork()))
             {
                 return repostitory.Get(key);
+            }
+        }
+
+        /// <summary>
+        /// Gets the default customer address of a certain type
+        /// </summary>
+        /// <param name="customerKey">
+        /// The customer key.
+        /// </param>
+        /// <param name="addressType">
+        /// The address type.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ICustomerAddress"/>.
+        /// </returns>
+        public ICustomerAddress GetDefaultCustomerAddress(Guid customerKey, AddressType addressType)
+        {
+            using (var repostitory = _repositoryFactory.CreateCustomerAddressRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var typeFieldKey = EnumTypeFieldConverter.Address.GetTypeField(addressType).TypeKey;
+
+                var query = Query<ICustomerAddress>.Builder.Where(x => x.CustomerKey == customerKey && x.AddressTypeFieldKey == typeFieldKey && x.IsDefault == true);
+
+                return repostitory.GetByQuery(query).FirstOrDefault();
             }
         }
 
@@ -281,6 +261,155 @@
 
                 return repostitory.GetByQuery(query);
             }
+        }
+
+        /// <summary>
+        /// The get all.
+        /// </summary>
+        /// <returns>
+        /// The collection of all customer addresses.
+        /// </returns>
+        public IEnumerable<ICustomerAddress> GetAll()
+        {
+            using (var repostitory = _repositoryFactory.CreateCustomerAddressRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repostitory.GetAll();
+            }
+        }
+
+        /// <summary>
+        /// Gets the count of all <see cref="CustomerAddress"/> for a given customer
+        /// </summary>
+        /// <param name="customerKey">
+        /// The customer key.
+        /// </param>
+        /// <returns>
+        /// The count
+        /// </returns>
+        internal int GetCustomerAddressCount(Guid customerKey)
+        {
+            using (var repository = _repositoryFactory.CreateCustomerAddressRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Query<ICustomerAddress>.Builder.Where(x => x.CustomerKey == customerKey);
+                
+                return repository.Count(query);
+            }
+        }
+
+        /// <summary>
+        /// Gets the count of all <see cref="CustomerAddress"/> for a given customer by <see cref="AddressType"/>
+        /// </summary>
+        /// <param name="customerKey">
+        /// The customer key.
+        /// </param>
+        /// <param name="addressType">
+        /// The address Type.
+        /// </param>
+        /// <returns>
+        /// The count
+        /// </returns>
+        internal int GetCustomerAddressCount(Guid customerKey, AddressType addressType)
+        {
+            using (var repostitory = _repositoryFactory.CreateCustomerAddressRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var typeFieldKey = EnumTypeFieldConverter.Address.GetTypeField(addressType).TypeKey;
+
+                var query = Query<ICustomerAddress>.Builder.Where(x => x.CustomerKey == customerKey && x.AddressTypeFieldKey == typeFieldKey);
+
+                return repostitory.Count(query);
+            }
+        }
+
+        /// <summary>
+        /// Saves a collection of <see cref="ICustomerAddress"/>
+        /// </summary>
+        /// <param name="addresses">
+        /// The addresses.
+        /// </param>
+        /// <param name="raiseEvents">
+        /// The raise events.
+        /// </param>
+        /// <remarks>
+        /// TODO - come up with a validation strategy on batch saves that protects default address settings
+        /// </remarks>
+        internal void Save(IEnumerable<ICustomerAddress> addresses, bool raiseEvents = true)
+        {
+            var addressArray = addresses as ICustomerAddress[] ?? addresses.ToArray();
+            if (raiseEvents) Saving.RaiseEvent(new SaveEventArgs<ICustomerAddress>(addressArray), this);
+
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreateCustomerAddressRepository(uow))
+                {
+                    foreach (var address in addressArray)
+                    {
+                        repository.AddOrUpdate(address);
+                    }
+
+                    uow.Commit();
+                }
+            }
+
+            if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<ICustomerAddress>(addressArray), this);
+        }
+
+        /// <summary>
+        /// Deletes a collection of <see cref="ICustomerAddress"/>
+        /// </summary>
+        /// <param name="addresses">
+        /// The addresses.
+        /// </param>
+        /// <param name="raiseEvents">
+        /// The raise events.
+        /// </param>
+        /// <remarks>
+        /// TODO - come up with a validation strategy on batch saves that protects default address settings
+        /// </remarks>
+        internal void Delete(IEnumerable<ICustomerAddress> addresses, bool raiseEvents = true)
+        {
+            var addressArray = addresses as ICustomerAddress[] ?? addresses.ToArray();
+            if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<ICustomerAddress>(addressArray), this);
+
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreateCustomerAddressRepository(uow))
+                {
+                    foreach (var address in addressArray)
+                    {
+                        repository.Delete(address);
+                    }
+
+                    uow.Commit();
+                }
+            }
+
+            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<ICustomerAddress>(addressArray), this);
+        }
+
+        /// <summary>
+        /// The clear default customer address.
+        /// </summary>
+        /// <param name="customerKey">
+        /// The customer key.
+        /// </param>
+        /// <param name="addressType">
+        /// The address type.
+        /// </param>
+        private void ClearDefaultCustomerAddress(Guid customerKey, AddressType addressType)
+        {
+            // there should only ever be one of these
+            var addresses = GetByCustomerKey(customerKey, addressType).Where(x => x.IsDefault);
+
+            var customerAddresses = addresses as ICustomerAddress[] ?? addresses.ToArray();
+            if (!customerAddresses.Any()) return;
+
+            foreach (var address in customerAddresses)
+            {
+                address.IsDefault = false;
+                Save(address);
+            }            
         }
     }
 }

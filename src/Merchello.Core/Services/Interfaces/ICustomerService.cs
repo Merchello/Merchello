@@ -12,7 +12,6 @@
     /// </summary>
     public interface ICustomerService : IService
     {
-
         /// <summary>
         /// Creates a customer without saving to the database
         /// </summary>
@@ -63,7 +62,6 @@
         /// <see cref="ICustomer"/>
         /// </returns>
         ICustomer CreateCustomerWithKey(string loginName);
-
 
         /// <summary>
         /// Saves a single <see cref="ICustomer"/> object
@@ -163,13 +161,6 @@
         /// </param>
         void Save(ICustomerAddress address);
 
-        /// <summary>
-        /// Saves a collection of <see cref="ICustomerAddress"/>
-        /// </summary>
-        /// <param name="addresses">
-        /// The addresses.
-        /// </param>
-        void Save(IEnumerable<ICustomerAddress> addresses);
 
         /// <summary>
         /// Deletes a single instance of the <see cref="ICustomerAddress"/>
@@ -179,13 +170,6 @@
         /// </param>
         void Delete(ICustomerAddress address);
 
-        /// <summary>
-        /// Deletes a collection of <see cref="ICustomerAddress"/>
-        /// </summary>
-        /// <param name="addresses">
-        /// The addresses to be deleted
-        /// </param>
-        void Delete(IEnumerable<ICustomerAddress> addresses);
 
         /// <summary>
         /// The get by key.
@@ -222,6 +206,20 @@
         /// A collection of <see cref="ICustomerAddress"/>.
         /// </returns>
         IEnumerable<ICustomerAddress> GetByCustomerKey(Guid customerKey, AddressType addressType);
+
+        /// <summary>
+        /// Gets the default customer address of a certain type
+        /// </summary>
+        /// <param name="customerKey">
+        /// The customer key.
+        /// </param>
+        /// <param name="addressType">
+        /// The address type.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ICustomerAddress"/>.
+        /// </returns>
+        ICustomerAddress GetDefaultCustomerAddress(Guid customerKey, AddressType addressType);
 
         #endregion
     }

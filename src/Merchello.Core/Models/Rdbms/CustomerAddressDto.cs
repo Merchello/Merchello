@@ -32,6 +32,7 @@
         /// Gets or sets the label.
         /// </summary>
         [Column("label")]
+        [NullSetting(NullSetting = NullSettings.Null)]
         public string Label { get; set; }
 
         /// <summary>
