@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Merchello.Core.Gateways;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Models;
+using Merchello.Plugin.Shipping.FOA.Models;
 using Umbraco.Core;
 
 namespace Merchello.Plugin.Shipping.FOA.Provider
@@ -15,11 +16,11 @@ namespace Merchello.Plugin.Shipping.FOA.Provider
     public class FoaShippingGatewayMethod : ShippingGatewayMethodBase, IFoaShippingGatewayMethod
     {
         private IShipMethod _shipMethod;
-        private readonly ExtendedDataCollection _extendedDataCollection;
-        public FoaShippingGatewayMethod(IGatewayResource gatewayResource, IShipMethod shipMethod, IShipCountry shipCountry, ExtendedDataCollection providerExtendedData) : 
+        private readonly FoaProcessorSettings _processorSettings;
+        public FoaShippingGatewayMethod(IGatewayResource gatewayResource, IShipMethod shipMethod, IShipCountry shipCountry, IGatewayProviderSettings gatewayProviderSettings) : 
             base(gatewayResource, shipMethod, shipCountry)
         {
-            _extendedDataCollection = providerExtendedData;
+            _processorSettings = gatewayProviderSettings.ExtendedData.GetProcessorSettings();
             _shipMethod = shipMethod;
         }
 
@@ -31,7 +32,7 @@ namespace Merchello.Plugin.Shipping.FOA.Provider
 
                 shipment.Items.Accept(visitor);
 
-                if (visitor.TotalPrice <= _extendedDataCollection.GetProcessorSettings().Amount)
+                if (visitor.TotalPrice >= _processorSettings.Amount)
                 {
                     return Attempt<IShipmentRateQuote>.Succeed(new ShipmentRateQuote(shipment, ShipMethod) { Rate = 0 });
                 }

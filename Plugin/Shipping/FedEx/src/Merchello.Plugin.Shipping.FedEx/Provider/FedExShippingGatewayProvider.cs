@@ -6,7 +6,6 @@ using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Merchello.Plugin.Shipping.FedEx.Models;
-using Umbraco.Core;
 using Umbraco.Core.Cache;
 
 namespace Merchello.Plugin.Shipping.FedEx.Provider
@@ -15,27 +14,6 @@ namespace Merchello.Plugin.Shipping.FedEx.Provider
     [GatewayProviderEditor("FedEx configuration", "~/App_Plugins/Merchello.FedEx/editor.html")]
     public class FedExShippingGatewayProvider : ShippingGatewayProviderBase, IFedExShippingGatewayProvider
     {
-        public const string FedEx2Day = "1";
-        public const string FedEx2DayAm = "2";
-        public const string FedExExpressSaver = "3";
-        public const string FedExFirstOvernight = "4";
-        public const string FedExPriorityOvernight = "5";
-        public const string FedExStandardOvernight = "6";       
-        public const string FedEx1DayFreight = "7";
-        public const string FedEx2DayFreight = "8";
-        public const string FedEx3DayFreight = "9";
-        public const string FedExFirstFreight = "10";
-        public const string FedExInternationalDistributionFreight = "11";
-        public const string FedExEconomyFreight = "12";
-        public const string FedExInternationalEconomy = "13";
-        public const string FedExInternationalEconomyDistribution = "14";
-        public const string FedExInternationalFirst = "15";
-        public const string FedExInternationalPriority = "16";
-        public const string FedExInternationalPriorityDistribution = "17";
-        public const string FedExInternationalPriorityFreight = "18";
-        public const string FedExEuropeFirstInternationalPriority = "19";
-        
-
         private FedExProcessorSettings _settings;
 
         public FedExShippingGatewayProvider(IGatewayProviderService gatewayProviderService,
@@ -48,25 +26,25 @@ namespace Merchello.Plugin.Shipping.FedEx.Provider
         // In this case, the GatewayResource can be used to create multiple shipmethods of the same resource type.
         internal static readonly IEnumerable<IGatewayResource> AvailableResources = new List<IGatewayResource>()
         {                  
-            new GatewayResource(FedEx2Day, "FedEx 2Day®"),     
-            new GatewayResource(FedEx2DayAm, "FedEx 2Day®A.M."),     
-            new GatewayResource(FedExExpressSaver, "FedEx Express Saver®"),        
-            new GatewayResource(FedExFirstOvernight, "FedEx First Overnight®"),
-            new GatewayResource(FedExPriorityOvernight, "FedEx Priority Overnight®"),
-            new GatewayResource(FedExStandardOvernight, "FedEx Standard Overnight®"),  
-            new GatewayResource(FedExInternationalEconomy, "FedEx International Economy"),
-            new GatewayResource(FedExInternationalEconomyDistribution, "FedEx International Distribution"),
-            new GatewayResource(FedExInternationalFirst, "FedEx International First"),
-            new GatewayResource(FedExInternationalPriority, "FedEx International Priority"),
-            new GatewayResource(FedExInternationalPriorityDistribution, "FedEx International Priority Distribution"),
-            new GatewayResource(FedExEuropeFirstInternationalPriority, "FedEx Europe First International Priority"),
-            new GatewayResource(FedEx1DayFreight, "FedEx 1 Day Freight"),
-            new GatewayResource(FedEx2DayFreight, "FedEx 2 Day Freight"),
-            new GatewayResource(FedEx3DayFreight, "FedEx 3 Day Freight"),
-            new GatewayResource(FedExFirstFreight, "FedEx First Freight"),        
-            new GatewayResource(FedExInternationalDistributionFreight, "FedEx International Distribution Freight"),
-            new GatewayResource(FedExEconomyFreight, "FedEx Economy Freight"),                                       
-            new GatewayResource(FedExInternationalPriorityFreight, "FedEx International Priority Freight")
+            new GatewayResource(Constants.ExtendedDataKeys.FedEx2DayServiceCode, Constants.ExtendedDataKeys.FedEx2DayServiceType),     
+            new GatewayResource(Constants.ExtendedDataKeys.FedEx2DayAmServiceCode, Constants.ExtendedDataKeys.FedEx2DayAmServiceType),     
+            new GatewayResource(Constants.ExtendedDataKeys.FedExExpressSaverServiceCode, Constants.ExtendedDataKeys.FedExExpressSaverServiceType),        
+            new GatewayResource(Constants.ExtendedDataKeys.FedExFirstOvernightServiceCode, Constants.ExtendedDataKeys.FedExFirstOvernightServiceType),
+            new GatewayResource(Constants.ExtendedDataKeys.FedExPriorityOvernightServiceCode, Constants.ExtendedDataKeys.FedExPriorityOvernightServiceType),
+            new GatewayResource(Constants.ExtendedDataKeys.FedExStandardOvernightServiceCode, Constants.ExtendedDataKeys.FedExStandardOvernightServiceType),  
+            new GatewayResource(Constants.ExtendedDataKeys.FedExInternationalEconomyServiceCode, Constants.ExtendedDataKeys.FedExInternationalEconomyServiceType),
+            new GatewayResource(Constants.ExtendedDataKeys.FedExInternationalEconomyDistributionServiceCode, Constants.ExtendedDataKeys.FedExInternationalEconomyDistributionServiceType),
+            new GatewayResource(Constants.ExtendedDataKeys.FedExInternationalFirstServiceCode, Constants.ExtendedDataKeys.FedExInternationalFirstServiceType),
+            new GatewayResource(Constants.ExtendedDataKeys.FedExInternationalPriorityServiceCode, Constants.ExtendedDataKeys.FedExInternationalPriorityServiceType),
+            new GatewayResource(Constants.ExtendedDataKeys.FedExInternationalPriorityDistributionServiceCode, Constants.ExtendedDataKeys.FedExInternationalPriorityDistributionServiceType),
+            new GatewayResource(Constants.ExtendedDataKeys.FedExEuropeFirstInternationalPriorityServiceCode, Constants.ExtendedDataKeys.FedExEuropeFirstInternationalPriorityServiceType),
+            new GatewayResource(Constants.ExtendedDataKeys.FedEx1DayFreightServiceCode, Constants.ExtendedDataKeys.FedEx1DayFreightServiceType),
+            new GatewayResource(Constants.ExtendedDataKeys.FedEx2DayFreightServiceCode, Constants.ExtendedDataKeys.FedEx2DayFreightServiceType),
+            new GatewayResource(Constants.ExtendedDataKeys.FedEx3DayFreightServiceCode, Constants.ExtendedDataKeys.FedEx3DayFreightServiceType),
+            new GatewayResource(Constants.ExtendedDataKeys.FedExFirstFreightServiceCode, Constants.ExtendedDataKeys.FedExFirstFreightServiceType),        
+            new GatewayResource(Constants.ExtendedDataKeys.FedExInternationalDistributionFreightServiceCode, Constants.ExtendedDataKeys.FedExInternationalDistributionFreightServiceType),
+            new GatewayResource(Constants.ExtendedDataKeys.FedExEconomyFreightServiceCode, Constants.ExtendedDataKeys.FedExEconomyFreightServiceType),                                       
+            new GatewayResource(Constants.ExtendedDataKeys.FedExInternationalPriorityFreightServiceCode, Constants.ExtendedDataKeys.FedExInternationalPriorityFreightServiceType)
         };
 
         /// <summary>
@@ -84,62 +62,62 @@ namespace Merchello.Plugin.Shipping.FedEx.Provider
             var resource = AvailableResources.First();
             switch (fedExType.ToString())
             {
-                case FedEx2Day:
-                    resource = AvailableResources.First(x => x.ServiceCode == "1");
+                case Constants.ExtendedDataKeys.FedEx2DayServiceCode:
+                    resource = AvailableResources.First(x => x.ServiceCode == Constants.ExtendedDataKeys.FedEx2DayServiceCode);
                     break;
-                case FedEx2DayAm:
-                    resource = AvailableResources.First(x => x.ServiceCode ==  "2");
+                case Constants.ExtendedDataKeys.FedEx2DayAmServiceCode:
+                    resource = AvailableResources.First(x => x.ServiceCode == Constants.ExtendedDataKeys.FedEx2DayAmServiceCode);
                     break;
-                case FedExExpressSaver:
-                     resource = AvailableResources.First(x => x.ServiceCode == "3");        
+                case Constants.ExtendedDataKeys.FedExExpressSaverServiceCode:
+                     resource = AvailableResources.First(x => x.ServiceCode == Constants.ExtendedDataKeys.FedExExpressSaverServiceCode);        
                     break;
-                case FedExFirstOvernight:
-                     resource = AvailableResources.First(x => x.ServiceCode == "4");     
+                case Constants.ExtendedDataKeys.FedExFirstOvernightServiceCode:
+                    resource = AvailableResources.First(x => x.ServiceCode == Constants.ExtendedDataKeys.FedExFirstOvernightServiceCode);     
                     break;
-                case FedExPriorityOvernight:
-                    resource = AvailableResources.First(x => x.ServiceCode == "5");     
+                case Constants.ExtendedDataKeys.FedExPriorityOvernightServiceCode:
+                    resource = AvailableResources.First(x => x.ServiceCode == Constants.ExtendedDataKeys.FedExPriorityOvernightServiceCode);     
                     break;
-                case FedExStandardOvernight:
-                    resource = AvailableResources.First(x => x.ServiceCode == "6");     
-                    break;  
-                case FedEx1DayFreight:
-                    resource = AvailableResources.First(x => x.ServiceCode == "7");           
+                case Constants.ExtendedDataKeys.FedExStandardOvernightServiceCode:
+                    resource = AvailableResources.First(x => x.ServiceCode == Constants.ExtendedDataKeys.FedExStandardOvernightServiceCode);     
                     break;
-                case FedEx2DayFreight:
-                    resource = AvailableResources.First(x => x.ServiceCode == "8");           
+                case Constants.ExtendedDataKeys.FedEx1DayFreightServiceCode:
+                    resource = AvailableResources.First(x => x.ServiceCode == Constants.ExtendedDataKeys.FedEx1DayFreightServiceCode);           
                     break;
-                case FedEx3DayFreight:
-                    resource = AvailableResources.First(x => x.ServiceCode == "9");           
+                case Constants.ExtendedDataKeys.FedEx2DayFreightServiceCode:
+                    resource = AvailableResources.First(x => x.ServiceCode == Constants.ExtendedDataKeys.FedEx2DayFreightServiceCode);           
                     break;
-                case FedExFirstFreight:
-                    resource = AvailableResources.First(x => x.ServiceCode == "10");          
+                case Constants.ExtendedDataKeys.FedEx3DayFreightServiceCode:
+                    resource = AvailableResources.First(x => x.ServiceCode == Constants.ExtendedDataKeys.FedEx3DayFreightServiceCode);           
                     break;
-                case FedExInternationalDistributionFreight:
-                    resource = AvailableResources.First(x => x.ServiceCode == "11");    
+                case Constants.ExtendedDataKeys.FedExFirstFreightServiceCode:
+                    resource = AvailableResources.First(x => x.ServiceCode == Constants.ExtendedDataKeys.FedExFirstFreightServiceCode);          
                     break;
-                case FedExEconomyFreight:
-                    resource = AvailableResources.First(x => x.ServiceCode == "12");                             
+                case Constants.ExtendedDataKeys.FedExInternationalDistributionFreightServiceCode:
+                    resource = AvailableResources.First(x => x.ServiceCode == Constants.ExtendedDataKeys.FedExInternationalDistributionFreightServiceCode);    
                     break;
-                case FedExInternationalEconomy:
-                    resource = AvailableResources.First(x => x.ServiceCode == "13");                       
+                case Constants.ExtendedDataKeys.FedExEconomyFreightServiceCode:
+                    resource = AvailableResources.First(x => x.ServiceCode == Constants.ExtendedDataKeys.FedExEconomyFreightServiceCode);                             
                     break;
-                case FedExInternationalEconomyDistribution:
-                    resource = AvailableResources.First(x => x.ServiceCode == "14");               
+                case Constants.ExtendedDataKeys.FedExInternationalEconomyServiceCode:
+                    resource = AvailableResources.First(x => x.ServiceCode == Constants.ExtendedDataKeys.FedExInternationalEconomyServiceCode);                       
                     break;
-                case FedExInternationalFirst:
-                    resource = AvailableResources.First(x => x.ServiceCode == "15");                   
+                case Constants.ExtendedDataKeys.FedExInternationalEconomyDistributionServiceCode:
+                    resource = AvailableResources.First(x => x.ServiceCode == Constants.ExtendedDataKeys.FedExInternationalEconomyDistributionServiceCode);               
                     break;
-                case FedExInternationalPriority:
-                    resource = AvailableResources.First(x => x.ServiceCode == "16");                
+                case Constants.ExtendedDataKeys.FedExInternationalFirstServiceCode:
+                    resource = AvailableResources.First(x => x.ServiceCode == Constants.ExtendedDataKeys.FedExInternationalFirstServiceCode);                   
                     break;
-                case FedExInternationalPriorityDistribution:
-                    resource = AvailableResources.First(x => x.ServiceCode == "17");     
+                case Constants.ExtendedDataKeys.FedExInternationalPriorityServiceCode:
+                    resource = AvailableResources.First(x => x.ServiceCode == Constants.ExtendedDataKeys.FedExInternationalPriorityServiceCode);                
                     break;
-                case FedExInternationalPriorityFreight:
-                    resource = AvailableResources.First(x => x.ServiceCode == "18");       
+                case Constants.ExtendedDataKeys.FedExInternationalPriorityDistributionServiceCode:
+                    resource = AvailableResources.First(x => x.ServiceCode == Constants.ExtendedDataKeys.FedExInternationalPriorityDistributionServiceCode);     
                     break;
-                case FedExEuropeFirstInternationalPriority:
-                    resource = AvailableResources.First(x => x.ServiceCode == "19");   
+                case Constants.ExtendedDataKeys.FedExInternationalPriorityFreightServiceCode:
+                    resource = AvailableResources.First(x => x.ServiceCode == Constants.ExtendedDataKeys.FedExInternationalPriorityFreightServiceCode);       
+                    break;
+                case Constants.ExtendedDataKeys.FedExEuropeFirstInternationalPriorityServiceCode:
+                    resource = AvailableResources.First(x => x.ServiceCode == Constants.ExtendedDataKeys.FedExEuropeFirstInternationalPriorityServiceCode);   
                     break;
             }
 
@@ -170,7 +148,7 @@ namespace Merchello.Plugin.Shipping.FedEx.Provider
 
             if (!attempt.Success) throw attempt.Exception;
 
-            return new FedExShippingGatewayMethod(gatewayResource, attempt.Result, shipCountry, new ExtendedDataCollection());
+            return new FedExShippingGatewayMethod(gatewayResource, attempt.Result, shipCountry, GatewayProviderSettings);
         }
 
         /// <summary>
@@ -205,7 +183,7 @@ namespace Merchello.Plugin.Shipping.FedEx.Provider
                         new FedExShippingGatewayMethod(
                             AvailableResources.FirstOrDefault(x => shipMethod.ServiceCode.StartsWith(x.ServiceCode)),
                             shipMethod, shipCountry,
-                            new ExtendedDataCollection())
+                            GatewayProviderSettings)
                 ).OrderBy(x => x.ShipMethod.Name);
         }
     }

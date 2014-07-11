@@ -36,7 +36,7 @@ namespace Merchello.Plugin.Shipping.FOA.Provider
 
             if (!attempt.Success) throw attempt.Exception;
 
-            return new FoaShippingGatewayMethod(gatewayResource, attempt.Result, shipCountry, new ExtendedDataCollection());
+            return new FoaShippingGatewayMethod(gatewayResource, attempt.Result, shipCountry, GatewayProviderSettings);
         }
 
         public override void SaveShippingGatewayMethod(IShippingGatewayMethod shippingGatewayMethod)
@@ -52,7 +52,7 @@ namespace Merchello.Plugin.Shipping.FOA.Provider
                     shipMethod =>
                         new FoaShippingGatewayMethod(
                             GatewayResource,
-                            shipMethod, shipCountry, new ExtendedDataCollection())
+                            shipMethod, shipCountry, GatewayProviderSettings)
                 ).OrderBy(x => x.ShipMethod.Name);
         }
     }
