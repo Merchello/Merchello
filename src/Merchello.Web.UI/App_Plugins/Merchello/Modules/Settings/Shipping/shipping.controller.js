@@ -575,19 +575,19 @@
 
 		    var dialogMethod = method;
 
-		    if (!method) {
-		        if (provider.isFixedRate()) {
-		            dialogMethod = new merchello.Models.FixedRateShippingMethod();
-		            dialogMethod.shipMethod.shipCountryKey = country.key;
-		            dialogMethod.shipMethod.providerKey = provider.key;
-		            dialogMethod.shipMethod.dialogEditorView.editorView = '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shippingmethod.html';
-		        } else {
-		            dialogMethod = new merchello.Models.ShippingMethod();
-		            dialogMethod.shipCountryKey = country.key;
-		            dialogMethod.providerKey = provider.key;
-		            dialogMethod.dialogEditorView.editorView = '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shippingmethod.html';
-		        }
-		    }
+		    //if (!method) {
+		    //    if (provider.isFixedRate()) {
+		    //        dialogMethod = new merchello.Models.FixedRateShippingMethod();
+		    //        dialogMethod.shipMethod.shipCountryKey = country.key;
+		    //        dialogMethod.shipMethod.providerKey = provider.key;
+		    //        dialogMethod.shipMethod.dialogEditorView.editorView = '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shippingmethod.html';
+		    //    } else {
+		    dialogMethod = new merchello.Models.ShippingMethod();
+		    dialogMethod.shipCountryKey = country.key;
+		    dialogMethod.providerKey = provider.key;
+		    dialogMethod.dialogEditorView.editorView = '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shippingmethod.html';
+		    //}
+		    //}
 
 		    var availableResources = [];
 		    if (provider.isFixedRate()) {
