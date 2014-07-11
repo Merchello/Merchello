@@ -1,10 +1,9 @@
-﻿using Umbraco.Core.Services;
-
-namespace Merchello.Core.Services
+﻿namespace Merchello.Core.Services
 {
     using System;
     using System.Collections.Generic;
     using Models;
+    using Umbraco.Core.Services;
 
     /// <summary>
     /// The AnonymousCustomerService interface.

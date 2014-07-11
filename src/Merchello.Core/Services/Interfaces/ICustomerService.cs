@@ -125,6 +125,8 @@
         /// <returns>List of <see cref="ICustomer"/></returns>
         IEnumerable<ICustomer> GetByKeys(IEnumerable<Guid> keys);
 
+        #region Anonymous Customer
+
         /// <summary>
         /// Crates an <see cref="IAnonymousCustomer"/> and saves it to the database
         /// </summary>
@@ -148,5 +150,79 @@
         /// </summary>
         /// <param name="anonymouses">Collection of <see cref="IAnonymousCustomer"/> to delete</param>
         void Delete(IEnumerable<IAnonymousCustomer> anonymouses);
+
+        #endregion
+
+        #region Customer Address
+
+        /// <summary>
+        /// Saves a single <see cref="ICustomerAddress"/>
+        /// </summary>
+        /// <param name="address">
+        /// The address.
+        /// </param>
+        void Save(ICustomerAddress address);
+
+        /// <summary>
+        /// Saves a collection of <see cref="ICustomerAddress"/>
+        /// </summary>
+        /// <param name="addresses">
+        /// The addresses.
+        /// </param>
+        void Save(IEnumerable<ICustomerAddress> addresses);
+
+        /// <summary>
+        /// Deletes a single instance of the <see cref="ICustomerAddress"/>
+        /// </summary>
+        /// <param name="address">
+        /// The address to be deleted
+        /// </param>
+        void Delete(ICustomerAddress address);
+
+        /// <summary>
+        /// Deletes a collection of <see cref="ICustomerAddress"/>
+        /// </summary>
+        /// <param name="addresses">
+        /// The addresses to be deleted
+        /// </param>
+        void Delete(IEnumerable<ICustomerAddress> addresses);
+
+        /// <summary>
+        /// The get by key.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ICustomerAddress"/>.
+        /// </returns>
+        ICustomerAddress GetAddressByKey(Guid key);
+
+        /// <summary>
+        /// Gets a collection of <see cref="ICustomerAddress"/> by the customer key
+        /// </summary>
+        /// <param name="customerKey">
+        /// The customer key.
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="ICustomerAddress"/>.
+        /// </returns>
+        IEnumerable<ICustomerAddress> GetByCustomerKey(Guid customerKey);
+
+        /// <summary>
+        /// Gets a collection of <see cref="ICustomerAddress"/> by the customer key filtered by an <see cref="AddressType"/>
+        /// </summary>
+        /// <param name="customerKey">
+        /// The customer key.
+        /// </param>
+        /// <param name="addressType">
+        /// The address type.
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="ICustomerAddress"/>.
+        /// </returns>
+        IEnumerable<ICustomerAddress> GetByCustomerKey(Guid customerKey, AddressType addressType);
+
+        #endregion
     }
 }

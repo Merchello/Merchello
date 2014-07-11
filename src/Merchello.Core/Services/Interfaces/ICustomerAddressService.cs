@@ -8,7 +8,7 @@
     /// <summary>
     /// Defines a CustomerAddressService
     /// </summary>
-    internal interface ICustomerAddressService : IService
+    public interface ICustomerAddressService : IService
     {
         /// <summary>
         /// The save.
@@ -16,7 +16,8 @@
         /// <param name="address">
         /// The address.
         /// </param>
-        void Save(ICustomerAddress address);
+        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        void Save(ICustomerAddress address, bool raiseEvents = true);
 
         /// <summary>
         /// The save.
@@ -24,7 +25,8 @@
         /// <param name="addresses">
         /// The addresses.
         /// </param>
-        void Save(IEnumerable<ICustomerAddress> addresses);
+        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        void Save(IEnumerable<ICustomerAddress> addresses, bool raiseEvents = true);
 
         /// <summary>
         /// The delete.
@@ -32,7 +34,8 @@
         /// <param name="address">
         /// The address.
         /// </param>
-        void Delete(ICustomerAddress address);
+        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        void Delete(ICustomerAddress address, bool raiseEvents = true);
 
         /// <summary>
         /// The delete.
@@ -40,7 +43,8 @@
         /// <param name="addresses">
         /// The addresses.
         /// </param>
-        void Delete(IEnumerable<ICustomerAddress> addresses);
+        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        void Delete(IEnumerable<ICustomerAddress> addresses, bool raiseEvents = true);
 
         /// <summary>
         /// The get by key.
@@ -54,7 +58,7 @@
         ICustomerAddress GetByKey(Guid key);
 
         /// <summary>
-        /// The get by customer key.
+        /// Gets a collection of <see cref="ICustomerAddress"/> by the customer key
         /// </summary>
         /// <param name="customerKey">
         /// The customer key.
@@ -65,7 +69,7 @@
         IEnumerable<ICustomerAddress> GetByCustomerKey(Guid customerKey);
 
         /// <summary>
-        /// The get by customer key.
+        /// Gets a collection of <see cref="ICustomerAddress"/> by the customer key filtered by an <see cref="AddressType"/>
         /// </summary>
         /// <param name="customerKey">
         /// The customer key.

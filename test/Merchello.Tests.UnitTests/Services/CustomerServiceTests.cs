@@ -24,7 +24,7 @@ namespace Merchello.Tests.UnitTests.Services
         {
             base.Setup();
 
-            _customerService = new CustomerService(new MockUnitOfWorkProvider(), new RepositoryFactory(), new AnonymousCustomerService());
+            _customerService = new CustomerService(new MockUnitOfWorkProvider(), new RepositoryFactory(), new AnonymousCustomerService(), new CustomerAddressService());
             Before = null;
             After = null;
 

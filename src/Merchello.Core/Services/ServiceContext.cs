@@ -35,6 +35,11 @@
         private Lazy<ITaxMethodService> _countryTaxRateService;
 
         /// <summary>
+        /// The customer address service.
+        /// </summary>
+        private Lazy<ICustomerAddressService> _customerAddressService;
+
+        /// <summary>
         /// The customer service.
         /// </summary>
         private Lazy<ICustomerService> _customerService;
@@ -230,6 +235,14 @@
         {
             get { return _countryTaxRateService.Value; }
         }
+
+        /// <summary>
+        /// Gets the <see cref="ICustomerAddressService"/>
+        /// </summary>
+        internal ICustomerAddressService CustomerAddressService
+        {
+            get { return _customerAddressService.Value; }
+        }
     
         /// <summary>
         /// Gets the <see cref="INotificationMessageService"/>
@@ -286,8 +299,11 @@
             if (_appliedPaymentService == null)
                 _appliedPaymentService = new Lazy<IAppliedPaymentService>(() => new AppliedPaymentService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
+            if (_customerAddressService == null)
+                _customerAddressService = new Lazy<ICustomerAddressService>(() => new CustomerAddressService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+
             if (_customerService == null)
-                _customerService = new Lazy<ICustomerService>(() => new CustomerService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _anonymousCustomerService.Value));
+                _customerService = new Lazy<ICustomerService>(() => new CustomerService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _anonymousCustomerService.Value, _customerAddressService.Value));
 
             if (_itemCacheService == null)
                 _itemCacheService = new Lazy<IItemCacheService>(() => new ItemCacheService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
@@ -343,6 +359,5 @@
             if (_notificationMessageService == null)
                 _notificationMessageService = new Lazy<INotificationMessageService>(() => new NotificationMessageService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
         }
-
     }
 }

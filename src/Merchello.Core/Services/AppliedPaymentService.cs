@@ -116,47 +116,15 @@
         /// <returns>An <see cref="IAppliedPayment"/></returns>
         public IAppliedPayment CreateAppliedPaymentWithKey(Guid paymentKey, Guid invoiceKey, AppliedPaymentType appliedPaymentType, string description, decimal amount, bool raiseEvents = true)
         {
-
-            return CreateAppliedPaymentWithKey(paymentKey, invoiceKey,
-                                               EnumTypeFieldConverter.AppliedPayment.GetTypeField(appliedPaymentType)
-                                                                     .TypeKey, description, amount, raiseEvents);
+            return CreateAppliedPaymentWithKey(
+                paymentKey, 
+                invoiceKey,
+                EnumTypeFieldConverter.AppliedPayment.GetTypeField(appliedPaymentType).TypeKey, 
+                description, 
+                amount, 
+                raiseEvents);
         }
-
-        internal IAppliedPayment CreateAppliedPaymentWithKey(Guid paymentKey, Guid invoiceKey, Guid appliedPaymentTfKey, string description, decimal amount, bool raiseEvents = true)
-        {
-            Mandate.ParameterCondition(!Guid.Empty.Equals(paymentKey), "paymentKey");
-            Mandate.ParameterCondition(!Guid.Empty.Equals(invoiceKey), "invoiceKey");
-            Mandate.ParameterCondition(!Guid.Empty.Equals(appliedPaymentTfKey), "appliedPaymentTfKey");
-
-            var appliedPayment = new AppliedPayment(paymentKey, invoiceKey, appliedPaymentTfKey)
-            {
-                Description = description,
-                Amount = amount,
-                Exported = false
-            };
-
-            if (raiseEvents)
-                if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<IAppliedPayment>(appliedPayment), this))
-                {
-                    appliedPayment.WasCancelled = true;
-                    return appliedPayment;
-                }
-
-            using (new WriteLock(Locker))
-            {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateAppliedPaymentRepository(uow))
-                {
-                    repository.AddOrUpdate(appliedPayment);
-                    uow.Commit();
-                }
-            }
-
-            if (raiseEvents) Created.RaiseEvent(new Events.NewEventArgs<IAppliedPayment>(appliedPayment), this);
-
-            return appliedPayment;
-        }
-
+       
         /// <summary>
         /// Saves an <see cref="IAppliedPayment"/>
         /// </summary>
@@ -203,6 +171,7 @@
                     {
                         repository.AddOrUpdate(appliedPayment);
                     }
+
                     uow.Commit();
                 }
             }
@@ -308,5 +277,65 @@
                 return repository.GetByQuery(query);
             }
         }
+
+        /// <summary>
+        /// The create applied payment with key.
+        /// </summary>
+        /// <param name="paymentKey">
+        /// The payment key.
+        /// </param>
+        /// <param name="invoiceKey">
+        /// The invoice key.
+        /// </param>
+        /// <param name="appliedPaymentTfKey">
+        /// The applied payment tf key.
+        /// </param>
+        /// <param name="description">
+        /// The description.
+        /// </param>
+        /// <param name="amount">
+        /// The amount.
+        /// </param>
+        /// <param name="raiseEvents">
+        /// The raise events.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IAppliedPayment"/>.
+        /// </returns>
+        internal IAppliedPayment CreateAppliedPaymentWithKey(Guid paymentKey, Guid invoiceKey, Guid appliedPaymentTfKey, string description, decimal amount, bool raiseEvents = true)
+        {
+            Mandate.ParameterCondition(!Guid.Empty.Equals(paymentKey), "paymentKey");
+            Mandate.ParameterCondition(!Guid.Empty.Equals(invoiceKey), "invoiceKey");
+            Mandate.ParameterCondition(!Guid.Empty.Equals(appliedPaymentTfKey), "appliedPaymentTfKey");
+
+            var appliedPayment = new AppliedPayment(paymentKey, invoiceKey, appliedPaymentTfKey)
+            {
+                Description = description,
+                Amount = amount,
+                Exported = false
+            };
+
+            if (raiseEvents)
+                if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<IAppliedPayment>(appliedPayment), this))
+                {
+                    appliedPayment.WasCancelled = true;
+                    return appliedPayment;
+                }
+
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreateAppliedPaymentRepository(uow))
+                {
+                    repository.AddOrUpdate(appliedPayment);
+                    uow.Commit();
+                }
+            }
+
+            if (raiseEvents) Created.RaiseEvent(new Events.NewEventArgs<IAppliedPayment>(appliedPayment), this);
+
+            return appliedPayment;
+        }
+
     }
 }

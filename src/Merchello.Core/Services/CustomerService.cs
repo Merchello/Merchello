@@ -40,13 +40,18 @@
         /// </summary>
         private readonly IAnonymousCustomerService _anonymousCustomerService;
 
+        /// <summary>
+        /// The customer address service.
+        /// </summary>
+        private readonly ICustomerAddressService _customerAddressService;
+
         #endregion
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomerService"/> class.
         /// </summary>
         public CustomerService()
-            : this(new RepositoryFactory(), new AnonymousCustomerService())
+            : this(new RepositoryFactory(), new AnonymousCustomerService(), new CustomerAddressService())
         {
         }
 
@@ -59,8 +64,11 @@
         /// <param name="anonymousCustomerService">
         /// The anonymous Customer Service.
         /// </param>
-        public CustomerService(RepositoryFactory repositoryFactory, IAnonymousCustomerService anonymousCustomerService)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, anonymousCustomerService)
+        /// <param name="customerAddressService">
+        /// The customer Address Service.
+        /// </param>
+        public CustomerService(RepositoryFactory repositoryFactory, IAnonymousCustomerService anonymousCustomerService, ICustomerAddressService customerAddressService)
+            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, anonymousCustomerService, customerAddressService)
         {
         }
 
@@ -76,15 +84,20 @@
         /// <param name="anonymousCustomerService">
         /// The anonymous Customer Service.
         /// </param>
-        public CustomerService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, IAnonymousCustomerService anonymousCustomerService)
+        /// <param name="customerAddressService">
+        /// The customer Address Service.
+        /// </param>
+        public CustomerService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, IAnonymousCustomerService anonymousCustomerService, ICustomerAddressService customerAddressService)
         {
             Mandate.ParameterNotNull(provider, "provider");
             Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
             Mandate.ParameterNotNull(anonymousCustomerService, "anonymousCustomerService");
+            Mandate.ParameterNotNull(customerAddressService, "customerAddressService");
 
             _uowProvider = provider;
             _repositoryFactory = repositoryFactory;
             _anonymousCustomerService = anonymousCustomerService;
+            _customerAddressService = customerAddressService;
         }
 
 
@@ -410,6 +423,99 @@
         {
             _anonymousCustomerService.Delete(anonymouses);
         }
+
+        #region Customer Address
+
+        /// <summary>
+        /// Saves a single <see cref="ICustomerAddress"/>
+        /// </summary>
+        /// <param name="address">
+        /// The address to be saved
+        /// </param>
+        public void Save(ICustomerAddress address)
+        {
+            _customerAddressService.Save(address);
+        }
+
+        /// <summary>
+        /// Saves a collection of <see cref="ICustomerAddress"/>
+        /// </summary>
+        /// <param name="addresses">
+        /// The addresses to be saved
+        /// </param>
+        public void Save(IEnumerable<ICustomerAddress> addresses)
+        {
+            _customerAddressService.Save(addresses);
+        }
+
+        /// <summary>
+        /// Deletes a single instance of the <see cref="ICustomerAddress"/>
+        /// </summary>
+        /// <param name="address">
+        /// The address to be deleted
+        /// </param>
+        public void Delete(ICustomerAddress address)
+        {
+            _customerAddressService.Delete(address);
+        }
+
+        /// <summary>
+        /// Deletes a collection of <see cref="ICustomerAddress"/>
+        /// </summary>
+        /// <param name="addresses">
+        /// The addresses to be deleted
+        /// </param>
+        public void Delete(IEnumerable<ICustomerAddress> addresses)
+        {
+            _customerAddressService.Delete(addresses);
+        }
+
+        /// <summary>
+        /// Gets an address by it's key
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ICustomerAddress"/>.
+        /// </returns>
+        public ICustomerAddress GetAddressByKey(Guid key)
+        {
+            return _customerAddressService.GetByKey(key);
+        }
+
+        /// <summary>
+        /// Gets a collection of <see cref="ICustomerAddress"/> by the customer key
+        /// </summary>
+        /// <param name="customerKey">
+        /// The customer key.
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="ICustomerAddress"/>.
+        /// </returns>
+        public IEnumerable<ICustomerAddress> GetByCustomerKey(Guid customerKey)
+        {
+            return _customerAddressService.GetByCustomerKey(customerKey);
+        }
+
+        /// <summary>
+        /// Gets a collection of <see cref="ICustomerAddress"/> by the customer key filtered by an <see cref="AddressType"/>
+        /// </summary>
+        /// <param name="customerKey">
+        /// The customer key.
+        /// </param>
+        /// <param name="addressType">
+        /// The address type.
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="ICustomerAddress"/>.
+        /// </returns>
+        public IEnumerable<ICustomerAddress> GetByCustomerKey(Guid customerKey, AddressType addressType)
+        {
+            return _customerAddressService.GetByCustomerKey(customerKey, addressType);
+        }
+
+        #endregion
 
         /// <summary>
         /// Gets a list of customer give a list of unique keys
