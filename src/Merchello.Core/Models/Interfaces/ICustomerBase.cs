@@ -11,12 +11,6 @@
     public interface ICustomerBase : IHasExtendedData, IEntity
     {
         /// <summary>
-        /// Gets the unique key for the Entity (used for ItemCaching)
-        /// </summary>
-        [DataMember]
-        Guid EntityKey { get; }
-
-        /// <summary>
         /// Gets or sets the date the customer was last active on the site
         /// </summary>
         [DataMember]

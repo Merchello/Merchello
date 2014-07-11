@@ -305,9 +305,6 @@
     <Compile Include="Gateways\Taxation\TaxationContext.cs" />
     <Compile Include="Gateways\Taxation\TaxationGatewayProviderBase.cs" />
     <Compile Include="Models\Address.cs" />
-    <Compile Include="Models\AnonymousCustomerBase.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Models\AppliedPayment.cs">
       <SubType>Code</SubType>
     </Compile>

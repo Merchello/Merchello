@@ -1,6 +1,5 @@
 ﻿namespace Merchello.Core.Models
 {
-    using System;
     using System.Runtime.Serialization;
 
     /// <summary>
@@ -37,5 +36,11 @@
         /// </summary>
         [DataMember]
         string LoginName { get; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether tax exempt.
+        /// </summary>
+        [DataMember]
+        bool TaxExempt { get; set; }
     }
 }

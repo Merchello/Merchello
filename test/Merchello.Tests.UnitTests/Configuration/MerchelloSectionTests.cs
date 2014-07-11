@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using ClientDependency.Core;
+using Merchello.Core.Configuration;
 using Merchello.Core.Configuration.Outline;
 using NUnit.Framework;
 
@@ -113,6 +114,19 @@ namespace Merchello.Tests.UnitTests.Configuration
 
             //// Assert
             Assert.NotNull(replacementCollection);
+        }
+
+        [Test]
+        public void Can_Retrieve_AnonymousCustomerMaxDays()
+        {
+            //// Arrange
+            const string expected = "7";
+
+            //// Act
+            var value = MerchelloConfiguration.Current.GetSetting("AnonymousCustomersMaxDays");
+
+            //// Assert
+            Assert.AreEqual(expected, value);
         }
     }
 

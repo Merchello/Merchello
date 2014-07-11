@@ -34,12 +34,10 @@
             CacheMap<Customer, CustomerDto>(src => src.LastName, dto => dto.LastName);
             CacheMap<Customer, CustomerDto>(src => src.Email, dto => dto.Email);
             CacheMap<Customer, CustomerDto>(src => src.LoginName, dto => dto.LoginName);
-            CacheMap<Customer, CustomerDto>(src => src.EntityKey, dto => dto.EntityKey);
             CacheMap<Customer, CustomerDto>(src => src.CreateDate, dto => dto.CreateDate);
             CacheMap<Customer, CustomerDto>(src => src.UpdateDate, dto => dto.UpdateDate);
         }
 
         #endregion
-
     }
 }

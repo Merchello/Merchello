@@ -83,7 +83,7 @@
             var itemCache = GetItemCacheByCustomer(customer, itemCacheType);
             if (itemCache != null) return itemCache;
 
-            itemCache = new ItemCache(customer.EntityKey, itemCacheType)
+            itemCache = new ItemCache(customer.Key, itemCacheType)
             {
                 VersionKey = versionKey
             };
@@ -94,7 +94,7 @@
                 return itemCache;
             }
 
-            itemCache.EntityKey = customer.EntityKey;
+            itemCache.EntityKey = customer.Key;
 
             using (new WriteLock(Locker))
             {
@@ -253,7 +253,7 @@
         {
             using (var repository = _repositoryFactory.CreateItemCacheRepository(_uowProvider.GetUnitOfWork()))
             {
-                var query = Query<IItemCache>.Builder.Where(x => x.EntityKey == customer.EntityKey);
+                var query = Query<IItemCache>.Builder.Where(x => x.EntityKey == customer.Key);
                 return repository.GetByQuery(query);
             }
         }
@@ -265,7 +265,7 @@
         {
             using (var repository = _repositoryFactory.CreateItemCacheRepository(_uowProvider.GetUnitOfWork()))
             {
-                var query = Query<IItemCache>.Builder.Where(x => x.EntityKey == customer.EntityKey && x.ItemCacheTfKey == itemCacheTfKey);
+                var query = Query<IItemCache>.Builder.Where(x => x.EntityKey == customer.Key && x.ItemCacheTfKey == itemCacheTfKey);
                 return repository.GetByQuery(query).FirstOrDefault();
             }
         }

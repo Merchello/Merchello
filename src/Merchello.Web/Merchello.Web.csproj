@@ -116,6 +116,7 @@
     <Compile Include="Editors\CatalogFixedRateShippingApiController.cs">
       <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
     </Compile>
+    <Compile Include="Editors\FixedRateShippingApiController.cs" />
     <Compile Include="Editors\GatewayProviderApiController.cs" />
     <Compile Include="Editors\InvoiceApiController.cs" />
     <Compile Include="Editors\NotificationGatewayApiController.cs" />

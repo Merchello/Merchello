@@ -22,10 +22,10 @@
             var customer = new Customer(dto.LoginName)
                 {
                     Key = dto.Key,
-                    EntityKey = dto.EntityKey,
                     FirstName = dto.FirstName,
                     LastName = dto.LastName,
                     Email = dto.Email,
+                    TaxExempt = dto.TaxExempt,
                     ExtendedData = new ExtendedDataCollection(dto.ExtendedData),
                     CreateDate = dto.CreateDate,
                     UpdateDate = dto.UpdateDate
@@ -54,14 +54,14 @@
                     FirstName = entity.FirstName,
                     LastName = entity.LastName,
                     Email = entity.Email,
-                    EntityKey = entity.EntityKey,
+                    TaxExempt = entity.TaxExempt,
+                    LastActivityDate = entity.LastActivityDate,
                     ExtendedData = entity.ExtendedData.SerializeToXml(),
                     UpdateDate = entity.UpdateDate,
                     CreateDate = entity.CreateDate
                 };
 
             return dto;
-        }       
-        
+        }               
     }
 }

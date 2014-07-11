@@ -1,4 +1,6 @@
-﻿namespace Merchello.Core.Services
+﻿using System;
+
+namespace Merchello.Core.Services
 {
     using System.Collections.Generic;
 
@@ -35,5 +37,15 @@
         /// <param name="anonymouses">Collection of <see cref="IAnonymousCustomer"/> to delete</param>
         void Delete(IEnumerable<IAnonymousCustomer> anonymouses);
 
+        /// <summary>
+        /// The get anonymous customers created before a certain date.
+        /// </summary>
+        /// <param name="createdDate">
+        /// The created Date.
+        /// </param>
+        /// <returns>
+        /// The collection of <see cref="IAnonymousCustomer"/> older than a certain number of days.
+        /// </returns>
+        IEnumerable<IAnonymousCustomer> GetAnonymousCustomersCreatedBefore(DateTime createdDate);
     }
 }
