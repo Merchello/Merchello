@@ -43,12 +43,12 @@
 				    </div>
 
                     <!-- Digital Downloads Picker -->
-			        <merchello-slide-open-panel is-open="productVariant.hasDigitalDownload">
+			        <merchello-slide-open-panel is-open="productVariant.hasDigitalDownload" classes="'control-group umb-control-group'">
 			            <product-digital-download-section product="product" product-variant="productVariant" ></product-digital-download-section>
 			        </merchello-slide-open-panel>
               
                     <!-- Product Options and Variants -->
-			        <merchello-slide-open-panel is-open="product.hasOptions">
+			        <merchello-slide-open-panel is-open="product.hasOptions" classes="'control-group umb-control-group'">
 					    <label class="merchello-control-label">
 						    <localize key="merchelloGeneral_multipleOptions"/>
 						    <small><localize key="merchelloVariant_addOptions"/></small>
@@ -57,7 +57,7 @@
 					    <div class="merchello-controls row-fluid">
 
                             <!-- Allows adding/removing/editing of options / attributes -->
-					        <product-options-manage product="product" parent-form="productVariantForm" on-update="updateVariants(form)"></product-options-manage>
+					        <product-options-manage product="product" parent-form="productVariantForm" classes="'well col-xs-10 span10'" on-update="updateVariants(form)"></product-options-manage>
 
                             <!-- Table of variants that the options create for editing -->
 					        <product-variant-create-table product="product" ></product-variant-create-table>
@@ -69,12 +69,12 @@
 			        </merchello-slide-open-panel>
 
                     <!-- Inventory for a single product without options -->
-			        <merchello-slide-open-panel is-open="(productVariant.trackInventory && !productVariant.hasOptions)">
+			        <merchello-slide-open-panel is-open="(productVariant.trackInventory && !productVariant.hasOptions)" classes="'control-group umb-control-group'">
 			            <product-inventory-section product="product" product-variant="productVariant" default-warehouse="defaultWarehouse" warehouses="warehouses" ></product-inventory-section>
 			        </merchello-slide-open-panel>
 
                     <!-- Shipping settings for a product. -->
-			        <merchello-slide-open-panel is-open="productVariant.shippable">
+			        <merchello-slide-open-panel is-open="productVariant.shippable" classes="'control-group umb-control-group'">
 			            <product-shipping-section product="product" product-variant="productVariant" ></product-shipping-section>
 			        </merchello-slide-open-panel>
 

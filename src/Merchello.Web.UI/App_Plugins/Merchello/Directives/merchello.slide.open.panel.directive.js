@@ -14,9 +14,17 @@
             replace: true,
             transclude: 'true',
             scope: {
-                isOpen: '='
+                isOpen: '=',
+                classes: '='
             },
-            templateUrl: '/App_Plugins/Merchello/Directives/merchello-slide-open-panel.html'
+            templateUrl: '/App_Plugins/Merchello/Directives/merchello-slide-open-panel.html',
+            link: function ($scope, $element, attrs) {
+                
+                if ($scope.classes == undefined) {
+                    $scope.classes = 'control-group umb-control-group';
+                }
+            }
+
         };
     };
 
