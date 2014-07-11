@@ -12,6 +12,7 @@ using Merchello.Core.Services;
 using Merchello.Tests.Base.DataMakers;
 using Merchello.Tests.Base.SqlSyntax;
 using Umbraco.Core.Persistence;
+using umbraco.presentation.webservices;
 
 
 namespace Merchello.Tests.IntegrationTests.TestHelpers
@@ -81,22 +82,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
             return addresses;
         }
 
-        /// <summary>
-        /// Deletes all of the addresses in the database
-        /// </summary>
-        public void DeleteAllAddresses()
-        {
-            //var all = ((AddressService) AddressService).GetAll();
-            //AddressService.Delete(all);
-        }
 
-        ///// <summary>
-        ///// The address service
-        ///// </summary>
-        //public IAddressService AddressService
-        //{
-        //    get { return _serviceContext.AddressService; }
-        //}
 
         #endregion
 
@@ -119,6 +105,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         }
 
         #endregion
+
 
         #region ICountryTaxRegion
 
@@ -214,6 +201,23 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         public ICustomerService CustomerService
         {
             get { return _serviceContext.CustomerService; }
+        }
+
+        /// <summary>
+        /// Deletes all customer addresses
+        /// </summary>
+        public void DeleteAllCustomerAddresses()
+        {
+            var all = ((CustomerAddressService) CustomerAddressService).GetAll();
+            ((CustomerAddressService)CustomerAddressService).Delete(all);
+        }
+
+        /// <summary>
+        /// The customer address service
+        /// </summary>
+        public ICustomerAddressService CustomerAddressService
+        {
+            get { return _serviceContext.CustomerAddressService; }
         }
 
         #endregion

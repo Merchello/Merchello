@@ -1,17 +1,15 @@
-﻿using System;
-
-namespace Merchello.Core.Services
+﻿namespace Merchello.Core.Services
 {
+    using System;
     using System.Collections.Generic;
-
-    using Merchello.Core.Models;
+    using Models;
+    using Umbraco.Core.Services;
 
     /// <summary>
     /// The AnonymousCustomerService interface.
     /// </summary>
-    public interface IAnonymousCustomerService
+    public interface IAnonymousCustomerService : IService
     {
-
         /// <summary>
         /// Crates an <see cref="IAnonymousCustomer"/> and saves it to the database
         /// </summary>
