@@ -357,6 +357,10 @@
     <Content Include="App_Plugins\Merchello\lib\tinymce\bower_components\tinymce\skins\lightgray\skin.min.css" />
     <Content Include="App_Plugins\Merchello\lib\tinymce\bower_components\tinymce\themes\modern\theme.min.js" />
     <Content Include="App_Plugins\Merchello\lib\tinymce\bower_components\tinymce\tinymce.min.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\product-option-attributes-selection.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\product-variants-view-table.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\productwithoptions.directives.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\product-options-reorder.html" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\product.edit.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\productvariant.create.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\product-options-manage.html" />
