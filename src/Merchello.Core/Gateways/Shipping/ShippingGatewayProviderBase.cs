@@ -70,7 +70,7 @@
         public IShippingGatewayMethod GetShippingGatewayMethod(Guid shipMethodKey, Guid shipCountrKey)
         {
             return
-                GetAllShippingGatewayMethodsForShipCountry(shipMethodKey)
+                GetAllShippingGatewayMethodsForShipCountry(shipCountrKey)
                     .FirstOrDefault(x => x.ShipMethod.Key == shipMethodKey);
         }
 

@@ -553,13 +553,16 @@
                     provider = $scope.providers[i];
                 }
             }
-
             // If no method exists, create a new, blank one.
 		    if (!method) {
 		        dialogMethod = new merchello.Models.ShippingMethod();
 		        dialogMethod.shipCountryKey = country.key;
 		        dialogMethod.providerKey = gatewayProvider.key;
 		        dialogMethod.dialogEditorView.editorView = provider.dialogEditorView.editorView;
+		    } else {
+		        if (method.shipCountryKey === "00000000-0000-0000-0000-000000000000") {
+		            method.shipCountryKey = country.key;
+		        }
 		    }
 
             // Acquire the provider's available resources.

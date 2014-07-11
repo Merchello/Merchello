@@ -75,6 +75,7 @@
 		'~/App_Plugins/Merchello/Modules/Report/reports.taxesByDestination.controller.js',
         '~/App_Plugins/Merchello/Modules/Settings/Shipping/merchello.catalogshipping.service.js',
         '~/App_Plugins/Merchello/Modules/Settings/Shipping/merchello.catalogfixedrateshipping.service.js',
+        '~/App_Plugins/Merchello/Modules/Settings/Shipping/merchello.fixedrateshipping.service.js',
 		'~/App_Plugins/Merchello/Modules/Settings/Shipping/Directives/shipping-helper-directives.js',
 		'~/App_Plugins/Merchello/Modules/Settings/Shipping/Directives/shipping-history-directives.js',
 		'~/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shippingprovider.controller.js',
