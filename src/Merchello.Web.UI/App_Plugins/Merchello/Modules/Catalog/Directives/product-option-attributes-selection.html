@@ -1,0 +1,3 @@
+﻿<div class="well col-xs-10 span10">                           
+    <localize key="merchelloGeneral_select" />: <span><a data-ng-click="selectVariants({attributeToSelect: 'All'})"><localize key="merchelloGeneral_all"/></a></span><span>, <a data-ng-click="selectVariants({attributeToSelect: 'None'})"><localize key="merchelloGeneral_none" /></a></span><span data-ng-repeat="attribute in product.flattened()">, <a data-ng-click="selectVariants({attributeToSelect: attribute.name})">{{attribute.name}}</a></span>
+</div>
