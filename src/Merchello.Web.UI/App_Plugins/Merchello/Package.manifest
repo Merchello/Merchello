@@ -45,6 +45,7 @@
 		'~/App_Plugins/Merchello/Modules/Catalog/merchello.productvariant.service.js',
 		'~/App_Plugins/Merchello/Modules/Settings/merchello.warehouse.service.js',
 		'~/App_Plugins/Merchello/Modules/Catalog/Directives/productvariant.directives.js',
+		'~/App_Plugins/Merchello/Modules/Catalog/Directives/productwithoptions.directives.js',
 		'~/App_Plugins/Merchello/Modules/Catalog/product.list.controller.js',
 		'~/App_Plugins/Merchello/Modules/Catalog/product.edit.controller.js',
 		'~/App_Plugins/Merchello/Modules/Catalog/product.editwithoptions.controller.js',
@@ -112,7 +113,6 @@
 		'~/App_Plugins/Merchello/PropertyEditors/ProductEditor/Js/merchelloproducteditor.controller.js'
 	],
 	css: [
-		'~/App_Plugins/Merchello/Common/Css/merchello.css',
-		'~/App_Plugins/Merchello/lib/codemirror/Js/Lib/codemirror.css'
+		'~/App_Plugins/Merchello/Common/Css/merchello.css'
 	]
 }

@@ -13,7 +13,6 @@
      * @description
      * directive to collect the main information for the product / product variant (sku, price, etc)
      */
-
     directives.ProductVariantMainProperties = function (merchelloWarehouseService) {
         return {
             restrict: 'E',
@@ -84,7 +83,6 @@
      * @description
      * directive to pick the media file or files for digital download
      */
-
     directives.ProductDigitalDownloadSection = function (dialogService) {
         return {
             restrict: 'E',
@@ -148,7 +146,6 @@
      * @description
      * directive to set the shipping information on a product or product variant
      */
-
     directives.ProductShippingSection = function () {
         return {
             restrict: 'E',
@@ -174,7 +171,6 @@
      * @description
      * directive to set the inventory information on a product or product variant
      */
-
     directives.ProductInventorySection = function () {
         return {
             restrict: 'E',
@@ -202,7 +198,6 @@
      * @description
      * directive to set the inventory information on all variants to a specific value
      */
-
     directives.ProductVariantBulkInventory = function () {
         return {
             restrict: 'E',
@@ -251,7 +246,6 @@
      * @description
      * directive to set the show the variants allowed by the options during the create process and allow editing before saving
      */
-
     directives.ProductVariantCreateTable = function () {
         return {
             restrict: 'E',
@@ -276,7 +270,6 @@
      * @description
      * directive to add/edit/delete variants from a product during create or edit of a product
      */
-
     directives.ProductOptionsManage = function () {
         return {
             restrict: 'E',
@@ -284,11 +277,13 @@
             scope: {
                 product: '=',
                 parentForm: '=',
+                classes: '=',
                 'update': '&onUpdate'
             },
             templateUrl: '/App_Plugins/Merchello/Modules/Catalog/Directives/product-options-manage.html',
 
             link: function ($scope, $element) {
+                $scope.rebuildVariants = false;
 
                 /**
                  * @ngdoc method
@@ -299,9 +294,8 @@
                  * Called when the Add Option button is pressed.  Creates a new option ready to fill out.
                  */
                 $scope.addOption = function () {
-
+                    $scope.rebuildVariants = true;
                     $scope.product.addBlankOption();
-
                 };
 
                 /**
@@ -313,9 +307,21 @@
                  * Called when the Trash can icon button is pressed next to an option. Removes the option from the product.
                  */
                 $scope.removeOption = function (option) {
-
+                    $scope.rebuildVariants = true;
                     $scope.product.removeOption(option);
+                };
 
+                /**
+                 * @ngdoc method
+                 * @name updateOptions
+                 * @function
+                 * 
+                 * @description
+                 * Called when the update options button is pressed
+                 */
+                $scope.updateOptions = function () {
+                    $scope.update({ form: $scope.parentForm, rebuild: $scope.rebuildVariants });
+                    $scope.rebuildVariants = false;
                 };
             }
 
