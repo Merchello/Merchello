@@ -11,19 +11,6 @@
         <a data-ng-click="addEditShippingMethodDialogOpen(country, shippingGatewayProvider)" class="btn btn-primary pull-right merchello-button-right"><i class="icon-add"></i> <localize key="merchelloShippingMethod_method" /></a>
         <table class="table table-striped merchello-striped-table settings-table shipping-table clear">
             <tbody>
-                <!-- Fixed Rate Methods -->
-                <!--<tr data-ng-show="shippingGatewayProvider.isFixedRate()" data-ng-repeat="fixedRateShipMethod in shippingGatewayProvider.shipMethods">
-                    <td>{{fixedRateShipMethod.shipMethod.name}}</td>
-                    <td>{{fixedRateShipMethod.tierRange().low}} - {{fixedRateShipMethod.tierRange().high}}</td>
-                    <td>{{fixedRateShipMethod.tierPriceRange().low}} - {{fixedRateShipMethod.tierPriceRange().high}}</td>
-                    <td class="edit">
-                        <div class="btn-group">
-                            <a data-ng-show="countryHasProvinces(country)" data-ng-click="editRegionalShippingRatesDialogOpen(country, shippingGatewayProvider, fixedRateShipMethod)" class="btn btn-default btn-xs btn-mini"><i class="icon-globe-alt"></i></a>
-                            <a data-ng-click="addEditShippingMethodDialogOpen(country, shippingGatewayProvider, fixedRateShipMethod)" class="btn btn-default btn-xs btn-mini"><i class="icon-edit"></i></a>
-                            <a data-ng-click="removeMethodFromProvider(shippingGatewayProvider, fixedRateShipMethod, country)" class="btn btn-warning btn-xs btn-mini"><i class="icon-trash"></i></a>
-                        </div>
-                    </td>
-                </tr>-->
                 <!-- Shipping Methods -->
                 <tr data-ng-repeat="shipMethod in shippingGatewayProvider.shipMethods">
                     <td>{{shipMethod.name}}</td>

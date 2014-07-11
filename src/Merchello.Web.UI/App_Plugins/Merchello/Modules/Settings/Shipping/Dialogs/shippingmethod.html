@@ -6,13 +6,13 @@
         <!-- Add a Shipping Method Flyout -->
         <div class="form-group row-fluid">
             <label for="method-name"><localize key="general_name" /></label>
-            <input name="method-name" data-ng-model="dialogData.method.shipMethod.name" class="col-xs-12 span12" type="text" />
+            <input name="method-name" data-ng-model="dialogData.method.name" class="col-xs-12 span12" type="text" />
         </div>
 
         <div class="form-group row-fluid">
             <label for="method-type"><localize key="merchelloShippingMethod_method" /></label>
             <div class="col-xs-6 span6 row-fluid">
-                <select name="method-type" class="col-xs-12 span12" data-ng-model="dialogData.method.gatewayResource" data-ng-options="r.name for r in dialogData.gatewayResources track by r.serviceCode" data-ng-disabled="dialogData.method.shipMethod.key.length > 0">
+                <select name="method-type" class="col-xs-12 span12" data-ng-model="filters.gatewayResource" data-ng-options="r.name for r in dialogData.gatewayResources track by r.serviceCode" data-ng-disabled="dialogData.method.shipMethod.key.length > 0">
                 </select>
             </div>
         </div>

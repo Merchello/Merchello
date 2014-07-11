@@ -45,7 +45,6 @@
 
 	        $scope.loadWarehouses();
 	        $scope.loadAllAvailableCountries();
-	        //$scope.loadAllAvailableFixedRateGatewayResources();
 
 	    };
 
@@ -77,32 +76,6 @@
 	        }, function (reason) {
 
 	            notificationsService.error("Available Countries Load Failed", reason.message);
-
-	        });
-
-	    };
-
-	    /**
-         * @ngdoc method
-         * @name loadAllAvailableFixedRateGatewayResources
-         * @function
-         * 
-         * @description
-         * Load the fixed rate shipping gateway resources from the fixed rate shipping gateway service, then wrap the results
-         * in Merchello models and add to the scope via the availableFixedRateGatewayResources collection.
-         */
-	    $scope.loadAllAvailableFixedRateGatewayResources = function () {
-
-	        var promiseAllResources = merchelloCatalogFixedRateShippingService.getAllFixedRateGatewayResources();
-	        promiseAllResources.then(function (allResources) {
-
-	            $scope.availableFixedRateGatewayResources = _.map(allResources, function (resource) {
-	                return new merchello.Models.GatewayResource(resource);
-	            });
-
-	        }, function (reason) {
-
-	            notificationsService.error("Available Fixed Rate Gateway Resources Load Failed", reason.message);
 
 	        });
 
@@ -571,43 +544,34 @@
         * @description
         * Opens the add/edit shipping method dialog via the Umbraco dialogService.
         */
-		$scope.addEditShippingMethodDialogOpen = function (country, provider, method) {
+		$scope.addEditShippingMethodDialogOpen = function (country, gatewayProvider, method) {
 
 		    var dialogMethod = method;
+		    var provider;
+            for (var i = 0; i < $scope.providers.length; i++) {
+                if (gatewayProvider.key == $scope.providers[i].key) {
+                    provider = $scope.providers[i];
+                }
+            }
 
-		    //if (!method) {
-		    //    if (provider.isFixedRate()) {
-		    //        dialogMethod = new merchello.Models.FixedRateShippingMethod();
-		    //        dialogMethod.shipMethod.shipCountryKey = country.key;
-		    //        dialogMethod.shipMethod.providerKey = provider.key;
-		    //        dialogMethod.shipMethod.dialogEditorView.editorView = '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shippingmethod.html';
-		    //    } else {
-		    dialogMethod = new merchello.Models.ShippingMethod();
-		    dialogMethod.shipCountryKey = country.key;
-		    dialogMethod.providerKey = provider.key;
-		    dialogMethod.dialogEditorView.editorView = '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shippingmethod.html';
-		    //}
-		    //}
-
-		    var availableResources = [];
-		    if (provider.isFixedRate()) {
-		        availableResources = $scope.availableFixedRateGatewayResources;
-		    } else {
-		        availableResources = provider.resources;
+            // If no method exists, create a new, blank one.
+		    if (!method) {
+		        dialogMethod = new merchello.Models.ShippingMethod();
+		        dialogMethod.shipCountryKey = country.key;
+		        dialogMethod.providerKey = gatewayProvider.key;
+		        dialogMethod.dialogEditorView.editorView = provider.dialogEditorView.editorView;
 		    }
 
-		    var templatePage = '';
-		    templatePage = '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shippingmethod.html';
-		    if (!provider.isFixedRate()) {
-		        if (dialogMethod.dialogEditorView.editorView) {
-		            templatePage = dialogMethod.dialogEditorView.editorView;
-		        }
-		    }
+            // Acquire the provider's available resources.
+		    var availableResources = gatewayProvider.resources;
+
+            // Get the editor template for the provider's dialog.
+            var templatePage = provider.dialogEditorView.editorView;
 
 		    var myDialogData = {
 		        method: dialogMethod,
 		        country: country,
-		        provider: provider,
+		        provider: gatewayProvider,
 		        gatewayResources: availableResources
 		    };
 

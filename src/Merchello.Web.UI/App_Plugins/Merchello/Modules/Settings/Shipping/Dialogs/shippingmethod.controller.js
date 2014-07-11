@@ -10,9 +10,6 @@
      */
     controllers.ShippingMethodController = function ($scope, merchelloCatalogFixedRateShippingService, merchelloCatalogShippingService, notificationsService) {
 
-        $scope.isAddNewTier = false;
-        $scope.newTier = {};
-
         /**
         * @ngdoc method
         * @name addOrUpdateShippingMethod
@@ -26,19 +23,11 @@
             var method = $scope.dialogData.method;
             var provider = $scope.dialogData.provider;
             var promiseSave;
-            if (provider.isFixedRate()) {
-                if (method.shipMethod.key.length > 0) {
-                    // Save existing method
-                    promiseSave = merchelloCatalogFixedRateShippingService.saveRateTableShipMethod(method);
-                } else {
-                    // Create new method
-                    promiseSave = merchelloCatalogFixedRateShippingService.createRateTableShipMethod(method);
-                }
-            } else {
-                method.serviceCode = method.gatewayResource.serviceCode;
-                if (method.shipMethod != undefined) {
-                    method.name = method.shipMethod.name;
-                }
+
+            // If service code is blank, the user has not selected the service, and cannot save.
+            if ($scope.filters.gatewayResource.serviceCode !== '' && method.name !== '') {
+                method.serviceCode = $scope.filters.gatewayResource.serviceCode;
+                method.name = method.name;
                 if (method.shipCountryKey == "00000000-0000-0000-0000-000000000000") {
                     method.shipCountryKey = country.key;
                 }
@@ -49,27 +38,93 @@
                     // Create new method
                     promiseSave = merchelloCatalogShippingService.addShipMethod(method);
                 }
+                promiseSave.then(function() {
+                    $scope.submit($scope.dialogData);
+                }, function(reason) {
+                    notificationsService.error("Shipping Method Save Failed", reason.message);
+                });
             }
-            promiseSave.then(function () {
-                $scope.submit($scope.dialogData);
-            }, function (reason) {
-                notificationsService.error("Shipping Method Save Failed", reason.message);
-            });
         };
 
-        $scope.removeRateTier = function(tier) {
-            $scope.dialogData.method.rateTable.removeRow(tier);
-        };
-
-        $scope.addRateTier = function() {
+        /**
+        * @ngdoc method
+        * @name addRateTier
+        * @function
+        * 
+        * @description
+        * Adds the edited, new rate tier to the method.
+        */
+        $scope.addRateTier = function () {
             $scope.dialogData.method.rateTable.addRow($scope.newTier);
             $scope.isAddNewTier = false;
         };
 
-        $scope.insertRateTier = function() {
+        /**
+        * @ngdoc method
+        * @name init
+        * @function
+        * 
+        * @description
+        * Runs when the scope is initialized.
+        */
+        $scope.init = function () {
+            $scope.setVariables();
+        }
+
+        /**
+        * @ngdoc method
+        * @name insertRateTier
+        * @function
+        * 
+        * @description
+        * Inserts a new, blank row in the rate table.
+        */
+        $scope.insertRateTier = function () {
             $scope.isAddNewTier = true;
             $scope.newTier = merchello.Models.ShippingRateTier();
         };
+
+        /**
+        * @ngdoc method
+        * @name removeRateTier
+        * @function
+        * 
+        * @description
+        * Remove a rate tier from the method.
+        */
+        $scope.removeRateTier = function (tier) {
+            $scope.dialogData.method.rateTable.removeRow(tier);
+        };
+
+        /**
+        * @ngdoc method
+        * @name setVariables
+        * @function
+        * 
+        * @description
+        * Set up the new variables for the scope upon init.
+        */
+        $scope.setVariables = function() {
+            $scope.isAddNewTier = false;
+            $scope.newTier = {};
+            $scope.filters = {};
+            if ($scope.dialogData.gatewayResources[0].serviceCode !== '') {
+                var blankMethod = new merchello.Models.GatewayResource({ name: 'Choose Method', serviceCode: '' });
+                $scope.dialogData.gatewayResources.unshift(blankMethod);
+            }
+            var serviceCode = $scope.dialogData.method.serviceCode;
+            for (var i = 0; i < $scope.dialogData.gatewayResources.length; i++) {
+                var resourceServiceCode = $scope.dialogData.gatewayResources[i].serviceCode;
+                if (serviceCode.indexOf('VBP') == 0 || serviceCode.indexOf('VBW') == 0) {
+                    serviceCode = serviceCode.split('-')[0];
+                }
+                if (resourceServiceCode == serviceCode) {
+                    $scope.filters.gatewayResource = $scope.dialogData.gatewayResources[i];
+                }
+            }
+        }
+
+        $scope.init();
 
     };
 
