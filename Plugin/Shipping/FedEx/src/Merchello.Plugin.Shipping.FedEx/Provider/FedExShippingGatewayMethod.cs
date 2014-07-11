@@ -14,10 +14,10 @@ namespace Merchello.Plugin.Shipping.FedEx.Provider
         private FedExType _fedExType;
         private IShipMethod _shipMethod;
 
-        public FedExShippingGatewayMethod(IGatewayResource gatewayResource, IShipMethod shipMethod, IShipCountry shipCountry, ExtendedDataCollection providerExtendedData)
+        public FedExShippingGatewayMethod(IGatewayResource gatewayResource, IShipMethod shipMethod, IShipCountry shipCountry, IGatewayProviderSettings gatewayProviderSettings)
             : base(gatewayResource, shipMethod, shipCountry)
         {
-            _processor = new FedExShippingProcessor(providerExtendedData.GetProcessorSettings());
+            _processor = new FedExShippingProcessor(gatewayProviderSettings.ExtendedData.GetProcessorSettings());
             _shipMethod = shipMethod;
         }
 
