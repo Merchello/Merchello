@@ -86,73 +86,12 @@
             Analyzer analyzer,
             bool async)
             : base(indexerData, luceneDirectory, dataService, analyzer, async)
-        {
-            
-        }
-        
-
-        /// <summary>
-        /// Adds all product variants to the index
-        /// </summary>
-        /// <param name="type"></param>
-        protected override void PerformIndexAll(string type)
-        {
-            if(!SupportedTypes.Contains(type)) return;
-
-            var products = DataService.ProductDataService.GetAll();
-            var productsArray = products as IProduct[] ?? products.ToArray();
-
-            if (!productsArray.Any()) return;
-            var nodes = new List<XElement>();
-            foreach (var p in productsArray)
-            {
-                nodes.AddRange(p.SerializeToXml().Descendants("productVariant"));
-            }
-
-            AddNodesToIndex(nodes, IndexTypes.ProductVariant);
-        }
-
-
-        public override void RebuildIndex()
-        {
-            DataService.LogService.AddVerboseLog(-1, "Rebuilding index");
-
-            EnsureIndex(true);
-
-            PerformIndexAll(IndexTypes.ProductVariant);
-            //base.RebuildIndex();
+        {    
         }
 
         /// <summary>
-        /// Adds all variants for a given product to the index
+        /// Gets the supported types.
         /// </summary>
-        /// <param name="product"></param>
-        /// <remarks>For testing</remarks>
-        internal void AddProductToIndex(IProduct product)
-        {
-            var nodes = new List<XElement>();
-            nodes.AddRange(product.SerializeToXml().Descendants("productVariant"));
-            AddNodesToIndex(nodes, IndexTypes.ProductVariant);
-        }
-
-        /// <summary>
-        /// Removes all variants for a given product from the index
-        /// </summary>
-        /// <param name="product"></param>
-        /// <remarks>For testing</remarks>
-        internal void DeleteProductFromIndex(IProduct product)
-        {
-            var ids = product.ProductVariants.Select(x => ((ProductVariant)x).ExamineId).ToList();
-            ids.Add(
-                ((ProductVariant)((Product) product).MasterVariant).ExamineId
-                );
-            
-            foreach (var id in ids)
-            {
-                DeleteFromIndex(id.ToString(CultureInfo.InvariantCulture));
-            }
-        }
-
         protected override IEnumerable<string> SupportedTypes
         {
             get { return new[] { IndexTypes.ProductVariant }; }
@@ -194,15 +133,81 @@
                 new StaticField("allDocs", FieldIndexTypes.ANALYZED, false, string.Empty)
             };
 
+        /// <summary>
+        /// Adds all product variants to the index
+        /// </summary>
+        /// <param name="type"></param>
+        protected override void PerformIndexAll(string type)
+        {
+            if(!SupportedTypes.Contains(type)) return;
 
+            var products = DataService.ProductDataService.GetAll();
+            var productsArray = products as IProduct[] ?? products.ToArray();
+
+            if (!productsArray.Any()) return;
+            var nodes = new List<XElement>();
+            foreach (var p in productsArray)
+            {
+                nodes.AddRange(p.SerializeToXml().Descendants("productVariant"));
+            }
+
+            AddNodesToIndex(nodes, IndexTypes.ProductVariant);
+        }
+
+        /// <summary>
+        /// Completely rebuilds the index.
+        /// </summary>
+        public override void RebuildIndex()
+        {
+            DataService.LogService.AddVerboseLog(-1, "Rebuilding index");
+
+            EnsureIndex(true);
+
+            PerformIndexAll(IndexTypes.ProductVariant);
+            //base.RebuildIndex();
+        }
+
+        /// <summary>
+        /// Adds all variants for a given product to the index
+        /// </summary>
+        /// <param name="product"></param>
+        /// <remarks>For testing</remarks>
+        internal void AddProductToIndex(IProduct product)
+        {
+            var nodes = new List<XElement>();
+            nodes.AddRange(product.SerializeToXml().Descendants("productVariant"));
+            AddNodesToIndex(nodes, IndexTypes.ProductVariant);
+        }
+
+        /// <summary>
+        /// Removes all variants for a given product from the index
+        /// </summary>
+        /// <param name="product"></param>
+        /// <remarks>For testing</remarks>
+        internal void DeleteProductFromIndex(IProduct product)
+        {
+            var ids = product.ProductVariants.Select(x => ((ProductVariant)x).ExamineId).ToList();
+            ids.Add(((ProductVariant)((Product) product).MasterVariant).ExamineId);
+            
+            foreach (var id in ids)
+            {
+                DeleteFromIndex(id.ToString(CultureInfo.InvariantCulture));
+            }
+        }
+
+        
         /// <summary>
         /// Creates an IIndexCriteria object based on the indexSet passed in and our DataService
         /// </summary>
-        /// <param name="indexSet"></param>
-        /// <returns></returns>
+        /// <param name="indexSet">
+        /// The index Set.
+        /// </param>
         /// <remarks>
         /// If we cannot initialize we will pass back empty indexer data since we cannot read from the database
         /// </remarks>
+        /// <returns>
+        /// The <see cref="IIndexCriteria"/>.
+        /// </returns>
         protected override IIndexCriteria GetIndexerData(IndexSet indexSet)
         {
             return indexSet.ToIndexCriteria(DataService.ProductDataService.GetIndexFieldNames(),  IndexFieldPolicies);
@@ -211,8 +216,12 @@
         /// <summary>
         /// return the index policy for the field name passed in, if not found, return normal
         /// </summary>
-        /// <param name="fieldName"></param>
-        /// <returns></returns>
+        /// <param name="fieldName">
+        /// The field Name.
+        /// </param>
+        /// <returns>
+        /// The <see cref="FieldIndexTypes"/>.
+        /// </returns>
         protected override FieldIndexTypes GetPolicy(string fieldName)
         {
             var def = IndexFieldPolicies.Where(x => x.Name == fieldName).ToArray();

@@ -10,7 +10,7 @@
     using WebApi;
 
     /// <summary>
-    /// The fixed rate shipping api controller.
+    /// The fixed rate shipping API controller.
     /// </summary>
     [PluginController("Merchello")]
     public class FixedRateShippingApiController : MerchelloApiController

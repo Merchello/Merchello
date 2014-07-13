@@ -65,6 +65,11 @@
                 controller => controller.GetProductVariant(Guid.NewGuid())));
 
             umbracoUrls.Add(
+                "merchelloCustomerApiBaseUrl",
+                url.GetUmbracoApiServiceBaseUrl<CustomerApiController>(
+                controller => controller.GetAllCustomers()));
+
+            umbracoUrls.Add(
                 "merchelloSettingsApiBaseUrl", 
                 url.GetUmbracoApiServiceBaseUrl<SettingsApiController>(
                 controller => controller.GetAllCountries()));
@@ -79,6 +84,7 @@
                 url.GetUmbracoApiServiceBaseUrl<ShippingGatewayApiController>(
                 controller => controller.GetShipCountry(Guid.NewGuid())));
 
+            // TODO remove while cleaning up legacy controllers
             umbracoUrls.Add(
                 "merchelloCatalogFixedRateShippingApiBaseUrl", 
                 url.GetUmbracoApiServiceBaseUrl<CatalogFixedRateShippingApiController>(
