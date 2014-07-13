@@ -1,17 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using Merchello.Core.Models;
-using Merchello.Core.Models.TypeFields;
-using Merchello.Core.Persistence;
-using Merchello.Core.Persistence.Querying;
-using Merchello.Core.Persistence.UnitOfWork;
-using Umbraco.Core;
-using Umbraco.Core.Events;
-
-namespace Merchello.Core.Services
+﻿namespace Merchello.Core.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
+
+    using Merchello.Core.Models;
+    using Merchello.Core.Models.TypeFields;
+    using Merchello.Core.Persistence;
+    using Merchello.Core.Persistence.Querying;
+    using Merchello.Core.Persistence.UnitOfWork;
+
+    using Umbraco.Core;
+    using Umbraco.Core.Events;
+
     /// <summary>
     /// Represents the PaymentService
     /// </summary>
@@ -45,6 +47,42 @@ namespace Merchello.Core.Services
             _repositoryFactory = repositoryFactory;
             _appliedPaymentService = appliedPaymentService;
         }
+
+
+        #region Event Handlers
+
+        /// <summary>
+        /// Occurs after Create
+        /// </summary>
+        public static event TypedEventHandler<IPaymentService, Events.NewEventArgs<IPayment>> Creating;
+
+
+        /// <summary>
+        /// Occurs after Create
+        /// </summary>
+        public static event TypedEventHandler<IPaymentService, Events.NewEventArgs<IPayment>> Created;
+
+        /// <summary>
+        /// Occurs before Save
+        /// </summary>
+        public static event TypedEventHandler<IPaymentService, SaveEventArgs<IPayment>> Saving;
+
+        /// <summary>
+        /// Occurs after Save
+        /// </summary>
+        public static event TypedEventHandler<IPaymentService, SaveEventArgs<IPayment>> Saved;
+
+        /// <summary>
+        /// Occurs before Delete
+        /// </summary>		
+        public static event TypedEventHandler<IPaymentService, DeleteEventArgs<IPayment>> Deleting;
+
+        /// <summary>
+        /// Occurs after Delete
+        /// </summary>
+        public static event TypedEventHandler<IPaymentService, DeleteEventArgs<IPayment>> Deleted;
+
+        #endregion
 
         /// <summary>
         /// Creates a payment without saving it to the database
@@ -85,42 +123,7 @@ namespace Merchello.Core.Services
             return CreatePaymentWithKey(EnumTypeFieldConverter.PaymentMethod.GetTypeField(paymentMethodType).TypeKey, amount, paymentMethodKey);
         }
 
-        /// <summary>
-        /// Creates and saves a payment
-        /// </summary>
-        /// <param name="paymentTfKey">The payment typefield key</param>
-        /// <param name="amount">The amount of the payment</param>
-        /// <param name="paymentMethodKey">The optional paymentMethodKey</param>
-        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        /// <returns>Returns <see cref="IPayment"/></returns>
-        internal IPayment CreatePaymentWithKey(Guid paymentTfKey, decimal amount, Guid? paymentMethodKey, bool raiseEvents = true)
-        {
-            Mandate.ParameterCondition(!Guid.Empty.Equals(paymentTfKey), "paymentTfKey");
 
-
-            var payment = new Payment(paymentTfKey, amount, paymentMethodKey, new ExtendedDataCollection());
-
-            if (raiseEvents)
-                if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<IPayment>(payment), this))
-                {
-                    payment.WasCancelled = true;
-                    return payment;
-                }
-
-            using (new WriteLock(Locker))
-            {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreatePaymentRepository(uow))
-                {
-                    repository.AddOrUpdate(payment);
-                    uow.Commit();
-                }
-            }
-
-            if (raiseEvents) Created.RaiseEvent(new Events.NewEventArgs<IPayment>(payment), this);
-
-            return payment;
-        }
 
         /// <summary>
         /// Saves a single <see cref="IPaymentMethod"/>
@@ -257,6 +260,11 @@ namespace Merchello.Core.Services
             return !paymentKeys.Any() ? new List<IPayment>() : GetByKeys(paymentKeys);
         }
 
+        public IEnumerable<IPayment> GetPaymentsByCustomerKey(Guid customerKey)
+        {
+            throw new NotImplementedException();
+        }
+
         #region AppliedPayments
         
 
@@ -327,40 +335,41 @@ namespace Merchello.Core.Services
 
         #endregion
 
-        #region Event Handlers
-
         /// <summary>
-        /// Occurs after Create
+        /// Creates and saves a payment
         /// </summary>
-        public static event TypedEventHandler<IPaymentService, Events.NewEventArgs<IPayment>> Creating;
+        /// <param name="paymentTfKey">The payment typefield key</param>
+        /// <param name="amount">The amount of the payment</param>
+        /// <param name="paymentMethodKey">The optional paymentMethodKey</param>
+        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        /// <returns>Returns <see cref="IPayment"/></returns>
+        internal IPayment CreatePaymentWithKey(Guid paymentTfKey, decimal amount, Guid? paymentMethodKey, bool raiseEvents = true)
+        {
+            Mandate.ParameterCondition(!Guid.Empty.Equals(paymentTfKey), "paymentTfKey");
 
 
-        /// <summary>
-        /// Occurs after Create
-        /// </summary>
-        public static event TypedEventHandler<IPaymentService, Events.NewEventArgs<IPayment>> Created;
+            var payment = new Payment(paymentTfKey, amount, paymentMethodKey, new ExtendedDataCollection());
 
-        /// <summary>
-        /// Occurs before Save
-        /// </summary>
-        public static event TypedEventHandler<IPaymentService, SaveEventArgs<IPayment>> Saving;
+            if (raiseEvents)
+                if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<IPayment>(payment), this))
+                {
+                    payment.WasCancelled = true;
+                    return payment;
+                }
 
-        /// <summary>
-        /// Occurs after Save
-        /// </summary>
-        public static event TypedEventHandler<IPaymentService, SaveEventArgs<IPayment>> Saved;
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreatePaymentRepository(uow))
+                {
+                    repository.AddOrUpdate(payment);
+                    uow.Commit();
+                }
+            }
 
-        /// <summary>
-        /// Occurs before Delete
-        /// </summary>		
-        public static event TypedEventHandler<IPaymentService, DeleteEventArgs<IPayment>> Deleting;
+            if (raiseEvents) Created.RaiseEvent(new Events.NewEventArgs<IPayment>(payment), this);
 
-        /// <summary>
-        /// Occurs after Delete
-        /// </summary>
-        public static event TypedEventHandler<IPaymentService, DeleteEventArgs<IPayment>> Deleted;
-
-        #endregion
-
+            return payment;
+        }
     }
 }
