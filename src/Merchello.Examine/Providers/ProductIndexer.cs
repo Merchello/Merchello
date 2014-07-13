@@ -1,47 +1,94 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Security;
-using System.Xml.Linq;
-using Examine;
-using Examine.LuceneEngine;
-using Examine.LuceneEngine.Config;
-using Lucene.Net.Analysis;
-using Merchello.Core;
-using Merchello.Core.Models;
-using Merchello.Examine.DataServices;
-
-namespace Merchello.Examine.Providers
+﻿namespace Merchello.Examine.Providers
 {
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.IO;
+    using System.Linq;
+    using System.Security;
+    using System.Xml.Linq;
+
+    using global::Examine;
+
+    using global::Examine.LuceneEngine;
+
+    using global::Examine.LuceneEngine.Config;
+
+    using Lucene.Net.Analysis;
+
+    using Merchello.Core;
+    using Merchello.Core.Models;
+    using Merchello.Examine.DataServices;
+
+    /// <summary>
+    /// The product indexer.
+    /// </summary>
     public class ProductIndexer : BaseMerchelloIndexer
     {
-
-        public ProductIndexer()
-        {}
-
-                /// <summary>
-        /// Constructor to allow for creating an indexer at runtime
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductIndexer"/> class.
         /// </summary>
-        /// <param name="indexerData"></param>
-        /// <param name="indexPath"></param>
-        /// <param name="dataService"></param>
-        /// <param name="analyzer"></param>
-		[SecuritySafeCritical]
-		public ProductIndexer(IIndexCriteria indexerData, DirectoryInfo indexPath, IDataService dataService, Analyzer analyzer, bool async)
-            : base(indexerData, indexPath, dataService, analyzer, async) { }
+        public ProductIndexer()
+        {
+        }
 
-		/// <summary>
-		/// Constructor to allow for creating an indexer at runtime
-		/// </summary>
-		/// <param name="indexerData"></param>
-		/// <param name="luceneDirectory"></param>
-		/// <param name="dataService"></param>
-		/// <param name="analyzer"></param>
-		/// <param name="async"></param>
-		[SecuritySafeCritical]
-        public ProductIndexer(IIndexCriteria indexerData, Lucene.Net.Store.Directory luceneDirectory, IDataService dataService, Analyzer analyzer, bool async)
-			: base(indexerData, luceneDirectory, dataService, analyzer, async) { }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductIndexer"/> class.
+        /// </summary>
+        /// <param name="indexerData">
+        /// The indexer data.
+        /// </param>
+        /// <param name="indexPath">
+        /// The index path.
+        /// </param>
+        /// <param name="dataService">
+        /// The data service.
+        /// </param>
+        /// <param name="analyzer">
+        /// The analyzer.
+        /// </param>
+        /// <param name="async">
+        /// The async.
+        /// </param>
+        [SecuritySafeCritical]
+        public ProductIndexer(
+            IIndexCriteria indexerData,
+            DirectoryInfo indexPath,
+            IDataService dataService,
+            Analyzer analyzer,
+            bool async)
+            : base(indexerData, indexPath, dataService, analyzer, async)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductIndexer"/> class.
+        /// </summary>
+        /// <param name="indexerData">
+        /// The indexer data.
+        /// </param>
+        /// <param name="luceneDirectory">
+        /// The lucene directory.
+        /// </param>
+        /// <param name="dataService">
+        /// The data service.
+        /// </param>
+        /// <param name="analyzer">
+        /// The analyzer.
+        /// </param>
+        /// <param name="async">
+        /// The async.
+        /// </param>
+        [SecuritySafeCritical]
+        public ProductIndexer(
+            IIndexCriteria indexerData,
+            Lucene.Net.Store.Directory luceneDirectory,
+            IDataService dataService,
+            Analyzer analyzer,
+            bool async)
+            : base(indexerData, luceneDirectory, dataService, analyzer, async)
+        {
+            
+        }
         
 
         /// <summary>
@@ -119,16 +166,16 @@ namespace Merchello.Examine.Providers
                 new StaticField("productVariantKey", FieldIndexTypes.ANALYZED, false, string.Empty),
                 new StaticField("name", FieldIndexTypes.ANALYZED, true, string.Empty),
                 new StaticField("sku", FieldIndexTypes.ANALYZED, true, string.Empty),
-                new StaticField("price", FieldIndexTypes.ANALYZED, true, "DOUBLE"),
+                new StaticField("price", FieldIndexTypes.ANALYZED, true, string.Empty),
                 new StaticField("onSale", FieldIndexTypes.ANALYZED, true, string.Empty),
                 new StaticField("manufacturer", FieldIndexTypes.ANALYZED,false, string.Empty),
                 new StaticField("modelNumber", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
-                new StaticField("salePrice", FieldIndexTypes.NOT_ANALYZED, true, "DOUBLE"),
-                new StaticField("costOfGoods", FieldIndexTypes.NOT_ANALYZED, false, "DOUBLE"),
-                new StaticField("weight", FieldIndexTypes.NOT_ANALYZED, false, "DOUBLE"),
-                new StaticField("length", FieldIndexTypes.NOT_ANALYZED, false, "DOUBLE"),
-                new StaticField("height", FieldIndexTypes.NOT_ANALYZED, false, "DOUBLE"),
-                new StaticField("width", FieldIndexTypes.NOT_ANALYZED, false, "DOUBLE"),
+                new StaticField("salePrice", FieldIndexTypes.NOT_ANALYZED, true, string.Empty),
+                new StaticField("costOfGoods", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
+                new StaticField("weight", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
+                new StaticField("length", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
+                new StaticField("height", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
+                new StaticField("width", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
                 new StaticField("barcode", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),                
                 new StaticField("available", FieldIndexTypes.ANALYZED, false, string.Empty),
                 new StaticField("trackInventory", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
@@ -171,6 +218,5 @@ namespace Merchello.Examine.Providers
             var def = IndexFieldPolicies.Where(x => x.Name == fieldName).ToArray();
             return (def.Any() == false ? FieldIndexTypes.ANALYZED : def.Single().IndexType);
         }
-
     }
 }
