@@ -24,7 +24,7 @@
                 Key = dto.Key,
                 Label = dto.Label,
                 FullName = dto.FullName,
-                Company =  dto.Company,
+                Company = dto.Company,
                 AddressTypeFieldKey = dto.AddressTfKey,
                 Address1 = dto.Address1,
                 Address2 = dto.Address2,
@@ -33,6 +33,7 @@
                 PostalCode = dto.PostalCode,
                 CountryCode = dto.CountryCode,
                 Phone = dto.Phone,
+                IsDefault = dto.IsDefault,
                 CreateDate = dto.CreateDate,
                 UpdateDate = dto.UpdateDate
             };
@@ -68,6 +69,7 @@
                 PostalCode = entity.PostalCode,
                 CountryCode = entity.CountryCode,
                 Phone = entity.Phone,
+                IsDefault = entity.IsDefault,
                 UpdateDate = entity.UpdateDate,
                 CreateDate = entity.CreateDate
             };
