@@ -128,7 +128,7 @@
         /// <param name="key">The key of the customer to retrieve</param>
         private void TryGetCustomer(Guid key)
         {
-            var customer = (ICustomerBase)_cache.RuntimeCache.GetCacheItem(CacheKeys.CostumerCacheKey(key));
+            var customer = (ICustomerBase)_cache.RuntimeCache.GetCacheItem(CacheKeys.CustomerCacheKey(key));
             
             // check the cache for a previously retrieved customer
             if (customer != null)
@@ -196,7 +196,7 @@
             _umbracoContext.HttpContext.Response.Cookies.Add(cookie);
 
             _cache.RequestCache.GetCacheItem(ConsumerCookieKey, () => customer.Key);
-            _cache.RuntimeCache.GetCacheItem(CacheKeys.CostumerCacheKey(customer.Key), () => customer, TimeSpan.FromMinutes(5), true);
+            _cache.RuntimeCache.GetCacheItem(CacheKeys.CustomerCacheKey(customer.Key), () => customer, TimeSpan.FromMinutes(5), true);
         }
     }
 }
