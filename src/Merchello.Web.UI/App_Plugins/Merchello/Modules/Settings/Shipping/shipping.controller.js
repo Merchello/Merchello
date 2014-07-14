@@ -10,25 +10,6 @@
      */
 	controllers.ShippingController = function ($scope, $routeParams, $location, notificationsService, angularHelper, serverValidationManager, dialogService, merchelloWarehouseService, merchelloSettingsService, merchelloCatalogShippingService, merchelloCatalogFixedRateShippingService) {
 
-		$scope.sortProperty = "name";
-		$scope.availableCountries = [];
-		$scope.availableFixedRateGatewayResources = [];
-		$scope.countries = [];
-		$scope.warehouses = [];
-		$scope.providers = [];
-		$scope.newWarehouse = new merchello.Models.Warehouse();
-		$scope.primaryWarehouse = new merchello.Models.Warehouse();
-		$scope.visible = {
-            catalogPanel: true,
-			shippingMethodPanel: true,
-			warehouseInfoPanel: false,
-			warehouseListPanel: true
-		};
-		$scope.countryToAdd = new merchello.Models.Country();
-		$scope.providerToAdd = {};
-		$scope.currentShipCountry = {};
-	    $scope.selectedCatalog = new merchello.Models.WarehouseCatalog();
-
 	    //--------------------------------------------------------------------------------------
 	    // Initialization methods
 	    //--------------------------------------------------------------------------------------
@@ -43,6 +24,7 @@
          */
 	    $scope.init = function () {
 
+	        $scope.setVariables();
 	        $scope.loadWarehouses();
 	        $scope.loadAllAvailableCountries();
 
@@ -346,6 +328,35 @@
 
 	        });
 
+	    };
+
+	    /**
+         * @ngdoc method
+         * @name setVariables
+         * @function
+         * 
+         * @description
+         * Set up the new variables for the scope.
+         */
+	    $scope.setVariables = function () {
+	        $scope.sortProperty = "name";
+	        $scope.availableCountries = [];
+	        $scope.availableFixedRateGatewayResources = [];
+	        $scope.countries = [];
+	        $scope.warehouses = [];
+	        $scope.providers = [];
+	        $scope.newWarehouse = new merchello.Models.Warehouse();
+	        $scope.primaryWarehouse = new merchello.Models.Warehouse();
+	        $scope.visible = {
+	            catalogPanel: true,
+	            shippingMethodPanel: true,
+	            warehouseInfoPanel: false,
+	            warehouseListPanel: true
+	        };
+	        $scope.countryToAdd = new merchello.Models.Country();
+	        $scope.providerToAdd = {};
+	        $scope.currentShipCountry = {};
+	        $scope.selectedCatalog = new merchello.Models.WarehouseCatalog();
 	    };
 
 	    $scope.init();
@@ -738,35 +749,16 @@
         * Opens the edit regional shipping rates dialog via the Umbraco dialogService.
         */
 		$scope.editRegionalShippingRatesDialogOpen = function (country, provider, method) {
+
 		    var dialogMethod = method;
+		    var availableResources = provider.resources;
+		    var templatePage = '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shippingregions.html';
 
 		    if (!method) {
-		        if (provider.isFixedRate()) {
-		            dialogMethod = new merchello.Models.FixedRateShippingMethod();
-		            dialogMethod.shipMethod.shipCountryKey = country.key;
-		            dialogMethod.shipMethod.providerKey = provider.key;
-		            dialogMethod.shipMethod.dialogEditorView.editorView = '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shippingregions.html';
-		        } else {
-		            dialogMethod = new merchello.Models.ShippingMethod();
-		            dialogMethod.shipCountryKey = country.key;
-		            dialogMethod.providerKey = provider.key;
-		            dialogMethod.dialogEditorView.editorView = '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shippingregions.html';
-		        }
-		    }
-
-		    var availableResources = [];
-		    if (provider.isFixedRate()) {
-		        availableResources = $scope.availableFixedRateGatewayResources;
-		    } else {
-		        availableResources = provider.resources;
-		    }
-
-		    var templatePage = '';
-		    templatePage = '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shippingregions.html';
-		    if (!provider.isFixedRate()) {
-		        if (dialogMethod.dialogEditorView.editorView) {
-		            templatePage = dialogMethod.dialogEditorView.editorView;
-		        }
+		        dialogMethod = new merchello.Models.ShippingMethod();
+		        dialogMethod.shipCountryKey = country.key;
+		        dialogMethod.providerKey = provider.key;
+		        dialogMethod.dialogEditorView.editorView = '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shippingregions.html';
 		    }
 
 		    var myDialogData = {
@@ -782,6 +774,7 @@
 		        callback: $scope.shippingMethodDialogConfirm,
 		        dialogData: myDialogData
 		    });
+
 		};
 
 	    /**
