@@ -154,6 +154,9 @@
             Mandate.ParameterCondition(!customerKey.Equals(Guid.Empty), "customerKey");
 
             _customerKey = customerKey;
+
+            // Default to a shipping address
+            _addressTypeFieldKey = EnumTypeFieldConverter.Address.Shipping.TypeKey;
         }
 
         /// <summary>
