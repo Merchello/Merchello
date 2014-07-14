@@ -413,7 +413,6 @@
 
 		        provider.shipMethods = [];
 		        $scope.loadProviderMethods(provider, country);
-		        $scope.loadFixedRateProviderMethods(country);
 
 		        notificationsService.success("Shipping Method Deleted");
 

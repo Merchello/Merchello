@@ -39,8 +39,9 @@
                     // Create new method
                     promiseSaveMethod = merchelloCatalogShippingService.addShipMethod(method);
                 }
-                promiseSaveRateTable = merchelloFixedRateShippingService.saveRateTable(rateTable);
-                promiseSaveMethod.then(function () {
+                promiseSaveMethod.then(function (methodResponse) {
+                    rateTable.shipMethodKey = methodResponse.key;
+                    promiseSaveRateTable = merchelloFixedRateShippingService.saveRateTable(rateTable);
                     promiseSaveRateTable.then(function() {
                         $scope.submit($scope.dialogData);
                     }, function(reason) {
