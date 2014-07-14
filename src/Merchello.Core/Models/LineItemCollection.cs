@@ -1,33 +1,63 @@
-﻿using System;
-using System.Collections.Specialized;
-using System.IO;
-using System.Linq;
-using System.Net.Configuration;
-using System.Runtime.Serialization;
-using System.Threading;
-using System.Xml;
-using Umbraco.Core;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace Merchello.Core.Models
 {
+    using System;
+    using System.Collections.Specialized;
+    using System.IO;
+    using System.Linq;
+    using System.Net.Configuration;
+    using System.Runtime.Serialization;
+    using System.Threading;
+    using System.Xml;
+    using Umbraco.Core;
+
     /// <summary>
     /// Represents a Collection of <see cref="T"/> objects
     /// </summary>
     [Serializable]
-    [CollectionDataContract(IsReference = true)]   
+    [CollectionDataContract(IsReference = true)]
+    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed. Suppression is OK here.")]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "Reviewed. Suppression is OK here.")] 
     public class LineItemCollection : NotifiyCollectionBase<string, ILineItem>
     {
+        #region Fields
+
+        /// <summary>
+        /// The add locker.
+        /// </summary>
         private readonly ReaderWriterLockSlim _addLocker = new ReaderWriterLockSlim();
-        internal Action OnAdd;
-        internal Func<ILineItem, bool> ValidateAdd { get; set; }
 
+        /// <summary>
+        /// The on add.
+        /// </summary>
+        private Action OnAdd;
+
+#endregion
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LineItemCollection"/> class.
+        /// </summary>
         public LineItemCollection()
-        {}
+        {            
+        }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LineItemCollection"/> class.
+        /// </summary>
+        /// <param name="validationCallback">
+        /// The validation callback.
+        /// </param>
         public LineItemCollection(Func<ILineItem, bool> validationCallback)
         {
             ValidateAdd = validationCallback;
         }
+
+
+        /// <summary>
+        /// Gets or sets the validate add.
+        /// </summary>
+        internal Func<ILineItem, bool> ValidateAdd { get; set; }
 
         internal new void Add(ILineItem item)
         {

@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using Merchello.Core.Models;
-using Umbraco.Core.Services;
-
-namespace Merchello.Core.Services
+﻿namespace Merchello.Core.Services
 {
+    using System;
+    using System.Collections.Generic;
+
+    using Merchello.Core.Models;
+
+    using Umbraco.Core.Services;
+
     /// <summary>
     /// Defines the InvoiceService
     /// </summary>
@@ -47,9 +49,9 @@ namespace Merchello.Core.Services
         void Delete(IEnumerable<IInvoice> invoices, bool raiseEvents = true);
 
         /// <summary>
-        /// Gets a <see cref="IInvoice"/> given it's unique 'key' (Guid)
+        /// Gets a <see cref="IInvoice"/> given it's unique 'key' (GUID)
         /// </summary>
-        /// <param name="key">The <see cref="IInvoice"/>'s unique 'key' (Guid)</param>
+        /// <param name="key">The <see cref="IInvoice"/>'s unique 'key' (GUID)</param>
         /// <returns><see cref="IInvoice"/></returns>
         IInvoice GetByKey(Guid key);
 
@@ -63,21 +65,34 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Gets list of <see cref="IInvoice"/> objects given a list of Keys
         /// </summary>
-        /// <param name="keys">List of guid 'key' for the invoices to retrieve</param>
+        /// <param name="keys">List of GUID 'key' for the invoices to retrieve</param>
         /// <returns>List of <see cref="IInvoice"/></returns>
         IEnumerable<IInvoice> GetByKeys(IEnumerable<Guid> keys);
 
         /// <summary>
         /// Gets a collection of <see cref="IInvoice"/> objects that are associated with a <see cref="IPayment"/> by the payments 'key'
         /// </summary>
-        /// <param name="paymentKey">The <see cref="IPayment"/> key (Guid)</param>
+        /// <param name="paymentKey">The <see cref="IPayment"/> key (GUID)</param>
         /// <returns>A collection of <see cref="IInvoice"/></returns>
         IEnumerable<IInvoice> GetInvoicesByPaymentKey(Guid paymentKey);
 
+        /// <summary>
+        /// Get invoices by a customer key.
+        /// </summary>
+        /// <param name="customeryKey">
+        /// The customer key.
+        /// </param>
+        /// <returns>
+        /// The collection of <see cref="IInvoice"/>.
+        /// </returns>
+        IEnumerable<IInvoice> GetInvoicesByCustomerKey(Guid customeryKey); 
 
         /// <summary>
         /// Gets the total count of all invoices
         /// </summary>
+        /// <returns>
+        /// The <see cref="int"/> representing the count of invoices.
+        /// </returns>
         int InvoiceCount();
 
         #region InvoiceStatus
@@ -92,6 +107,9 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Returns a collection of all <see cref="IInvoiceStatus"/>
         /// </summary>
+        /// <returns>
+        /// The collection of <see cref="IInvoiceStatus"/>.
+        /// </returns>
         IEnumerable<IInvoiceStatus> GetAllInvoiceStatuses();
 
 
