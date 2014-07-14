@@ -129,7 +129,7 @@
          * @description
          * Load the countries from the shipping service, then wrap the results
          * in Merchello models and add to the scope via the countries collection.
-         * Once loaded, it calls the loadFixedRateCountryProviders method for each 
+         * Once loaded, it calls the loadCountryProviders method for each 
          * country.
          */
 	    $scope.loadCountries = function () {
@@ -147,7 +147,6 @@
 
 	                _.each($scope.countries, function (element, index, list) {
 	                    $scope.loadCountryProviders(element);
-	                    //$scope.loadFixedRateCountryProviders(element);
 	                });
 
 	                $scope.loaded = true;
@@ -198,78 +197,6 @@
 	            }, function (reason) {
 
 	                notificationsService.error("Fixed Rate Shipping Countries Providers Load Failed", reason.message);
-
-	            });
-	        }
-	    };
-
-	    /**
-         * @ngdoc method
-         * @name loadFixedRateCountryProviders
-         * @function
-         * 
-         * @description
-         * Load the fixed rate shipping gateway providers from the fixed rate shipping gateway service, then wrap the results
-         * in Merchello models and add to the scope via the shippingGatewayProviders collection on the country model.  After
-         * load is complete, it calls the loadFixedRateProviderMethods to load in the methods.
-         */
-	    $scope.loadFixedRateCountryProviders = function (country) {
-
-	        if (country) {
-	            var promiseProviders = merchelloCatalogFixedRateShippingService.getAllShipCountryFixedRateProviders(country.key);
-	            promiseProviders.then(function (providerFromServer) {
-
-	                if (providerFromServer.length > 0) {
-
-	                    _.each(providerFromServer, function (element, index, list) {
-	                        var newProvider = new merchello.Models.ShippingGatewayProvider(element);
-	                        // Need this to get the name for now.
-	                        var tempGlobalProvider = _.find($scope.providers, function (p) { return p.key == newProvider.key; });
-	                        newProvider.name = tempGlobalProvider.name;
-	                        newProvider.typeFullName = tempGlobalProvider.typeFullName;
-	                        newProvider.resources = $scope.availableFixedRateGatewayResources;
-	                        newProvider.shipMethods = [];
-	                        country.shippingGatewayProviders.push(newProvider);
-	                        $scope.loadFixedRateProviderMethods(country);
-	                    });
-	                }
-
-	            }, function (reason) {
-
-	                notificationsService.error("Fixed Rate Shipping Countries Providers Load Failed", reason.message);
-
-	            });
-	        }
-	    };
-
-	    /**
-         * @ngdoc method
-         * @name loadFixedRateProviderMethods
-         * @function
-         * 
-         * @description
-         * Load the fixed rate shipping gateway methods from the fixed rate shipping gateway service, then wrap the results
-         * in Merchello models and add to the scope via the shipMethods collection on the gateway provider model.
-         */
-	    $scope.loadFixedRateProviderMethods = function (country) {
-
-	        if (country) {
-	            var promiseMethods = merchelloCatalogFixedRateShippingService.getAllFixedRateProviderMethods(country.key);
-	            promiseMethods.then(function (methodsFromServer) {
-
-	                if (methodsFromServer.length > 0) {
-
-	                    _.each(methodsFromServer, function (element, index, list) {
-	                        var newMethod = new merchello.Models.FixedRateShippingMethod(element);
-
-	                        var shippingGatewayProvider = _.find(country.shippingGatewayProviders, function (p) { return p.key == newMethod.shipMethod.providerKey; });
-	                        shippingGatewayProvider.shipMethods.push(newMethod);
-	                    });
-	                }
-
-	            }, function (reason) {
-
-	                notificationsService.error("Fixed Rate Shipping Countries Methods Load Failed", reason.message);
 
 	            });
 	        }
@@ -838,7 +765,7 @@
 
 		    data.provider.shipMethods = [];
 		    $scope.loadProviderMethods(data.provider, data.country);
-		    $scope.loadFixedRateProviderMethods(data.country);
+		    //$scope.loadFixedRateProviderMethods(data.country);
 
 		};
 
@@ -875,7 +802,6 @@
 
 		        data.country.shippingGatewayProviders = [];
 		        $scope.loadCountryProviders(data.country);
-		        $scope.loadFixedRateCountryProviders(data.country);
 
 		    }, function (reason) {
 
