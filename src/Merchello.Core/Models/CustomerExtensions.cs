@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Core.Models
 {
     using System.Collections.Generic;
+
     using Services;
 
     /// <summary>
@@ -105,6 +106,33 @@
             customer.DeleteCustomerAddress(MerchelloContext.Current, address);
         }
 
+        /// <summary>
+        /// Gets a collection of <see cref="IInvoice"/> associated with the customer
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="IInvoice"/>.
+        /// </returns>
+        public static IEnumerable<IInvoice> Invoices(this ICustomer customer)
+        {
+            return customer.Invoices(MerchelloContext.Current);
+        }
+
+        /// <summary>
+        /// Gets a collection of <see cref="IPayment"/> associated with the customer
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="IPayment"/>
+        /// </returns>
+        public static IEnumerable<IPayment> Payments(this ICustomer customer)
+        {
+            return customer.Payments(MerchelloContext.Current);
+        }
 
         /// <summary>
         /// Gets a collection of addresses associated with the customer
@@ -140,7 +168,7 @@
         /// </returns>
         internal static IEnumerable<ICustomerAddress> Addresses(this ICustomer customer, IMerchelloContext merchelloContext, AddressType addressType)
         {
-            return ((ServiceContext) merchelloContext.Services).CustomerAddressService.GetByCustomerKey(customer.Key, addressType);
+            return ((ServiceContext)merchelloContext.Services).CustomerAddressService.GetByCustomerKey(customer.Key, addressType);
         }
 
         /// <summary>
@@ -160,7 +188,7 @@
         /// </returns>
         internal static ICustomerAddress DefaultCustomerAddress(this ICustomer customer, IMerchelloContext merchelloContext, AddressType addressType)
         {
-            return ((ServiceContext) merchelloContext.Services).CustomerAddressService.GetDefaultCustomerAddress(customer.Key, addressType);
+            return ((ServiceContext)merchelloContext.Services).CustomerAddressService.GetDefaultCustomerAddress(customer.Key, addressType);
         }
 
         /// <summary>
@@ -229,6 +257,40 @@
             Mandate.ParameterCondition(address.CustomerKey == customer.Key, "The customer address is not associated with this customer.");
 
             ((ServiceContext)merchelloContext.Services).CustomerAddressService.Delete(address);
+        }
+
+        /// <summary>
+        /// Gets the collection of <see cref="IInvoice"/> associated with the customer
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <param name="merchelloContext">
+        /// The merchello context.
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="IInvoice"/>.
+        /// </returns>
+        internal static IEnumerable<IInvoice> Invoices(this ICustomer customer, IMerchelloContext merchelloContext)
+        {
+            return merchelloContext.Services.InvoiceService.GetInvoicesByCustomerKey(customer.Key);
+        }
+
+        /// <summary>
+        /// Gets the collection of <see cref="IPayment"/> associated with a customer
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <param name="merchelloContext">
+        /// The merchello context.
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="IPayment"/>.
+        /// </returns>
+        internal static IEnumerable<IPayment> Payments(this ICustomer customer, IMerchelloContext merchelloContext)
+        {
+            return merchelloContext.Services.PaymentService.GetPaymentsByCustomerKey(customer.Key);
         }
     }
 }

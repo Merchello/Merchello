@@ -1,48 +1,137 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Security;
-using System.Xml.Linq;
-using Examine;
-using Examine.LuceneEngine;
-using Examine.LuceneEngine.Config;
-using Lucene.Net.Analysis;
-using Merchello.Core;
-using Merchello.Core.Models;
-using Merchello.Examine.DataServices;
-
-namespace Merchello.Examine.Providers
+﻿namespace Merchello.Examine.Providers
 {
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.IO;
+    using System.Linq;
+    using System.Security;
+    using System.Xml.Linq;
+
+    using global::Examine;
+
+    using global::Examine.LuceneEngine;
+
+    using global::Examine.LuceneEngine.Config;
+
+    using Lucene.Net.Analysis;
+
+    using Merchello.Core;
+    using Merchello.Core.Models;
+    using Merchello.Examine.DataServices;
+
+    /// <summary>
+    /// The product indexer.
+    /// </summary>
     public class ProductIndexer : BaseMerchelloIndexer
     {
-
-        public ProductIndexer()
-        {}
-
-                /// <summary>
-        /// Constructor to allow for creating an indexer at runtime
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductIndexer"/> class.
         /// </summary>
-        /// <param name="indexerData"></param>
-        /// <param name="indexPath"></param>
-        /// <param name="dataService"></param>
-        /// <param name="analyzer"></param>
-		[SecuritySafeCritical]
-		public ProductIndexer(IIndexCriteria indexerData, DirectoryInfo indexPath, IDataService dataService, Analyzer analyzer, bool async)
-            : base(indexerData, indexPath, dataService, analyzer, async) { }
+        public ProductIndexer()
+        {
+        }
 
-		/// <summary>
-		/// Constructor to allow for creating an indexer at runtime
-		/// </summary>
-		/// <param name="indexerData"></param>
-		/// <param name="luceneDirectory"></param>
-		/// <param name="dataService"></param>
-		/// <param name="analyzer"></param>
-		/// <param name="async"></param>
-		[SecuritySafeCritical]
-        public ProductIndexer(IIndexCriteria indexerData, Lucene.Net.Store.Directory luceneDirectory, IDataService dataService, Analyzer analyzer, bool async)
-			: base(indexerData, luceneDirectory, dataService, analyzer, async) { }
-        
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductIndexer"/> class.
+        /// </summary>
+        /// <param name="indexerData">
+        /// The indexer data.
+        /// </param>
+        /// <param name="indexPath">
+        /// The index path.
+        /// </param>
+        /// <param name="dataService">
+        /// The data service.
+        /// </param>
+        /// <param name="analyzer">
+        /// The analyzer.
+        /// </param>
+        /// <param name="async">
+        /// The async.
+        /// </param>
+        [SecuritySafeCritical]
+        public ProductIndexer(
+            IIndexCriteria indexerData,
+            DirectoryInfo indexPath,
+            IDataService dataService,
+            Analyzer analyzer,
+            bool async)
+            : base(indexerData, indexPath, dataService, analyzer, async)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductIndexer"/> class.
+        /// </summary>
+        /// <param name="indexerData">
+        /// The indexer data.
+        /// </param>
+        /// <param name="luceneDirectory">
+        /// The lucene directory.
+        /// </param>
+        /// <param name="dataService">
+        /// The data service.
+        /// </param>
+        /// <param name="analyzer">
+        /// The analyzer.
+        /// </param>
+        /// <param name="async">
+        /// The async.
+        /// </param>
+        [SecuritySafeCritical]
+        public ProductIndexer(
+            IIndexCriteria indexerData,
+            Lucene.Net.Store.Directory luceneDirectory,
+            IDataService dataService,
+            Analyzer analyzer,
+            bool async)
+            : base(indexerData, luceneDirectory, dataService, analyzer, async)
+        {    
+        }
+
+        /// <summary>
+        /// Gets the supported types.
+        /// </summary>
+        protected override IEnumerable<string> SupportedTypes
+        {
+            get { return new[] { IndexTypes.ProductVariant }; }
+        }
+
+
+        internal static readonly List<StaticField> IndexFieldPolicies
+            = new List<StaticField>()
+            {
+                new StaticField("productKey", FieldIndexTypes.ANALYZED, false, string.Empty),
+                new StaticField("productVariantKey", FieldIndexTypes.ANALYZED, false, string.Empty),
+                new StaticField("name", FieldIndexTypes.ANALYZED, true, string.Empty),
+                new StaticField("sku", FieldIndexTypes.ANALYZED, true, string.Empty),
+                new StaticField("price", FieldIndexTypes.ANALYZED, true, string.Empty),
+                new StaticField("onSale", FieldIndexTypes.ANALYZED, true, string.Empty),
+                new StaticField("manufacturer", FieldIndexTypes.ANALYZED,false, string.Empty),
+                new StaticField("modelNumber", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
+                new StaticField("salePrice", FieldIndexTypes.NOT_ANALYZED, true, string.Empty),
+                new StaticField("costOfGoods", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
+                new StaticField("weight", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
+                new StaticField("length", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
+                new StaticField("height", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
+                new StaticField("width", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
+                new StaticField("barcode", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),                
+                new StaticField("available", FieldIndexTypes.ANALYZED, false, string.Empty),
+                new StaticField("trackInventory", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
+                new StaticField("outOfStockPurchase", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
+                new StaticField("taxable", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
+                new StaticField("shippable", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
+                new StaticField("download", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
+                new StaticField("downloadMediaId", FieldIndexTypes.NOT_ANALYZED, false, "NUMBER"),
+                new StaticField("master", FieldIndexTypes.ANALYZED, false, string.Empty),
+                new StaticField("totalInventoryCount", FieldIndexTypes.NOT_ANALYZED, false, "NUMBER"),
+                new StaticField("attributes", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
+                new StaticField("catalogInventories", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
+                new StaticField("productOptions", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
+                new StaticField("createDate", FieldIndexTypes.NOT_ANALYZED, false, "DATETIME"),
+                new StaticField("updateDate", FieldIndexTypes.NOT_ANALYZED, false, "DATETIME"),
+                new StaticField("allDocs", FieldIndexTypes.ANALYZED, false, string.Empty)
+            };
 
         /// <summary>
         /// Adds all product variants to the index
@@ -65,7 +154,9 @@ namespace Merchello.Examine.Providers
             AddNodesToIndex(nodes, IndexTypes.ProductVariant);
         }
 
-
+        /// <summary>
+        /// Completely rebuilds the index.
+        /// </summary>
         public override void RebuildIndex()
         {
             DataService.LogService.AddVerboseLog(-1, "Rebuilding index");
@@ -96,9 +187,7 @@ namespace Merchello.Examine.Providers
         internal void DeleteProductFromIndex(IProduct product)
         {
             var ids = product.ProductVariants.Select(x => ((ProductVariant)x).ExamineId).ToList();
-            ids.Add(
-                ((ProductVariant)((Product) product).MasterVariant).ExamineId
-                );
+            ids.Add(((ProductVariant)((Product) product).MasterVariant).ExamineId);
             
             foreach (var id in ids)
             {
@@ -106,56 +195,19 @@ namespace Merchello.Examine.Providers
             }
         }
 
-        protected override IEnumerable<string> SupportedTypes
-        {
-            get { return new[] { IndexTypes.ProductVariant }; }
-        }
-
-
-        internal static readonly List<StaticField> IndexFieldPolicies
-            = new List<StaticField>()
-            {
-                new StaticField("productKey", FieldIndexTypes.ANALYZED, false, string.Empty),
-                new StaticField("productVariantKey", FieldIndexTypes.ANALYZED, false, string.Empty),
-                new StaticField("name", FieldIndexTypes.ANALYZED, true, string.Empty),
-                new StaticField("sku", FieldIndexTypes.ANALYZED, true, string.Empty),
-                new StaticField("price", FieldIndexTypes.ANALYZED, true, "DOUBLE"),
-                new StaticField("onSale", FieldIndexTypes.ANALYZED, true, string.Empty),
-                new StaticField("manufacturer", FieldIndexTypes.ANALYZED,false, string.Empty),
-                new StaticField("modelNumber", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
-                new StaticField("salePrice", FieldIndexTypes.NOT_ANALYZED, true, "DOUBLE"),
-                new StaticField("costOfGoods", FieldIndexTypes.NOT_ANALYZED, false, "DOUBLE"),
-                new StaticField("weight", FieldIndexTypes.NOT_ANALYZED, false, "DOUBLE"),
-                new StaticField("length", FieldIndexTypes.NOT_ANALYZED, false, "DOUBLE"),
-                new StaticField("height", FieldIndexTypes.NOT_ANALYZED, false, "DOUBLE"),
-                new StaticField("width", FieldIndexTypes.NOT_ANALYZED, false, "DOUBLE"),
-                new StaticField("barcode", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),                
-                new StaticField("available", FieldIndexTypes.ANALYZED, false, string.Empty),
-                new StaticField("trackInventory", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
-                new StaticField("outOfStockPurchase", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
-                new StaticField("taxable", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
-                new StaticField("shippable", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
-                new StaticField("download", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
-                new StaticField("downloadMediaId", FieldIndexTypes.NOT_ANALYZED, false, "NUMBER"),
-                new StaticField("master", FieldIndexTypes.ANALYZED, false, string.Empty),
-                new StaticField("totalInventoryCount", FieldIndexTypes.NOT_ANALYZED, false, "NUMBER"),
-                new StaticField("attributes", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
-                new StaticField("catalogInventories", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
-                new StaticField("productOptions", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
-                new StaticField("createDate", FieldIndexTypes.NOT_ANALYZED, false, "DATETIME"),
-                new StaticField("updateDate", FieldIndexTypes.NOT_ANALYZED, false, "DATETIME"),
-                new StaticField("allDocs", FieldIndexTypes.ANALYZED, false, string.Empty)
-            };
-
-
+        
         /// <summary>
         /// Creates an IIndexCriteria object based on the indexSet passed in and our DataService
         /// </summary>
-        /// <param name="indexSet"></param>
-        /// <returns></returns>
+        /// <param name="indexSet">
+        /// The index Set.
+        /// </param>
         /// <remarks>
         /// If we cannot initialize we will pass back empty indexer data since we cannot read from the database
         /// </remarks>
+        /// <returns>
+        /// The <see cref="IIndexCriteria"/>.
+        /// </returns>
         protected override IIndexCriteria GetIndexerData(IndexSet indexSet)
         {
             return indexSet.ToIndexCriteria(DataService.ProductDataService.GetIndexFieldNames(),  IndexFieldPolicies);
@@ -164,13 +216,16 @@ namespace Merchello.Examine.Providers
         /// <summary>
         /// return the index policy for the field name passed in, if not found, return normal
         /// </summary>
-        /// <param name="fieldName"></param>
-        /// <returns></returns>
+        /// <param name="fieldName">
+        /// The field Name.
+        /// </param>
+        /// <returns>
+        /// The <see cref="FieldIndexTypes"/>.
+        /// </returns>
         protected override FieldIndexTypes GetPolicy(string fieldName)
         {
             var def = IndexFieldPolicies.Where(x => x.Name == fieldName).ToArray();
             return (def.Any() == false ? FieldIndexTypes.ANALYZED : def.Single().IndexType);
         }
-
     }
 }
