@@ -113,9 +113,12 @@
     </Compile>
     <Compile Include="AutoMapperMappings.cs" />
     <Compile Include="CheckoutExtensions.cs" />
+    <Compile Include="Models\Customer\CustomerContextDataExtentions.cs" />
+    <Compile Include="Models\Customer\CustomerContextData.cs" />
     <Compile Include="Editors\CatalogFixedRateShippingApiController.cs">
       <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
     </Compile>
+    <Compile Include="Editors\CustomerApiController.cs" />
     <Compile Include="Editors\FixedRateShippingApiController.cs" />
     <Compile Include="Editors\GatewayProviderApiController.cs" />
     <Compile Include="Editors\InvoiceApiController.cs" />
@@ -123,6 +126,7 @@
     <Compile Include="Editors\OrderApiController.cs" />
     <Compile Include="Editors\PaymentApiController.cs" />
     <Compile Include="Editors\PaymentGatewayApiController.cs" />
+    <Compile Include="Models\ContentEditing\CustomerDisplay.cs" />
     <Compile Include="Models\ContentEditing\DialogEditorDisplayBase.cs" />
     <Compile Include="Models\ContentEditing\DialogEditorViewDisplay.cs" />
     <Compile Include="Models\ContentEditing\NotificationMessageDisplay.cs" />

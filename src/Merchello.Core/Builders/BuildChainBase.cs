@@ -34,8 +34,7 @@
                 typeName => new AttemptChainTaskHandler<T>(
                     ActivatorHelper.CreateInstance<AttemptChainTaskBase<T>>(
                         typeName, 
-                        ConstructorArgumentValues.ToArray()).Result
-                    )));
+                        ConstructorArgumentValues.ToArray()).Result)));
 
             // register the next task for each link (these are linear chains)
             foreach (var taskHandler in TaskHandlers.Where(task => TaskHandlers.IndexOf(task) != TaskHandlers.IndexOf(TaskHandlers.Last())))

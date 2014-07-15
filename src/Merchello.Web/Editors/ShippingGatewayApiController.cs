@@ -343,29 +343,20 @@
         /// POSTed ShipMethodDisplay object
         /// </param>
         /// <returns>
-        /// The <see cref="HttpResponseMessage"/>.
+        /// The <see cref="ShipMethodDisplay"/>.
         /// </returns>
         [AcceptVerbs("POST", "PUT")]
-        public HttpResponseMessage PutShipMethod(ShipMethodDisplay method)
-        {
-            var response = Request.CreateResponse(HttpStatusCode.OK);
+        public ShipMethodDisplay PutShipMethod(ShipMethodDisplay method)
+        {            
+            var provider = _shippingContext.GetProviderByKey(method.ProviderKey);
 
-            try
-            {
-                var provider = _shippingContext.GetProviderByKey(method.ProviderKey);
+            var shippingMethod = provider.ShipMethods.FirstOrDefault(x => x.Key == method.Key);
 
-                var shippingMethod = provider.ShipMethods.FirstOrDefault(x => x.Key == method.Key);
+            shippingMethod = method.ToShipMethod(shippingMethod);
 
-                shippingMethod = method.ToShipMethod(shippingMethod);
+            provider.GatewayProviderService.Save(shippingMethod);
 
-                provider.GatewayProviderService.Save(shippingMethod);
-            }
-            catch (Exception ex)
-            {
-                response = Request.CreateResponse(HttpStatusCode.InternalServerError, string.Format("{0}", ex.Message));
-            }
-
-            return response;
+            return shippingMethod.ToShipMethodDisplay();
         }
 
         /// <summary>
