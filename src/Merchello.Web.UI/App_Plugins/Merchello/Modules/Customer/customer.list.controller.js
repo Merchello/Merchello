@@ -10,8 +10,33 @@
      */
     controllers.CustomerListController = function($scope) {
 
-        $scope.loaded = true;
-        $scope.preValuesLoaded = true;
+        /**
+         * @ngdoc method
+         * @name init
+         * @function
+         * 
+         * @description
+         * initialized when the scope loads.
+         */
+        $scope.init = function () {
+            $scope.setVariables();
+        };
+
+        /**
+         * @ngdoc method
+         * @name setVariables
+         * @function
+         * 
+         * @description
+         * Sets $scope variables.
+         */
+        $scope.setVariables = function() {
+            $scope.loaded = true;
+            $scope.preValuesLoaded = true;
+
+        };
+
+        $scope.init();
 
     };
 
