@@ -402,24 +402,13 @@
          * TODO: make a dialog to confirm delete?
          */
 		$scope.removeMethodFromProvider = function (provider, method, country) {
-
-		    var promiseDelete;
-		    if (provider.isFixedRate()) {
-		        promiseDelete = merchelloCatalogFixedRateShippingService.deleteRateTableShipMethod(method);
-		    } else {
-		        promiseDelete = merchelloCatalogShippingService.deleteShipMethod(method);
-		    }
+		    var promiseDelete = merchelloCatalogShippingService.deleteShipMethod(method);
 		    promiseDelete.then(function () {
-
 		        provider.shipMethods = [];
 		        $scope.loadProviderMethods(provider, country);
-
 		        notificationsService.success("Shipping Method Deleted");
-
 		    }, function (reason) {
-
 		        notificationsService.error("Shipping Method Delete Failed", reason.message);
-
 		    });
 		};
 
