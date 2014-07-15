@@ -10,7 +10,6 @@
 	]
 	,
 	javascript: [
-		'~/App_Plugins/Merchello/lib/bootstrap/js/bootstrap.min.js',
 		'~/App_Plugins/Merchello/lib/JsonTree/jsontree.js',
 		'~/App_Plugins/Merchello/lib/codemirror/Js/Lib/codemirror.js',
 		'~/App_Plugins/Merchello/lib/codemirror/Js/Mode/Razor/razor.js',
