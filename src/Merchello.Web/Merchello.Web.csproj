@@ -136,6 +136,7 @@
     <Compile Include="PackageActions\AddAppConfigKey.cs" />
     <Compile Include="PackageActions\AddLocalizationAreas.cs" />
     <Compile Include="ProductContentEditing.cs" />
+    <Compile Include="WebApi\ScheduledTasksController.cs" />
     <Compile Include="Workflow\PaymentProcessor.cs" />
     <Compile Include="Editors\SettingsApiController.cs" />
     <Compile Include="Editors\ShippingGatewayApiController.cs" />
