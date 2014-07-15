@@ -65,6 +65,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App_Plugins\Merchello\Modules\Customer\Dialogs\" />
     <Folder Include="App_Plugins\Merchello\PropertyEditors\ProductEditor\Css\" />
     <Folder Include="App_Plugins\Merchello\PropertyEditors\ProductPicker\Css\" />
     <Folder Include="App_Plugins\Merchello\System\" />
