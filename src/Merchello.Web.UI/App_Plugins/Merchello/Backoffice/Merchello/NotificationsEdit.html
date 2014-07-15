@@ -41,8 +41,9 @@
                         <div class="row-fluid">
                             <label for="template"><localize key="merchelloNotificationsEdit_emailTemplateEditBody" /></label>
                             <div class="umb-editor umb-codeeditor" style="height: 720px;">
-                                <textarea name="template" data-ui-tinymce data-ng-model="notificationMessage.bodyText"></textarea>
+                                <textarea name="template" ui-tinymce="tinymceOptions" data-ng-model="notificationMessage.bodyText"></textarea>
                             </div>
+
                         </div>
                     </div>
                 </div>
