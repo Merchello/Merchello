@@ -1,8 +1,12 @@
 ﻿namespace Merchello.Core.Models
 {
     using System.Collections.Generic;
-
+    using System.Globalization;
+    using System.IO;
+    using System.Xml;
+    using System.Xml.Linq;
     using Services;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// The customer extensions.
@@ -292,5 +296,47 @@
         {
             return merchelloContext.Services.PaymentService.GetPaymentsByCustomerKey(customer.Key);
         }
+
+        #region Examine Serialization
+
+        /// <summary>
+        /// Serializes a customer to xml suitable for Examine indexer.
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <returns>
+        /// The <see cref="XDocument"/>.
+        /// </returns>
+        internal static XDocument SerializeToXml(this ICustomer customer)
+        {
+            string xml;
+            using (var sw = new StringWriter())
+            {
+                using (var writer = new XmlTextWriter(sw))
+                {
+                    writer.WriteStartDocument();
+                    writer.WriteStartElement("customer");
+                    writer.WriteAttributeString("id", ((Customer)customer).ExamineId.ToString(CultureInfo.InvariantCulture));
+                    writer.WriteAttributeString("customerKey", customer.Key.ToString());
+                    writer.WriteAttributeString("loginName", customer.LoginName);
+                    writer.WriteAttributeString("firstName", customer.FirstName);
+                    writer.WriteAttributeString("lastName", customer.LastName);
+                    writer.WriteAttributeString("email", customer.Email);
+                    writer.WriteAttributeString("taxExempt", customer.TaxExempt.ToString());
+                    writer.WriteAttributeString("extendedData", customer.ExtendedDataAsJson());
+                    writer.WriteAttributeString("createDate", customer.CreateDate.ToString("s"));
+                    writer.WriteAttributeString("updateDate", customer.UpdateDate.ToString("s"));
+                    writer.WriteAttributeString("allDocs", "1");
+                    writer.WriteEndElement();
+                    writer.WriteEndDocument();
+                    xml = sw.ToString();
+                }
+            }
+
+            return XDocument.Parse(xml);
+        }
+
+        #endregion
     }
 }

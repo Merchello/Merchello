@@ -227,6 +227,13 @@
             get { return _warehouseService.Value; }
         }
 
+        /// <summary>
+        /// Gets the <see cref="IAnonymousCustomerService"/>.
+        /// </summary>
+        internal IAnonymousCustomerService AnonymousCustomerService
+        {
+            get { return _anonymousCustomerService.Value; }
+        }
 
         /// <summary>
         /// Gets the <see cref="ITaxMethodService"/>

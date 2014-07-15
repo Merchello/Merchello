@@ -1,4 +1,7 @@
-﻿namespace Merchello.Core.Models
+﻿using System.Diagnostics.CodeAnalysis;
+using Newtonsoft.Json;
+
+namespace Merchello.Core.Models
 {
     using System;
     using System.Collections.Generic;
@@ -12,6 +15,7 @@
     /// <summary>
     /// Extension methods for <see cref="ExtendedDataCollection"/>
     /// </summary>
+   [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:ElementsMustBeOrderedByAccess", Justification = "Reviewed. Suppression is OK here.")]
     public static class ExtendedDataCollectionExtensions
     {
         #region ExtendedDataCollection
@@ -80,7 +84,7 @@
         /// Creates an instance of <see cref="LineItemCollection"/> from a serialized collection in the ExtendedDataCollection
         /// </summary>
         /// <typeparam name="T">The type of the <see cref="ILineItem"/></typeparam>
-        /// <param name="extendedData"></param>
+        /// <param name="extendedData">The extended data collection</param>
         /// <returns><see cref="LineItemCollection"/></returns>
         public static LineItemCollection GetLineItemCollection<T>(this ExtendedDataCollection extendedData) where T : LineItemBase
         {
@@ -102,9 +106,8 @@
                         decimal.Parse(dictionary[Constants.ExtendedDataKeys.Price]),
                         new ExtendedDataCollection(dictionary[Constants.ExtendedDataKeys.ExtendedData])
                     };
-               
-                
-                var attempt = ActivatorHelper.CreateInstance<LineItemBase>(typeof (T).FullName, ctrValues);
+                               
+                var attempt = ActivatorHelper.CreateInstance<LineItemBase>(typeof(T).FullName, ctrValues);
 
                 if (!attempt.Success)
                 {
@@ -146,7 +149,15 @@
 
         #region Product / ProductVariant
 
-
+        /// <summary>
+        /// The add product variant values.
+        /// </summary>
+        /// <param name="extendedData">
+        /// The extended data.
+        /// </param>
+        /// <param name="productVariant">
+        /// The product variant.
+        /// </param>
         public static void AddProductVariantValues(this ExtendedDataCollection extendedData, IProductVariant productVariant)
         {
             extendedData.SetValue(Constants.ExtendedDataKeys.ProductKey, productVariant.ProductKey.ToString());
@@ -551,20 +562,28 @@
 
         #endregion
 
-        #region AutoMapper
+        #region AutoMapper and Serialization
 
         /// <summary>
         /// Converts extended data into a more easily serializable collection for display classes (back office UI)
         /// </summary>
         /// <param name="extendedData">The <see cref="ExtendedDataCollection"/></param>
         /// <returns>An <c>IEnumerable{object}</c></returns>
+        
         internal static IEnumerable<KeyValuePair<string, string>> AsEnumerable(this ExtendedDataCollection extendedData)
         {
-            return extendedData.Select(item =>
-                    new KeyValuePair<string, string>(item.Key, item.Value)
-                );
+            return extendedData.Select(item => new KeyValuePair<string, string>(item.Key, item.Value));
         }
 
+        /// <summary>
+        /// The as extended data collection.
+        /// </summary>
+        /// <param name="source">
+        /// The source.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ExtendedDataCollection"/>.
+        /// </returns>
         internal static ExtendedDataCollection AsExtendedDataCollection(this IEnumerable<KeyValuePair<string, string>> source)
         {
             var ed = new ExtendedDataCollection();
@@ -574,6 +593,20 @@
             }
 
             return ed;
+        }
+
+        /// <summary>
+        /// Serializes the extended data collection to an json representation
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        public static string ExtendedDataAsJson(this IHasExtendedData entity)
+        {
+            return JsonConvert.SerializeObject(entity.ExtendedData.AsEnumerable());
         }
 
         #endregion

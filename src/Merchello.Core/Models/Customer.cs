@@ -63,6 +63,11 @@
         /// </summary>
         private bool _taxExempt;
 
+        /// <summary>
+        /// The examine id.
+        /// </summary>
+        private int _examineId = 1;
+
         #endregion
 
         /// <summary>
@@ -205,6 +210,16 @@
                     _taxExempt,
                     TaxExemptSelector);
             }
+        }
+
+        /// <summary>
+        /// Gets or sets the examine id.
+        /// </summary>
+        [IgnoreDataMember]
+        internal int ExamineId
+        {
+            get { return _examineId; }
+            set { _examineId = value; }
         }
     }
 }
