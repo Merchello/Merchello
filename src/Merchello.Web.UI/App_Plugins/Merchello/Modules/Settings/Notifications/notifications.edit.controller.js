@@ -8,7 +8,6 @@
      * @description
      * The controller for the Notifications page
      */
-    app.requires.push('ui.tinymce');
     controllers.NotificationsEditController = function ($scope, $routeParams, assetsService, notificationsService, merchelloNotificationsService) {
         
 
