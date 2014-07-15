@@ -534,6 +534,9 @@
     <Content Include="App_Plugins\Merchello\lib\tinymce\bower_components\tinymce\skins\lightgray\fonts\tinymce.eot" />
     <Content Include="App_Plugins\Merchello\lib\tinymce\bower_components\tinymce\skins\lightgray\fonts\tinymce.ttf" />
     <Content Include="App_Plugins\Merchello\lib\tinymce\bower_components\tinymce\skins\lightgray\fonts\tinymce.woff" />
+    <Content Include="App_Plugins\Merchello\Common\Css\merchello.css.map">
+      <DependentUpon>merchello.css</DependentUpon>
+    </Content>
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

@@ -1,4 +1,4 @@
-.merchello-panel-body {
+﻿.merchello-panel-body {
   position: absolute;
   top: 101px;
   bottom: 0;
@@ -13,7 +13,7 @@
   .merchello-panel-body a {
     cursor: pointer;
     color: #049cdb; }
-  .merchello-panel-body .active, .merchello-panel-body .active td, .merchello-panel-body .merchello-side-panel .active td, .merchello-side-panel .active .merchello-panel-body td, .merchello-panel-body .active:hover, .merchello-panel-body .active td:hover, .merchello-panel-body .merchello-side-panel .active td:hover, .merchello-side-panel .active .merchello-panel-body td:hover {
+  .merchello-panel-body .active, .merchello-panel-body .merchello-panel-body .active td, .merchello-panel-body .active .merchello-panel-body td, .merchello-panel-body .merchello-side-panel .active td, .merchello-side-panel .active .merchello-panel-body td, .merchello-panel-body .active:hover, .merchello-panel-body .merchello-panel-body .active td:hover, .merchello-panel-body .active .merchello-panel-body td:hover, .merchello-panel-body .merchello-side-panel .active td:hover, .merchello-side-panel .active .merchello-panel-body td:hover {
     background-color: #f0f9ee; }
   .merchello-panel-body .btn {
     line-height: 21px;
@@ -25,11 +25,11 @@
     line-height: 20px;
     text-shadow: none; }
   .merchello-panel-body .label-success {
-    background: #8ecf7f; }
+    background: #8fcf7f; }
   .merchello-panel-body .label-warning {
-    background: #f9af82; }
+    background: #f9ae82; }
   .merchello-panel-body .label-info {
-    background: #8cd0ec; }
+    background: #8cd1ec; }
   .merchello-panel-body .icon-loading:before {
     font-size: 1.15em;
     vertical-align: top;
@@ -158,7 +158,7 @@
     float: left;
     display: inline-block;
     margin-right: 10px;
-    line-height: .8em; }
+    line-height: 0.8em; }
     .merchello-panel-body *[class*="icon"].large + p {
       display: inline-block;
       width: 90%; }
@@ -174,16 +174,16 @@
         border-top: none; }
   .merchello-panel-body table.merchello-selectable-table tr td {
     cursor: pointer; }
-  .merchello-panel-body td input[type="checkbox"] {
+  .merchello-panel-body td input[type="checkbox"], .merchello-panel-body th input[type="checkbox"] {
     margin: 0 auto;
     display: block; }
   .merchello-panel-body .merchello-striped-table i {
     font-size: 1em; }
   .merchello-panel-body .merchello-striped-table td > i {
     font-size: 1.7em; }
-  .merchello-panel-body .active td, .merchello-panel-body .active td td, .merchello-panel-body .merchello-side-panel .active td td, .merchello-side-panel .active .merchello-panel-body td td {
-    border-top: solid 1px #cfebc9; }
-  .merchello-panel-body .table-hover tbody .active:hover > td, .merchello-panel-body .table-hover tbody .active td:hover > td, .merchello-panel-body .active .table-hover tbody td:hover > td, .merchello-side-panel .active .merchello-panel-body .table-hover tbody td:hover > td {
+  .merchello-panel-body .active td, .merchello-panel-body .active .merchello-side-panel .active td, .merchello-side-panel .active .merchello-panel-body .active td {
+    border-top: solid 1px #d0ebc9; }
+  .merchello-panel-body .table-hover tbody .active:hover > td, .merchello-panel-body .table-hover tbody .active:hover > .merchello-panel-body .active td:hover, .merchello-panel-body .active .merchello-panel-body .table-hover tbody .active:hover > td:hover, .merchello-panel-body .table-hover tbody .active:hover > .merchello-side-panel .active td:hover, .merchello-side-panel .active .merchello-panel-body .table-hover tbody .active:hover > td:hover {
     background-color: #e0f2dc; }
   .merchello-panel-body .table .text-right {
     text-align: right; }
@@ -330,7 +330,7 @@
         color: #f57020;
         text-decoration: none;
         border-color: #f57020;
-        background: #fcceb2; }
+        background: #fccdb2; }
       .merchello-panel-body .tags .tag:after {
         content: "\e1a4";
         padding-left: 5px;
@@ -368,11 +368,11 @@
         padding-top: 0;
         border-top: none; }
     .merchello-panel-body .notes #new {
-      color: #f78f51; }
+      color: #f78e51; }
       .merchello-panel-body .notes #new blockquote {
         border-left-color: #f57020; }
       .merchello-panel-body .notes #new .date-time {
-        color: #f9af82; }
+        color: #f9ae82; }
   .merchello-panel-body .customer-details ul {
     margin: 0;
     padding: 0;
@@ -392,7 +392,7 @@
       border: solid 3px #53a93f; }
   .bar-graph .merchello-panel-body li {
     display: inline-block;
-    margin-right: .8%;
+    margin-right: 0.8%;
     text-align: center;
     color: #d9d9d9;
     margin-left: -4px; }
@@ -416,8 +416,8 @@
   .month .merchello-panel-body li {
     width: 2.5%; }
   .ninety .merchello-panel-body li {
-    width: .81%;
-    margin-right: .3%;
+    width: 0.81%;
+    margin-right: 0.3%;
     overflow: hidden;
     text-indent: -9999em; }
   .ninety .key .merchello-panel-body li:nth-child(5n), .ninety .key .merchello-panel-body li:first-child {
@@ -430,18 +430,18 @@
   .merchello-panel-body .bar-graph .graph {
     border-bottom: solid 1px #d9d9d9; }
   .merchello-panel-body .bar-graph .mid {
-    background: #8cd0ec; }
+    background: #8cd1ec; }
   .merchello-panel-body .bar-graph .high {
-    background: #8ecf7f; }
+    background: #8fcf7f; }
   .merchello-panel-body .bar-graph .low {
-    background: #f9af82; }
+    background: #f9ae82; }
   @media screen and (max-width: 88em) {
     .day .merchello-panel-body li {
-      margin-right: .8%; }
+      margin-right: 0.8%; }
     .month .merchello-panel-body li {
-      margin-right: .8%; }
+      margin-right: 0.8%; }
     .ninety .merchello-panel-body li {
-      margin-right: .3%; } }
+      margin-right: 0.3%; } }
 
 .merchello-side-panel .umb-panel-body {
   top: 120px; }
@@ -451,10 +451,10 @@
   display: block; }
 .merchello-side-panel input[type="radio"] {
   margin-top: 0; }
-.merchello-side-panel .active, .merchello-side-panel .merchello-panel-body .active td, .merchello-panel-body .active .merchello-side-panel td, .merchello-side-panel .active td, .merchello-side-panel .active:hover, .merchello-side-panel .merchello-panel-body .active td:hover, .merchello-panel-body .active .merchello-side-panel td:hover, .merchello-side-panel .active td:hover {
+.merchello-side-panel .active, .merchello-side-panel .merchello-panel-body .active td, .merchello-panel-body .active .merchello-side-panel td, .merchello-side-panel .merchello-side-panel .active td, .merchello-side-panel .active .merchello-side-panel td, .merchello-side-panel .active:hover, .merchello-side-panel .merchello-panel-body .active td:hover, .merchello-panel-body .active .merchello-side-panel td:hover, .merchello-side-panel .merchello-side-panel .active td:hover, .merchello-side-panel .active .merchello-side-panel td:hover {
   background-color: #f0f9ee; }
-.merchello-side-panel .active td, .merchello-side-panel .merchello-panel-body .active td td, .merchello-panel-body .active .merchello-side-panel td td, .merchello-side-panel .active td td {
-  border-top: solid 1px #cfebc9; }
+.merchello-side-panel .active td, .merchello-side-panel .active .merchello-panel-body .active td, .merchello-panel-body .active .merchello-side-panel .active td {
+  border-top: solid 1px #d0ebc9; }
 
 .merchello-product-picker .selector {
   margin-bottom: 5px; }
@@ -469,3 +469,4 @@
   .merchello-product-picker table td {
     padding: 5px; }
 
+/*# sourceMappingURL=merchello.css.map */

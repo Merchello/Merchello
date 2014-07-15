@@ -16,15 +16,18 @@
                 <!-- Tabs for All Customers, Accepts Marketing, and Repeat Customers -->
                 <ul class="nav nav-tabs umb-nav-tabs span12">
                     <li class="ng-scope active">
-    	                <a href="#tab6" data-toggle="tab" class="ng-binding">All Customers</a>
+                        <a href="#tab6" data-toggle="tab" class="ng-binding">All Customers</a>
                     </li>
+                    <!-- COMMENT: Removed For Merchello v1.0 -->
+                    <!--
                     <li class="ng-scope">
-                        <a href="#tab0" data-toggle="tab" class="ng-binding">Accepts Marketing</a>
-                    </li>
+                    <a href="#tab0" data-toggle="tab" class="ng-binding">Accepts Marketing</a>
+                    </!--li>
                     <li class="ng-scope">
                         <a href="#tab0" data-toggle="tab" class="ng-binding">Repeat Customers</a>
                     </li>
-    	        </ul>
+                    -->
+                </ul>
             </div>
 
 
@@ -33,6 +36,7 @@
                     
                     <!-- New Order Button -->
                     <div class="btn-group">
+                        <!-- ACTION: New Customer -->
                         <button type="submit" class="btn btn-success">New Customer</button>
                     </div>
 
@@ -49,7 +53,9 @@
                     <div class="form-group control-group row-fluid">
                         <label for="customerFilter" class="col-xs-2 control-label">Filter Customers:</label>
                         <div class="col-xs-10 controls">
-                            <input id="customerFilter" class="form-control span6" name="customerFilter" data-ng-model="filtertext" placeholder="Start typing a customer's name or e-mail..." />
+                            <input id="customerFilter" class="form-control span6" name="customerFilter" data-ng-model="filtertext" placeholder="Type a customer's name or e-mail..." />
+                            <!-- ACTION: Customer Filter -->
+                            <button type="submit" class="btn">Filter</button>
                         </div>
                     </div>
                 </form>
@@ -65,58 +71,29 @@
                             <th>Total Spent</th>
                         </tr>
                         <!-- Displays the bulk action button & dropdown menu when the checkbox is selected, which replaces normal heading TR -->
-                        <!--<tr>
-                            <th><input type="checkbox" /></th>
+                        <tr data-ng-show="visible.bulkActionButton">
+                            <th></th>
                             <th colspan="5">
                                 <div class="btn-group">
-                                    <a href="#" class="btn dropdown-toggle" data-toggle="dropdown">Bulk Action (3 Variants) <i class="icon-navigation-down"></i></a>
-                                    <ul class="dropdown-menu">
+                                    <!-- ACTION: Show Dropdown Menu -->
+                                    <a href="#" class="btn dropdown-toggle" data-toggle="dropdown" data-ng-click="visible.bulkActionDropdown = !visible.bulkActionDropdown">Bulk Action (3 Variants) <i class="icon-navigation-down"></i></a>
+                                    <ul class="dropdown-menu" data-ng-class="{'show': visible.bulkActionDropdown }">
+                                        <!-- ACTION: Export Customers -->
                                         <li><a href="#">Export Customers</a></li>
                                     </ul>
                                 </div>
                             </th>
-                        </tr>-->
+                        </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td><input type="checkbox" /></td>
+                            <!-- ACTION: Go To Customer View Page -->
                             <td><a href="#/merchello/merchello/CustomerView/keygoeshere">Heather Alvis</a></td>
                             <td>Bellingham, WA</td>
                             <td>4</td>
                             <td>10/11/2013, 6:49pm EDT</td>
                             <td>$301.48</td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" /></td>
-                            <td><a href="#/merchello/merchello/CustomerView/keygoeshere">Jane Doe</a></td>
-                            <td>Bellingham, WA</td>
-                            <td>1</td>
-                            <td>10/02/2013, 5:22pm EDT</td>
-                            <td>$25.60</td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" /></td>
-                            <td><a href="#/merchello/merchello/CustomerView/keygoeshere">Kristen Miller</a></td>
-                            <td>Folsom, CA</td>
-                            <td>2</td>
-                            <td>10/10/2013, 2:32am EDT</td>
-                            <td>$40.02</td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" /></td>
-                            <td><a href="#/merchello/merchello/CustomerView/keygoeshere">Buck Watson</a></td>
-                            <td>Marion, NC</td>
-                            <td>1</td>
-                            <td>9/01/2013, 1:17pm EDT</td>
-                            <td>$47.80</td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" /></td>
-                            <td><a href="#/merchello/merchello/CustomerView/keygoeshere">Fritz Williams</a></td>
-                            <td>Chicag, IL</td>
-                            <td>21</td>
-                            <td>10/22/2013, 4:33pm EDT</td>
-                            <td>$1152.57</td>
                         </tr>
                     </tbody>
                 </table>

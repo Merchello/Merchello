@@ -33,6 +33,13 @@
         $scope.setVariables = function() {
             $scope.loaded = true;
             $scope.preValuesLoaded = true;
+            $scope.visible = {
+                bulkActionButton: function() {
+                    var result = false;
+                    return result;
+                },
+                bulkActionDropdown: false
+            };
 
         };
 
