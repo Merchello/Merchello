@@ -1,11 +1,13 @@
 ﻿namespace Merchello.Web
 {
     using System;
+    using System.Runtime.Remoting.Contexts;
     using System.Web;
-    using Merchello.Core;
-    using Merchello.Core.Cache;
-    using Merchello.Core.Models;
-    using Merchello.Core.Services;
+    using Core;
+    using Core.Cache;
+    using Core.Models;
+    using Core.Services;
+    using Models.Customer;
     using Umbraco.Core;
     using Umbraco.Core.Logging;
     using Umbraco.Web;
@@ -20,7 +22,7 @@
         /// <summary>
         /// The consumer cookie key.
         /// </summary>
-        private const string ConsumerCookieKey = "merchello";
+        private const string CustomerCookieName = "merchello";
 
         /// <summary>
         /// The _customer service.
@@ -89,37 +91,47 @@
         public ICustomerBase CurrentCustomer { get; private set; }
 
         /// <summary>
+        /// Gets the context data.
+        /// </summary>
+        public CustomerContextData ContextData { get; private set; }
+
+        /// <summary>
         /// Initializes this class with default values
         /// </summary>
         private void Initialize()
         {
             // see if the key is already in the request cache
-            var cachedKey = _cache.RequestCache.GetCacheItem(ConsumerCookieKey);
+            var cachedContextData = _cache.RequestCache.GetCacheItem(CustomerCookieName);
 
-            if (cachedKey != null)
+            if (cachedContextData != null)
             {
-                var key = (Guid)cachedKey;
+                ContextData = (CustomerContextData)cachedContextData;
+                var key = ContextData.Key;
                 TryGetCustomer(key);
                 return;
             }
 
             // retrieve the merchello consumer cookie
-            var cookie = _umbracoContext.HttpContext.Request.Cookies[ConsumerCookieKey];
+            var cookie = _umbracoContext.HttpContext.Request.Cookies[CustomerCookieName];
 
             if (cookie != null)
             {
-                Guid key;
-                if (Guid.TryParse(EncryptionHelper.Decrypt(cookie.Value), out key))
+                ContextData = cookie.ToCustomerContextData();
+
+                try
                 {
-                    TryGetCustomer(key);
+                    TryGetCustomer(ContextData.Key);
                 }
-                else
+                catch (Exception ex)
                 {
-                    LogHelper.Debug<CustomerContext>("Decrypted guid did not parse");
+                    LogHelper.Error<CustomerContext>("Decrypted guid did not parse", ex);
                     CreateAnonymousCustomer();
-                } // consumer key parsing failed ... start over
+                }                             
             }
-            else { CreateAnonymousCustomer(); } // a cookie was not found
+            else
+            {
+                CreateAnonymousCustomer();
+            } // a cookie was not found
         }
 
         /// <summary>
@@ -134,6 +146,9 @@
             if (customer != null)
             {
                 CurrentCustomer = customer;
+
+                ContextData.Key = customer.Key;
+
                 return;
             }
 
@@ -160,6 +175,7 @@
             if (customer != null)
             {
                 CurrentCustomer = customer;
+                ContextData.Key = customer.Key;
                 CacheCustomer(customer);
             }
             else 
@@ -176,6 +192,11 @@
         {
             var customer = _customerService.CreateAnonymousCustomerWithKey();
             CurrentCustomer = customer;
+            ContextData = new CustomerContextData()
+            {
+                Key = customer.Key
+            };
+
             CacheCustomer(customer);
         }
 
@@ -189,13 +210,14 @@
         {
             // set/reset the cookie 
             // TODO decide how we want to deal with cookie persistence options
-            var cookie = new HttpCookie(ConsumerCookieKey)
+            var cookie = new HttpCookie(CustomerCookieName)
             {
-                Value = EncryptionHelper.Encrypt(customer.Key.ToString())
+                Value = ContextData.ToJson()
             };
+
             _umbracoContext.HttpContext.Response.Cookies.Add(cookie);
 
-            _cache.RequestCache.GetCacheItem(ConsumerCookieKey, () => customer.Key);
+            _cache.RequestCache.GetCacheItem(CustomerCookieName, () => ContextData);
             _cache.RuntimeCache.GetCacheItem(CacheKeys.CustomerCacheKey(customer.Key), () => customer, TimeSpan.FromMinutes(5), true);
         }
     }
