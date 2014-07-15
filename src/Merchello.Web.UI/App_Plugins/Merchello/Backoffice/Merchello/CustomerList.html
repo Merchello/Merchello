@@ -86,10 +86,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        <tr data-ng-repeat="customer in customers">
                             <td><input type="checkbox" /></td>
                             <!-- ACTION: Go To Customer View Page -->
-                            <td><a href="#/merchello/merchello/CustomerView/keygoeshere">Heather Alvis</a></td>
+                            <td><a href="#/merchello/merchello/CustomerView/{{customer.key}}">{{customer.firstName}} {{customer.lastName}}</a></td>
                             <td>Bellingham, WA</td>
                             <td>4</td>
                             <td>10/11/2013, 6:49pm EDT</td>
