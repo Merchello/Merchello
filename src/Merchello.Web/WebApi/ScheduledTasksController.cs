@@ -14,6 +14,8 @@ using Umbraco.Web;
 using Merchello.Web.Models.ContentEditing;
 using Examine;
 using Umbraco.Web.WebApi;
+using Umbraco.Core.Logging;
+
 
 namespace Merchello.Web.WebApi
 {
@@ -38,6 +40,8 @@ namespace Merchello.Web.WebApi
             var anonymousCustomers = repo.GetAnonymousCustomersCreatedBefore(DateTime.Now); //.AddDays(-maxDays));
 
             repo.Delete(anonymousCustomers);
+
+            LogHelper.Info<string>(string.Format("RemoveAnonymousCustomers - Removed Count {0}", anonymousCustomers.Count()));
 
             return anonymousCustomers.Count();
         }
