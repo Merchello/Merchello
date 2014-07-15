@@ -111,6 +111,17 @@
         }
 
         /// <summary>
+        /// Days beyond which the anonymous customers will be deleted via a scheduled task.
+        /// </summary>
+        /// <remarks>
+        /// The number of days beyond which the anonymous customers will be deleted via a scheduled task.
+        /// </remarks>
+        public int AnonymousCustomersMaxDays
+        {
+            get { return int.Parse(Section.Settings["AnonymousCustomersMaxDays"].Value); }
+        }
+
+        /// <summary>
         /// Gets the pattern formatter.
         /// </summary>
         /// <remarks>
