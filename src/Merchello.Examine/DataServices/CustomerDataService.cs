@@ -1,4 +1,7 @@
-﻿namespace Merchello.Examine.DataServices
+﻿using System.Security;
+using Merchello.Core;
+
+namespace Merchello.Examine.DataServices
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -11,6 +14,31 @@
     /// </summary>
     public class CustomerDataService : ICustomerDataService
     {
+        /// <summary>
+        /// The merchello context.
+        /// </summary>
+        private readonly IMerchelloContext _merchelloContext;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CustomerDataService"/> class.
+        /// </summary>
+        [SecuritySafeCritical]
+        public CustomerDataService()
+            : this(MerchelloContext.Current)
+        {            
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CustomerDataService"/> class.
+        /// </summary>
+        /// <param name="merchelloContext">
+        /// The merchello context.
+        /// </param>
+        public CustomerDataService(IMerchelloContext merchelloContext)
+        {
+            _merchelloContext = merchelloContext;
+        }
+
         /// <summary>
         /// Gets all customers
         /// </summary>

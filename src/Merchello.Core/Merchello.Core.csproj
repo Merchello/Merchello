@@ -186,7 +186,7 @@
     <Compile Include="Gateways\Taxation\TaxCalculationResult.cs" />
     <Compile Include="Gateways\Taxation\TaxableLineItemVisitor.cs" />
     <Compile Include="Models\Currency.cs" />
-    <Compile Include="Models\Interfaces\IExtendedDataEntity.cs" />
+    <Compile Include="Models\Interfaces\IHasExtendedData.cs" />
     <Compile Include="Models\Interfaces\IGatewayProviderMethod.cs" />
     <Compile Include="Models\Interfaces\ICurrency.cs" />
     <Compile Include="Models\Interfaces\INotificationMethod.cs" />

@@ -56,24 +56,24 @@
         }
 
         /// <summary>
-        /// Adds the invoice to the index
+        /// Adds the customer to the index
         /// </summary>
         /// <param name="customer">The <see cref="ICustomer"/> to be indexed</param>
         /// <remarks>For testing</remarks>
-        internal void AddInvoiceToIndex(ICustomer customer)
+        internal void AddCustomerToIndex(ICustomer customer)
         {
-            //var nodes = new List<XElement> { customer.SerializeToXml().Root };
-            //AddNodesToIndex(nodes, IndexTypes.Customer);
+            var nodes = new List<XElement> { customer.SerializeToXml().Root };
+            AddNodesToIndex(nodes, IndexTypes.Customer);
         }
 
         /// <summary>
-        /// Removes the invoice from the index
+        /// Removes the customer from the index
         /// </summary>
         /// <param name="customer">The <see cref="ICustomer"/> to be removed from the index</param>
         /// <remarks>For testing</remarks>
-        internal void DeleteInvoiceFromIndex(ICustomer customer)
+        internal void DeleteCustomerFromIndex(ICustomer customer)
         {
-            //DeleteFromIndex(((ICustomer)customer).ExamineId.ToString(CultureInfo.InvariantCulture));
+            DeleteFromIndex(((Customer)customer).ExamineId.ToString(CultureInfo.InvariantCulture));
         }
 
         /// <summary>
@@ -86,13 +86,14 @@
         {
             if (!SupportedTypes.Contains(type)) return;
 
-            var invoices = DataService.InvoiceDataService.GetAll();
-            var invoicesArray = invoices as IInvoice[] ?? invoices.ToArray();
+            var customers = DataService.CustomerDataService.GetAll();
 
-            if (!invoicesArray.Any()) return;
-            var nodes = invoicesArray.Select(i => i.SerializeToXml().Root).ToList();
+            var customersArray = customers as ICustomer[] ?? customers.ToArray();
 
-            AddNodesToIndex(nodes, IndexTypes.Invoice);
+            if (!customersArray.Any()) return;
+            var nodes = customersArray.Select(i => i.SerializeToXml().Root).ToList();
+
+            AddNodesToIndex(nodes, IndexTypes.Customer);
         }
 
         /// <summary>
@@ -109,7 +110,7 @@
         /// </returns>
         protected override IIndexCriteria GetIndexerData(IndexSet indexSet)
         {
-            return indexSet.ToIndexCriteria(DataService.InvoiceDataService.GetIndexFieldNames(), IndexFieldPolicies);
+            return indexSet.ToIndexCriteria(DataService.CustomerDataService.GetIndexFieldNames(), IndexFieldPolicies);
         }
 
         /// <summary>
