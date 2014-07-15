@@ -85,12 +85,6 @@
                 "merchelloCatalogShippingApiBaseUrl", 
                 url.GetUmbracoApiServiceBaseUrl<ShippingGatewayApiController>(
                 controller => controller.GetShipCountry(Guid.NewGuid())));
-
-            // TODO remove while cleaning up legacy controllers
-            umbracoUrls.Add(
-                "merchelloCatalogFixedRateShippingApiBaseUrl", 
-                url.GetUmbracoApiServiceBaseUrl<CatalogFixedRateShippingApiController>(
-                controller => controller.GetAllShipCountryFixedRateProviders(Guid.NewGuid())));
             
             umbracoUrls.Add(
                 "merchelloNotificationApiBaseUrl", 

@@ -115,9 +115,6 @@
     <Compile Include="CheckoutExtensions.cs" />
     <Compile Include="Models\Customer\CustomerContextDataExtentions.cs" />
     <Compile Include="Models\Customer\CustomerContextData.cs" />
-    <Compile Include="Editors\CatalogFixedRateShippingApiController.cs">
-      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
-    </Compile>
     <Compile Include="Editors\CustomerApiController.cs" />
     <Compile Include="Editors\FixedRateShippingApiController.cs" />
     <Compile Include="Editors\GatewayProviderApiController.cs" />
@@ -150,9 +147,6 @@
     <Compile Include="Models\ContentEditing\AppliedPaymentDisplay.cs" />
     <Compile Include="Models\ContentEditing\GatewayProviderDisplay.cs" />
     <Compile Include="Models\ContentEditing\GatewayResourceDisplay.cs" />
-    <Compile Include="Models\ContentEditing\FixedRateShipMethodDisplay.cs">
-      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
-    </Compile>
     <Compile Include="Models\ContentEditing\InvoiceDisplay.cs" />
     <Compile Include="Models\ContentEditing\InvoiceLineItemDisplay.cs" />
     <Compile Include="Models\ContentEditing\InvoiceStatusDisplay.cs" />
