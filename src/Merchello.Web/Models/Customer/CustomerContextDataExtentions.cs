@@ -1,6 +1,9 @@
 namespace Merchello.Web.Models.Customer
 {
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Web;
+    using Core;
     using Newtonsoft.Json;
     using Umbraco.Core.Logging;
 
@@ -20,7 +23,7 @@ namespace Merchello.Web.Models.Customer
         /// </returns>
         public static string ToJson(this CustomerContextData contextData)
         {
-            return JsonConvert.SerializeObject(contextData);
+            return EncryptionHelper.Encrypt(JsonConvert.SerializeObject(contextData));
         }
 
         /// <summary>
@@ -40,8 +43,45 @@ namespace Merchello.Web.Models.Customer
                 return null;
             }
 
-            return JsonConvert.DeserializeObject<CustomerContextData>(contextCookie.Value);
+            return JsonConvert.DeserializeObject<CustomerContextData>(EncryptionHelper.Decrypt(contextCookie.Value));
         }
 
+        /// <summary>
+        /// Gets a value from the CustomerContextData.
+        /// </summary>
+        /// <param name="contextData">
+        /// The context data.
+        /// </param>
+        /// <param name="alias">
+        /// The alias.
+        /// </param>
+        /// <returns>
+        /// The value as a string.
+        /// </returns>
+        public static string GetValue(this CustomerContextData contextData, string alias)
+        {
+            return contextData.Values.FirstOrDefault(x => x.Key == alias).Value;
+        }
+
+        /// <summary>
+        /// Adds a value to the Context Data
+        /// </summary>
+        /// <param name="contextData">
+        /// The context data.
+        /// </param>
+        /// <param name="alias">
+        /// The alias.
+        /// </param>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        public static void SetValue(this CustomerContextData contextData, string alias, string value)
+        {
+            Mandate.ParameterNotNullOrEmpty(alias, "alias");
+            Mandate.ParameterNotNullOrEmpty(value, "value");
+
+            contextData.Values.Remove(contextData.Values.FirstOrDefault(x => x.Key == alias));
+            contextData.Values.Add(new KeyValuePair<string, string>(alias, value));
+        }
     }
 }

@@ -13,17 +13,17 @@
         /// </summary>
         public CustomerContextData()
         {
-            ContextValues = new List<KeyValuePair<string, string>>();
+            Values = new List<KeyValuePair<string, string>>();
         }
 
         /// <summary>
         /// Gets or sets the customer key.
         /// </summary>
-        public Guid CustomerKey { get; set; }
+        public Guid Key { get; set; }
 
         /// <summary>
         /// Gets the context values.
         /// </summary>
-        public List<KeyValuePair<string, string>> ContextValues { get; private set; } 
+        public List<KeyValuePair<string, string>> Values { get; private set; } 
     }
 }

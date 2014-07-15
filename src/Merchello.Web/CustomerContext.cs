@@ -105,7 +105,8 @@
 
             if (cachedContextData != null)
             {
-                var key = ((CustomerContextData)cachedContextData).CustomerKey;
+                ContextData = (CustomerContextData)cachedContextData;
+                var key = ContextData.Key;
                 TryGetCustomer(key);
                 return;
             }
@@ -115,11 +116,11 @@
 
             if (cookie != null)
             {
-                var cookieData = cookie.ToCustomerContextData();
+                ContextData = cookie.ToCustomerContextData();
 
                 try
                 {
-                    TryGetCustomer(cookieData.CustomerKey);
+                    TryGetCustomer(ContextData.Key);
                 }
                 catch (Exception ex)
                 {
@@ -146,7 +147,7 @@
             {
                 CurrentCustomer = customer;
 
-                ContextData.CustomerKey = customer.Key;
+                ContextData.Key = customer.Key;
 
                 return;
             }
@@ -174,7 +175,7 @@
             if (customer != null)
             {
                 CurrentCustomer = customer;
-                ContextData.CustomerKey = customer.Key;
+                ContextData.Key = customer.Key;
                 CacheCustomer(customer);
             }
             else 
@@ -193,7 +194,7 @@
             CurrentCustomer = customer;
             ContextData = new CustomerContextData()
             {
-                CustomerKey = customer.Key
+                Key = customer.Key
             };
 
             CacheCustomer(customer);
