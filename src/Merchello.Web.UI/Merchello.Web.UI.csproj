@@ -475,8 +475,10 @@
     <Content Include="App_Plugins\Merchello\Modules\Settings\settings.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Vendors\vendors.models.js" />
     <Content Include="App_Plugins\Merchello\Package.manifest" />
+    <Content Include="App_Plugins\Merchello\PropertyEditors\ProductEditor\Js\merchelloproducteditor.productedit.controller.js" />
     <Content Include="App_Plugins\Merchello\PropertyEditors\ProductEditor\Js\merchelloproducteditor.controller.js" />
     <Content Include="App_Plugins\Merchello\PropertyEditors\ProductEditor\Views\merchelloproducteditor.html" />
+    <Content Include="App_Plugins\Merchello\PropertyEditors\ProductEditor\Views\merchelloproducteditor.productedit.html" />
     <Content Include="App_Plugins\Merchello\PropertyEditors\ProductPicker\Js\merchelloproductdialog.controller.js" />
     <Content Include="App_Plugins\Merchello\PropertyEditors\ProductPicker\Js\merchelloproductselector.controller.js" />
     <Content Include="App_Plugins\Merchello\PropertyEditors\ProductPicker\Views\merchelloproductdialog.html" />
