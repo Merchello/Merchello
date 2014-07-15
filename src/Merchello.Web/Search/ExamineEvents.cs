@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Merchello.Web.Search
+﻿namespace Merchello.Web.Search
 {
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
@@ -100,34 +98,73 @@ namespace Merchello.Web.Search
             CustomerService.Deleted += CustomerServiceDeleted;
         }
 
+        #region Customers
+
         /// <summary>
         /// The customer service deleted.
         /// </summary>
         /// <param name="sender">
         /// The sender.
         /// </param>
-        /// <param name="deleteEventArgs">
+        /// <param name="args">
         /// The delete event args.
         /// </param>
-        private void CustomerServiceDeleted(ICustomerService sender, DeleteEventArgs<ICustomer> deleteEventArgs)
+        public void CustomerServiceDeleted(ICustomerService sender, DeleteEventArgs<ICustomer> args)
         {
-            
+            args.DeletedEntities.ForEach(DeleteCustomerFromIndex);
         }
 
-        private void CustomerServiceSaved(ICustomerService sender, SaveEventArgs<ICustomer> saveEventArgs)
+        /// <summary>
+        /// The customer service saved.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="args">
+        /// The args.
+        /// </param>
+        public void CustomerServiceSaved(ICustomerService sender, SaveEventArgs<ICustomer> args)
         {
-          
+            args.SavedEntities.ForEach(IndexCustomer);
         }
 
-        private void CustomerServiceCreated(ICustomerService sender, Core.Events.NewEventArgs<ICustomer> newEventArgs)
+        /// <summary>
+        /// The customer service created.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="args">
+        /// The args.
+        /// </param>
+        public void CustomerServiceCreated(ICustomerService sender, Core.Events.NewEventArgs<ICustomer> args)
         {
-            
+            IndexCustomer(args.Entity);
         }
 
-        private static void IndexCustomer(ICustomer customer)
+        /// <summary>
+        /// Indexes a customer
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        public static void IndexCustomer(ICustomer customer)
         {
             if (customer != null && customer.HasIdentity) CustomerIndexer.AddCustomerToIndex(customer);
         }
+
+        /// <summary>
+        /// The delete customer from index.
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        public static void DeleteCustomerFromIndex(ICustomer customer)
+        {
+            if (customer != null && customer.HasIdentity) CustomerIndexer.DeleteCustomerFromIndex(customer);
+        }
+
+#endregion
 
         #region Invoice
 
