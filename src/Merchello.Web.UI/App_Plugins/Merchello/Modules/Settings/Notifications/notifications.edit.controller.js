@@ -9,6 +9,7 @@
      * The controller for the Notifications page
      */
     controllers.NotificationsEditController = function ($scope, $routeParams, assetsService, notificationsService, merchelloNotificationsService) {
+        
 
         $scope.currentTab = "Template";
         $scope.notificationTriggers = [];
@@ -22,14 +23,15 @@
 		//--------------------------------------------------------------------------------------
 		// Initialization methods
 		//--------------------------------------------------------------------------------------
+		$scope.tinymceOptions = {
+		    theme: "modern",
+		    height: "630px",
+		};
 
 		$scope.init = function () {
 
 		    // declare empty options at startup, so ui-codemirror can watch it
-			$scope.tinymceOptions = {
-			    height: 1000,
-			    width: 1000,
-			};
+			
 			var promise = $scope.loadNotificationMessage();
 		    promise.then(function(data) {
 

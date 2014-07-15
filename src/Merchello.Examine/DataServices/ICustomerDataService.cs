@@ -4,16 +4,16 @@
     using Core.Models;
 
     /// <summary>
-    /// Defines an Invoice Data Service
+    /// Defines he CustomerDataService interface.
     /// </summary>
-    public interface IInvoiceDataService : IIndexDataService
+    public interface ICustomerDataService : IIndexDataService
     {
         /// <summary>
-        /// The get all.
+        /// Gets all customers
         /// </summary>
         /// <returns>
-        /// The collection of all <see cref="IInvoice"/>.
+        /// The collection of all <see cref="ICustomer"/>.
         /// </returns>
-        IEnumerable<IInvoice> GetAll(); 
+        IEnumerable<ICustomer> GetAll(); 
     }
 }

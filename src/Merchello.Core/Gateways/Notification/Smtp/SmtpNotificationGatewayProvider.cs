@@ -1,21 +1,24 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Merchello.Core.Models;
-using Merchello.Core.Services;
-using Umbraco.Core.Cache;
-using Umbraco.Core.Logging;
-
-namespace Merchello.Core.Gateways.Notification.Smtp
+﻿namespace Merchello.Core.Gateways.Notification.Smtp
 {
-     ///<summary>
-     /// Represents the SMTP Notification Gateway Provider
-     ///</summary>
+    using System.Collections.Generic;
+    using System.Linq;
+    using Models;
+    using Services;
+    using Umbraco.Core.Cache;
+    using Umbraco.Core.Logging;
+
+    /// <summary>
+    /// The smtp notification gateway provider.
+    /// </summary>
     [GatewayProviderActivation("5F2E88D1-6D07-4809-B9AB-D4D6036473E9", "SMTP Notification Provider", "SMTP Notification Provider")]
     [GatewayProviderEditor("SMTP Notification Configuration", "~/App_Plugins/Merchello/Modules/Settings/GatewayProviders/Dialogs/smtp.notifications.providersettings.html")]
     public class SmtpNotificationGatewayProvider : NotificationGatewayProviderBase, ISmtpNotificationGatewayProvider
     {
         #region Resources
-        
+
+        /// <summary>
+        /// The available resources.
+        /// </summary>
         private static readonly IEnumerable<IGatewayResource> AvailableResources = new List<IGatewayResource>()
         {
             new GatewayResource("Email", "Email Notification")

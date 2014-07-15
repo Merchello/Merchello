@@ -1,17 +1,18 @@
-﻿namespace Merchello.Examine.DataServices
+﻿using System.Security;
+using Merchello.Core;
+
+namespace Merchello.Examine.DataServices
 {
     using System.Collections.Generic;
     using System.Linq;
-    using System.Security;
-    using Core;
     using Core.Models;
     using Core.Services;
     using Providers;
 
     /// <summary>
-    /// The invoice data service.
+    /// The customer data service.
     /// </summary>
-    public class InvoiceDataService : IInvoiceDataService
+    public class CustomerDataService : ICustomerDataService
     {
         /// <summary>
         /// The merchello context.
@@ -19,47 +20,45 @@
         private readonly IMerchelloContext _merchelloContext;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="InvoiceDataService"/> class.
+        /// Initializes a new instance of the <see cref="CustomerDataService"/> class.
         /// </summary>
         [SecuritySafeCritical]
-        public InvoiceDataService()
+        public CustomerDataService()
             : this(MerchelloContext.Current)
         {            
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="InvoiceDataService"/> class.
+        /// Initializes a new instance of the <see cref="CustomerDataService"/> class.
         /// </summary>
         /// <param name="merchelloContext">
         /// The merchello context.
         /// </param>
-        public InvoiceDataService(IMerchelloContext merchelloContext)
+        public CustomerDataService(IMerchelloContext merchelloContext)
         {
             _merchelloContext = merchelloContext;
         }
 
-
         /// <summary>
-        /// The get all.
+        /// Gets all customers
         /// </summary>
         /// <returns>
-        /// The collection of all <see cref="IInvoice"/>.
+        ///  The collection of all <see cref="ICustomer"/>.
         /// </returns>
-        public IEnumerable<IInvoice> GetAll()
+        public IEnumerable<ICustomer> GetAll()
         {
-            return new InvoiceService().GetAll();
+            return new CustomerService().GetAll();
         }
 
-
         /// <summary>
-        /// The get index field names.
+        /// Returns a list of all property names in the Merchello set being indexed
         /// </summary>
         /// <returns>
-        /// The collection of index field names.
+        /// The collection of all index field names.
         /// </returns>
         public IEnumerable<string> GetIndexFieldNames()
         {
-            return InvoiceIndexer.IndexFieldPolicies.Select(x => x.Name);
+            return CustomerIndexer.IndexFieldPolicies.Select(x => x.Name);
         }
     }
 }
