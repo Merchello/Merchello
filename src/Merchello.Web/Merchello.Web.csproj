@@ -113,6 +113,8 @@
     </Compile>
     <Compile Include="AutoMapperMappings.cs" />
     <Compile Include="CheckoutExtensions.cs" />
+    <Compile Include="Models\Customer\CustomerContextDataExtentions.cs" />
+    <Compile Include="Models\Customer\CustomerContextData.cs" />
     <Compile Include="Editors\CatalogFixedRateShippingApiController.cs">
       <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
     </Compile>
