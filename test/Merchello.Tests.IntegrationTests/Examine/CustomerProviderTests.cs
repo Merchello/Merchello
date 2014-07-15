@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Runtime.InteropServices;
 using Examine;
 using Examine.Providers;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
+using Merchello.Examine;
 using Merchello.Examine.Providers;
 using Merchello.Tests.IntegrationTests.TestHelpers;
 using Merchello.Web;
@@ -17,6 +19,7 @@ namespace Merchello.Tests.IntegrationTests.Examine
     {
         private CustomerIndexer _customerIndexer;
         private BaseSearchProvider _searcher;
+        private ICustomerService _customerService;
 
         [TestFixtureSetUp]
         public override void FixtureSetup()
@@ -27,19 +30,57 @@ namespace Merchello.Tests.IntegrationTests.Examine
             bootManager.Initialize();
 
             _customerIndexer = (CustomerIndexer)ExamineManager.Instance.IndexProviderCollection["MerchelloCustomerIndexer"];
-            _searcher = ExamineManager.Instance.SearchProviderCollection["MerchelloCustomerSearcher"]
+            _searcher = ExamineManager.Instance.SearchProviderCollection["MerchelloCustomerSearcher"];
+
+            _customerService = PreTestDataWorker.CustomerService;
 
             CustomerService.Created += CustomerServiceCreated;
             CustomerService.Saved += CustomerServiceSaved;
             CustomerService.Deleted += CustomerServiceDeleted;
 
+        }
 
-            //var invoiceProvider = (InvoiceIndexer)ExamineManager.Instance.IndexProviderCollection["MerchelloInvoiceIndexer"];
-            //invoiceProvider.RebuildIndex();
+        [SetUp]
+        public void Initialize()
+        {
+            PreTestDataWorker.DeleteAllCustomers();
+        }
+
+        /// <summary>
+        /// Test shows that a customer can be saved and indexed
+        /// </summary>
+        [Test]
+        public void Can_Save_A_Customer_And_Find_It_In_The_Index()
+        {
+            //// Arrange
+            var customer = _customerService.CreateCustomerWithKey(
+                "rusty",
+                "firstName",
+                "lastName",
+                "test@test.com");
+
+            //// Act
+            var criteria = _searcher.CreateSearchCriteria(IndexTypes.Customer);
+            criteria.Field("loginName", "rusty");
+            var results = _searcher.Search(criteria);
+
+            //// Assert
+            Assert.IsTrue(results.Any());
         }
 
 
+        public void Can_Retrieve_A_CustomerDisplay_From_The_Index()
+        {
+            
+        }
 
+        [TestFixtureTearDown]
+        public void FixtureTearDown()
+        {
+            CustomerService.Created -= CustomerServiceCreated;
+            CustomerService.Saved -= CustomerServiceSaved;
+            CustomerService.Deleted -= CustomerServiceDeleted;
+        }
 
         private void CustomerServiceSaved(ICustomerService sender, SaveEventArgs<ICustomer> saveEventArgs)
         {
@@ -58,8 +99,6 @@ namespace Merchello.Tests.IntegrationTests.Examine
         {           
            _customerIndexer.AddCustomerToIndex(newEventArgs.Entity);           
         }
-
-
      
     }
 }

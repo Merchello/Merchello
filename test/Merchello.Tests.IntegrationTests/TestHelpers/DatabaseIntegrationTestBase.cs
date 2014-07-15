@@ -47,6 +47,8 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
             AutoMapperMappings.CreateMappings();
             ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"].RebuildIndex();  
+            ExamineManager.Instance.IndexProviderCollection["MerchelloCustomerIndexer"].RebuildIndex();
+            
         }
 
         protected DbPreTestDataWorker PreTestDataWorker {
