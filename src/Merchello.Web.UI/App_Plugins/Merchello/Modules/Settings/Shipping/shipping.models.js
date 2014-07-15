@@ -223,9 +223,11 @@
 
         if (shipRateTableFromServer == undefined) {
             self.shipMethodKey = "";
+            self.shipCountryKey = "";
             self.rows = [];
         } else {
             self.shipMethodKey = shipRateTableFromServer.shipMethodKey;
+            self.shipCountryKey = shipRateTableFromServer.shipCountryKey;
             self.rows = _.map(shipRateTableFromServer.rows, function (row) {
                 return new merchello.Models.ShippingRateTier(row);
             });
@@ -235,8 +237,8 @@
             self.rows.push(row);
         };
 
-        self.removeRow = function(rowToRemove) {
-            self.rows = _.reject(self.rows, function(row) { return row.key == rowToRemove.key; });
+        self.removeRow = function (rowToRemove) {
+            self.rows = _.reject(self.rows, function(row) { return row.$$hashKey == rowToRemove.$$hashKey; });
         };
     };
 

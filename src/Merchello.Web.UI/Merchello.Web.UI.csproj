@@ -460,6 +460,7 @@
     <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\notifications.models.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Payment\payment.models.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\settings.models.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\merchello.fixedrateshipping.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\shipping.models.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\merchello.warehouse.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Taxation\Dialogs\taxationmethod.controller.js" />

@@ -84,6 +84,7 @@
         /// <returns>
         /// The <see cref="ShipFixedRateTableDisplay"/>.
         /// </returns>
+        [HttpPost]
         public ShipFixedRateTableDisplay PutShipFixedRateTable(ShipFixedRateTableDisplay rateTable)
         {
             var fixedMethod = (IFixedRateShippingGatewayMethod)_fixedRateShippingGatewayProvider.GetShippingGatewayMethod(rateTable.ShipMethodKey, rateTable.ShipCountryKey);
