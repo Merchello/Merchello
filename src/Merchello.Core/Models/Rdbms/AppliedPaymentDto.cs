@@ -1,5 +1,4 @@
 ﻿using System;
-using Umbraco.Core.Media;
 using Umbraco.Core.Persistence;
 using Umbraco.Core.Persistence.DatabaseAnnotations;
 

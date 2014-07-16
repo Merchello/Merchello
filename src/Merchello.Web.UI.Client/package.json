@@ -44,6 +44,7 @@
     "karma-coffee-preprocessor": "latest",
     "karma": "~0.10",
     "karma-phantomjs-launcher": "latest",
-    "karma-ng-scenario": "latest"
-  }
+    "karma-ng-scenario": "latest",
+	"karma-ng-html2js-preprocessor": "~0.1"  
+	}
 }

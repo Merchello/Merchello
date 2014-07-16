@@ -96,7 +96,7 @@ namespace Merchello.Tests.UnitTests.PackageAction
 
             //// Assert
            Assert.IsTrue(files.Any());
-            Assert.AreEqual(2, files.Count());
+            Assert.AreEqual(5, files.Count());
             foreach (var f in files) Console.WriteLine(f.Name);
         }
     }

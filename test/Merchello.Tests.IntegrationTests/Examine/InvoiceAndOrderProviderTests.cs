@@ -51,6 +51,7 @@ namespace Merchello.Tests.IntegrationTests.Examine
         public void TestFixtureTearDown()
         {
             InvoiceService.Saved -= InvoiceServiceSaved;
+            OrderService.Saved -= OrderServiceSaved;
         }
 
         private void InvoiceServiceSaved(IInvoiceService sender, SaveEventArgs<IInvoice> e)

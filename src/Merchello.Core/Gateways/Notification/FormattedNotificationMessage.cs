@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using Merchello.Core.Formatters;
-using Merchello.Core.Models;
-using System.Linq;
-using Umbraco.Core.IO;
-using Umbraco.Core.Logging;
-
-namespace Merchello.Core.Gateways.Notification
+﻿namespace Merchello.Core.Gateways.Notification
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using Formatters;
+    using Models;
+    using Umbraco.Core.IO;
+    using Umbraco.Core.Logging;
+
     /// <summary>
     /// Defines the base notification
     /// </summary>
@@ -146,8 +146,8 @@ namespace Merchello.Core.Gateways.Notification
             {
                 LogHelper.Error<FormattedNotificationMessage>("Failed to parse message from file", ex);
             }
+
             return string.Empty;
         }
-
     }
 }

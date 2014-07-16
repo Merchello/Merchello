@@ -153,8 +153,8 @@ namespace Merchello.Web.Editors
         {
             var settingDisplay = new SettingDisplay
             {
-                nextInvoiceNumber = _storeSettingService.GetNextInvoiceNumber(),
-                nextOrderNumber = _storeSettingService.GetNextOrderNumber()
+                NextInvoiceNumber = _storeSettingService.GetNextInvoiceNumber(),
+                NextOrderNumber = _storeSettingService.GetNextOrderNumber()
             };
             
             return settingDisplay;

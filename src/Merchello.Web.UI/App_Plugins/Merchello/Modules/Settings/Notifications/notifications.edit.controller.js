@@ -9,6 +9,7 @@
      * The controller for the Notifications page
      */
     controllers.NotificationsEditController = function ($scope, $routeParams, assetsService, notificationsService, merchelloNotificationsService) {
+        
 
         $scope.currentTab = "Template";
         $scope.notificationTriggers = [];
@@ -22,26 +23,19 @@
 		//--------------------------------------------------------------------------------------
 		// Initialization methods
 		//--------------------------------------------------------------------------------------
+		$scope.tinymceOptions = {
+		    theme: "modern",
+		    height: "630px",
+		};
 
 		$scope.init = function () {
-			assetsService.loadCss("/App_Plugins/Merchello/lib/codemirror/Js/Lib/codemirror.css");
-			assetsService.loadCss("/App_Plugins/Merchello/lib/codemirror/Css/umbracoCustom.css");
 
 		    // declare empty options at startup, so ui-codemirror can watch it
-			$scope.cmOptions = {};
-
+			
 			var promise = $scope.loadNotificationMessage();
 		    promise.then(function(data) {
 
-		    	$scope.cmOptions = {
-		    		autofocus: true,
-		    		indentUnit: 4,
-		    		indentWithTabs: true,
-		    		lineNumbers: true,
-		    		matchBrackets: true,
-		    		mode: "razor",
-		    		value: $scope.notificationMessage.bodyText
-		    	};
+		        
 
 		    	$scope.loaded = true;
 		    	$scope.preValuesLoaded = true;
@@ -103,7 +97,7 @@
     };
 
 
-	angular.module("umbraco").controller("Merchello.Dashboards.Settings.NotificationsEditController", ['$scope', '$routeParams', 'assetsService', 'notificationsService', 'merchelloNotificationsService', merchello.Controllers.NotificationsEditController]);
+    angular.module("umbraco").controller("Merchello.Dashboards.Settings.NotificationsEditController", ['$scope', '$routeParams', 'assetsService', 'notificationsService', 'merchelloNotificationsService', merchello.Controllers.NotificationsEditController]);
 
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));

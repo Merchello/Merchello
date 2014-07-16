@@ -1,4 +1,6 @@
-﻿namespace Merchello.Web.Search
+﻿using System;
+
+namespace Merchello.Web.Search
 {
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
@@ -18,6 +20,52 @@
     /// </summary>
     public class ExamineEvents : ApplicationEventHandler
     {
+
+        #region Indexers
+
+        /// <summary>
+        /// Gets the product indexer.
+        /// </summary>
+        private static ProductIndexer ProductIndexer
+        {
+            get { return (ProductIndexer)ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"]; }
+        }
+
+        /// <summary>
+        /// Gets the invoice indexer.
+        /// </summary>
+        private static InvoiceIndexer InvoiceIndexer
+        {
+            get { return (InvoiceIndexer)ExamineManager.Instance.IndexProviderCollection["MerchelloInvoiceIndexer"]; }
+        }
+
+        /// <summary>
+        /// Gets the order indexer.
+        /// </summary>
+        private static OrderIndexer OrderIndexer
+        {
+            get { return (OrderIndexer)ExamineManager.Instance.IndexProviderCollection["MerchelloOrderIndexer"]; }
+        }
+
+        /// <summary>
+        /// Gets the customer indexer.
+        /// </summary>
+        private static CustomerIndexer CustomerIndexer
+        {
+            get { return (CustomerIndexer)ExamineManager.Instance.IndexProviderCollection["MerchelloCustomerIndexer"]; }
+        }
+
+        #endregion
+
+        /// <summary>
+        /// The application started.
+        /// </summary>
+        /// <param name="umbracoApplication">
+        /// The umbraco application.
+        /// </param>
+        /// <param name="applicationContext">
+        /// The application context.
+        /// </param>
         [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:ElementsMustBeOrderedByAccess", Justification = "Reviewed. Suppression is OK here.")]
         protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
@@ -46,6 +94,39 @@
 
             OrderService.Saved += OrderServiceSaved;
             OrderService.Deleted += OrderServiceDeleted;
+
+            CustomerService.Created += CustomerServiceCreated;
+            CustomerService.Saved += CustomerServiceSaved;
+            CustomerService.Deleted += CustomerServiceDeleted;
+        }
+
+        /// <summary>
+        /// The customer service deleted.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="deleteEventArgs">
+        /// The delete event args.
+        /// </param>
+        private void CustomerServiceDeleted(ICustomerService sender, DeleteEventArgs<ICustomer> deleteEventArgs)
+        {
+            
+        }
+
+        private void CustomerServiceSaved(ICustomerService sender, SaveEventArgs<ICustomer> saveEventArgs)
+        {
+          
+        }
+
+        private void CustomerServiceCreated(ICustomerService sender, Core.Events.NewEventArgs<ICustomer> newEventArgs)
+        {
+            
+        }
+
+        private static void IndexCustomer(ICustomer customer)
+        {
+            if (customer != null && customer.HasIdentity) CustomerIndexer.AddCustomerToIndex(customer);
         }
 
         #region Invoice
@@ -81,7 +162,7 @@
         /// <summary>
         /// ReIndexes an Invoice
         /// </summary>
-        /// <param name="invoice">The <see cref="IInvoice"/> to be reindexed</param>
+        /// <param name="invoice">The <see cref="IInvoice"/> to be re-indexed</param>
         private static void IndexInvoice(IInvoice invoice)
         {
             if (invoice != null && invoice.HasIdentity) InvoiceIndexer.AddInvoiceToIndex(invoice);
@@ -105,7 +186,13 @@
         /// <summary>
         /// Reindexes an invoice based on order saved
         /// </summary>
-        static void OrderServiceSaved(IOrderService sender, SaveEventArgs<IOrder> e)
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        public static void OrderServiceSaved(IOrderService sender, SaveEventArgs<IOrder> e)
         {
             e.SavedEntities.ForEach(IndexOrder);
         }
@@ -113,7 +200,13 @@
         /// <summary>
         /// Reindexes an invoice based on order deletion 
         /// </summary>
-        static void OrderServiceDeleted(IOrderService sender, DeleteEventArgs<IOrder> e)
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        public static void OrderServiceDeleted(IOrderService sender, DeleteEventArgs<IOrder> e)
         {
             e.DeletedEntities.ForEach(DeleteOrderFromIndex);
         }
@@ -121,14 +214,20 @@
         /// <summary>
         /// Indexes an order
         /// </summary>
+        /// <param name="order">
+        /// The order.
+        /// </param>
         private static void IndexOrder(IOrder order)
         {
-            if(order != null && order.HasIdentity) OrderIndexer.AddOrderToIndex(order);
+            if (order != null && order.HasIdentity) OrderIndexer.AddOrderToIndex(order);
         }
 
         /// <summary>
         /// Deletes an order from the index
         /// </summary>
+        /// <param name="order">
+        /// The order.
+        /// </param>
         private static void DeleteOrderFromIndex(IOrder order)
         {
             OrderIndexer.DeleteFromIndex(((Order)order).ExamineId.ToString(CultureInfo.InvariantCulture));
@@ -209,25 +308,5 @@
         }
 
 #endregion
-
-        #region Indexers
-
-
-        private static ProductIndexer ProductIndexer
-        {
-            get { return (ProductIndexer)ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"]; }
-        }
-
-        private static InvoiceIndexer InvoiceIndexer
-        {
-            get { return (InvoiceIndexer) ExamineManager.Instance.IndexProviderCollection["MerchelloInvoiceIndexer"]; }
-        }
-
-        private static OrderIndexer OrderIndexer
-        {
-            get { return (OrderIndexer) ExamineManager.Instance.IndexProviderCollection["MerchelloOrderIndexer"]; }
-        }
-
-        #endregion
     }
 }

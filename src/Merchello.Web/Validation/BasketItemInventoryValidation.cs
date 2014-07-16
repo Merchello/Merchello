@@ -1,30 +1,70 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Merchello.Core;
-using Merchello.Core.Models;
-using Merchello.Core.Services;
-
-namespace Merchello.Web.Validation
+﻿namespace Merchello.Web.Validation
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Merchello.Core;
+    using Merchello.Core.Models;
+    using Merchello.Core.Services;
+
     /// <summary>
     /// Visitor to audit basket line item for inventory requirements
     /// </summary>
     public class BasketItemInventoryValidation : ILineItemVisitor
     {
+        #region Fields
 
+        /// <summary>
+        /// The <see cref="IProductVariantService"/>.
+        /// </summary>
         private readonly IProductVariantService _productVariantService;
-        private readonly List<InventoryValidation> _failedInventoryValidtion;
 
+        /// <summary>
+        /// A collection of items that failed the inventory validation check.
+        /// </summary>
+        private readonly List<InventoryValidation> _failedInventoryValidation;
 
+        #endregion
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BasketItemInventoryValidation"/> class.
+        /// </summary>
+        /// <param name="productVariantService">
+        /// The <see cref="ProductVariantService"/>.
+        /// </param>
         public BasketItemInventoryValidation(IProductVariantService productVariantService)
         {
             Mandate.ParameterNotNull(productVariantService, "productVariantService");
 
             _productVariantService = productVariantService;
-            _failedInventoryValidtion = new List<InventoryValidation>();
+            this._failedInventoryValidation = new List<InventoryValidation>();
         }
 
+        /// <summary>
+        /// Gets the failed inventory validations.
+        /// </summary>
+        public IEnumerable<InventoryValidation> FailedInventoryValidations
+        {
+            get
+            {
+                return this._failedInventoryValidation;
+            }
+        }
 
+        /// <summary>
+        /// Gets a value indicating whether passes inventory requirements.
+        /// </summary>
+        public bool PassesInventoryRequirements
+        {
+            get { return !this._failedInventoryValidation.Any(); }
+        }
+
+        /// <summary>
+        /// Visits the line item
+        /// </summary>
+        /// <param name="lineItem">
+        /// The line item.
+        /// </param>
         public void Visit(ILineItem lineItem)
         {
             // if the line item does not have a product variant reference this vistor cannot check it 
@@ -39,28 +79,38 @@ namespace Merchello.Web.Validation
 
             if (variant.TotalInventoryCount < lineItem.Quantity)
             {
-                _failedInventoryValidtion.Add(new InventoryValidation(lineItem, variant.TotalInventoryCount));
+                this._failedInventoryValidation.Add(new InventoryValidation(lineItem, variant.TotalInventoryCount));
             }
         }
 
-
-        public IEnumerable<InventoryValidation> FailedInventoryValidations { get { return _failedInventoryValidtion; } }
-
-
-        public bool PassesInventoryRequirements {
-            get { return !_failedInventoryValidtion.Any(); }
-        }
-
-
+        /// <summary>
+        /// The inventory validation.
+        /// </summary>
         public class InventoryValidation
         {
+            /// <summary>
+            /// Initializes a new instance of the <see cref="InventoryValidation"/> class.
+            /// </summary>
+            /// <param name="requested">
+            /// The requested.
+            /// </param>
+            /// <param name="inventoryCount">
+            /// The inventory count.
+            /// </param>
             public InventoryValidation(ILineItem requested, int inventoryCount)
             {
                 Requested = requested;
                 InventoryCount = inventoryCount;
             }
 
+            /// <summary>
+            /// Gets the requested amount
+            /// </summary>
             public ILineItem Requested { get; private set; }
+
+            /// <summary>
+            /// Gets the inventory count.
+            /// </summary>
             public int InventoryCount { get; private set; }
         }
     }

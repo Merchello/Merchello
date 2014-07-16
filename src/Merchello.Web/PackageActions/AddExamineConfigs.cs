@@ -1,12 +1,12 @@
-﻿using System.Web;
-using System.Xml;
-using Merchello.Core.Configuration;
-using umbraco.cms.businesslogic.packager.standardPackageActions;
-using Umbraco.Core;
-using umbraco.interfaces;
-
-namespace Merchello.Web.PackageActions
+﻿namespace Merchello.Web.PackageActions
 {
+    using System.Web;
+    using System.Xml;
+    using Core.Configuration;
+    using umbraco.cms.businesslogic.packager.standardPackageActions;    
+    using umbraco.interfaces;
+    using Umbraco.Core;
+
     /// <summary>
     ///  Package action adds the custom Merchello Examine xml configurations to the Examine configuration files
     /// </summary>
@@ -27,11 +27,10 @@ namespace Merchello.Web.PackageActions
         /// Appends the xmlData to the applicable Examine configuration elements
         /// </summary>
         /// <param name="packageName">Name of the package that we install</param>
-        /// <param name="xmlData">Values </param>
+        /// <param name="xmlData">Xml Values</param>
         /// <returns>True when succeeded</returns>
         public bool Execute(string packageName, XmlNode xmlData)
-        {
-      
+        {      
             // Check if the xmlData has a childnode (the IndexSet rule node)
             if (!xmlData.HasChildNodes) return false;
 
@@ -44,7 +43,7 @@ namespace Merchello.Web.PackageActions
             if (indexSets == null || indexers == null || searchers == null) return false;
 
 
-            // --------------- ExamineIndex.config -----------------------------
+            //// --------------- ExamineIndex.config -----------------------------
 
             var examineIndexFile = XmlHelper.OpenAsXmlDocument(VirtualPathUtility.ToAbsolute("~/config/ExamineIndex.config"));
             var examineLuceneIndexSetsNode = examineIndexFile.SelectSingleNode("//ExamineLuceneIndexSets");
@@ -54,14 +53,15 @@ namespace Merchello.Web.PackageActions
                 var newNode = examineLuceneIndexSetsNode.OwnerDocument.ImportNode(set, true);
                 examineLuceneIndexSetsNode.AppendChild(newNode);
             }
-            // Save the config file
+
+            //// Save the config file
             examineIndexFile.Save(HttpContext.Current.Server.MapPath(VirtualPathUtility.ToAbsolute("/config/ExamineIndex.config")));
            
 
-            // ----------------ExamineSettings.config -------------------------
+            //// ----------------ExamineSettings.config -------------------------
             var examineSettingsFile = XmlHelper.OpenAsXmlDocument(VirtualPathUtility.ToAbsolute("/config/ExamineSettings.config"));
 
-            // the index providers
+            //// the index providers
             var examineIndexProviders = examineSettingsFile.SelectSingleNode("//ExamineIndexProviders/providers");
             foreach (XmlNode indexer in indexers)
             {
@@ -69,7 +69,7 @@ namespace Merchello.Web.PackageActions
                 examineIndexProviders.AppendChild(newNode);
             }
 
-            // the searchers
+            //// the searchers
             var examineSearchProviders = examineSettingsFile.SelectSingleNode("//ExamineSearchProviders/providers");
             foreach (XmlNode searcher in searchers)
             {
@@ -82,10 +82,6 @@ namespace Merchello.Web.PackageActions
             return true;
         }
 
-
-
-      
-
         /// <summary>
         /// Removes the xmlData Node from the ExamineIndex.config file based on the rulename 
         /// </summary>
@@ -94,8 +90,6 @@ namespace Merchello.Web.PackageActions
         /// <returns>True when succeeded</returns>
         public bool Undo(string packageName, XmlNode xmlData)
         {
-
-
             // Check if the xmlData has a childnode (the IndexSet rule node)
             if (!xmlData.HasChildNodes) return false;
 
@@ -106,7 +100,7 @@ namespace Merchello.Web.PackageActions
 
             if (indexSets == null || indexers == null || searchers == null) return false;
 
-            // -------------- ExamineIndex.config -------------------------
+            //// -------------- ExamineIndex.config -------------------------
 
             var examineIndexFile = XmlHelper.OpenAsXmlDocument(VirtualPathUtility.ToAbsolute("~/config/ExamineIndex.config"));
             XmlNode examineLuceneIndexSetsNode = examineIndexFile.SelectSingleNode("//ExamineLuceneIndexSets");         
@@ -123,10 +117,11 @@ namespace Merchello.Web.PackageActions
                     examineLuceneIndexSetsNode.RemoveChild(index);
                 }
             }
-            //Save the modified configuration file
+
+            ////Save the modified configuration file
             examineIndexFile.Save(HttpContext.Current.Server.MapPath("/config/ExamineIndex.config"));
 
-            // -------------- ExamineSettings.config -----------------------
+            //// -------------- ExamineSettings.config -----------------------
             var examineSettingsFile = XmlHelper.OpenAsXmlDocument(VirtualPathUtility.ToAbsolute("/config/ExamineSettings.config"));
 
             var examineIndexProviders = examineSettingsFile.SelectSingleNode("//ExamineIndexProviders/providers");

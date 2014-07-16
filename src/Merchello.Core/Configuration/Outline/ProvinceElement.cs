@@ -2,10 +2,13 @@
 
 namespace Merchello.Core.Configuration.Outline
 {
+    /// <summary>
+    /// The province element.
+    /// </summary>
     public class ProvinceElement : ConfigurationElement
     {
         /// <summary>
-        /// Gets/sets the province 'code' (key) for the province collection element.  Presumably this is an enum value.
+        /// Gets or sets the province 'code' (key) for the province collection element.  Presumably this is an enum value.
         /// </summary>
         [ConfigurationProperty("code", IsKey = true)]
         public string Code
@@ -15,7 +18,7 @@ namespace Merchello.Core.Configuration.Outline
         }
 
         /// <summary>
-        /// Gets/sets the name associated with the province.
+        /// Gets or sets the name associated with the province.
         /// </summary>
         [ConfigurationProperty("name", IsRequired = true)]
         public string Name

@@ -1,8 +1,7 @@
-﻿using System.Linq;
-
-namespace Merchello.Core.Gateways.Notification.Smtp
+﻿namespace Merchello.Core.Gateways.Notification.Smtp
 {
     using System;
+    using System.Linq;
     using System.Net.Mail;
     using System.Threading.Tasks;
     using Models;
@@ -42,7 +41,10 @@ namespace Merchello.Core.Gateways.Notification.Smtp
 
             foreach (var to in message.Recipients)
             {
-                msg.To.Add(new MailAddress(to));
+                if (!string.IsNullOrEmpty(to))
+                {
+                    msg.To.Add(new MailAddress(to));
+                }
             }
             
             //// We want to send the email async
