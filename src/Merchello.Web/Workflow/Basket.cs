@@ -186,6 +186,7 @@
                 AddItem(variant, name, quantity, extendedData);
                 return;
             }
+
             if (!product.ProductVariants.Any()) return;
 
             AddItem(product.ProductVariants.First(), name, quantity, extendedData);
@@ -318,7 +319,6 @@
             if (price < 0) price = 0;
             _itemCache.AddItem(LineItemType.Product, name, sku, quantity, price, extendedData);
         }
-
 
         /// <summary>
         /// Updates a basket item's quantity
