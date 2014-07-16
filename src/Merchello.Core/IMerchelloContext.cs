@@ -11,7 +11,7 @@
     public interface IMerchelloContext : IDisposable
     {
         /// <summary>
-        /// Gets the Umbraco's <see cref="CacheHelper"/>
+        /// Gets the Umbraco <see cref="CacheHelper"/>
         /// </summary>
         CacheHelper Cache { get; }
 
@@ -33,5 +33,6 @@
         /// package was upgraded
         /// </remarks>
         bool IsConfigured { get; }
+
     }
 }

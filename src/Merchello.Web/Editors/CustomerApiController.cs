@@ -1,10 +1,14 @@
 ﻿namespace Merchello.Web.Editors
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net;
+    using System.Net.Http;
     using System.Web.Http;
 
     using Merchello.Core;
+    using Merchello.Core.Models;
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing;
     using Merchello.Web.WebApi;
@@ -27,6 +31,11 @@
         private ICustomerService _customerService;
 
         /// <summary>
+        /// The customer address service.
+        /// </summary>
+        private ICustomerAddressService _customerAddressService;
+
+        /// <summary>
         /// The membership member service.
         /// </summary>
         private IMemberService _memberService;
@@ -40,7 +49,7 @@
         /// </summary>
         public CustomerApiController()
             : this(MerchelloContext.Current, global::Umbraco.Core.ApplicationContext.Current.Services.MemberService)
-        {            
+        {     
         }
 
         /// <summary>
@@ -59,6 +68,7 @@
             Mandate.ParameterNotNull(memberService, "memberService");
 
             _customerService = merchelloContext.Services.CustomerService;
+            _customerAddressService = ((Core.Services.ServiceContext)merchelloContext.Services).CustomerAddressService;
             _memberService = memberService;
         }
 
@@ -87,7 +97,32 @@
         #endregion
 
         /// <summary>
-        /// The get all customers.
+        /// Returns an customer by id (key)
+        /// 
+        /// GET /umbraco/Merchello/CustomerApi/GetCustomer/{guid}
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CustomerDisplay"/>.
+        /// </returns>
+        public CustomerDisplay GetCustomer(Guid id)
+        {
+            var customer = _customerService.GetByKey(id);
+            if (customer == null)
+            {
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+            }
+
+            return customer.ToCustomerDisplay();
+        }
+
+        /// <summary>
+        /// GET /umbraco/Merchello/CustomerApi/GetAllCustomers/
+        /// 
+        /// 
+        /// Gets a collection of all customers.
         /// </summary>
         /// <returns>
         /// The collection of all customers
@@ -95,8 +130,137 @@
         [HttpGet]
         public IEnumerable<CustomerDisplay> GetAllCustomers()
         {
-            // TODO - merchello helper
-            return ((CustomerService)_customerService).GetAll().Select(x => x.ToCustomerDisplay());
+            var merchello = new MerchelloHelper();
+
+            return merchello.AllCustomers();
+        }
+
+        /// <summary>
+        /// GET /umbraco/Merchello/CustomerApi/GetAllCustomers/{page}/{perPage}
+        /// 
+        /// 
+        /// Gets a paged collection of customers.
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="perPage">
+        /// The per page.
+        /// </param>
+        /// <returns>
+        /// The paged collection of customers.
+        /// </returns>
+        [HttpGet]
+        public IEnumerable<CustomerDisplay> GetAllCustomers(int page, int perPage)
+        {
+            var merchello = new MerchelloHelper();
+
+            return merchello.AllCustomers().Skip((page - 1) * perPage).Take(perPage);
+        }
+
+        /// <summary>
+        /// POST /umbraco/Merchello/CustomerApi/AddCustomer/
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CustomerDisplay"/>.
+        /// </returns>
+        [HttpPost]
+        public CustomerDisplay AddCustomer(CustomerDisplay customer)
+        {
+            var newCustomer = _customerService.CreateCustomer(
+                customer.LoginName,
+                customer.FirstName,
+                customer.LastName,
+                customer.Email);
+
+            newCustomer.Notes = customer.Notes;
+            newCustomer.LastActivityDate = DateTime.Today;
+
+            _customerService.Save(newCustomer);
+
+            foreach (var address in customer.Addresses)
+            {
+                newCustomer.SaveCustomerAddress(address.ToCustomerAddress());
+            }
+
+            return newCustomer.ToCustomerDisplay();
+        }
+
+        /// <summary>
+        /// PUT /umbraco/Merchello/CustomerApi/PutCustomer/
+        /// Saves the customer.
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CustomerDisplay"/>.
+        /// </returns>
+        [HttpPost, HttpPut]
+        public CustomerDisplay PutCustomer(CustomerDisplay customer)
+        {
+            RemoveDeletedAddresses(customer);
+
+            var merchCustomer = _customerService.GetByKey(customer.Key);
+
+            merchCustomer = customer.ToCustomer(merchCustomer);
+
+            foreach (var address in customer.Addresses)
+            {
+                merchCustomer.SaveCustomerAddress(address.ToCustomerAddress());
+            }
+
+           _customerService.Save(merchCustomer);
+            
+            return merchCustomer.ToCustomerDisplay();
+        }
+
+
+        /// <summary>
+        /// Deletes an existing customer
+        /// 
+        /// DELETE /umbraco/Merchello/CustomerApi/{guid}
+        /// </summary>
+        /// <param name="id">
+        /// The id of the customer to delete
+        /// </param>
+        /// <returns>
+        /// The <see cref="HttpResponseMessage"/>.
+        /// </returns>
+        [HttpPost]
+        public HttpResponseMessage DeleteCustomer(Guid id)
+        {
+            var customer = _customerService.GetByKey(id);
+            if (customer == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+
+            _customerService.Delete(customer);
+
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
+
+        /// <summary>
+        /// Removes addresses deleted in the back office.
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        private void RemoveDeletedAddresses(CustomerDisplay customer)
+        {
+            var existing = _customerAddressService.GetByCustomerKey(customer.Key);
+
+            var existingAddresses = existing as ICustomerAddress[] ?? existing.ToArray();
+            if (!existingAddresses.Any()) return;
+
+            foreach (var delete in existingAddresses.Where(address => customer.Addresses.All(x => x.Key != address.Key)).ToList())
+            {
+                _customerAddressService.Delete(delete);
+            }
         }
     }
 }

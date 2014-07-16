@@ -210,6 +210,49 @@
         }
 
         #endregion
+
+        #region Customers
+
+        /// <summary>
+        /// The customer.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CustomerDisplay"/>.
+        /// </returns>
+        public CustomerDisplay Customer(string key)
+        {
+            return CustomerQuery.GetByKey(key);
+        }
+
+        /// <summary>
+        /// The customer.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CustomerDisplay"/>.
+        /// </returns>
+        public CustomerDisplay Customer(Guid key)
+        {
+            return Customer(key.ToString());
+        }
+
+        /// <summary>
+        /// The all customers.
+        /// </summary>
+        /// <returns>
+        /// The collection of all customers.
+        /// </returns>
+        public IEnumerable<CustomerDisplay> AllCustomers()
+        {
+            return CustomerQuery.GetAllCustomers();
+        }
+
+        #endregion
     }
 
 }

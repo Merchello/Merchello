@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
+    using System.Linq;
     using System.Xml;
     using System.Xml.Linq;
 
@@ -243,6 +244,18 @@
 
             ((ServiceContext)merchelloContext.Services).CustomerAddressService.Save(address);
 
+            var addresses = customer.Addresses.ToList();
+
+            if (addresses.Any(x => x.Key == address.Key))
+            {
+                addresses.RemoveAt(addresses.IndexOf(addresses.FirstOrDefault(x => x.Key == address.Key)));
+            }
+
+            addresses.Add(address);
+
+
+            ((Customer)customer).Addresses = addresses;
+
             return address;
         }
 
@@ -263,6 +276,15 @@
             Mandate.ParameterCondition(address.CustomerKey == customer.Key, "The customer address is not associated with this customer.");
 
             ((ServiceContext)merchelloContext.Services).CustomerAddressService.Delete(address);
+
+            var addresses = customer.Addresses.ToList();
+
+            if (addresses.Any(x => x.Key == address.Key))
+            {
+                addresses.RemoveAt(addresses.IndexOf(addresses.FirstOrDefault(x => x.Key == address.Key)));
+            }
+
+            ((Customer)customer).Addresses = addresses;
         }
 
         /// <summary>

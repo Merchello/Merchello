@@ -123,6 +123,14 @@
         /// <returns>List of <see cref="ICustomer"/></returns>
         IEnumerable<ICustomer> GetByKeys(IEnumerable<Guid> keys);
 
+        /// <summary>
+        /// Gets the total customer count.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        int CustomerCount();
+
         #region Anonymous Customer
 
         /// <summary>

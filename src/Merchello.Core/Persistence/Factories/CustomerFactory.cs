@@ -1,5 +1,8 @@
 ﻿namespace Merchello.Core.Persistence.Factories
 {
+    using System.Collections;
+    using System.Collections.Generic;
+
     using Merchello.Core.Models;
     using Merchello.Core.Models.Rdbms;
 
@@ -8,6 +11,7 @@
     /// </summary>
     internal class CustomerFactory : IEntityFactory<ICustomer, CustomerDto>
     {
+        
         /// <summary>
         /// Builds the entity.
         /// </summary>
@@ -19,23 +23,41 @@
         /// </returns>
         public ICustomer BuildEntity(CustomerDto dto)
         {
+            return BuildEntity(dto, null);
+        }
+
+        /// <summary>
+        /// The build entity.
+        /// </summary>
+        /// <param name="dto">
+        /// The dto.
+        /// </param>
+        /// <param name="addresses">
+        /// The addresses.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ICustomer"/>.
+        /// </returns>
+        public ICustomer BuildEntity(CustomerDto dto, IEnumerable<ICustomerAddress> addresses)
+        {
             var customer = new Customer(dto.LoginName)
-                {
-                    Key = dto.Key,
-                    FirstName = dto.FirstName,
-                    LastName = dto.LastName,
-                    Email = dto.Email,
-                    TaxExempt = dto.TaxExempt,
-                    ExtendedData = new ExtendedDataCollection(dto.ExtendedData),
-                    ExamineId = dto.CustomerIndexDto.Id,
-                    Notes = dto.Notes,
-                    CreateDate = dto.CreateDate,
-                    UpdateDate = dto.UpdateDate
-                };
+            {
+                Key = dto.Key,
+                FirstName = dto.FirstName,
+                LastName = dto.LastName,
+                Email = dto.Email,
+                TaxExempt = dto.TaxExempt,
+                ExtendedData = new ExtendedDataCollection(dto.ExtendedData),
+                ExamineId = dto.CustomerIndexDto.Id,
+                Notes = dto.Notes,
+                Addresses = addresses ?? new List<ICustomerAddress>(),
+                CreateDate = dto.CreateDate,
+                UpdateDate = dto.UpdateDate
+            };
 
             customer.ResetDirtyProperties();
 
-            return customer;
+            return customer;   
         }
 
         /// <summary>
