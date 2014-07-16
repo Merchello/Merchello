@@ -27,6 +27,7 @@
             new StaticField("taxExempt", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
             new StaticField("extendedData", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
             new StaticField("notes", FieldIndexTypes.ANALYZED, false, string.Empty),
+            new StaticField("addresses", FieldIndexTypes.ANALYZED, false, string.Empty),
             new StaticField("lastActivityDate", FieldIndexTypes.NOT_ANALYZED, false, "DATETIME"),
             new StaticField("createDate", FieldIndexTypes.NOT_ANALYZED, false, "DATETIME"),
             new StaticField("updateDate", FieldIndexTypes.NOT_ANALYZED, false, "DATETIME")

@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Core.Models
 {
     using System;
+    using System.Collections.Generic;
     using System.Reflection;
     using System.Runtime.Serialization;
 
@@ -44,6 +45,11 @@
         private static readonly PropertyInfo NotesSelector = ExpressionHelper.GetPropertyInfo<Customer, string>(x => x.Notes);
 
         /// <summary>
+        /// The address selector.
+        /// </summary>
+        private static readonly PropertyInfo AddressSelector = ExpressionHelper.GetPropertyInfo<Customer, IEnumerable<ICustomerAddress>>(x => x.Addresses);
+        
+        /// <summary>
         /// The first name.
         /// </summary>
         private string _firstName;
@@ -77,6 +83,11 @@
         /// The examine id.
         /// </summary>
         private int _examineId = 1;
+
+        /// <summary>
+        /// The addresses.
+        /// </summary>
+        private IEnumerable<ICustomerAddress> _addresses; 
 
         #endregion
 
@@ -243,6 +254,30 @@
                     },
                     _notes,
                     NotesSelector);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the collection of addresses.
+        /// </summary>
+        [DataMember]
+        public IEnumerable<ICustomerAddress> Addresses
+        {
+            get
+            {
+                return _addresses;
+            }
+
+            internal set
+            {
+                SetPropertyValueAndDetectChanges(
+                    o =>
+                    {
+                        _addresses = value;
+                        return _addresses;
+                    },
+                    _addresses,
+                    AddressSelector);
             }
         }
 

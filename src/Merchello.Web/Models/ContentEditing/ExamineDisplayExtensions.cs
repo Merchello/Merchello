@@ -1,14 +1,16 @@
-﻿using Merchello.Core.Models;
-
-namespace Merchello.Web.Models.ContentEditing
+﻿namespace Merchello.Web.Models.ContentEditing
 {
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.Linq;
+
     using global::Examine;
+
+    using Merchello.Core.Models;
     using Merchello.Examine;
+
     using Newtonsoft.Json;
 
     /// <summary>
@@ -174,6 +176,7 @@ namespace Merchello.Web.Models.ContentEditing
                 ExtendedData =
                     RawJsonFieldAsCollection<KeyValuePair<string, string>>(result, "extendedData")
                         .AsExtendedDataCollection(),
+                Addresses = RawJsonFieldAsCollection<ICustomerAddress>(result, "addresses").Select(x => x.ToCustomerAddressDisplay()),
                 LastActivityDate = FieldAsDateTime(result, "lastActivityDate")
             };
         }

@@ -1,6 +1,8 @@
 ﻿namespace Merchello.Web.Models.ContentEditing
 {
     using System;
+    using System.Collections;
+    using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
 
     using Merchello.Core.Models;
@@ -54,6 +56,11 @@
         /// Gets or sets the extended data.
         /// </summary>
         public ExtendedDataCollection ExtendedData { get; set; }
+
+        /// <summary>
+        /// Gets or sets the collection of customer addresses.
+        /// </summary>
+        public IEnumerable<CustomerAddressDisplay> Addresses { get; set; }
     }
 
     #region Mapping Utility Extensions

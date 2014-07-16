@@ -30,6 +30,9 @@
                     dest => dest.ExtendedData,
                     opt => opt.ResolveUsing<ExtendedDataResolver>().ConstructedBy(() => new ExtendedDataResolver()));
 
+            AutoMapper.Mapper.CreateMap<ICustomerAddress, CustomerAddressDisplay>();
+
+
             // Gateway Provider       
             AutoMapper.Mapper.CreateMap<IGatewayProviderSettings, GatewayProviderDisplay>()
                 .ForMember(dest => dest.ExtendedData, opt => opt.ResolveUsing<ExtendedDataResolver>().ConstructedBy(() => new ExtendedDataResolver()))
