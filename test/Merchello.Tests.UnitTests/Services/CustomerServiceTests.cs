@@ -24,7 +24,7 @@ namespace Merchello.Tests.UnitTests.Services
         {
             base.Setup();
 
-            _customerService = new CustomerService(new MockUnitOfWorkProvider(), new RepositoryFactory());
+            _customerService = new CustomerService(new MockUnitOfWorkProvider(), new RepositoryFactory(), new AnonymousCustomerService(), new CustomerAddressService());
             Before = null;
             After = null;
 
@@ -40,6 +40,11 @@ namespace Merchello.Tests.UnitTests.Services
                 After = args.SavedEntities.FirstOrDefault();
             };
 
+            CustomerService.Creating += delegate(ICustomerService sender, Core.Events.NewEventArgs<ICustomer> args)
+            {
+                BeforeTriggered = true;
+                Before = args.Entity;
+            };
 
             CustomerService.Created += delegate(ICustomerService sender, Core.Events.NewEventArgs<ICustomer> args)
             {
@@ -72,9 +77,9 @@ namespace Merchello.Tests.UnitTests.Services
         [Test]
         public void Create_Triggers_Event_Assert_And_Customer_Is_Passed()
         {
-            var customer = _customerService.CreateCustomer("Jo", "Jo", "jo@test.com");
+            var customer = _customerService.CreateCustomer("rusty", "Rusty", "Swayne", "test@test.com");
 
-            Assert.IsTrue(AfterTriggered);
+            Assert.IsTrue(BeforeTriggered);
         }
 
         [Test]

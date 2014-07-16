@@ -46,7 +46,8 @@
                             <div class="form-group col-xs-6 span6">
                                 <label for="dateformat"><localize key="merchelloSettings_dateFormat" /></label>
                                 <select class="form-control col-xs-8 span8" name="dateformat" data-ng-model="settingsDisplay.dateFormat">
-                                    <option value="dd-mm-yyyy">dd/mm/yyyy</option>
+                                    <option value="dd-MM-yyyy">dd-MM-yyyy (ex: 01-01-2014)</option>
+                                    <option value="yyyy-MM-dd">yyyy-MM-dd (ex: 2014-01-01)</option>
                                 </select>
                             </div>
 
@@ -70,13 +71,14 @@
                             </div>
                         
                             <!-- Unit System and Time Zone will be included in version 2 -->
-                            <!--<div class="form-group col-xs-6 span6">
-                                <label for="unit-system">Unit System</label>
-                                <select class="form-control col-xs-8 span8" name="unit-system">
-                                    <option>Imperial System (Pound, Inch)</option>
+                            <div class="form-group col-xs-6 span6">
+                                <label for="unit-system"><localize key="merchelloSettings_unitSystem" /></label>
+                                <select class="form-control col-xs-8 span8" name="unit-system" data-ng-model="settingsDisplay.unitSystem">
+                                    <option value="Imperial">Imperial System (Pound, Inch)</option>
+                                    <option value="Metric">Metric System (Centimeter, Meter)</option>
                                 </select>
                             </div>
-                                <div class="form-group col-xs-6 span6">
+                             <!--<div class="form-group col-xs-6 span6">
                                 <label for="time-zone">Time Zone</label>
                                 <select class="form-control col-xs-8 span8" name="time-zone">
                                     <option>Pacific Standard (GMT-8)</option>

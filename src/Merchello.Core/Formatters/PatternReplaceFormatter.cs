@@ -174,7 +174,7 @@
         internal string ExplodeLineItemIterations(string value)
         {
             var identifier = GetIterationIdentifier(value);
-            if (string.IsNullOrEmpty(identifier)) return identifier;
+            if (string.IsNullOrEmpty(identifier)) return value;
 
             var startMarker = IterationMarker(identifier);
             var endMarker = IterationMarker(identifier, false);

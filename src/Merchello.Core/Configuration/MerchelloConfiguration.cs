@@ -1,43 +1,59 @@
-﻿using System;
-using System.Collections.Specialized;
-using System.Configuration;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Xml.Linq;
-using Merchello.Core.Configuration.Outline;
-using Umbraco.Core.IO;
-using Umbraco.Core.Logging;
-
-namespace Merchello.Core.Configuration
+﻿namespace Merchello.Core.Configuration
 {
+    using System;
+    using System.Configuration;
+    using System.IO;
+    using System.Linq;
+    using System.Reflection;
+    using System.Xml.Linq;
+    using Outline;
+    using Umbraco.Core.IO;
+    using Umbraco.Core.Logging;
+
     /// <summary>
     /// Provides quick access to the Merchello configuration section.
     /// </summary>
     public sealed class MerchelloConfiguration
     {
-        #region SingleTon
+        /// <summary>
+        /// Gets the application name.
+        /// </summary>
+        public const string ApplicationName = "Merchello";
 
+        /// <summary>
+        /// Gets the merchello migration name.
+        /// </summary>
+        /// <remarks>
+        /// Configuration Status - (Upgrades) 
+        /// </remarks>
+        public const string MerchelloMigrationName = "Merchello";
+
+        /// <summary>
+        /// The lazy loaded configuration section
+        /// </summary>
         private static readonly Lazy<MerchelloConfiguration> Lazy = new Lazy<MerchelloConfiguration>(() => new MerchelloConfiguration());
 
+        /// <summary>
+        /// The root directory.
+        /// </summary>
+        private string _rootDir = string.Empty;
+
+        /// <summary>
+        /// Gets the current instance
+        /// </summary>
         public static MerchelloConfiguration Current
         {
             get { return Lazy.Value; }
         }
 
-        #endregion
-
-
-        private string _rootDir = "";
-
         /// <summary>
-        /// Name of the application.
+        /// Gets the configuration name.
         /// </summary>
-        public static string ApplicationName = "Merchello";
-        public static string ConfigurationName = ApplicationName.ToLower();
-
-        // Configuration Status - (Upgrades)
-        public const string MerchelloMigrationName = "Merchello";
+        public static string ConfigurationName
+        {
+            get { return ApplicationName.ToLower(); }   
+        } 
+       
 
         /// <summary>
         /// Gets or sets the configuration status. This will return the version number of the currently installed merchello instance.
@@ -51,21 +67,99 @@ namespace Merchello.Core.Configuration
                     ? ConfigurationManager.AppSettings["merchelloConfigurationStatus"]
                     : string.Empty;
             }
+
             set
             {
-                SaveSetting("merchelloConfigurationStatus", value);
+                SaveAppSetting("merchelloConfigurationStatus", value);
             }
         }
-
         
         /// <summary>
-        /// Returns the <see cref="MerchelloSection"/> Configuration Element
+        /// Gets the <see cref="MerchelloSection"/> Configuration Element
         /// </summary>
         public MerchelloSection Section
         {
             get { return (MerchelloSection)ConfigurationManager.GetSection(ConfigurationName); }
         }
-        
+
+        /// <summary>
+        /// Gets the default SKU separator.
+        /// </summary>
+        public string DefaultSkuSeparator
+        {
+            get { return Section.Settings["DefaultSkuSeparator"].Value; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether to always approve order creation.
+        /// </summary>
+        public bool AlwaysApproveOrderCreation
+        {
+            get { return bool.Parse(Section.Settings["AlwaysApproveOrderCreation"].Value); }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether auto update database schema.
+        /// </summary>
+        /// <remarks>
+        /// If true, Merchello will automatically attempt to update the database schema (if required) 
+        /// when the boot strapping detects a Merchello version update
+        /// </remarks>
+        public bool AutoUpdateDbSchema
+        {
+            get { return bool.Parse(Section.Settings["AutoUpdateDbSchema"].Value); }
+        }
+
+        /// <summary>
+        /// Gets the pattern formatter.
+        /// </summary>
+        /// <remarks>
+        /// Returns the pattern formatter for a given group
+        /// </remarks>
+        public ReplacementCollection PatternFormatter
+        {
+            get
+            {
+                try
+                {
+                    return Section.PatternFormatter;
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.Info<MerchelloConfiguration>(ex.Message);
+                    return null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the back office.
+        /// </summary>
+        public TreeCollection BackOffice
+        {
+            get
+            {
+                try
+                {
+                    return Section.BackOffice;
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.Info<MerchelloConfiguration>(ex.Message);
+                    return null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the full path to root.
+        /// </summary>
+        /// <value>The fullpath to root.</value>
+        public string FullpathToRoot
+        {
+            get { return GetRootDirectorySafe(); }
+        }
+
         /// <summary>
         /// Gets the <see cref="StrategyElement"/> by it's configuration alias
         /// </summary>
@@ -86,25 +180,6 @@ namespace Merchello.Core.Configuration
             }
         }
 
-        public string DefaultSkuSeparator
-        {
-            get { return Section.Settings["DefaultSkuSeparator"].Value; }
-        }
-
-        public bool AlwaysApproveOrderCreation
-        {
-            get { return bool.Parse(Section.Settings["AlwaysApproveOrderCreation"].Value); }
-        }
-
-        /// <summary>
-        /// If true, Merchello will automatically attempt to update the database schema (if required) 
-        /// when the bootstrapper detects a Merchello version update
-        /// </summary>
-        public bool AutoUpdateDbSchema
-        {
-            get { return bool.Parse(Section.Settings["AutoUpdateDbSchema"].Value); }
-        }
-
         /// <summary>
         /// Gets a <see cref="TaskChainElement"/> by its configuration alias
         /// </summary>
@@ -121,33 +196,61 @@ namespace Merchello.Core.Configuration
                 LogHelper.Info<MerchelloConfiguration>(ex.Message);
                 return null;
             }
-            
         }
 
         /// <summary>
-        /// Returns the pattern formatter for a given group
+        /// The get setting.
         /// </summary>
-        public ReplacementCollection PatternFormatter
+        /// <param name="alias">
+        /// The alias.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/> value of the setting.
+        /// </returns>
+        public string GetSetting(string alias)
         {
-            get {
-                try
-                {
-                    return Section.PatternFormatter;
-                }
-                catch (Exception ex)
-                {
-                    LogHelper.Info<MerchelloConfiguration>(ex.Message);
-                    return null;
-                }
+            try
+            {
+                return Section.Settings[alias].Value;
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Info<MerchelloConfiguration>(ex.Message);
+                return string.Empty;
             }
         }
 
         /// <summary>
+        /// Saves a setting into the web configuration file.
+        /// </summary>
+        /// <param name="key">Key of the setting to be saved.</param>
+        /// <param name="value">Value of the setting to be saved.</param>
+        internal static void SaveAppSetting(string key, string value)
+        {
+            var fileName = IOHelper.MapPath(string.Format("{0}/web.config", SystemDirectories.Root));
+            var xml = XDocument.Load(fileName, LoadOptions.PreserveWhitespace);
+
+            var appSettings = xml.Root.DescendantsAndSelf("appSettings").Single();
+
+            // Update appSetting if it exists, or else create a new appSetting for the given key and value
+            var setting = appSettings.Descendants("add").FirstOrDefault(s => s.Attribute("key").Value == key);
+            if (setting == null)
+                appSettings.Add(new XElement("add", new XAttribute("key", key), new XAttribute("value", value)));
+            else
+                setting.Attribute("value").Value = value;
+
+            xml.Save(fileName, SaveOptions.DisableFormatting);
+            ConfigurationManager.RefreshSection("appSettings");
+        }
+
+        /// <summary>
         /// Returns the path to the root of the application, by getting the path to where the assembly where this
-        /// method is included is present, then traversing until it's past the /bin directory. Ie. this makes it work
+        /// method is included is present, then traversing until it's past the /bin directory. This makes it work
         /// even if the assembly is in a /bin/debug or /bin/release folder
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// The root directory path
+        /// </returns>
         internal string GetRootDirectorySafe()
         {
             if (string.IsNullOrEmpty(_rootDir) == false)
@@ -167,38 +270,6 @@ namespace Merchello.Core.Configuration
                            : baseDirectory;
 
             return _rootDir;
-        }
-
-        /// <summary>
-        /// Saves a setting into the configuration file.
-        /// </summary>
-        /// <param name="key">Key of the setting to be saved.</param>
-        /// <param name="value">Value of the setting to be saved.</param>
-        internal static void SaveSetting(string key, string value)
-        {
-            var fileName = IOHelper.MapPath(string.Format("{0}/web.config", SystemDirectories.Root));
-            var xml = XDocument.Load(fileName, LoadOptions.PreserveWhitespace);
-
-            var appSettings = xml.Root.DescendantsAndSelf("appSettings").Single();
-
-            // Update appSetting if it exists, or else create a new appSetting for the given key and value
-            var setting = appSettings.Descendants("add").FirstOrDefault(s => s.Attribute("key").Value == key);
-            if (setting == null)
-                appSettings.Add(new XElement("add", new XAttribute("key", key), new XAttribute("value", value)));
-            else
-                setting.Attribute("value").Value = value;
-
-            xml.Save(fileName, SaveOptions.DisableFormatting);
-            ConfigurationManager.RefreshSection("appSettings");
-        }
-
-        /// <summary>
-        /// Gets the full path to root.
-        /// </summary>
-        /// <value>The fullpath to root.</value>
-        public string FullpathToRoot
-        {
-            get { return GetRootDirectorySafe(); }
         }
     }
 }

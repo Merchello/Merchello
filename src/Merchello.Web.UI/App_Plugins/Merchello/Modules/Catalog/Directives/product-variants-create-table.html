@@ -1,0 +1,43 @@
+﻿<div class="col-xs-10 span10">
+	<table class="table">
+		<tr>
+			<th>
+				<localize key="merchelloVariant_variant"/>
+			</th>
+			<th>
+				<localize key="merchelloGeneral_price"/>
+			</th>
+			<!--<th>
+					SKU <small>(optional)</small>
+				</th>-->
+			<th>
+				<localize key="merchelloVariant_barcode"/> <small><localize key="merchelloGeneral_optional"/></small>
+			</th>
+			<th>
+				<localize key="merchelloInventory_inventory"/>
+			</th>
+		</tr>
+		<tr data-ng-repeat="variant in product.productVariants">
+			<td>
+				<input type="checkbox" data-ng-model="variant.selected"/>
+				<span data-ng-repeat="attribute in variant.attributes">
+					<span>{{attribute.name}}</span>
+					<span data-ng-show="!$last"> / </span>
+				</span>                                                    
+			</td>
+			<td>
+				<input class="form-control input-mini" data-ng-model="variant.price" />
+			</td>
+			<!--<td>
+					<input class="form-control input-mini" data-ng-model="variant.sku" />
+				</td>-->
+			<td>
+				<input class="form-control input-mini" data-ng-model="variant.barcode" />
+			</td>
+			<td>
+				<input type="checkbox" data-ng-model="variant.trackInventory" />
+				<input class="form-control input-mini" data-ng-show="variant.trackInventory" data-ng-model="variant.totalInventoryCount" data-ng-change="variant.globalInventoryChanged(variant.totalInventoryCount)" />
+			</td>
+		</tr>
+	</table>
+</div>

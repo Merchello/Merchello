@@ -40,9 +40,9 @@
                     <div class="merchello-controls">
                         <div class="row-fluid">
                             <label for="template"><localize key="merchelloNotificationsEdit_emailTemplateEditBody" /></label>
-                            <div class="umb-editor umb-codeeditor" style="height: 720px;">
-                                <textarea name="template" ui-codemirror="cmOptions" data-ng-model="notificationMessage.bodyText"></textarea>
-                            </div>
+                            <ng-form>
+                                <umb-editor model="rteProperties"></umb-editor>
+                            </ng-form>
                         </div>
                     </div>
                 </div>

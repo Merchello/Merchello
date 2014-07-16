@@ -22,8 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>
-    </DocumentationFile>
+    <DocumentationFile>bin\Debug\Merchello.Web.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -114,20 +113,23 @@
     </Compile>
     <Compile Include="AutoMapperMappings.cs" />
     <Compile Include="CheckoutExtensions.cs" />
-    <Compile Include="Editors\CatalogFixedRateShippingApiController.cs">
-      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
-    </Compile>
+    <Compile Include="Models\Customer\CustomerContextDataExtentions.cs" />
+    <Compile Include="Models\Customer\CustomerContextData.cs" />
+    <Compile Include="Editors\CustomerApiController.cs" />
+    <Compile Include="Editors\FixedRateShippingApiController.cs" />
     <Compile Include="Editors\GatewayProviderApiController.cs" />
     <Compile Include="Editors\InvoiceApiController.cs" />
     <Compile Include="Editors\NotificationGatewayApiController.cs" />
     <Compile Include="Editors\OrderApiController.cs" />
     <Compile Include="Editors\PaymentApiController.cs" />
     <Compile Include="Editors\PaymentGatewayApiController.cs" />
+    <Compile Include="Models\ContentEditing\CustomerDisplay.cs" />
     <Compile Include="Models\ContentEditing\DialogEditorDisplayBase.cs" />
     <Compile Include="Models\ContentEditing\DialogEditorViewDisplay.cs" />
     <Compile Include="Models\ContentEditing\NotificationMessageDisplay.cs" />
     <Compile Include="Models\ContentEditing\NotificationMethodDisplay.cs" />
     <Compile Include="Models\ContentEditing\NotificationMonitorDisplay.cs" />
+    <Compile Include="Models\ContentEditing\ShipmentOrderDisplay.cs" />
     <Compile Include="Models\MapperResolvers\GatewayProviderDialogEditorViewResolver.cs" />
     <Compile Include="Models\MapperResolvers\ExtendedDataResolver.cs" />
     <Compile Include="Models\MapperResolvers\GatewayMethodDialogEditorViewResolver.cs" />
@@ -145,9 +147,6 @@
     <Compile Include="Models\ContentEditing\AppliedPaymentDisplay.cs" />
     <Compile Include="Models\ContentEditing\GatewayProviderDisplay.cs" />
     <Compile Include="Models\ContentEditing\GatewayResourceDisplay.cs" />
-    <Compile Include="Models\ContentEditing\FixedRateShipMethodDisplay.cs">
-      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
-    </Compile>
     <Compile Include="Models\ContentEditing\InvoiceDisplay.cs" />
     <Compile Include="Models\ContentEditing\InvoiceLineItemDisplay.cs" />
     <Compile Include="Models\ContentEditing\InvoiceStatusDisplay.cs" />

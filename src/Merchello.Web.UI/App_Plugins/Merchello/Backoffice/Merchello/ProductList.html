@@ -17,7 +17,7 @@
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
                     
                     <div class="btn-group">
-	                    <a href="#/merchello/merchello/ProductVariantEdit/do?create" class="btn btn-primary"><localize key="merchelloVariant_newProduct" /></a>
+	                    <a href="#/merchello/merchello/ProductCreate/do?create" class="btn btn-primary"><localize key="merchelloVariant_newProduct" /></a>
                     </div>
 
                 </div>
@@ -77,8 +77,8 @@
                             <td data-ng-hide="product.hasVariants">{{product.price | currency : currencySymbol}}</td>
                             <td data-ng-show="product.hasVariants">{{product.variantsMinimumPrice() | currency : currencySymbol}} - {{product.variantsMaximumPrice() | currency : currencySymbol}}</td>
                             <td>
-                                <a data-ng-hide="product.hasVariants" class="btn btn-default btn-xs btn-mini" data-ng-href="#/merchello/merchello/ProductVariantEdit/{{product.key}}"><i class="icon-edit"></i></a>
-                                <a data-ng-show="product.hasVariants" class="btn btn-default btn-xs btn-mini" data-ng-href="#/merchello/merchello/ProductEdit/{{product.key}}"><i class="icon-edit"></i></a>
+                                <a data-ng-hide="product.hasVariants" class="btn btn-default btn-xs btn-mini" data-ng-href="#/merchello/merchello/ProductEdit/{{product.key}}"><i class="icon-edit"></i></a>
+                                <a data-ng-show="product.hasVariants" class="btn btn-default btn-xs btn-mini" data-ng-href="#/merchello/merchello/ProductEditWithOptions/{{product.key}}"><i class="icon-edit"></i></a>
                             </td>
                         </tr>
                     </tbody>

@@ -14,6 +14,15 @@
     /// </remarks>
     public class ExtendedDataResolver : ValueResolver<IHasExtendedData, IEnumerable<KeyValuePair<string, string>>>
     {
+        /// <summary>
+        /// The resolve core.
+        /// </summary>
+        /// <param name="source">
+        /// The source.
+        /// </param>
+        /// <returns>
+        /// A collection of key value pairs that represent an <see cref="ExtendedDataCollection"/>
+        /// </returns>
         protected override IEnumerable<KeyValuePair<string, string>> ResolveCore(IHasExtendedData source)
         {
             return source.ExtendedData.AsEnumerable();

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Merchello.Core.Strategies;
 
 namespace Merchello.Core.Gateways.Shipping
 {

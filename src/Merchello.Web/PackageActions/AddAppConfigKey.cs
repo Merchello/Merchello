@@ -1,11 +1,10 @@
-﻿using System.Configuration;
-using System.Xml;
-using Merchello.Core.Configuration;
-using umbraco.cms.businesslogic.packager.standardPackageActions;
-using umbraco.interfaces;
-
-namespace Merchello.Web.PackageActions
+﻿namespace Merchello.Web.PackageActions
 {
+    using System.Configuration;
+    using System.Xml;
+    using Core.Configuration;
+    using umbraco.cms.businesslogic.packager.standardPackageActions;
+    using umbraco.interfaces;
 
     /// <summary>
     /// Adds a key to the web.config app settings
@@ -20,19 +19,38 @@ namespace Merchello.Web.PackageActions
     {
         #region IPackageAction Members
 
+        /// <summary>
+        /// The key.
+        /// </summary>
         private const string Key = "merchelloConfigurationStatus";
 
+        /// <summary>
+        /// The alias.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
         public string Alias()
         {
             return string.Concat(MerchelloConfiguration.ApplicationName, "_AddAppConfigKey");
         }
 
+        /// <summary>
+        /// The execute.
+        /// </summary>
+        /// <param name="packageName">
+        /// The package name.
+        /// </param>
+        /// <param name="xmlData">
+        /// The xml data.
+        /// </param>
+        /// <returns>
+        /// True or false inicating success.
+        /// </returns>
         public bool Execute(string packageName, XmlNode xmlData)
-        {
-    
+        {    
             try
             {
- 
                 CreateAppSettingsKey(Key, MerchelloVersion.Current.ToString());
 
                 return true;
@@ -41,21 +59,37 @@ namespace Merchello.Web.PackageActions
             {
                 return false;
             }
-
         }
 
+        /// <summary>
+        /// The sample xml.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="XmlNode"/>.
+        /// </returns>
         public XmlNode SampleXml()
         {
-            const string sample = "<Action runat=\"install\" undo=\"true/false\" alias=\"AddAppConfigKey\"></Action>";
-            return helper.parseStringToXmlNode(sample);
+            const string Sample = "<Action runat=\"install\" undo=\"true/false\" alias=\"AddAppConfigKey\"></Action>";
+
+            return helper.parseStringToXmlNode(Sample);
         }
 
+        /// <summary>
+        /// The undo.
+        /// </summary>
+        /// <param name="packageName">
+        /// The package name.
+        /// </param>
+        /// <param name="xmlData">
+        /// The xml data.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
         public bool Undo(string packageName, XmlNode xmlData)
         {
-
             try
             {
-
                 RemoveAppSettingsKey(Key);
 
                 return true;

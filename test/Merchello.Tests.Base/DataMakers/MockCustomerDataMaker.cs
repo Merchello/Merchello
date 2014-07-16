@@ -17,16 +17,12 @@ namespace Merchello.Tests.Base.DataMakers
         {
             var first = FirstNames();
             var last = LastNames();
-            var customer = new Customer(0, 0, null)
+            var customer = new Customer(FirstNames())
                 {
                     FirstName = first,
                     LastName = last,
-                    Email = Email(first, last),
-                    MemberId = null,
-                    TotalInvoiced = 0
+                    Email = Email(first, last)
                 };
-
-            //customer.ResetDirtyProperties();
 
             return customer;
         }
@@ -37,14 +33,10 @@ namespace Merchello.Tests.Base.DataMakers
         {
             var dto = new CustomerDto()
                 {
-                    EntityKey = c.EntityKey,
                     FirstName = c.FirstName,
                     LastName = c.LastName,
                     Email = c.Email,
-                    MemberId = c.MemberId,
-                    LastPaymentDate = c.LastPaymentDate,
-                    TotalInvoiced = c.TotalInvoiced,
-                    TotalPayments = c.TotalPayments,
+                    LoginName = c.LoginName,
                     CreateDate = c.CreateDate,
                     UpdateDate = c.UpdateDate
                 };

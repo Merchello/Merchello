@@ -10,7 +10,7 @@ namespace Merchello.Core.Models
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    internal class NotificationMessage : Entity, INotificationMessage
+    public class NotificationMessage : Entity, INotificationMessage
     {
         private string _name;
         private string _description;

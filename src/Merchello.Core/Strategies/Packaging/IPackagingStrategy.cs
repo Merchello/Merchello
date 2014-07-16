@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using Merchello.Core.Models;
-
-namespace Merchello.Core.Strategies.Packaging
+﻿namespace Merchello.Core.Strategies.Packaging
 {
+    using System.Collections.Generic;
+    using Models;
+
     /// <summary>
     /// Defines a shipment packaging strategy
     /// </summary>
