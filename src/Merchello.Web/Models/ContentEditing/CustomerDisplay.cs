@@ -4,6 +4,7 @@
     using System.Collections;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
 
     using Merchello.Core.Models;
 
@@ -86,7 +87,7 @@
         internal static ICustomer ToCustomer(this CustomerDisplay customer, ICustomer destination)
         {
             if (!customer.Key.Equals(Guid.Empty)) destination.Key = customer.Key;
-            
+
             destination.FirstName = customer.FirstName;
             destination.LastName = customer.LastName;
             destination.Email = customer.Email;
@@ -94,6 +95,7 @@
             destination.TaxExempt = customer.TaxExempt;
             destination.LastActivityDate = customer.LastActivityDate;
             ((Customer)destination).ExtendedData = customer.ExtendedData;
+            ((Customer)destination).Addresses = customer.Addresses.Select(x => x.ToCustomerAddress());
 
             return destination;
         }

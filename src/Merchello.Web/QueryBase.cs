@@ -8,7 +8,7 @@
     using global::Examine;
     using Umbraco.Core;
 
-    internal abstract class QueryBase
+    public abstract class QueryBase
     {
         /// <summary>
         /// Assists in unit testing

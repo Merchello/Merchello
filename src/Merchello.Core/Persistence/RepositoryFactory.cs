@@ -57,7 +57,7 @@
         /// Returns an instance of the <see cref="IAppliedPaymentRepository"/>
         /// </summary>
         /// <param name="uow">
-        /// The uow.
+        /// The database unit of work
         /// </param>
         /// <returns>
         /// The <see cref="IAppliedPaymentRepository"/>.
@@ -71,7 +71,7 @@
         /// Returns an instance of the <see cref="ITaxMethodRepository"/>
         /// </summary>
         /// <param name="uow">
-        /// The uow.
+        /// The database unit of work
         /// </param>
         /// <returns>
         /// The <see cref="ITaxMethodRepository"/>.
@@ -85,21 +85,21 @@
         /// Returns an instance of the <see cref="ICustomerRepository"/>
         /// </summary>
         /// <param name="uow">
-        /// The uow.
+        /// The database unit of work
         /// </param>
         /// <returns>
         /// The <see cref="ICustomerRepository"/>.
         /// </returns>
         internal virtual ICustomerRepository CreateCustomerRepository(IDatabaseUnitOfWork uow)
         {
-            return new CustomerRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
+            return new CustomerRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, CreateCustomerAddressRepository(uow));
         }
 
         /// <summary>
         /// Returns an instance of the <see cref="IAnonymousCustomerRepository"/>
         /// </summary>
         /// <param name="uow">
-        /// The uow.
+        /// The database unit of work
         /// </param>
         /// <returns>
         /// The <see cref="IAnonymousCustomerRepository"/>.
@@ -113,7 +113,7 @@
         /// Returns an instance of the <see cref="ICustomerAddressRepository"/>
         /// </summary>
         /// <param name="uow">
-        /// The uow.
+        /// The database unit of work
         /// </param>
         /// <returns>
         /// The <see cref="ICustomerAddressRepository"/>.
@@ -137,7 +137,7 @@
         /// Gets an instance of the <see cref="IItemCacheLineItemRepository"/>
         /// </summary>
         /// <param name="uow">
-        /// The uow.
+        /// The database unit of work
         /// </param>
         /// <returns>
         /// The <see cref="IItemCacheLineItemRepository"/>.
@@ -151,7 +151,7 @@
         /// Returns an instance of the <see cref="IInvoiceRepository"/>
         /// </summary>
         /// <param name="uow">
-        /// The uow.
+        /// The database unit of work
         /// </param>
         /// <returns>
         /// The <see cref="IInvoiceRepository"/>.
@@ -169,7 +169,7 @@
         /// Gets an instance of the <see cref="IInvoiceLineItemRepository"/>
         /// </summary>
         /// <param name="uow">
-        /// The uow.
+        /// The database unit of work
         /// </param>
         /// <returns>
         /// The <see cref="IInvoiceLineItemRepository"/>.
@@ -183,7 +183,7 @@
         /// Returns an instance of the <see cref="IInvoiceStatusRepository"/>
         /// </summary>
         /// <param name="uow">
-        /// The uow.
+        /// The database unit of work
         /// </param>
         /// <returns>
         /// The <see cref="IInvoiceStatusRepository"/>.
@@ -197,7 +197,7 @@
         /// The create gateway provider repository.
         /// </summary>
         /// <param name="uow">
-        /// The uow.
+        /// The database unit of work
         /// </param>
         /// <returns>
         /// The <see cref="IGatewayProviderRepository"/>.
@@ -211,7 +211,7 @@
         /// Returns and instance of the <see cref="INotificationMessageRepository"/>
         /// </summary>
         /// <param name="uow">
-        /// The uow.
+        /// The database unit of work
         /// </param>
         /// <returns>
         /// The <see cref="INotificationMessageRepository"/>.
@@ -225,7 +225,7 @@
         /// Returns an instance of the <see cref="INotificationMethodRepository"/>
         /// </summary>
         /// <param name="uow">
-        /// The uow.
+        /// The database unit of work
         /// </param>
         /// <returns>
         /// The <see cref="INotificationMethodRepository"/>.
@@ -239,7 +239,7 @@
         /// Returns an instance of the <see cref="IOrderRepository"/>
         /// </summary>
         /// <param name="uow">
-        /// The uow.
+        /// The database unit of work
         /// </param>
         /// <returns>
         /// The <see cref="IOrderRepository"/>.
@@ -253,7 +253,7 @@
         /// Gets an instance of teh <see cref="IOrderLineItemRepository"/>
         /// </summary>
         /// <param name="uow">
-        /// The uow.
+        /// The database unit of work
         /// </param>
         /// <returns>
         /// The <see cref="IOrderLineItemRepository"/>.
@@ -267,7 +267,7 @@
         /// Returns an instance of the <see cref="IOrderStatusRepository"/>
         /// </summary>
         /// <param name="uow">
-        /// The uow.
+        /// The database unit of work
         /// </param>
         /// <returns>
         /// The <see cref="IOrderStatusRepository"/>.
@@ -281,7 +281,7 @@
         /// Returns an instance of the <see cref="IPaymentRepository"/>
         /// </summary>
         /// <param name="uow">
-        /// The uow.
+        /// The database unit of work
         /// </param>
         /// <returns>
         /// The <see cref="IPaymentRepository"/>.
@@ -295,7 +295,7 @@
         /// Returns an instance of the <see cref="IPaymentMethodRepository"/>
         /// </summary>
         /// <param name="uow">
-        /// The uow.
+        /// The database unit of work
         /// </param>
         /// <returns>
         /// The <see cref="IPaymentMethodRepository"/>.
@@ -309,7 +309,7 @@
         /// Returns an instance of the <see cref="IProductRepository"/>
         /// </summary>
         /// <param name="uow">
-        /// The uow.
+        /// The database unit of work
         /// </param>
         /// <returns>
         /// The <see cref="IProductRepository"/>.
@@ -323,7 +323,7 @@
         /// Returns an instance of the <see cref="IProductVariantRepository"/>
         /// </summary>
         /// <param name="uow">
-        /// The uow.
+        /// The database unit of work
         /// </param>
         /// <returns>
         /// The <see cref="IProductVariantRepository"/>.
@@ -337,7 +337,7 @@
         /// Returns an instance of the <see cref="IShipCountryRepository"/>
         /// </summary>
         /// <param name="uow">
-        /// The uow.
+        /// The database unit of work
         /// </param>
         /// <param name="storeSettingService">
         /// The store Setting Service.
@@ -355,7 +355,7 @@
         /// Returns an instance of the <see cref="IShipMethodRepository"/>
         /// </summary>
         /// <param name="uow">
-        /// The uow.
+        /// The database unit of work
         /// </param>
         /// <returns>
         /// The <see cref="IShipMethodRepository"/>.
@@ -369,7 +369,7 @@
         /// Returns an instance of the <see cref="IShipRateTierRepository"/>
         /// </summary>
         /// <param name="uow">
-        /// The uow.
+        /// The database unit of work
         /// </param>
         /// <returns>
         /// The <see cref="IShipRateTierRepository"/>.
@@ -383,7 +383,7 @@
         /// Returns an instance of the <see cref="IShipmentRepository"/>
         /// </summary>
         /// <param name="uow">
-        /// The uow.
+        /// The database unit of work
         /// </param>
         /// <returns>
         /// The <see cref="IShipmentRepository"/>.
@@ -397,7 +397,7 @@
         /// Returns an instance of the <see cref="IStoreSettingRepository"/>
         /// </summary>
         /// <param name="uow">
-        /// The uow.
+        /// The database unit of work
         /// </param>
         /// <returns>
         /// The <see cref="IStoreSettingRepository"/>.
@@ -411,7 +411,7 @@
         /// Returns an instance of the <see cref="IWarehouseRepository"/>
         /// </summary>
         /// <param name="uow">
-        /// The uow.
+        /// The database unit of work
         /// </param>
         /// <returns>
         /// The <see cref="IWarehouseRepository"/>.
