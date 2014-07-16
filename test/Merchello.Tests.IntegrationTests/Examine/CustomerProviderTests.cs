@@ -75,11 +75,19 @@ namespace Merchello.Tests.IntegrationTests.Examine
         public void Can_Retrieve_A_CustomerDisplay_From_The_Index()
         {
             //// Arrange
+            var lastActivityDate = DateTime.Today;
+
             var customer = _customerService.CreateCustomerWithKey(
                 "rusty",
-                "firstName",
-                "lastName",
+                "Rusty",
+                "Swayne",
                 "test@test.com");
+
+            
+            customer.Notes = "Here are some notes";
+            customer.LastActivityDate = lastActivityDate;
+
+            _customerService.Save(customer);
 
             //// Act
             var criteria = _searcher.CreateSearchCriteria(IndexTypes.Customer);
@@ -91,6 +99,12 @@ namespace Merchello.Tests.IntegrationTests.Examine
             //// Assert
             Assert.NotNull(customerDisplay);
             Assert.AreEqual("rusty", customerDisplay.LoginName);
+            Assert.AreEqual("Rusty", customerDisplay.FirstName);
+            Assert.AreEqual("Swayne", customerDisplay.LastName);
+            Assert.AreEqual("test@test.com", customer.Email);
+            Assert.AreEqual("Here are some notes", customerDisplay.Notes);
+            Assert.AreEqual(lastActivityDate, customerDisplay.LastActivityDate);
+            Assert.IsFalse(customerDisplay.TaxExempt);
         }
 
         [TestFixtureTearDown]

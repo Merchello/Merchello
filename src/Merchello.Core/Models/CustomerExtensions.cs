@@ -325,6 +325,7 @@
                     writer.WriteAttributeString("taxExempt", customer.TaxExempt.ToString());
                     writer.WriteAttributeString("extendedData", customer.ExtendedDataAsJson());
                     writer.WriteAttributeString("notes", customer.Notes);
+                    writer.WriteAttributeString("lastActivityDate", customer.LastActivityDate.ToString("s"));
                     writer.WriteAttributeString("createDate", customer.CreateDate.ToString("s"));
                     writer.WriteAttributeString("updateDate", customer.UpdateDate.ToString("s"));
                     writer.WriteAttributeString("allDocs", "1");
