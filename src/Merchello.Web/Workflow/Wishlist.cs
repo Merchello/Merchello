@@ -143,6 +143,16 @@
         public static IWishList GetWishList(string loginName)
         {
             return GetWishList(MerchelloContext.Current, loginName);
+        }   
+        
+        /// <summary>
+        /// Static method to instantiate a customer's wishlist
+        /// </summary>
+        /// <param name="customerKey">The customers login name associated with the wishlist</param>
+        /// <returns>The customer's <see cref="IWishList"/></returns>
+        public static IWishList GetWishList(Guid customerKey)
+        {
+            return GetWishList(MerchelloContext.Current, customerKey);
         }
 
         /// <summary>
@@ -473,6 +483,23 @@
             return GetWishList(merchelloContext, customer);
         }
 
+        /// <summary>
+        /// Instantiates a wishlist
+        /// </summary>
+        /// <param name="merchelloContext">The merchello context</param>
+        /// <param name="customerKey">The customers key associated with the wishlist</param>
+        /// <returns>The <see cref="IWishList"/></returns>
+        internal static IWishList GetWishList(IMerchelloContext merchelloContext, Guid customerKey)
+        {
+            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
+
+            var customer = merchelloContext.Services.CustomerService.GetByKey(customerKey);
+            if (customer == null)
+            {
+                return null;
+            }
+            return GetWishList(merchelloContext, customer);
+        }
 
         /// <summary>
         /// Instantiates a wishlist
