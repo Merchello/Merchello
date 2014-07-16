@@ -41,6 +41,11 @@
         public bool TaxExempt { get; set; }
 
         /// <summary>
+        /// Gets or sets the notes.
+        /// </summary>
+        public string Notes { get; set; }
+
+        /// <summary>
         /// Gets or sets the last activity date.
         /// </summary>
         public DateTime LastActivityDate { get; set; }

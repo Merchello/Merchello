@@ -4,10 +4,9 @@
     using System.Globalization;
     using System.IO;
     using System.Xml;
-    using System.Xml.Linq;
+    using System.Xml.Linq;   
     using Services;
-    using Newtonsoft.Json;
-
+   
     /// <summary>
     /// The customer extensions.
     /// </summary>
@@ -325,6 +324,7 @@
                     writer.WriteAttributeString("email", customer.Email);
                     writer.WriteAttributeString("taxExempt", customer.TaxExempt.ToString());
                     writer.WriteAttributeString("extendedData", customer.ExtendedDataAsJson());
+                    writer.WriteAttributeString("notes", customer.Notes);
                     writer.WriteAttributeString("createDate", customer.CreateDate.ToString("s"));
                     writer.WriteAttributeString("updateDate", customer.UpdateDate.ToString("s"));
                     writer.WriteAttributeString("allDocs", "1");

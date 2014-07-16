@@ -42,5 +42,11 @@
         /// </summary>
         [DataMember]
         bool TaxExempt { get; set; }
+
+        /// <summary>
+        /// Gets or sets the customer notes.
+        /// </summary>
+        [DataMember]
+        string Notes { get; set; }
     }
 }

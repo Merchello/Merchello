@@ -1,6 +1,4 @@
-﻿using Umbraco.Core.Persistence.Migrations.Upgrades.TargetVersionSixTwoZero;
-
-namespace Merchello.Core.Persistence.Factories
+﻿namespace Merchello.Core.Persistence.Factories
 {
     using Merchello.Core.Models;
     using Merchello.Core.Models.Rdbms;
@@ -30,6 +28,7 @@ namespace Merchello.Core.Persistence.Factories
                     TaxExempt = dto.TaxExempt,
                     ExtendedData = new ExtendedDataCollection(dto.ExtendedData),
                     ExamineId = dto.CustomerIndexDto.Id,
+                    Notes = dto.Notes,
                     CreateDate = dto.CreateDate,
                     UpdateDate = dto.UpdateDate
                 };
@@ -67,6 +66,7 @@ namespace Merchello.Core.Persistence.Factories
                       UpdateDate = entity.UpdateDate,
                       CreateDate = entity.CreateDate
                     },
+                    Notes = entity.Notes,
                     UpdateDate = entity.UpdateDate,
                     CreateDate = entity.CreateDate
                 };

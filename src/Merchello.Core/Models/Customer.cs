@@ -39,6 +39,11 @@
         private static readonly PropertyInfo TaxExemptSelector = ExpressionHelper.GetPropertyInfo<Customer, bool>(x => x.TaxExempt);
 
         /// <summary>
+        /// The notes selector.
+        /// </summary>
+        private static readonly PropertyInfo NotesSelector = ExpressionHelper.GetPropertyInfo<Customer, string>(x => x.Notes);
+
+        /// <summary>
         /// The first name.
         /// </summary>
         private string _firstName;
@@ -62,6 +67,11 @@
         /// The tax exempt.
         /// </summary>
         private bool _taxExempt;
+
+        /// <summary>
+        /// The _notes.
+        /// </summary>
+        private string _notes;
 
         /// <summary>
         /// The examine id.
@@ -209,6 +219,30 @@
                     },
                     _taxExempt,
                     TaxExemptSelector);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the notes.
+        /// </summary>
+        [DataMember]
+        public string Notes
+        {
+            get
+            {
+                return _notes;
+            }
+
+            set
+            {
+                SetPropertyValueAndDetectChanges(
+                    o =>
+                    {
+                        _notes = value;
+                        return _notes;
+                    },
+                    _notes,
+                    NotesSelector);
             }
         }
 
