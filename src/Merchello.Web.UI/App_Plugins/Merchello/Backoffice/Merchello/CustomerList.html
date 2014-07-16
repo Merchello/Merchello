@@ -65,15 +65,14 @@
                         <tr>
                             <th><input type="checkbox" /></th> <!-- This needs to allow a user to select all orders and change the status, delete, etc -->
                             <th>Name</th>
+                            <th>Email Address</th>
                             <th>Location</th>
-                            <th>Orders</th>
-                            <th>Payment Last Order</th>
-                            <th>Total Spent</th>
+                            <th>Last Order Total</th>
                         </tr>
                         <!-- Displays the bulk action button & dropdown menu when the checkbox is selected, which replaces normal heading TR -->
                         <tr data-ng-show="visible.bulkActionButton">
                             <th></th>
-                            <th colspan="5">
+                            <th colspan="4">
                                 <div class="btn-group">
                                     <!-- ACTION: Show Dropdown Menu -->
                                     <a href="#" class="btn dropdown-toggle" data-toggle="dropdown" data-ng-click="visible.bulkActionDropdown = !visible.bulkActionDropdown">Bulk Action (3 Variants) <i class="icon-navigation-down"></i></a>
@@ -90,9 +89,8 @@
                             <td><input type="checkbox" /></td>
                             <!-- ACTION: Go To Customer View Page -->
                             <td><a href="#/merchello/merchello/CustomerView/{{customer.key}}">{{customer.firstName}} {{customer.lastName}}</a></td>
-                            <td>Bellingham, WA</td>
-                            <td>4</td>
-                            <td>10/11/2013, 6:49pm EDT</td>
+                            <td>{{customer.email}}</td>
+                            <td>{{customer.primaryLocation()}}</td>
                             <td>$301.48</td>
                         </tr>
                     </tbody>

@@ -17,7 +17,7 @@
             self.taxExempt = false;
         } else {
             self.addresses = _.map(customerSource.addresses, function(address) {
-                return new merchello.Models.Address(address)
+                return new merchello.Models.Address(address);
             });
             self.email = customerSource.email;
             self.extendedData = _.map(customerSource.extendedData, function (item) {
@@ -30,6 +30,12 @@
             self.loginName = customerSource.loginName;
             self.taxExempt = customerSource.taxExempt;
         }
+
+        self.primaryLocation = function () {
+            var result = "";
+            // Return the city and state of the first address.
+            return result;
+        };
 
     };
 
