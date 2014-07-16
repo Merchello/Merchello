@@ -102,6 +102,8 @@
             Mandate.ParameterNotNullOrEmpty(loginName, "loginName");
 
             _loginName = loginName;
+
+            _addresses = new List<ICustomerAddress>();
         }
 
         /// <summary>

@@ -113,6 +113,7 @@
     </Compile>
     <Compile Include="AutoMapperMappings.cs" />
     <Compile Include="CheckoutExtensions.cs" />
+    <Compile Include="CustomerQuery.cs" />
     <Compile Include="Models\ContentEditing\CustomerAddressDisplay.cs" />
     <Compile Include="Models\Customer\CustomerContextDataExtentions.cs" />
     <Compile Include="Models\Customer\CustomerContextData.cs" />

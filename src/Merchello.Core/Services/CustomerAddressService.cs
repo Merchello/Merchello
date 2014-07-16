@@ -23,7 +23,7 @@
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
         /// <summary>
-        /// The uow provider.
+        /// The database unit of work provider.
         /// </summary>
         private readonly IDatabaseUnitOfWorkProvider _uowProvider;
 
@@ -229,13 +229,14 @@
         /// <returns>
         /// A collection of <see cref="ICustomerAddress"/>.
         /// </returns>
+        /// <remarks>
+        /// RSS This method becomes a bit superfluous now that we are exposing the customer address collection on ICustomer 
+        /// </remarks>
         public IEnumerable<ICustomerAddress> GetByCustomerKey(Guid customerKey)
         {
             using (var repostitory = _repositoryFactory.CreateCustomerAddressRepository(_uowProvider.GetUnitOfWork()))
             {
-                var query = Query<ICustomerAddress>.Builder.Where(x => x.CustomerKey == customerKey);
-
-                return repostitory.GetByQuery(query);
+                return repostitory.GetByCustomerKey(customerKey);
             }
         }
 

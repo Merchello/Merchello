@@ -4,6 +4,9 @@
     using System.Threading;
     using Configuration;
     using Gateways;
+
+    using Merchello.Core.Cache;
+
     using Services;
     using Umbraco.Core;
     using Umbraco.Core.Logging;

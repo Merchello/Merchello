@@ -106,7 +106,36 @@
         /// </returns>
         public static CustomerAddressDisplay ToCustomerAddressDisplay(this ICustomerAddress customerAddress)
         {
-            return AutoMapper.Mapper.Map<ICustomerAddress, CustomerAddressDisplay>(customerAddress);
+            return AutoMapper.Mapper.Map<CustomerAddressDisplay>(customerAddress);
+        }
+
+        /// <summary>
+        /// The to customer address.
+        /// </summary>
+        /// <param name="address">
+        /// The address.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ICustomerAddress"/>.
+        /// </returns>
+        public static ICustomerAddress ToCustomerAddress(this CustomerAddressDisplay address)
+        {
+            return new CustomerAddress(address.CustomerKey)
+                       {
+                           Key = address.Key,
+                           FullName = address.FullName,
+                           Label = address.Label,
+                           Address1 = address.Address1,
+                           Address2 = address.Address2,
+                           AddressTypeFieldKey = address.AddressTypeFieldKey,
+                           Locality = address.Locality,
+                           Region = address.Region,
+                           PostalCode = address.PostalCode,
+                           CountryCode = address.CountryCode,
+                           Company = address.Company,
+                           Phone = address.Phone,
+                           IsDefault = address.IsDefault
+                       };
         }
     }
 

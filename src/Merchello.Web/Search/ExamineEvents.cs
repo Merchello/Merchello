@@ -1,5 +1,7 @@
 ﻿namespace Merchello.Web.Search
 {
+    using System;
+    using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.Linq;    
@@ -96,6 +98,54 @@
             CustomerService.Created += CustomerServiceCreated;
             CustomerService.Saved += CustomerServiceSaved;
             CustomerService.Deleted += CustomerServiceDeleted;
+
+            CustomerAddressService.Saved += CustomerAddressServiceSaved;
+            CustomerAddressService.Deleted += CustomerAddressServiceDeleted;
+        }
+
+        // TODO RSS - come up with another way of updating the customer index ... we should not need to requiry the customer here
+
+        /// <summary>
+        /// The customer address service deleted.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="deleteEventArgs">
+        /// The delete event args.
+        /// </param>
+        public void CustomerAddressServiceDeleted(ICustomerAddressService sender, DeleteEventArgs<ICustomerAddress> deleteEventArgs)
+        {
+            ReIndexCustomers(deleteEventArgs.DeletedEntities.Select(x => x.Key));
+        }
+
+        /// <summary>
+        /// The customer address service saved.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="saveEventArgs">
+        /// The save event args.
+        /// </param>
+        public void CustomerAddressServiceSaved(ICustomerAddressService sender, SaveEventArgs<ICustomerAddress> saveEventArgs)
+        {
+            this.ReIndexCustomers(saveEventArgs.SavedEntities.Select(x => x.Key));
+        }
+
+        /// <summary>
+        /// The re index customers.
+        /// </summary>
+        /// <param name="keys">
+        /// The keys.
+        /// </param>
+        private void ReIndexCustomers(IEnumerable<Guid> keys)
+        {
+            if (MerchelloContext.Current == null) return;
+            
+            var customers = MerchelloContext.Current.Services.CustomerService.GetByKeys(keys);
+
+            customers.ForEach(IndexCustomer);
         }
 
         #region Customers
@@ -279,7 +329,7 @@
         /// </summary>
         static void ProductServiceCreated(IProductService sender, Core.Events.NewEventArgs<IProduct> e)
         {
-            if(e.Entity.HasIdentity) IndexProduct(e.Entity);
+            if (e.Entity.HasIdentity) IndexProduct(e.Entity);
         }
 
         /// <summary>

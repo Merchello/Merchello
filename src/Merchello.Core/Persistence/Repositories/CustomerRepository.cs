@@ -22,6 +22,11 @@
     internal class CustomerRepository : MerchelloPetaPocoRepositoryBase<ICustomer>, ICustomerRepository
     {
         /// <summary>
+        /// The _customer address repository.
+        /// </summary>
+        private ICustomerAddressRepository _customerAddressRepository;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CustomerRepository"/> class.
         /// </summary>
         /// <param name="work">
@@ -30,9 +35,15 @@
         /// <param name="cache">
         /// The cache.
         /// </param>
-        public CustomerRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache) 
+        /// <param name="customerAddressRepository">
+        /// The customer Address Repository.
+        /// </param>
+        public CustomerRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ICustomerAddressRepository customerAddressRepository) 
             : base(work, cache)
         {
+            Mandate.ParameterNotNull(customerAddressRepository, "customerAddressRepository");
+
+            _customerAddressRepository = customerAddressRepository;
         }
 
         /// <summary>
@@ -57,7 +68,7 @@
 
             var factory = new CustomerFactory();
 
-            var customer = factory.BuildEntity(dto);
+            var customer = factory.BuildEntity(dto, _customerAddressRepository.GetByCustomerKey(key));
 
             return customer;
         }
@@ -86,7 +97,7 @@
                 var dtos = Database.Fetch<CustomerDto, CustomerIndexDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {                    
-                    yield return factory.BuildEntity(dto);
+                    yield return factory.BuildEntity(dto, _customerAddressRepository.GetByCustomerKey(dto.Key));
                 }
             }
         }
