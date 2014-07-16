@@ -6,13 +6,13 @@
 
         if (customerSource === undefined) {
             self.addresses = [];
-            self.email = "";
+            self.email = '';
             self.extendedData = [];
-            self.firstName = "";
-            self.key = "";
-            self.lastActivityDate = "";
-            self.lastName = "";
-            self.loginName = "";
+            self.firstName = '';
+            self.key = '';
+            self.lastActivityDate = '';
+            self.lastName = '';
+            self.loginName = '';
             self.notes = [];
             self.taxExempt = false;
         } else {
@@ -32,8 +32,12 @@
         }
 
         self.primaryLocation = function () {
-            var result = "";
-            // Return the city and state of the first address.
+            var result = '';
+            // TODO: Change logic to return locality, region of primary address instead of first one.
+            if (self.addresses.length > 0) {
+                var address = self.addresses[0];
+                result = address.locality + ', ' + address.region;
+            }
             return result;
         };
 
@@ -44,8 +48,8 @@
         var self = this;
 
         if (dictionarySource === undefined) {
-            self.key = "";
-            self.value = "";
+            self.key = '';
+            self.value = '';
         } else {
             self.key = dictionarySource.key;
             self.value = dictionarySource.value;

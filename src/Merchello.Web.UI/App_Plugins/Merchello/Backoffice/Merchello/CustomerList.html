@@ -37,7 +37,7 @@
                     <!-- New Order Button -->
                     <div class="btn-group">
                         <!-- ACTION: New Customer -->
-                        <button type="submit" class="btn btn-success">New Customer</button>
+                        <a href="#/merchello/merchello/CustomerEdit/keygoeshere" class="btn btn-success">New Customer</a>
                     </div>
 
                 </div>
@@ -91,7 +91,7 @@
                             <td><a href="#/merchello/merchello/CustomerView/{{customer.key}}">{{customer.firstName}} {{customer.lastName}}</a></td>
                             <td>{{customer.email}}</td>
                             <td>{{customer.primaryLocation()}}</td>
-                            <td>$301.48</td>
+                            <td><localize key="merchelloGeneral_moneySymbol" />{{customer.lastOrderTotal}}</td>
                         </tr>
                     </tbody>
                 </table>
