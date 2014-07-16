@@ -137,6 +137,7 @@
     <Compile Include="PackageActions\AddLocalizationAreas.cs" />
     <Compile Include="ProductContentEditing.cs" />
     <Compile Include="WebApi\ScheduledTasksController.cs" />
+    <Compile Include="Workflow\IWishList.cs" />
     <Compile Include="Workflow\PaymentProcessor.cs" />
     <Compile Include="Editors\SettingsApiController.cs" />
     <Compile Include="Editors\ShippingGatewayApiController.cs" />
@@ -212,6 +213,7 @@
     <Compile Include="Validation\BasketItemInventoryValidation.cs" />
     <Compile Include="WebApi\MerchelloApiController.cs" />
     <Compile Include="WebBootManager.cs" />
+    <Compile Include="Workflow\Wishlist.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
