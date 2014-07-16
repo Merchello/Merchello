@@ -14,6 +14,8 @@ using Umbraco.Core.Events;
 
 namespace Merchello.Tests.IntegrationTests.Examine
 {
+    using Merchello.Web.Models.ContentEditing;
+
     [TestFixture]
     public class CustomerProviderTests : DatabaseIntegrationTestBase
     {
@@ -69,9 +71,26 @@ namespace Merchello.Tests.IntegrationTests.Examine
         }
 
 
+        [Test]
         public void Can_Retrieve_A_CustomerDisplay_From_The_Index()
         {
-            
+            //// Arrange
+            var customer = _customerService.CreateCustomerWithKey(
+                "rusty",
+                "firstName",
+                "lastName",
+                "test@test.com");
+
+            //// Act
+            var criteria = _searcher.CreateSearchCriteria(IndexTypes.Customer);
+            criteria.Field("loginName", "rusty");
+            var results = _searcher.Search(criteria);
+
+            var customerDisplay = results.FirstOrDefault().ToCustomerDisplay();
+
+            //// Assert
+            Assert.NotNull(customerDisplay);
+            Assert.AreEqual("rusty", customerDisplay.LoginName);
         }
 
         [TestFixtureTearDown]

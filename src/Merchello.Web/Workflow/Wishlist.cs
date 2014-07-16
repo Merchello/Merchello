@@ -9,12 +9,12 @@
     using Umbraco.Core.Logging;
 
     /// <summary>
-    /// Represents a shopping wishlist or Cart
+    /// Represents a shopping wish list or Cart
     /// </summary>
     public class WishList : IWishList
     { 
         /// <summary>
-        /// The item cache responsible for persisting the wishlist contents.
+        /// The item cache responsible for persisting the wish list contents.
         /// </summary>
         private readonly IItemCache _itemCache;
 
@@ -24,7 +24,7 @@
         private readonly ICustomerBase _customer;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Wishlist"/> class.
+        /// Initializes a new instance of the <see cref="WishList"/> class.
         /// </summary>
         /// <param name="itemCache">
         /// The item cache.
@@ -32,7 +32,6 @@
         /// <param name="customer">
         /// The customer.
         /// </param>
-
         internal WishList(IItemCache itemCache, ICustomerBase customer)
         {
             Mandate.ParameterNotNull(itemCache, "ItemCache");
@@ -45,7 +44,7 @@
         }
 
         /// <summary>
-        /// Gets the version of the wishlist
+        /// Gets the version of the wish list
         /// </summary>
         public Guid VersionKey
         {
@@ -54,7 +53,7 @@
         }
 
         /// <summary>
-        /// Gets the customer associated with the wishlist
+        /// Gets the customer associated with the wish list
         /// </summary>
         public ICustomerBase Customer
         {
@@ -70,7 +69,7 @@
         }
 
         /// <summary>
-        /// Gets the wishlist's item count
+        /// Gets the wish list's item count
         /// </summary>
         public int TotalItemCount
         {
@@ -78,7 +77,7 @@
         }
 
         /// <summary>
-        /// Gets the sum of all wishlist item quantities
+        /// Gets the sum of all wish list item quantities
         /// </summary>
         public int TotalQuantityCount
         {
@@ -86,7 +85,7 @@
         }
 
         /// <summary>
-        /// Gets the sum of all wishlist item "amount" (price)
+        /// Gets the sum of all wish list item "amount" (price)
         /// </summary>
         public decimal TotalWishListPrice
         {
@@ -94,7 +93,7 @@
         }
 
         /// <summary>
-        /// Gets a value indicating whether or not the wishlist contains any items
+        /// Gets a value indicating whether or not the wish list contains any items
         /// </summary>
         public bool IsEmpty
         {
@@ -136,9 +135,9 @@
         }
 
         /// <summary>
-        /// Static method to instantiate a customer's wishlist
+        /// Static method to instantiate a customer's wish list
         /// </summary>
-        /// <param name="loginName">The customers login name associated with the wishlist</param>
+        /// <param name="loginName">The customers login name associated with the wish list</param>
         /// <returns>The customer's <see cref="IWishList"/></returns>
         public static IWishList GetWishList(string loginName)
         {
@@ -146,9 +145,9 @@
         }   
         
         /// <summary>
-        /// Static method to instantiate a customer's wishlist
+        /// Static method to instantiate a customer's wish list
         /// </summary>
-        /// <param name="customerKey">The customers login name associated with the wishlist</param>
+        /// <param name="customerKey">The customers login name associated with the wish list</param>
         /// <returns>The customer's <see cref="IWishList"/></returns>
         public static IWishList GetWishList(Guid customerKey)
         {
@@ -157,9 +156,9 @@
 
         /// <summary>
         /// Intended to be used by a <see cref="IProduct"/>s without options.  If the product does have options and a collection of <see cref="IProductVariant"/>s, the first
-        /// <see cref="IProductVariant"/> is added to the wishlist item collection
+        /// <see cref="IProductVariant"/> is added to the wish list item collection
         /// </summary>
-        /// <param name="product">The <see cref="IProduct"/> to be added to the wishlist</param>
+        /// <param name="product">The <see cref="IProduct"/> to be added to the wish list</param>
         public void AddItem(IProduct product)
         {
             AddItem(product, product.Name, 1);
@@ -167,7 +166,7 @@
 
         /// <summary>
         /// Intended to be used by a <see cref="IProduct"/>s without options.  If the product does have options and a collection of <see cref="IProductVariant"/>s, the first
-        /// <see cref="IProductVariant"/> is added to the wishlist item collection
+        /// <see cref="IProductVariant"/> is added to the wish list item collection
         /// </summary>
         /// <param name="product">
         /// The product.
@@ -182,7 +181,7 @@
 
         /// <summary>
         /// Intended to be used by a <see cref="IProduct"/>s without options.  If the product does have options and a collection of <see cref="IProductVariant"/>s, the first
-        /// <see cref="IProductVariant"/> is added to the wishlist item collection
+        /// <see cref="IProductVariant"/> is added to the wish list item collection
         /// </summary>
         /// <param name="product">The <see cref="IProduct"/> to be added</param>
         /// <param name="name">The name to be used in the line item</param>
@@ -194,7 +193,7 @@
 
         /// <summary>
         /// Intended to be used by a <see cref="IProduct"/>s without options.  If the product does have options and a collection of <see cref="IProductVariant"/>s, the first
-        /// <see cref="IProductVariant"/> is added to the wishlist item collection
+        /// <see cref="IProductVariant"/> is added to the wish list item collection
         /// </summary>
         /// <param name="product">The <see cref="IProduct"/> to be added</param>
         /// <param name="name">The name of the product to be used in the line item</param>
@@ -214,7 +213,7 @@
         }
 
         /// <summary>
-        /// Adds a line item to the wishlist
+        /// Adds a line item to the wish list
         /// </summary>
         /// <param name="productVariant">
         /// The product Variant.
@@ -225,7 +224,7 @@
         }
 
         /// <summary>
-        /// Adds a line item to the wishlist
+        /// Adds a line item to the wish list
         /// </summary>
         /// <param name="productVariant">
         /// The product Variant.
@@ -239,7 +238,7 @@
         }
 
         /// <summary>
-        /// Adds a line item to the wishlist
+        /// Adds a line item to the wish list
         /// </summary>
         /// <param name="productVariant">
         /// The product Variant.
@@ -256,7 +255,7 @@
         }
 
         /// <summary>
-        /// Adds a line item to the wishlist
+        /// Adds a line item to the wish list
         /// </summary>
         /// <param name="productVariant">
         /// The product Variant.
@@ -280,13 +279,13 @@
         }
 
         /// <summary>
-        /// Adds a line item to the wishlist
+        /// Adds a line item to the wish list
         /// </summary>
         /// <param name="name">
         /// The name.
         /// </param>
         /// <param name="sku">
-        /// The sku.
+        /// The SKU.
         /// </param>
         /// <param name="price">
         /// The price.
@@ -297,13 +296,13 @@
         }
 
         /// <summary>
-        /// Adds a line item to the wishlist
+        /// Adds a line item to the wish list
         /// </summary>
         /// <param name="name">
         /// The name.
         /// </param>
         /// <param name="sku">
-        /// The sku.
+        /// The SKU.
         /// </param>
         /// <param name="quantity">
         /// The quantity.
@@ -317,13 +316,13 @@
         }
 
         /// <summary>
-        /// Adds a line item to the wishlist
+        /// Adds a line item to the wish list
         /// </summary>
         /// <param name="name">
         /// The name.
         /// </param>
         /// <param name="sku">
-        /// The sku.
+        /// The SKU.
         /// </param>
         /// <param name="quantity">
         /// The quantity.
@@ -343,7 +342,7 @@
 
 
         /// <summary>
-        /// Updates a wishlist item's quantity
+        /// Updates a wish list item's quantity
         /// </summary>
         /// <param name="productVariant">
         /// The product Variant.
@@ -357,7 +356,7 @@
         }
 
         /// <summary>
-        /// Updates a wishlist item's quantity
+        /// Updates a wish list item's quantity
         /// </summary>
         /// <param name="key">
         /// The key.
@@ -373,10 +372,10 @@
         }
 
         /// <summary>
-        /// Updates a wishlist item's quantity
+        /// Updates a wish list item's quantity
         /// </summary>
         /// <param name="sku">
-        /// The sku.
+        /// The SKU.
         /// </param>
         /// <param name="quantity">
         /// The quantity.
@@ -395,7 +394,7 @@
         }
 
         /// <summary>
-        /// Removes a wishlist line item
+        /// Removes a wish list line item
         /// </summary>
         /// <param name="itemKey">
         /// The item Key.
@@ -408,7 +407,7 @@
         }        
 
         /// <summary>
-        /// Removes a wishlist line item
+        /// Removes a wish list line item
         /// </summary>
         /// <param name="productVariant">
         /// The product Variant.
@@ -419,10 +418,10 @@
         }
 
         /// <summary>
-        /// Removes a wishlist line item
+        /// Removes a wish list line item
         /// </summary>
         /// <param name="sku">
-        /// The sku.
+        /// The SKU.
         /// </param>
         public void RemoveItem(string sku)
         {
@@ -433,7 +432,7 @@
         }
 
         /// <summary>
-        /// Empties the wishlist
+        /// Empties the wish list
         /// </summary>
         public void Empty()
         {
@@ -449,7 +448,7 @@
         }
 
         /// <summary>
-        /// Saves the wishlist
+        /// Saves the wish list
         /// </summary>
         public void Save()
         {
@@ -457,7 +456,7 @@
         }
 
         /// <summary>
-        /// Accepts visitor class to visit wishlist items
+        /// Accepts visitor class to visit wish list items
         /// </summary>
         /// <param name="visitor">The <see cref="ILineItemVisitor"/> to walk the collection</param>
         public void Accept(ILineItemVisitor visitor)
@@ -466,10 +465,10 @@
         }
 
         /// <summary>
-        /// Instantiates a wishlist
+        /// Instantiates a wish list
         /// </summary>
         /// <param name="merchelloContext">The merchello context</param>
-        /// <param name="loginName">The customers login name associated with the wishlist</param>
+        /// <param name="loginName">The customers login name associated with the wish list</param>
         /// <returns>The <see cref="IWishList"/></returns>
         internal static IWishList GetWishList(IMerchelloContext merchelloContext, string loginName)
         {
@@ -480,14 +479,15 @@
             {
                 return null;
             }
+
             return GetWishList(merchelloContext, customer);
         }
 
         /// <summary>
-        /// Instantiates a wishlist
+        /// Instantiates a wish list
         /// </summary>
         /// <param name="merchelloContext">The merchello context</param>
-        /// <param name="customerKey">The customers key associated with the wishlist</param>
+        /// <param name="customerKey">The customers key associated with the wish list</param>
         /// <returns>The <see cref="IWishList"/></returns>
         internal static IWishList GetWishList(IMerchelloContext merchelloContext, Guid customerKey)
         {
@@ -502,10 +502,10 @@
         }
 
         /// <summary>
-        /// Instantiates a wishlist
+        /// Instantiates a wish list
         /// </summary>
         /// <param name="merchelloContext">The merchello context</param>
-        /// <param name="customer">The customer associated with the wishlist</param>
+        /// <param name="customer">The customer associated with the wish list</param>
         /// <returns>The <see cref="IWishList"/></returns>
         internal static IWishList GetWishList(IMerchelloContext merchelloContext, ICustomerBase customer)
         {
@@ -527,20 +527,48 @@
             return wishlist;
         }
 
-        // used for testing
+        //// used for testing
+        /// <summary>
+        /// Gets the wish list.
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <param name="itemCache">
+        /// The item cache.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IWishList"/>.
+        /// </returns>
         internal static IWishList GetWishList(ICustomerBase customer, IItemCache itemCache)
         {
             return new WishList(itemCache, customer);
         }
 
-
-
+        /// <summary>
+        /// Empties the wish list.
+        /// </summary>
+        /// <param name="merchelloContext">
+        /// The merchello context.
+        /// </param>
+        /// <param name="wishlist">
+        /// The wish list.
+        /// </param>
         internal static void Empty(IMerchelloContext merchelloContext, IWishList wishlist)
         {
             wishlist.Items.Clear();
             Save(merchelloContext, wishlist);
         }
 
+        /// <summary>
+        /// Saves the wish list.
+        /// </summary>
+        /// <param name="merchelloContext">
+        /// The merchello context.
+        /// </param>
+        /// <param name="wishlist">
+        /// The wish list.
+        /// </param>
         internal static void Save(IMerchelloContext merchelloContext, IWishList wishlist)
         {
             // Update the wishlist item cache version so that it can be validated in the checkout
@@ -555,13 +583,12 @@
         /// Generates a unique cache key for runtime caching of the <see cref="WishList"/>
         /// </summary>
         /// <param name="customer">The <see cref="ICustomerBase"/></param>        
-        /// <returns>The cache key for the customer's wishlist</returns>
+        /// <returns>The cache key for the customer's wish list</returns>
         private static string MakeCacheKey(ICustomerBase customer)
         {
             // the version key here is not important since there can only ever be one wishlist
             return CacheKeys.ItemCacheCacheKey(customer.Key, EnumTypeFieldConverter.ItemItemCache.Wishlist.TypeKey, Guid.Empty);
         }
-
 
 
         public void MoveToBasket()
