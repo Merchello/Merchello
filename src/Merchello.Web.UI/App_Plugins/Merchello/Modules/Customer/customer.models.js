@@ -5,25 +5,30 @@
         var self = this;
 
         if (customerSource === undefined) {
-            self.key = "";
-            self.firstName = "";
-            self.lastName = "";
+            self.addresses = [];
             self.email = "";
-            self.loginName = "";
-            self.taxExempt = false;
-            self.lastActivityDate = "";
             self.extendedData = [];
+            self.firstName = "";
+            self.key = "";
+            self.lastActivityDate = "";
+            self.lastName = "";
+            self.loginName = "";
+            self.notes = [];
+            self.taxExempt = false;
         } else {
-            self.key = customerSource.key;
-            self.firstName = customerSource.firstName;
-            self.lastName = customerSource.lastName;
+            self.addresses = _.map(customerSource.addresses, function(address) {
+                return new merchello.Models.Address(address)
+            });
             self.email = customerSource.email;
+            self.extendedData = _.map(customerSource.extendedData, function (item) {
+                return new merchello.Models.DictionaryItem(item);
+            });
+            self.firstName = customerSource.firstName;
+            self.key = customerSource.key;
+            self.lastActivityDate = customerSource.lastActivityDate;
+            self.lastName = customerSource.lastName;
             self.loginName = customerSource.loginName;
             self.taxExempt = customerSource.taxExempt;
-            self.lastActivityDate = customerSource.lastActivityDate;
-            self.extendedData = _.map(customerSource.extendedData, function (method) {
-                return new merchello.Models.DictionaryItem(method);
-            });
         }
 
     };
