@@ -18,25 +18,31 @@
         }
 
         $scope.loaded = true;
-		$scope.preValuesLoaded = true;
+		$scope.preValuesLoaded = true;                  
 
 		//--------------------------------------------------------------------------------------
 		// Initialization methods
 		//--------------------------------------------------------------------------------------
-		$scope.tinymceOptions = {
-		    theme: "modern",
-		    height: "630px",
-		};
+        $scope.rteProperties = {
+            label: 'bodyText',
+            view: 'rte',
+            config: {
+                editor: {
+                    toolbar: ["code", "undo", "redo", "cut", "styleselect", "bold", "italic", "alignleft", "aligncenter", "alignright", "bullist", "numlist", "link", "umbmediapicker", "umbmacro", "table", "umbembeddialog"],
+                    stylesheets: [],
+                    dimensions: { height: 650 }
+                }
+            },
+            value: ""
+
+    };
 
 		$scope.init = function () {
 
 		    // declare empty options at startup, so ui-codemirror can watch it
 			
 			var promise = $scope.loadNotificationMessage();
-		    promise.then(function(data) {
-
-		        
-
+		    promise.then(function(data) {                   
 		    	$scope.loaded = true;
 		    	$scope.preValuesLoaded = true;
 		    });
@@ -52,7 +58,8 @@
         $scope.loadNotificationMessage = function() {
 
             var promise = merchelloNotificationsService.getNotificationMessagesByKey($routeParams.id);
-        	promise.then(function (notification) {
+            promise.then(function (notification) {
+                $scope.rteProperties.value = notification.bodyText;
         	    $scope.notificationMessage = new merchello.Models.NotificationMessage(notification);
         	});
 
@@ -74,6 +81,7 @@
 		$scope.saveNotificationMessage = function (message) {
 		    var promiseSave;
 		    message.monitorKey = message.monitorKey;
+		    message.bodyText = $scope.rteProperties.value;
 		    promiseSave = merchelloNotificationsService.updateNotificationMessage(message);
 
 		    promiseSave.then(function () {
