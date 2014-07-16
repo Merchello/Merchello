@@ -5,44 +5,46 @@
     using System.IO;
     using System.Xml;
     using System.Xml.Linq;
-    using Services;
+
     using Newtonsoft.Json;
 
+    using Services;
+   
     /// <summary>
     /// The customer extensions.
     /// </summary>
     public static class CustomerExtensions
     {
-        /// <summary>
-        /// Gets a collection of all customer addresses
-        /// </summary>
-        /// <param name="customer">
-        /// The customer.
-        /// </param>
-        /// <returns>
-        /// The collection of all <see cref="ICustomerAddress"/> for a given customer
-        /// </returns>
-        public static IEnumerable<ICustomerAddress> Addresses(this ICustomer customer)
-        {
-            return customer.Addresses(MerchelloContext.Current);
-        }
+        /////// <summary>
+        /////// Gets a collection of all customer addresses
+        /////// </summary>
+        /////// <param name="customer">
+        /////// The customer.
+        /////// </param>
+        /////// <returns>
+        /////// The collection of all <see cref="ICustomerAddress"/> for a given customer
+        /////// </returns>
+        ////public static IEnumerable<ICustomerAddress> CustomerAddresses(this ICustomer customer)
+        ////{
+        ////    return customer.CustomerAddresses(MerchelloContext.Current);
+        ////}
 
-        /// <summary>
-        /// The addresses.
-        /// </summary>
-        /// <param name="customer">
-        /// The customer.
-        /// </param>
-        /// <param name="addressType">
-        /// The address type.
-        /// </param>
-        /// <returns>
-        /// The collection of <see cref="ICustomerAddress"/>
-        /// </returns>
-        public static IEnumerable<ICustomerAddress> Addresses(this ICustomer customer, AddressType addressType)
-        {
-            return customer.Addresses(MerchelloContext.Current, addressType);
-        }
+        /////// <summary>
+        /////// The addresses.
+        /////// </summary>
+        /////// <param name="customer">
+        /////// The customer.
+        /////// </param>
+        /////// <param name="addressType">
+        /////// The address type.
+        /////// </param>
+        /////// <returns>
+        /////// The collection of <see cref="ICustomerAddress"/>
+        /////// </returns>
+        ////public static IEnumerable<ICustomerAddress> CustomerAddresses(this ICustomer customer, AddressType addressType)
+        ////{
+        ////    return customer.CustomerAddresses(MerchelloContext.Current, addressType);
+        ////}
 
         /// <summary>
         /// The default customer address associated with a customer of a given type
@@ -150,7 +152,7 @@
         /// <returns>
         /// The collection of <see cref="ICustomerAddress"/> associated with the customer
         /// </returns>
-        internal static IEnumerable<ICustomerAddress> Addresses(this ICustomer customer, IMerchelloContext merchelloContext)
+        internal static IEnumerable<ICustomerAddress> CustomerAddresses(this ICustomer customer, IMerchelloContext merchelloContext)
         {
             return ((ServiceContext) merchelloContext.Services).CustomerAddressService.GetByCustomerKey(customer.Key);
         }
@@ -170,7 +172,7 @@
         /// <returns>
         /// The collection of <see cref="ICustomerAddress"/> associated with the customer of a given type
         /// </returns>
-        internal static IEnumerable<ICustomerAddress> Addresses(this ICustomer customer, IMerchelloContext merchelloContext, AddressType addressType)
+        internal static IEnumerable<ICustomerAddress> CustomerAddresses(this ICustomer customer, IMerchelloContext merchelloContext, AddressType addressType)
         {
             return ((ServiceContext)merchelloContext.Services).CustomerAddressService.GetByCustomerKey(customer.Key, addressType);
         }
@@ -325,6 +327,9 @@
                     writer.WriteAttributeString("email", customer.Email);
                     writer.WriteAttributeString("taxExempt", customer.TaxExempt.ToString());
                     writer.WriteAttributeString("extendedData", customer.ExtendedDataAsJson());
+                    writer.WriteAttributeString("notes", customer.Notes);
+                    writer.WriteAttributeString("addresses", customer.AddressesAsJson());
+                    writer.WriteAttributeString("lastActivityDate", customer.LastActivityDate.ToString("s"));
                     writer.WriteAttributeString("createDate", customer.CreateDate.ToString("s"));
                     writer.WriteAttributeString("updateDate", customer.UpdateDate.ToString("s"));
                     writer.WriteAttributeString("allDocs", "1");
@@ -335,6 +340,20 @@
             }
 
             return XDocument.Parse(xml);
+        }
+
+        /// <summary>
+        /// The customer address collection as JSON.
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <returns>
+        /// The JSON representation <see cref="string"/>.
+        /// </returns>
+        private static string AddressesAsJson(this ICustomer customer)
+        {
+            return JsonConvert.SerializeObject(customer.Addresses ?? new List<ICustomerAddress>());
         }
 
         #endregion

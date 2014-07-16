@@ -20,12 +20,14 @@
         internal static readonly List<StaticField> IndexFieldPolicies = new List<StaticField>()
         {
             new StaticField("customerKey", FieldIndexTypes.ANALYZED, false, string.Empty),
-            new StaticField("loginName", FieldIndexTypes.ANALYZED, false, string.Empty),
-            new StaticField("firstName", FieldIndexTypes.ANALYZED, false, string.Empty),
-            new StaticField("lastName", FieldIndexTypes.ANALYZED, false, string.Empty),
-            new StaticField("email", FieldIndexTypes.ANALYZED, false, string.Empty),
+            new StaticField("loginName", FieldIndexTypes.ANALYZED, true, string.Empty),
+            new StaticField("firstName", FieldIndexTypes.ANALYZED, true, string.Empty),
+            new StaticField("lastName", FieldIndexTypes.ANALYZED, true, string.Empty),
+            new StaticField("email", FieldIndexTypes.ANALYZED, true, string.Empty),
             new StaticField("taxExempt", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
-            new StaticField("extendedData", FieldIndexTypes.NO, false, string.Empty),
+            new StaticField("extendedData", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
+            new StaticField("notes", FieldIndexTypes.ANALYZED, false, string.Empty),
+            new StaticField("addresses", FieldIndexTypes.ANALYZED, false, string.Empty),
             new StaticField("lastActivityDate", FieldIndexTypes.NOT_ANALYZED, false, "DATETIME"),
             new StaticField("createDate", FieldIndexTypes.NOT_ANALYZED, false, "DATETIME"),
             new StaticField("updateDate", FieldIndexTypes.NOT_ANALYZED, false, "DATETIME")

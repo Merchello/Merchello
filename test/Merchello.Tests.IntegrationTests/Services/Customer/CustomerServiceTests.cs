@@ -189,15 +189,15 @@ namespace Merchello.Tests.IntegrationTests.Services.Customer
             customer.CreateCustomerAddress(MerchelloContext, _address, AddressType.Shipping);
 
             //// Assert
-            var all = customer.Addresses(MerchelloContext);
+            var all = customer.CustomerAddresses(MerchelloContext);
             Assert.AreEqual(5, all.Count(), "Total address count was not five");
             Assert.AreEqual(2, all.Count(x => x.IsDefault), "There were not two defaults");
 
-            var billings = customer.Addresses(MerchelloContext, AddressType.Billing);
+            var billings = customer.CustomerAddresses(MerchelloContext, AddressType.Billing);
             Assert.AreEqual(2, billings.Count(), "There were not two billing addresses");
             Assert.AreEqual(1, billings.Count(x => x.IsDefault), "There was not one default billing address");
 
-            var shippings = customer.Addresses(MerchelloContext, AddressType.Shipping);
+            var shippings = customer.CustomerAddresses(MerchelloContext, AddressType.Shipping);
             Assert.AreEqual(3, shippings.Count(), "There were not two shipping addresses");
             Assert.AreEqual(1, shippings.Count(x => x.IsDefault), "There was not one default shipping address");
             
@@ -233,7 +233,7 @@ namespace Merchello.Tests.IntegrationTests.Services.Customer
             Assert.NotNull(assertDefaultBilling, "Assert Default billing was null");
             Assert.AreEqual(address2.Key, assertDefaultBilling.Key, "Address 2 was not the default address");
 
-            var allBillings = customer.Addresses(MerchelloContext, AddressType.Billing);
+            var allBillings = customer.CustomerAddresses(MerchelloContext, AddressType.Billing);
             Assert.AreEqual(1, allBillings.Count(x => x.IsDefault));
         }
 

@@ -68,6 +68,14 @@
         public string ExtendedData { get; set; }
 
         /// <summary>
+        /// Gets or sets the extended data.
+        /// </summary>
+        [Column("notes")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        [SpecialDbType(SpecialDbTypes.NTEXT)]
+        public string Notes { get; set; }
+
+        /// <summary>
         /// Gets or sets the update date.
         /// </summary>
         [Column("updateDate")]

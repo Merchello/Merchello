@@ -14,6 +14,8 @@ using Umbraco.Core.Events;
 
 namespace Merchello.Tests.IntegrationTests.Examine
 {
+    using Merchello.Web.Models.ContentEditing;
+
     [TestFixture]
     public class CustomerProviderTests : DatabaseIntegrationTestBase
     {
@@ -69,9 +71,41 @@ namespace Merchello.Tests.IntegrationTests.Examine
         }
 
 
+        [Test]
         public void Can_Retrieve_A_CustomerDisplay_From_The_Index()
         {
+            //// Arrange
+            var lastActivityDate = DateTime.Today;
+
+            var customer = _customerService.CreateCustomerWithKey(
+                "rusty",
+                "Rusty",
+                "Swayne",
+                "test@test.com");
+
             
+            customer.Notes = "Here are some notes";
+            customer.LastActivityDate = lastActivityDate;
+
+            _customerService.Save(customer);
+
+            //// Act
+            var criteria = _searcher.CreateSearchCriteria(IndexTypes.Customer);
+            criteria.Field("loginName", "rusty");
+            var results = _searcher.Search(criteria);
+
+            var customerDisplay = results.FirstOrDefault().ToCustomerDisplay();
+
+            //// Assert
+            Assert.NotNull(customerDisplay);
+            Assert.AreEqual("rusty", customerDisplay.LoginName);
+            Assert.AreEqual("Rusty", customerDisplay.FirstName);
+            Assert.AreEqual("Swayne", customerDisplay.LastName);
+            Assert.AreEqual("test@test.com", customer.Email);
+            Assert.AreEqual("Here are some notes", customerDisplay.Notes);
+            Assert.AreEqual(lastActivityDate, customerDisplay.LastActivityDate);
+            Assert.IsFalse(customerDisplay.Addresses.Any());
+            Assert.IsFalse(customerDisplay.TaxExempt);
         }
 
         [TestFixtureTearDown]
