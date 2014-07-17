@@ -1,22 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Merchello.Core.Gateways;
-using Merchello.Core.Gateways.Payment;
-using Merchello.Core.Models;
-using Merchello.Core.Services;
-using Umbraco.Core;
-using Umbraco.Core.Cache;
-using Umbraco.Core.Logging;
-
-namespace Merchello.Plugin.Payments.AuthorizeNet.Provider
+﻿namespace Merchello.Plugin.Payments.AuthorizeNet.Provider
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Core.Gateways;
+    using Core.Gateways.Payment;
+    using Core.Models;
+    using Core.Services;
+    using Umbraco.Core.Cache;
+    using Umbraco.Core.Logging;
+
+    /// <summary>
+    /// The authorize net payment gateway provider.
+    /// </summary>
     [GatewayProviderActivation("C6BF6743-3565-401F-911A-33B68CACB11B", "AuthorizeNet Payment Provider", "AuthorizeNet Payment Provider")]
     [GatewayProviderEditor("AuthorizeNet configuration", "~/App_Plugins/Merchello.AuthorizeNet/editor.html")]
     public class AuthorizeNetPaymentGatewayProvider : PaymentGatewayProviderBase, IAuthorizeNetPaymentGatewayProvider
     {
         #region AvailableResources
 
+        /// <summary>
+        /// The available resources.
+        /// </summary>
         internal static readonly IEnumerable<IGatewayResource> AvailableResources = new List<IGatewayResource>()
         {
             new GatewayResource("CreditCard", "Credit Card")
@@ -24,6 +29,18 @@ namespace Merchello.Plugin.Payments.AuthorizeNet.Provider
 
         #endregion
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AuthorizeNetPaymentGatewayProvider"/> class.
+        /// </summary>
+        /// <param name="gatewayProviderService">
+        /// The gateway provider service.
+        /// </param>
+        /// <param name="gatewayProviderSettings">
+        /// The gateway provider settings.
+        /// </param>
+        /// <param name="runtimeCacheProvider">
+        /// The runtime cache provider.
+        /// </param>
         public AuthorizeNetPaymentGatewayProvider(IGatewayProviderService gatewayProviderService, IGatewayProviderSettings gatewayProviderSettings, IRuntimeCacheProvider runtimeCacheProvider) 
             : base(gatewayProviderService, gatewayProviderSettings, runtimeCacheProvider)
         {
@@ -32,7 +49,9 @@ namespace Merchello.Plugin.Payments.AuthorizeNet.Provider
         /// <summary>
         /// Returns a list of remaining available resources
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// The collection of <see cref="IGatewayResource"/>.
+        /// </returns>
         public override IEnumerable<IGatewayResource> ListResourcesOffered()
         {
             // PaymentMethods is created in PaymentGatewayProviderBase.  It is a list of all previously saved payment methods
@@ -42,10 +61,18 @@ namespace Merchello.Plugin.Payments.AuthorizeNet.Provider
         /// <summary>
         /// Creates a <see cref="IPaymentGatewayMethod"/>
         /// </summary>
-        /// <param name="gatewayResource"></param>
-        /// <param name="name">The name of the payment method</param>
-        /// <param name="description">The description of the payment method</param>
-        /// <returns>A <see cref="IPaymentGatewayMethod"/></returns>
+        /// <param name="gatewayResource">
+        /// The gateway Resource.
+        /// </param>
+        /// <param name="name">
+        /// The name of the payment method
+        /// </param>
+        /// <param name="description">
+        /// The description of the payment method
+        /// </param>
+        /// <returns>
+        /// A <see cref="IPaymentGatewayMethod"/>
+        /// </returns>
         public override IPaymentGatewayMethod CreatePaymentMethod(IGatewayResource gatewayResource, string name, string description)
         {
             // assert gateway resource is still available

@@ -449,6 +449,10 @@
         // Helper to add a variant to this product
         self.addBlankOption = function () {
 
+            if (self.productOptions == undefined) {
+                self.productOptions = [];
+            }
+
             var newOption = new merchello.Models.ProductOption();
             newOption.sortOrder = self.productOptions.length + 1;
 

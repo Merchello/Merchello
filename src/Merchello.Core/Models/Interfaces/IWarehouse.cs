@@ -13,66 +13,68 @@ namespace Merchello.Core.Models
     public interface IWarehouse : IEntity
     {            
         /// <summary>
-        /// The name for the Warehouse
+        /// Gets or sets the name for the Warehouse
         /// </summary>
         [DataMember]
-        string Name { get; set;}
+        string Name { get; set; }
             
         /// <summary>
-        /// The address1 for the Warehouse
+        /// Gets or sets the address1 for the Warehouse
         /// </summary>
         [DataMember]
-        string Address1 { get; set;}
+        string Address1 { get; set; }
             
         /// <summary>
-        /// The address2 for the Warehouse
+        /// Gets or sets the address2 for the Warehouse
         /// </summary>
         [DataMember]
-        string Address2 { get; set;}
+        string Address2 { get; set; }
             
         /// <summary>
-        /// The locality for the Warehouse
+        /// Gets or sets the locality for the Warehouse
         /// </summary>
         [DataMember]
-        string Locality { get; set;}
+        string Locality { get; set; }
             
         /// <summary>
-        /// The region for the Warehouse
+        /// Gets or sets the region for the Warehouse
         /// </summary>
         [DataMember]
-        string Region { get; set;}
+        string Region { get; set; }
             
         /// <summary>
-        /// The postalCode for the Warehouse
+        /// Gets or sets the postalCode for the Warehouse
         /// </summary>
         [DataMember]
-        string PostalCode { get; set;}
+        string PostalCode { get; set; }
 
         /// <summary>
-        /// The country code of the warehouse
+        /// Gets or sets the country code of the warehouse
         /// </summary>
         [DataMember]
         string CountryCode { get; set; }
 
         /// <summary>
-        /// The phone number of the warehouse
+        /// Gets or sets the phone number of the warehouse
         /// </summary>
         [DataMember]
         string Phone { get; set; }
 
         /// <summary>
-        /// The contact email address of the warhouse
+        /// Gets or sets the contact email address of the warehouse
         /// </summary>
         [DataMember]
         string Email { get; set; }
 
         /// <summary>
-        /// True/false indicating whether or not this warehouse is the primary (or default) warehouse
+        /// Gets or sets a value indicating whether or not this warehouse is the primary (or default) warehouse
         /// </summary>
         [DataMember]
         bool IsDefault { get; set; }
 
-
+        /// <summary>
+        /// Gets the warehouse catalogs.
+        /// </summary>
         IEnumerable<IWarehouseCatalog> WarehouseCatalogs { get; }
     }
 }

@@ -53,6 +53,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataServices\CustomerDataService.cs" />
+    <Compile Include="DataServices\ICustomerDataService.cs" />
     <Compile Include="DataServices\IInvoiceDataService.cs" />
     <Compile Include="DataServices\InvoiceDataService.cs" />
     <Compile Include="DataServices\IOrderDataService.cs" />
@@ -67,6 +69,7 @@
     <Compile Include="DataServices\ProductDataService.cs" />
     <Compile Include="IndexSetExtensions.cs" />
     <Compile Include="IndexTypes.cs" />
+    <Compile Include="Providers\CustomerIndexer.cs" />
     <Compile Include="Providers\OrderIndexer.cs" />
     <Compile Include="Providers\InvoiceIndexer.cs" />
     <Compile Include="Providers\ProductIndexer.cs" />

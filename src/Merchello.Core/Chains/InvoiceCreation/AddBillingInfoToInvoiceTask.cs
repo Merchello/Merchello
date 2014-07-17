@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Merchello.Core.Models;
 using Merchello.Core.Sales;
 using Umbraco.Core;
@@ -27,8 +28,8 @@ namespace Merchello.Core.Chains.InvoiceCreation
 
             value.SetBillingAddress(address);
 
-            return Attempt<IInvoice>.Succeed(value);
-            
+            return Attempt<IInvoice>.Succeed(value);            
+
         }
     }
 }

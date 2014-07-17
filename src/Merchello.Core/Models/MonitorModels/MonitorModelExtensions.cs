@@ -51,8 +51,12 @@ namespace Merchello.Core.Models.MonitorModels
         /// <summary>
         /// To the order shipped notification.
         /// </summary>
-        /// <param name="paymentResult">The payment result.</param>
-        /// <returns></returns>
+        /// <param name="paymentResult">
+        /// The payment result.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IPaymentResultMonitorModel"/>.
+        /// </returns>
         public static IPaymentResultMonitorModel ToOrderShippedNotification(this IPaymentResult paymentResult)
         {
             return paymentResult.ToOrderConfirmationNotification(new string[] { });
@@ -61,9 +65,12 @@ namespace Merchello.Core.Models.MonitorModels
         /// <summary>
         /// To the order shipped notification.
         /// </summary>
-        /// <param name="paymentResult">The payment result.</param>
-        /// <param name="contacts">The contacts.</param>
-        /// <returns></returns>
+        /// <param name="shipmentResult">
+        /// The shipment Result.
+        /// </param>
+        /// <param name="contacts">
+        /// The contacts.
+        /// </param>
         public static IShipmentResult ToOrderShippedNotification(this IShipmentResult shipmentResult, IEnumerable<string> contacts)
         {
             return new ShippingResultNotifyModel()

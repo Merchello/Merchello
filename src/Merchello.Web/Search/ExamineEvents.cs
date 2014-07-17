@@ -1,5 +1,7 @@
 ﻿namespace Merchello.Web.Search
 {
+    using System;
+    using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.Linq;    
@@ -18,6 +20,43 @@
     /// </summary>
     public class ExamineEvents : ApplicationEventHandler
     {
+
+        #region Indexers
+
+        /// <summary>
+        /// Gets the product indexer.
+        /// </summary>
+        private static ProductIndexer ProductIndexer
+        {
+            get { return (ProductIndexer)ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"]; }
+        }
+
+        /// <summary>
+        /// Gets the invoice indexer.
+        /// </summary>
+        private static InvoiceIndexer InvoiceIndexer
+        {
+            get { return (InvoiceIndexer)ExamineManager.Instance.IndexProviderCollection["MerchelloInvoiceIndexer"]; }
+        }
+
+        /// <summary>
+        /// Gets the order indexer.
+        /// </summary>
+        private static OrderIndexer OrderIndexer
+        {
+            get { return (OrderIndexer)ExamineManager.Instance.IndexProviderCollection["MerchelloOrderIndexer"]; }
+        }
+
+        /// <summary>
+        /// Gets the customer indexer.
+        /// </summary>
+        private static CustomerIndexer CustomerIndexer
+        {
+            get { return (CustomerIndexer)ExamineManager.Instance.IndexProviderCollection["MerchelloCustomerIndexer"]; }
+        }
+
+        #endregion
+
         /// <summary>
         /// The application started.
         /// </summary>
@@ -55,7 +94,127 @@
 
             OrderService.Saved += OrderServiceSaved;
             OrderService.Deleted += OrderServiceDeleted;
+
+            CustomerService.Created += CustomerServiceCreated;
+            CustomerService.Saved += CustomerServiceSaved;
+            CustomerService.Deleted += CustomerServiceDeleted;
+
+            CustomerAddressService.Saved += CustomerAddressServiceSaved;
+            CustomerAddressService.Deleted += CustomerAddressServiceDeleted;
         }
+
+        // TODO RSS - come up with another way of updating the customer index ... we should not need to requiry the customer here
+
+        /// <summary>
+        /// The customer address service deleted.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="deleteEventArgs">
+        /// The delete event args.
+        /// </param>
+        public void CustomerAddressServiceDeleted(ICustomerAddressService sender, DeleteEventArgs<ICustomerAddress> deleteEventArgs)
+        {
+            ReIndexCustomers(deleteEventArgs.DeletedEntities.Select(x => x.Key));
+        }
+
+        /// <summary>
+        /// The customer address service saved.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="saveEventArgs">
+        /// The save event args.
+        /// </param>
+        public void CustomerAddressServiceSaved(ICustomerAddressService sender, SaveEventArgs<ICustomerAddress> saveEventArgs)
+        {
+            this.ReIndexCustomers(saveEventArgs.SavedEntities.Select(x => x.Key));
+        }
+
+        /// <summary>
+        /// The re index customers.
+        /// </summary>
+        /// <param name="keys">
+        /// The keys.
+        /// </param>
+        private void ReIndexCustomers(IEnumerable<Guid> keys)
+        {
+            if (MerchelloContext.Current == null) return;
+            
+            var customers = MerchelloContext.Current.Services.CustomerService.GetByKeys(keys);
+
+            customers.ForEach(IndexCustomer);
+        }
+
+        #region Customers
+
+        /// <summary>
+        /// The customer service deleted.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="args">
+        /// The delete event args.
+        /// </param>
+        public void CustomerServiceDeleted(ICustomerService sender, DeleteEventArgs<ICustomer> args)
+        {
+            args.DeletedEntities.ForEach(DeleteCustomerFromIndex);
+        }
+
+        /// <summary>
+        /// The customer service saved.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="args">
+        /// The args.
+        /// </param>
+        public void CustomerServiceSaved(ICustomerService sender, SaveEventArgs<ICustomer> args)
+        {
+            args.SavedEntities.ForEach(IndexCustomer);
+        }
+
+        /// <summary>
+        /// The customer service created.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="args">
+        /// The args.
+        /// </param>
+        public void CustomerServiceCreated(ICustomerService sender, Core.Events.NewEventArgs<ICustomer> args)
+        {
+            IndexCustomer(args.Entity);
+        }
+
+        /// <summary>
+        /// Indexes a customer
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        public static void IndexCustomer(ICustomer customer)
+        {
+            if (customer != null && customer.HasIdentity) CustomerIndexer.AddCustomerToIndex(customer);
+        }
+
+        /// <summary>
+        /// The delete customer from index.
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        public static void DeleteCustomerFromIndex(ICustomer customer)
+        {
+            if (customer != null && customer.HasIdentity) CustomerIndexer.DeleteCustomerFromIndex(customer);
+        }
+
+#endregion
 
         #region Invoice
 
@@ -114,7 +273,13 @@
         /// <summary>
         /// Reindexes an invoice based on order saved
         /// </summary>
-        static void OrderServiceSaved(IOrderService sender, SaveEventArgs<IOrder> e)
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        public static void OrderServiceSaved(IOrderService sender, SaveEventArgs<IOrder> e)
         {
             e.SavedEntities.ForEach(IndexOrder);
         }
@@ -122,7 +287,13 @@
         /// <summary>
         /// Reindexes an invoice based on order deletion 
         /// </summary>
-        static void OrderServiceDeleted(IOrderService sender, DeleteEventArgs<IOrder> e)
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        public static void OrderServiceDeleted(IOrderService sender, DeleteEventArgs<IOrder> e)
         {
             e.DeletedEntities.ForEach(DeleteOrderFromIndex);
         }
@@ -130,14 +301,20 @@
         /// <summary>
         /// Indexes an order
         /// </summary>
+        /// <param name="order">
+        /// The order.
+        /// </param>
         private static void IndexOrder(IOrder order)
         {
-            if(order != null && order.HasIdentity) OrderIndexer.AddOrderToIndex(order);
+            if (order != null && order.HasIdentity) OrderIndexer.AddOrderToIndex(order);
         }
 
         /// <summary>
         /// Deletes an order from the index
         /// </summary>
+        /// <param name="order">
+        /// The order.
+        /// </param>
         private static void DeleteOrderFromIndex(IOrder order)
         {
             OrderIndexer.DeleteFromIndex(((Order)order).ExamineId.ToString(CultureInfo.InvariantCulture));
@@ -152,7 +329,7 @@
         /// </summary>
         static void ProductServiceCreated(IProductService sender, Core.Events.NewEventArgs<IProduct> e)
         {
-            if(e.Entity.HasIdentity) IndexProduct(e.Entity);
+            if (e.Entity.HasIdentity) IndexProduct(e.Entity);
         }
 
         /// <summary>
@@ -218,25 +395,5 @@
         }
 
 #endregion
-
-        #region Indexers
-
-
-        private static ProductIndexer ProductIndexer
-        {
-            get { return (ProductIndexer)ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"]; }
-        }
-
-        private static InvoiceIndexer InvoiceIndexer
-        {
-            get { return (InvoiceIndexer) ExamineManager.Instance.IndexProviderCollection["MerchelloInvoiceIndexer"]; }
-        }
-
-        private static OrderIndexer OrderIndexer
-        {
-            get { return (OrderIndexer) ExamineManager.Instance.IndexProviderCollection["MerchelloOrderIndexer"]; }
-        }
-
-        #endregion
     }
 }

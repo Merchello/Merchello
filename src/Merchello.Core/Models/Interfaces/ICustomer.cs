@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Core.Models
 {
+    using System.Collections.Generic;
     using System.Runtime.Serialization;
 
     /// <summary>
@@ -42,5 +43,17 @@
         /// </summary>
         [DataMember]
         bool TaxExempt { get; set; }
+
+        /// <summary>
+        /// Gets or sets the customer notes.
+        /// </summary>
+        [DataMember]
+        string Notes { get; set; }
+
+        /// <summary>
+        /// Gets the addresses.
+        /// </summary>
+        [DataMember]
+        IEnumerable<ICustomerAddress> Addresses { get; } 
     }
 }

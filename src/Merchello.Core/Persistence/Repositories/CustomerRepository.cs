@@ -22,6 +22,11 @@
     internal class CustomerRepository : MerchelloPetaPocoRepositoryBase<ICustomer>, ICustomerRepository
     {
         /// <summary>
+        /// The _customer address repository.
+        /// </summary>
+        private ICustomerAddressRepository _customerAddressRepository;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CustomerRepository"/> class.
         /// </summary>
         /// <param name="work">
@@ -30,9 +35,15 @@
         /// <param name="cache">
         /// The cache.
         /// </param>
-        public CustomerRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache) 
+        /// <param name="customerAddressRepository">
+        /// The customer Address Repository.
+        /// </param>
+        public CustomerRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ICustomerAddressRepository customerAddressRepository) 
             : base(work, cache)
         {
+            Mandate.ParameterNotNull(customerAddressRepository, "customerAddressRepository");
+
+            _customerAddressRepository = customerAddressRepository;
         }
 
         /// <summary>
@@ -47,17 +58,17 @@
         protected override ICustomer PerformGet(Guid key)
         {
             var sql = GetBaseQuery(false)
-                .Where(GetBaseWhereClause(), new {Key = key});
+                .Where(GetBaseWhereClause(), new { Key = key });
 
 
-            var dto = Database.Fetch<CustomerDto>(sql).FirstOrDefault();
+            var dto = Database.Fetch<CustomerDto, CustomerIndexDto>(sql).FirstOrDefault();
 
             if (dto == null)
                 return null;
 
             var factory = new CustomerFactory();
 
-            var customer = factory.BuildEntity(dto);
+            var customer = factory.BuildEntity(dto, _customerAddressRepository.GetByCustomerKey(key));
 
             return customer;
         }
@@ -83,10 +94,10 @@
             else
             {
                 var factory = new CustomerFactory();
-                var dtos = Database.Fetch<CustomerDto>(GetBaseQuery(false));
+                var dtos = Database.Fetch<CustomerDto, CustomerIndexDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {                    
-                    yield return factory.BuildEntity(dto);
+                    yield return factory.BuildEntity(dto, _customerAddressRepository.GetByCustomerKey(dto.Key));
                 }
             }
         }
@@ -104,7 +115,9 @@
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-               .From<CustomerDto>();
+                .From<CustomerDto>()
+                .InnerJoin<CustomerIndexDto>()
+                .On<CustomerDto, CustomerIndexDto>(left => left.Key, right => right.CustomerKey);
 
             return sql;
         }
@@ -133,6 +146,7 @@
                     "DELETE FROM merchItemCacheItem WHERE ItemCacheKey IN (SELECT pk FROM merchItemCache WHERE entityKey = @Key)",
                     "DELETE FROM merchItemCache WHERE entityKey = @Key",
                     "DELETE FROM merchCustomerAddress WHERE customerKey = @Key",
+                    "DELETE FROM merchCustomerIndex WHERE customerKey = @Key",
                     "DELETE FROM merchCustomer WHERE pk = @Key"
                 };
 
@@ -154,6 +168,10 @@
             
             Database.Insert(dto);
             entity.Key = dto.Key;
+
+            Database.Insert(dto.CustomerIndexDto);
+            ((Customer)entity).ExamineId = dto.CustomerIndexDto.Id;
+
             entity.ResetDirtyProperties();
         }
 
@@ -205,7 +223,7 @@
             var translator = new SqlTranslator<ICustomer>(sqlClause, query);
             var sql = translator.Translate();
 
-            var dtos = Database.Fetch<CustomerDto>(sql);
+            var dtos = Database.Fetch<CustomerDto, CustomerIndexDto>(sql);
 
             return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
         }

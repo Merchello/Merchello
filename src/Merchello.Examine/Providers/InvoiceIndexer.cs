@@ -1,70 +1,23 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Xml.Linq;
-using Examine;
-using Examine.LuceneEngine;
-using Examine.LuceneEngine.Config;
-using Merchello.Core;
-using Merchello.Core.Models;
-
-namespace Merchello.Examine.Providers
+﻿namespace Merchello.Examine.Providers
 {
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
+    using System.Xml.Linq;
+    using Core.Models;
+    using global::Examine;
+    using global::Examine.LuceneEngine;
+    using global::Examine.LuceneEngine.Config;
+
+    /// <summary>
+    /// The invoice indexer.
+    /// </summary>
     public class InvoiceIndexer : BaseMerchelloIndexer
     {
-        protected override void PerformIndexAll(string type)
-        {
-            if (!SupportedTypes.Contains(type)) return;
-
-            var invoices = DataService.InvoiceDataService.GetAll();
-            var invoicesArray = invoices as IInvoice[] ?? invoices.ToArray();
-
-            if (!invoicesArray.Any()) return;
-            var nodes = invoicesArray.Select(i => i.SerializeToXml().Root).ToList();
-
-            AddNodesToIndex(nodes, IndexTypes.Invoice);
-        }
-
-        public override void RebuildIndex()
-        {
-            DataService.LogService.AddVerboseLog(-1, "Rebuilding index");
-
-            EnsureIndex(true);
-
-            PerformIndexAll(IndexTypes.Invoice);
-            //base.RebuildIndex();
-        }
-
         /// <summary>
-        /// Adds the invoice to the index
+        /// The index field policies.
         /// </summary>
-        /// <param name="invoice"></param>
-        /// <remarks>For testing</remarks>
-        internal void AddInvoiceToIndex(IInvoice invoice)
-        {
-            var nodes = new List<XElement> {invoice.SerializeToXml().Root};
-            AddNodesToIndex(nodes, IndexTypes.Invoice);
-        }
-
-        /// <summary>
-        /// Removes the invoice from the index
-        /// </summary>
-        /// <param name="invoice"></param>
-        /// <remarks>For testing</remarks>
-        internal void DeleteInvoiceFromIndex(IInvoice invoice)
-        {            
-            DeleteFromIndex(((Invoice)invoice).ExamineId.ToString(CultureInfo.InvariantCulture));
-        }
-
-
-
-        protected override IEnumerable<string> SupportedTypes
-        {
-            get { return new[] { IndexTypes.Invoice }; }
-        }
-
-        internal static readonly List<StaticField> IndexFieldPolicies
-            = new List<StaticField>()
+        internal static readonly List<StaticField> IndexFieldPolicies = new List<StaticField>()
             {
                 new StaticField("invoiceKey", FieldIndexTypes.ANALYZED, false, string.Empty),
                 new StaticField("customerKey", FieldIndexTypes.ANALYZED, false, string.Empty),
@@ -94,15 +47,79 @@ namespace Merchello.Examine.Providers
                 new StaticField("allDocs", FieldIndexTypes.ANALYZED, false, string.Empty)
             };
 
+        /// <summary>
+        /// Gets the supported types.
+        /// </summary>
+        protected override IEnumerable<string> SupportedTypes
+        {
+            get { return new[] { IndexTypes.Invoice }; }
+        }
+
+
+        /// <summary>
+        /// Rebuilds the invoice index
+        /// </summary>
+        public override void RebuildIndex()
+        {
+            DataService.LogService.AddVerboseLog(-1, "Rebuilding the invoice index");
+
+            EnsureIndex(true);
+
+            PerformIndexAll(IndexTypes.Invoice);
+        }
+
+        /// <summary>
+        /// Adds the invoice to the index
+        /// </summary>
+        /// <param name="invoice">The <see cref="IInvoice"/> to be indexed</param>
+        /// <remarks>For testing</remarks>
+        internal void AddInvoiceToIndex(IInvoice invoice)
+        {
+            var nodes = new List<XElement> {invoice.SerializeToXml().Root};
+            AddNodesToIndex(nodes, IndexTypes.Invoice);
+        }
+
+        /// <summary>
+        /// Removes the invoice from the index
+        /// </summary>
+        /// <param name="invoice">The <see cref="IInvoice"/> to be removed from the index</param>
+        /// <remarks>For testing</remarks>
+        internal void DeleteInvoiceFromIndex(IInvoice invoice)
+        {            
+            DeleteFromIndex(((Invoice)invoice).ExamineId.ToString(CultureInfo.InvariantCulture));
+        }
+
+        /// <summary>
+        /// The perform index all.
+        /// </summary>
+        /// <param name="type">
+        /// The type.
+        /// </param>
+        protected override void PerformIndexAll(string type)
+        {
+            if (!SupportedTypes.Contains(type)) return;
+
+            var invoices = DataService.InvoiceDataService.GetAll();
+            var invoicesArray = invoices as IInvoice[] ?? invoices.ToArray();
+
+            if (!invoicesArray.Any()) return;
+            var nodes = invoicesArray.Select(i => i.SerializeToXml().Root).ToList();
+
+            AddNodesToIndex(nodes, IndexTypes.Invoice);
+        }
 
         /// <summary>
         /// Creates an IIndexCriteria object based on the indexSet passed in and our DataService
         /// </summary>
-        /// <param name="indexSet"></param>
-        /// <returns></returns>
+        /// <param name="indexSet">
+        /// The index Set.
+        /// </param>
         /// <remarks>
         /// If we cannot initialize we will pass back empty indexer data since we cannot read from the database
         /// </remarks>
+        /// <returns>
+        /// The <see cref="IIndexCriteria"/>.
+        /// </returns>
         protected override IIndexCriteria GetIndexerData(IndexSet indexSet)
         {
             return indexSet.ToIndexCriteria(DataService.InvoiceDataService.GetIndexFieldNames(), IndexFieldPolicies);
@@ -111,13 +128,16 @@ namespace Merchello.Examine.Providers
         /// <summary>
         /// return the index policy for the field name passed in, if not found, return normal
         /// </summary>
-        /// <param name="fieldName"></param>
-        /// <returns></returns>
+        /// <param name="fieldName">
+        /// The field Name.
+        /// </param>
+        /// <returns>
+        /// The <see cref="FieldIndexTypes"/>.
+        /// </returns>
         protected override FieldIndexTypes GetPolicy(string fieldName)
         {
             var def = IndexFieldPolicies.Where(x => x.Name == fieldName).ToArray();
-            return (def.Any() == false ? FieldIndexTypes.ANALYZED : def.Single().IndexType);
+            return def.Any() == false ? FieldIndexTypes.ANALYZED : def.Single().IndexType;
         }
-
     }
 }

@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Core.Models
 {
     using System;
+    using System.Collections.Generic;
     using System.Reflection;
     using System.Runtime.Serialization;
 
@@ -39,6 +40,16 @@
         private static readonly PropertyInfo TaxExemptSelector = ExpressionHelper.GetPropertyInfo<Customer, bool>(x => x.TaxExempt);
 
         /// <summary>
+        /// The notes selector.
+        /// </summary>
+        private static readonly PropertyInfo NotesSelector = ExpressionHelper.GetPropertyInfo<Customer, string>(x => x.Notes);
+
+        /// <summary>
+        /// The address selector.
+        /// </summary>
+        private static readonly PropertyInfo AddressSelector = ExpressionHelper.GetPropertyInfo<Customer, IEnumerable<ICustomerAddress>>(x => x.Addresses);
+        
+        /// <summary>
         /// The first name.
         /// </summary>
         private string _firstName;
@@ -63,6 +74,21 @@
         /// </summary>
         private bool _taxExempt;
 
+        /// <summary>
+        /// The _notes.
+        /// </summary>
+        private string _notes;
+
+        /// <summary>
+        /// The examine id.
+        /// </summary>
+        private int _examineId = 1;
+
+        /// <summary>
+        /// The addresses.
+        /// </summary>
+        private IEnumerable<ICustomerAddress> _addresses; 
+
         #endregion
 
         /// <summary>
@@ -76,6 +102,8 @@
             Mandate.ParameterNotNullOrEmpty(loginName, "loginName");
 
             _loginName = loginName;
+
+            _addresses = new List<ICustomerAddress>();
         }
 
         /// <summary>
@@ -205,6 +233,64 @@
                     _taxExempt,
                     TaxExemptSelector);
             }
+        }
+
+        /// <summary>
+        /// Gets or sets the notes.
+        /// </summary>
+        [DataMember]
+        public string Notes
+        {
+            get
+            {
+                return _notes;
+            }
+
+            set
+            {
+                SetPropertyValueAndDetectChanges(
+                    o =>
+                    {
+                        _notes = value;
+                        return _notes;
+                    },
+                    _notes,
+                    NotesSelector);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the collection of addresses.
+        /// </summary>
+        [DataMember]
+        public IEnumerable<ICustomerAddress> Addresses
+        {
+            get
+            {
+                return _addresses;
+            }
+
+            internal set
+            {
+                SetPropertyValueAndDetectChanges(
+                    o =>
+                    {
+                        _addresses = value;
+                        return _addresses;
+                    },
+                    _addresses,
+                    AddressSelector);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the examine id.
+        /// </summary>
+        [IgnoreDataMember]
+        internal int ExamineId
+        {
+            get { return _examineId; }
+            set { _examineId = value; }
         }
     }
 }

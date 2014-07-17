@@ -1,8 +1,7 @@
-﻿using System.Linq;
-
-namespace Merchello.Core.Gateways.Notification.Smtp
+﻿namespace Merchello.Core.Gateways.Notification.Smtp
 {
     using System;
+    using System.Linq;
     using System.Net.Mail;
     using System.Threading.Tasks;
     using Models;

@@ -22,7 +22,7 @@
         /// Note the entity key is not the same as the primary key (or key).
         /// This is because of the implementation / mapping between an anonymous customer and and customer
         /// </remarks>
-        internal static string CostumerCacheKey(Guid entityKey)
+        internal static string CustomerCacheKey(Guid entityKey)
         {
             return string.Format("merchello.customer.{0}", entityKey);   
         }

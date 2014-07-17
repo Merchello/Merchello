@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using Merchello.Core.Models;
-using Umbraco.Core.Services;
-
-namespace Merchello.Core.Services
+﻿namespace Merchello.Core.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using Models;
+    using Umbraco.Core.Services;
+
     /// <summary>
     /// Defines the AppliedPaymentService
     /// </summary>
@@ -70,6 +70,5 @@ namespace Merchello.Core.Services
         /// <param name="invoiceKey">The invoice key</param>
         /// <returns>A collection <see cref="IAppliedPayment"/></returns>
         IEnumerable<IAppliedPayment> GetAppliedPaymentsByInvoiceKey(Guid invoiceKey);
-
     }
 }

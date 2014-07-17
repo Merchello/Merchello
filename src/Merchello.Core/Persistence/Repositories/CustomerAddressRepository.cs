@@ -37,6 +37,22 @@
         }
 
         /// <summary>
+        /// Gets a collection of <see cref="ICustomerAddress"/>.
+        /// </summary>
+        /// <param name="customerKey">
+        /// The customer key.
+        /// </param>
+        /// <returns>
+        /// The collection of <see cref="ICustomerAddress"/>.
+        /// </returns>
+        public IEnumerable<ICustomerAddress> GetByCustomerKey(Guid customerKey)
+        {
+            var query = Querying.Query<ICustomerAddress>.Builder.Where(x => x.CustomerKey == customerKey);
+
+            return GetByQuery(query);
+        }
+
+        /// <summary>
         /// The perform get.
         /// </summary>
         /// <param name="key">
@@ -104,7 +120,7 @@
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-               .From("merchAddress");
+               .From("merchCustomerAddress");
 
             return sql;
         }
@@ -117,7 +133,7 @@
         /// </returns>
         protected override string GetBaseWhereClause()
         {
-            return "merchAddress.pk = @Key";
+            return "merchCustomerAddress.pk = @Key";
         }
 
         /// <summary>
@@ -130,7 +146,7 @@
         {
             var list = new List<string>
                 {
-                    "DELETE FROM merchAddress WHERE pk = @Key",
+                    "DELETE FROM merchCustomerAddress WHERE pk = @Key",
                 };
 
             return list;
@@ -150,6 +166,7 @@
             var dto = factory.BuildDto(entity);
 
             Database.Insert(dto);
+            entity.Key = dto.Key;
             entity.ResetDirtyProperties();
         }
 

@@ -93,6 +93,7 @@
     <Compile Include="Gateways\Notification\Triggering\OrderShippedTrigger.cs" />
     <Compile Include="Gateways\Notification\Triggering\PartialOrderShippedTrigger.cs" />
     <Compile Include="Models\AddressExtensions.cs" />
+    <Compile Include="Models\CustomerExtensions.cs" />
     <Compile Include="Models\MonitorModels\INotifyModel.cs" />
     <Compile Include="Models\MonitorModels\MonitorModelExtensions.cs" />
     <Compile Include="Models\MonitorModels\NotifyModelBase.cs" />
@@ -104,6 +105,7 @@
     <Compile Include="Gateways\Notification\Triggering\NotificationTriggerBase.cs" />
     <Compile Include="Gateways\Notification\Triggering\OrderConfirmationTrigger.cs" />
     <Compile Include="Models\MonitorModels\ShippingResultNotifyModel.cs" />
+    <Compile Include="Models\Rdbms\CustomerIndexDto.cs" />
     <Compile Include="Notification.cs" />
     <Compile Include="NotificationExtensions.cs" />
     <Compile Include="Observation\IMonitor.cs" />
@@ -184,7 +186,7 @@
     <Compile Include="Gateways\Taxation\TaxCalculationResult.cs" />
     <Compile Include="Gateways\Taxation\TaxableLineItemVisitor.cs" />
     <Compile Include="Models\Currency.cs" />
-    <Compile Include="Models\Interfaces\IExtendedDataEntity.cs" />
+    <Compile Include="Models\Interfaces\IHasExtendedData.cs" />
     <Compile Include="Models\Interfaces\IGatewayProviderMethod.cs" />
     <Compile Include="Models\Interfaces\ICurrency.cs" />
     <Compile Include="Models\Interfaces\INotificationMethod.cs" />
@@ -707,8 +709,10 @@
     <Compile Include="SerializationHelper.cs" />
     <Compile Include="Services\AnonymousCustomerService.cs" />
     <Compile Include="Services\AppliedPaymentService.cs" />
+    <Compile Include="Services\CustomerAddressService.cs" />
     <Compile Include="Services\Interfaces\IAnonymousCustomerService.cs" />
     <Compile Include="Services\Interfaces\IAppliedPaymentService.cs" />
+    <Compile Include="Services\Interfaces\ICustomerAddressService.cs" />
     <Compile Include="Services\Interfaces\INotificationMessageService.cs" />
     <Compile Include="Services\Interfaces\INotificationMethodService.cs" />
     <Compile Include="Services\Interfaces\IOrderService.cs" />
