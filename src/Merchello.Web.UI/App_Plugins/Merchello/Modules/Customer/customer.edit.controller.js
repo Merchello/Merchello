@@ -58,6 +58,7 @@
         $scope.saveCustomer = function() {
             notificationsService.info("Saving...", "");
             var promiseSaveCustomer;
+            $scope.customer.loginName = $scope.customer.email;
             if ($routeParams.id === "new") {
                 promiseSaveCustomer = merchelloCustomerService.AddCustomer($scope.customer);
             } else {

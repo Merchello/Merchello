@@ -4,7 +4,9 @@
     <umb-panel val-show-validation>
         <umb-header>
             <div class="span4">
-                <umb-content-name ng-model="customer.loginName" placeholder="[Customer Name]"></umb-content-name>
+                <div class="umb-headline-editor-wrapper">
+                    <h1 class="umb-headline">{{customer.firstName}} {{customer.lastName}}</h1>
+                </div>
             </div>
             <div class="span8">
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
@@ -27,7 +29,7 @@
                             <input name="lastName" type="text" class="span5" data-ng-model="customer.lastName" />
                             <label for="tel">Phone Number:</label>
                             <input name="tel" type="text" class="span5" />
-                            <label for="email">Email Address:</label>
+                            <label for="email">Login/Email Address:</label>
                             <input name="email" type="email" class="span5" data-ng-model="customer.email" />
                         </div>
                         <div class="span5 gravatar">

@@ -59,6 +59,7 @@
 		'~/App_Plugins/Merchello/Modules/Customer/customer.list.controller.js',
 		'~/App_Plugins/Merchello/Modules/Customer/customer.view.controller.js',
 		'~/App_Plugins/Merchello/Modules/Customer/merchello.customer.service.js',
+		'~/App_Plugins/Merchello/Modules/Customer/merchello.gravatar.service.js',
 		'~/App_Plugins/Merchello/Modules/Order/merchello.invoice.service.js',
 		'~/App_Plugins/Merchello/Modules/Order/merchello.order.service.js',
 		'~/App_Plugins/Merchello/Modules/Order/merchello.payment.service.js',
