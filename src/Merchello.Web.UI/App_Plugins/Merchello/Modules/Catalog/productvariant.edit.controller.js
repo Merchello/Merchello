@@ -161,15 +161,13 @@
 
         /**
          * @ngdoc method
-         * @name deleteVariant
+         * @name deleteVariantDialogConfirmation
          * @function
          * 
          * @description
          * Called when the Delete Variant button is pressed.
-         *
-         * TODO: Need to call a confirmation dialog for this.
          */
-        $scope.deleteVariant = function () {
+        $scope.deleteVariantDialogConfirmation = function () {
             var promiseDel = merchelloProductVariantService.deleteVariant($scope.productVariant.key);
 
             promiseDel.then(function () {
@@ -182,6 +180,23 @@
             });
         };
 
+        /**
+         * @ngdoc method
+         * @name deleteVariantDialog
+         * @function
+         * 
+         * @description
+         * Opens the delete confirmation dialog via the Umbraco dialogService.
+         */
+        $scope.deleteVariantDialog = function () {
+
+            dialogService.open({
+                template: '/App_Plugins/Merchello/Common/Js/Dialogs/deleteconfirmation.html',
+                show: true,
+                callback: $scope.productVariant,
+                dialogData: $scope.productVariant
+            });
+        }
     };
 
     angular.module("umbraco").controller("Merchello.Editors.ProductVariant.EditController", ['$scope', '$routeParams', '$location', '$q', 'assetsService', 'notificationsService', 'dialogService', 'angularHelper', 'serverValidationManager', 'merchelloProductService', 'merchelloProductVariantService', 'merchelloWarehouseService', 'merchelloSettingsService', merchello.Controllers.ProductVariantEditController]);

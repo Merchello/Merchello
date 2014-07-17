@@ -5,7 +5,7 @@
         <!-- ACTION: Add Shipping Provider to Country -->
         <a data-ng-click="addEditShippingProviderDialogOpen(country)" class="btn btn-primary merchello-button-right"><i class="icon-add"></i> <localize key="merchelloShippingProvider_provider" /></a>
         <!-- ACTION: Delete Country -->
-        <a data-ng-click="deleteCountry(country)" class="btn btn-warning"><i class="icon-trash"></i></a>
+        <a data-ng-click="deleteCountryDialog(country)" class="btn btn-warning"><i class="icon-trash"></i></a>
     </div>
     <!-- Shipping Provider -->
     <div data-ng-repeat="shippingGatewayProvider in country.shippingGatewayProviders" class="merchello-shipping-gateway-provider clear">
@@ -26,7 +26,7 @@
                             <!-- ACTION: Edit Shipping Method -->
                             <a data-ng-click="addEditShippingMethodDialogOpen(country, shippingGatewayProvider, shipMethod)" class="btn btn-default btn-xs btn-mini"><i class="icon-edit"></i></a>
                             <!-- ACTION: Remove Shipping Method -->
-                            <a data-ng-click="removeMethodFromProvider(shippingGatewayProvider, shipMethod, country)" class="btn btn-warning btn-xs btn-mini"><i class="icon-trash"></i></a>
+                            <a data-ng-click="removeMethodFromProviderDialog(shippingGatewayProvider, shipMethod, country)" class="btn btn-warning btn-xs btn-mini"><i class="icon-trash"></i></a>
                         </div>
                     </td>
                 </tr>

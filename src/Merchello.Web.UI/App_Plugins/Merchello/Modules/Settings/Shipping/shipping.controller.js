@@ -373,9 +373,8 @@
          * Calls the shipping service to delete the country passed in via the country parameter.
          * When complete, the countries are reloaded from the api to get the latest from the database.
          *
-         * TODO: make a dialog to confirm delete.  Can a country with methods be deleted?
          */
-		$scope.deleteCountry = function (country) {
+		$scope.deleteCountryDialogConfirm = function (country) {
 
 		    var promiseDelete = merchelloCatalogShippingService.deleteShipCountry(country.key);
 		    promiseDelete.then(function () {
@@ -393,25 +392,45 @@
 
 	    /**
          * @ngdoc method
-         * @name removeFixedRateMethodFromProvider
+         * @name removeMethodFromProviderDialogConfirmation
          * @function
          * 
          * @description
          * Calls the fixed rate shipping service to delete the method passed in via the method parameter.
-         *
-         * TODO: make a dialog to confirm delete?
          */
-		$scope.removeMethodFromProvider = function (provider, method, country) {
-		    var promiseDelete = merchelloCatalogShippingService.deleteShipMethod(method);
+		$scope.removeMethodFromProviderDialogConfirmation = function (dialogData) {
+		    var promiseDelete = merchelloCatalogShippingService.deleteShipMethod(dialogData.method);
 		    promiseDelete.then(function () {
 		        provider.shipMethods = [];
-		        $scope.loadProviderMethods(provider, country);
+		        $scope.loadProviderMethods(dialogData.provider, dialogData.country);
 		        notificationsService.success("Shipping Method Deleted");
 		    }, function (reason) {
 		        notificationsService.error("Shipping Method Delete Failed", reason.message);
 		    });
 		};
+		
 
+	    /**
+         * @ngdoc method
+         * @name removeMethodFromProviderDialog
+         * @function
+         * 
+         * @description
+         * Opens the delete confirmation dialog via the Umbraco dialogService.
+         */
+		$scope.removeMethodFromProviderDialog = function (shippingGatewayProvider, shipMethod, country) {
+		    var dialogData = {};
+		    dialogData.name = shipMethod.name;
+		    dialogData.shippingGatewayProvider = shippingGatewayProvider;
+		    dialogData.shipMethod = shipMethod;
+		    dialogData.country = country;
+		    dialogService.open({
+		        template: '/App_Plugins/Merchello/Common/Js/Dialogs/deleteconfirmation.html',
+		        show: true,
+		        callback: $scope.removeMethodFromProviderDialogConfirmation,
+		        dialogData: dialogData
+		    });
+		}
 	    //--------------------------------------------------------------------------------------
 	    // Dialog methods
 	    //--------------------------------------------------------------------------------------
@@ -434,6 +453,25 @@
 		        dialogData: dialogData
 		    });
 		};
+
+	    /**
+         * @ngdoc method
+         * @name addCountry
+         * @function
+         * 
+         * @description
+         * Opens the add country dialog via the Umbraco dialogService.
+         */
+		$scope.deleteCountryDialog = function (country) {
+		    var dialogData = {};
+		    dialogData = country;
+		    dialogService.open({
+		        template: '/App_Plugins/Merchello/Common/Js/Dialogs/deleteconfirmation.html',
+		        show: true,
+		        callback: $scope.deleteCountryDialogConfirm,
+		        dialogData: dialogData
+		    });
+		}
 
 	    /**
          * @ngdoc method
