@@ -1,11 +1,23 @@
-﻿using Merchello.Core.Models;
-using Merchello.Core.Models.Interfaces;
-using Merchello.Core.Models.Rdbms;
-
-namespace Merchello.Core.Persistence.Factories
+﻿namespace Merchello.Core.Persistence.Factories
 {
+    using Merchello.Core.Models;
+    using Merchello.Core.Models.Interfaces;
+    using Merchello.Core.Models.Rdbms;
+
+    /// <summary>
+    /// The warehouse catalog factory.
+    /// </summary>
     internal class WarehouseCatalogFactory : IEntityFactory<IWarehouseCatalog, WarehouseCatalogDto>
     {
+        /// <summary>
+        /// The build entity.
+        /// </summary>
+        /// <param name="dto">
+        /// The dto.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IWarehouseCatalog"/>.
+        /// </returns>
         public IWarehouseCatalog BuildEntity(WarehouseCatalogDto dto)
         {            
             var entity = new WarehouseCatalog(dto.WarehouseKey)
@@ -20,6 +32,15 @@ namespace Merchello.Core.Persistence.Factories
             return entity;
         }
 
+        /// <summary>
+        /// The build dto.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
+        /// <returns>
+        /// The <see cref="WarehouseCatalogDto"/>.
+        /// </returns>
         public WarehouseCatalogDto BuildDto(IWarehouseCatalog entity)
         {           
             return new WarehouseCatalogDto()
@@ -31,7 +52,6 @@ namespace Merchello.Core.Persistence.Factories
                 UpdateDate = entity.UpdateDate,
                 CreateDate = entity.CreateDate
             };
-
         }
     }
 }
