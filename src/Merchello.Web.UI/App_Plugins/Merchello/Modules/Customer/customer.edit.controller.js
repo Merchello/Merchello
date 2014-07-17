@@ -8,7 +8,7 @@
      * @description
      * The controller for the customers edit page
      */
-    controllers.CustomerEditController = function ($scope, $routeParams, $location, merchelloCustomerService, notificationsService) {
+    controllers.CustomerEditController = function ($scope, $routeParams, $location, merchelloCustomerService, merchelloSettingsService, notificationsService) {
 
         /**
          * @ngdoc method
@@ -19,6 +19,7 @@
          * Inititalizes the scope.
          */
         $scope.init = function () {
+
             $scope.setVariables();
             $scope.loadCustomer();
         };
@@ -36,8 +37,8 @@
                 $scope.loaded = true;
             } else {
                 var customerKey = $routeParams.id;
-                var loadCustomerMethod = merchelloCustomerService.GetCustomer(customerKey);
-                loadCustomerMethod.then(function(customerResponse) {
+                var promiseLoadCustomer = merchelloCustomerService.GetCustomer(customerKey);
+                promiseLoadCustomer.then(function (customerResponse) {
                     $scope.customer = new merchello.Models.Customer(customerResponse);
                     $scope.loaded = true;
                 }, function(reason) {
@@ -46,39 +47,23 @@
             }
         };
 
-
-        $scope.loadRouteParams = function() {
-            console.info($routeParams.create);
-            if ($routeParams.create) {
-                $scope.loaded = true;
-                $scope.preValuesLoaded = true;
-                $scope.customer = {};
-                $(".content-column-body").css('background-image', 'none');
-            } else {
-                $scope.loaded = true;
-                $scope.preValuesLoaded = true;
-                $scope.customer = {};
-                $(".content-column-body").css('background-image', 'none');
-            }
-        };
-
-
+        /**
+         * @ngdoc method
+         * @name saveCustomer
+         * @function
+         * 
+         * @description
+         * Save the customer.
+         */
         $scope.saveCustomer = function () {
-
             notificationsService.info("Saving...", "");
-
-            //we are editing so get the product from the server
-            //var promise = merchelloProductService.save($scope.product);
-
-            //promise.then(function (product) {
-
-            //    notificationsService.success("Order Saved", "");
-
-            //}, function (reason) {
-
-            //    notificationsService.error("Order Save Failed", reason.message);
-
-            //});
+            var promiseSaveCustomer = merchelloCustomerService.SaveCustomer($scope.customer);
+            promiseSaveCustomer.then(function(customerResponse) {
+                $scope.customer = new merchello.Models.Customer(customerResponse);
+                notificationsService.success("Customer Saved", "");
+            }, function(reason) {
+                notificationsService.error("Customer Save Failed", reason.message);
+            });
         };
 
         /**
@@ -99,7 +84,7 @@
     }
 
 
-    angular.module("umbraco").controller("Merchello.Editors.Customer.EditController", ['$scope', '$routeParams', '$location', 'merchelloCustomerService', 'notificationsService', merchello.Controllers.CustomerEditController]);
+    angular.module("umbraco").controller("Merchello.Editors.Customer.EditController", ['$scope', '$routeParams', '$location', 'merchelloCustomerService', 'merchelloSettingsService', 'notificationsService', merchello.Controllers.CustomerEditController]);
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));
 
