@@ -1,32 +1,47 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Merchello.Core.Models;
-using Merchello.Core.Models.TypeFields;
-using Umbraco.Core.Services;
-
-namespace Merchello.Core.Services
+﻿namespace Merchello.Core.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using Models;
+    using Umbraco.Core.Services;
+
     /// <summary>
     /// Defines the ProductService, which provides access to operations involving <see cref="IProduct"/>
     /// </summary>
     public interface IProductService : IService
     {
-
         /// <summary>
         /// Creates a Product without saving it to the database
         /// </summary>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="sku">
+        /// The sku.
+        /// </param>
+        /// <param name="price">
+        /// The price.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProduct"/>.
+        /// </returns>
         IProduct CreateProduct(string name, string sku, decimal price);
 
         /// <summary>
         /// Creates a Product and saves it to the database
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="sku"></param>
-        /// <param name="price"></param>
-        /// <returns></returns>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="sku">
+        /// The sku.
+        /// </param>
+        /// <param name="price">
+        /// The price.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProduct"/>.
+        /// </returns>
         IProduct CreateProductWithKey(string name, string sku, decimal price);
 
         /// <summary>
@@ -72,15 +87,26 @@ namespace Merchello.Core.Services
         IEnumerable<IProduct> GetByKeys(IEnumerable<Guid> keys);
 
         /// <summary>
+        /// Gets a collection of all <see cref="IProduct"/>.
+        /// </summary>
+        /// <returns>
+        /// The collection of all <see cref="IProduct"/>.
+        /// </returns>
+        IEnumerable<IProduct> GetAll(); 
+
+        /// <summary>
         /// Returns the count of all products
         /// </summary>
+        /// <returns>
+        /// The count as an <see cref="int"/>.
+        /// </returns>
         int ProductsCount();
 
         /// <summary>
         /// True/false indicating whether or not a sku is already exists in the database
         /// </summary>
         /// <param name="sku">The sku to be tested</param>
-        /// <returns></returns>
+        /// <returns>A value indication whether or not the SKU exists</returns>
         bool SkuExists(string sku);
     }
 }

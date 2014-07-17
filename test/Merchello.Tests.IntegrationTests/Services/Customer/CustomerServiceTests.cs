@@ -259,5 +259,31 @@ namespace Merchello.Tests.IntegrationTests.Services.Customer
             Assert.NotNull(assertDefaultBilling, "Assert Default billing was null");
             Assert.AreEqual(address2.Key, assertDefaultBilling.Key, "Address 2 was not the default address");
         }
+
+        /// <summary>
+        /// Test confirms that a customer can be retrieved by a login name when the login name is an email address
+        /// </summary>
+        /// <remarks>
+        /// http://issues.merchello.com/youtrack/issue/M-302
+        /// </remarks>
+        [Test]
+        public void Can_Get_A_Customer_By_Login_When_LoginName_Is_An_Email_Address()
+        {
+            //// Arrange
+            const string email = "test@test.com";
+
+            var arrange = _customerService.CreateCustomerWithKey(
+                email,
+                "firstName",
+                "lastName",
+                email);
+
+            //// Act
+            var customer = _customerService.GetByLoginName(email);
+
+            //// Assert
+            Assert.NotNull(customer);
+
+        }
     }
 }
