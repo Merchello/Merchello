@@ -37,9 +37,29 @@
         }
 
         /// <summary>
+        /// Gets the count of tasks - Used for testing
+        /// </summary>
+        internal int TaskCount
+        {
+            get { return TaskHandlers.Count(); }
+        }
+
+        /// <summary>
+        /// Gets the constructor argument values.
+        /// </summary>
+        protected override IEnumerable<object> ConstructorArgumentValues
+        {
+            get
+            {
+                return _constructorParameters ??
+                    (_constructorParameters = new List<object>(new object[] { _salePreparation }));
+            }
+        }
+
+        /// <summary>
         /// Builds the invoice
         /// </summary>
-        /// <returns>Attempt{IInvoice}</returns>
+        /// <returns>The Attempt{IInvoice} representing the successful creation of an invoice</returns>
         public override Attempt<IInvoice> Build()
         {
             var unpaid =
@@ -48,8 +68,13 @@
             if (unpaid == null)
                 return Attempt<IInvoice>.Fail(new NullReferenceException("Unpaid invoice status query returned null"));
 
-            var attempt = (TaskHandlers.Any())
-                       ? TaskHandlers.First().Execute(new Invoice(unpaid) { VersionKey = _salePreparation.ItemCache.VersionKey })
+            var invoice = new Invoice(unpaid) { VersionKey = _salePreparation.ItemCache.VersionKey };
+
+            // Associate a customer with the invoice if it is a known customer.
+            if (!_salePreparation.Customer.IsAnonymous) invoice.CustomerKey = _salePreparation.Customer.Key;
+
+            var attempt = TaskHandlers.Any()
+                       ? TaskHandlers.First().Execute(invoice)
                        : Attempt<IInvoice>.Fail(new InvalidOperationException("The configuration Chain Task List could not be instantiated"));
 
             if (!attempt.Success) return attempt;
@@ -58,24 +83,6 @@
             attempt.Result.Total = attempt.Result.Items.Sum(x => x.TotalPrice);
 
             return attempt;
-        }
-
-
-        protected override IEnumerable<object> ConstructorArgumentValues
-        {
-            get
-            {
-                return _constructorParameters ?? 
-                    (_constructorParameters =  new List<object>(new object[] {_salePreparation} ));
-            }
-        }
-        
-        /// <summary>
-        /// Used for testing
-        /// </summary>
-        internal int TaskCount
-        {
-            get { return TaskHandlers.Count(); }
         }
     }
 }

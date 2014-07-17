@@ -16,11 +16,8 @@
 		}
 	]
 	,
-	javascript: [
-		'~/App_Plugins/Merchello/lib/bootstrap/js/bootstrap.min.js',                  
+	javascript: [                 
 		'~/App_Plugins/Merchello/lib/JsonTree/jsontree.js',    
-        '~/App_Plugins/Merchello/lib/tinymce/bower_components/tinymce/tinymce.min.js',
-        '~/App_Plugins/Merchello/lib/tinymce/bower_components/angular-ui-tinymce/src/tinymce.js',
 		'~/App_Plugins/Merchello/Common/Js/merchello.namespaces.js',
 		'~/App_Plugins/Merchello/Common/Js/startfrom.filter.js',
 		'~/App_Plugins/Merchello/Common/Js/greaterthan.filter.js',
@@ -75,6 +72,7 @@
 		'~/App_Plugins/Merchello/Modules/Report/reports.taxesByDestination.controller.js',
         '~/App_Plugins/Merchello/Modules/Settings/Shipping/merchello.catalogshipping.service.js',
         '~/App_Plugins/Merchello/Modules/Settings/Shipping/merchello.catalogfixedrateshipping.service.js',
+        '~/App_Plugins/Merchello/Modules/Settings/Shipping/merchello.fixedrateshipping.service.js',
 		'~/App_Plugins/Merchello/Modules/Settings/Shipping/Directives/shipping-helper-directives.js',
 		'~/App_Plugins/Merchello/Modules/Settings/Shipping/Directives/shipping-history-directives.js',
 		'~/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shippingprovider.controller.js',
@@ -110,7 +108,8 @@
 		'~/App_Plugins/Merchello/Modules/Settings/Vendors/vendors.controller.js',
 		'~/App_Plugins/Merchello/PropertyEditors/ProductPicker/Js/merchelloproductdialog.controller.js',
 		'~/App_Plugins/Merchello/PropertyEditors/ProductPicker/Js/merchelloproductselector.controller.js',
-		'~/App_Plugins/Merchello/PropertyEditors/ProductEditor/Js/merchelloproducteditor.controller.js'
+		'~/App_Plugins/Merchello/PropertyEditors/ProductEditor/Js/merchelloproducteditor.controller.js',
+		'~/App_Plugins/Merchello/PropertyEditors/ProductEditor/Js/merchelloproducteditor.productedit.controller.js'
 	],
 	css: [
 		'~/App_Plugins/Merchello/Common/Css/merchello.css'

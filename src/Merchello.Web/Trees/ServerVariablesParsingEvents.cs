@@ -6,6 +6,8 @@
     using System.Web.Mvc;
     using System.Web.Routing;
     using Merchello.Web.Editors;
+    using Merchello.Web.Models.ContentEditing;
+
     using Umbraco.Core;
     using Umbraco.Core.Logging;
     using Umbraco.Web;
@@ -65,6 +67,11 @@
                 controller => controller.GetProductVariant(Guid.NewGuid())));
 
             umbracoUrls.Add(
+                "merchelloCustomerApiBaseUrl",
+                url.GetUmbracoApiServiceBaseUrl<CustomerApiController>(
+                controller => controller.GetAllCustomers()));
+
+            umbracoUrls.Add(
                 "merchelloSettingsApiBaseUrl", 
                 url.GetUmbracoApiServiceBaseUrl<SettingsApiController>(
                 controller => controller.GetAllCountries()));
@@ -78,11 +85,6 @@
                 "merchelloCatalogShippingApiBaseUrl", 
                 url.GetUmbracoApiServiceBaseUrl<ShippingGatewayApiController>(
                 controller => controller.GetShipCountry(Guid.NewGuid())));
-
-            umbracoUrls.Add(
-                "merchelloCatalogFixedRateShippingApiBaseUrl", 
-                url.GetUmbracoApiServiceBaseUrl<CatalogFixedRateShippingApiController>(
-                controller => controller.GetAllShipCountryFixedRateProviders(Guid.NewGuid())));
             
             umbracoUrls.Add(
                 "merchelloNotificationApiBaseUrl", 
@@ -113,6 +115,11 @@
                 "merchelloShipmentApiBaseUrl",
                 url.GetUmbracoApiServiceBaseUrl<ShipmentApiController>(
                 controller => controller.GetShipment(Guid.NewGuid())));
+
+            umbracoUrls.Add(
+                "merchelloRateTableApiBaseUrl",
+                url.GetUmbracoApiServiceBaseUrl<FixedRateShippingApiController>(
+                controller => controller.GetShipFixedRateTable(new ShipMethodDisplay())));
 
             umbracoUrls.Add(
                 "merchelloPaymentApiBaseUrl", 

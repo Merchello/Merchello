@@ -1,13 +1,26 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Merchello.Core.Models;
-using Merchello.Core.Models.Interfaces;
-using Merchello.Core.Models.Rdbms;
-
-namespace Merchello.Core.Persistence.Factories
+﻿namespace Merchello.Core.Persistence.Factories
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Merchello.Core.Models;
+    using Merchello.Core.Models.Interfaces;
+    using Merchello.Core.Models.Rdbms;
+
+    /// <summary>
+    /// The warehouse factory.
+    /// </summary>
     internal class WarehouseFactory : IEntityFactory<IWarehouse, WarehouseDto>
     {
+        /// <summary>
+        /// The build entity.
+        /// </summary>
+        /// <param name="dto">
+        /// The dto.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IWarehouse"/>.
+        /// </returns>
         public IWarehouse BuildEntity(WarehouseDto dto)
         {
             var catalogs = new List<IWarehouseCatalog>()
@@ -36,6 +49,15 @@ namespace Merchello.Core.Persistence.Factories
             return warehouse;
         }
 
+        /// <summary>
+        /// The build dto.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
+        /// <returns>
+        /// The <see cref="WarehouseDto"/>.
+        /// </returns>
         public WarehouseDto BuildDto(IWarehouse entity)
         {
             var catalog = ((Warehouse) entity).WarehouseCatalogs.FirstOrDefault();

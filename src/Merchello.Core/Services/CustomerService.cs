@@ -324,6 +324,7 @@
                     {
                         repository.Delete(customer);
                     }
+
                     uow.Commit();                    
                 }                
             }
@@ -384,6 +385,22 @@
                 var query = Query<ICustomer>.Builder.Where(x => x.LoginName == loginName);
 
                 return repository.GetByQuery(query).FirstOrDefault();
+            }
+        }
+
+        /// <summary>
+        /// Gets the total customer count.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        public int CustomerCount()
+        {
+            using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Query<ICustomer>.Builder.Where(x => x.Key != Guid.Empty);
+
+                return repository.Count(query);
             }
         }
 
@@ -552,6 +569,30 @@
             using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll();
+            }
+        }
+
+        /// <summary>
+        /// The save addresses.
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        private void SaveAddresses(ICustomer customer)
+        {
+            var existing = _customerAddressService.GetByCustomerKey(customer.Key);
+
+            var existingAddresses = existing as ICustomerAddress[] ?? existing.ToArray();
+            if (!existingAddresses.Any()) return;
+
+            foreach (var delete in existingAddresses.Where(address => customer.Addresses.All(x => x.Key != address.Key)).ToList())
+            {
+                _customerAddressService.Delete(delete);   
+            }
+
+            foreach (var address in customer.Addresses)
+            {
+                _customerAddressService.Save(address);
             }
         }
     }

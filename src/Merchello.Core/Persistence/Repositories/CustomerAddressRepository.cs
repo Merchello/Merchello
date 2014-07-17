@@ -37,6 +37,22 @@
         }
 
         /// <summary>
+        /// Gets a collection of <see cref="ICustomerAddress"/>.
+        /// </summary>
+        /// <param name="customerKey">
+        /// The customer key.
+        /// </param>
+        /// <returns>
+        /// The collection of <see cref="ICustomerAddress"/>.
+        /// </returns>
+        public IEnumerable<ICustomerAddress> GetByCustomerKey(Guid customerKey)
+        {
+            var query = Querying.Query<ICustomerAddress>.Builder.Where(x => x.CustomerKey == customerKey);
+
+            return GetByQuery(query);
+        }
+
+        /// <summary>
         /// The perform get.
         /// </summary>
         /// <param name="key">

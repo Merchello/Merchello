@@ -23,8 +23,7 @@ namespace Merchello.Core.Persistence.Repositories
         {
         }
 
-        #region Overrides of RepositoryBase<IWarehouse>
-
+       
 
         protected override IWarehouse PerformGet(Guid key)
         {
@@ -63,10 +62,6 @@ namespace Merchello.Core.Persistence.Repositories
                 }
             }
         }
-
-        #endregion
-
-        #region Overrides of MerchelloPetaPocoRepositoryBase<IWarehouse>
 
 
         protected override Sql GetBaseQuery(bool isCount)
@@ -144,9 +139,5 @@ namespace Merchello.Core.Persistence.Repositories
 
             return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
         }
-
-
-        #endregion
-
     }
 }

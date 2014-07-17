@@ -1,43 +1,51 @@
 ﻿namespace Merchello.Core.Models
 {
     using System.Collections.Generic;
-    using Services;
+    using System.Globalization;
+    using System.IO;
+    using System.Linq;
+    using System.Xml;
+    using System.Xml.Linq;
 
+    using Newtonsoft.Json;
+
+    using Services;
+   
     /// <summary>
     /// The customer extensions.
     /// </summary>
     public static class CustomerExtensions
     {
-        /// <summary>
-        /// Gets a collection of all customer addresses
-        /// </summary>
-        /// <param name="customer">
-        /// The customer.
-        /// </param>
-        /// <returns>
-        /// The collection of all <see cref="ICustomerAddress"/> for a given customer
-        /// </returns>
-        public static IEnumerable<ICustomerAddress> Addresses(this ICustomer customer)
-        {
-            return customer.Addresses(MerchelloContext.Current);
-        }
+        /////// <summary>
+        /////// Gets a collection of all customer addresses
+        /////// </summary>
+        /////// <param name="customer">
+        /////// The customer.
+        /////// </param>
+        /////// <returns>
+        /////// The collection of all <see cref="ICustomerAddress"/> for a given customer
+        /////// </returns>
+        ////public static IEnumerable<ICustomerAddress> CustomerAddresses(this ICustomer customer)
+        ////{
+        ////    return customer.CustomerAddresses(MerchelloContext.Current);
+        ////}
 
-        /// <summary>
-        /// The addresses.
-        /// </summary>
-        /// <param name="customer">
-        /// The customer.
-        /// </param>
-        /// <param name="addressType">
-        /// The address type.
-        /// </param>
-        /// <returns>
-        /// The collection of <see cref="ICustomerAddress"/>
-        /// </returns>
-        public static IEnumerable<ICustomerAddress> Addresses(this ICustomer customer, AddressType addressType)
-        {
-            return customer.Addresses(MerchelloContext.Current, addressType);
-        }
+        /////// <summary>
+        /////// The addresses.
+        /////// </summary>
+        /////// <param name="customer">
+        /////// The customer.
+        /////// </param>
+        /////// <param name="addressType">
+        /////// The address type.
+        /////// </param>
+        /////// <returns>
+        /////// The collection of <see cref="ICustomerAddress"/>
+        /////// </returns>
+        ////public static IEnumerable<ICustomerAddress> CustomerAddresses(this ICustomer customer, AddressType addressType)
+        ////{
+        ////    return customer.CustomerAddresses(MerchelloContext.Current, addressType);
+        ////}
 
         /// <summary>
         /// The default customer address associated with a customer of a given type
@@ -105,6 +113,33 @@
             customer.DeleteCustomerAddress(MerchelloContext.Current, address);
         }
 
+        /// <summary>
+        /// Gets a collection of <see cref="IInvoice"/> associated with the customer
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="IInvoice"/>.
+        /// </returns>
+        public static IEnumerable<IInvoice> Invoices(this ICustomer customer)
+        {
+            return customer.Invoices(MerchelloContext.Current);
+        }
+
+        /// <summary>
+        /// Gets a collection of <see cref="IPayment"/> associated with the customer
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="IPayment"/>
+        /// </returns>
+        public static IEnumerable<IPayment> Payments(this ICustomer customer)
+        {
+            return customer.Payments(MerchelloContext.Current);
+        }
 
         /// <summary>
         /// Gets a collection of addresses associated with the customer
@@ -118,7 +153,7 @@
         /// <returns>
         /// The collection of <see cref="ICustomerAddress"/> associated with the customer
         /// </returns>
-        internal static IEnumerable<ICustomerAddress> Addresses(this ICustomer customer, IMerchelloContext merchelloContext)
+        internal static IEnumerable<ICustomerAddress> CustomerAddresses(this ICustomer customer, IMerchelloContext merchelloContext)
         {
             return ((ServiceContext) merchelloContext.Services).CustomerAddressService.GetByCustomerKey(customer.Key);
         }
@@ -138,9 +173,9 @@
         /// <returns>
         /// The collection of <see cref="ICustomerAddress"/> associated with the customer of a given type
         /// </returns>
-        internal static IEnumerable<ICustomerAddress> Addresses(this ICustomer customer, IMerchelloContext merchelloContext, AddressType addressType)
+        internal static IEnumerable<ICustomerAddress> CustomerAddresses(this ICustomer customer, IMerchelloContext merchelloContext, AddressType addressType)
         {
-            return ((ServiceContext) merchelloContext.Services).CustomerAddressService.GetByCustomerKey(customer.Key, addressType);
+            return ((ServiceContext)merchelloContext.Services).CustomerAddressService.GetByCustomerKey(customer.Key, addressType);
         }
 
         /// <summary>
@@ -160,7 +195,7 @@
         /// </returns>
         internal static ICustomerAddress DefaultCustomerAddress(this ICustomer customer, IMerchelloContext merchelloContext, AddressType addressType)
         {
-            return ((ServiceContext) merchelloContext.Services).CustomerAddressService.GetDefaultCustomerAddress(customer.Key, addressType);
+            return ((ServiceContext)merchelloContext.Services).CustomerAddressService.GetDefaultCustomerAddress(customer.Key, addressType);
         }
 
         /// <summary>
@@ -209,6 +244,18 @@
 
             ((ServiceContext)merchelloContext.Services).CustomerAddressService.Save(address);
 
+            var addresses = customer.Addresses.ToList();
+
+            if (addresses.Any(x => x.Key == address.Key))
+            {
+                addresses.RemoveAt(addresses.IndexOf(addresses.FirstOrDefault(x => x.Key == address.Key)));
+            }
+
+            addresses.Add(address);
+
+
+            ((Customer)customer).Addresses = addresses;
+
             return address;
         }
 
@@ -229,6 +276,108 @@
             Mandate.ParameterCondition(address.CustomerKey == customer.Key, "The customer address is not associated with this customer.");
 
             ((ServiceContext)merchelloContext.Services).CustomerAddressService.Delete(address);
+
+            var addresses = customer.Addresses.ToList();
+
+            if (addresses.Any(x => x.Key == address.Key))
+            {
+                addresses.RemoveAt(addresses.IndexOf(addresses.FirstOrDefault(x => x.Key == address.Key)));
+            }
+
+            ((Customer)customer).Addresses = addresses;
         }
+
+        /// <summary>
+        /// Gets the collection of <see cref="IInvoice"/> associated with the customer
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <param name="merchelloContext">
+        /// The merchello context.
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="IInvoice"/>.
+        /// </returns>
+        internal static IEnumerable<IInvoice> Invoices(this ICustomer customer, IMerchelloContext merchelloContext)
+        {
+            return merchelloContext.Services.InvoiceService.GetInvoicesByCustomerKey(customer.Key);
+        }
+
+        /// <summary>
+        /// Gets the collection of <see cref="IPayment"/> associated with a customer
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <param name="merchelloContext">
+        /// The merchello context.
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="IPayment"/>.
+        /// </returns>
+        internal static IEnumerable<IPayment> Payments(this ICustomer customer, IMerchelloContext merchelloContext)
+        {
+            return merchelloContext.Services.PaymentService.GetPaymentsByCustomerKey(customer.Key);
+        }
+
+        #region Examine Serialization
+
+        /// <summary>
+        /// Serializes a customer to xml suitable for Examine indexer.
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <returns>
+        /// The <see cref="XDocument"/>.
+        /// </returns>
+        internal static XDocument SerializeToXml(this ICustomer customer)
+        {
+            string xml;
+            using (var sw = new StringWriter())
+            {
+                using (var writer = new XmlTextWriter(sw))
+                {
+                    writer.WriteStartDocument();
+                    writer.WriteStartElement("customer");
+                    writer.WriteAttributeString("id", ((Customer)customer).ExamineId.ToString(CultureInfo.InvariantCulture));
+                    writer.WriteAttributeString("customerKey", customer.Key.ToString());
+                    writer.WriteAttributeString("loginName", customer.LoginName);
+                    writer.WriteAttributeString("firstName", customer.FirstName);
+                    writer.WriteAttributeString("lastName", customer.LastName);
+                    writer.WriteAttributeString("email", customer.Email);
+                    writer.WriteAttributeString("taxExempt", customer.TaxExempt.ToString());
+                    writer.WriteAttributeString("extendedData", customer.ExtendedDataAsJson());
+                    writer.WriteAttributeString("notes", customer.Notes);
+                    writer.WriteAttributeString("addresses", customer.AddressesAsJson());
+                    writer.WriteAttributeString("lastActivityDate", customer.LastActivityDate.ToString("s"));
+                    writer.WriteAttributeString("createDate", customer.CreateDate.ToString("s"));
+                    writer.WriteAttributeString("updateDate", customer.UpdateDate.ToString("s"));
+                    writer.WriteAttributeString("allDocs", "1");
+                    writer.WriteEndElement();
+                    writer.WriteEndDocument();
+                    xml = sw.ToString();
+                }
+            }
+
+            return XDocument.Parse(xml);
+        }
+
+        /// <summary>
+        /// The customer address collection as JSON.
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <returns>
+        /// The JSON representation <see cref="string"/>.
+        /// </returns>
+        private static string AddressesAsJson(this ICustomer customer)
+        {
+            return JsonConvert.SerializeObject(customer.Addresses ?? new List<ICustomerAddress>());
+        }
+
+        #endregion
     }
 }
