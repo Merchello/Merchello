@@ -1,4 +1,7 @@
-﻿namespace Merchello.Web
+﻿using umbraco.presentation.umbraco;
+using Umbraco.Web.Security;
+
+namespace Merchello.Web
 {
     using System;
     using System.Runtime.Remoting.Contexts;
@@ -38,6 +41,11 @@
         /// The <see cref="CacheHelper"/>.
         /// </summary>
         private readonly CacheHelper _cache;
+
+        /// <summary>
+        /// The membership helper.
+        /// </summary>
+        private readonly MembershipHelper _membershipHelper;
 
         #endregion
 
@@ -79,6 +87,8 @@
             _umbracoContext = umbracoContext;
             _customerService = merchelloContext.Services.CustomerService;
             _cache = merchelloContext.Cache;
+
+            _membershipHelper = new MembershipHelper(_umbracoContext);
 
             Initialize();
         }
@@ -140,12 +150,18 @@
         /// <param name="key">The key of the customer to retrieve</param>
         private void TryGetCustomer(Guid key)
         {
+
+            //// check to see if member is signed in
+            //// TODO RSS add configuration check for valid member type
+           
             var customer = (ICustomerBase)_cache.RuntimeCache.GetCacheItem(CacheKeys.CustomerCacheKey(key));
             
             // check the cache for a previously retrieved customer
             if (customer != null)
             {
                 CurrentCustomer = customer;
+                
+                // customer.IsAnonymous and Member is not anonymous -> convert to ICustomer ... retrieve new or create
 
                 ContextData.Key = customer.Key;
 

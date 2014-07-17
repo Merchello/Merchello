@@ -398,14 +398,14 @@ namespace Merchello.Core.Services
                 
                 foreach(var att in combo) attributes.Add(att);
 
-                if(!ProductVariantWithAttributesExists(product, attributes)) variants.Add(CreateProductVariant(product, attributes));
+                if (!ProductVariantWithAttributesExists(product, attributes)) variants.Add(CreateProductVariant(product, attributes));
             }
 
             return variants;
 
         }
 
-        internal IEnumerable<IEnumerable<IProductAttribute>> GetPossibleProductAttributeCombinations(IProduct product)
+        public IEnumerable<IEnumerable<IProductAttribute>> GetPossibleProductAttributeCombinations(IProduct product)
         {
             if (!product.ProductOptions.Any()) return new List<IEnumerable<IProductAttribute>>();
 
