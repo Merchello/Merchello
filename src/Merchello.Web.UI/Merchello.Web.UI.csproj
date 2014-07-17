@@ -65,7 +65,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Plugins\Merchello\Modules\Customer\Dialogs\" />
+    <Folder Include="App_Plugins\Merchello\lib\bower_components\angular-ui-tinymce\src\" />
     <Folder Include="App_Plugins\Merchello\Modules\Customer\Directives\" />
     <Folder Include="App_Plugins\Merchello\PropertyEditors\ProductEditor\Css\" />
     <Folder Include="App_Plugins\Merchello\PropertyEditors\ProductPicker\Css\" />
@@ -122,8 +122,6 @@
     <Content Include="App_Plugins\Merchello\Directives\merchello.panel.directive.js" />
     <Content Include="App_Plugins\Merchello\Common\Js\startfrom.filter.js" />
     <Content Include="App_Plugins\Merchello\Directives\merchello.slide.open.panel.directive.js" />
-    <Content Include="App_Plugins\Merchello\lib\bower_components\angular-ui-tinymce\src\tinymce.js" />
-    <Content Include="App_Plugins\Merchello\lib\bower_components\tinymce\tinymce.min.js" />
     <Content Include="App_Plugins\Merchello\lib\codemirror\Css\umbracoCustom.css" />
     <Content Include="App_Plugins\Merchello\lib\codemirror\Js\Lib\codemirror.css" />
     <Content Include="App_Plugins\Merchello\lib\codemirror\Js\Lib\codemirror.js" />
@@ -314,6 +312,8 @@
     <Content Include="App_Plugins\Merchello\Modules\Customer\customer.edit.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Customer\customer.models.js" />
     <Content Include="App_Plugins\Merchello\Modules\Customer\customer.view.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Customer\Dialogs\customer.selectshippingaddress.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Customer\Dialogs\customer.selectbillingaddress.html" />
     <Content Include="App_Plugins\Merchello\Modules\Customer\merchello.customer.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Dialogs\notificationsmessage.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Dialogs\notificationsmessage.html" />
