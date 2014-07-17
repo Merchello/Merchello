@@ -55,10 +55,15 @@
          * @description
          * Save the customer.
          */
-        $scope.saveCustomer = function () {
+        $scope.saveCustomer = function() {
             notificationsService.info("Saving...", "");
-            var promiseSaveCustomer = merchelloCustomerService.SaveCustomer($scope.customer);
-            promiseSaveCustomer.then(function(customerResponse) {
+            var promiseSaveCustomer;
+            if ($routeParams.id === "new") {
+                promiseSaveCustomer = merchelloCustomerService.AddCustomer($scope.customer);
+            } else {
+                promiseSaveCustomer = merchelloCustomerService.SaveCustomer($scope.customer);
+            }
+            promiseSaveCustomer.then(function (customerResponse) {
                 $scope.customer = new merchello.Models.Customer(customerResponse);
                 notificationsService.success("Customer Saved", "");
             }, function(reason) {
