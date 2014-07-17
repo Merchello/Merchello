@@ -65,6 +65,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App_Plugins\Merchello\lib\bower_components\angular-ui-tinymce\src\" />
+    <Folder Include="App_Plugins\Merchello\lib\bower_components\tinymce\" />
     <Folder Include="App_Plugins\Merchello\PropertyEditors\ProductEditor\Css\" />
     <Folder Include="App_Plugins\Merchello\PropertyEditors\ProductPicker\Css\" />
     <Folder Include="App_Plugins\Merchello\System\" />
@@ -120,8 +122,6 @@
     <Content Include="App_Plugins\Merchello\Directives\merchello.panel.directive.js" />
     <Content Include="App_Plugins\Merchello\Common\Js\startfrom.filter.js" />
     <Content Include="App_Plugins\Merchello\Directives\merchello.slide.open.panel.directive.js" />
-    <Content Include="App_Plugins\Merchello\lib\bower_components\angular-ui-tinymce\src\tinymce.js" />
-    <Content Include="App_Plugins\Merchello\lib\bower_components\tinymce\tinymce.min.js" />
     <Content Include="App_Plugins\Merchello\lib\codemirror\Css\umbracoCustom.css" />
     <Content Include="App_Plugins\Merchello\lib\codemirror\Js\Lib\codemirror.css" />
     <Content Include="App_Plugins\Merchello\lib\codemirror\Js\Lib\codemirror.js" />
