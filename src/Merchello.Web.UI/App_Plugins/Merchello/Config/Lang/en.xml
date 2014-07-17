@@ -300,6 +300,10 @@
   <area alias="merchelloMethodDelete">
     <key alias="deleteConfirmation">Are you sure you want to remove the method</key>
   </area>
+  <area alias="merchelloDelete">
+    <key alias="deleteConfirmation">Delete Confirmation</key>
+    <key alias="deleteConfirmMessage">Are you sure you want to remove the item </key>
+  </area>
   <area alias="merchelloProductEdit">
     <key alias="enterProductName">Enter a product name</key>
     <key alias="dragAndReorder">Drag to Reorder Options and Variants</key>

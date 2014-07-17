@@ -136,10 +136,8 @@
          * 
          * @description
          * Called when the Delete Product button is pressed.
-         *
-         * TODO: Need to call a confirmation dialog for this.
          */
-        $scope.delete = function () {
+        $scope.deleteProductDialogConfirmation = function () {
             var promiseDel = merchelloProductService.deleteProduct($scope.product);
 
             promiseDel.then(function() {
@@ -152,6 +150,23 @@
             });
         };
 
+        /**
+         * @ngdoc method
+         * @name addCountry
+         * @function
+         * 
+         * @description
+         * Opens the add country dialog via the Umbraco dialogService.
+         */
+        $scope.deleteProductDialog = function () {
+            
+            dialogService.open({
+                template: '/App_Plugins/Merchello/Common/Js/Dialogs/deleteconfirmation.html',
+                show: true,
+                callback: $scope.deleteProductDialogConfirmation,
+                dialogData: $scope.product
+            });
+        }
 
         /**
          * @ngdoc method
