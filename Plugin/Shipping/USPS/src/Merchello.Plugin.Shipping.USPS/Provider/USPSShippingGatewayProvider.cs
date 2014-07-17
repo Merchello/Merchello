@@ -13,7 +13,7 @@ namespace Merchello.Plugin.Shipping.USPS.Provider
     [GatewayProviderEditor("USPS configuration", "~/App_Plugins/Merchello.USPS/editor.html")]
     public class UspsShippingGatewayProvider : ShippingGatewayProviderBase, IUspsShippingGatewayProvider
     {
-
+        #region GatewayResources
         internal static readonly IEnumerable<GatewayResource> GatewayResources = new List<GatewayResource>()
         {
             new GatewayResource(Constants.ExtendedDataKeys.LibraryServiceCode, Constants.ExtendedDataKeys.LibraryServiceType), 														
@@ -104,11 +104,14 @@ namespace Merchello.Plugin.Shipping.USPS.Provider
             new GatewayResource(Constants.ExtendedDataKeys.GlobalExpressGuaranteedNonDocumentNonRectangularServiceCode, Constants.ExtendedDataKeys.GlobalExpressGuaranteedNonDocumentNonRectangularServiceType),
             new GatewayResource(Constants.ExtendedDataKeys.GxgEnvelopesServiceCode, Constants.ExtendedDataKeys.GxgEnvelopesServiceType)
         };
+        #endregion
 
+        private IRuntimeCacheProvider _runtimeCache;
         public UspsShippingGatewayProvider(IGatewayProviderService gatewayProviderService, 
             IGatewayProviderSettings gatewayProviderSettings, IRuntimeCacheProvider runtimeCacheProvider) : 
             base(gatewayProviderService, gatewayProviderSettings, runtimeCacheProvider)
         {
+            _runtimeCache = runtimeCacheProvider;
         }
 
         public override IEnumerable<IGatewayResource> ListResourcesOffered()
@@ -124,7 +127,7 @@ namespace Merchello.Plugin.Shipping.USPS.Provider
 
             if (!attempt.Success) throw attempt.Exception;
 
-            return new UspsShippingGatewayMethod(gatewayResource, attempt.Result, shipCountry, GatewayProviderSettings);
+            return new UspsShippingGatewayMethod(gatewayResource, attempt.Result, shipCountry, GatewayProviderSettings, _runtimeCache);
         }
 
         public override void SaveShippingGatewayMethod(IShippingGatewayMethod shippingGatewayMethod)
@@ -141,8 +144,26 @@ namespace Merchello.Plugin.Shipping.USPS.Provider
                         new UspsShippingGatewayMethod(
                             GatewayResources.FirstOrDefault(x => shipMethod.ServiceCode.StartsWith(x.ServiceCode)),
                             shipMethod, shipCountry,
-                            GatewayProviderSettings)
+                            GatewayProviderSettings, _runtimeCache)
                 ).OrderBy(x => x.ShipMethod.Name);
         }
+
+          public override IEnumerable<IShippingGatewayMethod> GetShippingGatewayMethodsForShipment(IShipment shipment)
+          {
+              var methods = base.GetShippingGatewayMethodsForShipment(shipment);
+          
+              var shippingMethods = new List<IShippingGatewayMethod>();
+              foreach (var method in methods)
+              {     
+                  var quote = method.QuoteShipment(shipment);
+                               
+                  if (quote.Result.Rate > (decimal) 0.00)
+                  {
+                      shippingMethods.Add(method);
+                  }
+              }
+                                      
+              return shippingMethods;
+          }
     }
 }
