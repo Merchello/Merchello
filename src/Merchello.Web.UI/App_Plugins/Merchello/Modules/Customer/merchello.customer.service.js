@@ -15,10 +15,23 @@
             * @name AddCustomer
             * @description Posts to the API a new customer.
             **/
-            AddCustomer: function (customer) {
+            AddCustomer: function(customer) {
+                return umbRequestHelper.resourcePromise($http.post(umbRequestHelper.getApiUrl('merchelloCustomerApiBaseUrl', 'AddCustomer'), customer), 'Failed to create customer');
+            },
+
+            /**
+            * @ngdoc method
+            * @name DeleteCustomer
+            * @description Posts to the API a request to delete the specified customer.
+            **/
+            DeleteCustomer: function(customerKey) {
                 return umbRequestHelper.resourcePromise(
-                    $http.post(umbRequestHelper.getApiUrl('merchelloCustomerApiBaseUrl', 'AddCustomer'), customer),
-                    'Failed to create customer');
+                $http({
+                    url: umbRequestHelper.getApiUrl('merchelloCustomerApiBaseUrl', 'DeleteCustomer'),
+                    method: "GET",
+                    params: { id: customerKey }
+                }),
+                'Failed to delete customer');
             },
 
             /**
@@ -26,12 +39,21 @@
             * @name GetAllCustomers
             * @description Requests from the API a list of all the customers.
             **/
-            GetAllCustomers: function() {
+            GetAllCustomers: function(page, perPage) {
+                if (page === undefined) {
+                    page = 1;
+                }
+                if (page < 1) {
+                    page = 1;
+                }
+                if (perPage === undefined) {
+                    perPage = 100;
+                }
                 return umbRequestHelper.resourcePromise(
                     $http({
                         url: umbRequestHelper.getApiUrl('merchelloCustomerApiBaseUrl', 'GetAllCustomers'),
                         method: "GET",
-                        params: {}
+                        params: { page: page, perPage: perPage }
                     }),
                     'Failed to load customers');
             },
@@ -48,7 +70,7 @@
                         method: "GET",
                         params: { id: customerKey }
                     }),
-                    'Failed to delete load customer');
+                    'Failed to load customer');
             },
 
             /**
@@ -56,13 +78,11 @@
             * @name PutCustomer
             * @description Posts to the API an edited customer.
             **/
-            SaveCustomer: function (customer) {
-            return umbRequestHelper.resourcePromise(
-                $http.post(umbRequestHelper.getApiUrl('merchelloCustomerApiBaseUrl', 'PutCustomer'), customer),
-                'Failed to save customer');
+            SaveCustomer: function(customer) {
+                return umbRequestHelper.resourcePromise($http.post(umbRequestHelper.getApiUrl('merchelloCustomerApiBaseUrl', 'PutCustomer'), customer), 'Failed to save customer');
             }
 
-        }
+        };
     };
 
     angular.module('umbraco.resources').factory('merchelloCustomerService', ['$http', 'umbRequestHelper', merchello.Services.MerchelloCustomerService]);
