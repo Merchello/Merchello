@@ -392,13 +392,11 @@
 
 	    /**
          * @ngdoc method
-         * @name removeFixedRateMethodFromProvider
+         * @name removeMethodFromProviderDialogConfirmation
          * @function
          * 
          * @description
          * Calls the fixed rate shipping service to delete the method passed in via the method parameter.
-         *
-         * TODO: make a dialog to confirm delete?
          */
 		$scope.removeMethodFromProviderDialogConfirmation = function (dialogData) {
 		    var promiseDelete = merchelloCatalogShippingService.deleteShipMethod(dialogData.method);
@@ -414,11 +412,11 @@
 
 	    /**
          * @ngdoc method
-         * @name addCountry
+         * @name removeMethodFromProviderDialog
          * @function
          * 
          * @description
-         * Opens the add country dialog via the Umbraco dialogService.
+         * Opens the delete confirmation dialog via the Umbraco dialogService.
          */
 		$scope.removeMethodFromProviderDialog = function (shippingGatewayProvider, shipMethod, country) {
 		    var dialogData = {};

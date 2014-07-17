@@ -161,7 +161,7 @@
 
         /**
          * @ngdoc method
-         * @name deleteVariant
+         * @name deleteVariantDialogConfirmation
          * @function
          * 
          * @description
@@ -182,11 +182,11 @@
 
         /**
          * @ngdoc method
-         * @name addCountry
+         * @name deleteVariantDialog
          * @function
          * 
          * @description
-         * Opens the add country dialog via the Umbraco dialogService.
+         * Opens the delete confirmation dialog via the Umbraco dialogService.
          */
         $scope.deleteVariantDialog = function () {
 

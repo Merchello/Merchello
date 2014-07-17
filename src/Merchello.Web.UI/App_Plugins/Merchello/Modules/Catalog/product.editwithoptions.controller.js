@@ -131,7 +131,7 @@
 
         /**
          * @ngdoc method
-         * @name delete
+         * @name deleteProductDialogConfirmation
          * @function
          * 
          * @description
@@ -152,11 +152,11 @@
 
         /**
          * @ngdoc method
-         * @name addCountry
+         * @name deleteProductDialog
          * @function
          * 
-         * @description
-         * Opens the add country dialog via the Umbraco dialogService.
+         * @description                                                 
+         * Opens the delete confirmation dialog via the Umbraco dialogService.
          */
         $scope.deleteProductDialog = function () {
             
