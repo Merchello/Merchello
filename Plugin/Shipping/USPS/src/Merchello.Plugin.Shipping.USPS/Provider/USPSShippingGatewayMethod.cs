@@ -11,6 +11,7 @@ using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Models;
 using Merchello.Plugin.Shipping.USPS.Models;
 using Umbraco.Core;
+using Umbraco.Core.Cache;
 
 namespace Merchello.Plugin.Shipping.USPS.Provider
 {
@@ -20,12 +21,16 @@ namespace Merchello.Plugin.Shipping.USPS.Provider
     {
         private IShipMethod _shipMethod;
         private UspsProcessorSettings _processorSettings;
-        
-        public UspsShippingGatewayMethod(IGatewayResource gatewayResource, IShipMethod shipMethod, IShipCountry shipCountry, IGatewayProviderSettings gatewayProviderSettings) : 
+        private IRuntimeCacheProvider _runtimeCache;
+        private IGatewayProviderSettings _gatewayProviderSettings;
+
+        public UspsShippingGatewayMethod(IGatewayResource gatewayResource, IShipMethod shipMethod, IShipCountry shipCountry, IGatewayProviderSettings gatewayProviderSettings, IRuntimeCacheProvider runtimeCache) : 
             base(gatewayResource, shipMethod, shipCountry)
         {
             _processorSettings = gatewayProviderSettings.ExtendedData.GetProcessorSettings();
             _shipMethod = shipMethod;
+            _runtimeCache = runtimeCache;
+            _gatewayProviderSettings = gatewayProviderSettings;
 
             // Express Mail Hold For Pickup
             ServiceLookup[2] = new[] { new UspsDeliveryOption(2, Decimal.MaxValue, Decimal.MaxValue, Decimal.MaxValue, 108, 70) };
@@ -81,9 +86,17 @@ namespace Merchello.Plugin.Shipping.USPS.Provider
                 shipment.Items.Accept(visitor);
 
                 var http = new HttpRequestHandler();
-                var rateXml = http.Post(RateRequest(shipment, visitor));
 
-                var collection = UspsParseRates(rateXml, shipment);
+                var collection = GetCollectionFromCache(shipment);
+
+                if (collection == null)
+                {
+                    var rateXml = http.Post(RateRequest(shipment, visitor));
+
+                    collection = UspsParseRates(rateXml, shipment);
+
+                    _runtimeCache.InsertCacheItem(MakeCacheKey(shipment), () => collection);      
+                }
                 //if (collection.Any(option => option.Service.Contains(shipment.ShipmentName) &&
                 //                             option.Service.ToLower().Contains("medium") || option.Service.ToLower().Contains("large")))
                 //{
@@ -124,6 +137,27 @@ namespace Merchello.Plugin.Shipping.USPS.Provider
             }
 
             return Attempt<IShipmentRateQuote>.Succeed(new ShipmentRateQuote(shipment, _shipMethod) { Rate = shippingPrice });
+        }
+
+        protected IEnumerable<DeliveryOption> GetCollectionFromCache(IShipment shipment)
+        {
+            return _runtimeCache.GetCacheItem(MakeCacheKey(shipment)) as IEnumerable<DeliveryOption>;
+        }
+
+        /// <summary>
+        /// Generates a unique cache key for runtime caching of the <see cref="FedExShippingGatewayMethod"/>
+        /// </summary>
+        /// <param name="shipment"> The Shipment</param>
+        /// <returns>The unique CacheKey string</returns>
+        /// <remarks>
+        /// 
+        /// CacheKey is assumed to be unique per customer and globally for CheckoutBase.  Therefore this will NOT be unique if 
+        /// to different checkouts are happening for the same customer at the same time - we consider that an extreme edge case.
+        /// 
+        /// </remarks>
+        private string MakeCacheKey(IShipment shipment)
+        {
+            return string.Format("merchello.shippingquotecollection.{0}.{1}.{2}", _shipMethod.ProviderKey, _gatewayProviderSettings.Key, shipment.VersionKey);
         }
 
         // Create rating request XML string
@@ -317,6 +351,7 @@ namespace Merchello.Plugin.Shipping.USPS.Provider
         }
 
          private static readonly Dictionary<int, IList<UspsDeliveryOption>> ServiceLookup = new Dictionary<int, IList<UspsDeliveryOption>>();
+
 
         static UspsShippingGatewayMethod()
         {
