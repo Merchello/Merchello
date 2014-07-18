@@ -2,6 +2,7 @@
   <GlobalSettings>
     <CollectionProperty Name="RecognizedWords">
       <Value>dto</Value>
+      <Value>Lucene</Value>
       <Value>Merchello</Value>
       <Value>Merchello's</Value>
       <Value>PetaPoco</Value>

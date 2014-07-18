@@ -76,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActivatorHelper.cs" />
+    <Compile Include="Configuration\Outline\CustomerElement.cs" />
     <Compile Include="Configuration\Outline\TreeCollection.cs" />
     <Compile Include="Configuration\Outline\ReplacementCollection.cs" />
     <Compile Include="Configuration\Outline\ReplaceElement.cs" />

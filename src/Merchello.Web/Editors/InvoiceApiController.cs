@@ -98,9 +98,9 @@
         }
 
         /// <summary>
-        /// Returns All Products
+        /// Returns All Invoices
         /// 
-        /// GET /umbraco/Merchello/ProductApi/GetProducts
+        /// GET /umbraco/Merchello/InvoiceApi/GetAllInvoices
         /// </summary>
         /// <param name="page">
         /// The page.
@@ -114,6 +114,22 @@
         public IEnumerable<InvoiceDisplay> GetAllInvoices(int page, int perPage)
         {
             return InvoiceQuery.GetAllInvoices().Skip((page - 1) * perPage).Take(perPage);
+        }
+
+        /// <summary>
+        /// Gets a collection of invoices associated with a customer.
+        /// 
+        /// GET /umbraco/Merchello/InvoiceApi/GetByCustomerKey/{id}
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The collection of invoices associated with the customer.
+        /// </returns>
+        public IEnumerable<InvoiceDisplay> GetByCustomerKey(Guid id)
+        {
+            return InvoiceQuery.GetByCustomerKey(id);
         }
 
         /// <summary>
