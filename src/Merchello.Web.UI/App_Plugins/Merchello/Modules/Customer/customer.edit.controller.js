@@ -8,7 +8,7 @@
      * @description
      * The controller for the customers edit page
      */
-    controllers.CustomerEditController = function ($scope, $routeParams, $location, merchelloCustomerService, merchelloSettingsService, notificationsService) {
+    controllers.CustomerEditController = function($scope, $routeParams, $location, merchelloCustomerService, merchelloSettingsService, notificationsService) {
 
         /**
          * @ngdoc method
@@ -18,8 +18,11 @@
          * @description
          * Inititalizes the scope.
          */
-        $scope.init = function () {
-
+        $scope.init = function() {
+            var promise = merchelloSettingsService.getTypeFields();
+            promise.then(function (response) {
+                console.info(response);
+            }, function (reason){});
             $scope.setVariables();
             $scope.loadCustomer();
         };
@@ -38,7 +41,7 @@
             } else {
                 var customerKey = $routeParams.id;
                 var promiseLoadCustomer = merchelloCustomerService.GetCustomer(customerKey);
-                promiseLoadCustomer.then(function (customerResponse) {
+                promiseLoadCustomer.then(function(customerResponse) {
                     $scope.customer = new merchello.Models.Customer(customerResponse);
                     $scope.loaded = true;
                 }, function(reason) {
@@ -64,7 +67,7 @@
             } else {
                 promiseSaveCustomer = merchelloCustomerService.SaveCustomer($scope.customer);
             }
-            promiseSaveCustomer.then(function (customerResponse) {
+            promiseSaveCustomer.then(function(customerResponse) {
                 $scope.customer = new merchello.Models.Customer(customerResponse);
                 notificationsService.success("Customer Saved", "");
             }, function(reason) {
@@ -87,7 +90,7 @@
 
         $scope.init();
 
-    }
+    };
 
 
     angular.module("umbraco").controller("Merchello.Editors.Customer.EditController", ['$scope', '$routeParams', '$location', 'merchelloCustomerService', 'merchelloSettingsService', 'notificationsService', merchello.Controllers.CustomerEditController]);

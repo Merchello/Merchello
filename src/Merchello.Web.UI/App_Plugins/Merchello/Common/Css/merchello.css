@@ -397,9 +397,11 @@
     float: left;
     margin-right: 10px; }
   .merchello-panel-body .customer-info h4 {
-    margin: 0 0 10px;
+    margin: 0;
     height: 32px;
     line-height: 32px; }
+  .merchello-panel-body .customer-info div {
+    margin-left: 42px; }
   .bar-graph .merchello-panel-body li {
     display: inline-block;
     margin-right: 0.8%;

@@ -58,7 +58,6 @@
             $scope.customer = new merchello.Models.Customer();
             $scope.customerKey = false;
             $scope.loaded = false;
-            $
         };
 
         $scope.init();

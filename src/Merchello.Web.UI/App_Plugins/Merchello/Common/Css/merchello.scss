@@ -264,7 +264,8 @@ $active: lighten($green, 50%);
 
     .customer-info {
         .customer-avatar { max-height: 32px; max-width: 32px; border-radius: 60px; float: left; margin-right: 10px; }
-        h4 { margin: 0 0 10px; height: 32px; line-height: 32px; }
+        h4 { margin: 0; height: 32px; line-height: 32px; } 
+        div { margin-left: 42px; }
     }
 
     //Graphs and Charts
