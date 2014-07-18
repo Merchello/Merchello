@@ -7,6 +7,8 @@ using NUnit.Framework;
 
 namespace Merchello.Tests.UnitTests.Configuration
 {
+    using System.Linq;
+
     [TestFixture]
     [Category("Configuration")]
     public class MerchelloSectionTests
@@ -127,6 +129,22 @@ namespace Merchello.Tests.UnitTests.Configuration
 
             //// Assert
             Assert.AreEqual(expected, value);
+        }
+
+        [Test]
+        public void Can_Retrieve_CustomerMemberTypes()
+        {
+            //// Arrange
+            const string expected = "Customer";
+
+            //// Act
+            var values = MerchelloConfiguration.Current.CustomerMemberTypes;
+
+            //// Assert
+            Assert.NotNull(values);
+            Assert.IsTrue(values.Any());
+            Assert.AreEqual(1, values.Count());
+            Assert.AreEqual(expected, values.First());
         }
     }
 
