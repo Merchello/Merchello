@@ -213,7 +213,7 @@
             {
                 if (Saving.IsRaisedEventCancelled(new SaveEventArgs<IInvoice>(invoice), this))
                 {
-                    ((Invoice) invoice).WasCancelled = true;
+                    ((Invoice)invoice).WasCancelled = true;
                     return;
                 }
 
@@ -267,7 +267,8 @@
             {
                 Saving.RaiseEvent(new SaveEventArgs<IInvoice>(invoicesArray), this);
                 if (existingInvoicesWithStatusChanges.Any())
-                    StatusChanging.RaiseEvent(new StatusChangeEventArgs<IInvoice>(existingInvoicesWithStatusChanges),
+                    StatusChanging.RaiseEvent(
+                        new StatusChangeEventArgs<IInvoice>(existingInvoicesWithStatusChanges),
                         this);
             }
 

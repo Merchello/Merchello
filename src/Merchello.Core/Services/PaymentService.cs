@@ -257,6 +257,38 @@
         }
 
         /// <summary>
+        /// Deletes a collection of <see cref="IPayment"/>
+        /// </summary>
+        /// <param name="payments">
+        /// The payments.
+        /// </param>
+        /// <param name="raiseEvents">
+        /// The raise events.
+        /// </param>
+        public void Delete(IEnumerable<IPayment> payments, bool raiseEvents = true)
+        {
+            var paymentsArray = payments as IPayment[] ?? payments.ToArray();
+            if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<IPayment>(paymentsArray), this);
+
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+
+                using (var repository = _repositoryFactory.CreatePaymentRepository(uow))
+                {
+                    foreach (var payment in paymentsArray)
+                    {
+                        repository.Delete(payment);
+                    }
+
+                    uow.Commit();
+                }
+            }
+
+            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<IPayment>(paymentsArray), this);
+        }
+
+        /// <summary>
         /// Gets a <see cref="IPayment"/>
         /// </summary>
         /// <param name="key">The unique 'key' (GUID) of the <see cref="IPayment"/></param>

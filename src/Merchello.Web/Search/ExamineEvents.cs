@@ -99,8 +99,8 @@
             CustomerService.Saved += CustomerServiceSaved;
             CustomerService.Deleted += CustomerServiceDeleted;
 
-            CustomerAddressService.Saved += CustomerAddressServiceSaved;
-            CustomerAddressService.Deleted += CustomerAddressServiceDeleted;
+            //CustomerAddressService.Saved += CustomerAddressServiceSaved;
+            //CustomerAddressService.Deleted += CustomerAddressServiceDeleted;
         }
 
         // TODO RSS - come up with another way of updating the customer index ... we should not need to requiry the customer here

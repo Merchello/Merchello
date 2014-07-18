@@ -92,6 +92,26 @@
             return retrieved.Select(AutoMapper.Mapper.Map<InvoiceDisplay>).ToList();
         }
 
+        /// <summary>
+        /// The get by customer key.
+        /// </summary>
+        /// <param name="customerKey">
+        /// The customer key.
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="InvoiceDisplay"/> associated with the customer.
+        /// </returns>
+        public static IEnumerable<InvoiceDisplay> GetByCustomerKey(Guid customerKey)
+        {
+            if (customerKey == Guid.Empty) return new List<InvoiceDisplay>();
+
+            var criteria = ExamineManager.Instance.CreateSearchCriteria(IndexTypes.Invoice);
+            criteria.Field("customerKey", customerKey.ToString());
+
+            return ExamineManager.Instance.SearchProviderCollection[SearcherName].Search(criteria)
+                    .Select(result => result.ToInvoiceDisplay())
+                    .ToArray();
+        }
 
         /// <summary>
         /// Searches InvoiceIndex by name and number for the 'term' passed

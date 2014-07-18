@@ -6,6 +6,8 @@
     using global::Examine.SearchCriteria;
     using Merchello.Web.Models.ContentEditing;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// A helper class that provides many useful methods and functionality for using Merchello in templates
     /// </summary> 
@@ -181,6 +183,33 @@
             return InvoiceQuery.GetAllInvoices();
         }
 
+        /// <summary>
+        /// The invoices by customer.
+        /// </summary>
+        /// <param name="customerKey">
+        /// The customer key.
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="InvoiceDisplay"/> associated with the customer.
+        /// </returns>
+        public IEnumerable<InvoiceDisplay> InvoicesByCustomer(Guid customerKey)
+        {
+            return InvoiceQuery.GetByCustomerKey(customerKey);
+        }
+
+        /// <summary>
+        /// The invoices by customer.
+        /// </summary>
+        /// <param name="customerKey">
+        /// The customer key.
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="InvoiceDisplay"/> associated with the customer.
+        /// </returns>
+        public IEnumerable<InvoiceDisplay> InvoicesByCustomer(string customerKey)
+        {
+            return InvoicesByCustomer(customerKey.EncodeAsGuid());
+        }
         /// <summary>
         /// Searches the Merchello Invoice index. 
         /// </summary>
