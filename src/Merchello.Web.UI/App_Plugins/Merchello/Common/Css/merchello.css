@@ -390,6 +390,18 @@
       padding-left: 2%; }
     .merchello-panel-body .gravatar img {
       border: solid 3px #53a93f; }
+  .merchello-panel-body .customer-info .customer-avatar {
+    max-height: 32px;
+    max-width: 32px;
+    border-radius: 60px;
+    float: left;
+    margin-right: 10px; }
+  .merchello-panel-body .customer-info h4 {
+    margin: 0;
+    height: 32px;
+    line-height: 32px; }
+  .merchello-panel-body .customer-info div {
+    margin-left: 42px; }
   .bar-graph .merchello-panel-body li {
     display: inline-block;
     margin-right: 0.8%;

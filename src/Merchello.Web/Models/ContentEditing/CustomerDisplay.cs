@@ -94,7 +94,11 @@
             ((Customer)destination).LoginName = customer.LoginName;
             destination.TaxExempt = customer.TaxExempt;
             destination.LastActivityDate = customer.LastActivityDate;
-            ((Customer)destination).ExtendedData = customer.ExtendedData;
+            if (customer.ExtendedData != null)
+            {
+                ((Customer)destination).ExtendedData = customer.ExtendedData;
+            }
+
             ((Customer)destination).Addresses = customer.Addresses.Select(x => x.ToCustomerAddress());
 
             return destination;
