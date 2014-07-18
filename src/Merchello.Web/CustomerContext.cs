@@ -1,22 +1,25 @@
-﻿using System.Net.Mime;
-using System.Web.Security;
-using Umbraco.Core.Models;
-using umbraco.presentation.umbraco;
-using Umbraco.Web.Security;
-
+﻿
 namespace Merchello.Web
 {
     using System;
     using System.Runtime.Remoting.Contexts;
     using System.Web;
-    using Core;
-    using Core.Cache;
-    using Core.Models;
-    using Core.Services;
-    using Models.Customer;
+    
+    using System.Net.Mime;
+    using System.Web.Security;
+
+
+    using Merchello.Core;
+    using Merchello.Core.Cache;
+    using Merchello.Core.Models;
+    using Merchello.Core.Services;
+    using Merchello.Web.Models.Customer;
+
+    using Umbraco.Core.Models;
     using Umbraco.Core;
     using Umbraco.Core.Logging;
     using Umbraco.Web;
+    using Umbraco.Web.Security;
 
     /// <summary>
     /// Represents the customer context.

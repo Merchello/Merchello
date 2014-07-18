@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Specialized;
-using System.Reflection;
-using System.Runtime.Serialization;
-using Merchello.Core.Models.EntityBase;
-using Merchello.Core.Models.TypeFields;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System;
+    using System.Collections.Specialized;
+    using System.Reflection;
+    using System.Runtime.Serialization;
+
+    using Merchello.Core.Models.EntityBase;
+    using Merchello.Core.Models.TypeFields;
+
     /// <summary>
     /// Defines a generic Gateway Provider
     /// </summary>
@@ -14,85 +15,146 @@ namespace Merchello.Core.Models
     [DataContract(IsReference = true)]
     public class GatewayProviderSettings : Entity, IGatewayProviderSettings
     {
-        private string _name;
-        private string _description;
-        private Guid _providerTfKey;
-        private ExtendedDataCollection _extendedData;
-        private bool _encryptExtendedData;       
-
-        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<GatewayProviderSettings, string>(x => x.Name);
-        private static readonly PropertyInfo DescriptionSelector = ExpressionHelper.GetPropertyInfo<GatewayProviderSettings, string>(x => x.Description);
-        private static readonly PropertyInfo ProviderTfKeySelector = ExpressionHelper.GetPropertyInfo<GatewayProviderSettings, Guid>(x => x.ProviderTfKey);
-        private static readonly PropertyInfo ExtendedDataChangedSelector = ExpressionHelper.GetPropertyInfo<GatewayProviderSettings, ExtendedDataCollection>(x => x.ExtendedData);
-        private static readonly PropertyInfo EncryptExtendedDataSelector = ExpressionHelper.GetPropertyInfo<GatewayProviderSettings, bool>(x => x.EncryptExtendedData);
-
-
-        private void ExtendedDataChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            OnPropertyChanged(ExtendedDataChangedSelector);
-        }
+        #region Fields
 
         /// <summary>
-        /// The descriptive name or label for the provider
+        /// The name selector.
+        /// </summary>
+        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<GatewayProviderSettings, string>(x => x.Name);
+
+        /// <summary>
+        /// The description selector.
+        /// </summary>
+        private static readonly PropertyInfo DescriptionSelector = ExpressionHelper.GetPropertyInfo<GatewayProviderSettings, string>(x => x.Description);
+
+        /// <summary>
+        /// The provider type field key selector.
+        /// </summary>
+        private static readonly PropertyInfo ProviderTfKeySelector = ExpressionHelper.GetPropertyInfo<GatewayProviderSettings, Guid>(x => x.ProviderTfKey);
+
+        /// <summary>
+        /// The extended data changed selector.
+        /// </summary>
+        private static readonly PropertyInfo ExtendedDataChangedSelector = ExpressionHelper.GetPropertyInfo<GatewayProviderSettings, ExtendedDataCollection>(x => x.ExtendedData);
+
+        /// <summary>
+        /// The encrypt extended data selector.
+        /// </summary>
+        private static readonly PropertyInfo EncryptExtendedDataSelector = ExpressionHelper.GetPropertyInfo<GatewayProviderSettings, bool>(x => x.EncryptExtendedData);
+
+        /// <summary>
+        /// The name.
+        /// </summary>
+        private string _name;
+
+        /// <summary>
+        /// The description.
+        /// </summary>
+        private string _description;
+
+        /// <summary>
+        /// The provider type field key.
+        /// </summary>
+        private Guid _providerTfKey;
+
+        /// <summary>
+        /// The extended data.
+        /// </summary>
+        private ExtendedDataCollection _extendedData;
+
+        /// <summary>
+        /// The encrypt extended data.
+        /// </summary>
+        private bool _encryptExtendedData;
+
+        #endregion
+
+
+        /// <summary>
+        /// Gets or sets the descriptive name or label for the provider
         /// </summary>
         [DataMember]
         public string Name
         {
-            get { return _name; }
+            get
+            {
+                return _name;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _name = value;
                     return _name;
-                }, _name, NameSelector);
+                }, 
+                _name, 
+                NameSelector);
             }
         }
 
 
         /// <summary>
-        /// The description of the provider
+        /// Gets or sets the description of the provider
         /// </summary>
         [DataMember]
         public string Description
         {
-            get { return _description; }
+            get
+            {
+                return _description;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _description = value;
                     return _description;
-                }, _description, DescriptionSelector);
+                }, 
+                _description, 
+                DescriptionSelector);
             }
         }
 
 
         /// <summary>
-        /// The type field key for the provider
+        /// Gets or sets the type field key for the provider
         /// </summary>
         [DataMember]
         public Guid ProviderTfKey
         {
-            get { return _providerTfKey; }
+            get
+            {
+                return _providerTfKey;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _providerTfKey = value;
                     return _providerTfKey;
-                }, _providerTfKey, ProviderTfKeySelector);
-                
+                }, 
+                _providerTfKey, 
+                ProviderTfKeySelector);
             }
         }
 
         /// <summary>
-        /// Extended data for the provider
+        /// Gets the extended data for the provider
         /// </summary>
         [DataMember]
         public ExtendedDataCollection ExtendedData
         {
-            get { return _extendedData; }
+            get
+            {
+                return _extendedData;
+            }
+
             internal set
             {
                 _extendedData = value;
@@ -101,24 +163,31 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
-        /// True/false indicating whether or the ExtendedData collection should be encrypted before persisted.
+        /// Gets or sets a value indicating whether or the ExtendedData collection should be encrypted before persisted.
         /// </summary>
         [DataMember]
         public bool EncryptExtendedData
         {
-            get { return _encryptExtendedData; }
+            get
+            {
+                return _encryptExtendedData;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _encryptExtendedData = value;
                     return _encryptExtendedData;
-                }, _encryptExtendedData, EncryptExtendedDataSelector); 
+                }, 
+                _encryptExtendedData, 
+                EncryptExtendedDataSelector); 
             }
         }
 
         /// <summary>
-        /// True/false indicating whether or not this provider is a "registered" and active provider.
+        /// Gets a value indicating whether or not this provider is a "registered" and active provider.
         /// </summary>
         /// <remarks>
         /// Any persisted provider is an activated provider
@@ -129,7 +198,7 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
-        /// Enum type of the Gateway Provider
+        /// Gets the type of the Gateway Provider
         /// </summary>
         [DataMember]
         public GatewayProviderType GatewayProviderType 
@@ -154,6 +223,19 @@ namespace Merchello.Core.Models
             CreateDate = DateTime.Now;
             UpdateDate = DateTime.Now;
         }
- 
+
+        /// <summary>
+        /// The extended data changed.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void ExtendedDataChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            OnPropertyChanged(ExtendedDataChangedSelector);
+        }
     }
 }
