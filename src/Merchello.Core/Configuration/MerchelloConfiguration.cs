@@ -1,6 +1,8 @@
 ﻿namespace Merchello.Core.Configuration
 {
     using System;
+    using System.Collections;
+    using System.Collections.Generic;
     using System.Configuration;
     using System.IO;
     using System.Linq;
@@ -83,6 +85,17 @@
         }
 
         /// <summary>
+        /// Gets the customer member types.
+        /// </summary>
+        public IEnumerable<string> CustomerMemberTypes
+        {
+            get
+            {
+                return Section.Customer.MemberTypes.Split(',').Select(x => x.Trim());
+            }
+        }
+
+        /// <summary>
         /// Gets the default SKU separator.
         /// </summary>
         public string DefaultSkuSeparator
@@ -111,7 +124,7 @@
         }
 
         /// <summary>
-        /// Days beyond which the anonymous customers will be deleted via a scheduled task.
+        /// Gets the days beyond which the anonymous customers will be deleted via a scheduled task.
         /// </summary>
         /// <remarks>
         /// The number of days beyond which the anonymous customers will be deleted via a scheduled task.

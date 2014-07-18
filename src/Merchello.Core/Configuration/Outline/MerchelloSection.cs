@@ -47,6 +47,18 @@
         }
 
         /// <summary>
+        /// Gets the customer element.
+        /// </summary>
+        [ConfigurationProperty("customer", IsRequired = true)]
+        public CustomerElement Customer
+        {
+            get
+            {
+                return (CustomerElement)this["customer"];
+            }
+        }
+
+        /// <summary>
         /// Gets the type field definitions element
         /// </summary>
         [ConfigurationProperty("typeFieldDefinitions", IsRequired = true)]
