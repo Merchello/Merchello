@@ -1,4 +1,6 @@
-﻿namespace Merchello.Core.Gateways.Shipping
+﻿using System;
+
+namespace Merchello.Core.Gateways.Shipping
 {
     using System.Collections.Generic;
     using Models;
@@ -40,7 +42,6 @@
         /// The <see cref="IShippingGatewayMethod"/> to be saved
         /// </param>
         void SaveShippingGatewayMethod(IShippingGatewayMethod shippingGatewayMethod);
-
 
         /// <summary>
         /// Returns a collection of ship methods assigned for this specific provider configuration (associated with the ShipCountry)

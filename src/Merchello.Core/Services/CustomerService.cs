@@ -45,13 +45,28 @@
         /// </summary>
         private readonly ICustomerAddressService _customerAddressService;
 
+        /// <summary>
+        /// The invoice service.
+        /// </summary>
+        private readonly IInvoiceService _invoiceService;
+
+        /// <summary>
+        /// The payment service.
+        /// </summary>
+        private readonly IPaymentService _paymentService;
+
         #endregion
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomerService"/> class.
         /// </summary>
         public CustomerService()
-            : this(new RepositoryFactory(), new AnonymousCustomerService(), new CustomerAddressService())
+            : this(
+            new RepositoryFactory(), 
+            new AnonymousCustomerService(), 
+            new CustomerAddressService(),
+            new InvoiceService(), 
+            new PaymentService())
         {
         }
 
@@ -67,8 +82,19 @@
         /// <param name="customerAddressService">
         /// The customer Address Service.
         /// </param>
-        public CustomerService(RepositoryFactory repositoryFactory, IAnonymousCustomerService anonymousCustomerService, ICustomerAddressService customerAddressService)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, anonymousCustomerService, customerAddressService)
+        public CustomerService(
+            RepositoryFactory repositoryFactory, 
+            IAnonymousCustomerService anonymousCustomerService, 
+            ICustomerAddressService customerAddressService,
+            IInvoiceService invoiceService,
+            IPaymentService paymentService)
+            : this(
+            new PetaPocoUnitOfWorkProvider(), 
+            repositoryFactory, 
+            anonymousCustomerService, 
+            customerAddressService,
+            invoiceService,
+            paymentService)
         {
         }
 
@@ -87,17 +113,33 @@
         /// <param name="customerAddressService">
         /// The customer Address Service.
         /// </param>
-        public CustomerService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, IAnonymousCustomerService anonymousCustomerService, ICustomerAddressService customerAddressService)
+        /// <param name="invoiceService">
+        /// The invoice Service.
+        /// </param>
+        /// <param name="paymentService">
+        /// The payment Service.
+        /// </param>
+        public CustomerService(
+            IDatabaseUnitOfWorkProvider provider, 
+            RepositoryFactory repositoryFactory, 
+            IAnonymousCustomerService anonymousCustomerService, 
+            ICustomerAddressService customerAddressService, 
+            IInvoiceService invoiceService,
+            IPaymentService paymentService)
         {
             Mandate.ParameterNotNull(provider, "provider");
             Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
             Mandate.ParameterNotNull(anonymousCustomerService, "anonymousCustomerService");
             Mandate.ParameterNotNull(customerAddressService, "customerAddressService");
+            Mandate.ParameterNotNull(invoiceService, "invoiceServie");
+            Mandate.ParameterNotNull(paymentService, "paymentService");
 
             _uowProvider = provider;
             _repositoryFactory = repositoryFactory;
             _anonymousCustomerService = anonymousCustomerService;
             _customerAddressService = customerAddressService;
+            _invoiceService = invoiceService;
+            _paymentService = paymentService;
         }
 
 
@@ -291,6 +333,8 @@
         public void Delete(ICustomer customer, bool raiseEvents = true)
         {
             if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<ICustomer>(customer), this);
+          
+            DeleteInvoicesAndPayments(customer);
 
             using (new WriteLock(Locker))
             {
@@ -301,6 +345,7 @@
                     uow.Commit();
                 }
             }
+
             if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<ICustomer>(customer), this);
         }
 
@@ -314,6 +359,8 @@
             var customerArray = customers as ICustomer[] ?? customers.ToArray();
 
             if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<ICustomer>(customerArray), this);
+
+            customerArray.ForEach(DeleteInvoicesAndPayments);
 
             using (new WriteLock(Locker))
             {
@@ -594,6 +641,24 @@
             {
                 _customerAddressService.Save(address);
             }
+        }
+
+        /// <summary>
+        /// Deletes invoices and payments associated with a customer
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <remarks>
+        /// This helps clean up the Examine (Lucene) indexes
+        /// </remarks>
+        private void DeleteInvoicesAndPayments(ICustomer customer)
+        {
+            var invoices = _invoiceService.GetInvoicesByCustomerKey(customer.Key).ToArray();
+            if (invoices.Any()) _invoiceService.Delete(invoices);
+
+            var payments = _paymentService.GetPaymentsByCustomerKey(customer.Key).ToArray();
+            if (payments.Any()) _paymentService.Delete(payments);
         }
     }
 }

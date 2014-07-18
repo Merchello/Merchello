@@ -63,6 +63,17 @@
         void Delete(IPayment payment, bool raiseEvents = true);
 
         /// <summary>
+        /// Deletes a collection of <see cref="IPayment"/>
+        /// </summary>
+        /// <param name="payments">
+        /// The payments.
+        /// </param>
+        /// <param name="raiseEvents">
+        /// The raise events.
+        /// </param>
+        void Delete(IEnumerable<IPayment> payments, bool raiseEvents = true);
+
+        /// <summary>
         /// Gets a <see cref="IPayment"/>
         /// </summary>
         /// <param name="key">The unique 'key' (GUID) of the <see cref="IPayment"/></param>
