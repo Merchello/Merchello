@@ -262,6 +262,11 @@ $active: lighten($green, 50%);
         img { border: solid 3px $green; }
     }
 
+    .customer-info {
+        .customer-avatar { max-height: 32px; max-width: 32px; border-radius: 60px; float: left; margin-right: 10px; }
+        h4 { margin: 0 0 10px; height: 32px; line-height: 32px; }
+    }
+
     //Graphs and Charts
     li {
         .bar-graph & { display: inline-block; margin-right: .8%; text-align: center; color: #d9d9d9; margin-left: -4px;

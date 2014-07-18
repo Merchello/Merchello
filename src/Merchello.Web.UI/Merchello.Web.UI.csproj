@@ -453,6 +453,9 @@
     <Content Include="App_Plugins\Merchello\lib\codemirror\Js\Mode\Razor\LICENSE" />
     <Content Include="App_Plugins\Merchello\lib\codemirror\Js\Mode\Sieve\LICENSE" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\GatewayProviders\Dialogs\smtp.notifications.providersettings.controller.js" />
+    <Content Include="App_Plugins\Merchello\Common\Css\merchello.css.map">
+      <DependentUpon>merchello.css</DependentUpon>
+    </Content>
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

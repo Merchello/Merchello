@@ -119,11 +119,13 @@
             </div>
 
             <div class="merchello-pane secondary span3">
-
+                <div class="well customer-info">
+                    <img class="customer-avatar" data-ng-show="avatarUrl != ''" class="photo pull-left" src="{{avatarUrl}}" />
+                    <h4>{{customer.firstName}} {{customer.lastName}}</h4>
+                    <div><a href="mailto:{{customer.email}}">{{customer.email}}</a></div>
+                    <div data-ng-show="customer.hasPrimaryAddress">{{primaryAddress.phone}}</div>
+                </div>
                 <div class="vcard well">
-                    <h3>Billing Address</h3>
-
-                    <img data-ng-show="avatarUrl != ''" class="photo pull-right" src="{{avatarUrl}}" />
                     <h4 class="fn">Heather Alvis</h4>
                     <span class="org">Mindfly</span>
                     <span class="adr">
@@ -136,13 +138,6 @@
                     <a href="mailto:heather@mindfly.com" class="email">heather@mindfly.com</a>
                 </div>
 
-                <div class="well customer-details">
-                    <h3>Customer Details</h3>
-                    <ul>
-                        <li><i class="icon-newspaper-alt"></i> Accepts Marketing</li>
-                        <li><i class="icon-user"></i> No Account</li>
-                    </ul>
-                </div>
 
             </div>
 
