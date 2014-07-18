@@ -1,4 +1,7 @@
-﻿using umbraco.presentation.umbraco;
+﻿using System.Net.Mime;
+using System.Web.Security;
+using Umbraco.Core.Models;
+using umbraco.presentation.umbraco;
 using Umbraco.Web.Security;
 
 namespace Merchello.Web
@@ -138,7 +141,7 @@ namespace Merchello.Web
                     CreateAnonymousCustomer();
                 }                             
             }
-            else
+            else 
             {
                 CreateAnonymousCustomer();
             } // a cookie was not found
@@ -160,7 +163,23 @@ namespace Merchello.Web
             if (customer != null)
             {
                 CurrentCustomer = customer;
-                
+
+                if (customer.IsAnonymous)
+                {
+                    if (_membershipHelper.IsLoggedIn())
+                    {
+                        var memberId = _membershipHelper.GetCurrentMemberId();
+
+                        var member = ApplicationContext.Current.Services.MemberService.GetById(memberId);
+                        customer = _customerService.GetByLoginName(member.Username) ??
+                                       _customerService.CreateCustomerWithKey(member.Username);
+
+                        CacheCustomer(customer);
+                        CurrentCustomer = customer;
+
+                        return;
+                    }
+                }
                 // customer.IsAnonymous and Member is not anonymous -> convert to ICustomer ... retrieve new or create
 
                 ContextData.Key = customer.Key;
@@ -172,18 +191,19 @@ namespace Merchello.Web
 
             //// If the member has been authenticated there is no need to create an anonymous record.
             //// Either return an existing customer or create a new one for the member.
-            ////if (_umbracoContext.Security.IsMemberAuthorized())
-            ////{
-            ////    var member = Member.GetCurrentMember();
+           /* if (_membershipHelper.IsLoggedIn())
+            {
+                var memberId = _membershipHelper.GetCurrentMemberId();
 
-            ////    customer = _customerService.GetByMemberId(member.Id) ??
-            ////                   _customerService.CreateCustomerWithId(member.Id);
+                var member = ApplicationContext.Current.Services.MemberService.GetById(memberId);
+                customer = _customerService.GetByLoginName(member.Username) ??
+                               _customerService.CreateCustomerWithKey(member.Username);
 
-            ////    CacheCustomer(customer);
-            ////    CurrentCustomer = customer;
+                CacheCustomer(customer);
+                CurrentCustomer = customer;
                 
-            ////    return;                
-            ////}
+                return;                
+            }*/
            
             // try to get the customer
             customer = _customerService.GetAnyByKey(key);
