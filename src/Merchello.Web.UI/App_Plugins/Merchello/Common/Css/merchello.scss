@@ -95,7 +95,7 @@ $active: lighten($green, 50%);
             td { cursor: pointer; }
         }
     }
-    td input[type="checkbox"] { margin: 0 auto; display: block; }
+    td input[type="checkbox"], th input[type="checkbox"] { margin: 0 auto; display: block; }
 
     .merchello-striped-table {
         i { font-size: 1em; }

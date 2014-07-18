@@ -107,6 +107,7 @@
         /// <returns>
         /// The <see cref="CustomerDisplay"/>.
         /// </returns>
+        [HttpGet]
         public CustomerDisplay GetCustomer(Guid id)
         {
             var customer = _customerService.GetByKey(id);
