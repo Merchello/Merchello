@@ -6,6 +6,7 @@ using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Merchello.Plugin.Shipping.FedEx.Models;
+using Umbraco.Core;
 using Umbraco.Core.Cache;
 
 namespace Merchello.Plugin.Shipping.FedEx.Provider
@@ -15,13 +16,16 @@ namespace Merchello.Plugin.Shipping.FedEx.Provider
     public class FedExShippingGatewayProvider : ShippingGatewayProviderBase, IFedExShippingGatewayProvider
     {
         private FedExProcessorSettings _settings;
+        private IRuntimeCacheProvider _runtimeCache;
 
         public FedExShippingGatewayProvider(IGatewayProviderService gatewayProviderService,
             IGatewayProviderSettings gatewayProvider, IRuntimeCacheProvider runtimeCacheProvider)
             : base(gatewayProviderService, gatewayProvider, runtimeCacheProvider)
         {
             _settings = new FedExProcessorSettings();
+            _runtimeCache = runtimeCacheProvider;
         }
+
 
         // In this case, the GatewayResource can be used to create multiple shipmethods of the same resource type.
         internal static readonly IEnumerable<IGatewayResource> AvailableResources = new List<IGatewayResource>()
@@ -144,11 +148,11 @@ namespace Merchello.Plugin.Shipping.FedEx.Provider
             //Mandate.ParameterNotNullOrEmpty(name, "name");
 
             var attempt = GatewayProviderService.CreateShipMethodWithKey(GatewayProviderSettings.Key, shipCountry, name,
-                gatewayResource.ServiceCode + string.Format("-{0}", Guid.NewGuid()));
+                gatewayResource.ServiceCode);
 
             if (!attempt.Success) throw attempt.Exception;
 
-            return new FedExShippingGatewayMethod(gatewayResource, attempt.Result, shipCountry, GatewayProviderSettings);
+            return new FedExShippingGatewayMethod(gatewayResource, attempt.Result, shipCountry, GatewayProviderSettings, _runtimeCache);
         }
 
         /// <summary>
@@ -183,8 +187,26 @@ namespace Merchello.Plugin.Shipping.FedEx.Provider
                         new FedExShippingGatewayMethod(
                             AvailableResources.FirstOrDefault(x => shipMethod.ServiceCode.StartsWith(x.ServiceCode)),
                             shipMethod, shipCountry,
-                            GatewayProviderSettings)
+                            GatewayProviderSettings, _runtimeCache)
                 ).OrderBy(x => x.ShipMethod.Name);
+        }
+
+        public override IEnumerable<IShippingGatewayMethod> GetShippingGatewayMethodsForShipment(IShipment shipment)
+        {
+            var methods = base.GetShippingGatewayMethodsForShipment(shipment);
+
+            var shippingMethods = new List<IShippingGatewayMethod>();
+            foreach (var method in methods)
+            {     
+                var quote = method.QuoteShipment(shipment);
+                             
+                if (quote.Result.Rate > (decimal) 0.00)
+                {
+                    shippingMethods.Add(method);
+                }
+            }
+                                    
+            return shippingMethods;
         }
     }
 }

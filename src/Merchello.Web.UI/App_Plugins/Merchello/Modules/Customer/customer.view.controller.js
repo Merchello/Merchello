@@ -8,32 +8,64 @@
      * @description
      * The controller for the Customer view page
      */
-    controllers.CustomerViewController = function($scope) {
+    controllers.CustomerViewController = function ($scope, $routeParams, merchelloCustomerService, merchelloGravatarService, notificationsService) {
 
-        $scope.loaded = true;
-        $scope.preValuesLoaded = true;
-        $scope.customer = { name: "This is a placeholder!" };
-        $(".content-column-body").css('background-image', 'none');
+        /**
+         * @ngdoc method
+         * @name init
+         * @function
+         * 
+         * @description
+         * Inititalizes the scope.
+         */
+        $scope.init = function () {
+            $scope.setVariables();
+            $scope.loadCustomer();
+        };
 
-        //we are editing so get the product from the server
-        //var promise = merchelloProductService.getByKey($routeParams.id);
+        /**
+         * @ngdoc method
+         * @name loadCustomer
+         * @function
+         * 
+         * @description
+         * Load the customer information if needed.
+         */
+        $scope.loadCustomer = function () {
+            if ($routeParams.id !== "keygoeshere") {
+                $scope.customerKey = $routeParams.id;
+                var promiseLoadCustomer = merchelloCustomerService.GetCustomer($scope.customerKey);
+                promiseLoadCustomer.then(function (customerResponse) {
+                    $scope.customer = new merchello.Models.Customer(customerResponse);
+                    $scope.avatarUrl = merchelloGravatarService.avatarUrl($scope.customer.email);
+                    $scope.loaded = true;
+                }, function (reason) {
+                    notificationsService.error("Failed to load customer", reason.message);
+                });
+            }
+        };
 
-        //promise.then(function (product) {
+        /**
+         * @ngdoc method
+         * @name setVariables
+         * @function
+         * 
+         * @description
+         * Set the $scope variables.
+         */
+        $scope.setVariables = function () {
+            $scope.avatarUrl = "";
+            $scope.customer = new merchello.Models.Customer();
+            $scope.customerKey = false;
+            $scope.loaded = false;
+            $
+        };
 
-        //    $scope.product = product;
-        //    $scope.loaded = true;
-        //    $scope.preValuesLoaded = true;
-        //    $(".content-column-body").css('background-image', 'none');
-
-        //}, function (reason) {
-
-        //    alert('Failed: ' + reason.message);
-
-        //});
+        $scope.init();
 
     };
 
 
-    angular.module("umbraco").controller("Merchello.Editors.Customer.ViewController", ['$scope', merchello.Controllers.CustomerViewController]);
+    angular.module("umbraco").controller("Merchello.Editors.Customer.ViewController", ['$scope', '$routeParams', 'merchelloCustomerService', 'merchelloGravatarService', 'notificationsService', merchello.Controllers.CustomerViewController]);
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));
