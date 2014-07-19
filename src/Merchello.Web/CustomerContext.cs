@@ -2,22 +2,20 @@
 namespace Merchello.Web
 {
     using System;
-    using System.Runtime.Remoting.Contexts;
-    using System.Web;
-    
     using System.Net.Mime;
-    using System.Web.Security;
-
+    using System.Web;
 
     using Merchello.Core;
     using Merchello.Core.Cache;
+    using Merchello.Core.Configuration;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
     using Merchello.Web.Models.Customer;
+    using Merchello.Web.Workflow;
 
-    using Umbraco.Core.Models;
     using Umbraco.Core;
     using Umbraco.Core.Logging;
+    using Umbraco.Core.Services;
     using Umbraco.Web;
     using Umbraco.Web.Security;
 
@@ -34,9 +32,19 @@ namespace Merchello.Web
         private const string CustomerCookieName = "merchello";
 
         /// <summary>
-        /// The _customer service.
+        /// The merchello context.
+        /// </summary>
+        private readonly IMerchelloContext _merchelloContext;
+
+        /// <summary>
+        /// The customer service.
         /// </summary>
         private readonly ICustomerService _customerService;
+
+        /// <summary>
+        /// The member service.
+        /// </summary>
+        private readonly IMemberService _memberService;
 
         /// <summary>
         /// The <see cref="UmbracoContext"/>.
@@ -72,7 +80,7 @@ namespace Merchello.Web
         /// The umbraco context.
         /// </param>
         public CustomerContext(UmbracoContext umbracoContext)
-            : this(MerchelloContext.Current, umbracoContext)
+            : this(MerchelloContext.Current, ApplicationContext.Current.Services.MemberService, umbracoContext)
         {
         }
 
@@ -82,16 +90,22 @@ namespace Merchello.Web
         /// <param name="merchelloContext">
         /// The merchello context.
         /// </param>
+        /// <param name="memberService">
+        /// The member Service.
+        /// </param>
         /// <param name="umbracoContext">
         /// The umbraco context.
         /// </param>
-        internal CustomerContext(IMerchelloContext merchelloContext, UmbracoContext umbracoContext)
+        internal CustomerContext(IMerchelloContext merchelloContext, IMemberService memberService, UmbracoContext umbracoContext)
         {
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
             Mandate.ParameterNotNull(umbracoContext, "umbracoContext");
+            Mandate.ParameterNotNull(memberService, "memberService");
 
+            _merchelloContext = merchelloContext;
             _umbracoContext = umbracoContext;
             _customerService = merchelloContext.Services.CustomerService;
+            _memberService = memberService;
             _cache = merchelloContext.Cache;
 
             _membershipHelper = new MembershipHelper(_umbracoContext);
@@ -171,11 +185,21 @@ namespace Merchello.Web
                 {
                     if (_membershipHelper.IsLoggedIn())
                     {
+                        var anonymousBasket = Basket.GetBasket(_merchelloContext, customer);
+
                         var memberId = _membershipHelper.GetCurrentMemberId();
 
-                        var member = ApplicationContext.Current.Services.MemberService.GetById(memberId);
+                        var member = _memberService.GetById(memberId);
                         customer = _customerService.GetByLoginName(member.Username) ??
                                        _customerService.CreateCustomerWithKey(member.Username);
+
+                        var customerBasket = Basket.GetBasket(_merchelloContext, customer);
+
+                        //var type = Type.GetType(
+                        //    MerchelloConfiguration.Current.GetStrategyElement(
+                        //        "DefaultAnonymousBasketConversionStrategy").Type);
+                        //var strategy = ActivatorHelper.CreateInstance<BasketConversionBase>(type,)
+
 
                         CacheCustomer(customer);
                         CurrentCustomer = customer;
@@ -183,8 +207,7 @@ namespace Merchello.Web
                         return;
                     }
                 }
-                // customer.IsAnonymous and Member is not anonymous -> convert to ICustomer ... retrieve new or create
-
+                
                 ContextData.Key = customer.Key;
 
                 return;

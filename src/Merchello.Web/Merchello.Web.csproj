@@ -139,6 +139,10 @@
     <Compile Include="PackageActions\AddLocalizationAreas.cs" />
     <Compile Include="ProductContentEditing.cs" />
     <Compile Include="WebApi\ScheduledTasksController.cs" />
+    <Compile Include="Workflow\BasketConversionBase.cs" />
+    <Compile Include="Workflow\BasketConversionByCombiningAnonymousBasket.cs" />
+    <Compile Include="Workflow\BasketConversionByDiscardingPreviousCustomerBasket.cs" />
+    <Compile Include="Workflow\IBasketConversionBase.cs" />
     <Compile Include="Workflow\IWishList.cs" />
     <Compile Include="Workflow\PaymentProcessor.cs" />
     <Compile Include="Editors\SettingsApiController.cs" />
