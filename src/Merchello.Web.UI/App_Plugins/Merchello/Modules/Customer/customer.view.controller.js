@@ -8,7 +8,24 @@
      * @description
      * The controller for the Customer view page
      */
-    controllers.CustomerViewController = function ($scope, $routeParams, merchelloCustomerService, merchelloGravatarService, notificationsService) {
+    controllers.CustomerViewController = function($scope, $routeParams, merchelloCustomerService, merchelloGravatarService, notificationsService) {
+
+        /**
+         * @ngdoc method
+         * @name getDefaultAddress
+         * @function
+         * 
+         * @description
+         * Load the default address from the customer's list of addresses.
+         */
+        $scope.getDefaultAddress = function() {
+            var addresses = $scope.customer.addresses;
+            for (var i = 0; i < addresses.length; i++) {
+                if (addresses[i].isDefault) {
+                    $scope.defaultAddress = addresses[i];
+                }
+            }
+        }
 
         /**
          * @ngdoc method
@@ -18,7 +35,7 @@
          * @description
          * Inititalizes the scope.
          */
-        $scope.init = function () {
+        $scope.init = function() {
             $scope.setVariables();
             $scope.loadCustomer();
         };
@@ -31,18 +48,38 @@
          * @description
          * Load the customer information if needed.
          */
-        $scope.loadCustomer = function () {
+        $scope.loadCustomer = function() {
             if ($routeParams.id !== "keygoeshere") {
                 $scope.customerKey = $routeParams.id;
                 var promiseLoadCustomer = merchelloCustomerService.GetCustomer($scope.customerKey);
-                promiseLoadCustomer.then(function (customerResponse) {
+                promiseLoadCustomer.then(function(customerResponse) {
                     $scope.customer = new merchello.Models.Customer(customerResponse);
                     $scope.avatarUrl = merchelloGravatarService.avatarUrl($scope.customer.email);
+                    $scope.getDefaultAddress();
                     $scope.loaded = true;
-                }, function (reason) {
+                }, function(reason) {
                     notificationsService.error("Failed to load customer", reason.message);
                 });
             }
+        };
+
+        /**
+         * @ngdoc method
+         * @name saveCustoemr
+         * @function
+         * 
+         * @description
+         * Save the customer with the new note.
+         */
+        $scope.saveCustomer = function() {
+            notificationsService.info("Saving...", "");
+            var promiseSaveCustomer = merchelloCustomerService.SaveCustomer($scope.customer);
+            promiseSaveCustomer.then(function(customerResponse) {
+                $scope.customer = new merchello.Models.Customer(customerResponse);
+                notificationsService.success("Customer Note Saved", "");
+            }, function(reason) {
+                notificationsService.error("Customer Note Save Failed", reason.message);
+            });
         };
 
         /**
@@ -57,6 +94,7 @@
             $scope.avatarUrl = "";
             $scope.customer = new merchello.Models.Customer();
             $scope.customerKey = false;
+            $scope.defaultAddress = {};
             $scope.loaded = false;
         };
 
