@@ -109,7 +109,9 @@
             {
                 ((Customer)destination).ExtendedData = customer.ExtendedData;
             }
-            
+
+            destination.Notes = customer.Notes;
+
             ((Customer)destination).Addresses = customer.Addresses.Select(x => x.ToCustomerAddress());
 
             return destination;
