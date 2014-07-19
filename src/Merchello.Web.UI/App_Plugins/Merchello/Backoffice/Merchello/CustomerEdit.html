@@ -53,28 +53,36 @@
                     <div class="merchello-controls row-fluid">
                         <div class="row-fluid span10 col-xs-10">
                             <div class="pull-right btn-group">
+                                <!-- ACTION: Select Address to Edit -->
                                 <a class="btn-standard btn" data-ng-show="billingAddresses.length > 1">Select Address</a>
+                                <!-- ACTION: Create New Address -->
                                 <a class="btn btn-primary"><i class="icon-add"></i> New</a>
+                                <!-- ACTION: Delete This Address -->
                                 <a class="btn-warning btn"><i class="icon-trash"></i></a>
                             </div>
                         </div>
                         <div class="form-group span12">
                             <label for="fullName">Full Name:</label>
-                            <input name="fullName" type="text" class="span5" data-ng-model="defaultBillingAddress.fullName" />
+                            <input name="fullName" type="text" class="span5" data-ng-model="currentBillingAddress.fullName" />
                             <label for="org">Company:</label>
-                            <input name="org" type="text" class="span5" data-ng-model="defaultBillingAddress.company" />
+                            <input name="org" type="text" class="span5" data-ng-model="currentBillingAddress.company" />
                             <label for="streetAddress">*Address:</label>
-                            <input name="streetAddress" type="text" class="span5" data-ng-model="defaultBillingAddress.address1" />
+                            <input name="streetAddress" type="text" class="span5" data-ng-model="currentBillingAddress.address1" />
                             <label for="extendedAddress">Address Line 2:</label>
-                            <input name="extendedAddress" type="text" class="span5" data-ng-model="defaultBillingAddress.address2" />
+                            <input name="extendedAddress" type="text" class="span5" data-ng-model="currentBillingAddress.address2" />
                             <label for="locality">*City:</label>
-                            <input name="locality" type="text" class="span5" data-ng-model="defaultBillingAddress.locality" />
-                            <label for="region">*State:</label>
-                            <select name="region" class="span3"><option value="WA">WA</option></select>
+                            <input name="locality" type="text" class="span5" data-ng-model="currentBillingAddress.locality" />
+                            <label for="region">*{{provinceLabel}}:</label>
+                            <input name="regionInput" type="text" class="span3" data-ng-show="!doesCountryHaveProvinces(filters.billingCountry)" data-ng-model="currentBillingAddress.region" />
+                            <select name="regionSelect" class="span3" data-ng-show="doesCountryHaveProvinces(filters.billingCountry)" data-ng-model="filters.billingProvince" data-ng-change="updateProvince('billing')" data-ng-options="option.name for option in filters.billingCountry.provinces"></select>
                             <label for="postalCode">*Zip Code:</label>
-                            <input name="postalCode" type="text" class="span3" data-ng-model="defaultBillingAddres.postalCode" />
+                            <input name="postalCode" type="text" class="span3" data-ng-model="currentBillingAddress.postalCode" />
                             <label for="countryName">*Country:</label>
-                            <select name="countryName" class="span3" data-ng-filter="filters.billingCountry" data-ng-options="country.name for country in countries"></select>
+                            <select name="countryName" class="span3" data-ng-model="filters.billingCountry" data-ng-change="updateCountry('billing')" data-ng-options="option.name for option in countries"></select>
+                            <div>
+                                <!-- ACTION: Add Billing Address to Address List -->
+                                <a class="btn btn-primary" data-ng-click="addAddress('billing')">Add Address</a>
+                            </div>
                         </div>
                     </div>
                 </div>
