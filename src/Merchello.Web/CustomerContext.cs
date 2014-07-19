@@ -2,6 +2,7 @@
 namespace Merchello.Web
 {
     using System;
+    using System.Linq;
     using System.Net.Mime;
     using System.Web;
 
@@ -184,24 +185,27 @@ namespace Merchello.Web
                 if (customer.IsAnonymous)
                 {
                     if (_membershipHelper.IsLoggedIn())
-                    {
-                        var anonymousBasket = Basket.GetBasket(_merchelloContext, customer);
-
+                    {                        
                         var memberId = _membershipHelper.GetCurrentMemberId();
-
                         var member = _memberService.GetById(memberId);
-                        customer = _customerService.GetByLoginName(member.Username) ??
-                                       _customerService.CreateCustomerWithKey(member.Username);
 
-                        var customerBasket = Basket.GetBasket(_merchelloContext, customer);
+                        if (MerchelloConfiguration.Current.CustomerMemberTypes.Any(x => x == member.ContentTypeAlias))
+                        {                          
+                            var anonymousBasket = Basket.GetBasket(_merchelloContext, customer);
 
-                        //// convert the customer basket
-                        ConvertBasket(anonymousBasket, customerBasket);
+                            customer = _customerService.GetByLoginName(member.Username) ??
+                                            _customerService.CreateCustomerWithKey(member.Username);
 
-                        CacheCustomer(customer);
-                        CurrentCustomer = customer;
+                            var customerBasket = Basket.GetBasket(_merchelloContext, customer);
 
-                        return;
+                            //// convert the customer basket
+                            ConvertBasket(anonymousBasket, customerBasket);
+
+                            CacheCustomer(customer);
+                            CurrentCustomer = customer;
+
+                            return;
+                        }
                     }
                 }
                 

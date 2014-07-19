@@ -1,5 +1,9 @@
 ﻿namespace Merchello.Web.Workflow
 {
+    using System.Linq;
+
+    using Merchello.Core.Models;
+
     /// <summary>
     /// The basket conversion by discarding previously saved basket.
     /// </summary>
@@ -31,7 +35,8 @@
 
             CustomerBasket.Empty();
 
-            CustomerBasket.Items.Add(AnonymousBasket.Items);
+            CustomerBasket.Items.Add(AnonymousBasket.Items.Select(x => x.AsLineItemOf<IItemCacheLineItem>()));
+            CustomerBasket.Save();
 
             return CustomerBasket;
         }
