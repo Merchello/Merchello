@@ -755,6 +755,7 @@
     <Compile Include="Strategies\IStrategy.cs" />
     <Compile Include="Gateways\Shipping\IShipmentRateQuoteStrategy.cs" />
     <Compile Include="Gateways\Taxation\ITaxCalculationStrategy.cs" />
+    <Compile Include="Strategies\Merging\ILineItemContainerMergingStrategy.cs" />
     <Compile Include="Strategies\Packaging\DefaultWarehousePackagingStrategy.cs" />
     <Compile Include="Strategies\Packaging\PackagingStrategyBase.cs" />
     <Compile Include="Strategies\Packaging\IPackagingStrategy.cs" />

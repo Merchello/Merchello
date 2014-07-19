@@ -3,6 +3,7 @@
 namespace Merchello.Core.Models
 {
     using System;
+    using System.Collections.Generic;
     using System.Collections.Specialized;
     using System.IO;
     using System.Linq;
@@ -43,6 +44,15 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
+        /// True/false indicating whether or not the current collection is empty
+        /// </summary>
+        /// <returns></returns>
+        public bool IsEmpty
+        {
+            get { return Count == 0; }
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="LineItemCollection"/> class.
         /// </summary>
         /// <param name="validationCallback">
@@ -59,35 +69,16 @@ namespace Merchello.Core.Models
         /// </summary>
         internal Func<ILineItem, bool> ValidateAdd { get; set; }
 
-        internal new void Add(ILineItem item)
-        {
-            using (new WriteLock(_addLocker))
-            {
-                var key = GetKeyForItem(item);
-                if (key != null)
-                {
-                    var exists = Contains(key);
-                    if (exists) 
-                    { 
-                        this[key].Quantity += item.Quantity;
-                        return;
-                    }
-                }
-                if(ValidateAdd != null) if(!ValidateAdd(item)) return;
-                
-                base.Add(item);
 
-                OnAdd.IfNotNull(x => x.Invoke());
-
-                OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));
-            }
-        }
-
-        protected override string GetKeyForItem(ILineItem item)
-        {
-            return item.Sku;
-        }
-
+        /// <summary>
+        /// Gets the index of the key.
+        /// </summary>
+        /// <param name="sku">
+        /// The SKU.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
         public override int IndexOfKey(string sku)
         {
             for (var i = 0; i < Count; i++)
@@ -97,39 +88,86 @@ namespace Merchello.Core.Models
                     return i;
                 }
             }
+
             return -1;
         }
 
         /// <summary>
-        /// Determines whether this collection contains a <see cref="T"/> whose sku matches the specified sku.
+        /// Determines whether this collection contains a <see cref="T"/> whose SKU matches the specified SKU.
         /// </summary>
-        /// <param name="sku">Sku of the line item.</param>
-        /// <returns><c>true</c> if the collection contains the specified sku; otherwise, <c>false</c>.</returns>
-        /// <remarks></remarks>
+        /// <param name="sku">SKU of the line item.</param>
+        /// <returns><c>true</c> if the collection contains the specified SKU; otherwise, <c>false</c>.</returns>
         public new bool Contains(string sku)
         {
             return this.Any(x => x.Sku == sku);
         }
 
         /// <summary>
-        /// True/false indicating whether or not the current collection is empty
+        /// Adds a collection of <see cref="ILineItem"/> to the collection.
         /// </summary>
-        /// <returns></returns>
-        public bool IsEmpty
+        /// <param name="items">
+        /// The items.
+        /// </param>
+        public void Add(IEnumerable<ILineItem> items)
         {
-            get { return Count == 0; }
+            items.ForEach(Add);
         }
 
         /// <summary>
         /// Allows visitor to visit each item in the collection
         /// </summary>
-        /// <param name="visitor"><see cref="ILineItemVisitor"/></param>
+        /// <param name="visitor">A <see cref="ILineItemVisitor"/></param>
         public virtual void Accept(ILineItemVisitor visitor)
         {
             foreach (var item in this)
             {
                 visitor.Visit(item);
             }
-        }       
+        }
+
+        /// <summary>
+        /// The add.
+        /// </summary>
+        /// <param name="item">
+        /// The item.
+        /// </param>
+        internal new void Add(ILineItem item)
+        {
+            using (new WriteLock(_addLocker))
+            {
+                var key = GetKeyForItem(item);
+                if (key != null)
+                {
+                    var exists = Contains(key);
+                    if (exists)
+                    {
+                        this[key].Quantity += item.Quantity;
+                        return;
+                    }
+                }
+
+                if (ValidateAdd != null) if (!ValidateAdd(item)) return;
+
+                base.Add(item);
+
+                OnAdd.IfNotNull(x => x.Invoke());
+
+                OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));
+            }
+        }
+
+        /// <summary>
+        /// Gets the key for the item.
+        /// </summary>
+        /// <param name="item">
+        /// The item.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        protected override string GetKeyForItem(ILineItem item)
+        {
+            return item.Sku;
+        }
     }
 }
