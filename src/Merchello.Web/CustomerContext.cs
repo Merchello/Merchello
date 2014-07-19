@@ -195,11 +195,8 @@ namespace Merchello.Web
 
                         var customerBasket = Basket.GetBasket(_merchelloContext, customer);
 
-                        //var type = Type.GetType(
-                        //    MerchelloConfiguration.Current.GetStrategyElement(
-                        //        "DefaultAnonymousBasketConversionStrategy").Type);
-                        //var strategy = ActivatorHelper.CreateInstance<BasketConversionBase>(type,)
-
+                        //// convert the customer basket
+                        ConvertBasket(anonymousBasket, customerBasket);
 
                         CacheCustomer(customer);
                         CurrentCustomer = customer;
@@ -213,24 +210,6 @@ namespace Merchello.Web
                 return;
             }
 
-            //// TODO persisted customers
-
-            //// If the member has been authenticated there is no need to create an anonymous record.
-            //// Either return an existing customer or create a new one for the member.
-           /* if (_membershipHelper.IsLoggedIn())
-            {
-                var memberId = _membershipHelper.GetCurrentMemberId();
-
-                var member = ApplicationContext.Current.Services.MemberService.GetById(memberId);
-                customer = _customerService.GetByLoginName(member.Username) ??
-                               _customerService.CreateCustomerWithKey(member.Username);
-
-                CacheCustomer(customer);
-                CurrentCustomer = customer;
-                
-                return;                
-            }*/
-           
             // try to get the customer
             customer = _customerService.GetAnyByKey(key);
            
@@ -245,6 +224,34 @@ namespace Merchello.Web
                 // create a new anonymous customer
                 CreateAnonymousCustomer();
             }
+        }
+
+        /// <summary>
+        /// Converts an anonymous basket to a customer basket.
+        /// </summary>
+        /// <param name="anonymousBasket">
+        /// The anonymous basket.
+        /// </param>
+        /// <param name="customerBasket">
+        /// The customer basket.
+        /// </param>
+        private void ConvertBasket(IBasket anonymousBasket, IBasket customerBasket)
+        {
+            var type = Type.GetType(
+                            MerchelloConfiguration.Current.GetStrategyElement(
+                                "DefaultAnonymousBasketConversionStrategy").Type);
+
+            var attempt = ActivatorHelper.CreateInstance<BasketConversionBase>(
+                type,
+                new object[] { anonymousBasket, customerBasket });
+
+            if (!attempt.Success)
+            {
+                LogHelper.Error<CustomerContext>("Failed to convert anonymous basket to customer basket", attempt.Exception);
+                return;
+            }
+
+            attempt.Result.Merge();
         }
 
         /// <summary>
