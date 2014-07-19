@@ -313,8 +313,7 @@
     <Content Include="App_Plugins\Merchello\Modules\Customer\customer.edit.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Customer\customer.models.js" />
     <Content Include="App_Plugins\Merchello\Modules\Customer\customer.view.controller.js" />
-    <Content Include="App_Plugins\Merchello\Modules\Customer\Dialogs\customer.selectbillingaddress.html" />
-    <Content Include="App_Plugins\Merchello\Modules\Customer\Dialogs\customer.selectshippingaddress.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Customer\Dialogs\customer.selectaddress.html" />
     <Content Include="App_Plugins\Merchello\Modules\Customer\merchello.customer.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Customer\merchello.gravatar.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Dialogs\notificationsmessage.controller.js" />

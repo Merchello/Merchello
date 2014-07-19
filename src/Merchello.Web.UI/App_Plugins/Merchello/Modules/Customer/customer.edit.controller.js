@@ -8,7 +8,7 @@
      * @description
      * The controller for the customers edit page
      */
-    controllers.CustomerEditController = function ($scope, $routeParams, $location, merchelloCatalogShippingService, merchelloCustomerService, merchelloGravatarService, merchelloSettingsService, merchelloWarehouseService, notificationsService) {
+    controllers.CustomerEditController = function($scope, $routeParams, $location, angularHelper, dialogService, merchelloCatalogShippingService, merchelloCustomerService, merchelloGravatarService, merchelloSettingsService, merchelloWarehouseService, notificationsService) {
 
         /**
          * @ngdoc method
@@ -18,7 +18,7 @@
          * @description
          * Add an address to the customer's list of addresses. 
          */
-        $scope.addAddress = function (type) {
+        $scope.addAddress = function(type) {
             // TODO: Add functionality to tag address with applicable billing or shipping flags.
             var newAddress;
             if (type === 'billing') {
@@ -40,30 +40,64 @@
          * @description
          * Build a list of addresses and assign to either billing or shipping address lists depending on passed parameters. 
          */
-        $scope.buildAddressList = function (type, addresses) {
+        $scope.buildAddressList = function(type, addresses) {
             // TODO: Modify this function to seperate out only billing addresses once there exists typefieldkeys to match against
             var addressList = [];
-            var defaultAddress = false;
+            var defaultAddress = false, defaultAddressId = -1;
             if (addresses.length > 0) {
                 for (var i = 0; i < addresses.length; i++) {
                     var newAddress = new merchello.Models.CustomerAddress(addresses[i]);
-                    addressList.push(newAddress);
                     if (newAddress.isDefault) {
                         defaultAddress = newAddress;
+                        defaultAddressId = addressList.length;
                     }
+                    addressList.push(newAddress);
                 }
                 if (!defaultAddress) {
                     defaultAddress = addresses[0];
                 }
                 if (type === 'billing') {
                     $scope.currentBillingAddress = defaultAddress;
+                    $scope.currentBillingAddressId = defaultAddressId;
                     $scope.billingAddresses = addressList;
                 } else {
                     $scope.currentShippingAddress = defaultAddress;
                     $scope.shippingAddresses = addressList;
+                    $scope.currentShippingAddressId = defaultAddressId;
                 }
             }
         };
+
+        /**
+         * @ngdoc method
+         * @name deleteAddress
+         * @function
+         * 
+         * @description
+         * Delete an address and updated the associated lists. 
+         */
+        $scope.deleteAddress = function (type) {
+            // TODO: This won't work properly until the address typekeys, and keys are existing (at which point it will need alteration).
+            if (type === 'billing') {
+                if ($scope.currentBillingAddressId == -1) {
+                    $scope.newAddress('billing');
+                } else {
+                    $scope.billingAddresses.splice($scope.currentBillingAddressId, 1);
+                }
+            } else {
+                if ($scope.currentShippingAddressId == -1) {
+                    $scope.newAddress('shipping');
+                } else {
+                    $scope.shippingAddresses.splice($scope.currentShippingAddressId, 1);
+                }
+            }
+            notificationsService.info("Removing address.", "");
+            notificationsService.info("Updating address lists. Customer must be saved to preserve address removal.", "");
+            var updatedAddressList = $scope.prepareAddressesForSave();
+            $scope.buildAddressList('billing', updatedAddressList);
+            $scope.buildAddressList('shipping', updatedAddressList);
+
+        }
 
         /**
          * @ngdoc method
@@ -91,7 +125,7 @@
          * @description
          * Inititalizes the scope.
          */
-        $scope.init = function () {
+        $scope.init = function() {
             $scope.setVariables();
             $scope.loadCustomer();
             $scope.loadCountries();
@@ -137,10 +171,10 @@
          * @description
          * Load a list of countries and provinces from the API. 
          */
-        $scope.loadCountries = function () {
+        $scope.loadCountries = function() {
             $scope.countries = [];
             var promiseCountries = merchelloSettingsService.getAllCountries();
-            promiseCountries.then(function (countriesResponse) {
+            promiseCountries.then(function(countriesResponse) {
                 for (var i = 0; i < countriesResponse.length; i++) {
                     var country = countriesResponse[i];
                     var newCountry = {
@@ -187,6 +221,143 @@
 
         /**
          * @ngdoc method
+         * @name newAddress
+         * @function
+         * 
+         * @description
+         * Resets the edit panel for the selected address type for a new, blank address.
+         */
+        $scope.newAddress = function(type) {
+            if (type === 'billing') {
+                $scope.filters.billingCountry = $scope.countries[0];
+                $scope.currentBillingAddress = new merchello.Models.CustomerAddress();
+                $scope.currentBillingAddressId = -1;
+            } else {
+                $scope.filters.shippingProvince = $scope.countries[0];
+                $scope.currentShippingAddress = new merchello.Models.CustomerAddress();
+                $scope.currentBillingAddressId = -1;
+            }
+        };
+
+        /**
+        * @ngdoc method
+        * @name openSelectAddressDialog
+        * @function
+        * 
+        * @description
+        * Opens the address selection dialog via the Umbraco dialogService.
+        */
+        $scope.openSelectAddressDialog = function (type) {
+            var addresses, availableAddresses = [];
+            if (type === 'billing') {
+                addresses = $scope.billingAddresses;
+            } else {
+                addresses = $scope.shippingAddresses;
+            }
+            for (var i = 0; i < addresses.length; i++) {
+                var addressToAdd = {
+                    id: i,
+                    name: addresses[i].address1 + " " + addresses[i].locality + ", " + addresses[i].region
+                };
+                availableAddresses.push(addressToAdd);
+            }
+            var myDialogData = {
+                addressType: type,
+                availableAddresses: availableAddresses,
+                filter: availableAddresses[0]
+            };
+            dialogService.open({
+                template: '/App_Plugins/Merchello/Modules/Customer/Dialogs/customer.selectaddress.html',
+                show: true,
+                callback: $scope.processSelectAddressDialog,
+                dialogData: myDialogData
+            });
+        };
+
+        /**
+        * @ngdoc method
+        * @name prepareAddressesForSave
+        * @function
+        * 
+        * @description
+        * Prepare a list of addresses to save with the customer
+        */
+        $scope.prepareAddressesForSave = function() {
+            // TODO: Currently all addresses have the same key, requiring much more thorough comparison between addresses to confirm uniqueness.
+            var addresses = [], addressToAdd, addressToCompare, isDuplicate, i, j;
+            for (i = 0; i < $scope.billingAddresses.length; i++) {
+                addressToAdd = new merchello.Models.CustomerAddress($scope.billingAddresses[i]);
+                addresses.push(addressToAdd);
+            }
+            // Because the customer keys are all the same, and there are no different type keys between shipping and billing addresses, logic must exist to double check that duplicates of each address are not being created.
+            for (i = 0; i < $scope.shippingAddresses.length; i++) {
+                addressToAdd = new merchello.Models.CustomerAddress($scope.shippingAddresses[i]);
+                isDuplicate = false;
+                // TODO: Get rid of this when the above to-do is accomplished. This is ridiculous. <-- Kyle Weems
+                // AKA: I wrote it, but it's tacky and I hate it.
+                for (j = 0; j < $scope.billingAddresses.length; j++) {
+                    addressToCompare = $scope.billingAddresses[j];
+                    if (addressToAdd.address1 == addressToCompare.address1) {
+                        if (addressToAdd.address2 == addressToCompare.address2) {
+                            if (addressToAdd.addressType == addressToCompare.addressType) {
+                                if (addressToAdd.addressTypeFieldKey == addressToCompare.addressTypeFieldKey) {
+                                    if (addressToAdd.company == addressToCompare.company) {
+                                        if (addressToAdd.countryCode == addressToCompare.countryCode) {
+                                            if (addressToAdd.customerKey == addressToCompare.customerKey) {
+                                                if (addressToAdd.fullName == addressToCompare.fullName) {
+                                                    if (addressToAdd.isDefault == addressToCompare.isDefault) {
+                                                        if (addressToAdd.key == addressToCompare.key) {
+                                                            if (addressToAdd.label == addressToCompare.label) {
+                                                                if (addressToAdd.locality == addressToCompare.locality) {
+                                                                    if (addressToAdd.phone == addressToCompare.phone) {
+                                                                        if (addressToAdd.postalCode == addressToCompare.postalCode) {
+                                                                            if (addressToAdd.region == addressToCompare.region) {
+                                                                                isDuplicate = true;
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                if (!isDuplicate) {
+                    addresses.push(addressToAdd);
+                }
+            }
+            return addresses;
+        };
+
+        /**
+        * @ngdoc method
+        * @name processSelectAddressDialog
+        * @function
+        * 
+        * @description
+        * Process the dialogData returned back from the address selection dialog via the Umbraco dialogService.
+        */
+        $scope.processSelectAddressDialog = function (dialogData) {
+            var selected = dialogData.filter;
+            if (dialogData.addressType === 'billing') {
+                $scope.currentBillingAddress = $scope.billingAddresses[dialogData.filter.id];
+                $scope.currentBillingAddressId = dialogData.filter.id;
+            } else {
+                $scope.currentShippingAddress = $scope.shippingAddresses[dialogData.filter.id];
+                $scope.currentShippingAddressId = dialogData.filter.id;
+            }
+
+        };
+
+        /**
+         * @ngdoc method
          * @name saveCustomer
          * @function
          * 
@@ -199,6 +370,7 @@
                 notificationsService.info("Saving...", "");
                 var promiseSaveCustomer;
                 $scope.customer.loginName = $scope.customer.email;
+                $scope.customer.addresses = $scope.prepareAddressesForSave();
                 if ($routeParams.id === "new") {
                     promiseSaveCustomer = merchelloCustomerService.AddCustomer($scope.customer);
                 } else {
@@ -209,6 +381,8 @@
                     notificationsService.success("Customer Saved", "");
                     if ($routeParams.id === "") {
                         window.location.hash = "#/merchello/merchello/CustomerList/manage";
+                    } else {
+                        window.location.hash = "#/merchello/merchello/CustomerView/" + $routeParams.id;
                     }
                 }, function(reason) {
                     notificationsService.error("Customer Save Failed", reason.message);
@@ -231,7 +405,9 @@
             $scope.billingAddresses = [];
             $scope.countries = [];
             $scope.currentBillingAddress = new merchello.Models.CustomerAddress();
+            $scope.currentBillingAddressId = -1;
             $scope.currentShippingAddress = new merchello.Models.CustomerAddress();
+            $scope.currentShippingAddressId = -1;
             $scope.customer = new merchello.Models.Customer();
             $scope.filters = {
                 billingCountry: {},
@@ -262,6 +438,23 @@
                 return 1;
             }
             return 0;
+        };
+
+        /**
+         * @ngdoc method
+         * @name updateAddress
+         * @function
+         * 
+         * @description
+         * Update an existing address.
+         */
+        $scope.updateAddress = function (type) {
+            if (type === 'billing') {
+                $scope.billingAddresses[$scope.currentBillingAddressId] = $scope.currentBillingAddress;
+            } else {
+                $scope.shippingAddresses[$scope.currentShippingAddressId] = $scope.currentShippingAddress;
+            }
+            notificationsService.success("Address updated. Customer must be saved to keep change", "");
         };
 
         /**
@@ -338,8 +531,7 @@
 
     };
 
-
-    angular.module("umbraco").controller("Merchello.Editors.Customer.EditController", ['$scope', '$routeParams', '$location', 'merchelloCatalogShippingService', 'merchelloCustomerService', 'merchelloGravatarService', 'merchelloSettingsService', 'merchelloWarehouseService', 'notificationsService', merchello.Controllers.CustomerEditController]);
+    angular.module("umbraco").controller("Merchello.Editors.Customer.EditController", ['$scope', '$routeParams', '$location', 'angularHelper', 'dialogService', 'merchelloCatalogShippingService', 'merchelloCustomerService', 'merchelloGravatarService', 'merchelloSettingsService', 'merchelloWarehouseService', 'notificationsService', merchello.Controllers.CustomerEditController]);
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));
 
