@@ -18,30 +18,33 @@
             </div>
         </umb-header>
         <merchello-panel class="row-fluid">
-            <div class="merchello-pane row-fluid">
+            <div class="merchello-pane row-fluid edit-customer">
                 <div class="control-group umb-control-group">
                     <label class="merchello-section-label" for="customer-note">Customer Overview</label>
                     <div class="merchello-controls row-fluid">
                         <div class="form-group span12">
-                            <label for="firstName">First Name:</label>
-                            <input name="firstName" type="text" class="span5" data-ng-model="customer.firstName" />
-                            <label for="lastName">Last Name:</label>
-                            <input name="lastName" type="text" class="span5" data-ng-model="customer.lastName" />
+                            <label for="firstName">*First Name:</label>
+                            <div><span class="error validation-error" data-ng-show="wasFormSubmitted && customerForm.firstName.$invalid">First Name is a required field.</span></div>
+                            <input name="firstName" type="text" class="span5" data-ng-model="customer.firstName" required />
+                            <label for="lastName">*Last Name:</label>
+                            <div><span class="error validation-error" data-ng-show="wasFormSubmitted && customerForm.lastName.$invalid">Last Name is a required field.</span></div>
+                            <input name="lastName" type="text" class="span5" data-ng-model="customer.lastName" required />
                             <label for="tel">Phone Number:</label>
                             <input name="tel" type="text" class="span5" />
-                            <label for="email">Login/Email Address:</label>
-                            <input name="email" type="email" class="span5" data-ng-model="customer.email" />
+                            <label for="email">*Login/Email Address:</label>
+                            <div><span class="error validation-error" data-ng-show="wasFormSubmitted && customerForm.email.$invalid">Login/Email is a required field and must contain a valid email address.</span></div>
+                            <input name="email" type="email" class="span5" data-ng-model="customer.email" required />
                         </div>
-                        <div class="span5 gravatar">
-                            <div class="span3"><img src="/media/1001/heather.jpg" /></div>
-                            <p class="span7">Gravatar for this email address</p>
+                        <div class="gravatar" data-ng-show="isAvatarAvailable()">
+                            <img src="{{avatarUrl}}" />
+                            <div>Gravatar for this email address</div>
                         </div>
                         <!-- Merchello 2.0 Feature -->
                         <!--
-                            <div class="form-group span12">
-                                <label for="acceptsMarketing"><input type="checkbox" name="acceptsMarketing" /> Accepts marketing</label>
-                            </div>
-                            -->
+                    <div class="form-group span12">
+                        <label for="acceptsMarketing"><input type="checkbox" name="acceptsMarketing" /> Accepts marketing</label>
+                    </div>
+                    -->
                     </div>
                 </div>
                 <div class="control-group umb-control-group">
@@ -50,26 +53,28 @@
                     <div class="merchello-controls row-fluid">
                         <div class="row-fluid span10 col-xs-10">
                             <div class="pull-right btn-group">
-                                <a class="btn-standard btn">Select Address</a>
+                                <a class="btn-standard btn" data-ng-show="billingAddresses.length > 1">Select Address</a>
                                 <a class="btn btn-primary"><i class="icon-add"></i> New</a>
                                 <a class="btn-warning btn"><i class="icon-trash"></i></a>
                             </div>
                         </div>
                         <div class="form-group span12">
+                            <label for="fullName">Full Name:</label>
+                            <input name="fullName" type="text" class="span5" data-ng-model="defaultBillingAddress.fullName" />
                             <label for="org">Company:</label>
-                            <input name="org" type="text" class="span5" />
-                            <label for="streetAddress">Address:</label>
-                            <input name="streetAddress" type="text" class="span5" />
+                            <input name="org" type="text" class="span5" data-ng-model="defaultBillingAddress.company" />
+                            <label for="streetAddress">*Address:</label>
+                            <input name="streetAddress" type="text" class="span5" data-ng-model="defaultBillingAddress.address1" />
                             <label for="extendedAddress">Address Line 2:</label>
-                            <input name="extendedAddress" type="text" class="span5" />
-                            <label for="locality">City:</label>
-                            <input name="locality" type="text" class="span5" />
-                            <label for="region">State:</label>
+                            <input name="extendedAddress" type="text" class="span5" data-ng-model="defaultBillingAddress.address2" />
+                            <label for="locality">*City:</label>
+                            <input name="locality" type="text" class="span5" data-ng-model="defaultBillingAddress.locality" />
+                            <label for="region">*State:</label>
                             <select name="region" class="span3"><option value="WA">WA</option></select>
-                            <label for="postalCode">Zip Code:</label>
-                            <input name="postalCode" type="text" class="span3" />
-                            <label for="countryName">Country:</label>
-                            <select name="countryName" class="span3"><option>USA</option></select>
+                            <label for="postalCode">*Zip Code:</label>
+                            <input name="postalCode" type="text" class="span3" data-ng-model="defaultBillingAddres.postalCode" />
+                            <label for="countryName">*Country:</label>
+                            <select name="countryName" class="span3" data-ng-filter="filters.billingCountry" data-ng-options="country.name for country in countries"></select>
                         </div>
                     </div>
                 </div>
