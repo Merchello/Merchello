@@ -420,5 +420,19 @@
         {
             return new WarehouseRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
         }
+
+        /// <summary>
+        /// Creates an instance of the warehouse catalog repository.
+        /// </summary>
+        /// <param name="uow">
+        /// The database unit of work.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IWarehouseCatalogRepository"/>.
+        /// </returns>
+        internal virtual IWarehouseCatalogRepository CreateWarehouseCatalogRepository(IDatabaseUnitOfWork uow)
+        {
+            return new WarehouseCatalogRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
+        }
     }
 }

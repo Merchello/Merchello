@@ -171,10 +171,6 @@ namespace Merchello.Web
         /// <param name="key">The key of the customer to retrieve</param>
         private void TryGetCustomer(Guid key)
         {
-
-            //// check to see if member is signed in
-            //// TODO RSS add configuration check for valid member type
-           
             var customer = (ICustomerBase)_cache.RuntimeCache.GetCacheItem(CacheKeys.CustomerCacheKey(key));
             
             // check the cache for a previously retrieved customer
