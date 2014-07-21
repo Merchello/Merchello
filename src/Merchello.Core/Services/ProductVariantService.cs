@@ -1,19 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading;
-using Merchello.Core.Configuration;
-using Merchello.Core.Models;
-using Merchello.Core.Persistence;
-using Merchello.Core.Persistence.UnitOfWork;
-using Umbraco.Core;
-using Umbraco.Core.Events;
-
-
-namespace Merchello.Core.Services
+﻿namespace Merchello.Core.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text.RegularExpressions;
+    using System.Threading;
+
+    using Merchello.Core.Configuration;
+    using Merchello.Core.Models;
+    using Merchello.Core.Persistence;
+    using Merchello.Core.Persistence.UnitOfWork;
+
+    using Umbraco.Core;
+    using Umbraco.Core.Events;
+
     /// <summary>
     /// Represents the ProductVariantService
     /// </summary>
@@ -398,14 +398,14 @@ namespace Merchello.Core.Services
                 
                 foreach(var att in combo) attributes.Add(att);
 
-                if(!ProductVariantWithAttributesExists(product, attributes)) variants.Add(CreateProductVariant(product, attributes));
+                if (!ProductVariantWithAttributesExists(product, attributes)) variants.Add(CreateProductVariant(product, attributes));
             }
 
             return variants;
 
         }
 
-        internal IEnumerable<IEnumerable<IProductAttribute>> GetPossibleProductAttributeCombinations(IProduct product)
+        public IEnumerable<IEnumerable<IProductAttribute>> GetPossibleProductAttributeCombinations(IProduct product)
         {
             if (!product.ProductOptions.Any()) return new List<IEnumerable<IProductAttribute>>();
 

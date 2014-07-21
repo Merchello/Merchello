@@ -1,30 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.Http;
-using System.Web.Http.ModelBinding;
-using Umbraco.Web;
-using Umbraco.Web.Mvc;
-using Merchello.Core;
-using Merchello.Core.Models;
-using Merchello.Core.Services;
-using Merchello.Web.WebApi;
-using Merchello.Web.Models.ContentEditing;
-using System.Net;
-using System.Net.Http;
-
-
-namespace Merchello.Web.Editors
+﻿namespace Merchello.Web.Editors
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Net;
+    using System.Net.Http;
+    using System.Web.Http;
+
+    using Merchello.Core;
+    using Merchello.Core.Models;
+    using Merchello.Core.Services;
+    using Merchello.Web.Models.ContentEditing;
+    using Merchello.Web.WebApi;
+
+    using Umbraco.Web;
+    using Umbraco.Web.Mvc;
+
+    /// <summary>
+    /// The warehouse API controller.
+    /// </summary>
     [PluginController("Merchello")]
     public class WarehouseApiController : MerchelloApiController
     {
+        /// <summary>
+        /// The warehouse service.
+        /// </summary>
         private readonly IWarehouseService _warehouseService;
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="WarehouseApiController"/> class.
         /// </summary>
         public WarehouseApiController()
             : this(MerchelloContext.Current)
@@ -32,9 +35,11 @@ namespace Merchello.Web.Editors
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="WarehouseApiController"/> class.
         /// </summary>
-        /// <param name="merchelloContext"></param>
+        /// <param name="merchelloContext">
+        /// The merchello context.
+        /// </param>
         public WarehouseApiController(MerchelloContext merchelloContext)
             : base(merchelloContext)
         {
@@ -42,8 +47,14 @@ namespace Merchello.Web.Editors
         }
 
         /// <summary>
-        /// This is a helper contructor for unit testing
+        /// Initializes a new instance of the <see cref="WarehouseApiController"/> class.
         /// </summary>
+        /// <param name="merchelloContext">
+        /// The merchello context.
+        /// </param>
+        /// <param name="umbracoContext">
+        /// The umbraco context.
+        /// </param>
         internal WarehouseApiController(MerchelloContext merchelloContext, UmbracoContext umbracoContext)
             : base(merchelloContext, umbracoContext)
         {
@@ -55,6 +66,9 @@ namespace Merchello.Web.Editors
         /// 
         /// GET /umbraco/Merchello/WarehouseApi/GetDefaultWarehouse
         /// </summary>
+        /// <returns>
+        /// The <see cref="WarehouseDisplay"/>.
+        /// </returns>
         public WarehouseDisplay GetDefaultWarehouse()
         {
             IWarehouse warehouse = _warehouseService.GetDefaultWarehouse();
@@ -71,10 +85,16 @@ namespace Merchello.Web.Editors
         /// 
         /// GET /umbraco/Merchello/WarehouseApi/GetWarehouse/{key}
         /// </summary>
-        /// <param name="id">Key of the warehouse to retrieve</param>
+        /// <param name="id">
+        /// Key of the warehouse to retrieve
+        /// </param>
+        /// <returns>
+        /// The <see cref="WarehouseDisplay"/>.
+        /// </returns>
         public WarehouseDisplay GetWarehouse(Guid id)
         {
-            IWarehouse warehouse = _warehouseService.GetByKey(id);
+            var warehouse = _warehouseService.GetByKey(id);
+
             if (warehouse == null)
             {
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
@@ -86,9 +106,14 @@ namespace Merchello.Web.Editors
         /// <summary>
         /// Returns Warehouses by keys separated by a comma
         /// 
-        /// GET /umbraco/Merchello/WarehouseApi/GetWarehouses?keys={guid}&keys={guid}
+        /// GET /umbraco/Merchello/WarehouseApi/GetWarehouses?keys={guid}&amp;keys={guid}
         /// </summary>
-        /// <param name="keys">Warehouse keys to retrieve</param>
+        /// <param name="keys">
+        /// Warehouse keys to retrieve
+        /// </param>
+        /// <returns>
+        /// The collection of warehouses.
+        /// </returns>
         internal IEnumerable<WarehouseDisplay> GetWarehouses([FromUri]IEnumerable<Guid> keys)
         {
             if (keys != null)
@@ -117,10 +142,15 @@ namespace Merchello.Web.Editors
 
         /// <summary>
         /// Updates an existing warehouse
-        ///
+        /// 
         /// PUT /umbraco/Merchello/WarehouseApi/PutWarehouse
         /// </summary>
-        /// <param name="warehouse">WarehouseDisplay object serialized from WebApi</param>
+        /// <param name="warehouse">
+        /// WarehouseDisplay object serialized from Web API
+        /// </param>
+        /// <returns>
+        /// The <see cref="HttpResponseMessage"/>.
+        /// </returns>
         [AcceptVerbs("PUT","POST")]
         public HttpResponseMessage PutWarehouse(WarehouseDisplay warehouse)
         {

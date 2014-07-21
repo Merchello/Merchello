@@ -16,6 +16,7 @@
         $scope.sortOrder = "desc";
         $scope.limitAmount = 10;
         $scope.currentPage = 0;
+        $scope.settings = {};
 
         assetsService.loadCss("/App_Plugins/Merchello/Common/Css/merchello.css");
 
@@ -35,6 +36,7 @@
         $scope.loadAllInvoices = function () {
 
             var promiseAll = merchelloInvoiceService.getAll();
+            
             promiseAll.then(function (allInvoices) {
 
                 $scope.invoices = _.map(allInvoices, function (invoice) {
@@ -60,8 +62,7 @@
          * @description
          * Load the settings from the settings service to get the currency symbol
          */
-        $scope.loadSettings = function () {
-
+        $scope.loadSettings = function () {         
 
         	var currencySymbolPromise = merchelloSettingsService.getCurrencySymbol();
         	currencySymbolPromise.then(function (currencySymbol) {
@@ -70,6 +71,11 @@
         	}, function (reason) {
         	    notificationsService.error("Settings Load Failed", reason.message);
         	});
+
+        	var settingsPromise = merchelloSettingsService.getAllSettings();
+            settingsPromise.then(function(settingsFromServer) {
+                $scope.settings = settingsFromServer;
+            });
         };
 
         /**

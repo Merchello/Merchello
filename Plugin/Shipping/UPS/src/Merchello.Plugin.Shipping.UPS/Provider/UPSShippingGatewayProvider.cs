@@ -26,27 +26,30 @@ namespace Merchello.Plugin.Shipping.UPS.Provider
         public const string UPSNextDayAirEarlyAM = "14";
         public const string UPSWorldwideExpressPlus = "54";
         public const string UPS2ndDayAirAM = "59";
-
+                                                          
         public UPSShippingGatewayProvider(IGatewayProviderService gatewayProviderService,
             IGatewayProviderSettings gatewayProvider, IRuntimeCacheProvider runtimeCacheProvider)
             : base(gatewayProviderService, gatewayProvider, runtimeCacheProvider)
         {
+
         }
 
         // In this case, the GatewayResource can be used to create multiple shipmethods of the same resource type.
         internal static readonly IEnumerable<IGatewayResource> AvailableResources = new List<IGatewayResource>()
         {
-            new GatewayResource(UPSNextDayAir, "UPS NextDay Air"),
-            new GatewayResource(UPS2ndDayAir, "UPS 2nd Day Air"),
-            new GatewayResource(UPSGround, "UPS Ground"),
-            new GatewayResource(UPSWorldwideExpress, "UPS Worldwide Express"),
-            new GatewayResource(UPSWorldwideExpidited, "UPS Worldwide Expidited"),
-            new GatewayResource(UPSStandard, "UPS Standard"),
-            new GatewayResource(UPS3DaySelect, "UPS 3 Day Select"),
-            new GatewayResource(UPSNextDayAirSaver, "UPS Next Day Air Saver"),
-            new GatewayResource(UPSNextDayAirEarlyAM, "UPS Next Day Air Early AM"),
-            new GatewayResource(UPSWorldwideExpressPlus, "UPS Worldwide Express Plus"),
-            new GatewayResource(UPS2ndDayAirAM, "UPS 2nd Day Air AM")
+            //new GatewayResource(Constants.ExtendedDataKeys.NextDayAirEarlyAmServiceCode, Constants.ExtendedDataKeys.NextDayAirEarlyAmServiceType),
+            new GatewayResource(Constants.ExtendedDataKeys.NextDayAirServiceCode, Constants.ExtendedDataKeys.NextDayAirServiceType),
+            new GatewayResource(Constants.ExtendedDataKeys.NextDayAirSaverServiceCode, Constants.ExtendedDataKeys.NextDayAirSaverServiceType),
+            new GatewayResource(Constants.ExtendedDataKeys.SecondDayAirAmServiceCode, Constants.ExtendedDataKeys.SecondDayAirAmServiceType),
+            new GatewayResource(Constants.ExtendedDataKeys.SecondDayAirServiceCode, Constants.ExtendedDataKeys.SecondDayAirServiceType),
+            new GatewayResource(Constants.ExtendedDataKeys.ThirdDaySelectServiceCode, Constants.ExtendedDataKeys.ThirdDaySelectServiceType),
+            new GatewayResource(Constants.ExtendedDataKeys.GroundServiceCode, Constants.ExtendedDataKeys.GroundServiceType),
+            new GatewayResource(Constants.ExtendedDataKeys.WorldwideExpressPlusServiceCode, Constants.ExtendedDataKeys.WorldwideExpressPlusServiceType),
+            new GatewayResource(Constants.ExtendedDataKeys.WorldwideExpressServiceCode, Constants.ExtendedDataKeys.WorldwideExpressServiceType),
+            //new GatewayResource(Constants.ExtendedDataKeys.WorldwideSaverExpressServiceCode, Constants.ExtendedDataKeys.WorldwideSaverExpressServiceType),
+            new GatewayResource(Constants.ExtendedDataKeys.WorldwideExpeditedServiceCode, Constants.ExtendedDataKeys.WorldwideExpeditedServiceType),
+            new GatewayResource(Constants.ExtendedDataKeys.StandardServiceCode, Constants.ExtendedDataKeys.StandardServiceType),
+            //new GatewayResource(Constants.ExtendedDataKeys.UPSExpressServiceCode, Constants.ExtendedDataKeys.UPSExpressServiceType)
         };
 
         /// <summary>
@@ -122,11 +125,11 @@ namespace Merchello.Plugin.Shipping.UPS.Provider
             //Mandate.ParameterNotNullOrEmpty(name, "name");
 
             var attempt = GatewayProviderService.CreateShipMethodWithKey(GatewayProviderSettings.Key, shipCountry, name,
-                gatewayResource.ServiceCode + string.Format("-{0}", Guid.NewGuid()));
+                gatewayResource.ServiceCode);
 
             if (!attempt.Success) throw attempt.Exception;
 
-            return new UPSShippingGatewayMethod(gatewayResource, attempt.Result, shipCountry, new ExtendedDataCollection());
+            return new UPSShippingGatewayMethod(gatewayResource, attempt.Result, shipCountry, GatewayProviderSettings, RuntimeCache);
         }
 
         /// <summary>
@@ -161,8 +164,26 @@ namespace Merchello.Plugin.Shipping.UPS.Provider
                         new UPSShippingGatewayMethod(
                             AvailableResources.FirstOrDefault(x => shipMethod.ServiceCode.StartsWith(x.ServiceCode)),
                             shipMethod, shipCountry,
-                            new ExtendedDataCollection())
+                            GatewayProviderSettings, RuntimeCache)
                 ).OrderBy(x => x.ShipMethod.Name);
+        }
+
+        public override IEnumerable<IShippingGatewayMethod> GetShippingGatewayMethodsForShipment(IShipment shipment)
+        {
+            var methods = base.GetShippingGatewayMethodsForShipment(shipment);
+
+            var shippingMethods = new List<IShippingGatewayMethod>();
+            foreach (var method in methods)
+            {
+                var quote = method.QuoteShipment(shipment);
+
+                if (quote.Result.Rate > (decimal)0.00)
+                {
+                    shippingMethods.Add(method);
+                }
+            }
+
+            return shippingMethods;
         }
     }
 }

@@ -1,17 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using Merchello.Core.Models;
-using Umbraco.Core.Services;
-
-namespace Merchello.Core.Services
+﻿namespace Merchello.Core.Services
 {
+    using System;
+    using System.Collections.Generic;
+
+    using Merchello.Core.Models;
+
+    using Umbraco.Core.Services;
+
+    /// <summary>
+    /// The PaymentService interface.
+    /// </summary>
     public interface IPaymentService : IService
     {
-
         /// <summary>
         /// Creates a payment without saving it to the database
         /// </summary>
-        /// <param name="paymentMethodType">The type of the paymentmethod</param>
+        /// <param name="paymentMethodType">The type of the payment method</param>
         /// <param name="amount">The amount of the payment</param>
         /// <param name="paymentMethodKey">The optional paymentMethodKey</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
@@ -21,21 +25,21 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Creates and saves a payment
         /// </summary>
-        /// <param name="paymentMethodType">The type of the paymentmethod</param>
+        /// <param name="paymentMethodType">The type of the payment method</param>
         /// <param name="amount">The amount of the payment</param>
         /// <param name="paymentMethodKey">The optional paymentMethodKey</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         /// <returns>Returns <see cref="IPayment"/></returns>
         IPayment CreatePaymentWithKey(PaymentMethodType paymentMethodType, decimal amount, Guid? paymentMethodKey, bool raiseEvents = true);
 
-        ///// <summary>
-        ///// Creates and saves a payment
-        ///// </summary>
-        ///// <param name="paymentTfKey">The payment typefield key</param>
-        ///// <param name="amount">The amount of the payment</param>
-        ///// <param name="paymentMethodKey">The optional paymentMethodKey</param>
-        ///// <returns>Returns <see cref="IPayment"/></returns>
-        //IPayment CreatePaymentWithKey(Guid paymentTfKey, decimal amount, Guid? paymentMethodKey);
+        /////// <summary>
+        /////// Creates and saves a payment
+        /////// </summary>
+        /////// <param name="paymentTfKey">The payment typefield key</param>
+        /////// <param name="amount">The amount of the payment</param>
+        /////// <param name="paymentMethodKey">The optional paymentMethodKey</param>
+        /////// <returns>Returns <see cref="IPayment"/></returns>
+        ////IPayment CreatePaymentWithKey(Guid paymentTfKey, decimal amount, Guid? paymentMethodKey);
 
         /// <summary>
         /// Saves a single <see cref="IPaymentMethod"/>
@@ -59,9 +63,20 @@ namespace Merchello.Core.Services
         void Delete(IPayment payment, bool raiseEvents = true);
 
         /// <summary>
+        /// Deletes a collection of <see cref="IPayment"/>
+        /// </summary>
+        /// <param name="payments">
+        /// The payments.
+        /// </param>
+        /// <param name="raiseEvents">
+        /// The raise events.
+        /// </param>
+        void Delete(IEnumerable<IPayment> payments, bool raiseEvents = true);
+
+        /// <summary>
         /// Gets a <see cref="IPayment"/>
         /// </summary>
-        /// <param name="key">The unique 'key' (Guid) of the <see cref="IPayment"/></param>
+        /// <param name="key">The unique 'key' (GUID) of the <see cref="IPayment"/></param>
         /// <returns><see cref="IPaymentMethod"/></returns>
         IPayment GetByKey(Guid key);
 
@@ -86,7 +101,17 @@ namespace Merchello.Core.Services
         /// <returns>A collection of <see cref="IPayment"/></returns>
         IEnumerable<IPayment> GetPaymentsByInvoiceKey(Guid invoiceKey);
 
-
+        /// <summary>
+        /// Get a list of payments by customer key.
+        /// </summary>
+        /// <param name="customerKey">
+        /// The customer key.
+        /// </param>
+        /// <returns>
+        /// The collection of <see cref="IPayment"/>.
+        /// </returns>
+        IEnumerable<IPayment> GetPaymentsByCustomerKey(Guid customerKey); 
+            
         /// <summary>
         /// Creates and saves an AppliedPayment
         /// </summary>
@@ -133,6 +158,5 @@ namespace Merchello.Core.Services
         /// <param name="invoiceKey">The invoice key</param>
         /// <returns>A collection of <see cref="IAppliedPayment"/></returns>
         IEnumerable<IAppliedPayment> GetAppliedPaymentsByInvoiceKey(Guid invoiceKey);
-
     }
 }

@@ -23,8 +23,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <DocumentationFile>
-    </DocumentationFile>
+    <DocumentationFile>bin\Debug\Merchello.Core.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -77,15 +76,25 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActivatorHelper.cs" />
+    <Compile Include="Configuration\Outline\CustomerElement.cs" />
+    <Compile Include="Configuration\Outline\TreeCollection.cs" />
     <Compile Include="Configuration\Outline\ReplacementCollection.cs" />
     <Compile Include="Configuration\Outline\ReplaceElement.cs" />
+    <Compile Include="Configuration\Outline\TreeElement.cs" />
     <Compile Include="Formatters\IPatternReplaceFormatter.cs" />
     <Compile Include="Formatters\IReplaceablePattern.cs" />
     <Compile Include="Formatters\PatternReplaceFormatter.cs" />
     <Compile Include="Formatters\ReplaceablePattern.cs" />
+    <Compile Include="Gateways\GatewayMethodUiAttribute.cs" />
     <Compile Include="Gateways\Notification\Monitors\INotificationMonitorBase.cs" />
     <Compile Include="Gateways\Notification\Monitors\NotificationMonitorEvents.cs" />
+    <Compile Include="Gateways\Notification\Monitors\OrderShippedMonitor.cs" />
+    <Compile Include="Gateways\Notification\Monitors\PartialOrderShippedMonitor.cs" />
+    <Compile Include="Gateways\Notification\Triggering\IShipmentResult.cs" />
+    <Compile Include="Gateways\Notification\Triggering\OrderShippedTrigger.cs" />
+    <Compile Include="Gateways\Notification\Triggering\PartialOrderShippedTrigger.cs" />
     <Compile Include="Models\AddressExtensions.cs" />
+    <Compile Include="Models\CustomerExtensions.cs" />
     <Compile Include="Models\MonitorModels\INotifyModel.cs" />
     <Compile Include="Models\MonitorModels\MonitorModelExtensions.cs" />
     <Compile Include="Models\MonitorModels\NotifyModelBase.cs" />
@@ -96,6 +105,8 @@
     <Compile Include="Gateways\Notification\Triggering\INotificationTrigger.cs" />
     <Compile Include="Gateways\Notification\Triggering\NotificationTriggerBase.cs" />
     <Compile Include="Gateways\Notification\Triggering\OrderConfirmationTrigger.cs" />
+    <Compile Include="Models\MonitorModels\ShippingResultNotifyModel.cs" />
+    <Compile Include="Models\Rdbms\CustomerIndexDto.cs" />
     <Compile Include="Notification.cs" />
     <Compile Include="NotificationExtensions.cs" />
     <Compile Include="Observation\IMonitor.cs" />
@@ -158,6 +169,8 @@
     <Compile Include="Observation\Unsubscriber.cs" />
     <Compile Include="Persistence\Migrations\DataLossException.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneOneOne\RecreateNotificaitonMessageTable.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IWarehouseCatalogRepository.cs" />
+    <Compile Include="Persistence\Repositories\WarehouseCatalogRepository.cs" />
     <Compile Include="PluginManagerExtensions.cs" />
     <Compile Include="Gateways\Shipping\FixedRate\FixedRateShipmentLineItemVisitor.cs" />
     <Compile Include="Gateways\Shipping\FixedRate\FixedRateShippingGatewayMethod.cs" />
@@ -175,9 +188,8 @@
     <Compile Include="Gateways\Taxation\ITaxationGatewayMethod.cs" />
     <Compile Include="Gateways\Taxation\TaxCalculationResult.cs" />
     <Compile Include="Gateways\Taxation\TaxableLineItemVisitor.cs" />
-    <Compile Include="IEventTriggerBase.cs" />
     <Compile Include="Models\Currency.cs" />
-    <Compile Include="Models\Interfaces\IExtendedDataEntity.cs" />
+    <Compile Include="Models\Interfaces\IHasExtendedData.cs" />
     <Compile Include="Models\Interfaces\IGatewayProviderMethod.cs" />
     <Compile Include="Models\Interfaces\ICurrency.cs" />
     <Compile Include="Models\Interfaces\INotificationMethod.cs" />
@@ -297,11 +309,7 @@
     <Compile Include="Gateways\Taxation\ITaxationGatewayProvider.cs" />
     <Compile Include="Gateways\Taxation\TaxationContext.cs" />
     <Compile Include="Gateways\Taxation\TaxationGatewayProviderBase.cs" />
-    <Compile Include="ISalesManager.cs" />
     <Compile Include="Models\Address.cs" />
-    <Compile Include="Models\AnonymousCustomerBase.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Models\AppliedPayment.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -702,13 +710,18 @@
     <Compile Include="Chains\AttemptChainTaskHandler.cs" />
     <Compile Include="RateAdjustmentType.cs" />
     <Compile Include="SerializationHelper.cs" />
+    <Compile Include="Services\AnonymousCustomerService.cs" />
     <Compile Include="Services\AppliedPaymentService.cs" />
+    <Compile Include="Services\CustomerAddressService.cs" />
+    <Compile Include="Services\Interfaces\IAnonymousCustomerService.cs" />
     <Compile Include="Services\Interfaces\IAppliedPaymentService.cs" />
+    <Compile Include="Services\Interfaces\ICustomerAddressService.cs" />
     <Compile Include="Services\Interfaces\INotificationMessageService.cs" />
     <Compile Include="Services\Interfaces\INotificationMethodService.cs" />
     <Compile Include="Services\Interfaces\IOrderService.cs" />
     <Compile Include="Services\Interfaces\IPaymentMethodService.cs" />
     <Compile Include="Services\Interfaces\IPaymentService.cs" />
+    <Compile Include="Services\Interfaces\IWarehouseCatalogService.cs" />
     <Compile Include="Services\NotificationMessageService.cs" />
     <Compile Include="Services\NotificationMethodService.cs" />
     <Compile Include="Services\OrderService.cs" />
@@ -741,10 +754,12 @@
     <Compile Include="Services\ShipRateTierService.cs" />
     <Compile Include="Services\StoreSettingService.cs" />
     <Compile Include="Services\ShipmentService.cs" />
+    <Compile Include="Services\WarehouseCatalogService.cs" />
     <Compile Include="Services\WarehouseService.cs" />
-    <Compile Include="IStrategy.cs" />
+    <Compile Include="Strategies\IStrategy.cs" />
     <Compile Include="Gateways\Shipping\IShipmentRateQuoteStrategy.cs" />
     <Compile Include="Gateways\Taxation\ITaxCalculationStrategy.cs" />
+    <Compile Include="Strategies\Merging\ILineItemContainerMergingStrategy.cs" />
     <Compile Include="Strategies\Packaging\DefaultWarehousePackagingStrategy.cs" />
     <Compile Include="Strategies\Packaging\PackagingStrategyBase.cs" />
     <Compile Include="Strategies\Packaging\IPackagingStrategy.cs" />

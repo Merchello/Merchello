@@ -1,136 +1,149 @@
 ﻿<link href="/App_Plugins/Merchello/Common/Css/merchello.css" rel="stylesheet">
 
-<form novalidate name="customerForm" 
-      data-ng-controller="Merchello.Editors.Customer.EditController" 
-      data-ng-show="loaded" 
-      data-ng-submit="save()">
+<form novalidate name="customerForm" data-ng-controller="Merchello.Editors.Customer.EditController" data-ng-show="loaded" data-ng-submit="saveCustomer()">
     <umb-panel val-show-validation>
-
         <umb-header>
-
             <div class="span4">
-                 <umb-content-name 
-                    ng-model="customer.name" 
-                    placeholder="[Customer Name]">
-                </umb-content-name>
+                <div class="umb-headline-editor-wrapper">
+                    <h1 class="umb-headline">{{customer.firstName}} {{customer.lastName}}</h1>
+                </div>
             </div>
-
-
             <div class="span8">
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
-                    
                     <div class="btn-group">
-                        
+                        <!-- ACTION: Save Customer -->
                         <button type="submit" class="btn btn-success">Save</button>
-
                     </div>
                 </div>
             </div>
-
         </umb-header>
-        
         <merchello-panel class="row-fluid">
-
-            <div class="merchello-pane row-fluid">
-
+            <div class="merchello-pane row-fluid edit-customer">
                 <div class="control-group umb-control-group">
-
-                    <label class="merchello-section-label" for="customer-note">
-                        Customer Overview
-                    </label>
-                    
+                    <label class="merchello-section-label" for="customer-note">Customer Overview</label>
                     <div class="merchello-controls row-fluid">
-
                         <div class="form-group span12">
-                            <label for="firstName">First Name:</label>
-                            <input name="firstName" type="text" class="span5" />
-
-                            <label for="lastName">Last Name:</label>
-                            <input name="lastName" type="text" class="span5" />
-
+                            <label for="firstName">*First Name:</label>
+                            <div><span class="error validation-error" data-ng-show="wasFormSubmitted && customerForm.firstName.$invalid">First Name is a required field.</span></div>
+                            <input name="firstName" type="text" class="span5" data-ng-model="customer.firstName" required />
+                            <label for="lastName">*Last Name:</label>
+                            <div><span class="error validation-error" data-ng-show="wasFormSubmitted && customerForm.lastName.$invalid">Last Name is a required field.</span></div>
+                            <input name="lastName" type="text" class="span5" data-ng-model="customer.lastName" required />
                             <label for="tel">Phone Number:</label>
                             <input name="tel" type="text" class="span5" />
-
-                            <label for="email">Email Address:</label>
-                            <input name="email" type="email" class="span5" />
+                            <label for="email">*Login/Email Address:</label>
+                            <div><span class="error validation-error" data-ng-show="wasFormSubmitted && customerForm.email.$invalid">Login/Email is a required field and must contain a valid email address.</span></div>
+                            <input name="email" type="email" class="span5" data-ng-model="customer.email" required />
                         </div>
-
-                        <div class="span5 gravatar">
-                            <div class="span3"><img src="/media/1001/heather.jpg" /></div>
-                            <p class="span7">Gravatar for this email address</p>
+                        <div class="gravatar" data-ng-show="isAvatarAvailable()">
+                            <img src="{{avatarUrl}}" />
+                            <div>Gravatar for this email address</div>
                         </div>
-
-                        <div class="form-group span12">
-                            <label for="acceptsMarketing"><input type="checkbox" name="acceptsMarketing" /> Acceps marketing</label>
-                        </div>
-
+                        <!-- Merchello 2.0 Feature -->
+                        <!--
+                    <div class="form-group span12">
+                        <label for="acceptsMarketing"><input type="checkbox" name="acceptsMarketing" /> Accepts marketing</label>
                     </div>
-
+                    -->
+                    </div>
                 </div>
-
                 <div class="control-group umb-control-group">
-
-                    <label class="merchello-section-label" for="customer-note">
-                        Billing Address
-                    </label>
-
+                    <!-- Billing Address -->
+                    <label class="merchello-section-label" for="customer-note">Billing Address</label>
                     <div class="merchello-controls row-fluid">
-
+                        <div class="row-fluid span10 col-xs-10">
+                            <div class="pull-right btn-group">
+                                <!-- ACTION: Select Address to Edit -->
+                                <a class="btn-standard btn" data-ng-show="billingAddresses.length > 1" data-ng-click="openSelectAddressDialog('billing')">Select Address</a>
+                                <!-- ACTION: Create New Address -->
+                                <a class="btn btn-primary" data-ng-click="newAddress('billing')" ><i class="icon-add"></i> New</a>
+                                <!-- ACTION: Delete This Address -->
+                                <a class="btn-warning btn" data-ng-show="billingAddresses.length > 1" data-ng-click="deleteAddress('billing')"><i class="icon-trash"></i></a>
+                            </div>
+                        </div>
                         <div class="form-group span12">
+                            <label for="fullName">Full Name:</label>
+                            <input name="fullName" type="text" class="span5" data-ng-model="currentBillingAddress.fullName" />
                             <label for="org">Company:</label>
-                            <input name="org" type="text" class="span5" />
-
-                            <label for="streetAddress">Address:</label>
-                            <input name="streetAddress" type="text" class="span5" />
-
-                            <label for="extendedAddress">Address Con't</label>
-                            <input name="extendedAddress" type="text" class="span5" />
-
-                            <label for="locality">City:</label>
-                            <input name="locality" type="text" class="span5" />
-
-                            <label for="postalCode">Zip Code:</label>
-                            <input name="postalCode" type="text" class="span3" />
-
-                            <label for="region">State:</label>
-                            <select name="region" class="span3">
-                                <option value="WA">WA</option>
-                            </select>
-
-                            <label for="countryName">Country:</label>
-                            <select name="countryName" class="span3">
-                                <option>USA</option>
-                            </select>
+                            <input name="org" type="text" class="span5" data-ng-model="currentBillingAddress.company" />
+                            <label for="streetAddress">*Address:</label>
+                            <input name="streetAddress" type="text" class="span5" data-ng-model="currentBillingAddress.address1" />
+                            <label for="extendedAddress">Address Line 2:</label>
+                            <input name="extendedAddress" type="text" class="span5" data-ng-model="currentBillingAddress.address2" />
+                            <label for="locality">*City:</label>
+                            <input name="locality" type="text" class="span5" data-ng-model="currentBillingAddress.locality" />
+                            <label for="regionInput">*{{provinceLabel}}:</label>
+                            <input name="regionInput" type="text" class="span3" data-ng-show="!doesCountryHaveProvinces(filters.billingCountry)" data-ng-model="currentBillingAddress.region" />
+                            <select name="regionSelect" class="span3" data-ng-show="doesCountryHaveProvinces(filters.billingCountry)" data-ng-model="filters.billingProvince" data-ng-change="updateProvince('billing')" data-ng-options="option.name for option in filters.billingCountry.provinces"></select>
+                            <label for="postalCode">*Zip Code:</label>
+                            <input name="postalCode" type="text" class="span3" data-ng-model="currentBillingAddress.postalCode" />
+                            <label for="countryName">*Country:</label>
+                            <select name="countryName" class="span3" data-ng-model="filters.billingCountry" data-ng-change="updateCountry('billing')" data-ng-options="option.name for option in countries"></select>
+                            <div>
+                                <!-- ACTION: Add Billing Address to Address List -->
+                                <a class="btn btn-primary" data-ng-show="currentBillingAddressId == -1" data-ng-click="addAddress('billing')">Add Address</a>
+                                <!-- ACTION: Update Current Billing Address -->
+                                <a class="btn btn-primary" data-ng-show="currentBillingAddressId != -1" data-ng-click="updateAddress('billing')">Update Address</a>
+                            </div>
                         </div>
                     </div>
-
                 </div>
-
                 <div class="control-group umb-control-group">
-
+                    <!-- Shipping Address -->
+                    <label class="merchello-section-label" for="customer-note">Shipping Address</label>
+                    <div class="merchello-controls row-fluid">
+                        <div class="row-fluid span10 col-xs-10">
+                            <div class="pull-right btn-group">
+                                <!-- ACTION: Select Address to Edit -->
+                                <a class="btn-standard btn" data-ng-show="shippingAddresses.length > 1" data-ng-click="openSelectAddressDialog('shipping')">Select Address</a>
+                                <!-- ACTION: Create New Address -->
+                                <a class="btn btn-primary" data-ng-click="newAddress('shipping')"><i class="icon-add"></i> New</a>
+                                <!-- ACTION: Delete This Address -->
+                                <a class="btn-warning btn" data-ng-show="shippingAddresses.length > 1" data-ng-click="deleteAddress('shipping')"><i class="icon-trash"></i></a>
+                            </div>
+                        </div>
+                        <div class="form-group span12">
+                            <label for="shippingFullName">Full Name:</label>
+                            <input name="shippingFullName" type="text" class="span5" data-ng-model="currentShippingAddress.fullName" />
+                            <label for="shippingOrg">Company:</label>
+                            <input name="shippingOrg" type="text" class="span5" data-ng-model="currentShippingAddress.company" />
+                            <label for="shippingStreetAddress">*Address:</label>
+                            <input name="shippingStreetAddress" type="text" class="span5" data-ng-model="currentShippingAddress.address1" />
+                            <label for="shippingExtendedAddress">Address Line 2:</label>
+                            <input name="shippingExtendedAddress" type="text" class="span5" data-ng-model="currentShippingAddress.address2" />
+                            <label for="shippingLocality">*City:</label>
+                            <input name="shippingLocality" type="text" class="span5" data-ng-model="currentShippingAddress.locality" />
+                            <label for="shippingRegionInput">*{{provinceLabel}}:</label>
+                            <input name="shippingRegionInput" type="text" class="span3" data-ng-show="!doesCountryHaveProvinces(filters.shippingCountry)" data-ng-model="currentShippingAddress.region" />
+                            <select name="shippingRegionSelect" class="span3" data-ng-show="doesCountryHaveProvinces(filters.shippingCountry)" data-ng-model="filters.shippingProvince" data-ng-change="updateProvince('shipping')" data-ng-options="option.name for option in filters.shippingCountry.provinces"></select>
+                            <label for="shippingPostalCode">*Zip Code:</label>
+                            <input name="shippingPostalCode" type="text" class="span3" data-ng-model="currentShippingAddress.postalCode" />
+                            <label for="shippingCountryName">*Country:</label>
+                            <select name="shippingCountryName" class="span3" data-ng-model="filters.shippingCountry" data-ng-change="updateCountry('shipping')" data-ng-options="option.name for option in countries"></select>
+                            <div>
+                                <!-- ACTION: Add Billing Address to Address List -->
+                                <a class="btn btn-primary" data-ng-show="currentShippingAddressId == -1" data-ng-click="addAddress('shipping')">Add Address</a>
+                                <!-- ACTION: Update Current Billing Address -->
+                                <a class="btn btn-primary" data-ng-show="currentShippingAddressId != -1" data-ng-click="updateAddress('shipping')">Update Address</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="control-group umb-control-group">
                     <label class="merchello-section-label" for="customer-note">
                         Notes
                         <small>Notes about the customer (not order specific)</small>
                     </label>
-                    
                     <div class="merchello-controls">
-
                         <div class="well new-note span10">
                             <div class="form-group col-xs-12 span12">
-                                <textarea name="note-message" name="customer-note" rows="8" class="span12">Nulla mollis mauris nec erat ullamcorper, at vestibulum ipsum bibendum. Fusce leo lorem, tempor ac dapibus rhoncus, imperdiet at tellus. Quisque vel odio et dolor gravida sollicitudin et eu mi. Donec risus turpis, facilisis nec commodo sed, tempus sit amet enim. Sed vel eros vitae metus viverra ornare. Proin condimentum sodales elit eget elementum. Morbi adipiscing eget nisl ut lacinia. Ut molestie, ipsum auctor iaculis iaculis, mauris mi rutrum sapien, eget ultrices nulla justo ut lorem. Sed accumsan quis augue nec condimentum. Fusce ac iaculis felis. Duis viverra, eros eget varius molestie, metus felis mollis odio, sed rutrum nisi turpis quis quam. Mauris rutrum pellentesque sollicitudin.</textarea>
+                                <textarea name="note-message" name="customer-note" rows="8" class="span12" data-ng-model="customer.notes"></textarea>
                             </div>
-                            <input type="submit" class="btn btn-primary" value="Save Note" />
                         </div>
-
                         <div class="clearfix"></div>
-
                     </div>
-
                 </div>
-
             </div>
-
         </merchello-panel>
-
     </umb-panel>
 </form>

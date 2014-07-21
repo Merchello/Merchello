@@ -46,16 +46,6 @@ namespace Merchello.Core.Persistence.Repositories
             var factory = new ProductFactory(productAttributeCollection, inventoryCollection, GetProductOptionCollection(dto.Key), GetProductVariantCollection(dto.Key));
             var product = factory.BuildEntity(dto);
 
-            // TODO - inventory
-            //((ProductVariant) ((Product) product).MasterVariant).CatalogInventoryInventory =
-            //    ((ProductVariantRepository) _productVariantRepository).GetCategoryInventoryCollection(
-            //        ((Product) product).ProductVariantKey);
-
-            //// Build the list of options
-            //product.ProductOptions = GetProductOptionCollection(product.Key);
-
-            //// Build the list of product variants
-            //product.ProductVariants = GetProductVariantCollection(product.Key);
 
             product.ResetDirtyProperties();
 

@@ -3,20 +3,20 @@
 	    <h4><localize key="merchelloShippingMethod_addEditShippingMethod" /> <strong>{{dialogData.method.shipMethod.name}}</strong></h4>
     </div>
     <div class="umb-panel-body with-header with-footer">
-        <!-- Add a Shipping Method Flyout -->
+        <!-- Add/Edit Shipping Method Flyout -->
         <div class="form-group row-fluid">
             <label for="method-name"><localize key="general_name" /></label>
-            <input name="method-name" data-ng-model="dialogData.method.shipMethod.name" class="col-xs-12 span12" type="text" />
+            <input name="method-name" data-ng-model="dialogData.method.name" class="col-xs-12 span12" type="text" />
         </div>
 
         <div class="form-group row-fluid">
             <label for="method-type"><localize key="merchelloShippingMethod_method" /></label>
             <div class="col-xs-6 span6 row-fluid">
-                <select name="method-type" class="col-xs-12 span12" data-ng-model="dialogData.method.gatewayResource" data-ng-options="r.name for r in dialogData.gatewayResources track by r.serviceCode" data-ng-disabled="dialogData.method.shipMethod.key.length > 0">
+                <select name="method-type" class="col-xs-12 span12" data-ng-model="filters.gatewayResource" data-ng-options="r.name for r in dialogData.gatewayResources track by r.serviceCode" data-ng-disabled="dialogData.method.shipMethod.key.length > 0">
                 </select>
             </div>
         </div>
-
+        <!-- Rate Table -->
         <table class="table settings-table col-xs-6 span6">
             <thead>
                 <tr>
@@ -24,7 +24,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr data-ng-repeat="tier in dialogData.method.rateTable.rows">
+                <tr data-ng-repeat="tier in rateTable.rows">
                     <td class="col-xs-4 span4">
                         <span>{{tier.rangeLow}} - {{tier.rangeHigh}}</span>
                     </td>
@@ -35,6 +35,7 @@
                         </div>
                     </td>
                     <td>
+                        <!-- ACTION: Remove Rate Tier -->
                         <a data-ng-click="removeRateTier(tier)" class="btn btn-default btn-xs btn-mini btn-warning">X</a>
                     </td>
                 </tr>
@@ -51,63 +52,28 @@
                         </div>
                     </td>
                     <td>
+                        <!-- ACTION: Add (Save) Rate Tier -->
                         <a data-ng-click="addRateTier()" class="btn btn-default btn-xs btn-mini btn-warning"><localize key="general_add" /></a>
                     </td>
                 </tr>
             </tbody>
         </table>
+        <!-- ACTION: Insert Rate Tier -->
         <a data-ng-click="insertRateTier()" class="btn btn-default btn-primary"><localize key="merchelloShippingMethod_addNewRange" /></a>
-
-        <div data-ng-hide="dialogData.method.shipMethod.provinces.length == 0">
-            <h5><localize key="merchelloShippingMethod_adjustIndividualRegions" /></h5>
-
-            <table class="table merchello-striped-table settings-table adjustment-table col-xs-6 span6">
-                <thead>
-                    <tr>
-                        <th class="span1 col-xs-1"><input type="checkbox" data-ng-model="allProvinces" data-ng-change="toggleAllProvinces()" /></th>
-                        <th><localize key="merchelloShippingMethod_region" /></th>
-                        <th><localize key="merchelloShippingMethod_adjustRate" /></th>
-                        <th><localize key="merchelloShippingMethod_adjustBy" /></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr data-ng-repeat="province in dialogData.method.shipMethod.provinces">
-                        <td class="span1 col-xs-1">
-                            <input type="checkbox" data-ng-model="province.allowShipping"/>
-                        </td>
-                        <td class="col-xs-5 span5">
-                            {{province.name}}
-                        </td>
-                        <td class="col-xs-4 span4 row-fluid">
-                            <div data-ng-class="{'input-prepend': province.rateAdjustmentType == 1, 'input-append': province.rateAdjustmentType == 2 }">
-                                <span class="add-on" data-ng-show="province.rateAdjustmentType == 1"><localize key="merchelloGeneral_moneySymbol" /></span>
-                                <input type="number" data-ng-model="province.rateAdjustment" class="span8 col-xs-8" />
-                                <span class="add-on" data-ng-show="province.rateAdjustmentType == 2"><localize key="merchelloGeneral_percentSymbol" /></span>
-                            </div>
-                        </td>
-                        <td class="col-xs-2 span2 row-fluid">
-                            <label class="col-xs-6 span6"><input type="radio" data-ng-model="province.rateAdjustmentType" value="1" /> <localize key="merchelloGeneral_moneySymbol" /></label>
-                            <label class="col-xs-6 span6"><input type="radio" data-ng-model="province.rateAdjustmentType" value="2" /> <localize key="merchelloGeneral_percentSymbol" /></label>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
 	</div>
 
 	<div class="umb-panel-footer" >
 		<div class="umb-el-wrap umb-panel-buttons">
 	        <div class="btn-toolbar umb-btn-toolbar pull-right">
-
+                <!-- ACTION: Cancel/Close Flyout -->
 	        	<a href data-ng-click="close()" class="btn btn-link">
 	        		<localize key="general_cancel"></localize>
 				</a>
-
-				<button
-					class="btn btn-primary"
-					data-ng-click="submit(dialogData)">
-					<localize key="buttons_save"></localize>
-				</button>
+                <!-- ACTION: Save Flyout -->
+                <button class="btn btn-primary"
+                        data-ng-click="addOrUpdateShippingMethod()">
+                    <localize key="buttons_save"></localize>
+                </button>
 
 	        </div>
 		</div>

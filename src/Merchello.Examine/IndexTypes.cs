@@ -20,9 +20,9 @@
         /// </summary>
         public const string Invoice = "invoice";
 
-        ///// <summary>
-        ///// The customer index type
-        ///// </summary>
-        //public const string Customer = "customer";
+        /// <summary>
+        /// The customer index type
+        /// </summary>
+        public const string Customer = "customer";
     }
 }

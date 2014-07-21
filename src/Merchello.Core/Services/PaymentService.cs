@@ -1,40 +1,93 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using Merchello.Core.Models;
-using Merchello.Core.Models.TypeFields;
-using Merchello.Core.Persistence;
-using Merchello.Core.Persistence.Querying;
-using Merchello.Core.Persistence.UnitOfWork;
-using Umbraco.Core;
-using Umbraco.Core.Events;
-
-namespace Merchello.Core.Services
+﻿namespace Merchello.Core.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
+
+    using Merchello.Core.Models;
+    using Merchello.Core.Models.TypeFields;
+    using Merchello.Core.Persistence;
+    using Merchello.Core.Persistence.Querying;
+    using Merchello.Core.Persistence.UnitOfWork;
+
+    using Umbraco.Core;
+    using Umbraco.Core.Events;
+
     /// <summary>
     /// Represents the PaymentService
     /// </summary>
     public class PaymentService : IPaymentService
     {
-        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
-        private readonly RepositoryFactory _repositoryFactory;
-        private readonly IAppliedPaymentService _appliedPaymentService;
+        #region Fields
 
+        /// <summary>
+        /// The locker.
+        /// </summary>
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
+        /// <summary>
+        /// The unit of work provider.
+        /// </summary>
+        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
+
+        /// <summary>
+        /// The repository factory.
+        /// </summary>
+        private readonly RepositoryFactory _repositoryFactory;
+
+        /// <summary>
+        /// The applied payment service.
+        /// </summary>
+        private readonly IAppliedPaymentService _appliedPaymentService;
+
+        #endregion
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PaymentService"/> class.
+        /// </summary>
         public PaymentService()
             : this(new AppliedPaymentService())
-        { }
+        {
+        }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PaymentService"/> class.
+        /// </summary>
+        /// <param name="appliedPaymentService">
+        /// The applied payment service.
+        /// </param>
         internal PaymentService(IAppliedPaymentService appliedPaymentService)
-             : this(new RepositoryFactory(), appliedPaymentService)
-        { }
+            : this(new RepositoryFactory(), appliedPaymentService)
+        {
+        }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PaymentService"/> class.
+        /// </summary>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="appliedPaymentService">
+        /// The applied payment service.
+        /// </param>
         internal PaymentService(RepositoryFactory repositoryFactory, IAppliedPaymentService appliedPaymentService)
             : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, appliedPaymentService)
-        { }
+        {
+        }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PaymentService"/> class.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="appliedPaymentService">
+        /// The applied payment service.
+        /// </param>
         internal PaymentService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, IAppliedPaymentService appliedPaymentService)
         {
             Mandate.ParameterNotNull(provider, "provider");
@@ -46,12 +99,48 @@ namespace Merchello.Core.Services
             _appliedPaymentService = appliedPaymentService;
         }
 
+
+        #region Event Handlers
+
+        /// <summary>
+        /// Occurs after Create
+        /// </summary>
+        public static event TypedEventHandler<IPaymentService, Events.NewEventArgs<IPayment>> Creating;
+
+
+        /// <summary>
+        /// Occurs after Create
+        /// </summary>
+        public static event TypedEventHandler<IPaymentService, Events.NewEventArgs<IPayment>> Created;
+
+        /// <summary>
+        /// Occurs before Save
+        /// </summary>
+        public static event TypedEventHandler<IPaymentService, SaveEventArgs<IPayment>> Saving;
+
+        /// <summary>
+        /// Occurs after Save
+        /// </summary>
+        public static event TypedEventHandler<IPaymentService, SaveEventArgs<IPayment>> Saved;
+
+        /// <summary>
+        /// Occurs before Delete
+        /// </summary>		
+        public static event TypedEventHandler<IPaymentService, DeleteEventArgs<IPayment>> Deleting;
+
+        /// <summary>
+        /// Occurs after Delete
+        /// </summary>
+        public static event TypedEventHandler<IPaymentService, DeleteEventArgs<IPayment>> Deleted;
+
+        #endregion
+
         /// <summary>
         /// Creates a payment without saving it to the database
         /// </summary>
-        /// <param name="paymentMethodType">The type of the paymentmethod</param>
+        /// <param name="paymentMethodType">The type of the payment method</param>
         /// <param name="amount">The amount of the payment</param>
-        /// <param name="paymentMethodKey">The optional paymentMethodKey</param>
+        /// <param name="paymentMethodKey">The optional payment method Key</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         /// <returns>Returns <see cref="IPayment"/></returns>
         public IPayment CreatePayment(PaymentMethodType paymentMethodType, decimal amount, Guid? paymentMethodKey, bool raiseEvents = true)
@@ -75,9 +164,9 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Creates and saves a payment
         /// </summary>
-        /// <param name="paymentMethodType">The type of the paymentmethod</param>
+        /// <param name="paymentMethodType">The type of the payment method</param>
         /// <param name="amount">The amount of the payment</param>
-        /// <param name="paymentMethodKey">The optional paymentMethodKey</param>
+        /// <param name="paymentMethodKey">The optional payment Method Key</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         /// <returns>Returns <see cref="IPayment"/></returns>
         public IPayment CreatePaymentWithKey(PaymentMethodType paymentMethodType, decimal amount, Guid? paymentMethodKey, bool raiseEvents = true)
@@ -85,42 +174,7 @@ namespace Merchello.Core.Services
             return CreatePaymentWithKey(EnumTypeFieldConverter.PaymentMethod.GetTypeField(paymentMethodType).TypeKey, amount, paymentMethodKey);
         }
 
-        /// <summary>
-        /// Creates and saves a payment
-        /// </summary>
-        /// <param name="paymentTfKey">The payment typefield key</param>
-        /// <param name="amount">The amount of the payment</param>
-        /// <param name="paymentMethodKey">The optional paymentMethodKey</param>
-        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        /// <returns>Returns <see cref="IPayment"/></returns>
-        internal IPayment CreatePaymentWithKey(Guid paymentTfKey, decimal amount, Guid? paymentMethodKey, bool raiseEvents = true)
-        {
-            Mandate.ParameterCondition(!Guid.Empty.Equals(paymentTfKey), "paymentTfKey");
 
-
-            var payment = new Payment(paymentTfKey, amount, paymentMethodKey, new ExtendedDataCollection());
-
-            if (raiseEvents)
-                if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<IPayment>(payment), this))
-                {
-                    payment.WasCancelled = true;
-                    return payment;
-                }
-
-            using (new WriteLock(Locker))
-            {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreatePaymentRepository(uow))
-                {
-                    repository.AddOrUpdate(payment);
-                    uow.Commit();
-                }
-            }
-
-            if (raiseEvents) Created.RaiseEvent(new Events.NewEventArgs<IPayment>(payment), this);
-
-            return payment;
-        }
 
         /// <summary>
         /// Saves a single <see cref="IPaymentMethod"/>
@@ -203,9 +257,41 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
+        /// Deletes a collection of <see cref="IPayment"/>
+        /// </summary>
+        /// <param name="payments">
+        /// The payments.
+        /// </param>
+        /// <param name="raiseEvents">
+        /// The raise events.
+        /// </param>
+        public void Delete(IEnumerable<IPayment> payments, bool raiseEvents = true)
+        {
+            var paymentsArray = payments as IPayment[] ?? payments.ToArray();
+            if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<IPayment>(paymentsArray), this);
+
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+
+                using (var repository = _repositoryFactory.CreatePaymentRepository(uow))
+                {
+                    foreach (var payment in paymentsArray)
+                    {
+                        repository.Delete(payment);
+                    }
+
+                    uow.Commit();
+                }
+            }
+
+            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<IPayment>(paymentsArray), this);
+        }
+
+        /// <summary>
         /// Gets a <see cref="IPayment"/>
         /// </summary>
-        /// <param name="key">The unique 'key' (Guid) of the <see cref="IPayment"/></param>
+        /// <param name="key">The unique 'key' (GUID) of the <see cref="IPayment"/></param>
         /// <returns><see cref="IPaymentMethod"/></returns>
         public IPayment GetByKey(Guid key)
         {
@@ -215,12 +301,10 @@ namespace Merchello.Core.Services
             }
         }
 
-
-
         /// <summary>
         /// Gets list of <see cref="IProduct"/> objects given a list of Unique keys
         /// </summary>
-        /// <param name="keys">List of Guid keys for Product objects to retrieve</param>
+        /// <param name="keys">List of GUID keys for Product objects to retrieve</param>
         /// <returns>List of <see cref="IProduct"/></returns>
         public IEnumerable<IPayment> GetByKeys(IEnumerable<Guid> keys)
         {
@@ -255,6 +339,25 @@ namespace Merchello.Core.Services
             var paymentKeys = _appliedPaymentService.GetAppliedPaymentsByInvoiceKey(invoiceKey).Select(x => x.PaymentKey).Distinct().ToArray();
             
             return !paymentKeys.Any() ? new List<IPayment>() : GetByKeys(paymentKeys);
+        }
+
+        /// <summary>
+        /// Gets a collection of <see cref="IPayment"/> by customer key.
+        /// </summary>
+        /// <param name="customerKey">
+        /// The customer key.
+        /// </param>
+        /// <returns>
+        /// The collection of <see cref="IPayment"/>.
+        /// </returns>
+        public IEnumerable<IPayment> GetPaymentsByCustomerKey(Guid customerKey)
+        {
+            using (var repository = _repositoryFactory.CreatePaymentRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Query<IPayment>.Builder.Where(x => x.CustomerKey == customerKey);
+
+                return repository.GetByQuery(query);
+            }
         }
 
         #region AppliedPayments
@@ -327,40 +430,41 @@ namespace Merchello.Core.Services
 
         #endregion
 
-        #region Event Handlers
-
         /// <summary>
-        /// Occurs after Create
+        /// Creates and saves a payment
         /// </summary>
-        public static event TypedEventHandler<IPaymentService, Events.NewEventArgs<IPayment>> Creating;
+        /// <param name="paymentTfKey">The payment typefield key</param>
+        /// <param name="amount">The amount of the payment</param>
+        /// <param name="paymentMethodKey">The optional paymentMethodKey</param>
+        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        /// <returns>Returns <see cref="IPayment"/></returns>
+        internal IPayment CreatePaymentWithKey(Guid paymentTfKey, decimal amount, Guid? paymentMethodKey, bool raiseEvents = true)
+        {
+            Mandate.ParameterCondition(!Guid.Empty.Equals(paymentTfKey), "paymentTfKey");
 
 
-        /// <summary>
-        /// Occurs after Create
-        /// </summary>
-        public static event TypedEventHandler<IPaymentService, Events.NewEventArgs<IPayment>> Created;
+            var payment = new Payment(paymentTfKey, amount, paymentMethodKey, new ExtendedDataCollection());
 
-        /// <summary>
-        /// Occurs before Save
-        /// </summary>
-        public static event TypedEventHandler<IPaymentService, SaveEventArgs<IPayment>> Saving;
+            if (raiseEvents)
+                if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<IPayment>(payment), this))
+                {
+                    payment.WasCancelled = true;
+                    return payment;
+                }
 
-        /// <summary>
-        /// Occurs after Save
-        /// </summary>
-        public static event TypedEventHandler<IPaymentService, SaveEventArgs<IPayment>> Saved;
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreatePaymentRepository(uow))
+                {
+                    repository.AddOrUpdate(payment);
+                    uow.Commit();
+                }
+            }
 
-        /// <summary>
-        /// Occurs before Delete
-        /// </summary>		
-        public static event TypedEventHandler<IPaymentService, DeleteEventArgs<IPayment>> Deleting;
+            if (raiseEvents) Created.RaiseEvent(new Events.NewEventArgs<IPayment>(payment), this);
 
-        /// <summary>
-        /// Occurs after Delete
-        /// </summary>
-        public static event TypedEventHandler<IPaymentService, DeleteEventArgs<IPayment>> Deleted;
-
-        #endregion
-
+            return payment;
+        }
     }
 }

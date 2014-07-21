@@ -1,14 +1,26 @@
-﻿using System;
-using Merchello.Core.Gateways;
-using Merchello.Core.Models;
-using Merchello.Core.Models.Rdbms;
-using Merchello.Core.Models.TypeFields;
-using Umbraco.Core;
-
-namespace Merchello.Core.Persistence.Factories
+﻿namespace Merchello.Core.Persistence.Factories
 {
+    using System;
+    using Gateways;
+    using Models;
+    using Models.Rdbms;
+    using Models.TypeFields;
+    using Umbraco.Core;
+
+    /// <summary>
+    /// The gateway provider settings factory.
+    /// </summary>
     internal class GatewayProviderSettingsFactory : IEntityFactory<IGatewayProviderSettings, GatewayProviderSettingsDto>
     {
+        /// <summary>
+        /// The build entity.
+        /// </summary>
+        /// <param name="dto">
+        /// The dto.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IGatewayProviderSettings"/>.
+        /// </returns>
         public IGatewayProviderSettings BuildEntity(GatewayProviderSettingsDto dto)
         {
             var extendedData = string.IsNullOrEmpty(dto.ExtendedData)
@@ -16,8 +28,7 @@ namespace Merchello.Core.Persistence.Factories
                                    : new ExtendedDataCollection(
                                        dto.EncryptExtendedData ? 
                                        dto.ExtendedData.DecryptWithMachineKey() :
-                                       dto.ExtendedData
-                                       );
+                                       dto.ExtendedData);
 
             var entity = new GatewayProviderSettings()
             {
@@ -36,6 +47,15 @@ namespace Merchello.Core.Persistence.Factories
             return entity;
         }
 
+        /// <summary>
+        /// The build dto.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
+        /// <returns>
+        /// The <see cref="GatewayProviderSettingsDto"/>.
+        /// </returns>
         public GatewayProviderSettingsDto BuildDto(IGatewayProviderSettings entity)
         {
             var extendedDataXml = entity.EncryptExtendedData
@@ -53,7 +73,6 @@ namespace Merchello.Core.Persistence.Factories
                 UpdateDate = entity.UpdateDate,
                 CreateDate = entity.CreateDate
             };
-
         }
 
         /// <summary>
@@ -61,7 +80,7 @@ namespace Merchello.Core.Persistence.Factories
         /// </summary>
         /// <param name="t">The resolved Type t</param>
         /// <param name="gatewayProviderType">The gateway provider type</param>
-        /// <returns></returns>
+        /// <returns>The <see cref="IGatewayProviderSettings"/></returns>
         internal IGatewayProviderSettings BuildEntity(Type t, GatewayProviderType gatewayProviderType)
         {
             Mandate.ParameterNotNull(t, "Type t cannot be null");

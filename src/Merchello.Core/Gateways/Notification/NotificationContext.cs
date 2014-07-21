@@ -13,6 +13,15 @@
     /// </summary>
     internal class NotificationContext : GatewayProviderTypedContextBase<NotificationGatewayProviderBase>, INotificationContext
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NotificationContext"/> class.
+        /// </summary>
+        /// <param name="gatewayProviderService">
+        /// The gateway provider service.
+        /// </param>
+        /// <param name="resolver">
+        /// The resolver.
+        /// </param>
         public NotificationContext(IGatewayProviderService gatewayProviderService, IGatewayProviderResolver resolver)
             : base(gatewayProviderService, resolver)
         {

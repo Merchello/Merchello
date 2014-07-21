@@ -1,14 +1,14 @@
-﻿using System.Configuration;
-
-namespace Merchello.Core.Configuration.Outline
+﻿namespace Merchello.Core.Configuration.Outline
 {
+    using System.Configuration;
+
     /// <summary>
-    /// Defines Merchello's main configuration section.
+    /// Defines the Merchello main configuration section.
     /// </summary>
     public class MerchelloSection : ConfigurationSection
     {
         /// <summary>
-        /// Gets/Sets the default connectionstring name for Merchello database connectivity
+        /// Gets or sets the default connection string name for Merchello database connectivity
         /// </summary>
         [ConfigurationProperty("defaultConnectionStringName", DefaultValue = "umbracoDbDSN", IsRequired = false)]
         public string DefaultConnectionStringName
@@ -18,7 +18,7 @@ namespace Merchello.Core.Configuration.Outline
         }
 
         /// <summary>
-        /// Gets/Sets teh default country code, primarily used for UI controls
+        /// Gets or sets the default country code, primarily used for UI controls
         /// </summary>
         [ConfigurationProperty("defaultCountryCode", IsRequired = false)]
         public string DefaultCountryCode
@@ -28,7 +28,7 @@ namespace Merchello.Core.Configuration.Outline
         }
 
         /// <summary>
-        /// Gets/Sets the enableLogging property setting
+        /// Gets or sets a value indicating whether logging is enabled
         /// </summary>
         [ConfigurationProperty("enableLogging", DefaultValue = false, IsRequired = false)]
         public bool EnableLogging
@@ -37,7 +37,15 @@ namespace Merchello.Core.Configuration.Outline
             set { this["enableLogging"] = value; }
         }
 
-       
+        /// <summary>
+        /// Gets the orders collection
+        /// </summary>
+        [ConfigurationProperty("orders", IsRequired = true), ConfigurationCollection(typeof(SettingsCollection), AddItemName = "orders")]
+        public SettingsCollection Orders                     
+        {
+            get { return (SettingsCollection)this["orders"]; }
+        }
+
         /// <summary>
         /// Gets the settings collection
         /// </summary>
@@ -45,6 +53,18 @@ namespace Merchello.Core.Configuration.Outline
         public SettingsCollection Settings
         {
             get { return (SettingsCollection) this["settings"]; }
+        }
+
+        /// <summary>
+        /// Gets the customer element.
+        /// </summary>
+        [ConfigurationProperty("customer", IsRequired = true)]
+        public CustomerElement Customer
+        {
+            get
+            {
+                return (CustomerElement)this["customer"];
+            }
         }
 
         /// <summary>
@@ -65,7 +85,6 @@ namespace Merchello.Core.Configuration.Outline
             get { return (RegionalProvinceCollection) this["regionalProvinces"]; }
         }
 
-
         /// <summary>
         /// Gets the strategies collection
         /// </summary>
@@ -84,7 +103,6 @@ namespace Merchello.Core.Configuration.Outline
             get { return (TaskChainsCollection)this["taskChains"]; }
         }
 
-
         /// <summary>
         /// Gets the tasks collection
         /// </summary>
@@ -92,6 +110,15 @@ namespace Merchello.Core.Configuration.Outline
         public ReplacementCollection PatternFormatter
         {
             get { return (ReplacementCollection)this["patternFormatter"]; }
+        }
+
+        /// <summary>
+        /// Gets the sub tree.
+        /// </summary>
+        [ConfigurationProperty("backoffice", IsRequired = true), ConfigurationCollection(typeof(TreeCollection), AddItemName = "tree")]
+        public TreeCollection BackOffice
+        {
+            get { return (TreeCollection)this["backoffice"]; }
         }
     }
 }

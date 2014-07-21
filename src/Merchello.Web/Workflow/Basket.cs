@@ -13,10 +13,25 @@
     /// </summary>
     public class Basket : IBasket
     {
+        /// <summary>
+        /// The item cache responsible for persisting the basket contents.
+        /// </summary>
         private readonly IItemCache _itemCache;
 
+        /// <summary>
+        /// The customer.
+        /// </summary>
         private readonly ICustomerBase _customer;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Basket"/> class.
+        /// </summary>
+        /// <param name="itemCache">
+        /// The item cache.
+        /// </param>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
         internal Basket(IItemCache itemCache, ICustomerBase customer)
         {
             Mandate.ParameterNotNull(itemCache, "ItemCache");
@@ -45,6 +60,9 @@
             get { return _customer; }
         }
 
+        /// <summary>
+        /// Gets the items.
+        /// </summary>
         public LineItemCollection Items
         {
             get { return _itemCache.Items; }
@@ -168,6 +186,7 @@
                 AddItem(variant, name, quantity, extendedData);
                 return;
             }
+
             if (!product.ProductVariants.Any()) return;
 
             AddItem(product.ProductVariants.First(), name, quantity, extendedData);
@@ -246,7 +265,7 @@
         /// The name.
         /// </param>
         /// <param name="sku">
-        /// The sku.
+        /// The SKU.
         /// </param>
         /// <param name="price">
         /// The price.
@@ -263,7 +282,7 @@
         /// The name.
         /// </param>
         /// <param name="sku">
-        /// The sku.
+        /// The SKU.
         /// </param>
         /// <param name="quantity">
         /// The quantity.
@@ -283,7 +302,7 @@
         /// The name.
         /// </param>
         /// <param name="sku">
-        /// The sku.
+        /// The SKU.
         /// </param>
         /// <param name="quantity">
         /// The quantity.
@@ -300,7 +319,6 @@
             if (price < 0) price = 0;
             _itemCache.AddItem(LineItemType.Product, name, sku, quantity, price, extendedData);
         }
-
 
         /// <summary>
         /// Updates a basket item's quantity
@@ -336,7 +354,7 @@
         /// Updates a basket item's quantity
         /// </summary>
         /// <param name="sku">
-        /// The sku.
+        /// The SKU.
         /// </param>
         /// <param name="quantity">
         /// The quantity.
@@ -382,7 +400,7 @@
         /// Removes a basket line item
         /// </summary>
         /// <param name="sku">
-        /// The sku.
+        /// The SKU.
         /// </param>
         public void RemoveItem(string sku)
         {
@@ -452,20 +470,47 @@
             return basket;
         }
 
-        // used for testing
+        /// <summary>
+        /// Instantiates the basket
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <param name="itemCache">
+        /// The item cache.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IBasket"/>.
+        /// </returns>
         internal static IBasket GetBasket(ICustomerBase customer, IItemCache itemCache)
         {
             return new Basket(itemCache, customer);
         }
 
-
-
+        /// <summary>
+        /// Empties the basket.
+        /// </summary>
+        /// <param name="merchelloContext">
+        /// The merchello context.
+        /// </param>
+        /// <param name="basket">
+        /// The basket.
+        /// </param>
         internal static void Empty(IMerchelloContext merchelloContext, IBasket basket)
         {
             basket.Items.Clear();
             Save(merchelloContext, basket);
         }
 
+        /// <summary>
+        /// Saves the basket.
+        /// </summary>
+        /// <param name="merchelloContext">
+        /// The merchello context.
+        /// </param>
+        /// <param name="basket">
+        /// The basket.
+        /// </param>
         internal static void Save(IMerchelloContext merchelloContext, IBasket basket)
         {
             // Update the basket item cache version so that it can be validated in the checkout
@@ -484,7 +529,7 @@
         private static string MakeCacheKey(ICustomerBase customer)
         {
             // the version key here is not important since there can only ever be one basket
-            return CacheKeys.ItemCacheCacheKey(customer.EntityKey, EnumTypeFieldConverter.ItemItemCache.Basket.TypeKey, Guid.Empty);
+            return CacheKeys.ItemCacheCacheKey(customer.Key, EnumTypeFieldConverter.ItemItemCache.Basket.TypeKey, Guid.Empty);
         }
     }
 }

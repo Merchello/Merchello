@@ -1,0 +1,57 @@
+﻿<div class="col-xs-10 span10">
+    <table class="table table-hover merchello-selectable-table sortable">
+        <thead>
+
+            <tr data-ng-hide="allVariants">
+                <th>&nbsp;</th> <!-- Swaps out the current TR with headings in it for the bulk action TR -->
+                <th data-ng-repeat="option in product.productOptions | orderBy:'sortOrder'"
+                    data-ng-click="changeSortOrder(option.name)" data-ng-class="{'sorted': sortProperty == option.name}">
+                    <i data-ng-class="{'icon-navigation-up': sortProperty == option.name, 'icon-navigation-down': sortProperty == ('-' + option.name)}"></i>
+                    {{option.name}}
+                </th>
+                <th data-ng-click="changeSortOrder('sku')" data-ng-class="{'sorted': sortProperty == 'sku'}">
+                    <i data-ng-class="{'icon-navigation-up': sortProperty == 'sku', 'icon-navigation-down': sortProperty == '-sku'}"></i>
+                    <localize key="merchelloGeneral_sku" />
+                </th>
+                <th data-ng-click="changeSortOrder('price')" data-ng-class="{'sorted': sortProperty == 'price'}">
+                    <i data-ng-class="{'icon-navigation-up': sortProperty == 'price', 'icon-navigation-down': sortProperty == '-price'}"></i>
+                    <localize key="merchelloGeneral_price" />
+                </th>
+                <th data-ng-click="changeSortOrder('totalInventoryCount')" data-ng-class="{'sorted': sortProperty == 'totalInventoryCount'}">
+                    <i data-ng-class="{'icon-navigation-up': sortProperty == 'totalInventoryCount', 'icon-navigation-down': sortProperty == '-totalInventoryCount'}"></i> 
+                    <localize key="merchelloGeneral_total" /> <localize key="merchelloGeneral_quantity" />
+                </th>
+                <th><localize key="general_edit" /></th>
+            </tr>
+            <!-- Displays the bulk action button & dropdown menu when the checkbox is selected. Replaces the normal header TR -->
+            <tr data-ng-show="allVariants">
+                <th colspan="{{product.productOptions.length + 5}}">
+                    <div class="btn-group" data-ng-class="{ 'open': bulkAction }">
+                        <a data-ng-click="bulkAction = !bulkAction" class="btn dropdown-toggle" data-toggle="dropdown">Bulk Action ({{selectedVariants().length}} Variants) <i class="icon-navigation-down"></i></a>
+                        <ul class="dropdown-menu">
+                            <li><a data-ng-click="changePrices()"><localize key="merchelloProductEdit_changePrices" /></a></li>
+                            <li><a data-ng-click="updateInventory()"><localize key="merchelloProductEdit_updateInventory" /></a></li>
+                            <li><a data-ng-click="deleteVariants()"><localize key="merchelloVariant_deleteVariant" /></a></li>
+<!--                            <li class="divider"></li>
+                            <li class="header"><localize key="merchelloProductEdit_duplicateVariant" /></li>
+                            <li data-ng-repeat="option in product.productOptions"><a data-ng-click="duplicateVariants(option)"><localize key="merchelloProductEdit_inAnother" /> {{option.name}}</a></li>-->
+                        </ul>
+                    </div>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-ng-repeat="variant in product.productVariants | orderBy:sortProperty" 
+                data-ng-class="{active: variant.selected}" 
+                data-ng-click="toggleAVariant(variant)"
+            >
+                <td><input type="checkbox" data-ng-model="variant.selected" data-ng-change="checkBulkVariantsSelected()" /></td>
+                <td data-ng-repeat="attribute in variant.attributes | orderBy:'optionOrder'">{{attribute.name}}</td>
+                <td>{{variant.sku}}</td>
+                <td>{{variant.price}}</td>
+                <td>{{variant.totalInventoryCount}}</td>
+                <td><a data-ng-href="#/merchello/merchello/ProductVariantEdit/{{variant.productKey}}?variantid={{variant.key}}"><localize key="general_edit" /></a></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

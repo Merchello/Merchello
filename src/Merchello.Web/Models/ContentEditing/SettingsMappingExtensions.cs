@@ -33,55 +33,58 @@ namespace Merchello.Web.Models.ContentEditing
 				switch (setting.Name)
 				{
 					case "currencyCode":
-						settingDisplay.currencyCode = setting.Value;
+						settingDisplay.CurrencyCode = setting.Value;
 						break;
 					case "nextOrderNumber":
 						if (!int.TryParse(setting.Value, out intValue))
 						{
 							intValue = 0;
 						}	 
-						settingDisplay.nextOrderNumber = intValue;
+						settingDisplay.NextOrderNumber = intValue;
 						break;
 					case "nextInvoiceNumber":
 						if (!int.TryParse(setting.Value, out intValue))
 						{
 							intValue = 0;
 						}
-						settingDisplay.nextInvoiceNumber = intValue;
+						settingDisplay.NextInvoiceNumber = intValue;
 						break;
 					case "dateFormat":
-						settingDisplay.dateFormat = setting.Value;
+						settingDisplay.DateFormat = setting.Value;
 						break;
 					case "timeFormat":
-						settingDisplay.timeFormat = setting.Value;
+						settingDisplay.TimeFormat = setting.Value;
 						break;
+                    case "unitSystem":
+                        settingDisplay.UnitSystem = setting.Value;
+                        break;
 					case "globalShippable":
 						if (!bool.TryParse(setting.Value, out boolValue))
 						{
 							boolValue = false;
 						}
-						settingDisplay.globalShippable = boolValue;
+						settingDisplay.GlobalShippable = boolValue;
 						break;
 					case "globalTaxable":
 						if (!bool.TryParse(setting.Value, out boolValue))
 						{
 							boolValue = false;
 						}
-						settingDisplay.globalTaxable = boolValue;
+						settingDisplay.GlobalTaxable = boolValue;
 						break;
 					case "globalTrackInventory":
 						if (!bool.TryParse(setting.Value, out boolValue))
 						{
 							boolValue = false;
 						}
-						settingDisplay.globalTrackInventory = boolValue;
+						settingDisplay.GlobalTrackInventory = boolValue;
                         break;
                     case "globalShippingIsTaxable":
                         if (!bool.TryParse(setting.Value, out boolValue))
                         {
                             boolValue = false;
                         }
-                        settingDisplay.globalShippingIsTaxable = boolValue;
+                        settingDisplay.GlobalShippingIsTaxable = boolValue;
                         break;
 					default:
 						setting.Value = string.Empty;
@@ -98,31 +101,34 @@ namespace Merchello.Web.Models.ContentEditing
 				switch (setting.Name)
 				{
 					case "currencyCode":
-						setting.Value = settingDisplay.currencyCode;			  
+						setting.Value = settingDisplay.CurrencyCode;			  
 						break;
 					case "nextOrderNumber":
-						setting.Value = settingDisplay.nextOrderNumber.ToString();	  
+						setting.Value = settingDisplay.NextOrderNumber.ToString();	  
 						break;
 					case "nextInvoiceNumber":
-						setting.Value = settingDisplay.nextInvoiceNumber.ToString();	 
+						setting.Value = settingDisplay.NextInvoiceNumber.ToString();	 
 						break;
 					case "dateFormat":
-						setting.Value = settingDisplay.dateFormat;					 
+						setting.Value = settingDisplay.DateFormat;					 
 						break;
 					case "timeFormat":
-						setting.Value = settingDisplay.timeFormat;
-						break;
+						setting.Value = settingDisplay.TimeFormat;
+                        break;
+                    case "unitSystem":
+                        setting.Value = settingDisplay.UnitSystem;
+                        break;
 					case "globalShippable":
-						setting.Value = settingDisplay.globalShippable.ToString();
+						setting.Value = settingDisplay.GlobalShippable.ToString();
 						break;
 					case "globalTaxable":
-						setting.Value = settingDisplay.globalTaxable.ToString();	 
+						setting.Value = settingDisplay.GlobalTaxable.ToString();	 
 						break;
 					case "globalTrackInventory":
-						setting.Value = settingDisplay.globalTrackInventory.ToString();	
+						setting.Value = settingDisplay.GlobalTrackInventory.ToString();	
 						break;
                     case "globalShippingIsTaxable":
-						setting.Value = settingDisplay.globalShippingIsTaxable.ToString();	
+						setting.Value = settingDisplay.GlobalShippingIsTaxable.ToString();	
 						break;
 					default:
 						setting.Value = string.Empty;		 
