@@ -456,25 +456,6 @@
 
 	    /**
          * @ngdoc method
-         * @name addCountry
-         * @function
-         * 
-         * @description
-         * Opens the add country dialog via the Umbraco dialogService.
-         */
-		$scope.deleteCountryDialog = function (country) {
-		    var dialogData = {};
-		    dialogData = country;
-		    dialogService.open({
-		        template: '/App_Plugins/Merchello/Common/Js/Dialogs/deleteconfirmation.html',
-		        show: true,
-		        callback: $scope.deleteCountryDialogConfirm,
-		        dialogData: dialogData
-		    });
-		}
-
-	    /**
-         * @ngdoc method
          * @name addCountryDialogConfirm
          * @function
          * 
@@ -661,6 +642,25 @@
 
 	    /**
          * @ngdoc method
+         * @name addCountry
+         * @function
+         * 
+         * @description
+         * Opens the add country dialog via the Umbraco dialogService.
+         */
+	    $scope.deleteCountryDialog = function(country) {
+	        var dialogData = {};
+	        dialogData = country;
+	        dialogService.open({
+	            template: '/App_Plugins/Merchello/Common/Js/Dialogs/deleteconfirmation.html',
+	            show: true,
+	            callback: $scope.deleteCountryDialogConfirm,
+	            dialogData: dialogData
+	        });
+	    };
+
+	    /**
+         * @ngdoc method
          * @name deleteWarehouse
          * @function
          * 
@@ -803,35 +803,20 @@
          * Handles the edit after recieving the dialogData from the dialog view/controller
          */
 		$scope.shippingProviderDialogConfirm = function (data) {
-
 		    var selectedProvider = data.provider;
 		    var selectedResource = data.resource;
-
 		    var newShippingMethod = new merchello.Models.ShippingMethod();
-		    var newFixedRateShippingMethod = new merchello.Models.FixedRateShippingMethod();
 		    newShippingMethod.name = data.country.name + " " + selectedResource.name;
 		    newShippingMethod.providerKey = selectedProvider.key;
 		    newShippingMethod.serviceCode = selectedResource.serviceCode;
 		    newShippingMethod.shipCountryKey = data.country.key;
-		    if (selectedProvider.isFixedRate()) {
-		        newFixedRateShippingMethod.shipMethod = newShippingMethod;
-		    }
-
 		    var promiseAddMethod;
-		    if (selectedProvider.isFixedRate()) {
-		        promiseAddMethod = merchelloCatalogFixedRateShippingService.createRateTableShipMethod(newFixedRateShippingMethod);
-		    } else {
-		        promiseAddMethod = merchelloCatalogShippingService.addShipMethod(newShippingMethod);
-		    }
+            promiseAddMethod = merchelloCatalogShippingService.addShipMethod(newShippingMethod);
 		    promiseAddMethod.then(function () {
-
 		        data.country.shippingGatewayProviders = [];
 		        $scope.loadCountryProviders(data.country);
-
 		    }, function (reason) {
-
 		        notificationsService.error("Shipping Provider / Initial Method Create Failed", reason.message);
-
 		    });
 		};
 
@@ -857,7 +842,6 @@
 		    }
 
 		};
-
 
 	};
 
