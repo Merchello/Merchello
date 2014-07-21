@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Threading;
-using Merchello.Core.Models;
-using Merchello.Core.Persistence;
-using Merchello.Core.Persistence.Querying;
-using Merchello.Core.Persistence.UnitOfWork;
-using Umbraco.Core;
-using Umbraco.Core.Events;
-
-namespace Merchello.Core.Services
+﻿namespace Merchello.Core.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Linq;
+    using System.Threading;
+    using Models;
+    using Persistence;
+    using Persistence.Querying;
+    using Persistence.UnitOfWork;
+    using Umbraco.Core;
+    using Umbraco.Core.Events;
+
     /// <summary>
     /// Defines the ShipMethodService
     /// </summary>
@@ -189,7 +189,7 @@ namespace Merchello.Core.Services
         {
             var methods = shipMethods as IShipMethod[] ?? shipMethods.ToArray();
 
-            if(raiseEvents)
+            if (raiseEvents)
             Deleting.RaiseEvent(new DeleteEventArgs<IShipMethod>(methods), this);
 
             using (new WriteLock(Locker))
@@ -205,7 +205,7 @@ namespace Merchello.Core.Services
                 }
             }
 
-            if(raiseEvents)
+            if (raiseEvents)
             Deleted.RaiseEvent(new DeleteEventArgs<IShipMethod>(methods), this);
 
         }

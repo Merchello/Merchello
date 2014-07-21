@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Merchello.Core.Models;
-using Umbraco.Core.Services;
-
-namespace Merchello.Core.Services
+﻿namespace Merchello.Core.Services
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using Models;
+    using Umbraco.Core.Services;
+
     /// <summary>
     /// Defines a ProductVariantService
     /// </summary>
@@ -15,8 +15,8 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Creates a <see cref="IProductVariant"/> of the <see cref="IProduct"/> passed defined by the collection of <see cref="IProductAttribute"/>
         /// </summary>
-        /// <param name="product"><see cref="IProduct"/></param>
-        /// <param name="attributes"><see cref="IProductVariant"/></param>
+        /// <param name="product">The <see cref="IProduct"/></param>
+        /// <param name="attributes">The <see cref="IProductVariant"/></param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         /// <returns>Either a new <see cref="IProductVariant"/> or, if one already exists with associated attributes, the existing <see cref="IProductVariant"/></returns>
         IProductVariant CreateProductVariantWithKey(IProduct product, ProductAttributeCollection attributes, bool raiseEvents = true);
@@ -24,11 +24,11 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Creates a <see cref="IProductVariant"/> of the <see cref="IProduct"/> passed defined by the collection of <see cref="IProductAttribute"/>
         /// </summary>
-        /// <param name="product"><see cref="IProduct"/></param>
+        /// <param name="product">The <see cref="IProduct"/></param>
         /// <param name="name">The name of the product variant</param>
         /// <param name="sku">The unique sku of the product variant</param>
         /// <param name="price">The price of the product variant</param>
-        /// <param name="attributes"><see cref="IProductVariant"/></param>
+        /// <param name="attributes">The <see cref="IProductVariant"/></param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         /// <returns>Either a new <see cref="IProductVariant"/> or, if one already exists with associated attributes, the existing <see cref="IProductVariant"/></returns>
         IProductVariant CreateProductVariantWithKey(IProduct product, string name, string sku, decimal price, ProductAttributeCollection attributes, bool raiseEvents = true);
@@ -36,7 +36,7 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Saves a single instance of a <see cref="IProductVariant"/>
         /// </summary>
-        /// <param name="productVariant"></param>
+        /// <param name="productVariant">The <see cref="IProductVariant"/></param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         void Save(IProductVariant productVariant, bool raiseEvents = true);
 
