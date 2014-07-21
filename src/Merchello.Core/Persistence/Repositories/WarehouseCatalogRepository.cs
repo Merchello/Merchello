@@ -17,12 +17,12 @@
     using Umbraco.Core.Persistence.Querying;
 
     /// <summary>
-    /// The invoice status repository.
+    /// Represents a warehouse catalog repository.
     /// </summary>
-    internal class InvoiceStatusRepository : MerchelloPetaPocoRepositoryBase<IInvoiceStatus>, IInvoiceStatusRepository
+    internal class WarehouseCatalogRepository : MerchelloPetaPocoRepositoryBase<IWarehouseCatalog>, IWarehouseCatalogRepository
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="InvoiceStatusRepository"/> class.
+        /// Initializes a new instance of the <see cref="WarehouseCatalogRepository"/> class.
         /// </summary>
         /// <param name="work">
         /// The work.
@@ -30,47 +30,47 @@
         /// <param name="cache">
         /// The cache.
         /// </param>
-        public InvoiceStatusRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache)
+        public WarehouseCatalogRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache)
             : base(work, cache)
         {
         }
 
         /// <summary>
-        /// Gets a <see cref="IInvoice"/> by it's unique key.
+        /// Gets a <see cref="IWarehouseCatalog"/> by it's unique key.
         /// </summary>
         /// <param name="key">
         /// The key.
         /// </param>
         /// <returns>
-        /// The <see cref="IInvoiceStatus"/>.
+        /// The <see cref="IWarehouseCatalog"/>.
         /// </returns>
-        protected override IInvoiceStatus PerformGet(Guid key)
+        protected override IWarehouseCatalog PerformGet(Guid key)
         {
             var sql = GetBaseQuery(false)
                 .Where(GetBaseWhereClause(), new { Key = key });
 
-            var dto = Database.Fetch<InvoiceStatusDto>(sql).FirstOrDefault();
+            var dto = Database.Fetch<WarehouseCatalogDto>(sql).FirstOrDefault();
 
             if (dto == null)
                 return null;
 
-            var factory = new InvoiceStatusFactory();
+            var factory = new WarehouseCatalogFactory();
 
-            var invoiceStatus = factory.BuildEntity(dto);
+            var catalog = factory.BuildEntity(dto);
 
-            return invoiceStatus;
+            return catalog;
         }
 
         /// <summary>
-        /// Gets a collection of all <see cref="IInvoice"/>.
+        /// The perform get all.
         /// </summary>
         /// <param name="keys">
         /// The keys.
         /// </param>
         /// <returns>
-        /// A collection of <see cref="IInvoice"/>.
+        /// A collection of <see cref="IWarehouseCatalog"/>.
         /// </returns>
-        protected override IEnumerable<IInvoiceStatus> PerformGetAll(params Guid[] keys)
+        protected override IEnumerable<IWarehouseCatalog> PerformGetAll(params Guid[] keys)
         {
             if (keys.Any())
             {
@@ -81,8 +81,8 @@
             }
             else
             {
-                var factory = new InvoiceStatusFactory();
-                var dtos = Database.Fetch<InvoiceStatusDto>(GetBaseQuery(false));
+                var factory = new WarehouseCatalogFactory();
+                var dtos = Database.Fetch<WarehouseCatalogDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
                     yield return factory.BuildEntity(dto);
@@ -91,21 +91,21 @@
         }
 
         /// <summary>
-        /// Gets a collection of <see cref="IInvoice"/> by query.
+        /// Gets a collection of <see cref="IWarehouseCatalog"/> by query.
         /// </summary>
         /// <param name="query">
         /// The query.
         /// </param>
         /// <returns>
-        /// A collection of <see cref="IInvoice"/>.
+        /// A collection of <see cref="IWarehouseCatalog"/>.
         /// </returns>
-        protected override IEnumerable<IInvoiceStatus> PerformGetByQuery(IQuery<IInvoiceStatus> query)
+        protected override IEnumerable<IWarehouseCatalog> PerformGetByQuery(IQuery<IWarehouseCatalog> query)
         {
             var sqlClause = GetBaseQuery(false);
-            var translator = new SqlTranslator<IInvoiceStatus>(sqlClause, query);
+            var translator = new SqlTranslator<IWarehouseCatalog>(sqlClause, query);
             var sql = translator.Translate();
 
-            var dtos = Database.Fetch<InvoiceStatusDto>(sql);
+            var dtos = Database.Fetch<WarehouseCatalogDto>(sql);
 
             return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
         }
@@ -123,7 +123,7 @@
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-               .From<InvoiceStatusDto>();
+               .From<WarehouseCatalogDto>();
 
             return sql;
         }
@@ -136,15 +136,19 @@
         /// </returns>
         protected override string GetBaseWhereClause()
         {
-            return "merchInvoiceStatus.pk = @Key";
+            return "merchWarehouseCatalog.pk = @Key";
         }
 
         /// <summary>
-        /// Gets the delete clauses.
+        /// Gets a collection delete clauses.
         /// </summary>
         /// <returns>
         /// The collection of delete clauses.
         /// </returns>
+        /// <remarks>
+        /// This is a complex delete so most of the operation is handled
+        /// in the service so that the caching and Lucene indexes do not get messed up.
+        /// </remarks>
         protected override IEnumerable<string> GetDeleteClauses()
         {
             var list = new List<string>
@@ -156,16 +160,16 @@
         }
 
         /// <summary>
-        /// Persists a new invoice.
+        /// Persist a new warehouse catalog.
         /// </summary>
         /// <param name="entity">
         /// The entity.
         /// </param>
-        protected override void PersistNewItem(IInvoiceStatus entity)
+        protected override void PersistNewItem(IWarehouseCatalog entity)
         {
             ((Entity)entity).AddingEntity();
 
-            var factory = new InvoiceStatusFactory();
+            var factory = new WarehouseCatalogFactory();
             var dto = factory.BuildDto(entity);
 
             Database.Insert(dto);
@@ -174,20 +178,19 @@
         }
 
         /// <summary>
-        /// Persists an updated invoice.
+        /// Persists an updated warehouse catalog.
         /// </summary>
         /// <param name="entity">
         /// The entity.
         /// </param>
-        protected override void PersistUpdatedItem(IInvoiceStatus entity)
+        protected override void PersistUpdatedItem(IWarehouseCatalog entity)
         {
-            ((Entity)entity).UpdatingEntity();
+            ((Entity)entity).AddingEntity();
 
-            var factory = new InvoiceStatusFactory();
+            var factory = new WarehouseCatalogFactory();
             var dto = factory.BuildDto(entity);
 
             Database.Update(dto);
-
             entity.ResetDirtyProperties();
         }
     }
